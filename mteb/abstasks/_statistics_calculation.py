@@ -125,52 +125,71 @@ def calculate_text_statistics(
     )
 
 
-def is_constant_image(image: Image.Image) -> bool:
-    """Whether every pixel of the image is the same colour.
+def is_black_or_white_image(image: Image.Image) -> bool:
+    """Whether every pixel of the image is pure black or pure white.
 
     Such an image carries no visual signal at all. It is usually not a quirk of
     the source material but a failed image fetch that was silently replaced by a
     blank frame, which makes it missing data rather than noise: as a query it
-    cannot be answered, and as a labelled sample it cannot be learned from.
+    cannot be answered, and as a labelled sample it cannot be learned from. Other
+    constant colours (a solid red placeholder, a brand background) are common in
+    synthetic or template imagery and are not reliably a fetch failure, so they
+    are left alone.
+
+    Palette (``P``) mode is resolved to its actual colours first -- its raw pixel
+    values are indices into a palette, not the colours themselves, so an index of
+    0 does not mean black. An alpha band, if present, is required to be constant
+    (a partially transparent pixel is not uniformly displayed) but is excluded from
+    the black/white colour check itself -- a fully opaque black or white pixel is
+    ``(0, 0, 0, 255)`` or ``(255, 255, 255, 255)``, not ``(0, 0, 0, 0)``.
     """
+    if image.mode == "P":
+        image = image.convert("RGBA" if "transparency" in image.info else "RGB")
     extrema = image.getextrema()
     if extrema is None:
         return False
-    if isinstance(extrema[0], tuple):  # one (min, max) pair per band
-        return all(lo == hi for lo, hi in extrema)
-    return extrema[0] == extrema[1]
+    bands = extrema if isinstance(extrema[0], tuple) else (extrema,)
+    color_bands = [
+        band for name, band in zip(image.getbands(), bands) if name != "A"
+    ]
+    alpha_bands = [band for name, band in zip(image.getbands(), bands) if name == "A"]
+    if not all(lo == hi for lo, hi in alpha_bands):
+        return False
+    return all(lo == hi == 0 for lo, hi in color_bands) or all(
+        lo == hi == 255 for lo, hi in color_bands
+    )
 
 
-def compute_constant_image_flags(
+def compute_black_or_white_image_flags(
     images: list[Image.Image], max_workers: int | None = None
 ) -> list[bool]:
-    """Return a per-image flag saying whether that image is a single colour.
+    """Return a per-image flag saying whether that image is pure black or white.
 
-    Extracted so a caller that also needs to know *which* images are constant
+    Extracted so a caller that also needs to know *which* images are flagged
     (to intersect them with qrels) can reuse the result instead of decoding
     every image a second time.
     """
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        return list(executor.map(is_constant_image, images))
+        return list(executor.map(is_black_or_white_image, images))
 
 
-def count_queries_with_all_gold_constant(
+def count_queries_with_all_gold_black_or_white(
     relevant_docs: Mapping[str, Mapping[str, int]],
-    constant_doc_ids: Container[str],
+    black_or_white_doc_ids: Container[str],
 ) -> int:
-    """Number of queries whose *entire* gold set is constant images.
+    """Number of queries whose *entire* gold set is pure black/white images.
 
-    A constant document is only an evaluation defect when the query has nothing
-    else to retrieve. Corpora routinely carry a handful of blank images that no
-    qrel references, and class-judged tasks give a query hundreds of positives
-    where one blank changes nothing; neither is a broken query. Requiring the
-    whole gold set to be constant is what separates those from a query that
-    genuinely cannot be answered.
+    A black-or-white document is only an evaluation defect when the query has
+    nothing else to retrieve. Corpora routinely carry a handful of blank images
+    that no qrel references, and class-judged tasks give a query hundreds of
+    positives where one blank changes nothing; neither is a broken query.
+    Requiring the whole gold set to be black/white is what separates those from
+    a query that genuinely cannot be answered.
     """
     broken = 0
     for docs in relevant_docs.values():
         gold = [doc_id for doc_id, score in docs.items() if score > 0]
-        if gold and all(doc_id in constant_doc_ids for doc_id in gold):
+        if gold and all(doc_id in black_or_white_doc_ids for doc_id in gold):
             broken += 1
     return broken
 
@@ -179,7 +198,7 @@ def calculate_image_statistics(
     images: list[Image.Image],
     hashes: list[str] | None = None,
     max_workers: int | None = None,
-    constant_flags: list[bool] | None = None,
+    black_or_white_flags: list[bool] | None = None,
 ) -> ImageStatistics:
     """Calculate descriptive statistics for a list of images.
 
@@ -189,16 +208,19 @@ def calculate_image_statistics(
         hashes: Optional pre-computed MD5 hashes (from `compute_image_hashes`).
             When provided the function skips recomputing them.
         max_workers: Maximum number of worker threads for parallel hash computation.
-        constant_flags: Optional pre-computed flags (from `compute_constant_image_flags`).
-            When provided the function skips recomputing them.
+        black_or_white_flags: Optional pre-computed flags (from
+            `compute_black_or_white_image_flags`). When provided the function
+            skips recomputing them.
 
     Returns:
         ImageStatistics: A dictionary containing the descriptive statistics.
     """
     if hashes is None:
         hashes = compute_image_hashes(images, max_workers=max_workers)
-    if constant_flags is None:
-        constant_flags = compute_constant_image_flags(images, max_workers=max_workers)
+    if black_or_white_flags is None:
+        black_or_white_flags = compute_black_or_white_image_flags(
+            images, max_workers=max_workers
+        )
     img_widths, img_heights = [], []
     for img in tqdm(images, desc="Computing image statistics"):
         width, height = img.size
@@ -213,7 +235,7 @@ def calculate_image_statistics(
         average_image_height=sum(img_heights) / len(img_heights),
         max_image_height=max(img_heights),
         unique_images=len(set(hashes)),
-        constant_images=sum(constant_flags),
+        black_or_white_images=sum(black_or_white_flags),
     )
 
 
@@ -456,7 +478,7 @@ def calculate_relevant_docs_statistics(
     relevant_docs: Mapping[str, Mapping[str, int]],
     query_ids: Iterable[str],
     corpus_ids: Iterable[str],
-    constant_doc_ids: Container[str] | None = None,
+    black_or_white_doc_ids: Container[str] | None = None,
 ) -> RelevantDocsStatistics:
     qrel_query_ids = set(relevant_docs)
     qrel_corpus_ids = {doc for qid in relevant_docs for doc in relevant_docs[qid]}
@@ -475,9 +497,11 @@ def calculate_relevant_docs_statistics(
         unique_relevant_docs=len(qrel_corpus_ids),
         num_missing_query_ids=len(qrel_query_ids.difference(query_ids)),
         num_missing_corpus_ids=len(qrel_corpus_ids.difference(corpus_ids)),
-        queries_with_all_gold_constant=(
-            count_queries_with_all_gold_constant(relevant_docs, constant_doc_ids)
-            if constant_doc_ids is not None
+        queries_with_all_gold_black_or_white=(
+            count_queries_with_all_gold_black_or_white(
+                relevant_docs, black_or_white_doc_ids
+            )
+            if black_or_white_doc_ids is not None
             else 0
         ),
     )
@@ -487,7 +511,7 @@ def calculate_single_input_modality_statistics(
     col_inputs: dict[Modalities, list[Any]],
     hashes: dict[str, list[str]] | None = None,
     max_workers: int | None = None,
-    constant_image_flags: list[bool] | None = None,
+    black_or_white_image_flags: list[bool] | None = None,
 ) -> SingleInputModalityStatistics:
     """Compute per-modality statistics for a single-input dataset."""
     _hashes = hashes or {}
@@ -501,7 +525,7 @@ def calculate_single_input_modality_statistics(
             col_inputs["image"],
             hashes=_hashes.get("image"),
             max_workers=max_workers,
-            constant_flags=constant_image_flags,
+            black_or_white_flags=black_or_white_image_flags,
         )
         if "image" in col_inputs
         else None,

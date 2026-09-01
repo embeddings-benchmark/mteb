@@ -259,7 +259,7 @@ class MockPairImageClassificationTask(AbsTaskPairClassification):
                 "average_image_height": 100.0,
                 "max_image_height": 100,
                 "unique_images": 2,
-                "constant_images": 0,
+                "black_or_white_images": 0,
             },
             "audio1_statistics": None,
             "video1_statistics": None,
@@ -272,7 +272,7 @@ class MockPairImageClassificationTask(AbsTaskPairClassification):
                 "average_image_height": 100.0,
                 "max_image_height": 100,
                 "unique_images": 2,
-                "constant_images": 0,
+                "black_or_white_images": 0,
             },
             "audio2_statistics": None,
             "video2_statistics": None,
@@ -337,7 +337,7 @@ class MockImageTextPairClassificationTask(AbsTaskImageTextPairClassification):
                 "average_image_height": 100.0,
                 "max_image_height": 100,
                 "unique_images": 2,
-                "constant_images": 0,
+                "black_or_white_images": 0,
             },
         }
     }
@@ -389,7 +389,7 @@ class MockMultilingualImageTextPairClassificationTask(
                 "average_image_height": 100.0,
                 "max_image_height": 100,
                 "unique_images": 2,
-                "constant_images": 0,
+                "black_or_white_images": 0,
             },
             "hf_subset_descriptive_stats": {
                 "eng": {
@@ -409,7 +409,7 @@ class MockMultilingualImageTextPairClassificationTask(
                         "average_image_height": 100.0,
                         "max_image_height": 100,
                         "unique_images": 2,
-                        "constant_images": 0,
+                        "black_or_white_images": 0,
                     },
                 },
                 "fra": {
@@ -429,7 +429,7 @@ class MockMultilingualImageTextPairClassificationTask(
                         "average_image_height": 100.0,
                         "max_image_height": 100,
                         "unique_images": 2,
-                        "constant_images": 0,
+                        "black_or_white_images": 0,
                     },
                 },
             },

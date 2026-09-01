@@ -64,7 +64,7 @@ class ImageStatistics(TypedDict):
         max_image_height: Maximum height of images
 
         unique_images: Number of unique images
-        constant_images: Number of images that are a single colour everywhere
+        black_or_white_images: Number of images that are pure black or pure white everywhere
     """
 
     min_image_width: float
@@ -76,7 +76,7 @@ class ImageStatistics(TypedDict):
     max_image_height: float
 
     unique_images: int
-    constant_images: int
+    black_or_white_images: int
 
 
 class AudioStatistics(TypedDict):
@@ -221,8 +221,8 @@ class RelevantDocsStatistics(TypedDict):
         unique_relevant_docs: Number of unique relevant documents across all queries.
         num_missing_query_ids: Number of unique qrel query IDs absent from the loaded queries split.
         num_missing_corpus_ids: Number of unique qrel corpus/document IDs absent from the loaded corpus split.
-        queries_with_all_gold_constant: Number of queries whose every relevant document is a
-            constant (single-colour) image, leaving the query with nothing retrievable.
+        queries_with_all_gold_black_or_white: Number of queries whose every relevant document is
+            a pure black or white image, leaving the query with nothing retrievable.
     """
 
     num_relevant_docs: int
@@ -232,7 +232,7 @@ class RelevantDocsStatistics(TypedDict):
     unique_relevant_docs: int
     num_missing_query_ids: int
     num_missing_corpus_ids: int
-    queries_with_all_gold_constant: int
+    queries_with_all_gold_black_or_white: int
 
 
 class SingleInputModalityStatistics(TypedDict):

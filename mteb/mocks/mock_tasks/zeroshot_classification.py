@@ -49,7 +49,7 @@ class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
                 "average_image_height": 100.0,
                 "max_image_height": 100,
                 "unique_images": 2,
-                "constant_images": 0,
+                "black_or_white_images": 0,
             },
             "audio_statistics": None,
             "video_statistics": None,

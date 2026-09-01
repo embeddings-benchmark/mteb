@@ -79,7 +79,7 @@ class MockRerankingTask(AbsTaskRetrieval):
                 "unique_relevant_docs": 2,
                 "num_missing_query_ids": 0,
                 "num_missing_corpus_ids": 0,
-                "queries_with_all_gold_constant": 0,
+                "queries_with_all_gold_black_or_white": 0,
             },
             "top_ranked_statistics": {
                 "num_top_ranked": 4,
@@ -139,7 +139,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                 "unique_relevant_docs": 4,
                 "num_missing_query_ids": 0,
                 "num_missing_corpus_ids": 0,
-                "queries_with_all_gold_constant": 0,
+                "queries_with_all_gold_black_or_white": 0,
             },
             "top_ranked_statistics": {
                 "num_top_ranked": 8,
@@ -181,7 +181,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                         "unique_relevant_docs": 2,
                         "num_missing_query_ids": 0,
                         "num_missing_corpus_ids": 0,
-                        "queries_with_all_gold_constant": 0,
+                        "queries_with_all_gold_black_or_white": 0,
                     },
                     "top_ranked_statistics": {
                         "num_top_ranked": 4,
@@ -223,7 +223,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
                         "unique_relevant_docs": 2,
                         "num_missing_query_ids": 0,
                         "num_missing_corpus_ids": 0,
-                        "queries_with_all_gold_constant": 0,
+                        "queries_with_all_gold_black_or_white": 0,
                     },
                     "top_ranked_statistics": {
                         "num_top_ranked": 4,
@@ -288,7 +288,7 @@ class MockInstructionReranking(AbsTaskRetrieval):
                 "unique_relevant_docs": 2,
                 "num_missing_query_ids": 0,
                 "num_missing_corpus_ids": 0,
-                "queries_with_all_gold_constant": 0,
+                "queries_with_all_gold_black_or_white": 0,
             },
             "top_ranked_statistics": {
                 "num_top_ranked": 4,
@@ -347,7 +347,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                 "unique_relevant_docs": 4,
                 "num_missing_query_ids": 0,
                 "num_missing_corpus_ids": 0,
-                "queries_with_all_gold_constant": 0,
+                "queries_with_all_gold_black_or_white": 0,
             },
             "top_ranked_statistics": {
                 "num_top_ranked": 8,
@@ -389,7 +389,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                         "unique_relevant_docs": 2,
                         "num_missing_query_ids": 0,
                         "num_missing_corpus_ids": 0,
-                        "queries_with_all_gold_constant": 0,
+                        "queries_with_all_gold_black_or_white": 0,
                     },
                     "top_ranked_statistics": {
                         "num_top_ranked": 4,
@@ -431,7 +431,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
                         "unique_relevant_docs": 2,
                         "num_missing_query_ids": 0,
                         "num_missing_corpus_ids": 0,
-                        "queries_with_all_gold_constant": 0,
+                        "queries_with_all_gold_black_or_white": 0,
                     },
                     "top_ranked_statistics": {
                         "num_top_ranked": 4,
@@ -509,7 +509,7 @@ class MockAudioReranking(AbsTaskRetrieval):
                 "unique_relevant_docs": 2,
                 "num_missing_query_ids": 0,
                 "num_missing_corpus_ids": 0,
-                "queries_with_all_gold_constant": 0,
+                "queries_with_all_gold_black_or_white": 0,
             },
             "top_ranked_statistics": {
                 "num_top_ranked": 4,
