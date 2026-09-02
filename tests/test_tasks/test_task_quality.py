@@ -842,6 +842,8 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "FER2013ZeroShot",  # documented to contain duplicate/near-duplicate images
         "FORBI2IRetrieval",  # fingerprint corpus contains near-duplicate captures of the same print
         "FashionIQIT2IRetrieval",
+        "GLAMI1MI2TRetrieval",
+        "GLAMI1MT2IRetrieval",  # images recur across language subsets
         "ImageCoDeT2IRetrieval",
         "InfoSeekIT2ITRetrieval",
         "InfoSeekIT2TRetrieval",

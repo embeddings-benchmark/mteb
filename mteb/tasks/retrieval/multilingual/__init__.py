@@ -21,6 +21,7 @@ from .fleurs import (
     FleursT2ARetrieval,
     FleursT2ARetrievalV2,
 )
+from .glami_1m_retrieval import GLAMI1MI2TRetrieval, GLAMI1MT2IRetrieval
 from .google_svq import GoogleSVQA2TRetrieval, GoogleSVQT2ARetrieval
 from .indic_qa_retrieval import IndicQARetrieval
 from .jam_alt import (
@@ -172,6 +173,8 @@ __all__ = [
     "FleursA2TRetrievalV2",
     "FleursT2ARetrieval",
     "FleursT2ARetrievalV2",
+    "GLAMI1MI2TRetrieval",
+    "GLAMI1MT2IRetrieval",
     "GlobalNewsRetrieval",
     "GoogleSVQA2TRetrieval",
     "GoogleSVQT2ARetrieval",
