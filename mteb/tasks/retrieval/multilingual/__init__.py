@@ -111,6 +111,10 @@ from .neu_clir2023_retrieval import (
     NeuCLIR2023RetrievalHardNegatives,
 )
 from .news_retrieval import GlobalNewsRetrieval, PublicNewsRetrieval
+from .omnilingual_asr_retrieval import (
+    OmnilingualASRA2TRetrieval,
+    OmnilingualASRT2ARetrieval,
+)
 from .public_health_qa_retrieval import PublicHealthQARetrieval
 from .ru_sci_bench_retrieval import RuSciBenchCiteRetrieval, RuSciBenchCociteRetrieval
 from .statcan_dialogue_dataset_retrieval import StatcanDialogueDatasetRetrieval
@@ -253,6 +257,8 @@ __all__ = [
     "NeuCLIR2022RetrievalHardNegatives",
     "NeuCLIR2023Retrieval",
     "NeuCLIR2023RetrievalHardNegatives",
+    "OmnilingualASRA2TRetrieval",
+    "OmnilingualASRT2ARetrieval",
     "PublicHealthQARetrieval",
     "PublicNewsRetrieval",
     "RuSciBenchCiteRetrieval",
