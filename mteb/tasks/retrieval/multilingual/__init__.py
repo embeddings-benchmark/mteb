@@ -1,3 +1,4 @@
+from .afri_mcqa_retrieval import AfriMCQAA2IRetrieval, AfriMCQAI2ARetrieval
 from .audio_caps import AudioCapsA2TRetrieval, AudioCapsT2ARetrieval
 from .belebele_retrieval import BelebeleRetrieval
 from .common_voice import (
@@ -154,6 +155,8 @@ from .xm3600_t2i_retrieval import XM3600I2TRetrieval, XM3600T2IRetrieval
 from .xpqa_retrieval import XPQARetrieval
 
 __all__ = [
+    "AfriMCQAA2IRetrieval",
+    "AfriMCQAI2ARetrieval",
     "AudioCapsA2TRetrieval",
     "AudioCapsT2ARetrieval",
     "BelebeleRetrieval",
