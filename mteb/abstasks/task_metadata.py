@@ -193,7 +193,6 @@ MIEB_TASK_TYPE = (
     "VisionCentricQA",
     "ImageClustering",
     "ImageClassification",
-    "AudioImageClassification",
     "DocumentUnderstanding",
     "VisualSTS(eng)",
     "VisualSTS(multi)",
@@ -209,6 +208,10 @@ MAEB_TASK_TYPE = (
     "AudioZeroshotClassification",
     "AudioClassification",
     "AudioPairClassification",
+    # Grouped with the audio types rather than the image ones so that its descriptive
+    # statistics land in descriptive_stats/AudioImageClassification/ rather than nested
+    # under descriptive_stats/Image/, which only the MIEB types are.
+    "AudioImageClassification",
     "Any2AnyRetrieval",
 )
 
