@@ -37,7 +37,7 @@ class AfriMCQACategoryClassification(AbsTaskClassification):
             "path": "vnahata/AfriMCQA-category-classification",
             "revision": "1581d446105e451a1fc8d2c62fd1f3d54d75fb5e",
         },
-        type="ImageClassification",
+        type="AudioImageClassification",
         category="ia2c",
         modalities=["image", "audio"],
         eval_splits=["test"],
