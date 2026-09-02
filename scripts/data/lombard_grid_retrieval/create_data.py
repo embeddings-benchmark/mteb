@@ -1,32 +1,32 @@
 #!/usr/bin/env python3
-"""Build the Lombard GRID image-to-video+audio speaker-retrieval dataset.
+"""Build the Lombard GRID cross-modal utterance-retrieval datasets.
 
 The script is reproducible, resumable, and non-publishing by default. It verifies
 the official Zenodo sizes and MD5 digests, safely extracts the archives, audits
-the source release, selects a balanced fixed protocol, materializes query images,
-and validates every selected output with the media stack used by MTEB.
+the source release, selects a balanced fixed protocol, materializes the selected
+media, and validates every output with the media stack used by MTEB.
 
 Examples:
   # Download and verify the four required source archives.
-  python scripts/data/lombard_grid_i2va/create_data.py download \
-      --work-dir /tmp/lombard-grid-i2va
+  python scripts/data/lombard_grid_retrieval/create_data.py download \
+      --work-dir /tmp/lombard-grid-retrieval
 
   # Reconcile metadata and media, including a complete FFmpeg decode audit.
-  python scripts/data/lombard_grid_i2va/create_data.py inspect \
-      --work-dir /tmp/lombard-grid-i2va
+  python scripts/data/lombard_grid_retrieval/create_data.py inspect \
+      --work-dir /tmp/lombard-grid-retrieval
 
-  # Build and validate the local queries/corpus/qrels datasets.
-  python scripts/data/lombard_grid_i2va/create_data.py build \
-      --work-dir /tmp/lombard-grid-i2va
+  # Build and validate the shared media and link configs.
+  python scripts/data/lombard_grid_retrieval/create_data.py build \
+      --work-dir /tmp/lombard-grid-retrieval
 
   # Re-run validation without rebuilding media.
-  python scripts/data/lombard_grid_i2va/create_data.py validate \
-      --work-dir /tmp/lombard-grid-i2va
+  python scripts/data/lombard_grid_retrieval/create_data.py validate \
+      --work-dir /tmp/lombard-grid-retrieval
 
   # Publishing is a separate, explicit action.
-  python scripts/data/lombard_grid_i2va/create_data.py push \
-      --work-dir /tmp/lombard-grid-i2va \
-      --repo-id Cerru02/LombardGrid-I2VA
+  python scripts/data/lombard_grid_retrieval/create_data.py push \
+      --work-dir /tmp/lombard-grid-retrieval \
+      --repo-id Cerru02/LombardGrid-Retrieval
 """
 
 from __future__ import annotations
@@ -47,19 +47,18 @@ from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, dataclass
 from pathlib import Path, PurePosixPath
-from typing import Any
+from typing import Any, cast
 
-from datasets import Audio, Dataset, DatasetDict, Image, Video, load_from_disk
+from datasets import Audio, Dataset, DatasetDict, Video, load_from_disk
 from huggingface_hub import HfApi, create_repo, get_token
 
 _ZENODO_RECORD = "https://zenodo.org/records/3736465"
 _ZENODO_API = "https://zenodo.org/api/records/3736465/files"
 _PAPER = "https://doi.org/10.1121/1.5042758"
-_SELECTION_SEED = "mteb-lombard-grid-i2va-v1"
+_SELECTION_SEED = "mteb-lombard-grid-retrieval-v2"
 _SPEAKERS = tuple(f"s{index}" for index in range(2, 56))
 _CONDITIONS = ("p", "l")
-_QUERY_PER_CONDITION = 5
-_CORPUS_PER_CONDITION = 10
+_PAIRS_PER_SPEAKER = 10
 _EXPECTED_CORRUPT_FRONT = {
     "s32_l_pwip9p",
     "s32_p_bwwj2n",
@@ -119,13 +118,12 @@ class Recording:
 
 
 @dataclass(frozen=True)
-class SelectedRecording:
-    id: str
-    role: str
-    stem: str
+class SelectedPair:
     speaker: str
-    condition: str
     utterance_code: str
+    plain_stem: str
+    lombard_stem: str
+    matching_condition: str
 
 
 _CORRECT_FILENAME = re.compile(
@@ -548,7 +546,7 @@ def _source_media_audit(
         cached = json.loads(report_path.read_text(encoding="utf-8"))
         if cached.get("archive_fingerprint") == fingerprint:
             print("Using cached complete source-media audit", flush=True)
-            return cached
+            return cast(dict[str, Any], cached)
 
     paths = [
         path
@@ -658,84 +656,100 @@ def _source_media_audit(
     return report
 
 
-def _stable_order_key(role: str, stem: str) -> bytes:
-    value = f"{_SELECTION_SEED}\0{role}\0{stem}".encode()
-    return hashlib.sha256(value).digest()
+def _stable_order_key(namespace: str, value: str) -> bytes:
+    payload = f"{_SELECTION_SEED}\0{namespace}\0{value}".encode()
+    return hashlib.sha256(payload).digest()
 
 
-def _opaque_id(role: str, stem: str) -> str:
-    digest = hashlib.sha256(f"{role}\0{stem}".encode()).hexdigest()[:16]
-    return f"{'q' if role == 'query' else 'c'}_{digest}"
+def _opaque_id(kind: str, stem: str) -> str:
+    digest = hashlib.sha256(f"{kind}\0{stem}".encode()).hexdigest()[:16]
+    prefix = {
+        "recording": "r",
+        "audio": "a",
+        "front_video": "vf",
+        "profile_video": "vp",
+    }[kind]
+    return f"{prefix}_{digest}"
 
 
 def _select_protocol(
     recordings: list[Recording],
     unavailable_stems: set[str],
-) -> tuple[list[SelectedRecording], list[dict[str, str]]]:
+) -> tuple[list[SelectedPair], list[dict[str, str]]]:
     candidates = [
         recording
         for recording in recordings
         if recording.status == "CORRECT" and not recording.legacy_filename
     ]
-    selected: list[SelectedRecording] = []
+    by_key = {recording.canonical_key: recording for recording in candidates}
+    if len(by_key) != len(candidates):
+        raise RuntimeError("Duplicate eligible source recording keys")
+
+    selected: list[SelectedPair] = []
     fallbacks: list[dict[str, str]] = []
     for speaker in _SPEAKERS:
-        used_codes: set[str] = set()
-        for role, quota in (
-            ("query", _QUERY_PER_CONDITION),
-            ("corpus", _CORPUS_PER_CONDITION),
-        ):
-            for condition in _CONDITIONS:
-                ordered = sorted(
-                    (
-                        recording
-                        for recording in candidates
-                        if recording.speaker == speaker
-                        and recording.condition == condition
-                    ),
-                    key=lambda item: _stable_order_key(role, item.stem),
+        plain_codes = {
+            code
+            for spk, condition, code in by_key
+            if spk == speaker and condition == "p"
+        }
+        lombard_codes = {
+            code
+            for spk, condition, code in by_key
+            if spk == speaker and condition == "l"
+        }
+        ordered_codes = sorted(
+            plain_codes & lombard_codes,
+            key=lambda code: _stable_order_key("condition-pair", f"{speaker}_{code}"),
+        )
+        chosen: list[tuple[str, Recording, Recording]] = []
+        for code in ordered_codes:
+            plain = by_key[(speaker, "p", code)]
+            lombard = by_key[(speaker, "l", code)]
+            unavailable = sorted({plain.stem, lombard.stem} & unavailable_stems)
+            if unavailable:
+                fallbacks.append(
+                    {
+                        "speaker": speaker,
+                        "utterance_code": code,
+                        "rejected_stems": ",".join(unavailable),
+                        "reason": "missing or corrupt required source modality",
+                    }
                 )
-                chosen: list[Recording] = []
-                for recording in ordered:
-                    if recording.utterance_code in used_codes:
-                        continue
-                    if recording.stem in unavailable_stems:
-                        fallbacks.append(
-                            {
-                                "speaker": speaker,
-                                "role": role,
-                                "condition": condition,
-                                "rejected_stem": recording.stem,
-                                "reason": "missing or corrupt required source modality",
-                            }
-                        )
-                        continue
-                    chosen.append(recording)
-                    used_codes.add(recording.utterance_code)
-                    if len(chosen) == quota:
-                        break
-                if len(chosen) != quota:
-                    raise RuntimeError(
-                        f"Unable to select {quota} {role}/{condition} recordings "
-                        f"for {speaker}; found {len(chosen)}"
-                    )
-                selected.extend(
-                    SelectedRecording(
-                        id=_opaque_id(role, recording.stem),
-                        role=role,
-                        stem=recording.stem,
-                        speaker=recording.speaker,
-                        condition=recording.condition,
-                        utterance_code=recording.utterance_code,
-                    )
-                    for recording in chosen
-                )
-        if len(used_codes) != 30:
+                continue
+            chosen.append((code, plain, lombard))
+            if len(chosen) == _PAIRS_PER_SPEAKER:
+                break
+        if len(chosen) != _PAIRS_PER_SPEAKER:
             raise RuntimeError(
-                f"Expected 30 distinct utterance codes for {speaker}, "
-                f"found {len(used_codes)}"
+                f"Unable to select {_PAIRS_PER_SPEAKER} complete plain/Lombard "
+                f"pairs for {speaker}; found {len(chosen)}"
             )
+
+        plain_matching_codes = {
+            code
+            for code, _, _ in sorted(
+                chosen,
+                key=lambda item: _stable_order_key(
+                    "matching-condition", f"{speaker}_{item[0]}"
+                ),
+            )[: _PAIRS_PER_SPEAKER // 2]
+        }
+        selected.extend(
+            SelectedPair(
+                speaker=speaker,
+                utterance_code=code,
+                plain_stem=plain.stem,
+                lombard_stem=lombard.stem,
+                matching_condition="p" if code in plain_matching_codes else "l",
+            )
+            for code, plain, lombard in chosen
+        )
     return selected, fallbacks
+
+
+def _selected_stems(selected: list[SelectedPair]) -> list[str]:
+    return [stem for pair in selected for stem in (pair.plain_stem, pair.lombard_stem)]
 
 
 def _copy_resumable(source: Path, destination: Path) -> None:
@@ -745,34 +759,6 @@ def _copy_resumable(source: Path, destination: Path) -> None:
     partial = destination.with_name(destination.name + ".part")
     with source.open("rb") as input_file, partial.open("wb") as output_file:
         shutil.copyfileobj(input_file, output_file, length=8 * 1024 * 1024)
-    partial.replace(destination)
-
-
-def _image_is_valid(path: Path) -> bool:
-    try:
-        from PIL import Image as PILImage
-
-        with PILImage.open(path) as image:
-            image.load()
-            return image.mode == "RGB" and image.width > 0 and image.height > 0
-    except Exception:
-        return False
-
-
-def _extract_midpoint_image(source: Path, destination: Path) -> None:
-    if destination.is_file() and _image_is_valid(destination):
-        return
-    from PIL import Image as PILImage
-    from torchcodec.decoders import VideoDecoder
-
-    decoder = VideoDecoder(source, dimension_order="NHWC")
-    metadata = decoder.metadata
-    midpoint = metadata.begin_stream_seconds + metadata.duration_seconds / 2
-    frame = decoder.get_frame_played_at(midpoint).data.cpu().numpy()
-    image = PILImage.fromarray(frame, mode="RGB")
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    partial = destination.with_name(destination.name + ".part")
-    image.save(partial, format="PNG", optimize=False)
     partial.replace(destination)
 
 
@@ -837,237 +823,248 @@ def _materialize_video(source: Path, destination: Path) -> bool:
 
 def _output_paths(
     output_dir: Path,
-    selected: list[SelectedRecording],
+    selected: list[SelectedPair],
 ) -> dict[str, dict[str, Path]]:
     paths: dict[str, dict[str, Path]] = {}
-    for item in selected:
-        if item.role == "query":
-            paths[item.id] = {
-                "image": output_dir / "media" / "queries" / f"{item.id}.png"
-            }
-        else:
-            paths[item.id] = {
-                "video": output_dir / "media" / "corpus" / "video" / f"{item.id}.mov",
-                "audio": output_dir / "media" / "corpus" / "audio" / f"{item.id}.wav",
-            }
+    for stem in _selected_stems(selected):
+        paths[stem] = {
+            "front_video": output_dir
+            / "media"
+            / "front"
+            / f"{_opaque_id('front_video', stem)}.mov",
+            "profile_video": output_dir
+            / "media"
+            / "profile"
+            / f"{_opaque_id('profile_video', stem)}.mov",
+            "audio": output_dir
+            / "media"
+            / "audio"
+            / f"{_opaque_id('audio', stem)}.wav",
+        }
     return paths
 
 
 def _materialize_media(
     media_root: Path,
     output_dir: Path,
-    selected: list[SelectedRecording],
+    selected: list[SelectedPair],
     *,
     workers: int,
 ) -> tuple[dict[str, dict[str, Path]], list[str]]:
     paths = _output_paths(output_dir, selected)
-    queries = [item for item in selected if item.role == "query"]
-    corpus = [item for item in selected if item.role == "corpus"]
-
-    def extract_query(item: SelectedRecording) -> None:
-        _extract_midpoint_image(
-            media_root / "front" / f"{item.stem}.mov",
-            paths[item.id]["image"],
-        )
-
-    with ThreadPoolExecutor(max_workers=max(1, min(workers, 4))) as pool:
-        list(pool.map(extract_query, queries))
-
     remuxed: list[str] = []
-    for item in corpus:
-        if _materialize_video(
-            media_root / "side" / f"{item.stem}.mov",
-            paths[item.id]["video"],
+    for stem in _selected_stems(selected):
+        for source_view, output_view in (
+            ("front", "front_video"),
+            ("side", "profile_video"),
         ):
-            remuxed.append(item.id)
+            if _materialize_video(
+                media_root / source_view / f"{stem}.mov",
+                paths[stem][output_view],
+            ):
+                remuxed.append(f"{output_view}:{_opaque_id(output_view, stem)}")
         _copy_resumable(
-            media_root / "audio" / f"{item.stem}.wav",
-            paths[item.id]["audio"],
+            media_root / "audio" / f"{stem}.wav",
+            paths[stem]["audio"],
         )
     return paths, remuxed
 
 
 def _validate_output_media(
-    selected: list[SelectedRecording],
+    selected: list[SelectedPair],
     paths: dict[str, dict[str, Path]],
     *,
     workers: int,
 ) -> dict[str, Any]:
-    from torchcodec.decoders import AudioDecoder, VideoDecoder
+    from torchcodec.decoders import (  # type: ignore[attr-defined]
+        AudioDecoder,
+        VideoDecoder,
+    )
 
-    queries = [item for item in selected if item.role == "query"]
-    corpus = [item for item in selected if item.role == "corpus"]
+    def validate_recording(stem: str) -> dict[str, Any]:
+        recording_paths = paths[stem]
+        video_results: dict[str, Any] = {}
+        for view in ("front_video", "profile_video"):
+            video_path = recording_paths[view]
+            if _stream_types(video_path) != ["video"]:
+                raise RuntimeError(f"Published video is not visual-only: {video_path}")
+            video_decoder = VideoDecoder(video_path, dimension_order="NHWC")
+            frames = video_decoder[:]
+            if frames.ndim != 4 or frames.shape[0] == 0:
+                raise RuntimeError(f"No decoded frames in {video_path}")
+            video_results[view] = {
+                "duration_seconds": video_decoder.metadata.duration_seconds,
+                "frames": int(frames.shape[0]),
+                "sha256": _sha256(video_path),
+            }
 
-    query_results: list[tuple[str, str]] = []
-    for item in queries:
-        path = paths[item.id]["image"]
-        if not _image_is_valid(path):
-            raise RuntimeError(f"Invalid query image: {path}")
-        query_results.append((item.id, _sha256(path)))
-
-    def validate_corpus(item: SelectedRecording) -> dict[str, Any]:
-        video_path = paths[item.id]["video"]
-        audio_path = paths[item.id]["audio"]
-        if _stream_types(video_path) != ["video"]:
-            raise RuntimeError(f"Corpus video is not visual-only: {video_path}")
-        video_decoder = VideoDecoder(video_path, dimension_order="NHWC")
-        frames = video_decoder[:]
-        if frames.ndim != 4 or frames.shape[0] == 0:
-            raise RuntimeError(f"No decoded frames in {video_path}")
+        audio_path = recording_paths["audio"]
         audio_decoder = AudioDecoder(audio_path)
         samples = audio_decoder.get_all_samples().data
         if samples.ndim != 2 or samples.shape[-1] == 0:
             raise RuntimeError(f"No decoded samples in {audio_path}")
         return {
-            "id": item.id,
-            "video_duration_seconds": video_decoder.metadata.duration_seconds,
+            "stem": stem,
+            **video_results,
             "audio_duration_seconds": audio_decoder.metadata.duration_seconds,
-            "video_frames": int(frames.shape[0]),
             "audio_samples": int(samples.shape[-1]),
-            "video_sha256": _sha256(video_path),
             "audio_sha256": _sha256(audio_path),
         }
 
     with ThreadPoolExecutor(max_workers=max(1, min(workers, 4))) as pool:
-        corpus_results = list(pool.map(validate_corpus, corpus))
+        results = list(pool.map(validate_recording, _selected_stems(selected)))
 
-    image_hashes = [digest for _, digest in query_results]
-    video_hashes = [item["video_sha256"] for item in corpus_results]
-    audio_hashes = [item["audio_sha256"] for item in corpus_results]
-    if len(set(image_hashes)) != len(image_hashes):
-        raise RuntimeError("Byte-identical query images found")
-    if len(set(video_hashes)) != len(video_hashes):
-        raise RuntimeError("Byte-identical corpus videos found")
+    front_hashes = [item["front_video"]["sha256"] for item in results]
+    profile_hashes = [item["profile_video"]["sha256"] for item in results]
+    audio_hashes = [item["audio_sha256"] for item in results]
+    if len(set(front_hashes)) != len(front_hashes):
+        raise RuntimeError("Byte-identical frontal videos found")
+    if len(set(profile_hashes)) != len(profile_hashes):
+        raise RuntimeError("Byte-identical profile videos found")
     if len(set(audio_hashes)) != len(audio_hashes):
-        raise RuntimeError("Byte-identical corpus audio files found")
+        raise RuntimeError("Byte-identical audio files found")
 
-    duration_differences = [
-        abs(item["video_duration_seconds"] - item["audio_duration_seconds"])
-        for item in corpus_results
-    ]
+    duration_differences = {
+        view: _distribution(
+            [
+                abs(item[view]["duration_seconds"] - item["audio_duration_seconds"])
+                for item in results
+            ]
+        )
+        for view in ("front_video", "profile_video")
+    }
     return {
-        "query_images_fully_decoded": len(query_results),
-        "corpus_videos_fully_decoded_with_torchcodec": len(corpus_results),
-        "corpus_audio_fully_decoded_with_torchcodec": len(corpus_results),
-        "byte_identical_query_images": 0,
-        "byte_identical_corpus_videos": 0,
-        "byte_identical_corpus_audio": 0,
-        "video_audio_duration_absolute_difference_seconds": _distribution(
-            duration_differences
-        ),
+        "recordings": len(results),
+        "front_videos_fully_decoded_with_torchcodec": len(results),
+        "profile_videos_fully_decoded_with_torchcodec": len(results),
+        "audio_files_fully_decoded_with_torchcodec": len(results),
+        "byte_identical_front_videos": 0,
+        "byte_identical_profile_videos": 0,
+        "byte_identical_audio_files": 0,
+        "video_audio_duration_absolute_difference_seconds": duration_differences,
         "signal_level_synchronization_independently_verified": False,
     }
 
 
-def _build_qrels(
-    selected: list[SelectedRecording],
-) -> list[tuple[str, str, int]]:
-    queries = [item for item in selected if item.role == "query"]
-    corpus = [item for item in selected if item.role == "corpus"]
-    return sorted(
-        (query.id, document.id, 1)
-        for query in queries
-        for document in corpus
-        if query.speaker == document.speaker
-    )
-
-
 def _validate_protocol(
-    selected: list[SelectedRecording],
-    qrels: list[tuple[str, str, int]],
+    selected: list[SelectedPair],
 ) -> dict[str, Any]:
-    queries = [item for item in selected if item.role == "query"]
-    corpus = [item for item in selected if item.role == "corpus"]
-    if len(queries) != 540 or len(corpus) != 1_080 or len(qrels) != 10_800:
-        raise RuntimeError(
-            f"Unexpected protocol counts: {len(queries)=}, {len(corpus)=}, "
-            f"{len(qrels)=}"
-        )
-    ids = [item.id for item in selected]
-    if len(ids) != len(set(ids)):
-        raise RuntimeError("Duplicate opaque recording IDs")
-
-    query_ids = {item.id for item in queries}
-    corpus_ids = {item.id for item in corpus}
-    if query_ids & corpus_ids:
-        raise RuntimeError("Query/corpus ID overlap")
-    if any(
-        query_id not in query_ids or corpus_id not in corpus_ids
-        for query_id, corpus_id, _ in qrels
-    ):
-        raise RuntimeError("Qrel references an unknown ID")
-    if any(score != 1 for _, _, score in qrels):
-        raise RuntimeError("Non-binary qrel score")
-
-    by_query = Counter(query_id for query_id, _, _ in qrels)
-    if set(by_query) != query_ids or set(by_query.values()) != {20}:
-        raise RuntimeError("Every query must have exactly 20 relevant documents")
+    if len(selected) != len(_SPEAKERS) * _PAIRS_PER_SPEAKER:
+        raise RuntimeError(f"Unexpected selected-pair count: {len(selected)}")
+    stems = _selected_stems(selected)
+    if len(stems) != 1_080 or len(stems) != len(set(stems)):
+        raise RuntimeError("Expected 1,080 unique selected recordings")
 
     speaker_balance: dict[str, Any] = {}
     for speaker in _SPEAKERS:
-        speaker_queries = [item for item in queries if item.speaker == speaker]
-        speaker_corpus = [item for item in corpus if item.speaker == speaker]
-        if len(speaker_queries) != 10 or len(speaker_corpus) != 20:
+        pairs = [pair for pair in selected if pair.speaker == speaker]
+        if len(pairs) != _PAIRS_PER_SPEAKER:
             raise RuntimeError(f"Unbalanced speaker {speaker}")
-        if Counter(item.condition for item in speaker_queries) != {"p": 5, "l": 5}:
-            raise RuntimeError(f"Unbalanced query conditions for {speaker}")
-        if Counter(item.condition for item in speaker_corpus) != {"p": 10, "l": 10}:
-            raise RuntimeError(f"Unbalanced corpus conditions for {speaker}")
-        query_codes = {item.utterance_code for item in speaker_queries}
-        corpus_codes = {item.utterance_code for item in speaker_corpus}
-        if query_codes & corpus_codes or len(query_codes | corpus_codes) != 30:
-            raise RuntimeError(f"Utterance-code leakage for {speaker}")
+        codes = {pair.utterance_code for pair in pairs}
+        if len(codes) != _PAIRS_PER_SPEAKER:
+            raise RuntimeError(f"Duplicate selected sentence codes for {speaker}")
+        if Counter(pair.matching_condition for pair in pairs) != {"p": 5, "l": 5}:
+            raise RuntimeError(f"Unbalanced matching-task conditions for {speaker}")
+        for pair in pairs:
+            plain = _parse_recording(pair.plain_stem)
+            lombard = _parse_recording(pair.lombard_stem)
+            if (
+                plain.speaker != speaker
+                or lombard.speaker != speaker
+                or plain.condition != "p"
+                or lombard.condition != "l"
+                or plain.utterance_code != pair.utterance_code
+                or lombard.utterance_code != pair.utterance_code
+            ):
+                raise RuntimeError(f"Invalid plain/Lombard pair for {speaker}")
         speaker_balance[speaker] = {
-            "queries": len(speaker_queries),
-            "query_plain": 5,
-            "query_lombard": 5,
-            "corpus": len(speaker_corpus),
-            "corpus_plain": 10,
-            "corpus_lombard": 10,
-            "distinct_utterance_codes": 30,
+            "condition_pairs": len(pairs),
+            "matching_plain": 5,
+            "matching_lombard": 5,
+            "distinct_sentence_codes": len(codes),
         }
 
     return {
-        "queries": len(queries),
-        "corpus": len(corpus),
-        "qrels": len(qrels),
-        "relevant_corpus_per_query": 20,
         "speakers": len(_SPEAKERS),
+        "condition_pairs": len(selected),
+        "published_media_recordings": len(stems),
+        "matching_utterance_recordings": len(selected),
         "speaker_condition_balance": speaker_balance,
-        "query_corpus_utterance_code_overlap": 0,
         "published_feature_labels": [],
+        "tasks": {
+            "LombardGridA2VRetrieval": {
+                "queries": 540,
+                "corpus": 1_080,
+                "qrels": 1_080,
+                "positives_per_query": 2,
+            },
+            "LombardGridV2ARetrieval": {
+                "queries": 1_080,
+                "corpus": 540,
+                "qrels": 1_080,
+                "positives_per_query": 1,
+            },
+            "LombardGridV2VRetrieval": {
+                "queries": 540,
+                "corpus": 540,
+                "qrels": 540,
+                "positives_per_query": 1,
+            },
+            "LombardGridVA2VARetrieval": {
+                "queries": 540,
+                "corpus": 540,
+                "qrels": 540,
+                "positives_per_query": 1,
+            },
+        },
     }
 
 
 def _make_datasets(
-    selected: list[SelectedRecording],
-    qrels: list[tuple[str, str, int]],
+    selected: list[SelectedPair],
     paths: dict[str, dict[str, Path]],
 ) -> tuple[Dataset, Dataset, Dataset]:
-    queries = [item for item in selected if item.role == "query"]
-    corpus = [item for item in selected if item.role == "corpus"]
-    query_dataset = Dataset.from_dict(
+    stems = _selected_stems(selected)
+    media = Dataset.from_dict(
         {
-            "id": [item.id for item in queries],
-            "image": [str(paths[item.id]["image"]) for item in queries],
+            "recording_id": [_opaque_id("recording", stem) for stem in stems],
+            "audio_id": [_opaque_id("audio", stem) for stem in stems],
+            "front_video_id": [_opaque_id("front_video", stem) for stem in stems],
+            "profile_video_id": [_opaque_id("profile_video", stem) for stem in stems],
+            "front_video": [str(paths[stem]["front_video"]) for stem in stems],
+            "profile_video": [str(paths[stem]["profile_video"]) for stem in stems],
+            "audio": [str(paths[stem]["audio"]) for stem in stems],
         }
-    ).cast_column("image", Image())
-    corpus_dataset = Dataset.from_dict(
+    ).cast_column("front_video", Video())
+    media = media.cast_column("profile_video", Video())
+    media = media.cast_column("audio", Audio())
+
+    matching_stems = [
+        pair.plain_stem if pair.matching_condition == "p" else pair.lombard_stem
+        for pair in selected
+    ]
+    matching = Dataset.from_dict(
         {
-            "id": [item.id for item in corpus],
-            "video": [str(paths[item.id]["video"]) for item in corpus],
-            "audio": [str(paths[item.id]["audio"]) for item in corpus],
-        }
-    ).cast_column("video", Video())
-    corpus_dataset = corpus_dataset.cast_column("audio", Audio())
-    qrel_dataset = Dataset.from_dict(
-        {
-            "query-id": [query_id for query_id, _, _ in qrels],
-            "corpus-id": [corpus_id for _, corpus_id, _ in qrels],
-            "score": [score for _, _, score in qrels],
+            "audio_id": [_opaque_id("audio", stem) for stem in matching_stems],
+            "front_video_id": [
+                _opaque_id("front_video", stem) for stem in matching_stems
+            ],
+            "profile_video_id": [
+                _opaque_id("profile_video", stem) for stem in matching_stems
+            ],
         }
     )
-    return corpus_dataset, query_dataset, qrel_dataset
+    condition_pairs = Dataset.from_dict(
+        {
+            "plain_recording_id": [
+                _opaque_id("recording", pair.plain_stem) for pair in selected
+            ],
+            "lombard_recording_id": [
+                _opaque_id("recording", pair.lombard_stem) for pair in selected
+            ],
+        }
+    )
+    return media, matching, condition_pairs
 
 
 def _feature_schema(dataset: Dataset) -> dict[str, str]:
@@ -1081,8 +1078,10 @@ def _dataset_identity_matches(
 ) -> bool:
     if len(existing) != len(expected) or existing.features != expected.features:
         return False
-    identity_columns = (
-        ("id",) if name in {"corpus", "queries"} else tuple(expected.column_names)
+    identity_columns = tuple(
+        column
+        for column in expected.column_names
+        if column == "recording_id" or column.endswith("_id")
     )
     return all(
         list(existing[column]) == list(expected[column]) for column in identity_columns
@@ -1091,14 +1090,12 @@ def _dataset_identity_matches(
 
 def _save_datasets(
     output_dir: Path,
-    corpus: Dataset,
-    queries: Dataset,
-    qrels: Dataset,
+    datasets: dict[str, Dataset],
     *,
     force: bool,
 ) -> None:
     datasets_dir = output_dir / "datasets"
-    for name, dataset in (("corpus", corpus), ("queries", queries), ("qrels", qrels)):
+    for name, dataset in datasets.items():
         destination = datasets_dir / name
         if destination.exists():
             if not force:
@@ -1118,48 +1115,53 @@ def _dataset_card(summary: dict[str, Any]) -> str:
     media = summary["selected_media_validation"]
     source = summary["source_reconciliation"]
     fallbacks = summary["selection_fallbacks"]
-    remuxed = summary["corpus_videos_remuxed_to_strip_audio"]
+    remuxed = summary["videos_remuxed_to_strip_audio"]
     return f"""---
 license: cc-by-4.0
-pretty_name: Lombard GRID Image-to-Video+Audio Speaker Retrieval
+pretty_name: Lombard GRID Cross-Modal Utterance Retrieval
 task_categories:
-- image-to-video
+- any-to-any
 tags:
 - mteb
 - moeb
-- image-to-video-audio-retrieval
-- speaker-retrieval
-- biometric-evaluation
+- audio-video-retrieval
+- cross-view-retrieval
+- speech-retrieval
 ---
 
-# Lombard GRID Image-to-Video+Audio Speaker Retrieval
+# Lombard GRID Cross-Modal Utterance Retrieval
 
-An MTEB/MOEB image-to-video+audio (`i2va`) speaker-retrieval benchmark derived
-from the [Lombard GRID corpus]({_ZENODO_RECORD}). Query images show a frontal
-view of a talker. Corpus items contain a different utterance from the side/profile
-camera together with the matching separate high-quality audio recording. Every
-corpus item from the same speaker is relevant.
+Four MTEB/MOEB utterance-retrieval tasks derived from the
+[Lombard GRID corpus]({_ZENODO_RECORD}): audio-to-video, video-to-audio,
+frontal-to-profile video, and plain-to-Lombard video+audio. Relevance always
+requires the same utterance recording or the same speaker-and-sentence pair;
+speaker identity alone is never relevant.
 
-The source paper introduced the corpus but did not define this retrieval task.
-Relevance is derived from native speaker identity labels.
+The source paper introduced the corpus but did not define these retrieval tasks.
+Relevance is derived from native recording, speaker, sentence-code, condition,
+and camera-view labels.
 
 ## Frozen evaluation protocol
 
-- Test queries: {protocol["queries"]} (10 per speaker; 5 plain and 5 Lombard)
-- Test corpus: {protocol["corpus"]} (20 per speaker; 10 plain and 10 Lombard)
-- Binary qrels: {protocol["qrels"]}
 - Speakers: {protocol["speakers"]} (`s2` through `s55`; `s1` was excluded by the source)
-- Relevant corpus items per query: {protocol["relevant_corpus_per_query"]}
-- Distinct utterance codes per speaker: 30
-- Query/corpus utterance-code overlap: 0
+- Selected sentence codes: {protocol["condition_pairs"]} (10 per speaker)
+- Published media recordings: {protocol["published_media_recordings"]}
+- Matching-task recordings: {protocol["matching_utterance_recordings"]} (5 plain and 5 Lombard per speaker)
 - Selection seed: `{_SELECTION_SEED}`
 
-Within each speaker and condition, recordings are ordered by SHA-256 over the
-fixed seed, role, and source filename. The query and corpus selections are
-balanced across plain and Lombard conditions and are disjoint at the
-`(speaker, utterance_code)` level. Query images are the frame displayed at the
-temporal midpoint of the selected frontal clip. Opaque IDs are published; speaker,
-condition, utterance code, transcription, and other text are not dataset features.
+For every speaker, eligible sentence codes present in both conditions and all
+three media streams are ordered by SHA-256 over the fixed seed, speaker, and
+sentence code. The first ten valid pairs are retained. Five plain and five
+Lombard recordings per speaker are then selected deterministically for the three
+same-recording tasks. Opaque IDs are published; speaker, condition, sentence
+code, transcription, and other text are not encodable dataset features.
+
+| Task | Queries | Corpus | Qrels | Positives/query |
+|---|---:|---:|---:|---:|
+| Audio to frontal/profile video | 540 | 1,080 | 1,080 | 2 |
+| Frontal/profile video to audio | 1,080 | 540 | 1,080 | 1 |
+| Frontal video to profile video | 540 | 540 | 540 | 1 |
+| Plain frontal video+audio to Lombard frontal video+audio | 540 | 540 | 540 | 1 |
 
 ## Source audit and release discrepancies
 
@@ -1174,37 +1176,39 @@ recordings as `WRONG`. Media filenames mark 70: the additional one is among the
 excluded from selection. Four frontal MOV files lack a `moov` atom and are corrupt:
 `s32_l_pwip9p`, `s32_p_bwwj2n`, `s33_l_pwajza`, and `s33_p_sgwq2s`.
 
-The deterministic selection required {len(fallbacks)} fallback(s). The selected
+The deterministic selection required {len(fallbacks)} fallback(s); the selected
 protocol remains exactly balanced after exclusions.
 
 ## Media processing and validation
 
 The released MOV files are already H.264/yuv420p visual-only clips, so
-{protocol["corpus"] - len(remuxed)} selected corpus videos are copied without
+{2 * protocol["published_media_recordings"] - len(remuxed):,} selected videos are copied without
 transcoding. {len(remuxed)} video(s) required a lossless video-stream remux to
 remove embedded audio. Separate source WAV files are copied without transcoding.
-Only the query midpoint frames are newly encoded, as RGB PNG files.
 
-All {media["query_images_fully_decoded"]} images, all
-{media["corpus_videos_fully_decoded_with_torchcodec"]} complete videos, and all
-{media["corpus_audio_fully_decoded_with_torchcodec"]} complete audio files were
-decoded during construction. Matching speaker, condition, utterance code, and
-source filename stems establish audiovisual correspondence. Selected video/audio
-duration differences were checked and paired decoding succeeded. The source
-paper reports correlation-based audiovisual alignment before utterance extraction;
-this construction did **not** independently verify signal-level synchronization.
+All {media["front_videos_fully_decoded_with_torchcodec"]} frontal videos,
+{media["profile_videos_fully_decoded_with_torchcodec"]} profile videos, and
+{media["audio_files_fully_decoded_with_torchcodec"]} audio files were decoded
+completely with TorchCodec during construction. Matching source filename stems
+establish audiovisual correspondence. Selected video/audio duration differences
+were checked and paired decoding succeeded. The source paper reports
+correlation-based audiovisual alignment before utterance extraction; this
+construction did **not** independently verify signal-level synchronization.
 
-Configs follow MTEB's retrieval layout:
+The shared configs avoid storing the same media repeatedly across four tasks:
 
-- `queries/test`: `id`, `image`
-- `corpus/test`: `id`, `video`, `audio`
-- `qrels/test`: `query-id`, `corpus-id`, `score`
+- `media/test`: opaque recording and modality IDs, frontal video, profile video, audio
+- `matching_utterances/test`: opaque audio, frontal-video, and profile-video IDs
+- `condition_pairs/test`: opaque plain- and Lombard-recording IDs
+
+The MTEB task loaders project these configs into the standard query, corpus, and
+qrel structures without exposing source labels to embedding models.
 
 ## Evaluation
 
-The primary metric is nDCG@10. Other standard MTEB retrieval metrics are reported
-as secondary results. This multi-positive speaker-retrieval protocol is newly
-derived, so there is no source-paper retrieval score to reproduce.
+The primary metric for all four tasks is nDCG@10. Other standard MTEB retrieval
+metrics are reported as secondary results. These protocols are newly derived, so
+there is no source-paper retrieval score to reproduce.
 
 ## License and attribution
 
@@ -1215,11 +1219,10 @@ metadata and this card both use `cc-by-4.0`.
 
 ## Responsible use
 
-This task evaluates biometric speaker identity using faces and voices. Such
-representations can create privacy, surveillance, demographic-bias, and
-misidentification risks. Results should be treated as research measurements, not
-as evidence that a system is suitable for identity decisions. Users should
-consider participant consent, applicable biometric-data law, subgroup behavior,
+The source contains identifiable faces and voices. Although these tasks evaluate
+utterance correspondence rather than biometric identification, the representations
+may still encode identity and demographic attributes. Users should consider
+participant consent, privacy, applicable biometric-data law, subgroup behavior,
 and downstream misuse before training or deploying related systems.
 
 ## Citation
@@ -1289,8 +1292,7 @@ def _build_or_validate(args: argparse.Namespace, *, build: bool) -> dict[str, An
     )
     unavailable = {Path(relative).stem for relative in audit["decode_errors"]}
     selected, fallbacks = _select_protocol(recordings, unavailable)
-    qrels = _build_qrels(selected)
-    protocol_validation = _validate_protocol(selected, qrels)
+    protocol_validation = _validate_protocol(selected)
 
     if build:
         paths, remuxed = _materialize_media(
@@ -1318,17 +1320,30 @@ def _build_or_validate(args: argparse.Namespace, *, build: bool) -> dict[str, An
         paths,
         workers=args.workers,
     )
-    corpus, queries, qrel_dataset = _make_datasets(selected, qrels, paths)
+    media, matching, condition_pairs = _make_datasets(selected, paths)
+    datasets = {
+        "media": media,
+        "matching_utterances": matching,
+        "condition_pairs": condition_pairs,
+    }
     expected_columns = {
-        "queries": ["id", "image"],
-        "corpus": ["id", "video", "audio"],
-        "qrels": ["query-id", "corpus-id", "score"],
+        "media": [
+            "recording_id",
+            "audio_id",
+            "front_video_id",
+            "profile_video_id",
+            "front_video",
+            "profile_video",
+            "audio",
+        ],
+        "matching_utterances": [
+            "audio_id",
+            "front_video_id",
+            "profile_video_id",
+        ],
+        "condition_pairs": ["plain_recording_id", "lombard_recording_id"],
     }
-    actual_columns = {
-        "queries": queries.column_names,
-        "corpus": corpus.column_names,
-        "qrels": qrel_dataset.column_names,
-    }
+    actual_columns = {name: dataset.column_names for name, dataset in datasets.items()}
     if actual_columns != expected_columns:
         raise RuntimeError(f"Unexpected schemas: {actual_columns}")
 
@@ -1338,22 +1353,24 @@ def _build_or_validate(args: argparse.Namespace, *, build: bool) -> dict[str, An
         "source_reconciliation": reconciliation,
         "source_media_audit": audit,
         "selection_fallbacks": fallbacks,
-        "corpus_videos_remuxed_to_strip_audio": remuxed,
+        "videos_remuxed_to_strip_audio": remuxed,
         "protocol_validation": protocol_validation,
         "selected_media_validation": selected_media_validation,
         "schemas": {
-            "queries": _feature_schema(queries),
-            "corpus": _feature_schema(corpus),
-            "qrels": _feature_schema(qrel_dataset),
+            name: _feature_schema(dataset) for name, dataset in datasets.items()
         },
         "dataset_examples": {
-            "queries": {"id": queries[0]["id"], "image": "<image>"},
-            "corpus": {
-                "id": corpus[0]["id"],
-                "video": "<video>",
+            "media": {
+                "recording_id": media["recording_id"][0],
+                "audio_id": media["audio_id"][0],
+                "front_video_id": media["front_video_id"][0],
+                "profile_video_id": media["profile_video_id"][0],
+                "front_video": "<video>",
+                "profile_video": "<video>",
                 "audio": "<audio>",
             },
-            "qrels": qrel_dataset[0],
+            "matching_utterances": matching[0],
+            "condition_pairs": condition_pairs[0],
         },
     }
 
@@ -1374,17 +1391,11 @@ def _build_or_validate(args: argparse.Namespace, *, build: bool) -> dict[str, An
     if build:
         _save_datasets(
             output_dir,
-            corpus,
-            queries,
-            qrel_dataset,
+            datasets,
             force=args.force,
         )
     else:
-        for name, expected in (
-            ("corpus", corpus),
-            ("queries", queries),
-            ("qrels", qrel_dataset),
-        ):
+        for name, expected in datasets.items():
             loaded = load_from_disk(str(output_dir / "datasets" / name))
             if not _dataset_identity_matches(name, loaded, expected):
                 raise RuntimeError(f"Saved {name} dataset does not match rebuilt data")
@@ -1397,9 +1408,9 @@ def _publish(work_dir: Path, repo_id: str) -> str:
     required = [
         output_dir / "README.md",
         output_dir / "build_summary.json",
-        output_dir / "datasets" / "queries",
-        output_dir / "datasets" / "corpus",
-        output_dir / "datasets" / "qrels",
+        output_dir / "datasets" / "media",
+        output_dir / "datasets" / "matching_utterances",
+        output_dir / "datasets" / "condition_pairs",
     ]
     missing = [str(path) for path in required if not path.exists()]
     if missing:
@@ -1408,9 +1419,9 @@ def _publish(work_dir: Path, repo_id: str) -> str:
     if not token:
         raise RuntimeError("No Hugging Face token found; run `hf auth login` first")
 
-    corpus = load_from_disk(str(output_dir / "datasets" / "corpus"))
-    queries = load_from_disk(str(output_dir / "datasets" / "queries"))
-    qrels = load_from_disk(str(output_dir / "datasets" / "qrels"))
+    media = load_from_disk(str(output_dir / "datasets" / "media"))
+    matching = load_from_disk(str(output_dir / "datasets" / "matching_utterances"))
+    condition_pairs = load_from_disk(str(output_dir / "datasets" / "condition_pairs"))
     create_repo(repo_id, repo_type="dataset", token=token, exist_ok=True)
     api = HfApi(token=token)
     # Upload the human-authored card first. Each Dataset push then merges its
@@ -1423,26 +1434,35 @@ def _publish(work_dir: Path, repo_id: str) -> str:
         repo_type="dataset",
         commit_message="Add Lombard GRID dataset card",
     )
-    DatasetDict({"test": queries}).push_to_hub(
+    DatasetDict({"test": media}).push_to_hub(
         repo_id,
-        "queries",
-        token=token,
-        commit_message="Add Lombard GRID image queries",
-    )
-    DatasetDict({"test": corpus}).push_to_hub(
-        repo_id,
-        "corpus",
+        "media",
         token=token,
         max_shard_size="500MB",
-        commit_message="Add Lombard GRID video+audio corpus",
+        commit_message="Add Lombard GRID selected media",
     )
-    DatasetDict({"test": qrels}).push_to_hub(
+    DatasetDict({"test": matching}).push_to_hub(
         repo_id,
-        "qrels",
+        "matching_utterances",
         token=token,
-        commit_message="Add Lombard GRID relevance judgments",
+        commit_message="Add Lombard GRID matching-utterance links",
+    )
+    DatasetDict({"test": condition_pairs}).push_to_hub(
+        repo_id,
+        "condition_pairs",
+        token=token,
+        commit_message="Add Lombard GRID plain-Lombard links",
+    )
+    api.upload_file(
+        path_or_fileobj=(output_dir / "build_summary.json"),
+        path_in_repo="build_summary.json",
+        repo_id=repo_id,
+        repo_type="dataset",
+        commit_message="Add Lombard GRID build summary",
     )
     sha = api.dataset_info(repo_id).sha
+    if sha is None:
+        raise RuntimeError("Hugging Face did not return a dataset revision")
     (output_dir / "hub_revision.txt").write_text(f"{sha}\n", encoding="utf-8")
     print(f"Published immutable revision {sha}", flush=True)
     return sha
@@ -1457,7 +1477,7 @@ def main() -> None:
     parser.add_argument(
         "--work-dir",
         type=Path,
-        default=Path("/tmp/lombard-grid-i2va"),
+        default=Path("/tmp/lombard-grid-retrieval"),
     )
     parser.add_argument(
         "--source-dir",
@@ -1472,7 +1492,7 @@ def main() -> None:
     parser.add_argument("--download-retries", type=int, default=3)
     parser.add_argument("--workers", type=int, default=8)
     parser.add_argument("--force", action="store_true")
-    parser.add_argument("--repo-id", default="Cerru02/LombardGrid-I2VA")
+    parser.add_argument("--repo-id", default="Cerru02/LombardGrid-Retrieval")
     args = parser.parse_args()
 
     work_dir = args.work_dir.resolve()
