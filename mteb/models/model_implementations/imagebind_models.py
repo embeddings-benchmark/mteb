@@ -59,7 +59,10 @@ class ImageBindWrapper(AbsEncoder):
         from imagebind import data
         from imagebind.models.imagebind_model import ModalityType
 
-        return data.load_and_transform_text(texts, self.device)[ModalityType.TEXT]
+        result = data.load_and_transform_text(texts, self.device)
+        if isinstance(result, dict):
+            return result[ModalityType.TEXT]
+        return result
 
     def _load_images(self, images: list) -> torch.Tensor:
         """Transform PIL images using ImageBind's vision pipeline."""
