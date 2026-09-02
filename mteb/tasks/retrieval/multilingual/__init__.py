@@ -72,6 +72,10 @@ from .jina_vdr_bench_retrieval import (
     JinaVDRWikimediaCommonsDocumentsRetrieval,
     JinaVDRWikimediaCommonsMapsRetrieval,
 )
+from .lingua_libre_retrieval import (
+    LinguaLibreA2TRetrieval,
+    LinguaLibreT2ARetrieval,
+)
 from .mintaka_retrieval import MintakaRetrieval
 from .miracl_retrieval import (
     MIRACLRetrieval,
@@ -219,6 +223,8 @@ __all__ = [
     "JinaVDRTweetStockSyntheticsRetrieval",
     "JinaVDRWikimediaCommonsDocumentsRetrieval",
     "JinaVDRWikimediaCommonsMapsRetrieval",
+    "LinguaLibreA2TRetrieval",
+    "LinguaLibreT2ARetrieval",
     "MIRACLRetrieval",
     "MIRACLRetrievalHardNegatives",
     "MIRACLRetrievalHardNegativesV2",
