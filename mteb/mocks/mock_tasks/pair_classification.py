@@ -943,7 +943,7 @@ class MockSymCustomVideoAudioPairClassificationTaskV2(AbsTaskPairClassification)
 
     input1_column_name = {"video": "video"}
     input2_column_name = {"audio": "audio"}
-    input1_prompt_type = PromptType.query
+    input1_prompt_type = PromptType.document
     input2_prompt_type = PromptType.document
 
     label_column_name = "label"
