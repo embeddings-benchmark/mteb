@@ -23,6 +23,7 @@ from mteb.types.statistics import (
 
 KNOWN_ISSUES: dict[str, list[str]] = {
     "short_text": [
+        "AfriMCQAVisionCentricQA",  # a correct answer can be one character, such as a count
         "ARCChallenge",
         "AVMemeExamVideoAudioCentricQA",
         "AVMemeExamVideoCentricQA",
@@ -411,6 +412,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "BrightProSustainableLivingRetrieval",
     ],
     "duplicate_text": [
+        "AfriMCQAVisionCentricQA",  # each question carries its own copy of its options, and top_ranked scopes it to them
         "AfriHateClassification",
         "AfriSentiClassification",
         "AllegroReviews",
@@ -830,6 +832,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "YueOpenriceReviewClassification",
     ],
     "duplicate_image": [
+        "AfriMCQAVisionCentricQA",  # several questions are asked about one photograph by design
         "AROCocoOrder",
         "AROFlickrOrder",
         "AROVisualAttribution",
