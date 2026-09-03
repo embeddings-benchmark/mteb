@@ -1,4 +1,5 @@
 from collections import defaultdict
+from typing import Any
 
 from datasets import Dataset, DatasetDict, load_dataset
 from tqdm.auto import tqdm
@@ -43,7 +44,7 @@ class ClothoA2TRetrieval(AbsTaskRetrieval):
         superseded_by="ClothoA2TRetrieval.v2",
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -148,7 +149,7 @@ class ClothoT2ARetrieval(AbsTaskRetrieval):
         superseded_by="ClothoT2ARetrieval.v2",
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 

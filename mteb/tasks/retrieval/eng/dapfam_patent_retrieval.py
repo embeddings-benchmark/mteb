@@ -1,3 +1,5 @@
+from typing import Any
+
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -59,7 +61,7 @@ class _DAPFAMMixin:
     query_fields: list[str] = []  # noqa: RUF012
     corpus_fields: list[str] = []  # noqa: RUF012
 
-    def load_data(self, **kwargs) -> tuple[dict, dict, dict]:
+    def load_data(self, **kwargs: Any) -> tuple[dict, dict, dict]:
         ds_c = load_dataset(
             self.metadata.dataset["path"],
             "corpus",

@@ -210,7 +210,7 @@ class FleursA2TRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
         self.corpus = defaultdict(DatasetDict)
@@ -283,7 +283,7 @@ class FleursT2ARetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
         self.corpus = defaultdict(DatasetDict)
@@ -364,7 +364,7 @@ class FleursA2TRetrievalV2(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
         self.corpus = defaultdict(DatasetDict)
@@ -432,7 +432,7 @@ class FleursT2ARetrievalV2(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
         self.corpus = defaultdict(DatasetDict)

@@ -1,3 +1,5 @@
+from typing import Any
+
 from datasets import Dataset, DatasetDict, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -167,7 +169,7 @@ class WITT2IRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
@@ -217,7 +219,7 @@ class WITI2TRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a caption describing the following image."},
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 

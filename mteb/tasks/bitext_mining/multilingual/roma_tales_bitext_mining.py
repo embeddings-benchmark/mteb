@@ -1,3 +1,5 @@
+from typing import Any
+
 import datasets
 
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -32,7 +34,7 @@ class RomaTalesBitextMining(AbsTaskBitextMining):
         bibtex_citation="",
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """Load dataset from HuggingFace hub and convert it to the standard format."""
         if self.data_loaded:
             return

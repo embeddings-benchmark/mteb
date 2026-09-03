@@ -1,3 +1,5 @@
+from typing import Any
+
 import datasets
 import numpy as np
 from datasets import Dataset, DatasetDict
@@ -51,7 +53,7 @@ class MLSUMClusteringS2S(AbsTaskClusteringLegacy):
         superseded_by="MLSUMClusteringS2S.v2",
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """Load dataset from HuggingFace hub and convert it to the standard format."""
         if self.data_loaded:
             return
@@ -119,7 +121,7 @@ class MLSUMClusteringS2SFast(AbsTaskClustering):
         adapted_from=["MLSUMClusteringS2S"],
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """Load dataset from HuggingFace hub and convert it to the standard format."""
         if self.data_loaded:
             return

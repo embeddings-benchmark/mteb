@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.sts import AbsTaskSTS
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -39,7 +41,7 @@ class Assin2STS(AbsTaskSTS):
     min_score = 1
     max_score = 5
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.dataset = self.dataset.rename_columns(
             {
                 "premise": "sentence1",

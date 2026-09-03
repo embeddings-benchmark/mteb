@@ -1,3 +1,5 @@
+from typing import Any
+
 from datasets import Audio, DatasetDict, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -18,7 +20,7 @@ def _load_jam_alt_data(
     query_column: str,
     corpus_column: str,
     qrels_column: str,
-    **kwargs,
+    **kwargs: Any,
 ):
     corpus = {lang: dict.fromkeys(splits) for lang in langs}
     queries = {lang: dict.fromkeys(splits) for lang in langs}
@@ -143,7 +145,7 @@ Music Information Retrieval Conference},
         },
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -201,7 +203,7 @@ Music Information Retrieval Conference},
         prompt={"query": "Retrieve audio clip for the lyrics: {query}"},
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -261,7 +263,7 @@ Music Information Retrieval Conference},
         },
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 

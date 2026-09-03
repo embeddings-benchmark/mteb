@@ -1,3 +1,5 @@
+from typing import Any
+
 from datasets import Audio, DatasetDict
 from sklearn.linear_model import LogisticRegression
 from sklearn.multioutput import MultiOutputClassifier
@@ -47,7 +49,7 @@ class BirdSetMultilabelClassification(AbsTaskMultilabelClassification):
     label_column_name: str = "labels"
     samples_per_label: int = 21
 
-    def dataset_transform(self, **kwargs):
+    def dataset_transform(self, **kwargs: Any):
         if "ebird_code_multilabel" in self.dataset.column_names[self.eval_splits[0]]:
             self.dataset = self.dataset.rename_column(
                 original_column_name="ebird_code_multilabel",

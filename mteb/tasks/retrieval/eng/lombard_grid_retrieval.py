@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Any, Literal
 
 from datasets import concatenate_datasets, load_dataset
 
@@ -174,7 +174,7 @@ class LombardGridA2VRetrieval(AbsTaskRetrieval):
         **_COMMON,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_lombard_grid(self, "a2v")
 
 
@@ -193,7 +193,7 @@ class LombardGridV2ARetrieval(AbsTaskRetrieval):
         **_COMMON,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_lombard_grid(self, "v2a")
 
 
@@ -214,7 +214,7 @@ class LombardGridV2VRetrieval(AbsTaskRetrieval):
         **_COMMON,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_lombard_grid(self, "v2v")
 
 
@@ -240,5 +240,5 @@ class LombardGridVA2VARetrieval(AbsTaskRetrieval):
         **_COMMON,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_lombard_grid(self, "va2va")
