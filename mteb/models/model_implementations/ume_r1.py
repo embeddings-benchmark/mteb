@@ -35,7 +35,7 @@ class UMER1Wrapper(AbsEncoder):
         fps: float | None = 2.0,
         max_frames: int | None = 64,
         num_frames: int | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         from transformers import AutoProcessor, Qwen2VLForConditionalGeneration
         from transformers.utils.import_utils import is_flash_attn_2_available

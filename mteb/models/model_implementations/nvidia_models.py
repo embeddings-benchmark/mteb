@@ -748,7 +748,9 @@ nemotron_3_embed_8b_bf16 = ModelMeta(
 )
 
 
-def _nemotron_rerank_model(model: str, revision: str, **kwargs) -> CrossEncoderWrapper:
+def _nemotron_rerank_model(
+    model: str, revision: str, **kwargs: Any
+) -> CrossEncoderWrapper:
     return CrossEncoderWrapper(
         model=model,
         revision=revision,

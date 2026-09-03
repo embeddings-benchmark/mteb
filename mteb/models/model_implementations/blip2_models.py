@@ -22,7 +22,7 @@ BLIP2_CITATION = """@inproceedings{li2023blip2,
 }"""
 
 
-def blip2_loader(model_name, **kwargs):
+def blip2_loader(model_name, **kwargs: Any):
     from lavis.models.blip2_models.blip2_image_text_matching import (
         Blip2ITM,
     )

@@ -59,7 +59,7 @@ class RateLimiter:
             time.sleep(sleep_time)
         self.last_request_time = time.time()
 
-    def execute_with_retry(self, func, *args, **kwargs):
+    def execute_with_retry(self, func, *args: Any, **kwargs: Any):
         """Execute a function with retry logic
 
         Args:
@@ -159,7 +159,7 @@ class ConanWrapper(AbsEncoder):
         model_name: str,
         revision: str | None = None,
         api_model_name: str | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         ak = os.getenv("CONAN_AK")
         sk = os.getenv("CONAN_SK")

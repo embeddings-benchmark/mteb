@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
@@ -52,7 +52,7 @@ def _composite_prior(
     return np.clip(prior, 0.1, 0.9)
 
 
-def bb25_loader(model_name, **kwargs) -> SearchProtocol:
+def bb25_loader(model_name, **kwargs: Any) -> SearchProtocol:
     import bm25s
     import Stemmer
 
@@ -93,7 +93,7 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
             b: float = 0.75,
             alpha: float = 1.0,
             prior_weight: float = 0.0,
-            **kwargs,
+            **kwargs: Any,
         ):
             self.k1 = k1
             self.b = b

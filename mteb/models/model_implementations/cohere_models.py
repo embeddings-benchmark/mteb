@@ -175,7 +175,7 @@ def retry_with_rate_limit(
 
     def decorator(func):
         @wraps(func)
-        def wrapper(self, *args, **kwargs):
+        def wrapper(self, *args: Any, **kwargs: Any):
             import cohere
 
             nonlocal previous_call_ts
@@ -230,7 +230,7 @@ class CohereTextEmbeddingModel(AbsEncoder):
         model_prompts: dict[str, str] | None = None,
         embedding_type: EmbeddingType = "float",
         output_dimension: int | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         import cohere
 
@@ -247,7 +247,7 @@ class CohereTextEmbeddingModel(AbsEncoder):
         self._client = cohere.Client()
 
     @retry_with_rate_limit(max_retries=5, max_rpm=300)
-    def _embed_func(self, **kwargs):
+    def _embed_func(self, **kwargs: Any):
         """Call Cohere embed API with retry and rate limiting."""
         return self._client.embed(**kwargs)
 

@@ -179,7 +179,7 @@ OUTPUT_TYPES = [
 ]
 
 
-def cohere_v_loader(model_name, **kwargs):
+def cohere_v_loader(model_name, **kwargs: Any):
     import cohere
 
     class CohereMultiModalModelWrapper(AbsEncoder):
@@ -213,7 +213,7 @@ def cohere_v_loader(model_name, **kwargs):
             self.transform = transforms.Compose([transforms.PILToTensor()])
 
         @retry_with_rate_limit(max_retries=5, max_rpm=300)
-        def _embed_func(self, **kwargs):
+        def _embed_func(self, **kwargs: Any):
             """Call Cohere embed API with retry and rate limiting."""
             return self.client.embed(**kwargs)
 

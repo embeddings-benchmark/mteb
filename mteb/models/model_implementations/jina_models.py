@@ -334,7 +334,7 @@ class JinaWrapper(SentenceTransformerEncoderWrapper):
         revision: str,
         device: str | None = None,
         model_prompts: dict[str, str] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         super().__init__(
             model, revision, device=device, model_prompts=model_prompts, **kwargs
@@ -416,7 +416,7 @@ class JinaV4Wrapper(AbsEncoder):
         trust_remote_code: bool = True,
         model_prompts: dict[str, str] | None = None,
         vector_type: Literal[SUPPORTED_VECTOR_TYPES] = "single_vector",
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         device = device_map or device
 
@@ -754,7 +754,7 @@ class JinaV5TextWrapper(SentenceTransformerEncoderWrapper):
         revision: str,
         device: str | None = None,
         model_prompts: dict[str, str] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         super().__init__(
             model, revision, device=device, model_prompts=model_prompts, **kwargs

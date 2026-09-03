@@ -38,7 +38,7 @@ class VLM2VecWrapper(AbsEncoder):
         self,
         model_name: str = "TIGER-Lab/VLM2Vec-LoRA",
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        **kwargs,
+        **kwargs: Any,
     ):
         if suggest_package(
             self,
@@ -398,7 +398,7 @@ class VLM2VEC2Wrapper(AbsEncoder):
         fps: float | None = 2.0,
         max_frames: int | None = 64,
         num_frames: int | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         from peft import PeftModel
         from transformers import AutoProcessor, Qwen2VLForConditionalGeneration

@@ -272,7 +272,14 @@ PROMPTS_DICT = {
 
 class GeeVecLiteModel(InstructSentenceTransformerModel):
     def encode(
-        self, inputs, *, task_metadata, hf_split, hf_subset, prompt_type=None, **kwargs
+        self,
+        inputs,
+        *,
+        task_metadata,
+        hf_split,
+        hf_subset,
+        prompt_type=None,
+        **kwargs: Any,
     ):
         sentences = [text for batch in inputs for text in batch["text"]]
         domain = _resolve_geevec_domain(task_metadata, hf_subset, kwargs.get("domain"))
@@ -320,7 +327,7 @@ class GeeVecAPIModel(AbsEncoder):
         base_url: str | None = None,
         api_key: str | None = None,
         session: Any | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         import requests
 

@@ -35,7 +35,7 @@ class ALIGNModel(AbsEncoder):
         self,
         texts: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
-        **kwargs,
+        **kwargs: Any,
     ):
         all_text_embeddings = []
 
@@ -62,7 +62,7 @@ class ALIGNModel(AbsEncoder):
         self,
         images: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
-        **kwargs,
+        **kwargs: Any,
     ):
         all_image_embeddings = []
         with torch.no_grad():
