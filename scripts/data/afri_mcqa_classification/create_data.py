@@ -41,7 +41,7 @@ from huggingface_hub import HfApi
 
 _SOURCE_REPO = "Atnafu/Afri-MCQA"
 _SOURCE_REV = "8b8c53df57b0c2cf9d9798c53515ba1dd14df669"
-_TARGET = "vnahata/AfriMCQA-category-classification"
+_TARGET = "vnahata/AfriMCQA-category-classification"  # same repo, gains text columns
 _LICENSE = "cc-by-nc-4.0"
 
 _LANGS = {
@@ -80,7 +80,25 @@ _CATEGORIES = [
 ]
 _LABEL_OF = {name: i for i, name in enumerate(_CATEGORIES)}
 
-_KEEP = ["Language", "Category", "image", "native_audio_question"]
+# The source spells five of the categories a second way. Matching only one spelling
+# silently dropped 173 single-category rows, so both are mapped to the same label.
+_ALIASES = {
+    "geography, buildings, and landmarks": "geography, building, and landmarks",
+    "tradition, art, and history": "tranditions, art, and history",
+    "objects, materials, and clothing": "objects, materials, clothing",
+    "brands and products": "brands, products, and companies",
+    "people and everyday life": "people, and everyday life",
+}
+
+
+_KEEP = [
+    "Language",
+    "Category",
+    "image",
+    "native_audio_question",
+    "eng_question",
+    "native_question",
+]
 
 
 def _prepare(config: str, split: str):
@@ -111,6 +129,7 @@ def _prepare(config: str, split: str):
             labels.append(None)
             continue
         key = text.casefold()
+        key = _ALIASES.get(key, key)
         if key not in _LABEL_OF:
             unmapped.add(text)
             labels.append(None)
@@ -155,7 +174,9 @@ def stage_build(work: Path) -> dict:
                 test_images = set(seen_img)
             if not rows:
                 continue
-            sub = ds.select_columns(["image", "native_audio_question"]).select(rows)
+            sub = ds.select_columns(
+                ["image", "native_audio_question", "eng_question", "native_question"]
+            ).select(rows)
             sub = sub.rename_column("native_audio_question", "audio")
             sub = sub.add_column("label", [labels[i] for i in rows])
             sub.cast_column("image", Image()).cast_column(
@@ -175,6 +196,7 @@ def _card(codes: list[str]) -> str:
         f"license: {_LICENSE}",
         "task_categories:",
         "  - audio-classification",
+        "  - text-classification",
         "  - image-classification",
         "language:",
         *[f"  - {c}" for c in codes],

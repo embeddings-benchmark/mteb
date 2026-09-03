@@ -35,7 +35,7 @@ class AfriMCQACategoryClassification(AbsTaskClassification):
         reference="https://arxiv.org/abs/2601.05699",
         dataset={
             "path": "vnahata/AfriMCQA-category-classification",
-            "revision": "1581d446105e451a1fc8d2c62fd1f3d54d75fb5e",
+            "revision": "c8796f4dd6283b8dc11bda9af1a3c8086cf174f7",
         },
         type="AudioImageClassification",
         category="ia2c",
