@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import gradio as gr
 
@@ -18,7 +18,7 @@ def _create_button(
     benchmark: Benchmark,
     state: gr.State,
     label_to_value: dict[str, str],
-    **kwargs,
+    **kwargs: Any,
 ):
     val = benchmark.name
     label = (
