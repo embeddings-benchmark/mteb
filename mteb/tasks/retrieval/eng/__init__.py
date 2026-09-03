@@ -1,3 +1,4 @@
+from .acm_composed_audio_retrieval import ACMComposedAudioRetrieval
 from .activitynet_captions_retrieval import (
     ActivityNetCaptionsT2VRetrieval,
     ActivityNetCaptionsV2TRetrieval,
@@ -18,6 +19,14 @@ from .audiocaps_av_retrieval import (
     AudioCapsAVV2TRetrieval,
     AudioCapsAVVA2TRetrieval,
     AudioCapsAVVT2ARetrieval,
+)
+from .avcaps_retrieval import (
+    AVCapsA2TRetrieval,
+    AVCapsT2ARetrieval,
+    AVCapsT2VARetrieval,
+    AVCapsT2VRetrieval,
+    AVCapsV2TRetrieval,
+    AVCapsVA2TRetrieval,
 )
 from .avmeme_exam_retrieval import (
     AVMemeExamA2VRetrieval,
@@ -93,6 +102,7 @@ from .clotho import (
     ClothoT2ARetrieval,
     ClothoT2ARetrievalV2,
 )
+from .clotho_moment import ClothoMomentRetrieval
 from .cmu_arctic import CMUArcticA2TRetrieval, CMUArcticT2ARetrieval
 from .covers80_retrieval import Covers80A2ARetrieval
 from .covr_r_retrieval import CoVRRVT2VRetrieval
@@ -130,6 +140,7 @@ from .dapfam_patent_retrieval import (
     DAPFAMOutTitlAbsToTitlAbsRetrieval,
 )
 from .dbpedia_retrieval import DBPedia, DBPediaHardNegatives, DBPediaHardNegativesV2
+from .dense_webvid_covr_retrieval import DenseWebVidCoVRVT2VRetrieval
 from .didemo_retrieval import (
     DiDeMoA2VRetrieval,
     DiDeMoAT2VRetrieval,
@@ -140,6 +151,8 @@ from .didemo_retrieval import (
     DiDeMoVA2TRetrieval,
     DiDeMoVT2ARetrieval,
 )
+from .droid_retrieval import DROIDIT2VRetrieval
+from .edir_it2i_retrieval import EDIRIT2IRetrieval
 from .edis_t2it_retrieval import EDIST2ITRetrieval
 from .elastic_kb_retrieval import ElasticKBRetrieval
 from .emid_retrieval import EMIDA2IRetrieval, EMIDI2ARetrieval
@@ -236,6 +249,12 @@ from .lmeb_retrieval import (
     ProceduralMemBench,
     ReMe,
     ToolBench,
+)
+from .lombard_grid_retrieval import (
+    LombardGridA2VRetrieval,
+    LombardGridV2ARetrieval,
+    LombardGridV2VRetrieval,
+    LombardGridVA2VARetrieval,
 )
 from .lotte_retrieval import LoTTERetrieval
 from .macs import MACSA2TRetrieval, MACST2ARetrieval
@@ -364,6 +383,7 @@ from .sop_i2i_retrieval import SOPI2IRetrieval
 from .sounding_earth import SoundingEarthA2IRetrieval, SoundingEarthI2ARetrieval
 from .spart_qa_retrieval import SpartQA
 from .speech_coco import SpeechCocoA2IRetrieval, SpeechCocoI2ARetrieval
+from .speech_edit_acoustic import SpeechEditAcousticRetrieval
 from .spoken_coco_retrieval import SpokenCOCOA2IRetrieval, SpokenCOCOI2ARetrieval
 from .spoken_s_qu_ad import SpokenSQuADT2ARetrieval
 from .ssw60 import SSW60A2IRetrieval, SSW60I2ARetrieval
@@ -473,11 +493,18 @@ __all__ = [
     "TRECCOVID",
     "TRECDL2019",
     "TRECDL2020",
+    "ACMComposedAudioRetrieval",
     "ADVANCEA2IRetrieval",
     "ADVANCEI2ARetrieval",
     "AILACasedocs",
     "AILAStatutes",
     "ARCChallenge",
+    "AVCapsA2TRetrieval",
+    "AVCapsT2ARetrieval",
+    "AVCapsT2VARetrieval",
+    "AVCapsT2VRetrieval",
+    "AVCapsV2TRetrieval",
+    "AVCapsVA2TRetrieval",
     "AVMemeExamA2VRetrieval",
     "AVMemeExamAT2VRetrieval",
     "AVMemeExamT2VARetrieval",
@@ -571,6 +598,7 @@ __all__ = [
     "ClimateFEVERRetrievalv2",
     "ClothoA2TRetrieval",
     "ClothoA2TRetrievalV2",
+    "ClothoMomentRetrieval",
     "ClothoT2ARetrieval",
     "ClothoT2ARetrievalV2",
     "CoVRRVT2VRetrieval",
@@ -598,7 +626,9 @@ __all__ = [
     "DBPedia",
     "DBPediaHardNegatives",
     "DBPediaHardNegativesV2",
+    "DROIDIT2VRetrieval",
     "DeepPlanning",
+    "DenseWebVidCoVRVT2VRetrieval",
     "DiDeMoA2VRetrieval",
     "DiDeMoAT2VRetrieval",
     "DiDeMoT2VARetrieval",
@@ -607,6 +637,7 @@ __all__ = [
     "DiDeMoV2TRetrieval",
     "DiDeMoVA2TRetrieval",
     "DiDeMoVT2ARetrieval",
+    "EDIRIT2IRetrieval",
     "EDIST2ITRetrieval",
     "EMIDA2IRetrieval",
     "EMIDI2ARetrieval",
@@ -689,6 +720,10 @@ __all__ = [
     "LitSearchRetrieval",
     "LoCoMo",
     "LoTTERetrieval",
+    "LombardGridA2VRetrieval",
+    "LombardGridV2ARetrieval",
+    "LombardGridV2VRetrieval",
+    "LombardGridVA2VARetrieval",
     "LongMemEval",
     "LooGLE",
     "MACSA2TRetrieval",
@@ -801,6 +836,7 @@ __all__ = [
     "SpartQA",
     "SpeechCocoA2IRetrieval",
     "SpeechCocoI2ARetrieval",
+    "SpeechEditAcousticRetrieval",
     "SpokenCOCOA2IRetrieval",
     "SpokenCOCOI2ARetrieval",
     "SpokenSQuADT2ARetrieval",

@@ -44,12 +44,11 @@ def _post_process_embeddings(
                     unpacked.append(1.0 if bit_val else -1.0)
             unpacked_embeddings.append(unpacked)
         return torch.tensor(unpacked_embeddings, dtype=torch.float32)
-    elif embedding_type in ["int8", "uint8"]:  # noqa: PLR6201
+    if embedding_type in ["int8", "uint8"]:  # noqa: PLR6201
         # Convert int8/uint8 embeddings to float32
         return embeddings_array.float()
-    else:
-        # For float and other types, return as-is
-        return embeddings_array
+    # For float and other types, return as-is
+    return embeddings_array
 
 
 all_languages = [
@@ -377,9 +376,9 @@ def cohere_v_loader(model_name, **kwargs):
                     )
                 fused_embeddings = text_embeddings + image_embeddings
                 return fused_embeddings
-            elif text_embeddings is not None:
+            if text_embeddings is not None:
                 return text_embeddings
-            elif image_embeddings is not None:
+            if image_embeddings is not None:
                 return image_embeddings
             raise ValueError
 

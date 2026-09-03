@@ -77,9 +77,9 @@ class ColPaliEngineWrapper(AbsEncoder):
                 )
             fused_embeddings = torch.cat([text_embeddings, image_embeddings], dim=1)
             return fused_embeddings
-        elif text_embeddings is not None:
+        if text_embeddings is not None:
             return text_embeddings
-        elif image_embeddings is not None:
+        if image_embeddings is not None:
             return image_embeddings
         raise ValueError
 

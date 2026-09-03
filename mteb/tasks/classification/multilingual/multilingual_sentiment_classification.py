@@ -95,7 +95,7 @@ Vylomova, Ekaterina},
     ):
         # create a train set from the test set for Welsh language (cym)
         lang = "cym"
-        if lang in self.dataset.keys():
+        if lang in self.dataset:
             _dataset = self.dataset[lang]
             _dataset = _dataset.class_encode_column("label")
             _dataset = _dataset["test"].train_test_split(

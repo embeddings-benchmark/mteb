@@ -1018,3 +1018,76 @@ class MockSymCustomVideoAudioPairClassificationTaskV2(AbsTaskPairClassification)
         self.dataset = self.dataset.cast_column("video", Video())
         self.dataset = self.dataset.cast_column("audio", Audio())
         self.data_loaded = True
+
+
+class MockAsymCustomTextImagePairClassificationTaskV2(AbsTaskPairClassification):
+    metadata = TaskMetadata(
+        type="VideoPairClassification",
+        name="MockAsymCustomTextImagePairClassificationTaskV2",
+        main_score="max_ap",
+        **general_args,  # type: ignore[arg-type]
+    )
+    metadata.modalities = ["text", "image"]
+    metadata.category = "v2a"
+
+    input1_column_name = {"text": "text"}
+    input2_column_name = {"image": "image"}
+
+    label_column_name = "label"
+
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "unique_pairs": 2,
+            "number_of_characters": None,
+            "text1_statistics": {
+                "total_text_length": 12,
+                "min_text_length": 6,
+                "average_text_length": 6.0,
+                "max_text_length": 6,
+                "unique_texts": 2,
+            },
+            "image1_statistics": None,
+            "audio1_statistics": None,
+            "video1_statistics": None,
+            "text2_statistics": None,
+            "image2_statistics": {
+                "min_image_width": 100,
+                "average_image_width": 100.0,
+                "max_image_width": 100,
+                "min_image_height": 100,
+                "average_image_height": 100.0,
+                "max_image_height": 100,
+                "unique_images": 2,
+            },
+            "audio2_statistics": None,
+            "video2_statistics": None,
+            "labels_statistics": {
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
+                "unique_labels": 2,
+                "labels": {"0": {"count": 1}, "1": {"count": 1}},
+            },
+        }
+    }
+
+    def load_data(self, **kwargs):
+        from datasets import Image
+
+        mock_text = ["text 1", "text 2"]
+        mock_image = create_mock_images(self.np_rng)
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "text": mock_text,
+                        "image": mock_image,
+                        "label": [0, 1],
+                    }
+                ),
+            }
+        )
+        self.dataset = self.dataset.cast_column("image", Image())
+        self.data_loaded = True

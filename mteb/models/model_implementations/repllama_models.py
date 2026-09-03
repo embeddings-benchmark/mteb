@@ -116,18 +116,17 @@ class RepLLaMAModel(AbsEncoder):
                 key: value.to(self.model.device) for key, value in batch_dict.items()
             }
 
-            with torch.cuda.amp.autocast():
-                with torch.no_grad():
-                    outputs = self.model(**batch_dict)
-                    last_hidden_state = outputs.last_hidden_state
-                    sequence_lengths = batch_dict["attention_mask"].sum(dim=1) - 1
-                    batch_size = last_hidden_state.shape[0]
-                    reps = last_hidden_state[
-                        torch.arange(batch_size, device=last_hidden_state.device),
-                        sequence_lengths,
-                    ]
-                    embeddings = F.normalize(reps, p=2, dim=-1)
-                    all_embeddings.append(embeddings.cpu().detach().numpy())
+            with torch.cuda.amp.autocast(), torch.no_grad():
+                outputs = self.model(**batch_dict)
+                last_hidden_state = outputs.last_hidden_state
+                sequence_lengths = batch_dict["attention_mask"].sum(dim=1) - 1
+                batch_size = last_hidden_state.shape[0]
+                reps = last_hidden_state[
+                    torch.arange(batch_size, device=last_hidden_state.device),
+                    sequence_lengths,
+                ]
+                embeddings = F.normalize(reps, p=2, dim=-1)
+                all_embeddings.append(embeddings.cpu().detach().numpy())
 
         return np.concatenate(all_embeddings, axis=0)
 

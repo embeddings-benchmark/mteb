@@ -1138,3 +1138,35 @@ lightonai__mlateon = ModelMeta(
     citation=mdenseon_mlateon_citation,
     extra_requirements_groups=["pylate"],
 )
+
+
+nlpai_lab__kure_v2 = ModelMeta(
+    loader=MultiVectorModel,
+    name="nlpai-lab/KURE-v2",
+    model_type=["late-interaction"],
+    languages=[
+        "kor-Hang",
+        "eng-Latn",
+    ],
+    open_weights=True,
+    revision="cce9f539de457da36300adbe6245d24f878ca270",
+    public_training_code=None,
+    # Fine-tuned on lightonai/embeddings-fine-tuning, plus a subsample of
+    # lightonai/embeddings-pre-training-curated.
+    public_training_data="https://huggingface.co/datasets/lightonai/embeddings-fine-tuning",
+    release_date="2026-08-17",
+    n_parameters=153550080,
+    n_embedding_parameters=38401536,
+    memory_usage_mb=586,
+    max_tokens=8192,
+    embed_dim=128,
+    license="apache-2.0",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    framework=["PyLate", "ColBERT", "safetensors", "Sentence Transformers"],
+    reference="https://huggingface.co/nlpai-lab/KURE-v2",
+    use_instructions=False,
+    adapted_from="skt/A.X-Encoder-base",
+    superseded_by=None,
+    training_datasets=denseon_lateon_unsupervised_data | denseon_lateon_supervised_data,
+    extra_requirements_groups=["pylate"],
+)

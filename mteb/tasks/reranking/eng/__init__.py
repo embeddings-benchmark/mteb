@@ -17,6 +17,18 @@ from .swe_bench_verified_reranking import SWEbenchVerifiedReranking
 from .swe_poly_bench_reranking import SWEPolyBenchReranking
 from .vocal_sound_audio_reranking import VocalSoundAudioReranking
 from .web_linx_candidates_reranking import WebLINXCandidatesReranking
+from .xmod_bench import (
+    XModBenchAT2IReranking,
+    XModBenchAT2TReranking,
+    XModBenchAT2VReranking,
+    XModBenchIT2AReranking,
+    XModBenchIT2TReranking,
+    XModBenchT2AReranking,
+    XModBenchT2IReranking,
+    XModBenchT2VReranking,
+    XModBenchVT2AReranking,
+    XModBenchVT2TReranking,
+)
 
 __all__ = [
     "AskUbuntuDupQuestions",
@@ -38,4 +50,14 @@ __all__ = [
     "StackOverflowDupQuestions",
     "VocalSoundAudioReranking",
     "WebLINXCandidatesReranking",
+    "XModBenchAT2IReranking",
+    "XModBenchAT2TReranking",
+    "XModBenchAT2VReranking",
+    "XModBenchIT2AReranking",
+    "XModBenchIT2TReranking",
+    "XModBenchT2AReranking",
+    "XModBenchT2IReranking",
+    "XModBenchT2VReranking",
+    "XModBenchVT2AReranking",
+    "XModBenchVT2TReranking",
 ]
