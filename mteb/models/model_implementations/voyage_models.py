@@ -326,7 +326,7 @@ QUERY_PROMPTS = {
     "LegalQuAD": "Locate enforceable legal rules for: {text}",
     "LegalSummarization": "Seek clarity in legal information: {text}",
     "MBPPRetrieval": "Programming task: {text}",
-    "MIRACLRetrievalHardNegatives": "Uncover comprehensive background: {text}",
+    "MIRACLRetrievalHardNegatives": "Represent this question for retrieving one whole, self-contained encyclopedic reference paragraph, not a passing reference: {text}",
     "WikiSQLRetrieval": "Unveil the SQL instruction to fulfill: {text}",
 }
 
