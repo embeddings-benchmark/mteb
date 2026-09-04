@@ -208,6 +208,10 @@ MAEB_TASK_TYPE = (
     "AudioZeroshotClassification",
     "AudioClassification",
     "AudioPairClassification",
+    # Grouped with the audio types rather than the image ones so that its descriptive
+    # statistics land in descriptive_stats/AudioImageClassification/ rather than nested
+    # under descriptive_stats/Image/, which only the MIEB types are.
+    "AudioImageClassification",
     "Any2AnyRetrieval",
 )
 
@@ -295,6 +299,7 @@ TaskCategory = Literal[
     "it2v",
     "v2i",
     "it2c",
+    "ia2c",
 ]
 """The category of the task.
 
@@ -345,6 +350,7 @@ TaskCategory = Literal[
 45. it2v: image+text to video
 46. v2i: video to image
 47. it2c: image+text to category
+48. ia2c: image+audio to category
 """
 
 _MODALITY_CODES: dict[str, str] = {
@@ -407,6 +413,7 @@ _TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {
     "AudioZeroshotClassification": "classification",
     "AudioClassification": "classification",
     "ImageClassification": "classification",
+    "AudioImageClassification": "classification",
     "ZeroShotClassification": "classification",
     "MultilabelClassification": "classification",
     "Classification": "classification",
