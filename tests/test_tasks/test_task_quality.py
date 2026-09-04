@@ -23,6 +23,8 @@ from mteb.types.statistics import (
 
 KNOWN_ISSUES: dict[str, list[str]] = {
     "short_text": [
+        "LinguaLibreA2TRetrieval",  # single words, so two characters is a whole word
+        "LinguaLibreT2ARetrieval",
         "ARCChallenge",
         "AVMemeExamVideoAudioCentricQA",
         "AVMemeExamVideoCentricQA",
@@ -411,6 +413,8 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "BrightProSustainableLivingRetrieval",
     ],
     "duplicate_text": [
+        "LinguaLibreA2TRetrieval",  # no repeats within a language; related languages share cognates and each subset is ranked on its own
+        "LinguaLibreT2ARetrieval",
         "AfriHateClassification",
         "AfriSentiClassification",
         "AllegroReviews",
