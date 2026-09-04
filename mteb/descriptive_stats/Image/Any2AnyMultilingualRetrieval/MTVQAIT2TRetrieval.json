@@ -41,7 +41,12 @@
             "num_missing_query_ids": 0,
             "num_missing_corpus_ids": 0
         },
-        "top_ranked_statistics": null,
+        "top_ranked_statistics": {
+            "num_top_ranked": 72217,
+            "min_top_ranked_per_query": 10,
+            "average_top_ranked_per_query": 10.654617881380938,
+            "max_top_ranked_per_query": 11
+        },
         "hf_subset_descriptive_stats": {
             "ara": {
                 "num_samples": 1290,
@@ -85,7 +90,12 @@
                     "num_missing_query_ids": 0,
                     "num_missing_corpus_ids": 0
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": {
+                    "num_top_ranked": 7484,
+                    "min_top_ranked_per_query": 10,
+                    "average_top_ranked_per_query": 10.645803698435277,
+                    "max_top_ranked_per_query": 11
+                }
             },
             "deu": {
                 "num_samples": 1915,
@@ -129,7 +139,12 @@
                     "num_missing_query_ids": 0,
                     "num_missing_corpus_ids": 0
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": {
+                    "num_top_ranked": 11248,
+                    "min_top_ranked_per_query": 10,
+                    "average_top_ranked_per_query": 10.732824427480915,
+                    "max_top_ranked_per_query": 11
+                }
             },
             "fra": {
                 "num_samples": 1629,
@@ -173,7 +188,12 @@
                     "num_missing_query_ids": 0,
                     "num_missing_corpus_ids": 0
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": {
+                    "num_top_ranked": 9486,
+                    "min_top_ranked_per_query": 10,
+                    "average_top_ranked_per_query": 10.706546275395034,
+                    "max_top_ranked_per_query": 11
+                }
             },
             "ita": {
                 "num_samples": 1701,
@@ -217,7 +237,12 @@
                     "num_missing_query_ids": 0,
                     "num_missing_corpus_ids": 0
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": {
+                    "num_top_ranked": 9450,
+                    "min_top_ranked_per_query": 10,
+                    "average_top_ranked_per_query": 10.690045248868778,
+                    "max_top_ranked_per_query": 11
+                }
             },
             "jpn": {
                 "num_samples": 1520,
@@ -261,7 +286,12 @@
                     "num_missing_query_ids": 0,
                     "num_missing_corpus_ids": 0
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": {
+                    "num_top_ranked": 8743,
+                    "min_top_ranked_per_query": 10,
+                    "average_top_ranked_per_query": 10.559178743961352,
+                    "max_top_ranked_per_query": 11
+                }
             },
             "kor": {
                 "num_samples": 1066,
@@ -305,7 +335,12 @@
                     "num_missing_query_ids": 0,
                     "num_missing_corpus_ids": 0
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": {
+                    "num_top_ranked": 5907,
+                    "min_top_ranked_per_query": 10,
+                    "average_top_ranked_per_query": 10.586021505376344,
+                    "max_top_ranked_per_query": 11
+                }
             },
             "rus": {
                 "num_samples": 1481,
@@ -349,7 +384,12 @@
                     "num_missing_query_ids": 0,
                     "num_missing_corpus_ids": 0
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": {
+                    "num_top_ranked": 8003,
+                    "min_top_ranked_per_query": 10,
+                    "average_top_ranked_per_query": 10.585978835978835,
+                    "max_top_ranked_per_query": 11
+                }
             },
             "tha": {
                 "num_samples": 438,
@@ -393,7 +433,12 @@
                     "num_missing_query_ids": 0,
                     "num_missing_corpus_ids": 0
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": {
+                    "num_top_ranked": 2393,
+                    "min_top_ranked_per_query": 10,
+                    "average_top_ranked_per_query": 10.35930735930736,
+                    "max_top_ranked_per_query": 11
+                }
             },
             "vie": {
                 "num_samples": 1711,
@@ -437,7 +482,12 @@
                     "num_missing_query_ids": 0,
                     "num_missing_corpus_ids": 0
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": {
+                    "num_top_ranked": 9503,
+                    "min_top_ranked_per_query": 10,
+                    "average_top_ranked_per_query": 10.75,
+                    "max_top_ranked_per_query": 11
+                }
             }
         }
     }

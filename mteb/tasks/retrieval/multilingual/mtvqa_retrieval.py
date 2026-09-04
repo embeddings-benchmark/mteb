@@ -31,7 +31,7 @@ class MTVQAIT2TRetrieval(AbsTaskRetrieval):
         reference="https://arxiv.org/abs/2405.11985",
         dataset={
             "path": "vnahata/MTVQA-it2t-retrieval",
-            "revision": "72f2324b9ed1e46ca2e41576a3b81b7df480cf3c",
+            "revision": "f2d2ab47cf576e94ef89807d9c2dd8012515cf84",
         },
         type="Any2AnyMultilingualRetrieval",
         category="it2t",
@@ -48,7 +48,7 @@ class MTVQAIT2TRetrieval(AbsTaskRetrieval):
             "tha": ["tha-Thai"],
             "vie": ["vie-Latn"],
         },
-        main_score="ndcg_at_10",
+        main_score="accuracy",
         date=("2023-01-01", "2024-05-20"),
         domains=["Scene", "Written"],
         task_subtypes=["Rendered Texts Understanding"],
