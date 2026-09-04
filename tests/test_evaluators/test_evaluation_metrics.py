@@ -1,6 +1,11 @@
 import pytrec_eval
 
-from mteb._evaluators.retrieval_metrics import calculate_pmrr, mrr, recall_cap
+from mteb._evaluators.retrieval_metrics import (
+    calculate_pmrr,
+    calculate_retrieval_scores,
+    mrr,
+    recall_cap,
+)
 
 
 def test_recall_cap_no_relevant_docs_yields_none():
@@ -61,6 +66,22 @@ def test_p_mrr_tiebreak_independent_of_insertion_order():
 
     score = calculate_pmrr(original_run, new_run, changed_qrels)
     assert score == 0.0
+
+
+def test_skip_first_result_tiebreak_independent_of_insertion_order():
+    # regression for the same #5092 tie-break bug in skip_first_result: the top hit is
+    # dropped with a score-only stable sort, so when the top two scores tie it was dict
+    # insertion order that decided which doc got discarded. Both runs below carry
+    # identical scores, so they must score identically.
+    qrels = {"q1": {"d_dup": 1, "d_other": 1}}
+    tied_self_first = {"q1": {"d_self": 1.0, "d_dup": 1.0, "d_other": 0.5}}
+    tied_dup_first = {"q1": {"d_dup": 1.0, "d_self": 1.0, "d_other": 0.5}}
+
+    self_first = calculate_retrieval_scores(tied_self_first, qrels, [1, 2], True)
+    dup_first = calculate_retrieval_scores(tied_dup_first, qrels, [1, 2], True)
+
+    assert self_first.ndcg == dup_first.ndcg
+    assert self_first.recall == dup_first.recall
 
 
 def test_p_mrr():
