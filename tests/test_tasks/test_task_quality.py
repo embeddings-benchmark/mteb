@@ -863,6 +863,10 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SoundingEarthA2IRetrieval",
         "SoundingEarthI2ARetrieval",
         "SugarCrepe",
+        # every language subset is scored against the same image corpus so that subset
+        # differences reflect the query language, as with XM3600T2IRetrieval
+        "VaaniA2IRetrieval",
+        "VaaniI2ARetrieval",
         "VQA2IT2TRetrieval",
         "WebQAT2ITRetrieval",
         "WebVidCoVRIT2VRetrieval",
