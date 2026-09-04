@@ -22,7 +22,7 @@ VISTA_CITATION = """@article{zhou2024vista,
 }"""
 
 
-def vista_loader(model_name, **kwargs):
+def vista_loader(model_name, **kwargs: Any):
     try:  # a temporal fix for the dependency issues of vista models.
         from visual_bge.modeling import Visualized_BGE
     except ImportError:

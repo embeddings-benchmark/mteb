@@ -49,7 +49,9 @@ def test_task_modality_filtering(task, modalities):
 
 
 @pytest.mark.parametrize("task", [MockMultiChoiceTask()])
-def test_task_modality_filtering_model_modalities_only_one_of_modalities(task, caplog):
+def test_task_modality_filtering_model_modalities_only_one_of_modalities(
+    task, caplog: pytest.LogCaptureFixture
+):
     """Task have it2i, model only image."""
     with caplog.at_level(logging.WARNING):
         model = mteb.get_model("mteb/baseline-random-encoder")

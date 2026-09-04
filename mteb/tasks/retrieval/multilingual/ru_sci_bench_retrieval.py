@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import cast
+from typing import Any, cast
 
 import datasets
 
@@ -103,7 +103,7 @@ class RuSciBenchCiteRetrieval(AbsTaskRetrieval):
         },
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
@@ -161,7 +161,7 @@ class RuSciBenchCociteRetrieval(AbsTaskRetrieval):
         },
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 

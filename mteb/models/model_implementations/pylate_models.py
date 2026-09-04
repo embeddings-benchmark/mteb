@@ -294,7 +294,7 @@ class MultiVectorModel(PylateSearchEncoder):
         index_name: str | None = None,
         index_autodelete: bool = True,
         index_kwargs: dict[str, Any] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """Wrapper for MultiVector/ColBERT models (via PyLate)."""
         from pylate.models import ColBERT  # type: ignore[import]

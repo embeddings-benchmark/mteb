@@ -52,7 +52,7 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         revision: str,
         tokenizer_name: str = "cl100k_base",
         embed_dim: int | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """Wrapper for Seed embedding API."""
         self._model_name = model_name

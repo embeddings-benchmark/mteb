@@ -56,7 +56,7 @@ def _downsample_image(
     return image
 
 
-def voyage_v_loader(model_name, **kwargs):
+def voyage_v_loader(model_name, **kwargs: Any):
     import voyageai
     from tenacity import retry, stop_after_attempt, wait_exponential
 

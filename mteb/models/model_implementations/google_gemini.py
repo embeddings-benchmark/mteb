@@ -322,7 +322,7 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
         model_name: str,
         model_prompts: dict[str, str] | None = None,
         embed_dim: int | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         from google import genai
 

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import subprocess
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -265,7 +266,7 @@ def test_create_pr_action_do_and_undo() -> None:
             self.pr = FakePR()
             self.last_args = None
 
-        def create_pull(self, **kwargs):
+        def create_pull(self, **kwargs: Any):
             self.last_args = kwargs
             return self.pr
 

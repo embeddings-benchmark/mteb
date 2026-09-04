@@ -28,7 +28,7 @@ def multilingual_tasks():
     return [MockMultilingualRetrievalTask()]
 
 
-def test_all_splits_evaluated(model, tasks, tmp_path):
+def test_all_splits_evaluated(model, tasks, tmp_path: Path):
     evaluation = MTEB(tasks=tasks)
     results = evaluation.run(
         model,
@@ -44,7 +44,7 @@ def test_all_splits_evaluated(model, tasks, tmp_path):
     assert results[0].scores.keys() == {"val", "test"}
 
 
-def test_one_missing_split(model, tasks, tmp_path):
+def test_one_missing_split(model, tasks, tmp_path: Path):
     evaluation = MTEB(tasks=tasks)
     results = evaluation.run(
         model,
@@ -73,7 +73,7 @@ def test_one_missing_split(model, tasks, tmp_path):
     assert results2[0].scores.keys() == {"test", "val"}
 
 
-def test_no_missing_splits(model, tasks, tmp_path):
+def test_no_missing_splits(model, tasks, tmp_path: Path):
     evaluation = MTEB(tasks=tasks)
     results = evaluation.run(
         model,
@@ -100,7 +100,7 @@ def test_no_missing_splits(model, tasks, tmp_path):
     assert results[0].scores.keys() == {"test", "val"}
 
 
-def test_all_languages_evaluated(model, multilingual_tasks, tmp_path):
+def test_all_languages_evaluated(model, multilingual_tasks, tmp_path: Path):
     evaluation = MTEB(tasks=multilingual_tasks)
     results = evaluation.run(
         model,
@@ -118,7 +118,7 @@ def test_all_languages_evaluated(model, multilingual_tasks, tmp_path):
     assert len(results[0].scores["test"]) == 2
 
 
-def test_missing_language(model, multilingual_tasks, tmp_path):
+def test_missing_language(model, multilingual_tasks, tmp_path: Path):
     evaluation = MTEB(tasks=multilingual_tasks)
     results = evaluation.run(
         model,
@@ -152,7 +152,7 @@ def test_missing_language(model, multilingual_tasks, tmp_path):
     assert len(results[0].scores["test"]) == 2
 
 
-def test_no_missing_languages(model, multilingual_tasks, tmp_path):
+def test_no_missing_languages(model, multilingual_tasks, tmp_path: Path):
     evaluation = MTEB(tasks=multilingual_tasks)
     results = evaluation.run(
         model,
@@ -183,7 +183,7 @@ def test_no_missing_languages(model, multilingual_tasks, tmp_path):
     assert sorted(results[0].languages) == ["eng", "fra"]
 
 
-def test_partial_languages(model, multilingual_tasks, tmp_path):
+def test_partial_languages(model, multilingual_tasks, tmp_path: Path):
     evaluation = MTEB(tasks=multilingual_tasks)
     results = evaluation.run(
         model,
@@ -215,7 +215,7 @@ def test_partial_languages(model, multilingual_tasks, tmp_path):
 
 
 def test_multilingual_one_missing_split_no_missing_lang(
-    model, multilingual_tasks, tmp_path
+    model, multilingual_tasks, tmp_path: Path
 ):
     evaluation = MTEB(tasks=multilingual_tasks)
     results = evaluation.run(
@@ -250,7 +250,7 @@ def test_multilingual_one_missing_split_no_missing_lang(
 
 
 def test_multilingual_one_missing_lang_in_one_split(
-    model, multilingual_tasks, tmp_path
+    model, multilingual_tasks, tmp_path: Path
 ):
     evaluation = MTEB(tasks=multilingual_tasks)
     results = evaluation.run(
@@ -298,7 +298,7 @@ def test_multilingual_one_missing_lang_in_one_split(
     assert len(results[0].scores["test"]) == 2
 
 
-def test_all_splits_evaluated_with_overwrite(model, tasks, tmp_path):
+def test_all_splits_evaluated_with_overwrite(model, tasks, tmp_path: Path):
     evaluation = MTEB(tasks=tasks)
     results = evaluation.run(
         model,
@@ -328,7 +328,7 @@ def test_all_splits_evaluated_with_overwrite(model, tasks, tmp_path):
 
 
 def test_all_splits_subsets_evaluated_with_overwrite(
-    model, multilingual_tasks, tmp_path
+    model, multilingual_tasks, tmp_path: Path
 ):
     evaluation = MTEB(tasks=multilingual_tasks)
     results = evaluation.run(

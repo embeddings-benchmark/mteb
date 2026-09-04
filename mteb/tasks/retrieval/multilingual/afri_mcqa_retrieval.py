@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -123,7 +125,7 @@ class AfriMCQAA2IRetrieval(AbsTaskRetrieval):
         **_COMMON,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_afri_mcqa(self, to_image=True)
 
 
@@ -137,5 +139,5 @@ class AfriMCQAI2ARetrieval(AbsTaskRetrieval):
         **_COMMON,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_afri_mcqa(self, to_image=False)

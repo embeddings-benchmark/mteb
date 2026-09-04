@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -55,7 +57,7 @@ class GLAMI1MT2IRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find the fashion product image matching this description."},
     )
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         for subset in self.hf_subsets:
             for split in self.eval_splits:
                 queries = self.dataset[subset][split]["queries"]
@@ -98,7 +100,7 @@ class GLAMI1MI2TRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find the fashion product matching this image."},
     )
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         for subset in self.hf_subsets:
             for split in self.eval_splits:
                 data = self.dataset[subset][split]

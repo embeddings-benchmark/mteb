@@ -141,7 +141,7 @@ def token_limit(max_tpm: int, interval: int = 60):
 
     def decorator(func):
         @wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Any, **kwargs: Any):
             nonlocal limit_interval_start_ts, used_tokens
 
             result = func(*args, **kwargs)
@@ -168,7 +168,7 @@ def rate_limit(max_rpm: int, interval: int = 60):
 
     def decorator(func):
         @wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Any, **kwargs: Any):
             current_time = time.time()
             nonlocal previous_call_ts
             if (
@@ -198,7 +198,7 @@ class VoyageModel(AbsEncoder):
         output_dtype: str | None = None,
         api_model_name: str | None = None,
         evolved_prompts: bool = False,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         import voyageai
 

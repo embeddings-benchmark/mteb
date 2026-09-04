@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
@@ -122,7 +122,7 @@ training_data = {
 
 
 def q3e_instruct_loader(
-    model_name_or_path: str, revision: str, **kwargs
+    model_name_or_path: str, revision: str, **kwargs: Any
 ) -> EncoderProtocol:
     model = InstructSentenceTransformerModel(
         model_name_or_path,

@@ -65,7 +65,7 @@ class BedrockModel(AbsEncoder):
         provider: str,
         max_tokens: int,
         model_prompts: dict[str, str] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         self._client = get_bedrock_runtime_client()
 

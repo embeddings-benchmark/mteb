@@ -61,14 +61,16 @@ class SLMBaseWrapper(AbsEncoder):
         revision: str | None = None,
         device: str | None = None,
         use_flash_attn: bool = True,
-        **kwargs,
+        **kwargs: Any,
     ):
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self._load_model_and_processor(model_name, revision, use_flash_attn, **kwargs)
         self.mdl = self.mdl.to(self.device)
         self.mdl.eval()
 
-    def _load_model_and_processor(self, model_name, revision, use_flash_attn, **kwargs):
+    def _load_model_and_processor(
+        self, model_name, revision, use_flash_attn, **kwargs: Any
+    ):
         """Override in subclasses to load specific model/processor."""
         raise NotImplementedError
 
@@ -121,7 +123,7 @@ class SLMBaseWrapper(AbsEncoder):
         self,
         images: DataLoader,
         batch_size: int = 32,
-        **kwargs,
+        **kwargs: Any,
     ) -> torch.Tensor:
         import torchvision.transforms.functional as F
 
@@ -149,7 +151,7 @@ class SLMBaseWrapper(AbsEncoder):
         self,
         texts: DataLoader,
         batch_size: int = 32,
-        **kwargs,
+        **kwargs: Any,
     ) -> torch.Tensor:
         all_embeds = []
 
@@ -176,7 +178,9 @@ class SLMBaseWrapper(AbsEncoder):
 class SLMColQwen3Wrapper(SLMBaseWrapper):
     """Wrapper for SLM-ColQwen3 models (Qwen3-VL backbone)."""
 
-    def _load_model_and_processor(self, model_name, revision, use_flash_attn, **kwargs):
+    def _load_model_and_processor(
+        self, model_name, revision, use_flash_attn, **kwargs: Any
+    ):
         from sauerkrautlm_colpali.models.qwen3.colqwen3 import (
             ColQwen3,
             ColQwen3Processor,
@@ -201,7 +205,9 @@ class SLMColQwen3Wrapper(SLMBaseWrapper):
 class SLMColLFM2Wrapper(SLMBaseWrapper):
     """Wrapper for SLM-ColLFM2 models (LFM2 backbone)."""
 
-    def _load_model_and_processor(self, model_name, revision, use_flash_attn, **kwargs):
+    def _load_model_and_processor(
+        self, model_name, revision, use_flash_attn, **kwargs: Any
+    ):
         from sauerkrautlm_colpali.models.lfm2.collfm2 import ColLFM2, ColLFM2Processor
 
         self.mdl = ColLFM2.from_pretrained(
@@ -222,7 +228,9 @@ class SLMColLFM2Wrapper(SLMBaseWrapper):
 class SLMColMinistral3Wrapper(SLMBaseWrapper):
     """Wrapper for SLM-ColMinistral3 models (Ministral3 backbone)."""
 
-    def _load_model_and_processor(self, model_name, revision, use_flash_attn, **kwargs):
+    def _load_model_and_processor(
+        self, model_name, revision, use_flash_attn, **kwargs: Any
+    ):
         from sauerkrautlm_colpali.models.ministral3.colministral3 import (
             ColMinistral3,
             ColMinistral3Processor,

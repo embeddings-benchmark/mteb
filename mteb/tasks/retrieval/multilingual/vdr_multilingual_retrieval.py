@@ -1,3 +1,5 @@
+from typing import Any
+
 import datasets
 from datasets import Dataset, DatasetDict
 
@@ -126,7 +128,7 @@ class VDRMultilingualRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 

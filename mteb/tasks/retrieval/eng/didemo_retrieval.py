@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -80,7 +82,7 @@ class DiDeMoV2TRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_didemo(self, query_columns=["video"], corpus_columns=["caption"])
 
 
@@ -113,7 +115,7 @@ class DiDeMoT2VRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_didemo(self, query_columns=["caption"], corpus_columns=["video"])
 
 
@@ -146,7 +148,7 @@ class DiDeMoVA2TRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_didemo(self, query_columns=["video", "audio"], corpus_columns=["caption"])
 
 
@@ -179,7 +181,7 @@ class DiDeMoT2VARetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_didemo(self, query_columns=["caption"], corpus_columns=["video", "audio"])
 
 
@@ -211,7 +213,7 @@ class DiDeMoV2ARetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_didemo(self, query_columns=["video"], corpus_columns=["audio"])
 
 
@@ -243,7 +245,7 @@ class DiDeMoA2VRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_didemo(self, query_columns=["audio"], corpus_columns=["video"])
 
 
@@ -278,7 +280,7 @@ class DiDeMoVT2ARetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_didemo(self, query_columns=["video", "caption"], corpus_columns=["audio"])
 
 
@@ -313,5 +315,5 @@ class DiDeMoAT2VRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_didemo(self, query_columns=["audio", "caption"], corpus_columns=["video"])

@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def yamnet_loader(*args, **kwargs):
+def yamnet_loader(*args: Any, **kwargs: Any):
     """Factory function to create a YAMNet model wrapper."""
     from torch_vggish_yamnet import yamnet
     from torch_vggish_yamnet.input_proc import WaveformToInput
@@ -116,7 +116,7 @@ def yamnet_loader(*args, **kwargs):
             self,
             inputs: DataLoader[AudioInput],
             show_progress_bar=True,
-            **kwargs,
+            **kwargs: Any,
         ):
             """Generate embeddings for audio inputs."""
             all_embeddings = []

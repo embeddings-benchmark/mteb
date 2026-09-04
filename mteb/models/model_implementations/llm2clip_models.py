@@ -32,7 +32,7 @@ MODEL2PROCESSOR = {
 }
 
 
-def llm2clip_loader(model_name, **kwargs):
+def llm2clip_loader(model_name, **kwargs: Any):
     from llm2vec import LLM2Vec
     from transformers import AutoConfig, AutoModel, AutoTokenizer, CLIPImageProcessor
     from transformers.modeling_outputs import BaseModelOutputWithPooling

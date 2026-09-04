@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -109,7 +111,7 @@ class AVCapsA2TRetrieval(AbsTaskRetrieval):
         **_COMMON,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_avcaps(self, "audio_captions", to_text=True)
 
 
@@ -123,7 +125,7 @@ class AVCapsT2ARetrieval(AbsTaskRetrieval):
         **_COMMON,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_avcaps(self, "audio_captions", to_text=False)
 
 
@@ -137,7 +139,7 @@ class AVCapsV2TRetrieval(AbsTaskRetrieval):
         **_COMMON,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_avcaps(self, "visual_captions", to_text=True)
 
 
@@ -151,7 +153,7 @@ class AVCapsT2VRetrieval(AbsTaskRetrieval):
         **_COMMON,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_avcaps(self, "visual_captions", to_text=False)
 
 
@@ -167,7 +169,7 @@ class AVCapsVA2TRetrieval(AbsTaskRetrieval):
         **_COMMON,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_avcaps(self, "av_captions", to_text=True)
 
 
@@ -185,5 +187,5 @@ class AVCapsT2VARetrieval(AbsTaskRetrieval):
         **_COMMON,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_avcaps(self, "av_captions", to_text=False)
