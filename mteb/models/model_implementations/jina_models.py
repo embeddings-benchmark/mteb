@@ -616,8 +616,8 @@ class JinaV4Wrapper(AbsEncoder):
             return_numpy=return_numpy,
         )
 
-    @staticmethod
     # Passthrough: ndarray/list are converted, anything else is returned unchanged.
+    @staticmethod
     def _convert_to_torch_if_needed(
         embeddings: Any,  # noqa: ANN401
     ) -> torch.Tensor | list[Any] | Any:  # noqa: ANN401
