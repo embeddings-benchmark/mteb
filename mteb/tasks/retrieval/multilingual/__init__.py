@@ -85,6 +85,7 @@ from .mkqa_retrieval import MKQARetrieval
 from .mlqa_retrieval import MLQARetrieval
 from .mmarco_retrieval import MMarcoRetrievalMultilingual
 from .mr_tidy_retrieval import MrTidyRetrieval
+from .multi30k_retrieval import Multi30kI2TRetrieval, Multi30kT2IRetrieval
 from .multi_long_doc_retrieval import MultiLongDocRetrieval
 from .mupler_retrieval import MuPLeRRetrieval
 from .nanobeir_multilingual import (
@@ -239,6 +240,8 @@ __all__ = [
     "MintakaRetrieval",
     "MrTidyRetrieval",
     "MuPLeRRetrieval",
+    "Multi30kI2TRetrieval",
+    "Multi30kT2IRetrieval",
     "MultiLongDocRetrieval",
     "MultilingualNanoArguAnaRetrieval",
     "MultilingualNanoClimateFeverRetrieval",

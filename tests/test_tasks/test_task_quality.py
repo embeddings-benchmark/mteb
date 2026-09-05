@@ -851,6 +851,8 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MVLSIBSent2Img",  # all languages share the same 70 images
         "MMLongBenchDocRetrieval",  # official corpus contains repeated rendered pages; preserve IDs to match qrels
         "MomentSeekerTI2VRetrieval",
+        "Multi30kI2TRetrieval",  # same 1k images are shared across the four language subsets by design
+        "Multi30kT2IRetrieval",  # same 1k images are shared across the four language subsets by design
         "OVENIT2ITRetrieval",
         "PatchCamelyon",  # adjacent, overlapping WSI patches are inherent to the source data
         "PatchCamelyonZeroShot",  # adjacent, overlapping WSI patches are inherent to the source data
