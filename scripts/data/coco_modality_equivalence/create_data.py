@@ -37,7 +37,9 @@ def _patched_audio_encode(self, value):
     datasets 5.0.0 unconditionally imports torchcodec at the top of
     encode_example even for the bytes-dict path that doesn't need it.
     """
-    if isinstance(value, dict) and (value.get("bytes") is not None or value.get("path") is not None):
+    if isinstance(value, dict) and (
+        value.get("bytes") is not None or value.get("path") is not None
+    ):
         return {"bytes": value.get("bytes"), "path": value.get("path")}
     return _patched_audio_encode._orig(self, value)
 
@@ -50,6 +52,7 @@ def _coco_id_from_path(path: str) -> str | None:
     """Extract 12-digit zero-padded COCO image ID from a filename like COCO_val2014_000000391895.jpg."""
     m = re.search(r"(\d{12})\.jpg", path)
     return m.group(1) if m else None
+
 
 _SPOKEN_COCO = "whybe-choi/SpokenCOCOA2IRetrieval"
 _SPEECH_COCO = "dukesun99/SpeechCoco-A2I"
@@ -96,7 +99,9 @@ def _load_spoken_coco() -> tuple[dict[str, bytes], dict[str, bytes]]:
 
     print(f"  {len(human_by_image)} images with human audio")
     # Store images as {"bytes": ..., "path": None} dicts too
-    images_d: dict[str, dict] = {k: {"bytes": v, "path": None} for k, v in images.items()}
+    images_d: dict[str, dict] = {
+        k: {"bytes": v, "path": None} for k, v in images.items()
+    }
     return images_d, human_by_image
 
 
