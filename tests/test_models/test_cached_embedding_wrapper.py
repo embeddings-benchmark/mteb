@@ -350,8 +350,10 @@ def test_wrapper_mock_tasks(task: AbsTask, model: EncoderProtocol, tmp_path: Pat
     cache_directories = {
         index_path.parent for index_path in task_cache_path.rglob("index.json")
     }
-    expected_cache_count = 2 if isinstance(task, MockRetrievalTask) else 1
-    assert len(cache_directories) == expected_cache_count
+    assert {cache_directory.name for cache_directory in cache_directories} == {
+        PromptType.query.value,
+        PromptType.document.value,
+    }
     for cache_directory in cache_directories:
         assert {path.name for path in cache_directory.iterdir()} == {
             "dimension",
