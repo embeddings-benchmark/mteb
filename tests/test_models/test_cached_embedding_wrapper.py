@@ -60,6 +60,29 @@ class DummyModel(RandomEncoderBaseline):
         )
 
 
+class PromptAwareDummyModel(DummyModel):
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        self.call_count += 1
+        if prompt_type == PromptType.query:
+            value = 1.0
+        elif prompt_type == PromptType.document:
+            value = 2.0
+        else:
+            raise ValueError("A prompt type is required for this test model.")
+        return np.full(
+            (len(inputs.dataset), self.embedding_dim), value, dtype=np.float32
+        )
+
+
 class TestCachedEmbeddingWrapper:
     @pytest.fixture
     def cache_dir(self, tmp_path: Path):
@@ -252,6 +275,60 @@ class TestCachedEmbeddingWrapper:
 
         wrapped_model.close()  # delete to allow cleanup on Windows
 
+    def test_cache_isolated_by_prompt_type(self, cache_dir: Path):
+        model = PromptAwareDummyModel("test_model", revision=None)
+        wrapped_model = CachedEmbeddingWrapper(model, cache_dir)
+        task_metadata = MockRetrievalTask().metadata
+        inputs = DataLoader(
+            Dataset.from_dict({"id": ["1"], "title": [""], "text": ["same input"]})
+        )
+
+        query_embeddings = wrapped_model.encode(
+            inputs,
+            task_metadata=task_metadata,
+            hf_subset="default",
+            hf_split="test",
+            prompt_type=PromptType.query,
+        )
+        document_embeddings = wrapped_model.encode(
+            inputs,
+            task_metadata=task_metadata,
+            hf_subset="default",
+            hf_split="test",
+            prompt_type=PromptType.document,
+        )
+
+        np.testing.assert_allclose(query_embeddings, 1.0)
+        np.testing.assert_allclose(document_embeddings, 2.0)
+        assert model.call_count == 2
+
+        cached_query_embeddings = wrapped_model.encode(
+            inputs,
+            task_metadata=task_metadata,
+            hf_subset="default",
+            hf_split="test",
+            prompt_type=PromptType.query,
+        )
+        cached_document_embeddings = wrapped_model.encode(
+            inputs,
+            task_metadata=task_metadata,
+            hf_subset="default",
+            hf_split="test",
+            prompt_type=PromptType.document,
+        )
+
+        np.testing.assert_allclose(cached_query_embeddings, query_embeddings)
+        np.testing.assert_allclose(cached_document_embeddings, document_embeddings)
+        assert model.call_count == 2
+        assert (
+            cache_dir / task_metadata.name / PromptType.query.value / "index.json"
+        ).exists()
+        assert (
+            cache_dir / task_metadata.name / PromptType.document.value / "index.json"
+        ).exists()
+
+        wrapped_model.close()
+
 
 @pytest.mark.parametrize(
     ("task", "model"),
@@ -269,4 +346,15 @@ class TestCachedEmbeddingWrapper:
 def test_wrapper_mock_tasks(task: AbsTask, model: EncoderProtocol, tmp_path: Path):
     cached_model = CachedEmbeddingWrapper(model, tmp_path)
     mteb.evaluate(cached_model, task, cache=None)
-    assert len(list((tmp_path / task.metadata.name).glob("*"))) == 3
+    task_cache_path = tmp_path / task.metadata.name
+    cache_directories = {
+        index_path.parent for index_path in task_cache_path.rglob("index.json")
+    }
+    expected_cache_count = 2 if isinstance(task, MockRetrievalTask) else 1
+    assert len(cache_directories) == expected_cache_count
+    for cache_directory in cache_directories:
+        assert {path.name for path in cache_directory.iterdir()} == {
+            "dimension",
+            "index.json",
+            "vectors.npy",
+        }
