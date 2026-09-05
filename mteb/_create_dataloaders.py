@@ -149,9 +149,12 @@ def _convert_conv_history_to_query(
     return cast("dict[str, str | list[ConversationTurn]]", row)
 
 
+# Duck-typed: accepts a PIL image or a tensor (narrowed via `hasattr`), and the
+# caller-supplied `transform` decides the output type.
 def _transform_image_to_rgb(
-    image: Any, transform: Callable[[Any], Any] | None = None
-) -> Any:
+    image: Any,  # noqa: ANN401
+    transform: Callable[[Any], Any] | None = None,
+) -> Any:  # noqa: ANN401
     """Convert image to RGB and apply a transformation (e.g. PILToTensor).
 
     Args:
@@ -276,19 +279,20 @@ def _prepare_dataset(
                 dataset = _combine_queries_with_instruction_text(dataset)
 
     if "image" in modalities:
-        dataset = _prepare_image_dataset(
-            dataset,
-            image_column_name=input_column if input_column else "image",
-            num_proc=num_proc,
-        )
+        image_column_name = "image" if input_column is None else input_column
+        if input_column in dataset.column_names:
+            dataset = _prepare_image_dataset(
+                dataset,
+                image_column_name=image_column_name,
+                num_proc=num_proc,
+            )
     for modality in ("audio", "video"):
-        if modality in modalities:
-            if (
-                input_column
-                and input_column in dataset.column_names
-                and modality not in dataset.column_names
-            ):
-                dataset = dataset.rename_column(input_column, modality)
+        if modality in modalities and (
+            input_column
+            and input_column in dataset.column_names
+            and modality not in dataset.column_names
+        ):
+            dataset = dataset.rename_column(input_column, modality)
 
     # Drop modality columns not needed for this prompt type to avoid
     # None values in the collate function (e.g. text=None in image-only corpus)

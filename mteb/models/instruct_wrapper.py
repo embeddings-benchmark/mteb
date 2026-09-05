@@ -37,7 +37,7 @@ def instruct_wrapper(
     instruction_template: str | Callable[[str, PromptType | None], str] | None = None,
     device: str | None = None,
     **kwargs: Any,
-) -> Any:
+) -> AbsEncoder:
     """Instruct wrapper for models. Uses GritLM to pass instructions to the model.
 
     It's recommended to use `InstructSentenceTransformerModel` instead of this wrapper for models.

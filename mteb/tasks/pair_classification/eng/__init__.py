@@ -3,8 +3,10 @@ from .ave_dataset_pc import (
     AVEDatasetVAPairClassification,
     AVEDatasetVPairClassification,
 )
+from .breakfast_pc import BreakfastPairClassification
 from .cremad import CREMADPairClassification
 from .dtd_pair_classification import DTDPairClassification
+from .emid_pc import EMIDPairClassification
 from .eurosat_pair_classification import EuroSATPairClassification
 from .fer2013_pair_classification import FER2013PairClassification
 from .fgvc_aircraft_pair_classification import FGVCAircraftPairClassification
@@ -44,8 +46,10 @@ __all__ = [
     "AVEDatasetVAPairClassification",
     "AVEDatasetVPairClassification",
     "AVSpeakerBenchPairClassification",
+    "BreakfastPairClassification",
     "CREMADPairClassification",
     "DTDPairClassification",
+    "EMIDPairClassification",
     "EuroSATPairClassification",
     "FER2013PairClassification",
     "FGVCAircraftPairClassification",

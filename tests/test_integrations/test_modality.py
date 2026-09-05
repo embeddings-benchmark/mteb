@@ -19,7 +19,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 @pytest.mark.parametrize(
-    "task, modalities",
+    ("task", "modalities"),
     [
         # Task needs image and text, model only text
         (MockImageTextPairClassificationTask(), ["text"]),
@@ -40,7 +40,7 @@ def test_task_modality_filtering(task, modalities):
     model_meta = model_meta.model_copy(update={"modalities": modalities})
     model.mteb_model_meta = model_meta
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="but none overlap with"):
         mteb.evaluate(
             model,
             task,
@@ -49,7 +49,9 @@ def test_task_modality_filtering(task, modalities):
 
 
 @pytest.mark.parametrize("task", [MockMultiChoiceTask()])
-def test_task_modality_filtering_model_modalities_only_one_of_modalities(task, caplog):
+def test_task_modality_filtering_model_modalities_only_one_of_modalities(
+    task, caplog: pytest.LogCaptureFixture
+):
     """Task have it2i, model only image."""
     with caplog.at_level(logging.WARNING):
         model = mteb.get_model("mteb/baseline-random-encoder")

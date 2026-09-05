@@ -334,7 +334,7 @@ class JinaWrapper(SentenceTransformerEncoderWrapper):
         revision: str,
         device: str | None = None,
         model_prompts: dict[str, str] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         super().__init__(
             model, revision, device=device, model_prompts=model_prompts, **kwargs
@@ -387,16 +387,16 @@ class Jinav4ModelMeta(ModelMeta):
         device: str | None = None,
         *,
         embed_dim: int | None = None,
-        vector_type: Literal[SUPPORTED_VECTOR_TYPES] = "single_vector",
         **kwargs: Any,
     ) -> MTEBModels:
-        model = super().load_model(
-            device=device, embed_dim=embed_dim, vector_type=vector_type, **kwargs
-        )
+        model = super().load_model(device=device, embed_dim=embed_dim, **kwargs)
+        vector_type = kwargs.pop(
+            "vector_type", "single_vector"
+        )  # didn't add to args to not trigger experiments
         if vector_type == "multi_vector":
             model.mteb_model_meta = model.mteb_model_meta.model_copy(
                 update={
-                    "model_type": "late-interaction",
+                    "model_type": ["late-interaction"],
                 }
             )
         return model
@@ -416,7 +416,7 @@ class JinaV4Wrapper(AbsEncoder):
         trust_remote_code: bool = True,
         model_prompts: dict[str, str] | None = None,
         vector_type: Literal[SUPPORTED_VECTOR_TYPES] = "single_vector",
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         device = device_map or device
 
@@ -526,7 +526,15 @@ class JinaV4Wrapper(AbsEncoder):
                     )
                 ]
             else:
-                embeddings = text_embeddings + image_embeddings
+                # `encode_text`/`encode_image` return a list with one vector per
+                # input, so the two lists must be fused per example rather than
+                # concatenated - otherwise one input yields two embeddings.
+                embeddings = torch.nn.functional.normalize(
+                    torch.stack(list(text_embeddings))
+                    + torch.stack(list(image_embeddings)),
+                    p=2,
+                    dim=-1,
+                )
         elif text_embeddings is not None:
             embeddings = text_embeddings
         elif image_embeddings is not None:
@@ -608,12 +616,15 @@ class JinaV4Wrapper(AbsEncoder):
             return_numpy=return_numpy,
         )
 
+    # Passthrough: ndarray/list are converted, anything else is returned unchanged.
     @staticmethod
-    def _convert_to_torch_if_needed(embeddings):
+    def _convert_to_torch_if_needed(
+        embeddings: Any,  # noqa: ANN401
+    ) -> torch.Tensor | list[Any] | Any:  # noqa: ANN401
         """Convert numpy arrays to torch tensors if needed."""
         if isinstance(embeddings, np.ndarray):
             return torch.from_numpy(embeddings)
-        elif isinstance(embeddings, list):
+        if isinstance(embeddings, list):
             # Handle list of numpy arrays or tensors
             converted = []
             for emb in embeddings:
@@ -636,20 +647,19 @@ class JinaV4Wrapper(AbsEncoder):
 
         if self.vector_type == "single_vector":
             return self.score_single_vector(a_torch, b_torch)
-        elif self.vector_type == "multi_vector":
+        if self.vector_type == "multi_vector":
             return self.score_multi_vector(a_torch, b_torch)
-        else:
-            raise ValueError(
-                "vector_type must be one of the following: [`single_vector`, `multi_vector`]"
-            )
+        raise ValueError(
+            "vector_type must be one of the following: [`single_vector`, `multi_vector`]"
+        )
 
-    @staticmethod
     def score_single_vector(
+        self,
         qs: torch.Tensor | list[torch.Tensor],
         ps: torch.Tensor | list[torch.Tensor],
     ) -> torch.Tensor:
         """Compute the dot product score for the given single-vector query and passage embeddings."""
-        device = "cpu"
+        device = self.model.device
 
         if len(qs) == 0:
             raise ValueError("No queries provided")
@@ -660,26 +670,24 @@ class JinaV4Wrapper(AbsEncoder):
         def normalize_input(x):
             if isinstance(x, torch.Tensor):
                 return x.unsqueeze(0) if x.ndim == 1 else x
-            else:  # list
-                return torch.stack(x) if len(x) > 1 else x[0].unsqueeze(0)
+            # list
+            return torch.stack(x) if len(x) > 1 else x[0].unsqueeze(0)
 
         qs_stacked = normalize_input(qs).to(device)
         ps_stacked = normalize_input(ps).to(device)
-
-        # Compute scores
-        scores = torch.einsum("bd,cd->bc", qs_stacked, ps_stacked).to(torch.float32)
-
-        # Squeeze if single query
+        scores = (
+            torch.einsum("bd,cd->bc", qs_stacked, ps_stacked).to(torch.float32).cpu()
+        )
         return scores.squeeze(0) if scores.shape[0] == 1 else scores
 
-    @staticmethod
     def score_multi_vector(
+        self,
         qs: list[torch.Tensor],
         ps: list[torch.Tensor],
         batch_size: int = 16,
     ) -> torch.Tensor:
         """Compute the MaxSim score (ColBERT-like) for the given multi-vector query and passage embeddings."""
-        device = "cpu"
+        device = self.model.device
 
         if len(qs) == 0:
             raise ValueError("No queries provided")
@@ -749,7 +757,7 @@ class JinaV5TextWrapper(SentenceTransformerEncoderWrapper):
         revision: str,
         device: str | None = None,
         model_prompts: dict[str, str] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         super().__init__(
             model, revision, device=device, model_prompts=model_prompts, **kwargs
@@ -832,7 +840,9 @@ _OMNI_MODEL_PROMPTS = {
 }
 
 
-def _video_frames_to_channels_last(video: Any) -> Any:
+def _video_frames_to_channels_last(
+    video: Any,  # noqa: ANN401 -- any frame container; only tensors are permuted, others pass through
+) -> Any:  # noqa: ANN401
     """torchcodec frame batches are (T, C, H, W) uint8; the model's remote code
     detects video only for channels-last (T, H, W, 3|4) arrays and would
     otherwise stringify the tensor and embed it as text."""

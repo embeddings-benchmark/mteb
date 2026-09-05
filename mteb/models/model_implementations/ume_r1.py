@@ -35,7 +35,7 @@ class UMER1Wrapper(AbsEncoder):
         fps: float | None = 2.0,
         max_frames: int | None = 64,
         num_frames: int | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         from transformers import AutoProcessor, Qwen2VLForConditionalGeneration
         from transformers.utils.import_utils import is_flash_attn_2_available
@@ -183,7 +183,9 @@ class UMER1Wrapper(AbsEncoder):
         return embedding_idx
 
     def _extract_generative_reasoning_embeddings(
-        self, output: Any, model_inputs: dict
+        self,
+        output: Any,  # noqa: ANN401 -- transformers model output object
+        model_inputs: dict,
     ) -> torch.Tensor:
         """Helper to extract embeddings from the generated output."""
         sequences = output.sequences

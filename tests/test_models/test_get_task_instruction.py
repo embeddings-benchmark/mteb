@@ -1,4 +1,5 @@
 from collections.abc import Callable
+from typing import Any
 
 import pytest
 
@@ -20,7 +21,7 @@ class _FakeEncoder(AbsEncoder):
     ) -> None:
         self.instruction_template = instruction_template
 
-    def encode(self, *args, **kwargs):
+    def encode(self, *args: Any, **kwargs: Any):
         raise NotImplementedError
 
 
@@ -32,7 +33,7 @@ QUERY_INSTR = "Given a biology post, retrieve relevant passages"
 
 
 @pytest.mark.parametrize(
-    "template, prompt_type, expected",
+    ("template", "prompt_type", "expected"),
     [
         # Callable template: fires even on empty input (document side)
         (_gritlm_template, PromptType.document, "<|embed|>\n"),

@@ -25,6 +25,7 @@ logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     import torch
+    from PIL import Image
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -236,15 +237,14 @@ def _video_to_mp4_bytes(frames: torch.Tensor, *, fps: float) -> bytes:
         raise ValueError(f"Expected a positive video FPS, got {fps}")
 
     video_frames = frames.detach().cpu()
-    if video_frames.is_floating_point():
-        # TorchCodec currently returns uint8, but accepting normalized tensors
-        # makes this boundary safe for other frame providers too.
-        if video_frames.numel():
-            min_value = video_frames.min().item()
-            max_value = video_frames.max().item()
+    # TorchCodec currently returns uint8, but accepting normalized tensors
+    # makes this boundary safe for other frame providers too.
+    if video_frames.is_floating_point() and video_frames.numel():
+        min_value = video_frames.min().item()
+        max_value = video_frames.max().item()
 
-            if min_value >= 0 and max_value <= 1:
-                video_frames = torch.mul(video_frames, 255)
+        if min_value >= 0 and max_value <= 1:
+            video_frames = torch.mul(video_frames, 255)
     if video_frames.dtype != torch.uint8:
         video_frames = video_frames.clamp(0, 255).to(torch.uint8)
 
@@ -274,13 +274,13 @@ def _build_gemini_content(
     *,
     text: str | None,
     title: str | None,
-    image: Any | None,
+    image: Image.Image | None,
     audio: dict | None,
     video: torch.Tensor | None,
     google_task_type: str | None,
     prompt_type: PromptType | None,
     use_text_formatting: bool = True,
-) -> str | list[Any] | Any:
+) -> str | list[Any] | Any:  # noqa: ANN401 -- returns a google-genai Part or content list
     """Build one Gemini input, aggregating all modalities present in a row."""
     from google.genai.types import Part
 
@@ -323,7 +323,7 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
         model_name: str,
         model_prompts: dict[str, str] | None = None,
         embed_dim: int | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         from google import genai
 
@@ -346,7 +346,9 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
         async def run() -> list:
             semaphore = asyncio.Semaphore(batch_size)
 
-            async def embed_one(item: Any) -> list[float]:
+            async def embed_one(
+                item: Any,  # noqa: ANN401 -- google-genai content payload
+            ) -> list[float]:
                 wait_time = 1.0
                 async with semaphore:
                     for attempt in range(10):
@@ -373,6 +375,9 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
                                 )
                             else:
                                 raise
+                    raise RuntimeError(
+                        "embed_one exhausted all retries without returning or raising"
+                    )
 
             if show_progress_bar:
                 from tqdm.asyncio import tqdm as async_tqdm

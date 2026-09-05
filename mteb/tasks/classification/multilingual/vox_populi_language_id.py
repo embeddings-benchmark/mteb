@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -58,7 +60,7 @@ Dupoux, Emmanuel},
     label_column_name: str = "language"
     is_cross_validation: bool = True
 
-    def dataset_transform(self, **kwargs):
+    def dataset_transform(self, **kwargs: Any):
         import numpy as np
         from datasets import DatasetDict
 
@@ -70,9 +72,7 @@ Dupoux, Emmanuel},
             # require at least 500 samples (so that Kaldi fbank(window_size=400) won't fail)
             if (audio_arr is None) or (len(audio_arr) < 500):
                 return False
-            if np.isnan(audio_arr).any() or np.isinf(audio_arr).any():
-                return False
-            return True
+            return not (np.isnan(audio_arr).any() or np.isinf(audio_arr).any())
 
         filtered_test = test_ds.filter(is_valid_audio)
 

@@ -1,6 +1,6 @@
 import logging
 import time
-from typing import get_args
+from typing import Any, get_args
 
 import numpy as np
 import pandas as pd
@@ -29,7 +29,7 @@ def _failsafe_plot(fun):
          A text plot with the error message if an exception occurs.
     """
 
-    def wrapper(*args, **kwargs):
+    def wrapper(*args: Any, **kwargs: Any):
         t0 = time.time()
         try:
             result = fun(*args, **kwargs)

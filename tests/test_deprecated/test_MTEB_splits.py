@@ -28,7 +28,7 @@ def multilingual_tasks():
     return [MockMultilingualRetrievalTask()]
 
 
-def test_all_splits_evaluated(model, tasks, tmp_path):
+def test_all_splits_evaluated(model, tasks, tmp_path: Path):
     evaluation = MTEB(tasks=tasks)
     results = evaluation.run(
         model,
@@ -37,14 +37,14 @@ def test_all_splits_evaluated(model, tasks, tmp_path):
         verbosity=2,
     )
 
-    assert "MockRetrievalTask" == results[0].task_name
+    assert results[0].task_name == "MockRetrievalTask"
     last_evaluated_splits = evaluation._get_last_evaluated_splits()
     assert set(last_evaluated_splits["MockRetrievalTask"]) == {"val", "test"}
     assert len(last_evaluated_splits["MockRetrievalTask"]) == 2
     assert results[0].scores.keys() == {"val", "test"}
 
 
-def test_one_missing_split(model, tasks, tmp_path):
+def test_one_missing_split(model, tasks, tmp_path: Path):
     evaluation = MTEB(tasks=tasks)
     results = evaluation.run(
         model,
@@ -53,7 +53,7 @@ def test_one_missing_split(model, tasks, tmp_path):
         verbosity=2,
     )
 
-    assert "MockRetrievalTask" == results[0].task_name
+    assert results[0].task_name == "MockRetrievalTask"
     last_evaluated_splits = evaluation._get_last_evaluated_splits()
     assert set(last_evaluated_splits["MockRetrievalTask"]) == {"val"}
     assert len(last_evaluated_splits["MockRetrievalTask"]) == 1
@@ -66,14 +66,14 @@ def test_one_missing_split(model, tasks, tmp_path):
         verbosity=2,
     )
 
-    assert "MockRetrievalTask" == results2[0].task_name
+    assert results2[0].task_name == "MockRetrievalTask"
     last_evaluated_splits = evaluation._get_last_evaluated_splits()
     assert set(last_evaluated_splits["MockRetrievalTask"]) == {"test"}
     assert len(last_evaluated_splits["MockRetrievalTask"]) == 1
     assert results2[0].scores.keys() == {"test", "val"}
 
 
-def test_no_missing_splits(model, tasks, tmp_path):
+def test_no_missing_splits(model, tasks, tmp_path: Path):
     evaluation = MTEB(tasks=tasks)
     results = evaluation.run(
         model,
@@ -100,7 +100,7 @@ def test_no_missing_splits(model, tasks, tmp_path):
     assert results[0].scores.keys() == {"test", "val"}
 
 
-def test_all_languages_evaluated(model, multilingual_tasks, tmp_path):
+def test_all_languages_evaluated(model, multilingual_tasks, tmp_path: Path):
     evaluation = MTEB(tasks=multilingual_tasks)
     results = evaluation.run(
         model,
@@ -109,7 +109,7 @@ def test_all_languages_evaluated(model, multilingual_tasks, tmp_path):
         verbosity=2,
         eval_subsets=None,
     )
-    assert "MockMultilingualRetrievalTask" == results[0].task_name
+    assert results[0].task_name == "MockMultilingualRetrievalTask"
     last_evaluated_splits = evaluation._get_last_evaluated_splits()
     assert "MockMultilingualRetrievalTask" in last_evaluated_splits
     assert len(last_evaluated_splits["MockMultilingualRetrievalTask"]) == 1
@@ -118,7 +118,7 @@ def test_all_languages_evaluated(model, multilingual_tasks, tmp_path):
     assert len(results[0].scores["test"]) == 2
 
 
-def test_missing_language(model, multilingual_tasks, tmp_path):
+def test_missing_language(model, multilingual_tasks, tmp_path: Path):
     evaluation = MTEB(tasks=multilingual_tasks)
     results = evaluation.run(
         model,
@@ -128,7 +128,7 @@ def test_missing_language(model, multilingual_tasks, tmp_path):
         eval_subsets=["eng"],
     )
 
-    assert "MockMultilingualRetrievalTask" == results[0].task_name
+    assert results[0].task_name == "MockMultilingualRetrievalTask"
     last_evaluated_splits = evaluation._get_last_evaluated_splits()
     assert "MockMultilingualRetrievalTask" in last_evaluated_splits
     assert len(last_evaluated_splits["MockMultilingualRetrievalTask"]) == 1
@@ -152,7 +152,7 @@ def test_missing_language(model, multilingual_tasks, tmp_path):
     assert len(results[0].scores["test"]) == 2
 
 
-def test_no_missing_languages(model, multilingual_tasks, tmp_path):
+def test_no_missing_languages(model, multilingual_tasks, tmp_path: Path):
     evaluation = MTEB(tasks=multilingual_tasks)
     results = evaluation.run(
         model,
@@ -183,7 +183,7 @@ def test_no_missing_languages(model, multilingual_tasks, tmp_path):
     assert sorted(results[0].languages) == ["eng", "fra"]
 
 
-def test_partial_languages(model, multilingual_tasks, tmp_path):
+def test_partial_languages(model, multilingual_tasks, tmp_path: Path):
     evaluation = MTEB(tasks=multilingual_tasks)
     results = evaluation.run(
         model,
@@ -215,7 +215,7 @@ def test_partial_languages(model, multilingual_tasks, tmp_path):
 
 
 def test_multilingual_one_missing_split_no_missing_lang(
-    model, multilingual_tasks, tmp_path
+    model, multilingual_tasks, tmp_path: Path
 ):
     evaluation = MTEB(tasks=multilingual_tasks)
     results = evaluation.run(
@@ -250,7 +250,7 @@ def test_multilingual_one_missing_split_no_missing_lang(
 
 
 def test_multilingual_one_missing_lang_in_one_split(
-    model, multilingual_tasks, tmp_path
+    model, multilingual_tasks, tmp_path: Path
 ):
     evaluation = MTEB(tasks=multilingual_tasks)
     results = evaluation.run(
@@ -298,7 +298,7 @@ def test_multilingual_one_missing_lang_in_one_split(
     assert len(results[0].scores["test"]) == 2
 
 
-def test_all_splits_evaluated_with_overwrite(model, tasks, tmp_path):
+def test_all_splits_evaluated_with_overwrite(model, tasks, tmp_path: Path):
     evaluation = MTEB(tasks=tasks)
     results = evaluation.run(
         model,
@@ -307,7 +307,7 @@ def test_all_splits_evaluated_with_overwrite(model, tasks, tmp_path):
         verbosity=2,
     )
 
-    assert "MockRetrievalTask" == results[0].task_name
+    assert results[0].task_name == "MockRetrievalTask"
     last_evaluated_splits = evaluation._get_last_evaluated_splits()
     assert len(last_evaluated_splits["MockRetrievalTask"]) == 1
     assert set(last_evaluated_splits["MockRetrievalTask"]) == {"val"}
@@ -320,7 +320,7 @@ def test_all_splits_evaluated_with_overwrite(model, tasks, tmp_path):
         verbosity=2,
         overwrite_results=True,
     )
-    assert "MockRetrievalTask" == results2[0].task_name
+    assert results2[0].task_name == "MockRetrievalTask"
     last_evaluated_splits = evaluation._get_last_evaluated_splits()
     assert len(last_evaluated_splits["MockRetrievalTask"]) == 2
     assert set(last_evaluated_splits["MockRetrievalTask"]) == {"val", "test"}
@@ -328,7 +328,7 @@ def test_all_splits_evaluated_with_overwrite(model, tasks, tmp_path):
 
 
 def test_all_splits_subsets_evaluated_with_overwrite(
-    model, multilingual_tasks, tmp_path
+    model, multilingual_tasks, tmp_path: Path
 ):
     evaluation = MTEB(tasks=multilingual_tasks)
     results = evaluation.run(

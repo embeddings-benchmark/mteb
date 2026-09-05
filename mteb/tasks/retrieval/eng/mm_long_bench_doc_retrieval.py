@@ -1,3 +1,5 @@
+from typing import Any
+
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -98,7 +100,7 @@ class MMLongBenchDocRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a document image that matches the given query."},
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 

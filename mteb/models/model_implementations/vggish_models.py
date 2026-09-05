@@ -21,7 +21,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def vggish_loader(*args, **kwargs):
+def vggish_loader(*args: Any, **kwargs: Any):
     """Factory function to create a VGGish model wrapper."""
     import torchaudio
     from torch_vggish_yamnet import vggish
@@ -111,7 +111,7 @@ def vggish_loader(*args, **kwargs):
             self,
             inputs: DataLoader[AudioInput],
             show_progress_bar=True,
-            **kwargs,
+            **kwargs: Any,
         ):
             """Generate embeddings for audio inputs."""
             all_embeddings = []

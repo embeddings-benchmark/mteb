@@ -117,9 +117,9 @@ class VoiceCLAPSmallWrapper(AbsEncoder):
                     "The number of texts and audios must have the same length"
                 )
             return text_embeddings + audio_embeddings
-        elif text_embeddings is not None:
+        if text_embeddings is not None:
             return text_embeddings
-        elif audio_embeddings is not None:
+        if audio_embeddings is not None:
             return audio_embeddings
         raise ValueError
 

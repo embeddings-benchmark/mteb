@@ -22,7 +22,7 @@ BLIP2_CITATION = """@inproceedings{li2023blip2,
 }"""
 
 
-def blip2_loader(model_name, **kwargs):
+def blip2_loader(model_name, **kwargs: Any):
     from lavis.models.blip2_models.blip2_image_text_matching import (
         Blip2ITM,
     )
@@ -149,9 +149,9 @@ def blip2_loader(model_name, **kwargs):
                     )
                 fused_embeddings = text_embeddings + image_embeddings
                 return fused_embeddings
-            elif text_embeddings is not None:
+            if text_embeddings is not None:
                 return text_embeddings
-            elif image_embeddings is not None:
+            if image_embeddings is not None:
                 return image_embeddings
             raise ValueError
 

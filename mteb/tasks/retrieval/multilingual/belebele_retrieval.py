@@ -1,3 +1,5 @@
+from typing import Any
+
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -209,7 +211,7 @@ class BelebeleRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs) -> None:
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 

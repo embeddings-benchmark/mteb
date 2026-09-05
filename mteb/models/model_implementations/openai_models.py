@@ -11,6 +11,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
+    from openai import OpenAI
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -32,8 +33,8 @@ class OpenAIModel(AbsEncoder):
         max_tokens: int,
         tokenizer_name: str = "cl100k_base",
         embed_dim: int | None = None,
-        client: Any | None = None,  # OpenAI
-        **kwargs,
+        client: OpenAI | None = None,
+        **kwargs: Any,
     ) -> None:
         """Wrapper for OpenAIs embedding API.
 
@@ -113,7 +114,7 @@ class OpenAIModel(AbsEncoder):
         # Set dimensions only for models that support it
         dimensions = (
             self._embed_dim or NotGiven()
-            if not self.model_name == "text-embedding-ada-002"
+            if self.model_name != "text-embedding-ada-002"
             else NotGiven()
         )
         default_kwargs = dict(

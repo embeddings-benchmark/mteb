@@ -22,7 +22,7 @@ VISTA_CITATION = """@article{zhou2024vista,
 }"""
 
 
-def vista_loader(model_name, **kwargs):
+def vista_loader(model_name, **kwargs: Any):
     try:  # a temporal fix for the dependency issues of vista models.
         from visual_bge.modeling import Visualized_BGE
     except ImportError:
@@ -219,14 +219,14 @@ def vista_loader(model_name, **kwargs):
                             .to(torch.float32)
                         )
                 return torch.cat(all_fused_embeddings, dim=0)
-            elif "text" in inputs.dataset.features:
+            if "text" in inputs.dataset.features:
                 return self.get_text_embeddings(
                     inputs,
                     task_metadata=task_metadata,
                     prompt_type=prompt_type,
                     **kwargs,
                 )
-            elif "image" in inputs.dataset.features:
+            if "image" in inputs.dataset.features:
                 return self.get_image_embeddings(
                     inputs,
                     task_metadata=task_metadata,

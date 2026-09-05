@@ -13,6 +13,7 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    from PIL import Image
     from torch.utils.data import DataLoader
     from typing_extensions import Unpack
 
@@ -48,7 +49,7 @@ def _bidirectional_causal_mask(
     attention_mask: torch.Tensor | None,
     input_tensor: torch.Tensor,
     cache_position: torch.Tensor | None = None,
-    past_key_values: Any = None,
+    past_key_values: Any = None,  # noqa: ANN401 -- transformers Cache object
     output_attentions: bool = False,
 ) -> torch.Tensor | None:
     """Replacement for `Qwen2_5_VLTextModel._update_causal_mask` that only masks padding.
@@ -159,7 +160,7 @@ class MoCaWrapper(AbsEncoder):
         self.processor.tokenizer.padding_side = "right"
 
     @staticmethod
-    def _prepare_image(image: Any) -> Any:
+    def _prepare_image(image: Image.Image) -> Image.Image:
         image = image.convert("RGB")
         width, height = image.size
         if width < MIN_IMAGE_SIDE or height < MIN_IMAGE_SIDE:

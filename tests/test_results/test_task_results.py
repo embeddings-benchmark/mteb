@@ -1,5 +1,6 @@
 from importlib.metadata import version
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -45,7 +46,7 @@ class DummyTask(AbsTask):
     def evaluate(self, model, split: str = "test"):
         pass
 
-    def _evaluate_subset(self, **kwargs):
+    def _evaluate_subset(self, **kwargs: Any):
         pass
 
     def _calculate_descriptive_statistics_from_split(
@@ -58,7 +59,7 @@ class DummyTask(AbsTask):
         return {}
 
 
-@pytest.fixture()
+@pytest.fixture
 def task_result():
     scores = {
         "train": {

@@ -35,7 +35,7 @@ class ColPaliEngineWrapper(AbsEncoder):
         revision: str | None = None,
         device: str | None = None,
         query_prefix: str | None = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -77,9 +77,9 @@ class ColPaliEngineWrapper(AbsEncoder):
                 )
             fused_embeddings = torch.cat([text_embeddings, image_embeddings], dim=1)
             return fused_embeddings
-        elif text_embeddings is not None:
+        if text_embeddings is not None:
             return text_embeddings
-        elif image_embeddings is not None:
+        if image_embeddings is not None:
             return image_embeddings
         raise ValueError
 
@@ -90,7 +90,7 @@ class ColPaliEngineWrapper(AbsEncoder):
         self,
         images,
         batch_size: int = 32,
-        **kwargs,
+        **kwargs: Any,
     ):
         import torchvision.transforms.functional as F
         from PIL import Image
@@ -120,7 +120,7 @@ class ColPaliEngineWrapper(AbsEncoder):
         self,
         texts,
         batch_size: int = 32,
-        **kwargs,
+        **kwargs: Any,
     ):
         all_embeds = []
         with torch.no_grad():
@@ -169,7 +169,7 @@ class ColPaliWrapper(ColPaliEngineWrapper):
         revision: str | None = None,
         device: str | None = None,
         query_prefix: str = "Query: ",
-        **kwargs,
+        **kwargs: Any,
     ):
         from colpali_engine.models import ColPali, ColPaliProcessor
 

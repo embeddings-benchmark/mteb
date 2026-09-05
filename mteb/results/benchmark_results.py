@@ -206,9 +206,10 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         for model_res in self.model_results:
             model_name = model_res.model_name
             revision = model_res.model_revision
-            if model_name in name_rev:
-                if name_rev[model_name] is None or revision == name_rev[model_name]:
-                    models_res.append(model_res)
+            if model_name in name_rev and (
+                name_rev[model_name] is None or revision == name_rev[model_name]
+            ):
+                models_res.append(model_res)
 
         return type(self).model_construct(model_results=models_res)
 
@@ -337,10 +338,10 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         scripts: list[ISOLanguageScript] | None = None,
         getter: Callable[[ScoresDict], Score] | None = None,
         aggregation: Callable[[list[Score]], Any] | None = None,
-        format: Literal["wide", "long"] = "wide",
+        output_format: Literal["wide", "long"] = "wide",
     ) -> list[dict[str, Any]]:
         entries: list[dict[str, Any]] = []
-        if format == "wide":
+        if output_format == "wide":
             for model_res in self:
                 try:
                     model_scores = model_res._get_scores(
@@ -349,7 +350,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                         scripts=scripts,
                         getter=getter,
                         aggregation=aggregation,
-                        format="wide",
+                        output_format="wide",
                     )
                     entries.append(
                         {
@@ -363,7 +364,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                         f"Couldn't get scores for {model_res.model_name}({model_res.model_revision}), due to: {e}",
                         stacklevel=2,
                     )
-        if format == "long":
+        if output_format == "long":
             for model_res in self:
                 try:
                     entries.extend(
@@ -373,7 +374,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                             scripts=scripts,
                             getter=getter,
                             aggregation=aggregation,
-                            format="long",
+                            output_format="long",
                         )
                     )
                 except Exception as e:
@@ -388,7 +389,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         aggregation_level: Literal["subset", "split", "task", "language"] = "task",
         aggregation_fn: Callable[[list[Score]], Any] | None = None,
         include_model_revision: bool = False,
-        format: Literal["wide", "long"] = "wide",
+        format: Literal["wide", "long"] = "wide",  # noqa: A002  # public API, renaming would break callers
     ) -> pd.DataFrame:
         """Get a DataFrame with the scores for all models and tasks.
 
@@ -437,7 +438,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
             columns=columns,
             aggregation_level=aggregation_level,
             aggregation_fn=aggregation_fn,
-            format=format,
+            output_format=format,
         )
         # Cast categorical columns back to object so downstream string ops don't
         # raise "can only concatenate str (not Categorical) to str".

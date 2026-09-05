@@ -1,4 +1,5 @@
 from collections import defaultdict
+from typing import Any
 
 import datasets
 from datasets import Audio, DatasetDict
@@ -71,7 +72,7 @@ class GoogleSVQA2TRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if getattr(self, "data_loaded", False):
             return
         self.corpus = defaultdict(DatasetDict)
@@ -163,7 +164,7 @@ class GoogleSVQT2ARetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if getattr(self, "data_loaded", False):
             return
         self.corpus = defaultdict(DatasetDict)

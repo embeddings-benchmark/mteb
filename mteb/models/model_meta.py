@@ -266,7 +266,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
     output_dtypes: OutputDType | list[OutputDType] | None = None
     extra_requirements_groups: Sequence[str] | None = None
 
-    def __setattr__(self, name: str, value: Any) -> None:
+    def __setattr__(self, name: str, value: Any) -> None:  # noqa: ANN401 -- dunder contract
         """Deprecation warning for direct attribute mutation. Use model_copy(update={...}) instead."""
         warnings.warn(
             f"Mutating '{name}' is deprecated and will be removed in future versions. "
@@ -278,7 +278,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
 
     @model_validator(mode="before")
     @classmethod
-    def _handle_legacy_is_cross_encoder(cls, data: Any) -> Any:
+    def _handle_legacy_is_cross_encoder(cls, data: Any) -> Any:  # noqa: ANN401 -- pydantic mode='before' receives raw input
         """Handle legacy is_cross_encoder field by converting it to model_type.
 
         This validator handles backward compatibility for the deprecated is_cross_encoder field.
@@ -510,7 +510,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                     "Model does not support loading with a different embedding dimension. "
                     "You can change supported embedding dimensions in `meta.embed_dim`."
                 )
-            elif isinstance(_self.embed_dim, list) and embed_dim not in _self.embed_dim:
+            if isinstance(_self.embed_dim, list) and embed_dim not in _self.embed_dim:
                 raise ValueError(
                     f"Requested embedding dimension {embed_dim} is not in the model's supported embedding dimensions {_self.embed_dim}."
                 )
@@ -786,12 +786,11 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
 
         if st_model_type == "CrossEncoder":
             return CrossEncoderWrapper, "cross-encoder", modalities
-        elif st_model_type == "SparseEncoder":
+        if st_model_type == "SparseEncoder":
             return SparseEncoderWrapper, "sparse", modalities
-        elif st_model_type == "SentenceTransformer":
+        if st_model_type == "SentenceTransformer":
             return SentenceTransformerEncoderWrapper, "dense", modalities
-        else:
-            raise ValueError("Unsupported model type")
+        raise ValueError("Unsupported model type")
 
     @classmethod
     def _detect_model_type_and_loader(
@@ -944,7 +943,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         ):
             emb = model.model.get_input_embeddings()
             return int(np.prod(emb.weight.shape))
-        elif isinstance(model, SentenceTransformer):
+        if isinstance(model, SentenceTransformer):
             vocab = None
             try:
                 vocab = len(model.tokenizer.vocab)
@@ -1085,9 +1084,8 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         sbert_config = _get_json_from_hub(
             model_name, "sentence_bert_config.json", "model", revision=revision
         )
-        if sbert_config:
-            if max_tokens is None:
-                max_tokens = sbert_config.get("max_seq_length", None)
+        if sbert_config and max_tokens is None:
+            max_tokens = sbert_config.get("max_seq_length", None)
         # have model type, similarity function fields
         config_sbert = _get_json_from_hub(
             model_name, "config_sentence_transformers.json", "model", revision=revision
@@ -1771,7 +1769,7 @@ def _pydantic_instance_to_code(
     return "\n".join(lines)
 
 
-def _value_to_code(value: Any, indent: int) -> str:  # noqa: PLR0911
+def _value_to_code(value: Any, indent: int) -> str:  # noqa: PLR0911, ANN401 -- serialises arbitrary values
     """Convert a Python value into valid Python source code."""
     if isinstance(value, BaseModel):
         return _pydantic_instance_to_code(value, indent, only_set_fields=True)
@@ -1854,7 +1852,7 @@ def _serialize_experiment_kwargs_to_name(
 
     invalid_chars = set('<>:"|?*\\/\0')
 
-    def _serialize_value(value: Any) -> str:
+    def _serialize_value(value: Any) -> str:  # noqa: ANN401 -- serialises arbitrary values
         """Convert value to deterministic string representation."""
         if isinstance(value, (str, int, float, bool)) or value is None:
             str_value = str(value)

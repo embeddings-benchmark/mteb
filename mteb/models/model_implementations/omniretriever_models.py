@@ -116,7 +116,7 @@ class OmniRetrieverWrapper(AbsEncoder):
         )
 
     @staticmethod
-    def _load_processor(base_model_name_or_path: str, revision: str):
+    def _load_processor(base_model_name_or_path: str, revision: str) -> Any:  # noqa: ANN401 -- class resolved dynamically from the repo's auto_map
         """Load WAVE-7B's multimodal processor.
 
         The backbone repo ships no ``processor_config.json``, so
@@ -246,7 +246,7 @@ class OmniRetrieverWrapper(AbsEncoder):
         prompts: list[str],
         *,
         audio_lengths: list[int],
-        video_grid_thw: Any,
+        video_grid_thw: torch.Tensor,
         second_per_grid: list[float],
         use_audio_in_video: bool,
         seconds_per_chunk: float | None,

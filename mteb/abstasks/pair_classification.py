@@ -206,13 +206,20 @@ class AbsTaskPairClassification(AbsTask):
             n,
             max_workers=num_proc,
         )
+        number_of_characters = None
 
-        number_of_characters = (
-            pair_stats["text1_statistics"]["total_text_length"]
-            + pair_stats["text2_statistics"]["total_text_length"]
-            if pair_stats["text1_statistics"]
-            else None
-        )
+        if (
+            pair_stats["text1_statistics"] is not None
+            and pair_stats["text2_statistics"] is not None
+        ):
+            number_of_characters = (
+                pair_stats["text1_statistics"]["total_text_length"]
+                + pair_stats["text2_statistics"]["total_text_length"]
+            )
+        elif pair_stats["text1_statistics"] is not None:
+            number_of_characters = pair_stats["text1_statistics"]["total_text_length"]
+        elif pair_stats["text2_statistics"] is not None:
+            number_of_characters = pair_stats["text2_statistics"]["total_text_length"]
 
         return PairClassificationDescriptiveStatistics(
             num_samples=n,
@@ -331,29 +338,27 @@ class AbsTaskPairClassification(AbsTask):
         return max_acc, best_threshold
 
     def _find_best_f1_and_threshold(  # noqa: PLR6301
-        self, scores: Any, labels: NDArray[np.int64], high_score_more_similar: bool
+        self,
+        scores: list[float],
+        labels: NDArray[np.int64],
+        high_score_more_similar: bool,
     ) -> tuple[float, float, float, float]:
-        scores = np.asarray(scores)
-
         rows = list(zip(scores, labels, strict=True))
 
         rows = sorted(rows, key=lambda x: x[0], reverse=high_score_more_similar)
 
         best_f1 = best_precision = best_recall = 0.0
-        threshold = 0
-        nextract = 0
+        threshold = 0.0
         ncorrect = 0
         total_num_duplicates = sum(labels)
 
-        for i in range(len(rows) - 1):
-            score, label = rows[i]
-            nextract += 1
-
+        for i, (_score, label) in enumerate(rows[:-1]):
             if label == 1:
                 ncorrect += 1
 
             if ncorrect > 0:
-                precision = ncorrect / nextract
+                # i is 0-based, so i + 1 is the number of rows extracted so far
+                precision = ncorrect / (i + 1)
                 recall = ncorrect / total_num_duplicates
                 f1 = 2 * precision * recall / (precision + recall)
                 if f1 > best_f1:

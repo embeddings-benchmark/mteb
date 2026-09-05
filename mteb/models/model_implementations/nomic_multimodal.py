@@ -50,7 +50,7 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
         revision: str | None = None,
         device: str | None = None,
         base_revision: str | None = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         from colpali_engine.models import BiQwen2_5, BiQwen2_5_Processor
 
@@ -92,9 +92,9 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
                 )
             fused_embeddings = text_embeddings + image_embeddings
             return fused_embeddings
-        elif text_embeddings is not None:
+        if text_embeddings is not None:
             return text_embeddings
-        elif image_embeddings is not None:
+        if image_embeddings is not None:
             return image_embeddings
         raise ValueError
 
@@ -102,7 +102,7 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
         self,
         images,
         batch_size: int = 32,
-        **kwargs,
+        **kwargs: Any,
     ):
         all_embeds = []
 
@@ -122,7 +122,7 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
         self,
         texts,
         batch_size: int = 32,
-        **kwargs,
+        **kwargs: Any,
     ):
         all_embeds = []
         with torch.no_grad():

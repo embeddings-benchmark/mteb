@@ -38,7 +38,7 @@ class VLM2VecWrapper(AbsEncoder):
         self,
         model_name: str = "TIGER-Lab/VLM2Vec-LoRA",
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        **kwargs,
+        **kwargs: Any,
     ):
         if suggest_package(
             self,
@@ -94,10 +94,10 @@ class VLM2VecWrapper(AbsEncoder):
             num_crops=4,
         )
 
-    def encode_input(self, input):
-        hidden_states = self.mdl(**input, return_dict=True, output_hidden_states=True)
+    def encode_input(self, inputs):
+        hidden_states = self.mdl(**inputs, return_dict=True, output_hidden_states=True)
         hidden_states = hidden_states.hidden_states[-1]
-        pooled_output = self._pooling(hidden_states, input["attention_mask"])
+        pooled_output = self._pooling(hidden_states, inputs["attention_mask"])
         return pooled_output
 
     def _pooling(self, last_hidden_state, attention_mask):
@@ -398,7 +398,7 @@ class VLM2VEC2Wrapper(AbsEncoder):
         fps: float | None = 2.0,
         max_frames: int | None = 64,
         num_frames: int | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         from peft import PeftModel
         from transformers import AutoProcessor, Qwen2VLForConditionalGeneration

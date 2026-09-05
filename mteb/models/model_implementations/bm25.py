@@ -2,13 +2,14 @@ from __future__ import annotations
 
 import logging
 import unicodedata
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Literal
 
-from mteb._create_dataloaders import _combine_queries_with_instruction_text
 from mteb.models.model_meta import ModelMeta
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+
+    from bm25s.tokenization import Tokenized
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models.models_protocols import SearchProtocol
@@ -289,7 +290,7 @@ class BM25Tokenizer:
         raise ValueError(f"Unknown tokenizer name: {name!r}")
 
     @staticmethod
-    def _to_tokenized(token_lists: list[list[str]]):
+    def _to_tokenized(token_lists: list[list[str]]) -> Tokenized:
         from bm25s.tokenization import Tokenized
 
         vocab: dict[str, int] = {}
@@ -329,7 +330,11 @@ class BM25Search:
         stemmer_language: str | None = None,
         freq_threshold: float = 0.9,
         tokenizer: str | Callable[[str], list[str]] | None = None,
-        **kwargs,
+        k1: float = 1.5,
+        b: float = 0.75,
+        delta: float = 0.5,
+        method: Literal["robertson", "lucene", "atire"] = "lucene",
+        **kwargs: Any,
     ):
         """
         Args:
@@ -350,6 +355,10 @@ class BM25Search:
         self._tokenizer = None
         self.retriever = None
         self.corpus_idx_to_id: dict[int, str] = {}
+        self.k1 = k1
+        self.b = b
+        self.delta = delta
+        self.method = method
 
     @staticmethod
     def _resolve_tokenizer(
@@ -404,7 +413,12 @@ class BM25Search:
         logger.info(
             f"Indexing Corpus... {len(encoded_corpus.ids):,} documents, {len(encoded_corpus.vocab):,} vocab"
         )
-        self.retriever = bm25s.BM25()
+        self.retriever = bm25s.BM25(
+            k1=self.k1,
+            b=self.b,
+            delta=self.delta,
+            method=self.method,
+        )
         self.retriever.index(encoded_corpus)
         self.corpus_idx_to_id = {i: row["id"] for i, row in enumerate(corpus)}
 
@@ -428,6 +442,8 @@ class BM25Search:
         logger.info("Encoding Queries...")
         query_ids = list(queries["id"])
         results = {qid: {} for qid in query_ids}
+        from mteb._create_dataloaders import _combine_queries_with_instruction_text
+
         processed = _combine_queries_with_instruction_text(queries)
         queries_texts = list(processed["text"])
         query_token_strs = self._tokenizer.transform(queries_texts)
@@ -462,7 +478,7 @@ class BM25Search:
         return results
 
 
-def bm25_loader(model_name, **kwargs) -> SearchProtocol:
+def bm25_loader(model_name, **kwargs: Any) -> SearchProtocol:
     return BM25Search(**kwargs)
 
 

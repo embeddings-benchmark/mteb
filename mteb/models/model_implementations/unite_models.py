@@ -31,7 +31,7 @@ UNITE_CITATION = """@article{kong2025modality,
 # Qwen2VL refactor; each is marked inline.
 
 
-def _build_unite_model(model_name: str, revision: str | None, **kwargs):
+def _build_unite_model(model_name: str, revision: str | None, **kwargs: Any):
     from transformers import Qwen2VLForConditionalGeneration
 
     class UniteQwen2VL(Qwen2VLForConditionalGeneration):
@@ -51,7 +51,7 @@ def _build_unite_model(model_name: str, revision: str | None, **kwargs):
             image_grid_thw=None,
             video_grid_thw=None,
             pooling_mask=None,
-            **unused,
+            **unused: Any,
         ) -> torch.Tensor:
             if inputs_embeds is None:
                 # Upstream: self.model.embed_tokens(input_ids).

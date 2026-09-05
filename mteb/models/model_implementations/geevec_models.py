@@ -14,6 +14,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    import requests
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -272,7 +273,14 @@ PROMPTS_DICT = {
 
 class GeeVecLiteModel(InstructSentenceTransformerModel):
     def encode(
-        self, inputs, *, task_metadata, hf_split, hf_subset, prompt_type=None, **kwargs
+        self,
+        inputs,
+        *,
+        task_metadata,
+        hf_split,
+        hf_subset,
+        prompt_type=None,
+        **kwargs: Any,
     ):
         sentences = [text for batch in inputs for text in batch["text"]]
         domain = _resolve_geevec_domain(task_metadata, hf_subset, kwargs.get("domain"))
@@ -319,8 +327,8 @@ class GeeVecAPIModel(AbsEncoder):
         apply_instruction_to_passages: bool = False,
         base_url: str | None = None,
         api_key: str | None = None,
-        session: Any | None = None,
-        **kwargs,
+        session: requests.Session | None = None,
+        **kwargs: Any,
     ) -> None:
         import requests
 
@@ -538,25 +546,24 @@ class GeeVecAPIModel(AbsEncoder):
                 optional_fields = {}
                 continue
 
-            if response.status_code == 400 and self._is_context_window_error(
-                response.text
+            # Adaptive fallback: progressively shorten each input until it fits.
+            if (
+                response.status_code == 400
+                and self._is_context_window_error(response.text)
+                and current_max_chars > self._min_input_chars
             ):
-                # Adaptive fallback: progressively shorten each input until it fits.
-                if current_max_chars > self._min_input_chars:
-                    next_max_chars = max(
-                        self._min_input_chars, int(current_max_chars * 0.8)
+                next_max_chars = max(
+                    self._min_input_chars, int(current_max_chars * 0.8)
+                )
+                if next_max_chars < current_max_chars:
+                    logger.warning(
+                        "GeeVec API context window exceeded; reducing max chars per text from %s to %s and retrying.",
+                        current_max_chars,
+                        next_max_chars,
                     )
-                    if next_max_chars < current_max_chars:
-                        logger.warning(
-                            "GeeVec API context window exceeded; reducing max chars per text from %s to %s and retrying.",
-                            current_max_chars,
-                            next_max_chars,
-                        )
-                        current_max_chars = next_max_chars
-                        req_texts = self._truncate_texts_by_chars(
-                            texts, current_max_chars
-                        )
-                        continue
+                    current_max_chars = next_max_chars
+                    req_texts = self._truncate_texts_by_chars(texts, current_max_chars)
+                    continue
 
             if response.status_code >= 400:
                 raise RuntimeError(
