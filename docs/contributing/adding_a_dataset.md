@@ -37,7 +37,7 @@ class MyNewTask(AbsTaskClassification):
     input_column_name = "text"
 
     # This is the function that loads the dataset, this is typically untouched
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.dataset = load_dataset(
             **self.metadata.dataset,
         )
@@ -46,7 +46,7 @@ class MyNewTask(AbsTaskClassification):
 
     # dataset transform, which allow you to process the dataset
     # including downsampling, filtering etc.
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         # some processing
         ...
 ```
@@ -473,7 +473,7 @@ Once we have decided on task, we can implement them as follows:
                 prompt="Given a question, retrieve the most relevant question from the corpus.",
             )
 
-            def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+            def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
                 # corpus should have `id` and (`text` + `title`)/`image`/`audio` or any combination of these columns
                 corpus = Dataset.from_dict(
                     {
