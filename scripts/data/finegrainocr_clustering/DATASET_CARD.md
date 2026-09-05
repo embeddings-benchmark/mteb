@@ -1,0 +1,77 @@
+---
+license: cc0-1.0
+task_categories:
+- feature-extraction
+language:
+- en
+- fr
+tags:
+- mteb
+- image-text
+- clustering
+pretty_name: FineGrainOCR Image-Text Clustering
+---
+
+# FineGrainOCR image-text clustering
+
+This dataset adapts the complete usable validation split of
+[FineGrainOCR](https://github.com/Tubbias/finegrainocr) for cross-modal
+clustering in MTEB. Each test row contains a grocery-product image, OCR derived
+from that image, and a product-class label registered by the checkout barcode
+scanner. Of the 18,416 source validation pairs, 27 rows with empty OCR are
+excluded, leaving 18,389 rows across all 256 product classes.
+
+## Benchmark input and output
+
+The embedding model receives both `image` and `text` for each row and produces
+one vector. The clustering evaluator fits MiniBatch K-means to all vectors using
+the known number of classes (256). It does not give product labels to the model
+or clustering algorithm. The predicted cluster assignments are compared with
+`label` using V-measure.
+
+The `sample_id` column is provenance metadata and is not model input.
+
+## Construction
+
+Every validation pair with non-empty OCR is retained. Images are resized so
+their longest edge is at most 512 pixels and encoded as optimized JPEG at
+quality 90. Source members are decompressed and verified against the official
+ZIP's size and CRC-32 metadata.
+
+OCR digit sequences containing 8–14 digits, including sequences separated by
+spaces or hyphens, are replaced by `[BARCODE]`. This prevents printed GTINs from
+revealing the class identifier while retaining product names and other package
+text.
+
+The construction script and its focused tests are preserved on the
+[`codex/finegrainocr-build-scripts`](https://github.com/PranitChawla/mteb/tree/codex/finegrainocr-build-scripts/scripts/data/finegrainocr_clustering)
+branch.
+
+## Provenance and license
+
+- Source repository: <https://github.com/Tubbias/finegrainocr>
+- Source commit: `9ce19719123fd33a994b103b6e91c37a640ce92b`
+- Paper: <https://doi.org/10.1007/s00138-024-01549-9>
+- Source license: CC0-1.0
+
+## Build summary
+
+```json
+{{SUMMARY_JSON}}
+```
+
+## Citation
+
+```bibtex
+@article{pettersson2024,
+  title = {Multimodal fine-grained grocery product recognition using image and OCR text},
+  author = {Pettersson, Tobias and Riveiro, Maria and L{\"o}fstr{\"o}m, Tuwe},
+  journal = {Machine Vision and Applications},
+  volume = {35},
+  number = {4},
+  pages = {79},
+  year = {2024},
+  publisher = {Springer},
+  doi = {10.1007/s00138-024-01549-9},
+}
+```
