@@ -1,0 +1,176 @@
+[
+  {
+    "model": "jinaai/jina-embeddings-v5-omni-nano",
+    "configs": [
+      {
+        "config": "a2i_h",
+        "avg_clip_duration_s": 4.24,
+        "budgets": [
+          {
+            "budget_s": 1.0,
+            "label": "1.0s",
+            "speedup": 4.24,
+            "ndcg_at_10": 0.2513,
+            "spearman_vs_full": 0.3615
+          },
+          {
+            "budget_s": 2.0,
+            "label": "2.0s",
+            "speedup": 2.12,
+            "ndcg_at_10": 0.5017,
+            "spearman_vs_full": 0.7934
+          },
+          {
+            "budget_s": 3.0,
+            "label": "3.0s",
+            "speedup": 1.41,
+            "ndcg_at_10": 0.6646,
+            "spearman_vs_full": 0.9123
+          },
+          {
+            "budget_s": 5.0,
+            "label": "5.0s",
+            "speedup": 1.0,
+            "ndcg_at_10": 0.7348,
+            "spearman_vs_full": 0.9959
+          },
+          {
+            "budget_s": null,
+            "label": "full",
+            "speedup": 1.0,
+            "ndcg_at_10": 0.7337,
+            "spearman_vs_full": 1.0
+          }
+        ]
+      },
+      {
+        "config": "a2i_s",
+        "avg_clip_duration_s": 3.56,
+        "budgets": [
+          {
+            "budget_s": 1.0,
+            "label": "1.0s",
+            "speedup": 3.56,
+            "ndcg_at_10": 0.4602,
+            "spearman_vs_full": 0.6628
+          },
+          {
+            "budget_s": 2.0,
+            "label": "2.0s",
+            "speedup": 1.78,
+            "ndcg_at_10": 0.5926,
+            "spearman_vs_full": 0.8799
+          },
+          {
+            "budget_s": 3.0,
+            "label": "3.0s",
+            "speedup": 1.19,
+            "ndcg_at_10": 0.658,
+            "spearman_vs_full": 0.9659
+          },
+          {
+            "budget_s": 5.0,
+            "label": "5.0s",
+            "speedup": 1.0,
+            "ndcg_at_10": 0.6732,
+            "spearman_vs_full": 0.9994
+          },
+          {
+            "budget_s": null,
+            "label": "full",
+            "speedup": 1.0,
+            "ndcg_at_10": 0.6762,
+            "spearman_vs_full": 1.0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "model": "jinaai/jina-embeddings-v5-omni-small",
+    "configs": [
+      {
+        "config": "a2i_h",
+        "avg_clip_duration_s": 4.24,
+        "budgets": [
+          {
+            "budget_s": 1.0,
+            "label": "1.0s",
+            "speedup": 4.24,
+            "ndcg_at_10": 0.2538,
+            "spearman_vs_full": 0.3651
+          },
+          {
+            "budget_s": 2.0,
+            "label": "2.0s",
+            "speedup": 2.12,
+            "ndcg_at_10": 0.6578,
+            "spearman_vs_full": 0.7956
+          },
+          {
+            "budget_s": 3.0,
+            "label": "3.0s",
+            "speedup": 1.41,
+            "ndcg_at_10": 0.8066,
+            "spearman_vs_full": 0.9027
+          },
+          {
+            "budget_s": 5.0,
+            "label": "5.0s",
+            "speedup": 1.0,
+            "ndcg_at_10": 0.8613,
+            "spearman_vs_full": 0.9946
+          },
+          {
+            "budget_s": null,
+            "label": "full",
+            "speedup": 1.0,
+            "ndcg_at_10": 0.857,
+            "spearman_vs_full": 1.0
+          }
+        ]
+      },
+      {
+        "config": "a2i_s",
+        "avg_clip_duration_s": 3.56,
+        "budgets": [
+          {
+            "budget_s": 1.0,
+            "label": "1.0s",
+            "speedup": 3.56,
+            "ndcg_at_10": 0.5914,
+            "spearman_vs_full": 0.6399
+          },
+          {
+            "budget_s": 2.0,
+            "label": "2.0s",
+            "speedup": 1.78,
+            "ndcg_at_10": 0.7544,
+            "spearman_vs_full": 0.8781
+          },
+          {
+            "budget_s": 3.0,
+            "label": "3.0s",
+            "speedup": 1.19,
+            "ndcg_at_10": 0.8305,
+            "spearman_vs_full": 0.9568
+          },
+          {
+            "budget_s": 5.0,
+            "label": "5.0s",
+            "speedup": 1.0,
+            "ndcg_at_10": 0.847,
+            "spearman_vs_full": 0.9992
+          },
+          {
+            "budget_s": null,
+            "label": "full",
+            "speedup": 1.0,
+            "ndcg_at_10": 0.847,
+            "spearman_vs_full": 1.0
+          }
+        ]
+      }
+    ]
+  }
+]
