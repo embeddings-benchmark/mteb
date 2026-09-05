@@ -45,7 +45,7 @@ MIN_IMAGE_SIDE = 28
 
 
 def _bidirectional_causal_mask(
-    self,
+    self: torch.nn.Module,
     attention_mask: torch.Tensor | None,
     input_tensor: torch.Tensor,
     cache_position: torch.Tensor | None = None,

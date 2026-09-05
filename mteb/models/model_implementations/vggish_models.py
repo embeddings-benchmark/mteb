@@ -15,13 +15,14 @@ if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb import TaskMetadata
+    from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
     from mteb.types._encoder_io import AudioInput
 
 logger = logging.getLogger(__name__)
 
 
-def vggish_loader(*args: Any, **kwargs: Any):
+def vggish_loader(*args: Any, **kwargs: Any) -> EncoderProtocol:
     """Factory function to create a VGGish model wrapper."""
     import torchaudio
     from torch_vggish_yamnet import vggish
@@ -44,7 +45,9 @@ def vggish_loader(*args: Any, **kwargs: Any):
             self.embed_dim = 128
             self.min_samples = int(0.96 * self.sampling_rate)  # 15,360 samples
 
-        def _resample_audio(self, audio, source_rate):
+        def _resample_audio(
+            self, audio: torch.Tensor, source_rate: int
+        ) -> torch.Tensor:
             """Resample audio to target sampling rate."""
             if source_rate != self.sampling_rate:
                 resampler = torchaudio.transforms.Resample(
@@ -53,7 +56,7 @@ def vggish_loader(*args: Any, **kwargs: Any):
                 return resampler(audio)
             return audio
 
-        def _normalize_audio(self, audio):
+        def _normalize_audio(self, audio: Array) -> torch.Tensor:
             """Normalize and pad audio to minimum length."""
             if isinstance(audio, np.ndarray):
                 audio = torch.from_numpy(audio)
@@ -78,7 +81,7 @@ def vggish_loader(*args: Any, **kwargs: Any):
 
             return audio
 
-        def _prepare_input_tensor(self, audio_data):
+        def _prepare_input_tensor(self, audio_data: Array) -> torch.Tensor:
             """Convert audio to VGGish input format and handle tensor dimensions."""
             if isinstance(audio_data, np.ndarray):
                 audio_data = torch.from_numpy(audio_data)
@@ -110,9 +113,9 @@ def vggish_loader(*args: Any, **kwargs: Any):
         def get_audio_embeddings(
             self,
             inputs: DataLoader[AudioInput],
-            show_progress_bar=True,
+            show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             """Generate embeddings for audio inputs."""
             all_embeddings = []
 

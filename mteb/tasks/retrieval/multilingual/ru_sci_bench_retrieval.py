@@ -1,10 +1,17 @@
+from __future__ import annotations
+
 from collections import defaultdict
-from typing import Any, cast
+from typing import TYPE_CHECKING, Any, cast
 
 import datasets
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+
+if TYPE_CHECKING:
+    from datasets import Dataset
+
+    from mteb.types import RelevantDocumentsType
 
 _LANGUAGES = {
     "ru": ["rus-Cyrl"],
@@ -17,7 +24,7 @@ def load_ruscibench_data(
     langs: list,
     eval_splits: list,
     revision: str | None = None,
-):
+) -> tuple[dict[str, Dataset], dict[str, Dataset], dict[str, RelevantDocumentsType]]:
     corpus: dict[str, dict[str, dict[str, dict[str, str]] | None]] = {
         lang: dict.fromkeys(eval_splits) for lang in langs
     }

@@ -23,6 +23,7 @@ if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
 
 
@@ -179,7 +180,7 @@ OUTPUT_TYPES = [
 ]
 
 
-def cohere_v_loader(model_name, **kwargs: Any):
+def cohere_v_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
     import cohere
 
     class CohereMultiModalModelWrapper(AbsEncoder):
@@ -213,7 +214,7 @@ def cohere_v_loader(model_name, **kwargs: Any):
             self.transform = transforms.Compose([transforms.PILToTensor()])
 
         @retry_with_rate_limit(max_retries=5, max_rpm=300)
-        def _embed_func(self, **kwargs: Any):
+        def _embed_func(self, **kwargs: Any) -> cohere.EmbedByTypeResponse:
             """Call Cohere embed API with retry and rate limiting."""
             return self.client.embed(**kwargs)
 
@@ -222,7 +223,7 @@ def cohere_v_loader(model_name, **kwargs: Any):
             inputs: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_text_embeddings = []
             index = 0
             texts = [text for batch in inputs for text in batch["text"]]
@@ -301,7 +302,7 @@ def cohere_v_loader(model_name, **kwargs: Any):
             images: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_image_embeddings = []
             images = [image for batch in images for image in batch["images"]]
 

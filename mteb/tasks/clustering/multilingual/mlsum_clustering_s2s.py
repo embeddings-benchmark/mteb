@@ -66,7 +66,7 @@ class MLSUMClusteringS2S(AbsTaskClusteringLegacy):
             self.dataset_transform(lang)
         self.data_loaded = True
 
-    def dataset_transform(self, lang):
+    def dataset_transform(self, lang: str) -> None:
         """Convert to standard format"""
         _dataset = self.dataset[lang]
         _dataset.pop("train")
@@ -134,7 +134,7 @@ class MLSUMClusteringS2SFast(AbsTaskClustering):
             self.dataset_transform(lang)
         self.data_loaded = True
 
-    def dataset_transform(self, lang):
+    def dataset_transform(self, lang: str) -> None:
         """Convert to standard format"""
         _dataset = self.dataset[lang]
         _dataset.pop("train")

@@ -155,7 +155,9 @@ class OmniRetrieverWrapper(AbsEncoder):
         """Convert torchcodec ``(T, C, H, W)`` uint8 frames to ``(T, H, W, C)``."""
         return frames.permute(0, 2, 3, 1).contiguous().numpy()
 
-    def _build_prompt(self, caption: str | None, has_video: bool, has_audio: bool):
+    def _build_prompt(
+        self, caption: str | None, has_video: bool, has_audio: bool
+    ) -> str:
         """Build the bare user-turn prompt for a modality combination.
 
         Mirrors ``_prepare_submodal_input`` in ``data_qwen.py``: a single media

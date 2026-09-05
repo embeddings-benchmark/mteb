@@ -8,6 +8,8 @@ import numpy as np
 from mteb.models.model_meta import ModelMeta
 
 if TYPE_CHECKING:
+    from bm25s.tokenization import Tokenized
+
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models.models_protocols import SearchProtocol
     from mteb.types import (
@@ -51,7 +53,7 @@ def _composite_prior(
     return np.clip(prior, 0.1, 0.9)
 
 
-def bb25_loader(model_name, **kwargs: Any) -> SearchProtocol:
+def bb25_loader(model_name: str, **kwargs: Any) -> SearchProtocol:
     import bm25s
     import Stemmer
 
@@ -103,7 +105,7 @@ def bb25_loader(model_name, **kwargs: Any) -> SearchProtocol:
                 Stemmer.Stemmer(stemmer_language) if stemmer_language else None
             )
 
-        def _encode(self, texts: list[str]):
+        def _encode(self, texts: list[str]) -> Tokenized:
             """Tokenize texts using bm25s. Not to be confused with EncoderProtocol.encode()."""
             return bm25s.tokenize(texts, stopwords=self.stopwords, stemmer=self.stemmer)
 

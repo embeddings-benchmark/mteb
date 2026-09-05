@@ -30,7 +30,7 @@ def instruction_template(
     return INSTRUCTION.format(instruction=instruction)
 
 
-def instruct_loader(*args: Any, **kwargs: Any):
+def instruct_loader(*args: Any, **kwargs: Any) -> InstructSentenceTransformerModel:
     model = InstructSentenceTransformerModel(*args, **kwargs)
     encoder = model.model._first_module()
     if encoder.auto_model.config._attn_implementation == "flash_attention_2":

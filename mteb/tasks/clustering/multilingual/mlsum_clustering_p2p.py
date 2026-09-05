@@ -66,11 +66,13 @@ class MLSUMClusteringP2P(AbsTaskClusteringLegacy):
             self.dataset_transform(lang)
         self.data_loaded = True
 
-    def _create_description(self, example):  # noqa: PLR6301
+    def _create_description(  # noqa: PLR6301
+        self, example: dict[str, Any]
+    ) -> dict[str, Any]:
         example["text"] = example["title"] + " " + example["text"]
         return example
 
-    def dataset_transform(self, lang):
+    def dataset_transform(self, lang: str) -> None:
         """Convert to standard format"""
         _dataset = self.dataset[lang]
         _dataset.pop("train")
@@ -139,11 +141,13 @@ class MLSUMClusteringP2PFast(AbsTaskClustering):
             self.dataset_transform(lang)
         self.data_loaded = True
 
-    def _create_description(self, example):  # noqa: PLR6301
+    def _create_description(  # noqa: PLR6301
+        self, example: dict[str, Any]
+    ) -> dict[str, Any]:
         example["text"] = example["title"] + " " + example["text"]
         return example
 
-    def dataset_transform(self, lang):
+    def dataset_transform(self, lang: str) -> None:
         """Convert to standard format"""
         _dataset = self.dataset[lang]
         _dataset.pop("train")

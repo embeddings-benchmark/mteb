@@ -53,9 +53,9 @@ class NemotronColEmbedVL(AbsEncoder):
         model_name_or_path: str,
         revision: str,
         trust_remote_code: bool,
-        device_map="cuda",
-        torch_dtype=torch.bfloat16,
-        attn_implementation="flash_attention_2",
+        device_map: str = "cuda",
+        torch_dtype: torch.dtype = torch.bfloat16,
+        attn_implementation: str = "flash_attention_2",
         **kwargs: Any,
     ):
         from transformers import AutoModel
@@ -69,15 +69,17 @@ class NemotronColEmbedVL(AbsEncoder):
             attn_implementation=attn_implementation,
         ).eval()
 
-    def get_text_embeddings(self, texts, batch_size: int = 32, **kwargs: Any):
+    def get_text_embeddings(
+        self, texts: DataLoader[BatchedInput], batch_size: int = 32, **kwargs: Any
+    ) -> Array:
         return self.model.forward_queries(texts, batch_size=batch_size)
 
     def get_image_embeddings(
         self,
-        images,
+        images: DataLoader[BatchedInput],
         batch_size: int = 32,
         **kwargs: Any,
-    ):
+    ) -> Array:
         import torchvision.transforms.functional as F
         from PIL import Image
 
@@ -98,7 +100,7 @@ class NemotronColEmbedVL(AbsEncoder):
 
         return self.model.forward_images(all_images, batch_size=batch_size)
 
-    def similarity(self, a, b):
+    def similarity(self, a: Array, b: Array) -> Array:
         return self.model.get_scores(a, b)
 
     def get_fused_embeddings(
@@ -326,9 +328,9 @@ class LlamaNemotronEmbedVL(AbsEncoder):
         revision: str,
         trust_remote_code: bool,
         extra_name: str = "llama-nemotron-embed-vl-1b-v2",
-        device_map="cuda",
-        torch_dtype=torch.bfloat16,
-        attn_implementation="flash_attention_2",
+        device_map: str = "cuda",
+        torch_dtype: torch.dtype = torch.bfloat16,
+        attn_implementation: str = "flash_attention_2",
         use_image_modality: bool = True,
         use_text_modality: bool = True,
         **kwargs: Any,

@@ -69,7 +69,7 @@ class SLMBaseWrapper(AbsEncoder):
         self.mdl.eval()
 
     def _load_model_and_processor(
-        self, model_name, revision, use_flash_attn, **kwargs: Any
+        self, model_name: str, revision: str | None, use_flash_attn: bool, **kwargs: Any
     ):
         """Override in subclasses to load specific model/processor."""
         raise NotImplementedError
@@ -105,7 +105,7 @@ class SLMBaseWrapper(AbsEncoder):
             return image_embeddings
         raise ValueError("No text or image features found in inputs")
 
-    def encode_input(self, inputs):
+    def encode_input(self, inputs: dict[str, Any]) -> torch.Tensor:
         """Forward pass through the model."""
         return self.mdl(**inputs)
 
@@ -179,7 +179,7 @@ class SLMColQwen3Wrapper(SLMBaseWrapper):
     """Wrapper for SLM-ColQwen3 models (Qwen3-VL backbone)."""
 
     def _load_model_and_processor(
-        self, model_name, revision, use_flash_attn, **kwargs: Any
+        self, model_name: str, revision: str | None, use_flash_attn: bool, **kwargs: Any
     ):
         from sauerkrautlm_colpali.models.qwen3.colqwen3 import (
             ColQwen3,
@@ -206,7 +206,7 @@ class SLMColLFM2Wrapper(SLMBaseWrapper):
     """Wrapper for SLM-ColLFM2 models (LFM2 backbone)."""
 
     def _load_model_and_processor(
-        self, model_name, revision, use_flash_attn, **kwargs: Any
+        self, model_name: str, revision: str | None, use_flash_attn: bool, **kwargs: Any
     ):
         from sauerkrautlm_colpali.models.lfm2.collfm2 import ColLFM2, ColLFM2Processor
 
@@ -229,7 +229,7 @@ class SLMColMinistral3Wrapper(SLMBaseWrapper):
     """Wrapper for SLM-ColMinistral3 models (Ministral3 backbone)."""
 
     def _load_model_and_processor(
-        self, model_name, revision, use_flash_attn, **kwargs: Any
+        self, model_name: str, revision: str | None, use_flash_attn: bool, **kwargs: Any
     ):
         from sauerkrautlm_colpali.models.ministral3.colministral3 import (
             ColMinistral3,

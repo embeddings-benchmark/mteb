@@ -37,10 +37,10 @@ class WebVidCoVRIT2VRetrieval(AbsTaskRetrieval):
         sample_creation="created",
         bibtex_citation=r"""
 @inproceedings{ventura23covr,
-  author    = {Lucas Ventura and Cordelia Schmid and Gregory Rogez},
-  title     = {COVR: Compositional Video Retrieval},
+  author = {Lucas Ventura and Cordelia Schmid and Gregory Rogez},
   booktitle = {CVPR},
-  year      = {2023},
+  title = {COVR: Compositional Video Retrieval},
+  year = {2023},
 }
 """,
         prompt={

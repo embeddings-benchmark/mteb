@@ -43,7 +43,7 @@ class UrbanSound8kClassification(AbsTaskClassification):
     is_cross_validation: bool = True
 
 
-def dataset_transform(self, **kwargs: Any):
+def dataset_transform(self: UrbanSound8kClassification, **kwargs: Any) -> None:
     self.dataset = self.stratified_subsampling(
         self.dataset, seed=self.seed, splits=["train"], label=self.label_column_name
     )
