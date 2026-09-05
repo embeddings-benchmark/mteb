@@ -1,6 +1,8 @@
 from mteb.benchmarks.benchmark import (
     Benchmark,
     BenchmarkAggregation,
+    CustomGroup,
+    CustomGrouping,
     HUMEBenchmark,
     MIEBBenchmark,
     VidoreBenchmark,
@@ -1632,6 +1634,22 @@ MTEB_EU = Benchmark(
     contacts=["KennethEnevoldsen", "isaac-chung"],
 )
 
+_LONG_EMBED_LENGTHS = (256, 512, 1024, 2048, 4096, 8192, 16384, 32768)
+
+
+def _long_embed_length_group(n: int) -> CustomGroup:
+    split = f"test_{n}"
+    label = f"{n // 1024}K" if n >= 1024 else str(n)
+    return CustomGroup(
+        label=label,
+        tasks=[
+            get_task("LEMBNeedleRetrieval", eval_splits=[split]),
+            get_task("LEMBPasskeyRetrieval", eval_splits=[split]),
+        ],
+        description=f"Needle- and passkey-retrieval accuracy at a {n}-token context length.",
+    )
+
+
 LONG_EMBED = Benchmark(
     name="LongEmbed",
     display_name="Long-context Retrieval",
@@ -1655,6 +1673,15 @@ LONG_EMBED = Benchmark(
   year = {2024},
 }
 """,
+    aggregations=(
+        BenchmarkAggregation.MEAN_TASK,
+        BenchmarkAggregation.MEAN_TASK_TYPE,
+        BenchmarkAggregation.TASK_TYPES,
+        CustomGrouping(
+            name="Context Length",
+            groups=tuple(_long_embed_length_group(n) for n in _LONG_EMBED_LENGTHS),
+        ),
+    ),
 )
 
 LMEB = Benchmark(
@@ -1699,6 +1726,70 @@ LMEB = Benchmark(
   year = {2026},
 }
 """,
+    aggregations=(
+        BenchmarkAggregation.MEAN_TASK,
+        CustomGrouping(
+            name="Memory Type",
+            groups=(
+                CustomGroup(
+                    label="Episodic",
+                    tasks=get_tasks(["EPBench", "KnowMeBench"]),
+                    description="Episodic memory retrieval aims to recall past events "
+                    "grounded in temporal cues, entities, contents, and spatial context.",
+                ),
+                CustomGroup(
+                    label="Dialogue",
+                    tasks=get_tasks(
+                        [
+                            "LoCoMo",
+                            "LongMemEval",
+                            "REALTALK",
+                            "TMD",
+                            "MemBench",
+                            "ConvoMem",
+                        ]
+                    ),
+                    description="Dialogue memory retrieval aims to maintain context "
+                    "across multi-turn interactions by recalling relevant dialogue "
+                    "history and user preference.",
+                ),
+                CustomGroup(
+                    label="Semantic",
+                    tasks=get_tasks(
+                        [
+                            "QASPER",
+                            "NovelQA",
+                            "PeerQA",
+                            "CovidQA",
+                            "ESGReports",
+                            "LMEBMLDR",
+                            "LooGLE",
+                            "LMEB_SciFact",
+                        ]
+                    ),
+                    description="Semantic memory retrieval focuses on recalling general "
+                    "knowledge and concepts that are largely independent of time or "
+                    "specific context.",
+                ),
+                CustomGroup(
+                    label="Procedural",
+                    tasks=get_tasks(
+                        [
+                            "Gorilla",
+                            "ToolBench",
+                            "ReMe",
+                            "ProceduralMemBench",
+                            "MemGovern",
+                            "DeepPlanning",
+                        ]
+                    ),
+                    description="Procedural memory retrieval focuses on recalling "
+                    "learned skills, action patterns, and structured procedures that "
+                    "guide task execution and multi-step reasoning.",
+                ),
+            ),
+        ),
+    ),
 )
 
 BRIGHT = Benchmark(
@@ -1741,33 +1832,35 @@ BRIGHT_LONG = Benchmark(
     superseded_by=["BRIGHT(v1.1)"],
 )
 
+_BRIGHT_SHORT_TASKS = [
+    "BrightBiologyRetrieval",
+    "BrightEarthScienceRetrieval",
+    "BrightEconomicsRetrieval",
+    "BrightPsychologyRetrieval",
+    "BrightRoboticsRetrieval",
+    "BrightStackoverflowRetrieval",
+    "BrightSustainableLivingRetrieval",
+    "BrightPonyRetrieval",
+    "BrightLeetcodeRetrieval",
+    "BrightAopsRetrieval",
+    "BrightTheoremQATheoremsRetrieval",
+    "BrightTheoremQAQuestionsRetrieval",
+]
+_BRIGHT_LONG_TASKS = [
+    "BrightBiologyLongRetrieval",
+    "BrightEarthScienceLongRetrieval",
+    "BrightEconomicsLongRetrieval",
+    "BrightPsychologyLongRetrieval",
+    "BrightRoboticsLongRetrieval",
+    "BrightStackoverflowLongRetrieval",
+    "BrightSustainableLivingLongRetrieval",
+    "BrightPonyLongRetrieval",
+]
+
 BRIGHT_V1_1 = Benchmark(
     name="BRIGHT(v1.1)",
     display_name="Reasoning Retrieval",
-    tasks=get_tasks(
-        tasks=[
-            "BrightBiologyRetrieval",
-            "BrightEarthScienceRetrieval",
-            "BrightEconomicsRetrieval",
-            "BrightPsychologyRetrieval",
-            "BrightRoboticsRetrieval",
-            "BrightStackoverflowRetrieval",
-            "BrightSustainableLivingRetrieval",
-            "BrightPonyRetrieval",
-            "BrightLeetcodeRetrieval",
-            "BrightAopsRetrieval",
-            "BrightTheoremQATheoremsRetrieval",
-            "BrightTheoremQAQuestionsRetrieval",
-            "BrightBiologyLongRetrieval",
-            "BrightEarthScienceLongRetrieval",
-            "BrightEconomicsLongRetrieval",
-            "BrightPsychologyLongRetrieval",
-            "BrightRoboticsLongRetrieval",
-            "BrightStackoverflowLongRetrieval",
-            "BrightSustainableLivingLongRetrieval",
-            "BrightPonyLongRetrieval",
-        ],
-    ),
+    tasks=get_tasks(tasks=[*_BRIGHT_SHORT_TASKS, *_BRIGHT_LONG_TASKS]),
     description="Reasoning-intensive retrieval quality across real-world queries spanning diverse domains including economics, psychology, mathematics, and coding. v1.1 restructures tasks into separate datasets and adds per-task prompts.",
     reference="https://brightbenchmark.github.io/",
     citation=r"""
@@ -1779,6 +1872,24 @@ BRIGHT_V1_1 = Benchmark(
 }
 """,
     benchmark_hf_repo="mteb/BRIGHT",
+    aggregations=(
+        BenchmarkAggregation.MEAN_TASK,
+        CustomGrouping(
+            name="Document Length",
+            groups=(
+                CustomGroup(
+                    label="Short",
+                    tasks=get_tasks(_BRIGHT_SHORT_TASKS),
+                    description="Standard-length BRIGHT documents.",
+                ),
+                CustomGroup(
+                    label="Long",
+                    tasks=get_tasks(_BRIGHT_LONG_TASKS),
+                    description="Documents filtered to longer context lengths, stress-testing retrieval over extended documents.",
+                ),
+            ),
+        ),
+    ),
 )
 
 
@@ -2481,6 +2592,69 @@ MIEB_common_tasks = [
     "WebQAT2TRetrieval",
 ]
 
+# Named so MIEB(Multilingual)'s CustomGrouping (below) can reuse it without
+# depending on MIEB_LITE's own definition order.
+_MIEB_LITE_TASKS = [
+    # Image Classification
+    "Country211",
+    "DTD",
+    "EuroSAT",
+    "GTSRB",
+    "OxfordPets",
+    "PatchCamelyon",
+    "RESISC45",
+    "SUN397",
+    # Clustering
+    "ImageNetDog15Clustering",
+    "TinyImageNetClustering",
+    # ZeroShotClassification
+    "CIFAR100ZeroShot",
+    "Country211ZeroShot",
+    "FER2013ZeroShot",
+    "FGVCAircraftZeroShot",
+    "Food101ZeroShot",
+    "OxfordPetsZeroShot",
+    "StanfordCarsZeroShot",
+    # Any2AnyMultipleChoice
+    "BLINKIT2IMultiChoice",
+    "CVBenchCount",
+    "CVBenchRelation",
+    "CVBenchDepth",
+    "CVBenchDistance",
+    # ImageTextPairClassification
+    "AROCocoOrder",
+    "AROFlickrOrder",
+    "AROVisualAttribution",
+    "AROVisualRelation",
+    "Winoground",
+    "ImageCoDe",
+    # VisualSTS
+    "STS13VisualSTS",
+    "STS15VisualSTS",
+    "VisualSTS17Multilingual",
+    "VisualSTS-b-Multilingual",
+    # Any2AnyRetrieval
+    "CIRRIT2IRetrieval",
+    "CUB200I2IRetrieval",
+    "Fashion200kI2TRetrieval",
+    "HatefulMemesI2TRetrieval",
+    "InfoSeekIT2TRetrieval",
+    "NIGHTSI2IRetrieval",
+    "OVENIT2TRetrieval",
+    "RP2kI2IRetrieval",
+    "VidoreDocVQARetrieval",
+    "VidoreInfoVQARetrieval",
+    "VidoreTabfquadRetrieval",
+    "VidoreTatdqaRetrieval",
+    "VidoreShiftProjectRetrieval",
+    "VidoreSyntheticDocQAAIRetrieval",
+    "VisualNewsI2TRetrieval",
+    "VQA2IT2TRetrieval",
+    "WebQAT2ITRetrieval",
+    "WITT2IRetrieval",
+    "XM3600T2IRetrieval",
+]
+
 MIEB_ENG = MIEBBenchmark(
     name="MIEB(eng)",
     display_name="Image-Text, English",
@@ -2536,74 +2710,45 @@ MIEB_MULTILINGUAL = MIEBBenchmark(
   year = {2025},
 }
 """,
+    aggregations=(
+        BenchmarkAggregation.MEAN_TASK_TYPE,
+        BenchmarkAggregation.TASK_TYPES,
+        # Separate dimensions, not one shared group each: MIEB(eng) and
+        # MIEB(lite) overlap too much (92%) to be exclusive groups of one
+        # CustomGrouping. MIEB(Img) is skipped — 2 of its 49 tasks aren't in
+        # MIEB(Multilingual). Values are unweighted task means, not the
+        # Mean(TaskType) MIEB(eng)/MIEB(lite) actually publish — hence
+        # "Task Mean" in the labels, so they're not mistaken for a match.
+        CustomGrouping(
+            name="Task Mean vs MIEB(eng)",
+            groups=(
+                CustomGroup(
+                    label="Task Mean",
+                    tasks=get_tasks(
+                        MIEB_common_tasks + ["VisualSTS17Eng", "VisualSTS-b-Eng"]
+                    ),
+                    description="Unweighted mean across MIEB(eng)'s task set (a strict subset of MIEB(Multilingual)'s) — not the same statistic as MIEB(eng)'s own Mean(TaskType).",
+                ),
+            ),
+        ),
+        CustomGrouping(
+            name="Task Mean vs MIEB(lite)",
+            groups=(
+                CustomGroup(
+                    label="Task Mean",
+                    tasks=get_tasks(_MIEB_LITE_TASKS),
+                    description="Unweighted mean across MIEB(lite)'s task set (a strict subset of MIEB(Multilingual)'s) — not the same statistic as MIEB(lite)'s own Mean(TaskType).",
+                ),
+            ),
+        ),
+    ),
 )
 
 MIEB_LITE = MIEBBenchmark(
     name="MIEB(lite)",
     display_name="Image-Text, Lite",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-map-landscape.svg",
-    tasks=get_tasks(
-        tasks=[
-            # Image Classification
-            "Country211",
-            "DTD",
-            "EuroSAT",
-            "GTSRB",
-            "OxfordPets",
-            "PatchCamelyon",
-            "RESISC45",
-            "SUN397",
-            # Clustering
-            "ImageNetDog15Clustering",
-            "TinyImageNetClustering",
-            # ZeroShotClassification
-            "CIFAR100ZeroShot",
-            "Country211ZeroShot",
-            "FER2013ZeroShot",
-            "FGVCAircraftZeroShot",
-            "Food101ZeroShot",
-            "OxfordPetsZeroShot",
-            "StanfordCarsZeroShot",
-            # Any2AnyMultipleChoice
-            "BLINKIT2IMultiChoice",
-            "CVBenchCount",
-            "CVBenchRelation",
-            "CVBenchDepth",
-            "CVBenchDistance",
-            # ImageTextPairClassification
-            "AROCocoOrder",
-            "AROFlickrOrder",
-            "AROVisualAttribution",
-            "AROVisualRelation",
-            "Winoground",
-            "ImageCoDe",
-            # VisualSTS
-            "STS13VisualSTS",
-            "STS15VisualSTS",
-            "VisualSTS17Multilingual",
-            "VisualSTS-b-Multilingual",
-            # Any2AnyRetrieval
-            "CIRRIT2IRetrieval",
-            "CUB200I2IRetrieval",
-            "Fashion200kI2TRetrieval",
-            "HatefulMemesI2TRetrieval",
-            "InfoSeekIT2TRetrieval",
-            "NIGHTSI2IRetrieval",
-            "OVENIT2TRetrieval",
-            "RP2kI2IRetrieval",
-            "VidoreDocVQARetrieval",
-            "VidoreInfoVQARetrieval",
-            "VidoreTabfquadRetrieval",
-            "VidoreTatdqaRetrieval",
-            "VidoreShiftProjectRetrieval",
-            "VidoreSyntheticDocQAAIRetrieval",
-            "VisualNewsI2TRetrieval",
-            "VQA2IT2TRetrieval",
-            "WebQAT2ITRetrieval",
-            "WITT2IRetrieval",
-            "XM3600T2IRetrieval",
-        ],
-    ),
+    tasks=get_tasks(tasks=_MIEB_LITE_TASKS),
     description="Multilingual image embedding quality across the same task types as MIEB(Multilingual), designed to be run at a fraction of the cost while maintaining relative model rankings.",
     reference="https://arxiv.org/abs/2504.10471",
     contacts=["gowitheflow-1998", "isaac-chung"],
@@ -3387,39 +3532,41 @@ _MAEB_CITATION = """@misc{assadi2026maebmassiveaudioembedding,
 }"""
 
 
+# Named so MAEB(beta)'s "Benchmark Variant" CustomGrouping (below) can reuse
+# it without depending on MAEB_AUDIO's own definition.
+_MAEB_AUDIO_ONLY_TASKS = [
+    # Any2AnyRetrieval (1)
+    "JamAltArtistA2ARetrieval",
+    # AudioClassification (11)
+    "BeijingOpera",
+    "BirdCLEF",
+    "CREMA_D",
+    "CommonLanguageAgeDetection",
+    "GTZANGenre",
+    "IEMOCAPGender",
+    "MInDS14",
+    "MridinghamTonic",
+    "SIBFLEURS",
+    "VoxCelebSA",
+    "VoxPopuliLanguageID",
+    # AudioClustering (3)
+    "CREMA_DClustering",
+    "VehicleSoundClustering",
+    "VoxPopuliGenderClustering",
+    # AudioPairClassification (3)
+    "CREMADPairClassification",
+    "NMSQAPairClassification",
+    "VoxPopuliAccentPairClassification",
+    # AudioReranking (1)
+    "GTZANAudioReranking",
+]
+
 MAEB_AUDIO = Benchmark(
     name="MAEB(beta, audio-only)",
     aliases=["MAEB(audio-only)"],
     display_name="MAEB Audio-Only",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
-    tasks=get_tasks(
-        tasks=[
-            # Any2AnyRetrieval (1)
-            "JamAltArtistA2ARetrieval",
-            # AudioClassification (11)
-            "BeijingOpera",
-            "BirdCLEF",
-            "CREMA_D",
-            "CommonLanguageAgeDetection",
-            "GTZANGenre",
-            "IEMOCAPGender",
-            "MInDS14",
-            "MridinghamTonic",
-            "SIBFLEURS",
-            "VoxCelebSA",
-            "VoxPopuliLanguageID",
-            # AudioClustering (3)
-            "CREMA_DClustering",
-            "VehicleSoundClustering",
-            "VoxPopuliGenderClustering",
-            # AudioPairClassification (3)
-            "CREMADPairClassification",
-            "NMSQAPairClassification",
-            "VoxPopuliAccentPairClassification",
-            # AudioReranking (1)
-            "GTZANAudioReranking",
-        ]
-    ),
+    tasks=get_tasks(tasks=_MAEB_AUDIO_ONLY_TASKS),
     description="Audio-only embedding quality across classification, clustering, pair classification, reranking, and retrieval tasks. Currently in beta pending peer review.",
     reference=None,
     citation=_MAEB_CITATION,
@@ -3479,6 +3626,21 @@ MAEB = Benchmark(
     reference=None,
     citation=_MAEB_CITATION,
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
+    aggregations=(
+        BenchmarkAggregation.MEAN_TASK,
+        BenchmarkAggregation.MEAN_TASK_TYPE,
+        BenchmarkAggregation.TASK_TYPES,
+        CustomGrouping(
+            name="Benchmark Variant",
+            groups=(
+                CustomGroup(
+                    label="Audio-Only",
+                    tasks=get_tasks(_MAEB_AUDIO_ONLY_TASKS),
+                    description="This model's score restricted to MAEB(beta, audio-only)'s task set — a strict subset of MAEB(beta)'s.",
+                ),
+            ),
+        ),
+    ),
 )
 
 
