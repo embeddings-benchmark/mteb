@@ -133,6 +133,7 @@ sauerkrautlm-colpali = ["sauerkrautlm-colpali>=0.1.0; python_full_version < '3.1
 xet = ["huggingface_hub>=0.32.0"]
 youtu = ["tencentcloud-sdk-python-common>=3.0.1454", "tencentcloud-sdk-python-lkeap>=3.0.1451"]
 llama-embed-nemotron = ["transformers==4.51.0"]
+wave = ["transformers==4.51.3", "accelerate>=0.26.0"]
 llama-nemotron-colembed-vl = ["transformers[torch]==4.49.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
 nemotron-colembed-vl-v2 = ["transformers[torch]==5.0.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
 llama-nemotron-embed-vl-1b-v2 = ["transformers[torch]>=4.56.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
@@ -546,6 +547,7 @@ conflicts = [
         { extra = "modernbert" }, # conflicting versions of transformers
         { extra = "sparse-encoder" }, # conflicting version of sentence-transformers
         { extra = "gme" }, # requires transformers<4.52.0
+        { extra = "wave" }, # remote code needs transformers==4.51.3
     ],
 ]
 
