@@ -158,16 +158,15 @@ def test_encoder_io_does_not_import_datasets_at_runtime() -> None:
     cannot mask a regression here.
     """
     script = """\
-import sys, types as _t, enum, importlib.util
+import sys, types as _t, importlib.util
 
 # Stub parent packages so Python skips their __init__.py files.
 for _pkg in ("mteb", "mteb.types", "mteb._helpful_enum"):
     sys.modules.setdefault(_pkg, _t.ModuleType(_pkg))
 
-# _encoder_io subclasses HelpfulStrEnum; provide a no-op stand-in.
-# enum.StrEnum was added in Python 3.11; fall back to (str, enum.Enum).
-_StrEnum = getattr(enum, "StrEnum", None) or type("StrEnum", (str, enum.Enum), {})
-sys.modules["mteb._helpful_enum"].HelpfulStrEnum = _StrEnum
+# _encoder_io subclasses HelpfulStrEnum; stub it as plain str so that
+# PromptType / OutputDType can be defined without enum machinery.
+sys.modules["mteb._helpful_enum"].HelpfulStrEnum = str
 
 # Load _encoder_io via importlib without triggering any __init__.py.
 spec = importlib.util.spec_from_file_location(
