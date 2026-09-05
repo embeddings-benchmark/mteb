@@ -617,7 +617,7 @@ class JinaV4Wrapper(AbsEncoder):
         )
 
     @staticmethod
-    def _convert_to_torch_if_needed(embeddings):
+    def _convert_to_torch_if_needed(embeddings: Any) -> torch.Tensor | list[Any] | Any:
         """Convert numpy arrays to torch tensors if needed."""
         if isinstance(embeddings, np.ndarray):
             return torch.from_numpy(embeddings)

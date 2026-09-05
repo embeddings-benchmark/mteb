@@ -10,6 +10,8 @@ from mteb.models.model_meta import ModelMeta
 if TYPE_CHECKING:
     from collections.abc import Callable
 
+    from bm25s.tokenization import Tokenized
+
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models.models_protocols import SearchProtocol
     from mteb.types import (
@@ -289,7 +291,7 @@ class BM25Tokenizer:
         raise ValueError(f"Unknown tokenizer name: {name!r}")
 
     @staticmethod
-    def _to_tokenized(token_lists: list[list[str]]):
+    def _to_tokenized(token_lists: list[list[str]]) -> Tokenized:
         from bm25s.tokenization import Tokenized
 
         vocab: dict[str, int] = {}
