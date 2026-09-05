@@ -77,7 +77,7 @@ Yih, Scott Wen-tau},
         ]
         _dataset = {}
 
-        def map_labels(example):
+        def map_labels(example: dict[str, Any]) -> dict[str, Any]:
             ml_labels = []
             for i, label in enumerate(labels):
                 if example[label] == "yes":

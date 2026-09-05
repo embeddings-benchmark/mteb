@@ -400,10 +400,6 @@ preview = true
 "mteb/tasks/*" = [
     "D",
     "DOC",
-    # TODO: annotate and remove -- needs a type inferred per call site
-    "ANN001",
-    "ANN201",
-    "ANN202",
 ]
 "mteb/models/model_implementations/*" = [
     "D",

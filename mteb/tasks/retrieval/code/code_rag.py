@@ -6,7 +6,7 @@ from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-def split_by_first_newline(s):
+def split_by_first_newline(s: str) -> tuple[str, str]:
     # Split the string by the first newline
     parts = s.split("\n", 1)
     # Return parts or (s, '') if no newline

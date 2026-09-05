@@ -1,13 +1,22 @@
+from __future__ import annotations
+
 from collections import defaultdict
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from datasets import DatasetDict, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
+if TYPE_CHECKING:
+    from datasets import Dataset
 
-def load_retrieval_data(dataset_path, eval_splits):
+    from mteb.types import RelevantDocumentsType
+
+
+def load_retrieval_data(
+    dataset_path: str, eval_splits: list[str]
+) -> tuple[dict[str, Dataset], dict[str, Dataset], dict[str, RelevantDocumentsType]]:
     eval_split = eval_splits[0]
     corpus_dataset = load_dataset(dataset_path, "corpus")
     queries_dataset = load_dataset(dataset_path, "queries")

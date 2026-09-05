@@ -1,9 +1,16 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import datasets
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+
+if TYPE_CHECKING:
+    from datasets import Dataset
+
+    from mteb.types import RelevantDocumentsType
 
 _EVAL_SPLIT = "default"
 
@@ -34,7 +41,11 @@ def _load_miracl_data(  # noqa: PLR0914
     langs: list,
     splits: list[str],
     revision: str | None = None,
-):
+) -> tuple[
+    dict[str, dict[str, Dataset]],
+    dict[str, dict[str, Dataset]],
+    dict[str, dict[str, RelevantDocumentsType]],
+]:
     corpus = {lang: dict.fromkeys(splits) for lang in langs}
     queries = {lang: dict.fromkeys(splits) for lang in langs}
     relevant_docs = {lang: dict.fromkeys(splits) for lang in langs}
