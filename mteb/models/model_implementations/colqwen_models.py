@@ -98,7 +98,6 @@ class ColQwen3_5Wrapper(AbsEncoder):  # noqa: N801
             model_name,
             revision=revision,
             device_map=self.device,
-            adapter_kwargs={"revision": revision},
             **kwargs,
         )
         self.model.eval()
