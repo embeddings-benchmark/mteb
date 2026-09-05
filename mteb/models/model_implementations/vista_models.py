@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
 
 VISTA_CITATION = """@article{zhou2024vista,
@@ -22,7 +23,7 @@ VISTA_CITATION = """@article{zhou2024vista,
 }"""
 
 
-def vista_loader(model_name, **kwargs: Any):
+def vista_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
     try:  # a temporal fix for the dependency issues of vista models.
         from visual_bge.modeling import Visualized_BGE
     except ImportError:
@@ -61,12 +62,12 @@ def vista_loader(model_name, **kwargs: Any):
         def __init__(
             self,
             model_name_bge: str | None = None,
-            model_weight=None,
+            model_weight: str | None = None,
             normlized: bool = True,
             sentence_pooling_method: str = "cls",
             negatives_cross_device: bool = False,
             temperature: float = 0.02,
-            from_pretrained=None,
+            from_pretrained: str | None = None,
             image_tokens_num: int | None = None,
             **kwargs: Any,
         ):
@@ -147,7 +148,7 @@ def vista_loader(model_name, **kwargs: Any):
             prompt_type: PromptType | None = None,
             input_type: Literal["document", "query"] | None = None,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_text_embeddings = []
             for batch in tqdm(
                 texts, disable=not show_progress_bar, desc="Text Encoding"
@@ -170,7 +171,7 @@ def vista_loader(model_name, **kwargs: Any):
             prompt_type: PromptType | None = None,
             input_type: Literal["document", "query"] | None = None,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_image_embeddings = []
             with torch.no_grad():
                 for batch in tqdm(images):

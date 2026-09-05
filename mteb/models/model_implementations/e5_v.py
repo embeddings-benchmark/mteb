@@ -31,7 +31,7 @@ class E5VModel(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
-        composed_prompt=None,
+        composed_prompt: str | None = None,
         **kwargs: Any,
     ):
         from transformers import LlavaNextForConditionalGeneration, LlavaNextProcessor
@@ -65,7 +65,7 @@ class E5VModel(AbsEncoder):
         texts: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ):
+    ) -> Array:
         all_text_embeddings = []
 
         with torch.no_grad():
@@ -91,7 +91,7 @@ class E5VModel(AbsEncoder):
         images: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ):
+    ) -> Array:
         all_image_embeddings = []
 
         with torch.no_grad():

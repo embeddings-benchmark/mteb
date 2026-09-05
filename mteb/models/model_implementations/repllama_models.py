@@ -19,6 +19,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
     from torch.utils.data import DataLoader
+    from transformers import BatchEncoding, PreTrainedTokenizerBase
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models.models_protocols import EncoderProtocol
@@ -58,7 +59,9 @@ class RepLLaMAModel(AbsEncoder):
         self.tokenizer.model_max_length = 512
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
 
-    def create_batch_dict(self, tokenizer, input_texts):
+    def create_batch_dict(
+        self, tokenizer: PreTrainedTokenizerBase, input_texts: list[str]
+    ) -> BatchEncoding:
         max_length = self.model.config.max_length
         batch_dict = tokenizer(
             input_texts,
@@ -80,7 +83,9 @@ class RepLLaMAModel(AbsEncoder):
             return_tensors="pt",
         )
 
-    def combine_query_and_instruction(self, query, instruction):  # noqa: PLR6301
+    def combine_query_and_instruction(  # noqa: PLR6301
+        self, query: str, instruction: str
+    ) -> str:
         end_punct = "?" if query.strip()[-1] not in ["?", ".", "!"] else ""  # noqa: PLR6201
         return f"{query}{end_punct} {instruction}".strip()
 

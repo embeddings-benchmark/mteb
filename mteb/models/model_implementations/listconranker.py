@@ -53,7 +53,7 @@ class ListConRanker(RerankerWrapper):
         hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ):
+    ) -> list[float]:
         queries = [text for batch in inputs1 for text in batch["query"]]
         passages = [text for batch in inputs2 for text in batch["text"]["text"]]
 

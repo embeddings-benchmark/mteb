@@ -41,7 +41,7 @@ CHARS_PER_TOKEN = 4.5
 def get_bedrock_runtime_client(
     region_name: str | None = None,
     config: Any = None,  # noqa: ANN401 -- botocore Config; boto3 is an optional, untyped dep
-):
+) -> Any:  # noqa: ANN401 -- botocore client; boto3 is an optional, untyped dep
     """Create a bedrock-runtime client.
 
     Defaults to the region of the active boto3 session when none is given.
@@ -181,7 +181,7 @@ class BedrockModel(AbsEncoder):
         )
         return self._to_numpy(response)
 
-    def _to_numpy(self, embedding_response) -> Array:
+    def _to_numpy(self, embedding_response: Any) -> Array:  # noqa: ANN401 -- raw botocore response
         response = read_response_body(embedding_response)
         key = "embedding" if self._provider == "amazon" else "embeddings"
         return np.array(response[key])

@@ -387,7 +387,7 @@ preview = true
     "PLC2701",  # Private name import
     "PLR6301",  # Method could be a function - pytest test methods are instance methods
     # tests are not type-checked (`make mypy` covers `mteb` only), so annotations
-    # here would be unverified;
+    # here would go unverified.
     "ANN001",
     "ANN201",
     "ANN202",
@@ -404,10 +404,6 @@ preview = true
 "mteb/models/model_implementations/*" = [
     "D",
     "DOC",
-    # TODO: annotate and remove -- needs a type inferred per call site
-    "ANN001",
-    "ANN201",
-    "ANN202",
 ]
 "mteb/benchmarks/benchmark.py" = [
     # pydantic would try to validate fields in Benchmark class

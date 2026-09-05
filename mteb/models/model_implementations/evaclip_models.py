@@ -13,6 +13,7 @@ if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
 
 EVA_CLIP_CITATION = """@article{EVA-CLIP,
@@ -23,7 +24,7 @@ EVA_CLIP_CITATION = """@article{EVA-CLIP,
 }"""
 
 
-def evaclip_loader(model_name, **kwargs: Any):
+def evaclip_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
     try:
         import sys
 
@@ -60,7 +61,7 @@ def evaclip_loader(model_name, **kwargs: Any):
             texts: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_text_embeddings = []
 
             with torch.no_grad(), torch.cuda.amp.autocast():
@@ -79,7 +80,7 @@ def evaclip_loader(model_name, **kwargs: Any):
             images: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_image_embeddings = []
 
             with torch.no_grad(), torch.cuda.amp.autocast():
