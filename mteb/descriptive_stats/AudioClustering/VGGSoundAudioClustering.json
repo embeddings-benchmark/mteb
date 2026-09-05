@@ -1,0 +1,954 @@
+{
+    "test": {
+        "num_samples": 9888,
+        "text_statistics": null,
+        "image_statistics": null,
+        "video_statistics": null,
+        "audio_statistics": {
+            "total_duration_seconds": 98880.0,
+            "min_duration_seconds": 10.0,
+            "average_duration_seconds": 10.0,
+            "max_duration_seconds": 10.0,
+            "unique_audios": 9888,
+            "average_sampling_rate": 16000.0,
+            "sampling_rates": {
+                "16000": 9888
+            }
+        },
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 309,
+            "labels": {
+                "air conditioning noise": {
+                    "count": 32
+                },
+                "air horn": {
+                    "count": 32
+                },
+                "airplane": {
+                    "count": 32
+                },
+                "airplane flyby": {
+                    "count": 32
+                },
+                "alarm clock ringing": {
+                    "count": 32
+                },
+                "alligators, crocodiles hissing": {
+                    "count": 32
+                },
+                "ambulance siren": {
+                    "count": 32
+                },
+                "arc welding": {
+                    "count": 32
+                },
+                "baby babbling": {
+                    "count": 32
+                },
+                "baby crying": {
+                    "count": 32
+                },
+                "baby laughter": {
+                    "count": 32
+                },
+                "baltimore oriole calling": {
+                    "count": 32
+                },
+                "barn swallow calling": {
+                    "count": 32
+                },
+                "basketball bounce": {
+                    "count": 32
+                },
+                "bathroom ventilation fan running": {
+                    "count": 32
+                },
+                "beat boxing": {
+                    "count": 32
+                },
+                "bee, wasp, etc. buzzing": {
+                    "count": 32
+                },
+                "bird chirping, tweeting": {
+                    "count": 32
+                },
+                "bird squawking": {
+                    "count": 32
+                },
+                "bird wings flapping": {
+                    "count": 32
+                },
+                "black capped chickadee calling": {
+                    "count": 32
+                },
+                "blowtorch igniting": {
+                    "count": 32
+                },
+                "bouncing on trampoline": {
+                    "count": 32
+                },
+                "bowling impact": {
+                    "count": 32
+                },
+                "bull bellowing": {
+                    "count": 32
+                },
+                "canary calling": {
+                    "count": 32
+                },
+                "cap gun shooting": {
+                    "count": 32
+                },
+                "car engine idling": {
+                    "count": 32
+                },
+                "car engine knocking": {
+                    "count": 32
+                },
+                "car engine starting": {
+                    "count": 32
+                },
+                "car passing by": {
+                    "count": 32
+                },
+                "cat caterwauling": {
+                    "count": 32
+                },
+                "cat growling": {
+                    "count": 32
+                },
+                "cat hissing": {
+                    "count": 32
+                },
+                "cat meowing": {
+                    "count": 32
+                },
+                "cat purring": {
+                    "count": 32
+                },
+                "cattle mooing": {
+                    "count": 32
+                },
+                "cattle, bovinae cowbell": {
+                    "count": 32
+                },
+                "cell phone buzzing": {
+                    "count": 32
+                },
+                "chainsawing trees": {
+                    "count": 32
+                },
+                "cheetah chirrup": {
+                    "count": 32
+                },
+                "chicken clucking": {
+                    "count": 32
+                },
+                "chicken crowing": {
+                    "count": 32
+                },
+                "child singing": {
+                    "count": 32
+                },
+                "child speech, kid speaking": {
+                    "count": 32
+                },
+                "children shouting": {
+                    "count": 32
+                },
+                "chimpanzee pant-hooting": {
+                    "count": 32
+                },
+                "chinchilla barking": {
+                    "count": 32
+                },
+                "chipmunk chirping": {
+                    "count": 32
+                },
+                "chopping food": {
+                    "count": 32
+                },
+                "chopping wood": {
+                    "count": 32
+                },
+                "church bell ringing": {
+                    "count": 32
+                },
+                "civil defense siren": {
+                    "count": 32
+                },
+                "cow lowing": {
+                    "count": 32
+                },
+                "coyote howling": {
+                    "count": 32
+                },
+                "cricket chirping": {
+                    "count": 32
+                },
+                "crow cawing": {
+                    "count": 32
+                },
+                "cuckoo bird calling": {
+                    "count": 32
+                },
+                "cupboard opening or closing": {
+                    "count": 32
+                },
+                "cutting hair with electric trimmers": {
+                    "count": 32
+                },
+                "dinosaurs bellowing": {
+                    "count": 32
+                },
+                "disc scratching": {
+                    "count": 32
+                },
+                "dog barking": {
+                    "count": 32
+                },
+                "dog baying": {
+                    "count": 32
+                },
+                "dog bow-wow": {
+                    "count": 32
+                },
+                "dog growling": {
+                    "count": 32
+                },
+                "dog howling": {
+                    "count": 32
+                },
+                "dog whimpering": {
+                    "count": 32
+                },
+                "donkey, ass braying": {
+                    "count": 32
+                },
+                "door slamming": {
+                    "count": 32
+                },
+                "driving buses": {
+                    "count": 32
+                },
+                "driving motorcycle": {
+                    "count": 32
+                },
+                "driving snowmobile": {
+                    "count": 32
+                },
+                "duck quacking": {
+                    "count": 32
+                },
+                "eagle screaming": {
+                    "count": 32
+                },
+                "eating with cutlery": {
+                    "count": 32
+                },
+                "electric grinder grinding": {
+                    "count": 32
+                },
+                "electric shaver, electric razor shaving": {
+                    "count": 32
+                },
+                "elephant trumpeting": {
+                    "count": 32
+                },
+                "eletric blender running": {
+                    "count": 32
+                },
+                "elk bugling": {
+                    "count": 32
+                },
+                "engine accelerating, revving, vroom": {
+                    "count": 32
+                },
+                "female singing": {
+                    "count": 32
+                },
+                "female speech, woman speaking": {
+                    "count": 32
+                },
+                "ferret dooking": {
+                    "count": 32
+                },
+                "fire crackling": {
+                    "count": 32
+                },
+                "fire truck siren": {
+                    "count": 32
+                },
+                "fireworks banging": {
+                    "count": 32
+                },
+                "firing cannon": {
+                    "count": 32
+                },
+                "firing muskets": {
+                    "count": 32
+                },
+                "fly, housefly buzzing": {
+                    "count": 32
+                },
+                "foghorn": {
+                    "count": 32
+                },
+                "footsteps on snow": {
+                    "count": 32
+                },
+                "forging swords": {
+                    "count": 32
+                },
+                "fox barking": {
+                    "count": 32
+                },
+                "francolin calling": {
+                    "count": 32
+                },
+                "frog croaking": {
+                    "count": 32
+                },
+                "gibbon howling": {
+                    "count": 32
+                },
+                "goat bleating": {
+                    "count": 32
+                },
+                "golf driving": {
+                    "count": 32
+                },
+                "goose honking": {
+                    "count": 32
+                },
+                "hail": {
+                    "count": 32
+                },
+                "hair dryer drying": {
+                    "count": 32
+                },
+                "hammering nails": {
+                    "count": 32
+                },
+                "heart sounds, heartbeat": {
+                    "count": 32
+                },
+                "hedge trimmer running": {
+                    "count": 32
+                },
+                "helicopter": {
+                    "count": 32
+                },
+                "horse clip-clop": {
+                    "count": 32
+                },
+                "horse neighing": {
+                    "count": 32
+                },
+                "ice cracking": {
+                    "count": 32
+                },
+                "ice cream truck, ice cream van": {
+                    "count": 32
+                },
+                "lathe spinning": {
+                    "count": 32
+                },
+                "lawn mowing": {
+                    "count": 32
+                },
+                "lighting firecrackers": {
+                    "count": 32
+                },
+                "lions growling": {
+                    "count": 32
+                },
+                "lions roaring": {
+                    "count": 32
+                },
+                "lip smacking": {
+                    "count": 32
+                },
+                "machine gun shooting": {
+                    "count": 32
+                },
+                "magpie calling": {
+                    "count": 32
+                },
+                "male singing": {
+                    "count": 32
+                },
+                "male speech, man speaking": {
+                    "count": 32
+                },
+                "metronome": {
+                    "count": 32
+                },
+                "missile launch": {
+                    "count": 32
+                },
+                "mosquito buzzing": {
+                    "count": 32
+                },
+                "motorboat, speedboat acceleration": {
+                    "count": 32
+                },
+                "mouse clicking": {
+                    "count": 32
+                },
+                "mouse pattering": {
+                    "count": 32
+                },
+                "mouse squeaking": {
+                    "count": 32
+                },
+                "mynah bird singing": {
+                    "count": 32
+                },
+                "ocean burbling": {
+                    "count": 32
+                },
+                "opening or closing car doors": {
+                    "count": 32
+                },
+                "opening or closing car electric windows": {
+                    "count": 32
+                },
+                "opening or closing drawers": {
+                    "count": 32
+                },
+                "orchestra": {
+                    "count": 32
+                },
+                "otter growling": {
+                    "count": 32
+                },
+                "owl hooting": {
+                    "count": 32
+                },
+                "parrot talking": {
+                    "count": 32
+                },
+                "penguins braying": {
+                    "count": 32
+                },
+                "people babbling": {
+                    "count": 32
+                },
+                "people battle cry": {
+                    "count": 32
+                },
+                "people belly laughing": {
+                    "count": 32
+                },
+                "people booing": {
+                    "count": 32
+                },
+                "people burping": {
+                    "count": 32
+                },
+                "people cheering": {
+                    "count": 32
+                },
+                "people clapping": {
+                    "count": 32
+                },
+                "people coughing": {
+                    "count": 32
+                },
+                "people crowd": {
+                    "count": 32
+                },
+                "people eating": {
+                    "count": 32
+                },
+                "people eating apple": {
+                    "count": 32
+                },
+                "people eating crisps": {
+                    "count": 32
+                },
+                "people eating noodle": {
+                    "count": 32
+                },
+                "people farting": {
+                    "count": 32
+                },
+                "people finger snapping": {
+                    "count": 32
+                },
+                "people gargling": {
+                    "count": 32
+                },
+                "people giggling": {
+                    "count": 32
+                },
+                "people hiccup": {
+                    "count": 32
+                },
+                "people humming": {
+                    "count": 32
+                },
+                "people marching": {
+                    "count": 32
+                },
+                "people nose blowing": {
+                    "count": 32
+                },
+                "people running": {
+                    "count": 32
+                },
+                "people screaming": {
+                    "count": 32
+                },
+                "people shuffling": {
+                    "count": 32
+                },
+                "people slapping": {
+                    "count": 32
+                },
+                "people slurping": {
+                    "count": 32
+                },
+                "people sneezing": {
+                    "count": 32
+                },
+                "people sniggering": {
+                    "count": 32
+                },
+                "people sobbing": {
+                    "count": 32
+                },
+                "people whispering": {
+                    "count": 32
+                },
+                "people whistling": {
+                    "count": 32
+                },
+                "pheasant crowing": {
+                    "count": 32
+                },
+                "pig oinking": {
+                    "count": 32
+                },
+                "pigeon, dove cooing": {
+                    "count": 32
+                },
+                "planing timber": {
+                    "count": 32
+                },
+                "plastic bottle crushing": {
+                    "count": 32
+                },
+                "playing accordion": {
+                    "count": 32
+                },
+                "playing acoustic guitar": {
+                    "count": 32
+                },
+                "playing badminton": {
+                    "count": 32
+                },
+                "playing bagpipes": {
+                    "count": 32
+                },
+                "playing banjo": {
+                    "count": 32
+                },
+                "playing bass drum": {
+                    "count": 32
+                },
+                "playing bass guitar": {
+                    "count": 32
+                },
+                "playing bassoon": {
+                    "count": 32
+                },
+                "playing bongo": {
+                    "count": 32
+                },
+                "playing bugle": {
+                    "count": 32
+                },
+                "playing castanets": {
+                    "count": 32
+                },
+                "playing cello": {
+                    "count": 32
+                },
+                "playing clarinet": {
+                    "count": 32
+                },
+                "playing congas": {
+                    "count": 32
+                },
+                "playing cornet": {
+                    "count": 32
+                },
+                "playing cymbal": {
+                    "count": 32
+                },
+                "playing darts": {
+                    "count": 32
+                },
+                "playing didgeridoo": {
+                    "count": 32
+                },
+                "playing djembe": {
+                    "count": 32
+                },
+                "playing double bass": {
+                    "count": 32
+                },
+                "playing drum kit": {
+                    "count": 32
+                },
+                "playing electric guitar": {
+                    "count": 32
+                },
+                "playing electronic organ": {
+                    "count": 32
+                },
+                "playing erhu": {
+                    "count": 32
+                },
+                "playing flute": {
+                    "count": 32
+                },
+                "playing french horn": {
+                    "count": 32
+                },
+                "playing glockenspiel": {
+                    "count": 32
+                },
+                "playing gong": {
+                    "count": 32
+                },
+                "playing guiro": {
+                    "count": 32
+                },
+                "playing hammond organ": {
+                    "count": 32
+                },
+                "playing harmonica": {
+                    "count": 32
+                },
+                "playing harp": {
+                    "count": 32
+                },
+                "playing harpsichord": {
+                    "count": 32
+                },
+                "playing hockey": {
+                    "count": 32
+                },
+                "playing lacrosse": {
+                    "count": 32
+                },
+                "playing mandolin": {
+                    "count": 32
+                },
+                "playing marimba, xylophone": {
+                    "count": 32
+                },
+                "playing oboe": {
+                    "count": 32
+                },
+                "playing piano": {
+                    "count": 32
+                },
+                "playing saxophone": {
+                    "count": 32
+                },
+                "playing shofar": {
+                    "count": 32
+                },
+                "playing sitar": {
+                    "count": 32
+                },
+                "playing snare drum": {
+                    "count": 32
+                },
+                "playing squash": {
+                    "count": 32
+                },
+                "playing steel guitar, slide guitar": {
+                    "count": 32
+                },
+                "playing steelpan": {
+                    "count": 32
+                },
+                "playing synthesizer": {
+                    "count": 32
+                },
+                "playing tabla": {
+                    "count": 32
+                },
+                "playing table tennis": {
+                    "count": 32
+                },
+                "playing tambourine": {
+                    "count": 32
+                },
+                "playing tennis": {
+                    "count": 32
+                },
+                "playing theremin": {
+                    "count": 32
+                },
+                "playing timbales": {
+                    "count": 32
+                },
+                "playing timpani": {
+                    "count": 32
+                },
+                "playing trombone": {
+                    "count": 32
+                },
+                "playing trumpet": {
+                    "count": 32
+                },
+                "playing tuning fork": {
+                    "count": 32
+                },
+                "playing tympani": {
+                    "count": 32
+                },
+                "playing ukulele": {
+                    "count": 32
+                },
+                "playing vibraphone": {
+                    "count": 32
+                },
+                "playing violin, fiddle": {
+                    "count": 32
+                },
+                "playing volleyball": {
+                    "count": 32
+                },
+                "playing washboard": {
+                    "count": 32
+                },
+                "playing zither": {
+                    "count": 32
+                },
+                "police car (siren)": {
+                    "count": 32
+                },
+                "police radio chatter": {
+                    "count": 32
+                },
+                "popping popcorn": {
+                    "count": 32
+                },
+                "printer printing": {
+                    "count": 32
+                },
+                "pumping water": {
+                    "count": 32
+                },
+                "race car, auto racing": {
+                    "count": 32
+                },
+                "railroad car, train wagon": {
+                    "count": 32
+                },
+                "raining": {
+                    "count": 32
+                },
+                "rapping": {
+                    "count": 32
+                },
+                "reversing beeps": {
+                    "count": 32
+                },
+                "ripping paper": {
+                    "count": 32
+                },
+                "roller coaster running": {
+                    "count": 32
+                },
+                "rope skipping": {
+                    "count": 32
+                },
+                "rowboat, canoe, kayak rowing": {
+                    "count": 32
+                },
+                "running electric fan": {
+                    "count": 32
+                },
+                "sailing": {
+                    "count": 32
+                },
+                "scuba diving": {
+                    "count": 32
+                },
+                "sea lion barking": {
+                    "count": 32
+                },
+                "sea waves": {
+                    "count": 32
+                },
+                "sharpen knife": {
+                    "count": 32
+                },
+                "sheep bleating": {
+                    "count": 32
+                },
+                "shot football": {
+                    "count": 32
+                },
+                "singing bowl": {
+                    "count": 32
+                },
+                "singing choir": {
+                    "count": 32
+                },
+                "skateboarding": {
+                    "count": 32
+                },
+                "skidding": {
+                    "count": 32
+                },
+                "skiing": {
+                    "count": 32
+                },
+                "sliding door": {
+                    "count": 32
+                },
+                "sloshing water": {
+                    "count": 32
+                },
+                "slot machine": {
+                    "count": 32
+                },
+                "smoke detector beeping": {
+                    "count": 32
+                },
+                "snake hissing": {
+                    "count": 32
+                },
+                "snake rattling": {
+                    "count": 32
+                },
+                "splashing water": {
+                    "count": 32
+                },
+                "spraying water": {
+                    "count": 32
+                },
+                "squishing water": {
+                    "count": 32
+                },
+                "stream burbling": {
+                    "count": 32
+                },
+                "strike lighter": {
+                    "count": 32
+                },
+                "striking bowling": {
+                    "count": 32
+                },
+                "striking pool": {
+                    "count": 32
+                },
+                "subway, metro, underground": {
+                    "count": 32
+                },
+                "swimming": {
+                    "count": 32
+                },
+                "tap dancing": {
+                    "count": 32
+                },
+                "tapping guitar": {
+                    "count": 32
+                },
+                "telephone bell ringing": {
+                    "count": 32
+                },
+                "thunder": {
+                    "count": 32
+                },
+                "toilet flushing": {
+                    "count": 32
+                },
+                "tornado roaring": {
+                    "count": 32
+                },
+                "tractor digging": {
+                    "count": 32
+                },
+                "train horning": {
+                    "count": 32
+                },
+                "train wheels squealing": {
+                    "count": 32
+                },
+                "train whistling": {
+                    "count": 32
+                },
+                "turkey gobbling": {
+                    "count": 32
+                },
+                "typing on computer keyboard": {
+                    "count": 32
+                },
+                "typing on typewriter": {
+                    "count": 32
+                },
+                "underwater bubbling": {
+                    "count": 32
+                },
+                "using sewing machines": {
+                    "count": 32
+                },
+                "vacuum cleaner cleaning floors": {
+                    "count": 32
+                },
+                "vehicle horn, car horn, honking": {
+                    "count": 32
+                },
+                "volcano explosion": {
+                    "count": 32
+                },
+                "warbler chirping": {
+                    "count": 32
+                },
+                "waterfall burbling": {
+                    "count": 32
+                },
+                "whale calling": {
+                    "count": 32
+                },
+                "wind chime": {
+                    "count": 32
+                },
+                "wind noise": {
+                    "count": 32
+                },
+                "wind rustling leaves": {
+                    "count": 32
+                },
+                "wood thrush calling": {
+                    "count": 32
+                },
+                "woodpecker pecking tree": {
+                    "count": 32
+                },
+                "writing on blackboard with chalk": {
+                    "count": 32
+                },
+                "yodelling": {
+                    "count": 32
+                },
+                "zebra braying": {
+                    "count": 32
+                }
+            }
+        }
+    }
+}
