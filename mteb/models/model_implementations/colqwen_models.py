@@ -96,13 +96,16 @@ class ColQwen3_5Wrapper(AbsEncoder):  # noqa: N801
 
         self.model = ColQwen3_5.from_pretrained(
             model_name,
+            revision=revision,
             device_map=self.device,
             adapter_kwargs={"revision": revision},
             **kwargs,
         )
         self.model.eval()
 
-        self.processor = ColQwen3_5Processor.from_pretrained(model_name)
+        self.processor = ColQwen3_5Processor.from_pretrained(
+            model_name, revision=revision
+        )
 
     def encode(
         self,
