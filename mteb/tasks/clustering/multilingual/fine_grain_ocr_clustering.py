@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from mteb.abstasks import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -32,10 +34,6 @@ class FineGrainOCRITClustering(AbsTaskClustering):
         dialect=[],
         modalities=["image", "text"],
         sample_creation="found",
-        prompt=(
-            "Identify the grocery product shown in the image and described by "
-            "the OCR text."
-        ),
         bibtex_citation=r"""
 @article{pettersson2024,
   title = {Multimodal fine-grained grocery product recognition using image and OCR text},
@@ -56,7 +54,7 @@ class FineGrainOCRITClustering(AbsTaskClustering):
     input_column_name = ("image", "text")
     label_column_name: str = "label"
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         for split in self.metadata.eval_splits:
             self.dataset[split] = self.dataset[split].select_columns(
                 ["image", "text", "label"],
