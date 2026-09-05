@@ -7,7 +7,6 @@ import tempfile
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-from mteb._create_dataloaders import create_dataloader
 from mteb.models.abs_encoder import AbsEncoder, get_prompt
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
@@ -87,6 +86,8 @@ class PylateSearchEncoder:
         top_ranked: TopRankedDocumentsType | None = None,
         num_proc: int | None,
     ) -> RetrievalOutputType:
+        from mteb._create_dataloaders import create_dataloader
+
         queries_dataloader = create_dataloader(
             queries,
             task_metadata=task_metadata,
@@ -168,6 +169,8 @@ class PylateSearchEncoder:
         doc_ids = [str(x) for x in self.task_corpus["id"]]
 
         # Encode entire corpus via dataloader batching
+        from mteb._create_dataloaders import create_dataloader
+
         documents_loader = create_dataloader(
             self.task_corpus,
             task_metadata=task_metadata,
@@ -228,6 +231,8 @@ class PylateSearchEncoder:
 
         result_heaps = {qid: [] for qid in query_idx_to_id.values()}
         doc_id_to_idx = {doc: idx for idx, doc in enumerate(self.task_corpus["id"])}
+
+        from mteb._create_dataloaders import create_dataloader
 
         all_doc_embeddings = self._encode(
             create_dataloader(

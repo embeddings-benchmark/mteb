@@ -5,13 +5,13 @@ from typing import TYPE_CHECKING, TypeAlias, TypedDict, cast
 
 import numpy as np
 import torch
-from datasets import Dataset
 from numpy.typing import NDArray
 
 from mteb._helpful_enum import HelpfulStrEnum
 
 if TYPE_CHECKING:
     import numpy.typing as npt
+    from datasets import Dataset
     from PIL import Image
     from typing_extensions import NotRequired
 
@@ -244,7 +244,7 @@ Each type is defined as a separate structured input with its own fields.
 TextBatchedInput = TextInput | CorpusInput | QueryInput
 """The input to the encoder for a batch of text data."""
 
-QueryDatasetType = Dataset
+QueryDatasetType: TypeAlias = "Dataset"
 """Retrieval query dataset, containing queries. Should have columns:
 1. `id`, `text`, `instruction` (optionally) for text queries
 2. `id`, `image` for image queries
@@ -252,7 +252,7 @@ QueryDatasetType = Dataset
 4. `id`, `video` for video queries
 or a combination of these for multimodal queries.
  """
-CorpusDatasetType = Dataset
+CorpusDatasetType: TypeAlias = "Dataset"
 """Retrieval corpus dataset, containing documents. Should have columns:
  1. `id`, `title` (optionally), `body` for text corpus
  2. `id`, `image` for image corpus
@@ -260,7 +260,7 @@ CorpusDatasetType = Dataset
  4. `id`, `video` for video corpus
  or a combination of these for multimodal corpus.
  """
-InstructionDatasetType = Dataset
+InstructionDatasetType: TypeAlias = "Dataset"
 """Retrieval instruction dataset, containing instructions. Should have columns `query-id`, `instruction`."""
 RelevantDocumentsType = Mapping[str, Mapping[str, int]]
 """Relevant documents for each query, mapping query IDs to a mapping of document IDs and their relevance
