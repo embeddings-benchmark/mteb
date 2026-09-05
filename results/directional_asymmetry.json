@@ -1,0 +1,76 @@
+[
+  {
+    "model": "jinaai/jina-embeddings-v5-omni-nano",
+    "ndcg_at_10": {
+      "t2i": 0.871734002602926,
+      "i2t": 0.9024295091617004,
+      "a2i_h": 0.733721951128381,
+      "i2a_h": 0.7208538210695737,
+      "a2i_s": 0.6762428891477722,
+      "i2a_s": 0.6526666188358466
+    },
+    "asymmetry": {
+      "text\u2194image": {
+        "forward_config": "t2i",
+        "reverse_config": "i2t",
+        "forward_score": 0.8717,
+        "reverse_score": 0.9024,
+        "asymmetry": -0.0307,
+        "dominant": "B\u2192A"
+      },
+      "audio_human\u2194image": {
+        "forward_config": "a2i_h",
+        "reverse_config": "i2a_h",
+        "forward_score": 0.7337,
+        "reverse_score": 0.7209,
+        "asymmetry": 0.0129,
+        "dominant": "A\u2192B"
+      },
+      "audio_tts\u2194image": {
+        "forward_config": "a2i_s",
+        "reverse_config": "i2a_s",
+        "forward_score": 0.6762,
+        "reverse_score": 0.6527,
+        "asymmetry": 0.0236,
+        "dominant": "A\u2192B"
+      }
+    }
+  },
+  {
+    "model": "jinaai/jina-embeddings-v5-omni-small",
+    "ndcg_at_10": {
+      "t2i": 0.960333117448233,
+      "i2t": 0.9681709847200577,
+      "a2i_h": 0.8569645640168737,
+      "i2a_h": 0.8568363892810292,
+      "a2i_s": 0.8469915483750043,
+      "i2a_s": 0.8363020498753965
+    },
+    "asymmetry": {
+      "text\u2194image": {
+        "forward_config": "t2i",
+        "reverse_config": "i2t",
+        "forward_score": 0.9603,
+        "reverse_score": 0.9682,
+        "asymmetry": -0.0078,
+        "dominant": "B\u2192A"
+      },
+      "audio_human\u2194image": {
+        "forward_config": "a2i_h",
+        "reverse_config": "i2a_h",
+        "forward_score": 0.857,
+        "reverse_score": 0.8568,
+        "asymmetry": 0.0001,
+        "dominant": "A\u2192B"
+      },
+      "audio_tts\u2194image": {
+        "forward_config": "a2i_s",
+        "reverse_config": "i2a_s",
+        "forward_score": 0.847,
+        "reverse_score": 0.8363,
+        "asymmetry": 0.0107,
+        "dominant": "A\u2192B"
+      }
+    }
+  }
+]
