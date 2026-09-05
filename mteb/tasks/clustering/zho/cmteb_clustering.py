@@ -49,6 +49,7 @@ class CLSClusteringFastS2S(AbsTaskClustering):
 """,
         prompt="Identify the main category of scholar papers based on the titles",
         adapted_from=["CLSClusteringS2S"],
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(
@@ -111,6 +112,7 @@ class CLSClusteringFastP2P(AbsTaskClustering):
 """,
         prompt="Identify the main category of scholar papers based on the titles and abstracts",
         adapted_from=["CLSClusteringP2P"],
+        version_reason="mteb_task_correction",
     )
 
 
@@ -221,6 +223,7 @@ class ThuNewsClusteringFastS2S(AbsTaskClustering):
 """,
         prompt="Identify the topic or theme of the given news articles based on the titles",
         adapted_from=["ThuNewsClusteringS2S"],
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(
@@ -283,6 +286,7 @@ class ThuNewsClusteringFastP2P(AbsTaskClustering):
 """,
         prompt="Identify the topic or theme of the given news articles based on the titles and contents",
         adapted_from=["ThuNewsClusteringP2P"],
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(

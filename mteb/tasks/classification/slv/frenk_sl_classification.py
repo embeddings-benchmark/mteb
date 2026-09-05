@@ -73,6 +73,7 @@ class FrenkSlClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["FrenkSlClassification"],
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(

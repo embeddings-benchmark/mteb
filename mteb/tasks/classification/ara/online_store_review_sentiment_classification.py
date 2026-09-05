@@ -60,4 +60,5 @@ class OnlineStoreReviewSentimentClassificationV2(AbsTaskClassification):
         dialect=["ara-Arab-SA"],
         sample_creation="found",
         bibtex_citation="",
+        version_reason="mteb_task_correction",
     )

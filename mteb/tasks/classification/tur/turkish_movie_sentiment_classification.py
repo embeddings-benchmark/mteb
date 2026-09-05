@@ -77,6 +77,7 @@ class TurkishMovieSentimentClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["TurkishMovieSentimentClassification"],
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(

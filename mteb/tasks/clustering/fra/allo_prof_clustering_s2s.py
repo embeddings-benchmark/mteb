@@ -83,4 +83,5 @@ class AlloProfClusteringS2SFast(AbsTaskClustering):
 }
 """,
         adapted_from=["AlloProfClusteringS2S"],
+        version_reason="mteb_task_correction",
     )

@@ -119,6 +119,7 @@ class MLSUMClusteringS2SFast(AbsTaskClustering):
 }
 """,
         adapted_from=["MLSUMClusteringS2S"],
+        version_reason="mteb_task_correction",
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:

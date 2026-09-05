@@ -81,6 +81,7 @@ class YueOpenriceReviewClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["YueOpenriceReviewClassification"],
+        version_reason="mteb_task_correction",
     )
 
     samples_per_label = 32

@@ -129,6 +129,7 @@ Piperidis, Stelios},
 }
 """,
         adapted_from=["EightTagsClustering"],
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(
@@ -205,6 +206,7 @@ class PlscClusteringS2SFast(AbsTaskClustering):
         sample_creation="found",
         bibtex_citation="",
         adapted_from=["PlscClusteringS2S"],
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(
@@ -290,4 +292,5 @@ class PlscClusteringP2PFast(AbsTaskClustering):
         sample_creation="found",
         bibtex_citation="",
         adapted_from=["PlscClusteringP2P"],
+        version_reason="mteb_task_correction",
     )

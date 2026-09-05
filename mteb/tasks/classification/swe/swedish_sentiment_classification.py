@@ -53,4 +53,5 @@ class SwedishSentimentClassificationV2(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation="",
         adapted_from=["SwedishSentimentClassification"],
+        version_reason="mteb_task_correction",
     )

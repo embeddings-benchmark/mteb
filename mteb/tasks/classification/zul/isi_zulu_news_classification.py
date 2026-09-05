@@ -73,4 +73,5 @@ class IsiZuluNewsClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["IsiZuluNewsClassification"],
+        version_reason="mteb_task_correction",
     )

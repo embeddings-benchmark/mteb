@@ -90,4 +90,5 @@ class RuSciBenchBitextMiningV2(AbsTaskBitextMining):
 }
 """,
         prompt="Given the following title and abstract of the scientific article, find its translation",
+        version_reason="mteb_task_correction",
     )

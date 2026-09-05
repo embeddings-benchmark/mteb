@@ -87,6 +87,7 @@ class ToxicConversationsClassificationV2(AbsTaskClassification):
 """,
         prompt="Classify the given comments as either toxic or not toxic",
         adapted_from=["ToxicConversationsClassification"],
+        version_reason="mteb_task_correction",
     )
 
     samples_per_label = 16

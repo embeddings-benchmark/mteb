@@ -70,4 +70,5 @@ class FinancialPhrasebankClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["FinancialPhrasebankClassification"],
+        version_reason="mteb_task_correction",
     )

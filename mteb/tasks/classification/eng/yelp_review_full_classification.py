@@ -87,6 +87,7 @@ class YelpReviewFullClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["YelpReviewFullClassification"],
+        version_reason="mteb_task_correction",
     )
 
     samples_per_label = 128

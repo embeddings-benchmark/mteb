@@ -101,4 +101,5 @@ Vylomova, Ekaterina},
 }
 """,
         adapted_from=["SpanishSentimentClassification"],
+        version_reason="mteb_task_correction",
     )

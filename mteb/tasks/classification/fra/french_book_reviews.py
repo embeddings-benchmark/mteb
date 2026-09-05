@@ -64,6 +64,7 @@ class FrenchBookReviewsV2(AbsTaskClassification):
         bibtex_citation="""
         """,
         adapted_from=["FrenchBookReviews"],
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(

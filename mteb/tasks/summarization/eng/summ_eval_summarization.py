@@ -75,6 +75,7 @@ class SummEvalSummarizationv2(AbsTaskSummarization):
 }
 """,
         adapted_from=["SummEval"],
+        version_reason="mteb_task_correction",
     )
 
     min_score = 0

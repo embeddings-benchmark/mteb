@@ -486,6 +486,7 @@ class SynPerTextToneClassificationV2(AbsTaskClassification):
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
         adapted_from=["SynPerTextToneClassification"],
+        version_reason="mteb_task_correction",
         superseded_by="SynPerTextToneClassification.v3",
     )
     samples_per_label = 32
@@ -515,6 +516,7 @@ class SynPerTextToneClassificationV3(AbsTaskClassification):
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
         adapted_from=["SynPerTextToneClassification"],
+        version_reason="mteb_task_correction",
     )
     samples_per_label = 32
 
@@ -571,6 +573,7 @@ class SIDClassificationV2(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation=""" """,
         adapted_from=["SIDClassification"],
+        version_reason="mteb_task_correction",
     )
     samples_per_label = 32
 
@@ -633,6 +636,7 @@ class DeepSentiPersV2(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation=""" """,
         adapted_from=["DeepSentiPers"],
+        version_reason="mteb_task_correction",
     )
     samples_per_label = 32
 
@@ -689,6 +693,7 @@ class PersianTextEmotionV2(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation=""" """,
         adapted_from=["PersianTextEmotion"],
+        version_reason="mteb_task_correction",
     )
     samples_per_label = 32
 
@@ -745,6 +750,7 @@ class SentimentDKSFV2(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation=""" """,
         adapted_from=["SentimentDKSF"],
+        version_reason="mteb_task_correction",
     )
     samples_per_label = 32
 
@@ -807,6 +813,7 @@ class NLPTwitterAnalysisClassificationV2(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation=""" """,
         adapted_from=["NLPTwitterAnalysisClassification"],
+        version_reason="mteb_task_correction",
     )
     samples_per_label = 32
 

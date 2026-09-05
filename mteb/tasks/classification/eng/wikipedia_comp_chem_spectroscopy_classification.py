@@ -67,4 +67,5 @@ class WikipediaCompChemSpectroscopyClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["WikipediaCompChemSpectroscopyClassification"],
+        version_reason="mteb_task_correction",
     )

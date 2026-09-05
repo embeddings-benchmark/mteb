@@ -29,6 +29,7 @@ class LivedoorNewsClusteringv2(AbsTaskClustering):
         sample_creation="found",
         bibtex_citation="",
         adapted_from=["LivedoorNewsClustering"],
+        version_reason="mteb_task_correction",
     )
 
 

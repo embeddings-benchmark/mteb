@@ -69,4 +69,5 @@ class UrduRomanSentimentClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["UrduRomanSentimentClassification"],
+        version_reason="mteb_task_correction",
     )

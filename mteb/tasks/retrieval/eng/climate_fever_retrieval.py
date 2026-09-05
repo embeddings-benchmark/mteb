@@ -63,6 +63,7 @@ class ClimateFEVERRetrievalv2(AbsTaskRetrieval):
             "query": "Given a claim about climate change, retrieve documents that support or refute the claim"
         },
         adapted_from=["ClimateFEVER"],
+        version_reason="mteb_task_correction",
         **_climate_fever_metadata,
     )
 
@@ -99,6 +100,7 @@ class ClimateFEVERHardNegativesV2(AbsTaskRetrieval):
             "revision": "3a309e201f3c2c4b13bd4a367a8f37eee2ec1d21",
         },
         adapted_from=["ClimateFEVER"],
+        version_reason="mteb_task_correction",
         prompt={
             "query": "Given a claim about climate change, retrieve documents that support or refute the claim"
         },

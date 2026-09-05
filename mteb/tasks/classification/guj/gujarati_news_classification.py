@@ -53,4 +53,5 @@ class GujaratiNewsClassificationV2(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation="",  # none found,
         adapted_from=["GujaratiNewsClassification"],
+        version_reason="mteb_task_correction",
     )

@@ -73,6 +73,7 @@ class AngryTweetsClassificationV2(AbsTaskClassification):
 """,
         prompt="Classify Danish tweets by sentiment. (positive, negative, neutral).",
         adapted_from=["AngryTweetsClassification"],
+        version_reason="mteb_task_correction",
     )
 
     samples_per_label = 16

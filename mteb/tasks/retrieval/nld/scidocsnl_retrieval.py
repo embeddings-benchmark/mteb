@@ -52,6 +52,7 @@ class SCIDOCSNLv2(AbsTaskRetrieval):
         "citation prediction, to document classification and recommendation. SciDocs-NL is a Dutch "
         "translation. This version adds a Dutch prompt to the dataset.",
         adapted_from=["SCIDOCS-NL"],
+        version_reason="mteb_task_correction",
         **_scidocsnl_metadata,
         prompt={
             "query": "Gegeven de titel van een wetenschappelijk artikel, haal de abstracts op van artikelen die door het gegeven artikel worden geciteerd"

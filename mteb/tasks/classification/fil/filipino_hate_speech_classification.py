@@ -75,4 +75,5 @@ class FilipinoHateSpeechClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["FilipinoHateSpeechClassification"],
+        version_reason="mteb_task_correction",
     )

@@ -186,6 +186,26 @@ SampleCreationMethod = Literal[
 ]
 """How the text was created. It can be an important factor for understanding the quality of a dataset. E.g. used to filter out machine-translated datasets."""
 
+TaskVersionReason = Literal[
+    "upstream_dataset_update",
+    "mteb_task_correction",
+]
+"""Why a versioned task (e.g. ``TaskName.v2``) was created.
+
+``upstream_dataset_update``
+    The upstream dataset released a new version (e.g. the dataset authors
+    corrected labels or added new data).
+
+``mteb_task_correction``
+    MTEB fixed a bug in its own task construction — wrong label mapping,
+    empty segments introduced by preprocessing, incorrect split selection, etc.
+    The upstream dataset itself was not updated.
+
+Use this alongside ``adapted_from`` / ``superseded_by`` so that tooling and
+leaderboards can distinguish a true new benchmark version from an MTEB
+housekeeping fix.
+"""
+
 MIEB_TASK_TYPE = (
     "Any2AnyReranking",
     "Any2AnyRetrieval",
@@ -517,6 +537,7 @@ class TaskMetadata(BaseModel):
     is_public: bool = True
     contributed_by: str | None = None
     superseded_by: str | None = None
+    version_reason: TaskVersionReason | None = None
     is_beta: bool = False
 
     def _validate_metadata(self) -> None:
@@ -611,7 +632,7 @@ class TaskMetadata(BaseModel):
             getattr(self, field_name) is not None
             for field_name in self.__class__.model_fields
             if field_name
-            not in ["prompt", "adapted_from", "contributed_by", "superseded_by"]  # noqa: PLR6201
+            not in ["prompt", "adapted_from", "contributed_by", "superseded_by", "version_reason"]  # noqa: PLR6201
         )
 
     @property

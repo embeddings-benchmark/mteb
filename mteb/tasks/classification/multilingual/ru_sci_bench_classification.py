@@ -131,6 +131,7 @@ class RuSciBenchGRNTIClassificationV2(AbsTaskClassification):
 }
 """,
         prompt="Classify the category of scientific papers based on the titles and abstracts",
+        version_reason="mteb_task_correction",
     )
 
 
@@ -175,4 +176,5 @@ class RuSciBenchOECDClassificationV2(AbsTaskClassification):
 }
 """,
         prompt="Classify the category of scientific papers based on the titles and abstracts",
+        version_reason="mteb_task_correction",
     )

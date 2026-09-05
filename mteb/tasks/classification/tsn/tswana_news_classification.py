@@ -75,4 +75,5 @@ class TswanaNewsClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["TswanaNewsClassification"],
+        version_reason="mteb_task_correction",
     )

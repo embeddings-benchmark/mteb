@@ -87,4 +87,5 @@ Bontcheva, Kalina},
 }
 """,
         adapted_from=["MacedonianTweetSentimentClassification"],
+        version_reason="mteb_task_correction",
     )

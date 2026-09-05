@@ -155,4 +155,5 @@ Purwarianti, Ayu},
 }
 """,
         adapted_from=["IndonesianMongabayConservationClassification"],
+        version_reason="mteb_task_correction",
     )

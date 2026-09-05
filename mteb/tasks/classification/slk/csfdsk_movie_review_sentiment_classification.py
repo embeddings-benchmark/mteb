@@ -78,6 +78,7 @@ class CSFDSKMovieReviewSentimentClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["CSFDSKMovieReviewSentimentClassification"],
+        version_reason="mteb_task_correction",
     )
 
     # Increase the samples_per_label in order to improve baseline performance

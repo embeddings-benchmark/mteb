@@ -79,6 +79,7 @@ class YahooAnswersTopicsClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["YahooAnswersTopicsClassification"],
+        version_reason="mteb_task_correction",
     )
 
     samples_per_label = 32

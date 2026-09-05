@@ -89,6 +89,7 @@ class BlurbsClusteringS2SFast(AbsTaskClustering):
 }
 """,
         adapted_from=["BlurbsClusteringS2S"],
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(

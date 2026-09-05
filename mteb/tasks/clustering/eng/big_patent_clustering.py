@@ -100,6 +100,7 @@ Lu Wang},
 }
 """,
         adapted_from=["BigPatentClustering"],
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(

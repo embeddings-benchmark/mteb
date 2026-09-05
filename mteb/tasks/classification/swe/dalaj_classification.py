@@ -75,6 +75,7 @@ class DalajClassificationV2(AbsTaskClassification):
 """,
         prompt="Classify texts based on linguistic acceptability in Swedish",
         adapted_from=["DalajClassification"],
+        version_reason="mteb_task_correction",
     )
 
     samples_per_label = 16

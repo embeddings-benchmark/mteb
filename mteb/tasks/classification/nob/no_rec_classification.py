@@ -117,4 +117,5 @@ Tokunaga, Takenobu},
 """,
         prompt="Classify Norwegian reviews by sentiment",
         adapted_from=["NoRecClassification"],
+        version_reason="mteb_task_correction",
     )

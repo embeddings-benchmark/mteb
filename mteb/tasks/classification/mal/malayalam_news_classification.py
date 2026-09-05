@@ -73,4 +73,5 @@ class MalayalamNewsClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["MalayalamNewsClassification"],
+        version_reason="mteb_task_correction",
     )

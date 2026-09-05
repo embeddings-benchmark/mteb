@@ -73,6 +73,7 @@ class SwahiliNewsClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["SwahiliNewsClassification"],
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:

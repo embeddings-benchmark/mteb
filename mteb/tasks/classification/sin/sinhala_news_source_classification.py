@@ -76,6 +76,7 @@ class SinhalaNewsSourceClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["SinhalaNewsSourceClassification"],
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(

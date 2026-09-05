@@ -100,4 +100,5 @@ Mihalcea, Rada},
 """,
         prompt="Classify the sentiment expressed in the given movie review text from the IMDB dataset",
         adapted_from=["ImdbClassification"],
+        version_reason="mteb_task_correction",
     )

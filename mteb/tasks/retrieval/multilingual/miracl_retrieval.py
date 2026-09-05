@@ -102,5 +102,6 @@ class MIRACLRetrievalHardNegativesV2(AbsTaskRetrieval):
             "query": "Given a question, retrieve Wikipedia passages that answer the question",
         },
         adapted_from=["MIRACLRetrieval"],
+        version_reason="mteb_task_correction",
         **_common_metadata,
     )

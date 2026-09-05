@@ -54,6 +54,7 @@ class SpanishNewsClassificationV2(AbsTaskClassification):
         bibtex_citation="""
         """,
         adapted_from=["SpanishNewsClassification"],
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(

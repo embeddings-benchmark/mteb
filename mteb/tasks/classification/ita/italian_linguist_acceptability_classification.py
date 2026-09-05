@@ -85,4 +85,5 @@ Tonelli, Sara},
 }
 """,
         adapted_from=["ItalianLinguisticAcceptabilityClassification"],
+        version_reason="mteb_task_correction",
     )

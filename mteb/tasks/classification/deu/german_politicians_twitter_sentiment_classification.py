@@ -101,4 +101,5 @@ Zesch, Torsten},
 }
 """,
         adapted_from=["GermanPoliticiansTwitterSentimentClassification"],
+        version_reason="mteb_task_correction",
     )

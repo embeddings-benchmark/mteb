@@ -73,4 +73,5 @@ class FrenkHrClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["FrenkHrClassification"],
+        version_reason="mteb_task_correction",
     )

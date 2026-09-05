@@ -60,6 +60,7 @@ class TeluguAndhraJyotiNewsClassificationV2(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation="",
         adapted_from=["TeluguAndhraJyotiNewsClassification"],
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(

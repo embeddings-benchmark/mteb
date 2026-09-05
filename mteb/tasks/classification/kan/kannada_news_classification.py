@@ -76,6 +76,7 @@ class KannadaNewsClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["KannadaNewsClassification"],
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(

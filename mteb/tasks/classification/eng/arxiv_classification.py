@@ -75,4 +75,5 @@ class ArxivClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["ArxivClassification"],
+        version_reason="mteb_task_correction",
     )

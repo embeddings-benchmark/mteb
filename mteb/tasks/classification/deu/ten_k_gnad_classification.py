@@ -75,4 +75,5 @@ class TenKGnadClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["TenKGnadClassification"],
+        version_reason="mteb_task_correction",
     )

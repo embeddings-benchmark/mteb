@@ -55,6 +55,7 @@ class GeoreviewClassificationV2(AbsTaskClassification):
         bibtex_citation="",
         prompt="Classify the organization rating based on the reviews",
         adapted_from=["GeoreviewClassification"],
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(

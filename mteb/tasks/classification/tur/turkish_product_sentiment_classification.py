@@ -69,4 +69,5 @@ class TurkishProductSentimentClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["TurkishProductSentimentClassification"],
+        version_reason="mteb_task_correction",
     )

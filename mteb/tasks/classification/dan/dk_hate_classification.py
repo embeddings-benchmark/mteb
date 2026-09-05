@@ -126,6 +126,7 @@ Piperidis, Stelios},
 """,
         prompt="Classify Danish tweets based on offensiveness (offensive, not offensive)",
         adapted_from=["DKHateClassification"],
+        version_reason="mteb_task_correction",
     )
 
     samples_per_label = 16

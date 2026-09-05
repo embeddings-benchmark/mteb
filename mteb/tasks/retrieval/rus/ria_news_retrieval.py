@@ -73,6 +73,7 @@ class RiaNewsRetrievalHardNegativesV2(AbsTaskRetrieval):
             "V2 uses a more appropriate prompt rather than the default prompt for retrieval. You can get more information on the effect of different prompt in the [PR](https://github.com/embeddings-benchmark/mteb/pull/3469#issuecomment-3436467106)"
         ),
         adapted_from=["RiaNewsRetrieval"],
+        version_reason="mteb_task_correction",
         prompt={"query": "Given a news title, retrieve relevant news article"},
         **_ria_news_metadata,
     )

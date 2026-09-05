@@ -78,6 +78,7 @@ class DBPediaHardNegativesV2(AbsTaskRetrieval):
             "revision": "943ec7fdfef3728b2ad1966c5b6479ff9ffd26c9",
         },
         adapted_from=["DBPedia"],
+        version_reason="mteb_task_correction",
         prompt={
             "query": "Given a query, retrieve relevant entity descriptions from DBPedia"
         },

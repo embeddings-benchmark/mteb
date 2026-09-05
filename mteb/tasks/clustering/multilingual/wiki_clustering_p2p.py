@@ -74,4 +74,5 @@ class WikiClusteringFastP2P(AbsTaskClustering):
         sample_creation="created",
         bibtex_citation="",  # None exists
         adapted_from=["WikiClusteringP2P"],
+        version_reason="mteb_task_correction",
     )

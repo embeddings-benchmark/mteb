@@ -71,4 +71,5 @@ class SentiRuEval2016ClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["SentiRuEval2016Classification"],
+        version_reason="mteb_task_correction",
     )

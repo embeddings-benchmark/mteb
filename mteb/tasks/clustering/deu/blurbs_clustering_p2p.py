@@ -80,6 +80,7 @@ class BlurbsClusteringP2PFast(AbsTaskClustering):
 }
 """,
         adapted_from=["BlurbsClusteringP2P"],
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(

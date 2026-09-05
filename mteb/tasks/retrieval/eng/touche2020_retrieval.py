@@ -83,4 +83,5 @@ class Touche2020v3Retrieval(AbsTaskRetrieval):
 }
 """,
         adapted_from=["Touche2020"],
+        version_reason="mteb_task_correction",
     )

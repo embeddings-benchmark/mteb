@@ -74,4 +74,5 @@ class PoemSentimentClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["PoemSentimentClassification"],
+        version_reason="mteb_task_correction",
     )

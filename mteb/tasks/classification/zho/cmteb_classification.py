@@ -145,6 +145,7 @@ Lan, Zhenzhong },
 """,
         prompt="Classify the fine-grained category of the given news title",
         adapted_from=["TNews"],
+        version_reason="mteb_task_correction",
     )
 
     samples_per_label = 32
@@ -294,6 +295,7 @@ Lan, Zhenzhong },
 """,
         prompt="Given an App description text, find the appropriate fine-grained category",
         adapted_from=["IFlyTek"],
+        version_reason="mteb_task_correction",
     )
 
     samples_per_label = 32
@@ -369,6 +371,7 @@ class MultilingualSentimentV2(AbsTaskClassification):
 """,
         prompt="Classify sentiment of the customer review into positive, neutral, or negative",
         adapted_from=["MultilingualSentiment"],
+        version_reason="mteb_task_correction",
     )
 
     samples_per_label = 32
@@ -449,6 +452,7 @@ class JDReviewV2(AbsTaskClassification):
 """,
         prompt="Classify the customer review for iPhone on e-commerce platform into positive or negative",
         adapted_from=["JDReview"],
+        version_reason="mteb_task_correction",
     )
 
     samples_per_label = 32
@@ -568,6 +572,7 @@ class WaimaiV2(AbsTaskClassification):
 """,
         prompt="Classify the customer review from a food takeaway platform into positive or negative",
         adapted_from=["Waimai"],
+        version_reason="mteb_task_correction",
     )
 
     samples_per_label = 32

@@ -77,6 +77,7 @@ Ratan, Shyam},
 }
 """,
         adapted_from=["STS22"],
+        version_reason="mteb_task_correction",
     )
 
     min_score = 1

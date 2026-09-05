@@ -71,4 +71,5 @@ class MyanmarNewsV2(AbsTaskClassification):
 }
 """,
         adapted_from=["MyanmarNews"],
+        version_reason="mteb_task_correction",
     )

@@ -79,4 +79,5 @@ class IndonesianIdClickbaitClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["IndonesianIdClickbaitClassification"],
+        version_reason="mteb_task_correction",
     )

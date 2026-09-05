@@ -67,4 +67,5 @@ class WikipediaCrystallographyAnalyticalClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["WikipediaCrystallographyAnalyticalClassification"],
+        version_reason="mteb_task_correction",
     )

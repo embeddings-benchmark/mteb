@@ -83,4 +83,5 @@ class SDSGlovesClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["SDSGlovesClassification"],
+        version_reason="mteb_task_correction",
     )

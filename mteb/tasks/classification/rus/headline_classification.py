@@ -111,6 +111,7 @@ Oda, Yusuke},
 """,
         prompt="Classify the topic or theme of the given news headline",
         adapted_from=["HeadlineClassification"],
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(

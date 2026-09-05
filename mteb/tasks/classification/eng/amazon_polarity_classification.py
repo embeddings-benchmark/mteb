@@ -77,4 +77,5 @@ class AmazonPolarityClassificationV2(AbsTaskClassification):
 """,
         prompt="Classify Amazon reviews into positive or negative sentiment",
         adapted_from=["AmazonPolarityClassification"],
+        version_reason="mteb_task_correction",
     )

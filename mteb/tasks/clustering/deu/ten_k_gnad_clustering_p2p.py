@@ -65,6 +65,7 @@ class TenKGnadClusteringP2PFast(AbsTaskClustering):
         sample_creation="found",
         bibtex_citation="",  # none found
         adapted_from=["TenKGnadClusteringP2P"],
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:

@@ -99,6 +99,7 @@ Stent, Amanda},
 }
 """,
         adapted_from=["HindiDiscourseClassification"],
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(

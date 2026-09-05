@@ -77,6 +77,7 @@ class VieStudentFeedbackClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["VieStudentFeedbackClassification"],
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(

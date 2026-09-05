@@ -73,4 +73,5 @@ class STSBenchmarkSTSV2(AbsTaskSTS):
 }
 """,
         adapted_from=["STSBenchmark"],
+        version_reason="mteb_task_correction",
     )

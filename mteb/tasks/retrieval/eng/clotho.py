@@ -110,6 +110,7 @@ class ClothoA2TRetrievalV2(AbsTaskRetrieval):
 }
 """,
         adapted_from=["ClothoA2TRetrieval"],
+        version_reason="mteb_task_correction",
     )
 
 
@@ -214,4 +215,5 @@ class ClothoT2ARetrievalV2(AbsTaskRetrieval):
 }
 """,
         adapted_from=["ClothoT2ARetrieval"],
+        version_reason="mteb_task_correction",
     )

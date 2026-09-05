@@ -67,4 +67,5 @@ class WikipediaChemFieldsClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["WikipediaChemFieldsClassification"],
+        version_reason="mteb_task_correction",
     )

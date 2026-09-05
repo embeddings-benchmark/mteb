@@ -73,6 +73,7 @@ class CbdClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["CbdClassification"],
+        version_reason="mteb_task_correction",
     )
 
 
@@ -159,6 +160,7 @@ Za{\'s}ko-Zieli{\'n}ska, Monika},
 }
 """,
         adapted_from=["PolEmo2InClassification"],
+        version_reason="mteb_task_correction",
     )
 
 
@@ -249,6 +251,7 @@ Za{\'s}ko-Zieli{\'n}ska, Monika},
 }
 """,
         adapted_from=["PolEmo2OutClassification"],
+        version_reason="mteb_task_correction",
     )
 
 
@@ -349,6 +352,7 @@ Tetreault, Joel},
 }
 """,
         adapted_from=["AllegroReviewsClassification"],
+        version_reason="mteb_task_correction",
     )
 
 
@@ -423,4 +427,5 @@ class PacClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["PacClassification"],
+        version_reason="mteb_task_correction",
     )

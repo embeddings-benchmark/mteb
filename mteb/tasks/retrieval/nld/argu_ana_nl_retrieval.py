@@ -57,5 +57,6 @@ class ArguAnaNLv2(AbsTaskRetrieval):
             "query": "Gegeven een bewering, vind documenten die de bewering weerleggen"
         },
         adapted_from=["ArguAna-NL"],
+        version_reason="mteb_task_correction",
         **_argu_ana_nl_metadata,
     )

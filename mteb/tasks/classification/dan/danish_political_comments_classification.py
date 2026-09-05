@@ -77,6 +77,7 @@ class DanishPoliticalCommentsClassificationV2(AbsTaskClassification):
 """,
         prompt="Classify Danish political comments for sentiment",
         adapted_from=["DanishPoliticalCommentsClassification"],
+        version_reason="mteb_task_correction",
     )
 
     samples_per_label = 16

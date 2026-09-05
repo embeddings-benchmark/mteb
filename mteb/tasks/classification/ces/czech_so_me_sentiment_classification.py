@@ -95,5 +95,6 @@ Montoyo, Andres},
 }
 """,
         adapted_from=["CzechSoMeSentimentClassification"],
+        version_reason="mteb_task_correction",
     )
     samples_per_label = 16

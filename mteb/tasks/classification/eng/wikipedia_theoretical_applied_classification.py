@@ -67,4 +67,5 @@ class WikipediaTheoreticalAppliedClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["WikipediaTheoreticalAppliedClassification"],
+        version_reason="mteb_task_correction",
     )

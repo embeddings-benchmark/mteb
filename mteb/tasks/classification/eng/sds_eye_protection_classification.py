@@ -83,4 +83,5 @@ class SDSEyeProtectionClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["SDSEyeProtectionClassification"],
+        version_reason="mteb_task_correction",
     )

@@ -49,6 +49,7 @@ Iryna Gurevych},
 """,
         prompt="Identify the topic or theme of Reddit posts based on the titles",
         adapted_from=["RedditClustering"],
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(

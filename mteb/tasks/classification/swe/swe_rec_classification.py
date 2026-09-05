@@ -83,4 +83,5 @@ Fishel, Mark},
 """,
         prompt="Classify Swedish reviews by sentiment",
         adapted_from=["SweRecClassification"],
+        version_reason="mteb_task_correction",
     )

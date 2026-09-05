@@ -49,6 +49,7 @@ Iryna Gurevych},
 """,
         prompt="Identify the topic or theme of StackExchange posts based on the titles",
         adapted_from=["StackExchangeClustering"],
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(

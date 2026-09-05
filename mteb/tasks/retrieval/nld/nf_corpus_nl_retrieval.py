@@ -50,6 +50,7 @@ class NFCorpusNLv2(AbsTaskRetrieval):
         description="NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval. NFCorpus-NL is "
         "a Dutch translation. This version adds a Dutch prompt to the dataset.",
         adapted_from=["NFCorpus-NL"],
+        version_reason="mteb_task_correction",
         prompt={
             "query": "Gegeven een vraag, haal relevante documenten op die de vraag het beste beantwoorden"
         },

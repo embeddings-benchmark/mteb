@@ -89,4 +89,5 @@ Laippala, Veronika},
 }
 """,
         adapted_from=["FinToxicityClassification"],
+        version_reason="mteb_task_correction",
     )

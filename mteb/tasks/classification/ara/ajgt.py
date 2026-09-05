@@ -70,4 +70,5 @@ class AJGTV2(AbsTaskClassification):
   year = {2017},
 }
 """,
+        version_reason="mteb_task_correction",
     )

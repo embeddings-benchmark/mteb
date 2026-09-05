@@ -71,6 +71,7 @@ class JavaneseIMDBClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["JavaneseIMDBClassification"],
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(

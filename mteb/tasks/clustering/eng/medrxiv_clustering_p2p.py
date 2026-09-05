@@ -35,6 +35,7 @@ class MedrxivClusteringP2PFast(AbsTaskClustering):
         bibtex_citation="",
         prompt="Identify the main category of Medrxiv papers based on the titles and abstracts",
         adapted_from=["MedrxivClusteringP2P"],
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(

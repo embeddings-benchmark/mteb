@@ -82,4 +82,5 @@ class BSARDRetrievalv2(AbsTaskRetrieval):
   year = {2022},
 }
 """,
+        version_reason="mteb_task_correction",
     )

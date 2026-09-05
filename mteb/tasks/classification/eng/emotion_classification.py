@@ -105,6 +105,7 @@ Tsujii, Jun{'}ichi},
 """,
         prompt="Classify the emotion expressed in the given Twitter message into one of the six emotions: anger, fear, joy, love, sadness, and surprise",
         adapted_from=["EmotionClassification"],
+        version_reason="mteb_task_correction",
     )
 
     samples_per_label = 16

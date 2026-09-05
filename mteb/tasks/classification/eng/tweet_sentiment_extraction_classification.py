@@ -79,6 +79,7 @@ class TweetSentimentExtractionClassificationV2(AbsTaskClassification):
 """,
         prompt="Classify the sentiment of a given tweet as either positive, negative, or neutral",
         adapted_from=["TweetSentimentExtractionClassification"],
+        version_reason="mteb_task_correction",
     )
 
     samples_per_label = 32

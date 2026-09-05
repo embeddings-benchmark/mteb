@@ -71,4 +71,5 @@ class SentimentAnalysisHindiV2(AbsTaskClassification):
 }
 """,
         adapted_from=["SentimentAnalysisHindi"],
+        version_reason="mteb_task_correction",
     )

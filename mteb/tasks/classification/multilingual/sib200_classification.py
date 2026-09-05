@@ -305,6 +305,7 @@ class SIB200ClassificationV2(AbsTaskClassification):
   year = {2023},
 }
 """,
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(self, **kwargs: Any) -> None:

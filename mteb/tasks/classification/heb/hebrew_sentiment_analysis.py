@@ -90,6 +90,7 @@ class HebrewSentimentAnalysisV2(AbsTaskClassification):
 """,
         adapted_from=["HebrewSentimentAnalysis"],
         superseded_by="HebrewSentimentAnalysis.v3",
+        version_reason="mteb_task_correction",
     )
 
 
@@ -137,4 +138,5 @@ class HebrewSentimentAnalysisV3(AbsTaskClassification):
 }
 """,
         adapted_from=["HebrewSentimentAnalysis"],
+        version_reason="mteb_task_correction",
     )

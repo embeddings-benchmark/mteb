@@ -82,4 +82,5 @@ class AlloProfClusteringP2PFast(AbsTaskClustering):
 }
 """,
         adapted_from=["AlloProfClusteringP2P"],
+        version_reason="mteb_task_correction",
     )

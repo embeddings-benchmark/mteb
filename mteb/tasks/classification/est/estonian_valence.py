@@ -79,6 +79,7 @@ class EstonianValenceClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["EstonianValenceClassification"],
+        version_reason="mteb_task_correction",
     )
 
     samples_per_label = 16

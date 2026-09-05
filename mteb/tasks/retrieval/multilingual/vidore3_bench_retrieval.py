@@ -87,6 +87,7 @@ class Vidore3FinanceEnRetrievalv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         adapted_from=["Vidore3FinanceEnRetrieval"],
+        version_reason="mteb_task_correction",
         contributed_by="Illuin Technology",
     )
 
@@ -169,6 +170,7 @@ class Vidore3FinanceFrRetrievalv2(AbsTaskRetrieval):
         is_public=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3FinanceFrRetrieval"],
+        version_reason="mteb_task_correction",
     )
 
 
@@ -250,6 +252,7 @@ class Vidore3IndustrialRetrievalv2(AbsTaskRetrieval):
         is_public=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3IndustrialRetrieval"],
+        version_reason="mteb_task_correction",
     )
 
 
@@ -331,6 +334,7 @@ class Vidore3PharmaceuticalsRetrievalv2(AbsTaskRetrieval):
         is_public=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3PharmaceuticalsRetrieval"],
+        version_reason="mteb_task_correction",
     )
 
 
@@ -412,6 +416,7 @@ class Vidore3ComputerScienceRetrievalv2(AbsTaskRetrieval):
         is_public=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3ComputerScienceRetrieval"],
+        version_reason="mteb_task_correction",
     )
 
 
@@ -493,6 +498,7 @@ class Vidore3HrRetrievalv2(AbsTaskRetrieval):
         is_public=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3HrRetrieval"],
+        version_reason="mteb_task_correction",
     )
 
 
@@ -574,6 +580,7 @@ class Vidore3EnergyRetrievalv2(AbsTaskRetrieval):
         is_public=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3EnergyRetrieval"],
+        version_reason="mteb_task_correction",
     )
 
 
@@ -655,6 +662,7 @@ class Vidore3PhysicsRetrievalv2(AbsTaskRetrieval):
         is_public=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3PhysicsRetrieval"],
+        version_reason="mteb_task_correction",
     )
 
 
@@ -776,6 +784,7 @@ class Vidore3TelecomRetrievalv2(AbsTaskRetrieval):
         is_public=False,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3TelecomRetrieval"],
+        version_reason="mteb_task_correction",
     )
 
 
@@ -817,4 +826,5 @@ class Vidore3NuclearRetrievalv2(AbsTaskRetrieval):
         is_public=False,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3NuclearRetrieval"],
+        version_reason="mteb_task_correction",
     )

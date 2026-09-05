@@ -73,4 +73,5 @@ class SiswatiNewsClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["SiswatiNewsClassification"],
+        version_reason="mteb_task_correction",
     )

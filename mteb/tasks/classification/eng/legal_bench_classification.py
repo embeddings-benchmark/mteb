@@ -2700,6 +2700,7 @@ class JCrewBlockerLegalBenchClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["JCrewBlockerLegalBenchClassification"],
+        version_reason="mteb_task_correction",
     )
 
 
@@ -3477,6 +3478,7 @@ class LegalReasoningCausalityLegalBenchClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["LegalReasoningCausalityLegalBenchClassification"],
+        version_reason="mteb_task_correction",
     )
 
 
@@ -3672,6 +3674,7 @@ class MAUDLegalBenchClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["MAUDLegalBenchClassification"],
+        version_reason="mteb_task_correction",
     )
 
 
@@ -3839,6 +3842,7 @@ class OPP115DataSecurityLegalBenchClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["OPP115DataSecurityLegalBenchClassification"],
+        version_reason="mteb_task_correction",
     )
 
 
@@ -3928,6 +3932,7 @@ class OPP115DoNotTrackLegalBenchClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["OPP115DoNotTrackLegalBenchClassification"],
+        version_reason="mteb_task_correction",
     )
 
 
@@ -4234,6 +4239,7 @@ class OPP115UserChoiceControlLegalBenchClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["OPP115UserChoiceControlLegalBenchClassification"],
+        version_reason="mteb_task_correction",
     )
 
 
@@ -4307,6 +4313,7 @@ class OralArgumentQuestionPurposeLegalBenchClassificationV2(AbsTaskClassificatio
 }
 """,
         adapted_from=["OralArgumentQuestionPurposeLegalBenchClassification"],
+        version_reason="mteb_task_correction",
     )
 
 
@@ -4396,6 +4403,7 @@ class OverrulingLegalBenchClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["OverrulingLegalBenchClassification"],
+        version_reason="mteb_task_correction",
     )
 
 

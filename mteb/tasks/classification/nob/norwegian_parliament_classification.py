@@ -91,4 +91,5 @@ Brygfjeld, Svein Arne},
 """,
         prompt="Classify parliament speeches in Norwegian based on political affiliation",
         adapted_from=["NorwegianParliamentClassification"],
+        version_reason="mteb_task_correction",
     )

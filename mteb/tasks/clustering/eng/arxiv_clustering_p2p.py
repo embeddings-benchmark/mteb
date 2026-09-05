@@ -77,6 +77,7 @@ class ArxivClusteringP2PFast(AbsTaskClusteringLegacy):
 """,  # None found
         prompt="Identify the main and secondary category of Arxiv papers based on the titles and abstracts",
         adapted_from=["ArxivClusteringP2P"],
+        version_reason="mteb_task_correction",
         superseded_by="ArXivHierarchicalClusteringP2P",
         # a faster version of the dataset, since it does not sample from the same distribution we can't use the AbsTaskClustering, instead we
         # simply downsample each cluster.

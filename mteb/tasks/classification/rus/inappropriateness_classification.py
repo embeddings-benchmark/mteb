@@ -119,6 +119,7 @@ Robnik-{\v{S}}ikonja, Marko},
 """,
         prompt="Classify the given message as either sensitive topic or not",
         adapted_from=["InappropriatenessClassification"],
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(

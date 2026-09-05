@@ -50,6 +50,7 @@ class SciFactNLv2(AbsTaskRetrieval):
         description="SciFactNL verifies scientific claims in Dutch using evidence from the research literature "
         "containing scientific paper abstracts. This version adds a Dutch prompt to the dataset.",
         adapted_from=["SciFact-NL"],
+        version_reason="mteb_task_correction",
         prompt={
             "query": "Given a scientific claim, retrieve documents that support or refute the claim"
         },

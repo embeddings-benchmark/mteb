@@ -88,5 +88,6 @@ Montoyo, Andres},
 }
 """,
         adapted_from=["CzechProductReviewSentimentClassification"],
+        version_reason="mteb_task_correction",
     )
     samples_per_label = 16

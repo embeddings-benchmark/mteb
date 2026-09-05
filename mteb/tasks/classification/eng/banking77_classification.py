@@ -111,4 +111,5 @@ Shah, Rushin},
 """,
         prompt="Given a online banking query, find the corresponding intents",
         adapted_from=["Banking77Classification"],
+        version_reason="mteb_task_correction",
     )

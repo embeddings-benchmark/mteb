@@ -89,4 +89,5 @@ Barbieri, Francesco},
 }
 """,
         adapted_from=["TweetTopicSingleClassification"],
+        version_reason="mteb_task_correction",
     )

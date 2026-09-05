@@ -74,4 +74,5 @@ class MarathiNewsClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["MarathiNewsClassification"],
+        version_reason="mteb_task_correction",
     )

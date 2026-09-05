@@ -89,6 +89,7 @@ class RuReviewsClassificationV2(AbsTaskClassification):
 """,
         prompt="Classify product reviews into positive, negative or neutral sentiment",
         adapted_from=["RuReviewsClassification"],
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(

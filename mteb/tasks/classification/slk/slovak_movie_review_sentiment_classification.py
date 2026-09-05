@@ -73,6 +73,7 @@ class SlovakMovieReviewSentimentClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["SlovakMovieReviewSentimentClassification"],
+        version_reason="mteb_task_correction",
     )
 
     def dataset_transform(self, **kwargs: Any) -> None:

@@ -73,4 +73,5 @@ class KurdishSentimentClassificationV2(AbsTaskClassification):
 }
 """,
         adapted_from=["KurdishSentimentClassification"],
+        version_reason="mteb_task_correction",
     )

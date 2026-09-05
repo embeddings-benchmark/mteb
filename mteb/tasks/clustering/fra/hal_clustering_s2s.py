@@ -96,4 +96,5 @@ class HALClusteringS2SFast(AbsTaskClustering):
 }
 """,
         adapted_from=["HALClusteringS2S"],
+        version_reason="mteb_task_correction",
     )

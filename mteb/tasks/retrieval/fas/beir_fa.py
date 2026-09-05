@@ -63,6 +63,7 @@ class ArguAnaFaV2(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=fa_mteb,
         adapted_from=["ArguAna"],
+        version_reason="mteb_task_correction",
     )
 
 
@@ -499,6 +500,7 @@ class FiQA2018FaV2(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=fa_mteb,
         adapted_from=["FiQA2018"],
+        version_reason="mteb_task_correction",
     )
 
 
@@ -668,6 +670,7 @@ class QuoraRetrievalFaV2(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=fa_mteb,
         adapted_from=["QuoraRetrieval"],
+        version_reason="mteb_task_correction",
     )
 
 
@@ -723,6 +726,7 @@ class SCIDOCSFaV2(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=fa_mteb,
         adapted_from=["SCIDOCS"],
+        version_reason="mteb_task_correction",
     )
 
 
@@ -778,6 +782,7 @@ class SciFactFaV2(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=fa_mteb,
         adapted_from=["SciFact"],
+        version_reason="mteb_task_correction",
     )
 
 
@@ -833,6 +838,7 @@ class TRECCOVIDFaV2(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=fa_mteb,
         adapted_from=["TRECCOVID"],
+        version_reason="mteb_task_correction",
     )
 
 
@@ -888,6 +894,7 @@ class Touche2020FaV2(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=fa_mteb,
         adapted_from=["Touche2020"],
+        version_reason="mteb_task_correction",
     )
 
 

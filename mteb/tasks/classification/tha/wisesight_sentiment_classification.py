@@ -81,4 +81,5 @@ Polpanumas, Charin},
 }
 """,
         adapted_from=["WisesightSentimentClassification"],
+        version_reason="mteb_task_correction",
     )

@@ -80,4 +80,5 @@ class RestaurantReviewSentimentClassificationV2(AbsTaskClassification):
   year = {2015},
 }
 """,
+        version_reason="mteb_task_correction",
     )

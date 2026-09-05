@@ -124,6 +124,7 @@ class MLSUMClusteringP2PFast(AbsTaskClustering):
 }
 """,
         adapted_from=["MLSUMClusteringP2P"],
+        version_reason="mteb_task_correction",
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
