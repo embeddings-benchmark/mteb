@@ -1199,6 +1199,111 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskRetrieval):
         self.data_loaded = True
 
 
+class MockAny2AnyRetrievalInterleavedIT2ITTask(AbsTaskRetrieval):
+    """Queries and documents with interleaved modality coverage.
+
+    Every row declares both modalities, but each carries only the ones it actually
+    has: some are text-only, some image-only, some both.
+    """
+
+    expected_stats = {
+        "test": {
+            "num_samples": 6,
+            "num_queries": 3,
+            "num_documents": 3,
+            # only the rows that carry text/images count towards the statistics
+            "number_of_characters": 114,
+            "documents_text_statistics": {
+                "total_text_length": 69,
+                "min_text_length": 32,
+                "average_text_length": 34.5,
+                "max_text_length": 37,
+                "unique_texts": 2,
+            },
+            "documents_image_statistics": {
+                "min_image_width": 100,
+                "average_image_width": 100.0,
+                "max_image_width": 100,
+                "min_image_height": 100,
+                "average_image_height": 100.0,
+                "max_image_height": 100,
+                "unique_images": 2,
+            },
+            "documents_audio_statistics": None,
+            "documents_video_statistics": None,
+            "queries_text_statistics": {
+                "total_text_length": 45,
+                "min_text_length": 20,
+                "average_text_length": 22.5,
+                "max_text_length": 25,
+                "unique_texts": 2,
+            },
+            "queries_image_statistics": {
+                "min_image_width": 100,
+                "average_image_width": 100.0,
+                "max_image_width": 100,
+                "min_image_height": 100,
+                "average_image_height": 100.0,
+                "max_image_height": 100,
+                "unique_images": 2,
+            },
+            "queries_audio_statistics": None,
+            "queries_video_statistics": None,
+            "relevant_docs_statistics": {
+                "num_relevant_docs": 3,
+                "min_relevant_docs_per_query": 1,
+                "average_relevant_docs_per_query": 1.0,
+                "max_relevant_docs_per_query": 1,
+                "unique_relevant_docs": 3,
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
+            },
+            "top_ranked_statistics": None,
+        }
+    }
+
+    metadata = TaskMetadata(
+        type="Any2AnyRetrieval",
+        name="MockAny2AnyRetrievalInterleavedIT2IT",
+        main_score="ndcg_at_10",
+        **general_args,
+    )
+    metadata.modalities = ["image", "text"]
+    metadata.category = "it2it"
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        images = create_mock_images(self.np_rng, n=4)
+
+        retrieval_split_data = RetrievalSplitData(
+            queries=Dataset.from_dict(
+                {
+                    "id": ["q0", "q1", "q2"],
+                    "text": ["This is a text only query", None, "This is a both query"],
+                    "image": [None, images[0], images[1]],
+                }
+            ),
+            corpus=Dataset.from_dict(
+                {
+                    "id": ["d0", "d1", "d2"],
+                    "text": [
+                        "This is a text only positive sentence",
+                        None,
+                        "This is a both positive sentence",
+                    ],
+                    "image": [None, images[2], images[3]],
+                }
+            ),
+            relevant_docs={
+                "q0": {"d0": 1, "d1": 0, "d2": 0},
+                "q1": {"d0": 0, "d1": 1, "d2": 0},
+                "q2": {"d0": 0, "d1": 0, "d2": 1},
+            },
+            top_ranked=None,
+        )
+        self.dataset = {"default": {"test": retrieval_split_data}}
+        self.data_loaded = True
+
+
 class MockAny2AnyRetrievalT2ATask(AbsTaskRetrieval):
     metadata = TaskMetadata(
         type="Any2AnyRetrieval",

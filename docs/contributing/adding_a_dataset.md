@@ -530,6 +530,36 @@ Once we have decided on task, we can implement them as follows:
         ```
 
 
+### Datasets with interleaved modalities
+
+A multimodal dataset does not have to give every sample the same modalities. Samples may interleave them — some text-only, some image-only, some carrying both — as long as
+`modalities` (and `category`, for retrieval) declares every modality the dataset uses.
+
+Every row keeps a column per declared modality; a row that does not carry one leaves it empty. **Use `None` to mark an absent value**, which is what tells it apart from a value that is genuinely empty, such as a document whose text is the empty string:
+
+```python
+Dataset.from_dict(
+    {
+        "id": ["d0", "d1", "d2"],
+        "text": ["a text-only document", None, "a document with an image"],
+        "image": [None, image_1, image_2],
+    }
+)
+```
+
+Descriptive statistics count only the rows that carry each modality, so the example above reports two texts and two images across its three documents.
+
+Models receive the absence explicitly: an absent text is passed as `""` (so text encoders never see a `None`) and every other absent modality as `None`. A model that fuses modalities per row should encode only the modalities each row carries — see `mteb.models.modality_utils` for the helpers, and `CLIPModel.get_fused_embeddings` for a worked example:
+
+```python
+from mteb.models.modality_utils import get_present_indices
+
+image_rows = get_present_indices(batch, "image")
+images = [batch["image"][i] for i in image_rows]
+```
+
+A missing value is only allowed in an input column. A `None` in `id`, a label or a score is a broken dataset and still raises.
+
 ### Filling out the TaskMetadata
 
 To run a task locally you do not necessarily need to fill out all the fields in the `TaskMetadata`, but if you want to include the dataset in

@@ -54,26 +54,34 @@ def _create_dataloader_from_texts(
 
 
 def _corpus_to_dict(
-    row: dict[str, str],
-) -> dict[str, str]:
-    text = (
-        (row["title"] + " " + row["text"]).strip()
-        if "title" in row and len(row["title"]) > 0
-        else row["text"].strip()
-    )
-    new_row = {
+    row: dict[str, str | None],
+) -> dict[str, str | None]:
+    # An interleaved corpus leaves the text empty for documents that only carry
+    # another modality, so both title and body may be absent on a given row. The
+    # absence is preserved here — it is what tells the statistics apart from a
+    # document whose text is genuinely the empty string — and normalized to ""
+    # when the batch is collated for the model.
+    body = row["text"]
+    title = row.get("title") or ""
+    if title:
+        text = f"{title} {body}".strip() if body else title
+    else:
+        text = body.strip() if body else body
+    new_row: dict[str, str | None] = {
         "id": row["id"],
         "text": text,
-        "body": row["text"],
+        "body": body,
     }
     # dataloaders can't handle None
-    if "title" in row and row["title"] is not None and len(row["title"]) > 0:
-        new_row["title"] = row["title"]
+    if title:
+        new_row["title"] = title
     return new_row
 
 
 def _combine_queries_with_instruction_text(dataset: Dataset) -> Dataset:
-    texts = dataset["text"]
+    # An interleaved query set leaves the text empty for queries carrying only
+    # another modality, so `text` may be None on a given row.
+    texts = [text or "" for text in dataset["text"]]
     if "query" in dataset.column_names:
         dataset = dataset.remove_columns(["query"])
     dataset = dataset.add_column("query", texts)
@@ -99,6 +107,13 @@ def _convert_conv_history_to_query(
         The updated row with the "query" and "text" fields set to the conversation string, and the "conversation" field set to the list of ConversationTurn.
     """
     conversation = row["text"]
+    # an interleaved query set carries no conversation on rows that are
+    # image-/audio-/video-only
+    if not conversation:
+        row["query"] = ""
+        row["text"] = ""
+        row["conversation"] = []
+        return cast("dict[str, str | list[ConversationTurn]]", row)
     # if it's a list of strings, just join them
     if isinstance(conversation, list) and isinstance(conversation[0], str):
         conv_str = "; ".join(conversation)
@@ -159,8 +174,11 @@ def _transform_image_to_rgb(
         transform: An optional transformation function to apply to the image.
 
     Returns:
-        The transformed image in RGB format.
+        The transformed image in RGB format, or None if the row carries no image.
     """
+    # An interleaved dataset carries no image on rows of another modality.
+    if image is None:
+        return None
     # For PIL images: ensure RGB format.
     if hasattr(image, "mode") and image.mode != "RGB":
         image = image.convert("RGB")
@@ -210,11 +228,31 @@ def _prepare_image_dataset(
     )
 
 
+# Kept as lists rather than stacked, since their entries vary in shape and a row
+# of an interleaved dataset may carry no value for them at all (`None`).
+_UNCOLLATED_COLUMNS = frozenset(
+    {
+        "image",  # images can be with different sizes
+        "conversation",  # conversations are lists of varying lengths
+        "audio",  # audio can have different lengths
+        "video",  # video can have different lengths
+    }
+)
+# Text-valued columns that an interleaved dataset may leave empty on rows that
+# only carry another modality. A missing value is passed to the model as "",
+# which every text encoder can handle, unlike None.
+_OPTIONAL_TEXT_COLUMNS = frozenset({"text", "body", "title", "query", "instruction"})
+
+
 def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
     """Custom collate function for DataLoader.
 
     - For the "image", "conversation" key, leave the images as a list (to avoid stacking errors).
     - For other keys, use the default collate.
+
+    Missing values are only tolerated for input columns, where they mark a row of
+    an interleaved dataset that does not carry that modality. A None anywhere else
+    (`id`, labels, scores, …) is a bug in the dataset and still raises.
 
     Args:
         batch: A list of dictionaries to collate.
@@ -224,17 +262,15 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
     """
     collated = {}
     for key in batch[0]:
-        if key in (  # noqa: PLR6201
-            "image",  # images can be with different sizes
-            "conversation",  # conversations are lists of varying lengths
-            "audio",  # audio can have different lengths
-            "video",  # video can have different lengths
-        ):
+        if key in _UNCOLLATED_COLUMNS:
             collated[key] = [item[key] for item in batch]
         else:
-            if any(item[key] is None for item in batch):
-                raise ValueError(f"Found None in batch for key '{key}'")
-            collated[key] = default_collate([item[key] for item in batch])
+            values = [item[key] for item in batch]
+            if any(value is None for value in values):
+                if key not in _OPTIONAL_TEXT_COLUMNS:
+                    raise ValueError(f"Found None in batch for key '{key}'")
+                values = [value if value is not None else "" for value in values]
+            collated[key] = default_collate(values)
     return cast("BatchedInput", collated)
 
 
@@ -266,7 +302,9 @@ def _prepare_dataset(
                 num_proc=num_proc,
             )
         elif prompt_type == PromptType.query:
-            if isinstance(dataset["text"][0], list):
+            # an interleaved query set may leave the first rows without text
+            first_text = next((text for text in dataset["text"] if text), None)
+            if isinstance(first_text, list):
                 dataset = dataset.map(
                     _convert_conv_history_to_query,
                     desc="Converting conversations to queries",

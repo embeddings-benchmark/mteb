@@ -1,12 +1,16 @@
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING, Any
 
 import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_utils import get_present_indices
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+
+logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -32,58 +36,115 @@ class CLIPModel(AbsEncoder):
         )
         self.processor = AutoProcessor.from_pretrained(model_name, revision=revision)
 
+    @torch.no_grad()
+    def _encode_texts(self, texts: list[str]) -> torch.Tensor:
+        inputs = self.processor(
+            text=texts,
+            return_tensors="pt",
+            padding=True,
+            truncation=True,
+        )
+        inputs = {k: v.to(self.device) for k, v in inputs.items()}
+        text_outputs = self.model.get_text_features(**inputs)
+        # Handle both tensor and BaseModelOutputWithPooling returns
+        if hasattr(text_outputs, "pooler_output"):
+            text_outputs = text_outputs.pooler_output
+        return text_outputs.cpu()
+
+    @torch.no_grad()
+    def _encode_images(self, images: list[Any]) -> torch.Tensor:
+        inputs = self.processor(
+            images=images,
+            return_tensors="pt",
+            padding=True,
+        )
+        inputs = {k: v.to(self.device) for k, v in inputs.items()}
+        image_outputs = self.model.get_image_features(**inputs)
+        # Handle both tensor and BaseModelOutputWithPooling returns
+        if hasattr(image_outputs, "pooler_output"):
+            image_outputs = image_outputs.pooler_output
+        return image_outputs.cpu()
+
     def get_text_embeddings(
         self,
         texts: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ):
-        all_text_embeddings = []
-
-        with torch.no_grad():
+        all_text_embeddings = [
+            self._encode_texts(batch["text"])
             for batch in tqdm(
                 texts, disable=not show_progress_bar, desc="Text Encoding"
-            ):
-                inputs = self.processor(
-                    text=batch["text"],
-                    return_tensors="pt",
-                    padding=True,
-                    truncation=True,
-                )
-                inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                text_outputs = self.model.get_text_features(**inputs)
-                # Handle both tensor and BaseModelOutputWithPooling returns
-                if hasattr(text_outputs, "pooler_output"):
-                    text_outputs = text_outputs.pooler_output
-                all_text_embeddings.append(text_outputs.cpu())
+            )
+        ]
+        return torch.cat(all_text_embeddings, dim=0)
 
-        all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
-        return all_text_embeddings
-
-    @torch.no_grad()
     def get_image_embeddings(
         self,
         images: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ):
-        all_image_embeddings = []
-
-        for batch in tqdm(images, disable=not show_progress_bar, desc="Image Encoding"):
-            inputs = self.processor(
-                images=batch["image"],
-                return_tensors="pt",
-                padding=True,
+        all_image_embeddings = [
+            self._encode_images(batch["image"])
+            for batch in tqdm(
+                images, disable=not show_progress_bar, desc="Image Encoding"
             )
-            inputs = {k: v.to(self.device) for k, v in inputs.items()}
-            image_outputs = self.model.get_image_features(**inputs)
-            # Handle both tensor and BaseModelOutputWithPooling returns
-            if hasattr(image_outputs, "pooler_output"):
-                image_outputs = image_outputs.pooler_output
-            all_image_embeddings.append(image_outputs.cpu())
+        ]
+        return torch.cat(all_image_embeddings, dim=0)
 
-        all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
-        return all_image_embeddings
+    def get_fused_embeddings(
+        self,
+        inputs: DataLoader[BatchedInput],
+        show_progress_bar: bool = True,
+        **kwargs: Any,
+    ) -> torch.Tensor:
+        """Sum the text and image embedding of every row.
+
+        The dataset may interleave modalities, so a row can carry only a text or
+        only an image; each row is the sum over the modalities it actually carries.
+        A row carrying neither is embedded as zeros.
+        """
+        all_embeddings = []
+        for batch in tqdm(
+            inputs, disable=not show_progress_bar, desc="Interleaved Encoding"
+        ):
+            text_rows = get_present_indices(batch, "text")
+            image_rows = get_present_indices(batch, "image")
+            batch_size = len(batch["text"])
+
+            encoded = []
+            if text_rows:
+                encoded.append(
+                    (
+                        text_rows,
+                        self._encode_texts([batch["text"][i] for i in text_rows]),
+                    )
+                )
+            if image_rows:
+                encoded.append(
+                    (
+                        image_rows,
+                        self._encode_images([batch["image"][i] for i in image_rows]),
+                    )
+                )
+            if not encoded:
+                raise ValueError(
+                    "Batch carries neither text nor images; nothing to encode."
+                )
+            covered = len(set(text_rows) | set(image_rows))
+            if covered < batch_size:
+                logger.warning(
+                    "%d row(s) carry no modality at all and are embedded as zeros.",
+                    batch_size - covered,
+                )
+
+            dim = encoded[0][1].shape[-1]
+            fused = torch.zeros(batch_size, dim, dtype=encoded[0][1].dtype)
+            for rows, vectors in encoded:
+                fused[rows] += vectors
+            all_embeddings.append(fused)
+        return torch.cat(all_embeddings, dim=0)
 
     def encode(
         self,
@@ -95,24 +156,15 @@ class CLIPModel(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        text_embeddings = None
-        image_embeddings = None
-        if "text" in inputs.dataset.features:
-            text_embeddings = self.get_text_embeddings(inputs, **kwargs)
-        if "image" in inputs.dataset.features:
-            image_embeddings = self.get_image_embeddings(inputs, **kwargs)
+        has_text = "text" in inputs.dataset.features
+        has_image = "image" in inputs.dataset.features
 
-        if text_embeddings is not None and image_embeddings is not None:
-            if len(text_embeddings) != len(image_embeddings):
-                raise ValueError(
-                    "The number of texts and images must have the same length"
-                )
-            fused_embeddings = text_embeddings + image_embeddings
-            return fused_embeddings
-        if text_embeddings is not None:
-            return text_embeddings
-        if image_embeddings is not None:
-            return image_embeddings
+        if has_text and has_image:
+            return self.get_fused_embeddings(inputs, **kwargs)
+        if has_text:
+            return self.get_text_embeddings(inputs, **kwargs)
+        if has_image:
+            return self.get_image_embeddings(inputs, **kwargs)
         raise ValueError
 
 

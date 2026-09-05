@@ -10,13 +10,19 @@ if TYPE_CHECKING:
 
 
 def _hash_item(item: Mapping[str, Any]) -> str:
+    """Build the cache key for one dataset row.
+
+    A row of an interleaved dataset carries no value for the modalities it does not
+    use; those contribute nothing to the key, exactly as an absent column does. The
+    key of a row with a value is unchanged, so existing on-disk caches stay valid.
+    """
     item_hash = ""
-    if "text" in item:
-        item_text: str = item["text"]
+    item_text: str | None = item.get("text")
+    if item_text is not None:
         item_hash = hashlib.sha256(item_text.encode()).hexdigest()
 
-    if "image" in item:
-        image: Image.Image = item["image"]
+    image: Image.Image | None = item.get("image")
+    if image is not None:
         item_hash += hashlib.sha256(image.tobytes()).hexdigest()
 
     if len(item_hash) == 0:

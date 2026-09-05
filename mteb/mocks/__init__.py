@@ -10,6 +10,7 @@ from .mock_tasks import (
     MockAny2AnyRetrievalA2ATask,
     MockAny2AnyRetrievalA2TTask,
     MockAny2AnyRetrievalI2TTask,
+    MockAny2AnyRetrievalInterleavedIT2ITTask,
     MockAny2AnyRetrievalT2ATask,
     MockAny2AnyRetrievalT2ITask,
     MockAsymVideoAudioPairClassificationTask,
@@ -154,6 +155,7 @@ MOCK_TASK_REGISTRY = {task.metadata.name: type(task) for task in MOCK_TASK_TEST_
 MOCK_MIEB_TASK_GRID = [
     MockAny2AnyRetrievalI2TTask(),
     MockAny2AnyRetrievalT2ITask(),
+    MockAny2AnyRetrievalInterleavedIT2ITTask(),
     MockMultiChoiceTask(),
     MockImageClassificationTask(),
     MockImageClusteringTask(),

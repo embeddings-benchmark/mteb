@@ -13,6 +13,7 @@ from mteb._requires_package import (
     requires_image_dependencies,
 )
 from mteb.models.modality_collators import VideoCollator
+from mteb.models.modality_utils import is_modality_present
 from mteb.models.model_meta import ModelMeta
 from mteb.similarity_functions import (
     max_sim,
@@ -22,6 +23,8 @@ from mteb.similarity_functions import (
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from numpy.typing import NDArray
     from PIL import Image
     from torch.utils.data import DataLoader
@@ -44,19 +47,19 @@ def _text_to_bytes(text: str | None) -> bytes:
     return (text or "").encode("utf-8")
 
 
-def _image_to_bytes(image: Image.Image) -> bytes:
-    """Convert a PIL image sample into bytes for deterministic seeding."""
-    return image.tobytes()
+def _image_to_bytes(image: Image.Image | None) -> bytes:
+    """Convert a (possibly missing) PIL image sample into bytes for deterministic seeding."""
+    return image.tobytes() if image is not None else b""
 
 
-def _audio_to_bytes(audio: AudioInputItem) -> bytes:
-    """Convert an audio sample into bytes for deterministic seeding."""
-    return audio["array"].tobytes()
+def _audio_to_bytes(audio: AudioInputItem | None) -> bytes:
+    """Convert a (possibly missing) audio sample into bytes for deterministic seeding."""
+    return audio["array"].tobytes() if audio is not None else b""
 
 
-def _video_to_bytes(item: torch.Tensor) -> bytes:
-    """Convert a video frames tensor into bytes for deterministic seeding."""
-    return item.numpy().tobytes()
+def _video_to_bytes(item: torch.Tensor | None) -> bytes:
+    """Convert a (possibly missing) video frames tensor into bytes for deterministic seeding."""
+    return item.numpy().tobytes() if item is not None else b""
 
 
 def _bytes_to_vector(data: bytes, size: int) -> NDArray[np.floating]:
@@ -101,59 +104,35 @@ def _bytes_to_multi_vector(
     return (vectors / (norms + 1e-10)).astype(np.float32)
 
 
-def _string_to_vector(text: str | None, size: int) -> NDArray[np.floating]:
-    """Generate a deterministic random vector based on a string.
+_MODALITY_TO_BYTES: dict[str, Callable[[Any], bytes]] = {
+    "text": _text_to_bytes,
+    "image": _image_to_bytes,
+    "audio": _audio_to_bytes,
+    "video": _video_to_bytes,
+}
 
-    Args:
-        text: Input string.
-        size: Size of the output vector.
 
-    Returns:
-        A numpy array of shape (size,) containing the random vector.
+def _batch_modality_bytes(batch: BatchedInput) -> dict[str, list[bytes]]:
+    """Raw bytes per modality column present in the batch, one entry per row."""
+    return {
+        modality: [to_bytes(value) for value in batch[modality]]
+        for modality, to_bytes in _MODALITY_TO_BYTES.items()
+        if modality in batch
+    }
+
+
+def _row_modalities(batch: BatchedInput, modalities: list[str], row: int) -> list[str]:
+    """The modalities that row `row` actually carries.
+
+    A dataset may interleave modality coverage, so a row only contributes the
+    modalities it has. A row carrying none of them falls back to every column of
+    the batch, which keeps single-modality datasets — where an empty sample is a
+    genuine empty value rather than an absent one — embedded as before.
     """
-    return _bytes_to_vector(_text_to_bytes(text), size)
-
-
-def _image_to_vector(image: Image.Image, size: int) -> NDArray[np.floating]:
-    """Generate a deterministic random vector based on image content.
-
-    Args:
-        image: PIL Image object.
-        size: Size of the output vector.
-
-    Returns:
-        A numpy array of shape (size,) containing the random vector.
-    """
-    return _bytes_to_vector(_image_to_bytes(image), size)
-
-
-def _audio_to_vector(audio: AudioInputItem, size: int) -> NDArray[np.floating]:
-    """Generate a deterministic random vector based on audio content.
-
-    Args:
-        audio: Audio data (e.g., numpy array).
-        size: Size of the output vector.
-
-    Returns:
-        A numpy array of shape (size,) containing the random vector.
-    """
-    return _bytes_to_vector(_audio_to_bytes(audio), size)
-
-
-def _video_to_vector(
-    item: torch.Tensor,
-    size: int,
-) -> NDArray[np.floating]:
-    """Generate a deterministic random vector based on video content.
-
-    Args:
-        item: Video frames tensor.
-        size: Size of the output vector.
-
-    Returns:
-        A numpy array of shape (size,) containing the random vector.
-    """
-    return _bytes_to_vector(_video_to_bytes(item), size)
+    present = [
+        modality for modality in modalities if is_modality_present(batch[modality][row])
+    ]
+    return present or modalities
 
 
 def _attach_modality_collator(
@@ -221,55 +200,19 @@ def _batch_to_embeddings(
     """
     embeddings = []
     for batch in tqdm(inputs, desc="Encoding batches", unit="batch"):
-        text_embeddings = []
-        image_embeddings = []
-        audio_embeddings = []
-        video_embeddings = []
+        modality_bytes = _batch_modality_bytes(batch)
+        modalities = list(modality_bytes)
+        if not modalities:
+            continue
 
-        if "text" in batch:
-            text_embeddings = [
-                _string_to_vector(txt, embedding_dim) for txt in batch["text"]
-            ]
-        if "image" in batch:
-            image_embeddings = [
-                _image_to_vector(img, embedding_dim) for img in batch["image"]
-            ]
-        if "audio" in batch:
-            audio_embeddings = [
-                _audio_to_vector(audio, embedding_dim) for audio in batch["audio"]
-            ]
-        if "video" in batch:
-            video_embeddings = [
-                _video_to_vector(
-                    video,
-                    embedding_dim,
-                )
-                for video in batch["video"]
-            ]
-
-        # Combine embeddings
-        max_len = max(
-            [
-                len(text_embeddings),
-                len(image_embeddings),
-                len(audio_embeddings),
-                len(video_embeddings),
-            ]
-        )
-        for i in range(max_len):
+        for i in range(len(modality_bytes[modalities[0]])):
+            contributing = _row_modalities(batch, modalities, i)
             combined_embedding = np.zeros(embedding_dim, dtype=np.float32)
-            count = 0
-            for embeddings_list in [
-                text_embeddings,
-                image_embeddings,
-                audio_embeddings,
-                video_embeddings,
-            ]:
-                if i < len(embeddings_list):
-                    combined_embedding += embeddings_list[i]
-                    count += 1
-            if count > 0:
-                combined_embedding /= count
+            for modality in contributing:
+                combined_embedding += _bytes_to_vector(
+                    modality_bytes[modality][i], embedding_dim
+                )
+            combined_embedding /= len(contributing)
             embeddings.append(combined_embedding)
 
     return np.vstack(embeddings)
@@ -343,58 +286,19 @@ def _batch_to_multi_vector_embeddings(
     """
     embeddings = []
     for batch in tqdm(inputs, desc="Encoding batches", unit="batch"):
-        text_embeddings = []
-        image_embeddings = []
-        audio_embeddings = []
-        video_embeddings = []
+        modality_bytes = _batch_modality_bytes(batch)
+        modalities = list(modality_bytes)
+        if not modalities:
+            continue
 
-        if "text" in batch:
-            text_embeddings = [
-                _bytes_to_multi_vector(_text_to_bytes(txt), num_tokens, embedding_dim)
-                for txt in batch["text"]
-            ]
-        if "image" in batch:
-            image_embeddings = [
-                _bytes_to_multi_vector(_image_to_bytes(img), num_tokens, embedding_dim)
-                for img in batch["image"]
-            ]
-        if "audio" in batch:
-            audio_embeddings = [
-                _bytes_to_multi_vector(
-                    _audio_to_bytes(audio), num_tokens, embedding_dim
-                )
-                for audio in batch["audio"]
-            ]
-        if "video" in batch:
-            video_embeddings = [
-                _bytes_to_multi_vector(
-                    _video_to_bytes(video), num_tokens, embedding_dim
-                )
-                for video in batch["video"]
-            ]
-
-        max_len = max(
-            [
-                len(text_embeddings),
-                len(image_embeddings),
-                len(audio_embeddings),
-                len(video_embeddings),
-            ]
-        )
-        for i in range(max_len):
+        for i in range(len(modality_bytes[modalities[0]])):
+            contributing = _row_modalities(batch, modalities, i)
             combined_embedding = np.zeros((num_tokens, embedding_dim), dtype=np.float32)
-            count = 0
-            for embeddings_list in [
-                text_embeddings,
-                image_embeddings,
-                audio_embeddings,
-                video_embeddings,
-            ]:
-                if i < len(embeddings_list):
-                    combined_embedding += embeddings_list[i]
-                    count += 1
-            if count > 0:
-                combined_embedding /= count
+            for modality in contributing:
+                combined_embedding += _bytes_to_multi_vector(
+                    modality_bytes[modality][i], num_tokens, embedding_dim
+                )
+            combined_embedding /= len(contributing)
             embeddings.append(combined_embedding)
 
     return np.stack(embeddings)
