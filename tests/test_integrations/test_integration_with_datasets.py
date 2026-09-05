@@ -48,9 +48,7 @@ SPARSE_MODEL = ModelInfo(
         "IFIRNFCorpus": 0.0,
     },
 )
-# Only one (small) task: RandomColBERTBaseline.search() scores the full corpus against
-# all queries in a single MaxSim call with no chunking, which OOMs on the larger corpora
-# of the other retrieval-shaped tasks (e.g. SciDocsRR).
+
 COLBERT_MODEL = ModelInfo(
     name="mteb/baseline-random-colbert",
     expected_scores={"TwitterHjerneRetrieval": 0.01750},
