@@ -130,7 +130,7 @@ class OpenAIModel(AbsEncoder):
                 )
             except Exception as e:
                 # Sleep due to too many requests
-                logger.info("Sleeping for 10 seconds due to error", e)  # noqa: PLE1205
+                logger.info("Sleeping for 10 seconds due to error: %s", e)
                 import time
 
                 time.sleep(10)
@@ -139,7 +139,7 @@ class OpenAIModel(AbsEncoder):
                         input=sublist, **default_kwargs
                     )
                 except Exception as e:
-                    logger.info("Sleeping for 60 seconds due to error", e)  # noqa: PLE1205
+                    logger.info("Sleeping for 60 seconds due to error: %s", e)
                     time.sleep(60)
                     response = self._client.embeddings.create(
                         input=sublist, **default_kwargs
