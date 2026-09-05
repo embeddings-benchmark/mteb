@@ -1049,6 +1049,11 @@ def _is_duplicate_check_exempt(field: str) -> bool:
     )
 
 
+def _is_document_field(field: str) -> bool:
+    """Whether a stats field describes retrieval documents rather than an evaluated unit."""
+    return field.startswith("documents_")
+
+
 def _is_impossible_count_exempt(field: str) -> bool:
     return field in _DUPLICATE_CHECK_EXEMPT_FIELDS
 
@@ -1134,6 +1139,23 @@ def _image_field_quality(
     name: str, split: str, field: str, stats: ImageStatistics
 ) -> tuple[int, list[tuple[str, str]]]:
     errors: list[tuple[str, str]] = []
+
+    # A pure black or white image carries no visual signal, but whether that breaks
+    # the evaluation depends on what the column *is*. A query or a labelled sample
+    # is itself the unit being evaluated, so a blank one can never be answered or
+    # learned from. A document is only unretrievable when it is the whole of some
+    # query's gold set, which qrels decide, not this column -- that case is
+    # reported separately as `queries_with_all_gold_black_or_white`. `.get` because
+    # stats generated before this field existed simply omit it.
+    black_or_white_images = stats.get("black_or_white_images")
+    if black_or_white_images and not _is_document_field(field):
+        errors.append(
+            (
+                f"black_or_white_image:{field}",
+                f"{name} ({split}) contains pure black/white images in {field} ({black_or_white_images=}), these carry no visual signal and cannot be answered or learned from.",
+            )
+        )
+
     min_image_width = stats["min_image_width"]
     min_image_height = stats["min_image_height"]
     if not (min_image_width > _MIN_IMAGE_DIMENSION) or not (
@@ -1364,6 +1386,21 @@ def _relevant_docs_integrity_quality(
             (
                 "missing_qrel_query_ids",
                 f"{name} ({split}) has qrels keyed on queries missing from the split ({num_missing_query_ids=}).",
+            )
+        )
+
+    # A black/white document only breaks evaluation when a query has nothing else
+    # to retrieve. Corpora carry blank images no qrel references, and class-judged
+    # tasks give a query hundreds of positives where one blank changes nothing;
+    # neither is a defect. Only a wholly-black/white gold set is.
+    queries_with_all_gold_black_or_white = relevant_docs_stats.get(
+        "queries_with_all_gold_black_or_white"
+    )
+    if queries_with_all_gold_black_or_white:
+        errors.append(
+            (
+                "black_or_white_gold_documents",
+                f"{name} ({split}) has queries whose every relevant document is a pure black/white image ({queries_with_all_gold_black_or_white=}), so those queries cannot be answered.",
             )
         )
 
