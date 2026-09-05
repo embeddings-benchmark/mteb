@@ -9,44 +9,115 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 
 import mteb
 from mteb.abstasks import AbsTask
-from mteb.mocks import MOCK_TASK_TEST_GRID
-from mteb.mocks.mock_tasks import (
+from mteb.mocks import (
+    LegacyMockClusteringFastTask,
+    MockBitextMiningTask,
+    MockClassificationTask,
+    MockClusteringTask,
     MockInstructionReranking,
+    MockInstructionRetrieval,
+    MockMultilabelClassification,
+    MockMultilingualBitextMiningTask,
+    MockMultilingualClassificationTask,
+    MockMultilingualClusteringFastTask,
+    MockMultilingualClusteringTask,
+    MockMultilingualInstructionReranking,
+    MockMultilingualInstructionRetrieval,
+    MockMultilingualMultilabelClassification,
+    MockMultilingualPairClassificationTask,
+    MockMultilingualParallelBitextMiningTask,
+    MockMultilingualRerankingTask,
+    MockMultilingualRetrievalTask,
+    MockMultilingualSTSTask,
+    MockMultilingualSummarizationTask,
+    MockPairClassificationTask,
+    MockRegressionTask,
     MockRerankingTask,
+    MockRetrievalDialogTask,
+    MockRetrievalTask,
+    MockSTSTask,
+    MockSummarizationTask,
+    MockTextZeroShotClassificationTask,
 )
 from mteb.models import ModelMeta
+from tests.test_integrations._model_info import ModelInfo, assert_final_score
 
 logging.basicConfig(level=logging.INFO)
 
 
-@pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID)
-@pytest.mark.parametrize("model_name", ["average_word_embeddings_levy_dependency"])
-def test_sentence_transformer_integration(task: AbsTask, model_name: str):
-    """Test that a task can be fetched and run"""
-    model = SentenceTransformer(model_name)
+def _load_sentence_transformer(name: str) -> SentenceTransformer:
+    model = SentenceTransformer(name)
     # Prior to https://github.com/embeddings-benchmark/mteb/pull/3079 the
     # SentenceTransformerWrapper would set the model's prompts to None because
     # the mock tasks are not in the MTEB task registry. The linked PR changes
     # this behavior and keeps the prompts as configured by the model, so this
-    # test now sets the prompts to an empty dict explicitly to preserve the legacy
-    # behavior and focus the test on the tasks instead of the prompts.
-    # Using empty dict instead of None to avoid TypeError in SentenceTransformers 5.0.0+
+    # test clears the prompts explicitly to preserve the legacy behavior and
+    # focus the test on the tasks instead of the prompts. Using an empty dict
+    # instead of None avoids a TypeError in SentenceTransformers 5.0.0+.
     model.prompts = {}
-    mteb.evaluate(model, task, cache=None)
+    return model
+
+
+SENTENCE_TRANSFORMER_MODEL = ModelInfo(
+    name="average_word_embeddings_levy_dependency",
+    loader=_load_sentence_transformer,
+    expected_scores={
+        MockMultilingualBitextMiningTask: 0.5,
+        MockMultilingualParallelBitextMiningTask: 0.5,
+        MockMultilingualClassificationTask: 0.5,
+        MockMultilingualClusteringTask: 0.0,
+        MockMultilingualClusteringFastTask: 0.0,
+        MockMultilingualPairClassificationTask: 1.0,
+        MockMultilingualRerankingTask: 0.75,
+        MockMultilingualRetrievalTask: 0.81546,
+        MockMultilingualSTSTask: 1.0,
+        MockMultilingualMultilabelClassification: 1.0,
+        MockMultilingualSummarizationTask: float("nan"),
+        MockMultilingualInstructionRetrieval: 0.81546,
+        MockMultilingualInstructionReranking: 0.81546,
+        MockBitextMiningTask: 0.5,
+        MockClassificationTask: 0.5,
+        MockRegressionTask: float("nan"),
+        MockClusteringTask: 0.0,
+        LegacyMockClusteringFastTask: 0.0,
+        MockPairClassificationTask: 1.0,
+        MockRerankingTask: 0.75,
+        MockRetrievalTask: 0.81546,
+        MockSTSTask: 1.0,
+        MockMultilabelClassification: 1.0,
+        MockSummarizationTask: float("nan"),
+        MockInstructionRetrieval: 0.81546,
+        MockInstructionReranking: 0.81546,
+        MockRetrievalDialogTask: 0.81546,
+        MockTextZeroShotClassificationTask: 0.5,
+    },
+)
+CROSS_ENCODER_MODEL = ModelInfo(
+    name="cross-encoder/ms-marco-TinyBERT-L2-v2",
+    loader=CrossEncoder,
+    expected_scores={
+        MockRerankingTask: 0.5,
+        MockInstructionReranking: 0.63093,
+    },
+)
 
 
 @pytest.mark.parametrize(
-    "task",
-    [
-        MockRerankingTask(),
-        MockInstructionReranking(),
-    ],
+    ("model", "task", "expected_score"), SENTENCE_TRANSFORMER_MODEL
 )
-@pytest.mark.parametrize("model_name", ["cross-encoder/ms-marco-TinyBERT-L2-v2"])
-def test_sentence_transformer_integration_cross_encoder(task: AbsTask, model_name: str):
-    """Test that a task can be fetched and run"""
-    model = CrossEncoder(model_name)
-    mteb.evaluate(model, task, cache=None)
+def test_sentence_transformer_integration(
+    model: mteb.EncoderProtocol, task: AbsTask, expected_score: float
+):
+    """Test that a task can be fetched and produces the expected final score."""
+    assert_final_score(model, task, expected_score)
+
+
+@pytest.mark.parametrize(("model", "task", "expected_score"), CROSS_ENCODER_MODEL)
+def test_sentence_transformer_integration_cross_encoder(
+    model: mteb.EncoderProtocol, task: AbsTask, expected_score: float
+):
+    """Test that a task can be fetched and produces the expected final score."""
+    assert_final_score(model, task, expected_score)
 
 
 def test_model_meta_load_sentence_transformer_metadata_from_model():
