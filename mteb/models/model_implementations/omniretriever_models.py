@@ -116,7 +116,7 @@ class OmniRetrieverWrapper(AbsEncoder):
         )
 
     @staticmethod
-    def _load_processor(base_model_name_or_path: str, revision: str) -> Any:
+    def _load_processor(base_model_name_or_path: str, revision: str) -> Any:  # noqa: ANN401 -- class resolved dynamically from the repo's auto_map
         """Load WAVE-7B's multimodal processor.
 
         The backbone repo ships no ``processor_config.json``, so
