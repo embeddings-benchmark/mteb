@@ -1,0 +1,52 @@
+[
+  {
+    "model": "jinaai/jina-embeddings-v5-omni-nano",
+    "n_items": {
+      "text": 120,
+      "image": 120,
+      "audio_human": 120,
+      "audio_tts": 120
+    },
+    "gap": {
+      "text_vs_image": 0.44087672233581543,
+      "text_vs_audio_human": 0.5440613627433777,
+      "text_vs_audio_tts": 0.5018681883811951,
+      "image_vs_audio_human": 0.6142677068710327,
+      "image_vs_audio_tts": 0.5870931148529053,
+      "audio_human_vs_audio_tts": 0.052007973194122314
+    },
+    "spread": {
+      "text": 0.8487433195114136,
+      "image": 0.6475238800048828,
+      "audio_human": 0.7911628484725952,
+      "audio_tts": 0.7829360961914062
+    }
+  },
+  {
+    "model": "jinaai/jina-embeddings-v5-omni-small",
+    "n_items": {
+      "text": 120,
+      "image": 120,
+      "audio_human": 120,
+      "audio_tts": 120
+    },
+    "gap": {
+      "text_vs_image": 0.5951758027076721,
+      "text_vs_audio_human": 0.4202243685722351,
+      "text_vs_audio_tts": 0.4436948299407959,
+      "image_vs_audio_human": 0.6523242592811584,
+      "image_vs_audio_tts": 0.6408365964889526,
+      "audio_human_vs_audio_tts": 0.10507869720458984
+    },
+    "spread": {
+      "text": 0.852222204208374,
+      "image": 0.45253074169158936,
+      "audio_human": 0.8037514686584473,
+      "audio_tts": 0.776252806186676
+    }
+  },
+  {
+    "model": "BidirLM/BidirLM-Omni-2.5B-Embedding",
+    "error": "fewer than 2 modalities encoded"
+  }
+]
