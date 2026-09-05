@@ -584,8 +584,12 @@ def calculate_retrieval_scores(  # noqa: PLR0914
     skip_first_result: bool = False,
 ) -> RetrievalEvaluationResult:
     if skip_first_result:
+        # tie-break by doc id descending, like every other ranking in this module (#5092);
+        # a score-only sort is stable, so which doc got dropped followed dict insertion order
         results = {
-            qid: dict(sorted(doc_scores.items(), key=lambda x: x[1], reverse=True)[1:])
+            qid: dict(
+                sorted(doc_scores.items(), key=lambda x: (x[1], x[0]), reverse=True)[1:]
+            )
             for qid, doc_scores in results.items()
         }
 
