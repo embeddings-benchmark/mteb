@@ -24,9 +24,32 @@ Examples:
 from __future__ import annotations
 
 import argparse
+import re
 from pathlib import Path
 
 from datasets import Audio, Dataset, DatasetDict, Features, Image, Value, load_dataset
+from datasets.features.audio import Audio as _AudioFeature
+
+
+def _patched_audio_encode(self, value):
+    """Skip torchcodec for pre-encoded {"bytes": ..., "path": ...} dicts.
+
+    datasets 5.0.0 unconditionally imports torchcodec at the top of
+    encode_example even for the bytes-dict path that doesn't need it.
+    """
+    if isinstance(value, dict) and (value.get("bytes") is not None or value.get("path") is not None):
+        return {"bytes": value.get("bytes"), "path": value.get("path")}
+    return _patched_audio_encode._orig(self, value)
+
+
+_patched_audio_encode._orig = _AudioFeature.encode_example
+_AudioFeature.encode_example = _patched_audio_encode
+
+
+def _coco_id_from_path(path: str) -> str | None:
+    """Extract 12-digit zero-padded COCO image ID from a filename like COCO_val2014_000000391895.jpg."""
+    m = re.search(r"(\d{12})\.jpg", path)
+    return m.group(1) if m else None
 
 _SPOKEN_COCO = "whybe-choi/SpokenCOCOA2IRetrieval"
 _SPEECH_COCO = "dukesun99/SpeechCoco-A2I"
@@ -41,6 +64,7 @@ def _load_spoken_coco() -> tuple[dict[str, bytes], dict[str, bytes]]:
     """Return (image_id -> image_bytes, image_id -> human_audio_bytes)."""
     print("Loading SpokenCOCO corpus …")
     corpus = load_dataset(_SPOKEN_COCO, "corpus", split=_SPLIT)
+    corpus = corpus.cast_column("image", Image(decode=False))
     images: dict[str, bytes] = {}
     for row in corpus:
         img = row["image"]
@@ -57,8 +81,9 @@ def _load_spoken_coco() -> tuple[dict[str, bytes], dict[str, bytes]]:
 
     print("Loading SpokenCOCO queries (audio) …")
     queries = load_dataset(_SPOKEN_COCO, "queries", split=_SPLIT)
-    # image-id -> first audio bytes
-    human_by_image: dict[str, bytes] = {}
+    queries = queries.cast_column("audio", Audio(decode=False))
+    # image-id -> first audio as {"bytes": ..., "path": None}
+    human_by_image: dict[str, dict] = {}
     for row in queries:
         qid = str(row["id"])
         img_id = q2img.get(qid)
@@ -67,45 +92,102 @@ def _load_spoken_coco() -> tuple[dict[str, bytes], dict[str, bytes]]:
         aud = row["audio"]
         raw = aud.get("bytes") if isinstance(aud, dict) else None
         if raw:
-            human_by_image[img_id] = raw
+            human_by_image[img_id] = {"bytes": raw, "path": None}
 
     print(f"  {len(human_by_image)} images with human audio")
-    return images, human_by_image
+    # Store images as {"bytes": ..., "path": None} dicts too
+    images_d: dict[str, dict] = {k: {"bytes": v, "path": None} for k, v in images.items()}
+    return images_d, human_by_image
 
 
 def _load_speech_coco() -> dict[str, bytes]:
-    """Return image_id -> TTS audio bytes from SpeechCoco."""
+    """Return coco_image_id -> TTS audio bytes from SpeechCoco.
+
+    SpeechCoco uses internal IDs like 'img-775' / 'q-57154'. We normalize to
+    the 12-digit COCO image ID by extracting it from the corpus image path
+    (e.g. COCO_val2014_000000000775.jpg -> '000000000775').
+    """
+    print("Loading SpeechCoco corpus (image paths for ID mapping) …")
+    corpus = load_dataset(_SPEECH_COCO, "corpus", split=_SPLIT)
+    corpus = corpus.cast_column("image", Image(decode=False))
+    img_id_to_coco: dict[str, str] = {}  # 'img-775' -> '000000000775'
+    for row in corpus:
+        img = row["image"]
+        path = img.get("path") if isinstance(img, dict) else None
+        if path:
+            coco_id = _coco_id_from_path(path)
+            if coco_id:
+                img_id_to_coco[str(row["id"])] = coco_id
+
+    print(f"  {len(img_id_to_coco)} corpus images mapped to COCO IDs")
+
     print("Loading SpeechCoco qrels …")
     qrels = load_dataset(_SPEECH_COCO, "qrels", split=_SPLIT)
-    q2img = {str(r["query-id"]): str(r["corpus-id"]) for r in qrels}
+    # query internal id -> corpus internal id -> coco id
+    q2coco: dict[str, str] = {}
+    for r in qrels:
+        coco_id = img_id_to_coco.get(str(r["corpus-id"]))
+        if coco_id:
+            q2coco[str(r["query-id"])] = coco_id
 
     print("Loading SpeechCoco queries (TTS audio) …")
     queries = load_dataset(_SPEECH_COCO, "queries", split=_SPLIT)
-    tts_by_image: dict[str, bytes] = {}
+    queries = queries.cast_column("audio", Audio(decode=False))
+    tts_by_image: dict[str, dict] = {}
     for row in queries:
         qid = str(row["id"])
-        img_id = q2img.get(qid)
-        if img_id is None or img_id in tts_by_image:
+        coco_id = q2coco.get(qid)
+        if coco_id is None or coco_id in tts_by_image:
             continue
         aud = row["audio"]
         raw = aud.get("bytes") if isinstance(aud, dict) else None
         if raw:
-            tts_by_image[img_id] = raw
+            tts_by_image[coco_id] = {"bytes": raw, "path": None}
 
     print(f"  {len(tts_by_image)} images with TTS audio")
     return tts_by_image
 
 
 def _load_mscoco_text() -> dict[str, str]:
-    """Return image_id -> text caption from MSCOCO MBEIR corpus."""
-    print("Loading MSCOCO corpus (text + image) …")
-    # mbeir uses split name "corpus", not "test"
+    """Return coco_image_id -> text caption from MSCOCO MBEIR.
+
+    MBEIR uses compound IDs like '9:1'. The corpus is images-only (text=None).
+    Text captions are in the 'query' config. We map compound IDs to 12-digit
+    COCO image IDs via the corpus image paths, then follow qrels to get captions.
+    """
+    print("Loading MSCOCO corpus (image paths for ID mapping) …")
     corpus = load_dataset(_MSCOCO, "corpus", split="corpus")
-    text_by_image: dict[str, str] = {}
+    corpus = corpus.cast_column("image", Image(decode=False))
+    compound_to_coco: dict[str, str] = {}  # '9:1' -> '000000391895'
     for row in corpus:
-        iid = str(row["id"])
-        if iid not in text_by_image and row.get("text"):
-            text_by_image[iid] = str(row["text"])
+        img = row["image"]
+        path = img.get("path") if isinstance(img, dict) else None
+        if path:
+            coco_id = _coco_id_from_path(path)
+            if coco_id:
+                compound_to_coco[str(row["id"])] = coco_id
+
+    print(f"  {len(compound_to_coco)} corpus images mapped to COCO IDs")
+
+    print("Loading MSCOCO qrels …")
+    qrels = load_dataset(_MSCOCO, "qrels", split=_SPLIT)
+    query_to_coco: dict[str, str] = {}
+    for r in qrels:
+        coco_id = compound_to_coco.get(str(r["corpus-id"]))
+        if coco_id:
+            query_to_coco[str(r["query-id"])] = coco_id
+
+    print("Loading MSCOCO text queries …")
+    queries = load_dataset(_MSCOCO, "query", split=_SPLIT)
+    text_by_image: dict[str, str] = {}
+    for row in queries:
+        qid = str(row["id"])
+        coco_id = query_to_coco.get(qid)
+        if coco_id is None or coco_id in text_by_image:
+            continue
+        if row.get("text"):
+            text_by_image[coco_id] = str(row["text"])
+
     print(f"  {len(text_by_image)} images with text captions")
     return text_by_image
 
@@ -230,6 +312,16 @@ def stage_build(work: Path) -> None:
 
 
 def stage_push(work: Path, repo: str) -> None:
+    """Push to HuggingFace using the MTEB retrieval format.
+
+    MTEB loads retrieval datasets as:
+      load_dataset(path, name=f"{task}-corpus",  split="test")
+      load_dataset(path, name=f"{task}-queries", split="test")
+      load_dataset(path, name=f"{task}-qrels",   split="test")
+
+    So we push 18 HF configs (6 task directions × 3 data types), each with a
+    single "test" split, rather than 6 configs with 3 splits each.
+    """
     from datasets import load_from_disk
 
     from huggingface_hub import HfApi
@@ -242,9 +334,12 @@ def stage_push(work: Path, repo: str) -> None:
         if not cfg_path.exists():
             raise FileNotFoundError(f"{cfg_path} not found — run --stage build first")
         dd = load_from_disk(str(cfg_path))
+        # Push each split as its own HF config: "{task}-corpus", "{task}-queries", "{task}-qrels"
         for split_name, ds in dd.items():
-            ds.push_to_hub(repo, config_name=cfg_name, split=split_name)
-        print(f"Pushed config '{cfg_name}'")
+            hf_config = f"{cfg_name}-{split_name}"
+            ds.push_to_hub(repo, config_name=hf_config, split="test")
+            print(f"  Pushed '{hf_config}'")
+        print(f"Done: '{cfg_name}'")
 
     info = api.dataset_info(repo)
     print(f"\nPushed to {repo}\nRevision: {info.sha}")

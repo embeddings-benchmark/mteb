@@ -24,8 +24,8 @@ from __future__ import annotations
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
-_DATASET_PATH = "mteb/coco-modality-equivalence"
-_DATASET_REVISION = "PLACEHOLDER"  # fill after dataset is uploaded
+_DATASET_PATH = "rakshi719/coco-modality-equivalence"
+_DATASET_REVISION = "3aabaa047c92980e12628149df52425757b3f8a6"
 
 _REFERENCE = "https://github.com/embeddings-benchmark/mteb/issues/5358"
 
