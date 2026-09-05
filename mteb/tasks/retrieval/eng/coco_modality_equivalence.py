@@ -30,26 +30,25 @@ _DATASET_REVISION = "PLACEHOLDER"  # fill after dataset is uploaded
 _REFERENCE = "https://github.com/embeddings-benchmark/mteb/issues/5358"
 
 _BIBTEX = r"""
-@inproceedings{lin2014microsoft,
-  author = {Lin, Tsung-Yi and Maire, Michael and Belongie, Serge and Hays, James
-            and Perona, Pietro and Ramanan, Deva and Doll{\'a}r, Piotr
-            and Zitnick, C Lawrence},
-  booktitle = {Computer Vision--ECCV 2014},
-  title = {Microsoft coco: Common objects in context},
-  year = {2014},
-}
-@inproceedings{hsu2021spokencoco,
-  author = {Hsu, Wei-Ning and Harwath, David and Miller, Tyler and Song, Christopher
-            and Glass, James},
-  booktitle = {Proceedings of ACL-IJCNLP 2021},
-  title = {Text-Free Image-to-Speech Synthesis Using Learned Segmental Units},
-  year = {2021},
-}
 @inproceedings{havard2017speechcoco,
   author = {Havard, William and Besacier, Laurent and Rosec, Olivier},
   booktitle = {GLU 2017 Workshop},
   title = {SPEECH-COCO: 600k Visually Grounded Spoken Captions Aligned to MSCOCO},
   year = {2017},
+}
+
+@inproceedings{hsu2021spokencoco,
+  author = {Hsu, Wei-Ning and Harwath, David and Miller, Tyler and Song, Christopher and Glass, James},
+  booktitle = {Proceedings of ACL-IJCNLP 2021},
+  title = {Text-Free Image-to-Speech Synthesis Using Learned Segmental Units},
+  year = {2021},
+}
+
+@inproceedings{lin2014microsoft,
+  author = {Lin, Tsung-Yi and Maire, Michael and Belongie, Serge and Hays, James and Perona, Pietro and Ramanan, Deva and Doll{\'a}r, Piotr and Zitnick, C Lawrence},
+  booktitle = {Computer Vision--ECCV 2014},
+  title = {Microsoft coco: Common objects in context},
+  year = {2014},
 }
 """
 

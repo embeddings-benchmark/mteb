@@ -151,9 +151,12 @@ def stage_build(work: Path) -> None:
         )
 
     print(f"Building dataset with {len(rows)} items …")
-    ds = Dataset.from_list(rows).cast_column("image", Image()).cast_column(
-        "audio_human", Audio(sampling_rate=16_000)
-    ).cast_column("audio_tts", Audio(sampling_rate=16_000))
+    ds = (
+        Dataset.from_list(rows)
+        .cast_column("image", Image())
+        .cast_column("audio_human", Audio(sampling_rate=16_000))
+        .cast_column("audio_tts", Audio(sampling_rate=16_000))
+    )
 
     out = work / "dataset"
     ds.save_to_disk(str(out))
