@@ -303,8 +303,13 @@ def _prepare_dataset(
                 num_proc=num_proc,
             )
         elif prompt_type == PromptType.query:
-            # an interleaved query set may leave the first rows without text
-            first_text = next((text for text in dataset["text"] if text), None)
+            # An interleaved query set may leave the first rows without text, so
+            # the format is decided by the first row that carries a value. Only
+            # None means "no value" here: an empty conversation is still a list,
+            # and an empty string is still a string.
+            first_text = next(
+                (text for text in dataset["text"] if text is not None), None
+            )
             if isinstance(first_text, list):
                 dataset = dataset.map(
                     _convert_conv_history_to_query,

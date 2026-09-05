@@ -169,6 +169,8 @@ your_model = ModelMeta(
 
 A multimodal dataset may interleave modality coverage: every batch has a column per modality the task declares, but an individual row only carries the ones it has. An absent text arrives as `""` and every other absent modality as `None`, so a model that fuses modalities cannot assume each row carries all of them.
 
+Collation normalizes a missing text (`None`) to `""`, so at encoding time a model cannot tell it apart from a genuinely empty text. `is_modality_present` therefore treats both as "this row carries no text" — which is what a fusion model wants, since embedding `""` would add a constant vector to every text-less row. The `""`-vs-`None` distinction is preserved in the raw dataset and in the descriptive statistics; a model that needs it at encoding time has to carry its own mask column.
+
 Use `mteb.models.modality_utils` to encode each row from what it actually has:
 
 ```python

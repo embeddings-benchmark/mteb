@@ -10,7 +10,10 @@ carrying only text, others only an image, others both:
 A batch therefore always has a column per declared modality, but an individual row
 may not carry a value for it. `""` marks an absent text (the dataloader normalizes
 `None` to it, so that text encoders never see a `None`) and `None` marks any other
-absent modality.
+absent modality. Because of that normalization a model cannot tell an absent text
+from a genuinely empty one; the distinction is preserved in the raw dataset and in
+the descriptive statistics, and a task needing it at encoding time must carry its
+own mask column.
 
 Models that fuse modalities per row should encode only the rows that carry each
 modality and combine the results by row, rather than assuming every row carries
@@ -28,14 +31,22 @@ if TYPE_CHECKING:
 
 
 def is_modality_present(value: object) -> bool:
-    """Whether a single value in a batch column carries data.
+    """Whether a single value in a batch column carries data to encode.
+
+    Note:
+        Collation normalizes an absent text (`None`) to `""`, so by the time a batch
+        reaches a model the two are indistinguishable and both are reported absent
+        here. That is what a fusion model wants — embedding `""` would add a constant
+        vector to every text-less row — but it means this predicate is about
+        "something to encode", not about the `""`-vs-`None` distinction, which
+        survives only in the raw dataset and the descriptive statistics.
 
     Args:
         value: One entry of a modality column, e.g. `batch["image"][3]`.
 
     Returns:
-        False if the row carries nothing for that modality — `None`, the empty
-        string used for absent text, or an empty list of images/frames — else True.
+        False if the row carries nothing to encode for that modality — `None`, an
+        empty string, or an empty list of images/frames — else True.
     """
     if value is None:
         return False

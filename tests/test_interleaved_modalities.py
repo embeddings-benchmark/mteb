@@ -97,6 +97,51 @@ def test_interleaved_queries_dataloader(images):
     assert batch["image"][1] is None
 
 
+def test_conversation_is_detected_from_the_first_row_that_has_text():
+    """An empty conversation is still a conversation, and a text-less row is skipped."""
+    queries = Dataset.from_dict(
+        {
+            "id": ["q0", "q1", "q2"],
+            "text": [
+                None,  # carries no text at all
+                [],  # an empty conversation history is still a list
+                [{"role": "user", "content": "a turn"}],
+            ],
+        }
+    )
+    loader = create_dataloader(
+        queries,
+        task_metadata=_task_metadata("t2t", ["text"]),
+        prompt_type=PromptType.query,
+        batch_size=3,
+    )
+    (batch,) = list(loader)
+
+    assert "conversation" in batch, "should route through the conversation path"
+    assert batch["conversation"][2] == [{"role": "user", "content": "a turn"}]
+    assert batch["text"] == ["", "", "user: a turn"]
+
+
+def test_conversation_detection_when_every_history_is_empty():
+    """An all-empty conversation column is still a conversation column.
+
+    Guards the detection against a truthiness check, which would see nothing at all
+    here and misroute the dataset through the plain-text query path.
+    """
+    queries = Dataset.from_dict({"id": ["q0", "q1"], "text": [None, []]})
+    loader = create_dataloader(
+        queries,
+        task_metadata=_task_metadata("t2t", ["text"]),
+        prompt_type=PromptType.query,
+        batch_size=2,
+    )
+    (batch,) = list(loader)
+
+    assert "conversation" in batch
+    assert batch["conversation"] == [[], []]
+    assert batch["text"] == ["", ""]
+
+
 def test_missing_value_outside_an_input_column_still_raises():
     """A None in `id` is a broken dataset, not an interleaved one."""
     dataset = Dataset.from_dict(

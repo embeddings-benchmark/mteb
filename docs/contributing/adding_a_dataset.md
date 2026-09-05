@@ -549,7 +549,9 @@ Dataset.from_dict(
 
 Descriptive statistics count only the rows that carry each modality, so the example above reports two texts and two images across its three documents.
 
-Models receive the absence explicitly: an absent text is passed as `""` (so text encoders never see a `None`) and every other absent modality as `None`. A model that fuses modalities per row should encode only the modalities each row carries — see `mteb.models.modality_utils` for the helpers, and `CLIPModel.get_fused_embeddings` for a worked example:
+At encoding time, absent text values are normalized to `""` (so text encoders never see `None`) and every other absent modality to `None`. If your dataset can contain genuinely empty texts (`""`) as well as missing texts (`None`), models cannot distinguish them after collation unless you provide an explicit mask column.
+
+A model that fuses modalities per row should encode only the modalities each row carries — see `mteb.models.modality_utils` for the helpers, and `CLIPModel.get_fused_embeddings` for a worked example:
 
 ```python
 from mteb.models.modality_utils import get_present_indices

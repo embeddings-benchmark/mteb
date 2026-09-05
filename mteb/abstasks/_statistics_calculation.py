@@ -21,7 +21,7 @@ from mteb.types.statistics import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterable, Mapping
+    from collections.abc import Callable, Iterable, Mapping, Sequence
 
     from PIL import Image
     from torchcodec.decoders import VideoDecoder  # type: ignore[attr-defined]
@@ -40,15 +40,23 @@ functions then exclude those rows from the reported statistics.
 """
 
 
-def compute_text_hashes(texts: list[str], max_workers: int | None = None) -> list[str]:
-    """Return a hash per text — for text, the string itself is the identity key."""
+def compute_text_hashes(
+    texts: Sequence[str | None], max_workers: int | None = None
+) -> list[str]:
+    """Return a hash per text — for text, the string itself is the identity key.
+
+    Entries are None for rows of an interleaved dataset that carry no text.
+    """
     return [text if text is not None else MISSING_MODALITY_HASH for text in texts]
 
 
 def compute_image_hashes(
-    images: list[Image.Image], max_workers: int | None = None
+    images: Sequence[Image.Image | None], max_workers: int | None = None
 ) -> list[str]:
-    """Return a per-image MD5 hash of the raw pixel bytes."""
+    """Return a per-image MD5 hash of the raw pixel bytes.
+
+    Entries are None for rows of an interleaved dataset that carry no image.
+    """
 
     def _hash_one(img: Image.Image | None) -> str:
         if img is None:
@@ -60,9 +68,12 @@ def compute_image_hashes(
 
 
 def compute_audio_hashes(
-    audios: list[AudioInputItem], max_workers: int | None = None
+    audios: Sequence[AudioInputItem | None], max_workers: int | None = None
 ) -> list[str]:
-    """Return a per-audio MD5 hash of the raw sample array bytes."""
+    """Return a per-audio MD5 hash of the raw sample array bytes.
+
+    Entries are None for rows of an interleaved dataset that carry no audio.
+    """
 
     def _hash_one(audio: AudioInputItem | None) -> str:
         if audio is None:
@@ -74,7 +85,7 @@ def compute_audio_hashes(
 
 
 def compute_video_hashes(
-    videos: list[VideoDecoder], max_workers: int | None = None
+    videos: Sequence[VideoDecoder | None], max_workers: int | None = None
 ) -> list[str]:
     """Return a per-video MD5 hash derived from the first decoded frame.
 
@@ -116,13 +127,15 @@ def compute_video_hashes(
 
 
 def calculate_text_statistics(
-    texts: list[str],
-    hashes: list[str] | None = None,
+    texts: Sequence[str | None],
+    hashes: Sequence[str] | None = None,
 ) -> TextStatistics:
     """Calculate descriptive statistics for a list of texts.
 
     Args:
-        texts: List of texts to analyze.
+        texts: List of texts to analyze. An entry is None for a row of an
+            interleaved dataset that carries no text; those rows are excluded
+            from the statistics.
         hashes: Optional pre-computed identity keys (from `compute_text_hashes`).
             When provided the function skips recomputing them.
 
@@ -155,15 +168,17 @@ def calculate_text_statistics(
 
 
 def calculate_image_statistics(
-    images: list[Image.Image],
-    hashes: list[str] | None = None,
+    images: Sequence[Image.Image | None],
+    hashes: Sequence[str] | None = None,
     max_workers: int | None = None,
 ) -> ImageStatistics:
     """Calculate descriptive statistics for a list of images.
 
     Args:
         images: List of images to analyze. Each image should have a ``size``
-            attribute returning ``(width, height)``.
+            attribute returning ``(width, height)``. An entry is None for a row of
+            an interleaved dataset that carries no image; those rows are excluded
+            from the statistics.
         hashes: Optional pre-computed MD5 hashes (from `compute_image_hashes`).
             When provided the function skips recomputing them.
         max_workers: Maximum number of worker threads for parallel hash computation.
@@ -206,15 +221,17 @@ def calculate_image_statistics(
 
 
 def calculate_audio_statistics(
-    audios: list[AudioInputItem],
-    hashes: list[str] | None = None,
+    audios: Sequence[AudioInputItem | None],
+    hashes: Sequence[str] | None = None,
     max_workers: int | None = None,
 ) -> AudioStatistics:
     """Calculate descriptive statistics for a list of audio clips.
 
     Args:
         audios: List of audio clips to analyze. Each clip must have ``array``
-            and ``sampling_rate`` keys.
+            and ``sampling_rate`` keys. An entry is None for a row of an
+            interleaved dataset that carries no audio; those rows are excluded
+            from the statistics.
         hashes: Optional pre-computed MD5 hashes (from `compute_audio_hashes`).
             When provided the function skips recomputing them.
         max_workers: Maximum number of worker threads for parallel hash computation.
@@ -263,14 +280,16 @@ def calculate_audio_statistics(
 
 
 def calculate_video_statistics(  # noqa: PLR0914
-    videos: list[VideoDecoder],
-    hashes: list[str] | None = None,
+    videos: Sequence[VideoDecoder | None],
+    hashes: Sequence[str] | None = None,
     max_workers: int | None = None,
 ) -> VideoStatistics:
     """Calculate descriptive statistics for a list of video clips.
 
     Args:
-        videos: List of VideoDecoder objects to analyze.
+        videos: List of VideoDecoder objects to analyze. An entry is None for a
+            row of an interleaved dataset that carries no video; those rows are
+            excluded from the statistics.
         hashes: Optional pre-computed MD5 hashes (from `compute_video_hashes`).
             When provided the function skips decoding the first frame again, which
             is the most expensive part of this function.
