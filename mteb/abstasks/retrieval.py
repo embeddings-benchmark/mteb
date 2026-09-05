@@ -563,7 +563,12 @@ class AbsTaskRetrieval(AbsTask):
             queries_ = queries
             if "instruction" in queries_[0]:
                 queries_ = _combine_queries_with_instruction_text(queries_)
-            if isinstance(queries_["text"][0], dict | list):
+            # decided by the first query that carries a value, since an interleaved
+            # query set may leave the first rows without text
+            first_text = next(
+                (text for text in queries_["text"] if text is not None), None
+            )
+            if isinstance(first_text, dict | list):
                 queries_ = queries_.map(_convert_conv_history_to_query)
             queries_col_inputs["text"] = queries_["text"]
         if "image" in queries_modalities:

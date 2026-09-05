@@ -21,7 +21,7 @@ from mteb.types.statistics import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterable, Mapping
+    from collections.abc import Callable, Iterable, Mapping, Sequence
 
     from PIL import Image
     from torchcodec.decoders import VideoDecoder  # type: ignore[attr-defined]
@@ -30,17 +30,37 @@ if TYPE_CHECKING:
     from mteb.types._encoder_io import AudioInputItem
 
 
-def compute_text_hashes(texts: list[str], max_workers: int | None = None) -> list[str]:
-    """Return a hash per text — for text, the string itself is the identity key."""
-    return texts
+MISSING_MODALITY_HASH = "__mteb_missing_modality__"
+"""Hash standing in for a row of an interleaved dataset that carries no value for a modality.
+
+The ``compute_*_hashes`` functions stay row-aligned with their input — callers such as
+`_count_samples_in_train` zip the per-modality hash lists positionally — so a missing
+entry is given this sentinel instead of being dropped. The ``calculate_*_statistics``
+functions then exclude those rows from the reported statistics.
+"""
+
+
+def compute_text_hashes(
+    texts: Sequence[str | None], max_workers: int | None = None
+) -> list[str]:
+    """Return a hash per text — for text, the string itself is the identity key.
+
+    Entries are None for rows of an interleaved dataset that carry no text.
+    """
+    return [text if text is not None else MISSING_MODALITY_HASH for text in texts]
 
 
 def compute_image_hashes(
-    images: list[Image.Image], max_workers: int | None = None
+    images: Sequence[Image.Image | None], max_workers: int | None = None
 ) -> list[str]:
-    """Return a per-image MD5 hash of the raw pixel bytes."""
+    """Return a per-image MD5 hash of the raw pixel bytes.
 
-    def _hash_one(img: Image.Image) -> str:
+    Entries are None for rows of an interleaved dataset that carry no image.
+    """
+
+    def _hash_one(img: Image.Image | None) -> str:
+        if img is None:
+            return MISSING_MODALITY_HASH
         return hashlib.md5(img.tobytes(), usedforsecurity=False).hexdigest()
 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
@@ -48,11 +68,16 @@ def compute_image_hashes(
 
 
 def compute_audio_hashes(
-    audios: list[AudioInputItem], max_workers: int | None = None
+    audios: Sequence[AudioInputItem | None], max_workers: int | None = None
 ) -> list[str]:
-    """Return a per-audio MD5 hash of the raw sample array bytes."""
+    """Return a per-audio MD5 hash of the raw sample array bytes.
 
-    def _hash_one(audio: AudioInputItem) -> str:
+    Entries are None for rows of an interleaved dataset that carry no audio.
+    """
+
+    def _hash_one(audio: AudioInputItem | None) -> str:
+        if audio is None:
+            return MISSING_MODALITY_HASH
         return hashlib.md5(audio["array"].tobytes(), usedforsecurity=False).hexdigest()
 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
@@ -60,7 +85,7 @@ def compute_audio_hashes(
 
 
 def compute_video_hashes(
-    videos: list[VideoDecoder], max_workers: int | None = None
+    videos: Sequence[VideoDecoder | None], max_workers: int | None = None
 ) -> list[str]:
     """Return a per-video MD5 hash derived from the first decoded frame.
 
@@ -69,7 +94,9 @@ def compute_video_hashes(
     and avoid repeating the decode.
     """
 
-    def _hash_one(video: VideoDecoder) -> str:
+    def _hash_one(video: VideoDecoder | None) -> str:
+        if video is None:
+            return MISSING_MODALITY_HASH
         meta = video.metadata
         # Drop the last frame index because some container metadata over-counts
         # by one (the final claimed frame fails to decode).
@@ -100,13 +127,15 @@ def compute_video_hashes(
 
 
 def calculate_text_statistics(
-    texts: list[str],
-    hashes: list[str] | None = None,
+    texts: Sequence[str | None],
+    hashes: Sequence[str] | None = None,
 ) -> TextStatistics:
     """Calculate descriptive statistics for a list of texts.
 
     Args:
-        texts: List of texts to analyze.
+        texts: List of texts to analyze. An entry is None for a row of an
+            interleaved dataset that carries no text; those rows are excluded
+            from the statistics.
         hashes: Optional pre-computed identity keys (from `compute_text_hashes`).
             When provided the function skips recomputing them.
 
@@ -115,26 +144,41 @@ def calculate_text_statistics(
     """
     if hashes is None:
         hashes = compute_text_hashes(texts)
-    lengths = [len(text) for text in texts]
+    present = [
+        (text, hash_)
+        for text, hash_ in zip(texts, hashes, strict=True)
+        if text is not None
+    ]
+    if not present:
+        return TextStatistics(
+            total_text_length=0,
+            min_text_length=0,
+            average_text_length=0.0,
+            max_text_length=0,
+            unique_texts=0,
+        )
+    lengths = [len(text) for text, _ in present]
     return TextStatistics(
         total_text_length=sum(lengths),
         min_text_length=min(lengths),
         average_text_length=sum(lengths) / len(lengths),
         max_text_length=max(lengths),
-        unique_texts=len(set(hashes)),
+        unique_texts=len({hash_ for _, hash_ in present}),
     )
 
 
 def calculate_image_statistics(
-    images: list[Image.Image],
-    hashes: list[str] | None = None,
+    images: Sequence[Image.Image | None],
+    hashes: Sequence[str] | None = None,
     max_workers: int | None = None,
 ) -> ImageStatistics:
     """Calculate descriptive statistics for a list of images.
 
     Args:
         images: List of images to analyze. Each image should have a ``size``
-            attribute returning ``(width, height)``.
+            attribute returning ``(width, height)``. An entry is None for a row of
+            an interleaved dataset that carries no image; those rows are excluded
+            from the statistics.
         hashes: Optional pre-computed MD5 hashes (from `compute_image_hashes`).
             When provided the function skips recomputing them.
         max_workers: Maximum number of worker threads for parallel hash computation.
@@ -144,12 +188,27 @@ def calculate_image_statistics(
     """
     if hashes is None:
         hashes = compute_image_hashes(images, max_workers=max_workers)
+    present_hashes = {
+        hash_ for img, hash_ in zip(images, hashes, strict=True) if img is not None
+    }
     img_widths, img_heights = [], []
     for img in tqdm(images, desc="Computing image statistics"):
+        if img is None:
+            continue
         width, height = img.size
         img_heights.append(height)
         img_widths.append(width)
 
+    if not img_widths:
+        return ImageStatistics(
+            min_image_width=0,
+            average_image_width=0,
+            max_image_width=0,
+            min_image_height=0,
+            average_image_height=0,
+            max_image_height=0,
+            unique_images=0,
+        )
     return ImageStatistics(
         min_image_width=min(img_widths),
         average_image_width=sum(img_widths) / len(img_widths),
@@ -157,20 +216,22 @@ def calculate_image_statistics(
         min_image_height=min(img_heights),
         average_image_height=sum(img_heights) / len(img_heights),
         max_image_height=max(img_heights),
-        unique_images=len(set(hashes)),
+        unique_images=len(present_hashes),
     )
 
 
 def calculate_audio_statistics(
-    audios: list[AudioInputItem],
-    hashes: list[str] | None = None,
+    audios: Sequence[AudioInputItem | None],
+    hashes: Sequence[str] | None = None,
     max_workers: int | None = None,
 ) -> AudioStatistics:
     """Calculate descriptive statistics for a list of audio clips.
 
     Args:
         audios: List of audio clips to analyze. Each clip must have ``array``
-            and ``sampling_rate`` keys.
+            and ``sampling_rate`` keys. An entry is None for a row of an
+            interleaved dataset that carries no audio; those rows are excluded
+            from the statistics.
         hashes: Optional pre-computed MD5 hashes (from `compute_audio_hashes`).
             When provided the function skips recomputing them.
         max_workers: Maximum number of worker threads for parallel hash computation.
@@ -180,37 +241,55 @@ def calculate_audio_statistics(
     """
     if hashes is None:
         hashes = compute_audio_hashes(audios, max_workers=max_workers)
+    present_hashes = {
+        hash_ for audio, hash_ in zip(audios, hashes, strict=True) if audio is not None
+    }
     audio_lengths = []
     sampling_rates: dict[int, int] = defaultdict(int)
 
     for audio in tqdm(audios, desc="Computing audio statistics"):
+        if audio is None:
+            continue
         array = audio["array"]
         sampling_rate = audio["sampling_rate"]
         audio_lengths.append(len(array) / sampling_rate)
         sampling_rates[sampling_rate] += 1
 
+    if not audio_lengths:
+        return AudioStatistics(
+            total_duration_seconds=0.0,
+            min_duration_seconds=0.0,
+            average_duration_seconds=0.0,
+            max_duration_seconds=0.0,
+            unique_audios=0,
+            average_sampling_rate=0.0,
+            sampling_rates={},
+        )
     return AudioStatistics(
         total_duration_seconds=sum(audio_lengths),
         min_duration_seconds=min(audio_lengths),
         average_duration_seconds=sum(audio_lengths) / len(audio_lengths),
         max_duration_seconds=max(audio_lengths),
-        unique_audios=len(set(hashes)),
+        unique_audios=len(present_hashes),
         average_sampling_rate=(
-            sum(rate * count for rate, count in sampling_rates.items()) / len(audios)
+            sum(rate * count for rate, count in sampling_rates.items())
+            / len(audio_lengths)
         ),
         sampling_rates=dict(sampling_rates),
     )
 
 
 def calculate_video_statistics(  # noqa: PLR0914
-    videos: list[VideoDecoder],
-    hashes: list[str] | None = None,
+    videos: Sequence[VideoDecoder | None],
+    hashes: Sequence[str] | None = None,
     max_workers: int | None = None,
 ) -> VideoStatistics:
     """Calculate descriptive statistics for a list of video clips.
 
     Args:
-        videos: List of VideoDecoder objects to analyze.
+        videos: List of VideoDecoder objects to analyze. An entry is None for a
+            row of an interleaved dataset that carries no video; those rows are
+            excluded from the statistics.
         hashes: Optional pre-computed MD5 hashes (from `compute_video_hashes`).
             When provided the function skips decoding the first frame again, which
             is the most expensive part of this function.
@@ -229,6 +308,8 @@ def calculate_video_statistics(  # noqa: PLR0914
     resolution_counts: dict[str, int] = defaultdict(int)
 
     for video in tqdm(videos, desc="Computing video statistics"):
+        if video is None:
+            continue
         meta = video.metadata
 
         num_frames = meta.num_frames
@@ -251,7 +332,32 @@ def calculate_video_statistics(  # noqa: PLR0914
         if meta.width is not None and meta.height is not None:
             resolution_counts[f"{meta.width}x{meta.height}"] += 1
 
-    n = len(videos)
+    # rows of an interleaved dataset that carry no video are excluded throughout
+    n = len(durations)
+    present_hashes = {
+        hash_ for video, hash_ in zip(videos, hashes, strict=True) if video is not None
+    }
+    if n == 0:
+        return VideoStatistics(
+            total_duration_seconds=None,
+            total_frames=None,
+            min_width=None,
+            average_width=None,
+            max_width=None,
+            min_height=None,
+            average_height=None,
+            max_height=None,
+            min_duration_seconds=None,
+            average_duration_seconds=None,
+            max_duration_seconds=None,
+            unique_videos=0,
+            average_fps=None,
+            fps={},
+            min_resolution=None,
+            average_resolution=None,
+            max_resolution=None,
+            resolutions={},
+        )
     all_durations = durations if None not in durations else None
     all_frames = frames_counts if None not in frames_counts else None
     all_widths = widths if None not in widths else None
@@ -289,7 +395,7 @@ def calculate_video_statistics(  # noqa: PLR0914
         if all_durations is not None
         else None,
         max_duration_seconds=max(all_durations) if all_durations is not None else None,  # type: ignore[type-var]
-        unique_videos=len(set(hashes)),
+        unique_videos=len(present_hashes),
         average_fps=sum(rate * count for rate, count in fps_counts.items()) / n
         if has_all_fps
         else None,

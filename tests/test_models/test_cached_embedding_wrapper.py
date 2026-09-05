@@ -13,6 +13,7 @@ import mteb
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.mocks.mock_tasks import (
+    MockAny2AnyRetrievalInterleavedIT2ITTask,
     MockMultiChoiceTask,
     MockRetrievalTask,
 )
@@ -264,6 +265,10 @@ class TestCachedEmbeddingWrapper:
             MockRetrievalTask(),
             mteb.get_model("mteb/baseline-random-encoder"),
         ),  # t2t
+        (
+            MockAny2AnyRetrievalInterleavedIT2ITTask(),
+            mteb.get_model("mteb/baseline-random-encoder"),
+        ),  # it2it, with rows that carry only one of the two modalities
     ],
 )
 def test_wrapper_mock_tasks(task: AbsTask, model: EncoderProtocol, tmp_path: Path):

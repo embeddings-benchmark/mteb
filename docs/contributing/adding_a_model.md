@@ -165,6 +165,24 @@ your_model = ModelMeta(
 )
 ```
 
+### Handling datasets with interleaved modalities
+
+A multimodal dataset may interleave modality coverage: every batch has a column per modality the task declares, but an individual row only carries the ones it has. An absent text arrives as `""` and every other absent modality as `None`, so a model that fuses modalities cannot assume each row carries all of them.
+
+Collation normalizes a missing text (`None`) to `""`, so at encoding time a model cannot tell it apart from a genuinely empty text. `is_modality_present` therefore treats both as "this row carries no text" — which is what a fusion model wants, since embedding `""` would add a constant vector to every text-less row. The `""`-vs-`None` distinction is preserved in the raw dataset and in the descriptive statistics; a model that needs it at encoding time has to carry its own mask column.
+
+Use `mteb.models.modality_utils` to encode each row from what it actually has:
+
+```python
+from mteb.models.modality_utils import get_present_indices
+
+for batch in inputs:
+    image_rows = get_present_indices(batch, "image")
+    image_embeddings = self.encode_images([batch["image"][i] for i in image_rows])
+    # scatter `image_embeddings` back onto rows `image_rows`
+```
+
+`CLIPModel.get_fused_embeddings` is a worked example. A model that only supports uniform batches can call `is_interleaved(batch, modality)` to fail with a clear message rather than inside its processor.
 
 ### Adding model dependencies
 If you are adding a model that requires additional dependencies, you can add them to the `pyproject.toml` file, under optional dependencies:
