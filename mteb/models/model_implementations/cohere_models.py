@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import time
 from functools import wraps
-from typing import TYPE_CHECKING, Any, Literal, get_args
+from typing import TYPE_CHECKING, Any, Literal, TypeVar, get_args
 
 import numpy as np
 import torch
@@ -13,7 +13,12 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import OutputDType, PromptType
 
+T = TypeVar("T")
+
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    import cohere
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -157,7 +162,7 @@ def retry_with_rate_limit(
     max_retries: int = 5,
     max_rpm: int = 300,
     initial_delay: float = 1.0,
-):
+) -> Callable[[Callable[..., T]], Callable[..., T | None]]:
     """Combined retry and rate limiting decorator.
 
     This decorator handles both proactive rate limiting (spacing requests)
@@ -173,9 +178,9 @@ def retry_with_rate_limit(
     """
     previous_call_ts: float | None = None
 
-    def decorator(func):
+    def decorator(func: Callable[..., T]) -> Callable[..., T | None]:
         @wraps(func)
-        def wrapper(self, *args: Any, **kwargs: Any):
+        def wrapper(self: AbsEncoder, *args: Any, **kwargs: Any) -> T | None:
             import cohere
 
             nonlocal previous_call_ts
@@ -247,7 +252,7 @@ class CohereTextEmbeddingModel(AbsEncoder):
         self._client = cohere.Client()
 
     @retry_with_rate_limit(max_retries=5, max_rpm=300)
-    def _embed_func(self, **kwargs: Any):
+    def _embed_func(self, **kwargs: Any) -> cohere.EmbedResponse:
         """Call Cohere embed API with retry and rate limiting."""
         return self._client.embed(**kwargs)
 

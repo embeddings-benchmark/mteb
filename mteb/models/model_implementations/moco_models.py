@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
 
 MOCOV3_CITATION = """@Article{chen2021mocov3,
@@ -22,7 +23,7 @@ MOCOV3_CITATION = """@Article{chen2021mocov3,
 }"""
 
 
-def mocov3_loader(model_name, **kwargs: Any):
+def mocov3_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
     import timm
 
     class MOCOv3Model(AbsEncoder):
@@ -58,7 +59,7 @@ def mocov3_loader(model_name, **kwargs: Any):
 
         @staticmethod
         def get_text_embeddings(
-            self,  # noqa: PLW0211
+            self: object,  # noqa: PLW0211
             texts: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
@@ -70,7 +71,7 @@ def mocov3_loader(model_name, **kwargs: Any):
             images: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_image_embeddings = []
 
             import torchvision.transforms.functional as F

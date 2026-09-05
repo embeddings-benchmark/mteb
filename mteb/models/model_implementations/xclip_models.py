@@ -43,7 +43,7 @@ class XCLIPModel(AbsEncoder):
         texts: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ):
+    ) -> Array:
         all_embeddings = []
 
         for batch in tqdm(texts, disable=not show_progress_bar, desc="Text Encoding"):
@@ -67,7 +67,7 @@ class XCLIPModel(AbsEncoder):
         videos: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ):
+    ) -> Array:
         all_embeddings = []
 
         for batch in tqdm(videos, disable=not show_progress_bar, desc="Video Encoding"):

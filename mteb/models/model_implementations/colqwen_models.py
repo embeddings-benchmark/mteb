@@ -11,10 +11,13 @@ from mteb.models.modality_collators import AudioCollator, VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    from collections.abc import Callable, Mapping
+
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types._encoder_io import AudioInputItem
 
 from .colpali_models import (
     COLPALI_CITATION,
@@ -136,7 +139,7 @@ class ColQwen3_5Wrapper(AbsEncoder):  # noqa: N801
         batch_size: int = 32,
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ):
+    ) -> Array:
         import torchvision.transforms.functional as F
         from PIL import Image
 
@@ -192,7 +195,7 @@ class ColQwen3_5Wrapper(AbsEncoder):  # noqa: N801
         )
         return padded
 
-    def similarity(self, a, b):
+    def similarity(self, a: Array, b: Array) -> Array:
         a = [torch.as_tensor(x) for x in a]
         b = [torch.as_tensor(x) for x in b]
         return self.processor.score_multi_vector(a, b, device=self.device)
@@ -265,9 +268,9 @@ class ColQwen3Wrapper(AbsEncoder):
         image_texts_pairs: DataLoader[BatchedInput] | None = None,
         batch_size: int = 32,
         show_progress_bar: bool = True,
-        fusion_mode="concat",
+        fusion_mode: str = "concat",
         **kwargs: Any,
-    ):
+    ) -> Array:
         import torchvision.transforms.functional as F
         from PIL import Image
 
@@ -319,7 +322,7 @@ class ColQwen3Wrapper(AbsEncoder):
         )
         return padded
 
-    def similarity(self, a, b):
+    def similarity(self, a: Array, b: Array) -> Array:
         return self.processor.score_multi_vector(a, b, device=self.device)
 
 
@@ -400,7 +403,13 @@ class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
             raise ValueError("All modalities must have the same number of items")
         return torch.cat(embeddings, dim=1)
 
-    def _encode_batches(self, loader, key, process_fn, desc):
+    def _encode_batches(
+        self,
+        loader: DataLoader[BatchedInput],
+        key: str,
+        process_fn: Callable[[Any], Mapping[str, torch.Tensor]],
+        desc: str,
+    ) -> torch.Tensor:
         all_embeds = []
         with torch.no_grad():
             for batch in tqdm(loader, desc=desc):
@@ -413,8 +422,12 @@ class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
             all_embeds, batch_first=True, padding_value=0
         )
 
-    def get_audio_embeddings(self, audios, batch_size: int = 32, **kwargs: Any):
-        def _process(audio):
+    def get_audio_embeddings(
+        self, audios: DataLoader[BatchedInput], batch_size: int = 32, **kwargs: Any
+    ) -> Array:
+        def _process(
+            audio: AudioInputItem | torch.Tensor,
+        ) -> Mapping[str, torch.Tensor]:
             arr = audio["array"] if isinstance(audio, dict) else audio
             if isinstance(arr, torch.Tensor):
                 arr = arr.numpy()
@@ -422,8 +435,10 @@ class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
 
         return self._encode_batches(audios, "audio", _process, "Encoding audio")
 
-    def get_video_embeddings(self, videos, batch_size: int = 32, **kwargs: Any):
-        def _process(clip):
+    def get_video_embeddings(
+        self, videos: DataLoader[BatchedInput], batch_size: int = 32, **kwargs: Any
+    ) -> Array:
+        def _process(clip: torch.Tensor) -> Mapping[str, torch.Tensor]:
             return self.processor.process_videos([clip])
 
         return self._encode_batches(videos, "video", _process, "Encoding video")

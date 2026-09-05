@@ -83,7 +83,7 @@ class OpsColQwen3Wrapper(AbsEncoder):
             return image_embeddings
         raise ValueError("No text or image inputs found")
 
-    def encode_input(self, inputs):
+    def encode_input(self, inputs: dict[str, Any]) -> torch.Tensor:
         return self.mdl(**inputs)
 
     def get_image_embeddings(

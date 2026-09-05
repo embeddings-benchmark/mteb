@@ -21,7 +21,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def llm2vec_instruction(instruction):
+def llm2vec_instruction(instruction: str) -> str:
     if len(instruction) > 0 and instruction[-1] != ":":
         instruction = instruction.strip(".") + ":"
     return instruction

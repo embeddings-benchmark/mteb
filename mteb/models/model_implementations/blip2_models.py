@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
 
 BLIP2_CITATION = """@inproceedings{li2023blip2,
@@ -22,7 +23,7 @@ BLIP2_CITATION = """@inproceedings{li2023blip2,
 }"""
 
 
-def blip2_loader(model_name, **kwargs: Any):
+def blip2_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
     from lavis.models.blip2_models.blip2_image_text_matching import (
         Blip2ITM,
     )
@@ -54,7 +55,7 @@ def blip2_loader(model_name, **kwargs: Any):
             texts: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_text_embeddings = []
 
             with torch.no_grad():
@@ -78,7 +79,7 @@ def blip2_loader(model_name, **kwargs: Any):
             images: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_image_embeddings = []
 
             with torch.no_grad():
@@ -102,7 +103,7 @@ def blip2_loader(model_name, **kwargs: Any):
             inputs: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_multimodal_embeddings = []
 
             with torch.no_grad():

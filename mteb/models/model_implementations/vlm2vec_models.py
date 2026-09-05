@@ -94,13 +94,15 @@ class VLM2VecWrapper(AbsEncoder):
             num_crops=4,
         )
 
-    def encode_input(self, inputs):
+    def encode_input(self, inputs: dict[str, Any]) -> torch.Tensor:
         hidden_states = self.mdl(**inputs, return_dict=True, output_hidden_states=True)
         hidden_states = hidden_states.hidden_states[-1]
         pooled_output = self._pooling(hidden_states, inputs["attention_mask"])
         return pooled_output
 
-    def _pooling(self, last_hidden_state, attention_mask):
+    def _pooling(
+        self, last_hidden_state: torch.Tensor, attention_mask: torch.Tensor
+    ) -> torch.Tensor:
         if self.pooling == "last":
             sequence_lengths = attention_mask.sum(dim=1) - 1
             batch_size = last_hidden_state.shape[0]
@@ -120,7 +122,7 @@ class VLM2VecWrapper(AbsEncoder):
         images: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ):
+    ) -> Array:
         text = "<|image_1|> Represent the given image."
         all_image_embeddings = []
 
@@ -169,7 +171,7 @@ class VLM2VecWrapper(AbsEncoder):
         texts: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ):
+    ) -> Array:
         all_text_embeddings = []
 
         with torch.no_grad():

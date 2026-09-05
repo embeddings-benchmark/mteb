@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, TypeVar
 
 import torch
 
@@ -9,8 +9,13 @@ from mteb.models.model_meta import ModelMeta
 
 from .rerankers_custom import RerankerWrapper
 
+T = TypeVar("T")
+
 if TYPE_CHECKING:
+    from collections.abc import Generator
+
     from torch.utils.data import DataLoader
+    from transformers import PreTrainedTokenizerBase
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
@@ -37,7 +42,7 @@ prediction_tokens = {
 }
 
 
-def chunks(lst, n):
+def chunks(lst: list[T], n: int) -> Generator[list[T], None, None]:
     for i in range(0, len(lst), n):
         yield lst[i : i + n]
 
@@ -48,7 +53,7 @@ class MonoT5Reranker(RerankerWrapper):
 
     def __init__(
         self,
-        model_name_or_path="castorini/monot5-base-msmarco-10k",
+        model_name_or_path: str = "castorini/monot5-base-msmarco-10k",
         **kwargs: Any,
     ):
         super().__init__(model_name_or_path, **kwargs)
@@ -92,8 +97,12 @@ class MonoT5Reranker(RerankerWrapper):
         self.model.eval()
 
     def get_prediction_tokens(  # noqa: PLR6301
-        self, model_name_or_path, tokenizer, token_false=None, token_true=None
-    ):
+        self,
+        model_name_or_path: str,
+        tokenizer: PreTrainedTokenizerBase,
+        token_false: str | None = None,
+        token_true: str | None = None,
+    ) -> tuple[int, int]:
         if not (token_false and token_true):
             if model_name_or_path in prediction_tokens:
                 token_false, token_true = prediction_tokens[model_name_or_path]
@@ -314,7 +323,7 @@ class FLANT5Reranker(MonoT5Reranker):
 Query: {query}
 Passage: {text}"""
 
-    def get_prediction_tokens(self, *args: Any, **kwargs: Any):
+    def get_prediction_tokens(self, *args: Any, **kwargs: Any) -> tuple[int, int]:
         yes_token_id, *_ = self.tokenizer.encode("yes")
         no_token_id, *_ = self.tokenizer.encode("no")
         return no_token_id, yes_token_id

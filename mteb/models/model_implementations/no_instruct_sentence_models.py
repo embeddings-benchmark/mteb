@@ -11,7 +11,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
-    from collections.abc import Generator
+    from collections.abc import Generator, Iterable
 
     from torch.utils.data import DataLoader
 
@@ -21,7 +21,9 @@ if TYPE_CHECKING:
 
 # https://docs.python.org/3/library/itertools.html#itertools.batched
 # Added in version 3.12.
-def batched(iterable, n: int, *, strict: bool = False) -> Generator[tuple, None, None]:
+def batched(
+    iterable: Iterable[Any], n: int, *, strict: bool = False
+) -> Generator[tuple, None, None]:
     # batched('ABCDEFG', 3) → ABC DEF G
     if n < 1:
         raise ValueError("n must be at least one")
