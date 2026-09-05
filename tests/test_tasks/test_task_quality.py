@@ -23,6 +23,7 @@ from mteb.types.statistics import (
 
 KNOWN_ISSUES: dict[str, list[str]] = {
     "short_text": [
+        "MTVQAIT2TRetrieval",  # a complete CJK question or answer can be one or two characters
         "ARCChallenge",
         "AVMemeExamVideoAudioCentricQA",
         "AVMemeExamVideoCentricQA",
@@ -411,6 +412,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "BrightProSustainableLivingRetrieval",
     ],
     "duplicate_text": [
+        "MTVQAIT2TRetrieval",  # the query is an image plus a question, so one question asked of different images is a different query
         "AfriHateClassification",
         "AfriSentiClassification",
         "AllegroReviews",
@@ -830,6 +832,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "YueOpenriceReviewClassification",
     ],
     "duplicate_image": [
+        "MTVQAIT2TRetrieval",  # each image carries several questions by design
         "AROCocoOrder",
         "AROFlickrOrder",
         "AROVisualAttribution",
