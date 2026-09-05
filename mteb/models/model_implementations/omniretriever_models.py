@@ -246,7 +246,7 @@ class OmniRetrieverWrapper(AbsEncoder):
         prompts: list[str],
         *,
         audio_lengths: list[int],
-        video_grid_thw: Any,
+        video_grid_thw: torch.Tensor,
         second_per_grid: list[float],
         use_audio_in_video: bool,
         seconds_per_chunk: float | None,

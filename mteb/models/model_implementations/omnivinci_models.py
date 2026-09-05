@@ -15,6 +15,8 @@ from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    from numpy.typing import NDArray
+    from PIL import Image
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -89,7 +91,7 @@ class OmniVinciWrapper(AbsEncoder):
         return path
 
     @staticmethod
-    def _save_image_as_file(image: Any) -> str:
+    def _save_image_as_file(image: Image.Image) -> str:
         """Write a PIL Image to a temporary PNG file (omnivinci processor expects paths)."""
         fd, path = tempfile.mkstemp(suffix=".png")
         os.close(fd)
@@ -100,7 +102,9 @@ class OmniVinciWrapper(AbsEncoder):
         return path
 
     @staticmethod
-    def _save_audio_as_wav(audio_data: Any, fallback_sr: int) -> str:
+    def _save_audio_as_wav(
+        audio_data: NDArray[Any] | dict[str, Any], fallback_sr: int
+    ) -> str:
         """Write an audio array or ``AudioInputItem`` dict to a temporary WAV."""
         import numpy as np
         import soundfile as sf

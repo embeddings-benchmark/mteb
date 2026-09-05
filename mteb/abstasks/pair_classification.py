@@ -22,6 +22,7 @@ if TYPE_CHECKING:
     from collections.abc import Mapping
     from pathlib import Path
 
+    import numpy.typing as npt
     from numpy.typing import NDArray
 
     from mteb._evaluators.pair_classification_evaluator import (
@@ -338,7 +339,10 @@ class AbsTaskPairClassification(AbsTask):
         return max_acc, best_threshold
 
     def _find_best_f1_and_threshold(  # noqa: PLR6301
-        self, scores: Any, labels: NDArray[np.int64], high_score_more_similar: bool
+        self,
+        scores: npt.ArrayLike,
+        labels: NDArray[np.int64],
+        high_score_more_similar: bool,
     ) -> tuple[float, float, float, float]:
         scores = np.asarray(scores)
 

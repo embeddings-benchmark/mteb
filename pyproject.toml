@@ -369,7 +369,6 @@ ignore = [
     "ANN201",   # missing-return-type-undocumented-public-function
     "ANN202",   # missing-return-type-private-function
     "ANN205",   # missing-return-type-static-method
-    "ANN401",   # any-type
 ]
 future-annotations = true  # For TC rules
 typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
