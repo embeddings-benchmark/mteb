@@ -338,16 +338,17 @@ class AbsTaskPairClassification(AbsTask):
         return max_acc, best_threshold
 
     def _find_best_f1_and_threshold(  # noqa: PLR6301
-        self, scores: Any, labels: NDArray[np.int64], high_score_more_similar: bool
+        self,
+        scores: list[float],
+        labels: NDArray[np.int64],
+        high_score_more_similar: bool,
     ) -> tuple[float, float, float, float]:
-        scores = np.asarray(scores)
-
         rows = list(zip(scores, labels, strict=True))
 
         rows = sorted(rows, key=lambda x: x[0], reverse=high_score_more_similar)
 
         best_f1 = best_precision = best_recall = 0.0
-        threshold = 0
+        threshold = 0.0
         ncorrect = 0
         total_num_duplicates = sum(labels)
 
