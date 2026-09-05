@@ -19,7 +19,7 @@ def _create_button(
     state: gr.State,
     label_to_value: dict[str, str],
     **kwargs: Any,
-):
+) -> gr.Button:
     val = benchmark.name
     label = (
         benchmark.display_name if benchmark.display_name is not None else benchmark.name

@@ -1,17 +1,24 @@
+from __future__ import annotations
+
 from collections import defaultdict
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import datasets
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
+if TYPE_CHECKING:
+    from datasets import Dataset
+
+    from mteb.types import RelevantDocumentsType
+
 
 def load_r2med_data(
     path: str,
     eval_splits: list,
     revision: str,
-):
+) -> tuple[dict[str, Dataset], dict[str, Dataset], dict[str, RelevantDocumentsType]]:
     eval_split = eval_splits[0]
     corpus = {eval_split: None}
     queries = {eval_split: None}

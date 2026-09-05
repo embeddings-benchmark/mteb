@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
-from mteb._create_dataloaders import _combine_queries_with_instruction_text
 from mteb.models.model_meta import ModelMeta
 
 if TYPE_CHECKING:
@@ -164,6 +163,8 @@ def bb25_loader(model_name, **kwargs: Any) -> SearchProtocol:
             logger.info("Encoding Queries...")
             query_ids = list(queries["id"])
             results: RetrievalOutputType = {qid: {} for qid in query_ids}
+            from mteb._create_dataloaders import _combine_queries_with_instruction_text
+
             processed = _combine_queries_with_instruction_text(queries)
             queries_texts = processed["text"]
             query_tokenized = self._encode(queries_texts)

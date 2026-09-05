@@ -4,7 +4,6 @@ import logging
 import unicodedata
 from typing import TYPE_CHECKING, Any, Literal
 
-from mteb._create_dataloaders import _combine_queries_with_instruction_text
 from mteb.models.model_meta import ModelMeta
 
 if TYPE_CHECKING:
@@ -443,6 +442,8 @@ class BM25Search:
         logger.info("Encoding Queries...")
         query_ids = list(queries["id"])
         results = {qid: {} for qid in query_ids}
+        from mteb._create_dataloaders import _combine_queries_with_instruction_text
+
         processed = _combine_queries_with_instruction_text(queries)
         queries_texts = list(processed["text"])
         query_token_strs = self._tokenizer.transform(queries_texts)

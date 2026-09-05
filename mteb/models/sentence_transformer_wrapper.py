@@ -107,17 +107,20 @@ def _batch_to_modality_dicts(
 
 
 def _resolve_model_prompts(
-    model: Any, model_prompts: dict[str, str] | None
+    model: SentenceTransformer, model_prompts: dict[str, str] | None
 ) -> dict[str, str] | None:
     """Merge `model_prompts` with `model`'s built-in prompts (explicit `model_prompts` wins) and validate the result."""
-    built_in_prompts = getattr(model, "prompts", None)
+    # SentenceTransformer types `prompts` as `dict[str, str | None]`; mteb only ever
+    # stores non-None values in it.
+    built_in_prompts = cast("dict[str, str] | None", getattr(model, "prompts", None))
     if built_in_prompts and not model_prompts:
         model_prompts = built_in_prompts
     elif model_prompts and built_in_prompts:
         msg = f"Model prompts specified, these will overwrite the default model prompts. Current prompts will be:\n {model_prompts}"
         logger.warning(msg)
         warnings.warn(msg, stacklevel=2)
-        model.prompts = model_prompts
+        # dict is invariant: SentenceTransformer declares dict[str, str | None]
+        model.prompts = cast("dict[str, str | None]", model_prompts)
 
     resolved_prompts, invalid_prompts = AbsEncoder.validate_task_to_prompt_name(
         model_prompts, raise_for_invalid_keys=False
@@ -167,7 +170,7 @@ def _select_encode_function(
     return model.encode
 
 
-def _postprocess_dense_embeddings(embeddings: Any) -> Any:
+def _postprocess_dense_embeddings(embeddings: Array) -> Array:
     """Move a batch's embeddings to CPU float32 if it's a torch tensor; otherwise pass through unchanged."""
     if isinstance(embeddings, torch.Tensor):
         embeddings = embeddings.cpu().detach().float()
@@ -191,7 +194,7 @@ def _is_sparse_compatible_task(task_metadata: TaskMetadata) -> bool:
     )
 
 
-def _postprocess_sparse_embeddings(embeddings: Any) -> Any:
+def _postprocess_sparse_embeddings(embeddings: Array) -> Array:
     """Densify a batch's embeddings if it's a sparse torch tensor, then move to CPU float32."""
     if isinstance(embeddings, torch.Tensor) and embeddings.is_sparse:
         embeddings = embeddings.to_dense()

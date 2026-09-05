@@ -616,8 +616,11 @@ class JinaV4Wrapper(AbsEncoder):
             return_numpy=return_numpy,
         )
 
+    # Passthrough: ndarray/list are converted, anything else is returned unchanged.
     @staticmethod
-    def _convert_to_torch_if_needed(embeddings: Any) -> torch.Tensor | list[Any] | Any:
+    def _convert_to_torch_if_needed(
+        embeddings: Any,  # noqa: ANN401
+    ) -> torch.Tensor | list[Any] | Any:  # noqa: ANN401
         """Convert numpy arrays to torch tensors if needed."""
         if isinstance(embeddings, np.ndarray):
             return torch.from_numpy(embeddings)
@@ -837,7 +840,9 @@ _OMNI_MODEL_PROMPTS = {
 }
 
 
-def _video_frames_to_channels_last(video: Any) -> Any:
+def _video_frames_to_channels_last(
+    video: Any,  # noqa: ANN401 -- any frame container; only tensors are permuted, others pass through
+) -> Any:  # noqa: ANN401
     """torchcodec frame batches are (T, C, H, W) uint8; the model's remote code
     detects video only for channels-last (T, H, W, 3|4) arrays and would
     otherwise stringify the tensor and embed it as text."""

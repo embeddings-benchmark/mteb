@@ -183,7 +183,9 @@ class UMER1Wrapper(AbsEncoder):
         return embedding_idx
 
     def _extract_generative_reasoning_embeddings(
-        self, output: Any, model_inputs: dict
+        self,
+        output: Any,  # noqa: ANN401 -- transformers model output object
+        model_inputs: dict,
     ) -> torch.Tensor:
         """Helper to extract embeddings from the generated output."""
         sequences = output.sequences

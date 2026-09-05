@@ -1,9 +1,16 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+
+if TYPE_CHECKING:
+    from datasets import Dataset
+
+    from mteb.types import RelevantDocumentsType
 
 _LANGS = {
     "french": ["fra-Latn"],
@@ -19,7 +26,11 @@ def _load_data(
     langs: list | None = None,
     revision: str | None = None,
     num_proc: int | None = None,
-):
+) -> tuple[
+    dict[str, Dataset] | dict[str, dict[str, Dataset]],
+    dict[str, Dataset] | dict[str, dict[str, Dataset]],
+    dict[str, RelevantDocumentsType] | dict[str, dict[str, RelevantDocumentsType]],
+]:
     if langs is None:
         corpus = {}
         queries = {}
