@@ -1,3 +1,5 @@
+from typing import Any
+
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -82,7 +84,7 @@ class FGMCapsT2ARetrieval(AbsTaskRetrieval):
         prompt={"query": "Retrieve the music clip described by this caption."},
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
@@ -127,7 +129,7 @@ class FGMCapsA2TRetrieval(AbsTaskRetrieval):
         prompt={"query": "Retrieve the caption that describes this music clip."},
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 

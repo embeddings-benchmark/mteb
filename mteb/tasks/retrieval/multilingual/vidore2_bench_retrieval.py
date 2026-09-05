@@ -1,3 +1,5 @@
+from typing import Any
+
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -133,7 +135,7 @@ class Vidore2ESGReportsRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
@@ -181,7 +183,7 @@ class Vidore2EconomicsReportsRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
@@ -229,7 +231,7 @@ class Vidore2BioMedicalLecturesRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
@@ -277,7 +279,7 @@ class Vidore2ESGReportsHLRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 

@@ -1,3 +1,5 @@
+from typing import Any
+
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -100,7 +102,7 @@ class IncompeBenchStrictRetrieval(AbsTaskRetrieval):
         prompt={"query": "Retrieve music that matches the user's search query."},
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
@@ -156,7 +158,7 @@ class IncompeBenchLenientRetrieval(AbsTaskRetrieval):
         prompt={"query": "Retrieve music that matches the user's search query."},
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 

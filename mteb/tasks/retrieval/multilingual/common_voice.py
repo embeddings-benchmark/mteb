@@ -1,4 +1,5 @@
 from collections import defaultdict
+from typing import Any
 
 import datasets
 from datasets import DatasetDict
@@ -214,7 +215,7 @@ class CommonVoiceMini17A2TRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
@@ -291,7 +292,7 @@ class CommonVoiceMini17T2ARetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
@@ -365,7 +366,7 @@ class CommonVoiceMini21A2TRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
@@ -442,7 +443,7 @@ class CommonVoiceMini21T2ARetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return

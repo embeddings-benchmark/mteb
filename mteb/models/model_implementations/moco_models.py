@@ -22,7 +22,7 @@ MOCOV3_CITATION = """@Article{chen2021mocov3,
 }"""
 
 
-def mocov3_loader(model_name, **kwargs):
+def mocov3_loader(model_name, **kwargs: Any):
     import timm
 
     class MOCOv3Model(AbsEncoder):

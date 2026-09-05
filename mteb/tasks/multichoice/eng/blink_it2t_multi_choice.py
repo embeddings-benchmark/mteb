@@ -1,4 +1,5 @@
 from collections import defaultdict
+from typing import Any
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -36,7 +37,7 @@ class BLINKIT2TMultiChoice(AbsTaskRetrieval):
 """,
     )
 
-    def dataset_transform(self, **kwargs):
+    def dataset_transform(self, **kwargs: Any):
         for split_data in self.dataset.values():
             for dataset in split_data.values():
                 top_ranked = defaultdict(list)

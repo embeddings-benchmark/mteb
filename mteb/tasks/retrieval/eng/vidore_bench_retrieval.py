@@ -1,3 +1,5 @@
+from typing import Any
+
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -95,7 +97,7 @@ class VidoreArxivQARetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
@@ -138,7 +140,7 @@ class VidoreDocVQARetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
@@ -181,7 +183,7 @@ class VidoreInfoVQARetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
@@ -224,7 +226,7 @@ class VidoreTabfquadRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
@@ -267,7 +269,7 @@ class VidoreTatdqaRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
@@ -310,7 +312,7 @@ class VidoreShiftProjectRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
@@ -354,7 +356,7 @@ class VidoreSyntheticDocQAAIRetrieval(AbsTaskRetrieval):
         adapted_from=["VidoreDocVQARetrieval"],
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
@@ -398,7 +400,7 @@ class VidoreSyntheticDocQAEnergyRetrieval(AbsTaskRetrieval):
         adapted_from=["VidoreDocVQARetrieval"],
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
@@ -442,7 +444,7 @@ class VidoreSyntheticDocQAGovernmentReportsRetrieval(AbsTaskRetrieval):
         adapted_from=["VidoreDocVQARetrieval"],
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
@@ -486,7 +488,7 @@ class VidoreSyntheticDocQAHealthcareIndustryRetrieval(AbsTaskRetrieval):
         adapted_from=["VidoreDocVQARetrieval"],
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -80,7 +82,7 @@ class AVMemeExamV2TRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_avmeme_exam(self, query_columns=["video"], corpus_columns=["summary"])
 
 
@@ -113,7 +115,7 @@ class AVMemeExamT2VRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_avmeme_exam(self, query_columns=["summary"], corpus_columns=["video"])
 
 
@@ -146,7 +148,7 @@ class AVMemeExamVA2TRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_avmeme_exam(
             self, query_columns=["video", "audio"], corpus_columns=["summary"]
         )
@@ -181,7 +183,7 @@ class AVMemeExamT2VARetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_avmeme_exam(
             self, query_columns=["summary"], corpus_columns=["video", "audio"]
         )
@@ -218,7 +220,7 @@ class AVMemeExamV2ARetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_avmeme_exam(self, query_columns=["video"], corpus_columns=["audio"])
 
 
@@ -253,7 +255,7 @@ class AVMemeExamA2VRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_avmeme_exam(self, query_columns=["audio"], corpus_columns=["video"])
 
 
@@ -288,7 +290,7 @@ class AVMemeExamVT2ARetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_avmeme_exam(
             self, query_columns=["video", "summary"], corpus_columns=["audio"]
         )
@@ -325,7 +327,7 @@ class AVMemeExamAT2VRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_avmeme_exam(
             self, query_columns=["audio", "summary"], corpus_columns=["video"]
         )

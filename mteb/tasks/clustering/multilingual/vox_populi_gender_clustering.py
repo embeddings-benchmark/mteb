@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -59,7 +61,7 @@ Dupoux, Emmanuel},
     max_fraction_of_documents_to_embed = None
     input_column_name: str = "audio"
 
-    def dataset_transform(self, **kwargs):
+    def dataset_transform(self, **kwargs: Any):
         # Define label mapping
         label2id = {"female": 0, "male": 1}
 

@@ -1,5 +1,6 @@
 import csv
 from pathlib import Path
+from typing import Any
 
 from huggingface_hub import snapshot_download
 
@@ -55,7 +56,7 @@ Reddy, Siva},
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}

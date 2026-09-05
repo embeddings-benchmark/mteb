@@ -1,5 +1,6 @@
 import warnings
 from collections import defaultdict
+from typing import Any
 
 import datasets
 
@@ -83,7 +84,7 @@ def load_bright_data(
     return corpus, queries, relevant_docs
 
 
-def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
     if self.data_loaded:
         return
 

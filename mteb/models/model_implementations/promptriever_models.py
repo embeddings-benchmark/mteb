@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 
 class PromptrieverModel(RepLLaMAModel, AbsEncoder):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any):
         super().__init__(*args, **kwargs)
 
     def encode(
@@ -48,7 +48,7 @@ class PromptrieverModel(RepLLaMAModel, AbsEncoder):
 
 
 def _loader(
-    wrapper: type[PromptrieverModel], **kwargs
+    wrapper: type[PromptrieverModel], **kwargs: Any
 ) -> Callable[..., EncoderProtocol]:
     _kwargs = kwargs
 

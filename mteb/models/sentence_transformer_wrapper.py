@@ -161,7 +161,7 @@ def _select_encode_function(
     if prompt_type and has_query_encode:
         if prompt_type == PromptType.query:
             return model.encode_query  # type: ignore[no-any-return]
-        elif prompt_type == PromptType.document:
+        if prompt_type == PromptType.document:
             return model.encode_document  # type: ignore[no-any-return]
         raise ValueError(f"Unknown prompt type: {prompt_type}")
     return model.encode

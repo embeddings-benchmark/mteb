@@ -16,7 +16,7 @@ class TestOpenAIAPIRerankWrapper:
     """Test OpenAIAPIRerankWrapper functionality."""
 
     @patch("requests.get")
-    def test_initialization(self, mock_get):
+    def test_initialization(self, mock_get: MagicMock):
         """Test that wrapper initializes and connects to server."""
         # Mock the /v1/models endpoint
         mock_response = MagicMock()
@@ -51,7 +51,7 @@ class TestOpenAIAPIRerankWrapper:
 
     @patch("requests.post")
     @patch("requests.get")
-    def test_basic_reranking(self, mock_get, mock_post):
+    def test_basic_reranking(self, mock_get: MagicMock, mock_post: MagicMock):
         """Test basic reranking functionality with mocked responses."""
         # Mock server initialization
         mock_get_response = MagicMock()
@@ -92,7 +92,7 @@ class TestOpenAIAPIRerankWrapper:
 
     @patch("requests.post")
     @patch("requests.get")
-    def test_predict_pairwise(self, mock_get, mock_post):
+    def test_predict_pairwise(self, mock_get: MagicMock, mock_post: MagicMock):
         """Test predict with pairwise query-document scoring."""
         from mteb.abstasks.task_metadata import TaskMetadata
         from mteb.types import PromptType
@@ -147,7 +147,7 @@ class TestOpenAIAPIRerankWrapper:
 
     @patch("requests.post")
     @patch("requests.get")
-    def test_top_k_parameter(self, mock_get, mock_post):
+    def test_top_k_parameter(self, mock_get: MagicMock, mock_post: MagicMock):
         """Test that top_k parameter can be passed to predict()."""
         mock_response = MagicMock()
         mock_response.status_code = 200
@@ -193,7 +193,7 @@ class TestOpenAIAPIRerankWrapper:
 
     @patch("requests.post")
     @patch("requests.get")
-    def test_predict_invalid_sizes(self, mock_get, mock_post):
+    def test_predict_invalid_sizes(self, mock_get: MagicMock, mock_post: MagicMock):
         """Test predict with invalid input sizes raises ValueError."""
         from mteb.abstasks.task_metadata import TaskMetadata
         from mteb.types import PromptType

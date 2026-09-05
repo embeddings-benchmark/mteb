@@ -4,13 +4,13 @@ from collections.abc import Mapping
 from typing import TYPE_CHECKING, TypeAlias, TypedDict, cast
 
 import numpy as np
-import torch
 from numpy.typing import NDArray
 
 from mteb._helpful_enum import HelpfulStrEnum
 
 if TYPE_CHECKING:
     import numpy.typing as npt
+    import torch
     from datasets import Dataset
     from PIL import Image
     from typing_extensions import NotRequired
@@ -31,8 +31,14 @@ class EncodeKwargs(TypedDict):
 
 
 # --- Output types ---
-Array = NDArray[np.floating | np.integer | np.bool_] | torch.Tensor
-"""General array type, can be a numpy array (float, int, or bool) or a torch tensor."""
+if TYPE_CHECKING:
+    Array: TypeAlias = NDArray[np.floating | np.integer | np.bool_] | torch.Tensor
+    """General array type, can be a numpy array (float, int, or bool) or a torch tensor."""
+else:
+    # Importing torch here would make `import mteb` pull in the full torch stack, which
+    # results-only users do not need. `Array` is only ever used as an annotation (never
+    # introspected at runtime), so the runtime value can drop the `torch.Tensor` arm.
+    Array: TypeAlias = NDArray[np.floating | np.integer | np.bool_]
 
 
 # --- Input types ---
@@ -178,11 +184,13 @@ class OutputDType(HelpfulStrEnum):
         Output types that are not natively supported by PyTorch like 4-bit integers require specific mapping to the
         desired dtype.
         """
+        import torch
+
         if self == OutputDType.UINT4:
             return torch.uint8
-        elif self == OutputDType.INT4:
+        if self == OutputDType.INT4:
             return torch.int8
-        elif self == OutputDType.BINARY:
+        if self == OutputDType.BINARY:
             return torch.bool
         return cast("torch.dtype", getattr(torch, self.value))
 

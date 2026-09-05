@@ -187,6 +187,7 @@ SampleCreationMethod = Literal[
 """How the text was created. It can be an important factor for understanding the quality of a dataset. E.g. used to filter out machine-translated datasets."""
 
 MIEB_TASK_TYPE = (
+    "Any2AnyReranking",
     "Any2AnyRetrieval",
     "Any2AnyMultilingualRetrieval",
     "VisionCentricQA",
@@ -200,6 +201,7 @@ MIEB_TASK_TYPE = (
 )
 
 MAEB_TASK_TYPE = (
+    "Any2AnyReranking",
     "AudioClustering",
     "AudioMultilabelClassification",
     "AudioReranking",
@@ -210,6 +212,7 @@ MAEB_TASK_TYPE = (
 )
 
 MVEB_TASK_TYPE = (
+    "Any2AnyReranking",
     "VideoClassification",
     "VideoClustering",
     "VideoMultilabelClassification",
@@ -261,6 +264,7 @@ TaskCategory = Literal[
     "a2t",
     "t2a",
     "at2t",
+    "at2i",
     "at2a",
     "a2at",
     "t2at",
@@ -282,6 +286,7 @@ TaskCategory = Literal[
     "v2a",
     "a2v",
     "vt2a",
+    "it2a",
     "at2v",
     "a2i",
     "i2a",
@@ -289,6 +294,7 @@ TaskCategory = Literal[
     "i2va",
     "it2v",
     "v2i",
+    "it2c",
 ]
 """The category of the task.
 
@@ -308,32 +314,37 @@ TaskCategory = Literal[
 14. a2t: audio to text
 15. t2a: text to audio
 16. at2t: audio+text to text
-17. at2a: audio+text to audio
-18. a2at: audio to audio+text
-19. t2at: text to audio+text
-20. at2at: audio+text to audio+text
-21. v2v: video to video
-22. v2c: video to category
-23. v2t: video to text
-24. t2v: text to video
-25. vt2t: video+text to text
-26. vt2v: video+text to video
-27. v2vt: video to video+text
-28. t2vt: text to video+text
-29. vt2vt: video+text to video+text
-30. va2c: video+audio to category
-31. va2t: video+audio to text
-32. t2va: text to video+audio
-33. vat2t: video+audio+text to text
-34. va2va: video+audio to video+audio
-35. v2a: video to audio
-36. a2v: audio to video
-37. a2i: audio to image
-38. i2a: image to audio
-39. i2v: image to video
-40. i2va: image to video+audio
-41. it2v: image+text to video
-42. v2i: video to image
+17. at2i: audio+text to image
+18. at2a: audio+text to audio
+19. a2at: audio to audio+text
+20. t2at: text to audio+text
+21. at2at: audio+text to audio+text
+22. v2v: video to video
+23. v2c: video to category
+24. v2t: video to text
+25. t2v: text to video
+26. vt2t: video+text to text
+27. vt2v: video+text to video
+28. v2vt: video to video+text
+29. t2vt: text to video+text
+30. vt2vt: video+text to video+text
+31. va2c: video+audio to category
+32. va2t: video+audio to text
+33. t2va: text to video+audio
+34. vat2t: video+audio+text to text
+35. va2va: video+audio to video+audio
+36. v2a: video to audio
+37. a2v: audio to video
+38. vt2a: video+text to audio
+39. it2a: image+text to audio
+40. at2v: audio+text to video
+41. a2i: audio to image
+42. i2a: image to audio
+43. i2v: image to video
+44. i2va: image to video+audio
+45. it2v: image+text to video
+46. v2i: video to image
+47. it2c: image+text to category
 """
 
 _MODALITY_CODES: dict[str, str] = {
@@ -379,6 +390,7 @@ SimplifiedTaskType = Literal[
 ]
 
 _TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {
+    "Any2AnyReranking": "retrieval",
     "Any2AnyRetrieval": "retrieval",
     "Any2AnyMultilingualRetrieval": "retrieval",
     "VisionCentricQA": "retrieval",
@@ -981,6 +993,7 @@ class TaskMetadata(BaseModel):
             "InstructionReranking": ["text-ranking"],
             # Image
             "Any2AnyMultiChoice": ["visual-question-answering"],
+            "Any2AnyReranking": ["visual-question-answering"],
             "Any2AnyMultilingualRetrieval": ["visual-document-retrieval"],
             "VisionCentricQA": ["visual-question-answering"],
             "ImageClustering": ["image-feature-extraction"],
@@ -1017,13 +1030,32 @@ class TaskMetadata(BaseModel):
         dataset_type = []
         if self.category in ["i2i", "it2i", "i2it", "it2it"]:  # noqa: PLR6201
             dataset_type.append("image-to-image")
-        if self.category in ["i2t", "t2i", "it2t", "it2i", "t2it", "i2it", "it2it"]:  # noqa: PLR6201
+        if self.category in {
+            "i2t",
+            "t2i",
+            "it2t",
+            "it2i",
+            "t2it",
+            "i2it",
+            "it2it",
+            "at2i",
+            "it2a",
+        }:
             dataset_type.extend(["image-to-text", "text-to-image"])
         if self.category in ["it2t", "it2i", "t2it", "i2it", "it2it"]:  # noqa: PLR6201
             dataset_type.extend(["image-text-to-text"])
         if self.category in ["a2a", "at2a", "a2at", "at2at"]:  # noqa: PLR6201
             dataset_type.append("audio-to-audio")
-        if self.category in ["a2t", "t2a", "at2t", "t2at", "at2at", "a2at"]:  # noqa: PLR6201
+        if self.category in {
+            "a2t",
+            "t2a",
+            "at2t",
+            "at2i",
+            "it2a",
+            "t2at",
+            "at2at",
+            "a2at",
+        }:
             dataset_type.extend(["text-to-audio"])
         if self.category in {"i2v", "i2va"}:
             dataset_type.append("image-to-video")

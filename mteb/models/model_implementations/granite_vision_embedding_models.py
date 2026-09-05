@@ -25,7 +25,7 @@ class GraniteVisionEmbeddingWrapper:
         revision: str | None = None,
         device: str | None = None,
         attn_implementation: str | None = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         from transformers import AutoModel, AutoProcessor
         from transformers.utils.import_utils import is_flash_attn_2_available
@@ -60,7 +60,7 @@ class GraniteVisionEmbeddingWrapper:
         images,
         batch_size: int = 16,
         show_progress_bar: bool = True,
-        **kwargs,
+        **kwargs: Any,
     ):
         all_embeds = []
         with torch.no_grad():
@@ -81,7 +81,7 @@ class GraniteVisionEmbeddingWrapper:
         self,
         texts: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
-        **kwargs,
+        **kwargs: Any,
     ):
         all_embeds = []
 
@@ -142,9 +142,9 @@ class GraniteVisionEmbeddingWrapper:
                 )
             fused_embeddings = text_embeddings + image_embeddings
             return fused_embeddings
-        elif text_embeddings is not None:
+        if text_embeddings is not None:
             return text_embeddings
-        elif image_embeddings is not None:
+        if image_embeddings is not None:
             return image_embeddings
         raise ValueError
 

@@ -139,7 +139,7 @@ class EventLogger:
         benchmark: str | None = None,
         filters: dict[str, Any] | None = None,
         properties: dict[str, Any] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         """Log raw event (generic method)
 
@@ -163,7 +163,9 @@ class EventLogger:
 
     # ============ Convenience Methods ============
 
-    def log_page_view(self, session_id: str, benchmark: str | None = None, **kwargs):
+    def log_page_view(
+        self, session_id: str, benchmark: str | None = None, **kwargs: Any
+    ):
         """Log page view event
 
         Args:
@@ -175,7 +177,11 @@ class EventLogger:
         self.log(event)
 
     def log_benchmark_change(
-        self, session_id: str, new_value: str, old_value: str | None = None, **kwargs
+        self,
+        session_id: str,
+        new_value: str,
+        old_value: str | None = None,
+        **kwargs: Any,
     ):
         """Log benchmark change event
 
@@ -199,7 +205,7 @@ class EventLogger:
         old_value: Any = None,
         benchmark: str | None = None,
         filters: dict[str, Any] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         """Log filter change event
 
@@ -229,7 +235,7 @@ class EventLogger:
         new_table: str,
         old_table: str | None = None,
         benchmark: str | None = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         """Log table switch event
 
@@ -253,23 +259,23 @@ class EventLogger:
         self,
         session_id: str,
         benchmark: str | None = None,
-        format: str = "csv",
+        file_format: str = "csv",
         row_count: int | None = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         """Log table download event
 
         Args:
             session_id: Session ID
             benchmark: Current benchmark
-            format: Download format (e.g., csv, json)
+            file_format: Download format (e.g., csv, json)
             row_count: Number of rows downloaded
             **kwargs (Any): Additional context.
         """
         event = TableDownloadEvent.create(
             session_id=session_id,
             benchmark=benchmark,
-            format=format,
+            file_format=file_format,
             row_count=row_count,
             **kwargs,
         )

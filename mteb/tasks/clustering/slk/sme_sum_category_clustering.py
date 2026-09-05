@@ -1,3 +1,5 @@
+from typing import Any
+
 from datasets import Dataset, DatasetDict
 
 from mteb.abstasks.clustering import AbsTaskClustering
@@ -45,7 +47,7 @@ class SMESumCategoryClustering(AbsTaskClustering):
         prompt="Identify the topic or theme of the given text.",
     )
 
-    def dataset_transform(self, **kwargs) -> None:
+    def dataset_transform(self, **kwargs: Any) -> None:
         """Transform the dataset to create sentences (title + introduction) and labels (category).
 
         Filters out articles with 'none' category as they don't represent meaningful clusters.

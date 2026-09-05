@@ -33,7 +33,7 @@ class OpenAIModel(AbsEncoder):
         tokenizer_name: str = "cl100k_base",
         embed_dim: int | None = None,
         client: Any | None = None,  # OpenAI
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """Wrapper for OpenAIs embedding API.
 
@@ -113,7 +113,7 @@ class OpenAIModel(AbsEncoder):
         # Set dimensions only for models that support it
         dimensions = (
             self._embed_dim or NotGiven()
-            if not self.model_name == "text-embedding-ada-002"
+            if self.model_name != "text-embedding-ada-002"
             else NotGiven()
         )
         default_kwargs = dict(

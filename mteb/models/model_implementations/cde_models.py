@@ -57,7 +57,7 @@ class CDEWrapper(SentenceTransformerEncoderWrapper):
         model: str,
         revision: str | None = None,
         device: str | None = None,
-        *args,
+        *args: Any,
         **kwargs: Any,
     ) -> None:
         from transformers import AutoConfig

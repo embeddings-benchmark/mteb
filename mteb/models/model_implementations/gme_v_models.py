@@ -60,7 +60,7 @@ class Encoder(torch.nn.Module):
         image_grid_thw: torch.LongTensor | None = None,
         # video_grid_thw: torch.LongTensor | None = None,
         pooling_mask: torch.LongTensor | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> torch.Tensor:
         if inputs_embeds is None:
             inputs_embeds = self.base.model.embed_tokens(input_ids)
@@ -108,7 +108,7 @@ class Encoder(torch.nn.Module):
         images: list[Image.Image],
         device,
         instruction=None,
-        **kwargs,
+        **kwargs: Any,
     ):
         instruction = instruction or self.default_instruction
         # Inputs must be batched
@@ -149,7 +149,7 @@ class GmeQwen2VL(AbsEncoder):
         min_image_tokens=4,
         max_image_tokens=1280,
         max_length=1800,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         from transformers import AutoModelForVision2Seq, AutoProcessor
 

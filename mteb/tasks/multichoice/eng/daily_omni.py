@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from datasets import Dataset, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -40,7 +42,7 @@ class DailyOmniVideoCentricQA(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs) -> None:
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
         self.dataset = {"default": {}}
@@ -113,7 +115,7 @@ class DailyOmniVideoAudioCentricQA(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs) -> None:
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
         self.dataset = {"default": {}}

@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_implementations.e5_models import ME5_TRAINING_DATA
 from mteb.models.model_meta import ModelMeta
@@ -28,7 +30,7 @@ def instruction_template(
     return INSTRUCTION.format(instruction=instruction)
 
 
-def instruct_loader(*args, **kwargs):
+def instruct_loader(*args: Any, **kwargs: Any):
     model = InstructSentenceTransformerModel(*args, **kwargs)
     encoder = model.model._first_module()
     if encoder.auto_model.config._attn_implementation == "flash_attention_2":

@@ -334,7 +334,7 @@ class JinaWrapper(SentenceTransformerEncoderWrapper):
         revision: str,
         device: str | None = None,
         model_prompts: dict[str, str] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         super().__init__(
             model, revision, device=device, model_prompts=model_prompts, **kwargs
@@ -416,7 +416,7 @@ class JinaV4Wrapper(AbsEncoder):
         trust_remote_code: bool = True,
         model_prompts: dict[str, str] | None = None,
         vector_type: Literal[SUPPORTED_VECTOR_TYPES] = "single_vector",
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         device = device_map or device
 
@@ -617,11 +617,11 @@ class JinaV4Wrapper(AbsEncoder):
         )
 
     @staticmethod
-    def _convert_to_torch_if_needed(embeddings):
+    def _convert_to_torch_if_needed(embeddings: Any) -> torch.Tensor | list[Any] | Any:
         """Convert numpy arrays to torch tensors if needed."""
         if isinstance(embeddings, np.ndarray):
             return torch.from_numpy(embeddings)
-        elif isinstance(embeddings, list):
+        if isinstance(embeddings, list):
             # Handle list of numpy arrays or tensors
             converted = []
             for emb in embeddings:
@@ -644,12 +644,11 @@ class JinaV4Wrapper(AbsEncoder):
 
         if self.vector_type == "single_vector":
             return self.score_single_vector(a_torch, b_torch)
-        elif self.vector_type == "multi_vector":
+        if self.vector_type == "multi_vector":
             return self.score_multi_vector(a_torch, b_torch)
-        else:
-            raise ValueError(
-                "vector_type must be one of the following: [`single_vector`, `multi_vector`]"
-            )
+        raise ValueError(
+            "vector_type must be one of the following: [`single_vector`, `multi_vector`]"
+        )
 
     def score_single_vector(
         self,
@@ -668,8 +667,8 @@ class JinaV4Wrapper(AbsEncoder):
         def normalize_input(x):
             if isinstance(x, torch.Tensor):
                 return x.unsqueeze(0) if x.ndim == 1 else x
-            else:  # list
-                return torch.stack(x) if len(x) > 1 else x[0].unsqueeze(0)
+            # list
+            return torch.stack(x) if len(x) > 1 else x[0].unsqueeze(0)
 
         qs_stacked = normalize_input(qs).to(device)
         ps_stacked = normalize_input(ps).to(device)
@@ -755,7 +754,7 @@ class JinaV5TextWrapper(SentenceTransformerEncoderWrapper):
         revision: str,
         device: str | None = None,
         model_prompts: dict[str, str] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         super().__init__(
             model, revision, device=device, model_prompts=model_prompts, **kwargs

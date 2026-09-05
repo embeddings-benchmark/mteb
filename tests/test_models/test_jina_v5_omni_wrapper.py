@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import typing
+from typing import Any
 
 import numpy as np
 import pytest
@@ -35,7 +36,7 @@ class CapturingModel(MockSentenceTransformer):
         super().__init__()
         self.captured: list[dict] = []
 
-    def encode(self, inputs, **kwargs):
+    def encode(self, inputs, **kwargs: Any):
         self.captured.append(
             {
                 "inputs": inputs,

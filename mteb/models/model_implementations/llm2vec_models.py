@@ -61,8 +61,8 @@ class LLM2VecModel(AbsEncoder):
         self,
         model_prompts: dict[str, str] | None = None,
         device: str | None = None,
-        *args,
-        **kwargs,
+        *args: Any,
+        **kwargs: Any,
     ):
         model_name = kwargs.get("model_name", "LLM2Vec")
         from llm2vec import LLM2Vec
@@ -107,7 +107,9 @@ class LLM2VecModel(AbsEncoder):
         return self.model.encode(sentences, **kwargs)
 
 
-def _loader(wrapper: type[LLM2VecModel], **kwargs) -> Callable[..., EncoderProtocol]:
+def _loader(
+    wrapper: type[LLM2VecModel], **kwargs: Any
+) -> Callable[..., EncoderProtocol]:
     _kwargs = kwargs
 
     def loader_inner(**kwargs: Any) -> EncoderProtocol:
