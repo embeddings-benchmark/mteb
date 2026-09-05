@@ -5,7 +5,7 @@ import logging
 import warnings
 from pathlib import Path
 from time import monotonic
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, TypeGuard, cast
 
 from datasets.exceptions import DatasetNotFoundError
 from tqdm.auto import tqdm
@@ -19,7 +19,9 @@ from mteb.cache import ResultCache
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
+    MultiVectorWrapper,
     SentenceTransformerEncoderWrapper,
+    SparseEncoderWrapper,
 )
 from mteb.results import ModelResult, TaskResult
 from mteb.results.task_result import TaskError
@@ -28,14 +30,24 @@ from mteb.types import PromptType
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
+    from typing import TypeAlias
 
-    from sentence_transformers import CrossEncoder, SentenceTransformer
+    from sentence_transformers import (
+        CrossEncoder,
+        MultiVectorEncoder,
+        SentenceTransformer,
+        SparseEncoder,
+    )
 
     from mteb.models.models_protocols import (
         MTEBModels,
     )
     from mteb.types import EncodeKwargs, HFSubset, ScoresDict, SplitName
     from mteb.types._metadata import ModelName, Revision
+
+    SentenceTransformerModels: TypeAlias = (
+        CrossEncoder | MultiVectorEncoder | SentenceTransformer | SparseEncoder
+    )
 
 
 logger = logging.getLogger(__name__)
@@ -63,8 +75,33 @@ class OverwriteStrategy(HelpfulStrEnum):
     ONLY_CACHE = "only-cache"
 
 
+def _is_sparse_encoder(model: object) -> TypeGuard[SparseEncoder]:
+    try:
+        from sentence_transformers.sparse_encoder import SparseEncoder
+    except ImportError:
+        raise ImportError(
+            "This looks like a sentence-transformers model, but 'SparseEncoder' isn't available "
+            "in your installed version. Please upgrade with `pip install -U sentence-transformers` "
+            "(>= 5.0.0) to use SparseEncoder models with mteb."
+        ) from None
+    return isinstance(model, SparseEncoder)
+
+
+def _is_multi_vector_encoder(model: object) -> TypeGuard[MultiVectorEncoder]:
+    try:
+        from sentence_transformers import MultiVectorEncoder
+    except ImportError:
+        raise ImportError(
+            "This looks like a sentence-transformers model, but 'MultiVectorEncoder' isn't "
+            "available in your installed version. Please upgrade with "
+            "`pip install -U sentence-transformers` (>= 6.0.0) to use MultiVectorEncoder models "
+            "with mteb."
+        ) from None
+    return isinstance(model, MultiVectorEncoder)
+
+
 def _sanitize_model(
-    model: ModelMeta | MTEBModels | SentenceTransformer | CrossEncoder,
+    model: ModelMeta | MTEBModels | SentenceTransformerModels,
 ) -> tuple[MTEBModels | ModelMeta, ModelMeta, ModelName, Revision]:
     from sentence_transformers import CrossEncoder, SentenceTransformer
 
@@ -83,6 +120,12 @@ def _sanitize_model(
             else ModelMeta.create_empty()
         )
         wrapped_model = cast("MTEBModels | ModelMeta", model)
+    elif _is_sparse_encoder(model):
+        wrapped_model = SparseEncoderWrapper(model)
+        meta = wrapped_model.mteb_model_meta
+    elif _is_multi_vector_encoder(model):
+        wrapped_model = MultiVectorWrapper(model)
+        meta = wrapped_model.mteb_model_meta
     else:
         meta = ModelMeta.create_empty() if not isinstance(model, ModelMeta) else model
         wrapped_model = meta
@@ -432,7 +475,7 @@ def _check_cache(
 
 
 def evaluate(  # noqa: PLR0913, PLR0914
-    model: ModelMeta | MTEBModels | SentenceTransformer | CrossEncoder,
+    model: ModelMeta | MTEBModels | SentenceTransformerModels,
     tasks: AbsTask | Iterable[AbsTask],
     *,
     co2_tracker: bool | None = None,
