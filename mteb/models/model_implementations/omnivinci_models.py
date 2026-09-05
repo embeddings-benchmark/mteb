@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types import Array, AudioInputItem, BatchedInput, PromptType
 
 
 class OmniVinciWrapper(AbsEncoder):
@@ -103,7 +103,7 @@ class OmniVinciWrapper(AbsEncoder):
 
     @staticmethod
     def _save_audio_as_wav(
-        audio_data: NDArray[Any] | dict[str, Any], fallback_sr: int
+        audio_data: NDArray[Any] | AudioInputItem, fallback_sr: int
     ) -> str:
         """Write an audio array or ``AudioInputItem`` dict to a temporary WAV."""
         import numpy as np
