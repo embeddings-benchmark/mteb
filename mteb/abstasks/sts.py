@@ -13,7 +13,7 @@ from ._statistics_calculation import (
     calculate_pair_modality_statistics,
     calculate_score_statistics,
 )
-from .abstask import AbsTask
+from .abstask import AbsTask, _pair_content_columns
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -90,6 +90,17 @@ class AbsTaskSTS(AbsTask):
     max_score: int = 5
     input1_prompt_type: PromptType | None = None
     input2_prompt_type: PromptType | None = None
+
+    def _get_content_columns(self) -> dict[str, Modalities]:
+        return _pair_content_columns(self.column_names, self.modalities)
+
+    def _get_symmetric_sides(self) -> tuple[list[str], list[str]] | None:
+        # similarity does not depend on which sentence comes first, matching `symmetric=True` in the statistics
+        sides = [
+            [column] if isinstance(column, str) else list(column)
+            for column in self.column_names
+        ]
+        return (sides[0], sides[1])
 
     def _evaluate_subset(
         self,
