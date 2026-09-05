@@ -924,7 +924,7 @@ class BibleNLPBitextMining(AbsTaskBitextMining):
             )
 
     @staticmethod
-    def _transform_lang_name_hf(lang):
+    def _transform_lang_name_hf(lang: str) -> str:
         # Transform language name to match huggingface configuration
         langs = [l.split("_")[0] for l in lang.split("-")]
         if langs[1] == "eng":
@@ -932,7 +932,7 @@ class BibleNLPBitextMining(AbsTaskBitextMining):
         return "-".join(langs)
 
     @staticmethod
-    def _swap_substrings(string):
+    def _swap_substrings(string: str) -> str:
         substring1, substring2 = string.split("-")
         parts = string.split("-")
         if substring1 in parts and substring2 in parts:
