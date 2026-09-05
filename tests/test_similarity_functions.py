@@ -7,6 +7,8 @@ collapse distinct scores into spurious ties.
 
 from __future__ import annotations
 
+from collections.abc import Callable
+
 import numpy as np
 import pytest
 import torch
@@ -32,7 +34,11 @@ def embeddings() -> tuple[torch.Tensor, torch.Tensor]:
 
 @pytest.mark.parametrize("fn", [cos_sim, dot_score])
 @pytest.mark.parametrize("dtype", LOW_PRECISION_DTYPES)
-def test_scores_are_float32_for_low_precision_inputs(fn, dtype, embeddings):
+def test_scores_are_float32_for_low_precision_inputs(
+    fn: Callable[..., torch.Tensor],
+    dtype: torch.dtype,
+    embeddings: tuple[torch.Tensor, torch.Tensor],
+) -> None:
     """Low-precision embeddings must still yield float32 scores (HPS)."""
     a, b = embeddings
     scores = fn(a.to(dtype), b.to(dtype))
@@ -41,7 +47,9 @@ def test_scores_are_float32_for_low_precision_inputs(fn, dtype, embeddings):
 
 @pytest.mark.parametrize("fn", [pairwise_cos_sim, pairwise_dot_score])
 @pytest.mark.parametrize("dtype", LOW_PRECISION_DTYPES)
-def test_pairwise_scores_are_float32_for_low_precision_inputs(fn, dtype):
+def test_pairwise_scores_are_float32_for_low_precision_inputs(
+    fn: Callable[..., torch.Tensor], dtype: torch.dtype
+) -> None:
     torch.manual_seed(0)
     a = torch.randn(16, 32).to(dtype)
     b = torch.randn(16, 32).to(dtype)
@@ -50,7 +58,9 @@ def test_pairwise_scores_are_float32_for_low_precision_inputs(fn, dtype):
 
 
 @pytest.mark.parametrize("dtype", LOW_PRECISION_DTYPES)
-def test_hps_collapses_spurious_ties(dtype, embeddings):
+def test_hps_collapses_spurious_ties(
+    dtype: torch.dtype, embeddings: tuple[torch.Tensor, torch.Tensor]
+) -> None:
     """Upcasting the scoring step recovers the tie structure of float32.
 
     A naive low-precision matmul buckets scores coarsely and produces spurious
@@ -80,14 +90,18 @@ def test_hps_collapses_spurious_ties(dtype, embeddings):
 
 
 @pytest.mark.parametrize("fn", [cos_sim, dot_score])
-def test_float32_inputs_are_unchanged(fn, embeddings):
+def test_float32_inputs_are_unchanged(
+    fn: Callable[..., torch.Tensor], embeddings: tuple[torch.Tensor, torch.Tensor]
+) -> None:
     """HPS is a no-op for embeddings that are already float32."""
     a, b = embeddings
     assert fn(a, b).dtype == torch.float32
 
 
 @pytest.mark.parametrize("fn", [cos_sim, dot_score])
-def test_numpy_inputs_still_supported(fn, embeddings):
+def test_numpy_inputs_still_supported(
+    fn: Callable[..., torch.Tensor], embeddings: tuple[torch.Tensor, torch.Tensor]
+) -> None:
     a, b = embeddings
     scores = fn(a.numpy().astype(np.float32), b.numpy().astype(np.float32))
     assert torch.as_tensor(scores).dtype == torch.float32

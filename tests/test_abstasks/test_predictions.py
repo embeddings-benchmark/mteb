@@ -1,10 +1,12 @@
 import json
 from pathlib import Path
+from typing import Any
 
 import pytest
 from sklearn.metrics import v_measure_score
 
 import mteb
+from mteb.abstasks import AbsTask
 from mteb.mocks.mock_tasks import (
     MockBitextMiningTask,
     MockClassificationTask,
@@ -122,7 +124,7 @@ from mteb.mocks.mock_tasks.clustering import MockClusteringTask
         ),
     ],
 )
-def test_predictions(tmp_path: Path, task, expected):
+def test_predictions(tmp_path: Path, task: AbsTask, expected: dict[str, Any]) -> None:
     """Run evaluation for each mock task and check predictions."""
     if "image" in task.metadata.modalities:
         pytest.importorskip(

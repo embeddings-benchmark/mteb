@@ -232,8 +232,13 @@ def test_leaderboard_help():
     ],
 )
 def test_leaderboard_cache_paths(
-    tmp_path: Path, cache_path_input, host, port, share, test_description
-):
+    tmp_path: Path,
+    cache_path_input: str | None,
+    host: str,
+    port: int,
+    share: bool,
+    test_description: str,
+) -> None:
     """Test leaderboard with different cache path configurations."""
 
     # Set up cache path based on parameter
@@ -253,7 +258,7 @@ def test_leaderboard_cache_paths(
     mock_app.launch = MagicMock()
 
     # Create a mock function that captures the cache argument and returns our mock app
-    def mock_get_app_func(cache, rebuild=False):
+    def mock_get_app_func(cache: object, rebuild: bool = False) -> MagicMock:
         # Store the cache for verification
         mock_get_app_func.called_with_cache = cache
         mock_get_app_func.called_with_rebuild = rebuild

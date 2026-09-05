@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 import pytest
+from datasets import Dataset
 from datasets.exceptions import DatasetNotFoundError
 
 import mteb
@@ -445,7 +446,7 @@ def test_evaluate_experiment(tmp_path: Path):
 
 
 @pytest.mark.parametrize("embed_dim", [None, 10])
-def test_evaluate_mrl(tmp_path: Path, embed_dim):
+def test_evaluate_mrl(tmp_path: Path, embed_dim: int | None) -> None:
     """Test that evaluate() can be used in an experiment context."""
     model = mteb.get_model(
         "mteb/baseline-random-encoder",
@@ -524,7 +525,14 @@ def test_mock_mmeb_tasks(task: AbsTask):
 
 
 class MockCrashTask(MockMultilingualClassificationTask):
-    def _evaluate_subset(self, model, data_split, hf_split, hf_subset, **kwargs: Any):
+    def _evaluate_subset(
+        self,
+        model: EncoderProtocol,
+        data_split: Dataset,
+        hf_split: str,
+        hf_subset: str,
+        **kwargs: Any,
+    ) -> dict[str, float]:
         if hf_subset == "fra":
             raise RuntimeError("Crash on fra")
         return {"accuracy": 0.8}

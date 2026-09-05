@@ -3,23 +3,26 @@ import pytest
 import mteb
 from mteb._evaluators import SummarizationEvaluator
 from mteb.mocks.mock_tasks import MockSummarizationTask
+from mteb.models.models_protocols import EncoderProtocol
 from mteb.timing import TimingStack
 
 
 # Fixtures
 @pytest.fixture
-def model():
+def model() -> EncoderProtocol:
     return mteb.get_model("mteb/baseline-random-encoder")
 
 
 @pytest.fixture
-def mock_task():
+def mock_task() -> MockSummarizationTask:
     task = MockSummarizationTask()
     task.load_data()
     return task
 
 
-def test_basic_functionality(model, mock_task):
+def test_basic_functionality(
+    model: EncoderProtocol, mock_task: MockSummarizationTask
+) -> None:
     """Test basic functionality and proper initialization."""
     test_data = mock_task.dataset["test"]
 

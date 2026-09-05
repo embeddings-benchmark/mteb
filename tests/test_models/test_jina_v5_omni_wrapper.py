@@ -17,7 +17,10 @@ from mteb.models.model_implementations.jina_models import (
     _video_frames_to_channels_last,
     jina_embeddings_v5_omni_small,
 )
-from mteb.types import PromptType
+from mteb.types import Array, PromptType
+
+if typing.TYPE_CHECKING:
+    from sentence_transformers.base.modality_types import SingleInput
 from tests.mock_models import MockSentenceTransformer
 
 _VARIANT_MAP = {
@@ -32,11 +35,11 @@ _VARIANT_MAP = {
 class CapturingModel(MockSentenceTransformer):
     """Records encode kwargs for assertion."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.captured: list[dict] = []
 
-    def encode(self, inputs, **kwargs: Any):
+    def encode(self, inputs: list[SingleInput] | SingleInput, **kwargs: Any) -> Array:
         self.captured.append(
             {
                 "inputs": inputs,
@@ -47,7 +50,7 @@ class CapturingModel(MockSentenceTransformer):
         return super().encode(inputs, **kwargs)
 
 
-def _make_wrapper(model_prompts=_VARIANT_MAP) -> JinaV5OmniWrapper:
+def _make_wrapper(model_prompts: dict[str, str] = _VARIANT_MAP) -> JinaV5OmniWrapper:
     return JinaV5OmniWrapper(model=CapturingModel(), model_prompts=model_prompts)
 
 
@@ -83,7 +86,12 @@ def _omni_prompts() -> dict:
         (PromptType.query, "PairClassification", "text-matching", "Query: "),
     ],
 )
-def test_prefix_by_task_type(prompt_type, task_type, expected_task, expected_prompt):
+def test_prefix_by_task_type(
+    prompt_type: PromptType,
+    task_type: str,
+    expected_task: str,
+    expected_prompt: str,
+) -> None:
     wrapper = _make_wrapper()
     _encode(wrapper, prompt_type, task_type)
     assert wrapper.model.captured[-1]["task"] == expected_task
@@ -100,7 +108,12 @@ def test_prefix_by_task_type(prompt_type, task_type, expected_task, expected_pro
         (PromptType.query, "AudioPairClassification", "text-matching", "Query: "),
     ],
 )
-def test_simplified_fallback(prompt_type, task_type, expected_task, expected_prompt):
+def test_simplified_fallback(
+    prompt_type: PromptType,
+    task_type: str,
+    expected_task: str,
+    expected_prompt: str,
+) -> None:
     """Simplified task types fall back to the _SIMPLIFIED_TO_JINA_TASK map."""
     wrapper = _make_wrapper(model_prompts={})
     _encode(wrapper, prompt_type, task_type)
@@ -120,7 +133,12 @@ def test_simplified_fallback(prompt_type, task_type, expected_task, expected_pro
         (PromptType.document, "ImageClustering", "text-matching", "Document: "),
     ],
 )
-def test_omni_overrides(prompt_type, task_type, expected_task, expected_prompt):
+def test_omni_overrides(
+    prompt_type: PromptType,
+    task_type: str,
+    expected_task: str,
+    expected_prompt: str,
+) -> None:
     """Omni model_prompts overrides route specific task types correctly."""
     wrapper = _make_wrapper(model_prompts=_omni_prompts())
     _encode(wrapper, prompt_type, task_type)

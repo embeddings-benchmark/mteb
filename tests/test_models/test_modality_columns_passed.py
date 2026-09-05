@@ -6,6 +6,7 @@ import pytest
 from torch.utils.data import DataLoader
 
 import mteb
+from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.mocks.mock_tasks import (
     MockAudioClassification,
@@ -83,7 +84,7 @@ class TrackingEncoderModel(RandomEncoderBaseline):
     ],
     ids=lambda task: task.metadata.name,
 )
-def test_modality_columns_passed_to_encode(task):
+def test_modality_columns_passed_to_encode(task: AbsTask) -> None:
     if "image" in task.metadata.modalities:
         pytest.importorskip(
             "torchvision", reason="Image dependencies are not installed"
@@ -146,7 +147,9 @@ def test_modality_columns_passed_to_encode(task):
         ),
     ],
 )
-def test_text_retrieval_columns_passed_to_encode(task, expected_columns_by_prompt_type):
+def test_text_retrieval_columns_passed_to_encode(
+    task: AbsTask, expected_columns_by_prompt_type: dict[str, list[str]]
+) -> None:
     model = TrackingEncoderModel()
     mteb.evaluate(model, task, cache=None)
 

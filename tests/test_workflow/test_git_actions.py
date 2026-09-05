@@ -3,6 +3,7 @@ from __future__ import annotations
 import subprocess
 from pathlib import Path
 from typing import Any
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -266,7 +267,7 @@ def test_create_pr_action_do_and_undo() -> None:
             self.pr = FakePR()
             self.last_args = None
 
-        def create_pull(self, **kwargs: Any):
+        def create_pull(self, **kwargs: Any) -> MagicMock:
             self.last_args = kwargs
             return self.pr
 
@@ -274,7 +275,7 @@ def test_create_pr_action_do_and_undo() -> None:
         def __init__(self):
             self.repo = FakeRepo()
 
-        def get_repo(self, _name: str):
+        def get_repo(self, _name: str) -> MagicMock:
             return self.repo
 
     gh = FakeGh()

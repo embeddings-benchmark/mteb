@@ -46,7 +46,7 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
 
         def encode(
             self, sentences: DataLoader, prompt_name: str | None = None, **kwargs: Any
-        ):
+        ) -> np.ndarray:
             assert prompt_name == to_compare
             return np.zeros((len(sentences.dataset), 10))
 
@@ -65,7 +65,7 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
 
         def encode(
             self, sentences: DataLoader, prompt_name: str | None = None, **kwargs: Any
-        ):
+        ) -> np.ndarray:
             assert prompt_name == to_compare
             return np.zeros((len(sentences.dataset), 10))
 
@@ -106,7 +106,7 @@ def test_model_query_passage_prompts_task_type(
 
     task_name = task.metadata.name if is_task_name else task.metadata.type
 
-    def check_prompt(prompt_name, is_query):
+    def check_prompt(prompt_name: str | None, is_query: bool) -> None:
         prompt_type = "query" if is_query else "document"
         assert prompt_name == f"{task_name}-{prompt_type}"
 
@@ -120,7 +120,7 @@ def test_model_query_passage_prompts_task_type(
 
         def encode(
             self, sentences: DataLoader, prompt_name: str | None = None, **kwargs: Any
-        ):
+        ) -> np.ndarray:
             check_prompt(prompt_name, self.is_query)
             self.is_query = not self.is_query
             return np.zeros((len(sentences.dataset), 10))
@@ -130,7 +130,7 @@ def test_model_query_passage_prompts_task_type(
 
         def encode(
             self, sentences: DataLoader, prompt_name: str | None = None, **kwargs: Any
-        ):
+        ) -> np.ndarray:
             check_prompt(prompt_name, self.is_query)
             self.is_query = not self.is_query
             return np.zeros((len(sentences.dataset), 10))

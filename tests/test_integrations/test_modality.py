@@ -6,6 +6,7 @@ from copy import deepcopy
 import pytest
 
 import mteb
+from mteb.abstasks import AbsTask
 from mteb.mocks.mock_tasks import (
     MockImageTextPairClassificationTask,
     MockMultiChoiceTask,
@@ -33,7 +34,7 @@ logging.basicConfig(level=logging.INFO)
         ((MockRetrievalTask(), MockImageClusteringTask()), ["text"]),
     ],
 )
-def test_task_modality_filtering(task, modalities):
+def test_task_modality_filtering(task: AbsTask, modalities: list[str]) -> None:
     model_name = "mteb/baseline-random-encoder"
     model = mteb.get_model(model_name)
     model_meta = deepcopy(model.mteb_model_meta)
@@ -50,8 +51,8 @@ def test_task_modality_filtering(task, modalities):
 
 @pytest.mark.parametrize("task", [MockMultiChoiceTask()])
 def test_task_modality_filtering_model_modalities_only_one_of_modalities(
-    task, caplog: pytest.LogCaptureFixture
-):
+    task: AbsTask, caplog: pytest.LogCaptureFixture
+) -> None:
     """Task have it2i, model only image."""
     with caplog.at_level(logging.WARNING):
         model = mteb.get_model("mteb/baseline-random-encoder")
@@ -72,7 +73,9 @@ def test_task_modality_filtering_model_modalities_only_one_of_modalities(
 
 
 @pytest.mark.parametrize("task", [MockImageClusteringTask()])
-def test_task_modality_filtering_model_modalities_more_than_task_modalities(task):
+def test_task_modality_filtering_model_modalities_more_than_task_modalities(
+    task: AbsTask,
+) -> None:
     scores = mteb.evaluate(
         mteb.get_model("mteb/baseline-random-encoder"),
         task,

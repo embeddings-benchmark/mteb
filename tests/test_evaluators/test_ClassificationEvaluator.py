@@ -8,13 +8,13 @@ from mteb.timing import TimingStack
 
 
 @pytest.fixture
-def mock_task():
+def mock_task() -> MockClassificationTask:
     task = MockClassificationTask()
     task.load_data()
     return task
 
 
-def test_expected_scores(mock_task):
+def test_expected_scores(mock_task: MockClassificationTask) -> None:
     """Test that the evaluator returns expected scores with pre-computed embeddings."""
     train_data = mock_task.dataset["train"]
     test_data = mock_task.dataset["test"]
@@ -37,7 +37,7 @@ def test_expected_scores(mock_task):
     assert len(y_pred) == len(test_data)
 
 
-def test_deterministic_predictions(mock_task):
+def test_deterministic_predictions(mock_task: MockClassificationTask) -> None:
     """Test that the evaluator produces identical results when called with the same embeddings."""
     train_data = mock_task.dataset["train"]
     test_data = mock_task.dataset["test"]

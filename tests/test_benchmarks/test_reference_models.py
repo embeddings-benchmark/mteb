@@ -7,6 +7,7 @@ import pytest
 import mteb
 from mteb import BenchmarkResults, ResultCache
 from mteb.abstasks import AbsTaskRetrieval
+from mteb.benchmarks import Benchmark
 from mteb.models.get_model_meta import get_model_meta
 
 logging.basicConfig(level=logging.INFO)
@@ -23,7 +24,7 @@ REFERENCE_MODELS = [
 RETRIEVAL_ONLY_MODELS = {"mteb/baseline-bm25s"}
 
 
-def _get_expected_task_names(benchmark, model_name):
+def _get_expected_task_names(benchmark: Benchmark, model_name: str) -> list[str]:
     """Get public task names compatible with the model's capabilities."""
     model_meta = get_model_meta(model_name)
     model_mods = set(model_meta.modalities) if model_meta.modalities else None
@@ -66,7 +67,9 @@ TARGET_BENCHMARKS = mteb.get_benchmarks()
 @pytest.mark.test_reference_models
 @pytest.mark.parametrize("benchmark", TARGET_BENCHMARKS, ids=lambda b: b.name)
 @pytest.mark.parametrize("model_name", REFERENCE_MODELS)
-def test_reference_model_coverage(result_cache, benchmark, model_name):
+def test_reference_model_coverage(
+    result_cache: BenchmarkResults, benchmark: Benchmark, model_name: str
+) -> None:
     expected = _get_expected_task_names(benchmark, model_name)
     results = result_cache._filter_models(model_names=[model_name])._filter_tasks(
         expected
