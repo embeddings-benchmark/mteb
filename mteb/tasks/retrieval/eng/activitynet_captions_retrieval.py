@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -80,7 +82,7 @@ class ActivityNetCaptionsV2TRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_activitynet(self, query_columns=["video"], corpus_columns=["caption"])
 
 
@@ -113,5 +115,5 @@ class ActivityNetCaptionsT2VRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_activitynet(self, query_columns=["caption"], corpus_columns=["video"])

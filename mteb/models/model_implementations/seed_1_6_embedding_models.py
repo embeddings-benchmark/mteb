@@ -159,7 +159,7 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         tokenizer_name: str = "cl100k_base",
         embed_dim: int | None = None,
         available_embed_dims: Sequence[int | None] = (None,),
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """Wrapper for Seed embedding API."""
         import tiktoken

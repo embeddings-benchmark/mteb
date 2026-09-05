@@ -56,7 +56,7 @@ class NemotronColEmbedVL(AbsEncoder):
         device_map="cuda",
         torch_dtype=torch.bfloat16,
         attn_implementation="flash_attention_2",
-        **kwargs,
+        **kwargs: Any,
     ):
         from transformers import AutoModel
 
@@ -69,14 +69,14 @@ class NemotronColEmbedVL(AbsEncoder):
             attn_implementation=attn_implementation,
         ).eval()
 
-    def get_text_embeddings(self, texts, batch_size: int = 32, **kwargs):
+    def get_text_embeddings(self, texts, batch_size: int = 32, **kwargs: Any):
         return self.model.forward_queries(texts, batch_size=batch_size)
 
     def get_image_embeddings(
         self,
         images,
         batch_size: int = 32,
-        **kwargs,
+        **kwargs: Any,
     ):
         import torchvision.transforms.functional as F
         from PIL import Image
@@ -103,8 +103,8 @@ class NemotronColEmbedVL(AbsEncoder):
 
     def get_fused_embeddings(
         self,
-        *args,
-        **kwargs,
+        *args: Any,
+        **kwargs: Any,
     ):
         raise NotImplementedError(
             "Fused embeddings are not supported yet. Please use get_text_embeddings or get_image_embeddings."
@@ -331,7 +331,7 @@ class LlamaNemotronEmbedVL(AbsEncoder):
         attn_implementation="flash_attention_2",
         use_image_modality: bool = True,
         use_text_modality: bool = True,
-        **kwargs,
+        **kwargs: Any,
     ):
         self.use_image_modality = use_image_modality
         self.use_text_modality = use_text_modality

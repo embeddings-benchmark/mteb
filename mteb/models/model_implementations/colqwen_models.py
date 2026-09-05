@@ -34,7 +34,7 @@ class ColQwen2Wrapper(ColPaliEngineWrapper):
         revision: str | None = None,
         device: str | None = None,
         query_prefix: str = "Query: ",
-        **kwargs,
+        **kwargs: Any,
     ):
         from colpali_engine.models import ColQwen2, ColQwen2Processor
 
@@ -59,7 +59,7 @@ class ColQwen2_5Wrapper(ColPaliEngineWrapper):  # noqa: N801
         device: str | None = None,
         attn_implementation: str | None = None,
         query_prefix: str = "Query: ",
-        **kwargs,
+        **kwargs: Any,
     ):
         from colpali_engine.models import ColQwen2_5, ColQwen2_5_Processor
         from transformers.utils.import_utils import is_flash_attn_2_available
@@ -88,7 +88,7 @@ class ColQwen3_5Wrapper(AbsEncoder):  # noqa: N801
         model_name: str = "athrael-soju/colqwen3.5-4.5B-v3",
         revision: str | None = None,
         device: str | None = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         from colpali_engine.models import ColQwen3_5, ColQwen3_5Processor
 
@@ -332,7 +332,7 @@ class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
         max_frames: int | None = 64,
         num_frames: int | None = None,
         max_audio_length: int | None = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         from colpali_engine.models import ColQwen2_5Omni, ColQwen2_5OmniProcessor
 
@@ -411,7 +411,7 @@ class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
             all_embeds, batch_first=True, padding_value=0
         )
 
-    def get_audio_embeddings(self, audios, batch_size: int = 32, **kwargs):
+    def get_audio_embeddings(self, audios, batch_size: int = 32, **kwargs: Any):
         def _process(audio):
             arr = audio["array"] if isinstance(audio, dict) else audio
             if isinstance(arr, torch.Tensor):
@@ -420,7 +420,7 @@ class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
 
         return self._encode_batches(audios, "audio", _process, "Encoding audio")
 
-    def get_video_embeddings(self, videos, batch_size: int = 32, **kwargs):
+    def get_video_embeddings(self, videos, batch_size: int = 32, **kwargs: Any):
         def _process(clip):
             return self.processor.process_videos([clip])
 
@@ -754,7 +754,7 @@ class ColQwen3EngineWrapper(ColPaliEngineWrapper):
         model_name: str = "Verm1ion/ColTurk-VDR-Qwen3VL-4B-v1.0",
         revision: str | None = None,
         device: str | None = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         from colpali_engine.models import ColQwen3, ColQwen3Processor
 

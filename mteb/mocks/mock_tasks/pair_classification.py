@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from datasets import Audio, Dataset, DatasetDict
 
 from mteb.abstasks.image.image_text_pair_classification import (
@@ -85,7 +87,7 @@ class MockPairClassificationTask(AbsTaskPairClassification):
         **general_args,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         sentence1 = ["This is a test sentence", "This is another test sentence"]
         sentence2 = [
             "dette er en test sætning",
@@ -217,7 +219,7 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         sentence1 = ["This is a test sentence", "This is another test sentence"]
         sentence2 = [
             "dette er en test sætning",
@@ -296,7 +298,7 @@ class MockPairImageClassificationTask(AbsTaskPairClassification):
     input1_column_name = "image1"
     input2_column_name = "image2"
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         images1 = create_mock_images(self.np_rng)
         images2 = create_mock_images(self.np_rng)
 
@@ -348,7 +350,7 @@ class MockImageTextPairClassificationTask(AbsTaskImageTextPairClassification):
     metadata.modalities = ["image", "text"]
     metadata.category = "i2t"
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         images = create_mock_images(self.np_rng)
         texts = ["This is a test sentence", "This is another test sentence"]
 
@@ -441,7 +443,7 @@ class MockMultilingualImageTextPairClassificationTask(
 
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         images = create_mock_images(self.np_rng)
         texts = ["This is a test sentence", "This is another test sentence"]
         data = {
@@ -515,7 +517,7 @@ class MockAudioPairClassification(AbsTaskPairClassification):
     input2_column_name = "audio1"
     label_column_name = "label"
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         mock_audio = create_mock_audio(self.np_rng)
 
         self.dataset = DatasetDict(
@@ -609,7 +611,7 @@ class MockVideoPairClassificationTask(AbsTaskPairClassification):
     input2_column_name = "video2"
     label_column_name = "label"
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         from datasets import Video
 
         mock_videos = create_mock_video_bytes(self.np_rng)
@@ -721,7 +723,7 @@ class MockVideoAudioPairClassificationTask(AbsTaskPairClassification):
         }
     }
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         from datasets import Video
 
         mock_videos = create_mock_video_bytes(self.np_rng)
@@ -816,7 +818,7 @@ class MockAsymVideoAudioPairClassificationTask(AbsTaskPairClassification):
         }
     }
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         from datasets import Video
 
         mock_videos = create_mock_video_bytes(self.np_rng)
@@ -907,7 +909,7 @@ class MockAsymVideoAudioPairClassificationTaskV2(AbsTaskPairClassification):
         }
     }
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         from datasets import Video
 
         mock_videos = create_mock_video_bytes(self.np_rng)
@@ -998,7 +1000,7 @@ class MockSymCustomVideoAudioPairClassificationTaskV2(AbsTaskPairClassification)
         }
     }
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         from datasets import Video
 
         mock_videos = create_mock_video_bytes(self.np_rng)
@@ -1072,7 +1074,7 @@ class MockAsymCustomTextImagePairClassificationTaskV2(AbsTaskPairClassification)
         }
     }
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         from datasets import Image
 
         mock_text = ["text 1", "text 2"]

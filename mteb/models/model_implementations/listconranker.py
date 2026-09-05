@@ -23,7 +23,7 @@ LISTCONRANKER_CITATION = """@article{liu2025listconranker,
 
 
 class ListConRanker(RerankerWrapper):
-    def __init__(self, model_name_or_path: str, **kwargs) -> None:
+    def __init__(self, model_name_or_path: str, **kwargs: Any) -> None:
         from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
         super().__init__(model_name_or_path, **kwargs)

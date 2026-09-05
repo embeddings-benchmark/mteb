@@ -1,3 +1,5 @@
+from typing import Any
+
 from datasets import DatasetDict, load_dataset
 
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -40,7 +42,7 @@ class TbilisiCityHallBitextMining(AbsTaskBitextMining):
         bibtex_citation="",
     )
 
-    def load_data(self, **kwargs) -> None:
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
         self.dataset = {}

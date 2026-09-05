@@ -1,0 +1,92 @@
+{
+    "test": {
+        "num_samples": 1080,
+        "num_queries": 540,
+        "num_documents": 540,
+        "number_of_characters": 0,
+        "documents_text_statistics": null,
+        "documents_image_statistics": null,
+        "documents_audio_statistics": null,
+        "documents_video_statistics": {
+            "total_duration_seconds": 1393.3333333333335,
+            "total_frames": 33440,
+            "min_width": 854,
+            "average_width": 863.8888888888889,
+            "max_width": 864,
+            "min_height": 480,
+            "average_height": 480.0,
+            "max_height": 480,
+            "min_duration_seconds": 1.5833333333333333,
+            "average_duration_seconds": 2.5802469135802473,
+            "max_duration_seconds": 3.5416666666666665,
+            "unique_videos": 540,
+            "average_fps": 24.0,
+            "fps": {
+                "24": 540
+            },
+            "min_resolution": [
+                854,
+                480
+            ],
+            "average_resolution": [
+                863.8888888888889,
+                480.0
+            ],
+            "max_resolution": [
+                864,
+                480
+            ],
+            "resolutions": {
+                "854x480": 6,
+                "864x480": 534
+            }
+        },
+        "queries_text_statistics": null,
+        "queries_image_statistics": null,
+        "queries_audio_statistics": null,
+        "queries_video_statistics": {
+            "total_duration_seconds": 1379.9695162080268,
+            "total_frames": 33122,
+            "min_width": 720,
+            "average_width": 720.0,
+            "max_width": 720,
+            "min_height": 480,
+            "average_height": 480.0,
+            "max_height": 480,
+            "min_duration_seconds": 1.5470383275261324,
+            "average_duration_seconds": 2.5554991040889385,
+            "max_duration_seconds": 3.5,
+            "unique_videos": 540,
+            "average_fps": 24.011111111111113,
+            "fps": {
+                "24": 534,
+                "25": 6
+            },
+            "min_resolution": [
+                720,
+                480
+            ],
+            "average_resolution": [
+                720.0,
+                480.0
+            ],
+            "max_resolution": [
+                720,
+                480
+            ],
+            "resolutions": {
+                "720x480": 540
+            }
+        },
+        "relevant_docs_statistics": {
+            "num_relevant_docs": 540,
+            "min_relevant_docs_per_query": 1,
+            "average_relevant_docs_per_query": 1.0,
+            "max_relevant_docs_per_query": 1,
+            "unique_relevant_docs": 540,
+            "num_missing_query_ids": 0,
+            "num_missing_corpus_ids": 0
+        },
+        "top_ranked_statistics": null
+    }
+}

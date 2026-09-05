@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections import defaultdict
+from typing import Any
 
 import datasets
 
@@ -113,7 +114,7 @@ class BrightBiologyRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -157,7 +158,7 @@ class BrightEarthScienceRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -201,7 +202,7 @@ class BrightEconomicsRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -245,7 +246,7 @@ class BrightPsychologyRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -289,7 +290,7 @@ class BrightRoboticsRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -333,7 +334,7 @@ class BrightStackoverflowRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -377,7 +378,7 @@ class BrightSustainableLivingRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -421,7 +422,7 @@ class BrightPonyRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -465,7 +466,7 @@ class BrightLeetcodeRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -509,7 +510,7 @@ class BrightAopsRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -553,7 +554,7 @@ class BrightTheoremQATheoremsRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -597,7 +598,7 @@ class BrightTheoremQAQuestionsRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -641,7 +642,7 @@ class BrightBiologyLongRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -685,7 +686,7 @@ class BrightEarthScienceLongRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -729,7 +730,7 @@ class BrightEconomicsLongRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -773,7 +774,7 @@ class BrightPsychologyLongRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -817,7 +818,7 @@ class BrightRoboticsLongRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -861,7 +862,7 @@ class BrightStackoverflowLongRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -905,7 +906,7 @@ class BrightSustainableLivingLongRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -949,7 +950,7 @@ class BrightPonyLongRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 

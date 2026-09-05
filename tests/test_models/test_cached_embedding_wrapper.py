@@ -62,7 +62,7 @@ class DummyModel(RandomEncoderBaseline):
 
 class TestCachedEmbeddingWrapper:
     @pytest.fixture
-    def cache_dir(self, tmp_path):
+    def cache_dir(self, tmp_path: Path):
         cache_path = tmp_path / "test_cache"
         yield cache_path
         # Cleanup after test

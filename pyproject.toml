@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.20.5"
+version = "2.20.6"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -337,6 +337,7 @@ select = [
     "A",       # flake8-builtins, don't shadow builtins
     "RET",     # flake8-return
     "SIM",     # flake8-simplify
+    "ANN",     # flake8-annotations
 ]
 
 ignore = [
@@ -362,6 +363,12 @@ ignore = [
     "PT018",    # composite assertions; splitting `assert a and b` is not always clearer
     "RET504",   # unnecessary-assign; named intermediate results often aid readability
     "SIM108",   # ternary over if/else is a style preference, and displaces inline comments
+    # TODO: burn down in follow-ups. These need a type inferred per call site (ruff can fix
+    # only 5 of 733), and all of them sit in modules mypy currently exempts.
+    "ANN001",   # missing-type-function-argument
+    "ANN201",   # missing-return-type-undocumented-public-function
+    "ANN202",   # missing-return-type-private-function
+    "ANN401",   # any-type
 ]
 future-annotations = true  # For TC rules
 typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
@@ -433,6 +440,9 @@ convention = "google"
 [tool.ruff.lint.flake8-annotations]
 mypy-init-return = true
 suppress-none-returning = true
+# ANN003 requires `**kwargs` to be annotated; ANN401 rejects `Any`. `**kwargs` here is a
+# pass-through for arbitrary model/task options, so `Any` is the only correct annotation.
+allow-star-arg-any = true
 
 [tool.ruff.lint.flake8-type-checking]
 strict = true
@@ -623,6 +633,7 @@ extend-ignore-re = [
     "editor.*",  # ignore authors in citations
     "FIne-Grained Music retrievAl",  # stylised paper title (FIGMA)
     "@\\w+\\{[^,\n]+,",  # bibtex entry keys are arbitrary identifiers
+    '"[a-z]{3}": \["[a-z]{3}-[A-Z][a-z]{3}"\]',  # ISO 639-3 language-map entries are codes, not prose
 ]
 
 [tool.typos.files]

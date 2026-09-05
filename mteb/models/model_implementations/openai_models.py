@@ -33,7 +33,7 @@ class OpenAIModel(AbsEncoder):
         tokenizer_name: str = "cl100k_base",
         embed_dim: int | None = None,
         client: Any | None = None,  # OpenAI
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """Wrapper for OpenAIs embedding API.
 

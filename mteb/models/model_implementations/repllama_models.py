@@ -36,7 +36,7 @@ class RepLLaMAModel(AbsEncoder):
         torch_dtype: torch.dtype,
         device_map: str,
         model_prompts: dict[str, str] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         from peft import PeftModel
         from transformers import AutoModel, AutoTokenizer
@@ -131,7 +131,9 @@ class RepLLaMAModel(AbsEncoder):
         return np.concatenate(all_embeddings, axis=0)
 
 
-def _loader(wrapper: type[RepLLaMAModel], **kwargs) -> Callable[..., EncoderProtocol]:
+def _loader(
+    wrapper: type[RepLLaMAModel], **kwargs: Any
+) -> Callable[..., EncoderProtocol]:
     _kwargs = kwargs
 
     def loader_inner(**kwargs: Any) -> EncoderProtocol:

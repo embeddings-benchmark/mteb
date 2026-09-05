@@ -20,7 +20,7 @@ from mteb.cli.build_cli import (
 )
 
 
-def test_available_tasks(capsys):
+def test_available_tasks(capsys: pytest.CaptureFixture[str]):
     args = Namespace(
         categories=None,
         task_types=None,
@@ -35,7 +35,7 @@ def test_available_tasks(capsys):
     )
 
 
-def test_available_benchmarks(capsys):
+def test_available_benchmarks(capsys: pytest.CaptureFixture[str]):
     args = Namespace(benchmarks=None)
     _available_benchmarks(args=args)
 
@@ -96,7 +96,7 @@ def test_run_task(
     )
 
 
-def test_create_meta(tmp_path):
+def test_create_meta(tmp_path: Path):
     """Test create_meta function directly as well as through the command line interface"""
     test_folder = Path(__file__).parent
     model_name = "sentence-transformers/all-MiniLM-L6-v2"
@@ -315,7 +315,7 @@ def test_leaderboard_cli_integration():
     assert "leaderboard" in result.stdout, "Leaderboard command not found in main help"
 
 
-def test_mock_run_cli(tmp_path):
+def test_mock_run_cli(tmp_path: Path):
     """Test the mock-run subcommand."""
 
     args = Namespace(

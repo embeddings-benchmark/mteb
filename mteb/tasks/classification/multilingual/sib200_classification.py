@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -305,7 +307,7 @@ class SIB200ClassificationV2(AbsTaskClassification):
 """,
     )
 
-    def dataset_transform(self, **kwargs) -> None:
+    def dataset_transform(self, **kwargs: Any) -> None:
         """
         Convert each split to the MTEB format:
         * text: str

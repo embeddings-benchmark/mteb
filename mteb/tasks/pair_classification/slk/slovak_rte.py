@@ -1,3 +1,5 @@
+from typing import Any
+
 from datasets import DatasetDict
 
 from mteb.abstasks.pair_classification import AbsTaskPairClassification
@@ -50,7 +52,7 @@ class SlovakRTE(AbsTaskPairClassification):
         prompt="Given a premise, retrieve a hypothesis that is entailed by the premise",
     )
 
-    def dataset_transform(self, **kwargs):
+    def dataset_transform(self, **kwargs: Any):
         _dataset = {}
 
         for split in self.dataset:

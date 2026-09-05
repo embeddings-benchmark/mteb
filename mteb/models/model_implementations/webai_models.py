@@ -32,7 +32,7 @@ class ColVec1Wrapper(AbsEncoder):
         device: str | None = None,
         trust_remote_code: bool = True,
         torch_dtype: torch.dtype | None = torch.bfloat16,
-        **kwargs,
+        **kwargs: Any,
     ):
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -90,7 +90,7 @@ class ColVec1Wrapper(AbsEncoder):
         return self.model(**encoded_inputs)
 
     def get_image_embeddings(
-        self, images, batch_size=32, show_progress_bar=True, **kwargs
+        self, images, batch_size=32, show_progress_bar=True, **kwargs: Any
     ):
         import torchvision.transforms.functional as F
         from PIL import Image
@@ -116,7 +116,7 @@ class ColVec1Wrapper(AbsEncoder):
         )
 
     def get_text_embeddings(
-        self, texts, batch_size=32, show_progress_bar=True, **kwargs
+        self, texts, batch_size=32, show_progress_bar=True, **kwargs: Any
     ):
         all_embeds = []
         with torch.no_grad():
@@ -153,7 +153,7 @@ class ColVec11Wrapper(ColVec1Wrapper):
         trust_remote_code: bool = True,
         torch_dtype: torch.dtype | None = torch.bfloat16,
         processor_kwargs: dict[str, Any] | None = None,
-        **model_kwargs,
+        **model_kwargs: Any,
     ):
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         processor_kwargs = dict(processor_kwargs or {})
@@ -175,7 +175,7 @@ class ColVec11Wrapper(ColVec1Wrapper):
         )
 
     def get_image_embeddings(
-        self, images, batch_size=32, show_progress_bar=True, **kwargs
+        self, images, batch_size=32, show_progress_bar=True, **kwargs: Any
     ):
         import torchvision.transforms.functional as F
         from PIL import Image

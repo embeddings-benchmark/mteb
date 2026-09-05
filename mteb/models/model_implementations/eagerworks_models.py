@@ -25,7 +25,7 @@ class EagerEmbedV1Wrapper(AbsEncoder):
         revision: str | None = None,
         device: str | None = None,
         image_size: int = 784,
-        **kwargs,
+        **kwargs: Any,
     ):
         from transformers import AutoProcessor, Qwen3VLForConditionalGeneration
 

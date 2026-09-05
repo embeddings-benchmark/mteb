@@ -23,7 +23,7 @@ EVA_CLIP_CITATION = """@article{EVA-CLIP,
 }"""
 
 
-def evaclip_loader(model_name, **kwargs):
+def evaclip_loader(model_name, **kwargs: Any):
     try:
         import sys
 

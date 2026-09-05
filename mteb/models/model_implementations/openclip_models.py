@@ -23,7 +23,7 @@ OPENCLIP_CITATION = """@inproceedings{cherti2023reproducible,
 }"""
 
 
-def openclip_loader(model_name, **kwargs):
+def openclip_loader(model_name, **kwargs: Any):
     import open_clip
 
     class OpenCLIPModel(AbsEncoder):

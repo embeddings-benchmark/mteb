@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks import AbsTaskZeroShotClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -54,7 +56,7 @@ class UrbanSound8kZeroshotClassification(AbsTaskZeroShotClassification):
             "This is a sound of street music",
         ]
 
-    def dataset_transform(self, **kwargs):
+    def dataset_transform(self, **kwargs: Any):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["train"], label=self.label_column_name
         )
