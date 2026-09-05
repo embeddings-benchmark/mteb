@@ -1,6 +1,7 @@
 from .afri_mcqa_retrieval import AfriMCQAA2IRetrieval, AfriMCQAI2ARetrieval
 from .audio_caps import AudioCapsA2TRetrieval, AudioCapsT2ARetrieval
 from .belebele_retrieval import BelebeleRetrieval
+from .chinaopen_retrieval import ChinaOpenT2VRetrieval, ChinaOpenV2TRetrieval
 from .common_voice import (
     CommonVoiceMini17A2TRetrieval,
     CommonVoiceMini17T2ARetrieval,
@@ -167,6 +168,8 @@ __all__ = [
     "AudioCapsT2ARetrieval",
     "BelebeleRetrieval",
     "CUREv1Retrieval",
+    "ChinaOpenT2VRetrieval",
+    "ChinaOpenV2TRetrieval",
     "CommonVoiceMini17A2TRetrieval",
     "CommonVoiceMini17T2ARetrieval",
     "CommonVoiceMini21A2TRetrieval",
