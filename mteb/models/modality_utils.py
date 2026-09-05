@@ -19,13 +19,15 @@ every modality.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, cast
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping, Sequence
+
     from mteb.types import BatchedInput, Modalities
 
 
-def is_modality_present(value: Any) -> bool:
+def is_modality_present(value: object) -> bool:
     """Whether a single value in a batch column carries data.
 
     Args:
@@ -40,6 +42,17 @@ def is_modality_present(value: Any) -> bool:
     if isinstance(value, (str, list, tuple)):
         return len(value) > 0
     return True
+
+
+def _modality_column(
+    batch: BatchedInput, modality: Modalities
+) -> Sequence[object] | None:
+    """The batch column for `modality`, or None if the batch has no such column.
+
+    `BatchedInput` is a union of TypedDicts, so it has to be widened to a plain
+    mapping to be looked up by a modality name that is not a literal.
+    """
+    return cast("Mapping[str, Sequence[object]]", batch).get(modality)
 
 
 def get_present_indices(batch: BatchedInput, modality: Modalities) -> list[int]:
@@ -59,7 +72,7 @@ def get_present_indices(batch: BatchedInput, modality: Modalities) -> list[int]:
         images = [batch["image"][i] for i in image_rows]
         ```
     """
-    values = batch.get(modality)
+    values = _modality_column(batch, modality)
     if values is None:
         return []
     return [i for i, value in enumerate(values) if is_modality_present(value)]
@@ -77,7 +90,7 @@ def is_interleaved(batch: BatchedInput, modality: Modalities) -> bool:
         not. A model that handles only uniform batches can use this to report an
         informative error instead of failing inside its processor.
     """
-    values = batch.get(modality)
+    values = _modality_column(batch, modality)
     if not values:
         return False
     return 0 < len(get_present_indices(batch, modality)) < len(values)

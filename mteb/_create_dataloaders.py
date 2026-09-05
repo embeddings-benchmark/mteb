@@ -63,6 +63,7 @@ def _corpus_to_dict(
     # when the batch is collated for the model.
     body = row["text"]
     title = row.get("title") or ""
+    text: str | None
     if title:
         text = f"{title} {body}".strip() if body else title
     else:
