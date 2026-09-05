@@ -13,71 +13,64 @@ _BIBTEX = r"""
 }
 """
 
+# The official evaluation reports Top-1/Top-5 accuracy; its script also
+# computes Top-10.
+_K_VALUES = (1, 5, 10)
 
-class _BioVITAReranking(AbsTaskRetrieval):
-    """Shared loader for the six BioVITA cross-modal reranking directions."""
 
-    # The official evaluation reports Top-1/Top-5 accuracy; its script also
-    # computes Top-10.
-    k_values = (1, 5, 10)
+def _task_specific_scores(
+    self: AbsTaskRetrieval,
+    scores: dict[str, dict[str, float]],
+    qrels: dict[str, dict[str, int]],
+    results: dict[str, dict[str, float]],
+    hf_split: str,
+    hf_subset: str,
+) -> dict[str, float]:
+    """Compute BioVITA's official taxon-level Top-k accuracy.
 
-    def task_specific_scores(
-        self,
-        scores: dict[str, dict[str, float]],
-        qrels: dict[str, dict[str, int]],
-        results: dict[str, dict[str, float]],
-        hf_split: str,
-        hf_subset: str,
-    ) -> dict[str, float]:
-        """Compute BioVITA's official taxon-level Top-k accuracy.
+    Each candidate taxon can contain multiple documents. Following the
+    reference evaluation, we max-pool document similarities per taxon and
+    rank the 100 candidate taxa. Standard MTEB metrics remain document-level.
+    """
+    split_data = self.dataset[hf_subset][hf_split]
+    queries = split_data["queries"]
+    corpus = split_data["corpus"]
 
-        Each candidate taxon can contain multiple documents. Following the
-        reference evaluation, we max-pool document similarities per taxon and
-        rank the 100 candidate taxa. Standard MTEB metrics remain document-level.
-        """
-        split_data = self.dataset[hf_subset][hf_split]
-        queries = split_data["queries"]
-        corpus = split_data["corpus"]
+    candidate_taxa = dict(zip(queries["id"], queries["candidate_taxa"], strict=True))
+    correct_taxon = dict(zip(queries["id"], queries["correct_taxon"], strict=True))
+    doc_taxon = dict(zip(corpus["id"], corpus["taxon"], strict=True))
 
-        candidate_taxa = dict(
-            zip(queries["id"], queries["candidate_taxa"], strict=True)
+    hits = dict.fromkeys(_K_VALUES, 0)
+    total = 0
+    for query_id, doc_scores in results.items():
+        taxa = candidate_taxa[query_id]
+        rank_of_taxon = {taxon: rank for rank, taxon in enumerate(taxa)}
+        best: dict[str, float] = {}
+        for doc_id, score in doc_scores.items():
+            taxon = doc_taxon.get(doc_id)
+            if taxon is None or taxon not in rank_of_taxon:
+                continue
+            if taxon not in best or score > best[taxon]:
+                best[taxon] = score
+        # Use the official candidate order as a deterministic tie-break
+        # when taxon scores are equal.
+        ranked = sorted(
+            taxa,
+            key=lambda taxon: (
+                -best.get(taxon, float("-inf")),
+                rank_of_taxon[taxon],
+            ),
         )
-        correct_taxon = dict(zip(queries["id"], queries["correct_taxon"], strict=True))
-        doc_taxon = dict(zip(corpus["id"], corpus["taxon"], strict=True))
+        total += 1
+        correct = correct_taxon[query_id]
+        for k in _K_VALUES:
+            if correct in ranked[:k]:
+                hits[k] += 1
 
-        hits = dict.fromkeys(self.k_values, 0)
-        total = 0
-        for query_id, doc_scores in results.items():
-            taxa = candidate_taxa[query_id]
-            rank_of_taxon = {taxon: rank for rank, taxon in enumerate(taxa)}
-            best: dict[str, float] = {}
-            for doc_id, score in doc_scores.items():
-                taxon = doc_taxon.get(doc_id)
-                if taxon is None or taxon not in rank_of_taxon:
-                    continue
-                if taxon not in best or score > best[taxon]:
-                    best[taxon] = score
-            # Use the official candidate order as a deterministic tie-break
-            # when taxon scores are equal.
-            ranked = sorted(
-                taxa,
-                key=lambda taxon: (
-                    -best.get(taxon, float("-inf")),
-                    rank_of_taxon[taxon],
-                ),
-            )
-            total += 1
-            correct = correct_taxon[query_id]
-            for k in self.k_values:
-                if correct in ranked[:k]:
-                    hits[k] += 1
-
-        return {
-            f"taxon_top_{k}_accuracy": hits[k] / max(1, total) for k in self.k_values
-        }
+    return {f"taxon_top_{k}_accuracy": hits[k] / max(1, total) for k in _K_VALUES}
 
 
-class BioVITAA2TReranking(_BioVITAReranking):
+class BioVITAA2TReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BioVITAA2TReranking",
         description="Given a wildlife audio recording, rerank candidate taxon names from the official candidate pool. Each query has 100 candidate taxa, which are ranked by similarity to their text representations. Performance is reported as taxon-level Top-1, Top-5, and Top-10 accuracy on the unseen species and unseen genus subsets.",
@@ -103,8 +96,10 @@ class BioVITAA2TReranking(_BioVITAReranking):
         is_beta=True,
     )
 
+    task_specific_scores = _task_specific_scores
 
-class BioVITAT2AReranking(_BioVITAReranking):
+
+class BioVITAT2AReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BioVITAT2AReranking",
         description="Given a taxon name, rerank candidate audio recordings by taxon relevance from the official candidate pool. Each query has 100 candidate taxa; a taxon is scored by the maximum similarity over its audio recordings. Performance is reported as taxon-level Top-1, Top-5, and Top-10 accuracy on the unseen species and unseen genus subsets.",
@@ -130,8 +125,10 @@ class BioVITAT2AReranking(_BioVITAReranking):
         is_beta=True,
     )
 
+    task_specific_scores = _task_specific_scores
 
-class BioVITAA2IReranking(_BioVITAReranking):
+
+class BioVITAA2IReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BioVITAA2IReranking",
         description="Given a wildlife audio recording, rerank candidate images by taxon relevance from the official candidate pool. Each query has 100 candidate taxa; a taxon is scored by the maximum similarity over its images. Performance is reported as taxon-level Top-1, Top-5, and Top-10 accuracy on the unseen species and unseen genus subsets.",
@@ -157,8 +154,10 @@ class BioVITAA2IReranking(_BioVITAReranking):
         is_beta=True,
     )
 
+    task_specific_scores = _task_specific_scores
 
-class BioVITAI2AReranking(_BioVITAReranking):
+
+class BioVITAI2AReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BioVITAI2AReranking",
         description="Given a wildlife image, rerank candidate audio recordings by taxon relevance from the official candidate pool. Each query has 100 candidate taxa; a taxon is scored by the maximum similarity over its audio recordings. Performance is reported as taxon-level Top-1, Top-5, and Top-10 accuracy on the unseen species and unseen genus subsets.",
@@ -184,8 +183,10 @@ class BioVITAI2AReranking(_BioVITAReranking):
         is_beta=True,
     )
 
+    task_specific_scores = _task_specific_scores
 
-class BioVITAI2TReranking(_BioVITAReranking):
+
+class BioVITAI2TReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BioVITAI2TReranking",
         description="Given a wildlife image, rerank candidate taxon names from the official candidate pool. Each query has 100 candidate taxa, which are ranked by similarity to their text representations. Performance is reported as taxon-level Top-1, Top-5, and Top-10 accuracy on the unseen species and unseen genus subsets.",
@@ -211,8 +212,10 @@ class BioVITAI2TReranking(_BioVITAReranking):
         is_beta=True,
     )
 
+    task_specific_scores = _task_specific_scores
 
-class BioVITAT2IReranking(_BioVITAReranking):
+
+class BioVITAT2IReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BioVITAT2IReranking",
         description="Given a taxon name, rerank candidate images by taxon relevance from the official candidate pool. Each query has 100 candidate taxa; a taxon is scored by the maximum similarity over its images. Performance is reported as taxon-level Top-1, Top-5, and Top-10 accuracy on the unseen species and unseen genus subsets.",
@@ -237,3 +240,5 @@ class BioVITAT2IReranking(_BioVITAReranking):
         bibtex_citation=_BIBTEX,
         is_beta=True,
     )
+
+    task_specific_scores = _task_specific_scores
