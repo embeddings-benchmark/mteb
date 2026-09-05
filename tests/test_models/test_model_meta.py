@@ -589,3 +589,38 @@ def test_model_validate_json_resolved():
     json_data_unknown = json.dumps(meta_dict)
     parsed_unknown = ModelMeta.model_validate_json_resolved(json_data_unknown)
     assert parsed_unknown.loader is None
+
+
+def test_load_model_model_type_override():
+    """model_type override is reflected in mteb_model_meta and experiment_kwargs."""
+    model = mteb.get_model(
+        "mteb/baseline-random-encoder",
+        model_type="late-interaction",
+    )
+    assert model.mteb_model_meta.model_type == ["late-interaction"]
+    assert model.mteb_model_meta.experiment_kwargs is not None
+    assert model.mteb_model_meta.experiment_kwargs["model_type"] == ["late-interaction"]
+
+
+def test_load_model_similarity_fn_name_override():
+    """similarity_fn_name override is reflected in mteb_model_meta and experiment_kwargs."""
+    from mteb.models.model_meta import ScoringFunction
+
+    model = mteb.get_model(
+        "mteb/baseline-random-encoder",
+        similarity_fn_name="dot",
+    )
+    assert model.mteb_model_meta.similarity_fn_name == ScoringFunction.DOT_PRODUCT
+    assert model.mteb_model_meta.experiment_kwargs is not None
+    assert "similarity_fn_name" in model.mteb_model_meta.experiment_kwargs
+
+
+def test_load_model_overrides_not_passed_to_loader():
+    """model_type and similarity_fn_name must not appear in loader_kwargs."""
+    model = mteb.get_model(
+        "mteb/baseline-random-encoder",
+        model_type="late-interaction",
+        similarity_fn_name="dot",
+    )
+    assert "model_type" not in model.mteb_model_meta.loader_kwargs
+    assert "similarity_fn_name" not in model.mteb_model_meta.loader_kwargs

@@ -477,9 +477,27 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         device: str | None = None,
         *,
         embed_dim: int | None = None,
+        model_type: list[MODEL_TYPES] | MODEL_TYPES | None = None,
+        similarity_fn_name: ScoringFunction | str | None = None,
         **kwargs: Any,
     ) -> MTEBModels:
-        """Loads the model using the specified loader function."""
+        """Loads the model using the specified loader function.
+
+        Args:
+            device: The device to load the model on.
+            embed_dim: Override the embedding dimension at load time.  The model
+                must declare the requested dimension in ``meta.embed_dim``.
+            model_type: Override the ``model_type`` recorded in the result
+                metadata.  Useful for models that can operate in multiple modes
+                (e.g. ``["dense"]`` vs ``["late-interaction"]``).  The value is
+                stored in ``experiment_kwargs`` for tracking but is **not** passed
+                to the loader function.
+            similarity_fn_name: Override the similarity function recorded in the
+                result metadata (e.g. switch from cosine to dot-product for a
+                sparse variant).  Also stored in ``experiment_kwargs`` only.
+            **kwargs: Additional keyword arguments forwarded to the loader and
+                recorded in ``experiment_kwargs``.
+        """
         # create a copy so that changing the model meta on the model does not influence the original meta
         self._check_requirements()
         _self = self.model_copy(deep=True)
@@ -525,6 +543,23 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         _kwargs.update(merged_exp_kwargs)
         if device is not None:
             _kwargs["device"] = device
+
+        # model_type and similarity_fn_name overrides are metadata-only —
+        # they are recorded in experiment_kwargs for tracking but never
+        # forwarded to the loader function.
+        if model_type is not None:
+            _mt = [model_type] if isinstance(model_type, str) else list(model_type)
+            updates["model_type"] = _mt
+            exp = dict(updates.get("experiment_kwargs") or {})
+            exp["model_type"] = _mt
+            updates["experiment_kwargs"] = exp or None
+
+        if similarity_fn_name is not None:
+            _sfn = ScoringFunction(similarity_fn_name) if isinstance(similarity_fn_name, str) else similarity_fn_name
+            updates["similarity_fn_name"] = _sfn
+            exp = dict(updates.get("experiment_kwargs") or {})
+            exp["similarity_fn_name"] = str(_sfn)
+            updates["experiment_kwargs"] = exp or None
 
         updates["loader_kwargs"] = _kwargs
         _self = _self.model_copy(update=updates)

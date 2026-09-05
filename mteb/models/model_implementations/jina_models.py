@@ -381,27 +381,6 @@ class JinaWrapper(SentenceTransformerEncoderWrapper):
 SUPPORTED_VECTOR_TYPES = ("single_vector", "multi_vector")
 
 
-class Jinav4ModelMeta(ModelMeta):
-    def load_model(
-        self,
-        device: str | None = None,
-        *,
-        embed_dim: int | None = None,
-        **kwargs: Any,
-    ) -> MTEBModels:
-        model = super().load_model(device=device, embed_dim=embed_dim, **kwargs)
-        vector_type = kwargs.pop(
-            "vector_type", "single_vector"
-        )  # didn't add to args to not trigger experiments
-        if vector_type == "multi_vector":
-            model.mteb_model_meta = model.mteb_model_meta.model_copy(
-                update={
-                    "model_type": ["late-interaction"],
-                }
-            )
-        return model
-
-
 class JinaV4Wrapper(AbsEncoder):
     """following the hf model card documentation."""
 
@@ -445,6 +424,20 @@ class JinaV4Wrapper(AbsEncoder):
         ).eval()
         self.model_prompts = model_prompts or {}
         self.vector_type = vector_type
+        self._mteb_model_meta: ModelMeta | None = None
+
+    @property
+    def mteb_model_meta(self) -> ModelMeta | None:
+        return self._mteb_model_meta
+
+    @mteb_model_meta.setter
+    def mteb_model_meta(self, meta: ModelMeta | None) -> None:
+        if meta is None:
+            self._mteb_model_meta = None
+            return
+        if self.vector_type == "multi_vector":
+            meta = meta.model_copy(update={"model_type": ["late-interaction"]})
+        self._mteb_model_meta = meta
 
     def _resolve_task_parameters(
         self, task_metadata: TaskMetadata, prompt_type: PromptType | None = None
@@ -1229,7 +1222,7 @@ jina_reranker_v3_5 = ModelMeta(
 }""",
 )
 
-jina_embeddings_v4 = Jinav4ModelMeta(
+jina_embeddings_v4 = ModelMeta(
     loader=JinaV4Wrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
