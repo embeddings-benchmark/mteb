@@ -62,7 +62,7 @@ class DummyModel(RandomEncoderBaseline):
 
 class TestCachedEmbeddingWrapper:
     @pytest.fixture
-    def cache_dir(self, tmp_path: Path) -> Path:
+    def cache_dir(self, tmp_path: Path):
         cache_path = tmp_path / "test_cache"
         yield cache_path
         # Cleanup after test
@@ -77,7 +77,7 @@ class TestCachedEmbeddingWrapper:
         ],
     )
     def test_caching_functionality(  # noqa: PLR0914
-        self, cache_dir: Path, cache_backend: type[CacheBackendProtocol]
+        self, cache_dir, cache_backend: type[CacheBackendProtocol]
     ):
         if cache_backend is FaissCache:
             try:

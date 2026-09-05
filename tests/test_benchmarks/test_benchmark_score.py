@@ -10,7 +10,6 @@ from mteb.benchmarks._benchmark_metrics import (
     _compute_task_types,
 )
 from mteb.benchmarks.benchmark import Benchmark, BenchmarkAggregation
-from mteb.results import BenchmarkResults
 from tests.conftest import _skip_if_datasets_too_old
 
 MODELS_SCORES = {
@@ -25,7 +24,7 @@ MODELS_SCORES = {
 }
 
 
-def _make_benchmark(extra_tasks: list[str] | None = None) -> Benchmark:
+def _make_benchmark(extra_tasks: list[str] | None = None):
     tasks = mteb.get_tasks(
         [
             "NanoSCIDOCSRetrieval",
@@ -233,7 +232,7 @@ def test_compute_mean_public_private(mock_mteb_cache: ResultCache):
     assert means["Mean(Private)"] is None
 
 
-def _summary_columns(benchmark: Benchmark, mock_results: BenchmarkResults) -> set[str]:
+def _summary_columns(benchmark: Benchmark, mock_results) -> set[str]:
     pl_df = mock_results.select_tasks(benchmark.tasks)._to_results_df(benchmark.tasks)
     return set(benchmark._create_summary_table(pl_df).df.columns)
 

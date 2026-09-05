@@ -80,12 +80,8 @@ class TestRetrievalEvaluator:
         ],
     )
     def test_metrics_at_k(
-        self,
-        relevant_docs: dict[str, dict[str, int]],
-        results: dict[str, dict[str, float]],
-        ignore_identical_ids: bool,
-        expected_metrics: dict[str, dict[str, float]],
-    ) -> None:
+        self, relevant_docs, results, ignore_identical_ids, expected_metrics
+    ):
         (
             all_scores,
             ndcg,
@@ -129,9 +125,7 @@ class TestRetrievalEvaluator:
             ),
         ],
     )
-    def test_n_auc(
-        self, ignore_identical_ids: bool, expected_naucs: dict[str, float]
-    ) -> None:
+    def test_n_auc(self, ignore_identical_ids, expected_naucs):
         relevant_docs = {
             "0": {"0": 1, "1": 1},
             "1": {"0": 1},

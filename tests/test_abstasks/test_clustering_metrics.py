@@ -12,7 +12,7 @@ from tests.mock_models import MockSentenceTransformer
 
 def _well_separated_dataset(
     n_clusters: int = 3, points_per_cluster: int = 12, dim: int = 8, seed: int = 0
-) -> tuple[np.ndarray, list[list[str]]]:
+):
     rng = np.random.default_rng(seed)
     centers = rng.normal(scale=10.0, size=(n_clusters, dim))
     embeddings = []

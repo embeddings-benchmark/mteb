@@ -6,7 +6,6 @@ import pytest
 from pydantic import ValidationError
 
 import mteb
-from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import (
     _TASKTYPE2SIMPLIFIEDTASKTYPE,
     TaskMetadata,
@@ -21,7 +20,7 @@ from mteb.mocks import (
 )
 
 
-def check_descriptive_stats(task: AbsTask) -> None:
+def check_descriptive_stats(task):
     result_stat = task.calculate_descriptive_statistics()
     # remove descriptive task file
     task.metadata.descriptive_stat_path.unlink()
@@ -33,24 +32,24 @@ def check_descriptive_stats(task: AbsTask) -> None:
 
 
 @pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID)
-def test_descriptive_statistics_mock_tasks(task: AbsTask) -> None:
+def test_descriptive_statistics_mock_tasks(task):
     check_descriptive_stats(task)
 
 
 @pytest.mark.parametrize("task", MOCK_MIEB_TASK_GRID)
-def test_descriptive_statistics_mock_mieb_tasks(task: AbsTask) -> None:
+def test_descriptive_statistics_mock_mieb_tasks(task):
     pytest.importorskip("torchvision", reason="Image dependencies are not installed")
     check_descriptive_stats(task)
 
 
 @pytest.mark.parametrize("task", MOCK_MAEB_TASK_GRID)
-def test_descriptive_statistics_mock_maeb_tasks(task: AbsTask) -> None:
+def test_descriptive_statistics_mock_maeb_tasks(task):
     pytest.importorskip("torchaudio", reason="Audio dependencies are not installed")
     check_descriptive_stats(task)
 
 
 @pytest.mark.parametrize("task", MOCK_MVEB_TASK_GRID)
-def test_descriptive_statistics_mock_mveb_tasks(task: AbsTask) -> None:
+def test_descriptive_statistics_mock_mveb_tasks(task):
     pytest.importorskip(
         "torchcodec", reason="Video dependencies torchcodec are not installed"
     )
@@ -58,7 +57,7 @@ def test_descriptive_statistics_mock_mveb_tasks(task: AbsTask) -> None:
 
 
 @pytest.mark.parametrize("task", MOCK_MULTIMODAL_TASKS)
-def test_descriptive_statistics_mock_mmeb_tasks(task: AbsTask) -> None:
+def test_descriptive_statistics_mock_mmeb_tasks(task):
     pytest.importorskip(
         "torchcodec", reason="Video dependencies torchcodec are not installed"
     )

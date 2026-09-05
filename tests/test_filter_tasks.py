@@ -4,13 +4,12 @@ from mteb import get_tasks
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.task_metadata import TaskDomain, TaskType
 from mteb.filter_tasks import filter_tasks
-from mteb.get_tasks import MTEBTasks
 from mteb.tasks.aggregated_tasks import CQADupstackRetrieval
 from mteb.types import Modalities
 
 
 @pytest.fixture
-def all_tasks() -> MTEBTasks:
+def all_tasks():
     return get_tasks()
 
 

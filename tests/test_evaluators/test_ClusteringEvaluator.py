@@ -8,7 +8,6 @@ from sklearn.metrics import v_measure_score
 from torch.utils.data import DataLoader
 
 from mteb._evaluators import ClusteringEvaluator
-from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.mocks.mock_tasks.clustering import MockClusteringTask
 from mteb.timing import TimingStack
 
@@ -22,11 +21,11 @@ class TestClusteringEvaluator:
             def encode(
                 self,
                 sentences: DataLoader,
-                task_metadata: TaskMetadata,
-                hf_split: str,
-                hf_subset: str,
+                task_metadata,
+                hf_split,
+                hf_subset,
                 task_name: str | None = None,
-                batch_size: int = 32,
+                batch_size=32,
                 **kwargs: Any,
             ) -> NDArray[np.floating]:
                 return np.eye(len(sentences.dataset))

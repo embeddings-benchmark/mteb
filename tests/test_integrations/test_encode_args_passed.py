@@ -32,7 +32,7 @@ def test_encode_kwargs_passed_to_all_encodes(task: AbsTask, tmp_path: Path):
     class MockEncoderWithKwargs(AbsEncoder):
         def encode(
             self, sentences: DataLoader, task_name: str | None = None, **kwargs: Any
-        ) -> np.ndarray:
+        ):
             assert "no_one_uses_this_args" in kwargs
             assert (
                 my_encode_kwargs["no_one_uses_this_args"]

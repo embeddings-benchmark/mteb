@@ -25,7 +25,7 @@ def format_bibtex(bibtex_str: str) -> str | None:
 
 
 @pytest.fixture(params=mteb.get_tasks())
-def task(request: pytest.FixtureRequest) -> AbsTask:
+def task(request: pytest.FixtureRequest):
     return request.param
 
 
@@ -44,7 +44,7 @@ def test_task_bibtex(task: AbsTask):
 
 
 @pytest.fixture(params=mteb.get_benchmarks())
-def benchmark(request: pytest.FixtureRequest) -> Benchmark:
+def benchmark(request: pytest.FixtureRequest):
     return request.param
 
 

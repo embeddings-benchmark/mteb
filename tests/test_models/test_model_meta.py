@@ -127,7 +127,7 @@ def test_model_meta_hashable():
         {"Touche2020-NL"},  # child task
     ],
 )
-def test_model_similar_tasks(training_datasets: set[str]) -> None:
+def test_model_similar_tasks(training_datasets):
     dummy_model_meta = ModelMeta(
         name="test/test_model",
         revision="test",
@@ -287,7 +287,7 @@ def test_check_training_datasets_can_be_derived(model_meta: ModelMeta):
 
 
 @pytest.mark.parametrize("model_type", ["dense", "cross-encoder", "late-interaction"])
-def test_get_model_metas_each_model_type(model_type: str) -> None:
+def test_get_model_metas_each_model_type(model_type):
     """Test filtering by each individual model type."""
     models = mteb.get_model_metas(model_types=[model_type])
 
@@ -537,7 +537,7 @@ def test_model_meta_auto_install_extras(monkeypatch: pytest.MonkeyPatch):
 
     install_calls: list[tuple[str | None, list[str]]] = []
 
-    def fake_install(name: str, groups: list[str]) -> None:
+    def fake_install(name, groups):
         install_calls.append((name, list(groups)))
 
     monkeypatch.setattr("mteb.models.model_meta._install_extras", fake_install)
@@ -562,7 +562,7 @@ def test_model_meta_no_auto_install_by_default(monkeypatch: pytest.MonkeyPatch):
     )
     monkeypatch.delenv("MTEB_AUTO_INSTALL_EXTRAS", raising=False)
 
-    def fail_install(name: str, groups: list[str]) -> None:
+    def fail_install(name, groups):
         raise AssertionError("install should not be attempted")
 
     monkeypatch.setattr("mteb.models.model_meta._install_extras", fail_install)

@@ -73,7 +73,7 @@ def test_mteb_mteb_tasks(
 
 
 @pytest.mark.parametrize("modalities", [["text"], ["image"], ["text", "image"]])
-def test_get_tasks_with_exclusive_modality_filter(modalities: list[str]) -> None:
+def test_get_tasks_with_exclusive_modality_filter(modalities):
     """Test exclusive_modality_filter with actual tasks (if available)"""
     text_tasks_exclusive = get_tasks(
         modalities=modalities, exclusive_modality_filter=True

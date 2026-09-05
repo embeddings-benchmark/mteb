@@ -4,7 +4,6 @@ import pytest
 from datasets import Dataset, DatasetDict
 
 import mteb
-from mteb.abstasks import AbsTask
 
 
 @pytest.mark.parametrize(
@@ -18,7 +17,7 @@ from mteb.abstasks import AbsTask
         mteb.get_task("STS17MultilingualVisualSTS", hf_subsets=["en-en"]),
     ],
 )
-def test_multilingual_load_data(task: AbsTask) -> None:
+def test_multilingual_load_data(task):
     dummy_dataset = DatasetDict({"test": Dataset.from_dict({"text": ["test"]})})
 
     with patch("mteb.abstasks.abstask.load_dataset") as mock_load:
@@ -36,7 +35,7 @@ def test_multilingual_load_data(task: AbsTask) -> None:
         mteb.get_task("MIRACLRetrievalHardNegatives", languages=["eng"]),
     ],
 )
-def test_multilingual_retrieval_load_data(task: AbsTask) -> None:
+def test_multilingual_retrieval_load_data(task):
     dummy_split = {
         "corpus": Dataset.from_dict({"id": ["d1"], "text": ["doc"]}),
         "queries": Dataset.from_dict({"id": ["q1"], "text": ["query"]}),

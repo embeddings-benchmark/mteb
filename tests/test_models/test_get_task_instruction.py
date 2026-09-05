@@ -25,7 +25,7 @@ class _FakeEncoder(AbsEncoder):
         raise NotImplementedError
 
 
-def _gritlm_template(instr: str, prompt_type: PromptType | None) -> str:
+def _gritlm_template(instr, prompt_type):
     return f"<|user|>\n{instr}\n<|embed|>\n" if instr else "<|embed|>\n"
 
 
@@ -53,11 +53,7 @@ QUERY_INSTR = "Given a biology post, retrieve relevant passages"
         (None, PromptType.query, QUERY_INSTR),
     ],
 )
-def test_get_task_instruction(
-    template: str | Callable[[str, PromptType | None], str],
-    prompt_type: PromptType | None,
-    expected: str,
-) -> None:
+def test_get_task_instruction(template, prompt_type, expected):
     """Regression test for issue https://github.com/embeddings-benchmark/mteb/issues/4683"""
     enc = _FakeEncoder(instruction_template=template)
     meta = _meta(prompt={"query": QUERY_INSTR})

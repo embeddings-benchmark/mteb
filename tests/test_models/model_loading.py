@@ -50,7 +50,7 @@ def get_model_below_n_param_threshold(model_name: str, threshold: float = 2e9) -
     return "n_parameters not specified. Not tested."
 
 
-def parse_args() -> argparse.Namespace:
+def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--omit_previous_success",

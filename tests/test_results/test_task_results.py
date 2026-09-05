@@ -11,7 +11,6 @@ from mteb._hf_integration.eval_result_model import (
 )
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models.models_protocols import EncoderProtocol
 from mteb.results import TaskResult
 from mteb.timing import PhaseTiming
 
@@ -44,7 +43,7 @@ class DummyTask(AbsTask):
         superseded_by="newer_task",
     )
 
-    def evaluate(self, model: EncoderProtocol, split: str = "test") -> dict[str, float]:
+    def evaluate(self, model, split: str = "test"):
         pass
 
     def _evaluate_subset(self, **kwargs: Any):
@@ -61,7 +60,7 @@ class DummyTask(AbsTask):
 
 
 @pytest.fixture
-def task_result() -> TaskResult:
+def task_result():
     scores = {
         "train": {
             "en-de": {

@@ -3,24 +3,23 @@ import pytest
 import mteb
 from mteb._evaluators import AnySTSEvaluator
 from mteb.mocks.mock_tasks import MockSTSTask
-from mteb.models.models_protocols import EncoderProtocol
 from mteb.timing import TimingStack
 
 
 # Fixtures
 @pytest.fixture
-def model() -> EncoderProtocol:
+def model():
     return mteb.get_model("mteb/baseline-random-encoder")
 
 
 @pytest.fixture
-def mock_task() -> MockSTSTask:
+def mock_task():
     task = MockSTSTask()
     task.load_data()
     return task
 
 
-def test_output_structure(model: EncoderProtocol, mock_task: MockSTSTask) -> None:
+def test_output_structure(model, mock_task):
     """Test that the evaluator returns the expected output structure and scores."""
     test_data = mock_task.dataset["test"]
 

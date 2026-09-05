@@ -386,6 +386,11 @@ preview = true
     "S603",  # allow subprocess calls in tests
     "PLC2701",  # Private name import
     "PLR6301",  # Method could be a function - pytest test methods are instance methods
+    # tests are not type-checked (`make mypy` covers `mteb` only), so annotations
+    # here would be unverified;
+    "ANN001",
+    "ANN201",
+    "ANN202",
 ]
 "mteb/mocks/*" = [
     "RUF012",

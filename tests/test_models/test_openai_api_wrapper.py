@@ -183,7 +183,7 @@ class TestOpenAIAPIEncodeWrapper:
 
         # Mock embeddings response - 768-dim embeddings
         # This will be called twice (once for queries, once for corpus)
-        def create_embeddings(count: int) -> dict[str, Any]:
+        def create_embeddings(count):
             return {
                 "data": [
                     {
@@ -198,7 +198,7 @@ class TestOpenAIAPIEncodeWrapper:
         mock_post_response.status_code = 200
 
         # Return different responses based on input size
-        def mock_post_side_effect(*args: Any, **kwargs: Any) -> MagicMock:
+        def mock_post_side_effect(*args: Any, **kwargs: Any):
             input_data = kwargs.get("json", {}).get("input", [])
             response = MagicMock()
             response.status_code = 200

@@ -78,7 +78,7 @@ def test_langscripts(test_case: LangScriptTestCase):
         ("nn", "nno-Latn"),
     ],
 )
-def test_hf_iso_639_1_codes(hf_lang: str, expected: str) -> None:
+def test_hf_iso_639_1_codes(hf_lang, expected):
     assert _hf_lang_to_iso_lang_script(hf_lang) == expected
 
 
@@ -91,7 +91,7 @@ def test_hf_iso_639_1_codes(hf_lang: str, expected: str) -> None:
         ("ara", "ara-Arab"),
     ],
 )
-def test_hf_iso_639_3_codes(hf_lang: str, expected: str) -> None:
+def test_hf_iso_639_3_codes(hf_lang, expected):
     assert _hf_lang_to_iso_lang_script(hf_lang) == expected
 
 
@@ -99,7 +99,7 @@ def test_hf_iso_639_3_codes(hf_lang: str, expected: str) -> None:
     "hf_lang",
     ["multilingual", "code", "mixed", "other", "unknown"],
 )
-def test_hf_special_values_return_none(hf_lang: str) -> None:
+def test_hf_special_values_return_none(hf_lang):
     assert _hf_lang_to_iso_lang_script(hf_lang) is None
 
 
