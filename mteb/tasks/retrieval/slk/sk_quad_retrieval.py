@@ -39,7 +39,7 @@ class SKQuadRetrieval(AbsTaskRetrieval):
         bibtex_citation="",
     )
 
-    def load_data(self, eval_splits=None, **kwargs: Any) -> None:
+    def load_data(self, eval_splits: list[str] | None = None, **kwargs: Any) -> None:
         """Load and preprocess datasets for retrieval task."""
         eval_splits = eval_splits or ["test"]
 

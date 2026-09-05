@@ -25,7 +25,9 @@ _DATASET = {
 _DATE = ("2023-01-19", "2023-01-19")
 
 
-def _load_split(path, revision, config, split, modalities):
+def _load_split(
+    path: str, revision: str | None, config: str, split: str, modalities: list[str]
+) -> RetrievalSplitData:
     ds = load_dataset(path, config, revision=revision, split=split)
     ds = ds.add_column("id", [f"q{i}" for i in range(len(ds))])
 

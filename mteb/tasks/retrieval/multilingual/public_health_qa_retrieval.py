@@ -1,9 +1,16 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 import datasets
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+
+if TYPE_CHECKING:
+    from datasets import Dataset
+
+    from mteb.types import RelevantDocumentsType
 
 _EVAL_SPLIT = "test"
 
@@ -22,7 +29,11 @@ _LANGS = {
 
 def _load_publichealthqa_data(
     path: str, langs: list, split: str, revision: str | None = None
-):
+) -> tuple[
+    dict[str, dict[str, Dataset]],
+    dict[str, dict[str, Dataset]],
+    dict[str, dict[str, RelevantDocumentsType]],
+]:
     queries = {lang: {split: {}} for lang in langs}
     corpus = {lang: {split: {}} for lang in langs}
     relevant_docs = {lang: {split: {}} for lang in langs}

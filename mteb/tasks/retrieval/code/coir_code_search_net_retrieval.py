@@ -1,10 +1,17 @@
+from __future__ import annotations
+
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import datasets
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+
+if TYPE_CHECKING:
+    from datasets import Dataset
+
+    from mteb.types import RelevantDocumentsType
 
 _LANGS = ["python", "javascript", "go", "ruby", "java", "php"]
 _EVAL_SPLIT = "test"
@@ -14,7 +21,11 @@ logger = logging.getLogger(__name__)
 
 def _load_code_search_code_retrieval(
     path: str, langs: list, splits: str, revision: str | None = None
-):
+) -> tuple[
+    dict[str, dict[str, Dataset]],
+    dict[str, dict[str, Dataset]],
+    dict[str, dict[str, RelevantDocumentsType]],
+]:
     corpus = {lang: {split: {} for split in splits} for lang in langs}
     queries = {lang: {split: {} for split in splits} for lang in langs}
     relevant_docs = {lang: {split: {} for split in splits} for lang in langs}

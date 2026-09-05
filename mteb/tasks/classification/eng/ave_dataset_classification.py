@@ -43,7 +43,7 @@ class AVEDatasetClassification(AbsTaskClassification):
     label_column_name: str = "label"
     is_cross_validation: bool = False
 
-    def dataset_transform(self, num_proc=None, **kwargs: Any) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.dataset["train"] = self.dataset["train"].select(range(2048))
 
 
@@ -84,5 +84,5 @@ class AVEDatasetVideoClassification(AbsTaskClassification):
     label_column_name: str = "label"
     is_cross_validation: bool = False
 
-    def dataset_transform(self, num_proc=None, **kwargs: Any) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.dataset["train"] = self.dataset["train"].select(range(2048))
