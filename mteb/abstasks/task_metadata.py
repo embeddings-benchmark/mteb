@@ -237,6 +237,7 @@ _TASK_TYPE = (
         "Summarization",
         "InstructionRetrieval",
         "InstructionReranking",
+        "QuestionAnswering",
     )
     + MIEB_TASK_TYPE
     + MAEB_TASK_TYPE
@@ -398,6 +399,7 @@ _TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {
     "AudioReranking": "retrieval",
     "Reranking": "retrieval",
     "Retrieval": "retrieval",
+    "QuestionAnswering": "retrieval",
     "InstructionRetrieval": "retrieval",
     "InstructionReranking": "retrieval",
     "Clustering": "clustering",
