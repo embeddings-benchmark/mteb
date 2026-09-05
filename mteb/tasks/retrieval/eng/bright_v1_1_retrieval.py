@@ -1,12 +1,17 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import datasets
 
 from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+
+if TYPE_CHECKING:
+    from datasets import Dataset
+
+    from mteb.types import RelevantDocumentsType, TopRankedDocumentsType
 
 
 def load_bright_data(
@@ -15,7 +20,12 @@ def load_bright_data(
     eval_splits: list,
     cache_dir: str | None = None,
     revision: str | None = None,
-):
+) -> tuple[
+    dict[str, Dataset],
+    dict[str, Dataset],
+    dict[str, RelevantDocumentsType],
+    dict[str, TopRankedDocumentsType],
+]:
     eval_split = eval_splits[0]
     corpus_name = "documents" if eval_split == "standard" else "long_documents"
     gold_ids_field = "gold_ids" if eval_split == "standard" else "gold_ids_long"

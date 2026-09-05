@@ -100,10 +100,10 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
 
     def get_image_embeddings(
         self,
-        images,
+        images: DataLoader[BatchedInput],
         batch_size: int = 32,
         **kwargs: Any,
-    ):
+    ) -> Array:
         all_embeds = []
 
         with torch.no_grad():
@@ -120,10 +120,10 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
 
     def get_text_embeddings(
         self,
-        texts,
+        texts: DataLoader[BatchedInput],
         batch_size: int = 32,
         **kwargs: Any,
-    ):
+    ) -> Array:
         all_embeds = []
         with torch.no_grad():
             for batch in tqdm(texts, desc="Encoding texts"):
@@ -138,8 +138,8 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
         return padded
 
     def similarity(
-        self, a, b
-    ):  # Using the processing it goes from 0.57382 to 0.57297 on Vidore2ESGReportsHLRetrieval (without flash attention 2)
+        self, a: Array, b: Array
+    ) -> Array:  # Using the processing it goes from 0.57382 to 0.57297 on Vidore2ESGReportsHLRetrieval (without flash attention 2)
         return self.processor.score(a, b, device=self.device)
 
 

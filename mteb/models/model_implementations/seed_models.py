@@ -69,7 +69,7 @@ class SeedTextEmbeddingModel(AbsEncoder):
 
     def _encode(
         self, inputs: list[str], task_name: str, prompt_type: PromptType | None = None
-    ):
+    ) -> list[list[float]]:
         if (
             self._embed_dim is not None
             and self._embed_dim not in self._available_embed_dims

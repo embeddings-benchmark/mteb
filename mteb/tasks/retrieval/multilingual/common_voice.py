@@ -225,7 +225,12 @@ class CommonVoiceMini17A2TRetrieval(AbsTaskRetrieval):
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(self, id_col="path", text_col="sentence", audio_col="audio"):
+    def dataset_transform(
+        self,
+        id_col: str = "path",
+        text_col: str = "sentence",
+        audio_col: str = "audio",
+    ) -> None:
         """Transform Common Voice dataset to MTEB a2t retrieval format.
         Process each language separately to avoid memory accumulation.
         """
@@ -302,7 +307,12 @@ class CommonVoiceMini17T2ARetrieval(AbsTaskRetrieval):
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(self, id_col="path", text_col="sentence", audio_col="audio"):
+    def dataset_transform(
+        self,
+        id_col: str = "path",
+        text_col: str = "sentence",
+        audio_col: str = "audio",
+    ) -> None:
         """For T2A: query=text, corpus=audio.
         Process each language separately to avoid memory accumulation.
         """
@@ -376,7 +386,12 @@ class CommonVoiceMini21A2TRetrieval(AbsTaskRetrieval):
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(self, id_col="path", text_col="sentence", audio_col="audio"):
+    def dataset_transform(
+        self,
+        id_col: str = "path",
+        text_col: str = "sentence",
+        audio_col: str = "audio",
+    ) -> None:
         """Transform Common Voice dataset to MTEB a2t retrieval format.
         Process each language separately to avoid memory accumulation.
         """
@@ -453,7 +468,12 @@ class CommonVoiceMini21T2ARetrieval(AbsTaskRetrieval):
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(self, id_col="path", text_col="sentence", audio_col="audio"):
+    def dataset_transform(
+        self,
+        id_col: str = "path",
+        text_col: str = "sentence",
+        audio_col: str = "audio",
+    ) -> None:
         """For T2A: query=text, corpus=audio.
         Process each language separately to avoid memory accumulation.
         """

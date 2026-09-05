@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.20.7"
+version = "2.20.10"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -363,11 +363,6 @@ ignore = [
     "PT018",    # composite assertions; splitting `assert a and b` is not always clearer
     "RET504",   # unnecessary-assign; named intermediate results often aid readability
     "SIM108",   # ternary over if/else is a style preference, and displaces inline comments
-    # TODO: burn down in follow-ups. These need a type inferred per call site (ruff can fix
-    # only 5 of 733), and all of them sit in modules mypy currently exempts.
-    "ANN001",   # missing-type-function-argument
-    "ANN201",   # missing-return-type-undocumented-public-function
-    "ANN202",   # missing-return-type-private-function
 ]
 future-annotations = true  # For TC rules
 typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
@@ -391,6 +386,11 @@ preview = true
     "S603",  # allow subprocess calls in tests
     "PLC2701",  # Private name import
     "PLR6301",  # Method could be a function - pytest test methods are instance methods
+    # tests are not type-checked (`make mypy` covers `mteb` only), so annotations
+    # here would go unverified.
+    "ANN001",
+    "ANN201",
+    "ANN202",
 ]
 "mteb/mocks/*" = [
     "RUF012",

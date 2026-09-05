@@ -7,7 +7,7 @@ import os
 import random
 import string
 import time
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, TypeVar
 
 import numpy as np
 import requests
@@ -18,7 +18,11 @@ from mteb.models.model_meta import ModelMeta
 from .bge_models import bge_full_data
 from .e5_instruct import E5_MISTRAL_TRAINING_DATA
 
+T = TypeVar("T")
+
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -44,7 +48,7 @@ logger = logging.getLogger(__name__)
 
 
 class RateLimiter:
-    def __init__(self, qps, max_retries=3):
+    def __init__(self, qps: float, max_retries: int = 3) -> None:
         self.qps = qps
         self.min_interval = 1.0 / qps
         self.last_request_time = 0
@@ -59,7 +63,9 @@ class RateLimiter:
             time.sleep(sleep_time)
         self.last_request_time = time.time()
 
-    def execute_with_retry(self, func, *args: Any, **kwargs: Any):
+    def execute_with_retry(
+        self, func: Callable[..., T], *args: Any, **kwargs: Any
+    ) -> T | None:
         """Execute a function with retry logic
 
         Args:
@@ -91,25 +97,25 @@ class RateLimiter:
 
 
 class Client:
-    def __init__(self, ak, sk, url, timeout=30):
+    def __init__(self, ak: str, sk: str, url: str, timeout: int = 30) -> None:
         self.ak = ak
         self.sk = sk
         self.url = url
         self.timeout = timeout
         self.rate_limiter = RateLimiter(qps=5, max_retries=3)
 
-    def _random_password(self, size=40, chars=None):  # noqa: PLR6301
+    def _random_password(self, size: int = 40, chars: str | None = None) -> str:  # noqa: PLR6301
         if chars is None:
             chars = string.ascii_uppercase + string.ascii_lowercase + string.digits
         random_chars = random.SystemRandom().choice
         return "".join(random_chars(chars) for _ in range(size))
 
-    def __signature(self, random_str, time_stamp):
+    def __signature(self, random_str: str, time_stamp: int) -> str:
         params_str = f"{self.ak}:{time_stamp}:{random_str}:{self.sk}"
         encoded_params_str = params_str.encode("utf-8")
         return hashlib.md5(encoded_params_str, usedforsecurity=False).hexdigest()
 
-    def get_signature(self):
+    def get_signature(self) -> dict[str, Any]:
         timestamp = int(time.time())
         random_str = self._random_password(20)
         sig = self.__signature(random_str, timestamp)
@@ -121,7 +127,7 @@ class Client:
         }
         return params
 
-    def _do_request(self, text):
+    def _do_request(self, text: str) -> dict[str, Any]:
         """Execute the actual request without retry logic"""
         params = self.get_signature()
         params["body"] = text
@@ -140,7 +146,7 @@ class Client:
 
         return result
 
-    def embed(self, text):
+    def embed(self, text: str) -> dict[str, Any] | None:
         """Embed text using the server with rate limiting and retry logic
 
         Args:
