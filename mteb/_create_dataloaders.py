@@ -149,9 +149,12 @@ def _convert_conv_history_to_query(
     return cast("dict[str, str | list[ConversationTurn]]", row)
 
 
+# Duck-typed: accepts a PIL image or a tensor (narrowed via `hasattr`), and the
+# caller-supplied `transform` decides the output type.
 def _transform_image_to_rgb(
-    image: Any, transform: Callable[[Any], Any] | None = None
-) -> Any:
+    image: Any,  # noqa: ANN401
+    transform: Callable[[Any], Any] | None = None,
+) -> Any:  # noqa: ANN401
     """Convert image to RGB and apply a transformation (e.g. PILToTensor).
 
     Args:

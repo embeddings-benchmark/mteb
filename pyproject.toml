@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.20.5"
+version = "2.20.7"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -368,8 +368,6 @@ ignore = [
     "ANN001",   # missing-type-function-argument
     "ANN201",   # missing-return-type-undocumented-public-function
     "ANN202",   # missing-return-type-private-function
-    "ANN205",   # missing-return-type-static-method
-    "ANN401",   # any-type
 ]
 future-annotations = true  # For TC rules
 typing-modules = ["typing_extensions", "mteb.types", "collections.abc"]
@@ -689,6 +687,7 @@ som = "som"
 yor = "yor"
 Beng = "Beng"
 als = "als"
+bse = "bse"
 tha = "tha"
 tham = "tham"
 thi = "thi"

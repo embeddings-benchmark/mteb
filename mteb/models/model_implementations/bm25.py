@@ -4,11 +4,12 @@ import logging
 import unicodedata
 from typing import TYPE_CHECKING, Any, Literal
 
-from mteb._create_dataloaders import _combine_queries_with_instruction_text
 from mteb.models.model_meta import ModelMeta
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+
+    from bm25s.tokenization import Tokenized
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models.models_protocols import SearchProtocol
@@ -289,7 +290,7 @@ class BM25Tokenizer:
         raise ValueError(f"Unknown tokenizer name: {name!r}")
 
     @staticmethod
-    def _to_tokenized(token_lists: list[list[str]]):
+    def _to_tokenized(token_lists: list[list[str]]) -> Tokenized:
         from bm25s.tokenization import Tokenized
 
         vocab: dict[str, int] = {}
@@ -441,6 +442,8 @@ class BM25Search:
         logger.info("Encoding Queries...")
         query_ids = list(queries["id"])
         results = {qid: {} for qid in query_ids}
+        from mteb._create_dataloaders import _combine_queries_with_instruction_text
+
         processed = _combine_queries_with_instruction_text(queries)
         queries_texts = list(processed["text"])
         query_token_strs = self._tokenizer.transform(queries_texts)

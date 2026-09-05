@@ -14,6 +14,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    import requests
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -326,7 +327,7 @@ class GeeVecAPIModel(AbsEncoder):
         apply_instruction_to_passages: bool = False,
         base_url: str | None = None,
         api_key: str | None = None,
-        session: Any | None = None,
+        session: requests.Session | None = None,
         **kwargs: Any,
     ) -> None:
         import requests
