@@ -130,6 +130,7 @@ FRAMEWORKS = Literal[
     "ONNX",
     "OpenVINO",
     "Transformers",
+    "MLX",
 ]
 
 MODEL_TYPES = Literal[
@@ -1526,8 +1527,9 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         """Extract frameworks supported by the model from HuggingFace model tags.
 
         HuggingFace derives tags like ``pytorch``, ``tf``, ``jax``, ``onnx``,
-        ``safetensors``, ``gguf``, and ``openvino`` from the files present in a
-        repository. This method maps those tags to MTEB framework names.
+        ``safetensors``, ``gguf``, ``openvino``, and ``mlx`` from the files
+        present in a repository. This method maps those tags to MTEB framework
+        names.
 
         Args:
             model_name: HuggingFace model name
@@ -1557,6 +1559,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             "safetensors": "safetensors",
             "gguf": "GGUF",
             "openvino": "OpenVINO",
+            "mlx": "MLX",
         }
 
         frameworks: list[FRAMEWORKS] = []
