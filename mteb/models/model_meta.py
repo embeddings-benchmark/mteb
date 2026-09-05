@@ -266,7 +266,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
     output_dtypes: OutputDType | list[OutputDType] | None = None
     extra_requirements_groups: Sequence[str] | None = None
 
-    def __setattr__(self, name: str, value: Any) -> None:
+    def __setattr__(self, name: str, value: Any) -> None:  # noqa: ANN401 -- dunder contract
         """Deprecation warning for direct attribute mutation. Use model_copy(update={...}) instead."""
         warnings.warn(
             f"Mutating '{name}' is deprecated and will be removed in future versions. "
@@ -278,7 +278,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
 
     @model_validator(mode="before")
     @classmethod
-    def _handle_legacy_is_cross_encoder(cls, data: Any) -> Any:
+    def _handle_legacy_is_cross_encoder(cls, data: Any) -> Any:  # noqa: ANN401 -- pydantic mode='before' receives raw input
         """Handle legacy is_cross_encoder field by converting it to model_type.
 
         This validator handles backward compatibility for the deprecated is_cross_encoder field.
@@ -1769,7 +1769,7 @@ def _pydantic_instance_to_code(
     return "\n".join(lines)
 
 
-def _value_to_code(value: Any, indent: int) -> str:  # noqa: PLR0911
+def _value_to_code(value: Any, indent: int) -> str:  # noqa: PLR0911, ANN401 -- serialises arbitrary values
     """Convert a Python value into valid Python source code."""
     if isinstance(value, BaseModel):
         return _pydantic_instance_to_code(value, indent, only_set_fields=True)
@@ -1852,7 +1852,7 @@ def _serialize_experiment_kwargs_to_name(
 
     invalid_chars = set('<>:"|?*\\/\0')
 
-    def _serialize_value(value: Any) -> str:
+    def _serialize_value(value: Any) -> str:  # noqa: ANN401 -- serialises arbitrary values
         """Convert value to deterministic string representation."""
         if isinstance(value, (str, int, float, bool)) or value is None:
             str_value = str(value)

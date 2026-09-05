@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -305,7 +307,7 @@ class SIB200ClassificationV2(AbsTaskClassification):
 """,
     )
 
-    def dataset_transform(self, **kwargs) -> None:
+    def dataset_transform(self, **kwargs: Any) -> None:
         """
         Convert each split to the MTEB format:
         * text: str
@@ -321,7 +323,11 @@ class SIB200ClassificationV2(AbsTaskClassification):
                 )
                 lab_col = next(c for c in ("label", "labels", "category") if c in cols)
 
-                def to_mteb(example, lab_col=lab_col, text_col=text_col):
+                def to_mteb(
+                    example: dict[str, Any],
+                    lab_col: str = lab_col,
+                    text_col: str = text_col,
+                ) -> dict[str, Any]:
                     raw_label = example[lab_col]
                     if isinstance(raw_label, str):
                         label = _TOPIC2ID[raw_label]

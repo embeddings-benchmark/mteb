@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -80,7 +82,7 @@ class Panda70MV2TRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_panda70m(self, query_columns=["video"], corpus_columns=["caption"])
 
 
@@ -113,7 +115,7 @@ class Panda70MT2VRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_panda70m(self, query_columns=["caption"], corpus_columns=["video"])
 
 
@@ -145,7 +147,7 @@ class Panda70MVA2TRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_panda70m(
             self, query_columns=["video", "audio"], corpus_columns=["caption"]
         )
@@ -179,7 +181,7 @@ class Panda70MT2VARetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_panda70m(
             self, query_columns=["caption"], corpus_columns=["video", "audio"]
         )

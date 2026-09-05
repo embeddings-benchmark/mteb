@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 import functools
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 import polars as pl
 
@@ -39,6 +39,7 @@ if TYPE_CHECKING:
         ModelMetaSchema,
         TaskMetaSchema,
     )
+    from mteb.benchmarks._create_table import SummaryTable
     from mteb.cache.result_cache import ResultCache
 
 logger = logging.getLogger(__name__)
@@ -278,7 +279,7 @@ async def build_benchmark_summary(  # noqa: PLR0914
 
 def _build_summary_rows(
     summary_pl: pl.DataFrame,
-    summary: Any,
+    summary: SummaryTable,
     type_cols: list[str],
     per_task_rows: dict[str, dict[str, float]],
     trained_on_by_model: dict[str, tuple[str, ...]],

@@ -65,7 +65,7 @@ def _get_column_widths(df: pd.DataFrame) -> list[str]:
     return widths
 
 
-def _format_zero_shot(zero_shot_percentage: int):
+def _format_zero_shot(zero_shot_percentage: int) -> str:
     if zero_shot_percentage == -1:
         return "⚠️ NA"
     return f"{zero_shot_percentage:.0f}%"

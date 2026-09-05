@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.20.5"
+version = "2.20.10"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -337,6 +337,7 @@ select = [
     "A",       # flake8-builtins, don't shadow builtins
     "RET",     # flake8-return
     "SIM",     # flake8-simplify
+    "ANN",     # flake8-annotations
 ]
 
 ignore = [
@@ -385,6 +386,11 @@ preview = true
     "S603",  # allow subprocess calls in tests
     "PLC2701",  # Private name import
     "PLR6301",  # Method could be a function - pytest test methods are instance methods
+    # tests are not type-checked (`make mypy` covers `mteb` only), so annotations
+    # here would go unverified.
+    "ANN001",
+    "ANN201",
+    "ANN202",
 ]
 "mteb/mocks/*" = [
     "RUF012",
@@ -433,6 +439,9 @@ convention = "google"
 [tool.ruff.lint.flake8-annotations]
 mypy-init-return = true
 suppress-none-returning = true
+# ANN003 requires `**kwargs` to be annotated; ANN401 rejects `Any`. `**kwargs` here is a
+# pass-through for arbitrary model/task options, so `Any` is the only correct annotation.
+allow-star-arg-any = true
 
 [tool.ruff.lint.flake8-type-checking]
 strict = true
@@ -623,6 +632,7 @@ extend-ignore-re = [
     "editor.*",  # ignore authors in citations
     "FIne-Grained Music retrievAl",  # stylised paper title (FIGMA)
     "@\\w+\\{[^,\n]+,",  # bibtex entry keys are arbitrary identifiers
+    '"[a-z]{3}": \["[a-z]{3}-[A-Z][a-z]{3}"\]',  # ISO 639-3 language-map entries are codes, not prose
 ]
 
 [tool.typos.files]
@@ -677,6 +687,7 @@ som = "som"
 yor = "yor"
 Beng = "Beng"
 als = "als"
+bse = "bse"
 tha = "tha"
 tham = "tham"
 thi = "thi"
