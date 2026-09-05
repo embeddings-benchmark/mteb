@@ -59,8 +59,12 @@ _SHARED_POOL_NOTE = (
     "effect of content. "
 )
 
+
+def _dataset(config: str) -> dict:
+    return {"path": _DATASET_PATH, "revision": _DATASET_REVISION, "name": config}
+
+
 _COMMON = dict(
-    dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
     reference=_REFERENCE,
     type="Any2AnyRetrieval",
     eval_splits=["test"],
@@ -88,6 +92,7 @@ class COCOModalEquivT2IRetrieval(AbsTaskRetrieval):
         category="t2i",
         modalities=["text", "image"],
         prompt={"query": "Find the image described by the caption."},
+        dataset=_dataset("t2i"),
         **_COMMON,
     )
 
@@ -102,6 +107,7 @@ class COCOModalEquivA2IHumanRetrieval(AbsTaskRetrieval):
         category="a2i",
         modalities=["audio", "image"],
         prompt={"query": "Find the image described by the spoken caption."},
+        dataset=_dataset("a2i_h"),
         **_COMMON,
     )
 
@@ -116,6 +122,7 @@ class COCOModalEquivA2ITTSRetrieval(AbsTaskRetrieval):
         category="a2i",
         modalities=["audio", "image"],
         prompt={"query": "Find the image described by the spoken caption."},
+        dataset=_dataset("a2i_s"),
         **_COMMON,
     )
 
@@ -129,6 +136,7 @@ class COCOModalEquivI2TRetrieval(AbsTaskRetrieval):
         category="i2t",
         modalities=["image", "text"],
         prompt={"query": "Find the caption that describes this image."},
+        dataset=_dataset("i2t"),
         **_COMMON,
     )
 
@@ -143,6 +151,7 @@ class COCOModalEquivI2AHumanRetrieval(AbsTaskRetrieval):
         category="i2a",
         modalities=["image", "audio"],
         prompt={"query": "Find the spoken caption that describes this image."},
+        dataset=_dataset("i2a_h"),
         **_COMMON,
     )
 
@@ -157,5 +166,6 @@ class COCOModalEquivI2ATTSRetrieval(AbsTaskRetrieval):
         category="i2a",
         modalities=["image", "audio"],
         prompt={"query": "Find the spoken caption that describes this image."},
+        dataset=_dataset("i2a_s"),
         **_COMMON,
     )
