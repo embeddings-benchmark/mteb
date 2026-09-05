@@ -3,7 +3,6 @@ from __future__ import annotations
 import shutil
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
-from unittest.mock import Mock
 
 import numpy as np
 import pytest
@@ -51,7 +50,7 @@ class DummyModel(RandomEncoderBaseline):
                 lambda x: {"text": x["text"] + " (first task processed)"}
             )
             inputs = DataLoader(old_inputs, batch_size=inputs.batch_size)
-        return super().encode(
+        embeddings = super().encode(
             inputs,
             task_metadata=task_metadata,
             hf_split=hf_split,
@@ -59,6 +58,10 @@ class DummyModel(RandomEncoderBaseline):
             prompt_type=prompt_type,
             **kwargs,
         )
+        if prompt_type is None:
+            return embeddings
+        prompt_offset = 1.0 if prompt_type is PromptType.query else 2.0
+        return embeddings + prompt_offset
 
 
 class TestCachedEmbeddingWrapper:
@@ -253,15 +256,8 @@ class TestCachedEmbeddingWrapper:
 
         wrapped_model.close()  # delete to allow cleanup on Windows
 
-    def test_cache_isolated_by_prompt_type(self, cache_dir: Path, monkeypatch):
+    def test_cache_isolated_by_prompt_type(self, cache_dir: Path):
         model = DummyModel("test_model", revision=None)
-        encode = Mock(
-            side_effect=[
-                np.full((1, model.embedding_dim), 1.0, dtype=np.float32),
-                np.full((1, model.embedding_dim), 2.0, dtype=np.float32),
-            ]
-        )
-        monkeypatch.setattr(model, "encode", encode)
         wrapped_model = CachedEmbeddingWrapper(model, cache_dir)
         task_metadata = MockRetrievalTask().metadata
         inputs = DataLoader(
@@ -285,11 +281,10 @@ class TestCachedEmbeddingWrapper:
         finally:
             wrapped_model.close()
 
-        np.testing.assert_allclose(query_embeddings, 1.0)
-        np.testing.assert_allclose(document_embeddings, 2.0)
+        assert not np.array_equal(document_embeddings, query_embeddings)
         np.testing.assert_allclose(cached_query_embeddings, query_embeddings)
         np.testing.assert_allclose(cached_document_embeddings, document_embeddings)
-        assert encode.call_count == 2
+        assert model.call_count == 2
 
 
 @pytest.mark.parametrize(
