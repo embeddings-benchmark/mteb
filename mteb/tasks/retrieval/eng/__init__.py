@@ -319,6 +319,7 @@ from .panda70m_retrieval import (
     Panda70MV2TRetrieval,
     Panda70MVA2TRetrieval,
 )
+from .parse_embed_retrieval import ParseEmbedRetrieval
 from .piqa_retrieval import PIQA
 from .quail_retrieval import Quail
 from .quora_retrieval import (
@@ -781,6 +782,7 @@ __all__ = [
     "Panda70MT2VRetrieval",
     "Panda70MV2TRetrieval",
     "Panda70MVA2TRetrieval",
+    "ParseEmbedRetrieval",
     "PeerQA",
     "ProceduralMemBench",
     "Quail",
