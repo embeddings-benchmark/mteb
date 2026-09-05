@@ -110,7 +110,7 @@ class BitextMiningEvaluator(Evaluator):
         if len(query_embeddings.shape) == 1:
             query_embeddings = query_embeddings.reshape(1, *query_embeddings.shape)
         if len(corpus_embeddings.shape) == 1:
-            corpus_embeddings = corpus_embeddings.reshape(1, *corpus_embeddings)
+            corpus_embeddings = corpus_embeddings.reshape(1, *corpus_embeddings.shape)
 
         # Check that corpus and queries are on the same device
         if (
