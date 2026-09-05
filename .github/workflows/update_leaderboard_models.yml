@@ -40,7 +40,7 @@ jobs:
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
       - name: Generate model list
-        run: uv run python scripts/generate_leaderboard_models.py > models.py
+        run: uv run --no-sync python scripts/generate_leaderboard_models.py > models.py
 
       - name: Check if models.py changed in HF Space
         id: diff
