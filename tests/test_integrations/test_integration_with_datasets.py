@@ -2,8 +2,6 @@
 
 import logging
 import sys
-from dataclasses import dataclass, field
-from pathlib import Path
 
 import pytest
 import sklearn
@@ -11,19 +9,9 @@ from packaging.version import Version
 
 import mteb
 from mteb.abstasks import AbsTask
-from mteb.mocks import TASK_TEST_GRID
+from tests.test_integrations._model_info import ModelInfo, assert_final_score
 
 logging.basicConfig(level=logging.INFO)
-
-
-@dataclass
-class ModelInfo:
-    name: str
-    expected_scores: dict[str, float]
-    model: mteb.EncoderProtocol = field(init=False, repr=False)
-
-    def __post_init__(self) -> None:
-        self.model = mteb.get_model(self.name)
 
 
 DENSE_MODEL = ModelInfo(
@@ -60,6 +48,9 @@ SPARSE_MODEL = ModelInfo(
         "IFIRNFCorpus": 0.0,
     },
 )
+# Only one (small) task: RandomColBERTBaseline.search() scores the full corpus against
+# all queries in a single MaxSim call with no chunking, which OOMs on the larger corpora
+# of the other retrieval-shaped tasks (e.g. SciDocsRR).
 COLBERT_MODEL = ModelInfo(
     name="mteb/baseline-random-colbert",
     expected_scores={"TwitterHjerneRetrieval": 0.01750},
@@ -96,61 +87,45 @@ if sys.platform == "darwin":
     )
 
 
-def _assert_score(result: mteb.TaskResult, model_info: ModelInfo) -> None:
-    expected_score = model_info.expected_scores[result.task_name]
-
-    assert result.get_score() == pytest.approx(expected_score, abs=1e-5, nan_ok=True), (
-        f"{model_info.name} final score changed for {result.task_name}"
-    )
-
-
-def _evaluate_and_assert_score(
-    task: AbsTask,
-    model_info: ModelInfo,
-) -> None:
-    task = mteb.get_task(task.metadata.name)
-    result = mteb.evaluate(model_info.model, task, cache=None)[0]
-    _assert_score(result, model_info)
-
-
-@pytest.mark.parametrize("task", TASK_TEST_GRID, ids=lambda t: t.metadata.name)
-def test_benchmark_datasets(task: AbsTask, tmp_path: Path):
+@pytest.mark.parametrize(("model", "task", "expected_score"), DENSE_MODEL)
+def test_benchmark_datasets(
+    model: mteb.EncoderProtocol, task: AbsTask, expected_score: float
+):
     """Test that a task can be fetched and produces the expected final score."""
-    _evaluate_and_assert_score(task, DENSE_MODEL)
+    assert_final_score(model, task, expected_score)
 
 
-@pytest.mark.parametrize("task", TASK_TEST_GRID, ids=lambda t: t.metadata.name)
-def test_benchmark_datasets_sparse_encoder(task: AbsTask):
+@pytest.mark.parametrize(("model", "task", "expected_score"), SPARSE_MODEL)
+def test_benchmark_datasets_sparse_encoder(
+    model: mteb.EncoderProtocol, task: AbsTask, expected_score: float
+):
     """Test that a task can be fetched and produces the expected final score."""
-    _evaluate_and_assert_score(task, SPARSE_MODEL)
+    assert_final_score(model, task, expected_score)
 
 
-@pytest.mark.parametrize(
-    # Only one (small) task: RandomColBERTBaseline.search() scores the full corpus against all
-    # queries in a single MaxSim call with no chunking, which OOMs on the larger corpora of the
-    # other retrieval-shaped tasks in TASK_TEST_GRID (e.g. SciDocsRR).
-    "task",
-    [mteb.get_task("TwitterHjerneRetrieval")],
-    ids=lambda t: t.metadata.name,
-)
-def test_benchmark_datasets_colbert(task: AbsTask):
-    _evaluate_and_assert_score(task, COLBERT_MODEL)
+@pytest.mark.parametrize(("model", "task", "expected_score"), COLBERT_MODEL)
+def test_benchmark_datasets_colbert(
+    model: mteb.EncoderProtocol, task: AbsTask, expected_score: float
+):
+    assert_final_score(model, task, expected_score)
 
 
-@pytest.mark.parametrize(
-    "task",
-    [t for t in TASK_TEST_GRID if t.metadata.type == "Reranking"],
-    ids=lambda t: t.metadata.name,
-)
-def test_benchmark_datasets_cross_encoder(task: AbsTask):
-    _evaluate_and_assert_score(task, CROSS_ENCODER_MODEL)
+@pytest.mark.parametrize(("model", "task", "expected_score"), CROSS_ENCODER_MODEL)
+def test_benchmark_datasets_cross_encoder(
+    model: mteb.EncoderProtocol, task: AbsTask, expected_score: float
+):
+    assert_final_score(model, task, expected_score)
 
 
 def test_run_task_multiple_times():
     """Regression test for https://github.com/embeddings-benchmark/mteb/issues/4397"""
-    # Core17InstructionRetrieval already in TASK_TEST_GRID
     task = mteb.get_task("Core17InstructionRetrieval")
+    expected_score = DENSE_MODEL.expected_scores[task.metadata.name]
+
     first_result = mteb.evaluate(DENSE_MODEL.model, task, cache=None)[0]
     second_result = mteb.evaluate(DENSE_MODEL.model, task, cache=None)[0]
-    _assert_score(first_result, DENSE_MODEL)
-    _assert_score(second_result, DENSE_MODEL)
+
+    for result in (first_result, second_result):
+        assert result.get_score() == pytest.approx(
+            expected_score, abs=1e-5, nan_ok=True
+        )
