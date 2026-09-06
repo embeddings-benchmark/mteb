@@ -20,6 +20,6 @@ ru_reranker_edge_150m = ModelMeta(
     reference="https://huggingface.co/sshalimov04/ru-reranker-edge-150m",
     similarity_fn_name=None,
     use_instructions=False,
-    training_datasets={"MIRACLRetrieval": ["train"], "MIRACLReranking": ["train"], "MMarcoRetrieval": ["train"]},
+    training_datasets={"MIRACLRetrieval", "MIRACLReranking", "MMarcoRetrieval"},
     modalities=["text"],
 )
