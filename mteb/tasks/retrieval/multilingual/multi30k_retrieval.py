@@ -21,6 +21,19 @@ _BIBTEX = r"""
   year = {2018},
 }
 
+@inproceedings{elliott-etal-2017-findings,
+  title = {Findings of the Second Shared Task on Multimodal Machine Translation and Multilingual Image Description},
+  author = {Elliott, Desmond and Frank, Stella and Barrault, Lo{\"i}c and Bougares, Fethi and Specia, Lucia},
+  booktitle = {Proceedings of the Second Conference on Machine Translation},
+  month = sep,
+  year = {2017},
+  address = {Copenhagen, Denmark},
+  publisher = {Association for Computational Linguistics},
+  url = {https://aclanthology.org/W17-4718/},
+  doi = {10.18653/v1/W17-4718},
+  pages = {215--233},
+}
+
 @inproceedings{elliott2016multi30k,
   address = {Berlin, Germany},
   author = {Elliott, Desmond and Frank, Stella and Sima'an, Khalil and Specia, Lucia},
@@ -62,7 +75,7 @@ class Multi30kT2IRetrieval(AbsTaskRetrieval):
         date=("2016-01-01", "2018-12-31"),
         domains=["Scene", "Web", "Written"],
         task_subtypes=["Image Text Retrieval"],
-        license="mit",
+        license="cc-by-sa-4.0",
         annotations_creators="human-annotated",
         dialect=[],
         modalities=["text", "image"],
@@ -91,7 +104,7 @@ class Multi30kI2TRetrieval(AbsTaskRetrieval):
         date=("2016-01-01", "2018-12-31"),
         domains=["Scene", "Web", "Written"],
         task_subtypes=["Image Text Retrieval"],
-        license="mit",
+        license="cc-by-sa-4.0",
         annotations_creators="human-annotated",
         dialect=[],
         modalities=["text", "image"],
