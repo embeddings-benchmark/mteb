@@ -20,6 +20,14 @@ from .audiocaps_av_retrieval import (
     AudioCapsAVVA2TRetrieval,
     AudioCapsAVVT2ARetrieval,
 )
+from .avcaps_retrieval import (
+    AVCapsA2TRetrieval,
+    AVCapsT2ARetrieval,
+    AVCapsT2VARetrieval,
+    AVCapsT2VRetrieval,
+    AVCapsV2TRetrieval,
+    AVCapsVA2TRetrieval,
+)
 from .avmeme_exam_retrieval import (
     AVMemeExamA2VRetrieval,
     AVMemeExamAT2VRetrieval,
@@ -241,6 +249,12 @@ from .lmeb_retrieval import (
     ProceduralMemBench,
     ReMe,
     ToolBench,
+)
+from .lombard_grid_retrieval import (
+    LombardGridA2VRetrieval,
+    LombardGridV2ARetrieval,
+    LombardGridV2VRetrieval,
+    LombardGridVA2VARetrieval,
 )
 from .lotte_retrieval import LoTTERetrieval
 from .macs import MACSA2TRetrieval, MACST2ARetrieval
@@ -485,6 +499,12 @@ __all__ = [
     "AILACasedocs",
     "AILAStatutes",
     "ARCChallenge",
+    "AVCapsA2TRetrieval",
+    "AVCapsT2ARetrieval",
+    "AVCapsT2VARetrieval",
+    "AVCapsT2VRetrieval",
+    "AVCapsV2TRetrieval",
+    "AVCapsVA2TRetrieval",
     "AVMemeExamA2VRetrieval",
     "AVMemeExamAT2VRetrieval",
     "AVMemeExamT2VARetrieval",
@@ -700,6 +720,10 @@ __all__ = [
     "LitSearchRetrieval",
     "LoCoMo",
     "LoTTERetrieval",
+    "LombardGridA2VRetrieval",
+    "LombardGridV2ARetrieval",
+    "LombardGridV2VRetrieval",
+    "LombardGridVA2VARetrieval",
     "LongMemEval",
     "LooGLE",
     "MACSA2TRetrieval",

@@ -148,8 +148,8 @@ def get_rank_from_dict(
     sorted_by_score = sorted(
         tuple_of_id_score, key=lambda x: (x[1], x[0]), reverse=True
     )
-    for i, (id, score) in enumerate(sorted_by_score):
-        if id == doc_id:
+    for i, (cur_doc_id, score) in enumerate(sorted_by_score):
+        if cur_doc_id == doc_id:
             return i + 1, score
 
     return len(sorted_by_score) + 1, 0
@@ -267,8 +267,7 @@ def evaluate_p_mrr_change(
 def rank_score(x: dict[str, float]) -> float:
     if x["og_rank"] >= x["new_rank"]:
         return ((1 / x["og_rank"]) / (1 / x["new_rank"])) - 1
-    else:
-        return 1 - ((1 / x["new_rank"]) / (1 / x["og_rank"]))
+    return 1 - ((1 / x["new_rank"]) / (1 / x["og_rank"]))
 
 
 def confidence_scores(sim_scores: list[float]) -> dict[str, float]:
@@ -387,7 +386,7 @@ def paired_accuracy(
     """
     # group the queries by the query id
     query_keys = set()
-    for key in qrels.keys():
+    for key in qrels:
         query_keys.add(key.split("_")[0])
 
     paired_scores = []
@@ -418,7 +417,7 @@ def robustness_at_10(
         The robustness at 10 score
     """
     query_keys = defaultdict(list)
-    for key in qrels.keys():
+    for key in qrels:
         query_keys[key.split("_")[0]].append(key)
 
     robustness_scores = []
@@ -495,7 +494,7 @@ def parse_metrics_from_scores(
         defaultdict(list),
     )
 
-    for query_id in scores.keys():
+    for query_id in scores:
         for k in k_values:
             all_ndcgs[f"NDCG@{k}"].append(scores[query_id]["ndcg_cut_" + str(k)])
             all_aps[f"MAP@{k}"].append(scores[query_id]["map_cut_" + str(k)])
@@ -543,7 +542,7 @@ def max_over_subqueries(
         A dictionary with the scores, prefixed with "max_over_subqueries_"
     """
     query_keys = defaultdict(list)
-    for key in qrels.keys():
+    for key in qrels:
         query_keys["_".join(key.split("_")[:-1])].append(key)
 
     new_results = {}
@@ -620,7 +619,7 @@ def calculate_retrieval_scores(  # noqa: PLR0914
     )
     naucs_mrr = evaluate_abstention(results, mrr_scores)
 
-    avg_mrr = {k: sum(mrr_scores[k]) / len(mrr_scores[k]) for k in mrr_scores.keys()}
+    avg_mrr = {k: sum(mrr_scores[k]) / len(mrr_scores[k]) for k in mrr_scores}
     return RetrievalEvaluationResult(
         all_scores=scores,
         ndcg=ndcg,

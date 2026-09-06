@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from datasets import DatasetDict
 
 from mteb.abstasks.clustering import AbsTaskClustering
@@ -54,7 +56,7 @@ class HumanConceptsClustering(AbsTaskClustering):
     input_column_name = "item"
     label_column_name = "category"
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.dataset = DatasetDict(
             {
                 sub: self.dataset["train"].filter(

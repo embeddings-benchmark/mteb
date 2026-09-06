@@ -1,4 +1,5 @@
 from collections import defaultdict
+from typing import Any
 
 from datasets import load_dataset
 
@@ -53,7 +54,7 @@ Questions}},
         adapted_from=["Touche2020"],
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 

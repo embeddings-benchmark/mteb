@@ -160,7 +160,9 @@ def test_given_missing_revision_path_then_it_throws():
         )
 
 
-def test_given_none_revision_path_then_it_logs_warning(caplog):
+def test_given_none_revision_path_then_it_logs_warning(
+    caplog: pytest.LogCaptureFixture,
+):
     with pytest.raises(ValidationError):
         TaskMetadata(
             name="MyTask",

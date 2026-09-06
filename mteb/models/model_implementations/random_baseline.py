@@ -7,7 +7,6 @@ import numpy as np
 import torch
 from tqdm.auto import tqdm
 
-from mteb._create_dataloaders import create_dataloader
 from mteb._requires_package import (
     requires_audio_dependencies,
     requires_image_dependencies,
@@ -735,6 +734,8 @@ class RandomColBERTBaseline:
         """
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
+
+        from mteb._create_dataloaders import create_dataloader
 
         query_embeddings = self._encode(
             create_dataloader(

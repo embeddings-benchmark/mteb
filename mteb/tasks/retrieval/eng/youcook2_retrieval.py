@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -80,7 +82,7 @@ class YouCook2V2TRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_youcook2(self, query_columns=["video"], corpus_columns=["sentence"])
 
 
@@ -113,7 +115,7 @@ class YouCook2T2VRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_youcook2(self, query_columns=["sentence"], corpus_columns=["video"])
 
 
@@ -145,7 +147,7 @@ class YouCook2VA2TRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_youcook2(
             self, query_columns=["video", "audio"], corpus_columns=["sentence"]
         )
@@ -179,7 +181,7 @@ class YouCook2T2VARetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_youcook2(
             self, query_columns=["sentence"], corpus_columns=["video", "audio"]
         )
@@ -214,7 +216,7 @@ class YouCook2V2ARetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_youcook2(self, query_columns=["video"], corpus_columns=["audio"])
 
 
@@ -247,7 +249,7 @@ class YouCook2A2VRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_youcook2(self, query_columns=["audio"], corpus_columns=["video"])
 
 
@@ -282,7 +284,7 @@ class YouCook2VT2ARetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_youcook2(
             self, query_columns=["video", "sentence"], corpus_columns=["audio"]
         )
@@ -319,7 +321,7 @@ class YouCook2AT2VRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_youcook2(
             self, query_columns=["audio", "sentence"], corpus_columns=["video"]
         )
