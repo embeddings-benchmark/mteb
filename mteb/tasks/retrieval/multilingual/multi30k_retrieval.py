@@ -22,16 +22,16 @@ _BIBTEX = r"""
 }
 
 @inproceedings{elliott-etal-2017-findings,
-  title = {Findings of the Second Shared Task on Multimodal Machine Translation and Multilingual Image Description},
+  address = {Copenhagen, Denmark},
   author = {Elliott, Desmond and Frank, Stella and Barrault, Lo{\"i}c and Bougares, Fethi and Specia, Lucia},
   booktitle = {Proceedings of the Second Conference on Machine Translation},
-  month = sep,
-  year = {2017},
-  address = {Copenhagen, Denmark},
-  publisher = {Association for Computational Linguistics},
-  url = {https://aclanthology.org/W17-4718/},
   doi = {10.18653/v1/W17-4718},
+  month = sep,
   pages = {215--233},
+  publisher = {Association for Computational Linguistics},
+  title = {Findings of the Second Shared Task on Multimodal Machine Translation and Multilingual Image Description},
+  url = {https://aclanthology.org/W17-4718/},
+  year = {2017},
 }
 
 @inproceedings{elliott2016multi30k,
