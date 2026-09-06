@@ -23,4 +23,6 @@ ru_reranker_edge_150m = ModelMeta(
     use_instructions=False,
     training_datasets={"MIRACLRetrieval", "MIRACLReranking", "MMarcoRetrieval"},
     modalities=["text"],
+    adapted_from="deepvk/RuModernBERT-base",
+    model_type=["cross-encoder"],
 )
