@@ -86,8 +86,8 @@ _SUPPORTED_MODALITIES: frozenset[str] = frozenset(MODALITY_HASH_FNS)
 """The modalities a filter can compare, i.e. those the descriptive statistics know how to hash."""
 
 
-def _normalize(value: Any, normalization: Normalization) -> str:
-    """Apply `normalization`, treating a missing text as an empty one."""
+def _normalize(value: object, normalization: Normalization) -> str:
+    """Apply `normalization` to a value read from a column, treating a missing text as an empty one."""
     return normalization(value) if isinstance(value, str) else ""
 
 
