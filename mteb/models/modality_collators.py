@@ -69,10 +69,7 @@ class AudioCollator:
             collated_inputs.append(row)
         return cast(
             "BatchedInput",
-            {
-                key: [row[key] for row in collated_inputs]
-                for key in collated_inputs[0].keys()
-            },
+            {key: [row[key] for row in collated_inputs] for key in collated_inputs[0]},
         )
 
     @staticmethod
@@ -178,10 +175,7 @@ class FramesCollator:
             collated_inputs.append(row)
         return cast(
             "BatchedInput",
-            {
-                key: [row[key] for row in collated_inputs]
-                for key in collated_inputs[0].keys()
-            },
+            {key: [row[key] for row in collated_inputs] for key in collated_inputs[0]},
         )
 
     @staticmethod
@@ -304,8 +298,5 @@ class VideoCollator:
             collated_inputs.append(row)
         return cast(
             "BatchedInput",
-            {
-                key: [row[key] for row in collated_inputs]
-                for key in collated_inputs[0].keys()
-            },
+            {key: [row[key] for row in collated_inputs] for key in collated_inputs[0]},
         )

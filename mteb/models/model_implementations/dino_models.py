@@ -52,7 +52,7 @@ class DINOModel(AbsEncoder):
         show_progress_bar: bool = True,
         pooling: Literal["cls", "mean"] = "cls",
         **kwargs: Any,
-    ):
+    ) -> Array:
         all_image_embeddings = []
 
         with torch.no_grad():
@@ -95,9 +95,9 @@ class DINOModel(AbsEncoder):
 
         if text_embeddings is not None and image_embeddings is not None:
             raise ValueError("DINO models only support image encoding.")
-        elif text_embeddings is not None:
+        if text_embeddings is not None:
             return text_embeddings
-        elif image_embeddings is not None:
+        if image_embeddings is not None:
             return image_embeddings
         raise ValueError("No text or image data found.")
 

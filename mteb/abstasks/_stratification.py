@@ -49,6 +49,8 @@ from sklearn.model_selection._split import _BaseKFold  # noqa: PLC2701
 from sklearn.utils import check_random_state
 
 if TYPE_CHECKING:
+    from collections.abc import Hashable, Iterator
+
     from numpy.typing import NDArray
 
 
@@ -100,14 +102,15 @@ def _fold_tie_break(
     """
     if len(M) == 1:
         return int(M[0])
-    else:
-        max_val = max(desired_samples_per_fold[M])
-        m_prim = np.where(np.array(desired_samples_per_fold) == max_val)[0]
-        m_prim = np.array([x for x in m_prim if x in M])
-        return int(random_state.choice(m_prim, 1)[0])
+    max_val = max(desired_samples_per_fold[M])
+    m_prim = np.where(np.array(desired_samples_per_fold) == max_val)[0]
+    m_prim = np.array([x for x in m_prim if x in M])
+    return int(random_state.choice(m_prim, 1)[0])
 
 
-def _get_most_desired_combination(samples_with_combination: dict[Any, Any]) -> Any:
+def _get_most_desired_combination(
+    samples_with_combination: dict[Any, Any],
+) -> Hashable | None:
     """Select the next most desired combination whose evidence should be split among folds
 
     Args:
@@ -312,7 +315,12 @@ class IterativeStratification(_BaseKFold):  # type: ignore[misc]
             self.desired_samples_per_fold[fold_selected] -= 1
             folds[fold_selected].append(row)
 
-    def _iter_test_indices(self, X: Any, y: Any = None, groups: Any = None) -> Any:
+    def _iter_test_indices(
+        self,
+        X: NDArray[Any] | None = None,
+        y: NDArray[np.integer[Any]] | None = None,
+        groups: object = None,
+    ) -> Iterator[list[int]]:
         """Internal method for providing scikit-learn's split with folds
 
         Args:
@@ -332,6 +340,9 @@ class IterativeStratification(_BaseKFold):  # type: ignore[misc]
             fold : list[int]
                 indexes of test samples for a given fold, yielded for each of the folds
         """
+        if y is None:
+            raise ValueError("`y` is required for iterative stratification.")
+
         (
             rows,
             rows_used,

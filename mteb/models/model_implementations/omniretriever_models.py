@@ -116,7 +116,7 @@ class OmniRetrieverWrapper(AbsEncoder):
         )
 
     @staticmethod
-    def _load_processor(base_model_name_or_path: str, revision: str):
+    def _load_processor(base_model_name_or_path: str, revision: str) -> Any:  # noqa: ANN401 -- class resolved dynamically from the repo's auto_map
         """Load WAVE-7B's multimodal processor.
 
         The backbone repo ships no ``processor_config.json``, so
@@ -155,7 +155,9 @@ class OmniRetrieverWrapper(AbsEncoder):
         """Convert torchcodec ``(T, C, H, W)`` uint8 frames to ``(T, H, W, C)``."""
         return frames.permute(0, 2, 3, 1).contiguous().numpy()
 
-    def _build_prompt(self, caption: str | None, has_video: bool, has_audio: bool):
+    def _build_prompt(
+        self, caption: str | None, has_video: bool, has_audio: bool
+    ) -> str:
         """Build the bare user-turn prompt for a modality combination.
 
         Mirrors ``_prepare_submodal_input`` in ``data_qwen.py``: a single media
@@ -246,7 +248,7 @@ class OmniRetrieverWrapper(AbsEncoder):
         prompts: list[str],
         *,
         audio_lengths: list[int],
-        video_grid_thw: Any,
+        video_grid_thw: torch.Tensor,
         second_per_grid: list[float],
         use_audio_in_video: bool,
         seconds_per_chunk: float | None,

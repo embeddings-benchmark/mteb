@@ -126,7 +126,7 @@ class KaLMRerankerWrapper:
             raise ValueError(f"Failed to tokenize the answer {answer!r}.")
         return token_ids[-1]
 
-    def _get_encoder(self):
+    def _get_encoder(self) -> torch.nn.Module:
         if hasattr(self.model, "get_encoder"):
             return self.model.get_encoder()
         if hasattr(self.model, "encoder"):

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import time
 from functools import wraps
-from typing import TYPE_CHECKING, Any, Literal
+from typing import TYPE_CHECKING, Any, Literal, TypeVar
 
 import numpy as np
 from tqdm.auto import tqdm
@@ -14,7 +14,11 @@ from mteb.models.sentence_transformer_wrapper import (
 )
 from mteb.types import OutputDType, PromptType
 
+T = TypeVar("T")
+
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -135,13 +139,15 @@ OUTPUT_TYPES = [
 ]
 
 
-def token_limit(max_tpm: int, interval: int = 60):
+def token_limit(
+    max_tpm: int, interval: int = 60
+) -> Callable[[Callable[..., T]], Callable[..., T]]:
     limit_interval_start_ts = time.time()
     used_tokens = 0
 
-    def decorator(func):
+    def decorator(func: Callable[..., T]) -> Callable[..., T]:
         @wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Any, **kwargs: Any) -> T:
             nonlocal limit_interval_start_ts, used_tokens
 
             result = func(*args, **kwargs)
@@ -162,13 +168,15 @@ def token_limit(max_tpm: int, interval: int = 60):
     return decorator
 
 
-def rate_limit(max_rpm: int, interval: int = 60):
+def rate_limit(
+    max_rpm: int, interval: int = 60
+) -> Callable[[Callable[..., T]], Callable[..., T]]:
     request_interval = interval / max_rpm
     previous_call_ts: float | None = None
 
-    def decorator(func):
+    def decorator(func: Callable[..., T]) -> Callable[..., T]:
         @wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Any, **kwargs: Any) -> T:
             current_time = time.time()
             nonlocal previous_call_ts
             if (
@@ -198,7 +206,7 @@ class VoyageModel(AbsEncoder):
         output_dtype: str | None = None,
         api_model_name: str | None = None,
         evolved_prompts: bool = False,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         import voyageai
 
@@ -326,7 +334,7 @@ QUERY_PROMPTS = {
     "LegalQuAD": "Locate enforceable legal rules for: {text}",
     "LegalSummarization": "Seek clarity in legal information: {text}",
     "MBPPRetrieval": "Programming task: {text}",
-    "MIRACLRetrievalHardNegatives": "Uncover comprehensive background: {text}",
+    "MIRACLRetrievalHardNegatives": "Represent this question for retrieving one whole, self-contained encyclopedic reference paragraph, not a passing reference: {text}",
     "WikiSQLRetrieval": "Unveil the SQL instruction to fulfill: {text}",
 }
 

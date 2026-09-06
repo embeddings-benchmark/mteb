@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 import datasets
 from datasets import Audio, Dataset, DatasetDict
 
@@ -77,7 +79,7 @@ class MockSTSTask(AbsTaskSTS):
         **general_args,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         sentence1 = ["This is a test sentence", "This is another test sentence"]
         sentence2 = [
             "dette er en test sætning",
@@ -202,7 +204,7 @@ class MockMultilingualSTSTask(AbsTaskSTS):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         sentence1 = ["This is a test sentence", "This is another test sentence"]
         sentence2 = [
             "dette er en test sætning",
@@ -272,7 +274,7 @@ class MockVisualSTSTask(AbsTaskSTS):
     metadata.modalities = ["image"]
     metadata.category = "i2i"
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         images = create_mock_images(self.np_rng)
         scores = [0.5, 0.5]
 
@@ -377,7 +379,7 @@ class MockVideoAudioSTSTask(AbsTaskSTS):
         }
     }
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         from datasets import Video
 
         mock_videos = create_mock_video_bytes(self.np_rng)
@@ -467,7 +469,7 @@ class MockSymCustomVideoAudiSTSTask(AbsTaskSTS):
         }
     }
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         from datasets import Video
 
         mock_videos = create_mock_video_bytes(self.np_rng)

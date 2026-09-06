@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -73,7 +75,7 @@ class SlovakMovieReviewSentimentClassificationV2(AbsTaskClassification):
         adapted_from=["SlovakMovieReviewSentimentClassification"],
     )
 
-    def dataset_transform(self, **kwargs) -> None:
+    def dataset_transform(self, **kwargs: Any) -> None:
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["test"]
         )
