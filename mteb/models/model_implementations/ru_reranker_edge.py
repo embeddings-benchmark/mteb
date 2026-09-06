@@ -9,6 +9,7 @@ ru_reranker_edge_150m = ModelMeta(
     release_date="2026-09-06",
     languages=["rus-Cyrl"],
     n_parameters=149_000_000,
+    n_embedding_parameters=38_682_624,
     memory_usage_mb=570,
     max_tokens=8192,
     embed_dim=None,
