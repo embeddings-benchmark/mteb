@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from datasets import Audio, Dataset, DatasetDict
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -136,6 +138,8 @@ class MockRetrievalTask(AbsTaskRetrieval):
                 "average_relevant_docs_per_query": 1.0,
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
             },
             "top_ranked_statistics": None,
         },
@@ -170,6 +174,8 @@ class MockRetrievalTask(AbsTaskRetrieval):
                 "average_relevant_docs_per_query": 1.0,
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
             },
             "top_ranked_statistics": None,
         },
@@ -182,7 +188,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
         **dict(general_args | {"eval_splits": ["val", "test"]}),
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         base_datasplit = base_retrieval_datasplit()
 
         base_datasplit["top_ranked"] = None
@@ -223,6 +229,8 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
                 "average_relevant_docs_per_query": 1.0,
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
             },
             "top_ranked_statistics": None,
         },
@@ -257,6 +265,8 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
                 "average_relevant_docs_per_query": 1.0,
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
             },
             "top_ranked_statistics": None,
         },
@@ -269,7 +279,7 @@ class MockRetrievalDialogTask(AbsTaskRetrieval):
         **dict(general_args | {"eval_splits": ["val", "test"]}),
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         base_datasplit = base_retrieval_datasplit()
 
         base_datasplit["top_ranked"] = None
@@ -328,6 +338,8 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                 "average_relevant_docs_per_query": 1.0,
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 4,
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
             },
             "top_ranked_statistics": None,
             "hf_subset_descriptive_stats": {
@@ -362,6 +374,8 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                         "average_relevant_docs_per_query": 1.0,
                         "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
+                        "num_missing_query_ids": 0,
+                        "num_missing_corpus_ids": 0,
                     },
                     "top_ranked_statistics": None,
                 },
@@ -396,6 +410,8 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                         "average_relevant_docs_per_query": 1.0,
                         "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
+                        "num_missing_query_ids": 0,
+                        "num_missing_corpus_ids": 0,
                     },
                     "top_ranked_statistics": None,
                 },
@@ -432,6 +448,8 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                 "average_relevant_docs_per_query": 1.0,
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 4,
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
             },
             "top_ranked_statistics": None,
             "hf_subset_descriptive_stats": {
@@ -466,6 +484,8 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                         "average_relevant_docs_per_query": 1.0,
                         "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
+                        "num_missing_query_ids": 0,
+                        "num_missing_corpus_ids": 0,
                     },
                     "top_ranked_statistics": None,
                 },
@@ -500,6 +520,8 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
                         "average_relevant_docs_per_query": 1.0,
                         "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
+                        "num_missing_query_ids": 0,
+                        "num_missing_corpus_ids": 0,
                     },
                     "top_ranked_statistics": None,
                 },
@@ -515,7 +537,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         base_datasplit = base_retrieval_datasplit()
 
         base_datasplit["top_ranked"] = None
@@ -559,6 +581,8 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
                 "average_relevant_docs_per_query": 1.0,
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
             },
             "top_ranked_statistics": None,
         }
@@ -571,7 +595,7 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
         **general_args,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         base_datasplit = instruction_retrieval_datasplit()
         base_datasplit["top_ranked"] = None
 
@@ -612,6 +636,8 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                 "average_relevant_docs_per_query": 1.0,
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 4,
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
             },
             "top_ranked_statistics": None,
             "hf_subset_descriptive_stats": {
@@ -646,6 +672,8 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                         "average_relevant_docs_per_query": 1.0,
                         "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
+                        "num_missing_query_ids": 0,
+                        "num_missing_corpus_ids": 0,
                     },
                     "top_ranked_statistics": None,
                 },
@@ -680,6 +708,8 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
                         "average_relevant_docs_per_query": 1.0,
                         "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
+                        "num_missing_query_ids": 0,
+                        "num_missing_corpus_ids": 0,
                     },
                     "top_ranked_statistics": None,
                 },
@@ -695,7 +725,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         base_datasplit = instruction_retrieval_datasplit()
         base_datasplit["top_ranked"] = None
         self.dataset = {
@@ -748,6 +778,8 @@ class MockMultiChoiceTask(AbsTaskRetrieval):
                 "average_relevant_docs_per_query": 1.0,
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
             },
             "top_ranked_statistics": {
                 "num_top_ranked": 4,
@@ -767,7 +799,7 @@ class MockMultiChoiceTask(AbsTaskRetrieval):
     metadata.modalities = ["image", "text"]
     metadata.category = "it2i"
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         images = create_mock_images(self.np_rng)
         retrieval_split_data = RetrievalSplitData(
             queries=Dataset.from_dict(
@@ -842,6 +874,8 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                 "average_relevant_docs_per_query": 1.0,
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 4,
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
             },
             "top_ranked_statistics": {
                 "num_top_ranked": 8,
@@ -891,6 +925,8 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                         "average_relevant_docs_per_query": 1.0,
                         "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
+                        "num_missing_query_ids": 0,
+                        "num_missing_corpus_ids": 0,
                     },
                     "top_ranked_statistics": {
                         "num_top_ranked": 4,
@@ -940,6 +976,8 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
                         "average_relevant_docs_per_query": 1.0,
                         "max_relevant_docs_per_query": 1,
                         "unique_relevant_docs": 2,
+                        "num_missing_query_ids": 0,
+                        "num_missing_corpus_ids": 0,
                     },
                     "top_ranked_statistics": {
                         "num_top_ranked": 4,
@@ -961,7 +999,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskRetrieval):
     metadata.modalities = ["image", "text"]
     metadata.category = "it2i"
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         images = create_mock_images(self.np_rng)
 
         split_data = RetrievalSplitData(
@@ -1037,6 +1075,8 @@ class MockAny2AnyRetrievalI2TTask(AbsTaskRetrieval):
                 "average_relevant_docs_per_query": 1.0,
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
             },
             "top_ranked_statistics": None,
         }
@@ -1051,7 +1091,7 @@ class MockAny2AnyRetrievalI2TTask(AbsTaskRetrieval):
     metadata.modalities = ["image", "text"]
     metadata.category = "i2t"
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         images = create_mock_images(self.np_rng)
 
         retrieval_split_data = RetrievalSplitData(
@@ -1115,6 +1155,8 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskRetrieval):
                 "average_relevant_docs_per_query": 1.0,
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
             },
             "top_ranked_statistics": None,
         }
@@ -1128,7 +1170,7 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskRetrieval):
     metadata.modalities = ["image", "text"]
     metadata.category = "t2i"
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         images = create_mock_images(self.np_rng)
 
         retrieval_split_data = RetrievalSplitData(
@@ -1200,12 +1242,14 @@ class MockAny2AnyRetrievalT2ATask(AbsTaskRetrieval):
                 "average_relevant_docs_per_query": 1.0,
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
             },
             "top_ranked_statistics": None,
         }
     }
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         mock_audio = create_mock_audio(self.np_rng)
 
         self.queries = DatasetDict(
@@ -1288,12 +1332,14 @@ class MockAny2AnyRetrievalA2TTask(AbsTaskRetrieval):
                 "average_relevant_docs_per_query": 1.0,
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
             },
             "top_ranked_statistics": None,
         }
     }
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         mock_audio = create_mock_audio(self.np_rng)
 
         self.queries = DatasetDict(
@@ -1377,12 +1423,14 @@ class MockAny2AnyRetrievalA2ATask(AbsTaskRetrieval):
                 "average_relevant_docs_per_query": 1.0,
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
             },
             "top_ranked_statistics": None,
         }
     }
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         mock_audio = create_mock_audio(self.np_rng)
 
         self.queries = DatasetDict(
@@ -1477,12 +1525,14 @@ class MockVideoRetrievalV2T(AbsTaskRetrieval):
                 "average_relevant_docs_per_query": 1.0,
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
             },
             "top_ranked_statistics": None,
         }
     }
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         from datasets import Video
 
         mock_videos = create_mock_video_bytes(self.np_rng)
@@ -1578,12 +1628,14 @@ class MockVideoRetrievalT2V(AbsTaskRetrieval):
                 "average_relevant_docs_per_query": 1.0,
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
             },
             "top_ranked_statistics": None,
         }
     }
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         from datasets import Video
 
         mock_videos = create_mock_video_bytes(self.np_rng)
@@ -1687,12 +1739,14 @@ class MockVideoAudioRetrievalVA2T(AbsTaskRetrieval):
                 "average_relevant_docs_per_query": 1.0,
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
             },
             "top_ranked_statistics": None,
         }
     }
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         from datasets import Video
 
         mock_videos = create_mock_video_bytes(self.np_rng)
@@ -1799,12 +1853,14 @@ class MockVideoAudioRetrievalT2VA(AbsTaskRetrieval):
                 "average_relevant_docs_per_query": 1.0,
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
             },
             "top_ranked_statistics": None,
         }
     }
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         from datasets import Video
 
         mock_videos = create_mock_video_bytes(self.np_rng)
@@ -1917,12 +1973,14 @@ class MockVideoAudioTextRetrievalVAT2T(AbsTaskRetrieval):
                 "average_relevant_docs_per_query": 1.0,
                 "max_relevant_docs_per_query": 1,
                 "unique_relevant_docs": 2,
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
             },
             "top_ranked_statistics": None,
         }
     }
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         from datasets import Video
 
         mock_videos = create_mock_video_bytes(self.np_rng)

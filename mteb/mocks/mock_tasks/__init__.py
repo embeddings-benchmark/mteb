@@ -30,6 +30,7 @@ from .clustering import (
     MockVideoClusteringTask,
 )
 from .pair_classification import (
+    MockAsymCustomTextImagePairClassificationTaskV2,
     MockAsymVideoAudioPairClassificationTask,
     MockAsymVideoAudioPairClassificationTaskV2,
     MockAudioPairClassification,
@@ -94,6 +95,7 @@ __all__ = [
     "MockAny2AnyRetrievalI2TTask",
     "MockAny2AnyRetrievalT2ATask",
     "MockAny2AnyRetrievalT2ITask",
+    "MockAsymCustomTextImagePairClassificationTaskV2",
     "MockAsymVideoAudioPairClassificationTask",
     "MockAsymVideoAudioPairClassificationTaskV2",
     "MockAudioClassification",

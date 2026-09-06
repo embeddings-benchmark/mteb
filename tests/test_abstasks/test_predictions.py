@@ -19,7 +19,7 @@ from mteb.mocks.mock_tasks.clustering import MockClusteringTask
 
 
 @pytest.mark.parametrize(
-    "task, expected",
+    ("task", "expected"),
     [
         (
             MockBitextMiningTask(),

@@ -1,0 +1,64 @@
+{
+    "test": {
+        "num_samples": 1693,
+        "num_queries": 400,
+        "num_documents": 1293,
+        "number_of_characters": 0,
+        "documents_text_statistics": null,
+        "documents_image_statistics": {
+            "min_image_width": 256,
+            "average_image_width": 256.0,
+            "max_image_width": 256,
+            "min_image_height": 256,
+            "average_image_height": 256.0,
+            "max_image_height": 256,
+            "unique_images": 1293
+        },
+        "documents_audio_statistics": null,
+        "documents_video_statistics": null,
+        "queries_text_statistics": null,
+        "queries_image_statistics": null,
+        "queries_audio_statistics": null,
+        "queries_video_statistics": {
+            "total_duration_seconds": 6679.499999999999,
+            "total_frames": 66795,
+            "min_width": 256,
+            "average_width": 256.0,
+            "max_width": 256,
+            "min_height": 256,
+            "average_height": 256.0,
+            "max_height": 256,
+            "min_duration_seconds": 7.7,
+            "average_duration_seconds": 16.698749999999997,
+            "max_duration_seconds": 45.5,
+            "unique_videos": 400,
+            "average_fps": 10.0,
+            "fps": {
+                "10": 400
+            },
+            "min_resolution": [
+                256,
+                256
+            ],
+            "average_resolution": [
+                256.0,
+                256.0
+            ],
+            "max_resolution": [
+                256,
+                256
+            ],
+            "resolutions": {
+                "256x256": 400
+            }
+        },
+        "relevant_docs_statistics": {
+            "num_relevant_docs": 12930,
+            "min_relevant_docs_per_query": 19,
+            "average_relevant_docs_per_query": 32.325,
+            "max_relevant_docs_per_query": 40,
+            "unique_relevant_docs": 1293
+        },
+        "top_ranked_statistics": null
+    }
+}

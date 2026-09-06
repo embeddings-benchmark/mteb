@@ -58,7 +58,7 @@ class CachedEmbeddingWrapper:
         if not hasattr(model, "encode"):
             raise ValueError("Model must have an 'encode' method.")
         self.cache_backend = cache_backend
-        self.cache_dict: dict[str, CacheBackendProtocol] = {}
+        self.cache_dict: dict[tuple[str, PromptType | None], CacheBackendProtocol] = {}
         logger.info("Initialized CachedEmbeddingWrapper")
 
     @property
@@ -93,7 +93,7 @@ class CachedEmbeddingWrapper:
         """
         task_name = task_metadata.name
         try:
-            cache = self._get_or_create_cache(task_name)
+            cache = self._get_or_create_cache(task_name, prompt_type)
 
             uncached_items: list[dict[str, Any]] = []
             uncached_indices: list[int] = []
@@ -151,20 +151,27 @@ class CachedEmbeddingWrapper:
             logger.error(f"Error in cached encoding: {str(e)}")
             raise
 
-    def _get_or_create_cache(self, task_name: str) -> CacheBackendProtocol:
-        """Get or create cache for a specific task.
+    def _get_or_create_cache(
+        self, task_name: str, prompt_type: PromptType | None
+    ) -> CacheBackendProtocol:
+        """Get or create cache for a specific task and prompt type.
 
         Args:
             task_name: Name of the task
+            prompt_type: Prompt role used to encode the inputs
 
         Returns:
             Cache backend instance for the task
         """
-        if task_name not in self.cache_dict:
-            cache = self.cache_backend(self.cache_path / task_name)
+        cache_key = (task_name, prompt_type)
+        if cache_key not in self.cache_dict:
+            cache_path = self.cache_path / task_name
+            if prompt_type is not None:
+                cache_path /= prompt_type.value
+            cache = self.cache_backend(cache_path)
             cache.load()
-            self.cache_dict[task_name] = cache
-        return self.cache_dict[task_name]
+            self.cache_dict[cache_key] = cache
+        return self.cache_dict[cache_key]
 
     def __del__(self) -> None:
         self.close()

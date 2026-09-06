@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.zeroshot_classification import AbsTaskZeroShotClassification
 
@@ -42,7 +44,7 @@ class MELDAudioVideoZeroShotClassification(AbsTaskZeroShotClassification):
     input_column_name = ("video", "audio")
     label_column_name: str = "emotion"
 
-    def dataset_transform(self, num_proc=None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.dataset = self.stratified_subsampling(
             self.dataset,
             seed=self.seed,
@@ -83,7 +85,7 @@ class MELDVideoZeroShotClassification(AbsTaskZeroShotClassification):
     input_column_name = "video"
     label_column_name: str = "emotion"
 
-    def dataset_transform(self, num_proc=None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.dataset = self.stratified_subsampling(
             self.dataset,
             seed=self.seed,

@@ -48,14 +48,15 @@ def test_utility_properties(
     model_result: ModelResult,
 ) -> None:
     mr = model_result
-    assert isinstance(mr.task_names, list) and isinstance(mr.task_names[0], str)
-    assert (
-        isinstance(mr.languages, list)
-        and isinstance(mr.languages[0], str)
-        and "eng" in mr.languages  # known from mock data
-    )
-    assert isinstance(mr.task_types, list) and isinstance(mr.task_types[0], str)
-    assert isinstance(mr.domains, list) and isinstance(mr.domains[0], str)
+    assert isinstance(mr.task_names, list)
+    assert isinstance(mr.task_names[0], str)
+    assert isinstance(mr.languages, list)
+    assert isinstance(mr.languages[0], str)
+    assert "eng" in mr.languages  # known from mock data
+    assert isinstance(mr.task_types, list)
+    assert isinstance(mr.task_types[0], str)
+    assert isinstance(mr.domains, list)
+    assert isinstance(mr.domains[0], str)
 
 
 def test_select_tasks(

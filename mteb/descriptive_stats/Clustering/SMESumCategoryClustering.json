@@ -1,0 +1,57 @@
+{
+    "test": {
+        "num_samples": 7233,
+        "text_statistics": {
+            "total_text_length": 1015343,
+            "min_text_length": 49,
+            "average_text_length": 140.3764689617033,
+            "max_text_length": 546,
+            "unique_texts": 7233
+        },
+        "image_statistics": null,
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 12,
+            "labels": {
+                "domov": {
+                    "count": 1315
+                },
+                "sport": {
+                    "count": 878
+                },
+                "svet": {
+                    "count": 2738
+                },
+                "tech": {
+                    "count": 250
+                },
+                "ekonomika": {
+                    "count": 1276
+                },
+                "auto": {
+                    "count": 117
+                },
+                "zena": {
+                    "count": 88
+                },
+                "bratislava": {
+                    "count": 296
+                },
+                "kultura": {
+                    "count": 110
+                },
+                "komentare": {
+                    "count": 88
+                },
+                "cestovanie": {
+                    "count": 26
+                },
+                "primar": {
+                    "count": 51
+                }
+            }
+        }
+    }
+}

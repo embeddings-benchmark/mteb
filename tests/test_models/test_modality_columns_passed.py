@@ -118,7 +118,7 @@ def test_modality_columns_passed_to_encode(task):
 
 
 @pytest.mark.parametrize(
-    "task, expected_columns_by_prompt_type",
+    ("task", "expected_columns_by_prompt_type"),
     [
         pytest.param(
             MockRetrievalTask(),

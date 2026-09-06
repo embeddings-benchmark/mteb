@@ -109,6 +109,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "DKHateClassification",
         "DanishMedicinesAgencyBitextMining",
         "DanishPoliticalCommentsClassification",
+        "DanRAGT2ITRetrieval",  # some image-bearing pages have no extracted text
         "DiaBlaBitextMining",
         "DuRetrieval",
         "DutchNewsArticlesRetrieval",
@@ -193,6 +194,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MMDocIRT2ITRetrieval",
         "MMVUVideoCentricQA",
         "MMarcoRetrieval",
+        "MMarcoRetrievalMultilingual",  # CJK languages (ja, zh) have short queries and some translations (id, vi) are truncated in the original source dataset
         "MSMARCO",
         "MSMARCO-Fa",
         "MSMARCO-PL",
@@ -310,6 +312,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SentimentDKSF",
         "SinhalaNewsClassification",
         "SlovakMovieReviewSentimentClassification",
+        "SlovakPharmacyDrMaxReranking",  # real e-commerce search-query log; 2/4676 queries are 1-char noise
         "SpanishNewsClusteringP2P",
         "SpeechCommandsZeroshotv0.01",
         "SpeechCommandsZeroshotv0.02",
@@ -377,6 +380,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "VisualNewsT2IRetrieval",
         "VizWizIT2TRetrieval",
         "VoyageMMarcoReranking",
+        "WITI2TRetrieval",  # official WIT includes valid short titles/proper names
         "WITT2IRetrieval",
         "WRIMEClassification",
         "WRIMEClassification.v2",
@@ -386,7 +390,10 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "WinoGrande",
         "WisesightSentimentClassification",
         "WisesightSentimentClassification.v2",
+        "XModBenchAT2TReranking",
+        "XModBenchIT2TReranking",
         "XGlueWPRReranking",
+        "XM3600I2TRetrieval",  # official captions include one-character strings
         "XM3600T2IRetrieval",
         "XMarket",
         "XNLI",
@@ -445,6 +452,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "CMedQAv1-reranking",
         "CMedQAv2-reranking",
         "ClimateFEVER.v2",
+        "ClothoMomentRetrieval",  # same instruction with different audio
         "ClusTREC-Covid",
         "CodeFeedbackST",
         "CodeSearchNetCCRetrieval",
@@ -452,13 +460,17 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "CodeTransOceanDL",
         "Core17InstructionRetrieval",
         "CosQA",
+        "CrisisMMDHumanitarianClassification",  # one tweet can pair with several separately annotated images
+        "CrisisMMDInformativeClassification",  # one tweet can pair with several separately annotated images
         "CzechProductReviewSentimentClassification",
         "CzechSoMeSentimentClassification",
         "DKHateClassification",
         "DS1000Retrieval",
         "DalajClassification",
         "DanishPoliticalCommentsClassification",
+        "DanRAGT2ITRetrieval",  # repeated page text is present in the source benchmark
         "DeepSentiPers",
+        "EDIRIT2IRetrieval",
         "EDIST2ITRetrieval",
         "ESCIReranking",
         "EmitClassification",
@@ -525,6 +537,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MTOPDomainVNClassification",
         "MTOPIntentClassification",
         "MTOPIntentVNClassification",
+        "MVLSIBSent2Img",  # k=1 repeats sentences across candidate sets
         "MalayalamNewsClassification",
         "MasakhaNEWSClassification",
         "MassiveIntentClassification",
@@ -607,6 +620,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SpanishPassageRetrievalS2P",
         "SpanishPassageRetrievalS2S",
         "SpartQA",
+        "SpeechEditAcousticRetrieval",  # repeated instruction for speech edit
         "SpokenSQuADT2ARetrieval",
         "StackExchangeClustering",
         "StackExchangeClustering-VN",
@@ -647,11 +661,24 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "WebFAQRetrieval",
         "WebLINXCandidatesReranking",
         "WebQAT2ITRetrieval",
+        "WebVidCoVRIT2VRetrieval",
         "WikiClusteringP2P",
         "WikiClusteringP2P.v2",
         "WikiSQLRetrieval",
+        "WITI2TRetrieval",  # distinct WIT records can share the same caption
+        "XM3600I2TRetrieval",  # captions are intentionally preserved verbatim
         "XM3600T2IRetrieval",
         "XMarket",
+        "XModBenchAT2IReranking",
+        "XModBenchAT2TReranking",
+        "XModBenchAT2VReranking",
+        "XModBenchIT2AReranking",
+        "XModBenchIT2TReranking",
+        "XModBenchT2AReranking",
+        "XModBenchT2IReranking",
+        "XModBenchT2VReranking",
+        "XModBenchVT2AReranking",
+        "XModBenchVT2TReranking",
         "XPQARetrieval",
         "YahooAnswersTopicsClassification",
         "YueOpenriceReviewClassification",
@@ -808,16 +835,20 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "AROVisualAttribution",
         "AROVisualRelation",
         "CIRRIT2IRetrieval",
+        "EDIRIT2IRetrieval",
         "EDIST2ITRetrieval",
         "EncyclopediaVQAIT2ITRetrieval",
         "FER2013",  # documented to contain duplicate/near-duplicate images
         "FER2013ZeroShot",  # documented to contain duplicate/near-duplicate images
         "FORBI2IRetrieval",  # fingerprint corpus contains near-duplicate captures of the same print
         "FashionIQIT2IRetrieval",
+        "GLAMI1MI2TRetrieval",
+        "GLAMI1MT2IRetrieval",  # images recur across language subsets
         "ImageCoDeT2IRetrieval",
         "InfoSeekIT2ITRetrieval",
         "InfoSeekIT2TRetrieval",
         "LLaVAIT2TRetrieval",
+        "MVLSIBSent2Img",  # all languages share the same 70 images
         "MMLongBenchDocRetrieval",  # official corpus contains repeated rendered pages; preserve IDs to match qrels
         "MomentSeekerTI2VRetrieval",
         "OVENIT2ITRetrieval",
@@ -834,8 +865,16 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SugarCrepe",
         "VQA2IT2TRetrieval",
         "WebQAT2ITRetrieval",
+        "WebVidCoVRIT2VRetrieval",
+        "WITI2TRetrieval",  # images can recur across WIT records and languages
+        "XFlickr30kCoI2TRetrieval",  # the same image corpus is reused across languages
         "XFlickr30kCoT2IRetrieval",
+        "XM3600I2TRetrieval",  # the same image corpus is reused across languages
         "XM3600T2IRetrieval",
+        "XModBenchAT2IReranking",
+        "XModBenchIT2AReranking",
+        "XModBenchIT2TReranking",
+        "XModBenchT2IReranking",
     ],
     "duplicate_pairs": [
         "BibleNLPBitextMining",
@@ -844,6 +883,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "ESC50PairClassification",  # pairs constructed combinatorially from a small pool of audio clips
         "FalseFriendsGermanEnglish",
         "LinceMTBitextMining",
+        "OpusSlovakEnglishBitextMining",  # OPUS-100's subtitle/legal-document mix naturally repeats short common phrases
         "ParsinluEntail",
         "Query2Query",
         "RUParaPhraserSTS",
@@ -859,8 +899,10 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "VoxPopuliAccentPairClassification",  # pairs constructed combinatorially from a small pool of audio clips
     ],
     "duplicate_audio": [
+        "ACMComposedAudioRetrieval",  # composed audio retrieval naturally reuses source audios with different query instructions
         "AmbientAcousticContext",
         "AmbientAcousticContextClustering",
+        "ClothoMomentRetrieval",  # same audio with different instruction
         "CLDAT2ARetrieval",
         "FSD2019Kaggle",
         "GTZANGenre",  # repeated short clips sampled from the same tracks
@@ -872,21 +914,42 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "Kinetics700VA",
         "Kinetics700VAZeroShot",
         "NSynth",  # repeated notes across instrument/pitch/velocity combinations
+        "NSynthInstrumentFamilyClustering",  # same upstream duplicate notes as NSynth
         "SpeechCommands",  # many repeated recordings of the same short command word
         "SpeechCommandsZeroshotv0.01",
         "SpeechCommandsZeroshotv0.02",
         "StanfordI2VRetrieval",  # official manifest contains repeated video+audio clips
+        "VCDBCoreAudioVideoRetrieval",  # distinct copied videos can have identical soundtracks
         "WorldSenseAudioVideoClassification",  # multiple QA rows share the same underlying video/audio
         "WorldSenseAudioVideoZeroShot",
+        "XModBenchAT2IReranking",
+        "XModBenchAT2TReranking",
+        "XModBenchAT2VReranking",
+        "XModBenchIT2AReranking",
+        "XModBenchT2AReranking",
+        "XModBenchVT2AReranking",
     ],
     "duplicate_video": [
+        "DenseWebVidCoVRVT2VRetrieval",  # multiple rows have same video with different instruction
+        "InsAVE80KVT2VRetrieval",  # reverse couples re-release the same clip under two names
         "MMVUVideoCentricQA",
         "MomentSeekerTV2VRetrieval",
         "StanfordI2VRetrieval",  # official 3,401-ID manifest contains 3,325 unique video contents
+        "StanfordI2VVisualRetrieval",  # same official manifest as StanfordI2VRetrieval
         "WorldSenseAudioVideoClassification",  # multiple QA rows share the same underlying video/audio
         "WorldSenseAudioVideoZeroShot",
         "WorldSenseVideoClassification",  # multiple QA rows share the same underlying video/audio
         "WorldSenseVideoZeroShot",
+        "XModBenchAT2VReranking",
+        "XModBenchT2VReranking",
+        "XModBenchVT2AReranking",
+        "XModBenchVT2TReranking",
+    ],
+    "missing_qrel_corpus_ids": [
+        "ArguAna",  # 5 missing qrel document IDs
+        "InfoSeekIT2TRetrieval",  # qrels/corpus pool mismatch
+        "OVENIT2ITRetrieval",  # qrels/corpus pool mismatch
+        "OVENIT2TRetrieval",  # qrels/corpus pool mismatch
     ],
     "relevant_docs_exceed_corpus": [
         "MSMARCO-FaHardNegatives",
@@ -1285,24 +1348,48 @@ def _field_quality(
     return errors
 
 
-def _relevant_docs_bound_quality(
+def _relevant_docs_integrity_quality(
     name: str, split: str, split_stats: SplitDescriptiveStatistics
 ) -> list[tuple[str, str]]:
-    """Relevant docs referenced in qrels must be a subset of the corpus."""
+    """Qrels must only reference query and document IDs present in the split."""
     relevant_docs_stats = split_stats.get("relevant_docs_statistics")
-    num_documents = split_stats.get("num_documents")
-    if not isinstance(relevant_docs_stats, dict) or num_documents is None:
+    if not isinstance(relevant_docs_stats, dict):
         return []
 
+    errors: list[tuple[str, str]] = []
+
+    num_missing_query_ids = relevant_docs_stats.get("num_missing_query_ids")
+    if num_missing_query_ids:
+        errors.append(
+            (
+                "missing_qrel_query_ids",
+                f"{name} ({split}) has qrels keyed on queries missing from the split ({num_missing_query_ids=}).",
+            )
+        )
+
+    num_documents = split_stats.get("num_documents")
     unique_relevant_docs = relevant_docs_stats.get("unique_relevant_docs")
-    if unique_relevant_docs is not None and unique_relevant_docs > num_documents:
-        return [
+    num_missing_corpus_ids = relevant_docs_stats.get("num_missing_corpus_ids")
+    if num_missing_corpus_ids is not None:
+        if num_missing_corpus_ids:
+            errors.append(
+                (
+                    "missing_qrel_corpus_ids",
+                    f"{name} ({split}) has qrels referencing documents missing from the corpus ({num_missing_corpus_ids=}, {unique_relevant_docs=}).",
+                )
+            )
+    elif (
+        num_documents is not None
+        and unique_relevant_docs is not None
+        and unique_relevant_docs > num_documents
+    ):
+        errors.append(
             (
                 "relevant_docs_exceed_corpus",
                 f"{name} ({split}) has more unique relevant docs than documents in the corpus ({unique_relevant_docs=}, {num_documents=}), qrels likely reference IDs missing from the corpus.",
             )
-        ]
-    return []
+        )
+    return errors
 
 
 def _audio_video_pair_quality(
@@ -1372,7 +1459,7 @@ def _split_quality(
         )
         errors += _field_quality(name, split, field, stats, expected_count)
 
-    errors += _relevant_docs_bound_quality(name, split, split_stats)
+    errors += _relevant_docs_integrity_quality(name, split, split_stats)
     errors += _audio_video_pair_quality(name, split, split_stats)
 
     # train-test leakage

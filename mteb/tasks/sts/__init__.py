@@ -12,6 +12,7 @@ from .pol import *
 from .por import *
 from .ron import *
 from .rus import *
+from .slk import *
 from .spa import *
 from .ukr import *
 from .vie import *

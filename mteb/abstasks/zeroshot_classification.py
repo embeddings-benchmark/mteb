@@ -66,10 +66,12 @@ class AbsTaskZeroShotClassification(AbsTask):
         label_column_name: Name of the column containing the labels. Labels must be
             integer indices of the candidate labels or strings matching an entry of
             `get_candidate_labels`.
+        abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
     """
 
     input_column_name: str | Sequence[Modalities] = "image"
     label_column_name: str = "label"
+    abstask_prompt = "Classify the given input into one of the candidate labels."
 
     def _get_content_columns(self) -> dict[str, Modalities]:
         # a multimodal task names each of its input columns after the modality it holds

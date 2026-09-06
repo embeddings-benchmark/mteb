@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from datasets import Audio, Dataset, DatasetDict
 from sklearn.linear_model import LogisticRegression
 
@@ -97,7 +99,7 @@ class MockClassificationTask(AbsTaskClassification):
         **general_args,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         train_texts = ["This is a test sentence", "This is another train sentence"]
         test_texts = ["This is a test sentence", "This is another test sentence"]
 
@@ -266,7 +268,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         train_texts = ["This is a test sentence", "This is another train sentence"]
         test_texts = ["This is a test sentence", "This is another test sentence"]
         labels = [0, 1]
@@ -347,7 +349,7 @@ class MockMultilabelClassification(AbsTaskMultilabelClassification):
         **general_args,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         train_texts = ["This is a test sentence", "This is another train sentence"] * 3
         test_texts = ["This is a test sentence", "This is another test sentence"] * 3
         labels = [[0, 1], [1, 0]] * 3
@@ -513,7 +515,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         train_texts = ["This is a test sentence", "This is another train sentence"] * 3
         test_texts = ["This is a test sentence", "This is another test sentence"] * 3
         labels = [[0, 1], [1, 0]] * 3
@@ -604,7 +606,7 @@ class MockImageClassificationTask(AbsTaskClassification):
     samples_per_label = 5
     input_column_name = "image"
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         images = create_mock_images(self.np_rng)
         labels = [1, 0]
 
@@ -786,7 +788,7 @@ class MockMultilingualImageClassificationTask(AbsTaskClassification):
     metadata.eval_langs = multilingual_eval_langs
     input_column_name = "image"
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         images = create_mock_images(self.np_rng)
         labels = [1, 0]
         data = {
@@ -885,7 +887,7 @@ class MockImageMultilabelClassificationTask(AbsTaskMultilabelClassification):
     samples_per_label = 3
     input_column_name = "image"
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         images = create_mock_images(self.np_rng)
         labels = [["0", "3"], ["1", "2"]]
 
@@ -967,7 +969,7 @@ class MockAudioMultilabelClassificationTask(AbsTaskMultilabelClassification):
     metadata.modalities = ["audio"]
     input_column_name = "audio"
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         mock_audio = create_mock_audio(self.np_rng)
         labels = [[0], [1]]
 
@@ -1041,7 +1043,7 @@ class MockAudioClassification(AbsTaskClassification):
         },
     }
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         sampling_rates = [16000, 8000]
         mock_audio = [
             {
@@ -1109,7 +1111,7 @@ class MockAudioClassificationCrossVal(AbsTaskClassification):
         }
     }
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         mock_audio = create_mock_audio(self.np_rng)
 
         self.dataset = DatasetDict(
@@ -1208,7 +1210,7 @@ class MockVideoClassification(AbsTaskClassification):
         },
     }
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         from datasets import Video
 
         mock_videos = create_mock_video_bytes(self.np_rng)
@@ -1331,7 +1333,7 @@ class MockVideoAudioClassification(AbsTaskClassification):
         },
     }
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         from datasets import Video
 
         mock_videos = create_mock_video_bytes(self.np_rng)
@@ -1442,7 +1444,7 @@ class MockVideoMultilabelClassificationTask(AbsTaskMultilabelClassification):
     metadata.category = "v2c"
     input_column_name = "video"
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         from datasets import Video
 
         mock_videos = create_mock_video_bytes(self.np_rng)
@@ -1559,7 +1561,7 @@ class MockVideoAudioMultilabelClassificationTask(AbsTaskMultilabelClassification
     metadata.category = "va2c"
     input_column_name = ("video", "audio")
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         from datasets import Video
 
         mock_videos = create_mock_video_bytes(self.np_rng)

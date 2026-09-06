@@ -5,6 +5,7 @@ on:
   pull_request:
     paths:
       - "mteb/tasks/**.py"
+      - ".github/workflows/dataset_loading.yml"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -27,7 +28,9 @@ jobs:
 
     - name: Install dependencies
       run: |
-        make install
+        uv python install 3.11
+        "$(uv python find 3.11)" -m venv .venv
+        uv pip install mteb pytest pytest-rerunfailures bibtexparser gitpython
 
     - name: Run dataset loading tests
       env:

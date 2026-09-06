@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -75,7 +77,7 @@ class MSRVTTV2T(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_msr_vtt(self, query_columns=["video"], corpus_columns=["caption"])
 
 
@@ -103,7 +105,7 @@ class MSRVTTT2V(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_msr_vtt(self, query_columns=["caption"], corpus_columns=["video"])
 
 
@@ -131,7 +133,7 @@ class MSRVTTVA2T(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_msr_vtt(
             self, query_columns=["video", "audio"], corpus_columns=["caption"]
         )
@@ -161,7 +163,7 @@ class MSRVTTT2VA(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_msr_vtt(
             self, query_columns=["caption"], corpus_columns=["video", "audio"]
         )
@@ -195,7 +197,7 @@ class MSRVTTV2A(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_msr_vtt(self, query_columns=["video"], corpus_columns=["audio"])
 
 
@@ -227,7 +229,7 @@ class MSRVTTA2V(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_msr_vtt(self, query_columns=["audio"], corpus_columns=["video"])
 
 
@@ -257,7 +259,7 @@ class MSRVTTVT2A(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_msr_vtt(
             self, query_columns=["video", "caption"], corpus_columns=["audio"]
         )
@@ -289,7 +291,7 @@ class MSRVTTAT2V(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_msr_vtt(
             self, query_columns=["audio", "caption"], corpus_columns=["video"]
         )

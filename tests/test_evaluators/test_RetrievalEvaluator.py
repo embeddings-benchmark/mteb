@@ -36,7 +36,7 @@ class TestRetrievalEvaluator:
         )
 
     @pytest.mark.parametrize(
-        "relevant_docs, results, ignore_identical_ids, expected_metrics",
+        ("relevant_docs", "results", "ignore_identical_ids", "expected_metrics"),
         [
             (
                 # Qid: {Docid: Relevance}
@@ -105,7 +105,7 @@ class TestRetrievalEvaluator:
         assert precision == expected_metrics["precision"]
 
     @pytest.mark.parametrize(
-        "ignore_identical_ids, expected_naucs",
+        ("ignore_identical_ids", "expected_naucs"),
         [
             (
                 True,

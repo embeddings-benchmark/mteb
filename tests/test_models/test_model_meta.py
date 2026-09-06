@@ -1,5 +1,6 @@
 import json
 import re
+from typing import Any
 
 import pytest
 
@@ -65,8 +66,6 @@ _MISSING_N_EMBEDDING_MODELS = [
     "OrlikB/st-polish-kartonberta-base-alpha-v1",
     "jinaai/jina-clip-v2",
     "baseline/Human",
-    "mteb/baseline-random-cross-encoder",
-    "mteb/baseline-random-encoder",
     "VAGOsolutions/SauerkrautLM-ColLFM2-450M-v0.1",
     "MCINext/Hakim",
     "MCINext/Hakim-small",
@@ -79,8 +78,6 @@ _MISSING_N_EMBEDDING_MODELS = [
     "microsoft/msclap-2022",
     "microsoft/msclap-2023",
     "Qwen/Qwen2-Audio-7B",
-    "mteb/baseline-random-cross-encoder",
-    "mteb/baseline-random-encoder",
     "OpenMuQ/MuQ-MuLan-large",
     "microsoft/speecht5_asr",
     "microsoft/speecht5_tts",
@@ -175,7 +172,7 @@ def test_similar_tasks_superseded_by():
     assert "Banking77Classification.v2" in model_meta.get_training_datasets()
 
 
-def _openness_meta(**overwrites) -> ModelMeta:
+def _openness_meta(**overwrites: Any) -> ModelMeta:
     return ModelMeta.create_empty(
         overwrites={"name": "test/openness", "revision": "test", **overwrites}
     )
@@ -218,7 +215,7 @@ def test_openness_non_open_license_not_counted():
 
 
 def test_model_name_without_prefix():
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="Model name must be in the format"):
         ModelMeta(
             name="test_model",
             revision="test",
@@ -529,7 +526,7 @@ def test_model_meta_dependencies_not_installed_group():
         model_meta._check_requirements()
 
 
-def test_model_meta_auto_install_extras(monkeypatch):
+def test_model_meta_auto_install_extras(monkeypatch: pytest.MonkeyPatch):
     """When MTEB_AUTO_INSTALL_EXTRAS is set, missing deps trigger an install attempt."""
     model_meta = mteb.get_model_meta("google/vggish").model_copy(
         update={
@@ -556,7 +553,7 @@ def test_model_meta_auto_install_extras(monkeypatch):
     assert "torch-vggish-yamnet" in groups
 
 
-def test_model_meta_no_auto_install_by_default(monkeypatch):
+def test_model_meta_no_auto_install_by_default(monkeypatch: pytest.MonkeyPatch):
     """Without the env var, no install is attempted and the error is raised directly."""
     model_meta = mteb.get_model_meta("google/vggish").model_copy(
         update={

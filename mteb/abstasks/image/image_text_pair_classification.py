@@ -60,6 +60,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
     # it can be ["image_0", "image_1"]; ["text_0", "text_1"] for datasets like WinoGround
     images_column_names: str | Sequence[str] = "image"
     texts_column_names: str | Sequence[str] = "caption"
+    abstask_prompt = "Identify the caption that matches the given image."
 
     def _get_content_columns(self) -> dict[str, Modalities]:
         def _named(columns: str | Sequence[str]) -> list[str]:
