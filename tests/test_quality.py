@@ -110,13 +110,16 @@ def test_remove_duplicates_can_be_restricted_to_a_split() -> None:
     assert len(task.dataset["test"]) == 4
 
 
-def test_remove_duplicates_loads_the_data_when_it_is_not_loaded() -> None:
+def test_remove_duplicates_loads_the_data_onto_the_copy_only() -> None:
     task = MockClassificationTask()
     assert not task.data_loaded
 
-    task = remove_duplicates(task)
+    cleaned = remove_duplicates(task)
 
-    assert task.data_loaded
+    assert cleaned.data_loaded
+    # loading is part of filtering, so it must not reach the task that was passed in
+    assert not task.data_loaded
+    assert task.dataset is None
 
 
 @pytest.mark.parametrize(

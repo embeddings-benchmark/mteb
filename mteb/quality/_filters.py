@@ -425,8 +425,10 @@ def _filter_task_rows(
 ) -> T:
     """Apply `filter_` to every selected split of `task`, returning a cleaned copy.
 
-    The task passed in is never changed. Its data is loaded if needed, and the returned copy holds new containers
-    for the splits that were filtered, so the two share nothing that either could mutate.
+    The task passed in is never changed, not even by loading its data: the copy is made first and the data is
+    loaded onto that. The copy holds new containers for any filtered splits; unfiltered splits and subsets may
+    still be shared with the input task.
+
 
     Args:
         task: The task to filter.
@@ -453,13 +455,16 @@ def _filter_task_rows(
             "aggregates instead, via its `tasks` attribute."
         )
 
-    if not task.data_loaded:
-        task.load_data(num_proc=num_proc)
+    # copy before loading, so that a task whose data is not loaded yet is left that way
+    cleaned = _independent_copy(task)
+    original = cleaned.metadata
+    if not cleaned.data_loaded:
+        cleaned.load_data(num_proc=num_proc)
 
-    col_modalities = _resolve_columns(task, filter_.name, columns)
-    symmetric_sides = _resolve_symmetric_sides(task, col_modalities)
-    is_retrieval = isinstance(task, AbsTaskRetrieval)
-    available, flat = _split_containers(task)
+    col_modalities = _resolve_columns(cleaned, filter_.name, columns)
+    symmetric_sides = _resolve_symmetric_sides(cleaned, col_modalities)
+    is_retrieval = isinstance(cleaned, AbsTaskRetrieval)
+    available, flat = _split_containers(cleaned)
 
     n_removed = 0
     n_filtered_splits = 0
@@ -494,20 +499,19 @@ def _filter_task_rows(
         by_subset[subset] = new_splits if is_retrieval else DatasetDict(new_splits)
 
     if n_filtered_splits == 0:
-        raise ValueError(_no_split_matched_message(task.metadata.name, available))
+        raise ValueError(_no_split_matched_message(original.name, available))
 
-    cleaned = _independent_copy(task)
     cleaned.dataset = by_subset["default"] if flat else by_subset
     if n_removed:
-        _rename_as_cleaned(cleaned, task.metadata, filter_.name)
+        _rename_as_cleaned(cleaned, original, filter_.name)
         logger.warning(
-            f"`{filter_.name}` removed {n_removed} samples from '{task.metadata.name}' "
+            f"`{filter_.name}` removed {n_removed} samples from '{original.name}' "
             f"(columns={sorted(col_modalities)}). The cleaned task is '{cleaned.metadata.name}', and its scores "
-            f"are not comparable to results on '{task.metadata.name}'."
+            f"are not comparable to results on '{original.name}'."
         )
     else:
         logger.info(
-            f"`{filter_.name}` removed nothing from '{task.metadata.name}' "
+            f"`{filter_.name}` removed nothing from '{original.name}' "
             f"(columns={sorted(col_modalities)})."
         )
     return cleaned
