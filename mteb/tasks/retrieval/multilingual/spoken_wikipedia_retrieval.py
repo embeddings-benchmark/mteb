@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -99,7 +101,7 @@ class SpokenWikipediaA2TRetrieval(AbsTaskRetrieval):
         **_COMMON,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load(self, to_text=True)
 
 
@@ -113,5 +115,5 @@ class SpokenWikipediaT2ARetrieval(AbsTaskRetrieval):
         **_COMMON,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load(self, to_text=False)
