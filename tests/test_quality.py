@@ -3,7 +3,6 @@
 import re
 from collections.abc import Callable
 
-import datasets
 import pytest
 from datasets import Dataset, DatasetDict
 
@@ -39,10 +38,17 @@ def _alphanumeric(text: str) -> str:
     return " ".join(re.sub(r"[^\w\s]", "", text.casefold()).split())
 
 
-def _skip_without_modality_support(modality: str) -> None:
-    """Skip a modality the installed dependencies cannot represent, as on the lowest-dependency CI run."""
-    if modality == "video" and not hasattr(datasets, "Video"):
-        pytest.skip("the installed `datasets` has no `Video` feature")
+def _load_or_skip(task: AbsTask) -> None:
+    """Load a task's data, skipping the test if this environment cannot represent its modality.
+
+    The mocks build their audio and video columns with `cast_column`, which encodes the data and needs optional
+    dependencies that the lowest-dependency CI run does not install. Skipping on the failure itself, rather than
+    on the presence of a particular package, keeps the test running wherever the data can actually be built.
+    """
+    try:
+        task.load_data()
+    except ImportError as error:
+        pytest.skip(f"modality dependencies are not installed: {error}")
 
 
 def _classification_task() -> MockClassificationTask:
@@ -237,9 +243,8 @@ def test_remove_duplicates_applies_within_a_row_of_a_clustering_task() -> None:
 def test_remove_duplicates_compares_non_text_by_content(
     task_class: type[AbsTask], column: str
 ) -> None:
-    _skip_without_modality_support(column)
     task = task_class()
-    task.load_data()
+    _load_or_skip(task)
     split = next(iter(task.dataset))
     # row 0 repeated, so only a hash of the content can tell it apart from row 1
     task.dataset[split] = task.dataset[split].select([0, 0, 1])
@@ -619,10 +624,8 @@ def test_the_copy_shares_no_mutable_state_with_the_original() -> None:
 def test_remove_duplicates_handles_non_text_clustering(
     task_class: type[AbsTask],
 ) -> None:
-    for modality in task_class.metadata.modalities:
-        _skip_without_modality_support(modality)
     task = task_class()
-    task.load_data()
+    _load_or_skip(task)
     split = next(iter(task.dataset))
     task.dataset[split] = task.dataset[split].select([0, 0, 1])
 
@@ -633,9 +636,8 @@ def test_remove_duplicates_handles_non_text_clustering(
 
 def test_retrieval_compares_each_side_on_its_own_modality() -> None:
     # an any-to-any task holds a different modality on each side: text documents, image queries
-    _skip_without_modality_support("image")
     task = MockAny2AnyRetrievalI2TTask()
-    task.load_data()
+    _load_or_skip(task)
     subset, split = _retrieval_split(task)
     data = task.dataset[subset][split]
     images = data["queries"]["image"]
