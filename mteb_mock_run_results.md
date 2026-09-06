@@ -41,3 +41,9 @@
 | skipped   | image    |  |
 | skipped   | audio    |  |
 | skipped   | video    |  |
+
+Submission revision: `d6969c26400944d4f5200ebddfdc04a083fd7b75`.
+The live run used local evaluation label `ngnn_general_encoder_singleton_e55ba679_20260906`.
+Only the registration identifier was renamed to the immutable public source
+commit for the results repository revision format. Inference and weights
+are unchanged; see [revision mapping and hashes](https://github.com/steffen181/frozen-ngnn-api-modesl/blob/main/verification/revision_alias.json).

@@ -26,7 +26,7 @@ if TYPE_CHECKING:
 
 DEFAULT_ARTIFACT_PATH = Path(__file__).with_name("model.npz")
 MODEL_NAME = "steffen-negabo/ngnn-general-encoder-v1"
-MODEL_REVISION = "ngnn_general_encoder_singleton_e55ba679_20260906"
+MODEL_REVISION = "d6969c26400944d4f5200ebddfdc04a083fd7b75"
 ARTIFACT_REVISION = "sparse_ngnn_v1_api_20260711_469679b8"
 ARTIFACT_SHA256 = "e55ba67998039ba7cb4837798b0464e06e5939245d3275802cbbd6f0aa3fcb6a"
 BASE_EMBEDDING_MODEL = "text-embedding-3-large"
