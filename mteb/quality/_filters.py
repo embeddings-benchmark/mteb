@@ -26,6 +26,7 @@ from mteb._content_hashes import MODALITY_HASH_FNS
 from mteb._set_seed import _set_seed
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.sts import AbsTaskSTS
 
 if TYPE_CHECKING:
     from collections.abc import Iterator, Sequence
@@ -185,15 +186,22 @@ def _iter_row_content(
 def _resolve_symmetric_sides(
     task: AbsTask, col_modalities: Mapping[str, Modalities]
 ) -> tuple[list[str], list[str]] | None:
-    """The task's symmetric sides, if they exactly cover the columns being compared.
+    """The two sides of a task that mean the same thing when swapped, if they cover the compared columns.
 
-    Narrowing the comparison with `columns=` can leave a side partly selected, in which case swapping the sides is
-    no longer meaningful and the comparison stays order-sensitive.
+    STS is the only symmetric task type: a similarity does not depend on which sentence comes first, which is why
+    it already passes `symmetric=True` when counting unique pairs for its descriptive statistics. Narrowing the
+    comparison with `columns=` can leave a side partly selected, in which case swapping them is no longer
+    meaningful and the comparison stays order-sensitive.
     """
-    sides = task._get_symmetric_sides()
-    if sides is None or set(sides[0]) | set(sides[1]) != set(col_modalities):
+    if not isinstance(task, AbsTaskSTS):
         return None
-    return sides
+    left, right = (
+        [column] if isinstance(column, str) else list(column)
+        for column in task.column_names
+    )
+    if set(left) | set(right) != set(col_modalities):
+        return None
+    return left, right
 
 
 def _is_grouped(dataset: Dataset, columns: Sequence[str]) -> bool:

@@ -626,14 +626,6 @@ class AbsTask(ABC):  # noqa: PLR0904
         """
         return {}
 
-    def _get_symmetric_sides(self) -> tuple[list[str], list[str]] | None:  # noqa: PLR6301
-        """The two sides of a task whose inputs mean the same thing when swapped, or None if order matters.
-
-        A symmetric task treats `(a, b)` and `(b, a)` as one sample, so the filters in `mteb.quality` compare them
-        as equal. This mirrors the `symmetric` flag the descriptive statistics use when counting unique pairs.
-        """
-        return None
-
     def _add_main_score(self, scores: ScoresDict) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
 
