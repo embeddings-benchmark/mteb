@@ -31,7 +31,7 @@ class LibriSpeechSpeakerA2ARetrieval(AbsTaskRetrieval):
         domains=["Spoken"],
         task_subtypes=["Speech Retrieval"],
         license="cc-by-4.0",
-        annotations_creators="human-annotated",
+        annotations_creators="derived",
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
