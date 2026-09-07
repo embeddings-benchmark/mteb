@@ -303,7 +303,12 @@ class RzenEmbedWrapper(AbsEncoder):
                 pixel_values = pixel_values.type(self.model.model.visual.get_dtype())
                 image_embeds = self.model.model.visual(
                     pixel_values, grid_thw=inputs_tokenized["image_grid_thw"]
-                ).to(inputs_embeds.device)
+                )
+
+                if not isinstance(image_embeds, torch.Tensor):
+                    image_embeds = getattr(image_embeds, "last_hidden_state", image_embeds[0])
+
+                image_embeds = image_embeds.to(inputs_embeds.device)
 
                 image_mask = (
                     inputs_tokenized["input_ids"] == self.model.config.image_token_id
