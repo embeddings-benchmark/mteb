@@ -36,7 +36,6 @@ class MSClapWrapper(AbsEncoder):
 
         self.model_name = model_name
         self.device = device
-        self.sampling_rate = 48000
         self.max_audio_length_s = max_audio_length_s
 
         if "2022" in self.model_name:
@@ -53,6 +52,15 @@ class MSClapWrapper(AbsEncoder):
         self.model = CLAP(version=self.version, use_cuda=self.use_cuda)
         self.model.clap = self.model.clap.to(self.device)
         self.tokenizer = self.model.tokenizer
+        # msclap's config declares the rate its preprocessing expects (44,100
+        # for both 2022 and 2023). This wrapper previously hardcoded 48000,
+        # wrote WAVs at that rate, and called msclap with resample=False, so
+        # the package treated 48 kHz samples as its configured 44.1 kHz rate
+        # and received a mis-scaled waveform (~6.43 s of 48 kHz audio
+        # evaluated as 7 s). Derive the truthful rate from the package config
+        # so the AudioCollator resamples and the bridge WAV is written at the
+        # rate msclap actually expects, preserving its own preprocessing path.
+        self.sampling_rate = self.model.args.sampling_rate
 
     def get_audio_embeddings(
         self,
