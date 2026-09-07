@@ -1,3 +1,5 @@
+from typing import Any
+
 from datasets import DatasetDict
 
 from mteb.abstasks.pair_classification import AbsTaskPairClassification
@@ -35,7 +37,7 @@ class SlovakNLI(AbsTaskPairClassification):
         bibtex_citation="",
     )
 
-    def dataset_transform(self, **kwargs):
+    def dataset_transform(self, **kwargs: Any):
         _dataset = {}
 
         for split in self.metadata.eval_splits:

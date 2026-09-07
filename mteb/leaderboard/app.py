@@ -7,7 +7,7 @@ import logging
 import tempfile
 import time
 import warnings
-from typing import Literal, get_args
+from typing import TYPE_CHECKING, Any, Literal, get_args
 from urllib.parse import urlencode
 
 import cachetools
@@ -44,6 +44,9 @@ from mteb.leaderboard.text_segments import ACKNOWLEDGEMENT, FAQ
 from mteb.models.model_meta import MODEL_TYPES
 from mteb.results.benchmark_results import BenchmarkResults
 
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
 logger = logging.getLogger(__name__)
 
 # Shared default cache, constructed at import time exactly as the previous
@@ -74,7 +77,7 @@ def _produce_benchmark_link(benchmark_name: str, request: gr.Request) -> str:
     return md
 
 
-def _set_benchmark_on_load(request: gr.Request):
+def _set_benchmark_on_load(request: gr.Request) -> str:
     query_params = request.query_params
     return query_params.get("benchmark_name", DEFAULT_BENCHMARK_NAME)
 
@@ -116,7 +119,7 @@ def _update_description(
     return description
 
 
-def _format_list(props: list[str]):
+def _format_list(props: list[str]) -> str:
     if props is None:
         return ""
     if len(props) > 3:
@@ -186,7 +189,7 @@ def _filter_models(
     max_model_size: int,
     zero_shot_setting: Literal["only_zero_shot", "allow_all", "remove_unknown"],
     model_types: list[str] | None,
-):
+) -> list[str]:
     lower, upper = 0, max_model_size
     # Setting to None, when the user doesn't specify anything
     if (lower == MIN_MODEL_SIZE) or (lower is None):
@@ -235,7 +238,9 @@ def _should_show_zero_shot_filter(benchmark_name: str) -> bool:
     cache={},
     key=lambda benchmark_name, all_benchmark_results: hash(benchmark_name),
 )
-def _cache_on_benchmark_select(benchmark_name, all_benchmark_results):
+def _cache_on_benchmark_select(
+    benchmark_name: str, all_benchmark_results: BenchmarkResults
+) -> tuple[Any, ...]:
     start_time = time.time()
     benchmark = mteb.get_benchmark(benchmark_name)
     languages = [task.languages for task in benchmark.tasks if task.languages]
@@ -308,10 +313,14 @@ def _cache_on_benchmark_select(benchmark_name, all_benchmark_results):
     ),
 )
 def _cache_update_task_list(
-    benchmark_name, type_select, domain_select, lang_select, modality_select
-):
+    benchmark_name: str,
+    type_select: list[str],
+    domain_select: list[str],
+    lang_select: list[str],
+    modality_select: list[str],
+) -> tuple[list[str], list[str]]:
     if not len(lang_select):
-        return []
+        return [], []
     start_time = time.time()
     benchmark_tasks = []
     tasks_to_keep = []
@@ -482,7 +491,9 @@ def get_leaderboard_app(  # noqa: PLR0914
     loaded: dict[str, pl.DataFrame] | None = None
     use_cache = not rebuild
 
-    def _try_load(source_label: str, loader) -> dict[str, pl.DataFrame] | None:
+    def _try_load(
+        source_label: str, loader: Callable[[], dict[str, pl.DataFrame] | None]
+    ) -> dict[str, pl.DataFrame] | None:
         try:
             cached = loader()
         except Exception as e:
@@ -858,7 +869,7 @@ def get_leaderboard_app(  # noqa: PLR0914
         # This sets the benchmark from the URL query parameters
         demo.load(_set_benchmark_on_load, inputs=[], outputs=[benchmark_select])
 
-        def _estimate_payload_size(obj) -> int:
+        def _estimate_payload_size(obj: object) -> int:
             """Rough byte estimate of a single output value for telemetry only.
 
             Uses sys.getsizeof for primitives and len() on str/bytes-like; for
@@ -880,7 +891,9 @@ def get_leaderboard_app(  # noqa: PLR0914
             except Exception:
                 return -1
 
-        def on_benchmark_select(benchmark_name, request: gr.Request | None = None):  # noqa: PLR0914
+        def on_benchmark_select(  # noqa: PLR0914
+            benchmark_name: str, request: gr.Request | None = None
+        ) -> tuple[Any, ...]:
             t0 = time.time()
             (
                 languages,
@@ -1041,7 +1054,9 @@ def get_leaderboard_app(  # noqa: PLR0914
                 (hash(benchmark_name), hash(tuple(languages)))
             ),
         )
-        def update_scores_on_lang_change(benchmark_name, languages):
+        def update_scores_on_lang_change(
+            benchmark_name: str, languages: list[str]
+        ) -> pl.DataFrame:
             start_time = time.time()
             if not len(languages):
                 return _EMPTY_SCORES_FRAME
@@ -1064,13 +1079,13 @@ def get_leaderboard_app(  # noqa: PLR0914
             return scores
 
         def update_task_list(
-            benchmark_name,
-            type_select,
-            domain_select,
-            lang_select,
-            modality_select,
+            benchmark_name: str,
+            type_select: list[str],
+            domain_select: list[str],
+            lang_select: list[str],
+            modality_select: list[str],
             request: gr.Request | None = None,
-        ):
+        ) -> dict[str, Any]:
             benchmark_tasks, tasks_to_keep = _cache_update_task_list(
                 benchmark_name, type_select, domain_select, lang_select, modality_select
             )
@@ -1118,7 +1133,7 @@ def get_leaderboard_app(  # noqa: PLR0914
             zero_shot: Literal["allow_all", "remove_unknown", "only_zero_shot"],
             model_type_select: list[str],
             request: gr.Request | None = None,
-        ):
+        ) -> list[str]:
             start_time = time.time()
             model_names = scores["model_name"].unique().to_list()
             filtered_models = _filter_models(
@@ -1154,8 +1169,12 @@ def get_leaderboard_app(  # noqa: PLR0914
             return sorted(filtered_models)
 
         def _cache_key_for_update_tables(
-            scores, tasks, models_to_keep, benchmark_name, languages
-        ):
+            scores: pl.DataFrame,
+            tasks: list[str],
+            models_to_keep: list[str],
+            benchmark_name: str,
+            languages: list[str],
+        ) -> int:
             # `scores` is fully determined by `(benchmark_name, languages)` upstream,
             # so we hash those instead of the O(N log N) sort over the scores list.
             tasks_hash = hash(tuple(sorted(tasks))) if tasks is not None else None
@@ -1177,12 +1196,12 @@ def get_leaderboard_app(  # noqa: PLR0914
             key=_cache_key_for_update_tables,
         )
         def update_tables(  # noqa: PLR0914
-            scores,
-            tasks,
-            models_to_keep,
+            scores: pl.DataFrame,
+            tasks: list[str],
+            models_to_keep: list[str],
             benchmark_name: str,
             languages: list[str],
-        ):
+        ) -> tuple[Any, ...]:
             # Reaching the body means cachetools missed — log so unexpected misses surface.
             logger.info(
                 "update_tables cache MISS [%s] tasks=%d models=%d langs=%d",

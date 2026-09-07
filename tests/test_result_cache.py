@@ -2,7 +2,7 @@
 
 import subprocess
 from pathlib import Path
-from typing import cast
+from typing import Any, cast
 from unittest.mock import patch
 
 import numpy as np
@@ -266,7 +266,7 @@ def test_cache_load_different_subsets():
     assert result2.model_results[0].task_results[0].get_score() == 0.01035
 
 
-def test_load_experiment_results(tmp_path):
+def test_load_experiment_results(tmp_path: Path):
     """Test that results from an experiment can be loaded correctly."""
     model = mteb.get_model("mteb/baseline-random-encoder")
     task = MockRetrievalTask()
@@ -463,7 +463,7 @@ def _setup_test_model_results(cache_path: Path) -> tuple[ModelMeta, list[str]]:
     return model_meta, result_files
 
 
-def test_submit_results_with_fake_remote(tmp_path):
+def test_submit_results_with_fake_remote(tmp_path: Path):
     """Comprehensive test for submit_results workflow: verifies file copying, commit creation, branch restoration, and pre-flight checks."""
     cache_path, remote_path = _setup_fake_remote(tmp_path)
     test_model, result_files_copied = _setup_test_model_results(cache_path)
@@ -563,7 +563,7 @@ def test_submit_results_with_fake_remote(tmp_path):
         )
 
 
-def test_submit_results(tmp_path):
+def test_submit_results(tmp_path: Path):
     cache_path, remote_path = _setup_fake_remote(tmp_path)
     test_model, result_files_copied = _setup_test_model_results(cache_path)
 
@@ -616,7 +616,7 @@ def test_submit_results(tmp_path):
         )
 
 
-def test_pr_creation_failure_cleans_up_branch(tmp_path):
+def test_pr_creation_failure_cleans_up_branch(tmp_path: Path):
     """Verify that failed PR creation cleans up temporary branch and restores original branch."""
     cache_path, remote_path = _setup_fake_remote(tmp_path)
     test_model, _ = _setup_test_model_results(cache_path)
@@ -675,7 +675,7 @@ def test_pr_creation_failure_cleans_up_branch(tmp_path):
 
 
 def _setup_experiment_model_results(
-    cache_path: Path, **kwargs
+    cache_path: Path, **kwargs: Any
 ) -> tuple[ModelMeta, list[str]]:
     """Generate experiment results by evaluating the baseline random encoder with experiment kwargs."""
     cache = ResultCache(cache_path=cache_path)
@@ -717,7 +717,7 @@ def _committed_files(remote_path: Path) -> str:
     ).stdout
 
 
-def test_submit_results_experiments_only(tmp_path):
+def test_submit_results_experiments_only(tmp_path: Path):
     """Submit results for a model that only has experiment results (no base results)."""
     cache_path, remote_path = _setup_fake_remote(tmp_path)
     test_model, result_files = _setup_experiment_model_results(cache_path, a="test")

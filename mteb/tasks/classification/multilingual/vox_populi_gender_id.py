@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -58,14 +60,14 @@ Dupoux, Emmanuel},
     label_column_name: str = "gender_id"
     is_cross_validation: bool = True
 
-    def dataset_transform(self, **kwargs):
+    def dataset_transform(self, **kwargs: Any) -> None:
         # Define label mapping
         label2id = {"female": 0, "male": 1}
 
         # Apply transformation to all dataset splits
         for split in self.dataset:
             # Define transform function to add numeric labels
-            def add_gender_id(example):
+            def add_gender_id(example: dict[str, Any]) -> dict[str, Any]:
                 example["gender_id"] = label2id[example["gender"]]
                 return example
 

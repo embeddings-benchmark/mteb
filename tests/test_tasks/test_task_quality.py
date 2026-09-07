@@ -130,6 +130,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "FiQA2018-Fa",
         "FiQA2018-NL",
         "FilipinoHateSpeechClassification",
+        "FineGrainOCRITClustering",  # OCR can be short, but every sample also has a product image
         "FinParaSTS",
         "FinToxicityClassification",
         "FrenchBookReviews",
@@ -390,6 +391,8 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "WinoGrande",
         "WisesightSentimentClassification",
         "WisesightSentimentClassification.v2",
+        "XModBenchAT2TReranking",
+        "XModBenchIT2TReranking",
         "XGlueWPRReranking",
         "XM3600I2TRetrieval",  # official captions include one-character strings
         "XM3600T2IRetrieval",
@@ -458,6 +461,8 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "CodeTransOceanDL",
         "Core17InstructionRetrieval",
         "CosQA",
+        "CrisisMMDHumanitarianClassification",  # one tweet can pair with several separately annotated images
+        "CrisisMMDInformativeClassification",  # one tweet can pair with several separately annotated images
         "CzechProductReviewSentimentClassification",
         "CzechSoMeSentimentClassification",
         "DKHateClassification",
@@ -665,6 +670,16 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "XM3600I2TRetrieval",  # captions are intentionally preserved verbatim
         "XM3600T2IRetrieval",
         "XMarket",
+        "XModBenchAT2IReranking",
+        "XModBenchAT2TReranking",
+        "XModBenchAT2VReranking",
+        "XModBenchIT2AReranking",
+        "XModBenchIT2TReranking",
+        "XModBenchT2AReranking",
+        "XModBenchT2IReranking",
+        "XModBenchT2VReranking",
+        "XModBenchVT2AReranking",
+        "XModBenchVT2TReranking",
         "XPQARetrieval",
         "YahooAnswersTopicsClassification",
         "YueOpenriceReviewClassification",
@@ -828,6 +843,8 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "FER2013ZeroShot",  # documented to contain duplicate/near-duplicate images
         "FORBI2IRetrieval",  # fingerprint corpus contains near-duplicate captures of the same print
         "FashionIQIT2IRetrieval",
+        "GLAMI1MI2TRetrieval",
+        "GLAMI1MT2IRetrieval",  # images recur across language subsets
         "ImageCoDeT2IRetrieval",
         "InfoSeekIT2ITRetrieval",
         "InfoSeekIT2TRetrieval",
@@ -835,6 +852,8 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MVLSIBSent2Img",  # all languages share the same 70 images
         "MMLongBenchDocRetrieval",  # official corpus contains repeated rendered pages; preserve IDs to match qrels
         "MomentSeekerTI2VRetrieval",
+        "Multi30kI2TRetrieval",  # same 1k images are shared across the four language subsets by design
+        "Multi30kT2IRetrieval",  # same 1k images are shared across the four language subsets by design
         "OVENIT2ITRetrieval",
         "PatchCamelyon",  # adjacent, overlapping WSI patches are inherent to the source data
         "PatchCamelyonZeroShot",  # adjacent, overlapping WSI patches are inherent to the source data
@@ -855,6 +874,10 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "XFlickr30kCoT2IRetrieval",
         "XM3600I2TRetrieval",  # the same image corpus is reused across languages
         "XM3600T2IRetrieval",
+        "XModBenchAT2IReranking",
+        "XModBenchIT2AReranking",
+        "XModBenchIT2TReranking",
+        "XModBenchT2IReranking",
     ],
     "duplicate_pairs": [
         "BibleNLPBitextMining",
@@ -902,6 +925,12 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "VCDBCoreAudioVideoRetrieval",  # distinct copied videos can have identical soundtracks
         "WorldSenseAudioVideoClassification",  # multiple QA rows share the same underlying video/audio
         "WorldSenseAudioVideoZeroShot",
+        "XModBenchAT2IReranking",
+        "XModBenchAT2TReranking",
+        "XModBenchAT2VReranking",
+        "XModBenchIT2AReranking",
+        "XModBenchT2AReranking",
+        "XModBenchVT2AReranking",
     ],
     "duplicate_video": [
         "DenseWebVidCoVRVT2VRetrieval",  # multiple rows have same video with different instruction
@@ -914,6 +943,10 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "WorldSenseAudioVideoZeroShot",
         "WorldSenseVideoClassification",  # multiple QA rows share the same underlying video/audio
         "WorldSenseVideoZeroShot",
+        "XModBenchAT2VReranking",
+        "XModBenchT2VReranking",
+        "XModBenchVT2AReranking",
+        "XModBenchVT2TReranking",
     ],
     "missing_qrel_corpus_ids": [
         "ArguAna",  # 5 missing qrel document IDs

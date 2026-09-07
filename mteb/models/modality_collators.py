@@ -97,9 +97,11 @@ class AudioCollator:
                 orig_freq=audio["sampling_rate"],
                 new_freq=target_sampling_rate,
             )
-            audio_array = resampler(torch.from_numpy(audio["array"]).float()).numpy()
+            audio_array = resampler(
+                torch.from_numpy(np.asarray(audio["array"])).float()
+            ).numpy()
         else:
-            audio_array = audio["array"]
+            audio_array = np.asarray(audio["array"])
 
         # Convert to mono if needed
         if audio_array.ndim > 1 and audio_array.shape[0] > 1:

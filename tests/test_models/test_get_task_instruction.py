@@ -1,4 +1,5 @@
 from collections.abc import Callable
+from typing import Any
 
 import pytest
 
@@ -20,7 +21,7 @@ class _FakeEncoder(AbsEncoder):
     ) -> None:
         self.instruction_template = instruction_template
 
-    def encode(self, *args, **kwargs):
+    def encode(self, *args: Any, **kwargs: Any):
         raise NotImplementedError
 
 

@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.sts import AbsTaskSTS
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -30,7 +32,7 @@ class SlovakSumSTS(AbsTaskSTS):
     min_score = 0
     max_score = 5
 
-    def dataset_transform(self, **kwargs):
+    def dataset_transform(self, **kwargs: Any):
         _dataset = self.dataset.rename_columns({"similarity_score": "score"})
 
         # ensure numeric value

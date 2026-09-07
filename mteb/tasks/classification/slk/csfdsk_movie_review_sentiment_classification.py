@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -81,7 +83,7 @@ class CSFDSKMovieReviewSentimentClassificationV2(AbsTaskClassification):
     # Increase the samples_per_label in order to improve baseline performance
     samples_per_label = 20
 
-    def dataset_transform(self, **kwargs) -> None:
+    def dataset_transform(self, **kwargs: Any) -> None:
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["test"], n_samples=N_SAMPLES
         )

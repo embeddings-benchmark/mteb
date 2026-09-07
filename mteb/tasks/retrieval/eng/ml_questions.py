@@ -1,10 +1,18 @@
+from __future__ import annotations
+
 import csv
 from pathlib import Path
+from typing import TYPE_CHECKING, Any
 
 from huggingface_hub import snapshot_download
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+
+if TYPE_CHECKING:
+    from datasets import Dataset
+
+    from mteb.types import RelevantDocumentsType
 
 
 class MLQuestionsRetrieval(AbsTaskRetrieval):
@@ -55,7 +63,7 @@ Reddy, Siva},
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
@@ -74,7 +82,9 @@ Reddy, Siva},
 
         self.data_loaded = True
 
-    def _load_data_for_split(self, download_dir, split):  # noqa: PLR6301
+    def _load_data_for_split(  # noqa: PLR6301
+        self, download_dir: str, split: str
+    ) -> tuple[Dataset, Dataset, RelevantDocumentsType]:
         queries, corpus, qrels = {}, {}, {}
 
         download_dir = Path(download_dir)

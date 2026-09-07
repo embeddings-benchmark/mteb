@@ -1,4 +1,5 @@
 from hashlib import sha256
+from typing import Any
 
 import datasets
 
@@ -64,7 +65,7 @@ class XQuADRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 

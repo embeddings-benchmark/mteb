@@ -14,10 +14,11 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    import requests
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import BatchedInput
+    from mteb.types import Array, BatchedInput
 
 logger = logging.getLogger(__name__)
 
@@ -272,8 +273,15 @@ PROMPTS_DICT = {
 
 class GeeVecLiteModel(InstructSentenceTransformerModel):
     def encode(
-        self, inputs, *, task_metadata, hf_split, hf_subset, prompt_type=None, **kwargs
-    ):
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
         sentences = [text for batch in inputs for text in batch["text"]]
         domain = _resolve_geevec_domain(task_metadata, hf_subset, kwargs.get("domain"))
         if domain is not None:
@@ -319,8 +327,8 @@ class GeeVecAPIModel(AbsEncoder):
         apply_instruction_to_passages: bool = False,
         base_url: str | None = None,
         api_key: str | None = None,
-        session: Any | None = None,
-        **kwargs,
+        session: requests.Session | None = None,
+        **kwargs: Any,
     ) -> None:
         import requests
 
@@ -382,7 +390,7 @@ class GeeVecAPIModel(AbsEncoder):
         hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ):
+    ) -> Array:
         sentences = [text for batch in inputs for text in batch["text"]]
 
         prompt_name = self.get_prompt_name(task_metadata, prompt_type)
