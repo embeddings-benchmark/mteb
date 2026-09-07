@@ -34,11 +34,6 @@ from huggingface_hub.errors import (
 from packaging.requirements import Requirement
 from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict, field_validator, model_validator
-from sentence_transformers import (
-    CrossEncoder,
-    SentenceTransformer,
-)
-from transformers import AutoConfig
 
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb._hf_integration.hf_hub_utils import (
@@ -62,7 +57,9 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
 
     from sentence_transformers import (
+        CrossEncoder,
         CrossEncoderModelCardData,
+        SentenceTransformer,
         SentenceTransformerModelCardData,
     )
     from sentence_transformers.sparse_encoder import SparseEncoder
@@ -933,6 +930,8 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         This is based on the heuristic: `vocab_size * embedding_dim` where vocab_size and embedding_dim are extracted from the model's first
         Transformer module.
         """
+        from sentence_transformers import CrossEncoder, SentenceTransformer
+
         logger.info(
             "Calculating number of embedding parameters for SentenceTransformer model."
         )
@@ -1053,6 +1052,11 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         card = ModelCard.load(model_name)
         card_data = card.data
         card_data = cast("ModelCardData", card_data)
+        # imported here rather than at module scope so that `mteb.models.model_meta` stays
+        # importable without transformers; kept outside the `try` so a missing dependency
+        # surfaces as an ImportError instead of a "can't get model configuration" warning.
+        from transformers import AutoConfig
+
         try:
             model_config = AutoConfig.from_pretrained(model_name)
         except Exception as e:
