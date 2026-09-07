@@ -62,7 +62,9 @@ class MuQMuLanWrapper(AbsEncoder):
                 audio_arrays.append(array)
 
             # Find max length and pad all tensors
-            max_length = max(arr.shape[-1] for arr in audio_arrays)
+            max_length = max(
+                arr.shape[-1] for arr in audio_arrays
+            )
             batch_tensor = torch.zeros(
                 len(audio_arrays), max_length, dtype=torch.float32
             )
