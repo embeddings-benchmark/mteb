@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -43,7 +45,7 @@ class IEMOCAPEmotionClassification(AbsTaskClassification):
 
     is_cross_validation: bool = True
 
-    def dataset_transform(self, **kwargs):
+    def dataset_transform(self, **kwargs: Any):
         # Define emotion labels and their mapping to indices
         labels = [
             "angry",  # 0
@@ -63,8 +65,10 @@ class IEMOCAPEmotionClassification(AbsTaskClassification):
         for split in self.dataset:
             # First ensure we have valid emotion labels and normalize case
             self.dataset[split] = self.dataset[split].filter(
-                lambda example: example["major_emotion"] is not None
-                and example["major_emotion"] != ""  # noqa: PLC1901
+                lambda example: (
+                    example["major_emotion"] is not None
+                    and example["major_emotion"] != ""  # noqa: PLC1901
+                )
             )
 
             # Map to indices with case normalization for reliability

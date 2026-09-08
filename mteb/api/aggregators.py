@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 import functools
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 import polars as pl
 
@@ -39,6 +39,7 @@ if TYPE_CHECKING:
         ModelMetaSchema,
         TaskMetaSchema,
     )
+    from mteb.benchmarks._create_table import SummaryTable
     from mteb.cache.result_cache import ResultCache
 
 logger = logging.getLogger(__name__)
@@ -121,7 +122,7 @@ def _trained_on_map_cached(bench_name: str) -> dict[str, tuple[str, ...]]:
     return {
         mn: tuple(tasks)
         for mn, tasks in zip(
-            grouped["model_name"].to_list(), grouped["task_name"].to_list()
+            grouped["model_name"].to_list(), grouped["task_name"].to_list(), strict=True
         )
     }
 
@@ -278,7 +279,7 @@ async def build_benchmark_summary(  # noqa: PLR0914
 
 def _build_summary_rows(
     summary_pl: pl.DataFrame,
-    summary: Any,
+    summary: SummaryTable,
     type_cols: list[str],
     per_task_rows: dict[str, dict[str, float]],
     trained_on_by_model: dict[str, tuple[str, ...]],
@@ -379,7 +380,7 @@ def _build_per_language_rows(
     codes = grouped["language"].to_list()
     scores = grouped["score"].to_list()
     rows: dict[str, dict[str, float]] = {}
-    for mn, code, score in zip(model_names, codes, scores):
+    for mn, code, score in zip(model_names, codes, scores, strict=True):
         if not mn or code is None or score is None:
             continue
         rows.setdefault(mn, {})[language_label(code)] = score
@@ -434,7 +435,9 @@ def build_task_scores(name: str) -> TaskScoresSchema:  # noqa: PLR0914
         subset_col = deduped["subset"].to_list()
         split_col = deduped["split"].to_list()
         score_col = deduped["score"].to_list()
-        for mn, subset, split, s in zip(model_names, subset_col, split_col, score_col):
+        for mn, subset, split, s in zip(
+            model_names, subset_col, split_col, score_col, strict=True
+        ):
             seen.setdefault(mn, {}).setdefault(subset, {})[split] = s
 
     rows: list[TaskScoreRowSchema] = []
@@ -521,7 +524,7 @@ async def build_model_scores(name: str) -> ModelScoresSchema:
     model_meta: ModelMetaSchema | None = None
     rows: list[ModelScoreRowSchema] = []
 
-    for bench, summary in zip(all_benchmarks, results):
+    for bench, summary in zip(all_benchmarks, results, strict=True):
         if isinstance(summary, BaseException):
             continue
         row = _summary_row_index(bench.name, summary).get(name)

@@ -44,8 +44,7 @@ cache.submit_results(model_meta, create_pr=False)  # manual review before pushin
 
     ```python
     submission_info = cache.submit_results(
-        models=["sentence-transformers/all-MiniLM-L6-v2"],
-        create_pr=False
+        models=["sentence-transformers/all-MiniLM-L6-v2"], create_pr=False
     )
 
     # submit_results logs the manual submission instructions
@@ -68,8 +67,7 @@ cache.submit_results(model_meta, create_pr=False)  # manual review before pushin
 
     ```python
     submission_info = cache.submit_results(
-        models=["sentence-transformers/all-MiniLM-L6-v2"],
-        create_pr=True
+        models=["sentence-transformers/all-MiniLM-L6-v2"], create_pr=True
     )
 
     if submission_info.get("pr_url"):
@@ -84,7 +82,7 @@ Submit multiple models at once:
 models = [
     "sentence-transformers/all-MiniLM-L6-v2",
     "sentence-transformers/all-mpnet-base-v2",
-    "BAAI/bge-base-en-v1.5"
+    "BAAI/bge-base-en-v1.5",
 ]
 
 cache.submit_results(models=models, create_pr=False)

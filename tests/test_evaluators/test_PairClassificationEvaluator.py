@@ -2,16 +2,14 @@ import pytest
 
 import mteb
 from mteb._evaluators import PairClassificationEvaluator
+from mteb.mocks.mock_tasks import MockPairClassificationTask
 from mteb.timing import TimingStack
-from tests.mock_tasks import (
-    MockPairClassificationTask,
-)
 
 TOL = 0.0001
 
 
 class TestPairClassificationEvaluator:
-    def test_accuracy(self):  # noqa: PLR6301
+    def test_accuracy(self):
         task = MockPairClassificationTask()
         task.load_data()
 

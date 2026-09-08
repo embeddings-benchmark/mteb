@@ -16,10 +16,13 @@ model = mteb.get_model("sentence-transformers/static-similarity-mrl-multilingual
 
 # wrap the model with the cache wrapper
 from mteb.models.cache_wrappers import CachedEmbeddingWrapper
-model_with_cached_emb = CachedEmbeddingWrapper(model, cache_path='path_to_cache_dir')
+
+model_with_cached_emb = CachedEmbeddingWrapper(model, cache_path="path_to_cache_dir")
 # run as normal
 results = mteb.evaluate(model_with_cached_emb, tasks=[task])
 ```
+
+For tasks that use query and document prompts, embeddings are stored separately in `<path_to_cache_dir>/<task_name>/<prompt_type>` so that inputs encoded with different prompts cannot share cached vectors.
 
 If you want to directly access the cached embeddings (e.g. for subsequent analyses) follow this example:
 

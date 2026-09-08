@@ -86,6 +86,7 @@ class MMarcoRetrieval(AbsTaskRetrieval):
         prompt={
             "query": "Given a web search query, retrieve relevant passages that answer the query"
         },
+        superseded_by="MMarcoRetrievalMultilingual",
     )
 
 

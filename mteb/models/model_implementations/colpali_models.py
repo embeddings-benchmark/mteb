@@ -34,7 +34,8 @@ class ColPaliEngineWrapper(AbsEncoder):
         processor_class: type,
         revision: str | None = None,
         device: str | None = None,
-        **kwargs,
+        query_prefix: str | None = None,
+        **kwargs: Any,
     ):
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -49,6 +50,8 @@ class ColPaliEngineWrapper(AbsEncoder):
 
         # Load processor
         self.processor = processor_class.from_pretrained(model_name)
+        if query_prefix is not None:
+            self.processor.query_prefix = query_prefix
 
     def encode(
         self,
@@ -72,23 +75,23 @@ class ColPaliEngineWrapper(AbsEncoder):
                 raise ValueError(
                     "The number of texts and images must have the same length"
                 )
-            fused_embeddings = text_embeddings + image_embeddings
+            fused_embeddings = torch.cat([text_embeddings, image_embeddings], dim=1)
             return fused_embeddings
-        elif text_embeddings is not None:
+        if text_embeddings is not None:
             return text_embeddings
-        elif image_embeddings is not None:
+        if image_embeddings is not None:
             return image_embeddings
         raise ValueError
 
-    def encode_input(self, inputs):
+    def encode_input(self, inputs: dict[str, Any]) -> torch.Tensor:
         return self.mdl(**inputs)
 
     def get_image_embeddings(
         self,
-        images,
+        images: DataLoader[BatchedInput],
         batch_size: int = 32,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> Array:
         import torchvision.transforms.functional as F
         from PIL import Image
 
@@ -115,10 +118,10 @@ class ColPaliEngineWrapper(AbsEncoder):
 
     def get_text_embeddings(
         self,
-        texts,
+        texts: DataLoader[BatchedInput],
         batch_size: int = 32,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> Array:
         all_embeds = []
         with torch.no_grad():
             for batch in tqdm(texts, desc="Encoding texts"):
@@ -146,14 +149,14 @@ class ColPaliEngineWrapper(AbsEncoder):
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
         batch_size: int = 32,
-        fusion_mode="sum",
+        fusion_mode: str = "sum",
         **kwargs: Any,
     ):
         raise NotImplementedError(
             "Fused embeddings are not supported yet. Please use get_text_embeddings or get_image_embeddings."
         )
 
-    def similarity(self, a, b):
+    def similarity(self, a: Array, b: Array) -> Array:
         return self.processor.score(a, b, device=self.device)
 
 
@@ -165,7 +168,8 @@ class ColPaliWrapper(ColPaliEngineWrapper):
         model_name: str = "vidore/colpali-v1.3",
         revision: str | None = None,
         device: str | None = None,
-        **kwargs,
+        query_prefix: str = "Query: ",
+        **kwargs: Any,
     ):
         from colpali_engine.models import ColPali, ColPaliProcessor
 
@@ -175,6 +179,7 @@ class ColPaliWrapper(ColPaliEngineWrapper):
             processor_class=ColPaliProcessor,
             revision=revision,
             device=device,
+            query_prefix=query_prefix,
             **kwargs,
         )
 

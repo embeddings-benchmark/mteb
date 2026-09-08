@@ -1,3 +1,5 @@
+from typing import Any
+
 import datasets
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -16,7 +18,7 @@ class NarrativeQARetrieval(AbsTaskRetrieval):
         reference="https://metatext.io/datasets/narrativeqa",
         description=(
             "NarrativeQA is a dataset for the task of question answering on long narratives. It consists of "
-            + "realistic QA instances collected from literature (fiction and non-fiction) and movie scripts. "
+            "realistic QA instances collected from literature (fiction and non-fiction) and movie scripts. "
         ),
         type="Retrieval",
         category="t2t",
@@ -57,7 +59,7 @@ Roark, Brian},
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 

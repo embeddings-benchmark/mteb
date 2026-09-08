@@ -27,10 +27,7 @@ from mteb.models.search_encoder_index import FaissSearchIndex
 
 model = mteb.get_model(...)
 index_backend = FaissSearchIndex(model)
-model = SearchEncoderWrapper(
-    model,
-    index_backend=index_backend
-)
+model = SearchEncoderWrapper(model, index_backend=index_backend)
 ...
 ```
 

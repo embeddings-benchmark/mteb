@@ -17,10 +17,10 @@ In normal use these come up when running a model:
 ```python
 # ...
 models_results = mteb.evaluate(model, tasks)
-type(models_results) # mteb.results.ModelResults
+type(models_results)  # mteb.results.ModelResults
 
 task_result = models_results.task_results
-type(models_results) # mteb.results.TaskResult
+type(models_results)  # mteb.results.TaskResult
 ```
 
 ## Results cache

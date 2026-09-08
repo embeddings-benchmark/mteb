@@ -11,7 +11,7 @@ MTEB comes with an implementation of many popular models and APIs. These can be 
 
 ```python
 model_name = "intfloat/multilingual-e5-small"
-meta = mteb.get_model_meta(model_name) # (1)!
+meta = mteb.get_model_meta(model_name)  # (1)!
 model = meta.load_model()
 # or directly using
 model = mteb.get_model(model_name)
@@ -42,6 +42,7 @@ on `MTEB`:
     ```python
     import mteb
     from sentence_transformers import SentenceTransformer
+
     model = SentenceTransformers("sentence-transformers/LaBSE")
 
     # select the desired tasks and evaluate
@@ -54,6 +55,7 @@ on `MTEB`:
     ```python
     import mteb
     from sentence_transformers import CrossEncoder
+
     model = CrossEncoder("sentence-transformers/LaBSE")
 
     # select a reranking task and evaluate
@@ -111,4 +113,3 @@ model = mteb.evaluate(model, tasks=tasks)
 ```
 
 If you want to submit your implementation to be included in the leaderboard see the section on [submitting a model](../../contributing/adding_a_model.md).
-

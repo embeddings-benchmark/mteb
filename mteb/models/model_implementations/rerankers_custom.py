@@ -27,7 +27,7 @@ class RerankerWrapper:
         batch_size: int = 4,
         fp_options: bool | None = None,
         silent: bool = False,
-        **kwargs,
+        **kwargs: Any,
     ):
         self.model_name_or_path = model_name_or_path
         self.batch_size = batch_size
@@ -51,9 +51,9 @@ class BGEReranker(RerankerWrapper):
 
     def __init__(
         self,
-        model_name_or_path="BAAI/bge-reranker-v2-m3",
-        torch_compile=False,
-        **kwargs,
+        model_name_or_path: str = "BAAI/bge-reranker-v2-m3",
+        torch_compile: bool = False,
+        **kwargs: Any,
     ):
         super().__init__(model_name_or_path, **kwargs)
         if not self.device:
@@ -89,11 +89,13 @@ class BGEReranker(RerankerWrapper):
                 raise ValueError(
                     f"Expected {len(queries)} instructions, got {len(instructions)}"
                 )
-            queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
+            queries = [
+                f"{q} {i}".strip() for i, q in zip(instructions, queries, strict=True)
+            ]
 
         if len(queries) != len(passages):
             raise ValueError(f"Expected {len(queries)} passages, got {len(passages)}")
-        query_passage_tuples = list(zip(queries, passages))
+        query_passage_tuples = list(zip(queries, passages, strict=True))
         scores = self.model.compute_score(query_passage_tuples, normalize=True)
         if len(scores) != len(queries):
             raise ValueError(f"Expected {len(queries)} scores, got {len(scores)}")
@@ -105,9 +107,9 @@ class JinaReranker(RerankerWrapper):
 
     def __init__(
         self,
-        model_name_or_path="jinaai/jina-reranker-v2-base-multilingual",
-        torch_compile=False,
-        **kwargs,
+        model_name_or_path: str = "jinaai/jina-reranker-v2-base-multilingual",
+        torch_compile: bool = False,
+        **kwargs: Any,
     ):
         from sentence_transformers import CrossEncoder
 
@@ -143,13 +145,15 @@ class JinaReranker(RerankerWrapper):
         passages = [text for batch in inputs2 for text in batch["text"]]
 
         if instructions is not None and instructions[0] is not None:
-            queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
+            queries = [
+                f"{q} {i}".strip() for i, q in zip(instructions, queries, strict=True)
+            ]
 
         if self.first_print:
             logger.info(f"Using {queries[0]}")
             self.first_print = False
 
-        sentence_pairs = list(zip(queries, passages))
+        sentence_pairs = list(zip(queries, passages, strict=True))
         scores = self.model.predict(sentence_pairs, convert_to_tensor=True)
         return scores
 

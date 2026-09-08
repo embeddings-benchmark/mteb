@@ -2,8 +2,8 @@ import pytest
 
 from mteb._evaluators import RetrievalEvaluator
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.mocks.mock_tasks.retrieval import general_args
 from mteb.timing import TimingStack
-from tests.mock_tasks import general_args
 
 TOL = 0.0001
 
@@ -36,7 +36,7 @@ class TestRetrievalEvaluator:
         )
 
     @pytest.mark.parametrize(
-        "relevant_docs, results, ignore_identical_ids, expected_metrics",
+        ("relevant_docs", "results", "ignore_identical_ids", "expected_metrics"),
         [
             (
                 # Qid: {Docid: Relevance}
@@ -105,7 +105,7 @@ class TestRetrievalEvaluator:
         assert precision == expected_metrics["precision"]
 
     @pytest.mark.parametrize(
-        "ignore_identical_ids, expected_naucs",
+        ("ignore_identical_ids", "expected_naucs"),
         [
             (
                 True,

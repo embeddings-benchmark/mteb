@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -43,7 +45,7 @@ class InjongoIntent(AbsTaskClassification):
             "xho": ["xho-Latn"],
             "yor": ["yor-Latn"],
             "zul": ["zul-Latn"],
-            "eng": ["eng-Latn"],
+            # "eng": ["eng-Latn"],
         },
         main_score="accuracy",
         date=("2024-02-13", "2025-02-13"),
@@ -62,7 +64,7 @@ class InjongoIntent(AbsTaskClassification):
 """,
     )
 
-    def dataset_transform(self, **kwargs):
+    def dataset_transform(self, **kwargs: Any):
         """Convert HuggingFace splits to the lists of dicts expected by AbsTaskClassification."""
         transformed = {}
 

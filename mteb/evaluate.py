@@ -40,6 +40,11 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+# Shared default cache. Constructed at import time, exactly as the previous
+# `cache: ResultCache | None = ResultCache()` default argument was -- `cache=None`
+# means "no cache", so a None sentinel cannot be used here.
+_DEFAULT_CACHE = ResultCache()
+
 
 class OverwriteStrategy(HelpfulStrEnum):
     """Enum for the overwrite strategy when running a task.
@@ -71,9 +76,12 @@ def _sanitize_model(
         wrapped_model = CrossEncoderWrapper(model)
         meta = wrapped_model.mteb_model_meta
     elif hasattr(model, "mteb_model_meta"):
-        meta = getattr(model, "mteb_model_meta")
-        if not isinstance(meta, ModelMeta):
-            meta = ModelMeta.create_empty()
+        model_meta = model.mteb_model_meta
+        meta = (
+            model_meta
+            if isinstance(model_meta, ModelMeta)
+            else ModelMeta.create_empty()
+        )
         wrapped_model = cast("MTEBModels | ModelMeta", model)
     else:
         meta = ModelMeta.create_empty() if not isinstance(model, ModelMeta) else model
@@ -111,7 +119,7 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
             if co2_tracker is True:
                 raise ImportError(
                     "Codecarbon is required when co2_tracker=True. Please install it using `pip install mteb[codecarbon]` to track CO₂ emissions."
-                )
+                ) from None
             co2_tracker = False
         else:
             co2_tracker = True
@@ -182,7 +190,7 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
                     "Make sure you have access to the dataset and that you have set up the authentication correctly. To disable this warning set `public_only=False`"
                 )
                 logger.warning(msg)
-                warnings.warn(msg)
+                warnings.warn(msg, stacklevel=2)
                 return TaskError(
                     task_name=task.metadata.name,
                     exception=str(e),
@@ -306,7 +314,7 @@ def _check_model_modalities(
                 and query_mods.issubset(model_modalities)
             ):
                 continue
-            elif query_overlap and doc_overlap:
+            if query_overlap and doc_overlap:
                 warnings.append(
                     f"Model {model.name} supports {model.modalities}, partially overlapping "
                     f"with task {task.metadata.name} query={sorted(query_mods)}, document={sorted(doc_mods)}. "
@@ -322,11 +330,10 @@ def _check_model_modalities(
 
             if task_mods.issubset(model_modalities):
                 continue
-            else:
-                errors.append(
-                    f"Model {model.name} supports {model.modalities}, but none overlap with "
-                    f"task {task.metadata.name} modalities={task.metadata.modalities}."
-                )
+            errors.append(
+                f"Model {model.name} supports {model.modalities}, but none overlap with "
+                f"task {task.metadata.name} modalities={task.metadata.modalities}."
+            )
 
     if errors:
         raise ValueError("\n".join(errors))
@@ -417,7 +424,7 @@ def _check_cache(
         ):
             raise ValueError(
                 f"overwrite_strategy is set to '{overwrite_strategy.value}' and the results file exists for task {task.metadata.name}. "
-                + f"However there are the following missing splits (and subsets): {missing_eval}. To rerun these set overwrite_strategy to 'only-missing'."
+                f"However there are the following missing splits (and subsets): {missing_eval}. To rerun these set overwrite_strategy to 'only-missing'."
             )
         existing_results = None
 
@@ -431,7 +438,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
     co2_tracker: bool | None = None,
     raise_error: bool = True,
     encode_kwargs: EncodeKwargs | None = None,
-    cache: ResultCache | None = ResultCache(),
+    cache: ResultCache | None = _DEFAULT_CACHE,
     overwrite_strategy: str | OverwriteStrategy = "only-missing",
     prediction_folder: Path | str | None = None,
     show_progress_bar: bool = True,
@@ -566,7 +573,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
             desc="Evaluating tasks",
             disable=not show_progress_bar,
         )
-        for i, task in enumerate(tasks_tqdm):
+        for task in tasks_tqdm:
             tasks_tqdm.set_description(f"Evaluating task {task.metadata.name}")
             _res = evaluate(
                 model,

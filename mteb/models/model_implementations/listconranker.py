@@ -23,7 +23,7 @@ LISTCONRANKER_CITATION = """@article{liu2025listconranker,
 
 
 class ListConRanker(RerankerWrapper):
-    def __init__(self, model_name_or_path: str, **kwargs) -> None:
+    def __init__(self, model_name_or_path: str, **kwargs: Any) -> None:
         from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
         super().__init__(model_name_or_path, **kwargs)
@@ -53,7 +53,7 @@ class ListConRanker(RerankerWrapper):
         hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ):
+    ) -> list[float]:
         queries = [text for batch in inputs1 for text in batch["query"]]
         passages = [text for batch in inputs2 for text in batch["text"]["text"]]
 
@@ -64,7 +64,7 @@ class ListConRanker(RerankerWrapper):
         query = queries[0]
         tmp_passages = []
         if kwargs.get("traditional_inference"):
-            for q, p in zip(queries, passages):
+            for q, p in zip(queries, passages, strict=True):
                 if query == q:
                     tmp_passages.append(p)
                 else:
@@ -78,7 +78,7 @@ class ListConRanker(RerankerWrapper):
                 scores = self.model.multi_passage(query_passages_tuples)
                 final_scores += scores
         else:
-            for q, p in zip(queries, passages):
+            for q, p in zip(queries, passages, strict=True):
                 if query == q:
                     tmp_passages.append(p)
                 else:

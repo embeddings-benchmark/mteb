@@ -30,5 +30,5 @@
             }
         ]
     },
-    "task_name": "MockClusteringFastTask"
+    "task_name": "LegacyMockClusteringFastTask"
 }

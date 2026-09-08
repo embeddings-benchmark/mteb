@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import typing
+from typing import Any
 
 import numpy as np
 import pytest
@@ -9,6 +10,7 @@ from datasets import Dataset
 from torch.utils.data import DataLoader
 
 from mteb.abstasks.task_metadata import SimplifiedTaskType, TaskMetadata
+from mteb.mocks.mock_tasks import MockRetrievalTask
 from mteb.models.model_implementations.jina_models import (
     _SIMPLIFIED_TO_JINA_TASK,
     JinaV5OmniWrapper,
@@ -17,7 +19,6 @@ from mteb.models.model_implementations.jina_models import (
 )
 from mteb.types import PromptType
 from tests.mock_models import MockSentenceTransformer
-from tests.mock_tasks import MockRetrievalTask
 
 _VARIANT_MAP = {
     "Retrieval": "retrieval",
@@ -35,7 +36,7 @@ class CapturingModel(MockSentenceTransformer):
         super().__init__()
         self.captured: list[dict] = []
 
-    def encode(self, inputs, **kwargs):
+    def encode(self, inputs, **kwargs: Any):
         self.captured.append(
             {
                 "inputs": inputs,
@@ -71,7 +72,7 @@ def _omni_prompts() -> dict:
 
 
 @pytest.mark.parametrize(
-    "prompt_type,task_type,expected_task,expected_prompt",
+    ("prompt_type", "task_type", "expected_task", "expected_prompt"),
     [
         (PromptType.query, "Retrieval", "retrieval", "Query: "),
         (PromptType.document, "Retrieval", "retrieval", "Document: "),
@@ -90,7 +91,7 @@ def test_prefix_by_task_type(prompt_type, task_type, expected_task, expected_pro
 
 
 @pytest.mark.parametrize(
-    "prompt_type,task_type,expected_task,expected_prompt",
+    ("prompt_type", "task_type", "expected_task", "expected_prompt"),
     [
         (PromptType.query, "Any2AnyRetrieval", "retrieval", "Query: "),
         # Text-input paths always get prefix regardless of task type label
@@ -108,7 +109,7 @@ def test_simplified_fallback(prompt_type, task_type, expected_task, expected_pro
 
 
 @pytest.mark.parametrize(
-    "prompt_type,task_type,expected_task,expected_prompt",
+    ("prompt_type", "task_type", "expected_task", "expected_prompt"),
     [
         (PromptType.query, "ImageClassification", "retrieval", "Query: "),
         (PromptType.query, "AudioClassification", "retrieval", "Query: "),

@@ -182,7 +182,7 @@ class NanoVDRWrapper(AbsEncoder):
 
                 videos, video_metadata = None, None
                 if video_inputs is not None:
-                    videos, video_metadata = zip(*video_inputs)
+                    videos, video_metadata = zip(*video_inputs, strict=True)
                     videos, video_metadata = list(videos), list(video_metadata)
 
                 processed = self._doc_processor(
@@ -243,9 +243,8 @@ class NanoVDRWrapper(AbsEncoder):
 
         if prompt_type == PromptType.document:
             return self._encode_documents(inputs, show_progress_bar=show_progress_bar)
-        else:
-            # Use the lightweight student for queries and all non-retrieval tasks
-            return self._encode_queries(inputs, show_progress_bar=show_progress_bar)
+        # Use the lightweight student for queries and all non-retrieval tasks
+        return self._encode_queries(inputs, show_progress_bar=show_progress_bar)
 
 
 nanovdr_s_multi = ModelMeta(

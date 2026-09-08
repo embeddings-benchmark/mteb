@@ -33,6 +33,14 @@ If you want to run certain models implemented within mteb you will often need so
 
 If a specific model requires a dependency it will raise an error with the recommended installation. To see full list of available models you can look at the [models overview](overview/available_models/text.md).
 
+### Automatically installing model dependencies
+
+Instead of installing extras manually for every model, you can let mteb install the missing ones for you by setting the `MTEB_AUTO_INSTALL_EXTRAS` environment variable. When it is set to a truthy value (`1`, `true`, `yes`, `on`), loading a model whose extras are missing will install them automatically (using `uv` if it is available, otherwise `pip`) before raising:
+
+```bash
+export MTEB_AUTO_INSTALL_EXTRAS=1
+```
+
 ## Audio Tasks
 
 If you want to run audio tasks, install the audio dependencies:

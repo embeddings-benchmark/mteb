@@ -10,6 +10,7 @@ from .nob import *
 from .pol import *
 from .rom import *
 from .rus import *
+from .slk import *
 from .spa import *
 from .swe import *
 from .vie import *

@@ -1,3 +1,5 @@
+from typing import Any
+
 import datasets
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -47,7 +49,7 @@ Derczynski, Leon},
         task_subtypes=["Claim verification"],
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
@@ -55,7 +57,7 @@ Derczynski, Leon},
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """And transform to a retrieval dataset, which have the following attributes
 
         self.corpus = dict[doc_id, dict[str, str]] #id => dict with document data like title and text
@@ -78,7 +80,9 @@ Derczynski, Leon},
             labels = ds["label"]
             class_labels = ds.features["label"].names
 
-            for claim, evidence, label_id in zip(claims, evidences, labels):
+            for claim, evidence, label_id in zip(
+                claims, evidences, labels, strict=True
+            ):
                 claim_is_supported = class_labels[label_id] == "Supported"
 
                 sim = (

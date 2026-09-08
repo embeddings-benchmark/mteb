@@ -33,3 +33,36 @@ elephant_embeddings_v1_text_small = ModelMeta(
   url={https://huggingface.co/llm-semantic-router/mmbert-embed-32k-2d-matryoshka}
 }""",
 )
+
+mmbert_embed_32k_2d_matryoshka = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    loader_kwargs={},
+    name="llm-semantic-router/mmbert-embed-32k-2d-matryoshka",
+    revision="c544097d7603b10c546560e8be5d7fe0965a7909",
+    release_date="2026-01-26",
+    languages=bgem3_languages,
+    n_parameters=306_939_648,
+    n_embedding_parameters=196_608_000,
+    memory_usage_mb=585,
+    max_tokens=32768,
+    embed_dim=[64, 128, 256, 512, 768],
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["Sentence Transformers", "ONNX", "safetensors"],
+    reference="https://huggingface.co/llm-semantic-router/mmbert-embed-32k-2d-matryoshka",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=False,
+    training_datasets=bge_m3_training_data,
+    adapted_from="llm-semantic-router/mmbert-32k-yarn",
+    superseded_by=None,
+    modalities=["text"],
+    model_type=["dense"],
+    citation="""@misc{mmbert-embed-2d-matryoshka,
+  title={mmBERT-Embed: Multilingual Embedding Model with 2D Matryoshka Training},
+  author={vLLM Semantic Router Team},
+  year={2025},
+  url={https://huggingface.co/llm-semantic-router/mmbert-embed-32k-2d-matryoshka}
+}""",
+)

@@ -11,7 +11,7 @@ class HotpotQANL(AbsTaskRetrieval):
         },
         description=(
             "HotpotQA is a question answering dataset featuring natural, multi-hop questions, with strong"
-            + "supervision for supporting facts to enable more explainable question answering systems. HotpotQA-NL is "
+            "supervision for supporting facts to enable more explainable question answering systems. HotpotQA-NL is "
             "a Dutch translation. "
         ),
         reference="https://hotpotqa.github.io/",

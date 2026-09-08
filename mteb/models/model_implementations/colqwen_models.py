@@ -7,13 +7,17 @@ import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import AudioCollator, VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    from collections.abc import Callable, Mapping
+
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types._encoder_io import AudioInputItem
 
 from .colpali_models import (
     COLPALI_CITATION,
@@ -32,7 +36,8 @@ class ColQwen2Wrapper(ColPaliEngineWrapper):
         model_name: str = "vidore/colqwen2-v1.0",
         revision: str | None = None,
         device: str | None = None,
-        **kwargs,
+        query_prefix: str = "Query: ",
+        **kwargs: Any,
     ):
         from colpali_engine.models import ColQwen2, ColQwen2Processor
 
@@ -42,6 +47,7 @@ class ColQwen2Wrapper(ColPaliEngineWrapper):
             processor_class=ColQwen2Processor,
             revision=revision,
             device=device,
+            query_prefix=query_prefix,
             **kwargs,
         )
 
@@ -55,7 +61,8 @@ class ColQwen2_5Wrapper(ColPaliEngineWrapper):  # noqa: N801
         revision: str | None = None,
         device: str | None = None,
         attn_implementation: str | None = None,
-        **kwargs,
+        query_prefix: str = "Query: ",
+        **kwargs: Any,
     ):
         from colpali_engine.models import ColQwen2_5, ColQwen2_5_Processor
         from transformers.utils.import_utils import is_flash_attn_2_available
@@ -71,6 +78,7 @@ class ColQwen2_5Wrapper(ColPaliEngineWrapper):  # noqa: N801
             processor_class=ColQwen2_5_Processor,
             revision=revision,
             device=device,
+            query_prefix=query_prefix,
             **kwargs,
         )
 
@@ -83,7 +91,7 @@ class ColQwen3_5Wrapper(AbsEncoder):  # noqa: N801
         model_name: str = "athrael-soju/colqwen3.5-4.5B-v3",
         revision: str | None = None,
         device: str | None = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         from colpali_engine.models import ColQwen3_5, ColQwen3_5Processor
 
@@ -91,13 +99,15 @@ class ColQwen3_5Wrapper(AbsEncoder):  # noqa: N801
 
         self.model = ColQwen3_5.from_pretrained(
             model_name,
+            revision=revision,
             device_map=self.device,
-            adapter_kwargs={"revision": revision},
             **kwargs,
         )
         self.model.eval()
 
-        self.processor = ColQwen3_5Processor.from_pretrained(model_name)
+        self.processor = ColQwen3_5Processor.from_pretrained(
+            model_name, revision=revision
+        )
 
     def encode(
         self,
@@ -129,7 +139,7 @@ class ColQwen3_5Wrapper(AbsEncoder):  # noqa: N801
         batch_size: int = 32,
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ):
+    ) -> Array:
         import torchvision.transforms.functional as F
         from PIL import Image
 
@@ -166,11 +176,10 @@ class ColQwen3_5Wrapper(AbsEncoder):  # noqa: N801
                     texts = batch["text"]
                 else:
                     texts = None
-                if contains_both:
-                    if len(imgs) != len(texts):
-                        raise ValueError(
-                            f"The number of texts and images must have the same length, got {len(imgs)} and {len(texts)}"
-                        )
+                if contains_both and len(imgs) != len(texts):
+                    raise ValueError(
+                        f"The number of texts and images must have the same length, got {len(imgs)} and {len(texts)}"
+                    )
 
                 if contains_image:
                     imgs = [img.convert("RGB") for img in imgs]
@@ -186,7 +195,7 @@ class ColQwen3_5Wrapper(AbsEncoder):  # noqa: N801
         )
         return padded
 
-    def similarity(self, a, b):
+    def similarity(self, a: Array, b: Array) -> Array:
         a = [torch.as_tensor(x) for x in a]
         b = [torch.as_tensor(x) for x in b]
         return self.processor.score_multi_vector(a, b, device=self.device)
@@ -259,9 +268,9 @@ class ColQwen3Wrapper(AbsEncoder):
         image_texts_pairs: DataLoader[BatchedInput] | None = None,
         batch_size: int = 32,
         show_progress_bar: bool = True,
-        fusion_mode="concat",
+        fusion_mode: str = "concat",
         **kwargs: Any,
-    ):
+    ) -> Array:
         import torchvision.transforms.functional as F
         from PIL import Image
 
@@ -298,11 +307,10 @@ class ColQwen3Wrapper(AbsEncoder):
                     texts = batch["text"]
                 else:
                     texts = None
-                if contains_both:
-                    if len(imgs) != len(texts):
-                        raise ValueError(
-                            f"The number of texts and images must have the same length, got {len(imgs)} and {len(texts)}"
-                        )
+                if contains_both and len(imgs) != len(texts):
+                    raise ValueError(
+                        f"The number of texts and images must have the same length, got {len(imgs)} and {len(texts)}"
+                    )
 
                 inputs = self.processor(images=imgs, text=texts)
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
@@ -314,8 +322,126 @@ class ColQwen3Wrapper(AbsEncoder):
         )
         return padded
 
-    def similarity(self, a, b):
+    def similarity(self, a: Array, b: Array) -> Array:
         return self.processor.score_multi_vector(a, b, device=self.device)
+
+
+class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
+    """Wrapper for ColQwen-Omni: late interaction over text, image, audio and video."""
+
+    def __init__(
+        self,
+        model_name: str = "vidore/colqwen-omni-v0.1",
+        revision: str | None = None,
+        device: str | None = None,
+        max_frames: int | None = 64,
+        num_frames: int | None = None,
+        max_audio_length: int | None = None,
+        **kwargs: Any,
+    ):
+        from colpali_engine.models import ColQwen2_5Omni, ColQwen2_5OmniProcessor
+
+        self.max_frames = max_frames
+        self.num_frames = num_frames
+        self.max_audio_length = max_audio_length
+
+        super().__init__(
+            model_name=model_name,
+            model_class=ColQwen2_5Omni,
+            processor_class=ColQwen2_5OmniProcessor,
+            revision=revision,
+            device=device,
+            **kwargs,
+        )
+        self.sampling_rate = self.processor.feature_extractor.sampling_rate
+        # VideoCollator has already selected the frames. The processor's own
+        # sampling would run on top of that, so switch it off once here.
+        self.processor.video_processor.do_sample_frames = False
+
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        features = inputs.dataset.features
+        if "video" in features:
+            inputs.collate_fn = VideoCollator(
+                target_sampling_rate=self.sampling_rate,
+                fps=None,
+                max_frames=self.max_frames,
+                num_frames=self.num_frames,
+                max_samples=self.max_audio_length,
+            )
+        elif "audio" in features:
+            inputs.collate_fn = AudioCollator(
+                target_sampling_rate=self.sampling_rate,
+                max_samples=self.max_audio_length,
+            )
+
+        embeddings = []
+        if "text" in features:
+            embeddings.append(self.get_text_embeddings(inputs, **kwargs))
+        if "image" in features:
+            embeddings.append(self.get_image_embeddings(inputs, **kwargs))
+        if "audio" in features:
+            embeddings.append(self.get_audio_embeddings(inputs, **kwargs))
+        if "video" in features:
+            embeddings.append(self.get_video_embeddings(inputs, **kwargs))
+
+        if not embeddings:
+            raise ValueError(
+                "No supported modality found; expected one of text, image, audio, video."
+            )
+        if len(embeddings) == 1:
+            return embeddings[0]
+        if len({len(e) for e in embeddings}) != 1:
+            raise ValueError("All modalities must have the same number of items")
+        return torch.cat(embeddings, dim=1)
+
+    def _encode_batches(
+        self,
+        loader: DataLoader[BatchedInput],
+        key: str,
+        process_fn: Callable[[Any], Mapping[str, torch.Tensor]],
+        desc: str,
+    ) -> torch.Tensor:
+        all_embeds = []
+        with torch.no_grad():
+            for batch in tqdm(loader, desc=desc):
+                for item in batch[key]:
+                    inputs = process_fn(item)
+                    inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                    outs = self.encode_input(inputs)
+                    all_embeds.extend(outs.cpu().to(torch.float32))
+        return torch.nn.utils.rnn.pad_sequence(
+            all_embeds, batch_first=True, padding_value=0
+        )
+
+    def get_audio_embeddings(
+        self, audios: DataLoader[BatchedInput], batch_size: int = 32, **kwargs: Any
+    ) -> Array:
+        def _process(
+            audio: AudioInputItem | torch.Tensor,
+        ) -> Mapping[str, torch.Tensor]:
+            arr = audio["array"] if isinstance(audio, dict) else audio
+            if isinstance(arr, torch.Tensor):
+                arr = arr.numpy()
+            return self.processor.process_audios([arr])
+
+        return self._encode_batches(audios, "audio", _process, "Encoding audio")
+
+    def get_video_embeddings(
+        self, videos: DataLoader[BatchedInput], batch_size: int = 32, **kwargs: Any
+    ) -> Array:
+        def _process(clip: torch.Tensor) -> Mapping[str, torch.Tensor]:
+            return self.processor.process_videos([clip])
+
+        return self._encode_batches(videos, "video", _process, "Encoding video")
 
 
 colqwen2 = ModelMeta(
@@ -645,7 +771,7 @@ class ColQwen3EngineWrapper(ColPaliEngineWrapper):
         model_name: str = "Verm1ion/ColTurk-VDR-Qwen3VL-4B-v1.0",
         revision: str | None = None,
         device: str | None = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         from colpali_engine.models import ColQwen3, ColQwen3Processor
 
@@ -726,7 +852,7 @@ vultron_prime_qwen35_8b = ModelMeta(
     name="vultr/VultronRetrieverPrime-Qwen3.5-8B",
     model_type=["late-interaction"],
     languages=["eng-Latn", "fra-Latn", "deu-Latn", "spa-Latn", "ita-Latn", "por-Latn"],
-    revision="e8f3104b743a04b0d5f715b67117d687ae99ce51",
+    revision="209b8d883c53b1e1d0ef7a8582885d4e5a1e05ba",
     release_date="2026-06-18",
     modalities=["image", "text"],
     n_parameters=8_394_006_064,
@@ -754,7 +880,7 @@ vultron_flash_qwen35_0_8b = ModelMeta(
     name="vultr/VultronRetrieverFlash-Qwen3.5-0.8B",
     model_type=["late-interaction"],
     languages=["eng-Latn", "fra-Latn", "deu-Latn", "spa-Latn", "ita-Latn", "por-Latn"],
-    revision="5d1a696e8e62f12508045a93543dfd0488ea3b77",
+    revision="a2bcbcda0472dff9863380621bcff09b3d0261ac",
     release_date="2026-06-21",
     modalities=["image", "text"],
     n_parameters=853_341_916,
@@ -782,7 +908,7 @@ vultron_core_qwen35_4b = ModelMeta(
     name="vultr/VultronRetrieverCore-Qwen3.5-4.5B",
     model_type=["late-interaction"],
     languages=["eng-Latn", "fra-Latn", "deu-Latn", "spa-Latn", "ita-Latn", "por-Latn"],
-    revision="5b63301ce5a49993f9ec1cf36645840b8cbd8120",
+    revision="461c7bc02d596932c76c12164596732dad9cf4f2",
     release_date="2026-06-22",
     modalities=["image", "text"],
     n_parameters=4_540_085_056,
@@ -799,5 +925,32 @@ vultron_core_qwen35_4b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=False,
     training_datasets=VULTRON_PRIME_8B_TRAINING_DATA,  # 4B sibling, same training pool as Prime/Flash
+    extra_requirements_groups=["colpali_engine"],
+)
+
+colqwen_omni = ModelMeta(
+    loader=ColQwen2_5OmniWrapper,
+    loader_kwargs=dict(torch_dtype=torch.bfloat16),
+    name="vidore/colqwen-omni-v0.1",
+    model_type=["late-interaction"],
+    languages=["eng-Latn"],
+    revision="61e78ef2f9c826cac588a01e44df51672ce957bd",
+    release_date="2025-07-14",
+    modalities=["text", "image", "audio", "video"],
+    n_parameters=4_452_498_560,
+    n_embedding_parameters=311_164_928,  # vocab 151936 x hidden 2048 (token embedding matrix)
+    memory_usage_mb=8492,
+    max_tokens=32768,
+    embed_dim=128,
+    license="mit",
+    open_weights=True,
+    public_training_code="https://github.com/illuin-tech/colpali",
+    public_training_data="https://huggingface.co/datasets/vidore/colpali_train_set",
+    framework=["ColPali", "safetensors"],
+    reference="https://huggingface.co/vidore/colqwen-omni-v0.1",
+    similarity_fn_name="MaxSim",
+    use_instructions=True,
+    training_datasets=COLPALI_TRAINING_DATA,
+    citation=COLPALI_CITATION,
     extra_requirements_groups=["colpali_engine"],
 )

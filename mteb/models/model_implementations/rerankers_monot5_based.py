@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, TypeVar
 
 import torch
 
@@ -9,8 +9,13 @@ from mteb.models.model_meta import ModelMeta
 
 from .rerankers_custom import RerankerWrapper
 
+T = TypeVar("T")
+
 if TYPE_CHECKING:
+    from collections.abc import Generator
+
     from torch.utils.data import DataLoader
+    from transformers import PreTrainedTokenizerBase
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
@@ -37,7 +42,7 @@ prediction_tokens = {
 }
 
 
-def chunks(lst, n):
+def chunks(lst: list[T], n: int) -> Generator[list[T], None, None]:
     for i in range(0, len(lst), n):
         yield lst[i : i + n]
 
@@ -48,8 +53,8 @@ class MonoT5Reranker(RerankerWrapper):
 
     def __init__(
         self,
-        model_name_or_path="castorini/monot5-base-msmarco-10k",
-        **kwargs,
+        model_name_or_path: str = "castorini/monot5-base-msmarco-10k",
+        **kwargs: Any,
     ):
         super().__init__(model_name_or_path, **kwargs)
         from transformers import (
@@ -78,8 +83,8 @@ class MonoT5Reranker(RerankerWrapper):
         self.token_false_id, self.token_true_id = self.get_prediction_tokens(
             model_name_or_path,
             self.tokenizer,
-            kwargs["token_false"] if "token_false" in kwargs else None,
-            kwargs["token_true"] if "token_true" in kwargs else None,
+            kwargs.get("token_false"),
+            kwargs.get("token_true"),
         )
         logger.info(f"Using max_length of {self.tokenizer.model_max_length}")
         logger.info(f"Using token_false_id of {self.token_false_id}")
@@ -92,23 +97,25 @@ class MonoT5Reranker(RerankerWrapper):
         self.model.eval()
 
     def get_prediction_tokens(  # noqa: PLR6301
-        self, model_name_or_path, tokenizer, token_false=None, token_true=None
-    ):
+        self,
+        model_name_or_path: str,
+        tokenizer: PreTrainedTokenizerBase,
+        token_false: str | None = None,
+        token_true: str | None = None,
+    ) -> tuple[int, int]:
         if not (token_false and token_true):
             if model_name_or_path in prediction_tokens:
                 token_false, token_true = prediction_tokens[model_name_or_path]
                 token_false_id = tokenizer.get_vocab()[token_false]
                 token_true_id = tokenizer.get_vocab()[token_true]
                 return token_false_id, token_true_id
-            else:
-                raise Exception(
-                    f"We don't know the indexes for the non-relevant/relevant tokens for\
+            raise Exception(
+                f"We don't know the indexes for the non-relevant/relevant tokens for\
                         the checkpoint {model_name_or_path} and you did not provide any."
-                )
-        else:
-            token_false_id = tokenizer.get_vocab()[token_false]
-            token_true_id = tokenizer.get_vocab()[token_true]
-            return token_false_id, token_true_id
+            )
+        token_false_id = tokenizer.get_vocab()[token_false]
+        token_true_id = tokenizer.get_vocab()[token_true]
+        return token_false_id, token_true_id
 
     @torch.inference_mode()
     def predict(
@@ -129,11 +136,13 @@ class MonoT5Reranker(RerankerWrapper):
         passages = [text for batch in inputs2 for text in batch["text"]]
 
         if instructions is not None and instructions[0] is not None:
-            queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
+            queries = [
+                f"{q} {i}".strip() for i, q in zip(instructions, queries, strict=True)
+            ]
 
         prompts = [
             self.prompt_template.format(query=query, text=text)
-            for (query, text) in zip(queries, passages)
+            for (query, text) in zip(queries, passages, strict=True)
         ]
 
         tokens = self.tokenizer(
@@ -152,7 +161,8 @@ class MonoT5Reranker(RerankerWrapper):
         )
         batch_scores = output.scores[0]
         batch_scores = batch_scores[:, [self.token_false_id, self.token_true_id]]
-        batch_scores = torch.nn.functional.log_softmax(batch_scores, dim=1)
+        # upcast the logits to float32 before the softmax
+        batch_scores = torch.nn.functional.log_softmax(batch_scores.float(), dim=1)
         return batch_scores[:, 1].exp().tolist()
 
 
@@ -160,7 +170,7 @@ class LlamaReranker(RerankerWrapper):
     name: str = "LLAMA-Based"
 
     def __init__(
-        self, model_name_or_path: str, is_classification: bool = False, **kwargs
+        self, model_name_or_path: str, is_classification: bool = False, **kwargs: Any
     ):
         from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -236,12 +246,12 @@ Relevant: """
             # logger.info(f"Adding instructions to LLAMA queries")
             queries = [
                 self.query_instruct_template.format(instruction=i, query=q).strip()
-                for i, q in zip(instructions, queries)
+                for i, q in zip(instructions, queries, strict=True)
             ]
 
         prompts = [
             self.template.format(query=query, text=text)
-            for (query, text) in zip(queries, passages)
+            for (query, text) in zip(queries, passages, strict=True)
         ]
         if "{query}" in prompts[0]:
             raise ValueError("Query not replaced")
@@ -265,11 +275,13 @@ Relevant: """
             true_vector = batch_scores[:, self.token_true_id]
             false_vector = batch_scores[:, self.token_false_id]
             batch_scores = torch.stack([false_vector, true_vector], dim=1)
-            batch_scores = torch.nn.functional.log_softmax(batch_scores, dim=1)
+            # upcast the logits to float32 before the softmax
+            batch_scores = torch.nn.functional.log_softmax(batch_scores.float(), dim=1)
             scores = batch_scores[:, 1].exp().tolist()
         else:
             batch_scores = self.model(**tokens).logits
-            batch_scores = torch.nn.functional.log_softmax(batch_scores, dim=1)
+            # upcast the logits to float32 before the softmax
+            batch_scores = torch.nn.functional.log_softmax(batch_scores.float(), dim=1)
             scores = batch_scores[:, 1].exp().tolist()
 
         return scores
@@ -278,7 +290,7 @@ Relevant: """
 class MistralReranker(LlamaReranker):
     name: str = "Mistral"
 
-    def __init__(self, model_name_or_path: str, **kwargs):
+    def __init__(self, model_name_or_path: str, **kwargs: Any):
         # use the base class for everything except template
         super().__init__(model_name_or_path, **kwargs)
         self.template = """<s>[INST] You are an expert Google searcher, whose job is to determine if the following document is relevant to the query (true/false).
@@ -293,7 +305,7 @@ Relevant (either "true" or "false"): [/INST]"""
 class FollowIRReranker(LlamaReranker):
     name: str = "FollowIR"
 
-    def __init__(self, model_name_or_path: str, **kwargs):
+    def __init__(self, model_name_or_path: str, **kwargs: Any):
         # use the base class for everything except template
         super().__init__(model_name_or_path, **kwargs)
         self.template = """<s> [INST] You are an expert Google searcher, whose job is to determine if the following document is relevant to the query (true/false). Answer using only one word, one of those two choices.
@@ -311,7 +323,7 @@ class FLANT5Reranker(MonoT5Reranker):
 Query: {query}
 Passage: {text}"""
 
-    def get_prediction_tokens(self, *args, **kwargs):
+    def get_prediction_tokens(self, *args: Any, **kwargs: Any) -> tuple[int, int]:
         yes_token_id, *_ = self.tokenizer.encode("yes")
         no_token_id, *_ = self.tokenizer.encode("no")
         return no_token_id, yes_token_id

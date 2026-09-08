@@ -16,7 +16,7 @@ Evaluating models in `mteb` typically takes the simple form:
     import mteb
 
     model = mteb.get_model("sentence-transformers/static-similarity-mrl-multilingual-v1")
-    tasks = mteb.get_task(["MultiHateClassification"], languages = ["ita", "dan"])
+    tasks = mteb.get_task(["MultiHateClassification"], languages=["ita", "dan"])
 
     results = mteb.evaluate(model, tasks=tasks)
     ```
@@ -80,7 +80,7 @@ from sentence_transformers import SentenceTransformer
 
 model = SentenceTransformer(
     "intfloat/multilingual-e5-small",
-  prompts={"query": "Query:", "document": "Passage:"}
+    prompts={"query": "Query:", "document": "Passage:"},
 )
 results = mteb.evaluate(model, tasks=tasks)
 ```
@@ -147,11 +147,11 @@ import mteb
 meta = mteb.get_model_meta("intfloat/multilingual-e5-small")
 
 kwargs = dict(
-    device="cuda", # use a gpu
-    model_kwargs={"torch_dtype": "float16"}, # use low-precision
+    device="cuda",  # use a gpu
+    model_kwargs={"torch_dtype": "float16"},  # use low-precision
 )
 
-model = meta.load_model(**kwargs) # passed to model loader, e.g. SentenceTransformer
+model = meta.load_model(**kwargs)  # passed to model loader, e.g. SentenceTransformer
 ```
 
 This e.g., allows you to use all the [inference optimization tricks](https://sbert.net/docs/sentence_transformer/usage/efficiency.html) from sentence-transformers. However, in general, you can always pass `device`.
@@ -163,7 +163,7 @@ model = meta.load_model(**kwargs)
 sentence_trf_model = model.model
 
 # optimizations:
-sentence_trf_model.half() # half precision
+sentence_trf_model.half()  # half precision
 ```
 
 A last option is to make a [custom implementation](defining_the_model.md#using-a-custom-model) of the model. This way you have full flexibility of how the model handles the input.

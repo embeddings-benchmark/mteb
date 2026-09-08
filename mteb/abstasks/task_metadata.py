@@ -74,8 +74,10 @@ TaskSubtype = Literal[
     "Scene recognition",
     "Caption Pairing",
     "Emotion recognition",
+    "Event Retrieval",
     "Textures recognition",
     "Activity recognition",
+    "Physical plausibility classification",
     "Tumor detection",
     "Duplicate Detection",
     "Rendered semantic textual similarity",
@@ -161,6 +163,7 @@ TaskDomain = Literal[
     "Egocentric",  # first-person / wearable-camera video
     "Nature",  # animals, wildlife, natural environments
     "Animation",  # cartoon / animated / synthetic content
+    "Robotics",  # robot manipulation / embodied-agent content
 ]
 """
 The domains follow the categories used in the [Universal Dependencies project](https://universaldependencies.org), though
@@ -184,6 +187,7 @@ SampleCreationMethod = Literal[
 """How the text was created. It can be an important factor for understanding the quality of a dataset. E.g. used to filter out machine-translated datasets."""
 
 MIEB_TASK_TYPE = (
+    "Any2AnyReranking",
     "Any2AnyRetrieval",
     "Any2AnyMultilingualRetrieval",
     "VisionCentricQA",
@@ -197,6 +201,7 @@ MIEB_TASK_TYPE = (
 )
 
 MAEB_TASK_TYPE = (
+    "Any2AnyReranking",
     "AudioClustering",
     "AudioMultilabelClassification",
     "AudioReranking",
@@ -207,6 +212,7 @@ MAEB_TASK_TYPE = (
 )
 
 MVEB_TASK_TYPE = (
+    "Any2AnyReranking",
     "VideoClassification",
     "VideoClustering",
     "VideoMultilabelClassification",
@@ -258,6 +264,7 @@ TaskCategory = Literal[
     "a2t",
     "t2a",
     "at2t",
+    "at2i",
     "at2a",
     "a2at",
     "t2at",
@@ -279,7 +286,15 @@ TaskCategory = Literal[
     "v2a",
     "a2v",
     "vt2a",
+    "it2a",
     "at2v",
+    "a2i",
+    "i2a",
+    "i2v",
+    "i2va",
+    "it2v",
+    "v2i",
+    "it2c",
 ]
 """The category of the task.
 
@@ -299,26 +314,37 @@ TaskCategory = Literal[
 14. a2t: audio to text
 15. t2a: text to audio
 16. at2t: audio+text to text
-17. at2a: audio+text to audio
-18. a2at: audio to audio+text
-19. t2at: text to audio+text
-20. at2at: audio+text to audio+text
-21. v2v: video to video
-22. v2c: video to category
-23. v2t: video to text
-24. t2v: text to video
-25. vt2t: video+text to text
-26. vt2v: video+text to video
-27. v2vt: video to video+text
-28. t2vt: text to video+text
-29. vt2vt: video+text to video+text
-30. va2c: video+audio to category
-31. va2t: video+audio to text
-32. t2va: text to video+audio
-33. vat2t: video+audio+text to text
-34. va2va: video+audio to video+audio
-35. v2a: video to audio
-36. a2v: audio to video
+17. at2i: audio+text to image
+18. at2a: audio+text to audio
+19. a2at: audio to audio+text
+20. t2at: text to audio+text
+21. at2at: audio+text to audio+text
+22. v2v: video to video
+23. v2c: video to category
+24. v2t: video to text
+25. t2v: text to video
+26. vt2t: video+text to text
+27. vt2v: video+text to video
+28. v2vt: video to video+text
+29. t2vt: text to video+text
+30. vt2vt: video+text to video+text
+31. va2c: video+audio to category
+32. va2t: video+audio to text
+33. t2va: text to video+audio
+34. vat2t: video+audio+text to text
+35. va2va: video+audio to video+audio
+36. v2a: video to audio
+37. a2v: audio to video
+38. vt2a: video+text to audio
+39. it2a: image+text to audio
+40. at2v: audio+text to video
+41. a2i: audio to image
+42. i2a: image to audio
+43. i2v: image to video
+44. i2va: image to video+audio
+45. it2v: image+text to video
+46. v2i: video to image
+47. it2c: image+text to category
 """
 
 _MODALITY_CODES: dict[str, str] = {
@@ -364,6 +390,7 @@ SimplifiedTaskType = Literal[
 ]
 
 _TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {
+    "Any2AnyReranking": "retrieval",
     "Any2AnyRetrieval": "retrieval",
     "Any2AnyMultilingualRetrieval": "retrieval",
     "VisionCentricQA": "retrieval",
@@ -394,6 +421,7 @@ _TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {
     "PairClassification": "pair-classification",
     "VideoClassification": "classification",
     "VideoClustering": "clustering",
+    "VideoMultilabelClassification": "classification",
     "VideoPairClassification": "pair-classification",
     "VideoZeroshotClassification": "classification",
     "VideoCentricQA": "retrieval",
@@ -540,7 +568,7 @@ class TaskMetadata(BaseModel):
 
     @property
     def bcp47_codes(self) -> list[ISOLanguageScript]:
-        """Return the languages and script codes of the dataset formatting in accordance with the BCP-47 standard."""
+        """The languages and script codes of the dataset formatted in accordance with the BCP-47 standard."""
         if isinstance(self.eval_langs, dict):
             return sorted(
                 {lang for langs in self.eval_langs.values() for lang in langs}
@@ -549,7 +577,7 @@ class TaskMetadata(BaseModel):
 
     @property
     def languages(self) -> list[str]:
-        """Return the languages of the dataset as iso639-3 codes."""
+        """The languages of the dataset as iso639-3 codes."""
 
         def get_lang(lang: str) -> str:
             return lang.split("-", maxsplit=1)[0]
@@ -562,7 +590,7 @@ class TaskMetadata(BaseModel):
 
     @property
     def scripts(self) -> set[str]:
-        """Return the scripts of the dataset as iso15924 codes."""
+        """The scripts of the dataset as iso15924 codes."""
 
         def get_script(lang: str) -> str:
             return lang.split("-")[1]
@@ -581,14 +609,14 @@ class TaskMetadata(BaseModel):
         """
         return all(
             getattr(self, field_name) is not None
-            for field_name in self.model_fields
+            for field_name in self.__class__.model_fields
             if field_name
             not in ["prompt", "adapted_from", "contributed_by", "superseded_by"]  # noqa: PLR6201
         )
 
     @property
     def hf_subsets_to_langscripts(self) -> dict[HFSubset, list[ISOLanguageScript]]:
-        """Return a dictionary mapping huggingface subsets to languages."""
+        """A dictionary mapping huggingface subsets to languages."""
         if isinstance(self.eval_langs, dict):
             return self.eval_langs
         return {"default": cast("list[str]", self.eval_langs)}
@@ -608,7 +636,7 @@ class TaskMetadata(BaseModel):
 
     @property
     def descriptive_stats(self) -> dict[str, DescriptiveStatistics] | None:
-        """Return the descriptive statistics for the dataset."""
+        """The descriptive statistics for the dataset."""
         if self.descriptive_stat_path.exists():
             with self.descriptive_stat_path.open("r") as f:
                 js = cast("dict[str, DescriptiveStatistics]", json.load(f))
@@ -617,7 +645,7 @@ class TaskMetadata(BaseModel):
 
     @property
     def descriptive_stat_path(self) -> Path:
-        """Return the path to the descriptive statistics file."""
+        """The path to the descriptive statistics file."""
         descriptive_stat_base_dir = Path(__file__).parent.parent / "descriptive_stats"
         if self.type in MIEB_TASK_TYPE:
             descriptive_stat_base_dir = descriptive_stat_base_dir / "Image"  # noqa: PLR6104
@@ -626,7 +654,7 @@ class TaskMetadata(BaseModel):
 
     @property
     def n_samples(self) -> dict[str, int] | None:
-        """Returns the number of samples in the dataset"""
+        """The number of samples in the dataset."""
         stats = self.descriptive_stats
         if not stats:
             return None
@@ -640,7 +668,7 @@ class TaskMetadata(BaseModel):
 
     @property
     def hf_subsets(self) -> list[str]:
-        """Return the huggingface subsets."""
+        """The huggingface subsets."""
         return list(self.hf_subsets_to_langscripts.keys())
 
     @property
@@ -653,7 +681,7 @@ class TaskMetadata(BaseModel):
 
     @property
     def revision(self) -> str:
-        """Return the dataset revision."""
+        """The dataset revision."""
         return self.dataset["revision"]
 
     def get_modalities(self, prompt_type: PromptType | None = None) -> list[Modalities]:
@@ -728,7 +756,7 @@ class TaskMetadata(BaseModel):
         descriptive_stats = ""
         if self.descriptive_stats is not None:
             descriptive_stats_ = self.descriptive_stats
-            for split, split_stat in descriptive_stats_.items():
+            for split_stat in descriptive_stats_.values():
                 if len(split_stat.get("hf_subset_descriptive_stats", {})) > 10:
                     split_stat.pop("hf_subset_descriptive_stats", {})
             descriptive_stats = json.dumps(descriptive_stats_, indent=4)
@@ -893,6 +921,7 @@ class TaskMetadata(BaseModel):
             "Emotion recognition": ["sentiment-scoring"],
             "Textures recognition": [],
             "Activity recognition": [],
+            "Physical plausibility classification": [],
             "Tumor detection": [],
             "Duplicate Detection": [],
             "Rendered semantic textual similarity": [
@@ -964,6 +993,7 @@ class TaskMetadata(BaseModel):
             "InstructionReranking": ["text-ranking"],
             # Image
             "Any2AnyMultiChoice": ["visual-question-answering"],
+            "Any2AnyReranking": ["visual-question-answering"],
             "Any2AnyMultilingualRetrieval": ["visual-document-retrieval"],
             "VisionCentricQA": ["visual-question-answering"],
             "ImageClustering": ["image-feature-extraction"],
@@ -982,6 +1012,7 @@ class TaskMetadata(BaseModel):
             "AudioPairClassification": ["audio-classification"],
             # video
             "VideoCentricQA": ["visual-question-answering"],
+            "VideoZeroshotClassification": ["video-classification"],
         }
         if self.type == "ZeroShotClassification":
             if self.modalities == ["image"]:
@@ -999,14 +1030,35 @@ class TaskMetadata(BaseModel):
         dataset_type = []
         if self.category in ["i2i", "it2i", "i2it", "it2it"]:  # noqa: PLR6201
             dataset_type.append("image-to-image")
-        if self.category in ["i2t", "t2i", "it2t", "it2i", "t2it", "i2it", "it2it"]:  # noqa: PLR6201
+        if self.category in {
+            "i2t",
+            "t2i",
+            "it2t",
+            "it2i",
+            "t2it",
+            "i2it",
+            "it2it",
+            "at2i",
+            "it2a",
+        }:
             dataset_type.extend(["image-to-text", "text-to-image"])
         if self.category in ["it2t", "it2i", "t2it", "i2it", "it2it"]:  # noqa: PLR6201
             dataset_type.extend(["image-text-to-text"])
         if self.category in ["a2a", "at2a", "a2at", "at2at"]:  # noqa: PLR6201
             dataset_type.append("audio-to-audio")
-        if self.category in ["a2t", "t2a", "at2t", "t2at", "at2at", "a2at"]:  # noqa: PLR6201
+        if self.category in {
+            "a2t",
+            "t2a",
+            "at2t",
+            "at2i",
+            "it2a",
+            "t2at",
+            "at2at",
+            "a2at",
+        }:
             dataset_type.extend(["text-to-audio"])
+        if self.category in {"i2v", "i2va"}:
+            dataset_type.append("image-to-video")
         return dataset_type
 
     def _hf_languages(self) -> list[str]:

@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 model_entry = """
 ####  `{model_name}` {{ .model-copy }}
 
- **License:** {license} {learn_more}
+ **License:** {license} • **Openness:** {openness} {learn_more}
 
 | :lucide-cpu: Parameters | :lucide-layers: Emb. Dim | :lucide-ruler: Max Tokens | :lucide-database: Memory | :lucide-calendar: Released | :lucide-languages: Languages |
 |:-:|:-:|:-:|:-:|:-:|:-:|
@@ -116,23 +116,31 @@ def modality_to_filename(modality: tuple[str, ...]) -> str:
     return f"{modality_to_string(modality).lower().replace('-', '_')}.md"
 
 
+def openness_badge(openness: dict[str, bool], score: int) -> str:
+    """Renders the openness score as `n/total`, with a hover tooltip listing each dimension."""
+    tooltip = "&#10;".join(
+        f"{'✅' if value else '❌'} {dimension.title()}"
+        for dimension, value in openness.items()
+    )
+    return f'<abbr title="{tooltip}">{score}/{len(openness)}</abbr>'
+
+
 def required_memory_string(mem_in_mb: int | None) -> str:
     if mem_in_mb is None:
         return "not specified"
     if mem_in_mb < 1024:
         return f"{mem_in_mb} MB"
-    else:
-        mem_in_gb = mem_in_mb / 1024
-        return f"{mem_in_gb:.1f} GB"
+    mem_in_gb = mem_in_mb / 1024
+    return f"{mem_in_gb:.1f} GB"
 
 
 def format_model_entry(meta: ModelMeta) -> str:
     revision = meta.revision or "not specified"
     raw_license = meta.license or "not specified"
-    if raw_license.startswith("http://") or raw_license.startswith("https://"):
-        license = f"[custom]({raw_license})"
+    if raw_license.startswith(("http://", "https://")):
+        license_str = f"[custom]({raw_license})"
     else:
-        license = raw_license
+        license_str = raw_license
     max_tokens = (
         human_readable_number(meta.max_tokens)
         if meta.max_tokens is not None
@@ -152,19 +160,21 @@ def format_model_entry(meta: ModelMeta) -> str:
         pretty_long_list(sorted(meta.languages)) if meta.languages else "not specified"
     )
     required_mem = required_memory_string(meta.memory_usage_mb)
+    openness = openness_badge(meta.openness, meta.openness_score)
 
     entry = model_entry.format(
         icon=modality_to_icon.get(meta.modalities[0], "lucide/layers"),
         model_name=meta.name,
         learn_more=learn_more,
         revision=revision,
-        license=license,
+        license=license_str,
         max_tokens=max_tokens,
         embed_dim=embed_dim,
         n_parameters=n_parameters,
         release_date=release_date,
         languages=languages,
         required_memory=required_mem,
+        openness=openness,
     )
 
     if meta.citation:

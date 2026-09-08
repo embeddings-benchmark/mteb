@@ -46,7 +46,7 @@ def _model_name_and_revision(
 
 @deprecated(
     "`load_results` is deprecated and will be removed in future versions. "
-    + "Please use the `ResultCache`'s `.load_results` method instead."
+    "Please use the `ResultCache`'s `.load_results` method instead."
 )
 def load_results(  # noqa: PLR0914
     results_repo: str = "https://github.com/embeddings-benchmark/results",
@@ -120,12 +120,15 @@ def load_results(  # noqa: PLR0914
             model_name = model_name.replace("__", "/")
             if models_to_keep is not None and model_name not in models_to_keep:
                 continue
-            elif models_to_keep is not None and models_to_keep[model_name] is not None:
-                if models_to_keep[model_name] != revision:
-                    continue
+            if (
+                models_to_keep is not None
+                and models_to_keep[model_name] is not None
+                and models_to_keep[model_name] != revision
+            ):
+                continue
 
             task_json_files = [
-                f for f in revision_path.glob("*.json") if "model_meta.json" != f.name
+                f for f in revision_path.glob("*.json") if f.name != "model_meta.json"
             ]
             _results = []
             for f in task_json_files:

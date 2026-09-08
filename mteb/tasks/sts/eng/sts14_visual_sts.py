@@ -10,7 +10,7 @@ class STS14VisualSTS(AbsTaskSTS):
             "revision": "0a54520fac778d76f3009f7cb7290ad4c7ffc678",
         },
         description="SemEval STS 2014 dataset. Currently only the English dataset."
-        + "rendered into images.",
+        "rendered into images.",
         reference="https://arxiv.org/abs/2402.08183/",
         type="VisualSTS(eng)",
         category="i2i",

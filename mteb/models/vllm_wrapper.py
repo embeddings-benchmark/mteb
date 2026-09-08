@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
 import torch
+from packaging import version
 
 from mteb._requires_package import _is_package_available
 from mteb.models import ModelMeta
@@ -30,7 +31,7 @@ Dtype = Literal["half", "float16", "float", "float32", "bfloat16", "auto"]
 
 
 class VllmWrapperBase:
-    """Wrapper for vllm serving engine."""
+    """Base wrapper for vLLM serving engine."""
 
     convert = "auto"
     mteb_model_meta: ModelMeta | None = None
@@ -46,6 +47,7 @@ class VllmWrapperBase:
         max_model_len: int | None = None,
         max_num_batched_tokens: int | None = None,
         max_num_seqs: int = 128,
+        renderer_num_workers: int = 1,
         tensor_parallel_size: int = 1,
         enable_prefix_caching: bool | None = None,
         gpu_memory_utilization: float = 0.9,
@@ -54,26 +56,25 @@ class VllmWrapperBase:
         enforce_eager: bool = False,
         **kwargs: Any,
     ):
-        """Wrapper for vllm serving engine.
+        """Wrapper for vLLM serving engine.
 
         Args:
-            model: model name string.
+            model: Model name or ModelMeta instance.
             revision: The revision of the model to use.
             trust_remote_code: Whether to trust remote code execution when loading the model.
                 Should be True for models with custom code.
             dtype: Data type for model weights. "auto" will automatically select appropriate
-                dtype based on hardware and model capabilities. vllm uses flash attention by
-                default, which does not support fp32. Therefore, it defaults to using fp16 for
-                inference on fp32 models. Testing has shown a relatively small drop in accuracy.
-                You can manually opt for fp32, but inference speed will be very slow.
-            head_dtype: "head" refers to the last Linear layer(s) of an LLMs, such as the score
-                or classifier in a classification model. Uses fp32 for the head by default to
-                gain extra precision.
+                dtype based on hardware and model capabilities. vLLM uses flash attention by
+                default, which requires fp16/bf16; using fp32 may cause fallback or slow speed.
+            head_dtype: If provided, overrides the data type of the head layers. If None
+                (default), the model's original head dtype is kept.
             max_model_len: Maximum sequence length (context window) supported by the model.
                 If None, uses the model's default maximum length.
             max_num_batched_tokens: Maximum number of tokens to process in a single batch.
                 If None, automatically determined.
             max_num_seqs: Maximum number of sequences to process concurrently.
+            renderer_num_workers: Number of threads for multithreading to accelerate
+                preprocessing. Defaults to 1. Only effective for vLLM versions >= 0.26.0.
             tensor_parallel_size: Number of GPUs for tensor parallelism.
             enable_prefix_caching: Whether to enable KV cache sharing for common prompt prefixes.
                 If None, uses the model's default setting.
@@ -81,7 +82,7 @@ class VllmWrapperBase:
             hf_overrides: Dictionary mapping Hugging Face configuration keys to override values.
             pooler_config: Controls the behavior of output pooling in pooling models.
             enforce_eager: Whether to disable CUDA graph optimization and use eager execution.
-            **kwargs: Additional arguments to pass to the vllm serving engine model.
+            **kwargs: Additional arguments to pass to the vLLM serving engine model.
         """
         if not _is_package_available("vllm"):
             raise ImportError(
@@ -91,6 +92,15 @@ class VllmWrapperBase:
         os.environ["VLLM_WORKER_MULTIPROC_METHOD"] = "spawn"
 
         from vllm import LLM, EngineArgs
+        from vllm import __version__ as vllm_version
+
+        if version.parse(vllm_version) >= version.parse("0.26.0"):
+            kwargs["renderer_num_workers"] = renderer_num_workers
+        elif renderer_num_workers > 1:
+            logger.warning(
+                f"renderer_num_workers is set to {renderer_num_workers} but requires vLLM >= 0.26.0; "
+                f"current vLLM version is {vllm_version}. It will be ignored."
+            )
 
         hf_overrides = {} if hf_overrides is None else hf_overrides
 
@@ -141,6 +151,7 @@ class VllmWrapperBase:
             cleanup_dist_env_and_memory,
         )
 
+        atexit.unregister(self.cleanup)
         self.llm = None
         gc.collect()
         cleanup_dist_env_and_memory()
@@ -167,7 +178,7 @@ class VllmEncoderWrapper(AbsEncoder, VllmWrapperBase):
             Can be a string with '{instruction}' placeholder or a callable that takes
             the instruction and prompt type and returns a formatted string.
         apply_instruction_to_documents: Whether to apply instructions to documents prompts.
-        **kwargs: Additional arguments to pass to the vllm serving engine model.
+        **kwargs: Additional arguments to pass to the vLLM serving engine model.
     """
 
     convert = "embed"

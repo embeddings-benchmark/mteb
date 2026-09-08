@@ -3,8 +3,8 @@ import pytest
 from sklearn.linear_model import LogisticRegression
 
 from mteb._evaluators import SklearnEvaluator
+from mteb.mocks.mock_tasks import MockClassificationTask
 from mteb.timing import TimingStack
-from tests.mock_tasks import MockClassificationTask
 
 
 @pytest.fixture

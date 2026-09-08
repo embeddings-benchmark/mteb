@@ -19,6 +19,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
     from torch.utils.data import DataLoader
+    from transformers import BatchEncoding, PreTrainedTokenizerBase
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models.models_protocols import EncoderProtocol
@@ -36,7 +37,7 @@ class RepLLaMAModel(AbsEncoder):
         torch_dtype: torch.dtype,
         device_map: str,
         model_prompts: dict[str, str] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         from peft import PeftModel
         from transformers import AutoModel, AutoTokenizer
@@ -58,7 +59,9 @@ class RepLLaMAModel(AbsEncoder):
         self.tokenizer.model_max_length = 512
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
 
-    def create_batch_dict(self, tokenizer, input_texts):
+    def create_batch_dict(
+        self, tokenizer: PreTrainedTokenizerBase, input_texts: list[str]
+    ) -> BatchEncoding:
         max_length = self.model.config.max_length
         batch_dict = tokenizer(
             input_texts,
@@ -80,7 +83,9 @@ class RepLLaMAModel(AbsEncoder):
             return_tensors="pt",
         )
 
-    def combine_query_and_instruction(self, query, instruction):  # noqa: PLR6301
+    def combine_query_and_instruction(  # noqa: PLR6301
+        self, query: str, instruction: str
+    ) -> str:
         end_punct = "?" if query.strip()[-1] not in ["?", ".", "!"] else ""  # noqa: PLR6201
         return f"{query}{end_punct} {instruction}".strip()
 
@@ -116,23 +121,24 @@ class RepLLaMAModel(AbsEncoder):
                 key: value.to(self.model.device) for key, value in batch_dict.items()
             }
 
-            with torch.cuda.amp.autocast():
-                with torch.no_grad():
-                    outputs = self.model(**batch_dict)
-                    last_hidden_state = outputs.last_hidden_state
-                    sequence_lengths = batch_dict["attention_mask"].sum(dim=1) - 1
-                    batch_size = last_hidden_state.shape[0]
-                    reps = last_hidden_state[
-                        torch.arange(batch_size, device=last_hidden_state.device),
-                        sequence_lengths,
-                    ]
-                    embeddings = F.normalize(reps, p=2, dim=-1)
-                    all_embeddings.append(embeddings.cpu().detach().numpy())
+            with torch.cuda.amp.autocast(), torch.no_grad():
+                outputs = self.model(**batch_dict)
+                last_hidden_state = outputs.last_hidden_state
+                sequence_lengths = batch_dict["attention_mask"].sum(dim=1) - 1
+                batch_size = last_hidden_state.shape[0]
+                reps = last_hidden_state[
+                    torch.arange(batch_size, device=last_hidden_state.device),
+                    sequence_lengths,
+                ]
+                embeddings = F.normalize(reps, p=2, dim=-1)
+                all_embeddings.append(embeddings.cpu().detach().numpy())
 
         return np.concatenate(all_embeddings, axis=0)
 
 
-def _loader(wrapper: type[RepLLaMAModel], **kwargs) -> Callable[..., EncoderProtocol]:
+def _loader(
+    wrapper: type[RepLLaMAModel], **kwargs: Any
+) -> Callable[..., EncoderProtocol]:
     _kwargs = kwargs
 
     def loader_inner(**kwargs: Any) -> EncoderProtocol:

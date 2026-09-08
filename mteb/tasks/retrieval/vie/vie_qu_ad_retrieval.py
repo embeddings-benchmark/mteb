@@ -1,4 +1,5 @@
 import random
+from typing import Any
 
 from datasets import load_dataset
 
@@ -52,7 +53,7 @@ Zong, Chengqing},
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
@@ -88,7 +89,7 @@ Zong, Chengqing},
 
         text2id = {}
         n = 0
-        for t, q, cont, ans in zip(titles, questions, contexts, answers):
+        for t, q, cont, ans in zip(titles, questions, contexts, answers, strict=True):
             self.queries[split][str(n)] = q
             q_n = n
             n += 1

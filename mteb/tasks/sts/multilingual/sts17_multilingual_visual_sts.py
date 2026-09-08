@@ -26,8 +26,7 @@ class STS17MultilingualVisualSTS(AbsTaskSTS):
             "revision": "2e31b4b459551a51e1ab54fd7266b40f3fe510d4",
         },
         description=(
-            "Semantic Textual Similarity 17 (STS-17) dataset, "
-            + "rendered into images."
+            "Semantic Textual Similarity 17 (STS-17) dataset, rendered into images."
         ),
         reference="https://arxiv.org/abs/2402.08183/",
         type="VisualSTS(multi)",

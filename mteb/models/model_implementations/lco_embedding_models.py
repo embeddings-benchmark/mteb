@@ -69,8 +69,9 @@ class LCOEmbedding(AbsEncoder):
                 return f"\nSummarize the above {modality} in one word:"
         return "\nSummarize the above text in one word:"
 
-    @staticmethod
-    def _build_messages(batch: BatchedInput, suffix: str) -> list[list[dict[str, Any]]]:
+    def _build_messages(
+        self, batch: BatchedInput, suffix: str
+    ) -> list[list[dict[str, Any]]]:
         """Build chat messages for each item in the batch."""
         texts = batch.get("text", [])
         images = batch.get("image", [])
@@ -88,7 +89,12 @@ class LCOEmbedding(AbsEncoder):
             if i < len(images) and images[i] is not None:
                 content.append({"type": "image", "image": "placeholder"})
             if i < len(texts) and texts[i] is not None:
-                content.append({"type": "text", "text": texts[i]})
+                text = texts[i]
+                # match author eval: cap text at 300 tokens
+                ids = self.processor.tokenizer(text).input_ids
+                if len(ids) > 300:
+                    text = self.processor.tokenizer.decode(ids[:300])
+                content.append({"type": "text", "text": text})
             content.append({"type": "text", "text": suffix})
             messages.append([{"role": "user", "content": content}])
         return messages
@@ -180,6 +186,41 @@ lco_3b = ModelMeta(
     embed_dim=2048,
     license="mit",
     reference="https://huggingface.co/LCO-Embedding/LCO-Embedding-Omni-3B",
+    similarity_fn_name="cosine",
+    framework=["PyTorch"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=set(
+        # SeaDoc (not in MTEB)
+    ),
+    modalities=["audio", "image", "text", "video"],
+    citation="""
+@misc{xiao2025scalinglanguagecentricomnimodalrepresentation,
+  title={Scaling Language-Centric Omnimodal Representation Learning},
+  author={Chenghao Xiao and Hou Pong Chan and Hao Zhang and Weiwen Xu and Mahani Aljunied and Yu Rong},
+  year={2025},
+  eprint={2510.11693},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL},
+  url={https://arxiv.org/abs/2510.11693},
+}""",
+)
+
+lco_3b_2605 = ModelMeta(
+    loader=LCOEmbedding,
+    name="LCO-Embedding/LCO-Embedding-Omni-3B-2605",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="93aadb155d07c16018cc241efe03e4c278e6001c",
+    release_date="2026-05-13",
+    max_tokens=32768,
+    n_parameters=4_703_464_448,
+    n_embedding_parameters=311164928,
+    memory_usage_mb=8978,
+    embed_dim=2048,
+    license="apache-2.0",
+    reference="https://huggingface.co/LCO-Embedding/LCO-Embedding-Omni-3B-2605",
     similarity_fn_name="cosine",
     framework=["PyTorch"],
     use_instructions=True,

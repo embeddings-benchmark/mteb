@@ -12,6 +12,10 @@ from torch.utils.data import DataLoader
 import mteb
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.mocks.mock_tasks import (
+    MockMultiChoiceTask,
+    MockRetrievalTask,
+)
 from mteb.models.cache_wrappers.cache_backend_protocol import CacheBackendProtocol
 from mteb.models.cache_wrappers.cache_backends.faiss_cache import FaissCache
 from mteb.models.cache_wrappers.cache_backends.numpy_cache import NumpyCache
@@ -19,7 +23,6 @@ from mteb.models.cache_wrappers.cache_wrapper import CachedEmbeddingWrapper
 from mteb.models.model_implementations.random_baseline import RandomEncoderBaseline
 from mteb.models.models_protocols import EncoderProtocol
 from mteb.types import PromptType
-from tests.mock_tasks import MockMultiChoiceTask, MockRetrievalTask
 
 if TYPE_CHECKING:
     from mteb.types import Array, BatchedInput
@@ -47,7 +50,7 @@ class DummyModel(RandomEncoderBaseline):
                 lambda x: {"text": x["text"] + " (first task processed)"}
             )
             inputs = DataLoader(old_inputs, batch_size=inputs.batch_size)
-        return super().encode(
+        embeddings = super().encode(
             inputs,
             task_metadata=task_metadata,
             hf_split=hf_split,
@@ -55,11 +58,15 @@ class DummyModel(RandomEncoderBaseline):
             prompt_type=prompt_type,
             **kwargs,
         )
+        if prompt_type is None:
+            return embeddings
+        prompt_offset = 1.0 if prompt_type is PromptType.query else 2.0
+        return embeddings + prompt_offset
 
 
 class TestCachedEmbeddingWrapper:
-    @pytest.fixture(scope="function")
-    def cache_dir(self, tmp_path):  # noqa: PLR6301
+    @pytest.fixture
+    def cache_dir(self, tmp_path: Path):
         cache_path = tmp_path / "test_cache"
         yield cache_path
         # Cleanup after test
@@ -73,7 +80,7 @@ class TestCachedEmbeddingWrapper:
             FaissCache,
         ],
     )
-    def test_caching_functionality(  # noqa: PLR0914, PLR6301
+    def test_caching_functionality(  # noqa: PLR0914
         self, cache_dir, cache_backend: type[CacheBackendProtocol]
     ):
         if cache_backend is FaissCache:
@@ -249,9 +256,39 @@ class TestCachedEmbeddingWrapper:
 
         wrapped_model.close()  # delete to allow cleanup on Windows
 
+    def test_cache_isolated_by_prompt_type(self, cache_dir: Path):
+        model = DummyModel("test_model", revision=None)
+        wrapped_model = CachedEmbeddingWrapper(model, cache_dir)
+        task_metadata = MockRetrievalTask().metadata
+        inputs = DataLoader(
+            Dataset.from_dict({"id": ["1"], "title": [""], "text": ["same input"]})
+        )
+
+        def cached_encode(prompt_type: PromptType):
+            return wrapped_model.encode(
+                inputs,
+                task_metadata=task_metadata,
+                hf_subset="default",
+                hf_split="test",
+                prompt_type=prompt_type,
+            )
+
+        try:
+            query_embeddings = cached_encode(PromptType.query)
+            document_embeddings = cached_encode(PromptType.document)
+            cached_query_embeddings = cached_encode(PromptType.query)
+            cached_document_embeddings = cached_encode(PromptType.document)
+        finally:
+            wrapped_model.close()
+
+        assert not np.array_equal(document_embeddings, query_embeddings)
+        np.testing.assert_allclose(cached_query_embeddings, query_embeddings)
+        np.testing.assert_allclose(cached_document_embeddings, document_embeddings)
+        assert model.call_count == 2
+
 
 @pytest.mark.parametrize(
-    "task, model",
+    ("task", "model"),
     [
         (
             MockMultiChoiceTask(),
@@ -265,5 +302,9 @@ class TestCachedEmbeddingWrapper:
 )
 def test_wrapper_mock_tasks(task: AbsTask, model: EncoderProtocol, tmp_path: Path):
     cached_model = CachedEmbeddingWrapper(model, tmp_path)
-    mteb.evaluate(cached_model, task, cache=None)
-    assert len(list((tmp_path / task.metadata.name).glob("*"))) == 3
+    try:
+        results = mteb.evaluate(cached_model, task, cache=None)
+    finally:
+        cached_model.close()
+
+    assert results[0].task_name == task.metadata.name

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import torch
@@ -30,7 +30,7 @@ class Qwen3RerankerWrapper:
         model_name_or_path: str,
         device: str | None = None,
         max_length: int = 8192,
-        **kwargs,
+        **kwargs: Any,
     ):
         self.model_name_or_path = model_name_or_path
         self.device = device or (
@@ -101,7 +101,8 @@ class Qwen3RerankerWrapper:
         true_vector = batch_scores[:, self.token_true_id]
         false_vector = batch_scores[:, self.token_false_id]
         batch_scores = torch.stack([false_vector, true_vector], dim=1)
-        batch_scores = torch.nn.functional.log_softmax(batch_scores, dim=1)
+        # upcast the logits to float32 before the softmax
+        batch_scores = torch.nn.functional.log_softmax(batch_scores.float(), dim=1)
         return batch_scores[:, 1].exp().tolist()
 
     @torch.inference_mode()
@@ -140,7 +141,7 @@ class Qwen3RerankerWrapper:
             pairs = [
                 self.format_instruction(instr, query, doc)
                 for instr, query, doc in zip(
-                    batch_instructions, batch_queries, batch_passages
+                    batch_instructions, batch_queries, batch_passages, strict=True
                 )
             ]
 

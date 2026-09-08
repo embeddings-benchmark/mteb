@@ -40,5 +40,7 @@ from mteb.models import CompressionWrapper
 from mteb.types import OutputDType
 
 model = mteb.get_model("intfloat/multilingual-e5-large-instruct")
-model_with_compression = CompressionWrapper(model, output_dtype=OutputDType.INT8, clipping_margin=(0.025, 0.975))
+model_with_compression = CompressionWrapper(
+    model, output_dtype=OutputDType.INT8, clipping_margin=(0.025, 0.975)
+)
 ```
