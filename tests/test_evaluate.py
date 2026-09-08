@@ -5,6 +5,7 @@ from importlib.metadata import version
 from pathlib import Path
 from typing import Any
 
+import numpy as np
 import pytest
 from datasets.exceptions import DatasetNotFoundError
 
@@ -26,9 +27,9 @@ from mteb.mocks.mock_tasks import (
 )
 from mteb.models import ModelMeta
 from mteb.models.models_protocols import EncoderProtocol
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_model_loader
 from mteb.results.task_result import TaskResult
 from mteb.timing import TimingStack
-from mteb.types import OutputDType
 from tests.mock_models import MockSentenceTransformer
 
 mock_classification = (MockSentenceTransformer(), MockClassificationTask(), 1)
@@ -492,13 +493,64 @@ def test_mrl_unsupported_dim():
         )
 
 
-def test_precision_arg():
-    model = SentenceTransformerEncoderWrapper(MockSentenceTransformer())
-    task = MockRetrievalTask()
-    mteb.evaluate(model, task, cache=None, encode_kwargs={"precision": "float16"})
+def test_precision_uses_separate_result_cache(tmp_path: Path):
+    encode_calls = 0
 
-    assert (
-        model.mteb_model_meta.experiment_kwargs["output_dtypes"] == OutputDType.FLOAT16
+    class PrecisionAwareMockModel(MockSentenceTransformer):
+        def encode(self, inputs, precision="float32", **kwargs: Any):
+            nonlocal encode_calls
+            encode_calls += 1
+            if precision == "int8":
+                return np.zeros((len(inputs), 1))
+            return np.array([["another" in text] for text in inputs])
+
+    @sentence_transformers_model_loader
+    def load_precision_aware_model(*args: Any, **kwargs: Any):
+        return SentenceTransformerEncoderWrapper(PrecisionAwareMockModel())
+
+    model = ModelMeta.create_empty(
+        overwrites={
+            "name": "mock/precision-aware-model",
+            "revision": "test",
+            "loader": load_precision_aware_model,
+        }
+    )
+    task = MockClassificationTask()
+    cache = ResultCache(tmp_path)
+
+    def run(precision: str | None = None):
+        encode_kwargs = {"precision": precision} if precision else None
+        return mteb.evaluate(
+            model,
+            task,
+            cache=cache,
+            co2_tracker=False,
+            encode_kwargs=encode_kwargs,
+        )[0]
+
+    int8_result = run("int8")
+    calls_after_int8 = encode_calls
+    default_result = run()
+
+    assert encode_calls > calls_after_int8
+    assert int8_result.get_score() != default_result.get_score()
+
+    calls_after_uncached_runs = encode_calls
+    assert run("int8").get_score() == int8_result.get_score()
+    assert run().get_score() == default_result.get_score()
+
+    assert encode_calls == calls_after_uncached_runs
+
+
+@pytest.mark.parametrize("precision", ["float32", "ubinary"])
+def test_sentence_transformer_supported_precision(precision: str):
+    model = SentenceTransformerEncoderWrapper(MockSentenceTransformer())
+    mteb.evaluate(
+        model,
+        MockClassificationTask(),
+        cache=None,
+        co2_tracker=False,
+        encode_kwargs={"precision": precision},
     )
 
 

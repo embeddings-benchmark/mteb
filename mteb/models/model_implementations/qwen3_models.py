@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Any
 
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_model_loader
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
@@ -121,6 +122,7 @@ training_data = {
 }
 
 
+@sentence_transformers_model_loader
 def q3e_instruct_loader(
     model_name_or_path: str, revision: str, **kwargs: Any
 ) -> EncoderProtocol:

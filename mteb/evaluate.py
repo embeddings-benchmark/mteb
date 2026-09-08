@@ -16,6 +16,7 @@ from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.benchmarks.benchmark import Benchmark
 from mteb.cache import ResultCache
+from mteb.models._evaluation_meta import resolve_evaluation_model_meta
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
@@ -95,6 +96,7 @@ def _sanitize_model(
 
 def _evaluate_task(  # noqa: PLR0913, PLR0914
     model: MTEBModels,
+    model_meta: ModelMeta,
     task: AbsTask,
     *,
     splits: dict[SplitName, list[HFSubset]],
@@ -133,6 +135,7 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
         ) as tracker:
             result = _evaluate_task(
                 model,
+                model_meta,
                 task,
                 splits=splits,
                 encode_kwargs=encode_kwargs,
@@ -156,8 +159,6 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
 
     task_results: dict[SplitName, dict[HFSubset, ScoresDict]] = {}
     evaluation_time: float = 0.0
-
-    model_meta = model.mteb_model_meta
 
     existing_co2 = existing_results.kg_co2_emissions if existing_results else None
     if existing_results is not None:
@@ -507,6 +508,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
         )
 
     model, meta, model_name, model_revision = _sanitize_model(model)
+    meta = resolve_evaluation_model_meta(meta, encode_kwargs)
     _check_model_modalities(meta, tasks)
     overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
 
@@ -631,6 +633,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
         try:
             result = _evaluate_task(
                 model=model,
+                model_meta=meta,
                 splits=missing_eval,
                 task=task,
                 co2_tracker=co2_tracker,
@@ -649,6 +652,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
     else:
         result = _evaluate_task(
             model=model,
+            model_meta=meta,
             splits=missing_eval,
             task=task,
             co2_tracker=co2_tracker,

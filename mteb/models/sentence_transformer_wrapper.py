@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import logging
 import warnings
-from typing import TYPE_CHECKING, Any, cast
+from collections.abc import Callable
+from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 import numpy as np
 import torch
@@ -12,13 +13,12 @@ from typing_extensions import deprecated
 
 from mteb._log_once import LogOnce
 from mteb.models import ModelMeta
-from mteb.types import OutputDType, PromptType
+from mteb.models._evaluation_meta import register_evaluation_meta_resolver
+from mteb.types import PromptType
 
 from .abs_encoder import AbsEncoder, get_prompt_name
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
-
     from sentence_transformers import CrossEncoder, SentenceTransformer
     from sentence_transformers.sparse_encoder import SparseEncoder
     from torch.utils.data import DataLoader
@@ -30,6 +30,53 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION = "5.0.0"
+ModelLoaderT = TypeVar("ModelLoaderT", bound=Callable[..., Any])
+
+
+def sentence_transformers_model_loader(loader: ModelLoaderT) -> ModelLoaderT:
+    """Mark an opaque loader as returning a Sentence Transformers model."""
+    loader._mteb_sentence_transformers_loader = True  # type: ignore[attr-defined]
+    return loader
+
+
+def _resolve_sentence_transformer_evaluation_meta(
+    meta: ModelMeta, encode_kwargs: EncodeKwargs
+) -> ModelMeta:
+    precision = encode_kwargs.get("precision")
+    if precision is None:
+        return meta
+
+    experiment_kwargs = dict(meta.experiment_kwargs or {})
+    experiment_kwargs["output_dtypes"] = precision
+    logger.warning(
+        f"The 'precision' argument passed in encode_kwargs setting output_dtypes to {precision}."
+    )
+    return meta.model_copy(
+        update={"experiment_kwargs": experiment_kwargs},
+        deep=True,
+    )
+
+
+def _uses_sentence_transformers(meta: ModelMeta) -> bool:
+    loader = getattr(meta.loader, "func", meta.loader)
+    if loader is sentence_transformers_loader or getattr(
+        loader, "_mteb_sentence_transformers_loader", False
+    ):
+        return True
+    if not isinstance(loader, type):
+        return False
+
+    from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
+
+    return issubclass(
+        loader,
+        (SentenceTransformerEncoderWrapper, InstructSentenceTransformerModel),
+    )
+
+
+register_evaluation_meta_resolver(
+    _uses_sentence_transformers, _resolve_sentence_transformer_evaluation_meta
+)
 
 
 @deprecated(
@@ -363,23 +410,6 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         Returns:
             The encoded sentences.
         """
-        if "precision" in kwargs:
-            existing_experiment_kwargs = self.mteb_model_meta.experiment_kwargs
-            output_dtype = OutputDType.from_str(kwargs["precision"])
-            if existing_experiment_kwargs is not None:
-                existing_experiment_kwargs["output_dtypes"] = output_dtype  # type: ignore[index]
-            else:
-                existing_experiment_kwargs = {"output_dtypes": output_dtype.value}
-            logger.warning(
-                f"The 'precision' argument passed in encode_kwargs setting output_dtypes to {output_dtype.value}."
-            )
-            self.mteb_model_meta = self.mteb_model_meta.model_copy(
-                update={
-                    "experiment_kwargs": existing_experiment_kwargs,
-                },
-                deep=True,
-            )
-
         prompt = _resolve_prompt(self.model_prompts, task_metadata, prompt_type)
 
         is_multimodal = _setup_modality_collator(
