@@ -308,6 +308,8 @@ class RzenEmbedWrapper(AbsEncoder):
                 if not isinstance(image_embeds, torch.Tensor):
                     image_embeds = getattr(image_embeds, "last_hidden_state", image_embeds[0])
 
+                # Run the patch merger to merge patches (4->1) and project to language dimension (1280->3584)
+                image_embeds = self.model.model.visual.merger(image_embeds)
                 image_embeds = image_embeds.to(inputs_embeds.device)
 
                 image_mask = (
