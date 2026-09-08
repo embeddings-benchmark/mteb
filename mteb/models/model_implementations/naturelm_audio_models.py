@@ -33,18 +33,6 @@ class NatureLMAudioBEATsWrapper(AbsEncoder):
     This is the standalone bioacoustics-specialized encoder (avex's
     esp_aves2_naturelm_audio_v1_beats), not the full NatureLM-audio LLM
     pipeline -- pure feature extraction, no text tower.
-
-    Zero-padding a short clip to match a longer one in the same batch
-    materially distorts its embedding (cosine ~0.80 vs the unpadded
-    embedding, verified directly), so same-length clips must be grouped
-    and encoded separately, same issue as Dasheng's wrapper.
-
-    BEATs' attention/embedding memory scales with sequence length, and
-    some real-world field recordings (e.g. in BirdCLEF) run many minutes
-    long -- one such clip triggered a 24GB single-allocation request on
-    real GPU hardware, more than any single GPU here has. Clips are
-    truncated to max_audio_length_seconds to keep memory bounded, same
-    pattern as Qwen2AudioWrapper's max_audio_length_seconds.
     """
 
     def __init__(
@@ -88,19 +76,25 @@ class NatureLMAudioBEATsWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate,
+            max_samples=int(self.max_audio_length_seconds * self.sampling_rate),
+        )
 
         all_embeddings = []
         with torch.no_grad():
             for batch in tqdm(
                 inputs, disable=not show_progress_bar, desc="Encoding audio"
             ):
-                max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
                 arrays = [
-                    (item["array"] if isinstance(item, dict) else item)[:max_samples]
+                    item["array"] if isinstance(item, dict) else item
                     for item in batch["audio"]
                 ]
 
+                # Zero-padding a short clip to match a longer one in the same
+                # batch materially distorts its embedding (cosine ~0.80 vs the
+                # unpadded embedding, verified directly), so same-length clips
+                # are grouped and encoded separately instead.
                 groups: dict[int, list[int]] = {}
                 for idx, array in enumerate(arrays):
                     groups.setdefault(len(array), []).append(idx)
@@ -135,7 +129,7 @@ naturelm_audio_beats = ModelMeta(
     n_parameters=90_717_055,
     n_embedding_parameters=0,
     memory_usage_mb=346,
-    embed_dim=1536,
+    embed_dim=768,
     license="cc-by-nc-sa-4.0",
     reference="https://huggingface.co/EarthSpeciesProject/esp-aves2-naturelm-audio-v1-beats",
     similarity_fn_name="cosine",
