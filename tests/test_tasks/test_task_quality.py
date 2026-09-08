@@ -131,6 +131,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "FalseFriendsGermanEnglish",
         "FiQA-PL",
         "FiQA2018",
+        "FiQADecontaminated",
         "FiQA2018-Fa",
         "FiQA2018-NL",
         "FilipinoHateSpeechClassification",
@@ -234,6 +235,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MyanmarNews.v2",
         "NExTQAVideoCentricQA",
         "NFCorpus",
+        "NFCorpusDecontaminated",
         "NFCorpus-Fa",
         "NFCorpus-NL",
         "NFCorpus-NL.v2",
@@ -290,6 +292,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "Quora-PL",
         "Quora-PLHardNegatives",
         "QuoraRetrieval",
+        "QuoraRetrievalDecontaminated",
         "QuoraRetrieval-Fa",
         "QuoraRetrieval-Fa.v2",
         "QuoraRetrievalHardNegatives",
@@ -336,6 +339,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "TNews",
         "TNews.v2",
         "TRECCOVID",
+        "TrecCOVIDDecontaminated",
         "TRECCOVID-Fa",
         "TRECCOVID-NL",
         "TRECCOVID-PL",
@@ -353,6 +357,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "ThuNewsClusteringS2S",
         "ToolRetrieval",
         "Touche2020",
+        "Touche2020Decontaminated",
         "Touche2020-Fa",
         "Touche2020-Fa.v2",
         "Touche2020-NL",
@@ -424,6 +429,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "AmazonCounterfactualClassification",
         "AmazonReviewsClassification",
         "ArguAna",
+        "ArguAnaDecontaminated",
         "ArguAna-NL",
         "ArguAna-NL.v2",
         "ArguAna-PL",
@@ -573,6 +579,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MultilingualSentiment",
         "MultilingualSentimentClassification",
         "NFCorpus",
+        "NFCorpusDecontaminated",
         "NFCorpus-Fa",
         "NFCorpus-NL",
         "NFCorpus-NL.v2",
@@ -969,6 +976,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
     ],
     "missing_qrel_corpus_ids": [
         "ArguAna",  # 5 missing qrel document IDs
+        "ArguAnaDecontaminated",  # 5 missing qrel document IDs (inherited from ArguAna)
         "InfoSeekIT2TRetrieval",  # qrels/corpus pool mismatch
         "OVENIT2ITRetrieval",  # qrels/corpus pool mismatch
         "OVENIT2TRetrieval",  # qrels/corpus pool mismatch
