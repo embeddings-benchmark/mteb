@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from mteb.abstasks import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -52,7 +54,7 @@ class EPICKitchens100Clustering(AbsTaskClustering):
     input_column_name: str = "video"
     label_column_name: str = "label"
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         for split in self.metadata.eval_splits:
             self.dataset[split] = self.dataset[split].select_columns(
                 ["video", "label"],
@@ -108,7 +110,7 @@ class EPICKitchens100ClusteringMini(AbsTaskClustering):
     input_column_name: str = "video"
     label_column_name: str = "label"
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         for split in self.metadata.eval_splits:
             self.dataset[split] = self.dataset[split].select_columns(
                 ["video", "label"],
