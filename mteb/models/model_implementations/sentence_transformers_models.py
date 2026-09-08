@@ -910,7 +910,7 @@ qwen_indic_v1 = ModelMeta(
     public_training_data=None,
 )
 
-flowvec_v1 = ModelMeta(
+FlowVec-v1 = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
     name="LingoIITGN/FlowVec-v1",              
     revision="53671cb1a58225b91c0469d411500aef082c74a1",                  
