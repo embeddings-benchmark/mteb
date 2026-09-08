@@ -912,9 +912,9 @@ qwen_indic_v1 = ModelMeta(
 
 FlowVec_v1 = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
-    name="LingoIITGN/FlowVec-v1",              
-    revision="53671cb1a58225b91c0469d411500aef082c74a1",                  
-    release_date="2026-09-08",             
+    name="LingoIITGN/FlowVec-v1",
+    revision="53671cb1a58225b91c0469d411500aef082c74a1",
+    release_date="2026-09-08",
     languages=[
         "asm-Beng",
         "ben-Beng",
@@ -941,7 +941,7 @@ FlowVec_v1 = ModelMeta(
     n_parameters=7567295488,
     n_embedding_parameters=621219840,
     memory_usage_mb=14433,
-    max_tokens=40960,                           
+    max_tokens=40960,
     embed_dim=4096,
     license="apache-2.0",
     open_weights=True,
@@ -961,6 +961,6 @@ FlowVec_v1 = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    public_training_code=None,               
+    public_training_code=None,
     public_training_data=None,
 )
