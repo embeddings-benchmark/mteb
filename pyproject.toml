@@ -181,7 +181,7 @@ lint = [
     "ruff==0.16.0", # locked so we don't get PRs which fail only due to a lint update
     "pre-commit>=4.1.0",
     "typos>1",
-    "bibtexparser>=1.4.3", # used for tests/test_citation_formatting.py
+    "bibtexparser>=1.4.3,<2.0.0", # used for tests/test_citation_formatting.py
 ]
 test = [
     "pytest>=8.3.4,<8.4.0",
@@ -191,7 +191,7 @@ test = [
     "iso639>=0.1.4", # used for tests/scripts/test_generate_model_meta.py
     "GitPython>=3.0.0",
     "tabulate>=0.9.0",
-    "bibtexparser>=1.4.3", # used for tests/test_citation_formatting.py
+    "bibtexparser>=1.4.3,<2.0.0", # used for tests/test_citation_formatting.py
     "av>=17.0.0",
 ]
 docs = [

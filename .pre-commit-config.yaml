@@ -47,7 +47,7 @@ repos:
         types_or: [ python ]
         minimum_pre_commit_version: "2.9.2"
         additional_dependencies:
-          - bibtexparser
+          - "bibtexparser<2.0.0"
       - id: format-tasks-citations
         name: format-tasks-citations
         description: "Format tasks citations"
@@ -58,4 +58,4 @@ repos:
         types_or: [ python ]
         minimum_pre_commit_version: "2.9.2"
         additional_dependencies:
-          - bibtexparser
+          - "bibtexparser<2.0.0"
