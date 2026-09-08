@@ -45,3 +45,16 @@ def test_benchmark_on_leaderboard():
     names = {b.name for b in benchmark}
     assert on_leaderboard not in names
     assert not_on_leaderboard in names
+
+
+def test_task_benchmark_memberships_include_hidden_benchmarks():
+    from mteb.api.aggregators import _task_to_hosting_benchmarks
+
+    memberships = _task_to_hosting_benchmarks()["WebLINXCandidatesReranking"]
+    expected = [
+        benchmark.name
+        for benchmark in mteb.get_benchmarks()
+        if any(task.metadata.name == "WebLINXCandidatesReranking" for task in benchmark)
+    ]
+
+    assert memberships == expected
