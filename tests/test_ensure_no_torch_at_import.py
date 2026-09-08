@@ -14,7 +14,7 @@ import textwrap
 
 _REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 
-# `mteb/__init__.py` (and `mteb/models/__init__.py`) still pull torch in, so importing a submodule
+# `mteb/__init__.py` still pulls torch in, so importing a submodule
 # normally drags it along transitively. Stubbing the parent packages in `sys.modules` lets us
 # import the submodule on its own. Once those packages are lazy too this can become `import mteb`.
 _PREAMBLE = """
@@ -165,3 +165,58 @@ def test_set_seed_works_without_torch(monkeypatch) -> None:
     rng, np_rng = seed_module._set_seed(42)
     assert rng.random() == random.Random(42).random()
     assert np_rng is not None
+
+
+def test_importing_models_package_does_not_import_torch() -> None:
+    """`mteb.models` re-exports torch-backed wrappers, but must not load them to be imported."""
+    assert _loaded_heavy_deps("mteb.models", ("mteb",)) == [], (
+        "importing mteb.models pulled in a heavy dependency; add the re-export to "
+        "_LAZY_ATTRIBUTES in mteb/models/__init__.py instead of importing it eagerly"
+    )
+
+
+def test_importing_abstask_does_not_import_torch() -> None:
+    """`AbsTask` carries task metadata, so describing tasks must not require torch."""
+    assert (
+        _loaded_heavy_deps("mteb.abstasks.abstask", ("mteb", "mteb.abstasks")) == []
+    ), "importing mteb.abstasks.abstask pulled in a heavy dependency"
+
+
+def test_lazy_model_reexports_match_direct_imports() -> None:
+    """Every deferred name must resolve to exactly the object the submodule defines."""
+    output = _run(
+        "mteb.models",
+        ("mteb",),
+        """
+        from importlib import import_module
+
+        import mteb.models as models
+
+        mismatched = [
+            name
+            for name, module in models._LAZY_ATTRIBUTES.items()
+            if getattr(models, name) is not getattr(import_module(module, "mteb.models"), name)
+        ]
+        print(mismatched)
+        print(sorted(models.__all__) == sorted(dir(models)))
+        print(all(hasattr(models, name) for name in models.__all__))
+        """,
+    )
+    assert output.splitlines() == ["[]", "True", "True"]
+
+
+def test_unknown_model_attribute_raises_attribute_error() -> None:
+    """The lazy loader must not turn typos into ImportErrors or silent Nones."""
+    output = _run(
+        "mteb.models",
+        ("mteb",),
+        """
+        import mteb.models as models
+
+        try:
+            models.NoSuchWrapper
+        except AttributeError as exc:
+            print(exc)
+        """,
+    )
+    assert output == "module 'mteb.models' has no attribute 'NoSuchWrapper'"
