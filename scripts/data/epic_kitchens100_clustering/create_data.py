@@ -98,7 +98,9 @@ def build_split(seed: int = SEED, full: bool = False) -> Dataset:
     # 92% of the whole clips/ folder, download it with one glob instead.
     if full:
         local_root = snapshot_download(
-            repo_id=SOURCE_DATASET, repo_type="dataset", allow_patterns=["clips/**/*.mp4"]
+            repo_id=SOURCE_DATASET,
+            repo_type="dataset",
+            allow_patterns=["clips/**/*.mp4"],
         )
     else:
         patterns = [clip_paths[narration_id] for narration_id, _ in selections]
