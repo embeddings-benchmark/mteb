@@ -396,7 +396,7 @@ def _build_per_language_rows(
 def _task_to_hosting_benchmarks() -> dict[str, list[str]]:
     """Reverse index: task name -> list of benchmarks that include it."""
     out: dict[str, list[str]] = {}
-    for bench in mteb.get_benchmarks(display_on_leaderboard=True):
+    for bench in mteb.get_benchmarks():
         for t in bench.tasks:
             out.setdefault(t.metadata.name, []).append(bench.name)
     return out
