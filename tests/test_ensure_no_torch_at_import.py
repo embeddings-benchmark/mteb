@@ -196,3 +196,18 @@ def test_image_dataset_builder_still_returns_a_torch_dataset() -> None:
         dataset, batch_size=2, collate_fn=lambda b: {"image": [i["image"] for i in b]}
     )
     assert [len(batch["image"]) for batch in loader] == [2, 1]
+
+
+def test_importing_abstasks_does_not_import_torch() -> None:
+    """Task classes carry the metadata the leaderboard and API read; describing them needs no torch."""
+    assert _loaded_heavy_deps("mteb.abstasks", ("mteb",)) == [], (
+        "importing mteb.abstasks pulled in a heavy dependency; move the import into the "
+        "method that uses it"
+    )
+
+
+def test_importing_benchmarks_does_not_import_torch() -> None:
+    """Benchmark definitions are metadata over tasks, so they must not need torch either."""
+    assert _loaded_heavy_deps("mteb.benchmarks.benchmark", ("mteb",)) == [], (
+        "importing mteb.benchmarks.benchmark pulled in a heavy dependency"
+    )
