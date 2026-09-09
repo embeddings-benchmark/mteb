@@ -165,3 +165,34 @@ def test_set_seed_works_without_torch(monkeypatch) -> None:
     rng, np_rng = seed_module._set_seed(42)
     assert rng.random() == random.Random(42).random()
     assert np_rng is not None
+
+
+def test_importing_evaluators_does_not_import_torch() -> None:
+    """Evaluators need torch to *run*, but constructing task metadata must not load them."""
+    assert _loaded_heavy_deps("mteb._evaluators", ("mteb",)) == [], (
+        "importing mteb._evaluators pulled in a heavy dependency; move the import into the "
+        "method that uses it (see mteb/_evaluators/retrieval_evaluator.py for the pattern)"
+    )
+
+
+def test_image_dataset_builder_still_returns_a_torch_dataset() -> None:
+    """`CustomImageDataset` moved inside a function; it must still behave identically."""
+    from PIL import Image as PILImage
+    from torch.utils.data import DataLoader, Dataset
+
+    from mteb._evaluators.image.imagetext_pairclassification_evaluator import (
+        _build_image_dataset,
+    )
+
+    images = [PILImage.new("RGB", (8, 8)) for _ in range(3)]
+    dataset = _build_image_dataset(images)
+
+    assert isinstance(dataset, Dataset)
+    assert len(dataset) == 3
+    assert dataset.features == {"image": []}
+    assert list(dataset[0]) == ["image"]
+
+    loader = DataLoader(
+        dataset, batch_size=2, collate_fn=lambda b: {"image": [i["image"] for i in b]}
+    )
+    assert [len(batch["image"]) for batch in loader] == [2, 1]

@@ -9,9 +9,6 @@ from sklearn.metrics.pairwise import (
     paired_manhattan_distances,
 )
 
-from mteb._create_dataloaders import create_dataloader
-from mteb.similarity_functions import compute_pairwise_similarity
-
 from .evaluator import Evaluator
 
 if TYPE_CHECKING:
@@ -76,6 +73,9 @@ class AnySTSEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> STSEvaluatorScores:
+        from mteb._create_dataloaders import create_dataloader
+        from mteb.similarity_functions import compute_pairwise_similarity
+
         if (
             isinstance(self.input_columns[0], str)
             and len(self.task_metadata.modalities) == 1

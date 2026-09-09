@@ -3,11 +3,9 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from datasets import Dataset
 from tqdm.auto import tqdm
 
-from mteb._create_dataloaders import _create_dataloader_from_texts
 from mteb._evaluators.evaluator import Evaluator
 
 if TYPE_CHECKING:
@@ -46,6 +44,8 @@ class BitextMiningEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> dict[str, list[dict[str, float]]]:
+        from mteb._create_dataloaders import _create_dataloader_from_texts
+
         pair_elements = {p for pair in self.pairs for p in pair}
         if isinstance(self.sentences, Dataset):
             subsets = [col for col in self.sentences.features if col in pair_elements]
@@ -107,6 +107,8 @@ class BitextMiningEvaluator(Evaluator):
             Returns a list with one entry for each query. Each entry is a list of dictionaries with the keys 'corpus_id' and 'score', sorted by
                 decreasing cosine similarity scores.
         """
+        import torch
+
         if len(query_embeddings.shape) == 1:
             query_embeddings = query_embeddings.reshape(1, *query_embeddings.shape)
         if len(corpus_embeddings.shape) == 1:

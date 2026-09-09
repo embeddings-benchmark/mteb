@@ -5,13 +5,10 @@ import sys
 from typing import TYPE_CHECKING, Any, TypedDict
 
 import numpy as np
-import torch
 from scipy.stats import pearsonr, spearmanr
 from tqdm.auto import tqdm
 
-from mteb._create_dataloaders import _create_dataloader_from_texts
 from mteb._evaluators.evaluator import Evaluator
-from mteb.similarity_functions import cos_sim, dot_score
 
 if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -108,6 +105,11 @@ class SummarizationEvaluator(Evaluator):
         num_proc: int | None = None,
     ) -> SummarizationDistances:
         # Get the human & machine summaries for the text in one go for all
+        import torch
+
+        from mteb._create_dataloaders import _create_dataloader_from_texts
+        from mteb.similarity_functions import cos_sim, dot_score
+
         human_lens = [len(human_summaries) for human_summaries in self.human_summaries]
         machine_lens = [
             len(machine_summaries) for machine_summaries in self.machine_summaries
