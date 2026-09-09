@@ -5,7 +5,6 @@ import warnings
 from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
 from typing_extensions import deprecated
 
@@ -111,6 +110,8 @@ def instruct_wrapper(
             prompt_type: PromptType | None = None,
             **kwargs: Any,
         ) -> Array:
+            import torch
+
             instruction = self.get_instruction(task_metadata, prompt_type)
 
             if self.instruction_template:

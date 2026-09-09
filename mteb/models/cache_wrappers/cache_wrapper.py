@@ -5,7 +5,6 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 from datasets import Dataset
 
 from mteb._create_dataloaders import create_dataloader
@@ -91,6 +90,8 @@ class CachedEmbeddingWrapper:
         Returns:
             The encoded input in a numpy array or torch tensor of the shape (Number of sentences) x (Embedding dimension).
         """
+        import torch
+
         task_name = task_metadata.name
         try:
             cache = self._get_or_create_cache(task_name, prompt_type)
