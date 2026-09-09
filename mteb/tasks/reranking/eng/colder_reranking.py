@@ -20,13 +20,15 @@ _SUBSETS = [
     "repetition_bias",
 ]
 
-# For each subset, specify which document is positive (contains factual evidence / unbiased control)
+# For each subset, select the candidate that should rank first.
 # foil: doc2 has evidence, doc1 is foil
 # poison: doc2 has true evidence, doc1 is poisoned
 # answer_importance: doc1 has evidence, doc2 has no evidence
-# brevity_bias, literal_bias, position_bias, repetition_bias:
-# doc1 is the biased variant, doc2 is the control
-_POSITIVE_DOC = {
+# In the four individual-bias subsets, both documents contain the answer. MTEB
+# needs a single target to score the pair, so doc2 is the less-biased control;
+# accuracy for those subsets measures resistance to the named bias rather than
+# ordinary relevance.
+_PREFERRED_DOC = {
     "foil": "doc2",
     "poison": "doc2",
     "answer_importance": "doc1",
@@ -45,7 +47,9 @@ class ColDeRReranking(AbsTaskRetrieval):
         description=(
             "ColDeR (Collapse of Dense Retrievers) evaluates retriever vulnerability to "
             "heuristic biases (brevity, position, repetition, literal matching) and failure "
-            "modes where biased non-evidence documents outrank factual evidence."
+            "modes where biased non-evidence documents outrank factual evidence. For "
+            "the individual-bias subsets where both candidates contain evidence, accuracy "
+            "measures preference for the less-biased control document."
         ),
         reference="https://arxiv.org/abs/2503.05037",
         dataset={
@@ -61,7 +65,7 @@ class ColDeRReranking(AbsTaskRetrieval):
         date=("2025-01-01", "2025-05-01"),
         domains=["Encyclopaedic", "Written"],
         task_subtypes=["Reasoning as Retrieval"],
-        license="cc-by-4.0",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         sample_creation="created",
@@ -103,7 +107,7 @@ class ColDeRReranking(AbsTaskRetrieval):
             relevant_docs = {}
             top_ranked = {}
 
-            pos_choice = _POSITIVE_DOC[subset]
+            preferred_doc = _PREFERRED_DOC[subset]
 
             for i, row in enumerate(ds):
                 qid = f"{subset}_{i}"
@@ -114,8 +118,8 @@ class ColDeRReranking(AbsTaskRetrieval):
                 corpus.append({"id": doc1_id, "text": row["document_1"], "title": ""})
                 corpus.append({"id": doc2_id, "text": row["document_2"], "title": ""})
 
-                pos_id = doc1_id if pos_choice == "doc1" else doc2_id
-                relevant_docs[qid] = {pos_id: 1}
+                preferred_id = doc1_id if preferred_doc == "doc1" else doc2_id
+                relevant_docs[qid] = {preferred_id: 1}
                 top_ranked[qid] = [doc1_id, doc2_id]
 
             self.dataset[subset] = {

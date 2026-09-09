@@ -459,7 +459,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "CodeSearchNetCCRetrieval",
         "CodeSearchNetRetrieval",
         "CodeTransOceanDL",
-        "ColDeRReranking",
+        "ColDeRReranking",  # controlled document pairs intentionally reuse text
         "Core17InstructionRetrieval",
         "CosQA",
         "CrisisMMDHumanitarianClassification",  # one tweet can pair with several separately annotated images
