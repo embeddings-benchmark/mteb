@@ -13,7 +13,7 @@ BASINRAG_CITATION = """@software{martins2026basinrag,
 
 basinrag = ModelMeta(
     loader=None,
-    name="alexmart1ns/BasinRAG",
+    name="Basinfy/BasinRAG",
     model_type=["hybrid"],
     languages=["eng-Latn", "por-Latn"],
     open_weights=True,
