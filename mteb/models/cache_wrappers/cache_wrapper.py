@@ -26,7 +26,12 @@ logger = logging.getLogger(__name__)
 
 
 class CachedEmbeddingWrapper:
-    """Wraps an encoder and caches embeddings for text and images.
+    """Wraps an encoder and caches embeddings for text, images, audio, and video.
+
+    When ``shared_cache=True`` all tasks share a single flat cache keyed only by
+    content hash, so items that appear in multiple tasks are encoded only once.
+    When ``shared_cache=False`` (the default) each task gets its own cache
+    sub-directory (original behaviour).
 
     Examples:
         >>> import mteb
@@ -44,6 +49,8 @@ class CachedEmbeddingWrapper:
         model: EncoderProtocol,
         cache_path: str | Path,
         cache_backend: type[CacheBackendProtocol] = NumpyCache,
+        *,
+        shared_cache: bool = False,
     ) -> None:
         """Init
 
@@ -51,6 +58,9 @@ class CachedEmbeddingWrapper:
             model: Model to be wrapped.
             cache_path: Path to the directory where cached embeddings are stored.
             cache_backend: Cache backend class to use for storing embeddings.
+            shared_cache: If True, use a single flat cache shared across all tasks
+                so that items appearing in multiple tasks are encoded only once.
+                Useful when several tasks share the same video/audio corpus.
         """
         self._model = model
         self.cache_path = Path(cache_path)
@@ -58,6 +68,7 @@ class CachedEmbeddingWrapper:
         if not hasattr(model, "encode"):
             raise ValueError("Model must have an 'encode' method.")
         self.cache_backend = cache_backend
+        self.shared_cache = shared_cache
         self.cache_dict: dict[str, CacheBackendProtocol] = {}
         logger.info("Initialized CachedEmbeddingWrapper")
 
@@ -154,17 +165,20 @@ class CachedEmbeddingWrapper:
     def _get_or_create_cache(self, task_name: str) -> CacheBackendProtocol:
         """Get or create cache for a specific task.
 
+        When ``shared_cache=True`` all tasks share one cache under ``_shared/``.
+
         Args:
             task_name: Name of the task
 
         Returns:
             Cache backend instance for the task
         """
-        if task_name not in self.cache_dict:
-            cache = self.cache_backend(self.cache_path / task_name)
+        cache_key = "_shared" if self.shared_cache else task_name
+        if cache_key not in self.cache_dict:
+            cache = self.cache_backend(self.cache_path / cache_key)
             cache.load()
-            self.cache_dict[task_name] = cache
-        return self.cache_dict[task_name]
+            self.cache_dict[cache_key] = cache
+        return self.cache_dict[cache_key]
 
     def __del__(self) -> None:
         self.close()
