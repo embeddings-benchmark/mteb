@@ -647,6 +647,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "TenKGnadClusteringP2P",
         "TenKGnadClusteringS2S",
         "ToolRetrieval",
+        "ToolRetrievalInstruction",
         "Touche2020-VN",
         "ToxicChatClassification",
         "TurkicClassification",
