@@ -26,7 +26,7 @@ class OpsColQwen3Wrapper(AbsEncoder):
         device: str | None = None,
         attn_implementation: str | None = None,
         trust_remote_code: bool = True,
-        **kwargs,
+        **kwargs: Any,
     ):
         from transformers.utils.import_utils import is_flash_attn_2_available
 
@@ -77,20 +77,20 @@ class OpsColQwen3Wrapper(AbsEncoder):
                 )
             fused_embeddings = text_embeddings + image_embeddings
             return fused_embeddings
-        elif text_embeddings is not None:
+        if text_embeddings is not None:
             return text_embeddings
-        elif image_embeddings is not None:
+        if image_embeddings is not None:
             return image_embeddings
         raise ValueError("No text or image inputs found")
 
-    def encode_input(self, inputs):
+    def encode_input(self, inputs: dict[str, Any]) -> torch.Tensor:
         return self.mdl(**inputs)
 
     def get_image_embeddings(
         self,
         images: DataLoader,
         batch_size: int = 32,
-        **kwargs,
+        **kwargs: Any,
     ) -> torch.Tensor:
         import torchvision.transforms.functional as F
         from PIL import Image
@@ -120,7 +120,7 @@ class OpsColQwen3Wrapper(AbsEncoder):
         self,
         texts: DataLoader,
         batch_size: int = 32,
-        **kwargs,
+        **kwargs: Any,
     ) -> torch.Tensor:
         all_embeds = []
 

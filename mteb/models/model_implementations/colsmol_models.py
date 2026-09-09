@@ -1,4 +1,5 @@
 import logging
+from typing import Any
 
 import torch
 
@@ -22,7 +23,8 @@ class ColSmolWrapper(ColPaliEngineWrapper):
         revision: str | None = None,
         device: str | None = None,
         attn_implementation: str | None = None,
-        **kwargs,
+        query_prefix: str = "Query: ",
+        **kwargs: Any,
     ):
         from colpali_engine.models import ColIdefics3, ColIdefics3Processor
         from transformers.utils.import_utils import is_flash_attn_2_available
@@ -38,6 +40,7 @@ class ColSmolWrapper(ColPaliEngineWrapper):
             processor_class=ColIdefics3Processor,
             revision=revision,
             device=device,
+            query_prefix=query_prefix,
             **kwargs,
         )
 

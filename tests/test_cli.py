@@ -1,5 +1,6 @@
 """tests for the MTEB CLI"""
 
+import os
 import subprocess
 import sys
 from argparse import Namespace
@@ -14,11 +15,12 @@ from mteb.cli.build_cli import (
     _available_tasks,
     _create_meta,
     _leaderboard,
+    _mock_run,
     run,
 )
 
 
-def test_available_tasks(capsys):
+def test_available_tasks(capsys: pytest.CaptureFixture[str]):
     args = Namespace(
         categories=None,
         task_types=None,
@@ -33,7 +35,7 @@ def test_available_tasks(capsys):
     )
 
 
-def test_available_benchmarks(capsys):
+def test_available_benchmarks(capsys: pytest.CaptureFixture[str]):
     args = Namespace(benchmarks=None)
     _available_benchmarks(args=args)
 
@@ -52,7 +54,9 @@ run_task_fixures = [
 ]
 
 
-@pytest.mark.parametrize("model_name,task_name,model_revision", run_task_fixures)
+@pytest.mark.parametrize(
+    ("model_name", "task_name", "model_revision"), run_task_fixures
+)
 def test_run_task(
     model_name: str,
     task_name: str,
@@ -92,7 +96,7 @@ def test_run_task(
     )
 
 
-def test_create_meta(tmp_path):
+def test_create_meta(tmp_path: Path):
     """Test create_meta function directly as well as through the command line interface"""
     test_folder = Path(__file__).parent
     model_name = "sentence-transformers/all-MiniLM-L6-v2"
@@ -140,7 +144,7 @@ def test_create_meta(tmp_path):
 
 
 @pytest.mark.parametrize(
-    "existing_readme_name, gold_readme_name",
+    ("existing_readme_name", "gold_readme_name"),
     [
         ("existing_readme.md", "model_card_gold_existing.md"),
         ("model_card_without_frontmatter.md", "model_card_gold_without_frontmatter.md"),
@@ -221,7 +225,7 @@ def test_leaderboard_help():
 
 
 @pytest.mark.parametrize(
-    "cache_path_input,host,port,share,test_description",
+    ("cache_path_input", "host", "port", "share", "test_description"),
     [
         ("custom", "localhost", 8080, True, "custom cache path"),
         (None, "127.0.0.1", 7860, False, "default cache path"),
@@ -309,3 +313,24 @@ def test_leaderboard_cli_integration():
 
     assert result.returncode == 0
     assert "leaderboard" in result.stdout, "Leaderboard command not found in main help"
+
+
+def test_mock_run_cli(tmp_path: Path):
+    """Test the mock-run subcommand."""
+
+    args = Namespace(
+        model="sentence-transformers/all-MiniLM-L6-v2",
+        model_revision="8b3219a92973c328a8e22fadcfa821b5dc75636a",
+        device=None,
+        verbosity=2,
+    )
+
+    orig_cwd = Path.cwd()
+    try:
+        os.chdir(tmp_path)
+        _mock_run(args)
+        assert (tmp_path / "mteb_mock_run_results.md").exists(), (
+            "mteb_mock_run_results.md not created in output folder"
+        )
+    finally:
+        os.chdir(orig_cwd)

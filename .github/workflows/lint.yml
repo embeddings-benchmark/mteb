@@ -21,7 +21,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          make install
+          uv sync --extra image --group dev --frozen
 
       - name: Lint
         id: lint

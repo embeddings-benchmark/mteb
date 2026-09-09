@@ -5,8 +5,8 @@ import math
 
 import mteb
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
+from mteb.mocks.mock_tasks import MockAggregatedTask
 from mteb.results.task_result import TaskResult
-from tests.mock_tasks import MockAggregatedTask
 
 logging.basicConfig(level=logging.INFO)
 

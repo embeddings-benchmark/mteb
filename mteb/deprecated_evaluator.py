@@ -7,7 +7,7 @@ import sys
 import traceback
 import warnings
 from copy import deepcopy
-from datetime import datetime
+from datetime import datetime, timezone
 from itertools import chain
 from pathlib import Path
 from time import time
@@ -111,21 +111,18 @@ class MTEB:
             )
             if len(current_type_tasks) == 0:
                 continue
-            else:
-                console.print(f"[bold]{task_type}[/]")
-                for (
-                    task
-                ) in current_type_tasks:  # will be sorted as input to this function
-                    prefix = "    - "
-                    name = f"{task.metadata.name}"
-                    category = f", [italic grey39]{task.metadata.category}[/]"
-                    multilingual = (
-                        f", [italic red]multilingual {len(task.hf_subsets)} / {len(task.metadata.eval_langs)} Subsets[/]"
-                        if task.metadata.is_multilingual
-                        else ""
-                    )
-                    console.print(f"{prefix}{name}{category}{multilingual}")
-                console.print("\n")
+            console.print(f"[bold]{task_type}[/]")
+            for task in current_type_tasks:  # will be sorted as input to this function
+                prefix = "    - "
+                name = f"{task.metadata.name}"
+                category = f", [italic grey39]{task.metadata.category}[/]"
+                multilingual = (
+                    f", [italic red]multilingual {len(task.hf_subsets)} / {len(task.metadata.eval_langs)} Subsets[/]"
+                    if task.metadata.is_multilingual
+                    else ""
+                )
+                console.print(f"{prefix}{name}{category}{multilingual}")
+            console.print("\n")
 
     def mteb_benchmarks(self) -> None:
         """Get all benchmarks available in the MTEB."""
@@ -204,11 +201,10 @@ class MTEB:
 
         missing_splits = []
         for split in task_eval_splits:
-            if split not in existing_results.scores:
-                missing_splits.append(split)
-            elif not existing_results.scores[
-                split
-            ]:  # Check if the split has any scores
+            if (
+                split not in existing_results.scores
+                or not existing_results.scores[split]
+            ):
                 missing_splits.append(split)
 
         return missing_splits
@@ -487,10 +483,10 @@ class MTEB:
                         except ImportError:
                             raise ImportError(
                                 "codecarbon is not installed. Please install it using `pip install 'mteb[codecarbon]'` to track CO₂ emissions."
-                            )
+                            ) from None
                         msg = "Evaluating multiple MTEB runs simultaneously will produce incorrect CO₂ results"
                         logger.warning(msg)
-                        warnings.warn(msg)
+                        warnings.warn(msg, stacklevel=2)
                         with EmissionsTracker(
                             save_to_file=False,
                             save_to_api=False,
@@ -559,7 +555,9 @@ class MTEB:
                     f"Please check all the error logs at: {self.err_logs_path}"
                 )
                 with self.err_logs_path.open("a") as f_out:
-                    f_out.write(f"{datetime.now()} >>> {task.metadata.name}\n")
+                    f_out.write(
+                        f"{datetime.now(timezone.utc)} >>> {task.metadata.name}\n"
+                    )
                     f_out.write(traceback.format_exc())
                     f_out.write("\n\n")
 

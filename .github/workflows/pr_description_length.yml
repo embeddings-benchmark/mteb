@@ -1,0 +1,45 @@
+name: Check PR description length
+
+on:
+  pull_request_target:
+    types: [opened, reopened]
+
+permissions:
+  pull-requests: write
+  issues: write
+
+jobs:
+  check-description-length:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      MAX_LENGTH: 2000
+    steps:
+      - name: Check description length and close if too long
+        run: |
+          length=$(gh pr view "$PR_NUMBER" --repo "$REPO" --json body --jq '.body | length')
+          echo "Description length: $length"
+
+          if [ "$length" -le "$MAX_LENGTH" ]; then
+            echo "Description within limit, nothing to do."
+            exit 0
+          fi
+
+          gh pr comment "$PR_NUMBER" --repo "$REPO" --body "$(cat <<EOF
+          This pull request description is marked as long, $length characters exceeding the $MAX_LENGTH limit.
+
+          This is usually a sign that the description is too verbose and e.g. due to being auto-generated. This poses undue strain on our contributors. Please reduce the length of the comment. Reviewers are free to close long PRs without providing a reason.
+
+          See our [contributing guidelines](https://github.com/embeddings-benchmark/mteb/blob/main/docs/CONTRIBUTING.md#pull-requests) for details on what a good PR description should contain.
+          EOF
+          )"
+
+          has_label=$(gh pr view "$PR_NUMBER" --repo "$REPO" --json labels --jq '.labels[].name | select(. == "long PR desc")')
+          if [ -z "$has_label" ]; then
+            gh pr edit "$PR_NUMBER" --repo "$REPO" --add-label "long PR desc"
+            echo 'Added label: long PR desc'
+          else
+            echo 'Label already present: long PR desc'
+          fi

@@ -53,7 +53,7 @@ class AbsTaskReranking(AbsTaskRetrieval):
             self.transform_old_dataset_format()
         else:
             # use AbsTaskRetrieval default to load the data
-            return super().load_data(num_proc=num_proc, timer=timer)
+            super().load_data(num_proc=num_proc, timer=timer)
 
     def _process_example(  # noqa: PLR6301
         self,
@@ -173,7 +173,9 @@ class AbsTaskReranking(AbsTaskRetrieval):
 
                 # Map the transformation function over the dataset
                 processed_dataset = enumerated_dataset.map(
-                    lambda example, idx: self._process_example(example, split, idx),
+                    lambda example, idx, split=split: self._process_example(
+                        example, split, idx
+                    ),
                     with_indices=True,
                     remove_columns=enumerated_dataset.column_names,
                 )
@@ -185,7 +187,10 @@ class AbsTaskReranking(AbsTaskRetrieval):
 
                     # Add documents and relevance information
                     for doc_id, doc_text, relevance in zip(
-                        item["doc_ids"], item["doc_texts"], item["relevance_scores"]
+                        item["doc_ids"],
+                        item["doc_texts"],
+                        item["relevance_scores"],
+                        strict=True,
                     ):
                         corpus.append(
                             {

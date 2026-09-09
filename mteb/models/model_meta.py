@@ -34,11 +34,6 @@ from huggingface_hub.errors import (
 from packaging.requirements import Requirement
 from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict, field_validator, model_validator
-from sentence_transformers import (
-    CrossEncoder,
-    SentenceTransformer,
-)
-from transformers import AutoConfig
 
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb._hf_integration.hf_hub_utils import (
@@ -62,9 +57,12 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
 
     from sentence_transformers import (
+        CrossEncoder,
         CrossEncoderModelCardData,
+        SentenceTransformer,
         SentenceTransformerModelCardData,
     )
+    from sentence_transformers.sparse_encoder import SparseEncoder
     from typing_extensions import Self
 
     from mteb.abstasks import AbsTask
@@ -132,7 +130,12 @@ FRAMEWORKS = Literal[
 ]
 
 MODEL_TYPES = Literal[
-    "dense", "cross-encoder", "late-interaction", "sparse", "router", "hybrid"
+    "dense",
+    "cross-encoder",
+    "late-interaction",
+    "sparse",
+    "router",
+    "hybrid",
 ]
 
 # Licenses considered "open" (OSI-approved or otherwise free/libre) when computing the
@@ -260,7 +263,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
     output_dtypes: OutputDType | list[OutputDType] | None = None
     extra_requirements_groups: Sequence[str] | None = None
 
-    def __setattr__(self, name: str, value: Any) -> None:
+    def __setattr__(self, name: str, value: Any) -> None:  # noqa: ANN401 -- dunder contract
         """Deprecation warning for direct attribute mutation. Use model_copy(update={...}) instead."""
         warnings.warn(
             f"Mutating '{name}' is deprecated and will be removed in future versions. "
@@ -272,7 +275,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
 
     @model_validator(mode="before")
     @classmethod
-    def _handle_legacy_is_cross_encoder(cls, data: Any) -> Any:
+    def _handle_legacy_is_cross_encoder(cls, data: Any) -> Any:  # noqa: ANN401 -- pydantic mode='before' receives raw input
         """Handle legacy is_cross_encoder field by converting it to model_type.
 
         This validator handles backward compatibility for the deprecated is_cross_encoder field.
@@ -504,7 +507,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                     "Model does not support loading with a different embedding dimension. "
                     "You can change supported embedding dimensions in `meta.embed_dim`."
                 )
-            elif isinstance(_self.embed_dim, list) and embed_dim not in _self.embed_dim:
+            if isinstance(_self.embed_dim, list) and embed_dim not in _self.embed_dim:
                 raise ValueError(
                     f"Requested embedding dimension {embed_dim} is not in the model's supported embedding dimensions {_self.embed_dim}."
                 )
@@ -715,13 +718,34 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             or "cross-encoder" in model_name_lower
         )
 
+    @staticmethod
+    def _modules_indicate_sparse_encoder(
+        modules_config: list[dict[str, Any]] | dict[str, Any] | None,
+    ) -> bool:
+        """Detect a SparseEncoder architecture from modules.json entries.
+
+        Sparse encoder modules (e.g. MLMTransformer, SpladePooling, SparseStaticEmbedding) all live
+        under the ``sentence_transformers.sparse_encoder`` namespace, which lets us recognize a sparse
+        model even when ``config_sentence_transformers.json`` doesn't declare ``model_type``.
+        """
+        if not modules_config:
+            return False
+        modules = (
+            modules_config if isinstance(modules_config, list) else [modules_config]
+        )
+        return any(
+            "sparse_encoder" in module.get("type", "")
+            for module in modules
+            if isinstance(module, dict)
+        )
+
     @classmethod
     def _resolve_loader(
         cls,
         model_name: str,
         config_sbert: dict[str, Any] | None,
         sbert_config: dict[str, Any] | None,
-        modules_config: dict[str, Any] | None,
+        modules_config: list[dict[str, Any]] | dict[str, Any] | None,
         config: dict[str, Any] | None,
         revision: str | None = None,
     ) -> tuple[Callable[..., MTEBModels], MODEL_TYPES, list[Modalities]]:
@@ -729,15 +753,23 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
 
         - SentenceTransformer  → SentenceTransformerEncoderWrapper
         - CrossEncoder         → CrossEncoderWrapper
+        - SparseEncoder        → SparseEncoderWrapper
         """
         from mteb.models import (
             CrossEncoderWrapper,
             SentenceTransformerEncoderWrapper,
+            SparseEncoderWrapper,
         )
 
         st_model_type = config_sbert.get("model_type") if config_sbert else None
-        if st_model_type not in {"SentenceTransformer", "CrossEncoder"}:
-            if modules_config:
+        if st_model_type not in {
+            "SentenceTransformer",
+            "CrossEncoder",
+            "SparseEncoder",
+        }:
+            if cls._modules_indicate_sparse_encoder(modules_config):
+                st_model_type = "SparseEncoder"
+            elif modules_config:
                 st_model_type = "SentenceTransformer"
             else:
                 fallback = cls._detect_model_type(model_name, revision, config)
@@ -748,14 +780,14 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 )
 
         modalities = cls._detect_modalities_from_sbert_config(sbert_config)
-        is_cross_encoder = st_model_type == "CrossEncoder"
 
-        if is_cross_encoder:
+        if st_model_type == "CrossEncoder":
             return CrossEncoderWrapper, "cross-encoder", modalities
-        elif st_model_type == "SentenceTransformer":
+        if st_model_type == "SparseEncoder":
+            return SparseEncoderWrapper, "sparse", modalities
+        if st_model_type == "SentenceTransformer":
             return SentenceTransformerEncoderWrapper, "dense", modalities
-        else:
-            raise ValueError("Unsupported model type")
+        raise ValueError("Unsupported model type")
 
     @classmethod
     def _detect_model_type_and_loader(
@@ -898,6 +930,8 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         This is based on the heuristic: `vocab_size * embedding_dim` where vocab_size and embedding_dim are extracted from the model's first
         Transformer module.
         """
+        from sentence_transformers import CrossEncoder, SentenceTransformer
+
         logger.info(
             "Calculating number of embedding parameters for SentenceTransformer model."
         )
@@ -908,7 +942,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         ):
             emb = model.model.get_input_embeddings()
             return int(np.prod(emb.weight.shape))
-        elif isinstance(model, SentenceTransformer):
+        if isinstance(model, SentenceTransformer):
             vocab = None
             try:
                 vocab = len(model.tokenizer.vocab)
@@ -950,6 +984,34 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         )
 
     @classmethod
+    def _from_sparse_encoder_model(cls, model: SparseEncoder) -> Self:
+        """Generates a ModelMeta from only a SparseEncoder model, without fetching any additional metadata from HuggingFace Hub."""
+        from mteb.models import SparseEncoderWrapper
+
+        name: str | None = (
+            model.model_card_data.model_name
+            if model.model_card_data.model_name
+            else model.model_card_data.base_model
+        )
+        return cls.create_empty(
+            overwrites=dict(
+                name=name,
+                revision=model.model_card_data.base_model_revision,
+                loader=SparseEncoderWrapper,
+                max_tokens=model.get_max_seq_length(),
+                embed_dim=model.get_embedding_dimension(),
+                similarity_fn_name=ScoringFunction.from_str(model.similarity_fn_name)
+                if model.similarity_fn_name
+                else None,
+                framework=["Sentence Transformers", "PyTorch"],
+                model_type=["sparse"],
+                adapted_from=_get_source_model(model.model_card_data)  # type: ignore[arg-type]
+                if hasattr(model, "model_card_data")
+                else None,
+            )
+        )
+
+    @classmethod
     def _from_hub(  # noqa: PLR0914
         cls,
         model_name: str,
@@ -972,7 +1034,8 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
 
         if not _repo_exists(model_name):
             warnings.warn(
-                f"Could not find model {model_name} on HuggingFace Hub repository ({reference}). Metadata will be limited."
+                f"Could not find model {model_name} on HuggingFace Hub repository ({reference}). Metadata will be limited.",
+                stacklevel=2,
             )
             return cls.create_empty(
                 overwrites=dict(
@@ -989,6 +1052,11 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         card = ModelCard.load(model_name)
         card_data = card.data
         card_data = cast("ModelCardData", card_data)
+        # imported here rather than at module scope so that `mteb.models.model_meta` stays
+        # importable without transformers; kept outside the `try` so a missing dependency
+        # surfaces as an ImportError instead of a "can't get model configuration" warning.
+        from transformers import AutoConfig
+
         try:
             model_config = AutoConfig.from_pretrained(model_name)
         except Exception as e:
@@ -1020,9 +1088,8 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         sbert_config = _get_json_from_hub(
             model_name, "sentence_bert_config.json", "model", revision=revision
         )
-        if sbert_config:
-            if max_tokens is None:
-                max_tokens = sbert_config.get("max_seq_length", None)
+        if sbert_config and max_tokens is None:
+            max_tokens = sbert_config.get("max_seq_length", None)
         # have model type, similarity function fields
         config_sbert = _get_json_from_hub(
             model_name, "config_sentence_transformers.json", "model", revision=revision
@@ -1196,6 +1263,38 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             meta_hub = cls._from_hub(name, revision)
             # prioritize metadata from the model card but fill missing fields from the hub
             meta = meta_hub.merge(meta)
+
+        return meta
+
+    @classmethod
+    def from_sparse_encoder_model(
+        cls,
+        model: SparseEncoder,
+        revision: str | None = None,
+        fetch_from_hf: bool = False,
+    ) -> Self:
+        """Generates a ModelMeta from a SparseEncoder model.
+
+        Args:
+            model: SparseEncoder model.
+            revision: Revision of the model.
+            fetch_from_hf: Whether to fetch additional metadata from HuggingFace Hub based on the model name. If False, only metadata that can be
+                extracted from the SparseEncoder model will be used.
+
+        Returns:
+            The generated ModelMeta.
+        """
+        meta = cls._from_sparse_encoder_model(model)
+        if fetch_from_hf:
+            if meta.name is None:
+                logger.warning(
+                    "Model name is not set in metadata extracted from SparseEncoder model. Cannot fetch additional metadata from HuggingFace Hub."
+                )
+            else:
+                name = meta.name
+                meta_hub = cls._from_hub(name, revision)
+                # prioritize metadata from the model card but fill missing fields from the hub
+                meta = meta_hub.merge(meta)
 
         return meta
 
@@ -1674,7 +1773,7 @@ def _pydantic_instance_to_code(
     return "\n".join(lines)
 
 
-def _value_to_code(value: Any, indent: int) -> str:  # noqa: PLR0911
+def _value_to_code(value: Any, indent: int) -> str:  # noqa: PLR0911, ANN401 -- serialises arbitrary values
     """Convert a Python value into valid Python source code."""
     if isinstance(value, BaseModel):
         return _pydantic_instance_to_code(value, indent, only_set_fields=True)
@@ -1757,7 +1856,7 @@ def _serialize_experiment_kwargs_to_name(
 
     invalid_chars = set('<>:"|?*\\/\0')
 
-    def _serialize_value(value: Any) -> str:
+    def _serialize_value(value: Any) -> str:  # noqa: ANN401 -- serialises arbitrary values
         """Convert value to deterministic string representation."""
         if isinstance(value, (str, int, float, bool)) or value is None:
             str_value = str(value)

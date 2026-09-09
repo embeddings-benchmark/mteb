@@ -20,11 +20,11 @@ GRANITE_EMBEDDING_R2_CITATION = """@article{awasthy2025graniteembeddingr2models,
 }"""
 
 GRANITE_EMBEDDING_MULTILINGUAL_R2_CITATION = """@article{awasthy2026graniteembeddingmultilingualr2,
-      title={Granite Embedding Multilingual R2 Models}, 
+      title={Granite Embedding Multilingual R2 Models},
       author={Parul Awasthy and Aashka Trivedi and Yushu Yang and Ken Barker and Yulong Li and Bhavani Iyer and Martin Franz and Juergen Bross and Meet Doshi and Vignesh P and Vishwajeet Kumar and Todd Ward and Abraham Daniels and Madison Lee and Luis Lastras and Jaydeep Sen and Radu Florian},
       year={2026},
       journal={arXiv preprint arXiv:2605.13521}
-      url={https://arxiv.org/abs/2605.13521}, 
+      url={https://arxiv.org/abs/2605.13521},
 }"""
 
 GRANITE_LANGUAGES = [

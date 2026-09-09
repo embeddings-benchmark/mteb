@@ -100,12 +100,15 @@ class AbsTaskRetrieval(AbsTask):
     ignore_identical_ids: bool = False
     abstask_prompt = "Retrieve text based on user query."
     k_values: Sequence[int] = (1, 3, 5, 10, 20, 100, 1000)
-    _top_k: int = max(k_values)
     dataset: dict[str, dict[str, RetrievalSplitData]]
     _support_cross_encoder: bool = True
     _support_search: bool = True
     _previous_results_model_meta: dict[str, Any] | None = None
     skip_first_result: bool = False
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self._top_k: int = max(self.k_values)
 
     def convert_v1_dataset_format_to_v2(
         self,
@@ -475,11 +478,15 @@ class AbsTaskRetrieval(AbsTask):
             corpus = split_data["corpus"]
             relevant_docs = split_data["relevant_docs"]
             top_ranked = split_data["top_ranked"]
+            query_ids = set(queries["id"])
+            corpus_ids = set(corpus["id"])
         elif compute_overall:
             queries = None
             corpus = None
             relevant_docs = {}
             top_ranked = {}
+            query_ids = set()
+            corpus_ids = set()
             for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
                 split_data = self.dataset[hf_subset][split]
                 if queries is None:
@@ -491,6 +498,14 @@ class AbsTaskRetrieval(AbsTask):
                 else:
                     corpus = concatenate_datasets([corpus, split_data["corpus"]])
 
+                query_ids.update(
+                    f"{split}_{hf_subset}_{query_id}"
+                    for query_id in split_data["queries"]["id"]
+                )
+                corpus_ids.update(
+                    f"{split}_{hf_subset}_{corpus_id}"
+                    for corpus_id in split_data["corpus"]["id"]
+                )
                 relevant_docs.update(
                     _process_relevant_docs(
                         split_data["relevant_docs"], hf_subset, split
@@ -514,6 +529,8 @@ class AbsTaskRetrieval(AbsTask):
             corpus = split_data["corpus"]
             relevant_docs = split_data["relevant_docs"]
             top_ranked = split_data["top_ranked"]
+            query_ids = set(queries["id"])
+            corpus_ids = set(corpus["id"])
 
         num_documents = len(corpus)
         num_queries = len(queries)
@@ -572,7 +589,9 @@ class AbsTaskRetrieval(AbsTask):
             if stat is not None
         )
 
-        relevant_docs_statistics = calculate_relevant_docs_statistics(relevant_docs)
+        relevant_docs_statistics = calculate_relevant_docs_statistics(
+            relevant_docs, query_ids, corpus_ids
+        )
         top_ranked_statistics = (
             calculate_top_ranked_statistics(top_ranked, num_queries)
             if top_ranked is not None and num_queries and len(top_ranked) > 0

@@ -1,4 +1,5 @@
 from collections import defaultdict
+from typing import Any
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -36,11 +37,11 @@ class BLINKIT2TMultiChoice(AbsTaskRetrieval):
 """,
     )
 
-    def dataset_transform(self, **kwargs):
-        for subset, split_data in self.dataset.items():
-            for split, dataset in split_data.items():
+    def dataset_transform(self, **kwargs: Any):
+        for split_data in self.dataset.values():
+            for dataset in split_data.values():
                 top_ranked = defaultdict(list)
                 for query_id, relevant in dataset["relevant_docs"].items():
-                    for corpus_id, score in relevant.items():
+                    for corpus_id in relevant:
                         top_ranked[query_id].append(corpus_id)
                 dataset["top_ranked"] = top_ranked

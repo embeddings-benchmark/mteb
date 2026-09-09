@@ -34,9 +34,8 @@ class MockSentenceTransformer(SentenceTransformer):
 
     def __init__(self):
         self._modules = {}
-        pass
 
-    def encode(  # noqa: PLR0913, PLR0917, PLR6301
+    def encode(  # noqa: PLR0913, PLR0917
         self,
         inputs: list[SingleInput] | SingleInput,
         prompt_name: str | None = None,
@@ -53,7 +52,7 @@ class MockSentenceTransformer(SentenceTransformer):
         truncate_dim: int | None = None,
         pool: dict[Literal["input", "output", "processes"], Any] | None = None,
         chunk_size: int | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> (
         list[Tensor] | np.ndarray | Tensor | dict[str, Tensor] | list[dict[str, Tensor]]
     ):
@@ -64,7 +63,7 @@ class MockSentenceTransformer(SentenceTransformer):
     def get_sentence_embedding_dimension() -> int:
         return 10
 
-    def max_seq_length(self) -> int:  # noqa: PLR6301
+    def max_seq_length(self) -> int:
         return 10
 
     @property
@@ -77,7 +76,7 @@ class MockSentenceTransformersbf16Encoder(MockSentenceTransformer):
         model_name="mock/MockSentenceTransformersbf16Encoder",
     )
 
-    def encode(  # noqa: PLR0913, PLR0917, PLR6301
+    def encode(  # noqa: PLR0913, PLR0917
         self,
         inputs: list[SingleInput] | SingleInput,
         prompt_name: str | None = None,
@@ -94,7 +93,7 @@ class MockSentenceTransformersbf16Encoder(MockSentenceTransformer):
         truncate_dim: int | None = None,
         pool: dict[Literal["input", "output", "processes"], Any] | None = None,
         chunk_size: int | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> (
         list[Tensor] | np.ndarray | Tensor | dict[str, Tensor] | list[dict[str, Tensor]]
     ):
@@ -107,7 +106,7 @@ class MockSentenceTransformerWrapper(SentenceTransformerEncoderWrapper):
         model: str | SentenceTransformer | CrossEncoder,
         revision: str | None = None,
         model_prompts: dict[str, str] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """Wrapper for SentenceTransformer models.
 

@@ -2,6 +2,7 @@
 
 import logging
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 import pytest
@@ -9,12 +10,8 @@ from torch.utils.data import DataLoader
 
 import mteb
 from mteb.abstasks import AbsTask
-from mteb.models.abs_encoder import AbsEncoder
-from tests.mock_models import (
-    MockSentenceTransformer,
-    MockSentenceTransformerWrapper,
-)
-from tests.mock_tasks import (
+from mteb.mocks import MOCK_TASK_TEST_GRID
+from mteb.mocks.mock_tasks import (
     MockInstructionRetrieval,
     MockMultilingualInstructionRetrieval,
     MockMultilingualRerankingTask,
@@ -22,7 +19,11 @@ from tests.mock_tasks import (
     MockRerankingTask,
     MockRetrievalTask,
 )
-from tests.task_grid import MOCK_TASK_TEST_GRID
+from mteb.models.abs_encoder import AbsEncoder
+from tests.mock_models import (
+    MockSentenceTransformer,
+    MockSentenceTransformerWrapper,
+)
 
 logging.basicConfig(level=logging.INFO)
 
@@ -43,8 +44,8 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
     class MockEncoderWithPrompts(MockSentenceTransformer):
         prompts = {}
 
-        def encode(  # noqa: PLR6301
-            self, sentences: DataLoader, prompt_name: str | None = None, **kwargs
+        def encode(
+            self, sentences: DataLoader, prompt_name: str | None = None, **kwargs: Any
         ):
             assert prompt_name == to_compare
             return np.zeros((len(sentences.dataset), 10))
@@ -62,8 +63,8 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
     class MockEncoderWithExistingPrompts(MockSentenceTransformer):
         prompts = {to_compare: to_compare}
 
-        def encode(  # noqa: PLR6301
-            self, sentences: DataLoader, prompt_name: str | None = None, **kwargs
+        def encode(
+            self, sentences: DataLoader, prompt_name: str | None = None, **kwargs: Any
         ):
             assert prompt_name == to_compare
             return np.zeros((len(sentences.dataset), 10))
@@ -118,7 +119,7 @@ def test_model_query_passage_prompts_task_type(
         is_query = True
 
         def encode(
-            self, sentences: DataLoader, prompt_name: str | None = None, **kwargs
+            self, sentences: DataLoader, prompt_name: str | None = None, **kwargs: Any
         ):
             check_prompt(prompt_name, self.is_query)
             self.is_query = not self.is_query
@@ -128,7 +129,7 @@ def test_model_query_passage_prompts_task_type(
         is_query = True
 
         def encode(
-            self, sentences: DataLoader, prompt_name: str | None = None, **kwargs
+            self, sentences: DataLoader, prompt_name: str | None = None, **kwargs: Any
         ):
             check_prompt(prompt_name, self.is_query)
             self.is_query = not self.is_query

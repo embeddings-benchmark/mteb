@@ -1,4 +1,5 @@
 from collections import defaultdict
+from typing import Any
 
 from datasets import load_dataset
 
@@ -46,7 +47,7 @@ Linguistics},
         adapted_from=["NQ"],
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
@@ -86,6 +87,7 @@ Linguistics},
             for query_id, corpus_id in zip(
                 self.relevant_docs[split]["query-id"],
                 self.relevant_docs[split]["corpus-id"],
+                strict=True,
             ):
                 relevant_docs[split][query_id][corpus_id] = 1
         self.relevant_docs = relevant_docs

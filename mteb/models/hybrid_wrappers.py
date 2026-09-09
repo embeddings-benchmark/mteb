@@ -240,7 +240,7 @@ def fuse_dbsf(
             normalized = (raw_scores - lower_limit) / denom
             normalized = np.clip(normalized, 0.0, 1.0)
 
-        for doc_id, norm_score in zip(doc_ids, normalized):
+        for doc_id, norm_score in zip(doc_ids, normalized, strict=True):
             fused[doc_id] = fused.get(doc_id, 0.0) + weight * float(norm_score)
 
     return fused
@@ -281,7 +281,7 @@ def fuse_relative_score_fusion(
         else:
             normalized = (raw_scores - min_s) / (max_s - min_s)
 
-        for doc_id, norm_score in zip(doc_ids, normalized):
+        for doc_id, norm_score in zip(doc_ids, normalized, strict=True):
             fused[doc_id] = fused.get(doc_id, 0.0) + weight * float(norm_score)
 
     return fused

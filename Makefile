@@ -69,14 +69,6 @@ reference-model-test:
 	@echo "--- Running reference model coverage test ---"
 	uv run --no-sync --group test pytest -m test_reference_models -v
 
-leaderboard-build-test:
-	@echo "--- 🚀 Running leaderboard build test ---"
-	uv run --group test --extra leaderboard pytest -n auto -m leaderboard_stability
-
-leaderboard-test-all:
-	@echo "--- 🧪 Running all leaderboard tests ---"
-	uv run --group test --extra leaderboard pytest tests/test_leaderboard/ -v
-
 run-leaderboard:
 	@echo "--- 🚀 Running leaderboard locally ---"
 	uv run --no-sync --extra leaderboard python -m mteb leaderboard

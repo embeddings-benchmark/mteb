@@ -7,7 +7,6 @@ import numpy as np
 import torch
 
 import mteb
-from mteb._create_dataloaders import _corpus_to_dict
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import PromptType
@@ -58,12 +57,12 @@ class CDEWrapper(SentenceTransformerEncoderWrapper):
         model: str,
         revision: str | None = None,
         device: str | None = None,
-        *args,
+        *args: Any,
         **kwargs: Any,
     ) -> None:
         from transformers import AutoConfig
 
-        super().__init__(model, revision=revision, device=device, *args, **kwargs)
+        super().__init__(model, *args, revision=revision, device=device, **kwargs)
         model_config = AutoConfig.from_pretrained(model, trust_remote_code=True)
         self.max_sentences = model_config.transductive_corpus_size
 
@@ -168,6 +167,8 @@ class CDEWrapper(SentenceTransformerEncoderWrapper):
             task.load_data()
             task.convert_v1_dataset_format_to_v2()
             cur_ds = task.dataset[hf_subset][hf_split]["corpus"]
+            from mteb._create_dataloaders import _corpus_to_dict
+
             sentences = cur_ds.map(_corpus_to_dict)["text"]
         elif task_metadata.type in self.classification_task_types:
             task: AbsTaskClassification = mteb.get_task(task_metadata.name)

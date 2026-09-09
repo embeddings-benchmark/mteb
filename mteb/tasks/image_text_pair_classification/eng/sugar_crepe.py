@@ -1,3 +1,5 @@
+from typing import Any
+
 import datasets
 
 from mteb.abstasks.image.image_text_pair_classification import (
@@ -12,7 +14,15 @@ class SugarCrepe(AbsTaskImageTextPairClassification):
 
     metadata = TaskMetadata(
         name="SugarCrepe",
-        description="Compositionality Evaluation of images to their captions.",
+        description=(
+            "Compositionality Evaluation of images to their captions. "
+            "Note that 572 of the 7511 pairs (7.6%) have a caption and "
+            "negative_caption that are the same words in a different order "
+            "(the swap_obj and swap_att subsets of the source benchmark). A "
+            "model whose text representation is order-insensitive scores "
+            "chance on those pairs by construction, capping its text_acc at "
+            "0.962."
+        ),
         reference="https://proceedings.neurips.cc/paper_files/paper/2023/hash/63461de0b4cb760fc498e85b18a7fe81-Abstract-Datasets_and_Benchmarks.html",
         dataset={
             "path": "mteb/SUGARCREPE_fmt",
@@ -45,7 +55,7 @@ class SugarCrepe(AbsTaskImageTextPairClassification):
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return

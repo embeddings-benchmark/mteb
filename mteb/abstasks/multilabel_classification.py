@@ -151,7 +151,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
                 **encode_kwargs,
             )
         unique_train_embeddings = dict(
-            zip(unique_train_indices, _unique_train_embeddings)
+            zip(unique_train_indices, _unique_train_embeddings, strict=True)
         )
         # Stratified subsampling of test set to 2000 examples.
         test_dataset = eval_split
@@ -229,7 +229,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
 
         avg_scores: dict[str, np.floating[Any]] = {
             k: np.mean([s[k] for s in scores])  # type: ignore[literal-required]
-            for k in scores[0].keys()
+            for k in scores[0]
         }
         logger.info("Running multilabel classification - Finished.")
         return FullMultilabelClassificationMetrics(  # type: ignore[no-any-return]

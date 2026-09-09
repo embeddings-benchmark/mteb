@@ -37,7 +37,7 @@ def requires_package(
         name = obj.__name__ if hasattr(obj, "__name__") else obj.__class__.__name__
         raise ImportError(
             f"{name} requires the `{package_name}` library but it was not found in your environment. "
-            + f"If you want to load {model_name} models, please `{install_instruction}` to install the package."
+            f"If you want to load {model_name} models, please `{install_instruction}` to install the package."
         )
 
 
@@ -62,7 +62,7 @@ def suggest_package(
         name = obj.__name__ if hasattr(obj, "__name__") else obj.__class__.__name__
         logger.warning(
             f"{name} can benefit from the `{package_name}` library but it was not found in your environment. "
-            + f"{model_name} models were trained with flash attention enabled. For optimal performance, please install the `{package_name}` package with `{install_instruction}`."
+            f"{model_name} models were trained with flash attention enabled. For optimal performance, please install the `{package_name}` package with `{install_instruction}`."
         )
         return False
     return True
@@ -76,7 +76,7 @@ def requires_image_dependencies() -> None:
     if not _is_package_available("torchvision"):
         raise ImportError(
             "You are trying to running the image subset of mteb without having installed the required dependencies (`torchvision`). "
-            + "You can install the required dependencies using `pip install 'mteb[image]'` to install the required dependencies."
+            "You can install the required dependencies using `pip install 'mteb[image]'` to install the required dependencies."
         )
 
 
@@ -88,5 +88,5 @@ def requires_audio_dependencies() -> None:
     if not _is_package_available("torchaudio"):
         raise ImportError(
             "You are trying to running the audio subset of mteb without having installed the required dependencies (`torchaudio`). "
-            + "You can install the required dependencies using `pip install 'mteb[audio]'` to install the required dependencies."
+            "You can install the required dependencies using `pip install 'mteb[audio]'` to install the required dependencies."
         )

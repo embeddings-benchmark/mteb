@@ -5,6 +5,9 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 
 class Covers80A2ARetrieval(AbsTaskRetrieval):
+    # Query audio is also in the corpus under a different id; drop that self-hit.
+    skip_first_result = True
+
     metadata = TaskMetadata(
         name="Covers80A2ARetrieval",
         description=(
@@ -15,8 +18,8 @@ class Covers80A2ARetrieval(AbsTaskRetrieval):
         ),
         reference="https://labrosa.ee.columbia.edu/projects/coversongs/covers80/",
         dataset={
-            "path": "Wissam42/Covers80-A2A",
-            "revision": "37145bdba45d5593c8a171998dd797a360c6cf96",
+            "path": "mteb/Covers80-A2A",
+            "revision": "2d12e7048b0eaea41655ae8d35bafaf87c9bc4e0",
         },
         type="Any2AnyRetrieval",
         category="a2a",

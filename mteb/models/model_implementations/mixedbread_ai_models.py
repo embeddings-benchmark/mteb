@@ -66,6 +66,34 @@ mxbai_embed_large_v1 = ModelMeta(
     training_datasets=mixedbread_training_data,
 )
 
+deepset_mxbai_embed_de_large_v1 = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    name="mixedbread-ai/deepset-mxbai-embed-de-large-v1",
+    model_type=["dense"],
+    languages=["deu-Latn", "eng-Latn"],
+    open_weights=True,
+    revision="cbbec43ebdf8b2d8304d3093781eee56a8cdfb69",
+    release_date="2024-07-12",  # initial commit of hf model.
+    n_parameters=487066624,
+    n_embedding_parameters=183178240,
+    memory_usage_mb=929,
+    max_tokens=514,
+    embed_dim=1024,
+    license="apache-2.0",
+    reference="https://huggingface.co/mixedbread-ai/deepset-mxbai-embed-de-large-v1",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=[
+        "Sentence Transformers",
+        "Transformers",
+        "ONNX",
+        "safetensors",
+    ],
+    use_instructions=None,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+)
+
 mxbai_embed_2d_large_v1 = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
     name="mixedbread-ai/mxbai-embed-2d-large-v1",

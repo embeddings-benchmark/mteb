@@ -21,6 +21,8 @@ from ._statistics_calculation import _count_samples_in_train
 from .classification import AbsTaskClassification
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from datasets import Dataset
     from numpy.typing import NDArray
 
@@ -114,7 +116,7 @@ class AbsTaskRegression(AbsTaskClassification):
         dataset_dict: datasets.DatasetDict,
         *,
         seed: int,
-        splits: list[str] = ["test"],
+        splits: Sequence[str] = ("test",),
         label: str = "value",
         n_samples: int = 2048,
         n_bins: int = 10,

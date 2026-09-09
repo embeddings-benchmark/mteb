@@ -1,11 +1,12 @@
 from collections.abc import Callable
+from typing import Any
 
 import pytest
 
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.mocks.mock_tasks import MockRetrievalTask
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import PromptType
-from tests.mock_tasks import MockRetrievalTask
 
 
 def _meta(prompt: dict[str, str] | str | None) -> TaskMetadata:
@@ -20,7 +21,7 @@ class _FakeEncoder(AbsEncoder):
     ) -> None:
         self.instruction_template = instruction_template
 
-    def encode(self, *args, **kwargs):
+    def encode(self, *args: Any, **kwargs: Any):
         raise NotImplementedError
 
 
@@ -32,7 +33,7 @@ QUERY_INSTR = "Given a biology post, retrieve relevant passages"
 
 
 @pytest.mark.parametrize(
-    "template, prompt_type, expected",
+    ("template", "prompt_type", "expected"),
     [
         # Callable template: fires even on empty input (document side)
         (_gritlm_template, PromptType.document, "<|embed|>\n"),

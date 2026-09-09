@@ -228,7 +228,7 @@ class CreatePRAction:
         except ImportError:
             raise ImportError(
                 "PyGithub is required for CreatePRAction. To install it run `pip install mteb[github]`"
-            )
+            ) from None
 
         try:
             upstream = self.gh.get_repo(self.upstream_repo_name)

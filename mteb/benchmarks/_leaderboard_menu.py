@@ -92,7 +92,7 @@ GP_BENCHMARK_ENTRIES = [
                         "MTEB(deu, v1)",
                         "MTEB(fra, v1)",
                         "JMTEB(v2)",
-                        "MTEB(kor, v1)",
+                        "MTEB(kor, v2)",
                         "MTEB(nld, v1)",
                         "MTEB(pol, v1)",
                         "MTEB(rus, v1.1)",
@@ -112,6 +112,7 @@ GP_BENCHMARK_ENTRIES = [
                                 "MTEB(fas, v1)",
                                 "MTEB(rus, v1)",
                                 "MTEB(jpn, v1)",
+                                "MTEB(kor, v1)",
                             ]
                         ),
                     )
@@ -204,7 +205,7 @@ HOME_BENCHMARK_ENTRIES = [
                 "MTEB(Europe, v1)",
                 "MTEB(Scandinavian, v1)",
                 "JMTEB(v2)",
-                "MTEB(kor, v1)",
+                "MTEB(kor, v2)",
                 "MTEB(nld, v1)",
                 "MTEB(pol, v1)",
                 "MTEB(rus, v1.1)",

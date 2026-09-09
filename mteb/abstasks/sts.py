@@ -195,6 +195,7 @@ class AbsTaskSTS(AbsTask):
                 else self.dataset[split]
             )
         )
+
         if hf_subset:
             score = self.dataset[hf_subset][split]["score"]
             n = len(score)
@@ -235,17 +236,27 @@ class AbsTaskSTS(AbsTask):
             _load_col,
             n,
             max_workers=num_proc,
+            symmetric=True,
         )
         labels_statistics = calculate_score_statistics(score)
+        number_of_characters = None
+
+        if (
+            pair_stats["text1_statistics"] is not None
+            and pair_stats["text2_statistics"] is not None
+        ):
+            number_of_characters = (
+                pair_stats["text1_statistics"]["total_text_length"]
+                + pair_stats["text2_statistics"]["total_text_length"]
+            )
+        elif pair_stats["text1_statistics"] is not None:
+            number_of_characters = pair_stats["text1_statistics"]["total_text_length"]
+        elif pair_stats["text2_statistics"] is not None:
+            number_of_characters = pair_stats["text2_statistics"]["total_text_length"]
 
         return AnySTSDescriptiveStatistics(
             num_samples=n,
-            number_of_characters=(
-                pair_stats["text1_statistics"]["total_text_length"]
-                + pair_stats["text2_statistics"]["total_text_length"]
-                if pair_stats["text1_statistics"]
-                else None
-            ),
+            number_of_characters=number_of_characters,
             unique_pairs=pair_stats["unique_pairs"],
             text1_statistics=pair_stats["text1_statistics"],
             text2_statistics=pair_stats["text2_statistics"],

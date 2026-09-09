@@ -129,11 +129,40 @@ dragonkue_e5_small_ko = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     adapted_from="intfloat/multilingual-e5-small",
+    superseded_by="dragonkue/multilingual-e5-small-ko-v2",
     public_training_code=None,
     public_training_data=None,
     # Fine-tuned on the same data as dragonkue/snowflake-arctic-embed-l-v2.0-ko
     # (AI Hub Korean MRC corpora — none are mteb datasets); empty set so the
     # multilingual-e5 base data is still inherited via adapted_from.
+    training_datasets=set(),
+)
+
+dragonkue_e5_small_ko_v2 = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    loader_kwargs=dict(model_prompts=E5_PROMPTS),
+    name="dragonkue/multilingual-e5-small-ko-v2",
+    model_type=["dense"],
+    languages=KOR_EN,
+    open_weights=True,
+    revision="fcfc26bf355882620c48df58be112275bd756f50",
+    release_date="2025-06-10",
+    n_parameters=117_653_760,
+    embed_dim=384,
+    license="apache-2.0",
+    max_tokens=512,
+    memory_usage_mb=449,
+    n_embedding_parameters=96_014_208,
+    reference="https://huggingface.co/dragonkue/multilingual-e5-small-ko-v2",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    adapted_from="intfloat/multilingual-e5-small",
+    public_training_code=None,
+    public_training_data=None,
+    # Successor to dragonkue/multilingual-e5-small-ko; same architecture, fine-tuned
+    # on Korean MRC corpora (none are mteb datasets); empty set so the multilingual-e5
+    # base data is still inherited via adapted_from.
     training_datasets=set(),
 )
 

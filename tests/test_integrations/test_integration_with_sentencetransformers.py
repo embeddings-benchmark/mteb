@@ -9,12 +9,12 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 
 import mteb
 from mteb.abstasks import AbsTask
-from mteb.models import ModelMeta
-from tests.mock_tasks import (
+from mteb.mocks import MOCK_TASK_TEST_GRID
+from mteb.mocks.mock_tasks import (
     MockInstructionReranking,
     MockRerankingTask,
 )
-from tests.task_grid import MOCK_TASK_TEST_GRID
+from mteb.models import ModelMeta
 
 logging.basicConfig(level=logging.INFO)
 
@@ -59,10 +59,8 @@ def test_model_meta_load_sentence_transformer_metadata_from_model():
     assert meta.max_tokens == 256
     assert meta.embed_dim == 384
     if Version(sentence_transformers.__version__) >= Version("4.0.0"):
-        assert (
-            meta.similarity_fn_name is not None
-            and meta.similarity_fn_name.value == "cosine"
-        )
+        assert meta.similarity_fn_name is not None
+        assert meta.similarity_fn_name.value == "cosine"
 
 
 @pytest.mark.parametrize("model_name", ["sentence-transformers/all-MiniLM-L6-v2"])
@@ -76,10 +74,8 @@ def test_model_meta_sentence_transformer_from_hub(model_name: str):
     assert meta.memory_usage_mb == 87
     assert meta.embed_dim == 384
     assert meta.license == "apache-2.0"
-    assert (
-        meta.similarity_fn_name is not None
-        and meta.similarity_fn_name.value == "cosine"
-    )
+    assert meta.similarity_fn_name is not None
+    assert meta.similarity_fn_name.value == "cosine"
     assert meta.max_tokens == 512
 
 

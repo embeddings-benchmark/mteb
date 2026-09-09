@@ -6,7 +6,6 @@ import torch
 from tqdm.auto import tqdm
 from transformers import AutoModel, AutoProcessor
 
-from mteb._requires_package import requires_image_dependencies
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import OutputDType
@@ -33,9 +32,8 @@ class ColVec1Wrapper(AbsEncoder):
         device: str | None = None,
         trust_remote_code: bool = True,
         torch_dtype: torch.dtype | None = torch.bfloat16,
-        **kwargs,
+        **kwargs: Any,
     ):
-        requires_image_dependencies()
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
 
         self.model = AutoModel.from_pretrained(
@@ -77,9 +75,9 @@ class ColVec1Wrapper(AbsEncoder):
                     "The number of texts and images must have the same length"
                 )
             return text_embeddings + image_embeddings
-        elif text_embeddings is not None:
+        if text_embeddings is not None:
             return text_embeddings
-        elif image_embeddings is not None:
+        if image_embeddings is not None:
             return image_embeddings
         raise ValueError("No text or image features found in inputs.")
 
@@ -92,8 +90,12 @@ class ColVec1Wrapper(AbsEncoder):
         return self.model(**encoded_inputs)
 
     def get_image_embeddings(
-        self, images, batch_size=32, show_progress_bar=True, **kwargs
-    ):
+        self,
+        images: DataLoader[BatchedInput],
+        batch_size: int = 32,
+        show_progress_bar: bool = True,
+        **kwargs: Any,
+    ) -> Array:
         import torchvision.transforms.functional as F
         from PIL import Image
 
@@ -118,8 +120,12 @@ class ColVec1Wrapper(AbsEncoder):
         )
 
     def get_text_embeddings(
-        self, texts, batch_size=32, show_progress_bar=True, **kwargs
-    ):
+        self,
+        texts: DataLoader[BatchedInput],
+        batch_size: int = 32,
+        show_progress_bar: bool = True,
+        **kwargs: Any,
+    ) -> Array:
         all_embeds = []
         with torch.no_grad():
             for batch in tqdm(
@@ -133,7 +139,7 @@ class ColVec1Wrapper(AbsEncoder):
             all_embeds, batch_first=True, padding_value=0
         )
 
-    def similarity(self, a, b):
+    def similarity(self, a: Array, b: Array) -> Array:
         a = [torch.as_tensor(x) for x in a]
         b = [torch.as_tensor(x) for x in b]
         return self.processor.score_multi_vector(a, b, device=self.device)
@@ -155,9 +161,8 @@ class ColVec11Wrapper(ColVec1Wrapper):
         trust_remote_code: bool = True,
         torch_dtype: torch.dtype | None = torch.bfloat16,
         processor_kwargs: dict[str, Any] | None = None,
-        **model_kwargs,
+        **model_kwargs: Any,
     ):
-        requires_image_dependencies()
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         processor_kwargs = dict(processor_kwargs or {})
 
@@ -178,8 +183,12 @@ class ColVec11Wrapper(ColVec1Wrapper):
         )
 
     def get_image_embeddings(
-        self, images, batch_size=32, show_progress_bar=True, **kwargs
-    ):
+        self,
+        images: DataLoader[BatchedInput],
+        batch_size: int = 32,
+        show_progress_bar: bool = True,
+        **kwargs: Any,
+    ) -> Array:
         import torchvision.transforms.functional as F
         from PIL import Image
 
@@ -221,7 +230,7 @@ class ColVec11Wrapper(ColVec1Wrapper):
             return self.get_text_embeddings(inputs, **kwargs)
         raise ValueError("No text or image features found in inputs.")
 
-    def similarity(self, a, b):
+    def similarity(self, a: Array, b: Array) -> Array:
         a = [torch.as_tensor(x) for x in a]
         b = [torch.as_tensor(x) for x in b]
         return self.processor.score_retrieval(

@@ -80,7 +80,7 @@ class PolEmo2InClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PolEmo2.0-IN",
         description="A collection of Polish online reviews from four domains: medicine, hotels, products and "
-        + "school. The PolEmo2.0-IN task is to predict the sentiment of in-domain (medicine and hotels) reviews.",
+        "school. The PolEmo2.0-IN task is to predict the sentiment of in-domain (medicine and hotels) reviews.",
         reference="https://aclanthology.org/K19-1092.pdf",
         dataset={
             "path": "PL-MTEB/polemo2_in",
@@ -123,7 +123,7 @@ class PolEmo2InClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PolEmo2.0-IN.v2",
         description="A collection of Polish online reviews from four domains: medicine, hotels, products and "
-        + "school. The PolEmo2.0-IN task is to predict the sentiment of in-domain (medicine and hotels) reviews.",
+        "school. The PolEmo2.0-IN task is to predict the sentiment of in-domain (medicine and hotels) reviews.",
         reference="https://aclanthology.org/K19-1092.pdf",
         dataset={
             "path": "mteb/pol_emo2_in",
@@ -212,8 +212,8 @@ class PolEmo2OutClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PolEmo2.0-OUT.v2",
         description="A collection of Polish online reviews from four domains: medicine, hotels, products and "
-        + "school. The PolEmo2.0-OUT task is to predict the sentiment of out-of-domain (products and "
-        + "school) reviews using models train on reviews from medicine and hotels domains.",
+        "school. The PolEmo2.0-OUT task is to predict the sentiment of out-of-domain (products and "
+        "school) reviews using models train on reviews from medicine and hotels domains.",
         reference="https://aclanthology.org/K19-1092.pdf",
         dataset={
             "path": "mteb/pol_emo2_out",

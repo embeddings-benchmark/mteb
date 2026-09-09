@@ -1,0 +1,57 @@
+{
+    "test": {
+        "num_samples": 10871,
+        "text_statistics": {
+            "total_text_length": 2315552,
+            "min_text_length": 57,
+            "average_text_length": 213.00266764787048,
+            "max_text_length": 1072,
+            "unique_texts": 10871
+        },
+        "image_statistics": null,
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 12,
+            "labels": {
+                "auto": {
+                    "count": 356
+                },
+                "crime": {
+                    "count": 1172
+                },
+                "culture": {
+                    "count": 201
+                },
+                "economy": {
+                    "count": 1271
+                },
+                "health": {
+                    "count": 686
+                },
+                "home": {
+                    "count": 1020
+                },
+                "politics": {
+                    "count": 1800
+                },
+                "sport": {
+                    "count": 361
+                },
+                "tech": {
+                    "count": 508
+                },
+                "travel": {
+                    "count": 279
+                },
+                "weather": {
+                    "count": 38
+                },
+                "world": {
+                    "count": 3179
+                }
+            }
+        }
+    }
+}

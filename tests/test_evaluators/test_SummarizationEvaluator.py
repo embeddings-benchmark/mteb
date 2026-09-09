@@ -2,8 +2,8 @@ import pytest
 
 import mteb
 from mteb._evaluators import SummarizationEvaluator
+from mteb.mocks.mock_tasks import MockSummarizationTask
 from mteb.timing import TimingStack
-from tests.mock_tasks import MockSummarizationTask
 
 
 # Fixtures

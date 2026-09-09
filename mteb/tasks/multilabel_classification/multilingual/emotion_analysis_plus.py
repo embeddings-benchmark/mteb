@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import ClassVar
-
 from mteb.abstasks.multilabel_classification import (
     AbsTaskMultilabelClassification,
 )
@@ -29,7 +27,7 @@ class EmotionAnalysisPlus(AbsTaskMultilabelClassification):
         type="MultilabelClassification",
         category="t2c",
         modalities=["text"],
-        eval_splits=["validation", "test"],
+        eval_splits=["test"],
         eval_langs={
             # (ISO-639-3 code : BCP-47 tag)
             "afr": ["afr-Latn"],
@@ -73,70 +71,3 @@ class EmotionAnalysisPlus(AbsTaskMultilabelClassification):
         sample_creation="created",
         bibtex_citation="",
     )
-
-    # ---------------------------------------------------------------- constants
-    _EMOTION2ID: ClassVar[dict[str, int]] = {
-        "anger": 0,
-        "disgust": 1,
-        "fear": 2,
-        "joy": 3,
-        "sadness": 4,
-        "surprise": 5,
-    }
-    _LOOKUP_TEXT: ClassVar[tuple[str, ...]] = ("text", "sentence", "utterance")
-    _LOOKUP_EMO: ClassVar[tuple[str, ...]] = (
-        "label",
-        "emotions",
-        "emotion",
-        "category",
-        "label_cat",
-    )
-
-    # ---------------------------------------------------------------- transform
-    def dataset_transform(self, **kwargs) -> None:
-        """
-        Bring every split to the MTEB expected format:
-
-        * column **text** : sentence/utterance (str)
-        * column **label**: list[int] (multi-label IDs 0–5)
-        """
-        for lang in self.dataset:
-            for split in self.dataset[lang]:
-                ds = self.dataset[lang][split]
-
-                # ── 1️⃣  locate the text column ───────────────────────────────
-                cols = ds.column_names
-                text_col = next(c for c in self._LOOKUP_TEXT if c in cols)
-
-                # ── 2️⃣  locate all emotion columns that are present ──────────
-                emo_cols = [e for e in self._EMOTION2ID if e in cols]
-                if not emo_cols:
-                    raise ValueError(
-                        f"{lang}/{split}: none of the expected emotion columns "
-                        f"{list(self._EMOTION2ID)} were found."
-                    )
-
-                # ── 3️⃣  map each row to {text, label} ────────────────────────
-                def to_labels(example):
-                    labels = [
-                        self._EMOTION2ID[emo]  # integer ID
-                        for emo in emo_cols  # only the columns that exist
-                        if int(example[emo]) == 1  # treat non-zero as “present”
-                    ]
-                    return {"text": example[text_col], "label": labels}
-
-                ds = ds.map(
-                    to_labels,
-                    remove_columns=cols,  # drop original columns
-                    desc=f"{lang}/{split}",
-                )
-
-                # ── 4️⃣  save the cleaned split back ──────────────────────────
-                self.dataset[lang][split] = ds
-
-        # ── 5️⃣  make sure every language has a 'train' split ────────────────
-        for lang, splits in self.dataset.items():
-            if "train" not in splits:
-                self.dataset[lang]["train"] = (
-                    splits.get("validation") or splits.get("dev") or splits["test"]
-                )

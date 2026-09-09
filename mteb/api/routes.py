@@ -213,7 +213,9 @@ def _task_num_models_map() -> dict[str, int]:
         .agg(pl.col("model_name").n_unique().alias("n"))
         .collect()
     )
-    return dict(zip(grouped["task_name"].to_list(), (int(n) for n in grouped["n"])))
+    return dict(
+        zip(grouped["task_name"].to_list(), (int(n) for n in grouped["n"]), strict=True)
+    )
 
 
 _S = TypeVar("_S", BenchmarkSchema, TaskMetaSchema)

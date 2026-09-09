@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+import inspect
 import logging
 from collections import defaultdict
-from typing import TYPE_CHECKING, Any, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar, Literal
 
 import numpy as np
 import torch
@@ -22,11 +23,10 @@ if TYPE_CHECKING:
     from typing_extensions import Unpack
 
     from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models import MTEBModels
     from mteb.types import Array, BatchedInput, EncodeKwargs
 
 logger = logging.getLogger(__name__)
-
-MIN_SENTENCE_TRANSFORMERS_VERSION = (3, 1, 0)
 
 multilingual_langs = [
     "afr-Latn",
@@ -271,7 +271,10 @@ class JinaRerankerV3Wrapper(CrossEncoderWrapper):
         from transformers import AutoModel
 
         self.model = AutoModel.from_pretrained(
-            model, trust_remote_code=trust_remote_code, dtype="auto"
+            model,
+            revision=revision,
+            trust_remote_code=trust_remote_code,
+            dtype="auto",
         )
 
         device = device or get_device_name()
@@ -295,16 +298,21 @@ class JinaRerankerV3Wrapper(CrossEncoderWrapper):
 
         sentences_count = len(all_corpus)
         query_groups: dict[str, list[tuple[int, str]]] = defaultdict(list)
-        for idx, (query, doc) in enumerate(zip(all_queries, all_corpus)):
+        for idx, (query, doc) in enumerate(zip(all_queries, all_corpus, strict=True)):
             query_groups[query].append((idx, doc))
+
+        rerank_parameters = inspect.signature(self.model.rerank).parameters
+        rerank_kwargs = {}
+        if "max_query_length" in rerank_parameters:
+            rerank_kwargs["max_query_length"] = 3072
+        if "max_doc_length" in rerank_parameters:
+            rerank_kwargs["max_doc_length"] = 2048
 
         results = np.zeros(sentences_count, dtype=np.float32)
         for query, doc_infos in query_groups.items():
-            original_indices, docs = zip(*doc_infos)
+            original_indices, docs = zip(*doc_infos, strict=True)
 
-            scores = self.model.rerank(
-                query, list(docs), max_query_length=3072, max_doc_length=2048
-            )
+            scores = self.model.rerank(query, list(docs), **rerank_kwargs)
             for scr in scores:
                 original_idx = original_indices[scr["index"]]
                 results[original_idx] = float(scr["relevance_score"])
@@ -326,19 +334,8 @@ class JinaWrapper(SentenceTransformerEncoderWrapper):
         revision: str,
         device: str | None = None,
         model_prompts: dict[str, str] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
-        from sentence_transformers import __version__ as st_version
-
-        current_sentence_transformers_version = tuple(map(int, st_version.split(".")))
-
-        if current_sentence_transformers_version < MIN_SENTENCE_TRANSFORMERS_VERSION:
-            raise RuntimeError(
-                f"sentence_transformers version {st_version} is lower than the required version 3.1.0"
-            )
-        import einops  # noqa: F401
-        import flash_attn  # noqa: F401
-
         super().__init__(
             model, revision, device=device, model_prompts=model_prompts, **kwargs
         )
@@ -381,37 +378,73 @@ class JinaWrapper(SentenceTransformerEncoderWrapper):
         return embeddings
 
 
+SUPPORTED_VECTOR_TYPES = ("single_vector", "multi_vector")
+
+
+class Jinav4ModelMeta(ModelMeta):
+    def load_model(
+        self,
+        device: str | None = None,
+        *,
+        embed_dim: int | None = None,
+        **kwargs: Any,
+    ) -> MTEBModels:
+        model = super().load_model(device=device, embed_dim=embed_dim, **kwargs)
+        vector_type = kwargs.pop(
+            "vector_type", "single_vector"
+        )  # didn't add to args to not trigger experiments
+        if vector_type == "multi_vector":
+            model.mteb_model_meta = model.mteb_model_meta.model_copy(
+                update={
+                    "model_type": ["late-interaction"],
+                }
+            )
+        return model
+
+
 class JinaV4Wrapper(AbsEncoder):
     """following the hf model card documentation."""
-
-    SUPPORTED_VECTOR_TYPES: ClassVar[set[str]] = {"single_vector", "multi_vector"}
 
     def __init__(
         self,
         model: str,
         revision: str | None = None,
-        device_map="cuda",
-        torch_dtype=torch.bfloat16,
-        attn_implementation="flash_attention_2",
+        device: str | None = None,
+        device_map: str | None = None,
+        torch_dtype: torch.dtype = torch.bfloat16,
+        attn_implementation: str = "sdpa",
         trust_remote_code: bool = True,
         model_prompts: dict[str, str] | None = None,
-        **kwargs,
+        vector_type: Literal[SUPPORTED_VECTOR_TYPES] = "single_vector",
+        **kwargs: Any,
     ) -> None:
-        import flash_attn  # noqa: F401
-        import peft  # noqa: F401
-        import transformers  # noqa: F401
+        device = device_map or device
+
+        self.device = device or (
+            "cuda"
+            if torch.cuda.is_available()
+            else "mps"
+            if torch.backends.mps.is_available()
+            else "cpu"
+        )
+
         from transformers import AutoModel
+
+        if vector_type not in SUPPORTED_VECTOR_TYPES:
+            raise ValueError(
+                f"vector_type must be one of {SUPPORTED_VECTOR_TYPES}, got {vector_type!r}"
+            )
 
         self.model = AutoModel.from_pretrained(
             model,
-            device_map=device_map,
+            device_map=self.device,
             trust_remote_code=trust_remote_code,
             torch_dtype=torch_dtype,
             attn_implementation=attn_implementation,
             revision=revision,
         ).eval()
         self.model_prompts = model_prompts or {}
-        self.vector_type = "single_vector"  # default vector type
+        self.vector_type = vector_type
 
     def _resolve_task_parameters(
         self, task_metadata: TaskMetadata, prompt_type: PromptType | None = None
@@ -462,6 +495,7 @@ class JinaV4Wrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+
         text_embeddings = None
         image_embeddings = None
         if "text" in inputs.dataset.features:
@@ -484,7 +518,23 @@ class JinaV4Wrapper(AbsEncoder):
                 raise ValueError(
                     "The number of texts and images must have the same length"
                 )
-            embeddings = text_embeddings + image_embeddings
+            if self.vector_type == "multi_vector":
+                embeddings = [
+                    torch.cat([text_emb, image_emb], dim=0)
+                    for text_emb, image_emb in zip(
+                        text_embeddings, image_embeddings, strict=True
+                    )
+                ]
+            else:
+                # `encode_text`/`encode_image` return a list with one vector per
+                # input, so the two lists must be fused per example rather than
+                # concatenated - otherwise one input yields two embeddings.
+                embeddings = torch.nn.functional.normalize(
+                    torch.stack(list(text_embeddings))
+                    + torch.stack(list(image_embeddings)),
+                    p=2,
+                    dim=-1,
+                )
         elif text_embeddings is not None:
             embeddings = text_embeddings
         elif image_embeddings is not None:
@@ -499,9 +549,9 @@ class JinaV4Wrapper(AbsEncoder):
             and embeddings
             and isinstance(embeddings[0], torch.Tensor)
         ):
-            embeddings = np.stack(
-                [e.cpu().detach().float().numpy() for e in embeddings]
-            )
+            # Multi-vector embeddings have one vector per token or image patch.
+            # Their sequence lengths vary by input, so they must remain ragged.
+            embeddings = [e.cpu().detach().float() for e in embeddings]
         return embeddings
 
     def get_text_embeddings(
@@ -511,9 +561,9 @@ class JinaV4Wrapper(AbsEncoder):
         task_metadata: TaskMetadata,
         prompt_type: PromptType | None = None,
         batch_size: int = 32,
-        return_numpy=False,
+        return_numpy: bool = False,
         **kwargs: Any,
-    ):
+    ) -> Array:
         prompt_name = self.get_prompt_name(task_metadata, prompt_type)
         if prompt_name:
             logger.info(
@@ -527,14 +577,9 @@ class JinaV4Wrapper(AbsEncoder):
         )
 
         # Resolve task parameters
-        base_task, prompt_name_param, task_type = self._resolve_task_parameters(
+        base_task, prompt_name_param, _ = self._resolve_task_parameters(
             task_metadata, prompt_type
         )
-
-        if task_type and task_type.startswith("DocumentUnderstanding"):
-            self.vector_type = "multi_vector"
-        else:
-            self.vector_type = "single_vector"
 
         with torch.no_grad():
             return self.model.encode_text(
@@ -553,18 +598,11 @@ class JinaV4Wrapper(AbsEncoder):
         task_metadata: TaskMetadata,
         prompt_type: PromptType | None = None,
         max_pixels: int = 37788800,
-        return_numpy=False,
+        return_numpy: bool = False,
         **kwargs: Any,
     ) -> Array:
         # Resolve task parameters
-        base_task, _, task_type = self._resolve_task_parameters(
-            task_metadata, prompt_type
-        )
-
-        if task_type and task_type.startswith("DocumentUnderstanding"):
-            self.vector_type = "multi_vector"
-        else:
-            self.vector_type = "single_vector"
+        base_task, _, _ = self._resolve_task_parameters(task_metadata, prompt_type)
 
         all_images = [text for batch in inputs for text in batch["image"]]
 
@@ -578,21 +616,15 @@ class JinaV4Wrapper(AbsEncoder):
             return_numpy=return_numpy,
         )
 
-    def get_fused_embeddings(
-        self,
-        *args,
-        **kwargs,
-    ):
-        raise NotImplementedError(
-            "Fused embeddings are not supported yet. Please use get_text_embeddings or get_image_embeddings."
-        )
-
+    # Passthrough: ndarray/list are converted, anything else is returned unchanged.
     @staticmethod
-    def _convert_to_torch_if_needed(embeddings):
+    def _convert_to_torch_if_needed(
+        embeddings: Any,  # noqa: ANN401
+    ) -> torch.Tensor | list[Any] | Any:  # noqa: ANN401
         """Convert numpy arrays to torch tensors if needed."""
         if isinstance(embeddings, np.ndarray):
             return torch.from_numpy(embeddings)
-        elif isinstance(embeddings, list):
+        if isinstance(embeddings, list):
             # Handle list of numpy arrays or tensors
             converted = []
             for emb in embeddings:
@@ -603,7 +635,7 @@ class JinaV4Wrapper(AbsEncoder):
             return converted
         return embeddings
 
-    def similarity(self, a, b):
+    def similarity(self, a: Array, b: Array) -> Array:
         """Compute similarity between embeddings.
 
         Args:
@@ -615,20 +647,19 @@ class JinaV4Wrapper(AbsEncoder):
 
         if self.vector_type == "single_vector":
             return self.score_single_vector(a_torch, b_torch)
-        elif self.vector_type == "multi_vector":
+        if self.vector_type == "multi_vector":
             return self.score_multi_vector(a_torch, b_torch)
-        else:
-            raise ValueError(
-                "vector_type must be one of the following: [`single_vector`, `multi_vector`]"
-            )
+        raise ValueError(
+            "vector_type must be one of the following: [`single_vector`, `multi_vector`]"
+        )
 
-    @staticmethod
     def score_single_vector(
+        self,
         qs: torch.Tensor | list[torch.Tensor],
         ps: torch.Tensor | list[torch.Tensor],
     ) -> torch.Tensor:
         """Compute the dot product score for the given single-vector query and passage embeddings."""
-        device = "cpu"
+        device = self.model.device
 
         if len(qs) == 0:
             raise ValueError("No queries provided")
@@ -636,29 +667,27 @@ class JinaV4Wrapper(AbsEncoder):
             raise ValueError("No passages provided")
 
         # Normalize inputs to 2D tensors
-        def normalize_input(x):
+        def normalize_input(x: torch.Tensor | list[torch.Tensor]) -> torch.Tensor:
             if isinstance(x, torch.Tensor):
                 return x.unsqueeze(0) if x.ndim == 1 else x
-            else:  # list
-                return torch.stack(x) if len(x) > 1 else x[0].unsqueeze(0)
+            # list
+            return torch.stack(x) if len(x) > 1 else x[0].unsqueeze(0)
 
         qs_stacked = normalize_input(qs).to(device)
         ps_stacked = normalize_input(ps).to(device)
-
-        # Compute scores
-        scores = torch.einsum("bd,cd->bc", qs_stacked, ps_stacked).to(torch.float32)
-
-        # Squeeze if single query
+        scores = (
+            torch.einsum("bd,cd->bc", qs_stacked, ps_stacked).to(torch.float32).cpu()
+        )
         return scores.squeeze(0) if scores.shape[0] == 1 else scores
 
-    @staticmethod
     def score_multi_vector(
+        self,
         qs: list[torch.Tensor],
         ps: list[torch.Tensor],
         batch_size: int = 16,
     ) -> torch.Tensor:
         """Compute the MaxSim score (ColBERT-like) for the given multi-vector query and passage embeddings."""
-        device = "cpu"
+        device = self.model.device
 
         if len(qs) == 0:
             raise ValueError("No queries provided")
@@ -728,7 +757,7 @@ class JinaV5TextWrapper(SentenceTransformerEncoderWrapper):
         revision: str,
         device: str | None = None,
         model_prompts: dict[str, str] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         super().__init__(
             model, revision, device=device, model_prompts=model_prompts, **kwargs
@@ -811,7 +840,9 @@ _OMNI_MODEL_PROMPTS = {
 }
 
 
-def _video_frames_to_channels_last(video: Any) -> Any:
+def _video_frames_to_channels_last(
+    video: Any,  # noqa: ANN401 -- any frame container; only tensors are permuted, others pass through
+) -> Any:  # noqa: ANN401
     """torchcodec frame batches are (T, C, H, W) uint8; the model's remote code
     detects video only for channels-last (T, H, W, 3|4) arrays and would
     otherwise stringify the tensor and embed it as text."""
@@ -1162,10 +1193,48 @@ jina_reranker_v3 = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2509.25085},}
 """,
+    superseded_by="jinaai/jina-reranker-v3.5",
 )
 
 
-jina_embeddings_v4 = ModelMeta(
+jina_reranker_v3_5 = ModelMeta(
+    loader=JinaRerankerV3Wrapper,
+    loader_kwargs=dict(
+        trust_remote_code=True,
+    ),
+    name="jinaai/jina-reranker-v3.5",
+    model_type=["cross-encoder"],
+    languages=multilingual_langs,
+    open_weights=True,
+    revision="cbe7fd34449cc1a036c2959fa3c9b1deca6730ed",
+    release_date="2026-07-20",
+    modalities=["text"],
+    n_parameters=596836352,
+    n_embedding_parameters=155582464,
+    memory_usage_mb=1138,
+    max_tokens=131072,
+    embed_dim=None,
+    license="cc-by-nc-4.0",
+    similarity_fn_name=None,
+    framework=["PyTorch", "Transformers", "safetensors"],
+    use_instructions=None,
+    reference="https://huggingface.co/jinaai/jina-reranker-v3.5",
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+    adapted_from="jinaai/jina-reranker-v3",
+    citation="""@misc{nasika2026jinarerankerv35,
+      title={jina-reranker-v3.5: An Efficient Listwise Reranker with Hybrid Attention and Self-Distillation},
+      author={Christina Nasika and Feng Wang and Antonis Krasakis and Han Xiao},
+      year={2026},
+      eprint={2607.18152},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2607.18152},
+}""",
+)
+
+jina_embeddings_v4 = Jinav4ModelMeta(
     loader=JinaV4Wrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
@@ -1207,9 +1276,8 @@ jina_embeddings_v4 = ModelMeta(
       primaryClass={cs.AI},
       url={https://arxiv.org/abs/2506.18902},
 }""",
-    extra_requirements_groups=["jina-v4", "flash_attention"],
+    extra_requirements_groups=["jina-v4"],
 )
-
 
 jina_embeddings_v3 = ModelMeta(
     loader=JinaWrapper,
@@ -1237,7 +1305,7 @@ jina_embeddings_v3 = ModelMeta(
     n_parameters=572310396,
     n_embedding_parameters=256002048,
     memory_usage_mb=1092,
-    max_tokens=8194,
+    max_tokens=8192,
     embed_dim=1024,
     license="cc-by-nc-4.0",
     similarity_fn_name=ScoringFunction.COSINE,
