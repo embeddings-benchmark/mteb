@@ -45,7 +45,6 @@ class BitextMiningEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> dict[str, list[dict[str, float]]]:
-
         pair_elements = {p for pair in self.pairs for p in pair}
         if isinstance(self.sentences, Dataset):
             subsets = [col for col in self.sentences.features if col in pair_elements]

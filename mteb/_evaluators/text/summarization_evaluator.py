@@ -106,9 +106,9 @@ class SummarizationEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> SummarizationDistances:
-        # Get the human & machine summaries for the text in one go for all
         import torch
 
+        # Get the human & machine summaries for the text in one go for all
         human_lens = [len(human_summaries) for human_summaries in self.human_summaries]
         machine_lens = [
             len(machine_summaries) for machine_summaries in self.machine_summaries

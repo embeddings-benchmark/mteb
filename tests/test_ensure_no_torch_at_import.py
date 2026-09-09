@@ -167,11 +167,11 @@ def test_set_seed_works_without_torch(monkeypatch) -> None:
     assert np_rng is not None
 
 
-def test_importing_evaluators_does_not_import_torch() -> None:
-    """Evaluators need torch to *run*, but constructing task metadata must not load them."""
-    assert _loaded_heavy_deps("mteb._evaluators", ("mteb",)) == [], (
-        "importing mteb._evaluators pulled in a heavy dependency; move the import into the "
-        "method that uses it (see mteb/_evaluators/retrieval_evaluator.py for the pattern)"
+def test_importing_create_dataloaders_does_not_import_torch() -> None:
+    """Dataloaders are only built when a task actually runs, so importing must not need torch."""
+    assert _loaded_heavy_deps("mteb._create_dataloaders", ("mteb",)) == [], (
+        "importing mteb._create_dataloaders pulled in a heavy dependency; move the import "
+        "into the function that uses it"
     )
 
 
