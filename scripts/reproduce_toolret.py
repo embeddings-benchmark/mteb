@@ -23,20 +23,24 @@ reference passes an empty string rather than None when instructions are off, so
 its "no instruction" setting still prepends a bare "Instruct:" / "Query:"
 prefix; that quirk is preserved here because it is what produced Table 4.
 
-Reproduction is confirmed on trends and close on absolutes. Over 9 models:
+Reproduction is confirmed on trends and close on absolutes. Over 10 baselines:
 
   * instructions help every model, mean gain +11.26 NDCG@10 vs the paper's
     +11.34 (Pearson 0.958 across models) -- the paper's central claim
-  * the model ranking replicates (Pearson 0.988, Spearman 0.967)
+  * the model ranking replicates (Pearson 0.936, Spearman 0.855)
   * subset difficulty orders the same way, web < code < customized
-  * 85% of metrics land within 2.0 NDCG@10; mean |delta| is 1.39
+  * 77% of metrics land within 2.0 NDCG@10; mean |delta| is 1.69
 
-Tool-COLT is the one clear outlier (web -9.41, code +8.48); its public checkpoint
-appears not to be the one evaluated in the paper. Excluding it, 92% of `w/ inst.`
-metrics fall within 2.0. Note also that the reference `print_results()` computes a
-size-weighted (micro) mean while the published tables match an unweighted (macro)
-one, so the numbers in the paper were not produced by the released code -- exact
-per-cell agreement was never available.
+Two known gaps. gtr-t5-large scores below gtr-t5-base here, inverting the paper's
+ordering for that pair, and is unexplained; excluding it the figures are Spearman
+0.967, 85% within 2.0 and mean |delta| 1.41. Tool-COLT is the other outlier
+(web -9.41, code +8.48); its public checkpoint appears not to be the one the
+authors evaluated.
+
+Note also that the reference `print_results()` computes a size-weighted (micro)
+mean while the published tables match an unweighted (macro) one, so the numbers
+in the paper were not produced by the released code -- exact per-cell agreement
+was never available.
 
 Usage:
     python scripts/reproduce_toolret.py --model BAAI/bge-base-en-v1.5
@@ -99,6 +103,9 @@ PAPER = {
 _ST_MODELS = ("e5-mistral-7b-instruct", "gtr-t5", "gte-Qwen2-1.5B", "Tool-COLT", "GritLM")
 CATEGORIES = ("web", "code", "customized")
 TOP_K = 100
+# cap on items per forward pass; short texts would otherwise make the
+# token-budget batch enormous and trip a device-side assert
+MAX_BATCH = 256
 
 
 def trunc(sentence: str, n: int = 2048) -> str:
@@ -125,6 +132,10 @@ class ReferenceEncoder:
             from sentence_transformers import SentenceTransformer
 
             model_kwargs = {"torch_dtype": torch.float16} if "instruct" in model_name else None
+            # Always trust_remote_code: for gte-Qwen2 the custom modelling code
+            # makes attention bidirectional, so falling back to the native
+            # (causal) architecture silently evaluates a different model -- it
+            # scores ~19 NDCG@10 below the published value. Fail loudly instead.
             self.st = SentenceTransformer(
                 model_name, trust_remote_code=True, model_kwargs=model_kwargs, device=device
             )
@@ -159,8 +170,11 @@ class ReferenceEncoder:
         ordered = [str(texts[i]) for i in order]
 
         if self.is_st:
+            # size the batch off the sequence length: the ST path forces 2048
+            # tokens, at which a fixed batch of 32 exhausts a 24GB card
+            batch_size = max(1, min(budget // max(self.max_length, 1), MAX_BATCH))
             vectors = self.st.encode(
-                ordered, batch_size=32, show_progress_bar=False,
+                ordered, batch_size=batch_size, show_progress_bar=False,
                 convert_to_numpy=True, normalize_embeddings=False,
             )
             out = torch.tensor(np.asarray(vectors, dtype=np.float32))
@@ -174,7 +188,7 @@ class ReferenceEncoder:
             pad = self.tokenizer.pad_token_id or 0
             chunks, start = [], 0
             while start < len(ids):
-                size = max(1, budget // max(len(ids[start]), 1))
+                size = max(1, min(budget // max(len(ids[start]), 1), MAX_BATCH))
                 batch = pad_sequence(
                     ids[start:start + size], batch_first=True, padding_value=pad
                 ).to(self.device)
