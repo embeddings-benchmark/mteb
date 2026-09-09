@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+from typing import Any
+
+from datasets import Video
+
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -23,7 +27,27 @@ _DESCRIPTION_TAIL = (
 )
 
 
-class YouCook2I2VRetrieval(AbsTaskRetrieval):
+class _YouCook2Retrieval(AbsTaskRetrieval):
+    """Decode the video's bytes supplied by the published dataset.
+
+    The dataset stores video columns with ``decode=False`` to avoid decoding
+    media while it is being built. MTEB video encoders, however, receive a
+    ``torchcodec.VideoDecoder`` from the dataset row, so restore decoding after
+    the retrieval split has loaded.
+    """
+
+    def dataset_transform(
+        self, num_proc: int | None = None, **kwargs: Any
+    ) -> None:
+        for split in self.eval_splits:
+            split_data = self.dataset["default"][split]
+            for dataset_name in ("queries", "corpus"):
+                dataset = split_data[dataset_name]
+                if "video" in dataset.column_names:
+                    split_data[dataset_name] = dataset.cast_column("video", Video())
+
+
+class YouCook2I2VRetrieval(_YouCook2Retrieval):
     metadata = TaskMetadata(
         name="YouCook2I2VRetrieval",
         description=(
@@ -61,7 +85,7 @@ class YouCook2I2VRetrieval(AbsTaskRetrieval):
     )
 
 
-class YouCook2V2IRetrieval(AbsTaskRetrieval):
+class YouCook2V2IRetrieval(_YouCook2Retrieval):
     metadata = TaskMetadata(
         name="YouCook2V2IRetrieval",
         description=(

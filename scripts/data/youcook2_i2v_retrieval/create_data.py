@@ -236,11 +236,11 @@ def build_youcook2_datasets(
 
         q_ds = Dataset.from_list(
             [{k: r[k] for k in ("id", q_mod)} for r in query_rows]
-        ).cast_column(q_mod, Video(decode=False) if q_mod == "video" else Image())
+        ).cast_column(q_mod, Video() if q_mod == "video" else Image())
 
         c_ds = Dataset.from_list(
             [{k: r[k] for k in ("id", c_mod)} for r in corpus_rows]
-        ).cast_column(c_mod, Video(decode=False) if c_mod == "video" else Image())
+        ).cast_column(c_mod, Video() if c_mod == "video" else Image())
 
         qrels_features = Features({
             "query-id": Value("string"),
