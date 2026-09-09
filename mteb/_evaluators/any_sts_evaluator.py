@@ -76,7 +76,6 @@ class AnySTSEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> STSEvaluatorScores:
-
         if (
             isinstance(self.input_columns[0], str)
             and len(self.task_metadata.modalities) == 1

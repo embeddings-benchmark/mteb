@@ -3,7 +3,10 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-from mteb._create_dataloaders import _create_dataloader_from_texts, create_dataloader
+from mteb._create_dataloaders import (
+    _create_dataloader_from_texts,
+    create_dataloader,
+)
 from mteb.similarity_functions import similarity
 
 from .evaluator import Evaluator
@@ -51,7 +54,6 @@ class ZeroShotClassificationEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> Array:
-
         with self.timer(
             "Encoding labels",
             split=self.hf_split,

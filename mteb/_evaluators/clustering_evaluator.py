@@ -53,7 +53,6 @@ class ClusteringEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> list[int]:
-
         data_loader = create_dataloader(
             self.dataset,
             task_metadata=self.task_metadata,

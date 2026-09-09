@@ -94,7 +94,6 @@ class PairClassificationEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> PairClassificationDistances:
-
         if isinstance(self.input1_column_name, str):
             cols1: str | list[str] = self.input1_column_name
             ds1_col_names: Mapping[str, str] = {
@@ -203,7 +202,6 @@ class PairClassificationEvaluator(Evaluator):
         hf_subset: str,
         **encode_kwargs: Any,
     ) -> NDArray[np.floating]:
-
         index_map = {}
         all_unique_texts: list[str] = []
         all_texts_indexes = []
