@@ -1,4 +1,8 @@
-**Real OpenAI provider verification with the public frozen NGNN compressor.**
+**Native MTEB integration with the installed ngnn-encoder 0.1.0 wheel and actual anonymous Hugging Face downloads. Provider embeddings are synthetic; no new paid OpenAI calls or model-quality claim.**
+
+HF artifact commit: `bab7d30011438e52f22be540067c73ca37f462eb`. Canonical MTEB revision remains `d6969c26400944d4f5200ebddfdc04a083fd7b75`.
+
+The previous [real-provider verification](https://github.com/steffen181/frozen-ngnn-api-modesl/blob/738ce65556d355b130f79e501bdc80af6bfd9f9c/verification/live_mock_run.md) covers the unchanged inference core and remains available separately.
 
 # MTEB Mock-Run Results for `steffen-negabo/ngnn-general-encoder-v1`
 
@@ -41,9 +45,3 @@
 | skipped   | image    |  |
 | skipped   | audio    |  |
 | skipped   | video    |  |
-
-Submission revision: `d6969c26400944d4f5200ebddfdc04a083fd7b75`.
-The live run used local evaluation label `ngnn_general_encoder_singleton_e55ba679_20260906`.
-Only the registration identifier was renamed to the immutable public source
-commit for the results repository revision format. Inference and weights
-are unchanged; see [revision mapping and hashes](https://github.com/steffen181/frozen-ngnn-api-modesl/blob/main/verification/revision_alias.json).
