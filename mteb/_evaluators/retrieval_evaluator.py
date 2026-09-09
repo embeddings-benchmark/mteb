@@ -4,6 +4,11 @@ import logging
 import time
 from typing import TYPE_CHECKING, Any
 
+from mteb.models.search_wrappers import (
+    SearchCrossEncoderWrapper,
+    SearchEncoderWrapper,
+)
+
 from .evaluator import Evaluator
 from .retrieval_metrics import (
     calculate_retrieval_scores,
@@ -62,10 +67,6 @@ class RetrievalEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> RetrievalOutputType:
-        from mteb.models.search_wrappers import (
-            SearchCrossEncoderWrapper,
-            SearchEncoderWrapper,
-        )
 
         logger.info("Running retrieval task - Indexing corpus...")
         start_time = time.monotonic()

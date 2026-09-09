@@ -3,6 +3,10 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
+from mteb._create_dataloaders import (
+    _create_dataloader_from_texts,
+    _transform_image_to_rgb,
+)
 from mteb._evaluators.evaluator import Evaluator
 
 if TYPE_CHECKING:
@@ -105,11 +109,6 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         import torch
         import torch.nn.functional as F
         from torch.utils.data import DataLoader
-
-        from mteb._create_dataloaders import (
-            _create_dataloader_from_texts,
-            _transform_image_to_rgb,
-        )
 
         images = []
         if isinstance(self.images_column_names, str):

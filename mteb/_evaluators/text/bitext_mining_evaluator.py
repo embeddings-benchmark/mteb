@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, Any
 from datasets import Dataset
 from tqdm.auto import tqdm
 
+from mteb._create_dataloaders import _create_dataloader_from_texts
 from mteb._evaluators.evaluator import Evaluator
 
 if TYPE_CHECKING:
@@ -44,7 +45,6 @@ class BitextMiningEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> dict[str, list[dict[str, float]]]:
-        from mteb._create_dataloaders import _create_dataloader_from_texts
 
         pair_elements = {p for pair in self.pairs for p in pair}
         if isinstance(self.sentences, Dataset):

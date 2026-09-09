@@ -2,16 +2,18 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import torch
-
 from mteb.models.model_meta import ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
+
     from mteb.models import EncoderProtocol
     from mteb.types import Array
 
 
 def _use_torch_compile() -> bool:
+    import torch
+
     gpu_ok = False
     if torch.cuda.is_available():
         device_cap = torch.cuda.get_device_capability()
@@ -21,7 +23,11 @@ def _use_torch_compile() -> bool:
     return gpu_ok
 
 
-def _convert_to_tensor(a: Array, dtype: torch.dtype = torch.float32) -> torch.Tensor:
+def _convert_to_tensor(a: Array, dtype: torch.dtype | None = None) -> torch.Tensor:
+    import torch
+
+    dtype = torch.float32 if dtype is None else dtype
+
     if not isinstance(a, torch.Tensor):
         a = torch.tensor(a, dtype=dtype)
     elif torch.is_floating_point(a) and torch.finfo(a.dtype).bits < 32:
@@ -106,6 +112,8 @@ def _normalize_embeddings(embeddings: Array) -> torch.Tensor:
     Returns:
         Tensor: The normalized embeddings matrix.
     """
+    import torch
+
     embeddings = _convert_to_tensor(embeddings)
     return torch.nn.functional.normalize(embeddings, p=2, dim=1)
 
@@ -124,6 +132,8 @@ def cos_sim(a: Array, b: Array) -> torch.Tensor:
     """
     # Move tensor conversion outside the compiled function
     # since compile works better with pure tensor operations
+    import torch
+
     a = _convert_to_tensor(a)
     b = _convert_to_tensor(b)
 
@@ -187,6 +197,8 @@ def max_sim(a: Array, b: Array, batch_size: int = 128) -> torch.Tensor:
     Returns:
         A tensor containing the maximum similarity values for each batch.
     """
+    import torch
+
     a = _convert_to_tensor(a)
     b = _convert_to_tensor(b)
 
@@ -223,6 +235,8 @@ def pairwise_max_sim(
     Returns:
         Tensor: Vector with res[i] = max_sim(queries_embeddings[i], documents_embeddings[i])
     """
+    import torch
+
     scores = []
 
     for query_embedding, document_embedding in zip(
@@ -255,6 +269,8 @@ def dot_score(a: Array, b: Array) -> torch.Tensor:
         Matrix with res[i][j]  = dot_prod(a[i], b[j])
     """
     # Move tensor conversion outside the compiled function
+    import torch
+
     a = _convert_to_tensor(a)
     b = _convert_to_tensor(b)
 
@@ -304,6 +320,8 @@ def euclidean_sim(a: Array, b: Array) -> Array:
     Returns:
         Tensor: Matrix with res[i][j] = -euclidean_distance(a[i], b[j])
     """
+    import torch
+
     a = _convert_to_tensor(a)
     b = _convert_to_tensor(b)
 
@@ -320,6 +338,8 @@ def pairwise_euclidean_sim(a: Array, b: Array) -> Array:
     Returns:
         Vector with res[i] = -euclidean_distance(a[i], b[i])
     """
+    import torch
+
     a = _convert_to_tensor(a)
     b = _convert_to_tensor(b)
 
@@ -336,6 +356,8 @@ def similarity(text_embeddings: Array, input_embeddings: Array) -> Array:
     Returns:
         Matrix with similarities
     """
+    import torch
+
     text_embeddings_tensor = _convert_to_tensor(text_embeddings)
     input_embeddings_tensor = _convert_to_tensor(input_embeddings)
 

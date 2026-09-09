@@ -10,7 +10,9 @@ from sklearn.metrics.pairwise import (
     paired_manhattan_distances,
 )
 
+from mteb._create_dataloaders import _create_dataloader_from_texts, create_dataloader
 from mteb._evaluators.evaluator import Evaluator
+from mteb.similarity_functions import compute_pairwise_similarity
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -92,8 +94,6 @@ class PairClassificationEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> PairClassificationDistances:
-        from mteb._create_dataloaders import create_dataloader
-        from mteb.similarity_functions import compute_pairwise_similarity
 
         if isinstance(self.input1_column_name, str):
             cols1: str | list[str] = self.input1_column_name
@@ -203,7 +203,6 @@ class PairClassificationEvaluator(Evaluator):
         hf_subset: str,
         **encode_kwargs: Any,
     ) -> NDArray[np.floating]:
-        from mteb._create_dataloaders import _create_dataloader_from_texts
 
         index_map = {}
         all_unique_texts: list[str] = []

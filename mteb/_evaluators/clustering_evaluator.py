@@ -5,6 +5,8 @@ from typing import TYPE_CHECKING, Any, cast
 
 from sklearn import cluster
 
+from mteb._create_dataloaders import create_dataloader
+
 from .evaluator import Evaluator
 
 if TYPE_CHECKING:
@@ -51,7 +53,6 @@ class ClusteringEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> list[int]:
-        from mteb._create_dataloaders import create_dataloader
 
         data_loader = create_dataloader(
             self.dataset,
