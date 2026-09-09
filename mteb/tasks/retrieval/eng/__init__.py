@@ -255,6 +255,10 @@ from .obliq_bench_retrieval import (
 )
 from .okvqa_it2t_retrieval import OKVQAIT2TRetrieval
 from .omni_cvr import OmniCVRVT2VRetrieval
+from .omni_cvr_mini import (
+    OmniCVRMiniVT2VRetrieval,
+    OmniCVRMiniVT2VRetrievalHardNegatives,
+)
 from .oven_it2it_retrieval import OVENIT2ITRetrieval
 from .oven_it2t_retrieval import OVENIT2TRetrieval
 from .panda70m_retrieval import (
@@ -655,6 +659,8 @@ __all__ = [
     "OKVQAIT2TRetrieval",
     "OVENIT2ITRetrieval",
     "OVENIT2TRetrieval",
+    "OmniCVRMiniVT2VRetrieval",
+    "OmniCVRMiniVT2VRetrievalHardNegatives",
     "OmniCVRVT2VRetrieval",
     "Panda70MT2VARetrieval",
     "Panda70MT2VRetrieval",
