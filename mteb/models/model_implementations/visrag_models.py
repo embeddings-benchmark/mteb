@@ -20,6 +20,7 @@ from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -56,9 +57,12 @@ class VisRAGRetWrapper(AbsEncoder):
         model_name: str = "openbmb/VisRAG-Ret",
         revision: str | None = None,
         device: str | None = None,
-        torch_dtype: torch.dtype = torch.bfloat16,
+        torch_dtype: OutputDType | torch.dtype = OutputDType.BF16,
         **kwargs: Any,
     ) -> None:
+        if isinstance(torch_dtype, OutputDType):
+            torch_dtype = torch_dtype.get_dtype()
+
         from transformers import AutoConfig, AutoModel, AutoTokenizer
 
         self.model_name = model_name
@@ -173,7 +177,7 @@ VISRAG_RET_TRAINING_DATASETS = {
 
 visrag_ret = ModelMeta(
     loader=VisRAGRetWrapper,
-    loader_kwargs=dict(torch_dtype=torch.bfloat16),
+    loader_kwargs=dict(torch_dtype=OutputDType.BF16),
     name="openbmb/VisRAG-Ret",
     revision="95ef596df871b606167cb7e4b7215caf1bfdf761",
     release_date="2024-10-14",

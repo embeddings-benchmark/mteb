@@ -8,6 +8,7 @@ import torch
 from mteb._requires_package import suggest_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -136,7 +137,7 @@ llm2vec_llama3_8b_supervised = ModelMeta(
         base_model_name_or_path="McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp",
         peft_model_name_or_path="McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp-supervised",
         device_map="auto",
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
     ),
     name="McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp-supervised",
     model_type=["dense"],
@@ -168,7 +169,7 @@ llm2vec_llama3_8b_unsupervised = ModelMeta(
         base_model_name_or_path="McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp",
         peft_model_name_or_path="McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp-unsup-simcse",
         device_map="auto",
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
     ),
     name="McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp-unsup-simcse",
     model_type=["dense"],
@@ -199,7 +200,7 @@ llm2vec_mistral7b_supervised = ModelMeta(
         base_model_name_or_path="McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp",
         peft_model_name_or_path="McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp-supervised",
         device_map="auto",
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
     ),
     name="McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp-supervised",
     model_type=["dense"],
@@ -230,7 +231,7 @@ llm2vec_mistral7b_unsupervised = ModelMeta(
         base_model_name_or_path="McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp",
         peft_model_name_or_path="McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp-unsup-simcse",
         device_map="auto",
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
     ),
     name="McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp-unsup-simcse",
     model_type=["dense"],
@@ -261,7 +262,7 @@ llm2vec_llama2_7b_supervised = ModelMeta(
         base_model_name_or_path="McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp",
         peft_model_name_or_path="McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp-supervised",
         device_map="auto",
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
     ),
     name="McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp-supervised",
     model_type=["dense"],
@@ -292,7 +293,7 @@ llm2vec_llama2_7b_unsupervised = ModelMeta(
         base_model_name_or_path="McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp",
         peft_model_name_or_path="McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp-unsup-simcse",
         device_map="auto",
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
     ),
     name="McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp-unsup-simcse",
     model_type=["dense"],
@@ -323,7 +324,7 @@ llm2vec_sheared_llama_supervised = ModelMeta(
         base_model_name_or_path="McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp",
         peft_model_name_or_path="McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp-supervised",
         device_map="auto",
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
     ),
     name="McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp-supervised",
     model_type=["dense"],
@@ -354,7 +355,7 @@ llm2vec_sheared_llama_unsupervised = ModelMeta(
         base_model_name_or_path="McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp",
         peft_model_name_or_path="McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp-unsup-simcse",
         device_map="auto",
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
     ),
     name="McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp-unsup-simcse",
     model_type=["dense"],

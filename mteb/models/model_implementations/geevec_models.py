@@ -11,7 +11,7 @@ import torch
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     import requests
@@ -675,7 +675,7 @@ geevec_embeddings_1_0_lite = ModelMeta(
         apply_instruction_to_passages=False,
         max_seq_length=GEEVEC_MAX_SEQ_LENGTH,
         prompts_dict=PROMPTS_DICT,
-        model_kwargs={"dtype": torch.bfloat16},
+        model_kwargs={"dtype": OutputDType.BF16},
         trust_remote_code=True,
     ),
     name="geevec-ai/geevec-embeddings-1.0-lite",

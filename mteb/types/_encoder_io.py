@@ -159,12 +159,14 @@ class MultimodalInput(  # type: ignore[misc]
 
 
 class OutputDType(HelpfulStrEnum):
-    """Enum for valid compression levels.
+    """Enum for torch dtypes, referred to by name rather than by `torch.dtype` object.
 
     Used by the CompressionWrapper class and specified by models to indicate the dtypes of output embeddings they
-    support internally.
+    support internally, and by `ModelMeta` entries to declare the dtype a model should be loaded in -- naming the
+    dtype keeps model metadata importable without torch. Call `get_dtype()` to resolve one to a real `torch.dtype`.
     """
 
+    FLOAT32 = "float32"
     FLOAT16 = "float16"
     BF16 = "bfloat16"
     INT8 = "int8"

@@ -8,6 +8,7 @@ from transformers import AutoModel, AutoProcessor
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -244,7 +245,7 @@ OPS_COLQWEN3_CITATION = """
 ops_colqwen3_4b = ModelMeta(
     loader=OpsColQwen3Wrapper,
     name="OpenSearch-AI/Ops-Colqwen3-4B",
-    loader_kwargs=dict(dtype=torch.float16, trust_remote_code=True),
+    loader_kwargs=dict(dtype=OutputDType.FLOAT16, trust_remote_code=True),
     languages=multilingual_langs,
     revision="4894b7d451ff33981650acc693bb482dbef302d3",
     release_date="2026-01-24",

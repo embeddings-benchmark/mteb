@@ -31,9 +31,12 @@ class ColVec1Wrapper(AbsEncoder):
         revision: str | None = None,
         device: str | None = None,
         trust_remote_code: bool = True,
-        torch_dtype: torch.dtype | None = torch.bfloat16,
+        torch_dtype: OutputDType | torch.dtype | None = OutputDType.BF16,
         **kwargs: Any,
     ):
+        if isinstance(torch_dtype, OutputDType):
+            torch_dtype = torch_dtype.get_dtype()
+
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
 
         self.model = AutoModel.from_pretrained(
@@ -159,10 +162,13 @@ class ColVec11Wrapper(ColVec1Wrapper):
         revision: str | None = None,
         device: str | None = None,
         trust_remote_code: bool = True,
-        torch_dtype: torch.dtype | None = torch.bfloat16,
+        torch_dtype: OutputDType | torch.dtype | None = OutputDType.BF16,
         processor_kwargs: dict[str, Any] | None = None,
         **model_kwargs: Any,
     ):
+        if isinstance(torch_dtype, OutputDType):
+            torch_dtype = torch_dtype.get_dtype()
+
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         processor_kwargs = dict(processor_kwargs or {})
 
@@ -295,7 +301,7 @@ COLVEC1_1_CITATION = """
 
 colvec1_4b = ModelMeta(
     loader=ColVec1Wrapper,
-    loader_kwargs=dict(torch_dtype=torch.bfloat16),
+    loader_kwargs=dict(torch_dtype=OutputDType.BF16),
     name="webAI-Official/webAI-ColVec1-4b",
     revision="dce73882e6b89a01e702891a593f775dc5711929",
     release_date="2026-04-05",
@@ -327,7 +333,7 @@ colvec1_4b = ModelMeta(
 
 colvec1_9b = ModelMeta(
     loader=ColVec1Wrapper,
-    loader_kwargs=dict(torch_dtype=torch.bfloat16),
+    loader_kwargs=dict(torch_dtype=OutputDType.BF16),
     name="webAI-Official/webAI-ColVec1-9b",
     revision="3767539920b9132abb24cef2c88d42d81817e50b",
     release_date="2026-04-05",
@@ -360,7 +366,7 @@ colvec1_9b = ModelMeta(
 colvec1_1_4b = ModelMeta(
     loader=ColVec11Wrapper,
     loader_kwargs={
-        "torch_dtype": torch.bfloat16,
+        "torch_dtype": OutputDType.BF16,
         "attn_implementation": "sdpa",
         "processor_kwargs": {
             "max_num_visual_tokens": 1792,
@@ -407,7 +413,7 @@ colvec1_1_4b = ModelMeta(
 colvec1_1_8b = ModelMeta(
     loader=ColVec11Wrapper,
     loader_kwargs={
-        "torch_dtype": torch.bfloat16,
+        "torch_dtype": OutputDType.BF16,
         "attn_implementation": "sdpa",
         "processor_kwargs": {
             "max_num_visual_tokens": 1792,

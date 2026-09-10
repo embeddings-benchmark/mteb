@@ -1,10 +1,9 @@
-import torch
-
 from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
 
 from .bge_models import bge_training_data
 from .e5_models import E5_TRAINING_DATA
@@ -1876,7 +1875,7 @@ openbmb__minicpm_embedding = ModelMeta(
     loader_kwargs=dict(
         model_kwargs={
             # "attn_implementation": "flash_attention_2",
-            "torch_dtype": torch.float16,
+            "torch_dtype": OutputDType.FLOAT16,
         },
         trust_remote_code=True,
         # https://huggingface.co/openbmb/MiniCPM-Embedding/blob/c0cb2de33fb366e17c30f9d53142ff11bc18e049/README.md?code=true#L405

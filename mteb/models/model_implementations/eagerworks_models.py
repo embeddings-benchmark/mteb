@@ -7,7 +7,7 @@ from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -135,7 +135,7 @@ EAGER_EMBED_V1_TRAINING_DATASETS = {"colpali", "bge-ir", "pixmo-docs", "wiki-ss"
 Eager_Embed_V1 = ModelMeta(
     loader=EagerEmbedV1Wrapper,
     loader_kwargs=dict(
-        dtype=torch.float16,
+        dtype=OutputDType.FLOAT16,
         image_size=784,
     ),
     name="eagerworks/eager-embed-v1",

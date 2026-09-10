@@ -211,3 +211,54 @@ def test_importing_benchmarks_does_not_import_torch() -> None:
     assert _loaded_heavy_deps("mteb.benchmarks.benchmark", ("mteb",)) == [], (
         "importing mteb.benchmarks.benchmark pulled in a heavy dependency"
     )
+
+
+def test_model_meta_dtypes_are_named_not_torch_objects() -> None:
+    """`ModelMeta` declares load dtypes by name, so metadata stays importable without torch.
+
+    `OutputDType` is a `str` enum, so it resolves through both `getattr(torch, ...)` (the path
+    transformers takes for a string dtype) and `OutputDType.get_dtype()`.
+    """
+    import torch
+
+    import mteb
+    from mteb.types import OutputDType
+
+    meta = mteb.get_model_meta("vidore/colpali-v1.1")
+    declared = meta.loader_kwargs["torch_dtype"]
+
+    assert isinstance(declared, OutputDType)
+    assert declared.get_dtype() is torch.float16
+    assert getattr(torch, declared) is torch.float16
+
+
+def test_model_implementations_declare_no_import_time_torch_dtypes() -> None:
+    """No model file may evaluate a `torch.<dtype>` at import time; use `OutputDType` instead."""
+    import ast
+
+    dtypes = {"float16", "float32", "bfloat16", "uint8", "int8", "float64"}
+    offenders = []
+    for path in sorted(
+        (_REPO_ROOT / "mteb/models/model_implementations").rglob("*.py")
+    ):
+        tree = ast.parse(path.read_text())
+        for node in ast.walk(tree):
+            # only signature defaults execute at import; bodies are evaluated lazily
+            if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                continue
+            for default in [*node.args.defaults, *node.args.kw_defaults]:
+                if default is None:
+                    continue
+                for sub in ast.walk(default):
+                    if (
+                        isinstance(sub, ast.Attribute)
+                        and isinstance(sub.value, ast.Name)
+                        and sub.value.id == "torch"
+                        and sub.attr in dtypes
+                    ):
+                        offenders.append(f"{path.name}:{sub.lineno} torch.{sub.attr}")
+
+    assert not offenders, (
+        "these default arguments evaluate a torch dtype at import time; use the matching "
+        f"OutputDType member instead: {offenders}"
+    )

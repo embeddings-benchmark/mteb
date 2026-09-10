@@ -764,7 +764,7 @@ nemotron_rerank_1b_v2 = ModelMeta(
         trust_remote_code=True,
         query_prefix="question:",
         passage_prefix=" \n \n passage:",
-        model_kwargs={"torch_dtype": torch.float32},
+        model_kwargs={"torch_dtype": OutputDType.FLOAT32},
     ),
     name="nvidia/llama-nemotron-rerank-1b-v2",
     extra_requirements_groups=["nemotron-rerank"],
