@@ -1,10 +1,21 @@
 """BasinRAG model definition for MTEB."""
+
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.models_protocols import SearchProtocol
+
+if TYPE_CHECKING:
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.models_protocols import SearchProtocol
+    from mteb.types import (
+        CorpusDatasetType,
+        EncodeKwargs,
+        QueryDatasetType,
+        RetrievalOutputType,
+        TopRankedDocumentsType,
+    )
 
 BASINRAG_CITATION = """@software{martins2026basinrag,
   author = {Alex Martins},
@@ -48,12 +59,12 @@ def basinrag_loader(
 
         def index(
             self,
-            corpus: Any,
+            corpus: CorpusDatasetType,
             *,
-            task_metadata: Any = None,
-            hf_split: str = "test",
-            hf_subset: str = "default",
-            encode_kwargs: Any = None,
+            task_metadata: TaskMetadata,
+            hf_split: str,
+            hf_subset: str,
+            encode_kwargs: EncodeKwargs,
             num_proc: int | None = None,
             **index_kwargs: Any,
         ) -> None:
@@ -79,7 +90,9 @@ def basinrag_loader(
                     if "text" in corpus.column_names
                     else [""] * len(doc_ids)
                 )
-                doc_texts = [f"{t} {x}".strip() for t, x in zip(titles, texts)]
+                doc_texts = [
+                    f"{t} {x}".strip() for t, x in zip(titles, texts, strict=True)
+                ]
 
             batch_size = 64
             all_embeddings = self.rag.ingestor.encoder.encode(
@@ -90,18 +103,22 @@ def basinrag_loader(
             )
 
             nodes = []
-            for doc_id, text, emb in zip(doc_ids, doc_texts, all_embeddings):
+            for doc_id, text, emb in zip(
+                doc_ids, doc_texts, all_embeddings, strict=True
+            ):
                 layers = node_layers(text)
-                nodes.append({
-                    "id": str(doc_id),
-                    "text": text,
-                    "embedding": emb,
-                    "source": str(doc_id),
-                    "chunk_index": 0,
-                    "l1": layers["l1"],
-                    "l2": layers["l2"],
-                    "metadata": {"doc_id": str(doc_id), "id": str(doc_id)},
-                })
+                nodes.append(
+                    {
+                        "id": str(doc_id),
+                        "text": text,
+                        "embedding": emb,
+                        "source": str(doc_id),
+                        "chunk_index": 0,
+                        "l1": layers["l1"],
+                        "l2": layers["l2"],
+                        "metadata": {"doc_id": str(doc_id), "id": str(doc_id)},
+                    }
+                )
 
             self.rag.engine.encoder_model = self.rag.config.encoder_model
             self.rag.engine.build_graph(nodes)
@@ -112,17 +129,17 @@ def basinrag_loader(
 
         def search(
             self,
-            queries: Any,
+            queries: QueryDatasetType,
             *,
-            task_metadata: Any = None,
-            hf_split: str = "test",
-            hf_subset: str = "default",
-            top_k: int = 10,
-            encode_kwargs: Any = None,
-            top_ranked: Any = None,
+            task_metadata: TaskMetadata,
+            hf_split: str,
+            hf_subset: str,
+            top_k: int,
+            encode_kwargs: EncodeKwargs,
+            top_ranked: TopRankedDocumentsType | None = None,
             num_proc: int | None = None,
             **search_kwargs: Any,
-        ) -> dict[str, dict[str, float]]:
+        ) -> RetrievalOutputType:
             if isinstance(queries, dict):
                 query_dict = queries
             else:
@@ -130,14 +147,19 @@ def basinrag_loader(
                     queries["id"] if "id" in queries.column_names else queries["_id"]
                 )
                 q_texts = list(queries["text"])
-                query_dict = {str(qid): text for qid, text in zip(q_ids, q_texts)}
+                query_dict = {
+                    str(qid): text for qid, text in zip(q_ids, q_texts, strict=True)
+                }
 
             results: dict[str, dict[str, float]] = {}
-            for qid, qtext in query_dict.items():
-                if isinstance(qtext, list):
-                    qtext = " ".join(str(m) for m in qtext)
+            for qid, raw_qtext in query_dict.items():
+                qtext = (
+                    " ".join(str(m) for m in raw_qtext)
+                    if isinstance(raw_qtext, list)
+                    else str(raw_qtext)
+                )
                 docs = self.rag.query(
-                    str(qtext), search_type=self.search_type, top_k=max(20, top_k * 2)
+                    qtext, search_type=self.search_type, top_k=max(20, top_k * 2)
                 )
                 doc_scores: dict[str, float] = {}
                 for rank, d in enumerate(docs):
@@ -185,4 +207,3 @@ basinrag = ModelMeta(
     adapted_from="sentence-transformers/all-MiniLM-L6-v2",
     citation=BASINRAG_CITATION,
 )
-
