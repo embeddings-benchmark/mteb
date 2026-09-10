@@ -71,18 +71,18 @@ class ColDeRReranking(AbsTaskRetrieval):
         sample_creation="created",
         bibtex_citation=r"""
 @inproceedings{fayyaz-etal-2025-collapse,
-    title = "Collapse of Dense Retrievers: Short, Early, and Literal Biases Outranking Factual Evidence",
-    author = "Fayyaz, Mohsen  and
-      Modarressi, Ali  and
-      Schuetze, Hinrich  and
-      Peng, Nanyun",
-    booktitle = "Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
-    month = jul,
-    year = "2025",
-    address = "Vienna, Austria",
-    publisher = "Association for Computational Linguistics",
-    url = "https://aclanthology.org/2025.acl-long.447/",
-    pages = "9136--9152",
+  address = {Vienna, Austria},
+  author = {Fayyaz, Mohsen  and
+Modarressi, Ali  and
+Schuetze, Hinrich  and
+Peng, Nanyun},
+  booktitle = {Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  month = jul,
+  pages = {9136--9152},
+  publisher = {Association for Computational Linguistics},
+  title = {Collapse of Dense Retrievers: Short, Early, and Literal Biases Outranking Factual Evidence},
+  url = {https://aclanthology.org/2025.acl-long.447/},
+  year = {2025},
 }
 """,
         prompt={
