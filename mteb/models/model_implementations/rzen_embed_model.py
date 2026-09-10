@@ -306,7 +306,9 @@ class RzenEmbedWrapper(AbsEncoder):
                 )
 
                 if not isinstance(image_embeds, torch.Tensor):
-                    image_embeds = getattr(image_embeds, "last_hidden_state", image_embeds[0])
+                    image_embeds = getattr(
+                        image_embeds, "last_hidden_state", image_embeds[0]
+                    )
 
                 # Run the patch merger if the features are pre-merger/pre-projected (e.g. 1280 vs 3584)
                 if image_embeds.shape[-1] != self.model.config.hidden_size:
@@ -343,6 +345,36 @@ class RzenEmbedWrapper(AbsEncoder):
         return np.concatenate([emb.numpy() for emb in all_embeddings], axis=0)
 
 
+RZEN_TRAINING_DATA = {
+    # Stage 1: Multimodal Continual Pre-training (Text retrieval)
+    "MSMARCO",
+    "NQ",
+    "HotpotQA",
+    "FEVER",
+    # Not in MTEB: TriviaQA, SQuAD, AllNLI, LAION-2B, ShareGPT4V, MegaPairs
+    # Stage 2: Fine-Tuning (MMEB-v2 train & classification datasets)
+    "HatefulMemesI2TRetrieval",
+    "HatefulMemesT2IRetrieval",
+    "VOC2007",
+    # MMEB-train overlaps:
+    "CIRRIT2IRetrieval",
+    "FashionIQIT2IRetrieval",
+    "MSCOCOI2TRetrieval",
+    "MSCOCOT2IRetrieval",
+    "NIGHTSI2IRetrieval",
+    "OKVQAIT2TRetrieval",
+    "OVENIT2ITRetrieval",
+    "OVENIT2TRetrieval",
+    "SUN397",
+    "SUN397ZeroShot",
+    "VisualNewsI2TRetrieval",
+    "VisualNewsT2IRetrieval",
+    "WebQAT2ITRetrieval",
+    "WebQAT2TRetrieval",
+    # Not in MTEB: N24News, mmE5-synthetic, VideoChat-Flash
+}
+
+
 rzen_embed = ModelMeta(
     loader=RzenEmbedWrapper,
     name="qihoo360/RzenEmbed",
@@ -352,6 +384,7 @@ rzen_embed = ModelMeta(
     release_date="2025-11-06",
     modalities=["image", "video", "text"],
     n_parameters=8_291_375_616,
+    n_embedding_parameters=544_997_376,
     memory_usage_mb=16584,
     embed_dim=3584,
     license="mit",
@@ -362,7 +395,8 @@ rzen_embed = ModelMeta(
     framework=["PyTorch", "Transformers"],
     use_instructions=True,
     public_training_code=None,
-    public_training_data=None,
-    training_datasets=None,
+    public_training_data="https://huggingface.co/datasets/TIGER-Lab/MMEB-train, https://huggingface.co/datasets/intfloat/mmE5-synthetic",
+    training_datasets=RZEN_TRAINING_DATA,
     citation=CITATION,
+    extra_requirements_groups=["qwen-vl"],
 )
