@@ -112,49 +112,38 @@ DECODE_WORKERS = 8
 
 
 def load_query_categories(max_retries: int = 5) -> dict[str, str]:
-    """id -> category for all 5,000 queries in the full OmniCVR dataset.
+    """id -> category for every query in the full OmniCVR `queries` config.
 
-    Uses the lightweight datasets-server /rows API (paginated, metadata +
-    signed asset URLs only -- never video/audio bytes) instead of
-    load_dataset() on the full queries config, which would otherwise
-    download/decode ~11.5GB of video+audio just to read two scalar
-    columns. Retries transient 5xx/timeout errors per page with bounded
-    attempts; raises if a page never succeeds (deterministic failure, no
-    silent partial result). No scratchpad/instance-specific paths.
+    Uses the standard `datasets.load_dataset(..., streaming=True)` API with
+    `.select_columns(["id", "category"])`, so only these two scalar columns
+    are decoded per row -- never the embedded video/audio bytes that make up
+    the bulk of the `queries` config. The full query population is derived
+    by iterating the streaming dataset to exhaustion; nothing is hardcoded.
+    Retries the whole streaming pass on transient network errors (bounded
+    attempts); raises if it never completes cleanly (deterministic failure,
+    no silent partial result).
     """
-    import urllib.request
+    from datasets import load_dataset
 
-    total_rows = 5000
-    base = "https://datasets-server.huggingface.co/rows"
-    tmpl = (
-        "dataset=mteb%2FOmniCVR&config=queries&split=queries&offset={offset}&length=100"
-    )
-    id_to_category: dict[str, str] = {}
-    for offset in range(0, total_rows, 100):
-        url = f"{base}?{tmpl.format(offset=offset)}"
-        for attempt in range(max_retries):
-            try:
-                with urllib.request.urlopen(url, timeout=20) as resp:
-                    data = json.load(resp)
-                break
-            except Exception as e:  # noqa: BLE001
-                _log(
-                    f"  query-category fetch retry offset={offset} attempt={attempt}: {e}"
-                )
-                time.sleep(1)
-        else:
-            raise RuntimeError(
-                f"failed to fetch query categories at offset {offset} "
-                f"after {max_retries} attempts"
-            )
-        for r in data["rows"]:
-            row = r["row"]
-            id_to_category[row["id"]] = row["category"]
-
-    if len(id_to_category) != total_rows:
+    for attempt in range(max_retries):
+        try:
+            ds = load_dataset(
+                SOURCE_REPO,
+                "queries",
+                split="queries",
+                revision=SOURCE_REVISION,
+                streaming=True,
+            ).select_columns(["id", "category"])
+            id_to_category = {row["id"]: row["category"] for row in ds}
+            break
+        except Exception as e:  # noqa: BLE001
+            _log(f"  query-category streaming pass retry attempt={attempt}: {e}")
+            time.sleep(2)
+    else:
         raise RuntimeError(
-            f"expected {total_rows} query categories, got {len(id_to_category)}"
+            f"failed to stream query categories after {max_retries} attempts"
         )
+
     return id_to_category
 
 
@@ -294,7 +283,8 @@ def _fetch_video_urls(corpus_ids: set[str] | None = None) -> dict[str, str]:
     )
     urls: dict[str, str] = {}
     remaining = set(corpus_ids) if corpus_ids is not None else None
-    for offset in range(0, 16316, 100):
+    offset = 0
+    while True:
         url = f"{base}?{tmpl.format(offset=offset)}"
         for attempt in range(5):
             try:
@@ -306,13 +296,17 @@ def _fetch_video_urls(corpus_ids: set[str] | None = None) -> dict[str, str]:
                 time.sleep(1)
         else:
             _log(f"  url fetch GIVING UP on offset {offset}")
+            offset += 100
             continue
+        if not data["rows"]:
+            break  # reached the end of the corpus
         for r in data["rows"]:
             row = r["row"]
             if remaining is None or row["id"] in remaining:
                 urls[row["id"]] = row["video"]["src"]
         if remaining is not None and remaining <= urls.keys():
             break
+        offset += 100
     return urls
 
 
@@ -553,12 +547,14 @@ ASSET_MAX_RETRY_ROUNDS = 3
 
 
 def _fetch_rows_for_ids(
-    config: str, split: str, total_rows: int, wanted_ids: set[str]
+    config: str, split: str, wanted_ids: set[str]
 ) -> dict[str, dict]:
     """Fetch full row dicts (all scalar fields + signed asset URLs) for
     `wanted_ids` from a config, via the lightweight datasets-server /rows
     API. Metadata-only cost regardless of video size -- video/audio come
-    back as signed URLs, not bytes."""
+    back as signed URLs, not bytes. Paginates until a page comes back empty
+    (end of the config) or every wanted id has been found -- no hardcoded
+    row-count bound."""
     import urllib.request
 
     base = "https://datasets-server.huggingface.co/rows"
@@ -568,9 +564,8 @@ def _fetch_rows_for_ids(
     )
     found: dict[str, dict] = {}
     remaining = set(wanted_ids)
-    for offset in range(0, total_rows, 100):
-        if not remaining:
-            break
+    offset = 0
+    while remaining:
         url = f"{base}?{tmpl.format(offset=offset)}"
         for attempt in range(5):
             try:
@@ -582,23 +577,27 @@ def _fetch_rows_for_ids(
                 time.sleep(1)
         else:
             _log(f"  rows fetch GIVING UP on offset {offset}")
+            offset += 100
             continue
+        if not data["rows"]:
+            break  # reached the end of the config
         for r in data["rows"]:
             row = r["row"]
             if row["id"] in remaining:
                 found[row["id"]] = row
                 remaining.discard(row["id"])
+        offset += 100
     return found
 
 
 def _fetch_corpus_video_urls(corpus_ids: set[str]) -> dict[str, str]:
-    rows = _fetch_rows_for_ids("corpus", "corpus", 16316, corpus_ids)
+    rows = _fetch_rows_for_ids("corpus", "corpus", corpus_ids)
     return {vid: row["video"]["src"] for vid, row in rows.items()}
 
 
 def _fetch_query_rows(query_ids: set[str]) -> dict[str, dict]:
     """id -> {text, source_id, category, video_url} for the given queries."""
-    rows = _fetch_rows_for_ids("queries", "queries", 5000, query_ids)
+    rows = _fetch_rows_for_ids("queries", "queries", query_ids)
     return {
         qid: {
             "text": row["text"],
