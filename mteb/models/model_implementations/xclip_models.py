@@ -43,7 +43,7 @@ class XCLIPModel(AbsEncoder):
         texts: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ):
+    ) -> Array:
         all_embeddings = []
 
         for batch in tqdm(texts, disable=not show_progress_bar, desc="Text Encoding"):
@@ -67,7 +67,7 @@ class XCLIPModel(AbsEncoder):
         videos: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ):
+    ) -> Array:
         all_embeddings = []
 
         for batch in tqdm(videos, disable=not show_progress_bar, desc="Video Encoding"):
@@ -121,9 +121,9 @@ class XCLIPModel(AbsEncoder):
                     "The number of texts and videos must have the same length"
                 )
             return text_embeddings + video_embeddings
-        elif text_embeddings is not None:
+        if text_embeddings is not None:
             return text_embeddings
-        elif video_embeddings is not None:
+        if video_embeddings is not None:
             return video_embeddings
 
         raise ValueError(

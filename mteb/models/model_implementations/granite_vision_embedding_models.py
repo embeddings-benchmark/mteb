@@ -25,7 +25,7 @@ class GraniteVisionEmbeddingWrapper:
         revision: str | None = None,
         device: str | None = None,
         attn_implementation: str | None = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         from transformers import AutoModel, AutoProcessor
         from transformers.utils.import_utils import is_flash_attn_2_available
@@ -52,16 +52,16 @@ class GraniteVisionEmbeddingWrapper:
             model_name, trust_remote_code=True, revision=revision
         )
 
-    def encode_input(self, inputs):
+    def encode_input(self, inputs: dict[str, Any]) -> torch.Tensor:
         return self.mdl(**inputs)
 
     def get_image_embeddings(
         self,
-        images,
+        images: DataLoader[BatchedInput],
         batch_size: int = 16,
         show_progress_bar: bool = True,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> Array:
         all_embeds = []
         with torch.no_grad():
             for batch in tqdm(
@@ -81,8 +81,8 @@ class GraniteVisionEmbeddingWrapper:
         self,
         texts: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> Array:
         all_embeds = []
 
         with torch.no_grad():
@@ -107,7 +107,7 @@ class GraniteVisionEmbeddingWrapper:
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
         batch_size: int = 32,
-        fusion_mode="sum",
+        fusion_mode: str = "sum",
         **kwargs: Any,
     ):
         raise NotImplementedError(
@@ -142,13 +142,13 @@ class GraniteVisionEmbeddingWrapper:
                 )
             fused_embeddings = text_embeddings + image_embeddings
             return fused_embeddings
-        elif text_embeddings is not None:
+        if text_embeddings is not None:
             return text_embeddings
-        elif image_embeddings is not None:
+        if image_embeddings is not None:
             return image_embeddings
         raise ValueError
 
-    def similarity(self, a, b):
+    def similarity(self, a: Array, b: Array) -> Array:
         return self.processor.score_multi_vector(a, b)
 
 

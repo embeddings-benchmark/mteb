@@ -80,7 +80,7 @@ class RADIOModel(AbsEncoder):
         images: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ):
+    ) -> Array:
         import torch.nn.functional as F
         from torchvision.transforms.functional import pil_to_tensor
 

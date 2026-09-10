@@ -28,7 +28,7 @@ def get_model_below_n_param_threshold(model_name: str, threshold: float = 2e9) -
     if model_meta.n_parameters is not None:
         if model_meta.n_parameters >= threshold:
             return "Over threshold. Not tested."
-        elif "API" in model_meta.framework:
+        if "API" in model_meta.framework:
             try:
                 m = get_model(model_name)
                 if m is not None:
@@ -47,6 +47,7 @@ def get_model_below_n_param_threshold(model_name: str, threshold: float = 2e9) -
         except Exception as e:
             logger.warning(f"Failed to load model {model_name} with error {e}")
             return str(e)
+    return "n_parameters not specified. Not tested."
 
 
 def parse_args():

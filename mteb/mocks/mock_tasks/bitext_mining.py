@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from datasets import Dataset, DatasetDict
 
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -62,7 +64,7 @@ class MockBitextMiningTask(AbsTaskBitextMining):
         **general_args,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         sentence1 = ["This is a test sentence", "This is another test sentence"]
         sentence2 = [
             "dette er en test sætning",
@@ -153,7 +155,7 @@ class MockMultilingualBitextMiningTask(AbsTaskBitextMining):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         sentence1 = ["This is a test sentence", "This is another test sentence"]
         sentence2 = [
             "dette er en test sætning",
@@ -251,7 +253,7 @@ class MockMultilingualParallelBitextMiningTask(AbsTaskBitextMining):
         "fra_Latn-eng_Latn": ["eng-Latn", "fra-Latn"],
     }
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         sentence1 = ["This is a test sentence", "This is another test sentence"]
         sentence2 = [
             "dette er en test sætning",

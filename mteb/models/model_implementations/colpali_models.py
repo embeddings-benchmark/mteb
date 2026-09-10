@@ -35,7 +35,7 @@ class ColPaliEngineWrapper(AbsEncoder):
         revision: str | None = None,
         device: str | None = None,
         query_prefix: str | None = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -77,21 +77,21 @@ class ColPaliEngineWrapper(AbsEncoder):
                 )
             fused_embeddings = torch.cat([text_embeddings, image_embeddings], dim=1)
             return fused_embeddings
-        elif text_embeddings is not None:
+        if text_embeddings is not None:
             return text_embeddings
-        elif image_embeddings is not None:
+        if image_embeddings is not None:
             return image_embeddings
         raise ValueError
 
-    def encode_input(self, inputs):
+    def encode_input(self, inputs: dict[str, Any]) -> torch.Tensor:
         return self.mdl(**inputs)
 
     def get_image_embeddings(
         self,
-        images,
+        images: DataLoader[BatchedInput],
         batch_size: int = 32,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> Array:
         import torchvision.transforms.functional as F
         from PIL import Image
 
@@ -118,10 +118,10 @@ class ColPaliEngineWrapper(AbsEncoder):
 
     def get_text_embeddings(
         self,
-        texts,
+        texts: DataLoader[BatchedInput],
         batch_size: int = 32,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> Array:
         all_embeds = []
         with torch.no_grad():
             for batch in tqdm(texts, desc="Encoding texts"):
@@ -149,14 +149,14 @@ class ColPaliEngineWrapper(AbsEncoder):
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
         batch_size: int = 32,
-        fusion_mode="sum",
+        fusion_mode: str = "sum",
         **kwargs: Any,
     ):
         raise NotImplementedError(
             "Fused embeddings are not supported yet. Please use get_text_embeddings or get_image_embeddings."
         )
 
-    def similarity(self, a, b):
+    def similarity(self, a: Array, b: Array) -> Array:
         return self.processor.score(a, b, device=self.device)
 
 
@@ -169,7 +169,7 @@ class ColPaliWrapper(ColPaliEngineWrapper):
         revision: str | None = None,
         device: str | None = None,
         query_prefix: str = "Query: ",
-        **kwargs,
+        **kwargs: Any,
     ):
         from colpali_engine.models import ColPali, ColPaliProcessor
 
