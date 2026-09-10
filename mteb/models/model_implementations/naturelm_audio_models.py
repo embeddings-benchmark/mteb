@@ -16,7 +16,17 @@ if TYPE_CHECKING:
     from mteb.types import Array, BatchedInput, PromptType
 
 
-NATURELM_AUDIO_CITATION = """@misc{robinson2024naturelmaudio,
+NATURELM_AUDIO_CITATION = """@misc{miron2025avex,
+    title={AVEX: What Matters for Animal Vocalization Encoding},
+    author={Miron, Marius and Robinson, David and Alizadeh, Milad and Gilsenan-McMahon, Ellen and Narula, Gagan and Chemla, Emmanuel and Cusimano, Maddie and Effenberger, Felix and Hagiwara, Masato and Hoffman, Benjamin and Keen, Sara and Kim, Diane and Lawton, Jane and Liu, Jen-Yu and Raskin, Aza and Pietquin, Olivier and Geist, Matthieu},
+    year={2025},
+    eprint={2508.11845},
+    archivePrefix={arXiv},
+    primaryClass={cs.SD},
+    url={https://arxiv.org/abs/2508.11845},
+}
+
+@misc{robinson2024naturelmaudio,
     title={NatureLM-audio: an Audio-Language Foundation Model for Bioacoustics},
     author={Robinson, David and Miron, Marius and Hagiwara, Masato and Pietquin, Olivier},
     year={2024},
@@ -33,6 +43,12 @@ class NatureLMAudioBEATsWrapper(AbsEncoder):
     This is the standalone bioacoustics-specialized encoder (avex's
     esp_aves2_naturelm_audio_v1_beats), not the full NatureLM-audio LLM
     pipeline -- pure feature extraction, no text tower.
+
+    The embedding is the temporal mean of the final backbone features
+    (``model(audio).mean(dim=1)``, 768-dim), which is exactly the
+    representation the model card documents and the one AVEX's own eval
+    config uses for this checkpoint (``target_layers: ["last_layer"]``,
+    ``aggregation: mean``).
     """
 
     def __init__(
@@ -63,7 +79,7 @@ class NatureLMAudioBEATsWrapper(AbsEncoder):
             return_features_only=True,
             device=self.device,
         )
-        self.model.register_hooks_for_layers([0, -1])
+        self.model.eval()
 
     def encode(
         self,
@@ -107,9 +123,8 @@ class NatureLMAudioBEATsWrapper(AbsEncoder):
                             for i in indices
                         ]
                     ).to(self.device)
-                    embeddings = self.model.extract_embeddings(
-                        audio_tensor, aggregation="mean"
-                    )
+                    features = self.model(audio_tensor)
+                    embeddings = features.mean(dim=1)
                     for position, idx in enumerate(indices):
                         ordered[idx] = embeddings[position].cpu().to(torch.float32)
 
@@ -135,7 +150,7 @@ naturelm_audio_beats = ModelMeta(
     similarity_fn_name="cosine",
     framework=["PyTorch"],
     use_instructions=False,
-    public_training_code="https://github.com/earthspecies/NatureLM-audio",
+    public_training_code="https://github.com/earthspecies/avex",
     public_training_data=None,
     training_datasets=None,
     modalities=["audio"],
