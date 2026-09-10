@@ -4,11 +4,11 @@ import logging
 from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
-import torch
 
 from mteb.types._encoder_io import AudioInputItem
 
 if TYPE_CHECKING:
+    import torch
     from torchcodec.decoders import VideoDecoder  # type: ignore[attr-defined]
 
     from mteb.types import BatchedInput
@@ -86,6 +86,7 @@ class AudioCollator:
             target_sampling_rate: The sampling rate to resample the audio to.
             max_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
         """
+        import torch
         import torchaudio
 
         audio = audio["audio"]
@@ -97,9 +98,11 @@ class AudioCollator:
                 orig_freq=audio["sampling_rate"],
                 new_freq=target_sampling_rate,
             )
-            audio_array = resampler(torch.from_numpy(audio["array"]).float()).numpy()
+            audio_array = resampler(
+                torch.from_numpy(np.asarray(audio["array"])).float()
+            ).numpy()
         else:
-            audio_array = audio["array"]
+            audio_array = np.asarray(audio["array"])
 
         # Convert to mono if needed
         if audio_array.ndim > 1 and audio_array.shape[0] > 1:

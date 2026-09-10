@@ -223,6 +223,7 @@ from .lemb_summ_screen_fd_retrieval import LEMBSummScreenFDRetrieval
 from .lemb_wikim_qa_retrieval import LEMBWikimQARetrieval
 from .lembqm_sum_retrieval import LEMBQMSumRetrieval
 from .libri_tts import LibriTTSA2TRetrieval, LibriTTST2ARetrieval
+from .librispeech_speaker_retrieval import LibriSpeechSpeakerA2ARetrieval
 from .limit_retrieval import LIMITRetrieval, LIMITSmallRetrieval
 from .lit_search_retrieval import LitSearchRetrieval
 from .llava_it2t_retrieval import LLaVAIT2TRetrieval
@@ -715,6 +716,7 @@ __all__ = [
     "LegalBenchConsumerContractsQA",
     "LegalBenchCorporateLobbying",
     "LegalSummarization",
+    "LibriSpeechSpeakerA2ARetrieval",
     "LibriTTSA2TRetrieval",
     "LibriTTST2ARetrieval",
     "LitSearchRetrieval",
