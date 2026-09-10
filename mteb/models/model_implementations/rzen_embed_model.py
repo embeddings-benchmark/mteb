@@ -67,7 +67,7 @@ def smart_resize(
 
 
 def fetch_image(
-    image: Any,
+    image: Image.Image | torch.Tensor,
     size_factor: int = IMAGE_FACTOR,
 ) -> Image.Image:
     """Robust image parser supporting PIL Images, paths, and file-like objects."""
@@ -147,7 +147,9 @@ class RzenEmbedWrapper(AbsEncoder):
 
         self.default_instruction = "You are a helpful assistant."
 
-    def _process_images(self, images: Any) -> list[Image.Image]:
+    def _process_images(
+        self, images: list[Image.Image | torch.Tensor] | Image.Image | None
+    ) -> list[Image.Image]:
         """Maps varying input visual formats cleanly into a normalized list of PIL Images."""
         if images is None:
             return []
@@ -166,7 +168,10 @@ class RzenEmbedWrapper(AbsEncoder):
         return [fetch_image(images)]
 
     def _prepare_sample(
-        self, text: str | None, visual: Any, instruction: str | None = None
+        self,
+        text: str | None,
+        visual: list[Image.Image | torch.Tensor] | None,
+        instruction: str | None = None,
     ) -> tuple[str, list[Image.Image] | None]:
         """Assembles prompt strings and vision padding tokens matching Qwen2-VL's prompt structure."""
         input_str = ""
@@ -219,9 +224,9 @@ class RzenEmbedWrapper(AbsEncoder):
         instruction: str,
     ) -> tuple[list[str], list[Image.Image] | None]:
         """Assembles prompt strings and collects visual frame sequences for a single batch."""
-        texts = batch.get("text", None)
-        images = batch.get("image", None)
-        videos = batch.get("video", None)
+        texts = batch.get("text")
+        images = batch.get("image")
+        videos = batch.get("video")
 
         batch_size = len(texts or images or videos or [])
         input_texts = []
@@ -297,7 +302,7 @@ class RzenEmbedWrapper(AbsEncoder):
             inputs_embeds = self.model.get_input_embeddings()(
                 inputs_tokenized["input_ids"]
             )
-            pixel_values = inputs_tokenized.get("pixel_values", None)
+            pixel_values = inputs_tokenized.get("pixel_values")
 
             if pixel_values is not None:
                 pixel_values = pixel_values.type(self.model.model.visual.get_dtype())
@@ -322,8 +327,8 @@ class RzenEmbedWrapper(AbsEncoder):
 
             outputs = self.model.model(
                 input_ids=None,
-                position_ids=inputs_tokenized.get("position_ids", None),
-                attention_mask=inputs_tokenized.get("attention_mask", None),
+                position_ids=inputs_tokenized.get("position_ids"),
+                attention_mask=inputs_tokenized.get("attention_mask"),
                 inputs_embeds=inputs_embeds,
             )
 
