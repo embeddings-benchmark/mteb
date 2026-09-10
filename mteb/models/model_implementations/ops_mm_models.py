@@ -32,6 +32,7 @@ class OpsMMEmbeddingWrapper(AbsEncoder):
         fps: float | None = 2.0,
         max_frames: int | None = 64,
         num_frames: int | None = None,
+        trust_remote_code: bool = True,
         **kwargs: Any,
     ):
         from transformers import AutoModelForImageTextToText, AutoProcessor
@@ -51,13 +52,10 @@ class OpsMMEmbeddingWrapper(AbsEncoder):
             "auto" if self.device.startswith("cuda") else torch.float32
         )
 
-        trust_remote_code = kwargs.pop("trust_remote_code", True)
-
         self.base_model = AutoModelForImageTextToText.from_pretrained(
             model_name,
             revision=revision,
             torch_dtype=self.torch_dtype,
-            low_cpu_mem_usage=True,
             attn_implementation=attn_implementation,
             trust_remote_code=trust_remote_code,
             **kwargs,
@@ -170,6 +168,7 @@ class OpsMMEmbeddingWrapper(AbsEncoder):
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
         instruction = self.get_task_instruction(task_metadata, prompt_type)
@@ -192,19 +191,17 @@ class OpsMMEmbeddingWrapper(AbsEncoder):
                 num_frames=self.num_frames,
             )
 
-        show_progress_bar = kwargs.get("show_progress_bar", True)
-
         all_embeddings = []
         with torch.no_grad():
             for batch in tqdm(inputs, desc="Encoding", disable=not show_progress_bar):
                 texts = batch["text"] if has_text else None
-                images = (
-                    batch["image"]
-                    if has_image
-                    else (batch["video"] if has_video else None)
-                )
+                images = batch["image"] if has_image else None
+                videos = batch["video"] if has_video else None
                 emb = self.embed_batch(
-                    texts=texts, images=images, instruction=instruction
+                    texts=texts,
+                    images=images,
+                    videos=videos,
+                    instruction=instruction,
                 )
                 all_embeddings.append(emb.cpu().to(torch.float32))
 
