@@ -33,16 +33,41 @@ POOLED_CORPUS_SIZE = 44453
 # Query counts in the released dataset. 34 of 35 agree with the paper's Table 6;
 # `autotools-music` ships 32 queries where Table 6 reports 72.
 RELEASED_QUERY_COUNTS = {
-    "apibank": 101, "apigen": 1000, "appbench": 32, "autotools-food": 22,
-    "autotools-music": 32, "autotools-weather": 11, "craft-math-algebra": 280,
-    "craft-tabmwp": 174, "craft-vqa": 200, "gorilla-huggingface": 500,
-    "gorilla-pytorch": 43, "gorilla-tensor": 55, "gpt4tools": 32, "gta": 14,
-    "metatool": 200, "mnms": 33, "restgpt-spotify": 40, "restgpt-tmdb": 54,
-    "reversechain": 200, "rotbench": 550, "t-eval-dialog": 50, "t-eval-step": 50,
-    "taskbench-daily": 40, "taskbench-huggingface": 23, "taskbench-multimedia": 40,
-    "tool-be-honest": 350, "toolace": 1000, "toolalpaca": 94, "toolbench": 1100,
-    "toolbench-sam": 197, "toolemu": 38, "tooleyes": 95, "toolink": 497,
-    "toollens": 314, "ultratool": 500,
+    "apibank": 101,
+    "apigen": 1000,
+    "appbench": 32,
+    "autotools-food": 22,
+    "autotools-music": 32,
+    "autotools-weather": 11,
+    "craft-math-algebra": 280,
+    "craft-tabmwp": 174,
+    "craft-vqa": 200,
+    "gorilla-huggingface": 500,
+    "gorilla-pytorch": 43,
+    "gorilla-tensor": 55,
+    "gpt4tools": 32,
+    "gta": 14,
+    "metatool": 200,
+    "mnms": 33,
+    "restgpt-spotify": 40,
+    "restgpt-tmdb": 54,
+    "reversechain": 200,
+    "rotbench": 550,
+    "t-eval-dialog": 50,
+    "t-eval-step": 50,
+    "taskbench-daily": 40,
+    "taskbench-huggingface": 23,
+    "taskbench-multimedia": 40,
+    "tool-be-honest": 350,
+    "toolace": 1000,
+    "toolalpaca": 94,
+    "toolbench": 1100,
+    "toolbench-sam": 197,
+    "toolemu": 38,
+    "tooleyes": 95,
+    "toolink": 497,
+    "toollens": 314,
+    "ultratool": 500,
 }
 
 
@@ -59,7 +84,7 @@ def test_subsets_are_the_retrieval_tasks(task_name: str) -> None:
 
 
 def test_categories_are_only_a_reporting_grouping() -> None:
-    counts = {c: 0 for c in _TOOL_CATEGORIES}
+    counts = dict.fromkeys(_TOOL_CATEGORIES, 0)
     for category in _TASK_2_CATEGORY.values():
         counts[category] += 1
     assert counts == {"web": 19, "code": 7, "customized": 9}
@@ -136,5 +161,5 @@ def test_instruction_variant_uses_the_reference_prompt_template() -> None:
     # and the instruction must add information beyond the bare query
     assert all(
         len(inst) > len(bare)
-        for inst, bare in zip(inst_queries["text"], plain_queries["text"])
+        for inst, bare in zip(inst_queries["text"], plain_queries["text"], strict=True)
     )

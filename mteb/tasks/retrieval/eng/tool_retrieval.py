@@ -135,7 +135,7 @@ class _ToolRetrievalBase(AbsTaskRetrieval):
             if self._WITH_INSTRUCTIONS:
                 q_texts = [
                     _INSTRUCTION_TEMPLATE.format(instruction=instruction, query=query)
-                    for query, instruction in zip(q_texts, q_instructions)
+                    for query, instruction in zip(q_texts, q_instructions, strict=True)
                 ]
 
             queries = Dataset.from_dict({"id": q_ids, "text": q_texts})
@@ -224,4 +224,3 @@ class ToolRetrievalInstruction(_ToolRetrievalBase):
             "query": "Given a user query, retrieve relevant tool documentation that can solve the query"
         },
     )
-
