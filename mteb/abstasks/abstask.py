@@ -619,7 +619,7 @@ class AbsTask(ABC):  # noqa: PLR0904
     def _get_content_columns(self) -> dict[str, Modalities]:  # noqa: PLR6301
         """The dataset columns holding the task's content, mapped to the modality of that content.
 
-        This is what the filters in `mteb.quality` compare samples on. Subclasses point it at their own column
+        This is what the filters in `mteb.data_cleaning` compare samples on. Subclasses point it at their own column
         names, e.g. `{"text": "text"}` for a text classification task or `{"image": "image"}` for an image one. It
         is empty when a task does not declare its columns, which makes those filters raise rather than silently do
         nothing.

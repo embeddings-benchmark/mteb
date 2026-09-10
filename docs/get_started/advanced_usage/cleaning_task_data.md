@@ -30,15 +30,15 @@ For a task you are developing, compute the statistics yourself with [`task.calcu
 
 Each filter takes a task and returns a cleaned copy, leaving the task you passed in untouched. They cover every split and subset by default; see the linked reference for the arguments that narrow that down.
 
-- [`remove_duplicates`][mteb.quality.remove_duplicates] removes [repeated samples](#removing-duplicates).
+- [`remove_duplicates`][mteb.data_cleaning.remove_duplicates] removes [repeated samples](#removing-duplicates).
 
 
 ## Removing duplicates
 
-[`remove_duplicates`][mteb.quality.remove_duplicates] drops repeated samples, keeping the first of each:
+[`remove_duplicates`][mteb.data_cleaning.remove_duplicates] drops repeated samples, keeping the first of each:
 
 ```python
-from mteb.quality import remove_duplicates
+from mteb.data_cleaning import remove_duplicates
 
 cleaned = remove_duplicates(task)
 

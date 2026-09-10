@@ -4,7 +4,7 @@ Each filter takes a task and returns a cleaned copy:
 
 ```python
 import mteb
-from mteb.quality import remove_duplicates
+from mteb.data_cleaning import remove_duplicates
 
 task = remove_duplicates(mteb.get_task("MassiveIntentClassification"))
 ```

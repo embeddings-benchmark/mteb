@@ -1,4 +1,4 @@
-"""The filters of `mteb.quality`, and the machinery that applies them to a task.
+"""The filters of `mteb.data_cleaning`, and the machinery that applies them to a task.
 
 The primitives at the top work on a single `datasets.Dataset` and know nothing about task types: the caller
 supplies the columns to compare and a `KeepIndicesFn` deciding which rows to keep. `_filter_task_rows` then walks
@@ -570,7 +570,7 @@ def remove_duplicates(
 
     Examples:
         >>> import mteb
-        >>> from mteb.quality import remove_duplicates
+        >>> from mteb.data_cleaning import remove_duplicates
         >>> task = mteb.get_task("MassiveIntentClassification")
         >>> cleaned = remove_duplicates(task)
         >>> # ignore case too, so that "Wake me up!" and "wake me up!" are duplicates

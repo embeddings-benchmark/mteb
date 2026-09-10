@@ -1,6 +1,6 @@
 """Per-sample content hashes, used to tell whether two samples hold the same content.
 
-Shared by the descriptive statistics and by the filters in `mteb.quality`, so that both agree on what makes two
+Shared by the descriptive statistics and by the filters in `mteb.data_cleaning`, so that both agree on what makes two
 images, audio clips or videos identical.
 """
 

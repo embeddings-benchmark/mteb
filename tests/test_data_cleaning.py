@@ -1,4 +1,4 @@
-"""Tests for `mteb.quality`."""
+"""Tests for `mteb.data_cleaning`."""
 
 import re
 from collections.abc import Callable
@@ -8,6 +8,12 @@ from datasets import Dataset, DatasetDict
 
 import mteb
 from mteb.abstasks.abstask import AbsTask
+from mteb.data_cleaning import remove_duplicates
+from mteb.data_cleaning._filters import (
+    _derived_task_name,
+    _keep_first_occurrence,
+    _row_key,
+)
 from mteb.mocks import (
     MockAny2AnyRetrievalI2TTask,
     MockAudioClassification,
@@ -24,12 +30,6 @@ from mteb.mocks import (
     MockVideoClusteringTask,
 )
 from mteb.mocks.mock_tasks.reranking import MockAggregatedTask
-from mteb.quality import remove_duplicates
-from mteb.quality._filters import (
-    _derived_task_name,
-    _keep_first_occurrence,
-    _row_key,
-)
 from mteb.results import TaskResult
 
 
