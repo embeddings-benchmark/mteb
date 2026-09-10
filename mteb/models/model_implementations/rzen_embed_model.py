@@ -311,13 +311,11 @@ class RzenEmbedWrapper(AbsEncoder):
                 )
 
                 if not isinstance(image_embeds, torch.Tensor):
-                    image_embeds = getattr(
-                        image_embeds, "last_hidden_state", image_embeds[0]
+                    image_embeds = (
+                        image_embeds.pooler_output
+                        if hasattr(image_embeds, "pooler_output")
+                        else image_embeds[-1]
                     )
-
-                # Run the patch merger if the features are pre-merger/pre-projected (e.g. 1280 vs 3584)
-                if image_embeds.shape[-1] != self.model.config.hidden_size:
-                    image_embeds = self.model.model.visual.merger(image_embeds)
                 image_embeds = image_embeds.to(inputs_embeds.device)
 
                 image_mask = (
