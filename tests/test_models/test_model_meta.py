@@ -178,10 +178,11 @@ def _openness_meta(**overwrites: Any) -> ModelMeta:
     )
 
 
-def test_openness_score_all_dimensions():
+@pytest.mark.parametrize("license_name", ["apache-2.0", "openmdw-1.1"])
+def test_openness_score_all_dimensions(license_name: str):
     meta = _openness_meta(
         open_weights=True,
-        license="apache-2.0",
+        license=license_name,
         public_training_code="https://github.com/example/train",
         public_training_data="https://huggingface.co/datasets/example",
         citation="@article{example}",
