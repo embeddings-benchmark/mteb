@@ -396,6 +396,7 @@ from .temp_reason_l2_pure_retrieval import TempReasonL2Pure
 from .temp_reason_l3_context_retrieval import TempReasonL3Context
 from .temp_reason_l3_fact_retrieval import TempReasonL3Fact
 from .temp_reason_l3_pure_retrieval import TempReasonL3Pure
+from .tool_retrieval import ToolRetrieval, ToolRetrievalInstruction
 from .topi_ocqa_retrieval import TopiOCQARetrieval, TopiOCQARetrievalHardNegatives
 from .touche2020_retrieval import Touche2020, Touche2020v3Retrieval
 from .treccovid_retrieval import TRECCOVID
@@ -854,6 +855,8 @@ __all__ = [
     "TempReasonL3Fact",
     "TempReasonL3Pure",
     "ToolBench",
+    "ToolRetrieval",
+    "ToolRetrievalInstruction",
     "TopiOCQARetrieval",
     "TopiOCQARetrievalHardNegatives",
     "Touche2020",
