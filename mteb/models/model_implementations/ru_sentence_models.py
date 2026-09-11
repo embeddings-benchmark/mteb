@@ -1,14 +1,12 @@
 """Sentence models for evaluation on the Russian part of MTEB"""
 
-import torch
-
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 from .bge_models import bge_m3_training_data
 from .nomic_models import (
@@ -924,7 +922,7 @@ giga_embeddings = ModelMeta(
         apply_instruction_to_passages=True,
         prompts_dict=GIGA_task_prompts,
         model_kwargs={
-            "torch_dtype": torch.bfloat16,
+            "torch_dtype": OutputDType.BF16,
         },
     ),
     name="ai-sage/Giga-Embeddings-instruct",

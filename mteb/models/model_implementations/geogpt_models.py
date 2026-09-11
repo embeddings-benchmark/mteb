@@ -1,9 +1,8 @@
 """Models for GeoGPT-Research-Project"""
 
-import torch
-
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
+from mteb.types import OutputDType
 
 geoembedding = ModelMeta(
     name="GeoGPT-Research-Project/GeoEmbedding",
@@ -15,7 +14,7 @@ geoembedding = ModelMeta(
     loader_kwargs=dict(
         instruction_template="Instruct: {instruction}\nQuery: ",
         apply_instruction_to_passages=False,
-        model_kwargs={"torch_dtype": torch.bfloat16},
+        model_kwargs={"torch_dtype": OutputDType.BF16},
         trust_remote_code=True,
     ),
     release_date="2025-04-22",

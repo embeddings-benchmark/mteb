@@ -22,7 +22,7 @@ model_with_compression = CompressionWrapper(model, output_dtype=OutputDType.INT8
 results = mteb.evaluate(model_with_compression, tasks=[task])
 ```
 
-The `output_dtype` parameter determines the value range to which embeddings are compressed. Consult the [`OutputDType`][mteb.types.OutputDType] class for a full overview of valid compression levels.
+The `output_dtype` parameter determines the value range to which embeddings are compressed. Consult the [`OutputDType`][mteb.types.OutputDType] class for the available dtypes; note that it also names dtypes used elsewhere for model loading, and passing one that is not a compression level (such as `FLOAT32`) raises a `ValueError`.
 
 ### Threshold Estimation
 

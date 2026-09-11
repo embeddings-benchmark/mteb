@@ -2,10 +2,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import torch
-
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 from .e5_instruct import E5_MISTRAL_TRAINING_DATA
 
@@ -30,7 +29,7 @@ Linq_Embed_Mistral = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=instruction_template,
-        model_kwargs={"dtype": torch.bfloat16},
+        model_kwargs={"dtype": OutputDType.BF16},
         apply_instruction_to_passages=False,
     ),
     name="Linq-AI-Research/Linq-Embed-Mistral",

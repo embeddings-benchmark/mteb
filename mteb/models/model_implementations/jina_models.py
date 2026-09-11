@@ -15,7 +15,7 @@ from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
 )
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     from sentence_transformers import CrossEncoder
@@ -411,13 +411,16 @@ class JinaV4Wrapper(AbsEncoder):
         revision: str | None = None,
         device: str | None = None,
         device_map: str | None = None,
-        torch_dtype: torch.dtype = torch.bfloat16,
+        torch_dtype: OutputDType | torch.dtype = OutputDType.BF16,
         attn_implementation: str = "sdpa",
         trust_remote_code: bool = True,
         model_prompts: dict[str, str] | None = None,
         vector_type: Literal[SUPPORTED_VECTOR_TYPES] = "single_vector",
         **kwargs: Any,
     ) -> None:
+        if isinstance(torch_dtype, OutputDType):
+            torch_dtype = torch_dtype.get_dtype()
+
         device = device_map or device
 
         self.device = device or (
