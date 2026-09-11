@@ -230,6 +230,28 @@ class RelevantDocsStatistics(TypedDict):
     num_missing_corpus_ids: int
 
 
+class TextCorpusOverlapStatistics(TypedDict):
+    """Character n-gram overlap between queries and the full text corpus.
+
+    Attributes:
+        num_queries: Number of non-empty queries considered.
+        min_query_character_ngram_overlap: Minimum fraction of unique normalized
+            query character n-grams found anywhere in the corpus.
+        average_query_character_ngram_overlap: Average fraction of unique normalized
+            query character n-grams found anywhere in the corpus.
+        max_query_character_ngram_overlap: Maximum fraction of unique normalized
+            query character n-grams found anywhere in the corpus.
+
+    Text is Unicode NFKC-normalized and case-folded, then punctuation, symbols,
+    and whitespace are removed before extracting character 4-grams.
+    """
+
+    num_queries: int
+    min_query_character_ngram_overlap: float
+    average_query_character_ngram_overlap: float
+    max_query_character_ngram_overlap: float
+
+
 class SingleInputModalityStatistics(TypedDict):
     """Per-modality statistics for a single-input dataset (Classification, Regression, …).
 
@@ -511,6 +533,8 @@ class RetrievalDescriptiveStatistics(SplitDescriptiveStatistics):
         queries_audio_statistics: Statistics for queries
         queries_video_statistics: Statistics for queries
         relevant_docs_statistics: Statistics for relevant documents
+        text_corpus_overlap_statistics: Character n-gram overlap statistics between
+            text queries and the full text corpus
         top_ranked_statistics: Statistics for top ranked documents (if available)
     """
 
@@ -530,6 +554,7 @@ class RetrievalDescriptiveStatistics(SplitDescriptiveStatistics):
     queries_video_statistics: VideoStatistics | None
 
     relevant_docs_statistics: RelevantDocsStatistics
+    text_corpus_overlap_statistics: TextCorpusOverlapStatistics | None
 
     # this is for datasets that do reranking
     top_ranked_statistics: TopRankedStatistics | None
