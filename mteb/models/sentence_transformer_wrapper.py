@@ -11,7 +11,7 @@ from typing_extensions import deprecated
 
 from mteb._log_once import LogOnce
 from mteb.models import ModelMeta
-from mteb.types import OutputDType, PromptType
+from mteb.types import PromptType
 
 from .abs_encoder import AbsEncoder, get_prompt_name
 
@@ -369,23 +369,6 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         Returns:
             The encoded sentences.
         """
-        if "precision" in kwargs:
-            existing_experiment_kwargs = self.mteb_model_meta.experiment_kwargs
-            output_dtype = OutputDType.from_str(kwargs["precision"])
-            if existing_experiment_kwargs is not None:
-                existing_experiment_kwargs["output_dtypes"] = output_dtype  # type: ignore[index]
-            else:
-                existing_experiment_kwargs = {"output_dtypes": output_dtype.value}
-            logger.warning(
-                f"The 'precision' argument passed in encode_kwargs setting output_dtypes to {output_dtype.value}."
-            )
-            self.mteb_model_meta = self.mteb_model_meta.model_copy(
-                update={
-                    "experiment_kwargs": existing_experiment_kwargs,
-                },
-                deep=True,
-            )
-
         prompt = _resolve_prompt(self.model_prompts, task_metadata, prompt_type)
 
         is_multimodal = _setup_modality_collator(
