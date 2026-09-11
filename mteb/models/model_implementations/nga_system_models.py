@@ -31,6 +31,32 @@ ko_embed_v0 = ModelMeta(
     model_type=["dense"],
 )
 
+ko_embed_cls = ModelMeta(
+    name="NGA-KR/ko-embed-cls",
+    loader=SentenceTransformerEncoderWrapper,
+    loader_kwargs=dict(),
+    revision="64bf48823ed89c0e14fe8f00030c6f1e68053d2c",
+    release_date="2026-09-10",
+    languages=["kor-Hang", "eng-Latn"],
+    open_weights=True,
+    n_parameters=567754752,
+    n_embedding_parameters=256_002_048,
+    memory_usage_mb=2167,
+    embed_dim=1024,
+    max_tokens=128,
+    license="mit",
+    reference="https://huggingface.co/NGA-KR/ko-embed-cls",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets={"KLUE-TC"},
+    adapted_from="BAAI/bge-m3",
+    modalities=["text"],
+    model_type=["dense"],
+)
+
 ko_embed_nli = ModelMeta(
     name="NGA-KR/ko-embed-nli",
     loader=SentenceTransformerEncoderWrapper,
