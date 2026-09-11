@@ -80,6 +80,27 @@ def _multilabel_subsampling(
     return dataset_dict
 
 
+def _pair_content_columns(
+    columns: tuple[str | Mapping[str, Modalities], str | Mapping[str, Modalities]],
+    modalities: list[Modalities],
+) -> dict[str, Modalities]:
+    """The content columns of a task comparing two inputs, mapped to the modality of each.
+
+    An input is either a single column, whose modality is then the task's only one, or already a mapping from
+    column to modality. A plain column name on a task with several modalities is ambiguous, so nothing is returned
+    in that case and the caller reports the task as not declaring its columns.
+    """
+    resolved: dict[str, Modalities] = {}
+    for column in columns:
+        if isinstance(column, str):
+            if len(modalities) != 1:
+                return {}
+            resolved[column] = modalities[0]
+        else:
+            resolved.update(column)
+    return resolved
+
+
 class AbsTask(ABC):  # noqa: PLR0904
     """The abstract class for the tasks. All tasks in `mteb` inherit from this class.
 
@@ -595,6 +616,16 @@ class AbsTask(ABC):  # noqa: PLR0904
         self.hf_subsets = subsets_to_keep
         return self
 
+    def _get_content_columns(self) -> dict[str, Modalities]:  # noqa: PLR6301
+        """The dataset columns holding the task's content, mapped to the modality of that content.
+
+        This is what the filters in `mteb.data_cleaning` compare samples on. Subclasses point it at their own column
+        names, e.g. `{"text": "text"}` for a text classification task or `{"image": "image"}` for an image one. It
+        is empty when a task does not declare its columns, which makes those filters raise rather than silently do
+        nothing.
+        """
+        return {}
+
     def _add_main_score(self, scores: ScoresDict) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
 
@@ -802,6 +833,9 @@ class AbsTask(ABC):  # noqa: PLR0904
         if self.data_loaded:
             self.dataset = None
             self.data_loaded = False
+            # a task whose data was filtered carries metadata of its own describing that data; unloading it
+            # leaves only the published data to reload, so restore the published metadata alongside
+            self.__dict__.pop("metadata", None)
             logger.info(f"Unloaded dataset {self.metadata.name} from memory.")
         else:
             msg = f"Dataset `{self.metadata.name}` is not loaded, cannot unload it."
