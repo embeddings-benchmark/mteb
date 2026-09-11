@@ -27,7 +27,7 @@ class OpsMMEmbeddingWrapper(AbsEncoder):
         model_name: str,
         revision: str | None = None,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        torch_dtype: Any | None = None,
+        torch_dtype: torch.dtype | None = None,  # ruff: any-type
         attn_implementation: str | None = None,
         fps: float | None = 2.0,
         max_frames: int | None = 64,
