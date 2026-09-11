@@ -459,6 +459,10 @@ from .web_qa_t2it_retrieval import WebQAT2ITRetrieval
 from .web_qa_t2t_retrieval import WebQAT2TRetrieval
 from .webvid_covr_retrieval import WebVidCoVRIT2VRetrieval
 from .wino_grande_retrieval import WinoGrande
+from .youcook2_i2v_retrieval import (
+    YouCook2I2VRetrieval,
+    YouCook2V2IRetrieval,
+)
 from .youcook2_retrieval import (
     YouCook2A2VRetrieval,
     YouCook2AT2VRetrieval,
@@ -908,9 +912,11 @@ __all__ = [
     "WinoGrande",
     "YouCook2A2VRetrieval",
     "YouCook2AT2VRetrieval",
+    "YouCook2I2VRetrieval",
     "YouCook2T2VARetrieval",
     "YouCook2T2VRetrieval",
     "YouCook2V2ARetrieval",
+    "YouCook2V2IRetrieval",
     "YouCook2V2TRetrieval",
     "YouCook2VA2TRetrieval",
     "YouCook2VT2ARetrieval",
