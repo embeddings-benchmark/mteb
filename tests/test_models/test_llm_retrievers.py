@@ -1,0 +1,216 @@
+"""Offline tests for the LLM retriever wrappers (query rewrite, HyDE, rerank).
+
+A FakeChatModel and a FakeSearchModel exercise the wrappers without network
+access; one test wraps the real BM25 model to check the integration.
+"""
+
+from __future__ import annotations
+
+import pytest
+from datasets import Dataset
+
+from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.models import (
+    ChatModelProtocol,
+    HyDERetriever,
+    MultiHopRetriever,
+    MultiQueryRetriever,
+    QueryRewriteRetriever,
+    RerankRetriever,
+    SearchProtocol,
+    TournamentRerankRetriever,
+)
+from mteb.models.chat_models import ChatResponse
+
+CORPUS = Dataset.from_list(
+    [
+        {"id": "d1", "title": "", "text": "Paris is the capital of France."},
+        {"id": "d2", "title": "", "text": "Berlin is the capital of Germany."},
+        {
+            "id": "d3",
+            "title": "",
+            "text": "The Seine flows through Paris, the French capital.",
+        },
+    ]
+)
+
+TASK_METADATA = TaskMetadata(
+    dataset={"path": "mteb/test", "revision": "main"},
+    name="LLMRetrieverTest",
+    description="Fixture task for LLM retriever tests.",
+    type="Retrieval",
+    eval_langs=["eng-Latn"],
+    main_score="ndcg_at_10",
+)
+
+_KWARGS = {
+    "task_metadata": TASK_METADATA,
+    "hf_split": "test",
+    "hf_subset": "default",
+    "encode_kwargs": {},
+    "num_proc": None,
+}
+
+
+class FakeChatModel:
+    """Deterministic ChatModel replying from a scripted queue."""
+
+    def __init__(self, scripted: list[str]) -> None:
+        self._scripted = list(scripted)
+
+    def generate(self, messages, **kwargs) -> ChatResponse:
+        return ChatResponse(text=self._scripted.pop(0))
+
+
+class FakeSearchModel:
+    """Minimal SearchProtocol: word-overlap ranking, no encoding or network."""
+
+    def index(self, corpus, **kwargs) -> None:
+        self._docs = {row["id"]: row["text"] for row in corpus}
+
+    def search(self, queries, *, top_k, **kwargs):
+        out = {}
+        for row in queries:
+            terms = set(row["text"].lower().split())
+            scored = {
+                d: float(sum(t in text.lower() for t in terms))
+                for d, text in self._docs.items()
+            }
+            ranked = sorted(scored.items(), key=lambda kv: -kv[1])[:top_k]
+            out[row["id"]] = dict(ranked)
+        return out
+
+
+def _top_ids(retriever, query: str, top_k: int = 2) -> list[str]:
+    retriever.index(CORPUS, **_KWARGS)
+    out = retriever.search(
+        Dataset.from_list([{"id": "q", "text": query}]), top_k=top_k, **_KWARGS
+    )
+    ranking = out["q"]
+    return sorted(ranking, key=lambda d: -ranking[d])
+
+
+def test_wrappers_implement_search_protocol():
+    model = FakeChatModel([])
+    for retriever in (
+        QueryRewriteRetriever(FakeSearchModel(), model),
+        HyDERetriever(FakeSearchModel(), model),
+        RerankRetriever(FakeSearchModel(), model),
+        MultiHopRetriever(FakeSearchModel(), model),
+        MultiQueryRetriever(FakeSearchModel(), model),
+        TournamentRerankRetriever(FakeSearchModel(), model),
+    ):
+        assert isinstance(retriever, SearchProtocol)
+
+
+def test_query_rewrite_searches_on_rewritten_text():
+    retriever = QueryRewriteRetriever(
+        FakeSearchModel(), FakeChatModel(["capital France"])
+    )
+    assert _top_ids(retriever, "a vague question")[0] in {"d1", "d3"}
+
+
+def test_hyde_searches_on_hypothetical_passage():
+    retriever = HyDERetriever(
+        FakeSearchModel(), FakeChatModel(["Paris is the capital of France"])
+    )
+    assert _top_ids(retriever, "q")[0] in {"d1", "d3"}
+
+
+def test_rerank_honors_llm_order():
+    retriever = RerankRetriever(
+        FakeSearchModel(), FakeChatModel(['["d3", "d1"]']), pool_size=3
+    )
+    assert _top_ids(retriever, "capital of France") == ["d3", "d1"]
+
+
+def test_rerank_falls_back_to_base_score_order():
+    retriever = RerankRetriever(
+        FakeSearchModel(), FakeChatModel(["not json at all"]), pool_size=3
+    )
+    ids = _top_ids(retriever, "capital of France paris", top_k=3)
+    assert ids[0] == "d1" and len(ids) == 3  # base score order kept
+
+
+def test_wrappers_compose():
+    retriever = RerankRetriever(
+        QueryRewriteRetriever(FakeSearchModel(), FakeChatModel(["capital France"])),
+        FakeChatModel(['["d1"]']),
+        pool_size=3,
+    )
+    assert _top_ids(retriever, "a vague question", top_k=1) == ["d1"]
+
+
+def test_query_rewrite_over_real_bm25():
+    pytest.importorskip("bm25s", reason="bm25s not installed")
+    pytest.importorskip("Stemmer", reason="PyStemmer not installed")
+    import mteb
+
+    retriever = QueryRewriteRetriever(
+        mteb.get_model("mteb/baseline-bb25"), FakeChatModel(["capital France"])
+    )
+    assert _top_ids(retriever, "a vague question")[0] in {"d1", "d3"}
+
+
+def test_litellm_chat_model_offline():
+    pytest.importorskip("litellm")
+    from mteb.models import LiteLLMChatModel
+
+    model = LiteLLMChatModel("gpt-4o")
+    assert isinstance(model, ChatModelProtocol)
+    # mock_response skips the network; cost still comes from the local pricing table.
+    out = model.generate(
+        [{"role": "user", "content": "capital?"}], mock_response="Paris"
+    )
+    assert out.text == "Paris"
+    assert out.cost_usd is not None and out.cost_usd > 0
+
+
+def test_multi_hop_promotes_selected_docs():
+    scripted = [
+        "capital France",  # hop 1 query
+        '["d1"]\nnote: check the Seine',  # hop 1 read
+        "seine river",  # hop 2 query
+        '["d3"]',  # hop 2 read
+    ]
+    retriever = MultiHopRetriever(
+        FakeSearchModel(), FakeChatModel(scripted), hops=2, per_hop=2
+    )
+    ids = _top_ids(retriever, "a vague question", top_k=3)
+    assert ids[:2] == ["d1", "d3"]  # selection order, pooled tail after
+
+
+def test_tournament_rerank_final_round_leads():
+    import json
+    import random
+
+    # Base score order for this query, then the per-query deterministic shuffle.
+    shuffled = ["d1", "d2", "d3"]
+    random.Random("q").shuffle(shuffled)
+    survivors = [shuffled[:2][0], shuffled[2:][0]]  # round 1 falls back to batch order
+    scripted = ["not json", "not json", json.dumps(survivors[::-1])]
+    retriever = TournamentRerankRetriever(
+        FakeSearchModel(),
+        FakeChatModel(scripted),
+        pool_size=3,
+        batch_size=2,
+        promote_k=1,
+    )
+    ids = _top_ids(retriever, "capital of France paris", top_k=3)
+    assert ids[:2] == survivors[::-1]  # final listwise round decides the head
+
+
+def test_multi_query_fuses_variant_rankings():
+    retriever = MultiQueryRetriever(
+        FakeSearchModel(), FakeChatModel(["capital France\nSeine Paris"]), num_queries=2
+    )
+    ids = _top_ids(retriever, "a vague question", top_k=3)
+    assert set(ids[:2]) == {"d1", "d3"}  # each variant surfaces one gold doc
+
+
+def test_rerank_accepts_structured_reply():
+    # Providers honouring the json schema return an object, not a bare array.
+    retriever = RerankRetriever(
+        FakeSearchModel(), FakeChatModel(['{"doc_ids": ["d3", "d1"]}']), pool_size=3
+    )
+    assert _top_ids(retriever, "capital of France") == ["d3", "d1"]
