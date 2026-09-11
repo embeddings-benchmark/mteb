@@ -64,6 +64,18 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
+def _resolved_search_config(search_model: Any) -> dict[str, Any] | None:
+    """Settings a search model resolved for this task, if it reports any.
+
+    Optional and duck-typed: a model that does not implement `resolved_config` is
+    unaffected, and `SearchProtocol` is unchanged.
+    """
+    fn = getattr(search_model, "resolved_config", None)
+    if not callable(fn):
+        return None
+    return fn() or None
+
+
 def _filter_queries_without_positives(
     relevant_docs: RelevantDocumentsType, queries: QueryDatasetType
 ) -> tuple[RelevantDocumentsType, QueryDatasetType]:
@@ -442,6 +454,7 @@ class AbsTaskRetrieval(AbsTask):
             hit_rate=hit_rate,
             task_scores=task_specific_scores,
             previous_results_model_meta=self._previous_results_model_meta,
+            search_config=_resolved_search_config(search_model),
         )
 
     def task_specific_scores(  # noqa: PLR6301
