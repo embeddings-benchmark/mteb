@@ -312,6 +312,7 @@ from .obliq_bench_retrieval import (
     OBLIQBenchWritingRetrieval,
 )
 from .okvqa_it2t_retrieval import OKVQAIT2TRetrieval
+from .omni_wiki_retrieval import OmniWikiV2IRetrieval, OmniWikiV2TRetrieval
 from .oven_it2it_retrieval import OVENIT2ITRetrieval
 from .oven_it2t_retrieval import OVENIT2TRetrieval
 from .panda70m_retrieval import (
@@ -779,6 +780,8 @@ __all__ = [
     "OKVQAIT2TRetrieval",
     "OVENIT2ITRetrieval",
     "OVENIT2TRetrieval",
+    "OmniWikiV2IRetrieval",
+    "OmniWikiV2TRetrieval",
     "Panda70MT2VARetrieval",
     "Panda70MT2VRetrieval",
     "Panda70MV2TRetrieval",
