@@ -184,6 +184,10 @@ from .flickr_audio_image_retrieval import (
     FlickrAudioToImageRetrieval,
     FlickrImageToAudioRetrieval,
 )
+from .flickr_audio_image_text_retrieval import (
+    FlickrAudioToImageTextRetrieval,
+    FlickrImageTextToAudioRetrieval,
+)
 from .forb_i2i_retrieval import FORBI2I
 from .giga_speech import GigaSpeechA2TRetrieval, GigaSpeechT2ARetrieval
 from .gl_dv2_i2i_retrieval import GLDv2I2IRetrieval
@@ -672,6 +676,8 @@ __all__ = [
     "Flickr30kI2TRetrieval",
     "Flickr30kT2IRetrieval",
     "FlickrAudioToImageRetrieval",
+    "FlickrAudioToImageTextRetrieval",
+    "FlickrImageTextToAudioRetrieval",
     "FlickrImageToAudioRetrieval",
     "GLDv2I2IRetrieval",
     "GLDv2I2TRetrieval",
