@@ -385,6 +385,7 @@ from .sounding_earth import SoundingEarthA2IRetrieval, SoundingEarthI2ARetrieval
 from .spart_qa_retrieval import SpartQA
 from .speech_coco import SpeechCocoA2IRetrieval, SpeechCocoI2ARetrieval
 from .speech_edit_acoustic import SpeechEditAcousticRetrieval
+from .spoken_coco_a2it_retrieval import SpokenCOCOA2ITRetrieval
 from .spoken_coco_retrieval import SpokenCOCOA2IRetrieval, SpokenCOCOI2ARetrieval
 from .spoken_s_qu_ad import SpokenSQuADT2ARetrieval
 from .ssw60 import SSW60A2IRetrieval, SSW60I2ARetrieval
@@ -840,6 +841,7 @@ __all__ = [
     "SpeechCocoA2IRetrieval",
     "SpeechCocoI2ARetrieval",
     "SpeechEditAcousticRetrieval",
+    "SpokenCOCOA2ITRetrieval",
     "SpokenCOCOA2IRetrieval",
     "SpokenCOCOI2ARetrieval",
     "SpokenSQuADT2ARetrieval",
