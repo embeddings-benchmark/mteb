@@ -1,10 +1,18 @@
+from __future__ import annotations
+
 import warnings
 from collections import defaultdict
+from typing import TYPE_CHECKING, Any
 
 import datasets
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+
+if TYPE_CHECKING:
+    from datasets import Dataset
+
+    from mteb.types import RelevantDocumentsType
 
 DOMAINS_LONG = [
     "biology",
@@ -28,12 +36,16 @@ DOMAINS_langs = {split: ["eng-Latn"] for split in DOMAINS}
 
 
 def load_bright_data(
-    self,
+    self: AbsTaskRetrieval,
     path: str,
     domains: list,
     eval_splits: list,
     revision: str | None = None,
-):
+) -> tuple[
+    dict[str, dict[str, Dataset]],
+    dict[str, dict[str, Dataset]],
+    dict[str, dict[str, RelevantDocumentsType]],
+]:
     corpus = {domain: dict.fromkeys(eval_splits) for domain in domains}
     queries = {domain: dict.fromkeys(eval_splits) for domain in domains}
     relevant_docs = {domain: dict.fromkeys(eval_splits) for domain in domains}
@@ -83,7 +95,9 @@ def load_bright_data(
     return corpus, queries, relevant_docs
 
 
-def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+def load_data(
+    self: AbsTaskRetrieval, num_proc: int | None = None, **kwargs: Any
+) -> None:
     if self.data_loaded:
         return
 

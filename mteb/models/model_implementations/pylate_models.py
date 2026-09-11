@@ -7,7 +7,6 @@ import tempfile
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-from mteb._create_dataloaders import create_dataloader
 from mteb.models.abs_encoder import AbsEncoder, get_prompt
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
@@ -87,6 +86,8 @@ class PylateSearchEncoder:
         top_ranked: TopRankedDocumentsType | None = None,
         num_proc: int | None,
     ) -> RetrievalOutputType:
+        from mteb._create_dataloaders import create_dataloader
+
         queries_dataloader = create_dataloader(
             queries,
             task_metadata=task_metadata,
@@ -168,6 +169,8 @@ class PylateSearchEncoder:
         doc_ids = [str(x) for x in self.task_corpus["id"]]
 
         # Encode entire corpus via dataloader batching
+        from mteb._create_dataloaders import create_dataloader
+
         documents_loader = create_dataloader(
             self.task_corpus,
             task_metadata=task_metadata,
@@ -228,6 +231,8 @@ class PylateSearchEncoder:
 
         result_heaps = {qid: [] for qid in query_idx_to_id.values()}
         doc_id_to_idx = {doc: idx for idx, doc in enumerate(self.task_corpus["id"])}
+
+        from mteb._create_dataloaders import create_dataloader
 
         all_doc_embeddings = self._encode(
             create_dataloader(
@@ -294,7 +299,7 @@ class MultiVectorModel(PylateSearchEncoder):
         index_name: str | None = None,
         index_autodelete: bool = True,
         index_kwargs: dict[str, Any] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """Wrapper for MultiVector/ColBERT models (via PyLate)."""
         from pylate.models import ColBERT  # type: ignore[import]
@@ -1136,5 +1141,37 @@ lightonai__mlateon = ModelMeta(
     | mdenseon_mlateon_organic_data
     | mdenseon_mlateon_code_data,
     citation=mdenseon_mlateon_citation,
+    extra_requirements_groups=["pylate"],
+)
+
+
+nlpai_lab__kure_v2 = ModelMeta(
+    loader=MultiVectorModel,
+    name="nlpai-lab/KURE-v2",
+    model_type=["late-interaction"],
+    languages=[
+        "kor-Hang",
+        "eng-Latn",
+    ],
+    open_weights=True,
+    revision="cce9f539de457da36300adbe6245d24f878ca270",
+    public_training_code=None,
+    # Fine-tuned on lightonai/embeddings-fine-tuning, plus a subsample of
+    # lightonai/embeddings-pre-training-curated.
+    public_training_data="https://huggingface.co/datasets/lightonai/embeddings-fine-tuning",
+    release_date="2026-08-17",
+    n_parameters=153550080,
+    n_embedding_parameters=38401536,
+    memory_usage_mb=586,
+    max_tokens=8192,
+    embed_dim=128,
+    license="apache-2.0",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    framework=["PyLate", "ColBERT", "safetensors", "Sentence Transformers"],
+    reference="https://huggingface.co/nlpai-lab/KURE-v2",
+    use_instructions=False,
+    adapted_from="skt/A.X-Encoder-base",
+    superseded_by=None,
+    training_datasets=denseon_lateon_unsupervised_data | denseon_lateon_supervised_data,
     extra_requirements_groups=["pylate"],
 )

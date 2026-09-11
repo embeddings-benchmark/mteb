@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -43,7 +45,7 @@ class IEMOCAPEmotionClassification(AbsTaskClassification):
 
     is_cross_validation: bool = True
 
-    def dataset_transform(self, **kwargs):
+    def dataset_transform(self, **kwargs: Any):
         # Define emotion labels and their mapping to indices
         labels = [
             "angry",  # 0

@@ -5,7 +5,6 @@ import warnings
 from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
-import torch
 from packaging.version import Version
 from tqdm.auto import tqdm
 from typing_extensions import deprecated
@@ -19,6 +18,7 @@ from .abs_encoder import AbsEncoder, get_prompt_name
 if TYPE_CHECKING:
     from collections.abc import Callable
 
+    import torch
     from sentence_transformers import CrossEncoder, SentenceTransformer
     from sentence_transformers.sparse_encoder import SparseEncoder
     from torch.utils.data import DataLoader
@@ -107,17 +107,20 @@ def _batch_to_modality_dicts(
 
 
 def _resolve_model_prompts(
-    model: Any, model_prompts: dict[str, str] | None
+    model: SentenceTransformer, model_prompts: dict[str, str] | None
 ) -> dict[str, str] | None:
     """Merge `model_prompts` with `model`'s built-in prompts (explicit `model_prompts` wins) and validate the result."""
-    built_in_prompts = getattr(model, "prompts", None)
+    # SentenceTransformer types `prompts` as `dict[str, str | None]`; mteb only ever
+    # stores non-None values in it.
+    built_in_prompts = cast("dict[str, str] | None", getattr(model, "prompts", None))
     if built_in_prompts and not model_prompts:
         model_prompts = built_in_prompts
     elif model_prompts and built_in_prompts:
         msg = f"Model prompts specified, these will overwrite the default model prompts. Current prompts will be:\n {model_prompts}"
         logger.warning(msg)
         warnings.warn(msg, stacklevel=2)
-        model.prompts = model_prompts
+        # dict is invariant: SentenceTransformer declares dict[str, str | None]
+        model.prompts = cast("dict[str, str | None]", model_prompts)
 
     resolved_prompts, invalid_prompts = AbsEncoder.validate_task_to_prompt_name(
         model_prompts, raise_for_invalid_keys=False
@@ -161,14 +164,16 @@ def _select_encode_function(
     if prompt_type and has_query_encode:
         if prompt_type == PromptType.query:
             return model.encode_query  # type: ignore[no-any-return]
-        elif prompt_type == PromptType.document:
+        if prompt_type == PromptType.document:
             return model.encode_document  # type: ignore[no-any-return]
         raise ValueError(f"Unknown prompt type: {prompt_type}")
     return model.encode
 
 
-def _postprocess_dense_embeddings(embeddings: Any) -> Any:
+def _postprocess_dense_embeddings(embeddings: Array) -> Array:
     """Move a batch's embeddings to CPU float32 if it's a torch tensor; otherwise pass through unchanged."""
+    import torch
+
     if isinstance(embeddings, torch.Tensor):
         embeddings = embeddings.cpu().detach().float()
     return embeddings
@@ -176,6 +181,8 @@ def _postprocess_dense_embeddings(embeddings: Any) -> Any:
 
 def _concatenate_sparse_batches(batches: list[torch.Tensor]) -> torch.Tensor:
     """Concatenate per-batch sparse tensors along dim 0 (sparse tensors don't support `np.concatenate`)."""
+    import torch
+
     return torch.cat(batches, dim=0)
 
 
@@ -191,8 +198,10 @@ def _is_sparse_compatible_task(task_metadata: TaskMetadata) -> bool:
     )
 
 
-def _postprocess_sparse_embeddings(embeddings: Any) -> Any:
+def _postprocess_sparse_embeddings(embeddings: Array) -> Array:
     """Densify a batch's embeddings if it's a sparse torch tensor, then move to CPU float32."""
+    import torch
+
     if isinstance(embeddings, torch.Tensor) and embeddings.is_sparse:
         embeddings = embeddings.to_dense()
     return _postprocess_dense_embeddings(embeddings)

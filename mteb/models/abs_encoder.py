@@ -177,12 +177,11 @@ class AbsEncoder(ABC):
 
         if raise_for_invalid_keys and invalid_task_messages:
             raise KeyError(invalid_task_messages)
-        elif raise_for_invalid_keys:
+        if raise_for_invalid_keys:
             return task_to_prompt
-        else:
-            return {
-                k: v for k, v in task_to_prompt.items() if k not in invalid_keys
-            }, tuple(invalid_task_messages)
+        return {
+            k: v for k, v in task_to_prompt.items() if k not in invalid_keys
+        }, tuple(invalid_task_messages)
 
     def get_instruction(
         self,
@@ -265,10 +264,11 @@ class AbsEncoder(ABC):
             The instruction to be used for encoding sentences.
         """
         instruction = self.get_instruction(task_metadata, prompt_type)
-        if self.instruction_template:
-            # Always invoke callables. Issue https://github.com/embeddings-benchmark/mteb/issues/4683
-            if callable(self.instruction_template) or len(instruction) > 0:
-                return self.format_instruction(instruction, prompt_type)
+        # Always invoke callables. Issue https://github.com/embeddings-benchmark/mteb/issues/4683
+        if self.instruction_template and (
+            callable(self.instruction_template) or len(instruction) > 0
+        ):
+            return self.format_instruction(instruction, prompt_type)
         return instruction
 
     def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
@@ -303,9 +303,9 @@ class AbsEncoder(ABC):
             return cos_sim(embeddings1, embeddings2)
         if self.mteb_model_meta.similarity_fn_name is ScoringFunction.COSINE:
             return cos_sim(embeddings1, embeddings2)
-        elif self.mteb_model_meta.similarity_fn_name is ScoringFunction.DOT_PRODUCT:
+        if self.mteb_model_meta.similarity_fn_name is ScoringFunction.DOT_PRODUCT:
             return dot_score(embeddings1, embeddings2)
-        elif self.mteb_model_meta.similarity_fn_name is ScoringFunction.MAX_SIM:
+        if self.mteb_model_meta.similarity_fn_name is ScoringFunction.MAX_SIM:
             return max_sim(embeddings1, embeddings2)
         raise ValueError("Similarity function not specified.")
 
@@ -341,9 +341,9 @@ class AbsEncoder(ABC):
             return pairwise_cos_sim(embeddings1, embeddings2)
         if self.mteb_model_meta.similarity_fn_name is ScoringFunction.COSINE:
             return pairwise_cos_sim(embeddings1, embeddings2)
-        elif self.mteb_model_meta.similarity_fn_name is ScoringFunction.DOT_PRODUCT:
+        if self.mteb_model_meta.similarity_fn_name is ScoringFunction.DOT_PRODUCT:
             return pairwise_dot_score(embeddings1, embeddings2)
-        elif self.mteb_model_meta.similarity_fn_name is ScoringFunction.MAX_SIM:
+        if self.mteb_model_meta.similarity_fn_name is ScoringFunction.MAX_SIM:
             return pairwise_max_sim(embeddings1, embeddings2)
         raise ValueError("Similarity function not specified.")
 

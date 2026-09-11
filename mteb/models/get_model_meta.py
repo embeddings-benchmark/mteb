@@ -65,11 +65,11 @@ def get_model_metas(  # noqa: PLR0913, PLR0917
     for model_meta in model_metas:
         if (model_names is not None) and (model_meta.name not in model_names):
             continue
-        if languages is not None:
-            if (model_meta.languages is None) or not (
-                languages <= set(model_meta.languages)
-            ):
-                continue
+        if languages is not None and (
+            (model_meta.languages is None)
+            or not (languages <= set(model_meta.languages))
+        ):
+            continue
         if (open_weights is not None) and (model_meta.open_weights != open_weights):
             continue
         if (frameworks is not None) and not (frameworks <= set(model_meta.framework)):
@@ -99,9 +99,8 @@ def get_model_metas(  # noqa: PLR0913, PLR0917
             if lower is not None and n_parameters < lower:
                 continue
 
-        if zero_shot_on is not None:
-            if not model_meta.is_zero_shot_on(zero_shot_on):
-                continue
+        if zero_shot_on is not None and not model_meta.is_zero_shot_on(zero_shot_on):
+            continue
         res.append(model_meta)
     return res
 
@@ -208,7 +207,7 @@ def get_model_meta(
     not_found_msg += " nor on the Huggingface Hub." if fetch_from_hf else "."
 
     close_matches = difflib.get_close_matches(model_name, MODEL_REGISTRY.keys())
-    model_names_no_org = {mdl: mdl.split("/")[-1] for mdl in MODEL_REGISTRY.keys()}
+    model_names_no_org = {mdl: mdl.split("/")[-1] for mdl in MODEL_REGISTRY}
     if model_name in model_names_no_org:
         close_matches = [model_names_no_org[model_name]] + close_matches
 

@@ -20,6 +20,14 @@ from .audiocaps_av_retrieval import (
     AudioCapsAVVA2TRetrieval,
     AudioCapsAVVT2ARetrieval,
 )
+from .avcaps_retrieval import (
+    AVCapsA2TRetrieval,
+    AVCapsT2ARetrieval,
+    AVCapsT2VARetrieval,
+    AVCapsT2VRetrieval,
+    AVCapsV2TRetrieval,
+    AVCapsVA2TRetrieval,
+)
 from .avmeme_exam_retrieval import (
     AVMemeExamA2VRetrieval,
     AVMemeExamAT2VRetrieval,
@@ -215,6 +223,7 @@ from .lemb_summ_screen_fd_retrieval import LEMBSummScreenFDRetrieval
 from .lemb_wikim_qa_retrieval import LEMBWikimQARetrieval
 from .lembqm_sum_retrieval import LEMBQMSumRetrieval
 from .libri_tts import LibriTTSA2TRetrieval, LibriTTST2ARetrieval
+from .librispeech_speaker_retrieval import LibriSpeechSpeakerA2ARetrieval
 from .limit_retrieval import LIMITRetrieval, LIMITSmallRetrieval
 from .lit_search_retrieval import LitSearchRetrieval
 from .llava_it2t_retrieval import LLaVAIT2TRetrieval
@@ -241,6 +250,12 @@ from .lmeb_retrieval import (
     ProceduralMemBench,
     ReMe,
     ToolBench,
+)
+from .lombard_grid_retrieval import (
+    LombardGridA2VRetrieval,
+    LombardGridV2ARetrieval,
+    LombardGridV2VRetrieval,
+    LombardGridVA2VARetrieval,
 )
 from .lotte_retrieval import LoTTERetrieval
 from .macs import MACSA2TRetrieval, MACST2ARetrieval
@@ -485,6 +500,12 @@ __all__ = [
     "AILACasedocs",
     "AILAStatutes",
     "ARCChallenge",
+    "AVCapsA2TRetrieval",
+    "AVCapsT2ARetrieval",
+    "AVCapsT2VARetrieval",
+    "AVCapsT2VRetrieval",
+    "AVCapsV2TRetrieval",
+    "AVCapsVA2TRetrieval",
     "AVMemeExamA2VRetrieval",
     "AVMemeExamAT2VRetrieval",
     "AVMemeExamT2VARetrieval",
@@ -695,11 +716,16 @@ __all__ = [
     "LegalBenchConsumerContractsQA",
     "LegalBenchCorporateLobbying",
     "LegalSummarization",
+    "LibriSpeechSpeakerA2ARetrieval",
     "LibriTTSA2TRetrieval",
     "LibriTTST2ARetrieval",
     "LitSearchRetrieval",
     "LoCoMo",
     "LoTTERetrieval",
+    "LombardGridA2VRetrieval",
+    "LombardGridV2ARetrieval",
+    "LombardGridV2VRetrieval",
+    "LombardGridVA2VARetrieval",
     "LongMemEval",
     "LooGLE",
     "MACSA2TRetrieval",

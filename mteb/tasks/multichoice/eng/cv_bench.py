@@ -1,9 +1,15 @@
+from __future__ import annotations
+
 from collections import defaultdict
+from typing import TYPE_CHECKING, Any
 
 from datasets import Dataset, load_dataset
 
 from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+
+if TYPE_CHECKING:
+    from mteb.types import RelevantDocumentsType, TopRankedDocumentsType
 
 
 def _load_data(
@@ -11,7 +17,12 @@ def _load_data(
     splits: list[str],
     revision: str | None = None,
     subtask: str = "Count",
-):
+) -> tuple[
+    dict[str, Dataset],
+    dict[str, Dataset],
+    dict[str, RelevantDocumentsType],
+    dict[str, TopRankedDocumentsType],
+]:
     corpus = {}
     queries = {}
     relevant_docs = {}
@@ -85,7 +96,7 @@ def _load_data(
     return corpus, queries, relevant_docs, top_ranked
 
 
-def transform_choices(example):
+def transform_choices(example: dict[str, Any]) -> dict[str, Any]:
     mapping = {"(A)": 0, "(B)": 1, "(C)": 2, "(D)": 3, "(E)": 4, "(F)": 5}
     example["answer"] = mapping[example["answer"]]
     return example
@@ -123,7 +134,7 @@ class CVBenchCount(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
@@ -165,7 +176,7 @@ class CVBenchRelation(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
@@ -207,7 +218,7 @@ class CVBenchDepth(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
@@ -249,7 +260,7 @@ class CVBenchDistance(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
             path=self.metadata.dataset["path"],
             splits=self.metadata.eval_splits,
