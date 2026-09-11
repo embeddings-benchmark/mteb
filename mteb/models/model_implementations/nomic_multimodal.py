@@ -50,7 +50,7 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
         revision: str | None = None,
         device: str | None = None,
         base_revision: str | None = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         from colpali_engine.models import BiQwen2_5, BiQwen2_5_Processor
 
@@ -92,18 +92,18 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
                 )
             fused_embeddings = text_embeddings + image_embeddings
             return fused_embeddings
-        elif text_embeddings is not None:
+        if text_embeddings is not None:
             return text_embeddings
-        elif image_embeddings is not None:
+        if image_embeddings is not None:
             return image_embeddings
         raise ValueError
 
     def get_image_embeddings(
         self,
-        images,
+        images: DataLoader[BatchedInput],
         batch_size: int = 32,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> Array:
         all_embeds = []
 
         with torch.no_grad():
@@ -120,10 +120,10 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
 
     def get_text_embeddings(
         self,
-        texts,
+        texts: DataLoader[BatchedInput],
         batch_size: int = 32,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> Array:
         all_embeds = []
         with torch.no_grad():
             for batch in tqdm(texts, desc="Encoding texts"):
@@ -138,8 +138,8 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
         return padded
 
     def similarity(
-        self, a, b
-    ):  # Using the processing it goes from 0.57382 to 0.57297 on Vidore2ESGReportsHLRetrieval (without flash attention 2)
+        self, a: Array, b: Array
+    ) -> Array:  # Using the processing it goes from 0.57382 to 0.57297 on Vidore2ESGReportsHLRetrieval (without flash attention 2)
         return self.processor.score(a, b, device=self.device)
 
 

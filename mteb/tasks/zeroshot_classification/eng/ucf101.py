@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.zeroshot_classification import AbsTaskZeroShotClassification
 
@@ -90,7 +92,7 @@ class UCF101VideoAudioZeroShotClassification(AbsTaskZeroShotClassification):
     input_column_name = ("video", "audio")
     label_column_name: str = "label"
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         for split in self.metadata.eval_splits:
             self.dataset[split] = self.dataset[split].select_columns(
                 ["video", "audio", "label"],
@@ -146,7 +148,7 @@ class UCF101VideoZeroShotClassification(AbsTaskZeroShotClassification):
     input_column_name = "video"
     label_column_name: str = "label"
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         for split in self.metadata.eval_splits:
             self.dataset[split] = self.dataset[split].select_columns(
                 ["video", "label"],

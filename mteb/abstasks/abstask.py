@@ -333,8 +333,7 @@ class AbsTask(ABC):  # noqa: PLR0904
                     return _multilabel_subsampling(
                         dataset_dict, seed, splits, label, n_samples
                     )
-                else:
-                    raise e
+                raise e
 
         for split in splits:
             if n_samples >= len(dataset_dict[split]):
@@ -402,7 +401,7 @@ class AbsTask(ABC):  # noqa: PLR0904
         """
         self.dataset = {}
         merged_dataset = load_dataset(**self.metadata.dataset)  # load "default" subset
-        for split in merged_dataset.keys():
+        for split in merged_dataset:
             df_split = merged_dataset[split].to_polars()
             df_grouped = dict(df_split.group_by(["lang"]))
             for lang in set(df_split["lang"].unique()) & set(self.hf_subsets):
@@ -581,9 +580,12 @@ class AbsTask(ABC):  # noqa: PLR0904
                         subsets_to_keep.append(hf_subset)
                         break
 
-            if exclusive_language_filter is True and languages:
-                if lang_scripts.contains_languages(langs):
-                    subsets_to_keep.append(hf_subset)
+            if (
+                exclusive_language_filter is True
+                and languages
+                and lang_scripts.contains_languages(langs)
+            ):
+                subsets_to_keep.append(hf_subset)
 
         if len(subsets_to_keep) == 0:
             raise ValueError(

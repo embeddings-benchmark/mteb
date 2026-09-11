@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from datasets import Dataset
 from tqdm.auto import tqdm
 
@@ -48,9 +47,7 @@ class BitextMiningEvaluator(Evaluator):
     ) -> dict[str, list[dict[str, float]]]:
         pair_elements = {p for pair in self.pairs for p in pair}
         if isinstance(self.sentences, Dataset):
-            subsets = [
-                col for col in self.sentences.features.keys() if col in pair_elements
-            ]
+            subsets = [col for col in self.sentences.features if col in pair_elements]
         else:
             # BUCC outputs a dict instead of a Dataset
             subsets = list(pair_elements)
@@ -109,6 +106,8 @@ class BitextMiningEvaluator(Evaluator):
             Returns a list with one entry for each query. Each entry is a list of dictionaries with the keys 'corpus_id' and 'score', sorted by
                 decreasing cosine similarity scores.
         """
+        import torch
+
         if len(query_embeddings.shape) == 1:
             query_embeddings = query_embeddings.reshape(1, *query_embeddings.shape)
         if len(corpus_embeddings.shape) == 1:

@@ -1,4 +1,5 @@
 from collections import defaultdict
+from typing import Any
 
 from datasets import load_dataset
 
@@ -46,7 +47,7 @@ class NanoNFCorpusRetrieval(AbsTaskRetrieval):
         adapted_from=["NFCorpus"],
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 

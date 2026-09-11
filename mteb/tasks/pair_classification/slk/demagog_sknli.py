@@ -1,3 +1,5 @@
+from typing import Any
+
 from datasets import DatasetDict
 
 from mteb.abstasks.pair_classification import AbsTaskPairClassification
@@ -36,7 +38,7 @@ class DemagogSKNLI(AbsTaskPairClassification):
         prompt="Given a fact-checker's analysis (evidence), determine if it supports or refutes the political claim",
     )
 
-    def dataset_transform(self, **kwargs):
+    def dataset_transform(self, **kwargs: Any):
         """Transform DemagogSK into evidence-claim NLI pairs."""
         _dataset = {}
 

@@ -52,7 +52,7 @@ class MockSentenceTransformer(SentenceTransformer):
         truncate_dim: int | None = None,
         pool: dict[Literal["input", "output", "processes"], Any] | None = None,
         chunk_size: int | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> (
         list[Tensor] | np.ndarray | Tensor | dict[str, Tensor] | list[dict[str, Tensor]]
     ):
@@ -93,7 +93,7 @@ class MockSentenceTransformersbf16Encoder(MockSentenceTransformer):
         truncate_dim: int | None = None,
         pool: dict[Literal["input", "output", "processes"], Any] | None = None,
         chunk_size: int | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> (
         list[Tensor] | np.ndarray | Tensor | dict[str, Tensor] | list[dict[str, Tensor]]
     ):
@@ -106,7 +106,7 @@ class MockSentenceTransformerWrapper(SentenceTransformerEncoderWrapper):
         model: str | SentenceTransformer | CrossEncoder,
         revision: str | None = None,
         model_prompts: dict[str, str] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """Wrapper for SentenceTransformer models.
 

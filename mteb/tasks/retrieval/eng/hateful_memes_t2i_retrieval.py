@@ -1,11 +1,22 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
+
 import polars as pl
 from datasets import concatenate_datasets, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
+if TYPE_CHECKING:
+    from datasets import Dataset
 
-def _load_data(path: str, splits: str, revision: str | None = None):
+    from mteb.types import RelevantDocumentsType
+
+
+def _load_data(
+    path: str, splits: str, revision: str | None = None
+) -> tuple[dict[str, Dataset], dict[str, Dataset], dict[str, RelevantDocumentsType]]:
     corpus = {}
     queries = {}
     relevant_docs = {}
@@ -90,7 +101,7 @@ class HatefulMemesT2IRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = _load_data(

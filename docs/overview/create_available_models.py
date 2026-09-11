@@ -130,18 +130,17 @@ def required_memory_string(mem_in_mb: int | None) -> str:
         return "not specified"
     if mem_in_mb < 1024:
         return f"{mem_in_mb} MB"
-    else:
-        mem_in_gb = mem_in_mb / 1024
-        return f"{mem_in_gb:.1f} GB"
+    mem_in_gb = mem_in_mb / 1024
+    return f"{mem_in_gb:.1f} GB"
 
 
 def format_model_entry(meta: ModelMeta) -> str:
     revision = meta.revision or "not specified"
     raw_license = meta.license or "not specified"
     if raw_license.startswith(("http://", "https://")):
-        license = f"[custom]({raw_license})"
+        license_str = f"[custom]({raw_license})"
     else:
-        license = raw_license
+        license_str = raw_license
     max_tokens = (
         human_readable_number(meta.max_tokens)
         if meta.max_tokens is not None
@@ -168,7 +167,7 @@ def format_model_entry(meta: ModelMeta) -> str:
         model_name=meta.name,
         learn_more=learn_more,
         revision=revision,
-        license=license,
+        license=license_str,
         max_tokens=max_tokens,
         embed_dim=embed_dim,
         n_parameters=n_parameters,

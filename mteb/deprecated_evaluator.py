@@ -111,21 +111,18 @@ class MTEB:
             )
             if len(current_type_tasks) == 0:
                 continue
-            else:
-                console.print(f"[bold]{task_type}[/]")
-                for (
-                    task
-                ) in current_type_tasks:  # will be sorted as input to this function
-                    prefix = "    - "
-                    name = f"{task.metadata.name}"
-                    category = f", [italic grey39]{task.metadata.category}[/]"
-                    multilingual = (
-                        f", [italic red]multilingual {len(task.hf_subsets)} / {len(task.metadata.eval_langs)} Subsets[/]"
-                        if task.metadata.is_multilingual
-                        else ""
-                    )
-                    console.print(f"{prefix}{name}{category}{multilingual}")
-                console.print("\n")
+            console.print(f"[bold]{task_type}[/]")
+            for task in current_type_tasks:  # will be sorted as input to this function
+                prefix = "    - "
+                name = f"{task.metadata.name}"
+                category = f", [italic grey39]{task.metadata.category}[/]"
+                multilingual = (
+                    f", [italic red]multilingual {len(task.hf_subsets)} / {len(task.metadata.eval_langs)} Subsets[/]"
+                    if task.metadata.is_multilingual
+                    else ""
+                )
+                console.print(f"{prefix}{name}{category}{multilingual}")
+            console.print("\n")
 
     def mteb_benchmarks(self) -> None:
         """Get all benchmarks available in the MTEB."""
@@ -204,11 +201,10 @@ class MTEB:
 
         missing_splits = []
         for split in task_eval_splits:
-            if split not in existing_results.scores:
-                missing_splits.append(split)
-            elif not existing_results.scores[
-                split
-            ]:  # Check if the split has any scores
+            if (
+                split not in existing_results.scores
+                or not existing_results.scores[split]
+            ):
                 missing_splits.append(split)
 
         return missing_splits

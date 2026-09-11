@@ -4,9 +4,7 @@ import logging
 import warnings
 from typing import TYPE_CHECKING, Any, cast
 
-import torch
 from datasets import Dataset, Image
-from torch.utils.data import DataLoader, default_collate
 
 from mteb.types import (
     ConversationTurn,
@@ -15,6 +13,8 @@ from mteb.types import (
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Sequence
+
+    from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import (
@@ -45,6 +45,8 @@ def _create_dataloader_from_texts(
     Returns:
         A dataloader with the text.
     """
+    from torch.utils.data import DataLoader
+
     dataset = Dataset.from_dict({"text": text})
     return DataLoader(
         dataset,
@@ -149,9 +151,12 @@ def _convert_conv_history_to_query(
     return cast("dict[str, str | list[ConversationTurn]]", row)
 
 
+# Duck-typed: accepts a PIL image or a tensor (narrowed via `hasattr`), and the
+# caller-supplied `transform` decides the output type.
 def _transform_image_to_rgb(
-    image: Any, transform: Callable[[Any], Any] | None = None
-) -> Any:
+    image: Any,  # noqa: ANN401
+    transform: Callable[[Any], Any] | None = None,
+) -> Any:  # noqa: ANN401
     """Convert image to RGB and apply a transformation (e.g. PILToTensor).
 
     Args:
@@ -161,6 +166,8 @@ def _transform_image_to_rgb(
     Returns:
         The transformed image in RGB format.
     """
+    import torch
+
     # For PIL images: ensure RGB format.
     if hasattr(image, "mode") and image.mode != "RGB":
         image = image.convert("RGB")
@@ -222,6 +229,8 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
     Returns:
         A collated dictionary.
     """
+    from torch.utils.data import default_collate
+
     collated = {}
     for key in batch[0]:
         if key in (  # noqa: PLR6201
@@ -284,13 +293,12 @@ def _prepare_dataset(
                 num_proc=num_proc,
             )
     for modality in ("audio", "video"):
-        if modality in modalities:
-            if (
-                input_column
-                and input_column in dataset.column_names
-                and modality not in dataset.column_names
-            ):
-                dataset = dataset.rename_column(input_column, modality)
+        if modality in modalities and (
+            input_column
+            and input_column in dataset.column_names
+            and modality not in dataset.column_names
+        ):
+            dataset = dataset.rename_column(input_column, modality)
 
     # Drop modality columns not needed for this prompt type to avoid
     # None values in the collate function (e.g. text=None in image-only corpus)
@@ -330,6 +338,8 @@ def create_dataloader(
     Returns:
         A dataloader for the dataset.
     """
+    from torch.utils.data import DataLoader
+
     # Sequence means columns already match modality names, no renaming needed
     _input_column = input_column if isinstance(input_column, str) else None
 

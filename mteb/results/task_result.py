@@ -526,9 +526,9 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             "1.1.3.dev0",
         ]:
             scores["test"]["fr"] = scores["test"].pop("default")
-        if task_name == "XPQARetrieval":  # subset were renamed from "fr" to "fra-fra"
-            if "test" in scores and "fr" in scores["test"]:
-                scores["test"]["fra-fra"] = scores["test"].pop("fr")
+        # subset were renamed from "fr" to "fra-fra"
+        if task_name == "XPQARetrieval" and "test" in scores and "fr" in scores["test"]:
+            scores["test"]["fra-fra"] = scores["test"].pop("fr")
 
         result: TaskResult = TaskResult.from_task_results(
             task,
@@ -612,7 +612,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                     raise ValueError(f"Missing main score for subset: {hf_subset}")
                 if subsets and hf_subset not in subsets:
                     continue
-                elif subsets:
+                if subsets:
                     val_sum += main_score
                     n_val += 1
                     continue

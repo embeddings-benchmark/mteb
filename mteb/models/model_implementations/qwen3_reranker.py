@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import torch
@@ -30,7 +30,7 @@ class Qwen3RerankerWrapper:
         model_name_or_path: str,
         device: str | None = None,
         max_length: int = 8192,
-        **kwargs,
+        **kwargs: Any,
     ):
         self.model_name_or_path = model_name_or_path
         self.device = device or (

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -79,7 +81,7 @@ class VALOR32KV2TRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_valor(self, query_columns=["video"], corpus_columns=["description"])
 
 
@@ -111,7 +113,7 @@ class VALOR32KT2VRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_valor(self, query_columns=["description"], corpus_columns=["video"])
 
 
@@ -143,7 +145,7 @@ class VALOR32KVA2TRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_valor(
             self, query_columns=["video", "audio"], corpus_columns=["description"]
         )
@@ -177,7 +179,7 @@ class VALOR32KT2VARetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_valor(
             self, query_columns=["description"], corpus_columns=["video", "audio"]
         )
@@ -212,7 +214,7 @@ class VALOR32KV2ARetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_valor(self, query_columns=["video"], corpus_columns=["audio"])
 
 
@@ -245,7 +247,7 @@ class VALOR32KA2VRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_valor(self, query_columns=["audio"], corpus_columns=["video"])
 
 
@@ -280,7 +282,7 @@ class VALOR32KVT2ARetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_valor(
             self, query_columns=["video", "description"], corpus_columns=["audio"]
         )
@@ -317,7 +319,7 @@ class VALOR32KAT2VRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_valor(
             self, query_columns=["audio", "description"], corpus_columns=["video"]
         )

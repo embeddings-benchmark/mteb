@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -42,7 +44,7 @@ class VoxCelebSA(AbsTaskClassification):
 
     is_cross_validation: bool = True
 
-    def dataset_transform(self, **kwargs):
+    def dataset_transform(self, **kwargs: Any):
         # remove disagreement data
         self.dataset = self.dataset.filter(lambda x: x["label"] != "Disagreement")
         self.dataset["train"] = self.dataset.pop("test")

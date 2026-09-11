@@ -4,7 +4,6 @@ import logging
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any, TypedDict
 
-import torch
 from datasets import concatenate_datasets
 
 from mteb._evaluators import ImageTextPairClassificationEvaluator
@@ -19,6 +18,7 @@ from mteb.types.statistics import ImageTextPairClassificationDescriptiveStatisti
 if TYPE_CHECKING:
     from pathlib import Path
 
+    import torch
     from datasets import Dataset
 
     from mteb.models.models_protocols import MTEBModels
@@ -181,6 +181,8 @@ class AbsTaskImageTextPairClassification(AbsTask):
         num_images_per_sample: int,
         num_texts_per_sample: int,
     ) -> ImageTextPairClassificationMetrics:
+        import torch
+
         image_score = []
         text_score = []
         all_correct_scores = []
