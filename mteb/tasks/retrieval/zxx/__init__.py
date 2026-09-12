@@ -1,4 +1,5 @@
 from .abo_i2v_retrieval import ABOI2VRetrieval
+from .got10k_retrieval import GOT10kI2VRetrieval, GOT10kV2IRetrieval
 from .bridge_retrieval import BridgeV2VRetrieval
 from .evve_retrieval import EVVERetrieval
 from .libero_retrieval import LIBEROI2VRetrieval, LIBEROV2IRetrieval
@@ -22,6 +23,8 @@ from .vsc2022_retrieval import VSC2022Retrieval
 
 __all__ = [
     "ABOI2VRetrieval",
+    "GOT10kI2VRetrieval",
+    "GOT10kV2IRetrieval",
     "BridgeV2VRetrieval",
     "EVVERetrieval",
     "LIBEROI2VRetrieval",
