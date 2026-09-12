@@ -523,6 +523,7 @@ conflicts = [
         { extra = "nemotron-3-embed" }, # conflicting versions of transformers
         { extra = "multimodal-sbert" }, # conflicting version of sentence-transformers
         { extra = "colpali_engine" },
+        { extra = "evie" }, # transformers>=5.13.1 conflicts with visrag-ret etc.
         { extra = "colqwen3" },
         { extra = "colvec1-1" },
         { extra = "jina-v4" },
