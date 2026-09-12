@@ -164,8 +164,8 @@ class ViCLIPWrapper(AbsEncoder):
 
 _VICLIP_COMMON = dict(
     loader=ViCLIPWrapper,
-    # 8 frames: 8-frame clips
-    # https://github.com/OpenGVLab/InternVideo
+    # 8 frames: video_input_num_frames = 8 in ViCLIP's source
+    # https://github.com/OpenGVLab/InternVideo/blob/main/Data/InternVid/viclip/viclip.py
     loader_kwargs=dict(num_frames=8),
     model_type=["dense"],
     languages=["eng-Latn"],
