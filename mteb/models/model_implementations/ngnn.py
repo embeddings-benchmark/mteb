@@ -103,16 +103,18 @@ ngnn_general_encoder = ModelMeta(
     loader=load_ngnn_model,
     release_date="2026-09-06",
     languages=["eng-Latn"],
+    # The local dictionary has 1,572,864 values plus 512 fixed unit scales.
+    # Totals include the proprietary OpenAI base and are unknown.
     n_parameters=None,
     n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=8191,
     embed_dim=OUTPUT_DIM,
-    license=None,
+    license="mit",  # Published compressor/code; OpenAI API terms remain separate.
     open_weights=False,
     public_training_code=None,
     public_training_data=None,
-    framework=["API", "PyTorch"],
+    framework=["API", "PyTorch"],  # Encoding still requires OpenAI API access.
     reference="https://github.com/steffen181/frozen-ngnn-api-modesl",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
