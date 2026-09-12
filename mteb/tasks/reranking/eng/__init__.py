@@ -8,6 +8,7 @@ from .biovita import (
     BioVITAT2IReranking,
 )
 from .built_bench_reranking import BuiltBenchReranking
+from .colder_reranking import ColDeRReranking
 from .ecommerce_product_relevance_reranking import ERESSReranking
 from .fs_dnoisy18k_audio_reranking import FSDnoisy18kAudioReranking
 from .hume_core17_instruction_reranking import HUMECore17InstructionReranking
@@ -47,6 +48,7 @@ __all__ = [
     "BioVITAT2AReranking",
     "BioVITAT2IReranking",
     "BuiltBenchReranking",
+    "ColDeRReranking",
     "ERESSReranking",
     "FSDnoisy18kAudioReranking",
     "HUMECore17InstructionReranking",
