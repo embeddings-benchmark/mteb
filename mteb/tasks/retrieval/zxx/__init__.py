@@ -1,6 +1,7 @@
 from .abo_i2v_retrieval import ABOI2VRetrieval
 from .bridge_retrieval import BridgeV2VRetrieval
 from .evve_retrieval import EVVERetrieval
+from .jaco_play_retrieval import JacoPlayI2VRetrieval, JacoPlayV2IRetrieval
 from .libero_retrieval import LIBEROI2VRetrieval, LIBEROV2IRetrieval
 from .lp_music_caps import LPMusicCapsMTTA2TRetrieval, LPMusicCapsMTTT2ARetrieval
 from .maniskill_retrieval import ManiSkillI2VRetrieval, ManiSkillV2IRetrieval
@@ -24,6 +25,8 @@ __all__ = [
     "ABOI2VRetrieval",
     "BridgeV2VRetrieval",
     "EVVERetrieval",
+    "JacoPlayI2VRetrieval",
+    "JacoPlayV2IRetrieval",
     "LIBEROI2VRetrieval",
     "LIBEROV2IRetrieval",
     "LPMusicCapsMTTA2TRetrieval",
