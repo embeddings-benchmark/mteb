@@ -72,7 +72,7 @@ class EvieWrapper(ColQwen3_5Wrapper):
             if cfg is not None:
                 cfg.is_causal = False
         for module in self.model.modules():
-            if module.__class__.__name__ in ("Qwen3_5Attention", "Qwen3Attention"):
+            if module.__class__.__name__ in {"Qwen3_5Attention", "Qwen3Attention"}:
                 module.is_causal = False
 
 
