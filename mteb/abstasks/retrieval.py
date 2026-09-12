@@ -32,6 +32,7 @@ from ._statistics_calculation import (
     calculate_relevant_docs_statistics,
     calculate_single_input_modality_statistics,
     calculate_top_ranked_statistics,
+    compute_black_or_white_image_flags,
 )
 from .abstask import AbsTask
 from .retrieval_dataset_loaders import (
@@ -573,8 +574,32 @@ class AbsTaskRetrieval(AbsTask):
         if "video" in queries_modalities:
             queries_col_inputs["video"] = queries["video"]
 
+        # Compute the corpus black-or-white-image flags once: `calculate_image_statistics`
+        # needs the count and `calculate_relevant_docs_statistics` needs to know
+        # *which* documents are black/white so it can intersect them with qrels.
+        black_or_white_image_flags = (
+            compute_black_or_white_image_flags(
+                corpus_col_inputs["image"], max_workers=num_proc
+            )
+            if "image" in corpus_col_inputs
+            else None
+        )
+        black_or_white_doc_ids = (
+            {
+                doc_id
+                for doc_id, is_black_or_white in zip(
+                    corpus["id"], black_or_white_image_flags, strict=True
+                )
+                if is_black_or_white
+            }
+            if black_or_white_image_flags is not None
+            else None
+        )
+
         corpus_stats = calculate_single_input_modality_statistics(
-            corpus_col_inputs, max_workers=num_proc
+            corpus_col_inputs,
+            max_workers=num_proc,
+            black_or_white_image_flags=black_or_white_image_flags,
         )
         queries_stats = calculate_single_input_modality_statistics(
             queries_col_inputs, max_workers=num_proc
@@ -590,7 +615,7 @@ class AbsTaskRetrieval(AbsTask):
         )
 
         relevant_docs_statistics = calculate_relevant_docs_statistics(
-            relevant_docs, query_ids, corpus_ids
+            relevant_docs, query_ids, corpus_ids, black_or_white_doc_ids
         )
         top_ranked_statistics = (
             calculate_top_ranked_statistics(top_ranked, num_queries)
