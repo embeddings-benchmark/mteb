@@ -1,8 +1,3 @@
-from collections import defaultdict
-from typing import Any
-
-from datasets import load_dataset
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -13,8 +8,8 @@ class NanoArguAnaRetrieval(AbsTaskRetrieval):
         description="NanoArguAna is a smaller subset of ArguAna, a dataset for argument retrieval in debate contexts.",
         reference="http://argumentation.bplaced.net/arguana/data",
         dataset={
-            "path": "zeta-alpha-ai/NanoArguAna",
-            "revision": "8f4a982d470a32c45817738b9d29042ca55d75ad",
+            "path": "mteb/NanoArguAnaRetrieval",
+            "revision": "63ac9f026e8f6b85dc0622f3d630ed7a1758e9ec",
         },
         type="Retrieval",
         category="t2t",
@@ -40,50 +35,3 @@ class NanoArguAnaRetrieval(AbsTaskRetrieval):
         prompt={"query": "Given a claim, find documents that refute the claim"},
         adapted_from=["ArguAna"],
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus = load_dataset(
-            "zeta-alpha-ai/NanoArguAna",
-            "corpus",
-            revision="8f4a982d470a32c45817738b9d29042ca55d75ad",
-        )
-        self.queries = load_dataset(
-            "zeta-alpha-ai/NanoArguAna",
-            "queries",
-            revision="8f4a982d470a32c45817738b9d29042ca55d75ad",
-        )
-        self.relevant_docs = load_dataset(
-            "zeta-alpha-ai/NanoArguAna",
-            "qrels",
-            revision="8f4a982d470a32c45817738b9d29042ca55d75ad",
-        )
-
-        self.corpus = {
-            split: {
-                sample["_id"]: {"_id": sample["_id"], "text": sample["text"]}
-                for sample in self.corpus[split]
-            }
-            for split in self.corpus
-        }
-
-        self.queries = {
-            split: {sample["_id"]: sample["text"] for sample in self.queries[split]}
-            for split in self.queries
-        }
-
-        relevant_docs = {}
-
-        for split in self.relevant_docs:
-            relevant_docs[split] = defaultdict(dict)
-            for query_id, corpus_id in zip(
-                self.relevant_docs[split]["query-id"],
-                self.relevant_docs[split]["corpus-id"],
-                strict=True,
-            ):
-                relevant_docs[split][query_id][corpus_id] = 1
-        self.relevant_docs = relevant_docs
-
-        self.data_loaded = True
