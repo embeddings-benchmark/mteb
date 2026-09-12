@@ -482,9 +482,10 @@ def test_evaluate_aggregated_task_with_error(monkeypatch: pytest.MonkeyPatch):
     def load_error(*args: Any, **kwargs: Any):
         raise RuntimeError("Test error")
 
-    # the subtasks live on the class attribute `metadata`, so they are shared across the
-    # session and the patch has to be undone after the test
-    monkeypatch.setattr(error_subtask, "load_data", load_error)
+    # the subtasks live on the class attribute `metadata`, so they are shared across the session.
+    # The class is patched rather than the instance, as undoing an instance patch would leave the
+    # bound method shadowing the class method on the shared subtask.
+    monkeypatch.setattr(type(error_subtask), "load_data", load_error)
 
     with pytest.raises(RuntimeError, match="Test error"):
         mteb.evaluate(model, task, cache=None)
