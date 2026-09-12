@@ -1,14 +1,11 @@
 from __future__ import annotations
 
-import logging
 from typing import Any
 
 from datasets import Dataset, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-
-logger = logging.getLogger(__name__)
 
 _SUBSETS = [
     "foil",
