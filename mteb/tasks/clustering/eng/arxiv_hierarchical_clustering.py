@@ -16,6 +16,7 @@ def split_labels(record: dict) -> dict:
 class ArXivHierarchicalClusteringP2P(AbsTaskClustering):
     metadata = TaskMetadata(
         name="ArXivHierarchicalClusteringP2P",
+        superseded_by="ArXivHierarchicalClusteringP2P.v2",
         description="Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the main or secondary category",
         reference="https://www.kaggle.com/Cornell-University/arxiv",
         dataset={
@@ -59,6 +60,7 @@ class ArXivHierarchicalClusteringP2P(AbsTaskClustering):
 class ArXivHierarchicalClusteringS2S(AbsTaskClustering):
     metadata = TaskMetadata(
         name="ArXivHierarchicalClusteringS2S",
+        superseded_by="ArXivHierarchicalClusteringS2S.v2",
         description="Clustering of titles from arxiv. Clustering of 30 sets, either on the main or secondary category",
         reference="https://www.kaggle.com/Cornell-University/arxiv",
         dataset={
@@ -97,3 +99,45 @@ class ArXivHierarchicalClusteringS2S(AbsTaskClustering):
         self.dataset["test"] = self.dataset["test"].train_test_split(
             test_size=N_SAMPLES, seed=self.seed
         )["test"]
+
+
+class ArXivHierarchicalClusteringP2PV2(ArXivHierarchicalClusteringP2P):
+    """ArXivHierarchicalClusteringP2P with documents that have no label at the level being scored dropped.
+
+    Same data and same revision as ArXivHierarchicalClusteringP2P. The only difference is that a
+    document whose label path stops above the level being scored is left out of that
+    level rather than gathered into one group under a sentinel label. Those documents
+    have nothing in common except a missing label, so scoring them asks the model to
+    find a class that is not really there.
+
+    Scores are not comparable with ArXivHierarchicalClusteringP2P. On the SNL tasks the difference is
+    about +0.13 v_measure, and it tracks the share of documents that have no label at
+    each level.
+    """
+
+    drop_unlabelled_documents = True
+
+    metadata = ArXivHierarchicalClusteringP2P.metadata.model_copy(
+        update={"name": "ArXivHierarchicalClusteringP2P.v2", "superseded_by": None},
+    )
+
+
+class ArXivHierarchicalClusteringS2SV2(ArXivHierarchicalClusteringS2S):
+    """ArXivHierarchicalClusteringS2S with documents that have no label at the level being scored dropped.
+
+    Same data and same revision as ArXivHierarchicalClusteringS2S. The only difference is that a
+    document whose label path stops above the level being scored is left out of that
+    level rather than gathered into one group under a sentinel label. Those documents
+    have nothing in common except a missing label, so scoring them asks the model to
+    find a class that is not really there.
+
+    Scores are not comparable with ArXivHierarchicalClusteringS2S. On the SNL tasks the difference is
+    about +0.13 v_measure, and it tracks the share of documents that have no label at
+    each level.
+    """
+
+    drop_unlabelled_documents = True
+
+    metadata = ArXivHierarchicalClusteringS2S.metadata.model_copy(
+        update={"name": "ArXivHierarchicalClusteringS2S.v2", "superseded_by": None},
+    )

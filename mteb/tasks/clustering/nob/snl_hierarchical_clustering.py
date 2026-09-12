@@ -15,6 +15,7 @@ class SNLHierarchicalClusteringP2P(AbsTaskClustering):
 
     metadata = TaskMetadata(
         name="SNLHierarchicalClusteringP2P",
+        superseded_by="SNLHierarchicalClusteringP2P.v2",
         dataset={
             "path": "mteb/SNLHierarchicalClusteringP2P",
             "revision": "693a321c42fb13ffe76bb9043f8d2aaa8f0a9499",
@@ -53,6 +54,7 @@ class SNLHierarchicalClusteringS2S(AbsTaskClustering):
 
     metadata = TaskMetadata(
         name="SNLHierarchicalClusteringS2S",
+        superseded_by="SNLHierarchicalClusteringS2S.v2",
         dataset={
             "path": "mteb/SNLHierarchicalClusteringS2S",
             "revision": "b505e4ce65f255228e49dd07b6f8148731c5dc64",
@@ -83,3 +85,45 @@ class SNLHierarchicalClusteringS2S(AbsTaskClustering):
         prompt="Identify categories in a Norwegian lexicon",
     )
     max_depth = 5
+
+
+class SNLHierarchicalClusteringP2PV2(SNLHierarchicalClusteringP2P):
+    """SNLHierarchicalClusteringP2P with documents that have no label at the level being scored dropped.
+
+    Same data and same revision as SNLHierarchicalClusteringP2P. The only difference is that a
+    document whose label path stops above the level being scored is left out of that
+    level rather than gathered into one group under a sentinel label. Those documents
+    have nothing in common except a missing label, so scoring them asks the model to
+    find a class that is not really there.
+
+    Scores are not comparable with SNLHierarchicalClusteringP2P. On the SNL tasks the difference is
+    about +0.13 v_measure, and it tracks the share of documents that have no label at
+    each level.
+    """
+
+    drop_unlabelled_documents = True
+
+    metadata = SNLHierarchicalClusteringP2P.metadata.model_copy(
+        update={"name": "SNLHierarchicalClusteringP2P.v2", "superseded_by": None},
+    )
+
+
+class SNLHierarchicalClusteringS2SV2(SNLHierarchicalClusteringS2S):
+    """SNLHierarchicalClusteringS2S with documents that have no label at the level being scored dropped.
+
+    Same data and same revision as SNLHierarchicalClusteringS2S. The only difference is that a
+    document whose label path stops above the level being scored is left out of that
+    level rather than gathered into one group under a sentinel label. Those documents
+    have nothing in common except a missing label, so scoring them asks the model to
+    find a class that is not really there.
+
+    Scores are not comparable with SNLHierarchicalClusteringS2S. On the SNL tasks the difference is
+    about +0.13 v_measure, and it tracks the share of documents that have no label at
+    each level.
+    """
+
+    drop_unlabelled_documents = True
+
+    metadata = SNLHierarchicalClusteringS2S.metadata.model_copy(
+        update={"name": "SNLHierarchicalClusteringS2S.v2", "superseded_by": None},
+    )
