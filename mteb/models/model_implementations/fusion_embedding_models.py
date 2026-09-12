@@ -46,6 +46,8 @@ class FusionEmbeddingWrapper(AbsEncoder):
 
     sampling_rate = 16_000
     max_text_tokens = 254
+    # 64 frames: base is Qwen/Qwen3-VL-Embedding-2B, sampled uniformly
+    # https://huggingface.co/EximiusLabs/fusion-embedding-1-2b-preview/blob/main/config.json
     video_num_frames = 64  # the base's reference max_frames; sampled uniformly
 
     def __init__(

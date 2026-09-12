@@ -357,6 +357,7 @@ class _UEmbedInference:
         # VideoCollator sampled at rather than let the processor assume 24 fps.
         video_metadata = [
             VideoMetadata(
+                # all frames: UEmbed uses the clip's own length, no cap declared
                 total_num_frames=len(video),
                 fps=self.fps,
                 frames_indices=list(range(len(video))),
