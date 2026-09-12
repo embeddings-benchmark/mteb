@@ -123,6 +123,7 @@ from .spoken_wikipedia_retrieval import (
     SpokenWikipediaT2ARetrieval,
 )
 from .statcan_dialogue_dataset_retrieval import StatcanDialogueDatasetRetrieval
+from .vaani_retrieval import VaaniA2IRetrieval, VaaniI2ARetrieval
 from .vaani_speech_text_retrieval import VaaniA2TRetrieval, VaaniT2ARetrieval
 from .vdr_multilingual_retrieval import VDRMultilingualRetrieval
 from .vidore2_bench_retrieval import (
@@ -275,6 +276,8 @@ __all__ = [
     "SpokenWikipediaT2ARetrieval",
     "StatcanDialogueDatasetRetrieval",
     "VDRMultilingualRetrieval",
+    "VaaniA2IRetrieval",
+    "VaaniI2ARetrieval",
     "VaaniA2TRetrieval",
     "VaaniT2ARetrieval",
     "Vidore2BioMedicalLecturesRetrieval",
