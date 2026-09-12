@@ -24,6 +24,7 @@ from mteb.mocks.mock_tasks import (
     MockMultilingualRetrievalTask,
     MockRetrievalTask,
 )
+from mteb.mocks.mock_tasks.clustering import MockImageClusteringTask
 from mteb.models import ModelMeta
 from mteb.models.models_protocols import EncoderProtocol
 from mteb.results.task_result import TaskResult
@@ -396,6 +397,145 @@ def test_run_list_with_error():
     results = mteb.evaluate(model, [error_task, task], cache=None, raise_error=False)
     assert len(results.task_results) == 1
     assert len(results.exceptions) == 1
+
+
+def test_run_list_with_unsupported_modalities():
+    """Test that a task the model does not support does not abort the remaining tasks
+
+    The raising counterpart is covered by tests/test_integrations/test_modality.py.
+    """
+    error_task = MockImageClusteringTask()
+    task = MockClassificationTask()
+
+    # a text-only model, as the random baseline supports all modalities
+    model = MockSentenceTransformer()
+    results = mteb.evaluate(model, [error_task, task], cache=None, raise_error=False)
+    assert len(results.task_results) == 1
+    assert len(results.exceptions) == 1
+    assert results.exceptions[0].task_name == error_task.metadata.name
+
+
+def test_run_list_with_missing_cache(tmp_path: Path):
+    """Test that a task missing from the cache does not abort the remaining tasks
+
+    The raising counterpart is covered by `test_cache_hit`.
+    """
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    cache = ResultCache(tmp_path)
+    cached_task = MockRetrievalTask()
+    mteb.evaluate(model, cached_task, cache=cache)
+    uncached_task = MockClassificationTask()
+
+    results = mteb.evaluate(
+        model,
+        [uncached_task, cached_task],
+        cache=cache,
+        overwrite_strategy="only-cache",
+        raise_error=False,
+    )
+    assert len(results.task_results) == 1
+    assert len(results.exceptions) == 1
+    assert results.exceptions[0].task_name == uncached_task.metadata.name
+
+
+def test_run_list_with_failing_cache_save(tmp_path: Path):
+    """Test that a failure while saving the results does not abort the remaining tasks
+
+    The evaluation itself succeeded, so its result is kept alongside the error.
+    """
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    # a single split, so that the second save is the one of the completed result
+    error_task = MockClassificationTask()
+    task = MockRetrievalTask()
+
+    cache = ResultCache(tmp_path)
+
+    save_calls = 0
+
+    def save_error(result: TaskResult, *args: Any, **kwargs: Any) -> None:
+        nonlocal save_calls
+        if result.task_name != error_task.metadata.name:
+            return
+        save_calls += 1
+        # the first call is the intermediate write during the evaluation, which is not
+        # recoverable as the task has not finished running yet
+        if save_calls > 1:
+            raise OSError("Test error")
+
+    cache.save_to_cache = save_error
+
+    results = mteb.evaluate(model, [error_task, task], cache=cache, raise_error=False)
+    assert [result.task_name for result in results.task_results] == [
+        error_task.metadata.name,
+        task.metadata.name,
+    ]
+    assert len(results.exceptions) == 1
+    assert results.exceptions[0].task_name == error_task.metadata.name
+
+
+def test_evaluate_aggregated_task_with_error(monkeypatch: pytest.MonkeyPatch):
+    """Test that a failing subtask is reported as an error rather than raised, when specified"""
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    task = MockAggregatedTask()
+    error_subtask = task.metadata.tasks[0]
+
+    def load_error(*args: Any, **kwargs: Any):
+        raise RuntimeError("Test error")
+
+    # the subtasks live on the class attribute `metadata`, so they are shared across the session.
+    # The class is patched rather than the instance, as undoing an instance patch would leave the
+    # bound method shadowing the class method on the shared subtask.
+    monkeypatch.setattr(type(error_subtask), "load_data", load_error)
+
+    with pytest.raises(RuntimeError, match="Test error"):
+        mteb.evaluate(model, task, cache=None)
+
+    results = mteb.evaluate(model, task, cache=None, raise_error=False)
+    # the aggregate score can't be computed from the incomplete subtask results
+    assert len(results.task_results) == 1
+    aggregate_result = results.task_results[0]
+    assert aggregate_result.task_name == task.metadata.name
+    assert all(
+        score["main_score"] is None
+        for scores in aggregate_result.scores.values()
+        for score in scores
+    )
+    assert [exception.task_name for exception in results.exceptions] == [
+        error_subtask.metadata.name
+    ]
+
+
+def test_evaluate_aggregated_task_with_failing_aggregation(
+    monkeypatch: pytest.MonkeyPatch,
+):
+    """Test that a failure to aggregate the subtask results is reported as an error"""
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    task = MockAggregatedTask()
+
+    def combine_error(*args: Any, **kwargs: Any):
+        raise RuntimeError("Test error")
+
+    monkeypatch.setattr(task, "combine_task_results", combine_error)
+
+    with pytest.raises(RuntimeError, match="Test error"):
+        mteb.evaluate(model, task, cache=None)
+
+    results = mteb.evaluate(model, task, cache=None, raise_error=False)
+    assert len(results.task_results) == 0
+    assert [exception.task_name for exception in results.exceptions] == [
+        task.metadata.name
+    ]
+
+
+def test_evaluate_generator_of_tasks():
+    """Test that the tasks are not consumed before they are evaluated, if passed as a generator"""
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    tasks = [MockClassificationTask(), MockRetrievalTask()]
+
+    results = mteb.evaluate(model, (task for task in tasks), cache=None)
+    assert [result.task_name for result in results.task_results] == [
+        task.metadata.name for task in tasks
+    ]
 
 
 def test_evaluate_unloads_data_when_not_preloaded():
