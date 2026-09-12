@@ -1,77 +1,9 @@
 from __future__ import annotations
 
-from typing import Any
-
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
 )
-
-
-class AuroLAOmniWrapper(SentenceTransformerEncoderWrapper):
-    """Wrapper for AuroLA-Omni-7B omni-modal embedding model.
-
-    Configures recommended video processing parameters and ensures Qwen2.5-Omni
-    architecture registration with AutoModelForMultimodalLM.
-    """
-
-    def __init__(
-        self,
-        model: str,
-        revision: str | None = None,
-        device: str | None = None,
-        fps: float | None = 1.0,
-        max_frames: int | None = 64,
-        num_frames: int | None = None,
-        **kwargs: Any,
-    ) -> None:
-        try:
-            from transformers.models.auto.modeling_auto import (
-                MODEL_FOR_MULTIMODAL_LM_MAPPING,
-                AutoModelForMultimodalLM,
-            )
-            from transformers.models.qwen2_5_omni.configuration_qwen2_5_omni import (
-                Qwen2_5OmniThinkerConfig,
-            )
-            from transformers.models.qwen2_5_omni.modeling_qwen2_5_omni import (
-                Qwen2_5OmniThinkerForConditionalGeneration,
-            )
-
-            if (
-                Qwen2_5OmniThinkerConfig not in MODEL_FOR_MULTIMODAL_LM_MAPPING
-                and hasattr(AutoModelForMultimodalLM, "register")
-            ):
-                AutoModelForMultimodalLM.register(
-                    Qwen2_5OmniThinkerConfig,
-                    Qwen2_5OmniThinkerForConditionalGeneration,
-                )
-        except (ImportError, AttributeError):
-            pass
-
-        super().__init__(
-            model,
-            revision=revision,
-            device=device,
-            fps=fps,
-            max_frames=max_frames,
-            num_frames=num_frames,
-            **kwargs,
-        )
-        if hasattr(self.model[0], "processor") and hasattr(
-            self.model[0].processor, "feature_extractor"
-        ):
-            self.target_sampling_rate = self.model[
-                0
-            ].processor.feature_extractor.sampling_rate
-        if hasattr(self.model[0], "processing_kwargs"):
-            self.model[0].processing_kwargs.setdefault("video", {}).update(
-                {
-                    "max_pixels": 64 * 28 * 28,
-                    "do_sample_frames": False,
-                    "fps": 1,
-                }
-            )
-
 
 AUROLA_TRAINING_DATASETS = {
     "AudioCapsA2TRetrieval",
@@ -93,11 +25,14 @@ _AUROLA_CITATION = r"""
 """
 
 aurola_omni_7b = ModelMeta(
-    loader=AuroLAOmniWrapper,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs={
         "trust_remote_code": True,
         "model_kwargs": {
             "torch_dtype": "bfloat16",
+        },
+        "processor_kwargs": {
+            "max_pixels": 64 * 28 * 28,
         },
     },
     name="Jazzcharles/AuroLA-Omni-7B",
@@ -127,11 +62,14 @@ aurola_omni_7b = ModelMeta(
 )
 
 aurola_omni_3b = ModelMeta(
-    loader=AuroLAOmniWrapper,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs={
         "trust_remote_code": True,
         "model_kwargs": {
             "torch_dtype": "bfloat16",
+        },
+        "processor_kwargs": {
+            "max_pixels": 64 * 28 * 28,
         },
     },
     name="Jazzcharles/AuroLA-Omni-3B",
