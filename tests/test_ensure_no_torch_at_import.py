@@ -240,21 +240,26 @@ def test_model_implementations_declare_no_import_time_torch_dtypes() -> None:
     """
     import ast
 
-    from mteb.types import OutputDType
+    import torch
 
-    # every dtype OutputDType can name (including the float8 variants), plus float64
-    dtypes = {member.value for member in OutputDType} | {"float64"}
+    # every torch attribute that is itself a dtype, e.g. "float32", "bfloat16", but also
+    # aliases like "float", "half" and "long" that OutputDType has no member for
+    dtypes = {name for name in dir(torch) if isinstance(getattr(torch, name), torch.dtype)}
 
     offenders = []
     for path in sorted(
         (_REPO_ROOT / "mteb/models/model_implementations").rglob("*.py")
     ):
         tree = ast.parse(path.read_text())
-        body_lines = {
-            line
+        # nodes actually inside a function/method body are evaluated lazily and exempt;
+        # matched by identity (not line number) so a one-line `def f(x=torch.bfloat16): ...`
+        # doesn't let the signature default hide behind its body's line number
+        in_body = {
+            id(sub)
             for node in ast.walk(tree)
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
-            for line in range(node.body[0].lineno, node.end_lineno + 1)
+            for stmt in node.body
+            for sub in ast.walk(stmt)
         }
         offenders += [
             f"{path.name}:{node.lineno} torch.{node.attr}"
@@ -263,7 +268,7 @@ def test_model_implementations_declare_no_import_time_torch_dtypes() -> None:
             and isinstance(node.value, ast.Name)
             and node.value.id == "torch"
             and node.attr in dtypes
-            and node.lineno not in body_lines
+            and id(node) not in in_body
         ]
 
     assert not offenders, (
