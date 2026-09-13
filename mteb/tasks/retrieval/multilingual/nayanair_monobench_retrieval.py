@@ -37,7 +37,6 @@ COMMON_METADATA = {
   year = {2025},
 }""",
     "prompt": {"query": "Find a screenshot that is relevant to the user's question."},
-    "contributed_by": "gitgod-debug",
 }
 
 _DESCRIPTION = (
