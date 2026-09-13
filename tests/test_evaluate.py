@@ -398,6 +398,34 @@ def test_run_list_with_error():
     assert len(results.exceptions) == 1
 
 
+def test_evaluate_aggregated_task_with_failing_subtask(
+    monkeypatch: pytest.MonkeyPatch,
+):
+    """Test that an aggregate task is reported as failed if one of its subtasks fails"""
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    task = MockAggregatedTask()
+    error_subtask = task.metadata.tasks[0]
+
+    def load_error(*args: Any, **kwargs: Any):
+        raise RuntimeError("Test error")
+
+    # the subtasks live on the class attribute `metadata`, so they are shared across the session.
+    # The class is patched rather than the instance, as undoing an instance patch would leave the
+    # bound method shadowing the class method on the shared subtask.
+    monkeypatch.setattr(type(error_subtask), "load_data", load_error)
+
+    with pytest.raises(RuntimeError, match="Test error"):
+        mteb.evaluate(model, task, cache=None)
+
+    results = mteb.evaluate(model, task, cache=None, raise_error=False)
+    # no aggregate score can be computed, so no result is returned or cached
+    assert len(results.task_results) == 0
+    assert [exception.task_name for exception in results.exceptions] == [
+        error_subtask.metadata.name,
+        task.metadata.name,
+    ]
+
+
 def test_evaluate_unloads_data_when_not_preloaded():
     """Test that evaluate() unloads data when it was not preloaded."""
     model = MockSentenceTransformer()

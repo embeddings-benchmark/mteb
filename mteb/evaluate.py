@@ -431,7 +431,7 @@ def _check_cache(
     return existing_results, missing_eval
 
 
-def evaluate(  # noqa: PLR0913, PLR0914
+def evaluate(  # noqa: PLR0911, PLR0913, PLR0914
     model: ModelMeta | MTEBModels | SentenceTransformer | CrossEncoder,
     tasks: AbsTask | Iterable[AbsTask],
     *,
@@ -454,7 +454,8 @@ def evaluate(  # noqa: PLR0913, PLR0914
         co2_tracker: If True, track the CO₂ emissions of the evaluation, required codecarbon to be installed, which can be installed using
             `pip install mteb[codecarbon]`. If none is passed co2 tracking will only be run if codecarbon is installed.
         encode_kwargs: Additional keyword arguments passed to the models `encode` and `load_data` methods;
-        raise_error: If True, raise an error if the task fails. If False, return an empty list.
+        raise_error: If True, raise an error if a task fails. If False, the failure is logged and recorded as a `TaskError` in
+            `ModelResult.exceptions` and the remaining tasks are still evaluated.
         cache: The cache to use for loading the results. If None, then no cache will be used. The default cache saved the cache in the
             `~/.cache/mteb` directory. It can be overridden by setting the `MTEB_CACHE` environment variable to a different directory or by directly
             passing a `ResultCache` object.
@@ -507,14 +508,29 @@ def evaluate(  # noqa: PLR0913, PLR0914
         )
 
     model, meta, model_name, model_revision = _sanitize_model(model)
-    _check_model_modalities(meta, tasks)
     overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
+
+    if raise_error:
+        # checked up front so that a long run fails before it starts. With raise_error=False an
+        # unsupported task should not abort the run, so it is checked per task instead.
+        _check_model_modalities(meta, tasks)
 
     # AbsTaskAggregate is a special case where we have to run multiple tasks and combine the results
     if isinstance(tasks, AbsTaskAggregate):
-        existing_results, missing_eval = _check_cache(
-            tasks, meta, cache, overwrite_strategy
-        )
+        try:
+            existing_results, missing_eval = _check_cache(
+                tasks, meta, cache, overwrite_strategy
+            )
+        except Exception as e:
+            if raise_error:
+                raise
+            logger.error(f"Error while running task {tasks.metadata.name}: {e}")
+            return ModelResult(
+                model_name=model_name,
+                model_revision=model_revision,
+                task_results=[],
+                exceptions=[TaskError(task_name=tasks.metadata.name, exception=str(e))],
+            )
 
         if (
             existing_results
@@ -544,23 +560,53 @@ def evaluate(  # noqa: PLR0913, PLR0914
             num_proc=num_proc,
             timer=timer,
         )
-        combined_results = tasks.combine_task_results(results.task_results)
 
-        if existing_results:
-            combined_results = existing_results.merge(combined_results)
+        if results.exceptions:
+            # a subtask failed, so there is nothing to aggregate. Reporting the aggregate task as
+            # failed avoids caching a result whose main score is None.
+            logger.error(
+                f"Subtasks of {tasks.metadata.name} failed, skipping the aggregation"
+            )
+            return ModelResult(
+                model_name=results.model_name,
+                model_revision=results.model_revision,
+                task_results=[],
+                exceptions=[
+                    *results.exceptions,
+                    TaskError(
+                        task_name=tasks.metadata.name,
+                        exception="one or more subtasks failed",
+                    ),
+                ],
+            )
 
-        if cache:
-            cache.save_to_cache(
-                combined_results,
-                meta,
-                encode_kwargs=encode_kwargs,
+        try:
+            combined_results = tasks.combine_task_results(results.task_results)
+
+            if existing_results:
+                combined_results = existing_results.merge(combined_results)
+
+            if cache:
+                cache.save_to_cache(
+                    combined_results,
+                    meta,
+                    encode_kwargs=encode_kwargs,
+                )
+        except Exception as e:
+            if raise_error:
+                raise
+            logger.error(f"Error while aggregating {tasks.metadata.name}: {e}")
+            return ModelResult(
+                model_name=results.model_name,
+                model_revision=results.model_revision,
+                task_results=[],
+                exceptions=[TaskError(task_name=tasks.metadata.name, exception=str(e))],
             )
 
         return ModelResult(
             model_name=results.model_name,
             model_revision=results.model_revision,
             task_results=[combined_results],
-            exceptions=results.exceptions,
         )
 
     if isinstance(tasks, AbsTask):
@@ -599,7 +645,25 @@ def evaluate(  # noqa: PLR0913, PLR0914
             exceptions=exceptions,
         )
 
-    existing_results, missing_eval = _check_cache(task, meta, cache, overwrite_strategy)
+    try:
+        if not raise_error:
+            # not checked up front in this case, so that an unsupported task does not abort the
+            # evaluation of the remaining tasks
+            _check_model_modalities(meta, task)
+
+        existing_results, missing_eval = _check_cache(
+            task, meta, cache, overwrite_strategy
+        )
+    except Exception as e:
+        if raise_error:
+            raise
+        logger.error(f"Error while running task {task.metadata.name}: {e}")
+        return ModelResult(
+            model_name=model_name,
+            model_revision=model_revision,
+            task_results=[],
+            exceptions=[TaskError(task_name=task.metadata.name, exception=str(e))],
+        )
 
     if (
         existing_results
@@ -620,6 +684,8 @@ def evaluate(  # noqa: PLR0913, PLR0914
             f"Found existing results for {task.metadata.name}, only running missing splits (subsets): {missing_eval}"
         )
 
+    # loaded outside the guard below: a model that cannot be loaded fails the run rather than
+    # being reported once per task
     if isinstance(model, ModelMeta):
         logger.info(
             f"Loading model {model_name} with revision {model_revision} from ModelMeta."
@@ -627,26 +693,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
         model = model.load_model()
         logger.info("✓ Model loaded")
 
-    if raise_error is False:
-        try:
-            result = _evaluate_task(
-                model=model,
-                splits=missing_eval,
-                task=task,
-                co2_tracker=co2_tracker,
-                encode_kwargs=encode_kwargs,
-                prediction_folder=prediction_folder,
-                public_only=public_only,
-                cache=cache,
-                num_proc=num_proc,
-                existing_results=existing_results,
-            )
-        except Exception as e:
-            logger.error(
-                f"Error while running task {task.metadata.name} on splits {list(missing_eval.keys())}: {e}"
-            )
-            result = TaskError(task_name=task.metadata.name, exception=str(e))
-    else:
+    try:
         result = _evaluate_task(
             model=model,
             splits=missing_eval,
@@ -659,21 +706,33 @@ def evaluate(  # noqa: PLR0913, PLR0914
             num_proc=num_proc,
             existing_results=existing_results,
         )
-    logger.info(f"✓ Finished evaluation for {task.metadata.name}")
+        logger.info(f"✓ Finished evaluation for {task.metadata.name}")
 
-    if isinstance(result, TaskError):
+        if isinstance(result, TaskError):
+            return ModelResult(
+                model_name=model_name,
+                model_revision=model_revision,
+                task_results=[],
+                exceptions=[result],
+            )
+
+        if cache:
+            cache.save_to_cache(
+                result,
+                meta,
+                encode_kwargs=encode_kwargs,
+            )
+    except Exception as e:
+        if raise_error:
+            raise
+        logger.error(
+            f"Error while running task {task.metadata.name} on splits {list(missing_eval.keys())}: {e}"
+        )
         return ModelResult(
             model_name=model_name,
             model_revision=model_revision,
             task_results=[],
-            exceptions=[result],
-        )
-
-    if cache:
-        cache.save_to_cache(
-            result,
-            meta,
-            encode_kwargs=encode_kwargs,
+            exceptions=[TaskError(task_name=task.metadata.name, exception=str(e))],
         )
 
     return ModelResult(
