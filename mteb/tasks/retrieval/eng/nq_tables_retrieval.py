@@ -1,7 +1,7 @@
 """Local, deliberately unregistered NQ-Tables engineering prototype.
 
 Import this class explicitly; it is not exported by ``mteb.tasks``. The source
-license discrepancy is unresolved (see experiments/omniwiki implementation notes).
+license discrepancy remains unresolved.
 """
 
 from __future__ import annotations
