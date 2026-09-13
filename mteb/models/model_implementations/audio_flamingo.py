@@ -9,6 +9,7 @@ from tqdm.auto import tqdm
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -26,10 +27,13 @@ class AudioFlamingoWrapper(AbsEncoder):
         revision: str | None = None,
         device: str | None = None,
         max_audio_length_seconds: float = 30.0,
-        torch_dtype: torch.dtype = torch.bfloat16,
+        torch_dtype: OutputDType | torch.dtype = OutputDType.BF16,
         device_map: str | dict | None = None,
         **kwargs: Any,
     ):
+        if isinstance(torch_dtype, OutputDType):
+            torch_dtype = torch_dtype.get_dtype()
+
         from transformers import AudioFlamingo3ForConditionalGeneration, AutoProcessor
 
         self.model_name = model_name
