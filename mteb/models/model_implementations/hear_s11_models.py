@@ -9,6 +9,7 @@ from transformers import AutoModel
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.audio_windowing import pool_windows, split_into_windows
 from mteb.models.modality_collators import AudioCollator
 
 if TYPE_CHECKING:
@@ -71,14 +72,24 @@ class HeARS11AudioWrapper(AbsEncoder):
         embeddings = []
 
         for batch in tqdm(inputs, disable=not show_progress_bar):
-            audio = torch.stack(
-                [self._prepare_audio(item["array"]) for item in batch["audio"]]
-            ).to(self.device)
+            # HEAR scores a clip by averaging its per-clip embeddings rather than
+            # cropping to one window (get_scene_embeddings = torch.mean)
+            # https://github.com/hearbenchmark/hear-eval-kit
+            clip_arrays = [np.asarray(item["array"]) for item in batch["audio"]]
+            windows, owner = split_into_windows(
+                clip_arrays, self.clip_samples, min_samples=self.sampling_rate // 10
+            )
+            audio = torch.stack([self._prepare_audio(w) for w in windows]).to(
+                self.device
+            )
 
             with torch.no_grad():
                 output = self.model(input_values=audio, return_dict=True)
 
-            embeddings.append(output.pooler_output.cpu().detach())
+            pooled = pool_windows(
+                output.pooler_output.cpu().detach().numpy(), owner, len(clip_arrays)
+            )
+            embeddings.append(torch.from_numpy(pooled))
 
         return torch.cat(embeddings, dim=0).numpy()
 
