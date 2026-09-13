@@ -1,0 +1,376 @@
+{
+    "source": {
+        "path": "ibm-research/NQTablesRetrieval",
+        "revision": "4962c33f5e651c82bc82c013893061202a47685e"
+    },
+    "license": null,
+    "git_head": "f18a06948161f41241ab4b3793ab76ba736e634c",
+    "python": "3.14.6",
+    "mteb_module_path": "/private/tmp/mteb-nqtables-pr/mteb/__init__.py",
+    "packages": {
+        "mteb": "2.19.5",
+        "datasets": "5.0.0",
+        "numpy": "2.4.6",
+        "torch": "2.11.0",
+        "pytest": "8.3.5"
+    },
+    "splits": {
+        "train": {
+            "queries": {
+                "rows": 9594,
+                "unique_ids": 9534,
+                "duplicated_ids": 60,
+                "duplicate_rows_beyond_first": 60,
+                "empty_texts": 0,
+                "conflicting_ids": 0,
+                "source_sha256": "2c58fa912bfb70690d4d18db246f1b51f64c6a33ff47b80444859fbd3ccb3546",
+                "adapted_sha256": "2c58fa912bfb70690d4d18db246f1b51f64c6a33ff47b80444859fbd3ccb3546"
+            },
+            "corpus_items": 169898,
+            "qrel_rows": 9594,
+            "qrel_source_sha256": "0bc07c8971d28ab22acaf25284d33606ef4474a8646edf23c0f6aabaef222fe7",
+            "qrel_triples_preserved": true,
+            "query_cache_files": [
+                "/private/tmp/nqtables-prototype-cache/datasets/ibm-research___nq_tables_retrieval/queries/0.0.0/4962c33f5e651c82bc82c013893061202a47685e/nq_tables_retrieval-train_queries.arrow"
+            ],
+            "qrel_cache_files": [
+                "/private/tmp/nqtables-prototype-cache/datasets/ibm-research___nq_tables_retrieval/default/0.0.0/4962c33f5e651c82bc82c013893061202a47685e/nq_tables_retrieval-train.arrow"
+            ],
+            "duplicate_qrel_pairs": 0,
+            "scores": {
+                "1": 9594
+            },
+            "positive_docs_per_unique_query": {
+                "1": 9474,
+                "2": 60
+            },
+            "queries_without_qrels": 0,
+            "dangling_query_qrel_rows": 0,
+            "dangling_corpus_qrel_rows": 4,
+            "dangling_corpus_unique_ids": 2
+        },
+        "dev": {
+            "queries": {
+                "rows": 1068,
+                "unique_ids": 1067,
+                "duplicated_ids": 1,
+                "duplicate_rows_beyond_first": 1,
+                "empty_texts": 0,
+                "conflicting_ids": 0,
+                "source_sha256": "e2d7b86133b8140405f3be3a1de8a9e9026f2f6f0a5e3e885706a70950906315",
+                "adapted_sha256": "e2d7b86133b8140405f3be3a1de8a9e9026f2f6f0a5e3e885706a70950906315"
+            },
+            "corpus_items": 169898,
+            "qrel_rows": 1068,
+            "qrel_source_sha256": "957bad0a88e4bd81d2c6b478af90703a79af7b4582bae12491ff1afeeebb8f41",
+            "qrel_triples_preserved": true,
+            "query_cache_files": [
+                "/private/tmp/nqtables-prototype-cache/datasets/ibm-research___nq_tables_retrieval/queries/0.0.0/4962c33f5e651c82bc82c013893061202a47685e/nq_tables_retrieval-dev_queries.arrow"
+            ],
+            "qrel_cache_files": [
+                "/private/tmp/nqtables-prototype-cache/datasets/ibm-research___nq_tables_retrieval/default/0.0.0/4962c33f5e651c82bc82c013893061202a47685e/nq_tables_retrieval-dev.arrow"
+            ],
+            "duplicate_qrel_pairs": 0,
+            "scores": {
+                "1": 1068
+            },
+            "positive_docs_per_unique_query": {
+                "1": 1066,
+                "2": 1
+            },
+            "queries_without_qrels": 0,
+            "dangling_query_qrel_rows": 0,
+            "dangling_corpus_qrel_rows": 1,
+            "dangling_corpus_unique_ids": 1
+        },
+        "test": {
+            "queries": {
+                "rows": 966,
+                "unique_ids": 959,
+                "duplicated_ids": 7,
+                "duplicate_rows_beyond_first": 7,
+                "empty_texts": 0,
+                "conflicting_ids": 0,
+                "source_sha256": "07ff727821d6e7243bf09b0d14936a84b6b87ae77752333545544e4da4ee9726",
+                "adapted_sha256": "07ff727821d6e7243bf09b0d14936a84b6b87ae77752333545544e4da4ee9726"
+            },
+            "corpus_items": 169898,
+            "qrel_rows": 966,
+            "qrel_source_sha256": "4bca063062cd91b9c073440fa712f74270d293dd5a26052ba13802cdce15494f",
+            "qrel_triples_preserved": true,
+            "query_cache_files": [
+                "/private/tmp/nqtables-prototype-cache/datasets/ibm-research___nq_tables_retrieval/queries/0.0.0/4962c33f5e651c82bc82c013893061202a47685e/nq_tables_retrieval-test_queries.arrow"
+            ],
+            "qrel_cache_files": [
+                "/private/tmp/nqtables-prototype-cache/datasets/ibm-research___nq_tables_retrieval/default/0.0.0/4962c33f5e651c82bc82c013893061202a47685e/nq_tables_retrieval-test.arrow"
+            ],
+            "duplicate_qrel_pairs": 0,
+            "scores": {
+                "1": 966
+            },
+            "positive_docs_per_unique_query": {
+                "1": 952,
+                "2": 7
+            },
+            "queries_without_qrels": 0,
+            "dangling_query_qrel_rows": 0,
+            "dangling_corpus_qrel_rows": 1,
+            "dangling_corpus_unique_ids": 1
+        }
+    },
+    "corpus": {
+        "rows": 169898,
+        "unique_ids": 169898,
+        "duplicated_ids": 0,
+        "duplicate_rows_beyond_first": 0,
+        "empty_texts": 0,
+        "empty_titles": 169898,
+        "source_sha256": "fa3a30712de3dc44e6d804f800760a69c5e4aa6dad30a212d2210b9ee3ec97ee",
+        "adapted_sha256": "fa3a30712de3dc44e6d804f800760a69c5e4aa6dad30a212d2210b9ee3ec97ee",
+        "raw_text_characters": 417919068,
+        "cache_files": [
+            "/private/tmp/nqtables-prototype-cache/datasets/ibm-research___nq_tables_retrieval/corpus_md/0.0.0/4962c33f5e651c82bc82c013893061202a47685e/nq_tables_retrieval-corpus_md.arrow"
+        ],
+        "mteb_model_input_whitespace_changes": 169898
+    },
+    "shared_corpus_identity": true,
+    "cross_split_query_id_overlap": {
+        "train/dev": 0,
+        "train/test": 0,
+        "dev/test": 0
+    },
+    "traced_example_preserved": true,
+    "quality_findings": [
+        {
+            "split": "train",
+            "check": "long_text:documents_text_statistics",
+            "message": "NQTablesRetrieval (train) contains a document far longer than the rest of documents_text_statistics (max_text_length=285798, average_text_length=2458.8233528352307), this can indicate a truncation/concatenation bug.",
+            "severity": "warning"
+        },
+        {
+            "split": "train",
+            "check": "missing_qrel_corpus_ids",
+            "message": "NQTablesRetrieval (train) has qrels referencing documents missing from the corpus (num_missing_corpus_ids=2, unique_relevant_docs=6915).",
+            "severity": "error"
+        },
+        {
+            "split": "dev",
+            "check": "long_text:documents_text_statistics",
+            "message": "NQTablesRetrieval (dev) contains a document far longer than the rest of documents_text_statistics (max_text_length=285798, average_text_length=2458.8233528352307), this can indicate a truncation/concatenation bug.",
+            "severity": "warning"
+        },
+        {
+            "split": "dev",
+            "check": "missing_qrel_corpus_ids",
+            "message": "NQTablesRetrieval (dev) has qrels referencing documents missing from the corpus (num_missing_corpus_ids=1, unique_relevant_docs=775).",
+            "severity": "error"
+        },
+        {
+            "split": "test",
+            "check": "long_text:documents_text_statistics",
+            "message": "NQTablesRetrieval (test) contains a document far longer than the rest of documents_text_statistics (max_text_length=285798, average_text_length=2458.8233528352307), this can indicate a truncation/concatenation bug.",
+            "severity": "warning"
+        },
+        {
+            "split": "test",
+            "check": "duplicate_text:queries_text_statistics",
+            "message": "NQTablesRetrieval (test) contains text duplicates in queries_text_statistics (expected_count=966, unique_texts=919)",
+            "severity": "error"
+        },
+        {
+            "split": "test",
+            "check": "missing_qrel_corpus_ids",
+            "message": "NQTablesRetrieval (test) has qrels referencing documents missing from the corpus (num_missing_corpus_ids=1, unique_relevant_docs=896).",
+            "severity": "error"
+        }
+    ],
+    "quality_checks_passed": false,
+    "metadata_schema_valid": true,
+    "publication_metadata_complete": false,
+    "unset_metadata_fields": [
+        "prompt",
+        "date",
+        "license",
+        "dialect",
+        "bibtex_citation",
+        "adapted_from",
+        "contributed_by",
+        "superseded_by"
+    ],
+    "baseline": {
+        "model": "mteb/baseline-random-encoder",
+        "revision": "1",
+        "embedding_dimension": 32,
+        "seed": 42,
+        "similarity": "cosine",
+        "split": "test",
+        "query_rows": 966,
+        "unique_queries": 959,
+        "corpus_items": 169898,
+        "corpus_chunk_size": 10000,
+        "batch_size": 256,
+        "torch_threads": 2,
+        "requested_top_k": 1000,
+        "result_query_ids": 959,
+        "retrieved_docs_per_query": {
+            "1000": 952,
+            "500": 7
+        },
+        "scores": {
+            "default": {
+                "ndcg_at_1": 0.0,
+                "ndcg_at_3": 0.0,
+                "ndcg_at_5": 0.0,
+                "ndcg_at_10": 0.0,
+                "ndcg_at_20": 0.0,
+                "ndcg_at_100": 0.00022,
+                "ndcg_at_1000": 0.0004,
+                "map_at_1": 0.0,
+                "map_at_3": 0.0,
+                "map_at_5": 0.0,
+                "map_at_10": 0.0,
+                "map_at_20": 0.0,
+                "map_at_100": 4e-05,
+                "map_at_1000": 4e-05,
+                "recall_at_1": 0.0,
+                "recall_at_3": 0.0,
+                "recall_at_5": 0.0,
+                "recall_at_10": 0.0,
+                "recall_at_20": 0.0,
+                "recall_at_100": 0.00104,
+                "recall_at_1000": 0.00261,
+                "accuracy": 0.0,
+                "precision_at_1": 0.0,
+                "precision_at_3": 0.0,
+                "precision_at_5": 0.0,
+                "precision_at_10": 0.0,
+                "precision_at_20": 0.0,
+                "precision_at_100": 1e-05,
+                "precision_at_1000": 0.0,
+                "mrr_at_1": 0.0,
+                "mrr_at_3": 0.0,
+                "mrr_at_5": 0.0,
+                "mrr_at_10": 0.0,
+                "mrr_at_20": 0.0,
+                "mrr_at_100": 3.862047657668096e-05,
+                "mrr_at_1000": 4.239768767620143e-05,
+                "nauc_ndcg_at_1_max": null,
+                "nauc_ndcg_at_1_std": null,
+                "nauc_ndcg_at_1_diff1": null,
+                "nauc_ndcg_at_3_max": null,
+                "nauc_ndcg_at_3_std": null,
+                "nauc_ndcg_at_3_diff1": null,
+                "nauc_ndcg_at_5_max": null,
+                "nauc_ndcg_at_5_std": null,
+                "nauc_ndcg_at_5_diff1": null,
+                "nauc_ndcg_at_10_max": null,
+                "nauc_ndcg_at_10_std": null,
+                "nauc_ndcg_at_10_diff1": null,
+                "nauc_ndcg_at_20_max": null,
+                "nauc_ndcg_at_20_std": null,
+                "nauc_ndcg_at_20_diff1": null,
+                "nauc_ndcg_at_100_max": 1.0,
+                "nauc_ndcg_at_100_std": -0.49999967147329655,
+                "nauc_ndcg_at_100_diff1": -0.07033044703106228,
+                "nauc_ndcg_at_1000_max": 0.8450519830722848,
+                "nauc_ndcg_at_1000_std": -0.431054363481477,
+                "nauc_ndcg_at_1000_diff1": 0.20507303679709518,
+                "nauc_map_at_1_max": null,
+                "nauc_map_at_1_std": null,
+                "nauc_map_at_1_diff1": null,
+                "nauc_map_at_3_max": null,
+                "nauc_map_at_3_std": null,
+                "nauc_map_at_3_diff1": null,
+                "nauc_map_at_5_max": null,
+                "nauc_map_at_5_std": null,
+                "nauc_map_at_5_diff1": null,
+                "nauc_map_at_10_max": null,
+                "nauc_map_at_10_std": null,
+                "nauc_map_at_10_diff1": null,
+                "nauc_map_at_20_max": null,
+                "nauc_map_at_20_std": null,
+                "nauc_map_at_20_diff1": null,
+                "nauc_map_at_100_max": 1.0,
+                "nauc_map_at_100_std": -0.4999996714732968,
+                "nauc_map_at_100_diff1": -0.07033044703106238,
+                "nauc_map_at_1000_max": 0.977780396740107,
+                "nauc_map_at_1000_std": -0.49012946655001843,
+                "nauc_map_at_1000_diff1": -0.030852654299727274,
+                "nauc_recall_at_1_max": null,
+                "nauc_recall_at_1_std": null,
+                "nauc_recall_at_1_diff1": null,
+                "nauc_recall_at_3_max": null,
+                "nauc_recall_at_3_std": null,
+                "nauc_recall_at_3_diff1": null,
+                "nauc_recall_at_5_max": null,
+                "nauc_recall_at_5_std": null,
+                "nauc_recall_at_5_diff1": null,
+                "nauc_recall_at_10_max": null,
+                "nauc_recall_at_10_std": null,
+                "nauc_recall_at_10_diff1": null,
+                "nauc_recall_at_20_max": null,
+                "nauc_recall_at_20_std": null,
+                "nauc_recall_at_20_diff1": null,
+                "nauc_recall_at_100_max": 1.0,
+                "nauc_recall_at_100_std": -0.49999967147329677,
+                "nauc_recall_at_100_diff1": -0.07033044703106235,
+                "nauc_recall_at_1000_max": 0.7972005468783249,
+                "nauc_recall_at_1000_std": -0.39736432608065925,
+                "nauc_recall_at_1000_diff1": 0.3014685503586751,
+                "nauc_precision_at_1_max": null,
+                "nauc_precision_at_1_std": null,
+                "nauc_precision_at_1_diff1": null,
+                "nauc_precision_at_3_max": null,
+                "nauc_precision_at_3_std": null,
+                "nauc_precision_at_3_diff1": null,
+                "nauc_precision_at_5_max": null,
+                "nauc_precision_at_5_std": null,
+                "nauc_precision_at_5_diff1": null,
+                "nauc_precision_at_10_max": null,
+                "nauc_precision_at_10_std": null,
+                "nauc_precision_at_10_diff1": null,
+                "nauc_precision_at_20_max": null,
+                "nauc_precision_at_20_std": null,
+                "nauc_precision_at_20_diff1": null,
+                "nauc_precision_at_100_max": 1.0,
+                "nauc_precision_at_100_std": -0.4999996714732968,
+                "nauc_precision_at_100_diff1": -0.07033044703106237,
+                "nauc_precision_at_1000_max": 0.7746672743092501,
+                "nauc_precision_at_1000_std": -0.4270032075161137,
+                "nauc_precision_at_1000_diff1": 0.30522409578685444,
+                "nauc_mrr_at_1_max": null,
+                "nauc_mrr_at_1_std": null,
+                "nauc_mrr_at_1_diff1": null,
+                "nauc_mrr_at_3_max": null,
+                "nauc_mrr_at_3_std": null,
+                "nauc_mrr_at_3_diff1": null,
+                "nauc_mrr_at_5_max": null,
+                "nauc_mrr_at_5_std": null,
+                "nauc_mrr_at_5_diff1": null,
+                "nauc_mrr_at_10_max": null,
+                "nauc_mrr_at_10_std": null,
+                "nauc_mrr_at_10_diff1": null,
+                "nauc_mrr_at_20_max": null,
+                "nauc_mrr_at_20_std": null,
+                "nauc_mrr_at_20_diff1": null,
+                "nauc_mrr_at_100_max": 1.0,
+                "nauc_mrr_at_100_std": -0.4999996714732968,
+                "nauc_mrr_at_100_diff1": -0.07033044703106238,
+                "nauc_mrr_at_1000_max": 0.9698876523975364,
+                "nauc_mrr_at_1000_std": -0.4922557007618581,
+                "nauc_mrr_at_1000_diff1": -0.021983250813547933,
+                "hit_rate_at_1": 0.0,
+                "hit_rate_at_3": 0.0,
+                "hit_rate_at_5": 0.0,
+                "hit_rate_at_10": 0.0,
+                "hit_rate_at_20": 0.0,
+                "hit_rate_at_100": 0.00104,
+                "hit_rate_at_1000": 0.00313,
+                "main_score": 0.0
+            }
+        },
+        "elapsed_seconds": 8.642195999971591,
+        "nonfinite_metric_handling": "Nonfinite metrics are serialized as null.",
+        "query_rows_and_qrels_preserved_after_evaluation": true
+    }
+}
