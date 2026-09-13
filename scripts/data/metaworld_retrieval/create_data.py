@@ -1,4 +1,4 @@
-﻿"""Construction script for MetaWorld-MT50-I2V and MetaWorld-MT50-V2I.
+"""Construction script for MetaWorld-MT50-I2V and MetaWorld-MT50-V2I.
 
 Builds image<->video retrieval tasks from lerobot/metaworld_mt50:
 - 49 robot manipulation tasks.
@@ -165,7 +165,9 @@ def main() -> None:
     )
 
     # Render videos and goal images in parallel
-    print(f"Step 2: Rendering MP4 videos and extracting goal images ({args.num_workers} workers)...")
+    print(
+        f"Step 2: Rendering MP4 videos and extracting goal images ({args.num_workers} workers)..."
+    )
     needed_files = sorted(file_to_episodes.keys())
 
     def process_file(f_idx: int) -> None:
@@ -258,15 +260,11 @@ def main() -> None:
 
         queries = Dataset.from_list(
             [{k: r[k] for k in ("id", query_modality)} for r in query_rows]
-        ).cast_column(
-            query_modality, Video() if query_modality == "video" else Image()
-        )
+        ).cast_column(query_modality, Video() if query_modality == "video" else Image())
 
         corpus = Dataset.from_list(
             [{k: r[k] for k in ("id", doc_modality)} for r in corpus_rows]
-        ).cast_column(
-            doc_modality, Video() if doc_modality == "video" else Image()
-        )
+        ).cast_column(doc_modality, Video() if doc_modality == "video" else Image())
 
         qrels = Dataset.from_list(qrel_rows)
         return {"queries": queries, "corpus": corpus, "qrels": qrels}
@@ -308,11 +306,15 @@ def main() -> None:
                 print(f"  Successfully pushed {repo_id} at revision {info.sha}")
             except Exception as e:
                 print(f"  WARNING: Push failed for {repo_id}: {e}")
-                print("  Data is saved locally and can be pushed once write credentials are provided.")
+                print(
+                    "  Data is saved locally and can be pushed once write credentials are provided."
+                )
 
     print("\nSummary:")
     for d, sha in commit_hashes.items():
-        print(f"  MetaWorld-MT50-{d}: https://huggingface.co/datasets/{args.hf_user}/MetaWorld-MT50-{d} (commit {sha})")
+        print(
+            f"  MetaWorld-MT50-{d}: https://huggingface.co/datasets/{args.hf_user}/MetaWorld-MT50-{d} (commit {sha})"
+        )
 
 
 if __name__ == "__main__":
