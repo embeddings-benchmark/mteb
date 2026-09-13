@@ -1,8 +1,3 @@
-from collections import defaultdict
-from typing import Any
-
-from datasets import load_dataset
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -13,8 +8,8 @@ class NanoClimateFeverRetrieval(AbsTaskRetrieval):
         description="NanoClimateFever is a small version of the BEIR dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change.",
         reference="https://arxiv.org/abs/2012.00614",
         dataset={
-            "path": "zeta-alpha-ai/NanoClimateFEVER",
-            "revision": "96741bfa30b9f56db8c9eb7d08e775ed6474f206",
+            "path": "mteb/NanoClimateFeverRetrieval",
+            "revision": "ccb5552bc17e87afe0f9479fb4346898213a71db",
         },
         type="Retrieval",
         category="t2t",
@@ -44,50 +39,3 @@ class NanoClimateFeverRetrieval(AbsTaskRetrieval):
         },
         adapted_from=["ClimateFEVER"],
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus = load_dataset(
-            "zeta-alpha-ai/NanoClimateFEVER",
-            "corpus",
-            revision="96741bfa30b9f56db8c9eb7d08e775ed6474f206",
-        )
-        self.queries = load_dataset(
-            "zeta-alpha-ai/NanoClimateFEVER",
-            "queries",
-            revision="96741bfa30b9f56db8c9eb7d08e775ed6474f206",
-        )
-        self.relevant_docs = load_dataset(
-            "zeta-alpha-ai/NanoClimateFEVER",
-            "qrels",
-            revision="96741bfa30b9f56db8c9eb7d08e775ed6474f206",
-        )
-
-        self.corpus = {
-            split: {
-                sample["_id"]: {"_id": sample["_id"], "text": sample["text"]}
-                for sample in self.corpus[split]
-            }
-            for split in self.corpus
-        }
-
-        self.queries = {
-            split: {sample["_id"]: sample["text"] for sample in self.queries[split]}
-            for split in self.queries
-        }
-
-        relevant_docs = {}
-
-        for split in self.relevant_docs:
-            relevant_docs[split] = defaultdict(dict)
-            for query_id, corpus_id in zip(
-                self.relevant_docs[split]["query-id"],
-                self.relevant_docs[split]["corpus-id"],
-                strict=True,
-            ):
-                relevant_docs[split][query_id][corpus_id] = 1
-        self.relevant_docs = relevant_docs
-
-        self.data_loaded = True

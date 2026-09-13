@@ -1,8 +1,3 @@
-from collections import defaultdict
-from typing import Any
-
-from datasets import load_dataset
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -16,8 +11,8 @@ class NanoFEVERRetrieval(AbsTaskRetrieval):
         " derived from.",
         reference="https://fever.ai/",
         dataset={
-            "path": "zeta-alpha-ai/NanoFEVER",
-            "revision": "a8bfdf1bf15181167a7e22e69cf8754bdea9b4c8",
+            "path": "mteb/NanoFEVERRetrieval",
+            "revision": "a6490dfeed0f13c2a052e39c6ddaeb6086afd4a8",
         },
         type="Retrieval",
         category="t2t",
@@ -57,50 +52,3 @@ Stent, Amanda},
         },
         adapted_from=["FEVER"],
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus = load_dataset(
-            "zeta-alpha-ai/NanoFEVER",
-            "corpus",
-            revision="a8bfdf1bf15181167a7e22e69cf8754bdea9b4c8",
-        )
-        self.queries = load_dataset(
-            "zeta-alpha-ai/NanoFEVER",
-            "queries",
-            revision="a8bfdf1bf15181167a7e22e69cf8754bdea9b4c8",
-        )
-        self.relevant_docs = load_dataset(
-            "zeta-alpha-ai/NanoFEVER",
-            "qrels",
-            revision="a8bfdf1bf15181167a7e22e69cf8754bdea9b4c8",
-        )
-
-        self.corpus = {
-            split: {
-                sample["_id"]: {"_id": sample["_id"], "text": sample["text"]}
-                for sample in self.corpus[split]
-            }
-            for split in self.corpus
-        }
-
-        self.queries = {
-            split: {sample["_id"]: sample["text"] for sample in self.queries[split]}
-            for split in self.queries
-        }
-
-        relevant_docs = {}
-
-        for split in self.relevant_docs:
-            relevant_docs[split] = defaultdict(dict)
-            for query_id, corpus_id in zip(
-                self.relevant_docs[split]["query-id"],
-                self.relevant_docs[split]["corpus-id"],
-                strict=True,
-            ):
-                relevant_docs[split][query_id][corpus_id] = 1
-        self.relevant_docs = relevant_docs
-
-        self.data_loaded = True
