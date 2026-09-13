@@ -112,8 +112,8 @@ Peng, Nanyun},
                 doc2_id = f"{qid}_doc2"
 
                 queries.append({"id": qid, "text": row["query"]})
-                corpus.append({"id": doc1_id, "text": row["document_1"], "title": ""})
-                corpus.append({"id": doc2_id, "text": row["document_2"], "title": ""})
+                corpus.append({"id": doc1_id, "text": row["document_1"]})
+                corpus.append({"id": doc2_id, "text": row["document_2"]})
 
                 preferred_id = doc1_id if preferred_doc == "doc1" else doc2_id
                 relevant_docs[qid] = {preferred_id: 1}
