@@ -163,9 +163,9 @@ def _select_encode_function(
     """Pick `model.encode_query`/`model.encode_document`/`model.encode` based on `prompt_type`."""
     if prompt_type and has_query_encode:
         if prompt_type == PromptType.query:
-            return model.encode_query  # type: ignore[no-any-return]
+            return model.encode_query
         if prompt_type == PromptType.document:
-            return model.encode_document  # type: ignore[no-any-return]
+            return model.encode_document
         raise ValueError(f"Unknown prompt type: {prompt_type}")
     return model.encode
 
