@@ -2,13 +2,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from sentence_transformers import SentenceTransformer
 from sentence_transformers.models import Pooling, Transformer
 
 from mteb.models import ModelMeta
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -89,7 +88,7 @@ BMRETRIEVER_TRAINING_DATA = {
 BMRetriever_410M = ModelMeta(
     loader=BMRetrieverWrapper,
     loader_kwargs=dict(
-        model_args={"torch_dtype": torch.float32},
+        model_args={"torch_dtype": OutputDType.FLOAT32},
         instruction_template=instruction_template,
         padding_side="left",
         add_eos_token=True,
@@ -120,7 +119,7 @@ BMRetriever_410M = ModelMeta(
 BMRetriever_1B = ModelMeta(
     loader=BMRetrieverWrapper,
     loader_kwargs=dict(
-        model_args={"torch_dtype": torch.float32},
+        model_args={"torch_dtype": OutputDType.FLOAT32},
         instruction_template=instruction_template,
         padding_side="left",
         add_eos_token=True,
@@ -151,7 +150,7 @@ BMRetriever_1B = ModelMeta(
 BMRetriever_2B = ModelMeta(
     loader=BMRetrieverWrapper,
     loader_kwargs=dict(
-        model_args={"torch_dtype": torch.float32},
+        model_args={"torch_dtype": OutputDType.FLOAT32},
         instruction_template=instruction_template,
         padding_side="left",
         add_eos_token=True,
@@ -182,7 +181,7 @@ BMRetriever_2B = ModelMeta(
 BMRetriever_7B = ModelMeta(
     loader=BMRetrieverWrapper,
     loader_kwargs=dict(
-        model_args={"torch_dtype": torch.float32},
+        model_args={"torch_dtype": OutputDType.FLOAT32},
         instruction_template=instruction_template,
         padding_side="left",
         add_eos_token=True,

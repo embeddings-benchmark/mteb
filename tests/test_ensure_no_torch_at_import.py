@@ -211,3 +211,69 @@ def test_importing_benchmarks_does_not_import_torch() -> None:
     assert _loaded_heavy_deps("mteb.benchmarks.benchmark", ("mteb",)) == [], (
         "importing mteb.benchmarks.benchmark pulled in a heavy dependency"
     )
+
+
+def test_model_meta_dtypes_are_named_not_torch_objects() -> None:
+    """`ModelMeta` declares load dtypes by name, so metadata stays importable without torch.
+
+    `OutputDType` is a `str` enum, so it resolves through both `getattr(torch, ...)` (the path
+    transformers takes for a string dtype) and `OutputDType.get_dtype()`.
+    """
+    import torch
+
+    import mteb
+    from mteb.types import OutputDType
+
+    meta = mteb.get_model_meta("vidore/colpali-v1.1")
+    declared = meta.loader_kwargs["torch_dtype"]
+
+    assert isinstance(declared, OutputDType)
+    assert declared.get_dtype() is torch.float16
+    assert getattr(torch, declared) is torch.float16
+
+
+def test_model_implementations_declare_no_import_time_torch_dtypes() -> None:
+    """No model file may evaluate a `torch.<dtype>` at import time; use `OutputDType` instead.
+
+    Everything outside a function body runs at import -- module-level `ModelMeta(...)` calls,
+    class bodies, decorators and signature defaults -- so only function bodies are exempt.
+    """
+    import ast
+
+    import torch
+
+    # every torch attribute that is itself a dtype, e.g. "float32", "bfloat16", but also
+    # aliases like "float", "half" and "long" that OutputDType has no member for
+    dtypes = {
+        name for name in dir(torch) if isinstance(getattr(torch, name), torch.dtype)
+    }
+
+    offenders = []
+    for path in sorted(
+        (_REPO_ROOT / "mteb/models/model_implementations").rglob("*.py")
+    ):
+        tree = ast.parse(path.read_text())
+        # nodes actually inside a function/method body are evaluated lazily and exempt;
+        # matched by identity (not line number) so a one-line `def f(x=torch.bfloat16): ...`
+        # doesn't let the signature default hide behind its body's line number
+        in_body = {
+            id(sub)
+            for node in ast.walk(tree)
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+            for stmt in node.body
+            for sub in ast.walk(stmt)
+        }
+        offenders += [
+            f"{path.name}:{node.lineno} torch.{node.attr}"
+            for node in ast.walk(tree)
+            if isinstance(node, ast.Attribute)
+            and isinstance(node.value, ast.Name)
+            and node.value.id == "torch"
+            and node.attr in dtypes
+            and id(node) not in in_body
+        ]
+
+    assert not offenders, (
+        "these evaluate a torch dtype at import time; use the matching OutputDType member "
+        f"instead: {offenders}"
+    )
