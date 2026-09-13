@@ -21,11 +21,15 @@ Directions:
 
 from __future__ import annotations
 
-from mteb.abstasks.retrieval import AbsTaskRetrieval
-from mteb.abstasks.task_metadata import TaskMetadata
+from typing import Any
 
-_DATASET_PATH = "rakshi719/coco-modality-equivalence"
-_DATASET_REVISION = "3aabaa047c92980e12628149df52425757b3f8a6"
+from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.retrieval_dataset_loaders import RetrievalDatasetLoader
+from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.timing import TimingStack
+
+_DATASET_PATH = "mteb/coco-modality-equivalence"
+_DATASET_REVISION = "8f0d56ee81cb60167d956f2eff75f1a719e4787b"
 
 _REFERENCE = "https://github.com/embeddings-benchmark/mteb/issues/5358"
 
@@ -82,7 +86,51 @@ _COMMON = dict(
 )
 
 
-class COCOModalEquivT2IRetrieval(AbsTaskRetrieval):
+class _COCOModalEquivRetrieval(AbsTaskRetrieval):
+    """Shared base for the COCO modality-equivalence directions.
+
+    The upstream HF repo stores each direction as HF configs prefixed with
+    the direction name (e.g. ``t2i-corpus``, ``t2i-queries``, ``t2i-qrels``)
+    rather than under the ``default`` config that `AbsTaskRetrieval.load_data`
+    assumes, so the direction (`dataset["name"]`) has to be threaded through
+    explicitly as the HF config prefix.
+    """
+
+    def load_data(
+        self,
+        num_proc: int | None = None,
+        *,
+        timer: TimingStack | None = None,
+        **kwargs: Any,
+    ) -> None:
+        if self.data_loaded:
+            return
+
+        dataset_path = self.metadata.dataset["path"]
+        revision = self.metadata.dataset["revision"]
+        config = self.metadata.dataset["name"]
+        trust_remote_code = self.metadata.dataset.get("trust_remote_code", False)
+
+        timer = timer or TimingStack()
+        self.dataset = {"default": {}}
+        with timer(
+            "Data loading", log_message=f"Loading dataset {self.metadata.name}..."
+        ):
+            for split in self.eval_splits:
+                self.dataset["default"][split] = RetrievalDatasetLoader(
+                    hf_repo=dataset_path,
+                    revision=revision,
+                    trust_remote_code=trust_remote_code,
+                    split=split,
+                    config=config,
+                ).load(num_proc=num_proc)
+
+        with timer("Dataset transform"):
+            self.dataset_transform(num_proc=num_proc)
+        self.data_loaded = True
+
+
+class COCOModalEquivT2IRetrieval(_COCOModalEquivRetrieval):
     metadata = TaskMetadata(
         name="COCOModalEquivT2IRetrieval",
         description=_SHARED_POOL_NOTE
@@ -97,7 +145,7 @@ class COCOModalEquivT2IRetrieval(AbsTaskRetrieval):
     )
 
 
-class COCOModalEquivA2IHumanRetrieval(AbsTaskRetrieval):
+class COCOModalEquivA2IHumanRetrieval(_COCOModalEquivRetrieval):
     metadata = TaskMetadata(
         name="COCOModalEquivA2IHumanRetrieval",
         description=_SHARED_POOL_NOTE
@@ -112,7 +160,7 @@ class COCOModalEquivA2IHumanRetrieval(AbsTaskRetrieval):
     )
 
 
-class COCOModalEquivA2ITTSRetrieval(AbsTaskRetrieval):
+class COCOModalEquivA2ITTSRetrieval(_COCOModalEquivRetrieval):
     metadata = TaskMetadata(
         name="COCOModalEquivA2ITTSRetrieval",
         description=_SHARED_POOL_NOTE
@@ -127,7 +175,7 @@ class COCOModalEquivA2ITTSRetrieval(AbsTaskRetrieval):
     )
 
 
-class COCOModalEquivI2TRetrieval(AbsTaskRetrieval):
+class COCOModalEquivI2TRetrieval(_COCOModalEquivRetrieval):
     metadata = TaskMetadata(
         name="COCOModalEquivI2TRetrieval",
         description=_SHARED_POOL_NOTE
@@ -141,7 +189,7 @@ class COCOModalEquivI2TRetrieval(AbsTaskRetrieval):
     )
 
 
-class COCOModalEquivI2AHumanRetrieval(AbsTaskRetrieval):
+class COCOModalEquivI2AHumanRetrieval(_COCOModalEquivRetrieval):
     metadata = TaskMetadata(
         name="COCOModalEquivI2AHumanRetrieval",
         description=_SHARED_POOL_NOTE
@@ -156,7 +204,7 @@ class COCOModalEquivI2AHumanRetrieval(AbsTaskRetrieval):
     )
 
 
-class COCOModalEquivI2ATTSRetrieval(AbsTaskRetrieval):
+class COCOModalEquivI2ATTSRetrieval(_COCOModalEquivRetrieval):
     metadata = TaskMetadata(
         name="COCOModalEquivI2ATTSRetrieval",
         description=_SHARED_POOL_NOTE

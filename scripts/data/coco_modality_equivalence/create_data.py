@@ -263,8 +263,8 @@ def stage_build(work: Path) -> None:
         img_queries.append({"id": img_id, "image": images[img_id]})
 
         qrels_t2i.append({"query-id": img_id, "corpus-id": img_id, "score": 1})
-        qrels_a2i_h.append({"query-id": h_id, "corpus-id": img_id, "score": 1})
-        qrels_a2i_s.append({"query-id": s_id, "corpus-id": img_id, "score": 1})
+        qrels_a2i_h.append({"query-id": img_id, "corpus-id": img_id, "score": 1})
+        qrels_a2i_s.append({"query-id": img_id, "corpus-id": img_id, "score": 1})
         qrels_i2t.append({"query-id": img_id, "corpus-id": img_id, "score": 1})
         qrels_i2a_h.append({"query-id": img_id, "corpus-id": h_id, "score": 1})
         qrels_i2a_s.append({"query-id": img_id, "corpus-id": s_id, "score": 1})
