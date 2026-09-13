@@ -7,6 +7,8 @@ from typing import TYPE_CHECKING
 import gradio as gr
 from pandas.api.types import is_numeric_dtype
 
+from mteb.leaderboard._pareto import _pareto_frontier
+
 if TYPE_CHECKING:
     import pandas as pd
     import polars as pl
@@ -99,6 +101,21 @@ def apply_summary_styling_from_benchmark(
 
     summary_df = summary.df.to_pandas()
     display_df = summary_df.drop(columns=["Release Date"], errors="ignore")
+    required_columns = {"Mean (Task)", "Active Parameters (B)"}
+    if required_columns.issubset(display_df.columns):
+        scores = display_df["Mean (Task)"].to_numpy(dtype=float, na_value=float("nan"))
+        sizes = display_df["Active Parameters (B)"].to_numpy(
+            dtype=float, na_value=float("nan")
+        )
+        frontier = _pareto_frontier(scores.tolist(), sizes.tolist())
+        labels = [
+            "N/A" if value is None else "Yes" if value else "No" for value in frontier
+        ]
+    else:
+        labels = ["N/A"] * len(display_df)
+
+    column_position = display_df.columns.get_loc("Model") + 1
+    display_df.insert(column_position, "Pareto", labels)
     result = _apply_summary_table_styling(display_df), summary_df
     t2 = time.time()
     logger.debug(
@@ -215,6 +232,7 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         "Rank (Mean Task)",
         "Rank",
         "Model",
+        "Pareto",
         "Total Parameters (B)",
         "Active Parameters (B)",
         "Embedding Dimensions",

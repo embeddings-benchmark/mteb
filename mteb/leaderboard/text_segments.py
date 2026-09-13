@@ -4,6 +4,14 @@ FAQ = """### What do aggregate measures (Rank(Borda), Mean(Task), etc.) mean?
 - **Mean(Task)**: This is a naïve average computed across all the tasks within the benchmark. This score is simple to understand and is continuous as opposed to the Borda rank. However, the mean can overvalue tasks with higher variance in its scores.
 - **Mean(TaskType)**: This is a weighted average across different task categories, such as classification or retrieval. It is computed by first computing the average by task category and then computing the average on each category. Similar to the Mean(Task) this measure is continuous and tends to overvalue tasks with higher variance. This score also prefers models that perform well across all task categories.
 
+### What does Pareto mean?
+
+Pareto compares higher **Mean (Task)** scores with fewer **Active Parameters (B)** in the current benchmark and filtered model/task comparison.
+**Yes** means no other eligible model has an equal or higher score and an equal or smaller active parameter count, with at least one strict improvement. **No** means another model dominates it by this rule. Exact ties do not dominate each other.
+The objective is always Mean (Task), even when another measure determines the ranking: Yes does not imply the highest score or best overall rank.
+**N/A** means the required score or parameter count is unavailable or nonfinite, or the parameter count is negative. A genuine zero parameter count is valid.
+Benchmark, model, and task filters recalculate the comparison. Table search and sorting preserve the labels and do not redefine the comparison population.
+
 ### What does zero-shot mean?
 
 A model is considered zero-shot if it is not trained on any splits of the datasets used to derive the tasks.
