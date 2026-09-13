@@ -41,7 +41,7 @@ from mteb.types import PromptType
 
 warnings.filterwarnings("ignore", category=UserWarning, module="mteb")
 
-_REPO = "rakshi719/coco-modality-equivalence"
+_REPO = "mteb/coco-modality-equivalence"
 
 # (modality_label, hf_config, hf_split_type, task_name, prompt_type)
 _MODALITIES: list[tuple[str, str, str, str, str]] = [

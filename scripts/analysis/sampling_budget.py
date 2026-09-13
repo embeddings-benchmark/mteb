@@ -35,7 +35,7 @@ from mteb.types import PromptType
 
 warnings.filterwarnings("ignore", category=UserWarning, module="mteb")
 
-_REPO = "rakshi719/coco-modality-equivalence"
+_REPO = "mteb/coco-modality-equivalence"
 _TARGET_SR = 16_000
 
 # Audio query configs to test (corpus is always images)
