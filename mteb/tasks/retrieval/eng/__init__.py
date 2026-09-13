@@ -295,6 +295,7 @@ from .msr_vtt import (
 )
 from .msvd_t2v_retrieval import MSVDT2VRetrieval
 from .msvd_v2t_retrieval import MSVDV2TRetrieval
+from .music_avqa_retrieval import MusicAVQAA2VRetrieval, MusicAVQAV2ARetrieval
 from .nano_argu_ana_retrieval import NanoArguAnaRetrieval
 from .nano_climate_fever_retrieval import NanoClimateFeverRetrieval
 from .nano_db_pedia_retrieval import NanoDBPediaRetrieval
@@ -768,6 +769,8 @@ __all__ = [
     "MemotionT2IRetrieval",
     "MomentSeekerTI2VRetrieval",
     "MomentSeekerTV2VRetrieval",
+    "MusicAVQAA2VRetrieval",
+    "MusicAVQAV2ARetrieval",
     "NFCorpus",
     "NIGHTSI2IRetrieval",
     "NQHardNegatives",
