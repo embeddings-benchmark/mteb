@@ -104,6 +104,14 @@ from .clotho import (
 )
 from .clotho_moment import ClothoMomentRetrieval
 from .cmu_arctic import CMUArcticA2TRetrieval, CMUArcticT2ARetrieval
+from .coco_modality_equivalence import (
+    COCOModalEquivA2IHumanRetrieval,
+    COCOModalEquivA2ITTSRetrieval,
+    COCOModalEquivI2AHumanRetrieval,
+    COCOModalEquivI2ATTSRetrieval,
+    COCOModalEquivI2TRetrieval,
+    COCOModalEquivT2IRetrieval,
+)
 from .covers80_retrieval import Covers80A2ARetrieval
 from .covr_r_retrieval import CoVRRVT2VRetrieval
 from .cqa_dupstack_android_retrieval import CQADupstackAndroidRetrieval
@@ -576,6 +584,12 @@ __all__ = [
     "CLDAT2ARetrieval",
     "CMUArcticA2TRetrieval",
     "CMUArcticT2ARetrieval",
+    "COCOModalEquivA2IHumanRetrieval",
+    "COCOModalEquivA2ITTSRetrieval",
+    "COCOModalEquivI2AHumanRetrieval",
+    "COCOModalEquivI2ATTSRetrieval",
+    "COCOModalEquivI2TRetrieval",
+    "COCOModalEquivT2IRetrieval",
     "CQADupstackAndroidRetrieval",
     "CQADupstackEnglishRetrieval",
     "CQADupstackGamingRetrieval",
