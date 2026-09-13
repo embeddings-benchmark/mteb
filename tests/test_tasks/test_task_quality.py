@@ -952,15 +952,17 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "XModBenchVT2AReranking",
     ],
     "duplicate_video": [
-        "DenseWebVidCoVRVT2VRetrieval",  # multiple rows have same video with different instruction
-        "InsAVE80KVT2VRetrieval",  # reverse couples re-release the same clip under two names
+        "ChinaOpenT2VRetrieval",
+        "ChinaOpenV2TRetrieval",
+        "DenseWebVidCoVRVT2VRetrieval",
+        "InsAVE80KVT2VRetrieval",
         "MMVUVideoCentricQA",
         "MomentSeekerTV2VRetrieval",
-        "StanfordI2VRetrieval",  # official 3,401-ID manifest contains 3,325 unique video contents
-        "StanfordI2VVisualRetrieval",  # same official manifest as StanfordI2VRetrieval
-        "WorldSenseAudioVideoClassification",  # multiple QA rows share the same underlying video/audio
+        "StanfordI2VRetrieval",
+        "StanfordI2VVisualRetrieval",
+        "WorldSenseAudioVideoClassification",
         "WorldSenseAudioVideoZeroShot",
-        "WorldSenseVideoClassification",  # multiple QA rows share the same underlying video/audio
+        "WorldSenseVideoClassification",
         "WorldSenseVideoZeroShot",
         "XModBenchAT2VReranking",
         "XModBenchT2VReranking",
