@@ -244,7 +244,9 @@ def test_model_implementations_declare_no_import_time_torch_dtypes() -> None:
 
     # every torch attribute that is itself a dtype, e.g. "float32", "bfloat16", but also
     # aliases like "float", "half" and "long" that OutputDType has no member for
-    dtypes = {name for name in dir(torch) if isinstance(getattr(torch, name), torch.dtype)}
+    dtypes = {
+        name for name in dir(torch) if isinstance(getattr(torch, name), torch.dtype)
+    }
 
     offenders = []
     for path in sorted(
