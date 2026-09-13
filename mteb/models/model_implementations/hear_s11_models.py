@@ -72,9 +72,9 @@ class HeARS11AudioWrapper(AbsEncoder):
         embeddings = []
 
         for batch in tqdm(inputs, disable=not show_progress_bar):
-            # HEAR scores a clip by averaging its per-clip embeddings rather than
-            # cropping to one window (get_scene_embeddings = torch.mean)
-            # https://github.com/hearbenchmark/hear-eval-kit
+            # the checkpoint's own card declares this protocol: window 2.0 s,
+            # hop 2.0 s, pooling over windows mean
+            # https://huggingface.co/matthewagi/HeAR-s1.1
             clip_arrays = [np.asarray(item["array"]) for item in batch["audio"]]
             windows, owner = split_into_windows(
                 clip_arrays, self.clip_samples, min_samples=self.sampling_rate // 10
