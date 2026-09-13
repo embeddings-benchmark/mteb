@@ -3,9 +3,8 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-import torch
-
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 from .colqwen_models import ColQwen3_5Wrapper
 
@@ -103,7 +102,7 @@ _EVIE_LANGUAGES = [
 evie_8b = ModelMeta(
     loader=EvieWrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
     ),
     name="tencent/EVIE-8B",
     model_type=["late-interaction"],
@@ -132,7 +131,7 @@ evie_8b = ModelMeta(
 evie_4_5b = ModelMeta(
     loader=EvieWrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
     ),
     name="tencent/EVIE-4.5B",
     model_type=["late-interaction"],
