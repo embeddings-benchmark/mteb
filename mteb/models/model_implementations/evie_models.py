@@ -34,28 +34,27 @@ class EvieWrapper(ColQwen3_5Wrapper):
 
         # EVIE's reported numbers come from flash_attention_2, and the choice is
         # not free: under bf16 the reduction order differs enough from sdpa to
-        # move a ViDoRe v3 domain by ~0.15 nDCG@10. Pin it rather than probing,
-        # so the same code scores the same everywhere.
+        # move a ViDoRe v3 domain by ~0.15 nDCG@10. Prefer FA2 when it is
+        # available, but fall back to sdpa so the model still runs without it.
         if (
             attn_implementation == "flash_attention_2"
             and not is_flash_attn_2_available()
         ):
-            raise ImportError(
-                "EVIE is evaluated with flash_attention_2; install it with "
-                "`pip install mteb[evie]`. Passing attn_implementation='sdpa' "
-                "also works but shifts nDCG@10 by roughly 0.15 per domain."
+            logger.warning(
+                "flash_attention_2 is not available; falling back to "
+                "attn_implementation='sdpa'. EVIE's reported nDCG@10 uses "
+                "flash_attention_2, and sdpa can shift it by roughly 0.15 per "
+                "domain. Install it with `pip install flash-attn` to reproduce "
+                "the reported numbers exactly."
             )
+            attn_implementation = "sdpa"
         kwargs["attn_implementation"] = attn_implementation
 
         super().__init__(
             model_name=model_name, revision=revision, device=device, **kwargs
         )
 
-        enable = getattr(self.model, "enable_bidirectional_attention", None)
-        if callable(enable):
-            enable()
-        else:
-            self._enable_bidirectional_attention()
+        self.model.enable_bidirectional_attention()
 
         # The released page budget is 16384 visual tokens; reported results use 1024.
         from colpali_engine.models import ColQwen3_5Processor
@@ -65,15 +64,6 @@ class EvieWrapper(ColQwen3_5Wrapper):
             revision=revision,
             max_num_visual_tokens=max_num_visual_tokens,
         )
-
-    def _enable_bidirectional_attention(self) -> None:
-        config = self.model.config
-        for cfg in (config, getattr(config, "text_config", None)):
-            if cfg is not None:
-                cfg.is_causal = False
-        for module in self.model.modules():
-            if module.__class__.__name__ in {"Qwen3_5Attention", "Qwen3Attention"}:
-                module.is_causal = False
 
 
 EVIE_CITATION = """
