@@ -24,10 +24,15 @@ class UniSpeechWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        # uncapped: conv positional embedding, no max_position_embeddings, and
+        # transformers picks SDPA here. Set this to truncate, e.g. to ablate length.
+        # https://huggingface.co/microsoft/unispeech-sat-base/blob/main/config.json
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
         self.model_name = model_name
         self.device = device
+        self.max_audio_length_seconds = max_audio_length_seconds
 
         # UniSpeech uses the same feature extractor as Wav2Vec2
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(
@@ -45,7 +50,14 @@ class UniSpeechWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+        max_samples = (
+            int(self.max_audio_length_seconds * self.sampling_rate)
+            if self.max_audio_length_seconds
+            else None
+        )
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate, max_samples=max_samples
+        )
 
         all_embeddings = []
 
@@ -60,8 +72,6 @@ class UniSpeechWrapper(AbsEncoder):
                 sampling_rate=self.sampling_rate,
                 return_tensors="pt",
                 padding="longest",
-                # no cap: conv positional embedding, no max_position_embeddings
-                # https://huggingface.co/microsoft/unispeech-sat-base/blob/main/config.json
                 return_attention_mask=True,
             ).to(self.device)
 
