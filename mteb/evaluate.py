@@ -231,17 +231,23 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
                 )
                 tock_ss = monotonic()
                 task_results[split].update(res)
-                # Save intermediate cache
+
                 if cache:
-                    new_result = TaskResult.from_task_results(
-                        task,
-                        task_results,
-                        evaluation_time=evaluation_time + (tock_ss - tick),
-                        kg_co2_emissions=existing_co2,
-                        date=datetime.datetime.now(tz=datetime.timezone.utc),
-                        evaluation_phases=timer.phases if timer.phases else None,
-                    )
-                    cache.save_to_cache(new_result, model_meta)
+                    try:
+                        new_result = TaskResult.from_task_results(
+                            task,
+                            task_results,
+                            evaluation_time=evaluation_time + (tock_ss - tick),
+                            kg_co2_emissions=existing_co2,
+                            date=datetime.datetime.now(tz=datetime.timezone.utc),
+                            evaluation_phases=timer.phases if timer.phases else None,
+                        )
+                        cache.save_to_cache(new_result, model_meta)
+                    except Exception as e:
+                        logger.error(
+                            f"Error while saving intermediate cache for {task.metadata.name} "
+                            f"split {split}: {e}"
+                        )
 
         duration = general_timer.phases[0]["end"] - general_timer.phases[0]["start"]
 
@@ -431,6 +437,28 @@ def _check_cache(
     return existing_results, missing_eval
 
 
+def _save_to_cache_or_record_error(
+    result: TaskResult,
+    meta: ModelMeta,
+    *,
+    task_name: str,
+    cache: ResultCache | None,
+    encode_kwargs: EncodeKwargs,
+    raise_error: bool,
+    prior_exceptions: list[TaskError] | None = None,
+) -> list[TaskError]:
+    exceptions = list(prior_exceptions or [])
+    if cache:
+        try:
+            cache.save_to_cache(result, meta, encode_kwargs=encode_kwargs)
+        except Exception as e:
+            if raise_error:
+                raise
+            logger.error(f"Error while caching results for {task_name}: {e}")
+            exceptions.append(TaskError(task_name=task_name, exception=str(e)))
+    return exceptions
+
+
 def evaluate(  # noqa: PLR0911, PLR0913, PLR0914
     model: ModelMeta | MTEBModels | SentenceTransformer | CrossEncoder,
     tasks: AbsTask | Iterable[AbsTask],
@@ -561,9 +589,7 @@ def evaluate(  # noqa: PLR0911, PLR0913, PLR0914
             timer=timer,
         )
 
-        if results.exceptions:
-            # a subtask failed, so there is nothing to aggregate. Reporting the aggregate task as
-            # failed avoids caching a result whose main score is None.
+        if len(results.task_results) < len(tasks.metadata.tasks):
             logger.error(
                 f"Subtasks of {tasks.metadata.name} failed, skipping the aggregation"
             )
@@ -585,13 +611,6 @@ def evaluate(  # noqa: PLR0911, PLR0913, PLR0914
 
             if existing_results:
                 combined_results = existing_results.merge(combined_results)
-
-            if cache:
-                cache.save_to_cache(
-                    combined_results,
-                    meta,
-                    encode_kwargs=encode_kwargs,
-                )
         except Exception as e:
             if raise_error:
                 raise
@@ -600,13 +619,27 @@ def evaluate(  # noqa: PLR0911, PLR0913, PLR0914
                 model_name=results.model_name,
                 model_revision=results.model_revision,
                 task_results=[],
-                exceptions=[TaskError(task_name=tasks.metadata.name, exception=str(e))],
+                exceptions=[
+                    *results.exceptions,
+                    TaskError(task_name=tasks.metadata.name, exception=str(e)),
+                ],
             )
+
+        cache_exceptions = _save_to_cache_or_record_error(
+            combined_results,
+            meta,
+            task_name=tasks.metadata.name,
+            cache=cache,
+            encode_kwargs=encode_kwargs,
+            raise_error=raise_error,
+            prior_exceptions=results.exceptions,
+        )
 
         return ModelResult(
             model_name=results.model_name,
             model_revision=results.model_revision,
             task_results=[combined_results],
+            exceptions=cache_exceptions or None,
         )
 
     if isinstance(tasks, AbsTask):
@@ -639,8 +672,8 @@ def evaluate(  # noqa: PLR0911, PLR0913, PLR0914
             if _res.exceptions:
                 exceptions.extend(_res.exceptions)
         return ModelResult(
-            model_name=_res.model_name,
-            model_revision=_res.model_revision,
+            model_name=model_name,
+            model_revision=model_revision,
             task_results=evaluate_results,
             exceptions=exceptions,
         )
@@ -684,16 +717,14 @@ def evaluate(  # noqa: PLR0911, PLR0913, PLR0914
             f"Found existing results for {task.metadata.name}, only running missing splits (subsets): {missing_eval}"
         )
 
-    # loaded outside the guard below: a model that cannot be loaded fails the run rather than
-    # being reported once per task
-    if isinstance(model, ModelMeta):
-        logger.info(
-            f"Loading model {model_name} with revision {model_revision} from ModelMeta."
-        )
-        model = model.load_model()
-        logger.info("✓ Model loaded")
-
     try:
+        if isinstance(model, ModelMeta):
+            logger.info(
+                f"Loading model {model_name} with revision {model_revision} from ModelMeta."
+            )
+            model = model.load_model()
+            logger.info("✓ Model loaded")
+
         result = _evaluate_task(
             model=model,
             splits=missing_eval,
@@ -707,21 +738,6 @@ def evaluate(  # noqa: PLR0911, PLR0913, PLR0914
             existing_results=existing_results,
         )
         logger.info(f"✓ Finished evaluation for {task.metadata.name}")
-
-        if isinstance(result, TaskError):
-            return ModelResult(
-                model_name=model_name,
-                model_revision=model_revision,
-                task_results=[],
-                exceptions=[result],
-            )
-
-        if cache:
-            cache.save_to_cache(
-                result,
-                meta,
-                encode_kwargs=encode_kwargs,
-            )
     except Exception as e:
         if raise_error:
             raise
@@ -735,8 +751,26 @@ def evaluate(  # noqa: PLR0911, PLR0913, PLR0914
             exceptions=[TaskError(task_name=task.metadata.name, exception=str(e))],
         )
 
+    if isinstance(result, TaskError):
+        return ModelResult(
+            model_name=model_name,
+            model_revision=model_revision,
+            task_results=[],
+            exceptions=[result],
+        )
+
+    cache_exceptions = _save_to_cache_or_record_error(
+        result,
+        meta,
+        task_name=task.metadata.name,
+        cache=cache,
+        encode_kwargs=encode_kwargs,
+        raise_error=raise_error,
+    )
+
     return ModelResult(
         model_name=model_name,
         model_revision=model_revision,
         task_results=[result],
+        exceptions=cache_exceptions or None,
     )
