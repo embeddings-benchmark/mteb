@@ -19,12 +19,13 @@ from __future__ import annotations
 import argparse
 import io
 import random
+import tempfile
 from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 
 import pyarrow.parquet as pq
-from datasets import Audio, Dataset, DatasetDict, Video
+from datasets import Audio, Dataset, Video
 from huggingface_hub import HfApi, snapshot_download
 
 SOURCE_DATASET = "mteb/MUSIC-AVQA_cls-preprocessed"
@@ -262,9 +263,25 @@ def push_direction(
 ) -> None:
     """Publish a direction and its card in MTEB's standard Hub configuration layout."""
     api.create_repo(repo_id, repo_type="dataset", exist_ok=True)
-    DatasetDict({"test": queries}).push_to_hub(repo_id, "queries")
-    DatasetDict({"test": corpus}).push_to_hub(repo_id, "corpus")
-    DatasetDict({"test": qrels}).push_to_hub(repo_id, "qrels")
+    # ``Dataset.push_to_hub`` can hang on Windows while uploading large Video
+    # feature shards. Writing standard Parquet splits and using ``upload_file``
+    # produces the identical Hub layout without that platform-specific path.
+    with tempfile.TemporaryDirectory(prefix="music_avqa_") as temporary_directory:
+        temporary_path = Path(temporary_directory)
+        for configuration, split in (
+            ("queries", queries),
+            ("corpus", corpus),
+            ("qrels", qrels),
+        ):
+            parquet_path = temporary_path / f"{configuration}.parquet"
+            split.to_parquet(parquet_path)
+            api.upload_file(
+                path_or_fileobj=str(parquet_path),
+                path_in_repo=f"{configuration}/test-00000-of-00001.parquet",
+                repo_id=repo_id,
+                repo_type="dataset",
+                commit_message=f"Add {configuration} test split",
+            )
     api.upload_file(
         path_or_fileobj=io.BytesIO(dataset_card(direction).encode()),
         path_in_repo="README.md",
