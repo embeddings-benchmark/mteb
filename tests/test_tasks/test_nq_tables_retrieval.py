@@ -55,11 +55,12 @@ def loader(release):
         yield mock
 
 
-def test_local_unregistered_metadata():
-    assert "NQTablesRetrieval" not in _TASKS_REGISTRY
-    assert NQTablesRetrieval.metadata.license is None
+def test_registered_complete_metadata():
+    assert _TASKS_REGISTRY["NQTablesRetrieval"] is NQTablesRetrieval
+    assert NQTablesRetrieval.metadata.license == "cc-by-4.0"
     NQTablesRetrieval.metadata._validate_metadata()
-    assert not NQTablesRetrieval.metadata.is_filled()
+    assert NQTablesRetrieval.metadata.is_filled()
+    assert list(NQTablesRetrieval.metadata.descriptive_stats or {}) == ["test"]
 
 
 @pytest.mark.parametrize(

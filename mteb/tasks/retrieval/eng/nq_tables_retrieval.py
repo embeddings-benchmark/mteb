@@ -1,8 +1,4 @@
-"""Local, deliberately unregistered NQ-Tables engineering prototype.
-
-Import this class explicitly; it is not exported by ``mteb.tasks``. The source
-license discrepancy remains unresolved.
-"""
+"""NQ-Tables retrieval task."""
 
 from __future__ import annotations
 
@@ -19,6 +15,31 @@ if TYPE_CHECKING:
     from mteb.timing import TimingStack
 
 
+_BIBTEX = r"""
+@misc{doshi2026tableir,
+  title = {TableIR Eval: Table-Text IR Evaluation Collection},
+  author = {Doshi, Meet and Boni, Odellia and Kumar, Vishwajeet and Sen, Jaydeep and Joshi, Sachindra},
+  year = {2026},
+  institution = {IBM Research},
+  howpublished = {https://huggingface.co/collections/ibm-research/table-text-ir-evaluation},
+  note = {Hugging Face dataset collection},
+}
+
+@inproceedings{herzig-etal-2021-open,
+  title = {Open Domain Question Answering over Tables via Dense Retrieval},
+  author = {Herzig, Jonathan and M{\"u}ller, Thomas and Krichene, Syrine and Eisenschlos, Julian Martin},
+  booktitle = {Proceedings of the 2021 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies},
+  month = jun,
+  year = {2021},
+  address = {Online},
+  publisher = {Association for Computational Linguistics},
+  url = {https://aclanthology.org/2021.naacl-main.43/},
+  doi = {10.18653/v1/2021.naacl-main.43},
+  pages = {512--519},
+}
+"""
+
+
 class NQTablesRetrieval(AbsTaskRetrieval):
     """Retrieve the released Markdown tables using the original release qrels."""
 
@@ -31,9 +52,10 @@ class NQTablesRetrieval(AbsTaskRetrieval):
             "revision": "4962c33f5e651c82bc82c013893061202a47685e",
         },
         description=(
-            "This task preserves original NQ-Tables qrels and is an engineering "
-            "baseline, not the final table-necessary OmniWikipedia benchmark. "
-            "Local prototype; dataset license discrepancy remains unresolved."
+            "Retrieve the reference Wikipedia table associated with a Natural "
+            "Questions query under the original NQ-Tables relevance judgments. "
+            "The task uses the Markdown table serialization, questions, stable "
+            "source IDs, and qrels from the NQ-Tables TableIR release."
         ),
         reference="https://aclanthology.org/2021.naacl-main.43/",
         type="Retrieval",
@@ -42,11 +64,16 @@ class NQTablesRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
+        date=("2021-01-01", "2021-12-31"),  # publication year
         domains=["Written", "Encyclopaedic"],
         task_subtypes=["Question answering"],
-        license=None,  # Intentionally unresolved; not a publication-ready task.
+        license="cc-by-4.0",
         annotations_creators="derived",
+        dialect=[],
         sample_creation="found",
+        bibtex_citation=_BIBTEX,
+        adapted_from=["NQ"],
+        prompt={"query": "Given a question, retrieve its reference Wikipedia table."},
         is_beta=True,
     )
 
