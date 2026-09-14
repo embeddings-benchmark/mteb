@@ -81,20 +81,12 @@ class JuriFindITRetrieval(AbsTaskRetrieval):
         """Reshape the JuriFindIT corpus and expert questions into a retrieval task.
 
         The upstream dataset ships the corpus and the questions as separate configs, and
-        the questions carry no query id, so ids are derived from the origin split. Two
-        splits are built:
-
-        * `test` -- all 895 expert-written questions (the upstream `train` and `validation`
-          splits merged). `mteb` evaluation is zero-shot, so nothing is fit on the upstream
-          `train` questions and merging them simply gives a query set large enough for stable
-          nDCG estimates.
-        * `validation` -- the 179 upstream validation questions only, kept so the baselines
-          published with the paper remain reproducible through `mteb`.
-
-        Args:
-            num_proc: Number of processes used when building the query datasets.
-            timer: Timing stack passed down by the evaluator.
-            **kwargs: Unused, kept for signature compatibility.
+        the questions carry no query id, so ids are derived from the origin split. The
+        single `test` split holds all 895 expert-written questions, the upstream `train`
+        and `validation` splits merged: `mteb` evaluation is zero-shot, so nothing is fit
+        on the upstream `train` questions, and merging them gives a query set large enough
+        for stable nDCG estimates. The 179 questions the paper evaluates on keep their
+        `validation-` id prefix, so its numbers can be reproduced from this split alone.
         """
         if self.data_loaded:
             return
@@ -106,33 +98,22 @@ class JuriFindITRetrieval(AbsTaskRetrieval):
 
         corpus, canonical_doc_ids = self._build_corpus(corpus_raw)
 
-        question_splits = {
-            "validation": [("validation", questions_raw["validation"])],
-            "test": [
-                ("train", questions_raw["train"]),
-                ("validation", questions_raw["validation"]),
-            ],
+        queries: list[dict[str, str]] = []
+        relevant_docs: dict[str, dict[str, int]] = {}
+        for origin in ("train", "validation"):
+            for index, row in enumerate(questions_raw[origin]):
+                query_id = f"{origin}-{index}"
+                queries.append({"id": query_id, "text": row["question"]})
+                relevant_docs[query_id] = {
+                    canonical_doc_ids[doc_id]: 1 for doc_id in row["relevant_doc_ids"]
+                }
+        split_data: RetrievalSplitData = {
+            "corpus": corpus,
+            "queries": datasets.Dataset.from_list(queries),
+            "relevant_docs": relevant_docs,
+            "top_ranked": None,
         }
-
-        self.dataset = {"default": {}}
-        for split, sources in question_splits.items():
-            queries: list[dict[str, str]] = []
-            relevant_docs: dict[str, dict[str, int]] = {}
-            for origin, question_ds in sources:
-                for index, row in enumerate(question_ds):
-                    query_id = f"{origin}-{index}"
-                    queries.append({"id": query_id, "text": row["question"]})
-                    relevant_docs[query_id] = {
-                        canonical_doc_ids[doc_id]: 1
-                        for doc_id in row["relevant_doc_ids"]
-                    }
-            split_data: RetrievalSplitData = {
-                "corpus": corpus,
-                "queries": datasets.Dataset.from_list(queries),
-                "relevant_docs": relevant_docs,
-                "top_ranked": None,
-            }
-            self.dataset["default"][split] = split_data
+        self.dataset = {"default": {"test": split_data}}
 
         self.data_loaded = True
 
@@ -142,12 +123,9 @@ class JuriFindITRetrieval(AbsTaskRetrieval):
     ) -> tuple[datasets.Dataset, dict[int, str]]:
         """Drop structural placeholders and collapse exact-duplicate articles.
 
-        Args:
-            corpus_raw: The raw `corpus` config of the upstream dataset.
-
-        Returns:
-            The deduplicated corpus and a mapping from every upstream article id to the
-            document id that represents it, so that qrels resolve after deduplication.
+        Returns the deduplicated corpus together with a mapping from every upstream
+        article id to the document id that represents it, so that the qrels still
+        resolve after deduplication.
         """
         documents: list[dict[str, str]] = []
         first_id_for_text: dict[str, str] = {}
