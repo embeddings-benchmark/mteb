@@ -71,28 +71,14 @@ class HeARS11AudioWrapper(AbsEncoder):
         embeddings = []
 
         for batch in tqdm(inputs, disable=not show_progress_bar):
-            # the card declares window 2.0 s, hop 2.0 s, mean over windows
-            # https://huggingface.co/matthewagi/HeAR-s1.1
-            windows, owner = [], []
-            for index, item in enumerate(batch["audio"]):
-                array = np.asarray(item["array"]).reshape(-1)
-                for start in range(0, max(array.shape[-1], 1), self.clip_samples):
-                    windows.append(array[start : start + self.clip_samples])
-                    owner.append(index)
-            audio = torch.stack([self._prepare_audio(w) for w in windows]).to(
-                self.device
-            )
+            audio = torch.stack(
+                [self._prepare_audio(item["array"]) for item in batch["audio"]]
+            ).to(self.device)
 
             with torch.no_grad():
                 output = self.model(input_values=audio, return_dict=True)
 
-            emb = output.pooler_output.cpu().detach()
-            index = torch.tensor(owner)
-            n_clips = len(batch["audio"])
-            summed = torch.zeros(n_clips, emb.shape[-1], dtype=emb.dtype)
-            summed.index_add_(0, index, emb)
-            counts = torch.bincount(index, minlength=n_clips).clamp(min=1)
-            embeddings.append(summed / counts.unsqueeze(1))
+            embeddings.append(output.pooler_output.cpu().detach())
 
         return torch.cat(embeddings, dim=0).numpy()
 
