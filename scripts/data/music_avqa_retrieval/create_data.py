@@ -34,6 +34,7 @@ SOURCE_SPLIT = "test"
 SEED = 42
 QUERIES_PER_CLASS = 5
 CORPUS_PER_CLASS = 10
+MEDIA_ROWS_PER_SHARD = 20
 
 
 @dataclass(frozen=True)
@@ -264,8 +265,8 @@ def push_direction(
     """Publish a direction and its card in MTEB's standard Hub configuration layout."""
     api.create_repo(repo_id, repo_type="dataset", exist_ok=True)
     # ``Dataset.push_to_hub`` can hang on Windows while uploading large Video
-    # feature shards. Writing standard Parquet splits and using ``upload_file``
-    # produces the identical Hub layout without that platform-specific path.
+    # feature shards. Writing small standard Parquet shards and using
+    # ``upload_file`` produces the identical Hub layout without that path.
     with tempfile.TemporaryDirectory(prefix="music_avqa_") as temporary_directory:
         temporary_path = Path(temporary_directory)
         for configuration, split in (
@@ -273,15 +274,38 @@ def push_direction(
             ("corpus", corpus),
             ("qrels", qrels),
         ):
-            parquet_path = temporary_path / f"{configuration}.parquet"
-            split.to_parquet(parquet_path)
-            api.upload_file(
-                path_or_fileobj=str(parquet_path),
-                path_in_repo=f"{configuration}/test-00000-of-00001.parquet",
-                repo_id=repo_id,
-                repo_type="dataset",
-                commit_message=f"Add {configuration} test split",
+            existing_paths = [
+                path
+                for path in api.list_repo_files(repo_id, repo_type="dataset")
+                if path.startswith(f"{configuration}/")
+            ]
+            for path in existing_paths:
+                api.delete_file(
+                    path_in_repo=path,
+                    repo_id=repo_id,
+                    repo_type="dataset",
+                    commit_message=f"Replace {configuration} test split",
+                )
+
+            num_shards = (
+                1
+                if configuration == "qrels"
+                else -(-len(split) // MEDIA_ROWS_PER_SHARD)
             )
+            for shard_index in range(num_shards):
+                parquet_path = temporary_path / f"{configuration}_{shard_index}.parquet"
+                split.shard(num_shards=num_shards, index=shard_index).to_parquet(
+                    parquet_path
+                )
+                api.upload_file(
+                    path_or_fileobj=str(parquet_path),
+                    path_in_repo=(
+                        f"{configuration}/test-{shard_index:05d}-of-{num_shards:05d}.parquet"
+                    ),
+                    repo_id=repo_id,
+                    repo_type="dataset",
+                    commit_message=f"Add {configuration} test shard {shard_index + 1}",
+                )
     api.upload_file(
         path_or_fileobj=io.BytesIO(dataset_card(direction).encode()),
         path_in_repo="README.md",
