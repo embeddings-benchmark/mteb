@@ -9,7 +9,6 @@ from transformers import Wav2Vec2FeatureExtractor, Wav2Vec2Model
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.audio_windowing import pool_windows, split_into_windows
 from mteb.models.modality_collators import AudioCollator
 
 if TYPE_CHECKING:
@@ -29,16 +28,12 @@ class MMSWrapper(AbsEncoder):
         revision: str | None = None,
         target_lang: str = "eng",
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        # 20 s: s3prl UnfoldChunkByFrame, 2000 frames
-        # https://github.com/s3prl/s3prl/blob/main/s3prl/dataset/chunking.py
-        window_seconds: float | None = 20.0,
         **kwargs: Any,
     ):
         self.model_name = model_name
         self.model_revision = revision
         self.target_lang = target_lang
         self.device = device
-        self.window_seconds = window_seconds
 
         # Standard feature extractor used by audio models
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(
@@ -75,21 +70,15 @@ class MMSWrapper(AbsEncoder):
             inputs,
             disable=not show_progress_bar,
         ):
-            clip_arrays = [audio["array"] for audio in batch["audio"]]
-            window_samples = (
-                int(self.window_seconds * self.sampling_rate)
-                if self.window_seconds is not None
-                else None
-            )
-            audio_arrays, owner = split_into_windows(
-                clip_arrays, window_samples, min_samples=self.sampling_rate // 10
-            )
+            audio_arrays = [audio["array"] for audio in batch["audio"]]
 
             feature_inputs = self.feature_extractor(
                 audio_arrays,
                 sampling_rate=self.sampling_rate,
                 return_tensors="pt",
                 padding="longest",
+                # no cap: conv positional embedding, no max_position_embeddings
+                # https://huggingface.co/facebook/mms-1b/blob/main/config.json
                 return_attention_mask=True,
             ).to(self.device)
 
@@ -124,10 +113,7 @@ class MMSWrapper(AbsEncoder):
                 valid_tokens = hidden_attention_mask.sum(dim=1)
                 embeddings = masked_embeddings.sum(dim=1) / valid_tokens.clamp(min=1e-9)
 
-                pooled = pool_windows(
-                    embeddings.cpu().detach().numpy(), owner, len(clip_arrays)
-                )
-                all_embeddings.append(torch.from_numpy(pooled))
+                all_embeddings.append(embeddings.cpu().detach())
 
         return torch.cat(all_embeddings, dim=0).numpy()
 

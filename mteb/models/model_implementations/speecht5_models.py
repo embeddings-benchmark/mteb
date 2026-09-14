@@ -13,7 +13,6 @@ from transformers import (
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.audio_windowing import pool_windows, split_into_windows
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -31,11 +30,11 @@ class SpeechT5Audio(AbsEncoder):
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         # 80 s: max_speech_positions=4000 at 50 fps
         # https://huggingface.co/microsoft/speecht5_asr/blob/main/config.json
-        window_seconds: float | None = 80.0,
+        max_audio_length_s: float = 80.0,
         **kwargs: Any,
     ):
         self.device = device
-        self.window_seconds = window_seconds
+        self.max_audio_length_s = max_audio_length_s
 
         self.asr_processor = SpeechT5Processor.from_pretrained(
             "microsoft/speecht5_asr",
@@ -87,21 +86,13 @@ class SpeechT5Audio(AbsEncoder):
             elif batch_arrays[0].ndim > 1:
                 batch_arrays = [x.reshape(x.size(0), -1) for x in batch_arrays]
 
-            clip_count = len(batch_arrays)
-            window_samples = (
-                int(self.window_seconds * self.sampling_rate)
-                if self.window_seconds is not None
-                else None
-            )
-            batch_arrays, owner = split_into_windows(
-                batch_arrays, window_samples, min_samples=self.sampling_rate // 10
-            )
-
             features = self.asr_processor(
                 audio=batch_arrays,
                 sampling_rate=self.sampling_rate,
                 return_tensors="pt",
                 padding="longest",
+                truncation=True,
+                max_length=int(self.max_audio_length_s * self.sampling_rate),
                 return_attention_mask=True,
             ).to(self.device)
 
@@ -134,8 +125,7 @@ class SpeechT5Audio(AbsEncoder):
                 valid_tokens = hidden_attention_mask.sum(dim=1)
                 embeddings = masked_embeddings.sum(dim=1) / valid_tokens.clamp(min=1e-9)
 
-                pooled = pool_windows(embeddings.cpu().numpy(), owner, clip_count)
-                all_embeddings.append(torch.from_numpy(pooled))
+                all_embeddings.append(embeddings.cpu())
 
         return torch.cat(all_embeddings, dim=0)
 

@@ -9,7 +9,6 @@ from transformers import AutoModel
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.audio_windowing import pool_windows, split_into_windows
 from mteb.models.modality_collators import AudioCollator
 
 if TYPE_CHECKING:
@@ -72,13 +71,14 @@ class HeARS11AudioWrapper(AbsEncoder):
         embeddings = []
 
         for batch in tqdm(inputs, disable=not show_progress_bar):
-            # the checkpoint's own card declares this protocol: window 2.0 s,
-            # hop 2.0 s, pooling over windows mean
+            # the card declares window 2.0 s, hop 2.0 s, mean over windows
             # https://huggingface.co/matthewagi/HeAR-s1.1
-            clip_arrays = [np.asarray(item["array"]) for item in batch["audio"]]
-            windows, owner = split_into_windows(
-                clip_arrays, self.clip_samples, min_samples=self.sampling_rate // 10
-            )
+            windows, owner = [], []
+            for index, item in enumerate(batch["audio"]):
+                array = np.asarray(item["array"]).reshape(-1)
+                for start in range(0, max(array.shape[-1], 1), self.clip_samples):
+                    windows.append(array[start : start + self.clip_samples])
+                    owner.append(index)
             audio = torch.stack([self._prepare_audio(w) for w in windows]).to(
                 self.device
             )
@@ -86,10 +86,13 @@ class HeARS11AudioWrapper(AbsEncoder):
             with torch.no_grad():
                 output = self.model(input_values=audio, return_dict=True)
 
-            pooled = pool_windows(
-                output.pooler_output.cpu().detach().numpy(), owner, len(clip_arrays)
-            )
-            embeddings.append(torch.from_numpy(pooled))
+            emb = output.pooler_output.cpu().detach()
+            index = torch.tensor(owner)
+            n_clips = len(batch["audio"])
+            summed = torch.zeros(n_clips, emb.shape[-1], dtype=emb.dtype)
+            summed.index_add_(0, index, emb)
+            counts = torch.bincount(index, minlength=n_clips).clamp(min=1)
+            embeddings.append(summed / counts.unsqueeze(1))
 
         return torch.cat(embeddings, dim=0).numpy()
 

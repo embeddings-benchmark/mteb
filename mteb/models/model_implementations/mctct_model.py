@@ -8,7 +8,6 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.audio_windowing import pool_windows, split_into_windows
 from mteb.models.modality_collators import AudioCollator
 
 if TYPE_CHECKING:
@@ -90,14 +89,14 @@ class MCTCTWrapper(AbsEncoder):
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         # 27.6 s: max_position_embeddings=920 at 30 ms/frame
         # https://huggingface.co/speechbrain/m-ctc-t-large/blob/main/config.json
-        window_seconds: float | None = 27.6,
+        max_audio_length_seconds: float = 27.6,
         **kwargs: Any,
     ):
         from transformers import MCTCTFeatureExtractor, MCTCTModel
 
         self.model_name = model_name
         self.device = device
-        self.window_seconds = window_seconds
+        self.max_audio_length_seconds = max_audio_length_seconds
 
         self.model = MCTCTModel.from_pretrained(model_name, revision=revision).to(
             device
@@ -122,15 +121,7 @@ class MCTCTWrapper(AbsEncoder):
             inputs,
             disable=not show_progress_bar,
         ):
-            clip_arrays = [audio["array"] for audio in batch["audio"]]
-            window_samples = (
-                int(self.window_seconds * self.sampling_rate)
-                if self.window_seconds is not None
-                else None
-            )
-            audio_arrays, owner = split_into_windows(
-                clip_arrays, window_samples, min_samples=self.sampling_rate // 10
-            )
+            audio_arrays = [audio["array"] for audio in batch["audio"]]
 
             feature_inputs = self.feature_extractor(
                 audio_arrays,
@@ -138,6 +129,7 @@ class MCTCTWrapper(AbsEncoder):
                 return_tensors="pt",
                 padding=True,
                 truncation=True,
+                max_length=int(self.max_audio_length_seconds * self.sampling_rate),
             ).to(self.device)
 
             with torch.no_grad():
@@ -185,10 +177,7 @@ class MCTCTWrapper(AbsEncoder):
                         nan_mask, torch.zeros_like(embeddings), embeddings
                     )
 
-                pooled = pool_windows(
-                    embeddings.detach().cpu().numpy(), owner, len(clip_arrays)
-                )
-                all_embeddings.append(torch.from_numpy(pooled))
+                all_embeddings.append(embeddings.cpu().detach())
 
         return torch.cat(all_embeddings, dim=0).numpy()
 

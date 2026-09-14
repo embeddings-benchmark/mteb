@@ -8,7 +8,6 @@ from transformers import WhisperModel, WhisperProcessor
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.audio_windowing import pool_windows, split_into_windows
 from mteb.models.modality_collators import AudioCollator
 
 if TYPE_CHECKING:
@@ -27,12 +26,12 @@ class WhisperAudioWrapper(AbsEncoder):
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         # 30 s: chunk_length=30
         # https://huggingface.co/openai/whisper-large-v3/blob/main/preprocessor_config.json
-        window_seconds: float | None = 30.0,
+        max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
         self.model_name = model_name
         self.device = device
-        self.window_seconds = window_seconds
+        self.max_audio_length_seconds = max_audio_length_seconds
 
         self.model = WhisperModel.from_pretrained(model_name, revision=revision).to(
             device
@@ -56,15 +55,7 @@ class WhisperAudioWrapper(AbsEncoder):
             inputs,
             disable=not show_progress_bar,
         ):
-            clip_arrays = [audio["array"] for audio in batch["audio"]]
-            window_samples = (
-                int(self.window_seconds * self.sampling_rate)
-                if self.window_seconds is not None
-                else None
-            )
-            audio_arrays, owner = split_into_windows(
-                clip_arrays, window_samples, min_samples=self.sampling_rate // 10
-            )
+            audio_arrays = [audio["array"] for audio in batch["audio"]]
 
             feature_inputs = self.processor(
                 audio_arrays,
@@ -72,6 +63,7 @@ class WhisperAudioWrapper(AbsEncoder):
                 return_tensors="pt",
                 padding="max_length",
                 truncation=True,
+                max_length=int(self.max_audio_length_seconds * self.sampling_rate),
                 return_attention_mask=True,
             ).to(self.device)
             # Some Whisper checkpoints load as fp16;
@@ -141,10 +133,7 @@ class WhisperAudioWrapper(AbsEncoder):
                     # Fallback to simple mean pooling if no attention mask
                     embeddings = torch.mean(selected_hidden, dim=1)
 
-                pooled = pool_windows(
-                    embeddings.detach().cpu().numpy(), owner, len(clip_arrays)
-                )
-                all_embeddings.append(torch.from_numpy(pooled))
+                all_embeddings.append(embeddings.cpu().detach())
 
         return torch.cat(all_embeddings, dim=0).numpy()
 

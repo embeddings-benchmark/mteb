@@ -10,7 +10,6 @@ from transformers import ASTFeatureExtractor, ASTModel
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.audio_windowing import pool_windows, split_into_windows
 from mteb.models.modality_collators import AudioCollator
 
 if TYPE_CHECKING:
@@ -57,17 +56,15 @@ class ASTWrapper(AbsEncoder):
             inputs,
             disable=not show_progress_bar,
         ):
-            clip_arrays = [a["array"] for a in batch["audio"]]
-            # 10.24 s: max_length=1024 frames
+            # truncation=True uses the extractor's own max_length=1024 frames (10.24 s)
             # https://huggingface.co/MIT/ast-finetuned-audioset-10-10-0.4593/blob/main/preprocessor_config.json
-            audio_arrays, owner = split_into_windows(
-                clip_arrays,
-                int(10.24 * self.sampling_rate),
-                min_samples=self.sampling_rate // 10,
-            )
+            # pad up to the 400-sample FFT window so short clips do not crash
             audio_arrays = [
-                np.pad(np.asarray(a), (0, max(0, 401 - np.asarray(a).shape[-1])))
-                for a in audio_arrays
+                np.pad(
+                    np.asarray(a["array"]),
+                    (0, max(0, 401 - np.asarray(a["array"]).shape[-1])),
+                )
+                for a in batch["audio"]
             ]
 
             features = self.feature_extractor(
@@ -82,10 +79,7 @@ class ASTWrapper(AbsEncoder):
 
             # AST's pooled output is the [CLS] token embedding
             embeddings = outputs.pooler_output
-            pooled = pool_windows(
-                embeddings.detach().cpu().numpy(), owner, len(clip_arrays)
-            )
-            all_embeddings.append(torch.from_numpy(pooled))
+            all_embeddings.append(embeddings.cpu().detach())
         return torch.cat(all_embeddings, dim=0).numpy()
 
     def encode(

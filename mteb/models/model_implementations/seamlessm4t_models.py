@@ -8,7 +8,6 @@ from transformers import AutoProcessor, SeamlessM4Tv2Model
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.audio_windowing import pool_windows, split_into_windows
 from mteb.models.modality_collators import AudioCollator
 
 if TYPE_CHECKING:
@@ -27,12 +26,12 @@ class SeamlessM4TWrapper(AbsEncoder):
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         # 10 s: MAX_INPUT_AUDIO_LENGTH
         # https://github.com/facebookresearch/seamless_communication/blob/main/demo/expressive/app.py
-        window_seconds: float | None = 10.0,
+        max_audio_length_seconds: float = 10.0,
         **kwargs: Any,
     ):
         self.model_name = model_name
         self.device = device
-        self.window_seconds = window_seconds
+        self.max_audio_length_seconds = max_audio_length_seconds
 
         self.model = SeamlessM4Tv2Model.from_pretrained(model_name, revision=revision)
         self.model.eval()
@@ -43,11 +42,7 @@ class SeamlessM4TWrapper(AbsEncoder):
 
         self.model = self.model.to(device)
         self.speech_encoder = self.speech_encoder.to(device)
-        self.window_samples = (
-            int(self.window_seconds * self.sampling_rate)
-            if self.window_seconds is not None
-            else None
-        )
+        self.max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
 
     def get_audio_embeddings(  # noqa: PLR0914
         self,
@@ -55,17 +50,14 @@ class SeamlessM4TWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+        inputs.collate_fn = AudioCollator(self.sampling_rate, self.max_samples)
         all_embeddings = []
 
         for batch in tqdm(
             inputs,
             disable=not show_progress_bar,
         ):
-            clip_arrays = [audio["array"] for audio in batch["audio"]]
-            audio_arrays, owner = split_into_windows(
-                clip_arrays, self.window_samples, min_samples=self.sampling_rate // 10
-            )
+            audio_arrays = [audio["array"] for audio in batch["audio"]]
 
             # Process the entire batch at once
             features = self.processor(
@@ -132,8 +124,7 @@ class SeamlessM4TWrapper(AbsEncoder):
                     # Fallback to simple mean pooling if no attention mask
                     embeddings = last_hidden_state.mean(dim=1)
 
-                pooled = pool_windows(embeddings.cpu().numpy(), owner, len(clip_arrays))
-                all_embeddings.append(torch.from_numpy(pooled))
+                all_embeddings.append(embeddings.cpu())
 
         return torch.cat(all_embeddings, dim=0).numpy()
 
