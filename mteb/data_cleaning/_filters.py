@@ -2,8 +2,7 @@
 
 The primitives at the top work on a single `datasets.Dataset` and know nothing about task types: the caller
 supplies the columns to compare and a `KeepIndicesFn` deciding which rows to keep. `_filter_task_rows` then walks
-a task's subsets and splits, dispatching to `_classification` and `_retrieval` for the parts that differ per task
-type. The public filters are at the bottom.
+a task's subsets and splits, dispatching to `_retrieval` for the parts that differ per task type. The public filters are at the bottom.
 """
 
 from __future__ import annotations
