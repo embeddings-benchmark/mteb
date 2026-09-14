@@ -30,11 +30,11 @@ class SpeechT5Audio(AbsEncoder):
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         # 80 s: max_speech_positions=4000 at 50 fps
         # https://huggingface.co/microsoft/speecht5_asr/blob/main/config.json
-        max_audio_length_s: float = 80.0,
+        max_audio_length_seconds: float = 80.0,
         **kwargs: Any,
     ):
         self.device = device
-        self.max_audio_length_s = max_audio_length_s
+        self.max_audio_length_seconds = max_audio_length_seconds
 
         self.asr_processor = SpeechT5Processor.from_pretrained(
             "microsoft/speecht5_asr",
@@ -92,7 +92,7 @@ class SpeechT5Audio(AbsEncoder):
                 return_tensors="pt",
                 padding="longest",
                 truncation=True,
-                max_length=int(self.max_audio_length_s * self.sampling_rate),
+                max_length=int(self.max_audio_length_seconds * self.sampling_rate),
                 return_attention_mask=True,
             ).to(self.device)
 
@@ -228,7 +228,7 @@ class SpeechT2Multimodal(AbsEncoder):
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         # 80 s: max_speech_positions=4000 at 50 fps
         # https://huggingface.co/microsoft/speecht5_asr/blob/main/config.json
-        max_audio_length_s: float = 80.0,
+        max_audio_length_seconds: float = 80.0,
         **kwargs: Any,
     ):
         # Revision is combined as "asr_revision-tts_revision"
@@ -238,7 +238,7 @@ class SpeechT2Multimodal(AbsEncoder):
             model_name=model_name,
             revision=asr_revision,
             device=device,
-            max_audio_length_s=max_audio_length_s,
+            max_audio_length_seconds=max_audio_length_seconds,
             **kwargs,
         )
         self.tts_encoder = SpeechT5Text(

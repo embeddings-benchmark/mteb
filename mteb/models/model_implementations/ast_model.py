@@ -38,8 +38,6 @@ class ASTWrapper(AbsEncoder):
             self.device
         )
         self.model.eval()
-        # 10.24 s: max_length=1024 frames
-        # https://huggingface.co/MIT/ast-finetuned-audioset-10-10-0.4593/blob/main/preprocessor_config.json
         self.sampling_rate = self.feature_extractor.sampling_rate
 
     @torch.no_grad()

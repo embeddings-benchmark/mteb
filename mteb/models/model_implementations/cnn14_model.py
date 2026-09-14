@@ -24,12 +24,12 @@ class CNN14Wrapper(AbsEncoder):
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         # no limit: no duration declared
         # https://huggingface.co/speechbrain/cnn14-esc50/blob/main/hyperparams.yaml
-        max_audio_length_s: float | None = None,
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
         self.model_name = model_name
         self.device = device
-        self.max_audio_length_s = max_audio_length_s
+        self.max_audio_length_seconds = max_audio_length_seconds
 
         from speechbrain.inference.classifiers import AudioClassifier
 
@@ -70,8 +70,8 @@ class CNN14Wrapper(AbsEncoder):
                 array = array.squeeze()
 
                 # Apply audio truncation (configurable limit)
-                if self.max_audio_length_s is not None:
-                    max_length = int(self.max_audio_length_s * self.sampling_rate)
+                if self.max_audio_length_seconds is not None:
+                    max_length = int(self.max_audio_length_seconds * self.sampling_rate)
                     if array.shape[-1] > max_length:
                         array = array[..., :max_length]
 
