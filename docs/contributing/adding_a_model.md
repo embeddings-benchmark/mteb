@@ -204,7 +204,7 @@ class MyModel(AbsEncoder):
     ):
         from transformers import AutoModel
 
-        # get_device(None) picks cuda or cpu; a `torch.cuda.is_available()` default would run at import
+        # get_device(None) picks cuda, then mps, then cpu; a `torch.cuda.is_available()` default would run at import
         device = get_device(device)
         self.model = AutoModel.from_pretrained(model_name, revision=revision).to(device)
 
