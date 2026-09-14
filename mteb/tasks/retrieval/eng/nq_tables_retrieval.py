@@ -74,7 +74,6 @@ class NQTablesRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX,
         adapted_from=["NQ"],
         prompt={"query": "Given a question, retrieve its reference Wikipedia table."},
-        is_beta=True,
     )
 
     def __init__(self, **kwargs: Any) -> None:
