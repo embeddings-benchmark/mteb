@@ -598,7 +598,7 @@ def evaluate(  # noqa: PLR0911, PLR0913, PLR0914
                 model_revision=results.model_revision,
                 task_results=[],
                 exceptions=[
-                    *results.exceptions,
+                    *(results.exceptions or []),
                     TaskError(
                         task_name=tasks.metadata.name,
                         exception="one or more subtasks failed",
@@ -620,7 +620,7 @@ def evaluate(  # noqa: PLR0911, PLR0913, PLR0914
                 model_revision=results.model_revision,
                 task_results=[],
                 exceptions=[
-                    *results.exceptions,
+                    *(results.exceptions or []),
                     TaskError(task_name=tasks.metadata.name, exception=str(e)),
                 ],
             )
