@@ -1,15 +1,24 @@
 import numpy as np
+import pytest
 
 import mteb
 from mteb import ResultCache
 from mteb.benchmarks._benchmark_metrics import (
+    _compute_custom_group_means,
     _compute_mean_public_private,
     _compute_mean_subset,
     _compute_mean_task,
     _compute_mean_task_type,
     _compute_task_types,
+    _recompute_lenient_custom_groups,
+    _recompute_lenient_means,
 )
-from mteb.benchmarks.benchmark import Benchmark, BenchmarkAggregation
+from mteb.benchmarks.benchmark import (
+    Benchmark,
+    BenchmarkAggregation,
+    CustomGroup,
+    CustomGrouping,
+)
 from tests.conftest import _skip_if_datasets_too_old
 
 MODELS_SCORES = {
@@ -22,6 +31,33 @@ MODELS_SCORES = {
         "sentence-transformers/all-MiniLM-L6-v2": 0.645581,
     },
 }
+
+
+def _make_custom_groupings() -> tuple[CustomGrouping, CustomGrouping]:
+    """Two CustomGrouping dimensions over the mock task set, deliberately
+    sharing a group label ("Other") to exercise dimension namespacing."""
+    dim_a = CustomGrouping(
+        name="DimA",
+        groups=(
+            CustomGroup(
+                label="G1",
+                tasks=mteb.get_tasks(
+                    ["NanoSCIDOCSRetrieval", "Banking77Classification"]
+                ),
+            ),
+            CustomGroup(label="Other", tasks=mteb.get_tasks(["NanoArguAnaRetrieval"])),
+        ),
+    )
+    dim_b = CustomGrouping(
+        name="DimB",
+        groups=(
+            CustomGroup(label="G2", tasks=mteb.get_tasks(["NanoArguAnaRetrieval"])),
+            CustomGroup(
+                label="Other", tasks=mteb.get_tasks(["Banking77Classification"])
+            ),
+        ),
+    )
+    return dim_a, dim_b
 
 
 def _make_benchmark(extra_tasks: list[str] | None = None):
@@ -459,3 +495,448 @@ def test_benchmark_get_score_aggregations_drive_keys(mock_mteb_cache: ResultCach
 
     pp_keys = set(public_private.get_score(mock_results)[model_name])
     assert pp_keys == {"Mean(Public)", "Mean(Private)", "Rank"}
+
+
+def test_compute_custom_group_means(mock_mteb_cache: ResultCache):
+    """_compute_custom_group_means returns namespaced 'dimension::label' keys,
+    and two dimensions sharing a group label ("Other") don't collide."""
+    mock_model_name = "mteb/baseline-random-encoder"
+    dim_a, dim_b = _make_custom_groupings()
+    mock_benchmark = _make_benchmark()
+
+    model_result = mock_mteb_cache.load_results(models=[mock_model_name]).model_results[
+        0
+    ]
+    task_results = model_result.select_tasks(mock_benchmark.tasks).task_results
+
+    out_a = _compute_custom_group_means(task_results, dim_a)
+    out_b = _compute_custom_group_means(task_results, dim_b)
+
+    assert set(out_a) == {"DimA::G1", "DimA::Other"}
+    assert set(out_b) == {"DimB::G2", "DimB::Other"}
+    assert all(v is not None for v in {**out_a, **out_b}.values())
+    # Different task sets behind each "Other" -> different values, and
+    # namespacing keeps both present at once without overwriting each other.
+    assert out_a["DimA::Other"] != out_b["DimB::Other"]
+
+
+def test_benchmark_get_score_custom_groups(mock_mteb_cache: ResultCache):
+    """get_score surfaces CustomGrouping keys alongside the built-in aggregations."""
+    dim_a, dim_b = _make_custom_groupings()
+    mock_benchmark = _make_benchmark()
+    mock_benchmark = Benchmark(
+        name=mock_benchmark.name,
+        tasks=mock_benchmark.tasks,
+        aggregations=(BenchmarkAggregation.MEAN_TASK, dim_a, dim_b),
+    )
+    mock_results = mock_mteb_cache.load_results()
+    model_name = next(iter(MODELS_SCORES["Mean(Task)"]))
+
+    scores = mock_benchmark.get_score(mock_results)[model_name]
+
+    assert set(scores) == {
+        "Mean(Task)",
+        "DimA::G1",
+        "DimA::Other",
+        "DimB::G2",
+        "DimB::Other",
+        "Rank",
+    }
+    assert np.allclose(scores["Mean(Task)"], MODELS_SCORES["Mean(Task)"][model_name])
+
+
+@_skip_if_datasets_too_old
+def test_summary_table_custom_groups_columns(mock_mteb_cache: ResultCache):
+    """_create_summary_table namespaces CustomGrouping columns per dimension
+    and exposes them via SummaryTable.custom_group_cols, without polluting
+    the TASK_TYPES columns the aggregators.py type_cols catch-all reads."""
+    dim_a, dim_b = _make_custom_groupings()
+    mock_benchmark = _make_benchmark()
+    bench = Benchmark(
+        name="mock_custom_groups",
+        tasks=mock_benchmark.tasks,
+        aggregations=(
+            BenchmarkAggregation.MEAN_TASK,
+            BenchmarkAggregation.TASK_TYPES,
+            dim_a,
+            dim_b,
+        ),
+    )
+    mock_results = mock_mteb_cache.load_results()
+
+    pl_df = mock_results.select_tasks(bench.tasks)._to_results_df(bench.tasks)
+    summary = bench._create_summary_table(pl_df)
+
+    # Column order within a dimension follows first-occurrence order in the
+    # pivoted task frame (same precedent as TASK_TYPES / _get_means_per_types
+    # — not the declaration order of `grouping.groups`), so compare as sets.
+    assert {dim: set(cols) for dim, cols in summary.custom_group_cols.items()} == {
+        "DimA": {"__cg__DimA::G1", "__cg__DimA::Other"},
+        "DimB": {"__cg__DimB::G2", "__cg__DimB::Other"},
+    }
+    cols = set(summary.df.columns)
+    assert {
+        "__cg__DimA::G1",
+        "__cg__DimA::Other",
+        "__cg__DimB::G2",
+        "__cg__DimB::Other",
+    } <= cols
+    # TASK_TYPES columns are unaffected by the custom-group columns sharing
+    # the frame — no collision, no cross-contamination.
+    assert {"Retrieval", "Classification"} <= cols
+
+
+@_skip_if_datasets_too_old
+def test_get_score_matches_summary_table_custom_groups(mock_mteb_cache: ResultCache):
+    """get_score() and the polars summary table agree on CustomGrouping values,
+    mirroring test_get_score_matches_summary_table_means for the built-ins."""
+    dim_a, dim_b = _make_custom_groupings()
+    mock_benchmark = _make_benchmark()
+    bench = Benchmark(
+        name="mock_custom_groups_parity",
+        tasks=mock_benchmark.tasks,
+        aggregations=(BenchmarkAggregation.MEAN_TASK, dim_a, dim_b),
+    )
+    mock_results = mock_mteb_cache.load_results()
+
+    get_score_out = bench.get_score(mock_results)
+    pl_df = mock_results.select_tasks(bench.tasks)._to_results_df(bench.tasks)
+    summary_pl = bench._create_summary_table(pl_df).df
+    summary_by_model = {row["Model"]: row for row in summary_pl.iter_rows(named=True)}
+
+    parity_pairs = [
+        ("DimA::G1", "__cg__DimA::G1"),
+        ("DimA::Other", "__cg__DimA::Other"),
+        ("DimB::G2", "__cg__DimB::G2"),
+        ("DimB::Other", "__cg__DimB::Other"),
+    ]
+
+    checked = 0
+    for model_name, scores in get_score_out.items():
+        if model_name not in summary_by_model:
+            continue
+        srow = summary_by_model[model_name]
+        for gs_key, summary_col in parity_pairs:
+            gs = scores.get(gs_key)
+            sm = srow.get(summary_col)
+            if gs is None and sm is None:
+                continue
+            assert gs is not None and sm is not None, (
+                f"{model_name}: get_score[{gs_key}]={gs!r} vs summary[{summary_col}]={sm!r}"
+            )
+            assert np.isclose(gs, sm), (
+                f"{model_name}: get_score[{gs_key}]={gs:.6f} vs summary[{summary_col}]={sm:.6f}"
+            )
+            checked += 1
+    assert checked > 0, (
+        "Parity test never matched a model — fixture or registry change?"
+    )
+
+
+def test_recompute_lenient_custom_groups_averages_present_tasks_only():
+    """Mirrors _recompute_lenient_means: only tasks the model actually has a
+    score for (post language-filter) contribute to each group's mean."""
+    scores_by_task = {"t1": 0.2, "t2": 0.6, "t3": 0.8}
+    custom_group_task_to_label = {
+        "DimA": {"t1": "G1", "t2": "G1", "t3": "Other"},
+        "DimB": {"t2": "G2", "t3": "Other"},
+    }
+
+    out = _recompute_lenient_custom_groups(scores_by_task, custom_group_task_to_label)
+
+    assert out == {
+        "DimA": {"G1": (0.2 + 0.6) / 2, "Other": 0.8},
+        "DimB": {"G2": 0.6, "Other": 0.8},
+    }
+
+
+def test_recompute_lenient_custom_groups_ignores_tasks_outside_the_visible_set():
+    """A task missing from scores_by_task (filtered out / not run) is simply
+    absent from its group's bucket, not treated as a zero."""
+    scores_by_task = {"t1": 1.0}
+    custom_group_task_to_label = {"DimA": {"t1": "G1", "t2": "G1"}}
+
+    out = _recompute_lenient_custom_groups(scores_by_task, custom_group_task_to_label)
+
+    assert out == {"DimA": {"G1": 1.0}}
+
+
+def test_recompute_lenient_custom_groups_empty_mapping_is_a_no_op():
+    """Benchmarks with no CustomGrouping declared pass an empty mapping —
+    the function must return {} rather than raise."""
+    assert _recompute_lenient_custom_groups({"t1": 0.5}, {}) == {}
+
+
+def test_recompute_lenient_custom_groups_matches_recompute_lenient_means_semantics():
+    """Same 'average only what's present' policy as the task-type recompute,
+    just keyed by CustomGrouping label instead of task type."""
+    scores_by_task = {"t1": 0.4, "t2": 0.9}
+    task_to_type = {"t1": "Retrieval", "t2": "Retrieval"}
+    custom_group_task_to_label = {"DimA": {"t1": "G1", "t2": "G1"}}
+
+    _, mean_task, _ = _recompute_lenient_means(scores_by_task, task_to_type)
+    out = _recompute_lenient_custom_groups(scores_by_task, custom_group_task_to_label)
+
+    assert out["DimA"]["G1"] == mean_task
+
+
+# --- Scoped (subset-/split-narrowed) CustomGroup.tasks entries -------------
+#
+# NOTE (pre-existing, not introduced here): get_score() nulls a whole
+# dimension when any entry is missing a score; the polars path only nulls
+# the affected group. So the parity test below only checks a fully-covered
+# model -- a partial-coverage model would legitimately disagree between paths.
+
+
+def _make_scoped_custom_grouping() -> CustomGrouping:
+    """A subset-scoped 'Language' dimension over the same
+    CataloniaTweetClassification/Banking77Classification mock fixture
+    `test_benchmark_get_score_nulls_partial_split_and_subset_coverage` uses."""
+    catalan = mteb.get_task("CataloniaTweetClassification", hf_subsets=["catalan"])
+    spanish = mteb.get_task("CataloniaTweetClassification", hf_subsets=["spanish"])
+    banking = mteb.get_task("Banking77Classification")
+    return CustomGrouping(
+        name="Language",
+        groups=(
+            CustomGroup(label="Catalan", tasks=[catalan]),
+            CustomGroup(label="Mixed", tasks=[spanish, banking]),
+        ),
+    )
+
+
+def test_custom_grouping_post_init_scope_detection():
+    """A whole-task ref lands in task_to_label; subset-, split-, and
+    both-scoped refs don't -- and has_scoped_refs flips accordingly."""
+    whole = mteb.get_task("Banking77Classification")
+    subset_scoped = mteb.get_task(
+        "CataloniaTweetClassification", hf_subsets=["catalan"]
+    )
+    split_scoped = mteb.get_task(
+        "PoemSentimentClassification.v2", eval_splits=["validation"]
+    )
+    both_scoped = mteb.get_task(
+        "CataloniaTweetClassification", hf_subsets=["spanish"], eval_splits=["test"]
+    )
+
+    grouping = CustomGrouping(
+        name="ScopeDetect",
+        groups=(
+            CustomGroup(label="Whole", tasks=[whole]),
+            CustomGroup(label="SubsetScoped", tasks=[subset_scoped]),
+            CustomGroup(label="SplitScoped", tasks=[split_scoped]),
+            CustomGroup(label="BothScoped", tasks=[both_scoped]),
+        ),
+    )
+
+    assert grouping.task_to_label == {"Banking77Classification": "Whole"}
+    assert grouping.has_scoped_refs
+
+
+def test_custom_grouping_rejects_whole_task_and_scope_conflict():
+    """A task claimed whole in one group can't also be claimed (even
+    partially) by another group in the same dimension."""
+    whole = mteb.get_task("CataloniaTweetClassification")
+    scoped = mteb.get_task("CataloniaTweetClassification", hf_subsets=["catalan"])
+
+    with pytest.raises(ValueError, match="assigned to multiple groups"):
+        CustomGrouping(
+            name="Conflict",
+            groups=(
+                CustomGroup(label="A", tasks=[whole]),
+                CustomGroup(label="B", tasks=[scoped]),
+            ),
+        )
+
+
+def test_custom_grouping_rejects_duplicate_scope_claim():
+    """Two groups can't both claim the same (subset, split) cell of a task."""
+    first = mteb.get_task("CataloniaTweetClassification", hf_subsets=["catalan"])
+    second = mteb.get_task(
+        "CataloniaTweetClassification", hf_subsets=["catalan"], eval_splits=["test"]
+    )
+
+    with pytest.raises(ValueError, match="assigned to multiple groups"):
+        CustomGrouping(
+            name="Conflict",
+            groups=(
+                CustomGroup(label="A", tasks=[first]),
+                CustomGroup(label="B", tasks=[second]),
+            ),
+        )
+
+
+def test_custom_grouping_allows_different_scopes_of_same_task_in_different_groups():
+    """Two groups *may* each claim a different subset/split scope of the
+    same task -- the whole point of scoped refs (e.g. LongEmbed's per-length
+    groups)."""
+    catalan = mteb.get_task("CataloniaTweetClassification", hf_subsets=["catalan"])
+    spanish = mteb.get_task("CataloniaTweetClassification", hf_subsets=["spanish"])
+
+    grouping = CustomGrouping(
+        name="Language",
+        groups=(
+            CustomGroup(label="Catalan", tasks=[catalan]),
+            CustomGroup(label="Spanish", tasks=[spanish]),
+        ),
+    )
+    assert grouping.has_scoped_refs
+    assert grouping.task_to_label == {}
+
+
+def test_compute_custom_group_means_subset_scoped(mock_mteb_cache: ResultCache):
+    """A subset-scoped entry contributes _get_score_fast(subsets=...), not
+    the whole task's score."""
+    model_name = "mteb/baseline-random-encoder"
+    grouping = _make_scoped_custom_grouping()
+    tasks = mteb.get_tasks(["CataloniaTweetClassification", "Banking77Classification"])
+    model_result = mock_mteb_cache.load_results(models=[model_name]).model_results[0]
+    task_results = model_result.select_tasks(tasks).task_results
+    by_name = {tr.task.metadata.name: tr for tr in task_results}
+
+    out = _compute_custom_group_means(task_results, grouping)
+
+    catalan_expected = by_name["CataloniaTweetClassification"]._get_score_fast(
+        subsets=["catalan"]
+    )
+    spanish_expected = by_name["CataloniaTweetClassification"]._get_score_fast(
+        subsets=["spanish"]
+    )
+    banking_expected = by_name["Banking77Classification"].get_score()
+
+    assert out["Language::Catalan"] == pytest.approx(catalan_expected)
+    assert out["Language::Mixed"] == pytest.approx(
+        (spanish_expected + banking_expected) / 2
+    )
+
+
+def test_compute_custom_group_means_split_scoped(mock_mteb_cache: ResultCache):
+    """A split-scoped entry contributes _get_score_fast(splits=...), not the
+    whole task's score -- the LongEmbed shape."""
+    model_name = "mteb/baseline-random-encoder"
+    poem_val = mteb.get_task(
+        "PoemSentimentClassification.v2", eval_splits=["validation"]
+    )
+    poem_test = mteb.get_task("PoemSentimentClassification.v2", eval_splits=["test"])
+    banking = mteb.get_task("Banking77Classification")
+    grouping = CustomGrouping(
+        name="SplitDim",
+        groups=(
+            CustomGroup(label="ValOnly", tasks=[poem_val]),
+            CustomGroup(label="Mixed", tasks=[poem_test, banking]),
+        ),
+    )
+    tasks = mteb.get_tasks(
+        ["PoemSentimentClassification.v2", "Banking77Classification"]
+    )
+    model_result = mock_mteb_cache.load_results(models=[model_name]).model_results[0]
+    task_results = model_result.select_tasks(tasks).task_results
+    by_name = {tr.task.metadata.name: tr for tr in task_results}
+
+    out = _compute_custom_group_means(task_results, grouping)
+
+    val_expected = by_name["PoemSentimentClassification.v2"]._get_score_fast(
+        splits=["validation"]
+    )
+    test_expected = by_name["PoemSentimentClassification.v2"]._get_score_fast(
+        splits=["test"]
+    )
+    banking_expected = by_name["Banking77Classification"].get_score()
+
+    assert out["SplitDim::ValOnly"] == pytest.approx(val_expected)
+    assert out["SplitDim::Mixed"] == pytest.approx(
+        (test_expected + banking_expected) / 2
+    )
+
+
+def _weight_regression_expected_values(
+    by_name: dict, banking_expected: float
+) -> tuple[float, float]:
+    """(correct evenly-weighted value, wrong per-cell-weighted value) for
+    test_compute_custom_group_means_weights_one_entry_per_ref_not_per_cell."""
+    catalonia = by_name["CataloniaTweetClassification"]
+    multi_cell_expected = catalonia._get_score_fast(
+        subsets=["catalan", "spanish"], splits=["test"]
+    )
+    catalan_test = catalonia._get_score_fast(subsets=["catalan"], splits=["test"])
+    spanish_test = catalonia._get_score_fast(subsets=["spanish"], splits=["test"])
+    correct = (multi_cell_expected + banking_expected) / 2
+    wrong = (catalan_test + spanish_test + banking_expected) / 3
+    return correct, wrong
+
+
+def test_compute_custom_group_means_weights_one_entry_per_ref_not_per_cell(
+    mock_mteb_cache: ResultCache,
+):
+    """A 2-cell scoped entry (2 subsets x 1 split) and a 1-task entry in the
+    same group must weight 50/50, not 2:1 by underlying cell count."""
+    model_name = "mteb/baseline-random-encoder"
+    multi_cell = mteb.get_task(
+        "CataloniaTweetClassification",
+        hf_subsets=["catalan", "spanish"],
+        eval_splits=["test"],
+    )
+    banking = mteb.get_task("Banking77Classification")
+    grouping = CustomGrouping(
+        name="WeightDim",
+        groups=(CustomGroup(label="G", tasks=[multi_cell, banking]),),
+    )
+    tasks = mteb.get_tasks(["CataloniaTweetClassification", "Banking77Classification"])
+    model_result = mock_mteb_cache.load_results(models=[model_name]).model_results[0]
+    task_results = model_result.select_tasks(tasks).task_results
+    by_name = {tr.task.metadata.name: tr for tr in task_results}
+
+    out = _compute_custom_group_means(task_results, grouping)
+    correct, wrong = _weight_regression_expected_values(
+        by_name, by_name["Banking77Classification"].get_score()
+    )
+
+    assert out["WeightDim::G"] == pytest.approx(correct)
+    assert out["WeightDim::G"] != pytest.approx(wrong)
+
+
+def test_compute_custom_group_means_nulls_on_missing_scope_coverage(
+    mock_mteb_cache: ResultCache,
+):
+    """A model missing the subset a scoped entry needs nulls every group in
+    the dimension (dimension-global policy, unchanged from whole-task)."""
+    model_name = "sentence-transformers/all-MiniLM-L6-v2"  # missing catalan/test
+    grouping = _make_scoped_custom_grouping()
+    tasks = mteb.get_tasks(["CataloniaTweetClassification", "Banking77Classification"])
+    model_result = mock_mteb_cache.load_results(models=[model_name]).model_results[0]
+    task_results = model_result.select_tasks(tasks).task_results
+
+    out = _compute_custom_group_means(task_results, grouping)
+
+    assert out == {"Language::Catalan": None, "Language::Mixed": None}
+
+
+@_skip_if_datasets_too_old
+def test_get_score_matches_summary_table_custom_groups_scoped(
+    mock_mteb_cache: ResultCache,
+):
+    """get_score() and the polars summary table agree on a scoped
+    CustomGrouping's values for a fully-covered model (see the module note
+    on partial models)."""
+    grouping = _make_scoped_custom_grouping()
+    tasks = mteb.get_tasks(["CataloniaTweetClassification", "Banking77Classification"])
+    bench = Benchmark(
+        name="mock_custom_groups_scoped_parity",
+        tasks=tasks,
+        aggregations=(BenchmarkAggregation.MEAN_TASK, grouping),
+    )
+    mock_results = mock_mteb_cache.load_results()
+
+    get_score_out = bench.get_score(mock_results)
+    pl_df = mock_results.select_tasks(bench.tasks)._to_results_df(bench.tasks)
+    summary_pl = bench._create_summary_table(pl_df).df
+    summary_by_model = {row["Model"]: row for row in summary_pl.iter_rows(named=True)}
+
+    model_name = "mteb/baseline-random-encoder"  # fully covers both subsets
+    scores = get_score_out[model_name]
+    srow = summary_by_model[model_name]
+    for gs_key, summary_col in [
+        ("Language::Catalan", "__cg__Language::Catalan"),
+        ("Language::Mixed", "__cg__Language::Mixed"),
+    ]:
+        assert scores[gs_key] is not None and srow[summary_col] is not None
+        assert np.isclose(scores[gs_key], srow[summary_col])
