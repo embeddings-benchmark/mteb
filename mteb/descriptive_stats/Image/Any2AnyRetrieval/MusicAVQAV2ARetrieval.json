@@ -1,0 +1,83 @@
+{
+    "test": {
+        "num_samples": 330,
+        "num_queries": 110,
+        "num_documents": 220,
+        "number_of_characters": 0,
+        "documents_text_statistics": null,
+        "documents_image_statistics": null,
+        "documents_audio_statistics": {
+            "total_duration_seconds": 13090.973624999968,
+            "min_duration_seconds": 33.5684375,
+            "average_duration_seconds": 59.504425568181674,
+            "max_duration_seconds": 60.8925,
+            "unique_audios": 220,
+            "average_sampling_rate": 16000.0,
+            "sampling_rates": {
+                "16000": 220
+            }
+        },
+        "documents_video_statistics": null,
+        "queries_text_statistics": null,
+        "queries_image_statistics": null,
+        "queries_audio_statistics": null,
+        "queries_video_statistics": {
+            "total_duration_seconds": 6598.650000000005,
+            "total_frames": 395919,
+            "min_width": 202,
+            "average_width": 718.1454545454545,
+            "max_width": 1920,
+            "min_height": 224,
+            "average_height": 395.76363636363635,
+            "max_height": 720,
+            "min_duration_seconds": 57.916666666666664,
+            "average_duration_seconds": 59.98772727272732,
+            "max_duration_seconds": 60.03333333333333,
+            "unique_videos": 110,
+            "average_fps": 60.0,
+            "fps": {
+                "60": 110
+            },
+            "min_resolution": [
+                202,
+                360
+            ],
+            "average_resolution": [
+                718.1454545454545,
+                395.76363636363635
+            ],
+            "max_resolution": [
+                1920,
+                720
+            ],
+            "resolutions": {
+                "640x360": 78,
+                "480x360": 6,
+                "1280x720": 9,
+                "1920x720": 2,
+                "824x720": 1,
+                "1280x360": 4,
+                "638x360": 1,
+                "320x240": 1,
+                "636x360": 1,
+                "210x360": 1,
+                "480x320": 1,
+                "400x224": 1,
+                "202x360": 1,
+                "480x270": 1,
+                "406x360": 1,
+                "1120x360": 1
+            }
+        },
+        "relevant_docs_statistics": {
+            "num_relevant_docs": 1100,
+            "min_relevant_docs_per_query": 10,
+            "average_relevant_docs_per_query": 10.0,
+            "max_relevant_docs_per_query": 10,
+            "unique_relevant_docs": 220,
+            "num_missing_query_ids": 0,
+            "num_missing_corpus_ids": 0
+        },
+        "top_ranked_statistics": null
+    }
+}
