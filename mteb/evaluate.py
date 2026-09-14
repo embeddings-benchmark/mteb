@@ -24,7 +24,7 @@ from mteb.models.sentence_transformer_wrapper import (
 from mteb.results import ModelResult, TaskResult
 from mteb.results.task_result import TaskError
 from mteb.timing import TimingStack
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -93,6 +93,32 @@ def _sanitize_model(
     return wrapped_model, meta, model_name, model_revision
 
 
+def _apply_precision_to_meta(meta: ModelMeta, encode_kwargs: EncodeKwargs) -> ModelMeta:
+    """Fold a ``precision`` encode kwarg into the model metadata's ``experiment_kwargs``.
+
+    ``precision`` is forwarded to ``encode`` and changes the dtype of the produced
+    embeddings, so an evaluation that sets it must not share a cache namespace with the
+    default float run (or with a run using a different precision). Deriving
+    ``output_dtypes`` here -- before the cache lookup -- keeps the lookup and the
+    subsequent save consistent, instead of updating the metadata inside ``encode()``
+    after the lookup has already happened.
+    """
+    precision = encode_kwargs.get("precision")
+    if precision is None:
+        return meta
+
+    output_dtype = OutputDType.from_str(precision)
+    experiment_kwargs = dict(meta.experiment_kwargs) if meta.experiment_kwargs else {}
+    if experiment_kwargs.get("output_dtypes") == output_dtype.value:
+        return meta
+
+    experiment_kwargs["output_dtypes"] = output_dtype.value
+    logger.warning(
+        f"The 'precision' argument passed in encode_kwargs is setting output_dtypes to {output_dtype.value}."
+    )
+    return meta.model_copy(update={"experiment_kwargs": experiment_kwargs}, deep=True)
+
+
 def _evaluate_task(  # noqa: PLR0913, PLR0914
     model: MTEBModels,
     task: AbsTask,
@@ -106,6 +132,7 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
     num_proc: int | None = None,
     timer: TimingStack | None = None,
     existing_results: TaskResult | None = None,
+    model_meta: ModelMeta | None = None,
 ) -> TaskResult | TaskError:
     """The core logic to run a model on a given task. See `evaluate` for more details.
 
@@ -142,6 +169,7 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
                 cache=cache,
                 num_proc=num_proc,
                 existing_results=existing_results,
+                model_meta=model_meta,
             )
         if isinstance(result, TaskResult):
             existing_co2_val = (
@@ -157,7 +185,8 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
     task_results: dict[SplitName, dict[HFSubset, ScoresDict]] = {}
     evaluation_time: float = 0.0
 
-    model_meta = model.mteb_model_meta
+    if model_meta is None:
+        model_meta = model.mteb_model_meta
 
     existing_co2 = existing_results.kg_co2_emissions if existing_results else None
     if existing_results is not None:
@@ -507,6 +536,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
         )
 
     model, meta, model_name, model_revision = _sanitize_model(model)
+    meta = _apply_precision_to_meta(meta, encode_kwargs)
     _check_model_modalities(meta, tasks)
     overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
 
@@ -640,6 +670,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
                 cache=cache,
                 num_proc=num_proc,
                 existing_results=existing_results,
+                model_meta=meta,
             )
         except Exception as e:
             logger.error(
@@ -658,6 +689,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
             cache=cache,
             num_proc=num_proc,
             existing_results=existing_results,
+            model_meta=meta,
         )
     logger.info(f"✓ Finished evaluation for {task.metadata.name}")
 

@@ -492,14 +492,38 @@ def test_mrl_unsupported_dim():
         )
 
 
-def test_precision_arg():
-    model = SentenceTransformerEncoderWrapper(MockSentenceTransformer())
-    task = MockRetrievalTask()
-    mteb.evaluate(model, task, cache=None, encode_kwargs={"precision": "float16"})
+def test_precision_arg(tmp_path: Path):
+    """A ``precision`` encode kwarg is recorded as ``output_dtypes`` before the cache
+    lookup, so precision-specific runs live in their own experiment namespace and do
+    not reuse (or overwrite) the default cached result.
 
-    assert (
-        model.mteb_model_meta.experiment_kwargs["output_dtypes"] == OutputDType.FLOAT16
+    Regression test for https://github.com/embeddings-benchmark/mteb/issues/5394
+    """
+    model = SentenceTransformerEncoderWrapper(MockSentenceTransformer())
+    task = MockClassificationTask()
+    cache = ResultCache(tmp_path)
+
+    mteb.evaluate(model, task, cache=cache, encode_kwargs={"precision": "int8"})
+
+    default_path = (
+        tmp_path
+        / "results"
+        / model.mteb_model_meta.model_name_as_path()
+        / model.mteb_model_meta.revision
+        / f"{task.metadata.name}.json"
     )
+    experiment_path = (
+        default_path.parent / "experiments" / "output_dtypes_int8" / default_path.name
+    )
+    assert not default_path.exists()
+    assert experiment_path.exists()
+
+    saved_meta = json.loads((experiment_path.parent / "model_meta.json").read_text())
+    assert saved_meta["experiment_kwargs"]["output_dtypes"] == OutputDType.INT8
+
+    # a later default evaluation must not reuse the quantized result
+    mteb.evaluate(model, task, cache=cache)
+    assert default_path.exists()
 
 
 @pytest.mark.parametrize("task", MOCK_MAEB_TASK_GRID)
