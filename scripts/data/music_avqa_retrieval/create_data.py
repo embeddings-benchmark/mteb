@@ -220,6 +220,19 @@ def dataset_card(direction: RetrievalDirection) -> str:
     )
     return f"""---
 license: cc-by-nc-4.0
+configs:
+- config_name: queries
+  data_files:
+  - split: test
+    path: queries/**
+- config_name: corpus
+  data_files:
+  - split: test
+    path: corpus/**
+- config_name: qrels
+  data_files:
+  - split: test
+    path: qrels/**
 ---
 
 # {direction.repo_name}

@@ -32,7 +32,7 @@ class MusicAVQAA2VRetrieval(AbsTaskRetrieval):
         reference=_REFERENCE,
         dataset={
             "path": "iamfortytwo/MusicAVQA-A2V-Retrieval",
-            "revision": "TO_BE_FILLED_AFTER_UPLOAD",
+            "revision": "fb70b8f6bbf02292a289a338cfbb31d9b8508f8f",
         },
         type="Any2AnyRetrieval",
         category="a2v",
@@ -63,7 +63,7 @@ class MusicAVQAV2ARetrieval(AbsTaskRetrieval):
         reference=_REFERENCE,
         dataset={
             "path": "iamfortytwo/MusicAVQA-V2A-Retrieval",
-            "revision": "TO_BE_FILLED_AFTER_UPLOAD",
+            "revision": "5d8f94b5738a0fd88b4241c866ad3ee9475a621c",
         },
         type="Any2AnyRetrieval",
         category="v2a",
