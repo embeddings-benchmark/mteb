@@ -3,14 +3,15 @@ from __future__ import annotations
 import tempfile
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
+from mteb._torch_utils import inference_mode
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator, VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb import TaskMetadata
@@ -40,6 +41,7 @@ class EBindWrapper(AbsEncoder):
         num_frames: int | None = 8,
         **kwargs: Any,
     ) -> None:
+        import torch
         from ebind import EBindModel, EBindProcessor
 
         self.device = device or (
@@ -66,6 +68,7 @@ class EBindWrapper(AbsEncoder):
         """Process a batch of audio items via temp WAV files (IBAudioProcessor requires paths)."""
         import numpy as np
         import soundfile as sf
+        import torch
 
         audio_tensors = []
         for item in audio_items:
@@ -96,13 +99,15 @@ class EBindWrapper(AbsEncoder):
         processed = processed.float() / 255.0
         return normalize(processed, mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
 
-    @torch.inference_mode()
+    @inference_mode
     def _encode_batch(self, batch: BatchedInput) -> torch.Tensor:
         """Encode all modalities together in a single forward pass.
 
         When multiple modalities are present (e.g. video+audio from the same
         clip), embeddings are fused by element-wise addition and renormalised.
         """
+        import torch
+
         forward_kwargs: dict[str, torch.Tensor] = {}
 
         if batch.get("text"):
@@ -151,6 +156,8 @@ class EBindWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         features = inputs.dataset.features
         has_video = "video" in features
         has_audio = "audio" in features

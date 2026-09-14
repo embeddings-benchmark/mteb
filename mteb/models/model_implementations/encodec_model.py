@@ -3,10 +3,9 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
-from transformers import AutoProcessor, EncodecModel
 
+from mteb._torch_utils import get_device
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator
@@ -27,10 +26,14 @@ class EncodecWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
+        from transformers import AutoProcessor, EncodecModel
+
+        device = get_device(device)
+
         self.model_name = model_name
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds
@@ -49,6 +52,8 @@ class EncodecWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
         inputs.collate_fn = AudioCollator(self.sampling_rate, max_samples)
 

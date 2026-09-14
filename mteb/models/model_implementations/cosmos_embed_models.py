@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
+from mteb._torch_utils import get_device, no_grad
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -12,6 +12,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 if TYPE_CHECKING:
     from collections.abc import Mapping
 
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -29,12 +30,12 @@ class CosmosEmbed1Model(AbsEncoder):
         num_frames: int = 8,
         **kwargs: Any,
     ) -> None:
+        import torch
         from transformers import AutoModel, AutoProcessor
 
         self.model_name = model_name
         self.num_frames = num_frames
-        if device is None:
-            device = "cuda" if torch.cuda.is_available() else "cpu"
+        device = get_device(device)
         # mteb's CLI passes an int device index, torch.device normalises it
         self.device = torch.device(device)
         dtype = torch.bfloat16 if self.device.type == "cuda" else torch.float32
@@ -53,6 +54,8 @@ class CosmosEmbed1Model(AbsEncoder):
         )
 
     def _move(self, batch: Mapping[str, Any]) -> dict[str, Any]:
+        import torch
+
         moved: dict[str, Any] = {}
         for key, value in dict(batch).items():
             if isinstance(value, torch.Tensor):
@@ -69,13 +72,15 @@ class CosmosEmbed1Model(AbsEncoder):
                 moved[key] = value
         return moved
 
-    @torch.no_grad()
+    @no_grad
     def get_text_embeddings(
         self,
         texts: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> torch.Tensor:
+        import torch
+
         all_embeddings = []
         for batch in tqdm(texts, disable=not show_progress_bar, desc="Text Encoding"):
             inputs = self._move(self.processor(text=batch["text"], return_tensors="pt"))
@@ -84,13 +89,15 @@ class CosmosEmbed1Model(AbsEncoder):
             all_embeddings.append(embeddings.float().cpu())
         return torch.cat(all_embeddings, dim=0)
 
-    @torch.no_grad()
+    @no_grad
     def get_video_embeddings(
         self,
         videos: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> torch.Tensor:
+        import torch
+
         all_embeddings = []
         for batch in tqdm(videos, disable=not show_progress_bar, desc="Video Encoding"):
             # Source clips vary in resolution, so they cannot be stacked

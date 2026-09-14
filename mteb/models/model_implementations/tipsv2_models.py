@@ -2,10 +2,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
-from torch.nn.functional import normalize
 from tqdm.auto import tqdm
 
+from mteb._torch_utils import get_device
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -47,9 +46,11 @@ class TIPSv2Model(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ):
+        device = get_device(device)
+
         from torchvision import transforms
         from transformers import AutoModel
 
@@ -72,6 +73,9 @@ class TIPSv2Model(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+        from torch.nn.functional import normalize
+
         all_text_embeddings = []
         with torch.no_grad():
             for batch in tqdm(
@@ -87,6 +91,9 @@ class TIPSv2Model(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+        from torch.nn.functional import normalize
+
         all_image_embeddings = []
         with torch.no_grad():
             for batch in tqdm(

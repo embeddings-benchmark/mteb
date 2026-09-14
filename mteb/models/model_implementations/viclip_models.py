@@ -2,14 +2,15 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
+from mteb._torch_utils import get_device, no_grad
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -41,10 +42,12 @@ class ViCLIPWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         num_frames: int = 8,
         **kwargs: Any,
     ):
+        device = get_device(device)
+
         from transformers import AutoModel
 
         self.model_name = model_name
@@ -59,6 +62,7 @@ class ViCLIPWrapper(AbsEncoder):
     @staticmethod
     def _preprocess_frames(frames: torch.Tensor) -> torch.Tensor:
         """Normalize (T, C, H, W) frame tensor to ViCLIP input format."""
+        import torch
         import torch.nn.functional as F
 
         if frames.dtype == torch.uint8 or frames.max() > 1.0:
@@ -78,13 +82,15 @@ class ViCLIPWrapper(AbsEncoder):
         std = torch.tensor(_VICLIP_STD, device=frames.device).view(1, 3, 1, 1)
         return (frames - mean) / std
 
-    @torch.no_grad()
+    @no_grad
     def get_text_embeddings(
         self,
         texts: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         all_embeddings = []
 
         for batch in tqdm(texts, disable=not show_progress_bar, desc="Text Encoding"):
@@ -102,13 +108,15 @@ class ViCLIPWrapper(AbsEncoder):
 
         return torch.cat(all_embeddings, dim=0)
 
-    @torch.no_grad()
+    @no_grad
     def get_video_embeddings(
         self,
         videos: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         all_embeddings = []
 
         for batch in tqdm(videos, disable=not show_progress_bar, desc="Video Encoding"):

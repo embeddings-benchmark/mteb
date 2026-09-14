@@ -4,14 +4,14 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
-import torch.nn.functional as F
 from tqdm.auto import tqdm
 
+from mteb._torch_utils import inference_mode
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
     from typing_extensions import Unpack
 
@@ -36,6 +36,8 @@ def _prepare_biovita_audio(
     preroll: float = 0.2,
 ) -> torch.Tensor:
     """Reproduce BioVITA's official onset-based audio preprocessing."""
+    import torch
+    import torch.nn.functional as F
     from torchaudio.functional import resample
 
     n_samples = int(target_sr * seconds)
@@ -155,6 +157,7 @@ class BioVITAWrapper(AbsEncoder):
         device: str | None = None,
         **kwargs: Any,
     ):
+        import torch
         from huggingface_hub import hf_hub_download
         from transformers import ClapModel, ClapProcessor
 
@@ -251,13 +254,16 @@ class BioVITAWrapper(AbsEncoder):
         for parameter in self.audio_adapter.parameters():
             parameter.requires_grad = False
 
-    @torch.inference_mode()
+    @inference_mode
     def get_text_embeddings(
         self,
         inputs: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
+        import torch
+        import torch.nn.functional as F
+
         embeddings = []
 
         for batch in tqdm(
@@ -283,13 +289,16 @@ class BioVITAWrapper(AbsEncoder):
 
         return np.vstack(embeddings)
 
-    @torch.inference_mode()
+    @inference_mode
     def get_image_embeddings(
         self,
         inputs: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
+        import torch
+        import torch.nn.functional as F
+
         embeddings = []
 
         for batch in tqdm(
@@ -320,13 +329,16 @@ class BioVITAWrapper(AbsEncoder):
 
         return np.vstack(embeddings)
 
-    @torch.inference_mode()
+    @inference_mode
     def get_audio_embeddings(
         self,
         inputs: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
+        import torch
+        import torch.nn.functional as F
+
         inputs.collate_fn = _BioVITAAudioCollator()
 
         embeddings = []

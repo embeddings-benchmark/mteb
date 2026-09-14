@@ -4,15 +4,13 @@ from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
-import torch.nn.functional as F
-from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
-from transformers.modeling_outputs import BaseModelOutput
 
+from mteb._torch_utils import get_device, inference_mode
 from mteb.models.model_meta import ModelMeta
 from mteb.types import OutputDType
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -48,6 +46,8 @@ class KaLMRerankerWrapper:
         system_instruction: str = DEFAULT_SYSTEM_INSTRUCTION,
         **model_kwargs: Any,
     ) -> None:
+        from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
+
         if not isinstance(model_name_or_path, str) or not model_name_or_path:
             raise ValueError("model_name_or_path must be a non-empty string.")
         if query_max_length <= 0 or max_length <= 0:
@@ -89,8 +89,9 @@ class KaLMRerankerWrapper:
 
     @staticmethod
     def _resolve_device(device: str | torch.device | None) -> torch.device:
-        if device is None:
-            device = "cuda" if torch.cuda.is_available() else "cpu"
+        import torch
+
+        device = get_device(device)
         resolved = torch.device(device)
         if resolved.type == "cuda" and not torch.cuda.is_available():
             raise RuntimeError("CUDA was requested, but no CUDA device is available.")
@@ -100,6 +101,8 @@ class KaLMRerankerWrapper:
     def _resolve_dtype(
         dtype: str | torch.dtype | None, device: torch.device
     ) -> torch.dtype:
+        import torch
+
         if dtype is None:
             return torch.bfloat16 if device.type == "cuda" else torch.float32
         if isinstance(dtype, torch.dtype):
@@ -140,6 +143,8 @@ class KaLMRerankerWrapper:
         attention_mask: torch.Tensor,
         chunk_size: int,
     ) -> tuple[torch.Tensor, torch.Tensor]:
+        import torch.nn.functional as F
+
         batch_size, sequence_length, hidden_size = hidden_states.shape
         num_chunks = (sequence_length + chunk_size - 1) // chunk_size
         padded_length = num_chunks * chunk_size
@@ -199,10 +204,13 @@ class KaLMRerankerWrapper:
             validated.append((query, document))
         return validated
 
-    @torch.inference_mode()
+    @inference_mode
     def _predict_batch(
         self, pairs: Sequence[tuple[str, str]], instructions: Sequence[str]
     ) -> list[float]:
+        import torch
+        from transformers.modeling_outputs import BaseModelOutput
+
         if len(pairs) != len(instructions):
             raise ValueError("pairs and instructions must have the same length.")
         encoder_texts = [f"<Document>: {document}" for _, document in pairs]
@@ -286,6 +294,8 @@ class KaLMRerankerWrapper:
         batch_size: int = 32,
     ) -> Array:
         """Return ``P(yes)`` scores in the same order as ``pairs``."""
+        import torch
+
         queries = [text for batch in inputs1 for text in batch["text"]]
         documents = [text for batch in inputs2 for text in batch["text"]]
         pairs = [

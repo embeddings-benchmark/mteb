@@ -16,9 +16,9 @@ import re
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
 
+from mteb._torch_utils import inference_mode
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
 from mteb.types import OutputDType
@@ -69,6 +69,7 @@ class LightOnListwiseRerankerWrapper:
         max_length: int = 2048,
         **kwargs: Any,
     ):
+        import torch
         from transformers import AutoModelForImageTextToText, AutoProcessor
 
         self.device = device or (
@@ -151,7 +152,7 @@ class LightOnListwiseRerankerWrapper:
             text += self.think_block
         return text, images
 
-    @torch.inference_mode()
+    @inference_mode
     def _generate(
         self, texts: list[str], images: list[Image.Image] | None
     ) -> list[str]:
@@ -185,6 +186,8 @@ class LightOnListwiseRerankerWrapper:
         One batch unit is one window (window_size documents per generate() call);
         when batch_size is None the per-modality default is used.
         """
+        import torch
+
         results: list[list[int] | None] = [None] * len(windows)
         has_images = any(
             not isinstance(doc, str) for _, docs in windows for doc in docs
@@ -276,7 +279,7 @@ class LightOnListwiseRerankerWrapper:
                 order[p:end] = [order[p + j] for j in perm]
         return orders
 
-    @torch.inference_mode()
+    @inference_mode
     def predict(
         self,
         inputs1: DataLoader[BatchedInput],

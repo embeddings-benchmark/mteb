@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
+from mteb._torch_utils import inference_mode
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import FramesCollator
@@ -30,6 +30,7 @@ class VJepaV2Wrapper(AbsEncoder):
         num_frames: int | None = None,
         **kwargs: Any,
     ) -> None:
+        import torch
         from transformers import AutoModel, AutoVideoProcessor
 
         self.device = device or (
@@ -52,7 +53,7 @@ class VJepaV2Wrapper(AbsEncoder):
         self.model.eval()
         self.model.to(self.device)
 
-    @torch.inference_mode()
+    @inference_mode
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -64,6 +65,8 @@ class VJepaV2Wrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
+        import torch
+
         inputs.collate_fn = FramesCollator(
             fps=self.fps,
             max_frames=self.max_frames,

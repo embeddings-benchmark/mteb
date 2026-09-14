@@ -3,11 +3,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
-from transformers import CLIPModel, CLIPProcessor
-from transformers.modeling_outputs import BaseModelOutputWithPooling
 
+from mteb._torch_utils import get_device
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator
@@ -25,10 +23,14 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         max_audio_length_s: float = 30.0,
         **kwargs: Any,
     ):
+        from transformers import CLIPModel, CLIPProcessor
+
+        device = get_device(device)
+
         from wav2clip import embed_audio, get_model
 
         self.embed_audio = embed_audio
@@ -56,6 +58,8 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
+        import torch
+
         inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
 
         all_embeddings = []
@@ -99,6 +103,9 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+        from transformers.modeling_outputs import BaseModelOutputWithPooling
+
         text_embeddings = []
         for batch in tqdm(
             inputs, disable=not show_progress_bar, desc="Processing text batches"

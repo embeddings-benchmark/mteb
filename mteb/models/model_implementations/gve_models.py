@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
+from mteb._torch_utils import inference_mode
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -59,6 +59,7 @@ class GVEWrapper(AbsEncoder):
         num_frames: int | None = None,
         **kwargs: Any,
     ) -> None:
+        import torch
         from transformers import AutoProcessor, Qwen2_5_VLForConditionalGeneration
 
         self.device = device or (
@@ -92,7 +93,7 @@ class GVEWrapper(AbsEncoder):
             "do_sample_frames": False,
         }
 
-    @torch.inference_mode()
+    @inference_mode
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -104,6 +105,8 @@ class GVEWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         instruction = None
         if prompt_type != PromptType.document:
             instruction = self.get_instruction(task_metadata, prompt_type)

@@ -3,13 +3,14 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
+from mteb._torch_utils import inference_mode
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
     from typing_extensions import Unpack
 
@@ -46,6 +47,7 @@ class VirtueWrapper(AbsEncoder):
         device: str | None = None,
         **kwargs: Any,
     ) -> None:
+        import torch
         from transformers import AutoProcessor, Qwen2VLForConditionalGeneration
 
         self.device = device or (
@@ -70,6 +72,8 @@ class VirtueWrapper(AbsEncoder):
     def _pooling(
         last_hidden_state: torch.Tensor, attention_mask: torch.Tensor
     ) -> torch.Tensor:
+        import torch
+
         left_padding = attention_mask[:, -1].sum() == attention_mask.shape[0]
         batch_size = last_hidden_state.shape[0]
         if left_padding:
@@ -81,7 +85,7 @@ class VirtueWrapper(AbsEncoder):
             ]
         return torch.nn.functional.normalize(reps, p=2, dim=-1)
 
-    @torch.inference_mode()
+    @inference_mode
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -93,6 +97,8 @@ class VirtueWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
+        import torch
+
         features = inputs.dataset.features
         has_text = "text" in features
         has_image = "image" in features

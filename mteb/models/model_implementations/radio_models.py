@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
+from mteb._torch_utils import get_device
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -50,10 +50,12 @@ class RADIOModel(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         image_resolution: int | tuple[int, int] | None = None,
         **kwargs: Any,
     ) -> None:
+        device = get_device(device)
+
         from transformers import AutoModel
 
         self.device = device
@@ -81,6 +83,7 @@ class RADIOModel(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
         import torch.nn.functional as F
         from torchvision.transforms.functional import pil_to_tensor
 

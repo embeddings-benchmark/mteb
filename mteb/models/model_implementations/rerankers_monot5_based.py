@@ -3,8 +3,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any, TypeVar
 
-import torch
-
+from mteb._torch_utils import inference_mode
 from mteb.models.model_meta import ModelMeta
 
 from .rerankers_custom import RerankerWrapper
@@ -56,6 +55,8 @@ class MonoT5Reranker(RerankerWrapper):
         model_name_or_path: str = "castorini/monot5-base-msmarco-10k",
         **kwargs: Any,
     ):
+        import torch
+
         super().__init__(model_name_or_path, **kwargs)
         from transformers import (
             AutoModelForSeq2SeqLM,
@@ -117,7 +118,7 @@ class MonoT5Reranker(RerankerWrapper):
         token_true_id = tokenizer.get_vocab()[token_true]
         return token_false_id, token_true_id
 
-    @torch.inference_mode()
+    @inference_mode
     def predict(
         self,
         inputs1: DataLoader[BatchedInput],
@@ -129,6 +130,8 @@ class MonoT5Reranker(RerankerWrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         queries = [text for batch in inputs1 for text in batch["query"]]
         instructions = None
         if "instruction" in inputs2.dataset.features:
@@ -172,6 +175,7 @@ class LlamaReranker(RerankerWrapper):
     def __init__(
         self, model_name_or_path: str, is_classification: bool = False, **kwargs: Any
     ):
+        import torch
         from transformers import AutoModelForCausalLM, AutoTokenizer
 
         kwargs.pop("torch_compile", None)
@@ -224,7 +228,7 @@ Relevant: """
             self.model = torch.nn.DataParallel(self.model)
         self.model.eval()
 
-    @torch.inference_mode()
+    @inference_mode
     def predict(
         self,
         inputs1: DataLoader[BatchedInput],
@@ -236,6 +240,8 @@ Relevant: """
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         queries = [text for batch in inputs1 for text in batch["query"]]
         instructions = None
         if "instruction" in inputs2.dataset.features:

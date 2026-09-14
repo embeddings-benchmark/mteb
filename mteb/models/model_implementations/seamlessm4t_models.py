@@ -2,10 +2,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
-from transformers import AutoProcessor, SeamlessM4Tv2Model
 
+from mteb._torch_utils import get_device
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator
@@ -23,10 +22,14 @@ class SeamlessM4TWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         max_audio_length_seconds: float = 5.0,
         **kwargs: Any,
     ):
+        from transformers import AutoProcessor, SeamlessM4Tv2Model
+
+        device = get_device(device)
+
         self.model_name = model_name
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds
@@ -48,6 +51,8 @@ class SeamlessM4TWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         inputs.collate_fn = AudioCollator(self.sampling_rate, self.max_samples)
         all_embeddings = []
 

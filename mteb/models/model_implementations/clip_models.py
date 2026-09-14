@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
+from mteb._torch_utils import get_device, no_grad
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -20,9 +20,11 @@ class CLIPModel(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ):
+        device = get_device(device)
+
         from transformers import AutoModel, AutoProcessor
 
         self.model_name = model_name
@@ -38,6 +40,8 @@ class CLIPModel(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         all_text_embeddings = []
 
         with torch.no_grad():
@@ -60,13 +64,15 @@ class CLIPModel(AbsEncoder):
         all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
         return all_text_embeddings
 
-    @torch.no_grad()
+    @no_grad
     def get_image_embeddings(
         self,
         images: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         all_image_embeddings = []
 
         for batch in tqdm(images, disable=not show_progress_bar, desc="Image Encoding"):

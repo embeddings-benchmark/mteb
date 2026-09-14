@@ -4,15 +4,15 @@ import logging
 import types
 from typing import TYPE_CHECKING, Any
 
-import torch
-import transformers
 from tqdm.auto import tqdm
 
 from mteb._requires_package import suggest_package
+from mteb._torch_utils import inference_mode
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
     from PIL import Image
     from torch.utils.data import DataLoader
     from typing_extensions import Unpack
@@ -60,6 +60,8 @@ def _bidirectional_causal_mask(
     instead build an explicit lower-triangular mask, so they need this patch to stay
     bidirectional.
     """
+    import torch
+
     if attention_mask is None:
         return None
     dtype = input_tensor.dtype
@@ -91,6 +93,8 @@ class MoCaWrapper(AbsEncoder):
         attn_implementation: str | None = None,
         **kwargs: Any,
     ) -> None:
+        import torch
+        import transformers
         from transformers import AutoProcessor, Qwen2_5_VLModel
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
@@ -178,9 +182,11 @@ class MoCaWrapper(AbsEncoder):
         counts = mask.sum(dim=1).clamp(min=1e-9)
         return summed / counts
 
-    @torch.inference_mode()
+    @inference_mode
     def _embed(self, texts: list[str], images: list[Any] | None = None) -> torch.Tensor:
         """Encode one batch of (optionally interleaved) inputs into unit-norm vectors."""
+        import torch
+
         processed = self.processor(
             text=texts,
             images=images or None,
@@ -206,6 +212,8 @@ class MoCaWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
+        import torch
+
         features = inputs.dataset.features
         has_text = "text" in features
         has_image = "image" in features

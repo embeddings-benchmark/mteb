@@ -3,8 +3,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
-
+from mteb._torch_utils import inference_mode
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
 
@@ -29,6 +28,8 @@ class RerankerWrapper:
         silent: bool = False,
         **kwargs: Any,
     ):
+        import torch
+
         self.model_name_or_path = model_name_or_path
         self.batch_size = batch_size
         self.fp_options = fp_options if fp_options is not None else torch.float32
@@ -55,6 +56,8 @@ class BGEReranker(RerankerWrapper):
         torch_compile: bool = False,
         **kwargs: Any,
     ):
+        import torch
+
         super().__init__(model_name_or_path, **kwargs)
         if not self.device:
             self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -66,7 +69,7 @@ class BGEReranker(RerankerWrapper):
 
         self.model = FlagReranker(model_name_or_path, use_fp16=True)
 
-    @torch.inference_mode()
+    @inference_mode
     def predict(
         self,
         inputs1: DataLoader[BatchedInput],
@@ -111,6 +114,7 @@ class JinaReranker(RerankerWrapper):
         torch_compile: bool = False,
         **kwargs: Any,
     ):
+        import torch
         from sentence_transformers import CrossEncoder
 
         super().__init__(model_name_or_path, **kwargs)
@@ -126,7 +130,7 @@ class JinaReranker(RerankerWrapper):
             trust_remote_code=True,
         )
 
-    @torch.inference_mode()
+    @inference_mode
     def predict(
         self,
         inputs1: DataLoader[BatchedInput],

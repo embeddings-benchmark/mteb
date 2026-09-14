@@ -3,10 +3,9 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
-from transformers import ASTFeatureExtractor, ASTModel
 
+from mteb._torch_utils import get_device, no_grad
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator
@@ -26,9 +25,13 @@ class ASTWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ):
+        from transformers import ASTFeatureExtractor, ASTModel
+
+        device = get_device(device)
+
         self.model_name = model_name
         self.device = device
 
@@ -39,13 +42,15 @@ class ASTWrapper(AbsEncoder):
         self.model.eval()
         self.sampling_rate = self.feature_extractor.sampling_rate
 
-    @torch.no_grad()
+    @no_grad
     def get_audio_embeddings(
         self,
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
         all_embeddings = []
 

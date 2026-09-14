@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
+from mteb._torch_utils import get_device, no_grad
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -21,10 +21,12 @@ class XCLIPModel(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         num_frames: int = 8,
         **kwargs: Any,
     ):
+        device = get_device(device)
+
         from transformers import XCLIPModel as HFXCLIPModel
         from transformers import XCLIPProcessor
 
@@ -37,13 +39,15 @@ class XCLIPModel(AbsEncoder):
         self.model.eval()
         self.processor = XCLIPProcessor.from_pretrained(model_name, revision=revision)
 
-    @torch.no_grad()
+    @no_grad
     def get_text_embeddings(
         self,
         texts: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         all_embeddings = []
 
         for batch in tqdm(texts, disable=not show_progress_bar, desc="Text Encoding"):
@@ -61,13 +65,15 @@ class XCLIPModel(AbsEncoder):
 
         return torch.cat(all_embeddings, dim=0)
 
-    @torch.no_grad()
+    @no_grad
     def get_video_embeddings(
         self,
         videos: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         all_embeddings = []
 
         for batch in tqdm(videos, disable=not show_progress_bar, desc="Video Encoding"):

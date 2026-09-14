@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
-
+from mteb._torch_utils import inference_mode
 from mteb.models.model_meta import ModelMeta
 
 from .rerankers_custom import RerankerWrapper
@@ -24,6 +23,7 @@ LISTCONRANKER_CITATION = """@article{liu2025listconranker,
 
 class ListConRanker(RerankerWrapper):
     def __init__(self, model_name_or_path: str, **kwargs: Any) -> None:
+        import torch
         from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
         super().__init__(model_name_or_path, **kwargs)
@@ -42,7 +42,7 @@ class ListConRanker(RerankerWrapper):
         self.model = self.model.to(self.device)
         self.model.eval()
 
-    @torch.inference_mode()
+    @inference_mode
     def predict(
         self,
         inputs1: DataLoader[BatchedInput],

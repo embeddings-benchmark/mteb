@@ -14,19 +14,18 @@ import unicodedata
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, cast
 
-import torch
-import torch.nn.functional as F
 from huggingface_hub import hf_hub_download
 from tqdm.auto import tqdm
-from transformers import AutoModel, AutoProcessor
 from typing_extensions import override
 
+from mteb._torch_utils import no_grad
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    import torch
     from PIL import Image
     from torch.utils.data import DataLoader
 
@@ -61,6 +60,8 @@ def _hub_download_kwargs(kwargs: dict[str, Any]) -> dict[str, Any]:
 def _concatenate_sparse_batches(
     batches: list[torch.Tensor], sparse_dim: int
 ) -> torch.Tensor:
+    import torch
+
     if not batches:
         return torch.sparse_coo_tensor(
             torch.empty((2, 0), dtype=torch.long),
@@ -110,7 +111,13 @@ class _UEmbedInference:
         processor_kwargs: dict[str, Any] | None,
         **model_kwargs: Any,
     ) -> None:
-        from transformers import AutoImageProcessor, AutoVideoProcessor
+        import torch
+        from transformers import (
+            AutoImageProcessor,
+            AutoModel,
+            AutoProcessor,
+            AutoVideoProcessor,
+        )
 
         if pooling not in SUPPORTED_POOLING:
             raise ValueError(
@@ -236,6 +243,8 @@ class _UEmbedInference:
         revision: str | None,
         model_kwargs: dict[str, Any],
     ) -> None:
+        import torch
+
         weights_path = self._resolve_artifact(
             model_name_or_path,
             "sparse_weights.pt",
@@ -291,6 +300,7 @@ class _UEmbedInference:
     def _format_model_input(
         self, item: dict[str, Any]
     ) -> tuple[list[dict[str, Any]], list[Image.Image], list[torch.Tensor]]:
+        import torch
         from PIL import Image
 
         instruction = self._format_instruction(item.get("instruction"))
@@ -382,6 +392,9 @@ class _UEmbedInference:
     def _pool_dense(
         self, hidden_state: torch.Tensor, attention_mask: torch.Tensor
     ) -> torch.Tensor:
+        import torch
+        import torch.nn.functional as F
+
         last_indices = (attention_mask.cumsum(dim=1) * attention_mask).argmax(dim=1)
         target_indices = last_indices - self.num_eos_tokens
         batch_indices = torch.arange(hidden_state.shape[0], device=hidden_state.device)
@@ -393,6 +406,9 @@ class _UEmbedInference:
     def _pool_sparse(
         self, hidden_state: torch.Tensor, attention_mask: torch.Tensor
     ) -> torch.Tensor:
+        import torch
+        import torch.nn.functional as F
+
         if self.sparse_lm_heads is None or self.sparse_bias is None:
             raise RuntimeError("UEmbed sparse heads were not loaded")
 
@@ -414,7 +430,7 @@ class _UEmbedInference:
             )
         return torch.log1p(F.relu(torch.cat(logits, dim=-1)))
 
-    @torch.no_grad()
+    @no_grad
     def process(self, items: list[dict[str, Any]]) -> torch.Tensor:
         conversations = []
         images: list[Image.Image] = []
@@ -459,6 +475,8 @@ class UEmbedEncoder(AbsEncoder):
         embed_dim: int | None = None,
         **model_kwargs: Any,
     ) -> None:
+        import torch
+
         self.pooling = pooling
         self.apply_instruction_to_passages = apply_instruction_to_passages
         self.fps = fps
@@ -559,6 +577,8 @@ class UEmbedEncoder(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         instruction = self._instruction(task_metadata, prompt_type)
         output_dim = (
             self.model.dense_dim
@@ -604,6 +624,8 @@ class UEmbedEncoder(AbsEncoder):
 
     @override
     def similarity(self, embeddings1: Array, embeddings2: Array) -> torch.Tensor:
+        import torch
+
         first = torch.as_tensor(embeddings1)
         second = torch.as_tensor(embeddings2)
         if first.is_sparse:
@@ -623,6 +645,8 @@ class UEmbedEncoder(AbsEncoder):
     def similarity_pairwise(
         self, embeddings1: Array, embeddings2: Array
     ) -> torch.Tensor:
+        import torch
+
         first = torch.as_tensor(embeddings1)
         second = torch.as_tensor(embeddings2)
         if first.is_sparse:

@@ -2,14 +2,15 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
+from mteb._torch_utils import inference_mode
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -28,6 +29,8 @@ MAX_TEXT_TOKENS = 64
 
 
 def _resolve_device(device: str | int | torch.device | None) -> torch.device:
+    import torch
+
     if device is not None:
         # mteb's CLI may pass an int index, torch.device normalises it
         return torch.device(device)
@@ -51,6 +54,7 @@ class VideoPrismVisionWrapper(AbsEncoder):
         num_frames: int | None = 16,
         **kwargs: Any,
     ) -> None:
+        import torch
         from transformers import AutoVideoProcessor, VideoPrismVisionModel
 
         self.model_name = model_name
@@ -67,7 +71,7 @@ class VideoPrismVisionWrapper(AbsEncoder):
         ).to(self.device)
         self.model.eval()
 
-    @torch.inference_mode()
+    @inference_mode
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -79,6 +83,8 @@ class VideoPrismVisionWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         inputs.collate_fn = FramesCollator(
             fps=self.fps,
             max_frames=self.max_frames,
@@ -123,6 +129,7 @@ class VideoPrismClipWrapper(AbsEncoder):
         num_frames: int | None = 16,
         **kwargs: Any,
     ) -> None:
+        import torch
         from transformers import AutoProcessor, VideoPrismClipModel
 
         self.model_name = model_name
@@ -137,13 +144,15 @@ class VideoPrismClipWrapper(AbsEncoder):
         ).to(self.device)
         self.model.eval()
 
-    @torch.inference_mode()
+    @inference_mode
     def get_text_embeddings(
         self,
         texts: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> torch.Tensor:
+        import torch
+
         all_embeddings = []
         for batch in tqdm(texts, disable=not show_progress_bar, desc="Text Encoding"):
             encoded = self.processor.tokenizer(
@@ -157,13 +166,15 @@ class VideoPrismClipWrapper(AbsEncoder):
             all_embeddings.append(output.pooler_output.float().cpu())
         return torch.cat(all_embeddings, dim=0)
 
-    @torch.inference_mode()
+    @inference_mode
     def get_video_embeddings(
         self,
         videos: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> torch.Tensor:
+        import torch
+
         all_embeddings = []
         for batch in tqdm(videos, disable=not show_progress_bar, desc="Video Encoding"):
             processed = []

@@ -3,14 +3,15 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
+from mteb._torch_utils import inference_mode
 from mteb.models.model_meta import ModelMeta
 
 from .rerankers_custom import RerankerWrapper
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -30,6 +31,8 @@ class QueritWrapper(RerankerWrapper):
         model_name: str,
         **kwargs: Any,
     ) -> None:
+        import torch
+
         super().__init__(model_name, **kwargs)
         from transformers import AutoModel, AutoTokenizer
 
@@ -70,6 +73,8 @@ class QueritWrapper(RerankerWrapper):
         - Generate custom attention mask based on block types
         """
         # Construct input texts
+        import torch
+
         enc = self.tokenizer(
             pairs,
             add_special_tokens=False,
@@ -104,7 +109,7 @@ class QueritWrapper(RerankerWrapper):
 
         return {"input_ids": input_ids, "attention_mask": attention_mask}
 
-    @torch.inference_mode()
+    @inference_mode
     def predict(
         self,
         inputs1: DataLoader[BatchedInput],
@@ -185,6 +190,8 @@ class QueritWrapper(RerankerWrapper):
         Returns:
             [1, seq_len, seq_len] boolean attention mask (True = allowed to attend)
         """
+        import torch
+
         pos = torch.tensor(block_types, dtype=torch.long)
         n = pos.shape[0]
         if n == 0:

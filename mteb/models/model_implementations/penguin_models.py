@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
+from mteb._torch_utils import get_device, inference_mode
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -21,9 +21,13 @@ class PenguinEncoderModel(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ):
+        import torch
+
+        device = get_device(device)
+
         from transformers import AutoConfig, AutoImageProcessor, AutoModel
 
         self.model_name = model_name
@@ -48,7 +52,7 @@ class PenguinEncoderModel(AbsEncoder):
             trust_remote_code=True,
         )
 
-    @torch.inference_mode
+    @inference_mode
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -60,6 +64,8 @@ class PenguinEncoderModel(AbsEncoder):
         show_progress_bar: bool = False,
         **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
+        import torch
+
         all_image_embeddings = []
 
         for batch in tqdm(inputs, disable=not show_progress_bar, desc="Image Encoding"):

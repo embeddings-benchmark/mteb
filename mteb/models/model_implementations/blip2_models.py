@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
+from mteb._torch_utils import get_device
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -24,6 +24,7 @@ BLIP2_CITATION = """@inproceedings{li2023blip2,
 
 
 def blip2_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
+    import torch
     from lavis.models.blip2_models.blip2_image_text_matching import (
         Blip2ITM,
     )
@@ -33,9 +34,11 @@ def blip2_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
             self,
             model_name: str,
             revision: str,
-            device: str = "cuda" if torch.cuda.is_available() else "cpu",
+            device: str | None = None,
             **kwargs: Any,
         ):
+            device = get_device(device)
+
             from transformers import Blip2Processor
 
             self.model_name = model_name

@@ -2,17 +2,15 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
-from transformers import (
-    AutoProcessor,
-)
 
+from mteb._torch_utils import no_grad
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator, VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -33,6 +31,9 @@ class QwenOmniWrapper(AbsEncoder):
         num_frames: int | None = None,
         **kwargs: Any,
     ) -> None:
+        import torch
+        from transformers import AutoProcessor
+
         self.device = device or (
             "cuda"
             if torch.cuda.is_available()
@@ -101,7 +102,7 @@ class QwenOmniWrapper(AbsEncoder):
             )
         return messages
 
-    @torch.no_grad()
+    @no_grad
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -112,6 +113,8 @@ class QwenOmniWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         has_video = "video" in inputs.dataset.features
         has_audio = "audio" in inputs.dataset.features
         if has_video:

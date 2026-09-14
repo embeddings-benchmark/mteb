@@ -3,14 +3,15 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
+from mteb._torch_utils import no_grad
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator, VideoCollator
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb import TaskMetadata
@@ -31,6 +32,7 @@ class LCOEmbedding(AbsEncoder):
         max_audio_length: int | None = None,
         **kwargs: Any,
     ):
+        import torch
         from transformers import (
             Qwen2_5OmniProcessor,
             Qwen2_5OmniThinkerForConditionalGeneration,
@@ -99,7 +101,7 @@ class LCOEmbedding(AbsEncoder):
             messages.append([{"role": "user", "content": content}])
         return messages
 
-    @torch.no_grad()
+    @no_grad
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -110,6 +112,8 @@ class LCOEmbedding(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         has_video = "video" in inputs.dataset.features
         has_audio = "audio" in inputs.dataset.features
         if has_video:

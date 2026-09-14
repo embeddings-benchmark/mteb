@@ -3,13 +3,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
-from transformers import (
-    AutoModelForCausalLM,
-    AutoTokenizer,
-)
 
+from mteb._torch_utils import inference_mode, no_grad
 from mteb.models.model_meta import ModelMeta
 from mteb.types import OutputDType
 
@@ -33,6 +29,9 @@ class Qwen3RerankerWrapper:
         max_length: int = 8192,
         **kwargs: Any,
     ):
+        import torch
+        from transformers import AutoModelForCausalLM, AutoTokenizer
+
         self.model_name_or_path = model_name_or_path
         self.device = device or (
             "cuda"
@@ -96,8 +95,10 @@ class Qwen3RerankerWrapper:
             inputs[key] = inputs[key].to(self.device)
         return inputs
 
-    @torch.no_grad()
+    @no_grad
     def compute_logits(self, inputs: dict) -> list[float]:
+        import torch
+
         batch_scores = self.model(**inputs).logits[:, -1, :]
         true_vector = batch_scores[:, self.token_true_id]
         false_vector = batch_scores[:, self.token_false_id]
@@ -106,7 +107,7 @@ class Qwen3RerankerWrapper:
         batch_scores = torch.nn.functional.log_softmax(batch_scores.float(), dim=1)
         return batch_scores[:, 1].exp().tolist()
 
-    @torch.inference_mode()
+    @inference_mode
     def predict(
         self,
         inputs1: DataLoader[BatchedInput],

@@ -11,6 +11,10 @@ import random
 import subprocess
 import sys
 import textwrap
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
 
 _REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 
@@ -252,7 +256,7 @@ def test_model_implementations_declare_no_import_time_torch_dtypes() -> None:
     for path in sorted(
         (_REPO_ROOT / "mteb/models/model_implementations").rglob("*.py")
     ):
-        tree = ast.parse(path.read_text())
+        tree = ast.parse(path.read_text(encoding="utf-8"))
         # nodes actually inside a function/method body are evaluated lazily and exempt;
         # matched by identity (not line number) so a one-line `def f(x=torch.bfloat16): ...`
         # doesn't let the signature default hide behind its body's line number
@@ -277,3 +281,79 @@ def test_model_implementations_declare_no_import_time_torch_dtypes() -> None:
         "these evaluate a torch dtype at import time; use the matching OutputDType member "
         f"instead: {offenders}"
     )
+
+
+# Hides packages from the import system as if they were not installed: `import torch` fails and
+# `importlib.util.find_spec("torch")` returns None. (Setting `sys.modules["torch"] = None` is not
+# faithful -- libraries such as scipy see the key and dereference it.)
+_WITHOUT_TORCH = """
+import importlib.machinery
+import sys
+
+
+class _Hide(importlib.machinery.PathFinder):
+    @classmethod
+    def find_spec(cls, fullname, path=None, target=None):
+        if fullname.split(".")[0] in {"torch", "transformers", "sentence_transformers"}:
+            return None
+        return super().find_spec(fullname, path, target)
+
+
+sys.meta_path = [_Hide if f is importlib.machinery.PathFinder else f for f in sys.meta_path]
+"""
+
+
+def test_mteb_and_model_metadata_work_without_torch_installed() -> None:
+    """`import mteb` and reading every model's metadata must work on an install without torch.
+
+    Building the model registry imports all model implementation files, so any of them importing
+    torch, transformers or sentence-transformers at module scope fails this test.
+    """
+    script = _WITHOUT_TORCH + textwrap.dedent(
+        """
+        import mteb
+
+        print(len(mteb.get_model_metas()))
+        print(len(mteb.get_tasks(tasks=["NFCorpus"])))
+        """
+    )
+    result = subprocess.run(
+        [sys.executable, "-c", script],
+        capture_output=True,
+        text=True,
+        check=False,
+        cwd=_REPO_ROOT,
+    )
+    assert result.returncode == 0, result.stderr[-3000:]
+    n_models, n_tasks = (int(line) for line in result.stdout.split()[-2:])
+    assert n_models > 0
+    assert n_tasks == 1
+
+
+def test_torch_decorators_match_torch() -> None:
+    """The call-time decorators must enter exactly the context `@torch.<decorator>()` does."""
+    import torch
+
+    from mteb._torch_utils import inference_mode, no_grad
+
+    x = torch.ones(2, requires_grad=True)
+
+    def state() -> tuple[bool, bool, bool]:
+        y = x * 2
+        return (
+            torch.is_grad_enabled(),
+            torch.is_inference_mode_enabled(),
+            y.requires_grad,
+        )
+
+    def steps() -> Iterator[tuple[bool, bool, bool]]:
+        yield state()
+        yield state()
+
+    assert no_grad(state)() == torch.no_grad()(state)()
+    assert inference_mode(state)() == torch.inference_mode()(state)()
+    # generators must hold the context around every step, as torch's decorators do
+    assert list(no_grad(steps)()) == list(torch.no_grad()(steps)())
+    assert list(inference_mode(steps)()) == list(torch.inference_mode()(steps)())
+    assert torch.is_grad_enabled()
+    assert no_grad(state).__name__ == "state"

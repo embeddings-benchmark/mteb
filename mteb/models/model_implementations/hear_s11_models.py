@@ -3,15 +3,15 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
-from transformers import AutoModel
 
+from mteb._torch_utils import get_device
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb import TaskMetadata
@@ -27,9 +27,13 @@ class HeARS11AudioWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ) -> None:
+        from transformers import AutoModel
+
+        device = get_device(device)
+
         self.model_name = model_name
         self.device = device
         self.model = AutoModel.from_pretrained(
@@ -47,6 +51,8 @@ class HeARS11AudioWrapper(AbsEncoder):
         have different lengths and channel layouts. This normalizes each waveform to
         mono float32 audio with exactly 32,000 samples so the batch can be stacked.
         """
+        import torch
+
         audio = np.asarray(audio, dtype=np.float32)
         if audio.ndim > 1:
             audio = audio.mean(axis=0)
@@ -66,6 +72,8 @@ class HeARS11AudioWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         embeddings = []
 
         for batch in tqdm(inputs, disable=not show_progress_bar):

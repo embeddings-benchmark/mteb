@@ -3,10 +3,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
-from transformers import AutoModel
 
+from mteb._torch_utils import get_device
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator, VideoCollator
@@ -52,9 +51,13 @@ class FusionEmbeddingWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ) -> None:
+        from transformers import AutoModel
+
+        device = get_device(device)
+
         self.model_name = model_name
         self.device = device
         self.model = AutoModel.from_pretrained(
@@ -70,6 +73,8 @@ class FusionEmbeddingWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         embeddings = []
 
         for batch in tqdm(inputs, disable=not show_progress_bar):
@@ -98,6 +103,8 @@ class FusionEmbeddingWrapper(AbsEncoder):
         # The video path is the frozen base model's own encode path, exposed by
         # the remote code. VideoCollator supplies decoded [T, C, H, W] uint8
         # frame tensors (torchcodec), which embed_video consumes directly.
+        import torch
+
         embeddings = []
 
         for batch in tqdm(inputs, disable=not show_progress_bar, desc="Video Encoding"):
@@ -122,6 +129,8 @@ class FusionEmbeddingWrapper(AbsEncoder):
         # The image path is the frozen base model's own encode path (audio-side
         # components never touch it), exposed by the remote code as a single-image
         # method; images are embedded one at a time (as in other merged wrappers).
+        import torch
+
         embeddings = []
 
         for batch in tqdm(inputs, disable=not show_progress_bar, desc="Image Encoding"):
@@ -140,6 +149,8 @@ class FusionEmbeddingWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         embeddings = []
 
         for batch in tqdm(inputs, disable=not show_progress_bar):

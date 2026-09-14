@@ -3,14 +3,9 @@ from __future__ import annotations
 import warnings
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
-from transformers import (
-    SpeechT5ForSpeechToText,
-    SpeechT5ForTextToSpeech,
-    SpeechT5Processor,
-)
 
+from mteb._torch_utils import get_device
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 
@@ -27,10 +22,14 @@ class SpeechT5Audio(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         max_audio_length_s: float = 30.0,
         **kwargs: Any,
     ):
+        from transformers import SpeechT5ForSpeechToText, SpeechT5Processor
+
+        device = get_device(device)
+
         self.device = device
         self.max_audio_length_s = max_audio_length_s
 
@@ -52,6 +51,7 @@ class SpeechT5Audio(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
         import torchaudio
 
         all_embeddings = []
@@ -147,9 +147,13 @@ class SpeechT5Text(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ):
+        from transformers import SpeechT5ForTextToSpeech, SpeechT5Processor
+
+        device = get_device(device)
+
         self.device = device
         self.tts_processor = SpeechT5Processor.from_pretrained(
             "microsoft/speecht5_tts",
@@ -168,6 +172,8 @@ class SpeechT5Text(AbsEncoder):
         **kwargs: Any,
     ) -> Array:
         """Get text embeddings using the text encoder."""
+        import torch
+
         all_embeddings = []
 
         for batch in tqdm(
@@ -223,11 +229,14 @@ class SpeechT2Multimodal(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         max_audio_length_s: float = 30.0,
         **kwargs: Any,
     ):
         # Revision is combined as "asr_revision-tts_revision"
+
+        device = get_device(device)
+
         asr_revision, tts_revision = revision.split("-")
 
         self.asr_encoder = SpeechT5Audio(

@@ -5,14 +5,15 @@ import math
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
 
+from mteb._torch_utils import no_grad
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
     from PIL import Image
     from torch.utils.data import DataLoader
 
@@ -101,6 +102,7 @@ class RzenEmbedWrapper(AbsEncoder):
         num_frames: int | None = None,
         **kwargs: Any,
     ) -> None:
+        import torch
         from transformers import (
             AutoConfig,
             AutoProcessor,
@@ -151,6 +153,8 @@ class RzenEmbedWrapper(AbsEncoder):
         self, images: list[Image.Image | torch.Tensor] | Image.Image | None
     ) -> list[Image.Image]:
         """Maps varying input visual formats cleanly into a normalized list of PIL Images."""
+        import torch
+
         if images is None:
             return []
 
@@ -253,7 +257,7 @@ class RzenEmbedWrapper(AbsEncoder):
         batch_images_out = batch_images if batch_images else None
         return input_texts, batch_images_out
 
-    @torch.no_grad()
+    @no_grad
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -265,6 +269,8 @@ class RzenEmbedWrapper(AbsEncoder):
         **kwargs: Any,
     ) -> Array:
         """Main entry point orchestrating text, image, video and joint multi-modality encoding."""
+        import torch
+
         has_video = "video" in inputs.dataset.features
 
         from torch.utils.data import default_collate

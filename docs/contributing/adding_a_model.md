@@ -182,6 +182,38 @@ your_model = ModelMeta(
 ```
 
 
+### Keeping your implementation importable without torch
+
+`mteb` imports every model implementation file to build its model registry, including on installs without torch (for example to read results or model metadata). A model file must therefore not import
+`torch`, `transformers` or `sentence_transformers` at module scope. Import them inside the functions that use them instead:
+
+```python
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+from mteb._torch_utils import get_device, inference_mode
+
+if TYPE_CHECKING:
+    import torch  # only for type annotations
+
+
+class MyModel(AbsEncoder):
+    def __init__(
+        self, model_name: str, revision: str, device: str | None = None, **kwargs
+    ):
+        from transformers import AutoModel
+
+        # get_device(None) picks cuda or cpu; a `torch.cuda.is_available()` default would run at import
+        device = get_device(device)
+        self.model = AutoModel.from_pretrained(model_name, revision=revision).to(device)
+
+    @inference_mode  # instead of @torch.inference_mode(); `no_grad` replaces @torch.no_grad()
+    def encode(self, inputs, **kwargs) -> torch.Tensor: ...
+```
+
+Anything else that runs at import time has to follow the same rule: default arguments, decorators, class bases such as `torch.nn.Module`, and values inside `ModelMeta(...)` (use `OutputDType` for dtypes, as described above).
+
 ### Adding model dependencies
 If you are adding a model that requires additional dependencies, you can add them to the `pyproject.toml` file, under optional dependencies:
 

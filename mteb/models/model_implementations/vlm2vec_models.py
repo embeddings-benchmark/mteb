@@ -3,18 +3,19 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb._requires_package import (
     suggest_package,
 )
+from mteb._torch_utils import get_device, inference_mode
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
     from typing_extensions import Unpack
 
@@ -37,9 +38,13 @@ class VLM2VecWrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str = "TIGER-Lab/VLM2Vec-LoRA",
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ):
+        import torch
+
+        device = get_device(device)
+
         if suggest_package(
             self,
             "flash_attn",
@@ -103,6 +108,8 @@ class VLM2VecWrapper(AbsEncoder):
     def _pooling(
         self, last_hidden_state: torch.Tensor, attention_mask: torch.Tensor
     ) -> torch.Tensor:
+        import torch
+
         if self.pooling == "last":
             sequence_lengths = attention_mask.sum(dim=1) - 1
             batch_size = last_hidden_state.shape[0]
@@ -123,6 +130,8 @@ class VLM2VecWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         text = "<|image_1|> Represent the given image."
         all_image_embeddings = []
 
@@ -172,6 +181,8 @@ class VLM2VecWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         all_text_embeddings = []
 
         with torch.no_grad():
@@ -217,6 +228,8 @@ class VLM2VecWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
+        import torch
+
         if "text" in inputs.dataset.features and "image" in inputs.dataset.features:
             all_fused_embeddings = []
 
@@ -402,6 +415,7 @@ class VLM2VEC2Wrapper(AbsEncoder):
         num_frames: int | None = None,
         **kwargs: Any,
     ) -> None:
+        import torch
         from peft import PeftModel
         from transformers import AutoProcessor, Qwen2VLForConditionalGeneration
 
@@ -436,6 +450,8 @@ class VLM2VEC2Wrapper(AbsEncoder):
     def _pooling(
         last_hidden_state: torch.Tensor, attention_mask: torch.Tensor
     ) -> torch.Tensor:
+        import torch
+
         left_padding = attention_mask[:, -1].sum() == attention_mask.shape[0]
         batch_size = last_hidden_state.shape[0]
         if left_padding:
@@ -447,7 +463,7 @@ class VLM2VEC2Wrapper(AbsEncoder):
             ]
         return torch.nn.functional.normalize(reps, p=2, dim=-1)
 
-    @torch.inference_mode()
+    @inference_mode
     def encode(  # noqa: PLR0914
         self,
         inputs: DataLoader[BatchedInput],
@@ -458,6 +474,8 @@ class VLM2VEC2Wrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
+        import torch
+
         features = inputs.dataset.features
         has_text = "text" in features
         has_image = "image" in features

@@ -3,9 +3,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
 
+from mteb._torch_utils import get_device, inference_mode
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import VideoCollator
@@ -31,13 +31,15 @@ class PEAudioVisualWrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str = "facebook/pe-av-large",
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         fps: float | None = 2.0,
         max_frames: int | None = 64,
         num_frames: int | None = None,
         max_samples: int | None = 30 * 48000,  # 30s * sampling rate
         **kwargs: Any,
     ):
+        device = get_device(device)
+
         from transformers import PeAudioVideoModel, PeAudioVideoProcessor
 
         self.model_name = model_name
@@ -51,7 +53,7 @@ class PEAudioVisualWrapper(AbsEncoder):
         self.processor = PeAudioVideoProcessor.from_pretrained(model_name)
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
 
-    @torch.inference_mode()
+    @inference_mode
     def get_text_embeddings(
         self,
         inputs: DataLoader[TextInput],
@@ -60,6 +62,8 @@ class PEAudioVisualWrapper(AbsEncoder):
         **kwargs: Any,
     ) -> np.ndarray:
         """Get text embeddings aligned to audio-video space."""
+        import torch
+
         all_embeddings = []
 
         for batch in tqdm(
@@ -90,7 +94,7 @@ class PEAudioVisualWrapper(AbsEncoder):
 
         return np.vstack(all_embeddings)
 
-    @torch.inference_mode()
+    @inference_mode
     def get_video_embeddings(
         self,
         inputs: DataLoader[VideoInput],
@@ -98,6 +102,8 @@ class PEAudioVisualWrapper(AbsEncoder):
         **kwargs: Any,
     ) -> np.ndarray:
         """Get video-only embeddings."""
+        import torch
+
         all_embeddings = []
 
         for batch in tqdm(
@@ -126,7 +132,7 @@ class PEAudioVisualWrapper(AbsEncoder):
 
         return np.vstack(all_embeddings)
 
-    @torch.inference_mode()
+    @inference_mode
     def get_audio_embeddings(
         self,
         inputs: DataLoader[AudioInput],
@@ -134,6 +140,8 @@ class PEAudioVisualWrapper(AbsEncoder):
         **kwargs: Any,
     ) -> np.ndarray:
         """Get audio-only embeddings."""
+        import torch
+
         all_embeddings = []
 
         for batch in tqdm(
@@ -160,7 +168,7 @@ class PEAudioVisualWrapper(AbsEncoder):
 
         return np.vstack(all_embeddings)
 
-    @torch.inference_mode()
+    @inference_mode
     def get_audio_video_embeddings(
         self,
         inputs: DataLoader[BatchedInput],
@@ -168,6 +176,8 @@ class PEAudioVisualWrapper(AbsEncoder):
         **kwargs: Any,
     ) -> np.ndarray:
         """Get joint audio-video embeddings."""
+        import torch
+
         all_embeddings = []
 
         for batch in tqdm(

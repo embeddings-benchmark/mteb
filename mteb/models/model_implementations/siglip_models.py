@@ -2,10 +2,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
-from transformers.modeling_outputs import BaseModelOutputWithPooling
 
+from mteb._torch_utils import get_device
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -30,9 +29,11 @@ class SiglipModelWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ):
+        device = get_device(device)
+
         from transformers import AutoModel, AutoProcessor
 
         self.model_name = model_name
@@ -48,6 +49,9 @@ class SiglipModelWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+        from transformers.modeling_outputs import BaseModelOutputWithPooling
+
         all_text_embeddings = []
 
         with torch.no_grad():
@@ -77,6 +81,9 @@ class SiglipModelWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+        from transformers.modeling_outputs import BaseModelOutputWithPooling
+
         all_image_embeddings = []
 
         with torch.no_grad():

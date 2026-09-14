@@ -2,9 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
-from torch.nn.functional import normalize
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -12,6 +9,9 @@ from mteb.models.model_meta import ModelMeta
 from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
+    import torch
+    from torch.utils.data import DataLoader
+
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput
 
@@ -85,6 +85,7 @@ class NemotronColEmbedVL(AbsEncoder):
     ) -> Array:
         import torchvision.transforms.functional as F
         from PIL import Image
+        from torch.utils.data import DataLoader
 
         all_images = []
         if isinstance(images, DataLoader):
@@ -373,6 +374,9 @@ class LlamaNemotronEmbedVL(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+        from torch.nn.functional import normalize
+
         with torch.inference_mode():
             embeddings_list = []
             for batch in tqdm(

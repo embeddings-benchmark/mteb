@@ -3,9 +3,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
 
+from mteb._torch_utils import get_device
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator
@@ -22,10 +22,12 @@ class MuQMuLanWrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str = "OpenMuQ/MuQ-MuLan-large",
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         max_audio_length_s: float = 30.0,
         **kwargs: Any,
     ):
+        device = get_device(device)
+
         from muq import MuQMuLan
 
         self.model_name = model_name
@@ -45,6 +47,8 @@ class MuQMuLanWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
 
         all_features = []
@@ -92,6 +96,8 @@ class MuQMuLanWrapper(AbsEncoder):
         **kwargs: Any,
     ) -> np.ndarray:
         """Get text embeddings using MuQ-MuLan."""
+        import torch
+
         all_embeddings = []
 
         for batch in tqdm(
@@ -143,6 +149,8 @@ class MuQMuLanWrapper(AbsEncoder):
         embeddings2: Array,
     ) -> Array:
         """Calculate similarity between audio and text embeddings."""
+        import torch
+
         embeddings1 = torch.from_numpy(embeddings1).to(self.device)
         embeddings2 = torch.from_numpy(embeddings2).to(self.device)
 
