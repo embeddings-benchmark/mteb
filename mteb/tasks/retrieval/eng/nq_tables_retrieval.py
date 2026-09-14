@@ -116,8 +116,6 @@ class NQTablesRetrieval(AbsTaskRetrieval):
             relevant_docs: dict[str, dict[str, int]] = {}
             for row in qrels:
                 qid, did, score = row["qid"], row["did"], row["score"]
-                # Keep even dangling source references; the local validation
-                # runner reports them. Resolving them would change the qrels.
                 docs = relevant_docs.setdefault(qid, {})
                 if did in docs:
                     raise ValueError(f"Repeated qrel pair in {split}: {qid!r}, {did!r}")
