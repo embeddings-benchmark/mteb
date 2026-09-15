@@ -14,7 +14,9 @@ logger = logging.getLogger(__name__)
 def _enable_bidirectional_attention(model: Any) -> None:
     """Encoder-ize the full-attention layers of a ColQwen3.5 backbone.
 
-    Mirrors `ColQwen3_5.enable_bidirectional_attention` from the EVIE release.
+    Mirrors `ColQwen3_5.enable_bidirectional_attention` from the EVIE release:
+    https://github.com/Tencent/EVIE/blob/main/colpali/colpali_engine/models/qwen3_5/colqwen3_5/modeling_colqwen3_5.py#L20
+
     Two switches have to be flipped, and they are not interchangeable:
 
     * `config.is_causal=False` is what `create_causal_mask` reads to build a
@@ -80,9 +82,6 @@ class EvieWrapper(ColQwen3_5Wrapper):
             model_name=model_name, revision=revision, device=device, **kwargs
         )
 
-        # `enable_bidirectional_attention` ships with the EVIE release of
-        # colpali_engine; the published PyPI wheels do not carry it yet, so fall
-        # back to an equivalent local implementation instead of raising.
         if hasattr(self.model, "enable_bidirectional_attention"):
             self.model.enable_bidirectional_attention()
         else:
