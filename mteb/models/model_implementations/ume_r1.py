@@ -97,6 +97,7 @@ class UMER1Wrapper(AbsEncoder):
                 target_sampling_rate=16000,
                 fps=self.fps,
                 max_frames=self.max_frames,
+                num_frames=self.num_frames,
             )
 
         all_embeddings: list[torch.Tensor] = []

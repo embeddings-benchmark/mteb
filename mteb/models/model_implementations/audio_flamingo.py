@@ -99,6 +99,9 @@ class AudioFlamingoWrapper(AbsEncoder):
                         {"audio": audio_row},
                         target_sampling_rate=self.sampling_rate,
                     )
+                    if self.max_audio_length_seconds:
+                        cap = int(self.max_audio_length_seconds * self.sampling_rate)
+                        array = array[..., :cap]
                     content.append({"type": "audio", "audio": array})
 
                 conversations.append([{"role": "user", "content": content}])
