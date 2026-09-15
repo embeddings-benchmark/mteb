@@ -29,16 +29,17 @@ class MSClapWrapper(AbsEncoder):
         self,
         model_name: str = "microsoft/msclap-2023",
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        # unused: msclap crops to duration=7
+        # None means msclap's own duration (5 s for 2022, 7 s for 2023). Cutting
+        # there keeps msclap out of its random-segment branch, which picks a
+        # different window per run and makes scores irreproducible
         # https://github.com/microsoft/CLAP/blob/main/msclap/configs/config_2023.yml
-        max_audio_length_seconds: float = 30.0,
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
         from msclap import CLAP
 
         self.model_name = model_name
         self.device = device
-        self.max_audio_length_seconds = max_audio_length_seconds
 
         if "2022" in self.model_name:
             self.version = "2022"
@@ -59,6 +60,9 @@ class MSClapWrapper(AbsEncoder):
         # with resample=False made it read them as 44.1 kHz, stretching the audio.
         # https://github.com/microsoft/CLAP/blob/main/msclap/configs/config_2023.yml
         self.sampling_rate = int(self.model.args.sampling_rate)
+        self.max_audio_length_seconds = max_audio_length_seconds or float(
+            self.model.args.duration
+        )
 
     def get_audio_embeddings(
         self,
@@ -68,7 +72,10 @@ class MSClapWrapper(AbsEncoder):
     ) -> np.ndarray:
         import soundfile as sf
 
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate,
+            max_samples=int(self.max_audio_length_seconds * self.sampling_rate),
+        )
 
         all_embeddings = []
         for batch in tqdm(
