@@ -11,7 +11,7 @@ from .colqwen_models import ColQwen3_5Wrapper
 logger = logging.getLogger(__name__)
 
 
-def _enable_bidirectional_attention(model: Any) -> None:
+def _enable_bidirectional_attention(model: Any) -> None:  # ruff: ignore[any-type]
     """Encoder-ize the full-attention layers of a ColQwen3.5 backbone.
 
     Mirrors `ColQwen3_5.enable_bidirectional_attention` from the EVIE release:
@@ -35,7 +35,7 @@ def _enable_bidirectional_attention(model: Any) -> None:
 
     text_model = model.language_model
     layer_types = text_model.config.layer_types
-    for layer, layer_type in zip(text_model.layers, layer_types):
+    for layer, layer_type in zip(text_model.layers, layer_types, strict=True):
         if layer_type == "full_attention":
             layer.self_attn.is_causal = False
 
@@ -82,10 +82,7 @@ class EvieWrapper(ColQwen3_5Wrapper):
             model_name=model_name, revision=revision, device=device, **kwargs
         )
 
-        if hasattr(self.model, "enable_bidirectional_attention"):
-            self.model.enable_bidirectional_attention()
-        else:
-            _enable_bidirectional_attention(self.model)
+        _enable_bidirectional_attention(self.model)
 
         # The released page budget is 16384 visual tokens; reported results use 1024.
         from colpali_engine.models import ColQwen3_5Processor
