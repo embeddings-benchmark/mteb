@@ -87,7 +87,9 @@ class NumpyCache:
             self.vectors = self._open_vectors_file(self.vector_dim)
         logger.info(f"Vectors file initialized with shape: {self.vectors.shape}")
 
-    def _open_vectors_file(self, vector_dim: int) -> np.memmap:
+    def _open_vectors_file(
+        self, vector_dim: int
+    ) -> np.memmap[tuple[int, ...], np.dtype[np.floating]]:
         # np.memmap does not infer a -1 dimension, so derive the row count from the file size
         n_vectors = self.vectors_file.stat().st_size // (
             np.dtype(np.float32).itemsize * vector_dim
