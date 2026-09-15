@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING, Any, Literal
 
 from tqdm.auto import tqdm
 
-from mteb._torch_utils import get_device
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -70,7 +69,8 @@ class PS3Model(AbsEncoder):
     ):
         import torch
 
-        device = get_device(device)
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
 
         from ps3 import PS3ImageProcessor, PS3TextModel, PS3Tokenizer, PS3VisionModel
 

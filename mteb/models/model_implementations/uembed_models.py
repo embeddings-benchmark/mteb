@@ -18,7 +18,6 @@ from huggingface_hub import hf_hub_download
 from tqdm.auto import tqdm
 from typing_extensions import override
 
-from mteb._torch_utils import no_grad
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -430,24 +429,26 @@ class _UEmbedInference:
             )
         return torch.log1p(F.relu(torch.cat(logits, dim=-1)))
 
-    @no_grad
     def process(self, items: list[dict[str, Any]]) -> torch.Tensor:
-        conversations = []
-        images: list[Image.Image] = []
-        videos: list[torch.Tensor] = []
-        for item in items:
-            conversation, item_images, item_videos = self._format_model_input(item)
-            conversations.append(conversation)
-            images.extend(item_images)
-            videos.extend(item_videos)
+        import torch
 
-        inputs = self._preprocess_inputs(conversations, images, videos)
-        outputs = self.model(**inputs)
-        hidden_state = outputs.last_hidden_state
-        attention_mask = cast("torch.Tensor", inputs["attention_mask"])
-        if self.pooling == "last.normal":
-            return self._pool_dense(hidden_state, attention_mask)
-        return self._pool_sparse(hidden_state, attention_mask)
+        with torch.no_grad():
+            conversations = []
+            images: list[Image.Image] = []
+            videos: list[torch.Tensor] = []
+            for item in items:
+                conversation, item_images, item_videos = self._format_model_input(item)
+                conversations.append(conversation)
+                images.extend(item_images)
+                videos.extend(item_videos)
+
+            inputs = self._preprocess_inputs(conversations, images, videos)
+            outputs = self.model(**inputs)
+            hidden_state = outputs.last_hidden_state
+            attention_mask = cast("torch.Tensor", inputs["attention_mask"])
+            if self.pooling == "last.normal":
+                return self._pool_dense(hidden_state, attention_mask)
+            return self._pool_sparse(hidden_state, attention_mask)
 
 
 class UEmbedEncoder(AbsEncoder):

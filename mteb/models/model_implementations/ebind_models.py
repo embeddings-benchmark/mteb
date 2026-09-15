@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Any
 
 from tqdm.auto import tqdm
 
-from mteb._torch_utils import inference_mode
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator, VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -99,7 +98,6 @@ class EBindWrapper(AbsEncoder):
         processed = processed.float() / 255.0
         return normalize(processed, mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
 
-    @inference_mode
     def _encode_batch(self, batch: BatchedInput) -> torch.Tensor:
         """Encode all modalities together in a single forward pass.
 
@@ -108,43 +106,44 @@ class EBindWrapper(AbsEncoder):
         """
         import torch
 
-        forward_kwargs: dict[str, torch.Tensor] = {}
+        with torch.inference_mode():
+            forward_kwargs: dict[str, torch.Tensor] = {}
 
-        if batch.get("text"):
-            processed = self.processor({"text": batch["text"]}, return_tensors="pt")
-            forward_kwargs["text"] = processed["text"]
+            if batch.get("text"):
+                processed = self.processor({"text": batch["text"]}, return_tensors="pt")
+                forward_kwargs["text"] = processed["text"]
 
-        if batch.get("image"):
-            forward_kwargs["image"] = torch.stack(
-                [self._image_transform(img) for img in batch["image"]]
-            ).to(self.device)
+            if batch.get("image"):
+                forward_kwargs["image"] = torch.stack(
+                    [self._image_transform(img) for img in batch["image"]]
+                ).to(self.device)
 
-        if batch.get("video"):
-            video_tensors = [self._process_video(v) for v in batch["video"]]
-            if len({v.shape[0] for v in video_tensors}) != 1:
+            if batch.get("video"):
+                video_tensors = [self._process_video(v) for v in batch["video"]]
+                if len({v.shape[0] for v in video_tensors}) != 1:
+                    raise ValueError(
+                        "Variable frame counts in batch — cannot stack videos with "
+                        "different numbers of frames. Use batch_size=1 or fixed "
+                        "num_frames (default 8) instead of fps."
+                    )
+                forward_kwargs["video"] = torch.stack(video_tensors).to(self.device)
+
+            if batch.get("audio"):
+                forward_kwargs["audio"] = self._process_audio_batch(batch["audio"])
+
+            if not forward_kwargs:
                 raise ValueError(
-                    "Variable frame counts in batch — cannot stack videos with "
-                    "different numbers of frames. Use batch_size=1 or fixed "
-                    "num_frames (default 8) instead of fps."
+                    f"No supported modality found in batch: {list(batch.keys())}"
                 )
-            forward_kwargs["video"] = torch.stack(video_tensors).to(self.device)
 
-        if batch.get("audio"):
-            forward_kwargs["audio"] = self._process_audio_batch(batch["audio"])
+            outputs = self.model.forward(**forward_kwargs)
 
-        if not forward_kwargs:
-            raise ValueError(
-                f"No supported modality found in batch: {list(batch.keys())}"
-            )
+            # Fuse by addition when multiple modalities are present
+            embeddings = None
+            for emb in outputs.values():
+                embeddings = emb if embeddings is None else embeddings + emb
 
-        outputs = self.model.forward(**forward_kwargs)
-
-        # Fuse by addition when multiple modalities are present
-        embeddings = None
-        for emb in outputs.values():
-            embeddings = emb if embeddings is None else embeddings + emb
-
-        return torch.nn.functional.normalize(embeddings, p=2, dim=-1)
+            return torch.nn.functional.normalize(embeddings, p=2, dim=-1)
 
     def encode(
         self,

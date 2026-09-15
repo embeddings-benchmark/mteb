@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING, Any
 
 from tqdm.auto import tqdm
 
-from mteb._torch_utils import inference_mode
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -71,7 +70,6 @@ class VideoPrismVisionWrapper(AbsEncoder):
         ).to(self.device)
         self.model.eval()
 
-    @inference_mode
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -85,35 +83,38 @@ class VideoPrismVisionWrapper(AbsEncoder):
     ) -> Array:
         import torch
 
-        inputs.collate_fn = FramesCollator(
-            fps=self.fps,
-            max_frames=self.max_frames,
-            num_frames=self.num_frames,
-        )
-
-        all_embeddings = []
-        for batch in tqdm(inputs, disable=not show_progress_bar, desc="Video Encoding"):
-            # Source clips vary in resolution, so they cannot be stacked before
-            # preprocessing. The processor resizes each clip to 288x288, after
-            # which they concatenate cleanly.
-            processed = []
-            for video in batch["video"]:
-                clip = video.to(torch.uint8)
-                processed.append(
-                    self.processor(videos=[clip.numpy()], return_tensors="pt")[
-                        "pixel_values_videos"
-                    ]
-                )
-            pixel_values_videos = torch.cat(processed, dim=0).to(
-                self.device, dtype=self.dtype
+        with torch.inference_mode():
+            inputs.collate_fn = FramesCollator(
+                fps=self.fps,
+                max_frames=self.max_frames,
+                num_frames=self.num_frames,
             )
-            output = self.model(pixel_values_videos=pixel_values_videos)
-            # No pooler head on the vision-only checkpoints. last_hidden_state is
-            # (batch, num_frames * num_patches, hidden), so mean over the token
-            # axis, matching how the vjepa2 wrapper pools.
-            pooled = output.last_hidden_state.mean(dim=1)
-            all_embeddings.append(pooled.float().cpu())
-        return torch.cat(all_embeddings, dim=0).numpy()
+
+            all_embeddings = []
+            for batch in tqdm(
+                inputs, disable=not show_progress_bar, desc="Video Encoding"
+            ):
+                # Source clips vary in resolution, so they cannot be stacked before
+                # preprocessing. The processor resizes each clip to 288x288, after
+                # which they concatenate cleanly.
+                processed = []
+                for video in batch["video"]:
+                    clip = video.to(torch.uint8)
+                    processed.append(
+                        self.processor(videos=[clip.numpy()], return_tensors="pt")[
+                            "pixel_values_videos"
+                        ]
+                    )
+                pixel_values_videos = torch.cat(processed, dim=0).to(
+                    self.device, dtype=self.dtype
+                )
+                output = self.model(pixel_values_videos=pixel_values_videos)
+                # No pooler head on the vision-only checkpoints. last_hidden_state is
+                # (batch, num_frames * num_patches, hidden), so mean over the token
+                # axis, matching how the vjepa2 wrapper pools.
+                pooled = output.last_hidden_state.mean(dim=1)
+                all_embeddings.append(pooled.float().cpu())
+            return torch.cat(all_embeddings, dim=0).numpy()
 
 
 class VideoPrismClipWrapper(AbsEncoder):
@@ -144,7 +145,6 @@ class VideoPrismClipWrapper(AbsEncoder):
         ).to(self.device)
         self.model.eval()
 
-    @inference_mode
     def get_text_embeddings(
         self,
         texts: DataLoader[BatchedInput],
@@ -153,20 +153,22 @@ class VideoPrismClipWrapper(AbsEncoder):
     ) -> torch.Tensor:
         import torch
 
-        all_embeddings = []
-        for batch in tqdm(texts, disable=not show_progress_bar, desc="Text Encoding"):
-            encoded = self.processor.tokenizer(
-                batch["text"],
-                padding="max_length",
-                truncation=True,
-                max_length=MAX_TEXT_TOKENS,
-                return_tensors="pt",
-            ).to(self.device)
-            output = self.model.get_text_features(**encoded)
-            all_embeddings.append(output.pooler_output.float().cpu())
-        return torch.cat(all_embeddings, dim=0)
+        with torch.inference_mode():
+            all_embeddings = []
+            for batch in tqdm(
+                texts, disable=not show_progress_bar, desc="Text Encoding"
+            ):
+                encoded = self.processor.tokenizer(
+                    batch["text"],
+                    padding="max_length",
+                    truncation=True,
+                    max_length=MAX_TEXT_TOKENS,
+                    return_tensors="pt",
+                ).to(self.device)
+                output = self.model.get_text_features(**encoded)
+                all_embeddings.append(output.pooler_output.float().cpu())
+            return torch.cat(all_embeddings, dim=0)
 
-    @inference_mode
     def get_video_embeddings(
         self,
         videos: DataLoader[BatchedInput],
@@ -175,27 +177,30 @@ class VideoPrismClipWrapper(AbsEncoder):
     ) -> torch.Tensor:
         import torch
 
-        all_embeddings = []
-        for batch in tqdm(videos, disable=not show_progress_bar, desc="Video Encoding"):
-            processed = []
-            for video in batch["video"]:
-                clip = video.to(torch.uint8)
-                processed.append(
-                    self.processor(videos=[clip.numpy()], return_tensors="pt")[
-                        "pixel_values_videos"
-                    ]
+        with torch.inference_mode():
+            all_embeddings = []
+            for batch in tqdm(
+                videos, disable=not show_progress_bar, desc="Video Encoding"
+            ):
+                processed = []
+                for video in batch["video"]:
+                    clip = video.to(torch.uint8)
+                    processed.append(
+                        self.processor(videos=[clip.numpy()], return_tensors="pt")[
+                            "pixel_values_videos"
+                        ]
+                    )
+                pixel_values_videos = torch.cat(processed, dim=0).to(
+                    self.device, dtype=self.dtype
                 )
-            pixel_values_videos = torch.cat(processed, dim=0).to(
-                self.device, dtype=self.dtype
-            )
-            output = self.model.get_video_features(
-                pixel_values_videos=pixel_values_videos
-            )
-            # The video pooler returns (batch, 1, hidden) while the text pooler
-            # returns (batch, hidden). Drop the singleton axis so the two towers
-            # are directly comparable.
-            all_embeddings.append(output.pooler_output.squeeze(1).float().cpu())
-        return torch.cat(all_embeddings, dim=0)
+                output = self.model.get_video_features(
+                    pixel_values_videos=pixel_values_videos
+                )
+                # The video pooler returns (batch, 1, hidden) while the text pooler
+                # returns (batch, hidden). Drop the singleton axis so the two towers
+                # are directly comparable.
+                all_embeddings.append(output.pooler_output.squeeze(1).float().cpu())
+            return torch.cat(all_embeddings, dim=0)
 
     def encode(
         self,

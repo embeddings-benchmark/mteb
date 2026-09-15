@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 from tqdm.auto import tqdm
 
-from mteb._torch_utils import get_device
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator
@@ -27,9 +26,11 @@ class ClapZeroShotWrapper(AbsEncoder):
         device: str | None = None,
         **kwargs: Any,
     ):
+        import torch
         from transformers import ClapModel, ClapProcessor
 
-        device = get_device(device)
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
 
         self.model_name = model_name
         self.device = device

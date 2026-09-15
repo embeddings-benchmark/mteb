@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
-from mteb._torch_utils import get_device, inference_mode
 from mteb.models.model_meta import ModelMeta
 from mteb.types import OutputDType
 
@@ -91,7 +90,8 @@ class KaLMRerankerWrapper:
     def _resolve_device(device: str | torch.device | None) -> torch.device:
         import torch
 
-        device = get_device(device)
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
         resolved = torch.device(device)
         if resolved.type == "cuda" and not torch.cuda.is_available():
             raise RuntimeError("CUDA was requested, but no CUDA device is available.")
@@ -204,83 +204,83 @@ class KaLMRerankerWrapper:
             validated.append((query, document))
         return validated
 
-    @inference_mode
     def _predict_batch(
         self, pairs: Sequence[tuple[str, str]], instructions: Sequence[str]
     ) -> list[float]:
         import torch
         from transformers.modeling_outputs import BaseModelOutput
 
-        if len(pairs) != len(instructions):
-            raise ValueError("pairs and instructions must have the same length.")
-        encoder_texts = [f"<Document>: {document}" for _, document in pairs]
-        decoder_texts = [
-            self._decoder_text(query, inst)
-            for query, inst in zip(
-                [pair[0] for pair in pairs], instructions, strict=True
-            )
-        ]
+        with torch.inference_mode():
+            if len(pairs) != len(instructions):
+                raise ValueError("pairs and instructions must have the same length.")
+            encoder_texts = [f"<Document>: {document}" for _, document in pairs]
+            decoder_texts = [
+                self._decoder_text(query, inst)
+                for query, inst in zip(
+                    [pair[0] for pair in pairs], instructions, strict=True
+                )
+            ]
 
-        encoder_batch = self.tokenizer(
-            encoder_texts,
-            padding=True,
-            truncation=True,
-            max_length=self.max_length,
-            add_special_tokens=False,
-            return_tensors="pt",
-        ).to(self.device)
-        decoder_batch = self.tokenizer(
-            decoder_texts,
-            padding=True,
-            pad_to_multiple_of=8,
-            add_special_tokens=False,
-            return_tensors="pt",
-        ).to(self.device)
+            encoder_batch = self.tokenizer(
+                encoder_texts,
+                padding=True,
+                truncation=True,
+                max_length=self.max_length,
+                add_special_tokens=False,
+                return_tensors="pt",
+            ).to(self.device)
+            decoder_batch = self.tokenizer(
+                decoder_texts,
+                padding=True,
+                pad_to_multiple_of=8,
+                add_special_tokens=False,
+                return_tensors="pt",
+            ).to(self.device)
 
-        if self.chunk_size is None:
-            outputs = self.model(
-                input_ids=encoder_batch["input_ids"],
-                attention_mask=encoder_batch["attention_mask"],
-                decoder_input_ids=decoder_batch["input_ids"],
-                decoder_attention_mask=decoder_batch["attention_mask"],
-                return_dict=True,
-            )
-        else:
-            encoder_outputs = self._get_encoder()(
-                input_ids=encoder_batch["input_ids"],
-                attention_mask=encoder_batch["attention_mask"],
-                return_dict=True,
-            )
-            pooled_hidden, pooled_mask = self._pool_encoder_chunks(
-                encoder_outputs.last_hidden_state,
-                encoder_batch["attention_mask"],
-                self.chunk_size,
-            )
-            outputs = self.model(
-                encoder_outputs=BaseModelOutput(last_hidden_state=pooled_hidden),
-                attention_mask=pooled_mask,
-                decoder_input_ids=decoder_batch["input_ids"],
-                decoder_attention_mask=decoder_batch["attention_mask"],
-                return_dict=True,
-            )
+            if self.chunk_size is None:
+                outputs = self.model(
+                    input_ids=encoder_batch["input_ids"],
+                    attention_mask=encoder_batch["attention_mask"],
+                    decoder_input_ids=decoder_batch["input_ids"],
+                    decoder_attention_mask=decoder_batch["attention_mask"],
+                    return_dict=True,
+                )
+            else:
+                encoder_outputs = self._get_encoder()(
+                    input_ids=encoder_batch["input_ids"],
+                    attention_mask=encoder_batch["attention_mask"],
+                    return_dict=True,
+                )
+                pooled_hidden, pooled_mask = self._pool_encoder_chunks(
+                    encoder_outputs.last_hidden_state,
+                    encoder_batch["attention_mask"],
+                    self.chunk_size,
+                )
+                outputs = self.model(
+                    encoder_outputs=BaseModelOutput(last_hidden_state=pooled_hidden),
+                    attention_mask=pooled_mask,
+                    decoder_input_ids=decoder_batch["input_ids"],
+                    decoder_attention_mask=decoder_batch["attention_mask"],
+                    return_dict=True,
+                )
 
-        sequence_lengths = decoder_batch["attention_mask"].sum(dim=1) - 1
-        batch_indices = torch.arange(outputs.logits.shape[0], device=self.device)
-        last_logits = outputs.logits[batch_indices, sequence_lengths]
-        yes_no_logits = torch.stack(
-            (
-                last_logits[:, self.yes_token_id],
-                last_logits[:, self.no_token_id],
-            ),
-            dim=-1,
-        ).float()
-        if not torch.isfinite(yes_no_logits).all():
-            bad_count = (~torch.isfinite(yes_no_logits).all(dim=-1)).sum().item()
-            raise RuntimeError(
-                f"The model produced non-finite yes/no logits for {bad_count} input(s). "
-                "Use bfloat16 or float32 instead of float16."
-            )
-        return torch.softmax(yes_no_logits, dim=-1)[:, 0].cpu().tolist()
+            sequence_lengths = decoder_batch["attention_mask"].sum(dim=1) - 1
+            batch_indices = torch.arange(outputs.logits.shape[0], device=self.device)
+            last_logits = outputs.logits[batch_indices, sequence_lengths]
+            yes_no_logits = torch.stack(
+                (
+                    last_logits[:, self.yes_token_id],
+                    last_logits[:, self.no_token_id],
+                ),
+                dim=-1,
+            ).float()
+            if not torch.isfinite(yes_no_logits).all():
+                bad_count = (~torch.isfinite(yes_no_logits).all(dim=-1)).sum().item()
+                raise RuntimeError(
+                    f"The model produced non-finite yes/no logits for {bad_count} input(s). "
+                    "Use bfloat16 or float32 instead of float16."
+                )
+            return torch.softmax(yes_no_logits, dim=-1)[:, 0].cpu().tolist()
 
     def predict(
         self,

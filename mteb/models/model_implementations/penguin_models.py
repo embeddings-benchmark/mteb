@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING, Any
 
 from tqdm.auto import tqdm
 
-from mteb._torch_utils import get_device, inference_mode
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -26,7 +25,8 @@ class PenguinEncoderModel(AbsEncoder):
     ):
         import torch
 
-        device = get_device(device)
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
 
         from transformers import AutoConfig, AutoImageProcessor, AutoModel
 
@@ -52,7 +52,6 @@ class PenguinEncoderModel(AbsEncoder):
             trust_remote_code=True,
         )
 
-    @inference_mode
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -66,22 +65,25 @@ class PenguinEncoderModel(AbsEncoder):
     ) -> Array:
         import torch
 
-        all_image_embeddings = []
+        with torch.inference_mode():
+            all_image_embeddings = []
 
-        for batch in tqdm(inputs, disable=not show_progress_bar, desc="Image Encoding"):
-            inputs = self.processor(images=batch["image"], merge_size=1)
-            inputs = {k: torch.tensor(v) for k, v in inputs.items()}
+            for batch in tqdm(
+                inputs, disable=not show_progress_bar, desc="Image Encoding"
+            ):
+                inputs = self.processor(images=batch["image"], merge_size=1)
+                inputs = {k: torch.tensor(v) for k, v in inputs.items()}
 
-            pixel_values = inputs.pop("pixel_values").to(
-                self.device, dtype=torch.bfloat16
-            )
-            other_inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                pixel_values = inputs.pop("pixel_values").to(
+                    self.device, dtype=torch.bfloat16
+                )
+                other_inputs = {k: v.to(self.device) for k, v in inputs.items()}
 
-            image_features = self.model(pixel_values=pixel_values, **other_inputs)
-            batch_embeddings = image_features.mean(dim=0, keepdim=True)
-            all_image_embeddings.append(batch_embeddings.cpu().float())
+                image_features = self.model(pixel_values=pixel_values, **other_inputs)
+                batch_embeddings = image_features.mean(dim=0, keepdim=True)
+                all_image_embeddings.append(batch_embeddings.cpu().float())
 
-        return torch.cat(all_image_embeddings, dim=0)
+            return torch.cat(all_image_embeddings, dim=0)
 
 
 PENGUIN_CITATION = """@misc{zhang2026penguinvlexploringefficiencylimits,

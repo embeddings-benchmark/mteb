@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING, Any
 
 from tqdm.auto import tqdm
 
-from mteb._torch_utils import get_device, no_grad
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -23,7 +22,10 @@ class CLIPModel(AbsEncoder):
         device: str | None = None,
         **kwargs: Any,
     ):
-        device = get_device(device)
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
 
         from transformers import AutoModel, AutoProcessor
 
@@ -64,7 +66,6 @@ class CLIPModel(AbsEncoder):
         all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
         return all_text_embeddings
 
-    @no_grad
     def get_image_embeddings(
         self,
         images: DataLoader[BatchedInput],
@@ -73,23 +74,26 @@ class CLIPModel(AbsEncoder):
     ) -> Array:
         import torch
 
-        all_image_embeddings = []
+        with torch.no_grad():
+            all_image_embeddings = []
 
-        for batch in tqdm(images, disable=not show_progress_bar, desc="Image Encoding"):
-            inputs = self.processor(
-                images=batch["image"],
-                return_tensors="pt",
-                padding=True,
-            )
-            inputs = {k: v.to(self.device) for k, v in inputs.items()}
-            image_outputs = self.model.get_image_features(**inputs)
-            # Handle both tensor and BaseModelOutputWithPooling returns
-            if hasattr(image_outputs, "pooler_output"):
-                image_outputs = image_outputs.pooler_output
-            all_image_embeddings.append(image_outputs.cpu())
+            for batch in tqdm(
+                images, disable=not show_progress_bar, desc="Image Encoding"
+            ):
+                inputs = self.processor(
+                    images=batch["image"],
+                    return_tensors="pt",
+                    padding=True,
+                )
+                inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                image_outputs = self.model.get_image_features(**inputs)
+                # Handle both tensor and BaseModelOutputWithPooling returns
+                if hasattr(image_outputs, "pooler_output"):
+                    image_outputs = image_outputs.pooler_output
+                all_image_embeddings.append(image_outputs.cpu())
 
-        all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
-        return all_image_embeddings
+            all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
+            return all_image_embeddings
 
     def encode(
         self,

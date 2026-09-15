@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING, Any
 
 from tqdm.auto import tqdm
 
-from mteb._torch_utils import inference_mode
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -132,31 +131,31 @@ class ImageBindWrapper(AbsEncoder):
 
         return torch.stack(audio_outputs, dim=0)
 
-    @inference_mode
     def _encode_batch(self, batch: BatchedInput) -> torch.Tensor:
         import torch
         from imagebind.models.imagebind_model import ModalityType
 
-        inputs = {}
-        if batch.get("text"):
-            inputs[ModalityType.TEXT] = self._load_text(batch["text"])
-        if batch.get("image"):
-            inputs[ModalityType.VISION] = self._load_images(batch["image"])
-        if batch.get("audio"):
-            inputs[ModalityType.AUDIO] = self._load_audio(batch["audio"])
+        with torch.inference_mode():
+            inputs = {}
+            if batch.get("text"):
+                inputs[ModalityType.TEXT] = self._load_text(batch["text"])
+            if batch.get("image"):
+                inputs[ModalityType.VISION] = self._load_images(batch["image"])
+            if batch.get("audio"):
+                inputs[ModalityType.AUDIO] = self._load_audio(batch["audio"])
 
-        if not inputs:
-            raise ValueError(
-                f"No supported modality found in batch: {list(batch.keys())}"
-            )
+            if not inputs:
+                raise ValueError(
+                    f"No supported modality found in batch: {list(batch.keys())}"
+                )
 
-        outputs = self.model(inputs)
+            outputs = self.model(inputs)
 
-        embeddings = None
-        for emb in outputs.values():
-            embeddings = emb if embeddings is None else embeddings + emb
+            embeddings = None
+            for emb in outputs.values():
+                embeddings = emb if embeddings is None else embeddings + emb
 
-        return torch.nn.functional.normalize(embeddings, p=2, dim=-1)
+            return torch.nn.functional.normalize(embeddings, p=2, dim=-1)
 
     def encode(
         self,

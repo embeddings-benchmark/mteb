@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 from tqdm.auto import tqdm
 
-from mteb._torch_utils import inference_mode
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -254,7 +253,6 @@ class BioVITAWrapper(AbsEncoder):
         for parameter in self.audio_adapter.parameters():
             parameter.requires_grad = False
 
-    @inference_mode
     def get_text_embeddings(
         self,
         inputs: DataLoader[BatchedInput],
@@ -264,32 +262,32 @@ class BioVITAWrapper(AbsEncoder):
         import torch
         import torch.nn.functional as F
 
-        embeddings = []
+        with torch.inference_mode():
+            embeddings = []
 
-        for batch in tqdm(
-            inputs,
-            disable=not show_progress_bar,
-            desc="Encoding BioVITA text",
-        ):
-            tokens = self.tokenizer(list(batch["text"])).to(self.device)
-
-            with torch.autocast(
-                device_type="cuda",
-                dtype=self._amp_dtype,
-                enabled=self._use_amp,
+            for batch in tqdm(
+                inputs,
+                disable=not show_progress_bar,
+                desc="Encoding BioVITA text",
             ):
-                features = self.txt_img_model.encode_text(tokens)
+                tokens = self.tokenizer(list(batch["text"])).to(self.device)
 
-            features = F.normalize(
-                features,
-                dim=-1,
-            ).float()
+                with torch.autocast(
+                    device_type="cuda",
+                    dtype=self._amp_dtype,
+                    enabled=self._use_amp,
+                ):
+                    features = self.txt_img_model.encode_text(tokens)
 
-            embeddings.append(features.cpu().numpy())
+                features = F.normalize(
+                    features,
+                    dim=-1,
+                ).float()
 
-        return np.vstack(embeddings)
+                embeddings.append(features.cpu().numpy())
 
-    @inference_mode
+            return np.vstack(embeddings)
+
     def get_image_embeddings(
         self,
         inputs: DataLoader[BatchedInput],
@@ -299,37 +297,37 @@ class BioVITAWrapper(AbsEncoder):
         import torch
         import torch.nn.functional as F
 
-        embeddings = []
+        with torch.inference_mode():
+            embeddings = []
 
-        for batch in tqdm(
-            inputs,
-            disable=not show_progress_bar,
-            desc="Encoding BioVITA images",
-        ):
-            image_tensor = torch.stack(
-                [
-                    self.image_preprocess(image.convert("RGB"))
-                    for image in batch["image"]
-                ]
-            ).to(self.device)
-
-            with torch.autocast(
-                device_type="cuda",
-                dtype=self._amp_dtype,
-                enabled=self._use_amp,
+            for batch in tqdm(
+                inputs,
+                disable=not show_progress_bar,
+                desc="Encoding BioVITA images",
             ):
-                features = self.txt_img_model.encode_image(image_tensor)
+                image_tensor = torch.stack(
+                    [
+                        self.image_preprocess(image.convert("RGB"))
+                        for image in batch["image"]
+                    ]
+                ).to(self.device)
 
-            features = F.normalize(
-                features,
-                dim=-1,
-            ).float()
+                with torch.autocast(
+                    device_type="cuda",
+                    dtype=self._amp_dtype,
+                    enabled=self._use_amp,
+                ):
+                    features = self.txt_img_model.encode_image(image_tensor)
 
-            embeddings.append(features.cpu().numpy())
+                features = F.normalize(
+                    features,
+                    dim=-1,
+                ).float()
 
-        return np.vstack(embeddings)
+                embeddings.append(features.cpu().numpy())
 
-    @inference_mode
+            return np.vstack(embeddings)
+
     def get_audio_embeddings(
         self,
         inputs: DataLoader[BatchedInput],
@@ -339,50 +337,51 @@ class BioVITAWrapper(AbsEncoder):
         import torch
         import torch.nn.functional as F
 
-        inputs.collate_fn = _BioVITAAudioCollator()
+        with torch.inference_mode():
+            inputs.collate_fn = _BioVITAAudioCollator()
 
-        embeddings = []
+            embeddings = []
 
-        for batch in tqdm(
-            inputs,
-            disable=not show_progress_bar,
-            desc="Encoding BioVITA audio",
-        ):
-            waveforms = [audio["array"] for audio in batch["audio"]]
-
-            audio_inputs = self.audio_processor(
-                audio=waveforms,
-                sampling_rate=TARGET_SAMPLING_RATE,
-                return_tensors="pt",
-                padding=True,
-            )
-
-            audio_inputs = {
-                key: value.to(self.device) for key, value in audio_inputs.items()
-            }
-
-            model_dtype = next(self.clap.parameters()).dtype
-
-            for key, value in audio_inputs.items():
-                if torch.is_floating_point(value):
-                    audio_inputs[key] = value.to(model_dtype)
-
-            with torch.autocast(
-                device_type="cuda",
-                dtype=self._amp_dtype,
-                enabled=self._use_amp,
+            for batch in tqdm(
+                inputs,
+                disable=not show_progress_bar,
+                desc="Encoding BioVITA audio",
             ):
-                audio_outputs = self.clap.get_audio_features(**audio_inputs)
+                waveforms = [audio["array"] for audio in batch["audio"]]
 
-            features = self.audio_adapter(audio_outputs.pooler_output)
-            features = F.normalize(
-                features,
-                dim=-1,
-            ).float()
+                audio_inputs = self.audio_processor(
+                    audio=waveforms,
+                    sampling_rate=TARGET_SAMPLING_RATE,
+                    return_tensors="pt",
+                    padding=True,
+                )
 
-            embeddings.append(features.cpu().numpy())
+                audio_inputs = {
+                    key: value.to(self.device) for key, value in audio_inputs.items()
+                }
 
-        return np.vstack(embeddings)
+                model_dtype = next(self.clap.parameters()).dtype
+
+                for key, value in audio_inputs.items():
+                    if torch.is_floating_point(value):
+                        audio_inputs[key] = value.to(model_dtype)
+
+                with torch.autocast(
+                    device_type="cuda",
+                    dtype=self._amp_dtype,
+                    enabled=self._use_amp,
+                ):
+                    audio_outputs = self.clap.get_audio_features(**audio_inputs)
+
+                features = self.audio_adapter(audio_outputs.pooler_output)
+                features = F.normalize(
+                    features,
+                    dim=-1,
+                ).float()
+
+                embeddings.append(features.cpu().numpy())
+
+            return np.vstack(embeddings)
 
     def encode(
         self,

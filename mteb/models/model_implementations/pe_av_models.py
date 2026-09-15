@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 from tqdm.auto import tqdm
 
-from mteb._torch_utils import get_device, inference_mode
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import VideoCollator
@@ -38,7 +37,10 @@ class PEAudioVisualWrapper(AbsEncoder):
         max_samples: int | None = 30 * 48000,  # 30s * sampling rate
         **kwargs: Any,
     ):
-        device = get_device(device)
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
 
         from transformers import PeAudioVideoModel, PeAudioVideoProcessor
 
@@ -53,7 +55,6 @@ class PEAudioVisualWrapper(AbsEncoder):
         self.processor = PeAudioVideoProcessor.from_pretrained(model_name)
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
 
-    @inference_mode
     def get_text_embeddings(
         self,
         inputs: DataLoader[TextInput],
@@ -64,37 +65,37 @@ class PEAudioVisualWrapper(AbsEncoder):
         """Get text embeddings aligned to audio-video space."""
         import torch
 
-        all_embeddings = []
+        with torch.inference_mode():
+            all_embeddings = []
 
-        for batch in tqdm(
-            inputs,
-            disable=not show_progress_bar,
-            desc="Processing text batches",
-        ):
-            texts = batch["text"]
-            processed = self.processor(
-                text=texts,
-                return_tensors="pt",
-                padding=True,
-                truncation=True,
-            )
-            processed = {k: v.to(self.device) for k, v in processed.items()}
-
-            with torch.autocast(str(self.device), dtype=torch.bfloat16):
-                text_outputs = self.model.text_model(
-                    input_ids=processed["input_ids"],
-                    attention_mask=processed.get("attention_mask"),
-                    output_hidden_states=True,
+            for batch in tqdm(
+                inputs,
+                disable=not show_progress_bar,
+                desc="Processing text batches",
+            ):
+                texts = batch["text"]
+                processed = self.processor(
+                    text=texts,
+                    return_tensors="pt",
+                    padding=True,
+                    truncation=True,
                 )
-                # Use last hidden layer CLS token, matching the HF wrapper's intent.
-                text_pooler = text_outputs.hidden_states[-1][:, 0]
-                text_embeds = self.model.text_audio_video_head(text_pooler)
-                text_embeds /= text_embeds.norm(dim=-1, keepdim=True)
-                all_embeddings.append(text_embeds.cpu().float().numpy())
+                processed = {k: v.to(self.device) for k, v in processed.items()}
 
-        return np.vstack(all_embeddings)
+                with torch.autocast(str(self.device), dtype=torch.bfloat16):
+                    text_outputs = self.model.text_model(
+                        input_ids=processed["input_ids"],
+                        attention_mask=processed.get("attention_mask"),
+                        output_hidden_states=True,
+                    )
+                    # Use last hidden layer CLS token, matching the HF wrapper's intent.
+                    text_pooler = text_outputs.hidden_states[-1][:, 0]
+                    text_embeds = self.model.text_audio_video_head(text_pooler)
+                    text_embeds /= text_embeds.norm(dim=-1, keepdim=True)
+                    all_embeddings.append(text_embeds.cpu().float().numpy())
 
-    @inference_mode
+            return np.vstack(all_embeddings)
+
     def get_video_embeddings(
         self,
         inputs: DataLoader[VideoInput],
@@ -104,35 +105,35 @@ class PEAudioVisualWrapper(AbsEncoder):
         """Get video-only embeddings."""
         import torch
 
-        all_embeddings = []
+        with torch.inference_mode():
+            all_embeddings = []
 
-        for batch in tqdm(
-            inputs,
-            disable=not show_progress_bar,
-            desc="Processing video batches",
-        ):
-            videos = list(batch["video"])
-            processed = self.processor(
-                videos=videos,
-                return_tensors="pt",
-                padding=True,
-            )
-            processed = {k: v.to(self.device) for k, v in processed.items()}
-
-            with torch.autocast(str(self.device), dtype=torch.bfloat16):
-                video_out = self.model.video_model.video_encoder(
-                    pixel_values_videos=processed["pixel_values_videos"],
-                    padding_mask_videos=processed.get("padding_mask_videos"),
+            for batch in tqdm(
+                inputs,
+                disable=not show_progress_bar,
+                desc="Processing video batches",
+            ):
+                videos = list(batch["video"])
+                processed = self.processor(
+                    videos=videos,
+                    return_tensors="pt",
+                    padding=True,
                 )
-                video_embeds = self.model.video_model.video_head(
-                    video_out.pooler_output
-                )
-                video_embeds /= video_embeds.norm(dim=-1, keepdim=True)
-                all_embeddings.append(video_embeds.cpu().float().numpy())
+                processed = {k: v.to(self.device) for k, v in processed.items()}
 
-        return np.vstack(all_embeddings)
+                with torch.autocast(str(self.device), dtype=torch.bfloat16):
+                    video_out = self.model.video_model.video_encoder(
+                        pixel_values_videos=processed["pixel_values_videos"],
+                        padding_mask_videos=processed.get("padding_mask_videos"),
+                    )
+                    video_embeds = self.model.video_model.video_head(
+                        video_out.pooler_output
+                    )
+                    video_embeds /= video_embeds.norm(dim=-1, keepdim=True)
+                    all_embeddings.append(video_embeds.cpu().float().numpy())
 
-    @inference_mode
+            return np.vstack(all_embeddings)
+
     def get_audio_embeddings(
         self,
         inputs: DataLoader[AudioInput],
@@ -142,33 +143,33 @@ class PEAudioVisualWrapper(AbsEncoder):
         """Get audio-only embeddings."""
         import torch
 
-        all_embeddings = []
+        with torch.inference_mode():
+            all_embeddings = []
 
-        for batch in tqdm(
-            inputs,
-            disable=not show_progress_bar,
-            desc="Processing audio batches",
-        ):
-            audio_arrays = [audio["array"] for audio in batch["audio"]]
-            processed = self.processor(
-                audio=audio_arrays,
-                sampling_rate=self.sampling_rate,
-                return_tensors="pt",
-                padding=True,
-            )
-            processed = {k: v.to(self.device) for k, v in processed.items()}
-
-            with torch.autocast(str(self.device), dtype=torch.bfloat16):
-                audio_embeds = self.model.get_audio_embeds(
-                    input_values=processed["input_values"],
-                    padding_mask=processed.get("padding_mask"),
+            for batch in tqdm(
+                inputs,
+                disable=not show_progress_bar,
+                desc="Processing audio batches",
+            ):
+                audio_arrays = [audio["array"] for audio in batch["audio"]]
+                processed = self.processor(
+                    audio=audio_arrays,
+                    sampling_rate=self.sampling_rate,
+                    return_tensors="pt",
+                    padding=True,
                 )
-                audio_embeds /= audio_embeds.norm(dim=-1, keepdim=True)
-                all_embeddings.append(audio_embeds.cpu().float().numpy())
+                processed = {k: v.to(self.device) for k, v in processed.items()}
 
-        return np.vstack(all_embeddings)
+                with torch.autocast(str(self.device), dtype=torch.bfloat16):
+                    audio_embeds = self.model.get_audio_embeds(
+                        input_values=processed["input_values"],
+                        padding_mask=processed.get("padding_mask"),
+                    )
+                    audio_embeds /= audio_embeds.norm(dim=-1, keepdim=True)
+                    all_embeddings.append(audio_embeds.cpu().float().numpy())
 
-    @inference_mode
+            return np.vstack(all_embeddings)
+
     def get_audio_video_embeddings(
         self,
         inputs: DataLoader[BatchedInput],
@@ -178,36 +179,37 @@ class PEAudioVisualWrapper(AbsEncoder):
         """Get joint audio-video embeddings."""
         import torch
 
-        all_embeddings = []
+        with torch.inference_mode():
+            all_embeddings = []
 
-        for batch in tqdm(
-            inputs,
-            disable=not show_progress_bar,
-            desc="Processing audio-video batches",
-        ):
-            videos = list(batch["video"])
-            audio_arrays = [audio["array"] for audio in batch["audio"]]
-            processed = self.processor(
-                videos=videos,
-                audio=audio_arrays,
-                sampling_rate=self.sampling_rate,
-                return_tensors="pt",
-                padding=True,
-            )
-            processed = {k: v.to(self.device) for k, v in processed.items()}
-
-            with torch.autocast(str(self.device), dtype=torch.bfloat16):
-                av_output = self.model.get_audio_video_embeds(
-                    input_values=processed["input_values"],
-                    pixel_values_videos=processed["pixel_values_videos"],
-                    padding_mask=processed.get("padding_mask"),
-                    padding_mask_videos=processed.get("padding_mask_videos"),
+            for batch in tqdm(
+                inputs,
+                disable=not show_progress_bar,
+                desc="Processing audio-video batches",
+            ):
+                videos = list(batch["video"])
+                audio_arrays = [audio["array"] for audio in batch["audio"]]
+                processed = self.processor(
+                    videos=videos,
+                    audio=audio_arrays,
+                    sampling_rate=self.sampling_rate,
+                    return_tensors="pt",
+                    padding=True,
                 )
-                av_embeds = av_output.audio_video_embeds
-                av_embeds /= av_embeds.norm(dim=-1, keepdim=True)
-                all_embeddings.append(av_embeds.cpu().float().numpy())
+                processed = {k: v.to(self.device) for k, v in processed.items()}
 
-        return np.vstack(all_embeddings)
+                with torch.autocast(str(self.device), dtype=torch.bfloat16):
+                    av_output = self.model.get_audio_video_embeds(
+                        input_values=processed["input_values"],
+                        pixel_values_videos=processed["pixel_values_videos"],
+                        padding_mask=processed.get("padding_mask"),
+                        padding_mask_videos=processed.get("padding_mask_videos"),
+                    )
+                    av_embeds = av_output.audio_video_embeds
+                    av_embeds /= av_embeds.norm(dim=-1, keepdim=True)
+                    all_embeddings.append(av_embeds.cpu().float().numpy())
+
+            return np.vstack(all_embeddings)
 
     def encode(
         self,

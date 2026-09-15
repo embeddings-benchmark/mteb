@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING, Any
 
 from tqdm.auto import tqdm
 
-from mteb._torch_utils import get_device, no_grad
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -46,7 +45,10 @@ class ViCLIPWrapper(AbsEncoder):
         num_frames: int = 8,
         **kwargs: Any,
     ):
-        device = get_device(device)
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
 
         from transformers import AutoModel
 
@@ -82,7 +84,6 @@ class ViCLIPWrapper(AbsEncoder):
         std = torch.tensor(_VICLIP_STD, device=frames.device).view(1, 3, 1, 1)
         return (frames - mean) / std
 
-    @no_grad
     def get_text_embeddings(
         self,
         texts: DataLoader[BatchedInput],
@@ -91,24 +92,26 @@ class ViCLIPWrapper(AbsEncoder):
     ) -> Array:
         import torch
 
-        all_embeddings = []
+        with torch.no_grad():
+            all_embeddings = []
 
-        for batch in tqdm(texts, disable=not show_progress_bar, desc="Text Encoding"):
-            text_list = batch["text"]
-            # get_text_features may process one string at a time (caching dict API)
-            # so we call per-string and stack to handle both list and single-string APIs
-            batch_feats = []
-            for text in text_list:
-                feat = self.model.get_text_features(text, self.tokenizer)
-                if feat.dim() == 1:
-                    feat = feat.unsqueeze(0)
-                batch_feats.append(feat)
-            features = torch.cat(batch_feats, dim=0)
-            all_embeddings.append(features.cpu())
+            for batch in tqdm(
+                texts, disable=not show_progress_bar, desc="Text Encoding"
+            ):
+                text_list = batch["text"]
+                # get_text_features may process one string at a time (caching dict API)
+                # so we call per-string and stack to handle both list and single-string APIs
+                batch_feats = []
+                for text in text_list:
+                    feat = self.model.get_text_features(text, self.tokenizer)
+                    if feat.dim() == 1:
+                        feat = feat.unsqueeze(0)
+                    batch_feats.append(feat)
+                features = torch.cat(batch_feats, dim=0)
+                all_embeddings.append(features.cpu())
 
-        return torch.cat(all_embeddings, dim=0)
+            return torch.cat(all_embeddings, dim=0)
 
-    @no_grad
     def get_video_embeddings(
         self,
         videos: DataLoader[BatchedInput],
@@ -117,19 +120,22 @@ class ViCLIPWrapper(AbsEncoder):
     ) -> Array:
         import torch
 
-        all_embeddings = []
+        with torch.no_grad():
+            all_embeddings = []
 
-        for batch in tqdm(videos, disable=not show_progress_bar, desc="Video Encoding"):
-            processed = [
-                self._preprocess_frames(v) if isinstance(v, torch.Tensor) else v
-                for v in batch["video"]
-            ]
-            # Stack to (B, T, C, H, W) and move to device
-            video_tensor = torch.stack(processed, dim=0).to(self.device)
-            features = self.model.get_vid_features(video_tensor)
-            all_embeddings.append(features.cpu())
+            for batch in tqdm(
+                videos, disable=not show_progress_bar, desc="Video Encoding"
+            ):
+                processed = [
+                    self._preprocess_frames(v) if isinstance(v, torch.Tensor) else v
+                    for v in batch["video"]
+                ]
+                # Stack to (B, T, C, H, W) and move to device
+                video_tensor = torch.stack(processed, dim=0).to(self.device)
+                features = self.model.get_vid_features(video_tensor)
+                all_embeddings.append(features.cpu())
 
-        return torch.cat(all_embeddings, dim=0)
+            return torch.cat(all_embeddings, dim=0)
 
     def encode(
         self,

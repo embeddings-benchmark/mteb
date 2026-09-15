@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING, Any
 
 from tqdm.auto import tqdm
 
-from mteb._torch_utils import inference_mode
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -93,7 +92,6 @@ class GVEWrapper(AbsEncoder):
             "do_sample_frames": False,
         }
 
-    @inference_mode
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -107,75 +105,76 @@ class GVEWrapper(AbsEncoder):
     ) -> Array:
         import torch
 
-        instruction = None
-        if prompt_type != PromptType.document:
-            instruction = self.get_instruction(task_metadata, prompt_type)
+        with torch.inference_mode():
+            instruction = None
+            if prompt_type != PromptType.document:
+                instruction = self.get_instruction(task_metadata, prompt_type)
 
-        if "video" in inputs.dataset.features:
-            inputs.collate_fn = FramesCollator(
-                fps=self.fps,
-                max_frames=self.max_frames,
-                num_frames=self.num_frames,
-            )
-
-        all_embeddings = []
-        for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding"):
-            batch_size = len(next(iter(batch.values())))
-            texts = batch.get("text", [None] * batch_size)
-            images = batch.get("image", [None] * batch_size)
-            videos = batch.get("video", [None] * batch_size)
-
-            conversations = []
-            for text, image, video in zip(texts, images, videos, strict=True):
-                content = []
-                if video is not None:
-                    content.append({"type": "video"})
-                if image is not None:
-                    content.append({"type": "image"})
-                if text is not None:
-                    content.append({"type": "text", "text": text})
-                conversations.append(
-                    [
-                        {
-                            "role": "system",
-                            "content": instruction or _DEFAULT_INSTRUCTION,
-                        },
-                        {"role": "user", "content": content},
-                    ]
+            if "video" in inputs.dataset.features:
+                inputs.collate_fn = FramesCollator(
+                    fps=self.fps,
+                    max_frames=self.max_frames,
+                    num_frames=self.num_frames,
                 )
-            prompts = self.processor.apply_chat_template(
-                conversations, tokenize=False, add_generation_prompt=True
-            )
-            # GVE pools the <|endoftext|> token appended after the assistant
-            # turn (the GME-lineage training convention), not the bare
-            # generation prompt. Verified on the authors' UVRB MSRVTT split:
-            # R@1 0.31 -> 0.44 (paper: 0.431) with this token appended.
-            prompts = [p + "<|endoftext|>" for p in prompts]
 
-            image_inputs = [img.convert("RGB") for img in images if img is not None]
-            video_inputs = [vid for vid in videos if vid is not None]
-            processed = self.processor(
-                text=prompts,
-                images=image_inputs or None,
-                videos=video_inputs or None,
-                videos_kwargs=self.videos_kwargs,
-                padding=True,
-                truncation=True,
-                max_length=self.max_length,
-                return_tensors="pt",
-            )
-            processed = processed.to(self.device)
+            all_embeddings = []
+            for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding"):
+                batch_size = len(next(iter(batch.values())))
+                texts = batch.get("text", [None] * batch_size)
+                images = batch.get("image", [None] * batch_size)
+                videos = batch.get("video", [None] * batch_size)
 
-            # logits_to_keep=1 skips computing vocab logits we don't use
-            outputs = self.model(
-                **processed, output_hidden_states=True, logits_to_keep=1
-            )
-            # left padding -> last position is the last real token
-            embeddings = torch.nn.functional.normalize(
-                outputs.hidden_states[-1][:, -1, :], p=2, dim=1
-            )
-            all_embeddings.append(embeddings.float().cpu())
-        return torch.cat(all_embeddings, dim=0).numpy()
+                conversations = []
+                for text, image, video in zip(texts, images, videos, strict=True):
+                    content = []
+                    if video is not None:
+                        content.append({"type": "video"})
+                    if image is not None:
+                        content.append({"type": "image"})
+                    if text is not None:
+                        content.append({"type": "text", "text": text})
+                    conversations.append(
+                        [
+                            {
+                                "role": "system",
+                                "content": instruction or _DEFAULT_INSTRUCTION,
+                            },
+                            {"role": "user", "content": content},
+                        ]
+                    )
+                prompts = self.processor.apply_chat_template(
+                    conversations, tokenize=False, add_generation_prompt=True
+                )
+                # GVE pools the <|endoftext|> token appended after the assistant
+                # turn (the GME-lineage training convention), not the bare
+                # generation prompt. Verified on the authors' UVRB MSRVTT split:
+                # R@1 0.31 -> 0.44 (paper: 0.431) with this token appended.
+                prompts = [p + "<|endoftext|>" for p in prompts]
+
+                image_inputs = [img.convert("RGB") for img in images if img is not None]
+                video_inputs = [vid for vid in videos if vid is not None]
+                processed = self.processor(
+                    text=prompts,
+                    images=image_inputs or None,
+                    videos=video_inputs or None,
+                    videos_kwargs=self.videos_kwargs,
+                    padding=True,
+                    truncation=True,
+                    max_length=self.max_length,
+                    return_tensors="pt",
+                )
+                processed = processed.to(self.device)
+
+                # logits_to_keep=1 skips computing vocab logits we don't use
+                outputs = self.model(
+                    **processed, output_hidden_states=True, logits_to_keep=1
+                )
+                # left padding -> last position is the last real token
+                embeddings = torch.nn.functional.normalize(
+                    outputs.hidden_states[-1][:, -1, :], p=2, dim=1
+                )
+                all_embeddings.append(embeddings.float().cpu())
+            return torch.cat(all_embeddings, dim=0).numpy()
 
 
 gve_training_datasets = set(

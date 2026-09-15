@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Any
 
 from tqdm.auto import tqdm
 
-from mteb._torch_utils import inference_mode
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import FramesCollator
@@ -141,7 +140,6 @@ class VideoMAEWrapper(AbsEncoder):
             )
         logger.info("Restored q_bias/v_bias for %d VideoMAE layers", restored)
 
-    @inference_mode
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -155,29 +153,30 @@ class VideoMAEWrapper(AbsEncoder):
     ) -> Array:
         import torch
 
-        inputs.collate_fn = FramesCollator(num_frames=self.num_frames)
+        with torch.inference_mode():
+            inputs.collate_fn = FramesCollator(num_frames=self.num_frames)
 
-        embeddings = []
-        for batch in tqdm(inputs, desc="Encoding", disable=not show_progress_bar):
-            videos = batch["video"]
-            padded = [
-                torch.cat(
-                    [v, v[-1:].expand(self.num_frames - v.shape[0], *v.shape[1:])],
-                    dim=0,
-                )
-                if v.shape[0] < self.num_frames
-                else v[: self.num_frames]
-                for v in videos
-            ]
-            # Explicit list-of-videos-of-frames in HWC. A list of 4D tensors trips
-            # `make_batched` on the v4 slow processor, which treats the whole batch
-            # as a single video and then fails inside PIL.
-            processed = self.processor(padded, return_tensors="pt").to(self.device)
+            embeddings = []
+            for batch in tqdm(inputs, desc="Encoding", disable=not show_progress_bar):
+                videos = batch["video"]
+                padded = [
+                    torch.cat(
+                        [v, v[-1:].expand(self.num_frames - v.shape[0], *v.shape[1:])],
+                        dim=0,
+                    )
+                    if v.shape[0] < self.num_frames
+                    else v[: self.num_frames]
+                    for v in videos
+                ]
+                # Explicit list-of-videos-of-frames in HWC. A list of 4D tensors trips
+                # `make_batched` on the v4 slow processor, which treats the whole batch
+                # as a single video and then fails inside PIL.
+                processed = self.processor(padded, return_tensors="pt").to(self.device)
 
-            outputs = self.model(**processed)
-            pooled = outputs.last_hidden_state.mean(dim=1)
-            embeddings.append(pooled.cpu())
-        return torch.cat(embeddings, dim=0).numpy()
+                outputs = self.model(**processed)
+                pooled = outputs.last_hidden_state.mean(dim=1)
+                embeddings.append(pooled.cpu())
+            return torch.cat(embeddings, dim=0).numpy()
 
 
 _VIDEOMAE_CITATION = """

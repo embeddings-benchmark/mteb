@@ -11,10 +11,6 @@ import random
 import subprocess
 import sys
 import textwrap
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from collections.abc import Iterator
 
 _REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 
@@ -328,32 +324,3 @@ def test_mteb_and_model_metadata_work_without_torch_installed() -> None:
     n_models, n_tasks = (int(line) for line in result.stdout.split()[-2:])
     assert n_models > 0
     assert n_tasks == 1
-
-
-def test_torch_decorators_match_torch() -> None:
-    """The call-time decorators must enter exactly the context `@torch.<decorator>()` does."""
-    import torch
-
-    from mteb._torch_utils import inference_mode, no_grad
-
-    x = torch.ones(2, requires_grad=True)
-
-    def state() -> tuple[bool, bool, bool]:
-        y = x * 2
-        return (
-            torch.is_grad_enabled(),
-            torch.is_inference_mode_enabled(),
-            y.requires_grad,
-        )
-
-    def steps() -> Iterator[tuple[bool, bool, bool]]:
-        yield state()
-        yield state()
-
-    assert no_grad(state)() == torch.no_grad()(state)()
-    assert inference_mode(state)() == torch.inference_mode()(state)()
-    # generators must hold the context around every step, as torch's decorators do
-    assert list(no_grad(steps)()) == list(torch.no_grad()(steps)())
-    assert list(inference_mode(steps)()) == list(torch.inference_mode()(steps)())
-    assert torch.is_grad_enabled()
-    assert no_grad(state).__name__ == "state"

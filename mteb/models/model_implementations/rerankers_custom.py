@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-from mteb._torch_utils import inference_mode
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
 
@@ -69,7 +68,6 @@ class BGEReranker(RerankerWrapper):
 
         self.model = FlagReranker(model_name_or_path, use_fp16=True)
 
-    @inference_mode
     def predict(
         self,
         inputs1: DataLoader[BatchedInput],
@@ -81,28 +79,36 @@ class BGEReranker(RerankerWrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        queries = [text for batch in inputs1 for text in batch["query"]]
-        instructions = None
-        if "instruction" in inputs2.dataset.features:
-            instructions = [text for batch in inputs1 for text in batch["instruction"]]
-        passages = [text for batch in inputs2 for text in batch["text"]]
+        import torch
 
-        if instructions is not None and instructions[0] is not None:
-            if len(instructions) != len(queries):
+        with torch.inference_mode():
+            queries = [text for batch in inputs1 for text in batch["query"]]
+            instructions = None
+            if "instruction" in inputs2.dataset.features:
+                instructions = [
+                    text for batch in inputs1 for text in batch["instruction"]
+                ]
+            passages = [text for batch in inputs2 for text in batch["text"]]
+
+            if instructions is not None and instructions[0] is not None:
+                if len(instructions) != len(queries):
+                    raise ValueError(
+                        f"Expected {len(queries)} instructions, got {len(instructions)}"
+                    )
+                queries = [
+                    f"{q} {i}".strip()
+                    for i, q in zip(instructions, queries, strict=True)
+                ]
+
+            if len(queries) != len(passages):
                 raise ValueError(
-                    f"Expected {len(queries)} instructions, got {len(instructions)}"
+                    f"Expected {len(queries)} passages, got {len(passages)}"
                 )
-            queries = [
-                f"{q} {i}".strip() for i, q in zip(instructions, queries, strict=True)
-            ]
-
-        if len(queries) != len(passages):
-            raise ValueError(f"Expected {len(queries)} passages, got {len(passages)}")
-        query_passage_tuples = list(zip(queries, passages, strict=True))
-        scores = self.model.compute_score(query_passage_tuples, normalize=True)
-        if len(scores) != len(queries):
-            raise ValueError(f"Expected {len(queries)} scores, got {len(scores)}")
-        return scores
+            query_passage_tuples = list(zip(queries, passages, strict=True))
+            scores = self.model.compute_score(query_passage_tuples, normalize=True)
+            if len(scores) != len(queries):
+                raise ValueError(f"Expected {len(queries)} scores, got {len(scores)}")
+            return scores
 
 
 class JinaReranker(RerankerWrapper):
@@ -130,7 +136,6 @@ class JinaReranker(RerankerWrapper):
             trust_remote_code=True,
         )
 
-    @inference_mode
     def predict(
         self,
         inputs1: DataLoader[BatchedInput],
@@ -142,24 +147,30 @@ class JinaReranker(RerankerWrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        queries = [text for batch in inputs1 for text in batch["query"]]
-        instructions = None
-        if "instruction" in inputs2.dataset.features:
-            instructions = [text for batch in inputs1 for text in batch["instruction"]]
-        passages = [text for batch in inputs2 for text in batch["text"]]
+        import torch
 
-        if instructions is not None and instructions[0] is not None:
-            queries = [
-                f"{q} {i}".strip() for i, q in zip(instructions, queries, strict=True)
-            ]
+        with torch.inference_mode():
+            queries = [text for batch in inputs1 for text in batch["query"]]
+            instructions = None
+            if "instruction" in inputs2.dataset.features:
+                instructions = [
+                    text for batch in inputs1 for text in batch["instruction"]
+                ]
+            passages = [text for batch in inputs2 for text in batch["text"]]
 
-        if self.first_print:
-            logger.info(f"Using {queries[0]}")
-            self.first_print = False
+            if instructions is not None and instructions[0] is not None:
+                queries = [
+                    f"{q} {i}".strip()
+                    for i, q in zip(instructions, queries, strict=True)
+                ]
 
-        sentence_pairs = list(zip(queries, passages, strict=True))
-        scores = self.model.predict(sentence_pairs, convert_to_tensor=True)
-        return scores
+            if self.first_print:
+                logger.info(f"Using {queries[0]}")
+                self.first_print = False
+
+            sentence_pairs = list(zip(queries, passages, strict=True))
+            scores = self.model.predict(sentence_pairs, convert_to_tensor=True)
+            return scores
 
 
 # languages unclear: https://huggingface.co/jinaai/jina-reranker-v2-base-multilingual/discussions/28

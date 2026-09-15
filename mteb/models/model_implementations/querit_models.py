@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Any
 
 from tqdm.auto import tqdm
 
-from mteb._torch_utils import inference_mode
 from mteb.models.model_meta import ModelMeta
 
 from .rerankers_custom import RerankerWrapper
@@ -109,7 +108,6 @@ class QueritWrapper(RerankerWrapper):
 
         return {"input_ids": input_ids, "attention_mask": attention_mask}
 
-    @inference_mode
     def predict(
         self,
         inputs1: DataLoader[BatchedInput],
@@ -126,47 +124,52 @@ class QueritWrapper(RerankerWrapper):
         Supports both single-process and multi-process/multi-GPU modes.
         """
         # Flatten all pairs from mteb.mteb DataLoaders
-        queries = [text for batch in inputs1 for text in batch["text"]]
-        passages = [text for batch in inputs2 for text in batch["text"]]
+        import torch
 
-        instructions = None
-        if "instruction" in inputs2.dataset.features:
-            instructions = [text for batch in inputs1 for text in batch["instruction"]]
+        with torch.inference_mode():
+            queries = [text for batch in inputs1 for text in batch["text"]]
+            passages = [text for batch in inputs2 for text in batch["text"]]
 
-        num_pairs = len(queries)
-        if num_pairs == 0:
-            return []
-        final_scores: list[float] = []
-
-        batch_size = kwargs.get("batch_size", self.batch_size)
-        with tqdm(total=num_pairs, desc="Scoring", ncols=100) as pbar:
-            for start in range(0, num_pairs, batch_size):
-                end = min(start + batch_size, num_pairs)
-                batch_q = queries[start:end]
-                batch_d = passages[start:end]
-
-                batch_instructions = (
-                    instructions[start:end]
-                    if instructions is not None
-                    else [None] * len(batch_q)
-                )
-                pairs = [
-                    self.format_instruction(instr, query, doc)
-                    for instr, query, doc in zip(
-                        batch_instructions, batch_q, batch_d, strict=True
-                    )
+            instructions = None
+            if "instruction" in inputs2.dataset.features:
+                instructions = [
+                    text for batch in inputs1 for text in batch["instruction"]
                 ]
-                enc = self.process_inputs(pairs)
-                out = self.model(**enc)
-                scores = out["score"].squeeze(-1).detach().float().cpu().tolist()
 
-                if not isinstance(scores, list):
-                    scores = [scores]
+            num_pairs = len(queries)
+            if num_pairs == 0:
+                return []
+            final_scores: list[float] = []
 
-                final_scores.extend(scores)
-                pbar.update(len(scores))
+            batch_size = kwargs.get("batch_size", self.batch_size)
+            with tqdm(total=num_pairs, desc="Scoring", ncols=100) as pbar:
+                for start in range(0, num_pairs, batch_size):
+                    end = min(start + batch_size, num_pairs)
+                    batch_q = queries[start:end]
+                    batch_d = passages[start:end]
 
-        return final_scores
+                    batch_instructions = (
+                        instructions[start:end]
+                        if instructions is not None
+                        else [None] * len(batch_q)
+                    )
+                    pairs = [
+                        self.format_instruction(instr, query, doc)
+                        for instr, query, doc in zip(
+                            batch_instructions, batch_q, batch_d, strict=True
+                        )
+                    ]
+                    enc = self.process_inputs(pairs)
+                    out = self.model(**enc)
+                    scores = out["score"].squeeze(-1).detach().float().cpu().tolist()
+
+                    if not isinstance(scores, list):
+                        scores = [scores]
+
+                    final_scores.extend(scores)
+                    pbar.update(len(scores))
+
+            return final_scores
 
     @staticmethod
     def format_instruction(instruction: str | None, query: str, doc: str) -> str:

@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING, Any
 from tqdm.auto import tqdm
 
 from mteb._requires_package import suggest_package
-from mteb._torch_utils import inference_mode
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -182,25 +181,27 @@ class MoCaWrapper(AbsEncoder):
         counts = mask.sum(dim=1).clamp(min=1e-9)
         return summed / counts
 
-    @inference_mode
     def _embed(self, texts: list[str], images: list[Any] | None = None) -> torch.Tensor:
         """Encode one batch of (optionally interleaved) inputs into unit-norm vectors."""
         import torch
 
-        processed = self.processor(
-            text=texts,
-            images=images or None,
-            padding=True,
-            # truncating a sequence that contains image placeholders would
-            # desynchronise the image tokens from the vision features
-            truncation=images is None,
-            max_length=None if images else self.max_length,
-            return_tensors="pt",
-        )
-        processed = {k: v.to(self.device) for k, v in processed.items()}
-        outputs = self.model(**processed, use_cache=False, return_dict=True)
-        reps = self._mean_pool(outputs.last_hidden_state, processed["attention_mask"])
-        return torch.nn.functional.normalize(reps, p=2, dim=-1)
+        with torch.inference_mode():
+            processed = self.processor(
+                text=texts,
+                images=images or None,
+                padding=True,
+                # truncating a sequence that contains image placeholders would
+                # desynchronise the image tokens from the vision features
+                truncation=images is None,
+                max_length=None if images else self.max_length,
+                return_tensors="pt",
+            )
+            processed = {k: v.to(self.device) for k, v in processed.items()}
+            outputs = self.model(**processed, use_cache=False, return_dict=True)
+            reps = self._mean_pool(
+                outputs.last_hidden_state, processed["attention_mask"]
+            )
+            return torch.nn.functional.normalize(reps, p=2, dim=-1)
 
     def encode(
         self,

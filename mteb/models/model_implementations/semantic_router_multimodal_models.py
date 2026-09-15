@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING, Any
 
 from tqdm.auto import tqdm
 
-from mteb._torch_utils import inference_mode
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -363,7 +362,6 @@ class SemanticRouterMultiModalEmbedWrapper(AbsEncoder):
             max_samples=self.max_audio_samples,
         )
 
-    @inference_mode
     def get_text_embeddings(
         self,
         inputs: DataLoader[TextInput],
@@ -372,12 +370,14 @@ class SemanticRouterMultiModalEmbedWrapper(AbsEncoder):
     ) -> Array:
         import torch
 
-        embeddings: list[torch.Tensor] = []
-        for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding text"):
-            embeddings.append(self._encode_text_batch(batch["text"]))
-        return torch.cat(embeddings, dim=0).float().cpu()
+        with torch.inference_mode():
+            embeddings: list[torch.Tensor] = []
+            for batch in tqdm(
+                inputs, disable=not show_progress_bar, desc="Encoding text"
+            ):
+                embeddings.append(self._encode_text_batch(batch["text"]))
+            return torch.cat(embeddings, dim=0).float().cpu()
 
-    @inference_mode
     def get_image_embeddings(
         self,
         inputs: DataLoader[BatchedInput],
@@ -386,13 +386,15 @@ class SemanticRouterMultiModalEmbedWrapper(AbsEncoder):
     ) -> Array:
         import torch
 
-        embeddings: list[torch.Tensor] = []
-        for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding image"):
-            images = [img.convert("RGB") for img in batch["image"]]
-            embeddings.append(self._encode_image_batch(images))
-        return torch.cat(embeddings, dim=0).float().cpu()
+        with torch.inference_mode():
+            embeddings: list[torch.Tensor] = []
+            for batch in tqdm(
+                inputs, disable=not show_progress_bar, desc="Encoding image"
+            ):
+                images = [img.convert("RGB") for img in batch["image"]]
+                embeddings.append(self._encode_image_batch(images))
+            return torch.cat(embeddings, dim=0).float().cpu()
 
-    @inference_mode
     def get_audio_embeddings(
         self,
         inputs: DataLoader[AudioInput],
@@ -401,14 +403,16 @@ class SemanticRouterMultiModalEmbedWrapper(AbsEncoder):
     ) -> Array:
         import torch
 
-        self._maybe_set_audio_collator(inputs)
-        embeddings: list[torch.Tensor] = []
-        for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding audio"):
-            audio_arrays = [audio["array"] for audio in batch["audio"]]
-            embeddings.append(self._encode_audio_batch(audio_arrays))
-        return torch.cat(embeddings, dim=0).float().cpu()
+        with torch.inference_mode():
+            self._maybe_set_audio_collator(inputs)
+            embeddings: list[torch.Tensor] = []
+            for batch in tqdm(
+                inputs, disable=not show_progress_bar, desc="Encoding audio"
+            ):
+                audio_arrays = [audio["array"] for audio in batch["audio"]]
+                embeddings.append(self._encode_audio_batch(audio_arrays))
+            return torch.cat(embeddings, dim=0).float().cpu()
 
-    @inference_mode
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -422,40 +426,41 @@ class SemanticRouterMultiModalEmbedWrapper(AbsEncoder):
         import torch
         import torch.nn.functional as F
 
-        features = inputs.dataset.features
-        has_text = "text" in features
-        has_image = "image" in features
-        has_audio = "audio" in features
-        if not (has_text or has_image or has_audio):
-            raise ValueError(
-                f"{self.model_name} supports text, image, and/or audio inputs"
-            )
-
-        if has_audio:
-            self._maybe_set_audio_collator(inputs)
-
-        show_progress_bar = kwargs.get("show_progress_bar", True)
-        all_embeddings: list[torch.Tensor] = []
-        for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding"):
-            parts: list[torch.Tensor] = []
-            if has_text and batch.get("text"):
-                parts.append(self._encode_text_batch(batch["text"]))
-            if has_image and batch.get("image"):
-                images = [img.convert("RGB") for img in batch["image"]]
-                parts.append(self._encode_image_batch(images))
-            if has_audio and batch.get("audio"):
-                audio_arrays = [audio["array"] for audio in batch["audio"]]
-                parts.append(self._encode_audio_batch(audio_arrays))
-            if not parts:
+        with torch.inference_mode():
+            features = inputs.dataset.features
+            has_text = "text" in features
+            has_image = "image" in features
+            has_audio = "audio" in features
+            if not (has_text or has_image or has_audio):
                 raise ValueError(
-                    f"No supported modality found in batch: {batch.keys()}"
+                    f"{self.model_name} supports text, image, and/or audio inputs"
                 )
-            fused = parts[0]
-            for part in parts[1:]:
-                fused += part
-            fused = F.normalize(fused, p=2, dim=-1)
-            all_embeddings.append(fused)
-        return torch.cat(all_embeddings, dim=0).float().cpu()
+
+            if has_audio:
+                self._maybe_set_audio_collator(inputs)
+
+            show_progress_bar = kwargs.get("show_progress_bar", True)
+            all_embeddings: list[torch.Tensor] = []
+            for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding"):
+                parts: list[torch.Tensor] = []
+                if has_text and batch.get("text"):
+                    parts.append(self._encode_text_batch(batch["text"]))
+                if has_image and batch.get("image"):
+                    images = [img.convert("RGB") for img in batch["image"]]
+                    parts.append(self._encode_image_batch(images))
+                if has_audio and batch.get("audio"):
+                    audio_arrays = [audio["array"] for audio in batch["audio"]]
+                    parts.append(self._encode_audio_batch(audio_arrays))
+                if not parts:
+                    raise ValueError(
+                        f"No supported modality found in batch: {batch.keys()}"
+                    )
+                fused = parts[0]
+                for part in parts[1:]:
+                    fused += part
+                fused = F.normalize(fused, p=2, dim=-1)
+                all_embeddings.append(fused)
+            return torch.cat(all_embeddings, dim=0).float().cpu()
 
 
 class SemanticRouterMultiModalEmbedSmallWrapper(SemanticRouterMultiModalEmbedWrapper):

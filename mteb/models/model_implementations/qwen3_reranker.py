@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 from tqdm.auto import tqdm
 
-from mteb._torch_utils import inference_mode, no_grad
 from mteb.models.model_meta import ModelMeta
 from mteb.types import OutputDType
 
@@ -95,19 +94,18 @@ class Qwen3RerankerWrapper:
             inputs[key] = inputs[key].to(self.device)
         return inputs
 
-    @no_grad
     def compute_logits(self, inputs: dict) -> list[float]:
         import torch
 
-        batch_scores = self.model(**inputs).logits[:, -1, :]
-        true_vector = batch_scores[:, self.token_true_id]
-        false_vector = batch_scores[:, self.token_false_id]
-        batch_scores = torch.stack([false_vector, true_vector], dim=1)
-        # upcast the logits to float32 before the softmax
-        batch_scores = torch.nn.functional.log_softmax(batch_scores.float(), dim=1)
-        return batch_scores[:, 1].exp().tolist()
+        with torch.no_grad():
+            batch_scores = self.model(**inputs).logits[:, -1, :]
+            true_vector = batch_scores[:, self.token_true_id]
+            false_vector = batch_scores[:, self.token_false_id]
+            batch_scores = torch.stack([false_vector, true_vector], dim=1)
+            # upcast the logits to float32 before the softmax
+            batch_scores = torch.nn.functional.log_softmax(batch_scores.float(), dim=1)
+            return batch_scores[:, 1].exp().tolist()
 
-    @inference_mode
     def predict(
         self,
         inputs1: DataLoader[BatchedInput],
@@ -120,38 +118,43 @@ class Qwen3RerankerWrapper:
         batch_size: int = 32,
         show_progress_bar: bool = True,
     ) -> Array:
-        queries = [text for batch in inputs1 for text in batch["text"]]
-        instructions = None
-        if "instruction" in inputs1.dataset.features:
-            instructions = [text for batch in inputs1 for text in batch["instruction"]]
-        passages = [text for batch in inputs2 for text in batch["text"]]
+        import torch
 
-        all_scores = []
-        for i in tqdm(
-            range(0, len(queries), batch_size),
-            disable=not show_progress_bar,
-            desc="Computing relevance scores",
-        ):
-            batch_queries = queries[i : i + batch_size]
-            batch_passages = passages[i : i + batch_size]
-            batch_instructions = (
-                instructions[i : i + batch_size]
-                if instructions is not None
-                else [None] * len(batch_queries)
-            )
+        with torch.inference_mode():
+            queries = [text for batch in inputs1 for text in batch["text"]]
+            instructions = None
+            if "instruction" in inputs1.dataset.features:
+                instructions = [
+                    text for batch in inputs1 for text in batch["instruction"]
+                ]
+            passages = [text for batch in inputs2 for text in batch["text"]]
 
-            pairs = [
-                self.format_instruction(instr, query, doc)
-                for instr, query, doc in zip(
-                    batch_instructions, batch_queries, batch_passages, strict=True
+            all_scores = []
+            for i in tqdm(
+                range(0, len(queries), batch_size),
+                disable=not show_progress_bar,
+                desc="Computing relevance scores",
+            ):
+                batch_queries = queries[i : i + batch_size]
+                batch_passages = passages[i : i + batch_size]
+                batch_instructions = (
+                    instructions[i : i + batch_size]
+                    if instructions is not None
+                    else [None] * len(batch_queries)
                 )
-            ]
 
-            inputs = self.process_inputs(pairs)
-            scores = self.compute_logits(inputs)
-            all_scores.extend(scores)
+                pairs = [
+                    self.format_instruction(instr, query, doc)
+                    for instr, query, doc in zip(
+                        batch_instructions, batch_queries, batch_passages, strict=True
+                    )
+                ]
 
-        return np.array(all_scores)
+                inputs = self.process_inputs(pairs)
+                scores = self.compute_logits(inputs)
+                all_scores.extend(scores)
+
+            return np.array(all_scores)
 
 
 qwen3_reranker_training_data = {

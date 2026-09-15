@@ -8,7 +8,6 @@ from tqdm.auto import tqdm
 from mteb._requires_package import (
     suggest_package,
 )
-from mteb._torch_utils import get_device, inference_mode
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -43,7 +42,8 @@ class VLM2VecWrapper(AbsEncoder):
     ):
         import torch
 
-        device = get_device(device)
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
 
         if suggest_package(
             self,
@@ -463,7 +463,6 @@ class VLM2VEC2Wrapper(AbsEncoder):
             ]
         return torch.nn.functional.normalize(reps, p=2, dim=-1)
 
-    @inference_mode
     def encode(  # noqa: PLR0914
         self,
         inputs: DataLoader[BatchedInput],
@@ -476,70 +475,71 @@ class VLM2VEC2Wrapper(AbsEncoder):
     ) -> Array:
         import torch
 
-        features = inputs.dataset.features
-        has_text = "text" in features
-        has_image = "image" in features
-        has_video = "video" in features
+        with torch.inference_mode():
+            features = inputs.dataset.features
+            has_text = "text" in features
+            has_image = "image" in features
+            has_video = "video" in features
 
-        if has_video:
-            inputs.collate_fn = FramesCollator(
-                num_frames=self.num_frames,
-                fps=self.fps,
-                max_frames=self.max_frames,
-            )
-
-        show_progress_bar = kwargs.get("show_progress_bar", True)
-
-        task_prompts = _VLM2VEC2_TASK_PROMPTS.get(task_metadata.name, {})
-        prompt_key = "query" if prompt_type == PromptType.query else "document"
-        instruction = task_prompts.get(prompt_key, "")
-
-        prefix_tokens: list[str] = []
-        if has_image:
-            prefix_tokens.append(_VLM2VEC2_IMAGE_TOKEN)
-        if has_video:
-            prefix_tokens.append(_VLM2VEC2_VIDEO_TOKEN)
-        prefix = " ".join(prefix_tokens)
-
-        all_embeddings: list[torch.Tensor] = []
-
-        for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding"):
-            batch_size = len(next(iter(batch.values())))
-
-            prompts: list[str] = []
-            batch_images: list | None = [] if has_image else None
-            batch_videos: list | None = [] if has_video else None
-
-            for i in range(batch_size):
-                text = batch["text"][i] if has_text else None
-                prompt = (
-                    f"{prefix} {instruction} {text}".strip()
-                    if text
-                    else f"{prefix} {instruction}".strip()
+            if has_video:
+                inputs.collate_fn = FramesCollator(
+                    num_frames=self.num_frames,
+                    fps=self.fps,
+                    max_frames=self.max_frames,
                 )
-                prompts.append(prompt)
-                if has_image:
-                    batch_images.append(batch["image"][i])
-                if has_video:
-                    batch_videos.append(batch["video"][i])
 
-            proc_inputs = self.processor(
-                text=prompts,
-                images=batch_images,
-                videos=batch_videos,
-                padding=True,
-                return_tensors="pt",
-            )
-            proc_inputs = {k: v.to(self.device) for k, v in proc_inputs.items()}
+            show_progress_bar = kwargs.get("show_progress_bar", True)
 
-            output = self.model(
-                **proc_inputs, return_dict=True, output_hidden_states=True
-            )
-            hidden_states = output.hidden_states[-1]
-            embs = self._pooling(hidden_states, proc_inputs["attention_mask"])
-            all_embeddings.append(embs.cpu().to(torch.float32))
+            task_prompts = _VLM2VEC2_TASK_PROMPTS.get(task_metadata.name, {})
+            prompt_key = "query" if prompt_type == PromptType.query else "document"
+            instruction = task_prompts.get(prompt_key, "")
 
-        return torch.cat(all_embeddings, dim=0)
+            prefix_tokens: list[str] = []
+            if has_image:
+                prefix_tokens.append(_VLM2VEC2_IMAGE_TOKEN)
+            if has_video:
+                prefix_tokens.append(_VLM2VEC2_VIDEO_TOKEN)
+            prefix = " ".join(prefix_tokens)
+
+            all_embeddings: list[torch.Tensor] = []
+
+            for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding"):
+                batch_size = len(next(iter(batch.values())))
+
+                prompts: list[str] = []
+                batch_images: list | None = [] if has_image else None
+                batch_videos: list | None = [] if has_video else None
+
+                for i in range(batch_size):
+                    text = batch["text"][i] if has_text else None
+                    prompt = (
+                        f"{prefix} {instruction} {text}".strip()
+                        if text
+                        else f"{prefix} {instruction}".strip()
+                    )
+                    prompts.append(prompt)
+                    if has_image:
+                        batch_images.append(batch["image"][i])
+                    if has_video:
+                        batch_videos.append(batch["video"][i])
+
+                proc_inputs = self.processor(
+                    text=prompts,
+                    images=batch_images,
+                    videos=batch_videos,
+                    padding=True,
+                    return_tensors="pt",
+                )
+                proc_inputs = {k: v.to(self.device) for k, v in proc_inputs.items()}
+
+                output = self.model(
+                    **proc_inputs, return_dict=True, output_hidden_states=True
+                )
+                hidden_states = output.hidden_states[-1]
+                embs = self._pooling(hidden_states, proc_inputs["attention_mask"])
+                all_embeddings.append(embs.cpu().to(torch.float32))
+
+            return torch.cat(all_embeddings, dim=0)
 
 
 vlm2vec_training_datasets = set(

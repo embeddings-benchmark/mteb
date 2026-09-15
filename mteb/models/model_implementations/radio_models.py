@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING, Any
 
 from tqdm.auto import tqdm
 
-from mteb._torch_utils import get_device
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -54,7 +53,10 @@ class RADIOModel(AbsEncoder):
         image_resolution: int | tuple[int, int] | None = None,
         **kwargs: Any,
     ) -> None:
-        device = get_device(device)
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
 
         from transformers import AutoModel
 

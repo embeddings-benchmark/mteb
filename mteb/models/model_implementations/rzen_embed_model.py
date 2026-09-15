@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 from tqdm.auto import tqdm
 
-from mteb._torch_utils import no_grad
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -257,7 +256,6 @@ class RzenEmbedWrapper(AbsEncoder):
         batch_images_out = batch_images if batch_images else None
         return input_texts, batch_images_out
 
-    @no_grad
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -271,87 +269,95 @@ class RzenEmbedWrapper(AbsEncoder):
         """Main entry point orchestrating text, image, video and joint multi-modality encoding."""
         import torch
 
-        has_video = "video" in inputs.dataset.features
+        with torch.no_grad():
+            has_video = "video" in inputs.dataset.features
 
-        from torch.utils.data import default_collate
+            from torch.utils.data import default_collate
 
-        if has_video and (
-            inputs.collate_fn is None or inputs.collate_fn is default_collate
-        ):
-            inputs.collate_fn = VideoCollator(
-                target_sampling_rate=16000,
-                fps=self.fps,
-                max_frames=self.max_frames,
-                num_frames=self.num_frames,
-            )
-
-        instruction = self.get_task_instruction(task_metadata, prompt_type)
-
-        all_embeddings = []
-
-        for batch in tqdm(inputs, desc="RzenEmbed Processing"):
-            input_texts, batch_images = self._process_batch_elements(batch, instruction)
-
-            inputs_tokenized = (self.video_processor if has_video else self.processor)(
-                text=input_texts,
-                images=batch_images,
-                padding=True,
-                truncation=True,
-                max_length=self.max_length,
-                return_tensors="pt",
-            )
-
-            inputs_tokenized = {
-                k: v.to(self.device) for k, v in inputs_tokenized.items()
-            }
-
-            inputs_embeds = self.model.get_input_embeddings()(
-                inputs_tokenized["input_ids"]
-            )
-            pixel_values = inputs_tokenized.get("pixel_values")
-
-            if pixel_values is not None:
-                pixel_values = pixel_values.type(self.model.model.visual.get_dtype())
-                image_embeds = self.model.model.visual(
-                    pixel_values, grid_thw=inputs_tokenized["image_grid_thw"]
+            if has_video and (
+                inputs.collate_fn is None or inputs.collate_fn is default_collate
+            ):
+                inputs.collate_fn = VideoCollator(
+                    target_sampling_rate=16000,
+                    fps=self.fps,
+                    max_frames=self.max_frames,
+                    num_frames=self.num_frames,
                 )
 
-                if not isinstance(image_embeds, torch.Tensor):
-                    image_embeds = (
-                        image_embeds.pooler_output
-                        if hasattr(image_embeds, "pooler_output")
-                        else image_embeds[-1]
+            instruction = self.get_task_instruction(task_metadata, prompt_type)
+
+            all_embeddings = []
+
+            for batch in tqdm(inputs, desc="RzenEmbed Processing"):
+                input_texts, batch_images = self._process_batch_elements(
+                    batch, instruction
+                )
+
+                inputs_tokenized = (
+                    self.video_processor if has_video else self.processor
+                )(
+                    text=input_texts,
+                    images=batch_images,
+                    padding=True,
+                    truncation=True,
+                    max_length=self.max_length,
+                    return_tensors="pt",
+                )
+
+                inputs_tokenized = {
+                    k: v.to(self.device) for k, v in inputs_tokenized.items()
+                }
+
+                inputs_embeds = self.model.get_input_embeddings()(
+                    inputs_tokenized["input_ids"]
+                )
+                pixel_values = inputs_tokenized.get("pixel_values")
+
+                if pixel_values is not None:
+                    pixel_values = pixel_values.type(
+                        self.model.model.visual.get_dtype()
                     )
-                image_embeds = image_embeds.to(inputs_embeds.device)
+                    image_embeds = self.model.model.visual(
+                        pixel_values, grid_thw=inputs_tokenized["image_grid_thw"]
+                    )
 
-                image_mask = (
-                    inputs_tokenized["input_ids"] == self.model.config.image_token_id
+                    if not isinstance(image_embeds, torch.Tensor):
+                        image_embeds = (
+                            image_embeds.pooler_output
+                            if hasattr(image_embeds, "pooler_output")
+                            else image_embeds[-1]
+                        )
+                    image_embeds = image_embeds.to(inputs_embeds.device)
+
+                    image_mask = (
+                        inputs_tokenized["input_ids"]
+                        == self.model.config.image_token_id
+                    )
+                    inputs_embeds[image_mask] = image_embeds
+
+                outputs = self.model.model(
+                    input_ids=None,
+                    position_ids=inputs_tokenized.get("position_ids"),
+                    attention_mask=inputs_tokenized.get("attention_mask"),
+                    inputs_embeds=inputs_embeds,
                 )
-                inputs_embeds[image_mask] = image_embeds
 
-            outputs = self.model.model(
-                input_ids=None,
-                position_ids=inputs_tokenized.get("position_ids"),
-                attention_mask=inputs_tokenized.get("attention_mask"),
-                inputs_embeds=inputs_embeds,
-            )
+                attention_mask = inputs_tokenized["attention_mask"]
+                if attention_mask[:, -1].sum() == attention_mask.shape[0]:
+                    embeddings = outputs.last_hidden_state[:, -1]
+                else:
+                    embeddings = outputs.last_hidden_state[
+                        torch.arange(
+                            len(input_texts), device=outputs.last_hidden_state.device
+                        ),
+                        attention_mask.sum(dim=1) - 1,
+                    ]
 
-            attention_mask = inputs_tokenized["attention_mask"]
-            if attention_mask[:, -1].sum() == attention_mask.shape[0]:
-                embeddings = outputs.last_hidden_state[:, -1]
-            else:
-                embeddings = outputs.last_hidden_state[
-                    torch.arange(
-                        len(input_texts), device=outputs.last_hidden_state.device
-                    ),
-                    attention_mask.sum(dim=1) - 1,
-                ]
+                embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=1)
 
-            embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=1)
+                all_embeddings.append(embeddings.cpu().to(torch.float32))
 
-            all_embeddings.append(embeddings.cpu().to(torch.float32))
-
-        return np.concatenate([emb.numpy() for emb in all_embeddings], axis=0)
+            return np.concatenate([emb.numpy() for emb in all_embeddings], axis=0)
 
 
 RZEN_TRAINING_DATA = {

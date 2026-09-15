@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING, Any
 
 from tqdm.auto import tqdm
 
-from mteb._torch_utils import get_device, no_grad
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -35,7 +34,8 @@ class CosmosEmbed1Model(AbsEncoder):
 
         self.model_name = model_name
         self.num_frames = num_frames
-        device = get_device(device)
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
         # mteb's CLI passes an int device index, torch.device normalises it
         self.device = torch.device(device)
         dtype = torch.bfloat16 if self.device.type == "cuda" else torch.float32
@@ -72,7 +72,6 @@ class CosmosEmbed1Model(AbsEncoder):
                 moved[key] = value
         return moved
 
-    @no_grad
     def get_text_embeddings(
         self,
         texts: DataLoader[BatchedInput],
@@ -81,15 +80,19 @@ class CosmosEmbed1Model(AbsEncoder):
     ) -> torch.Tensor:
         import torch
 
-        all_embeddings = []
-        for batch in tqdm(texts, disable=not show_progress_bar, desc="Text Encoding"):
-            inputs = self._move(self.processor(text=batch["text"], return_tensors="pt"))
-            output = self.model.get_text_embeddings(**inputs)
-            embeddings = output.text_proj
-            all_embeddings.append(embeddings.float().cpu())
-        return torch.cat(all_embeddings, dim=0)
+        with torch.no_grad():
+            all_embeddings = []
+            for batch in tqdm(
+                texts, disable=not show_progress_bar, desc="Text Encoding"
+            ):
+                inputs = self._move(
+                    self.processor(text=batch["text"], return_tensors="pt")
+                )
+                output = self.model.get_text_embeddings(**inputs)
+                embeddings = output.text_proj
+                all_embeddings.append(embeddings.float().cpu())
+            return torch.cat(all_embeddings, dim=0)
 
-    @no_grad
     def get_video_embeddings(
         self,
         videos: DataLoader[BatchedInput],
@@ -98,31 +101,38 @@ class CosmosEmbed1Model(AbsEncoder):
     ) -> torch.Tensor:
         import torch
 
-        all_embeddings = []
-        for batch in tqdm(videos, disable=not show_progress_bar, desc="Video Encoding"):
-            # Source clips vary in resolution, so they cannot be stacked
-            # before preprocessing. The processor resizes each clip to the
-            # model's input size, after which they concatenate cleanly.
-            processed: list[dict[str, torch.Tensor]] = []
-            for video in batch["video"]:
-                clip = (
-                    video.to(torch.uint8)
-                    if isinstance(video, torch.Tensor)
-                    else torch.as_tensor(video, dtype=torch.uint8)
+        with torch.no_grad():
+            all_embeddings = []
+            for batch in tqdm(
+                videos, disable=not show_progress_bar, desc="Video Encoding"
+            ):
+                # Source clips vary in resolution, so they cannot be stacked
+                # before preprocessing. The processor resizes each clip to the
+                # model's input size, after which they concatenate cleanly.
+                processed: list[dict[str, torch.Tensor]] = []
+                for video in batch["video"]:
+                    clip = (
+                        video.to(torch.uint8)
+                        if isinstance(video, torch.Tensor)
+                        else torch.as_tensor(video, dtype=torch.uint8)
+                    )
+                    processed.append(
+                        dict(
+                            self.processor(
+                                videos=clip.unsqueeze(0), return_tensors="pt"
+                            )
+                        )
+                    )
+                inputs = self._move(
+                    {
+                        key: torch.cat([item[key] for item in processed], dim=0)
+                        for key in processed[0]
+                    }
                 )
-                processed.append(
-                    dict(self.processor(videos=clip.unsqueeze(0), return_tensors="pt"))
-                )
-            inputs = self._move(
-                {
-                    key: torch.cat([item[key] for item in processed], dim=0)
-                    for key in processed[0]
-                }
-            )
-            output = self.model.get_video_embeddings(**inputs)
-            embeddings = output.visual_proj
-            all_embeddings.append(embeddings.float().cpu())
-        return torch.cat(all_embeddings, dim=0)
+                output = self.model.get_video_embeddings(**inputs)
+                embeddings = output.visual_proj
+                all_embeddings.append(embeddings.float().cpu())
+            return torch.cat(all_embeddings, dim=0)
 
     def encode(
         self,

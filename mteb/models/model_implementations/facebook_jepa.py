@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING, Any
 
 from tqdm.auto import tqdm
 
-from mteb._torch_utils import inference_mode
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import FramesCollator
@@ -53,7 +52,6 @@ class VJepaV2Wrapper(AbsEncoder):
         self.model.eval()
         self.model.to(self.device)
 
-    @inference_mode
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -67,33 +65,34 @@ class VJepaV2Wrapper(AbsEncoder):
     ) -> Array:
         import torch
 
-        inputs.collate_fn = FramesCollator(
-            fps=self.fps,
-            max_frames=self.max_frames,
-            num_frames=self.num_frames,
-        )
+        with torch.inference_mode():
+            inputs.collate_fn = FramesCollator(
+                fps=self.fps,
+                max_frames=self.max_frames,
+                num_frames=self.num_frames,
+            )
 
-        embeddings = []
-        for batch in tqdm(inputs, desc="Encoding", disable=not show_progress_bar):
-            videos = batch["video"]
-            max_frames = max(v.shape[0] for v in videos)
-            padded = [
-                torch.cat(
-                    [v, v[-1:].expand(max_frames - v.shape[0], *v.shape[1:])], dim=0
-                )
-                if v.shape[0] < max_frames
-                else v
-                for v in videos
-            ]
-            processed_videos = self.processor(
-                videos=padded,
-                return_tensors="pt",
-            ).to(self.device)
+            embeddings = []
+            for batch in tqdm(inputs, desc="Encoding", disable=not show_progress_bar):
+                videos = batch["video"]
+                max_frames = max(v.shape[0] for v in videos)
+                padded = [
+                    torch.cat(
+                        [v, v[-1:].expand(max_frames - v.shape[0], *v.shape[1:])], dim=0
+                    )
+                    if v.shape[0] < max_frames
+                    else v
+                    for v in videos
+                ]
+                processed_videos = self.processor(
+                    videos=padded,
+                    return_tensors="pt",
+                ).to(self.device)
 
-            outputs = self.model(**processed_videos)
-            pooled = outputs.last_hidden_state.mean(dim=1)
-            embeddings.append(pooled.cpu())
-        return torch.cat(embeddings, dim=0).numpy()
+                outputs = self.model(**processed_videos)
+                pooled = outputs.last_hidden_state.mean(dim=1)
+                embeddings.append(pooled.cpu())
+            return torch.cat(embeddings, dim=0).numpy()
 
 
 _JEPA_CITATION = """

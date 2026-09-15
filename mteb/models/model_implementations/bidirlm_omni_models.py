@@ -16,7 +16,6 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, EncodeKwargs
 
-from mteb._torch_utils import get_device
 
 from .bidirlm_models import (
     BIDIRLM_CITATION,
@@ -95,9 +94,11 @@ class BidirLMOmniEncoder(AbsEncoder):
         max_samples: int | None = 30 * 16_000,
         **kwargs: Any,
     ) -> None:
+        import torch
         from sentence_transformers import SentenceTransformer
 
-        device = get_device(device)
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
 
         from transformers import AutoVideoProcessor
 

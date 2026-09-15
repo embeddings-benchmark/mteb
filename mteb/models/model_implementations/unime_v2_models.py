@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING, Any
 
 from tqdm.auto import tqdm
 
-from mteb._torch_utils import inference_mode
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -170,7 +169,6 @@ class UniMEV2Wrapper(AbsEncoder):
             return prompt.strip() if isinstance(prompt, str) else _QUERY_DEFAULT_PROMPT
         return ""
 
-    @inference_mode
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -183,55 +181,56 @@ class UniMEV2Wrapper(AbsEncoder):
     ) -> Array:
         import torch
 
-        features = inputs.dataset.features
-        has_text = "text" in features
-        has_image = "image" in features
-        has_video = "video" in features
+        with torch.inference_mode():
+            features = inputs.dataset.features
+            has_text = "text" in features
+            has_image = "image" in features
+            has_video = "video" in features
 
-        if has_video:
-            inputs.collate_fn = FramesCollator(
-                fps=self.fps,
-                max_frames=self.max_frames,
-                num_frames=self.num_frames,
-            )
-
-        instruction = self._get_instruction(task_metadata, prompt_type)
-        show_progress_bar = kwargs.get("show_progress_bar", True)
-        all_embeddings: list[torch.Tensor] = []
-
-        for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding"):
-            batch_size = len(next(iter(batch.values())))
-            conversations = [
-                self._build_conversation(
-                    text=batch["text"][i] if has_text else None,
-                    image=batch["image"][i] if has_image else None,
-                    video=batch["video"][i] if has_video else None,
-                    instruction=instruction,
+            if has_video:
+                inputs.collate_fn = FramesCollator(
+                    fps=self.fps,
+                    max_frames=self.max_frames,
+                    num_frames=self.num_frames,
                 )
-                for i in range(batch_size)
-            ]
-            for conversation_batch in self._conversation_batches(
-                conversations, has_video=has_video
-            ):
-                model_inputs = self.processor.apply_chat_template(
-                    conversation_batch,
-                    add_generation_prompt=True,
-                    tokenize=True,
-                    return_dict=True,
-                    return_tensors="pt",
-                    processor_kwargs={"padding": True},
-                ).to(self.device)
-                output = self.model(
-                    **model_inputs,
-                    output_hidden_states=True,
-                    return_dict=True,
-                )
-                embeddings = self._pooling(
-                    output.hidden_states[-1], model_inputs["attention_mask"]
-                )
-                all_embeddings.append(embeddings.cpu().to(torch.float32))
 
-        return torch.cat(all_embeddings, dim=0)
+            instruction = self._get_instruction(task_metadata, prompt_type)
+            show_progress_bar = kwargs.get("show_progress_bar", True)
+            all_embeddings: list[torch.Tensor] = []
+
+            for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding"):
+                batch_size = len(next(iter(batch.values())))
+                conversations = [
+                    self._build_conversation(
+                        text=batch["text"][i] if has_text else None,
+                        image=batch["image"][i] if has_image else None,
+                        video=batch["video"][i] if has_video else None,
+                        instruction=instruction,
+                    )
+                    for i in range(batch_size)
+                ]
+                for conversation_batch in self._conversation_batches(
+                    conversations, has_video=has_video
+                ):
+                    model_inputs = self.processor.apply_chat_template(
+                        conversation_batch,
+                        add_generation_prompt=True,
+                        tokenize=True,
+                        return_dict=True,
+                        return_tensors="pt",
+                        processor_kwargs={"padding": True},
+                    ).to(self.device)
+                    output = self.model(
+                        **model_inputs,
+                        output_hidden_states=True,
+                        return_dict=True,
+                    )
+                    embeddings = self._pooling(
+                        output.hidden_states[-1], model_inputs["attention_mask"]
+                    )
+                    all_embeddings.append(embeddings.cpu().to(torch.float32))
+
+            return torch.cat(all_embeddings, dim=0)
 
 
 unime_v2_llava_onevision_8b = ModelMeta(

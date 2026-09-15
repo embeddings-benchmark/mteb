@@ -17,7 +17,6 @@ from typing import TYPE_CHECKING, Any
 
 from tqdm.auto import tqdm
 
-from mteb._torch_utils import no_grad
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import OutputDType
@@ -96,14 +95,18 @@ class VisRAGRetWrapper(AbsEncoder):
         ).to(self.device)
         self.mdl.eval()
 
-    @no_grad
     def _encode(self, *, texts: list[str], images: list[Any]) -> torch.Tensor:
         """Run the custom VisRAG forward and apply the published pooling/norm."""
         import torch
 
-        outputs = self.mdl(text=texts, image=images, tokenizer=self.tokenizer)
-        reps = _weighted_mean_pooling(outputs.last_hidden_state, outputs.attention_mask)
-        return torch.nn.functional.normalize(reps, p=2, dim=1).to(torch.float32).cpu()
+        with torch.no_grad():
+            outputs = self.mdl(text=texts, image=images, tokenizer=self.tokenizer)
+            reps = _weighted_mean_pooling(
+                outputs.last_hidden_state, outputs.attention_mask
+            )
+            return (
+                torch.nn.functional.normalize(reps, p=2, dim=1).to(torch.float32).cpu()
+            )
 
     def get_text_embeddings(
         self,

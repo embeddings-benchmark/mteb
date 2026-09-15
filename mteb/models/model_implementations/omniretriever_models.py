@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 from tqdm.auto import tqdm
 
-from mteb._torch_utils import inference_mode
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -346,7 +345,6 @@ class OmniRetrieverWrapper(AbsEncoder):
                 row["video_duration"] = row["video"].metadata.end_stream_seconds
         return self.collator(inputs)
 
-    @inference_mode
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -360,22 +358,23 @@ class OmniRetrieverWrapper(AbsEncoder):
         import torch
         from torch.utils.data import DataLoader
 
-        features = inputs.dataset.features
-        if "video" in features:
-            inputs = DataLoader(
-                inputs.dataset,
-                batch_size=self.video_batch_size,
-                collate_fn=self._collate,
-                num_workers=inputs.num_workers,
-                shuffle=False,
-            )
-        elif "audio" in features:
-            inputs.collate_fn = self._collate
+        with torch.inference_mode():
+            features = inputs.dataset.features
+            if "video" in features:
+                inputs = DataLoader(
+                    inputs.dataset,
+                    batch_size=self.video_batch_size,
+                    collate_fn=self._collate,
+                    num_workers=inputs.num_workers,
+                    shuffle=False,
+                )
+            elif "audio" in features:
+                inputs.collate_fn = self._collate
 
-        all_embeddings: list[torch.Tensor] = []
-        for batch in tqdm(inputs, desc="Encoding"):
-            all_embeddings.append(self._encode_batch(batch).cpu())
-        return torch.cat(all_embeddings, dim=0).float()
+            all_embeddings: list[torch.Tensor] = []
+            for batch in tqdm(inputs, desc="Encoding"):
+                all_embeddings.append(self._encode_batch(batch).cpu())
+            return torch.cat(all_embeddings, dim=0).float()
 
 
 _OMNIRETRIEVER_CITATION = r"""

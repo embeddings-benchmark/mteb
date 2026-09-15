@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 from tqdm.auto import tqdm
 
-from mteb._torch_utils import get_device
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator
@@ -27,9 +26,11 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
         max_audio_length_s: float = 30.0,
         **kwargs: Any,
     ):
+        import torch
         from transformers import CLIPModel, CLIPProcessor
 
-        device = get_device(device)
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
 
         from wav2clip import embed_audio, get_model
 

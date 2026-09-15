@@ -18,7 +18,6 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 from tqdm.auto import tqdm
 
-from mteb._torch_utils import inference_mode
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
 from mteb.types import OutputDType
@@ -152,29 +151,31 @@ class LightOnListwiseRerankerWrapper:
             text += self.think_block
         return text, images
 
-    @inference_mode
     def _generate(
         self, texts: list[str], images: list[Image.Image] | None
     ) -> list[str]:
-        processor_kwargs: dict[str, Any] = dict(
-            text=texts, return_tensors="pt", padding=True
-        )
-        if images:
-            processor_kwargs["images"] = images
-        else:
-            processor_kwargs.update(truncation=True, max_length=self.max_length)
-        inputs = self.processor(**processor_kwargs).to(self.device)
-        input_len = inputs["input_ids"].shape[1]
-        out = self.model.generate(
-            **inputs,
-            max_new_tokens=self.max_new_tokens,
-            do_sample=False,
-            pad_token_id=self.processor.tokenizer.eos_token_id,
-        )
-        return [
-            self.processor.decode(out[i][input_len:], skip_special_tokens=True)
-            for i in range(len(texts))
-        ]
+        import torch
+
+        with torch.inference_mode():
+            processor_kwargs: dict[str, Any] = dict(
+                text=texts, return_tensors="pt", padding=True
+            )
+            if images:
+                processor_kwargs["images"] = images
+            else:
+                processor_kwargs.update(truncation=True, max_length=self.max_length)
+            inputs = self.processor(**processor_kwargs).to(self.device)
+            input_len = inputs["input_ids"].shape[1]
+            out = self.model.generate(
+                **inputs,
+                max_new_tokens=self.max_new_tokens,
+                do_sample=False,
+                pad_token_id=self.processor.tokenizer.eos_token_id,
+            )
+            return [
+                self.processor.decode(out[i][input_len:], skip_special_tokens=True)
+                for i in range(len(texts))
+            ]
 
     def _rank_windows_batched(
         self,
@@ -279,7 +280,6 @@ class LightOnListwiseRerankerWrapper:
                 order[p:end] = [order[p + j] for j in perm]
         return orders
 
-    @inference_mode
     def predict(
         self,
         inputs1: DataLoader[BatchedInput],
@@ -293,55 +293,58 @@ class LightOnListwiseRerankerWrapper:
         batch_size: int | None = None,
         **kwargs: Any,
     ) -> Array:
-        queries: list[str] = []
-        for batch in inputs1:
-            if batch.get("image") is not None:
-                raise ValueError(
-                    "LightOn-rerank models support text queries only; "
-                    "got queries with an image modality."
-                )
-            queries.extend(batch["text"])
-        documents: list[str | Image.Image] = []
-        for batch in inputs2:
-            images = batch.get("image")
-            texts = batch.get("text")
-            if images is not None and texts is not None:
-                raise ValueError(
-                    "LightOn-rerank models score each candidate as either a text "
-                    "passage or a page image, not both; this task provides documents "
-                    "with both modalities. Use an image-only or text-only variant."
-                )
-            documents.extend(images if images is not None else texts)
-        group_queries: list[str] = []
-        group_docs: list[list[str | Image.Image]] = []
-        for query, document in zip(queries, documents, strict=True):
-            if not group_queries or query != group_queries[-1]:
-                group_queries.append(query)
-                group_docs.append([])
-            group_docs[-1].append(document)
+        import torch
 
-        orders = self._sliding_window_rank(
-            group_queries,
-            group_docs,
-            show_progress_bar=show_progress_bar,
-            batch_size=batch_size,
-        )
+        with torch.inference_mode():
+            queries: list[str] = []
+            for batch in inputs1:
+                if batch.get("image") is not None:
+                    raise ValueError(
+                        "LightOn-rerank models support text queries only; "
+                        "got queries with an image modality."
+                    )
+                queries.extend(batch["text"])
+            documents: list[str | Image.Image] = []
+            for batch in inputs2:
+                images = batch.get("image")
+                texts = batch.get("text")
+                if images is not None and texts is not None:
+                    raise ValueError(
+                        "LightOn-rerank models score each candidate as either a text "
+                        "passage or a page image, not both; this task provides documents "
+                        "with both modalities. Use an image-only or text-only variant."
+                    )
+                documents.extend(images if images is not None else texts)
+            group_queries: list[str] = []
+            group_docs: list[list[str | Image.Image]] = []
+            for query, document in zip(queries, documents, strict=True):
+                if not group_queries or query != group_queries[-1]:
+                    group_queries.append(query)
+                    group_docs.append([])
+                group_docs[-1].append(document)
 
-        scores: list[float] = []
-        for order in orders:
-            n = len(order)
-            doc_scores = [0.0] * n
-            for rank, original_idx in enumerate(order):
-                doc_scores[original_idx] = float(n - rank)
-            scores.extend(doc_scores)
-
-        if self.parse_stats["fallbacks"]:
-            logger.warning(
-                "Listwise permutation parse fallbacks: %d/%d windows fell back to input order.",
-                self.parse_stats["fallbacks"],
-                self.parse_stats["calls"],
+            orders = self._sliding_window_rank(
+                group_queries,
+                group_docs,
+                show_progress_bar=show_progress_bar,
+                batch_size=batch_size,
             )
-        return np.asarray(scores)
+
+            scores: list[float] = []
+            for order in orders:
+                n = len(order)
+                doc_scores = [0.0] * n
+                for rank, original_idx in enumerate(order):
+                    doc_scores[original_idx] = float(n - rank)
+                scores.extend(doc_scores)
+
+            if self.parse_stats["fallbacks"]:
+                logger.warning(
+                    "Listwise permutation parse fallbacks: %d/%d windows fell back to input order.",
+                    self.parse_stats["fallbacks"],
+                    self.parse_stats["calls"],
+                )
+            return np.asarray(scores)
 
 
 LIGHTON_CITATION = r"""@misc{ananya2026lightonrerank,

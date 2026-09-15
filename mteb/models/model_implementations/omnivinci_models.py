@@ -8,7 +8,6 @@ from typing import TYPE_CHECKING, Any
 
 from tqdm.auto import tqdm
 
-from mteb._torch_utils import inference_mode
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -197,7 +196,6 @@ class OmniVinciWrapper(AbsEncoder):
                 with contextlib.suppress(OSError):
                     pathlib.Path(f).unlink()
 
-    @inference_mode
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -210,22 +208,23 @@ class OmniVinciWrapper(AbsEncoder):
     ) -> Array:
         import torch
 
-        has_video = "video" in inputs.dataset.features
-        has_audio = "audio" in inputs.dataset.features
+        with torch.inference_mode():
+            has_video = "video" in inputs.dataset.features
+            has_audio = "audio" in inputs.dataset.features
 
-        if has_video or has_audio:
-            inputs.collate_fn = VideoCollator(
-                target_sampling_rate=self.AUDIO_SAMPLING_RATE,
-                num_frames=self.num_frames,
-                max_samples=self.max_audio_samples,
-            )
+            if has_video or has_audio:
+                inputs.collate_fn = VideoCollator(
+                    target_sampling_rate=self.AUDIO_SAMPLING_RATE,
+                    num_frames=self.num_frames,
+                    max_samples=self.max_audio_samples,
+                )
 
-        all_embeddings: list[torch.Tensor] = []
-        for batch in tqdm(inputs, desc="Encoding"):
-            embeddings = self._encode_batch(batch)
-            all_embeddings.append(embeddings.cpu())
+            all_embeddings: list[torch.Tensor] = []
+            for batch in tqdm(inputs, desc="Encoding"):
+                embeddings = self._encode_batch(batch)
+                all_embeddings.append(embeddings.cpu())
 
-        return torch.cat(all_embeddings, dim=0).float()
+            return torch.cat(all_embeddings, dim=0).float()
 
 
 _OMNIVINCI_CITATION = r"""

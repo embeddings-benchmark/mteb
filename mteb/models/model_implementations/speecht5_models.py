@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Any
 
 from tqdm.auto import tqdm
 
-from mteb._torch_utils import get_device
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 
@@ -26,9 +25,11 @@ class SpeechT5Audio(AbsEncoder):
         max_audio_length_s: float = 30.0,
         **kwargs: Any,
     ):
+        import torch
         from transformers import SpeechT5ForSpeechToText, SpeechT5Processor
 
-        device = get_device(device)
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
 
         self.device = device
         self.max_audio_length_s = max_audio_length_s
@@ -150,9 +151,11 @@ class SpeechT5Text(AbsEncoder):
         device: str | None = None,
         **kwargs: Any,
     ):
+        import torch
         from transformers import SpeechT5ForTextToSpeech, SpeechT5Processor
 
-        device = get_device(device)
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
 
         self.device = device
         self.tts_processor = SpeechT5Processor.from_pretrained(
@@ -235,7 +238,10 @@ class SpeechT2Multimodal(AbsEncoder):
     ):
         # Revision is combined as "asr_revision-tts_revision"
 
-        device = get_device(device)
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
 
         asr_revision, tts_revision = revision.split("-")
 
