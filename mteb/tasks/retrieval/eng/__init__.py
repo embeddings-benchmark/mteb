@@ -312,6 +312,7 @@ from .narrative_qa_retrieval import NarrativeQARetrieval
 from .nf_corpus_retrieval import NFCorpus
 from .nights_i2i_retrieval import NIGHTSI2IRetrieval
 from .nq_retrieval import NQ, NQHardNegatives
+from .nq_tables_retrieval import NQTablesRetrieval
 from .obliq_bench_retrieval import (
     OBLIQBenchCongressRetrieval,
     OBLIQBenchMathRetrieval,
@@ -772,6 +773,7 @@ __all__ = [
     "NFCorpus",
     "NIGHTSI2IRetrieval",
     "NQHardNegatives",
+    "NQTablesRetrieval",
     "NanoArguAnaRetrieval",
     "NanoClimateFeverRetrieval",
     "NanoDBPediaRetrieval",
