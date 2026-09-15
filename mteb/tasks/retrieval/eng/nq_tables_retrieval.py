@@ -10,8 +10,6 @@ from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 if TYPE_CHECKING:
-    from datasets import Dataset
-
     from mteb.timing import TimingStack
 
 
@@ -76,12 +74,6 @@ class NQTablesRetrieval(AbsTaskRetrieval):
         prompt={"query": "Given a question, retrieve its reference Wikipedia table."},
     )
 
-    def __init__(self, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
-        # Retain source rows as well as MTEB's mapping representation.
-        self.source_qrels: dict[str, Dataset] = {}
-        self._shared_corpus: Dataset | None = None
-
     def load_data(
         self,
         num_proc: int | None = None,
@@ -92,32 +84,29 @@ class NQTablesRetrieval(AbsTaskRetrieval):
         """Load requested splits without filtering, deduplicating or rewriting text.
 
         Defaults to test. Use ``filter_eval_splits(["train", "dev", "test"])``
-        before loading to inspect all splits. Additional calls can load further
-        splits while reusing the same corpus. ``kwargs`` go to ``load_dataset``
-        (for example, ``cache_dir``); the source and revision stay pinned.
+        before loading to inspect all splits with the shared corpus. ``kwargs``
+        go to ``load_dataset`` (for example, ``cache_dir``); the source and
+        revision stay pinned.
         """
         unknown = set(self.eval_splits) - set(self.supported_splits)
         if unknown:
             raise ValueError(f"Unsupported NQ-Tables splits: {sorted(unknown)}")
 
-        if self._shared_corpus is None:
-            corpus = load_dataset(
-                **self.metadata.dataset,
-                name="corpus_md",
-                split="corpus_md",
-                num_proc=num_proc,
-                **kwargs,
-            ).rename_column("_id", "id")
-            if len(set(corpus["id"])) != len(corpus):
-                raise ValueError("Duplicate corpus IDs cannot be represented safely")
-            self._shared_corpus = corpus
+        if self.data_loaded:
+            return
 
-        corpus = self._shared_corpus
-        if self.dataset is None:
-            self.dataset = {"default": {}}
+        corpus = load_dataset(
+            **self.metadata.dataset,
+            name="corpus_md",
+            split="corpus_md",
+            num_proc=num_proc,
+            **kwargs,
+        ).rename_column("_id", "id")
+        if len(set(corpus["id"])) != len(corpus):
+            raise ValueError("Duplicate corpus IDs cannot be represented safely")
+
+        self.dataset = {"default": {}}
         for split in self.eval_splits:
-            if split in self.dataset["default"]:
-                continue
             queries = load_dataset(
                 **self.metadata.dataset,
                 name="queries",
@@ -147,7 +136,6 @@ class NQTablesRetrieval(AbsTaskRetrieval):
                     raise ValueError(f"Repeated qrel pair in {split}: {qid!r}, {did!r}")
                 docs[did] = score
 
-            self.source_qrels[split] = qrels
             self.dataset["default"][split] = {
                 "corpus": corpus,
                 "queries": queries,
