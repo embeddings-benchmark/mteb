@@ -26,9 +26,10 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        # 10 s: distilled on 10 s VGGSound clips
+        # uncapped: Wav2CLIP pools over the spectrogram, so length is unbounded.
+        # Set this to truncate; it was previously declared but never applied.
         # https://arxiv.org/abs/2110.11499
-        max_audio_length_seconds: float = 10.0,
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
         from wav2clip import embed_audio, get_model
@@ -67,6 +68,9 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
             inputs, desc="Processing audio batches", disable=not show_progress_bar
         ):
             audio_arrays = [audio["array"] for audio in batch["audio"]]
+            if self.max_audio_length_seconds:
+                cap = int(self.max_audio_length_seconds * self.sampling_rate)
+                audio_arrays = [w[..., :cap] for w in audio_arrays]
 
             max_length = max(wav.shape[-1] for wav in audio_arrays)
             padded_wavs = []

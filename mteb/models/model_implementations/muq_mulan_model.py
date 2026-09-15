@@ -23,9 +23,10 @@ class MuQMuLanWrapper(AbsEncoder):
         self,
         model_name: str = "OpenMuQ/MuQ-MuLan-large",
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        # 10 s: MuQ-MuLan input length
+        # uncapped: MuQ-MuLan splits anything over clip_secs=10 into clips itself
+        # and returns their average latent, so truncating would discard that
         # https://github.com/tencent-ailab/MuQ/blob/main/src/muq/muq_mulan/muq_mulan.py
-        max_audio_length_seconds: float = 10.0,
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
         from muq import MuQMuLan
@@ -35,8 +36,10 @@ class MuQMuLanWrapper(AbsEncoder):
         self.sampling_rate = 24000
         self.max_audio_length_seconds = max_audio_length_seconds
         # Apply audio truncation (30 seconds max)
-        self.max_length_samples = int(
-            self.max_audio_length_seconds * self.sampling_rate
+        self.max_length_samples = (
+            int(self.max_audio_length_seconds * self.sampling_rate)
+            if self.max_audio_length_seconds
+            else None
         )
 
         # Load the model
@@ -60,8 +63,10 @@ class MuQMuLanWrapper(AbsEncoder):
             audio_arrays = []
             audio_array = [audio["array"] for audio in batch["audio"]]
             for array in audio_array:
-                # Apply audio truncation (30 seconds max)
-                if array.shape[-1] > self.max_length_samples:
+                if (
+                    self.max_length_samples is not None
+                    and array.shape[-1] > self.max_length_samples
+                ):
                     array = array[..., : self.max_length_samples]  # noqa: PLW2901
                 audio_arrays.append(array)
 
