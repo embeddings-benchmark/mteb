@@ -38,9 +38,6 @@ class MSClapWrapper(AbsEncoder):
 
         self.model_name = model_name
         self.device = device
-        # 44100 per msclap config, 48000 here is wrong (fixed in #5404)
-        # https://github.com/microsoft/CLAP/blob/main/msclap/configs/config_2023.yml
-        self.sampling_rate = 48000
         self.max_audio_length_seconds = max_audio_length_seconds
 
         if "2022" in self.model_name:
@@ -57,6 +54,11 @@ class MSClapWrapper(AbsEncoder):
         self.model = CLAP(version=self.version, use_cuda=self.use_cuda)
         self.model.clap = self.model.clap.to(self.device)
         self.tokenizer = self.model.tokenizer
+        # msclap's own config declares the rate its preprocessing expects
+        # (44,100 for 2022 and 2023). Writing 48 kHz WAVs and calling msclap
+        # with resample=False made it read them as 44.1 kHz, stretching the audio.
+        # https://github.com/microsoft/CLAP/blob/main/msclap/configs/config_2023.yml
+        self.sampling_rate = int(self.model.args.sampling_rate)
 
     def get_audio_embeddings(
         self,

@@ -78,7 +78,11 @@ class MuQMuLanWrapper(AbsEncoder):
 
             for idx, arr in enumerate(audio_arrays):
                 length = arr.shape[-1]
-                batch_tensor[idx, :length] = arr
+                # the collator yields numpy; assigning one straight into a torch
+                # buffer raises TypeError, so bridge through from_numpy
+                batch_tensor[idx, :length] = torch.from_numpy(
+                    np.ascontiguousarray(arr, dtype=np.float32)
+                )
 
             batch_tensor = batch_tensor.to(self.device)
 
