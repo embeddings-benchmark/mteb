@@ -20,6 +20,8 @@ class TevatronOmniEmbedWrapper(SentenceTransformerEncoderWrapper):
         model: str,
         revision: str | None = None,
         device: str | None = None,
+        # fps=2: qwen-omni-utils FPS=2.0
+        # https://github.com/QwenLM/Qwen2.5-Omni/blob/main/qwen-omni-utils/src/qwen_omni_utils/v2_5/vision_process.py
         fps: float | None = 2.0,
         max_frames: int | None = 64,
         num_frames: int | None = None,

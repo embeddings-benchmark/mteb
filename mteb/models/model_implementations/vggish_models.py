@@ -32,7 +32,9 @@ def vggish_loader(*args: Any, **kwargs: Any) -> EncoderProtocol:
         def __init__(
             self,
             device: str = "cuda" if torch.cuda.is_available() else "cpu",
-            max_audio_length_seconds: float = 30.0,
+            # no limit: 0.96 s patches, no max
+            # https://github.com/harritaylor/torchvggish/blob/master/torchvggish/vggish_params.py
+            max_audio_length_seconds: float | None = None,
             **kwargs: Any,
         ):
             self.device = device
@@ -43,6 +45,8 @@ def vggish_loader(*args: Any, **kwargs: Any) -> EncoderProtocol:
             self.converter = WaveformToInput()
             self.sampling_rate = 16000
             self.embed_dim = 128
+            # 0.96 s patches
+            # https://arxiv.org/abs/1609.09430
             self.min_samples = int(0.96 * self.sampling_rate)  # 15,360 samples
 
         def _resample_audio(
@@ -66,9 +70,10 @@ def vggish_loader(*args: Any, **kwargs: Any) -> EncoderProtocol:
                 audio = audio.mean(dim=0)
 
             # Apply audio truncation
-            max_length = int(self.max_audio_length_seconds * self.sampling_rate)
-            if audio.shape[-1] > max_length:
-                audio = audio[..., :max_length]
+            if self.max_audio_length_seconds is not None:
+                max_length = int(self.max_audio_length_seconds * self.sampling_rate)
+                if audio.shape[-1] > max_length:
+                    audio = audio[..., :max_length]
 
             # Normalize to [-1.0, 1.0]
             if audio.numel() > 0 and audio.abs().max() > 1.0:

@@ -75,6 +75,8 @@ class DashengAudioWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        # no max_samples: X-ARES evaluates Dasheng on variable length up to 10 min
+        # https://arxiv.org/abs/2505.16369
         inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
 
         all_embeddings = []

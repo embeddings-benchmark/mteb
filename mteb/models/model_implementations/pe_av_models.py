@@ -32,10 +32,14 @@ class PEAudioVisualWrapper(AbsEncoder):
         self,
         model_name: str = "facebook/pe-av-large",
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        # fps=2: qwen-omni-utils FPS=2.0
+        # https://github.com/QwenLM/Qwen2.5-Omni/blob/main/qwen-omni-utils/src/qwen_omni_utils/v2_5/vision_process.py
         fps: float | None = 2.0,
         max_frames: int | None = 64,
         num_frames: int | None = None,
-        max_samples: int | None = 30 * 48000,  # 30s * sampling rate
+        # 400 s: max_position_embeddings=10000 at 25 frames/s
+        # https://huggingface.co/facebook/pe-av-base/blob/main/config.json
+        max_samples: int | None = 400 * 48000,
         **kwargs: Any,
     ):
         from transformers import PeAudioVideoModel, PeAudioVideoProcessor

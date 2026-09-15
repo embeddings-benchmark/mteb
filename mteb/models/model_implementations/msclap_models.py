@@ -29,15 +29,19 @@ class MSClapWrapper(AbsEncoder):
         self,
         model_name: str = "microsoft/msclap-2023",
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_s: float = 30.0,
+        # unused: msclap crops to duration=7
+        # https://github.com/microsoft/CLAP/blob/main/msclap/configs/config_2023.yml
+        max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
         from msclap import CLAP
 
         self.model_name = model_name
         self.device = device
+        # 44100 per msclap config, 48000 here is wrong (fixed in #5404)
+        # https://github.com/microsoft/CLAP/blob/main/msclap/configs/config_2023.yml
         self.sampling_rate = 48000
-        self.max_audio_length_s = max_audio_length_s
+        self.max_audio_length_seconds = max_audio_length_seconds
 
         if "2022" in self.model_name:
             self.version = "2022"

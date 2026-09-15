@@ -50,6 +50,8 @@ class OmniRetrieverWrapper(AbsEncoder):
 
     AUDIO_SAMPLING_RATE = 16_000
     MIN_AUDIO_SEC = 1
+    # 300 s: base WAVE-7B on Qwen2.5-Omni-7B
+    # https://huggingface.co/YunzeLiu/OmniRetriever-7B/blob/main/adapter_config.json
     MAX_AUDIO_SEC = 300
     POSITION_ID_PER_SECONDS = 25
     EMBED_DIM = 3584

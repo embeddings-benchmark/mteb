@@ -47,7 +47,8 @@ class VoiceCLAPSmallWrapper(AbsEncoder):
             .eval()
         )
         self.tokenizer = AutoTokenizer.from_pretrained(model_name, revision=revision)
-        # VoiceCLAP-Small expects 16 kHz mono waveforms.
+        # 16 kHz, 300 s: chunk_length=300
+        # https://huggingface.co/VoiceNet/voiceclap-large/blob/main/preprocessor_config.json
         self.sampling_rate = 16000
 
     def get_text_embeddings(

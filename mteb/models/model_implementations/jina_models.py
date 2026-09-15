@@ -1071,6 +1071,8 @@ jina_embeddings_v5_omni_small = ModelMeta(
         fps=2.0,
         max_frames=64,
         target_sampling_rate=16000,
+        # 30 s: audio_config.max_source_positions=1500 frames at 50 Hz
+        # https://huggingface.co/jinaai/jina-embeddings-v5-omni-small/blob/main/config.json
         max_samples=30 * 16000,
         model_prompts=_OMNI_MODEL_PROMPTS,
     ),
@@ -1120,6 +1122,8 @@ jina_embeddings_v5_omni_nano = ModelMeta(
         fps=2.0,
         max_frames=64,
         target_sampling_rate=16000,
+        # 30 s: audio_config.max_source_positions=1500 frames at 50 Hz
+        # https://huggingface.co/jinaai/jina-embeddings-v5-omni-small/blob/main/config.json
         max_samples=30 * 16000,
         model_prompts=_OMNI_MODEL_PROMPTS,
     ),

@@ -20,6 +20,8 @@ if TYPE_CHECKING:
 
 
 # LanguageBind expects audio sampled at 16 kHz (its audio mel-spectrogram pipeline).
+# 16 kHz: vision_config.audio_sample_rate
+# https://huggingface.co/LanguageBind/LanguageBind_Audio_FT/blob/main/config.json
 _LANGUAGE_BIND_AUDIO_SR = 16000
 
 _LANGUAGEBIND_SHIM_APPLIED: list[bool] = []
@@ -123,6 +125,8 @@ class LanguageBindVideoWrapper(_LanguageBindBase):
         revision: str | None = None,
         fps: float | None = None,
         max_frames: int | None = None,
+        # 8 frames: 8-frame clips
+        # https://github.com/PKU-YuanGroup/LanguageBind
         num_frames: int | None = 8,
         max_samples: int | None = None,
         **kwargs: Any,

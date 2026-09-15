@@ -21,6 +21,8 @@ if TYPE_CHECKING:
 
 class HeARS11AudioWrapper(AbsEncoder):
     sampling_rate = 16_000
+    # 2 s: clip_seconds=2.0
+    # https://huggingface.co/matthewagi/HeAR-s1.1/blob/main/config.json
     clip_samples = 32_000
 
     def __init__(

@@ -24,7 +24,9 @@ class SewDWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_seconds: float = 30.0,
+        # 20.5 s: max_position_embeddings=512 at 25 frames/s
+        # https://huggingface.co/asapp/sew-d-base-plus-400k-ft-ls100h/blob/main/config.json
+        max_audio_length_seconds: float = 20.5,
         **kwargs: Any,
     ):
         self.model_name = model_name

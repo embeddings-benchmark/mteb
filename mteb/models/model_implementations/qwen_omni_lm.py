@@ -27,7 +27,11 @@ class QwenOmniWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
+        # 300 s: chunk_length=300
+        # https://huggingface.co/nvidia/omni-embed-nemotron-3b/blob/main/preprocessor_config.json
         max_audio_length_seconds: int = 300,
+        # fps=2: qwen-omni-utils FPS=2.0
+        # https://github.com/QwenLM/Qwen2.5-Omni/blob/main/qwen-omni-utils/src/qwen_omni_utils/v2_5/vision_process.py
         fps: float | None = 2.0,
         max_frames: int | None = 64,
         num_frames: int | None = None,

@@ -24,7 +24,9 @@ class SeamlessM4TWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_seconds: float = 5.0,
+        # 10 s: MAX_INPUT_AUDIO_LENGTH
+        # https://github.com/facebookresearch/seamless_communication/blob/main/demo/expressive/app.py
+        max_audio_length_seconds: float = 10.0,
         **kwargs: Any,
     ):
         self.model_name = model_name

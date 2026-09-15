@@ -26,7 +26,9 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_s: float = 30.0,
+        # 10 s: distilled on 10 s VGGSound clips
+        # https://arxiv.org/abs/2110.11499
+        max_audio_length_seconds: float = 10.0,
         **kwargs: Any,
     ):
         from wav2clip import embed_audio, get_model
@@ -36,7 +38,7 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
         self.device = device
         self.audio_model = get_model().to(device)
         self.sampling_rate = 16_000
-        self.max_audio_length_s = max_audio_length_s
+        self.max_audio_length_seconds = max_audio_length_seconds
 
         # text side (CLIP) - we use the standard OpenAI CLIP model as mentioned in paper
         # Wav2Clip aligns audio embeddings to CLIP's embedding space using this specific model

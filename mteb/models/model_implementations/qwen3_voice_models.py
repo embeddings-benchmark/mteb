@@ -26,7 +26,10 @@ class Qwen3VoiceEmbeddingWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_seconds: float = 30.0,
+        # no limit: ECAPA-TDNN is convolutional and pools over the whole clip
+        # (AttentiveStatisticsPooling), so length is unbounded and cost linear
+        # https://huggingface.co/marksverdhei/Qwen3-Voice-Embedding-12Hz-1.7B/blob/main/modeling_ecapa_tdnn.py
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
         from transformers import AutoFeatureExtractor, AutoModel
@@ -51,7 +54,11 @@ class Qwen3VoiceEmbeddingWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
+        max_samples = (
+            int(self.max_audio_length_seconds * self.sampling_rate)
+            if self.max_audio_length_seconds
+            else None
+        )
         inputs.collate_fn = AudioCollator(
             target_sampling_rate=self.sampling_rate, max_samples=max_samples
         )

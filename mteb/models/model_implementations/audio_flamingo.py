@@ -26,7 +26,9 @@ class AudioFlamingoWrapper(AbsEncoder):
         model_name: str,
         revision: str | None = None,
         device: str | None = None,
-        max_audio_length_seconds: float = 30.0,
+        # 600 s: "Max Audio Length: 10 Minutes"
+        # https://huggingface.co/nvidia/audio-flamingo-3-hf
+        max_audio_length_seconds: float = 600.0,
         torch_dtype: OutputDType | torch.dtype = OutputDType.BF16,
         device_map: str | dict | None = None,
         **kwargs: Any,

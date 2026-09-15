@@ -87,6 +87,8 @@ class VideoMAEWrapper(AbsEncoder):
         # VideoMAE bakes the clip length into its temporal position embeddings
         # and transformers does not interpolate it, so the config is the source
         # of truth rather than a per-ModelMeta constant.
+        # frames read from the checkpoint (videomae-base declares num_frames=16)
+        # https://huggingface.co/MCG-NJU/videomae-base/blob/main/config.json
         self.num_frames = (
             num_frames if num_frames is not None else self.model.config.num_frames
         )

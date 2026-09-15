@@ -25,10 +25,15 @@ class LCOEmbedding(AbsEncoder):
         model_name: str,
         revision: str | None = None,
         device: str | None = None,
+        # fps=2: qwen-omni-utils FPS=2.0
+        # https://github.com/QwenLM/Qwen2.5-Omni/blob/main/qwen-omni-utils/src/qwen_omni_utils/v2_5/vision_process.py
         fps: float | None = 2.0,
         max_frames: int | None = 64,
         num_frames: int | None = None,
-        max_audio_length: int | None = None,
+        # 300 s at 16 kHz: Qwen2.5-Omni chunk_length=300; this is max_samples,
+        # so it is in samples, not seconds
+        # https://huggingface.co/Qwen/Qwen2.5-Omni-7B/blob/main/preprocessor_config.json
+        max_audio_length: int | None = 4_800_000,
         **kwargs: Any,
     ):
         from transformers import (

@@ -87,7 +87,9 @@ class MCTCTWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_seconds: float = 30.0,
+        # 27.6 s: max_position_embeddings=920 at 30 ms/frame
+        # https://huggingface.co/speechbrain/m-ctc-t-large/blob/main/config.json
+        max_audio_length_seconds: float = 27.6,
         **kwargs: Any,
     ):
         from transformers import MCTCTFeatureExtractor, MCTCTModel

@@ -315,7 +315,10 @@ NOVA_PURPOSE_CLASSIFICATION = "CLASSIFICATION"
 NOVA_PURPOSE_CLUSTERING = "CLUSTERING"
 
 # Nova accepts video segments up to 30 seconds.
+# 30 s: Nova 2 accepts "8K tokens or 30s of video and 30s of audio"
+# https://docs.aws.amazon.com/nova/latest/nova2-userguide/embeddings.html
 NOVA_MAX_VIDEO_SECONDS = 30
+NOVA_MAX_AUDIO_SECONDS = 30
 NOVA_VIDEO_MODE = "AUDIO_VIDEO_COMBINED"
 
 _NOVA_CLASSIFICATION_TASKS = {
@@ -398,6 +401,9 @@ class NovaMultimodalEmbeddingsModel(AbsEncoder):
         sampling_rate = int(audio["sampling_rate"])
         if array.ndim > 1:
             array = array.mean(axis=0)
+        max_samples = NOVA_MAX_AUDIO_SECONDS * sampling_rate
+        if array.shape[-1] > max_samples:
+            array = array[..., :max_samples]
         pcm = (np.clip(array, -1.0, 1.0) * 32767).astype("<i2")
 
         buffer = io.BytesIO()

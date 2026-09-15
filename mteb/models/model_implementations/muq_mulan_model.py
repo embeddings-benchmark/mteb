@@ -23,7 +23,9 @@ class MuQMuLanWrapper(AbsEncoder):
         self,
         model_name: str = "OpenMuQ/MuQ-MuLan-large",
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_s: float = 30.0,
+        # 10 s: MuQ-MuLan input length
+        # https://github.com/tencent-ailab/MuQ/blob/main/src/muq/muq_mulan/muq_mulan.py
+        max_audio_length_seconds: float = 10.0,
         **kwargs: Any,
     ):
         from muq import MuQMuLan
@@ -31,9 +33,11 @@ class MuQMuLanWrapper(AbsEncoder):
         self.model_name = model_name
         self.device = device
         self.sampling_rate = 24000
-        self.max_audio_length_s = max_audio_length_s
+        self.max_audio_length_seconds = max_audio_length_seconds
         # Apply audio truncation (30 seconds max)
-        self.max_length_samples = int(self.max_audio_length_s * self.sampling_rate)
+        self.max_length_samples = int(
+            self.max_audio_length_seconds * self.sampling_rate
+        )
 
         # Load the model
         self.model = MuQMuLan.from_pretrained(model_name).eval().to(self.device)

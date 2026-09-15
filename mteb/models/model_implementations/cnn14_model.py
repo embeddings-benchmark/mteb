@@ -22,12 +22,14 @@ class CNN14Wrapper(AbsEncoder):
         self,
         model_name: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_s: float = 30.0,
+        # no limit: no duration declared
+        # https://huggingface.co/speechbrain/cnn14-esc50/blob/main/hyperparams.yaml
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
         self.model_name = model_name
         self.device = device
-        self.max_audio_length_s = max_audio_length_s
+        self.max_audio_length_seconds = max_audio_length_seconds
 
         from speechbrain.inference.classifiers import AudioClassifier
 
@@ -38,8 +40,9 @@ class CNN14Wrapper(AbsEncoder):
             run_opts={"device": device},
         )
 
-        # SpeechBrain uses a 16kHz sampling rate for audio
-        self.sampling_rate = 16_000
+        # 44.1 kHz: sample_rate=44100
+        # https://huggingface.co/speechbrain/cnn14-esc50/blob/main/hyperparams.yaml
+        self.sampling_rate = 44_100
 
     def _pad_audio_batch(self, batch: list[torch.Tensor]) -> torch.Tensor:  # noqa: PLR6301
         max_len = max(w.shape[0] for w in batch)
@@ -67,9 +70,10 @@ class CNN14Wrapper(AbsEncoder):
                 array = array.squeeze()
 
                 # Apply audio truncation (configurable limit)
-                max_length = int(self.max_audio_length_s * self.sampling_rate)
-                if array.shape[-1] > max_length:
-                    array = array[..., :max_length]
+                if self.max_audio_length_seconds is not None:
+                    max_length = int(self.max_audio_length_seconds * self.sampling_rate)
+                    if array.shape[-1] > max_length:
+                        array = array[..., :max_length]
 
                 audio_tensors.append(array)
 

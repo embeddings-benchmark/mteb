@@ -55,6 +55,8 @@ MULTILINGUAL_EVALUATED_LANGUAGES = [
 
 GEMINI_VIDEO_FPS = 1.0
 GEMINI_MAX_VIDEO_FRAMES = 32
+# 180 s: "Maximum duration of 180 seconds"
+# https://ai.google.dev/gemini-api/docs/embeddings
 GEMINI_MAX_AUDIO_SECONDS = 180
 
 GEMINI_EMBEDDING_CITATION = """@misc{lee2025geminiembeddinggeneralizableembeddings,

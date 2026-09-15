@@ -61,8 +61,8 @@ class ClapZeroShotWrapper(AbsEncoder):
                 audio=audio_array,
                 sampling_rate=self.sampling_rate,
                 return_tensors="pt",
-                padding=True,
-            )
+            )  # no padding=/truncation=: keeps the checkpoint's "repeatpad" + "fusion"
+            # https://github.com/huggingface/transformers/blob/main/src/transformers/models/clap/feature_extraction_clap.py
             features = {k: v.to(self.device) for k, v in features.items()}
 
             with torch.no_grad():
