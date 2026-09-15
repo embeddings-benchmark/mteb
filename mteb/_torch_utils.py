@@ -51,13 +51,13 @@ def inference_mode(func: Callable[P, R]) -> Callable[P, R]:
 
 
 def get_device(device: str | None = None) -> str:
-    """Return `device` if given, otherwise the best available of `"cuda"`, `"mps"` and `"cpu"`."""
+    """Return `device` if given, otherwise `"cuda"` when available and `"cpu"` if not.
+
+    Deliberately does not select `"mps"`: this replaces `"cuda" if torch.cuda.is_available() else "cpu"`
+    defaults, and those models ran on CPU on Apple Silicon. Models that support MPS choose it themselves.
+    """
     if device is not None:
         return device
     import torch
 
-    if torch.cuda.is_available():
-        return "cuda"
-    if torch.backends.mps.is_available():
-        return "mps"
-    return "cpu"
+    return "cuda" if torch.cuda.is_available() else "cpu"

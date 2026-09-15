@@ -204,7 +204,7 @@ class MyModel(AbsEncoder):
     ):
         from transformers import AutoModel
 
-        # get_device(None) picks cuda, then mps, then cpu; a `torch.cuda.is_available()` default would run at import
+        # get_device(None) picks cuda or cpu; a `torch.cuda.is_available()` default would run at import
         device = get_device(device)
         self.model = AutoModel.from_pretrained(model_name, revision=revision).to(device)
 
@@ -213,6 +213,20 @@ class MyModel(AbsEncoder):
 ```
 
 Anything else that runs at import time has to follow the same rule: default arguments, decorators, class bases such as `torch.nn.Module`, and values inside `ModelMeta(...)` (use `OutputDType` for dtypes, as described above).
+
+`get_device(None)` picks `"cuda"` if available, otherwise `"cpu"`. It never picks `"mps"`, so on Apple Silicon a model using it runs on CPU. A device passed explicitly (e.g. `device="mps"`) is always used as is. If your model supports MPS and should use it by default, select it yourself instead of calling `get_device`:
+
+```python
+import torch
+
+if device is None:
+    if torch.cuda.is_available():
+        device = "cuda"
+    elif torch.backends.mps.is_available():
+        device = "mps"
+    else:
+        device = "cpu"
+```
 
 ### Adding model dependencies
 If you are adding a model that requires additional dependencies, you can add them to the `pyproject.toml` file, under optional dependencies:
