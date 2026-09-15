@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -10,6 +9,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -27,6 +27,7 @@ class EagerEmbedV1Wrapper(AbsEncoder):
         image_size: int = 784,
         **kwargs: Any,
     ):
+        import torch
         from transformers import AutoProcessor, Qwen3VLForConditionalGeneration
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
@@ -56,6 +57,7 @@ class EagerEmbedV1Wrapper(AbsEncoder):
         **kwargs: Any,
     ) -> Array:
         """Encode inputs (text and/or images) into embeddings."""
+        import torch
         from qwen_vl_utils import process_vision_info
 
         all_embeddings: list[torch.Tensor] = []

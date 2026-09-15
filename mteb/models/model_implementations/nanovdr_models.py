@@ -3,14 +3,13 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
-import torch.nn.functional as F
 from tqdm.autonotebook import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -42,6 +41,8 @@ class NanoVDRWrapper(AbsEncoder):
         device: str | None = None,
         **kwargs: Any,
     ):
+        import torch
+
         self.device = device or (
             "cuda"
             if torch.cuda.is_available()
@@ -104,6 +105,8 @@ class NanoVDRWrapper(AbsEncoder):
         """Encode document page images using the Qwen3-VL teacher."""
         import unicodedata
 
+        import torch
+        import torch.nn.functional as F
         from qwen_vl_utils.vision_process import process_vision_info
 
         self._load_teacher()

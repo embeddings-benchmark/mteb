@@ -5,13 +5,13 @@ import warnings
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb import TaskMetadata
@@ -25,16 +25,22 @@ logger = logging.getLogger(__name__)
 
 def yamnet_loader(*args: Any, **kwargs: Any) -> EncoderProtocol:
     """Factory function to create a YAMNet model wrapper."""
+    import torch
     from torch_vggish_yamnet import yamnet
     from torch_vggish_yamnet.input_proc import WaveformToInput
 
     class YAMNetWrapper(AbsEncoder):
         def __init__(
             self,
-            device: str = "cuda" if torch.cuda.is_available() else "cpu",
+            device: str | None = None,
             max_audio_length_seconds: float = 30.0,
             **kwargs: Any,
         ):
+            import torch
+
+            if device is None:
+                device = "cuda" if torch.cuda.is_available() else "cpu"
+
             self.device = device
             self.max_audio_length_seconds = max_audio_length_seconds
             self.model = yamnet.yamnet(pretrained=True)

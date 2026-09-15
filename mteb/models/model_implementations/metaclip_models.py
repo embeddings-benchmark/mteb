@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -36,9 +35,14 @@ class MetaClip2Model(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ):
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         from transformers import AutoModel, AutoProcessor
 
         self.model_name = model_name
@@ -58,6 +62,8 @@ class MetaClip2Model(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         all_text_embeddings = []
 
         with torch.no_grad():
@@ -80,30 +86,34 @@ class MetaClip2Model(AbsEncoder):
         all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
         return all_text_embeddings
 
-    @torch.no_grad()
     def get_image_embeddings(
         self,
         images: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        all_image_embeddings = []
+        import torch
 
-        for batch in tqdm(images, disable=not show_progress_bar, desc="Image Encoding"):
-            inputs = self.processor(
-                images=batch["image"],
-                return_tensors="pt",
-                padding=True,
-            )
-            inputs = {k: v.to(self.device) for k, v in inputs.items()}
-            image_outputs = self.model.get_image_features(**inputs)
-            # MetaCLIP 2 returns BaseModelOutputWithPooling, extract pooler_output
-            if hasattr(image_outputs, "pooler_output"):
-                image_outputs = image_outputs.pooler_output
-            all_image_embeddings.append(image_outputs.cpu())
+        with torch.no_grad():
+            all_image_embeddings = []
 
-        all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
-        return all_image_embeddings
+            for batch in tqdm(
+                images, disable=not show_progress_bar, desc="Image Encoding"
+            ):
+                inputs = self.processor(
+                    images=batch["image"],
+                    return_tensors="pt",
+                    padding=True,
+                )
+                inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                image_outputs = self.model.get_image_features(**inputs)
+                # MetaCLIP 2 returns BaseModelOutputWithPooling, extract pooler_output
+                if hasattr(image_outputs, "pooler_output"):
+                    image_outputs = image_outputs.pooler_output
+                all_image_embeddings.append(image_outputs.cpu())
+
+            all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
+            return all_image_embeddings
 
     def encode(
         self,

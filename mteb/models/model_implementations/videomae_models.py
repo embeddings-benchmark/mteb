@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
@@ -12,6 +11,7 @@ from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
     from typing_extensions import Unpack
 
@@ -25,6 +25,7 @@ def _load_checkpoint_tensors(
     model_name: str, revision: str | None
 ) -> dict[str, torch.Tensor]:
     """Read raw checkpoint tensors. The file is already in the local HF cache."""
+    import torch
     from huggingface_hub import hf_hub_download
     from huggingface_hub.errors import EntryNotFoundError
 
@@ -62,6 +63,7 @@ class VideoMAEWrapper(AbsEncoder):
         num_frames: int | None = None,
         **kwargs: Any,
     ) -> None:
+        import torch
         from transformers import AutoModel, AutoVideoProcessor
 
         self.model_name = model_name
@@ -104,6 +106,8 @@ class VideoMAEWrapper(AbsEncoder):
         uses standard Linears with their own biases and no key mapping, so they
         arrive zeroed. Skipped on v4, and on any version that loads them.
         """
+        import torch
+
         first = self.model.encoder.layer[0].attention.attention
         if hasattr(first, "q_bias") or first.query.bias is None:
             return
@@ -136,7 +140,6 @@ class VideoMAEWrapper(AbsEncoder):
             )
         logger.info("Restored q_bias/v_bias for %d VideoMAE layers", restored)
 
-    @torch.inference_mode()
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -148,29 +151,32 @@ class VideoMAEWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
-        inputs.collate_fn = FramesCollator(num_frames=self.num_frames)
+        import torch
 
-        embeddings = []
-        for batch in tqdm(inputs, desc="Encoding", disable=not show_progress_bar):
-            videos = batch["video"]
-            padded = [
-                torch.cat(
-                    [v, v[-1:].expand(self.num_frames - v.shape[0], *v.shape[1:])],
-                    dim=0,
-                )
-                if v.shape[0] < self.num_frames
-                else v[: self.num_frames]
-                for v in videos
-            ]
-            # Explicit list-of-videos-of-frames in HWC. A list of 4D tensors trips
-            # `make_batched` on the v4 slow processor, which treats the whole batch
-            # as a single video and then fails inside PIL.
-            processed = self.processor(padded, return_tensors="pt").to(self.device)
+        with torch.inference_mode():
+            inputs.collate_fn = FramesCollator(num_frames=self.num_frames)
 
-            outputs = self.model(**processed)
-            pooled = outputs.last_hidden_state.mean(dim=1)
-            embeddings.append(pooled.cpu())
-        return torch.cat(embeddings, dim=0).numpy()
+            embeddings = []
+            for batch in tqdm(inputs, desc="Encoding", disable=not show_progress_bar):
+                videos = batch["video"]
+                padded = [
+                    torch.cat(
+                        [v, v[-1:].expand(self.num_frames - v.shape[0], *v.shape[1:])],
+                        dim=0,
+                    )
+                    if v.shape[0] < self.num_frames
+                    else v[: self.num_frames]
+                    for v in videos
+                ]
+                # Explicit list-of-videos-of-frames in HWC. A list of 4D tensors trips
+                # `make_batched` on the v4 slow processor, which treats the whole batch
+                # as a single video and then fails inside PIL.
+                processed = self.processor(padded, return_tensors="pt").to(self.device)
+
+                outputs = self.model(**processed)
+                pooled = outputs.last_hidden_state.mean(dim=1)
+                embeddings.append(pooled.cpu())
+            return torch.cat(embeddings, dim=0).numpy()
 
 
 _VIDEOMAE_CITATION = """
