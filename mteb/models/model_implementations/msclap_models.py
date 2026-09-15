@@ -29,9 +29,7 @@ class MSClapWrapper(AbsEncoder):
         self,
         model_name: str = "microsoft/msclap-2023",
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        # None means msclap's own duration (5 s for 2022, 7 s for 2023). Cutting
-        # there keeps msclap out of its random-segment branch, which picks a
-        # different window per run and makes scores irreproducible
+        # None: msclap's own duration; longer input hits its random-window branch
         # https://github.com/microsoft/CLAP/blob/main/msclap/configs/config_2023.yml
         max_audio_length_seconds: float | None = None,
         **kwargs: Any,
@@ -55,9 +53,7 @@ class MSClapWrapper(AbsEncoder):
         self.model = CLAP(version=self.version, use_cuda=self.use_cuda)
         self.model.clap = self.model.clap.to(self.device)
         self.tokenizer = self.model.tokenizer
-        # msclap's own config declares the rate its preprocessing expects
-        # (44,100 for 2022 and 2023). Writing 48 kHz WAVs and calling msclap
-        # with resample=False made it read them as 44.1 kHz, stretching the audio.
+        # 44100 for 2022 and 2023: msclap's own config
         # https://github.com/microsoft/CLAP/blob/main/msclap/configs/config_2023.yml
         self.sampling_rate = int(self.model.args.sampling_rate)
         self.max_audio_length_seconds = max_audio_length_seconds or float(
