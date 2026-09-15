@@ -9,6 +9,7 @@ from tqdm.auto import tqdm
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator, VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Mapping
@@ -210,9 +211,12 @@ class ColQwen3Wrapper(AbsEncoder):
         *,
         revision: str | None = None,
         device: str | None = None,
-        dtype: torch.dtype | str | None = torch.bfloat16,
+        dtype: OutputDType | torch.dtype | str | None = OutputDType.BF16,
         **kwargs: Any,
     ):
+        if isinstance(dtype, OutputDType):
+            dtype = dtype.get_dtype()
+
         from transformers import AutoModel, AutoProcessor
 
         self.device = device or (
@@ -450,7 +454,7 @@ class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
 colqwen2 = ModelMeta(
     loader=ColQwen2Wrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float16,
+        torch_dtype=OutputDType.FLOAT16,
     ),
     name="vidore/colqwen2-v1.0",
     model_type=["late-interaction"],
@@ -479,7 +483,7 @@ colqwen2 = ModelMeta(
 colqwen2_5 = ModelMeta(
     loader=ColQwen2_5Wrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float16,
+        torch_dtype=OutputDType.FLOAT16,
     ),
     name="vidore/colqwen2.5-v0.2",
     model_type=["late-interaction"],
@@ -599,7 +603,7 @@ COLNOMIC_LANGUAGES = [
 colnomic_3b = ModelMeta(
     loader=ColQwen2_5Wrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float16, attn_implementation="flash_attention_2"
+        torch_dtype=OutputDType.FLOAT16, attn_implementation="flash_attention_2"
     ),
     name="nomic-ai/colnomic-embed-multimodal-3b",
     model_type=["late-interaction"],
@@ -628,7 +632,7 @@ colnomic_3b = ModelMeta(
 colnomic_7b = ModelMeta(
     loader=ColQwen2_5Wrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float16,
+        torch_dtype=OutputDType.FLOAT16,
     ),
     name="nomic-ai/colnomic-embed-multimodal-7b",
     model_type=["late-interaction"],
@@ -667,7 +671,7 @@ EVOQWEN_TRAINING_DATA = {
 evoqwen25_vl_retriever_3b_v1 = ModelMeta(
     loader=ColQwen2_5Wrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float16, attn_implementation="flash_attention_2"
+        torch_dtype=OutputDType.FLOAT16, attn_implementation="flash_attention_2"
     ),
     name="ApsaraStackMaaS/EvoQwen2.5-VL-Retriever-3B-v1",
     model_type=["late-interaction"],
@@ -695,7 +699,7 @@ evoqwen25_vl_retriever_3b_v1 = ModelMeta(
 evoqwen25_vl_retriever_7b_v1 = ModelMeta(
     loader=ColQwen2_5Wrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float16, attn_implementation="flash_attention_2"
+        torch_dtype=OutputDType.FLOAT16, attn_implementation="flash_attention_2"
     ),
     name="ApsaraStackMaaS/EvoQwen2.5-VL-Retriever-7B-v1",
     model_type=["late-interaction"],
@@ -740,7 +744,7 @@ COLQWEN35_V3_TRAINING_DATA = {
 colqwen3_5_v3 = ModelMeta(
     loader=ColQwen3_5Wrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
     ),
     name="athrael-soju/colqwen3.5-4.5B-v3",
     model_type=["late-interaction"],
@@ -800,7 +804,7 @@ COLTURK_CITATION = """
 colturk_vdr_4b = ModelMeta(
     loader=ColQwen3EngineWrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
     ),
     name="Verm1ion/ColTurk-VDR-Qwen3VL-4B-v1.0",
     model_type=["late-interaction"],
@@ -850,7 +854,7 @@ VULTRON_PRIME_8B_TRAINING_DATA = {
 vultron_prime_qwen35_8b = ModelMeta(
     loader=ColQwen3_5Wrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
     ),
     name="vultr/VultronRetrieverPrime-Qwen3.5-8B",
     model_type=["late-interaction"],
@@ -878,7 +882,7 @@ vultron_prime_qwen35_8b = ModelMeta(
 vultron_flash_qwen35_0_8b = ModelMeta(
     loader=ColQwen3_5Wrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
     ),
     name="vultr/VultronRetrieverFlash-Qwen3.5-0.8B",
     model_type=["late-interaction"],
@@ -906,7 +910,7 @@ vultron_flash_qwen35_0_8b = ModelMeta(
 vultron_core_qwen35_4b = ModelMeta(
     loader=ColQwen3_5Wrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
     ),
     name="vultr/VultronRetrieverCore-Qwen3.5-4.5B",
     model_type=["late-interaction"],
@@ -933,7 +937,7 @@ vultron_core_qwen35_4b = ModelMeta(
 
 colqwen_omni = ModelMeta(
     loader=ColQwen2_5OmniWrapper,
-    loader_kwargs=dict(torch_dtype=torch.bfloat16),
+    loader_kwargs=dict(torch_dtype=OutputDType.BF16),
     name="vidore/colqwen-omni-v0.1",
     model_type=["late-interaction"],
     languages=["eng-Latn"],

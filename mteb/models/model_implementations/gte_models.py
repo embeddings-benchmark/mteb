@@ -1,12 +1,10 @@
-import torch
-
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 
 def instruction_template(
@@ -33,7 +31,7 @@ gte_qwen2_7b_instruct = ModelMeta(
     loader_kwargs=dict(
         instruction_template=instruction_template,
         apply_instruction_to_passages=False,
-        model_kwargs={"dtype": torch.bfloat16},
+        model_kwargs={"dtype": OutputDType.BF16},
         # The remote modeling_qwen.py calls DynamicCache.get_usable_length(),
         # removed in transformers>=4.56; encoding never needs the KV cache,
         # and use_cache=False skips that code path.
@@ -68,7 +66,7 @@ gte_qwen1_5_7b_instruct = ModelMeta(
     loader_kwargs=dict(
         instruction_template=instruction_template,
         apply_instruction_to_passages=False,
-        model_kwargs={"dtype": torch.float16},
+        model_kwargs={"dtype": OutputDType.FLOAT16},
         add_eos_token=True,
     ),
     name="Alibaba-NLP/gte-Qwen1.5-7B-instruct",
@@ -103,7 +101,7 @@ gte_qwen2_1_5b_instruct = ModelMeta(
     loader_kwargs=dict(
         instruction_template=instruction_template,
         apply_instruction_to_passages=False,
-        model_kwargs={"dtype": torch.float16},
+        model_kwargs={"dtype": OutputDType.FLOAT16},
         add_eos_token=True,
     ),
     name="Alibaba-NLP/gte-Qwen2-1.5B-instruct",

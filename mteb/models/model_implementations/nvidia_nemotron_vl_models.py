@@ -9,7 +9,7 @@ from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -54,10 +54,13 @@ class NemotronColEmbedVL(AbsEncoder):
         revision: str,
         trust_remote_code: bool,
         device_map: str = "cuda",
-        torch_dtype: torch.dtype = torch.bfloat16,
+        torch_dtype: OutputDType | torch.dtype = OutputDType.BF16,
         attn_implementation: str = "flash_attention_2",
         **kwargs: Any,
     ):
+        if isinstance(torch_dtype, OutputDType):
+            torch_dtype = torch_dtype.get_dtype()
+
         from transformers import AutoModel
 
         self.model = AutoModel.from_pretrained(
@@ -329,12 +332,15 @@ class LlamaNemotronEmbedVL(AbsEncoder):
         trust_remote_code: bool,
         extra_name: str = "llama-nemotron-embed-vl-1b-v2",
         device_map: str = "cuda",
-        torch_dtype: torch.dtype = torch.bfloat16,
+        torch_dtype: OutputDType | torch.dtype = OutputDType.BF16,
         attn_implementation: str = "flash_attention_2",
         use_image_modality: bool = True,
         use_text_modality: bool = True,
         **kwargs: Any,
     ):
+        if isinstance(torch_dtype, OutputDType):
+            torch_dtype = torch_dtype.get_dtype()
+
         self.use_image_modality = use_image_modality
         self.use_text_modality = use_text_modality
         if not self.use_image_modality and not self.use_text_modality:

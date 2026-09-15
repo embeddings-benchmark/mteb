@@ -46,6 +46,10 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "BSARDRetrieval.v2",
         "BengaliDocumentClassification",
         "BibleNLPBitextMining",
+        "BioVITAA2TReranking",  # genus-level text is the bare genus name, which can be 3 characters
+        "BioVITAI2TReranking",
+        "BioVITAT2AReranking",
+        "BioVITAT2IReranking",
         "BlurbsClusteringS2S",
         "BlurbsClusteringS2S.v2",
         "BornholmBitextMining",
@@ -347,6 +351,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "TempReasonL3Fact",
         "TempReasonL3Pure",
         "ThuNewsClusteringS2S",
+        "ToolRetrieval",
         "Touche2020",
         "Touche2020-Fa",
         "Touche2020-Fa.v2",
@@ -439,6 +444,10 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "BengaliHateSpeechClassification",
         "BengaliSentimentAnalysis",
         "BeytooteClustering",
+        "BioVITAA2TReranking",  # genus-level text repeats across the species of a genus; the official candidate groups require one entry per species row
+        "BioVITAI2TReranking",
+        "BioVITAT2AReranking",
+        "BioVITAT2IReranking",
         "BiorxivClusteringP2P",
         "BiorxivClusteringS2S",
         "BlurbsClusteringP2P",
@@ -459,6 +468,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "CodeSearchNetCCRetrieval",
         "CodeSearchNetRetrieval",
         "CodeTransOceanDL",
+        "ColDeRReranking",  # controlled document pairs intentionally reuse text
         "Core17InstructionRetrieval",
         "CosQA",
         "CrisisMMDHumanitarianClassification",  # one tweet can pair with several separately annotated images
@@ -645,6 +655,8 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "TamilNewsClassification",
         "TenKGnadClusteringP2P",
         "TenKGnadClusteringS2S",
+        "ToolRetrieval",
+        "ToolRetrievalInstruction",
         "Touche2020-VN",
         "ToxicChatClassification",
         "TurkicClassification",
@@ -835,6 +847,10 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "AROFlickrOrder",
         "AROVisualAttribution",
         "AROVisualRelation",
+        "BioVITAA2IReranking",  # the species and genus subsets share one image index, so the cross-subset aggregate counts each image twice
+        "BioVITAI2AReranking",
+        "BioVITAI2TReranking",
+        "BioVITAT2IReranking",
         "CIRRIT2IRetrieval",
         "EDIRIT2IRetrieval",
         "EDIST2ITRetrieval",
@@ -905,6 +921,10 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "ACMComposedAudioRetrieval",  # composed audio retrieval naturally reuses source audios with different query instructions
         "AmbientAcousticContext",
         "AmbientAcousticContextClustering",
+        "BioVITAA2IReranking",  # the species and genus subsets share one audio index, so the cross-subset aggregate counts each clip twice
+        "BioVITAA2TReranking",
+        "BioVITAI2AReranking",
+        "BioVITAT2AReranking",
         "ClothoMomentRetrieval",  # same audio with different instruction
         "CLDAT2ARetrieval",
         "FSD2019Kaggle",

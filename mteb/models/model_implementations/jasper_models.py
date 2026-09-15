@@ -16,7 +16,7 @@ from mteb.models.model_implementations.e5_instruct import E5_MISTRAL_TRAINING_DA
 from mteb.models.model_implementations.nvidia_models import nvidia_training_datasets
 from mteb.models.model_implementations.qzhou_models import qzhou_training_data
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -286,7 +286,7 @@ jasper_en_v1 = ModelMeta(
         config_kwargs={"is_text_encoder": True, "vector_dim": 12288},
         model_kwargs={
             "attn_implementation": "sdpa",
-            "torch_dtype": torch.bfloat16,
+            "torch_dtype": OutputDType.BF16,
         },
         trust_remote_code=True,
         max_seq_length=2048,
