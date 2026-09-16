@@ -54,7 +54,7 @@ class ASTWrapper(AbsEncoder):
             inputs,
             disable=not show_progress_bar,
         ):
-            # truncation=True uses the extractor's own max_length=1024 frames (10.24 s)
+            # the extractor always emits max_length=1024 frames (10.24 s)
             # https://huggingface.co/MIT/ast-finetuned-audioset-10-10-0.4593/blob/main/preprocessor_config.json
             # pad up to the 400-sample FFT window so short clips do not crash
             audio_arrays = [
@@ -69,8 +69,6 @@ class ASTWrapper(AbsEncoder):
                 audio_arrays,
                 sampling_rate=self.sampling_rate,
                 return_tensors="pt",
-                truncation=True,
-                padding=True,
             ).to(self.device)
 
             outputs = self.model(**features)

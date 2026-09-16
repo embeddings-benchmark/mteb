@@ -37,9 +37,7 @@ class EBindWrapper(AbsEncoder):
         device: str | None = None,
         fps: float | None = None,
         max_frames: int | None = None,
-        # 8 frames: eBind's declared clip length; the checkpoint declares no
-        # frame count of its own
-        # https://huggingface.co/encord-team/ebind-full
+        # 8 frames is an mteb default; the checkpoint declares no frame count
         num_frames: int | None = 8,
         **kwargs: Any,
     ) -> None:
