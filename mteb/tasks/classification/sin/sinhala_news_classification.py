@@ -67,10 +67,10 @@ class SinhalaNewsClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{deSilva2015,
-  author = {Nisansa de Silva},
-  journal = {Year of Publication},
-  title = {Sinhala Text Classification: Observations from the Perspective of a Resource Poor Language},
+@article{de2015sinhala,
+  author = {de Silva, Nisansa},
+  journal = {ResearchGate},
+  title = {Sinhala text classification: observations from the perspective of a resource poor language},
   year = {2015},
 }
 

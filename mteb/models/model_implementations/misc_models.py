@@ -292,11 +292,14 @@ Lajavaness__bilingual_embedding_base = ModelMeta(
       bibsource = {dblp computer science bibliography, https://dblp.org}
     }
 
-@article{reimers2019sentence,
-   title={Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
-   author={Nils Reimers, Iryna Gurevych},
-   journal={https://arxiv.org/abs/1908.10084},
-   year={2019}
+@inproceedings{reimers-2019-sentence-bert,
+  author = {Reimers, Nils and Gurevych, Iryna},
+  booktitle = {Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing},
+  month = {11},
+  publisher = {Association for Computational Linguistics},
+  title = {Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
+  url = {https://arxiv.org/abs/1908.10084},
+  year = {2019},
 }
 
 @article{thakur2020augmented,
@@ -358,11 +361,14 @@ Lajavaness__bilingual_embedding_large = ModelMeta(
       bibsource = {dblp computer science bibliography, https://dblp.org}
     }
 
-@article{reimers2019sentence,
-   title={Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
-   author={Nils Reimers, Iryna Gurevych},
-   journal={https://arxiv.org/abs/1908.10084},
-   year={2019}
+@inproceedings{reimers-2019-sentence-bert,
+  author = {Reimers, Nils and Gurevych, Iryna},
+  booktitle = {Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing},
+  month = {11},
+  publisher = {Association for Computational Linguistics},
+  title = {Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
+  url = {https://arxiv.org/abs/1908.10084},
+  year = {2019},
 }
 
 @article{thakur2020augmented,
@@ -424,11 +430,14 @@ Lajavaness__bilingual_embedding_small = ModelMeta(
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 
-@article{reimers2019sentence,
-   title={Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
-   author={Nils Reimers, Iryna Gurevych},
-   journal={https://arxiv.org/abs/1908.10084},
-   year={2019}
+@inproceedings{reimers-2019-sentence-bert,
+  author = {Reimers, Nils and Gurevych, Iryna},
+  booktitle = {Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing},
+  month = {11},
+  publisher = {Association for Computational Linguistics},
+  title = {Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
+  url = {https://arxiv.org/abs/1908.10084},
+  year = {2019},
 }
 
 @article{thakur2020augmented,
