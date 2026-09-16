@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import importlib.metadata
 from typing import TYPE_CHECKING, Any
 
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -15,40 +14,8 @@ if TYPE_CHECKING:
 MODEL_NAME = "steffen-negabo/ngnn-general-encoder-v1"
 MODEL_REVISION = "d6969c26400944d4f5200ebddfdc04a083fd7b75"
 OUTPUT_DIM = 512
-PACKAGE_DISTRIBUTION = "ngnn-encoder"
-PACKAGE_VERSION = "0.1.0"
-PACKAGE_INSTALL_URL = (
-    "https://github.com/steffen181/frozen-ngnn-api-modesl/releases/download/"
-    "v0.1.0/ngnn_encoder-0.1.0-py3-none-any.whl"
-    "#sha256=1ea29b3717175aacc2b6f1465d456201446a2c4eec835428526807bd6c7833e3"
-)
-
-HF_REPO_ID: str | None = "steffen-negabo/ngnn-general-encoder-v1"
-HF_ARTIFACT_REVISION: str | None = "bab7d30011438e52f22be540067c73ca37f462eb"
-
-
-def _load_encoder_class() -> Any:  # noqa: ANN401 -- package class is imported lazily
-    """Import the pinned inference package only when a model is requested."""
-    install = f"pip install '{PACKAGE_INSTALL_URL}'"
-    try:
-        installed = importlib.metadata.version(PACKAGE_DISTRIBUTION)
-    except importlib.metadata.PackageNotFoundError:
-        raise RuntimeError(
-            f"Install {PACKAGE_DISTRIBUTION}=={PACKAGE_VERSION} with: {install}"
-        ) from None
-    if installed != PACKAGE_VERSION:
-        raise RuntimeError(
-            f"This adapter requires {PACKAGE_DISTRIBUTION}=={PACKAGE_VERSION}; "
-            f"found {installed}. Reinstall with: {install}"
-        )
-    try:
-        from ngnn_encoder import NgnnGeneralEncoder
-    except ImportError:
-        raise RuntimeError(
-            f"Could not import {PACKAGE_DISTRIBUTION}=={PACKAGE_VERSION}; "
-            f"reinstall with: {install}"
-        ) from None
-    return NgnnGeneralEncoder
+HF_REPO_ID = "steffen-negabo/ngnn-general-encoder-v1"
+HF_ARTIFACT_REVISION = "bab7d30011438e52f22be540067c73ca37f462eb"
 
 
 def load_ngnn_model(
@@ -73,20 +40,16 @@ def load_ngnn_model(
         raise ValueError("Unsupported NGNN model revision")
     if device not in {None, "cpu"}:
         raise ValueError("This NGNN revision uses CPU inference")
-    if artifact_path is None and (HF_REPO_ID is None or HF_ARTIFACT_REVISION is None):
-        raise RuntimeError(
-            "NGNN Hub loading is not yet published; pass artifact_path explicitly"
-        )
+    from ngnn_encoder import NgnnGeneralEncoder
 
-    encoder_class = _load_encoder_class()
     if artifact_path is not None:
-        model = encoder_class(
+        model = NgnnGeneralEncoder(
             artifact_path,
             client=client,
             provider_batch_size=provider_batch_size,
         )
     else:
-        model = encoder_class.from_pretrained(
+        model = NgnnGeneralEncoder.from_pretrained(
             HF_REPO_ID,
             revision=HF_ARTIFACT_REVISION,
             cache_dir=cache_dir,
@@ -123,5 +86,5 @@ ngnn_general_encoder = ModelMeta(
     modalities=["text"],
     model_type=["dense"],
     contacts=["steffen181"],
-    extra_requirements_groups=["openai"],
+    extra_requirements_groups=["ngnn"],
 )

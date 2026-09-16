@@ -1,4 +1,4 @@
-**Native MTEB integration with the installed ngnn-encoder 0.1.0 wheel and actual anonymous Hugging Face downloads. Provider embeddings are synthetic; no new paid OpenAI calls or model-quality claim.**
+**Native MTEB integration with the ngnn-encoder 0.1.0 installed from public PyPI and actual anonymous Hugging Face downloads. Provider embeddings are synthetic; no new paid OpenAI calls or model-quality claim.**
 
 HF artifact commit: `bab7d30011438e52f22be540067c73ca37f462eb`. Canonical MTEB revision remains `d6969c26400944d4f5200ebddfdc04a083fd7b75`.
 
