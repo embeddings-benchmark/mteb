@@ -92,7 +92,6 @@ multilingual_langs = [
     "zho-Hans",
 ]
 
-MOD_CITATION = None
 training_data = {
     "T2Retrieval",
     "DuRetrieval",
@@ -181,6 +180,5 @@ MoD_Embedding = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=training_data,
-    citation=MOD_CITATION,
     adapted_from="Qwen/Qwen3-Embedding-4B",
 )

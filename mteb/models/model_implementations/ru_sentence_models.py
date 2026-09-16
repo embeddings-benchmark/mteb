@@ -1052,7 +1052,6 @@ user2_small = ModelMeta(
     public_training_data=None,
     public_training_code="https://github.com/BlessedTatonka/some_code/tree/2899f27d51efdf4217fc6453799ff197e9792f1e",
     framework=["Sentence Transformers", "PyTorch", "safetensors"],
-    citation=None,
 )
 
 user2_base = ModelMeta(
@@ -1080,7 +1079,6 @@ user2_base = ModelMeta(
     public_training_data=None,
     public_training_code="https://github.com/BlessedTatonka/some_code/tree/2899f27d51efdf4217fc6453799ff197e9792f1e",
     framework=["Sentence Transformers", "PyTorch", "safetensors"],
-    citation=None,
 )
 
 

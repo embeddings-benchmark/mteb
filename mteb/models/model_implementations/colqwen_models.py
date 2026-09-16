@@ -517,7 +517,6 @@ TOMORO_TRAINING_DATA = {
     "VisRAG-Ret-Train-In-domain-data",
 }
 
-TOMORO_CITATION = None
 colqwen3_8b = ModelMeta(
     loader=ColQwen3Wrapper,
     name="TomoroAI/tomoro-colqwen3-embed-8b",
@@ -540,7 +539,6 @@ colqwen3_8b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=TOMORO_TRAINING_DATA,
-    citation=TOMORO_CITATION,
     extra_requirements_groups=["colqwen3"],
 )
 
@@ -566,7 +564,6 @@ colqwen3_4b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=TOMORO_TRAINING_DATA,
-    citation=TOMORO_CITATION,
     extra_requirements_groups=["colqwen3"],
 )
 
@@ -781,7 +778,6 @@ class ColQwen3EngineWrapper(ColPaliEngineWrapper):
         )
 
 
-COLTURK_CITATION = None
 colturk_vdr_4b = ModelMeta(
     loader=ColQwen3EngineWrapper,
     loader_kwargs=dict(
@@ -807,7 +803,6 @@ colturk_vdr_4b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
-    citation=COLTURK_CITATION,
     extra_requirements_groups=["colpali_engine"],
     adapted_from="Qwen/Qwen3-VL-4B-Instruct",
 )

@@ -122,8 +122,6 @@ class EagerEmbedV1Wrapper(AbsEncoder):
         return torch.cat(all_embeddings, dim=0)
 
 
-EAGER_EMBED_V1_CITATION = None
-
 EAGER_EMBED_V1_TRAINING_DATASETS = {"colpali", "bge-ir", "pixmo-docs", "wiki-ss"}
 
 Eager_Embed_V1 = ModelMeta(
@@ -150,7 +148,6 @@ Eager_Embed_V1 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     training_datasets=EAGER_EMBED_V1_TRAINING_DATASETS,
-    citation=EAGER_EMBED_V1_CITATION,
     adapted_from="https://huggingface.co/Qwen/Qwen3-VL-4B-Instruct",
     public_training_code="https://github.com/eagerworks/eager-embed",
     public_training_data="https://github.com/eagerworks/eager-embed/blob/main/dataset_config.yaml",

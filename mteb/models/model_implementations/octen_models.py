@@ -127,7 +127,6 @@ multilingual_langs = [
     "zho-Hans",
 ]
 
-OCTEN_CITATION = None
 training_data = {
     "T2Retrieval",
     "DuRetrieval",
@@ -215,7 +214,6 @@ Octen_Embedding_0B6 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=training_data,
-    citation=OCTEN_CITATION,
     output_dtypes=OutputDType.BF16,
     adapted_from="Qwen/Qwen3-Embedding-0.6B",
 )
@@ -247,7 +245,6 @@ Octen_Embedding_4B = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=training_data,
-    citation=OCTEN_CITATION,
     output_dtypes=OutputDType.BF16,
     adapted_from="Qwen/Qwen3-Embedding-4B",
 )
@@ -279,7 +276,6 @@ Octen_Embedding_8B = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=training_data,
-    citation=OCTEN_CITATION,
     output_dtypes=OutputDType.BF16,
     adapted_from="Qwen/Qwen3-Embedding-8B",
 )
@@ -311,7 +307,6 @@ Octen_Embedding_4B_INT8_dim_1024 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=training_data,
-    citation=OCTEN_CITATION,
     output_dtypes=OutputDType.FLOAT16,
     adapted_from="Qwen/Qwen3-Embedding-4B",
 )
@@ -343,7 +338,6 @@ Octen_Embedding_8B_INT8_dim_1024 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=training_data,
-    citation=OCTEN_CITATION,
     output_dtypes=OutputDType.FLOAT16,
     adapted_from="Qwen/Qwen3-Embedding-8B",
 )
@@ -494,7 +488,6 @@ Octen_VL_Embedding = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=training_data,
-    citation=OCTEN_CITATION,
 )
 
 Octen_VL_Embedding_Large = ModelMeta(
@@ -521,5 +514,4 @@ Octen_VL_Embedding_Large = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=training_data,
-    citation=OCTEN_CITATION,
 )

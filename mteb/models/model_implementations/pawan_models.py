@@ -4,7 +4,6 @@ from mteb.models.model_meta import (
 )
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
-PAWAN_EMBD_CITATION = None
 pawan_embd_68m = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
     name="dmedhi/PawanEmbd-68M",
@@ -30,5 +29,4 @@ pawan_embd_68m = ModelMeta(
     training_datasets={
         "AllNLI",
     },
-    citation=PAWAN_EMBD_CITATION,
 )

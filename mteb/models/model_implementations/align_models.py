@@ -136,5 +136,4 @@ align_base = ModelMeta(
     training_datasets=set(
         #  COYO-700M
     ),
-    citation=None,
 )

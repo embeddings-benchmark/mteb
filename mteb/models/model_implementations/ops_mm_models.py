@@ -208,7 +208,6 @@ class OpsMMEmbeddingWrapper(AbsEncoder):
         return torch.cat(all_embeddings, dim=0).numpy()
 
 
-OPS_MM_EMBEDDING_CITATION = None
 ops_mm_embedding_v1_2b = ModelMeta(
     loader=OpsMMEmbeddingWrapper,
     name="OpenSearch-AI/Ops-MM-embedding-v1-2B",
@@ -231,7 +230,6 @@ ops_mm_embedding_v1_2b = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
-    citation=OPS_MM_EMBEDDING_CITATION,
 )
 
 ops_mm_embedding_v1_7b = ModelMeta(
@@ -256,5 +254,4 @@ ops_mm_embedding_v1_7b = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
-    citation=OPS_MM_EMBEDDING_CITATION,
 )

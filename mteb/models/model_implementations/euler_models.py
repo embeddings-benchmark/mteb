@@ -24,5 +24,4 @@ Euler_Legal_Embedding_V1 = ModelMeta(
     training_datasets=set(),  # final-data-new-anonymized-grok4-filtered
     adapted_from="Qwen/Qwen3-Embedding-8B",
     superseded_by=None,
-    citation=None,
 )

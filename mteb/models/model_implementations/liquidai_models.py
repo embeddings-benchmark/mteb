@@ -4,8 +4,6 @@ from mteb.models.model_implementations.pylate_models import MultiVectorModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
-LFM2_5_CITATION = None
-
 LFM2_CITATION = """@article{liquidai2025lfm2,
   title={LFM2 Technical Report},
   author={Liquid AI},
@@ -56,7 +54,6 @@ lfm2_5_embedding_350m = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
-    citation=LFM2_5_CITATION,
 )
 
 lfm2_5_colbert_350m = ModelMeta(
@@ -104,7 +101,6 @@ lfm2_5_colbert_350m = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     extra_requirements_groups=["pylate"],
-    citation=LFM2_5_CITATION,
 )
 
 lfm2_colbert_350m = ModelMeta(

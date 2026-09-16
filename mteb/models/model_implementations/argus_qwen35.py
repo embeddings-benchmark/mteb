@@ -61,7 +61,6 @@ ARGUS_TRAINING_DATA = {
     "VidoreArxivQARetrieval",
 }
 
-ARGUS_CITATION = None
 argus_colqwen35_4b = ModelMeta(
     loader=ArgusColQwen35Wrapper,
     name="DataScience-UIBK/Argus-Colqwen3.5-4b-v0",
@@ -87,7 +86,6 @@ argus_colqwen35_4b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=ARGUS_TRAINING_DATA,
-    citation=ARGUS_CITATION,
     model_type=["late-interaction"],
 )
 
@@ -117,7 +115,6 @@ argus_colqwen35_4b_bf16 = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=ARGUS_TRAINING_DATA,
-    citation=ARGUS_CITATION,
     model_type=["late-interaction"],
     adapted_from="DataScience-UIBK/Argus-Colqwen3.5-4b-v0",
 )
@@ -148,7 +145,6 @@ argus_colqwen35_2b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=ARGUS_TRAINING_DATA,
-    citation=ARGUS_CITATION,
     model_type=["late-interaction"],
 )
 
@@ -178,7 +174,6 @@ argus_colqwen35_2b_bf16 = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=ARGUS_TRAINING_DATA,
-    citation=ARGUS_CITATION,
     model_type=["late-interaction"],
     adapted_from="DataScience-UIBK/Argus-Colqwen3.5-2b-v0",
 )
@@ -209,7 +204,6 @@ argus_colqwen35_9b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=ARGUS_TRAINING_DATA,
-    citation=ARGUS_CITATION,
     model_type=["late-interaction"],
 )
 
@@ -239,7 +233,6 @@ argus_colqwen35_9b_bf16 = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=ARGUS_TRAINING_DATA,
-    citation=ARGUS_CITATION,
     model_type=["late-interaction"],
     adapted_from="DataScience-UIBK/Argus-Colqwen3.5-9b-v0",
 )

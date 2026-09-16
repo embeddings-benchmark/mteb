@@ -124,7 +124,6 @@ class VoiceCLAPSmallWrapper(AbsEncoder):
         raise ValueError
 
 
-_VOICECLAP_CITATION = None
 voiceclap_large = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
     loader_kwargs={"trust_remote_code": True},
@@ -148,7 +147,6 @@ voiceclap_large = ModelMeta(
     use_instructions=False,
     training_datasets=None,
     adapted_from="LCO-Embedding/LCO-Embedding-Omni-7B",
-    citation=_VOICECLAP_CITATION,
     extra_requirements_groups=["multimodal-sbert"],
 )
 
@@ -173,5 +171,4 @@ voiceclap_small = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=None,
-    citation=_VOICECLAP_CITATION,
 )

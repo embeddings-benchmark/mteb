@@ -133,7 +133,6 @@ aiteamvn_vietnamese_embeddings = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     adapted_from="BAAI/bge-m3",
-    citation=None,
 )
 
 

@@ -66,7 +66,6 @@ SFR_Embedding_2_R = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=SFR_TRAINING_DATA,
-    citation=None,
 )
 
 SFR_Embedding_Code_2B_R = ModelMeta(
@@ -135,5 +134,4 @@ SFR_Embedding_Mistral = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=SFR_TRAINING_DATA,
-    citation=None,
 )

@@ -508,7 +508,6 @@ lightonai__gte_moderncolbert_v1 = ModelMeta(
         "TRECDL2020",
         "CornStack",
     },
-    citation=None,
     extra_requirements_groups=["pylate"],
 )
 
@@ -569,7 +568,6 @@ topk_io__iso_moderncolbert = ModelMeta(
     training_datasets={
         "MSMARCO",
     },
-    citation=None,
     extra_requirements_groups=["pylate"],
 )
 

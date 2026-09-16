@@ -45,9 +45,6 @@ LlamaEmbedNemotron_CITATION = """@misc{babakhin2025llamaembednemotron8buniversal
 }"""
 
 
-NEMOTRON_3_EMBED_CITATION = None
-
-
 def _instruction_template(
     instruction: str, prompt_type: PromptType | None = None
 ) -> str:
@@ -712,7 +709,6 @@ nemotron_3_embed_1b_bf16 = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation=NEMOTRON_3_EMBED_CITATION,
     contacts=["ybabakhin"],
     output_dtypes=OutputDType.BF16,
     extra_requirements_groups=["nemotron-3-embed"],
@@ -744,7 +740,6 @@ nemotron_3_embed_8b_bf16 = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation=NEMOTRON_3_EMBED_CITATION,
     contacts=["ybabakhin"],
     output_dtypes=OutputDType.BF16,
     extra_requirements_groups=["nemotron-3-embed"],

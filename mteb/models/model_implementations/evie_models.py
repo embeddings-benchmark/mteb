@@ -94,7 +94,6 @@ class EvieWrapper(ColQwen3_5Wrapper):
         )
 
 
-EVIE_CITATION = None
 EVIE_TRAINING_DATA = {
     # from https://huggingface.co/datasets/vidore/colpali_train_set
     "VidoreDocVQARetrieval",
@@ -145,7 +144,6 @@ evie_8b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=False,
     training_datasets=EVIE_TRAINING_DATA,
-    citation=EVIE_CITATION,
     extra_requirements_groups=["evie"],
 )
 
@@ -176,6 +174,5 @@ evie_4_5b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=False,
     training_datasets=EVIE_TRAINING_DATA,
-    citation=EVIE_CITATION,
     extra_requirements_groups=["evie"],
 )
