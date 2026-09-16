@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import logging
+import math
 from collections import defaultdict
+from itertools import groupby
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
@@ -17,7 +19,7 @@ if TYPE_CHECKING:
 
     from numpy.typing import NDArray
 
-    from mteb.types import RelevantDocumentsType
+    from mteb.types import GainsType, RelevantDocumentsType
 
 logger = logging.getLogger(__name__)
 
@@ -53,6 +55,95 @@ def mrr(
                     break
             mrr_metrics[f"MRR@{k}"].append(rr)
     return mrr_metrics
+
+
+def _dcg(gains: Sequence[float], k: int) -> float:
+    """DCG@k = sum_{r=1}^{k} gain(r) / log2(r + 1)."""
+    return sum(
+        gain / math.log2(rank + 1) for rank, gain in enumerate(gains[:k], start=1)
+    )
+
+
+def ndcg_float_scores(
+    gains: GainsType,
+    results: Mapping[str, Mapping[str, float]],
+    k_values: Sequence[int],
+) -> dict[str, float]:
+    """Computes NDCG@k over continuous (float) relevance gains, bypassing pytrec_eval.
+
+    pytrec_eval only accepts integer relevance labels, so gains are used directly
+    (identity, non-negative; apply any transform, e.g. a sigmoid, at dataset
+    creation time). Equal model scores form one equivalence class: every tied
+    document is credited the group-mean gain, the expectation over all tie
+    resolutions. A stable sort instead would let the candidate-pool order (which
+    is relevance-ordered for reranking pools) leak ground truth into tied scores.
+
+    The task layer must ensure that the gains cover every query in `results`;
+    a query ID missing from `gains` raises `KeyError`. A non-finite or negative
+    gain, and a NaN model score, raise `ValueError` rather than being scored --
+    each would otherwise reach the mean as a silent `nan` or an extra tie class.
+    Unlike the integer-qrels metrics, `skip_first_result` is not applied to the
+    float metric.
+
+    Args:
+        gains: Continuous gains for each query, `{query_id: {doc_id: gain}}`. Must
+            cover every query ID in `results`.
+        results: Retrieval scores for each query, `{query_id: {doc_id: score}}`.
+        k_values: The k values for which to compute the scores.
+
+    Returns:
+        A dictionary with the mean `ndcg_float_at_{k}` scores and the nAUC
+        variants of the per-query scores.
+    """
+    for query_id, doc_gains in gains.items():
+        # NaN passes every comparison, so finiteness is checked before the sign
+        if any(not math.isfinite(gain) or gain < 0 for gain in doc_gains.values()):
+            raise ValueError(
+                f"Non-finite or negative gain for query {query_id}. Gains must be "
+                "finite and non-negative; apply any transform (e.g. sigmoid) at "
+                "dataset creation time."
+            )
+
+    for query_id, doc_scores in results.items():
+        if any(math.isnan(score) for score in doc_scores.values()):
+            raise ValueError(
+                f"NaN model score for query {query_id}. NDCG_float is undefined "
+                "for NaN model scores (infinities are ranked as usual)."
+            )
+
+    per_query: dict[str, list[float]] = defaultdict(list)
+    for query_id, doc_scores in results.items():
+        query_gains = gains[query_id]
+        ranking = sorted(
+            doc_scores, key=lambda doc_id: doc_scores[doc_id], reverse=True
+        )
+
+        tie_mean: dict[str, float] = {}
+        for _, tie_group in groupby(ranking, key=doc_scores.__getitem__):
+            tie_docs = list(tie_group)
+            mean = sum(query_gains.get(doc_id, 0.0) for doc_id in tie_docs) / len(
+                tie_docs
+            )
+            tie_mean.update(dict.fromkeys(tie_docs, mean))
+
+        ideal_gains = sorted(query_gains.values(), reverse=True)
+        for k in k_values:
+            ideal_dcg = _dcg(ideal_gains, k)
+            if ideal_dcg == 0.0:
+                per_query[f"NDCG_float@{k}"].append(0.0)
+                continue
+            actual_dcg = _dcg([tie_mean[doc_id] for doc_id in ranking[:k]], k)
+            per_query[f"NDCG_float@{k}"].append(actual_dcg / ideal_dcg)
+
+    summary = {
+        f"ndcg_float_at_{key.split('@')[1]}": round(sum(values) / len(values), 5)
+        for key, values in per_query.items()
+    }
+    naucs = evaluate_abstention(results, per_query)
+    return {
+        **summary,
+        **{key.replace("@", "_at_").lower(): value for key, value in naucs.items()},
+    }
 
 
 def recall_cap(

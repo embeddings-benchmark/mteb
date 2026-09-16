@@ -14,8 +14,11 @@ from datasets import (
 )
 
 if TYPE_CHECKING:
+    from typing_extensions import NotRequired
+
     from mteb.types import (
         CorpusDatasetType,
+        GainsType,
         InstructionDatasetType,
         QueryDatasetType,
         RelevantDocumentsType,
@@ -33,12 +36,14 @@ class RetrievalSplitData(TypedDict):
         queries: The queries dataset containing queries. Should have columns `id`, and at least one modality column (e.g. `text`, `video`, `audio`). For instruction retrieval the column can also include `instruction`.
         relevant_docs: A mapping of query IDs to relevant document IDs and their relevance scores. Should have columns `query-id`, `corpus-id`, `score`.
         top_ranked: A mapping of query IDs to a list of top-ranked document IDs. Should have columns `query-id`, `corpus-ids` (list[str]). This is optional and used for reranking tasks.
+        gains: A mapping of query IDs to continuous relevance gains. Should have columns `query-id`, `corpus-id`, `gain`. This is optional and adds NDCG over float gains (`ndcg_float_at_{k}`) to the reported metrics; the gains must cover every query with qrels.
     """
 
     corpus: CorpusDatasetType
     queries: QueryDatasetType
     relevant_docs: RelevantDocumentsType
     top_ranked: TopRankedDocumentsType | None
+    gains: NotRequired[GainsType | None]
 
 
 class RetrievalDatasetLoader:
@@ -46,7 +51,7 @@ class RetrievalDatasetLoader:
 
     If the `hf_repo` is provided, the dataloader will fetch the data from the HuggingFace hub. Otherwise, it will look for the data in the specified `data_folder`.
 
-    Required files include the corpus, queries, and qrels files. Optionally, the dataloader can also load instructions and top-ranked (for reranking) files.
+    Required files include the corpus, queries, and qrels files. Optionally, the dataloader can also load instructions, gains (continuous relevance annotations), and top-ranked (for reranking) files.
     """
 
     def __init__(
@@ -86,13 +91,18 @@ class RetrievalDatasetLoader:
             num_proc: The number of processes to use.
 
         Returns:
-            A dictionary containing the corpus, queries, relevant documents, instructions (if applicable), and top-ranked documents (if applicable).
+            A dictionary containing the corpus, queries, relevant documents, instructions (if applicable), gains (if applicable), and top-ranked documents (if applicable).
         """
         top_ranked = None
+        gains = None
 
         qrels = self._load_qrels(num_proc)
         corpus = self._load_corpus(num_proc)
         queries = self._load_queries(num_proc)
+
+        gains_config = f"{self.config}-gains" if self.config is not None else "gains"
+        if gains_config in self.dataset_configs:
+            gains = self._load_gains(num_proc, gains_config)
 
         ids_to_keep = set(qrels.keys())
         indices = [i for i, id_ in enumerate(queries["id"]) if id_ in ids_to_keep]
@@ -118,6 +128,7 @@ class RetrievalDatasetLoader:
             queries=queries,
             relevant_docs=qrels,
             top_ranked=top_ranked,
+            gains=gains,
         )
 
     def _get_split(self, config: str) -> str:
@@ -221,6 +232,30 @@ class RetrievalDatasetLoader:
 
         logger.info("Loaded %d %s qrels.", len(qrels_dict), self.split.upper())
         return qrels_dict
+
+    def _load_gains(self, num_proc: int | None, config: str) -> GainsType:
+        logger.info("Loading gains subset: %s", config)
+        gains_ds = self._load_dataset_split(config, num_proc)
+        gains_ds = gains_ds.select_columns(["query-id", "corpus-id", "gain"])
+
+        gains_ds = gains_ds.cast(
+            Features(
+                {
+                    "query-id": Value("string"),
+                    "corpus-id": Value("string"),
+                    "gain": Value("float64"),
+                }
+            )
+        )
+
+        gains_ds = gains_ds.to_polars()
+        gains_dict = {
+            query_id[0]: dict(zip(group["corpus-id"], group["gain"], strict=True))
+            for query_id, group in gains_ds.group_by("query-id", maintain_order=False)
+        }
+
+        logger.info("Loaded %d %s gains.", len(gains_dict), self.split.upper())
+        return gains_dict
 
     def _load_top_ranked(
         self,
