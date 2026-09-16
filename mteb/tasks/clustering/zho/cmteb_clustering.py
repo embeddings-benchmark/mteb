@@ -331,13 +331,6 @@ class ThuNewsClusteringS2S(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{eisner2007proceedings,
-  author = {Eisner, Jason},
-  booktitle = {Proceedings of the 2007 Joint Conference on Empirical Methods in Natural Language Processing and Computational Natural Language Learning (EMNLP-CoNLL)},
-  title = {Proceedings of the 2007 joint conference on empirical methods in natural language processing and computational natural language learning (EMNLP-CoNLL)},
-  year = {2007},
-}
-
 @inproceedings{li2006comparison,
   author = {Li, Jingyang and Sun, Maosong and Zhang, Xian},
   booktitle = {proceedings of the 21st international conference on computational linguistics and 44th annual meeting of the association for computational linguistics},
@@ -374,13 +367,6 @@ class ThuNewsClusteringP2P(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{eisner2007proceedings,
-  author = {Eisner, Jason},
-  booktitle = {Proceedings of the 2007 Joint Conference on Empirical Methods in Natural Language Processing and Computational Natural Language Learning (EMNLP-CoNLL)},
-  title = {Proceedings of the 2007 joint conference on empirical methods in natural language processing and computational natural language learning (EMNLP-CoNLL)},
-  year = {2007},
-}
-
 @inproceedings{li2006comparison,
   author = {Li, Jingyang and Sun, Maosong and Zhang, Xian},
   booktitle = {proceedings of the 21st international conference on computational linguistics and 44th annual meeting of the association for computational linguistics},

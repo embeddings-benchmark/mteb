@@ -2980,11 +2980,14 @@ R2MED = Benchmark(
     description="Reasoning-driven medical retrieval quality across biology, bioinformatics, medical sciences, clinical, and treatment scenarios, requiring models to perform multi-step reasoning over medical literature.",
     reference="https://r2med.github.io/",
     citation=r"""
-@article{li2025r2med,
-  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
-  journal = {arXiv preprint arXiv:2505.14558},
-  title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
-  year = {2025},
+@misc{zhang2026r2medbenchmarkreasoningdrivenmedical,
+      title={R2MED: A Benchmark for Reasoning-Driven Medical Retrieval}, 
+      author={Xiangxu Zhang and Lei Li and Xiao Zhou and Zheng Liu},
+      year={2026},
+      eprint={2505.14558},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2505.14558}, 
 }
 """,
 )

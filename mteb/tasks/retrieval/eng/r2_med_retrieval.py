@@ -69,11 +69,14 @@ class R2MEDBiologyRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@article{li2025r2med,
-  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
-  journal = {arXiv preprint arXiv:2505.14558},
-  title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
-  year = {2025},
+@misc{zhang2026r2medbenchmarkreasoningdrivenmedical,
+      title={R2MED: A Benchmark for Reasoning-Driven Medical Retrieval}, 
+      author={Xiangxu Zhang and Lei Li and Xiao Zhou and Zheng Liu},
+      year={2026},
+      eprint={2505.14558},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2505.14558}, 
 }
 """,
     )
@@ -113,11 +116,14 @@ class R2MEDBioinformaticsRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@article{li2025r2med,
-  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
-  journal = {arXiv preprint arXiv:2505.14558},
-  title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
-  year = {2025},
+@misc{zhang2026r2medbenchmarkreasoningdrivenmedical,
+      title={R2MED: A Benchmark for Reasoning-Driven Medical Retrieval}, 
+      author={Xiangxu Zhang and Lei Li and Xiao Zhou and Zheng Liu},
+      year={2026},
+      eprint={2505.14558},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2505.14558}, 
 }
 """,
     )
@@ -157,11 +163,14 @@ class R2MEDMedicalSciencesRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@article{li2025r2med,
-  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
-  journal = {arXiv preprint arXiv:2505.14558},
-  title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
-  year = {2025},
+@misc{zhang2026r2medbenchmarkreasoningdrivenmedical,
+      title={R2MED: A Benchmark for Reasoning-Driven Medical Retrieval}, 
+      author={Xiangxu Zhang and Lei Li and Xiao Zhou and Zheng Liu},
+      year={2026},
+      eprint={2505.14558},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2505.14558}, 
 }
 """,
     )
@@ -201,11 +210,14 @@ class R2MEDMedXpertQAExamRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@article{li2025r2med,
-  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
-  journal = {arXiv preprint arXiv:2505.14558},
-  title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
-  year = {2025},
+@misc{zhang2026r2medbenchmarkreasoningdrivenmedical,
+      title={R2MED: A Benchmark for Reasoning-Driven Medical Retrieval}, 
+      author={Xiangxu Zhang and Lei Li and Xiao Zhou and Zheng Liu},
+      year={2026},
+      eprint={2505.14558},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2505.14558}, 
 }
 """,
     )
@@ -245,11 +257,14 @@ class R2MEDMedQADiagRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@article{li2025r2med,
-  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
-  journal = {arXiv preprint arXiv:2505.14558},
-  title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
-  year = {2025},
+@misc{zhang2026r2medbenchmarkreasoningdrivenmedical,
+      title={R2MED: A Benchmark for Reasoning-Driven Medical Retrieval}, 
+      author={Xiangxu Zhang and Lei Li and Xiao Zhou and Zheng Liu},
+      year={2026},
+      eprint={2505.14558},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2505.14558}, 
 }
 """,
     )
@@ -289,11 +304,14 @@ class R2MEDPMCTreatmentRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@article{li2025r2med,
-  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
-  journal = {arXiv preprint arXiv:2505.14558},
-  title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
-  year = {2025},
+@misc{zhang2026r2medbenchmarkreasoningdrivenmedical,
+      title={R2MED: A Benchmark for Reasoning-Driven Medical Retrieval}, 
+      author={Xiangxu Zhang and Lei Li and Xiao Zhou and Zheng Liu},
+      year={2026},
+      eprint={2505.14558},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2505.14558}, 
 }
 """,
     )
@@ -333,11 +351,14 @@ class R2MEDPMCClinicalRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@article{li2025r2med,
-  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
-  journal = {arXiv preprint arXiv:2505.14558},
-  title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
-  year = {2025},
+@misc{zhang2026r2medbenchmarkreasoningdrivenmedical,
+      title={R2MED: A Benchmark for Reasoning-Driven Medical Retrieval}, 
+      author={Xiangxu Zhang and Lei Li and Xiao Zhou and Zheng Liu},
+      year={2026},
+      eprint={2505.14558},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2505.14558}, 
 }
 """,
     )
@@ -377,11 +398,14 @@ class R2MEDIIYiClinicalRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@article{li2025r2med,
-  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
-  journal = {arXiv preprint arXiv:2505.14558},
-  title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
-  year = {2025},
+@misc{zhang2026r2medbenchmarkreasoningdrivenmedical,
+      title={R2MED: A Benchmark for Reasoning-Driven Medical Retrieval}, 
+      author={Xiangxu Zhang and Lei Li and Xiao Zhou and Zheng Liu},
+      year={2026},
+      eprint={2505.14558},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2505.14558}, 
 }
 """,
     )

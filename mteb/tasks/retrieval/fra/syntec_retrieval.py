@@ -29,12 +29,10 @@ class SyntecRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@misc{ciancone2024extending,
-  archiveprefix = {arXiv},
-  author = {Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
-  eprint = {2405.20468},
-  primaryclass = {cs.CL},
-  title = {Extending the Massive Text Embedding Benchmark to French},
+@article{ciancone2024mteb,
+  author = {Ciancone, Mathieu and Kerboua, Imene and Schaeffer, Marion and Siblini, Wissam},
+  journal = {arXiv preprint arXiv:2405.20468},
+  title = {Mteb-french: Resources for french sentence embedding evaluation and analysis},
   year = {2024},
 }
 """,

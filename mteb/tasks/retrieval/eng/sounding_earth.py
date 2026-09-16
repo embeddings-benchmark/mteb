@@ -5,13 +5,17 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 _REFERENCE = "https://arxiv.org/abs/2108.00688"
 _BIBTEX = r"""
-@article{heidler2023soundingearth,
-  author = {Heidler, Konrad and Mou, Lichao and Hu, Di and Jin, Pu and Li, Guangyao and Gan, Chuang and Wen, Ji-Rong and Zhu, Xiao Xiang},
-  journal = {International Journal of Applied Earth Observation and Geoinformation},
-  title = {Self-supervised audiovisual representation learning for remote sensing data},
-  url = {https://arxiv.org/abs/2108.00688},
-  volume = {116},
-  year = {2023},
+@article{Heidler_2023,
+   title={Self-supervised audiovisual representation learning for remote sensing data},
+   volume={116},
+   ISSN={1569-8432},
+   url={http://dx.doi.org/10.1016/j.jag.2022.103130},
+   DOI={10.1016/j.jag.2022.103130},
+   journal={International Journal of Applied Earth Observation and Geoinformation},
+   publisher={Elsevier BV},
+   author={Heidler, Konrad and Mou, Lichao and Hu, Di and Jin, Pu and Li, Guangyao and Gan, Chuang and Wen, Ji-Rong and Zhu, Xiao Xiang},
+   year={2023},
+   month=Feb, pages={103130} 
 }
 """
 _DESCRIPTION = (
