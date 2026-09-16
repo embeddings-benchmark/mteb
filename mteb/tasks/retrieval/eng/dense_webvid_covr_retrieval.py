@@ -32,13 +32,13 @@ class DenseWebVidCoVRVT2VRetrieval(AbsTaskRetrieval):
         sample_creation="created",
         bibtex_citation=r"""
 @misc{thawakar2025simpleeditscomposedvideo,
-      title={Beyond Simple Edits: Composed Video Retrieval with Dense Modifications}, 
-      author={Omkar Thawakar and Dmitry Demidov and Ritesh Thawkar and Rao Muhammad Anwer and Mubarak Shah and Fahad Shahbaz Khan and Salman Khan},
-      year={2025},
-      eprint={2508.14039},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2508.14039}, 
+  archiveprefix = {arXiv},
+  author = {Omkar Thawakar and Dmitry Demidov and Ritesh Thawkar and Rao Muhammad Anwer and Mubarak Shah and Fahad Shahbaz Khan and Salman Khan},
+  eprint = {2508.14039},
+  primaryclass = {cs.CV},
+  title = {Beyond Simple Edits: Composed Video Retrieval with Dense Modifications},
+  url = {https://arxiv.org/abs/2508.14039},
+  year = {2025},
 }
 """,
         prompt={

@@ -122,13 +122,7 @@ class EagerEmbedV1Wrapper(AbsEncoder):
         return torch.cat(all_embeddings, dim=0)
 
 
-EAGER_EMBED_V1_CITATION = """@article{EagerEmbed,
-  title={Eager Embed V1: Multimodal Dense Embeddings for Retrieval},
-  author={Juan Pablo Balarini},
-  year={2025},
-  publisher={Eagerworks},
-  url={https://github.com/eagerworks/eager-embed},
-}"""
+EAGER_EMBED_V1_CITATION = None
 
 EAGER_EMBED_V1_TRAINING_DATASETS = {"colpali", "bge-ir", "pixmo-docs", "wiki-ss"}
 

@@ -1935,13 +1935,7 @@ silma_ai__silma_embedding_matryoshka_v0_1 = ModelMeta(
     training_datasets=None,
     adapted_from="/workspace/v3-matryoshka_aubmindlab-bert-base-arabertv02-2024-10-12_13-55-06/checkpoint-26250",
     superseded_by=None,
-    citation="""@misc{silma2024embedding,
-  author = {Abu Bakr Soliman, Karim Ouda, SILMA AI},
-  title = {SILMA Embedding Matryoshka 0.1},
-  year = {2024},
-  publisher = {Hugging Face},
-  howpublished = {https://huggingface.co/silma-ai/silma-embeddding-matryoshka-0.1},
-}""",
+    citation=None,
 )
 
 sbert_chinese_general_v1 = ModelMeta(

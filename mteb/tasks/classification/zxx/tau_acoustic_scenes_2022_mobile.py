@@ -35,8 +35,7 @@ Virtanen, Tuomas},
   month = mar,
   publisher = {Zenodo},
   title = {TAU Urban Acoustic Scenes 2022 Mobile, Development
-dataset
-},
+dataset},
   url = {https://doi.org/10.5281/zenodo.6337421},
   year = {2022},
 }

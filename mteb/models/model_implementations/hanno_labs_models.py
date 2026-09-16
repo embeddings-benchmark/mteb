@@ -10,14 +10,7 @@ from mteb.models.sentence_transformer_wrapper import (
 # (last-token pooling, cosine, query-side "Instruct: {instruction}\nQuery:" prefix, unprefixed documents). Training
 # data, licensing, and leakage accounting are on the model card.
 
-DINGHY_LAW_CITATION = """@misc{dinghy-law-0.6b,
-  title  = {dinghy-law-0.6b: a compact legal text-embedding model},
-  author = {Solka, Stephen},
-  year   = {2026},
-  note   = {Hanno Labs / Clause Logic Inc.},
-  howpublished = {\\url{https://huggingface.co/Hanno-Labs/dinghy-law-0.6b-v1}}
-}"""
-
+DINGHY_LAW_CITATION = None
 # training sources that correspond to MTEB tasks (for train/test leakage accounting)
 training_data = {
     "GerDaLIR",
@@ -69,14 +62,7 @@ dinghy_law_0_6b = ModelMeta(
     adapted_from="Qwen/Qwen3-Embedding-0.6B",
 )
 
-DINGHY_LAW_4B_CITATION = """@misc{dinghy-law-4b,
-  title  = {dinghy-law-4b: a 4B legal text-embedding model},
-  author = {Solka, Stephen},
-  year   = {2026},
-  note   = {Hanno Labs / Clause Logic Inc.},
-  howpublished = {\\url{https://huggingface.co/Hanno-Labs/dinghy-law-4b-v1}}
-}"""
-
+DINGHY_LAW_4B_CITATION = None
 # Per-task query instruction (the dominant eval lever); query-side only (apply_instruction_to_passages=False).
 _instructions_4b = {
     "AILACasedocs": "Represent this legal case by its core governing legal issue, so cases on the same issue match: ",
@@ -120,14 +106,7 @@ dinghy_law_4b = ModelMeta(
     adapted_from="Qwen/Qwen3-Embedding-4B",
 )
 
-DINGHY_LAW_8B_CITATION = """@misc{dinghy-law-8b,
-  title  = {dinghy-law-8b: an 8B multilingual legal text-embedding model},
-  author = {Solka, Stephen},
-  year   = {2026},
-  note   = {Hanno Labs / Clause Logic Inc.},
-  howpublished = {\\url{https://huggingface.co/Hanno-Labs/dinghy-law-8b-v1}}
-}"""
-
+DINGHY_LAW_8B_CITATION = None
 dinghy_law_8b = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
     name="Hanno-Labs/dinghy-law-8b-v1",

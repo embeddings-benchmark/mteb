@@ -133,12 +133,7 @@ aiteamvn_vietnamese_embeddings = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     adapted_from="BAAI/bge-m3",
-    citation="""@misc{Vietnamese_Embedding,
-  title={Vietnamese_Embedding: Embedding model in Vietnamese language.},
-  author={Nguyen Nho Trung, Nguyen Nhat Quang, Nguyen Van Huy},
-  year={2025},
-  publisher={Huggingface},
-}""",
+    citation=None,
 )
 
 

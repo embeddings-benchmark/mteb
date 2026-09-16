@@ -37,11 +37,5 @@ and Kawahara, Daisuke},
   title = {{J}{M}{T}{E}{B}-lite: {T}he {L}ightweight {V}ersion of {JMTEB}},
   year = {2025},
 }
-
-@misc{yuichi-tateno-2024-jacwir,
-  author = {Yuichi Tateno},
-  title = {JaCWIR: Japanese Casual Web IR - 日本語情報検索評価のための小規模でカジュアルなWebタイトルと概要のデータセット},
-  url = {https://huggingface.co/datasets/hotchpotch/JaCWIR},
-}
 """,
     )

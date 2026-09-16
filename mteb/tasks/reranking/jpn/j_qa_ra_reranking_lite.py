@@ -38,12 +38,5 @@ and Kawahara, Daisuke},
   title = {{J}{M}{T}{E}{B}-lite: {T}he {L}ightweight {V}ersion of {JMTEB}},
   year = {2025},
 }
-
-@misc{yuichi-tateno-2024-jqara,
-  author = {Yuichi Tateno},
-  title = {JQaRA: Japanese Question Answering with Retrieval Augmentation
-- 検索拡張(RAG)評価のための日本語Q&Aデータセット},
-  url = {https://huggingface.co/datasets/hotchpotch/JQaRA},
-}
 """,
     )

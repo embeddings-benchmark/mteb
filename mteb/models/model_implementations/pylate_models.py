@@ -508,12 +508,7 @@ lightonai__gte_moderncolbert_v1 = ModelMeta(
         "TRECDL2020",
         "CornStack",
     },
-    citation="""@misc{GTE-ModernColBERT,
-    title={GTE-ModernColBERT},
-    author={Chaffin, Antoine},
-    url={https://huggingface.co/lightonai/GTE-ModernColBERT-v1},
-    year={2025}
-}""",
+    citation=None,
     extra_requirements_groups=["pylate"],
 )
 
@@ -574,12 +569,7 @@ topk_io__iso_moderncolbert = ModelMeta(
     training_datasets={
         "MSMARCO",
     },
-    citation="""@misc{Iso-ModernColBERT,
-    title={Iso-ModernColBERT},
-    author={TopK},
-    url={https://huggingface.co/topk-io/Iso-ModernColBERT},
-    year={2026}
-}""",
+    citation=None,
     extra_requirements_groups=["pylate"],
 )
 

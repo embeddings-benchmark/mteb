@@ -142,11 +142,5 @@ class TatoebaBitextMining(AbsTaskBitextMining):
         annotations_creators="human-annotated",
         dialect=[],  # No specific dialect mentioned
         sample_creation="found",
-        bibtex_citation=r"""
-@misc{tatoeba,
-  author = {Tatoeba community},
-  title = {Tatoeba: Collection of sentences and translations},
-  year = {2021},
-}
-""",
+        bibtex_citation="",
     )

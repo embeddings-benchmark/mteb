@@ -127,13 +127,7 @@ multilingual_langs = [
     "zho-Hans",
 ]
 
-OCTEN_CITATION = """@misc{octen2025rteb,
-  title={Octen Series: Optimizing Embedding Models to #1 on RTEB Leaderboard},
-  author={Octen Team},
-  year={2025},
-  url={https://octen-team.github.io/octen_blog/posts/octen-rteb-first-place/}
-}"""
-
+OCTEN_CITATION = None
 training_data = {
     "T2Retrieval",
     "DuRetrieval",

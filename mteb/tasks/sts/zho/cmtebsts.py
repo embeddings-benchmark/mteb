@@ -268,14 +268,7 @@ class QBQTC(AbsTaskSTS):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@misc{clue2020qbqtc,
-  author = {CLUE},
-  title = {QBQTC: Question Bank Question Title Corpus},
-  url = {https://github.com/CLUEbenchmark/QBQTC},
-  year = {2020},
-}
-""",
+        bibtex_citation="",
     )
 
     min_score = 0

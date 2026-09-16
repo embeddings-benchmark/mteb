@@ -92,13 +92,7 @@ multilingual_langs = [
     "zho-Hans",
 ]
 
-MOD_CITATION = """@misc{mod-embedding-2025,
-  title={MoD-Embedding: A Fine-tuned Multilingual Text Embedding Model},
-  author={MoD Team},
-  year={2025},
-  url={https://huggingface.co/bflhc/MoD-Embedding}
-}"""
-
+MOD_CITATION = None
 training_data = {
     "T2Retrieval",
     "DuRetrieval",

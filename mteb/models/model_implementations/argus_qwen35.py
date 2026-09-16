@@ -61,15 +61,7 @@ ARGUS_TRAINING_DATA = {
     "VidoreArxivQARetrieval",
 }
 
-ARGUS_CITATION = """
-@misc{argus2026,
-  title  = {Argus: Region-Aware Query-Conditioned Mixture of Experts for Visual Document Retrieval},
-  author = {DataScience-UIBK team},
-  year   = {2026},
-  url    = {https://huggingface.co/DataScience-UIBK/Argus-Colqwen3.5-4b-v0},
-}"""
-
-
+ARGUS_CITATION = None
 argus_colqwen35_4b = ModelMeta(
     loader=ArgusColQwen35Wrapper,
     name="DataScience-UIBK/Argus-Colqwen3.5-4b-v0",

@@ -31,11 +31,5 @@ class JQaRAReranking(AbsTaskRetrieval):
         dialect=["jpn-Jpan"],
         sample_creation="found",
         prompt="Given a Japanese question, rerank passages based on their relevance for answering the question",
-        bibtex_citation=r"""
-@misc{yuichi-tateno-2024-jqara,
-  author = {Yuichi Tateno},
-  title = {JQaRA: Japanese Question Answering with Retrieval Augmentation - 検索拡張(RAG)評価のための日本語Q&Aデータセット},
-  url = {https://huggingface.co/datasets/hotchpotch/JQaRA},
-}
-""",
+        bibtex_citation="",
     )

@@ -124,15 +124,7 @@ class VoiceCLAPSmallWrapper(AbsEncoder):
         raise ValueError
 
 
-_VOICECLAP_CITATION = """
-@misc{voicenet2026voiceclap,
-      title={VoiceCLAP: Voice-Text Contrastive Embeddings},
-      author={VoiceNet},
-      year={2026},
-      url={https://huggingface.co/VoiceNet/voiceclap-large},
-}
-"""
-
+_VOICECLAP_CITATION = None
 voiceclap_large = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
     loader_kwargs={"trust_remote_code": True},

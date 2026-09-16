@@ -208,15 +208,7 @@ class OpsMMEmbeddingWrapper(AbsEncoder):
         return torch.cat(all_embeddings, dim=0).numpy()
 
 
-OPS_MM_EMBEDDING_CITATION = """
-@misc{ops_mm_embedding_v1,
-  author       = {OpenSearch-AI},
-  title        = {Ops-MM-embedding-v1: State-of-the-Art Multimodal Embedding Models},
-  year         = {2025},
-  url          = {https://huggingface.co/OpenSearch-AI/Ops-MM-embedding-v1-2B},
-}
-"""
-
+OPS_MM_EMBEDDING_CITATION = None
 ops_mm_embedding_v1_2b = ModelMeta(
     loader=OpsMMEmbeddingWrapper,
     name="OpenSearch-AI/Ops-MM-embedding-v1-2B",

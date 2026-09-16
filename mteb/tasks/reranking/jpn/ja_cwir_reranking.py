@@ -31,11 +31,5 @@ class JaCWIRReranking(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@misc{yuichi-tateno-2024-jacwir,
-  author = {Yuichi Tateno},
-  title = {JaCWIR: Japanese Casual Web IR - 日本語情報検索評価のための小規模でカジュアルなWebタイトルと概要のデータセット},
-  url = {https://huggingface.co/datasets/hotchpotch/JaCWIR},
-}
-""",
+        bibtex_citation="",
     )

@@ -94,15 +94,7 @@ class EvieWrapper(ColQwen3_5Wrapper):
         )
 
 
-EVIE_CITATION = """
-@misc{tencent2026evie,
-  title        = {EVIE: Evidence-Vector-Informed Embedding for Visual Document Retrieval},
-  author       = {Wang, Zifei and Wen, Wei},
-  year         = {2026},
-  howpublished = {\\url{https://github.com/Tencent/EVIE}}
-}
-"""
-
+EVIE_CITATION = None
 EVIE_TRAINING_DATA = {
     # from https://huggingface.co/datasets/vidore/colpali_train_set
     "VidoreDocVQARetrieval",

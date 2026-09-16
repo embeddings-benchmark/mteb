@@ -3,15 +3,7 @@ from __future__ import annotations
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
 
-_ETTIN_V1_CITATION = """@misc{aarsen2026ettin-reranker,
-    title = "Introducing the Ettin Reranker Family",
-    author = "Aarsen, Tom",
-    year = "2026",
-    publisher = "Hugging Face",
-    url = "https://huggingface.co/blog/ettin-reranker",
-}
-"""
-
+_ETTIN_V1_CITATION = None
 _ETTIN_V1_TRAINING_DATA = {
     # source: https://huggingface.co/datasets/cross-encoder/ettin-reranker-v1-data
     # rerank-scored retrieval data

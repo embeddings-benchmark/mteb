@@ -4,13 +4,7 @@ from mteb.models.model_meta import (
 )
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
-PAWAN_EMBD_CITATION = """@misc{medhi2025pawanembd,
-    title={PawanEmbd-68M: Distilled Embedding Model},
-    author={Medhi, D.},
-    year={2025},
-    url={https://huggingface.co/dmedhi/PawanEmbd-68M}
-}"""
-
+PAWAN_EMBD_CITATION = None
 pawan_embd_68m = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
     name="dmedhi/PawanEmbd-68M",

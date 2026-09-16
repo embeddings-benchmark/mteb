@@ -3,7 +3,7 @@
 Every task, benchmark and model may cite using a BibTeX. A
 citation that does not resolve to the work it claims - to prevent
 fabricated citations from AI usage, draft, or similarly incorrect citations
-this CI test checks that the cited work exists and is cited correctly. 
+this CI test checks that the cited work exists and is cited correctly.
 See original issue: https://github.com/embeddings-benchmark/mteb/issues/5471.
 
 The entries are checked with [refaudit](https://pypi.org/project/refaudit/),
@@ -34,7 +34,7 @@ import sys
 from collections import Counter
 from pathlib import Path
 
-from refaudit import Cache, Checker, Entry, default_resolvers, parse_string
+from refaudit import Cache, Checker, Entry, Verdict, default_resolvers, parse_string
 
 import mteb
 
@@ -117,8 +117,9 @@ def main() -> int:
         )
     )
 
+    # SKIPPED is refaudit abstaining on an entry with nothing to look up; we report it
     findings = sorted(
-        (r for r in results if r.verdict.is_finding),
+        (r for r in results if r.verdict.is_finding or r.verdict is Verdict.SKIPPED),
         key=lambda r: (r.verdict.value, r.key),
     )
     for result in findings:

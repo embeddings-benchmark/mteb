@@ -517,15 +517,7 @@ TOMORO_TRAINING_DATA = {
     "VisRAG-Ret-Train-In-domain-data",
 }
 
-TOMORO_CITATION = """
-@misc{huang2025tomoro_colqwen3_embed,
-  title={TomoroAI/tomoro-colqwen3-embed},
-  author={Xin Huang and Kye Min Tan and Albert Phelps},
-  year={2025},
-  url={https://huggingface.co/TomoroAI/tomoro-colqwen3-embed-8b}
-}
-"""
-
+TOMORO_CITATION = None
 colqwen3_8b = ModelMeta(
     loader=ColQwen3Wrapper,
     name="TomoroAI/tomoro-colqwen3-embed-8b",
@@ -789,15 +781,7 @@ class ColQwen3EngineWrapper(ColPaliEngineWrapper):
         )
 
 
-COLTURK_CITATION = """
-@misc{karatay2026colturkvdr,
-  title={ColTurk-VDR: A Late-Interaction Visual Document Retriever on Qwen3-VL-4B},
-  author={Karatay, Mert},
-  year={2026},
-  url={https://github.com/Verm1lion/ColTurk-VDR}
-}
-"""
-
+COLTURK_CITATION = None
 colturk_vdr_4b = ModelMeta(
     loader=ColQwen3EngineWrapper,
     loader_kwargs=dict(

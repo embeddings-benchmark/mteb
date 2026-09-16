@@ -27,12 +27,5 @@ class SWEbenchVerifiedReranking(AbsTaskRetrieval):
         prompt={
             "query": "Given a github issue, identify the code that needs to be changed to fix the issue."
         },
-        bibtex_citation=r"""
-@misc{openai2024swebenchverified,
-  author = {OpenAI},
-  title = {Introducing swe-bench verified},
-  url = {https://openai.com/index/introducing-swe-bench-verified/},
-  year = {2024},
-}
-""",
+        bibtex_citation="",
     )

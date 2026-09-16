@@ -26,10 +26,12 @@ class VoyageMMarcoReranking(AbsTaskRetrieval):
         sample_creation="found",
         prompt="Given a Japanese search query, retrieve web passages that answer the question",
         bibtex_citation=r"""
-@article{clavie2023jacolbert,
-  author = {Clavi{\'e}, Benjamin},
-  journal = {arXiv preprint arXiv:2312.16144},
-  title = {Jacolbert and hard negatives, towards better japanese-first embeddings for retrieval: Early technical report},
+@misc{clavie2023jacolbert,
+  archiveprefix = {arXiv},
+  author = {Benjamin Clavié},
+  eprint = {2312.16144},
+  title = {Towards Better Monolingual Japanese Retrievers with Multi-Vector Models},
+  url = {https://arxiv.org/abs/2312.16144},
   year = {2023},
 }
 """,

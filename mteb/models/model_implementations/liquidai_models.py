@@ -4,13 +4,7 @@ from mteb.models.model_implementations.pylate_models import MultiVectorModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
-LFM2_5_CITATION = """@article{liquidAI2026Retrievers,
-  author = {Liquid AI},
-  title = {LFM2.5 Retrievers: Bi-directional LFMs for Fast Multilingual Search},
-  journal = {Liquid AI Blog},
-  year = {2026},
-  note = {www.liquid.ai/blog/lfm2-5-retrievers}
-}"""
+LFM2_5_CITATION = None
 
 LFM2_CITATION = """@article{liquidai2025lfm2,
   title={LFM2 Technical Report},
