@@ -26,6 +26,9 @@ concurrency:
 jobs:
   citation-check:
     runs-on: ubuntu-latest
+    # the lookups are rate-limited, and a shared runner IP gets throttled harder than
+    # a laptop does; fail rather than sit in the queue for hours
+    timeout-minutes: 45
     permissions:
       contents: write  # to commit the refreshed cache on main
     steps:
