@@ -34,6 +34,7 @@ class PEAudioVisualWrapper(AbsEncoder):
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         # fps=2 is an mteb default; PE-AV declares no frame rate
         fps: float | None = 2.0,
+        # 64 is an mteb cap; qwen-omni-utils and qwen-vl-utils ship FPS_MAX_FRAMES=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
         # 400 s: max_position_embeddings=10000 at 25 frames/s

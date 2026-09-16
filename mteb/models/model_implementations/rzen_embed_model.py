@@ -97,6 +97,7 @@ class RzenEmbedWrapper(AbsEncoder):
         device: str | None = None,
         max_length: int = 2000,
         fps: float = 2.0,
+        # 64 is an mteb cap; qwen-omni-utils and qwen-vl-utils ship FPS_MAX_FRAMES=768
         max_frames: int = 64,
         num_frames: int | None = None,
         **kwargs: Any,

@@ -78,6 +78,7 @@ class Qwen3VLRerankerWrapper(CrossEncoderWrapper):
         # fps=2: qwen-vl-utils FPS=2.0
         # https://github.com/QwenLM/Qwen2.5-VL/blob/main/qwen-vl-utils/src/qwen_vl_utils/vision_process.py
         fps: float | None = 2.0,
+        # 64 is an mteb cap; qwen-omni-utils and qwen-vl-utils ship FPS_MAX_FRAMES=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
         use_instructions: bool = True,
