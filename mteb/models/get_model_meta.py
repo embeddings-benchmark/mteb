@@ -93,8 +93,10 @@ def get_model_metas(  # noqa: PLR0913, PLR0917
         lower, upper = n_parameters_range
         n_parameters = model_meta.n_parameters
 
-        if upper is not None:
-            if (n_parameters is None) or (n_parameters > upper):
+        if lower is not None or upper is not None:
+            if n_parameters is None:
+                continue
+            if upper is not None and n_parameters > upper:
                 continue
             if lower is not None and n_parameters < lower:
                 continue
