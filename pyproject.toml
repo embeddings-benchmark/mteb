@@ -605,6 +605,7 @@ extend-ignore-words-re = [
     "nd", # license
     # authors
     "Stap",
+    "Thant",
     "Asai",
     "Tung",
     "Gool",

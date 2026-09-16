@@ -11,7 +11,7 @@ from .colqwen_models import ColQwen3_5Wrapper
 logger = logging.getLogger(__name__)
 
 
-def _enable_bidirectional_attention(model: Any) -> None:  # ruff: ignore[any-type]
+def _enable_bidirectional_attention(model: Any) -> None:  # noqa: ANN401
     """Encoder-ize the full-attention layers of a ColQwen3.5 backbone.
 
     Mirrors `ColQwen3_5.enable_bidirectional_attention` from the EVIE release:
