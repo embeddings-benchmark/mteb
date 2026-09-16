@@ -129,7 +129,13 @@ class MCTCTWrapper(AbsEncoder):
                 return_tensors="pt",
                 padding=True,
                 truncation=True,
-                max_length=int(self.max_audio_length_seconds * self.sampling_rate),
+                # MCTCTFeatureExtractor pads after fbank, so max_length counts
+                # frames (hop_length ms apart), not samples
+                max_length=int(
+                    self.max_audio_length_seconds
+                    * 1000
+                    / self.feature_extractor.hop_length
+                ),
             ).to(self.device)
 
             with torch.no_grad():
