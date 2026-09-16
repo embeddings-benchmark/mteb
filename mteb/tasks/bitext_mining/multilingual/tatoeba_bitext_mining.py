@@ -144,36 +144,16 @@ class TatoebaBitextMining(AbsTaskBitextMining):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{tiedemann-2020-tatoeba,
-    title = "The Tatoeba Translation Challenge {--} Realistic Data Sets for Low Resource and Multilingual {MT}",
-    author = {Tiedemann, J{\"o}rg},
-    editor = {Barrault, Lo{\"i}c  and
-      Bojar, Ond{\v{r}}ej  and
-      Bougares, Fethi  and
-      Chatterjee, Rajen  and
-      Costa-juss{\`a}, Marta R.  and
-      Federmann, Christian  and
-      Fishel, Mark  and
-      Fraser, Alexander  and
-      Graham, Yvette  and
-      Guzman, Paco  and
-      Haddow, Barry  and
-      Huck, Matthias  and
-      Yepes, Antonio Jimeno  and
-      Koehn, Philipp  and
-      Martins, Andr{\'e}  and
-      Morishita, Makoto  and
-      Monz, Christof  and
-      Nagata, Masaaki  and
-      Nakazawa, Toshiaki  and
-      Negri, Matteo},
-    booktitle = "Proceedings of the Fifth Conference on Machine Translation",
-    month = nov,
-    year = "2020",
-    address = "Online",
-    publisher = "Association for Computational Linguistics",
-    url = "https://aclanthology.org/2020.wmt-1.139/",
-    doi = "10.18653/v1/2020.wmt-1.139",
-    pages = "1174--1182",
+  address = {Online},
+  author = {Tiedemann, J{\"o}rg},
+  booktitle = {Proceedings of the Fifth Conference on Machine Translation},
+  doi = {10.18653/v1/2020.wmt-1.139},
+  month = nov,
+  pages = {1174--1182},
+  publisher = {Association for Computational Linguistics},
+  title = {The Tatoeba Translation Challenge {--} Realistic Data Sets for Low Resource and Multilingual {MT}},
+  url = {https://aclanthology.org/2020.wmt-1.139/},
+  year = {2020},
 }
-        """,
+""",
     )
