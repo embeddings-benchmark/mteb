@@ -75,16 +75,12 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
             max_length = max(wav.shape[-1] for wav in audio_arrays)
             padded_wavs = []
             for wav in audio_arrays:
+                wav = np.asarray(wav, dtype=np.float32)  # noqa: PLW2901
                 if wav.shape[-1] < max_length:
-                    # Pad with zeros
-                    pad_length = max_length - wav.shape[-1]
-                    padded_wav = torch.nn.functional.pad(wav, (0, pad_length))
-                else:
-                    padded_wav = wav
-                padded_wavs.append(padded_wav)
+                    wav = np.pad(wav, (0, max_length - wav.shape[-1]))  # noqa: PLW2901
+                padded_wavs.append(wav)
 
-            # Stack into batch array and convert to numpy for embed_audio
-            batch_tensor = torch.stack(padded_wavs).numpy()
+            batch_tensor = np.stack(padded_wavs)
 
             # Process entire batch at once
             batch_embeds = self.embed_audio(batch_tensor, self.audio_model)

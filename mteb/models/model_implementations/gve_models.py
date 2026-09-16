@@ -41,10 +41,8 @@ class GVEWrapper(AbsEncoder):
     `output_hidden_states`. Embeddings are the L2-normalized last-token
     hidden state with left padding, following the model card.
 
-    Frame sampling defaults to fps=2 capped at 32 frames, denser than the
-    model card's 8-frame demo: with the 200*28*28 per-frame pixel budget,
-    max_length is 4096 (vs the demo's 1200) so dense video batches never
-    truncate vision tokens; text-only batches still pad to longest-in-batch.
+    Frame sampling follows the model card's inference example: fps=1,
+    max_frames=8.
     """
 
     def __init__(

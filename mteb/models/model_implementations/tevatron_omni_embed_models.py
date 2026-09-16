@@ -34,6 +34,10 @@ class TevatronOmniEmbedWrapper(SentenceTransformerEncoderWrapper):
             fps=fps,
             max_frames=max_frames,
             num_frames=num_frames,
+            # 300 s at 16 kHz: Qwen2.5-Omni chunk_length=300, the base this
+            # is adapted from
+            # https://huggingface.co/Qwen/Qwen2.5-Omni-7B/blob/main/preprocessor_config.json
+            max_samples=4_800_000,
             **kwargs,
         )
         self.target_sampling_rate = self.model[
