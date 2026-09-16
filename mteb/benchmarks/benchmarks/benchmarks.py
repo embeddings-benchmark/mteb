@@ -1213,6 +1213,72 @@ MTEB_multilingual_v2 = Benchmark(
     benchmark_hf_repo="mteb/MMTEB-Multilingual-v2",
 )
 
+# Three candidate Italian tasks were left out of MTEB(ita, v1) on measurement rather
+# than on principle. Their results are in the results repository, so the reasoning can
+# be checked rather than taken on trust.
+#
+# MMarcoRetrievalMultilingual: the training distribution of several recent Italian
+#   retrieval models, including the submitter's own.
+# XStance (it): no signal. Its positive rate is 0.539, which is also the average
+#   precision of a random ranking; the five reference models score 0.504 to 0.518, all
+#   below chance, and for each of them the best threshold labels every pair positive.
+# IlPostRetrieval: a news summary-to-article task also assembled for this benchmark and
+#   dropped for the same reason, BM25 reaching 0.927 nDCG@10 against 0.946 for
+#   multilingual-e5-large, because the summaries reuse the wording of their articles.
+MTEB_ITA = Benchmark(
+    name="MTEB(ita, v1)",
+    aliases=["MTEB(ita)"],
+    display_name="Italian",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/it.svg",
+    tasks=MTEBTasks(
+        get_tasks(
+            languages=["ita"],
+            exclusive_language_filter=True,
+            tasks=[
+                # Classification (9)
+                "DadoEvalCoarseClassification",
+                "ItaCaseholdClassification",
+                "MassiveIntentClassification",
+                "MassiveScenarioClassification",
+                "MultiHateClassification",
+                "SardiStanceClassification",
+                "SIB200Classification.v2",
+                "SwissJudgementClassification",
+                "TweetSentimentClassification",
+                # MultilabelClassification (2)
+                "EmitClassification",
+                "MultiEURLEXMultilabelClassification",
+                # Clustering (1)
+                "SIB200ClusteringS2S",
+                # PairClassification (1)
+                "DisCoTexPairClassification",
+                # Retrieval (7)
+                "BelebeleRetrieval",
+                "JuriFindITRetrieval",
+                "MintakaRetrieval",
+                "MultiLongDocRetrieval",
+                "WebFAQRetrieval",
+                "WikipediaRetrievalMultilingual",
+                "XPQARetrieval",
+                # Reranking (3)
+                "MultiLongDocReranking",
+                "WikipediaRerankingMultilingual",
+                "XGlueWPRReranking",
+            ],
+        )
+        # STS (2): Italian has no monolingual native STS beyond STS22, so the
+        # machine-translated STS Benchmark is included as well, following the
+        # precedent of MTEB(por), MTEB(nld), MTEB(fra) and MTEB(spa).
+        + (get_task("STS22.v2", hf_subsets=["it"]),)
+        + (get_task("STSBenchmarkMultilingualSTS", hf_subsets=["it"]),)
+    ),
+    description="""Italian Massive Text Embedding Benchmark, the first benchmark for text embeddings in Italian. It gathers 25 tasks across 7 task types, five of them natively Italian rather than translated, and contributes JuriFindITRetrieval, a legal retrieval task built from questions written by Italian legal professionals. Machine-translated miniature tasks, cross-lingual tasks and saturated bitext-mining tasks are excluded, as is MMarcoRetrievalMultilingual, the training distribution of several recent Italian retrieval models.""",
+    reference=None,
+    citation=None,
+    contacts=["albertobarnabo"],
+)
+
+
 MTEB_JPN = Benchmark(
     name="MTEB(jpn, v1)",
     aliases=["MTEB(jpn)"],
