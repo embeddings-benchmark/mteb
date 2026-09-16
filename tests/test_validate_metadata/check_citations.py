@@ -23,6 +23,11 @@ Citations that cannot be verified but are correct - a workshop paper with no DOI
 a dataset card, a thesis - are listed in `citation_allowlist.json` with the reason
 they are accepted. The list is meant to shrink: when you fix a citation, remove
 its key.
+
+An entry that nothing could confirm either way is reported as UNVERIFIED and fails
+the run: an entry no source can stand behind is the kind this check exists to catch.
+Usually it has no DOI or arXiv id, so it can only be looked up by title; giving it
+one is the fix.
 """
 
 from __future__ import annotations
@@ -117,9 +122,14 @@ def main() -> int:
         )
     )
 
-    # SKIPPED is refaudit abstaining on an entry with nothing to look up; we report it
+    # SKIPPED is refaudit abstaining on an entry with nothing to look up
     findings = sorted(
-        (r for r in results if r.verdict.is_finding or r.verdict is Verdict.SKIPPED),
+        (
+            r
+            for r in results
+            if r.verdict.is_finding
+            or r.verdict in {Verdict.SKIPPED, Verdict.UNVERIFIED}
+        ),
         key=lambda r: (r.verdict.value, r.key),
     )
     for result in findings:
@@ -134,11 +144,20 @@ def main() -> int:
     if not findings:
         print("\nevery citation checks out")
         return 0
+
+    unverified = sum(1 for r in findings if r.verdict is Verdict.UNVERIFIED)
+    print(f"\n{len(findings)} citations did not check out.")
+    if unverified:
+        print(
+            f"{unverified} of them are UNVERIFIED: nothing could confirm them either way. "
+            "Giving the entry a doi or an arXiv eprint is usually enough, since that is "
+            "looked up directly instead of by title."
+        )
     print(
-        f"\n{len(findings)} citations could not be verified. Please check them against the "
-        "original publication - a dataset usually states how it wants to be cited on its "
-        "landing page or in its README. If a work is cited correctly but is simply not "
-        f"indexed by any of the sources, add its key to {ALLOWLIST_PATH.name} with the reason."
+        "Please check them against the original publication - a dataset usually states "
+        "how it wants to be cited on its landing page or in its README. If a work is "
+        "cited correctly but is simply not indexed by any of the sources, add its key to "
+        f"{ALLOWLIST_PATH.name} with the reason."
     )
     return 1
 
