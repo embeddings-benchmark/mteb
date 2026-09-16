@@ -498,7 +498,6 @@ class JinaV4Wrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-
         text_embeddings = None
         image_embeddings = None
         if "text" in inputs.dataset.features:
