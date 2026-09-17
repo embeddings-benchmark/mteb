@@ -125,39 +125,40 @@ def calculate_text_statistics(
     )
 
 
+# Band values in these modes are palette indices, subtractive ink or hue/chroma
+# rather than RGB intensities, so black and white are not all-zero/all-max in
+# them. `LAB` is deliberately absent: its conversion rounds (black round-trips to
+# `(1, 0, 1)`), which an exact check cannot use.
+_NON_RGB_COLOUR_SPACES = frozenset({"P", "PA", "CMYK", "YCbCr", "HSV"})
+
+# Integer modes wider than 8 bits, where white is the mode's own maximum.
+_WHITE_POINT = {
+    "I": 2**31 - 1,
+    "I;16": 65535,
+    "I;16B": 65535,
+    "I;16L": 65535,
+    "I;16N": 65535,
+}
+
+
 def is_black_or_white_image(image: Image.Image) -> bool:
-    """Whether every pixel of the image is pure black or pure white.
-
-    Such an image carries no visual signal at all. It is usually not a quirk of
-    the source material but a failed image fetch that was silently replaced by a
-    blank frame, which makes it missing data rather than noise: as a query it
-    cannot be answered, and as a labelled sample it cannot be learned from. Other
-    constant colours (a solid red placeholder, a brand background) are common in
-    synthetic or template imagery and are not reliably a fetch failure, so they
-    are left alone.
-
-    Palette (``P``) mode is resolved to its actual colours first -- its raw pixel
-    values are indices into a palette, not the colours themselves, so an index of
-    0 does not mean black. An alpha band, if present, is required to be constant
-    (a partially transparent pixel is not uniformly displayed) but is excluded from
-    the black/white colour check itself -- a fully opaque black or white pixel is
-    ``(0, 0, 0, 255)`` or ``(255, 255, 255, 255)``, not ``(0, 0, 0, 0)``.
-    """
-    if image.mode == "P":
-        image = image.convert("RGBA" if "transparency" in image.info else "RGB")
+    """Return whether the image is uniformly black or white, with constant alpha."""
+    if image.mode in _NON_RGB_COLOUR_SPACES:
+        image = image.convert(
+            "RGBA" if "A" in image.getbands() or "transparency" in image.info else "RGB"
+        )
+    if image.mode == "F":
+        return False  # float samples have no defined white point
     extrema = image.getextrema()
     if extrema is None:
         return False
     bands = extrema if isinstance(extrema[0], tuple) else (extrema,)
-    color_bands = [
-        band for name, band in zip(image.getbands(), bands) if name != "A"
-    ]
-    alpha_bands = [band for name, band in zip(image.getbands(), bands) if name == "A"]
-    if not all(lo == hi for lo, hi in alpha_bands):
+    if any(lo != hi for lo, hi in bands):
         return False
-    return all(lo == hi == 0 for lo, hi in color_bands) or all(
-        lo == hi == 255 for lo, hi in color_bands
-    )
+    colours = {
+        lo for name, (lo, _) in zip(image.getbands(), bands, strict=True) if name != "A"
+    }
+    return colours == {0} or colours == {_WHITE_POINT.get(image.mode, 255)}
 
 
 def compute_black_or_white_image_flags(
@@ -165,9 +166,7 @@ def compute_black_or_white_image_flags(
 ) -> list[bool]:
     """Return a per-image flag saying whether that image is pure black or white.
 
-    Extracted so a caller that also needs to know *which* images are flagged
-    (to intersect them with qrels) can reuse the result instead of decoding
-    every image a second time.
+    The flags can be matched to corpus IDs to inspect relevant documents.
     """
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         return list(executor.map(is_black_or_white_image, images))
@@ -177,15 +176,7 @@ def count_queries_with_all_gold_black_or_white(
     relevant_docs: Mapping[str, Mapping[str, int]],
     black_or_white_doc_ids: Container[str],
 ) -> int:
-    """Number of queries whose *entire* gold set is pure black/white images.
-
-    A black-or-white document is only an evaluation defect when the query has
-    nothing else to retrieve. Corpora routinely carry a handful of blank images
-    that no qrel references, and class-judged tasks give a query hundreds of
-    positives where one blank changes nothing; neither is a broken query.
-    Requiring the whole gold set to be black/white is what separates those from
-    a query that genuinely cannot be answered.
-    """
+    """Count queries whose positive judgments all reference pure black/white images."""
     broken = 0
     for docs in relevant_docs.values():
         gold = [doc_id for doc_id, score in docs.items() if score > 0]
@@ -198,7 +189,6 @@ def calculate_image_statistics(
     images: list[Image.Image],
     hashes: list[str] | None = None,
     max_workers: int | None = None,
-    black_or_white_flags: list[bool] | None = None,
 ) -> ImageStatistics:
     """Calculate descriptive statistics for a list of images.
 
@@ -208,19 +198,15 @@ def calculate_image_statistics(
         hashes: Optional pre-computed MD5 hashes (from `compute_image_hashes`).
             When provided the function skips recomputing them.
         max_workers: Maximum number of worker threads for parallel hash computation.
-        black_or_white_flags: Optional pre-computed flags (from
-            `compute_black_or_white_image_flags`). When provided the function
-            skips recomputing them.
 
     Returns:
         ImageStatistics: A dictionary containing the descriptive statistics.
     """
     if hashes is None:
         hashes = compute_image_hashes(images, max_workers=max_workers)
-    if black_or_white_flags is None:
-        black_or_white_flags = compute_black_or_white_image_flags(
-            images, max_workers=max_workers
-        )
+    black_or_white_flags = compute_black_or_white_image_flags(
+        images, max_workers=max_workers
+    )
     img_widths, img_heights = [], []
     for img in tqdm(images, desc="Computing image statistics"):
         width, height = img.size
@@ -511,7 +497,6 @@ def calculate_single_input_modality_statistics(
     col_inputs: dict[Modalities, list[Any]],
     hashes: dict[str, list[str]] | None = None,
     max_workers: int | None = None,
-    black_or_white_image_flags: list[bool] | None = None,
 ) -> SingleInputModalityStatistics:
     """Compute per-modality statistics for a single-input dataset."""
     _hashes = hashes or {}
@@ -525,7 +510,6 @@ def calculate_single_input_modality_statistics(
             col_inputs["image"],
             hashes=_hashes.get("image"),
             max_workers=max_workers,
-            black_or_white_flags=black_or_white_image_flags,
         )
         if "image" in col_inputs
         else None,

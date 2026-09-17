@@ -574,9 +574,6 @@ class AbsTaskRetrieval(AbsTask):
         if "video" in queries_modalities:
             queries_col_inputs["video"] = queries["video"]
 
-        # Compute the corpus black-or-white-image flags once: `calculate_image_statistics`
-        # needs the count and `calculate_relevant_docs_statistics` needs to know
-        # *which* documents are black/white so it can intersect them with qrels.
         black_or_white_image_flags = (
             compute_black_or_white_image_flags(
                 corpus_col_inputs["image"], max_workers=num_proc
@@ -599,7 +596,6 @@ class AbsTaskRetrieval(AbsTask):
         corpus_stats = calculate_single_input_modality_statistics(
             corpus_col_inputs,
             max_workers=num_proc,
-            black_or_white_image_flags=black_or_white_image_flags,
         )
         queries_stats = calculate_single_input_modality_statistics(
             queries_col_inputs, max_workers=num_proc
