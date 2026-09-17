@@ -106,9 +106,8 @@ class MCTCTWrapper(AbsEncoder):
         )
         self.sampling_rate = self.feature_extractor.sampling_rate  # 16000 Hz
 
-        # cap is in filterbank frames (one per hop_length ms), not video frames
-        # and not samples: the encoder has max_position_embeddings positions and
-        # its conv frontend subsamples by conv_stride
+        # filterbank frames: max_position_embeddings x conv_stride
+        # https://huggingface.co/speechbrain/m-ctc-t-large/blob/main/config.json
         config = self.model.config
         stride = 1
         for st in config.conv_stride:
@@ -147,8 +146,6 @@ class MCTCTWrapper(AbsEncoder):
                 return_tensors="pt",
                 padding=True,
                 truncation=True,
-                # MCTCTFeatureExtractor pads after fbank, so max_length counts
-                # frames, not samples
                 max_length=self.max_feature_frames,
             ).to(self.device)
 
