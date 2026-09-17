@@ -125,40 +125,12 @@ def calculate_text_statistics(
     )
 
 
-# Band values in these modes are palette indices, subtractive ink or hue/chroma
-# rather than RGB intensities, so black and white are not all-zero/all-max in
-# them. `LAB` is deliberately absent: its conversion rounds (black round-trips to
-# `(1, 0, 1)`), which an exact check cannot use.
-_NON_RGB_COLOUR_SPACES = frozenset({"P", "PA", "CMYK", "YCbCr", "HSV"})
-
-# Integer modes wider than 8 bits, where white is the mode's own maximum.
-_WHITE_POINT = {
-    "I": 2**31 - 1,
-    "I;16": 65535,
-    "I;16B": 65535,
-    "I;16L": 65535,
-    "I;16N": 65535,
-}
-
-
 def is_black_or_white_image(image: Image.Image) -> bool:
-    """Return whether the image is uniformly black or white, with constant alpha."""
-    if image.mode in _NON_RGB_COLOUR_SPACES:
-        image = image.convert(
-            "RGBA" if "A" in image.getbands() or "transparency" in image.info else "RGB"
-        )
-    if image.mode == "F":
-        return False  # float samples have no defined white point
-    extrema = image.getextrema()
-    if extrema is None:
-        return False
-    bands = extrema if isinstance(extrema[0], tuple) else (extrema,)
-    if any(lo != hi for lo, hi in bands):
-        return False
-    colours = {
-        lo for name, (lo, _) in zip(image.getbands(), bands, strict=True) if name != "A"
-    }
-    return colours == {0} or colours == {_WHITE_POINT.get(image.mode, 255)}
+    """Return whether the image is pure black or pure white once converted to RGB."""
+    extrema = image.convert("RGB").getextrema()
+    return all(band == (0, 0) for band in extrema) or all(
+        band == (255, 255) for band in extrema
+    )
 
 
 def compute_black_or_white_image_flags(
@@ -507,9 +479,7 @@ def calculate_single_input_modality_statistics(
         if "text" in col_inputs
         else None,
         image_statistics=calculate_image_statistics(
-            col_inputs["image"],
-            hashes=_hashes.get("image"),
-            max_workers=max_workers,
+            col_inputs["image"], hashes=_hashes.get("image"), max_workers=max_workers
         )
         if "image" in col_inputs
         else None,
