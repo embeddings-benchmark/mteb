@@ -1252,16 +1252,14 @@ MTEB_ITA = Benchmark(
                 "SIB200ClusteringS2S",
                 # PairClassification (1)
                 "DisCoTexPairClassification",
-                # Retrieval (7)
+                # Retrieval (6)
                 "BelebeleRetrieval",
                 "JuriFindITRetrieval",
                 "MintakaRetrieval",
-                "MultiLongDocRetrieval",
                 "WebFAQRetrieval",
                 "WikipediaRetrievalMultilingual",
                 "XPQARetrieval",
-                # Reranking (3)
-                "MultiLongDocReranking",
+                # Reranking (2)
                 "WikipediaRerankingMultilingual",
                 "XGlueWPRReranking",
             ],
@@ -1272,7 +1270,7 @@ MTEB_ITA = Benchmark(
         + (get_task("STS22.v2", hf_subsets=["it"]),)
         + (get_task("STSBenchmarkMultilingualSTS", hf_subsets=["it"]),)
     ),
-    description="""Italian Massive Text Embedding Benchmark, the first benchmark for text embeddings in Italian. It gathers 25 tasks across 7 task types, five of them natively Italian rather than translated, and contributes JuriFindITRetrieval, a legal retrieval task built from questions written by Italian legal professionals. Machine-translated miniature tasks, cross-lingual tasks and saturated bitext-mining tasks are excluded, as is MMarcoRetrievalMultilingual, the training distribution of several recent Italian retrieval models.""",
+    description="""Italian Massive Text Embedding Benchmark, the first benchmark for text embeddings in Italian. It gathers 23 tasks across 7 task types, five of them natively Italian rather than translated, and contributes JuriFindITRetrieval, a legal retrieval task built from questions written by Italian legal professionals. Machine-translated miniature tasks, cross-lingual tasks and saturated bitext-mining tasks are excluded, as is MMarcoRetrievalMultilingual, the training distribution of several recent Italian retrieval models.""",
     reference=None,
     citation=None,
     contacts=["albertobarnabo"],
