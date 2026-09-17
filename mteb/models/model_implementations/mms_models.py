@@ -28,8 +28,7 @@ class MMSWrapper(AbsEncoder):
         revision: str | None = None,
         target_lang: str = "eng",
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        # uncapped: conv positional embedding, no max_position_embeddings, and
-        # transformers picks SDPA here. Set this to truncate, e.g. to ablate length.
+        # uncapped: conv positional embedding, no max_position_embeddings
         # https://huggingface.co/facebook/mms-1b/blob/main/config.json
         max_audio_length_seconds: float | None = None,
         **kwargs: Any,

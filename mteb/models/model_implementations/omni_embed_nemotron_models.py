@@ -22,7 +22,7 @@ class OmniEmbedNemotronWrapper(SentenceTransformerEncoderWrapper):
         # fps=2: qwen-omni-utils FPS=2.0
         # https://github.com/QwenLM/Qwen2.5-Omni/blob/main/qwen-omni-utils/src/qwen_omni_utils/v2_5/vision_process.py
         fps: float | None = 2.0,
-        # 64 is an mteb cap; qwen-omni-utils and qwen-vl-utils ship FPS_MAX_FRAMES=768
+        # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
         # 300 s: chunk_length=300

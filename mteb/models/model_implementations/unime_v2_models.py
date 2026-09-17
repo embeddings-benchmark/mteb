@@ -65,7 +65,7 @@ class UniMEV2Wrapper(AbsEncoder):
         device: str | None = None,
         # fps=2 is an mteb default; this is a LLaVA-OneVision model
         fps: float | None = 2.0,
-        # 64 is an mteb cap; qwen-omni-utils and qwen-vl-utils ship FPS_MAX_FRAMES=768
+        # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
         attn_implementation: str = "sdpa",

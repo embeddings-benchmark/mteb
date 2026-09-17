@@ -338,7 +338,7 @@ class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
         model_name: str = "vidore/colqwen-omni-v0.1",
         revision: str | None = None,
         device: str | None = None,
-        # 64 is an mteb cap; qwen-omni-utils and qwen-vl-utils ship FPS_MAX_FRAMES=768
+        # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
         # 300 s at 16 kHz: Qwen2.5-Omni chunk_length=300; this is max_samples,
