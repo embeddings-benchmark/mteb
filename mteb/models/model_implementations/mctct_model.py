@@ -87,9 +87,8 @@ class MCTCTWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        # 27.6 s: max_position_embeddings=920 at 30 ms/frame
-        # https://huggingface.co/speechbrain/m-ctc-t-large/blob/main/config.json
-        max_audio_length_seconds: float = 27.6,
+        # None: the encoder's own limit, read from the checkpoint below
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
         from transformers import MCTCTFeatureExtractor, MCTCTModel
@@ -106,6 +105,25 @@ class MCTCTWrapper(AbsEncoder):
             model_name, revision=revision
         )
         self.sampling_rate = self.feature_extractor.sampling_rate  # 16000 Hz
+
+        # cap is in filterbank frames (one per hop_length ms), not video frames
+        # and not samples: the encoder has max_position_embeddings positions and
+        # its conv frontend subsamples by conv_stride
+        config = self.model.config
+        stride = 1
+        for st in config.conv_stride:
+            stride *= st
+        self.max_feature_frames = config.max_position_embeddings * stride
+        if max_audio_length_seconds is not None:
+            self.max_feature_frames = int(
+                max_audio_length_seconds * 1000 / self.feature_extractor.hop_length
+            )
+        logger.info(
+            "%s: audio capped at %d filterbank frames (%.1f s)",
+            model_name,
+            self.max_feature_frames,
+            self.max_feature_frames * self.feature_extractor.hop_length / 1000,
+        )
 
     def get_audio_embeddings(  # noqa: PLR0914
         self,
@@ -130,12 +148,8 @@ class MCTCTWrapper(AbsEncoder):
                 padding=True,
                 truncation=True,
                 # MCTCTFeatureExtractor pads after fbank, so max_length counts
-                # frames (hop_length ms apart), not samples
-                max_length=int(
-                    self.max_audio_length_seconds
-                    * 1000
-                    / self.feature_extractor.hop_length
-                ),
+                # frames, not samples
+                max_length=self.max_feature_frames,
             ).to(self.device)
 
             with torch.no_grad():
