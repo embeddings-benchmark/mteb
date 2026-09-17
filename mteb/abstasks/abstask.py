@@ -475,8 +475,11 @@ class AbsTask(ABC):  # noqa: PLR0904
         hf_subset_stat: Literal["hf_subset_descriptive_stats"] = (
             "hf_subset_descriptive_stats"
         )
-        eval_splits = self.metadata.eval_splits
-        if isinstance(self, AbsTaskClassification):
+        eval_splits = list(self.metadata.eval_splits)
+        if (
+            isinstance(self, AbsTaskClassification)
+            and self.train_split not in eval_splits
+        ):
             eval_splits.append(self.train_split)
 
         pbar_split = tqdm(eval_splits, desc="Processing Splits...")
