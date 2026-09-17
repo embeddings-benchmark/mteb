@@ -29,6 +29,8 @@ class OpsMMEmbeddingWrapper(AbsEncoder):
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         torch_dtype: torch.dtype | None = None,  # ruff: any-type
         attn_implementation: str | None = None,
+        # fps=2: qwen-vl-utils FPS=2.0
+        # https://github.com/QwenLM/Qwen2.5-VL/blob/main/qwen-vl-utils/src/qwen_vl_utils/vision_process.py
         fps: float | None = 2.0,
         # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
         max_frames: int | None = 64,

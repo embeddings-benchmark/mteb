@@ -64,6 +64,7 @@ class OmniRetrieverWrapper(AbsEncoder):
         base_model_name_or_path: str = WAVE_BASE_MODEL,
         base_model_revision: str = WAVE_BASE_REVISION,
         device: str | None = None,
+        # 8 frames is an mteb default; WAVE-7B declares no frame count
         num_frames: int = 8,
         pixels: int = 50_176,
         video_batch_size: int = 1,
