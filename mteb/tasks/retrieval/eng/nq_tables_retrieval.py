@@ -15,25 +15,25 @@ if TYPE_CHECKING:
 
 _BIBTEX = r"""
 @misc{doshi2026tableir,
-  title = {TableIR Eval: Table-Text IR Evaluation Collection},
   author = {Doshi, Meet and Boni, Odellia and Kumar, Vishwajeet and Sen, Jaydeep and Joshi, Sachindra},
-  year = {2026},
-  institution = {IBM Research},
   howpublished = {https://huggingface.co/collections/ibm-research/table-text-ir-evaluation},
+  institution = {IBM Research},
   note = {Hugging Face dataset collection},
+  title = {TableIR Eval: Table-Text IR Evaluation Collection},
+  year = {2026},
 }
 
 @inproceedings{herzig-etal-2021-open,
-  title = {Open Domain Question Answering over Tables via Dense Retrieval},
+  address = {Online},
   author = {Herzig, Jonathan and M{\"u}ller, Thomas and Krichene, Syrine and Eisenschlos, Julian Martin},
   booktitle = {Proceedings of the 2021 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies},
-  month = jun,
-  year = {2021},
-  address = {Online},
-  publisher = {Association for Computational Linguistics},
-  url = {https://aclanthology.org/2021.naacl-main.43/},
   doi = {10.18653/v1/2021.naacl-main.43},
+  month = jun,
   pages = {512--519},
+  publisher = {Association for Computational Linguistics},
+  title = {Open Domain Question Answering over Tables via Dense Retrieval},
+  url = {https://aclanthology.org/2021.naacl-main.43/},
+  year = {2021},
 }
 """
 
