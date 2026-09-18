@@ -143,8 +143,7 @@ def filter_tasks(  # noqa: PLR0913
         metadata = t.metadata
 
         if langs_to_keep and not any(
-            langs_to_keep.contains_language(code)
-            for code in (*metadata.languages, *metadata.bcp47_codes)
+            langs_to_keep.contains_language(code) for code in metadata.bcp47_codes
         ):
             continue
         if script_to_keep and not script_to_keep.intersection(metadata.scripts):
