@@ -16,7 +16,7 @@ def check_language_code(code: str) -> None:
     lang = None
     script = None
     if "-" in code:
-        lang, script = code.split("-")
+        lang, script = code.split("-", maxsplit=1)
     elif code[0].isupper():
         script = code
     else:
