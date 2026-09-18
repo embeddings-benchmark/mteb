@@ -9,6 +9,8 @@ from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.languages import (
     ISO_TO_LANGUAGE,
     ISO_TO_SCRIPT,
+    PROGRAMMING_LANGS,
+    check_language_code,
 )
 
 if TYPE_CHECKING:
@@ -31,10 +33,12 @@ def _check_is_valid_script(script: str) -> None:
 
 
 def _check_is_valid_language(lang: str) -> None:
-    if lang not in ISO_TO_LANGUAGE:
+    code = lang.split("-", maxsplit=1)[0]
+    if code not in ISO_TO_LANGUAGE and code not in PROGRAMMING_LANGS:
         raise ValueError(
             f"Invalid language code: '{lang}', you can see valid ISO 639-3 codes using `from mteb.languages import ISO_TO_LANGUAGE`."
         )
+    check_language_code(lang)
 
 
 @overload
@@ -153,7 +157,9 @@ def filter_tasks(  # noqa: PLR0913
         # For metadata and superseded_by, we can access them directly
         metadata = t.metadata
 
-        if langs_to_keep and not langs_to_keep.intersection(metadata.languages):
+        if langs_to_keep and not langs_to_keep.intersection(
+            metadata.languages + metadata.bcp47_codes
+        ):
             continue
         if script_to_keep and not script_to_keep.intersection(metadata.scripts):
             continue
