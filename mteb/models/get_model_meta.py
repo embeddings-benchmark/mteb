@@ -55,8 +55,8 @@ def get_model_metas(  # noqa: PLR0913, PLR0917
     """
     res = []
     model_names = set(model_names) if model_names is not None else None
-    languages = set(languages) if languages is not None else None
     if languages is not None:
+        languages = set(languages)
         for lang in languages:
             check_language_code(lang)
     frameworks = set(frameworks) if frameworks is not None else None
