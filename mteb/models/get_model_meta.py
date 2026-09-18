@@ -5,6 +5,7 @@ import logging
 import warnings
 from typing import TYPE_CHECKING, Any
 
+from mteb.languages import check_language_code
 from mteb.models import (
     ModelMeta,
 )
@@ -36,7 +37,8 @@ def get_model_metas(  # noqa: PLR0913, PLR0917
 
     Args:
         model_names: A list of model names to filter by. If None, all models are included.
-        languages: A list of languages to filter by. If None, all languages are included.
+        languages: A list of languages to filter by, as ISO 639-3 codes (e.g. "eng") or language-script codes (e.g. "eng-Latn").
+            Only models supporting all of them are included. If None, all languages are included.
         open_weights: Whether to filter by models with open weights. If None this filter is ignored.
         frameworks: A list of frameworks to filter by. If None, all frameworks are included.
         n_parameters_range: A tuple of lower and upper bounds of the number of parameters to filter by.
@@ -54,6 +56,9 @@ def get_model_metas(  # noqa: PLR0913, PLR0917
     res = []
     model_names = set(model_names) if model_names is not None else None
     languages = set(languages) if languages is not None else None
+    if languages is not None:
+        for lang in languages:
+            check_language_code(lang)
     frameworks = set(frameworks) if frameworks is not None else None
     model_types_set = set(model_types) if model_types is not None else None
     modalities_set = set(modalities) if modalities is not None else None
@@ -67,7 +72,7 @@ def get_model_metas(  # noqa: PLR0913, PLR0917
             continue
         if languages is not None and (
             (model_meta.languages is None)
-            or not (languages <= set(model_meta.languages))
+            or not _supports_languages(model_meta.languages, languages)
         ):
             continue
         if (open_weights is not None) and (model_meta.open_weights != open_weights):
@@ -105,6 +110,14 @@ def get_model_metas(  # noqa: PLR0913, PLR0917
             continue
         res.append(model_meta)
     return res
+
+
+def _supports_languages(model_languages: list[str], languages: set[str]) -> bool:
+    iso_codes = {code.split("-", maxsplit=1)[0] for code in model_languages}
+    return all(
+        lang in model_languages if "-" in lang else lang in iso_codes
+        for lang in languages
+    )
 
 
 def get_model(
