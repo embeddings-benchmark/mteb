@@ -51,7 +51,7 @@ _SUMMARY_META_COLS = frozenset(
         "Rank (Mean Task)",
         "Rank",
         "Model",
-        "_variant_id",
+        "_experiment_id",
         "Zero-shot",
         "Active Parameters (B)",
         "Total Parameters (B)",
@@ -87,14 +87,14 @@ def _empty_summary(
 def _per_task_rows_and_cols(
     per_task_pl: pl.DataFrame,
 ) -> tuple[dict[tuple[str, str], dict[str, float]], list[str]]:
-    """Return ``({(model, variant_id) -> {task: score}}, task_cols)``; both empty on sentinel frame."""
+    """Return ``({(model, experiment_id) -> {task: score}}, task_cols)``; both empty on sentinel frame."""
     if "No results" in per_task_pl.columns or "Model" not in per_task_pl.columns:
         return {}, []
-    meta_cols = {"Model", "_variant_id"}
+    meta_cols = {"Model", "_experiment_id"}
     task_cols = [c for c in per_task_pl.columns if c not in meta_cols]
     rows: dict[tuple[str, str], dict[str, float]] = {}
     for prow in per_task_pl.iter_rows(named=True):
-        key = (prow["Model"], prow.get("_variant_id") or "")
+        key = (prow["Model"], prow.get("_experiment_id") or "")
         rows[key] = {col: float(v) for col in task_cols if (v := prow[col]) is not None}
     return rows, task_cols
 
@@ -245,18 +245,13 @@ async def build_benchmark_summary(  # noqa: PLR0914
 
     trained_on_by_model = _trained_on_map_cached(bench.name)
 
-    # Per-(model, variant_id) experiments kwargs — drives
-    # SummaryRowSchema.experiments. Built from the long frame's
-    # ``experiments`` column so variant rows can surface the exact ablation
-    # dict that produced them. Empty when the parquet pre-dates the
-    # experiments work.
-    #
-    # Also carries each variant's own `model_type`/`embed_dim`/`output_dtypes`
-    # (the ``model_meta`` column — see `_build_pre_agg_df`) so its row can
-    # patch those onto the static MODEL_REGISTRY entry: an ablation can
-    # change more than the kwarg it's named after (e.g.
-    # jinaai/jina-embeddings-v4's `vector_type=multi_vector` experiment runs
-    # `late-interaction`, not the base model's `dense`).
+    # (model_name, experiment_id) -> that experiment's kwargs, for
+    # SummaryRowSchema.experiments. experiment_id is the kwargs serialized to a
+    # stable string (see _serialize_experiment_kwargs_to_name); non-experiment
+    # rows never appear here. variant_model_meta carries the same run's own
+    # model_type/embed_dim/output_dtypes (the model_meta column — see
+    # _build_pre_agg_df), used to patch the static MODEL_REGISTRY entry for
+    # that row, since an ablation's kwarg can imply other metadata changes.
     variants_by_model: dict[tuple[str, str], dict[str, Any]] = {}
     variant_model_meta: dict[tuple[str, str], dict[str, Any]] = {}
     if "experiments" in long_df.columns:
@@ -337,7 +332,7 @@ def _build_summary_rows(
     rows: list[SummaryRowSchema] = []
     for idx, row in enumerate(summary_pl.iter_rows(named=True)):
         full = row["Model"]
-        variant_id = row.get("_variant_id") or ""
+        experiment_id = row.get("_experiment_id") or ""
         meta = MODEL_REGISTRY.get(full)
         if meta is None:
             logger.debug("Skipping %s — no MODEL_REGISTRY entry", full)
@@ -346,8 +341,8 @@ def _build_summary_rows(
         zs_raw = row.get("Zero-shot")
         zs = int(zs_raw) if zs_raw is not None else None
         run_meta = (
-            variant_model_meta.get((full, variant_id))
-            if variant_id and variant_model_meta
+            variant_model_meta.get((full, experiment_id))
+            if experiment_id and variant_model_meta
             else None
         )
         model_schema = (
@@ -365,7 +360,7 @@ def _build_summary_rows(
         scores_by_task_type = {
             col: v for col in type_cols if (v := row[col]) is not None
         }
-        scores_by_task = per_task_rows.get((full, variant_id), {})
+        scores_by_task = per_task_rows.get((full, experiment_id), {})
 
         if language_filtered and scores_by_task:
             scores_by_task_type, mean_task, mean_type = _recompute_lenient_means(
@@ -396,7 +391,7 @@ def _build_summary_rows(
                 scores_by_task_type=scores_by_task_type,
                 scores_by_task=scores_by_task,
                 trained_on_tasks=list(trained_on_by_model.get(full, ())),
-                experiments=variants_by_model.get((full, variant_id))
+                experiments=variants_by_model.get((full, experiment_id))
                 if variants_by_model
                 else None,
             )

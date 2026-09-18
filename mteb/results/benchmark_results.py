@@ -257,6 +257,10 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         Returns:
             A new BenchmarkResults object with the revisions joined.
         """
+        # pandas' groupby (used below) silently drops rows whose group key is
+        # NaN/None unless dropna=False is threaded through every groupby call
+        # — using "" as a stand-in for "no experiment" sidesteps that, and it
+        # gets converted back to None once the grouping is done (see below).
         _experiment_sentinel = ""
 
         records = []

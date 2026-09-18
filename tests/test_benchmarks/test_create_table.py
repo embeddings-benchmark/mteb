@@ -15,7 +15,7 @@ import pytest
 import mteb
 from mteb import ResultCache
 from mteb.benchmarks._create_table import (
-    _VARIANT_ID_COL,
+    _EXPERIMENT_ID_COL,
     _build_per_task_pivot,
     _create_summary_table,
     _incomplete_subset_pairs,
@@ -46,7 +46,7 @@ def test_incomplete_task_pairs_flags_partial_split_coverage(
     pl_df = _task_frame(mock_mteb_cache, [POEM])
     pairs = _incomplete_task_pairs(pl_df).sort("model_name", "task_name")
     assert pairs.to_dicts() == [
-        {"model_name": PARTIAL_MODEL, _VARIANT_ID_COL: "", "task_name": POEM}
+        {"model_name": PARTIAL_MODEL, _EXPERIMENT_ID_COL: "", "task_name": POEM}
     ]
 
 
@@ -106,7 +106,7 @@ def test_incomplete_subset_pairs_flags_partial_split_coverage_per_subset(
     assert pairs.to_dicts() == [
         {
             "model_name": PARTIAL_MODEL,
-            _VARIANT_ID_COL: "",
+            _EXPERIMENT_ID_COL: "",
             "task_name": CATALONIA,
             "subset": "catalan",
         }
