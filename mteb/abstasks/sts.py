@@ -13,7 +13,7 @@ from ._statistics_calculation import (
     calculate_pair_modality_statistics,
     calculate_score_statistics,
 )
-from .abstask import AbsTask
+from .abstask import AbsTask, _pair_content_columns
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -90,6 +90,9 @@ class AbsTaskSTS(AbsTask):
     max_score: int = 5
     input1_prompt_type: PromptType | None = None
     input2_prompt_type: PromptType | None = None
+
+    def _get_content_columns(self) -> dict[str, Modalities]:
+        return _pair_content_columns(self.column_names, self.modalities)
 
     def _evaluate_subset(
         self,
@@ -239,15 +242,24 @@ class AbsTaskSTS(AbsTask):
             symmetric=True,
         )
         labels_statistics = calculate_score_statistics(score)
+        number_of_characters = None
+
+        if (
+            pair_stats["text1_statistics"] is not None
+            and pair_stats["text2_statistics"] is not None
+        ):
+            number_of_characters = (
+                pair_stats["text1_statistics"]["total_text_length"]
+                + pair_stats["text2_statistics"]["total_text_length"]
+            )
+        elif pair_stats["text1_statistics"] is not None:
+            number_of_characters = pair_stats["text1_statistics"]["total_text_length"]
+        elif pair_stats["text2_statistics"] is not None:
+            number_of_characters = pair_stats["text2_statistics"]["total_text_length"]
 
         return AnySTSDescriptiveStatistics(
             num_samples=n,
-            number_of_characters=(
-                pair_stats["text1_statistics"]["total_text_length"]
-                + pair_stats["text2_statistics"]["total_text_length"]
-                if pair_stats["text1_statistics"]
-                else None
-            ),
+            number_of_characters=number_of_characters,
             unique_pairs=pair_stats["unique_pairs"],
             text1_statistics=pair_stats["text1_statistics"],
             text2_statistics=pair_stats["text2_statistics"],

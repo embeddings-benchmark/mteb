@@ -10,6 +10,7 @@ from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 from transformers.modeling_outputs import BaseModelOutput
 
 from mteb.models.model_meta import ModelMeta
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -126,7 +127,7 @@ class KaLMRerankerWrapper:
             raise ValueError(f"Failed to tokenize the answer {answer!r}.")
         return token_ids[-1]
 
-    def _get_encoder(self):
+    def _get_encoder(self) -> torch.nn.Module:
         if hasattr(self.model, "get_encoder"):
             return self.model.get_encoder()
         if hasattr(self.model, "encoder"):
@@ -207,7 +208,9 @@ class KaLMRerankerWrapper:
         encoder_texts = [f"<Document>: {document}" for _, document in pairs]
         decoder_texts = [
             self._decoder_text(query, inst)
-            for query, inst in zip([pair[0] for pair in pairs], instructions)
+            for query, inst in zip(
+                [pair[0] for pair in pairs], instructions, strict=True
+            )
         ]
 
         encoder_batch = self.tokenizer(
@@ -285,7 +288,10 @@ class KaLMRerankerWrapper:
         """Return ``P(yes)`` scores in the same order as ``pairs``."""
         queries = [text for batch in inputs1 for text in batch["text"]]
         documents = [text for batch in inputs2 for text in batch["text"]]
-        pairs = [(query, document) for query, document in zip(queries, documents)]
+        pairs = [
+            (query, document)
+            for query, document in zip(queries, documents, strict=True)
+        ]
         validated_pairs = self._validate_pairs(pairs)
         if not validated_pairs:
             return []
@@ -469,7 +475,7 @@ KALM_RERANKER_V1_CITATION = """@misc{zhao2026kalmrerankerv1,
 kalm_reranker_v1_nano = ModelMeta(
     loader=KaLMRerankerWrapper,
     loader_kwargs=dict(
-        dtype=torch.bfloat16,
+        dtype=OutputDType.BF16,
     ),
     name="KaLM-Embedding/KaLM-Reranker-V1-Nano",
     revision="1d3dcd79115a77b91b2ece798f536880d2115e48",
@@ -501,7 +507,7 @@ kalm_reranker_v1_nano = ModelMeta(
 kalm_reranker_v1_small = ModelMeta(
     loader=KaLMRerankerWrapper,
     loader_kwargs=dict(
-        dtype=torch.bfloat16,
+        dtype=OutputDType.BF16,
     ),
     name="KaLM-Embedding/KaLM-Reranker-V1-Small",
     revision="e8eaadc957a7ae383a4983a483c2c399f1056cd3",
@@ -532,7 +538,7 @@ kalm_reranker_v1_small = ModelMeta(
 kalm_reranker_v1_large = ModelMeta(
     loader=KaLMRerankerWrapper,
     loader_kwargs=dict(
-        dtype=torch.bfloat16,
+        dtype=OutputDType.BF16,
     ),
     name="KaLM-Embedding/KaLM-Reranker-V1-Large",
     revision="bc5cb8fe5a266b6d0b5ffdb9da4c06c950ae242f",

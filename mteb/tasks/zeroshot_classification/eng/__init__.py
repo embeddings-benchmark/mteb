@@ -24,6 +24,7 @@ from .human_animal_cartoon import (
     HumanAnimalCartoonZeroShotClassification,
 )
 from .imagenet1k import Imagenet1kZeroShotClassification
+from .intphys2 import IntPhys2VideoZeroShot
 from .kinetics400 import (
     Kinetics400VAZeroShotClassification,
     Kinetics400ZeroShotClassification,
@@ -99,6 +100,7 @@ __all__ = [
     "HumanAnimalCartoonVAZeroShotClassification",
     "HumanAnimalCartoonZeroShotClassification",
     "Imagenet1kZeroShotClassification",
+    "IntPhys2VideoZeroShot",
     "Kinetics400VAZeroShotClassification",
     "Kinetics400ZeroShotClassification",
     "Kinetics600VAZeroShotClassification",

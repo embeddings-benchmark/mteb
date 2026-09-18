@@ -217,6 +217,8 @@ class RelevantDocsStatistics(TypedDict):
         average_relevant_docs_per_query: Average number of relevant documents per query.
         max_relevant_docs_per_query: Maximum number of relevant documents for any query.
         unique_relevant_docs: Number of unique relevant documents across all queries.
+        num_missing_query_ids: Number of unique qrel query IDs absent from the loaded queries split.
+        num_missing_corpus_ids: Number of unique qrel corpus/document IDs absent from the loaded corpus split.
     """
 
     num_relevant_docs: int
@@ -224,6 +226,8 @@ class RelevantDocsStatistics(TypedDict):
     average_relevant_docs_per_query: float
     max_relevant_docs_per_query: float
     unique_relevant_docs: int
+    num_missing_query_ids: int
+    num_missing_corpus_ids: int
 
 
 class SingleInputModalityStatistics(TypedDict):

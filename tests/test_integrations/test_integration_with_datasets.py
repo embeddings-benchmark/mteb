@@ -19,6 +19,37 @@ def test_benchmark_datasets(task: AbsTask, model: mteb.EncoderProtocol, tmp_path
     mteb.evaluate(model, task, cache=None)
 
 
+@pytest.mark.parametrize("task", TASK_TEST_GRID)
+@pytest.mark.parametrize(
+    "model", [mteb.get_model("mteb/baseline-random-sparse-encoder")]
+)
+def test_benchmark_datasets_sparse_encoder(task: AbsTask, model: mteb.EncoderProtocol):
+    """Test that a task can be fetched and run"""
+    mteb.evaluate(model, task, cache=None)
+
+
+@pytest.mark.parametrize(
+    # Only one (small) task: RandomColBERTBaseline.search() scores the full corpus against all
+    # queries in a single MaxSim call with no chunking, which OOMs on the larger corpora of the
+    # other retrieval-shaped tasks in TASK_TEST_GRID (e.g. SciDocsRR).
+    "task",
+    [mteb.get_task("TwitterHjerneRetrieval")],
+)
+@pytest.mark.parametrize("model", [mteb.get_model("mteb/baseline-random-colbert")])
+def test_benchmark_datasets_colbert(task: AbsTask, model: mteb.EncoderProtocol):
+    mteb.evaluate(model, task, cache=None)
+
+
+@pytest.mark.parametrize(
+    "task", [t for t in TASK_TEST_GRID if t.metadata.type == "Reranking"]
+)
+@pytest.mark.parametrize(
+    "model", [mteb.get_model("mteb/baseline-random-cross-encoder")]
+)
+def test_benchmark_datasets_cross_encoder(task: AbsTask, model: mteb.EncoderProtocol):
+    mteb.evaluate(model, task, cache=None)
+
+
 def test_run_task_multiple_times():
     """Regression test for https://github.com/embeddings-benchmark/mteb/issues/4397"""
     model = mteb.get_model("mteb/baseline-random-encoder")

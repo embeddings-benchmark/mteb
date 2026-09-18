@@ -56,7 +56,6 @@ from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import requests
-import torch
 from tqdm.auto import tqdm
 
 from mteb._create_dataloaders import create_dataloader
@@ -67,6 +66,7 @@ from mteb.types import PromptType
 if TYPE_CHECKING:
     from collections.abc import Callable
 
+    import torch
     from numpy.typing import NDArray
     from PIL import Image
     from torch.utils.data import DataLoader
@@ -114,6 +114,8 @@ def _audio_to_data_url(audio: AudioInputItem) -> str:
     encoder — the same package already required to decode video — so audio
     and video share one encoding library.
     """
+    import torch
+
     try:
         from torchcodec.encoders import AudioEncoder  # type: ignore[attr-defined]
     except ImportError as e:
@@ -153,6 +155,8 @@ def _video_to_data_url(video: torch.Tensor, *, fps: float | None) -> str:
             was used instead), a default of 2.0 is used since there's no
             source frame rate to fall back to.
     """
+    import torch
+
     fps = fps or 2.0
 
     try:
@@ -1008,7 +1012,7 @@ class OpenAIAPIRerankWrapper(OpenAIBaseWrapper):
                 doc_image,
                 _,
                 doc_video,
-            ) in zip(batch_queries, batch_docs):
+            ) in zip(batch_queries, batch_docs, strict=True):
                 query = self._to_score_input(
                     query_text, query_image, query_video, fps=self.fps
                 )
@@ -1288,7 +1292,7 @@ class OpenAIAPITokenEmbedWrapper(OpenAIBaseWrapper):
             batch_idx = text_indices[start : start + batch_size]
             batch_texts = [prompt + (items[i][0] or "") for i in batch_idx]
             batch_embeddings = self._encode_texts(batch_texts)
-            for idx, embedding in zip(batch_idx, batch_embeddings):
+            for idx, embedding in zip(batch_idx, batch_embeddings, strict=True):
                 embeddings_by_index[idx] = embedding
 
         for i in tqdm(
@@ -1393,7 +1397,7 @@ class OpenAIAPITokenEmbedWrapper(OpenAIBaseWrapper):
         doc_id_to_idx = {doc_id: idx for idx, doc_id in enumerate(self._corpus_ids)}
 
         results: RetrievalOutputType = {}
-        for query_id, query_embedding in zip(query_ids, query_embeddings):
+        for query_id, query_embedding in zip(query_ids, query_embeddings, strict=True):
             if top_ranked is not None:
                 candidate_ids = [
                     doc_id
@@ -1410,7 +1414,7 @@ class OpenAIAPITokenEmbedWrapper(OpenAIBaseWrapper):
             scores = _max_sim_scores(query_embedding, candidate_embeddings)
 
             top_items = heapq.nlargest(
-                top_k, zip(candidate_ids, scores), key=lambda item: item[1]
+                top_k, zip(candidate_ids, scores, strict=True), key=lambda item: item[1]
             )
             results[query_id] = dict(top_items)
 

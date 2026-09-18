@@ -117,7 +117,7 @@ penguin_encoder = ModelMeta(
     contacts=None,
     output_dtypes=None,
     extra_requirements_groups=[
-        "mctct",  # have rope init error with transformers v5
+        "transformers-v4",  # have rope init error with transformers v5
         "flash_attention",
     ],
 )

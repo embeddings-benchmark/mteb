@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 import mteb
 from mteb.cache import ResultCache
@@ -12,7 +13,7 @@ def _read_jsonl(path):
         return [json.loads(line) for line in handle if line.strip()]
 
 
-def test_save_to_cache_replaces_existing_run_settings_entry(tmp_path):
+def test_save_to_cache_replaces_existing_run_settings_entry(tmp_path: Path):
     cache = ResultCache(cache_path=tmp_path)
     task_result = TaskResult.from_task_results(
         task=mteb.get_task("STS12"),
@@ -43,7 +44,7 @@ def test_save_to_cache_replaces_existing_run_settings_entry(tmp_path):
     assert entries[0]["encode_kwargs"]["batch_size"] == 32
 
 
-def test_save_to_cache_combines_subsets_with_same_settings(tmp_path):
+def test_save_to_cache_combines_subsets_with_same_settings(tmp_path: Path):
     cache = ResultCache(cache_path=tmp_path)
     for subset in ["en", "de"]:
         cache.save_to_cache(
@@ -84,7 +85,7 @@ def test_save_to_cache_combines_subsets_with_same_settings(tmp_path):
     assert entries[1]["encode_kwargs"]["batch_size"] == 32
 
 
-def test_save_to_cache_combines_splits_evaluated_on_the_same_subsets(tmp_path):
+def test_save_to_cache_combines_splits_evaluated_on_the_same_subsets(tmp_path: Path):
     cache = ResultCache(cache_path=tmp_path)
     scores = {"en": {"main_score": 0.5}, "de": {"main_score": 0.5}}
     cache.save_to_cache(
@@ -125,7 +126,7 @@ def test_save_to_cache_combines_splits_evaluated_on_the_same_subsets(tmp_path):
     assert entries[1]["subsets"] == ["de", "en"]
 
 
-def test_save_to_cache_serializes_non_json_serializable_encode_kwargs(tmp_path):
+def test_save_to_cache_serializes_non_json_serializable_encode_kwargs(tmp_path: Path):
     cache = ResultCache(cache_path=tmp_path)
     task_result = TaskResult.from_task_results(
         task=mteb.get_task("STS13"),

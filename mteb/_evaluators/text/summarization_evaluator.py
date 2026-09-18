@@ -5,7 +5,6 @@ import sys
 from typing import TYPE_CHECKING, Any, TypedDict
 
 import numpy as np
-import torch
 from scipy.stats import pearsonr, spearmanr
 from tqdm.auto import tqdm
 
@@ -107,6 +106,8 @@ class SummarizationEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> SummarizationDistances:
+        import torch
+
         # Get the human & machine summaries for the text in one go for all
         human_lens = [len(human_summaries) for human_summaries in self.human_summaries]
         machine_lens = [
@@ -173,7 +174,9 @@ class SummarizationEvaluator(Evaluator):
             for i, (embs_human_summaries, embs_machine_summaries) in tqdm(
                 enumerate(
                     zip(
-                        embs_human_summaries_all_split, embs_machine_summaries_all_split
+                        embs_human_summaries_all_split,
+                        embs_machine_summaries_all_split,
+                        strict=True,
                     )
                 ),
                 desc="Scoring",
@@ -185,7 +188,7 @@ class SummarizationEvaluator(Evaluator):
                 human_scores = []  # Human score for a summary
 
                 for emb_machine_summary, human_eval_score in zip(
-                    embs_machine_summaries, self.gold_scores[i]
+                    embs_machine_summaries, self.gold_scores[i], strict=True
                 ):  # Iterate through all machine summaries + scores for a single sample
                     cosine_scores = cos_sim(emb_machine_summary, embs_human_summaries)
                     dot_scores = dot_score(emb_machine_summary, embs_human_summaries)

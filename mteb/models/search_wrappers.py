@@ -4,8 +4,6 @@ import heapq
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
-
 from mteb._create_dataloaders import (
     create_dataloader,
 )
@@ -14,6 +12,7 @@ from mteb.types import (
 )
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -118,6 +117,8 @@ class SearchEncoderWrapper:
         Returns:
             Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.
         """
+        import torch
+
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
 
@@ -231,6 +232,8 @@ class SearchEncoderWrapper:
         top_k: int,
         encode_kwargs: EncodeKwargs,
     ) -> dict[str, list[tuple[float, str]]]:
+        import torch
+
         logger.info("Encoding Corpus in batches (this might take a while)...")
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
@@ -314,6 +317,7 @@ class SearchEncoderWrapper:
             for sub_corpus_id, score in zip(
                 cos_scores_top_k_idx[query_itr],
                 cos_scores_top_k_values[query_itr],
+                strict=True,
             ):
                 corpus_id = sub_corpus_ids[sub_corpus_id]
                 if len(result_heaps[query_id]) < top_k:
@@ -341,6 +345,8 @@ class SearchEncoderWrapper:
         Returns:
             A dictionary mapping query IDs to a list of tuples, each containing a relevance score and a document ID.
         """
+        import torch
+
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
         result_heaps: dict[str, list[tuple[float, str]]] = {
@@ -427,6 +433,7 @@ class SearchEncoderWrapper:
         for doc_idx, score in zip(
             scores_top_k_idx[0].tolist(),
             scores_top_k_values[0].tolist(),
+            strict=True,
         ):
             corpus_id = ranked_ids[doc_idx]
             heapq.heappush(result_heaps[query_id], (score, corpus_id))
@@ -583,7 +590,9 @@ class SearchCrossEncoderWrapper:
         )
 
         results: RetrievalOutputType = {qid: {} for qid in queries["id"]}
-        for (query_id, corpus_id), score in zip(doc_pairs_ids, predictions):
+        for (query_id, corpus_id), score in zip(
+            doc_pairs_ids, predictions, strict=True
+        ):
             results[query_id][corpus_id] = float(score)
 
         return results

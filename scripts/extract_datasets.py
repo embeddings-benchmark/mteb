@@ -63,6 +63,9 @@ def extract_datasets(files: list[str]) -> list[tuple[str, str]]:
         logging.debug(f"Set CUSTOM_DATASET_REVISIONS={custom_revisions}")
 
         print(f'export CUSTOM_DATASET_REVISIONS="{custom_revisions}"')
+    else:
+        # Keep the test module from falling back to the full dataset sweep.
+        print('export CUSTOM_DATASET_REVISIONS="__EMPTY__"')
     return unique_datasets
 
 

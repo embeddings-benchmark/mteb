@@ -279,6 +279,22 @@ class AbsTaskRetrieval(AbsTask):
             self.dataset_transform(num_proc=num_proc)
         self.data_loaded = True
 
+    def _get_content_columns(self) -> dict[str, Modalities]:
+        """The corpus and query columns holding the documents, mapped to their modality.
+
+        Retrieval stores each modality in a column named after the modality itself. Text also carries an optional
+        `title`, which is part of the document: a corpus entry is encoded as `"{title} {text}"`. Queries have no
+        title, so a filter compares whichever of these columns the corpus and the queries actually have.
+        """
+        columns: dict[str, Modalities] = {}
+        for modality in self.metadata.modalities:
+            if modality == "text":
+                columns["title"] = "text"
+                columns["text"] = "text"
+            else:
+                columns[modality] = modality
+        return columns
+
     def evaluate(
         self,
         model: MTEBModels,
@@ -478,11 +494,15 @@ class AbsTaskRetrieval(AbsTask):
             corpus = split_data["corpus"]
             relevant_docs = split_data["relevant_docs"]
             top_ranked = split_data["top_ranked"]
+            query_ids = set(queries["id"])
+            corpus_ids = set(corpus["id"])
         elif compute_overall:
             queries = None
             corpus = None
             relevant_docs = {}
             top_ranked = {}
+            query_ids = set()
+            corpus_ids = set()
             for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
                 split_data = self.dataset[hf_subset][split]
                 if queries is None:
@@ -494,6 +514,14 @@ class AbsTaskRetrieval(AbsTask):
                 else:
                     corpus = concatenate_datasets([corpus, split_data["corpus"]])
 
+                query_ids.update(
+                    f"{split}_{hf_subset}_{query_id}"
+                    for query_id in split_data["queries"]["id"]
+                )
+                corpus_ids.update(
+                    f"{split}_{hf_subset}_{corpus_id}"
+                    for corpus_id in split_data["corpus"]["id"]
+                )
                 relevant_docs.update(
                     _process_relevant_docs(
                         split_data["relevant_docs"], hf_subset, split
@@ -517,6 +545,8 @@ class AbsTaskRetrieval(AbsTask):
             corpus = split_data["corpus"]
             relevant_docs = split_data["relevant_docs"]
             top_ranked = split_data["top_ranked"]
+            query_ids = set(queries["id"])
+            corpus_ids = set(corpus["id"])
 
         num_documents = len(corpus)
         num_queries = len(queries)
@@ -575,7 +605,9 @@ class AbsTaskRetrieval(AbsTask):
             if stat is not None
         )
 
-        relevant_docs_statistics = calculate_relevant_docs_statistics(relevant_docs)
+        relevant_docs_statistics = calculate_relevant_docs_statistics(
+            relevant_docs, query_ids, corpus_ids
+        )
         top_ranked_statistics = (
             calculate_top_ranked_statistics(top_ranked, num_queries)
             if top_ranked is not None and num_queries and len(top_ranked) > 0

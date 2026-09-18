@@ -53,7 +53,7 @@ class AbsTaskReranking(AbsTaskRetrieval):
             self.transform_old_dataset_format()
         else:
             # use AbsTaskRetrieval default to load the data
-            return super().load_data(num_proc=num_proc, timer=timer)
+            super().load_data(num_proc=num_proc, timer=timer)
 
     def _process_example(  # noqa: PLR6301
         self,
@@ -187,7 +187,10 @@ class AbsTaskReranking(AbsTaskRetrieval):
 
                     # Add documents and relevance information
                     for doc_id, doc_text, relevance in zip(
-                        item["doc_ids"], item["doc_texts"], item["relevance_scores"]
+                        item["doc_ids"],
+                        item["doc_texts"],
+                        item["relevance_scores"],
+                        strict=True,
                     ):
                         corpus.append(
                             {

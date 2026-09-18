@@ -190,7 +190,7 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
                     "Make sure you have access to the dataset and that you have set up the authentication correctly. To disable this warning set `public_only=False`"
                 )
                 logger.warning(msg)
-                warnings.warn(msg)
+                warnings.warn(msg, stacklevel=2)
                 return TaskError(
                     task_name=task.metadata.name,
                     exception=str(e),
@@ -314,7 +314,7 @@ def _check_model_modalities(
                 and query_mods.issubset(model_modalities)
             ):
                 continue
-            elif query_overlap and doc_overlap:
+            if query_overlap and doc_overlap:
                 warnings.append(
                     f"Model {model.name} supports {model.modalities}, partially overlapping "
                     f"with task {task.metadata.name} query={sorted(query_mods)}, document={sorted(doc_mods)}. "
@@ -330,11 +330,10 @@ def _check_model_modalities(
 
             if task_mods.issubset(model_modalities):
                 continue
-            else:
-                errors.append(
-                    f"Model {model.name} supports {model.modalities}, but none overlap with "
-                    f"task {task.metadata.name} modalities={task.metadata.modalities}."
-                )
+            errors.append(
+                f"Model {model.name} supports {model.modalities}, but none overlap with "
+                f"task {task.metadata.name} modalities={task.metadata.modalities}."
+            )
 
     if errors:
         raise ValueError("\n".join(errors))

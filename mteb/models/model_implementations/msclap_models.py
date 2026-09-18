@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import contextlib
 import logging
 import tempfile
 from pathlib import Path
@@ -74,8 +75,11 @@ class MSClapWrapper(AbsEncoder):
             try:
                 for array in audio_arrays:
                     # Write to temp file - msclap expects file paths
-                    temp_file = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
-                    temp_files.append(temp_file.name)
+                    with tempfile.NamedTemporaryFile(
+                        suffix=".wav", delete=False
+                    ) as temp_file:
+                        temp_files.append(temp_file.name)
+                    # write after closing the handle so soundfile owns the file
                     sf.write(temp_file.name, array, self.sampling_rate)
 
                 with torch.no_grad():
@@ -93,10 +97,8 @@ class MSClapWrapper(AbsEncoder):
                 # Clean up temp files
 
                 for f in temp_files:
-                    try:
+                    with contextlib.suppress(OSError):
                         Path(f).unlink()
-                    except OSError:
-                        pass
 
         return np.vstack(all_embeddings)
 
@@ -153,9 +155,9 @@ class MSClapWrapper(AbsEncoder):
                 )
             fused_embeddings = text_embeddings + audio_embeddings
             return fused_embeddings
-        elif text_embeddings is not None:
+        if text_embeddings is not None:
             return text_embeddings
-        elif audio_embeddings is not None:
+        if audio_embeddings is not None:
             return audio_embeddings
         raise ValueError
 

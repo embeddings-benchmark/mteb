@@ -87,9 +87,11 @@ class VGClustering(AbsTaskClusteringLegacy):
 
             rng = random.Random(1111)  # local only seed
             # resampling changes scores from 12.68, 11.30, 12.65 (sample model)
-            pairs = list(zip(documents, labels))
+            pairs = list(zip(documents, labels, strict=True))
             rng.shuffle(pairs)
-            documents, labels = (list(collection) for collection in zip(*pairs))
+            documents, labels = (
+                list(collection) for collection in zip(*pairs, strict=True)
+            )
 
             # reduce size of dataset to not have too large datasets in the clustering task
             documents_batched = list(batched(documents, 512))[:4]

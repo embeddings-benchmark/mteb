@@ -1,10 +1,9 @@
-import torch
-
 from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
 
 from .bge_models import bge_training_data
 from .e5_models import E5_TRAINING_DATA
@@ -1184,7 +1183,7 @@ sdadas__mmlw_e5_small = ModelMeta(
 sdadas__mmlw_roberta_base = ModelMeta(
     name="sdadas/mmlw-roberta-base",
     model_type=["dense"],
-    revision="0ac7f23f6c96af601fa6a17852bd08d5136d6365",
+    revision="3afc79f75b26629881f9991571b0a444d5d22fa4",
     release_date="2023-11-17",
     languages=["pol-Latn"],
     loader=SentenceTransformerEncoderWrapper,
@@ -1216,7 +1215,7 @@ sdadas__mmlw_roberta_base = ModelMeta(
 sdadas__mmlw_roberta_large = ModelMeta(
     name="sdadas/mmlw-roberta-large",
     model_type=["dense"],
-    revision="b8058066a8de32d0737b3cd82d8b4f4108745af9",
+    revision="36ff7df7f0813041796f0ea49d974c07f086304e",
     release_date="2023-11-17",
     languages=["pol-Latn"],
     loader=SentenceTransformerEncoderWrapper,
@@ -1876,7 +1875,7 @@ openbmb__minicpm_embedding = ModelMeta(
     loader_kwargs=dict(
         model_kwargs={
             # "attn_implementation": "flash_attention_2",
-            "torch_dtype": torch.float16,
+            "torch_dtype": OutputDType.FLOAT16,
         },
         trust_remote_code=True,
         # https://huggingface.co/openbmb/MiniCPM-Embedding/blob/c0cb2de33fb366e17c30f9d53142ff11bc18e049/README.md?code=true#L405
@@ -2124,4 +2123,33 @@ ember_v1 = ModelMeta(
       author={Enrike Nur and Anar Aliyev},
       year={2023},
 }""",
+)
+amgix__static_retrieval_multilingual_69m_v1 = ModelMeta(
+    name="amgix/static-retrieval-multilingual-69m-v1",
+    model_type=["dense"],
+    revision="f777a93cd958b280b6c7fad5aaac3cd59d676822",
+    release_date="2026-08-16",
+    languages=None,
+    loader=SentenceTransformerEncoderWrapper,
+    n_parameters=69_095_424,
+    n_embedding_parameters=69_095_424,
+    memory_usage_mb=274,
+    max_tokens=None,
+    embed_dim=384,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch", "Sentence Transformers", "safetensors"],
+    reference="https://huggingface.co/amgix/static-retrieval-multilingual-69m-v1",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=None,
+    training_datasets={
+        "MSMARCO",  # mMARCO
+        "FiQA2018",  # FIQA
+        # Not in MTEB: GooAQ, S2ORC, Free-Law-Project/opinions-synthetic-query-512
+        # MIRACL languages: ar, bn, en, es, fa, fi, fr, hi, id, ja, ko, ru, sw, te, th, zh
+    },
+    adapted_from="ibm-granite/granite-embedding-97m-multilingual-r2",
+    superseded_by=None,
 )

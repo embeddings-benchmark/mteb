@@ -38,7 +38,7 @@ class VLM2VecWrapper(AbsEncoder):
         self,
         model_name: str = "TIGER-Lab/VLM2Vec-LoRA",
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        **kwargs,
+        **kwargs: Any,
     ):
         if suggest_package(
             self,
@@ -94,13 +94,15 @@ class VLM2VecWrapper(AbsEncoder):
             num_crops=4,
         )
 
-    def encode_input(self, input):
-        hidden_states = self.mdl(**input, return_dict=True, output_hidden_states=True)
+    def encode_input(self, inputs: dict[str, Any]) -> torch.Tensor:
+        hidden_states = self.mdl(**inputs, return_dict=True, output_hidden_states=True)
         hidden_states = hidden_states.hidden_states[-1]
-        pooled_output = self._pooling(hidden_states, input["attention_mask"])
+        pooled_output = self._pooling(hidden_states, inputs["attention_mask"])
         return pooled_output
 
-    def _pooling(self, last_hidden_state, attention_mask):
+    def _pooling(
+        self, last_hidden_state: torch.Tensor, attention_mask: torch.Tensor
+    ) -> torch.Tensor:
         if self.pooling == "last":
             sequence_lengths = attention_mask.sum(dim=1) - 1
             batch_size = last_hidden_state.shape[0]
@@ -120,7 +122,7 @@ class VLM2VecWrapper(AbsEncoder):
         images: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ):
+    ) -> Array:
         text = "<|image_1|> Represent the given image."
         all_image_embeddings = []
 
@@ -169,7 +171,7 @@ class VLM2VecWrapper(AbsEncoder):
         texts: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ):
+    ) -> Array:
         all_text_embeddings = []
 
         with torch.no_grad():
@@ -223,7 +225,9 @@ class VLM2VecWrapper(AbsEncoder):
                     input_ids, pixel_values, image_sizes = [], [], []
                     batch_text = batch["text"]
                     batch_image = batch["image"]
-                    for item_image, item_text in zip(batch_image, batch_text):
+                    for item_image, item_text in zip(
+                        batch_image, batch_text, strict=True
+                    ):
                         inputs = self.processor(
                             f"<|image_1|> Represent the given image with the following question: {item_text}",
                             item_image,
@@ -396,7 +400,7 @@ class VLM2VEC2Wrapper(AbsEncoder):
         fps: float | None = 2.0,
         max_frames: int | None = 64,
         num_frames: int | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         from peft import PeftModel
         from transformers import AutoProcessor, Qwen2VLForConditionalGeneration

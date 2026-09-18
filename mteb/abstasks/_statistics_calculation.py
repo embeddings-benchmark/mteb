@@ -1,12 +1,17 @@
 from __future__ import annotations
 
-import hashlib
 from collections import Counter, defaultdict
-from concurrent.futures import ThreadPoolExecutor
 from typing import TYPE_CHECKING, Any, cast
 
 from tqdm.auto import tqdm
 
+from mteb._content_hashes import (
+    MODALITY_HASH_FNS,
+    compute_audio_hashes,
+    compute_image_hashes,
+    compute_text_hashes,
+    compute_video_hashes,
+)
 from mteb.types.statistics import (
     AudioStatistics,
     ImageStatistics,
@@ -21,82 +26,13 @@ from mteb.types.statistics import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Mapping
+    from collections.abc import Callable, Iterable, Mapping
 
     from PIL import Image
     from torchcodec.decoders import VideoDecoder  # type: ignore[attr-defined]
 
     from mteb.types import Modalities, TopRankedDocumentsType
     from mteb.types._encoder_io import AudioInputItem
-
-
-def compute_text_hashes(texts: list[str], max_workers: int | None = None) -> list[str]:
-    """Return a hash per text — for text, the string itself is the identity key."""
-    return texts
-
-
-def compute_image_hashes(
-    images: list[Image.Image], max_workers: int | None = None
-) -> list[str]:
-    """Return a per-image MD5 hash of the raw pixel bytes."""
-
-    def _hash_one(img: Image.Image) -> str:
-        return hashlib.md5(img.tobytes(), usedforsecurity=False).hexdigest()
-
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        return list(executor.map(_hash_one, images))
-
-
-def compute_audio_hashes(
-    audios: list[AudioInputItem], max_workers: int | None = None
-) -> list[str]:
-    """Return a per-audio MD5 hash of the raw sample array bytes."""
-
-    def _hash_one(audio: AudioInputItem) -> str:
-        return hashlib.md5(audio["array"].tobytes(), usedforsecurity=False).hexdigest()
-
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        return list(executor.map(_hash_one, audios))
-
-
-def compute_video_hashes(
-    videos: list[VideoDecoder], max_workers: int | None = None
-) -> list[str]:
-    """Return a per-video MD5 hash derived from the first decoded frame.
-
-    Decoding a frame is the most expensive part of video statistics; this function
-    is extracted so callers can pass the resulting list to ``calculate_video_statistics``
-    and avoid repeating the decode.
-    """
-
-    def _hash_one(video: VideoDecoder) -> str:
-        meta = video.metadata
-        # Drop the last frame index because some container metadata over-counts
-        # by one (the final claimed frame fails to decode).
-        num_frames = meta.num_frames - 1 if meta.num_frames else meta.num_frames
-        avg_fps = meta.average_fps
-
-        if num_frames is None or num_frames == 0:
-            raise ValueError(f"Number of frames is {num_frames}")
-
-        if num_frames is not None and avg_fps is not None and avg_fps > 0:
-            step = max(1, round(avg_fps))
-            frame_indices = list(range(0, num_frames, step))
-        else:
-            frame_indices = [0]
-
-        frames = video.get_frames_at(frame_indices).data
-        return hashlib.md5(frames.numpy().tobytes(), usedforsecurity=False).hexdigest()
-
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        futures = list(
-            tqdm(
-                executor.map(_hash_one, videos),
-                total=len(videos),
-                desc="Computing video hashes",
-            )
-        )
-    return futures
 
 
 def calculate_text_statistics(
@@ -398,8 +334,11 @@ def calculate_top_ranked_statistics(
 
 def calculate_relevant_docs_statistics(
     relevant_docs: Mapping[str, Mapping[str, int]],
+    query_ids: Iterable[str],
+    corpus_ids: Iterable[str],
 ) -> RelevantDocsStatistics:
-    unique_qrels = len({doc for qid in relevant_docs for doc in relevant_docs[qid]})
+    qrel_query_ids = set(relevant_docs)
+    qrel_corpus_ids = {doc for qid in relevant_docs for doc in relevant_docs[qid]}
     # number of qrels that are not 0
     qrels_lengths = [
         sum(1 for doc_id in docs if docs[doc_id] != 0)
@@ -412,7 +351,9 @@ def calculate_relevant_docs_statistics(
         min_relevant_docs_per_query=min(qrels_lengths),
         average_relevant_docs_per_query=qrels_per_doc,
         max_relevant_docs_per_query=max(qrels_lengths),
-        unique_relevant_docs=unique_qrels,
+        unique_relevant_docs=len(qrel_corpus_ids),
+        num_missing_query_ids=len(qrel_query_ids.difference(query_ids)),
+        num_missing_corpus_ids=len(qrel_corpus_ids.difference(corpus_ids)),
     )
 
 
@@ -483,7 +424,7 @@ def _compute_side_statistics(
     all_hashes: list[list[str]] = [[] for _ in range(n)]
     for col, modality in col_modalities.items():
         data = load_col(col)
-        hashes = _HASH_FN[modality](data, max_workers=max_workers)
+        hashes = MODALITY_HASH_FNS[modality](data, max_workers=max_workers)
         stats[f"{modality}_statistics"] = _STAT_FN[modality](data, hashes=hashes)
         for i, h in enumerate(hashes):
             all_hashes[i].append(h)
@@ -516,7 +457,7 @@ def calculate_pair_modality_statistics(
     s2, all_h2 = _compute_side_statistics(
         col_modalities2, load_col, n, max_workers=max_workers
     )
-    pairs = ((tuple(r1), tuple(r2)) for r1, r2 in zip(all_h1, all_h2))
+    pairs = ((tuple(r1), tuple(r2)) for r1, r2 in zip(all_h1, all_h2, strict=True))
     if symmetric:
         unique_pairs = len(
             {(left, right) if left <= right else (right, left) for left, right in pairs}
@@ -535,30 +476,6 @@ def calculate_pair_modality_statistics(
         video2_statistics=s2["video_statistics"],
         unique_pairs=unique_pairs,
     )
-
-
-_HASH_FN: dict[str, Any] = {
-    "text": compute_text_hashes,
-    "image": compute_image_hashes,
-    "audio": compute_audio_hashes,
-    "video": compute_video_hashes,
-}
-
-
-def _compute_modality_hashes(
-    col_inputs: dict[Modalities, list[Any]],
-    max_workers: int | None = None,
-) -> dict[str, list[str]]:
-    """Compute per-sample hashes for each modality using the shared hash functions.
-
-    Reuses the same hashing logic as the ``calculate_*_statistics`` functions so that
-    callers can pass the result to both statistics functions and intersection checks
-    without decoding the data twice.
-    """
-    return {
-        mod: _HASH_FN[mod](values, max_workers=max_workers)
-        for mod, values in col_inputs.items()
-    }
 
 
 def _count_samples_in_train(

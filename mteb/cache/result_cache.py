@@ -300,7 +300,7 @@ class ResultCache:
         if model_revision is None:
             msg = "`model_revision` is not specified, attempting to load the latest revision. To disable this behavior, specify the 'model_revision` explicitly."
             logger.warning(msg)
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
             # get revs from paths
             revisions = [p for p in model_path.glob("*") if p.is_dir()]
             if not revisions:
@@ -361,9 +361,9 @@ class ResultCache:
                 remote=True,
                 experiment_name=experiment_name,
             )
-            if remote_result_path.exists() and prioritize_remote:
-                result_path = remote_result_path
-            elif not result_path.exists():
+            if (
+                remote_result_path.exists() and prioritize_remote
+            ) or not result_path.exists():
                 result_path = remote_result_path
 
         if not result_path.exists():
@@ -704,7 +704,7 @@ class ResultCache:
         else:
             msg = f"Cache directory `{self.cache_path}` does not exist."
             logger.warning(msg)
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
 
     def _load_from_cache(
         self,
@@ -867,7 +867,7 @@ class ResultCache:
 
         def _get_paths(base_path: Path, experiments: LoadExperimentEnum) -> list[Path]:
             paths = _cache_paths(base_path)
-            if not experiments == LoadExperimentEnum.NO_EXPERIMENTS:
+            if experiments != LoadExperimentEnum.NO_EXPERIMENTS:
                 paths += _experiments_paths(base_path)
             return paths
 
@@ -1023,7 +1023,9 @@ class ResultCache:
                 model_name_and_revision.append((model_name, revision, experiment_name))
             return [
                 p
-                for model_revision, p in zip(model_name_and_revision, paths)
+                for model_revision, p in zip(
+                    model_name_and_revision, paths, strict=True
+                )
                 if model_revision in name_and_revision
             ]
 
@@ -1367,7 +1369,8 @@ class ResultCache:
         ):
             warnings.warn(
                 "experiment_kwargs is specified but load_experiments is not set to MATCH_KWARGS."
-                "No results will be loaded."
+                "No results will be loaded.",
+                stacklevel=2,
             )
 
         models_as_model_meta = models is not None and isinstance(
@@ -1409,7 +1412,7 @@ class ResultCache:
             )
 
             if validate_and_filter:
-                task_instance = task_names[task_result.task_name]
+                task_instance = task_names.get(task_result.task_name)
                 try:
                     task_result = task_result.validate_and_filter_scores(
                         task=task_instance

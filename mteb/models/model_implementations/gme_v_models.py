@@ -15,6 +15,7 @@ from mteb.types import PromptType
 if TYPE_CHECKING:
     from PIL import Image
     from torch.utils.data import DataLoader
+    from transformers import PreTrainedModel, ProcessorMixin
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput
@@ -35,10 +36,10 @@ GME_CITATION = """@misc{zhang2024gme,
 class Encoder(torch.nn.Module):
     def __init__(
         self,
-        base,
-        processor,
-        max_length=1800,
-        normalize=True,
+        base: PreTrainedModel,
+        processor: ProcessorMixin,
+        max_length: int = 1800,
+        normalize: bool = True,
     ) -> None:
         super().__init__()
         self.base = base
@@ -60,7 +61,7 @@ class Encoder(torch.nn.Module):
         image_grid_thw: torch.LongTensor | None = None,
         # video_grid_thw: torch.LongTensor | None = None,
         pooling_mask: torch.LongTensor | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> torch.Tensor:
         if inputs_embeds is None:
             inputs_embeds = self.base.model.embed_tokens(input_ids)
@@ -106,14 +107,14 @@ class Encoder(torch.nn.Module):
         self,
         texts: list[str],
         images: list[Image.Image],
-        device,
-        instruction=None,
-        **kwargs,
-    ):
+        device: str,
+        instruction: str | None = None,
+        **kwargs: Any,
+    ) -> torch.Tensor:
         instruction = instruction or self.default_instruction
         # Inputs must be batched
         input_texts, input_images = [], []
-        for t, i in zip(texts, images):
+        for t, i in zip(texts, images, strict=True):
             input_str = ""
             if i is None:
                 input_images = None  # All examples in the same batch are consistent
@@ -146,10 +147,10 @@ class GmeQwen2VL(AbsEncoder):
         revision: str,
         model_path: str | None = None,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        min_image_tokens=4,
-        max_image_tokens=1280,
-        max_length=1800,
-        **kwargs,
+        min_image_tokens: int = 4,
+        max_image_tokens: int = 1280,
+        max_length: int = 1800,
+        **kwargs: Any,
     ) -> None:
         from transformers import AutoModelForVision2Seq, AutoProcessor
 
@@ -193,7 +194,7 @@ class GmeQwen2VL(AbsEncoder):
         self.model = self.model.to(self.device)
         all_embeddings = []
         for batch in tqdm(inputs, disable=not show_progress_bar, desc="Fused Encoding"):
-            batch_size = len(batch["text"]) or len(batch["image"])
+            batch_size = len(batch["text"]) if "text" in batch else len(batch["image"])
             if "text" in batch:
                 text_batch = batch["text"]
             else:
@@ -266,7 +267,7 @@ def smart_resize(
     if max(h_bar, w_bar) / min(h_bar, w_bar) > MAX_RATIO:
         msg = f"Absolute aspect ratio must be smaller than {MAX_RATIO}, got {max(h_bar, w_bar) / min(h_bar, w_bar)}"
         logger.warning(msg)
-        warnings.warn(msg)
+        warnings.warn(msg, stacklevel=2)
         if h_bar > w_bar:
             h_bar = w_bar * MAX_RATIO
         else:
@@ -365,6 +366,7 @@ gme_qwen2vl_2b = ModelMeta(
     public_training_data=None,
     training_datasets=training_data,
     citation=GME_CITATION,
+    extra_requirements_groups=["gme"],
 )
 
 gme_qwen2vl_7b = ModelMeta(
@@ -390,4 +392,5 @@ gme_qwen2vl_7b = ModelMeta(
     public_training_data=None,
     training_datasets=training_data,
     citation=GME_CITATION,
+    extra_requirements_groups=["gme"],
 )

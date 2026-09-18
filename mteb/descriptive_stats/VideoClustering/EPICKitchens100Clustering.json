@@ -1,0 +1,124 @@
+{
+    "test": {
+        "num_samples": 34564,
+        "text_statistics": null,
+        "image_statistics": null,
+        "audio_statistics": null,
+        "video_statistics": {
+            "total_duration_seconds": 87060.72,
+            "total_frames": 4353036,
+            "min_width": 854,
+            "average_width": 854.0,
+            "max_width": 854,
+            "min_height": 480,
+            "average_height": 480.0,
+            "max_height": 480,
+            "min_duration_seconds": 0.2,
+            "average_duration_seconds": 2.5188265247077886,
+            "max_duration_seconds": 297.16,
+            "unique_videos": 34563,
+            "average_fps": 50.0,
+            "fps": {
+                "50": 34564
+            },
+            "min_resolution": [
+                854,
+                480
+            ],
+            "average_resolution": [
+                854.0,
+                480.0
+            ],
+            "max_resolution": [
+                854,
+                480
+            ],
+            "resolutions": {
+                "854x480": 34564
+            }
+        },
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 25,
+            "labels": {
+                "pick-up": {
+                    "count": 8984
+                },
+                "put-down": {
+                    "count": 7295
+                },
+                "rinse": {
+                    "count": 3525
+                },
+                "open": {
+                    "count": 2376
+                },
+                "close": {
+                    "count": 1835
+                },
+                "put-in": {
+                    "count": 1465
+                },
+                "turn-on": {
+                    "count": 1351
+                },
+                "turn-off": {
+                    "count": 1142
+                },
+                "move": {
+                    "count": 1137
+                },
+                "pour": {
+                    "count": 869
+                },
+                "cut": {
+                    "count": 641
+                },
+                "stir": {
+                    "count": 609
+                },
+                "remove": {
+                    "count": 428
+                },
+                "throw": {
+                    "count": 396
+                },
+                "shake": {
+                    "count": 381
+                },
+                "dry": {
+                    "count": 368
+                },
+                "adjust": {
+                    "count": 255
+                },
+                "scoop": {
+                    "count": 226
+                },
+                "squeeze": {
+                    "count": 221
+                },
+                "flip": {
+                    "count": 215
+                },
+                "empty": {
+                    "count": 199
+                },
+                "press": {
+                    "count": 194
+                },
+                "scrape": {
+                    "count": 157
+                },
+                "fold": {
+                    "count": 148
+                },
+                "turn": {
+                    "count": 147
+                }
+            }
+        }
+    }
+}

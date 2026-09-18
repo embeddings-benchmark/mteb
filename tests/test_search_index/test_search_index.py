@@ -68,7 +68,7 @@ def test_retrieval_backends(
         faiss_predictions = full_faiss_predictions["default"]["test"]
 
     for python_pred_key, faiss_pred_key in zip(
-        sorted(python_predictions.keys()), sorted(faiss_predictions.keys())
+        sorted(python_predictions.keys()), sorted(faiss_predictions.keys()), strict=True
     ):
         assert python_pred_key == faiss_pred_key
         assert python_predictions[python_pred_key] == pytest.approx(

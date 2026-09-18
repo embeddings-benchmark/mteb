@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from pathlib import Path
 
     from mteb.models import MTEBModels
-    from mteb.types import EncodeKwargs, HFSubset, ScoresDict
+    from mteb.types import EncodeKwargs, HFSubset, Modalities, ScoresDict
 
 logger = logging.getLogger(__name__)
 
@@ -122,6 +122,14 @@ class AbsTaskBitextMining(AbsTask):
 
         return cast("dict[HFSubset, ScoresDict]", scores)
 
+    def _get_content_columns(self) -> dict[str, Modalities]:
+        # for parallel subsets the columns are the languages of each pair, otherwise sentence1/sentence2
+        return {
+            column: "text"
+            for pair in self._get_pairs(self.parallel_subsets)
+            for column in pair
+        }
+
     def _get_pairs(self, parallel: bool) -> list[tuple[str, str]]:
         pairs = self._DEFAULT_PAIR
         if parallel:
@@ -155,7 +163,7 @@ class AbsTaskBitextMining(AbsTask):
         )
         # NOTE: used only by BUCC
         gold = (
-            list(zip(range(len(data_split)), range(len(data_split))))
+            list(zip(range(len(data_split)), range(len(data_split)), strict=True))
             if "gold" not in data_split
             else data_split["gold"]
         )
@@ -245,7 +253,10 @@ class AbsTaskBitextMining(AbsTask):
 
         text1_statistics = calculate_text_statistics(sentence1)
         text2_statistics = calculate_text_statistics(sentence2)
-        unique_pairs = len(set(zip(sentence1, sentence2)))
+        # Not strict: BUCC (superseded by BUCC.v2) filters `sentence1` down to the
+        # gold pairs while keeping the full `sentence2` corpus, so the two sides are
+        # deliberately ragged and the zip truncates to the shorter one.
+        unique_pairs = len(set(zip(sentence1, sentence2, strict=False)))
 
         return BitextDescriptiveStatistics(
             num_samples=len(sentence1),

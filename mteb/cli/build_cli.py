@@ -82,6 +82,7 @@ def run(args: argparse.Namespace) -> None:
         warnings.warn(
             "`--overwrite` is deprecated, please use `--overwrite-strategy 'always'` instead.",
             DeprecationWarning,
+            stacklevel=2,
         )
         overwrite_strategy = OverwriteStrategy.ALWAYS.value
 
@@ -90,6 +91,7 @@ def run(args: argparse.Namespace) -> None:
         warnings.warn(
             "`--save_predictions` is deprecated, please use `--prediction-folder` instead.",
             DeprecationWarning,
+            stacklevel=2,
         )
         prediction_folder = args.output_folder
 
@@ -294,7 +296,7 @@ def _create_meta(args: argparse.Namespace) -> None:
     if output_path.exists() and overwrite:
         msg = "Output path already exists, overwriting."
         logger.warning(msg)
-        warnings.warn(msg)
+        warnings.warn(msg, stacklevel=2)
     elif output_path.exists():
         raise FileExistsError(
             "Output path already exists, use --overwrite to overwrite."
@@ -305,7 +307,7 @@ def _create_meta(args: argparse.Namespace) -> None:
     if tasks_names is not None:
         tasks = list(mteb.get_tasks(tasks_names))
     if args.benchmarks is not None:
-        benchmarks = mteb.get_benchmarks(benchmarks)
+        benchmarks = mteb.get_benchmarks(args.benchmarks)
 
     generate_model_card(
         model_name,

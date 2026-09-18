@@ -142,7 +142,7 @@ class AbsTaskAggregate(AbsTask):
         if len(mteb_versions) != 1:
             msg = f"All tasks of {self.metadata.name} is not run using the same version. different versions found are: {mteb_versions}"
             logger.warning(msg)
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
         task_res.mteb_version = TaskResult._compute_top_level_mteb_version(
             task_res.scores
         )

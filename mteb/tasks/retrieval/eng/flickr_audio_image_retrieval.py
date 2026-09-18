@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 import datasets
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -43,7 +45,7 @@ class FlickrAudioToImageRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -108,7 +110,7 @@ class FlickrImageToAudioRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 

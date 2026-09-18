@@ -62,7 +62,7 @@ def test_langscripts(test_case: LangScriptTestCase):
 
 
 @pytest.mark.parametrize(
-    "hf_lang, expected",
+    ("hf_lang", "expected"),
     [
         ("en", "eng-Latn"),
         ("fr", "fra-Latn"),
@@ -83,7 +83,7 @@ def test_hf_iso_639_1_codes(hf_lang, expected):
 
 
 @pytest.mark.parametrize(
-    "hf_lang, expected",
+    ("hf_lang", "expected"),
     [
         ("eng", "eng-Latn"),
         ("fra", "fra-Latn"),

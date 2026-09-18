@@ -19,7 +19,7 @@ import functools
 from collections.abc import (
     Sequence,  # noqa: TC003 — pydantic evaluates field annotations at runtime
 )
-from typing import Annotated, Any
+from typing import Annotated
 
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
@@ -62,7 +62,7 @@ class Settings(BaseSettings):
 
     @field_validator("cors_origins", mode="before")
     @classmethod
-    def _parse_cors_origins(cls, v: Any) -> list[str]:
+    def _parse_cors_origins(cls, v: object) -> list[str]:
         """Parse a comma-separated string or list; empty falls back to default."""
         if isinstance(v, str):
             parts = [o.strip() for o in v.split(",") if o.strip()]

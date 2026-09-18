@@ -91,7 +91,7 @@ Talat, Zeerak},
         num_proc: int | None = None,
     ):
         # for each language perform some transforms
-        for lang in self.dataset.keys():
+        for lang in self.dataset:
             _dataset = self.dataset[lang]
             _dataset = _dataset.rename_columns({"is_hateful": "label"})
             for label in ["label", "functionality"]:

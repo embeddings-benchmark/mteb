@@ -4,7 +4,6 @@ import logging
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any, TypedDict
 
-import torch
 from datasets import concatenate_datasets
 
 from mteb._evaluators import ImageTextPairClassificationEvaluator
@@ -19,11 +18,12 @@ from mteb.types.statistics import ImageTextPairClassificationDescriptiveStatisti
 if TYPE_CHECKING:
     from pathlib import Path
 
+    import torch
     from datasets import Dataset
 
     from mteb.models.models_protocols import MTEBModels
     from mteb.timing import TimingStack
-    from mteb.types import EncodeKwargs
+    from mteb.types import EncodeKwargs, Modalities
 
 logger = logging.getLogger(__name__)
 
@@ -60,6 +60,16 @@ class AbsTaskImageTextPairClassification(AbsTask):
     # it can be ["image_0", "image_1"]; ["text_0", "text_1"] for datasets like WinoGround
     images_column_names: str | Sequence[str] = "image"
     texts_column_names: str | Sequence[str] = "caption"
+    abstask_prompt = "Identify the caption that matches the given image."
+
+    def _get_content_columns(self) -> dict[str, Modalities]:
+        def _named(columns: str | Sequence[str]) -> list[str]:
+            return [columns] if isinstance(columns, str) else list(columns)
+
+        return {
+            **dict.fromkeys(_named(self.images_column_names), "image"),
+            **dict.fromkeys(_named(self.texts_column_names), "text"),
+        }
 
     def _calculate_descriptive_statistics_from_split(
         self,
@@ -180,6 +190,8 @@ class AbsTaskImageTextPairClassification(AbsTask):
         num_images_per_sample: int,
         num_texts_per_sample: int,
     ) -> ImageTextPairClassificationMetrics:
+        import torch
+
         image_score = []
         text_score = []
         all_correct_scores = []

@@ -1,5 +1,14 @@
 from .ask_ubuntu_dup_questions import AskUbuntuDupQuestions
+from .biovita import (
+    BioVITAA2IReranking,
+    BioVITAA2TReranking,
+    BioVITAI2AReranking,
+    BioVITAI2TReranking,
+    BioVITAT2AReranking,
+    BioVITAT2IReranking,
+)
 from .built_bench_reranking import BuiltBenchReranking
+from .colder_reranking import ColDeRReranking
 from .ecommerce_product_relevance_reranking import ERESSReranking
 from .fs_dnoisy18k_audio_reranking import FSDnoisy18kAudioReranking
 from .hume_core17_instruction_reranking import HUMECore17InstructionReranking
@@ -17,10 +26,29 @@ from .swe_bench_verified_reranking import SWEbenchVerifiedReranking
 from .swe_poly_bench_reranking import SWEPolyBenchReranking
 from .vocal_sound_audio_reranking import VocalSoundAudioReranking
 from .web_linx_candidates_reranking import WebLINXCandidatesReranking
+from .xmod_bench import (
+    XModBenchAT2IReranking,
+    XModBenchAT2TReranking,
+    XModBenchAT2VReranking,
+    XModBenchIT2AReranking,
+    XModBenchIT2TReranking,
+    XModBenchT2AReranking,
+    XModBenchT2IReranking,
+    XModBenchT2VReranking,
+    XModBenchVT2AReranking,
+    XModBenchVT2TReranking,
+)
 
 __all__ = [
     "AskUbuntuDupQuestions",
+    "BioVITAA2IReranking",
+    "BioVITAA2TReranking",
+    "BioVITAI2AReranking",
+    "BioVITAI2TReranking",
+    "BioVITAT2AReranking",
+    "BioVITAT2IReranking",
     "BuiltBenchReranking",
+    "ColDeRReranking",
     "ERESSReranking",
     "FSDnoisy18kAudioReranking",
     "HUMECore17InstructionReranking",
@@ -38,4 +66,14 @@ __all__ = [
     "StackOverflowDupQuestions",
     "VocalSoundAudioReranking",
     "WebLINXCandidatesReranking",
+    "XModBenchAT2IReranking",
+    "XModBenchAT2TReranking",
+    "XModBenchAT2VReranking",
+    "XModBenchIT2AReranking",
+    "XModBenchIT2TReranking",
+    "XModBenchT2AReranking",
+    "XModBenchT2IReranking",
+    "XModBenchT2VReranking",
+    "XModBenchVT2AReranking",
+    "XModBenchVT2TReranking",
 ]

@@ -64,7 +64,7 @@ class GoogleTextEmbeddingModel(AbsEncoder):
         model_name: str,
         sep: str = " ",
         model_prompts: dict[str, str] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         self.model_name = model_name
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
@@ -90,7 +90,7 @@ class GoogleTextEmbeddingModel(AbsEncoder):
                 TextEmbeddingInput(
                     text if text else " ", task_type=google_task_type, title=title
                 )
-                for text, title in zip(texts, titles)
+                for text, title in zip(texts, titles, strict=True)
             ]
         else:
             inputs = [

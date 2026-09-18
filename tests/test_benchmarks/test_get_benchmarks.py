@@ -17,7 +17,7 @@ def test_get_benchmark(name):
 
 
 @pytest.mark.parametrize(
-    "alias, full_name",
+    ("alias", "full_name"),
     [
         (
             "MTEB(eng, classic)",

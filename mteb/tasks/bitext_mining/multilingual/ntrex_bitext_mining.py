@@ -1,3 +1,5 @@
+from typing import Any
+
 import datasets
 
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -220,19 +222,18 @@ def extend_lang_pairs() -> dict[str, list[str]]:
     - source and target are from same language grouping
     """
     hf_lang_subset2isolang = {}
-    for x in _LANGUAGES.keys():
-        for y in _LANGUAGES.keys():
-            if x != y:
-                if (
-                    ("eng_Latn" in (x, y))  # noqa: PLR6201
-                    or (all(var in _BRIDGE_LANGUAGES for var in (x, y)))
-                    or (_LANGUAGES[x]["group"] == _LANGUAGES[y]["group"])
-                ):
-                    pair = f"{x}-{y}"
-                    hf_lang_subset2isolang[pair] = [
-                        x.replace("_", "-"),
-                        y.replace("_", "-"),
-                    ]
+    for x in _LANGUAGES:
+        for y in _LANGUAGES:
+            if x != y and (
+                ("eng_Latn" in (x, y))  # noqa: PLR6201
+                or (all(var in _BRIDGE_LANGUAGES for var in (x, y)))
+                or (_LANGUAGES[x]["group"] == _LANGUAGES[y]["group"])
+            ):
+                pair = f"{x}-{y}"
+                hf_lang_subset2isolang[pair] = [
+                    x.replace("_", "-"),
+                    y.replace("_", "-"),
+                ]
 
     return hf_lang_subset2isolang
 
@@ -280,7 +281,7 @@ class NTREXBitextMining(AbsTaskBitextMining):
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 

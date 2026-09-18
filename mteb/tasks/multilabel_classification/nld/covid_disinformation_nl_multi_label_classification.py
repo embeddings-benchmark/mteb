@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.multilabel_classification import (
     AbsTaskMultilabelClassification,
 )
@@ -64,7 +66,7 @@ Yih, Scott Wen-tau},
         prompt="Classificeer COVID-19-gerelateerde sociale media-berichten in alle toepasselijke desinformatiecategorieën",
     )
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         labels = [
             "q2_label",
             "q3_label",
@@ -75,7 +77,7 @@ Yih, Scott Wen-tau},
         ]
         _dataset = {}
 
-        def map_labels(example):
+        def map_labels(example: dict[str, Any]) -> dict[str, Any]:
             ml_labels = []
             for i, label in enumerate(labels):
                 if example[label] == "yes":

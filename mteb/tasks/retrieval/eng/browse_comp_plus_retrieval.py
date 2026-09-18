@@ -38,7 +38,7 @@ def _derive_key(password: str, length: int) -> bytes:
 def _decrypt_string(ciphertext_b64: str, password: str) -> str:
     encrypted = base64.b64decode(ciphertext_b64)
     key = _derive_key(password, len(encrypted))
-    return bytes(a ^ b for a, b in zip(encrypted, key)).decode("utf-8")
+    return bytes(a ^ b for a, b in zip(encrypted, key, strict=True)).decode("utf-8")
 
 
 class BrowseCompPlusRetrieval(AbsTaskRetrieval):

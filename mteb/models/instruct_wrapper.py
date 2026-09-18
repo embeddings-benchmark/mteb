@@ -5,7 +5,6 @@ import warnings
 from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
 from typing_extensions import deprecated
 
@@ -37,7 +36,7 @@ def instruct_wrapper(
     instruction_template: str | Callable[[str, PromptType | None], str] | None = None,
     device: str | None = None,
     **kwargs: Any,
-) -> Any:
+) -> AbsEncoder:
     """Instruct wrapper for models. Uses GritLM to pass instructions to the model.
 
     It's recommended to use `InstructSentenceTransformerModel` instead of this wrapper for models.
@@ -111,6 +110,8 @@ def instruct_wrapper(
             prompt_type: PromptType | None = None,
             **kwargs: Any,
         ) -> Array:
+            import torch
+
             instruction = self.get_instruction(task_metadata, prompt_type)
 
             if self.instruction_template:
@@ -333,8 +334,8 @@ class InstructSentenceTransformerModel(AbsEncoder):
             for batch in tqdm(inputs, desc="Building multimodal embeddings"):
                 modality_batch = {k: v for k, v in batch.items() if k in _modality_keys}
                 batched_input = [
-                    dict(zip(modality_batch, sample))
-                    for sample in zip(*modality_batch.values())
+                    dict(zip(modality_batch, sample, strict=True))
+                    for sample in zip(*modality_batch.values(), strict=True)
                 ]
 
                 embeddings = self.model.encode(
