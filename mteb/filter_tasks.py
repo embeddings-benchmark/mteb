@@ -6,12 +6,7 @@ import logging
 from typing import TYPE_CHECKING, overload
 
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
-from mteb.languages import (
-    ISO_TO_LANGUAGE,
-    ISO_TO_SCRIPT,
-    PROGRAMMING_LANGS,
-    check_language_code,
-)
+from mteb.languages import ISO_TO_SCRIPT, LanguageScripts
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Sequence
@@ -30,15 +25,6 @@ def _check_is_valid_script(script: str) -> None:
         raise ValueError(
             f"Invalid script code: '{script}', you can see valid ISO 15924 codes using `from mteb.languages import ISO_TO_SCRIPT`."
         )
-
-
-def _check_is_valid_language(lang: str) -> None:
-    code = lang.split("-", maxsplit=1)[0]
-    if code not in ISO_TO_LANGUAGE and code not in PROGRAMMING_LANGS:
-        raise ValueError(
-            f"Invalid language code: '{lang}', you can see valid ISO 639-3 codes using `from mteb.languages import ISO_TO_LANGUAGE`."
-        )
-    check_language_code(lang)
 
 
 @overload
@@ -125,8 +111,7 @@ def filter_tasks(  # noqa: PLR0913
     """
     langs_to_keep = None
     if languages:
-        [_check_is_valid_language(lang) for lang in languages]  # type: ignore[func-returns-value]
-        langs_to_keep = set(languages)
+        langs_to_keep = LanguageScripts.from_languages_and_scripts(languages)
 
     script_to_keep = None
     if script:
@@ -157,8 +142,9 @@ def filter_tasks(  # noqa: PLR0913
         # For metadata and superseded_by, we can access them directly
         metadata = t.metadata
 
-        if langs_to_keep and not langs_to_keep.intersection(
-            metadata.languages + metadata.bcp47_codes
+        if langs_to_keep and not any(
+            langs_to_keep.contains_language(code)
+            for code in (*metadata.languages, *metadata.bcp47_codes)
         ):
             continue
         if script_to_keep and not script_to_keep.intersection(metadata.scripts):
