@@ -33,11 +33,11 @@ class AVSpeakerBenchVideoCentricQA(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@article{nguyen2024seehearunderstand,
+@article{nguyen2025avspeakerbench,
   author = {Nguyen, Le Thien Phuc and Yu, Zhuoran and Hang, Samuel Low Yu and An, Subin and Lee, Jeongik and Ban, Yohan and Chung, SeungEun and Nguyen, Thanh-Huy and Maeng, JuWan and Lee, Soochahn and Lee, Yong Jae},
   journal = {arXiv preprint arXiv:2512.02231},
   title = {See, Hear, and Understand: Benchmarking Audiovisual Human Speech Understanding in Multimodal Large Language Models},
-  year = {2024},
+  year = {2025},
 }
 """,
     )
@@ -106,11 +106,11 @@ class AVSpeakerBenchVideoAudioCentricQA(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@article{nguyen2024seehearunderstand,
+@article{nguyen2025avspeakerbench,
   author = {Nguyen, Le Thien Phuc and Yu, Zhuoran and Hang, Samuel Low Yu and An, Subin and Lee, Jeongik and Ban, Yohan and Chung, SeungEun and Nguyen, Thanh-Huy and Maeng, JuWan and Lee, Soochahn and Lee, Yong Jae},
   journal = {arXiv preprint arXiv:2512.02231},
   title = {See, Hear, and Understand: Benchmarking Audiovisual Human Speech Understanding in Multimodal Large Language Models},
-  year = {2024},
+  year = {2025},
 }
 """,
     )

@@ -8,6 +8,7 @@ from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from PIL import Image
@@ -205,7 +206,7 @@ COLPALI_TRAINING_DATA = {
 colpali_v1_1 = ModelMeta(
     loader=ColPaliWrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float16,
+        torch_dtype=OutputDType.FLOAT16,
     ),
     name="vidore/colpali-v1.1",
     model_type=["late-interaction"],
@@ -234,7 +235,7 @@ colpali_v1_1 = ModelMeta(
 colpali_v1_2 = ModelMeta(
     loader=ColPaliWrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float16,
+        torch_dtype=OutputDType.FLOAT16,
     ),
     name="vidore/colpali-v1.2",
     model_type=["late-interaction"],
@@ -263,7 +264,7 @@ colpali_v1_2 = ModelMeta(
 colpali_v1_3 = ModelMeta(
     loader=ColPaliWrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float16,
+        torch_dtype=OutputDType.FLOAT16,
     ),
     name="vidore/colpali-v1.3",
     model_type=["late-interaction"],

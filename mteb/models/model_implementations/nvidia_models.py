@@ -45,6 +45,16 @@ LlamaEmbedNemotron_CITATION = """@misc{babakhin2025llamaembednemotron8buniversal
 }"""
 
 
+NEMOTRON_3_EMBED_CITATION = """@misc{babakhin2026nemotron3embed,
+    title={NVIDIA Nemotron 3 Embed Ranks \\#1 Overall on RTEB, Advancing Agentic Retrieval},
+    author={Yauhen Babakhin and Ronay Ak and Jiarui Cai and Vinay Raman and Radek Osmulski and Jakub Zakrzewski and Anmol Gupta and Oliver Holworthy and Sahel Sharifymoghaddam and Khang Pham and James Rong and Steve Han and Sean Sodha and Isabel Hulseman and Bo Liu},
+    year={2026},
+    month={July},
+    howpublished={Hugging Face Blog},
+    url={https://huggingface.co/blog/nvidia/nemotron-3-embed-wins-rteb},
+}"""
+
+
 def _instruction_template(
     instruction: str, prompt_type: PromptType | None = None
 ) -> str:
@@ -696,10 +706,10 @@ nemotron_3_embed_1b_bf16 = ModelMeta(
     memory_usage_mb=2176,
     max_tokens=32768,
     embed_dim=2048,
-    license="https://huggingface.co/nvidia/Nemotron-3-Embed-1B-BF16/blob/main/LICENSE",
+    license="openmdw-1.1",
     open_weights=True,
     public_training_code="https://github.com/NVIDIA-NeMo/Automodel/tree/main/examples/retrieval/distillation",
-    public_training_data=None,
+    public_training_data="https://huggingface.co/nvidia/Nemotron-3-Embed-1B-BF16#training-testing-and-evaluation-datasets",
     framework=["Sentence Transformers", "PyTorch", "Transformers"],
     reference="https://huggingface.co/nvidia/Nemotron-3-Embed-1B-BF16",
     similarity_fn_name=ScoringFunction.COSINE,
@@ -709,7 +719,7 @@ nemotron_3_embed_1b_bf16 = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation=None,
+    citation=NEMOTRON_3_EMBED_CITATION,
     contacts=["ybabakhin"],
     output_dtypes=OutputDType.BF16,
     extra_requirements_groups=["nemotron-3-embed"],
@@ -728,10 +738,10 @@ nemotron_3_embed_8b_bf16 = ModelMeta(
     memory_usage_mb=15169,
     max_tokens=32768,
     embed_dim=4096,
-    license="https://huggingface.co/nvidia/Nemotron-3-Embed-8B-BF16/blob/main/LICENSE",
+    license="openmdw-1.1",
     open_weights=True,
     public_training_code=None,
-    public_training_data=None,
+    public_training_data="https://huggingface.co/nvidia/Nemotron-3-Embed-8B-BF16#training-testing-and-evaluation-datasets",
     framework=["Sentence Transformers", "PyTorch", "Transformers"],
     reference="https://huggingface.co/nvidia/Nemotron-3-Embed-8B-BF16",
     similarity_fn_name=ScoringFunction.COSINE,
@@ -741,7 +751,7 @@ nemotron_3_embed_8b_bf16 = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation=None,
+    citation=NEMOTRON_3_EMBED_CITATION,
     contacts=["ybabakhin"],
     output_dtypes=OutputDType.BF16,
     extra_requirements_groups=["nemotron-3-embed"],
@@ -764,7 +774,7 @@ nemotron_rerank_1b_v2 = ModelMeta(
         trust_remote_code=True,
         query_prefix="question:",
         passage_prefix=" \n \n passage:",
-        model_kwargs={"torch_dtype": torch.float32},
+        model_kwargs={"torch_dtype": OutputDType.FLOAT32},
     ),
     name="nvidia/llama-nemotron-rerank-1b-v2",
     extra_requirements_groups=["nemotron-rerank"],
@@ -776,7 +786,7 @@ nemotron_rerank_1b_v2 = ModelMeta(
     memory_usage_mb=2357.0,
     max_tokens=4096,
     embed_dim=2048,
-    license="https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
+    license="openmdw-1.1",
     open_weights=True,
     public_training_code=None,
     public_training_data=None,

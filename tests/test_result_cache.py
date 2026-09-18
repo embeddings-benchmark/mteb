@@ -266,6 +266,22 @@ def test_cache_load_different_subsets():
     assert result2.model_results[0].task_results[0].get_score() == 0.01035
 
 
+def test_cache_validate_and_filter_without_tasks():
+    cache = ResultCache(cache_path=test_cache_path)
+    model = mteb.get_model_meta("mteb/baseline-random-encoder")
+
+    all_tasks = cache.load_results(models=[model], validate_and_filter=True)
+    task_names = sorted(
+        task_result.task_name for task_result in all_tasks.model_results[0].task_results
+    )
+    assert "BelebeleRetrieval" in task_names
+
+    by_name = cache.load_results(
+        models=[model], tasks=task_names, validate_and_filter=True
+    )
+    assert all_tasks.to_dataframe().equals(by_name.to_dataframe())
+
+
 def test_load_experiment_results(tmp_path: Path):
     """Test that results from an experiment can be loaded correctly."""
     model = mteb.get_model("mteb/baseline-random-encoder")

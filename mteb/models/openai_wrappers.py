@@ -56,7 +56,6 @@ from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import requests
-import torch
 from tqdm.auto import tqdm
 
 from mteb._create_dataloaders import create_dataloader
@@ -67,6 +66,7 @@ from mteb.types import PromptType
 if TYPE_CHECKING:
     from collections.abc import Callable
 
+    import torch
     from numpy.typing import NDArray
     from PIL import Image
     from torch.utils.data import DataLoader
@@ -114,6 +114,8 @@ def _audio_to_data_url(audio: AudioInputItem) -> str:
     encoder — the same package already required to decode video — so audio
     and video share one encoding library.
     """
+    import torch
+
     try:
         from torchcodec.encoders import AudioEncoder  # type: ignore[attr-defined]
     except ImportError as e:
@@ -153,6 +155,8 @@ def _video_to_data_url(video: torch.Tensor, *, fps: float | None) -> str:
             was used instead), a default of 2.0 is used since there's no
             source frame rate to fall back to.
     """
+    import torch
+
     fps = fps or 2.0
 
     try:

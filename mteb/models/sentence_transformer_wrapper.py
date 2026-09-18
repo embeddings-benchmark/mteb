@@ -5,7 +5,6 @@ import warnings
 from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
-import torch
 from packaging.version import Version
 from tqdm.auto import tqdm
 from typing_extensions import deprecated
@@ -19,6 +18,7 @@ from .abs_encoder import AbsEncoder, get_prompt_name
 if TYPE_CHECKING:
     from collections.abc import Callable
 
+    import torch
     from sentence_transformers import CrossEncoder, SentenceTransformer
     from sentence_transformers.sparse_encoder import SparseEncoder
     from torch.utils.data import DataLoader
@@ -163,15 +163,17 @@ def _select_encode_function(
     """Pick `model.encode_query`/`model.encode_document`/`model.encode` based on `prompt_type`."""
     if prompt_type and has_query_encode:
         if prompt_type == PromptType.query:
-            return model.encode_query  # type: ignore[no-any-return]
+            return model.encode_query
         if prompt_type == PromptType.document:
-            return model.encode_document  # type: ignore[no-any-return]
+            return model.encode_document
         raise ValueError(f"Unknown prompt type: {prompt_type}")
     return model.encode
 
 
 def _postprocess_dense_embeddings(embeddings: Array) -> Array:
     """Move a batch's embeddings to CPU float32 if it's a torch tensor; otherwise pass through unchanged."""
+    import torch
+
     if isinstance(embeddings, torch.Tensor):
         embeddings = embeddings.cpu().detach().float()
     return embeddings
@@ -179,6 +181,8 @@ def _postprocess_dense_embeddings(embeddings: Array) -> Array:
 
 def _concatenate_sparse_batches(batches: list[torch.Tensor]) -> torch.Tensor:
     """Concatenate per-batch sparse tensors along dim 0 (sparse tensors don't support `np.concatenate`)."""
+    import torch
+
     return torch.cat(batches, dim=0)
 
 
@@ -196,6 +200,8 @@ def _is_sparse_compatible_task(task_metadata: TaskMetadata) -> bool:
 
 def _postprocess_sparse_embeddings(embeddings: Array) -> Array:
     """Densify a batch's embeddings if it's a sparse torch tensor, then move to CPU float32."""
+    import torch
+
     if isinstance(embeddings, torch.Tensor) and embeddings.is_sparse:
         embeddings = embeddings.to_dense()
     return _postprocess_dense_embeddings(embeddings)

@@ -913,7 +913,7 @@ qwen_indic_v1 = ModelMeta(
 FlowVec_v1 = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
     name="LingoIITGN/FlowVec-v1",
-    revision="3c00af32fa13bee4c7b19b159b9dd4fe50a49e1e",
+    revision="107bdaba31a8181383a0c9c52a3ed566ee5ef377",
     release_date="2026-09-08",
     languages=[
         "asm-Beng",

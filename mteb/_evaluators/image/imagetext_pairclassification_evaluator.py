@@ -3,10 +3,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
-import torch.nn.functional as F
-from torch.utils.data import DataLoader
-
 from mteb._create_dataloaders import (
     _create_dataloader_from_texts,
     _transform_image_to_rgb,
@@ -16,6 +12,7 @@ from mteb._evaluators.evaluator import Evaluator
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
+    import torch
     from datasets import Dataset
     from PIL.Image import Image
 
@@ -28,25 +25,38 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class CustomImageDataset(torch.utils.data.Dataset[dict[str, Any]]):
-    def __init__(
-        self,
-        images: list[Image],
-    ):
-        self.images = images
+def _build_image_dataset(
+    images: list[Image],
+) -> torch.utils.data.Dataset[dict[str, Any]]:
+    """Wrap `images` in a torch map-style dataset.
 
-    def __len__(self) -> int:
-        return len(self.images)
+    The class is defined here rather than at module scope because subclassing
+    `torch.utils.data.Dataset` executes at import time, which would make importing this module
+    require torch.
+    """
+    import torch
 
-    def __getitem__(self, idx: int) -> dict[str, Image]:
-        return {
-            "image": self.images[idx],
-        }
+    class CustomImageDataset(torch.utils.data.Dataset[dict[str, Any]]):
+        def __init__(
+            self,
+            images: list[Image],
+        ):
+            self.images = images
 
-    @property
-    def features(self) -> dict[str, Any]:
-        # for correct wrapper handling
-        return {"image": []}
+        def __len__(self) -> int:
+            return len(self.images)
+
+        def __getitem__(self, idx: int) -> dict[str, Image]:
+            return {
+                "image": self.images[idx],
+            }
+
+        @property
+        def features(self) -> dict[str, Any]:
+            # for correct wrapper handling
+            return {"image": []}
+
+    return CustomImageDataset(images)
 
 
 class ImageTextPairClassificationEvaluator(Evaluator):
@@ -96,6 +106,10 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> list[torch.Tensor]:
+        import torch
+        import torch.nn.functional as F
+        from torch.utils.data import DataLoader
+
         images = []
         if isinstance(self.images_column_names, str):
             images = self.dataset[self.images_column_names]
@@ -140,7 +154,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
             return {"image": [item["image"] for item in batch]}
 
         _image_dl = DataLoader(
-            CustomImageDataset(images),
+            _build_image_dataset(images),
             collate_fn=_image_collate_fn,
             num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
         )

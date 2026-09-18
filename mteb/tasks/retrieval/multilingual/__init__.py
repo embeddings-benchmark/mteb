@@ -103,6 +103,16 @@ from .nanobeir_multilingual import (
     MultilingualNanoSciFactRetrieval,
     MultilingualNanoTouche2020Retrieval,
 )
+from .nayanair_monobench_retrieval import (
+    NayanaIRMonoBenchGujaratiRetrieval,
+    NayanaIRMonoBenchKannadaRetrieval,
+    NayanaIRMonoBenchMalayalamRetrieval,
+    NayanaIRMonoBenchMarathiRetrieval,
+    NayanaIRMonoBenchOdiaRetrieval,
+    NayanaIRMonoBenchPunjabiRetrieval,
+    NayanaIRMonoBenchSanskritRetrieval,
+    NayanaIRMonoBenchTamilRetrieval,
+)
 from .neu_clir2022_retrieval import (
     NeuCLIR2022Retrieval,
     NeuCLIR2022RetrievalHardNegatives,
@@ -261,6 +271,14 @@ __all__ = [
     "MultilingualNanoSCIDOCSRetrieval",
     "MultilingualNanoSciFactRetrieval",
     "MultilingualNanoTouche2020Retrieval",
+    "NayanaIRMonoBenchGujaratiRetrieval",
+    "NayanaIRMonoBenchKannadaRetrieval",
+    "NayanaIRMonoBenchMalayalamRetrieval",
+    "NayanaIRMonoBenchMarathiRetrieval",
+    "NayanaIRMonoBenchOdiaRetrieval",
+    "NayanaIRMonoBenchPunjabiRetrieval",
+    "NayanaIRMonoBenchSanskritRetrieval",
+    "NayanaIRMonoBenchTamilRetrieval",
     "NeuCLIR2022Retrieval",
     "NeuCLIR2022RetrievalHardNegatives",
     "NeuCLIR2023Retrieval",

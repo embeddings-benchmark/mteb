@@ -7,6 +7,7 @@ import torch
 from tqdm.auto import tqdm
 
 from mteb.models.model_meta import ModelMeta
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from PIL import Image
@@ -155,7 +156,7 @@ class GraniteVisionEmbeddingWrapper:
 granite_vision_embedding = ModelMeta(
     loader=GraniteVisionEmbeddingWrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float16,
+        torch_dtype=OutputDType.FLOAT16,
     ),
     name="ibm-granite/granite-vision-3.3-2b-embedding",
     model_type=["dense"],

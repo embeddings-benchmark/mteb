@@ -160,6 +160,7 @@ OPEN_LICENSES: frozenset[str] = frozenset(
         "cc-by-sa-4.0",
         "odc-by",
         "cdla-sharing-1.0",
+        "openmdw-1.1",
     }
 )
 

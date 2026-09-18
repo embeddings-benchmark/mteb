@@ -1,8 +1,3 @@
-from collections import defaultdict
-from typing import Any
-
-from datasets import load_dataset
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -13,8 +8,8 @@ class NanoFiQA2018Retrieval(AbsTaskRetrieval):
         description="NanoFiQA2018 is a smaller subset of the Financial Opinion Mining and Question Answering dataset.",
         reference="https://sites.google.com/view/fiqa/",
         dataset={
-            "path": "zeta-alpha-ai/NanoFiQA2018",
-            "revision": "4163ba032953d5044a7a6244261413f609c14342",
+            "path": "mteb/NanoFiQA2018Retrieval",
+            "revision": "ede84da4793cd2d4e61bba0dd08fc58de90f3681",
         },
         type="Retrieval",
         category="t2t",
@@ -43,50 +38,3 @@ class NanoFiQA2018Retrieval(AbsTaskRetrieval):
         },
         adapted_from=["FiQA2018"],
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus = load_dataset(
-            "zeta-alpha-ai/NanoFiQA2018",
-            "corpus",
-            revision="4163ba032953d5044a7a6244261413f609c14342",
-        )
-        self.queries = load_dataset(
-            "zeta-alpha-ai/NanoFiQA2018",
-            "queries",
-            revision="4163ba032953d5044a7a6244261413f609c14342",
-        )
-        self.relevant_docs = load_dataset(
-            "zeta-alpha-ai/NanoFiQA2018",
-            "qrels",
-            revision="4163ba032953d5044a7a6244261413f609c14342",
-        )
-
-        self.corpus = {
-            split: {
-                sample["_id"]: {"_id": sample["_id"], "text": sample["text"]}
-                for sample in self.corpus[split]
-            }
-            for split in self.corpus
-        }
-
-        self.queries = {
-            split: {sample["_id"]: sample["text"] for sample in self.queries[split]}
-            for split in self.queries
-        }
-
-        relevant_docs = {}
-
-        for split in self.relevant_docs:
-            relevant_docs[split] = defaultdict(dict)
-            for query_id, corpus_id in zip(
-                self.relevant_docs[split]["query-id"],
-                self.relevant_docs[split]["corpus-id"],
-                strict=True,
-            ):
-                relevant_docs[split][query_id][corpus_id] = 1
-        self.relevant_docs = relevant_docs
-
-        self.data_loaded = True
