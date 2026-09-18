@@ -186,6 +186,7 @@ class PscPC(AbsTaskPairClassification):
   author = {Ogrodniczuk, Maciej  and
 Kope{\'c}, Mateusz},
   booktitle = {Proceedings of the Ninth International Conference on Language Resources and Evaluation ({LREC}'14)},
+  doi = {10.63317/5254a9cpts99},
   editor = {Calzolari, Nicoletta  and
 Choukri, Khalid  and
 Declerck, Thierry  and
