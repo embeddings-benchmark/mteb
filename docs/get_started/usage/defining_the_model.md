@@ -76,7 +76,7 @@ on `MTEB`:
     results = mteb.evaluate(model, tasks=tasks)
     ```
 
-    !!! warning
+    !!! note
         Requires sentence-transformers >= 5.0.0.
 
 === "MultiVectorEncoder"
@@ -94,7 +94,7 @@ on `MTEB`:
     results = mteb.evaluate(model, tasks=tasks)
     ```
 
-    !!! warning
+    !!! note
         Requires sentence-transformers >= 6.0.0.
 
 !!! note
