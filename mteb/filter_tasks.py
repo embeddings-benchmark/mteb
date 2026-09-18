@@ -6,7 +6,7 @@ import logging
 from typing import TYPE_CHECKING, overload
 
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
-from mteb.languages import ISO_TO_SCRIPT, LanguageScripts
+from mteb.languages import LanguageScripts
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Sequence
@@ -18,13 +18,6 @@ if TYPE_CHECKING:
     from mteb.types import Modalities
 
 logger = logging.getLogger(__name__)
-
-
-def _check_is_valid_script(script: str) -> None:
-    if script not in ISO_TO_SCRIPT:
-        raise ValueError(
-            f"Invalid script code: '{script}', you can see valid ISO 15924 codes using `from mteb.languages import ISO_TO_SCRIPT`."
-        )
 
 
 @overload
@@ -115,8 +108,9 @@ def filter_tasks(  # noqa: PLR0913
 
     script_to_keep = None
     if script:
-        [_check_is_valid_script(s) for s in script]  # type: ignore[func-returns-value]
-        script_to_keep = set(script)
+        script_to_keep = LanguageScripts.from_languages_and_scripts(
+            scripts=script
+        ).scripts
 
     domains_to_keep = None
     if domains:
