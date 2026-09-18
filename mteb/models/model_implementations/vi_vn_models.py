@@ -160,12 +160,6 @@ contextboxai_halong_embedding = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     adapted_from="intfloat/multilingual-e5-base",
-    citation="""@misc{HalongEmbedding,
-  title={HalongEmbedding: A Vietnamese Text Embedding},
-  author={Ngo Hieu},
-  year={2024},
-  publisher={Huggingface},
-}""",
 )
 
 sup_simcse_vietnamese_phobert_base_ = ModelMeta(

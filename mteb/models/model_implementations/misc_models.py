@@ -2121,11 +2121,6 @@ ember_v1 = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     superseded_by=None,
-    citation="""@misc{nur2024emberv1,
-      title={ember-v1: SOTA embedding model},
-      author={Enrike Nur and Anar Aliyev},
-      year={2023},
-}""",
 )
 amgix__static_retrieval_multilingual_69m_v1 = ModelMeta(
     name="amgix/static-retrieval-multilingual-69m-v1",
