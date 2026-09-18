@@ -178,10 +178,11 @@ def _openness_meta(**overwrites: Any) -> ModelMeta:
     )
 
 
-def test_openness_score_all_dimensions():
+@pytest.mark.parametrize("license_name", ["apache-2.0", "openmdw-1.1"])
+def test_openness_score_all_dimensions(license_name: str):
     meta = _openness_meta(
         open_weights=True,
-        license="apache-2.0",
+        license=license_name,
         public_training_code="https://github.com/example/train",
         public_training_data="https://huggingface.co/datasets/example",
         citation="@article{example}",
@@ -589,3 +590,58 @@ def test_model_validate_json_resolved():
     json_data_unknown = json.dumps(meta_dict)
     parsed_unknown = ModelMeta.model_validate_json_resolved(json_data_unknown)
     assert parsed_unknown.loader is None
+
+
+def test_get_model_metas_n_parameters_lower_bound():
+    """A lower-only range must filter; it used to be ignored without an upper bound."""
+    one_b = 1_000_000_000
+    lower_only = mteb.get_model_metas(n_parameters_range=(one_b, None))
+
+    assert lower_only
+    assert all(meta.n_parameters >= one_b for meta in lower_only)
+    # The same bound with a redundant upper bound already worked, so both must agree.
+    with_upper = mteb.get_model_metas(n_parameters_range=(one_b, 10**13))
+    assert {meta.name for meta in lower_only} == {meta.name for meta in with_upper}
+
+
+def test_get_model_metas_n_parameters_upper_bound_unchanged():
+    """Upper-only filtering, including how it drops an unknown n_parameters."""
+    upper = 10**8
+    upper_only = mteb.get_model_metas(n_parameters_range=(None, upper))
+
+    assert upper_only
+    assert all(meta.n_parameters is not None for meta in upper_only)
+    assert all(meta.n_parameters <= upper for meta in upper_only)
+
+
+def test_get_model_metas_n_parameters_no_bounds_keeps_everything():
+    """(None, None) is documented as "filter is ignored"."""
+    assert (
+        mteb.get_model_metas(n_parameters_range=(None, None)) == mteb.get_model_metas()
+    )
+
+
+@pytest.mark.parametrize("languages", [["eng"], ["eng-Latn"], ["eng", "fra-Latn"]])
+def test_get_model_metas_languages(languages: list[str]):
+    models = mteb.get_model_metas(languages=languages)
+
+    assert len(models) > 0
+    for model in models:
+        assert model.languages is not None
+        for lang in languages:
+            if "-" in lang:
+                assert lang in model.languages
+            else:
+                assert any(code.split("-")[0] == lang for code in model.languages)
+
+
+def test_get_model_metas_iso_code_matches_language_script():
+    iso_models = {m.name for m in mteb.get_model_metas(languages=["eng"])}
+    script_models = {m.name for m in mteb.get_model_metas(languages=["eng-Latn"])}
+
+    assert script_models <= iso_models
+
+
+def test_get_model_metas_invalid_language():
+    with pytest.raises(ValueError, match="Invalid language code"):
+        mteb.get_model_metas(languages=["english"])

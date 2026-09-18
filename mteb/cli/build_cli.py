@@ -307,7 +307,7 @@ def _create_meta(args: argparse.Namespace) -> None:
     if tasks_names is not None:
         tasks = list(mteb.get_tasks(tasks_names))
     if args.benchmarks is not None:
-        benchmarks = mteb.get_benchmarks(benchmarks)
+        benchmarks = mteb.get_benchmarks(args.benchmarks)
 
     generate_model_card(
         model_name,

@@ -84,13 +84,22 @@ class NumpyCache:
                 shape=(self.initial_vectors, self.vector_dim),
             )
         else:
-            self.vectors = np.memmap(
-                self.vectors_file,
-                dtype="float32",
-                mode="r+",
-                shape=(-1, self.vector_dim),
-            )
+            self.vectors = self._open_vectors_file(self.vector_dim)
         logger.info(f"Vectors file initialized with shape: {self.vectors.shape}")
+
+    def _open_vectors_file(
+        self, vector_dim: int
+    ) -> np.memmap[tuple[int, ...], np.dtype[np.floating]]:
+        # np.memmap does not infer a -1 dimension, so derive the row count from the file size
+        n_vectors = self.vectors_file.stat().st_size // (
+            np.dtype(np.float32).itemsize * vector_dim
+        )
+        return np.memmap(
+            self.vectors_file,
+            dtype="float32",
+            mode="r+",
+            shape=(n_vectors, vector_dim),
+        )
 
     def _double_vectors_file(self) -> None:
         if self.vectors is None or self.vector_dim is None:
@@ -163,12 +172,7 @@ class NumpyCache:
                     }
 
                 if self.vector_dim is not None:
-                    self.vectors = np.memmap(
-                        self.vectors_file,
-                        dtype="float32",
-                        mode="r+",
-                        shape=(-1, self.vector_dim),
-                    )
+                    self.vectors = self._open_vectors_file(self.vector_dim)
                     logger.info(f"Loaded vectors file with shape: {self.vectors.shape}")
                 else:
                     msg = "Vector dimension not set. Unable to load vectors file."

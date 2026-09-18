@@ -4,9 +4,7 @@ import logging
 import warnings
 from typing import TYPE_CHECKING, Any, cast
 
-import torch
 from datasets import Dataset, Image
-from torch.utils.data import DataLoader, default_collate
 
 from mteb.types import (
     ConversationTurn,
@@ -15,6 +13,8 @@ from mteb.types import (
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Sequence
+
+    from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import (
@@ -45,6 +45,8 @@ def _create_dataloader_from_texts(
     Returns:
         A dataloader with the text.
     """
+    from torch.utils.data import DataLoader
+
     dataset = Dataset.from_dict({"text": text})
     return DataLoader(
         dataset,
@@ -164,6 +166,8 @@ def _transform_image_to_rgb(
     Returns:
         The transformed image in RGB format.
     """
+    import torch
+
     # For PIL images: ensure RGB format.
     if hasattr(image, "mode") and image.mode != "RGB":
         image = image.convert("RGB")
@@ -225,6 +229,8 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
     Returns:
         A collated dictionary.
     """
+    from torch.utils.data import default_collate
+
     collated = {}
     for key in batch[0]:
         if key in (  # noqa: PLR6201
@@ -332,6 +338,8 @@ def create_dataloader(
     Returns:
         A dataloader for the dataset.
     """
+    from torch.utils.data import DataLoader
+
     # Sequence means columns already match modality names, no renaming needed
     _input_column = input_column if isinstance(input_column, str) else None
 

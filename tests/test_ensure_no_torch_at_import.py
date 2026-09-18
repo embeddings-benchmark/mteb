@@ -165,3 +165,115 @@ def test_set_seed_works_without_torch(monkeypatch) -> None:
     rng, np_rng = seed_module._set_seed(42)
     assert rng.random() == random.Random(42).random()
     assert np_rng is not None
+
+
+def test_importing_create_dataloaders_does_not_import_torch() -> None:
+    """Dataloaders are only built when a task actually runs, so importing must not need torch."""
+    assert _loaded_heavy_deps("mteb._create_dataloaders", ("mteb",)) == [], (
+        "importing mteb._create_dataloaders pulled in a heavy dependency; move the import "
+        "into the function that uses it"
+    )
+
+
+def test_image_dataset_builder_still_returns_a_torch_dataset() -> None:
+    """`CustomImageDataset` moved inside a function; it must still behave identically."""
+    from PIL import Image as PILImage
+    from torch.utils.data import DataLoader, Dataset
+
+    from mteb._evaluators.image.imagetext_pairclassification_evaluator import (
+        _build_image_dataset,
+    )
+
+    images = [PILImage.new("RGB", (8, 8)) for _ in range(3)]
+    dataset = _build_image_dataset(images)
+
+    assert isinstance(dataset, Dataset)
+    assert len(dataset) == 3
+    assert dataset.features == {"image": []}
+    assert list(dataset[0]) == ["image"]
+
+    loader = DataLoader(
+        dataset, batch_size=2, collate_fn=lambda b: {"image": [i["image"] for i in b]}
+    )
+    assert [len(batch["image"]) for batch in loader] == [2, 1]
+
+
+def test_importing_abstasks_does_not_import_torch() -> None:
+    """Task classes carry the metadata the leaderboard and API read; describing them needs no torch."""
+    assert _loaded_heavy_deps("mteb.abstasks", ("mteb",)) == [], (
+        "importing mteb.abstasks pulled in a heavy dependency; move the import into the "
+        "method that uses it"
+    )
+
+
+def test_importing_benchmarks_does_not_import_torch() -> None:
+    """Benchmark definitions are metadata over tasks, so they must not need torch either."""
+    assert _loaded_heavy_deps("mteb.benchmarks.benchmark", ("mteb",)) == [], (
+        "importing mteb.benchmarks.benchmark pulled in a heavy dependency"
+    )
+
+
+def test_model_meta_dtypes_are_named_not_torch_objects() -> None:
+    """`ModelMeta` declares load dtypes by name, so metadata stays importable without torch.
+
+    `OutputDType` is a `str` enum, so it resolves through both `getattr(torch, ...)` (the path
+    transformers takes for a string dtype) and `OutputDType.get_dtype()`.
+    """
+    import torch
+
+    import mteb
+    from mteb.types import OutputDType
+
+    meta = mteb.get_model_meta("vidore/colpali-v1.1")
+    declared = meta.loader_kwargs["torch_dtype"]
+
+    assert isinstance(declared, OutputDType)
+    assert declared.get_dtype() is torch.float16
+    assert getattr(torch, declared) is torch.float16
+
+
+def test_model_implementations_declare_no_import_time_torch_dtypes() -> None:
+    """No model file may evaluate a `torch.<dtype>` at import time; use `OutputDType` instead.
+
+    Everything outside a function body runs at import -- module-level `ModelMeta(...)` calls,
+    class bodies, decorators and signature defaults -- so only function bodies are exempt.
+    """
+    import ast
+
+    import torch
+
+    # every torch attribute that is itself a dtype, e.g. "float32", "bfloat16", but also
+    # aliases like "float", "half" and "long" that OutputDType has no member for
+    dtypes = {
+        name for name in dir(torch) if isinstance(getattr(torch, name), torch.dtype)
+    }
+
+    offenders = []
+    for path in sorted(
+        (_REPO_ROOT / "mteb/models/model_implementations").rglob("*.py")
+    ):
+        tree = ast.parse(path.read_text())
+        # nodes actually inside a function/method body are evaluated lazily and exempt;
+        # matched by identity (not line number) so a one-line `def f(x=torch.bfloat16): ...`
+        # doesn't let the signature default hide behind its body's line number
+        in_body = {
+            id(sub)
+            for node in ast.walk(tree)
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+            for stmt in node.body
+            for sub in ast.walk(stmt)
+        }
+        offenders += [
+            f"{path.name}:{node.lineno} torch.{node.attr}"
+            for node in ast.walk(tree)
+            if isinstance(node, ast.Attribute)
+            and isinstance(node.value, ast.Name)
+            and node.value.id == "torch"
+            and node.attr in dtypes
+            and id(node) not in in_body
+        ]
+
+    assert not offenders, (
+        "these evaluate a torch dtype at import time; use the matching OutputDType member "
+        f"instead: {offenders}"
+    )

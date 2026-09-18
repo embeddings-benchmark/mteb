@@ -2,9 +2,8 @@ from __future__ import annotations
 
 from typing import Any
 
-import torch
-
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 from .colpali_models import COLPALI_TRAINING_DATA, ColPaliEngineWrapper
 
@@ -69,7 +68,7 @@ COLMODERNVBERT_CITATION = """
 colmodernvbert = ModelMeta(
     loader=ColModernVBertWrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float32,
+        torch_dtype=OutputDType.FLOAT32,
     ),
     name="ModernVBERT/colmodernvbert",
     model_type=["late-interaction"],
@@ -100,7 +99,7 @@ colmodernvbert = ModelMeta(
 bimodernvbert = ModelMeta(
     loader=BiModernVBertWrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float32,
+        torch_dtype=OutputDType.FLOAT32,
     ),
     name="ModernVBERT/bimodernvbert",
     model_type=["dense"],
@@ -131,7 +130,7 @@ bimodernvbert = ModelMeta(
 modernvbert_embed = ModelMeta(
     loader=BiModernVBertWrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float32,
+        torch_dtype=OutputDType.FLOAT32,
     ),
     name="ModernVBERT/modernvbert-embed",
     model_type=["dense"],

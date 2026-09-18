@@ -13,7 +13,7 @@ from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -166,7 +166,7 @@ repllama_llama2_original = ModelMeta(
     loader_kwargs=dict(
         base_model_name_or_path="meta-llama/Llama-2-7b-hf",
         device_map="auto",
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
         model_prompts=model_prompts,
     ),
     name="castorini/repllama-v1-7b-lora-passage",
@@ -201,7 +201,7 @@ repllama_llama2_reproduced = ModelMeta(
     loader_kwargs=dict(
         base_model_name_or_path="meta-llama/Llama-2-7b-hf",
         device_map="auto",
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
         model_prompts=model_prompts,
     ),
     name="samaya-ai/RepLLaMA-reproduced",

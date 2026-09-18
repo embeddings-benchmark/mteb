@@ -5,7 +5,6 @@ import sys
 from typing import TYPE_CHECKING, Any, TypedDict
 
 import numpy as np
-import torch
 from scipy.stats import pearsonr, spearmanr
 from tqdm.auto import tqdm
 
@@ -107,6 +106,8 @@ class SummarizationEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> SummarizationDistances:
+        import torch
+
         # Get the human & machine summaries for the text in one go for all
         human_lens = [len(human_summaries) for human_summaries in self.human_summaries]
         machine_lens = [

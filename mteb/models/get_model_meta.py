@@ -5,6 +5,7 @@ import logging
 import warnings
 from typing import TYPE_CHECKING, Any
 
+from mteb.languages import LanguageScripts, check_language_code
 from mteb.models import (
     ModelMeta,
 )
@@ -36,7 +37,8 @@ def get_model_metas(  # noqa: PLR0913, PLR0917
 
     Args:
         model_names: A list of model names to filter by. If None, all models are included.
-        languages: A list of languages to filter by. If None, all languages are included.
+        languages: A list of languages to filter by, as ISO 639-3 codes (e.g. "eng") or language-script codes (e.g. "eng-Latn").
+            Only models supporting all of them are included. If None, all languages are included.
         open_weights: Whether to filter by models with open weights. If None this filter is ignored.
         frameworks: A list of frameworks to filter by. If None, all frameworks are included.
         n_parameters_range: A tuple of lower and upper bounds of the number of parameters to filter by.
@@ -53,7 +55,10 @@ def get_model_metas(  # noqa: PLR0913, PLR0917
     """
     res = []
     model_names = set(model_names) if model_names is not None else None
-    languages = set(languages) if languages is not None else None
+    if languages is not None:
+        languages = set(languages)
+        for lang in languages:
+            check_language_code(lang)
     frameworks = set(frameworks) if frameworks is not None else None
     model_types_set = set(model_types) if model_types is not None else None
     modalities_set = set(modalities) if modalities is not None else None
@@ -65,11 +70,12 @@ def get_model_metas(  # noqa: PLR0913, PLR0917
     for model_meta in model_metas:
         if (model_names is not None) and (model_meta.name not in model_names):
             continue
-        if languages is not None and (
-            (model_meta.languages is None)
-            or not (languages <= set(model_meta.languages))
-        ):
-            continue
+        if languages is not None:
+            if model_meta.languages is None:
+                continue
+            supported = LanguageScripts.from_languages_and_scripts(model_meta.languages)
+            if not languages.issubset(supported.languages | supported.language_scripts):
+                continue
         if (open_weights is not None) and (model_meta.open_weights != open_weights):
             continue
         if (frameworks is not None) and not (frameworks <= set(model_meta.framework)):
@@ -93,8 +99,10 @@ def get_model_metas(  # noqa: PLR0913, PLR0917
         lower, upper = n_parameters_range
         n_parameters = model_meta.n_parameters
 
-        if upper is not None:
-            if (n_parameters is None) or (n_parameters > upper):
+        if lower is not None or upper is not None:
+            if n_parameters is None:
+                continue
+            if upper is not None and n_parameters > upper:
                 continue
             if lower is not None and n_parameters < lower:
                 continue
