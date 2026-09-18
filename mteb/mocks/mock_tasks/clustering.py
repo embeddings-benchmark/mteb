@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from datasets import Audio, Dataset, DatasetDict
 
 from mteb.abstasks.clustering import AbsTaskClustering
@@ -70,7 +72,7 @@ class MockClusteringTask(AbsTaskClusteringLegacy):
         **general_args,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         sentences = [
             [
                 "This is a test sentence",
@@ -175,7 +177,7 @@ class MockMultilingualClusteringTask(AbsTaskClusteringLegacy):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         sentences = [
             [
                 "This is a test sentence",
@@ -237,7 +239,7 @@ class LegacyMockClusteringFastTask(AbsTaskClustering):
         **general_args,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         sentences = [
             "This is a test sentence",
             "This is another test sentence",
@@ -343,7 +345,7 @@ class MockMultilingualClusteringFastTask(AbsTaskClustering):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         sentences = [
             "This is a test sentence",
             "This is another test sentence",
@@ -404,7 +406,7 @@ class MockImageClusteringTask(AbsTaskClusteringLegacy):
     input_column_name = "image"
     label_column_name = "label"
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         images = create_mock_images(self.np_rng)
         labels = [1, 0]
 
@@ -459,7 +461,7 @@ class MockImageClusteringFastTask(AbsTaskClustering):
     max_fraction_of_documents_to_embed = None
     max_document_to_embed = 2
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         images = create_mock_images(self.np_rng)
         labels = [1, 0]
 
@@ -514,7 +516,7 @@ class MockAudioClusteringTask(AbsTaskClustering):
     )
     metadata.modalities = ["audio"]
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         mock_audio = create_mock_audio(self.np_rng, n=3)
 
         labels = [0, 1, 2]
@@ -583,7 +585,7 @@ class MockVideoClusteringTask(AbsTaskClustering):
     metadata.modalities = ["video"]
     metadata.category = "v2c"
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         from datasets import Video
 
         mock_videos = create_mock_video_bytes(self.np_rng, n=3)
@@ -661,7 +663,7 @@ class MockVideoAudioClusteringTask(AbsTaskClustering):
     metadata.modalities = ["video", "audio"]
     metadata.category = "va2c"
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         from datasets import Video
 
         mock_videos = create_mock_video_bytes(self.np_rng, n=3)

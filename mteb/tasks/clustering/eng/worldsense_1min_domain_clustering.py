@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from mteb.abstasks import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -70,7 +70,7 @@ class WorldSense1MinDomainAudioVideoClustering(AbsTaskClustering):
     input_column_name = ("video", "audio")
     label_column_name: str = "domain"
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         for split in self.metadata.eval_splits:
             ds = self.dataset[split]
             ds = _dedupe_one_per_video_id(ds)
@@ -106,7 +106,7 @@ class WorldSense1MinDomainVideoClustering(AbsTaskClustering):
     input_column_name: str = "video"
     label_column_name: str = "domain"
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         for split in self.metadata.eval_splits:
             ds = self.dataset[split]
             ds = _dedupe_one_per_video_id(ds)

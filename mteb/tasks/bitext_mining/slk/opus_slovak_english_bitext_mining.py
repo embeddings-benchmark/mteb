@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.text.bitext_mining import AbsTaskBitextMining
 
@@ -45,7 +47,7 @@ Sennrich, Rico},
         prompt="Retrieve parallel sentences.",
     )
 
-    def dataset_transform(self, **kwargs) -> None:
+    def dataset_transform(self, **kwargs: Any) -> None:
         # Convert from OPUS-100 format to standard bitext format
         # OPUS-100 has structure: {"translation": {"en": "...", "sk": "..."}}
         # We need: {"sentence1": "...", "sentence2": "..."}

@@ -30,7 +30,9 @@ def test_encode_kwargs_passed_to_all_encodes(task: AbsTask, tmp_path: Path):
     my_encode_kwargs = {"no_one_uses_this_args": "but_its_here"}
 
     class MockEncoderWithKwargs(AbsEncoder):
-        def encode(self, sentences: DataLoader, task_name: str | None = None, **kwargs):
+        def encode(
+            self, sentences: DataLoader, task_name: str | None = None, **kwargs: Any
+        ):
             assert "no_one_uses_this_args" in kwargs
             assert (
                 my_encode_kwargs["no_one_uses_this_args"]

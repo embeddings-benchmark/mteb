@@ -25,6 +25,7 @@ logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     import torch
+    from PIL import Image
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -273,13 +274,13 @@ def _build_gemini_content(
     *,
     text: str | None,
     title: str | None,
-    image: Any | None,
+    image: Image.Image | None,
     audio: dict | None,
     video: torch.Tensor | None,
     google_task_type: str | None,
     prompt_type: PromptType | None,
     use_text_formatting: bool = True,
-) -> str | list[Any] | Any:
+) -> str | list[Any] | Any:  # noqa: ANN401 -- returns a google-genai Part or content list
     """Build one Gemini input, aggregating all modalities present in a row."""
     from google.genai.types import Part
 
@@ -322,7 +323,7 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
         model_name: str,
         model_prompts: dict[str, str] | None = None,
         embed_dim: int | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         from google import genai
 
@@ -345,7 +346,9 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
         async def run() -> list:
             semaphore = asyncio.Semaphore(batch_size)
 
-            async def embed_one(item: Any) -> list[float]:
+            async def embed_one(
+                item: Any,  # noqa: ANN401 -- google-genai content payload
+            ) -> list[float]:
                 wait_time = 1.0
                 async with semaphore:
                     for attempt in range(10):

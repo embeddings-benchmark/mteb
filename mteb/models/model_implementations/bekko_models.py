@@ -1,13 +1,18 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+
+if TYPE_CHECKING:
+    from mteb.types import Array
 
 
 class BekkoEncoderWrapper(SentenceTransformerEncoderWrapper):
     """Sentence Transformers loader with Bekko's documented L2 normalization."""
 
-    def encode(self, *args: Any, **kwargs: Any) -> Any:
+    def encode(self, *args: Any, **kwargs: Any) -> Array:
         kwargs["normalize_embeddings"] = True
         return super().encode(*args, **kwargs)
 

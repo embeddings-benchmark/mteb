@@ -154,3 +154,24 @@ def test_filter_tasks_exclude_aggregate_with_task_classes():
 
     tasks = filter_tasks([CQADupstackRetrieval], exclude_aggregate=False)
     assert len(tasks) == 1
+
+
+@pytest.mark.parametrize("language", ["eng-Latn", "rus-Cyrl", "python"])
+def test_filter_tasks_language_script_and_programming_language(
+    all_tasks: list[AbsTask], language: str
+):
+    tasks = filter_tasks(all_tasks, languages=[language])
+
+    assert tasks
+    lang = language.split("-", maxsplit=1)[0]
+    assert {t.metadata.name for t in tasks} <= {
+        t.metadata.name for t in filter_tasks(all_tasks, languages=[lang])
+    }
+    for task in tasks:
+        assert language in task.metadata.bcp47_codes + task.metadata.languages
+
+
+@pytest.mark.parametrize("language", ["zzz", "zzz-Latn", "eng-Xxxx"])
+def test_filter_tasks_invalid_language(all_tasks: list[AbsTask], language: str):
+    with pytest.raises(ValueError, match="Invalid"):
+        filter_tasks(all_tasks, languages=[language])

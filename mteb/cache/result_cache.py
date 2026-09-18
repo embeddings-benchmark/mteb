@@ -1412,7 +1412,7 @@ class ResultCache:
             )
 
             if validate_and_filter:
-                task_instance = task_names[task_result.task_name]
+                task_instance = task_names.get(task_result.task_name)
                 try:
                     task_result = task_result.validate_and_filter_scores(
                         task=task_instance

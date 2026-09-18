@@ -13,10 +13,13 @@ def check_language_code(code: str) -> None:
     Args:
         code: The language code to check.
     """
+    if not code:
+        raise ValueError(f"Invalid language code: {code!r}, code must not be empty.")
+
     lang = None
     script = None
     if "-" in code:
-        lang, script = code.split("-")
+        lang, script = code.split("-", maxsplit=1)
     elif code[0].isupper():
         script = code
     else:

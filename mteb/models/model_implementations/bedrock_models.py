@@ -38,7 +38,10 @@ logger = logging.getLogger(__name__)
 CHARS_PER_TOKEN = 4.5
 
 
-def get_bedrock_runtime_client(region_name: str | None = None, config: Any = None):
+def get_bedrock_runtime_client(
+    region_name: str | None = None,
+    config: Any = None,  # noqa: ANN401 -- botocore Config; boto3 is an optional, untyped dep
+) -> Any:  # noqa: ANN401 -- botocore client; boto3 is an optional, untyped dep
     """Create a bedrock-runtime client.
 
     Defaults to the region of the active boto3 session when none is given.
@@ -52,7 +55,7 @@ def get_bedrock_runtime_client(region_name: str | None = None, config: Any = Non
     return boto3.client("bedrock-runtime", region_name, config=config)
 
 
-def read_response_body(response: Any) -> dict[str, Any]:
+def read_response_body(response: Any) -> dict[str, Any]:  # noqa: ANN401 -- raw botocore response
     """Read and JSON-decode the streaming body of an InvokeModel response."""
     return json.loads(response.get("body").read())
 
@@ -65,7 +68,7 @@ class BedrockModel(AbsEncoder):
         provider: str,
         max_tokens: int,
         model_prompts: dict[str, str] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         self._client = get_bedrock_runtime_client()
 
@@ -178,7 +181,7 @@ class BedrockModel(AbsEncoder):
         )
         return self._to_numpy(response)
 
-    def _to_numpy(self, embedding_response) -> Array:
+    def _to_numpy(self, embedding_response: Any) -> Array:  # noqa: ANN401 -- raw botocore response
         response = read_response_body(embedding_response)
         key = "embedding" if self._provider == "amazon" else "embeddings"
         return np.array(response[key])
@@ -411,7 +414,11 @@ class NovaMultimodalEmbeddingsModel(AbsEncoder):
         }
         return {"taskType": "SINGLE_EMBEDDING", "singleEmbeddingParams": params}
 
-    def _video_payload(self, video: Any, purpose: str) -> dict[str, Any]:
+    def _video_payload(
+        self,
+        video: Any,  # noqa: ANN401 -- raw video payload handed to the Bedrock SDK
+        purpose: str,
+    ) -> dict[str, Any]:
         from torchcodec.encoders import VideoEncoder
 
         metadata = video.metadata

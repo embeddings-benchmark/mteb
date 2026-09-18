@@ -288,7 +288,7 @@ def test_evaluate_aggregated_task():
     mteb.evaluate(model, task, cache=None)
 
 
-def test_evaluate_aggregated_task_with_cache(tmp_path):
+def test_evaluate_aggregated_task_with_cache(tmp_path: Path):
     """Test evaluating an aggregate task with caching.
 
     Verifies both that:
@@ -333,7 +333,7 @@ def test_evaluate_aggregated_task_with_cache(tmp_path):
     assert cached_results.task_results[0].get_score() == pytest.approx(score1)
 
 
-def test_run_private_task_warning(caplog):
+def test_run_private_task_warning(caplog: pytest.LogCaptureFixture):
     """Test that a warning is correctly logged in an attempt run a private dataset is made"""
     task = mteb.get_task("Code1Retrieval")
     from mteb.timing import TimingStack
@@ -423,7 +423,7 @@ def test_evaluate_preserves_preloaded_data_across_multiple_calls():
     _ = task.dataset["test"]  # Verify dataset persists across multiple calls
 
 
-def test_evaluate_experiment(tmp_path):
+def test_evaluate_experiment(tmp_path: Path):
     """Test that evaluate() can be used in an experiment context."""
     model = mteb.get_model(
         "mteb/baseline-random-encoder", test_param=123, test_param2="abc"
@@ -445,7 +445,7 @@ def test_evaluate_experiment(tmp_path):
 
 
 @pytest.mark.parametrize("embed_dim", [None, 10])
-def test_evaluate_mrl(tmp_path, embed_dim):
+def test_evaluate_mrl(tmp_path: Path, embed_dim):
     """Test that evaluate() can be used in an experiment context."""
     model = mteb.get_model(
         "mteb/baseline-random-encoder",
@@ -524,7 +524,7 @@ def test_mock_mmeb_tasks(task: AbsTask):
 
 
 class MockCrashTask(MockMultilingualClassificationTask):
-    def _evaluate_subset(self, model, data_split, hf_split, hf_subset, **kwargs):
+    def _evaluate_subset(self, model, data_split, hf_split, hf_subset, **kwargs: Any):
         if hf_subset == "fra":
             raise RuntimeError("Crash on fra")
         return {"accuracy": 0.8}

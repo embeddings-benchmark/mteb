@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -60,7 +62,7 @@ class HinDialectClassification(AbsTaskClassification):
 """,
     )
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.dataset = self.dataset.rename_columns(
             {"folksong": "text", "language": "label"}
         )

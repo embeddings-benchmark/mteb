@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from datasets import concatenate_datasets, load_dataset
 
@@ -56,7 +56,7 @@ class VELOCITIPairClassification(AbsTaskPairClassification):
     input2_column_name: ClassVar[Mapping[str, str]] = {"text": "text"}
     label_column_name: str = "label"
 
-    def load_data(self, **kwargs) -> None:
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
         path = self.metadata.dataset["path"]

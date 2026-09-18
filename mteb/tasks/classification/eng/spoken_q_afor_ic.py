@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -42,5 +44,5 @@ class SpokenQAForIC(AbsTaskClassification):
 
     is_cross_validation: bool = True
 
-    def dataset_transform(self, **kwargs):
+    def dataset_transform(self, **kwargs: Any):
         self.dataset["train"] = self.dataset.pop("test")

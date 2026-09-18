@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from datasets import Dataset, DatasetDict
 
 from mteb.abstasks.regression import AbsTaskRegression
@@ -72,7 +74,7 @@ class MockRegressionTask(AbsTaskRegression):
         **general_args,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         train_texts = ["This is a test sentence", "This is another train sentence"]
         test_texts = ["This is a test sentence", "This is another test sentence"]
         train_values = [1.0, 0.0]
@@ -145,7 +147,7 @@ class MockImageRegressionTask(AbsTaskRegression):
     metadata.category = "i2c"
     input_column_name = "image"
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         train_images = create_mock_images(self.np_rng)
         test_images = create_mock_images(self.np_rng)
 

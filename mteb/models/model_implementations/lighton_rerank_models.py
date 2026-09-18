@@ -21,6 +21,7 @@ from tqdm.auto import tqdm
 
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from PIL import Image
@@ -382,7 +383,7 @@ _LIGHTON_COMMON = dict(
 _PW_COMMON = dict(
     loader=CrossEncoderWrapper,
     loader_kwargs=dict(
-        model_kwargs=dict(dtype=torch.bfloat16),
+        model_kwargs=dict(dtype=OutputDType.BF16),
     ),
     framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
     **_LIGHTON_COMMON,

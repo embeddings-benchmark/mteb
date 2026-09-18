@@ -5,7 +5,6 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 
 from mteb._create_dataloaders import (
     create_dataloader,
@@ -17,6 +16,7 @@ from mteb.types import (
 if TYPE_CHECKING:
     from collections.abc import Callable
 
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -87,6 +87,8 @@ def chunked_full_corpus_search(  # noqa: PLR0913
     Returns:
         A dictionary mapping query IDs to a list of `(score, corpus_id)` tuples.
     """
+    import torch
+
     result_heaps: dict[str, list[tuple[float, str]]] = {
         qid: [] for qid in query_idx_to_id.values()
     }
@@ -172,6 +174,8 @@ def rerank_top_ranked_documents(  # noqa: PLR0913
     Returns:
         A dictionary mapping query IDs to a list of `(score, corpus_id)` tuples.
     """
+    import torch
+
     result_heaps: dict[str, list[tuple[float, str]]] = {
         qid: [] for qid in query_idx_to_id.values()
     }
@@ -323,6 +327,8 @@ class SearchEncoderWrapper:
         Returns:
             Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.
         """
+        import torch
+
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
 
@@ -436,6 +442,8 @@ class SearchEncoderWrapper:
         top_k: int,
         encode_kwargs: EncodeKwargs,
     ) -> dict[str, list[tuple[float, str]]]:
+
+        logger.info("Encoding Corpus in batches (this might take a while)...")
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
 

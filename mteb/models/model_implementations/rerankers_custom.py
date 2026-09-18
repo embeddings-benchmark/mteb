@@ -27,7 +27,7 @@ class RerankerWrapper:
         batch_size: int = 4,
         fp_options: bool | None = None,
         silent: bool = False,
-        **kwargs,
+        **kwargs: Any,
     ):
         self.model_name_or_path = model_name_or_path
         self.batch_size = batch_size
@@ -51,9 +51,9 @@ class BGEReranker(RerankerWrapper):
 
     def __init__(
         self,
-        model_name_or_path="BAAI/bge-reranker-v2-m3",
-        torch_compile=False,
-        **kwargs,
+        model_name_or_path: str = "BAAI/bge-reranker-v2-m3",
+        torch_compile: bool = False,
+        **kwargs: Any,
     ):
         super().__init__(model_name_or_path, **kwargs)
         if not self.device:
@@ -107,9 +107,9 @@ class JinaReranker(RerankerWrapper):
 
     def __init__(
         self,
-        model_name_or_path="jinaai/jina-reranker-v2-base-multilingual",
-        torch_compile=False,
-        **kwargs,
+        model_name_or_path: str = "jinaai/jina-reranker-v2-base-multilingual",
+        torch_compile: bool = False,
+        **kwargs: Any,
     ):
         from sentence_transformers import CrossEncoder
 

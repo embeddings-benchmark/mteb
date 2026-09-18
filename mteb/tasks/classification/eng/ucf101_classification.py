@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -72,9 +74,9 @@ class UCF101VideoAudioClassification(AbsTaskClassification):
         modalities=["video", "audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{Soomro2012UCF101,
+@misc{soomro2012ucf101dataset101human,
   archiveprefix = {arXiv},
-  author = {Soomro, Khurram and Zamir, Amir Roshan and Shah, Mubarak},
+  author = {Khurram Soomro and Amir Roshan Zamir and Mubarak Shah},
   eprint = {1212.0402},
   primaryclass = {cs.CV},
   title = {UCF101: A Dataset of 101 Human Actions Classes From Videos in The Wild},
@@ -88,7 +90,7 @@ class UCF101VideoAudioClassification(AbsTaskClassification):
     input_column_name = ("video", "audio")
     label_column_name: str = "label"
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         for split in self.metadata.eval_splits:
             self.dataset[split] = self.dataset[split].select_columns(
                 ["video", "audio", "label"],
@@ -122,9 +124,9 @@ class UCF101VideoClassification(AbsTaskClassification):
         modalities=["video"],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{Soomro2012UCF101,
+@misc{soomro2012ucf101dataset101human,
   archiveprefix = {arXiv},
-  author = {Soomro, Khurram and Zamir, Amir Roshan and Shah, Mubarak},
+  author = {Khurram Soomro and Amir Roshan Zamir and Mubarak Shah},
   eprint = {1212.0402},
   primaryclass = {cs.CV},
   title = {UCF101: A Dataset of 101 Human Actions Classes From Videos in The Wild},
@@ -138,7 +140,7 @@ class UCF101VideoClassification(AbsTaskClassification):
     input_column_name = "video"
     label_column_name: str = "label"
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         for split in self.metadata.eval_splits:
             self.dataset[split] = self.dataset[split].select_columns(
                 ["video", "label"],

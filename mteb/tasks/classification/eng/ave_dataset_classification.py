@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -27,11 +29,11 @@ class AVEDatasetClassification(AbsTaskClassification):
         modalities=["video", "audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{tian2018audio,
+@inproceedings{Tian_2018_ECCV,
   author = {Tian, Yapeng and Shi, Jing and Li, Bochen and Duan, Zhiyao and Xu, Chenliang},
-  booktitle = {Proceedings of the European conference on computer vision (ECCV)},
-  pages = {247--263},
-  title = {Audio-visual event localization in unconstrained videos},
+  booktitle = {The European Conference on Computer Vision (ECCV)},
+  month = {September},
+  title = {Audio-Visual Event Localization in Unconstrained Videos},
   year = {2018},
 }
 """,
@@ -41,7 +43,7 @@ class AVEDatasetClassification(AbsTaskClassification):
     label_column_name: str = "label"
     is_cross_validation: bool = False
 
-    def dataset_transform(self, num_proc=None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.dataset["train"] = self.dataset["train"].select(range(2048))
 
 
@@ -68,11 +70,11 @@ class AVEDatasetVideoClassification(AbsTaskClassification):
         modalities=["video"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{tian2018audio,
+@inproceedings{Tian_2018_ECCV,
   author = {Tian, Yapeng and Shi, Jing and Li, Bochen and Duan, Zhiyao and Xu, Chenliang},
-  booktitle = {Proceedings of the European conference on computer vision (ECCV)},
-  pages = {247--263},
-  title = {Audio-visual event localization in unconstrained videos},
+  booktitle = {The European Conference on Computer Vision (ECCV)},
+  month = {September},
+  title = {Audio-Visual Event Localization in Unconstrained Videos},
   year = {2018},
 }
 """,
@@ -82,5 +84,5 @@ class AVEDatasetVideoClassification(AbsTaskClassification):
     label_column_name: str = "label"
     is_cross_validation: bool = False
 
-    def dataset_transform(self, num_proc=None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.dataset["train"] = self.dataset["train"].select(range(2048))

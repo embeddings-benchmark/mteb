@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import torch
@@ -11,6 +11,7 @@ from transformers import (
 )
 
 from mteb.models.model_meta import ModelMeta
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -30,7 +31,7 @@ class Qwen3RerankerWrapper:
         model_name_or_path: str,
         device: str | None = None,
         max_length: int = 8192,
-        **kwargs,
+        **kwargs: Any,
     ):
         self.model_name_or_path = model_name_or_path
         self.device = device or (
@@ -180,7 +181,7 @@ QWEN3_CITATION = """@article{qwen3embedding,
 qwen3_reranker_0_6b = ModelMeta(
     loader=Qwen3RerankerWrapper,
     loader_kwargs=dict(
-        dtype=torch.bfloat16,
+        dtype=OutputDType.BF16,
     ),
     name="Qwen/Qwen3-Reranker-0.6B",
     revision="6e9e69830b95c52b5fd889b7690dda3329508de3",
@@ -211,7 +212,7 @@ qwen3_reranker_0_6b = ModelMeta(
 qwen3_reranker_4b = ModelMeta(
     loader=Qwen3RerankerWrapper,
     loader_kwargs=dict(
-        dtype=torch.bfloat16,
+        dtype=OutputDType.BF16,
     ),
     name="Qwen/Qwen3-Reranker-4B",
     revision="f16fc5d5d2b9b1d0db8280929242745d79794ef5",
@@ -242,7 +243,7 @@ qwen3_reranker_4b = ModelMeta(
 qwen3_reranker_8b = ModelMeta(
     loader=Qwen3RerankerWrapper,
     loader_kwargs=dict(
-        dtype=torch.bfloat16,
+        dtype=OutputDType.BF16,
     ),
     name="Qwen/Qwen3-Reranker-8B",
     revision="5fa94080caafeaa45a15d11f969d7978e087a3db",

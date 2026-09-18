@@ -57,7 +57,7 @@ class MetaClip2Model(AbsEncoder):
         texts: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ):
+    ) -> Array:
         all_text_embeddings = []
 
         with torch.no_grad():
@@ -86,7 +86,7 @@ class MetaClip2Model(AbsEncoder):
         images: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ):
+    ) -> Array:
         all_image_embeddings = []
 
         for batch in tqdm(images, disable=not show_progress_bar, desc="Image Encoding"):

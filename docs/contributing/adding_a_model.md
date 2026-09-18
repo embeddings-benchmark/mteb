@@ -30,6 +30,7 @@ Typically, it only requires that you fill in metadata about the model and add it
 ??? example "Adding a ModelMeta object"
     ```python
     from mteb.models import ModelMeta, SentenceTransformerEncoderWrapper
+    from mteb.types import OutputDType
 
     my_model = ModelMeta(
         name="model_name",
@@ -118,6 +119,21 @@ model = ModelMeta(
     ...
 )
 ```
+
+If your model must be loaded in a specific precision, name the dtype with an [`OutputDType`][mteb.types.OutputDType] member rather than passing a `torch.dtype` object:
+
+```python
+model = ModelMeta(
+    loader=MyWrapper,
+    loader_kwargs=dict(
+        torch_dtype=OutputDType.BF16,  # not torch.bfloat16
+    ),
+    ...
+)
+```
+
+`ModelMeta` entries are evaluated when `mteb` is imported, so a `torch.dtype` here would make reading model metadata require torch. `OutputDType` is a string enum: it resolves via
+`OutputDType.get_dtype()`, and `transformers` accepts it directly wherever it accepts a string dtype.
 
 ### Using a custom Implementation
 

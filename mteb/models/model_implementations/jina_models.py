@@ -15,7 +15,7 @@ from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
 )
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     from sentence_transformers import CrossEncoder
@@ -334,7 +334,7 @@ class JinaWrapper(SentenceTransformerEncoderWrapper):
         revision: str,
         device: str | None = None,
         model_prompts: dict[str, str] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         super().__init__(
             model, revision, device=device, model_prompts=model_prompts, **kwargs
@@ -411,13 +411,16 @@ class JinaV4Wrapper(AbsEncoder):
         revision: str | None = None,
         device: str | None = None,
         device_map: str | None = None,
-        torch_dtype=torch.bfloat16,
-        attn_implementation="sdpa",
+        torch_dtype: OutputDType | torch.dtype = OutputDType.BF16,
+        attn_implementation: str = "sdpa",
         trust_remote_code: bool = True,
         model_prompts: dict[str, str] | None = None,
         vector_type: Literal[SUPPORTED_VECTOR_TYPES] = "single_vector",
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
+        if isinstance(torch_dtype, OutputDType):
+            torch_dtype = torch_dtype.get_dtype()
+
         device = device_map or device
 
         self.device = device or (
@@ -561,9 +564,9 @@ class JinaV4Wrapper(AbsEncoder):
         task_metadata: TaskMetadata,
         prompt_type: PromptType | None = None,
         batch_size: int = 32,
-        return_numpy=False,
+        return_numpy: bool = False,
         **kwargs: Any,
-    ):
+    ) -> Array:
         prompt_name = self.get_prompt_name(task_metadata, prompt_type)
         if prompt_name:
             logger.info(
@@ -598,7 +601,7 @@ class JinaV4Wrapper(AbsEncoder):
         task_metadata: TaskMetadata,
         prompt_type: PromptType | None = None,
         max_pixels: int = 37788800,
-        return_numpy=False,
+        return_numpy: bool = False,
         **kwargs: Any,
     ) -> Array:
         # Resolve task parameters
@@ -616,8 +619,11 @@ class JinaV4Wrapper(AbsEncoder):
             return_numpy=return_numpy,
         )
 
+    # Passthrough: ndarray/list are converted, anything else is returned unchanged.
     @staticmethod
-    def _convert_to_torch_if_needed(embeddings):
+    def _convert_to_torch_if_needed(
+        embeddings: Any,  # noqa: ANN401
+    ) -> torch.Tensor | list[Any] | Any:  # noqa: ANN401
         """Convert numpy arrays to torch tensors if needed."""
         if isinstance(embeddings, np.ndarray):
             return torch.from_numpy(embeddings)
@@ -632,7 +638,7 @@ class JinaV4Wrapper(AbsEncoder):
             return converted
         return embeddings
 
-    def similarity(self, a, b):
+    def similarity(self, a: Array, b: Array) -> Array:
         """Compute similarity between embeddings.
 
         Args:
@@ -664,7 +670,7 @@ class JinaV4Wrapper(AbsEncoder):
             raise ValueError("No passages provided")
 
         # Normalize inputs to 2D tensors
-        def normalize_input(x):
+        def normalize_input(x: torch.Tensor | list[torch.Tensor]) -> torch.Tensor:
             if isinstance(x, torch.Tensor):
                 return x.unsqueeze(0) if x.ndim == 1 else x
             # list
@@ -754,7 +760,7 @@ class JinaV5TextWrapper(SentenceTransformerEncoderWrapper):
         revision: str,
         device: str | None = None,
         model_prompts: dict[str, str] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         super().__init__(
             model, revision, device=device, model_prompts=model_prompts, **kwargs
@@ -837,7 +843,9 @@ _OMNI_MODEL_PROMPTS = {
 }
 
 
-def _video_frames_to_channels_last(video: Any) -> Any:
+def _video_frames_to_channels_last(
+    video: Any,  # noqa: ANN401 -- any frame container; only tensors are permuted, others pass through
+) -> Any:  # noqa: ANN401
     """torchcodec frame batches are (T, C, H, W) uint8; the model's remote code
     detects video only for channels-last (T, H, W, 3|4) arrays and would
     otherwise stringify the tensor and embed it as text."""
