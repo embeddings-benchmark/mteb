@@ -266,11 +266,6 @@ async def build_benchmark_summary(  # noqa: PLR0914
         custom_group_task_to_label,
     )
 
-    # The polars frame only carries labels (column names), not descriptions or
-    # task membership — join both back in from the benchmark's static
-    # CustomGrouping declaration, matched by (dimension, label). Membership
-    # (`tasks`) is what lets the frontend recompute scoresByCustomGroup under
-    # its client-side task-type/domain/modality filters.
     custom_groupings_out: list[CustomGroupingSchema] = []
     for dim, cols in custom_group_cols_by_dim.items():
         declared = declared_by_dim.get(dim)

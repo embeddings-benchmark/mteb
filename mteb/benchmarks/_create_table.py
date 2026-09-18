@@ -941,9 +941,6 @@ def _create_summary_table(  # noqa: PLR0914
     ).with_columns(_skipna_false_mean(type_cols).alias(mean_task_type_col))
 
     if custom_group_exprs:
-        # Scoped entries reference scope_pivot.wide's columns, which don't
-        # exist on per_task -- evaluate against the joined source, then
-        # join the result back in.
         custom_group_source = (
             per_task.join(scope_pivot.wide, on="model_name", how="left")
             if scope_pivot is not None
@@ -984,9 +981,6 @@ def _create_summary_table(  # noqa: PLR0914
 
     joint_table = joint_table.join(borda_df, on="model_name", how="left")
 
-    # Only BenchmarkAggregation columns are ever dropped here — a
-    # CustomGrouping's columns are computed only when the dimension is
-    # present in `aggregations` (above), so there's nothing to drop for it.
     drop_cols: list[str] = []
     for agg in BenchmarkAggregation:
         if agg in enum_aggregations:
