@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import torch
 from tqdm.auto import tqdm
@@ -44,7 +44,7 @@ class VirtueWrapper(AbsEncoder):
         revision: str | None = None,
         *,
         device: str | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         from transformers import AutoProcessor, Qwen2VLForConditionalGeneration
 

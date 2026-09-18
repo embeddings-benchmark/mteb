@@ -1,10 +1,21 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
+
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
+if TYPE_CHECKING:
+    from datasets import Dataset
 
-def _load_data(path: str, splits: str, revision: str | None = None):
+    from mteb.types import RelevantDocumentsType
+
+
+def _load_data(
+    path: str, splits: str, revision: str | None = None
+) -> tuple[dict[str, Dataset], dict[str, Dataset], dict[str, RelevantDocumentsType]]:
     corpus = {}
     queries = {}
     relevant_docs = {}
@@ -18,7 +29,7 @@ def _load_data(path: str, splits: str, revision: str | None = None):
         split_dataset = dataset[split]
 
         corpus[split] = split_dataset.map(
-            lambda x, idx: {
+            lambda x, idx, split=split: {
                 "id": f"corpus-{split}-{idx}",
                 "modality": "image",
             },
@@ -33,7 +44,7 @@ def _load_data(path: str, splits: str, revision: str | None = None):
         )
 
         queries[split] = split_dataset.map(
-            lambda x, idx: {
+            lambda x, idx, split=split: {
                 "id": f"query-{split}-{idx}",
                 "modality": "text",
             },
@@ -91,7 +102,7 @@ class SciMMIRT2IRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = _load_data(

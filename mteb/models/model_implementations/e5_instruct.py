@@ -1,9 +1,8 @@
-import torch
-
 from mteb.models.instruct_wrapper import (
     InstructSentenceTransformerModel,
 )
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 from .e5_models import (
     E5_PAPER_RELEASE_DATE,
@@ -32,7 +31,7 @@ e5_instruct = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=E5_INSTRUCTION,
-        model_kwargs={"dtype": torch.float16},
+        model_kwargs={"dtype": OutputDType.FLOAT16},
         apply_instruction_to_passages=False,
     ),
     name="intfloat/multilingual-e5-large-instruct",
@@ -75,7 +74,7 @@ me5_instruct_afri_large_instruct = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=E5_INSTRUCTION,
-        model_kwargs={"dtype": torch.float16},
+        model_kwargs={"dtype": OutputDType.FLOAT16},
     ),
     name="McGill-NLP/AfriE5-Large-instruct",
     languages=XLMR_LANGUAGES,
@@ -103,11 +102,21 @@ e5_mistral = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=E5_INSTRUCTION,
-        model_kwargs={"dtype": torch.float16},
+        model_kwargs={"dtype": OutputDType.FLOAT16},
         apply_instruction_to_passages=False,
+        # This model pools the last token, so its embedding is the hidden state of
+        # the trailing </s>. Its tokenizer_config.json sets add_eos_token, but its
+        # tokenizer.json post-processor only adds <s>; transformers <5 resolved that
+        # in favour of the config, transformers >=5 in favour of tokenizer.json, so
+        # the </s> silently disappeared and pooling started reading the last word.
+        # add_eos_token alone is not enough: it rebuilds the post-processor from
+        # add_bos_token, which defaults to False here, dropping the <s> instead.
+        add_eos_token=True,
+        tokenizer_kwargs={"add_bos_token": True},
     ),
     name="intfloat/e5-mistral-7b-instruct",
     model_type=["dense"],
+    output_dtypes="float16",
     languages=MISTRAL_LANGUAGES,
     open_weights=True,
     revision="07163b72af1488142a360786df853f237b1a3ca1",
@@ -153,7 +162,7 @@ zeta_alpha_ai__zeta_alpha_e5_mistral = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=E5_INSTRUCTION,
-        model_kwargs={"dtype": torch.bfloat16},
+        model_kwargs={"dtype": OutputDType.BF16},
         apply_instruction_to_passages=False,
     ),
     name="zeta-alpha-ai/Zeta-Alpha-E5-Mistral",

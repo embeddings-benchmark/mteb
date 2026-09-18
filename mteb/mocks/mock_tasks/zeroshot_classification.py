@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 import numpy as np
 from datasets import Audio, Dataset, DatasetDict
 
@@ -78,7 +80,7 @@ class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
     metadata.modalities = ["image", "text"]
     metadata.category = "i2t"
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         images = create_mock_images(self.np_rng)
         labels = [0, 1]
 
@@ -142,7 +144,7 @@ class MockTextZeroShotClassificationTask(AbsTaskZeroShotClassification):
     metadata.category = "t2t"
     input_column_name = "text"
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         texts = ["This is a test sentence", "This is another test sentence"]
         # String labels matching `get_candidate_labels` cover the string-label
         # code path; they are mapped to candidate indices during evaluation.
@@ -208,7 +210,7 @@ class MockAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
     )
     metadata.modalities = ["audio", "text"]
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         mock_audio = create_mock_audio(self.np_rng)
         labels = np.array([0, 1])  # Convert labels to numpy array
 
@@ -286,7 +288,7 @@ class MockVideoZeroshotClassificationTask(AbsTaskZeroShotClassification):
     metadata.modalities = ["video", "text"]
     metadata.category = "v2c"
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         from datasets import Video
 
         mock_videos = create_mock_video_bytes(self.np_rng)
@@ -373,7 +375,7 @@ class MockVideoAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
     metadata.modalities = ["video", "audio", "text"]
     metadata.category = "va2c"
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         from datasets import Video
 
         mock_videos = create_mock_video_bytes(self.np_rng)

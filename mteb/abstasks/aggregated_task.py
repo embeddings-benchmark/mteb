@@ -113,7 +113,7 @@ class AbsTaskAggregate(AbsTask):
         if len(eval_times) != len(task_results):
             logger.info(
                 f"Loaded results does not include runtime. Therefore evaluation of {self.metadata.name} "
-                + "can't be computed. Setting it to None."
+                "can't be computed. Setting it to None."
             )
             eval_time = np.nan
         else:
@@ -125,7 +125,7 @@ class AbsTaskAggregate(AbsTask):
         if len(kg_co2_emissions_) != len(task_results):
             logger.info(
                 f"Loaded results does not include co2-eq emissions. Therefore evaluation of {self.metadata.name} "
-                + "can't be computed. Setting it to None."
+                "can't be computed. Setting it to None."
             )
             kg_co2_emissions = np.nan
         else:
@@ -142,7 +142,7 @@ class AbsTaskAggregate(AbsTask):
         if len(mteb_versions) != 1:
             msg = f"All tasks of {self.metadata.name} is not run using the same version. different versions found are: {mteb_versions}"
             logger.warning(msg)
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
         task_res.mteb_version = TaskResult._compute_top_level_mteb_version(
             task_res.scores
         )

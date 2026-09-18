@@ -1,8 +1,15 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
+
 import datasets
 from datasets import Dataset, DatasetDict
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+
+if TYPE_CHECKING:
+    from mteb.types import RelevantDocumentsType
 
 _LANGS = {
     "en": ["eng-Latn"],
@@ -19,7 +26,9 @@ def _load_vdr_multilingual_data(
     langs: list,
     split: str,
     revision: str | None = None,
-):
+) -> tuple[
+    dict[str, DatasetDict], dict[str, DatasetDict], dict[str, RelevantDocumentsType]
+]:
     """Load data from the VDR Multilingual dataset."""
     corpus_dict = {}
     queries_dict = {}
@@ -37,7 +46,7 @@ def _load_vdr_multilingual_data(
         queries_records = []
         relevant_dict = {}
 
-        for idx, record in enumerate(dataset):
+        for record in dataset:
             doc_id = f"doc-{record['id']}"
             query_id = f"query-{record['id']}"
             has_query = record.get("query") is not None
@@ -126,7 +135,7 @@ class VDRMultilingualRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 

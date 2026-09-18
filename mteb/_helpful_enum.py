@@ -17,4 +17,4 @@ class HelpfulStrEnum(str, Enum):
         except ValueError:
             raise ValueError(
                 f"'{value}' is not a valid {cls.__name__} value, must be one of {[e.value for e in cls]}"
-            )
+            ) from None

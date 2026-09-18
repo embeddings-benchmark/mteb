@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 from datasets import Dataset
@@ -16,9 +16,9 @@ if TYPE_CHECKING:
 
 
 class TestClusteringEvaluator:
-    def test_clustering_v_measure(self):  # noqa: PLR6301
+    def test_clustering_v_measure(self):
         class Model:
-            def encode(  # noqa: PLR6301
+            def encode(
                 self,
                 sentences: DataLoader,
                 task_metadata,
@@ -26,7 +26,7 @@ class TestClusteringEvaluator:
                 hf_subset,
                 task_name: str | None = None,
                 batch_size=32,
-                **kwargs,
+                **kwargs: Any,
             ) -> NDArray[np.floating]:
                 return np.eye(len(sentences.dataset))
 

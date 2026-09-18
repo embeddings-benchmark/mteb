@@ -12,6 +12,7 @@ from mteb.types import PromptType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
+    from transformers import PreTrainedTokenizerBase
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput
@@ -23,7 +24,7 @@ def _split_sentences(text: str) -> list[str]:
 
 
 def _get_document_tokens(
-    tokenizer: Any,
+    tokenizer: PreTrainedTokenizerBase,
     raw: dict[str, str],
     *,
     separator_token_id: int,

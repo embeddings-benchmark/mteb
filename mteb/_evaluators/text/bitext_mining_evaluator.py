@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from datasets import Dataset
 from tqdm.auto import tqdm
 
@@ -48,9 +47,7 @@ class BitextMiningEvaluator(Evaluator):
     ) -> dict[str, list[dict[str, float]]]:
         pair_elements = {p for pair in self.pairs for p in pair}
         if isinstance(self.sentences, Dataset):
-            subsets = [
-                col for col in self.sentences.features.keys() if col in pair_elements
-            ]
+            subsets = [col for col in self.sentences.features if col in pair_elements]
         else:
             # BUCC outputs a dict instead of a Dataset
             subsets = list(pair_elements)
@@ -79,9 +76,7 @@ class BitextMiningEvaluator(Evaluator):
             subset=self.hf_subset,
             log_message="Finding nearest neighbors...",
         ):
-            for i, (key1, key2) in enumerate(
-                tqdm(self.pairs, desc="Matching sentences")
-            ):
+            for key1, key2 in tqdm(self.pairs, desc="Matching sentences"):
                 neighbours[f"{key1}-{key2}"] = self._similarity_search(
                     embeddings[key1], embeddings[key2], model
                 )
@@ -111,6 +106,8 @@ class BitextMiningEvaluator(Evaluator):
             Returns a list with one entry for each query. Each entry is a list of dictionaries with the keys 'corpus_id' and 'score', sorted by
                 decreasing cosine similarity scores.
         """
+        import torch
+
         if len(query_embeddings.shape) == 1:
             query_embeddings = query_embeddings.reshape(1, *query_embeddings.shape)
         if len(corpus_embeddings.shape) == 1:
@@ -158,6 +155,7 @@ class BitextMiningEvaluator(Evaluator):
                     for sub_corpus_id, score in zip(
                         cos_scores_top_k_idx[query_itr],
                         cos_scores_top_k_values[query_itr],
+                        strict=True,
                     ):
                         corpus_id = corpus_start_idx + sub_corpus_id
                         query_id = query_start_idx + query_itr

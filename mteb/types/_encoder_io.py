@@ -4,14 +4,14 @@ from collections.abc import Mapping
 from typing import TYPE_CHECKING, TypeAlias, TypedDict, cast
 
 import numpy as np
-import torch
-from datasets import Dataset
 from numpy.typing import NDArray
 
 from mteb._helpful_enum import HelpfulStrEnum
 
 if TYPE_CHECKING:
     import numpy.typing as npt
+    import torch
+    from datasets import Dataset
     from PIL import Image
     from typing_extensions import NotRequired
 
@@ -31,8 +31,14 @@ class EncodeKwargs(TypedDict):
 
 
 # --- Output types ---
-Array = NDArray[np.floating | np.integer | np.bool_] | torch.Tensor
-"""General array type, can be a numpy array (float, int, or bool) or a torch tensor."""
+if TYPE_CHECKING:
+    Array: TypeAlias = NDArray[np.floating | np.integer | np.bool_] | torch.Tensor
+    """General array type, can be a numpy array (float, int, or bool) or a torch tensor."""
+else:
+    # Importing torch here would make `import mteb` pull in the full torch stack, which
+    # results-only users do not need. `Array` is only ever used as an annotation (never
+    # introspected at runtime), so the runtime value can drop the `torch.Tensor` arm.
+    Array: TypeAlias = NDArray[np.floating | np.integer | np.bool_]
 
 
 # --- Input types ---
@@ -151,16 +157,18 @@ class MultimodalInput(  # type: ignore[misc]
 ):
     """The input to the encoder for multimodal data."""
 
-    pass
-
 
 class OutputDType(HelpfulStrEnum):
-    """Enum for valid compression levels.
+    """Named output/compression and model-loading dtype values, referred to by name rather than a `torch.dtype` object.
 
     Used by the CompressionWrapper class and specified by models to indicate the dtypes of output embeddings they
-    support internally.
+    support internally, and by `ModelMeta` entries to declare the dtype a model should be loaded in -- naming the
+    dtype keeps model metadata importable without torch. Most members share their name with a `torch.dtype`, but
+    some (`INT4`, `UINT4`, `BINARY`) are compression-only levels with no matching native torch dtype. Call
+    `get_dtype()` to resolve any member to the real `torch.dtype` used to hold its values.
     """
 
+    FLOAT32 = "float32"
     FLOAT16 = "float16"
     BF16 = "bfloat16"
     INT8 = "int8"
@@ -180,11 +188,13 @@ class OutputDType(HelpfulStrEnum):
         Output types that are not natively supported by PyTorch like 4-bit integers require specific mapping to the
         desired dtype.
         """
+        import torch
+
         if self == OutputDType.UINT4:
             return torch.uint8
-        elif self == OutputDType.INT4:
+        if self == OutputDType.INT4:
             return torch.int8
-        elif self == OutputDType.BINARY:
+        if self == OutputDType.BINARY:
             return torch.bool
         return cast("torch.dtype", getattr(torch, self.value))
 
@@ -246,7 +256,7 @@ Each type is defined as a separate structured input with its own fields.
 TextBatchedInput = TextInput | CorpusInput | QueryInput
 """The input to the encoder for a batch of text data."""
 
-QueryDatasetType = Dataset
+QueryDatasetType: TypeAlias = "Dataset"
 """Retrieval query dataset, containing queries. Should have columns:
 1. `id`, `text`, `instruction` (optionally) for text queries
 2. `id`, `image` for image queries
@@ -254,7 +264,7 @@ QueryDatasetType = Dataset
 4. `id`, `video` for video queries
 or a combination of these for multimodal queries.
  """
-CorpusDatasetType = Dataset
+CorpusDatasetType: TypeAlias = "Dataset"
 """Retrieval corpus dataset, containing documents. Should have columns:
  1. `id`, `title` (optionally), `body` for text corpus
  2. `id`, `image` for image corpus
@@ -262,7 +272,7 @@ CorpusDatasetType = Dataset
  4. `id`, `video` for video corpus
  or a combination of these for multimodal corpus.
  """
-InstructionDatasetType = Dataset
+InstructionDatasetType: TypeAlias = "Dataset"
 """Retrieval instruction dataset, containing instructions. Should have columns `query-id`, `instruction`."""
 RelevantDocumentsType = Mapping[str, Mapping[str, int]]
 """Relevant documents for each query, mapping query IDs to a mapping of document IDs and their relevance

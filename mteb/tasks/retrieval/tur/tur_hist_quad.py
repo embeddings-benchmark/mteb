@@ -1,3 +1,5 @@
+from typing import Any
+
 import datasets
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -41,7 +43,7 @@ class TurHistQuadRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs) -> None:
+    def load_data(self, **kwargs: Any) -> None:
         """And transform to a retrieval dataset, which have the following attributes
 
         self.corpus = dict[doc_id, dict[str, str]] #id => dict with document data like title and text
@@ -74,7 +76,7 @@ class TurHistQuadRetrieval(AbsTaskRetrieval):
             answer = [a["text"] for a in ds["answers"]]
 
             n = 0
-            for q, cont, ans in zip(question, context, answer):
+            for q, cont, ans in zip(question, context, answer, strict=True):
                 self.queries[split][str(n)] = q
                 q_n = n
                 n += 1

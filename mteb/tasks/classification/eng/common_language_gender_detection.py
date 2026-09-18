@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -44,7 +46,7 @@ Mirco Ravanelli},
     input_column_name: str = "audio"
     label_column_name: str = "gender"
 
-    def dataset_transform(self, **kwargs):
+    def dataset_transform(self, **kwargs: Any):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["test"], label=self.label_column_name
         )

@@ -1,0 +1,114 @@
+{
+    "evaluation": {
+        "num_samples": 8192,
+        "samples_in_train": null,
+        "text_statistics": {
+            "total_text_length": 11816485,
+            "min_text_length": 80,
+            "average_text_length": 1442.4420166015625,
+            "max_text_length": 10064,
+            "unique_texts": 8192
+        },
+        "image_statistics": null,
+        "audio_statistics": null,
+        "video_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 30,
+            "labels": {
+                "0": {
+                    "count": 150
+                },
+                "23": {
+                    "count": 484
+                },
+                "24": {
+                    "count": 388
+                },
+                "3": {
+                    "count": 343
+                },
+                "21": {
+                    "count": 197
+                },
+                "18": {
+                    "count": 202
+                },
+                "14": {
+                    "count": 327
+                },
+                "6": {
+                    "count": 635
+                },
+                "2": {
+                    "count": 394
+                },
+                "4": {
+                    "count": 190
+                },
+                "16": {
+                    "count": 204
+                },
+                "9": {
+                    "count": 149
+                },
+                "11": {
+                    "count": 273
+                },
+                "17": {
+                    "count": 374
+                },
+                "1": {
+                    "count": 228
+                },
+                "28": {
+                    "count": 285
+                },
+                "13": {
+                    "count": 260
+                },
+                "12": {
+                    "count": 240
+                },
+                "19": {
+                    "count": 212
+                },
+                "29": {
+                    "count": 153
+                },
+                "7": {
+                    "count": 442
+                },
+                "25": {
+                    "count": 220
+                },
+                "15": {
+                    "count": 242
+                },
+                "22": {
+                    "count": 214
+                },
+                "20": {
+                    "count": 260
+                },
+                "8": {
+                    "count": 278
+                },
+                "26": {
+                    "count": 265
+                },
+                "5": {
+                    "count": 276
+                },
+                "10": {
+                    "count": 148
+                },
+                "27": {
+                    "count": 159
+                }
+            }
+        }
+    }
+}

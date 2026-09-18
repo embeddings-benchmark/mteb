@@ -5,7 +5,6 @@ import warnings
 from typing import TYPE_CHECKING, cast
 
 import numpy as np
-import torch
 
 from mteb._requires_package import _is_package_available
 from mteb.models.model_meta import ScoringFunction
@@ -64,6 +63,7 @@ class FaissSearchIndex:
     def add_documents(self, embeddings: Array, idxs: list[str]) -> None:
         """Add all document embeddings and their IDs to FAISS index."""
         import faiss
+        import torch
 
         if isinstance(embeddings, torch.Tensor):
             embeddings = embeddings.detach().cpu().numpy()
@@ -91,6 +91,7 @@ class FaissSearchIndex:
     ) -> tuple[list[list[float]], list[list[int]]]:
         """Search using FAISS."""
         import faiss
+        import torch
 
         if self.index is None:
             raise ValueError("No index built. Call add_document() first.")
@@ -114,7 +115,8 @@ class FaissSearchIndex:
                 query_idx_to_id=query_idx_to_id,
             )
         else:
-            sim_array, id_array = self.index.search(embeddings_f32, top_k)
+            capped_top_k = min(top_k, self.index.ntotal)
+            sim_array, id_array = self.index.search(embeddings_f32, capped_top_k)
             similarities = sim_array.tolist()
             ids = id_array.tolist()
 
@@ -140,7 +142,7 @@ class FaissSearchIndex:
             if not ranked_ids:
                 msg = f"No top-ranked documents for query {query_id}"
                 logger.warning(msg)
-                warnings.warn(msg)
+                warnings.warn(msg, stacklevel=2)
                 scores_all.append([])
                 idxs_all.append([])
                 continue

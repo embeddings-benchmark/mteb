@@ -6,7 +6,7 @@ class LexRetrievalv1(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="LexRetrieval.v1",  # we suspect that there will be more
         description="Consists of simulated user-queries from the Danish encyclopaedia Lex.dk. The queries are synthetically generated dataset based "
-        + "on existing user queries of the existing chatbot.",
+        "on existing user queries of the existing chatbot.",
         category="t2t",
         reference=None,
         main_score="ndcg_at_10",

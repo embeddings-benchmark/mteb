@@ -50,7 +50,7 @@ class DummyModel(RandomEncoderBaseline):
                 lambda x: {"text": x["text"] + " (first task processed)"}
             )
             inputs = DataLoader(old_inputs, batch_size=inputs.batch_size)
-        return super().encode(
+        embeddings = super().encode(
             inputs,
             task_metadata=task_metadata,
             hf_split=hf_split,
@@ -58,11 +58,15 @@ class DummyModel(RandomEncoderBaseline):
             prompt_type=prompt_type,
             **kwargs,
         )
+        if prompt_type is None:
+            return embeddings
+        prompt_offset = 1.0 if prompt_type is PromptType.query else 2.0
+        return embeddings + prompt_offset
 
 
 class TestCachedEmbeddingWrapper:
-    @pytest.fixture(scope="function")
-    def cache_dir(self, tmp_path):  # noqa: PLR6301
+    @pytest.fixture
+    def cache_dir(self, tmp_path: Path):
         cache_path = tmp_path / "test_cache"
         yield cache_path
         # Cleanup after test
@@ -76,7 +80,7 @@ class TestCachedEmbeddingWrapper:
             FaissCache,
         ],
     )
-    def test_caching_functionality(  # noqa: PLR0914, PLR6301
+    def test_caching_functionality(  # noqa: PLR0914
         self, cache_dir, cache_backend: type[CacheBackendProtocol]
     ):
         if cache_backend is FaissCache:
@@ -252,9 +256,93 @@ class TestCachedEmbeddingWrapper:
 
         wrapped_model.close()  # delete to allow cleanup on Windows
 
+    def test_cache_isolated_by_prompt_type(self, cache_dir: Path):
+        model = DummyModel("test_model", revision=None)
+        wrapped_model = CachedEmbeddingWrapper(model, cache_dir)
+        task_metadata = MockRetrievalTask().metadata
+        inputs = DataLoader(
+            Dataset.from_dict({"id": ["1"], "title": [""], "text": ["same input"]})
+        )
+
+        def cached_encode(prompt_type: PromptType):
+            return wrapped_model.encode(
+                inputs,
+                task_metadata=task_metadata,
+                hf_subset="default",
+                hf_split="test",
+                prompt_type=prompt_type,
+            )
+
+        try:
+            query_embeddings = cached_encode(PromptType.query)
+            document_embeddings = cached_encode(PromptType.document)
+            cached_query_embeddings = cached_encode(PromptType.query)
+            cached_document_embeddings = cached_encode(PromptType.document)
+        finally:
+            wrapped_model.close()
+
+        assert not np.array_equal(document_embeddings, query_embeddings)
+        np.testing.assert_allclose(cached_query_embeddings, query_embeddings)
+        np.testing.assert_allclose(cached_document_embeddings, document_embeddings)
+        assert model.call_count == 2
+
+    def test_cache_reused_by_new_wrapper(self, cache_dir: Path):
+        model = DummyModel("test_model", revision=None)
+        task_metadata = MockRetrievalTask().metadata
+        inputs = DataLoader(Dataset.from_dict({"text": ["first", "second"]}))
+
+        def encode_with_new_wrapper():
+            wrapped_model = CachedEmbeddingWrapper(model, cache_dir)
+            try:
+                return wrapped_model.encode(
+                    inputs,
+                    task_metadata=task_metadata,
+                    hf_subset="default",
+                    hf_split="test",
+                )
+            finally:
+                wrapped_model.close()
+
+        embeddings = encode_with_new_wrapper()
+        cached_embeddings = encode_with_new_wrapper()
+
+        np.testing.assert_allclose(cached_embeddings, embeddings)
+        assert model.call_count == 1
+
+
+@pytest.mark.parametrize("n_first", [1, 3])
+def test_numpy_cache_reload_and_grow(tmp_path: Path, n_first: int):
+    items = [{"text": f"item {i}"} for i in range(n_first + 3)]
+    vectors = np.random.default_rng(0).random((len(items), 4), dtype=np.float32)
+
+    def open_cache() -> NumpyCache:
+        cache = NumpyCache(tmp_path, initial_vectors=1)
+        cache.load()
+        return cache
+
+    cache = open_cache()  # empty directory
+    assert cache.get_vector(items[0]) is None
+    cache.add(items[:n_first], vectors[:n_first])
+    cache.save()
+    cache.close()
+
+    # reopen and add enough vectors to grow the file past its current size
+    cache = open_cache()
+    cache.add(items[n_first:], vectors[n_first:])
+    cache.save()
+    cache.close()
+
+    cache = open_cache()
+    try:
+        assert len(cache.hash_to_index) == len(items)
+        for item, vector in zip(items, vectors, strict=True):
+            np.testing.assert_array_equal(cache.get_vector(item), vector)
+    finally:
+        cache.close()
+
 
 @pytest.mark.parametrize(
-    "task, model",
+    ("task", "model"),
     [
         (
             MockMultiChoiceTask(),
@@ -268,5 +356,9 @@ class TestCachedEmbeddingWrapper:
 )
 def test_wrapper_mock_tasks(task: AbsTask, model: EncoderProtocol, tmp_path: Path):
     cached_model = CachedEmbeddingWrapper(model, tmp_path)
-    mteb.evaluate(cached_model, task, cache=None)
-    assert len(list((tmp_path / task.metadata.name).glob("*"))) == 3
+    try:
+        results = mteb.evaluate(cached_model, task, cache=None)
+    finally:
+        cached_model.close()
+
+    assert results[0].task_name == task.metadata.name

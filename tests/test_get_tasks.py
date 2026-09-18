@@ -137,7 +137,9 @@ def _normalize_title_for_comparison(title: str) -> str:
 def _get_duplicate_citations() -> list[tuple[str, str, str, str, str, str]]:
     """Same paper under different bibtex ids -> (task1, task2, id1, id2, raw_title_1, raw_title_2)."""
     by_title: dict[str, list[tuple[str, str, str]]] = defaultdict(list)
-    for task_cls in mteb.get_tasks():
+    for task_cls in mteb.get_tasks(
+        exclude_beta=False, exclude_superseded=False, exclude_private=False
+    ):
         if task_cls.metadata.bibtex_citation is None:
             continue
         for cid, title in _parse_bibtex_entries(task_cls.metadata.bibtex_citation):
@@ -159,7 +161,7 @@ def _get_duplicate_citations() -> list[tuple[str, str, str, str, str, str]]:
             by_title[norm].append((f"benchmark:{benchmark.name}", cid, title))
 
     duplicates = []
-    for norm_title, items in by_title.items():
+    for items in by_title.values():
         id_to_raw = {cid: raw for _, cid, raw in items}
         id_to_item = {cid: item for item, cid, raw in items}
         if len(id_to_raw) < 2:

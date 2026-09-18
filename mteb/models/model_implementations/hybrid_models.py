@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 import mteb
 from mteb.models.hybrid_wrappers import HybridSearch
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -12,7 +14,7 @@ from .e5_models import (
 from .facebookai import XLMR_LANGUAGES
 
 
-def hybrid_bm25s_e5_loader(model_name: str, **kwargs) -> HybridSearch:
+def hybrid_bm25s_e5_loader(model_name: str, **kwargs: Any) -> HybridSearch:
     bm25 = mteb.get_model("mteb/baseline-bm25s")
     dense = mteb.get_model("intfloat/multilingual-e5-small")
     return HybridSearch(
@@ -47,7 +49,7 @@ hybrid_bm25s_e5_rrf = ModelMeta(
 )
 
 
-def hybrid_bm25s_e5_dbsf_loader(model_name: str, **kwargs) -> HybridSearch:
+def hybrid_bm25s_e5_dbsf_loader(model_name: str, **kwargs: Any) -> HybridSearch:
     bm25 = mteb.get_model("mteb/baseline-bm25s")
     dense = mteb.get_model("intfloat/multilingual-e5-small")
     return HybridSearch(
@@ -82,7 +84,7 @@ hybrid_bm25s_e5_dbsf = ModelMeta(
 )
 
 
-def hybrid_bm25s_e5_rsf_loader(model_name: str, **kwargs) -> HybridSearch:
+def hybrid_bm25s_e5_rsf_loader(model_name: str, **kwargs: Any) -> HybridSearch:
     bm25 = mteb.get_model("mteb/baseline-bm25s")
     dense = mteb.get_model("intfloat/multilingual-e5-small")
     return HybridSearch(

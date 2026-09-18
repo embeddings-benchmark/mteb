@@ -149,6 +149,12 @@ class AbsTaskClustering(AbsTask):
     input_column_name: str | Sequence[Modalities] = "sentences"
     label_column_name: str = "labels"
 
+    def _get_content_columns(self) -> dict[str, Modalities]:
+        # a multimodal task names each of its input columns after the modality it holds
+        if isinstance(self.input_column_name, str):
+            return {self.input_column_name: self.modalities[0]}
+        return {column: column for column in self.input_column_name}
+
     def _evaluate_subset(
         self,
         model: MTEBModels,
@@ -384,7 +390,7 @@ def _convert_to_fast(
                     "The clusters are not sampled from the same distribution as they have different labels."
                 )
 
-            for l, s in zip(lab, sents):
+            for l, s in zip(lab, sents, strict=True):
                 if s not in sent_set:
                     labels.append(l)
                     sentences.append(s)

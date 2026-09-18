@@ -39,4 +39,3 @@ class Evaluator(ABC):
             encode_kwargs: kwargs to pass to the model's encode method
             num_proc: number of processes to use for data loading
         """
-        pass

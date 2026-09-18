@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Any
 
 import torch
 import torch.nn.functional as F
-from packaging.version import Version
 
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
@@ -19,8 +18,6 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-MODERN_BERT_TRANSFORMERS_MIN_VERSION = "4.48.0"
-
 
 class NomicWrapper(SentenceTransformerEncoderWrapper):
     """following the hf model card documentation."""
@@ -33,17 +30,7 @@ class NomicWrapper(SentenceTransformerEncoderWrapper):
         model_prompts: dict[str, str] | None = None,
         **kwargs: Any,
     ):
-        import transformers
-
         self.model_name = model_name
-        if model_name == "nomic-ai/modernbert-embed-base" and (
-            Version(transformers.__version__).release
-            < Version(MODERN_BERT_TRANSFORMERS_MIN_VERSION).release
-        ):
-            raise RuntimeError(
-                f"Current transformers version is {transformers.__version__} is lower than the required version"
-                f" {MODERN_BERT_TRANSFORMERS_MIN_VERSION}"
-            )
         super().__init__(
             model_name, revision, device=device, model_prompts=model_prompts, **kwargs
         )
@@ -341,6 +328,7 @@ nomic_modern_bert_embed = ModelMeta(
         model_prompts=model_prompts,
     ),
     name="nomic-ai/modernbert-embed-base",
+    extra_requirements_groups=["modernbert"],
     model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,

@@ -20,7 +20,7 @@ from mteb.cli.build_cli import (
 )
 
 
-def test_available_tasks(capsys):
+def test_available_tasks(capsys: pytest.CaptureFixture[str]):
     args = Namespace(
         categories=None,
         task_types=None,
@@ -35,7 +35,7 @@ def test_available_tasks(capsys):
     )
 
 
-def test_available_benchmarks(capsys):
+def test_available_benchmarks(capsys: pytest.CaptureFixture[str]):
     args = Namespace(benchmarks=None)
     _available_benchmarks(args=args)
 
@@ -54,7 +54,9 @@ run_task_fixures = [
 ]
 
 
-@pytest.mark.parametrize("model_name,task_name,model_revision", run_task_fixures)
+@pytest.mark.parametrize(
+    ("model_name", "task_name", "model_revision"), run_task_fixures
+)
 def test_run_task(
     model_name: str,
     task_name: str,
@@ -94,7 +96,7 @@ def test_run_task(
     )
 
 
-def test_create_meta(tmp_path):
+def test_create_meta(tmp_path: Path):
     """Test create_meta function directly as well as through the command line interface"""
     test_folder = Path(__file__).parent
     model_name = "sentence-transformers/all-MiniLM-L6-v2"
@@ -141,8 +143,27 @@ def test_create_meta(tmp_path):
     assert result.returncode == 0, "Command failed"
 
 
+def test_create_meta_uses_selected_benchmarks(tmp_path: Path):
+    """--benchmarks should only pass the named benchmarks to the model card"""
+    args = Namespace(
+        model_name="sentence-transformers/all-MiniLM-L6-v2",
+        results_folder=Path(__file__).parent / "create_meta",
+        output_path=tmp_path / "model_card.md",
+        overwrite=True,
+        from_existing=None,
+        tasks=None,
+        benchmarks=["MTEB(eng, v2)"],
+    )
+
+    with patch("mteb.cli.build_cli.generate_model_card") as mock_generate:
+        _create_meta(args)
+
+    benchmarks = mock_generate.call_args.kwargs["benchmarks"]
+    assert [b.name for b in benchmarks] == ["MTEB(eng, v2)"]
+
+
 @pytest.mark.parametrize(
-    "existing_readme_name, gold_readme_name",
+    ("existing_readme_name", "gold_readme_name"),
     [
         ("existing_readme.md", "model_card_gold_existing.md"),
         ("model_card_without_frontmatter.md", "model_card_gold_without_frontmatter.md"),
@@ -223,7 +244,7 @@ def test_leaderboard_help():
 
 
 @pytest.mark.parametrize(
-    "cache_path_input,host,port,share,test_description",
+    ("cache_path_input", "host", "port", "share", "test_description"),
     [
         ("custom", "localhost", 8080, True, "custom cache path"),
         (None, "127.0.0.1", 7860, False, "default cache path"),
@@ -313,7 +334,7 @@ def test_leaderboard_cli_integration():
     assert "leaderboard" in result.stdout, "Leaderboard command not found in main help"
 
 
-def test_mock_run_cli(tmp_path):
+def test_mock_run_cli(tmp_path: Path):
     """Test the mock-run subcommand."""
 
     args = Namespace(

@@ -17,7 +17,7 @@ class EightTagsClustering(AbsTaskClusteringLegacy):
     metadata = TaskMetadata(
         name="EightTagsClustering",
         description="Clustering of headlines from social media posts in Polish belonging to 8 categories: film, history, "
-        + "food, medicine, motorization, work, sport and technology.",
+        "food, medicine, motorization, work, sport and technology.",
         reference="https://aclanthology.org/2020.lrec-1.207.pdf",
         dataset={
             "path": "PL-MTEB/8tags-clustering",
@@ -78,7 +78,7 @@ class EightTagsClusteringFast(AbsTaskClustering):
     metadata = TaskMetadata(
         name="EightTagsClustering.v2",
         description="Clustering of headlines from social media posts in Polish belonging to 8 categories: film, history, "
-        + "food, medicine, motorization, work, sport and technology.",
+        "food, medicine, motorization, work, sport and technology.",
         reference="https://aclanthology.org/2020.lrec-1.207.pdf",
         dataset={
             "path": "PL-MTEB/8tags-clustering",
@@ -156,7 +156,7 @@ class PlscClusteringS2S(AbsTaskClustering):
     metadata = TaskMetadata(
         name="PlscClusteringS2S",
         description="Clustering of Polish article titles from Library of Science (https://bibliotekanauki.pl/), either "
-        + "on the scientific field or discipline.",
+        "on the scientific field or discipline.",
         reference="https://huggingface.co/datasets/rafalposwiata/plsc",
         dataset={
             "path": "PL-MTEB/plsc-clustering-s2s",
@@ -184,7 +184,7 @@ class PlscClusteringS2SFast(AbsTaskClustering):
     metadata = TaskMetadata(
         name="PlscClusteringS2S.v2",
         description="Clustering of Polish article titles from Library of Science (https://bibliotekanauki.pl/), either "
-        + "on the scientific field or discipline.",
+        "on the scientific field or discipline.",
         reference="https://huggingface.co/datasets/rafalposwiata/plsc",
         dataset={
             "path": "PL-MTEB/plsc-clustering-s2s",
@@ -241,7 +241,7 @@ class PlscClusteringP2P(AbsTaskClustering):
     metadata = TaskMetadata(
         name="PlscClusteringP2P",
         description="Clustering of Polish article titles+abstracts from Library of Science "
-        + "(https://bibliotekanauki.pl/), either on the scientific field or discipline.",
+        "(https://bibliotekanauki.pl/), either on the scientific field or discipline.",
         reference="https://huggingface.co/datasets/rafalposwiata/plsc",
         dataset={
             "path": "PL-MTEB/plsc-clustering-p2p",
@@ -269,7 +269,7 @@ class PlscClusteringP2PFast(AbsTaskClustering):
     metadata = TaskMetadata(
         name="PlscClusteringP2P.v2",
         description="Clustering of Polish article titles+abstracts from Library of Science "
-        + "(https://bibliotekanauki.pl/), either on the scientific field or discipline.",
+        "(https://bibliotekanauki.pl/), either on the scientific field or discipline.",
         reference="https://huggingface.co/datasets/rafalposwiata/plsc",
         dataset={
             "path": "mteb/PlscClusteringP2P.v2",

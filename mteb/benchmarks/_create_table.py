@@ -269,7 +269,7 @@ def _ensure_variant_id(pl_df: pl.DataFrame) -> pl.DataFrame:
     if "experiments" not in pl_df.columns:
         return pl_df.with_columns(pl.lit("").alias(_VARIANT_ID_COL))
 
-    def _ser(exp: Any) -> str:
+    def _ser(exp: Any) -> str:  # noqa: ANN401 -- polars map_elements passes raw struct/dict values
         if not exp:
             return ""
         if isinstance(exp, dict):
@@ -286,6 +286,105 @@ def _ensure_variant_id(pl_df: pl.DataFrame) -> pl.DataFrame:
     )
 
 
+def _scored(pl_df: pl.DataFrame) -> pl.DataFrame:
+    """Rows with an actual score, dropping null- and NaN-scored placeholders."""
+    return pl_df.filter(pl.col("score").is_not_null() & pl.col("score").is_not_nan())
+
+
+def _required_splits_per_task(pl_df: pl.DataFrame) -> pl.DataFrame:
+    """``(task_name, _required_splits)`` — count of distinct splits observed for each task."""
+    return (
+        pl_df.select("task_name", "split")
+        .unique()
+        .group_by("task_name")
+        .agg(pl.len().alias("_required_splits"))
+    )
+
+
+def _incomplete_task_pairs(pl_df: pl.DataFrame) -> pl.DataFrame:
+    """``(model_name, _variant_id, task_name)`` triples that skipped a (subset, split) combo.
+
+    Coverage is judged per variant, not pooled across a model's base run and
+    its experiment variants — those can evaluate different (subset, split)
+    combos, and pooling by ``model_name`` alone would let one variant's full
+    coverage mask another's partial coverage (or vice versa).
+    """
+    scored = _scored(_ensure_variant_id(pl_df))
+    n_subsets = (
+        scored.select("task_name", "subset")
+        .unique()
+        .group_by("task_name")
+        .agg(pl.len().alias("_n_subsets"))
+    )
+    required = n_subsets.join(
+        _required_splits_per_task(scored), on="task_name", how="left"
+    ).select(
+        "task_name",
+        (pl.col("_n_subsets") * pl.col("_required_splits")).alias("_required"),
+    )
+    have = (
+        scored.select("model_name", _VARIANT_ID_COL, "task_name", "subset", "split")
+        .unique()
+        .group_by(["model_name", _VARIANT_ID_COL, "task_name"])
+        .agg(pl.len().alias("_have"))
+    )
+    return (
+        have.join(required, on="task_name", how="left")
+        .filter(pl.col("_have") < pl.col("_required"))
+        .select("model_name", _VARIANT_ID_COL, "task_name")
+    )
+
+
+def _incomplete_subset_pairs(pl_df: pl.DataFrame) -> pl.DataFrame:
+    """``(model_name, _variant_id, task_name, subset)`` missing an observed split.
+
+    See :func:`_incomplete_task_pairs` for why coverage is judged per variant.
+    """
+    scored = _scored(_ensure_variant_id(pl_df))
+    have = (
+        scored.select("model_name", _VARIANT_ID_COL, "task_name", "subset", "split")
+        .unique()
+        .group_by(["model_name", _VARIANT_ID_COL, "task_name", "subset"])
+        .agg(pl.len().alias("_have"))
+    )
+    return (
+        have.join(_required_splits_per_task(scored), on="task_name", how="left")
+        .filter(pl.col("_have") < pl.col("_required_splits"))
+        .select("model_name", _VARIANT_ID_COL, "task_name", "subset")
+    )
+
+
+def _null_incomplete_scores(
+    long_df: pl.DataFrame, incomplete: pl.DataFrame, *, keys: Sequence[str]
+) -> pl.DataFrame:
+    """Null the ``score`` column for every row ``incomplete`` flags, joined on ``keys``.
+
+    ``incomplete`` is the output of :func:`_incomplete_task_pairs`
+    (``keys=("model_name", _VARIANT_ID_COL, "task_name")``) or
+    :func:`_incomplete_subset_pairs`
+    (``keys=("model_name", _VARIANT_ID_COL, "task_name", "subset")``). No-op
+    (returns ``long_df`` unchanged) when nothing is incomplete — the common
+    case for single-split tasks, which never appear in ``incomplete``.
+    """
+    if incomplete.is_empty():
+        return long_df
+    keys = list(keys)
+    return (
+        long_df.join(
+            incomplete.with_columns(pl.lit(True).alias("_incomplete")),
+            on=keys,
+            how="left",
+        )
+        .with_columns(
+            pl.when(pl.col("_incomplete").fill_null(False))
+            .then(None)
+            .otherwise(pl.col("score"))
+            .alias("score")
+        )
+        .drop("_incomplete")
+    )
+
+
 def _build_per_task_pivot(
     pl_df: pl.DataFrame,
 ) -> tuple[pl.DataFrame, list[str]] | None:
@@ -296,15 +395,23 @@ def _build_per_task_pivot(
     summary/per-task builder opens with this pattern — extracted so the four
     builders + per-task table builder don't duplicate the boilerplate. The
     pivot index is ``(model_name, _variant_id)`` so experiment variants stay
-    as distinct rows (see :func:`_ensure_variant_id`).
+    as distinct rows (see :func:`_ensure_variant_id`), and a task with partial
+    (subset, split) coverage for a given model/variant is nulled rather than
+    silently averaged over (see :func:`_null_incomplete_scores`).
     """
     if pl_df.is_empty() or "model_name" not in pl_df.columns:
         return None
     pl_df = _ensure_variant_id(pl_df)
-    per_task = (
-        pl_df.group_by(["model_name", _VARIANT_ID_COL, "task_name"])
-        .agg(pl.col("score").mean())
-        .pivot(on="task_name", index=["model_name", _VARIANT_ID_COL], values="score")
+    per_task_long = pl_df.group_by(["model_name", _VARIANT_ID_COL, "task_name"]).agg(
+        pl.col("score").mean()
+    )
+    per_task_long = _null_incomplete_scores(
+        per_task_long,
+        _incomplete_task_pairs(pl_df),
+        keys=("model_name", _VARIANT_ID_COL, "task_name"),
+    )
+    per_task = per_task_long.pivot(
+        on="task_name", index=["model_name", _VARIANT_ID_COL], values="score"
     )
     task_cols = [
         c for c in per_task.columns if c not in {"model_name", _VARIANT_ID_COL}
@@ -702,6 +809,11 @@ def _create_summary_table(  # noqa: PLR0914
     per_task_long = pl_df.group_by(["model_name", _VARIANT_ID_COL, "task_name"]).agg(
         *per_task_aggs
     )
+    per_task_long = _null_incomplete_scores(
+        per_task_long,
+        _incomplete_task_pairs(pl_df),
+        keys=("model_name", _VARIANT_ID_COL, "task_name"),
+    )
     per_task = per_task_long.pivot(
         on="task_name", index=["model_name", _VARIANT_ID_COL], values="score"
     )
@@ -749,8 +861,16 @@ def _create_summary_table(  # noqa: PLR0914
         per_subset_long = pl_df.group_by(
             ["model_name", _VARIANT_ID_COL, "task_name", "subset"]
         ).agg(pl.col("score").mean())
+        per_subset_long = _null_incomplete_scores(
+            per_subset_long,
+            _incomplete_subset_pairs(pl_df),
+            keys=("model_name", _VARIANT_ID_COL, "task_name", "subset"),
+        )
         subset_mean = per_subset_long.group_by(["model_name", _VARIANT_ID_COL]).agg(
-            pl.col("score").mean().alias(mean_subset_col)
+            pl.when(pl.col("score").is_null().any())
+            .then(None)
+            .otherwise(pl.col("score").mean())
+            .alias(mean_subset_col)
         )
         joint_table = joint_table.join(
             subset_mean, on=["model_name", _VARIANT_ID_COL], how="left"

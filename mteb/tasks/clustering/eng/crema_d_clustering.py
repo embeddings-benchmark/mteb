@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -47,7 +49,7 @@ voice expression},
     max_fraction_of_documents_to_embed = None
     input_column_name: str = "audio"
 
-    def dataset_transform(self, **kwargs):
+    def dataset_transform(self, **kwargs: Any):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["train"], label=self.label_column_name
         )

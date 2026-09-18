@@ -9,6 +9,12 @@ icon: lucide/zap
 !!! note
     vLLM currently supports only a limited number of models, and many implementations have subtle differences compared to the default implementations in mteb. For the full list of supported models, refer to the [vllm documentation](https://docs.vllm.ai/en/stable/models/supported_models/#pooling-models).
 
+MTEB provides wrappers for local vLLM usage:
+
+- **[VllmEncoderWrapper][mteb.models.vllm_wrapper.VllmEncoderWrapper] / [VllmCrossEncoderWrapper][mteb.models.vllm_wrapper.VllmCrossEncoderWrapper]**: Local in-process vLLM instantiation for maximum performance
+
+For HTTP-based access to OpenAI-compatible API servers (including vLLM, OpenAI, and others) — including multimodal (image/audio/video) embedding, reranking, and ColBERT-style token-level retrieval — see [OpenAI-Compatible APIs](openai_api_wrappers.md).
+
 
 ## Installation
 
@@ -25,6 +31,8 @@ If you're using cuda you can run
 For other architectures, please refer to the [vLLM installation guide](https://docs.vllm.ai/en/latest/getting_started/installation/).
 
 ## Usage
+
+### Local vLLM (VllmEncoderWrapper)
 
 To use vLLM with MTEB, you need to wrap the model with its corresponding wrapper class.
 
@@ -202,7 +210,12 @@ within the sequence.
 | [Scoring Usages](https://docs.vllm.ai/en/latest/models/pooling_models/scoring/)                     | Computes similarity scores between two inputs. It supports three model types (aka `score_type`): `cross-encoder`, `late-interaction`, and `bi-encoder`.                          |
 | Plugins Usages                                                                                      | Allow users to customize input and output processors. For more information, please refer to [IO Processor Plugins](https://docs.vllm.ai/en/latest/design/io_processor_plugins/). |
 
+!!! tip "HTTP access to Embedding / Token Embedding / Scoring usages"
+    MTEB's [OpenAI-Compatible APIs](openai_api_wrappers.md) page has ready-to-use wrappers for these three pooling usages served via a vLLM HTTP server: `OpenAIAPIEncodeWrapper` (Embedding), `OpenAIAPITokenEmbedWrapper` (Token Embedding / ColBERT-style), and `OpenAIAPIRerankWrapper` (Scoring). All three also support multimodal (image/audio/video) inputs.
+
 ## API Reference
+
+### Local vLLM Wrappers
 
 :::mteb.models.vllm_wrapper.VllmWrapperBase
 

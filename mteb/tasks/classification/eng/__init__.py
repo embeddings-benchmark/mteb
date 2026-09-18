@@ -59,6 +59,10 @@ from .breakfast_classification import BreakfastClassification
 from .caltech101_classification import Caltech101Classification
 from .cifar import CIFAR10Classification, CIFAR100Classification
 from .country211_classification import Country211Classification
+from .crisismmd import (
+    CrisisMMDHumanitarianClassification,
+    CrisisMMDInformativeClassification,
+)
 from .dbpedia_classification import DBpediaClassification, DBpediaClassificationV2
 from .dtd_classification import DTDClassification
 from .emotion_classification import EmotionClassification, EmotionClassificationV2
@@ -231,6 +235,11 @@ from .ravdess_av_classification import (
     RAVDESSVClassification,
 )
 from .resisc45_classification import RESISC45Classification
+from .scirepeval_biomimicry_classification import SciRepEvalBiomimicryClassification
+from .scirepeval_drsm_classification import SciRepEvalDRSMClassification
+from .scirepeval_mesh_descriptors_classification import (
+    SciRepEvalMeSHDescriptorsClassification,
+)
 from .sds_eye_protection_classification import (
     SDSEyeProtectionClassification,
     SDSEyeProtectionClassificationV2,
@@ -404,6 +413,8 @@ __all__ = [
     "ContractNLISurvivalOfObligationsLegalBenchClassification",
     "CorporateLobbyingLegalBenchClassification",
     "Country211Classification",
+    "CrisisMMDHumanitarianClassification",
+    "CrisisMMDInformativeClassification",
     "DBpediaClassification",
     "DBpediaClassificationV2",
     "DTDClassification",
@@ -526,6 +537,9 @@ __all__ = [
     "SDSGlovesClassificationV2",
     "STL10Classification",
     "SUN397Classification",
+    "SciRepEvalBiomimicryClassification",
+    "SciRepEvalDRSMClassification",
+    "SciRepEvalMeSHDescriptorsClassification",
     "SomethingSomethingV2Classification",
     "SpeechCommandsClassification",
     "SpokeNEnglishClassification",

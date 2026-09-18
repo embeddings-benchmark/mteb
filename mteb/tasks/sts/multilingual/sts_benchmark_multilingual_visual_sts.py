@@ -26,9 +26,9 @@ class STSBenchmarkMultilingualVisualSTS(AbsTaskSTS):
         },
         description=(
             "Semantic Textual Similarity Benchmark (STSbenchmark) dataset, "
-            + "translated into target languages using DeepL API,"
-            + "then rendered into images."
-            + "built upon multi-sts created by Philip May"
+            "translated into target languages using DeepL API,"
+            "then rendered into images."
+            "built upon multi-sts created by Philip May"
         ),
         reference="https://arxiv.org/abs/2402.08183/",
         type="VisualSTS(multi)",

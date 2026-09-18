@@ -140,7 +140,7 @@ class Model2VecModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """Wrapper for Model2Vec models.
 

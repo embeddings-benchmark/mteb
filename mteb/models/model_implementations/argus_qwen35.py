@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from transformers import AutoProcessor
 
@@ -8,6 +8,9 @@ from mteb.models.model_implementations.ops_colqwen3_models import (
     OpsColQwen3Wrapper,
 )
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+
+if TYPE_CHECKING:
+    import torch
 
 
 class ArgusColQwen35Wrapper(OpsColQwen3Wrapper):
@@ -43,7 +46,7 @@ class ArgusColQwen35Wrapper(OpsColQwen3Wrapper):
             max_num_visual_tokens=max_num_visual_tokens,
         )
 
-    def encode_input(self, inputs):
+    def encode_input(self, inputs: dict[str, Any]) -> torch.Tensor:
         # Argus returns ``ArgusOutput(embeddings=...)`` instead of a tensor.
         return self.mdl(**inputs).embeddings
 
