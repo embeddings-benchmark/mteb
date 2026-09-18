@@ -1,4 +1,5 @@
 from .afri_hate_classification import AfriHateClassification
+from .afri_mcqa_category_classification import AfriMCQACategoryClassification
 from .afri_senti_classification import AfriSentiClassification
 from .afri_senti_lang_classification import AfriSentiLangClassification
 from .amazon_counterfactual_classification import AmazonCounterfactualClassification
@@ -49,6 +50,7 @@ from .vox_populi_language_id import VoxPopuliLanguageID
 
 __all__ = [
     "AfriHateClassification",
+    "AfriMCQACategoryClassification",
     "AfriSentiClassification",
     "AfriSentiLangClassification",
     "AmazonCounterfactualClassification",
