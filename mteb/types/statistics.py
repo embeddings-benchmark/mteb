@@ -222,7 +222,8 @@ class RelevantDocsStatistics(TypedDict):
         num_missing_query_ids: Number of unique qrel query IDs absent from the loaded queries split.
         num_missing_corpus_ids: Number of unique qrel corpus/document IDs absent from the loaded corpus split.
         queries_with_all_gold_black_or_white: Number of queries whose every relevant document is
-            a pure black or white image, leaving the query with nothing retrievable.
+            a pure black or white image. A stronger signal for manual review than a stray
+            blank image in the corpus, since no other document is judged relevant.
     """
 
     num_relevant_docs: int

@@ -149,12 +149,12 @@ def count_queries_with_all_gold_black_or_white(
     black_or_white_doc_ids: Container[str],
 ) -> int:
     """Count queries whose positive judgments all reference pure black/white images."""
-    broken = 0
+    count = 0
     for docs in relevant_docs.values():
         gold = [doc_id for doc_id, score in docs.items() if score > 0]
         if gold and all(doc_id in black_or_white_doc_ids for doc_id in gold):
-            broken += 1
-    return broken
+            count += 1
+    return count
 
 
 def calculate_image_statistics(

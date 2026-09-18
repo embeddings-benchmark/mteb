@@ -980,7 +980,16 @@ _DURATION_OUTLIER_RATIO = 50
 _DIMENSION_OUTLIER_RATIO = 20
 
 # Outlier checks are reported as warnings, not failures
-_WARNING_CHECK_KINDS = {"long_text", "long_audio", "long_video", "large_video_frame"}
+_WARNING_CHECK_KINDS = {
+    "long_text",
+    "long_audio",
+    "long_video",
+    "large_video_frame",
+    # Diagnostic heuristics: a black/white image can be valid content, so these
+    # flag samples for manual review rather than fail the task.
+    "black_or_white_image",
+    "black_or_white_gold_documents",
+}
 
 assert not (set(KNOWN_ISSUES) & _WARNING_CHECK_KINDS), (
     "A warning-kind check must not appear in KNOWN_ISSUES (it can never fail "
@@ -1099,7 +1108,7 @@ def _image_field_quality(
         errors.append(
             (
                 f"black_or_white_image:{field}",
-                f"{name} ({split}) contains pure black/white images in {field} ({black_or_white_images=}).",
+                f"{name} ({split}) contains pure black/white images in {field} ({black_or_white_images=}), worth checking whether they are placeholders.",
             )
         )
 
@@ -1343,7 +1352,7 @@ def _relevant_docs_integrity_quality(
         errors.append(
             (
                 "black_or_white_gold_documents",
-                f"{name} ({split}) has queries whose every relevant document is a pure black/white image ({queries_with_all_gold_black_or_white=}).",
+                f"{name} ({split}) has queries whose every relevant document is a pure black/white image ({queries_with_all_gold_black_or_white=}), a stronger signal than stray blank images; review these queries first.",
             )
         )
 
@@ -1527,3 +1536,33 @@ def test_dataset_quality() -> None:
 
     if errors:
         raise AssertionError("\n".join([str(e) for e in errors]))
+
+
+def test_black_or_white_checks_are_warnings() -> None:
+    image_stats = cast(
+        "ImageStatistics",
+        {
+            "min_image_width": 64,
+            "min_image_height": 64,
+            "unique_images": 1,
+            "black_or_white_images": 1,
+        },
+    )
+    _, image_checks = _image_field_quality(
+        "task", "test", "documents_image_statistics", image_stats
+    )
+    split_stats = cast(
+        "SplitDescriptiveStatistics",
+        {
+            "relevant_docs_statistics": {
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
+                "queries_with_all_gold_black_or_white": 1,
+            }
+        },
+    )
+    qrel_checks = _relevant_docs_integrity_quality("task", "test", split_stats)
+
+    kinds = {check_id.split(":", 1)[0] for check_id, _ in image_checks + qrel_checks}
+    assert kinds == {"black_or_white_image", "black_or_white_gold_documents"}
+    assert kinds <= _WARNING_CHECK_KINDS
