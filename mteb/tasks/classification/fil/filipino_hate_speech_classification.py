@@ -28,11 +28,11 @@ class FilipinoHateSpeechClassification(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @article{cabasag2019hate,
-  title={Hate speech in philippine election-related tweets: Automatic detection and classification using natural language processing},
-  author={Cabasag, Neil Vicente and Chan, Vicente Raphael and Lim, Sean Christian and Gonzales, Mark Edward and Cheng, Charibeth},
-  journal={Philippine Computing Journal, XIV No},
-  volume={1},
-  year={2019}
+  author = {Cabasag, Neil Vicente and Chan, Vicente Raphael and Lim, Sean Christian and Gonzales, Mark Edward and Cheng, Charibeth},
+  journal = {Philippine Computing Journal, XIV No},
+  title = {Hate speech in philippine election-related tweets: Automatic detection and classification using natural language processing},
+  volume = {1},
+  year = {2019},
 }
 """,
         superseded_by="FilipinoHateSpeechClassification.v2",
@@ -63,11 +63,11 @@ class FilipinoHateSpeechClassificationV2(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @article{cabasag2019hate,
-  title={Hate speech in philippine election-related tweets: Automatic detection and classification using natural language processing},
-  author={Cabasag, Neil Vicente and Chan, Vicente Raphael and Lim, Sean Christian and Gonzales, Mark Edward and Cheng, Charibeth},
-  journal={Philippine Computing Journal, XIV No},
-  volume={1},
-  year={2019}
+  author = {Cabasag, Neil Vicente and Chan, Vicente Raphael and Lim, Sean Christian and Gonzales, Mark Edward and Cheng, Charibeth},
+  journal = {Philippine Computing Journal, XIV No},
+  title = {Hate speech in philippine election-related tweets: Automatic detection and classification using natural language processing},
+  volume = {1},
+  year = {2019},
 }
 """,
         adapted_from=["FilipinoHateSpeechClassification"],

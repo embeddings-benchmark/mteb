@@ -69,15 +69,5 @@ class MovieReviewSentimentClassificationV2(AbsTaskClassification):
         num_proc: int | None = None,
     ):
         self.dataset = self.stratified_subsampling(
-}
-""",
-        adapted_from=["MovieReviewSentimentClassification"],
-    )
-
-    def dataset_transform(
-        self,
-        num_proc: int | None = None,
-    ):
-        self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["validation", "test"]
         )

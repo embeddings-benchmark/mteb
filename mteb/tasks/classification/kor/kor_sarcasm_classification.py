@@ -24,7 +24,7 @@ class KorSarcasmClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""
+        bibtex_citation="",
         superseded_by="KorSarcasmClassification.v2",
     )
 

@@ -37,19 +37,19 @@ class MSVDV2TRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{chen-dolan-2011-collecting,
-    title = "Collecting Highly Parallel Data for Paraphrase Evaluation",
-    author = "Chen, David  and
-      Dolan, William",
-    editor = "Lin, Dekang  and
-      Matsumoto, Yuji  and
-      Mihalcea, Rada",
-    booktitle = "Proceedings of the 49th Annual Meeting of the Association for Computational Linguistics: Human Language Technologies",
-    month = jun,
-    year = "2011",
-    address = "Portland, Oregon, USA",
-    publisher = "Association for Computational Linguistics",
-    url = "https://aclanthology.org/P11-1020/",
-    pages = "190--200"
+  address = {Portland, Oregon, USA},
+  author = {Chen, David  and
+Dolan, William},
+  booktitle = {Proceedings of the 49th Annual Meeting of the Association for Computational Linguistics: Human Language Technologies},
+  editor = {Lin, Dekang  and
+Matsumoto, Yuji  and
+Mihalcea, Rada},
+  month = jun,
+  pages = {190--200},
+  publisher = {Association for Computational Linguistics},
+  title = {Collecting Highly Parallel Data for Paraphrase Evaluation},
+  url = {https://aclanthology.org/P11-1020/},
+  year = {2011},
 }
 """,
         prompt={
