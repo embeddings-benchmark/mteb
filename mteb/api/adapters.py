@@ -84,6 +84,35 @@ def model_meta_to_schema(
     return cached.model_copy(update={"zero_shot_pct": int(zero_shot_pct)})
 
 
+_RUN_OVERRIDE_FIELDS = ("model_type", "embed_dim", "output_dtypes")
+
+
+def run_model_meta_to_schema(
+    base_meta: ModelMeta,
+    run_meta: dict[str, Any],
+    *,
+    zero_shot_pct: int | None = None,
+) -> ModelMetaSchema:
+    """`ModelMetaSchema` for `base_meta`, patched with one *run's own* metadata.
+
+    Meant for experiment/ablation rows: an ablation can change how the model
+    actually behaves along a few specific axes (e.g. jinaai/jina-embeddings-v4's
+    `vector_type=multi_vector` experiment runs `late-interaction`, not the
+    base model's `dense`), while everything else — name, params, languages,
+    openness, ... — stays whatever's on the static MODEL_REGISTRY entry.
+    `run_meta` (see `benchmark_results.py::_build_pre_agg_df`'s `model_meta`
+    column) only ever carries `model_type` / `embed_dim` / `output_dtypes`
+    for exactly this reason, so patching is a plain `model_copy` — no need to
+    re-validate a full `ModelMeta` (and resolve `loader` back from its
+    serialized name) just to read three fields.
+    """
+    overrides = {
+        k: run_meta[k] for k in _RUN_OVERRIDE_FIELDS if run_meta.get(k) is not None
+    }
+    meta = base_meta.model_copy(update=overrides) if overrides else base_meta
+    return ModelMetaSchema.from_model_meta(meta, zero_shot_pct=zero_shot_pct)
+
+
 def menus_to_schemas(entries: Sequence[MenuEntry]) -> list[MenuEntrySchema]:
     """Convert mteb menu entries into API schemas."""
     return [MenuEntrySchema.from_menu_entry(e) for e in entries]
