@@ -27,11 +27,6 @@ logger = logging.getLogger(__name__)
 class CachedEmbeddingWrapper:
     """Wraps an encoder and caches embeddings for text, images, audio, and video.
 
-    When ``shared_cache=True`` all tasks share a single flat cache keyed only by
-    content hash, so items that appear in multiple tasks are encoded only once.
-    When ``shared_cache=False`` (the default) each task gets its own cache
-    sub-directory (original behaviour).
-
     Examples:
         >>> import mteb
         >>> from mteb.models.cache_wrappers import CachedEmbeddingWrapper
@@ -48,8 +43,6 @@ class CachedEmbeddingWrapper:
         model: EncoderProtocol,
         cache_path: str | Path,
         cache_backend: type[CacheBackendProtocol] = NumpyCache,
-        *,
-        shared_cache: bool = False,
     ) -> None:
         """Init
 
@@ -57,9 +50,6 @@ class CachedEmbeddingWrapper:
             model: Model to be wrapped.
             cache_path: Path to the directory where cached embeddings are stored.
             cache_backend: Cache backend class to use for storing embeddings.
-            shared_cache: If True, use a single flat cache shared across all tasks
-                so that items appearing in multiple tasks are encoded only once.
-                Useful when several tasks share the same video/audio corpus.
         """
         self._model = model
         self.cache_path = Path(cache_path)
@@ -67,8 +57,7 @@ class CachedEmbeddingWrapper:
         if not hasattr(model, "encode"):
             raise ValueError("Model must have an 'encode' method.")
         self.cache_backend = cache_backend
-        self.shared_cache = shared_cache
-        self.cache_dict: dict[str | tuple[str, PromptType | None], CacheBackendProtocol] = {}
+        self.cache_dict: dict[tuple[str, PromptType | None], CacheBackendProtocol] = {}
         logger.info("Initialized CachedEmbeddingWrapper")
 
     @property
@@ -168,8 +157,6 @@ class CachedEmbeddingWrapper:
     ) -> CacheBackendProtocol:
         """Get or create cache for a specific task and prompt type.
 
-        When ``shared_cache=True`` all tasks share one cache under ``_shared/``.
-
         Args:
             task_name: Name of the task
             prompt_type: Prompt role used to encode the inputs
@@ -177,17 +164,11 @@ class CachedEmbeddingWrapper:
         Returns:
             Cache backend instance for the task
         """
-        if self.shared_cache:
-            cache_key: str | tuple[str, PromptType | None] = "_shared"
-        else:
-            cache_key = (task_name, prompt_type)
+        cache_key = (task_name, prompt_type)
         if cache_key not in self.cache_dict:
-            if self.shared_cache:
-                cache_path = self.cache_path / "_shared"
-            else:
-                cache_path = self.cache_path / task_name
-                if prompt_type is not None:
-                    cache_path /= prompt_type.value
+            cache_path = self.cache_path / task_name
+            if prompt_type is not None:
+                cache_path /= prompt_type.value
             cache = self.cache_backend(cache_path)
             cache.load()
             self.cache_dict[cache_key] = cache

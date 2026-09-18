@@ -1,7 +1,7 @@
 """Per-sample content hashes, used to tell whether two samples hold the same content.
 
-Shared by the descriptive statistics and by the filters in `mteb.data_cleaning`, so that both agree on what makes two
-images, audio clips or videos identical.
+Shared by the descriptive statistics, the filters in `mteb.data_cleaning`, and the
+cross-task embedding cache in `mteb.models.cache_wrappers`.
 """
 
 from __future__ import annotations
@@ -10,6 +10,7 @@ import hashlib
 from concurrent.futures import ThreadPoolExecutor
 from typing import TYPE_CHECKING, Any
 
+import torch
 from tqdm.auto import tqdm
 
 if TYPE_CHECKING:
@@ -20,73 +21,105 @@ if TYPE_CHECKING:
     from mteb.types._encoder_io import AudioInputItem
 
 
+def _sha256_digest(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+
+def hash_image(image: Image.Image) -> str:
+    """Content hash for a single image, from its raw pixel bytes."""
+    return _sha256_digest(image.tobytes())
+
+
+def hash_audio(audio: AudioInputItem) -> str:
+    """Content hash for a single audio clip (raw samples + sampling rate).
+
+    The sampling rate is mixed into the hash because it changes how the raw
+    samples are interpreted (duration/pitch); identical sample bytes at a
+    different declared sampling rate are a different clip.
+    """
+    array = audio["array"]
+    sampling_rate = audio["sampling_rate"]
+    return _sha256_digest(array.tobytes() + str(sampling_rate).encode())
+
+
+def hash_video(video: VideoDecoder) -> str:
+    """Content hash for a single video.
+
+    Samples roughly one frame per second.
+    """
+    meta = video.metadata
+    # Some containers over-count num_frames by one; the final claimed
+    # frame often fails to decode.
+    num_frames = meta.num_frames - 1 if meta.num_frames else meta.num_frames
+    avg_fps = meta.average_fps
+    if not num_frames:
+        raise ValueError(f"num_frames is {num_frames}")
+
+    if avg_fps is not None and avg_fps > 0:
+        step = max(1, round(avg_fps))
+        frame_indices = list(range(0, num_frames, step))
+    else:
+        frame_indices = [0]
+
+    frame_tensor = video.get_frames_at(frame_indices).data
+    if isinstance(frame_tensor, torch.Tensor):
+        frame_bytes = frame_tensor.cpu().numpy().tobytes()
+    else:
+        frame_bytes = frame_tensor.tobytes()
+
+    return _sha256_digest(frame_bytes)
+
+
 def compute_text_hashes(texts: list[str], max_workers: int | None = None) -> list[str]:
     """Return a hash per text — for text, the string itself is the identity key."""
-    return texts
+    return list(tqdm(texts, desc="Computing text hashes"))
 
 
 def compute_image_hashes(
     images: list[Image.Image], max_workers: int | None = None
 ) -> list[str]:
-    """Return a per-image MD5 hash of the raw pixel bytes."""
-
-    def _hash_one(img: Image.Image) -> str:
-        return hashlib.md5(img.tobytes(), usedforsecurity=False).hexdigest()
-
+    """Return a per-image content hash."""
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        return list(executor.map(_hash_one, images))
+        return list(
+            tqdm(
+                executor.map(hash_image, images),
+                total=len(images),
+                desc="Computing image hashes",
+            )
+        )
 
 
 def compute_audio_hashes(
     audios: list[AudioInputItem], max_workers: int | None = None
 ) -> list[str]:
-    """Return a per-audio MD5 hash of the raw sample array bytes."""
-
-    def _hash_one(audio: AudioInputItem) -> str:
-        return hashlib.md5(audio["array"].tobytes(), usedforsecurity=False).hexdigest()
-
+    """Return a per-audio content hash."""
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        return list(executor.map(_hash_one, audios))
+        return list(
+            tqdm(
+                executor.map(hash_audio, audios),
+                total=len(audios),
+                desc="Computing audio hashes",
+            )
+        )
 
 
 def compute_video_hashes(
     videos: list[VideoDecoder], max_workers: int | None = None
 ) -> list[str]:
-    """Return a per-video MD5 hash derived from the first decoded frame.
+    """Return a per-video content hash.
 
     Decoding a frame is the most expensive part of video statistics; this function
     is extracted so callers can pass the resulting list to ``calculate_video_statistics``
     and avoid repeating the decode.
     """
-
-    def _hash_one(video: VideoDecoder) -> str:
-        meta = video.metadata
-        # Drop the last frame index because some container metadata over-counts
-        # by one (the final claimed frame fails to decode).
-        num_frames = meta.num_frames - 1 if meta.num_frames else meta.num_frames
-        avg_fps = meta.average_fps
-
-        if num_frames is None or num_frames == 0:
-            raise ValueError(f"Number of frames is {num_frames}")
-
-        if num_frames is not None and avg_fps is not None and avg_fps > 0:
-            step = max(1, round(avg_fps))
-            frame_indices = list(range(0, num_frames, step))
-        else:
-            frame_indices = [0]
-
-        frames = video.get_frames_at(frame_indices).data
-        return hashlib.md5(frames.numpy().tobytes(), usedforsecurity=False).hexdigest()
-
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        futures = list(
+        return list(
             tqdm(
-                executor.map(_hash_one, videos),
+                executor.map(hash_video, videos),
                 total=len(videos),
                 desc="Computing video hashes",
             )
         )
-    return futures
 
 
 MODALITY_HASH_FNS: dict[str, Any] = {
@@ -112,3 +145,29 @@ def compute_modality_hashes(
         mod: MODALITY_HASH_FNS[mod](values, max_workers=max_workers)
         for mod, values in col_inputs.items()
     }
+
+
+def hash_item(item: dict[str, Any]) -> str:
+    """Compute a deterministic content hash for a multi-modality item.
+
+    Used by the cross-task embedding cache (`mteb.models.cache_wrappers`) to
+    derive a cache key for an item that may carry 'text', 'image', 'audio',
+    and/or 'video' data.
+    """
+    item_hash = ""
+    if "text" in item:
+        item_hash = _sha256_digest(item["text"].encode())
+
+    if "image" in item:
+        item_hash += hash_image(item["image"])
+
+    if "audio" in item:
+        item_hash += hash_audio(item["audio"])
+
+    if "video" in item:
+        item_hash += hash_video(item["video"])
+
+    if len(item_hash) == 0:
+        raise TypeError(f"Unsupported cache key type: {type(item)}")
+
+    return item_hash

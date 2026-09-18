@@ -15,6 +15,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.mocks.mock_tasks import (
     MockMultiChoiceTask,
     MockRetrievalTask,
+    MockVideoAudioTextRetrievalVAT2T,
 )
 from mteb.models.cache_wrappers.cache_backend_protocol import CacheBackendProtocol
 from mteb.models.cache_wrappers.cache_backends.faiss_cache import FaissCache
@@ -364,98 +365,29 @@ def test_wrapper_mock_tasks(task: AbsTask, model: EncoderProtocol, tmp_path: Pat
     assert results[0].task_name == task.metadata.name
 
 
-class TestSharedCache:
-    """Tests for cross-task shared cache (shared_cache=True)."""
+def test_wrapper_caches_multimodal_items(tmp_path: Path):
+    """Items combining text, audio, and video together are cached and reused.
 
-    @pytest.fixture
-    def cache_dir(self, tmp_path: Path):
-        cache_path = tmp_path / "shared_cache"
-        yield cache_path
-        if cache_path.exists():
-            import shutil
+    Exercises `hash_item` combining all three modalities into one cache key
+    (`MockVideoAudioTextRetrievalVAT2T` queries carry video+audio+text on the
+    same row), not just single-modality items.
+    """
+    task = MockVideoAudioTextRetrievalVAT2T()
+    try:
+        task.load_data()
+    except ImportError as error:
+        pytest.skip(f"modality dependencies are not installed: {error}")
 
-            shutil.rmtree(cache_path)
+    dummy_model = DummyModel("multimodal_test_model", revision=None)
+    wrapped_model = CachedEmbeddingWrapper(dummy_model, tmp_path)
+    try:
+        mteb.evaluate(wrapped_model, task, cache=None)
+        first_run_call_count = dummy_model.call_count
+        assert first_run_call_count > 0
 
-    def test_shared_cache_encodes_once_across_tasks(self, cache_dir: Path):
-        """Same text in two tasks should be encoded only once with shared_cache=True."""
-        dummy_model = DummyModel("shared_test_model", revision=None)
-        meta_a = TaskMetadata(
-            name="SharedTaskA",
-            description="",
-            dataset={"path": "test", "revision": "test"},
-            type="Classification",
-            eval_langs=["eng-Latn"],
-            main_score="accuracy",
-        )
-        meta_b = meta_a.model_copy()
-        meta_b.name = "SharedTaskB"
-
-        shared_text = "This sentence appears in both tasks."
-        data_a = DataLoader(Dataset.from_dict({"text": [shared_text]}))
-        data_b = DataLoader(Dataset.from_dict({"text": [shared_text, "Extra sentence only in B."]}))
-
-        wrapped = CachedEmbeddingWrapper(dummy_model, cache_dir, shared_cache=True)
-
-        emb_a = wrapped.encode(data_a, task_metadata=meta_a, hf_subset="test", hf_split="test")
-        assert dummy_model.call_count == 1
-
-        # Encoding task B: shared_text is already cached; only the extra sentence triggers a model call
-        emb_b = wrapped.encode(data_b, task_metadata=meta_b, hf_subset="test", hf_split="test")
-        assert dummy_model.call_count == 2  # one new encode call for the partial miss
-
-        # The shared sentence embedding from A and from B must match
-        np.testing.assert_allclose(emb_a[0], emb_b[0])
-        wrapped.close()
-
-    def test_shared_cache_uses_flat_directory(self, cache_dir: Path):
-        """With shared_cache=True, cache files are under _shared/, not per-task dirs."""
-        dummy_model = DummyModel("flat_dir_model", revision=None)
-        meta = TaskMetadata(
-            name="FlatDirTask",
-            description="",
-            dataset={"path": "test", "revision": "test"},
-            type="Classification",
-            eval_langs=["eng-Latn"],
-            main_score="accuracy",
-        )
-        data = DataLoader(Dataset.from_dict({"text": ["hello world"]}))
-        wrapped = CachedEmbeddingWrapper(dummy_model, cache_dir, shared_cache=True)
-        wrapped.encode(data, task_metadata=meta, hf_subset="test", hf_split="test")
-
-        assert (cache_dir / "_shared" / "vectors.npy").exists()
-        assert not (cache_dir / "FlatDirTask").exists()
-        wrapped.close()
-
-
-class TestHashItem:
-    """Tests for _hash_item covering all supported modalities."""
-
-    def test_hash_audio(self):
-        import numpy as np
-
-        from mteb.models.cache_wrappers.cache_backends._hash_utils import _hash_item
-
-        audio_array = np.zeros(16000, dtype=np.float32)
-        item = {"audio": {"array": audio_array, "sampling_rate": 16000}}
-        h = _hash_item(item)
-        assert isinstance(h, str) and len(h) > 0
-
-        # Different sampling rate → different hash
-        item2 = {"audio": {"array": audio_array, "sampling_rate": 8000}}
-        assert _hash_item(item2) != h
-
-    def test_hash_audio_different_content(self):
-        import numpy as np
-
-        from mteb.models.cache_wrappers.cache_backends._hash_utils import _hash_item
-
-        rng = np.random.default_rng(0)
-        a1 = {"audio": {"array": rng.uniform(-1, 1, 16000).astype(np.float32), "sampling_rate": 16000}}
-        a2 = {"audio": {"array": rng.uniform(-1, 1, 16000).astype(np.float32), "sampling_rate": 16000}}
-        assert _hash_item(a1) != _hash_item(a2)
-
-    def test_hash_unsupported_raises(self):
-        from mteb.models.cache_wrappers.cache_backends._hash_utils import _hash_item
-
-        with pytest.raises(TypeError):
-            _hash_item({"unknown_key": "value"})
+        # Every item was cached on the first run, so re-evaluating the same
+        # task must not trigger any further encode() calls.
+        mteb.evaluate(wrapped_model, task, cache=None)
+        assert dummy_model.call_count == first_run_call_count
+    finally:
+        wrapped_model.close()
