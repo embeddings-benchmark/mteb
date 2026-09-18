@@ -36,11 +36,20 @@ class MSVDT2VRetrieval(AbsTaskRetrieval):
         modalities=["text", "video"],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{microsoft2011msvd,
-  author = {{Microsoft Research}},
-  title = {Microsoft Research Video Description Corpus},
-  url = {https://www.microsoft.com/en-us/research/publication/microsoft-research-video-description-corpus/},
-  year = {2011},
+@inproceedings{chen-dolan-2011-collecting,
+    title = "Collecting Highly Parallel Data for Paraphrase Evaluation",
+    author = "Chen, David  and
+      Dolan, William",
+    editor = "Lin, Dekang  and
+      Matsumoto, Yuji  and
+      Mihalcea, Rada",
+    booktitle = "Proceedings of the 49th Annual Meeting of the Association for Computational Linguistics: Human Language Technologies",
+    month = jun,
+    year = "2011",
+    address = "Portland, Oregon, USA",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/P11-1020/",
+    pages = "190--200"
 }
 """,
         prompt={

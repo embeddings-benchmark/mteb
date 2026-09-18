@@ -30,12 +30,15 @@ class MNISTZeroShotClassification(AbsTaskZeroShotClassification):
         modalities=["image", "text"],
         sample_creation="created",
         bibtex_citation=r"""
-@article{lecun2010mnist,
-  author = {LeCun, Yann and Cortes, Corinna and Burges, CJ},
-  journal = {ATT Labs [Online]. Available: http://yann.lecun.com/exdb/mnist},
-  title = {MNIST handwritten digit database},
-  volume = {2},
-  year = {2010},
+@article{lecun1998gradient,
+  title={Gradient-based learning applied to document recognition},
+  author={LeCun, Yann and Bottou, L{\'e}on and Bengio, Yoshua and Haffner, Patrick},
+  journal={Proceedings of the IEEE},
+  volume={86},
+  number={11},
+  pages={2278--2324},
+  year={1998},
+  publisher={Ieee}
 }
 """,
     )
