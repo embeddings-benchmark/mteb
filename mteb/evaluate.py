@@ -16,7 +16,7 @@ from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.benchmarks.benchmark import Benchmark
 from mteb.cache import ResultCache
-from mteb.models.model_meta import ModelMeta
+from mteb.models.model_meta import ModelMeta, _merge_precision_into_experiment_kwargs
 from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
@@ -24,7 +24,7 @@ from mteb.models.sentence_transformer_wrapper import (
 from mteb.results import ModelResult, TaskResult
 from mteb.results.task_result import TaskError
 from mteb.timing import TimingStack
-from mteb.types import OutputDType, PromptType
+from mteb.types import PromptType
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -107,14 +107,16 @@ def _apply_precision_to_meta(meta: ModelMeta, encode_kwargs: EncodeKwargs) -> Mo
     if precision is None:
         return meta
 
-    output_dtype = OutputDType.from_str(precision)
-    experiment_kwargs = dict(meta.experiment_kwargs) if meta.experiment_kwargs else {}
-    if experiment_kwargs.get("output_dtypes") == output_dtype.value:
+    experiment_kwargs = _merge_precision_into_experiment_kwargs(
+        meta.experiment_kwargs, encode_kwargs
+    )
+    if experiment_kwargs.get("output_dtypes") == (meta.experiment_kwargs or {}).get(
+        "output_dtypes"
+    ):
         return meta
 
-    experiment_kwargs["output_dtypes"] = output_dtype.value
     logger.warning(
-        f"The 'precision' argument passed in encode_kwargs is setting output_dtypes to {output_dtype.value}."
+        f"The 'precision' argument passed in encode_kwargs is setting output_dtypes to {experiment_kwargs['output_dtypes']}."
     )
     return meta.model_copy(update={"experiment_kwargs": experiment_kwargs}, deep=True)
 
@@ -460,7 +462,7 @@ def _check_cache(
     return existing_results, missing_eval
 
 
-def evaluate(  # noqa: PLR0913, PLR0914
+def evaluate(  # noqa: PLR0913
     model: ModelMeta | MTEBModels | SentenceTransformer | CrossEncoder,
     tasks: AbsTask | Iterable[AbsTask],
     *,
@@ -540,6 +542,44 @@ def evaluate(  # noqa: PLR0913, PLR0914
     _check_model_modalities(meta, tasks)
     overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
 
+    return _evaluate_resolved(
+        model,
+        meta,
+        model_name,
+        model_revision,
+        tasks,
+        co2_tracker=co2_tracker,
+        raise_error=raise_error,
+        encode_kwargs=encode_kwargs,
+        cache=cache,
+        overwrite_strategy=overwrite_strategy,
+        prediction_folder=prediction_folder,
+        show_progress_bar=show_progress_bar,
+        public_only=public_only,
+        num_proc=num_proc,
+        timer=timer,
+    )
+
+
+def _evaluate_resolved(  # noqa: PLR0913
+    model: MTEBModels | ModelMeta,
+    meta: ModelMeta,
+    model_name: ModelName,
+    model_revision: Revision,
+    tasks: AbsTask | Iterable[AbsTask],
+    *,
+    co2_tracker: bool | None,
+    raise_error: bool,
+    encode_kwargs: EncodeKwargs,
+    cache: ResultCache | None,
+    overwrite_strategy: OverwriteStrategy,
+    prediction_folder: Path | None,
+    show_progress_bar: bool,
+    public_only: bool | None,
+    num_proc: int | None,
+    timer: TimingStack | None,
+) -> ModelResult:
+    """Recursive core of `evaluate`, run against an already-sanitized model/meta."""
     # AbsTaskAggregate is a special case where we have to run multiple tasks and combine the results
     if isinstance(tasks, AbsTaskAggregate):
         existing_results, missing_eval = _check_cache(
@@ -560,8 +600,11 @@ def evaluate(  # noqa: PLR0913, PLR0914
                 task_results=[existing_results],
             )
 
-        results = evaluate(
+        results = _evaluate_resolved(
             model,
+            meta,
+            model_name,
+            model_revision,
             tasks.metadata.tasks,
             co2_tracker=co2_tracker,
             raise_error=raise_error,
@@ -605,8 +648,11 @@ def evaluate(  # noqa: PLR0913, PLR0914
         )
         for task in tasks_tqdm:
             tasks_tqdm.set_description(f"Evaluating task {task.metadata.name}")
-            _res = evaluate(
+            _res = _evaluate_resolved(
                 model,
+                meta,
+                model_name,
+                model_revision,
                 task,
                 co2_tracker=co2_tracker,
                 raise_error=raise_error,

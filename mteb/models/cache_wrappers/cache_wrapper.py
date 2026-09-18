@@ -9,8 +9,10 @@ from datasets import Dataset
 
 from mteb._create_dataloaders import create_dataloader
 from mteb.models.cache_wrappers.cache_backends.numpy_cache import NumpyCache
-from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
-from mteb.types import OutputDType
+from mteb.models.model_meta import (
+    _merge_precision_into_experiment_kwargs,
+    _serialize_experiment_kwargs_to_name,
+)
 
 _EXPERIMENTS_FOLDER_NAME = "experiments"
 
@@ -61,7 +63,9 @@ class CachedEmbeddingWrapper:
         if not hasattr(model, "encode"):
             raise ValueError("Model must have an 'encode' method.")
         self.cache_backend = cache_backend
-        self.cache_dict: dict[tuple[str, PromptType | None], CacheBackendProtocol] = {}
+        self.cache_dict: dict[
+            tuple[str, PromptType | None, str | None], CacheBackendProtocol
+        ] = {}
         logger.info("Initialized CachedEmbeddingWrapper")
 
     @property
@@ -165,14 +169,10 @@ class CachedEmbeddingWrapper:
         parameters carried on the wrapped model's ``experiment_kwargs`` and a
         ``precision`` encode kwarg are taken into account.
         """
-        experiment_kwargs: dict[str, Any] = {}
         meta = self.mteb_model_meta
-        if meta is not None and meta.experiment_kwargs:
-            experiment_kwargs.update(meta.experiment_kwargs)
-
-        precision = encode_kwargs.get("precision")
-        if precision is not None:
-            experiment_kwargs["output_dtypes"] = OutputDType.from_str(precision).value
+        experiment_kwargs = _merge_precision_into_experiment_kwargs(
+            meta.experiment_kwargs if meta is not None else None, encode_kwargs
+        )
 
         return _serialize_experiment_kwargs_to_name(experiment_kwargs or None)
 
