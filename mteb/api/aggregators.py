@@ -86,6 +86,7 @@ def _empty_summary(
         tasks_meta=tasks_meta,
         rows=[],
         aggregations=bench_schema.aggregations,
+        custom_groupings=bench_schema.custom_groupings,
         show_zero_shot=bench_schema.show_zero_shot,
     )
 
@@ -246,11 +247,7 @@ async def build_benchmark_summary(  # noqa: PLR0914
     )
 
     custom_group_task_to_label: dict[str, dict[str, str]] = (
-        {
-            dim: g.task_to_label
-            for dim, g in declared_by_dim.items()
-            if not g.has_scoped_refs
-        }
+        {dim: g.task_to_label for dim, g in declared_by_dim.items()}
         if language_filtered
         else {}
     )
@@ -355,10 +352,9 @@ def _build_summary_rows(
 
         scores_by_custom_group = {
             dim: {
-                label: v
+                col.removeprefix(f"{_CUSTOM_GROUP_COL_PREFIX}{dim}::"): v
                 for col in cols
-                if (label := col.removeprefix(f"{_CUSTOM_GROUP_COL_PREFIX}{dim}::"))
-                and (v := row[col]) is not None
+                if (v := row[col]) is not None
             }
             for dim, cols in custom_group_cols_by_dim.items()
         }

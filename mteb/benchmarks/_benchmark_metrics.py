@@ -195,6 +195,18 @@ def _compute_custom_group_means(
     group with no scored entries gets `0.0`.
     """
     by_name = {tr.task.metadata.name: tr for tr in task_results}
+    return _custom_group_means_from_map(by_name, grouping)
+
+
+def _custom_group_means_from_map(
+    by_name: dict[str, TaskResult], grouping: CustomGrouping
+) -> dict[str, float | None]:
+    """Same as [_compute_custom_group_means][] but takes a pre-built ``by_name`` map.
+
+    Lets a caller scoring multiple `CustomGrouping` dimensions for the same
+    `TaskResult`s build the ``{task_name: TaskResult}`` map once and reuse it,
+    instead of rebuilding it on every dimension.
+    """
     has_null = False
     per_group_scores: dict[str, list[float]] = {}
     for group in grouping.groups:

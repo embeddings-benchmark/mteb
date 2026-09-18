@@ -904,9 +904,19 @@ def _create_summary_table(  # noqa: PLR0914
 
     type_exprs, type_cols = _get_means_per_types(task_cols)
 
+    scoped_task_names = {
+        task_ref.metadata.name
+        for grouping in custom_groupings
+        if grouping.has_scoped_refs
+        for group in grouping.groups
+        for task_ref in group.tasks
+        if not _is_whole_task_ref(task_ref)
+    }
     scope_pivot = (
-        _build_per_scope_pivot(pl_df)
-        if any(g.has_scoped_refs for g in custom_groupings)
+        _build_per_scope_pivot(
+            pl_df.filter(pl.col("task_name").is_in(scoped_task_names))
+        )
+        if scoped_task_names
         else None
     )
 

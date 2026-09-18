@@ -19,7 +19,7 @@ from mteb._hf_integration.eval_model import HFEvalMeta, HFEvalTaskConfig
 from mteb._hf_integration.hf_hub_utils import _get_file_on_hub
 from mteb.abstasks.abstask import AbsTask
 from mteb.benchmarks._benchmark_metrics import (
-    _compute_custom_group_means,
+    _custom_group_means_from_map,
     _is_whole_task_ref,
 )
 from mteb.types import StrURL
@@ -95,6 +95,10 @@ class CustomGrouping:
         task_to_label: dict[str, str] = {}
         has_scoped_refs = False
         for g in self.groups:
+            if not g.label:
+                raise ValueError(f"group label must not be empty in {self.name!r}")
+            if not g.tasks:
+                raise ValueError(f"group {g.label!r} in {self.name!r} has no tasks")
             if "::" in g.label:
                 raise ValueError(f"group label must not contain '::': {g.label!r}")
             if g.label in seen_labels:
@@ -333,6 +337,18 @@ class Benchmark:
     # Name of the 1-indexed rank column added when ``summary_sort_column`` is
     # set. ``None`` falls back to ``"Rank"`` (Borda stays as a trailing col).
     summary_rank_column: ClassVar[str | None] = None
+
+    def __post_init__(self) -> None:
+        seen_names: set[str] = set()
+        for aggregation in self.aggregations:
+            if not isinstance(aggregation, CustomGrouping):
+                continue
+            if aggregation.name in seen_names:
+                raise ValueError(
+                    f"Duplicate CustomGrouping.name detected: {aggregation.name!r}. "
+                    "Custom grouping names must be unique within a benchmark."
+                )
+            seen_names.add(aggregation.name)
 
     @property
     def display_on_leaderboard(self) -> bool:
@@ -618,10 +634,13 @@ class Benchmark:
                 "Some scores of benchmark are missing. Please, run model on full benchmark tasks"
             )
 
+        by_name: dict[str, TaskResult] | None = None
         scores: dict[str, float | None] = {}
         for aggregation in self.aggregations:
             if isinstance(aggregation, CustomGrouping):
-                scores.update(_compute_custom_group_means(filtered, aggregation))
+                if by_name is None:
+                    by_name = {tr.task.metadata.name: tr for tr in filtered}
+                scores.update(_custom_group_means_from_map(by_name, aggregation))
             else:
                 scores.update(aggregation.aggregate(filtered))
         return scores
