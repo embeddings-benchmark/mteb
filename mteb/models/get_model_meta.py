@@ -5,7 +5,7 @@ import logging
 import warnings
 from typing import TYPE_CHECKING, Any
 
-from mteb.languages import check_language_code
+from mteb.languages import LanguageScripts, check_language_code
 from mteb.models import (
     ModelMeta,
 )
@@ -70,11 +70,12 @@ def get_model_metas(  # noqa: PLR0913, PLR0917
     for model_meta in model_metas:
         if (model_names is not None) and (model_meta.name not in model_names):
             continue
-        if languages is not None and (
-            (model_meta.languages is None)
-            or not _supports_languages(model_meta.languages, languages)
-        ):
-            continue
+        if languages is not None:
+            if model_meta.languages is None:
+                continue
+            supported = LanguageScripts.from_languages_and_scripts(model_meta.languages)
+            if not languages.issubset(supported.languages | supported.language_scripts):
+                continue
         if (open_weights is not None) and (model_meta.open_weights != open_weights):
             continue
         if (frameworks is not None) and not (frameworks <= set(model_meta.framework)):
@@ -110,14 +111,6 @@ def get_model_metas(  # noqa: PLR0913, PLR0917
             continue
         res.append(model_meta)
     return res
-
-
-def _supports_languages(model_languages: list[str], languages: set[str]) -> bool:
-    iso_codes = {code.split("-", maxsplit=1)[0] for code in model_languages}
-    return all(
-        lang in model_languages if "-" in lang else lang in iso_codes
-        for lang in languages
-    )
 
 
 def get_model(
