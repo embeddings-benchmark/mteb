@@ -998,7 +998,9 @@ class MultiVectorWrapper(MultiVectorSearchEncoderWrapper):
             self.model = model
             self.mteb_model_meta = ModelMeta.from_multi_vector_encoder_model(self.model)
 
-        self.model_prompts = _resolve_model_prompts(self.model, model_prompts)
+        # MultiVectorEncoder doesn't subclass SentenceTransformer, but exposes the same
+        # `prompts` attribute that `_resolve_model_prompts` relies on.
+        self.model_prompts = _resolve_model_prompts(self.model, model_prompts)  # type: ignore[arg-type]
         self.corpus_chunk_size = corpus_chunk_size
 
         self.fps = fps
