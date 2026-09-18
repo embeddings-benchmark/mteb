@@ -112,7 +112,7 @@ bm25s = ["bm25s>=0.2.6", "PyStemmer>=2.2.0.3"]
 boto3 = ["boto3>=1.34.0"]
 gritlm = ["gritlm>=1.0.2"]
 xformers = ["xformers>=0.0.29"]
-arctic-embed-m-v2 = ["xformers>=0.0.35", "transformers<5.0.0"]  # remote code (GTE) needs transformers<5; xformers<0.0.35 pins an exact torch version and can conflict with mteb's torch req
+arctic-embed-m-v2 = ["xformers>=0.0.29", "transformers<5.0.0"]
 blip2 = ["salesforce-lavis>=1.0.2"]
 voyageai = ["voyageai>0.3.0,<2.0.0"]
 voyage_v = ["voyageai>0.3.0,<2.0.0", "tenacity>9.0.0"]
