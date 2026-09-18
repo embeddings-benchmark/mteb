@@ -26,7 +26,7 @@ def test_black_or_white_image_statistics() -> None:
 
     blank_ids = {str(i) for i, flag in enumerate(flags) if flag}
     relevant_docs = {
-        "all_blank": {"0": 1, "1": 2},
+        "all_blank": {"0": 1, "1": 1},
         "mixed": {"0": 1, "3": 1},
         "blank_is_only_positive": {"0": 1, "3": 0},
     }
