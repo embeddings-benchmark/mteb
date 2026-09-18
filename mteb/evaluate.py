@@ -16,7 +16,7 @@ from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.benchmarks.benchmark import Benchmark
 from mteb.cache import ResultCache
-from mteb.models.model_meta import ModelMeta
+from mteb.models.model_meta import ModelMeta, _merge_precision_into_experiment_kwargs
 from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
@@ -93,6 +93,34 @@ def _sanitize_model(
     return wrapped_model, meta, model_name, model_revision
 
 
+def _apply_precision_to_meta(meta: ModelMeta, encode_kwargs: EncodeKwargs) -> ModelMeta:
+    """Fold a ``precision`` encode kwarg into the model metadata's ``experiment_kwargs``.
+
+    ``precision`` is forwarded to ``encode`` and changes the dtype of the produced
+    embeddings, so an evaluation that sets it must not share a cache namespace with the
+    default float run (or with a run using a different precision). Deriving
+    ``output_dtypes`` here -- before the cache lookup -- keeps the lookup and the
+    subsequent save consistent, instead of updating the metadata inside ``encode()``
+    after the lookup has already happened.
+    """
+    precision = encode_kwargs.get("precision")
+    if precision is None:
+        return meta
+
+    experiment_kwargs = _merge_precision_into_experiment_kwargs(
+        meta.experiment_kwargs, encode_kwargs
+    )
+    if experiment_kwargs.get("output_dtypes") == (meta.experiment_kwargs or {}).get(
+        "output_dtypes"
+    ):
+        return meta
+
+    logger.warning(
+        f"The 'precision' argument passed in encode_kwargs is setting output_dtypes to {experiment_kwargs['output_dtypes']}."
+    )
+    return meta.model_copy(update={"experiment_kwargs": experiment_kwargs}, deep=True)
+
+
 def _evaluate_task(  # noqa: PLR0913, PLR0914
     model: MTEBModels,
     task: AbsTask,
@@ -106,6 +134,7 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
     num_proc: int | None = None,
     timer: TimingStack | None = None,
     existing_results: TaskResult | None = None,
+    model_meta: ModelMeta | None = None,
 ) -> TaskResult | TaskError:
     """The core logic to run a model on a given task. See `evaluate` for more details.
 
@@ -142,6 +171,7 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
                 cache=cache,
                 num_proc=num_proc,
                 existing_results=existing_results,
+                model_meta=model_meta,
             )
         if isinstance(result, TaskResult):
             existing_co2_val = (
@@ -157,7 +187,8 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
     task_results: dict[SplitName, dict[HFSubset, ScoresDict]] = {}
     evaluation_time: float = 0.0
 
-    model_meta = model.mteb_model_meta
+    if model_meta is None:
+        model_meta = model.mteb_model_meta
 
     existing_co2 = existing_results.kg_co2_emissions if existing_results else None
     if existing_results is not None:
@@ -431,7 +462,7 @@ def _check_cache(
     return existing_results, missing_eval
 
 
-def evaluate(  # noqa: PLR0913, PLR0914
+def evaluate(  # noqa: PLR0913
     model: ModelMeta | MTEBModels | SentenceTransformer | CrossEncoder,
     tasks: AbsTask | Iterable[AbsTask],
     *,
@@ -507,9 +538,48 @@ def evaluate(  # noqa: PLR0913, PLR0914
         )
 
     model, meta, model_name, model_revision = _sanitize_model(model)
+    meta = _apply_precision_to_meta(meta, encode_kwargs)
     _check_model_modalities(meta, tasks)
     overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
 
+    return _evaluate_resolved(
+        model,
+        meta,
+        model_name,
+        model_revision,
+        tasks,
+        co2_tracker=co2_tracker,
+        raise_error=raise_error,
+        encode_kwargs=encode_kwargs,
+        cache=cache,
+        overwrite_strategy=overwrite_strategy,
+        prediction_folder=prediction_folder,
+        show_progress_bar=show_progress_bar,
+        public_only=public_only,
+        num_proc=num_proc,
+        timer=timer,
+    )
+
+
+def _evaluate_resolved(  # noqa: PLR0913
+    model: MTEBModels | ModelMeta,
+    meta: ModelMeta,
+    model_name: ModelName,
+    model_revision: Revision,
+    tasks: AbsTask | Iterable[AbsTask],
+    *,
+    co2_tracker: bool | None,
+    raise_error: bool,
+    encode_kwargs: EncodeKwargs,
+    cache: ResultCache | None,
+    overwrite_strategy: OverwriteStrategy,
+    prediction_folder: Path | None,
+    show_progress_bar: bool,
+    public_only: bool | None,
+    num_proc: int | None,
+    timer: TimingStack | None,
+) -> ModelResult:
+    """Recursive core of `evaluate`, run against an already-sanitized model/meta."""
     # AbsTaskAggregate is a special case where we have to run multiple tasks and combine the results
     if isinstance(tasks, AbsTaskAggregate):
         existing_results, missing_eval = _check_cache(
@@ -530,8 +600,11 @@ def evaluate(  # noqa: PLR0913, PLR0914
                 task_results=[existing_results],
             )
 
-        results = evaluate(
+        results = _evaluate_resolved(
             model,
+            meta,
+            model_name,
+            model_revision,
             tasks.metadata.tasks,
             co2_tracker=co2_tracker,
             raise_error=raise_error,
@@ -575,8 +648,11 @@ def evaluate(  # noqa: PLR0913, PLR0914
         )
         for task in tasks_tqdm:
             tasks_tqdm.set_description(f"Evaluating task {task.metadata.name}")
-            _res = evaluate(
+            _res = _evaluate_resolved(
                 model,
+                meta,
+                model_name,
+                model_revision,
                 task,
                 co2_tracker=co2_tracker,
                 raise_error=raise_error,
@@ -640,6 +716,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
                 cache=cache,
                 num_proc=num_proc,
                 existing_results=existing_results,
+                model_meta=meta,
             )
         except Exception as e:
             logger.error(
@@ -658,6 +735,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
             cache=cache,
             num_proc=num_proc,
             existing_results=existing_results,
+            model_meta=meta,
         )
     logger.info(f"✓ Finished evaluation for {task.metadata.name}")
 

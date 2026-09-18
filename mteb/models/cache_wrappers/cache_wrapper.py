@@ -9,6 +9,12 @@ from datasets import Dataset
 
 from mteb._create_dataloaders import create_dataloader
 from mteb.models.cache_wrappers.cache_backends.numpy_cache import NumpyCache
+from mteb.models.model_meta import (
+    _merge_precision_into_experiment_kwargs,
+    _serialize_experiment_kwargs_to_name,
+)
+
+_EXPERIMENTS_FOLDER_NAME = "experiments"
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -57,7 +63,9 @@ class CachedEmbeddingWrapper:
         if not hasattr(model, "encode"):
             raise ValueError("Model must have an 'encode' method.")
         self.cache_backend = cache_backend
-        self.cache_dict: dict[tuple[str, PromptType | None], CacheBackendProtocol] = {}
+        self.cache_dict: dict[
+            tuple[str, PromptType | None, str | None], CacheBackendProtocol
+        ] = {}
         logger.info("Initialized CachedEmbeddingWrapper")
 
     @property
@@ -94,7 +102,7 @@ class CachedEmbeddingWrapper:
 
         task_name = task_metadata.name
         try:
-            cache = self._get_or_create_cache(task_name, prompt_type)
+            cache = self._get_or_create_cache(task_name, prompt_type, kwargs)
 
             uncached_items: list[dict[str, Any]] = []
             uncached_indices: list[int] = []
@@ -152,21 +160,45 @@ class CachedEmbeddingWrapper:
             logger.error(f"Error in cached encoding: {str(e)}")
             raise
 
+    def _experiment_name(self, encode_kwargs: dict[str, Any]) -> str | None:
+        """Serialize the settings that change the produced embeddings into a directory name.
+
+        This mirrors the experiment namespacing used by the result cache so that, e.g.,
+        an evaluation run with ``encode_kwargs={"precision": "int8"}`` does not reuse (or
+        overwrite) the cached float embeddings of the default run. Both ablation
+        parameters carried on the wrapped model's ``experiment_kwargs`` and a
+        ``precision`` encode kwarg are taken into account.
+        """
+        meta = self.mteb_model_meta
+        experiment_kwargs = _merge_precision_into_experiment_kwargs(
+            meta.experiment_kwargs if meta is not None else None, encode_kwargs
+        )
+
+        return _serialize_experiment_kwargs_to_name(experiment_kwargs or None)
+
     def _get_or_create_cache(
-        self, task_name: str, prompt_type: PromptType | None
+        self,
+        task_name: str,
+        prompt_type: PromptType | None,
+        encode_kwargs: dict[str, Any] | None = None,
     ) -> CacheBackendProtocol:
-        """Get or create cache for a specific task and prompt type.
+        """Get or create cache for a specific task, prompt type and experiment.
 
         Args:
             task_name: Name of the task
             prompt_type: Prompt role used to encode the inputs
+            encode_kwargs: Keyword arguments forwarded to the wrapped model's ``encode``.
+                Settings that change the embeddings (e.g. ``precision``) namespace the cache.
 
         Returns:
             Cache backend instance for the task
         """
-        cache_key = (task_name, prompt_type)
+        experiment_name = self._experiment_name(encode_kwargs or {})
+        cache_key = (task_name, prompt_type, experiment_name)
         if cache_key not in self.cache_dict:
             cache_path = self.cache_path / task_name
+            if experiment_name is not None:
+                cache_path = cache_path / _EXPERIMENTS_FOLDER_NAME / experiment_name
             if prompt_type is not None:
                 cache_path /= prompt_type.value
             cache = self.cache_backend(cache_path)
