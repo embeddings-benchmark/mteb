@@ -27,6 +27,7 @@ class TweetTopicSingleClassification(AbsTaskClassification):
         bibtex_citation=r"""
 @inproceedings{antypas-etal-2022-twitter,
   address = {Gyeongju, Republic of Korea},
+  archiveprefix = {arXiv},
   author = {Antypas, Dimosthenis  and
 Ushio, Asahi  and
 Camacho-Collados, Jose  and
@@ -54,6 +55,7 @@ Lee, Tony Kyungil  and
 Santus, Enrico  and
 Bond, Francis  and
 Na, Seung-Hoon},
+  eprint = {2209.09824},
   month = oct,
   pages = {3386--3400},
   publisher = {International Committee on Computational Linguistics},
@@ -97,6 +99,7 @@ class TweetTopicSingleClassificationV2(AbsTaskClassification):
         bibtex_citation=r"""
 @inproceedings{antypas-etal-2022-twitter,
   address = {Gyeongju, Republic of Korea},
+  archiveprefix = {arXiv},
   author = {Antypas, Dimosthenis  and
 Ushio, Asahi  and
 Camacho-Collados, Jose  and
@@ -124,6 +127,7 @@ Lee, Tony Kyungil  and
 Santus, Enrico  and
 Bond, Francis  and
 Na, Seung-Hoon},
+  eprint = {2209.09824},
   month = oct,
   pages = {3386--3400},
   publisher = {International Committee on Computational Linguistics},

@@ -31,6 +31,7 @@ class NorQuadRetrieval(AbsTaskRetrieval):
         bibtex_citation=r"""
 @inproceedings{ivanova-etal-2023-norquad,
   address = {T{\'o}rshavn, Faroe Islands},
+  archiveprefix = {arXiv},
   author = {Ivanova, Sardana  and
 Andreassen, Fredrik  and
 Jentoft, Matias  and
@@ -39,6 +40,7 @@ Wold, Sondre  and
   booktitle = {Proceedings of the 24th Nordic Conference on Computational Linguistics (NoDaLiDa)},
   editor = {Alum{\"a}e, Tanel  and
 Fishel, Mark},
+  eprint = {2305.01957},
   month = may,
   pages = {159--168},
   publisher = {University of Tartu Library},
