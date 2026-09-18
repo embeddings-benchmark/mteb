@@ -568,15 +568,6 @@ colqwen3_4b = ModelMeta(
 )
 
 
-COLNOMIC_CITATION = """
-@misc{nomicembedmultimodal2025,
-  title={Nomic Embed Multimodal: Interleaved Text, Image, and Screenshots for Visual Document Retrieval},
-  author={Nomic Team},
-  year={2025},
-  publisher={Nomic AI},
-  url={https://nomic.ai/blog/posts/nomic-embed-multimodal}
-}"""
-
 COLNOMIC_TRAINING_DATA = {"VDRMultilingual"} | COLPALI_TRAINING_DATA
 COLNOMIC_LANGUAGES = [
     "deu-Latn",  # German
@@ -611,7 +602,6 @@ colnomic_3b = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=COLNOMIC_TRAINING_DATA,
-    citation=COLNOMIC_CITATION,
     extra_requirements_groups=["colpali_engine"],
 )
 
@@ -639,7 +629,6 @@ colnomic_7b = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=COLNOMIC_TRAINING_DATA,
-    citation=COLNOMIC_CITATION,
     extra_requirements_groups=["colpali_engine"],
 )
 

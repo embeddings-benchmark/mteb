@@ -363,14 +363,6 @@ user_base_ru = ModelMeta(
     framework=["Sentence Transformers", "PyTorch", "safetensors"],
     adapted_from="https://huggingface.co/deepvk/deberta-v1-base",
     use_instructions=True,
-    citation="""@misc{deepvk2024user,
-        title={USER: Universal Sentence Encoder for Russian},
-        author={Malashenko, Boris and  Zemerov, Anton and Spirin, Egor},
-        url={https://huggingface.co/datasets/deepvk/USER-base},
-        publisher={Hugging Face}
-        year={2024},
-    }
-    """,
     training_datasets={
         "BibleNLPBitextMining",
         # https://github.com/unicamp-dl/mMARCO
@@ -449,13 +441,6 @@ user_bge_m3 = ModelMeta(
     },
     public_training_code=None,
     public_training_data=None,
-    citation="""@misc{deepvk2024user,
-    title={USER: Universal Sentence Encoder for Russian},
-    author={Malashenko, Boris and  Zemerov, Anton and Spirin, Egor},
-    url={https://huggingface.co/datasets/deepvk/USER-base},
-    publisher={Hugging Face},
-    year={2024},
-}""",
 )
 
 deberta_v1_ru = ModelMeta(

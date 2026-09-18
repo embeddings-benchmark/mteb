@@ -25,13 +25,24 @@ class KoVidore2CybersecurityRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created",
         bibtex_citation="""
-@misc{choi2026kovidorev2,
-  author = {Yongbin Choi},
-  note = {A benchmark for evaluating Korean vision document retrieval with multi-page reasoning queries in practical domains},
-  title = {KoViDoRe v2: a comprehensive evaluation of vision document retrieval for enterprise use-cases},
-  url = {https://github.com/whybe-choi/kovidore-data-generator},
-  year = {2026},
+@inproceedings{choi-etal-2026-kovidore,
+    title = "{K}o{V}i{D}o{R}e: A Benchmark for {K}orean Visual Document Retrieval",
+    author = "Choi, Yongbin  and
+      Song, Yongwoo  and
+      Sung, Mujeen",
+    editor = "Murray, Kenton  and
+      Kriz, Reno",
+    booktitle = "Proceedings of the 2nd Workshop on Multimodal Augmented Generation via Multimodal Retrieval ({MAGM}a{R} 2026)",
+    month = jul,
+    year = "2026",
+    address = "San Diego, USA",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2026.magmar-main.11/",
+    doi = "10.18653/v1/2026.magmar-main.11",
+    pages = "54--80",
+    ISBN = "979-8-89176-425-5",
 }
+
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
@@ -60,13 +71,24 @@ class KoVidore2EconomicRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created",
         bibtex_citation="""
-@misc{choi2026kovidorev2,
-  author = {Yongbin Choi},
-  note = {A benchmark for evaluating Korean vision document retrieval with multi-page reasoning queries in practical domains},
-  title = {KoViDoRe v2: a comprehensive evaluation of vision document retrieval for enterprise use-cases},
-  url = {https://github.com/whybe-choi/kovidore-data-generator},
-  year = {2026},
+@inproceedings{choi-etal-2026-kovidore,
+    title = "{K}o{V}i{D}o{R}e: A Benchmark for {K}orean Visual Document Retrieval",
+    author = "Choi, Yongbin  and
+      Song, Yongwoo  and
+      Sung, Mujeen",
+    editor = "Murray, Kenton  and
+      Kriz, Reno",
+    booktitle = "Proceedings of the 2nd Workshop on Multimodal Augmented Generation via Multimodal Retrieval ({MAGM}a{R} 2026)",
+    month = jul,
+    year = "2026",
+    address = "San Diego, USA",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2026.magmar-main.11/",
+    doi = "10.18653/v1/2026.magmar-main.11",
+    pages = "54--80",
+    ISBN = "979-8-89176-425-5",
 }
+
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
@@ -95,12 +117,22 @@ class KoVidore2EnergyRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created",
         bibtex_citation="""
-@misc{choi2026kovidorev2,
-  author = {Yongbin Choi},
-  note = {A benchmark for evaluating Korean vision document retrieval with multi-page reasoning queries in practical domains},
-  title = {KoViDoRe v2: a comprehensive evaluation of vision document retrieval for enterprise use-cases},
-  url = {https://github.com/whybe-choi/kovidore-data-generator},
-  year = {2026},
+@inproceedings{choi-etal-2026-kovidore,
+    title = "{K}o{V}i{D}o{R}e: A Benchmark for {K}orean Visual Document Retrieval",
+    author = "Choi, Yongbin  and
+      Song, Yongwoo  and
+      Sung, Mujeen",
+    editor = "Murray, Kenton  and
+      Kriz, Reno",
+    booktitle = "Proceedings of the 2nd Workshop on Multimodal Augmented Generation via Multimodal Retrieval ({MAGM}a{R} 2026)",
+    month = jul,
+    year = "2026",
+    address = "San Diego, USA",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2026.magmar-main.11/",
+    doi = "10.18653/v1/2026.magmar-main.11",
+    pages = "54--80",
+    ISBN = "979-8-89176-425-5",
 }
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
@@ -130,13 +162,24 @@ class KoVidore2HrRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created",
         bibtex_citation="""
-@misc{choi2026kovidorev2,
-  author = {Yongbin Choi},
-  note = {A benchmark for evaluating Korean vision document retrieval with multi-page reasoning queries in practical domains},
-  title = {KoViDoRe v2: a comprehensive evaluation of vision document retrieval for enterprise use-cases},
-  url = {https://github.com/whybe-choi/kovidore-data-generator},
-  year = {2026},
+@inproceedings{choi-etal-2026-kovidore,
+    title = "{K}o{V}i{D}o{R}e: A Benchmark for {K}orean Visual Document Retrieval",
+    author = "Choi, Yongbin  and
+      Song, Yongwoo  and
+      Sung, Mujeen",
+    editor = "Murray, Kenton  and
+      Kriz, Reno",
+    booktitle = "Proceedings of the 2nd Workshop on Multimodal Augmented Generation via Multimodal Retrieval ({MAGM}a{R} 2026)",
+    month = jul,
+    year = "2026",
+    address = "San Diego, USA",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2026.magmar-main.11/",
+    doi = "10.18653/v1/2026.magmar-main.11",
+    pages = "54--80",
+    ISBN = "979-8-89176-425-5",
 }
+
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )

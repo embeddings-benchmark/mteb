@@ -24,14 +24,7 @@ class MovieReviewSentimentClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@software{blard2020,
-  author = {Théophile Blard},
-  title = {French sentiment analysis with BERT},
-  url = {https://github.com/TheophileBlard/french-sentiment-analysis-with-bert},
-  year = {2020},
-}
-""",
+        bibtex_citation="",
         superseded_by="MovieReviewSentimentClassification.v2",
     )
 
@@ -67,12 +60,15 @@ class MovieReviewSentimentClassificationV2(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@software{blard2020,
-  author = {Théophile Blard},
-  title = {French sentiment analysis with BERT},
-  url = {https://github.com/TheophileBlard/french-sentiment-analysis-with-bert},
-  year = {2020},
+        bibtex_citation="",
+        adapted_from=["MovieReviewSentimentClassification"],
+    )
+
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
+        self.dataset = self.stratified_subsampling(
 }
 """,
         adapted_from=["MovieReviewSentimentClassification"],

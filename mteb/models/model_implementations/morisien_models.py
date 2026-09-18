@@ -26,12 +26,6 @@ morisien_embed = ModelMeta(
     training_datasets={"MorisienMTBitextMining"},
     public_training_code="https://github.com/LK-maker-007/morisien-embed",
     public_training_data=None,
-    citation="""@misc{b2026morisienembed,
-  title={morisien-embed: a dedicated text embedding model for Mauritian Creole},
-  author={B, Singaraj},
-  year={2026},
-  url={https://huggingface.co/Singaraj/morisien-embed},
-}""",
 )
 
 morisien_embed_v1_5 = ModelMeta(
@@ -57,11 +51,4 @@ morisien_embed_v1_5 = ModelMeta(
     training_datasets={"MorisienMTBitextMining"},
     public_training_code="https://github.com/LK-maker-007/morisien-embed",
     public_training_data=None,
-    citation="""@misc{b2026morisienembed,
-  title={morisien-embed: Text Embedding Models and Evaluation for Mauritian Creole (Kreol Morisien)},
-  author={B, Singaraj},
-  year={2026},
-  doi={10.5281/zenodo.21877805},
-  url={https://doi.org/10.5281/zenodo.21877805},
-}""",
 )

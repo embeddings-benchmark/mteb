@@ -59,10 +59,4 @@ sante_embed = ModelMeta(
     training_datasets={"NFCorpus", "SciFact"},
     public_training_code=None,
     public_training_data=None,
-    citation="""@misc{b2026santeembed,
-  title={sante-embed: a multilingual text embedding model for medical retrieval},
-  author={B, Singaraj},
-  year={2026},
-  url={https://huggingface.co/Singaraj/sante-embed},
-}""",
 )

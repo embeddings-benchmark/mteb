@@ -27,14 +27,12 @@ class FilipinoHateSpeechClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{Cabasag-2019-hate-speech,
-  author = {Neil Vicente Cabasag, Vicente Raphael Chan, Sean Christian Lim, Mark Edward Gonzales, and Charibeth Cheng},
-  journal = {Philippine Computing Journal},
-  month = {August},
-  number = {1},
-  title = {Hate speech in Philippine election-related tweets: Automatic detection and classification using natural language processing.},
-  volume = {XIV},
-  year = {2019},
+@article{cabasag2019hate,
+  title={Hate speech in philippine election-related tweets: Automatic detection and classification using natural language processing},
+  author={Cabasag, Neil Vicente and Chan, Vicente Raphael and Lim, Sean Christian and Gonzales, Mark Edward and Cheng, Charibeth},
+  journal={Philippine Computing Journal, XIV No},
+  volume={1},
+  year={2019}
 }
 """,
         superseded_by="FilipinoHateSpeechClassification.v2",
@@ -64,14 +62,12 @@ class FilipinoHateSpeechClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{Cabasag-2019-hate-speech,
-  author = {Neil Vicente Cabasag, Vicente Raphael Chan, Sean Christian Lim, Mark Edward Gonzales, and Charibeth Cheng},
-  journal = {Philippine Computing Journal},
-  month = {August},
-  number = {1},
-  title = {Hate speech in Philippine election-related tweets: Automatic detection and classification using natural language processing.},
-  volume = {XIV},
-  year = {2019},
+@article{cabasag2019hate,
+  title={Hate speech in philippine election-related tweets: Automatic detection and classification using natural language processing},
+  author={Cabasag, Neil Vicente and Chan, Vicente Raphael and Lim, Sean Christian and Gonzales, Mark Edward and Cheng, Charibeth},
+  journal={Philippine Computing Journal, XIV No},
+  volume={1},
+  year={2019}
 }
 """,
         adapted_from=["FilipinoHateSpeechClassification"],

@@ -586,12 +586,6 @@ late_on_code_fine_tuning_data = {
     "COIRCodeSearchNetRetrieval",
 }
 
-late_on_code_citation = """@misc{LateOn-Code,
-  title  = {LateOn-Code: a Family of State-Of-The-Art Late Interaction Code Retrieval Models},
-  author = {Chaffin, Antoine},
-  url    = {https://huggingface.co/collections/lightonai/lateon-code},
-  year   = {2026}
-}"""
 
 lightonai__late_on_code_pretrain = ModelMeta(
     loader=MultiVectorModel,
@@ -640,7 +634,6 @@ lightonai__late_on_code_pretrain = ModelMeta(
         "TRECDL2020",
         "CornStack",
     },
-    citation=late_on_code_citation,
     extra_requirements_groups=["pylate"],
 )
 
@@ -681,7 +674,6 @@ lightonai__late_on_code = ModelMeta(
         "CornStack",
     }
     | late_on_code_fine_tuning_data,
-    citation=late_on_code_citation,
     extra_requirements_groups=["pylate"],
 )
 
@@ -724,7 +716,6 @@ lightonai__late_on_code_edge_pretrain = ModelMeta(
         "MultiLongDocRetrieval",
         "CornStack",
     },
-    citation=late_on_code_citation,
     extra_requirements_groups=["pylate"],
 )
 
@@ -769,7 +760,6 @@ lightonai__late_on_code_edge = ModelMeta(
         "CornStack",
     }
     | late_on_code_fine_tuning_data,
-    citation=late_on_code_citation,
     extra_requirements_groups=["pylate"],
 )
 
@@ -934,12 +924,6 @@ lightonai__reason_moderncolbert = ModelMeta(
         "TRECDL2020",
         "CornStack",
     },
-    citation="""@misc{Reason-ModernColBERT,
-title={Reason-ModernColBERT},
-author={Chaffin, Antoine},
-url={https://huggingface.co/lightonai/Reason-ModernColBERT},
-year={2025}
-}""",
     extra_requirements_groups=["pylate"],
 )
 

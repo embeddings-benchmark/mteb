@@ -1719,12 +1719,6 @@ abhinand__medembed_small_v0_1 = ModelMeta(
     },
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
-    citation="""@software{balachandran2024medembed,
-  author = {Balachandran, Abhinand},
-  title = {MedEmbed: Medical-Focused Embedding Models},
-  year = {2024},
-  url = {https://github.com/abhinand5/MedEmbed}
-}""",
 )
 avsolatorio__noinstruct_small_embedding_v0 = ModelMeta(
     name="avsolatorio/NoInstruct-small-Embedding-v0",
