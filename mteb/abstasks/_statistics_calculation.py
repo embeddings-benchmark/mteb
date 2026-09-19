@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections import Counter, defaultdict
+from concurrent.futures import ThreadPoolExecutor
 from typing import TYPE_CHECKING, Any, cast
 
 from tqdm.auto import tqdm
@@ -26,7 +27,7 @@ from mteb.types.statistics import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterable, Mapping
+    from collections.abc import Callable, Container, Iterable, Mapping
 
     from PIL import Image
     from torchcodec.decoders import VideoDecoder  # type: ignore[attr-defined]
@@ -61,6 +62,38 @@ def calculate_text_statistics(
     )
 
 
+def is_black_or_white_image(image: Image.Image) -> bool:
+    """Return whether the image is pure black or pure white once converted to RGB."""
+    extrema = image.convert("RGB").getextrema()
+    return all(band == (0, 0) for band in extrema) or all(
+        band == (255, 255) for band in extrema
+    )
+
+
+def compute_black_or_white_image_flags(
+    images: list[Image.Image], max_workers: int | None = None
+) -> list[bool]:
+    """Return a per-image flag saying whether that image is pure black or white.
+
+    The flags can be matched to corpus IDs to inspect relevant documents.
+    """
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        return list(executor.map(is_black_or_white_image, images))
+
+
+def count_queries_with_all_gold_black_or_white(
+    relevant_docs: Mapping[str, Mapping[str, int]],
+    black_or_white_doc_ids: Container[str],
+) -> int:
+    """Count queries whose positive judgments all reference pure black/white images."""
+    count = 0
+    for docs in relevant_docs.values():
+        gold = [doc_id for doc_id, score in docs.items() if score > 0]
+        if gold and all(doc_id in black_or_white_doc_ids for doc_id in gold):
+            count += 1
+    return count
+
+
 def calculate_image_statistics(
     images: list[Image.Image],
     hashes: list[str] | None = None,
@@ -80,6 +113,9 @@ def calculate_image_statistics(
     """
     if hashes is None:
         hashes = compute_image_hashes(images, max_workers=max_workers)
+    black_or_white_flags = compute_black_or_white_image_flags(
+        images, max_workers=max_workers
+    )
     img_widths, img_heights = [], []
     for img in tqdm(images, desc="Computing image statistics"):
         width, height = img.size
@@ -94,6 +130,7 @@ def calculate_image_statistics(
         average_image_height=sum(img_heights) / len(img_heights),
         max_image_height=max(img_heights),
         unique_images=len(set(hashes)),
+        black_or_white_images=sum(black_or_white_flags),
     )
 
 
@@ -336,6 +373,7 @@ def calculate_relevant_docs_statistics(
     relevant_docs: Mapping[str, Mapping[str, int]],
     query_ids: Iterable[str],
     corpus_ids: Iterable[str],
+    black_or_white_doc_ids: Container[str] | None = None,
 ) -> RelevantDocsStatistics:
     qrel_query_ids = set(relevant_docs)
     qrel_corpus_ids = {doc for qid in relevant_docs for doc in relevant_docs[qid]}
@@ -354,6 +392,13 @@ def calculate_relevant_docs_statistics(
         unique_relevant_docs=len(qrel_corpus_ids),
         num_missing_query_ids=len(qrel_query_ids.difference(query_ids)),
         num_missing_corpus_ids=len(qrel_corpus_ids.difference(corpus_ids)),
+        queries_with_all_gold_black_or_white=(
+            count_queries_with_all_gold_black_or_white(
+                relevant_docs, black_or_white_doc_ids
+            )
+            if black_or_white_doc_ids is not None
+            else 0
+        ),
     )
 
 
