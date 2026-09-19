@@ -7,9 +7,23 @@
         "documents_text_statistics": null,
         "documents_image_statistics": null,
         "documents_audio_statistics": null,
-        "documents_video_statistics": null,
+        "documents_video_statistics": {
+            "total_duration_seconds": 2100.70,
+            "total_frames": 21007,
+            "min_duration_seconds": 6.0,
+            "average_duration_seconds": 11.67,
+            "max_duration_seconds": 47.1,
+            "average_fps": 10.0,
+            "unique_videos": 180
+        },
         "queries_text_statistics": null,
         "queries_image_statistics": {
+            "min_image_width": 480,
+            "average_image_width": 1579.62,
+            "max_image_width": 3840,
+            "min_image_height": 360,
+            "average_image_height": 910.40,
+            "max_image_height": 2160,
             "unique_images": 180
         },
         "queries_audio_statistics": null,
