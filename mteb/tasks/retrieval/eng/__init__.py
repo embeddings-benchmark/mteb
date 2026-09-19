@@ -424,6 +424,14 @@ from .valor_32k_retrieval import (
     VALOR32KVA2TRetrieval,
     VALOR32KVT2ARetrieval,
 )
+from .vatex_modal_equiv_retrieval import (
+    VATEXModalEquivA2TRetrieval,
+    VATEXModalEquivA2VRetrieval,
+    VATEXModalEquivT2ARetrieval,
+    VATEXModalEquivT2VRetrieval,
+    VATEXModalEquivV2ARetrieval,
+    VATEXModalEquivV2TRetrieval,
+)
 from .vatex_retrieval import (
     VATEXA2VRetrieval,
     VATEXAT2VRetrieval,
@@ -890,6 +898,12 @@ __all__ = [
     "VALOR32KVT2ARetrieval",
     "VATEXA2VRetrieval",
     "VATEXAT2VRetrieval",
+    "VATEXModalEquivA2TRetrieval",
+    "VATEXModalEquivA2VRetrieval",
+    "VATEXModalEquivT2ARetrieval",
+    "VATEXModalEquivT2VRetrieval",
+    "VATEXModalEquivV2ARetrieval",
+    "VATEXModalEquivV2TRetrieval",
     "VATEXT2VARetrieval",
     "VATEXT2VRetrieval",
     "VATEXV2ARetrieval",
