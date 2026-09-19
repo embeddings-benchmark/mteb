@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
@@ -10,6 +9,7 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb import TaskMetadata
@@ -45,6 +45,7 @@ class DashengAudioWrapper(AbsEncoder):
         device: str | None = None,
         **kwargs: Any,
     ) -> None:
+        import torch
         from transformers import AutoFeatureExtractor, AutoModel
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
@@ -75,6 +76,8 @@ class DashengAudioWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
 
         all_embeddings = []

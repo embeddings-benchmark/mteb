@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -53,6 +52,7 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
         base_revision: str | None = None,
         **kwargs: Any,
     ):
+        import torch
         from colpali_engine.models import BiQwen2_5, BiQwen2_5_Processor
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
@@ -105,6 +105,8 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
         batch_size: int = 32,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         all_embeds = []
 
         with torch.no_grad():
@@ -125,6 +127,8 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
         batch_size: int = 32,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         all_embeds = []
         with torch.no_grad():
             for batch in tqdm(texts, desc="Encoding texts"):
