@@ -151,6 +151,31 @@ def _convert_conv_history_to_query(
     return cast("dict[str, str | list[ConversationTurn]]", row)
 
 
+def _retrieval_texts(dataset: Dataset, prompt_type: PromptType) -> list[str]:
+    """The text of each corpus entry or query of a retrieval task, as the model reads it.
+
+    A document is its title and text joined, a query is its text followed by its instruction, and a conversation
+    is flattened into a single string.
+
+    Args:
+        dataset: The corpus or the queries.
+        prompt_type: `PromptType.document` for the corpus, `PromptType.query` for the queries.
+
+    Returns:
+        One text per entry of `dataset`.
+    """
+    if len(dataset) == 0:
+        return []
+    if prompt_type == PromptType.document:
+        dataset = dataset.map(_corpus_to_dict)
+    else:
+        if "instruction" in dataset.column_names:
+            dataset = _combine_queries_with_instruction_text(dataset)
+        if isinstance(dataset["text"][0], dict | list):
+            dataset = dataset.map(_convert_conv_history_to_query)
+    return cast("list[str]", dataset["text"])
+
+
 # Duck-typed: accepts a PIL image or a tensor (narrowed via `hasattr`), and the
 # caller-supplied `transform` decides the output type.
 def _transform_image_to_rgb(

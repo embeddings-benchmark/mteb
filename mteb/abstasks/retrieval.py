@@ -8,11 +8,7 @@ from typing import TYPE_CHECKING, Any, Literal
 
 from datasets import Dataset, DatasetDict, concatenate_datasets
 
-from mteb._create_dataloaders import (
-    _combine_queries_with_instruction_text,
-    _convert_conv_history_to_query,
-    _corpus_to_dict,
-)
+from mteb._create_dataloaders import _retrieval_texts
 from mteb._evaluators import RetrievalEvaluator
 from mteb._evaluators.retrieval_metrics import make_score_dict
 from mteb.models import (
@@ -282,18 +278,11 @@ class AbsTaskRetrieval(AbsTask):
     def _get_content_columns(self) -> dict[str, Modalities]:
         """The corpus and query columns holding the documents, mapped to their modality.
 
-        Retrieval stores each modality in a column named after the modality itself. Text also carries an optional
-        `title`, which is part of the document: a corpus entry is encoded as `"{title} {text}"`. Queries have no
-        title, so a filter compares whichever of these columns the corpus and the queries actually have.
+        Retrieval stores each modality in a column named after the modality itself. `text` stands for the text the
+        model reads, which for a document includes its optional `title` and for a query its instruction. The corpus
+        and the queries are each compared on the modalities the task's category gives them.
         """
-        columns: dict[str, Modalities] = {}
-        for modality in self.metadata.modalities:
-            if modality == "text":
-                columns["title"] = "text"
-                columns["text"] = "text"
-            else:
-                columns[modality] = modality
-        return columns
+        return {modality: modality for modality in self.metadata.modalities}
 
     def evaluate(
         self,
@@ -565,7 +554,7 @@ class AbsTaskRetrieval(AbsTask):
         # Build corpus col_inputs — text needs special mapping from the corpus dict format.
         corpus_col_inputs: dict[Modalities, list[Any]] = {}
         if "text" in corpus_modalities:
-            corpus_col_inputs["text"] = corpus.map(_corpus_to_dict)["text"]
+            corpus_col_inputs["text"] = _retrieval_texts(corpus, PromptType.document)
         if "image" in corpus_modalities:
             corpus_col_inputs["image"] = corpus["image"]
         if "audio" in corpus_modalities:
@@ -576,12 +565,7 @@ class AbsTaskRetrieval(AbsTask):
         # Build queries col_inputs — text may need instruction/conversation transformations.
         queries_col_inputs: dict[Modalities, list[Any]] = {}
         if "text" in queries_modalities:
-            queries_ = queries
-            if "instruction" in queries_[0]:
-                queries_ = _combine_queries_with_instruction_text(queries_)
-            if isinstance(queries_["text"][0], dict | list):
-                queries_ = queries_.map(_convert_conv_history_to_query)
-            queries_col_inputs["text"] = queries_["text"]
+            queries_col_inputs["text"] = _retrieval_texts(queries, PromptType.query)
         if "image" in queries_modalities:
             queries_col_inputs["image"] = queries["image"]
         if "audio" in queries_modalities:
