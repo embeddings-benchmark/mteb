@@ -214,7 +214,9 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             in the Latin script.
         use_instructions: Whether the model uses instructions E.g. for prompt-based models. This also includes models that require a specific format for
             input, such as "query: {document}" or "passage: {document}".
-        citation: The citation for the model. This is a bibtex string.
+        citation: The citation for the model, as a BibTeX string. As non-existing citations can cause
+            authors citing the work to be penalized, leave it out if the model has no article to cite,
+            rather than citing e.g. its model card. It is allowed to cite multiple articles.
         training_datasets: A dictionary of datasets that the model was trained on. Names should be names as their appear in `mteb` for example
             {"ArguAna"} if the model is trained on the ArguAna test set. This field is used to determine if a model generalizes zero-shot to
             a benchmark as well as mark dataset contaminations.

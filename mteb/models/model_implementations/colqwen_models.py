@@ -517,15 +517,6 @@ TOMORO_TRAINING_DATA = {
     "VisRAG-Ret-Train-In-domain-data",
 }
 
-TOMORO_CITATION = """
-@misc{huang2025tomoro_colqwen3_embed,
-  title={TomoroAI/tomoro-colqwen3-embed},
-  author={Xin Huang and Kye Min Tan and Albert Phelps},
-  year={2025},
-  url={https://huggingface.co/TomoroAI/tomoro-colqwen3-embed-8b}
-}
-"""
-
 colqwen3_8b = ModelMeta(
     loader=ColQwen3Wrapper,
     name="TomoroAI/tomoro-colqwen3-embed-8b",
@@ -548,7 +539,6 @@ colqwen3_8b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=TOMORO_TRAINING_DATA,
-    citation=TOMORO_CITATION,
     extra_requirements_groups=["colqwen3"],
 )
 
@@ -574,19 +564,9 @@ colqwen3_4b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=TOMORO_TRAINING_DATA,
-    citation=TOMORO_CITATION,
     extra_requirements_groups=["colqwen3"],
 )
 
-
-COLNOMIC_CITATION = """
-@misc{nomicembedmultimodal2025,
-  title={Nomic Embed Multimodal: Interleaved Text, Image, and Screenshots for Visual Document Retrieval},
-  author={Nomic Team},
-  year={2025},
-  publisher={Nomic AI},
-  url={https://nomic.ai/blog/posts/nomic-embed-multimodal}
-}"""
 
 COLNOMIC_TRAINING_DATA = {"VDRMultilingual"} | COLPALI_TRAINING_DATA
 COLNOMIC_LANGUAGES = [
@@ -622,7 +602,6 @@ colnomic_3b = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=COLNOMIC_TRAINING_DATA,
-    citation=COLNOMIC_CITATION,
     extra_requirements_groups=["colpali_engine"],
 )
 
@@ -650,7 +629,6 @@ colnomic_7b = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=COLNOMIC_TRAINING_DATA,
-    citation=COLNOMIC_CITATION,
     extra_requirements_groups=["colpali_engine"],
 )
 
@@ -789,15 +767,6 @@ class ColQwen3EngineWrapper(ColPaliEngineWrapper):
         )
 
 
-COLTURK_CITATION = """
-@misc{karatay2026colturkvdr,
-  title={ColTurk-VDR: A Late-Interaction Visual Document Retriever on Qwen3-VL-4B},
-  author={Karatay, Mert},
-  year={2026},
-  url={https://github.com/Verm1lion/ColTurk-VDR}
-}
-"""
-
 colturk_vdr_4b = ModelMeta(
     loader=ColQwen3EngineWrapper,
     loader_kwargs=dict(
@@ -823,7 +792,6 @@ colturk_vdr_4b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
-    citation=COLTURK_CITATION,
     extra_requirements_groups=["colpali_engine"],
     adapted_from="Qwen/Qwen3-VL-4B-Instruct",
 )

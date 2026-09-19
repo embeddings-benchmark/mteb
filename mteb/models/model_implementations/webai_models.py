@@ -261,15 +261,6 @@ COLWEBAI_TRAINING_DATA = {
     "VidoreTabfquadRetrieval",
 }
 
-COLWEBAI_CITATION = """
-@misc{webAI-ColVec1,
-  title={webAI-ColVec1: Late-Interaction Multi-Vector Embedding Model for Visual Document Retrieval},
-  author={webAI},
-  year={2026},
-  url={https://huggingface.co/webAI-Official/webAI-ColVec1-4b}
-}
-"""
-
 
 COLVEC1_1_TRAINING_DATA = {
     # from https://huggingface.co/datasets/vidore/colpali_train_set
@@ -288,15 +279,6 @@ COLVEC1_1_TRAINING_DATA = {
     # from https://huggingface.co/datasets/Tevatron/wiki-ss-nq
     "wiki-ss-nq",
 }
-
-COLVEC1_1_CITATION = """
-@misc{webai_colvec1_1,
-  title={webAI-ColVec1.1: Bidirectional Multi-Vector Models for Visual Document Retrieval},
-  author={webAI},
-  year={2026},
-  url={https://huggingface.co/webAI-Official}
-}
-"""
 
 
 colvec1_4b = ModelMeta(
@@ -325,7 +307,6 @@ colvec1_4b = ModelMeta(
     training_datasets=COLWEBAI_TRAINING_DATA,
     adapted_from="Qwen/Qwen3.5-4B",
     superseded_by=None,
-    citation=COLWEBAI_CITATION,
     contacts=["psam-ai"],
     output_dtypes=OutputDType.FLOAT16,
 )
@@ -357,7 +338,6 @@ colvec1_9b = ModelMeta(
     training_datasets=COLWEBAI_TRAINING_DATA,
     adapted_from="Qwen/Qwen3.5-9B",
     superseded_by=None,
-    citation=COLWEBAI_CITATION,
     contacts=["psam-ai"],
     output_dtypes=OutputDType.FLOAT16,
 )
@@ -403,7 +383,6 @@ colvec1_1_4b = ModelMeta(
     training_datasets=COLVEC1_1_TRAINING_DATA,
     adapted_from="Qwen/Qwen3.5-4B",
     superseded_by=None,
-    citation=COLVEC1_1_CITATION,
     contacts=["zhanlunchang-webai"],
     output_dtypes=None,
     extra_requirements_groups=["colvec1_1"],
@@ -450,7 +429,6 @@ colvec1_1_8b = ModelMeta(
     training_datasets=COLVEC1_1_TRAINING_DATA,
     adapted_from="Qwen/Qwen3.5-9B",
     superseded_by=None,
-    citation=COLVEC1_1_CITATION,
     contacts=["zhanlunchang-webai"],
     output_dtypes=None,
     extra_requirements_groups=["colvec1_1"],

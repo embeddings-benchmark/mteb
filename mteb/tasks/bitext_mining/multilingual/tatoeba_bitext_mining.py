@@ -143,10 +143,17 @@ class TatoebaBitextMining(AbsTaskBitextMining):
         dialect=[],  # No specific dialect mentioned
         sample_creation="found",
         bibtex_citation=r"""
-@misc{tatoeba,
-  author = {Tatoeba community},
-  title = {Tatoeba: Collection of sentences and translations},
-  year = {2021},
+@inproceedings{tiedemann-2020-tatoeba,
+  address = {Online},
+  author = {Tiedemann, J{\"o}rg},
+  booktitle = {Proceedings of the Fifth Conference on Machine Translation},
+  doi = {10.18653/v1/2020.wmt-1.139},
+  month = nov,
+  pages = {1174--1182},
+  publisher = {Association for Computational Linguistics},
+  title = {The Tatoeba Translation Challenge {--} Realistic Data Sets for Low Resource and Multilingual {MT}},
+  url = {https://aclanthology.org/2020.wmt-1.139/},
+  year = {2020},
 }
 """,
     )

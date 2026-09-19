@@ -25,10 +25,10 @@ class VehicleSoundClustering(AbsTaskClustering):
         modalities=["audio"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{inproceedings,
-  author = {Bazilinskyy, Pavlo and Aa, Arne and Schoustra, Michael and Spruit, John and Staats, Laurens and van der Vlist, Klaas Jan and de Winter, Joost},
-  month = {05},
-  pages = {},
+@inproceedings{bazilinskyy2018auditory,
+  author = {Bazilinskyy, Pavlo and van der Aa, Arne and Schoustra, Michael and Spruit, John and Staats, Laurens and van der Vlist, Klaas Jan and de Winter, Joost},
+  booktitle = {12th International Symposium on Tools and Methods of Competitive Engineering (TMCE 2018)},
+  pages = {417--422},
   title = {An auditory dataset of passing vehicles recorded with a smartphone},
   year = {2018},
 }

@@ -475,7 +475,9 @@ class TaskMetadata(BaseModel):
         sample_creation: The method of text creation. Includes "found", "created", "machine-translated", "machine-translated and verified", and
             "machine-translated and localized".
         prompt: The prompt used for the task. Can be a string or a dictionary containing the query and passage prompts.
-        bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
+        bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available. As non-existing citations can
+            cause authors citing the work to be penalized, we recommend to use an empty string if no citation is available. Similarly, if no article
+            exist, we recommend to use an empty string instead of citing e.g. the dataset's website. It is allowed to cite multiple articles.
         adapted_from: Datasets adapted (translated, sampled from, etc.) from other datasets.
         is_public: Whether the dataset is publicly available. If False (closed/private), a HuggingFace token is required to run the datasets.
         contributed_by: The name of the organization or individual who contributed the dataset. This is especially useful for private datasets
