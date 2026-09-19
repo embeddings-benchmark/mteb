@@ -132,6 +132,7 @@ class AnySTSEvaluator(Evaluator):
                 create_dataloader(
                     self.dataset.select_columns(cols2).rename_columns(ds2_col_names),
                     task_metadata=self.task_metadata,
+                    num_proc=num_proc,
                     **encode_kwargs,
                 ),
                 task_metadata=self.task_metadata,

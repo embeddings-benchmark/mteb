@@ -20,11 +20,18 @@ from mteb.mocks import (
 from mteb.mocks.mock_tasks import (
     MockAggregatedTask,
     MockClassificationTask,
+    MockMultilabelClassification,
     MockMultilingualClassificationTask,
     MockMultilingualRetrievalTask,
+    MockPairClassificationTask,
     MockRetrievalTask,
+    MockSTSTask,
+    MockSummarizationTask,
+    MockTextZeroShotClassificationTask,
+    MockZeroShotClassificationTask,
 )
 from mteb.models import ModelMeta
+from mteb.models.model_implementations.random_baseline import RandomEncoderBaseline
 from mteb.models.models_protocols import EncoderProtocol
 from mteb.results.task_result import TaskResult
 from mteb.timing import TimingStack
@@ -500,6 +507,38 @@ def test_precision_arg():
     assert (
         model.mteb_model_meta.experiment_kwargs["output_dtypes"] == OutputDType.FLOAT16
     )
+
+
+@pytest.mark.parametrize(
+    "task",
+    [
+        MockClassificationTask(),
+        MockMultilabelClassification(),
+        MockPairClassificationTask(),
+        MockSTSTask(),
+        MockSummarizationTask(),
+        MockTextZeroShotClassificationTask(),
+        MockZeroShotClassificationTask(),
+    ],
+    ids=lambda x: x.metadata.name,
+)
+def test_num_proc_reaches_every_dataloader(
+    task: AbsTask, monkeypatch: pytest.MonkeyPatch
+):
+    num_workers = []
+    encode = RandomEncoderBaseline.encode
+
+    def recording_encode(self, inputs, **kwargs: Any):
+        num_workers.append(inputs.num_workers)
+        inputs.num_workers = 0  # only record the request, iterate in-process
+        return encode(self, inputs, **kwargs)
+
+    monkeypatch.setattr(RandomEncoderBaseline, "encode", recording_encode)
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    mteb.evaluate(model, task, cache=None, num_proc=2)
+
+    assert num_workers
+    assert all(n == 2 for n in num_workers)
 
 
 @pytest.mark.parametrize("task", MOCK_MAEB_TASK_GRID)
