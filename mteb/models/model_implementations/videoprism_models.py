@@ -48,6 +48,8 @@ class VideoPrismVisionWrapper(AbsEncoder):
         device: str | int | torch.device | None = None,
         fps: float | None = None,
         max_frames: int | None = None,
+        # 16 frames: encoded in the checkpoint name
+        # https://github.com/google-deepmind/videoprism
         num_frames: int | None = 16,
         **kwargs: Any,
     ) -> None:

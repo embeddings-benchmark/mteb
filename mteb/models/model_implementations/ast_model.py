@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
+import numpy as np
 import torch
 from tqdm.auto import tqdm
 from transformers import ASTFeatureExtractor, ASTModel
@@ -53,23 +54,21 @@ class ASTWrapper(AbsEncoder):
             inputs,
             disable=not show_progress_bar,
         ):
-            audio_arrays = []
-            for a in batch["audio"]:
-                array = a["array"]
-                # Ensure minimum length for AST feature extractor (window size is 400)
-                min_samples = 401  # Just above the window size
-                if len(array) < min_samples:
-                    padding = torch.zeros(min_samples - len(array))
-                    array = torch.cat([array, padding])
-
-                audio_arrays.append(array.numpy())
+            # the extractor always emits max_length=1024 frames (10.24 s)
+            # https://huggingface.co/MIT/ast-finetuned-audioset-10-10-0.4593/blob/main/preprocessor_config.json
+            # pad up to the 400-sample FFT window so short clips do not crash
+            audio_arrays = [
+                np.pad(
+                    np.asarray(a["array"]),
+                    (0, max(0, 401 - np.asarray(a["array"]).shape[-1])),
+                )
+                for a in batch["audio"]
+            ]
 
             features = self.feature_extractor(
                 audio_arrays,
                 sampling_rate=self.sampling_rate,
                 return_tensors="pt",
-                truncation=True,
-                padding=True,
             ).to(self.device)
 
             outputs = self.model(**features)

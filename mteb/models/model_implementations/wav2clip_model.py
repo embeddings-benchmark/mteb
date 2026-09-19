@@ -26,7 +26,10 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_s: float = 30.0,
+        # uncapped: Wav2CLIP pools over the spectrogram, so length is unbounded.
+        # Set this to truncate; it was previously declared but never applied.
+        # https://arxiv.org/abs/2110.11499
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
         from wav2clip import embed_audio, get_model
@@ -36,7 +39,7 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
         self.device = device
         self.audio_model = get_model().to(device)
         self.sampling_rate = 16_000
-        self.max_audio_length_s = max_audio_length_s
+        self.max_audio_length_seconds = max_audio_length_seconds
 
         # text side (CLIP) - we use the standard OpenAI CLIP model as mentioned in paper
         # Wav2Clip aligns audio embeddings to CLIP's embedding space using this specific model
@@ -65,20 +68,19 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
             inputs, desc="Processing audio batches", disable=not show_progress_bar
         ):
             audio_arrays = [audio["array"] for audio in batch["audio"]]
+            if self.max_audio_length_seconds:
+                cap = int(self.max_audio_length_seconds * self.sampling_rate)
+                audio_arrays = [w[..., :cap] for w in audio_arrays]
 
             max_length = max(wav.shape[-1] for wav in audio_arrays)
             padded_wavs = []
             for wav in audio_arrays:
+                wav = np.asarray(wav, dtype=np.float32)  # noqa: PLW2901
                 if wav.shape[-1] < max_length:
-                    # Pad with zeros
-                    pad_length = max_length - wav.shape[-1]
-                    padded_wav = torch.nn.functional.pad(wav, (0, pad_length))
-                else:
-                    padded_wav = wav
-                padded_wavs.append(padded_wav)
+                    wav = np.pad(wav, (0, max_length - wav.shape[-1]))  # noqa: PLW2901
+                padded_wavs.append(wav)
 
-            # Stack into batch array and convert to numpy for embed_audio
-            batch_tensor = torch.stack(padded_wavs).numpy()
+            batch_tensor = np.stack(padded_wavs)
 
             # Process entire batch at once
             batch_embeds = self.embed_audio(batch_tensor, self.audio_model)

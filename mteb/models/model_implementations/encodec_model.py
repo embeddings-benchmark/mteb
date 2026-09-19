@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
+import numpy as np
 import torch
 from tqdm.auto import tqdm
 from transformers import AutoProcessor, EncodecModel
@@ -28,7 +29,9 @@ class EncodecWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_seconds: float = 30.0,
+        # no limit: chunk_length_s=null
+        # https://huggingface.co/facebook/encodec_24khz/blob/main/config.json
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
         self.model_name = model_name
@@ -41,7 +44,7 @@ class EncodecWrapper(AbsEncoder):
         self.model.eval()
 
         self.processor = AutoProcessor.from_pretrained(model_name)
-        self.sampling_rate = self.processor.sampling_rate  # 24000 Hz typically
+        self.sampling_rate = self.processor.sampling_rate  # from checkpoint (24 kHz)
 
     def get_audio_embeddings(
         self,
@@ -49,8 +52,14 @@ class EncodecWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
-        inputs.collate_fn = AudioCollator(self.sampling_rate, max_samples)
+        max_samples = (
+            int(self.max_audio_length_seconds * self.sampling_rate)
+            if self.max_audio_length_seconds is not None
+            else None
+        )
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate, max_samples=max_samples
+        )
 
         all_embeddings = []
 
@@ -63,12 +72,15 @@ class EncodecWrapper(AbsEncoder):
             for array in audio_array:
                 # Ensure minimum length for encoder (Encodec needs ~320 samples per frame)
                 # Use 1 second minimum to be safe
+                # AudioCollator yields numpy
                 min_samples = self.sampling_rate
+                array = np.asarray(array)  # noqa: PLW2901
                 if array.shape[-1] < min_samples:
-                    padding = torch.zeros(min_samples - array.shape[-1])
-                    array = torch.cat([array, padding])  # noqa: PLW2901
+                    array = np.pad(  # noqa: PLW2901
+                        array, (0, min_samples - array.shape[-1])
+                    )
 
-                audio_arrays.append(array.numpy())
+                audio_arrays.append(array)
 
             with torch.no_grad():
                 # Use processor for batch padding (truncation/min-length done manually above)

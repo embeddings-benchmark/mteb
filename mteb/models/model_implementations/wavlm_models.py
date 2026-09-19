@@ -24,7 +24,9 @@ class WavlmWrapper(AbsEncoder):
         model_name: str,
         revision: str | None = None,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_seconds: float = 30.0,
+        # 90 s: WavLM has no SDPA/flash kernel, so attention is O(n^2); this is
+        # the most that fits batch 32 in 80 GB. An mteb budget, not the model's.
+        max_audio_length_seconds: float = 90.0,
         **kwargs: Any,
     ):
         self.model_name = model_name

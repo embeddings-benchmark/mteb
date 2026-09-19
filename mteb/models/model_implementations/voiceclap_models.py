@@ -33,6 +33,10 @@ class VoiceCLAPSmallWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        # 30 s: chunk_length=30 (n_ctx=1500 positions); this wrapper serves
+        # voiceclap-small, large loads through SentenceTransformerEncoderWrapper
+        # https://huggingface.co/VoiceNet/voiceclap-small/blob/main/preprocessor_config.json
+        max_audio_length_seconds: float | None = 30.0,
         **kwargs: Any,
     ):
         from transformers import AutoModel, AutoTokenizer
@@ -47,8 +51,10 @@ class VoiceCLAPSmallWrapper(AbsEncoder):
             .eval()
         )
         self.tokenizer = AutoTokenizer.from_pretrained(model_name, revision=revision)
-        # VoiceCLAP-Small expects 16 kHz mono waveforms.
+        # 16 kHz: sampling_rate=16000
+        # https://huggingface.co/VoiceNet/voiceclap-small/blob/main/preprocessor_config.json
         self.sampling_rate = 16000
+        self.max_audio_length_seconds = max_audio_length_seconds
 
     def get_text_embeddings(
         self,
@@ -80,7 +86,14 @@ class VoiceCLAPSmallWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate,
+            max_samples=(
+                int(self.max_audio_length_seconds * self.sampling_rate)
+                if self.max_audio_length_seconds
+                else None
+            ),
+        )
 
         all_features = []
         for batch in tqdm(inputs, disable=not show_progress_bar):

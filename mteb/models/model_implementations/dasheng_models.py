@@ -75,6 +75,7 @@ class DashengAudioWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        # no max_samples: Dasheng pools internally and declares no length limit
         inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
 
         all_embeddings = []

@@ -20,7 +20,10 @@ class TevatronOmniEmbedWrapper(SentenceTransformerEncoderWrapper):
         model: str,
         revision: str | None = None,
         device: str | None = None,
+        # fps=2: qwen-omni-utils FPS=2.0
+        # https://github.com/QwenLM/Qwen2.5-Omni/blob/main/qwen-omni-utils/src/qwen_omni_utils/v2_5/vision_process.py
         fps: float | None = 2.0,
+        # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
         **kwargs: Any,
@@ -32,6 +35,10 @@ class TevatronOmniEmbedWrapper(SentenceTransformerEncoderWrapper):
             fps=fps,
             max_frames=max_frames,
             num_frames=num_frames,
+            # 300 s at 16 kHz: Qwen2.5-Omni chunk_length=300, the base this
+            # is adapted from
+            # https://huggingface.co/Qwen/Qwen2.5-Omni-7B/blob/main/preprocessor_config.json
+            max_samples=4_800_000,
             **kwargs,
         )
         self.target_sampling_rate = self.model[

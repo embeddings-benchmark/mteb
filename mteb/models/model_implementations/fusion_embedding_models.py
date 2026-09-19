@@ -46,6 +46,7 @@ class FusionEmbeddingWrapper(AbsEncoder):
 
     sampling_rate = 16_000
     max_text_tokens = 254
+    # 64 frames is an mteb default; the config names the base but no frame count
     video_num_frames = 64  # the base's reference max_frames; sampled uniformly
 
     def __init__(

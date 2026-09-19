@@ -24,7 +24,9 @@ class SeamlessM4TWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_seconds: float = 5.0,
+        # 10 s: MAX_INPUT_AUDIO_LENGTH in Meta's demo app, not a model config
+        # https://github.com/facebookresearch/seamless_communication/blob/main/demo/expressive/app.py
+        max_audio_length_seconds: float = 10.0,
         **kwargs: Any,
     ):
         self.model_name = model_name
@@ -48,7 +50,9 @@ class SeamlessM4TWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        inputs.collate_fn = AudioCollator(self.sampling_rate, self.max_samples)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate, max_samples=self.max_samples
+        )
         all_embeddings = []
 
         for batch in tqdm(

@@ -42,6 +42,8 @@ IMAGE_BASE_FACTOR = 16
 IMAGE_FACTOR = IMAGE_BASE_FACTOR * 2
 MIN_PIXELS = 4 * IMAGE_FACTOR * IMAGE_FACTOR
 MAX_PIXELS = 1800 * IMAGE_FACTOR * IMAGE_FACTOR
+# fps=1, max_frames=64: UEmbed's own FPS / MAX_FRAMES
+# https://github.com/Alibaba-NLP/UEmbed/blob/main/src/models/qwen35_embedding.py
 DEFAULT_FPS = 1.0
 DEFAULT_MAX_FRAMES = 64
 SPARSE_DIM = 184_016

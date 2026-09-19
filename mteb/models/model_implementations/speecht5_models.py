@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import warnings
 from typing import TYPE_CHECKING, Any
 
@@ -13,6 +14,8 @@ from transformers import (
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+
+logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -28,11 +31,11 @@ class SpeechT5Audio(AbsEncoder):
         model_name: str,
         revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_s: float = 30.0,
+        # None: the encoder's own limit, read from the checkpoint below
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
         self.device = device
-        self.max_audio_length_s = max_audio_length_s
 
         self.asr_processor = SpeechT5Processor.from_pretrained(
             "microsoft/speecht5_asr",
@@ -45,6 +48,22 @@ class SpeechT5Audio(AbsEncoder):
         self.asr_model.eval()
 
         self.sampling_rate = self.asr_processor.feature_extractor.sampling_rate
+
+        # samples: max_speech_positions x conv_stride
+        # https://huggingface.co/microsoft/speecht5_asr/blob/main/config.json
+        config = self.asr_model.config
+        stride = 1
+        for st in config.conv_stride:
+            stride *= st
+        self.max_samples = config.max_speech_positions * stride
+        if max_audio_length_seconds is not None:
+            self.max_samples = int(max_audio_length_seconds * self.sampling_rate)
+        logger.info(
+            "%s: audio capped at %d samples (%.1f s)",
+            model_name,
+            self.max_samples,
+            self.max_samples / self.sampling_rate,
+        )
 
     def get_audio_embeddings(  # noqa: PLR0914
         self,
@@ -90,7 +109,7 @@ class SpeechT5Audio(AbsEncoder):
                 return_tensors="pt",
                 padding="longest",
                 truncation=True,
-                max_length=int(self.max_audio_length_s * self.sampling_rate),
+                max_length=self.max_samples,
                 return_attention_mask=True,
             ).to(self.device)
 
@@ -224,7 +243,8 @@ class SpeechT2Multimodal(AbsEncoder):
         model_name: str,
         revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_s: float = 30.0,
+        # None: the encoder's own limit, read from the checkpoint below
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
         # Revision is combined as "asr_revision-tts_revision"
@@ -234,7 +254,7 @@ class SpeechT2Multimodal(AbsEncoder):
             model_name=model_name,
             revision=asr_revision,
             device=device,
-            max_audio_length_s=max_audio_length_s,
+            max_audio_length_seconds=max_audio_length_seconds,
             **kwargs,
         )
         self.tts_encoder = SpeechT5Text(

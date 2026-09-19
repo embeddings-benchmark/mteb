@@ -297,6 +297,8 @@ class SemanticRouterMultiModalEmbedWrapper(AbsEncoder):
     """Shared encode paths for multi-modal-embed small/large backends."""
 
     sampling_rate = 16_000
+    # 30 s: the audio encoder is Whisper (audio_encoder_name), chunk_length=30
+    # https://huggingface.co/openai/whisper-medium/blob/main/preprocessor_config.json
     max_audio_seconds = 30.0
 
     def __init__(self, device: str | None = None) -> None:

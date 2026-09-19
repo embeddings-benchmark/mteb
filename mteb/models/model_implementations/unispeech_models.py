@@ -24,7 +24,9 @@ class UniSpeechWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_seconds: float = 30.0,
+        # uncapped: conv positional embedding, no max_position_embeddings
+        # https://huggingface.co/microsoft/unispeech-sat-base/blob/main/config.json
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
         self.model_name = model_name
@@ -47,7 +49,14 @@ class UniSpeechWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+        max_samples = (
+            int(self.max_audio_length_seconds * self.sampling_rate)
+            if self.max_audio_length_seconds
+            else None
+        )
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate, max_samples=max_samples
+        )
 
         all_embeddings = []
 
@@ -62,8 +71,6 @@ class UniSpeechWrapper(AbsEncoder):
                 sampling_rate=self.sampling_rate,
                 return_tensors="pt",
                 padding="longest",
-                truncation=True,
-                max_length=int(self.max_audio_length_seconds * self.sampling_rate),
                 return_attention_mask=True,
             ).to(self.device)
 

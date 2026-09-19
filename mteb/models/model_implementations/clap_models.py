@@ -48,7 +48,15 @@ class ClapZeroShotWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+        # rand_trunc picks a random crop of anything over nb_max_samples, so the
+        # same clip scores differently each run; cutting there keeps it on the
+        # deterministic repeatpad branch. fusion is the checkpoint's own
+        # long-audio path, so it is left whole.
+        fe = self.processor.feature_extractor
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate,
+            max_samples=(None if fe.truncation == "fusion" else fe.nb_max_samples),
+        )
 
         all_features = []
 
@@ -61,8 +69,8 @@ class ClapZeroShotWrapper(AbsEncoder):
                 audio=audio_array,
                 sampling_rate=self.sampling_rate,
                 return_tensors="pt",
-                padding=True,
-            )
+            )  # no padding=/truncation=: keeps the checkpoint's own setting
+            # https://github.com/huggingface/transformers/blob/main/src/transformers/models/clap/feature_extraction_clap.py
             features = {k: v.to(self.device) for k, v in features.items()}
 
             with torch.no_grad():
