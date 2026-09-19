@@ -102,7 +102,11 @@ before settling on it: the one-word texts above include `"s."`, but also terse y
 The other modalities have a filter of their own, each measuring its content the way the descriptive statistics do:
 
 ```python
-from mteb.data_cleaning import remove_short_audio, remove_short_videos, remove_small_images
+from mteb.data_cleaning import (
+    remove_short_audio,
+    remove_short_videos,
+    remove_small_images,
+)
 
 cleaned = remove_small_images(task, min_size=32)  # width or height under 32 pixels
 cleaned = remove_short_audio(task, min_seconds=0.5)

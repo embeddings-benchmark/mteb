@@ -19,7 +19,9 @@ too small to carry meaning: `remove_short_texts`, `remove_small_images`, `remove
 from mteb.data_cleaning import remove_duplicates, remove_short_texts
 
 cleaned = remove_short_texts(remove_duplicates(task), min_length=1)
-print(cleaned.metadata.name)  # MassiveIntentClassification (remove_duplicates, remove_short_texts)
+print(
+    cleaned.metadata.name
+)  # MassiveIntentClassification (remove_duplicates, remove_short_texts)
 ```
 
 Each filter measures its content the way the task's descriptive statistics do, except that texts are measured without
