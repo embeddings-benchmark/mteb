@@ -4,12 +4,16 @@ from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _GOT10K_BIBTEX = r"""
-@article{huang2019got,
-  author = {Lianghua Huang and Xin Zhao and Kaiqi Huang},
-  title = {{GOT-10k}: A Large High-Diversity Benchmark for Generic Object
-           Tracking in the Wild},
-  journal = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
-  year = {2019},
+@ARTICLE{8922619,
+  author={Huang, Lianghua and Zhao, Xin and Huang, Kaiqi},
+  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  title={GOT-10k: A Large High-Diversity Benchmark for Generic Object Tracking in the Wild},
+  year={2021},
+  volume={43},
+  number={5},
+  pages={1562-1577},
+  keywords={Training;Object tracking;Databases;Protocols;Benchmark testing;Servers;Object tracking;benchmark dataset;performance evaluation},
+  doi={10.1109/TPAMI.2019.2957464}
 }
 """
 
@@ -32,7 +36,7 @@ class GOT10kI2VRetrieval(AbsTaskRetrieval):
             "given the first frame of a tracking sequence (image), retrieve "
             "the full tracking video that follows. " + _GOT10K_DESCRIPTION_TAIL
         ),
-        reference="https://arxiv.org/abs/1808.00803",
+        reference="https://ieeexplore.ieee.org/document/8922619",
         dataset={
             "path": "rakshi719/GOT10k-I2V",
             "revision": "b650a55bc4b7fbc25582421eeb4493177397a917",
@@ -46,7 +50,7 @@ class GOT10kI2VRetrieval(AbsTaskRetrieval):
         date=("2018-01-01", "2019-12-31"),
         domains=["Scene"],
         task_subtypes=["Cross-Modal Retrieval"],
-        license="cc-by-4.0",
+        license="cc-by-nc-sa-4.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
@@ -69,7 +73,7 @@ class GOT10kV2IRetrieval(AbsTaskRetrieval):
             "given a tracking video, retrieve its corresponding first frame "
             "(image). " + _GOT10K_DESCRIPTION_TAIL
         ),
-        reference="https://arxiv.org/abs/1808.00803",
+        reference="https://ieeexplore.ieee.org/document/8922619",
         dataset={
             "path": "rakshi719/GOT10k-V2I",
             "revision": "027a6f397f5ebb138504906c77c6ddbad27322c2",
@@ -83,7 +87,7 @@ class GOT10kV2IRetrieval(AbsTaskRetrieval):
         date=("2018-01-01", "2019-12-31"),
         domains=["Scene"],
         task_subtypes=["Cross-Modal Retrieval"],
-        license="cc-by-4.0",
+        license="cc-by-nc-sa-4.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

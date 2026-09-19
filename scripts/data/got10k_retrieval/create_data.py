@@ -46,8 +46,8 @@ from datasets import Dataset, DatasetDict, Image, Value, Video
 from huggingface_hub import HfApi, create_repo, get_token
 from PIL import Image as PILImage
 
-_LICENSE = "cc-by-4.0"
-_REFERENCE = "https://arxiv.org/abs/1808.00803"
+_LICENSE = "cc-by-nc-sa-4.0"
+_REFERENCE = "https://ieeexplore.ieee.org/document/8922619"
 _I2V_REPO_DEFAULT = "rakshi719/GOT10k-I2V"
 _V2I_REPO_DEFAULT = "rakshi719/GOT10k-V2I"
 
@@ -113,6 +113,7 @@ def _frames_to_mp4(frames: list[Path], output_path: Path, fps: int = 10) -> None
                 "-y",
                 "-framerate", str(fps),
                 "-i", str(tmp_dir / "%08d.jpg"),
+                "-vf", "scale=trunc(iw/2)*2:trunc(ih/2)*2",
                 "-c:v", "libx264",
                 "-pix_fmt", "yuv420p",
                 "-crf", "23",
