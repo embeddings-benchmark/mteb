@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Literal
+from typing import Any, Literal
 
 from datasets import load_dataset
 
@@ -106,7 +106,7 @@ class MarsVLPairsT2IRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_mars_vl_pairs(self, "t2i", num_proc)
 
 
@@ -140,5 +140,5 @@ class MarsVLPairsI2TRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_mars_vl_pairs(self, "i2t", num_proc)

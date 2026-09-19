@@ -1,4 +1,5 @@
 from hashlib import sha256
+from typing import Any
 
 import datasets
 
@@ -64,7 +65,7 @@ class XQuADRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
@@ -80,8 +81,10 @@ class XQuADRetrieval(AbsTaskRetrieval):
             data = data.filter(lambda x: x["answers"]["text"] != "")  # noqa: PLC1901
 
             question_ids = {
-                question: id
-                for id, question in zip(data["id"], data["question"], strict=True)
+                question: question_id
+                for question_id, question in zip(
+                    data["id"], data["question"], strict=True
+                )
             }
             context_ids = {
                 context: sha256(context.encode("utf-8")).hexdigest()

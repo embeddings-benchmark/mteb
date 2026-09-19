@@ -31,9 +31,12 @@ class ColVec1Wrapper(AbsEncoder):
         revision: str | None = None,
         device: str | None = None,
         trust_remote_code: bool = True,
-        torch_dtype: torch.dtype | None = torch.bfloat16,
-        **kwargs,
+        torch_dtype: OutputDType | torch.dtype | None = OutputDType.BF16,
+        **kwargs: Any,
     ):
+        if isinstance(torch_dtype, OutputDType):
+            torch_dtype = torch_dtype.get_dtype()
+
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
 
         self.model = AutoModel.from_pretrained(
@@ -75,9 +78,9 @@ class ColVec1Wrapper(AbsEncoder):
                     "The number of texts and images must have the same length"
                 )
             return text_embeddings + image_embeddings
-        elif text_embeddings is not None:
+        if text_embeddings is not None:
             return text_embeddings
-        elif image_embeddings is not None:
+        if image_embeddings is not None:
             return image_embeddings
         raise ValueError("No text or image features found in inputs.")
 
@@ -90,8 +93,12 @@ class ColVec1Wrapper(AbsEncoder):
         return self.model(**encoded_inputs)
 
     def get_image_embeddings(
-        self, images, batch_size=32, show_progress_bar=True, **kwargs
-    ):
+        self,
+        images: DataLoader[BatchedInput],
+        batch_size: int = 32,
+        show_progress_bar: bool = True,
+        **kwargs: Any,
+    ) -> Array:
         import torchvision.transforms.functional as F
         from PIL import Image
 
@@ -116,8 +123,12 @@ class ColVec1Wrapper(AbsEncoder):
         )
 
     def get_text_embeddings(
-        self, texts, batch_size=32, show_progress_bar=True, **kwargs
-    ):
+        self,
+        texts: DataLoader[BatchedInput],
+        batch_size: int = 32,
+        show_progress_bar: bool = True,
+        **kwargs: Any,
+    ) -> Array:
         all_embeds = []
         with torch.no_grad():
             for batch in tqdm(
@@ -131,7 +142,7 @@ class ColVec1Wrapper(AbsEncoder):
             all_embeds, batch_first=True, padding_value=0
         )
 
-    def similarity(self, a, b):
+    def similarity(self, a: Array, b: Array) -> Array:
         a = [torch.as_tensor(x) for x in a]
         b = [torch.as_tensor(x) for x in b]
         return self.processor.score_multi_vector(a, b, device=self.device)
@@ -151,10 +162,13 @@ class ColVec11Wrapper(ColVec1Wrapper):
         revision: str | None = None,
         device: str | None = None,
         trust_remote_code: bool = True,
-        torch_dtype: torch.dtype | None = torch.bfloat16,
+        torch_dtype: OutputDType | torch.dtype | None = OutputDType.BF16,
         processor_kwargs: dict[str, Any] | None = None,
-        **model_kwargs,
+        **model_kwargs: Any,
     ):
+        if isinstance(torch_dtype, OutputDType):
+            torch_dtype = torch_dtype.get_dtype()
+
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         processor_kwargs = dict(processor_kwargs or {})
 
@@ -175,8 +189,12 @@ class ColVec11Wrapper(ColVec1Wrapper):
         )
 
     def get_image_embeddings(
-        self, images, batch_size=32, show_progress_bar=True, **kwargs
-    ):
+        self,
+        images: DataLoader[BatchedInput],
+        batch_size: int = 32,
+        show_progress_bar: bool = True,
+        **kwargs: Any,
+    ) -> Array:
         import torchvision.transforms.functional as F
         from PIL import Image
 
@@ -218,7 +236,7 @@ class ColVec11Wrapper(ColVec1Wrapper):
             return self.get_text_embeddings(inputs, **kwargs)
         raise ValueError("No text or image features found in inputs.")
 
-    def similarity(self, a, b):
+    def similarity(self, a: Array, b: Array) -> Array:
         a = [torch.as_tensor(x) for x in a]
         b = [torch.as_tensor(x) for x in b]
         return self.processor.score_retrieval(
@@ -283,7 +301,7 @@ COLVEC1_1_CITATION = """
 
 colvec1_4b = ModelMeta(
     loader=ColVec1Wrapper,
-    loader_kwargs=dict(torch_dtype=torch.bfloat16),
+    loader_kwargs=dict(torch_dtype=OutputDType.BF16),
     name="webAI-Official/webAI-ColVec1-4b",
     revision="dce73882e6b89a01e702891a593f775dc5711929",
     release_date="2026-04-05",
@@ -315,7 +333,7 @@ colvec1_4b = ModelMeta(
 
 colvec1_9b = ModelMeta(
     loader=ColVec1Wrapper,
-    loader_kwargs=dict(torch_dtype=torch.bfloat16),
+    loader_kwargs=dict(torch_dtype=OutputDType.BF16),
     name="webAI-Official/webAI-ColVec1-9b",
     revision="3767539920b9132abb24cef2c88d42d81817e50b",
     release_date="2026-04-05",
@@ -348,7 +366,7 @@ colvec1_9b = ModelMeta(
 colvec1_1_4b = ModelMeta(
     loader=ColVec11Wrapper,
     loader_kwargs={
-        "torch_dtype": torch.bfloat16,
+        "torch_dtype": OutputDType.BF16,
         "attn_implementation": "sdpa",
         "processor_kwargs": {
             "max_num_visual_tokens": 1792,
@@ -395,7 +413,7 @@ colvec1_1_4b = ModelMeta(
 colvec1_1_8b = ModelMeta(
     loader=ColVec11Wrapper,
     loader_kwargs={
-        "torch_dtype": torch.bfloat16,
+        "torch_dtype": OutputDType.BF16,
         "attn_implementation": "sdpa",
         "processor_kwargs": {
             "max_num_visual_tokens": 1792,

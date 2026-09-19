@@ -46,7 +46,7 @@ class JinaCLIPModel(AbsEncoder):
         convert_to_numpy: bool = False,
         convert_to_tensor: bool = True,
         **kwargs: Any,
-    ):
+    ) -> Array:
         all_text_embeddings = []
 
         with torch.no_grad():
@@ -71,7 +71,7 @@ class JinaCLIPModel(AbsEncoder):
         convert_to_tensor: bool = True,
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ):
+    ) -> Array:
         all_image_embeddings = []
 
         with torch.no_grad():
@@ -116,9 +116,9 @@ class JinaCLIPModel(AbsEncoder):
                 )
             fused_embeddings = text_embeddings + image_embeddings
             return fused_embeddings
-        elif text_embeddings is not None:
+        if text_embeddings is not None:
             return text_embeddings
-        elif image_embeddings is not None:
+        if image_embeddings is not None:
             return image_embeddings
         raise ValueError
 

@@ -13,6 +13,7 @@ if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
 
 EVA_CLIP_CITATION = """@article{EVA-CLIP,
@@ -23,7 +24,7 @@ EVA_CLIP_CITATION = """@article{EVA-CLIP,
 }"""
 
 
-def evaclip_loader(model_name, **kwargs):
+def evaclip_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
     try:
         import sys
 
@@ -60,7 +61,7 @@ def evaclip_loader(model_name, **kwargs):
             texts: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_text_embeddings = []
 
             with torch.no_grad(), torch.cuda.amp.autocast():
@@ -79,7 +80,7 @@ def evaclip_loader(model_name, **kwargs):
             images: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_image_embeddings = []
 
             with torch.no_grad(), torch.cuda.amp.autocast():
@@ -119,9 +120,9 @@ def evaclip_loader(model_name, **kwargs):
                     )
                 fused_embeddings = text_embeddings + image_embeddings
                 return fused_embeddings
-            elif text_embeddings is not None:
+            if text_embeddings is not None:
                 return text_embeddings
-            elif image_embeddings is not None:
+            if image_embeddings is not None:
                 return image_embeddings
             raise ValueError
 

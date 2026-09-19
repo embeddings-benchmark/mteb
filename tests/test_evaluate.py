@@ -7,6 +7,7 @@ from typing import Any
 
 import pytest
 from datasets.exceptions import DatasetNotFoundError
+from torch.utils.data import DataLoader
 
 import mteb
 from mteb import SentenceTransformerEncoderWrapper
@@ -20,15 +21,23 @@ from mteb.mocks import (
 from mteb.mocks.mock_tasks import (
     MockAggregatedTask,
     MockClassificationTask,
+    MockMultilabelClassification,
     MockMultilingualClassificationTask,
     MockMultilingualRetrievalTask,
+    MockPairClassificationTask,
     MockRetrievalTask,
+    MockSTSTask,
+    MockSummarizationTask,
+    MockTextZeroShotClassificationTask,
+    MockZeroShotClassificationTask,
 )
 from mteb.models import ModelMeta
+from mteb.models.model_implementations.random_baseline import RandomEncoderBaseline
+from mteb.models.model_meta import ScoringFunction
 from mteb.models.models_protocols import EncoderProtocol
 from mteb.results.task_result import TaskResult
 from mteb.timing import TimingStack
-from mteb.types import OutputDType
+from mteb.types import Array, BatchedInput, OutputDType
 from tests.mock_models import MockSentenceTransformer
 
 mock_classification = (MockSentenceTransformer(), MockClassificationTask(), 1)
@@ -288,7 +297,7 @@ def test_evaluate_aggregated_task():
     mteb.evaluate(model, task, cache=None)
 
 
-def test_evaluate_aggregated_task_with_cache(tmp_path):
+def test_evaluate_aggregated_task_with_cache(tmp_path: Path):
     """Test evaluating an aggregate task with caching.
 
     Verifies both that:
@@ -333,7 +342,7 @@ def test_evaluate_aggregated_task_with_cache(tmp_path):
     assert cached_results.task_results[0].get_score() == pytest.approx(score1)
 
 
-def test_run_private_task_warning(caplog):
+def test_run_private_task_warning(caplog: pytest.LogCaptureFixture):
     """Test that a warning is correctly logged in an attempt run a private dataset is made"""
     task = mteb.get_task("Code1Retrieval")
     from mteb.timing import TimingStack
@@ -423,7 +432,7 @@ def test_evaluate_preserves_preloaded_data_across_multiple_calls():
     _ = task.dataset["test"]  # Verify dataset persists across multiple calls
 
 
-def test_evaluate_experiment(tmp_path):
+def test_evaluate_experiment(tmp_path: Path):
     """Test that evaluate() can be used in an experiment context."""
     model = mteb.get_model(
         "mteb/baseline-random-encoder", test_param=123, test_param2="abc"
@@ -445,7 +454,7 @@ def test_evaluate_experiment(tmp_path):
 
 
 @pytest.mark.parametrize("embed_dim", [None, 10])
-def test_evaluate_mrl(tmp_path, embed_dim):
+def test_evaluate_mrl(tmp_path: Path, embed_dim):
     """Test that evaluate() can be used in an experiment context."""
     model = mteb.get_model(
         "mteb/baseline-random-encoder",
@@ -502,6 +511,45 @@ def test_precision_arg():
     )
 
 
+@pytest.mark.parametrize(
+    "task",
+    [
+        MockClassificationTask(),
+        MockMultilabelClassification(),
+        MockPairClassificationTask(),
+        MockSTSTask(),
+        MockSummarizationTask(),
+        MockTextZeroShotClassificationTask(),
+        MockZeroShotClassificationTask(),
+    ],
+    ids=lambda x: x.metadata.name,
+)
+def test_num_proc_reaches_every_dataloader(task: AbsTask) -> None:
+    class _NumWorkersRecordingBaseline(RandomEncoderBaseline):
+        """Random baseline that records the num_workers of every dataloader it encodes."""
+
+        def __init__(self, *args: Any, **kwargs: Any) -> None:
+            super().__init__(*args, **kwargs)
+            self.num_workers: list[int] = []
+            self.mteb_model_meta = ModelMeta.create_empty(
+                overwrites=dict(
+                    similarity_fn_name=ScoringFunction.COSINE,
+                    modalities=["image", "text"],
+                )
+            )
+
+        def encode(self, inputs: DataLoader[BatchedInput], **kwargs: Any) -> Array:
+            self.num_workers.append(inputs.num_workers)
+            inputs.num_workers = 0  # only record the request, iterate in-process
+            return super().encode(inputs, **kwargs)
+
+    model = _NumWorkersRecordingBaseline("test_model", revision=None)
+    mteb.evaluate(model, task, cache=None, num_proc=2)
+
+    assert model.num_workers
+    assert all(n == 2 for n in model.num_workers)
+
+
 @pytest.mark.parametrize("task", MOCK_MAEB_TASK_GRID)
 def test_mock_maeb_tasks(task: AbsTask):
     pytest.importorskip("torchaudio", reason="Audio dependencies are not installed")
@@ -524,7 +572,7 @@ def test_mock_mmeb_tasks(task: AbsTask):
 
 
 class MockCrashTask(MockMultilingualClassificationTask):
-    def _evaluate_subset(self, model, data_split, hf_split, hf_subset, **kwargs):
+    def _evaluate_subset(self, model, data_split, hf_split, hf_subset, **kwargs: Any):
         if hf_subset == "fra":
             raise RuntimeError("Crash on fra")
         return {"accuracy": 0.8}

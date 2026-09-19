@@ -10,6 +10,8 @@ from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping
+
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -50,7 +52,7 @@ class CosmosEmbed1Model(AbsEncoder):
             trust_remote_code=True,
         )
 
-    def _move(self, batch: Any) -> dict[str, Any]:
+    def _move(self, batch: Mapping[str, Any]) -> dict[str, Any]:
         moved: dict[str, Any] = {}
         for key, value in dict(batch).items():
             if isinstance(value, torch.Tensor):

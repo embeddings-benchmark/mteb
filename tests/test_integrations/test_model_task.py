@@ -18,9 +18,14 @@ from mteb.mocks import (
     MOCK_MIEB_TASK_GRID,
     MOCK_MVEB_TASK_GRID,
     MOCK_TASK_TEST_GRID,
+    MockAsymVideoAudioPairClassificationTask,
+    MockAsymVideoAudioPairClassificationTaskV2,
     MockAudioReranking,
     MockRerankingTask,
+    MockSymCustomVideoAudioPairClassificationTaskV2,
+    MockVideoAudioPairClassificationTask,
 )
+from mteb.mocks.mock_tasks import MockAsymCustomTextImagePairClassificationTaskV2
 
 logging.basicConfig(level=logging.INFO)
 
@@ -168,6 +173,27 @@ def test_benchmark_video_sparse_encoder(
 )
 @pytest.mark.parametrize("model", [mteb.get_model("mteb/baseline-random-colbert")])
 def test_benchmark_video_colbert(task: str | AbsTask, model: mteb.EncoderProtocol):
+    """Test that a task can be fetched and run"""
+    pytest.importorskip("torchvision", reason="Video dependencies are not installed")
+    pytest.importorskip("torchaudio", reason="Video dependencies are not installed")
+    mteb.evaluate(model, task, cache=None)
+
+
+@pytest.mark.parametrize(
+    "task",
+    [
+        MockAsymCustomTextImagePairClassificationTaskV2(),
+        MockSymCustomVideoAudioPairClassificationTaskV2(),
+        MockAsymVideoAudioPairClassificationTaskV2(),
+        MockAsymVideoAudioPairClassificationTask(),
+        MockVideoAudioPairClassificationTask(),
+    ],
+    ids=lambda t: t.metadata.name,
+)
+@pytest.mark.parametrize("model", [mteb.get_model("mteb/baseline-random-encoder")])
+def test_benchmark_pair_classification(
+    task: str | AbsTask, model: mteb.EncoderProtocol
+):
     """Test that a task can be fetched and run"""
     pytest.importorskip("torchvision", reason="Video dependencies are not installed")
     pytest.importorskip("torchaudio", reason="Video dependencies are not installed")

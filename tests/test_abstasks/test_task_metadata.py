@@ -17,6 +17,7 @@ from mteb.mocks import (
     MOCK_MULTIMODAL_TASKS,
     MOCK_MVEB_TASK_GRID,
     MOCK_TASK_TEST_GRID,
+    MockClassificationTask,
 )
 
 
@@ -34,6 +35,18 @@ def check_descriptive_stats(task):
 @pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID)
 def test_descriptive_statistics_mock_tasks(task):
     check_descriptive_stats(task)
+
+
+def test_descriptive_statistics_does_not_mutate_eval_splits():
+    task = MockClassificationTask()
+    eval_splits = list(task.metadata.eval_splits)
+
+    for _ in range(2):
+        task.calculate_descriptive_statistics(overwrite_results=True)
+        task.metadata.descriptive_stat_path.unlink()
+
+    assert task.metadata.eval_splits == eval_splits
+    assert task.eval_splits == eval_splits
 
 
 @pytest.mark.parametrize("task", MOCK_MIEB_TASK_GRID)
@@ -160,7 +173,9 @@ def test_given_missing_revision_path_then_it_throws():
         )
 
 
-def test_given_none_revision_path_then_it_logs_warning(caplog):
+def test_given_none_revision_path_then_it_logs_warning(
+    caplog: pytest.LogCaptureFixture,
+):
     with pytest.raises(ValidationError):
         TaskMetadata(
             name="MyTask",

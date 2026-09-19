@@ -20,6 +20,7 @@ from tqdm.auto import tqdm
 
 from mteb._hf_integration.eval_model import HFEvalMeta, HFEvalTaskConfig
 from mteb._hf_integration.hf_hub_utils import _get_file_on_hub
+from mteb._log_once import LogOnce
 from mteb._set_seed import _set_seed
 from mteb.languages import LanguageScripts
 from mteb.models import (
@@ -30,7 +31,7 @@ from mteb.models import (
 from mteb.timing import TimingStack
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping
+    from collections.abc import Iterator, Mapping
 
     from typing_extensions import Self
 
@@ -43,6 +44,7 @@ if TYPE_CHECKING:
 
 
 logger = logging.getLogger(__name__)
+log_once = LogOnce(logger)
 
 
 def _multilabel_subsampling(
@@ -76,6 +78,27 @@ def _multilabel_subsampling(
         )
         dataset_dict.update({split: Dataset.from_dict(dataset_dict[split][test_idx])})
     return dataset_dict
+
+
+def _pair_content_columns(
+    columns: tuple[str | Mapping[str, Modalities], str | Mapping[str, Modalities]],
+    modalities: list[Modalities],
+) -> dict[str, Modalities]:
+    """The content columns of a task comparing two inputs, mapped to the modality of each.
+
+    An input is either a single column, whose modality is then the task's only one, or already a mapping from
+    column to modality. A plain column name on a task with several modalities is ambiguous, so nothing is returned
+    in that case and the caller reports the task as not declaring its columns.
+    """
+    resolved: dict[str, Modalities] = {}
+    for column in columns:
+        if isinstance(column, str):
+            if len(modalities) != 1:
+                return {}
+            resolved[column] = modalities[0]
+        else:
+            resolved.update(column)
+    return resolved
 
 
 class AbsTask(ABC):  # noqa: PLR0904
@@ -331,8 +354,7 @@ class AbsTask(ABC):  # noqa: PLR0904
                     return _multilabel_subsampling(
                         dataset_dict, seed, splits, label, n_samples
                     )
-                else:
-                    raise e
+                raise e
 
         for split in splits:
             if n_samples >= len(dataset_dict[split]):
@@ -400,7 +422,7 @@ class AbsTask(ABC):  # noqa: PLR0904
         """
         self.dataset = {}
         merged_dataset = load_dataset(**self.metadata.dataset)  # load "default" subset
-        for split in merged_dataset.keys():
+        for split in merged_dataset:
             df_split = merged_dataset[split].to_polars()
             df_grouped = dict(df_split.group_by(["lang"]))
             for lang in set(df_split["lang"].unique()) & set(self.hf_subsets):
@@ -453,8 +475,11 @@ class AbsTask(ABC):  # noqa: PLR0904
         hf_subset_stat: Literal["hf_subset_descriptive_stats"] = (
             "hf_subset_descriptive_stats"
         )
-        eval_splits = self.metadata.eval_splits
-        if isinstance(self, AbsTaskClassification):
+        eval_splits = list(self.metadata.eval_splits)
+        if (
+            isinstance(self, AbsTaskClassification)
+            and self.train_split not in eval_splits
+        ):
             eval_splits.append(self.train_split)
 
         pbar_split = tqdm(eval_splits, desc="Processing Splits...")
@@ -579,9 +604,12 @@ class AbsTask(ABC):  # noqa: PLR0904
                         subsets_to_keep.append(hf_subset)
                         break
 
-            if exclusive_language_filter is True and languages:
-                if lang_scripts.contains_languages(langs):
-                    subsets_to_keep.append(hf_subset)
+            if (
+                exclusive_language_filter is True
+                and languages
+                and lang_scripts.contains_languages(langs)
+            ):
+                subsets_to_keep.append(hf_subset)
 
         if len(subsets_to_keep) == 0:
             raise ValueError(
@@ -590,6 +618,16 @@ class AbsTask(ABC):  # noqa: PLR0904
 
         self.hf_subsets = subsets_to_keep
         return self
+
+    def _get_content_columns(self) -> dict[str, Modalities]:  # noqa: PLR6301
+        """The dataset columns holding the task's content, mapped to the modality of that content.
+
+        This is what the filters in `mteb.data_cleaning` compare samples on. Subclasses point it at their own column
+        names, e.g. `{"text": "text"}` for a text classification task or `{"image": "image"}` for an image one. It
+        is empty when a task does not declare its columns, which makes those filters raise rather than silently do
+        nothing.
+        """
+        return {}
 
     def _add_main_score(self, scores: ScoresDict) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
@@ -798,6 +836,9 @@ class AbsTask(ABC):  # noqa: PLR0904
         if self.data_loaded:
             self.dataset = None
             self.data_loaded = False
+            # a task whose data was filtered carries metadata of its own describing that data; unloading it
+            # leaves only the published data to reload, so restore the published metadata alongside
+            self.__dict__.pop("metadata", None)
             logger.info(f"Unloaded dataset {self.metadata.name} from memory.")
         else:
             msg = f"Dataset `{self.metadata.name}` is not loaded, cannot unload it."
@@ -807,3 +848,53 @@ class AbsTask(ABC):  # noqa: PLR0904
     def superseded_by(self) -> str | None:
         """If the dataset is superseded by another dataset, return the name of the new dataset."""
         return self.metadata.superseded_by
+
+
+def get_abstask_prompt(task_name: str) -> str:
+    """Get the prompt defined by the abstask class (`AbsTask.abstask_prompt`) of a task.
+
+    The task is resolved from the imported task classes instead of the task registry, such that it
+    doesn't only work for tasks within mteb, but also for tasks outside of it, e.g. mock tasks or
+    user defined tasks.
+
+    Args:
+        task_name: The name of the task, e.g. "SciFact".
+
+    Returns:
+        The prompt defined by the abstask class of the task, or an empty string if its abstask class
+            doesn't define one.
+    """
+    if task_name not in _task_name_to_prompt:
+        prompt = ""
+        for task_cls in _iter_task_subclasses():
+            # `abstask_prompt` is defined on the abstask class, e.g. `AbsTaskRetrieval`, and is only
+            # annotated on `AbsTask`, so abstasks such as `AbsTaskAggregate` don't define one
+            if task_cls.metadata.name == task_name:
+                prompt = getattr(task_cls, "abstask_prompt", "")
+                if prompt:
+                    break
+        _task_name_to_prompt[task_name] = prompt
+
+    prompt = _task_name_to_prompt[task_name]
+    if not prompt:
+        log_once.warning(
+            f"No prompt found on the abstask class of task '{task_name}'. Using an empty prompt."
+        )
+    return prompt
+
+
+def _iter_task_subclasses() -> Iterator[type[AbsTask]]:
+    """Iterate over the imported subclasses of `AbsTask` that define a metadata."""
+    stack: list[Any] = [AbsTask]
+    seen: set[Any] = set()
+    while stack:
+        for subclass in stack.pop().__subclasses__():
+            if subclass in seen:
+                continue
+            seen.add(subclass)
+            stack.append(subclass)
+            if getattr(subclass, "metadata", None) is not None:
+                yield subclass
+
+
+_task_name_to_prompt: dict[str, str] = {}

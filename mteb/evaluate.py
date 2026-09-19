@@ -314,7 +314,7 @@ def _check_model_modalities(
                 and query_mods.issubset(model_modalities)
             ):
                 continue
-            elif query_overlap and doc_overlap:
+            if query_overlap and doc_overlap:
                 warnings.append(
                     f"Model {model.name} supports {model.modalities}, partially overlapping "
                     f"with task {task.metadata.name} query={sorted(query_mods)}, document={sorted(doc_mods)}. "
@@ -330,11 +330,10 @@ def _check_model_modalities(
 
             if task_mods.issubset(model_modalities):
                 continue
-            else:
-                errors.append(
-                    f"Model {model.name} supports {model.modalities}, but none overlap with "
-                    f"task {task.metadata.name} modalities={task.metadata.modalities}."
-                )
+            errors.append(
+                f"Model {model.name} supports {model.modalities}, but none overlap with "
+                f"task {task.metadata.name} modalities={task.metadata.modalities}."
+            )
 
     if errors:
         raise ValueError("\n".join(errors))

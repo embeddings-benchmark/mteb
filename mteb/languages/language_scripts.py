@@ -44,9 +44,14 @@ class LanguageScripts:
             A LanguageScripts object representing the provided languages and scripts.
         """
         lang_script_codes = set()
-        script_codes: set[str] = set(scripts) if (scripts is not None) else set()
+        script_codes: set[str] = set()
         # normalize to 3 letter language codes
         normalized_langs = set()
+
+        if scripts is not None:
+            for script in scripts:
+                check_language_code(script)
+                script_codes.add(script)
 
         if languages is not None:
             for lang in languages:
@@ -89,9 +94,7 @@ class LanguageScripts:
         else:
             _lang = language
 
-        if _lang in self.languages:
-            return True
-        return False
+        return _lang in self.languages
 
     def contains_languages(self, languages: Iterable[str]) -> bool:
         """Whether is containing all the languages
@@ -102,10 +105,7 @@ class LanguageScripts:
         Returns:
             True if all languages are contained in the set, False otherwise.
         """
-        for l in languages:
-            if not self.contains_language(l):
-                return False
-        return True
+        return all(self.contains_language(l) for l in languages)
 
     def contains_script(self, script: str) -> bool:
         """Whether the set contains a specific script.
@@ -127,7 +127,4 @@ class LanguageScripts:
         Returns:
             True if all scripts are contained in the set, False otherwise.
         """
-        for s in scripts:
-            if not self.contains_script(s):
-                return False
-        return True
+        return all(self.contains_script(s) for s in scripts)

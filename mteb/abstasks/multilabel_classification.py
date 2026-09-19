@@ -168,6 +168,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
             test_dataset.select_columns(self.input_column_name),
             task_metadata=self.metadata,
             input_column=self.input_column_name,
+            num_proc=num_proc,
             **encode_kwargs,
         )
 
@@ -229,7 +230,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
 
         avg_scores: dict[str, np.floating[Any]] = {
             k: np.mean([s[k] for s in scores])  # type: ignore[literal-required]
-            for k in scores[0].keys()
+            for k in scores[0]
         }
         logger.info("Running multilabel classification - Finished.")
         return FullMultilabelClassificationMetrics(  # type: ignore[no-any-return]

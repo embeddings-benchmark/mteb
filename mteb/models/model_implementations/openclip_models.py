@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
 
 OPENCLIP_CITATION = """@inproceedings{cherti2023reproducible,
@@ -23,7 +24,7 @@ OPENCLIP_CITATION = """@inproceedings{cherti2023reproducible,
 }"""
 
 
-def openclip_loader(model_name, **kwargs):
+def openclip_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
     import open_clip
 
     class OpenCLIPModel(AbsEncoder):
@@ -47,7 +48,7 @@ def openclip_loader(model_name, **kwargs):
             texts: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_text_embeddings = []
 
             with torch.no_grad(), torch.cuda.amp.autocast():
@@ -66,7 +67,7 @@ def openclip_loader(model_name, **kwargs):
             images: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_image_embeddings = []
 
             with torch.no_grad(), torch.cuda.amp.autocast():
@@ -106,9 +107,9 @@ def openclip_loader(model_name, **kwargs):
                     )
                 fused_embeddings = text_embeddings + image_embeddings
                 return fused_embeddings
-            elif text_embeddings is not None:
+            if text_embeddings is not None:
                 return text_embeddings
-            elif image_embeddings is not None:
+            if image_embeddings is not None:
                 return image_embeddings
             raise ValueError
 

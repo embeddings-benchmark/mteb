@@ -23,6 +23,7 @@ if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
 
 
@@ -44,12 +45,11 @@ def _post_process_embeddings(
                     unpacked.append(1.0 if bit_val else -1.0)
             unpacked_embeddings.append(unpacked)
         return torch.tensor(unpacked_embeddings, dtype=torch.float32)
-    elif embedding_type in ["int8", "uint8"]:  # noqa: PLR6201
+    if embedding_type in ["int8", "uint8"]:  # noqa: PLR6201
         # Convert int8/uint8 embeddings to float32
         return embeddings_array.float()
-    else:
-        # For float and other types, return as-is
-        return embeddings_array
+    # For float and other types, return as-is
+    return embeddings_array
 
 
 all_languages = [
@@ -180,7 +180,7 @@ OUTPUT_TYPES = [
 ]
 
 
-def cohere_v_loader(model_name, **kwargs):
+def cohere_v_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
     import cohere
 
     class CohereMultiModalModelWrapper(AbsEncoder):
@@ -214,7 +214,7 @@ def cohere_v_loader(model_name, **kwargs):
             self.transform = transforms.Compose([transforms.PILToTensor()])
 
         @retry_with_rate_limit(max_retries=5, max_rpm=300)
-        def _embed_func(self, **kwargs):
+        def _embed_func(self, **kwargs: Any) -> cohere.EmbedByTypeResponse:
             """Call Cohere embed API with retry and rate limiting."""
             return self.client.embed(**kwargs)
 
@@ -223,7 +223,7 @@ def cohere_v_loader(model_name, **kwargs):
             inputs: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_text_embeddings = []
             index = 0
             texts = [text for batch in inputs for text in batch["text"]]
@@ -302,7 +302,7 @@ def cohere_v_loader(model_name, **kwargs):
             images: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_image_embeddings = []
             images = [image for batch in images for image in batch["images"]]
 
@@ -377,9 +377,9 @@ def cohere_v_loader(model_name, **kwargs):
                     )
                 fused_embeddings = text_embeddings + image_embeddings
                 return fused_embeddings
-            elif text_embeddings is not None:
+            if text_embeddings is not None:
                 return text_embeddings
-            elif image_embeddings is not None:
+            if image_embeddings is not None:
                 return image_embeddings
             raise ValueError
 

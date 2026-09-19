@@ -17,8 +17,8 @@ def test_run_using_benchmark(model: mteb.EncoderProtocol, tmp_path: Path):
         name="test_bench", tasks=mteb.get_tasks(tasks=["STS12", "SummEval"])
     )
 
-    eval = mteb.MTEB(tasks=[bench])
-    eval.run(
+    evaluation = mteb.MTEB(tasks=[bench])
+    evaluation.run(
         model, output_folder=tmp_path.as_posix(), overwrite_results=True
     )  # we just want to test that it runs
 
@@ -32,7 +32,7 @@ def test_run_using_list_of_benchmark(model: mteb.EncoderProtocol, tmp_path: Path
         )
     ]
 
-    eval = mteb.MTEB(tasks=bench)
-    eval.run(
+    evaluation = mteb.MTEB(tasks=bench)
+    evaluation.run(
         model, output_folder=tmp_path.as_posix(), overwrite_results=True
     )  # we just want to test that it runs
