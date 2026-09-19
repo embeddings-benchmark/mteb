@@ -5,7 +5,7 @@ icon: lucide/brush-cleaning
 
 # Cleaning Task Data
 
-Some datasets have quality issues. A dataset may repeat the same document many times, or contain documents that are empty or too short to carry meaning. Both distort a benchmark: a duplicated document is scored twice, and an empty one is scored on nothing.
+Some datasets have quality issues. A dataset may repeat the same document many times, or contain documents that are empty or too short to carry meaning. Both distort a benchmark: a duplicated document is scored twice, and an empty one is scored on nothing. The same goes for images, audio and video, e.g. a 1x1 pixel placeholder image or an audio clip cut to a fraction of a second.
 
 ## Spotting the issue
 
@@ -22,7 +22,7 @@ print(stats["text_statistics"]["unique_texts"])  # 2970
 print(stats["text_statistics"]["min_text_length"])  # 2
 ```
 
-Fewer unique texts than samples means the split contains duplicates -- four of them here. A small `min_text_length` points the other way, at documents too short to be meaningful.
+Fewer unique texts than samples means the split contains duplicates -- four of them here. A small `min_text_length` points the other way, at documents too short to be meaningful. For images, audio and video, look at `min_image_width`, `min_image_height` and `min_duration_seconds` instead.
 
 For a task you are developing, compute the statistics yourself with [`task.calculate_descriptive_statistics()`][mteb.AbsTask.calculate_descriptive_statistics].
 
@@ -31,7 +31,10 @@ For a task you are developing, compute the statistics yourself with [`task.calcu
 Each filter takes a task and returns a cleaned copy, leaving the task you passed in untouched. They cover every split and subset by default; see the linked reference for the arguments that narrow that down.
 
 - [`remove_duplicates`][mteb.data_cleaning.remove_duplicates] removes [repeated samples](#removing-duplicates).
+- [`remove_short_texts`][mteb.data_cleaning.remove_short_texts] removes [empty and too-short texts](#removing-short-or-small-samples).
+- [`remove_small_images`][mteb.data_cleaning.remove_small_images], [`remove_short_audio`][mteb.data_cleaning.remove_short_audio] and [`remove_short_videos`][mteb.data_cleaning.remove_short_videos] do the same for [images, audio and video](#images-audio-and-video).
 
+Filters can be chained, e.g. `remove_short_texts(remove_duplicates(task), min_length=1)`.
 
 ## Removing duplicates
 
@@ -66,7 +69,57 @@ def alphanumeric_text(text: str) -> str:
 cleaned = remove_duplicates(task, normalization=casefold_text)
 ```
 
-Only text is normalized; images, audio and video are compared by an exact hash of their content, so the filter works on any task but does not match a re-encoded or rescaled copy of a sample. Retrieval tasks keep their relevance judgements valid: a judgement pointing at a removed duplicate moves to the copy that was kept.
+Only text is normalized; images, audio and video are compared by an exact hash of their content, so the filter works on any task but does not match a re-encoded or rescaled copy of a sample. Retrieval tasks keep their relevance judgements valid: a judgement pointing at a removed duplicate moves to the copy that was kept. Their documents and queries are compared as the model reads them, so a document's title is part of its text, and two queries that differ only in their instruction are not duplicates.
+
+## Removing short or small samples
+
+[`remove_short_texts`][mteb.data_cleaning.remove_short_texts] drops samples whose text is shorter than `min_length`:
+
+```python
+from mteb.data_cleaning import remove_short_texts
+
+cleaned = remove_short_texts(task, min_length=3)
+
+print({split: len(data) for split, data in cleaned.dataset["en"].items()})
+# {'train': 11511, 'test': 2973, 'validation': 2033}, from 11514 / 2974 / 2033
+```
+
+A text is measured in characters, like `min_text_length` in the descriptive statistics, but without its surrounding
+whitespace, so a whitespace-only text counts as empty and `min_length=1` removes exactly the empty and whitespace-only
+texts. To measure a text differently, pass `length`, e.g. to count words:
+
+```python
+cleaned = remove_short_texts(task, min_length=2, length=lambda text: len(text.split()))
+# {'train': 11384, 'test': 2940, 'validation': 2008}
+```
+
+There is no default threshold, as what counts as too short depends on the task. Look at what a threshold removes
+before settling on it: the one-word texts above include `"s."`, but also terse yet genuine commands such as
+`"coffee"` and `"remind"`.
+
+### Images, audio and video
+
+The other modalities have a filter of their own, each measuring its content the way the descriptive statistics do:
+
+```python
+from mteb.data_cleaning import remove_short_audio, remove_short_videos, remove_small_images
+
+cleaned = remove_small_images(task, min_size=32)  # width or height under 32 pixels
+cleaned = remove_short_audio(task, min_seconds=0.5)
+cleaned = remove_short_videos(task, min_seconds=1.0)
+```
+
+The same care applies to their thresholds: a 28x28 MNIST digit or a 0.1 second drum hit is small by nature, not
+broken.
+
+### How samples are measured
+
+A sample is removed when any of its values is too small, e.g. either sentence of a pair. Each filter only measures its
+own modality, so `remove_short_texts` keeps the images of a task whatever their size. In a retrieval task a document
+is measured on its title and text together, and a query together with its instruction, as that is what the model
+reads. A document or query that combines modalities, such as a page image with its extracted text, is left alone,
+as one may carry what the other lacks. The relevance judgements of a removed document are dropped with it, and a query
+left without any relevant document is dropped as well, as it can no longer be scored.
 
 ## Cleaning produces a new task
 
@@ -79,7 +132,7 @@ print(task.metadata.name)  # MassiveIntentClassification
 print(cleaned.metadata.name)  # MassiveIntentClassification (remove_duplicates)
 ```
 
-Each filter adds its name to the list, so applying a second one gives `MassiveIntentClassification (remove_duplicates, filter_short)`. The task you passed in keeps its own name, and
+Each filter adds its name to the list, so applying a second one gives `MassiveIntentClassification (remove_duplicates, remove_short_texts)`. The task you passed in keeps its own name, and
 `adapted_from` on the copy records where the data came from.
 
 That id is what keeps the result honest. You evaluate a cleaned task as usual, and its scores are recorded against the cleaned id rather than against the published dataset:

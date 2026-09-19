@@ -35,6 +35,21 @@ if TYPE_CHECKING:
     from mteb.types._encoder_io import AudioInputItem
 
 
+def _audio_duration_seconds(audio: AudioInputItem) -> float:
+    """The duration of an audio clip in seconds."""
+    return len(audio["array"]) / audio["sampling_rate"]
+
+
+def _video_duration_seconds(video: VideoDecoder) -> float | None:
+    """The duration of a video in seconds, from its container or else from its frame count and rate, if known."""
+    meta = video.metadata
+    if meta.duration_seconds is not None:
+        return meta.duration_seconds
+    if meta.num_frames is not None and meta.average_fps:
+        return meta.num_frames / meta.average_fps
+    return None
+
+
 def calculate_text_statistics(
     texts: list[str],
     hashes: list[str] | None = None,
@@ -120,10 +135,8 @@ def calculate_audio_statistics(
     sampling_rates: dict[int, int] = defaultdict(int)
 
     for audio in tqdm(audios, desc="Computing audio statistics"):
-        array = audio["array"]
-        sampling_rate = audio["sampling_rate"]
-        audio_lengths.append(len(array) / sampling_rate)
-        sampling_rates[sampling_rate] += 1
+        audio_lengths.append(_audio_duration_seconds(audio))
+        sampling_rates[audio["sampling_rate"]] += 1
 
     return AudioStatistics(
         total_duration_seconds=sum(audio_lengths),
@@ -169,16 +182,8 @@ def calculate_video_statistics(  # noqa: PLR0914
 
         num_frames = meta.num_frames
         avg_fps = meta.average_fps
-        duration = meta.duration_seconds
-        if (
-            duration is None
-            and num_frames is not None
-            and avg_fps is not None
-            and avg_fps > 0
-        ):
-            duration = num_frames / avg_fps
 
-        durations.append(duration)
+        durations.append(_video_duration_seconds(video))
         frames_counts.append(num_frames)
         widths.append(meta.width)
         heights.append(meta.height)
