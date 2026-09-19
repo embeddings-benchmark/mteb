@@ -575,7 +575,10 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                 eval_langs = scores["languages"]
                 for lang in eval_langs:
                     if lang_scripts.contains_language(lang) and (
-                        not scripts or lang_scripts.contains_script(language.rsplit("-", maxsplit=1)[-1])
+                        not scripts
+                        or lang_scripts.contains_script(
+                            lang.rsplit("-", maxsplit=1)[-1]
+                        )
                     ):
                         values.append(getter(scores))
                         break
