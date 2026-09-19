@@ -8,9 +8,8 @@ from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
 
+from mteb._content_hashes import hash_item
 from mteb._requires_package import _is_package_available
-
-from ._hash_utils import _hash_item
 
 if TYPE_CHECKING:
     import faiss
@@ -56,7 +55,7 @@ class FaissCache:
         start_id = len(self.hash_to_index)
         vectors_to_add = []
         for i, (item, vector) in enumerate(zip(items, vectors, strict=True)):
-            item_hash = _hash_item(item)
+            item_hash = hash_item(item)
             if item_hash in self.hash_to_index:
                 continue
             self.hash_to_index[item_hash] = start_id + i
@@ -69,7 +68,7 @@ class FaissCache:
         """Retrieve vector from index by hash."""
         if self.index is None:
             return None
-        item_hash = _hash_item(item)
+        item_hash = hash_item(item)
         if item_hash not in self.hash_to_index:
             return None
         idx = self.hash_to_index[item_hash]
@@ -117,7 +116,7 @@ class FaissCache:
         self.index = None
 
     def __contains__(self, item: BatchedInput) -> bool:
-        return _hash_item(item) in self.hash_to_index
+        return hash_item(item) in self.hash_to_index
 
     def __del__(self) -> None:
         self.close()

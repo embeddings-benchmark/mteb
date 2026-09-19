@@ -15,6 +15,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.mocks.mock_tasks import (
     MockMultiChoiceTask,
     MockRetrievalTask,
+    MockVideoAudioTextRetrievalVAT2T,
 )
 from mteb.models.cache_wrappers.cache_backend_protocol import CacheBackendProtocol
 from mteb.models.cache_wrappers.cache_backends.faiss_cache import FaissCache
@@ -362,3 +363,31 @@ def test_wrapper_mock_tasks(task: AbsTask, model: EncoderProtocol, tmp_path: Pat
         cached_model.close()
 
     assert results[0].task_name == task.metadata.name
+
+
+def test_wrapper_caches_multimodal_items(tmp_path: Path):
+    """Items combining text, audio, and video together are cached and reused.
+
+    Exercises `hash_item` combining all three modalities into one cache key
+    (`MockVideoAudioTextRetrievalVAT2T` queries carry video+audio+text on the
+    same row), not just single-modality items.
+    """
+    task = MockVideoAudioTextRetrievalVAT2T()
+    try:
+        task.load_data()
+    except ImportError as error:
+        pytest.skip(f"modality dependencies are not installed: {error}")
+
+    dummy_model = DummyModel("multimodal_test_model", revision=None)
+    wrapped_model = CachedEmbeddingWrapper(dummy_model, tmp_path)
+    try:
+        mteb.evaluate(wrapped_model, task, cache=None)
+        first_run_call_count = dummy_model.call_count
+        assert first_run_call_count > 0
+
+        # Every item was cached on the first run, so re-evaluating the same
+        # task must not trigger any further encode() calls.
+        mteb.evaluate(wrapped_model, task, cache=None)
+        assert dummy_model.call_count == first_run_call_count
+    finally:
+        wrapped_model.close()
