@@ -3,10 +3,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
-import torch.nn.functional as F
 from tqdm.auto import tqdm
-from transformers import AutoModel, AutoTokenizer
 
 from mteb.models import CrossEncoderWrapper, SentenceTransformerEncoderWrapper
 from mteb.models.abs_encoder import AbsEncoder
@@ -17,6 +14,7 @@ from mteb.types import OutputDType, PromptType
 if TYPE_CHECKING:
     from collections.abc import Callable
 
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb import TaskMetadata
@@ -423,6 +421,9 @@ class LlamaEmbedNemotron(AbsEncoder):
         revision: str,
         device: str | None = None,
     ) -> None:
+        import torch
+        from transformers import AutoModel, AutoTokenizer
+
         self.model_name = model_name
         self.revision = revision
         self.max_seq_length = 4096
@@ -558,6 +559,9 @@ class LlamaEmbedNemotron(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+        import torch.nn.functional as F
+
         all_embeddings = []
         for batch in tqdm(
             dataloader, desc="Extracting embeddings...", disable=not show_progress_bar

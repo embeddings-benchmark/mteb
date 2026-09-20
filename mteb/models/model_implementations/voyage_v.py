@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any, Literal
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -58,6 +57,7 @@ def _downsample_image(
 
 
 def voyage_v_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
+    import torch
     import voyageai
     from tenacity import retry, stop_after_attempt, wait_exponential
 

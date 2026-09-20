@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
@@ -10,6 +9,7 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb import TaskMetadata
@@ -21,10 +21,15 @@ class CNN14Wrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         max_audio_length_s: float = 30.0,
         **kwargs: Any,
     ):
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         self.model_name = model_name
         self.device = device
         self.max_audio_length_s = max_audio_length_s
@@ -42,6 +47,8 @@ class CNN14Wrapper(AbsEncoder):
         self.sampling_rate = 16_000
 
     def _pad_audio_batch(self, batch: list[torch.Tensor]) -> torch.Tensor:  # noqa: PLR6301
+        import torch
+
         max_len = max(w.shape[0] for w in batch)
         padded = [torch.nn.functional.pad(w, (0, max_len - w.shape[0])) for w in batch]
         return torch.stack(padded)
@@ -52,6 +59,8 @@ class CNN14Wrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
 
         all_embeddings = []

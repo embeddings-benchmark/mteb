@@ -3,12 +3,12 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -34,6 +34,7 @@ class OgmaWrapper(AbsEncoder):
         device: str | None = None,
         **_: Any,
     ) -> None:
+        import torch
         from transformers import AutoModel, AutoTokenizer
 
         self.model_name = model_name
@@ -73,6 +74,8 @@ class OgmaWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **_: Any,
     ) -> Array:
+        import torch
+
         task = self._resolve_task_token(task_metadata)
         embeddings: list[np.ndarray] = []
         with torch.no_grad():
