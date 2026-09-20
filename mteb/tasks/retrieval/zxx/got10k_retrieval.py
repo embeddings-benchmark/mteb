@@ -39,7 +39,7 @@ class GOT10kI2VRetrieval(AbsTaskRetrieval):
         reference="https://ieeexplore.ieee.org/document/8922619",
         dataset={
             "path": "rakshi719/GOT10k-I2V",
-            "revision": "b650a55bc4b7fbc25582421eeb4493177397a917",
+            "revision": "cd80cde24d948b19ac7ee2e82a1ea7d08539772e",
         },
         type="Any2AnyRetrieval",
         category="i2v",
@@ -76,7 +76,7 @@ class GOT10kV2IRetrieval(AbsTaskRetrieval):
         reference="https://ieeexplore.ieee.org/document/8922619",
         dataset={
             "path": "rakshi719/GOT10k-V2I",
-            "revision": "027a6f397f5ebb138504906c77c6ddbad27322c2",
+            "revision": "4e93170e3b45ffe7d1e728116fec44373a7ca843",
         },
         type="Any2AnyRetrieval",
         category="v2i",
