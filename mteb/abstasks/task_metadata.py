@@ -247,106 +247,6 @@ TaskType = Literal[_TASK_TYPE]  # type: ignore[valid-type]
 """The type of the task. E.g. includes "Classification", "Retrieval" and "Clustering"."""
 
 
-TaskCategory = Literal[
-    "t2t",
-    "t2c",
-    "i2i",
-    "i2c",
-    "i2t",
-    "t2i",
-    "it2t",
-    "it2i",
-    "i2it",
-    "t2it",
-    "it2it",
-    "a2a",
-    "a2c",
-    "a2t",
-    "t2a",
-    "at2t",
-    "at2i",
-    "at2a",
-    "a2at",
-    "t2at",
-    "at2at",
-    "v2v",
-    "v2c",
-    "v2t",
-    "t2v",
-    "vt2t",
-    "vt2v",
-    "v2vt",
-    "t2vt",
-    "vt2vt",
-    "va2c",
-    "va2t",
-    "t2va",
-    "vat2t",
-    "va2va",
-    "v2a",
-    "a2v",
-    "vt2a",
-    "it2a",
-    "at2v",
-    "a2i",
-    "i2a",
-    "i2v",
-    "i2va",
-    "it2v",
-    "v2i",
-    "it2c",
-]
-"""The category of the task.
-
-1. t2t: text to text
-2. t2c: text to category
-3. i2i: image to image
-4. i2c: image to category
-5. i2t: image to text
-6. t2i: text to image
-7. it2t: image+text to text
-8. it2i: image+text to image
-9. i2it: image to image+text
-10. t2it: text to image+text
-11. it2it: image+text to image+text
-12. a2a: audio to audio
-13. a2c: audio to category
-14. a2t: audio to text
-15. t2a: text to audio
-16. at2t: audio+text to text
-17. at2i: audio+text to image
-18. at2a: audio+text to audio
-19. a2at: audio to audio+text
-20. t2at: text to audio+text
-21. at2at: audio+text to audio+text
-22. v2v: video to video
-23. v2c: video to category
-24. v2t: video to text
-25. t2v: text to video
-26. vt2t: video+text to text
-27. vt2v: video+text to video
-28. v2vt: video to video+text
-29. t2vt: text to video+text
-30. vt2vt: video+text to video+text
-31. va2c: video+audio to category
-32. va2t: video+audio to text
-33. t2va: text to video+audio
-34. vat2t: video+audio+text to text
-35. va2va: video+audio to video+audio
-36. v2a: video to audio
-37. a2v: audio to video
-38. vt2a: video+text to audio
-39. it2a: image+text to audio
-40. at2v: audio+text to video
-41. a2i: audio to image
-42. i2a: image to audio
-43. i2v: image to video
-44. i2va: image to video+audio
-45. it2v: image+text to video
-46. v2i: video to image
-47. it2c: image+text to category
-"""
-
 _MODALITY_CODES: dict[str, str] = {
     "t": "text",
     "i": "image",
@@ -496,7 +396,7 @@ class TaskMetadata(BaseModel):
     prompt: str | PromptDict | None = None
     type: TaskType
     modalities: list[Modalities] = ["text"]
-    category: TaskCategory | None = None
+    category: str | None = None
     reference: StrURL | None = None
 
     eval_splits: list[str] = ["test"]
@@ -534,6 +434,42 @@ class TaskMetadata(BaseModel):
                         "The prompt dictionary should only contain the keys 'query' and 'passage'."
                     )
         return prompt
+
+    @field_validator("category")
+    @classmethod
+    def _check_category_is_valid(cls, category: str | None) -> str | None:
+        if category is None:
+            return None
+        query_part, corpus_part = category.split("2", maxsplit=1)
+        allowed_corpus_part = set(_MODALITY_CODES.keys())
+        allowed_query_parts = allowed_corpus_part - {"c"}  # category/class
+
+        if not query_part or not corpus_part:
+            raise ValueError(
+                f"Invalid category {category!r}: both the query and corpus "
+                f"side of a '<query>2<corpus>' category must be non-empty."
+            )
+        if len(query_part) != len(set(query_part)):
+            raise ValueError(
+                f"Invalid category {category!r}: query side {query_part!r} "
+                f"contains duplicate modality codes."
+            )
+        if len(corpus_part) != len(set(corpus_part)):
+            raise ValueError(
+                f"Invalid category {category!r}: corpus side {corpus_part!r} "
+                f"contains duplicate modality codes."
+            )
+        if any(q not in allowed_query_parts for q in query_part):
+            raise ValueError(
+                f"Invalid category {category!r}: query side {query_part!r} "
+                f"contains codes outside the allowed set {sorted(allowed_query_parts)}."
+            )
+        if any(c not in allowed_corpus_part for c in corpus_part):
+            raise ValueError(
+                f"Invalid category {category!r}: corpus side {corpus_part!r} "
+                f"contains codes outside the allowed set {sorted(allowed_corpus_part)}."
+            )
+        return category
 
     def _eval_langs_are_valid(self, eval_langs: Languages) -> None:  # noqa: PLR6301
         """This method checks that the eval_langs are specified as a list of languages."""
