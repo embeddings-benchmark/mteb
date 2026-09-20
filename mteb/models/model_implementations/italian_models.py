@@ -26,10 +26,4 @@ bge_m3_italian = ModelMeta(
     # the mteb task built on that data is listed here; the bge-m3 base data is
     # inherited through adapted_from.
     training_datasets={"MMarcoRetrievalMultilingual"},
-    citation="""@misc{bge-m3-italian-2026,
-      author = {Barnabo, Alberto},
-      title = {bge-m3-italian: Italian retrieval fine-tune of bge-m3},
-      year = {2026},
-      url = {https://huggingface.co/albertobarnabo/bge-m3-italian}
-}""",
 )
