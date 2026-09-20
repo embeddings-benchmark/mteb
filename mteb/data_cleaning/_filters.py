@@ -1,7 +1,7 @@
 """The filters of `mteb.data_cleaning`, and the machinery that applies them to a task.
 
 The primitives at the top work on a single `datasets.Dataset` and know nothing about task types: the caller
-supplies the columns to compare and a `KeepIndicesFn` deciding which rows to keep. `_filter_task_rows` then walks
+supplies the columns to compare and a `KeepRowsFn` deciding which rows to keep. `_filter_task_rows` then walks
 a task's subsets and splits, dispatching to `_retrieval` for the parts that differ per task type. The public filters are at the bottom.
 """
 
@@ -60,7 +60,7 @@ def _strip_whitespace(text: str) -> str:
     return text.strip()
 
 
-KeepIndicesFn = Callable[[Iterable[tuple[Any, ...]]], list[int]]
+KeepRowsFn = Callable[[Iterable[tuple[Any, ...]]], list[int]]
 """Given the content of each row, return the (ascending) indices of the rows to keep.
 
 A row arrives as one tuple holding the content of each compared column: text as a normalized string, and images,
@@ -90,7 +90,7 @@ class _Filter:
     """
 
     name: str
-    keep_fn: KeepIndicesFn
+    keep_fn: KeepRowsFn
     removes_duplicates: bool = False
     modalities: frozenset[Modalities] | None = None
     compares_rows: bool = True
@@ -252,7 +252,7 @@ def _is_grouped(dataset: Dataset, columns: Sequence[str]) -> bool:
 def _filter_within_row(
     example: dict[str, Any],
     columns: Sequence[str],
-    keep_fn: KeepIndicesFn,
+    keep_fn: KeepRowsFn,
     normalization: Normalization,
 ) -> dict[str, Any]:
     """Apply `keep_fn` inside a single row of a grouped dataset.
@@ -746,6 +746,7 @@ def remove_short_texts(
 
 
 def _shorter_side(image: Image.Image) -> int:
+    """The shorter of an image's width and height, so that a thin image counts as small. The default."""
     return min(image.size)
 
 
@@ -753,19 +754,23 @@ def remove_small_images(
     task: T,
     *,
     min_size: int,
+    size: Callable[[Image.Image], float] = _shorter_side,
     columns: Sequence[str] | None = None,
     splits: Sequence[str] | None = None,
     subsets: Sequence[HFSubset] | None = None,
     num_proc: int | None = None,
 ) -> T:
-    """Remove samples with an image whose width or height is under `min_size` pixels, e.g. 1x1 placeholders.
+    """Remove samples with an image smaller than `min_size`, e.g. a 1x1 placeholder.
 
-    Works like [`remove_short_texts`][mteb.data_cleaning.remove_short_texts], measuring images instead, the same way
-    as the `min_image_width` and `min_image_height` of the task's descriptive statistics.
+    Works like [`remove_short_texts`][mteb.data_cleaning.remove_short_texts], measuring images instead. By default an
+    image is as small as its shorter side, so `min_size` is the width and the height it must reach, as the
+    `min_image_width` and `min_image_height` of the task's descriptive statistics report them.
 
     Args:
         task: The task to filter. It is not modified.
-        min_size: The smallest width and height, in pixels, an image may have.
+        min_size: The smallest size, by `size`, an image may have.
+        size: How to measure an image. Defaults to its shorter side in pixels; `lambda image: image.width *
+            image.height` measures its area instead, in which case `min_size` is a number of pixels.
         columns: The image columns to measure. Defaults to every image column of the task.
         splits: The splits to filter. Defaults to every split of the dataset.
         subsets: The Huggingface subsets to filter. Defaults to every loaded subset.
@@ -784,7 +789,7 @@ def remove_small_images(
         "remove_small_images",
         "image",
         min_size,
-        _shorter_side,
+        size,
         columns=columns,
         splits=splits,
         subsets=subsets,

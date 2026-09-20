@@ -965,3 +965,50 @@ def test_measuring_a_symmetric_task_does_not_order_its_sides() -> None:
     cleaned = remove_small_images(task, min_size=1)
 
     assert len(cleaned.dataset[split]) == 1
+
+
+def test_retrieval_compares_a_conversation_together_with_its_instruction() -> None:
+    task = MockRetrievalTask()
+    task.load_data()
+    subset, split = _retrieval_split(task)
+    task.dataset[subset][split] = {
+        "corpus": Dataset.from_dict(
+            {"id": ["d1", "d2"], "text": ["first doc", "second doc"]}
+        ),
+        "queries": Dataset.from_dict(
+            {
+                "id": ["q1", "q2"],
+                "text": [
+                    [{"role": "user", "content": "hello"}],
+                    [{"role": "user", "content": "hello"}],
+                ],
+                "instruction": ["find papers", "find news"],
+            }
+        ),
+        "relevant_docs": {"q1": {"d1": 1}, "q2": {"d2": 1}},
+        "top_ranked": None,
+    }
+
+    task = remove_duplicates(task)
+
+    # the instruction is part of the query, and a conversation cannot have one appended to its turns
+    assert task.dataset[subset][split]["queries"]["id"] == ["q1", "q2"]
+
+
+def test_remove_small_images_measures_with_the_given_size() -> None:
+    task = MockImageClassificationTask()
+    _load_or_skip(task)
+    split = next(iter(task.dataset))
+    data = task.dataset[split]
+    image = data["image"][0]
+    task.dataset[split] = Dataset.from_dict(
+        {"image": [image, image.resize((20, 20))], "label": [0, 1]},
+        features=data.features,
+    )
+
+    cleaned = remove_small_images(
+        task, min_size=1000, size=lambda image: image.width * image.height
+    )
+
+    # both images are wider than the default threshold would ask, but one covers only 400 pixels
+    assert cleaned.dataset[split]["label"] == [0]

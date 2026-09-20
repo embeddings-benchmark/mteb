@@ -113,6 +113,10 @@ cleaned = remove_short_audio(task, min_seconds=0.5)
 cleaned = remove_short_videos(task, min_seconds=1.0)
 ```
 
+An image counts as small by its shorter side, so `min_size=32` asks for at least 32 pixels in both directions. As with
+`length` for texts, pass `size` to measure it differently, e.g. `size=lambda image: image.width * image.height` for its
+area in pixels.
+
 The same care applies to their thresholds: a 28x28 MNIST digit or a 0.1 second drum hit is small by nature, not
 broken.
 
