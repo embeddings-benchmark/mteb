@@ -92,7 +92,7 @@ class AbsEncoder(ABC):
             task_metadata: The metadata of the task.
             prompt_type: The name type of prompt.
         """
-        return get_prompt_name(self.model_prompts, task_metadata, prompt_type)
+        return get_prompt(self.model_prompts, task_metadata, prompt_type)
 
     @staticmethod
     @overload

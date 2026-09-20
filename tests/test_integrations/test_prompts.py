@@ -20,6 +20,7 @@ from mteb.mocks.mock_tasks import (
     MockRetrievalTask,
 )
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.types import PromptType
 from tests.mock_models import (
     MockSentenceTransformer,
     MockSentenceTransformerWrapper,
@@ -76,6 +77,30 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
         tasks,
         cache=None,
     )
+
+
+@pytest.mark.parametrize(
+    ("prompt_type", "expected_prompt"),
+    [
+        (PromptType.query, "search_query: "),
+        (PromptType.document, "search_document: "),
+    ],
+)
+def test_get_prompt_returns_the_prompt_not_its_name(
+    prompt_type: PromptType, expected_prompt: str
+):
+    """`get_prompt` must return the prompt itself; only `get_prompt_name` returns its key."""
+    model_prompts = {
+        PromptType.query.value: "search_query: ",
+        PromptType.document.value: "search_document: ",
+    }
+    model = MockSentenceTransformerWrapper(
+        MockSentenceTransformer(), model_prompts=model_prompts
+    )
+    task_metadata = MockRetrievalTask().metadata
+
+    assert model.get_prompt_name(task_metadata, prompt_type) == prompt_type.value
+    assert model.get_prompt(task_metadata, prompt_type) == expected_prompt
 
 
 @pytest.mark.parametrize("task_name", ["NQ-NL-query", "NQ-NL-document"])
