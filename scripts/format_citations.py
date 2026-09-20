@@ -103,7 +103,8 @@ def format_bibtex(bibtex_str: str) -> str | None:
             logger.warning(msg)
             warnings.warn(msg)
             return None
-        library.remove(library.comments)
+        for comment in list(library.comments):
+            library.remove(comment)
 
         bib_format = BibtexFormat()
         bib_format.indent = "  "

@@ -11,6 +11,8 @@ def format_bibtex(bibtex_str: str) -> str | None:
     library = bibtexparser.parse_string(bibtex_str)
     if not library.entries:
         return None
+    for comment in list(library.comments):
+        library.remove(comment)
 
     bib_format = BibtexFormat()
     bib_format.indent = "  "
