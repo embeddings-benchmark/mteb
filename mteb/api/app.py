@@ -12,7 +12,6 @@ import pathlib
 from contextlib import asynccontextmanager
 from typing import TYPE_CHECKING
 
-import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
@@ -111,4 +110,6 @@ class _CachedStatic(StaticFiles):
 app = create_app()
 
 if __name__ == "__main__":
+    import uvicorn
+
     uvicorn.run(app)

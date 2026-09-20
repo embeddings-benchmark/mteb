@@ -9,9 +9,9 @@ untouched, not get wiped to `{}`).
 from __future__ import annotations
 
 import polars as pl
+import pytest
 
 import mteb
-from mteb.api.aggregators import _build_summary_rows
 from mteb.api.schemas import BenchmarkSchema
 from mteb.benchmarks._create_table import SummaryTable
 from mteb.benchmarks.benchmark import Benchmark, CustomGroup, CustomGrouping
@@ -72,9 +72,9 @@ def _summary_pl(cols: dict[str, list]) -> pl.DataFrame:
 
 
 def test_build_summary_rows_merges_lenient_recompute_not_overwrites():
-    """A scoped dimension (absent from custom_group_task_to_label, per the
-    has_scoped_refs gate) keeps its strict value under language_filtered;
-    a whole-task dimension present in the mapping gets recomputed."""
+    pytest.importorskip("fastapi")
+    from mteb.api.aggregators import _build_summary_rows
+
     summary_pl = _summary_pl(
         {
             "Model": [FULL_MODEL],
@@ -118,8 +118,9 @@ def test_build_summary_rows_merges_lenient_recompute_not_overwrites():
 
 
 def test_build_summary_rows_strict_when_not_language_filtered():
-    """language_filtered=False: no recompute at all, both dims keep their
-    strict polars-column values."""
+    pytest.importorskip("fastapi")
+    from mteb.api.aggregators import _build_summary_rows
+
     summary_pl = _summary_pl(
         {
             "Model": [FULL_MODEL],
