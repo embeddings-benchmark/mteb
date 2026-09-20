@@ -1,78 +1,16 @@
 from __future__ import annotations
 
-import logging
-from io import BytesIO
-from typing import TYPE_CHECKING, Any, Literal
+from typing import Any
 
-import pyarrow as pa
-from datasets import (
-    Dataset,
-    DatasetInfo,
-    Features,
-    Image,
-    Value,
-)
-from huggingface_hub import hf_hub_download
+from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.retrieval_dataset_loaders import RetrievalDatasetLoader
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.timing import TimingStack
 
-if TYPE_CHECKING:
-    from PIL import Image as PILImage
-
-    from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
-
-logger = logging.getLogger(__name__)
-
-DATASET_PATH = "mm-bright/MM-BRIGHT"
-DATASET_REVISION = "97702ca9ea81cd0a25288e74a9402439550d6bd4"
-PAPER_REFERENCE = "https://arxiv.org/abs/2601.09562"
-
-_DOMAINS = {
-    "academia": ("Academia", "Academia"),
-    "apple": ("Apple", "Apple"),
-    "askubuntu": ("AskUbuntu", "Ask Ubuntu"),
-    "aviation": ("Aviation", "Aviation"),
-    "bioacoustics": ("Bioacoustics", "Bioacoustics"),
-    "bioinformatics": ("Bioinformatics", "Bioinformatics"),
-    "biology": ("Biology", "Biology"),
-    "bitcoin": ("Bitcoin", "Bitcoin"),
-    "chemistry": ("Chemistry", "Chemistry"),
-    "christianity": ("Christianity", "Christianity"),
-    "crypto": ("Crypto", "Cryptography"),
-    "earthscience": ("EarthScience", "Earth Science"),
-    "economics": ("Economics", "Economics"),
-    "gaming": ("Gaming", "Gaming"),
-    "gis": ("GIS", "GIS"),
-    "islam": ("Islam", "Islam"),
-    "law": ("Law", "Law"),
-    "math": ("Math", "Mathematics"),
-    "medicalsciences": ("MedicalSciences", "Medical Sciences"),
-    "philosophy": ("Philosophy", "Philosophy"),
-    "physics": ("Physics", "Physics"),
-    "pm": ("ProjectManagement", "Project Management"),
-    "psychology": ("Psychology", "Psychology"),
-    "quant": ("Quant", "Quantitative Finance"),
-    "quantumcomputing": ("QuantumComputing", "Quantum Computing"),
-    "robotics": ("Robotics", "Robotics"),
-    "salesforce": ("Salesforce", "Salesforce"),
-    "sustainability": ("Sustainability", "Sustainability"),
-    "travel": ("Travel", "Travel"),
-}
-
-_TaskVariant = Literal["t2t", "it2t", "it2i"]
-_IMAGE_FEATURE = Image(mode="RGB")
-_QUERY_FEATURES = Features(
-    {
-        "id": Value("string"),
-        "text": Value("string"),
-        "image": _IMAGE_FEATURE,
-    }
-)
 _COMMON_METADATA = dict(
-    reference=PAPER_REFERENCE,
-    dataset={"path": DATASET_PATH, "revision": DATASET_REVISION},
+    reference="https://arxiv.org/abs/2601.09562",
     eval_splits=["test"],
     main_score="ndcg_at_10",
     date=("2025-01-01", "2026-01-15"),
@@ -81,6 +19,7 @@ _COMMON_METADATA = dict(
     annotations_creators="expert-annotated",
     dialect=[],
     sample_creation="found",
+    eval_langs=["eng-Latn"],
     bibtex_citation=r"""
 @article{abdallah2026mmbright,
   archiveprefix = {arXiv},
@@ -95,911 +34,1918 @@ _COMMON_METADATA = dict(
 )
 
 
-def _load_parquet(config: str, domain: str) -> Dataset:
-    path = hf_hub_download(
-        repo_id=DATASET_PATH,
-        filename=f"{config}/{domain}.parquet",
-        repo_type="dataset",
-        revision=DATASET_REVISION,
-    )
-    return Dataset.from_parquet(path)
-
-
-def _load_documents(domain: str) -> Dataset:
-    return (
-        _load_parquet("documents", domain)
-        .select_columns(["id", "content"])
-        .rename_column("content", "text")
-    )
-
-
-def _is_svg_payload(blob: bytes) -> bool:
-    prefix = blob.lstrip()[:5].lower()
-    return prefix.startswith((b"<svg", b"<?xml"))
-
-
-def _load_image_data(domain: str, config: str) -> Dataset:
-    raw = _load_parquet(config, domain).select_columns(["path", "bytes"])
-    valid_indices = [
-        index for index, blob in enumerate(raw["bytes"]) if not _is_svg_payload(blob)
-    ]
-    if len(valid_indices) != len(raw):
-        logger.warning(
-            "Dropping %d %s/%s SVG payloads that Pillow cannot decode",
-            len(raw) - len(valid_indices),
-            config,
-            domain,
-        )
-    table = raw.data.table.take(pa.array(valid_indices))
-    paths = table.column("path")
-    blobs = table.column("bytes")
-    if [len(chunk) for chunk in paths.chunks] != [len(chunk) for chunk in blobs.chunks]:
-        raise ValueError(f"Misaligned image columns in {config}/{domain}")
-    image_chunks = [
-        pa.StructArray.from_arrays([blob_chunk, path_chunk], names=["bytes", "path"])
-        for blob_chunk, path_chunk in zip(blobs.chunks, paths.chunks, strict=True)
-    ]
-    table = pa.table(
-        {
-            "id": paths,
-            "image": pa.chunked_array(image_chunks, type=_IMAGE_FEATURE.pa_type),
-        }
-    )
-    return Dataset(
-        table,
-        info=DatasetInfo(
-            features=Features({"id": Value("string"), "image": _IMAGE_FEATURE})
-        ),
-    )
-
-
-def _concatenate_images_vertically(blobs: list[bytes]) -> PILImage.Image | None:
-    from PIL import Image as PILImage
-
-    images = []
-    for blob in blobs:
-        try:
-            with PILImage.open(BytesIO(blob)) as image:
-                images.append(image.convert("RGB"))
-        except (OSError, ValueError):
-            continue
-    if not images:
-        return None
-
-    width = max(image.width for image in images)
-    combined = PILImage.new(
-        "RGB", (width, sum(image.height for image in images)), "white"
-    )
-    top = 0
-    for image in images:
-        combined.paste(image, ((width - image.width) // 2, top))
-        top += image.height
-    return combined
-
-
-def _load_multimodal_queries(domain: str, examples: Dataset) -> Dataset:
-    raw_images = _load_parquet("examples_images", domain).select_columns(
-        ["path", "bytes"]
-    )
-    image_lookup = {
-        path: blob
-        for path, blob in zip(raw_images["path"], raw_images["bytes"], strict=True)
-        if not _is_svg_payload(blob)
-    }
-    rows = []
-    missing_query_image_ids = set()
-    for example in examples:
-        image = _concatenate_images_vertically(
-            [
-                image_lookup[path]
-                for path in example["image_paths"]
-                if path in image_lookup
-            ]
-        )
-        if image is None:
-            from PIL import Image as PILImage
-
-            missing_query_image_ids.add(example["id"])
-            image = PILImage.new("RGB", (224, 224), "white")
-        rows.append(
-            {
-                "id": example["id"],
-                "text": example["query"],
-                "image": image,
-            }
-        )
-    if missing_query_image_ids:
-        logger.warning(
-            "%d %s queries have no usable stored query image",
-            len(missing_query_image_ids),
-            domain,
-        )
-    return Dataset.from_list(rows, features=_QUERY_FEATURES)
-
-
-def _text_queries(examples: Dataset) -> Dataset:
-    return Dataset.from_dict({"id": examples["id"], "text": examples["query"]})
-
-
-def _text_qrels(examples: Dataset) -> dict:
-    return {
-        example["id"]: dict.fromkeys(example["gold_ids"], 1) for example in examples
-    }
-
-
-def _full_corpus_without_excluded_ids(
-    documents: Dataset, examples: Dataset
-) -> dict[str, list[str]]:
-    document_ids = list(documents["id"])
-    top_ranked = {}
-    for example in examples:
-        excluded_ids = set(example["negative_ids"])
-        top_ranked[example["id"]] = (
-            [
-                document_id
-                for document_id in document_ids
-                if document_id not in excluded_ids
-            ]
-            if excluded_ids
-            else document_ids
-        )
-    return top_ranked
-
-
-def _positive_image_qrels(
-    examples: Dataset,
-    available_image_ids: set[str],
-) -> dict:
-    qrels = {}
-    for example in examples:
-        qrels[example["id"]] = {
-            item["image_path"]: 1
-            for item in example["positive_images"]
-            if item["image_path"] in available_image_ids
-        }
-    return qrels
-
-
-def _filter_queries_without_relevant_images(
-    queries: Dataset, qrels: dict, *, domain: str
-) -> tuple[Dataset, dict]:
-    query_ids = queries["id"]
-    valid_indices = [
-        index for index, query_id in enumerate(query_ids) if qrels[query_id]
-    ]
-    if len(valid_indices) != len(queries):
-        logger.warning(
-            "Dropping %d %s image-retrieval queries without a usable positive image",
-            len(queries) - len(valid_indices),
-            domain,
-        )
-    valid_ids = [query_ids[index] for index in valid_indices]
-    return (
-        queries.select(valid_indices),
-        {query_id: qrels[query_id] for query_id in valid_ids},
-    )
-
-
-def _load_domain(domain: str, variant: _TaskVariant) -> RetrievalSplitData:
-    config = "examples" if variant == "t2t" else "examples_multimodal"
-    examples = _load_parquet(config, domain)
-
-    if variant == "it2i":
-        queries = _load_multimodal_queries(domain, examples)
-        images = _load_image_data(domain, "document_images")
-        qrels = _positive_image_qrels(examples, set(images["id"]))
-        queries, qrels = _filter_queries_without_relevant_images(
-            queries, qrels, domain=domain
-        )
-        return {
-            "corpus": images,
-            "queries": queries,
-            "relevant_docs": qrels,
-            # Task 3 negative_ids are text IDs, so they cannot exclude image IDs.
-            "top_ranked": None,
-        }
-
-    documents = _load_documents(domain)
-    if variant == "t2t":
-        return {
-            "corpus": documents,
-            "queries": _text_queries(examples),
-            "relevant_docs": _text_qrels(examples),
-            "top_ranked": _full_corpus_without_excluded_ids(documents, examples),
-        }
-
-    queries = _load_multimodal_queries(domain, examples)
-    return {
-        "corpus": documents,
-        "queries": queries,
-        "relevant_docs": _text_qrels(examples),
-        "top_ranked": _full_corpus_without_excluded_ids(documents, examples),
-    }
-
-
-def _load_mm_bright_domain(
-    task: AbsTaskRetrieval,
-    domain: str,
-    variant: _TaskVariant,
-    timer: TimingStack | None = None,
+def _t2t_dataset_transform(
+    self: AbsTaskRetrieval, num_proc: int | None = None, **kwargs: Any
 ) -> None:
-    if task.data_loaded:
-        return
-    timer = timer or TimingStack()
-    with timer("Data loading", log_message=f"Loading dataset {task.metadata.name}..."):
-        task.dataset = {"default": {"test": _load_domain(domain, variant)}}
-    task.data_loaded = True
+    """Drop the `image` column: the hub repo's queries table is shared with
+    the IT2T task and carries an image for the multimodal-curated rows."""
+    for subset in self.dataset:
+        for split in self.dataset[subset]:
+            queries = self.dataset[subset][split]["queries"]
+            self.dataset[subset][split]["queries"] = queries.remove_columns(["image"])
 
 
-def _domain_metadata(domain: str, variant: _TaskVariant) -> TaskMetadata:
-    class_name, display_name = _DOMAINS[domain]
-    if variant == "t2t":
-        suffix = "T2TRetrieval"
-        task_type = "Retrieval"
-        modalities = ["text"]
-        task_subtypes = ["Reasoning as Retrieval"]
-        description = (
-            f"MM-BRIGHT text queries retrieving reasoning-intensive technical "
-            f"passages in the {display_name} domain."
-        )
-        prompt = (
-            "Given a technical question, retrieve passages that provide the "
-            "reasoning needed to answer it."
-        )
-    elif variant == "it2t":
-        suffix = "IT2TRetrieval"
-        task_type = "Any2AnyRetrieval"
-        modalities = ["text", "image"]
-        task_subtypes = ["Reasoning as Retrieval", "Image Text Retrieval"]
-        description = (
-            f"MM-BRIGHT text-and-image queries retrieving reasoning-intensive "
-            f"technical passages in the {display_name} domain."
-        )
-        prompt = (
-            "Given a technical question and its images, retrieve passages that "
-            "provide the reasoning needed to answer it."
-        )
-    else:
-        suffix = "IT2IRetrieval"
-        task_type = "Any2AnyRetrieval"
-        modalities = ["text", "image"]
-        task_subtypes = ["Reasoning as Retrieval", "Image Text Retrieval"]
-        description = (
-            f"MM-BRIGHT text-and-image queries retrieving relevant technical "
-            f"images in the {display_name} domain."
-        )
-        prompt = (
-            "Given a technical question and its images, retrieve images that "
-            "provide relevant visual evidence."
-        )
-
-    return TaskMetadata(
-        name=f"MMBright{class_name}{suffix}",
-        description=description,
-        type=task_type,
-        category=variant,
-        modalities=modalities,
-        task_subtypes=task_subtypes,
-        prompt={"query": prompt},
-        eval_langs=["eng-Latn"],
-        **_COMMON_METADATA,
-    )
+def _it2t_dataset_transform(
+    self: AbsTaskRetrieval, num_proc: int | None = None, **kwargs: Any
+) -> None:
+    """Keep only the rows of the shared queries table that were curated for
+    the multimodal (image-bearing) evaluation set."""
+    for subset in self.dataset:
+        for split in self.dataset[subset]:
+            data = self.dataset[subset][split]
+            queries = data["queries"]
+            keep_indices = [
+                i for i, image in enumerate(queries["image"]) if image is not None
+            ]
+            queries = queries.select(keep_indices)
+            keep_ids = set(queries["id"])
+            data["queries"] = queries
+            data["relevant_docs"] = {
+                query_id: docs
+                for query_id, docs in data["relevant_docs"].items()
+                if query_id in keep_ids
+            }
+            if data["top_ranked"] is not None:
+                data["top_ranked"] = {
+                    query_id: docs
+                    for query_id, docs in data["top_ranked"].items()
+                    if query_id in keep_ids
+                }
 
 
-def _load_data(
+def _it2i_load_data(
     self: AbsTaskRetrieval,
     num_proc: int | None = None,
     *,
     timer: TimingStack | None = None,
     **kwargs: Any,
 ) -> None:
-    _load_mm_bright_domain(self, self.domain, self.variant, timer=timer)
+    """Build IT2I's split from two hf_subsets of the same repo: the shared
+    "default" queries table (filtered to image-bearing rows sharing an id
+    with the image qrels) and the "image" subset's corpus/qrels."""
+    if self.data_loaded:
+        return
+    timer = timer or TimingStack()
+    dataset_path = self.metadata.dataset["path"]
+    revision = self.metadata.dataset["revision"]
+    self.dataset = {"default": {}}
+    with timer("Data loading", log_message=f"Loading dataset {self.metadata.name}..."):
+        for split in self.eval_splits:
+            default_data = RetrievalDatasetLoader(
+                hf_repo=dataset_path,
+                revision=revision,
+                split=split,
+                config="default",
+            ).load(num_proc=num_proc)
+            image_corpus = load_dataset(
+                dataset_path, "image-corpus", split=split, revision=revision
+            )
+            image_qrels_ds = load_dataset(
+                dataset_path, "image-qrels", split=split, revision=revision
+            )
+            image_qrels: dict[str, dict[str, int]] = {}
+            for row in image_qrels_ds:
+                image_qrels.setdefault(row["query-id"], {})[row["corpus-id"]] = row[
+                    "score"
+                ]
+            keep_ids = set(image_qrels.keys())
+            queries = default_data["queries"]
+            keep_indices = [
+                i for i, query_id in enumerate(queries["id"]) if query_id in keep_ids
+            ]
+            self.dataset["default"][split] = {
+                "corpus": image_corpus,
+                "queries": queries.select(keep_indices),
+                "relevant_docs": image_qrels,
+                "top_ranked": None,
+            }
+    with timer("Dataset transform"):
+        self.dataset_transform(num_proc=num_proc)
+    self.data_loaded = True
 
 
 class MMBrightAcademiaT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "academia"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightAcademiaT2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the Academia domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightAcademiaRetrieval",
+            "revision": "af4ca37a456ec4a028b02643d563b22cc45c1261",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightAcademiaIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "academia"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightAcademiaIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the Academia domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightAcademiaRetrieval",
+            "revision": "af4ca37a456ec4a028b02643d563b22cc45c1261",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightAcademiaIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "academia"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightAcademiaIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the Academia domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightAcademiaRetrieval",
+            "revision": "af4ca37a456ec4a028b02643d563b22cc45c1261",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightAppleT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "apple"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightAppleT2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the Apple domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightAppleRetrieval",
+            "revision": "faa769cd153101a5acd102df6f85c8613e6665a5",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightAppleIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "apple"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightAppleIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the Apple domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightAppleRetrieval",
+            "revision": "faa769cd153101a5acd102df6f85c8613e6665a5",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightAppleIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "apple"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightAppleIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the Apple domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightAppleRetrieval",
+            "revision": "faa769cd153101a5acd102df6f85c8613e6665a5",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightAskUbuntuT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "askubuntu"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightAskUbuntuT2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the Ask Ubuntu domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightAskUbuntuRetrieval",
+            "revision": "2073594359f9a0afc6309eb7e64226ca89f0992c",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightAskUbuntuIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "askubuntu"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightAskUbuntuIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the Ask Ubuntu domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightAskUbuntuRetrieval",
+            "revision": "2073594359f9a0afc6309eb7e64226ca89f0992c",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightAskUbuntuIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "askubuntu"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightAskUbuntuIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the Ask Ubuntu domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightAskUbuntuRetrieval",
+            "revision": "2073594359f9a0afc6309eb7e64226ca89f0992c",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightAviationT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "aviation"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightAviationT2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the Aviation domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightAviationRetrieval",
+            "revision": "1d19dc4b843495bfee3d37b22d91c4090f190747",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightAviationIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "aviation"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightAviationIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the Aviation domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightAviationRetrieval",
+            "revision": "1d19dc4b843495bfee3d37b22d91c4090f190747",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightAviationIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "aviation"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightAviationIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the Aviation domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightAviationRetrieval",
+            "revision": "1d19dc4b843495bfee3d37b22d91c4090f190747",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightBioacousticsT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "bioacoustics"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightBioacousticsT2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the Bioacoustics domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightBioacousticsRetrieval",
+            "revision": "070b2a0ca326bcaad71c34737a97a1684758d06c",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightBioacousticsIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "bioacoustics"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightBioacousticsIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the Bioacoustics domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightBioacousticsRetrieval",
+            "revision": "070b2a0ca326bcaad71c34737a97a1684758d06c",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightBioacousticsIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "bioacoustics"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightBioacousticsIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the Bioacoustics domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightBioacousticsRetrieval",
+            "revision": "070b2a0ca326bcaad71c34737a97a1684758d06c",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightBioinformaticsT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "bioinformatics"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightBioinformaticsT2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the Bioinformatics domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightBioinformaticsRetrieval",
+            "revision": "ac53f9241fed97d227a1c50a7539c84ad79a71ec",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightBioinformaticsIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "bioinformatics"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightBioinformaticsIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the Bioinformatics domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightBioinformaticsRetrieval",
+            "revision": "ac53f9241fed97d227a1c50a7539c84ad79a71ec",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightBioinformaticsIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "bioinformatics"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightBioinformaticsIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the Bioinformatics domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightBioinformaticsRetrieval",
+            "revision": "ac53f9241fed97d227a1c50a7539c84ad79a71ec",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightBiologyT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "biology"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightBiologyT2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the Biology domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightBiologyRetrieval",
+            "revision": "bf01be7bde5e4c9d8dbeb88a85e5be19f9600ec2",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightBiologyIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "biology"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightBiologyIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the Biology domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightBiologyRetrieval",
+            "revision": "bf01be7bde5e4c9d8dbeb88a85e5be19f9600ec2",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightBiologyIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "biology"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightBiologyIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the Biology domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightBiologyRetrieval",
+            "revision": "bf01be7bde5e4c9d8dbeb88a85e5be19f9600ec2",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightBitcoinT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "bitcoin"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightBitcoinT2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the Bitcoin domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightBitcoinRetrieval",
+            "revision": "6290eec70421f2c728c8aba4086a3a1e84846093",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightBitcoinIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "bitcoin"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightBitcoinIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the Bitcoin domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightBitcoinRetrieval",
+            "revision": "6290eec70421f2c728c8aba4086a3a1e84846093",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightBitcoinIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "bitcoin"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightBitcoinIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the Bitcoin domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightBitcoinRetrieval",
+            "revision": "6290eec70421f2c728c8aba4086a3a1e84846093",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightChemistryT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "chemistry"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightChemistryT2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the Chemistry domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightChemistryRetrieval",
+            "revision": "dd744dd3b842ac78a7616e1256dbd59bcdc776aa",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightChemistryIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "chemistry"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightChemistryIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the Chemistry domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightChemistryRetrieval",
+            "revision": "dd744dd3b842ac78a7616e1256dbd59bcdc776aa",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightChemistryIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "chemistry"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightChemistryIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the Chemistry domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightChemistryRetrieval",
+            "revision": "dd744dd3b842ac78a7616e1256dbd59bcdc776aa",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightChristianityT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "christianity"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightChristianityT2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the Christianity domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightChristianityRetrieval",
+            "revision": "8d11b1aa16a8980f8363e04663de48b86a48b24b",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightChristianityIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "christianity"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightChristianityIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the Christianity domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightChristianityRetrieval",
+            "revision": "8d11b1aa16a8980f8363e04663de48b86a48b24b",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightChristianityIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "christianity"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightChristianityIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the Christianity domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightChristianityRetrieval",
+            "revision": "8d11b1aa16a8980f8363e04663de48b86a48b24b",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightCryptoT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "crypto"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightCryptoT2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the Cryptography domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightCryptoRetrieval",
+            "revision": "5c1989db39403982be54d88d2ce587f78bf3487a",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightCryptoIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "crypto"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightCryptoIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the Cryptography domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightCryptoRetrieval",
+            "revision": "5c1989db39403982be54d88d2ce587f78bf3487a",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightCryptoIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "crypto"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightCryptoIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the Cryptography domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightCryptoRetrieval",
+            "revision": "5c1989db39403982be54d88d2ce587f78bf3487a",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightEarthScienceT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "earthscience"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightEarthScienceT2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the Earth Science domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightEarthScienceRetrieval",
+            "revision": "b5847d4bae53d791414fbefe6e9a179a9996ca92",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightEarthScienceIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "earthscience"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightEarthScienceIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the Earth Science domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightEarthScienceRetrieval",
+            "revision": "b5847d4bae53d791414fbefe6e9a179a9996ca92",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightEarthScienceIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "earthscience"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightEarthScienceIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the Earth Science domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightEarthScienceRetrieval",
+            "revision": "b5847d4bae53d791414fbefe6e9a179a9996ca92",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightEconomicsT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "economics"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightEconomicsT2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the Economics domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightEconomicsRetrieval",
+            "revision": "e245567b8bf0dc2a42872a845870bcaddce6d316",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightEconomicsIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "economics"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightEconomicsIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the Economics domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightEconomicsRetrieval",
+            "revision": "e245567b8bf0dc2a42872a845870bcaddce6d316",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightEconomicsIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "economics"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightEconomicsIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the Economics domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightEconomicsRetrieval",
+            "revision": "e245567b8bf0dc2a42872a845870bcaddce6d316",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightGamingT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "gaming"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightGamingT2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the Gaming domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightGamingRetrieval",
+            "revision": "c85d91ddbf7d7708f4b73696deb0f76e59dce71a",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightGamingIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "gaming"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightGamingIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the Gaming domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightGamingRetrieval",
+            "revision": "c85d91ddbf7d7708f4b73696deb0f76e59dce71a",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightGamingIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "gaming"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightGamingIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the Gaming domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightGamingRetrieval",
+            "revision": "c85d91ddbf7d7708f4b73696deb0f76e59dce71a",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightGIST2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "gis"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightGIST2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the GIS domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightGISRetrieval",
+            "revision": "8470bbfbff33477d5bd6a9f18d61fd8dd0ff642b",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightGISIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "gis"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightGISIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the GIS domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightGISRetrieval",
+            "revision": "8470bbfbff33477d5bd6a9f18d61fd8dd0ff642b",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightGISIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "gis"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightGISIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the GIS domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightGISRetrieval",
+            "revision": "8470bbfbff33477d5bd6a9f18d61fd8dd0ff642b",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightIslamT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "islam"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightIslamT2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the Islam domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightIslamRetrieval",
+            "revision": "b7cde3a07cea5bbfffced75b48fa28fe9141c672",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightIslamIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "islam"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightIslamIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the Islam domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightIslamRetrieval",
+            "revision": "b7cde3a07cea5bbfffced75b48fa28fe9141c672",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightIslamIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "islam"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightIslamIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the Islam domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightIslamRetrieval",
+            "revision": "b7cde3a07cea5bbfffced75b48fa28fe9141c672",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightLawT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "law"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightLawT2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the Law domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightLawRetrieval",
+            "revision": "003bc8f29a8f2c0575544f455ad8111e51127e59",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightLawIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "law"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightLawIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the Law domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightLawRetrieval",
+            "revision": "003bc8f29a8f2c0575544f455ad8111e51127e59",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightLawIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "law"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightLawIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the Law domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightLawRetrieval",
+            "revision": "003bc8f29a8f2c0575544f455ad8111e51127e59",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightMathT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "math"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightMathT2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the Mathematics domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightMathRetrieval",
+            "revision": "51fc7683cc39ffeab4a0d2b6702c89b417158668",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightMathIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "math"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightMathIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the Mathematics domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightMathRetrieval",
+            "revision": "51fc7683cc39ffeab4a0d2b6702c89b417158668",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightMathIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "math"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightMathIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the Mathematics domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightMathRetrieval",
+            "revision": "51fc7683cc39ffeab4a0d2b6702c89b417158668",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightMedicalSciencesT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "medicalsciences"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightMedicalSciencesT2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the Medical Sciences domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightMedicalSciencesRetrieval",
+            "revision": "31dd7c25c354bb6457195f3b13f9e7f85efb233e",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightMedicalSciencesIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "medicalsciences"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightMedicalSciencesIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the Medical Sciences domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightMedicalSciencesRetrieval",
+            "revision": "31dd7c25c354bb6457195f3b13f9e7f85efb233e",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightMedicalSciencesIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "medicalsciences"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightMedicalSciencesIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the Medical Sciences domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightMedicalSciencesRetrieval",
+            "revision": "31dd7c25c354bb6457195f3b13f9e7f85efb233e",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightPhilosophyT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "philosophy"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightPhilosophyT2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the Philosophy domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightPhilosophyRetrieval",
+            "revision": "ecc3b668d90119ee72d36fbe6e7e13436ff5e0ed",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightPhilosophyIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "philosophy"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightPhilosophyIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the Philosophy domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightPhilosophyRetrieval",
+            "revision": "ecc3b668d90119ee72d36fbe6e7e13436ff5e0ed",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightPhilosophyIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "philosophy"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightPhilosophyIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the Philosophy domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightPhilosophyRetrieval",
+            "revision": "ecc3b668d90119ee72d36fbe6e7e13436ff5e0ed",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightPhysicsT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "physics"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightPhysicsT2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the Physics domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightPhysicsRetrieval",
+            "revision": "90215bd3eecd6a8d08654fb9ec44ee0de67c4a77",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightPhysicsIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "physics"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightPhysicsIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the Physics domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightPhysicsRetrieval",
+            "revision": "90215bd3eecd6a8d08654fb9ec44ee0de67c4a77",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightPhysicsIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "physics"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightPhysicsIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the Physics domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightPhysicsRetrieval",
+            "revision": "90215bd3eecd6a8d08654fb9ec44ee0de67c4a77",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightProjectManagementT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "pm"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightProjectManagementT2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the Project Management domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightProjectManagementRetrieval",
+            "revision": "a3bbeb082957673cf68a8aa9c827d40e0f363753",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightProjectManagementIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "pm"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightProjectManagementIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the Project Management domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightProjectManagementRetrieval",
+            "revision": "a3bbeb082957673cf68a8aa9c827d40e0f363753",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightProjectManagementIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "pm"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightProjectManagementIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the Project Management domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightProjectManagementRetrieval",
+            "revision": "a3bbeb082957673cf68a8aa9c827d40e0f363753",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightPsychologyT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "psychology"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightPsychologyT2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the Psychology domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightPsychologyRetrieval",
+            "revision": "8d5fbe318260d7e6527dd368451ecbd7cf0cfd08",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightPsychologyIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "psychology"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightPsychologyIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the Psychology domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightPsychologyRetrieval",
+            "revision": "8d5fbe318260d7e6527dd368451ecbd7cf0cfd08",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightPsychologyIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "psychology"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightPsychologyIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the Psychology domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightPsychologyRetrieval",
+            "revision": "8d5fbe318260d7e6527dd368451ecbd7cf0cfd08",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightQuantT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "quant"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightQuantT2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the Quantitative Finance domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightQuantRetrieval",
+            "revision": "51084196e110f6bc55ca6be872a80742e070764c",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightQuantIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "quant"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightQuantIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the Quantitative Finance domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightQuantRetrieval",
+            "revision": "51084196e110f6bc55ca6be872a80742e070764c",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightQuantIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "quant"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightQuantIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the Quantitative Finance domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightQuantRetrieval",
+            "revision": "51084196e110f6bc55ca6be872a80742e070764c",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightQuantumComputingT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "quantumcomputing"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightQuantumComputingT2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the Quantum Computing domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightQuantumComputingRetrieval",
+            "revision": "629acc9d41bfdb12965aca6e2f9c65a33af432eb",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightQuantumComputingIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "quantumcomputing"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightQuantumComputingIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the Quantum Computing domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightQuantumComputingRetrieval",
+            "revision": "629acc9d41bfdb12965aca6e2f9c65a33af432eb",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightQuantumComputingIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "quantumcomputing"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightQuantumComputingIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the Quantum Computing domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightQuantumComputingRetrieval",
+            "revision": "629acc9d41bfdb12965aca6e2f9c65a33af432eb",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightRoboticsT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "robotics"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightRoboticsT2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the Robotics domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightRoboticsRetrieval",
+            "revision": "a59181d3dd1efc8d51cdcddb6b5983f8569cc68f",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightRoboticsIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "robotics"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightRoboticsIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the Robotics domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightRoboticsRetrieval",
+            "revision": "a59181d3dd1efc8d51cdcddb6b5983f8569cc68f",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightRoboticsIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "robotics"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightRoboticsIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the Robotics domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightRoboticsRetrieval",
+            "revision": "a59181d3dd1efc8d51cdcddb6b5983f8569cc68f",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightSalesforceT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "salesforce"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightSalesforceT2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the Salesforce domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightSalesforceRetrieval",
+            "revision": "c65b2cad4e96f460065c38fa3fc9f87c139c9618",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightSalesforceIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "salesforce"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightSalesforceIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the Salesforce domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightSalesforceRetrieval",
+            "revision": "c65b2cad4e96f460065c38fa3fc9f87c139c9618",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightSalesforceIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "salesforce"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightSalesforceIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the Salesforce domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightSalesforceRetrieval",
+            "revision": "c65b2cad4e96f460065c38fa3fc9f87c139c9618",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightSustainabilityT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "sustainability"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightSustainabilityT2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the Sustainability domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightSustainabilityRetrieval",
+            "revision": "f88b2c2e1adcdd722b3408c8d4c9785f1f22a473",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightSustainabilityIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "sustainability"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightSustainabilityIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the Sustainability domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightSustainabilityRetrieval",
+            "revision": "f88b2c2e1adcdd722b3408c8d4c9785f1f22a473",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightSustainabilityIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "sustainability"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightSustainabilityIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the Sustainability domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightSustainabilityRetrieval",
+            "revision": "f88b2c2e1adcdd722b3408c8d4c9785f1f22a473",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightTravelT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "travel"
-    variant = "t2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _t2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightTravelT2TRetrieval",
+        description="MM-BRIGHT text queries retrieving reasoning-intensive technical passages in the Travel domain.",
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        task_subtypes=["Reasoning as Retrieval"],
+        prompt={
+            "query": "Given a technical question, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightTravelRetrieval",
+            "revision": "b64e37c79fb9453e8ddd2e6167b783038e01d1a8",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightTravelIT2TRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "travel"
-    variant = "it2t"
-    metadata = _domain_metadata(domain, variant)
+    dataset_transform = _it2t_dataset_transform
+
+    metadata = TaskMetadata(
+        name="MMBrightTravelIT2TRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving reasoning-intensive technical passages in the Travel domain.",
+        type="Any2AnyRetrieval",
+        category="it2t",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve passages that provide the reasoning needed to answer it."
+        },
+        dataset={
+            "path": "mteb/MMBrightTravelRetrieval",
+            "revision": "b64e37c79fb9453e8ddd2e6167b783038e01d1a8",
+        },
+        **_COMMON_METADATA,
+    )
 
 
 class MMBrightTravelIT2IRetrieval(AbsTaskRetrieval):
-    load_data = _load_data
-    domain = "travel"
-    variant = "it2i"
-    metadata = _domain_metadata(domain, variant)
+    load_data = _it2i_load_data
+
+    metadata = TaskMetadata(
+        name="MMBrightTravelIT2IRetrieval",
+        description="MM-BRIGHT text-and-image queries retrieving relevant technical images in the Travel domain.",
+        type="Any2AnyRetrieval",
+        category="it2i",
+        modalities=["text", "image"],
+        task_subtypes=["Reasoning as Retrieval", "Image Text Retrieval"],
+        prompt={
+            "query": "Given a technical question and its images, retrieve images that provide relevant visual evidence."
+        },
+        dataset={
+            "path": "mteb/MMBrightTravelRetrieval",
+            "revision": "b64e37c79fb9453e8ddd2e6167b783038e01d1a8",
+        },
+        **_COMMON_METADATA,
+    )
