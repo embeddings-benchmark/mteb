@@ -12,7 +12,6 @@ import polars as pl
 import pytest
 
 import mteb
-from mteb.api.schemas import BenchmarkSchema
 from mteb.benchmarks._create_table import SummaryTable
 from mteb.benchmarks.benchmark import Benchmark, CustomGroup, CustomGrouping
 
@@ -20,6 +19,9 @@ FULL_MODEL = "mteb/baseline-random-encoder"
 
 
 def _custom_grouping_schema(grouping: CustomGrouping):
+    pytest.importorskip("fastapi")
+    from mteb.api.schemas import BenchmarkSchema
+
     bench = Benchmark(
         name="mock_aggregators_schema",
         tasks=mteb.get_tasks(
