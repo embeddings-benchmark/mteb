@@ -53,11 +53,10 @@ jobs:
     # something to report.
     - name: Commit the citation cache
       if: always() && github.ref == 'refs/heads/main'
-      run: |
         if ! git diff --quiet tests/test_validate_metadata/citation_cache.json; then
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add tests/test_validate_metadata/citation_cache.json
-          git commit -m "chore: update the citation cache"
+          git commit -m "chore: update the citation cache [skip ci]"
           git push origin HEAD:main
         fi
