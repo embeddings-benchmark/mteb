@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from pathlib import Path
 
     from mteb.models import MTEBModels
-    from mteb.types import EncodeKwargs, HFSubset, ScoresDict
+    from mteb.types import EncodeKwargs, HFSubset, Modalities, ScoresDict
 
 logger = logging.getLogger(__name__)
 
@@ -121,6 +121,14 @@ class AbsTaskBitextMining(AbsTask):
                 )
 
         return cast("dict[HFSubset, ScoresDict]", scores)
+
+    def _get_content_columns(self) -> dict[str, Modalities]:
+        # for parallel subsets the columns are the languages of each pair, otherwise sentence1/sentence2
+        return {
+            column: "text"
+            for pair in self._get_pairs(self.parallel_subsets)
+            for column in pair
+        }
 
     def _get_pairs(self, parallel: bool) -> list[tuple[str, str]]:
         pairs = self._DEFAULT_PAIR

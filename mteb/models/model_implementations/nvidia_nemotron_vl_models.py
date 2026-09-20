@@ -9,7 +9,7 @@ from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -53,11 +53,14 @@ class NemotronColEmbedVL(AbsEncoder):
         model_name_or_path: str,
         revision: str,
         trust_remote_code: bool,
-        device_map="cuda",
-        torch_dtype=torch.bfloat16,
-        attn_implementation="flash_attention_2",
-        **kwargs,
+        device_map: str = "cuda",
+        torch_dtype: OutputDType | torch.dtype = OutputDType.BF16,
+        attn_implementation: str = "flash_attention_2",
+        **kwargs: Any,
     ):
+        if isinstance(torch_dtype, OutputDType):
+            torch_dtype = torch_dtype.get_dtype()
+
         from transformers import AutoModel
 
         self.model = AutoModel.from_pretrained(
@@ -69,15 +72,17 @@ class NemotronColEmbedVL(AbsEncoder):
             attn_implementation=attn_implementation,
         ).eval()
 
-    def get_text_embeddings(self, texts, batch_size: int = 32, **kwargs):
+    def get_text_embeddings(
+        self, texts: DataLoader[BatchedInput], batch_size: int = 32, **kwargs: Any
+    ) -> Array:
         return self.model.forward_queries(texts, batch_size=batch_size)
 
     def get_image_embeddings(
         self,
-        images,
+        images: DataLoader[BatchedInput],
         batch_size: int = 32,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> Array:
         import torchvision.transforms.functional as F
         from PIL import Image
 
@@ -98,13 +103,13 @@ class NemotronColEmbedVL(AbsEncoder):
 
         return self.model.forward_images(all_images, batch_size=batch_size)
 
-    def similarity(self, a, b):
+    def similarity(self, a: Array, b: Array) -> Array:
         return self.model.get_scores(a, b)
 
     def get_fused_embeddings(
         self,
-        *args,
-        **kwargs,
+        *args: Any,
+        **kwargs: Any,
     ):
         raise NotImplementedError(
             "Fused embeddings are not supported yet. Please use get_text_embeddings or get_image_embeddings."
@@ -326,13 +331,16 @@ class LlamaNemotronEmbedVL(AbsEncoder):
         revision: str,
         trust_remote_code: bool,
         extra_name: str = "llama-nemotron-embed-vl-1b-v2",
-        device_map="cuda",
-        torch_dtype=torch.bfloat16,
-        attn_implementation="flash_attention_2",
+        device_map: str = "cuda",
+        torch_dtype: OutputDType | torch.dtype = OutputDType.BF16,
+        attn_implementation: str = "flash_attention_2",
         use_image_modality: bool = True,
         use_text_modality: bool = True,
-        **kwargs,
+        **kwargs: Any,
     ):
+        if isinstance(torch_dtype, OutputDType):
+            torch_dtype = torch_dtype.get_dtype()
+
         self.use_image_modality = use_image_modality
         self.use_text_modality = use_text_modality
         if not self.use_image_modality and not self.use_text_modality:
@@ -438,7 +446,7 @@ llama_nemotron_embed_vl_1b_v2 = ModelMeta(
     embed_dim=2048,
     license="https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
     open_weights=True,
-    public_training_code=None,
+    public_training_code="https://github.com/NVIDIA-NeMo/Automodel/tree/main/examples/retrieval/bi_encoder/nemotron_vl_1b",
     public_training_data="https://huggingface.co/nvidia/llama-nemotron-embed-vl-1b-v2#training-dataset",
     framework=["PyTorch"],
     reference="https://huggingface.co/nvidia/llama-nemotron-embed-vl-1b-v2",

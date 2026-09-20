@@ -139,7 +139,7 @@ class EventLogger:
         benchmark: str | None = None,
         filters: dict[str, Any] | None = None,
         properties: dict[str, Any] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         """Log raw event (generic method)
 
@@ -163,7 +163,9 @@ class EventLogger:
 
     # ============ Convenience Methods ============
 
-    def log_page_view(self, session_id: str, benchmark: str | None = None, **kwargs):
+    def log_page_view(
+        self, session_id: str, benchmark: str | None = None, **kwargs: Any
+    ):
         """Log page view event
 
         Args:
@@ -175,7 +177,11 @@ class EventLogger:
         self.log(event)
 
     def log_benchmark_change(
-        self, session_id: str, new_value: str, old_value: str | None = None, **kwargs
+        self,
+        session_id: str,
+        new_value: str,
+        old_value: str | None = None,
+        **kwargs: Any,
     ):
         """Log benchmark change event
 
@@ -194,12 +200,12 @@ class EventLogger:
         self,
         session_id: str,
         filter_name: str,
-        new_value: Any,
+        new_value: str | None,
         *,
-        old_value: Any = None,
+        old_value: str | None = None,
         benchmark: str | None = None,
         filters: dict[str, Any] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         """Log filter change event
 
@@ -229,7 +235,7 @@ class EventLogger:
         new_table: str,
         old_table: str | None = None,
         benchmark: str | None = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         """Log table switch event
 
@@ -255,7 +261,7 @@ class EventLogger:
         benchmark: str | None = None,
         file_format: str = "csv",
         row_count: int | None = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         """Log table download event
 

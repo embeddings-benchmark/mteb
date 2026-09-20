@@ -90,7 +90,7 @@ class MTEBTasks(tuple[AbsTask]):
         return "MTEBTasks" + super().__repr__()
 
     @staticmethod
-    def _extract_property_from_task(task: AbsTask, property_name: str) -> Any:
+    def _extract_property_from_task(task: AbsTask, property_name: str) -> Any:  # noqa: ANN401 -- returns an arbitrary metadata field
         if hasattr(task.metadata, property_name):
             return getattr(task.metadata, property_name)
         if hasattr(task, property_name):
@@ -133,7 +133,7 @@ class MTEBTasks(tuple[AbsTask]):
             string with a markdown table.
         """
 
-        def _limit_entries_in_cell_inner(cell: Any) -> Any:
+        def _limit_entries_in_cell_inner(cell: Any) -> Any:  # noqa: ANN401 -- arbitrary dataframe cell
             if isinstance(cell, list | set):
                 return self._limit_entries_in_cell(cell, limit_n_entries)
             return cell

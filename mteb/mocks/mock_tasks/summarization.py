@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from datasets import Dataset, DatasetDict
 
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -69,7 +71,7 @@ class MockSummarizationTask(AbsTaskSummarization):
         **general_args,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         texts = ["This is a test sentence", "This is another test sentence"]
         human_summaries = [
             ["This is a summary", "This is another summary"],
@@ -199,7 +201,7 @@ class MockMultilingualSummarizationTask(AbsTaskSummarization):
     )
     metadata.eval_langs = multilingual_eval_langs
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         texts = ["This is a test sentence", "This is another test sentence"]
         human_summaries = [
             ["This is a summary", "This is another summary"],

@@ -32,10 +32,10 @@ class DenseWebVidCoVRVT2VRetrieval(AbsTaskRetrieval):
         sample_creation="created",
         bibtex_citation=r"""
 @article{thawakar2025bse,
-  title={BSE-CoVR: Broadening Semantic Edit Support for Compositional Video Retrieval},
-  author={Thawakar, Omkar and others},
-  journal={arXiv preprint arXiv:2508.14039},
-  year={2025}
+  author = {Thawakar, Omkar and others},
+  journal = {arXiv preprint arXiv:2508.14039},
+  title = {BSE-CoVR: Broadening Semantic Edit Support for Compositional Video Retrieval},
+  year = {2025},
 }
 """,
         prompt={

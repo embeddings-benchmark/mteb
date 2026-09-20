@@ -52,7 +52,7 @@ class DINOModel(AbsEncoder):
         show_progress_bar: bool = True,
         pooling: Literal["cls", "mean"] = "cls",
         **kwargs: Any,
-    ):
+    ) -> Array:
         all_image_embeddings = []
 
         with torch.no_grad():

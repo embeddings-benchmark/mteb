@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -42,7 +44,7 @@ class MELDAudioVideoClassification(AbsTaskClassification):
     is_cross_validation: bool = True
     train_split: str = "test"
 
-    def dataset_transform(self, num_proc=None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.dataset = self.stratified_subsampling(
             self.dataset,
             seed=self.seed,
@@ -90,7 +92,7 @@ class MELDVideoClassification(AbsTaskClassification):
     is_cross_validation: bool = True
     train_split: str = "test"
 
-    def dataset_transform(self, num_proc=None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.dataset = self.stratified_subsampling(
             self.dataset,
             seed=self.seed,

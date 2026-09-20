@@ -13,7 +13,7 @@ from mteb.abstasks._statistics_calculation import (
     calculate_label_statistics,
     calculate_pair_modality_statistics,
 )
-from mteb.abstasks.abstask import AbsTask
+from mteb.abstasks.abstask import AbsTask, _pair_content_columns
 from mteb.models.model_meta import ScoringFunction
 from mteb.models.models_protocols import EncoderProtocol
 from mteb.types.statistics import PairClassificationDescriptiveStatistics
@@ -56,6 +56,11 @@ class AbsTaskPairClassification(AbsTask):
     label_column_name: str = "labels"
     input1_prompt_type: PromptType | None = None
     input2_prompt_type: PromptType | None = None
+
+    def _get_content_columns(self) -> dict[str, Modalities]:
+        return _pair_content_columns(
+            (self.input1_column_name, self.input2_column_name), self.modalities
+        )
 
     def _evaluate_subset(
         self,
@@ -338,16 +343,17 @@ class AbsTaskPairClassification(AbsTask):
         return max_acc, best_threshold
 
     def _find_best_f1_and_threshold(  # noqa: PLR6301
-        self, scores: Any, labels: NDArray[np.int64], high_score_more_similar: bool
+        self,
+        scores: list[float],
+        labels: NDArray[np.int64],
+        high_score_more_similar: bool,
     ) -> tuple[float, float, float, float]:
-        scores = np.asarray(scores)
-
         rows = list(zip(scores, labels, strict=True))
 
         rows = sorted(rows, key=lambda x: x[0], reverse=high_score_more_similar)
 
         best_f1 = best_precision = best_recall = 0.0
-        threshold = 0
+        threshold = 0.0
         ncorrect = 0
         total_num_duplicates = sum(labels)
 

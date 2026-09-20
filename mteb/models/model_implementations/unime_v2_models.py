@@ -11,6 +11,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    from PIL import Image
     from torch.utils.data import DataLoader
     from typing_extensions import Unpack
 
@@ -121,8 +122,8 @@ class UniMEV2Wrapper(AbsEncoder):
     def _build_conversation(
         *,
         text: str | None,
-        image: Any | None,
-        video: Any | None,
+        image: Image.Image | None,
+        video: torch.Tensor | None,
         instruction: str,
     ) -> list[dict[str, Any]]:
         content: list[dict[str, Any]] = []

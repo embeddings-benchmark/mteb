@@ -15,6 +15,7 @@ from mteb.types import PromptType
 if TYPE_CHECKING:
     from PIL import Image
     from torch.utils.data import DataLoader
+    from transformers import PreTrainedModel, ProcessorMixin
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput
@@ -35,10 +36,10 @@ GME_CITATION = """@misc{zhang2024gme,
 class Encoder(torch.nn.Module):
     def __init__(
         self,
-        base,
-        processor,
-        max_length=1800,
-        normalize=True,
+        base: PreTrainedModel,
+        processor: ProcessorMixin,
+        max_length: int = 1800,
+        normalize: bool = True,
     ) -> None:
         super().__init__()
         self.base = base
@@ -60,7 +61,7 @@ class Encoder(torch.nn.Module):
         image_grid_thw: torch.LongTensor | None = None,
         # video_grid_thw: torch.LongTensor | None = None,
         pooling_mask: torch.LongTensor | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> torch.Tensor:
         if inputs_embeds is None:
             inputs_embeds = self.base.model.embed_tokens(input_ids)
@@ -106,10 +107,10 @@ class Encoder(torch.nn.Module):
         self,
         texts: list[str],
         images: list[Image.Image],
-        device,
-        instruction=None,
-        **kwargs,
-    ):
+        device: str,
+        instruction: str | None = None,
+        **kwargs: Any,
+    ) -> torch.Tensor:
         instruction = instruction or self.default_instruction
         # Inputs must be batched
         input_texts, input_images = [], []
@@ -146,10 +147,10 @@ class GmeQwen2VL(AbsEncoder):
         revision: str,
         model_path: str | None = None,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        min_image_tokens=4,
-        max_image_tokens=1280,
-        max_length=1800,
-        **kwargs,
+        min_image_tokens: int = 4,
+        max_image_tokens: int = 1280,
+        max_length: int = 1800,
+        **kwargs: Any,
     ) -> None:
         from transformers import AutoModelForVision2Seq, AutoProcessor
 

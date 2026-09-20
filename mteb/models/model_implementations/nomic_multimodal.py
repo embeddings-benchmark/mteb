@@ -9,6 +9,7 @@ from tqdm.auto import tqdm
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_implementations.colpali_models import COLPALI_TRAINING_DATA
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -50,7 +51,7 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
         revision: str | None = None,
         device: str | None = None,
         base_revision: str | None = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         from colpali_engine.models import BiQwen2_5, BiQwen2_5_Processor
 
@@ -100,10 +101,10 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
 
     def get_image_embeddings(
         self,
-        images,
+        images: DataLoader[BatchedInput],
         batch_size: int = 32,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> Array:
         all_embeds = []
 
         with torch.no_grad():
@@ -120,10 +121,10 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
 
     def get_text_embeddings(
         self,
-        texts,
+        texts: DataLoader[BatchedInput],
         batch_size: int = 32,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> Array:
         all_embeds = []
         with torch.no_grad():
             for batch in tqdm(texts, desc="Encoding texts"):
@@ -138,15 +139,15 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
         return padded
 
     def similarity(
-        self, a, b
-    ):  # Using the processing it goes from 0.57382 to 0.57297 on Vidore2ESGReportsHLRetrieval (without flash attention 2)
+        self, a: Array, b: Array
+    ) -> Array:  # Using the processing it goes from 0.57382 to 0.57297 on Vidore2ESGReportsHLRetrieval (without flash attention 2)
         return self.processor.score(a, b, device=self.device)
 
 
 nomic_embed_multimodal_3b = ModelMeta(
     loader=BiQwen2_5Wrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
         base_revision="66285546d2b821cf421d4f5eb2576359d3770cd3",
     ),
     name="nomic-ai/nomic-embed-multimodal-3b",
@@ -176,7 +177,7 @@ nomic_embed_multimodal_3b = ModelMeta(
 nomic_embed_multimodal_7b = ModelMeta(
     loader=BiQwen2_5Wrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
         base_revision="cc594898137f460bfe9f0759e9844b3ce807cfb5",
     ),
     name="nomic-ai/nomic-embed-multimodal-7b",

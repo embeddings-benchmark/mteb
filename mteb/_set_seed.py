@@ -1,13 +1,14 @@
 """Utilities for setting seeds for reproducibility.
 
-Derived from `transformers.trainer_utils.set_seed`. It assumes torch is installed.
+Derived from `transformers.trainer_utils.set_seed`.
 """
 
 import logging
 import random
 
 import numpy as np
-import torch
+
+from mteb._requires_package import _is_package_available
 
 logger = logging.getLogger(__name__)
 
@@ -30,9 +31,19 @@ def _set_seed(seed: int) -> tuple[random.Random, np.random.Generator]:
     """
     random.seed(seed)
     np.random.seed(seed)  # noqa: NPY002
-    torch.manual_seed(seed)
-    torch.cuda.manual_seed_all(seed)
-    # ^^ safe to call this function even if cuda is not available
+
+    # `AbsTask.__init__` seeds every task it constructs, and `get_tasks()` constructs them all, so
+    # this runs on the metadata-only path too. Checking availability rather than catching
+    # ImportError means an installed-but-broken torch still raises instead of silently leaving the
+    # run unseeded.
+    if _is_package_available("torch"):
+        import torch
+
+        torch.manual_seed(seed)
+        torch.cuda.manual_seed_all(seed)
+        # ^^ safe to call this function even if cuda is not available
+    else:
+        logger.debug("torch is not installed; skipping torch seeding.")
 
     try:
         import tensorflow as tf

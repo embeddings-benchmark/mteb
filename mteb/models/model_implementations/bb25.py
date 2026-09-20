@@ -1,14 +1,15 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
-from mteb._create_dataloaders import _combine_queries_with_instruction_text
 from mteb.models.model_meta import ModelMeta
 
 if TYPE_CHECKING:
+    from bm25s.tokenization import Tokenized
+
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models.models_protocols import SearchProtocol
     from mteb.types import (
@@ -52,7 +53,7 @@ def _composite_prior(
     return np.clip(prior, 0.1, 0.9)
 
 
-def bb25_loader(model_name, **kwargs) -> SearchProtocol:
+def bb25_loader(model_name: str, **kwargs: Any) -> SearchProtocol:
     import bm25s
     import Stemmer
 
@@ -93,7 +94,7 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
             b: float = 0.75,
             alpha: float = 1.0,
             prior_weight: float = 0.0,
-            **kwargs,
+            **kwargs: Any,
         ):
             self.k1 = k1
             self.b = b
@@ -104,7 +105,7 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
                 Stemmer.Stemmer(stemmer_language) if stemmer_language else None
             )
 
-        def _encode(self, texts: list[str]):
+        def _encode(self, texts: list[str]) -> Tokenized:
             """Tokenize texts using bm25s. Not to be confused with EncoderProtocol.encode()."""
             return bm25s.tokenize(texts, stopwords=self.stopwords, stemmer=self.stemmer)
 
@@ -164,6 +165,8 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
             logger.info("Encoding Queries...")
             query_ids = list(queries["id"])
             results: RetrievalOutputType = {qid: {} for qid in query_ids}
+            from mteb._create_dataloaders import _combine_queries_with_instruction_text
+
             processed = _combine_queries_with_instruction_text(queries)
             queries_texts = processed["text"]
             query_tokenized = self._encode(queries_texts)

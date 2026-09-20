@@ -11,6 +11,8 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
+    from openai import OpenAI
+    from openai.types import CreateEmbeddingResponse
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -32,8 +34,8 @@ class OpenAIModel(AbsEncoder):
         max_tokens: int,
         tokenizer_name: str = "cl100k_base",
         embed_dim: int | None = None,
-        client: Any | None = None,  # OpenAI
-        **kwargs,
+        client: OpenAI | None = None,
+        **kwargs: Any,
     ) -> None:
         """Wrapper for OpenAIs embedding API.
 
@@ -129,7 +131,7 @@ class OpenAIModel(AbsEncoder):
                 )
             except Exception as e:
                 # Sleep due to too many requests
-                logger.info("Sleeping for 10 seconds due to error", e)  # noqa: PLE1205
+                logger.info("Sleeping for 10 seconds due to error: %s", e)
                 import time
 
                 time.sleep(10)
@@ -138,7 +140,7 @@ class OpenAIModel(AbsEncoder):
                         input=sublist, **default_kwargs
                     )
                 except Exception as e:
-                    logger.info("Sleeping for 60 seconds due to error", e)  # noqa: PLE1205
+                    logger.info("Sleeping for 60 seconds due to error: %s", e)
                     time.sleep(60)
                     response = self._client.embeddings.create(
                         input=sublist, **default_kwargs
@@ -153,7 +155,9 @@ class OpenAIModel(AbsEncoder):
             all_embeddings[mask] = no_empty_embeddings
         return all_embeddings
 
-    def _to_numpy(self, embedding_response) -> NDArray[np.floating]:  # noqa: PLR6301
+    def _to_numpy(  # noqa: PLR6301
+        self, embedding_response: CreateEmbeddingResponse
+    ) -> NDArray[np.floating]:
         return np.array([e.embedding for e in embedding_response.data])
 
 

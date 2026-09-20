@@ -23,7 +23,7 @@ LISTCONRANKER_CITATION = """@article{liu2025listconranker,
 
 
 class ListConRanker(RerankerWrapper):
-    def __init__(self, model_name_or_path: str, **kwargs) -> None:
+    def __init__(self, model_name_or_path: str, **kwargs: Any) -> None:
         from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
         super().__init__(model_name_or_path, **kwargs)
@@ -53,7 +53,7 @@ class ListConRanker(RerankerWrapper):
         hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ):
+    ) -> list[float]:
         queries = [text for batch in inputs1 for text in batch["query"]]
         passages = [text for batch in inputs2 for text in batch["text"]["text"]]
 

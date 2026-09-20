@@ -1,3 +1,5 @@
+from typing import Any
+
 import datasets
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -42,7 +44,7 @@ class SlovakSumRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs) -> None:
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}

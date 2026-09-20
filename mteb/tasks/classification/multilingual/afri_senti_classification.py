@@ -1,8 +1,15 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
+if TYPE_CHECKING:
+    from datasets import Dataset
 
-def _transform(dataset, lang):
+
+def _transform(dataset: Dataset, lang: str | None) -> Dataset:
     dataset = dataset.rename_columns({"tweet": "text"})
     sample_size = min(2048, len(dataset["test"]))
     dataset["test"] = dataset["test"].select(range(sample_size))
