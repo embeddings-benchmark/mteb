@@ -574,7 +574,12 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             for scores in self.scores[split]:
                 eval_langs = scores["languages"]
                 for lang in eval_langs:
-                    if lang_scripts.contains_language(lang):
+                    if lang_scripts.contains_language(lang) and (
+                        not scripts
+                        or lang_scripts.contains_script(
+                            lang.rsplit("-", maxsplit=1)[-1]
+                        )
+                    ):
                         values.append(getter(scores))
                         break
 
@@ -598,6 +603,11 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         """
         if splits is None:
             splits = self.scores.keys()
+        lang_scripts = (
+            LanguageScripts.from_languages_and_scripts(languages)
+            if languages is not None
+            else None
+        )
         val_sum = 0
         n_val = 0
         for split in splits:
@@ -617,12 +627,12 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                     n_val += 1
                     continue
 
-                if languages is None:
+                if lang_scripts is None:
                     val_sum += main_score
                     n_val += 1
                     continue
                 for lang in langs:
-                    if lang.split("-")[0] in languages:
+                    if lang_scripts.contains_language(lang):
                         val_sum += main_score
                         n_val += 1
                         logger.info(f"{val_sum=}, {n_val=}")

@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from transformers import AutoProcessor
-
 from mteb.models.model_implementations.ops_colqwen3_models import (
     OpsColQwen3Wrapper,
 )
@@ -31,6 +29,8 @@ class ArgusColQwen35Wrapper(OpsColQwen3Wrapper):
         max_num_visual_tokens: int = 2048,
         **kwargs: Any,
     ):
+        from transformers import AutoProcessor
+
         super().__init__(
             model_name=model_name,
             revision=revision,

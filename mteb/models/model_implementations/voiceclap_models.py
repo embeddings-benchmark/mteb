@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
@@ -32,9 +31,14 @@ class VoiceCLAPSmallWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ):
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         from transformers import AutoModel, AutoTokenizer
 
         self.model_name = model_name
@@ -56,6 +60,8 @@ class VoiceCLAPSmallWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         text_embeddings = []
         for batch in tqdm(
             inputs, disable=not show_progress_bar, desc="Processing text batches"
@@ -80,6 +86,8 @@ class VoiceCLAPSmallWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
+        import torch
+
         inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
 
         all_features = []

@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -14,6 +13,7 @@ from mteb.types import OutputDType
 if TYPE_CHECKING:
     from collections.abc import Callable, Mapping
 
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -94,6 +94,7 @@ class ColQwen3_5Wrapper(AbsEncoder):  # noqa: N801
         device: str | None = None,
         **kwargs: Any,
     ):
+        import torch
         from colpali_engine.models import ColQwen3_5, ColQwen3_5Processor
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
@@ -141,6 +142,7 @@ class ColQwen3_5Wrapper(AbsEncoder):  # noqa: N801
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
         import torchvision.transforms.functional as F
         from PIL import Image
 
@@ -197,6 +199,8 @@ class ColQwen3_5Wrapper(AbsEncoder):  # noqa: N801
         return padded
 
     def similarity(self, a: Array, b: Array) -> Array:
+        import torch
+
         a = [torch.as_tensor(x) for x in a]
         b = [torch.as_tensor(x) for x in b]
         return self.processor.score_multi_vector(a, b, device=self.device)
@@ -214,6 +218,8 @@ class ColQwen3Wrapper(AbsEncoder):
         dtype: OutputDType | torch.dtype | str | None = OutputDType.BF16,
         **kwargs: Any,
     ):
+        import torch
+
         if isinstance(dtype, OutputDType):
             dtype = dtype.get_dtype()
 
@@ -275,6 +281,7 @@ class ColQwen3Wrapper(AbsEncoder):
         fusion_mode: str = "concat",
         **kwargs: Any,
     ) -> Array:
+        import torch
         import torchvision.transforms.functional as F
         from PIL import Image
 
@@ -372,6 +379,8 @@ class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         features = inputs.dataset.features
         if "video" in features:
             inputs.collate_fn = VideoCollator(
@@ -414,6 +423,8 @@ class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
         process_fn: Callable[[Any], Mapping[str, torch.Tensor]],
         desc: str,
     ) -> torch.Tensor:
+        import torch
+
         all_embeds = []
         with torch.no_grad():
             for batch in tqdm(loader, desc=desc):
@@ -429,6 +440,8 @@ class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
     def get_audio_embeddings(
         self, audios: DataLoader[BatchedInput], batch_size: int = 32, **kwargs: Any
     ) -> Array:
+        import torch
+
         def _process(
             audio: AudioInputItem | torch.Tensor,
         ) -> Mapping[str, torch.Tensor]:

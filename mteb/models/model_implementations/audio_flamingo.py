@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -12,6 +11,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import OutputDType
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -31,6 +31,8 @@ class AudioFlamingoWrapper(AbsEncoder):
         device_map: str | dict | None = None,
         **kwargs: Any,
     ):
+        import torch
+
         if isinstance(torch_dtype, OutputDType):
             torch_dtype = torch_dtype.get_dtype()
 
@@ -76,6 +78,8 @@ class AudioFlamingoWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         all_embeddings = []
 
         for batch_data in tqdm(inputs, disable=not show_progress_bar):

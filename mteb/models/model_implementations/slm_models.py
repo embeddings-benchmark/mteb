@@ -15,7 +15,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -26,6 +25,7 @@ from mteb.models.model_implementations.colpali_models import (
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -63,6 +63,8 @@ class SLMBaseWrapper(AbsEncoder):
         use_flash_attn: bool = True,
         **kwargs: Any,
     ):
+        import torch
+
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self._load_model_and_processor(model_name, revision, use_flash_attn, **kwargs)
         self.mdl = self.mdl.to(self.device)
@@ -111,6 +113,8 @@ class SLMBaseWrapper(AbsEncoder):
 
     def _move_to_device(self, inputs: dict) -> dict:
         """Move all tensor inputs to the model's device."""
+        import torch
+
         result = {}
         for k, v in inputs.items():
             if isinstance(v, torch.Tensor):
@@ -125,6 +129,7 @@ class SLMBaseWrapper(AbsEncoder):
         batch_size: int = 32,
         **kwargs: Any,
     ) -> torch.Tensor:
+        import torch
         import torchvision.transforms.functional as F
 
         all_embeds = []
@@ -153,6 +158,8 @@ class SLMBaseWrapper(AbsEncoder):
         batch_size: int = 32,
         **kwargs: Any,
     ) -> torch.Tensor:
+        import torch
+
         all_embeds = []
 
         with torch.no_grad():
@@ -181,6 +188,7 @@ class SLMColQwen3Wrapper(SLMBaseWrapper):
     def _load_model_and_processor(
         self, model_name: str, revision: str | None, use_flash_attn: bool, **kwargs: Any
     ):
+        import torch
         from sauerkrautlm_colpali.models.qwen3.colqwen3 import (
             ColQwen3,
             ColQwen3Processor,
@@ -208,6 +216,7 @@ class SLMColLFM2Wrapper(SLMBaseWrapper):
     def _load_model_and_processor(
         self, model_name: str, revision: str | None, use_flash_attn: bool, **kwargs: Any
     ):
+        import torch
         from sauerkrautlm_colpali.models.lfm2.collfm2 import ColLFM2, ColLFM2Processor
 
         self.mdl = ColLFM2.from_pretrained(
@@ -231,6 +240,7 @@ class SLMColMinistral3Wrapper(SLMBaseWrapper):
     def _load_model_and_processor(
         self, model_name: str, revision: str | None, use_flash_attn: bool, **kwargs: Any
     ):
+        import torch
         from sauerkrautlm_colpali.models.ministral3.colministral3 import (
             ColMinistral3,
             ColMinistral3Processor,
