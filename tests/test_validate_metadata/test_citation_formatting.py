@@ -1,6 +1,6 @@
 import bibtexparser
 import pytest
-from bibtexparser.bwriter import BibTexWriter
+from bibtexparser.writer import BibtexFormat
 
 import mteb
 from mteb.abstasks import AbsTask
@@ -8,20 +8,18 @@ from mteb.benchmarks.benchmark import Benchmark
 
 
 def format_bibtex(bibtex_str: str) -> str | None:
-    parser = bibtexparser.bparser.BibTexParser(
-        common_strings=True, ignore_nonstandard_types=False, interpolate_strings=False
-    )
-
-    bib_database = bibtexparser.loads(bibtex_str, parser)
-    if not bib_database.entries:
+    library = bibtexparser.parse_string(bibtex_str)
+    if not library.entries:
         return None
+    for comment in list(library.comments):
+        library.remove(comment)
 
-    writer = BibTexWriter()
-    writer.indent = "  "
-    writer.comma_first = False
-    writer.add_trailing_comma = True
+    bib_format = BibtexFormat()
+    bib_format.indent = "  "
+    bib_format.trailing_comma = True
+    bib_format.block_separator = "\n"
 
-    return writer.write(bib_database).strip()
+    return bibtexparser.write_string(library, bibtex_format=bib_format).strip()
 
 
 @pytest.fixture(params=mteb.get_tasks())
