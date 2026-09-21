@@ -184,12 +184,12 @@ def test_image_dataset_works_in_dataloader_worker_processes() -> None:
     from torch.utils.data import DataLoader
 
     from mteb._evaluators.image.imagetext_pairclassification_evaluator import (
+        _build_image_dataset,
         _image_collate_fn,
-        _ImageDataset,
     )
 
     loader = DataLoader(
-        _ImageDataset([Image.new("RGB", (8, 8)) for _ in range(3)]),
+        _build_image_dataset([Image.new("RGB", (8, 8)) for _ in range(3)]),
         batch_size=2,
         num_workers=2,
         collate_fn=_image_collate_fn,
