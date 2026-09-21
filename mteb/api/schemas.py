@@ -304,10 +304,19 @@ class BenchmarkSummarySchema(_CamelModel):
 
 
 class BenchmarkPerLanguageRowSchema(_CamelModel):
-    """One model's per-language scores; keys are human labels (``"English"``)."""
+    """One model's per-language scores; keys are human labels (``"English"``).
+
+    One row per (model, experiment variant) — same granularity as
+    ``SummaryRowSchema``, so a model with several ablation runs gets a
+    separate row per run instead of pooling all of them under one
+    ``model_name``. ``experiments`` mirrors ``SummaryRowSchema.experiments``
+    (``None`` for the base/non-experiment row) and lets the frontend match a
+    row here to its ``SummaryRow`` via the same ``rowId`` it already uses.
+    """
 
     model_name: str
     scores_by_language: dict[str, float]
+    experiments: dict[str, Any] | None = None
 
 
 class BenchmarkPerLanguageSchema(_CamelModel):

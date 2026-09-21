@@ -255,7 +255,10 @@ async def build_benchmark_summary(  # noqa: PLR0914
     variants_by_model: dict[tuple[str, str], dict[str, Any]] = {}
     variant_model_meta: dict[tuple[str, str], dict[str, Any]] = {}
     if "experiments" in long_df.columns:
-        from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
+        from mteb.models.model_meta import (
+            _has_meaningful_value,
+            _serialize_experiment_kwargs_to_name,
+        )
 
         variant_cols = ["model_name", "experiments"]
         if "model_meta" in long_df.columns:
@@ -271,7 +274,7 @@ async def build_benchmark_summary(  # noqa: PLR0914
             exp = vr["experiments"]
             if not exp:
                 continue
-            clean = {k: v for k, v in dict(exp).items() if v is not None}
+            clean = {k: v for k, v in dict(exp).items() if _has_meaningful_value(v)}
             if not clean:
                 continue
             vid = _serialize_experiment_kwargs_to_name(clean) or ""
@@ -420,30 +423,102 @@ async def build_benchmark_per_language(name: str) -> BenchmarkPerLanguageSchema:
     return BenchmarkPerLanguageSchema(benchmark_name=bench.name, rows=rows)
 
 
+def _extract_variant_kwargs(
+    long_df: pl.DataFrame,
+) -> dict[tuple[str, str], dict[str, Any]]:
+    """``(model_name, experiment_id) -> that experiment's kwargs``, from ``long_df``.
+
+    ``experiment_id`` is the kwargs serialized to a stable string (see
+    ``_serialize_experiment_kwargs_to_name``); non-experiment rows never
+    appear. Same extraction `build_benchmark_summary` does inline for
+    ``variants_by_model`` — factored out so `_build_per_language_rows` can
+    reuse it without also needing that function's ``variant_model_meta``
+    (per-experiment model_type/embed_dim/output_dtypes) side, which a
+    per-language row has no use for.
+    """
+    variants_by_model: dict[tuple[str, str], dict[str, Any]] = {}
+    if "experiments" not in long_df.columns:
+        return variants_by_model
+    from mteb.models.model_meta import (
+        _has_meaningful_value,
+        _serialize_experiment_kwargs_to_name,
+    )
+
+    variant_pl = (
+        long_df.lazy()
+        .filter(pl.col("experiments").is_not_null())
+        .select(["model_name", "experiments"])
+        .unique(subset=["model_name", "experiments"])
+        .collect()
+    )
+    for vr in variant_pl.iter_rows(named=True):
+        exp = vr["experiments"]
+        if not exp:
+            continue
+        clean = {k: v for k, v in dict(exp).items() if _has_meaningful_value(v)}
+        if not clean:
+            continue
+        vid = _serialize_experiment_kwargs_to_name(clean) or ""
+        if not vid:
+            continue
+        variants_by_model[(vr["model_name"], vid)] = clean
+    return variants_by_model
+
+
 def _build_per_language_rows(
     long_df: pl.DataFrame,
 ) -> list[BenchmarkPerLanguageRowSchema]:
     """Sync groupby + row accumulation; off-loaded via ``asyncio.to_thread``."""
+    from mteb.benchmarks._create_table import (
+        _EXPERIMENT_ID_COL,
+        _ensure_experiment_id,
+        _incomplete_task_pairs,
+        _null_incomplete_scores,
+    )
+
+    # One row per (model, experiment variant) — same granularity as the
+    # Summary/Per-task tables — so an ablation's own scores don't get pooled
+    # into its base model's per-language means (or vice versa).
+    long_df = _ensure_experiment_id(long_df)
+    variants_by_model = _extract_variant_kwargs(long_df)
+
+    # Null out rows for (model, variant, task) triples the run only
+    # partially covered (missing a subset/split combo) before averaging into
+    # a language mean — same "don't credit an incomplete run" rule
+    # `_create_table.py` applies for the task/summary tables (issue #5101).
+    # Without this, a model with partial task coverage still got a full
+    # per-language score here even though its Summary/Per-task cells for
+    # that task were nulled.
+    long_df = _null_incomplete_scores(
+        long_df,
+        _incomplete_task_pairs(long_df),
+        keys=("model_name", _EXPERIMENT_ID_COL, "task_name"),
+    )
     grouped = (
         long_df.lazy()
         .explode("language")
-        .group_by(["model_name", "language"])
+        .group_by(["model_name", _EXPERIMENT_ID_COL, "language"])
         .agg(pl.col("score").mean().alias("score"))
         .collect(engine="streaming")
     )
     model_names = grouped["model_name"].to_list()
+    experiment_ids = grouped[_EXPERIMENT_ID_COL].to_list()
     codes = grouped["language"].to_list()
     scores = grouped["score"].to_list()
-    rows: dict[str, dict[str, float]] = {}
-    for mn, code, score in zip(model_names, codes, scores, strict=True):
+    rows: dict[tuple[str, str], dict[str, float]] = {}
+    for mn, eid, code, score in zip(
+        model_names, experiment_ids, codes, scores, strict=True
+    ):
         if not mn or code is None or score is None:
             continue
-        rows.setdefault(mn, {})[language_label(code)] = score
+        rows.setdefault((mn, eid or ""), {})[language_label(code)] = score
     return [
         BenchmarkPerLanguageRowSchema.model_construct(
-            model_name=mn, scores_by_language=s
+            model_name=mn,
+            scores_by_language=s,
+            experiments=variants_by_model.get((mn, eid)) if eid else None,
         )
-        for mn, s in rows.items()
+        for (mn, eid), s in rows.items()
     ]
 
 

@@ -262,7 +262,10 @@ def _ensure_experiment_id(pl_df: pl.DataFrame) -> pl.DataFrame:
     ``experiments`` column (legacy parquet pre-experiments work) the col is
     added as empty strings so downstream group_by keys behave uniformly.
     """
-    from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
+    from mteb.models.model_meta import (
+        _has_meaningful_value,
+        _serialize_experiment_kwargs_to_name,
+    )
 
     if _EXPERIMENT_ID_COL in pl_df.columns:
         return pl_df
@@ -273,7 +276,7 @@ def _ensure_experiment_id(pl_df: pl.DataFrame) -> pl.DataFrame:
         if not exp:
             return ""
         if isinstance(exp, dict):
-            exp = {k: v for k, v in exp.items() if v is not None}
+            exp = {k: v for k, v in exp.items() if _has_meaningful_value(v)}
             if not exp:
                 return ""
         return _serialize_experiment_kwargs_to_name(exp) or ""

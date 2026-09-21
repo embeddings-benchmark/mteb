@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import functools
 import gzip
 import io
 import json
@@ -942,53 +943,43 @@ class ResultCache:
         return list(set(tasks))
 
     @staticmethod
+    @functools.lru_cache(maxsize=4096)
     def _get_model_name_and_revision_from_path(
         revision_path: Path,
-    ) -> tuple[ModelName, Revision, str | None, ModelMeta | None]:
-        """Get model name, revision, experiment name, and ModelMeta from the given path.
+    ) -> tuple[ModelName, Revision, str | None, ModelMeta | None] | None:
+        """Get model name, revision, experiment name, and ModelMeta from ``revision_path``.
+
+        Cached per ``revision_path``: every task result file in a revision/
+        experiment folder shares the same ``model_meta.json``, and the caller
+        (``load_results``) invokes this once per task file — without caching
+        we'd re-read, re-parse, and re-validate the identical file (including
+        the ``MODEL_REGISTRY`` scan to resolve ``loader``) once per task.
 
         Args:
-            revision_path: The path to the revision folder, which should contain a model_meta.json file. If the file is not found, it will attempt to extract the model name and revision from the path.
+            revision_path: The path to the revision (or experiment) folder,
+                which must contain its own ``model_meta.json``.
 
         Returns:
-            A tuple of ``(model_name, revision, experiment_name, model_meta)``. ``model_meta`` is the parsed ModelMeta when ``model_meta.json`` was found in ``revision_path``, or ``None`` when the file is missing.
-
+            ``(model_name, revision, experiment_name, model_meta)`` read from
+            ``revision_path / "model_meta.json"``, or ``None`` when that file
+            is missing — callers should skip such a path rather than guess
+            identity from the folder name (e.g. a renamed directory would
+            silently misattribute results to the wrong model/revision).
         """
         model_meta_path = revision_path / "model_meta.json"
-        model_path = revision_path.parent
-
         if not model_meta_path.exists():
-            logger.debug(
-                f"model_meta.json not found in {revision_path}, extracting model_name and revision from the path"
-            )
-            if _EXPERIMENTS_FOLDER_NAME in revision_path.parts:
-                logger.debug(
-                    f"Path {revision_path} contains an experiment folder, extracting model_name and revision accordingly"
-                )
-                experiment_name = revision_path.name
-                revision = revision_path.parent.parent.name
-                model_name = revision_path.parent.parent.parent.name.replace("__", "/")
-                return model_name, revision, experiment_name, None
-            model_name = model_path.name.replace("__", "/")
-            revision = revision_path.name
-            return model_name, revision, None, None
+            logger.debug(f"model_meta.json not found in {revision_path}, skipping")
+            return None
+
         with model_meta_path.open("r") as f:
             raw = f.read()
         model_meta_json = json.loads(raw)
         model_name = model_meta_json["name"]
         revision = model_meta_json["revision"]
         experiment_kwargs = model_meta_json.get("experiment_kwargs", None)
-        experiment_name_ = _serialize_experiment_kwargs_to_name(experiment_kwargs)
-        try:
-            # `loader` is serialized to disk as its registered name (a plain
-            # string), not a callable — `model_validate_json` chokes on that
-            # for every model. `model_validate_json_resolved` looks the name
-            # back up in `MODEL_REGISTRY` before validating.
-            meta = ModelMeta.model_validate_json_resolved(raw)
-        except Exception as e:
-            logger.warning(f"Failed to parse ModelMeta from {model_meta_path}: {e!r}")
-            meta = None
-        return model_name, revision, experiment_name_, meta
+        experiment_name = _serialize_experiment_kwargs_to_name(experiment_kwargs)
+        meta = ModelMeta.model_construct(**model_meta_json)
+        return model_name, revision, experiment_name, meta
 
     @staticmethod
     def _filter_paths_by_model_and_revision(
@@ -1419,9 +1410,11 @@ class ResultCache:
 
             if only_main_score:
                 task_result = task_result.only_main_score()
-            model_name, revision, experiment_name, model_meta = (
-                self._get_model_name_and_revision_from_path(path.parent)
-            )
+            identity = self._get_model_name_and_revision_from_path(path.parent)
+            if identity is None:
+                logger.debug(f"Skipping {path}: no model_meta.json in {path.parent}")
+                continue
+            model_name, revision, experiment_name, model_meta = identity
 
             if validate_and_filter:
                 task_instance = task_names.get(task_result.task_name)

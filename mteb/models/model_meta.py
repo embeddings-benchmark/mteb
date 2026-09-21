@@ -33,7 +33,13 @@ from huggingface_hub.errors import (
 )
 from packaging.requirements import Requirement
 from packaging.version import InvalidVersion, Version
-from pydantic import BaseModel, ConfigDict, field_validator, model_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    field_serializer,
+    field_validator,
+    model_validator,
+)
 
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb._hf_integration.hf_hub_utils import (
@@ -177,10 +183,14 @@ class ScoringFunction(HelpfulStrEnum):
 
 
 def _get_loader_name(
-    loader: Callable[..., EncoderProtocol] | None,
+    loader: Callable[..., EncoderProtocol] | str | None,
 ) -> str | None:
-    if loader is None:
-        return None
+    if loader is None or isinstance(loader, str):
+        # Already a registered name — e.g. an unvalidated `ModelMeta` built
+        # straight from a parsed model_meta.json via `model_construct`
+        # (see `ResultCache._get_model_name_and_revision_from_path`), where
+        # `loader` was never resolved back into a callable.
+        return loader
     if hasattr(loader, "func"):  # partial class wrapper
         return str(loader.func.__name__)
     return str(loader.__name__)
@@ -379,6 +389,22 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             return mapping[value]
         raise ValueError(f"Invalid similarity function name: {value}")
 
+    @field_serializer("loader", when_used="json")
+    @staticmethod
+    def _serialize_loader(loader: Callable[..., MTEBModels] | None) -> str | None:
+        """JSON mode only: encode ``loader`` as its registered name.
+
+        Without this, `model_dump_json()`/`.model_dump(mode="json")` (used
+        directly by e.g. `BenchmarkResults.to_disk()`) crash with
+        `PydanticSerializationError: Unable to serialize unknown type` the
+        moment `loader` holds a real callable (as it does once a `ModelMeta`
+        has gone through `model_validate_json_resolved`) — pydantic has no
+        built-in way to JSON-encode a class/function. `to_dict()` below dumps
+        in Python mode instead (`model_dump()`, no `when_used="json"`), so it
+        still sees the raw callable and keeps its own `_get_loader_name` call.
+        """
+        return _get_loader_name(loader)
+
     def to_dict(self) -> dict[str, Any]:
         """Returns a dictionary representation of the model metadata."""
         meta = self.model_copy(deep=True)
@@ -515,12 +541,22 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             updates["embed_dim"] = embed_dim
             kwargs["embed_dim"] = embed_dim
 
-        merged_exp_kwargs = {**base_exp_kwargs, **kwargs} if kwargs else base_exp_kwargs
-        updates["experiment_kwargs"] = merged_exp_kwargs or None
+        merged_kwargs = {**base_exp_kwargs, **kwargs} if kwargs else base_exp_kwargs
+        # Only kwargs with a meaningful (non-empty, non-None) value count
+        # toward the experiment's identity/name — an explicit-but-empty
+        # override like `model_kwargs={}` doesn't change what the model
+        # actually does, so it shouldn't spin up a distinct "experiment"
+        # (a separate results folder/row) from the base model. The actual
+        # loader call below still receives every kwarg as passed, filtered
+        # or not — this only affects what counts as an experiment.
+        meaningful_exp_kwargs = {
+            k: v for k, v in merged_kwargs.items() if _has_meaningful_value(v)
+        }
+        updates["experiment_kwargs"] = meaningful_exp_kwargs or None
 
         # Allow overwrites
         _kwargs = _self.loader_kwargs.copy()
-        _kwargs.update(merged_exp_kwargs)
+        _kwargs.update(merged_kwargs)
         if device is not None:
             _kwargs["device"] = device
 
@@ -1845,6 +1881,22 @@ def _collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
             similar.update(_collect_similar_tasks(parent, visited))
 
     return similar
+
+
+def _has_meaningful_value(value: Any) -> bool:  # noqa: ANN401 -- checks arbitrary kwarg values
+    """``False`` for ``None`` or an empty collection (dict/list/tuple/set/str).
+
+    Filters out no-op experiment kwargs like ``model_kwargs={}`` — an
+    explicit-but-empty override that changes nothing about the run, so it
+    shouldn't count toward the experiment's identity or show up in the
+    displayed kwargs (as opposed to a meaningful falsy value like
+    ``use_image_modality=False``, which this keeps).
+    """
+    if value is None:
+        return False
+    if isinstance(value, (dict, list, tuple, set, str)):
+        return len(value) > 0
+    return True
 
 
 def _serialize_experiment_kwargs_to_name(

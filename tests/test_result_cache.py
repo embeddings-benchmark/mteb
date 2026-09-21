@@ -1,5 +1,6 @@
 """Test cases for the ResultCache class in the mteb.cache module."""
 
+import json
 import subprocess
 from pathlib import Path
 from typing import Any, cast
@@ -402,6 +403,44 @@ def test_load_experiment_results(tmp_path: Path):
         experiment_kwargs=[model.mteb_model_meta.experiment_kwargs],
     )
     assert len(model_meta_res.model_results) == 1
+
+
+def test_folder_without_model_meta_returns_none(tmp_path: Path) -> None:
+    """A revision/experiment folder missing its own model_meta.json is skipped.
+
+    No path-derived guessing of model_name/revision/experiment_name from the
+    folder structure — a renamed directory could silently misattribute
+    results to the wrong model/revision, so a missing model_meta.json means
+    the caller skips that path entirely.
+    """
+    base_meta = mteb.get_model_meta("mteb/baseline-random-encoder")
+    revision_dir = (
+        tmp_path
+        / "results"
+        / base_meta.model_name_as_path()
+        / cast("str", base_meta.revision)
+    )
+    revision_dir.mkdir(parents=True)
+    (revision_dir / "model_meta.json").write_text(
+        json.dumps(base_meta.to_dict(), default=str)
+    )
+
+    experiment_dir = revision_dir / "experiments" / "a_test"
+    experiment_dir.mkdir(parents=True)
+    # No model_meta.json here — only a task result file.
+    (experiment_dir / "SomeTask.json").write_text("{}")
+
+    assert ResultCache._get_model_name_and_revision_from_path(experiment_dir) is None
+    # The base revision's own folder (which does have model_meta.json) still
+    # resolves normally.
+    identity = ResultCache._get_model_name_and_revision_from_path(revision_dir)
+    assert identity is not None
+    model_name, revision, experiment_name, meta = identity
+    assert model_name == base_meta.name
+    assert revision == base_meta.revision
+    assert experiment_name is None
+    assert meta is not None
+    assert meta.name == base_meta.name
 
 
 def _setup_fake_remote(tmp_path: Path) -> tuple[Path, Path]:

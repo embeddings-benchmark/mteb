@@ -347,6 +347,31 @@ def test_get_model_kwargs_does_not_mutate_registry_meta():
     assert current_registry_meta.experiment_kwargs is None
 
 
+def test_get_model_with_only_empty_kwargs_is_not_an_experiment():
+    """`get_model(name, model_kwargs={})` shouldn't spin up a distinct experiment.
+
+    An explicit-but-empty override changes nothing about how the model
+    actually runs, so it must not count as an ablation — e.g. it shouldn't
+    generate a separate ``experiments/model_kwargs_{}/`` results folder
+    distinct from the base model's own results.
+    """
+    model_name = "mteb/baseline-random-encoder"
+
+    model = mteb.get_model(model_name, model_kwargs={})
+    assert model.mteb_model_meta.experiment_kwargs is None
+    # The loader itself still receives whatever was explicitly passed —
+    # only the experiment-identity bookkeeping is affected.
+    assert model.mteb_model_meta.loader_kwargs.get("model_kwargs") == {}
+
+
+def test_get_model_meaningless_kwarg_dropped_alongside_meaningful_one():
+    """A meaningless kwarg is dropped from the experiment identity; a real one stays."""
+    model_name = "mteb/baseline-random-encoder"
+
+    model = mteb.get_model(model_name, model_kwargs={}, not_existing_param=123)
+    assert model.mteb_model_meta.experiment_kwargs == {"not_existing_param": 123}
+
+
 def test_fill_missing_parameter():
     """Test that fill_missing parameter fetches missing metadata from HuggingFace Hub"""
     model_name = "sentence-transformers/all-MiniLM-L6-v2"
