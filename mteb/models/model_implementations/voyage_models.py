@@ -1001,8 +1001,22 @@ voyage_3_exp = ModelMeta(
     extra_requirements_groups=["voyageai"],
 )
 
+
+def voyage_4_nano_loader(
+    model_name: str, revision: str | None = None, **kwargs: Any
+) -> SentenceTransformerEncoderWrapper:
+    """Load voyage-4-nano from the Hugging Face Hub.
+
+    The model is registered under the ``mongodb/`` namespace, but its weights are
+    still hosted under the ``voyageai`` Hugging Face organisation.
+    """
+    return SentenceTransformerEncoderWrapper(
+        "voyageai/voyage-4-nano", revision=revision, **kwargs
+    )
+
+
 voyage_4_nano = ModelMeta(
-    loader=SentenceTransformerEncoderWrapper,
+    loader=voyage_4_nano_loader,
     loader_kwargs={"trust_remote_code": True},
     name="mongodb/voyage-4-nano",
     model_type=["dense"],
