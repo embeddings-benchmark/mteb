@@ -3636,7 +3636,7 @@ MAEB = Benchmark(
                 CustomGroup(
                     label="Audio-Only",
                     tasks=get_tasks(_MAEB_AUDIO_ONLY_TASKS),
-                    description="This model's score restricted to MAEB(beta, audio-only)'s task set — a strict subset of MAEB(beta)'s.",
+                    description="This model's score restricted to audio only tasks. It is equivalent to  MAEB(beta, audio-only).",
                 ),
             ),
         ),
