@@ -3,13 +3,10 @@
 Derived from `transformers.trainer_utils.set_seed`.
 """
 
-import logging
 import random
 import sys
 
 import numpy as np
-
-logger = logging.getLogger(__name__)
 
 
 def _set_seed(seed: int) -> tuple[random.Random, np.random.Generator]:

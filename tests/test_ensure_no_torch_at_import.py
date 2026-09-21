@@ -13,9 +13,9 @@ import textwrap
 
 _REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 
-# `mteb/__init__.py` (and `mteb/models/__init__.py`) still pull torch in, so importing a submodule
-# normally drags it along transitively. Stubbing the parent packages in `sys.modules` lets us
-# import the submodule on its own. Once those packages are lazy too this can become `import mteb`.
+# Importing a submodule normally imports its parent packages first, which would drag in every
+# other submodule (and any heavy dependency they import). Stubbing the parent packages in
+# `sys.modules` lets us import the submodule on its own to check it in isolation.
 _PREAMBLE = """
 import pathlib
 import sys
