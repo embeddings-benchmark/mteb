@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 from mteb._create_dataloaders import (
     _create_dataloader_from_texts,
@@ -15,6 +15,7 @@ if TYPE_CHECKING:
     import torch
     from datasets import Dataset
     from PIL.Image import Image
+    from torch.utils.data import Dataset as TorchDataset
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models.models_protocols import EncoderProtocol
@@ -25,38 +26,32 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def _build_image_dataset(
-    images: list[Image],
-) -> torch.utils.data.Dataset[dict[str, Any]]:
-    """Wrap `images` in a torch map-style dataset.
+class _ImageDataset:
+    """Map-style dataset over `images`.
 
-    The class is defined here rather than at module scope because subclassing
-    `torch.utils.data.Dataset` executes at import time, which would make importing this module
-    require torch.
+    `DataLoader` only needs `__len__` and `__getitem__`, so this does not subclass
+    `torch.utils.data.Dataset`: importing this module then needs no torch, and being defined at module
+    level lets it be pickled into DataLoader worker processes (`num_proc > 1`).
     """
-    import torch
 
-    class CustomImageDataset(torch.utils.data.Dataset[dict[str, Any]]):
-        def __init__(
-            self,
-            images: list[Image],
-        ):
-            self.images = images
+    def __init__(self, images: list[Image]) -> None:
+        self.images = images
 
-        def __len__(self) -> int:
-            return len(self.images)
+    def __len__(self) -> int:
+        return len(self.images)
 
-        def __getitem__(self, idx: int) -> dict[str, Image]:
-            return {
-                "image": self.images[idx],
-            }
+    def __getitem__(self, idx: int) -> dict[str, Image]:
+        return {"image": self.images[idx]}
 
-        @property
-        def features(self) -> dict[str, Any]:
-            # for correct wrapper handling
-            return {"image": []}
+    @property
+    def features(self) -> dict[str, Any]:
+        # for correct wrapper handling
+        return {"image": []}
 
-    return CustomImageDataset(images)
+
+def _image_collate_fn(batch: list[dict[str, Any]]) -> dict[str, list[Any]]:
+    """Collate function for image batches; module level so worker processes can unpickle it."""
+    return {"image": [item["image"] for item in batch]}
 
 
 class ImageTextPairClassificationEvaluator(Evaluator):
@@ -149,12 +144,8 @@ class ImageTextPairClassificationEvaluator(Evaluator):
             dim=-1,
         ).view(len(self.dataset), self.num_texts_per_sample, -1)
 
-        def _image_collate_fn(batch: list[dict[str, Any]]) -> dict[str, list[Any]]:
-            """Collate function for image batches."""
-            return {"image": [item["image"] for item in batch]}
-
         _image_dl = DataLoader(
-            _build_image_dataset(images),
+            cast("TorchDataset[dict[str, Any]]", _ImageDataset(images)),
             collate_fn=_image_collate_fn,
             num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
         )

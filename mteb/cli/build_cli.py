@@ -7,7 +7,6 @@ import warnings
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-import torch
 from rich.console import Console
 from rich.logging import RichHandler
 
@@ -29,6 +28,8 @@ logger = logging.getLogger(__name__)
 def run(args: argparse.Namespace) -> None:
     """Run a model on a set of tasks."""
     # set logging based on verbosity level
+    import torch
+
     if args.verbosity == 0:
         logging.getLogger("mteb").setLevel(logging.CRITICAL)
     elif args.verbosity == 1:
@@ -471,6 +472,8 @@ def _leaderboard(args: argparse.Namespace) -> None:
 def _mock_run(args: argparse.Namespace) -> None:
     """Run a model on the compatible mock tasks for verification."""
     # set logging based on verbosity level
+    import torch
+
     if args.verbosity == 0:
         logging.getLogger("mteb").setLevel(logging.CRITICAL)
     elif args.verbosity == 1:
