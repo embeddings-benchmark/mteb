@@ -211,7 +211,9 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
             ):
                 models_res.append(model_res)
 
-        return type(self).model_construct(model_results=models_res)
+        return type(self).model_construct(
+            model_results=models_res, benchmark=self.benchmark
+        )
 
     def _filter_models(
         self,
@@ -244,7 +246,9 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
             if model_res.model_name in models:
                 new_model_results.append(model_res)
 
-        return type(self).model_construct(model_results=new_model_results)
+        return type(self).model_construct(
+            model_results=new_model_results, benchmark=self.benchmark
+        )
 
     def join_revisions(self) -> BenchmarkResults:
         """Join revisions of the same model.
