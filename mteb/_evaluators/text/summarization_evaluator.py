@@ -149,6 +149,7 @@ class SummarizationEvaluator(Evaluator):
                         for machine_summaries in self.machine_summaries
                         for summary in machine_summaries
                     ],
+                    num_proc=num_proc,
                     **encode_kwargs,
                 ),
                 task_metadata=self.task_metadata,

@@ -9,11 +9,11 @@ if TYPE_CHECKING:
     from collections.abc import Mapping
 
 BIBTEX = r"""
-@inproceedings{tian2018audio,
+@inproceedings{Tian_2018_ECCV,
   author = {Tian, Yapeng and Shi, Jing and Li, Bochen and Duan, Zhiyao and Xu, Chenliang},
-  booktitle = {Proceedings of the European conference on computer vision (ECCV)},
-  pages = {247--263},
-  title = {Audio-visual event localization in unconstrained videos},
+  booktitle = {The European Conference on Computer Vision (ECCV)},
+  month = {September},
+  title = {Audio-Visual Event Localization in Unconstrained Videos},
   year = {2018},
 }
 """

@@ -1,4 +1,6 @@
-import torch
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from mteb.models.model_implementations.pylate_models import MultiVectorModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -6,6 +8,15 @@ from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
 )
+
+if TYPE_CHECKING:
+    import torch
+
+
+def _identity(logits: torch.Tensor) -> torch.Tensor:
+    """Keep the raw logit as the score, like ``torch.nn.Identity()`` but without importing torch."""
+    return logits
+
 
 mixedbread_training_data = {
     # from correspondence:
@@ -411,7 +422,7 @@ MXBAI_RERANK_V2_CITATION = """@inproceedings{li2026prorank,
 # to match the reference implementation and the published benchmark numbers.
 mxbai_rerank_base_v2 = ModelMeta(
     loader=CrossEncoderWrapper,
-    loader_kwargs=dict(activation_fn=torch.nn.Identity()),
+    loader_kwargs=dict(activation_fn=_identity),
     name="mixedbread-ai/mxbai-rerank-base-v2",
     revision="3ea9d4dffa7d12a4f366be8e275c349de9fc9865",
     release_date="2025-03-03",
@@ -441,7 +452,7 @@ mxbai_rerank_base_v2 = ModelMeta(
 
 mxbai_rerank_large_v2 = ModelMeta(
     loader=CrossEncoderWrapper,
-    loader_kwargs=dict(activation_fn=torch.nn.Identity()),
+    loader_kwargs=dict(activation_fn=_identity),
     name="mixedbread-ai/mxbai-rerank-large-v2",
     revision="ca7e1ee484c37c0ddd8d178a9a5c33cec575c5e6",
     release_date="2025-03-03",

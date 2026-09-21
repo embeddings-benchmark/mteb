@@ -11,6 +11,35 @@ from .colqwen_models import ColQwen3_5Wrapper
 logger = logging.getLogger(__name__)
 
 
+def _enable_bidirectional_attention(model: Any) -> None:  # ruff: ignore[any-type]
+    """Encoder-ize the full-attention layers of a ColQwen3.5 backbone.
+
+    Mirrors `ColQwen3_5.enable_bidirectional_attention` from the EVIE release:
+    https://github.com/Tencent/EVIE/blob/main/colpali/colpali_engine/models/qwen3_5/colqwen3_5/modeling_colqwen3_5.py#L20
+
+    Two switches have to be flipped, and they are not interchangeable:
+
+    * `config.is_causal=False` is what `create_causal_mask` reads to build a
+      bidirectional mask instead of a causal one. Whenever a batch is padded
+      the mask tensor is what sdpa actually honours, so without this the
+      attention silently stays causal.
+    * `Qwen3_5Attention.is_causal=False` is what flash_attention_2 reads, since
+      FA2 only receives the 2D padding mask.
+
+    Qwen3.5 interleaves GatedDeltaNet (`linear_attention`) and dense
+    (`full_attention`) layers; only the dense ones are touched.
+    """
+    for cfg in (model.config, getattr(model.config, "text_config", None)):
+        if cfg is not None:
+            cfg.is_causal = False
+
+    text_model = model.language_model
+    layer_types = text_model.config.layer_types
+    for layer, layer_type in zip(text_model.layers, layer_types, strict=True):
+        if layer_type == "full_attention":
+            layer.self_attn.is_causal = False
+
+
 class EvieWrapper(ColQwen3_5Wrapper):
     """EVIE: ColQwen3.5 with the full-attention layers encoder-ized.
 
@@ -53,7 +82,7 @@ class EvieWrapper(ColQwen3_5Wrapper):
             model_name=model_name, revision=revision, device=device, **kwargs
         )
 
-        self.model.enable_bidirectional_attention()
+        _enable_bidirectional_attention(self.model)
 
         # The released page budget is 16384 visual tokens; reported results use 1024.
         from colpali_engine.models import ColQwen3_5Processor

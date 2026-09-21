@@ -5,7 +5,7 @@ import warnings
 from pathlib import Path
 
 import bibtexparser
-from bibtexparser.bwriter import BibTexWriter
+from bibtexparser.writer import BibtexFormat
 
 logging.basicConfig(
     level=logging.INFO,
@@ -96,25 +96,22 @@ def extract_string_literal(
 
 
 def format_bibtex(bibtex_str: str) -> str | None:
-    parser = bibtexparser.bparser.BibTexParser(
-        common_strings=True, ignore_nonstandard_types=False, interpolate_strings=False
-    )
-
     try:
-        bib_database = bibtexparser.loads(bibtex_str, parser=parser)
-        if not bib_database.entries:
+        library = bibtexparser.parse_string(bibtex_str)
+        if not library.entries:
             msg = f"No entries found in BibTeX string. {bibtex_str}"
             logger.warning(msg)
             warnings.warn(msg)
             return None
-        bib_database.comments = []
+        for comment in list(library.comments):
+            library.remove(comment)
 
-        writer = BibTexWriter()
-        writer.indent = "  "
-        writer.comma_first = False
-        writer.add_trailing_comma = True
+        bib_format = BibtexFormat()
+        bib_format.indent = "  "
+        bib_format.trailing_comma = True
+        bib_format.block_separator = "\n"
 
-        return writer.write(bib_database).strip()
+        return bibtexparser.write_string(library, bibtex_format=bib_format).strip()
     except Exception as e:
         msg = f"Failed to parse BibTeX: {e}"
         logger.warning(msg)
