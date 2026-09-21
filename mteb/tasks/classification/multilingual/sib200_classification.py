@@ -297,6 +297,7 @@ class SIB200ClassificationV2(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="human-translated and localized",
+        superseded_by="SIB200Classification.v3",
         bibtex_citation=r"""
 @article{adelani2023sib,
   author = {Adelani, David Ifeoluwa and Liu, Hannah and Shen, Xiaoyu and Vassilyev, Nikita and Alabi, Jesujoba O and Mao, Yanke and Gao, Haonan and Lee, Annie En-Shiun},
@@ -336,3 +337,56 @@ class SIB200ClassificationV2(AbsTaskClassification):
                     return {"text": example[text_col], "label": label}
 
                 self.dataset[lang][split] = ds.map(to_mteb, remove_columns=cols)
+
+
+_LANGS_V3 = {
+    **_LANGS,
+    "ace_Arab": ["ace-Arab"],
+    "arb_Arab": ["arb-Arab"],
+    "bjn_Arab": ["bjn-Arab"],
+    "kas_Arab": ["kas-Arab"],
+    "knc_Arab": ["knc-Arab"],
+    "min_Arab": ["min-Arab"],
+    "taq_Latn": ["taq-Latn"],
+    "zho_Hans": ["zho-Hans"],
+}
+
+
+class SIB200ClassificationV3(SIB200ClassificationV2):
+    """SIB-200 (14 topics) multilingual classification benchmark with all 205 language-script configurations."""
+
+    metadata = TaskMetadata(
+        name="SIB200Classification.v3",
+        description=(
+            "SIB-200 is the largest publicly available topic classification "
+            "dataset based on Flores-200 covering 205 languages and dialects. "
+            "Version 3 includes all 205 language-script configurations of the "
+            "14-label dataset."
+        ),
+        reference="https://arxiv.org/abs/2309.07445",
+        dataset={
+            "path": "Davlan/sib200_14classes",
+            "revision": "9a9b57434ee6eac80271059112704ccfcad83402",
+        },
+        type="Classification",
+        category="t2c",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=_LANGS_V3,
+        main_score="accuracy",
+        date=("2023-09-14", "2024-01-27"),
+        domains=["News", "Written"],
+        task_subtypes=["Topic classification"],
+        license="cc-by-4.0",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        sample_creation="human-translated and localized",
+        bibtex_citation=r"""
+@article{adelani2023sib,
+  author = {Adelani, David Ifeoluwa and Liu, Hannah and Shen, Xiaoyu and Vassilyev, Nikita and Alabi, Jesujoba O and Mao, Yanke and Gao, Haonan and Lee, Annie En-Shiun},
+  journal = {arXiv preprint arXiv:2309.07445},
+  title = {SIB-200: A simple, inclusive, and big evaluation dataset for topic classification in 200+ languages and dialects},
+  year = {2023},
+}
+""",
+    )
