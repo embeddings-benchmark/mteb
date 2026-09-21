@@ -2,7 +2,7 @@ from mteb.abstasks.clustering import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SpanishWikiClusteringP2PV2(AbsTaskClustering):
+class SpanishWikiClusteringP2P(AbsTaskClustering):
     """Cluster Spanish Wikipedia passages from six audited thematic domains."""
 
     max_document_to_embed = None
@@ -10,10 +10,9 @@ class SpanishWikiClusteringP2PV2(AbsTaskClustering):
     max_documents_per_cluster = 1200
 
     metadata = TaskMetadata(
-        name="SpanishWikiClusteringP2P.v2",
+        name="SpanishWikiClusteringP2P",
         description=(
-            "Thematic clustering of Spanish Wikipedia passages across six balanced, audited domains. "
-            "This independently reconstructed v2 replaces a deprecated historical resource."
+            "Thematic clustering of Spanish Wikipedia passages across six balanced, audited domains."
         ),
         reference="https://huggingface.co/datasets/ClementeH/SpanishWikiClustering-v2",
         dataset={
