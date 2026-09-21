@@ -16,11 +16,13 @@ if TYPE_CHECKING:
     from mteb.types import Array, BatchedInput, PromptType
 
 
-METACLIP2_CITATION = """@article{xu2025metaclip2,
-  title={MetaCLIP 2: A Worldwide Scaling Recipe},
-  author={Xu, Hu and Xie, Saining and Ghosh, Gargi and Kira, Zsolt and Darrell, Trevor},
-  journal={arXiv preprint arXiv:2507.22062},
-  year={2025}
+METACLIP2_CITATION = """@misc{xu2025metaclip2,
+  archiveprefix = {arXiv},
+  author = {Yung-Sung Chuang and Yang Li and Dong Wang and Ching-Feng Yeh and Kehan Lyu and Ramya Raghavendra and James Glass and Lifei Huang and Jason Weston and Luke Zettlemoyer and Xinlei Chen and Zhuang Liu and Saining Xie and Wen-tau Yih and Shang-Wen Li and Hu Xu},
+  eprint = {2507.22062},
+  title = {Meta CLIP 2: A Worldwide Scaling Recipe},
+  url = {https://arxiv.org/abs/2507.22062},
+  year = {2025},
 }"""
 
 

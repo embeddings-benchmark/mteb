@@ -1,0 +1,89 @@
+name: Cited works exist
+on:
+  pull_request:
+    paths:
+      - "mteb/tasks/**.py"
+      - "mteb/benchmarks/**.py"
+      - "mteb/models/**.py"
+      - "tests/test_validate_metadata/**"
+      - ".github/workflows/citation_check.yml"
+  push:
+    branches: [main]
+    paths:
+      - "mteb/tasks/**.py"
+      - "mteb/benchmarks/**.py"
+      - "mteb/models/**.py"
+      - "tests/test_validate_metadata/**"
+      - ".github/workflows/citation_check.yml"
+  schedule:
+    - cron: "0 4 1 * *"  # monthly, citations are only re-checked every 30 days
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  citation-check-pr:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    # the lookups are rate-limited, and a shared runner IP gets throttled harder than
+    # a laptop does; fail rather than sit in the queue for hours
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v6
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v8.2.0
+      with:
+        enable-cache: true
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: uv sync --group test --frozen
+
+    - name: Check citations
+      run: make citation-check
+
+  citation-check-main:
+    if: github.event_name == 'push' ||
+        github.event_name == 'schedule' ||
+        github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    # the lookups are rate-limited, and a shared runner IP gets throttled harder than
+    # a laptop does; fail rather than sit in the queue for hours
+    timeout-minutes: 45
+    permissions:
+      contents: write
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v6
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v8.2.0
+      with:
+        enable-cache: true
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: uv sync --group test --frozen
+
+    - name: Check citations
+      run: make citation-check
+
+    # Keep what the run looked up so later runs start from the refreshed cache.
+    - name: Commit the citation cache
+      if: success() && github.ref == 'refs/heads/main'
+      run: |
+        if git diff --quiet -- tests/test_validate_metadata/citation_cache.json; then
+          exit 0
+        fi
+
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add tests/test_validate_metadata/citation_cache.json
+        git commit -m "chore: update the citation cache [skip ci]"
+        git push origin HEAD:main

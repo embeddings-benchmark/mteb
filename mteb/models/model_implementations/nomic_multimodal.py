@@ -25,14 +25,6 @@ NOMIC_LANGUAGES = [
     "ita-Latn",  # Italian
 ]
 
-CITATION = """
-@misc{nomicembedmultimodal2025,
-  title={Nomic Embed Multimodal: Interleaved Text, Image, and Screenshots for Visual Document Retrieval},
-  author={Nomic Team},
-  year={2025},
-  publisher={Nomic AI},
-  url={https://www.nomic.ai/news/nomic-embed-multimodal}
-}"""
 
 # https://huggingface.co/datasets/nomic-ai/colpali-queries-mined-20250321-by-source
 TRAINING_DATA = COLPALI_TRAINING_DATA | {"VDRMultilingualRetrieval"}
@@ -174,7 +166,6 @@ nomic_embed_multimodal_3b = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     training_datasets=TRAINING_DATA,
-    citation=CITATION,
     extra_requirements_groups=["colpali_engine"],
 )
 
@@ -204,6 +195,5 @@ nomic_embed_multimodal_7b = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     training_datasets=TRAINING_DATA,
-    citation=CITATION,
     extra_requirements_groups=["colpali_engine"],
 )

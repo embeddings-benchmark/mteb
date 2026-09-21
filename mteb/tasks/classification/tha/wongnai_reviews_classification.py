@@ -25,8 +25,9 @@ class WongnaiReviewsClassification(AbsTaskClassification):
         annotations_creators="derived",
         sample_creation="found",
         bibtex_citation=r"""
-@software{cstorm125_2020_3852912,
-  author = {cstorm125 and lukkiddd},
+@software{charin_polpanumas_2020_3852912,
+  author = {Charin Polpanumas and
+Phasathorn Suwansri},
   doi = {10.5281/zenodo.3852912},
   month = may,
   publisher = {Zenodo},

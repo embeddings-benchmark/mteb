@@ -258,17 +258,6 @@ class SLMColMinistral3Wrapper(SLMBaseWrapper):
         )
 
 
-SAUERKRAUTLM_CITATION = """
-@misc{sauerkrautlm-colpali-2025,
-  title={SauerkrautLM-ColPali: Multi-Vector Vision Retrieval Models},
-  author={David Golchinfar},
-  organization={VAGO Solutions},
-  year={2025},
-  url={https://github.com/VAGOsolutions/sauerkrautlm-colpali}
-}
-"""
-
-
 slm_colqwen3_1_7b_turbo = ModelMeta(
     loader=SLMColQwen3Wrapper,
     name="VAGOsolutions/SauerkrautLM-ColQwen3-1.7b-Turbo-v0.1",
@@ -292,7 +281,7 @@ slm_colqwen3_1_7b_turbo = ModelMeta(
     use_instructions=True,
     adapted_from="Qwen/Qwen3-VL-2B-Instruct",
     training_datasets=COLPALI_TRAINING_DATA,
-    citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
+    citation=COLPALI_CITATION,
     extra_requirements_groups=["sauerkrautlm-colpali"],
 )
 
@@ -319,7 +308,7 @@ slm_colqwen3_2b = ModelMeta(
     use_instructions=True,
     adapted_from="Qwen/Qwen3-VL-2B-Instruct",
     training_datasets=COLPALI_TRAINING_DATA,
-    citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
+    citation=COLPALI_CITATION,
     extra_requirements_groups=["sauerkrautlm-colpali"],
 )
 
@@ -346,7 +335,7 @@ slm_colqwen3_4b = ModelMeta(
     use_instructions=True,
     adapted_from="Qwen/Qwen3-VL-4B-Instruct",
     training_datasets=COLPALI_TRAINING_DATA,
-    citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
+    citation=COLPALI_CITATION,
     extra_requirements_groups=["sauerkrautlm-colpali"],
 )
 
@@ -373,7 +362,7 @@ slm_colqwen3_8b = ModelMeta(
     use_instructions=True,
     adapted_from="Qwen/Qwen3-VL-8B-Instruct",
     training_datasets=COLPALI_TRAINING_DATA,
-    citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
+    citation=COLPALI_CITATION,
     extra_requirements_groups=["sauerkrautlm-colpali"],
 )
 
@@ -399,7 +388,7 @@ slm_collfm2_450m = ModelMeta(
     use_instructions=True,
     adapted_from="LiquidAI/LFM2-VL-450M",
     training_datasets=COLPALI_TRAINING_DATA,
-    citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
+    citation=COLPALI_CITATION,
     extra_requirements_groups=["sauerkrautlm-colpali"],
 )
 
@@ -426,6 +415,6 @@ slm_colministral3_3b = ModelMeta(
     use_instructions=True,
     adapted_from="mistralai/Ministral-3B-Instruct-2410",
     training_datasets=COLPALI_TRAINING_DATA,
-    citation=SAUERKRAUTLM_CITATION + COLPALI_CITATION,
+    citation=COLPALI_CITATION,
     extra_requirements_groups=["sauerkrautlm-colpali"],
 )

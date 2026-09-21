@@ -58,20 +58,13 @@ mxbai_embed_large_v1 = ModelMeta(
     ],
     use_instructions=True,
     citation="""
-    @online{emb2024mxbai,
-      title={Open Source Strikes Bread - New Fluffy Embeddings Model},
-      author={Sean Lee and Aamir Shakir and Darius Koenig and Julius Lipp},
-      year={2024},
-      url={https://www.mixedbread.ai/blog/mxbai-embed-large-v1},
-    }
-
-    @article{li2023angle,
+@article{li2023angle,
       title={AnglE-optimized Text Embeddings},
       author={Li, Xianming and Li, Jing},
       journal={arXiv preprint arXiv:2309.12871},
       year={2023}
     }
-    """,
+""",
     public_training_code=None,
     public_training_data=None,
     training_datasets=mixedbread_training_data,
@@ -160,12 +153,7 @@ mxbai_embed_xsmall_v1 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=mixedbread_training_data,
-    citation="""@online{xsmall2024mxbai,
-  title={Every Byte Matters: Introducing mxbai-embed-xsmall-v1},
-  author={Sean Lee and Julius Lipp and Rui Huang and Darius Koenig},
-  year={2024},
-  url={https://www.mixedbread.ai/blog/mxbai-embed-xsmall-v1},
-}""",
+    citation=None,
 )
 
 mxbai_rerank_xsmall_v1 = ModelMeta(
@@ -198,12 +186,7 @@ mxbai_rerank_xsmall_v1 = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["cross-encoder"],
-    citation="""@online{rerank2024mxbai,
-  title={Boost Your Search With The Crispy Mixedbread Rerank Models},
-  author={Aamir Shakir and Darius Koenig and Julius Lipp and Sean Lee},
-  year={2024},
-  url={https://www.mixedbread.ai/blog/mxbai-rerank-v1},
-}""",
+    citation=None,
     contacts=None,
 )
 
@@ -237,12 +220,7 @@ mxbai_rerank_base_v1 = ModelMeta(
     superseded_by="mixedbread-ai/mxbai-rerank-base-v2",
     modalities=["text"],
     model_type=["cross-encoder"],
-    citation="""@online{rerank2024mxbai,
-  title={Boost Your Search With The Crispy Mixedbread Rerank Models},
-  author={Aamir Shakir and Darius Koenig and Julius Lipp and Sean Lee},
-  year={2024},
-  url={https://www.mixedbread.ai/blog/mxbai-rerank-v1},
-}""",
+    citation=None,
     contacts=None,
 )
 
@@ -276,12 +254,7 @@ mxbai_rerank_large_v1 = ModelMeta(
     superseded_by="mixedbread-ai/mxbai-rerank-large-v2",
     modalities=["text"],
     model_type=["cross-encoder"],
-    citation="""@online{rerank2024mxbai,
-  title={Boost Your Search With The Crispy Mixedbread Rerank Models},
-  author={Aamir Shakir and Darius Koenig and Julius Lipp and Sean Lee},
-  year={2024},
-  url={https://www.mixedbread.ai/blog/mxbai-rerank-v1},
-}""",
+    citation=None,
     contacts=None,
 )
 

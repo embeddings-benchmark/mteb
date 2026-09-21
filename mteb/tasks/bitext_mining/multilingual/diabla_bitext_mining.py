@@ -28,12 +28,15 @@ class DiaBLaBitextMining(AbsTaskBitextMining):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{gonzalez2019diabla,
-  author = {González, Matilde and García, Clara and Sánchez, Lucía},
-  booktitle = {Proceedings of the 12th Language Resources and Evaluation Conference},
-  pages = {4192--4198},
-  title = {DiaBLa: A Corpus of Bilingual Spontaneous Written Dialogues for Machine Translation},
-  year = {2019},
+@article{bawden2021diabla,
+  author = {Bawden, Rachel and Bilinski, Eric and Lavergne, Thomas and Rosset, Sophie},
+  journal = {Language Resources and Evaluation},
+  number = {3},
+  pages = {635--660},
+  publisher = {Springer},
+  title = {DiaBLa: a corpus of bilingual spontaneous written dialogues for machine translation},
+  volume = {55},
+  year = {2021},
 }
 """,
     )

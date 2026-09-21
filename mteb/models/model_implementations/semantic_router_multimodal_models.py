@@ -23,13 +23,6 @@ if TYPE_CHECKING:
     from mteb.types import Array, BatchedInput, PromptType
     from mteb.types._encoder_io import AudioInput, TextInput
 
-_CITATION = """@misc{multi-modal-embed-2026,
-  title={multi-modal-embed: Compact Multimodal Embeddings with 2DMSE},
-  author={Semantic Router Team},
-  year={2026},
-  url={https://huggingface.co/llm-semantic-router/multi-modal-embed-small}
-}"""
-
 
 def _remap_text_encoder_state_dict(
     state_dict: dict[str, Any], model: nn.Module
@@ -569,7 +562,6 @@ multi_modal_embed_small = ModelMeta(
     },
     modalities=["text", "image", "audio"],
     model_type=["dense"],
-    citation=_CITATION,
 )
 
 multi_modal_embed_large = ModelMeta(
@@ -595,5 +587,4 @@ multi_modal_embed_large = ModelMeta(
     adapted_from="llm-semantic-router/mmbert-embed-32k-2d-matryoshka",
     modalities=["text", "image", "audio"],
     model_type=["dense"],
-    citation=_CITATION,
 )

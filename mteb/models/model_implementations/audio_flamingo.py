@@ -164,10 +164,12 @@ audio_flamingo_meta = ModelMeta(
     modalities=["audio", "text"],
     citation="""
 @misc{audioflamingo2024,
-      title={Audio Flamingo: A Novel Audio Language Model with Few-Shot Learning and Dialogue Abilities},
-      author={NVIDIA},
-      year={2024},
-      url={https://arxiv.org/abs/2507.08128},
+  archiveprefix = {arXiv},
+  author = {Arushi Goel and Sreyan Ghosh and Jaehyeon Kim and Sonal Kumar and Zhifeng Kong and Sang-gil Lee and Chao-Han Huck Yang and Ramani Duraiswami and Dinesh Manocha and Rafael Valle and Bryan Catanzaro},
+  eprint = {2507.08128},
+  title = {Audio Flamingo 3: Advancing Audio Intelligence with Fully Open Large Audio Language Models},
+  url = {https://arxiv.org/abs/2507.08128},
+  year = {2025},
 }
 """,
 )

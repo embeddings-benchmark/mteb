@@ -37,7 +37,7 @@ class Covers80A2ARetrieval(AbsTaskRetrieval):
         bibtex_citation=r"""
 @misc{ellis2007covers80,
   author = {Daniel P. W. Ellis and Brian Whitman},
-  title = {The Covers80 Cover Song Dataset},
+  title = {The "Covers80" cover song data set},
   url = {https://labrosa.ee.columbia.edu/projects/coversongs/covers80/},
   year = {2007},
 }

@@ -36,14 +36,6 @@ NEMOTRON_COLEMBED_CITATION_V2 = """
     url={https://arxiv.org/abs/2602.03992},
 }"""
 
-NEMOTRON_EMBED_VL_1B_V2_CITATION = """
-@misc{ronay2026smallyetmighty,
-    title={Small Yet Mighty: Improve Accuracy In Multimodal Search and Visual Document Retrieval with Llama Nemotron RAG Models},
-    author={Ronay Ak, Gabriel de Souza Pereira Moreira and Bo Liu},
-    year={2026},
-    howpublished = {Available at: https://huggingface.co/blog/nvidia/llama-nemotron-vl-1b},
-}"""
-
 
 class NemotronColEmbedVL(AbsEncoder):
     """Encoder for the NemotronColEmbedVL family of models."""
@@ -457,6 +449,5 @@ llama_nemotron_embed_vl_1b_v2 = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=True,
     training_datasets=TRAINING_DATA_EMBED_VL_1B_V2,
-    citation=NEMOTRON_EMBED_VL_1B_V2_CITATION,
     extra_requirements_groups=["llama-nemotron-colembed-vl"],
 )
