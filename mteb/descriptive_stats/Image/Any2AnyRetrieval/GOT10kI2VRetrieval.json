@@ -8,13 +8,41 @@
         "documents_image_statistics": null,
         "documents_audio_statistics": null,
         "documents_video_statistics": {
-            "total_duration_seconds": 2100.70,
+            "total_duration_seconds": 2100.7,
             "total_frames": 21007,
+            "min_width": 480,
+            "average_width": 1579.62,
+            "max_width": 3840,
+            "min_height": 360,
+            "average_height": 910.4,
+            "max_height": 2160,
             "min_duration_seconds": 6.0,
             "average_duration_seconds": 11.67,
             "max_duration_seconds": 47.1,
+            "unique_videos": 180,
             "average_fps": 10.0,
-            "unique_videos": 180
+            "fps": {
+                "10": 180
+            },
+            "min_resolution": [480, 360],
+            "average_resolution": [1579.62, 910.4],
+            "max_resolution": [3840, 2160],
+            "resolutions": {
+                "1280x720": 50,
+                "1440x1080": 3,
+                "1920x1072": 1,
+                "1920x1080": 93,
+                "3840x2160": 4,
+                "480x360": 2,
+                "600x360": 1,
+                "640x360": 1,
+                "640x480": 15,
+                "720x1280": 1,
+                "720x480": 1,
+                "848x480": 1,
+                "854x480": 6,
+                "960x720": 1
+            }
         },
         "queries_text_statistics": null,
         "queries_image_statistics": {
@@ -22,7 +50,7 @@
             "average_image_width": 1579.62,
             "max_image_width": 3840,
             "min_image_height": 360,
-            "average_image_height": 910.40,
+            "average_image_height": 910.4,
             "max_image_height": 2160,
             "unique_images": 180
         },
