@@ -2,15 +2,14 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
-from transformers import AutoModel, AutoProcessor
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import OutputDType
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -34,6 +33,9 @@ class ColVec1Wrapper(AbsEncoder):
         torch_dtype: OutputDType | torch.dtype | None = OutputDType.BF16,
         **kwargs: Any,
     ):
+        import torch
+        from transformers import AutoModel, AutoProcessor
+
         if isinstance(torch_dtype, OutputDType):
             torch_dtype = torch_dtype.get_dtype()
 
@@ -99,6 +101,7 @@ class ColVec1Wrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
         import torchvision.transforms.functional as F
         from PIL import Image
 
@@ -129,6 +132,8 @@ class ColVec1Wrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         all_embeds = []
         with torch.no_grad():
             for batch in tqdm(
@@ -143,6 +148,8 @@ class ColVec1Wrapper(AbsEncoder):
         )
 
     def similarity(self, a: Array, b: Array) -> Array:
+        import torch
+
         a = [torch.as_tensor(x) for x in a]
         b = [torch.as_tensor(x) for x in b]
         return self.processor.score_multi_vector(a, b, device=self.device)
@@ -166,6 +173,9 @@ class ColVec11Wrapper(ColVec1Wrapper):
         processor_kwargs: dict[str, Any] | None = None,
         **model_kwargs: Any,
     ):
+        import torch
+        from transformers import AutoModel, AutoProcessor
+
         if isinstance(torch_dtype, OutputDType):
             torch_dtype = torch_dtype.get_dtype()
 
@@ -195,6 +205,7 @@ class ColVec11Wrapper(ColVec1Wrapper):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
         import torchvision.transforms.functional as F
         from PIL import Image
 
@@ -237,6 +248,8 @@ class ColVec11Wrapper(ColVec1Wrapper):
         raise ValueError("No text or image features found in inputs.")
 
     def similarity(self, a: Array, b: Array) -> Array:
+        import torch
+
         a = [torch.as_tensor(x) for x in a]
         b = [torch.as_tensor(x) for x in b]
         return self.processor.score_retrieval(

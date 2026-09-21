@@ -10,7 +10,6 @@ from io import BytesIO
 from typing import TYPE_CHECKING, Any
 
 import requests
-import torch
 from tqdm import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -22,6 +21,7 @@ from mteb.types import PromptType
 if TYPE_CHECKING:
     from collections.abc import Callable
 
+    import torch
     from PIL import Image
     from torch.utils.data import DataLoader
 
@@ -144,6 +144,8 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         if (
             self._embed_dim is not None
             and self._embed_dim not in self._available_embed_dims

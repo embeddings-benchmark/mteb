@@ -4,7 +4,6 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 
 import mteb
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -16,6 +15,7 @@ from .bge_models import bge_full_data
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks import (
@@ -95,6 +95,8 @@ class CDEWrapper(SentenceTransformerEncoderWrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         prompt = self.get_prompt(task_metadata, prompt_type)
         if prompt:
             logger.info(
