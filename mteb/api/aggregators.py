@@ -32,7 +32,6 @@ from mteb.api.schemas import (
 )
 from mteb.benchmarks._benchmark_metrics import (
     _is_whole_task_ref,
-    _recompute_lenient_custom_groups,
     _recompute_lenient_means,
 )
 from mteb.benchmarks._create_table import _CUSTOM_GROUP_COL_PREFIX, _format_max_tokens
@@ -246,12 +245,6 @@ async def build_benchmark_summary(  # noqa: PLR0914
         {tm.name: tm.type for tm in tasks_meta} if language_filtered else {}
     )
 
-    custom_group_task_to_label: dict[str, dict[str, str]] = (
-        {dim: g.task_to_label for dim, g in declared_by_dim.items()}
-        if language_filtered
-        else {}
-    )
-
     # Off-thread: ``model_construct`` releases the GIL in pydantic-core.
     rows = await asyncio.to_thread(
         _build_summary_rows,
@@ -263,7 +256,6 @@ async def build_benchmark_summary(  # noqa: PLR0914
         task_to_type,
         language_filtered,
         custom_group_cols_by_dim,
-        custom_group_task_to_label,
     )
 
     custom_groupings_out: list[CustomGroupingSchema] = []
@@ -317,11 +309,9 @@ def _build_summary_rows(
     task_to_type: dict[str, str],
     language_filtered: bool,
     custom_group_cols_by_dim: dict[str, tuple[str, ...]] | None = None,
-    custom_group_task_to_label: dict[str, dict[str, str]] | None = None,
 ) -> list[SummaryRowSchema]:
     """Sync row-construction loop; off-loaded via ``asyncio.to_thread``."""
     custom_group_cols_by_dim = custom_group_cols_by_dim or {}
-    custom_group_task_to_label = custom_group_task_to_label or {}
     rows: list[SummaryRowSchema] = []
     for idx, row in enumerate(summary_pl.iter_rows(named=True)):
         full = row["Model"]
@@ -358,13 +348,6 @@ def _build_summary_rows(
             scores_by_task_type, mean_task, mean_type = _recompute_lenient_means(
                 scores_by_task, task_to_type
             )
-
-            scores_by_custom_group = {
-                **scores_by_custom_group,
-                **_recompute_lenient_custom_groups(
-                    scores_by_task, custom_group_task_to_label
-                ),
-            }
 
         rows.append(
             SummaryRowSchema.model_construct(

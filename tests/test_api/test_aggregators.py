@@ -1,9 +1,9 @@
 """Tests for the CustomGroup(ing) plumbing in mteb.api.aggregators/schemas.
 
 Covers the scoped (subset-/split-narrowed) task-entry additions: schema
-construction of `tasks`/`tasks_complete`, and `_build_summary_rows`'s
-language-filter lenient-recompute merge (a scoped dimension must survive
-untouched, not get wiped to `{}`).
+construction of `tasks`/`tasks_complete`, and `_build_summary_rows` keeping
+custom-group scores at their strict (all-or-nothing) value even under a
+language filter, unlike `Mean(Task)`/`Mean(TaskType)`.
 """
 
 from __future__ import annotations
@@ -73,7 +73,10 @@ def _summary_pl(cols: dict[str, list]) -> pl.DataFrame:
     return pl.DataFrame(cols)
 
 
-def test_build_summary_rows_merges_lenient_recompute_not_overwrites():
+def test_build_summary_rows_custom_groups_stay_strict_under_language_filter():
+    """Custom-group scores are never recomputed leniently -- every task in a
+    group must have a score, unlike Mean(Task)/Mean(TaskType), which average
+    over whatever's present after a language filter."""
     pytest.importorskip("fastapi")
     from mteb.api.aggregators import _build_summary_rows
 
@@ -92,9 +95,9 @@ def test_build_summary_rows_merges_lenient_recompute_not_overwrites():
         "WholeDim": ("__cg__WholeDim::G1",),
         "ScopedDim": ("__cg__ScopedDim::G2",),
     }
-    # Only WholeDim is in this mapping -- mirrors the has_scoped_refs gate in
-    # build_benchmark_summary excluding ScopedDim.
-    custom_group_task_to_label = {"WholeDim": {"t1": "G1"}}
+    # Even though the model has a post-filter score for t1 (which feeds
+    # WholeDim::G1), that's irrelevant now -- custom groups always keep
+    # their strict, polars-computed value.
     per_task_rows = {FULL_MODEL: {"t1": 0.7}}
 
     rows = _build_summary_rows(
@@ -106,16 +109,11 @@ def test_build_summary_rows_merges_lenient_recompute_not_overwrites():
         task_to_type={},
         language_filtered=True,
         custom_group_cols_by_dim=custom_group_cols_by_dim,
-        custom_group_task_to_label=custom_group_task_to_label,
     )
 
     assert len(rows) == 1
     row = rows[0]
-    # WholeDim recomputed leniently from per_task_rows (t1=0.7 -> G1=0.7),
-    # not left at its strict polars-column value (0.5).
-    assert row.scores_by_custom_group["WholeDim"]["G1"] == 0.7
-    # ScopedDim absent from custom_group_task_to_label -> untouched, keeps
-    # its strict value (0.9) instead of being wiped to {} by an overwrite.
+    assert row.scores_by_custom_group["WholeDim"]["G1"] == 0.5
     assert row.scores_by_custom_group["ScopedDim"]["G2"] == 0.9
 
 
@@ -144,7 +142,6 @@ def test_build_summary_rows_strict_when_not_language_filtered():
         task_to_type={},
         language_filtered=False,
         custom_group_cols_by_dim=custom_group_cols_by_dim,
-        custom_group_task_to_label={"WholeDim": {"t1": "G1"}},
     )
 
     assert rows[0].scores_by_custom_group["WholeDim"]["G1"] == 0.5

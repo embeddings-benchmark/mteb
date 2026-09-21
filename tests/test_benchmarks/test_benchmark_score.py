@@ -10,8 +10,6 @@ from mteb.benchmarks._benchmark_metrics import (
     _compute_mean_task,
     _compute_mean_task_type,
     _compute_task_types,
-    _recompute_lenient_custom_groups,
-    _recompute_lenient_means,
 )
 from mteb.benchmarks.benchmark import (
     Benchmark,
@@ -520,6 +518,29 @@ def test_compute_custom_group_means(mock_mteb_cache: ResultCache):
     assert out_a["DimA::Other"] != out_b["DimB::Other"]
 
 
+def test_compute_custom_group_means_nulls_on_missing_whole_task_score(
+    mock_mteb_cache: ResultCache,
+):
+    """A model missing a whole-task entry's score nulls only the group that
+    task belongs to -- sibling groups in the same dimension are unaffected."""
+    mock_model_name = "mteb/baseline-random-encoder"
+    dim_a, _ = _make_custom_groupings()
+    model_result = mock_mteb_cache.load_results(models=[mock_model_name]).model_results[
+        0
+    ]
+    # Omit NanoArguAnaRetrieval (dim_a's "Other" group) -- G1's two tasks
+    # (NanoSCIDOCSRetrieval, Banking77Classification) are still present.
+    tasks_without_arguana = mteb.get_tasks(
+        ["NanoSCIDOCSRetrieval", "Banking77Classification"]
+    )
+    task_results = model_result.select_tasks(tasks_without_arguana).task_results
+
+    out = _compute_custom_group_means(task_results, dim_a)
+
+    assert out["DimA::G1"] is not None
+    assert out["DimA::Other"] is None
+
+
 def test_benchmark_get_score_custom_groups(mock_mteb_cache: ResultCache):
     """get_score surfaces CustomGrouping keys alongside the built-in aggregations."""
     dim_a, dim_b = _make_custom_groupings()
@@ -633,59 +654,7 @@ def test_get_score_matches_summary_table_custom_groups(mock_mteb_cache: ResultCa
     )
 
 
-def test_recompute_lenient_custom_groups_averages_present_tasks_only():
-    """Mirrors _recompute_lenient_means: only tasks the model actually has a
-    score for (post language-filter) contribute to each group's mean."""
-    scores_by_task = {"t1": 0.2, "t2": 0.6, "t3": 0.8}
-    custom_group_task_to_label = {
-        "DimA": {"t1": "G1", "t2": "G1", "t3": "Other"},
-        "DimB": {"t2": "G2", "t3": "Other"},
-    }
-
-    out = _recompute_lenient_custom_groups(scores_by_task, custom_group_task_to_label)
-
-    assert out == {
-        "DimA": {"G1": (0.2 + 0.6) / 2, "Other": 0.8},
-        "DimB": {"G2": 0.6, "Other": 0.8},
-    }
-
-
-def test_recompute_lenient_custom_groups_ignores_tasks_outside_the_visible_set():
-    """A task missing from scores_by_task (filtered out / not run) is simply
-    absent from its group's bucket, not treated as a zero."""
-    scores_by_task = {"t1": 1.0}
-    custom_group_task_to_label = {"DimA": {"t1": "G1", "t2": "G1"}}
-
-    out = _recompute_lenient_custom_groups(scores_by_task, custom_group_task_to_label)
-
-    assert out == {"DimA": {"G1": 1.0}}
-
-
-def test_recompute_lenient_custom_groups_empty_mapping_is_a_no_op():
-    """Benchmarks with no CustomGrouping declared pass an empty mapping —
-    the function must return {} rather than raise."""
-    assert _recompute_lenient_custom_groups({"t1": 0.5}, {}) == {}
-
-
-def test_recompute_lenient_custom_groups_matches_recompute_lenient_means_semantics():
-    """Same 'average only what's present' policy as the task-type recompute,
-    just keyed by CustomGrouping label instead of task type."""
-    scores_by_task = {"t1": 0.4, "t2": 0.9}
-    task_to_type = {"t1": "Retrieval", "t2": "Retrieval"}
-    custom_group_task_to_label = {"DimA": {"t1": "G1", "t2": "G1"}}
-
-    _, mean_task, _ = _recompute_lenient_means(scores_by_task, task_to_type)
-    out = _recompute_lenient_custom_groups(scores_by_task, custom_group_task_to_label)
-
-    assert out["DimA"]["G1"] == mean_task
-
-
 # --- Scoped (subset-/split-narrowed) CustomGroup.tasks entries -------------
-#
-# NOTE (pre-existing, not introduced here): get_score() nulls a whole
-# dimension when any entry is missing a score; the polars path only nulls
-# the affected group. So the parity test below only checks a fully-covered
-# model -- a partial-coverage model would legitimately disagree between paths.
 
 
 def _make_scoped_custom_grouping() -> CustomGrouping:
@@ -897,8 +866,9 @@ def test_compute_custom_group_means_weights_one_entry_per_ref_not_per_cell(
 def test_compute_custom_group_means_nulls_on_missing_scope_coverage(
     mock_mteb_cache: ResultCache,
 ):
-    """A model missing the subset a scoped entry needs nulls every group in
-    the dimension (dimension-global policy, unchanged from whole-task)."""
+    """A model missing the subset a scoped entry needs nulls only the group
+    that entry belongs to -- "Mixed" doesn't reference catalan, so it's
+    unaffected by the gap in "Catalan"."""
     model_name = "sentence-transformers/all-MiniLM-L6-v2"  # missing catalan/test
     grouping = _make_scoped_custom_grouping()
     tasks = mteb.get_tasks(["CataloniaTweetClassification", "Banking77Classification"])
@@ -907,7 +877,33 @@ def test_compute_custom_group_means_nulls_on_missing_scope_coverage(
 
     out = _compute_custom_group_means(task_results, grouping)
 
-    assert out == {"Language::Catalan": None, "Language::Mixed": None}
+    assert out["Language::Catalan"] is None
+    assert out["Language::Mixed"] is not None
+
+
+def test_compute_custom_group_means_full_vs_partial_coverage(
+    mock_mteb_cache: ResultCache,
+):
+    """Same scoped dimension, two models: one with both CataloniaTweet
+    subsets scored gets real values for every group; one missing just the
+    catalan subset gets None only for the group that references catalan --
+    "Mixed" (spanish + banking77, both fully covered) is unaffected."""
+    full_model = "mteb/baseline-random-encoder"
+    partial_model = "sentence-transformers/all-MiniLM-L6-v2"  # missing catalan/test
+    grouping = _make_scoped_custom_grouping()
+    tasks = mteb.get_tasks(["CataloniaTweetClassification", "Banking77Classification"])
+    model_results = mock_mteb_cache.load_results(
+        models=[full_model, partial_model]
+    ).model_results
+
+    for model_result in model_results:
+        task_results = model_result.select_tasks(tasks).task_results
+        out = _compute_custom_group_means(task_results, grouping)
+        assert out["Language::Mixed"] is not None
+        if model_result.model_name == full_model:
+            assert out["Language::Catalan"] is not None
+        else:
+            assert out["Language::Catalan"] is None
 
 
 @_skip_if_datasets_too_old
@@ -915,8 +911,8 @@ def test_get_score_matches_summary_table_custom_groups_scoped(
     mock_mteb_cache: ResultCache,
 ):
     """get_score() and the polars summary table agree on a scoped
-    CustomGrouping's values for a fully-covered model (see the module note
-    on partial models)."""
+    CustomGrouping's values, for both a fully-covered model and a model
+    partially covering it -- both paths null per-group, not per-dimension."""
     grouping = _make_scoped_custom_grouping()
     tasks = mteb.get_tasks(["CataloniaTweetClassification", "Banking77Classification"])
     bench = Benchmark(
@@ -931,12 +927,25 @@ def test_get_score_matches_summary_table_custom_groups_scoped(
     summary_pl = bench._create_summary_table(pl_df).df
     summary_by_model = {row["Model"]: row for row in summary_pl.iter_rows(named=True)}
 
-    model_name = "mteb/baseline-random-encoder"  # fully covers both subsets
-    scores = get_score_out[model_name]
-    srow = summary_by_model[model_name]
-    for gs_key, summary_col in [
-        ("Language::Catalan", "__cg__Language::Catalan"),
-        ("Language::Mixed", "__cg__Language::Mixed"),
-    ]:
-        assert scores[gs_key] is not None and srow[summary_col] is not None
-        assert np.isclose(scores[gs_key], srow[summary_col])
+    checked = 0
+    for model_name in (
+        "mteb/baseline-random-encoder",  # fully covers both subsets
+        "sentence-transformers/all-MiniLM-L6-v2",  # missing catalan/test
+    ):
+        scores = get_score_out[model_name]
+        srow = summary_by_model[model_name]
+        for gs_key, summary_col in [
+            ("Language::Catalan", "__cg__Language::Catalan"),
+            ("Language::Mixed", "__cg__Language::Mixed"),
+        ]:
+            gs, sm = scores[gs_key], srow[summary_col]
+            if gs is None and sm is None:
+                continue
+            assert gs is not None and sm is not None, (
+                f"{model_name}: get_score[{gs_key}]={gs!r} vs summary[{summary_col}]={sm!r}"
+            )
+            assert np.isclose(gs, sm)
+            checked += 1
+    assert checked > 0, (
+        "Parity test never matched a model — fixture or registry change?"
+    )
