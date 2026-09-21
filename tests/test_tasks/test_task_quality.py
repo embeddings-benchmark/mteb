@@ -1053,6 +1053,8 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "XModBenchVT2AReranking",
     ],
     "duplicate_video": [
+        "ChinaOpenT2VRetrieval",  # same 1,092 videos evaluated once per language subset (zho-Hans/eng-Latn)
+        "ChinaOpenV2TRetrieval",  # same 1,092 videos evaluated once per language subset (zho-Hans/eng-Latn)
         "DenseWebVidCoVRVT2VRetrieval",  # multiple rows have same video with different instruction
         "InsAVE80KVT2VRetrieval",  # reverse couples re-release the same clip under two names
         "MMVUVideoCentricQA",
