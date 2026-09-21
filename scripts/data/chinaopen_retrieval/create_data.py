@@ -125,9 +125,7 @@ def build_language_tables(
     )
     links_ds = Dataset.from_list(
         [{"text-id": tid, "video-id": vid} for tid, vid in pairs],
-        features=Features(
-            {"text-id": Value("string"), "video-id": Value("string")}
-        ),
+        features=Features({"text-id": Value("string"), "video-id": Value("string")}),
     )
     return text_table, links_ds
 
