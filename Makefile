@@ -50,9 +50,12 @@ serve-docs:
 	uv run --no-sync --group docs zensical serve
 
 
+install-for-model-load-test:
+	@echo "--- 🚀 Installing project dependencies for model load test ---"
+	uv sync --extra pylate --group dev --frozen
+
 model-load-test:
 	@echo "--- 🚀 Running model load test ---"
-	uv sync --extra pylate --group dev
 	uv run --no-sync python scripts/extract_model_names.py $(BASE_BRANCH) --return_one_model_name_per_file
 	uv run --no-sync python tests/test_models/model_loading.py --model_name_file scripts/model_names.txt
 
