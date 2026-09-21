@@ -33,6 +33,7 @@
   "flansmose-mikkelsen-etal-2022-ddisco": "Correct as cited (LREC 2022, https://aclanthology.org/2022.lrec-1.260/)",
   "gala2023indictrans": "Correct as cited (TMLR 2023, https://openreview.net/forum?id=vfT4YuzAYA), TMLR is not in Crossref",
   "habernal-etal-2013-sentiment": "Correct as cited (WASSA 2013, https://aclanthology.org/W13-1609/), ACL workshops have no Crossref DOIs",
+  "henriquez2026spanishwikiclusteringv2": "Correct as cited (official Hugging Face dataset card, https://huggingface.co/datasets/ClementeH/SpanishWikiClustering-v2); this dataset release has no DOI or bibliographic index record",
   "hoogeveen2015": "Correct as cited (https://dl.acm.org/doi/10.1145/2838931.2838934), couldn't see that the title was incorrect",
   "huynh2026omniret": "Correct as cited (https://openaccess.thecvf.com/content/CVPR2026/html/Huynh_Efficient_and_High-Fidelity_Omni_Modality_Retrieval_CVPR_2026_paper.html). Wasn't found, but is correct.",
   "infly-ai_2025": "Correct as cited (Hugging Face's own citation, https://doi.org/10.57967/hf/4262)",
