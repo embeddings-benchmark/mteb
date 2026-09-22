@@ -43,6 +43,7 @@ class FSD50HFMultilingualClassification(AbsTaskMultilabelClassification):
   year = {2022},
 }
 """,
+        superseded_by="FSD50K.v2",
     )
     # Published results score the whole evaluation split, so the cap stays off to keep them comparable.
     max_eval_samples: int | None = None
@@ -51,3 +52,17 @@ class FSD50HFMultilingualClassification(AbsTaskMultilabelClassification):
     input_column_name: str = "audio"
     label_column_name: str = "labels"
     samples_per_label: int = 8
+
+
+class FSD50HFMultilingualClassificationV2(FSD50HFMultilingualClassification):
+    metadata = FSD50HFMultilingualClassification.metadata.model_copy(
+        update={
+            "name": "FSD50K.v2",
+            "description": FSD50HFMultilingualClassification.metadata.description
+            + " This version scores at most 2000 rows of each evaluation split, sampled with iterative stratification over the labels.",
+            "superseded_by": None,
+            "adapted_from": ["FSD50K"],
+        },
+        deep=True,
+    )
+    max_eval_samples = 2000

@@ -38,6 +38,21 @@ Borg, Claudia},
   year = {2024},
 }
 """,
+        superseded_by="MalteseNewsClassification.v2",
     )
     # Published results score the whole evaluation split, so the cap stays off to keep them comparable.
     max_eval_samples: int | None = None
+
+
+class MalteseNewsClassificationV2(MalteseNewsClassification):
+    metadata = MalteseNewsClassification.metadata.model_copy(
+        update={
+            "name": "MalteseNewsClassification.v2",
+            "description": MalteseNewsClassification.metadata.description
+            + " This version scores at most 2000 rows of each evaluation split, sampled with iterative stratification over the labels.",
+            "superseded_by": None,
+            "adapted_from": ["MalteseNewsClassification"],
+        },
+        deep=True,
+    )
+    max_eval_samples = 2000

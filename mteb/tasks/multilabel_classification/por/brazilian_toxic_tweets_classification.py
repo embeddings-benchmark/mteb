@@ -43,6 +43,21 @@ New Dataset and Multilingual Analysis},
   year = {2020},
 }
 """,
+        superseded_by="BrazilianToxicTweetsClassification.v2",
     )
     # Published results score the whole evaluation split, so the cap stays off to keep them comparable.
     max_eval_samples: int | None = None
+
+
+class BrazilianToxicTweetsClassificationV2(BrazilianToxicTweetsClassification):
+    metadata = BrazilianToxicTweetsClassification.metadata.model_copy(
+        update={
+            "name": "BrazilianToxicTweetsClassification.v2",
+            "description": BrazilianToxicTweetsClassification.metadata.description
+            + " This version scores at most 2000 rows of each evaluation split, sampled with iterative stratification over the labels.",
+            "superseded_by": None,
+            "adapted_from": ["BrazilianToxicTweetsClassification"],
+        },
+        deep=True,
+    )
+    max_eval_samples = 2000

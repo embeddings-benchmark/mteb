@@ -94,6 +94,7 @@ class AudioSetMiniMultilingualClassification(AbsTaskMultilabelClassification):
   year = {2017},
 }
 """,
+        superseded_by="AudioSetMini.v2",
     )
     # Published results score the whole evaluation split, so the cap stays off to keep them comparable.
     max_eval_samples: int | None = None
@@ -101,3 +102,17 @@ class AudioSetMiniMultilingualClassification(AbsTaskMultilabelClassification):
     evaluator_model = MultiOutputClassifier(estimator=LogisticRegression())
     input_column_name: str = "audio"
     label_column_name: str = "human_labels"
+
+
+class AudioSetMiniMultilingualClassificationV2(AudioSetMiniMultilingualClassification):
+    metadata = AudioSetMiniMultilingualClassification.metadata.model_copy(
+        update={
+            "name": "AudioSetMini.v2",
+            "description": AudioSetMiniMultilingualClassification.metadata.description
+            + " This version scores at most 2000 rows of each evaluation split, sampled with iterative stratification over the labels.",
+            "superseded_by": None,
+            "adapted_from": ["AudioSetMini"],
+        },
+        deep=True,
+    )
+    max_eval_samples = 2000

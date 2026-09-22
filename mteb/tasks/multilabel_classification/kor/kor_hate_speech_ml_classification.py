@@ -47,6 +47,21 @@ Han, Soyeon Caren},
   year = {2022},
 }
 """,
+        superseded_by="KorHateSpeechMLClassification.v2",
     )
     # Published results score the whole evaluation split, so the cap stays off to keep them comparable.
     max_eval_samples: int | None = None
+
+
+class KorHateSpeechMLClassificationV2(KorHateSpeechMLClassification):
+    metadata = KorHateSpeechMLClassification.metadata.model_copy(
+        update={
+            "name": "KorHateSpeechMLClassification.v2",
+            "description": KorHateSpeechMLClassification.metadata.description
+            + " This version scores at most 2000 rows of each evaluation split, sampled with iterative stratification over the labels.",
+            "superseded_by": None,
+            "adapted_from": ["KorHateSpeechMLClassification"],
+        },
+        deep=True,
+    )
+    max_eval_samples = 2000

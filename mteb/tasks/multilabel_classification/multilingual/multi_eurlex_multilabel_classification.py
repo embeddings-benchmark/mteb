@@ -65,6 +65,21 @@ classification dataset for zero-shot cross-lingual transfer},
   year = {2021},
 }
 """,
+        superseded_by="MultiEURLEXMultilabelClassification.v2",
     )
     # Published results score the whole evaluation split, so the cap stays off to keep them comparable.
     max_eval_samples: int | None = None
+
+
+class MultiEURLEXMultilabelClassificationV2(MultiEURLEXMultilabelClassification):
+    metadata = MultiEURLEXMultilabelClassification.metadata.model_copy(
+        update={
+            "name": "MultiEURLEXMultilabelClassification.v2",
+            "description": MultiEURLEXMultilabelClassification.metadata.description
+            + " This version scores at most 2000 rows of each evaluation split, sampled with iterative stratification over the labels.",
+            "superseded_by": None,
+            "adapted_from": ["MultiEURLEXMultilabelClassification"],
+        },
+        deep=True,
+    )
+    max_eval_samples = 2000

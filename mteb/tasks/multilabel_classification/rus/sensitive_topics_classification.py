@@ -56,6 +56,21 @@ Robnik-{\v{S}}ikonja, Marko},
 }
 """,
         prompt="Given a sentence as query, find sensitive topics",
+        superseded_by="SensitiveTopicsClassification.v2",
     )
     # Published results score the whole evaluation split, so the cap stays off to keep them comparable.
     max_eval_samples: int | None = None
+
+
+class SensitiveTopicsClassificationV2(SensitiveTopicsClassification):
+    metadata = SensitiveTopicsClassification.metadata.model_copy(
+        update={
+            "name": "SensitiveTopicsClassification.v2",
+            "description": SensitiveTopicsClassification.metadata.description
+            + " This version scores at most 2000 rows of each evaluation split, sampled with iterative stratification over the labels.",
+            "superseded_by": None,
+            "adapted_from": ["SensitiveTopicsClassification"],
+        },
+        deep=True,
+    )
+    max_eval_samples = 2000

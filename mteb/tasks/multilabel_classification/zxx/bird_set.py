@@ -42,6 +42,7 @@ class BirdSetMultilabelClassification(AbsTaskMultilabelClassification):
   year = {2024},
 }
 """,
+        superseded_by="BirdSet.v2",
     )
     # Published results score the whole evaluation split, so the cap stays off to keep them comparable.
     max_eval_samples: int | None = None
@@ -113,3 +114,17 @@ class BirdSetMultilabelClassification(AbsTaskMultilabelClassification):
 
         for split, ds in self.dataset.items():
             self.dataset[split] = ds.cast_column("audio", Audio(sampling_rate=32000))
+
+
+class BirdSetMultilabelClassificationV2(BirdSetMultilabelClassification):
+    metadata = BirdSetMultilabelClassification.metadata.model_copy(
+        update={
+            "name": "BirdSet.v2",
+            "description": BirdSetMultilabelClassification.metadata.description
+            + " This version scores at most 2000 rows of each evaluation split, sampled with iterative stratification over the labels.",
+            "superseded_by": None,
+            "adapted_from": ["BirdSet"],
+        },
+        deep=True,
+    )
+    max_eval_samples = 2000
