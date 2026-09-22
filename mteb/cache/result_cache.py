@@ -712,6 +712,8 @@ class ResultCache:
         self,
         cache_filename: str = "__cached_results.json",
         rebuild: bool = False,
+        *,
+        save_rebuilt_to_disk: bool = False,
     ) -> BenchmarkResults:
         """Load benchmark results using the best available strategy.
 
@@ -720,13 +722,16 @@ class ResultCache:
                 {cache_path}/leaderboard/{cache_filename}.
             rebuild: If True, force a full rebuild from the results repository, bypassing any
                      pre-computed JSON cache.
+            save_rebuilt_to_disk: Whether a full rebuild (strategy 3, or
+                forced via ``rebuild=True``) persists its result to
+                ``cache_path``. See ``_rebuild_from_full_repository``.
 
         Strategy:
             1. If rebuild=False and local cache exists at cache_path → load and return
             2. If rebuild=False, try downloading pre-computed cache from 'cached-data' branch
                → save to cache_path and return
             3. Fallback (or if rebuild=True): clone the full results repository, build from
-               individual model files, call results.to_disk(cache_path), and return.
+               individual model files, optionally call results.to_disk(cache_path), and return.
 
         Returns:
             BenchmarkResults ready for leaderboard display
@@ -738,7 +743,9 @@ class ResultCache:
             logger.info(
                 "Rebuild requested, forcing full repository clone and rebuild..."
             )
-            return self._rebuild_from_full_repository(cache_path)
+            return self._rebuild_from_full_repository(
+                cache_path, save_to_disk=save_rebuilt_to_disk
+            )
 
         # Strategy 1: Try loading from existing local quick cache
         if cache_path.exists():
@@ -765,19 +772,32 @@ class ResultCache:
 
         # Strategy 3: Fallback to full repository clone
         logger.info("Falling back to full repository clone and rebuild...")
-        return self._rebuild_from_full_repository(cache_path)
+        return self._rebuild_from_full_repository(
+            cache_path,
+            save_to_disk=save_rebuilt_to_disk,
+        )
 
-    def _rebuild_from_full_repository(self, quick_cache_path: Path) -> BenchmarkResults:
+    def _rebuild_from_full_repository(
+        self,
+        quick_cache_path: Path,
+        *,
+        save_to_disk: bool = False,
+    ) -> BenchmarkResults:
         """Clone/pull the full results repository and build BenchmarkResults from individual files.
 
         This method performs a full rebuild by:
         1. Downloading or updating the full results repository
         2. Loading results from all individual model files
-        3. Saving the aggregated results to the quick cache path
+        3. Saving the aggregated results to the quick cache path (optional)
         4. Returning the BenchmarkResults object
 
         Args:
             quick_cache_path: Path where the rebuilt cache should be saved
+                when ``save_to_disk`` is ``True``.
+            save_to_disk: Whether to persist the rebuilt results to
+                ``quick_cache_path``. Defaults to ``False`` — most callers
+                only need the in-memory result; pass ``True`` to also
+                refresh the on-disk quick cache for future runs.
 
         Returns:
             BenchmarkResults built from the full repository
@@ -799,9 +819,9 @@ class ResultCache:
             load_experiments=LoadExperimentEnum.MATCH_NAME,
         )
 
-        # Save to disk for future use
-        logger.info(f"Saving rebuilt cache to {quick_cache_path}")
-        all_results.to_disk(quick_cache_path)
+        if save_to_disk:
+            logger.info(f"Saving rebuilt cache to {quick_cache_path}")
+            all_results.to_disk(quick_cache_path)
 
         return all_results
 
