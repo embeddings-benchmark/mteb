@@ -11,14 +11,11 @@ links:
 description: >
   We are very happy to announce the release of MTEB v2. This release has something for everyone, including a more consistent interface, better typing, new documentation, and better support for multimodal models and non-embedding based retrieval systems. This blog post will introduce you to some of the new features, but before diving into the new features, let's start with an introduction to MTEB and why we started working on v2.
 ---
-We are very happy to announce the release of [MTEB v2](https://github.com/embeddings-benchmark/mteb). This release has something for everyone, including a more consistent interface, better typing, new documentation, and better support for multimodal models and non-embedding based retrieval systems. This blog post will introduce you to some of the new features, but before diving into the new features, let's start with an introduction to MTEB and why we started working on v2.
-
-<!-- more -->
-
-
 # Introducing MTEB v2: Evaluation of embedding and retrieval systems for more than just text
 
 We are very happy to announce the release of [MTEB v2](https://github.com/embeddings-benchmark/mteb). This release has something for everyone, including a more consistent interface, better typing, new documentation, and better support for multimodal models and non-embedding based retrieval systems. This blog post will introduce you to some of the new features, but before diving into the new features, let's start with an introduction to MTEB and why we started working on v2.
+
+<!-- more -->
 
 
 ### What is MTEB?
@@ -33,7 +30,7 @@ While all of these contributions to the package naturally had a huge positive im
 
 ### So what has changed?
 
-This section gives an oveview of the new features added in v2. Below we give an overview of changes following by detailed examples. If you are hungering for more information, do check out the [documentation](https://embeddings-benchmark.github.io/mteb/)
+This section gives an overview of the new features added in v2. Below we give an overview of changes following by detailed examples. If you are hungering for more information, do check out the [documentation](https://embeddings-benchmark.github.io/mteb/)
 
 - [Easier evaluation using `mteb.evaluate`](#easier-evaluation)
 - [Easier caching and results loading using the `ResultCache`](#better-local-and-online-caching)
@@ -60,8 +57,8 @@ This section gives an oveview of the new features added in v2. Below we give an 
 Evaluations are now a lot easier using [`mteb.evaluate`](https://embeddings-benchmark.github.io/mteb/api/evaluation/#mteb.evaluate),
 
 ```py
-model = mteb.get_model("model_name") # load reference implementation if it exists
-tasks = mteb.get_tasks(tasks = ["taskname1", "taskname2"])
+model = mteb.get_model("model_name")  # load reference implementation if it exists
+tasks = mteb.get_tasks(tasks=["taskname1", "taskname2"])
 
 results = mteb.evaluate(model, tasks)
 ```
@@ -74,17 +71,17 @@ from mteb.cache import ResultCache
 model = ...
 tasks = ...
 
-cache = ResultCache(cache_path="~/.cache/mteb") # default
+cache = ResultCache(cache_path="~/.cache/mteb")  # default
 
 # simple evaluate with cache
-results = mteb.evaluate(model, tasks, cache=cache) # only runs if results not in cache
+results = mteb.evaluate(model, tasks, cache=cache)  # only runs if results not in cache
 ```
 
 It allow you to access the online cache so you don't have to rerun existing models.
 
 ```py
 # no need to rerun already public results
-cache.download_from_remote() # download the latest results from the remote repository
+cache.download_from_remote()  # download the latest results from the remote repository
 results = mteb.evaluate(model, tasks, cache=cache)
 ```
 
@@ -104,7 +101,7 @@ Not only does this allow more efficient loading using the torch dataloader, but 
 batch_input: BatchedInput = {
     "text": list[str],
     "images": list[PIL.Image],
-    "audio": list[list[audio]], # upcoming
+    "audio": list[list[audio]],  # upcoming
     # + optional fields such as document title
 }
 ```
@@ -126,16 +123,26 @@ Where `text` is a batch of texts and `list[images]` is a batch for that texts. T
    For corpus-style inputs with titles and bodies.
 
    ```python
-   {"text": ["Title 1 Body 1", "Title 2 Body 2"], "title": ["Title 1", "Title 2"], "body": ["Body 1", "Body 2"]}
+   {
+       "text": ["Title 1 Body 1", "Title 2 Body 2"],
+       "title": ["Title 1", "Title 2"],
+       "body": ["Body 1", "Body 2"],
+   }
    ```
 3. **[`QueryInput`](https://embeddings-benchmark.github.io/mteb/api/types/#mteb.types._encoder_io.QueryInput)**
    For query–instruction pairs, typically used in retrieval or question answering tasks. Queries and instructions are combined with the model's instruction template.
 
    ```python
    {
-       "text": ["Instruction: Your task is to find document for this query. Query: What is AI?", "Instruction: Your task is to find term for definition. Query: Define machine learning."],
+       "text": [
+           "Instruction: Your task is to find document for this query. Query: What is AI?",
+           "Instruction: Your task is to find term for definition. Query: Define machine learning.",
+       ],
        "query": ["What is AI?", "Define machine learning."],
-       "instruction": ["Your task is find document for this query.", "Your task is to find term for definition."]
+       "instruction": [
+           "Your task is find document for this query.",
+           "Your task is to find term for definition.",
+       ],
    }
    ```
 4. **[`ImageInput`](https://embeddings-benchmark.github.io/mteb/api/types/#mteb.types._encoder_io.ImageInput)**
@@ -150,7 +157,7 @@ Where `text` is a batch of texts and `list[images]` is a batch for that texts. T
    ```python
    {"text": ["This is a sample text."], "image": [PIL.Image1]}
    ```
-    
+
 </details>
 
 However, this also allows no text, multi-image inputs (e.g. for PDFs). Overall this greatly expands the possible tasks that can now be evaluated in MTEB.
@@ -174,7 +181,7 @@ class CrossEncoderProtocol(Protocol):
 ### Unified Retrieval, Reranking and instruction variants
 
 The retrieval tasks in MTEB now supports both retrieval and reranking using the same base task. The main difference now that Reranking tasks should have `top_ranked` subset to be evaluated on.
-New structure of retrieval tasks: 
+New structure of retrieval tasks:
 ```python
 dataset[subset][split] = {
     "corpus": ...,  # dataset
@@ -214,8 +221,7 @@ class SearchProtocol(Protocol):
         hf_split: str,
         hf_subset: str,
         encode_kwargs: dict[str, Any],
-    ) -> None:
-        ...
+    ) -> None: ...
 
     def search(
         self,
@@ -227,8 +233,7 @@ class SearchProtocol(Protocol):
         top_k: int,
         encode_kwargs: dict[str, Any],
         top_ranked: TopRankedDocumentsType | None = None,
-    ) -> RetrievalOutputType:
-        ...
+    ) -> RetrievalOutputType: ...
 ```
 
 We're automatically wrapping `Encoder` and `CrossEncoder` models support `SearchProtocol`. However, if your model needs a custom index you can implement this protocol directly, like done for [pylate models to support `PlaidIndex`](https://github.com/embeddings-benchmark/mteb/blob/3effff65356b692a49e48c8f5c33680edd4e33b5/mteb/models/model_implementations/pylate_models.py#L31).
@@ -248,11 +253,13 @@ The new [`ResultCache`](https://embeddings-benchmark.github.io/mteb/api/results/
 ```py
 from mteb.cache import ResultCache
 
-cache = ResultCache(cache_path="~/.cache/mteb") # default
-cache.download_from_remote() # download the latest results from the remote repository
+cache = ResultCache(cache_path="~/.cache/mteb")  # default
+cache.download_from_remote()  # download the latest results from the remote repository
 
 # load both local and online results
-results = cache.load_results(models=["sentence-transformers/all-MiniLM-L6-v2", ...], tasks=["STS12"])
+results = cache.load_results(
+    models=["sentence-transformers/all-MiniLM-L6-v2", ...], tasks=["STS12"]
+)
 df = results.to_dataframe()
 ```
 
@@ -262,6 +269,7 @@ Descriptive statistics isn't a new thing in MTEB, however, now it is there for e
 
 ```py
 import mteb
+
 task = mteb.get_task("MIRACLRetrievalHardNegatives")
 
 task.metadata.descriptive_stats
@@ -354,7 +362,7 @@ This section gives an introduction of how to upgrade from v1 to v2.
 The previous approach to evaluate would require you to first create `MTEB` object and then call `.run` on that object.
 The `MTEB` object was initially a sort of catch all object intended for both filtering tasks, selecting tasks, evaluating and few other cases.
 
-This overload of functionality made it hard to change. We have already for a while made it easier to filter and select tasks using `get_tasks` and `mteb.evaluate` now superseeded `MTEB` as the method for evaluation.
+This overload of functionality made it hard to change. We have already for a while made it easier to filter and select tasks using `get_tasks` and `mteb.evaluate` now superseded `MTEB` as the method for evaluation.
 
 ```py
 # Approach before 2.0.0:
@@ -388,8 +396,8 @@ model_names = ["intfloat/multilingual-e5-large"]
 results = mteb.load_results(models=model_names, tasks=tasks, download_latest=True)
 
 # Recommended:
-cache = ResultCache("~/.cache/mteb") # default
-cache.download_from_remote() # downloads remote results
+cache = ResultCache("~/.cache/mteb")  # default
+cache.download_from_remote()  # downloads remote results
 
 results = cache.load_results(models=model_names, tasks=tasks)
 ```
