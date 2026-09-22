@@ -335,14 +335,14 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         # Reconstruct model results
         model_results = []
         # Group by original revision (+ experiment_name) to maintain deterministic behavior.
-        for (model, model_revision, experiment_name), group in task_df.groupby(
+        for (model, model_revision, group_experiment_name), group in task_df.groupby(
             ["model", "revision", "experiment_name"]
         ):
             model_result = ModelResult.model_construct(
                 model_name=model,  # type: ignore[arg-type]
                 model_revision=model_revision,  # type: ignore[arg-type]
                 task_results=list(group["task_result"]),
-                experiment_name=experiment_name or None,
+                experiment_name=group_experiment_name or None,  # type: ignore[arg-type]
                 model_meta=group["model_meta"].iloc[0],
             )
             model_results.append(model_result)
