@@ -66,3 +66,5 @@ classification dataset for zero-shot cross-lingual transfer},
 }
 """,
     )
+    # Published results score the whole evaluation split, so the cap stays off to keep them comparable.
+    max_eval_samples: int | None = None

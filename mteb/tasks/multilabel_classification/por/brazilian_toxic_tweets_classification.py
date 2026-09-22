@@ -44,3 +44,5 @@ New Dataset and Multilingual Analysis},
 }
 """,
     )
+    # Published results score the whole evaluation split, so the cap stays off to keep them comparable.
+    max_eval_samples: int | None = None

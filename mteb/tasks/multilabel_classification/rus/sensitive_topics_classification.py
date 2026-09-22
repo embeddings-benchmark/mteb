@@ -57,3 +57,5 @@ Robnik-{\v{S}}ikonja, Marko},
 """,
         prompt="Given a sentence as query, find sensitive topics",
     )
+    # Published results score the whole evaluation split, so the cap stays off to keep them comparable.
+    max_eval_samples: int | None = None

@@ -45,6 +45,8 @@ class VOC2007Classification(AbsTaskMultilabelClassification):
 }
 """,
     )
+    # Published results score the whole evaluation split, so the cap stays off to keep them comparable.
+    max_eval_samples: int | None = None
 
     # Override default column name in the subclass
     label_column_name: str = "classes"

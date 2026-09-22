@@ -43,6 +43,8 @@ class BirdSetMultilabelClassification(AbsTaskMultilabelClassification):
 }
 """,
     )
+    # Published results score the whole evaluation split, so the cap stays off to keep them comparable.
+    max_eval_samples: int | None = None
 
     evaluator_model = MultiOutputClassifier(estimator=LogisticRegression())
     input_column_name: str = "audio"

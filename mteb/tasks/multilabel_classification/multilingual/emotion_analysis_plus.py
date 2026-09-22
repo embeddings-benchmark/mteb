@@ -71,3 +71,5 @@ class EmotionAnalysisPlus(AbsTaskMultilabelClassification):
         sample_creation="created",
         bibtex_citation="",
     )
+    # Published results score the whole evaluation split, so the cap stays off to keep them comparable.
+    max_eval_samples: int | None = None

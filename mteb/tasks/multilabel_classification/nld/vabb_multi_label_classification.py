@@ -43,3 +43,5 @@ class VABBMultiLabelClassification(AbsTaskMultilabelClassification):
 """,
         prompt="Classificeer de onderwerpen van een wetenschappelijk artikel op basis van de abstract",
     )
+    # Published results score the whole evaluation split, so the cap stays off to keep them comparable.
+    max_eval_samples: int | None = None
