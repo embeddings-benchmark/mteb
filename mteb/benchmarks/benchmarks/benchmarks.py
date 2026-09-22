@@ -1026,6 +1026,32 @@ MTEB_code = Benchmark(
     description="Code retrieval quality across a wide range of popular programming languages, covering code search, text-to-SQL, and code feedback tasks.",
     reference=None,
     citation=MMTEB_CITATION,
+    superseded_by=["MTEB(Code, v1.1)"],
+)
+
+MTEB_code_v1_1 = Benchmark(
+    name="MTEB(Code, v1.1)",
+    display_name="Code",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-tech-electronics.svg",
+    tasks=get_tasks(
+        tasks=[
+            # Retrieval
+            "AppsRetrieval",
+            "CodeEditSearchRetrieval",
+            "CodeFeedbackMT",
+            "CodeFeedbackST",
+            "CodeSearchNetCCRetrieval",
+            "CodeSearchNetRetrieval",
+            "CodeTransOceanContest",
+            "CosQA",
+            "COIRCodeSearchNetRetrieval",
+            "StackOverflowQA",
+            "SyntheticText2SQL",
+        ],
+    ),
+    description="Code retrieval quality across a wide range of popular programming languages, covering code search, text-to-SQL, and code feedback tasks. v1.1 removes CodeTransOceanDL because duplicate query and corpus texts create conflicting single-positive relevance labels and an artificial score ceiling; see [#4764](https://github.com/embeddings-benchmark/mteb/issues/4764).",
+    reference=None,
+    citation=MMTEB_CITATION,
 )
 
 mteb_multilingual_tasks = get_tasks(
