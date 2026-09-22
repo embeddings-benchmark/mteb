@@ -77,11 +77,9 @@ def test_select_tasks(benchmark_results: BenchmarkResults) -> None:
 def test_select_tasks_preserves_model_meta(tmp_path: Path) -> None:
     """`select_tasks` must not drop `model_meta` (and with it, experiment identity).
 
-    Regression test: `ModelResult.select_tasks`/`_filter_tasks` reconstructed
-    a new `ModelResult` via `model_construct` without passing `model_meta`
-    through, so any experiment row silently lost its `experiment_kwargs`
-    (and so its `experiments` column, used for grouping/display) the moment
-    `select_tasks` ran on it.
+    Regression test: `select_tasks`/`_filter_tasks` reconstructed a new
+    `ModelResult` via `model_construct` without passing `model_meta`
+    through, silently dropping any experiment row's `experiment_kwargs`.
     """
     from mteb.mocks.mock_tasks import MockRetrievalTask
 

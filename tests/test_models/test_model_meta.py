@@ -350,17 +350,14 @@ def test_get_model_kwargs_does_not_mutate_registry_meta():
 def test_get_model_with_only_empty_kwargs_is_not_an_experiment():
     """`get_model(name, model_kwargs={})` shouldn't spin up a distinct experiment.
 
-    An explicit-but-empty override changes nothing about how the model
-    actually runs, so it must not count as an ablation — e.g. it shouldn't
-    generate a separate ``experiments/model_kwargs_{}/`` results folder
-    distinct from the base model's own results.
+    An explicit-but-empty override changes nothing about the run, so it
+    shouldn't generate a separate results folder from the base model.
     """
     model_name = "mteb/baseline-random-encoder"
 
     model = mteb.get_model(model_name, model_kwargs={})
     assert model.mteb_model_meta.experiment_kwargs is None
-    # The loader itself still receives whatever was explicitly passed —
-    # only the experiment-identity bookkeeping is affected.
+    # The loader still receives it — only experiment identity is affected.
     assert model.mteb_model_meta.loader_kwargs.get("model_kwargs") == {}
 
 

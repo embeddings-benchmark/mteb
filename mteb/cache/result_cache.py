@@ -38,6 +38,7 @@ from mteb.benchmarks.benchmark import Benchmark
 from mteb.benchmarks.get_benchmark import get_benchmark
 from mteb.models import ModelMeta
 from mteb.models.get_model_meta import get_model_metas
+from mteb.models.model_implementations import MODEL_REGISTRY
 from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
 from mteb.results.task_result import (
@@ -949,27 +950,33 @@ class ResultCache:
     ) -> tuple[ModelName, Revision, str | None, ModelMeta | None] | None:
         """Get model name, revision, experiment name, and ModelMeta from ``revision_path``.
 
-        Cached per ``revision_path``: every task result file in a revision/
-        experiment folder shares the same ``model_meta.json``, and the caller
-        (``load_results``) invokes this once per task file — without caching
-        we'd re-read, re-parse, and re-validate the identical file (including
-        the ``MODEL_REGISTRY`` scan to resolve ``loader``) once per task.
-
-        Args:
-            revision_path: The path to the revision (or experiment) folder,
-                which must contain its own ``model_meta.json``.
+        Cached per ``revision_path`` (lru_cache) since every task result
+        file in a folder shares the same ``model_meta.json``, and the
+        caller invokes this once per task file.
 
         Returns:
-            ``(model_name, revision, experiment_name, model_meta)`` read from
-            ``revision_path / "model_meta.json"``, or ``None`` when that file
-            is missing — callers should skip such a path rather than guess
-            identity from the folder name (e.g. a renamed directory would
-            silently misattribute results to the wrong model/revision).
+            ``(model_name, revision, experiment_name, model_meta)``, or
+            ``None`` for an experiment folder missing its own
+            model_meta.json (its kwargs-derived name isn't reliable enough
+            to guess identity from). A plain revision folder without
+            model_meta.json still resolves via its path
+            (``results/<model>/<revision>/`` is unambiguous), falling back
+            to the static ``MODEL_REGISTRY`` entry for ``model_meta``.
         """
         model_meta_path = revision_path / "model_meta.json"
         if not model_meta_path.exists():
-            logger.debug(f"model_meta.json not found in {revision_path}, skipping")
-            return None
+            if _EXPERIMENTS_FOLDER_NAME in revision_path.parts:
+                # Warning (not debug): drops every task file under this
+                # folder, and only logs once per folder since this method
+                # is lru_cache'd.
+                logger.warning(
+                    f"No model_meta.json in experiment folder {revision_path} "
+                    "— skipping every result file under it."
+                )
+                return None
+            model_name = revision_path.parent.name.replace("__", "/")
+            revision = revision_path.name
+            return model_name, revision, None, MODEL_REGISTRY.get(model_name)
 
         with model_meta_path.open("r") as f:
             raw = f.read()
@@ -1410,9 +1417,10 @@ class ResultCache:
 
             if only_main_score:
                 task_result = task_result.only_main_score()
+            # `_get_model_name_and_revision_from_path` already warns (once
+            # per folder, lru_cache'd) when it returns None.
             identity = self._get_model_name_and_revision_from_path(path.parent)
             if identity is None:
-                logger.debug(f"Skipping {path}: no model_meta.json in {path.parent}")
                 continue
             model_name, revision, experiment_name, model_meta = identity
 

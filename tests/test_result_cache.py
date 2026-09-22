@@ -1,6 +1,7 @@
 """Test cases for the ResultCache class in the mteb.cache module."""
 
 import json
+import logging
 import subprocess
 from pathlib import Path
 from typing import Any, cast
@@ -405,13 +406,15 @@ def test_load_experiment_results(tmp_path: Path):
     assert len(model_meta_res.model_results) == 1
 
 
-def test_folder_without_model_meta_returns_none(tmp_path: Path) -> None:
-    """A revision/experiment folder missing its own model_meta.json is skipped.
+def test_experiment_folder_without_model_meta_is_skipped(
+    tmp_path: Path, caplog: pytest.LogCaptureFixture
+) -> None:
+    """An experiment folder missing its own model_meta.json is skipped.
 
-    No path-derived guessing of model_name/revision/experiment_name from the
-    folder structure — a renamed directory could silently misattribute
-    results to the wrong model/revision, so a missing model_meta.json means
-    the caller skips that path entirely.
+    Its kwargs-derived name isn't reliable enough to guess identity from
+    (unlike a plain revision folder's `results/<model>/<revision>/`
+    structure). Still warns once per folder (lru_cache'd), so it doesn't
+    silently vanish from load_results() output.
     """
     base_meta = mteb.get_model_meta("mteb/baseline-random-encoder")
     revision_dir = (
@@ -430,7 +433,16 @@ def test_folder_without_model_meta_returns_none(tmp_path: Path) -> None:
     # No model_meta.json here — only a task result file.
     (experiment_dir / "SomeTask.json").write_text("{}")
 
-    assert ResultCache._get_model_name_and_revision_from_path(experiment_dir) is None
+    with caplog.at_level(logging.WARNING):
+        assert (
+            ResultCache._get_model_name_and_revision_from_path(experiment_dir) is None
+        )
+        assert (
+            ResultCache._get_model_name_and_revision_from_path(experiment_dir) is None
+        )
+    warnings = [r for r in caplog.records if r.levelno == logging.WARNING]
+    assert len(warnings) == 1  # cached on the second call — no repeat warning
+    assert str(experiment_dir) in warnings[0].message
     # The base revision's own folder (which does have model_meta.json) still
     # resolves normally.
     identity = ResultCache._get_model_name_and_revision_from_path(revision_dir)
@@ -441,6 +453,47 @@ def test_folder_without_model_meta_returns_none(tmp_path: Path) -> None:
     assert experiment_name is None
     assert meta is not None
     assert meta.name == base_meta.name
+
+
+def test_plain_revision_folder_without_model_meta_derives_from_path(
+    tmp_path: Path,
+) -> None:
+    """A *plain* (non-experiment) revision folder without model_meta.json still resolves.
+
+    `results/<model>/<revision>/` is unambiguous enough to derive
+    model_name/revision from directly; model_meta falls back to the static
+    MODEL_REGISTRY entry for that model_name.
+    """
+    revision_dir = (
+        tmp_path / "results" / "sentence-transformers__all-MiniLM-L6-v2" / "some_rev"
+    )
+    revision_dir.mkdir(parents=True)
+    # No model_meta.json here — only a task result file.
+    (revision_dir / "SomeTask.json").write_text("{}")
+
+    identity = ResultCache._get_model_name_and_revision_from_path(revision_dir)
+    assert identity is not None
+    model_name, revision, experiment_name, meta = identity
+    assert model_name == "sentence-transformers/all-MiniLM-L6-v2"
+    assert revision == "some_rev"
+    assert experiment_name is None
+    assert meta is not None
+    assert meta.name == "sentence-transformers/all-MiniLM-L6-v2"
+
+
+def test_plain_revision_folder_unregistered_model_has_no_meta(
+    tmp_path: Path,
+) -> None:
+    """A plain revision folder for a model not in MODEL_REGISTRY gets model_meta=None."""
+    revision_dir = tmp_path / "results" / "totally__unregistered-model" / "some_rev"
+    revision_dir.mkdir(parents=True)
+    (revision_dir / "SomeTask.json").write_text("{}")
+
+    identity = ResultCache._get_model_name_and_revision_from_path(revision_dir)
+    assert identity is not None
+    model_name, revision, experiment_name, meta = identity
+    assert model_name == "totally/unregistered-model"
+    assert meta is None
 
 
 def _setup_fake_remote(tmp_path: Path) -> tuple[Path, Path]:

@@ -245,16 +245,9 @@ async def build_benchmark_summary(  # noqa: PLR0914
 
     trained_on_by_model = _trained_on_map_cached(bench.name)
 
-    # (model_name, experiment_id) -> that experiment's kwargs, for
-    # SummaryRowSchema.experiments and to patch the static MODEL_REGISTRY
-    # entry (run_model_meta_to_schema below). experiment_id is the kwargs
-    # serialized to a stable string (see _serialize_experiment_kwargs_to_name);
-    # non-experiment rows never appear here. `_build_pre_agg_df` folds each
-    # run's own model_type/embed_dim/output_dtypes into this same dict (not a
-    # separate column) — an ablation's kwarg can imply other metadata changes
-    # (e.g. jina-v4's vector_type=multi_vector experiment running
-    # late-interaction, not the base model's dense) — so both the
-    # experiment's identity and what's shown to users include them.
+    # (model_name, experiment_id) -> that experiment's kwargs, used for
+    # SummaryRowSchema.experiments and to patch MODEL_REGISTRY below via
+    # run_model_meta_to_schema. See _extract_variant_kwargs.
     variants_by_model = _extract_variant_kwargs(long_df)
 
     type_cols = [c for c in summary_pl.columns if c not in _SUMMARY_META_COLS]
@@ -398,11 +391,9 @@ def _extract_variant_kwargs(
     """``(model_name, experiment_id) -> that experiment's kwargs``, from ``long_df``.
 
     ``experiment_id`` is the kwargs serialized to a stable string (see
-    ``_serialize_experiment_kwargs_to_name``); non-experiment rows never
-    appear. The kwargs dict also carries that run's own
-    model_type/embed_dim/output_dtypes, folded in by `_build_pre_agg_df` —
-    used both here (SummaryRowSchema.experiments / per-language rows) and by
-    `build_benchmark_summary` to patch the static MODEL_REGISTRY entry via
+    ``_serialize_experiment_kwargs_to_name``). The dict also carries that
+    run's own model_type/embed_dim/output_dtypes (folded in by
+    `_build_pre_agg_df`), used to patch MODEL_REGISTRY via
     `run_model_meta_to_schema`.
     """
     variants_by_model: dict[tuple[str, str], dict[str, Any]] = {}
@@ -445,19 +436,12 @@ def _build_per_language_rows(
         _null_incomplete_scores,
     )
 
-    # One row per (model, experiment variant) — same granularity as the
-    # Summary/Per-task tables — so an ablation's own scores don't get pooled
-    # into its base model's per-language means (or vice versa).
+    # One row per (model, experiment variant), matching Summary/Per-task.
     long_df = _ensure_experiment_id(long_df)
     variants_by_model = _extract_variant_kwargs(long_df)
 
-    # Null out rows for (model, variant, task) triples the run only
-    # partially covered (missing a subset/split combo) before averaging into
-    # a language mean — same "don't credit an incomplete run" rule
-    # `_create_table.py` applies for the task/summary tables (issue #5101).
-    # Without this, a model with partial task coverage still got a full
-    # per-language score here even though its Summary/Per-task cells for
-    # that task were nulled.
+    # Null partially-covered (model, variant, task) scores before averaging
+    # — same rule _create_table.py applies elsewhere (issue #5101).
     long_df = _null_incomplete_scores(
         long_df,
         _incomplete_task_pairs(long_df),

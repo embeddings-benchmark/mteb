@@ -178,14 +178,10 @@ class ScoringFunction(HelpfulStrEnum):
 
 
 def _get_loader_name(
-    loader: Callable[..., EncoderProtocol] | str | None,
+    loader: Callable[..., EncoderProtocol] | None,
 ) -> str | None:
-    if loader is None or isinstance(loader, str):
-        # Already a registered name — e.g. an unvalidated `ModelMeta` built
-        # straight from a parsed model_meta.json via `model_construct`
-        # (see `ResultCache._get_model_name_and_revision_from_path`), where
-        # `loader` was never resolved back into a callable.
-        return loader
+    if loader is None:
+        return None
     if hasattr(loader, "func"):  # partial class wrapper
         return str(loader.func.__name__)
     return str(loader.__name__)
@@ -523,13 +519,10 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             kwargs["embed_dim"] = embed_dim
 
         merged_kwargs = {**base_exp_kwargs, **kwargs} if kwargs else base_exp_kwargs
-        # Only kwargs with a meaningful (non-empty, non-None) value count
-        # toward the experiment's identity/name — an explicit-but-empty
-        # override like `model_kwargs={}` doesn't change what the model
-        # actually does, so it shouldn't spin up a distinct "experiment"
-        # (a separate results folder/row) from the base model. The actual
-        # loader call below still receives every kwarg as passed, filtered
-        # or not — this only affects what counts as an experiment.
+        # Only meaningful kwargs count toward the experiment's identity — an
+        # explicit-but-empty override like `model_kwargs={}` shouldn't spin
+        # up a distinct experiment from the base model. The loader call
+        # below still gets every kwarg as passed, filtered or not.
         meaningful_exp_kwargs = {
             k: v for k, v in merged_kwargs.items() if _has_meaningful_value(v)
         }
@@ -1867,11 +1860,8 @@ def _collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
 def _has_meaningful_value(value: Any) -> bool:  # noqa: ANN401 -- checks arbitrary kwarg values
     """``False`` for ``None`` or an empty collection (dict/list/tuple/set/str).
 
-    Filters out no-op experiment kwargs like ``model_kwargs={}`` — an
-    explicit-but-empty override that changes nothing about the run, so it
-    shouldn't count toward the experiment's identity or show up in the
-    displayed kwargs (as opposed to a meaningful falsy value like
-    ``use_image_modality=False``, which this keeps).
+    Filters out no-op values like ``model_kwargs={}`` while keeping
+    meaningful falsy ones like ``use_image_modality=False``.
     """
     if value is None:
         return False

@@ -263,10 +263,9 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         Returns:
             A new BenchmarkResults object with the revisions joined.
         """
-        # pandas' groupby (used below) silently drops rows whose group key is
-        # NaN/None unless dropna=False is threaded through every groupby call
-        # — using "" as a stand-in for "no experiment" sidesteps that, and it
-        # gets converted back to None once the grouping is done (see below).
+        # pandas' groupby drops rows whose key is NaN/None unless dropna=False
+        # is threaded through every call — "" sidesteps that and is converted
+        # back to None once grouping is done (see below).
         _experiment_sentinel = ""
 
         records = []
@@ -498,22 +497,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                 else None
             )
             if mm is not None and exp_kwargs:
-                # Fold in the fields an ablation can plausibly change beyond
-                # the kwarg it's named after (e.g. jina-v4's
-                # vector_type=multi_vector experiment runs late-interaction,
-                # not the base model's dense) — into this same dict, not a
-                # separate column, so both the experiment's identity
-                # (_experiment_id) and what's shown to users include them.
-                # Only these three, not the whole `ModelMeta` — avoids
-                # `to_dict()`'s loader-name serialization (which the API
-                # side would otherwise have to resolve back) and keeps every
-                # row's dict a bounded shape (no heterogeneous per-experiment
-                # key sets to reconcile downstream). Skips None/empty values
-                # (e.g. output_dtypes is usually unset) and values that match
-                # the static registry entry's own — almost every run has all
-                # three set, so without diffing against the base, every
-                # experiment would carry same-as-base values regardless of
-                # whether the ablation actually touched that field.
+                # Fold model_type/embed_dim/output_dtypes into the same
                 default_meta = MODEL_REGISTRY.get(mn)
                 for field, value in (
                     ("model_type", mm.model_type),

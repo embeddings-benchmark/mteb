@@ -296,11 +296,8 @@ def _scored(pl_df: pl.DataFrame) -> pl.DataFrame:
 
 def _required_splits_per_task(pl_df: pl.DataFrame) -> pl.DataFrame:
     """``(task_name, _required_splits)`` — count of distinct splits observed for each task."""
-    return (
-        pl_df.select("task_name", "split")
-        .unique()
-        .group_by("task_name")
-        .agg(pl.len().alias("_required_splits"))
+    return pl_df.group_by("task_name").agg(
+        pl.col("split").n_unique().alias("_required_splits")
     )
 
 
@@ -313,23 +310,11 @@ def _incomplete_task_pairs(pl_df: pl.DataFrame) -> pl.DataFrame:
     coverage mask another's partial coverage (or vice versa).
     """
     scored = _scored(_ensure_experiment_id(pl_df))
-    n_subsets = (
-        scored.select("task_name", "subset")
-        .unique()
-        .group_by("task_name")
-        .agg(pl.len().alias("_n_subsets"))
+    required = scored.group_by("task_name").agg(
+        (pl.col("subset").n_unique() * pl.col("split").n_unique()).alias("_required")
     )
-    required = n_subsets.join(
-        _required_splits_per_task(scored), on="task_name", how="left"
-    ).select(
-        "task_name",
-        (pl.col("_n_subsets") * pl.col("_required_splits")).alias("_required"),
-    )
-    have = (
-        scored.select("model_name", _EXPERIMENT_ID_COL, "task_name", "subset", "split")
-        .unique()
-        .group_by(["model_name", _EXPERIMENT_ID_COL, "task_name"])
-        .agg(pl.len().alias("_have"))
+    have = scored.group_by(["model_name", _EXPERIMENT_ID_COL, "task_name"]).agg(
+        pl.struct("subset", "split").n_unique().alias("_have")
     )
     return (
         have.join(required, on="task_name", how="left")
@@ -344,12 +329,9 @@ def _incomplete_subset_pairs(pl_df: pl.DataFrame) -> pl.DataFrame:
     See :func:`_incomplete_task_pairs` for why coverage is judged per variant.
     """
     scored = _scored(_ensure_experiment_id(pl_df))
-    have = (
-        scored.select("model_name", _EXPERIMENT_ID_COL, "task_name", "subset", "split")
-        .unique()
-        .group_by(["model_name", _EXPERIMENT_ID_COL, "task_name", "subset"])
-        .agg(pl.len().alias("_have"))
-    )
+    have = scored.group_by(
+        ["model_name", _EXPERIMENT_ID_COL, "task_name", "subset"]
+    ).agg(pl.col("split").n_unique().alias("_have"))
     return (
         have.join(_required_splits_per_task(scored), on="task_name", how="left")
         .filter(pl.col("_have") < pl.col("_required_splits"))
@@ -394,13 +376,10 @@ def _build_per_task_pivot(
     """Pivot the long results frame to one row per (model, variant) × one col per task.
 
     Returns ``(per_task, task_cols)`` or ``None`` for the three empty-input
-    cases (empty frame, no ``model_name``, no tasks, or all-null rows). Every
-    summary/per-task builder opens with this pattern — extracted so the four
-    builders + per-task table builder don't duplicate the boilerplate. The
-    pivot index is ``(model_name, _experiment_id)`` so experiment variants stay
-    as distinct rows (see :func:`_ensure_experiment_id`), and a task with partial
-    (subset, split) coverage for a given model/variant is nulled rather than
-    silently averaged over (see :func:`_null_incomplete_scores`).
+    cases (empty frame, no ``model_name``, no tasks, or all-null rows).
+    Pivot index is ``(model_name, _experiment_id)`` so experiment variants
+    stay distinct rows, and partial (subset, split) coverage is nulled
+    rather than silently averaged over (:func:`_null_incomplete_scores`).
     """
     if pl_df.is_empty() or "model_name" not in pl_df.columns:
         return None

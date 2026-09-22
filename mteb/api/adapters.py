@@ -93,19 +93,14 @@ def run_model_meta_to_schema(
     *,
     zero_shot_pct: int | None = None,
 ) -> ModelMetaSchema:
-    """`ModelMetaSchema` for `base_meta`, patched with one *run's own* metadata.
+    """`ModelMetaSchema` for `base_meta`, with one run's own model_type/embed_dim/output_dtypes patched in.
 
-    Meant for experiment/ablation rows: an ablation can change how the model
-    actually behaves along a few specific axes (e.g. jinaai/jina-embeddings-v4's
-    `vector_type=multi_vector` experiment runs `late-interaction`, not the
-    base model's `dense`), while everything else — name, params, languages,
-    openness, ... — stays whatever's on the static MODEL_REGISTRY entry.
-    `run_meta` (see `benchmark_results.py::_build_pre_agg_df`, which folds
-    each run's `model_type`/`embed_dim`/`output_dtypes` into the same
-    `experiments` dict its own kwargs live in) may carry other keys too —
-    only `_RUN_OVERRIDE_FIELDS` are read here, so patching is a plain
-    `model_copy` — no need to re-validate a full `ModelMeta` (and resolve
-    `loader` back from its serialized name) just to read three fields.
+    An ablation can change how a model behaves along these axes (e.g.
+    jina-embeddings-v4's `vector_type=multi_vector` runs `late-interaction`,
+    not the base model's `dense`); everything else stays the static
+    MODEL_REGISTRY entry. `run_meta` may carry other keys too (see
+    `benchmark_results.py::_build_pre_agg_df`) — only `_RUN_OVERRIDE_FIELDS`
+    are read here.
     """
     overrides = {
         k: run_meta[k] for k in _RUN_OVERRIDE_FIELDS if run_meta.get(k) is not None
