@@ -26,12 +26,6 @@ model2vecdk = ModelMeta(
     training_datasets=set(),  # distilled
     public_training_code="https://github.com/andersborges/dkmodel2vec",
     public_training_data="https://huggingface.co/datasets/DDSC/nordic-embedding-training-data",
-    citation="""@article{minishlab2024model2vec,
-  author = {Tulkens, Stephan and {van Dongen}, Thomas},
-  title = {Model2Vec: Fast State-of-the-Art Static Embeddings},
-  year = {2024},
-  url = {https://github.com/MinishLab/model2vec}
-}""",
 )
 
 
@@ -58,10 +52,4 @@ model2vecdk_stem = ModelMeta(
     training_datasets=set(),  # distilled
     public_training_code="https://github.com/andersborges/dkmodel2vec",
     public_training_data="https://huggingface.co/datasets/DDSC/nordic-embedding-training-data",
-    citation="""@article{minishlab2024model2vec,
-  author = {Tulkens, Stephan and {van Dongen}, Thomas},
-  title = {Model2Vec: Fast State-of-the-Art Static Embeddings},
-  year = {2024},
-  url = {https://github.com/MinishLab/model2vec}
-}""",
 )

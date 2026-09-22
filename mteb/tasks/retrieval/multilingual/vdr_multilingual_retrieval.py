@@ -125,14 +125,7 @@ class VDRMultilingualRetrieval(AbsTaskRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@misc{llamaindex2024vdrmultilingual,
-  author = {LlamaIndex},
-  howpublished = {https://huggingface.co/datasets/llamaindex/vdr-multilingual-test},
-  title = {Visual Document Retrieval Goes Multilingual},
-  year = {2025},
-}
-""",
+        bibtex_citation="",
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:

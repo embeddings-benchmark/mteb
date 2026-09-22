@@ -28,10 +28,13 @@ class SWEbenchVerifiedReranking(AbsTaskRetrieval):
             "query": "Given a github issue, identify the code that needs to be changed to fix the issue."
         },
         bibtex_citation=r"""
-@misc{openai2024swebenchverified,
-  author = {OpenAI},
-  title = {Introducing swe-bench verified},
-  url = {https://openai.com/index/introducing-swe-bench-verified/},
+@misc{jimenez2024swebenchlanguagemodelsresolve,
+  archiveprefix = {arXiv},
+  author = {Carlos E. Jimenez and John Yang and Alexander Wettig and Shunyu Yao and Kexin Pei and Ofir Press and Karthik Narasimhan},
+  eprint = {2310.06770},
+  primaryclass = {cs.CL},
+  title = {SWE-bench: Can Language Models Resolve Real-World GitHub Issues?},
+  url = {https://arxiv.org/abs/2310.06770},
   year = {2024},
 }
 """,

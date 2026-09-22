@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -11,6 +10,7 @@ from mteb.models.model_implementations.ops_colqwen3_models import multilingual_l
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -26,7 +26,7 @@ class OpsMMEmbeddingWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str | None = None,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         torch_dtype: torch.dtype | None = None,  # ruff: any-type
         attn_implementation: str | None = None,
         fps: float | None = 2.0,
@@ -35,6 +35,11 @@ class OpsMMEmbeddingWrapper(AbsEncoder):
         trust_remote_code: bool = True,
         **kwargs: Any,
     ):
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         from transformers import AutoModelForImageTextToText, AutoProcessor
         from transformers.utils.import_utils import is_flash_attn_2_available
 
@@ -82,6 +87,8 @@ class OpsMMEmbeddingWrapper(AbsEncoder):
 
     @staticmethod
     def _pooling(last_hidden_state: torch.Tensor) -> torch.Tensor:
+        import torch
+
         batch_size = last_hidden_state.shape[0]
         reps = last_hidden_state[
             torch.arange(batch_size, device=last_hidden_state.device), -1, :
@@ -96,6 +103,8 @@ class OpsMMEmbeddingWrapper(AbsEncoder):
         videos: list[Any] | None = None,
         instruction: str | None = None,
     ) -> torch.Tensor:
+        import torch
+
         batch_size = next(
             (len(x) for x in (texts, images, videos) if x is not None), None
         )
@@ -171,6 +180,8 @@ class OpsMMEmbeddingWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         instruction = self.get_task_instruction(task_metadata, prompt_type)
 
         features = inputs.dataset.features
@@ -208,15 +219,6 @@ class OpsMMEmbeddingWrapper(AbsEncoder):
         return torch.cat(all_embeddings, dim=0).numpy()
 
 
-OPS_MM_EMBEDDING_CITATION = """
-@misc{ops_mm_embedding_v1,
-  author       = {OpenSearch-AI},
-  title        = {Ops-MM-embedding-v1: State-of-the-Art Multimodal Embedding Models},
-  year         = {2025},
-  url          = {https://huggingface.co/OpenSearch-AI/Ops-MM-embedding-v1-2B},
-}
-"""
-
 ops_mm_embedding_v1_2b = ModelMeta(
     loader=OpsMMEmbeddingWrapper,
     name="OpenSearch-AI/Ops-MM-embedding-v1-2B",
@@ -239,7 +241,6 @@ ops_mm_embedding_v1_2b = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
-    citation=OPS_MM_EMBEDDING_CITATION,
 )
 
 ops_mm_embedding_v1_7b = ModelMeta(
@@ -264,5 +265,4 @@ ops_mm_embedding_v1_7b = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
-    citation=OPS_MM_EMBEDDING_CITATION,
 )

@@ -39,6 +39,7 @@ class EightTagsClustering(AbsTaskClusteringLegacy):
         bibtex_citation=r"""
 @inproceedings{dadas-etal-2020-evaluation,
   address = {Marseille, France},
+  archiveprefix = {arXiv},
   author = {Dadas, Slawomir  and
 Pere{\\l}kiewicz, Micha{\\l}  and
 Po{\\'s}wiata, Rafa{\\l}},
@@ -57,6 +58,7 @@ Mazo, H{\\'e}l{\\`e}ne  and
 Moreno, Asuncion  and
 Odijk, Jan  and
 Piperidis, Stelios},
+  eprint = {1910.11834},
   isbn = {979-10-95546-34-4},
   language = {English},
   month = may,
@@ -100,6 +102,7 @@ class EightTagsClusteringFast(AbsTaskClustering):
         bibtex_citation=r"""
 @inproceedings{dadas-etal-2020-evaluation,
   address = {Marseille, France},
+  archiveprefix = {arXiv},
   author = {Dadas, Slawomir  and
 Pere{\\l}kiewicz, Micha{\\l}  and
 Po{\\'s}wiata, Rafa{\\l}},
@@ -118,6 +121,7 @@ Mazo, H{\\'e}l{\\`e}ne  and
 Moreno, Asuncion  and
 Odijk, Jan  and
 Piperidis, Stelios},
+  eprint = {1910.11834},
   isbn = {979-10-95546-34-4},
   language = {English},
   month = may,

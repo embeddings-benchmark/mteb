@@ -640,7 +640,7 @@ MTEB_FRA = Benchmark(
     description="French text embedding quality across classification, clustering, pair classification, reranking, retrieval, and semantic similarity, using high-quality native French datasets.",
     reference="https://arxiv.org/abs/2405.20468",
     citation=r"""
-@misc{ciancone2024mtebfrenchresourcesfrenchsentence,
+@misc{ciancone2024mteb,
   archiveprefix = {arXiv},
   author = {Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
   eprint = {2405.20468},
@@ -1836,8 +1836,10 @@ BEIR = Benchmark(
     reference="https://arxiv.org/abs/2104.08663",
     citation=r"""
 @inproceedings{thakur2021beir,
+  archiveprefix = {arXiv},
   author = {Nandan Thakur and Nils Reimers and Andreas R{\"u}ckl{\'e} and Abhishek Srivastava and Iryna Gurevych},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)},
+  eprint = {2104.08663},
   title = {{BEIR}: A Heterogeneous Benchmark for Zero-shot Evaluation of Information Retrieval Models},
   url = {https://openreview.net/forum?id=wCu6T5xFjeJ},
   year = {2021},
@@ -1945,12 +1947,12 @@ C_MTEB = Benchmark(
     description="Chinese text embedding quality across retrieval, reranking, pair classification, clustering, classification, and semantic similarity.",
     reference="https://github.com/FlagOpen/FlagEmbedding/tree/master/research/C_MTEB",
     citation=r"""
-@misc{xiao2024cpackpackagedresourcesadvance,
+@misc{xiao2024cpackpackedresourcesgeneral,
   archiveprefix = {arXiv},
   author = {Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
   eprint = {2309.07597},
   primaryclass = {cs.CL},
-  title = {C-Pack: Packaged Resources To Advance General Chinese Embedding},
+  title = {C-Pack: Packed Resources For General Chinese Embeddings},
   url = {https://arxiv.org/abs/2309.07597},
   year = {2024},
 }
@@ -2779,17 +2781,7 @@ ENCODECHKA = Benchmark(
     ),
     description="Russian text embedding quality across paraphrase identification, sentiment analysis, toxicity classification, intent classification, natural language inference, and semantic similarity.",
     reference="https://github.com/avidale/encodechka",
-    citation=r"""
-@misc{dale_encodechka,
-  author = {Dale, David},
-  editor = {habr.com},
-  month = {June},
-  note = {[Online; posted 12-June-2022]},
-  title = {Russian rating of sentence encoders},
-  url = {https://habr.com/ru/articles/669674/},
-  year = {2022},
-}
-""",
+    citation=None,
 )
 
 VIDORE = Benchmark(
@@ -2980,11 +2972,14 @@ R2MED = Benchmark(
     description="Reasoning-driven medical retrieval quality across biology, bioinformatics, medical sciences, clinical, and treatment scenarios, requiring models to perform multi-step reasoning over medical literature.",
     reference="https://r2med.github.io/",
     citation=r"""
-@article{li2025r2med,
-  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
-  journal = {arXiv preprint arXiv:2505.14558},
+@misc{zhang2026r2medbenchmarkreasoningdrivenmedical,
+  archiveprefix = {arXiv},
+  author = {Xiangxu Zhang and Lei Li and Xiao Zhou and Zheng Liu},
+  eprint = {2505.14558},
+  primaryclass = {cs.IR},
   title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
-  year = {2025},
+  url = {https://arxiv.org/abs/2505.14558},
+  year = {2026},
 }
 """,
 )
@@ -3252,13 +3247,17 @@ JMTEB_V2 = Benchmark(
     description="Japanese text embedding quality across clustering, classification, semantic similarity, retrieval, and reranking. v2 extends the benchmark to 28 datasets for more comprehensive evaluation compared with MTEB(jpn, v1).",
     reference="https://github.com/sbintuitions/JMTEB",
     citation=r"""
-@article{li2025jmteb,
+@inproceedings{li-etal-2026-jmteb,
+  address = {Palma de Mallorca, Spain},
   author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan and Fukuchi, Akihiko and Shibata, Tomohide and Kawahara, Daisuke},
-  issue = {3},
-  journal = {Vol.2025-NL-265,No.3,1-15},
-  month = {sep},
-  title = {{JMTEB and JMTEB-lite: Japanese Massive Text Embedding Benchmark and Its Lightweight Version}},
-  year = {2025},
+  booktitle = {Proceedings of the Fifteenth Language Resources and Evaluation Conference},
+  doi = {10.63317/5ouzpv2f2f6k},
+  month = may,
+  pages = {7423--7434},
+  publisher = {ELRA Language Resource Association},
+  title = {{JMTEB} and {JMTEB}-lite: {J}apanese Massive Text Embedding Benchmark and Its Lightweight Version},
+  url = {https://aclanthology.org/2026.lrec-1.588/},
+  year = {2026},
 }
 """,
     contacts=["lsz05"],
@@ -3309,13 +3308,17 @@ JMTEB_LITE_V1 = Benchmark(
     description="Japanese text embedding quality across clustering, classification, semantic similarity, retrieval, and reranking, with heavy datasets optimized via hard negative pooling to enable faster evaluation while maintaining rankings consistent with JMTEB.",
     reference="https://huggingface.co/datasets/sbintuitions/JMTEB-lite",
     citation=r"""
-@article{li2025jmteb,
+@inproceedings{li-etal-2026-jmteb,
+  address = {Palma de Mallorca, Spain},
   author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan and Fukuchi, Akihiko and Shibata, Tomohide and Kawahara, Daisuke},
-  issue = {3},
-  journal = {Vol.2025-NL-265,No.3,1-15},
-  month = {sep},
-  title = {{JMTEB and JMTEB-lite: Japanese Massive Text Embedding Benchmark and Its Lightweight Version}},
-  year = {2025},
+  booktitle = {Proceedings of the Fifteenth Language Resources and Evaluation Conference},
+  doi = {10.63317/5ouzpv2f2f6k},
+  month = may,
+  pages = {7423--7434},
+  publisher = {ELRA Language Resource Association},
+  title = {{JMTEB} and {JMTEB}-lite: {J}apanese Massive Text Embedding Benchmark and Its Lightweight Version},
+  url = {https://aclanthology.org/2026.lrec-1.588/},
+  year = {2026},
 }
 """,
     contacts=["lsz05"],
@@ -3335,11 +3338,21 @@ KOVIDORE_V2 = Benchmark(
     description="Korean visual document retrieval across enterprise document domains including cybersecurity, economics, energy, and HR.",
     reference="https://github.com/whybe-choi/kovidore-data-generator",
     citation=r"""
-@misc{choi2026kovidorev2,
-  author = {Yongbin Choi},
-  note = {A benchmark for evaluating Korean vision document retrieval with multi-page reasoning queries in practical domains},
-  title = {KoViDoRe v2: a comprehensive evaluation of vision document retrieval for enterprise use-cases},
-  url = {https://github.com/whybe-choi/kovidore-data-generator},
+@inproceedings{choi-etal-2026-kovidore,
+  address = {San Diego, USA},
+  author = {Choi, Yongbin  and
+Song, Yongwoo  and
+Sung, Mujeen},
+  booktitle = {Proceedings of the 2nd Workshop on Multimodal Augmented Generation via Multimodal Retrieval ({MAGM}a{R} 2026)},
+  doi = {10.18653/v1/2026.magmar-main.11},
+  editor = {Murray, Kenton  and
+Kriz, Reno},
+  isbn = {979-8-89176-425-5},
+  month = jul,
+  pages = {54--80},
+  publisher = {Association for Computational Linguistics},
+  title = {{K}o{V}i{D}o{R}e: A Benchmark for {K}orean Visual Document Retrieval},
+  url = {https://aclanthology.org/2026.magmar-main.11/},
   year = {2026},
 }
 """,

@@ -9,14 +9,6 @@ from mteb.models.model_meta import (
 )
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
-PIXIE_RUNE_V1_CITATION = """@misc{TelePIX-PIXIE-Rune-v1.0,
-  title        = {PIXIE-Rune-v1.0},
-  author       = {TelePIX AI Research Team and Bongmin Kim},
-  year         = {2026},
-  howpublished = {Hugging Face model card},
-  url          = {https://huggingface.co/telepix/PIXIE-Rune-v1.0}
-}"""
-
 PIXIE_RUNE_V1_PROMPTS = {
     "query": "query: ",
     "document": "",
@@ -53,7 +45,7 @@ pixie_rune_v1_0 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=pixie_rune_v1_training_datasets,
-    citation=PIXIE_RUNE_V1_CITATION + "\n\n" + ARCTIC_V2_CITATION,
+    citation=ARCTIC_V2_CITATION,
 )
 
 pixie_rune_v1_5 = ModelMeta(

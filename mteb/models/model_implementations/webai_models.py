@@ -2,15 +2,14 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
-from transformers import AutoModel, AutoProcessor
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import OutputDType
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -34,6 +33,9 @@ class ColVec1Wrapper(AbsEncoder):
         torch_dtype: OutputDType | torch.dtype | None = OutputDType.BF16,
         **kwargs: Any,
     ):
+        import torch
+        from transformers import AutoModel, AutoProcessor
+
         if isinstance(torch_dtype, OutputDType):
             torch_dtype = torch_dtype.get_dtype()
 
@@ -99,6 +101,7 @@ class ColVec1Wrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
         import torchvision.transforms.functional as F
         from PIL import Image
 
@@ -129,6 +132,8 @@ class ColVec1Wrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         all_embeds = []
         with torch.no_grad():
             for batch in tqdm(
@@ -143,6 +148,8 @@ class ColVec1Wrapper(AbsEncoder):
         )
 
     def similarity(self, a: Array, b: Array) -> Array:
+        import torch
+
         a = [torch.as_tensor(x) for x in a]
         b = [torch.as_tensor(x) for x in b]
         return self.processor.score_multi_vector(a, b, device=self.device)
@@ -166,6 +173,9 @@ class ColVec11Wrapper(ColVec1Wrapper):
         processor_kwargs: dict[str, Any] | None = None,
         **model_kwargs: Any,
     ):
+        import torch
+        from transformers import AutoModel, AutoProcessor
+
         if isinstance(torch_dtype, OutputDType):
             torch_dtype = torch_dtype.get_dtype()
 
@@ -195,6 +205,7 @@ class ColVec11Wrapper(ColVec1Wrapper):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
         import torchvision.transforms.functional as F
         from PIL import Image
 
@@ -237,6 +248,8 @@ class ColVec11Wrapper(ColVec1Wrapper):
         raise ValueError("No text or image features found in inputs.")
 
     def similarity(self, a: Array, b: Array) -> Array:
+        import torch
+
         a = [torch.as_tensor(x) for x in a]
         b = [torch.as_tensor(x) for x in b]
         return self.processor.score_retrieval(
@@ -261,15 +274,6 @@ COLWEBAI_TRAINING_DATA = {
     "VidoreTabfquadRetrieval",
 }
 
-COLWEBAI_CITATION = """
-@misc{webAI-ColVec1,
-  title={webAI-ColVec1: Late-Interaction Multi-Vector Embedding Model for Visual Document Retrieval},
-  author={webAI},
-  year={2026},
-  url={https://huggingface.co/webAI-Official/webAI-ColVec1-4b}
-}
-"""
-
 
 COLVEC1_1_TRAINING_DATA = {
     # from https://huggingface.co/datasets/vidore/colpali_train_set
@@ -288,15 +292,6 @@ COLVEC1_1_TRAINING_DATA = {
     # from https://huggingface.co/datasets/Tevatron/wiki-ss-nq
     "wiki-ss-nq",
 }
-
-COLVEC1_1_CITATION = """
-@misc{webai_colvec1_1,
-  title={webAI-ColVec1.1: Bidirectional Multi-Vector Models for Visual Document Retrieval},
-  author={webAI},
-  year={2026},
-  url={https://huggingface.co/webAI-Official}
-}
-"""
 
 
 colvec1_4b = ModelMeta(
@@ -325,7 +320,6 @@ colvec1_4b = ModelMeta(
     training_datasets=COLWEBAI_TRAINING_DATA,
     adapted_from="Qwen/Qwen3.5-4B",
     superseded_by=None,
-    citation=COLWEBAI_CITATION,
     contacts=["psam-ai"],
     output_dtypes=OutputDType.FLOAT16,
 )
@@ -357,7 +351,6 @@ colvec1_9b = ModelMeta(
     training_datasets=COLWEBAI_TRAINING_DATA,
     adapted_from="Qwen/Qwen3.5-9B",
     superseded_by=None,
-    citation=COLWEBAI_CITATION,
     contacts=["psam-ai"],
     output_dtypes=OutputDType.FLOAT16,
 )
@@ -403,7 +396,6 @@ colvec1_1_4b = ModelMeta(
     training_datasets=COLVEC1_1_TRAINING_DATA,
     adapted_from="Qwen/Qwen3.5-4B",
     superseded_by=None,
-    citation=COLVEC1_1_CITATION,
     contacts=["zhanlunchang-webai"],
     output_dtypes=None,
     extra_requirements_groups=["colvec1_1"],
@@ -450,7 +442,6 @@ colvec1_1_8b = ModelMeta(
     training_datasets=COLVEC1_1_TRAINING_DATA,
     adapted_from="Qwen/Qwen3.5-9B",
     superseded_by=None,
-    citation=COLVEC1_1_CITATION,
     contacts=["zhanlunchang-webai"],
     output_dtypes=None,
     extra_requirements_groups=["colvec1_1"],

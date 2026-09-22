@@ -5,7 +5,6 @@ import json
 import logging
 from collections import defaultdict
 from functools import cached_property
-from importlib.metadata import version
 from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
@@ -22,6 +21,7 @@ from mteb._hf_integration.eval_result_model import (
     HFEvalResultSource,
 )
 from mteb._log_once import LogOnce
+from mteb._requires_package import _mteb_distribution
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -199,7 +199,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         """
         task_meta = task.metadata
         subset2langscripts = task_meta.hf_subsets_to_langscripts
-        mteb_ver = version("mteb")
+        mteb_ver = _mteb_distribution().version
         flat_scores: dict[SplitName, list[ScoresDict]] = defaultdict(list)
         for split, hf_subset_scores in scores.items():
             for hf_subset, hf_scores in hf_subset_scores.items():
@@ -574,7 +574,12 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             for scores in self.scores[split]:
                 eval_langs = scores["languages"]
                 for lang in eval_langs:
-                    if lang_scripts.contains_language(lang):
+                    if lang_scripts.contains_language(lang) and (
+                        not scripts
+                        or lang_scripts.contains_script(
+                            lang.rsplit("-", maxsplit=1)[-1]
+                        )
+                    ):
                         values.append(getter(scores))
                         break
 
@@ -783,7 +788,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             revision = result.dataset_revision
             mteb_version = result.mteb_version
         elif isinstance(result, AbsTask):
-            mteb_version = version("mteb")
+            mteb_version = _mteb_distribution().version
             name = result.metadata.name
             revision = result.metadata.revision
         else:

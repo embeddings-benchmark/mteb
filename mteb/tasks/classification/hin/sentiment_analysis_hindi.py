@@ -24,16 +24,7 @@ class SentimentAnalysisHindi(AbsTaskClassification):
         license="cc-by-nc-sa-4.0",
         annotations_creators="derived",
         sample_creation="found",
-        bibtex_citation=r"""
-@misc{OdiaGenAI,
-  author = {Shantipriya Parida and Sambit Sekhar and Soumendra Kumar Sahoo and Swateek Jena and Abhijeet Parida and Satya Ranjan Dash and Guneet Singh Kohli},
-  howpublished = {{https://huggingface.co/OdiaGenAI}},
-  journal = {Hugging Face repository},
-  publisher = {Hugging Face},
-  title = {OdiaGenAI: Generative AI and LLM Initiative for the Odia Language},
-  year = {2023},
-}
-""",
+        bibtex_citation="",
         superseded_by="SentimentAnalysisHindi.v2",
     )
 
@@ -60,15 +51,6 @@ class SentimentAnalysisHindiV2(AbsTaskClassification):
         license="cc-by-nc-sa-4.0",
         annotations_creators="derived",
         sample_creation="found",
-        bibtex_citation=r"""
-@misc{OdiaGenAI,
-  author = {Shantipriya Parida and Sambit Sekhar and Soumendra Kumar Sahoo and Swateek Jena and Abhijeet Parida and Satya Ranjan Dash and Guneet Singh Kohli},
-  howpublished = {{https://huggingface.co/OdiaGenAI}},
-  journal = {Hugging Face repository},
-  publisher = {Hugging Face},
-  title = {OdiaGenAI: Generative AI and LLM Initiative for the Odia Language},
-  year = {2023},
-}
-""",
+        bibtex_citation="",
         adapted_from=["SentimentAnalysisHindi"],
     )

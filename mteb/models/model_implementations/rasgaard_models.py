@@ -26,10 +26,4 @@ potion_base_8m = ModelMeta(
     training_datasets=set(),  # distilled
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data="https://huggingface.co/datasets/HuggingFaceFW/fineweb-2",  # distilled on this
-    citation="""@article{minishlab2024model2vec,
-    author = {Tulkens, Stephan and {van Dongen}, Thomas},
-    title = {Model2Vec: Fast State-of-the-Art Static Embeddings},
-    year = {2024},
-    url = {https://github.com/MinishLab/model2vec}
-}""",
 )

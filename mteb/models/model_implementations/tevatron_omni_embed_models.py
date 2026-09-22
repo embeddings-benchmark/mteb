@@ -53,11 +53,13 @@ class TevatronOmniEmbedWrapper(SentenceTransformerEncoderWrapper):
 
 
 _OMNI_EMBED_CITATION = r"""
-@article{zhuang2025tevatron,
-    title={Tevatron 2.0: Unified Document Retrieval Toolkit across Scale, Language, and Modality},
-    author={Zhuang, Shengyao and Ma, Xueguang and Zhan, Samantha and Zhang, Crystina},
-    journal={arXiv preprint arXiv:2505.02466},
-    year={2025}
+@misc{zhuang2025tevatron,
+  archiveprefix = {arXiv},
+  author = {Xueguang Ma and Luyu Gao and Shengyao Zhuang and Jiaqi Samantha Zhan and Jamie Callan and Jimmy Lin},
+  eprint = {2505.02466},
+  title = {Tevatron 2.0: Unified Document Retrieval Toolkit across Scale, Language, and Modality},
+  url = {https://arxiv.org/abs/2505.02466},
+  year = {2025},
 }
 """
 

@@ -4,8 +4,6 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
-import torch.nn.functional as F
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -18,6 +16,7 @@ from mteb.types import OutputDType, PromptType
 if TYPE_CHECKING:
     from collections.abc import Callable
 
+    import torch
     from torch.utils.data import DataLoader
     from transformers import BatchEncoding, PreTrainedTokenizerBase
 
@@ -99,6 +98,9 @@ class RepLLaMAModel(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        import torch
+        import torch.nn.functional as F
+
         batch_size = 16 if "batch_size" not in kwargs else kwargs.pop("batch_size")
         all_embeddings = []
         prompt_name = self.get_prompt_name(task_metadata, prompt_type)

@@ -26,13 +26,7 @@ class ChatDoctorRetrieval(AbsTaskRetrieval):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@misc{chatdoctor_healthcaremagic,
-  title = {ChatDoctor HealthCareMagic: Medical Question-Answer Retrieval Dataset},
-  url = {https://huggingface.co/datasets/lavita/ChatDoctor-HealthCareMagic-100k},
-  year = {2023},
-}
-""",
+        bibtex_citation="",
         prompt={
             "query": "Given a medical question from a patient, retrieve relevant healthcare information that best answers the question"
         },

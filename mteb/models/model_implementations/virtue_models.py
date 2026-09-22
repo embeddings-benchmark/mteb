@@ -3,13 +3,13 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
     from typing_extensions import Unpack
 
@@ -46,6 +46,7 @@ class VirtueWrapper(AbsEncoder):
         device: str | None = None,
         **kwargs: Any,
     ) -> None:
+        import torch
         from transformers import AutoProcessor, Qwen2VLForConditionalGeneration
 
         self.device = device or (
@@ -70,6 +71,8 @@ class VirtueWrapper(AbsEncoder):
     def _pooling(
         last_hidden_state: torch.Tensor, attention_mask: torch.Tensor
     ) -> torch.Tensor:
+        import torch
+
         left_padding = attention_mask[:, -1].sum() == attention_mask.shape[0]
         batch_size = last_hidden_state.shape[0]
         if left_padding:
@@ -81,7 +84,6 @@ class VirtueWrapper(AbsEncoder):
             ]
         return torch.nn.functional.normalize(reps, p=2, dim=-1)
 
-    @torch.inference_mode()
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -93,49 +95,54 @@ class VirtueWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
-        features = inputs.dataset.features
-        has_text = "text" in features
-        has_image = "image" in features
+        import torch
 
-        all_embeddings: list[torch.Tensor] = []
+        with torch.inference_mode():
+            features = inputs.dataset.features
+            has_text = "text" in features
+            has_image = "image" in features
 
-        for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding"):
-            batch_size = len(next(iter(batch.values())))
+            all_embeddings: list[torch.Tensor] = []
 
-            prompts: list[str] = []
-            batch_images: list | None = [] if has_image else None
+            for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding"):
+                batch_size = len(next(iter(batch.values())))
 
-            for i in range(batch_size):
-                text = batch["text"][i] if has_text else None
-                if has_image:
-                    if text:
-                        prompt = (
-                            f"{_VIRTUE_IMAGE_TOKEN}\nRepresent the given image with "
-                            f"the following question: {text}"
-                        )
+                prompts: list[str] = []
+                batch_images: list | None = [] if has_image else None
+
+                for i in range(batch_size):
+                    text = batch["text"][i] if has_text else None
+                    if has_image:
+                        if text:
+                            prompt = (
+                                f"{_VIRTUE_IMAGE_TOKEN}\nRepresent the given image with "
+                                f"the following question: {text}"
+                            )
+                        else:
+                            prompt = (
+                                f"{_VIRTUE_IMAGE_TOKEN}\nRepresent the given image."
+                            )
+                        batch_images.append(batch["image"][i])
                     else:
-                        prompt = f"{_VIRTUE_IMAGE_TOKEN}\nRepresent the given image."
-                    batch_images.append(batch["image"][i])
-                else:
-                    prompt = text if text else ""
-                prompts.append(prompt)
+                        prompt = text if text else ""
+                    prompts.append(prompt)
 
-            proc_inputs = self.processor(
-                text=prompts,
-                images=batch_images,
-                padding=True,
-                return_tensors="pt",
-            )
-            proc_inputs = {k: v.to(self.device) for k, v in proc_inputs.items()}
+                proc_inputs = self.processor(
+                    text=prompts,
+                    images=batch_images,
+                    padding=True,
+                    return_tensors="pt",
+                )
+                proc_inputs = {k: v.to(self.device) for k, v in proc_inputs.items()}
 
-            # Call the inner model to obtain hidden states directly and avoid the
-            # memory-heavy `lm_head` projection over the full vocabulary.
-            output = self.model.model(**proc_inputs, return_dict=True)
-            hidden_states = output.last_hidden_state
-            embs = self._pooling(hidden_states, proc_inputs["attention_mask"])
-            all_embeddings.append(embs.cpu().to(torch.float32))
+                # Call the inner model to obtain hidden states directly and avoid the
+                # memory-heavy `lm_head` projection over the full vocabulary.
+                output = self.model.model(**proc_inputs, return_dict=True)
+                hidden_states = output.last_hidden_state
+                embs = self._pooling(hidden_states, proc_inputs["attention_mask"])
+                all_embeddings.append(embs.cpu().to(torch.float32))
 
-        return torch.cat(all_embeddings, dim=0)
+            return torch.cat(all_embeddings, dim=0)
 
 
 virtue_training_datasets = set(

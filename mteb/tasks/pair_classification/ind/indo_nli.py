@@ -29,6 +29,7 @@ class IndoNLI(AbsTaskPairClassification):
   address = {Online and Punta Cana, Dominican Republic},
   author = {Mahendra, Rahmad and Aji, Alham Fikri and Louvan, Samuel and Rahman, Fahrurrozi and Vania, Clara},
   booktitle = {Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing},
+  doi = {10.18653/v1/2021.emnlp-main.821},
   month = nov,
   pages = {10511--10527},
   publisher = {Association for Computational Linguistics},
