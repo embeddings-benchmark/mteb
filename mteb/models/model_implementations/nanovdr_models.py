@@ -272,7 +272,7 @@ nanovdr_s_multi = ModelMeta(
     public_training_code=None,
     public_training_data="https://huggingface.co/datasets/nanovdr/NanoVDR-Train",
     training_datasets={
-        "VidoreTabfquadRetrieval",
+        "VidoreTatdqaRetrieval",
         "VidoreDocVQARetrieval",
         "VidoreInfoVQARetrieval",
         "VidoreArxivQARetrieval",
