@@ -246,45 +246,16 @@ async def build_benchmark_summary(  # noqa: PLR0914
     trained_on_by_model = _trained_on_map_cached(bench.name)
 
     # (model_name, experiment_id) -> that experiment's kwargs, for
-    # SummaryRowSchema.experiments. experiment_id is the kwargs serialized to a
-    # stable string (see _serialize_experiment_kwargs_to_name); non-experiment
-    # rows never appear here. variant_model_meta carries the same run's own
-    # model_type/embed_dim/output_dtypes (the model_meta column — see
-    # _build_pre_agg_df), used to patch the static MODEL_REGISTRY entry for
-    # that row, since an ablation's kwarg can imply other metadata changes.
-    variants_by_model: dict[tuple[str, str], dict[str, Any]] = {}
-    variant_model_meta: dict[tuple[str, str], dict[str, Any]] = {}
-    if "experiments" in long_df.columns:
-        from mteb.models.model_meta import (
-            _has_meaningful_value,
-            _serialize_experiment_kwargs_to_name,
-        )
-
-        variant_cols = ["model_name", "experiments"]
-        if "model_meta" in long_df.columns:
-            variant_cols.append("model_meta")
-        variant_pl = (
-            long_df.lazy()
-            .filter(pl.col("experiments").is_not_null())
-            .select(variant_cols)
-            .unique(subset=["model_name", "experiments"])
-            .collect()
-        )
-        for vr in variant_pl.iter_rows(named=True):
-            exp = vr["experiments"]
-            if not exp:
-                continue
-            clean = {k: v for k, v in dict(exp).items() if _has_meaningful_value(v)}
-            if not clean:
-                continue
-            vid = _serialize_experiment_kwargs_to_name(clean) or ""
-            if not vid:
-                continue
-            key = (vr["model_name"], vid)
-            variants_by_model[key] = clean
-            run_meta = vr.get("model_meta")
-            if run_meta:
-                variant_model_meta[key] = dict(run_meta)
+    # SummaryRowSchema.experiments and to patch the static MODEL_REGISTRY
+    # entry (run_model_meta_to_schema below). experiment_id is the kwargs
+    # serialized to a stable string (see _serialize_experiment_kwargs_to_name);
+    # non-experiment rows never appear here. `_build_pre_agg_df` folds each
+    # run's own model_type/embed_dim/output_dtypes into this same dict (not a
+    # separate column) — an ablation's kwarg can imply other metadata changes
+    # (e.g. jina-v4's vector_type=multi_vector experiment running
+    # late-interaction, not the base model's dense) — so both the
+    # experiment's identity and what's shown to users include them.
+    variants_by_model = _extract_variant_kwargs(long_df)
 
     type_cols = [c for c in summary_pl.columns if c not in _SUMMARY_META_COLS]
 
@@ -306,7 +277,6 @@ async def build_benchmark_summary(  # noqa: PLR0914
         task_to_type,
         language_filtered,
         variants_by_model,
-        variant_model_meta,
     )
 
     return BenchmarkSummarySchema(
@@ -329,7 +299,6 @@ def _build_summary_rows(
     task_to_type: dict[str, str],
     language_filtered: bool,
     variants_by_model: dict[tuple[str, str], dict[str, Any]] | None = None,
-    variant_model_meta: dict[tuple[str, str], dict[str, Any]] | None = None,
 ) -> list[SummaryRowSchema]:
     """Sync row-construction loop; off-loaded via ``asyncio.to_thread``."""
     rows: list[SummaryRowSchema] = []
@@ -344,8 +313,8 @@ def _build_summary_rows(
         zs_raw = row.get("Zero-shot")
         zs = int(zs_raw) if zs_raw is not None else None
         run_meta = (
-            variant_model_meta.get((full, experiment_id))
-            if experiment_id and variant_model_meta
+            variants_by_model.get((full, experiment_id))
+            if experiment_id and variants_by_model
             else None
         )
         model_schema = (
@@ -430,11 +399,11 @@ def _extract_variant_kwargs(
 
     ``experiment_id`` is the kwargs serialized to a stable string (see
     ``_serialize_experiment_kwargs_to_name``); non-experiment rows never
-    appear. Same extraction `build_benchmark_summary` does inline for
-    ``variants_by_model`` — factored out so `_build_per_language_rows` can
-    reuse it without also needing that function's ``variant_model_meta``
-    (per-experiment model_type/embed_dim/output_dtypes) side, which a
-    per-language row has no use for.
+    appear. The kwargs dict also carries that run's own
+    model_type/embed_dim/output_dtypes, folded in by `_build_pre_agg_df` —
+    used both here (SummaryRowSchema.experiments / per-language rows) and by
+    `build_benchmark_summary` to patch the static MODEL_REGISTRY entry via
+    `run_model_meta_to_schema`.
     """
     variants_by_model: dict[tuple[str, str], dict[str, Any]] = {}
     if "experiments" not in long_df.columns:

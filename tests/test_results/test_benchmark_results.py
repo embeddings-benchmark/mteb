@@ -74,6 +74,36 @@ def test_select_tasks(benchmark_results: BenchmarkResults) -> None:
     assert task_names[0] == "STS12"
 
 
+def test_select_tasks_preserves_model_meta(tmp_path: Path) -> None:
+    """`select_tasks` must not drop `model_meta` (and with it, experiment identity).
+
+    Regression test: `ModelResult.select_tasks`/`_filter_tasks` reconstructed
+    a new `ModelResult` via `model_construct` without passing `model_meta`
+    through, so any experiment row silently lost its `experiment_kwargs`
+    (and so its `experiments` column, used for grouping/display) the moment
+    `select_tasks` ran on it.
+    """
+    from mteb.mocks.mock_tasks import MockRetrievalTask
+
+    model_name = "mteb/baseline-random-encoder"
+    task = MockRetrievalTask()
+    cache = mteb.ResultCache(tmp_path)
+
+    model = mteb.get_model(model_name, a="test")
+    mteb.evaluate(model, task, cache=cache)
+
+    from mteb.cache import LoadExperimentEnum
+
+    results = cache.load_results(load_experiments=LoadExperimentEnum.MATCH_NAME)
+    model_res = results.model_results[0]
+    assert model_res.model_meta is not None
+    assert model_res.model_meta.experiment_kwargs == {"a": "test"}
+
+    filtered = model_res.select_tasks([task])
+    assert filtered.model_meta is not None
+    assert filtered.model_meta.experiment_kwargs == {"a": "test"}
+
+
 def test_join_revisions(benchmark_results: BenchmarkResults) -> None:
     model_name = "sentence-transformers/all-MiniLM-L6-v2"
     bench_res = benchmark_results.select_models([model_name])

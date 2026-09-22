@@ -33,13 +33,7 @@ from huggingface_hub.errors import (
 )
 from packaging.requirements import Requirement
 from packaging.version import InvalidVersion, Version
-from pydantic import (
-    BaseModel,
-    ConfigDict,
-    field_serializer,
-    field_validator,
-    model_validator,
-)
+from pydantic import BaseModel, ConfigDict, field_validator, model_validator
 
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb._hf_integration.hf_hub_utils import (
@@ -391,22 +385,6 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         if value in mapping:
             return mapping[value]
         raise ValueError(f"Invalid similarity function name: {value}")
-
-    @field_serializer("loader", when_used="json")
-    @staticmethod
-    def _serialize_loader(loader: Callable[..., MTEBModels] | None) -> str | None:
-        """JSON mode only: encode ``loader`` as its registered name.
-
-        Without this, `model_dump_json()`/`.model_dump(mode="json")` (used
-        directly by e.g. `BenchmarkResults.to_disk()`) crash with
-        `PydanticSerializationError: Unable to serialize unknown type` the
-        moment `loader` holds a real callable (as it does once a `ModelMeta`
-        has gone through `model_validate_json_resolved`) — pydantic has no
-        built-in way to JSON-encode a class/function. `to_dict()` below dumps
-        in Python mode instead (`model_dump()`, no `when_used="json"`), so it
-        still sees the raw callable and keeps its own `_get_loader_name` call.
-        """
-        return _get_loader_name(loader)
 
     def to_dict(self) -> dict[str, Any]:
         """Returns a dictionary representation of the model metadata."""

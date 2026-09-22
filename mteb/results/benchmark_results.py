@@ -18,6 +18,8 @@ from tqdm.auto import tqdm
 from mteb.benchmarks.benchmark import Benchmark
 from mteb.models import ModelMeta
 from mteb.models.get_model_meta import get_model_metas
+from mteb.models.model_implementations import MODEL_REGISTRY
+from mteb.models.model_meta import _has_meaningful_value
 
 from .model_result import ModelResult, _aggregate_and_pivot
 
@@ -485,7 +487,6 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         col_subset: list[Any] = []
         col_score: list[Any] = []
         col_experiments: list[Any] = []
-        col_model_meta: list[Any] = []
 
         for model_result in bench_results:
             mn = model_result.model_name
@@ -496,20 +497,38 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                 if mm is not None and mm.experiment_kwargs
                 else None
             )
-            # Only the fields an ablation can plausibly change, not the whole
-            # `ModelMeta` — avoids `to_dict()`'s loader-name serialization
-            # (which the API side would otherwise have to resolve back) and
-            # keeps every row's dict the same fixed shape (no heterogeneous
-            # per-experiment key sets to reconcile downstream).
-            meta_dict = (
-                {
-                    "model_type": mm.model_type,
-                    "embed_dim": mm.embed_dim,
-                    "output_dtypes": mm.output_dtypes,
-                }
-                if mm is not None and exp_kwargs
-                else None
-            )
+            if mm is not None and exp_kwargs:
+                # Fold in the fields an ablation can plausibly change beyond
+                # the kwarg it's named after (e.g. jina-v4's
+                # vector_type=multi_vector experiment runs late-interaction,
+                # not the base model's dense) — into this same dict, not a
+                # separate column, so both the experiment's identity
+                # (_experiment_id) and what's shown to users include them.
+                # Only these three, not the whole `ModelMeta` — avoids
+                # `to_dict()`'s loader-name serialization (which the API
+                # side would otherwise have to resolve back) and keeps every
+                # row's dict a bounded shape (no heterogeneous per-experiment
+                # key sets to reconcile downstream). Skips None/empty values
+                # (e.g. output_dtypes is usually unset) and values that match
+                # the static registry entry's own — almost every run has all
+                # three set, so without diffing against the base, every
+                # experiment would carry same-as-base values regardless of
+                # whether the ablation actually touched that field.
+                default_meta = MODEL_REGISTRY.get(mn)
+                for field, value in (
+                    ("model_type", mm.model_type),
+                    ("embed_dim", mm.embed_dim),
+                    ("output_dtypes", mm.output_dtypes),
+                ):
+                    default_value = (
+                        getattr(default_meta, field)
+                        if default_meta is not None
+                        else None
+                    )
+                    if value == default_value:
+                        continue
+                    if _has_meaningful_value(value):
+                        exp_kwargs[field] = value
             for task_result in model_result.task_results:
                 tn = task_result.task_name
                 for split, scores_list in task_result.scores.items():
@@ -522,7 +541,6 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                         col_subset.append(score_item.get("hf_subset", "default"))
                         col_score.append(score_item.get("main_score", None))
                         col_experiments.append(exp_kwargs)
-                        col_model_meta.append(meta_dict)
 
         if not col_model_name:
             return None
@@ -537,7 +555,6 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                 "subset": col_subset,
                 "score": col_score,
                 "experiments": col_experiments,
-                "model_meta": col_model_meta,
             }
         )
         if include_model_revision is False:

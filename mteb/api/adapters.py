@@ -100,11 +100,12 @@ def run_model_meta_to_schema(
     `vector_type=multi_vector` experiment runs `late-interaction`, not the
     base model's `dense`), while everything else — name, params, languages,
     openness, ... — stays whatever's on the static MODEL_REGISTRY entry.
-    `run_meta` (see `benchmark_results.py::_build_pre_agg_df`'s `model_meta`
-    column) only ever carries `model_type` / `embed_dim` / `output_dtypes`
-    for exactly this reason, so patching is a plain `model_copy` — no need to
-    re-validate a full `ModelMeta` (and resolve `loader` back from its
-    serialized name) just to read three fields.
+    `run_meta` (see `benchmark_results.py::_build_pre_agg_df`, which folds
+    each run's `model_type`/`embed_dim`/`output_dtypes` into the same
+    `experiments` dict its own kwargs live in) may carry other keys too —
+    only `_RUN_OVERRIDE_FIELDS` are read here, so patching is a plain
+    `model_copy` — no need to re-validate a full `ModelMeta` (and resolve
+    `loader` back from its serialized name) just to read three fields.
     """
     overrides = {
         k: run_meta[k] for k in _RUN_OVERRIDE_FIELDS if run_meta.get(k) is not None
