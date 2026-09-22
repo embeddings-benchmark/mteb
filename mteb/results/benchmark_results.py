@@ -328,19 +328,13 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
             na_position="last",
         )
 
-        # `experiment_name` is part of the group key so an experiment variant
-        # never collapses into (or overwrites) the base model's row for a
-        # task they both happen to share.
         task_df = task_df.groupby(
             ["model", "experiment_name", "task_name"], as_index=False
         ).first()
 
         # Reconstruct model results
         model_results = []
-        # Group by original revision (+ experiment_name) to maintain
-        # deterministic behavior. After the first() selection above, each
-        # (model, experiment_name, task_name) is unique, so grouping by
-        # original revision ensures consistent ModelResult creation.
+        # Group by original revision (+ experiment_name) to maintain deterministic behavior.
         for (model, model_revision, experiment_name), group in task_df.groupby(
             ["model", "revision", "experiment_name"]
         ):

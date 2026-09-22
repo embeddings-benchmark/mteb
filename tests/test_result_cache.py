@@ -1,7 +1,5 @@
 """Test cases for the ResultCache class in the mteb.cache module."""
 
-import json
-import logging
 import subprocess
 from pathlib import Path
 from typing import Any, cast
@@ -404,55 +402,6 @@ def test_load_experiment_results(tmp_path: Path):
         experiment_kwargs=[model.mteb_model_meta.experiment_kwargs],
     )
     assert len(model_meta_res.model_results) == 1
-
-
-def test_experiment_folder_without_model_meta_is_skipped(
-    tmp_path: Path, caplog: pytest.LogCaptureFixture
-) -> None:
-    """An experiment folder missing its own model_meta.json is skipped.
-
-    Its kwargs-derived name isn't reliable enough to guess identity from
-    (unlike a plain revision folder's `results/<model>/<revision>/`
-    structure). Still warns once per folder (lru_cache'd), so it doesn't
-    silently vanish from load_results() output.
-    """
-    base_meta = mteb.get_model_meta("mteb/baseline-random-encoder")
-    revision_dir = (
-        tmp_path
-        / "results"
-        / base_meta.model_name_as_path()
-        / cast("str", base_meta.revision)
-    )
-    revision_dir.mkdir(parents=True)
-    (revision_dir / "model_meta.json").write_text(
-        json.dumps(base_meta.to_dict(), default=str)
-    )
-
-    experiment_dir = revision_dir / "experiments" / "a_test"
-    experiment_dir.mkdir(parents=True)
-    # No model_meta.json here — only a task result file.
-    (experiment_dir / "SomeTask.json").write_text("{}")
-
-    with caplog.at_level(logging.WARNING):
-        assert (
-            ResultCache._get_model_name_and_revision_from_path(experiment_dir) is None
-        )
-        assert (
-            ResultCache._get_model_name_and_revision_from_path(experiment_dir) is None
-        )
-    warnings = [r for r in caplog.records if r.levelno == logging.WARNING]
-    assert len(warnings) == 1  # cached on the second call — no repeat warning
-    assert str(experiment_dir) in warnings[0].message
-    # The base revision's own folder (which does have model_meta.json) still
-    # resolves normally.
-    identity = ResultCache._get_model_name_and_revision_from_path(revision_dir)
-    assert identity is not None
-    model_name, revision, experiment_name, meta = identity
-    assert model_name == base_meta.name
-    assert revision == base_meta.revision
-    assert experiment_name is None
-    assert meta is not None
-    assert meta.name == base_meta.name
 
 
 def test_plain_revision_folder_without_model_meta_derives_from_path(

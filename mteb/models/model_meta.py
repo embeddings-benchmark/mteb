@@ -519,10 +519,6 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             kwargs["embed_dim"] = embed_dim
 
         merged_kwargs = {**base_exp_kwargs, **kwargs} if kwargs else base_exp_kwargs
-        # Only meaningful kwargs count toward the experiment's identity — an
-        # explicit-but-empty override like `model_kwargs={}` shouldn't spin
-        # up a distinct experiment from the base model. The loader call
-        # below still gets every kwarg as passed, filtered or not.
         meaningful_exp_kwargs = {
             k: v for k, v in merged_kwargs.items() if _has_meaningful_value(v)
         }
