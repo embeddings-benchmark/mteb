@@ -24,16 +24,7 @@ class KorSarcasmClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@misc{kim2019kocasm,
-  author = {Kim, Jiwon and Cho, Won Ik},
-  howpublished = {https://github.com/SpellOnYou/korean-sarcasm},
-  journal = {GitHub repository},
-  publisher = {GitHub},
-  title = {Kocasm: Korean Automatic Sarcasm Detection},
-  year = {2019},
-}
-""",
+        bibtex_citation="",
         superseded_by="KorSarcasmClassification.v2",
     )
 
@@ -60,16 +51,7 @@ class KorSarcasmClassificationV2(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@misc{kim2019kocasm,
-  author = {Kim, Jiwon and Cho, Won Ik},
-  howpublished = {https://github.com/SpellOnYou/korean-sarcasm},
-  journal = {GitHub repository},
-  publisher = {GitHub},
-  title = {Kocasm: Korean Automatic Sarcasm Detection},
-  year = {2019},
-}
-""",
+        bibtex_citation="",
         adapted_from=["KorSarcasmClassification"],
     )
 

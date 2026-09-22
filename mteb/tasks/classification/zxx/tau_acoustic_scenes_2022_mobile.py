@@ -28,9 +28,14 @@ class TAUAcousticScenes2022Mobile(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @dataset{heittola_2022_6337421,
-  author = {Toni Heittola and Annamaria Mesaros and Tuomas Virtanen},
+  author = {Heittola, Toni and
+Mesaros, Annamaria and
+Virtanen, Tuomas},
+  doi = {10.5281/zenodo.6337421},
+  month = mar,
   publisher = {Zenodo},
-  title = {TAU Urban Acoustic Scenes 2022 Mobile, Development Dataset},
+  title = {TAU Urban Acoustic Scenes 2022 Mobile, Development
+dataset},
   url = {https://doi.org/10.5281/zenodo.6337421},
   year = {2022},
 }

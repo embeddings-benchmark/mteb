@@ -3,8 +3,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
-from sentence_transformers import SentenceTransformer
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator, VideoCollator
@@ -17,6 +15,7 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, EncodeKwargs
+
 
 from .bidirlm_models import (
     BIDIRLM_CITATION,
@@ -86,7 +85,7 @@ class BidirLMOmniEncoder(AbsEncoder):
         self,
         model_name: str,
         revision: str | None = None,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         trust_remote_code: bool = True,
         max_text_length: int = 1024,
         fps: float | None = 2.0,
@@ -95,6 +94,12 @@ class BidirLMOmniEncoder(AbsEncoder):
         max_samples: int | None = 30 * 16_000,
         **kwargs: Any,
     ) -> None:
+        import torch
+        from sentence_transformers import SentenceTransformer
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         from transformers import AutoVideoProcessor
 
         processor_kwargs = kwargs.get("processor_kwargs", {})
@@ -180,6 +185,8 @@ class BidirLMOmniEncoder(AbsEncoder):
         Builds conversation messages from whichever modalities are present and
         delegates to SentenceTransformer.encode() via the native 'message' modality.
         """
+        import torch
+
         ds_features = inputs.dataset.features
         has_text = "text" in ds_features
         has_image = "image" in ds_features

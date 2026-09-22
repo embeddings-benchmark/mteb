@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -10,6 +9,7 @@ from mteb.models.modality_collators import AudioCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb import TaskMetadata
@@ -43,6 +43,7 @@ class ImageBindWrapper(AbsEncoder):
         device: str | None = None,
         **kwargs: Any,
     ) -> None:
+        import torch
         from imagebind.models import imagebind_model
 
         self.device = device or (
@@ -66,6 +67,7 @@ class ImageBindWrapper(AbsEncoder):
 
     def _load_images(self, images: list) -> torch.Tensor:
         """Transform PIL images using ImageBind's vision pipeline."""
+        import torch
         from PIL import Image as PILImage
         from torchvision import transforms
 
@@ -93,6 +95,7 @@ class ImageBindWrapper(AbsEncoder):
     def _load_audio(self, audio_items: list) -> torch.Tensor:
         """Process audio arrays in-memory using ImageBind's mel spectrogram pipeline."""
         import numpy as np
+        import torch
         import torchaudio
         from imagebind.data import get_clip_timepoints, waveform2melspec
         from pytorchvideo.data.clip_sampling import ConstantClipsPerVideoSampler
@@ -128,30 +131,31 @@ class ImageBindWrapper(AbsEncoder):
 
         return torch.stack(audio_outputs, dim=0)
 
-    @torch.inference_mode()
     def _encode_batch(self, batch: BatchedInput) -> torch.Tensor:
+        import torch
         from imagebind.models.imagebind_model import ModalityType
 
-        inputs = {}
-        if batch.get("text"):
-            inputs[ModalityType.TEXT] = self._load_text(batch["text"])
-        if batch.get("image"):
-            inputs[ModalityType.VISION] = self._load_images(batch["image"])
-        if batch.get("audio"):
-            inputs[ModalityType.AUDIO] = self._load_audio(batch["audio"])
+        with torch.inference_mode():
+            inputs = {}
+            if batch.get("text"):
+                inputs[ModalityType.TEXT] = self._load_text(batch["text"])
+            if batch.get("image"):
+                inputs[ModalityType.VISION] = self._load_images(batch["image"])
+            if batch.get("audio"):
+                inputs[ModalityType.AUDIO] = self._load_audio(batch["audio"])
 
-        if not inputs:
-            raise ValueError(
-                f"No supported modality found in batch: {list(batch.keys())}"
-            )
+            if not inputs:
+                raise ValueError(
+                    f"No supported modality found in batch: {list(batch.keys())}"
+                )
 
-        outputs = self.model(inputs)
+            outputs = self.model(inputs)
 
-        embeddings = None
-        for emb in outputs.values():
-            embeddings = emb if embeddings is None else embeddings + emb
+            embeddings = None
+            for emb in outputs.values():
+                embeddings = emb if embeddings is None else embeddings + emb
 
-        return torch.nn.functional.normalize(embeddings, p=2, dim=-1)
+            return torch.nn.functional.normalize(embeddings, p=2, dim=-1)
 
     def encode(
         self,
@@ -163,6 +167,8 @@ class ImageBindWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         has_audio = "audio" in inputs.dataset.features
 
         if has_audio:

@@ -64,7 +64,7 @@ def _prewarm_list_schemas() -> None:
     ):
         futures = [
             ex.submit(_menu_schemas_bytes),
-            ex.submit(_benchmark_schemas_bytes),
+            ex.submit(_benchmark_schemas_bytes, False),
             ex.submit(_filtered_task_schemas_bytes, None, None, None, None, None),
             ex.submit(
                 _filtered_model_schemas_bytes,

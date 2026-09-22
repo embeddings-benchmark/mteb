@@ -14,15 +14,6 @@ if TYPE_CHECKING:
 
 
 _BIBTEX = r"""
-@misc{doshi2026tableir,
-  author = {Doshi, Meet and Boni, Odellia and Kumar, Vishwajeet and Sen, Jaydeep and Joshi, Sachindra},
-  howpublished = {https://huggingface.co/collections/ibm-research/table-text-ir-evaluation},
-  institution = {IBM Research},
-  note = {Hugging Face dataset collection},
-  title = {TableIR Eval: Table-Text IR Evaluation Collection},
-  year = {2026},
-}
-
 @inproceedings{herzig-etal-2021-open,
   address = {Online},
   author = {Herzig, Jonathan and M{\"u}ller, Thomas and Krichene, Syrine and Eisenschlos, Julian Martin},

@@ -36,24 +36,14 @@ class MSMARCOv2(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{DBLP:journals/corr/NguyenRSGTMD16,
+@misc{bajaj2018msmarcohumangenerated,
   archiveprefix = {arXiv},
-  author = {Tri Nguyen and
-Mir Rosenberg and
-Xia Song and
-Jianfeng Gao and
-Saurabh Tiwary and
-Rangan Majumder and
-Li Deng},
-  bibsource = {dblp computer science bibliography, https://dblp.org},
-  biburl = {https://dblp.org/rec/journals/corr/NguyenRSGTMD16.bib},
+  author = {Payal Bajaj and Daniel Campos and Nick Craswell and Li Deng and Jianfeng Gao and Xiaodong Liu and Rangan Majumder and Andrew McNamara and Bhaskar Mitra and Tri Nguyen and Mir Rosenberg and Xia Song and Alina Stoica and Saurabh Tiwary and Tong Wang},
   eprint = {1611.09268},
-  journal = {CoRR},
-  timestamp = {Mon, 13 Aug 2018 16:49:03 +0200},
-  title = {{MS} {MARCO:} {A} Human Generated MAchine Reading COmprehension Dataset},
-  url = {http://arxiv.org/abs/1611.09268},
-  volume = {abs/1611.09268},
-  year = {2016},
+  primaryclass = {cs.CL},
+  title = {MS MARCO: A Human Generated MAchine Reading COmprehension Dataset},
+  url = {https://arxiv.org/abs/1611.09268},
+  year = {2018},
 }
 """,
         adapted_from=["MSMARCO"],

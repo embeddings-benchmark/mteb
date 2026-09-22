@@ -3,14 +3,12 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
-import torch.nn.functional as F
-
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -50,6 +48,9 @@ class NomicWrapper(SentenceTransformerEncoderWrapper):
         **kwargs: Any,
     ) -> Array:
         # default to search_document if input_type and prompt_name are not provided
+        import torch
+        import torch.nn.functional as F
+
         prompt_name = (
             self.get_prompt_name(task_metadata, prompt_type)
             or PromptType.document.value

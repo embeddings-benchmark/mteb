@@ -3,8 +3,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
-
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
@@ -30,6 +28,8 @@ class UAEWrapper(SentenceTransformerEncoderWrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         prompt_name = self.get_prompt_name(task_metadata, prompt_type)
         sentences = [text for batch in inputs for text in batch["text"]]
 

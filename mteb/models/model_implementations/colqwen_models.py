@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -14,6 +13,7 @@ from mteb.types import OutputDType
 if TYPE_CHECKING:
     from collections.abc import Callable, Mapping
 
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -94,6 +94,7 @@ class ColQwen3_5Wrapper(AbsEncoder):  # noqa: N801
         device: str | None = None,
         **kwargs: Any,
     ):
+        import torch
         from colpali_engine.models import ColQwen3_5, ColQwen3_5Processor
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
@@ -141,6 +142,7 @@ class ColQwen3_5Wrapper(AbsEncoder):  # noqa: N801
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
         import torchvision.transforms.functional as F
         from PIL import Image
 
@@ -197,6 +199,8 @@ class ColQwen3_5Wrapper(AbsEncoder):  # noqa: N801
         return padded
 
     def similarity(self, a: Array, b: Array) -> Array:
+        import torch
+
         a = [torch.as_tensor(x) for x in a]
         b = [torch.as_tensor(x) for x in b]
         return self.processor.score_multi_vector(a, b, device=self.device)
@@ -214,6 +218,8 @@ class ColQwen3Wrapper(AbsEncoder):
         dtype: OutputDType | torch.dtype | str | None = OutputDType.BF16,
         **kwargs: Any,
     ):
+        import torch
+
         if isinstance(dtype, OutputDType):
             dtype = dtype.get_dtype()
 
@@ -275,6 +281,7 @@ class ColQwen3Wrapper(AbsEncoder):
         fusion_mode: str = "concat",
         **kwargs: Any,
     ) -> Array:
+        import torch
         import torchvision.transforms.functional as F
         from PIL import Image
 
@@ -372,6 +379,8 @@ class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         features = inputs.dataset.features
         if "video" in features:
             inputs.collate_fn = VideoCollator(
@@ -414,6 +423,8 @@ class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
         process_fn: Callable[[Any], Mapping[str, torch.Tensor]],
         desc: str,
     ) -> torch.Tensor:
+        import torch
+
         all_embeds = []
         with torch.no_grad():
             for batch in tqdm(loader, desc=desc):
@@ -429,6 +440,8 @@ class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
     def get_audio_embeddings(
         self, audios: DataLoader[BatchedInput], batch_size: int = 32, **kwargs: Any
     ) -> Array:
+        import torch
+
         def _process(
             audio: AudioInputItem | torch.Tensor,
         ) -> Mapping[str, torch.Tensor]:
@@ -517,15 +530,6 @@ TOMORO_TRAINING_DATA = {
     "VisRAG-Ret-Train-In-domain-data",
 }
 
-TOMORO_CITATION = """
-@misc{huang2025tomoro_colqwen3_embed,
-  title={TomoroAI/tomoro-colqwen3-embed},
-  author={Xin Huang and Kye Min Tan and Albert Phelps},
-  year={2025},
-  url={https://huggingface.co/TomoroAI/tomoro-colqwen3-embed-8b}
-}
-"""
-
 colqwen3_8b = ModelMeta(
     loader=ColQwen3Wrapper,
     name="TomoroAI/tomoro-colqwen3-embed-8b",
@@ -548,7 +552,6 @@ colqwen3_8b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=TOMORO_TRAINING_DATA,
-    citation=TOMORO_CITATION,
     extra_requirements_groups=["colqwen3"],
 )
 
@@ -574,19 +577,9 @@ colqwen3_4b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=TOMORO_TRAINING_DATA,
-    citation=TOMORO_CITATION,
     extra_requirements_groups=["colqwen3"],
 )
 
-
-COLNOMIC_CITATION = """
-@misc{nomicembedmultimodal2025,
-  title={Nomic Embed Multimodal: Interleaved Text, Image, and Screenshots for Visual Document Retrieval},
-  author={Nomic Team},
-  year={2025},
-  publisher={Nomic AI},
-  url={https://nomic.ai/blog/posts/nomic-embed-multimodal}
-}"""
 
 COLNOMIC_TRAINING_DATA = {"VDRMultilingual"} | COLPALI_TRAINING_DATA
 COLNOMIC_LANGUAGES = [
@@ -622,7 +615,6 @@ colnomic_3b = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=COLNOMIC_TRAINING_DATA,
-    citation=COLNOMIC_CITATION,
     extra_requirements_groups=["colpali_engine"],
 )
 
@@ -650,7 +642,6 @@ colnomic_7b = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=COLNOMIC_TRAINING_DATA,
-    citation=COLNOMIC_CITATION,
     extra_requirements_groups=["colpali_engine"],
 )
 
@@ -789,15 +780,6 @@ class ColQwen3EngineWrapper(ColPaliEngineWrapper):
         )
 
 
-COLTURK_CITATION = """
-@misc{karatay2026colturkvdr,
-  title={ColTurk-VDR: A Late-Interaction Visual Document Retriever on Qwen3-VL-4B},
-  author={Karatay, Mert},
-  year={2026},
-  url={https://github.com/Verm1lion/ColTurk-VDR}
-}
-"""
-
 colturk_vdr_4b = ModelMeta(
     loader=ColQwen3EngineWrapper,
     loader_kwargs=dict(
@@ -823,7 +805,6 @@ colturk_vdr_4b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
-    citation=COLTURK_CITATION,
     extra_requirements_groups=["colpali_engine"],
     adapted_from="Qwen/Qwen3-VL-4B-Instruct",
 )
