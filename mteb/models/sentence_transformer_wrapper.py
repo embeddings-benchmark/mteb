@@ -725,20 +725,7 @@ class SparseEncoderWrapper(AbsEncoder):
 
 
 class MultiVectorSearchEncoderWrapper:
-    """Mixin class to add brute-force MaxSim indexing and search to a MultiVectorEncoder-backed encoder.
-
-    Implements [SearchProtocol][mteb.models.SearchProtocol]. Mirrors `PylateSearchEncoder`
-    (used the same way by `MultiVectorModel` for PyLate models): `index()`/`search()` call
-    `self._encode(...)` on the same object, so the concrete class combines this mixin with its own
-    model-loading and `_encode` -- see `MultiVectorWrapper`, the class that does so for
-    sentence-transformers' native `MultiVectorEncoder`.
-
-    Unlike `PylateSearchEncoder` (which builds a PLAID approximate-nearest-neighbor index via the
-    `pylate` package), this scores the full corpus -- or pre-ranked candidates -- directly against
-    each query with the model's own MaxSim `similarity()`, chunked over the corpus (via
-    `corpus_chunk_size`) to bound memory. This trades PLAID's approximate, sub-linear search for an
-    exact one with no dependency beyond sentence-transformers.
-    """
+    """Mixin class to add brute-force MaxSim indexing and search to a MultiVectorEncoder-backed encoder."""
 
     task_corpus: CorpusDatasetType | None = None
     corpus_chunk_size: int = 50_000
@@ -757,7 +744,7 @@ class MultiVectorSearchEncoderWrapper:
 
         Args:
             corpus: Corpus dataset to index.
-            task_metadata: Metadata of the task, used to determine how to index the corpus.
+            task_metadata: Metadata of the task.
             hf_split: Split of current task, allows to know some additional information about current split.
             hf_subset: Subset of current task. Similar to `hf_split` to get more information
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
@@ -916,24 +903,7 @@ class MultiVectorSearchEncoderWrapper:
 
 
 class MultiVectorWrapper(MultiVectorSearchEncoderWrapper):
-    """Loads and encodes sentence-transformers' native `MultiVectorEncoder` models.
-
-    Combines with the inherited `MultiVectorSearchEncoderWrapper` mixin to implement
-    [SearchProtocol][mteb.models.SearchProtocol] -- mirroring `MultiVectorModel(PylateSearchEncoder)`
-    for PyLate models. Registered as the `loader` for `MultiVectorEncoder`-backed models
-    (e.g. `lightonai/LateOn`, or the "Sentence Transformers" usage of `vidore/colpali-v1.3`) in the
-    mteb model registry.
-
-    Deliberately does *not* implement the plain `EncoderProtocol` (no public `encode()`): unlike
-    `SentenceTransformerEncoderWrapper`, encoding here produces a *ragged* list of variable-length
-    per-token tensors rather than a single fixed-size vector per input, which most non-retrieval
-    tasks (STS, Classification, ...) don't know how to consume. Presenting a public `encode()` would
-    let such a task run against it directly and fail confusingly deep inside its evaluator, instead
-    of the clear, early guard mteb otherwise gives for a `SearchProtocol`-only model.
-
-    Supports both text-only and multimodal (text + image) inputs, following the same
-    auto-detection pattern as `SentenceTransformerEncoderWrapper`.
-    """
+    """Loads and encodes sentence-transformers' native `MultiVectorEncoder` models."""
 
     mteb_model_meta: ModelMeta
 
@@ -955,12 +925,10 @@ class MultiVectorWrapper(MultiVectorSearchEncoderWrapper):
         """Wrapper for MultiVectorEncoder models.
 
         Args:
-            model: The MultiVectorEncoder model to use. Can be a string (model name) or a
-                MultiVectorEncoder model.
+            model: The MultiVectorEncoder model to use.
             revision: The revision of the model to use.
             device: The device used to load the model.
-            model_prompts: A dictionary mapping task names to prompt names. See
-                `SentenceTransformerEncoderWrapper` for the order of priority used to select a prompt.
+            model_prompts: A dictionary mapping task names to prompt names.
             corpus_chunk_size: Number of corpus documents to encode and score against the queries at
                 once, during a full-corpus search.
             fps: Target frames per second for video sampling (multimodal inputs only).
@@ -998,8 +966,6 @@ class MultiVectorWrapper(MultiVectorSearchEncoderWrapper):
             self.model = model
             self.mteb_model_meta = ModelMeta.from_multi_vector_encoder_model(self.model)
 
-        # MultiVectorEncoder doesn't subclass SentenceTransformer, but exposes the same
-        # `prompts` attribute that `_resolve_model_prompts` relies on.
         self.model_prompts = _resolve_model_prompts(self.model, model_prompts)  # type: ignore[arg-type]
         self.corpus_chunk_size = corpus_chunk_size
 
@@ -1030,18 +996,15 @@ class MultiVectorWrapper(MultiVectorSearchEncoderWrapper):
         """Encode the given inputs into per-token multi-vector embeddings.
 
         Args:
-            inputs: The inputs (text, or text + image for multimodal models) to encode.
-            task_metadata: The metadata of the task. Used to determine which prompt to use from
-                `model_prompts`, following the same priority order as
-                `SentenceTransformerEncoderWrapper.encode`.
+            inputs: The inputs to encode.
+            task_metadata: The metadata of the task
             hf_split: Split of current task.
             hf_subset: Subset of current task.
             prompt_type: The name type of prompt (query or document).
             **kwargs: Additional arguments to pass to the encoder.
 
         Returns:
-            A list of per-input token embeddings, one variable-length `(num_tokens, embed_dim)`
-            tensor per input.
+            A list of per-input token embeddings, one variable-length `(num_tokens, embed_dim)` tensor per input.
         """
         precision = kwargs.pop("precision", None)
         if precision not in {None, "float32"}:
