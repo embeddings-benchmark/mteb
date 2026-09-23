@@ -75,15 +75,29 @@ class OverwriteStrategy(HelpfulStrEnum):
     ONLY_CACHE = "only-cache"
 
 
+def _is_sentence_transformers_model(model: object) -> bool:
+    """Whether `model`'s class comes from the `sentence_transformers` package.
+
+    Used to decide whether a failed optional import (e.g. `SparseEncoder`, `MultiVectorEncoder`
+    not existing in the installed sentence-transformers version) should raise an actionable
+    `ImportError`, or silently return `False` so an unrelated custom `EncoderProtocol` model
+    (which just happens to reach this fallback check, e.g. a bare `ModelMeta`) isn't penalized
+    for sentence-transformers being outdated or partially unavailable.
+    """
+    return type(model).__module__.startswith("sentence_transformers")
+
+
 def _is_sparse_encoder(model: object) -> TypeGuard[SparseEncoder]:
     try:
         from sentence_transformers.sparse_encoder import SparseEncoder
     except ImportError:
-        raise ImportError(
-            "This looks like a sentence-transformers model, but 'SparseEncoder' isn't available "
-            "in your installed version. Please upgrade with `pip install -U sentence-transformers` "
-            "(>= 5.0.0) to use SparseEncoder models with mteb."
-        ) from None
+        if _is_sentence_transformers_model(model):
+            raise ImportError(
+                "This looks like a sentence-transformers model, but 'SparseEncoder' isn't available "
+                "in your installed version. Please upgrade with `pip install -U sentence-transformers` "
+                "(>= 5.0.0) to use SparseEncoder models with mteb."
+            ) from None
+        return False
     return isinstance(model, SparseEncoder)
 
 
@@ -91,12 +105,14 @@ def _is_multi_vector_encoder(model: object) -> TypeGuard[MultiVectorEncoder]:
     try:
         from sentence_transformers import MultiVectorEncoder
     except ImportError:
-        raise ImportError(
-            "This looks like a sentence-transformers model, but 'MultiVectorEncoder' isn't "
-            "available in your installed version. Please upgrade with "
-            "`pip install -U sentence-transformers` (>= 6.0.0) to use MultiVectorEncoder models "
-            "with mteb."
-        ) from None
+        if _is_sentence_transformers_model(model):
+            raise ImportError(
+                "This looks like a sentence-transformers model, but 'MultiVectorEncoder' isn't "
+                "available in your installed version. Please upgrade with "
+                "`pip install -U sentence-transformers` (>= 6.0.0) to use MultiVectorEncoder models "
+                "with mteb."
+            ) from None
+        return False
     return isinstance(model, MultiVectorEncoder)
 
 
@@ -112,6 +128,13 @@ def _sanitize_model(
     elif isinstance(model, CrossEncoder):
         wrapped_model = CrossEncoderWrapper(model)
         meta = wrapped_model.mteb_model_meta
+    elif isinstance(model, ModelMeta):
+        # Checked before the SparseEncoder/MultiVectorEncoder duck-typing below: a bare
+        # ModelMeta (e.g. from `mteb.get_model_meta(...)`) is unambiguously not a
+        # sentence-transformers instance, so there's no reason to trigger those optional
+        # imports just to fall through to this same branch anyway.
+        wrapped_model = model
+        meta = model
     elif hasattr(model, "mteb_model_meta"):
         model_meta = model.mteb_model_meta
         meta = (
@@ -127,7 +150,7 @@ def _sanitize_model(
         wrapped_model = MultiVectorWrapper(model)
         meta = wrapped_model.mteb_model_meta
     else:
-        meta = ModelMeta.create_empty() if not isinstance(model, ModelMeta) else model
+        meta = ModelMeta.create_empty()
         wrapped_model = meta
 
     model_name = cast("str", meta.name)
