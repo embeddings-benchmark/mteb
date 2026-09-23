@@ -19,6 +19,7 @@ from mteb._hf_integration.eval_result_model import (
     HFEvalResultSource,
 )
 from mteb.benchmarks import Benchmark
+from mteb.models.model_meta import ModelMeta
 
 from .task_result import TaskError, TaskResult
 
@@ -108,6 +109,7 @@ class ModelResult(BaseModel):
     )
     exceptions: list[TaskError] | None = None
     experiment_name: str | None = None
+    model_meta: ModelMeta | None = None
 
     def __repr__(self) -> str:
         n_entries = len(self.task_results)
@@ -166,6 +168,7 @@ class ModelResult(BaseModel):
             model_revision=self.model_revision,
             task_results=new_task_results,
             experiment_name=self.experiment_name,
+            model_meta=self.model_meta,
         )
 
     def select_tasks(self, tasks: Iterable[AbsTask]) -> ModelResult:
@@ -185,6 +188,7 @@ class ModelResult(BaseModel):
             model_revision=self.model_revision,
             task_results=new_task_results,
             experiment_name=self.experiment_name,
+            model_meta=self.model_meta,
         )
 
     @overload

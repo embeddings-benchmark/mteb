@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 import functools
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import polars as pl
 
@@ -11,6 +11,7 @@ import mteb
 from mteb.api.adapters import (
     benchmark_to_schema,
     model_meta_to_schema,
+    run_model_meta_to_schema,
     scoped_task_meta_schema,
     task_to_meta_schema,
 )
@@ -50,6 +51,7 @@ _SUMMARY_META_COLS = frozenset(
         "Rank (Mean Task)",
         "Rank",
         "Model",
+        "_experiment_id",
         "Zero-shot",
         "Active Parameters (B)",
         "Total Parameters (B)",
@@ -84,18 +86,16 @@ def _empty_summary(
 
 def _per_task_rows_and_cols(
     per_task_pl: pl.DataFrame,
-) -> tuple[dict[str, dict[str, float]], list[str]]:
-    """Return ``({model -> {task: score}}, task_cols)``; both empty on sentinel frame."""
+) -> tuple[dict[tuple[str, str], dict[str, float]], list[str]]:
+    """Return ``({(model, experiment_id) -> {task: score}}, task_cols)``; both empty on sentinel frame."""
     if "No results" in per_task_pl.columns or "Model" not in per_task_pl.columns:
         return {}, []
-    task_cols = [c for c in per_task_pl.columns if c != "Model"]
-    # Bulk column reads beat ``iter_rows(named=True)`` on wide per-task tables.
-    model_col = per_task_pl["Model"].to_list()
-    task_data = {c: per_task_pl[c].to_list() for c in task_cols}
-    rows = {
-        m: {c: float(v) for c, vals in task_data.items() if (v := vals[i]) is not None}
-        for i, m in enumerate(model_col)
-    }
+    meta_cols = {"Model", "_experiment_id"}
+    task_cols = [c for c in per_task_pl.columns if c not in meta_cols]
+    rows: dict[tuple[str, str], dict[str, float]] = {}
+    for prow in per_task_pl.iter_rows(named=True):
+        key = (prow["Model"], prow.get("_experiment_id") or "")
+        rows[key] = {col: float(v) for col in task_cols if (v := prow[col]) is not None}
     return rows, task_cols
 
 
@@ -245,6 +245,11 @@ async def build_benchmark_summary(  # noqa: PLR0914
 
     trained_on_by_model = _trained_on_map_cached(bench.name)
 
+    # (model_name, experiment_id) -> that experiment's kwargs, used for
+    # SummaryRowSchema.experiments and to patch MODEL_REGISTRY below via
+    # run_model_meta_to_schema. See _extract_variant_kwargs.
+    variants_by_model = _extract_variant_kwargs(long_df)
+
     type_cols = [c for c in summary_pl.columns if c not in _SUMMARY_META_COLS]
 
     # Lenient means under language filter so partial-coverage models don't
@@ -264,6 +269,7 @@ async def build_benchmark_summary(  # noqa: PLR0914
         trained_on_by_model,
         task_to_type,
         language_filtered,
+        variants_by_model,
     )
 
     return BenchmarkSummarySchema(
@@ -281,15 +287,17 @@ def _build_summary_rows(
     summary_pl: pl.DataFrame,
     summary: SummaryTable,
     type_cols: list[str],
-    per_task_rows: dict[str, dict[str, float]],
+    per_task_rows: dict[tuple[str, str], dict[str, float]],
     trained_on_by_model: dict[str, tuple[str, ...]],
     task_to_type: dict[str, str],
     language_filtered: bool,
+    variants_by_model: dict[tuple[str, str], dict[str, Any]] | None = None,
 ) -> list[SummaryRowSchema]:
     """Sync row-construction loop; off-loaded via ``asyncio.to_thread``."""
     rows: list[SummaryRowSchema] = []
     for idx, row in enumerate(summary_pl.iter_rows(named=True)):
         full = row["Model"]
+        experiment_id = row.get("_experiment_id") or ""
         meta = MODEL_REGISTRY.get(full)
         if meta is None:
             logger.debug("Skipping %s — no MODEL_REGISTRY entry", full)
@@ -297,7 +305,16 @@ def _build_summary_rows(
 
         zs_raw = row.get("Zero-shot")
         zs = int(zs_raw) if zs_raw is not None else None
-        model_schema = model_meta_to_schema(meta, zero_shot_pct=zs)
+        run_meta = (
+            variants_by_model.get((full, experiment_id))
+            if experiment_id and variants_by_model
+            else None
+        )
+        model_schema = (
+            run_model_meta_to_schema(meta, run_meta, zero_shot_pct=zs)
+            if run_meta
+            else model_meta_to_schema(meta, zero_shot_pct=zs)
+        )
 
         rank_raw = row.get(summary.rank_col)
         rank = int(rank_raw) if rank_raw is not None else idx + 1
@@ -308,7 +325,7 @@ def _build_summary_rows(
         scores_by_task_type = {
             col: v for col in type_cols if (v := row[col]) is not None
         }
-        scores_by_task = per_task_rows.get(full, {})
+        scores_by_task = per_task_rows.get((full, experiment_id), {})
 
         if language_filtered and scores_by_task:
             scores_by_task_type, mean_task, mean_type = _recompute_lenient_means(
@@ -339,6 +356,9 @@ def _build_summary_rows(
                 scores_by_task_type=scores_by_task_type,
                 scores_by_task=scores_by_task,
                 trained_on_tasks=list(trained_on_by_model.get(full, ())),
+                experiments=variants_by_model.get((full, experiment_id))
+                if variants_by_model
+                else None,
             )
         )
     return rows
@@ -365,30 +385,93 @@ async def build_benchmark_per_language(name: str) -> BenchmarkPerLanguageSchema:
     return BenchmarkPerLanguageSchema(benchmark_name=bench.name, rows=rows)
 
 
+def _extract_variant_kwargs(
+    long_df: pl.DataFrame,
+) -> dict[tuple[str, str], dict[str, Any]]:
+    """``(model_name, experiment_id) -> that experiment's kwargs``, from ``long_df``.
+
+    ``experiment_id`` is the kwargs serialized to a stable string (see
+    ``_serialize_experiment_kwargs_to_name``). The dict also carries that
+    run's own model_type/embed_dim/output_dtypes (folded in by
+    `_build_pre_agg_df`), used to patch MODEL_REGISTRY via
+    `run_model_meta_to_schema`.
+    """
+    variants_by_model: dict[tuple[str, str], dict[str, Any]] = {}
+    if "experiments" not in long_df.columns:
+        return variants_by_model
+    from mteb.models.model_meta import (
+        _has_meaningful_value,
+        _serialize_experiment_kwargs_to_name,
+    )
+
+    variant_pl = (
+        long_df.lazy()
+        .filter(pl.col("experiments").is_not_null())
+        .select(["model_name", "experiments"])
+        .unique(subset=["model_name", "experiments"])
+        .collect()
+    )
+    for vr in variant_pl.iter_rows(named=True):
+        exp = vr["experiments"]
+        if not exp:
+            continue
+        clean = {k: v for k, v in dict(exp).items() if _has_meaningful_value(v)}
+        if not clean:
+            continue
+        vid = _serialize_experiment_kwargs_to_name(clean) or ""
+        if not vid:
+            continue
+        variants_by_model[(vr["model_name"], vid)] = clean
+    return variants_by_model
+
+
 def _build_per_language_rows(
     long_df: pl.DataFrame,
 ) -> list[BenchmarkPerLanguageRowSchema]:
     """Sync groupby + row accumulation; off-loaded via ``asyncio.to_thread``."""
+    from mteb.benchmarks._create_table import (
+        _EXPERIMENT_ID_COL,
+        _ensure_experiment_id,
+        _incomplete_task_pairs,
+        _null_incomplete_scores,
+    )
+
+    # One row per (model, experiment variant), matching Summary/Per-task.
+    long_df = _ensure_experiment_id(long_df)
+    variants_by_model = _extract_variant_kwargs(long_df)
+
+    # Null partially-covered (model, variant, task) scores before averaging
+    # — same rule _create_table.py applies elsewhere (issue #5101).
+    long_df = _null_incomplete_scores(
+        long_df,
+        _incomplete_task_pairs(long_df),
+        keys=("model_name", _EXPERIMENT_ID_COL, "task_name"),
+    )
     grouped = (
         long_df.lazy()
         .explode("language")
-        .group_by(["model_name", "language"])
+        .group_by(["model_name", _EXPERIMENT_ID_COL, "language"])
         .agg(pl.col("score").mean().alias("score"))
         .collect(engine="streaming")
     )
     model_names = grouped["model_name"].to_list()
+    experiment_ids = grouped[_EXPERIMENT_ID_COL].to_list()
     codes = grouped["language"].to_list()
     scores = grouped["score"].to_list()
-    rows: dict[str, dict[str, float]] = {}
-    for mn, code, score in zip(model_names, codes, scores, strict=True):
+    rows: dict[tuple[str, str], dict[str, float]] = {}
+    for mn, eid, code, score in zip(
+        model_names, experiment_ids, codes, scores, strict=True
+    ):
         if not mn or code is None or score is None:
             continue
-        rows.setdefault(mn, {})[language_label(code)] = score
+        rows.setdefault((mn, eid or ""), {})[language_label(code)] = score
     return [
         BenchmarkPerLanguageRowSchema.model_construct(
-            model_name=mn, scores_by_language=s
+            model_name=mn,
+            scores_by_language=s,
+            experiments=variants_by_model.get((mn, eid)) if eid else None,
         )
-        for mn, s in rows.items()
+        for (mn, eid), s in rows.items()
     ]
 
 

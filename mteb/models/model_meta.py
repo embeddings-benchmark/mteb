@@ -518,12 +518,15 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             updates["embed_dim"] = embed_dim
             kwargs["embed_dim"] = embed_dim
 
-        merged_exp_kwargs = {**base_exp_kwargs, **kwargs} if kwargs else base_exp_kwargs
-        updates["experiment_kwargs"] = merged_exp_kwargs or None
+        merged_kwargs = {**base_exp_kwargs, **kwargs} if kwargs else base_exp_kwargs
+        meaningful_exp_kwargs = {
+            k: v for k, v in merged_kwargs.items() if _has_meaningful_value(v)
+        }
+        updates["experiment_kwargs"] = meaningful_exp_kwargs or None
 
         # Allow overwrites
         _kwargs = _self.loader_kwargs.copy()
-        _kwargs.update(merged_exp_kwargs)
+        _kwargs.update(merged_kwargs)
         if device is not None:
             _kwargs["device"] = device
 
@@ -1848,6 +1851,19 @@ def _collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
             similar.update(_collect_similar_tasks(parent, visited))
 
     return similar
+
+
+def _has_meaningful_value(value: Any) -> bool:  # noqa: ANN401
+    """``False`` for ``None`` or an empty collection (dict/list/tuple/set/str).
+
+    Filters out no-op values like ``model_kwargs={}`` while keeping
+    meaningful falsy ones like ``use_image_modality=False``.
+    """
+    if value is None:
+        return False
+    if isinstance(value, (dict, list, tuple, set, str)):
+        return len(value) > 0
+    return True
 
 
 def _serialize_experiment_kwargs_to_name(
