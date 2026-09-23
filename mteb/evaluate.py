@@ -129,10 +129,6 @@ def _sanitize_model(
         wrapped_model = CrossEncoderWrapper(model)
         meta = wrapped_model.mteb_model_meta
     elif isinstance(model, ModelMeta):
-        # Checked before the SparseEncoder/MultiVectorEncoder duck-typing below: a bare
-        # ModelMeta (e.g. from `mteb.get_model_meta(...)`) is unambiguously not a
-        # sentence-transformers instance, so there's no reason to trigger those optional
-        # imports just to fall through to this same branch anyway.
         wrapped_model = model
         meta = model
     elif hasattr(model, "mteb_model_meta"):
