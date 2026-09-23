@@ -1853,7 +1853,7 @@ def _collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
     return similar
 
 
-def _has_meaningful_value(value: Any) -> bool:  # noqa: ANN401 -- checks arbitrary kwarg values
+def _has_meaningful_value(value: Any) -> bool:  # noqa: ANN401
     """``False`` for ``None`` or an empty collection (dict/list/tuple/set/str).
 
     Filters out no-op values like ``model_kwargs={}`` while keeping

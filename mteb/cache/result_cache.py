@@ -724,7 +724,7 @@ class ResultCache:
                      pre-computed JSON cache.
             save_rebuilt_to_disk: Whether a full rebuild (strategy 3, or
                 forced via ``rebuild=True``) persists its result to
-                ``cache_path``. See ``_rebuild_from_full_repository``.
+                ``cache_path`` in ``__cached_results.json``
 
         Strategy:
             1. If rebuild=False and local cache exists at cache_path → load and return
@@ -986,9 +986,6 @@ class ResultCache:
         model_meta_path = revision_path / "model_meta.json"
         if not model_meta_path.exists():
             if _EXPERIMENTS_FOLDER_NAME in revision_path.parts:
-                # Warning (not debug): drops every task file under this
-                # folder, and only logs once per folder since this method
-                # is lru_cache'd.
                 logger.warning(
                     f"No model_meta.json in experiment folder {revision_path} "
                     "— skipping every result file under it."
@@ -1437,8 +1434,7 @@ class ResultCache:
 
             if only_main_score:
                 task_result = task_result.only_main_score()
-            # `_get_model_name_and_revision_from_path` already warns (once
-            # per folder, lru_cache'd) when it returns None.
+
             identity = self._get_model_name_and_revision_from_path(path.parent)
             if identity is None:
                 continue
