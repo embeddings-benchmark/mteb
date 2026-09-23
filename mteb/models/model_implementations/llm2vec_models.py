@@ -3,8 +3,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
-
 from mteb._requires_package import suggest_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -65,6 +63,8 @@ class LLM2VecModel(AbsEncoder):
         *args: Any,
         **kwargs: Any,
     ):
+        import torch
+
         model_name = kwargs.get("model_name", "LLM2Vec")
         from llm2vec import LLM2Vec
 

@@ -27,6 +27,7 @@ class SickePLPC(AbsTaskPairClassification):
         bibtex_citation=r"""
 @inproceedings{dadas-etal-2020-evaluation,
   address = {Marseille, France},
+  archiveprefix = {arXiv},
   author = {Dadas, Slawomir  and
 Pere{\l}kiewicz, Micha{\l}  and
 Po{\'s}wiata, Rafa{\l}},
@@ -45,6 +46,7 @@ Mazo, H{\'e}l{\`e}ne  and
 Moreno, Asuncion  and
 Odijk, Jan  and
 Piperidis, Stelios},
+  eprint = {1910.11834},
   isbn = {979-10-95546-34-4},
   language = {English},
   month = may,
@@ -186,6 +188,7 @@ class PscPC(AbsTaskPairClassification):
   author = {Ogrodniczuk, Maciej  and
 Kope{\'c}, Mateusz},
   booktitle = {Proceedings of the Ninth International Conference on Language Resources and Evaluation ({LREC}'14)},
+  doi = {10.63317/5254a9cpts99},
   editor = {Calzolari, Nicoletta  and
 Choukri, Khalid  and
 Declerck, Thierry  and

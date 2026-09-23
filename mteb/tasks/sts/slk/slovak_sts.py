@@ -43,6 +43,7 @@ S{\'a}sikov{\'a}, Krist{\'i}na  and
 Tamajka, Martin  and
 Simko, Marian},
   booktitle = {Findings of the Association for Computational Linguistics: ACL 2025},
+  doi = {10.18653/v1/2025.findings-acl.1371},
   editor = {Che, Wanxiang  and
 Nabende, Joyce  and
 Shutova, Ekaterina  and

@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -26,14 +25,6 @@ NOMIC_LANGUAGES = [
     "ita-Latn",  # Italian
 ]
 
-CITATION = """
-@misc{nomicembedmultimodal2025,
-  title={Nomic Embed Multimodal: Interleaved Text, Image, and Screenshots for Visual Document Retrieval},
-  author={Nomic Team},
-  year={2025},
-  publisher={Nomic AI},
-  url={https://www.nomic.ai/news/nomic-embed-multimodal}
-}"""
 
 # https://huggingface.co/datasets/nomic-ai/colpali-queries-mined-20250321-by-source
 TRAINING_DATA = COLPALI_TRAINING_DATA | {"VDRMultilingualRetrieval"}
@@ -53,6 +44,7 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
         base_revision: str | None = None,
         **kwargs: Any,
     ):
+        import torch
         from colpali_engine.models import BiQwen2_5, BiQwen2_5_Processor
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
@@ -105,6 +97,8 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
         batch_size: int = 32,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         all_embeds = []
 
         with torch.no_grad():
@@ -125,6 +119,8 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
         batch_size: int = 32,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         all_embeds = []
         with torch.no_grad():
             for batch in tqdm(texts, desc="Encoding texts"):
@@ -170,7 +166,6 @@ nomic_embed_multimodal_3b = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     training_datasets=TRAINING_DATA,
-    citation=CITATION,
     extra_requirements_groups=["colpali_engine"],
 )
 
@@ -200,6 +195,5 @@ nomic_embed_multimodal_7b = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     training_datasets=TRAINING_DATA,
-    citation=CITATION,
     extra_requirements_groups=["colpali_engine"],
 )

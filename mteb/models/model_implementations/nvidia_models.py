@@ -3,10 +3,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
-import torch.nn.functional as F
 from tqdm.auto import tqdm
-from transformers import AutoModel, AutoTokenizer
 
 from mteb.models import CrossEncoderWrapper, SentenceTransformerEncoderWrapper
 from mteb.models.abs_encoder import AbsEncoder
@@ -17,6 +14,7 @@ from mteb.types import OutputDType, PromptType
 if TYPE_CHECKING:
     from collections.abc import Callable
 
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb import TaskMetadata
@@ -42,16 +40,6 @@ LlamaEmbedNemotron_CITATION = """@misc{babakhin2025llamaembednemotron8buniversal
       archivePrefix={arXiv},
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2511.07025},
-}"""
-
-
-NEMOTRON_3_EMBED_CITATION = """@misc{babakhin2026nemotron3embed,
-    title={NVIDIA Nemotron 3 Embed Ranks \\#1 Overall on RTEB, Advancing Agentic Retrieval},
-    author={Yauhen Babakhin and Ronay Ak and Jiarui Cai and Vinay Raman and Radek Osmulski and Jakub Zakrzewski and Anmol Gupta and Oliver Holworthy and Sahel Sharifymoghaddam and Khang Pham and James Rong and Steve Han and Sean Sodha and Isabel Hulseman and Bo Liu},
-    year={2026},
-    month={July},
-    howpublished={Hugging Face Blog},
-    url={https://huggingface.co/blog/nvidia/nemotron-3-embed-wins-rteb},
 }"""
 
 
@@ -423,6 +411,9 @@ class LlamaEmbedNemotron(AbsEncoder):
         revision: str,
         device: str | None = None,
     ) -> None:
+        import torch
+        from transformers import AutoModel, AutoTokenizer
+
         self.model_name = model_name
         self.revision = revision
         self.max_seq_length = 4096
@@ -558,6 +549,9 @@ class LlamaEmbedNemotron(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+        import torch.nn.functional as F
+
         all_embeddings = []
         for batch in tqdm(
             dataloader, desc="Extracting embeddings...", disable=not show_progress_bar
@@ -719,7 +713,6 @@ nemotron_3_embed_1b_bf16 = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation=NEMOTRON_3_EMBED_CITATION,
     contacts=["ybabakhin"],
     output_dtypes=OutputDType.BF16,
     extra_requirements_groups=["nemotron-3-embed"],
@@ -751,7 +744,6 @@ nemotron_3_embed_8b_bf16 = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation=NEMOTRON_3_EMBED_CITATION,
     contacts=["ybabakhin"],
     output_dtypes=OutputDType.BF16,
     extra_requirements_groups=["nemotron-3-embed"],

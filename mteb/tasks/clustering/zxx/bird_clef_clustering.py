@@ -33,11 +33,13 @@ class BirdCLEFSpeciesClustering(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{canas2025birdclef,
-  author = {Cañas, Juan and Kahl, Stefan and Denton, Tom and Toro-Gómez, Maria and Rodriguez-Buritica, Susana and Benavides-Lopez, Jose and Ulloa, Juan and Caycedo-Rosales, Paula and Klinck, Holger and Goëau, Hervé and Vellinga, Willem-Pier and Planqué, Robert and Joly, Alexis},
-  month = {10},
-  pages = {},
-  title = {Overview of BirdCLEF+ 2025: Multi-Taxonomic Sound Identification in the Middle Magdalena, Colombia},
+@inproceedings{canas2025overview,
+  author = {Ca{\~n}as, Juan Sebasti{\'a}n and Kahl, Stefan and Denton, Tom and Toro-G{\'o}mez, Maria Paula and Rodriguez-Buritica, Susana and Benavides-Lopez, Jose Luis and Ulloa, Juan Sebasti{\'a}n and Caycedo-Rosales, Paula and Klinck, Holger and Go{\"e}au, Herv{\'e} and others},
+  booktitle = {Conference and Labs of the Evaluation Forum (CLEF 2025)},
+  number = {4038},
+  organization = {CEUR-WS},
+  pages = {2909--2919},
+  title = {Overview of BirdCLEF+ 2025: Multi-taxonomic sound identification in the Middle Magdalena, Colombia},
   year = {2025},
 }
 """,

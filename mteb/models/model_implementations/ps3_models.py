@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Literal
 
-import torch
-from torch.nn.functional import normalize
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -64,11 +62,16 @@ class PS3Model(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         pooling: Literal["global", "high_res"] = "global",
         model_dtype: str = "float32",
         **kwargs: Any,
     ):
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         from ps3 import PS3ImageProcessor, PS3TextModel, PS3Tokenizer, PS3VisionModel
 
         if pooling not in {"global", "high_res"}:
@@ -104,6 +107,9 @@ class PS3Model(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+        from torch.nn.functional import normalize
+
         all_text_embeddings = []
         with torch.no_grad():
             for batch in tqdm(
@@ -120,6 +126,9 @@ class PS3Model(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+        from torch.nn.functional import normalize
+
         all_image_embeddings = []
         with torch.no_grad():
             for batch in tqdm(
