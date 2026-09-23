@@ -207,10 +207,6 @@ def rerank_top_ranked_documents(  # noqa: PLR0913
         doc_indices = [doc_id_to_idx[doc_id] for doc_id in ranked_ids]
         candidate_embeddings: Array | list[Any]
         if isinstance(all_doc_embeddings, (torch.Tensor, np.ndarray)):
-            # Pre-convert to a tensor here (matching `query_embedding` below) so that
-            # `_convert_to_tensor` in similarity_functions.py doesn't force-downcast only
-            # this side to float32 while leaving an already-tensor query embedding at its
-            # original (e.g. float64) dtype, which would raise a dtype-mismatch error.
             candidate_embeddings = torch.as_tensor(all_doc_embeddings[doc_indices])
         else:
             # Ragged (variable-length) multi-vector embeddings: a plain list of per-document
