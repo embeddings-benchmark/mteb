@@ -725,7 +725,7 @@ class SparseEncoderWrapper(AbsEncoder):
 
 
 class MultiVectorSearchEncoderWrapper:
-    """Mixin class to add brute-force MaxSim indexing and search to a MultiVectorEncoder-backed encoder."""
+    """Mixin class to add MaxSim indexing and search to a MultiVectorEncoder-backed encoder."""
 
     task_corpus: CorpusDatasetType | None = None
     corpus_chunk_size: int = 50_000
