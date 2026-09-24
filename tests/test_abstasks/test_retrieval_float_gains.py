@@ -162,6 +162,34 @@ def test_evaluate_without_gains_has_no_float_metrics() -> None:
     assert scores["main_score"] == scores["ndcg_at_10"]
 
 
+def test_ignore_identical_ids_applies_to_the_float_metric_consistently() -> None:
+    # ignore_identical_ids drops the query's own document from the ranking before
+    # scoring. The float metric must drop it from the ideal ranking too; otherwise
+    # the removed document's gain inflates the ideal DCG and a perfect ranking
+    # cannot reach 1.0.
+    class IdenticalIdsTask(GainsRetrievalTask):
+        ignore_identical_ids = True
+
+        def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+            super().load_data(num_proc, **kwargs)
+            split = self.dataset["default"]["test"]
+            # q1 retrieves itself: "q1" is also a corpus id with a gain
+            split["corpus"] = Dataset.from_list(
+                [{"id": "q1", "text": "doc q1"}]
+                + [{"id": f"d{i}", "text": f"doc {i}"} for i in range(1, 7)]
+            )
+            split["gains"] = {"q1": {"q1": 1.0, "d1": 0.5}, "q2": {"d6": 1.0}}
+
+    model = FixedScoreSearch({"q1": {"q1": 0.9, "d1": 0.8}, "q2": {"d6": 0.7}})
+
+    scores = IdenticalIdsTask().evaluate(model, split="test", encode_kwargs={})[
+        "default"
+    ]
+
+    # without q1's own document, both queries are ranked in ideal gain order
+    assert scores["ndcg_float_at_10"] == pytest.approx(1.0)
+
+
 def test_load_gains_preserves_float64(monkeypatch: pytest.MonkeyPatch) -> None:
     # the loader must NOT repeat the qrels int32 cast: gains are continuous
     # (e.g. sigmoid outputs), so 0.8 has to survive as 0.8

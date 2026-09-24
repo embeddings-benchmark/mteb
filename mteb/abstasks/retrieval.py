@@ -49,6 +49,7 @@ if TYPE_CHECKING:
     )
     from mteb.types import (
         EncodeKwargs,
+        GainsType,
         HFSubset,
         Modalities,
         QueryDatasetType,
@@ -78,6 +79,30 @@ def _filter_queries_without_positives(
     queries = queries.select(indices)
 
     return _relevant_docs, queries
+
+
+def _float_gain_scores(
+    gains: GainsType,
+    results: RetrievalOutputType,
+    k_values: Sequence[int],
+    ignore_identical_ids: bool,
+) -> dict[str, float]:
+    """NDCG over float gains, honouring `ignore_identical_ids` like the qrels metrics.
+
+    With `ignore_identical_ids`, each query's own document is dropped from both
+    the ranking and the gains, so it cannot inflate the ideal DCG. Copies are
+    filtered; the inputs are not mutated.
+    """
+    if ignore_identical_ids:
+        gains = {
+            query_id: {doc_id: g for doc_id, g in docs.items() if doc_id != query_id}
+            for query_id, docs in gains.items()
+        }
+        results = {
+            query_id: {doc_id: s for doc_id, s in docs.items() if doc_id != query_id}
+            for query_id, docs in results.items()
+        }
+    return ndcg_float_scores(gains, results, k_values)
 
 
 class AbsTaskRetrieval(AbsTask):
@@ -450,7 +475,7 @@ class AbsTaskRetrieval(AbsTask):
             hf_subset=hf_subset,
         )
         gain_scores = (
-            ndcg_float_scores(gains, results, self.k_values)
+            _float_gain_scores(gains, results, self.k_values, self.ignore_identical_ids)
             if gains is not None
             else {}
         )

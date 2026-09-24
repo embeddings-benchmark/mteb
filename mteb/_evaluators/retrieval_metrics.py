@@ -83,7 +83,9 @@ def ndcg_float_scores(
     gain, and a NaN model score, raise `ValueError` rather than being scored --
     each would otherwise reach the mean as a silent `nan` or an extra tie class.
     Unlike the integer-qrels metrics, `skip_first_result` is not applied to the
-    float metric.
+    float metric. The task layer applies `ignore_identical_ids` to both `gains`
+    and `results` before calling this function, so the query's own document is
+    dropped from the ranking and from the ideal ranking alike.
 
     Args:
         gains: Continuous gains for each query, `{query_id: {doc_id: gain}}`. Must
