@@ -71,11 +71,16 @@ def core_pyproject(pyproject: str) -> str:
     )
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--outdir", type=Path, default=REPO_ROOT / "dist")
-    args = parser.parse_args()
+def build(source: Path, outdir: Path) -> None:
+    """Build the sdist and wheel of `source` into `outdir`, in an isolated build environment."""
+    subprocess.run(
+        [sys.executable, "-m", "build", "--outdir", str(outdir.resolve()), str(source)],
+        check=True,
+    )
 
+
+def build_core_package(outdir: Path) -> None:
+    """Build `mteb-core` from the working tree into `outdir`."""
     with tempfile.TemporaryDirectory() as tmp:
         src = Path(tmp)
         pyproject = (REPO_ROOT / "pyproject.toml").read_text(encoding="utf-8")
@@ -87,17 +92,13 @@ def main() -> None:
             src / "mteb",
             ignore=shutil.ignore_patterns("__pycache__", "*.pyc"),
         )
-        subprocess.run(
-            [
-                sys.executable,
-                "-m",
-                "build",
-                "--outdir",
-                str(args.outdir.resolve()),
-                str(src),
-            ],
-            check=True,
-        )
+        build(src, outdir)
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
+    parser.add_argument("--outdir", type=Path, default=REPO_ROOT / "dist")
+    build_core_package(parser.parse_args().outdir)
 
 
 if __name__ == "__main__":

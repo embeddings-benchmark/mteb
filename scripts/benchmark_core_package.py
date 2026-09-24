@@ -13,6 +13,7 @@ Requires `uv` on the PATH. Usage:
 from __future__ import annotations
 
 import argparse
+import importlib.metadata
 import json
 import os
 import re
@@ -25,7 +26,8 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
+from build_core_package import REPO_ROOT, build, build_core_package
+
 PACKAGES = {"mteb": "mteb", "mteb-core": "mteb_core"}  # name -> wheel file prefix
 
 
@@ -34,32 +36,12 @@ def run(command: list[str], **kwargs) -> subprocess.CompletedProcess[str]:
 
 
 def build_wheels(outdir: Path) -> dict[str, Path]:
-    run(
-        [
-            sys.executable,
-            "-m",
-            "build",
-            "--wheel",
-            "--outdir",
-            str(outdir),
-            str(REPO_ROOT),
-        ]
-    )
-    run(
-        [
-            sys.executable,
-            str(REPO_ROOT / "scripts/build_core_package.py"),
-            "--outdir",
-            str(outdir),
-        ]
-    )
+    """Build `mteb` and `mteb-core` from the working tree."""
+    build(REPO_ROOT, outdir)
+    build_core_package(outdir)
     return {
         name: next(outdir.glob(f"{prefix}-*.whl")) for name, prefix in PACKAGES.items()
     }
-
-
-def venv_python(venv: Path) -> Path:
-    return venv / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
 
 
 def install(
@@ -68,7 +50,7 @@ def install(
     """Install `wheel` into a fresh venv with an empty cache and return the timing and size."""
     venv = workdir / f"venv-{wheel.name}-{tool}"
     run(["uv", "venv", "--seed", "--python", python_version, str(venv)])
-    python = venv_python(venv)
+    python = venv / "bin/python"
     if tool == "uv":
         command = ["uv", "pip", "install", "--python", str(python), str(wheel)]
         env = {**os.environ, "UV_CACHE_DIR": str(workdir / f"cache-{wheel.name}")}
@@ -79,9 +61,6 @@ def install(
     run(command, env=env)
     seconds = time.perf_counter() - start
 
-    listed = run(
-        ["uv", "pip", "list", "--python", str(python), "--format", "json"]
-    ).stdout
     site_packages = Path(
         run(
             [
@@ -92,9 +71,10 @@ def install(
         ).stdout.strip()
     )
     size = sum(f.stat().st_size for f in site_packages.rglob("*") if f.is_file())
+    installed = importlib.metadata.distributions(path=[str(site_packages)])
     return {
         "seconds": seconds,
-        "packages": len(json.loads(listed)),
+        "packages": len(list(installed)),
         "mb": size / 1e6,
         "python": python,
     }
@@ -156,7 +136,7 @@ def linux_download_size(wheel: Path, python_version: str) -> tuple[int, float]:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
     parser.add_argument("--python-version", default="3.12")
     parser.add_argument(
         "--repeats",
