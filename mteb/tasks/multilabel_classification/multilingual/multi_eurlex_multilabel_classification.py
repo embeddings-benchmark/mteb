@@ -76,10 +76,10 @@ class MultiEURLEXMultilabelClassificationV2(MultiEURLEXMultilabelClassification)
         update={
             "name": "MultiEURLEXMultilabelClassification.v2",
             "description": MultiEURLEXMultilabelClassification.metadata.description
-            + " This version scores at most 2000 rows of each evaluation split, sampled with iterative stratification over the labels.",
+            + " This version scores at most 3000 rows of each evaluation split, sampled with iterative stratification over the labels.",
             "superseded_by": None,
             "adapted_from": ["MultiEURLEXMultilabelClassification"],
         },
         deep=True,
     )
-    max_eval_samples = 2000
+    max_eval_samples = 3000

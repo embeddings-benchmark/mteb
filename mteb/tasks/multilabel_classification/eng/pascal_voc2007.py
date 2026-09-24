@@ -63,10 +63,10 @@ class VOC2007ClassificationV2(VOC2007Classification):
         update={
             "name": "VOC2007.v2",
             "description": VOC2007Classification.metadata.description
-            + " This version scores at most 2000 rows of each evaluation split, sampled with iterative stratification over the labels.",
+            + " This version scores at most 3000 rows of each evaluation split, sampled with iterative stratification over the labels.",
             "superseded_by": None,
             "adapted_from": ["VOC2007"],
         },
         deep=True,
     )
-    max_eval_samples = 2000
+    max_eval_samples = 3000

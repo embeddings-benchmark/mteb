@@ -1,9 +1,3 @@
-from .brazilian_toxic_tweets_classification import (
-    BrazilianToxicTweetsClassification,
-    BrazilianToxicTweetsClassificationV2,
-)
+from .brazilian_toxic_tweets_classification import BrazilianToxicTweetsClassification
 
-__all__ = [
-    "BrazilianToxicTweetsClassification",
-    "BrazilianToxicTweetsClassificationV2",
-]
+__all__ = ["BrazilianToxicTweetsClassification"]

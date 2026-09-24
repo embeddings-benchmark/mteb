@@ -81,10 +81,10 @@ class FSD2019KaggleMultilingualClassificationV2(
         update={
             "name": "FSD2019Kaggle.v2",
             "description": FSD2019KaggleMultilingualClassification.metadata.description
-            + " This version scores at most 2000 rows of each evaluation split, sampled with iterative stratification over the labels.",
+            + " This version scores at most 3000 rows of each evaluation split, sampled with iterative stratification over the labels.",
             "superseded_by": None,
             "adapted_from": ["FSD2019Kaggle"],
         },
         deep=True,
     )
-    max_eval_samples = 2000
+    max_eval_samples = 3000

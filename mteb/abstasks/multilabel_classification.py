@@ -87,7 +87,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
     evaluator_model: SklearnModelProtocol = KNeighborsClassifier(n_neighbors=5)
     input_column_name: str = "text"
     label_column_name: str = "label"
-    max_eval_samples: int | None = 2000
+    max_eval_samples: int | None = 3000
 
     @override
     def _evaluate_subset(  # type: ignore[override]  # noqa: PLR0914

@@ -1,9 +1,5 @@
-from .bird_set import (
-    BirdSetMultilabelClassification,
-    BirdSetMultilabelClassificationV2,
-)
+from .bird_set import BirdSetMultilabelClassification
 
 __all__ = [
     "BirdSetMultilabelClassification",
-    "BirdSetMultilabelClassificationV2",
 ]

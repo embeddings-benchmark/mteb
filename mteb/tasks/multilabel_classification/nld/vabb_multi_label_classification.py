@@ -53,10 +53,10 @@ class VABBMultiLabelClassificationV2(VABBMultiLabelClassification):
         update={
             "name": "VABBMultiLabelClassification.v2",
             "description": VABBMultiLabelClassification.metadata.description
-            + " This version scores at most 2000 rows of each evaluation split, sampled with iterative stratification over the labels.",
+            + " This version scores at most 3000 rows of each evaluation split, sampled with iterative stratification over the labels.",
             "superseded_by": None,
             "adapted_from": ["VABBMultiLabelClassification"],
         },
         deep=True,
     )
-    max_eval_samples = 2000
+    max_eval_samples = 3000
