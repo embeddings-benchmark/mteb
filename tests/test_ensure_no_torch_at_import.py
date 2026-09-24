@@ -127,8 +127,12 @@ def test_image_dataset_works_in_dataloader_worker_processes() -> None:
     assert [len(batch["image"]) for batch in loader] == [2, 1]
 
 
-def test_mteb_distribution_finds_mteb_or_mteb_core(monkeypatch) -> None:
-    """The version, extras and requirements are read from whichever of `mteb` and `mteb-core` is installed."""
+def test_mteb_distribution_finds_mteb_or_mteb_core(monkeypatch, caplog) -> None:
+    """The version, extras and requirements are read from whichever of `mteb` and `mteb-core` is installed.
+
+    Both ship the same files, so installing them together is a mistake worth warning about: uninstalling
+    either one then removes the files of the other.
+    """
     import importlib.metadata
 
     from mteb._requires_package import _mteb_distribution
@@ -142,14 +146,22 @@ def test_mteb_distribution_finds_mteb_or_mteb_core(monkeypatch) -> None:
         return distribution
 
     cases = [
-        (("mteb",), "mteb"),  # pip install mteb
-        (("mteb-core",), "mteb-core"),  # pip install mteb-core
+        (("mteb",), "mteb", False),  # pip install mteb
+        (("mteb-core",), "mteb-core", False),  # pip install mteb-core
+        (
+            ("mteb", "mteb-core"),
+            "mteb-core",
+            True,
+        ),  # both, which breaks on the next uninstall
     ]
     try:
-        for names, expected in cases:
+        for names, expected, warns in cases:
             monkeypatch.setattr(importlib.metadata, "distribution", installed(*names))
             _mteb_distribution.cache_clear()
-            assert _mteb_distribution() == expected
+            caplog.clear()
+            with caplog.at_level("WARNING"):
+                assert _mteb_distribution() == expected
+            assert ("both installed" in caplog.text) is warns, caplog.text
     finally:
         _mteb_distribution.cache_clear()
 
