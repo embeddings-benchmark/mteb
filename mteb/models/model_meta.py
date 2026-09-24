@@ -1850,6 +1850,22 @@ def _collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
     return similar
 
 
+def _merge_precision_into_experiment_kwargs(
+    experiment_kwargs: Mapping[str, Any] | None,
+    encode_kwargs: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Fold a ``precision`` encode kwarg into ``experiment_kwargs["output_dtypes"]``.
+
+    ``precision`` is forwarded to ``encode`` and changes the dtype of the produced
+    embeddings, so it must be folded into the same experiment namespace.
+    """
+    merged = dict(experiment_kwargs) if experiment_kwargs else {}
+    precision = encode_kwargs.get("precision")
+    if precision is not None:
+        merged["output_dtypes"] = OutputDType.from_str(precision).value
+    return merged
+
+
 def _serialize_experiment_kwargs_to_name(
     experiment_kwargs: Mapping[str, Any] | None,
     value_field_separator: str = "_",
