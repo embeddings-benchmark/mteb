@@ -2,8 +2,7 @@ import warnings
 
 import numpy as np
 import pytest
-from datasets import Dataset, Video
-from torchvision.transforms.functional import to_pil_image
+from datasets import Dataset
 
 import mteb
 from mteb._create_dataloaders import create_dataloader
@@ -22,8 +21,11 @@ from mteb.models.model_implementations.random_baseline import _image_to_vector
 from mteb.models.video_wrappers import DEFAULT_NUM_FRAMES
 from mteb.types import PromptType
 
-pytest.importorskip("torchcodec")
-pytest.importorskip("av")
+pytest.importorskip("torchcodec", reason="Video dependencies are not installed")
+pytest.importorskip("av", reason="Video dependencies are not installed")
+pytest.importorskip(
+    "datasets", minversion="4.0.0", reason="datasets.Video requires datasets>=4.0"
+)
 
 VIDEO_TASKS = [
     MockVideoRetrievalT2V(),
@@ -74,6 +76,9 @@ def test_default_num_frames():
 
 
 def test_pooled_embedding_is_mean_of_frame_embeddings():
+    from datasets import Video
+    from torchvision.transforms.functional import to_pil_image
+
     num_frames = 4
     videos = Dataset.from_dict(
         {"video": create_mock_video_bytes(np.random.default_rng(0), n=3)}
