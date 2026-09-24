@@ -53,6 +53,16 @@ def core_pyproject(pyproject: str) -> str:
             f"dependencies {RUN_DEPENDENCIES - found} are missing from pyproject.toml"
         )
 
+    # an extra requiring `mteb[...]` would make `mteb-core` depend on `mteb`, installing the same files twice
+    self_referencing = [
+        f"{extra}: {dependency}"
+        for extra, dependencies in project["optional-dependencies"].items()
+        for dependency in dependencies
+        if canonicalize_name(Requirement(dependency).name) == "mteb"
+    ]
+    if self_referencing:
+        raise ValueError(f"extras must not require `mteb` itself: {self_referencing}")
+
     core = pyproject.replace('\nname = "mteb"\n', '\nname = "mteb-core"\n', 1)
     for dependency in run:
         line = f'    "{dependency}",\n'
@@ -81,6 +91,15 @@ def build(source: Path, outdir: Path) -> None:
 
 def build_core_package(outdir: Path) -> None:
     """Build `mteb-core` from the working tree into `outdir`."""
+    # the build only sees what is copied below, so a packaging file added later would be ignored silently
+    unsupported = [
+        f for f in ("MANIFEST.in", "setup.py", "setup.cfg") if (REPO_ROOT / f).exists()
+    ]
+    if unsupported:
+        raise ValueError(
+            f"{unsupported} are not copied into the `mteb-core` build; update this script"
+        )
+
     with tempfile.TemporaryDirectory() as tmp:
         src = Path(tmp)
         pyproject = (REPO_ROOT / "pyproject.toml").read_text(encoding="utf-8")

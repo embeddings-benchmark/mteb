@@ -12,15 +12,30 @@ logger = logging.getLogger(__name__)
 def _mteb_distribution() -> importlib.metadata.Distribution:
     """Return the installed distribution that provides the `mteb` package.
 
-    The package can be installed as `mteb`, or as `mteb-core` with `mteb` as a metapackage depending on it.
-    `mteb-core` is checked first, as it holds the version, extras and requirements of the code.
+    The code is published both as `mteb` and as `mteb-core`, which is the same code without the dependencies
+    needed to load and run models (its `run` extra). `mteb-core` is checked first, so that its `run` extra is
+    used for the install instructions.
     """
     for name in ("mteb-core", "mteb"):
         try:
-            return importlib.metadata.distribution(name)
+            distribution = importlib.metadata.distribution(name)
         except importlib.metadata.PackageNotFoundError:
             continue
+        if name == "mteb-core" and _is_installed("mteb"):
+            logger.warning(
+                "`mteb` and `mteb-core` are both installed. They contain the same files, so uninstalling "
+                "either one removes the files of the other. Uninstall both, then install only one of them."
+            )
+        return distribution
     raise importlib.metadata.PackageNotFoundError("mteb")
+
+
+def _is_installed(distribution_name: str) -> bool:
+    try:
+        importlib.metadata.distribution(distribution_name)
+    except importlib.metadata.PackageNotFoundError:
+        return False
+    return True
 
 
 def _is_package_available(pkg_name: str) -> bool:

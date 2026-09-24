@@ -31,11 +31,11 @@ Installation is as simple as:
     uv add mteb-core
     ```
 
-`import mteb` works the same with both. To load and run models later, install `mteb-core[run]`.
+`import mteb` works the same with both. To load and run models later, install `mteb-core[run]`. Model specific extras such as `mteb-core[image]` can still pull in torch, since some models require it.
 
 !!! warning "Install either `mteb` or `mteb-core`, not both"
 
-    They contain the same files, so installing both leaves two packages owning the same files, and uninstalling either one breaks the other. To add the model dependencies to an existing `mteb-core` install, use `mteb-core[run]` rather than installing `mteb` next to it.
+    They contain the same files, so installing both leaves two packages owning the same files, and uninstalling either one then removes the files of the other. To add the model dependencies to an existing `mteb-core` install, use `mteb-core[run]` rather than installing `mteb` next to it. If you have installed both, uninstall them both and install only one again.
 
 ## Model Specific Installations
 
