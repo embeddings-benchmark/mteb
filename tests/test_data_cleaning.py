@@ -770,7 +770,7 @@ def test_remove_short_texts_removes_texts_under_min_length(
 def test_remove_short_texts_measures_with_the_given_length() -> None:
     task = _texts_task(["incomprehensibilities", "three short words"])
 
-    cleaned = remove_short_texts(task, min_length=3, length=lambda t: len(t.split()))
+    cleaned = remove_short_texts(task, min_length=3, length_fn=lambda t: len(t.split()))
 
     assert cleaned.dataset["test"]["text"] == ["three short words"]
 
@@ -830,7 +830,7 @@ def test_remove_short_texts_measures_only_the_text_of_a_multimodal_task() -> Non
 def test_remove_short_texts_refuses_a_task_without_text() -> None:
     task = MockImageClassificationTask()
 
-    with pytest.raises(NotImplementedError, match="only applies to \\['text'\\]"):
+    with pytest.raises(ValueError, match="only applies to \\['text'\\]"):
         remove_short_texts(task, min_length=1)
 
 
@@ -1007,7 +1007,7 @@ def test_remove_small_images_measures_with_the_given_size() -> None:
     )
 
     cleaned = remove_small_images(
-        task, min_size=1000, size=lambda image: image.width * image.height
+        task, min_size=1000, size_fn=lambda image: image.width * image.height
     )
 
     # both images are wider than the default threshold would ask, but one covers only 400 pixels

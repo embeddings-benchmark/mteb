@@ -145,21 +145,21 @@ def _keep_at_least(
     rows: Iterable[tuple[Any, ...]],
     *,
     minimum: float,
-    measure: Callable[[Any], float | None],
+    measure_fn: Callable[[Any], float | None],
 ) -> list[int]:
     """Keep the rows whose values all measure at least `minimum`.
 
     Args:
         rows: The content of each row, one tuple per row with one entry per compared column.
         minimum: The smallest size a value may have.
-        measure: The size of a value, or None if it cannot be told, in which case the value is kept.
+        measure_fn: The size of a value, or None if it cannot be told, in which case the value is kept.
 
     Returns:
         The indices of the rows without a value smaller than `minimum`.
     """
 
     def large_enough(value: object) -> bool:
-        size = measure(value)
+        size = measure_fn(value)
         return size is None or size >= minimum
 
     return [i for i, row in enumerate(rows) if all(map(large_enough, row))]
@@ -451,7 +451,7 @@ def _resolve_columns(
             if modality in filter_.modalities
         }
         if not col_modalities:
-            raise NotImplementedError(
+            raise ValueError(
                 f"`{filter_.name}` only applies to {sorted(filter_.modalities)} content, which "
                 f"'{task.metadata.name}' does not have."
             )
@@ -509,7 +509,8 @@ def _filter_task_rows(
 
     Raises:
         NotImplementedError: If `task` aggregates other tasks, which hold the data instead.
-        ValueError: If `splits` and `subsets` together match none of the task's splits.
+        ValueError: If `task` holds none of the content `filter_` applies to, or if `splits` and `subsets`
+            together match none of the task's splits.
         KeyError: If `columns` names a column the task does not declare.
     """
     from ._retrieval import _filter_retrieval_split
@@ -659,19 +660,19 @@ def _remove_small(
     name: str,
     modality: Modalities,
     minimum: float,
-    measure: Callable[[Any], float | None],
+    measure_fn: Callable[[Any], float | None],
     *,
     columns: Sequence[str] | None,
     splits: Sequence[str] | None,
     subsets: Sequence[HFSubset] | None,
     num_proc: int | None,
 ) -> T:
-    """Remove the samples holding a `modality` value that `measure` finds smaller than `minimum`."""
+    """Remove the samples holding a `modality` value that `measure_fn` finds smaller than `minimum`."""
     return _filter_task_rows(
         task,
         _Filter(
             name,
-            functools.partial(_keep_at_least, minimum=minimum, measure=measure),
+            functools.partial(_keep_at_least, minimum=minimum, measure_fn=measure_fn),
             modalities=frozenset({modality}),
             compares_rows=False,
         ),
@@ -686,7 +687,7 @@ def remove_short_texts(
     task: T,
     *,
     min_length: int,
-    length: Callable[[str], int] = len,
+    length_fn: Callable[[str], int] = len,
     columns: Sequence[str] | None = None,
     splits: Sequence[str] | None = None,
     subsets: Sequence[HFSubset] | None = None,
@@ -694,35 +695,30 @@ def remove_short_texts(
 ) -> T:
     """Remove samples with a text shorter than `min_length`, which includes empty and whitespace-only texts.
 
-    A sample is removed when any of its texts is too short, e.g. either sentence of a pair. Texts are measured as
-    the model reads them, after stripping surrounding whitespace: a retrieval document is its title and text
-    together, and a query includes its instruction. In characters, the default, they are counted like the
-    `min_text_length` of the task's descriptive statistics, apart from the stripped whitespace. A missing text
-    counts as empty.
+    A sample is removed when any of its texts is too short, e.g. either sentence of a pair. Texts are counted in
+    characters, ignoring surrounding whitespace, and a missing text counts as empty. A retrieval document is measured
+    on its title and text together and a query on its text and instruction, as they are encoded that way when
+    evaluated: a removed document takes its relevance judgements with it, and a query left without one is dropped.
 
-    Only text is measured. A retrieval document or query that combines text with an image, audio or video is kept,
-    as that content may carry what its text lacks. For a retrieval task, the relevance judgements of a removed
-    document go with it, and a query left without a relevant document is dropped. For a clustering task, short texts
-    are removed from within each set of texts, together with their labels.
-
-    The task passed in is left untouched; the cleaned copy is named after the filters applied to it, e.g.
-    `MassiveIntentClassification (remove_short_texts)`.
+    Only text is measured, so images, audio and video are kept whatever their size, as is a retrieval document or
+    query that combines text with one of them, e.g. a page whose image carries the content its text lacks.
 
     Args:
         task: The task to filter. It is not modified.
         min_length: The shortest length a text may have. `1` removes only empty and whitespace-only texts.
-        length: How to measure a text. Defaults to its number of characters.
+        length_fn: How to measure a text. Defaults to its number of characters.
         columns: The text columns to measure. Defaults to every text column of the task.
         splits: The splits to filter. Defaults to every split of the dataset.
         subsets: The Huggingface subsets to filter. Defaults to every loaded subset.
         num_proc: Number of processes to use for loading and filtering the dataset.
 
     Returns:
-        A copy of the task holding the filtered data.
+        A copy of the task holding the filtered data, named after the filters applied to it, e.g.
+        `MassiveIntentClassification (remove_short_texts)`. The task passed in is left untouched.
 
     Raises:
-        NotImplementedError: If `task` aggregates other tasks, or has no text.
-        ValueError: If `splits` and `subsets` together match none of the task's splits.
+        NotImplementedError: If `task` aggregates other tasks, which hold the data instead.
+        ValueError: If `task` has no text, or if `splits` and `subsets` together match none of its splits.
         KeyError: If `columns` names a column that is not a text column of the task.
 
     Examples:
@@ -730,14 +726,14 @@ def remove_short_texts(
         >>> from mteb.data_cleaning import remove_short_texts
         >>> task = mteb.get_task("MassiveIntentClassification")
         >>> cleaned = remove_short_texts(task, min_length=1)  # empty and whitespace-only texts
-        >>> cleaned = remove_short_texts(task, min_length=3, length=lambda text: len(text.split()))  # < 3 words
+        >>> cleaned = remove_short_texts(task, min_length=3, length_fn=lambda text: len(text.split()))  # < 3 words
     """
     return _remove_small(
         task,
         "remove_short_texts",
         "text",
         min_length,
-        length,
+        length_fn,
         columns=columns,
         splits=splits,
         subsets=subsets,
@@ -754,7 +750,7 @@ def remove_small_images(
     task: T,
     *,
     min_size: int,
-    size: Callable[[Image.Image], float] = _shorter_side,
+    size_fn: Callable[[Image.Image], float] = _shorter_side,
     columns: Sequence[str] | None = None,
     splits: Sequence[str] | None = None,
     subsets: Sequence[HFSubset] | None = None,
@@ -762,14 +758,15 @@ def remove_small_images(
 ) -> T:
     """Remove samples with an image smaller than `min_size`, e.g. a 1x1 placeholder.
 
-    Works like [`remove_short_texts`][mteb.data_cleaning.remove_short_texts], measuring images instead. By default an
-    image is as small as its shorter side, so `min_size` is the width and the height it must reach, as the
-    `min_image_width` and `min_image_height` of the task's descriptive statistics report them.
+    A sample is removed when any of its images is too small. An image is as small as its shorter side by default, so
+    `min_size` is the width and the height it must reach, as the `min_image_width` and `min_image_height` of the
+    task's descriptive statistics report them. Only images are measured, so the texts of a sample are kept whatever
+    their length.
 
     Args:
         task: The task to filter. It is not modified.
-        min_size: The smallest size, by `size`, an image may have.
-        size: How to measure an image. Defaults to its shorter side in pixels; `lambda image: image.width *
+        min_size: The smallest size, by `size_fn`, an image may have.
+        size_fn: How to measure an image. Defaults to its shorter side in pixels; `lambda image: image.width *
             image.height` measures its area instead, in which case `min_size` is a number of pixels.
         columns: The image columns to measure. Defaults to every image column of the task.
         splits: The splits to filter. Defaults to every split of the dataset.
@@ -777,11 +774,12 @@ def remove_small_images(
         num_proc: Number of processes to use for loading the dataset.
 
     Returns:
-        A copy of the task holding the filtered data.
+        A copy of the task holding the filtered data, named after the filters applied to it, e.g.
+        `ROxfordEasyI2IRetrieval (remove_small_images)`. The task passed in is left untouched.
 
     Raises:
-        NotImplementedError: If `task` aggregates other tasks, or has no images.
-        ValueError: If `splits` and `subsets` together match none of the task's splits.
+        NotImplementedError: If `task` aggregates other tasks, which hold the data instead.
+        ValueError: If `task` has no images, or if `splits` and `subsets` together match none of its splits.
         KeyError: If `columns` names a column that is not an image column of the task.
     """
     return _remove_small(
@@ -789,7 +787,7 @@ def remove_small_images(
         "remove_small_images",
         "image",
         min_size,
-        size,
+        size_fn,
         columns=columns,
         splits=splits,
         subsets=subsets,
@@ -808,8 +806,9 @@ def remove_short_audio(
 ) -> T:
     """Remove samples with an audio clip shorter than `min_seconds`.
 
-    Works like [`remove_short_texts`][mteb.data_cleaning.remove_short_texts], measuring audio instead, the same way
-    as the `min_duration_seconds` of the task's descriptive statistics.
+    A sample is removed when any of its clips is too short, measured as the `min_duration_seconds` of the task's
+    descriptive statistics measures it. Only audio is measured, so the texts of a sample are kept whatever their
+    length.
 
     Args:
         task: The task to filter. It is not modified.
@@ -820,11 +819,12 @@ def remove_short_audio(
         num_proc: Number of processes to use for loading the dataset.
 
     Returns:
-        A copy of the task holding the filtered data.
+        A copy of the task holding the filtered data, named after the filters applied to it, e.g.
+        `BeijingOpera (remove_short_audio)`. The task passed in is left untouched.
 
     Raises:
-        NotImplementedError: If `task` aggregates other tasks, or has no audio.
-        ValueError: If `splits` and `subsets` together match none of the task's splits.
+        NotImplementedError: If `task` aggregates other tasks, which hold the data instead.
+        ValueError: If `task` has no audio, or if `splits` and `subsets` together match none of its splits.
         KeyError: If `columns` names a column that is not an audio column of the task.
     """
     return _remove_small(
@@ -851,8 +851,9 @@ def remove_short_videos(
 ) -> T:
     """Remove samples with a video shorter than `min_seconds`. A video whose duration is unknown is kept.
 
-    Works like [`remove_short_texts`][mteb.data_cleaning.remove_short_texts], measuring videos instead, the same way
-    as the `min_duration_seconds` of the task's descriptive statistics.
+    A sample is removed when any of its videos is too short, measured as the `min_duration_seconds` of the task's
+    descriptive statistics measures it. Only video is measured, so the texts of a sample are kept whatever their
+    length.
 
     Args:
         task: The task to filter. It is not modified.
@@ -863,11 +864,12 @@ def remove_short_videos(
         num_proc: Number of processes to use for loading the dataset.
 
     Returns:
-        A copy of the task holding the filtered data.
+        A copy of the task holding the filtered data, named after the filters applied to it, e.g.
+        `CoVRRVT2VRetrieval (remove_short_videos)`. The task passed in is left untouched.
 
     Raises:
-        NotImplementedError: If `task` aggregates other tasks, or has no videos.
-        ValueError: If `splits` and `subsets` together match none of the task's splits.
+        NotImplementedError: If `task` aggregates other tasks, which hold the data instead.
+        ValueError: If `task` has no videos, or if `splits` and `subsets` together match none of its splits.
         KeyError: If `columns` names a column that is not a video column of the task.
     """
     return _remove_small(

@@ -86,10 +86,12 @@ print({split: len(data) for split, data in cleaned.dataset["en"].items()})
 
 A text is measured in characters, like `min_text_length` in the descriptive statistics, but without its surrounding
 whitespace, so a whitespace-only text counts as empty and `min_length=1` removes exactly the empty and whitespace-only
-texts. To measure a text differently, pass `length`, e.g. to count words:
+texts. To measure a text differently, pass `length_fn`, e.g. to count words:
 
 ```python
-cleaned = remove_short_texts(task, min_length=2, length=lambda text: len(text.split()))
+cleaned = remove_short_texts(
+    task, min_length=2, length_fn=lambda text: len(text.split())
+)
 # {'train': 11384, 'test': 2940, 'validation': 2008}
 ```
 
@@ -114,8 +116,8 @@ cleaned = remove_short_videos(task, min_seconds=1.0)
 ```
 
 An image counts as small by its shorter side, so `min_size=32` asks for at least 32 pixels in both directions. As with
-`length` for texts, pass `size` to measure it differently, e.g. `size=lambda image: image.width * image.height` for its
-area in pixels.
+`length_fn` for texts, pass `size_fn` to measure it differently, e.g.
+`size_fn=lambda image: image.width * image.height` for its area in pixels.
 
 The same care applies to their thresholds: a 28x28 MNIST digit or a 0.1 second drum hit is small by nature, not
 broken.
