@@ -55,6 +55,10 @@ length, valid frameworks, license, and degree of openness.
 
 :::mteb.models.CompressionWrapper
 
+## Video Frames Wrapper
+
+:::mteb.models.VideoFramesWrapper
+
 
 ## Search Index Backends
 

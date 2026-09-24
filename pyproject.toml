@@ -582,6 +582,7 @@ module = [
     "faiss",
     "vllm",
     "torchaudio",
+    "torchvision.*",
 ]
 ignore_missing_imports = true
 

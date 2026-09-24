@@ -23,6 +23,7 @@ from .sentence_transformer_wrapper import (
     SparseEncoderWrapper,
     sentence_transformers_loader,
 )
+from .video_wrappers import VideoFramesWrapper
 
 __all__ = [
     "CacheBackendProtocol",
@@ -43,5 +44,6 @@ __all__ = [
     "SearchProtocol",
     "SentenceTransformerEncoderWrapper",
     "SparseEncoderWrapper",
+    "VideoFramesWrapper",
     "sentence_transformers_loader",
 ]
