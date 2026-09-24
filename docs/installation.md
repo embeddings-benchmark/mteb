@@ -17,6 +17,26 @@ Installation is as simple as:
     uv add mteb
     ```
 
+## Installing without torch
+
+`mteb` installs everything needed to evaluate models including `torch`, `transformers` and `sentence-transformers`. If you only work with tasks, benchmarks, model metadata or results (e.g. to analyse results or build a leaderboard), you can install `mteb-core` instead, which is the same package without these dependencies:
+
+=== "pip"
+    ```bash
+    pip install mteb-core
+    ```
+
+=== "uv"
+    ```bash
+    uv add mteb-core
+    ```
+
+`import mteb` works the same with both. To load and run models later, install `mteb-core[run]`.
+
+!!! warning "Install either `mteb` or `mteb-core`, not both"
+
+    They contain the same files, so installing both leaves two packages owning the same files, and uninstalling either one breaks the other. To add the model dependencies to an existing `mteb-core` install, use `mteb-core[run]` rather than installing `mteb` next to it.
+
 ## Model Specific Installations
 
 If you want to run certain models implemented within mteb you will often need some additional dependencies. These can be installed using:
