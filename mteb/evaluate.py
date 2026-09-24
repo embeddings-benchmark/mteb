@@ -21,6 +21,11 @@ from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
 )
+from mteb.models.video_wrappers.video_frames_wrapper import (
+    DEFAULT_NUM_FRAMES,
+    VideoFramesWrapper,
+    video_frames_model_meta,
+)
 from mteb.results import ModelResult, TaskResult
 from mteb.results.task_result import TaskError
 from mteb.timing import TimingStack
@@ -32,6 +37,7 @@ if TYPE_CHECKING:
     from sentence_transformers import CrossEncoder, SentenceTransformer
 
     from mteb.models.models_protocols import (
+        EncoderProtocol,
         MTEBModels,
     )
     from mteb.types import EncodeKwargs, HFSubset, ScoresDict, SplitName
@@ -272,6 +278,16 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
     return result
 
 
+def _needs_video_frames(meta: ModelMeta, task: AbsTask) -> bool:
+    """Whether to run an image model on a video task through `VideoFramesWrapper`."""
+    modalities = set(meta.modalities or [])
+    return (
+        "video" in task.metadata.modalities
+        and "image" in modalities
+        and "video" not in modalities
+    )
+
+
 def _check_model_modalities(
     model: ModelMeta,
     tasks: AbsTask | Iterable[AbsTask],
@@ -288,6 +304,9 @@ def _check_model_modalities(
         return
 
     model_modalities = set(model.modalities)
+    if "image" in model_modalities:
+        # image models run on video tasks through VideoFramesWrapper
+        model_modalities.add("video")
     check_tasks: Iterable[AbsTask] = []
     if isinstance(tasks, AbsTask):
         check_tasks = [tasks]
@@ -445,6 +464,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
     public_only: bool | None = None,
     num_proc: int | None = None,
     timer: TimingStack | None = None,
+    video_frames: int | None = None,
 ) -> ModelResult:
     """This function runs a model on a given task and returns the results.
 
@@ -471,6 +491,8 @@ def evaluate(  # noqa: PLR0913, PLR0914
         public_only: Run only public tasks. If None, it will attempt to run the private task.
         num_proc: Number of processes to use during data loading and transformation. Defaults to 1.
         timer: A context manager that tracks the timing of evaluation phases.
+        video_frames: Number of frames sampled per video when a model that supports images but not video is run on a video task.
+            Frames are encoded as images and mean-pooled (see `VideoFramesWrapper`). If None, 8 frames are used and a warning is emitted.
 
     Returns:
         The results of the evaluation.
@@ -543,6 +565,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
             public_only=public_only,
             num_proc=num_proc,
             timer=timer,
+            video_frames=video_frames,
         )
         combined_results = tasks.combine_task_results(results.task_results)
 
@@ -588,6 +611,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
                 public_only=public_only,
                 num_proc=num_proc,
                 timer=timer,
+                video_frames=video_frames,
             )
             evaluate_results.extend(_res.task_results)
             if _res.exceptions:
@@ -598,6 +622,18 @@ def evaluate(  # noqa: PLR0913, PLR0914
             task_results=evaluate_results,
             exceptions=exceptions,
         )
+
+    wrap_for_video = _needs_video_frames(meta, task)
+    num_frames = DEFAULT_NUM_FRAMES if video_frames is None else video_frames
+    if wrap_for_video:
+        if video_frames is None:
+            warnings.warn(
+                f"{model_name} supports images but not video. Running {task.metadata.name} by sampling "
+                f"and mean-pooling the default {DEFAULT_NUM_FRAMES} frames per video. Pass `video_frames` "
+                "to `mteb.evaluate` (or `--video-frames` on the CLI) to set it explicitly.",
+                stacklevel=2,
+            )
+        meta = video_frames_model_meta(meta, num_frames)
 
     existing_results, missing_eval = _check_cache(task, meta, cache, overwrite_strategy)
 
@@ -626,6 +662,11 @@ def evaluate(  # noqa: PLR0913, PLR0914
         )
         model = model.load_model()
         logger.info("✓ Model loaded")
+
+    if wrap_for_video:
+        model = VideoFramesWrapper(
+            cast("EncoderProtocol", model), num_frames=num_frames
+        )
 
     if raise_error is False:
         try:

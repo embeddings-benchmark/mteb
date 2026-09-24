@@ -13,14 +13,32 @@ if TYPE_CHECKING:
 DEFAULT_NUM_FRAMES = 8
 
 
+def video_frames_model_meta(meta: ModelMeta, num_frames: int) -> ModelMeta:
+    """Meta of an image model evaluated on video through frame sampling and mean pooling.
+
+    Adds ``"video"`` to the modalities and records the protocol in ``experiment_kwargs``
+    so results are stored apart from those of native video models.
+    """
+    experiment_kwargs = dict(meta.experiment_kwargs or {})
+    experiment_kwargs["video_num_frames"] = num_frames
+    experiment_kwargs["video_frame_pooling"] = "mean"
+    modalities = list(meta.modalities)
+    if "video" not in modalities:
+        modalities.append("video")
+    return meta.model_copy(
+        update={"modalities": modalities, "experiment_kwargs": experiment_kwargs}
+    )
+
+
 class VideoFramesWrapper:
     """Runs an image encoder on video tasks by encoding sampled frames and mean-pooling them.
 
     Frames are sampled uniformly across each clip, encoded independently as images by the
     wrapped model, and averaged into one video embedding. This is the protocol used to report
-    CLIP-style models on video retrieval in e.g. CLIP4Clip and ChinaOpen. The frame count and
-    pooling are recorded in ``ModelMeta.experiment_kwargs`` so results are not confused with
-    those of native video models.
+    CLIP-style models on video retrieval in e.g. CLIP4Clip and ChinaOpen.
+
+    ``mteb.evaluate`` applies this wrapper automatically when an image model is run on a
+    video task, so it only needs to be used directly for custom pipelines.
 
     Examples:
         >>> import mteb
@@ -54,21 +72,7 @@ class VideoFramesWrapper:
 
         self.model = model
         self.num_frames = num_frames
-
-        experiment_kwargs = dict(meta.experiment_kwargs or {})
-        experiment_kwargs["video_num_frames"] = num_frames
-        experiment_kwargs["video_frame_pooling"] = "mean"
-        modalities = list(meta.modalities)
-        if "video" not in modalities:
-            modalities.append("video")
-        model.mteb_model_meta = meta.model_copy(  # type: ignore[misc]
-            update={"modalities": modalities, "experiment_kwargs": experiment_kwargs}
-        )
-
-    @property
-    def mteb_model_meta(self) -> ModelMeta | None:
-        """The wrapped model meta data."""
-        return self.model.mteb_model_meta
+        self.mteb_model_meta = video_frames_model_meta(meta, num_frames)
 
     def encode(
         self,

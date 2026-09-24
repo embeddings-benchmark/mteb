@@ -1,3 +1,5 @@
+import warnings
+
 import numpy as np
 import pytest
 from datasets import Dataset, Video
@@ -5,6 +7,7 @@ from torchvision.transforms.functional import to_pil_image
 
 import mteb
 from mteb._create_dataloaders import create_dataloader
+from mteb.cache import ResultCache
 from mteb.mocks import (
     MockVideoClassification,
     MockVideoClusteringTask,
@@ -16,28 +19,37 @@ from mteb.mocks.mock_tasks.create_mock_samples import create_mock_video_bytes
 from mteb.models import VideoFramesWrapper
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_implementations.random_baseline import _image_to_vector
-from mteb.models.video_wrappers.video_frames_wrapper import DEFAULT_NUM_FRAMES
+from mteb.models.video_wrappers import DEFAULT_NUM_FRAMES
 from mteb.types import PromptType
 
 pytest.importorskip("torchcodec")
 pytest.importorskip("av")
 
+VIDEO_TASKS = [
+    MockVideoRetrievalT2V(),
+    MockVideoRetrievalV2T(),
+    MockVideoZeroshotClassificationTask(),
+    MockVideoClassification(),
+    MockVideoClusteringTask(),
+]
+DEFAULT_WARNING = f"default {DEFAULT_NUM_FRAMES} frames per video"
 
-def _image_model():
+
+def _model(modalities: list[str]):
     model = mteb.get_model("mteb/baseline-random-encoder")
     model.mteb_model_meta = model.mteb_model_meta.model_copy(
-        update={"modalities": ["text", "image"]}
+        update={"modalities": modalities}
     )
     return model
 
 
+def _image_model():
+    return _model(["text", "image"])
+
+
 def test_requires_image_modality():
-    model = mteb.get_model("mteb/baseline-random-encoder")
-    model.mteb_model_meta = model.mteb_model_meta.model_copy(
-        update={"modalities": ["text"]}
-    )
     with pytest.raises(ValueError, match="image"):
-        VideoFramesWrapper(model)
+        VideoFramesWrapper(_model(["text"]))
 
 
 def test_rejects_non_positive_num_frames():
@@ -45,18 +57,20 @@ def test_rejects_non_positive_num_frames():
         VideoFramesWrapper(_image_model(), num_frames=0)
 
 
-def test_updates_model_meta():
-    wrapper = VideoFramesWrapper(_image_model(), num_frames=4)
-    meta = wrapper.mteb_model_meta
-    assert meta.modalities == ["text", "image", "video"]
-    assert meta.experiment_kwargs["video_num_frames"] == 4
-    assert meta.experiment_kwargs["video_frame_pooling"] == "mean"
+def test_wrapper_meta_leaves_inner_model_untouched():
+    model = _image_model()
+    wrapper = VideoFramesWrapper(model, num_frames=4)
+
+    assert wrapper.mteb_model_meta.modalities == ["text", "image", "video"]
+    assert wrapper.mteb_model_meta.experiment_kwargs["video_num_frames"] == 4
+    assert wrapper.mteb_model_meta.experiment_kwargs["video_frame_pooling"] == "mean"
+    assert model.mteb_model_meta.modalities == ["text", "image"]
+    assert "video_num_frames" not in (model.mteb_model_meta.experiment_kwargs or {})
 
 
 def test_default_num_frames():
     wrapper = VideoFramesWrapper(_image_model())
     assert wrapper.num_frames == DEFAULT_NUM_FRAMES == 8
-    assert wrapper.mteb_model_meta.experiment_kwargs["video_num_frames"] == 8
 
 
 def test_pooled_embedding_is_mean_of_frame_embeddings():
@@ -96,19 +110,40 @@ def test_pooled_embedding_is_mean_of_frame_embeddings():
     )
 
 
-@pytest.mark.parametrize(
-    "task",
-    [
-        MockVideoRetrievalT2V(),
-        MockVideoRetrievalV2T(),
-        MockVideoZeroshotClassificationTask(),
-        MockVideoClassification(),
-        MockVideoClusteringTask(),
-    ],
-)
-def test_evaluate_on_video_tasks(task):
-    with pytest.raises(ValueError, match="none overlap"):
+@pytest.mark.parametrize("task", VIDEO_TASKS)
+def test_evaluate_wraps_image_models_automatically(task):
+    with pytest.warns(UserWarning, match=DEFAULT_WARNING):
         mteb.evaluate(_image_model(), task, cache=None)
 
+
+def test_evaluate_video_frames_silences_default_warning():
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        mteb.evaluate(
+            _image_model(), MockVideoRetrievalT2V(), cache=None, video_frames=4
+        )
+    assert not [w for w in caught if "frames per video" in str(w.message)]
+
+
+def test_evaluate_stores_results_as_video_frames_experiment(tmp_path):
+    mteb.evaluate(
+        _image_model(),
+        MockVideoRetrievalT2V(),
+        cache=ResultCache(tmp_path),
+        video_frames=4,
+    )
+    (result_file,) = tmp_path.rglob("MockVideoRetrievalT2V.json")
+    assert result_file.parent.name == "video_frame_pooling_mean__video_num_frames_4"
+
+
+def test_evaluate_does_not_rewrap_explicit_wrapper():
     wrapper = VideoFramesWrapper(_image_model(), num_frames=4)
-    mteb.evaluate(wrapper, task, cache=None)
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        mteb.evaluate(wrapper, MockVideoRetrievalT2V(), cache=None)
+    assert not [w for w in caught if "frames per video" in str(w.message)]
+
+
+def test_evaluate_still_rejects_text_only_models_on_video():
+    with pytest.raises(ValueError, match="none overlap"):
+        mteb.evaluate(_model(["text"]), MockVideoRetrievalT2V(), cache=None)

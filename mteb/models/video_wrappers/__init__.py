@@ -1,3 +1,7 @@
-from .video_frames_wrapper import VideoFramesWrapper
+from .video_frames_wrapper import (
+    DEFAULT_NUM_FRAMES,
+    VideoFramesWrapper,
+    video_frames_model_meta,
+)
 
-__all__ = ["VideoFramesWrapper"]
+__all__ = ["DEFAULT_NUM_FRAMES", "VideoFramesWrapper", "video_frames_model_meta"]

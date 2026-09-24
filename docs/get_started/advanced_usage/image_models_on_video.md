@@ -7,26 +7,41 @@ icon: lucide/film
 
 Image-text models such as CLIP or SigLIP are commonly reported on video benchmarks even though they have no notion of time: a fixed number of frames is sampled uniformly from each clip, every frame is encoded as an image, and the frame embeddings are mean-pooled into a single video embedding. This is the protocol used for CLIP-style baselines in CLIP4Clip, X-CLIP and ChinaOpen, among others.
 
-By default MTEB refuses to run a model on a task whose modalities it does not declare, so a model with `modalities=["image", "text"]` raises on a `["text", "video"]` task. The [`VideoFramesWrapper`][mteb.models.video_wrappers.video_frames_wrapper.VideoFramesWrapper] makes the frame-pooling protocol explicit:
+MTEB applies this protocol automatically whenever a model that supports `image` but not `video` is evaluated on a video task. No change to the model or its `ModelMeta` is needed:
+
+```bash
+mteb run -m openai/clip-vit-base-patch32 -t MSRVTTT2V --video-frames 8
+```
 
 ```python
 import mteb
-from mteb.models import VideoFramesWrapper
 
 task = mteb.get_task("MSRVTTT2V")
 model = mteb.get_model("openai/clip-vit-base-patch32")
 
-video_model = VideoFramesWrapper(model, num_frames=8)
-results = mteb.evaluate(video_model, tasks=[task])
+results = mteb.evaluate(model, tasks=[task], video_frames=8)
 ```
 
-`num_frames` defaults to 8 and controls how many frames are sampled uniformly from each video. Text inputs (for example the queries of a text-to-video task) are passed through to the wrapped model unchanged.
+`video_frames` controls how many frames are sampled uniformly from each video. If it is not set, MTEB falls back to 8 frames and emits a warning, so a frame count is always a deliberate part of a reported result. Text inputs (for example the queries of a text-to-video task) are passed through to the model unchanged.
 
 ### Provenance
 
-The wrapper records `video_num_frames` and `video_frame_pooling` in the model's `experiment_kwargs`, and adds `"video"` to its declared modalities. Results produced this way are therefore distinguishable from those of native video models, and the frame count is always part of the result even when the default is used.
+Results produced this way are stored with `video_num_frames` and `video_frame_pooling` in the model's `experiment_kwargs`, under an `experiments/` folder next to the model's regular results. They are therefore distinguishable from those of native video models.
+
+### Using the wrapper directly
+
+Under the hood `mteb.evaluate` wraps the model in [`VideoFramesWrapper`][mteb.models.video_wrappers.video_frames_wrapper.VideoFramesWrapper]. You can do the same yourself for custom pipelines:
+
+```python
+from mteb.models import VideoFramesWrapper
+
+video_model = VideoFramesWrapper(model, num_frames=8)
+embeddings = video_model.encode(
+    dataloader, task_metadata=task.metadata, hf_split="test", hf_subset="default"
+)
+```
 
 ### Limitations
 
-- Only video-only inputs are pooled. Tasks whose rows combine video with text or audio in a single input (e.g. `vt2t`) are not supported by the wrapper and raise `NotImplementedError`.
+- Only video-only inputs are pooled. Tasks whose rows combine video with text or audio in a single input (e.g. `vt2t`) are not supported and raise `NotImplementedError`.
 - Decoding video requires the `video` extra (`pip install "mteb[video]"`).
