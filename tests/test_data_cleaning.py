@@ -670,7 +670,9 @@ def test_retrieval_compares_each_side_on_its_own_modality() -> None:
     assert cleaned_data["relevant_docs"] == {"q1": {"d1": 1}}
 
 
-def test_retrieval_compares_conversations_by_their_turns() -> None:
+def test_retrieval_does_not_merge_different_conversation_queries() -> None:
+    # a conversation query holds a list of turns rather than a string, which used to compare as an empty
+    # text, making every conversation of a task look like a duplicate of the first
     task = MockRetrievalTask()
     task.load_data()
     subset, split = _retrieval_split(task)
@@ -695,9 +697,38 @@ def test_retrieval_compares_conversations_by_their_turns() -> None:
     task = remove_duplicates(task)
 
     data = task.dataset[subset][split]
-    # only the repeated conversation is a duplicate, the others differ in their turns
+    # q3 repeats q1's turns and is a duplicate of it; q2 says something else and stays
     assert data["queries"]["id"] == ["q1", "q2"]
     assert data["relevant_docs"] == {"q1": {"d1": 1, "d2": 1}, "q2": {"d2": 1}}
+
+
+def test_retrieval_compares_a_conversation_together_with_its_instruction() -> None:
+    # an instruction cannot be appended to the list of turns, which used to raise a TypeError
+    task = MockRetrievalTask()
+    task.load_data()
+    subset, split = _retrieval_split(task)
+    task.dataset[subset][split] = {
+        "corpus": Dataset.from_dict(
+            {"id": ["d1", "d2"], "text": ["first doc", "second doc"]}
+        ),
+        "queries": Dataset.from_dict(
+            {
+                "id": ["q1", "q2"],
+                "text": [
+                    [{"role": "user", "content": "hello"}],
+                    [{"role": "user", "content": "hello"}],
+                ],
+                "instruction": ["find papers", "find news"],
+            }
+        ),
+        "relevant_docs": {"q1": {"d1": 1}, "q2": {"d2": 1}},
+        "top_ranked": None,
+    }
+
+    task = remove_duplicates(task)
+
+    # the instruction is part of the query, and a conversation cannot have one appended to its turns
+    assert task.dataset[subset][split]["queries"]["id"] == ["q1", "q2"]
 
 
 def test_retrieval_compares_a_query_together_with_its_instruction() -> None:
@@ -726,7 +757,8 @@ def test_retrieval_compares_a_query_together_with_its_instruction() -> None:
 
 def test_a_retrieval_task_in_the_older_layout_can_be_filtered() -> None:
     task = MockRetrievalTask()
-    # some tasks still load their data as separate corpus, queries and judgements
+    # some tasks still load their data as separate corpus, queries and judgements, which every filter
+    # has to convert the way evaluation does, rather than crash on
     task.corpus = {"test": {"d1": "same doc", "d2": "same doc"}}
     task.queries = {"test": {"q1": "a query"}}
     task.relevant_docs = {"test": {"q1": {"d2": 1}}}
@@ -739,7 +771,7 @@ def test_a_retrieval_task_in_the_older_layout_can_be_filtered() -> None:
     assert data["relevant_docs"] == {"q1": {"d1": 1}}
 
 
-def _texts_task(texts: list[str | None]) -> MockClassificationTask:
+def _create_texts_task(texts: list[str | None]) -> MockClassificationTask:
     task = MockClassificationTask()
     task.dataset = DatasetDict(
         {"test": Dataset.from_dict({"text": texts, "label": list(range(len(texts)))})}
@@ -749,17 +781,17 @@ def _texts_task(texts: list[str | None]) -> MockClassificationTask:
 
 
 @pytest.mark.parametrize(
-    ("min_length", "expected"),
+    ("min_length", "texts", "expected"),
     [
-        (1, ["hi", " hello there "]),
-        (3, [" hello there "]),
+        # empty, whitespace-only and missing texts are all empty once stripped
+        (1, ["", "   ", None, "hi", " hello there "], ["hi", " hello there "]),
+        (3, ["", "   ", None, "hi", " hello there "], [" hello there "]),
     ],
 )
 def test_remove_short_texts_removes_texts_under_min_length(
-    min_length: int, expected: list[str]
+    min_length: int, texts: list[str | None], expected: list[str]
 ) -> None:
-    # empty, whitespace-only and missing texts are all empty once stripped
-    task = _texts_task(["", "   ", None, "hi", " hello there "])
+    task = _create_texts_task(texts)
 
     cleaned = remove_short_texts(task, min_length=min_length)
 
@@ -768,7 +800,7 @@ def test_remove_short_texts_removes_texts_under_min_length(
 
 
 def test_remove_short_texts_measures_with_the_given_length() -> None:
-    task = _texts_task(["incomprehensibilities", "three short words"])
+    task = _create_texts_task(["incomprehensibilities", "three short words"])
 
     cleaned = remove_short_texts(task, min_length=3, length_fn=lambda t: len(t.split()))
 
@@ -965,34 +997,6 @@ def test_measuring_a_symmetric_task_does_not_order_its_sides() -> None:
     cleaned = remove_small_images(task, min_size=1)
 
     assert len(cleaned.dataset[split]) == 1
-
-
-def test_retrieval_compares_a_conversation_together_with_its_instruction() -> None:
-    task = MockRetrievalTask()
-    task.load_data()
-    subset, split = _retrieval_split(task)
-    task.dataset[subset][split] = {
-        "corpus": Dataset.from_dict(
-            {"id": ["d1", "d2"], "text": ["first doc", "second doc"]}
-        ),
-        "queries": Dataset.from_dict(
-            {
-                "id": ["q1", "q2"],
-                "text": [
-                    [{"role": "user", "content": "hello"}],
-                    [{"role": "user", "content": "hello"}],
-                ],
-                "instruction": ["find papers", "find news"],
-            }
-        ),
-        "relevant_docs": {"q1": {"d1": 1}, "q2": {"d2": 1}},
-        "top_ranked": None,
-    }
-
-    task = remove_duplicates(task)
-
-    # the instruction is part of the query, and a conversation cannot have one appended to its turns
-    assert task.dataset[subset][split]["queries"]["id"] == ["q1", "q2"]
 
 
 def test_remove_small_images_measures_with_the_given_size() -> None:
