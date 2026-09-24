@@ -223,27 +223,46 @@ MVEB_TASK_TYPE = (
 )
 
 
-_TASK_TYPE = (
-    (
-        "BitextMining",
-        "Classification",
-        "MultilabelClassification",
-        "Clustering",
-        "PairClassification",
-        "Regression",
-        "Reranking",
-        "Retrieval",
-        "STS",
-        "Summarization",
-        "InstructionRetrieval",
-        "InstructionReranking",
-    )
-    + MIEB_TASK_TYPE
-    + MAEB_TASK_TYPE
-    + MVEB_TASK_TYPE
-)
-
-TaskType = Literal[_TASK_TYPE]  # type: ignore[valid-type]
+TaskType = Literal[
+    "BitextMining",
+    "Classification",
+    "MultilabelClassification",
+    "Clustering",
+    "PairClassification",
+    "Regression",
+    "Reranking",
+    "Retrieval",
+    "STS",
+    "Summarization",
+    "InstructionRetrieval",
+    "InstructionReranking",
+    # MIEB
+    "Any2AnyReranking",
+    "Any2AnyRetrieval",
+    "Any2AnyMultilingualRetrieval",
+    "VisionCentricQA",
+    "ImageClustering",
+    "ImageClassification",
+    "DocumentUnderstanding",
+    "VisualSTS(eng)",
+    "VisualSTS(multi)",
+    "ZeroShotClassification",
+    "Compositionality",
+    # MAEB
+    "AudioClustering",
+    "AudioMultilabelClassification",
+    "AudioReranking",
+    "AudioZeroshotClassification",
+    "AudioClassification",
+    "AudioPairClassification",
+    # MVEB
+    "VideoClassification",
+    "VideoClustering",
+    "VideoMultilabelClassification",
+    "VideoPairClassification",
+    "VideoZeroshotClassification",
+    "VideoCentricQA",
+]
 """The type of the task. E.g. includes "Classification", "Retrieval" and "Clustering"."""
 
 

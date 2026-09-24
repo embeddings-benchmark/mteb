@@ -8,6 +8,9 @@ from pydantic import ValidationError
 import mteb
 from mteb.abstasks.task_metadata import (
     _TASKTYPE2SIMPLIFIEDTASKTYPE,
+    MAEB_TASK_TYPE,
+    MIEB_TASK_TYPE,
+    MVEB_TASK_TYPE,
     TaskMetadata,
     TaskType,
 )
@@ -322,3 +325,8 @@ def test_task_hf_config_from_existing():
 
     assert any(t.id == "MIRACLRetrievalHardNegatives" for t in config2.tasks)
     assert any(t.id == "MIRACLRetrievalHardNegatives.v2" for t in config2.tasks)
+
+
+@pytest.mark.parametrize("task_types", [MIEB_TASK_TYPE, MAEB_TASK_TYPE, MVEB_TASK_TYPE])
+def test_benchmark_task_types_are_valid_task_types(task_types):
+    assert set(task_types) <= set(get_args(TaskType))
