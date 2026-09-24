@@ -339,6 +339,8 @@ class SIB200ClassificationV2(AbsTaskClassification):
                 self.dataset[lang][split] = ds.map(to_mteb, remove_columns=cols)
 
 
+# The 8 configurations below are present in the 14-label dataset but were
+# omitted from the previous MTEB task definition, which included 197 configs.
 _LANGS_V3 = {
     **_LANGS,
     "ace_Arab": ["ace-Arab"],
@@ -358,10 +360,10 @@ class SIB200ClassificationV3(SIB200ClassificationV2):
     metadata = TaskMetadata(
         name="SIB200Classification.v3",
         description=(
-            "SIB-200 is the largest publicly available topic classification "
-            "dataset based on Flores-200 covering 205 languages and dialects. "
-            "Version 3 includes all 205 language-script configurations of the "
-            "14-label dataset."
+            "SIB-200 is a topic classification dataset based on Flores-200. "
+            "The previous MTEB task definition included 197 language-script "
+            "configurations; version 3 adds 8 configurations present in the "
+            "14-label dataset but previously omitted, bringing the total to 205."
         ),
         reference="https://arxiv.org/abs/2309.07445",
         dataset={
