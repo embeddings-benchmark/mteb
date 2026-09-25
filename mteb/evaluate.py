@@ -21,6 +21,9 @@ from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
 )
+from mteb.models.video_wrappers.video2images_wrapper import (
+    wrap_image_model_for_video,
+)
 from mteb.results import ModelResult, TaskResult
 from mteb.results.task_result import TaskError
 from mteb.timing import TimingStack
@@ -288,6 +291,9 @@ def _check_model_modalities(
         return
 
     model_modalities = set(model.modalities)
+    if "image" in model_modalities:
+        # image models run on video tasks through Video2ImagesWrapper
+        model_modalities.add("video")
     check_tasks: Iterable[AbsTask] = []
     if isinstance(tasks, AbsTask):
         check_tasks = [tasks]
@@ -445,6 +451,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
     public_only: bool | None = None,
     num_proc: int | None = None,
     timer: TimingStack | None = None,
+    video_frames: int | None = None,
 ) -> ModelResult:
     """This function runs a model on a given task and returns the results.
 
@@ -471,6 +478,8 @@ def evaluate(  # noqa: PLR0913, PLR0914
         public_only: Run only public tasks. If None, it will attempt to run the private task.
         num_proc: Number of processes to use during data loading and transformation. Defaults to 1.
         timer: A context manager that tracks the timing of evaluation phases.
+        video_frames: Number of frames sampled per video when a model that supports images but not video is run on a video task.
+            Frames are encoded as images and mean-pooled (see `Video2ImagesWrapper`). If None, 8 frames are used and a warning is emitted.
 
     Returns:
         The results of the evaluation.
@@ -543,6 +552,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
             public_only=public_only,
             num_proc=num_proc,
             timer=timer,
+            video_frames=video_frames,
         )
         combined_results = tasks.combine_task_results(results.task_results)
 
@@ -588,6 +598,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
                 public_only=public_only,
                 num_proc=num_proc,
                 timer=timer,
+                video_frames=video_frames,
             )
             evaluate_results.extend(_res.task_results)
             if _res.exceptions:
@@ -598,6 +609,8 @@ def evaluate(  # noqa: PLR0913, PLR0914
             task_results=evaluate_results,
             exceptions=exceptions,
         )
+
+    model, meta = wrap_image_model_for_video(model, meta, task, video_frames)
 
     existing_results, missing_eval = _check_cache(task, meta, cache, overwrite_strategy)
 

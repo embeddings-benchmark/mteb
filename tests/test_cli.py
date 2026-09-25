@@ -16,6 +16,7 @@ from mteb.cli.build_cli import (
     _create_meta,
     _leaderboard,
     _mock_run,
+    build_cli,
     run,
 )
 
@@ -73,6 +74,7 @@ def test_run_task(
         task_types=None,
         languages=None,
         batch_size=None,
+        video_frames=None,
         verbosity=3,
         co2_tracker=None,
         overwrite_strategy="always",
@@ -94,6 +96,14 @@ def test_run_task(
     assert f"{task_name}.json" in [f.name for f in list(results_path.glob("*.json"))], (
         f"{task_name} not found in output folder"
     )
+
+
+def test_run_parser_video_frames():
+    parser = build_cli()
+    run_args = ["run", "-m", "openai/clip-vit-base-patch32", "-t", "MSRVTTT2V"]
+
+    assert parser.parse_args(run_args).video_frames is None
+    assert parser.parse_args([*run_args, "--video-frames", "8"]).video_frames == 8
 
 
 def test_create_meta(tmp_path: Path):

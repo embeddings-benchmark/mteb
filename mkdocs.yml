@@ -87,6 +87,7 @@ nav:
         - Cache embeddings: get_started/advanced_usage/cache_embeddings.md
         - Cleaning task data: get_started/advanced_usage/cleaning_task_data.md
         - Hybrid Model: get_started/advanced_usage/hybrid_model.md
+        - Image models on video tasks: get_started/advanced_usage/image_models_on_video.md
         - Retrieval backend: get_started/advanced_usage/retrieval_backend.md
         - Two stage reranking: get_started/advanced_usage/two_stage_reranking.md
         - vLLM: get_started/advanced_usage/vllm_wrapper.md
