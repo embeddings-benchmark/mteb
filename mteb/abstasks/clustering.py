@@ -163,14 +163,8 @@ class AbsTaskClustering(AbsTask):
         n_clusters: Number of clustering experiments to run.
         k_mean_batch_size: Batch size to use for k-means clustering.
         max_depth: Maximum depth to evaluate clustering. If None, evaluates all levels.
-        drop_unlabelled_documents: For a hierarchical task, whether a document whose label
-            path is shorter than the level being scored is dropped at that level rather than
-            scored. Those documents have nothing in common except a missing label, so keeping
-            them asks the model to find a class that is not really there. Defaults to False,
-            which is the behaviour every published hierarchical score was produced under.
-            New tasks that want the corrected behaviour set it to True; the .v2 hierarchical
-            tasks do. A task whose label paths all reach the same depth is unaffected either
-            way, since no document is ever dropped.
+        drop_unlabelled_documents: Whether a document whose label path is shorter than the
+            level being scored is dropped at that level rather than scored. Defaults to False.
         input_column_name: Name of the column(s) containing the input sentences or data points. Default is "sentences".
             Can be a string for single-column tasks or a list of strings for multimodal tasks (e.g. ["video", "audio"]).
             When specified as a list, values must be the default column names as defined in the encoder I/O types

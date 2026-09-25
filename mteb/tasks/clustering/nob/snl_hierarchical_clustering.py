@@ -87,43 +87,83 @@ class SNLHierarchicalClusteringS2S(AbsTaskClustering):
     max_depth = 5
 
 
-class SNLHierarchicalClusteringP2PV2(SNLHierarchicalClusteringP2P):
-    """SNLHierarchicalClusteringP2P with documents that have no label at the level being scored dropped.
+class SNLHierarchicalClusteringP2PV2(AbsTaskClustering):
+    max_document_to_embed = 1300
+    max_fraction_of_documents_to_embed = None
 
-    Same data and same revision as SNLHierarchicalClusteringP2P. The only difference is that a
-    document whose label path stops above the level being scored is left out of that
-    level rather than gathered into one group under a sentinel label. Those documents
-    have nothing in common except a missing label, so scoring them asks the model to
-    find a class that is not really there.
-
-    Scores are not comparable with SNLHierarchicalClusteringP2P. On the SNL tasks the difference is
-    about +0.13 v_measure, and it tracks the share of documents that have no label at
-    each level.
-    """
+    metadata = TaskMetadata(
+        name="SNLHierarchicalClusteringP2P.v2",
+        dataset={
+            "path": "mteb/SNLHierarchicalClusteringP2P",
+            "revision": "693a321c42fb13ffe76bb9043f8d2aaa8f0a9499",
+        },
+        description="Webscrabed articles from the Norwegian lexicon 'Det Store Norske Leksikon'. Uses articles categories as clusters. This version drops documents that have no label at the level being scored, instead of grouping them into one class under a sentinel label.",
+        reference="https://huggingface.co/datasets/mteb/SNLHierarchicalClusteringP2P",
+        type="Clustering",
+        category="t2c",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["nob-Latn"],
+        main_score="v_measure",
+        date=("2020-01-01", "2024-12-31"),  # best guess
+        domains=["Encyclopaedic", "Non-fiction", "Written"],
+        license="cc-by-nc-4.0",  # version assumed (not specified beforehand)
+        annotations_creators="derived",
+        dialect=[],
+        task_subtypes=["Thematic clustering"],
+        sample_creation="found",
+        bibtex_citation=r"""
+@mastersthesis{navjord2023beyond,
+  author = {Navjord, J{\\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
+  school = {Norwegian University of Life Sciences, {\\AA}s},
+  title = {Beyond extractive: advancing abstractive automatic text summarization in Norwegian with transformers},
+  year = {2023},
+}
+""",
+        prompt="Identify categories in a Norwegian lexicon",
+        adapted_from=["SNLHierarchicalClusteringP2P"],
+    )
+    max_depth = 5
 
     drop_unlabelled_documents = True
 
-    metadata = SNLHierarchicalClusteringP2P.metadata.model_copy(
-        update={"name": "SNLHierarchicalClusteringP2P.v2", "superseded_by": None},
+
+class SNLHierarchicalClusteringS2SV2(AbsTaskClustering):
+    max_document_to_embed = 1300
+    max_fraction_of_documents_to_embed = None
+
+    metadata = TaskMetadata(
+        name="SNLHierarchicalClusteringS2S.v2",
+        dataset={
+            "path": "mteb/SNLHierarchicalClusteringS2S",
+            "revision": "b505e4ce65f255228e49dd07b6f8148731c5dc64",
+        },
+        description="Webscrabed articles from the Norwegian lexicon 'Det Store Norske Leksikon'. Uses articles categories as clusters. This version drops documents that have no label at the level being scored, instead of grouping them into one class under a sentinel label.",
+        reference="https://huggingface.co/datasets/mteb/SNLHierarchicalClusteringS2S",
+        type="Clustering",
+        category="t2c",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["nob-Latn"],
+        main_score="v_measure",
+        date=("2020-01-01", "2024-12-31"),  # best guess
+        domains=["Encyclopaedic", "Non-fiction", "Written"],
+        license="cc-by-nc-4.0",  # version assumed (not specified beforehand)
+        annotations_creators="derived",
+        dialect=[],
+        task_subtypes=["Thematic clustering"],
+        sample_creation="found",
+        bibtex_citation=r"""
+@mastersthesis{navjord2023beyond,
+  author = {Navjord, J{\\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
+  school = {Norwegian University of Life Sciences, {\\AA}s},
+  title = {Beyond extractive: advancing abstractive automatic text summarization in Norwegian with transformers},
+  year = {2023},
+}
+""",
+        prompt="Identify categories in a Norwegian lexicon",
+        adapted_from=["SNLHierarchicalClusteringS2S"],
     )
-
-
-class SNLHierarchicalClusteringS2SV2(SNLHierarchicalClusteringS2S):
-    """SNLHierarchicalClusteringS2S with documents that have no label at the level being scored dropped.
-
-    Same data and same revision as SNLHierarchicalClusteringS2S. The only difference is that a
-    document whose label path stops above the level being scored is left out of that
-    level rather than gathered into one group under a sentinel label. Those documents
-    have nothing in common except a missing label, so scoring them asks the model to
-    find a class that is not really there.
-
-    Scores are not comparable with SNLHierarchicalClusteringS2S. On the SNL tasks the difference is
-    about +0.13 v_measure, and it tracks the share of documents that have no label at
-    each level.
-    """
+    max_depth = 5
 
     drop_unlabelled_documents = True
-
-    metadata = SNLHierarchicalClusteringS2S.metadata.model_copy(
-        update={"name": "SNLHierarchicalClusteringS2S.v2", "superseded_by": None},
-    )

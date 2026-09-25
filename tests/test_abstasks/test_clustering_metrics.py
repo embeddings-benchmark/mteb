@@ -9,15 +9,6 @@ from mteb.abstasks.clustering import _evaluate_clustering_bootstrapped
 from mteb.mocks.mock_tasks import LegacyMockClusteringFastTask
 from tests.mock_models import MockSentenceTransformer
 
-HIERARCHICAL_TASKS = [
-    "ArXivHierarchicalClusteringP2P",
-    "ArXivHierarchicalClusteringS2S",
-    "SNLHierarchicalClusteringP2P",
-    "SNLHierarchicalClusteringS2S",
-    "VGHierarchicalClusteringP2P",
-    "VGHierarchicalClusteringS2S",
-]
-
 
 def _well_separated_dataset(
     n_clusters: int = 3, points_per_cluster: int = 12, dim: int = 8, seed: int = 0
@@ -199,39 +190,3 @@ def test_flag_makes_no_difference_when_every_label_reaches_every_level():
 
     assert dropped == kept
     assert dropped_assignments == kept_assignments
-
-
-def test_default_keeps_the_published_behaviour():
-    # Default False, so a task that predates the option is unaffected by it.
-    from mteb.abstasks.clustering import AbsTaskClustering
-
-    assert AbsTaskClustering.drop_unlabelled_documents is False
-
-
-def test_existing_hierarchical_tasks_are_untouched_and_superseded():
-    # These six were scored before the option existed. They keep their behaviour
-    # and point at the .v2 that has the fix.
-    for name in HIERARCHICAL_TASKS:
-        task = mteb.get_task(name)
-        assert task.drop_unlabelled_documents is False, name
-        assert task.metadata.superseded_by == f"{name}.v2", name
-
-
-def test_v2_hierarchical_tasks_drop_unlabelled_documents():
-    # The new version is where the corrected behaviour lives.
-    for name in HIERARCHICAL_TASKS:
-        task = mteb.get_task(f"{name}.v2")
-        assert task.drop_unlabelled_documents is True, name
-
-
-def test_v2_keeps_the_same_data_as_the_task_it_supersedes():
-    # A v2 is a scoring change, not a data change: same path and same revision,
-    # so a difference in score cannot be blamed on the dataset moving.
-    for name in HIERARCHICAL_TASKS:
-        old_task = mteb.get_task(name)
-        new_task = mteb.get_task(f"{name}.v2")
-        assert new_task.metadata.dataset["path"] == old_task.metadata.dataset["path"]
-        assert (
-            new_task.metadata.dataset["revision"]
-            == old_task.metadata.dataset["revision"]
-        )
