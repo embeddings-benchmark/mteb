@@ -26,16 +26,17 @@ results = mteb.evaluate(model, tasks=[task], video_frames=8)
 
 ### Provenance
 
-Results produced this way are stored with `video_num_frames` and `video_frame_pooling` in the model's `experiment_kwargs`, under an `experiments/` folder next to the model's regular results. They are therefore distinguishable from those of native video models.
+Results produced this way are stored with the sampling settings (`video_num_frames`, or `video_fps` and `video_max_frames`) and `video_frame_pooling` in the model's `experiment_kwargs`, under an `experiments/` folder next to the model's regular results. They are therefore distinguishable from those of native video models.
 
 ### Using the wrapper directly
 
-Under the hood `mteb.evaluate` wraps the model in [`VideoFramesWrapper`][mteb.models.video_wrappers.video_frames_wrapper.VideoFramesWrapper]. You can do the same yourself for custom pipelines:
+Under the hood `mteb.evaluate` wraps the model in [`Video2ImagesWrapper`][mteb.models.video_wrappers.video2images_wrapper.Video2ImagesWrapper]. You can do the same yourself for custom pipelines, or to sample frames at a rate (`fps`, optionally capped by `max_frames`) instead of a fixed count, as the native video models in MTEB do:
 
 ```python
-from mteb.models import VideoFramesWrapper
+from mteb.models import Video2ImagesWrapper
 
-video_model = VideoFramesWrapper(model, num_frames=8)
+video_model = Video2ImagesWrapper(model, num_frames=8)
+# or: Video2ImagesWrapper(model, fps=2.0, max_frames=64)
 embeddings = video_model.encode(
     dataloader, task_metadata=task.metadata, hf_split="test", hf_subset="default"
 )

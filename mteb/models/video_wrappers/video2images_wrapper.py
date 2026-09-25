@@ -13,15 +13,26 @@ if TYPE_CHECKING:
 DEFAULT_NUM_FRAMES = 8
 
 
-def video_frames_model_meta(meta: ModelMeta, num_frames: int) -> ModelMeta:
+def video2images_model_meta(
+    meta: ModelMeta,
+    *,
+    num_frames: int | None = None,
+    fps: float | None = None,
+    max_frames: int | None = None,
+) -> ModelMeta:
     """Meta of an image model evaluated on video through frame sampling and mean pooling.
 
-    Adds ``"video"`` to the modalities and records the protocol in ``experiment_kwargs``
-    so results are stored apart from those of native video models.
+    Adds ``"video"`` to the modalities and records the sampling settings in
+    ``experiment_kwargs`` so results are stored apart from those of native video models.
     """
     experiment_kwargs = dict(meta.experiment_kwargs or {})
-    experiment_kwargs["video_num_frames"] = num_frames
     experiment_kwargs["video_frame_pooling"] = "mean"
+    if num_frames is not None:
+        experiment_kwargs["video_num_frames"] = num_frames
+    if fps is not None:
+        experiment_kwargs["video_fps"] = fps
+    if max_frames is not None:
+        experiment_kwargs["video_max_frames"] = max_frames
     modalities = list(meta.modalities)
     if "video" not in modalities:
         modalities.append("video")
@@ -30,21 +41,24 @@ def video_frames_model_meta(meta: ModelMeta, num_frames: int) -> ModelMeta:
     )
 
 
-class VideoFramesWrapper:
+class Video2ImagesWrapper:
     """Runs an image encoder on video tasks by encoding sampled frames and mean-pooling them.
 
-    Frames are sampled uniformly across each clip, encoded independently as images by the
-    wrapped model, and averaged into one video embedding. This is the protocol used to report
+    Frames are sampled across each clip, encoded independently as images by the wrapped
+    model, and averaged into one video embedding. This is the protocol used to report
     CLIP-style models on video retrieval in e.g. CLIP4Clip and ChinaOpen.
+
+    Frames are sampled either as a fixed number per clip (``num_frames``, the default) or at a
+    rate (``fps``, optionally capped by ``max_frames``), matching the video models in MTEB.
 
     ``mteb.evaluate`` applies this wrapper automatically when an image model is run on a
     video task, so it only needs to be used directly for custom pipelines.
 
     Examples:
         >>> import mteb
-        >>> from mteb.models import VideoFramesWrapper
+        >>> from mteb.models import Video2ImagesWrapper
         >>> model = mteb.get_model("openai/clip-vit-base-patch32")
-        >>> video_model = VideoFramesWrapper(model, num_frames=8)
+        >>> video_model = Video2ImagesWrapper(model, num_frames=8)
         >>> task = mteb.get_task("MSRVTTT2V")
         >>> mteb.evaluate(video_model, task)
     """
@@ -53,13 +67,19 @@ class VideoFramesWrapper:
         self,
         model: EncoderProtocol,
         *,
-        num_frames: int = DEFAULT_NUM_FRAMES,
+        num_frames: int | None = None,
+        fps: float | None = None,
+        max_frames: int | None = None,
     ) -> None:
         """Wrap an image encoder so it can be evaluated on video tasks.
 
         Args:
             model: An encoder whose ``mteb_model_meta.modalities`` includes ``"image"``.
-            num_frames: Number of frames sampled uniformly from each video.
+            num_frames: Number of frames sampled uniformly from each video. Defaults to
+                ``DEFAULT_NUM_FRAMES`` when ``fps`` is not given.
+            fps: Sample frames at this rate instead of a fixed count. Cannot be combined
+                with ``num_frames``.
+            max_frames: Cap on the number of frames per video when sampling by ``fps``.
         """
         meta = model.mteb_model_meta
         if meta is None or "image" not in meta.modalities:
@@ -67,12 +87,20 @@ class VideoFramesWrapper:
                 f"{type(self).__name__} requires a model that supports the 'image' modality, "
                 f"got modalities={meta.modalities if meta else None}."
             )
-        if num_frames < 1:
+        if num_frames is not None and fps is not None:
+            raise ValueError("Use either `num_frames` or `fps`, not both.")
+        if num_frames is None and fps is None:
+            num_frames = DEFAULT_NUM_FRAMES
+        if num_frames is not None and num_frames < 1:
             raise ValueError(f"`num_frames` must be at least 1, got {num_frames}.")
 
         self.model = model
         self.num_frames = num_frames
-        self.mteb_model_meta = video_frames_model_meta(meta, num_frames)
+        self.fps = fps
+        self.max_frames = max_frames
+        self.mteb_model_meta = video2images_model_meta(
+            meta, num_frames=num_frames, fps=fps, max_frames=max_frames
+        )
 
     def encode(
         self,
@@ -121,18 +149,21 @@ class VideoFramesWrapper:
         from datasets import Dataset, Features
         from datasets import Image as ImageFeature
         from torchvision.transforms.functional import to_pil_image
-        from tqdm import tqdm
+        from tqdm.auto import tqdm
 
         from mteb._create_dataloaders import create_dataloader
         from mteb.models.modality_collators import FramesCollator
 
-        inputs.collate_fn = FramesCollator(num_frames=self.num_frames)
+        inputs.collate_fn = FramesCollator(
+            num_frames=self.num_frames, fps=self.fps, max_frames=self.max_frames
+        )
         image_task_metadata = _video_to_image_metadata(task_metadata)
         show_progress_bar = kwargs.pop("show_progress_bar", True)
 
-        video_embeddings = []
+        video_embeddings: list[torch.Tensor] = []
         for batch in tqdm(inputs, desc="Video Encoding", disable=not show_progress_bar):
             videos = batch["video"]
+            frame_counts = [len(video) for video in videos]
             images = [to_pil_image(frame) for video in videos for frame in video]
             image_loader = create_dataloader(
                 Dataset.from_dict(
@@ -153,10 +184,11 @@ class VideoFramesWrapper:
                     **kwargs,
                 )
             )
-            video_embeddings.append(
-                frame_embeddings.view(len(videos), self.num_frames, -1).mean(dim=1)
+            video_embeddings.extend(
+                chunk.mean(dim=0)
+                for chunk in torch.split(frame_embeddings, frame_counts)
             )
-        return torch.cat(video_embeddings)
+        return torch.stack(video_embeddings)
 
     def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
         """Refer to [EncoderProtocol.similarity][mteb.models.EncoderProtocol.similarity] for more details."""

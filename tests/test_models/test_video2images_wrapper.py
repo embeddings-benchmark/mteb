@@ -15,7 +15,7 @@ from mteb.mocks import (
     MockVideoZeroshotClassificationTask,
 )
 from mteb.mocks.mock_tasks.create_mock_samples import create_mock_video_bytes
-from mteb.models import VideoFramesWrapper
+from mteb.models import Video2ImagesWrapper
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_implementations.random_baseline import _image_to_vector
 from mteb.models.video_wrappers import DEFAULT_NUM_FRAMES
@@ -51,17 +51,22 @@ def _image_model():
 
 def test_requires_image_modality():
     with pytest.raises(ValueError, match="image"):
-        VideoFramesWrapper(_model(["text"]))
+        Video2ImagesWrapper(_model(["text"]))
 
 
 def test_rejects_non_positive_num_frames():
     with pytest.raises(ValueError, match="num_frames"):
-        VideoFramesWrapper(_image_model(), num_frames=0)
+        Video2ImagesWrapper(_image_model(), num_frames=0)
+
+
+def test_rejects_num_frames_together_with_fps():
+    with pytest.raises(ValueError, match="not both"):
+        Video2ImagesWrapper(_image_model(), num_frames=4, fps=2.0)
 
 
 def test_wrapper_meta_leaves_inner_model_untouched():
     model = _image_model()
-    wrapper = VideoFramesWrapper(model, num_frames=4)
+    wrapper = Video2ImagesWrapper(model, num_frames=4)
 
     assert wrapper.mteb_model_meta.modalities == ["text", "image", "video"]
     assert wrapper.mteb_model_meta.experiment_kwargs["video_num_frames"] == 4
@@ -71,20 +76,32 @@ def test_wrapper_meta_leaves_inner_model_untouched():
 
 
 def test_default_num_frames():
-    wrapper = VideoFramesWrapper(_image_model())
+    wrapper = Video2ImagesWrapper(_image_model())
     assert wrapper.num_frames == DEFAULT_NUM_FRAMES == 8
 
 
-def test_pooled_embedding_is_mean_of_frame_embeddings():
+def test_fps_mode_records_meta_without_num_frames():
+    wrapper = Video2ImagesWrapper(_image_model(), fps=2.0, max_frames=16)
+    experiment_kwargs = wrapper.mteb_model_meta.experiment_kwargs
+
+    assert wrapper.num_frames is None
+    assert experiment_kwargs["video_fps"] == 2.0
+    assert experiment_kwargs["video_max_frames"] == 16
+    assert "video_num_frames" not in experiment_kwargs
+
+
+@pytest.mark.parametrize(
+    "sampling", [{"num_frames": 4}, {"fps": 12.0}, {"fps": 12.0, "max_frames": 5}]
+)
+def test_pooled_embedding_is_mean_of_frame_embeddings(sampling):
     from datasets import Video
     from torchvision.transforms.functional import to_pil_image
 
-    num_frames = 4
     videos = Dataset.from_dict(
         {"video": create_mock_video_bytes(np.random.default_rng(0), n=3)}
     ).cast_column("video", Video())
     task = MockVideoRetrievalT2V()
-    wrapper = VideoFramesWrapper(_image_model(), num_frames=num_frames)
+    wrapper = Video2ImagesWrapper(_image_model(), **sampling)
     embed_dim = wrapper.model.embedding_dim
 
     loader = create_dataloader(
@@ -104,8 +121,7 @@ def test_pooled_embedding_is_mean_of_frame_embeddings():
 
     expected = []
     for row in videos:
-        frames = FramesCollator.resample_video(row["video"], num_frames=num_frames)
-        assert frames.shape[0] == num_frames
+        frames = FramesCollator.resample_video(row["video"], **sampling)
         frame_vectors = [
             _image_to_vector(to_pil_image(frame), embed_dim) for frame in frames
         ]
@@ -142,7 +158,7 @@ def test_evaluate_stores_results_as_video_frames_experiment(tmp_path):
 
 
 def test_evaluate_does_not_rewrap_explicit_wrapper():
-    wrapper = VideoFramesWrapper(_image_model(), num_frames=4)
+    wrapper = Video2ImagesWrapper(_image_model(), num_frames=4)
     with warnings.catch_warnings(record=True) as caught:
         warnings.simplefilter("always")
         mteb.evaluate(wrapper, MockVideoRetrievalT2V(), cache=None)

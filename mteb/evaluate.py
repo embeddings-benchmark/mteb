@@ -21,10 +21,10 @@ from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
 )
-from mteb.models.video_wrappers.video_frames_wrapper import (
+from mteb.models.video_wrappers.video2images_wrapper import (
     DEFAULT_NUM_FRAMES,
-    VideoFramesWrapper,
-    video_frames_model_meta,
+    Video2ImagesWrapper,
+    video2images_model_meta,
 )
 from mteb.results import ModelResult, TaskResult
 from mteb.results.task_result import TaskError
@@ -279,7 +279,7 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
 
 
 def _needs_video_frames(meta: ModelMeta, task: AbsTask) -> bool:
-    """Whether to run an image model on a video task through `VideoFramesWrapper`."""
+    """Whether to run an image model on a video task through `Video2ImagesWrapper`."""
     modalities = set(meta.modalities or [])
     return (
         "video" in task.metadata.modalities
@@ -305,7 +305,7 @@ def _check_model_modalities(
 
     model_modalities = set(model.modalities)
     if "image" in model_modalities:
-        # image models run on video tasks through VideoFramesWrapper
+        # image models run on video tasks through Video2ImagesWrapper
         model_modalities.add("video")
     check_tasks: Iterable[AbsTask] = []
     if isinstance(tasks, AbsTask):
@@ -492,7 +492,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
         num_proc: Number of processes to use during data loading and transformation. Defaults to 1.
         timer: A context manager that tracks the timing of evaluation phases.
         video_frames: Number of frames sampled per video when a model that supports images but not video is run on a video task.
-            Frames are encoded as images and mean-pooled (see `VideoFramesWrapper`). If None, 8 frames are used and a warning is emitted.
+            Frames are encoded as images and mean-pooled (see `Video2ImagesWrapper`). If None, 8 frames are used and a warning is emitted.
 
     Returns:
         The results of the evaluation.
@@ -633,7 +633,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
                 "to `mteb.evaluate` (or `--video-frames` on the CLI) to set it explicitly.",
                 stacklevel=2,
             )
-        meta = video_frames_model_meta(meta, num_frames)
+        meta = video2images_model_meta(meta, num_frames=num_frames)
 
     existing_results, missing_eval = _check_cache(task, meta, cache, overwrite_strategy)
 
@@ -664,7 +664,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
         logger.info("✓ Model loaded")
 
     if wrap_for_video:
-        model = VideoFramesWrapper(
+        model = Video2ImagesWrapper(
             cast("EncoderProtocol", model), num_frames=num_frames
         )
 
