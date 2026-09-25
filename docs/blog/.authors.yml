@@ -1,0 +1,17 @@
+# https://squidfunk.github.io/mkdocs-material/plugins/blog/#authors
+authors:
+  kenneth:
+    name: Kenneth Enevoldsen
+    description: Maintainer
+    url: https://github.com/KennethEnevoldsen
+    avatar: https://avatars.githubusercontent.com/u/23721977
+  samoed:
+    name: Roman Solomatin
+    description: Maintainer
+    url: https://github.com/Samoed
+    avatar: https://avatars.githubusercontent.com/u/36135455
+  isaac:
+    name: Isaac Chung
+    description: Maintainer
+    url: https://github.com/isaac-chung
+    avatar: https://avatars.githubusercontent.com/u/48971969
