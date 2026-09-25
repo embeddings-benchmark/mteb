@@ -65,6 +65,7 @@
   "potthast_2022_6862281": "Correct as cited (Zenodo, https://doi.org/10.5281/zenodo.6862281), DataCite dates the record 2020 and the deposit 2022",
   "priban-steinberger-2022-czech": "Correct as cited (LREC 2022, https://aclanthology.org/2022.lrec-1.148/), mismatch due to parsing of the latex accents in Priban",
   "quora-question-pairs": "Correct as cited (Kaggle's own citation, https://kaggle.com/competitions/quora-question-pairs), the authors are Kaggle handles",
+  "rcpndcg2026": "Forthcoming preprint accompanying the RCP-nDCG datasets (https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-nanobeir); replace with the arXiv entry once public",
   "riegoenhancement": " Correct as cited (United International Journal for Research & Technology, https://uijrt.com/articles/v4/i8/UIJRTV4I80009.pdf), the journal is not in Crossref",
   "sakaguchi2021winogrande": "Correct as cited (CACM 2021, https://doi.org/10.1145/3474381), Crossref holds the record under the short title 'WinoGrande'",
   "schmidt-etal-2022-sentiment": "Correct as cited (KONVENS 2022, https://aclanthology.org/2022.konvens-1.9/)",

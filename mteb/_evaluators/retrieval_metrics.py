@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 
     from numpy.typing import NDArray
 
-    from mteb.types import GainsType, RelevantDocumentsType
+    from mteb.types import RelevantDocumentsType
 
 logger = logging.getLogger(__name__)
 
@@ -65,15 +65,15 @@ def _dcg(gains: Sequence[float], k: int) -> float:
 
 
 def ndcg_float_scores(
-    gains: GainsType,
+    gains: Mapping[str, Mapping[str, float]],
     results: Mapping[str, Mapping[str, float]],
     k_values: Sequence[int],
 ) -> dict[str, float]:
     """Computes NDCG@k over continuous (float) relevance gains, bypassing pytrec_eval.
 
-    pytrec_eval only accepts integer relevance labels, so gains are used directly
-    (identity, non-negative; apply any transform, e.g. a sigmoid, at dataset
-    creation time). Equal model scores form one equivalence class: every tied
+    pytrec_eval only accepts integer relevance labels. Here each document's gain is
+    its float value, used as-is (linear gain, no ``2**g - 1``); gains must be finite
+    and non-negative. Equal model scores form one equivalence class: every tied
     document is credited the group-mean gain, the expectation over all tie
     resolutions. A stable sort instead would let the candidate-pool order (which
     is relevance-ordered for reranking pools) leak ground truth into tied scores.
@@ -83,9 +83,7 @@ def ndcg_float_scores(
     gain, and a NaN model score, raise `ValueError` rather than being scored --
     each would otherwise reach the mean as a silent `nan` or an extra tie class.
     Unlike the integer-qrels metrics, `skip_first_result` is not applied to the
-    float metric. The task layer applies `ignore_identical_ids` to both `gains`
-    and `results` before calling this function, so the query's own document is
-    dropped from the ranking and from the ideal ranking alike.
+    float metric.
 
     Args:
         gains: Continuous gains for each query, `{query_id: {doc_id: gain}}`. Must
@@ -102,8 +100,7 @@ def ndcg_float_scores(
         if any(not math.isfinite(gain) or gain < 0 for gain in doc_gains.values()):
             raise ValueError(
                 f"Non-finite or negative gain for query {query_id}. Gains must be "
-                "finite and non-negative; apply any transform (e.g. sigmoid) at "
-                "dataset creation time."
+                "finite and non-negative."
             )
 
     for query_id, doc_scores in results.items():

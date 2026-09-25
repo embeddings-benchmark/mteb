@@ -2916,6 +2916,120 @@ VIDORE_V3_1 = VidoreBenchmark(
 """,
 )
 
+
+NANOBEIR_RCP = Benchmark(
+    name="NanoBEIR(RCP)",
+    aliases=["rcp-nanobeir"],
+    display_name="NanoBEIR (RCP)",
+    tasks=get_tasks(
+        tasks=[
+            "NanoArguAnaRCPRetrieval",
+            "NanoClimateFeverRCPRetrieval",
+            "NanoDBPediaRCPRetrieval",
+            "NanoFEVERRCPRetrieval",
+            "NanoFiQA2018RCPRetrieval",
+            "NanoHotpotQARCPRetrieval",
+            "NanoMSMARCORCPRetrieval",
+            "NanoNFCorpusRCPRetrieval",
+            "NanoNQRCPRetrieval",
+            "NanoQuoraRCPRetrieval",
+            "NanoSCIDOCSRCPRetrieval",
+            "NanoSciFactRCPRetrieval",
+            "NanoTouche2020RCPRetrieval",
+        ],
+    ),
+    description="NanoBEIR with calibrated graded relevance. Rerankers are scored over a fixed candidate pool with NDCG over continuous relevance gains (ndcg_float_at_10): rubric-calibrated preferences (RCP) from an LLM judge, calibrated with a 2PL item-response model. The human qrels are unchanged.",
+    reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-nanobeir",
+    citation=r"""
+@misc{rcpndcg2026,
+  note = {Preprint forthcoming},
+  title = {RCP-nDCG: Retrieval Evaluation with Rubric-Calibrated Preferences},
+  year = {2026},
+}
+""",
+    contacts=["fabianschmidt-cohere"],
+)
+
+
+BRIGHT_RCP = Benchmark(
+    name="BRIGHT(RCP)",
+    aliases=["rcp-bright"],
+    display_name="BRIGHT (RCP)",
+    tasks=get_tasks(
+        tasks=[
+            "BrightAopsRCPRetrieval",
+            "BrightBiologyRCPRetrieval",
+            "BrightEarthScienceRCPRetrieval",
+            "BrightEconomicsRCPRetrieval",
+            "BrightLeetcodeRCPRetrieval",
+            "BrightPonyRCPRetrieval",
+            "BrightPsychologyRCPRetrieval",
+            "BrightRoboticsRCPRetrieval",
+            "BrightStackoverflowRCPRetrieval",
+            "BrightSustainableLivingRCPRetrieval",
+            "BrightTheoremQAQuestionsRCPRetrieval",
+            "BrightTheoremQATheoremsRCPRetrieval",
+        ],
+    ),
+    description="BRIGHT reasoning-intensive retrieval with calibrated graded relevance; excluded_ids are removed from the candidates. Rerankers are scored over a fixed candidate pool with NDCG over continuous relevance gains (ndcg_float_at_10): rubric-calibrated preferences (RCP) from an LLM judge, calibrated with a 2PL item-response model. The integer qrels are the upstream xlangai/BRIGHT@a75a0eb4 gold ids (as in BrightRetrieval), so ndcg_at_10 is not comparable to BRIGHT(v1.1).",
+    reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-bright",
+    citation=r"""
+@misc{rcpndcg2026,
+  note = {Preprint forthcoming},
+  title = {RCP-nDCG: Retrieval Evaluation with Rubric-Calibrated Preferences},
+  year = {2026},
+}
+
+@article{su2024bright,
+  author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},
+  journal = {arXiv preprint arXiv:2407.12883},
+  title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},
+  year = {2024},
+}
+""",
+    contacts=["fabianschmidt-cohere"],
+)
+
+
+VIDORE_V3_RCP = Benchmark(
+    name="ViDoRe(v3, RCP)",
+    aliases=["rcp-vidore-v3"],
+    display_name="ViDoRe v3 (RCP)",
+    tasks=get_tasks(
+        tasks=[
+            "Vidore3ComputerScienceRCPRetrieval",
+            "Vidore3EnergyRCPRetrieval",
+            "Vidore3FinanceEnRCPRetrieval",
+            "Vidore3FinanceFrRCPRetrieval",
+            "Vidore3HrRCPRetrieval",
+            "Vidore3IndustrialRCPRetrieval",
+            "Vidore3PharmaceuticalsRCPRetrieval",
+            "Vidore3PhysicsRCPRetrieval",
+        ],
+    ),
+    description="ViDoRe v3 visual document retrieval (8 public domains, 6 languages) with calibrated graded relevance. Rerankers are scored over a fixed candidate pool with NDCG over continuous relevance gains (ndcg_float_at_10): rubric-calibrated preferences (RCP) from an LLM judge, calibrated with a 2PL item-response model. The graded human qrels are unchanged.",
+    reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-vidore-v3",
+    citation=r"""
+@misc{rcpndcg2026,
+  note = {Preprint forthcoming},
+  title = {RCP-nDCG: Retrieval Evaluation with Rubric-Calibrated Preferences},
+  year = {2026},
+}
+
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+    contacts=["fabianschmidt-cohere"],
+)
+
+
 VISUAL_DOCUMENT_RETRIEVAL = Benchmark(
     name="ViDoRe(v1&v2)",
     aliases=["VisualDocumentRetrieval"],

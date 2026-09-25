@@ -79,9 +79,7 @@ def test_non_finite_or_negative_gains_raise(bad_gain: float):
 def test_nan_model_score_raises_instead_of_scoring():
     # a NaN model score is a model bug: it must fail loudly. Without the guard,
     # a NaN becomes its own singleton tie class and the query silently scores
-    # 1.0 (the committed 2545f4e code crashed with ZeroDivisionError on the
-    # same input -- neither behaviour is designed; the guard pins the designed
-    # one).
+    # 1.0, or the sort crashes, depending on the input.
     gains = {"q1": {"d1": 1.0, "d2": 0.5}}
     results = {"q1": {"d1": float("nan"), "d2": 0.5}}
 
