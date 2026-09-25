@@ -186,7 +186,20 @@ SampleCreationMethod = Literal[
 ]
 """How the text was created. It can be an important factor for understanding the quality of a dataset. E.g. used to filter out machine-translated datasets."""
 
-MIEB_TASK_TYPE = (
+TaskType = Literal[
+    "BitextMining",
+    "Classification",
+    "MultilabelClassification",
+    "Clustering",
+    "PairClassification",
+    "Regression",
+    "Reranking",
+    "Retrieval",
+    "STS",
+    "Summarization",
+    "InstructionRetrieval",
+    "InstructionReranking",
+    # MIEB
     "Any2AnyReranking",
     "Any2AnyRetrieval",
     "Any2AnyMultilingualRetrieval",
@@ -198,52 +211,21 @@ MIEB_TASK_TYPE = (
     "VisualSTS(multi)",
     "ZeroShotClassification",
     "Compositionality",
-)
-
-MAEB_TASK_TYPE = (
-    "Any2AnyReranking",
+    # MAEB
     "AudioClustering",
     "AudioMultilabelClassification",
     "AudioReranking",
     "AudioZeroshotClassification",
     "AudioClassification",
     "AudioPairClassification",
-    "Any2AnyRetrieval",
-)
-
-MVEB_TASK_TYPE = (
-    "Any2AnyReranking",
+    # MVEB
     "VideoClassification",
     "VideoClustering",
     "VideoMultilabelClassification",
     "VideoPairClassification",
     "VideoZeroshotClassification",
     "VideoCentricQA",
-    "Any2AnyRetrieval",
-)
-
-
-_TASK_TYPE = (
-    (
-        "BitextMining",
-        "Classification",
-        "MultilabelClassification",
-        "Clustering",
-        "PairClassification",
-        "Regression",
-        "Reranking",
-        "Retrieval",
-        "STS",
-        "Summarization",
-        "InstructionRetrieval",
-        "InstructionReranking",
-    )
-    + MIEB_TASK_TYPE
-    + MAEB_TASK_TYPE
-    + MVEB_TASK_TYPE
-)
-
-TaskType = Literal[_TASK_TYPE]  # type: ignore[valid-type]
+]
 """The type of the task. E.g. includes "Classification", "Retrieval" and "Clustering"."""
 
 
@@ -649,10 +631,11 @@ class TaskMetadata(BaseModel):
     def descriptive_stat_path(self) -> Path:
         """The path to the descriptive statistics file."""
         descriptive_stat_base_dir = Path(__file__).parent.parent / "descriptive_stats"
-        if self.type in MIEB_TASK_TYPE:
-            descriptive_stat_base_dir = descriptive_stat_base_dir / "Image"  # noqa: PLR6104
-        task_type_dir = descriptive_stat_base_dir / str(self.type)
-        return task_type_dir / f"{self.name}.json"
+        # Image task types (and Any2Any types) keep their stats under an extra "Image/" folder
+        image_task_type_dir = descriptive_stat_base_dir / "Image" / str(self.type)
+        if image_task_type_dir.is_dir():
+            return image_task_type_dir / f"{self.name}.json"
+        return descriptive_stat_base_dir / str(self.type) / f"{self.name}.json"
 
     @property
     def n_samples(self) -> dict[str, int] | None:
