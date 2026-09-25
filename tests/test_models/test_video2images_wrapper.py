@@ -75,9 +75,12 @@ def test_wrapper_meta_leaves_inner_model_untouched():
     assert "video_num_frames" not in (model.mteb_model_meta.experiment_kwargs or {})
 
 
-def test_default_num_frames():
+def test_default_num_frames_is_not_an_experiment():
     wrapper = Video2ImagesWrapper(_image_model())
     assert wrapper.num_frames == DEFAULT_NUM_FRAMES == 8
+    assert wrapper.mteb_model_meta.modalities == ["text", "image", "video"]
+    assert not wrapper.mteb_model_meta.experiment_kwargs
+    assert wrapper.mteb_model_meta.experiment_name is None
 
 
 def test_fps_mode_records_meta_without_num_frames():
@@ -146,7 +149,23 @@ def test_evaluate_video_frames_silences_default_warning():
     assert not [w for w in caught if "frames per video" in str(w.message)]
 
 
-def test_evaluate_stores_results_as_video_frames_experiment(tmp_path):
+@pytest.mark.parametrize("video_frames", [None, DEFAULT_NUM_FRAMES])
+def test_evaluate_stores_default_protocol_as_regular_results(tmp_path, video_frames):
+    model = _image_model()
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        mteb.evaluate(
+            model,
+            MockVideoRetrievalT2V(),
+            cache=ResultCache(tmp_path),
+            video_frames=video_frames,
+        )
+    (result_file,) = tmp_path.rglob("MockVideoRetrievalT2V.json")
+    assert "experiments" not in result_file.parts
+    assert result_file.parent.name == model.mteb_model_meta.revision
+
+
+def test_evaluate_stores_other_frame_counts_as_experiment(tmp_path):
     mteb.evaluate(
         _image_model(),
         MockVideoRetrievalT2V(),
@@ -155,6 +174,7 @@ def test_evaluate_stores_results_as_video_frames_experiment(tmp_path):
     )
     (result_file,) = tmp_path.rglob("MockVideoRetrievalT2V.json")
     assert result_file.parent.name == "video_frame_pooling_mean__video_num_frames_4"
+    assert result_file.parent.parent.name == "experiments"
 
 
 def test_evaluate_does_not_rewrap_explicit_wrapper():

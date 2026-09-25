@@ -25,23 +25,26 @@ def video2images_model_meta(
 ) -> ModelMeta:
     """Meta of an image model evaluated on video through frame sampling and mean pooling.
 
-    Adds ``"video"`` to the modalities and records the sampling settings in
-    ``experiment_kwargs`` so results are stored apart from those of native video models.
+    Adds ``"video"`` to the modalities. The default protocol (``DEFAULT_NUM_FRAMES`` uniform
+    frames) is stored as the model's regular results; any other sampling is recorded in
+    ``experiment_kwargs`` and stored as an experiment, like loader overrides on native
+    video models.
     """
-    experiment_kwargs = dict(meta.experiment_kwargs or {})
-    experiment_kwargs["video_frame_pooling"] = "mean"
-    if num_frames is not None:
-        experiment_kwargs["video_num_frames"] = num_frames
-    if fps is not None:
-        experiment_kwargs["video_fps"] = fps
-    if max_frames is not None:
-        experiment_kwargs["video_max_frames"] = max_frames
     modalities = list(meta.modalities)
     if "video" not in modalities:
         modalities.append("video")
-    return meta.model_copy(
-        update={"modalities": modalities, "experiment_kwargs": experiment_kwargs}
-    )
+    update: dict[str, Any] = {"modalities": modalities}
+    if num_frames != DEFAULT_NUM_FRAMES:
+        experiment_kwargs = dict(meta.experiment_kwargs or {})
+        experiment_kwargs["video_frame_pooling"] = "mean"
+        if num_frames is not None:
+            experiment_kwargs["video_num_frames"] = num_frames
+        if fps is not None:
+            experiment_kwargs["video_fps"] = fps
+        if max_frames is not None:
+            experiment_kwargs["video_max_frames"] = max_frames
+        update["experiment_kwargs"] = experiment_kwargs
+    return meta.model_copy(update=update)
 
 
 class Video2ImagesWrapper:
@@ -53,6 +56,8 @@ class Video2ImagesWrapper:
 
     Frames are sampled either as a fixed number per clip (``num_frames``, the default) or at a
     rate (``fps``, optionally capped by ``max_frames``), matching the video models in MTEB.
+    Results with the default ``DEFAULT_NUM_FRAMES`` frames are stored as the model's regular
+    results; any other sampling is stored as an experiment.
 
     ``mteb.evaluate`` applies this wrapper automatically when an image model is run on a
     video task, so it only needs to be used directly for custom pipelines.

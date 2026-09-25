@@ -26,7 +26,9 @@ results = mteb.evaluate(model, tasks=[task], video_frames=8)
 
 ### Provenance
 
-Results produced this way are stored with the sampling settings (`video_num_frames`, or `video_fps` and `video_max_frames`) and `video_frame_pooling` in the model's `experiment_kwargs`, under an `experiments/` folder next to the model's regular results. They are therefore distinguishable from those of native video models.
+Sampling 8 frames uniformly and mean-pooling is the default protocol, the same frame count X-CLIP, ViCLIP, LanguageBind and InternVideo2 use by default in MTEB. Results produced with it are stored as the model's regular results and appear on the leaderboard like those of native video models.
+
+Any other sampling (`video_frames=16`, or `fps` / `max_frames` through the wrapper) is recorded in the model's `experiment_kwargs` and stored under an `experiments/` folder next to the regular results, exactly as loader overrides such as `mteb.get_model("microsoft/xclip-base-patch32", num_frames=16)` are handled for native video models. Those results never overwrite the default-protocol ones and are not shown on the leaderboard.
 
 ### Using the wrapper directly
 
