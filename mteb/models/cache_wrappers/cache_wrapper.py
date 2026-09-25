@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 
 class CachedEmbeddingWrapper:
-    """Wraps an encoder and caches embeddings for text and images.
+    """Wraps an encoder and caches embeddings for text, images, audio, and video.
 
     Examples:
         >>> import mteb
