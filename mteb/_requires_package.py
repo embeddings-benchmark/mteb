@@ -1,9 +1,15 @@
+from __future__ import annotations
+
 import functools
 import importlib.metadata
 import importlib.util
 import logging
+from typing import TYPE_CHECKING
 
 from typing_extensions import deprecated
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 logger = logging.getLogger(__name__)
 
@@ -36,6 +42,29 @@ def _is_installed(distribution_name: str) -> bool:
     except importlib.metadata.PackageNotFoundError:
         return False
     return True
+
+
+def _install_target(groups: Sequence[str] = ()) -> str:
+    """The requirement that installs the given extras groups for the installed `mteb` or `mteb-core`."""
+    name = _mteb_distribution().metadata["Name"]
+    if name == "mteb-core":
+        # `mteb-core` leaves out the dependencies needed to load and run models
+        groups = ["run", *groups]
+    return f"{name}[{','.join(groups)}]" if groups else name
+
+
+def _requires_run_dependency(package: str, what: str) -> None:
+    """Raise an error saying what to install if a dependency needed to run models is missing.
+
+    Args:
+        package: The package to check, one of the packages of the `run` extra of `mteb-core`.
+        what: What the user was doing, e.g. "Evaluating a model".
+    """
+    if not _is_package_available(package):
+        raise ImportError(
+            f"{what} requires `{package}`, which is not installed. "
+            f"Install it with `pip install {_install_target()}`."
+        )
 
 
 def _is_package_available(pkg_name: str) -> bool:

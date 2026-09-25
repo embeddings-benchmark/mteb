@@ -11,6 +11,7 @@ from datasets.exceptions import DatasetNotFoundError
 from tqdm.auto import tqdm
 
 from mteb._helpful_enum import HelpfulStrEnum
+from mteb._requires_package import _requires_run_dependency
 from mteb.abstasks import AbsTaskBitextMining, AbsTaskRetrieval
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
@@ -505,6 +506,9 @@ def evaluate(  # noqa: PLR0913, PLR0914
         logger.info(
             "No batch size defined in encode_kwargs. Setting `encode_kwargs['batch_size'] = 32`. Explicitly set the batch size to silence this message."
         )
+
+    # encoding runs through torch dataloaders, so check before doing any work
+    _requires_run_dependency("torch", "Evaluating a model")
 
     model, meta, model_name, model_revision = _sanitize_model(model)
     _check_model_modalities(meta, tasks)

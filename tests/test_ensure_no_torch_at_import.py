@@ -69,8 +69,8 @@ def test_mteb_works_without_torch_installed() -> None:
     """Tasks, the CLI and every model's metadata must work on an install without torch.
 
     Building the model registry imports all model implementation files, so any of them importing
-    torch, transformers or sentence-transformers at module scope fails this test. Loading a model
-    must say what to install.
+    torch, transformers or sentence-transformers at module scope fails this test. Anything that does
+    need them must say what to install instead of raising a bare `ModuleNotFoundError`.
     """
     output = _run(
         _WITHOUT_TORCH
@@ -78,17 +78,29 @@ def test_mteb_works_without_torch_installed() -> None:
             """
             import mteb
             import mteb.cli
+            from mteb.mocks.mock_tasks.pair_classification import (
+                MockImageTextPairClassificationTask,
+            )
 
             assert len(mteb.get_model_metas()) > 0
             assert len(mteb.get_tasks(tasks=["NFCorpus"])) == 1
-            try:
-                mteb.get_model("sentence-transformers/all-MiniLM-L6-v2")
-            except ModuleNotFoundError as e:
-                print(e)
+
+            needs_run_dependencies = [
+                lambda: mteb.get_model("sentence-transformers/all-MiniLM-L6-v2"),
+                lambda: mteb.evaluate(object(), MockImageTextPairClassificationTask()),
+                lambda: mteb.models.ModelMeta.from_hub("BAAI/bge-m3"),
+            ]
+            explained = []
+            for call in needs_run_dependencies:
+                try:
+                    call()
+                except ImportError as e:  # ModuleNotFoundError is an ImportError
+                    explained.append("Install it with `pip install " in str(e))
+            print(explained)
             """
         )
     )
-    assert "To load and run models, install `" in output
+    assert output == "[True, True, True]", output
 
 
 def test_set_seed_still_seeds_torch_when_available() -> None:
