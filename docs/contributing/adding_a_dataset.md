@@ -227,6 +227,31 @@ Once we have decided on task, we can implement them as follows:
     # 0.021194685839832323
     ```
 
+    #### Retrieval tasks with continuous relevance gains
+
+    Integer qrels cannot express graded relevance well. A retrieval task can additionally ship a `gains`
+    config with continuous gains per (query, document) pair — columns `query-id`, `corpus-id`, `gain`
+    (float) — uploaded alongside `queries`/`corpus`/`qrels`. Config name: `gains` for the default subset,
+    `{subset}-gains` for multilingual subsets (e.g. `en-gains`), matching the `{subset}-qrels` convention.
+    Gains are used directly as NDCG gains (identity, non-negative); apply any transform (e.g. a sigmoid)
+    at dataset creation time. Descriptive statistics do not yet cover gains.
+
+    ```python
+    class MyGainsTask(AbsTaskRetrieval):
+        metadata = mteb.TaskMetadata(
+            # ...
+            main_score="ndcg_float_at_10",  # NDCG over the float gains
+            # ...
+        )
+    ```
+
+    When gains are present:
+
+    - each query's documents are scored with NDCG@k over the float gains (`ndcg_float_at_{k}` in the scores dict, with nAUC variants); the integer-qrels metrics are computed alongside, unchanged, over the same queries.
+    - queries with qrels but no gains entry raise a `KeyError` from the float metric — after retrieval has run — instead of silently changing the denominator; a query must have human qrels to be evaluated.
+    - a query whose gains are all zero scores 0.0 rather than being dropped, so it still counts in the mean; a NaN model score raises a `ValueError`.
+    - documents tied at the same model score are credited the mean gain of their tie group — the expectation over all tie resolutions — so the score does not depend on the candidate pool order.
+
 
 === "Multiple Choice Retrieval"
 

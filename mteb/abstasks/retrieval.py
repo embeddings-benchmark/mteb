@@ -14,7 +14,7 @@ from mteb._create_dataloaders import (
     _corpus_to_dict,
 )
 from mteb._evaluators import RetrievalEvaluator
-from mteb._evaluators.retrieval_metrics import make_score_dict
+from mteb._evaluators.retrieval_metrics import make_score_dict, ndcg_float_scores
 from mteb.models import (
     CrossEncoderProtocol,
     EncoderProtocol,
@@ -49,6 +49,7 @@ if TYPE_CHECKING:
     )
     from mteb.types import (
         EncodeKwargs,
+        GainsType,
         HFSubset,
         Modalities,
         QueryDatasetType,
@@ -80,6 +81,30 @@ def _filter_queries_without_positives(
     return _relevant_docs, queries
 
 
+def _float_gain_scores(
+    gains: GainsType,
+    results: RetrievalOutputType,
+    k_values: Sequence[int],
+    ignore_identical_ids: bool,
+) -> dict[str, float]:
+    """NDCG over float gains, honouring `ignore_identical_ids` like the qrels metrics.
+
+    With `ignore_identical_ids`, each query's own document is dropped from both
+    the ranking and the gains, so it cannot inflate the ideal DCG. Copies are
+    filtered; the inputs are not mutated.
+    """
+    if ignore_identical_ids:
+        gains = {
+            query_id: {doc_id: g for doc_id, g in docs.items() if doc_id != query_id}
+            for query_id, docs in gains.items()
+        }
+        results = {
+            query_id: {doc_id: s for doc_id, s in docs.items() if doc_id != query_id}
+            for query_id, docs in results.items()
+        }
+    return ndcg_float_scores(gains, results, k_values)
+
+
 class AbsTaskRetrieval(AbsTask):
     """The class which retrieval tasks inherit from.
 
@@ -87,6 +112,8 @@ class AbsTaskRetrieval(AbsTask):
     The task is to retrieve the relevant documents for each query. The evaluation is done by indexing the corpus and then searching for each query.
     The retrieved documents are then compared to the relevant documents to calculate the evaluation scores.
 
+    If the split data contains `gains` (continuous relevance gains), NDCG over the
+    float gains (`ndcg_float_at_{k}`) is added to the reported scores.
 
     Attributes:
         dataset: A nested dictionary where the first key is the subset (language or "default"),
@@ -370,6 +397,7 @@ class AbsTaskRetrieval(AbsTask):
             Dictionary of evaluation scores
         """
         # ensure queries format (see #3030)
+        gains = data_split.get("gains")
         data_split["relevant_docs"], data_split["queries"] = (
             _filter_queries_without_positives(
                 data_split["relevant_docs"], data_split["queries"]
@@ -446,6 +474,11 @@ class AbsTaskRetrieval(AbsTask):
             hf_split=hf_split,
             hf_subset=hf_subset,
         )
+        gain_scores = (
+            _float_gain_scores(gains, results, self.k_values, self.ignore_identical_ids)
+            if gains is not None
+            else {}
+        )
         logger.info("Running retrieval task - Finished.")
         return make_score_dict(
             ndcg=ndcg,
@@ -456,7 +489,8 @@ class AbsTaskRetrieval(AbsTask):
             naucs=naucs,
             naucs_mrr=naucs_mrr,
             hit_rate=hit_rate,
-            task_scores=task_specific_scores,
+            # task-specific scores merge last so they can extend the float gains
+            task_scores={**gain_scores, **task_specific_scores},
             previous_results_model_meta=self._previous_results_model_meta,
         )
 
@@ -714,6 +748,27 @@ class AbsTaskRetrieval(AbsTask):
                 commit_message=f"Add {subset}-qrels",
                 num_proc=num_proc,
             )
+
+            # Handle gains separately since one entry expands to multiple records.
+            gains_sections = {}
+            for split, values in self.dataset[subset].items():
+                gains = values.get("gains")
+                if not gains:
+                    continue
+                gains_sections[split] = Dataset.from_list(
+                    [
+                        {"query-id": query_id, "corpus-id": doc_id, "gain": gain}
+                        for query_id, docs in gains.items()
+                        for doc_id, gain in docs.items()
+                    ]
+                )
+            if gains_sections:
+                DatasetDict(gains_sections).push_to_hub(
+                    repo_name,
+                    f"{subset}-gains" if subset != "default" else "gains",
+                    commit_message=f"Add {subset}-gains",
+                    num_proc=num_proc,
+                )
 
             _push_section(
                 self.dataset[subset],

@@ -277,6 +277,10 @@ InstructionDatasetType: TypeAlias = "Dataset"
 RelevantDocumentsType = Mapping[str, Mapping[str, int]]
 """Relevant documents for each query, mapping query IDs to a mapping of document IDs and their relevance
 scores. Should have columns `query-id`, `corpus-id`, `score`."""
+GainsType = Mapping[str, Mapping[str, float]]
+"""Continuous relevance gains for each query, mapping query IDs to a mapping of document IDs and their
+gain values. Should have columns `query-id`, `corpus-id`, `gain`. Gains are used directly as NDCG gains
+(identity, non-negative); apply any transform (e.g. sigmoid) at dataset creation time."""
 TopRankedDocumentsType = Mapping[str, list[str]]
 """Top-ranked documents for each query, mapping query IDs to a list of document IDs. Should
 have columns `query-id`, `corpus-ids`."""
