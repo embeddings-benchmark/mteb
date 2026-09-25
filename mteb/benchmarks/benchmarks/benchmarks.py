@@ -2877,7 +2877,8 @@ VIDORE_V3 = VidoreBenchmark(
 
 VIDORE_V3_1 = VidoreBenchmark(
     name="ViDoRe(v3.1)",
-    display_name="ViDoRe v3.1",
+    display_name="ViDoRe v3 (corpus image+text)",
+    aliases=["ViDoRe(v3, image+text)"],
     language_view=[
         "deu-Latn",
         "eng-Latn",
