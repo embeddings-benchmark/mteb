@@ -1,13 +1,16 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+import warnings
+from typing import TYPE_CHECKING, Any, cast
+
+from mteb.models.model_meta import ModelMeta
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
+    from mteb.abstasks.abstask import AbsTask
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.models.model_meta import ModelMeta
-    from mteb.models.models_protocols import EncoderProtocol
+    from mteb.models.models_protocols import EncoderProtocol, MTEBModels
     from mteb.types import Array, BatchedInput, PromptType
 
 DEFAULT_NUM_FRAMES = 8
@@ -197,6 +200,42 @@ class Video2ImagesWrapper:
     def similarity_pairwise(self, embeddings1: Array, embeddings2: Array) -> Array:
         """Refer to [EncoderProtocol.similarity_pairwise][mteb.models.EncoderProtocol.similarity_pairwise] for more details."""
         return self.model.similarity_pairwise(embeddings1, embeddings2)
+
+
+def wrap_image_model_for_video(
+    model: MTEBModels | ModelMeta,
+    meta: ModelMeta,
+    task: AbsTask,
+    video_frames: int | None,
+) -> tuple[MTEBModels | ModelMeta, ModelMeta]:
+    """Wrap an image-only model in `Video2ImagesWrapper` when ``task`` needs video.
+
+    Returns the model and meta unchanged when no wrapping is needed. Loads the model
+    first if it is still a ``ModelMeta``.
+    """
+    modalities = set(meta.modalities or [])
+    if not (
+        "video" in task.metadata.modalities
+        and "image" in modalities
+        and "video" not in modalities
+    ):
+        return model, meta
+
+    if video_frames is None:
+        warnings.warn(
+            f"{meta.name} supports images but not video. Running {task.metadata.name} by sampling "
+            f"and mean-pooling the default {DEFAULT_NUM_FRAMES} frames per video. Pass `video_frames` "
+            "to `mteb.evaluate` (or `--video-frames` on the CLI) to set it explicitly.",
+            stacklevel=3,
+        )
+        video_frames = DEFAULT_NUM_FRAMES
+
+    if isinstance(model, ModelMeta):
+        model = model.load_model()
+    wrapper = Video2ImagesWrapper(
+        cast("EncoderProtocol", model), num_frames=video_frames
+    )
+    return wrapper, wrapper.mteb_model_meta
 
 
 def _video_to_image_metadata(task_metadata: TaskMetadata) -> TaskMetadata:

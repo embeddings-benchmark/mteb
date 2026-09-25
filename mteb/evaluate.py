@@ -22,9 +22,7 @@ from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
 )
 from mteb.models.video_wrappers.video2images_wrapper import (
-    DEFAULT_NUM_FRAMES,
-    Video2ImagesWrapper,
-    video2images_model_meta,
+    wrap_image_model_for_video,
 )
 from mteb.results import ModelResult, TaskResult
 from mteb.results.task_result import TaskError
@@ -37,7 +35,6 @@ if TYPE_CHECKING:
     from sentence_transformers import CrossEncoder, SentenceTransformer
 
     from mteb.models.models_protocols import (
-        EncoderProtocol,
         MTEBModels,
     )
     from mteb.types import EncodeKwargs, HFSubset, ScoresDict, SplitName
@@ -276,16 +273,6 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
         task.unload_data()
 
     return result
-
-
-def _needs_video_frames(meta: ModelMeta, task: AbsTask) -> bool:
-    """Whether to run an image model on a video task through `Video2ImagesWrapper`."""
-    modalities = set(meta.modalities or [])
-    return (
-        "video" in task.metadata.modalities
-        and "image" in modalities
-        and "video" not in modalities
-    )
 
 
 def _check_model_modalities(
@@ -623,17 +610,7 @@ def evaluate(  # noqa: PLR0913, PLR0914
             exceptions=exceptions,
         )
 
-    wrap_for_video = _needs_video_frames(meta, task)
-    num_frames = DEFAULT_NUM_FRAMES if video_frames is None else video_frames
-    if wrap_for_video:
-        if video_frames is None:
-            warnings.warn(
-                f"{model_name} supports images but not video. Running {task.metadata.name} by sampling "
-                f"and mean-pooling the default {DEFAULT_NUM_FRAMES} frames per video. Pass `video_frames` "
-                "to `mteb.evaluate` (or `--video-frames` on the CLI) to set it explicitly.",
-                stacklevel=2,
-            )
-        meta = video2images_model_meta(meta, num_frames=num_frames)
+    model, meta = wrap_image_model_for_video(model, meta, task, video_frames)
 
     existing_results, missing_eval = _check_cache(task, meta, cache, overwrite_strategy)
 
@@ -662,11 +639,6 @@ def evaluate(  # noqa: PLR0913, PLR0914
         )
         model = model.load_model()
         logger.info("✓ Model loaded")
-
-    if wrap_for_video:
-        model = Video2ImagesWrapper(
-            cast("EncoderProtocol", model), num_frames=num_frames
-        )
 
     if raise_error is False:
         try:
