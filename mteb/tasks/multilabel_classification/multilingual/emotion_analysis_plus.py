@@ -70,4 +70,21 @@ class EmotionAnalysisPlus(AbsTaskMultilabelClassification):
         dialect=[],
         sample_creation="created",
         bibtex_citation="",
+        superseded_by="EmotionAnalysisPlus.v2",
     )
+    # Published results score the whole evaluation split, so the cap stays off to keep them comparable.
+    max_eval_samples: int | None = None
+
+
+class EmotionAnalysisPlusV2(EmotionAnalysisPlus):
+    metadata = EmotionAnalysisPlus.metadata.model_copy(
+        update={
+            "name": "EmotionAnalysisPlus.v2",
+            "description": EmotionAnalysisPlus.metadata.description
+            + " This version scores at most 3000 rows of each evaluation split, sampled with iterative stratification over the labels.",
+            "superseded_by": None,
+            "adapted_from": ["EmotionAnalysisPlus"],
+        },
+        deep=True,
+    )
+    max_eval_samples = 3000

@@ -42,4 +42,21 @@ class VABBMultiLabelClassification(AbsTaskMultilabelClassification):
 }
 """,
         prompt="Classificeer de onderwerpen van een wetenschappelijk artikel op basis van de abstract",
+        superseded_by="VABBMultiLabelClassification.v2",
     )
+    # Published results score the whole evaluation split, so the cap stays off to keep them comparable.
+    max_eval_samples: int | None = None
+
+
+class VABBMultiLabelClassificationV2(VABBMultiLabelClassification):
+    metadata = VABBMultiLabelClassification.metadata.model_copy(
+        update={
+            "name": "VABBMultiLabelClassification.v2",
+            "description": VABBMultiLabelClassification.metadata.description
+            + " This version scores at most 3000 rows of each evaluation split, sampled with iterative stratification over the labels.",
+            "superseded_by": None,
+            "adapted_from": ["VABBMultiLabelClassification"],
+        },
+        deep=True,
+    )
+    max_eval_samples = 3000

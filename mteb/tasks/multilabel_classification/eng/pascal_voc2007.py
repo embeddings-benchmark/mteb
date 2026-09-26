@@ -44,7 +44,10 @@ class VOC2007Classification(AbsTaskMultilabelClassification):
   year = {2010},
 }
 """,
+        superseded_by="VOC2007.v2",
     )
+    # Published results score the whole evaluation split, so the cap stays off to keep them comparable.
+    max_eval_samples: int | None = None
 
     # Override default column name in the subclass
     label_column_name: str = "classes"
@@ -53,3 +56,17 @@ class VOC2007Classification(AbsTaskMultilabelClassification):
     n_experiments: int = 5
     input_column_name: str = "image"
     evaluator = MultiOutputClassifier(estimator=LogisticRegression())
+
+
+class VOC2007ClassificationV2(VOC2007Classification):
+    metadata = VOC2007Classification.metadata.model_copy(
+        update={
+            "name": "VOC2007.v2",
+            "description": VOC2007Classification.metadata.description
+            + " This version scores at most 3000 rows of each evaluation split, sampled with iterative stratification over the labels.",
+            "superseded_by": None,
+            "adapted_from": ["VOC2007"],
+        },
+        deep=True,
+    )
+    max_eval_samples = 3000

@@ -49,7 +49,10 @@ Xavier Serra},
   year = {2020},
 }
 """,
+        superseded_by="FSD2019Kaggle.v2",
     )
+    # Published results score the whole evaluation split, so the cap stays off to keep them comparable.
+    max_eval_samples: int | None = None
 
     evaluator_model = MultiOutputClassifier(estimator=LogisticRegression())
     input_column_name: str = "audio"
@@ -69,3 +72,19 @@ Xavier Serra},
 
         self.dataset_transform()
         self.data_loaded = True
+
+
+class FSD2019KaggleMultilingualClassificationV2(
+    FSD2019KaggleMultilingualClassification
+):
+    metadata = FSD2019KaggleMultilingualClassification.metadata.model_copy(
+        update={
+            "name": "FSD2019Kaggle.v2",
+            "description": FSD2019KaggleMultilingualClassification.metadata.description
+            + " This version scores at most 3000 rows of each evaluation split, sampled with iterative stratification over the labels.",
+            "superseded_by": None,
+            "adapted_from": ["FSD2019Kaggle"],
+        },
+        deep=True,
+    )
+    max_eval_samples = 3000
