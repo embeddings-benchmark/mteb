@@ -16,6 +16,7 @@ def split_labels(record: dict) -> dict:
 class ArXivHierarchicalClusteringP2P(AbsTaskClustering):
     metadata = TaskMetadata(
         name="ArXivHierarchicalClusteringP2P",
+        superseded_by="ArXivHierarchicalClusteringP2P.v2",
         description="Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the main or secondary category",
         reference="https://www.kaggle.com/Cornell-University/arxiv",
         dataset={
@@ -59,6 +60,7 @@ class ArXivHierarchicalClusteringP2P(AbsTaskClustering):
 class ArXivHierarchicalClusteringS2S(AbsTaskClustering):
     metadata = TaskMetadata(
         name="ArXivHierarchicalClusteringS2S",
+        superseded_by="ArXivHierarchicalClusteringS2S.v2",
         description="Clustering of titles from arxiv. Clustering of 30 sets, either on the main or secondary category",
         reference="https://www.kaggle.com/Cornell-University/arxiv",
         dataset={
@@ -97,3 +99,95 @@ class ArXivHierarchicalClusteringS2S(AbsTaskClustering):
         self.dataset["test"] = self.dataset["test"].train_test_split(
             test_size=N_SAMPLES, seed=self.seed
         )["test"]
+
+
+class ArXivHierarchicalClusteringP2PV2(AbsTaskClustering):
+    metadata = TaskMetadata(
+        name="ArXivHierarchicalClusteringP2P.v2",
+        description="Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the main or secondary category. This version drops documents that have no label at the level being scored, instead of grouping them into one class under a sentinel label.",
+        reference="https://www.kaggle.com/Cornell-University/arxiv",
+        dataset={
+            "path": "mteb/arxiv-clustering-p2p",
+            "revision": "0bbdb47bcbe3a90093699aefeed338a0f28a7ee8",
+        },
+        type="Clustering",
+        category="t2c",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="v_measure",
+        date=("1991-01-01", "2021-01-01"),  # 1991-01-01 is the first arxiv paper
+        domains=["Academic", "Written"],
+        task_subtypes=[],
+        license="cc0-1.0",
+        annotations_creators="derived",
+        dialect=["Thematic clustering"],
+        sample_creation="found",
+        bibtex_citation="",
+        adapted_from=["ArXivHierarchicalClusteringP2P"],
+    )
+
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
+        ds = {}
+        for split in self.metadata.eval_splits:
+            labels = list(itertools.chain.from_iterable(self.dataset[split]["labels"]))
+            sentences = list(
+                itertools.chain.from_iterable(self.dataset[split]["sentences"])
+            )
+            ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
+        self.dataset = DatasetDict(ds)
+        self.dataset = self.dataset.map(split_labels)
+        self.dataset["test"] = self.dataset["test"].train_test_split(
+            test_size=N_SAMPLES, seed=self.seed
+        )["test"]
+
+    drop_unlabelled_documents = True
+
+
+class ArXivHierarchicalClusteringS2SV2(AbsTaskClustering):
+    metadata = TaskMetadata(
+        name="ArXivHierarchicalClusteringS2S.v2",
+        description="Clustering of titles from arxiv. Clustering of 30 sets, either on the main or secondary category. This version drops documents that have no label at the level being scored, instead of grouping them into one class under a sentinel label.",
+        reference="https://www.kaggle.com/Cornell-University/arxiv",
+        dataset={
+            "path": "mteb/arxiv-clustering-s2s",
+            "revision": "b73bd54100e5abfa6e3a23dcafb46fe4d2438dc3",
+        },
+        type="Clustering",
+        category="t2c",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="v_measure",
+        date=("1991-01-01", "2021-01-01"),  # 1991-01-01 is the first arxiv paper
+        domains=["Academic", "Written"],
+        task_subtypes=["Thematic clustering"],
+        license="cc0-1.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation="",
+        adapted_from=["ArXivHierarchicalClusteringS2S"],
+    )
+
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
+        ds = {}
+        for split in self.metadata.eval_splits:
+            labels = list(itertools.chain.from_iterable(self.dataset[split]["labels"]))
+            sentences = list(
+                itertools.chain.from_iterable(self.dataset[split]["sentences"])
+            )
+            ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
+        self.dataset = DatasetDict(ds)
+        self.dataset = self.dataset.map(split_labels)
+        self.dataset["test"] = self.dataset["test"].train_test_split(
+            test_size=N_SAMPLES, seed=self.seed
+        )["test"]
+
+    drop_unlabelled_documents = True
