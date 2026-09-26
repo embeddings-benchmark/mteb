@@ -1,13 +1,14 @@
 """The filters of `mteb.data_cleaning`, and the machinery that applies them to a task.
 
 The primitives at the top work on a single `datasets.Dataset` and know nothing about task types: the caller
-supplies the columns to compare and a `KeepIndicesFn` deciding which rows to keep. `_filter_task_rows` then walks
+supplies the columns to compare and a `KeepRowsFn` deciding which rows to keep. `_filter_task_rows` then walks
 a task's subsets and splits, dispatching to `_retrieval` for the parts that differ per task type. The public filters are at the bottom.
 """
 
 from __future__ import annotations
 
 import copy
+import functools
 import hashlib
 import logging
 import re
@@ -23,12 +24,18 @@ from datasets import Dataset, DatasetDict
 
 from mteb._content_hashes import MODALITY_HASH_FNS
 from mteb._set_seed import _set_seed
+from mteb.abstasks._statistics_calculation import (
+    _audio_duration_seconds,
+    _video_duration_seconds,
+)
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.sts import AbsTaskSTS
 
 if TYPE_CHECKING:
     from collections.abc import Iterator, Sequence
+
+    from PIL import Image
 
     from mteb.abstasks.abstask import AbsTask
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -53,12 +60,13 @@ def _strip_whitespace(text: str) -> str:
     return text.strip()
 
 
-KeepIndicesFn = Callable[[Iterable[tuple[str, ...]]], list[int]]
-"""Given the comparable content of each row, return the (ascending) indices of the rows to keep.
+KeepRowsFn = Callable[[Iterable[tuple[Any, ...]]], list[int]]
+"""Given the content of each row, return the (ascending) indices of the rows to keep.
 
-A row arrives as one tuple holding the content of each compared column. The rows are passed as a lazy iterable and
-may only be consumed once, so that filtering a large corpus does not require holding all of its content in memory
-at the same time.
+A row arrives as one tuple holding the content of each compared column: text as a normalized string, and images,
+audio and video as a hash of their content, or as they are for a filter that measures rows rather than comparing
+them. The rows are passed as a lazy iterable and may only be consumed once, so that filtering a large corpus does
+not require holding all of its content in memory at the same time.
 """
 
 
@@ -75,11 +83,17 @@ class _Filter:
         removes_duplicates: Whether a row is removed for being identical to a kept one. When it is, a retrieval
             task moves the removed row's relevance judgements to the row it duplicated, so that deduplication
             costs no query its positives. A filter that removes rows on their own merit must leave this False.
+        modalities: The modalities the filter applies to, or None for every one. The content columns of any
+            other modality are left out of what `keep_fn` sees.
+        compares_rows: Whether `keep_fn` compares rows with each other, which it does by the hash of their
+            images, audio and video. A filter that measures each row on its own sees them as they are instead.
     """
 
     name: str
-    keep_fn: KeepIndicesFn
+    keep_fn: KeepRowsFn
     removes_duplicates: bool = False
+    modalities: frozenset[Modalities] | None = None
+    compares_rows: bool = True
 
 
 _SUPPORTED_MODALITIES: frozenset[str] = frozenset(MODALITY_HASH_FNS)
@@ -127,20 +141,45 @@ def _keep_first_occurrence(rows: Iterable[tuple[str, ...]]) -> list[int]:
     return keep
 
 
+def _keep_at_least(
+    rows: Iterable[tuple[Any, ...]],
+    *,
+    minimum: float,
+    measure_fn: Callable[[Any], float | None],
+) -> list[int]:
+    """Keep the rows whose values all measure at least `minimum`.
+
+    Args:
+        rows: The content of each row, one tuple per row with one entry per compared column.
+        minimum: The smallest size a value may have.
+        measure_fn: The size of a value, or None if it cannot be told, in which case the value is kept.
+
+    Returns:
+        The indices of the rows without a value smaller than `minimum`.
+    """
+
+    def large_enough(value: object) -> bool:
+        size = measure_fn(value)
+        return size is None or size >= minimum
+
+    return [i for i, row in enumerate(rows) if all(map(large_enough, row))]
+
+
 def _content_readers(
     dataset: Dataset,
     col_modalities: Mapping[str, Modalities],
     *,
     normalization: Normalization,
+    hash_non_text: bool,
     num_proc: int | None,
-) -> list[Callable[[], Iterable[str]]]:
-    """One reader per compared column, each returning that column's comparable content when called.
+) -> list[Callable[[], Iterable[Any]]]:
+    """One reader per compared column, each returning that column's content when called.
 
     Hashing images, audio or video is expensive, so it happens once here and the result is reused every time the
-    rows are read. Text is cheap to re-read and stays lazy, so comparing a large text corpus never holds all of it
-    in memory at once.
+    rows are read. Text, and non-text content that is not hashed, stays lazy, so a large corpus is never held in
+    memory at once.
     """
-    readers: list[Callable[[], Iterable[str]]] = []
+    readers: list[Callable[[], Iterable[Any]]] = []
     for column, modality in col_modalities.items():
         if modality == "text":
 
@@ -148,18 +187,20 @@ def _content_readers(
                 return (_normalize(value, normalization) for value in dataset[column])
 
             readers.append(_read_text)
-        else:
+        elif hash_non_text:
             hashes = MODALITY_HASH_FNS[modality](dataset[column], max_workers=num_proc)
             readers.append(lambda hashes=hashes: hashes)  # type: ignore[misc]
+        else:
+            readers.append(lambda column=column: dataset[column])  # type: ignore[misc]
     return readers
 
 
 def _iter_row_content(
-    readers: Sequence[Callable[[], Iterable[str]]],
+    readers: Sequence[Callable[[], Iterable[Any]]],
     *,
     columns: Sequence[str] = (),
     symmetric_sides: tuple[list[str], list[str]] | None = None,
-) -> Iterator[tuple[str, ...]]:
+) -> Iterator[tuple[Any, ...]]:
     """Iterate the comparable content of each row, one entry per reader.
 
     When `symmetric_sides` names the two sides of a symmetric task, they are ordered within each row, so that a
@@ -211,7 +252,7 @@ def _is_grouped(dataset: Dataset, columns: Sequence[str]) -> bool:
 def _filter_within_row(
     example: dict[str, Any],
     columns: Sequence[str],
-    keep_fn: KeepIndicesFn,
+    keep_fn: KeepRowsFn,
     normalization: Normalization,
 ) -> dict[str, Any]:
     """Apply `keep_fn` inside a single row of a grouped dataset.
@@ -247,13 +288,13 @@ def _count_values(dataset: Dataset, column: str, grouped: bool) -> int:
 def _apply_row_filter(
     dataset: Dataset,
     col_modalities: Mapping[str, Modalities],
-    keep_fn: KeepIndicesFn,
+    filter_: _Filter,
     *,
     normalization: Normalization = _strip_whitespace,
     num_proc: int | None = None,
     symmetric_sides: tuple[list[str], list[str]] | None = None,
 ) -> tuple[Dataset, int]:
-    """Filter `dataset` down to the rows that `keep_fn` keeps.
+    """Filter `dataset` down to the rows that `filter_` keeps.
 
     For a regular dataset this drops whole rows. For a grouped dataset -- one where each row holds a list of values,
     as clustering tasks do -- the filter is applied within each row instead, and the parallel columns of that row
@@ -262,7 +303,7 @@ def _apply_row_filter(
     Args:
         dataset: The dataset to filter.
         col_modalities: The columns to compare, mapped to the modality of their content.
-        keep_fn: Decides which rows to keep.
+        filter_: Decides which rows to keep.
         normalization: How to rewrite text before comparing it.
         num_proc: Number of processes to use for hashing and for filtering a grouped dataset.
         symmetric_sides: The two sides to order within each row, for a task where swapping them means the same.
@@ -297,19 +338,23 @@ def _apply_row_filter(
             _filter_within_row,
             fn_kwargs={
                 "columns": columns,
-                "keep_fn": keep_fn,
+                "keep_fn": filter_.keep_fn,
                 "normalization": normalization,
             },
             num_proc=num_proc,
         )
     else:
         readers = _content_readers(
-            dataset, col_modalities, normalization=normalization, num_proc=num_proc
+            dataset,
+            col_modalities,
+            normalization=normalization,
+            hash_non_text=filter_.compares_rows,
+            num_proc=num_proc,
         )
         rows = _iter_row_content(
             readers, columns=columns, symmetric_sides=symmetric_sides
         )
-        filtered = dataset.select(keep_fn(rows))
+        filtered = dataset.select(filter_.keep_fn(rows))
 
     return filtered, before - _count_values(filtered, columns[0], grouped)
 
@@ -335,7 +380,8 @@ def _derived_task_name(name: str, filter_name: str) -> str:
 
     Cleaning produces a different task, so it gets an id of its own rather than reusing the published one:
     `MassiveIntentClassification` becomes `MassiveIntentClassification (remove_duplicates)`. A second filter
-    extends the list rather than nesting, giving `MassiveIntentClassification (remove_duplicates, filter_short)`.
+    extends the list rather than nesting, giving
+    `MassiveIntentClassification (remove_duplicates, remove_short_texts)`.
     """
     applied_to = _APPLIED_FILTERS.match(name)
     if applied_to is None:
@@ -388,24 +434,36 @@ def _no_split_matched_message(
 
 
 def _resolve_columns(
-    task: AbsTask, filter_name: str, columns: Sequence[str] | None
+    task: AbsTask, filter_: _Filter, columns: Sequence[str] | None
 ) -> dict[str, Modalities]:
     """The columns a filter should compare, mapped to the modality of their content."""
     col_modalities = task._get_content_columns()
-    if columns is not None:
-        # a column the task does not declare raises a KeyError naming it
-        col_modalities = {column: col_modalities[column] for column in columns}
-
     if not col_modalities:
         raise NotImplementedError(
-            f"`{filter_name}` does not know which columns of '{task.metadata.name}' hold its content. Please "
+            f"`{filter_.name}` does not know which columns of '{task.metadata.name}' hold its content. Please "
             "open an issue at https://github.com/embeddings-benchmark/mteb/issues so the task can declare them."
         )
+
+    if filter_.modalities is not None:
+        col_modalities = {
+            column: modality
+            for column, modality in col_modalities.items()
+            if modality in filter_.modalities
+        }
+        if not col_modalities:
+            raise ValueError(
+                f"`{filter_.name}` only applies to {sorted(filter_.modalities)} content, which "
+                f"'{task.metadata.name}' does not have."
+            )
+
+    if columns is not None:
+        # a column the task does not declare, or that the filter does not apply to, raises a KeyError naming it
+        col_modalities = {column: col_modalities[column] for column in columns}
 
     unsupported = sorted(set(col_modalities.values()) - _SUPPORTED_MODALITIES)
     if unsupported:
         raise NotImplementedError(
-            f"`{filter_name}` cannot compare the {unsupported} content of '{task.metadata.name}'. Supported "
+            f"`{filter_.name}` cannot compare the {unsupported} content of '{task.metadata.name}'. Supported "
             f"modalities are {sorted(_SUPPORTED_MODALITIES)}."
         )
     return col_modalities
@@ -451,7 +509,8 @@ def _filter_task_rows(
 
     Raises:
         NotImplementedError: If `task` aggregates other tasks, which hold the data instead.
-        ValueError: If `splits` and `subsets` together match none of the task's splits.
+        ValueError: If `task` holds none of the content `filter_` applies to, or if `splits` and `subsets`
+            together match none of the task's splits.
         KeyError: If `columns` names a column the task does not declare.
     """
     from ._retrieval import _filter_retrieval_split
@@ -467,9 +526,17 @@ def _filter_task_rows(
     original = cleaned.metadata
     if not cleaned.data_loaded:
         cleaned.load_data(num_proc=num_proc)
+    if isinstance(cleaned, AbsTaskRetrieval):
+        # some tasks still load the older corpus/queries layout, which evaluation converts first as well
+        cleaned.convert_v1_dataset_format_to_v2(num_proc=num_proc)
 
-    col_modalities = _resolve_columns(cleaned, filter_.name, columns)
-    symmetric_sides = _resolve_symmetric_sides(cleaned, col_modalities)
+    col_modalities = _resolve_columns(cleaned, filter_, columns)
+    # a pair and its swap only need to meet when rows are compared with each other
+    symmetric_sides = (
+        _resolve_symmetric_sides(cleaned, col_modalities)
+        if filter_.compares_rows
+        else None
+    )
     is_retrieval = isinstance(cleaned, AbsTaskRetrieval)
     available, flat = _split_containers(cleaned)
 
@@ -486,17 +553,17 @@ def _filter_task_rows(
             if is_retrieval:
                 new_splits[split], removed = _filter_retrieval_split(
                     splits_data[split],
-                    filter_.keep_fn,
+                    filter_,
                     col_modalities,
+                    original,
                     normalization=normalization,
-                    remap_duplicates=filter_.removes_duplicates,
                     num_proc=num_proc,
                 )
             else:
                 new_splits[split], removed = _apply_row_filter(
                     splits_data[split],
                     col_modalities,
-                    filter_.keep_fn,
+                    filter_,
                     normalization=normalization,
                     num_proc=num_proc,
                     symmetric_sides=symmetric_sides,
@@ -545,7 +612,9 @@ def remove_duplicates(
 
     For a retrieval task the corpus and the queries are deduplicated together with their relevance judgements: a
     judgement pointing at a removed duplicate is moved to the copy that was kept, so no query loses a positive
-    document, and any query left without one afterwards is dropped, as it cannot be scored.
+    document, and any query left without one afterwards is dropped, as it cannot be scored. Both are compared as
+    the model reads them, so a document's title is part of its text, and two queries differing only in their
+    instruction are not duplicates.
 
     Args:
         task: The task to deduplicate. It is not modified.
@@ -579,6 +648,236 @@ def remove_duplicates(
         task,
         _Filter("remove_duplicates", _keep_first_occurrence, removes_duplicates=True),
         normalization=normalization,
+        columns=columns,
+        splits=splits,
+        subsets=subsets,
+        num_proc=num_proc,
+    )
+
+
+def _remove_small(
+    task: T,
+    name: str,
+    modality: Modalities,
+    minimum: float,
+    measure_fn: Callable[[Any], float | None],
+    *,
+    columns: Sequence[str] | None,
+    splits: Sequence[str] | None,
+    subsets: Sequence[HFSubset] | None,
+    num_proc: int | None,
+) -> T:
+    """Remove the samples holding a `modality` value that `measure_fn` finds smaller than `minimum`."""
+    return _filter_task_rows(
+        task,
+        _Filter(
+            name,
+            functools.partial(_keep_at_least, minimum=minimum, measure_fn=measure_fn),
+            modalities=frozenset({modality}),
+            compares_rows=False,
+        ),
+        columns=columns,
+        splits=splits,
+        subsets=subsets,
+        num_proc=num_proc,
+    )
+
+
+def remove_short_texts(
+    task: T,
+    *,
+    min_length: int,
+    length_fn: Callable[[str], int] = len,
+    columns: Sequence[str] | None = None,
+    splits: Sequence[str] | None = None,
+    subsets: Sequence[HFSubset] | None = None,
+    num_proc: int | None = None,
+) -> T:
+    """Remove samples with a text shorter than `min_length`, which includes empty and whitespace-only texts.
+
+    A sample is removed when any of its texts is too short, e.g. either sentence of a pair. Texts are counted in
+    characters, ignoring surrounding whitespace, and a missing text counts as empty. A retrieval document is measured
+    on its title and text together and a query on its text and instruction, as they are encoded that way when
+    evaluated: a removed document takes its relevance judgements with it, and a query left without one is dropped.
+
+    Only text is measured, so images, audio and video are kept whatever their size, as is a retrieval document or
+    query that combines text with one of them, e.g. a page whose image carries the content its text lacks.
+
+    Args:
+        task: The task to filter. It is not modified.
+        min_length: The shortest length a text may have. `1` removes only empty and whitespace-only texts.
+        length_fn: How to measure a text. Defaults to its number of characters.
+        columns: The text columns to measure. Defaults to every text column of the task.
+        splits: The splits to filter. Defaults to every split of the dataset.
+        subsets: The Huggingface subsets to filter. Defaults to every loaded subset.
+        num_proc: Number of processes to use for loading and filtering the dataset.
+
+    Returns:
+        A copy of the task holding the filtered data, named after the filters applied to it, e.g.
+        `MassiveIntentClassification (remove_short_texts)`. The task passed in is left untouched.
+
+    Raises:
+        NotImplementedError: If `task` aggregates other tasks, which hold the data instead.
+        ValueError: If `task` has no text, or if `splits` and `subsets` together match none of its splits.
+        KeyError: If `columns` names a column that is not a text column of the task.
+
+    Examples:
+        >>> import mteb
+        >>> from mteb.data_cleaning import remove_short_texts
+        >>> task = mteb.get_task("MassiveIntentClassification")
+        >>> cleaned = remove_short_texts(task, min_length=1)  # empty and whitespace-only texts
+        >>> cleaned = remove_short_texts(task, min_length=3, length_fn=lambda text: len(text.split()))  # < 3 words
+    """
+    return _remove_small(
+        task,
+        "remove_short_texts",
+        "text",
+        min_length,
+        length_fn,
+        columns=columns,
+        splits=splits,
+        subsets=subsets,
+        num_proc=num_proc,
+    )
+
+
+def _shorter_side(image: Image.Image) -> int:
+    """The shorter of an image's width and height, so that a thin image counts as small. The default."""
+    return min(image.size)
+
+
+def remove_small_images(
+    task: T,
+    *,
+    min_size: int,
+    size_fn: Callable[[Image.Image], float] = _shorter_side,
+    columns: Sequence[str] | None = None,
+    splits: Sequence[str] | None = None,
+    subsets: Sequence[HFSubset] | None = None,
+    num_proc: int | None = None,
+) -> T:
+    """Remove samples with an image smaller than `min_size`, e.g. a 1x1 placeholder.
+
+    A sample is removed when any of its images is too small. An image is as small as its shorter side by default, so
+    `min_size` is the width and the height it must reach, as the `min_image_width` and `min_image_height` of the
+    task's descriptive statistics report them. Only images are measured, so the texts of a sample are kept whatever
+    their length.
+
+    Args:
+        task: The task to filter. It is not modified.
+        min_size: The smallest size, by `size_fn`, an image may have.
+        size_fn: How to measure an image. Defaults to its shorter side in pixels; `lambda image: image.width *
+            image.height` measures its area instead, in which case `min_size` is a number of pixels.
+        columns: The image columns to measure. Defaults to every image column of the task.
+        splits: The splits to filter. Defaults to every split of the dataset.
+        subsets: The Huggingface subsets to filter. Defaults to every loaded subset.
+        num_proc: Number of processes to use for loading the dataset.
+
+    Returns:
+        A copy of the task holding the filtered data, named after the filters applied to it, e.g.
+        `ROxfordEasyI2IRetrieval (remove_small_images)`. The task passed in is left untouched.
+
+    Raises:
+        NotImplementedError: If `task` aggregates other tasks, which hold the data instead.
+        ValueError: If `task` has no images, or if `splits` and `subsets` together match none of its splits.
+        KeyError: If `columns` names a column that is not an image column of the task.
+    """
+    return _remove_small(
+        task,
+        "remove_small_images",
+        "image",
+        min_size,
+        size_fn,
+        columns=columns,
+        splits=splits,
+        subsets=subsets,
+        num_proc=num_proc,
+    )
+
+
+def remove_short_audio(
+    task: T,
+    *,
+    min_seconds: float,
+    columns: Sequence[str] | None = None,
+    splits: Sequence[str] | None = None,
+    subsets: Sequence[HFSubset] | None = None,
+    num_proc: int | None = None,
+) -> T:
+    """Remove samples with an audio clip shorter than `min_seconds`.
+
+    A sample is removed when any of its clips is too short, measured as the `min_duration_seconds` of the task's
+    descriptive statistics measures it. Only audio is measured, so the texts of a sample are kept whatever their
+    length.
+
+    Args:
+        task: The task to filter. It is not modified.
+        min_seconds: The shortest duration, in seconds, an audio clip may have.
+        columns: The audio columns to measure. Defaults to every audio column of the task.
+        splits: The splits to filter. Defaults to every split of the dataset.
+        subsets: The Huggingface subsets to filter. Defaults to every loaded subset.
+        num_proc: Number of processes to use for loading the dataset.
+
+    Returns:
+        A copy of the task holding the filtered data, named after the filters applied to it, e.g.
+        `BeijingOpera (remove_short_audio)`. The task passed in is left untouched.
+
+    Raises:
+        NotImplementedError: If `task` aggregates other tasks, which hold the data instead.
+        ValueError: If `task` has no audio, or if `splits` and `subsets` together match none of its splits.
+        KeyError: If `columns` names a column that is not an audio column of the task.
+    """
+    return _remove_small(
+        task,
+        "remove_short_audio",
+        "audio",
+        min_seconds,
+        _audio_duration_seconds,
+        columns=columns,
+        splits=splits,
+        subsets=subsets,
+        num_proc=num_proc,
+    )
+
+
+def remove_short_videos(
+    task: T,
+    *,
+    min_seconds: float,
+    columns: Sequence[str] | None = None,
+    splits: Sequence[str] | None = None,
+    subsets: Sequence[HFSubset] | None = None,
+    num_proc: int | None = None,
+) -> T:
+    """Remove samples with a video shorter than `min_seconds`. A video whose duration is unknown is kept.
+
+    A sample is removed when any of its videos is too short, measured as the `min_duration_seconds` of the task's
+    descriptive statistics measures it. Only video is measured, so the texts of a sample are kept whatever their
+    length.
+
+    Args:
+        task: The task to filter. It is not modified.
+        min_seconds: The shortest duration, in seconds, a video may have.
+        columns: The video columns to measure. Defaults to every video column of the task.
+        splits: The splits to filter. Defaults to every split of the dataset.
+        subsets: The Huggingface subsets to filter. Defaults to every loaded subset.
+        num_proc: Number of processes to use for loading the dataset.
+
+    Returns:
+        A copy of the task holding the filtered data, named after the filters applied to it, e.g.
+        `CoVRRVT2VRetrieval (remove_short_videos)`. The task passed in is left untouched.
+
+    Raises:
+        NotImplementedError: If `task` aggregates other tasks, which hold the data instead.
+        ValueError: If `task` has no videos, or if `splits` and `subsets` together match none of its splits.
+        KeyError: If `columns` names a column that is not a video column of the task.
+    """
+    return _remove_small(
+        task,
+        "remove_short_videos",
+        "video",
+        min_seconds,
+        _video_duration_seconds,
         columns=columns,
         splits=splits,
         subsets=subsets,

@@ -8,7 +8,13 @@ from datasets import Dataset, DatasetDict
 
 import mteb
 from mteb.abstasks.abstask import AbsTask
-from mteb.data_cleaning import remove_duplicates
+from mteb.data_cleaning import (
+    remove_duplicates,
+    remove_short_audio,
+    remove_short_texts,
+    remove_short_videos,
+    remove_small_images,
+)
 from mteb.data_cleaning._filters import (
     _derived_task_name,
     _keep_first_occurrence,
@@ -16,11 +22,13 @@ from mteb.data_cleaning._filters import (
 )
 from mteb.mocks import (
     MockAny2AnyRetrievalI2TTask,
+    MockAny2AnyRetrievalT2ITask,
     MockAudioClassification,
     MockAudioClusteringTask,
     MockClassificationTask,
     MockClusteringTask,
     MockImageClassificationTask,
+    MockImageTextPairClassificationTask,
     MockMultilingualClassificationTask,
     MockPairClassificationTask,
     MockRerankingTask,
@@ -28,6 +36,7 @@ from mteb.mocks import (
     MockSTSTask,
     MockVideoClassification,
     MockVideoClusteringTask,
+    MockVisualSTSTask,
 )
 from mteb.mocks.mock_tasks.reranking import MockAggregatedTask
 from mteb.results import TaskResult
@@ -591,8 +600,8 @@ def test_normalization_accepts_any_callable() -> None:
         ("Task", "remove_duplicates", "Task (remove_duplicates)"),
         (
             "Task (remove_duplicates)",
-            "filter_short",
-            "Task (remove_duplicates, filter_short)",
+            "remove_short_texts",
+            "Task (remove_duplicates, remove_short_texts)",
         ),
         ("Task (remove_duplicates)", "remove_duplicates", "Task (remove_duplicates)"),
         ("Task.v2", "remove_duplicates", "Task.v2 (remove_duplicates)"),
@@ -659,3 +668,351 @@ def test_retrieval_compares_each_side_on_its_own_modality() -> None:
     assert cleaned_data["corpus"]["id"] == ["d1"]
     assert cleaned_data["queries"]["id"] == ["q1"]
     assert cleaned_data["relevant_docs"] == {"q1": {"d1": 1}}
+
+
+def test_retrieval_does_not_merge_different_conversation_queries() -> None:
+    # a conversation query holds a list of turns rather than a string, which used to compare as an empty
+    # text, making every conversation of a task look like a duplicate of the first
+    task = MockRetrievalTask()
+    task.load_data()
+    subset, split = _retrieval_split(task)
+    task.dataset[subset][split] = {
+        "corpus": Dataset.from_dict(
+            {"id": ["d1", "d2"], "text": ["first doc", "second doc"]}
+        ),
+        "queries": Dataset.from_dict(
+            {
+                "id": ["q1", "q2", "q3"],
+                "text": [
+                    [{"role": "user", "content": "hello"}],
+                    [{"role": "user", "content": "goodbye"}],
+                    [{"role": "user", "content": "hello"}],
+                ],
+            }
+        ),
+        "relevant_docs": {"q1": {"d1": 1}, "q2": {"d2": 1}, "q3": {"d2": 1}},
+        "top_ranked": None,
+    }
+
+    task = remove_duplicates(task)
+
+    data = task.dataset[subset][split]
+    # q3 repeats q1's turns and is a duplicate of it; q2 says something else and stays
+    assert data["queries"]["id"] == ["q1", "q2"]
+    assert data["relevant_docs"] == {"q1": {"d1": 1, "d2": 1}, "q2": {"d2": 1}}
+
+
+def test_retrieval_compares_a_conversation_together_with_its_instruction() -> None:
+    # an instruction cannot be appended to the list of turns, which used to raise a TypeError
+    task = MockRetrievalTask()
+    task.load_data()
+    subset, split = _retrieval_split(task)
+    task.dataset[subset][split] = {
+        "corpus": Dataset.from_dict(
+            {"id": ["d1", "d2"], "text": ["first doc", "second doc"]}
+        ),
+        "queries": Dataset.from_dict(
+            {
+                "id": ["q1", "q2"],
+                "text": [
+                    [{"role": "user", "content": "hello"}],
+                    [{"role": "user", "content": "hello"}],
+                ],
+                "instruction": ["find papers", "find news"],
+            }
+        ),
+        "relevant_docs": {"q1": {"d1": 1}, "q2": {"d2": 1}},
+        "top_ranked": None,
+    }
+
+    task = remove_duplicates(task)
+
+    # the instruction is part of the query, and a conversation cannot have one appended to its turns
+    assert task.dataset[subset][split]["queries"]["id"] == ["q1", "q2"]
+
+
+def test_retrieval_compares_a_query_together_with_its_instruction() -> None:
+    task = MockRetrievalTask()
+    task.load_data()
+    subset, split = _retrieval_split(task)
+    task.dataset[subset][split] = {
+        "corpus": Dataset.from_dict(
+            {"id": ["d1", "d2"], "text": ["first doc", "second doc"]}
+        ),
+        "queries": Dataset.from_dict(
+            {
+                "id": ["q1", "q2"],
+                "text": ["same query", "same query"],
+                "instruction": ["find papers", "find news"],
+            }
+        ),
+        "relevant_docs": {"q1": {"d1": 1}, "q2": {"d2": 1}},
+        "top_ranked": None,
+    }
+
+    task = remove_duplicates(task)
+
+    assert task.dataset[subset][split]["queries"]["id"] == ["q1", "q2"]
+
+
+def test_a_retrieval_task_in_the_older_layout_can_be_filtered() -> None:
+    task = MockRetrievalTask()
+    # some tasks still load their data as separate corpus, queries and judgements, which every filter
+    # has to convert the way evaluation does, rather than crash on
+    task.corpus = {"test": {"d1": "same doc", "d2": "same doc"}}
+    task.queries = {"test": {"q1": "a query"}}
+    task.relevant_docs = {"test": {"q1": {"d2": 1}}}
+    task.data_loaded = True
+
+    cleaned = remove_duplicates(task)
+
+    data = cleaned.dataset["default"]["test"]
+    assert data["corpus"]["id"] == ["d1"]
+    assert data["relevant_docs"] == {"q1": {"d1": 1}}
+
+
+def _create_texts_task(texts: list[str | None]) -> MockClassificationTask:
+    task = MockClassificationTask()
+    task.dataset = DatasetDict(
+        {"test": Dataset.from_dict({"text": texts, "label": list(range(len(texts)))})}
+    )
+    task.data_loaded = True
+    return task
+
+
+@pytest.mark.parametrize(
+    ("min_length", "texts", "expected"),
+    [
+        # empty, whitespace-only and missing texts are all empty once stripped
+        (1, ["", "   ", None, "hi", " hello there "], ["hi", " hello there "]),
+        (3, ["", "   ", None, "hi", " hello there "], [" hello there "]),
+    ],
+)
+def test_remove_short_texts_removes_texts_under_min_length(
+    min_length: int, texts: list[str | None], expected: list[str]
+) -> None:
+    task = _create_texts_task(texts)
+
+    cleaned = remove_short_texts(task, min_length=min_length)
+
+    assert cleaned.dataset["test"]["text"] == expected
+    assert cleaned.metadata.name == "MockClassificationTask (remove_short_texts)"
+
+
+def test_remove_short_texts_measures_with_the_given_length() -> None:
+    task = _create_texts_task(["incomprehensibilities", "three short words"])
+
+    cleaned = remove_short_texts(task, min_length=3, length_fn=lambda t: len(t.split()))
+
+    assert cleaned.dataset["test"]["text"] == ["three short words"]
+
+
+def test_remove_short_texts_removes_a_pair_with_either_side_short() -> None:
+    task = MockPairClassificationTask()
+    task.dataset = DatasetDict(
+        {
+            "test": Dataset.from_dict(
+                {
+                    "sentence1": ["long enough", "", "long enough"],
+                    "sentence2": ["long enough", "long enough", " "],
+                    "labels": [1, 0, 1],
+                }
+            )
+        }
+    )
+    task.data_loaded = True
+
+    cleaned = remove_short_texts(task, min_length=1)
+
+    assert cleaned.dataset["test"]["labels"] == [1]
+
+
+def test_remove_short_texts_applies_within_a_row_of_a_clustering_task() -> None:
+    task = MockClusteringTask()
+    task.dataset = DatasetDict(
+        {
+            "test": Dataset.from_dict(
+                {"sentences": [["long enough", "", "also long"]], "labels": [[0, 1, 2]]}
+            )
+        }
+    )
+    task.data_loaded = True
+
+    cleaned = remove_short_texts(task, min_length=1)
+
+    row = cleaned.dataset["test"][0]
+    assert row["sentences"] == ["long enough", "also long"]
+    assert row["labels"] == [0, 2]
+
+
+def test_remove_short_texts_measures_only_the_text_of_a_multimodal_task() -> None:
+    task = MockImageTextPairClassificationTask()
+    _load_or_skip(task)
+    split = next(iter(task.dataset))
+    captions = ["", *task.dataset[split]["caption"][1:]]
+    task.dataset[split] = (
+        task.dataset[split].remove_columns("caption").add_column("caption", captions)
+    )
+
+    cleaned = remove_short_texts(task, min_length=1)
+
+    assert len(cleaned.dataset[split]) == len(task.dataset[split]) - 1
+
+
+def test_remove_short_texts_refuses_a_task_without_text() -> None:
+    task = MockImageClassificationTask()
+
+    with pytest.raises(ValueError, match="only applies to \\['text'\\]"):
+        remove_short_texts(task, min_length=1)
+
+
+def test_remove_short_texts_raises_for_a_column_that_is_not_text() -> None:
+    task = MockImageTextPairClassificationTask()
+    _load_or_skip(task)
+
+    with pytest.raises(KeyError, match="image"):
+        remove_short_texts(task, min_length=1, columns=["image"])
+
+
+def test_remove_short_texts_measures_a_document_as_its_title_and_text() -> None:
+    task = MockRetrievalTask()
+    task.load_data()
+    subset, split = _retrieval_split(task)
+    task.dataset[subset][split] = {
+        "corpus": Dataset.from_dict(
+            {
+                "id": ["d1", "d2", "d3"],
+                "title": ["", "A title", ""],
+                "text": ["a long body", "", " "],
+            }
+        ),
+        "queries": Dataset.from_dict({"id": ["q1", "q2"], "text": ["q one", "q two"]}),
+        "relevant_docs": {"q1": {"d1": 1, "d3": 1}, "q2": {"d3": 1}},
+        "top_ranked": None,
+    }
+
+    cleaned = remove_short_texts(task, min_length=1)
+
+    data = cleaned.dataset[subset][split]
+    # an empty title or body alone does not make a document short, only both together
+    assert data["corpus"]["id"] == ["d1", "d2"]
+    # q2 lost its only relevant document, so it can no longer be scored
+    assert data["queries"]["id"] == ["q1"]
+    assert data["relevant_docs"] == {"q1": {"d1": 1}}
+
+
+def test_remove_short_texts_leaves_the_non_text_side_of_a_retrieval_task() -> None:
+    task = MockAny2AnyRetrievalI2TTask()
+    _load_or_skip(task)
+    subset, split = _retrieval_split(task)
+    data = task.dataset[subset][split]
+    n_queries = len(data["queries"])
+    data["corpus"] = Dataset.from_dict({"id": ["d1", "d2"], "text": ["a doc", ""]})
+    data["relevant_docs"] = {query_id: {"d1": 1} for query_id in data["queries"]["id"]}
+    data["top_ranked"] = None
+
+    cleaned = remove_short_texts(task, min_length=1)
+
+    cleaned_data = cleaned.dataset[subset][split]
+    assert cleaned_data["corpus"]["id"] == ["d1"]
+    # the image queries have no text to measure, so they are all kept
+    assert len(cleaned_data["queries"]) == n_queries
+
+
+def test_remove_short_texts_keeps_an_entry_combining_text_with_an_image() -> None:
+    task = MockAny2AnyRetrievalT2ITask()
+    _load_or_skip(task)
+    # a text-to-(image and text) task, e.g. document pages with their extracted text
+    task.metadata = task.metadata.model_copy(update={"category": "t2it"})
+    subset, split = _retrieval_split(task)
+    data = task.dataset[subset][split]
+    data["corpus"] = data["corpus"].add_column("text", ["", "a caption"])
+    data["queries"] = Dataset.from_dict({"id": ["q1", "q2"], "text": ["a query", ""]})
+    data["relevant_docs"] = {
+        "q1": {data["corpus"]["id"][0]: 1},
+        "q2": {data["corpus"]["id"][1]: 1},
+    }
+    data["top_ranked"] = None
+
+    cleaned = remove_short_texts(task, min_length=1)
+
+    cleaned_data = cleaned.dataset[subset][split]
+    # the document's image is content in its own right, so an empty text does not make it empty
+    assert cleaned_data["corpus"]["id"] == data["corpus"]["id"]
+    assert cleaned_data["queries"]["id"] == ["q1"]
+
+
+def test_remove_small_images_removes_images_under_min_size() -> None:
+    task = MockImageClassificationTask()
+    _load_or_skip(task)
+    split = next(iter(task.dataset))
+    data = task.dataset[split]
+    image = data["image"][0]
+    task.dataset[split] = Dataset.from_dict(
+        {"image": [image, image.resize((100, 1))], "label": [0, 1]},
+        features=data.features,
+    )
+
+    cleaned = remove_small_images(task, min_size=2)
+
+    assert cleaned.dataset[split]["label"] == [0]
+    assert cleaned.metadata.name == "MockImageClassification (remove_small_images)"
+
+
+def test_remove_short_audio_removes_clips_under_min_seconds() -> None:
+    task = MockAudioClassification()
+    _load_or_skip(task)
+    split = next(iter(task.dataset))
+    # the mock's clips last one and two seconds
+    cleaned = remove_short_audio(task, min_seconds=1.5)
+
+    assert len(cleaned.dataset[split]) == len(task.dataset[split]) - 1
+
+
+@pytest.mark.parametrize(("min_seconds", "expected"), [(0.5, 2), (2.0, 0)])
+def test_remove_short_videos_removes_videos_under_min_seconds(
+    min_seconds: float, expected: int
+) -> None:
+    task = MockVideoClassification()
+    _load_or_skip(task)
+    split = next(iter(task.dataset))
+    # the mock's videos last one second
+    cleaned = remove_short_videos(task, min_seconds=min_seconds)
+
+    assert len(cleaned.dataset[split]) == expected
+
+
+def test_measuring_a_symmetric_task_does_not_order_its_sides() -> None:
+    # ordering the sides of a pair only matters when comparing rows, and images cannot be ordered
+    task = MockVisualSTSTask()
+    _load_or_skip(task)
+    split = next(iter(task.dataset))
+    data = task.dataset[split]
+    image = data["sentence1"][0]
+    task.dataset[split] = Dataset.from_dict(
+        {"sentence1": [image], "sentence2": [image.resize((50, 50))], "score": [1.0]},
+        features=data.features,
+    )
+
+    cleaned = remove_small_images(task, min_size=1)
+
+    assert len(cleaned.dataset[split]) == 1
+
+
+def test_remove_small_images_measures_with_the_given_size() -> None:
+    task = MockImageClassificationTask()
+    _load_or_skip(task)
+    split = next(iter(task.dataset))
+    data = task.dataset[split]
+    image = data["image"][0]
+    task.dataset[split] = Dataset.from_dict(
+        {"image": [image, image.resize((20, 20))], "label": [0, 1]},
+        features=data.features,
+    )
+
+    cleaned = remove_small_images(
+        task, min_size=1000, size_fn=lambda image: image.width * image.height
+    )
+
+    # both images are wider than the default threshold would ask, but one covers only 400 pixels
+    assert cleaned.dataset[split]["label"] == [0]
