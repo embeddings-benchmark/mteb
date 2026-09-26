@@ -41,7 +41,11 @@ from mteb._hf_integration.hf_hub_utils import (
     _get_repo_commits,
     _repo_exists,
 )
-from mteb._requires_package import _mteb_distribution
+from mteb._requires_package import (
+    _install_target,
+    _mteb_distribution,
+    _requires_run_dependency,
+)
 from mteb.languages import check_language_code
 from mteb.languages.iso_mappings import _hf_langs_to_iso_lang_scripts
 from mteb.models.models_protocols import MTEBModels
@@ -74,6 +78,9 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+# needed to load and run models; `mteb` depends on them, while `mteb-core` has them in its `run` extra
+_RUN_DEPENDENCIES = {"torch", "transformers", "sentence_transformers"}
+
 
 def _auto_install_extras_enabled() -> bool:
     """Whether mteb should try to install missing optional dependencies automatically.
@@ -94,7 +101,7 @@ def _install_extras(model_name: str | None, groups: Sequence[str]) -> None:
     Uses ``uv pip install`` when ``uv`` is on the PATH (faster), otherwise falls back
     to ``python -m pip install``.
     """
-    target = f"mteb[{','.join(groups)}]"
+    target = _install_target(groups)
     if shutil.which("uv") is not None:
         command = ["uv", "pip", "install", target]
     else:
@@ -529,11 +536,21 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
 
         updates["loader_kwargs"] = _kwargs
         _self = _self.model_copy(update=updates)
-        model: MTEBModels = loader(
-            name,
-            revision=revision,
-            **_kwargs,
-        )
+        try:
+            model: MTEBModels = loader(
+                name,
+                revision=revision,
+                **_kwargs,
+            )
+        except ModuleNotFoundError as e:
+            # `mteb-core` can use tasks and results without the `run` extra, but not load models
+            if e.name is None or e.name.split(".")[0] not in _RUN_DEPENDENCIES:
+                raise
+            raise ModuleNotFoundError(
+                f"Loading {name} requires `{e.name}`, which is not installed. "
+                f"Install it with `pip install {_install_target()}`.",
+                name=e.name,
+            ) from e
         model.mteb_model_meta = _self  # type: ignore[misc]
         return model
 
@@ -553,7 +570,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             raise ImportError(
                 f"Model {self.name} is missing required dependencies: "
                 + ", ".join(missing_dependencies)
-                + f".\nYou can install it with `pip install mteb[{','.join(groups)}]`."
+                + f".\nYou can install it with `pip install {_install_target(groups)}`."
                 + "\nAlternatively, set the environment variable "
                 "`MTEB_AUTO_INSTALL_EXTRAS=1` to let mteb install them automatically."
             )
@@ -1059,6 +1076,9 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         # imported here rather than at module scope so that `mteb.models.model_meta` stays
         # importable without transformers; kept outside the `try` so a missing dependency
         # surfaces as an ImportError instead of a "can't get model configuration" warning.
+        _requires_run_dependency(
+            "transformers", "Reading a model configuration from the Hub"
+        )
         from transformers import AutoConfig
 
         try:

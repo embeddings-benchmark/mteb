@@ -114,3 +114,29 @@ jobs:
             Write-Host "First test run failed, retrying..."
             make test
           }
+
+  test-core:
+    # `mteb-core` is mteb without torch, transformers and sentence-transformers
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install uv and set the Python version
+        uses: astral-sh/setup-uv@v8.2.0
+        with:
+          enable-cache: true
+          python-version: "3.12"
+
+      - name: Build and install mteb-core
+        shell: bash
+        run: |
+          uv venv
+          uv pip install build packaging
+          uv run --no-sync python scripts/build_core_package.py --outdir dist
+          uv pip install dist/mteb_core-*.whl pytest pytest-rerunfailures
+
+      - name: Run tests
+        shell: bash
+        run: |
+          uv run --no-sync python -c "import importlib.util; assert importlib.util.find_spec('torch') is None"
+          uv run --no-sync pytest tests/test_ensure_no_torch_at_import.py -k "import_mteb or without_torch or distribution"
