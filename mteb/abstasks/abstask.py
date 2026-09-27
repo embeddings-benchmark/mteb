@@ -29,6 +29,7 @@ from mteb.models import (
     SearchProtocol,
 )
 from mteb.timing import TimingStack
+from mteb.types._encoder_io import _split_corpus_chunk_size
 
 if TYPE_CHECKING:
     from collections.abc import Iterator, Mapping
@@ -195,6 +196,10 @@ class AbsTask(ABC):  # noqa: PLR0904
             TypeError: If the model is a SearchProtocol and the task does not support Search.
         """
         timer = timer or TimingStack()
+        if not self._support_search:
+            # `corpus_chunk_size` is only used by search, don't pass it on to the model
+            _, encode_kwargs = _split_corpus_chunk_size(encode_kwargs)
+
         if isinstance(model, CrossEncoderProtocol) and not self._support_cross_encoder:
             raise TypeError(
                 f"Model {model} is a CrossEncoder, but this task {self.metadata.name} does not support CrossEncoders. "

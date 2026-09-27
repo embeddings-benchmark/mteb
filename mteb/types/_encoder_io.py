@@ -23,11 +23,24 @@ class EncodeKwargs(TypedDict):
         batch_size: The batch size to use for encoding.
         show_progress_bar: Whether to show a progress bar during encoding.
         precision: Quantization embeddings settings for sentence transformers
+        corpus_chunk_size: Number of corpus entries to process at once in retrieval
+            (`SearchEncoderWrapper`) and bitext mining tasks. Lowering it reduces peak memory usage.
+            It is consumed by MTEB and never passed to the model's `encode` method.
     """
 
     batch_size: NotRequired[int]
     show_progress_bar: NotRequired[bool]
     precision: NotRequired[str]
+    corpus_chunk_size: NotRequired[int]
+
+
+def _split_corpus_chunk_size(
+    encode_kwargs: EncodeKwargs,
+) -> tuple[int | None, EncodeKwargs]:
+    """Split `corpus_chunk_size` from `encode_kwargs` so it is not passed on to the model's `encode` method."""
+    encode_kwargs = encode_kwargs.copy()
+    corpus_chunk_size = encode_kwargs.pop("corpus_chunk_size", None)
+    return corpus_chunk_size, encode_kwargs
 
 
 # --- Output types ---

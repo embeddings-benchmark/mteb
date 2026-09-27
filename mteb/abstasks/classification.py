@@ -21,6 +21,7 @@ from mteb._create_dataloaders import create_dataloader
 from mteb._evaluators.sklearn_evaluator import SklearnEvaluator
 from mteb.models import EncoderProtocol
 from mteb.timing import TimingStack
+from mteb.types._encoder_io import _split_corpus_chunk_size
 from mteb.types.statistics import ClassificationDescriptiveStatistics
 
 from ._statistics_calculation import (
@@ -153,6 +154,9 @@ class AbsTaskClassification(AbsTask):
 
         if self.dataset is None:
             raise RuntimeError("Dataset not loaded.")
+
+        # `corpus_chunk_size` is only used by search, don't pass it on to the model
+        _, encode_kwargs = _split_corpus_chunk_size(encode_kwargs)
 
         if "random_state" in self.evaluator_model.get_params():
             self.evaluator_model = self.evaluator_model.set_params(

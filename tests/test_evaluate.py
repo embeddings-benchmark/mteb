@@ -20,6 +20,7 @@ from mteb.mocks import (
 )
 from mteb.mocks.mock_tasks import (
     MockAggregatedTask,
+    MockBitextMiningTask,
     MockClassificationTask,
     MockMultilabelClassification,
     MockMultilingualClassificationTask,
@@ -509,6 +510,68 @@ def test_precision_arg():
     assert (
         model.mteb_model_meta.experiment_kwargs["output_dtypes"] == OutputDType.FLOAT16
     )
+
+
+class _CorpusChunkSizeCheckingBaseline(RandomEncoderBaseline):
+    """Random baseline that ensures `corpus_chunk_size` is not passed to `encode` and counts the similarity calls."""
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self.n_similarity_calls = 0
+        self.mteb_model_meta = ModelMeta.create_empty(
+            overwrites=dict(similarity_fn_name=ScoringFunction.COSINE)
+        )
+
+    def encode(self, inputs: DataLoader[BatchedInput], **kwargs: Any) -> Array:
+        assert "corpus_chunk_size" not in kwargs
+        return super().encode(inputs, **kwargs)
+
+    def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
+        self.n_similarity_calls += 1
+        return super().similarity(embeddings1, embeddings2)
+
+
+@pytest.mark.parametrize(
+    "task",
+    [
+        MockRetrievalTask(),
+        MockBitextMiningTask(),
+        MockClassificationTask(),
+        MockSTSTask(),
+    ],
+    ids=lambda x: x.metadata.name,
+)
+def test_corpus_chunk_size_is_not_passed_to_model(task: AbsTask) -> None:
+    model = _CorpusChunkSizeCheckingBaseline("test_model", revision=None)
+    mteb.evaluate(
+        model,
+        task,
+        cache=None,
+        co2_tracker=False,
+        encode_kwargs={"corpus_chunk_size": 1},
+    )
+
+
+@pytest.mark.parametrize(
+    "task",
+    [MockRetrievalTask(), MockBitextMiningTask()],
+    ids=lambda x: x.metadata.name,
+)
+def test_corpus_chunk_size_in_encode_kwargs(task: AbsTask) -> None:
+    default_model = _CorpusChunkSizeCheckingBaseline("test_model", revision=None)
+    mteb.evaluate(default_model, task, cache=None, co2_tracker=False)
+
+    chunked_model = _CorpusChunkSizeCheckingBaseline("test_model", revision=None)
+    mteb.evaluate(
+        chunked_model,
+        task,
+        cache=None,
+        co2_tracker=False,
+        encode_kwargs={"corpus_chunk_size": 1},
+    )
+
+    # the corpus is scored one entry at a time instead of all at once
+    assert chunked_model.n_similarity_calls > default_model.n_similarity_calls
 
 
 @pytest.mark.parametrize(
