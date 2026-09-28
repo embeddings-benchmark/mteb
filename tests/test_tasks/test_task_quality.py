@@ -347,6 +347,8 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "TRECCOVID-PL",
         "TRECDL2019",
         "TRECDL2020",
+        "TRECDL2019RCPRetrieval",  # same short MS MARCO passages as the upstream TRECDL2019 task
+        "TRECDL2020RCPRetrieval",  # same short MS MARCO passages as the upstream TRECDL2020 task
         "TUBerlinT2IRetrieval",
         "TalemaaderPC",
         "Tatoeba",

@@ -528,6 +528,7 @@ from .tool_retrieval import ToolRetrieval, ToolRetrievalInstruction
 from .topi_ocqa_retrieval import TopiOCQARetrieval, TopiOCQARetrievalHardNegatives
 from .touche2020_retrieval import Touche2020, Touche2020v3Retrieval
 from .treccovid_retrieval import TRECCOVID
+from .trecdl_rcp_retrieval import TRECDL2019RCPRetrieval, TRECDL2020RCPRetrieval
 from .trecdl_retrieval import TRECDL2019, TRECDL2020
 from .tu_berlin_t2i_retrieval import TUBerlinT2IRetrieval
 from .tuna_bench_t2v_retrieval import TUNABenchT2VRetrieval
@@ -1093,6 +1094,8 @@ __all__ = [
     "SpokenCOCOI2ARetrieval",
     "SpokenSQuADT2ARetrieval",
     "StanfordCarsI2I",
+    "TRECDL2019RCPRetrieval",
+    "TRECDL2020RCPRetrieval",
     "TUBerlinT2IRetrieval",
     "TUNABenchT2VRetrieval",
     "TUNABenchV2TRetrieval",
