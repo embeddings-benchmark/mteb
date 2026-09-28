@@ -361,9 +361,8 @@ class SIB200ClassificationV3(SIB200ClassificationV2):
         name="SIB200Classification.v3",
         description=(
             "SIB-200 is a topic classification dataset based on Flores-200. "
-            "The previous MTEB task definition included 197 language-script "
-            "configurations; version 3 adds 8 configurations present in the "
-            "14-label dataset but previously omitted, bringing the total to 205."
+            "The previous MTEB task definition included 197 (language, script) "
+            "pairs; version 3 adds 8 new pairs present bringing the total to 205."
         ),
         reference="https://arxiv.org/abs/2309.07445",
         dataset={
