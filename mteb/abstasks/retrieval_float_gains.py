@@ -24,7 +24,7 @@ if TYPE_CHECKING:
     from collections.abc import Mapping, Sequence
 
     from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
-    from mteb.types import RelevantDocumentsType
+    from mteb.types import RelevantDocumentsType, ScoresDict
 
 logger = logging.getLogger(__name__)
 
@@ -136,7 +136,8 @@ class AbsTaskRetrievalFloatGains(AbsTaskRetrieval):
       query searches the whole corpus, minus the documents listed in the optional
       ``{subset}-excluded`` config (``query-id``, ``excluded-corpus-ids``). Gains exist only for the
       candidate pools, so only the integer-qrels metrics are reported, and a float-gain main score
-      falls back to ``ndcg_at_10``.
+      falls back to ``ndcg_at_10``. Cross-encoders are refused in this mode (they would score every
+      query against the whole corpus).
 
     Attributes:
         gain_column: Name of the float-gain column in the qrels config.
@@ -277,7 +278,12 @@ class AbsTaskRetrievalFloatGains(AbsTaskRetrieval):
         )
         return task
 
-    def _add_main_score(self, scores: dict[str, Any]) -> None:
+    @property
+    def _support_cross_encoder(self) -> bool:  # type: ignore[override]
+        # a cross-encoder would score every (query, document) pair of the full corpus
+        return self.rerank_top_ranked
+
+    def _add_main_score(self, scores: ScoresDict) -> None:
         # the full-corpus mode reports only the integer-qrels metrics, so a main score over
         # the float gains falls back to the standard NDCG@10
         main_score = self.metadata.main_score

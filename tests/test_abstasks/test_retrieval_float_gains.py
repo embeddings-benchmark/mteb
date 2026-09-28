@@ -460,3 +460,11 @@ def test_default_subset_reads_the_excluded_config(tmp_path: Path) -> None:
         "q1": ["d1", "d2"],
         "q2": ["d2"],
     }
+
+
+def test_full_corpus_mode_refuses_cross_encoders() -> None:
+    reranking = MockRetrievalFloatGainsTask()
+    retrieval = MockRetrievalFloatGainsTask()
+    retrieval.rerank_top_ranked = False
+    assert reranking._support_cross_encoder
+    assert not retrieval._support_cross_encoder
