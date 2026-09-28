@@ -27,7 +27,7 @@ class NanoArguAnaRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-nanobeir",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-nanobeir",
-            "revision": "3462ee27487d585065756e7ea857082954bee8fb",
+            "revision": "c0c43c5790a808cb0e8ee833bc7487dc93e88cd5",
         },
         type="Retrieval",
         category="t2t",
@@ -56,7 +56,7 @@ class NanoClimateFeverRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-nanobeir",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-nanobeir",
-            "revision": "3462ee27487d585065756e7ea857082954bee8fb",
+            "revision": "c0c43c5790a808cb0e8ee833bc7487dc93e88cd5",
         },
         type="Retrieval",
         category="t2t",
@@ -87,7 +87,7 @@ class NanoDBPediaRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-nanobeir",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-nanobeir",
-            "revision": "3462ee27487d585065756e7ea857082954bee8fb",
+            "revision": "c0c43c5790a808cb0e8ee833bc7487dc93e88cd5",
         },
         type="Retrieval",
         category="t2t",
@@ -118,7 +118,7 @@ class NanoFEVERRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-nanobeir",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-nanobeir",
-            "revision": "3462ee27487d585065756e7ea857082954bee8fb",
+            "revision": "c0c43c5790a808cb0e8ee833bc7487dc93e88cd5",
         },
         type="Retrieval",
         category="t2t",
@@ -149,7 +149,7 @@ class NanoFiQA2018RCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-nanobeir",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-nanobeir",
-            "revision": "3462ee27487d585065756e7ea857082954bee8fb",
+            "revision": "c0c43c5790a808cb0e8ee833bc7487dc93e88cd5",
         },
         type="Retrieval",
         category="t2t",
@@ -180,7 +180,7 @@ class NanoHotpotQARCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-nanobeir",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-nanobeir",
-            "revision": "3462ee27487d585065756e7ea857082954bee8fb",
+            "revision": "c0c43c5790a808cb0e8ee833bc7487dc93e88cd5",
         },
         type="Retrieval",
         category="t2t",
@@ -211,7 +211,7 @@ class NanoMSMARCORCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-nanobeir",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-nanobeir",
-            "revision": "3462ee27487d585065756e7ea857082954bee8fb",
+            "revision": "c0c43c5790a808cb0e8ee833bc7487dc93e88cd5",
         },
         type="Retrieval",
         category="t2t",
@@ -242,7 +242,7 @@ class NanoNFCorpusRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-nanobeir",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-nanobeir",
-            "revision": "3462ee27487d585065756e7ea857082954bee8fb",
+            "revision": "c0c43c5790a808cb0e8ee833bc7487dc93e88cd5",
         },
         type="Retrieval",
         category="t2t",
@@ -273,7 +273,7 @@ class NanoNQRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-nanobeir",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-nanobeir",
-            "revision": "3462ee27487d585065756e7ea857082954bee8fb",
+            "revision": "c0c43c5790a808cb0e8ee833bc7487dc93e88cd5",
         },
         type="Retrieval",
         category="t2t",
@@ -304,7 +304,7 @@ class NanoQuoraRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-nanobeir",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-nanobeir",
-            "revision": "3462ee27487d585065756e7ea857082954bee8fb",
+            "revision": "c0c43c5790a808cb0e8ee833bc7487dc93e88cd5",
         },
         type="Retrieval",
         category="t2t",
@@ -335,7 +335,7 @@ class NanoSCIDOCSRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-nanobeir",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-nanobeir",
-            "revision": "3462ee27487d585065756e7ea857082954bee8fb",
+            "revision": "c0c43c5790a808cb0e8ee833bc7487dc93e88cd5",
         },
         type="Retrieval",
         category="t2t",
@@ -366,7 +366,7 @@ class NanoSciFactRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-nanobeir",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-nanobeir",
-            "revision": "3462ee27487d585065756e7ea857082954bee8fb",
+            "revision": "c0c43c5790a808cb0e8ee833bc7487dc93e88cd5",
         },
         type="Retrieval",
         category="t2t",
@@ -397,7 +397,7 @@ class NanoTouche2020RCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-nanobeir",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-nanobeir",
-            "revision": "3462ee27487d585065756e7ea857082954bee8fb",
+            "revision": "c0c43c5790a808cb0e8ee833bc7487dc93e88cd5",
         },
         type="Retrieval",
         category="t2t",

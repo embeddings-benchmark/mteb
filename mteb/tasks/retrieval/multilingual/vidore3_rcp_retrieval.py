@@ -27,7 +27,7 @@ class Vidore3ComputerScienceRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-vidore-v3",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-vidore-v3",
-            "revision": "adb6a2a8dcf9c07e87e3cda349db961e263b05d3",
+            "revision": "b22323345cb5639944600d490969bcce9fba7943",
         },
         type="DocumentUnderstanding",
         category="t2it",
@@ -63,7 +63,7 @@ class Vidore3EnergyRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-vidore-v3",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-vidore-v3",
-            "revision": "adb6a2a8dcf9c07e87e3cda349db961e263b05d3",
+            "revision": "b22323345cb5639944600d490969bcce9fba7943",
         },
         type="DocumentUnderstanding",
         category="t2it",
@@ -99,7 +99,7 @@ class Vidore3FinanceEnRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-vidore-v3",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-vidore-v3",
-            "revision": "adb6a2a8dcf9c07e87e3cda349db961e263b05d3",
+            "revision": "b22323345cb5639944600d490969bcce9fba7943",
         },
         type="DocumentUnderstanding",
         category="t2it",
@@ -135,7 +135,7 @@ class Vidore3FinanceFrRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-vidore-v3",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-vidore-v3",
-            "revision": "adb6a2a8dcf9c07e87e3cda349db961e263b05d3",
+            "revision": "b22323345cb5639944600d490969bcce9fba7943",
         },
         type="DocumentUnderstanding",
         category="t2it",
@@ -171,7 +171,7 @@ class Vidore3HrRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-vidore-v3",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-vidore-v3",
-            "revision": "adb6a2a8dcf9c07e87e3cda349db961e263b05d3",
+            "revision": "b22323345cb5639944600d490969bcce9fba7943",
         },
         type="DocumentUnderstanding",
         category="t2it",
@@ -207,7 +207,7 @@ class Vidore3IndustrialRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-vidore-v3",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-vidore-v3",
-            "revision": "adb6a2a8dcf9c07e87e3cda349db961e263b05d3",
+            "revision": "b22323345cb5639944600d490969bcce9fba7943",
         },
         type="DocumentUnderstanding",
         category="t2it",
@@ -243,7 +243,7 @@ class Vidore3PharmaceuticalsRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-vidore-v3",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-vidore-v3",
-            "revision": "adb6a2a8dcf9c07e87e3cda349db961e263b05d3",
+            "revision": "b22323345cb5639944600d490969bcce9fba7943",
         },
         type="DocumentUnderstanding",
         category="t2it",
@@ -279,7 +279,7 @@ class Vidore3PhysicsRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-vidore-v3",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-vidore-v3",
-            "revision": "adb6a2a8dcf9c07e87e3cda349db961e263b05d3",
+            "revision": "b22323345cb5639944600d490969bcce9fba7943",
         },
         type="DocumentUnderstanding",
         category="t2it",
