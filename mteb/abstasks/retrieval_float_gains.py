@@ -131,10 +131,12 @@ class AbsTaskRetrievalFloatGains(AbsTaskRetrieval):
     - Reranking (default, ``rerank_top_ranked = True``): each query is scored over its ``top_ranked``
       candidates, the documents that carry a gain; ``ndcg_float_at_k`` is reported next to the
       integer-qrels metrics.
-    - Full-corpus retrieval (``rerank_top_ranked = False``): ``top_ranked`` is dropped, so each
+    - Full-corpus retrieval (``task.as_full_corpus_retrieval()``, which sets ``rerank_top_ranked =
+      False`` under its own task name): ``top_ranked`` is dropped, so each
       query searches the whole corpus, minus the documents listed in the optional
       ``{subset}-excluded`` config (``query-id``, ``excluded-corpus-ids``). Gains exist only for the
-      candidate pools, so only the integer-qrels metrics are reported.
+      candidate pools, so only the integer-qrels metrics are reported, and a float-gain main score
+      falls back to ``ndcg_at_10``.
 
     Attributes:
         gain_column: Name of the float-gain column in the qrels config.
@@ -256,6 +258,32 @@ class AbsTaskRetrievalFloatGains(AbsTaskRetrieval):
         if hf_split not in subset_gains:
             subset_gains[hf_split] = self._load_float_gains(hf_subset, hf_split, None)
         return subset_gains[hf_split]
+
+    def as_full_corpus_retrieval(self) -> AbsTaskRetrievalFloatGains:
+        """A full-corpus retrieval version of this task (``rerank_top_ranked = False``).
+
+        It gets its own name (``<name>.retrieval``) and ``main_score = "ndcg_at_10"``, so its
+        results are not stored under, and do not overwrite, the reranking task's results.
+        """
+        task = type(self)()
+        task.rerank_top_ranked = False
+        task.metadata = self.metadata.model_copy(
+            update={
+                "name": f"{self.metadata.name}.retrieval",
+                "main_score": "ndcg_at_10",
+                "description": f"{self.metadata.description} Full-corpus retrieval view: "
+                "only the integer-qrels metrics are reported.",
+            }
+        )
+        return task
+
+    def _add_main_score(self, scores: dict[str, Any]) -> None:
+        # the full-corpus mode reports only the integer-qrels metrics, so a main score over
+        # the float gains falls back to the standard NDCG@10
+        main_score = self.metadata.main_score
+        if not self.rerank_top_ranked and main_score.startswith("ndcg_float"):
+            main_score = "ndcg_at_10"
+        scores["main_score"] = scores[main_score]
 
     def task_specific_scores(
         self,
