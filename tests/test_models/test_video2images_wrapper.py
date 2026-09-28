@@ -38,12 +38,16 @@ VIDEO_TASKS = [
 DEFAULT_WARNING = f"default {DEFAULT_NUM_FRAMES} frames per video"
 
 
-def _model(modalities: list[str]):
+def _model(modalities: list[str], model_type: list[str] | None = None):
     model = mteb.get_model("mteb/baseline-random-encoder")
-    model.mteb_model_meta = model.mteb_model_meta.model_copy(
-        update={"modalities": modalities}
-    )
+    update: dict = {"modalities": modalities}
+    if model_type is not None:
+        update["model_type"] = model_type
+    model.mteb_model_meta = model.mteb_model_meta.model_copy(update=update)
     return model
+
+
+NON_DENSE_TYPES = ["late-interaction", "cross-encoder", "sparse"]
 
 
 def _image_model():
@@ -209,3 +213,20 @@ def test_evaluate_checks_cache_before_loading_image_model(tmp_path):
                 overwrite_strategy="only-cache",
             )
     load_model.assert_not_called()
+
+
+@pytest.mark.parametrize("model_type", NON_DENSE_TYPES)
+def test_requires_dense_model(model_type):
+    with pytest.raises(ValueError, match="dense encoder"):
+        Video2ImagesWrapper(_model(["text", "image"], [model_type]))
+
+
+@pytest.mark.parametrize("model_type", NON_DENSE_TYPES)
+def test_evaluate_still_rejects_non_dense_image_models_on_video(model_type):
+    """Only dense image encoders may be wrapped; the rest stay rejected (see #5537)."""
+    with pytest.raises(ValueError, match="none overlap"):
+        mteb.evaluate(
+            _model(["text", "image"], [model_type]),
+            MockVideoRetrievalT2V(),
+            cache=None,
+        )

@@ -94,6 +94,13 @@ class Video2ImagesWrapper:
                 f"{type(self).__name__} requires a model that supports the 'image' modality, "
                 f"got modalities={meta.modalities if meta else None}."
             )
+        if "dense" not in meta.model_type:
+            raise ValueError(
+                f"{type(self).__name__} mean-pools one embedding per frame, which requires a "
+                f"dense encoder, got model_type={meta.model_type}. Late-interaction models emit "
+                "variable-length per-token embeddings and cross-encoders have no `encode`, so "
+                "neither can be pooled this way."
+            )
         if num_frames is not None and fps is not None:
             raise ValueError("Use either `num_frames` or `fps`, not both.")
         if num_frames is None and fps is None:
@@ -215,12 +222,14 @@ def video2images_frames_for_task(
 
     Returns ``None`` when no wrapping is needed, so callers can derive the recorded
     meta with `video2images_model_meta` and check the cache before loading the model.
+    Only dense encoders qualify; see `Video2ImagesWrapper` for why.
     """
     modalities = set(meta.modalities or [])
     if not (
         "video" in task.metadata.modalities
         and "image" in modalities
         and "video" not in modalities
+        and "dense" in meta.model_type
     ):
         return None
 

@@ -293,8 +293,9 @@ def _check_model_modalities(
         return
 
     model_modalities = set(model.modalities)
-    if "image" in model_modalities:
-        # image models run on video tasks through Video2ImagesWrapper
+    if "image" in model_modalities and "dense" in model.model_type:
+        # dense image models run on video tasks through Video2ImagesWrapper; other model
+        # types cannot be mean-pooled across frames and stay rejected
         model_modalities.add("video")
     check_tasks: Iterable[AbsTask] = []
     if isinstance(tasks, AbsTask):
