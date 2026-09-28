@@ -50,16 +50,16 @@ def ndcg_float_scores(
     resolutions. A stable sort instead would let the candidate-pool order (which
     is relevance-ordered for reranking pools) leak ground truth into tied scores.
 
-    The task layer must ensure that the gains cover every query in `results`;
-    a query ID missing from `gains` raises `KeyError`. A non-finite or negative
+    A query ID in `results` that is missing from `gains` (e.g. its qrels gain
+    entries are all null) is scored 0.0. A non-finite or negative
     gain, and a NaN model score, raise `ValueError` rather than being scored --
     each would otherwise reach the mean as a silent `nan` or an extra tie class.
     Unlike the integer-qrels metrics, `skip_first_result` is not applied to the
     float metric.
 
     Args:
-        gains: Continuous gains for each query, `{query_id: {doc_id: gain}}`. Must
-            cover every query ID in `results`.
+        gains: Continuous gains for each query, `{query_id: {doc_id: gain}}`.
+            Should cover every query ID in `results` (missing queries score 0.0).
         results: Retrieval scores for each query, `{query_id: {doc_id: score}}`.
         k_values: The k values for which to compute the scores.
 
@@ -84,7 +84,7 @@ def ndcg_float_scores(
 
     per_query: dict[str, list[float]] = defaultdict(list)
     for query_id, doc_scores in results.items():
-        query_gains = gains[query_id]
+        query_gains = gains.get(query_id, {})
         ranking = sorted(
             doc_scores, key=lambda doc_id: doc_scores[doc_id], reverse=True
         )

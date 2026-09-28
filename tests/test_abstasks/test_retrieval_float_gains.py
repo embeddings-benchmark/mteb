@@ -83,6 +83,28 @@ def test_all_zero_gains_score_zero_and_stay_in_the_mean(
     assert scores["ndcg_float_at_10"] == pytest.approx(round((1.0 + 0.0) / 2, 5))
 
 
+def test_all_null_gains_query_scores_zero_and_stays_in_the_mean(
+    task: MockRetrievalFloatGainsTask,
+) -> None:
+    """A query whose qrels gain entries are all null has no gains entry at all and scores 0.0."""
+
+    class AllNullGainsTask(MockRetrievalFloatGainsTask):
+        # q2's gain column is entirely null, so the loader yields no q2 entry
+        float_gains = {
+            **MockRetrievalFloatGainsTask.float_gains,
+            "test": {"q1": {"d1": 0.9, "d2": 0.1}},
+        }
+
+    model = FixedScoreSearch(
+        {"q1": {"d1": 0.9, "d2": 0.1}, "q2": {"d2": 0.9, "d1": 0.1}}
+    )
+    scores = AllNullGainsTask().evaluate(model, split="test", encode_kwargs={})[
+        "default"
+    ]
+
+    assert scores["ndcg_float_at_10"] == pytest.approx(round((1.0 + 0.0) / 2, 5))
+
+
 def test_integer_metrics_match_a_plain_retrieval_task() -> None:
     """Adding float gains must not change any integer-qrels metric."""
     model_scores = {"q1": {"d1": 0.9, "d2": 0.1}, "q2": {"d1": 0.9, "d2": 0.1}}
