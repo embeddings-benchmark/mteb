@@ -44,6 +44,7 @@ if TYPE_CHECKING:
         HFSubset,
         ISOLanguage,
         ISOLanguageScript,
+        Modalities,
         Score,
     )
 
@@ -295,6 +296,11 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         if doms is None:
             doms = []
         return doms
+
+    @property
+    def modalities(self) -> list[Modalities]:
+        """The modalities of the task."""
+        return self.task.metadata.modalities
 
     @property
     def task_type(self) -> str:
