@@ -2,7 +2,7 @@ import math
 
 import pytest
 
-from mteb._evaluators.retrieval_metrics import ndcg_float_scores
+from mteb.abstasks.retrieval_float_gains import ndcg_float_scores
 
 # mteb rounds metric means to 5 decimals
 TOL = 1e-5

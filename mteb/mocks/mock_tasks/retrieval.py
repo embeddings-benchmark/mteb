@@ -204,6 +204,9 @@ class MockRetrievalFloatGainsTask(AbsTaskRetrievalFloatGains):
         test: distinct model scores; gains cover every candidate.
         ties: all candidates of q1 tie, so each is credited the group-mean gain.
         zero_gains: q2's gains are all zero, so it scores 0.0 and still counts in the mean.
+
+    Identical-id handling and the real gain-column loader are tested in
+    ``tests/test_abstasks/test_retrieval_float_gains.py``.
     """
 
     metadata = TaskMetadata(

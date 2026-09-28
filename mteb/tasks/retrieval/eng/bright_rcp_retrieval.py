@@ -27,7 +27,7 @@ class BrightAopsRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-bright",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-bright",
-            "revision": "2ae76250fbd8dc53defadd9c410c1c95396c0e10",
+            "revision": "996c79ae8bcea667e3e2f285bf765c59f1d77f56",
         },
         type="Retrieval",
         category="t2t",
@@ -58,7 +58,7 @@ class BrightBiologyRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-bright",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-bright",
-            "revision": "2ae76250fbd8dc53defadd9c410c1c95396c0e10",
+            "revision": "996c79ae8bcea667e3e2f285bf765c59f1d77f56",
         },
         type="Retrieval",
         category="t2t",
@@ -89,7 +89,7 @@ class BrightEarthScienceRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-bright",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-bright",
-            "revision": "2ae76250fbd8dc53defadd9c410c1c95396c0e10",
+            "revision": "996c79ae8bcea667e3e2f285bf765c59f1d77f56",
         },
         type="Retrieval",
         category="t2t",
@@ -120,7 +120,7 @@ class BrightEconomicsRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-bright",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-bright",
-            "revision": "2ae76250fbd8dc53defadd9c410c1c95396c0e10",
+            "revision": "996c79ae8bcea667e3e2f285bf765c59f1d77f56",
         },
         type="Retrieval",
         category="t2t",
@@ -151,7 +151,7 @@ class BrightLeetcodeRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-bright",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-bright",
-            "revision": "2ae76250fbd8dc53defadd9c410c1c95396c0e10",
+            "revision": "996c79ae8bcea667e3e2f285bf765c59f1d77f56",
         },
         type="Retrieval",
         category="t2t",
@@ -182,7 +182,7 @@ class BrightPonyRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-bright",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-bright",
-            "revision": "2ae76250fbd8dc53defadd9c410c1c95396c0e10",
+            "revision": "996c79ae8bcea667e3e2f285bf765c59f1d77f56",
         },
         type="Retrieval",
         category="t2t",
@@ -213,7 +213,7 @@ class BrightPsychologyRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-bright",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-bright",
-            "revision": "2ae76250fbd8dc53defadd9c410c1c95396c0e10",
+            "revision": "996c79ae8bcea667e3e2f285bf765c59f1d77f56",
         },
         type="Retrieval",
         category="t2t",
@@ -244,7 +244,7 @@ class BrightRoboticsRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-bright",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-bright",
-            "revision": "2ae76250fbd8dc53defadd9c410c1c95396c0e10",
+            "revision": "996c79ae8bcea667e3e2f285bf765c59f1d77f56",
         },
         type="Retrieval",
         category="t2t",
@@ -275,7 +275,7 @@ class BrightStackoverflowRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-bright",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-bright",
-            "revision": "2ae76250fbd8dc53defadd9c410c1c95396c0e10",
+            "revision": "996c79ae8bcea667e3e2f285bf765c59f1d77f56",
         },
         type="Retrieval",
         category="t2t",
@@ -306,7 +306,7 @@ class BrightSustainableLivingRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-bright",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-bright",
-            "revision": "2ae76250fbd8dc53defadd9c410c1c95396c0e10",
+            "revision": "996c79ae8bcea667e3e2f285bf765c59f1d77f56",
         },
         type="Retrieval",
         category="t2t",
@@ -337,7 +337,7 @@ class BrightTheoremQAQuestionsRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-bright",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-bright",
-            "revision": "2ae76250fbd8dc53defadd9c410c1c95396c0e10",
+            "revision": "996c79ae8bcea667e3e2f285bf765c59f1d77f56",
         },
         type="Retrieval",
         category="t2t",
@@ -368,7 +368,7 @@ class BrightTheoremQATheoremsRCPRetrieval(AbsTaskRetrievalFloatGains):
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-bright",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-bright",
-            "revision": "2ae76250fbd8dc53defadd9c410c1c95396c0e10",
+            "revision": "996c79ae8bcea667e3e2f285bf765c59f1d77f56",
         },
         type="Retrieval",
         category="t2t",

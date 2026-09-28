@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import math
+from pathlib import Path
 from typing import Any
 
 import pytest
 from datasets import Dataset
 
+from mteb.abstasks.retrieval_float_gains import AbsTaskRetrievalFloatGains
 from mteb.mocks.mock_tasks import MockRetrievalFloatGainsTask, MockRetrievalTask
 from mteb.models.model_meta import ModelMeta
 from mteb.types import CorpusDatasetType
@@ -107,3 +109,195 @@ def test_corpus_is_restricted_to_top_ranked(task: MockRetrievalFloatGainsTask) -
     task.dataset_transform()
 
     assert task.dataset["default"]["test"]["corpus"]["id"] == ["d1"]
+
+
+def test_ignore_identical_ids_drops_the_query_document_from_the_gains() -> None:
+    # The evaluator drops each query's own document from the ranking in place. The
+    # float metric must drop it from the gains too; otherwise its gain inflates the
+    # ideal DCG and a perfect ranking of the remaining documents cannot reach 1.0.
+    class IdenticalIdsTask(MockRetrievalFloatGainsTask):
+        ignore_identical_ids = True
+        float_gains = {
+            **MockRetrievalFloatGainsTask.float_gains,
+            "test": {"q1": {"q1": 1.0, "d1": 0.9, "d2": 0.1}, "q2": {"d2": 0.8}},
+        }
+
+    model = FixedScoreSearch(
+        {"q1": {"q1": 0.99, "d1": 0.9, "d2": 0.1}, "q2": {"d2": 0.9, "d1": 0.1}}
+    )
+    scores = IdenticalIdsTask().evaluate(model, split="test", encode_kwargs={})[
+        "default"
+    ]
+
+    assert scores["ndcg_float_at_10"] == pytest.approx(1.0)
+
+
+def test_skip_first_result_is_rejected(task: MockRetrievalFloatGainsTask) -> None:
+    task.skip_first_result = True
+    model = FixedScoreSearch(
+        {"q1": {"d1": 0.9, "d2": 0.1}, "q2": {"d2": 0.9, "d1": 0.1}}
+    )
+    with pytest.raises(ValueError, match="skip_first_result"):
+        task.evaluate(model, split="test", encode_kwargs={})
+
+
+def test_gains_are_loaded_lazily_without_dataset_transform() -> None:
+    # A caller that injects `task.dataset` directly skips `dataset_transform`; the
+    # gains must then be loaded on first use instead of failing.
+    task = MockRetrievalFloatGainsTask()
+    task.load_data()
+    del task._float_gains
+    model = FixedScoreSearch(
+        {"q1": {"d1": 0.9, "d2": 0.1}, "q2": {"d2": 0.9, "d1": 0.1}}
+    )
+    scores = task.evaluate(model, split="test", encode_kwargs={})["default"]
+
+    assert scores["ndcg_float_at_10"] == pytest.approx(1.0)
+
+
+def _write_local_dataset(root: Path, subset: str | None) -> None:
+    """A tiny parquet dataset whose qrels config carries a `gain` column.
+
+    ``subset=None`` writes the default-subset layout (configs ``corpus``, ``queries``,
+    ``qrels``, ``top_ranked``); otherwise every config is prefixed ``{subset}-``.
+    """
+    prefix = f"{subset}-" if subset else ""
+    tables = {
+        "corpus": [
+            {"id": "d1", "title": "", "text": "first document"},
+            {"id": "d2", "title": "", "text": "second document"},
+        ],
+        "queries": [{"id": "q1", "text": "a query"}, {"id": "q2", "text": "another"}],
+        "qrels": [
+            {
+                "query-id": "q1",
+                "corpus-id": "d1",
+                "score": 1,
+                "gain": 0.9,
+                "theta": 1.0,
+            },
+            {
+                "query-id": "q1",
+                "corpus-id": "d2",
+                "score": 0,
+                "gain": 0.1,
+                "theta": -1.0,
+            },
+            {
+                "query-id": "q2",
+                "corpus-id": "d1",
+                "score": 0,
+                "gain": 0.2,
+                "theta": -0.5,
+            },
+            {
+                "query-id": "q2",
+                "corpus-id": "d2",
+                "score": 1,
+                "gain": 0.8,
+                "theta": 0.5,
+            },
+        ],
+        "top_ranked": [
+            {"query-id": "q1", "corpus-ids": ["d1", "d2"]},
+            {"query-id": "q2", "corpus-ids": ["d2", "d1"]},
+        ],
+    }
+    if subset:
+        # the named subset also excludes d2 for q1 (like BRIGHT's excluded_ids)
+        tables["excluded"] = [{"query-id": "q1", "excluded-corpus-ids": ["d2"]}]
+    configs = []
+    for name, rows in tables.items():
+        config = prefix + name
+        (root / config).mkdir(parents=True)
+        Dataset.from_list(rows).to_parquet(str(root / config / "test.parquet"))
+        configs.append(
+            f"- config_name: {config}\n  data_files:\n"
+            f"  - split: test\n    path: {config}/test.parquet\n"
+        )
+    (root / "README.md").write_text("---\nconfigs:\n" + "".join(configs) + "---\n")
+
+
+@pytest.mark.parametrize("subset", [None, "named"])
+def test_gains_are_read_from_the_qrels_gain_column(
+    tmp_path: Path, subset: str | None
+) -> None:
+    """The real loader path: the `gain` column of the (subset's) qrels config."""
+    _write_local_dataset(tmp_path, subset)
+    hf_subset = subset or "default"
+
+    class LocalFloatGainsTask(AbsTaskRetrievalFloatGains):
+        metadata = MockRetrievalFloatGainsTask.metadata.model_copy(
+            update={
+                "name": "LocalFloatGainsTask",
+                "dataset": {"path": str(tmp_path), "revision": "local"},
+                "eval_splits": ["test"],
+                "eval_langs": {hf_subset: ["eng-Latn"]} if subset else ["eng-Latn"],
+            }
+        )
+
+    task = LocalFloatGainsTask()
+    task.load_data()
+
+    assert task._float_gains[hf_subset]["test"] == {
+        "q1": {"d1": 0.9, "d2": 0.1},
+        "q2": {"d1": 0.2, "d2": 0.8},
+    }
+    model = FixedScoreSearch(
+        {"q1": {"d1": 0.9, "d2": 0.1}, "q2": {"d2": 0.9, "d1": 0.1}}
+    )
+    scores = task.evaluate(model, split="test", encode_kwargs={})[hf_subset]
+    assert scores["ndcg_float_at_10"] == pytest.approx(1.0)
+
+
+def test_gain_split_falls_back_to_the_only_split(tmp_path: Path) -> None:
+    """Like the core loader: a requested split missing from a single-split config falls back."""
+    _write_local_dataset(tmp_path, None)
+
+    class LocalFloatGainsTask(AbsTaskRetrievalFloatGains):
+        metadata = MockRetrievalFloatGainsTask.metadata.model_copy(
+            update={
+                "name": "LocalFloatGainsTask",
+                "dataset": {"path": str(tmp_path), "revision": "local"},
+                "eval_splits": ["test"],
+                "eval_langs": ["eng-Latn"],
+            }
+        )
+
+    gains = LocalFloatGainsTask()._load_float_gains("default", "dev", None)
+    assert gains["q2"] == {"d1": 0.2, "d2": 0.8}
+
+
+@pytest.mark.parametrize("subset", [None, "named"])
+def test_full_corpus_retrieval_mode(tmp_path: Path, subset: str | None) -> None:
+    """``rerank_top_ranked = False``: search the whole corpus minus excluded ids, no float metric."""
+    _write_local_dataset(tmp_path, subset)
+    hf_subset = subset or "default"
+
+    class LocalRetrievalView(AbsTaskRetrievalFloatGains):
+        rerank_top_ranked = False
+        metadata = MockRetrievalFloatGainsTask.metadata.model_copy(
+            update={
+                "name": "LocalRetrievalView",
+                "main_score": "ndcg_at_10",
+                "dataset": {"path": str(tmp_path), "revision": "local"},
+                "eval_splits": ["test"],
+                "eval_langs": {hf_subset: ["eng-Latn"]} if subset else ["eng-Latn"],
+            }
+        )
+
+    task = LocalRetrievalView()
+    task.load_data()
+    split = task.dataset[hf_subset]["test"]
+    if subset:
+        assert split["top_ranked"] == {"q1": ["d1"], "q2": ["d1", "d2"]}
+    else:
+        assert split["top_ranked"] is None
+    assert sorted(split["corpus"]["id"]) == ["d1", "d2"]  # the corpus is not trimmed
+
+    model = FixedScoreSearch(
+        {"q1": {"d1": 0.9, "d2": 0.1}, "q2": {"d2": 0.9, "d1": 0.1}}
+    )
+    scores = task.evaluate(model, split="test", encode_kwargs={})[hf_subset]
+    assert scores["main_score"] == scores["ndcg_at_10"]
+    assert not any(key.startswith("ndcg_float") for key in scores)
