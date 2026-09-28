@@ -22,6 +22,8 @@ from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
 )
 from mteb.models.video_wrappers.video2images_wrapper import (
+    video2images_frames_for_task,
+    video2images_model_meta,
     wrap_image_model_for_video,
 )
 from mteb.results import ModelResult, TaskResult
@@ -610,7 +612,11 @@ def evaluate(  # noqa: PLR0913, PLR0914
             exceptions=exceptions,
         )
 
-    model, meta = wrap_image_model_for_video(model, meta, task, video_frames)
+    # resolved before the cache check so cached video results can be found without
+    # loading the image model that would produce them
+    video_num_frames = video2images_frames_for_task(meta, task, video_frames)
+    if video_num_frames is not None:
+        meta = video2images_model_meta(meta, num_frames=video_num_frames)
 
     existing_results, missing_eval = _check_cache(task, meta, cache, overwrite_strategy)
 
@@ -639,6 +645,9 @@ def evaluate(  # noqa: PLR0913, PLR0914
         )
         model = model.load_model()
         logger.info("✓ Model loaded")
+
+    if video_num_frames is not None:
+        model = wrap_image_model_for_video(model, video_num_frames)
 
     if raise_error is False:
         try:

@@ -1,4 +1,5 @@
 import warnings
+from unittest.mock import patch
 
 import numpy as np
 import pytest
@@ -15,7 +16,7 @@ from mteb.mocks import (
     MockVideoZeroshotClassificationTask,
 )
 from mteb.mocks.mock_tasks.create_mock_samples import create_mock_video_bytes
-from mteb.models import Video2ImagesWrapper
+from mteb.models import ModelMeta, Video2ImagesWrapper
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_implementations.random_baseline import _image_to_vector
 from mteb.models.video_wrappers import DEFAULT_NUM_FRAMES
@@ -188,3 +189,23 @@ def test_evaluate_does_not_rewrap_explicit_wrapper():
 def test_evaluate_still_rejects_text_only_models_on_video():
     with pytest.raises(ValueError, match="none overlap"):
         mteb.evaluate(_model(["text"]), MockVideoRetrievalT2V(), cache=None)
+
+
+def test_evaluate_checks_cache_before_loading_image_model(tmp_path):
+    """The wrapped meta must be derivable without loading the model (see #5537)."""
+    meta = mteb.get_model_meta("mteb/baseline-random-encoder").model_copy(
+        update={"modalities": ["text", "image"]}
+    )
+    with (
+        warnings.catch_warnings(),
+        patch.object(ModelMeta, "load_model", autospec=True) as load_model,
+    ):
+        warnings.simplefilter("ignore")
+        with pytest.raises(ValueError, match="no results found in cache"):
+            mteb.evaluate(
+                meta,
+                MockVideoRetrievalT2V(),
+                cache=ResultCache(tmp_path),
+                overwrite_strategy="only-cache",
+            )
+    load_model.assert_not_called()
