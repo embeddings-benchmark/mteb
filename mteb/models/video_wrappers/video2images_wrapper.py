@@ -94,6 +94,12 @@ class Video2ImagesWrapper:
                 f"{type(self).__name__} requires a model that supports the 'image' modality, "
                 f"got modalities={meta.modalities if meta else None}."
             )
+        if "video" in meta.modalities:
+            raise ValueError(
+                f"{meta.name} already supports the 'video' modality, so wrapping it in "
+                f"{type(self).__name__} would replace its native video path with mean-pooled "
+                "frames and store the result as its regular video results. Evaluate it directly."
+            )
         if "dense" not in meta.model_type:
             raise ValueError(
                 f"{type(self).__name__} mean-pools one embedding per frame, which requires a "

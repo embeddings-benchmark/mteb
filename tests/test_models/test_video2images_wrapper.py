@@ -230,3 +230,8 @@ def test_evaluate_still_rejects_non_dense_image_models_on_video(model_type):
             MockVideoRetrievalT2V(),
             cache=None,
         )
+
+
+def test_rejects_models_that_already_support_video():
+    with pytest.raises(ValueError, match="already supports the 'video' modality"):
+        Video2ImagesWrapper(_model(["text", "image", "video"]))
