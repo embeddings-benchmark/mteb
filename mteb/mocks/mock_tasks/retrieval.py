@@ -4,9 +4,8 @@ from typing import Any
 
 from datasets import Audio, Dataset, DatasetDict
 
-from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.retrieval import AbsTaskRetrieval, AbsTaskRetrievalFloatGains
 from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
-from mteb.abstasks.retrieval_float_gains import AbsTaskRetrievalFloatGains
 from mteb.abstasks.task_metadata import TaskMetadata
 
 from .create_mock_samples import (

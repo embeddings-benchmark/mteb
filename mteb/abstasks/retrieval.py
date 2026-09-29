@@ -6,7 +6,14 @@ from collections import defaultdict
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal
 
-from datasets import Dataset, DatasetDict, concatenate_datasets
+from datasets import (
+    Dataset,
+    DatasetDict,
+    concatenate_datasets,
+    get_dataset_config_names,
+    get_dataset_split_names,
+    load_dataset,
+)
 
 from mteb._create_dataloaders import (
     _combine_queries_with_instruction_text,
@@ -14,7 +21,7 @@ from mteb._create_dataloaders import (
     _corpus_to_dict,
 )
 from mteb._evaluators import RetrievalEvaluator
-from mteb._evaluators.retrieval_metrics import make_score_dict
+from mteb._evaluators.retrieval_metrics import make_score_dict, ndcg_float_scores
 from mteb.models import (
     CrossEncoderProtocol,
     EncoderProtocol,
@@ -44,6 +51,7 @@ if TYPE_CHECKING:
 
     from typing_extensions import Self
 
+    from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
     from mteb.models import (
         MTEBModels,
     )
@@ -55,10 +63,6 @@ if TYPE_CHECKING:
         RelevantDocumentsType,
         RetrievalOutputType,
         ScoresDict,
-    )
-
-    from .retrieval_dataset_loaders import (
-        RetrievalSplitData,
     )
 
 logger = logging.getLogger(__name__)
@@ -790,3 +794,212 @@ def _process_relevant_docs(
             f"{split}_{hf_subset}_{doc_id}": value for doc_id, value in relevant.items()
         }
     return return_collection
+
+
+class AbsTaskRetrievalFloatGains(AbsTaskRetrieval):
+    """Retrieval (typically reranking over ``top_ranked``) scored against float gains in the qrels.
+
+    The gains are read from the qrels config of each subset (``{subset}-qrels``, or ``default`` /
+    ``qrels`` for the default subset), resolved like the standard retrieval loader resolves it.
+    ``ignore_identical_ids`` is honoured: each query's own document is dropped from the ranking and
+    from the gains, so it cannot inflate the ideal DCG. ``skip_first_result`` is not supported and
+    raises a ``ValueError``.
+
+    Two ways to evaluate:
+
+    - Reranking (default, ``rerank_top_ranked = True``): each query is scored over its ``top_ranked``
+      candidates, the documents that carry a gain; ``ndcg_float_at_k`` is reported next to the
+      integer-qrels metrics.
+    - Full-corpus retrieval (``task.as_full_corpus_retrieval()``, which sets ``rerank_top_ranked =
+      False`` under its own task name): ``top_ranked`` is dropped, so each
+      query searches the whole corpus, minus the documents listed in the optional
+      ``{subset}-excluded`` config (``query-id``, ``excluded-corpus-ids``). Gains exist only for the
+      candidate pools, so only the integer-qrels metrics are reported, and a float-gain main score
+      falls back to ``ndcg_at_10``. Cross-encoders are refused in this mode (they would score every
+      query against the whole corpus).
+
+    Attributes:
+        gain_column: Name of the float-gain column in the qrels config.
+        rerank_top_ranked: Rerank ``top_ranked`` (``True``) or retrieve from the full corpus.
+        restrict_corpus_to_top_ranked: When reranking, encode only the documents that appear in
+            ``top_ranked``. The float gains cover exactly those documents, and without this a
+            bi-encoder would embed the whole corpus to rerank a handful of candidates per query.
+            Descriptive statistics describe the full corpus: set this to ``False`` before calling
+            ``calculate_descriptive_statistics``.
+    """
+
+    gain_column: str = "gain"
+    rerank_top_ranked: bool = True
+    restrict_corpus_to_top_ranked: bool = True
+
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        """Load the float gains for every (subset, split) and optionally trim the corpus."""
+        self._float_gains: dict[str, dict[str, dict[str, dict[str, float]]]] = {}
+        for hf_subset, splits in self.dataset.items():
+            self._float_gains[hf_subset] = {}
+            for split, data in splits.items():
+                if not self.rerank_top_ranked:
+                    data["top_ranked"] = self._full_corpus_candidates(
+                        hf_subset, split, data, num_proc
+                    )
+                    continue
+                self._float_gains[hf_subset][split] = self._load_float_gains(
+                    hf_subset, split, num_proc
+                )
+                top_ranked = data.get("top_ranked")
+                if self.restrict_corpus_to_top_ranked and top_ranked:
+                    keep = {doc_id for docs in top_ranked.values() for doc_id in docs}
+                    corpus = data["corpus"]
+                    data["corpus"] = corpus.select(
+                        [i for i, doc_id in enumerate(corpus["id"]) if doc_id in keep]
+                    )
+
+    def _full_corpus_candidates(
+        self,
+        hf_subset: str,
+        split: str,
+        data: RetrievalSplitData,
+        num_proc: int | None,
+    ) -> dict[str, list[str]] | None:
+        """``None`` (plain full-corpus search), or the full corpus minus each query's excluded ids."""
+        path = self.metadata.dataset["path"]
+        revision = self.metadata.dataset["revision"]
+        config = f"{hf_subset}-excluded" if hf_subset != "default" else "excluded"
+        if config not in get_dataset_config_names(path, revision):
+            return None
+        _, excluded_split = self._split_of(config, split)
+        rows = load_dataset(
+            path, config, split=excluded_split, revision=revision, num_proc=num_proc
+        )
+        excluded = {
+            str(q): set(map(str, ids))
+            for q, ids in zip(
+                rows["query-id"], rows["excluded-corpus-ids"], strict=True
+            )
+        }
+        corpus_ids = [str(d) for d in data["corpus"]["id"]]
+        return {
+            str(q): [d for d in corpus_ids if d not in excluded[str(q)]]
+            if str(q) in excluded
+            else corpus_ids
+            for q in data["queries"]["id"]
+        }
+
+    def _split_of(self, config: str, split: str) -> tuple[str, str]:
+        """The split of ``config`` to read: ``split``, or the only split (like the core loader)."""
+        splits = get_dataset_split_names(
+            self.metadata.dataset["path"],
+            revision=self.metadata.dataset["revision"],
+            config_name=config,
+        )
+        if split not in splits:
+            if len(splits) != 1:
+                raise ValueError(
+                    f"Split {split} not found in {splits}. Please specify a valid split."
+                )
+            split = str(splits[0])
+        return config, split
+
+    def _qrels_config_and_split(self, hf_subset: str, split: str) -> tuple[str, str]:
+        """The qrels config and split, resolved like ``RetrievalDatasetLoader``."""
+        if hf_subset != "default":
+            config = f"{hf_subset}-qrels"
+        else:
+            configs = get_dataset_config_names(
+                self.metadata.dataset["path"], self.metadata.dataset["revision"]
+            )
+            config = "default" if "default" in configs else "qrels"
+        return self._split_of(config, split)
+
+    def _load_float_gains(
+        self, hf_subset: str, split: str, num_proc: int | None
+    ) -> dict[str, dict[str, float]]:
+        config, qrels_split = self._qrels_config_and_split(hf_subset, split)
+        qrels = load_dataset(
+            self.metadata.dataset["path"],
+            config,
+            split=qrels_split,
+            revision=self.metadata.dataset["revision"],
+            num_proc=num_proc,
+        ).select_columns(["query-id", "corpus-id", self.gain_column])
+        gains: dict[str, dict[str, float]] = defaultdict(dict)
+        for query_id, doc_id, gain in zip(
+            qrels["query-id"], qrels["corpus-id"], qrels[self.gain_column], strict=True
+        ):
+            if gain is not None:
+                gains[str(query_id)][str(doc_id)] = float(gain)
+        return dict(gains)
+
+    def _gains_for(self, hf_subset: str, hf_split: str) -> dict[str, dict[str, float]]:
+        """The gains of one (subset, split), loaded on first use if ``dataset_transform`` did not run."""
+        if not hasattr(self, "_float_gains"):
+            self._float_gains = {}
+        subset_gains = self._float_gains.setdefault(hf_subset, {})
+        if hf_split not in subset_gains:
+            subset_gains[hf_split] = self._load_float_gains(hf_subset, hf_split, None)
+        return subset_gains[hf_split]
+
+    def as_full_corpus_retrieval(self) -> AbsTaskRetrievalFloatGains:
+        """A full-corpus retrieval version of this task (``rerank_top_ranked = False``).
+
+        It gets its own name (``<name>.retrieval``) and ``main_score = "ndcg_at_10"``, so its
+        results are not stored under, and do not overwrite, the reranking task's results.
+        """
+        task = type(self)()
+        task.rerank_top_ranked = False
+        task.metadata = self.metadata.model_copy(
+            update={
+                "name": f"{self.metadata.name}.retrieval",
+                "main_score": "ndcg_at_10",
+                "description": f"{self.metadata.description} Full-corpus retrieval view: "
+                "only the integer-qrels metrics are reported.",
+            }
+        )
+        return task
+
+    @property
+    def _support_cross_encoder(self) -> bool:  # type: ignore[override]
+        # a cross-encoder would score every (query, document) pair of the full corpus
+        return self.rerank_top_ranked
+
+    def _add_main_score(self, scores: ScoresDict) -> None:
+        # the full-corpus mode reports only the integer-qrels metrics, so a main score over
+        # the float gains falls back to the standard NDCG@10
+        main_score = self.metadata.main_score
+        if not self.rerank_top_ranked and main_score.startswith("ndcg_float"):
+            main_score = "ndcg_at_10"
+        scores["main_score"] = scores[main_score]
+
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        """Adds ``ndcg_float_at_k`` over the float gains, for the queries the qrels metrics score."""
+        if not self.rerank_top_ranked:
+            return {}
+        if self.skip_first_result:
+            raise ValueError(
+                "skip_first_result is not supported by the float-gains metric."
+            )
+        gains = self._gains_for(hf_subset, hf_split)
+        # exactly the queries the integer metrics average over: pytrec_eval scores the queries
+        # present in `results` (an empty result dict scores 0; an absent query is skipped)
+        scored = {
+            query_id: results[query_id] for query_id in qrels if query_id in results
+        }
+        if self.ignore_identical_ids:
+            # the evaluator already dropped each query's own document from `results`; drop it
+            # from the gains too (on copies), so it cannot inflate the ideal DCG
+            gains = {
+                query_id: {d: g for d, g in docs.items() if d != query_id}
+                for query_id, docs in gains.items()
+            }
+            scored = {
+                query_id: {d: s for d, s in docs.items() if d != query_id}
+                for query_id, docs in scored.items()
+            }
+        return ndcg_float_scores(gains, scored, self.k_values)

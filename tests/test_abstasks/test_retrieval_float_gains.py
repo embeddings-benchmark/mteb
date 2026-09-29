@@ -9,7 +9,7 @@ from typing import Any
 import pytest
 from datasets import Dataset
 
-from mteb.abstasks.retrieval_float_gains import AbsTaskRetrievalFloatGains
+from mteb.abstasks.retrieval import AbsTaskRetrievalFloatGains
 from mteb.mocks.mock_tasks import MockRetrievalFloatGainsTask, MockRetrievalTask
 from mteb.models.model_meta import ModelMeta
 from mteb.types import CorpusDatasetType
@@ -439,7 +439,7 @@ def test_null_gains_are_skipped(
         {"query-id": "q1", "corpus-id": "d1", "gain": 0.9},
         {"query-id": "q1", "corpus-id": "d9", "gain": None},
     ]
-    import mteb.abstasks.retrieval_float_gains as module
+    import mteb.abstasks.retrieval as module
 
     monkeypatch.setattr(module, "load_dataset", lambda *a, **k: Dataset.from_list(rows))
     assert task_cls()._load_float_gains("named", "test", None) == {"q1": {"d1": 0.9}}

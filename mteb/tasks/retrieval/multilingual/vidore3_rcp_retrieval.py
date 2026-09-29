@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import copy
 
-from mteb.abstasks.retrieval_float_gains import AbsTaskRetrievalFloatGains
+from mteb.abstasks.retrieval import AbsTaskRetrievalFloatGains
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _CITATION = r"""@misc{schmidt2026rubriccalibratedpreferencescrossquerycalibration,
