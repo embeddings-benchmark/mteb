@@ -39,7 +39,7 @@ if TYPE_CHECKING:
     from mteb.models.models_protocols import (
         MTEBModels,
     )
-    from mteb.types import EncodeKwargs, HFSubset, ScoresDict, SplitName
+    from mteb.types import EncodeKwargs, HFSubset, Modalities, ScoresDict, SplitName
     from mteb.types._metadata import ModelName, Revision
 
 
@@ -293,10 +293,18 @@ def _check_model_modalities(
         return
 
     model_modalities = set(model.modalities)
-    if "image" in model_modalities and "dense" in model.model_type:
-        # dense image models run on video tasks through Video2ImagesWrapper; other model
-        # types cannot be mean-pooled across frames and stay rejected
-        model_modalities.add("video")
+    # dense image models run on video tasks through Video2ImagesWrapper; other model
+    # types cannot be mean-pooled across frames and stay rejected
+    wraps_video = "image" in model_modalities and "dense" in model.model_type
+
+    def covers(input_modalities: set[Modalities]) -> bool:
+        """Whether the model can encode one group of inputs, wrapping video if needed."""
+        if input_modalities.issubset(model_modalities):
+            return True
+        # Video2ImagesWrapper encodes a video-only dataloader; video mixed with other
+        # modalities in the same dataloader raises inside the wrapper, so it is not covered
+        return wraps_video and input_modalities == {"video"}
+
     check_tasks: Iterable[AbsTask] = []
     if isinstance(tasks, AbsTask):
         check_tasks = [tasks]
@@ -317,11 +325,8 @@ def _check_model_modalities(
             query_overlap = model_modalities & query_mods
             doc_overlap = model_modalities & doc_mods
 
-            if (
+            if covers(query_mods) and covers(doc_mods):
                 # both query and document modalities are fully supported by the model
-                doc_mods.issubset(model_modalities)
-                and query_mods.issubset(model_modalities)
-            ):
                 continue
             if query_overlap and doc_overlap:
                 warnings.append(
@@ -337,7 +342,13 @@ def _check_model_modalities(
         else:
             task_mods = set(task.metadata.modalities)
 
-            if task_mods.issubset(model_modalities):
+            # non-retrieval tasks encode each modality in its own dataloader (e.g. zeroshot
+            # classification encodes the text labels separately from the videos), so their
+            # modalities are a union across calls rather than one dataloader's features
+            supported = (
+                model_modalities | {"video"} if wraps_video else model_modalities
+            )
+            if task_mods.issubset(supported):
                 continue
             errors.append(
                 f"Model {model.name} supports {model.modalities}, but none overlap with "

@@ -8,6 +8,7 @@ from datasets import Dataset
 import mteb
 from mteb._create_dataloaders import create_dataloader
 from mteb.cache import ResultCache
+from mteb.evaluate import _check_model_modalities
 from mteb.mocks import (
     MockVideoClassification,
     MockVideoClusteringTask,
@@ -20,6 +21,9 @@ from mteb.models import ModelMeta, Video2ImagesWrapper
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_implementations.random_baseline import _image_to_vector
 from mteb.models.video_wrappers import DEFAULT_NUM_FRAMES
+from mteb.models.video_wrappers.video2images_wrapper import (
+    video2images_frames_for_task,
+)
 from mteb.types import PromptType
 
 pytest.importorskip("torchcodec", reason="Video dependencies are not installed")
@@ -235,3 +239,37 @@ def test_evaluate_still_rejects_non_dense_image_models_on_video(model_type):
 def test_rejects_models_that_already_support_video():
     with pytest.raises(ValueError, match="already supports the 'video' modality"):
         Video2ImagesWrapper(_model(["text", "image", "video"]))
+
+
+MIXED_VIDEO_SIDE_TASKS = [
+    # query=['video', 'text'], document=['text'] -> partial overlap, as before the wrapper
+    ("XModBenchVT2TReranking", "warns"),
+    # query=['video', 'text'], document=['video'] -> no document overlap
+    ("CoVRRVT2VRetrieval", "rejects"),
+    # query=document=['video', 'audio'] -> audio is never covered
+    ("VCDBCoreAudioVideoRetrieval", "rejects"),
+]
+
+
+@pytest.mark.parametrize(("task_name", "outcome"), MIXED_VIDEO_SIDE_TASKS)
+def test_video_mixed_with_other_modalities_is_not_wrapped(task_name, outcome):
+    """A dataloader mixing video with text/audio raises inside the wrapper (see #5537)."""
+    task = mteb.get_task(task_name)
+    meta = mteb.get_model_meta("openai/clip-vit-base-patch32")
+
+    assert video2images_frames_for_task(meta, task, None) is None
+
+    if outcome == "rejects":
+        with pytest.raises(ValueError, match="none overlap"):
+            _check_model_modalities(meta, task)
+    else:
+        _check_model_modalities(meta, task)
+
+
+@pytest.mark.parametrize("task", VIDEO_TASKS)
+def test_video_only_sides_are_still_wrapped(task):
+    meta = mteb.get_model_meta("openai/clip-vit-base-patch32")
+    _check_model_modalities(meta, task)
+    assert video2images_frames_for_task(meta, task, DEFAULT_NUM_FRAMES) == (
+        DEFAULT_NUM_FRAMES
+    )

@@ -219,6 +219,26 @@ class Video2ImagesWrapper:
         return self.model.similarity_pairwise(embeddings1, embeddings2)
 
 
+def _has_mixed_video_side(task: AbsTask) -> bool:
+    """Whether a retrieval side pairs video with another modality in one dataloader.
+
+    `Video2ImagesWrapper.encode` raises on such inputs, so these tasks must not be
+    wrapped. Only retrieval sides are checked: other task types encode each modality
+    in its own dataloader, so their metadata is a union across calls and says nothing
+    about what any single dataloader holds.
+    """
+    from mteb.abstasks.retrieval import AbsTaskRetrieval
+    from mteb.types import PromptType
+
+    if not isinstance(task, AbsTaskRetrieval):
+        return False
+    sides = (
+        set(task.metadata.get_modalities(PromptType.query)),
+        set(task.metadata.get_modalities(PromptType.document)),
+    )
+    return any("video" in side and side != {"video"} for side in sides)
+
+
 def video2images_frames_for_task(
     meta: ModelMeta,
     task: AbsTask,
@@ -236,6 +256,7 @@ def video2images_frames_for_task(
         and "image" in modalities
         and "video" not in modalities
         and "dense" in meta.model_type
+        and not _has_mixed_video_side(task)
     ):
         return None
 
