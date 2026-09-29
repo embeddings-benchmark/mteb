@@ -745,6 +745,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "WikiClusteringP2P.v2",
         "WikiSQLRetrieval",
         "WITI2TRetrieval",  # distinct WIT records can share the same caption
+        "WITT2IRetrieval",  # same WIT records, text on the query side
         "XM3600I2TRetrieval",  # captions are intentionally preserved verbatim
         "XM3600T2IRetrieval",
         "XMarket",
@@ -986,6 +987,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "WebQAT2ITRetrieval",
         "WebVidCoVRIT2VRetrieval",
         "WITI2TRetrieval",  # images can recur across WIT records and languages
+        "WITT2IRetrieval",  # same WIT records, images on the document side
         "XFlickr30kCoI2TRetrieval",  # the same image corpus is reused across languages
         "XFlickr30kCoT2IRetrieval",
         "XM3600I2TRetrieval",  # the same image corpus is reused across languages
