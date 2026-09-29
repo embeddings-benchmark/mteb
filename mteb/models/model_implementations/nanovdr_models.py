@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from tqdm.autonotebook import tqdm
 
@@ -11,6 +11,8 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 if TYPE_CHECKING:
     import torch
     from torch.utils.data import DataLoader
+    from transformers.cache_utils import Cache
+    from transformers.models.qwen3_vl.modeling_qwen3_vl import Qwen3VLConfig
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
@@ -25,6 +27,107 @@ NANOVDR_CITATION = """@article{nanovdr2026,
 }"""
 
 QUERY_INSTRUCTION = "Find a document image that matches the given query."
+
+
+# Vendored from mteb/models/model_implementations/qwen3_vl_embedding_models.py,
+# where it was removed in beee2102 (#4699) when Qwen3VLEmbeddingWrapper moved to
+# InstructSentenceTransformerModel. This wrapper is its only remaining consumer,
+# so it lives here rather than being re-added to that module's public surface.
+def _build_qwen3_vl_for_embedding_class() -> type:
+    """Lazily construct the custom Qwen3VLForEmbedding model class.
+
+    This class mirrors the official ``Qwen3VLForEmbedding`` from the model
+    repository scripts.  It wraps ``Qwen3VLModel`` (without the LM head)
+    so that we can extract ``last_hidden_state`` directly, which is the
+    behaviour intended by the model authors.
+    """
+    from dataclasses import dataclass
+
+    from transformers.modeling_outputs import ModelOutput
+    from transformers.models.qwen3_vl.modeling_qwen3_vl import (
+        Qwen3VLModel,
+        Qwen3VLPreTrainedModel,
+    )
+
+    @dataclass
+    class Qwen3VLForEmbeddingOutput(ModelOutput):
+        last_hidden_state: torch.FloatTensor | None = None
+        attention_mask: torch.Tensor | None = None
+
+    class Qwen3VLForEmbedding(Qwen3VLPreTrainedModel):
+        _checkpoint_conversion_mapping: ClassVar[dict] = {}
+        accepts_loss_kwargs = False
+
+        def __init__(self, config: Qwen3VLConfig):
+            super().__init__(config)
+            self.model = Qwen3VLModel(config)
+            self.post_init()
+
+        def get_input_embeddings(self) -> torch.nn.Module:
+            return self.model.get_input_embeddings()
+
+        def set_input_embeddings(self, value: torch.nn.Module) -> None:
+            self.model.set_input_embeddings(value)
+
+        def get_video_features(
+            self,
+            pixel_values_videos: torch.FloatTensor,
+            video_grid_thw: torch.LongTensor | None = None,
+        ) -> torch.Tensor:
+            return self.model.get_video_features(pixel_values_videos, video_grid_thw)
+
+        def get_image_features(
+            self,
+            pixel_values: torch.FloatTensor,
+            image_grid_thw: torch.LongTensor | None = None,
+        ) -> torch.Tensor:
+            return self.model.get_image_features(pixel_values, image_grid_thw)
+
+        @property
+        def language_model(self) -> torch.nn.Module:
+            return self.model.language_model
+
+        @property
+        def visual(self) -> torch.nn.Module:
+            return self.model.visual
+
+        def forward(  # noqa: PLR0913, PLR0917
+            self,
+            input_ids: torch.LongTensor | None = None,
+            attention_mask: torch.Tensor | None = None,
+            position_ids: torch.LongTensor | None = None,
+            past_key_values: Cache | None = None,
+            inputs_embeds: torch.FloatTensor | None = None,
+            pixel_values: torch.Tensor | None = None,
+            pixel_values_videos: torch.FloatTensor | None = None,
+            image_grid_thw: torch.LongTensor | None = None,
+            video_grid_thw: torch.LongTensor | None = None,
+            cache_position: torch.LongTensor | None = None,
+            **kwargs: Any,
+        ) -> tuple | Qwen3VLForEmbeddingOutput:
+            # Setting to None enables image + text embeddings mode
+            # More info: https://github.com/embeddings-benchmark/mteb/pull/4198/changes#r2899945802
+            self.model.rope_deltas = None
+
+            outputs = self.model(
+                input_ids=input_ids,
+                pixel_values=pixel_values,
+                pixel_values_videos=pixel_values_videos,
+                image_grid_thw=image_grid_thw,
+                video_grid_thw=video_grid_thw,
+                position_ids=position_ids,
+                attention_mask=attention_mask,
+                past_key_values=past_key_values,
+                inputs_embeds=inputs_embeds,
+                cache_position=cache_position,
+                **kwargs,
+            )
+            return Qwen3VLForEmbeddingOutput(
+                last_hidden_state=outputs.last_hidden_state,
+                attention_mask=attention_mask,
+            )
+
+    return Qwen3VLForEmbedding
 
 
 class NanoVDRWrapper(AbsEncoder):
@@ -71,10 +174,6 @@ class NanoVDRWrapper(AbsEncoder):
 
         from transformers.models.qwen3_vl.processing_qwen3_vl import Qwen3VLProcessor
 
-        from mteb.models.model_implementations.qwen3_vl_embedding_models import (
-            _build_qwen3_vl_for_embedding_class,
-        )
-
         qwen3_vl_cls = _build_qwen3_vl_for_embedding_class()
         self._doc_model = qwen3_vl_cls.from_pretrained(
             "Qwen/Qwen3-VL-Embedding-2B",
@@ -91,11 +190,16 @@ class NanoVDRWrapper(AbsEncoder):
         show_progress_bar: bool = True,
     ) -> Array:
         all_texts = [text for batch in inputs for text in batch["text"]]
+        # convert_to_tensor=True, not convert_to_numpy=False: the latter leaves
+        # convert_to_tensor at its default and sentence-transformers then returns
+        # a list[Tensor], which mteb's _convert_to_tensor cannot stack. .cpu()
+        # matches _encode_documents -- cos_sim does no device harmonisation, so
+        # mixing a CUDA query matrix with a CPU corpus matrix would fail.
         return self.query_model.encode(
             all_texts,
             show_progress_bar=show_progress_bar,
-            convert_to_numpy=False,
-        )
+            convert_to_tensor=True,
+        ).cpu()
 
     def _encode_documents(  # noqa: PLR0914
         self,
