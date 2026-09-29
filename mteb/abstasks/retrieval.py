@@ -813,9 +813,10 @@ class AbsTaskRetrievalFloatGains(AbsTaskRetrieval):
     - Full-corpus retrieval (``task.as_full_corpus_retrieval()``, which sets ``rerank_top_ranked =
       False`` under its own task name): ``top_ranked`` is dropped, so each
       query searches the whole corpus, minus the documents listed in the optional
-      ``{subset}-excluded`` config (``query-id``, ``excluded-corpus-ids``). Gains exist only for the
-      candidate pools, so only the integer-qrels metrics are reported, and a float-gain main score
-      falls back to ``ndcg_at_10``. Cross-encoders are refused in this mode (they would score every
+      ``{subset}-excluded`` config (``query-id``, ``excluded-corpus-ids``). Both metric families are
+      reported on the full-corpus ranking: the integer-qrels metrics, and ``ndcg_float_at_k`` over
+      the gains (the gains apply to the judged pool documents; unjudged documents score 0).
+      Cross-encoders are refused in this mode (they would score every
       query against the whole corpus).
 
     Attributes:
@@ -833,26 +834,27 @@ class AbsTaskRetrievalFloatGains(AbsTaskRetrieval):
     restrict_corpus_to_top_ranked: bool = True
 
     def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        """Load the float gains for every (subset, split) and optionally trim the corpus."""
-        self._float_gains: dict[str, dict[str, dict[str, dict[str, float]]]] = {}
+        """Restrict the corpus to the reranking pool; gains are loaded in ``task_specific_scores``."""
         for hf_subset, splits in self.dataset.items():
-            self._float_gains[hf_subset] = {}
             for split, data in splits.items():
                 if not self.rerank_top_ranked:
                     data["top_ranked"] = self._full_corpus_candidates(
                         hf_subset, split, data, num_proc
                     )
-                    continue
-                self._float_gains[hf_subset][split] = self._load_float_gains(
-                    hf_subset, split, num_proc
-                )
-                top_ranked = data.get("top_ranked")
-                if self.restrict_corpus_to_top_ranked and top_ranked:
-                    keep = {doc_id for docs in top_ranked.values() for doc_id in docs}
-                    corpus = data["corpus"]
-                    data["corpus"] = corpus.select(
-                        [i for i, doc_id in enumerate(corpus["id"]) if doc_id in keep]
-                    )
+                elif self.restrict_corpus_to_top_ranked:
+                    top_ranked = data.get("top_ranked")
+                    if top_ranked:
+                        keep = {
+                            doc_id for docs in top_ranked.values() for doc_id in docs
+                        }
+                        corpus = data["corpus"]
+                        data["corpus"] = corpus.select(
+                            [
+                                i
+                                for i, doc_id in enumerate(corpus["id"])
+                                if doc_id in keep
+                            ]
+                        )
 
     def _full_corpus_candidates(
         self,
@@ -942,17 +944,19 @@ class AbsTaskRetrievalFloatGains(AbsTaskRetrieval):
     def as_full_corpus_retrieval(self) -> AbsTaskRetrievalFloatGains:
         """A full-corpus retrieval version of this task (``rerank_top_ranked = False``).
 
-        It gets its own name (``<name>.retrieval``) and ``main_score = "ndcg_at_10"``, so its
-        results are not stored under, and do not overwrite, the reranking task's results.
+        It gets its own name (``<name>.retrieval``) so its results are not stored under, and do
+        not overwrite, the reranking task's results. The main score is unchanged: both the
+        integer-qrels metrics and ``ndcg_float_at_k`` are reported on the full-corpus ranking
+        (the gains apply to the judged pool documents; unjudged documents score 0).
         """
         task = type(self)()
         task.rerank_top_ranked = False
         task.metadata = self.metadata.model_copy(
             update={
                 "name": f"{self.metadata.name}.retrieval",
-                "main_score": "ndcg_at_10",
-                "description": f"{self.metadata.description} Full-corpus retrieval view: "
-                "only the integer-qrels metrics are reported.",
+                "description": f"{self.metadata.description} Full-corpus retrieval view: the"
+                " ranking covers the whole corpus; the gains apply to the judged pool documents"
+                " and unjudged documents score 0, next to the integer-qrels metrics.",
             }
         )
         return task
@@ -962,14 +966,6 @@ class AbsTaskRetrievalFloatGains(AbsTaskRetrieval):
         # a cross-encoder would score every (query, document) pair of the full corpus
         return self.rerank_top_ranked
 
-    def _add_main_score(self, scores: ScoresDict) -> None:
-        # the full-corpus mode reports only the integer-qrels metrics, so a main score over
-        # the float gains falls back to the standard NDCG@10
-        main_score = self.metadata.main_score
-        if not self.rerank_top_ranked and main_score.startswith("ndcg_float"):
-            main_score = "ndcg_at_10"
-        scores["main_score"] = scores[main_score]
-
     def task_specific_scores(
         self,
         scores: dict[str, dict[str, float]],
@@ -978,9 +974,12 @@ class AbsTaskRetrievalFloatGains(AbsTaskRetrieval):
         hf_split: str,
         hf_subset: str,
     ) -> dict[str, float]:
-        """Adds ``ndcg_float_at_k`` over the float gains, for the queries the qrels metrics score."""
-        if not self.rerank_top_ranked:
-            return {}
+        """Adds ``ndcg_float_at_k`` over the float gains, for the queries the qrels metrics score.
+
+        Computed in both modes: over the pool-restricted ranking when reranking, and over the
+        full-corpus ranking otherwise (the gains apply to the judged pool documents; unjudged
+        documents score 0).
+        """
         if self.skip_first_result:
             raise ValueError(
                 "skip_first_result is not supported by the float-gains metric."

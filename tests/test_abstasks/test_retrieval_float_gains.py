@@ -164,11 +164,11 @@ def test_skip_first_result_is_rejected(task: MockRetrievalFloatGainsTask) -> Non
 
 
 def test_gains_are_loaded_lazily_without_dataset_transform() -> None:
-    # A caller that injects `task.dataset` directly skips `dataset_transform`; the
-    # gains must then be loaded on first use instead of failing.
+    # The gains are loaded on first use in `task_specific_scores`; `dataset_transform`
+    # never loads them, so a caller that injects `task.dataset` directly still works.
     task = MockRetrievalFloatGainsTask()
     task.load_data()
-    del task._float_gains
+    assert not hasattr(task, "_float_gains")
     model = FixedScoreSearch(
         {"q1": {"d1": 0.9, "d2": 0.1}, "q2": {"d2": 0.9, "d1": 0.1}}
     )
@@ -261,7 +261,7 @@ def test_gains_are_read_from_the_qrels_gain_column(
     task = LocalFloatGainsTask()
     task.load_data()
 
-    assert task._float_gains[hf_subset]["test"] == {
+    assert task._gains_for(hf_subset, "test") == {
         "q1": {"d1": 0.9, "d2": 0.1},
         "q2": {"d1": 0.2, "d2": 0.8},
     }
@@ -292,7 +292,8 @@ def test_gain_split_falls_back_to_the_only_split(tmp_path: Path) -> None:
 
 @pytest.mark.parametrize("subset", [None, "named"])
 def test_full_corpus_retrieval_mode(tmp_path: Path, subset: str | None) -> None:
-    """``rerank_top_ranked = False``: search the whole corpus minus excluded ids, no float metric."""
+    """``rerank_top_ranked = False``: search the whole corpus minus excluded ids; both
+    metric families are reported on the full-corpus ranking."""
     _write_local_dataset(tmp_path, subset)
     hf_subset = subset or "default"
 
@@ -322,11 +323,11 @@ def test_full_corpus_retrieval_mode(tmp_path: Path, subset: str | None) -> None:
     )
     scores = task.evaluate(model, split="test", encode_kwargs={})[hf_subset]
     assert scores["main_score"] == scores["ndcg_at_10"]
-    assert not any(key.startswith("ndcg_float") for key in scores)
+    assert "ndcg_float_at_10" in scores  # both families, on the full-corpus ranking
 
 
 def test_full_corpus_mode_on_a_float_gains_main_score_task(tmp_path: Path) -> None:
-    """The shipped tasks keep ``main_score="ndcg_float_at_10"``; full-corpus mode must not crash."""
+    """Full-corpus mode reports both metric families; the main score is never mutated."""
     _write_local_dataset(tmp_path, "named")
 
     class ShippedLikeTask(AbsTaskRetrievalFloatGains):
@@ -346,8 +347,8 @@ def test_full_corpus_mode_on_a_float_gains_main_score_task(tmp_path: Path) -> No
         {"q1": {"d1": 0.9, "d2": 0.1}, "q2": {"d2": 0.9, "d1": 0.1}}
     )
     scores = task.evaluate(model, split="test", encode_kwargs={})["named"]
-    assert scores["main_score"] == scores["ndcg_at_10"]
-    assert not any(key.startswith("ndcg_float") for key in scores)
+    assert scores["main_score"] == scores["ndcg_float_at_10"]
+    assert "ndcg_at_10" in scores  # the integer-qrels metrics, alongside
 
 
 def test_as_full_corpus_retrieval_is_a_separate_task(tmp_path: Path) -> None:
@@ -367,7 +368,7 @@ def test_as_full_corpus_retrieval_is_a_separate_task(tmp_path: Path) -> None:
     reranking = ShippedLikeTask()
     retrieval = reranking.as_full_corpus_retrieval()
     assert retrieval.metadata.name == "ShippedLikeTask.retrieval"
-    assert retrieval.metadata.main_score == "ndcg_at_10"
+    assert retrieval.metadata.main_score == "ndcg_float_at_10"  # never mutated
     assert reranking.rerank_top_ranked and not retrieval.rerank_top_ranked
     assert ShippedLikeTask.metadata.name == "ShippedLikeTask"  # the class is untouched
 
@@ -375,7 +376,8 @@ def test_as_full_corpus_retrieval_is_a_separate_task(tmp_path: Path) -> None:
         {"q1": {"d1": 0.9, "d2": 0.1}, "q2": {"d2": 0.9, "d1": 0.1}}
     )
     scores = retrieval.evaluate(model, split="test", encode_kwargs={})["named"]
-    assert scores["main_score"] == scores["ndcg_at_10"]
+    assert scores["main_score"] == scores["ndcg_float_at_10"]
+    assert "ndcg_at_10" in scores  # both families, on the full-corpus ranking
     assert retrieval.dataset["named"]["test"]["top_ranked"] == {
         "q1": ["d1"],
         "q2": ["d1", "d2"],
