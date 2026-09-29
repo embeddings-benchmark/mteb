@@ -496,13 +496,15 @@ class AbsTaskRetrieval(AbsTask):
             relevant_docs = split_data["relevant_docs"]
             top_ranked = split_data["top_ranked"]
             query_ids = set(queries["id"])
-            corpus_ids = set(corpus["id"])
+            corpus_id_list = list(corpus["id"])
+            corpus_ids = set(corpus_id_list)
         elif compute_overall:
             queries = None
             corpus = None
             relevant_docs = {}
             top_ranked = {}
             query_ids = set()
+            corpus_id_list = []
             corpus_ids = set()
             for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
                 split_data = self.dataset[hf_subset][split]
@@ -519,10 +521,12 @@ class AbsTaskRetrieval(AbsTask):
                     f"{split}_{hf_subset}_{query_id}"
                     for query_id in split_data["queries"]["id"]
                 )
-                corpus_ids.update(
+                prefixed_corpus_ids = [
                     f"{split}_{hf_subset}_{corpus_id}"
                     for corpus_id in split_data["corpus"]["id"]
-                )
+                ]
+                corpus_id_list.extend(prefixed_corpus_ids)
+                corpus_ids.update(prefixed_corpus_ids)
                 relevant_docs.update(
                     _process_relevant_docs(
                         split_data["relevant_docs"], hf_subset, split
@@ -547,7 +551,8 @@ class AbsTaskRetrieval(AbsTask):
             relevant_docs = split_data["relevant_docs"]
             top_ranked = split_data["top_ranked"]
             query_ids = set(queries["id"])
-            corpus_ids = set(corpus["id"])
+            corpus_id_list = list(corpus["id"])
+            corpus_ids = set(corpus_id_list)
 
         num_documents = len(corpus)
         num_queries = len(queries)
@@ -601,7 +606,7 @@ class AbsTaskRetrieval(AbsTask):
             {
                 doc_id
                 for doc_id, is_black_or_white in zip(
-                    corpus["id"], black_or_white_image_flags, strict=True
+                    corpus_id_list, black_or_white_image_flags, strict=True
                 )
                 if is_black_or_white
             }

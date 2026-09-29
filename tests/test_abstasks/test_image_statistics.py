@@ -40,3 +40,36 @@ def test_black_or_white_image_statistics() -> None:
         count_queries_with_all_gold_black_or_white(relevant_docs, black_or_white_ids)
         == 2
     )
+
+
+def test_multilingual_retrieval_matches_black_or_white_docs_to_prefixed_qrels() -> None:
+    """The overall split prefixes corpus ids with split and subset; the flags must follow."""
+    from datasets import Dataset
+
+    from mteb.mocks.mock_tasks.retrieval import MockMultilingualMultiChoiceTask
+
+    task = MockMultilingualMultiChoiceTask()
+    task.load_data()
+    black = Image.new("RGB", (100, 100), (0, 0, 0))
+    for subset in task.dataset.values():
+        corpus = subset["test"]["corpus"]
+        subset["test"]["corpus"] = Dataset.from_dict(
+            {"id": corpus["id"], "image": [black, corpus["image"][1]]}
+        )
+
+    overall = task._calculate_descriptive_statistics_from_split(
+        "test", compute_overall=True
+    )
+    per_subset = task._calculate_descriptive_statistics_from_split(
+        "test", hf_subset="eng"
+    )
+
+    assert per_subset["documents_image_statistics"]["black_or_white_images"] == 1
+    assert (
+        per_subset["relevant_docs_statistics"]["queries_with_all_gold_black_or_white"]
+        == 1
+    )
+    assert overall["documents_image_statistics"]["black_or_white_images"] == 2
+    assert (
+        overall["relevant_docs_statistics"]["queries_with_all_gold_black_or_white"] == 2
+    )
