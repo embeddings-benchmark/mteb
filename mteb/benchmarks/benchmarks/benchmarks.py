@@ -2941,10 +2941,14 @@ NANOBEIR_RCP = Benchmark(
     description="NanoBEIR with calibrated graded relevance. Rerankers are scored over a fixed candidate pool with NDCG over continuous relevance gains (ndcg_float_at_10): rubric-calibrated preferences (RCP) from an LLM judge, calibrated with a 2PL item-response model. The human qrels are unchanged.",
     reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-nanobeir",
     citation=r"""
-@misc{rcpndcg2026,
-  note = {Preprint forthcoming},
-  title = {RCP-nDCG: Retrieval Evaluation with Rubric-Calibrated Preferences},
+@misc{schmidt2026rubriccalibratedpreferencescrossquerycalibration,
+  title = {Rubric-Calibrated Preferences: Cross-Query Calibration of LLM Judgments via Item Response Theory},
+  author = {Fabian David Schmidt and Donato Crisostomi and Carlos Lassance and Nils Reimers},
   year = {2026},
+  eprint = {2609.35739},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.IR},
+  url = {https://arxiv.org/abs/2609.35739},
 }
 """,
     contacts=["fabianschmidt-cohere"],
@@ -2974,10 +2978,14 @@ BRIGHT_RCP = Benchmark(
     description="BRIGHT reasoning-intensive retrieval with calibrated graded relevance; excluded_ids are removed from the candidates. Rerankers are scored over a fixed candidate pool with NDCG over continuous relevance gains (ndcg_float_at_10): rubric-calibrated preferences (RCP) from an LLM judge, calibrated with a 2PL item-response model. The integer qrels are the upstream xlangai/BRIGHT@a75a0eb4 gold ids (as in BrightRetrieval), so ndcg_at_10 is not comparable to BRIGHT(v1.1).",
     reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-bright",
     citation=r"""
-@misc{rcpndcg2026,
-  note = {Preprint forthcoming},
-  title = {RCP-nDCG: Retrieval Evaluation with Rubric-Calibrated Preferences},
+@misc{schmidt2026rubriccalibratedpreferencescrossquerycalibration,
+  title = {Rubric-Calibrated Preferences: Cross-Query Calibration of LLM Judgments via Item Response Theory},
+  author = {Fabian David Schmidt and Donato Crisostomi and Carlos Lassance and Nils Reimers},
   year = {2026},
+  eprint = {2609.35739},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.IR},
+  url = {https://arxiv.org/abs/2609.35739},
 }
 
 @article{su2024bright,
@@ -3010,10 +3018,14 @@ VIDORE_V3_RCP = Benchmark(
     description="ViDoRe v3 visual document retrieval (8 public domains, 6 languages) with calibrated graded relevance. Rerankers are scored over a fixed candidate pool with NDCG over continuous relevance gains (ndcg_float_at_10): rubric-calibrated preferences (RCP) from an LLM judge, calibrated with a 2PL item-response model. The graded human qrels are unchanged.",
     reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-vidore-v3",
     citation=r"""
-@misc{rcpndcg2026,
-  note = {Preprint forthcoming},
-  title = {RCP-nDCG: Retrieval Evaluation with Rubric-Calibrated Preferences},
+@misc{schmidt2026rubriccalibratedpreferencescrossquerycalibration,
+  title = {Rubric-Calibrated Preferences: Cross-Query Calibration of LLM Judgments via Item Response Theory},
+  author = {Fabian David Schmidt and Donato Crisostomi and Carlos Lassance and Nils Reimers},
   year = {2026},
+  eprint = {2609.35739},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.IR},
+  url = {https://arxiv.org/abs/2609.35739},
 }
 
 @article{loison2026vidorev3comprehensiveevaluation,
@@ -3043,10 +3055,14 @@ TREC_DL_RCP = Benchmark(
     description="TREC Deep Learning Track passage ranking (2019, 2020) with calibrated graded relevance. Rerankers are scored over the judged candidate pool with NDCG over continuous relevance gains (ndcg_float_at_10): rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.6-27B-FP8, a different judge from the NanoBEIR/BRIGHT/ViDoRe RCP benchmarks), calibrated with a 2PL item-response model. The NIST qrels (grades 0-3) are unchanged.",
     reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-trecdl",
     citation=r"""
-@misc{rcpndcg2026,
-  note = {Preprint forthcoming},
-  title = {RCP-nDCG: Retrieval Evaluation with Rubric-Calibrated Preferences},
+@misc{schmidt2026rubriccalibratedpreferencescrossquerycalibration,
+  title = {Rubric-Calibrated Preferences: Cross-Query Calibration of LLM Judgments via Item Response Theory},
+  author = {Fabian David Schmidt and Donato Crisostomi and Carlos Lassance and Nils Reimers},
   year = {2026},
+  eprint = {2609.35739},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.IR},
+  url = {https://arxiv.org/abs/2609.35739},
 }
 
 @misc{bajaj2018msmarcohumangenerated,

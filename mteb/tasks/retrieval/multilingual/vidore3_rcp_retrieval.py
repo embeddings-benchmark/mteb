@@ -12,10 +12,14 @@ from __future__ import annotations
 from mteb.abstasks.retrieval_float_gains import AbsTaskRetrievalFloatGains
 from mteb.abstasks.task_metadata import TaskMetadata
 
-_CITATION = r"""@misc{rcpndcg2026,
-  title = {RCP-nDCG: Retrieval Evaluation with Rubric-Calibrated Preferences},
+_CITATION = r"""@misc{schmidt2026rubriccalibratedpreferencescrossquerycalibration,
+  title = {Rubric-Calibrated Preferences: Cross-Query Calibration of LLM Judgments via Item Response Theory},
+  author = {Fabian David Schmidt and Donato Crisostomi and Carlos Lassance and Nils Reimers},
   year = {2026},
-  note = {Preprint forthcoming},
+  eprint = {2609.35739},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.IR},
+  url = {https://arxiv.org/abs/2609.35739},
 }
 """
 
