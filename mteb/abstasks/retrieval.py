@@ -825,8 +825,6 @@ class AbsTaskRetrievalFloatGains(AbsTaskRetrieval):
         restrict_corpus_to_top_ranked: When reranking, encode only the documents that appear in
             ``top_ranked``. The float gains cover exactly those documents, and without this a
             bi-encoder would embed the whole corpus to rerank a handful of candidates per query.
-            Descriptive statistics describe the full corpus: set this to ``False`` before calling
-            ``calculate_descriptive_statistics``.
     """
 
     gain_column: str = "gain"
