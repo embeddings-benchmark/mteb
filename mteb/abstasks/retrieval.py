@@ -56,6 +56,7 @@ if TYPE_CHECKING:
         MTEBModels,
     )
     from mteb.types import (
+        DescriptiveStatistics,
         EncodeKwargs,
         HFSubset,
         Modalities,
@@ -964,6 +965,22 @@ class AbsTaskRetrievalFloatGains(AbsTaskRetrieval):
     def _support_cross_encoder(self) -> bool:  # type: ignore[override]
         # a cross-encoder would score every (query, document) pair of the full corpus
         return self.rerank_top_ranked
+
+    def calculate_descriptive_statistics(
+        self,
+        overwrite_results: bool = False,
+        num_proc: int | None = None,
+    ) -> dict[str, DescriptiveStatistics]:
+        """Descriptive statistics describe the corpus as published.
+
+        This always covers the full corpus, including documents outside the reranking
+        pool, and reports the pool-size distribution (``top_ranked_statistics``).
+        """
+        # the pool trim is an encoding-cost control; statistics must never see it
+        self.restrict_corpus_to_top_ranked = False
+        return super().calculate_descriptive_statistics(
+            overwrite_results=overwrite_results, num_proc=num_proc
+        )
 
     def task_specific_scores(
         self,
