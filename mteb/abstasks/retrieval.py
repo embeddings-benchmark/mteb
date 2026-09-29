@@ -951,6 +951,7 @@ class AbsTaskRetrievalFloatGains(AbsTaskRetrieval):
         """
         task = type(self)()
         task.rerank_top_ranked = False
+        task.restrict_corpus_to_top_ranked = False
         task.metadata = self.metadata.model_copy(
             update={
                 "name": f"{self.metadata.name}.retrieval",

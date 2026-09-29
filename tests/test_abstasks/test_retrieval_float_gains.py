@@ -370,6 +370,7 @@ def test_as_full_corpus_retrieval_is_a_separate_task(tmp_path: Path) -> None:
     assert retrieval.metadata.name == "ShippedLikeTask.retrieval"
     assert retrieval.metadata.main_score == "ndcg_float_at_10"  # never mutated
     assert reranking.rerank_top_ranked and not retrieval.rerank_top_ranked
+    assert not retrieval.restrict_corpus_to_top_ranked  # the corpus stays full
     assert ShippedLikeTask.metadata.name == "ShippedLikeTask"  # the class is untouched
 
     model = FixedScoreSearch(
