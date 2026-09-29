@@ -3042,6 +3042,49 @@ VIDORE_V3_RCP = Benchmark(
 )
 
 
+VIDORE_V3_RCP_OCR = Benchmark(
+    name="ViDoRe(v3, RCP, OCR)",
+    aliases=["rcp-vidore-v3-ocr"],
+    display_name="ViDoRe v3 (RCP, OCR)",
+    tasks=get_tasks(
+        tasks=[
+            "Vidore3ComputerScienceRCPRetrievalOCR",
+            "Vidore3EnergyRCPRetrievalOCR",
+            "Vidore3FinanceEnRCPRetrievalOCR",
+            "Vidore3FinanceFrRCPRetrievalOCR",
+            "Vidore3HrRCPRetrievalOCR",
+            "Vidore3IndustrialRCPRetrievalOCR",
+            "Vidore3PharmaceuticalsRCPRetrievalOCR",
+            "Vidore3PhysicsRCPRetrievalOCR",
+        ],
+    ),
+    description="ViDoRe v3 visual document retrieval (8 public domains, 6 languages), text-only view: models retrieve over the pages' OCR'ed markdown instead of the page images, so text-only embedders can be evaluated. Reranking over a fixed candidate pool with NDCG over continuous relevance gains (ndcg_float_at_10): rubric-calibrated preferences (RCP) from an LLM judge, calibrated with a 2PL item-response model. The graded human qrels are unchanged. Scores are not comparable to the image-corpus benchmark ViDoRe(v3, RCP).",
+    reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-vidore-v3",
+    citation=r"""
+@misc{schmidt2026rubriccalibratedpreferencescrossquerycalibration,
+  title = {Rubric-Calibrated Preferences: Cross-Query Calibration of LLM Judgments via Item Response Theory},
+  author = {Fabian David Schmidt and Donato Crisostomi and Carlos Lassance and Nils Reimers},
+  year = {2026},
+  eprint = {2609.35739},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.IR},
+  url = {https://arxiv.org/abs/2609.35739},
+}
+
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+    contacts=["fabianschmidt-cohere"],
+)
+
+
 TREC_DL_RCP = Benchmark(
     name="TREC-DL(RCP)",
     aliases=["rcp-trecdl"],

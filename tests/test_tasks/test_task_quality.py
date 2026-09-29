@@ -444,6 +444,14 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "Vidore3FinanceFrRCPRetrieval",
         "Vidore3HrRCPRetrieval",
         "Vidore3IndustrialRCPRetrieval",
+        # ViDoRe(v3, RCP, OCR): same corpus as the multimodal RCP tasks, read as OCR'ed
+        # markdown (some pages are empty)
+        "Vidore3ComputerScienceRCPRetrievalOCR",
+        "Vidore3EnergyRCPRetrievalOCR",
+        "Vidore3FinanceEnRCPRetrievalOCR",
+        "Vidore3FinanceFrRCPRetrievalOCR",
+        "Vidore3HrRCPRetrievalOCR",
+        "Vidore3IndustrialRCPRetrievalOCR",
     ],
     "duplicate_text": [
         "AfriHateClassification",
@@ -818,6 +826,16 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         # ViDoRe(v3, RCP): the 6 language subsets share one corpus, so split-level stats count each page 6x
         "Vidore3ComputerScienceRCPRetrieval",
         "Vidore3PhysicsRCPRetrieval",
+        # ViDoRe(v3, RCP, OCR): same corpus as the multimodal RCP tasks; the 6 language
+        # subsets share one OCR'ed corpus, so split-level stats count each page 6x
+        "Vidore3ComputerScienceRCPRetrievalOCR",
+        "Vidore3EnergyRCPRetrievalOCR",
+        "Vidore3FinanceEnRCPRetrievalOCR",
+        "Vidore3FinanceFrRCPRetrievalOCR",
+        "Vidore3HrRCPRetrievalOCR",
+        "Vidore3IndustrialRCPRetrievalOCR",
+        "Vidore3PharmaceuticalsRCPRetrievalOCR",
+        "Vidore3PhysicsRCPRetrievalOCR",
     ],
     "train_test_leakage": [
         "AVEDatasetClassification",

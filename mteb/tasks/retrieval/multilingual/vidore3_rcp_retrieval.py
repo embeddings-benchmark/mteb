@@ -9,6 +9,8 @@ annotations_creators, citation and adapted_from.
 
 from __future__ import annotations
 
+import copy
+
 from mteb.abstasks.retrieval_float_gains import AbsTaskRetrievalFloatGains
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -310,3 +312,56 @@ class Vidore3PhysicsRCPRetrieval(AbsTaskRetrievalFloatGains):
         adapted_from=["Vidore3PhysicsRetrieval.v2"],
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
+
+
+def _ocr_view_metadata(cls: type[AbsTaskRetrievalFloatGains]) -> TaskMetadata:
+    """Derive the text-only (OCR) variant of a ViDoRe v3 RCP task.
+
+    The dataset, queries, pools, qrels and gains are unchanged; documents are the
+    pages' OCR'ed markdown instead of the page images, so text-only models can be
+    evaluated (they cannot encode page images). Scores are not comparable to the
+    image-corpus variant.
+    """
+    md = copy.deepcopy(cls.metadata)
+    md.name = f"{cls.metadata.name}OCR"
+    md.category = "t2t"
+    md.modalities = ["text"]
+    md.task_subtypes = ["Question answering"]
+    md.description += (
+        " This variant evaluates text-only models: documents are the pages' OCR'ed"
+        " markdown instead of the page images, so its scores are not comparable to"
+        " the image-corpus variant."
+    )
+    return md
+
+
+class Vidore3ComputerScienceRCPRetrievalOCR(Vidore3ComputerScienceRCPRetrieval):
+    metadata = _ocr_view_metadata(Vidore3ComputerScienceRCPRetrieval)
+
+
+class Vidore3EnergyRCPRetrievalOCR(Vidore3EnergyRCPRetrieval):
+    metadata = _ocr_view_metadata(Vidore3EnergyRCPRetrieval)
+
+
+class Vidore3FinanceEnRCPRetrievalOCR(Vidore3FinanceEnRCPRetrieval):
+    metadata = _ocr_view_metadata(Vidore3FinanceEnRCPRetrieval)
+
+
+class Vidore3FinanceFrRCPRetrievalOCR(Vidore3FinanceFrRCPRetrieval):
+    metadata = _ocr_view_metadata(Vidore3FinanceFrRCPRetrieval)
+
+
+class Vidore3HrRCPRetrievalOCR(Vidore3HrRCPRetrieval):
+    metadata = _ocr_view_metadata(Vidore3HrRCPRetrieval)
+
+
+class Vidore3IndustrialRCPRetrievalOCR(Vidore3IndustrialRCPRetrieval):
+    metadata = _ocr_view_metadata(Vidore3IndustrialRCPRetrieval)
+
+
+class Vidore3PharmaceuticalsRCPRetrievalOCR(Vidore3PharmaceuticalsRCPRetrieval):
+    metadata = _ocr_view_metadata(Vidore3PharmaceuticalsRCPRetrieval)
+
+
+class Vidore3PhysicsRCPRetrievalOCR(Vidore3PhysicsRCPRetrieval):
+    metadata = _ocr_view_metadata(Vidore3PhysicsRCPRetrieval)
