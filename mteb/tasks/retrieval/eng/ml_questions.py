@@ -89,7 +89,7 @@ Reddy, Siva},
 
         download_dir = Path(download_dir)
         dataset_path = download_dir / f"{split}.csv"
-        with dataset_path.open() as csvfile:
+        with dataset_path.open(encoding="utf-8") as csvfile:
             reader = csv.DictReader(csvfile)
             for i, row in enumerate(reader):
                 query_id = f"Q{str(i)}"
@@ -100,7 +100,7 @@ Reddy, Siva},
 
         # Same corpus for all splits
         corpus_path = download_dir / "test_passages.csv"
-        with corpus_path.open() as csvfile:
+        with corpus_path.open(encoding="utf-8") as csvfile:
             reader = csv.DictReader(csvfile)
             for i, row in enumerate(reader):
                 doc_id = f"C{str(i)}"
