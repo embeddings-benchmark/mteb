@@ -117,9 +117,11 @@ cleaned = remove_short_texts(task, min_length=10, subsets=["en"])
 cleaned = remove_short_texts(cleaned, min_length=2, subsets=["zh-CN"])
 ```
 
-Two details follow from counting code points: a zero-width space is not whitespace, so it survives `min_length=1`, and
-each combining mark counts on its own, which makes this task's Tamil texts measure about 18% longer than a reader would
-count. Pass `length_fn` if either matters.
+Two details follow from counting code points rather than characters as a reader sees them. A zero-width space is not
+whitespace, so it survives `min_length=1`. And a vowel sign or virama counts on its own, so this task's Tamil texts
+measure 1.6 times, and its Thai texts 1.3 times, their length in characters -- which makes a threshold that much more
+permissive for them. Pass `length_fn` if either matters, e.g. `lambda text: len(regex.findall(r"\X", text))` to count
+characters.
 
 ### Images, audio and video
 
