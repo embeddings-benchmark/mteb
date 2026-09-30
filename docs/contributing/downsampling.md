@@ -69,8 +69,12 @@ def sample_retrieval(data, *, n_queries, corpus_size=None, seed=42):
         selected_documents = sorted(document_ids)
     else:
         if not len(required) <= corpus_size <= len(document_ids):
-            raise ValueError("corpus_size must fit all judged documents and not exceed the corpus")
-        extras = rng.sample(sorted(document_set - required), corpus_size - len(required))
+            raise ValueError(
+                "corpus_size must fit all judged documents and not exceed the corpus"
+            )
+        extras = rng.sample(
+            sorted(document_set - required), corpus_size - len(required)
+        )
         selected_documents = sorted(required | set(extras))
 
     query_rows = {qid: index for index, qid in enumerate(query_ids)}
