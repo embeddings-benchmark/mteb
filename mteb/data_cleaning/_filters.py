@@ -705,8 +705,11 @@ def remove_short_texts(
 
     Args:
         task: The task to filter. It is not modified.
-        min_length: The shortest length a text may have. `1` removes only empty and whitespace-only texts.
-        length_fn: How to measure a text. Defaults to its number of characters.
+        min_length: The shortest length a text may have. `1` removes only empty and whitespace-only texts. What
+            counts as too short depends on the language, as a character carries more meaning in e.g. Chinese than
+            in English.
+        length_fn: How to measure a text. Defaults to its number of characters. Counting words with
+            `lambda text: len(text.split())` only holds for scripts that separate them by spaces.
         columns: The text columns to measure. Defaults to every text column of the task.
         splits: The splits to filter. Defaults to every split of the dataset.
         subsets: The Huggingface subsets to filter. Defaults to every loaded subset.

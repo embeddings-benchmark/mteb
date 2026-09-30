@@ -786,6 +786,8 @@ def _create_texts_task(texts: list[str | None]) -> MockClassificationTask:
         # empty, whitespace-only and missing texts are all empty once stripped
         (1, ["", "   ", None, "hi", " hello there "], ["hi", " hello there "]),
         (3, ["", "   ", None, "hi", " hello there "], [" hello there "]),
+        # characters are counted in any script, and the full-width space is whitespace too
+        (1, ["\u3000", "\u4f60\u597d"], ["\u4f60\u597d"]),
     ],
 )
 def test_remove_short_texts_removes_texts_under_min_length(

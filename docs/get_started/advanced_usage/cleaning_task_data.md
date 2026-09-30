@@ -69,6 +69,18 @@ def alphanumeric_text(text: str) -> str:
 cleaned = remove_duplicates(task, normalization=casefold_text)
 ```
 
+Text is compared exactly as written, so two strings that a reader cannot tell apart are duplicates only if Unicode
+spells them the same way. Normalize them if your data mixes forms, as a fifth of this task's Vietnamese texts do:
+
+```python
+import unicodedata
+
+cleaned = remove_duplicates(
+    task, normalization=lambda text: unicodedata.normalize("NFC", text.strip())
+)
+# finds 98 duplicates in the Vietnamese train split that the default comparison misses
+```
+
 Only text is normalized; images, audio and video are compared by an exact hash of their content, so the filter works on any task but does not match a re-encoded or rescaled copy of a sample. Retrieval tasks keep their relevance judgements valid: a judgement pointing at a removed duplicate moves to the copy that was kept. Their documents and queries are compared as the model reads them, so a document's title is part of its text, and two queries that differ only in their instruction are not duplicates.
 
 ## Removing short or small samples
@@ -84,20 +96,30 @@ print({split: len(data) for split, data in cleaned.dataset["en"].items()})
 # {'train': 11511, 'test': 2973, 'validation': 2033}, from 11514 / 2974 / 2033
 ```
 
-A text is measured in characters, like `min_text_length` in the descriptive statistics, but without its surrounding
-whitespace, so a whitespace-only text counts as empty and `min_length=1` removes exactly the empty and whitespace-only
-texts. To measure a text differently, pass `length_fn`, e.g. to count words:
+Texts are counted in characters without their surrounding whitespace, so `min_length=1` removes exactly the empty and
+whitespace-only ones. Pass `length_fn` to measure them differently, e.g. `lambda text: len(text.split())` to count
+words.
+
+There is no default threshold, as what is too short depends on the task: the one-word texts of this one include
+`"s."`, but also terse yet genuine commands such as `"coffee"` and `"remind"`.
+
+### Thresholds depend on the writing system
+
+A character carries more meaning in some scripts than in others, so a threshold does not travel between languages. In
+MassiveIntentClassification the median test text is 32 characters in English but 10 in Chinese, and `min_length=10`
+removes 1.8% of the English subset against 48.5% of the Chinese one. Counting words is worse: Chinese, Japanese and
+Thai leave no spaces between words, so a threshold of three words removes 99% of that Chinese subset.
+
+Filter a multilingual task one language at a time; the calls chain into a single cleaned task:
 
 ```python
-cleaned = remove_short_texts(
-    task, min_length=2, length_fn=lambda text: len(text.split())
-)
-# {'train': 11384, 'test': 2940, 'validation': 2008}
+cleaned = remove_short_texts(task, min_length=10, subsets=["en"])
+cleaned = remove_short_texts(cleaned, min_length=2, subsets=["zh-CN"])
 ```
 
-There is no default threshold, as what counts as too short depends on the task. Look at what a threshold removes
-before settling on it: the one-word texts above include `"s."`, but also terse yet genuine commands such as
-`"coffee"` and `"remind"`.
+Two details follow from counting code points: a zero-width space is not whitespace, so it survives `min_length=1`, and
+each combining mark counts on its own, which makes this task's Tamil texts measure about 18% longer than a reader would
+count. Pass `length_fn` if either matters.
 
 ### Images, audio and video
 
@@ -115,12 +137,9 @@ cleaned = remove_short_audio(task, min_seconds=0.5)
 cleaned = remove_short_videos(task, min_seconds=1.0)
 ```
 
-An image counts as small by its shorter side, so `min_size=32` asks for at least 32 pixels in both directions. As with
-`length_fn` for texts, pass `size_fn` to measure it differently, e.g.
-`size_fn=lambda image: image.width * image.height` for its area in pixels.
-
-The same care applies to their thresholds: a 28x28 MNIST digit or a 0.1 second drum hit is small by nature, not
-broken.
+An image counts as small by its shorter side, so `min_size=32` asks for 32 pixels in both directions; pass `size_fn`
+to measure it differently, e.g. `lambda image: image.width * image.height` for its area. Their thresholds need the same
+care as a text's: a 28x28 MNIST digit and a 0.1 second drum hit are small by nature, not broken.
 
 ### How samples are measured
 
