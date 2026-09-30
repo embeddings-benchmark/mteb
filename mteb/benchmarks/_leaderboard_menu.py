@@ -73,7 +73,7 @@ GP_BENCHMARK_ENTRIES = [
                 "Domain-Specific ",
                 mteb.get_benchmarks(
                     [
-                        "MTEB(Code, v1)",
+                        "MTEB(Code, v1.1)",
                         "MTEB(Law, v1)",
                         "MTEB(Medical, v1)",
                         "ChemTEB",
@@ -259,7 +259,7 @@ HOME_BENCHMARK_ENTRIES = [
         open=True,
         benchmarks=mteb.get_benchmarks(
             [
-                "MTEB(Code, v1)",
+                "MTEB(Code, v1.1)",
                 "MTEB(Law, v1)",
                 "MTEB(Medical, v1)",
                 "ChemTEB",
