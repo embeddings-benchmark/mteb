@@ -8,6 +8,7 @@ from tqdm.auto import tqdm
 
 from mteb._create_dataloaders import _create_dataloader_from_texts
 from mteb._evaluators.evaluator import Evaluator
+from mteb.types._encoder_io import _split_corpus_chunk_size
 
 if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -45,6 +46,13 @@ class BitextMiningEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> dict[str, list[dict[str, float]]]:
+        corpus_chunk_size, encode_kwargs = _split_corpus_chunk_size(encode_kwargs)
+        similarity_search_kwargs = (
+            {}
+            if corpus_chunk_size is None
+            else {"corpus_chunk_size": corpus_chunk_size}
+        )
+
         pair_elements = {p for pair in self.pairs for p in pair}
         if isinstance(self.sentences, Dataset):
             subsets = [col for col in self.sentences.features if col in pair_elements]
@@ -78,7 +86,10 @@ class BitextMiningEvaluator(Evaluator):
         ):
             for key1, key2 in tqdm(self.pairs, desc="Matching sentences"):
                 neighbours[f"{key1}-{key2}"] = self._similarity_search(
-                    embeddings[key1], embeddings[key2], model
+                    embeddings[key1],
+                    embeddings[key2],
+                    model,
+                    **similarity_search_kwargs,
                 )
         return neighbours
 
@@ -100,7 +111,7 @@ class BitextMiningEvaluator(Evaluator):
             model: The model used to encode the queries and corpus. This is used to check if the embeddings are on the same device and to encode the
                 queries and corpus if they are not already tensors.
             query_chunk_size: Process 100 queries simultaneously. Increasing that value increases the speed, but requires more memory.
-            corpus_chunk_size: Scans the corpus 100k entries at a time. Increasing that value increases the speed, but requires more memory.
+            corpus_chunk_size: Scans the corpus 500k entries at a time. Increasing that value increases the speed, but requires more memory.
 
         Returns:
             Returns a list with one entry for each query. Each entry is a list of dictionaries with the keys 'corpus_id' and 'score', sorted by

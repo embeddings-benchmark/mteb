@@ -10,6 +10,7 @@ from mteb._create_dataloaders import (
 from mteb.types import (
     PromptType,
 )
+from mteb.types._encoder_io import _split_corpus_chunk_size
 
 if TYPE_CHECKING:
     import torch
@@ -71,6 +72,7 @@ class SearchEncoderWrapper:
         """
         # Always retain corpus for potential reranking or fallback flows
         self.task_corpus = corpus
+        _, encode_kwargs = _split_corpus_chunk_size(encode_kwargs)
         if self.index_backend is not None:
             all_doc_embeddings = self.model.encode(
                 create_dataloader(
@@ -111,7 +113,8 @@ class SearchEncoderWrapper:
             top_ranked: Top-ranked documents for each query, mapping query IDs to a list of document IDs.
                 Passed only from Reranking tasks.
             top_k: Number of top documents to return for each query.
-            encode_kwargs: Additional arguments to pass to the encoder during indexing.
+            encode_kwargs: Additional arguments to pass to the encoder during indexing. If it contains
+                `corpus_chunk_size`, it overrides the `corpus_chunk_size` of the wrapper.
             num_proc: Number of processes to use for dataloading.
 
         Returns:
@@ -121,6 +124,10 @@ class SearchEncoderWrapper:
 
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
+
+        corpus_chunk_size, encode_kwargs = _split_corpus_chunk_size(encode_kwargs)
+        if corpus_chunk_size is None:
+            corpus_chunk_size = self.corpus_chunk_size
 
         queries_dataloader = create_dataloader(
             queries,
@@ -188,6 +195,7 @@ class SearchEncoderWrapper:
                     hf_split=hf_split,
                     top_k=top_k,
                     encode_kwargs=encode_kwargs,
+                    corpus_chunk_size=corpus_chunk_size,
                 )
             else:
                 cos_scores_top_k_values, cos_scores_top_k_idx = (
@@ -231,6 +239,7 @@ class SearchEncoderWrapper:
         hf_split: str,
         top_k: int,
         encode_kwargs: EncodeKwargs,
+        corpus_chunk_size: int,
     ) -> dict[str, list[tuple[float, str]]]:
         import torch
 
@@ -238,7 +247,7 @@ class SearchEncoderWrapper:
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
 
-        itr = range(0, len(self.task_corpus), self.corpus_chunk_size)
+        itr = range(0, len(self.task_corpus), corpus_chunk_size)
 
         result_heaps: dict[str, list[tuple[float, str]]] = {
             qid: [] for qid in query_idx_to_id.values()
@@ -246,7 +255,7 @@ class SearchEncoderWrapper:
         for batch_num, corpus_start_idx in enumerate(itr):
             logger.info(f"Encoding Batch {batch_num + 1}/{len(itr)}...")
             corpus_end_idx = min(
-                corpus_start_idx + self.corpus_chunk_size,
+                corpus_start_idx + corpus_chunk_size,
                 len(self.task_corpus),
             )
             sub_corpus = self.task_corpus.select(
@@ -449,7 +458,8 @@ class SearchEncoderWrapper:
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        """Encode inputs using the model' s encode."""
+        """Encode inputs using the model's encode."""
+        kwargs.pop("corpus_chunk_size", None)
         return self.model.encode(
             inputs,
             task_metadata=task_metadata,
