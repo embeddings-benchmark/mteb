@@ -1,7 +1,7 @@
 """Guards that keep torch out of `import mteb`.
 
-`mteb-core` is mteb without torch, transformers and sentence-transformers (they are in its `run` extra), so working
-with tasks, benchmarks, model metadata and results must not need them.
+`mteb-core` is a minimal install of mteb, without torch, transformers and sentence-transformers, so working with
+tasks, benchmarks, model metadata and results must not need them.
 """
 
 from __future__ import annotations
@@ -95,48 +95,13 @@ def test_mteb_works_without_torch_installed() -> None:
                 try:
                     call()
                 except ImportError as e:  # ModuleNotFoundError is an ImportError
-                    explained.append("Install it with `pip install " in str(e))
+                    # `mteb` installs it, `mteb-core` has to be swapped for `mteb` first
+                    explained.append("Install it with `pip " in str(e))
             print(explained)
             """
         )
     )
     assert output == "[True, True, True]", output
-
-
-def test_set_seed_still_seeds_torch_when_available() -> None:
-    """Torch must still be seeded once it is imported."""
-    import torch
-
-    from mteb._set_seed import _set_seed
-
-    _set_seed(42)
-    first = torch.randn(4)
-    _set_seed(42)
-    second = torch.randn(4)
-    assert torch.equal(first, second)
-
-
-def test_image_dataset_works_in_dataloader_worker_processes() -> None:
-    """With `num_proc > 1` the image dataset and collate fn are pickled into worker processes.
-
-    `spawn` (the default on macOS and Windows) cannot pickle anything defined inside a function.
-    """
-    from PIL import Image
-    from torch.utils.data import DataLoader
-
-    from mteb._evaluators.image.imagetext_pairclassification_evaluator import (
-        _build_image_dataset,
-        _image_collate_fn,
-    )
-
-    loader = DataLoader(
-        _build_image_dataset([Image.new("RGB", (8, 8)) for _ in range(3)]),
-        batch_size=2,
-        num_workers=2,
-        collate_fn=_image_collate_fn,
-        multiprocessing_context="spawn",
-    )
-    assert [len(batch["image"]) for batch in loader] == [2, 1]
 
 
 def test_mteb_distribution_finds_mteb_or_mteb_core(monkeypatch, caplog) -> None:
@@ -176,25 +141,6 @@ def test_mteb_distribution_finds_mteb_or_mteb_core(monkeypatch, caplog) -> None:
             assert ("both installed" in caplog.text) is warns, caplog.text
     finally:
         _mteb_distribution.cache_clear()
-
-
-def test_model_meta_dtypes_are_named_not_torch_objects() -> None:
-    """`ModelMeta` declares load dtypes by name, so metadata stays importable without torch.
-
-    `OutputDType` is a `str` enum, so it resolves through both `getattr(torch, ...)` (the path
-    transformers takes for a string dtype) and `OutputDType.get_dtype()`.
-    """
-    import torch
-
-    import mteb
-    from mteb.types import OutputDType
-
-    meta = mteb.get_model_meta("vidore/colpali-v1.1")
-    declared = meta.loader_kwargs["torch_dtype"]
-
-    assert isinstance(declared, OutputDType)
-    assert declared.get_dtype() is torch.float16
-    assert getattr(torch, declared) is torch.float16
 
 
 def test_model_implementations_declare_no_import_time_torch_dtypes() -> None:

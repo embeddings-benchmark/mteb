@@ -1,14 +1,17 @@
 """Build `mteb-core` into `dist/`, next to the `mteb` distributions.
 
-`mteb-core` ships the same code as `mteb`, but without torch, transformers and sentence-transformers, which move
-into its `run` extra. It is for working with tasks, benchmarks, model metadata and results without installing
-torch. Install either `mteb` or `mteb-core`, not both, as they contain the same files.
+`mteb-core` ships the same code as `mteb`, but without torch, transformers and sentence-transformers, so it is
+a minimal install for working with tasks, benchmarks, model metadata and results. Loading and running models
+needs `mteb`. Install either one, not both, as they contain the same files.
 
 It is generated from the root `pyproject.toml` at release time, so adding a dependency or an extra only ever
 means editing that file.
 
 Usage:
     python scripts/build_core_package.py [--outdir dist]
+
+    # rewrite pyproject.toml in place, to install `mteb-core` from the working tree (used by CI)
+    python scripts/build_core_package.py --edit-pyproject
 """
 
 from __future__ import annotations
@@ -30,7 +33,7 @@ except ModuleNotFoundError:  # Python < 3.11
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
-# only needed to load and run models
+# left out of `mteb-core`; only needed to load and run models
 RUN_DEPENDENCIES = {"torch", "transformers", "sentence-transformers"}
 
 
@@ -71,14 +74,7 @@ def core_pyproject(pyproject: str) -> str:
                 f"expected {line.strip()!r} on its own line in dependencies"
             )
         core = core.replace(line, "", 1)
-    run_extra = (
-        "run = [\n" + "".join(f'    "{dependency}",\n' for dependency in run) + "]\n"
-    )
-    return core.replace(
-        "[project.optional-dependencies]\n",
-        "[project.optional-dependencies]\n" + run_extra,
-        1,
-    )
+    return core
 
 
 def build(source: Path, outdir: Path) -> None:
@@ -117,7 +113,20 @@ def build_core_package(outdir: Path) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
     parser.add_argument("--outdir", type=Path, default=REPO_ROOT / "dist")
-    build_core_package(parser.parse_args().outdir)
+    parser.add_argument(
+        "--edit-pyproject",
+        action="store_true",
+        help="turn the working tree into `mteb-core` by rewriting pyproject.toml, instead of building",
+    )
+    args = parser.parse_args()
+
+    pyproject = REPO_ROOT / "pyproject.toml"
+    if args.edit_pyproject:
+        pyproject.write_text(
+            core_pyproject(pyproject.read_text(encoding="utf-8")), encoding="utf-8"
+        )
+        return
+    build_core_package(args.outdir)
 
 
 if __name__ == "__main__":

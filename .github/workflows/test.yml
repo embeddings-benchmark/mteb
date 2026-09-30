@@ -127,13 +127,13 @@ jobs:
           enable-cache: true
           python-version: "3.12"
 
-      - name: Build and install mteb-core
+      - name: Install mteb-core
         shell: bash
         run: |
           uv venv
-          uv pip install build packaging
-          uv run --no-sync python scripts/build_core_package.py --outdir dist
-          uv pip install dist/mteb_core-*.whl pytest pytest-rerunfailures
+          uv pip install packaging
+          uv run --no-sync python scripts/build_core_package.py --edit-pyproject
+          uv pip install . pytest pytest-rerunfailures
 
       - name: Run tests
         shell: bash

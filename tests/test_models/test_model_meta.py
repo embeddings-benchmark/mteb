@@ -645,3 +645,22 @@ def test_get_model_metas_iso_code_matches_language_script():
 def test_get_model_metas_invalid_language():
     with pytest.raises(ValueError, match="Invalid language code"):
         mteb.get_model_metas(languages=["english"])
+
+
+def test_model_meta_dtypes_are_named_not_torch_objects() -> None:
+    """`ModelMeta` declares load dtypes by name, so metadata stays importable without torch.
+
+    `OutputDType` is a `str` enum, so it resolves through both `getattr(torch, ...)` (the path
+    transformers takes for a string dtype) and `OutputDType.get_dtype()`.
+    """
+    import torch
+
+    import mteb
+    from mteb.types import OutputDType
+
+    meta = mteb.get_model_meta("vidore/colpali-v1.1")
+    declared = meta.loader_kwargs["torch_dtype"]
+
+    assert isinstance(declared, OutputDType)
+    assert declared.get_dtype() is torch.float16
+    assert getattr(torch, declared) is torch.float16

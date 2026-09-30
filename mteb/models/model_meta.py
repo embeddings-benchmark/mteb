@@ -42,7 +42,8 @@ from mteb._hf_integration.hf_hub_utils import (
     _repo_exists,
 )
 from mteb._requires_package import (
-    _install_target,
+    _extras_requirement,
+    _install_command,
     _mteb_distribution,
     _requires_run_dependency,
 )
@@ -101,7 +102,7 @@ def _install_extras(model_name: str | None, groups: Sequence[str]) -> None:
     Uses ``uv pip install`` when ``uv`` is on the PATH (faster), otherwise falls back
     to ``python -m pip install``.
     """
-    target = _install_target(groups)
+    target = _extras_requirement(groups)
     if shutil.which("uv") is not None:
         command = ["uv", "pip", "install", target]
     else:
@@ -548,7 +549,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 raise
             raise ModuleNotFoundError(
                 f"Loading {name} requires `{e.name}`, which is not installed. "
-                f"Install it with `pip install {_install_target()}`.",
+                f"Install it with `{_install_command()}`.",
                 name=e.name,
             ) from e
         model.mteb_model_meta = _self  # type: ignore[misc]
@@ -570,7 +571,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             raise ImportError(
                 f"Model {self.name} is missing required dependencies: "
                 + ", ".join(missing_dependencies)
-                + f".\nYou can install it with `pip install {_install_target(groups)}`."
+                + f".\nYou can install it with `{_install_command(groups)}`."
                 + "\nAlternatively, set the environment variable "
                 "`MTEB_AUTO_INSTALL_EXTRAS=1` to let mteb install them automatically."
             )

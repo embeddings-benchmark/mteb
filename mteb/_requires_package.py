@@ -18,9 +18,9 @@ logger = logging.getLogger(__name__)
 def _mteb_distribution() -> importlib.metadata.Distribution:
     """Return the installed distribution that provides the `mteb` package.
 
-    The code is published both as `mteb` and as `mteb-core`, which is the same code without the dependencies
-    needed to load and run models (its `run` extra). `mteb-core` is checked first, so that its `run` extra is
-    used for the install instructions.
+    The code is published both as `mteb` and as `mteb-core`, a minimal install of the same code without the
+    dependencies needed to load and run models. `mteb-core` is checked first, so that the install instructions
+    say to switch to `mteb`.
     """
     for name in ("mteb-core", "mteb"):
         try:
@@ -44,26 +44,35 @@ def _is_installed(distribution_name: str) -> bool:
     return True
 
 
-def _install_target(groups: Sequence[str] = ()) -> str:
-    """The requirement that installs the given extras groups for the installed `mteb` or `mteb-core`."""
-    name = _mteb_distribution().metadata["Name"]
-    if name == "mteb-core":
-        # `mteb-core` leaves out the dependencies needed to load and run models
-        groups = ["run", *groups]
-    return f"{name}[{','.join(groups)}]" if groups else name
+def _extras_requirement(groups: Sequence[str]) -> str:
+    """The requirement that installs the given extras groups for the installed distribution."""
+    return f"{_mteb_distribution().metadata['Name']}[{','.join(groups)}]"
+
+
+def _install_command(groups: Sequence[str] = ()) -> str:
+    """The command to install the given extras groups, or the dependencies to run models if there are none.
+
+    Loading and running models needs `mteb`, so on `mteb-core` that means switching. Both contain the same
+    files, so `mteb-core` has to be uninstalled first, rather than leaving two distributions owning them.
+    """
+    if groups:
+        return f"pip install {_extras_requirement(groups)}"
+    if _mteb_distribution().metadata["Name"] == "mteb-core":
+        return "pip uninstall -y mteb-core && pip install mteb"
+    return "pip install mteb"
 
 
 def _requires_run_dependency(package: str, what: str) -> None:
     """Raise an error saying what to install if a dependency needed to run models is missing.
 
     Args:
-        package: The package to check, one of the packages of the `run` extra of `mteb-core`.
+        package: The package to check, one of the dependencies that `mteb-core` leaves out.
         what: What the user was doing, e.g. "Evaluating a model".
     """
     if not _is_package_available(package):
         raise ImportError(
             f"{what} requires `{package}`, which is not installed. "
-            f"Install it with `pip install {_install_target()}`."
+            f"Install it with `{_install_command()}`."
         )
 
 
