@@ -69,8 +69,7 @@ def alphanumeric_text(text: str) -> str:
 cleaned = remove_duplicates(task, normalization=casefold_text)
 ```
 
-Text is compared exactly as written, so two strings that a reader cannot tell apart are duplicates only if Unicode
-spells them the same way. Normalize them if your data mixes forms, as a fifth of this task's Vietnamese texts do:
+Text is compared exactly as written, so two strings that a reader cannot tell apart are duplicates only if Unicode spells them the same way. Normalize them if your data mixes forms, as a fifth of this task's Vietnamese texts do:
 
 ```python
 import unicodedata
@@ -100,15 +99,12 @@ Texts are counted in characters without their surrounding whitespace, so `min_le
 whitespace-only ones. Pass `length_fn` to measure them differently, e.g. `lambda text: len(text.split())` to count
 words.
 
-There is no default threshold, as what is too short depends on the task: the one-word texts of this one include
-`"s."`, but also terse yet genuine commands such as `"coffee"` and `"remind"`.
+There is no default threshold, as what is too short depends on the task: the one-word texts of this one include `"s."`, but also terse yet genuine commands such as `"coffee"` and `"remind"`.
 
 ### Thresholds depend on the writing system
 
 A character carries more meaning in some scripts than in others, so a threshold does not travel between languages. In
-MassiveIntentClassification the median test text is 32 characters in English but 10 in Chinese, and `min_length=10`
-removes 1.8% of the English subset against 48.5% of the Chinese one. Counting words is worse: Chinese, Japanese and
-Thai leave no spaces between words, so a threshold of three words removes 99% of that Chinese subset.
+MassiveIntentClassification the median test text is 32 characters in English but 10 in Chinese, and `min_length=10` removes 1.8% of the English subset against 48.5% of the Chinese one. Counting words is worse: Chinese, Japanese and Thai leave no spaces between words, so a threshold of three words removes 99% of that Chinese subset.
 
 Filter a multilingual task one language at a time; the calls chain into a single cleaned task:
 
@@ -118,10 +114,7 @@ cleaned = remove_short_texts(cleaned, min_length=2, subsets=["zh-CN"])
 ```
 
 Two details follow from counting code points rather than characters as a reader sees them. A zero-width space is not
-whitespace, so it survives `min_length=1`. And a vowel sign or virama counts on its own, so this task's Tamil texts
-measure 1.6 times, and its Thai texts 1.3 times, their length in characters -- which makes a threshold that much more
-permissive for them. Pass `length_fn` if either matters, e.g. `lambda text: len(regex.findall(r"\X", text))` to count
-characters.
+whitespace, so it survives `min_length=1`. And a vowel sign or virama counts on its own, so this task's Tamil texts measure 1.6 times, and its Thai texts 1.3 times, their length in characters -- which makes a threshold that much more permissive for them. Pass `length_fn` if either matters, e.g. `lambda text: len(regex.findall(r"\X", text))` to count characters.
 
 ### Images, audio and video
 
@@ -145,12 +138,7 @@ care as a text's: a 28x28 MNIST digit and a 0.1 second drum hit are small by nat
 
 ### How samples are measured
 
-A sample is removed when any of its values is too small, e.g. either sentence of a pair. Each filter only measures its
-own modality, so `remove_short_texts` keeps the images of a task whatever their size. In a retrieval task a document
-is measured on its title and text together, and a query together with its instruction, as that is what the model
-reads. A document or query that combines modalities, such as a page image with its extracted text, is left alone,
-as one may carry what the other lacks. The relevance judgements of a removed document are dropped with it, and a query
-left without any relevant document is dropped as well, as it can no longer be scored.
+A sample is removed when any of its values is too small, e.g. either sentence of a pair. Each filter only measures its own modality, so `remove_short_texts` keeps the images of a task whatever their size. In a retrieval task a document is measured on its title and text together, and a query together with its instruction, as that is what the model reads. A document or query that combines modalities, such as a page image with its extracted text, is left alone, as one may carry what the other lacks. The relevance judgements of a removed document are dropped with it, and a query left without any relevant document is dropped as well, as it can no longer be scored.
 
 ## Cleaning produces a new task
 
@@ -163,8 +151,7 @@ print(task.metadata.name)  # MassiveIntentClassification
 print(cleaned.metadata.name)  # MassiveIntentClassification (remove_duplicates)
 ```
 
-Each filter adds its name to the list, so applying a second one gives `MassiveIntentClassification (remove_duplicates, remove_short_texts)`. The task you passed in keeps its own name, and
-`adapted_from` on the copy records where the data came from.
+Each filter adds its name to the list, so applying a second one gives `MassiveIntentClassification (remove_duplicates, remove_short_texts)`. The task you passed in keeps its own name, and `adapted_from` on the copy records where the data came from.
 
 That id is what keeps the result honest. You evaluate a cleaned task as usual, and its scores are recorded against the cleaned id rather than against the published dataset:
 
