@@ -3,7 +3,6 @@ from __future__ import annotations
 import hashlib
 from typing import TYPE_CHECKING, Any
 
-from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import OutputDType, PromptType
 
@@ -12,16 +11,26 @@ if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput
+    from mteb.types import (
+        BatchedInput,
+        CorpusDatasetType,
+        EncodeKwargs,
+        QueryDatasetType,
+        RetrievalOutputType,
+        TopRankedDocumentsType,
+    )
 
 
-class TopkEmbedWrapper(AbsEncoder):
-    """Late-interaction wrapper for the topk-embed-v1 models.
+class TopkEmbedSearch:
+    """Late-interaction search model for the topk-embed-v1 models.
 
-    Token vectors are stored in FP16 and scored with exhaustive FP32 MaxSim. The models have no
-    image+text fusion: a corpus with both columns (ViDoRe v3.1: page image and OCR markdown) is
-    encoded from its text only.
+    Multi-vector embeddings only support retrieval-style search, so this implements the
+    SearchProtocol, not the Encoder interface. Token vectors are stored in FP16 and scored with
+    exhaustive FP32 MaxSim. The models have no image+text fusion: an input with both columns
+    (ViDoRe v3.1: page image and OCR markdown) is encoded from its text only.
     """
+
+    mteb_model_meta: ModelMeta | None = None
 
     def __init__(
         self,
@@ -51,31 +60,93 @@ class TopkEmbedWrapper(AbsEncoder):
         self.document_chunk_size = document_chunk_size
         self.max_score_elements = max_score_elements
         # The query-language subsets of a task share one corpus, so it is encoded once.
-        self._corpus_cache: dict[str, list[torch.Tensor]] = {}
+        self._corpus_key: str | None = None
+        self._corpus_ids: list[str] = []
+        self._corpus_vectors: list[torch.Tensor] = []
 
-    def encode(
+    def index(
         self,
-        inputs: DataLoader[BatchedInput],
+        corpus: CorpusDatasetType,
         *,
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
-        prompt_type: PromptType | None = None,
-        **kwargs: Any,
-    ) -> Array:
+        encode_kwargs: EncodeKwargs,
+        num_proc: int | None = None,
+    ) -> None:
+        from mteb._create_dataloaders import create_dataloader
+
+        ids = list(corpus["id"])
+        digest = hashlib.sha256("\n".join(ids).encode()).hexdigest()
+        key = f"{task_metadata.name}/{hf_split}/{digest}"
+        if key == self._corpus_key:
+            return
+        loader = create_dataloader(
+            corpus,
+            task_metadata=task_metadata,
+            prompt_type=PromptType.document,
+            num_proc=num_proc,
+            **encode_kwargs,
+        )
+        self._corpus_vectors = self._encode(loader, is_query=False)
+        self._corpus_ids = ids
+        self._corpus_key = key
+
+    def search(
+        self,
+        queries: QueryDatasetType,
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        top_k: int,
+        encode_kwargs: EncodeKwargs,
+        top_ranked: TopRankedDocumentsType | None = None,
+        num_proc: int | None = None,
+    ) -> RetrievalOutputType:
         import torch
 
-        is_query = prompt_type == PromptType.query
-        column = "text" if is_query or "text" in inputs.dataset.features else "image"
-        key = None
-        if not is_query and "id" in inputs.dataset.column_names:
-            digest = hashlib.sha256(
-                "\n".join(inputs.dataset["id"]).encode()
-            ).hexdigest()
-            key = f"{task_metadata.name}/{hf_split}/{column}/{digest}"
-            if key in self._corpus_cache:
-                return self._corpus_cache[key]
-        encode = self.model.encode_query if is_query else self.model.encode_document
+        from mteb._create_dataloaders import create_dataloader
+
+        if self._corpus_key is None:
+            raise ValueError("Corpus must be indexed before searching.")
+        loader = create_dataloader(
+            queries,
+            task_metadata=task_metadata,
+            prompt_type=PromptType.query,
+            num_proc=num_proc,
+            **encode_kwargs,
+        )
+        scores = self._maxsim(self._encode(loader, is_query=True), self._corpus_vectors)
+        position = {
+            corpus_id: index for index, corpus_id in enumerate(self._corpus_ids)
+        }
+        results: RetrievalOutputType = {}
+        for query_id, row in zip(queries["id"], scores, strict=True):
+            if top_ranked is None:
+                candidates, candidate_scores = self._corpus_ids, row
+            else:
+                candidates = top_ranked[query_id]
+                rows = torch.tensor([position[c] for c in candidates], dtype=torch.long)
+                candidate_scores = row[rows]
+            values, indices = candidate_scores.topk(min(top_k, len(candidates)))
+            results[query_id] = {
+                candidates[index]: value
+                for value, index in zip(values.tolist(), indices.tolist(), strict=True)
+            }
+        return results
+
+    def _encode(
+        self, inputs: DataLoader[BatchedInput], *, is_query: bool
+    ) -> list[torch.Tensor]:
+        import torch
+
+        column = "text" if "text" in inputs.dataset.features else "image"
+        # The models are trained on text queries; an image query is encoded like an image document.
+        if is_query and column == "text":
+            encode = self.model.encode_query
+        else:
+            encode = self.model.encode_document
         vectors = []
         for batch in inputs:
             items = batch[column]
@@ -84,23 +155,21 @@ class TopkEmbedWrapper(AbsEncoder):
             output = encode(items, batch_size=len(items), show_progress_bar=False)
             vectors.extend(vector.to(torch.float16).cpu() for vector in output)
         # Vectors stay unpadded: one long page would pad the whole corpus to its length.
-        if key is not None:
-            self._corpus_cache = {key: vectors}
         return vectors
 
-    def similarity(self, a: Array, b: Array) -> Array:
+    def _maxsim(
+        self, queries: list[torch.Tensor], documents: list[torch.Tensor]
+    ) -> torch.Tensor:
         import torch
 
         # MultiVectorEncoder.similarity computes token similarities in the input dtype, so the
         # FP16 vectors are upcast chunk by chunk to score in FP32 without an FP32 copy of the corpus.
-        queries = [
-            torch.as_tensor(vector).to(self.device, torch.float32) for vector in a
-        ]
+        queries = [vector.to(self.device, torch.float32) for vector in queries]
         scores = []
-        for start in range(0, len(b), self.document_chunk_size):
+        for start in range(0, len(documents), self.document_chunk_size):
             chunk = [
-                torch.as_tensor(vector).to(self.device, torch.float32)
-                for vector in b[start : start + self.document_chunk_size]
+                vector.to(self.device, torch.float32)
+                for vector in documents[start : start + self.document_chunk_size]
             ]
             scores.append(
                 self.model.similarity(
@@ -120,7 +189,7 @@ TOPK_EMBED_V1_LANGUAGES = [
 ]
 
 topk_embed_v1_xsmall = ModelMeta(
-    loader=TopkEmbedWrapper,
+    loader=TopkEmbedSearch,
     loader_kwargs={"image_token_budget": 2048},
     name="topk-io/topk-embed-v1-xsmall",
     revision="d09d8a7a8cdd6c287f792b3c4d7b41233d46e66a",
@@ -149,7 +218,7 @@ topk_embed_v1_xsmall = ModelMeta(
 )
 
 topk_embed_v1_small = ModelMeta(
-    loader=TopkEmbedWrapper,
+    loader=TopkEmbedSearch,
     loader_kwargs={"image_token_budget": 2048},
     name="topk-io/topk-embed-v1-small",
     revision="33b15d544d74f29d04cdb97adeb9fd0e52da5fb7",
