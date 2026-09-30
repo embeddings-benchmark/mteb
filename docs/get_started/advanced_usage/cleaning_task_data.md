@@ -95,16 +95,13 @@ print({split: len(data) for split, data in cleaned.dataset["en"].items()})
 # {'train': 11511, 'test': 2973, 'validation': 2033}, from 11514 / 2974 / 2033
 ```
 
-Texts are counted in characters without their surrounding whitespace, so `min_length=1` removes exactly the empty and
-whitespace-only ones. Pass `length_fn` to measure them differently, e.g. `lambda text: len(text.split())` to count
-words.
+Texts are counted in characters without their surrounding whitespace, so `min_length=1` removes exactly the empty and whitespace-only ones. Pass `length_fn` to measure them differently, e.g. `lambda text: len(text.split())` to count words.
 
 There is no default threshold, as what is too short depends on the task: the one-word texts of this one include `"s."`, but also terse yet genuine commands such as `"coffee"` and `"remind"`.
 
 ### Thresholds depend on the writing system
 
-A character carries more meaning in some scripts than in others, so a threshold does not travel between languages. In
-MassiveIntentClassification the median test text is 32 characters in English but 10 in Chinese, and `min_length=10` removes 1.8% of the English subset against 48.5% of the Chinese one. Counting words is worse: Chinese, Japanese and Thai leave no spaces between words, so a threshold of three words removes 99% of that Chinese subset.
+A character carries more meaning in some scripts than in others, so a threshold does not travel between languages. In MassiveIntentClassification the median test text is 32 characters in English but 10 in Chinese, and `min_length=10` removes 1.8% of the English subset against 48.5% of the Chinese one. Counting words is worse: Chinese, Japanese and Thai leave no spaces between words, so a threshold of three words removes 99% of that Chinese subset.
 
 Filter a multilingual task one language at a time; the calls chain into a single cleaned task:
 
@@ -113,8 +110,7 @@ cleaned = remove_short_texts(task, min_length=10, subsets=["en"])
 cleaned = remove_short_texts(cleaned, min_length=2, subsets=["zh-CN"])
 ```
 
-Two details follow from counting code points rather than characters as a reader sees them. A zero-width space is not
-whitespace, so it survives `min_length=1`. And a vowel sign or virama counts on its own, so this task's Tamil texts measure 1.6 times, and its Thai texts 1.3 times, their length in characters -- which makes a threshold that much more permissive for them. Pass `length_fn` if either matters, e.g. `lambda text: len(regex.findall(r"\X", text))` to count characters.
+Two details follow from counting code points rather than characters as a reader sees them. A zero-width space is not whitespace, so it survives `min_length=1`. And a vowel sign or virama counts on its own, so this task's Tamil texts measure 1.6 times, and its Thai texts 1.3 times, their length in characters -- which makes a threshold that much more permissive for them. Pass `length_fn` if either matters, e.g. `lambda text: len(regex.findall(r"\X", text))` to count characters.
 
 ### Images, audio and video
 
@@ -132,9 +128,7 @@ cleaned = remove_short_audio(task, min_seconds=0.5)
 cleaned = remove_short_videos(task, min_seconds=1.0)
 ```
 
-An image counts as small by its shorter side, so `min_size=32` asks for 32 pixels in both directions; pass `size_fn`
-to measure it differently, e.g. `lambda image: image.width * image.height` for its area. Their thresholds need the same
-care as a text's: a 28x28 MNIST digit and a 0.1 second drum hit are small by nature, not broken.
+An image counts as small by its shorter side, so `min_size=32` asks for 32 pixels in both directions; pass `size_fn` to measure it differently, e.g. `lambda image: image.width * image.height` for its area. Their thresholds need the same care as a text's: a 28x28 MNIST digit and a 0.1 second drum hit are small by nature, not broken.
 
 ### How samples are measured
 
