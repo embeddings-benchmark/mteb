@@ -224,7 +224,7 @@ class FramesCollator:
             if n_source <= target:
                 return list(range(n_source))
             # evenly spaced over the whole clip, as upstream samplers do
-            return np.linspace(0, n_source - 1, target).round().astype(int).tolist()
+            return [int(i) for i in np.linspace(0, n_source - 1, target).round()]
 
         # Retry on the actual call: decrement source count when trailing
         # frames fail to decode.
