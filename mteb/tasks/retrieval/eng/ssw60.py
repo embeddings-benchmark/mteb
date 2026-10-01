@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from datasets import concatenate_datasets, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -58,7 +60,7 @@ class SSW60A2IRetrieval(AbsTaskRetrieval):
         },
     )
 
-    def load_data(self, **kwargs) -> None:
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
@@ -134,7 +136,7 @@ class SSW60I2ARetrieval(AbsTaskRetrieval):
         },
     )
 
-    def load_data(self, **kwargs) -> None:
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 

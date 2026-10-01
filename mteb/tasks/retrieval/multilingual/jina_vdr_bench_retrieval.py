@@ -1,9 +1,17 @@
+from __future__ import annotations
+
 from collections import defaultdict
+from typing import TYPE_CHECKING, Any
 
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+
+if TYPE_CHECKING:
+    from datasets import Dataset
+
+    from mteb.types import RelevantDocumentsType
 
 _LANGS = {
     "ar": ["ara-Arab"],
@@ -61,7 +69,7 @@ def _load_single_language(
     split: str,
     lang: str | None = None,
     revision: str | None = None,
-):
+) -> tuple[Dataset, Dataset, RelevantDocumentsType]:
     query_ds = load_dataset(
         path,
         data_dir=f"{lang}/queries" if lang else "queries",
@@ -106,7 +114,11 @@ def _load_data(
     splits: str,
     langs: list | None = None,
     revision: str | None = None,
-):
+) -> tuple[
+    dict[str, Dataset] | dict[str, dict[str, Dataset]],
+    dict[str, Dataset] | dict[str, dict[str, Dataset]],
+    dict[str, RelevantDocumentsType] | dict[str, dict[str, RelevantDocumentsType]],
+]:
     if langs is None or len(langs) == 1:
         corpus = {}
         queries = {}
@@ -148,7 +160,9 @@ def _load_data(
     return corpus, queries, relevant_docs
 
 
-def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+def load_data(
+    self: AbsTaskRetrieval, num_proc: int | None = None, **kwargs: Any
+) -> None:
     if self.data_loaded:
         return
 

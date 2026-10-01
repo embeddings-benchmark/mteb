@@ -11,14 +11,6 @@ import numpy as np
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
-SSE_CITATION = """@misc{rikkabotan2026sse,
-  author       = {Rikka Botan},
-  title        = {Stable Static Embedding (SSE): Fast Retrieval with Matryoshka Representation Learning},
-  year         = {2026},
-  publisher    = {Hugging Face},
-  url          = {https://huggingface.co/collections/RikkaBotan/sse-stable-static-embedding},
-}"""
-
 # Datasets that overlap with MTEB tasks (best-effort intersection of the
 # HF training datasets listed on each model card with mteb's task registry).
 _SSE_EN_TRAINING_DATASETS = {
@@ -69,7 +61,6 @@ stable_static_embedding_mrl_en = ModelMeta(
     training_datasets=_SSE_EN_TRAINING_DATASETS,
     modalities=["text"],
     model_type=["dense"],
-    citation=SSE_CITATION,
 )
 
 
@@ -98,7 +89,6 @@ stable_static_embedding_mrl_en_v2 = ModelMeta(
     model_type=["dense"],
     adapted_from="RikkaBotan/stable-static-embedding-fast-retrieval-mrl-en",
     superseded_by=None,
-    citation=SSE_CITATION,
 )
 
 
@@ -125,7 +115,6 @@ stable_static_embedding_mrl_ja = ModelMeta(
     training_datasets=_SSE_JA_TRAINING_DATASETS,
     modalities=["text"],
     model_type=["dense"],
-    citation=SSE_CITATION,
 )
 
 
@@ -152,7 +141,6 @@ stable_static_embedding_mrl_bilingual_ja_en = ModelMeta(
     training_datasets=_SSE_EN_TRAINING_DATASETS | _SSE_JA_TRAINING_DATASETS,
     modalities=["text"],
     model_type=["dense"],
-    citation=SSE_CITATION,
 )
 
 
@@ -181,7 +169,6 @@ quantized_stable_static_embedding_mrl_en = ModelMeta(
     modalities=["text"],
     model_type=["dense"],
     adapted_from="RikkaBotan/stable-static-embedding-fast-retrieval-mrl-en",
-    citation=SSE_CITATION,
 )
 
 
@@ -209,7 +196,6 @@ quantized_stable_static_embedding_mrl_ja = ModelMeta(
     modalities=["text"],
     model_type=["dense"],
     adapted_from="RikkaBotan/stable-static-embedding-fast-retrieval-mrl-ja",
-    citation=SSE_CITATION,
 )
 
 
@@ -237,5 +223,4 @@ quantized_stable_static_embedding_mrl_bilingual_ja_en = ModelMeta(
     modalities=["text"],
     model_type=["dense"],
     adapted_from="RikkaBotan/stable-static-embedding-fast-retrieval-mrl-bilingual-ja-en",
-    citation=SSE_CITATION,
 )

@@ -13,7 +13,7 @@ from collections.abc import Callable, Mapping, Sequence
 from dataclasses import field
 from enum import Enum
 from functools import partial
-from importlib.metadata import PackageNotFoundError, distribution, requires
+from importlib.metadata import PackageNotFoundError
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, cast
 
@@ -34,11 +34,6 @@ from huggingface_hub.errors import (
 from packaging.requirements import Requirement
 from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict, field_validator, model_validator
-from sentence_transformers import (
-    CrossEncoder,
-    SentenceTransformer,
-)
-from transformers import AutoConfig
 
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb._hf_integration.hf_hub_utils import (
@@ -46,6 +41,7 @@ from mteb._hf_integration.hf_hub_utils import (
     _get_repo_commits,
     _repo_exists,
 )
+from mteb._requires_package import _mteb_distribution
 from mteb.languages import check_language_code
 from mteb.languages.iso_mappings import _hf_langs_to_iso_lang_scripts
 from mteb.models.models_protocols import MTEBModels
@@ -62,10 +58,13 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
 
     from sentence_transformers import (
+        CrossEncoder,
         CrossEncoderModelCardData,
+        MultiVectorEncoder,
+        SentenceTransformer,
         SentenceTransformerModelCardData,
+        SparseEncoder,
     )
-    from sentence_transformers.sparse_encoder import SparseEncoder
     from typing_extensions import Self
 
     from mteb.abstasks import AbsTask
@@ -163,6 +162,7 @@ OPEN_LICENSES: frozenset[str] = frozenset(
         "cc-by-sa-4.0",
         "odc-by",
         "cdla-sharing-1.0",
+        "openmdw-1.1",
     }
 )
 
@@ -216,7 +216,9 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             in the Latin script.
         use_instructions: Whether the model uses instructions E.g. for prompt-based models. This also includes models that require a specific format for
             input, such as "query: {document}" or "passage: {document}".
-        citation: The citation for the model. This is a bibtex string.
+        citation: The citation for the model, as a BibTeX string. As non-existing citations can cause
+            authors citing the work to be penalized, leave it out if the model has no article to cite,
+            rather than citing e.g. its model card. It is allowed to cite multiple articles.
         training_datasets: A dictionary of datasets that the model was trained on. Names should be names as their appear in `mteb` for example
             {"ArguAna"} if the model is trained on the ArguAna test set. This field is used to determine if a model generalizes zero-shot to
             a benchmark as well as mark dataset contaminations.
@@ -266,7 +268,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
     output_dtypes: OutputDType | list[OutputDType] | None = None
     extra_requirements_groups: Sequence[str] | None = None
 
-    def __setattr__(self, name: str, value: Any) -> None:
+    def __setattr__(self, name: str, value: Any) -> None:  # noqa: ANN401 -- dunder contract
         """Deprecation warning for direct attribute mutation. Use model_copy(update={...}) instead."""
         warnings.warn(
             f"Mutating '{name}' is deprecated and will be removed in future versions. "
@@ -278,7 +280,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
 
     @model_validator(mode="before")
     @classmethod
-    def _handle_legacy_is_cross_encoder(cls, data: Any) -> Any:
+    def _handle_legacy_is_cross_encoder(cls, data: Any) -> Any:  # noqa: ANN401 -- pydantic mode='before' receives raw input
         """Handle legacy is_cross_encoder field by converting it to model_type.
 
         This validator handles backward compatibility for the deprecated is_cross_encoder field.
@@ -574,7 +576,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
     def _validate_extras_groups(groups: Sequence[str]) -> None:
         """Raise if any group is not a valid mteb extra."""
         available_extras = set(
-            distribution("mteb").metadata.get_all("Provides-Extra") or []
+            _mteb_distribution().metadata.get_all("Provides-Extra") or []
         )
 
         def _norm(s: str) -> str:
@@ -593,7 +595,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         """Return the requirement strings of the given groups that are not satisfied."""
         missing_dependencies = []
 
-        mteb_requires = requires("mteb")
+        mteb_requires = _mteb_distribution().requires
         if mteb_requires is None:
             raise RuntimeError(
                 "Could not retrieve mteb package requirements. Make sure mteb is installed properly."
@@ -757,18 +759,25 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         - SentenceTransformer  → SentenceTransformerEncoderWrapper
         - CrossEncoder         → CrossEncoderWrapper
         - SparseEncoder        → SparseEncoderWrapper
+        - MultiVectorEncoder   → MultiVectorWrapper
         """
         from mteb.models import (
             CrossEncoderWrapper,
+            MultiVectorWrapper,
             SentenceTransformerEncoderWrapper,
             SparseEncoderWrapper,
         )
 
         st_model_type = config_sbert.get("model_type") if config_sbert else None
+        # "ColBERT" is the legacy PyLate v3 spelling; sentence-transformers' MultiVectorEncoder
+        # itself normalizes it the same way when reading config_sentence_transformers.json.
+        if st_model_type == "ColBERT":
+            st_model_type = "MultiVectorEncoder"
         if st_model_type not in {
             "SentenceTransformer",
             "CrossEncoder",
             "SparseEncoder",
+            "MultiVectorEncoder",
         }:
             if cls._modules_indicate_sparse_encoder(modules_config):
                 st_model_type = "SparseEncoder"
@@ -788,6 +797,8 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             return CrossEncoderWrapper, "cross-encoder", modalities
         if st_model_type == "SparseEncoder":
             return SparseEncoderWrapper, "sparse", modalities
+        if st_model_type == "MultiVectorEncoder":
+            return MultiVectorWrapper, "late-interaction", modalities
         if st_model_type == "SentenceTransformer":
             return SentenceTransformerEncoderWrapper, "dense", modalities
         raise ValueError("Unsupported model type")
@@ -933,6 +944,8 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         This is based on the heuristic: `vocab_size * embedding_dim` where vocab_size and embedding_dim are extracted from the model's first
         Transformer module.
         """
+        from sentence_transformers import CrossEncoder, SentenceTransformer
+
         logger.info(
             "Calculating number of embedding parameters for SentenceTransformer model."
         )
@@ -1013,6 +1026,32 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         )
 
     @classmethod
+    def _from_multi_vector_encoder_model(cls, model: MultiVectorEncoder) -> Self:
+        """Generates a ModelMeta from only a MultiVectorEncoder model, without fetching any additional metadata from HuggingFace Hub."""
+        from mteb.models import MultiVectorWrapper
+
+        name: str | None = (
+            model.model_card_data.model_name
+            if model.model_card_data.model_name
+            else model.model_card_data.base_model
+        )
+        return cls.create_empty(
+            overwrites=dict(
+                name=name,
+                revision=model.model_card_data.base_model_revision,
+                loader=MultiVectorWrapper,
+                max_tokens=model.get_max_seq_length(),
+                embed_dim=model.get_embedding_dimension(),
+                similarity_fn_name=ScoringFunction.MAX_SIM,
+                framework=["Sentence Transformers", "PyTorch"],
+                model_type=["late-interaction"],
+                adapted_from=_get_source_model(model.model_card_data)  # type: ignore[arg-type]
+                if hasattr(model, "model_card_data")
+                else None,
+            )
+        )
+
+    @classmethod
     def _from_hub(  # noqa: PLR0914
         cls,
         model_name: str,
@@ -1053,6 +1092,11 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         card = ModelCard.load(model_name)
         card_data = card.data
         card_data = cast("ModelCardData", card_data)
+        # imported here rather than at module scope so that `mteb.models.model_meta` stays
+        # importable without transformers; kept outside the `try` so a missing dependency
+        # surfaces as an ImportError instead of a "can't get model configuration" warning.
+        from transformers import AutoConfig
+
         try:
             model_config = AutoConfig.from_pretrained(model_name)
         except Exception as e:
@@ -1285,6 +1329,38 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             if meta.name is None:
                 logger.warning(
                     "Model name is not set in metadata extracted from SparseEncoder model. Cannot fetch additional metadata from HuggingFace Hub."
+                )
+            else:
+                name = meta.name
+                meta_hub = cls._from_hub(name, revision)
+                # prioritize metadata from the model card but fill missing fields from the hub
+                meta = meta_hub.merge(meta)
+
+        return meta
+
+    @classmethod
+    def from_multi_vector_encoder_model(
+        cls,
+        model: MultiVectorEncoder,
+        revision: str | None = None,
+        fetch_from_hf: bool = False,
+    ) -> Self:
+        """Generates a ModelMeta from a MultiVectorEncoder model.
+
+        Args:
+            model: MultiVectorEncoder model.
+            revision: Revision of the model.
+            fetch_from_hf: Whether to fetch additional metadata from HuggingFace Hub based on the model name. If False, only metadata that can be
+                extracted from the MultiVectorEncoder model will be used.
+
+        Returns:
+            The generated ModelMeta.
+        """
+        meta = cls._from_multi_vector_encoder_model(model)
+        if fetch_from_hf:
+            if meta.name is None:
+                logger.warning(
+                    "Model name is not set in metadata extracted from MultiVectorEncoder model. Cannot fetch additional metadata from HuggingFace Hub."
                 )
             else:
                 name = meta.name
@@ -1769,7 +1845,7 @@ def _pydantic_instance_to_code(
     return "\n".join(lines)
 
 
-def _value_to_code(value: Any, indent: int) -> str:  # noqa: PLR0911
+def _value_to_code(value: Any, indent: int) -> str:  # noqa: PLR0911, ANN401 -- serialises arbitrary values
     """Convert a Python value into valid Python source code."""
     if isinstance(value, BaseModel):
         return _pydantic_instance_to_code(value, indent, only_set_fields=True)
@@ -1842,6 +1918,22 @@ def _collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
     return similar
 
 
+def _merge_precision_into_experiment_kwargs(
+    experiment_kwargs: Mapping[str, Any] | None,
+    encode_kwargs: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Fold a ``precision`` encode kwarg into ``experiment_kwargs["output_dtypes"]``.
+
+    ``precision`` is forwarded to ``encode`` and changes the dtype of the produced
+    embeddings, so it must be folded into the same experiment namespace.
+    """
+    merged = dict(experiment_kwargs) if experiment_kwargs else {}
+    precision = encode_kwargs.get("precision")
+    if precision is not None:
+        merged["output_dtypes"] = OutputDType.from_str(precision).value
+    return merged
+
+
 def _serialize_experiment_kwargs_to_name(
     experiment_kwargs: Mapping[str, Any] | None,
     value_field_separator: str = "_",
@@ -1852,7 +1944,7 @@ def _serialize_experiment_kwargs_to_name(
 
     invalid_chars = set('<>:"|?*\\/\0')
 
-    def _serialize_value(value: Any) -> str:
+    def _serialize_value(value: Any) -> str:  # noqa: ANN401 -- serialises arbitrary values
         """Convert value to deterministic string representation."""
         if isinstance(value, (str, int, float, bool)) or value is None:
             str_value = str(value)

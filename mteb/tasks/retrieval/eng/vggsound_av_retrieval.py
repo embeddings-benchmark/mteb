@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -93,7 +95,7 @@ class VGGSoundAVV2TRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_vggsound_av(
             self, query_columns=["video"], corpus_columns=["video_caption"]
         )
@@ -128,7 +130,7 @@ class VGGSoundAVT2VRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_vggsound_av(
             self, query_columns=["video_caption"], corpus_columns=["video"]
         )
@@ -165,7 +167,7 @@ class VGGSoundAVVA2TRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_vggsound_av(
             self, query_columns=["video", "audio"], corpus_columns=["av_caption"]
         )
@@ -202,7 +204,7 @@ class VGGSoundAVT2VARetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_vggsound_av(
             self, query_columns=["av_caption"], corpus_columns=["video", "audio"]
         )
@@ -237,7 +239,7 @@ class VGGSoundAVV2ARetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_vggsound_av(self, query_columns=["video"], corpus_columns=["audio"])
 
 
@@ -270,7 +272,7 @@ class VGGSoundAVA2VRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_vggsound_av(self, query_columns=["audio"], corpus_columns=["video"])
 
 
@@ -305,7 +307,7 @@ class VGGSoundAVVT2ARetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_vggsound_av(
             self, query_columns=["video", "av_caption"], corpus_columns=["audio"]
         )
@@ -342,7 +344,7 @@ class VGGSoundAVAT2VRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_vggsound_av(
             self, query_columns=["audio", "av_caption"], corpus_columns=["video"]
         )

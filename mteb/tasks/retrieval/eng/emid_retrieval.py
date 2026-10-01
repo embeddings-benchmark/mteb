@@ -3,18 +3,22 @@ from __future__ import annotations
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
-_REFERENCE = "https://arxiv.org/abs/2308.07622"
+_REFERENCE = "https://doi.org/10.1145/3607541.3616821"
 _BIBTEX = r"""
-@article{zhang2023emid,
-  author = {Zhang, Yujie and others},
-  journal = {arXiv preprint arXiv:2308.07622},
-  title = {Emotionally Paired Music and Image Dataset},
+@inproceedings{zou2023emid,
+  author = {Zou, Jialing and Mei, Jiahao and Ye, Guangze and Huai, Tianyu and Shen, Qiwei and Dong, Daoguo},
+  booktitle = {Proceedings of the 1st International Workshop on Multimedia Content Generation and Evaluation: New Methods and Practice},
+  doi = {10.1145/3607541.3616821},
+  pages = {41--48},
+  title = {{EMID}: An Emotional Aligned Dataset in Audio-Visual Modality},
   year = {2023},
 }
 """
 _DESCRIPTION = (
-    "EMID (Emotionally paired Music and Image Dataset) contains music clips each "
-    "paired with three images from the same of 13 emotion categories."
+    "EMID (Emotionally paired Music and Image Dataset) is an audio-visual dataset "
+    "for emotional matching of music and images. It contains music clips each "
+    "paired with three images aligned under a 13-dimension emotion model, "
+    "emphasizing emotional consistency rather than purely semantic correlation."
 )
 
 
@@ -41,7 +45,7 @@ class EMIDA2IRetrieval(AbsTaskRetrieval):
         license="cc-by-nc-sa-4.0",
         annotations_creators="human-annotated",
         dialect=[],
-        sample_creation="found",
+        sample_creation="created",
         bibtex_citation=_BIBTEX,
         prompt={
             "query": "Retrieve images that match the emotion expressed in this music clip."
@@ -73,7 +77,7 @@ class EMIDI2ARetrieval(AbsTaskRetrieval):
         license="cc-by-nc-sa-4.0",
         annotations_creators="human-annotated",
         dialect=[],
-        sample_creation="found",
+        sample_creation="created",
         bibtex_citation=_BIBTEX,
         prompt={
             "query": "Retrieve the music clip that matches the emotion expressed in this image."

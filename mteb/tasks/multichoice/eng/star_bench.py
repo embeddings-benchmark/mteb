@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from datasets import Dataset, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -23,7 +25,9 @@ _DATASET = {
 _DATE = ("2023-01-19", "2023-01-19")
 
 
-def _load_split(path, revision, config, split, modalities):
+def _load_split(
+    path: str, revision: str | None, config: str, split: str, modalities: list[str]
+) -> RetrievalSplitData:
     ds = load_dataset(path, config, revision=revision, split=split)
     ds = ds.add_column("id", [f"q{i}" for i in range(len(ds))])
 
@@ -78,7 +82,7 @@ class STARBenchFeasibilityVideoCentricQA(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX,
     )
 
-    def load_data(self, **kwargs) -> None:
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
         self.dataset = {"default": {}}
@@ -116,7 +120,7 @@ class STARBenchFeasibilityVideoAudioCentricQA(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX,
     )
 
-    def load_data(self, **kwargs) -> None:
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
         self.dataset = {"default": {}}
@@ -154,7 +158,7 @@ class STARBenchInteractionVideoCentricQA(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX,
     )
 
-    def load_data(self, **kwargs) -> None:
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
         self.dataset = {"default": {}}
@@ -192,7 +196,7 @@ class STARBenchInteractionVideoAudioCentricQA(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX,
     )
 
-    def load_data(self, **kwargs) -> None:
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
         self.dataset = {"default": {}}
@@ -230,7 +234,7 @@ class STARBenchPredictionVideoCentricQA(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX,
     )
 
-    def load_data(self, **kwargs) -> None:
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
         self.dataset = {"default": {}}
@@ -268,7 +272,7 @@ class STARBenchPredictionVideoAudioCentricQA(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX,
     )
 
-    def load_data(self, **kwargs) -> None:
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
         self.dataset = {"default": {}}
@@ -306,7 +310,7 @@ class STARBenchSequenceVideoCentricQA(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX,
     )
 
-    def load_data(self, **kwargs) -> None:
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
         self.dataset = {"default": {}}
@@ -344,7 +348,7 @@ class STARBenchSequenceVideoAudioCentricQA(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX,
     )
 
-    def load_data(self, **kwargs) -> None:
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
         self.dataset = {"default": {}}

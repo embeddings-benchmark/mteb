@@ -4,14 +4,13 @@ from itertools import islice
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
-    from collections.abc import Generator
+    from collections.abc import Generator, Iterable
 
     from torch.utils.data import DataLoader
 
@@ -21,7 +20,9 @@ if TYPE_CHECKING:
 
 # https://docs.python.org/3/library/itertools.html#itertools.batched
 # Added in version 3.12.
-def batched(iterable, n: int, *, strict: bool = False) -> Generator[tuple, None, None]:
+def batched(
+    iterable: Iterable[Any], n: int, *, strict: bool = False
+) -> Generator[tuple, None, None]:
     # batched('ABCDEFG', 3) → ABC DEF G
     if n < 1:
         raise ValueError("n must be at least one")
@@ -41,6 +42,7 @@ class NoInstructModel(AbsEncoder):
         model_prompts: dict[str, str] | None = None,
         **kwargs: Any,
     ):
+        import torch
         from transformers import AutoModel, AutoTokenizer
 
         self.model_name = model_name
@@ -64,6 +66,8 @@ class NoInstructModel(AbsEncoder):
         batch_size: int = 32,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         sentences = [text for batch in inputs for text in batch["text"]]
         embeddings = []
         for batch in batched(sentences, batch_size):

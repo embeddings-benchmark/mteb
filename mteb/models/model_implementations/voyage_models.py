@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import time
 from functools import wraps
-from typing import TYPE_CHECKING, Any, Literal
+from typing import TYPE_CHECKING, Any, Literal, TypeVar
 
 import numpy as np
 from tqdm.auto import tqdm
@@ -14,7 +14,11 @@ from mteb.models.sentence_transformer_wrapper import (
 )
 from mteb.types import OutputDType, PromptType
 
+T = TypeVar("T")
+
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -135,13 +139,15 @@ OUTPUT_TYPES = [
 ]
 
 
-def token_limit(max_tpm: int, interval: int = 60):
+def token_limit(
+    max_tpm: int, interval: int = 60
+) -> Callable[[Callable[..., T]], Callable[..., T]]:
     limit_interval_start_ts = time.time()
     used_tokens = 0
 
-    def decorator(func):
+    def decorator(func: Callable[..., T]) -> Callable[..., T]:
         @wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Any, **kwargs: Any) -> T:
             nonlocal limit_interval_start_ts, used_tokens
 
             result = func(*args, **kwargs)
@@ -162,13 +168,15 @@ def token_limit(max_tpm: int, interval: int = 60):
     return decorator
 
 
-def rate_limit(max_rpm: int, interval: int = 60):
+def rate_limit(
+    max_rpm: int, interval: int = 60
+) -> Callable[[Callable[..., T]], Callable[..., T]]:
     request_interval = interval / max_rpm
     previous_call_ts: float | None = None
 
-    def decorator(func):
+    def decorator(func: Callable[..., T]) -> Callable[..., T]:
         @wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Any, **kwargs: Any) -> T:
             current_time = time.time()
             nonlocal previous_call_ts
             if (
@@ -198,7 +206,7 @@ class VoyageModel(AbsEncoder):
         output_dtype: str | None = None,
         api_model_name: str | None = None,
         evolved_prompts: bool = False,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         import voyageai
 
@@ -326,7 +334,7 @@ QUERY_PROMPTS = {
     "LegalQuAD": "Locate enforceable legal rules for: {text}",
     "LegalSummarization": "Seek clarity in legal information: {text}",
     "MBPPRetrieval": "Programming task: {text}",
-    "MIRACLRetrievalHardNegatives": "Uncover comprehensive background: {text}",
+    "MIRACLRetrievalHardNegatives": "Represent this question for retrieving one whole, self-contained encyclopedic reference paragraph, not a passing reference: {text}",
     "WikiSQLRetrieval": "Unveil the SQL instruction to fulfill: {text}",
 }
 
@@ -356,7 +364,7 @@ model_prompts = {
 }
 
 voyage_4_large_2048d_evolved = ModelMeta(
-    name="voyageai/voyage-4-large (embed_dim=2048, evolved_prompts=True)",
+    name="mongodb/voyage-4-large (embed_dim=2048, evolved_prompts=True)",
     model_type=["dense"],
     revision="1",
     release_date="2026-01-15",
@@ -383,12 +391,12 @@ voyage_4_large_2048d_evolved = ModelMeta(
     public_training_data=None,
     output_dtypes=OUTPUT_TYPES,
     extra_requirements_groups=["voyageai"],
-    adapted_from="voyageai/voyage-4-large (embed_dim=2048)",
+    adapted_from="mongodb/voyage-4-large (embed_dim=2048)",
     experiment_kwargs=None,
 )
 
 voyage_4_large_2048d = ModelMeta(
-    name="voyageai/voyage-4-large (embed_dim=2048)",
+    name="mongodb/voyage-4-large (embed_dim=2048)",
     model_type=["dense"],
     revision="1",
     release_date="2026-01-15",
@@ -416,7 +424,7 @@ voyage_4_large_2048d = ModelMeta(
 )
 
 voyage_4 = ModelMeta(
-    name="voyageai/voyage-4",
+    name="mongodb/voyage-4",
     model_type=["dense"],
     revision="1",
     release_date="2026-01-15",
@@ -444,7 +452,7 @@ voyage_4 = ModelMeta(
 )
 
 voyage_4_lite = ModelMeta(
-    name="voyageai/voyage-4-lite",
+    name="mongodb/voyage-4-lite",
     model_type=["dense"],
     revision="1",
     release_date="2026-01-15",
@@ -472,7 +480,7 @@ voyage_4_lite = ModelMeta(
 )
 
 voyage_4_large = ModelMeta(
-    name="voyageai/voyage-4-large",
+    name="mongodb/voyage-4-large",
     model_type=["dense"],
     revision="1",
     release_date="2026-01-15",
@@ -500,7 +508,7 @@ voyage_4_large = ModelMeta(
 )
 
 voyage_3_large = ModelMeta(
-    name="voyageai/voyage-3-large",  # Date of publication of this post https://blog.voyageai.com/2025/01/07/voyage-3-large/
+    name="mongodb/voyage-3-large",  # Date of publication of this post https://blog.voyageai.com/2025/01/07/voyage-3-large/
     model_type=["dense"],
     revision="1",
     release_date="2025-01-07",
@@ -524,14 +532,14 @@ voyage_3_large = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
-    superseded_by="voyageai/voyage-4-large",
+    superseded_by="mongodb/voyage-4-large",
     output_dtypes=OUTPUT_TYPES,
     extra_requirements_groups=["voyageai"],
 )
 
 
 voyage_3_5 = ModelMeta(
-    name="voyageai/voyage-3.5",
+    name="mongodb/voyage-3.5",
     model_type=["dense"],
     revision="1",
     release_date="2025-01-21",
@@ -555,13 +563,13 @@ voyage_3_5 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
-    superseded_by="voyageai/voyage-4",
+    superseded_by="mongodb/voyage-4",
     output_dtypes=OUTPUT_TYPES,
     extra_requirements_groups=["voyageai"],
 )
 
 voyage_3_5_int8 = ModelMeta(
-    name="voyageai/voyage-3.5 (output_dtype=int8)",
+    name="mongodb/voyage-3.5 (output_dtype=int8)",
     model_type=["dense"],
     revision="1",
     release_date="2025-01-21",
@@ -585,13 +593,13 @@ voyage_3_5_int8 = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
-    adapted_from="voyageai/voyage-3.5",
+    adapted_from="mongodb/voyage-3.5",
     output_dtypes=OUTPUT_TYPES,
     extra_requirements_groups=["voyageai"],
 )
 
 voyage_3_5_binary = ModelMeta(
-    name="voyageai/voyage-3.5 (output_dtype=binary)",
+    name="mongodb/voyage-3.5 (output_dtype=binary)",
     model_type=["dense"],
     revision="1",
     release_date="2025-01-21",
@@ -615,13 +623,13 @@ voyage_3_5_binary = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
-    adapted_from="voyageai/voyage-3.5",
+    adapted_from="mongodb/voyage-3.5",
     output_dtypes=OUTPUT_TYPES,
     extra_requirements_groups=["voyageai"],
 )
 
 voyage_large_2_instruct = ModelMeta(
-    name="voyageai/voyage-large-2-instruct",
+    name="mongodb/voyage-large-2-instruct",
     model_type=["dense"],
     revision="1",
     release_date="2024-05-05",
@@ -649,7 +657,7 @@ voyage_large_2_instruct = ModelMeta(
 )
 
 voyage_finance_2 = ModelMeta(
-    name="voyageai/voyage-finance-2",
+    name="mongodb/voyage-finance-2",
     model_type=["dense"],
     revision="1",
     release_date="2024-05-30",
@@ -677,7 +685,7 @@ voyage_finance_2 = ModelMeta(
 )
 
 voyage_law_2 = ModelMeta(
-    name="voyageai/voyage-law-2",
+    name="mongodb/voyage-law-2",
     model_type=["dense"],
     revision="1",
     release_date="2024-04-15",
@@ -705,7 +713,7 @@ voyage_law_2 = ModelMeta(
 )
 
 voyage_code_2 = ModelMeta(
-    name="voyageai/voyage-code-2",
+    name="mongodb/voyage-code-2",
     model_type=["dense"],
     revision="1",
     release_date="2024-01-23",
@@ -733,7 +741,7 @@ voyage_code_2 = ModelMeta(
 )
 
 voyage_code_3 = ModelMeta(
-    name="voyageai/voyage-code-3",
+    name="mongodb/voyage-code-3",
     model_type=["dense"],
     revision="1",
     release_date="2024-12-04",
@@ -763,7 +771,7 @@ voyage_code_3 = ModelMeta(
 
 
 voyage_large_2 = ModelMeta(
-    name="voyageai/voyage-large-2",  # Date of publication of this post https://blog.voyageai.com/2023/10/29/voyage-embeddings/
+    name="mongodb/voyage-large-2",  # Date of publication of this post https://blog.voyageai.com/2023/10/29/voyage-embeddings/
     model_type=["dense"],
     revision="1",
     release_date="2023-10-29",
@@ -791,7 +799,7 @@ voyage_large_2 = ModelMeta(
 )
 
 voyage_2 = ModelMeta(
-    name="voyageai/voyage-2",
+    name="mongodb/voyage-2",
     model_type=["dense"],
     revision="1",
     release_date="2023-10-29",
@@ -819,7 +827,7 @@ voyage_2 = ModelMeta(
 )
 
 voyage_multilingual_2 = ModelMeta(
-    name="voyageai/voyage-multilingual-2",
+    name="mongodb/voyage-multilingual-2",
     model_type=["dense"],
     revision="1",
     release_date="2024-06-10",
@@ -847,7 +855,7 @@ voyage_multilingual_2 = ModelMeta(
 )
 
 voyage_3 = ModelMeta(
-    name="voyageai/voyage-3",
+    name="mongodb/voyage-3",
     model_type=["dense"],
     revision="1",
     release_date="2024-09-18",
@@ -875,7 +883,7 @@ voyage_3 = ModelMeta(
 )
 
 voyage_3_lite = ModelMeta(
-    name="voyageai/voyage-3-lite",
+    name="mongodb/voyage-3-lite",
     model_type=["dense"],
     revision="1",
     release_date="2024-09-18",
@@ -899,12 +907,12 @@ voyage_3_lite = ModelMeta(
     training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
-    superseded_by="voyageai/voyage-4-lite",
+    superseded_by="mongodb/voyage-4-lite",
     extra_requirements_groups=["voyageai"],
 )
 
 voyage_3_exp = ModelMeta(
-    name="voyageai/voyage-3-m-exp",
+    name="mongodb/voyage-3-m-exp",
     model_type=["dense"],
     revision="1",
     release_date="2025-01-08",
@@ -993,10 +1001,24 @@ voyage_3_exp = ModelMeta(
     extra_requirements_groups=["voyageai"],
 )
 
+
+def voyage_4_nano_loader(
+    model_name: str, revision: str | None = None, **kwargs: Any
+) -> SentenceTransformerEncoderWrapper:
+    """Load voyage-4-nano from the Hugging Face Hub.
+
+    The model is registered under the ``mongodb/`` namespace, but its weights are
+    still hosted under the ``voyageai`` Hugging Face organisation.
+    """
+    return SentenceTransformerEncoderWrapper(
+        "voyageai/voyage-4-nano", revision=revision, **kwargs
+    )
+
+
 voyage_4_nano = ModelMeta(
-    loader=SentenceTransformerEncoderWrapper,
+    loader=voyage_4_nano_loader,
     loader_kwargs={"trust_remote_code": True},
-    name="voyageai/voyage-4-nano",
+    name="mongodb/voyage-4-nano",
     model_type=["dense"],
     revision="29e841f72aa70c2802a92aff8c6eeb23229591b0",
     release_date="2026-01-15",

@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.autonotebook import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -11,7 +10,10 @@ from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
+    from PIL import Image
     from torch.utils.data import DataLoader
+    from transformers import PretrainedConfig, PreTrainedModel
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
@@ -31,27 +33,30 @@ UNITE_CITATION = """@article{kong2025modality,
 # Qwen2VL refactor; each is marked inline.
 
 
-def _build_unite_model(model_name: str, revision: str | None, **kwargs):
+def _build_unite_model(
+    model_name: str, revision: str | None, **kwargs: Any
+) -> PreTrainedModel:
+    import torch
     from transformers import Qwen2VLForConditionalGeneration
 
     class UniteQwen2VL(Qwen2VLForConditionalGeneration):
-        def __init__(self, config):
+        def __init__(self, config: PretrainedConfig) -> None:
             super().__init__(config)
             self.normalize = True
 
         def forward(  # noqa: PLR0913, PLR0917 - signature mirrors upstream Qwen2VLForConditionalGeneration
             self,
-            input_ids=None,
-            attention_mask=None,
-            position_ids=None,
-            past_key_values=None,
-            inputs_embeds=None,
-            pixel_values=None,
-            pixel_values_videos=None,
-            image_grid_thw=None,
-            video_grid_thw=None,
-            pooling_mask=None,
-            **unused,
+            input_ids: torch.Tensor | None = None,
+            attention_mask: torch.Tensor | None = None,
+            position_ids: torch.Tensor | None = None,
+            past_key_values: Any = None,  # noqa: ANN401 -- transformers Cache object
+            inputs_embeds: torch.Tensor | None = None,
+            pixel_values: torch.Tensor | None = None,
+            pixel_values_videos: torch.Tensor | None = None,
+            image_grid_thw: torch.Tensor | None = None,
+            video_grid_thw: torch.Tensor | None = None,
+            pooling_mask: torch.Tensor | None = None,
+            **unused: Any,
         ) -> torch.Tensor:
             if inputs_embeds is None:
                 # Upstream: self.model.embed_tokens(input_ids).
@@ -131,6 +136,7 @@ class UniteWrapper(AbsEncoder):
         video_max_pixels: int = 360 * 420,
         **kwargs: Any,
     ) -> None:
+        import torch
         from transformers import AutoProcessor
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
@@ -174,7 +180,9 @@ class UniteWrapper(AbsEncoder):
             return "\nSummary above image in one word:"
         return "\nSummary above sentence in one word:"
 
-    def _build_prompt(self, text=None, has_image=False, has_video=False) -> str:
+    def _build_prompt(
+        self, text: str | None = None, has_image: bool = False, has_video: bool = False
+    ) -> str:
         content = []
         if has_video:
             content.append({"type": "video", "video": ""})
@@ -193,7 +201,14 @@ class UniteWrapper(AbsEncoder):
             + "<|endoftext|>"
         )
 
-    def _embed_batch(self, texts=None, images=None, videos=None) -> torch.Tensor:
+    def _embed_batch(
+        self,
+        texts: list[str] | None = None,
+        images: list[Image.Image] | None = None,
+        videos: torch.Tensor | None = None,
+    ) -> torch.Tensor:
+        import torch
+
         n = len(texts or images or videos)
         prompts = [
             self._build_prompt(
@@ -224,6 +239,8 @@ class UniteWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         if "video" in inputs.dataset.features:
             inputs.collate_fn = VideoCollator(
                 target_sampling_rate=self.target_sampling_rate,

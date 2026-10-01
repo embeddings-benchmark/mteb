@@ -53,7 +53,7 @@ class BenchmarkChangeEvent(BaseEvent):
         old_value: str | None,
         new_value: str,
         properties: dict[str, Any] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> BenchmarkChangeEvent:
         """Convenience creation method"""
         merged = {"old_value": old_value, "new_value": new_value}
@@ -84,13 +84,13 @@ class FilterChangeEvent(BaseEvent):
         cls,
         session_id: str,
         filter_name: str,
-        new_value: Any,
+        new_value: str | None,
         *,
-        old_value: Any = None,
+        old_value: str | None = None,
         benchmark: str | None = None,
         filters: dict[str, Any] | None = None,
         properties: dict[str, Any] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> FilterChangeEvent:
         """Convenience creation method"""
         merged = {
@@ -129,7 +129,7 @@ class TableSwitchEvent(BaseEvent):
         new_table: str,
         benchmark: str | None = None,
         properties: dict[str, Any] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> TableSwitchEvent:
         """Convenience creation method"""
         merged = {"old_table": old_table, "new_table": new_table}
@@ -163,7 +163,7 @@ class TableDownloadEvent(BaseEvent):
         file_format: str = "csv",
         row_count: int | None = None,
         properties: dict[str, Any] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> TableDownloadEvent:
         """Convenience creation method"""
         merged = {"format": file_format}

@@ -1,10 +1,23 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
+
 from datasets import concatenate_datasets, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
-def _load_data(path: str, splits: str, revision: str | None = None):
+    from datasets import Dataset
+
+    from mteb.types import RelevantDocumentsType
+
+
+def _load_data(
+    path: str, splits: str, revision: str | None = None
+) -> tuple[dict[str, Dataset], dict[str, Dataset], dict[str, RelevantDocumentsType]]:
     corpus = {}
     queries = {}
     relevant_docs = {}
@@ -15,7 +28,9 @@ def _load_data(path: str, splits: str, revision: str | None = None):
     )
     dataset_splits = list(dataset)
 
-    def map_function(split_name):
+    def map_function(
+        split_name: str,
+    ) -> Callable[[dict[str, Any], int], dict[str, Any]]:
         return lambda x, idx: {
             "id": f"corpus-{split_name}-{idx}",
             "text": x["text_corrected"],
@@ -113,7 +128,7 @@ class MemotionI2TRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = _load_data(

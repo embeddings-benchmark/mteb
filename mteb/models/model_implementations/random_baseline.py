@@ -4,10 +4,8 @@ import hashlib
 from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
 
-from mteb._create_dataloaders import create_dataloader
 from mteb._requires_package import (
     requires_audio_dependencies,
     requires_image_dependencies,
@@ -22,6 +20,7 @@ from mteb.similarity_functions import (
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    import torch
     from numpy.typing import NDArray
     from PIL import Image
     from torch.utils.data import DataLoader
@@ -439,6 +438,8 @@ class RandomEncoderBaseline:
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         _attach_modality_collator(
             inputs, fps=self.fps, max_frames=self.max_frames, num_frames=self.num_frames
         )
@@ -733,8 +734,12 @@ class RandomColBERTBaseline:
         Returns:
             Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.
         """
+        import torch
+
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
+
+        from mteb._create_dataloaders import create_dataloader
 
         query_embeddings = self._encode(
             create_dataloader(

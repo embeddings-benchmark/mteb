@@ -1,16 +1,19 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any
-
-import torch
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from mteb.models.model_meta import ModelMeta
 
 from .rerankers_custom import RerankerWrapper
 
+T = TypeVar("T")
+
 if TYPE_CHECKING:
+    from collections.abc import Generator
+
     from torch.utils.data import DataLoader
+    from transformers import PreTrainedTokenizerBase
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
@@ -37,7 +40,7 @@ prediction_tokens = {
 }
 
 
-def chunks(lst, n):
+def chunks(lst: list[T], n: int) -> Generator[list[T], None, None]:
     for i in range(0, len(lst), n):
         yield lst[i : i + n]
 
@@ -48,9 +51,11 @@ class MonoT5Reranker(RerankerWrapper):
 
     def __init__(
         self,
-        model_name_or_path="castorini/monot5-base-msmarco-10k",
-        **kwargs,
+        model_name_or_path: str = "castorini/monot5-base-msmarco-10k",
+        **kwargs: Any,
     ):
+        import torch
+
         super().__init__(model_name_or_path, **kwargs)
         from transformers import (
             AutoModelForSeq2SeqLM,
@@ -92,8 +97,12 @@ class MonoT5Reranker(RerankerWrapper):
         self.model.eval()
 
     def get_prediction_tokens(  # noqa: PLR6301
-        self, model_name_or_path, tokenizer, token_false=None, token_true=None
-    ):
+        self,
+        model_name_or_path: str,
+        tokenizer: PreTrainedTokenizerBase,
+        token_false: str | None = None,
+        token_true: str | None = None,
+    ) -> tuple[int, int]:
         if not (token_false and token_true):
             if model_name_or_path in prediction_tokens:
                 token_false, token_true = prediction_tokens[model_name_or_path]
@@ -108,7 +117,6 @@ class MonoT5Reranker(RerankerWrapper):
         token_true_id = tokenizer.get_vocab()[token_true]
         return token_false_id, token_true_id
 
-    @torch.inference_mode()
     def predict(
         self,
         inputs1: DataLoader[BatchedInput],
@@ -120,49 +128,56 @@ class MonoT5Reranker(RerankerWrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        queries = [text for batch in inputs1 for text in batch["query"]]
-        instructions = None
-        if "instruction" in inputs2.dataset.features:
-            instructions = [text for batch in inputs1 for text in batch["instruction"]]
-        passages = [text for batch in inputs2 for text in batch["text"]]
+        import torch
 
-        if instructions is not None and instructions[0] is not None:
-            queries = [
-                f"{q} {i}".strip() for i, q in zip(instructions, queries, strict=True)
+        with torch.inference_mode():
+            queries = [text for batch in inputs1 for text in batch["query"]]
+            instructions = None
+            if "instruction" in inputs2.dataset.features:
+                instructions = [
+                    text for batch in inputs1 for text in batch["instruction"]
+                ]
+            passages = [text for batch in inputs2 for text in batch["text"]]
+
+            if instructions is not None and instructions[0] is not None:
+                queries = [
+                    f"{q} {i}".strip()
+                    for i, q in zip(instructions, queries, strict=True)
+                ]
+
+            prompts = [
+                self.prompt_template.format(query=query, text=text)
+                for (query, text) in zip(queries, passages, strict=True)
             ]
 
-        prompts = [
-            self.prompt_template.format(query=query, text=text)
-            for (query, text) in zip(queries, passages, strict=True)
-        ]
-
-        tokens = self.tokenizer(
-            prompts,
-            padding=True,
-            truncation=True,
-            return_tensors="pt",
-            max_length=self.max_length,
-            pad_to_multiple_of=(8 if self.torch_compile else None),
-        ).to(self.device)
-        output = self.model.generate(
-            **tokens,
-            max_new_tokens=1,
-            return_dict_in_generate=True,
-            output_scores=True,
-        )
-        batch_scores = output.scores[0]
-        batch_scores = batch_scores[:, [self.token_false_id, self.token_true_id]]
-        # upcast the logits to float32 before the softmax
-        batch_scores = torch.nn.functional.log_softmax(batch_scores.float(), dim=1)
-        return batch_scores[:, 1].exp().tolist()
+            tokens = self.tokenizer(
+                prompts,
+                padding=True,
+                truncation=True,
+                return_tensors="pt",
+                max_length=self.max_length,
+                pad_to_multiple_of=(8 if self.torch_compile else None),
+            ).to(self.device)
+            output = self.model.generate(
+                **tokens,
+                max_new_tokens=1,
+                return_dict_in_generate=True,
+                output_scores=True,
+            )
+            batch_scores = output.scores[0]
+            batch_scores = batch_scores[:, [self.token_false_id, self.token_true_id]]
+            # upcast the logits to float32 before the softmax
+            batch_scores = torch.nn.functional.log_softmax(batch_scores.float(), dim=1)
+            return batch_scores[:, 1].exp().tolist()
 
 
 class LlamaReranker(RerankerWrapper):
     name: str = "LLAMA-Based"
 
     def __init__(
-        self, model_name_or_path: str, is_classification: bool = False, **kwargs
+        self, model_name_or_path: str, is_classification: bool = False, **kwargs: Any
     ):
+        import torch
         from transformers import AutoModelForCausalLM, AutoTokenizer
 
         kwargs.pop("torch_compile", None)
@@ -215,7 +230,6 @@ Relevant: """
             self.model = torch.nn.DataParallel(self.model)
         self.model.eval()
 
-    @torch.inference_mode()
     def predict(
         self,
         inputs1: DataLoader[BatchedInput],
@@ -227,61 +241,70 @@ Relevant: """
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        queries = [text for batch in inputs1 for text in batch["query"]]
-        instructions = None
-        if "instruction" in inputs2.dataset.features:
-            instructions = [text for batch in inputs1 for text in batch["instruction"]]
-        passages = [text for batch in inputs2 for text in batch["text"]]
+        import torch
 
-        if instructions is not None and instructions[0] is not None:
-            # logger.info(f"Adding instructions to LLAMA queries")
-            queries = [
-                self.query_instruct_template.format(instruction=i, query=q).strip()
-                for i, q in zip(instructions, queries, strict=True)
+        with torch.inference_mode():
+            queries = [text for batch in inputs1 for text in batch["query"]]
+            instructions = None
+            if "instruction" in inputs2.dataset.features:
+                instructions = [
+                    text for batch in inputs1 for text in batch["instruction"]
+                ]
+            passages = [text for batch in inputs2 for text in batch["text"]]
+
+            if instructions is not None and instructions[0] is not None:
+                # logger.info(f"Adding instructions to LLAMA queries")
+                queries = [
+                    self.query_instruct_template.format(instruction=i, query=q).strip()
+                    for i, q in zip(instructions, queries, strict=True)
+                ]
+
+            prompts = [
+                self.template.format(query=query, text=text)
+                for (query, text) in zip(queries, passages, strict=True)
             ]
+            if "{query}" in prompts[0]:
+                raise ValueError("Query not replaced")
+            if "{text}" in prompts[0]:
+                raise ValueError("Text not replaced")
+            if "{instruction}" in prompts[0]:
+                raise ValueError("Instruction not replaced")
 
-        prompts = [
-            self.template.format(query=query, text=text)
-            for (query, text) in zip(queries, passages, strict=True)
-        ]
-        if "{query}" in prompts[0]:
-            raise ValueError("Query not replaced")
-        if "{text}" in prompts[0]:
-            raise ValueError("Text not replaced")
-        if "{instruction}" in prompts[0]:
-            raise ValueError("Instruction not replaced")
+            tokens = self.tokenizer(
+                prompts,
+                padding=True,
+                truncation=True,
+                return_tensors="pt",
+                max_length=self.max_length,
+                pad_to_multiple_of=None,
+            ).to(self.device)
+            if "token_type_ids" in tokens:
+                del tokens["token_type_ids"]
+            if not self.is_classification:
+                batch_scores = self.model(**tokens).logits[:, -1, :]
+                true_vector = batch_scores[:, self.token_true_id]
+                false_vector = batch_scores[:, self.token_false_id]
+                batch_scores = torch.stack([false_vector, true_vector], dim=1)
+                # upcast the logits to float32 before the softmax
+                batch_scores = torch.nn.functional.log_softmax(
+                    batch_scores.float(), dim=1
+                )
+                scores = batch_scores[:, 1].exp().tolist()
+            else:
+                batch_scores = self.model(**tokens).logits
+                # upcast the logits to float32 before the softmax
+                batch_scores = torch.nn.functional.log_softmax(
+                    batch_scores.float(), dim=1
+                )
+                scores = batch_scores[:, 1].exp().tolist()
 
-        tokens = self.tokenizer(
-            prompts,
-            padding=True,
-            truncation=True,
-            return_tensors="pt",
-            max_length=self.max_length,
-            pad_to_multiple_of=None,
-        ).to(self.device)
-        if "token_type_ids" in tokens:
-            del tokens["token_type_ids"]
-        if not self.is_classification:
-            batch_scores = self.model(**tokens).logits[:, -1, :]
-            true_vector = batch_scores[:, self.token_true_id]
-            false_vector = batch_scores[:, self.token_false_id]
-            batch_scores = torch.stack([false_vector, true_vector], dim=1)
-            # upcast the logits to float32 before the softmax
-            batch_scores = torch.nn.functional.log_softmax(batch_scores.float(), dim=1)
-            scores = batch_scores[:, 1].exp().tolist()
-        else:
-            batch_scores = self.model(**tokens).logits
-            # upcast the logits to float32 before the softmax
-            batch_scores = torch.nn.functional.log_softmax(batch_scores.float(), dim=1)
-            scores = batch_scores[:, 1].exp().tolist()
-
-        return scores
+            return scores
 
 
 class MistralReranker(LlamaReranker):
     name: str = "Mistral"
 
-    def __init__(self, model_name_or_path: str, **kwargs):
+    def __init__(self, model_name_or_path: str, **kwargs: Any):
         # use the base class for everything except template
         super().__init__(model_name_or_path, **kwargs)
         self.template = """<s>[INST] You are an expert Google searcher, whose job is to determine if the following document is relevant to the query (true/false).
@@ -296,7 +319,7 @@ Relevant (either "true" or "false"): [/INST]"""
 class FollowIRReranker(LlamaReranker):
     name: str = "FollowIR"
 
-    def __init__(self, model_name_or_path: str, **kwargs):
+    def __init__(self, model_name_or_path: str, **kwargs: Any):
         # use the base class for everything except template
         super().__init__(model_name_or_path, **kwargs)
         self.template = """<s> [INST] You are an expert Google searcher, whose job is to determine if the following document is relevant to the query (true/false). Answer using only one word, one of those two choices.
@@ -314,7 +337,7 @@ class FLANT5Reranker(MonoT5Reranker):
 Query: {query}
 Passage: {text}"""
 
-    def get_prediction_tokens(self, *args, **kwargs):
+    def get_prediction_tokens(self, *args: Any, **kwargs: Any) -> tuple[int, int]:
         yes_token_id, *_ = self.tokenizer.encode("yes")
         no_token_id, *_ = self.tokenizer.encode("no")
         return no_token_id, yes_token_id

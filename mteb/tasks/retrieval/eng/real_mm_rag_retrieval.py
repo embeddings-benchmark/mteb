@@ -1,3 +1,5 @@
+from typing import Any
+
 from datasets import Features, Value, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -115,7 +117,7 @@ class RealMMRAGFinReportRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
         self.dataset = _load_data(
@@ -152,7 +154,7 @@ class RealMMRAGFinSlidesRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
         self.dataset = _load_data(
@@ -189,7 +191,7 @@ class RealMMRAGTechReportRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
         self.dataset = _load_data(
@@ -226,7 +228,7 @@ class RealMMRAGTechSlidesRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
         self.dataset = _load_data(

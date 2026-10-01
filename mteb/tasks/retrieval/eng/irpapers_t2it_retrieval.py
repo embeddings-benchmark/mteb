@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -37,7 +39,7 @@ class IRPapersT2ITRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.dataset["default"]["train"]["corpus"] = self.dataset["default"]["train"][
             "corpus"
         ].rename_column("transcription", "text")

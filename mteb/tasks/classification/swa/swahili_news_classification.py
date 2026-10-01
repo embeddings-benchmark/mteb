@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -25,12 +27,14 @@ class SwahiliNewsClassification(AbsTaskClassification):
         annotations_creators="derived",
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{davis2020swahili,
-  author = {Davis, David},
+@dataset{davis_david_2020_5514203,
+  author = {Davis David},
   doi = {10.5281/zenodo.5514203},
+  month = dec,
   publisher = {Zenodo},
-  title = {Swahili: News Classification Dataset (0.2)},
+  title = {Swahili : News Classification Dataset},
   url = {https://doi.org/10.5281/zenodo.5514203},
+  version = {0.2},
   year = {2020},
 }
 """,
@@ -61,19 +65,21 @@ class SwahiliNewsClassificationV2(AbsTaskClassification):
         annotations_creators="derived",
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{davis2020swahili,
-  author = {Davis, David},
+@dataset{davis_david_2020_5514203,
+  author = {Davis David},
   doi = {10.5281/zenodo.5514203},
+  month = dec,
   publisher = {Zenodo},
-  title = {Swahili: News Classification Dataset (0.2)},
+  title = {Swahili : News Classification Dataset},
   url = {https://doi.org/10.5281/zenodo.5514203},
+  version = {0.2},
   year = {2020},
 }
 """,
         adapted_from=["SwahiliNewsClassification"],
     )
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["train"]
         )

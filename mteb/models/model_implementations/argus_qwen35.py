@@ -1,13 +1,14 @@
 from __future__ import annotations
 
-from typing import Any
-
-from transformers import AutoProcessor
+from typing import TYPE_CHECKING, Any
 
 from mteb.models.model_implementations.ops_colqwen3_models import (
     OpsColQwen3Wrapper,
 )
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+
+if TYPE_CHECKING:
+    import torch
 
 
 class ArgusColQwen35Wrapper(OpsColQwen3Wrapper):
@@ -28,6 +29,8 @@ class ArgusColQwen35Wrapper(OpsColQwen3Wrapper):
         max_num_visual_tokens: int = 2048,
         **kwargs: Any,
     ):
+        from transformers import AutoProcessor
+
         super().__init__(
             model_name=model_name,
             revision=revision,
@@ -43,7 +46,7 @@ class ArgusColQwen35Wrapper(OpsColQwen3Wrapper):
             max_num_visual_tokens=max_num_visual_tokens,
         )
 
-    def encode_input(self, inputs):
+    def encode_input(self, inputs: dict[str, Any]) -> torch.Tensor:
         # Argus returns ``ArgusOutput(embeddings=...)`` instead of a tensor.
         return self.mdl(**inputs).embeddings
 
@@ -57,15 +60,6 @@ ARGUS_TRAINING_DATA = {
     "VidoreTatdqaRetrieval",
     "VidoreArxivQARetrieval",
 }
-
-ARGUS_CITATION = """
-@misc{argus2026,
-  title  = {Argus: Region-Aware Query-Conditioned Mixture of Experts for Visual Document Retrieval},
-  author = {DataScience-UIBK team},
-  year   = {2026},
-  url    = {https://huggingface.co/DataScience-UIBK/Argus-Colqwen3.5-4b-v0},
-}"""
-
 
 argus_colqwen35_4b = ModelMeta(
     loader=ArgusColQwen35Wrapper,
@@ -92,7 +86,6 @@ argus_colqwen35_4b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=ARGUS_TRAINING_DATA,
-    citation=ARGUS_CITATION,
     model_type=["late-interaction"],
 )
 
@@ -122,7 +115,6 @@ argus_colqwen35_4b_bf16 = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=ARGUS_TRAINING_DATA,
-    citation=ARGUS_CITATION,
     model_type=["late-interaction"],
     adapted_from="DataScience-UIBK/Argus-Colqwen3.5-4b-v0",
 )
@@ -153,7 +145,6 @@ argus_colqwen35_2b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=ARGUS_TRAINING_DATA,
-    citation=ARGUS_CITATION,
     model_type=["late-interaction"],
 )
 
@@ -183,7 +174,6 @@ argus_colqwen35_2b_bf16 = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=ARGUS_TRAINING_DATA,
-    citation=ARGUS_CITATION,
     model_type=["late-interaction"],
     adapted_from="DataScience-UIBK/Argus-Colqwen3.5-2b-v0",
 )
@@ -214,7 +204,6 @@ argus_colqwen35_9b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=ARGUS_TRAINING_DATA,
-    citation=ARGUS_CITATION,
     model_type=["late-interaction"],
 )
 
@@ -244,7 +233,6 @@ argus_colqwen35_9b_bf16 = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=ARGUS_TRAINING_DATA,
-    citation=ARGUS_CITATION,
     model_type=["late-interaction"],
     adapted_from="DataScience-UIBK/Argus-Colqwen3.5-9b-v0",
 )

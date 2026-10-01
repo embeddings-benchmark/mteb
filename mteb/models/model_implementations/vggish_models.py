@@ -5,24 +5,26 @@ import warnings
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb import TaskMetadata
+    from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
     from mteb.types._encoder_io import AudioInput
 
 logger = logging.getLogger(__name__)
 
 
-def vggish_loader(*args, **kwargs):
+def vggish_loader(*args: Any, **kwargs: Any) -> EncoderProtocol:
     """Factory function to create a VGGish model wrapper."""
+    import torch
     import torchaudio
     from torch_vggish_yamnet import vggish
     from torch_vggish_yamnet.input_proc import WaveformToInput
@@ -30,10 +32,15 @@ def vggish_loader(*args, **kwargs):
     class VGGishWrapper(AbsEncoder):
         def __init__(
             self,
-            device: str = "cuda" if torch.cuda.is_available() else "cpu",
+            device: str | None = None,
             max_audio_length_seconds: float = 30.0,
             **kwargs: Any,
         ):
+            import torch
+
+            if device is None:
+                device = "cuda" if torch.cuda.is_available() else "cpu"
+
             self.device = device
             self.max_audio_length_seconds = max_audio_length_seconds
             self.model = vggish.get_vggish(with_classifier=False, pretrained=True)
@@ -44,7 +51,9 @@ def vggish_loader(*args, **kwargs):
             self.embed_dim = 128
             self.min_samples = int(0.96 * self.sampling_rate)  # 15,360 samples
 
-        def _resample_audio(self, audio, source_rate):
+        def _resample_audio(
+            self, audio: torch.Tensor, source_rate: int
+        ) -> torch.Tensor:
             """Resample audio to target sampling rate."""
             if source_rate != self.sampling_rate:
                 resampler = torchaudio.transforms.Resample(
@@ -53,7 +62,7 @@ def vggish_loader(*args, **kwargs):
                 return resampler(audio)
             return audio
 
-        def _normalize_audio(self, audio):
+        def _normalize_audio(self, audio: Array) -> torch.Tensor:
             """Normalize and pad audio to minimum length."""
             if isinstance(audio, np.ndarray):
                 audio = torch.from_numpy(audio)
@@ -78,7 +87,7 @@ def vggish_loader(*args, **kwargs):
 
             return audio
 
-        def _prepare_input_tensor(self, audio_data):
+        def _prepare_input_tensor(self, audio_data: Array) -> torch.Tensor:
             """Convert audio to VGGish input format and handle tensor dimensions."""
             if isinstance(audio_data, np.ndarray):
                 audio_data = torch.from_numpy(audio_data)
@@ -110,9 +119,9 @@ def vggish_loader(*args, **kwargs):
         def get_audio_embeddings(
             self,
             inputs: DataLoader[AudioInput],
-            show_progress_bar=True,
-            **kwargs,
-        ):
+            show_progress_bar: bool = True,
+            **kwargs: Any,
+        ) -> Array:
             """Generate embeddings for audio inputs."""
             all_embeddings = []
 

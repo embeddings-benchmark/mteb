@@ -1,3 +1,5 @@
+from typing import Any
+
 import datasets
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -25,42 +27,14 @@ class TV2Nordretrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@inproceedings{flansmose-mikkelsen-etal-2022-ddisco,
-  address = {Marseille, France},
-  author = {Flansmose Mikkelsen, Linea  and
-Kinch, Oliver  and
-Jess Pedersen, Anders  and
-Lacroix, Oph{\'e}lie},
-  booktitle = {Proceedings of the Thirteenth Language Resources and Evaluation Conference},
-  editor = {Calzolari, Nicoletta  and
-B{\'e}chet, Fr{\'e}d{\'e}ric  and
-Blache, Philippe  and
-Choukri, Khalid  and
-Cieri, Christopher  and
-Declerck, Thierry  and
-Goggi, Sara  and
-Isahara, Hitoshi  and
-Maegaard, Bente  and
-Mariani, Joseph  and
-Mazo, H{\'e}l{\`e}ne  and
-Odijk, Jan  and
-Piperidis, Stelios},
-  month = jun,
-  pages = {2440--2445},
-  publisher = {European Language Resources Association},
-  title = {{DD}is{C}o: A Discourse Coherence Dataset for {D}anish},
-  url = {https://aclanthology.org/2022.lrec-1.260},
-  year = {2022},
-}
-""",
+        bibtex_citation="",
         prompt={
             "query": "Given a summary of a Danish news article retrieve the corresponding news article"
         },
         task_subtypes=["Article retrieval"],
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
@@ -68,7 +42,7 @@ Piperidis, Stelios},
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """And transform to a retrieval dataset, which have the following attributes
 
         self.corpus = dict[doc_id, dict[str, str]] #id => dict with document data like title and text

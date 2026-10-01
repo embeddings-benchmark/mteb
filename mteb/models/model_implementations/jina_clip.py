@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -28,9 +27,14 @@ class JinaCLIPModel(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ):
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         from transformers import AutoModel
 
         self.model_name = model_name
@@ -46,7 +50,9 @@ class JinaCLIPModel(AbsEncoder):
         convert_to_numpy: bool = False,
         convert_to_tensor: bool = True,
         **kwargs: Any,
-    ):
+    ) -> Array:
+        import torch
+
         all_text_embeddings = []
 
         with torch.no_grad():
@@ -71,7 +77,9 @@ class JinaCLIPModel(AbsEncoder):
         convert_to_tensor: bool = True,
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ):
+    ) -> Array:
+        import torch
+
         all_image_embeddings = []
 
         with torch.no_grad():

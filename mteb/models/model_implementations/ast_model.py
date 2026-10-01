@@ -3,9 +3,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
-from transformers import ASTFeatureExtractor, ASTModel
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
@@ -26,9 +24,15 @@ class ASTWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ):
+        import torch
+        from transformers import ASTFeatureExtractor, ASTModel
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         self.model_name = model_name
         self.device = device
 
@@ -39,45 +43,47 @@ class ASTWrapper(AbsEncoder):
         self.model.eval()
         self.sampling_rate = self.feature_extractor.sampling_rate
 
-    @torch.no_grad()
     def get_audio_embeddings(
         self,
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
-        all_embeddings = []
+        import torch
 
-        for batch in tqdm(
-            inputs,
-            disable=not show_progress_bar,
-        ):
-            audio_arrays = []
-            for a in batch["audio"]:
-                array = a["array"]
-                # Ensure minimum length for AST feature extractor (window size is 400)
-                min_samples = 401  # Just above the window size
-                if len(array) < min_samples:
-                    padding = torch.zeros(min_samples - len(array))
-                    array = torch.cat([array, padding])
+        with torch.no_grad():
+            inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+            all_embeddings = []
 
-                audio_arrays.append(array.numpy())
+            for batch in tqdm(
+                inputs,
+                disable=not show_progress_bar,
+            ):
+                audio_arrays = []
+                for a in batch["audio"]:
+                    array = a["array"]
+                    # Ensure minimum length for AST feature extractor (window size is 400)
+                    min_samples = 401  # Just above the window size
+                    if len(array) < min_samples:
+                        padding = torch.zeros(min_samples - len(array))
+                        array = torch.cat([array, padding])
 
-            features = self.feature_extractor(
-                audio_arrays,
-                sampling_rate=self.sampling_rate,
-                return_tensors="pt",
-                truncation=True,
-                padding=True,
-            ).to(self.device)
+                    audio_arrays.append(array.numpy())
 
-            outputs = self.model(**features)
+                features = self.feature_extractor(
+                    audio_arrays,
+                    sampling_rate=self.sampling_rate,
+                    return_tensors="pt",
+                    truncation=True,
+                    padding=True,
+                ).to(self.device)
 
-            # AST's pooled output is the [CLS] token embedding
-            embeddings = outputs.pooler_output
-            all_embeddings.append(embeddings.cpu().detach())
-        return torch.cat(all_embeddings, dim=0).numpy()
+                outputs = self.model(**features)
+
+                # AST's pooled output is the [CLS] token embedding
+                embeddings = outputs.pooler_output
+                all_embeddings.append(embeddings.cpu().detach())
+            return torch.cat(all_embeddings, dim=0).numpy()
 
     def encode(
         self,

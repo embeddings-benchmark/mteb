@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -40,14 +42,14 @@ class VoxCelebClustering(AbsTaskClustering):
     max_fraction_of_documents_to_embed = None
     input_column_name: str = "audio"
 
-    def dataset_transform(self, **kwargs):
+    def dataset_transform(self, **kwargs: Any) -> None:
         ds = self.dataset
         # Remove 'Disagreement' samples and '<mixed>' samples
         ds = ds.filter(lambda x: x["label"] not in ["Disagreement", "<mixed>"])  # noqa: PLR6201
         # Map string sentiment labels to numeric IDs
         label2id = {"Negative": 0, "Neutral": 1, "Positive": 2}
 
-        def add_label_id(example):
+        def add_label_id(example: dict[str, Any]) -> dict[str, Any]:
             example["label_id"] = label2id[example["label"]]
             return example
 

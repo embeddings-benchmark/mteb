@@ -2,14 +2,14 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -25,8 +25,9 @@ class EagerEmbedV1Wrapper(AbsEncoder):
         revision: str | None = None,
         device: str | None = None,
         image_size: int = 784,
-        **kwargs,
+        **kwargs: Any,
     ):
+        import torch
         from transformers import AutoProcessor, Qwen3VLForConditionalGeneration
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
@@ -56,6 +57,7 @@ class EagerEmbedV1Wrapper(AbsEncoder):
         **kwargs: Any,
     ) -> Array:
         """Encode inputs (text and/or images) into embeddings."""
+        import torch
         from qwen_vl_utils import process_vision_info
 
         all_embeddings: list[torch.Tensor] = []
@@ -122,20 +124,12 @@ class EagerEmbedV1Wrapper(AbsEncoder):
         return torch.cat(all_embeddings, dim=0)
 
 
-EAGER_EMBED_V1_CITATION = """@article{EagerEmbed,
-  title={Eager Embed V1: Multimodal Dense Embeddings for Retrieval},
-  author={Juan Pablo Balarini},
-  year={2025},
-  publisher={Eagerworks},
-  url={https://github.com/eagerworks/eager-embed},
-}"""
-
 EAGER_EMBED_V1_TRAINING_DATASETS = {"colpali", "bge-ir", "pixmo-docs", "wiki-ss"}
 
 Eager_Embed_V1 = ModelMeta(
     loader=EagerEmbedV1Wrapper,
     loader_kwargs=dict(
-        dtype=torch.float16,
+        dtype=OutputDType.FLOAT16,
         image_size=784,
     ),
     name="eagerworks/eager-embed-v1",
@@ -156,7 +150,6 @@ Eager_Embed_V1 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     training_datasets=EAGER_EMBED_V1_TRAINING_DATASETS,
-    citation=EAGER_EMBED_V1_CITATION,
     adapted_from="https://huggingface.co/Qwen/Qwen3-VL-4B-Instruct",
     public_training_code="https://github.com/eagerworks/eager-embed",
     public_training_data="https://github.com/eagerworks/eager-embed/blob/main/dataset_config.yaml",

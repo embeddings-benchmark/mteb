@@ -4,12 +4,13 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 
 import mteb
-from mteb._create_dataloaders import _corpus_to_dict
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.models.sentence_transformer_wrapper import (
+    SentenceTransformerEncoderWrapper,
+    _resolve_prompt,
+)
 from mteb.types import PromptType
 
 from .bge_models import bge_full_data
@@ -17,6 +18,7 @@ from .bge_models import bge_full_data
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks import (
@@ -58,7 +60,7 @@ class CDEWrapper(SentenceTransformerEncoderWrapper):
         model: str,
         revision: str | None = None,
         device: str | None = None,
-        *args,
+        *args: Any,
         **kwargs: Any,
     ) -> None:
         from transformers import AutoConfig
@@ -96,15 +98,9 @@ class CDEWrapper(SentenceTransformerEncoderWrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        prompt = self.get_prompt(task_metadata, prompt_type)
-        if prompt:
-            logger.info(
-                f"Using prompt=`{prompt}` for task={task_metadata.name} prompt_type={prompt_type}"
-            )
-        else:
-            logger.info(
-                f"No model prompts found for task={task_metadata.name} prompt_type={prompt_type}"
-            )
+        import torch
+
+        prompt = _resolve_prompt(self.model_prompts, task_metadata, prompt_type)
         sentences = [text for batch in inputs for text in batch["text"]]
         self._load_task_sample(
             sentences,
@@ -168,6 +164,8 @@ class CDEWrapper(SentenceTransformerEncoderWrapper):
             task.load_data()
             task.convert_v1_dataset_format_to_v2()
             cur_ds = task.dataset[hf_subset][hf_split]["corpus"]
+            from mteb._create_dataloaders import _corpus_to_dict
+
             sentences = cur_ds.map(_corpus_to_dict)["text"]
         elif task_metadata.type in self.classification_task_types:
             task: AbsTaskClassification = mteb.get_task(task_metadata.name)

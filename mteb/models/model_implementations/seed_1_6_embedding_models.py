@@ -9,8 +9,6 @@ from io import BytesIO
 from typing import TYPE_CHECKING, Any
 
 import requests
-import torch
-from torch.utils.data import DataLoader
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_implementations.bge_models import bge_chinese_training_data
@@ -21,7 +19,9 @@ from mteb.types import PromptType
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
+    import torch
     from PIL import Image
+    from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput
@@ -30,7 +30,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def pil_to_base64(image, image_format="jpeg"):
+def pil_to_base64(image: Image.Image, image_format: str = "jpeg") -> str:
     buffer = BytesIO()
     image.save(buffer, format=image_format)
     img_bytes = buffer.getvalue()
@@ -38,7 +38,9 @@ def pil_to_base64(image, image_format="jpeg"):
     return encoded_bytes.decode("utf-8")
 
 
-def multimodal_embedding(image_base64=None, text_content=None):
+def multimodal_embedding(
+    image_base64: str | None = None, text_content: str | None = None
+) -> dict[str, Any] | None:
     auth_token = os.getenv("VOLCES_AUTH_TOKEN")
     model_name = "doubao-embedding-vision-250615"
     api_url = "https://ark.cn-beijing.volces.com/api/v3/embeddings/multimodal"
@@ -91,7 +93,11 @@ def multimodal_embedding(image_base64=None, text_content=None):
     return None
 
 
-def multi_thread_encode(sentences, batch_size=1, max_workers=8):
+def multi_thread_encode(
+    sentences: list[str], batch_size: int = 1, max_workers: int = 8
+) -> torch.Tensor:
+    import torch
+
     batches = []
     for idx in range(0, len(sentences), batch_size):
         batches.append((idx // batch_size, sentences[idx : idx + batch_size]))
@@ -100,7 +106,9 @@ def multi_thread_encode(sentences, batch_size=1, max_workers=8):
     results = [None] * n_batches  # Pre-allocated result list
     all_embeddings = []  # Final ordered embeddings
 
-    def _process_batch(batch_idx, batch_sentences):
+    def _process_batch(
+        batch_idx: int, batch_sentences: list[str]
+    ) -> tuple[int, torch.Tensor]:
         sentence = batch_sentences[0]
 
         retries = 5
@@ -159,7 +167,7 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         tokenizer_name: str = "cl100k_base",
         embed_dim: int | None = None,
         available_embed_dims: Sequence[int | None] = (None,),
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """Wrapper for Seed embedding API."""
         import tiktoken
@@ -190,6 +198,8 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         batch_size: int = 32,
     ) -> Array:
+        import torch
+
         trimmed_sentences = []
         for sentence in sentences:
             encoded_sentence = self._encoding.encode(sentence)
@@ -230,7 +240,9 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         batch_size: int = 32,
         **kwargs: Any,
     ) -> Array:
+        import torch
         import torchvision.transforms.functional as F
+        from torch.utils.data import DataLoader
 
         if (
             self._embed_dim is not None
@@ -275,9 +287,11 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         self,
         texts: list[str] | None = None,
         images: list[Image.Image] | DataLoader | None = None,
-        fusion_mode="sum",
+        fusion_mode: str = "sum",
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         if (
             self._embed_dim is not None
             and self._embed_dim not in self._available_embed_dims

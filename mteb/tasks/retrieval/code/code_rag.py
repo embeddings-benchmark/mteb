@@ -1,10 +1,12 @@
+from typing import Any
+
 import datasets
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-def split_by_first_newline(s):
+def split_by_first_newline(s: str) -> tuple[str, str]:
     # Split the string by the first newline
     parts = s.split("\n", 1)
     # Return parts or (s, '') if no newline
@@ -51,7 +53,7 @@ class CodeRAGProgrammingSolutionsRetrieval(AbsTaskRetrieval):
         **common_args,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
@@ -59,7 +61,7 @@ class CodeRAGProgrammingSolutionsRetrieval(AbsTaskRetrieval):
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """And transform to a retrieval dataset, which have the following attributes
 
         self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document data like title and text
@@ -108,7 +110,7 @@ class CodeRAGOnlineTutorialsRetrieval(AbsTaskRetrieval):
         **common_args,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
@@ -116,7 +118,7 @@ class CodeRAGOnlineTutorialsRetrieval(AbsTaskRetrieval):
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """And transform to a retrieval dataset, which have the following attributes
 
         self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document data like title and text
@@ -167,7 +169,7 @@ class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
         **common_args,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
@@ -175,7 +177,7 @@ class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """And transform to a retrieval dataset, which have the following attributes
 
         self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document data like title and text
@@ -224,7 +226,7 @@ class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
         **common_args,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
@@ -232,7 +234,7 @@ class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """And transform to a retrieval dataset, which have the following attributes
 
         self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document data like title and text

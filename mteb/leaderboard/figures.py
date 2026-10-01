@@ -1,25 +1,30 @@
+from __future__ import annotations
+
 import logging
 import time
-from typing import get_args
+from typing import TYPE_CHECKING, Any, get_args
 
 import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
 from mteb.abstasks.task_metadata import TaskType
 
 logger = logging.getLogger(__name__)
 
 
-def _text_plot(text: str):
+def _text_plot(text: str) -> go.Figure:
     """Returns empty scatter plot with text added, this can be great for error messages."""
     return px.scatter(template="plotly_white").add_annotation(
         text=text, showarrow=False, font=dict(size=20)
     )
 
 
-def _failsafe_plot(fun):
+def _failsafe_plot(fun: Callable[..., go.Figure]) -> Callable[..., go.Figure]:
     """Decorator that turns the function producing a figure failsafe.
 
     This is necessary, because once a Callback encounters an exception it
@@ -29,7 +34,7 @@ def _failsafe_plot(fun):
          A text plot with the error message if an exception occurs.
     """
 
-    def wrapper(*args, **kwargs):
+    def wrapper(*args: Any, **kwargs: Any) -> go.Figure:
         t0 = time.time()
         try:
             result = fun(*args, **kwargs)
@@ -59,13 +64,13 @@ def _parse_model_name(name: str) -> str:
     return name.rsplit("/", 1)[-1]
 
 
-def _parse_float(value) -> float:
+def _parse_float(value: float | None) -> float:
     if value is None or np.isnan(value):
         return np.nan
     return float(value)
 
 
-def _process_max_tokens(x):
+def _process_max_tokens(x: float | None) -> str:
     if pd.isna(x) or x is None or np.isinf(x):
         return "Unknown"
     return str(int(x))

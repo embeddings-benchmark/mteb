@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -79,7 +81,7 @@ class Shot2Story20KV2TRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_shot2story(self, query_columns=["video"], corpus_columns=["caption"])
 
 
@@ -111,7 +113,7 @@ class Shot2Story20KT2VRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_shot2story(self, query_columns=["caption"], corpus_columns=["video"])
 
 
@@ -143,7 +145,7 @@ class Shot2Story20KVA2TRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_shot2story(
             self, query_columns=["video", "audio"], corpus_columns=["caption"]
         )
@@ -177,7 +179,7 @@ class Shot2Story20KT2VARetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_shot2story(
             self, query_columns=["caption"], corpus_columns=["video", "audio"]
         )
@@ -212,7 +214,7 @@ class Shot2Story20KV2ARetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_shot2story(self, query_columns=["video"], corpus_columns=["audio"])
 
 
@@ -245,7 +247,7 @@ class Shot2Story20KA2VRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_shot2story(self, query_columns=["audio"], corpus_columns=["video"])
 
 
@@ -279,7 +281,7 @@ class Shot2Story20KVT2ARetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_shot2story(
             self, query_columns=["video", "caption"], corpus_columns=["audio"]
         )
@@ -315,7 +317,7 @@ class Shot2Story20KAT2VRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_shot2story(
             self, query_columns=["audio", "caption"], corpus_columns=["video"]
         )

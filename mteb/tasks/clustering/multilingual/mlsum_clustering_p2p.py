@@ -1,3 +1,5 @@
+from typing import Any
+
 import datasets
 import numpy as np
 from datasets import Dataset, DatasetDict
@@ -51,7 +53,7 @@ class MLSUMClusteringP2P(AbsTaskClusteringLegacy):
         superseded_by="MLSUMClusteringP2P.v2",
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """Load dataset from HuggingFace hub and convert it to the standard format."""
         if self.data_loaded:
             return
@@ -64,11 +66,13 @@ class MLSUMClusteringP2P(AbsTaskClusteringLegacy):
             self.dataset_transform(lang)
         self.data_loaded = True
 
-    def _create_description(self, example):  # noqa: PLR6301
+    def _create_description(  # noqa: PLR6301
+        self, example: dict[str, Any]
+    ) -> dict[str, Any]:
         example["text"] = example["title"] + " " + example["text"]
         return example
 
-    def dataset_transform(self, lang):
+    def dataset_transform(self, lang: str) -> None:
         """Convert to standard format"""
         _dataset = self.dataset[lang]
         _dataset.pop("train")
@@ -124,7 +128,7 @@ class MLSUMClusteringP2PFast(AbsTaskClustering):
         adapted_from=["MLSUMClusteringP2P"],
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """Load dataset from HuggingFace hub and convert it to the standard format."""
         if self.data_loaded:
             return
@@ -137,11 +141,13 @@ class MLSUMClusteringP2PFast(AbsTaskClustering):
             self.dataset_transform(lang)
         self.data_loaded = True
 
-    def _create_description(self, example):  # noqa: PLR6301
+    def _create_description(  # noqa: PLR6301
+        self, example: dict[str, Any]
+    ) -> dict[str, Any]:
         example["text"] = example["title"] + " " + example["text"]
         return example
 
-    def dataset_transform(self, lang):
+    def dataset_transform(self, lang: str) -> None:
         """Convert to standard format"""
         _dataset = self.dataset[lang]
         _dataset.pop("train")

@@ -1,3 +1,5 @@
+from typing import Any
+
 import datasets
 from sklearn.linear_model import LogisticRegression
 from sklearn.multioutput import MultiOutputClassifier
@@ -54,7 +56,7 @@ Xavier Serra},
     label_column_name: str = "sound"
     samples_per_label: int = 8
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         """Load dataset from HuggingFace hub and convert it to the standard format."""
         if self.data_loaded:
             return

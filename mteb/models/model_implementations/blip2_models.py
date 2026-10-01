@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -12,6 +11,7 @@ if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
 
 BLIP2_CITATION = """@inproceedings{li2023blip2,
@@ -22,7 +22,8 @@ BLIP2_CITATION = """@inproceedings{li2023blip2,
 }"""
 
 
-def blip2_loader(model_name, **kwargs):
+def blip2_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
+    import torch
     from lavis.models.blip2_models.blip2_image_text_matching import (
         Blip2ITM,
     )
@@ -32,9 +33,14 @@ def blip2_loader(model_name, **kwargs):
             self,
             model_name: str,
             revision: str,
-            device: str = "cuda" if torch.cuda.is_available() else "cpu",
+            device: str | None = None,
             **kwargs: Any,
         ):
+            import torch
+
+            if device is None:
+                device = "cuda" if torch.cuda.is_available() else "cpu"
+
             from transformers import Blip2Processor
 
             self.model_name = model_name
@@ -54,7 +60,7 @@ def blip2_loader(model_name, **kwargs):
             texts: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_text_embeddings = []
 
             with torch.no_grad():
@@ -78,7 +84,7 @@ def blip2_loader(model_name, **kwargs):
             images: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_image_embeddings = []
 
             with torch.no_grad():
@@ -102,7 +108,7 @@ def blip2_loader(model_name, **kwargs):
             inputs: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_multimodal_embeddings = []
 
             with torch.no_grad():

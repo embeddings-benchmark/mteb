@@ -1,5 +1,6 @@
 """Test cases for the _load_from_cache and _rebuild_from_full_repository methods."""
 
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -11,7 +12,7 @@ from mteb.results import BenchmarkResults
 class TestLoadFromCache:
     """Test the _load_from_cache method."""
 
-    def test_rebuild_flag_forces_full_rebuild(self, tmp_path):
+    def test_rebuild_flag_forces_full_rebuild(self, tmp_path: Path):
         """Test rebuild=True bypasses cache and forces rebuild."""
         cache = ResultCache(cache_path=tmp_path)
         cache_filename = "test_cache.json"
@@ -26,7 +27,7 @@ class TestLoadFromCache:
             mock_rebuild.assert_called_once_with(expected_path)
             assert result == mock_result
 
-    def test_loading_strategies_in_order(self, tmp_path):
+    def test_loading_strategies_in_order(self, tmp_path: Path):
         """Test the 3-tier loading strategy: local -> download -> rebuild."""
         cache = ResultCache(cache_path=tmp_path)
         cache_filename = "test_cache.json"
@@ -65,7 +66,7 @@ class TestLoadFromCache:
             mock_rebuild.assert_called_once_with(expected_path)
             assert result == mock_result
 
-    def test_corrupt_cache_triggers_fallback(self, tmp_path):
+    def test_corrupt_cache_triggers_fallback(self, tmp_path: Path):
         """Test that corrupt cache files trigger next strategy."""
         cache = ResultCache(cache_path=tmp_path)
         cache_filename = "test_cache.json"
@@ -90,7 +91,7 @@ class TestLoadFromCache:
 class TestRebuildFromFullRepository:
     """Test the _rebuild_from_full_repository method."""
 
-    def test_full_rebuild_process(self, tmp_path):
+    def test_full_rebuild_process(self, tmp_path: Path):
         """Test rebuild downloads repo, loads results, and saves cache."""
         cache = ResultCache(cache_path=tmp_path)
         quick_cache_path = tmp_path / "cache.json"
@@ -123,7 +124,7 @@ class TestRebuildFromFullRepository:
             mock_results.to_disk.assert_called_once_with(quick_cache_path)
             assert result == mock_results
 
-    def test_rebuild_error_propagation(self, tmp_path):
+    def test_rebuild_error_propagation(self, tmp_path: Path):
         """Test that errors during rebuild are properly propagated."""
         cache = ResultCache(cache_path=tmp_path)
         quick_cache_path = tmp_path / "cache.json"

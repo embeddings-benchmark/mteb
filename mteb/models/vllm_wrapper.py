@@ -7,7 +7,6 @@ import os
 from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
-import torch
 from packaging import version
 
 from mteb._requires_package import _is_package_available
@@ -244,6 +243,8 @@ class VllmEncoderWrapper(AbsEncoder, VllmWrapperBase):
         Returns:
             The encoded sentences.
         """
+        import torch
+
         prompt = ""
         if self.use_instructions and self.prompts_dict is not None:
             prompt = self.get_task_instruction(task_metadata, prompt_type)

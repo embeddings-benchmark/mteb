@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -35,10 +37,30 @@ class TUNABenchT2VRetrieval(AbsTaskRetrieval):
         modalities=["text", "video"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{ye2025tuna,
-  author = {Ye, Jinghao and Zhu, Yanbin and Liu, Jiaqi and Zhang, Yixin and Huang, Qianyu and Zhou, Jianfeng},
-  booktitle = {Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (ACL)},
-  title = {TUNA: Comprehensive Fine-grained Temporal Understanding Evaluation on Dense Dynamic Videos},
+@inproceedings{kong-etal-2025-tuna,
+  address = {Vienna, Austria},
+  author = {Kong, Fanheng  and
+Zhang, Jingyuan  and
+Zhang, Hongzhi  and
+Feng, Shi  and
+Wang, Daling  and
+Yu, Linhao  and
+Ji, Xingguang  and
+Tian, Yu  and
+W., Victoria  and
+Zhang, Fuzheng},
+  booktitle = {Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2025.acl-long.91},
+  editor = {Che, Wanxiang  and
+Nabende, Joyce  and
+Shutova, Ekaterina  and
+Pilehvar, Mohammad Taher},
+  isbn = {979-8-89176-251-0},
+  month = jul,
+  pages = {1810--1839},
+  publisher = {Association for Computational Linguistics},
+  title = {{TUNA}: Comprehensive Fine-grained Temporal Understanding Evaluation on Dense Dynamic Videos},
+  url = {https://aclanthology.org/2025.acl-long.91/},
   year = {2025},
 }
 """,
@@ -48,7 +70,7 @@ class TUNABenchT2VRetrieval(AbsTaskRetrieval):
         is_beta=True,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """Load the TUNA-Bench dataset for text-to-video retrieval.
 
         TODO: Reupload dataset in standard format and remove this custom load_data.

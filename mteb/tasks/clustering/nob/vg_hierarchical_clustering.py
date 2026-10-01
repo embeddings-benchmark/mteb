@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.clustering import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -45,7 +47,7 @@ class VGHierarchicalClusteringP2P(AbsTaskClustering):
         prompt="Identify the categories (e.g. sports) of given articles in Norwegian",
     )
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.dataset = self.dataset.rename_columns(
             {"article": "sentences", "classes": "labels"}
         )
@@ -92,7 +94,7 @@ class VGHierarchicalClusteringS2S(AbsTaskClustering):
         prompt="Identify the categories (e.g. sports) of given articles in Norwegian",
     )
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.dataset = self.dataset.rename_columns(
             {"ingress": "sentences", "classes": "labels"}
         )

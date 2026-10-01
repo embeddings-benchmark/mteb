@@ -189,7 +189,9 @@ class Benchmark:
         tasks: The tasks within the benchmark.
         description: A description of the benchmark, should include its intended goal and potentially a description of its construction
         reference: A link reference, to a source containing additional information typically to a paper, leaderboard or github.
-        citation: A bibtex citation
+        citation: A BibTeX citation. As non-existing citations can cause authors citing the work to be
+            penalized, leave it out if the benchmark has no article to cite. It is allowed to cite multiple
+            articles.
         contacts: The people to contact in case of a problem in the benchmark, preferably a GitHub handle.
         superseded_by: Benchmark name with newer version of benchmark
         aggregations: Which aggregations to use in on leaderboard

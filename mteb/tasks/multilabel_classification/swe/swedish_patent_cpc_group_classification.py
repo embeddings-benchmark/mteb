@@ -26,20 +26,7 @@ class SwedishPatentCPCGroupClassification(AbsTaskMultilabelClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@mastersthesis{Salim1987995,
-  author = {Salim, Atheer},
-  institution = {KTH, School of Electrical Engineering and Computer Science (EECS)},
-  keywords = {Multi-label Text Classification, Machine Learning, Patent Classification, Deep Learning, Natural Language Processing, Textklassificering med flera Klasser, Maskininlärning, Patentklassificering, Djupinlärning, Språkteknologi},
-  number = {2025:571},
-  pages = {70},
-  school = {KTH, School of Electrical Engineering and Computer Science (EECS)},
-  series = {TRITA-EECS-EX},
-  title = {Machine Learning for Classifying Historical Swedish Patents : A Comparison of Textual and Combined Data Approaches},
-  url = {https://urn.kb.se/resolve?urn=urn:nbn:se:kth:diva-368254},
-  year = {2025},
-}
-""",
+        bibtex_citation="",
     )
 
     def dataset_transform(

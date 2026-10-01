@@ -34,14 +34,6 @@ class SpanishWikinewsClusteringP2P(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@misc{henriquez2026spanishwikinewsclustering,
-  author = {Henríquez, Clemente},
-  publisher = {Hugging Face},
-  title = {SpanishWikinewsClustering},
-  url = {https://huggingface.co/datasets/ClementeH/SpanishWikinewsClustering},
-  year = {2026},
-}
-""",
+        bibtex_citation="",
         prompt="Identifica el tema principal de la noticia a partir del título y la introducción.",
     )

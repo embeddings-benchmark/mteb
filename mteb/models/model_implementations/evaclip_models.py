@@ -3,7 +3,6 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -13,6 +12,7 @@ if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
 
 EVA_CLIP_CITATION = """@article{EVA-CLIP,
@@ -23,7 +23,9 @@ EVA_CLIP_CITATION = """@article{EVA-CLIP,
 }"""
 
 
-def evaclip_loader(model_name, **kwargs):
+def evaclip_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
+    import torch
+
     try:
         import sys
 
@@ -43,9 +45,14 @@ def evaclip_loader(model_name, **kwargs):
         def __init__(
             self,
             model_name: str,
-            device: str = "cuda" if torch.cuda.is_available() else "cpu",
+            device: str | None = None,
             **kwargs: Any,
         ):
+            import torch
+
+            if device is None:
+                device = "cuda" if torch.cuda.is_available() else "cpu"
+
             self.model_name = model_name
             self.device = device
             pretrained = "eva_clip"  # or "/path/to/EVA02_CLIP_B_psz16_s8B.pt"
@@ -60,7 +67,7 @@ def evaclip_loader(model_name, **kwargs):
             texts: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_text_embeddings = []
 
             with torch.no_grad(), torch.cuda.amp.autocast():
@@ -79,7 +86,7 @@ def evaclip_loader(model_name, **kwargs):
             images: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_image_embeddings = []
 
             with torch.no_grad(), torch.cuda.amp.autocast():

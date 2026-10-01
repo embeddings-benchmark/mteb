@@ -5,7 +5,6 @@ import time
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -45,7 +44,7 @@ class SeedTextEmbeddingModel(AbsEncoder):
         tokenizer_name: str = "cl100k_base",
         embed_dim: int | None = None,
         available_embed_dims: Sequence[int | None] = (None,),
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """Wrapper for Seed embedding API."""
         import tiktoken
@@ -69,7 +68,9 @@ class SeedTextEmbeddingModel(AbsEncoder):
 
     def _encode(
         self, inputs: list[str], task_name: str, prompt_type: PromptType | None = None
-    ):
+    ) -> list[list[float]]:
+        import torch
+
         if (
             self._embed_dim is not None
             and self._embed_dim not in self._available_embed_dims

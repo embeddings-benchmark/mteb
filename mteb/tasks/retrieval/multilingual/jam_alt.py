@@ -1,7 +1,16 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
+
 from datasets import Audio, DatasetDict, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+
+if TYPE_CHECKING:
+    from datasets import Dataset
+
+    from mteb.types import RelevantDocumentsType
 
 _EVAL_LANGS = {
     "en": ["eng-Latn"],
@@ -12,14 +21,18 @@ _EVAL_LANGS = {
 
 
 def _load_jam_alt_data(
-    splits,
-    langs,
-    dataset_args,
+    splits: list[str],
+    langs: list[str],
+    dataset_args: dict[str, Any],
     query_column: str,
     corpus_column: str,
     qrels_column: str,
-    **kwargs,
-):
+    **kwargs: Any,
+) -> tuple[
+    dict[str, dict[str, Dataset]],
+    dict[str, dict[str, Dataset]],
+    dict[str, dict[str, RelevantDocumentsType]],
+]:
     corpus = {lang: dict.fromkeys(splits) for lang in langs}
     queries = {lang: dict.fromkeys(splits) for lang in langs}
     relevant_docs = {lang: dict.fromkeys(splits) for lang in langs}
@@ -46,11 +59,11 @@ def _load_jam_alt_data(
         lang_ds = ds.select(indices)
 
         # Generate IDs using map (avoids creating new dataset)
-        def add_corpus_id(example, idx):
+        def add_corpus_id(example: dict[str, Any], idx: int) -> dict[str, Any]:
             example["id"] = f"corpus-{example['song_name']}{example['line_indices'][0]}"
             return example
 
-        def add_query_id(example, idx):
+        def add_query_id(example: dict[str, Any], idx: int) -> dict[str, Any]:
             example["id"] = f"query-{example['song_name']}{example['line_indices'][0]}"
             return example
 
@@ -143,7 +156,7 @@ Music Information Retrieval Conference},
         },
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -201,7 +214,7 @@ Music Information Retrieval Conference},
         prompt={"query": "Retrieve audio clip for the lyrics: {query}"},
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -261,7 +274,7 @@ Music Information Retrieval Conference},
         },
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 

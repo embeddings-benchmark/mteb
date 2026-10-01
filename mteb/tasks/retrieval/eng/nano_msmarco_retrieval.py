@@ -1,7 +1,3 @@
-from collections import defaultdict
-
-from datasets import load_dataset
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -12,8 +8,8 @@ class NanoMSMARCORetrieval(AbsTaskRetrieval):
         description="NanoMSMARCORetrieval is a smaller subset of MS MARCO, a collection of datasets focused on deep learning in search.",
         reference="https://microsoft.github.io/msmarco/",
         dataset={
-            "path": "zeta-alpha-ai/NanoMSMARCO",
-            "revision": "7b8ff22f2771dc65ac5b439f222eb19a1f56abda",
+            "path": "mteb/NanoMSMARCORetrieval",
+            "revision": "5a5aa0c3df65d6883d85c8f5cdc88e679633595e",
         },
         type="Retrieval",
         category="t2t",
@@ -29,24 +25,14 @@ class NanoMSMARCORetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{DBLP:journals/corr/NguyenRSGTMD16,
+@misc{bajaj2018msmarcohumangenerated,
   archiveprefix = {arXiv},
-  author = {Tri Nguyen and
-Mir Rosenberg and
-Xia Song and
-Jianfeng Gao and
-Saurabh Tiwary and
-Rangan Majumder and
-Li Deng},
-  bibsource = {dblp computer science bibliography, https://dblp.org},
-  biburl = {https://dblp.org/rec/journals/corr/NguyenRSGTMD16.bib},
+  author = {Payal Bajaj and Daniel Campos and Nick Craswell and Li Deng and Jianfeng Gao and Xiaodong Liu and Rangan Majumder and Andrew McNamara and Bhaskar Mitra and Tri Nguyen and Mir Rosenberg and Xia Song and Alina Stoica and Saurabh Tiwary and Tong Wang},
   eprint = {1611.09268},
-  journal = {CoRR},
-  timestamp = {Mon, 13 Aug 2018 16:49:03 +0200},
-  title = {{MS} {MARCO:} {A} Human Generated MAchine Reading COmprehension Dataset},
-  url = {http://arxiv.org/abs/1611.09268},
-  volume = {abs/1611.09268},
-  year = {2016},
+  primaryclass = {cs.CL},
+  title = {MS MARCO: A Human Generated MAchine Reading COmprehension Dataset},
+  url = {https://arxiv.org/abs/1611.09268},
+  year = {2018},
 }
 """,
         prompt={
@@ -54,50 +40,3 @@ Li Deng},
         },
         adapted_from=["MSMARCO"],
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus = load_dataset(
-            "zeta-alpha-ai/NanoMSMARCO",
-            "corpus",
-            revision="7b8ff22f2771dc65ac5b439f222eb19a1f56abda",
-        )
-        self.queries = load_dataset(
-            "zeta-alpha-ai/NanoMSMARCO",
-            "queries",
-            revision="7b8ff22f2771dc65ac5b439f222eb19a1f56abda",
-        )
-        self.relevant_docs = load_dataset(
-            "zeta-alpha-ai/NanoMSMARCO",
-            "qrels",
-            revision="7b8ff22f2771dc65ac5b439f222eb19a1f56abda",
-        )
-
-        self.corpus = {
-            split: {
-                sample["_id"]: {"_id": sample["_id"], "text": sample["text"]}
-                for sample in self.corpus[split]
-            }
-            for split in self.corpus
-        }
-
-        self.queries = {
-            split: {sample["_id"]: sample["text"] for sample in self.queries[split]}
-            for split in self.queries
-        }
-
-        relevant_docs = {}
-
-        for split in self.relevant_docs:
-            relevant_docs[split] = defaultdict(dict)
-            for query_id, corpus_id in zip(
-                self.relevant_docs[split]["query-id"],
-                self.relevant_docs[split]["corpus-id"],
-                strict=True,
-            ):
-                relevant_docs[split][query_id][corpus_id] = 1
-        self.relevant_docs = relevant_docs
-
-        self.data_loaded = True

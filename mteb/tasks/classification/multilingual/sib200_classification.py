@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -225,11 +227,26 @@ class SIB200Classification(AbsTaskClassification):
         dialect=[],
         sample_creation="human-translated and localized",
         bibtex_citation=r"""
-@article{adelani2023sib,
-  author = {Adelani, David Ifeoluwa and Liu, Hannah and Shen, Xiaoyu and Vassilyev, Nikita and Alabi, Jesujoba O and Mao, Yanke and Gao, Haonan and Lee, Annie En-Shiun},
-  journal = {arXiv preprint arXiv:2309.07445},
-  title = {SIB-200: A simple, inclusive, and big evaluation dataset for topic classification in 200+ languages and dialects},
-  year = {2023},
+@inproceedings{adelani-etal-2024-sib,
+  address = {St. Julian{'}s, Malta},
+  author = {Adelani, David Ifeoluwa  and
+Liu, Hannah  and
+Shen, Xiaoyu  and
+Vassilyev, Nikita  and
+Alabi, Jesujoba O.  and
+Mao, Yanke  and
+Gao, Haonan  and
+Lee, En-Shiun Annie},
+  booktitle = {Proceedings of the 18th Conference of the European Chapter of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2024.eacl-long.14},
+  editor = {Graham, Yvette  and
+Purver, Matthew},
+  month = mar,
+  pages = {226--245},
+  publisher = {Association for Computational Linguistics},
+  title = {{SIB}-200: A Simple, Inclusive, and Big Evaluation Dataset for Topic Classification in 200+ Languages and Dialects},
+  url = {https://aclanthology.org/2024.eacl-long.14/},
+  year = {2024},
 }
 """,
         superseded_by="SIB200Classification.v2",
@@ -296,16 +313,31 @@ class SIB200ClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="human-translated and localized",
         bibtex_citation=r"""
-@article{adelani2023sib,
-  author = {Adelani, David Ifeoluwa and Liu, Hannah and Shen, Xiaoyu and Vassilyev, Nikita and Alabi, Jesujoba O and Mao, Yanke and Gao, Haonan and Lee, Annie En-Shiun},
-  journal = {arXiv preprint arXiv:2309.07445},
-  title = {SIB-200: A simple, inclusive, and big evaluation dataset for topic classification in 200+ languages and dialects},
-  year = {2023},
+@inproceedings{adelani-etal-2024-sib,
+  address = {St. Julian{'}s, Malta},
+  author = {Adelani, David Ifeoluwa  and
+Liu, Hannah  and
+Shen, Xiaoyu  and
+Vassilyev, Nikita  and
+Alabi, Jesujoba O.  and
+Mao, Yanke  and
+Gao, Haonan  and
+Lee, En-Shiun Annie},
+  booktitle = {Proceedings of the 18th Conference of the European Chapter of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2024.eacl-long.14},
+  editor = {Graham, Yvette  and
+Purver, Matthew},
+  month = mar,
+  pages = {226--245},
+  publisher = {Association for Computational Linguistics},
+  title = {{SIB}-200: A Simple, Inclusive, and Big Evaluation Dataset for Topic Classification in 200+ Languages and Dialects},
+  url = {https://aclanthology.org/2024.eacl-long.14/},
+  year = {2024},
 }
 """,
     )
 
-    def dataset_transform(self, **kwargs) -> None:
+    def dataset_transform(self, **kwargs: Any) -> None:
         """
         Convert each split to the MTEB format:
         * text: str
@@ -321,7 +353,11 @@ class SIB200ClassificationV2(AbsTaskClassification):
                 )
                 lab_col = next(c for c in ("label", "labels", "category") if c in cols)
 
-                def to_mteb(example, lab_col=lab_col, text_col=text_col):
+                def to_mteb(
+                    example: dict[str, Any],
+                    lab_col: str = lab_col,
+                    text_col: str = text_col,
+                ) -> dict[str, Any]:
                     raw_label = example[lab_col]
                     if isinstance(raw_label, str):
                         label = _TOPIC2ID[raw_label]

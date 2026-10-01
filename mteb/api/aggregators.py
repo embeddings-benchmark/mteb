@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 import functools
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 import polars as pl
 
@@ -39,6 +39,7 @@ if TYPE_CHECKING:
         ModelMetaSchema,
         TaskMetaSchema,
     )
+    from mteb.benchmarks._create_table import SummaryTable
     from mteb.cache.result_cache import ResultCache
 
 logger = logging.getLogger(__name__)
@@ -278,7 +279,7 @@ async def build_benchmark_summary(  # noqa: PLR0914
 
 def _build_summary_rows(
     summary_pl: pl.DataFrame,
-    summary: Any,
+    summary: SummaryTable,
     type_cols: list[str],
     per_task_rows: dict[str, dict[str, float]],
     trained_on_by_model: dict[str, tuple[str, ...]],
@@ -395,7 +396,7 @@ def _build_per_language_rows(
 def _task_to_hosting_benchmarks() -> dict[str, list[str]]:
     """Reverse index: task name -> list of benchmarks that include it."""
     out: dict[str, list[str]] = {}
-    for bench in mteb.get_benchmarks(display_on_leaderboard=True):
+    for bench in mteb.get_benchmarks():
         for t in bench.tasks:
             out.setdefault(t.metadata.name, []).append(bench.name)
     return out

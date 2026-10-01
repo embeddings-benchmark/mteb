@@ -2,6 +2,7 @@
 
 import logging
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 import pytest
@@ -44,7 +45,7 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
         prompts = {}
 
         def encode(
-            self, sentences: DataLoader, prompt_name: str | None = None, **kwargs
+            self, sentences: DataLoader, prompt_name: str | None = None, **kwargs: Any
         ):
             assert prompt_name == to_compare
             return np.zeros((len(sentences.dataset), 10))
@@ -63,7 +64,7 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
         prompts = {to_compare: to_compare}
 
         def encode(
-            self, sentences: DataLoader, prompt_name: str | None = None, **kwargs
+            self, sentences: DataLoader, prompt_name: str | None = None, **kwargs: Any
         ):
             assert prompt_name == to_compare
             return np.zeros((len(sentences.dataset), 10))
@@ -118,7 +119,7 @@ def test_model_query_passage_prompts_task_type(
         is_query = True
 
         def encode(
-            self, sentences: DataLoader, prompt_name: str | None = None, **kwargs
+            self, sentences: DataLoader, prompt_name: str | None = None, **kwargs: Any
         ):
             check_prompt(prompt_name, self.is_query)
             self.is_query = not self.is_query
@@ -128,7 +129,7 @@ def test_model_query_passage_prompts_task_type(
         is_query = True
 
         def encode(
-            self, sentences: DataLoader, prompt_name: str | None = None, **kwargs
+            self, sentences: DataLoader, prompt_name: str | None = None, **kwargs: Any
         ):
             check_prompt(prompt_name, self.is_query)
             self.is_query = not self.is_query

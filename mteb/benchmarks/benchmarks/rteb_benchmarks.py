@@ -4,11 +4,7 @@
 from mteb.benchmarks.benchmark import RtebBenchmark
 from mteb.get_tasks import MTEBTasks, get_task, get_tasks
 
-RTEB_CITATION = r"""@article{rteb2025,
-  author = {Liu, Frank and Enevoldsen, Kenneth and Solomatin, Roman and Chung, Isaac and Aarsen, Tom and Fődi, Zoltán},
-  title = {Introducing RTEB: A New Standard for Retrieval Evaluation},
-  year = {2025},
-}"""
+RTEB_CITATION = ""  # in-review
 
 removal_note = "\n\nNote: We have temporarily removed the 'Private' column to read more about this decision out the [announcement](https://github.com/embeddings-benchmark/mteb/issues/3934)."
 

@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any, Literal
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -15,6 +14,7 @@ if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput
 
 logger = logging.getLogger(__name__)
@@ -56,7 +56,8 @@ def _downsample_image(
     return image
 
 
-def voyage_v_loader(model_name, **kwargs):
+def voyage_v_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
+    import torch
     import voyageai
     from tenacity import retry, stop_after_attempt, wait_exponential
 
@@ -73,7 +74,12 @@ def voyage_v_loader(model_name, **kwargs):
             stop=stop_after_attempt(6),  # Stop after 6 attempts
             wait=wait_exponential(multiplier=1, max=60),  # Exponential backoff
         )
-        def _multimodal_embed(self, inputs, model, input_type):
+        def _multimodal_embed(
+            self,
+            inputs: list[list[str | Image.Image]],
+            model: str,
+            input_type: str | None,
+        ) -> Any:  # noqa: ANN401 -- voyageai response object; voyageai is untyped
             return self.vo.multimodal_embed(inputs, model=model, input_type=input_type)
 
         def get_text_embeddings(
@@ -83,7 +89,7 @@ def voyage_v_loader(model_name, **kwargs):
             prompt_type: PromptType | None = None,
             input_type: Literal["document", "query"] | None = None,
             **kwargs: Any,
-        ):
+        ) -> Array:
             if input_type is None and prompt_type is not None:
                 if prompt_type == PromptType.document:
                     input_type = "document"
@@ -112,7 +118,7 @@ def voyage_v_loader(model_name, **kwargs):
             prompt_type: PromptType | None = None,
             input_type: Literal["document", "query"] | None = None,
             **kwargs: Any,
-        ):
+        ) -> Array:
             if input_type is None and prompt_type is not None:
                 if prompt_type == PromptType.document:
                     input_type = "document"
@@ -194,7 +200,7 @@ def voyage_v_loader(model_name, **kwargs):
 
 voyage_v = ModelMeta(
     loader=voyage_v_loader,
-    name="voyageai/voyage-multimodal-3",
+    name="mongodb/voyage-multimodal-3",
     model_type=["dense"],
     languages=[],  # Unknown
     revision="1",

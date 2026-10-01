@@ -1,3 +1,5 @@
+from typing import Any
+
 from datasets import DatasetDict
 
 from mteb.abstasks.pair_classification import AbsTaskPairClassification
@@ -37,6 +39,7 @@ class SlovakRTE(AbsTaskPairClassification):
   address = {Vienna, Austria},
   author = {Suppa, Marek and Ridzik, Andrej and Hl{\'a}dek, Daniel and Jav{\r{u}}rek, Tom{\'a}{\v{s}} and Ondrejov{\'a}, Vikt{\'o}ria and S{\'a}sikov{\'a}, Krist{\'i}na and Tamajka, Martin and Simko, Marian},
   booktitle = {Findings of the Association for Computational Linguistics: ACL 2025},
+  doi = {10.18653/v1/2025.findings-acl.1371},
   editor = {Che, Wanxiang and Nabende, Joyce and Shutova, Ekaterina and Pilehvar, Mohammad Taher},
   isbn = {979-8-89176-256-5},
   month = jul,
@@ -50,7 +53,7 @@ class SlovakRTE(AbsTaskPairClassification):
         prompt="Given a premise, retrieve a hypothesis that is entailed by the premise",
     )
 
-    def dataset_transform(self, **kwargs):
+    def dataset_transform(self, **kwargs: Any):
         _dataset = {}
 
         for split in self.dataset:

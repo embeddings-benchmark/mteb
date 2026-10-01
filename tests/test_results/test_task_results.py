@@ -1,5 +1,6 @@
 from importlib.metadata import version
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -45,7 +46,7 @@ class DummyTask(AbsTask):
     def evaluate(self, model, split: str = "test"):
         pass
 
-    def _evaluate_subset(self, **kwargs):
+    def _evaluate_subset(self, **kwargs: Any):
         pass
 
     def _calculate_descriptive_statistics_from_split(
@@ -85,6 +86,25 @@ def test_task_results_get_score(task_result: TaskResult):
     assert task_result.get_score() == 0.55
     assert task_result.get_score(languages=["eng"]) == 0.55
     assert task_result.get_score(languages=["fra"]) == 0.6
+
+
+def test_task_results_get_score_scripts():
+    task_result = TaskResult.from_validated(
+        task_name="dummy_task",
+        dataset_revision="1.0",
+        mteb_version="2.0.0",
+        evaluation_time=1.0,
+        scores={
+            "test": [
+                {"hf_subset": "srp-Cyrl", "languages": ["srp-Cyrl"], "main_score": 0.2},
+                {"hf_subset": "srp-Latn", "languages": ["srp-Latn"], "main_score": 0.8},
+            ]
+        },
+    )
+    assert task_result.get_score(scripts=["Cyrl"]) == 0.2
+    assert task_result.get_score(scripts=["Latn"]) == 0.8
+    assert task_result.get_score(scripts=["Cyrl", "Latn"]) == 0.5
+    assert task_result.get_score(languages=["srp"], scripts=["Latn"]) == 0.8
 
 
 def test_task_results_to_dict(task_result: TaskResult):

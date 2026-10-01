@@ -1,10 +1,18 @@
+from __future__ import annotations
+
 from logging import getLogger
+from typing import TYPE_CHECKING, Any
 
 import datasets
 
 from mteb._evaluators.retrieval_metrics import evaluate_p_mrr_change
 from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+
+if TYPE_CHECKING:
+    from datasets import Dataset
+
+    from mteb.types import RelevantDocumentsType, TopRankedDocumentsType
 
 logger = getLogger(__name__)
 
@@ -46,7 +54,14 @@ def load_data(
     langs: list,
     eval_splits: list,
     revision: str | None = None,
-):
+) -> tuple[
+    dict[str, dict[str, Dataset]],
+    dict[str, dict[str, Dataset]],
+    dict[str, dict[str, Dataset]],
+    dict[str, dict[str, RelevantDocumentsType]],
+    dict[str, dict[str, TopRankedDocumentsType]],
+    dict[str, dict[str, RelevantDocumentsType]],
+]:
     corpus = {lang: {EVAL_SPLIT: {}} for lang in langs}
     queries = {lang: {EVAL_SPLIT: {}} for lang in langs}
     relevant_docs = {lang: {EVAL_SPLIT: {}} for lang in langs}
@@ -175,7 +190,7 @@ class mFollowIRCrossLingual(AbsTaskRetrieval):  # noqa: N801
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
@@ -243,7 +258,7 @@ class mFollowIR(AbsTaskRetrieval):  # noqa: N801
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 

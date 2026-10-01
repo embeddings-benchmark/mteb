@@ -2,9 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
-from transformers.modeling_outputs import BaseModelOutputWithPooling
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -21,9 +19,14 @@ class ALIGNModel(AbsEncoder):
         self,
         model: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ):
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         from transformers import AutoModel, AutoProcessor
 
         self.model_name = model
@@ -35,8 +38,11 @@ class ALIGNModel(AbsEncoder):
         self,
         texts: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> Array:
+        import torch
+        from transformers.modeling_outputs import BaseModelOutputWithPooling
+
         all_text_embeddings = []
 
         with torch.no_grad():
@@ -62,8 +68,11 @@ class ALIGNModel(AbsEncoder):
         self,
         images: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> Array:
+        import torch
+        from transformers.modeling_outputs import BaseModelOutputWithPooling
+
         all_image_embeddings = []
         with torch.no_grad():
             for batch in tqdm(
@@ -136,10 +145,4 @@ align_base = ModelMeta(
     training_datasets=set(
         #  COYO-700M
     ),
-    citation="""@misc{kakaobrain2022coyo-align,
-    title         = {COYO-ALIGN},
-    author        = {Yoon, Boogeo and Lee, Youhan and Baek, Woonhyuk},
-    year          = {2022},
-    howpublished  = {https://github.com/kakaobrain/coyo-align},
-}""",
 )

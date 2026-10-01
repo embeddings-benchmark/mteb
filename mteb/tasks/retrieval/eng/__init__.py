@@ -20,6 +20,14 @@ from .audiocaps_av_retrieval import (
     AudioCapsAVVA2TRetrieval,
     AudioCapsAVVT2ARetrieval,
 )
+from .avcaps_retrieval import (
+    AVCapsA2TRetrieval,
+    AVCapsT2ARetrieval,
+    AVCapsT2VARetrieval,
+    AVCapsT2VRetrieval,
+    AVCapsV2TRetrieval,
+    AVCapsVA2TRetrieval,
+)
 from .avmeme_exam_retrieval import (
     AVMemeExamA2VRetrieval,
     AVMemeExamAT2VRetrieval,
@@ -96,6 +104,14 @@ from .clotho import (
 )
 from .clotho_moment import ClothoMomentRetrieval
 from .cmu_arctic import CMUArcticA2TRetrieval, CMUArcticT2ARetrieval
+from .coco_modality_equivalence import (
+    COCOModalEquivA2IHumanRetrieval,
+    COCOModalEquivA2ITTSRetrieval,
+    COCOModalEquivI2AHumanRetrieval,
+    COCOModalEquivI2ATTSRetrieval,
+    COCOModalEquivI2TRetrieval,
+    COCOModalEquivT2IRetrieval,
+)
 from .covers80_retrieval import Covers80A2ARetrieval
 from .covr_r_retrieval import CoVRRVT2VRetrieval
 from .cqa_dupstack_android_retrieval import CQADupstackAndroidRetrieval
@@ -215,6 +231,7 @@ from .lemb_summ_screen_fd_retrieval import LEMBSummScreenFDRetrieval
 from .lemb_wikim_qa_retrieval import LEMBWikimQARetrieval
 from .lembqm_sum_retrieval import LEMBQMSumRetrieval
 from .libri_tts import LibriTTSA2TRetrieval, LibriTTST2ARetrieval
+from .librispeech_speaker_retrieval import LibriSpeechSpeakerA2ARetrieval
 from .limit_retrieval import LIMITRetrieval, LIMITSmallRetrieval
 from .lit_search_retrieval import LitSearchRetrieval
 from .llava_it2t_retrieval import LLaVAIT2TRetrieval
@@ -241,6 +258,12 @@ from .lmeb_retrieval import (
     ProceduralMemBench,
     ReMe,
     ToolBench,
+)
+from .lombard_grid_retrieval import (
+    LombardGridA2VRetrieval,
+    LombardGridV2ARetrieval,
+    LombardGridV2VRetrieval,
+    LombardGridVA2VARetrieval,
 )
 from .lotte_retrieval import LoTTERetrieval
 from .macs import MACSA2TRetrieval, MACST2ARetrieval
@@ -289,6 +312,7 @@ from .narrative_qa_retrieval import NarrativeQARetrieval
 from .nf_corpus_retrieval import NFCorpus
 from .nights_i2i_retrieval import NIGHTSI2IRetrieval
 from .nq_retrieval import NQ, NQHardNegatives
+from .nq_tables_retrieval import NQTablesRetrieval
 from .obliq_bench_retrieval import (
     OBLIQBenchCongressRetrieval,
     OBLIQBenchMathRetrieval,
@@ -297,6 +321,7 @@ from .obliq_bench_retrieval import (
     OBLIQBenchWritingRetrieval,
 )
 from .okvqa_it2t_retrieval import OKVQAIT2TRetrieval
+from .omni_wiki_retrieval import OmniWikiV2IRetrieval, OmniWikiV2TRetrieval
 from .oven_it2it_retrieval import OVENIT2ITRetrieval
 from .oven_it2t_retrieval import OVENIT2TRetrieval
 from .panda70m_retrieval import (
@@ -381,6 +406,7 @@ from .temp_reason_l2_pure_retrieval import TempReasonL2Pure
 from .temp_reason_l3_context_retrieval import TempReasonL3Context
 from .temp_reason_l3_fact_retrieval import TempReasonL3Fact
 from .temp_reason_l3_pure_retrieval import TempReasonL3Pure
+from .tool_retrieval import ToolRetrieval, ToolRetrievalInstruction
 from .topi_ocqa_retrieval import TopiOCQARetrieval, TopiOCQARetrievalHardNegatives
 from .touche2020_retrieval import Touche2020, Touche2020v3Retrieval
 from .treccovid_retrieval import TRECCOVID
@@ -485,6 +511,12 @@ __all__ = [
     "AILACasedocs",
     "AILAStatutes",
     "ARCChallenge",
+    "AVCapsA2TRetrieval",
+    "AVCapsT2ARetrieval",
+    "AVCapsT2VARetrieval",
+    "AVCapsT2VRetrieval",
+    "AVCapsV2TRetrieval",
+    "AVCapsVA2TRetrieval",
     "AVMemeExamA2VRetrieval",
     "AVMemeExamAT2VRetrieval",
     "AVMemeExamT2VARetrieval",
@@ -554,6 +586,12 @@ __all__ = [
     "CLDAT2ARetrieval",
     "CMUArcticA2TRetrieval",
     "CMUArcticT2ARetrieval",
+    "COCOModalEquivA2IHumanRetrieval",
+    "COCOModalEquivA2ITTSRetrieval",
+    "COCOModalEquivI2AHumanRetrieval",
+    "COCOModalEquivI2ATTSRetrieval",
+    "COCOModalEquivI2TRetrieval",
+    "COCOModalEquivT2IRetrieval",
     "CQADupstackAndroidRetrieval",
     "CQADupstackEnglishRetrieval",
     "CQADupstackGamingRetrieval",
@@ -695,11 +733,16 @@ __all__ = [
     "LegalBenchConsumerContractsQA",
     "LegalBenchCorporateLobbying",
     "LegalSummarization",
+    "LibriSpeechSpeakerA2ARetrieval",
     "LibriTTSA2TRetrieval",
     "LibriTTST2ARetrieval",
     "LitSearchRetrieval",
     "LoCoMo",
     "LoTTERetrieval",
+    "LombardGridA2VRetrieval",
+    "LombardGridV2ARetrieval",
+    "LombardGridV2VRetrieval",
+    "LombardGridVA2VARetrieval",
     "LongMemEval",
     "LooGLE",
     "MACSA2TRetrieval",
@@ -730,6 +773,7 @@ __all__ = [
     "NFCorpus",
     "NIGHTSI2IRetrieval",
     "NQHardNegatives",
+    "NQTablesRetrieval",
     "NanoArguAnaRetrieval",
     "NanoClimateFeverRetrieval",
     "NanoDBPediaRetrieval",
@@ -753,6 +797,8 @@ __all__ = [
     "OKVQAIT2TRetrieval",
     "OVENIT2ITRetrieval",
     "OVENIT2TRetrieval",
+    "OmniWikiV2IRetrieval",
+    "OmniWikiV2TRetrieval",
     "Panda70MT2VARetrieval",
     "Panda70MT2VRetrieval",
     "Panda70MV2TRetrieval",
@@ -828,6 +874,8 @@ __all__ = [
     "TempReasonL3Fact",
     "TempReasonL3Pure",
     "ToolBench",
+    "ToolRetrieval",
+    "ToolRetrievalInstruction",
     "TopiOCQARetrieval",
     "TopiOCQARetrievalHardNegatives",
     "Touche2020",

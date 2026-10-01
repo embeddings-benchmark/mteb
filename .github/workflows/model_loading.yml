@@ -25,6 +25,8 @@ jobs:
           enable-cache: true
           python-version: "3.10"
 
-      - name: Install dependencies and run tests
-        run: |
-          make model-load-test BASE_BRANCH=${{ github.event.pull_request.base.ref }}
+      - name: Install dependencies
+        run: make install-for-model-load-test
+
+      - name: Run model load test
+        run: make model-load-test BASE_BRANCH=${{ github.event.pull_request.base.ref }}

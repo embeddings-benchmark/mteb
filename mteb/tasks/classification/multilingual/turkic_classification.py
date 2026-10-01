@@ -1,10 +1,16 @@
+from __future__ import annotations
+
 from collections import Counter
+from typing import TYPE_CHECKING, Any
 
 import datasets
 from datasets import DatasetDict
 
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
+
+if TYPE_CHECKING:
+    from datasets import Dataset
 
 
 class TurkicClassification(AbsTaskClassification):
@@ -37,7 +43,7 @@ class TurkicClassification(AbsTaskClassification):
         """,
     )
 
-    def transform_data(self, dataset, lang):
+    def transform_data(self, dataset: Dataset, lang: str | None) -> Dataset:
         dataset_lang = DatasetDict()
         label_count = Counter(dataset["train"]["label"])
         dataset_lang["train"] = dataset["train"].filter(
@@ -50,7 +56,7 @@ class TurkicClassification(AbsTaskClassification):
         )
         return dataset_lang["train"]
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return

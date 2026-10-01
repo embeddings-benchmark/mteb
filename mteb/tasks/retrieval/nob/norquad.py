@@ -1,3 +1,5 @@
+from typing import Any
+
 import datasets
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -29,6 +31,7 @@ class NorQuadRetrieval(AbsTaskRetrieval):
         bibtex_citation=r"""
 @inproceedings{ivanova-etal-2023-norquad,
   address = {T{\'o}rshavn, Faroe Islands},
+  archiveprefix = {arXiv},
   author = {Ivanova, Sardana  and
 Andreassen, Fredrik  and
 Jentoft, Matias  and
@@ -37,6 +40,7 @@ Wold, Sondre  and
   booktitle = {Proceedings of the 24th Nordic Conference on Computational Linguistics (NoDaLiDa)},
   editor = {Alum{\"a}e, Tanel  and
 Fishel, Mark},
+  eprint = {2305.01957},
   month = may,
   pages = {159--168},
   publisher = {University of Tartu Library},
@@ -50,7 +54,7 @@ Fishel, Mark},
         },
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
@@ -58,7 +62,7 @@ Fishel, Mark},
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """And transform to a retrieval dataset, which have the following attributes
 
         self.corpus = dict[doc_id, dict[str, str]] #id => dict with document data like title and text

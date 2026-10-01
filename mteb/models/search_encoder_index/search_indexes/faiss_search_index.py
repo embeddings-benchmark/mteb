@@ -5,7 +5,6 @@ import warnings
 from typing import TYPE_CHECKING, cast
 
 import numpy as np
-import torch
 
 from mteb._requires_package import _is_package_available
 from mteb.models.model_meta import ScoringFunction
@@ -64,6 +63,7 @@ class FaissSearchIndex:
     def add_documents(self, embeddings: Array, idxs: list[str]) -> None:
         """Add all document embeddings and their IDs to FAISS index."""
         import faiss
+        import torch
 
         if isinstance(embeddings, torch.Tensor):
             embeddings = embeddings.detach().cpu().numpy()
@@ -91,6 +91,7 @@ class FaissSearchIndex:
     ) -> tuple[list[list[float]], list[list[int]]]:
         """Search using FAISS."""
         import faiss
+        import torch
 
         if self.index is None:
             raise ValueError("No index built. Call add_document() first.")

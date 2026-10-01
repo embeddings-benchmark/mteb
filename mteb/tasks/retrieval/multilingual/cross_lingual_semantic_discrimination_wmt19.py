@@ -1,3 +1,5 @@
+from typing import Any
+
 import datasets
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -53,7 +55,7 @@ class CrossLingualSemanticDiscriminationWMT19(AbsTaskRetrieval):
     )
     num_of_distractors = 4
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """Generic data loader function for original clsd datasets with the format shown in "hf_dataset_link".
         Loading the hf dataset, it populates the following three variables to be used for retrieval evaluation.
 

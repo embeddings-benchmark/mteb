@@ -2,16 +2,17 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
-import torch.nn.functional as F
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
     from PIL import Image
     from torch.utils.data import DataLoader
+    from transformers import BatchFeature
+    from transformers.modeling_outputs import BaseModelOutput
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
@@ -34,9 +35,14 @@ class NomicVisionModel(AbsEncoder):
         revision: str,
         text_model_name: str,
         text_model_revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ):
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         from transformers import AutoImageProcessor, AutoModel, AutoTokenizer
 
         self.vision_model_name = model_name
@@ -65,7 +71,7 @@ class NomicVisionModel(AbsEncoder):
         self,
         texts: list[str],
         images: list[Image.Image],
-    ):
+    ) -> BatchFeature:
         return self.processor(
             text=texts, images=images, return_tensors="pt", padding=True
         )
@@ -75,7 +81,10 @@ class NomicVisionModel(AbsEncoder):
         texts: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ):
+    ) -> Array:
+        import torch
+        import torch.nn.functional as F
+
         all_text_embeddings = []
 
         with torch.no_grad():
@@ -99,7 +108,11 @@ class NomicVisionModel(AbsEncoder):
         all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
         return all_text_embeddings
 
-    def mean_pooling(self, model_output, attention_mask):  # noqa: PLR6301
+    def mean_pooling(  # noqa: PLR6301
+        self, model_output: BaseModelOutput, attention_mask: torch.Tensor
+    ) -> torch.Tensor:
+        import torch
+
         token_embeddings = model_output[0]
         input_mask_expanded = (
             attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
@@ -113,7 +126,10 @@ class NomicVisionModel(AbsEncoder):
         images: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ):
+    ) -> Array:
+        import torch
+        import torch.nn.functional as F
+
         all_image_embeddings = []
 
         with torch.no_grad():

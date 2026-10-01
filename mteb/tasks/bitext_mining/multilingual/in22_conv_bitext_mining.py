@@ -1,3 +1,5 @@
+from typing import Any
+
 import datasets
 
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -48,12 +50,12 @@ def extend_lang_pairs() -> dict[str, list[str]]:
 _LANGUAGES_MAPPING = extend_lang_pairs()
 
 
-def get_hash(text):
+def get_hash(text: str) -> dict[str, int]:
     """Get hash of text field."""
     return {"hash": hash(text)}
 
 
-def check_uniques(example, uniques):
+def check_uniques(example: dict[str, Any], uniques: set[str]) -> bool:
     """Check if current hash is still in set of unique hashes and remove if true."""
     if example["hash"] in uniques:
         uniques.remove(example["hash"])
@@ -98,7 +100,7 @@ class IN22ConvBitextMining(AbsTaskBitextMining):
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 

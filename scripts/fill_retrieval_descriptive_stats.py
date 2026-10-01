@@ -35,6 +35,7 @@ DATASETS_SERVER_URL = "https://datasets-server.huggingface.co"
 TARGET_TASK_TYPES = [
     "Retrieval",
     "Reranking",
+    "Any2AnyReranking",
     "Any2AnyRetrieval",
     "Any2AnyMultilingualRetrieval",
     "InstructionRetrieval",

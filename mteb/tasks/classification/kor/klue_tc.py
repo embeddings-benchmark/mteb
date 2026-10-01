@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -42,7 +44,7 @@ class KlueTC(AbsTaskClassification):
         self,
         num_proc: int | None = None,
     ):
-        def id2str(example):
+        def id2str(example: dict[str, Any]) -> dict[str, Any]:
             return {"label": label_feature.int2str(example["label_id"])}
 
         self.dataset = self.stratified_subsampling(

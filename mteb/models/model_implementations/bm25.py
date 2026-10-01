@@ -2,13 +2,14 @@ from __future__ import annotations
 
 import logging
 import unicodedata
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Any, Literal
 
-from mteb._create_dataloaders import _combine_queries_with_instruction_text
 from mteb.models.model_meta import ModelMeta
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+
+    from bm25s.tokenization import Tokenized
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models.models_protocols import SearchProtocol
@@ -182,7 +183,7 @@ class BM25Tokenizer:
         self.fit_transform(corpus_texts)
         return self
 
-    def fit_transform(self, corpus_texts: list[str]):
+    def fit_transform(self, corpus_texts: list[str]) -> Tokenized:
         """Fit on corpus and return the encoded corpus as a ``Tokenized``."""
         if self._tok_arg is None:
             return self._fit_transform_bm25s(corpus_texts)
@@ -191,13 +192,13 @@ class BM25Tokenizer:
         )
         return self._fit_transform_custom(corpus_texts)
 
-    def transform(self, texts: list[str]):
+    def transform(self, texts: list[str]) -> Tokenized:
         """Tokenize ``texts`` using the stopword set learned during ``fit_transform``."""
         if self._tok_arg is None:
             return self._transform_bm25s(texts)
         return self._transform_custom(texts)
 
-    def _fit_transform_bm25s(self, corpus_texts: list[str]):
+    def _fit_transform_bm25s(self, corpus_texts: list[str]) -> Tokenized:
         import bm25s
         from bm25s.tokenization import Tokenized
 
@@ -240,14 +241,14 @@ class BM25Tokenizer:
         ]
         return Tokenized(ids=filtered_ids, vocab=raw.vocab)
 
-    def _transform_bm25s(self, texts: list[str]):
+    def _transform_bm25s(self, texts: list[str]) -> Tokenized:
         import bm25s
 
         return bm25s.tokenize(
             texts, stopwords=self._combined_list, stemmer=self.stemmer
         )
 
-    def _fit_transform_custom(self, corpus_texts: list[str]):
+    def _fit_transform_custom(self, corpus_texts: list[str]) -> Tokenized:
         raw_token_lists = [self._raw_tok(text) for text in corpus_texts]
 
         freq_stops: frozenset[str] = frozenset()
@@ -275,7 +276,7 @@ class BM25Tokenizer:
         ]
         return self._to_tokenized(filtered)
 
-    def _transform_custom(self, texts: list[str]):
+    def _transform_custom(self, texts: list[str]) -> Tokenized:
         token_lists = [
             [t for t in self._raw_tok(text) if t not in self._combined_stops]
             for text in texts
@@ -289,7 +290,7 @@ class BM25Tokenizer:
         raise ValueError(f"Unknown tokenizer name: {name!r}")
 
     @staticmethod
-    def _to_tokenized(token_lists: list[list[str]]):
+    def _to_tokenized(token_lists: list[list[str]]) -> Tokenized:
         from bm25s.tokenization import Tokenized
 
         vocab: dict[str, int] = {}
@@ -333,7 +334,7 @@ class BM25Search:
         b: float = 0.75,
         delta: float = 0.5,
         method: Literal["robertson", "lucene", "atire"] = "lucene",
-        **kwargs,
+        **kwargs: Any,
     ):
         """
         Args:
@@ -441,6 +442,8 @@ class BM25Search:
         logger.info("Encoding Queries...")
         query_ids = list(queries["id"])
         results = {qid: {} for qid in query_ids}
+        from mteb._create_dataloaders import _combine_queries_with_instruction_text
+
         processed = _combine_queries_with_instruction_text(queries)
         queries_texts = list(processed["text"])
         query_token_strs = self._tokenizer.transform(queries_texts)
@@ -475,7 +478,7 @@ class BM25Search:
         return results
 
 
-def bm25_loader(model_name, **kwargs) -> SearchProtocol:
+def bm25_loader(model_name: str, **kwargs: Any) -> SearchProtocol:
     return BM25Search(**kwargs)
 
 

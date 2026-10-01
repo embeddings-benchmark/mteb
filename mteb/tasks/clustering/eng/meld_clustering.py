@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from mteb.abstasks import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -63,7 +65,7 @@ class MELDEmotionAudioVideoClustering(AbsTaskClustering):
     input_column_name = ("video", "audio")
     label_column_name: str = "emotion"
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         for split in self.metadata.eval_splits:
             ds = self.dataset[split]
             neutral_id = ds.features["emotion"].str2int("neutral")
@@ -99,7 +101,7 @@ class MELDEmotionVideoClustering(AbsTaskClustering):
     input_column_name: str = "video"
     label_column_name: str = "emotion"
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         for split in self.metadata.eval_splits:
             ds = self.dataset[split]
             neutral_id = ds.features["emotion"].str2int("neutral")
@@ -134,7 +136,7 @@ class MELDSpeakerAudioVideoClustering(AbsTaskClustering):
     input_column_name = ("video", "audio")
     label_column_name: str = "speaker"
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         for split in self.metadata.eval_splits:
             self.dataset[split] = self.dataset[split].select_columns(
                 ["video", "audio", "speaker"],
@@ -168,7 +170,7 @@ class MELDSpeakerVideoClustering(AbsTaskClustering):
     input_column_name: str = "video"
     label_column_name: str = "speaker"
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         for split in self.metadata.eval_splits:
             self.dataset[split] = self.dataset[split].select_columns(
                 ["video", "speaker"],

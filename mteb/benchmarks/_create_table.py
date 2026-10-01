@@ -396,9 +396,9 @@ def _get_means_per_types(
 
     type_cols: list[str] = []
     type_exprs: list[pl.Expr] = []
-    for task_type, tasks in task_names_per_type.items():
-        type_cols.append(task_type)
-        type_exprs.append(_skipna_false_mean(tasks).alias(task_type))
+    for type_name, tasks in task_names_per_type.items():
+        type_cols.append(type_name)
+        type_exprs.append(_skipna_false_mean(tasks).alias(type_name))
     return type_exprs, type_cols
 
 

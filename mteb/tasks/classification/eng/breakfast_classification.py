@@ -33,10 +33,9 @@ class BreakfastClassification(AbsTaskClassification):
         bibtex_citation=r"""
 @inproceedings{kuehne2014language,
   author = {Kuehne, Hilde and Arslan, Ali and Serre, Thomas},
-  booktitle = {2014 IEEE Conference on Computer Vision and Pattern Recognition},
-  doi = {10.1109/CVPR.2014.338},
-  pages = {3325-3332},
-  title = {The Language of Actions: Recovering the Syntax and Semantics of Goal-Directed Human Activities},
+  booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
+  pages = {780--787},
+  title = {The language of actions: Recovering the syntax and semantics of goal-directed human activities},
   year = {2014},
 }
 """,

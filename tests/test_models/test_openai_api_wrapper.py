@@ -3,6 +3,7 @@
 All tests are fully mocked and do not require a running vLLM server.
 """
 
+from typing import Any
 from unittest.mock import MagicMock, patch
 
 import numpy as np
@@ -16,7 +17,7 @@ class TestOpenAIAPIEncodeWrapper:
     """Test OpenAIAPIEncodeWrapper functionality."""
 
     @patch("requests.get")
-    def test_initialization(self, mock_get):
+    def test_initialization(self, mock_get: MagicMock):
         """Test that wrapper initializes and connects to server."""
         # Mock the /v1/models endpoint
         mock_response = MagicMock()
@@ -52,7 +53,7 @@ class TestOpenAIAPIEncodeWrapper:
                 )
 
     @patch("requests.get")
-    def test_instruction_template_validation(self, mock_get):
+    def test_instruction_template_validation(self, mock_get: MagicMock):
         """Test instruction template validation."""
         # Mock server response
         mock_response = MagicMock()
@@ -79,7 +80,7 @@ class TestOpenAIAPIEncodeWrapper:
 
     @patch("requests.post")
     @patch("requests.get")
-    def test_basic_encoding(self, mock_get, mock_post):
+    def test_basic_encoding(self, mock_get: MagicMock, mock_post: MagicMock):
         """Test basic text encoding functionality with mocked responses."""
         from mteb.abstasks.task_metadata import TaskMetadata
         from mteb.types import PromptType
@@ -130,7 +131,7 @@ class TestOpenAIAPIEncodeWrapper:
         assert embeddings.dtype == np.float32
 
     @patch("requests.get")
-    def test_ssl_verification(self, mock_get):
+    def test_ssl_verification(self, mock_get: MagicMock):
         """Test SSL verification can be disabled."""
         # Mock successful response when SSL verification is disabled
         mock_response = MagicMock()
@@ -154,7 +155,7 @@ class TestOpenAIAPIEncodeWrapper:
         assert call_kwargs["verify"] is False
 
     @patch("requests.get")
-    def test_api_key_header(self, mock_get):
+    def test_api_key_header(self, mock_get: MagicMock):
         """Test that API key is stored correctly."""
         mock_response = MagicMock()
         mock_response.status_code = 200
@@ -170,7 +171,7 @@ class TestOpenAIAPIEncodeWrapper:
 
     @patch("requests.post")
     @patch("requests.get")
-    def test_encode_with_mock_task(self, mock_get, mock_post):
+    def test_encode_with_mock_task(self, mock_get: MagicMock, mock_post: MagicMock):
         """Test encoding with a mock task and actual data return."""
         # Mock server initialization
         mock_get_response = MagicMock()
@@ -197,7 +198,7 @@ class TestOpenAIAPIEncodeWrapper:
         mock_post_response.status_code = 200
 
         # Return different responses based on input size
-        def mock_post_side_effect(*args, **kwargs):
+        def mock_post_side_effect(*args: Any, **kwargs: Any):
             input_data = kwargs.get("json", {}).get("input", [])
             response = MagicMock()
             response.status_code = 200
@@ -255,7 +256,7 @@ class TestOpenAIAPIEncodeWrapper:
 
     @patch("requests.post")
     @patch("requests.get")
-    def test_batch_size_override(self, mock_get, mock_post):
+    def test_batch_size_override(self, mock_get: MagicMock, mock_post: MagicMock):
         """Test that batch_size can be overridden in encode()."""
         from mteb.abstasks.task_metadata import TaskMetadata
         from mteb.types import PromptType

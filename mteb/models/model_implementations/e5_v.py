@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -31,9 +30,10 @@ class E5VModel(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
-        composed_prompt=None,
+        composed_prompt: str | None = None,
         **kwargs: Any,
     ):
+        import torch
         from transformers import LlavaNextForConditionalGeneration, LlavaNextProcessor
 
         self.model_name = model_name
@@ -65,7 +65,9 @@ class E5VModel(AbsEncoder):
         texts: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ):
+    ) -> Array:
+        import torch
+
         all_text_embeddings = []
 
         with torch.no_grad():
@@ -91,7 +93,9 @@ class E5VModel(AbsEncoder):
         images: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ):
+    ) -> Array:
+        import torch
+
         all_image_embeddings = []
 
         with torch.no_grad():
@@ -121,6 +125,8 @@ class E5VModel(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         if "image" in inputs.dataset.features and "text" in inputs.dataset.features:
             all_fused_embeddings = []
 

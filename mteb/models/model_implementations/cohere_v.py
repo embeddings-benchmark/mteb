@@ -6,7 +6,6 @@ import os
 import time
 from typing import TYPE_CHECKING, Any, Literal, get_args
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
@@ -20,9 +19,11 @@ from mteb.models.model_meta import ScoringFunction
 from mteb.types import OutputDType
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
 
 
@@ -30,6 +31,8 @@ def _post_process_embeddings(
     embeddings_array: torch.Tensor, embedding_type: str
 ) -> torch.Tensor:
     """Post-process embeddings based on type (similar to voyage_models.py)"""
+    import torch
+
     if embedding_type == "binary":
         # Unpack bit-packed embeddings: each byte contains 8 embedding values
         unpacked_embeddings = []
@@ -179,8 +182,9 @@ OUTPUT_TYPES = [
 ]
 
 
-def cohere_v_loader(model_name, **kwargs):
+def cohere_v_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
     import cohere
+    import torch
 
     class CohereMultiModalModelWrapper(AbsEncoder):
         def __init__(
@@ -213,7 +217,7 @@ def cohere_v_loader(model_name, **kwargs):
             self.transform = transforms.Compose([transforms.PILToTensor()])
 
         @retry_with_rate_limit(max_retries=5, max_rpm=300)
-        def _embed_func(self, **kwargs):
+        def _embed_func(self, **kwargs: Any) -> cohere.EmbedByTypeResponse:
             """Call Cohere embed API with retry and rate limiting."""
             return self.client.embed(**kwargs)
 
@@ -222,7 +226,7 @@ def cohere_v_loader(model_name, **kwargs):
             inputs: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_text_embeddings = []
             index = 0
             texts = [text for batch in inputs for text in batch["text"]]
@@ -301,7 +305,7 @@ def cohere_v_loader(model_name, **kwargs):
             images: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_image_embeddings = []
             images = [image for batch in images for image in batch["images"]]
 

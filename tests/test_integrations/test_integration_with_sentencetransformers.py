@@ -10,6 +10,7 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 import mteb
 from mteb.abstasks import AbsTask
 from mteb.mocks import (
+    MOCK_TASK_TEST_GRID,
     LegacyMockClusteringFastTask,
     MockBitextMiningTask,
     MockClassificationTask,
@@ -40,6 +41,10 @@ from mteb.mocks import (
     MockTextZeroShotClassificationTask,
 )
 from mteb.models import ModelMeta
+from mteb.models.sentence_transformer_wrapper import (
+    SENTENCE_TRANSFORMERS_MULTI_VECTOR_VERSION,
+    SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION,
+)
 from tests.test_integrations._model_info import ModelInfo, assert_final_score
 
 logging.basicConfig(level=logging.INFO)
@@ -118,6 +123,54 @@ def test_sentence_transformer_integration_cross_encoder(
 ):
     """Test that a task can be fetched and produces the expected final score."""
     assert_final_score(model, task, expected_score)
+
+
+@pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID)
+@pytest.mark.parametrize("model_name", ["sparse-encoder/splade-camembert-base-v2"])
+def test_sentence_transformer_integration_sparse_encoder(
+    task: AbsTask, model_name: str
+):
+    """Test that a task can be fetched and run with a raw (unwrapped) SparseEncoder, exactly like
+    `test_sentence_transformer_integration` does for `SentenceTransformer`. Exercises the
+    `_sanitize_model` auto-wrapping path in `mteb.evaluate` (into `SparseEncoderWrapper`)."""
+    if (
+        Version(sentence_transformers.__version__).release
+        < Version(SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION).release
+    ):
+        pytest.skip(
+            f"sentence-transformers >= {SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION} is required for SparseEncoder"
+        )
+    from sentence_transformers.sparse_encoder import SparseEncoder
+
+    model = SparseEncoder(model_name)
+    mteb.evaluate(model, task, cache=None)
+
+
+@pytest.mark.parametrize(
+    "task",
+    [
+        MockRetrievalTask(),
+        MockRerankingTask(),
+        MockInstructionReranking(),
+    ],
+)
+@pytest.mark.parametrize("model_name", ["lightonai/LateOn"])
+def test_sentence_transformer_integration_multi_vector_encoder(
+    task: AbsTask, model_name: str
+):
+    if (
+        Version(sentence_transformers.__version__).release
+        < Version(SENTENCE_TRANSFORMERS_MULTI_VECTOR_VERSION).release
+    ):
+        pytest.skip(
+            f"sentence-transformers >= {SENTENCE_TRANSFORMERS_MULTI_VECTOR_VERSION} is required for MultiVectorEncoder"
+        )
+    from sentence_transformers import MultiVectorEncoder
+
+    model = MultiVectorEncoder(
+        model_name, revision="6bb4488a7a1f1769f7a69fa1ff0c74c6a7b98cbd"
+    )
+    mteb.evaluate(model, task, cache=None)
 
 
 def test_model_meta_load_sentence_transformer_metadata_from_model():
