@@ -97,6 +97,7 @@ def count_queries_with_all_gold_black_or_white(
 def calculate_image_statistics(
     images: list[Image.Image],
     hashes: list[str] | None = None,
+    black_or_white_flags: list[bool] | None = None,
     max_workers: int | None = None,
 ) -> ImageStatistics:
     """Calculate descriptive statistics for a list of images.
@@ -106,6 +107,9 @@ def calculate_image_statistics(
             attribute returning ``(width, height)``.
         hashes: Optional pre-computed MD5 hashes (from `compute_image_hashes`).
             When provided the function skips recomputing them.
+        black_or_white_flags: Optional pre-computed flags (from
+            `compute_black_or_white_image_flags`). When provided the function
+            skips recomputing them.
         max_workers: Maximum number of worker threads for parallel hash computation.
 
     Returns:
@@ -113,9 +117,10 @@ def calculate_image_statistics(
     """
     if hashes is None:
         hashes = compute_image_hashes(images, max_workers=max_workers)
-    black_or_white_flags = compute_black_or_white_image_flags(
-        images, max_workers=max_workers
-    )
+    if black_or_white_flags is None:
+        black_or_white_flags = compute_black_or_white_image_flags(
+            images, max_workers=max_workers
+        )
     img_widths, img_heights = [], []
     for img in tqdm(images, desc="Computing image statistics"):
         width, height = img.size
@@ -405,6 +410,7 @@ def calculate_relevant_docs_statistics(
 def calculate_single_input_modality_statistics(
     col_inputs: dict[Modalities, list[Any]],
     hashes: dict[str, list[str]] | None = None,
+    image_black_or_white_flags: list[bool] | None = None,
     max_workers: int | None = None,
 ) -> SingleInputModalityStatistics:
     """Compute per-modality statistics for a single-input dataset."""
@@ -416,7 +422,10 @@ def calculate_single_input_modality_statistics(
         if "text" in col_inputs
         else None,
         image_statistics=calculate_image_statistics(
-            col_inputs["image"], hashes=_hashes.get("image"), max_workers=max_workers
+            col_inputs["image"],
+            hashes=_hashes.get("image"),
+            black_or_white_flags=image_black_or_white_flags,
+            max_workers=max_workers,
         )
         if "image" in col_inputs
         else None,
