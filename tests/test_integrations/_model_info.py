@@ -71,6 +71,8 @@ def assert_final_score(
     # test order.
     task = type(task)()
     result = mteb.evaluate(model, task, cache=None)[0]
-    assert result.get_score() == pytest.approx(expected_score, abs=1e-5, nan_ok=True), (
-        f"{model} final score changed for {result.task_name}"
+    actual_score = result.get_score()
+    assert actual_score == pytest.approx(expected_score, abs=1e-5, nan_ok=True), (
+        f"{model} final score changed for {result.task_name}: "
+        f"got {actual_score!r}, expected {expected_score!r}"
     )
