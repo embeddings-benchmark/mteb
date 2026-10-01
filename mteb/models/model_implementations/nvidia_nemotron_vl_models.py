@@ -2,9 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
-from torch.nn.functional import normalize
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -12,6 +9,9 @@ from mteb.models.model_meta import ModelMeta
 from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
+    import torch
+    from torch.utils.data import DataLoader
+
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput
 
@@ -34,14 +34,6 @@ NEMOTRON_COLEMBED_CITATION_V2 = """
     archivePrefix={arXiv},
     primaryClass={cs.IR},
     url={https://arxiv.org/abs/2602.03992},
-}"""
-
-NEMOTRON_EMBED_VL_1B_V2_CITATION = """
-@misc{ronay2026smallyetmighty,
-    title={Small Yet Mighty: Improve Accuracy In Multimodal Search and Visual Document Retrieval with Llama Nemotron RAG Models},
-    author={Ronay Ak, Gabriel de Souza Pereira Moreira and Bo Liu},
-    year={2026},
-    howpublished = {Available at: https://huggingface.co/blog/nvidia/llama-nemotron-vl-1b},
 }"""
 
 
@@ -85,6 +77,7 @@ class NemotronColEmbedVL(AbsEncoder):
     ) -> Array:
         import torchvision.transforms.functional as F
         from PIL import Image
+        from torch.utils.data import DataLoader
 
         all_images = []
         if isinstance(images, DataLoader):
@@ -373,6 +366,9 @@ class LlamaNemotronEmbedVL(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+        from torch.nn.functional import normalize
+
         with torch.inference_mode():
             embeddings_list = []
             for batch in tqdm(
@@ -453,6 +449,5 @@ llama_nemotron_embed_vl_1b_v2 = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=True,
     training_datasets=TRAINING_DATA_EMBED_VL_1B_V2,
-    citation=NEMOTRON_EMBED_VL_1B_V2_CITATION,
     extra_requirements_groups=["llama-nemotron-colembed-vl"],
 )

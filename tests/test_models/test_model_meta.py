@@ -61,7 +61,7 @@ _MISSING_N_EMBEDDING_MODELS = [
     "vidore/colpali-v1.3",
     "vidore/colqwen2-v1.0",
     "vidore/colqwen2.5-v0.2",
-    "voyageai/voyage-multimodal-3",
+    "mongodb/voyage-multimodal-3",
     "OrlikB/KartonBERT-USE-base-v1",
     "OrlikB/st-polish-kartonberta-base-alpha-v1",
     "jinaai/jina-clip-v2",
@@ -619,3 +619,29 @@ def test_get_model_metas_n_parameters_no_bounds_keeps_everything():
     assert (
         mteb.get_model_metas(n_parameters_range=(None, None)) == mteb.get_model_metas()
     )
+
+
+@pytest.mark.parametrize("languages", [["eng"], ["eng-Latn"], ["eng", "fra-Latn"]])
+def test_get_model_metas_languages(languages: list[str]):
+    models = mteb.get_model_metas(languages=languages)
+
+    assert len(models) > 0
+    for model in models:
+        assert model.languages is not None
+        for lang in languages:
+            if "-" in lang:
+                assert lang in model.languages
+            else:
+                assert any(code.split("-")[0] == lang for code in model.languages)
+
+
+def test_get_model_metas_iso_code_matches_language_script():
+    iso_models = {m.name for m in mteb.get_model_metas(languages=["eng"])}
+    script_models = {m.name for m in mteb.get_model_metas(languages=["eng-Latn"])}
+
+    assert script_models <= iso_models
+
+
+def test_get_model_metas_invalid_language():
+    with pytest.raises(ValueError, match="Invalid language code"):
+        mteb.get_model_metas(languages=["english"])

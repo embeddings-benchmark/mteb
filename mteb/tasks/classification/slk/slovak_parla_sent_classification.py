@@ -28,11 +28,24 @@ class SlovakParlaSentClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{antunovic2022parlasent,
-  author = {Antunovi{\'c}, Matej and Bra{\v{z}}inskas, Rytis and {\v{Z}}agar, Bojan and Haddow, Barry and Birch, Alexandra and Ljube{\v{s}}i{\'c}, Nikola},
-  journal = {arXiv preprint arXiv:2210.03068},
-  title = {ParlaSent: A multilingual sentiment analysis dataset of parliamentary debates},
-  year = {2022},
+@inproceedings{mochtak-etal-2024-parlasent,
+  address = {Torino, Italia},
+  author = {Mochtak, Michal  and
+Rupnik, Peter  and
+Ljube{\v{s}}i{\'c}, Nikola},
+  booktitle = {Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation (LREC-COLING 2024)},
+  editor = {Calzolari, Nicoletta  and
+Kan, Min-Yen  and
+Hoste, Veronique  and
+Lenci, Alessandro  and
+Sakti, Sakriani  and
+Xue, Nianwen},
+  month = may,
+  pages = {16024--16036},
+  publisher = {ELRA and ICCL},
+  title = {The {P}arla{S}ent Multilingual Training Dataset for Sentiment Identification in Parliamentary Proceedings},
+  url = {https://aclanthology.org/2024.lrec-main.1393/},
+  year = {2024},
 }
 """,
         prompt="Classify the sentiment expressed in the given text as negative, neutral or positive",

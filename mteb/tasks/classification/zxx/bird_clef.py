@@ -25,11 +25,13 @@ class BirdCLEFClassification(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@dataset{birdclef2025,
-  author = {Christopher},
-  publisher = {Hugging Face},
-  title = {BirdCLEF+ 2025},
-  url = {https://huggingface.co/datasets/christopher/birdclef-2025},
+@inproceedings{canas2025overview,
+  author = {Ca{\~n}as, Juan Sebasti{\'a}n and Kahl, Stefan and Denton, Tom and Toro-G{\'o}mez, Maria Paula and Rodriguez-Buritica, Susana and Benavides-Lopez, Jose Luis and Ulloa, Juan Sebasti{\'a}n and Caycedo-Rosales, Paula and Klinck, Holger and Go{\"e}au, Herv{\'e} and others},
+  booktitle = {Conference and Labs of the Evaluation Forum (CLEF 2025)},
+  number = {4038},
+  organization = {CEUR-WS},
+  pages = {2909--2919},
+  title = {Overview of BirdCLEF+ 2025: Multi-taxonomic sound identification in the Middle Magdalena, Colombia},
   year = {2025},
 }
 """,

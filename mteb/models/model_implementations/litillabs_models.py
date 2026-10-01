@@ -8,9 +8,6 @@ from mteb.models.model_implementations.octen_models import (
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
-OCTEN_LAW_8B_V1_CITATION = "@misc{octen-law-8b-v1,\n  title={Octen Law 8B v1: a multilingual legal text embedding model},\n  author={{Litil Labs}},\n  year={2026},\n  howpublished={\\url{https://huggingface.co/litillabs/octen-law-8b-v1}}\n}"
-
-
 litillabs_octen_law_8b_v1 = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
     name="litillabs/octen-law-8b-v1",
@@ -35,7 +32,6 @@ litillabs_octen_law_8b_v1 = ModelMeta(
     # conservatively because the training pack contains disclosed
     # cross-direction benchmark-adjacent near-duplicates for those tasks.
     training_datasets={"GerDaLIRSmall", "LeCaRDv2", "WikiQA"},
-    citation=OCTEN_LAW_8B_V1_CITATION,
     adapted_from="Octen/Octen-Embedding-8B",
 )
 

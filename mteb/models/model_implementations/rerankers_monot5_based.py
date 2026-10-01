@@ -3,8 +3,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any, TypeVar
 
-import torch
-
 from mteb.models.model_meta import ModelMeta
 
 from .rerankers_custom import RerankerWrapper
@@ -56,6 +54,8 @@ class MonoT5Reranker(RerankerWrapper):
         model_name_or_path: str = "castorini/monot5-base-msmarco-10k",
         **kwargs: Any,
     ):
+        import torch
+
         super().__init__(model_name_or_path, **kwargs)
         from transformers import (
             AutoModelForSeq2SeqLM,
@@ -117,7 +117,6 @@ class MonoT5Reranker(RerankerWrapper):
         token_true_id = tokenizer.get_vocab()[token_true]
         return token_false_id, token_true_id
 
-    @torch.inference_mode()
     def predict(
         self,
         inputs1: DataLoader[BatchedInput],
@@ -129,41 +128,47 @@ class MonoT5Reranker(RerankerWrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        queries = [text for batch in inputs1 for text in batch["query"]]
-        instructions = None
-        if "instruction" in inputs2.dataset.features:
-            instructions = [text for batch in inputs1 for text in batch["instruction"]]
-        passages = [text for batch in inputs2 for text in batch["text"]]
+        import torch
 
-        if instructions is not None and instructions[0] is not None:
-            queries = [
-                f"{q} {i}".strip() for i, q in zip(instructions, queries, strict=True)
+        with torch.inference_mode():
+            queries = [text for batch in inputs1 for text in batch["query"]]
+            instructions = None
+            if "instruction" in inputs2.dataset.features:
+                instructions = [
+                    text for batch in inputs1 for text in batch["instruction"]
+                ]
+            passages = [text for batch in inputs2 for text in batch["text"]]
+
+            if instructions is not None and instructions[0] is not None:
+                queries = [
+                    f"{q} {i}".strip()
+                    for i, q in zip(instructions, queries, strict=True)
+                ]
+
+            prompts = [
+                self.prompt_template.format(query=query, text=text)
+                for (query, text) in zip(queries, passages, strict=True)
             ]
 
-        prompts = [
-            self.prompt_template.format(query=query, text=text)
-            for (query, text) in zip(queries, passages, strict=True)
-        ]
-
-        tokens = self.tokenizer(
-            prompts,
-            padding=True,
-            truncation=True,
-            return_tensors="pt",
-            max_length=self.max_length,
-            pad_to_multiple_of=(8 if self.torch_compile else None),
-        ).to(self.device)
-        output = self.model.generate(
-            **tokens,
-            max_new_tokens=1,
-            return_dict_in_generate=True,
-            output_scores=True,
-        )
-        batch_scores = output.scores[0]
-        batch_scores = batch_scores[:, [self.token_false_id, self.token_true_id]]
-        # upcast the logits to float32 before the softmax
-        batch_scores = torch.nn.functional.log_softmax(batch_scores.float(), dim=1)
-        return batch_scores[:, 1].exp().tolist()
+            tokens = self.tokenizer(
+                prompts,
+                padding=True,
+                truncation=True,
+                return_tensors="pt",
+                max_length=self.max_length,
+                pad_to_multiple_of=(8 if self.torch_compile else None),
+            ).to(self.device)
+            output = self.model.generate(
+                **tokens,
+                max_new_tokens=1,
+                return_dict_in_generate=True,
+                output_scores=True,
+            )
+            batch_scores = output.scores[0]
+            batch_scores = batch_scores[:, [self.token_false_id, self.token_true_id]]
+            # upcast the logits to float32 before the softmax
+            batch_scores = torch.nn.functional.log_softmax(batch_scores.float(), dim=1)
+            return batch_scores[:, 1].exp().tolist()
 
 
 class LlamaReranker(RerankerWrapper):
@@ -172,6 +177,7 @@ class LlamaReranker(RerankerWrapper):
     def __init__(
         self, model_name_or_path: str, is_classification: bool = False, **kwargs: Any
     ):
+        import torch
         from transformers import AutoModelForCausalLM, AutoTokenizer
 
         kwargs.pop("torch_compile", None)
@@ -224,7 +230,6 @@ Relevant: """
             self.model = torch.nn.DataParallel(self.model)
         self.model.eval()
 
-    @torch.inference_mode()
     def predict(
         self,
         inputs1: DataLoader[BatchedInput],
@@ -236,55 +241,64 @@ Relevant: """
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        queries = [text for batch in inputs1 for text in batch["query"]]
-        instructions = None
-        if "instruction" in inputs2.dataset.features:
-            instructions = [text for batch in inputs1 for text in batch["instruction"]]
-        passages = [text for batch in inputs2 for text in batch["text"]]
+        import torch
 
-        if instructions is not None and instructions[0] is not None:
-            # logger.info(f"Adding instructions to LLAMA queries")
-            queries = [
-                self.query_instruct_template.format(instruction=i, query=q).strip()
-                for i, q in zip(instructions, queries, strict=True)
+        with torch.inference_mode():
+            queries = [text for batch in inputs1 for text in batch["query"]]
+            instructions = None
+            if "instruction" in inputs2.dataset.features:
+                instructions = [
+                    text for batch in inputs1 for text in batch["instruction"]
+                ]
+            passages = [text for batch in inputs2 for text in batch["text"]]
+
+            if instructions is not None and instructions[0] is not None:
+                # logger.info(f"Adding instructions to LLAMA queries")
+                queries = [
+                    self.query_instruct_template.format(instruction=i, query=q).strip()
+                    for i, q in zip(instructions, queries, strict=True)
+                ]
+
+            prompts = [
+                self.template.format(query=query, text=text)
+                for (query, text) in zip(queries, passages, strict=True)
             ]
+            if "{query}" in prompts[0]:
+                raise ValueError("Query not replaced")
+            if "{text}" in prompts[0]:
+                raise ValueError("Text not replaced")
+            if "{instruction}" in prompts[0]:
+                raise ValueError("Instruction not replaced")
 
-        prompts = [
-            self.template.format(query=query, text=text)
-            for (query, text) in zip(queries, passages, strict=True)
-        ]
-        if "{query}" in prompts[0]:
-            raise ValueError("Query not replaced")
-        if "{text}" in prompts[0]:
-            raise ValueError("Text not replaced")
-        if "{instruction}" in prompts[0]:
-            raise ValueError("Instruction not replaced")
+            tokens = self.tokenizer(
+                prompts,
+                padding=True,
+                truncation=True,
+                return_tensors="pt",
+                max_length=self.max_length,
+                pad_to_multiple_of=None,
+            ).to(self.device)
+            if "token_type_ids" in tokens:
+                del tokens["token_type_ids"]
+            if not self.is_classification:
+                batch_scores = self.model(**tokens).logits[:, -1, :]
+                true_vector = batch_scores[:, self.token_true_id]
+                false_vector = batch_scores[:, self.token_false_id]
+                batch_scores = torch.stack([false_vector, true_vector], dim=1)
+                # upcast the logits to float32 before the softmax
+                batch_scores = torch.nn.functional.log_softmax(
+                    batch_scores.float(), dim=1
+                )
+                scores = batch_scores[:, 1].exp().tolist()
+            else:
+                batch_scores = self.model(**tokens).logits
+                # upcast the logits to float32 before the softmax
+                batch_scores = torch.nn.functional.log_softmax(
+                    batch_scores.float(), dim=1
+                )
+                scores = batch_scores[:, 1].exp().tolist()
 
-        tokens = self.tokenizer(
-            prompts,
-            padding=True,
-            truncation=True,
-            return_tensors="pt",
-            max_length=self.max_length,
-            pad_to_multiple_of=None,
-        ).to(self.device)
-        if "token_type_ids" in tokens:
-            del tokens["token_type_ids"]
-        if not self.is_classification:
-            batch_scores = self.model(**tokens).logits[:, -1, :]
-            true_vector = batch_scores[:, self.token_true_id]
-            false_vector = batch_scores[:, self.token_false_id]
-            batch_scores = torch.stack([false_vector, true_vector], dim=1)
-            # upcast the logits to float32 before the softmax
-            batch_scores = torch.nn.functional.log_softmax(batch_scores.float(), dim=1)
-            scores = batch_scores[:, 1].exp().tolist()
-        else:
-            batch_scores = self.model(**tokens).logits
-            # upcast the logits to float32 before the softmax
-            batch_scores = torch.nn.functional.log_softmax(batch_scores.float(), dim=1)
-            scores = batch_scores[:, 1].exp().tolist()
-
-        return scores
+            return scores
 
 
 class MistralReranker(LlamaReranker):

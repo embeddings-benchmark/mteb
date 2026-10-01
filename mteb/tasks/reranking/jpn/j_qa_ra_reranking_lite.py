@@ -31,19 +31,17 @@ class JQaRARerankingLite(AbsTaskRetrieval):
         sample_creation="found",
         adapted_from=["JQaRAReranking"],
         bibtex_citation=r"""
-@misc{jmteb_lite,
-  author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan and Fukuchi, Akihiko and Shibata, Tomohide
-and Kawahara, Daisuke},
-  howpublished = {\url{https://huggingface.co/datasets/sbintuitions/JMTEB-lite}},
-  title = {{J}{M}{T}{E}{B}-lite: {T}he {L}ightweight {V}ersion of {JMTEB}},
-  year = {2025},
-}
-
-@misc{yuichi-tateno-2024-jqara,
-  author = {Yuichi Tateno},
-  title = {JQaRA: Japanese Question Answering with Retrieval Augmentation
-- 検索拡張(RAG)評価のための日本語Q&Aデータセット},
-  url = {https://huggingface.co/datasets/hotchpotch/JQaRA},
+@inproceedings{li-etal-2026-jmteb,
+  address = {Palma de Mallorca, Spain},
+  author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan and Fukuchi, Akihiko and Shibata, Tomohide and Kawahara, Daisuke},
+  booktitle = {Proceedings of the Fifteenth Language Resources and Evaluation Conference},
+  doi = {10.63317/5ouzpv2f2f6k},
+  month = may,
+  pages = {7423--7434},
+  publisher = {ELRA Language Resource Association},
+  title = {{JMTEB} and {JMTEB}-lite: {J}apanese Massive Text Embedding Benchmark and Its Lightweight Version},
+  url = {https://aclanthology.org/2026.lrec-1.588/},
+  year = {2026},
 }
 """,
     )
