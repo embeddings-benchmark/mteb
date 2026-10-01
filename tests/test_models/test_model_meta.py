@@ -61,7 +61,7 @@ _MISSING_N_EMBEDDING_MODELS = [
     "vidore/colpali-v1.3",
     "vidore/colqwen2-v1.0",
     "vidore/colqwen2.5-v0.2",
-    "voyageai/voyage-multimodal-3",
+    "mongodb/voyage-multimodal-3",
     "OrlikB/KartonBERT-USE-base-v1",
     "OrlikB/st-polish-kartonberta-base-alpha-v1",
     "jinaai/jina-clip-v2",
@@ -345,6 +345,28 @@ def test_get_model_kwargs_does_not_mutate_registry_meta():
 
     current_registry_meta = mteb.get_model_meta(model_name)
     assert current_registry_meta.experiment_kwargs is None
+
+
+def test_get_model_with_only_empty_kwargs_is_not_an_experiment():
+    """`get_model(name, model_kwargs={})` shouldn't spin up a distinct experiment.
+
+    An explicit-but-empty override changes nothing about the run, so it
+    shouldn't generate a separate results folder from the base model.
+    """
+    model_name = "mteb/baseline-random-encoder"
+
+    model = mteb.get_model(model_name, model_kwargs={})
+    assert model.mteb_model_meta.experiment_kwargs is None
+    # The loader still receives it — only experiment identity is affected.
+    assert model.mteb_model_meta.loader_kwargs.get("model_kwargs") == {}
+
+
+def test_get_model_meaningless_kwarg_dropped_alongside_meaningful_one():
+    """A meaningless kwarg is dropped from the experiment identity; a real one stays."""
+    model_name = "mteb/baseline-random-encoder"
+
+    model = mteb.get_model(model_name, model_kwargs={}, not_existing_param=123)
+    assert model.mteb_model_meta.experiment_kwargs == {"not_existing_param": 123}
 
 
 def test_fill_missing_parameter():

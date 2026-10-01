@@ -19,6 +19,7 @@ from mteb._hf_integration.eval_result_model import (
     HFEvalResultSource,
 )
 from mteb.benchmarks import Benchmark
+from mteb.models.model_meta import ModelMeta
 
 from .task_result import TaskError, TaskResult
 
@@ -108,6 +109,7 @@ class ModelResult(BaseModel):
     )
     exceptions: list[TaskError] | None = None
     experiment_name: str | None = None
+    model_meta: ModelMeta | None = None
 
     def __repr__(self) -> str:
         n_entries = len(self.task_results)
@@ -155,7 +157,7 @@ class ModelResult(BaseModel):
             if (task_types is not None) and (task_result.task_type not in task_types):
                 continue
             if modalities is not None:
-                task_modalities = getattr(task_result, "modalities", [])
+                task_modalities = task_result.modalities
                 if not any(modality in task_modalities for modality in modalities):
                     continue
             if (is_public is not None) and (task_result.is_public is not is_public):
@@ -166,6 +168,7 @@ class ModelResult(BaseModel):
             model_revision=self.model_revision,
             task_results=new_task_results,
             experiment_name=self.experiment_name,
+            model_meta=self.model_meta,
         )
 
     def select_tasks(self, tasks: Iterable[AbsTask]) -> ModelResult:
@@ -185,6 +188,7 @@ class ModelResult(BaseModel):
             model_revision=self.model_revision,
             task_results=new_task_results,
             experiment_name=self.experiment_name,
+            model_meta=self.model_meta,
         )
 
     @overload
@@ -438,8 +442,7 @@ class ModelResult(BaseModel):
         """
         mods: list[Modalities] = []
         for task_res in self.task_results:
-            task_modalities = getattr(task_res, "modalities", [])
-            mods.extend(task_modalities)
+            mods.extend(task_res.modalities)
         if not mods:
             mods = ["text"]
         return list(set(mods))
