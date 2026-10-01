@@ -240,7 +240,6 @@ dev = [
     {include-group = "test"},
     {include-group = "typing"},
     {include-group = "docs"},
-    "mteb",
 ]
 
 
@@ -568,9 +567,6 @@ conflicts = [
 
 [tool.uv.extra-build-dependencies]
 flash-attn = [{ requirement = "torch", match-runtime = true }]
-
-[tool.uv.sources]
-mteb = { workspace = true }
 
 [tool.mypy]
 plugins = ['pydantic.mypy']
