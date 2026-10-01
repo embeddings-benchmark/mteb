@@ -76,8 +76,11 @@ class SpeechT5Audio(AbsEncoder):
 
         all_embeddings = []
 
+        # one clip per forward: padding to the batch's longest clip shifts the
+        # shorter clips' embeddings (feature normalisation, group norm)
+        clips = ({"audio": [a]} for b in inputs for a in b["audio"])
         for batch in tqdm(
-            inputs,
+            clips,
             disable=not show_progress_bar,
         ):
             batch_arrays = []
