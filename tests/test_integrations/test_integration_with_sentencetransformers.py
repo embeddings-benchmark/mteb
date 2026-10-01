@@ -10,7 +10,6 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 import mteb
 from mteb.abstasks import AbsTask
 from mteb.mocks import (
-    MOCK_TASK_TEST_GRID,
     LegacyMockClusteringFastTask,
     MockBitextMiningTask,
     MockClassificationTask,
@@ -107,6 +106,93 @@ CROSS_ENCODER_MODEL = ModelInfo(
 )
 
 
+def _skip_unsupported(min_version: str, feature: str) -> list[pytest.ParameterSet]:
+    """A single parametrize case that skips with a clear reason instead of running."""
+    return [
+        pytest.param(
+            None,
+            None,
+            None,
+            marks=pytest.mark.skip(
+                reason=f"sentence-transformers >= {min_version} is required for {feature}"
+            ),
+            id=f"unsupported-sentence-transformers-{feature}",
+        )
+    ]
+
+
+if (
+    Version(sentence_transformers.__version__).release
+    >= Version(SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION).release
+):
+    from sentence_transformers.sparse_encoder import SparseEncoder
+
+    SPARSE_ENCODER_MODEL = ModelInfo(
+        name="sparse-encoder/splade-camembert-base-v2",
+        loader=SparseEncoder,
+        expected_scores={
+            MockMultilingualBitextMiningTask: 0.5,
+            MockMultilingualParallelBitextMiningTask: 0.5,
+            MockMultilingualClassificationTask: 0.5,
+            MockMultilingualClusteringTask: 0.7336804366512111,
+            MockMultilingualClusteringFastTask: 1.0,
+            MockMultilingualPairClassificationTask: 1.0,
+            MockMultilingualRerankingTask: 0.75,
+            MockMultilingualRetrievalTask: 0.81546,
+            MockMultilingualSTSTask: 1.0,
+            MockMultilingualMultilabelClassification: 1.0,
+            MockMultilingualSummarizationTask: 0.0,
+            MockMultilingualInstructionRetrieval: 0.81546,
+            MockMultilingualInstructionReranking: 0.81546,
+            MockBitextMiningTask: 0.5,
+            MockClassificationTask: 0.5,
+            MockRegressionTask: 1.0,
+            MockClusteringTask: 0.7336804366512111,
+            LegacyMockClusteringFastTask: 1.0,
+            MockPairClassificationTask: 1.0,
+            MockRerankingTask: 0.75,
+            MockRetrievalTask: 0.81546,
+            MockSTSTask: 1.0,
+            MockMultilabelClassification: 1.0,
+            MockSummarizationTask: 0.0,
+            MockInstructionRetrieval: 0.81546,
+            MockInstructionReranking: 0.81546,
+            MockRetrievalDialogTask: 1.0,
+            MockTextZeroShotClassificationTask: 1.0,
+        },
+    )
+else:
+    SPARSE_ENCODER_MODEL = _skip_unsupported(
+        SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION, "SparseEncoder"
+    )
+
+
+if (
+    Version(sentence_transformers.__version__).release
+    >= Version(SENTENCE_TRANSFORMERS_MULTI_VECTOR_VERSION).release
+):
+    from sentence_transformers import MultiVectorEncoder
+
+    def _load_multi_vector_encoder(name: str) -> MultiVectorEncoder:
+        return MultiVectorEncoder(
+            name, revision="6bb4488a7a1f1769f7a69fa1ff0c74c6a7b98cbd"
+        )
+
+    MULTI_VECTOR_ENCODER_MODEL = ModelInfo(
+        name="lightonai/LateOn",
+        loader=_load_multi_vector_encoder,
+        expected_scores={
+            MockRetrievalTask: 0.81546,
+            MockRerankingTask: 0.75,
+            MockInstructionReranking: 0.81546,
+        },
+    )
+else:
+    MULTI_VECTOR_ENCODER_MODEL = _skip_unsupported(
+        SENTENCE_TRANSFORMERS_MULTI_VECTOR_VERSION, "MultiVectorEncoder"
+    )
+
+
 @pytest.mark.parametrize(
     ("model", "task", "expected_score"), SENTENCE_TRANSFORMER_MODEL
 )
@@ -125,52 +211,20 @@ def test_sentence_transformer_integration_cross_encoder(
     assert_final_score(model, task, expected_score)
 
 
-@pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID)
-@pytest.mark.parametrize("model_name", ["sparse-encoder/splade-camembert-base-v2"])
+@pytest.mark.parametrize(("model", "task", "expected_score"), SPARSE_ENCODER_MODEL)
 def test_sentence_transformer_integration_sparse_encoder(
-    task: AbsTask, model_name: str
+    model: mteb.EncoderProtocol, task: AbsTask, expected_score: float
 ):
-    """Test that a task can be fetched and run with a raw (unwrapped) SparseEncoder, exactly like
-    `test_sentence_transformer_integration` does for `SentenceTransformer`. Exercises the
-    `_sanitize_model` auto-wrapping path in `mteb.evaluate` (into `SparseEncoderWrapper`)."""
-    if (
-        Version(sentence_transformers.__version__).release
-        < Version(SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION).release
-    ):
-        pytest.skip(
-            f"sentence-transformers >= {SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION} is required for SparseEncoder"
-        )
-    from sentence_transformers.sparse_encoder import SparseEncoder
-
-    model = SparseEncoder(model_name)
-    mteb.evaluate(model, task, cache=None)
+    assert_final_score(model, task, expected_score)
 
 
 @pytest.mark.parametrize(
-    "task",
-    [
-        MockRetrievalTask(),
-        MockRerankingTask(),
-        MockInstructionReranking(),
-    ],
+    ("model", "task", "expected_score"), MULTI_VECTOR_ENCODER_MODEL
 )
-@pytest.mark.parametrize("model_name", ["lightonai/LateOn"])
 def test_sentence_transformer_integration_multi_vector_encoder(
-    task: AbsTask, model_name: str
+    model: mteb.EncoderProtocol, task: AbsTask, expected_score: float
 ):
-    if (
-        Version(sentence_transformers.__version__).release
-        < Version(SENTENCE_TRANSFORMERS_MULTI_VECTOR_VERSION).release
-    ):
-        pytest.skip(
-            f"sentence-transformers >= {SENTENCE_TRANSFORMERS_MULTI_VECTOR_VERSION} is required for MultiVectorEncoder"
-        )
-    from sentence_transformers import MultiVectorEncoder
-
-    model = MultiVectorEncoder(
-        model_name, revision="6bb4488a7a1f1769f7a69fa1ff0c74c6a7b98cbd"
-    )
-    mteb.evaluate(model, task, cache=None)
+    assert_final_score(model, task, expected_score)
 
 
 def test_model_meta_load_sentence_transformer_metadata_from_model():
