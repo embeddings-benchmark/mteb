@@ -7,6 +7,8 @@ from typing import TYPE_CHECKING
 import gradio as gr
 from pandas.api.types import is_numeric_dtype
 
+from mteb.leaderboard.organization import organization_summary_html
+
 if TYPE_CHECKING:
     import pandas as pd
     import polars as pl
@@ -73,7 +75,7 @@ def _format_zero_shot(zero_shot_percentage: int) -> str:
 
 def apply_summary_styling_from_benchmark(
     benchmark_instance: Benchmark, pl_df: pl.DataFrame
-) -> tuple[gr.DataFrame, pd.DataFrame]:
+) -> tuple[gr.DataFrame, pd.DataFrame, str]:
     """Apply styling to summary table created by the benchmark instance's _create_summary_table method.
 
     This supports polymorphism - different benchmark classes can have different table generation logic.
@@ -83,7 +85,7 @@ def apply_summary_styling_from_benchmark(
         pl_df: Polars pre-aggregation DataFrame containing model results (may be pre-filtered)
 
     Returns:
-        Tuple of (styled gr.DataFrame for display, raw pd.DataFrame with metadata for plots)
+        Styled table, raw frame for plots, and expandable organization view.
     """
     t0 = time.time()
     summary = benchmark_instance._create_summary_table(pl_df)
@@ -95,11 +97,19 @@ def apply_summary_styling_from_benchmark(
             benchmark_instance.name,
             t1 - t0,
         )
-        return gr.DataFrame(summary.df), summary.df.to_pandas()
+        return (
+            gr.DataFrame(summary.df),
+            summary.df.to_pandas(),
+            organization_summary_html(summary),
+        )
 
     summary_df = summary.df.to_pandas()
     display_df = summary_df.drop(columns=["Release Date"], errors="ignore")
-    result = _apply_summary_table_styling(display_df), summary_df
+    result = (
+        _apply_summary_table_styling(display_df),
+        summary_df,
+        organization_summary_html(summary),
+    )
     t2 = time.time()
     logger.debug(
         "apply_summary_styling [%s]: create_table=%.3fs styling=%.3fs total=%.3fs",
@@ -219,6 +229,7 @@ def _apply_summary_table_styling(joint_table: pd.DataFrame) -> gr.DataFrame:
         "Active Parameters (B)",
         "Embedding Dimensions",
         "Max Tokens",
+        "_experiment_id",
     ]
     # Humanise per-task-type column headers for display while leaving meta /
     # Mean (...) columns untouched.

@@ -582,8 +582,8 @@ def get_leaderboard_app(  # noqa: PLR0914
 
     logger.info("Step 4/6: Generating tables...")
     table_start = time.time()
-    summary_table, summary_raw = apply_summary_styling_from_benchmark(
-        default_benchmark, filtered_pl_df
+    summary_table, summary_raw, organization_html = (
+        apply_summary_styling_from_benchmark(default_benchmark, filtered_pl_df)
     )
     per_task_table = apply_per_task_styling_from_benchmark(
         default_benchmark, filtered_pl_df
@@ -805,7 +805,19 @@ def get_leaderboard_app(  # noqa: PLR0914
                                 )
 
         with gr.Tab("Summary"):
+            group_organizations = gr.Checkbox(
+                label="Group by organization", value=False
+            )
             summary_table.render()
+            organization_table = gr.HTML(organization_html, visible=False)
+            group_organizations.input(
+                lambda enabled: (
+                    gr.update(visible=not enabled),
+                    gr.update(visible=enabled),
+                ),
+                inputs=[group_organizations],
+                outputs=[summary_table, organization_table],
+            )
             download_summary = gr.DownloadButton("Download Table")
             download_summary.click(
                 _download_table, inputs=[summary_table], outputs=[download_summary]
@@ -892,7 +904,9 @@ def get_leaderboard_app(  # noqa: PLR0914
                 return -1
 
         def on_benchmark_select(  # noqa: PLR0914
-            benchmark_name: str, request: gr.Request | None = None
+            benchmark_name: str,
+            group_by_organization: bool = False,
+            request: gr.Request | None = None,
         ) -> tuple[Any, ...]:
             t0 = time.time()
             (
@@ -933,12 +947,14 @@ def get_leaderboard_app(  # noqa: PLR0914
                 per_task_table_value,
                 per_language_table_value,
                 language_tab_update,
+                organization_table_value,
             ) = update_tables(
                 scores,
                 benchmark_tasks,
                 initial_models,
                 benchmark_name,
                 languages,
+                group_by_organization,
             )
             t3 = time.time()
             size_plot = _performance_size_plot(summary_raw)
@@ -973,6 +989,7 @@ def get_leaderboard_app(  # noqa: PLR0914
                 language_tab_update,
                 task_info_value,
                 description_value,
+                organization_table_value,
             )
             output_names = (
                 "lang",
@@ -994,6 +1011,7 @@ def get_leaderboard_app(  # noqa: PLR0914
                 "lang_tab",
                 "task_info",
                 "desc",
+                "organization_tbl",
             )
             sizes = {
                 n: _estimate_payload_size(o)
@@ -1024,7 +1042,7 @@ def get_leaderboard_app(  # noqa: PLR0914
 
         benchmark_select.change(
             on_benchmark_select,
-            inputs=[benchmark_select],
+            inputs=[benchmark_select, group_organizations],
             outputs=[
                 lang_select,
                 domain_select,
@@ -1045,6 +1063,7 @@ def get_leaderboard_app(  # noqa: PLR0914
                 language_tab,
                 task_info_table,
                 description,
+                organization_table,
             ],
         )
 
@@ -1174,6 +1193,7 @@ def get_leaderboard_app(  # noqa: PLR0914
             models_to_keep: list[str],
             benchmark_name: str,
             languages: list[str],
+            group_by_organization: bool = False,
         ) -> int:
             # `scores` is fully determined by `(benchmark_name, languages)` upstream,
             # so we hash those instead of the O(N log N) sort over the scores list.
@@ -1187,7 +1207,9 @@ def get_leaderboard_app(  # noqa: PLR0914
             lang_hash = (
                 hash(tuple(sorted(languages))) if languages is not None else None
             )
-            return hash((bench_hash, lang_hash, tasks_hash, models_hash))
+            return hash(
+                (bench_hash, lang_hash, tasks_hash, models_hash, group_by_organization)
+            )
 
         _update_tables_cache: dict = {}
 
@@ -1201,6 +1223,7 @@ def get_leaderboard_app(  # noqa: PLR0914
             models_to_keep: list[str],
             benchmark_name: str,
             languages: list[str],
+            group_by_organization: bool = False,
         ) -> tuple[Any, ...]:
             # Reaching the body means cachetools missed — log so unexpected misses surface.
             logger.info(
@@ -1250,10 +1273,11 @@ def get_leaderboard_app(  # noqa: PLR0914
                 # ~4× faster than the default in-memory engine here.
                 filtered_df = bm_pl_df.lazy().filter(mask).collect(engine="streaming")
             t_filter1 = time.time()
-            summary, summary_raw = apply_summary_styling_from_benchmark(
-                benchmark, filtered_df
+            summary, summary_raw, organization_html = (
+                apply_summary_styling_from_benchmark(benchmark, filtered_df)
             )
             t_summary = time.time()
+            summary.visible = not group_by_organization
             per_task = apply_per_task_styling_from_benchmark(benchmark, filtered_df)
             t_per_task = time.time()
             per_language = apply_per_language_styling_from_benchmark(
@@ -1277,6 +1301,7 @@ def get_leaderboard_app(  # noqa: PLR0914
                 per_task,
                 per_language,
                 gr.update(visible=len(benchmark.language_view) > 0),
+                organization_html,
             )
 
         # Event wiring. Handlers use .input (not .change) so programmatic gr.update()
@@ -1298,13 +1323,21 @@ def get_leaderboard_app(  # noqa: PLR0914
             zero_shot,
             model_type_select,
         ]
-        _table_inputs = [scores, task_select, models, benchmark_select, lang_select]
+        _table_inputs = [
+            scores,
+            task_select,
+            models,
+            benchmark_select,
+            lang_select,
+            group_organizations,
+        ]
         _table_outputs = [
             summary_table,
             summary_data,
             per_task_table,
             per_language_table,
             language_tab,
+            organization_table,
         ]
 
         # Description updates from user changes to language/type/domain filters.
@@ -1421,6 +1454,7 @@ def get_leaderboard_app(  # noqa: PLR0914
             _language_tab_val,
             _task_info_val,
             _description_val,
+            _organization_table_val,
         ) = on_benchmark_select(benchmark.name)
         _, tasks_to_keep = _cache_update_task_list(
             benchmark.name,
