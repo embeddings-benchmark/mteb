@@ -4,13 +4,7 @@ import logging
 import warnings
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
-from transformers import (
-    SpeechT5ForSpeechToText,
-    SpeechT5ForTextToSpeech,
-    SpeechT5Processor,
-)
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
@@ -30,11 +24,17 @@ class SpeechT5Audio(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         # None: relative-position horizon, read from the checkpoint below
         max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
+        import torch
+        from transformers import SpeechT5ForSpeechToText, SpeechT5Processor
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         self.device = device
 
         self.asr_processor = SpeechT5Processor.from_pretrained(
@@ -71,6 +71,7 @@ class SpeechT5Audio(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
         import torchaudio
 
         all_embeddings = []
@@ -166,9 +167,15 @@ class SpeechT5Text(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ):
+        import torch
+        from transformers import SpeechT5ForTextToSpeech, SpeechT5Processor
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         self.device = device
         self.tts_processor = SpeechT5Processor.from_pretrained(
             "microsoft/speecht5_tts",
@@ -187,6 +194,8 @@ class SpeechT5Text(AbsEncoder):
         **kwargs: Any,
     ) -> Array:
         """Get text embeddings using the text encoder."""
+        import torch
+
         all_embeddings = []
 
         for batch in tqdm(
@@ -242,12 +251,18 @@ class SpeechT2Multimodal(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         # None: relative-position horizon, read from the checkpoint below
         max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
         # Revision is combined as "asr_revision-tts_revision"
+
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         asr_revision, tts_revision = revision.split("-")
 
         self.asr_encoder = SpeechT5Audio(

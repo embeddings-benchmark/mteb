@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
@@ -25,13 +24,18 @@ class Qwen3VoiceEmbeddingWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         # no limit: ECAPA-TDNN is convolutional and pools over the whole clip
         # (AttentiveStatisticsPooling), so length is unbounded and cost linear
         # https://huggingface.co/marksverdhei/Qwen3-Voice-Embedding-12Hz-1.7B/blob/main/modeling_ecapa_tdnn.py
         max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         from transformers import AutoFeatureExtractor, AutoModel
 
         self.model_name = model_name
@@ -54,6 +58,8 @@ class Qwen3VoiceEmbeddingWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         max_samples = (
             int(self.max_audio_length_seconds * self.sampling_rate)
             if self.max_audio_length_seconds

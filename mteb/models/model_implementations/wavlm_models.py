@@ -2,9 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
-from transformers import Wav2Vec2FeatureExtractor, WavLMModel
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
@@ -23,12 +21,18 @@ class WavlmWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str | None = None,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         # 90 s: WavLM has no SDPA/flash kernel, so attention is O(n^2); this is
         # the most that fits batch 32 in 80 GB. An mteb budget, not the model's.
         max_audio_length_seconds: float = 90.0,
         **kwargs: Any,
     ):
+        import torch
+        from transformers import Wav2Vec2FeatureExtractor, WavLMModel
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         self.model_name = model_name
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds
@@ -49,6 +53,8 @@ class WavlmWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
 
         all_embeddings = []

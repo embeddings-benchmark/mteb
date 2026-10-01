@@ -3,10 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
-from transformers import ClapModel, ClapProcessor
-from transformers.modeling_outputs import BaseModelOutputWithPooling
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
@@ -26,9 +23,15 @@ class ClapZeroShotWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ):
+        import torch
+        from transformers import ClapModel, ClapProcessor
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         self.model_name = model_name
         self.device = device
         self.model = ClapModel.from_pretrained(model_name, revision=revision).to(
@@ -48,6 +51,9 @@ class ClapZeroShotWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
+        import torch
+        from transformers.modeling_outputs import BaseModelOutputWithPooling
+
         # rand_trunc picks a random crop of anything over nb_max_samples, so the
         # same clip scores differently each run; cutting there keeps it on the
         # deterministic repeatpad branch. fusion is the checkpoint's own
@@ -90,6 +96,8 @@ class ClapZeroShotWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        from transformers.modeling_outputs import BaseModelOutputWithPooling
+
         text_embeddings = []
         for batch in tqdm(
             inputs, disable=not show_progress_bar, desc="Processing text batches"

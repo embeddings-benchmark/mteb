@@ -286,6 +286,60 @@ class TestCachedEmbeddingWrapper:
         np.testing.assert_allclose(cached_document_embeddings, document_embeddings)
         assert model.call_count == 2
 
+    def test_cache_reused_by_new_wrapper(self, cache_dir: Path):
+        model = DummyModel("test_model", revision=None)
+        task_metadata = MockRetrievalTask().metadata
+        inputs = DataLoader(Dataset.from_dict({"text": ["first", "second"]}))
+
+        def encode_with_new_wrapper():
+            wrapped_model = CachedEmbeddingWrapper(model, cache_dir)
+            try:
+                return wrapped_model.encode(
+                    inputs,
+                    task_metadata=task_metadata,
+                    hf_subset="default",
+                    hf_split="test",
+                )
+            finally:
+                wrapped_model.close()
+
+        embeddings = encode_with_new_wrapper()
+        cached_embeddings = encode_with_new_wrapper()
+
+        np.testing.assert_allclose(cached_embeddings, embeddings)
+        assert model.call_count == 1
+
+
+@pytest.mark.parametrize("n_first", [1, 3])
+def test_numpy_cache_reload_and_grow(tmp_path: Path, n_first: int):
+    items = [{"text": f"item {i}"} for i in range(n_first + 3)]
+    vectors = np.random.default_rng(0).random((len(items), 4), dtype=np.float32)
+
+    def open_cache() -> NumpyCache:
+        cache = NumpyCache(tmp_path, initial_vectors=1)
+        cache.load()
+        return cache
+
+    cache = open_cache()  # empty directory
+    assert cache.get_vector(items[0]) is None
+    cache.add(items[:n_first], vectors[:n_first])
+    cache.save()
+    cache.close()
+
+    # reopen and add enough vectors to grow the file past its current size
+    cache = open_cache()
+    cache.add(items[n_first:], vectors[n_first:])
+    cache.save()
+    cache.close()
+
+    cache = open_cache()
+    try:
+        assert len(cache.hash_to_index) == len(items)
+        for item, vector in zip(items, vectors, strict=True):
+            np.testing.assert_array_equal(cache.get_vector(item), vector)
+    finally:
+        cache.close()
+
 
 @pytest.mark.parametrize(
     ("task", "model"),

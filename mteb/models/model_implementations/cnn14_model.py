@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
@@ -21,12 +20,17 @@ class CNN14Wrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         # no limit: no duration declared
         # https://huggingface.co/speechbrain/cnn14-esc50/blob/main/hyperparams.yaml
         max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         self.model_name = model_name
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds
@@ -50,6 +54,7 @@ class CNN14Wrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
         from speechbrain.processing.features import spectral_magnitude
 
         inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)

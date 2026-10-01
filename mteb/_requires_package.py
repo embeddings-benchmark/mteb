@@ -1,9 +1,26 @@
+import functools
+import importlib.metadata
 import importlib.util
 import logging
 
 from typing_extensions import deprecated
 
 logger = logging.getLogger(__name__)
+
+
+@functools.cache
+def _mteb_distribution() -> importlib.metadata.Distribution:
+    """Return the installed distribution that provides the `mteb` package.
+
+    The package can be installed as `mteb`, or as `mteb-core` with `mteb` as a metapackage depending on it.
+    `mteb-core` is checked first, as it holds the version, extras and requirements of the code.
+    """
+    for name in ("mteb-core", "mteb"):
+        try:
+            return importlib.metadata.distribution(name)
+        except importlib.metadata.PackageNotFoundError:
+            continue
+    raise importlib.metadata.PackageNotFoundError("mteb")
 
 
 def _is_package_available(pkg_name: str) -> bool:

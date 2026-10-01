@@ -4,8 +4,6 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -13,6 +11,9 @@ from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
+    from torch.utils.data import DataLoader
+
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
 
@@ -70,6 +71,7 @@ class OmniRetrieverWrapper(AbsEncoder):
         video_batch_size: int = 1,
         **kwargs: Any,
     ) -> None:
+        import torch
         from peft import PeftModel
         from transformers import AutoModel
 
@@ -188,6 +190,8 @@ class OmniRetrieverWrapper(AbsEncoder):
         self, audios: list[Any]
     ) -> tuple[dict[str, torch.Tensor], list[torch.Tensor], list[int]]:
         """Build Whisper features, raw BEATs waveforms and placeholder counts."""
+        import torch
+
         if not audios:
             return {}, [], []
 
@@ -220,6 +224,8 @@ class OmniRetrieverWrapper(AbsEncoder):
         self, videos: list[Any], durations: list[float | None]
     ) -> tuple[dict[str, Any], list[float]]:
         """Build video pixel inputs and the per-grid second offsets."""
+        import torch
+
         if not videos:
             return {}, []
 
@@ -292,6 +298,8 @@ class OmniRetrieverWrapper(AbsEncoder):
         return texts, videos, audios, batch.get("video_duration") or []
 
     def _encode_batch(self, batch: BatchedInput) -> torch.Tensor:
+        import torch
+
         texts, videos, audios, durations = self._unpack(batch)
         # data_qwen.py folds audio into the video stream when both are present.
         use_audio_in_video = bool(videos) and bool(audios)
@@ -325,6 +333,8 @@ class OmniRetrieverWrapper(AbsEncoder):
 
     def _to_device(self, inputs: dict[str, Any]) -> dict[str, Any]:
         """Move every tensor in ``inputs`` to the model's device, leaving the rest."""
+        import torch
+
         return {
             key: value.to(self.device) if isinstance(value, torch.Tensor) else value
             for key, value in inputs.items()
@@ -336,7 +346,6 @@ class OmniRetrieverWrapper(AbsEncoder):
                 row["video_duration"] = row["video"].metadata.end_stream_seconds
         return self.collator(inputs)
 
-    @torch.inference_mode()
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -347,22 +356,26 @@ class OmniRetrieverWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        features = inputs.dataset.features
-        if "video" in features:
-            inputs = DataLoader(
-                inputs.dataset,
-                batch_size=self.video_batch_size,
-                collate_fn=self._collate,
-                num_workers=inputs.num_workers,
-                shuffle=False,
-            )
-        elif "audio" in features:
-            inputs.collate_fn = self._collate
+        import torch
+        from torch.utils.data import DataLoader
 
-        all_embeddings: list[torch.Tensor] = []
-        for batch in tqdm(inputs, desc="Encoding"):
-            all_embeddings.append(self._encode_batch(batch).cpu())
-        return torch.cat(all_embeddings, dim=0).float()
+        with torch.inference_mode():
+            features = inputs.dataset.features
+            if "video" in features:
+                inputs = DataLoader(
+                    inputs.dataset,
+                    batch_size=self.video_batch_size,
+                    collate_fn=self._collate,
+                    num_workers=inputs.num_workers,
+                    shuffle=False,
+                )
+            elif "audio" in features:
+                inputs.collate_fn = self._collate
+
+            all_embeddings: list[torch.Tensor] = []
+            for batch in tqdm(inputs, desc="Encoding"):
+                all_embeddings.append(self._encode_batch(batch).cpu())
+            return torch.cat(all_embeddings, dim=0).float()
 
 
 _OMNIRETRIEVER_CITATION = r"""

@@ -2,9 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
-from transformers import WhisperModel, WhisperProcessor
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
@@ -23,12 +21,18 @@ class WhisperAudioWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         # 30 s: chunk_length=30
         # https://huggingface.co/openai/whisper-large-v3/blob/main/preprocessor_config.json
         max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
+        import torch
+        from transformers import WhisperModel, WhisperProcessor
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         self.model_name = model_name
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds
@@ -47,6 +51,8 @@ class WhisperAudioWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
 
         all_embeddings = []

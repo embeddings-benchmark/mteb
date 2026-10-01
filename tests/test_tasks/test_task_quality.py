@@ -578,6 +578,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "NFCorpus-NL",
         "NFCorpus-NL.v2",
         "NFCorpus-PL",
+        "NQTablesRetrieval",  # repeated source question text is retained under its original IDs
         "NaijaSenti",
         "NanoFEVER-VN",
         "NanoNFCorpusRetrieval",
@@ -953,6 +954,8 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "XModBenchVT2AReranking",
     ],
     "duplicate_video": [
+        "ChinaOpenT2VRetrieval",  # same 1,092 videos evaluated once per language subset (zho-Hans/eng-Latn)
+        "ChinaOpenV2TRetrieval",  # same 1,092 videos evaluated once per language subset (zho-Hans/eng-Latn)
         "DenseWebVidCoVRVT2VRetrieval",  # multiple rows have same video with different instruction
         "InsAVE80KVT2VRetrieval",  # reverse couples re-release the same clip under two names
         "MMVUVideoCentricQA",
@@ -971,6 +974,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
     "missing_qrel_corpus_ids": [
         "ArguAna",  # 5 missing qrel document IDs
         "InfoSeekIT2TRetrieval",  # qrels/corpus pool mismatch
+        "NQTablesRetrieval",  # one original test qrel points to a table absent from the corpus
         "OVENIT2ITRetrieval",  # qrels/corpus pool mismatch
         "OVENIT2TRetrieval",  # qrels/corpus pool mismatch
     ],

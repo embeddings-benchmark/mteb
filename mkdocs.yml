@@ -4,6 +4,7 @@ repo_url: https://github.com/embeddings-benchmark/mteb
 watch: [mteb/, docs/]
 edit_uri: "blob/main/docs/"
 theme:
+  language: "en"
   favicon: images/logos/mteb_logo/dots-icon.png
   logo: images/logos/mteb_logo/dots-icon.png
   features:
@@ -122,6 +123,8 @@ nav:
       - Model: api/model.md
       - Results: api/results.md
       - Additional Types: api/types.md
+  - Blog:
+      - blog/index.md
   - Leaderboard: https://huggingface.co/spaces/mteb/leaderboard
 
 copyright: This site made available under a Creative Commons Attribution 4.0 license
@@ -139,6 +142,14 @@ plugins:
             heading_level: 3
             show_source: true
             show_root_heading: true
+  - blog:
+      blog_dir: blog
+      blog_toc: true
+      post_dir: "{blog}/posts"
+      post_date_format: long
+      post_url_format: "{slug}"
+      post_excerpt: required
+
 
 extra_javascript:
   - javascripts/extra.js

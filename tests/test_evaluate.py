@@ -7,6 +7,7 @@ from typing import Any
 
 import pytest
 from datasets.exceptions import DatasetNotFoundError
+from torch.utils.data import DataLoader
 
 import mteb
 from mteb import SentenceTransformerEncoderWrapper
@@ -20,15 +21,23 @@ from mteb.mocks import (
 from mteb.mocks.mock_tasks import (
     MockAggregatedTask,
     MockClassificationTask,
+    MockMultilabelClassification,
     MockMultilingualClassificationTask,
     MockMultilingualRetrievalTask,
+    MockPairClassificationTask,
     MockRetrievalTask,
+    MockSTSTask,
+    MockSummarizationTask,
+    MockTextZeroShotClassificationTask,
+    MockZeroShotClassificationTask,
 )
 from mteb.models import ModelMeta
+from mteb.models.model_implementations.random_baseline import RandomEncoderBaseline
+from mteb.models.model_meta import ScoringFunction
 from mteb.models.models_protocols import EncoderProtocol
 from mteb.results.task_result import TaskResult
 from mteb.timing import TimingStack
-from mteb.types import OutputDType
+from mteb.types import Array, BatchedInput, OutputDType
 from tests.mock_models import MockSentenceTransformer
 
 mock_classification = (MockSentenceTransformer(), MockClassificationTask(), 1)
@@ -500,6 +509,45 @@ def test_precision_arg():
     assert (
         model.mteb_model_meta.experiment_kwargs["output_dtypes"] == OutputDType.FLOAT16
     )
+
+
+@pytest.mark.parametrize(
+    "task",
+    [
+        MockClassificationTask(),
+        MockMultilabelClassification(),
+        MockPairClassificationTask(),
+        MockSTSTask(),
+        MockSummarizationTask(),
+        MockTextZeroShotClassificationTask(),
+        MockZeroShotClassificationTask(),
+    ],
+    ids=lambda x: x.metadata.name,
+)
+def test_num_proc_reaches_every_dataloader(task: AbsTask) -> None:
+    class _NumWorkersRecordingBaseline(RandomEncoderBaseline):
+        """Random baseline that records the num_workers of every dataloader it encodes."""
+
+        def __init__(self, *args: Any, **kwargs: Any) -> None:
+            super().__init__(*args, **kwargs)
+            self.num_workers: list[int] = []
+            self.mteb_model_meta = ModelMeta.create_empty(
+                overwrites=dict(
+                    similarity_fn_name=ScoringFunction.COSINE,
+                    modalities=["image", "text"],
+                )
+            )
+
+        def encode(self, inputs: DataLoader[BatchedInput], **kwargs: Any) -> Array:
+            self.num_workers.append(inputs.num_workers)
+            inputs.num_workers = 0  # only record the request, iterate in-process
+            return super().encode(inputs, **kwargs)
+
+    model = _NumWorkersRecordingBaseline("test_model", revision=None)
+    mteb.evaluate(model, task, cache=None, num_proc=2)
+
+    assert model.num_workers
+    assert all(n == 2 for n in model.num_workers)
 
 
 @pytest.mark.parametrize("task", MOCK_MAEB_TASK_GRID)

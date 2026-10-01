@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
@@ -11,6 +10,7 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator, VideoCollator
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
     from typing_extensions import Unpack
 
@@ -79,7 +79,6 @@ class _LanguageBindBase(AbsEncoder):
         )
         return {k: v.to(self.device) for k, v in tokens.items()}
 
-    @torch.inference_mode()
     def get_text_embeddings(
         self,
         inputs: DataLoader[TextInput],
@@ -88,26 +87,29 @@ class _LanguageBindBase(AbsEncoder):
         **kwargs: Any,
     ) -> np.ndarray:
         """Get text embeddings aligned to the LanguageBind joint space."""
-        all_embeddings = []
+        import torch
 
-        for batch in tqdm(
-            inputs,
-            disable=not show_progress_bar,
-            desc="Processing text batches",
-        ):
-            texts = list(batch["text"])
-            tokens = self._tokenize(texts)
+        with torch.inference_mode():
+            all_embeddings = []
 
-            with torch.autocast(str(self.device), dtype=torch.bfloat16):
-                text_outputs = self.model.text_model(
-                    input_ids=tokens["input_ids"],
-                    attention_mask=tokens.get("attention_mask"),
-                )
-                text_embeds = self.model.text_projection(text_outputs[1])
-                text_embeds /= text_embeds.norm(dim=-1, keepdim=True)
-                all_embeddings.append(text_embeds.cpu().float().numpy())
+            for batch in tqdm(
+                inputs,
+                disable=not show_progress_bar,
+                desc="Processing text batches",
+            ):
+                texts = list(batch["text"])
+                tokens = self._tokenize(texts)
 
-        return np.vstack(all_embeddings)
+                with torch.autocast(str(self.device), dtype=torch.bfloat16):
+                    text_outputs = self.model.text_model(
+                        input_ids=tokens["input_ids"],
+                        attention_mask=tokens.get("attention_mask"),
+                    )
+                    text_embeds = self.model.text_projection(text_outputs[1])
+                    text_embeds /= text_embeds.norm(dim=-1, keepdim=True)
+                    all_embeddings.append(text_embeds.cpu().float().numpy())
+
+            return np.vstack(all_embeddings)
 
 
 class LanguageBindVideoWrapper(_LanguageBindBase):
@@ -121,7 +123,7 @@ class LanguageBindVideoWrapper(_LanguageBindBase):
     def __init__(
         self,
         model_name: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         revision: str | None = None,
         fps: float | None = None,
         max_frames: int | None = None,
@@ -131,6 +133,11 @@ class LanguageBindVideoWrapper(_LanguageBindBase):
         max_samples: int | None = None,
         **kwargs: Any,
     ):
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         _apply_languagebind_compat()
         from languagebind import (
             LanguageBindVideo,
@@ -169,7 +176,6 @@ class LanguageBindVideoWrapper(_LanguageBindBase):
         video = frames.permute(1, 0, 2, 3).float()
         return self.processor.transform(video)
 
-    @torch.inference_mode()
     def get_video_embeddings(
         self,
         inputs: DataLoader[VideoInput],
@@ -177,32 +183,35 @@ class LanguageBindVideoWrapper(_LanguageBindBase):
         **kwargs: Any,
     ) -> np.ndarray:
         """Get video-only embeddings."""
-        all_embeddings = []
-        inputs.collate_fn = VideoCollator(
-            target_sampling_rate=self.sampling_rate,
-            fps=self.fps,
-            max_frames=self.max_frames,
-            num_frames=self.num_frames,
-            max_samples=self.max_samples,
-        )
+        import torch
 
-        for batch in tqdm(
-            inputs,
-            disable=not show_progress_bar,
-            desc="Processing video batches",
-        ):
-            frames_list = list(batch["video"])
-            processed = torch.stack(
-                [self._transform_video_frames(frames) for frames in frames_list]
-            ).to(self.device)
+        with torch.inference_mode():
+            all_embeddings = []
+            inputs.collate_fn = VideoCollator(
+                target_sampling_rate=self.sampling_rate,
+                fps=self.fps,
+                max_frames=self.max_frames,
+                num_frames=self.num_frames,
+                max_samples=self.max_samples,
+            )
 
-            with torch.autocast(str(self.device), dtype=torch.bfloat16):
-                vision_outputs = self.model.vision_model(pixel_values=processed)
-                video_embeds = self.model.visual_projection(vision_outputs[1])
-                video_embeds /= video_embeds.norm(dim=-1, keepdim=True)
-                all_embeddings.append(video_embeds.cpu().float().numpy())
+            for batch in tqdm(
+                inputs,
+                disable=not show_progress_bar,
+                desc="Processing video batches",
+            ):
+                frames_list = list(batch["video"])
+                processed = torch.stack(
+                    [self._transform_video_frames(frames) for frames in frames_list]
+                ).to(self.device)
 
-        return np.vstack(all_embeddings)
+                with torch.autocast(str(self.device), dtype=torch.bfloat16):
+                    vision_outputs = self.model.vision_model(pixel_values=processed)
+                    video_embeds = self.model.visual_projection(vision_outputs[1])
+                    video_embeds /= video_embeds.norm(dim=-1, keepdim=True)
+                    all_embeddings.append(video_embeds.cpu().float().numpy())
+
+            return np.vstack(all_embeddings)
 
     def encode(
         self,
@@ -242,10 +251,15 @@ class LanguageBindAudioWrapper(_LanguageBindBase):
     def __init__(
         self,
         model_name: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         revision: str | None = None,
         **kwargs: Any,
     ):
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         _apply_languagebind_compat()
         from languagebind import (
             LanguageBindAudio,
@@ -268,12 +282,13 @@ class LanguageBindAudioWrapper(_LanguageBindBase):
 
     def _transform_audio(self, audio_array: np.ndarray) -> torch.Tensor:
         """Apply LanguageBind's audio transform to a raw waveform array."""
+        import torch
+
         waveform = torch.as_tensor(audio_array, dtype=torch.float32)
         if waveform.ndim == 1:
             waveform = waveform.unsqueeze(0)
         return self.processor.transform((waveform, self.sampling_rate))
 
-    @torch.inference_mode()
     def get_audio_embeddings(
         self,
         inputs: DataLoader[AudioInput],
@@ -281,26 +296,29 @@ class LanguageBindAudioWrapper(_LanguageBindBase):
         **kwargs: Any,
     ) -> np.ndarray:
         """Get audio-only embeddings."""
-        all_embeddings = []
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+        import torch
 
-        for batch in tqdm(
-            inputs,
-            disable=not show_progress_bar,
-            desc="Processing audio batches",
-        ):
-            audio_arrays = [audio["array"] for audio in batch["audio"]]
-            processed = torch.stack(
-                [self._transform_audio(a) for a in audio_arrays]
-            ).to(self.device)
+        with torch.inference_mode():
+            all_embeddings = []
+            inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
 
-            with torch.autocast(str(self.device), dtype=torch.bfloat16):
-                audio_outputs = self.model.vision_model(pixel_values=processed)
-                audio_embeds = self.model.visual_projection(audio_outputs[1])
-                audio_embeds /= audio_embeds.norm(dim=-1, keepdim=True)
-                all_embeddings.append(audio_embeds.cpu().float().numpy())
+            for batch in tqdm(
+                inputs,
+                disable=not show_progress_bar,
+                desc="Processing audio batches",
+            ):
+                audio_arrays = [audio["array"] for audio in batch["audio"]]
+                processed = torch.stack(
+                    [self._transform_audio(a) for a in audio_arrays]
+                ).to(self.device)
 
-        return np.vstack(all_embeddings)
+                with torch.autocast(str(self.device), dtype=torch.bfloat16):
+                    audio_outputs = self.model.vision_model(pixel_values=processed)
+                    audio_embeds = self.model.visual_projection(audio_outputs[1])
+                    audio_embeds /= audio_embeds.norm(dim=-1, keepdim=True)
+                    all_embeddings.append(audio_embeds.cpu().float().numpy())
+
+            return np.vstack(all_embeddings)
 
     def encode(
         self,
@@ -340,10 +358,15 @@ class LanguageBindImageWrapper(_LanguageBindBase):
     def __init__(
         self,
         model_name: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         revision: str | None = None,
         **kwargs: Any,
     ):
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         _apply_languagebind_compat()
         from languagebind import (
             LanguageBindImage,
@@ -363,7 +386,6 @@ class LanguageBindImageWrapper(_LanguageBindBase):
         )
         self.processor = LanguageBindImageProcessor(self.model.config, self.tokenizer)
 
-    @torch.inference_mode()
     def get_image_embeddings(
         self,
         inputs: DataLoader[ImageInput],
@@ -371,25 +393,28 @@ class LanguageBindImageWrapper(_LanguageBindBase):
         **kwargs: Any,
     ) -> np.ndarray:
         """Get image-only embeddings."""
-        all_embeddings = []
+        import torch
 
-        for batch in tqdm(
-            inputs,
-            disable=not show_progress_bar,
-            desc="Processing image batches",
-        ):
-            images = list(batch["image"])
-            processed = torch.stack(
-                [self.processor.transform(img) for img in images]
-            ).to(self.device)
+        with torch.inference_mode():
+            all_embeddings = []
 
-            with torch.autocast(str(self.device), dtype=torch.bfloat16):
-                vision_outputs = self.model.vision_model(pixel_values=processed)
-                image_embeds = self.model.visual_projection(vision_outputs[1])
-                image_embeds /= image_embeds.norm(dim=-1, keepdim=True)
-                all_embeddings.append(image_embeds.cpu().float().numpy())
+            for batch in tqdm(
+                inputs,
+                disable=not show_progress_bar,
+                desc="Processing image batches",
+            ):
+                images = list(batch["image"])
+                processed = torch.stack(
+                    [self.processor.transform(img) for img in images]
+                ).to(self.device)
 
-        return np.vstack(all_embeddings)
+                with torch.autocast(str(self.device), dtype=torch.bfloat16):
+                    vision_outputs = self.model.vision_model(pixel_values=processed)
+                    image_embeds = self.model.visual_projection(vision_outputs[1])
+                    image_embeds /= image_embeds.norm(dim=-1, keepdim=True)
+                    all_embeddings.append(image_embeds.cpu().float().numpy())
+
+            return np.vstack(all_embeddings)
 
     def encode(
         self,
@@ -436,7 +461,7 @@ class LanguageBindOmniWrapper(AbsEncoder):
     def __init__(
         self,
         *args: Any,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         fps: float | None = None,
         max_frames: int | None = None,
         num_frames: int | None = 8,
@@ -445,6 +470,12 @@ class LanguageBindOmniWrapper(AbsEncoder):
     ):
         # The composite model has no checkpoint of its own; the model name that
         # ModelMeta passes positionally is unused and absorbed by *args.
+
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         self.video_model = LanguageBindVideoWrapper(
             "LanguageBind/LanguageBind_Video_FT",
             device=device,

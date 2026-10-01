@@ -2,9 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
-from transformers import UniSpeechSatForCTC, Wav2Vec2FeatureExtractor
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
@@ -23,12 +21,18 @@ class UniSpeechWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         # uncapped: conv positional embedding, no max_position_embeddings
         # https://huggingface.co/microsoft/unispeech-sat-base-100h-libri-ft/blob/main/config.json
         max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
+        import torch
+        from transformers import UniSpeechSatForCTC, Wav2Vec2FeatureExtractor
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         self.model_name = model_name
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds
@@ -49,6 +53,8 @@ class UniSpeechWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         max_samples = (
             int(self.max_audio_length_seconds * self.sampling_rate)
             if self.max_audio_length_seconds

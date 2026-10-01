@@ -13,7 +13,7 @@ from collections.abc import Callable, Mapping, Sequence
 from dataclasses import field
 from enum import Enum
 from functools import partial
-from importlib.metadata import PackageNotFoundError, distribution, requires
+from importlib.metadata import PackageNotFoundError
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, cast
 
@@ -41,6 +41,7 @@ from mteb._hf_integration.hf_hub_utils import (
     _get_repo_commits,
     _repo_exists,
 )
+from mteb._requires_package import _mteb_distribution
 from mteb.languages import check_language_code
 from mteb.languages.iso_mappings import _hf_langs_to_iso_lang_scripts
 from mteb.models.models_protocols import MTEBModels
@@ -214,7 +215,9 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             in the Latin script.
         use_instructions: Whether the model uses instructions E.g. for prompt-based models. This also includes models that require a specific format for
             input, such as "query: {document}" or "passage: {document}".
-        citation: The citation for the model. This is a bibtex string.
+        citation: The citation for the model, as a BibTeX string. As non-existing citations can cause
+            authors citing the work to be penalized, leave it out if the model has no article to cite,
+            rather than citing e.g. its model card. It is allowed to cite multiple articles.
         training_datasets: A dictionary of datasets that the model was trained on. Names should be names as their appear in `mteb` for example
             {"ArguAna"} if the model is trained on the ArguAna test set. This field is used to determine if a model generalizes zero-shot to
             a benchmark as well as mark dataset contaminations.
@@ -572,7 +575,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
     def _validate_extras_groups(groups: Sequence[str]) -> None:
         """Raise if any group is not a valid mteb extra."""
         available_extras = set(
-            distribution("mteb").metadata.get_all("Provides-Extra") or []
+            _mteb_distribution().metadata.get_all("Provides-Extra") or []
         )
 
         def _norm(s: str) -> str:
@@ -591,7 +594,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         """Return the requirement strings of the given groups that are not satisfied."""
         missing_dependencies = []
 
-        mteb_requires = requires("mteb")
+        mteb_requires = _mteb_distribution().requires
         if mteb_requires is None:
             raise RuntimeError(
                 "Could not retrieve mteb package requirements. Make sure mteb is installed properly."

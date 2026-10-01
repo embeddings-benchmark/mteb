@@ -3,10 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
-from transformers import CLIPModel, CLIPProcessor
-from transformers.modeling_outputs import BaseModelOutputWithPooling
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
@@ -25,13 +22,19 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         # uncapped: Wav2CLIP pools over the spectrogram, so length is unbounded.
         # Set this to truncate; it was previously declared but never applied.
         # https://arxiv.org/abs/2110.11499
         max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
+        import torch
+        from transformers import CLIPModel, CLIPProcessor
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         from wav2clip import embed_audio, get_model
 
         self.embed_audio = embed_audio
@@ -59,6 +62,7 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
+
         inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
 
         all_embeddings = []
@@ -99,6 +103,9 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+        from transformers.modeling_outputs import BaseModelOutputWithPooling
+
         text_embeddings = []
         for batch in tqdm(
             inputs, disable=not show_progress_bar, desc="Processing text batches"

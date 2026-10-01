@@ -3,9 +3,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
-from transformers import Wav2Vec2FeatureExtractor, Wav2Vec2Model
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
@@ -27,12 +25,18 @@ class MMSWrapper(AbsEncoder):
         model_name: str,
         revision: str | None = None,
         target_lang: str = "eng",
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         # uncapped: conv positional embedding, no max_position_embeddings
         # https://huggingface.co/facebook/mms-1b-all/blob/main/config.json
         max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
+        import torch
+        from transformers import Wav2Vec2FeatureExtractor, Wav2Vec2Model
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         self.model_name = model_name
         self.model_revision = revision
         self.target_lang = target_lang
@@ -66,6 +70,8 @@ class MMSWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         max_samples = (
             int(self.max_audio_length_seconds * self.sampling_rate)
             if self.max_audio_length_seconds

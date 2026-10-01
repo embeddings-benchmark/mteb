@@ -4,9 +4,7 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
-from transformers import AutoProcessor, EncodecModel
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
@@ -28,12 +26,18 @@ class EncodecWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         # no limit: chunk_length_s=null
         # https://huggingface.co/facebook/encodec_24khz/blob/main/config.json
         max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
+        import torch
+        from transformers import AutoProcessor, EncodecModel
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         self.model_name = model_name
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds
@@ -52,6 +56,8 @@ class EncodecWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         max_samples = (
             int(self.max_audio_length_seconds * self.sampling_rate)
             if self.max_audio_length_seconds is not None

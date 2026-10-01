@@ -36,14 +36,16 @@ _REFERENCE = "https://github.com/embeddings-benchmark/mteb/issues/5358"
 _BIBTEX = r"""
 @inproceedings{havard2017speechcoco,
   author = {Havard, William and Besacier, Laurent and Rosec, Olivier},
-  booktitle = {GLU 2017 Workshop},
-  title = {SPEECH-COCO: 600k Visually Grounded Spoken Captions Aligned to MSCOCO},
+  booktitle = {Proceedings of the GLU 2017 International Workshop on Grounding Language Understanding},
+  title = {SPEECH-COCO: 600k Visually Grounded Spoken Captions Aligned to MSCOCO Data Set},
   year = {2017},
 }
 
-@inproceedings{hsu2021spokencoco,
+@inproceedings{hsu-etal-2021-text,
   author = {Hsu, Wei-Ning and Harwath, David and Miller, Tyler and Song, Christopher and Glass, James},
-  booktitle = {Proceedings of ACL-IJCNLP 2021},
+  booktitle = {Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2021.acl-long.411},
+  pages = {5284--5300},
   title = {Text-Free Image-to-Speech Synthesis Using Learned Segmental Units},
   year = {2021},
 }

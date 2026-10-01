@@ -4,9 +4,7 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
-from transformers import ASTFeatureExtractor, ASTModel
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
@@ -27,9 +25,15 @@ class ASTWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ):
+        import torch
+        from transformers import ASTFeatureExtractor, ASTModel
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         self.model_name = model_name
         self.device = device
 
@@ -40,43 +44,45 @@ class ASTWrapper(AbsEncoder):
         self.model.eval()
         self.sampling_rate = self.feature_extractor.sampling_rate
 
-    @torch.no_grad()
     def get_audio_embeddings(
         self,
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
-        all_embeddings = []
+        import torch
 
-        for batch in tqdm(
-            inputs,
-            disable=not show_progress_bar,
-        ):
-            # the extractor always emits max_length=1024 frames (10.24 s)
-            # https://huggingface.co/MIT/ast-finetuned-audioset-10-10-0.4593/blob/main/preprocessor_config.json
-            # pad up to the 400-sample FFT window so short clips do not crash
-            audio_arrays = [
-                np.pad(
-                    np.asarray(a["array"]),
-                    (0, max(0, 401 - np.asarray(a["array"]).shape[-1])),
-                )
-                for a in batch["audio"]
-            ]
+        with torch.no_grad():
+            inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+            all_embeddings = []
 
-            features = self.feature_extractor(
-                audio_arrays,
-                sampling_rate=self.sampling_rate,
-                return_tensors="pt",
-            ).to(self.device)
+            for batch in tqdm(
+                inputs,
+                disable=not show_progress_bar,
+            ):
+                # the extractor always emits max_length=1024 frames (10.24 s)
+                # https://huggingface.co/MIT/ast-finetuned-audioset-10-10-0.4593/blob/main/preprocessor_config.json
+                # pad up to the 400-sample FFT window so short clips do not crash
+                audio_arrays = [
+                    np.pad(
+                        np.asarray(a["array"]),
+                        (0, max(0, 401 - np.asarray(a["array"]).shape[-1])),
+                    )
+                    for a in batch["audio"]
+                ]
 
-            outputs = self.model(**features)
+                features = self.feature_extractor(
+                    audio_arrays,
+                    sampling_rate=self.sampling_rate,
+                    return_tensors="pt",
+                ).to(self.device)
 
-            # AST's pooled output is the [CLS] token embedding
-            embeddings = outputs.pooler_output
-            all_embeddings.append(embeddings.cpu().detach())
-        return torch.cat(all_embeddings, dim=0).numpy()
+                outputs = self.model(**features)
+
+                # AST's pooled output is the [CLS] token embedding
+                embeddings = outputs.pooler_output
+                all_embeddings.append(embeddings.cpu().detach())
+            return torch.cat(all_embeddings, dim=0).numpy()
 
     def encode(
         self,

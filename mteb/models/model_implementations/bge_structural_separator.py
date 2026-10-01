@@ -4,13 +4,12 @@ import re
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
-from torch.nn import functional as F
 
 from mteb.models import ModelMeta
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
     from transformers import PreTrainedTokenizerBase
 
@@ -51,6 +50,8 @@ def _get_document_tokens(
 def _pad(
     sequences: list[list[int]], pad_token_id: int
 ) -> tuple[torch.Tensor, torch.Tensor]:
+    import torch
+
     maximum = max(map(len, sequences))
     input_ids = torch.full((len(sequences), maximum), pad_token_id, dtype=torch.long)
     attention_mask = torch.zeros((len(sequences), maximum), dtype=torch.long)
@@ -87,6 +88,7 @@ class StructuralSeparatorEncoder:
         device: str | None = None,
         **kwargs: Any,
     ) -> None:
+        import torch
         from transformers import AutoModel, AutoTokenizer
 
         if device is None:
@@ -114,6 +116,9 @@ class StructuralSeparatorEncoder:
     def _encode_batch(
         self, input_ids: torch.Tensor, attention_mask: torch.Tensor
     ) -> np.ndarray:
+        import torch
+        from torch.nn import functional as F
+
         with torch.inference_mode():
             output = self.backbone(
                 input_ids=input_ids.to(self.device),
@@ -176,6 +181,8 @@ class StructuralSeparatorEncoder:
 
     @staticmethod
     def similarity(embeddings1: Array, embeddings2: Array) -> Array:
+        import torch
+
         if isinstance(embeddings1, torch.Tensor) or isinstance(
             embeddings2, torch.Tensor
         ):
@@ -186,6 +193,8 @@ class StructuralSeparatorEncoder:
 
     @staticmethod
     def similarity_pairwise(embeddings1: Array, embeddings2: Array) -> Array:
+        import torch
+
         if isinstance(embeddings1, torch.Tensor) or isinstance(
             embeddings2, torch.Tensor
         ):

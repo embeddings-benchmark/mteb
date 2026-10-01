@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
@@ -32,13 +31,18 @@ class VoiceCLAPSmallWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         # 30 s: chunk_length=30 (n_ctx=1500 positions); this wrapper serves
         # voiceclap-small, large loads through SentenceTransformerEncoderWrapper
         # https://huggingface.co/VoiceNet/voiceclap-small/blob/main/preprocessor_config.json
         max_audio_length_seconds: float | None = 30.0,
         **kwargs: Any,
     ):
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         from transformers import AutoModel, AutoTokenizer
 
         self.model_name = model_name
@@ -62,6 +66,8 @@ class VoiceCLAPSmallWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         text_embeddings = []
         for batch in tqdm(
             inputs, disable=not show_progress_bar, desc="Processing text batches"
@@ -86,6 +92,8 @@ class VoiceCLAPSmallWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
+        import torch
+
         inputs.collate_fn = AudioCollator(
             target_sampling_rate=self.sampling_rate,
             max_samples=(
@@ -137,15 +145,6 @@ class VoiceCLAPSmallWrapper(AbsEncoder):
         raise ValueError
 
 
-_VOICECLAP_CITATION = """
-@misc{voicenet2026voiceclap,
-      title={VoiceCLAP: Voice-Text Contrastive Embeddings},
-      author={VoiceNet},
-      year={2026},
-      url={https://huggingface.co/VoiceNet/voiceclap-large},
-}
-"""
-
 voiceclap_large = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
     loader_kwargs={"trust_remote_code": True},
@@ -169,7 +168,6 @@ voiceclap_large = ModelMeta(
     use_instructions=False,
     training_datasets=None,
     adapted_from="LCO-Embedding/LCO-Embedding-Omni-7B",
-    citation=_VOICECLAP_CITATION,
     extra_requirements_groups=["multimodal-sbert"],
 )
 
@@ -194,5 +192,4 @@ voiceclap_small = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=None,
-    citation=_VOICECLAP_CITATION,
 )

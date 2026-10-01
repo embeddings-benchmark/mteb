@@ -2,15 +2,14 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
-from transformers import AutoModel, AutoProcessor
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import OutputDType
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -29,6 +28,8 @@ class OpsColQwen3Wrapper(AbsEncoder):
         trust_remote_code: bool = True,
         **kwargs: Any,
     ):
+        import torch
+        from transformers import AutoModel, AutoProcessor
         from transformers.utils.import_utils import is_flash_attn_2_available
 
         if attn_implementation is None:
@@ -93,6 +94,7 @@ class OpsColQwen3Wrapper(AbsEncoder):
         batch_size: int = 32,
         **kwargs: Any,
     ) -> torch.Tensor:
+        import torch
         import torchvision.transforms.functional as F
         from PIL import Image
 
@@ -123,6 +125,8 @@ class OpsColQwen3Wrapper(AbsEncoder):
         batch_size: int = 32,
         **kwargs: Any,
     ) -> torch.Tensor:
+        import torch
+
         all_embeds = []
 
         with torch.no_grad():
@@ -234,13 +238,6 @@ multilingual_langs = [
     "zho-Hans",
 ]
 
-OPS_COLQWEN3_CITATION = """
-@misc{ops_colqwen3_4b,
-  author       = {OpenSearch-AI},
-  title        = {Ops-ColQwen3: State-of-the-Art Multimodal Embedding Model for Visual Document Retrieval},
-  year         = {2026},
-  url          = {https://huggingface.co/OpenSearch-AI/Ops-ColQwen3-4B},
-}"""
 
 ops_colqwen3_4b = ModelMeta(
     loader=OpsColQwen3Wrapper,
@@ -264,6 +261,5 @@ ops_colqwen3_4b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=OPS_COLQWEN3_TRAINING_DATA,
-    citation=OPS_COLQWEN3_CITATION,
     model_type=["late-interaction"],
 )

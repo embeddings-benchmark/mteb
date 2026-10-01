@@ -44,9 +44,14 @@ class LanguageScripts:
             A LanguageScripts object representing the provided languages and scripts.
         """
         lang_script_codes = set()
-        script_codes: set[str] = set(scripts) if (scripts is not None) else set()
+        script_codes: set[str] = set()
         # normalize to 3 letter language codes
         normalized_langs = set()
+
+        if scripts is not None:
+            for script in scripts:
+                check_language_code(script)
+                script_codes.add(script)
 
         if languages is not None:
             for lang in languages:

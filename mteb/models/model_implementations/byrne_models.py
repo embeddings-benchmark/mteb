@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -25,10 +24,15 @@ class ByrneEmbedModel(AbsEncoder):
         self,
         model: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         max_length: int = 128,
         **kwargs: Any,
     ):
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         from transformers import AutoModel, AutoTokenizer
 
         self.model_name = model
@@ -53,6 +57,8 @@ class ByrneEmbedModel(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         embeddings = []
         with torch.no_grad():
             for batch in inputs:
@@ -90,10 +96,4 @@ byrne_embed = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=None,
-    citation="""@misc{byrne2026byrneembed,
-  title        = {Byrne-Embed: A Compact 85M Sentence-Embedding Model},
-  author       = {Byrne, Dean},
-  year         = {2026},
-  howpublished = {\\url{https://huggingface.co/Quazim0t0/Byrne-Embed}},
-}""",
 )

@@ -76,9 +76,9 @@ class UCF101VideoAudioZeroShotClassification(AbsTaskZeroShotClassification):
         modalities=["video", "audio", "text"],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{Soomro2012UCF101,
+@misc{soomro2012ucf101dataset101human,
   archiveprefix = {arXiv},
-  author = {Soomro, Khurram and Zamir, Amir Roshan and Shah, Mubarak},
+  author = {Khurram Soomro and Amir Roshan Zamir and Mubarak Shah},
   eprint = {1212.0402},
   primaryclass = {cs.CV},
   title = {UCF101: A Dataset of 101 Human Actions Classes From Videos in The Wild},
@@ -132,9 +132,9 @@ class UCF101VideoZeroShotClassification(AbsTaskZeroShotClassification):
         modalities=["video", "text"],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{Soomro2012UCF101,
+@misc{soomro2012ucf101dataset101human,
   archiveprefix = {arXiv},
-  author = {Soomro, Khurram and Zamir, Amir Roshan and Shah, Mubarak},
+  author = {Khurram Soomro and Amir Roshan Zamir and Mubarak Shah},
   eprint = {1212.0402},
   primaryclass = {cs.CV},
   title = {UCF101: A Dataset of 101 Human Actions Classes From Videos in The Wild},
