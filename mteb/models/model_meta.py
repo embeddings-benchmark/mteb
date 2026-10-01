@@ -43,9 +43,10 @@ from mteb._hf_integration.hf_hub_utils import (
 )
 from mteb._requires_package import (
     _extras_requirement,
+    _full_installation_message,
     _install_command,
     _mteb_distribution,
-    _requires_run_dependency,
+    _requires_full_installation,
 )
 from mteb.languages import check_language_code
 from mteb.languages.iso_mappings import _hf_langs_to_iso_lang_scripts
@@ -79,8 +80,8 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-# needed to load and run models; `mteb` depends on them, while `mteb-core` has them in its `run` extra
-_RUN_DEPENDENCIES = {"torch", "transformers", "sentence_transformers"}
+# only in a full `mteb` installation, not in `mteb-core`
+_FULL_INSTALL_DEPENDENCIES = {"torch", "transformers", "sentence_transformers"}
 
 
 def _auto_install_extras_enabled() -> bool:
@@ -544,13 +545,13 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 **_kwargs,
             )
         except ModuleNotFoundError as e:
-            # `mteb-core` can use tasks and results without the `run` extra, but not load models
-            if e.name is None or e.name.split(".")[0] not in _RUN_DEPENDENCIES:
+            # `mteb-core` can use tasks and results, but loading models needs a full installation
+            if e.name is None or e.name.split(".")[0] not in _FULL_INSTALL_DEPENDENCIES:
                 raise
+            # not a precondition like the other call sites: which packages a model needs depends on
+            # the model, e.g. API models only need their client and work on `mteb-core`
             raise ModuleNotFoundError(
-                f"Loading {name} requires `{e.name}`, which is not installed. "
-                f"Install it with `{_install_command()}`.",
-                name=e.name,
+                _full_installation_message(f"Loading {name}"), name=e.name
             ) from e
         model.mteb_model_meta = _self  # type: ignore[misc]
         return model
@@ -1077,7 +1078,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         # imported here rather than at module scope so that `mteb.models.model_meta` stays
         # importable without transformers; kept outside the `try` so a missing dependency
         # surfaces as an ImportError instead of a "can't get model configuration" warning.
-        _requires_run_dependency(
+        _requires_full_installation(
             "transformers", "Reading a model configuration from the Hub"
         )
         from transformers import AutoConfig

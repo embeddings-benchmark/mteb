@@ -1,7 +1,8 @@
 """Guards that keep torch out of `import mteb`.
 
-`mteb-core` is a minimal install of mteb, without torch, transformers and sentence-transformers, so working with
-tasks, benchmarks, model metadata and results must not need them.
+`mteb-core` is a minimal install of mteb, without torch, transformers and sentence-transformers. The `test-core`
+CI job runs the tests that must pass on it; these guards also run on a full installation, where an eager import
+or a torch dtype evaluated at import time would otherwise go unnoticed.
 """
 
 from __future__ import annotations
@@ -11,28 +12,11 @@ import subprocess
 import sys
 import textwrap
 
+import pytest
+
 _REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 
 _HEAVY = ("torch", "transformers", "sentence_transformers")
-
-# Hides packages from the import system as if they were not installed: `import torch` fails and
-# `importlib.util.find_spec("torch")` returns None. (Setting `sys.modules["torch"] = None` is not
-# faithful -- libraries such as scipy see the key and dereference it.)
-_WITHOUT_TORCH = f"""
-import importlib.machinery
-import sys
-
-
-class _Hide(importlib.machinery.PathFinder):
-    @classmethod
-    def find_spec(cls, fullname, path=None, target=None):
-        if fullname.split(".")[0] in {set(_HEAVY)!r}:
-            return None
-        return super().find_spec(fullname, path, target)
-
-
-sys.meta_path = [_Hide if f is importlib.machinery.PathFinder else f for f in sys.meta_path]
-"""
 
 
 def _run(script: str) -> str:
@@ -65,84 +49,16 @@ def test_import_mteb_does_not_import_torch() -> None:
     )
 
 
-def test_mteb_works_without_torch_installed() -> None:
-    """Tasks, the CLI and every model's metadata must work on an install without torch.
+def test_missing_full_installation_says_what_to_install(monkeypatch) -> None:
+    """On `mteb-core`, anything that needs torch must say how to get a full installation."""
+    import mteb._requires_package as requires_package
 
-    Building the model registry imports all model implementation files, so any of them importing
-    torch, transformers or sentence-transformers at module scope fails this test. Anything that does
-    need them must say what to install instead of raising a bare `ModuleNotFoundError`.
-    """
-    output = _run(
-        _WITHOUT_TORCH
-        + textwrap.dedent(
-            """
-            import mteb
-            import mteb.cli
-            from mteb.mocks.mock_tasks.pair_classification import (
-                MockImageTextPairClassificationTask,
-            )
-
-            assert len(mteb.get_model_metas()) > 0
-            assert len(mteb.get_tasks(tasks=["NFCorpus"])) == 1
-
-            needs_run_dependencies = [
-                lambda: mteb.get_model("sentence-transformers/all-MiniLM-L6-v2"),
-                lambda: mteb.evaluate(object(), MockImageTextPairClassificationTask()),
-                lambda: mteb.models.ModelMeta.from_hub("BAAI/bge-m3"),
-            ]
-            explained = []
-            for call in needs_run_dependencies:
-                try:
-                    call()
-                except ImportError as e:  # ModuleNotFoundError is an ImportError
-                    # `mteb` installs it, `mteb-core` has to be swapped for `mteb` first
-                    explained.append("Install it with `pip " in str(e))
-            print(explained)
-            """
-        )
-    )
-    assert output == "[True, True, True]", output
+    monkeypatch.setattr(requires_package, "_is_package_available", lambda name: False)
+    with pytest.raises(ImportError, match="Install it with `pip .*install mteb`"):
+        requires_package._requires_full_installation("torch", "Evaluating a model")
 
 
-def test_mteb_distribution_finds_mteb_or_mteb_core(monkeypatch, caplog) -> None:
-    """The version, extras and requirements are read from whichever of `mteb` and `mteb-core` is installed.
-
-    Both ship the same files, so installing them together is a mistake worth warning about: uninstalling
-    either one then removes the files of the other.
-    """
-    import importlib.metadata
-
-    from mteb._requires_package import _mteb_distribution
-
-    def installed(*names: str):
-        def distribution(name: str) -> str:
-            if name in names:
-                return name
-            raise importlib.metadata.PackageNotFoundError(name)
-
-        return distribution
-
-    cases = [
-        (("mteb",), "mteb", False),  # pip install mteb
-        (("mteb-core",), "mteb-core", False),  # pip install mteb-core
-        (
-            ("mteb", "mteb-core"),
-            "mteb-core",
-            True,
-        ),  # both, which breaks on the next uninstall
-    ]
-    try:
-        for names, expected, warns in cases:
-            monkeypatch.setattr(importlib.metadata, "distribution", installed(*names))
-            _mteb_distribution.cache_clear()
-            caplog.clear()
-            with caplog.at_level("WARNING"):
-                assert _mteb_distribution() == expected
-            assert ("both installed" in caplog.text) is warns, caplog.text
-    finally:
-        _mteb_distribution.cache_clear()
-
-
+@pytest.mark.full_install
 def test_model_implementations_declare_no_import_time_torch_dtypes() -> None:
     """No model file may evaluate a `torch.<dtype>` at import time; use `OutputDType` instead.
 

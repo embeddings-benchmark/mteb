@@ -127,16 +127,8 @@ jobs:
           enable-cache: true
           python-version: "3.12"
 
-      - name: Install mteb-core
-        shell: bash
-        run: |
-          uv venv
-          uv pip install packaging
-          uv run --no-sync python scripts/build_core_package.py --edit-pyproject
-          uv pip install . pytest pytest-rerunfailures
-
       - name: Run tests
         shell: bash
         run: |
-          uv run --no-sync python -c "import importlib.util; assert importlib.util.find_spec('torch') is None"
-          uv run --no-sync pytest tests/test_ensure_no_torch_at_import.py -k "import_mteb or without_torch or distribution"
+          make install-core
+          make test-core

@@ -50,10 +50,10 @@ def _extras_requirement(groups: Sequence[str]) -> str:
 
 
 def _install_command(groups: Sequence[str] = ()) -> str:
-    """The command to install the given extras groups, or the dependencies to run models if there are none.
+    """The command to install the given extras groups, or a full mteb installation if there are none.
 
-    Loading and running models needs `mteb`, so on `mteb-core` that means switching. Both contain the same
-    files, so `mteb-core` has to be uninstalled first, rather than leaving two distributions owning them.
+    A full installation means `mteb`, so on `mteb-core` it means switching. Both contain the same files, so
+    `mteb-core` has to be uninstalled first, rather than leaving two distributions owning them.
     """
     if groups:
         return f"pip install {_extras_requirement(groups)}"
@@ -62,18 +62,20 @@ def _install_command(groups: Sequence[str] = ()) -> str:
     return "pip install mteb"
 
 
-def _requires_run_dependency(package: str, what: str) -> None:
-    """Raise an error saying what to install if a dependency needed to run models is missing.
+def _full_installation_message(what: str) -> str:
+    """The error message for something that a minimal `mteb-core` installation cannot do."""
+    return f"{what} requires a full mteb installation. Install it with `{_install_command()}`."
+
+
+def _requires_full_installation(package: str, what: str) -> None:
+    """Raise an error saying what to install if this is a minimal `mteb-core` installation.
 
     Args:
         package: The package to check, one of the dependencies that `mteb-core` leaves out.
         what: What the user was doing, e.g. "Evaluating a model".
     """
     if not _is_package_available(package):
-        raise ImportError(
-            f"{what} requires `{package}`, which is not installed. "
-            f"Install it with `{_install_command()}`."
-        )
+        raise ImportError(_full_installation_message(what))
 
 
 def _is_package_available(pkg_name: str) -> bool:

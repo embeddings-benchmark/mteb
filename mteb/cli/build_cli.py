@@ -11,7 +11,7 @@ from rich.console import Console
 from rich.logging import RichHandler
 
 import mteb
-from mteb._requires_package import _requires_run_dependency
+from mteb._requires_package import _requires_full_installation
 from mteb.cache import ResultCache
 from mteb.cli._display_tasks import _display_benchmarks, _display_tasks
 from mteb.cli.generate_model_card import generate_model_card
@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 def run(args: argparse.Namespace) -> None:
     """Run a model on a set of tasks."""
     # set logging based on verbosity level
-    _requires_run_dependency("torch", "Running a model")
+    _requires_full_installation("torch", "Running a model")
     import torch
 
     if args.verbosity == 0:
@@ -474,7 +474,7 @@ def _leaderboard(args: argparse.Namespace) -> None:
 def _mock_run(args: argparse.Namespace) -> None:
     """Run a model on the compatible mock tasks for verification."""
     # set logging based on verbosity level
-    _requires_run_dependency("torch", "Running a model")
+    _requires_full_installation("torch", "Running a model")
     import torch
 
     if args.verbosity == 0:

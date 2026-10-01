@@ -33,8 +33,8 @@ except ModuleNotFoundError:  # Python < 3.11
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
-# left out of `mteb-core`; only needed to load and run models
-RUN_DEPENDENCIES = {"torch", "transformers", "sentence-transformers"}
+# left out of `mteb-core`; only needed to load and run models, so only in a full `mteb` install
+FULL_INSTALL_DEPENDENCIES = {"torch", "transformers", "sentence-transformers"}
 
 
 def core_pyproject(pyproject: str) -> str:
@@ -48,12 +48,12 @@ def core_pyproject(pyproject: str) -> str:
     run = [
         dependency
         for dependency in project["dependencies"]
-        if canonicalize_name(Requirement(dependency).name) in RUN_DEPENDENCIES
+        if canonicalize_name(Requirement(dependency).name) in FULL_INSTALL_DEPENDENCIES
     ]
     found = {canonicalize_name(Requirement(dependency).name) for dependency in run}
-    if found != RUN_DEPENDENCIES:
+    if found != FULL_INSTALL_DEPENDENCIES:
         raise ValueError(
-            f"dependencies {RUN_DEPENDENCIES - found} are missing from pyproject.toml"
+            f"dependencies {FULL_INSTALL_DEPENDENCIES - found} are missing from pyproject.toml"
         )
 
     # an extra requiring `mteb[...]` would make `mteb-core` depend on `mteb`, installing the same files twice
