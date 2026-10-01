@@ -35,7 +35,6 @@ class MuQMuLanWrapper(AbsEncoder):
         self.device = device
         self.sampling_rate = 24000
         self.max_audio_length_seconds = max_audio_length_seconds
-        # Apply audio truncation (30 seconds max)
         self.max_length_samples = (
             int(self.max_audio_length_seconds * self.sampling_rate)
             if self.max_audio_length_seconds

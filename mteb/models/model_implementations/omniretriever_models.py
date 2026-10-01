@@ -50,9 +50,9 @@ class OmniRetrieverWrapper(AbsEncoder):
 
     AUDIO_SAMPLING_RATE = 16_000
     MIN_AUDIO_SEC = 1
-    # 300 s: base WAVE-7B on Qwen2.5-Omni-7B
-    # https://huggingface.co/YunzeLiu/OmniRetriever-7B/blob/main/adapter_config.json
-    MAX_AUDIO_SEC = 300
+    # 8 s: --fixed_audio_duration 8 (training keeps the first 8 s)
+    # https://github.com/yunzeliu/Omni-Retriever/blob/main/training/train.sh
+    MAX_AUDIO_SEC = 8
     POSITION_ID_PER_SECONDS = 25
     EMBED_DIM = 3584
 
@@ -64,7 +64,8 @@ class OmniRetrieverWrapper(AbsEncoder):
         base_model_name_or_path: str = WAVE_BASE_MODEL,
         base_model_revision: str = WAVE_BASE_REVISION,
         device: str | None = None,
-        # 8 frames is an mteb default; WAVE-7B declares no frame count
+        # 8 frames: --video_max_frames 8 --video_min_frames 8
+        # https://github.com/yunzeliu/Omni-Retriever/blob/main/training/train.sh
         num_frames: int = 8,
         pixels: int = 50_176,
         video_batch_size: int = 1,

@@ -96,12 +96,11 @@ class RzenEmbedWrapper(AbsEncoder):
         model_name: str = "qihoo360/RzenEmbed",
         device: str | None = None,
         max_length: int = 2000,
-        # fps=2: qwen-vl-utils FPS=2.0
-        # https://github.com/QwenLM/Qwen2.5-VL/blob/main/qwen-vl-utils/src/qwen_vl_utils/vision_process.py
-        fps: float = 2.0,
-        # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
-        max_frames: int = 64,
-        num_frames: int | None = None,
+        fps: float | None = None,
+        max_frames: int | None = None,
+        # 8 frames: extract_frames(num_frames=8) in the model card
+        # https://huggingface.co/qihoo360/RzenEmbed
+        num_frames: int | None = 8,
         **kwargs: Any,
     ) -> None:
         from transformers import (

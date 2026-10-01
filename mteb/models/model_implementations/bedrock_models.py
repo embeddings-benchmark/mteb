@@ -314,7 +314,6 @@ NOVA_PURPOSE_QUERY = "GENERIC_RETRIEVAL"
 NOVA_PURPOSE_CLASSIFICATION = "CLASSIFICATION"
 NOVA_PURPOSE_CLUSTERING = "CLUSTERING"
 
-# Nova accepts video segments up to 30 seconds.
 # 30 s: Nova 2 accepts "8K tokens or 30s of video and 30s of audio"
 # https://docs.aws.amazon.com/nova/latest/nova2-userguide/embeddings.html
 NOVA_MAX_VIDEO_SECONDS = 30

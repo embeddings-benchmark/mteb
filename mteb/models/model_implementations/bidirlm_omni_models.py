@@ -95,7 +95,7 @@ class BidirLMOmniEncoder(AbsEncoder):
         # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
-        # 30 s: chunk_length=30
+        # 30 s: chunk_length=30; the processor itself sets truncation=False
         # https://huggingface.co/BidirLM/BidirLM-Omni-2.5B-Embedding/blob/main/preprocessor_config.json
         max_samples: int | None = 30 * 16_000,
         **kwargs: Any,

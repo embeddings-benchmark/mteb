@@ -397,10 +397,10 @@ class VLM2VEC2Wrapper(AbsEncoder):
         revision: str | None = None,
         *,
         device: str | None = None,
-        # fps=2: qwen-vl-utils FPS=2.0
-        # https://github.com/QwenLM/Qwen2.5-VL/blob/main/qwen-vl-utils/src/qwen_vl_utils/vision_process.py
-        fps: float | None = 2.0,
-        # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
+        # fps=1: video example in the model card
+        # https://huggingface.co/VLM2Vec/VLM2Vec-V2.0
+        fps: float | None = 1.0,
+        # 64 is an mteb cap; the card sets no frame limit
         max_frames: int | None = 64,
         num_frames: int | None = None,
         **kwargs: Any,

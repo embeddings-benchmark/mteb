@@ -26,6 +26,9 @@ class TevatronOmniEmbedWrapper(SentenceTransformerEncoderWrapper):
         # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
+        # 300 s at 16 kHz: chunk_length=300
+        # https://huggingface.co/Tevatron/OmniEmbed-v0.1/blob/main/preprocessor_config.json
+        max_samples: int | None = 4_800_000,
         **kwargs: Any,
     ) -> None:
         super().__init__(
@@ -35,10 +38,7 @@ class TevatronOmniEmbedWrapper(SentenceTransformerEncoderWrapper):
             fps=fps,
             max_frames=max_frames,
             num_frames=num_frames,
-            # 300 s at 16 kHz: Qwen2.5-Omni chunk_length=300, the base this
-            # is adapted from
-            # https://huggingface.co/Qwen/Qwen2.5-Omni-7B/blob/main/preprocessor_config.json
-            max_samples=4_800_000,
+            max_samples=max_samples,
             **kwargs,
         )
         self.target_sampling_rate = self.model[

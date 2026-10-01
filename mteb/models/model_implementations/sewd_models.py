@@ -27,7 +27,7 @@ class SewDWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        # None: the encoder's own limit, read from the checkpoint below
+        # None: relative-position horizon, read from the checkpoint below
         max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):

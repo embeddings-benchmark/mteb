@@ -25,7 +25,7 @@ class UniSpeechWrapper(AbsEncoder):
         revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         # uncapped: conv positional embedding, no max_position_embeddings
-        # https://huggingface.co/microsoft/unispeech-sat-base/blob/main/config.json
+        # https://huggingface.co/microsoft/unispeech-sat-base-100h-libri-ft/blob/main/config.json
         max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
