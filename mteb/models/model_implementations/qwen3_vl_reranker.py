@@ -89,12 +89,14 @@ class Qwen3VLRerankerWrapper(CrossEncoderWrapper):
         # scores away from the reference implementation, so it is opt-in only
         # (useful if you need to bound memory on a small GPU).
         processor_kwargs = dict(kwargs.pop("processor_kwargs", {}) or {})
+        # VideoCollator already samples frames; without this the processor
+        # resamples them again assuming 24 fps (64 frames -> 6)
+        processor_kwargs.setdefault("do_sample_frames", False)
         if min_pixels is not None:
             processor_kwargs.setdefault("min_pixels", min_pixels)
         if max_pixels is not None:
             processor_kwargs.setdefault("max_pixels", max_pixels)
-        if processor_kwargs:
-            kwargs["processor_kwargs"] = processor_kwargs
+        kwargs["processor_kwargs"] = processor_kwargs
 
         super().__init__(
             model,
