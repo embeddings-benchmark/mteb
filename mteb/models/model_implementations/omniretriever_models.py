@@ -42,17 +42,16 @@ class OmniRetrieverWrapper(AbsEncoder):
     projected by ``classify_linear`` to 3584 dims, then L2-normalised here (the
     model does not normalise internally).
 
-    All preprocessing constants below come from the official training launcher
-    (``training/train.sh``) and data pipeline (``training/qwenvl/data/data_qwen.py``)
-    in https://github.com/yunzeliu/Omni-Retriever, which define the released
-    model's behaviour.
+    Prompt layout follows the official training pipeline
+    (``training/qwenvl/data/data_qwen.py``); audio and frame sampling follow the
+    official evaluation pipeline (``src/omniretriever/data/media.py``) in
+    https://github.com/yunzeliu/Omni-Retriever.
     """
 
     AUDIO_SAMPLING_RATE = 16_000
-    MIN_AUDIO_SEC = 1
-    # 8 s: --fixed_audio_duration 8 (training keeps the first 8 s)
-    # https://github.com/yunzeliu/Omni-Retriever/blob/main/training/train.sh
-    MAX_AUDIO_SEC = 8
+    # 8 s, centre-cropped or zero-padded: DEFAULT_AUDIO_DURATION_SEC=8
+    # https://github.com/yunzeliu/Omni-Retriever/blob/main/src/omniretriever/data/media.py
+    AUDIO_SEC = 8
     POSITION_ID_PER_SECONDS = 25
     EMBED_DIM = 3584
 
@@ -64,8 +63,8 @@ class OmniRetrieverWrapper(AbsEncoder):
         base_model_name_or_path: str = WAVE_BASE_MODEL,
         base_model_revision: str = WAVE_BASE_REVISION,
         device: str | None = None,
-        # 8 frames: --video_max_frames 8 --video_min_frames 8
-        # https://github.com/yunzeliu/Omni-Retriever/blob/main/training/train.sh
+        # 8 frames: DEFAULT_VIDEO_FRAMES=8
+        # https://github.com/yunzeliu/Omni-Retriever/blob/main/src/omniretriever/models/loader.py
         num_frames: int = 8,
         pixels: int = 50_176,
         video_batch_size: int = 1,
@@ -112,11 +111,9 @@ class OmniRetrieverWrapper(AbsEncoder):
             image_processor.size["shortest_edge"] = pixels
 
         self.video_batch_size = video_batch_size
-        self.max_audio_samples = self.MAX_AUDIO_SEC * self.AUDIO_SAMPLING_RATE
         self.collator = VideoCollator(
             target_sampling_rate=self.AUDIO_SAMPLING_RATE,
             num_frames=num_frames,
-            max_samples=self.max_audio_samples,
         )
 
     @staticmethod
@@ -194,13 +191,13 @@ class OmniRetrieverWrapper(AbsEncoder):
         if not audios:
             return {}, [], []
 
-        minimum = self.MIN_AUDIO_SEC * self.AUDIO_SAMPLING_RATE
+        target = self.AUDIO_SEC * self.AUDIO_SAMPLING_RATE
         waveforms = []
         for audio in audios:
             waveform = np.asarray(audio["array"], dtype=np.float32)
-            if waveform.shape[-1] < minimum:
-                waveform = np.pad(waveform, (0, minimum - waveform.shape[-1]))
-            waveforms.append(waveform)
+            start = max(0, (waveform.shape[-1] - target) // 2)
+            waveform = waveform[start : start + target]
+            waveforms.append(np.pad(waveform, (0, target - waveform.shape[-1])))
         raw_wavs = [torch.from_numpy(w) for w in waveforms]
         features = self.processor.feature_extractor(
             waveforms,

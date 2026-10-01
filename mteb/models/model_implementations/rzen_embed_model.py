@@ -96,11 +96,12 @@ class RzenEmbedWrapper(AbsEncoder):
         model_name: str = "qihoo360/RzenEmbed",
         device: str | None = None,
         max_length: int = 2000,
-        fps: float | None = None,
-        max_frames: int | None = None,
+        # fps=2 is the mteb default
+        fps: float | None = 2.0,
         # 8 frames: extract_frames(num_frames=8) in the model card
         # https://huggingface.co/qihoo360/RzenEmbed
-        num_frames: int | None = 8,
+        max_frames: int | None = 8,
+        num_frames: int | None = None,
         **kwargs: Any,
     ) -> None:
         from transformers import (

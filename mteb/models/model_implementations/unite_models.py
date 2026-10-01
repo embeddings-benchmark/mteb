@@ -128,9 +128,10 @@ class UniteWrapper(AbsEncoder):
         device: str | None = None,
         min_image_tokens: int = 256,
         max_image_tokens: int = 1280,
-        # fps=1, max_frames=32: the config in UNITE's own inference example
+        # fps=2 is the mteb default
+        fps: float | None = 2.0,
+        # max_frames=32: the config in UNITE's own inference example
         # https://huggingface.co/friedrichor/Unite-Base-Qwen2-VL-2B/blob/main/README.md
-        fps: float | None = 1.0,
         max_frames: int | None = 32,
         num_frames: int | None = None,
         target_sampling_rate: int = 16000,

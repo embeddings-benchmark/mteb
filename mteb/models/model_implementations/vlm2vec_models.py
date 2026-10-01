@@ -397,9 +397,8 @@ class VLM2VEC2Wrapper(AbsEncoder):
         revision: str | None = None,
         *,
         device: str | None = None,
-        # fps=1: video example in the model card
-        # https://huggingface.co/VLM2Vec/VLM2Vec-V2.0
-        fps: float | None = 1.0,
+        # fps=2 is the mteb default
+        fps: float | None = 2.0,
         # 64 is an mteb cap; the card sets no frame limit
         max_frames: int | None = 64,
         num_frames: int | None = None,

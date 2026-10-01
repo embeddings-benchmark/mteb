@@ -41,7 +41,7 @@ class GVEWrapper(AbsEncoder):
     `output_hidden_states`. Embeddings are the L2-normalized last-token
     hidden state with left padding, following the model card.
 
-    Frame sampling follows the model card's inference example: fps=1,
+    Frame sampling uses the mteb default fps=2 with the model card's
     max_frames=8.
     """
 
@@ -52,9 +52,10 @@ class GVEWrapper(AbsEncoder):
         *,
         device: str | None = None,
         max_length: int = 4096,
-        # fps=1, max_frames=8: the video config in GVE's own inference example
+        # fps=2 is the mteb default
+        fps: float | None = 2.0,
+        # max_frames=8: the video config in GVE's own inference example
         # https://huggingface.co/Alibaba-NLP/GVE-3B/blob/main/README.md
-        fps: float | None = 1.0,
         max_frames: int | None = 8,
         num_frames: int | None = None,
         **kwargs: Any,

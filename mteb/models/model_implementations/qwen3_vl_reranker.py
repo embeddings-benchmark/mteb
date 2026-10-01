@@ -75,9 +75,10 @@ class Qwen3VLRerankerWrapper(CrossEncoderWrapper):
         device: str | None = None,
         min_pixels: int | None = None,
         max_pixels: int | None = None,
-        # fps=1, 64 frames: FPS=1, MAX_FRAMES=64
+        # fps=2 is the mteb default
+        fps: float | None = 2.0,
+        # 64 frames: MAX_FRAMES=64
         # https://huggingface.co/Qwen/Qwen3-VL-Reranker-2B/blob/main/scripts/qwen3_vl_reranker.py
-        fps: float | None = 1.0,
         max_frames: int | None = 64,
         num_frames: int | None = None,
         use_instructions: bool = True,
