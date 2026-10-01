@@ -10,7 +10,6 @@ import hashlib
 from concurrent.futures import ThreadPoolExecutor
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 if TYPE_CHECKING:
@@ -47,6 +46,8 @@ def hash_video(video: VideoDecoder) -> str:
 
     Samples roughly one frame per second.
     """
+    import torch
+
     meta = video.metadata
     # Some containers over-count num_frames by one; the final claimed
     # frame often fails to decode.
