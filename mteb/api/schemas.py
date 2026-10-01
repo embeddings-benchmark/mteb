@@ -6,7 +6,7 @@ serialises as ``camelCase`` via ``alias_generator=to_camel``.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Any, Literal
 from urllib.parse import quote
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -353,6 +353,7 @@ class SummaryRowSchema(_CamelModel):
     scores_by_task: dict[str, float]
     scores_by_custom_group: dict[str, dict[str, float]] = Field(default_factory=dict)
     trained_on_tasks: list[str] = Field(default_factory=list)
+    experiments: dict[str, Any] | None = None
 
 
 class BenchmarkSummarySchema(_CamelModel):
@@ -369,10 +370,16 @@ class BenchmarkSummarySchema(_CamelModel):
 
 
 class BenchmarkPerLanguageRowSchema(_CamelModel):
-    """One model's per-language scores; keys are human labels (``"English"``)."""
+    """One model's per-language scores; keys are human labels (``"English"``).
+
+    One row per (model, experiment variant), matching ``SummaryRowSchema``'s
+    granularity. ``experiments`` mirrors ``SummaryRowSchema.experiments`` —
+    match a row here to its ``SummaryRow`` via ``rowId``.
+    """
 
     model_name: str
     scores_by_language: dict[str, float]
+    experiments: dict[str, Any] | None = None
 
 
 class BenchmarkPerLanguageSchema(_CamelModel):
