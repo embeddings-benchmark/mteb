@@ -221,8 +221,10 @@ class FramesCollator:
                 raise RuntimeError("`fps` is not set; cannot use FPS-based sampling")
             if num_frames is not None and n_source < target:
                 return (list(range(n_source)) * ((target // n_source) + 1))[:target]
-            step = max(1, n_source // target)
-            return list(range(0, n_source, step))[:target]
+            if n_source <= target:
+                return list(range(n_source))
+            # evenly spaced over the whole clip, as upstream samplers do
+            return np.linspace(0, n_source - 1, target).round().astype(int).tolist()
 
         # Retry on the actual call: decrement source count when trailing
         # frames fail to decode.
