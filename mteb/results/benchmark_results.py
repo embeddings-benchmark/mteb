@@ -485,11 +485,15 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
             mn = model_result.model_name
             mr = model_result.model_revision
             mm = model_result.model_meta
-            exp_kwargs = (
-                dict(mm.experiment_kwargs)
-                if mm is not None and mm.experiment_kwargs
-                else None
-            )
+            exp_kwargs = None
+            if mm is not None and mm.experiment_kwargs:
+                # Historical model_meta.json may predate the meaningful-value
+                # filter in ModelMeta.load_model() (e.g. model_kwargs={}
+                exp_kwargs = {
+                    k: v
+                    for k, v in mm.experiment_kwargs.items()
+                    if _has_meaningful_value(v)
+                } or None
             if mm is not None and exp_kwargs:
                 # Fold model_type/embed_dim/output_dtypes into the same
                 default_meta = MODEL_REGISTRY.get(mn)
