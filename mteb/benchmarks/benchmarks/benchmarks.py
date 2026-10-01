@@ -2713,14 +2713,8 @@ MIEB_MULTILINGUAL = MIEBBenchmark(
     aggregations=(
         BenchmarkAggregation.MEAN_TASK_TYPE,
         BenchmarkAggregation.TASK_TYPES,
-        # Separate dimensions, not one shared group each: MIEB(eng) and
-        # MIEB(lite) overlap too much (92%) to be exclusive groups of one
-        # CustomGrouping. MIEB(Img) is skipped — 2 of its 49 tasks aren't in
-        # MIEB(Multilingual). Values are unweighted task means, not the
-        # Mean(TaskType) MIEB(eng)/MIEB(lite) actually publish — hence
-        # "Task Mean" in the labels, so they're not mistaken for a match.
         CustomGrouping(
-            name="Task Mean vs MIEB(eng)",
+            name="MIEB(eng) Task Mean",
             groups=(
                 CustomGroup(
                     label="Task Mean",
@@ -2732,7 +2726,7 @@ MIEB_MULTILINGUAL = MIEBBenchmark(
             ),
         ),
         CustomGrouping(
-            name="Task Mean vs MIEB(lite)",
+            name="MIEB(lite) Task Mean",
             groups=(
                 CustomGroup(
                     label="Task Mean",
