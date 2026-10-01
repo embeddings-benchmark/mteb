@@ -69,31 +69,14 @@ class MuQMuLanWrapper(AbsEncoder):
                     array = array[..., : self.max_length_samples]  # noqa: PLW2901
                 audio_arrays.append(array)
 
-            # Find max length and pad all tensors
-            max_length = max(arr.shape[-1] for arr in audio_arrays)
-            batch_tensor = torch.zeros(
-                len(audio_arrays), max_length, dtype=torch.float32
-            )
-
-            for idx, arr in enumerate(audio_arrays):
-                length = arr.shape[-1]
-                # the collator yields numpy; assigning one straight into a torch
-                # buffer raises TypeError, so bridge through from_numpy
-                batch_tensor[idx, :length] = torch.from_numpy(
-                    np.ascontiguousarray(arr, dtype=np.float32)
-                )
-
-            batch_tensor = batch_tensor.to(self.device)
-
             with torch.no_grad():
-                # Process entire batch at once
-                audio_embeds = self.model(wavs=batch_tensor)
-                all_features.extend(
-                    [
-                        embed.cpu().detach().numpy().reshape(1, -1)
-                        for embed in audio_embeds
-                    ]
-                )
+                # one clip per forward: zero padding would be averaged in as silent 10 s clips
+                for arr in audio_arrays:
+                    wav = torch.from_numpy(np.ascontiguousarray(arr, dtype=np.float32))
+                    audio_embeds = self.model(wavs=wav.unsqueeze(0).to(self.device))
+                    all_features.append(
+                        audio_embeds.cpu().detach().numpy().reshape(1, -1)
+                    )
 
         return np.vstack(all_features)
 

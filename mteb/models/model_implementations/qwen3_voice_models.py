@@ -68,19 +68,21 @@ class Qwen3VoiceEmbeddingWrapper(AbsEncoder):
             inputs,
             disable=not show_progress_bar,
         ):
-            audio_arrays = [audio["array"] for audio in batch["audio"]]
+            # one clip per forward: padded frames are not masked in the pooling
+            for audio in batch["audio"]:
+                feature_inputs = self.feature_extractor(
+                    [audio["array"]],
+                    sampling_rate=self.sampling_rate,
+                    return_tensors="pt",
+                )
+                feature_inputs = {
+                    k: v.to(self.device) for k, v in feature_inputs.items()
+                }
 
-            feature_inputs = self.feature_extractor(
-                audio_arrays,
-                sampling_rate=self.sampling_rate,
-                return_tensors="pt",
-            )
-            feature_inputs = {k: v.to(self.device) for k, v in feature_inputs.items()}
-
-            with torch.no_grad():
-                outputs = self.model(**feature_inputs)
-                embeddings = outputs.last_hidden_state
-                all_embeddings.append(embeddings.cpu().detach())
+                with torch.no_grad():
+                    outputs = self.model(**feature_inputs)
+                    embeddings = outputs.last_hidden_state
+                    all_embeddings.append(embeddings.cpu().detach())
 
         return torch.cat(all_embeddings, dim=0).numpy()
 

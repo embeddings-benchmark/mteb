@@ -72,18 +72,16 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
                 cap = int(self.max_audio_length_seconds * self.sampling_rate)
                 audio_arrays = [w[..., :cap] for w in audio_arrays]
 
-            max_length = max(wav.shape[-1] for wav in audio_arrays)
-            padded_wavs = []
-            for wav in audio_arrays:
-                wav = np.asarray(wav, dtype=np.float32)  # noqa: PLW2901
-                if wav.shape[-1] < max_length:
-                    wav = np.pad(wav, (0, max_length - wav.shape[-1]))  # noqa: PLW2901
-                padded_wavs.append(wav)
-
-            batch_tensor = np.stack(padded_wavs)
-
-            # Process entire batch at once
-            batch_embeds = self.embed_audio(batch_tensor, self.audio_model)
+            # one clip per call: padding and wav2clip's batch-wide input
+            # normalisation would make embeddings depend on batch-mates
+            batch_embeds = np.concatenate(
+                [
+                    self.embed_audio(
+                        np.asarray(wav, dtype=np.float32)[None], self.audio_model
+                    )
+                    for wav in audio_arrays
+                ]
+            )
 
             # Normalize each embedding in the batch
             norms = np.linalg.norm(batch_embeds, axis=-1, keepdims=True)

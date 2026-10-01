@@ -83,36 +83,38 @@ class EncodecWrapper(AbsEncoder):
                 audio_arrays.append(array)
 
             with torch.no_grad():
-                # Use processor for batch padding (truncation/min-length done manually above)
-                processed = self.processor(
-                    raw_audio=audio_arrays,
-                    sampling_rate=self.sampling_rate,
-                    padding=True,
-                    return_tensors="pt",
-                )
-                input_values = processed["input_values"].to(self.device)
-
-                # Add channel dimension if needed (B, T) -> (B, 1, T)
-                if input_values.dim() == 2:
-                    input_values = input_values.unsqueeze(1)
-
-                # Get the latent representations directly from the encoder
-                latent = self.model.encoder(input_values)
-
-                # Validate latent has time frames
-                if latent.shape[2] == 0:
-                    raise ValueError(
-                        f"Encodec encoder produced 0 time frames. "
-                        f"Input shape: {input_values.shape}, latent shape: {latent.shape}"
+                # one clip per forward: batch padding would enter the time mean
+                for array in audio_arrays:
+                    processed = self.processor(
+                        raw_audio=[array],
+                        sampling_rate=self.sampling_rate,
+                        return_tensors="pt",
                     )
+                    input_values = processed["input_values"].to(self.device)
 
-                # Apply mean pooling over the time dimension to get fixed-size embeddings
-                embeddings = torch.mean(latent, dim=2)  # Average over time dimension
+                    # Add channel dimension if needed (B, T) -> (B, 1, T)
+                    if input_values.dim() == 2:
+                        input_values = input_values.unsqueeze(1)
 
-                # Normalize embeddings
-                embeddings = embeddings / embeddings.norm(dim=-1, keepdim=True)  # noqa: PLR6104
+                    # Get the latent representations directly from the encoder
+                    latent = self.model.encoder(input_values)
 
-                all_embeddings.append(embeddings.cpu().detach())
+                    # Validate latent has time frames
+                    if latent.shape[2] == 0:
+                        raise ValueError(
+                            f"Encodec encoder produced 0 time frames. "
+                            f"Input shape: {input_values.shape}, latent shape: {latent.shape}"
+                        )
+
+                    # Apply mean pooling over the time dimension to get fixed-size embeddings
+                    embeddings = torch.mean(
+                        latent, dim=2
+                    )  # Average over time dimension
+
+                    # Normalize embeddings
+                    embeddings = embeddings / embeddings.norm(dim=-1, keepdim=True)  # noqa: PLR6104
+
+                    all_embeddings.append(embeddings.cpu().detach())
 
         return torch.cat(all_embeddings, dim=0).numpy()
 
