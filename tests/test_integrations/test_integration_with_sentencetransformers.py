@@ -6,6 +6,7 @@ import logging
 
 import pytest
 import sentence_transformers
+import sklearn
 from packaging.version import Version
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
@@ -163,6 +164,16 @@ if (
             MockTextZeroShotClassificationTask: 1.0,
         },
     )
+    # The minimum supported scikit-learn releases produce different deterministic
+    # KMeans assignments than 1.8+ for the same fixed embeddings and random state, see
+    # test_integration_with_datasets.py.
+    if Version(sklearn.__version__) < Version("1.8.0"):
+        SPARSE_ENCODER_MODEL.expected_scores.update(
+            {
+                MockMultilingualClusteringTask: 1.0,
+                MockClusteringTask: 1.0,
+            }
+        )
 else:
     SPARSE_ENCODER_MODEL = _skip_unsupported(
         SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION, "SparseEncoder"
