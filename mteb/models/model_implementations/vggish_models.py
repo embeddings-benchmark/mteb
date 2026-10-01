@@ -5,13 +5,13 @@ import warnings
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb import TaskMetadata
@@ -24,6 +24,7 @@ logger = logging.getLogger(__name__)
 
 def vggish_loader(*args: Any, **kwargs: Any) -> EncoderProtocol:
     """Factory function to create a VGGish model wrapper."""
+    import torch
     import torchaudio
     from torch_vggish_yamnet import vggish
     from torch_vggish_yamnet.input_proc import WaveformToInput
@@ -31,10 +32,15 @@ def vggish_loader(*args: Any, **kwargs: Any) -> EncoderProtocol:
     class VGGishWrapper(AbsEncoder):
         def __init__(
             self,
-            device: str = "cuda" if torch.cuda.is_available() else "cpu",
+            device: str | None = None,
             max_audio_length_seconds: float = 30.0,
             **kwargs: Any,
         ):
+            import torch
+
+            if device is None:
+                device = "cuda" if torch.cuda.is_available() else "cpu"
+
             self.device = device
             self.max_audio_length_seconds = max_audio_length_seconds
             self.model = vggish.get_vggish(with_classifier=False, pretrained=True)

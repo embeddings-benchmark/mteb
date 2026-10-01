@@ -24,12 +24,22 @@ class KoVidore2CybersecurityRetrieval(AbsTaskRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="created",
-        bibtex_citation="""
-@misc{choi2026kovidorev2,
-  author = {Yongbin Choi},
-  note = {A benchmark for evaluating Korean vision document retrieval with multi-page reasoning queries in practical domains},
-  title = {KoViDoRe v2: a comprehensive evaluation of vision document retrieval for enterprise use-cases},
-  url = {https://github.com/whybe-choi/kovidore-data-generator},
+        bibtex_citation=r"""
+@inproceedings{choi-etal-2026-kovidore,
+  address = {San Diego, USA},
+  author = {Choi, Yongbin  and
+Song, Yongwoo  and
+Sung, Mujeen},
+  booktitle = {Proceedings of the 2nd Workshop on Multimodal Augmented Generation via Multimodal Retrieval ({MAGM}a{R} 2026)},
+  doi = {10.18653/v1/2026.magmar-main.11},
+  editor = {Murray, Kenton  and
+Kriz, Reno},
+  isbn = {979-8-89176-425-5},
+  month = jul,
+  pages = {54--80},
+  publisher = {Association for Computational Linguistics},
+  title = {{K}o{V}i{D}o{R}e: A Benchmark for {K}orean Visual Document Retrieval},
+  url = {https://aclanthology.org/2026.magmar-main.11/},
   year = {2026},
 }
 """,
@@ -59,12 +69,22 @@ class KoVidore2EconomicRetrieval(AbsTaskRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="created",
-        bibtex_citation="""
-@misc{choi2026kovidorev2,
-  author = {Yongbin Choi},
-  note = {A benchmark for evaluating Korean vision document retrieval with multi-page reasoning queries in practical domains},
-  title = {KoViDoRe v2: a comprehensive evaluation of vision document retrieval for enterprise use-cases},
-  url = {https://github.com/whybe-choi/kovidore-data-generator},
+        bibtex_citation=r"""
+@inproceedings{choi-etal-2026-kovidore,
+  address = {San Diego, USA},
+  author = {Choi, Yongbin  and
+Song, Yongwoo  and
+Sung, Mujeen},
+  booktitle = {Proceedings of the 2nd Workshop on Multimodal Augmented Generation via Multimodal Retrieval ({MAGM}a{R} 2026)},
+  doi = {10.18653/v1/2026.magmar-main.11},
+  editor = {Murray, Kenton  and
+Kriz, Reno},
+  isbn = {979-8-89176-425-5},
+  month = jul,
+  pages = {54--80},
+  publisher = {Association for Computational Linguistics},
+  title = {{K}o{V}i{D}o{R}e: A Benchmark for {K}orean Visual Document Retrieval},
+  url = {https://aclanthology.org/2026.magmar-main.11/},
   year = {2026},
 }
 """,
@@ -94,12 +114,22 @@ class KoVidore2EnergyRetrieval(AbsTaskRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="created",
-        bibtex_citation="""
-@misc{choi2026kovidorev2,
-  author = {Yongbin Choi},
-  note = {A benchmark for evaluating Korean vision document retrieval with multi-page reasoning queries in practical domains},
-  title = {KoViDoRe v2: a comprehensive evaluation of vision document retrieval for enterprise use-cases},
-  url = {https://github.com/whybe-choi/kovidore-data-generator},
+        bibtex_citation=r"""
+@inproceedings{choi-etal-2026-kovidore,
+  address = {San Diego, USA},
+  author = {Choi, Yongbin  and
+Song, Yongwoo  and
+Sung, Mujeen},
+  booktitle = {Proceedings of the 2nd Workshop on Multimodal Augmented Generation via Multimodal Retrieval ({MAGM}a{R} 2026)},
+  doi = {10.18653/v1/2026.magmar-main.11},
+  editor = {Murray, Kenton  and
+Kriz, Reno},
+  isbn = {979-8-89176-425-5},
+  month = jul,
+  pages = {54--80},
+  publisher = {Association for Computational Linguistics},
+  title = {{K}o{V}i{D}o{R}e: A Benchmark for {K}orean Visual Document Retrieval},
+  url = {https://aclanthology.org/2026.magmar-main.11/},
   year = {2026},
 }
 """,
@@ -129,12 +159,22 @@ class KoVidore2HrRetrieval(AbsTaskRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="created",
-        bibtex_citation="""
-@misc{choi2026kovidorev2,
-  author = {Yongbin Choi},
-  note = {A benchmark for evaluating Korean vision document retrieval with multi-page reasoning queries in practical domains},
-  title = {KoViDoRe v2: a comprehensive evaluation of vision document retrieval for enterprise use-cases},
-  url = {https://github.com/whybe-choi/kovidore-data-generator},
+        bibtex_citation=r"""
+@inproceedings{choi-etal-2026-kovidore,
+  address = {San Diego, USA},
+  author = {Choi, Yongbin  and
+Song, Yongwoo  and
+Sung, Mujeen},
+  booktitle = {Proceedings of the 2nd Workshop on Multimodal Augmented Generation via Multimodal Retrieval ({MAGM}a{R} 2026)},
+  doi = {10.18653/v1/2026.magmar-main.11},
+  editor = {Murray, Kenton  and
+Kriz, Reno},
+  isbn = {979-8-89176-425-5},
+  month = jul,
+  pages = {54--80},
+  publisher = {Association for Computational Linguistics},
+  title = {{K}o{V}i{D}o{R}e: A Benchmark for {K}orean Visual Document Retrieval},
+  url = {https://aclanthology.org/2026.magmar-main.11/},
   year = {2026},
 }
 """,

@@ -27,6 +27,7 @@ class DKHateClassification(AbsTaskClassification):
         bibtex_citation=r"""
 @inproceedings{sigurbergsson-derczynski-2020-offensive,
   address = {Marseille, France},
+  archiveprefix = {arXiv},
   author = {Sigurbergsson, Gudbjartur Ingi  and
 Derczynski, Leon},
   booktitle = {Proceedings of the Twelfth Language Resources and Evaluation Conference},
@@ -44,6 +45,7 @@ Mazo, H{\'e}l{\`e}ne  and
 Moreno, Asuncion  and
 Odijk, Jan  and
 Piperidis, Stelios},
+  eprint = {1908.04531},
   isbn = {979-10-95546-34-4},
   language = {English},
   month = may,
@@ -97,6 +99,7 @@ class DKHateClassificationV2(AbsTaskClassification):
         bibtex_citation=r"""
 @inproceedings{sigurbergsson-derczynski-2020-offensive,
   address = {Marseille, France},
+  archiveprefix = {arXiv},
   author = {Sigurbergsson, Gudbjartur Ingi  and
 Derczynski, Leon},
   booktitle = {Proceedings of the Twelfth Language Resources and Evaluation Conference},
@@ -114,6 +117,7 @@ Mazo, H{\'e}l{\`e}ne  and
 Moreno, Asuncion  and
 Odijk, Jan  and
 Piperidis, Stelios},
+  eprint = {1908.04531},
   isbn = {979-10-95546-34-4},
   language = {English},
   month = may,

@@ -26,12 +26,10 @@ class DisCoTexPairClassification(AbsTaskPairClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{brunato2023discotex,
-  author = {Brunato, Dominique and Colla, Davide and Dell'Orletta, Felice and Dini, Irene and Radicioni, Daniele Paolo and Ravelli, Andrea Amelio and others},
-  booktitle = {CEUR WORKSHOP PROCEEDINGS},
-  organization = {CEUR},
-  pages = {1--8},
-  title = {DisCoTex at EVALITA 2023: overview of the assessing discourse coherence in Italian texts task},
-  volume = {3473},
+  author = {Brunato, Dominique and Colla, Davide and Dell’Orletta, Felice and Dini, Irene and Radicioni, Daniele Paolo and Ravelli, Andrea Amelio},
+  booktitle = {Proceedings of the Eighth Evaluation Campaign of Natural Language Processing and Speech Tools for Italian. Final Workshop (EVALITA 2023)},
+  pages = {318--325},
+  title = {Discotex at evalita 2023: Overview of the assessing discourse coherence in italian texts task},
   year = {2023},
 }
 """,

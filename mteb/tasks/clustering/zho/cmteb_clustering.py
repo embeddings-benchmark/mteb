@@ -209,16 +209,7 @@ class ThuNewsClusteringFastS2S(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@software{sun2016thuctc,
-  author = {Sun, M. and Li, J. and Guo, Z. and Yu, Z. and Zheng, Y. and Si, X. and Liu, Z.},
-  note = {THU Chinese Text Classification Toolkit},
-  publisher = {THU Natural Language Processing Lab},
-  title = {THUCTC: An Efficient Chinese Text Classifier},
-  url = {https://github.com/thunlp/THUCTC},
-  year = {2016},
-}
-""",
+        bibtex_citation="",
         prompt="Identify the topic or theme of the given news articles based on the titles",
         adapted_from=["ThuNewsClusteringS2S"],
     )
@@ -271,16 +262,7 @@ class ThuNewsClusteringFastP2P(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@software{sun2016thuctc,
-  author = {Sun, M. and Li, J. and Guo, Z. and Yu, Z. and Zheng, Y. and Si, X. and Liu, Z.},
-  note = {THU Chinese Text Classification Toolkit},
-  publisher = {THU Natural Language Processing Lab},
-  title = {THUCTC: An Efficient Chinese Text Classifier},
-  url = {https://github.com/thunlp/THUCTC},
-  year = {2016},
-}
-""",
+        bibtex_citation="",
         prompt="Identify the topic or theme of the given news articles based on the titles and contents",
         adapted_from=["ThuNewsClusteringP2P"],
     )
@@ -331,13 +313,6 @@ class ThuNewsClusteringS2S(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{eisner2007proceedings,
-  author = {Eisner, Jason},
-  booktitle = {Proceedings of the 2007 Joint Conference on Empirical Methods in Natural Language Processing and Computational Natural Language Learning (EMNLP-CoNLL)},
-  title = {Proceedings of the 2007 joint conference on empirical methods in natural language processing and computational natural language learning (EMNLP-CoNLL)},
-  year = {2007},
-}
-
 @inproceedings{li2006comparison,
   author = {Li, Jingyang and Sun, Maosong and Zhang, Xian},
   booktitle = {proceedings of the 21st international conference on computational linguistics and 44th annual meeting of the association for computational linguistics},
@@ -374,13 +349,6 @@ class ThuNewsClusteringP2P(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{eisner2007proceedings,
-  author = {Eisner, Jason},
-  booktitle = {Proceedings of the 2007 Joint Conference on Empirical Methods in Natural Language Processing and Computational Natural Language Learning (EMNLP-CoNLL)},
-  title = {Proceedings of the 2007 joint conference on empirical methods in natural language processing and computational natural language learning (EMNLP-CoNLL)},
-  year = {2007},
-}
-
 @inproceedings{li2006comparison,
   author = {Li, Jingyang and Sun, Maosong and Zhang, Xian},
   booktitle = {proceedings of the 21st international conference on computational linguistics and 44th annual meeting of the association for computational linguistics},

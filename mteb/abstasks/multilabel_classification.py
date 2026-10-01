@@ -168,6 +168,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
             test_dataset.select_columns(self.input_column_name),
             task_metadata=self.metadata,
             input_column=self.input_column_name,
+            num_proc=num_proc,
             **encode_kwargs,
         )
 

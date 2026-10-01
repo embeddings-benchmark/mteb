@@ -50,9 +50,12 @@ serve-docs:
 	uv run --no-sync --group docs zensical serve
 
 
+install-for-model-load-test:
+	@echo "--- 🚀 Installing project dependencies for model load test ---"
+	uv sync --extra pylate --group dev --frozen
+
 model-load-test:
 	@echo "--- 🚀 Running model load test ---"
-	uv sync --extra pylate --group dev
 	uv run --no-sync python scripts/extract_model_names.py $(BASE_BRANCH) --return_one_model_name_per_file
 	uv run --no-sync python tests/test_models/model_loading.py --model_name_file scripts/model_names.txt
 
@@ -64,6 +67,10 @@ dataset-load-test:
 dataset-load-test-pr:
 	@echo "--- 🚀 Running dataset load test for PR ---"
 	eval "$$(uv run --no-sync python -m scripts.extract_datasets $(BASE_BRANCH))" && uv run --no-sync --group test pytest -m test_datasets
+
+citation-check:
+	@echo "--- 🔍 Checking that the cited works exist ---"
+	uv run --no-sync --group test python tests/test_validate_metadata/check_citations.py
 
 reference-model-test:
 	@echo "--- Running reference model coverage test ---"

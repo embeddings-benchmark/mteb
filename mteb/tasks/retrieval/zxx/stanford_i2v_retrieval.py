@@ -37,18 +37,19 @@ class StanfordI2VRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
+@inproceedings{araujo2015stanford,
+  author = {Araujo, Andr{\'e} and Chaves, Jason and Chen, David and Angst, Roland and Girod, Bernd},
+  booktitle = {Proceedings of the 6th ACM Multimedia Systems Conference},
+  pages = {237--242},
+  title = {Stanford I2V: a news video dataset for query-by-image experiments},
+  year = {2015},
+}
+
 @article{AraujoArxiv2016,
   author = {Araujo, A. and Chaves, J. and Lakshman, H. and Angst, R. and Girod, B.},
   journal = {arXiv preprint arXiv:1604.07939},
   title = {{Large-Scale Query-by-Image Video Retrieval Using Bloom Filters}},
   year = {2016},
-}
-
-@inproceedings{AraujoMMSYS2015,
-  author = {Araujo, A. and Chaves, J. and Chen, D. and Angst, R. and Girod, B.},
-  booktitle = {Proc. ACM Multimedia Systems},
-  title = {{Stanford I2V: A News Video Dataset for Query-by-Image Experiments}},
-  year = {2015},
 }
 """,
         prompt={
@@ -93,18 +94,19 @@ class StanfordI2VVisualRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
+@inproceedings{araujo2015stanford,
+  author = {Araujo, Andr{\'e} and Chaves, Jason and Chen, David and Angst, Roland and Girod, Bernd},
+  booktitle = {Proceedings of the 6th ACM Multimedia Systems Conference},
+  pages = {237--242},
+  title = {Stanford I2V: a news video dataset for query-by-image experiments},
+  year = {2015},
+}
+
 @article{AraujoArxiv2016,
   author = {Araujo, A. and Chaves, J. and Lakshman, H. and Angst, R. and Girod, B.},
   journal = {arXiv preprint arXiv:1604.07939},
   title = {{Large-Scale Query-by-Image Video Retrieval Using Bloom Filters}},
   year = {2016},
-}
-
-@inproceedings{AraujoMMSYS2015,
-  author = {Araujo, A. and Chaves, J. and Chen, D. and Angst, R. and Girod, B.},
-  booktitle = {Proc. ACM Multimedia Systems},
-  title = {{Stanford I2V: A News Video Dataset for Query-by-Image Experiments}},
-  year = {2015},
 }
 """,
         prompt={

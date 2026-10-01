@@ -351,6 +351,7 @@ def create_dataloader(
         return _create_dataloader_from_texts(
             dataset[_input_column],
             batch_size=batch_size,
+            num_proc=num_proc,
         )
 
     prepared = _prepare_dataset(

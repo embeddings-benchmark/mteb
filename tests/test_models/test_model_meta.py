@@ -61,7 +61,7 @@ _MISSING_N_EMBEDDING_MODELS = [
     "vidore/colpali-v1.3",
     "vidore/colqwen2-v1.0",
     "vidore/colqwen2.5-v0.2",
-    "voyageai/voyage-multimodal-3",
+    "mongodb/voyage-multimodal-3",
     "OrlikB/KartonBERT-USE-base-v1",
     "OrlikB/st-polish-kartonberta-base-alpha-v1",
     "jinaai/jina-clip-v2",

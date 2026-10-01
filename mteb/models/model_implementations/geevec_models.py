@@ -6,7 +6,6 @@ import time
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
@@ -282,6 +281,8 @@ class GeeVecLiteModel(InstructSentenceTransformerModel):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         sentences = [text for batch in inputs for text in batch["text"]]
         domain = _resolve_geevec_domain(task_metadata, hf_subset, kwargs.get("domain"))
         if domain is not None:
