@@ -1,5 +1,7 @@
 """test that mteb.evaluate integrates with SentenceTransformers"""
 
+from __future__ import annotations
+
 import logging
 
 import pytest
