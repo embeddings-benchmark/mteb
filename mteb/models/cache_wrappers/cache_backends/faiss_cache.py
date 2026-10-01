@@ -14,7 +14,7 @@ from mteb._requires_package import _is_package_available
 if TYPE_CHECKING:
     import faiss
 
-    from mteb.types import Array, BatchedInput
+    from mteb.types import Array
 
 logger = logging.getLogger(__name__)
 
@@ -115,7 +115,7 @@ class FaissCache:
         self.save()
         self.index = None
 
-    def __contains__(self, item: BatchedInput) -> bool:
+    def __contains__(self, item: dict[str, Any]) -> bool:
         return hash_item(item) in self.hash_to_index
 
     def __del__(self) -> None:

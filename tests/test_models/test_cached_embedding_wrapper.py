@@ -32,6 +32,10 @@ if TYPE_CHECKING:
 class DummyModel(RandomEncoderBaseline):
     call_count = 0
 
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self.mteb_model_meta = mteb.get_model_meta("mteb/baseline-random-encoder")
+
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
