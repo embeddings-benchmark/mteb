@@ -615,7 +615,9 @@ class AbsTaskRetrieval(AbsTask):
         )
 
         corpus_stats = calculate_single_input_modality_statistics(
-            corpus_col_inputs, max_workers=num_proc
+            corpus_col_inputs,
+            image_black_or_white_flags=black_or_white_image_flags,
+            max_workers=num_proc,
         )
         queries_stats = calculate_single_input_modality_statistics(
             queries_col_inputs, max_workers=num_proc
