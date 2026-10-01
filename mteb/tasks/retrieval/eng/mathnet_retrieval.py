@@ -24,7 +24,8 @@ class MathNetRetrieval(AbsTaskRetrieval):
             "exactly one gold equivalent per tier. The easy, medium and hard subsets increasingly disguise the surface "
             "form of the problem (from light paraphrase to heavy disguise with minimal lexical overlap) while "
             "preserving the underlying mathematics; the query's equivalents at the other tiers act as negatives. "
-            "Problems are drawn from national and international olympiads; most text is English, with a small "
+            "Equivalents and near-misses were generated with Gemini-3-Flash and kept only when both Gemini-3-Flash "
+            "and GPT-5, used as LLM judges, agreed; a subset was additionally reviewed by humans. Problems are drawn from national and international olympiads; most text is English, with a small "
             "fraction also containing the original-language statement (e.g. Russian or Chinese)."
         ),
         reference="https://arxiv.org/abs/2604.18584",
@@ -44,7 +45,7 @@ class MathNetRetrieval(AbsTaskRetrieval):
         license="cc-by-4.0",
         annotations_creators="LM-generated",
         dialect=[],
-        sample_creation="LM-generated and verified",
+        sample_creation="multiple",  # queries are found olympiad problems, the corpus is LM-generated and LM-verified
         bibtex_citation=r"""
 @inproceedings{alshammari2026mathnet,
   author = {Alshammari, Shaden and Wen, Kevin and Zainal, Abrar and Hamilton, Mark and Safaei, Navid and Albarakati, Sultan and Freeman, William T. and Torralba, Antonio},
