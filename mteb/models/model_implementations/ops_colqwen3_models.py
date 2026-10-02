@@ -238,13 +238,6 @@ multilingual_langs = [
     "zho-Hans",
 ]
 
-OPS_COLQWEN3_CITATION = """
-@misc{ops_colqwen3_4b,
-  author       = {OpenSearch-AI},
-  title        = {Ops-ColQwen3: State-of-the-Art Multimodal Embedding Model for Visual Document Retrieval},
-  year         = {2026},
-  url          = {https://huggingface.co/OpenSearch-AI/Ops-ColQwen3-4B},
-}"""
 
 ops_colqwen3_4b = ModelMeta(
     loader=OpsColQwen3Wrapper,
@@ -268,6 +261,5 @@ ops_colqwen3_4b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=OPS_COLQWEN3_TRAINING_DATA,
-    citation=OPS_COLQWEN3_CITATION,
     model_type=["late-interaction"],
 )

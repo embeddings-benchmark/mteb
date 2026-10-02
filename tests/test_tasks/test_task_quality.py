@@ -197,12 +197,6 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MKQARetrieval",
         "MLQuestions",
         "MMDocIRT2ITRetrieval",
-        "MMBrightAcademiaIT2TRetrieval",  # source contains empty text
-        "MMBrightAcademiaT2TRetrieval",
-        "MMBrightBiologyIT2TRetrieval",
-        "MMBrightBiologyT2TRetrieval",
-        "MMBrightQuantumComputingIT2TRetrieval",
-        "MMBrightQuantumComputingT2TRetrieval",
         "MMVUVideoCentricQA",
         "MMarcoRetrieval",
         "MMarcoRetrievalMultilingual",  # CJK languages (ja, zh) have short queries and some translations (id, vi) are truncated in the original source dataset
@@ -547,65 +541,6 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MLSUMClusteringP2P",
         "MLSUMClusteringS2S",
         "MLSUMClusteringS2S.v2",
-        "MMBrightAcademiaIT2TRetrieval",  # source contains duplicate passages/queries
-        "MMBrightAcademiaT2TRetrieval",
-        "MMBrightAppleIT2TRetrieval",
-        "MMBrightAppleT2TRetrieval",
-        "MMBrightAskUbuntuIT2TRetrieval",
-        "MMBrightAskUbuntuT2TRetrieval",
-        "MMBrightAviationIT2TRetrieval",
-        "MMBrightAviationT2TRetrieval",
-        "MMBrightBioacousticsIT2TRetrieval",
-        "MMBrightBioacousticsT2TRetrieval",
-        "MMBrightBioinformaticsIT2IRetrieval",
-        "MMBrightBioinformaticsIT2TRetrieval",
-        "MMBrightBioinformaticsT2TRetrieval",
-        "MMBrightBiologyIT2TRetrieval",
-        "MMBrightBiologyT2TRetrieval",
-        "MMBrightBitcoinIT2TRetrieval",
-        "MMBrightBitcoinT2TRetrieval",
-        "MMBrightChemistryIT2TRetrieval",
-        "MMBrightChemistryT2TRetrieval",
-        "MMBrightChristianityIT2TRetrieval",
-        "MMBrightChristianityT2TRetrieval",
-        "MMBrightCryptoIT2TRetrieval",
-        "MMBrightCryptoT2TRetrieval",
-        "MMBrightEarthScienceIT2TRetrieval",
-        "MMBrightEarthScienceT2TRetrieval",
-        "MMBrightEconomicsIT2TRetrieval",
-        "MMBrightEconomicsT2TRetrieval",
-        "MMBrightGISIT2TRetrieval",
-        "MMBrightGIST2TRetrieval",
-        "MMBrightGamingIT2TRetrieval",
-        "MMBrightGamingT2TRetrieval",
-        "MMBrightIslamIT2TRetrieval",
-        "MMBrightIslamT2TRetrieval",
-        "MMBrightLawIT2TRetrieval",
-        "MMBrightLawT2TRetrieval",
-        "MMBrightMathIT2TRetrieval",
-        "MMBrightMathT2TRetrieval",
-        "MMBrightMedicalSciencesIT2TRetrieval",
-        "MMBrightMedicalSciencesT2TRetrieval",
-        "MMBrightPhilosophyIT2TRetrieval",
-        "MMBrightPhilosophyT2TRetrieval",
-        "MMBrightPhysicsIT2TRetrieval",
-        "MMBrightPhysicsT2TRetrieval",
-        "MMBrightProjectManagementIT2TRetrieval",
-        "MMBrightProjectManagementT2TRetrieval",
-        "MMBrightPsychologyIT2TRetrieval",
-        "MMBrightPsychologyT2TRetrieval",
-        "MMBrightQuantIT2TRetrieval",
-        "MMBrightQuantT2TRetrieval",
-        "MMBrightQuantumComputingIT2TRetrieval",
-        "MMBrightQuantumComputingT2TRetrieval",
-        "MMBrightRoboticsIT2TRetrieval",
-        "MMBrightRoboticsT2TRetrieval",
-        "MMBrightSalesforceIT2TRetrieval",
-        "MMBrightSalesforceT2TRetrieval",
-        "MMBrightSustainabilityIT2TRetrieval",
-        "MMBrightSustainabilityT2TRetrieval",
-        "MMBrightTravelIT2TRetrieval",
-        "MMBrightTravelT2TRetrieval",
         "MMVUVideoCentricQA",
         "MMarcoReranking",
         "MSMARCOv2",
@@ -745,6 +680,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "WikiClusteringP2P.v2",
         "WikiSQLRetrieval",
         "WITI2TRetrieval",  # distinct WIT records can share the same caption
+        "WITT2IRetrieval",  # same WIT records, text on the query side
         "XM3600I2TRetrieval",  # captions are intentionally preserved verbatim
         "XM3600T2IRetrieval",
         "XMarket",
@@ -934,40 +870,6 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MVLSIBSent2Img",  # all languages share the same 70 images
         "MMLongBenchDocRetrieval",  # official corpus contains repeated rendered pages; preserve IDs to match qrels
         "MomentSeekerTI2VRetrieval",
-        "MMBrightAcademiaIT2IRetrieval",  # source images are intentionally reused
-        "MMBrightAppleIT2IRetrieval",
-        "MMBrightAskUbuntuIT2IRetrieval",
-        "MMBrightAviationIT2IRetrieval",
-        "MMBrightBioacousticsIT2IRetrieval",
-        "MMBrightBioinformaticsIT2IRetrieval",
-        "MMBrightBioinformaticsIT2TRetrieval",
-        "MMBrightBiologyIT2IRetrieval",
-        "MMBrightBitcoinIT2IRetrieval",
-        "MMBrightChemistryIT2IRetrieval",
-        "MMBrightChristianityIT2IRetrieval",
-        "MMBrightCryptoIT2IRetrieval",
-        "MMBrightEarthScienceIT2IRetrieval",
-        "MMBrightEarthScienceIT2TRetrieval",
-        "MMBrightEconomicsIT2IRetrieval",
-        "MMBrightGISIT2IRetrieval",
-        "MMBrightGamingIT2IRetrieval",
-        "MMBrightIslamIT2IRetrieval",
-        "MMBrightLawIT2IRetrieval",
-        "MMBrightMathIT2IRetrieval",
-        "MMBrightMedicalSciencesIT2IRetrieval",
-        "MMBrightPhilosophyIT2IRetrieval",
-        "MMBrightPhysicsIT2IRetrieval",
-        "MMBrightPhysicsIT2TRetrieval",
-        "MMBrightProjectManagementIT2IRetrieval",
-        "MMBrightPsychologyIT2IRetrieval",
-        "MMBrightQuantIT2IRetrieval",
-        "MMBrightQuantumComputingIT2IRetrieval",
-        "MMBrightQuantumComputingIT2TRetrieval",
-        "MMBrightRoboticsIT2IRetrieval",
-        "MMBrightSalesforceIT2IRetrieval",
-        "MMBrightSustainabilityIT2IRetrieval",
-        "MMBrightSustainabilityIT2TRetrieval",
-        "MMBrightTravelIT2IRetrieval",
         "Multi30kI2TRetrieval",  # same 1k images are shared across the four language subsets by design
         "Multi30kT2IRetrieval",  # same 1k images are shared across the four language subsets by design
         "OVENIT2ITRetrieval",
@@ -986,6 +888,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "WebQAT2ITRetrieval",
         "WebVidCoVRIT2VRetrieval",
         "WITI2TRetrieval",  # images can recur across WIT records and languages
+        "WITT2IRetrieval",  # same WIT records, images on the document side
         "XFlickr30kCoI2TRetrieval",  # the same image corpus is reused across languages
         "XFlickr30kCoT2IRetrieval",
         "XM3600I2TRetrieval",  # the same image corpus is reused across languages
@@ -1053,6 +956,8 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "XModBenchVT2AReranking",
     ],
     "duplicate_video": [
+        "ChinaOpenT2VRetrieval",  # same 1,092 videos evaluated once per language subset (zho-Hans/eng-Latn)
+        "ChinaOpenV2TRetrieval",  # same 1,092 videos evaluated once per language subset (zho-Hans/eng-Latn)
         "DenseWebVidCoVRVT2VRetrieval",  # multiple rows have same video with different instruction
         "InsAVE80KVT2VRetrieval",  # reverse couples re-release the same clip under two names
         "MMVUVideoCentricQA",
@@ -1085,23 +990,6 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "FORBI2IRetrieval",  # min 1x1px query image present
         "GLDv2I2IRetrieval",  # min 7x7px document image present
         "Imagenet1k",  # min 8x10px image present
-        "MMBrightAcademiaIT2IRetrieval",  # source-faithful corpus includes very small images
-        "MMBrightAppleIT2IRetrieval",
-        "MMBrightAviationIT2IRetrieval",
-        "MMBrightBiologyIT2IRetrieval",
-        "MMBrightChemistryIT2IRetrieval",
-        "MMBrightChristianityIT2IRetrieval",
-        "MMBrightEarthScienceIT2IRetrieval",
-        "MMBrightGISIT2IRetrieval",
-        "MMBrightLawIT2IRetrieval",
-        "MMBrightMedicalSciencesIT2IRetrieval",
-        "MMBrightPhysicsIT2IRetrieval",
-        "MMBrightProjectManagementIT2IRetrieval",
-        "MMBrightPsychologyIT2IRetrieval",
-        "MMBrightQuantumComputingIT2IRetrieval",
-        "MMBrightRoboticsIT2IRetrieval",
-        "MMBrightSustainabilityIT2IRetrieval",
-        "MMBrightTravelIT2IRetrieval",
     ],
     "zero_relevant_docs": [
         "BrightRetrieval",
@@ -1162,7 +1050,16 @@ _DURATION_OUTLIER_RATIO = 50
 _DIMENSION_OUTLIER_RATIO = 20
 
 # Outlier checks are reported as warnings, not failures
-_WARNING_CHECK_KINDS = {"long_text", "long_audio", "long_video", "large_video_frame"}
+_WARNING_CHECK_KINDS = {
+    "long_text",
+    "long_audio",
+    "long_video",
+    "large_video_frame",
+    # Diagnostic heuristics: a black/white image can be valid content, so these
+    # flag samples for manual review rather than fail the task.
+    "black_or_white_image",
+    "black_or_white_gold_documents",
+}
 
 assert not (set(KNOWN_ISSUES) & _WARNING_CHECK_KINDS), (
     "A warning-kind check must not appear in KNOWN_ISSUES (it can never fail "
@@ -1275,6 +1172,16 @@ def _image_field_quality(
     name: str, split: str, field: str, stats: ImageStatistics
 ) -> tuple[int, list[tuple[str, str]]]:
     errors: list[tuple[str, str]] = []
+
+    black_or_white_images = stats.get("black_or_white_images")
+    if black_or_white_images:
+        errors.append(
+            (
+                f"black_or_white_image:{field}",
+                f"{name} ({split}) contains pure black/white images in {field} ({black_or_white_images=}), worth checking whether they are placeholders.",
+            )
+        )
+
     min_image_width = stats["min_image_width"]
     min_image_height = stats["min_image_height"]
     if not (min_image_width > _MIN_IMAGE_DIMENSION) or not (
@@ -1508,6 +1415,17 @@ def _relevant_docs_integrity_quality(
             )
         )
 
+    queries_with_all_gold_black_or_white = relevant_docs_stats.get(
+        "queries_with_all_gold_black_or_white"
+    )
+    if queries_with_all_gold_black_or_white:
+        errors.append(
+            (
+                "black_or_white_gold_documents",
+                f"{name} ({split}) has queries whose every relevant document is a pure black/white image ({queries_with_all_gold_black_or_white=}), a stronger signal than stray blank images; review these queries first.",
+            )
+        )
+
     num_documents = split_stats.get("num_documents")
     unique_relevant_docs = relevant_docs_stats.get("unique_relevant_docs")
     num_missing_corpus_ids = relevant_docs_stats.get("num_missing_corpus_ids")
@@ -1688,3 +1606,33 @@ def test_dataset_quality() -> None:
 
     if errors:
         raise AssertionError("\n".join([str(e) for e in errors]))
+
+
+def test_black_or_white_checks_are_warnings() -> None:
+    image_stats = cast(
+        "ImageStatistics",
+        {
+            "min_image_width": 64,
+            "min_image_height": 64,
+            "unique_images": 1,
+            "black_or_white_images": 1,
+        },
+    )
+    _, image_checks = _image_field_quality(
+        "task", "test", "documents_image_statistics", image_stats
+    )
+    split_stats = cast(
+        "SplitDescriptiveStatistics",
+        {
+            "relevant_docs_statistics": {
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
+                "queries_with_all_gold_black_or_white": 1,
+            }
+        },
+    )
+    qrel_checks = _relevant_docs_integrity_quality("task", "test", split_stats)
+
+    kinds = {check_id.split(":", 1)[0] for check_id, _ in image_checks + qrel_checks}
+    assert kinds == {"black_or_white_image", "black_or_white_gold_documents"}
+    assert kinds <= _WARNING_CHECK_KINDS

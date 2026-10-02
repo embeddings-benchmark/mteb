@@ -10,15 +10,6 @@ from mteb.timing import TimingStack
 
 _SOURCE_REVISION = "408cf48d4b78182878f06eb445b20de201d58d74"
 
-_CITATION = r"""
-@misc{schmidt2025danragbench,
-  author = {Johan Hausted Schmidt},
-  institution = {IT University of Copenhagen},
-  title = {DanRAG-Bench: A Danish Multimodal Document Retrieval Benchmark Across Five Sectors},
-  year = {2025},
-}
-"""
-
 
 def _load_danrag_data(
     task: AbsTaskRetrieval,
@@ -100,8 +91,7 @@ _COMMON_METADATA = {
     "dialect": [],
     "modalities": ["text", "image"],
     "sample_creation": "LM-generated and verified",
-    "bibtex_citation": _CITATION,
-    "contributed_by": "Johan Hausted Schmidt",
+    "bibtex_citation": "",
 }
 
 

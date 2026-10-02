@@ -96,10 +96,4 @@ byrne_embed = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=None,
-    citation="""@misc{byrne2026byrneembed,
-  title        = {Byrne-Embed: A Compact 85M Sentence-Embedding Model},
-  author       = {Byrne, Dean},
-  year         = {2026},
-  howpublished = {\\url{https://huggingface.co/Quazim0t0/Byrne-Embed}},
-}""",
 )

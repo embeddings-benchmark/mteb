@@ -69,14 +69,13 @@ class NanoVDRWrapper(AbsEncoder):
         if self._doc_model is not None:
             return
 
+        from transformers.models.qwen3_vl.modeling_qwen3_vl import Qwen3VLModel
         from transformers.models.qwen3_vl.processing_qwen3_vl import Qwen3VLProcessor
 
-        from mteb.models.model_implementations.qwen3_vl_embedding_models import (
-            _build_qwen3_vl_for_embedding_class,
-        )
-
-        qwen3_vl_cls = _build_qwen3_vl_for_embedding_class()
-        self._doc_model = qwen3_vl_cls.from_pretrained(
+        # Qwen3VLModel is the LM-head-less trunk and its forward already returns
+        # Qwen3VLModelOutputWithPast.last_hidden_state, which is all the pooling
+        # below needs -- no wrapper subclass required.
+        self._doc_model = Qwen3VLModel.from_pretrained(
             "Qwen/Qwen3-VL-Embedding-2B",
         ).to(self.device)
         self._doc_model.eval()
@@ -91,11 +90,16 @@ class NanoVDRWrapper(AbsEncoder):
         show_progress_bar: bool = True,
     ) -> Array:
         all_texts = [text for batch in inputs for text in batch["text"]]
+        # convert_to_tensor=True, not convert_to_numpy=False: the latter leaves
+        # convert_to_tensor at its default and sentence-transformers then returns
+        # a list[Tensor], which mteb's _convert_to_tensor cannot stack. .cpu()
+        # matches _encode_documents -- cos_sim does no device harmonisation, so
+        # mixing a CUDA query matrix with a CPU corpus matrix would fail.
         return self.query_model.encode(
             all_texts,
             show_progress_bar=show_progress_bar,
-            convert_to_numpy=False,
-        )
+            convert_to_tensor=True,
+        ).cpu()
 
     def _encode_documents(  # noqa: PLR0914
         self,
@@ -202,6 +206,10 @@ class NanoVDRWrapper(AbsEncoder):
                 )
                 processed = {k: v.to(self.device) for k, v in processed.items()}
 
+                # Enables image+text embedding mode: forward reads
+                # self.rope_deltas but never resets it, so stale deltas from the
+                # previous batch would otherwise be reused.
+                self._doc_model.rope_deltas = None
                 outputs = self._doc_model(**processed)
 
                 # Last-token pooling

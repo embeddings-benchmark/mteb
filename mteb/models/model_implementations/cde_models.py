@@ -7,7 +7,10 @@ import numpy as np
 
 import mteb
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.models.sentence_transformer_wrapper import (
+    SentenceTransformerEncoderWrapper,
+    _resolve_prompt,
+)
 from mteb.types import PromptType
 
 from .bge_models import bge_full_data
@@ -97,15 +100,7 @@ class CDEWrapper(SentenceTransformerEncoderWrapper):
     ) -> Array:
         import torch
 
-        prompt = self.get_prompt(task_metadata, prompt_type)
-        if prompt:
-            logger.info(
-                f"Using prompt=`{prompt}` for task={task_metadata.name} prompt_type={prompt_type}"
-            )
-        else:
-            logger.info(
-                f"No model prompts found for task={task_metadata.name} prompt_type={prompt_type}"
-            )
+        prompt = _resolve_prompt(self.model_prompts, task_metadata, prompt_type)
         sentences = [text for batch in inputs for text in batch["text"]]
         self._load_task_sample(
             sentences,

@@ -292,11 +292,14 @@ Lajavaness__bilingual_embedding_base = ModelMeta(
       bibsource = {dblp computer science bibliography, https://dblp.org}
     }
 
-@article{reimers2019sentence,
-   title={Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
-   author={Nils Reimers, Iryna Gurevych},
-   journal={https://arxiv.org/abs/1908.10084},
-   year={2019}
+@inproceedings{reimers-2019-sentence-bert,
+  author = {Reimers, Nils and Gurevych, Iryna},
+  booktitle = {Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing},
+  month = {11},
+  publisher = {Association for Computational Linguistics},
+  title = {Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
+  url = {https://arxiv.org/abs/1908.10084},
+  year = {2019},
 }
 
 @article{thakur2020augmented,
@@ -358,11 +361,14 @@ Lajavaness__bilingual_embedding_large = ModelMeta(
       bibsource = {dblp computer science bibliography, https://dblp.org}
     }
 
-@article{reimers2019sentence,
-   title={Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
-   author={Nils Reimers, Iryna Gurevych},
-   journal={https://arxiv.org/abs/1908.10084},
-   year={2019}
+@inproceedings{reimers-2019-sentence-bert,
+  author = {Reimers, Nils and Gurevych, Iryna},
+  booktitle = {Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing},
+  month = {11},
+  publisher = {Association for Computational Linguistics},
+  title = {Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
+  url = {https://arxiv.org/abs/1908.10084},
+  year = {2019},
 }
 
 @article{thakur2020augmented,
@@ -424,11 +430,14 @@ Lajavaness__bilingual_embedding_small = ModelMeta(
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 
-@article{reimers2019sentence,
-   title={Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
-   author={Nils Reimers, Iryna Gurevych},
-   journal={https://arxiv.org/abs/1908.10084},
-   year={2019}
+@inproceedings{reimers-2019-sentence-bert,
+  author = {Reimers, Nils and Gurevych, Iryna},
+  booktitle = {Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing},
+  month = {11},
+  publisher = {Association for Computational Linguistics},
+  title = {Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
+  url = {https://arxiv.org/abs/1908.10084},
+  year = {2019},
 }
 
 @article{thakur2020augmented,
@@ -1710,12 +1719,6 @@ abhinand__medembed_small_v0_1 = ModelMeta(
     },
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
-    citation="""@software{balachandran2024medembed,
-  author = {Balachandran, Abhinand},
-  title = {MedEmbed: Medical-Focused Embedding Models},
-  year = {2024},
-  url = {https://github.com/abhinand5/MedEmbed}
-}""",
 )
 avsolatorio__noinstruct_small_embedding_v0 = ModelMeta(
     name="avsolatorio/NoInstruct-small-Embedding-v0",
@@ -1926,13 +1929,7 @@ silma_ai__silma_embedding_matryoshka_v0_1 = ModelMeta(
     training_datasets=None,
     adapted_from="/workspace/v3-matryoshka_aubmindlab-bert-base-arabertv02-2024-10-12_13-55-06/checkpoint-26250",
     superseded_by=None,
-    citation="""@misc{silma2024embedding,
-  author = {Abu Bakr Soliman, Karim Ouda, SILMA AI},
-  title = {SILMA Embedding Matryoshka 0.1},
-  year = {2024},
-  publisher = {Hugging Face},
-  howpublished = {https://huggingface.co/silma-ai/silma-embeddding-matryoshka-0.1},
-}""",
+    citation=None,
 )
 
 sbert_chinese_general_v1 = ModelMeta(
@@ -2118,11 +2115,6 @@ ember_v1 = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     superseded_by=None,
-    citation="""@misc{nur2024emberv1,
-      title={ember-v1: SOTA embedding model},
-      author={Enrike Nur and Anar Aliyev},
-      year={2023},
-}""",
 )
 amgix__static_retrieval_multilingual_69m_v1 = ModelMeta(
     name="amgix/static-retrieval-multilingual-69m-v1",

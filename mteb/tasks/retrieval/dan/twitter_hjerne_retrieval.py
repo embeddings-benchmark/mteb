@@ -24,10 +24,14 @@ class TwitterHjerneRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{holm2024gllms,
-  author = {Holm, Soren Vejlgaard},
-  title = {Are GLLMs Danoliterate? Benchmarking Generative NLP in Danish},
-  year = {2024},
+@misc{holm2025danoliteracygenerativelargelanguage,
+  archiveprefix = {arXiv},
+  author = {Søren Vejlgaard Holm and Lars Kai Hansen and Martin Carsten Nielsen},
+  eprint = {2410.22839},
+  primaryclass = {cs.CL},
+  title = {Danoliteracy of Generative Large Language Models},
+  url = {https://arxiv.org/abs/2410.22839},
+  year = {2025},
 }
 """,
         prompt={"query": "Retrieve answers to questions asked in Danish tweets"},

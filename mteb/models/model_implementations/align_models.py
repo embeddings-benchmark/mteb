@@ -145,10 +145,4 @@ align_base = ModelMeta(
     training_datasets=set(
         #  COYO-700M
     ),
-    citation="""@misc{kakaobrain2022coyo-align,
-    title         = {COYO-ALIGN},
-    author        = {Yoon, Boogeo and Lee, Youhan and Baek, Woonhyuk},
-    year          = {2022},
-    howpublished  = {https://github.com/kakaobrain/coyo-align},
-}""",
 )

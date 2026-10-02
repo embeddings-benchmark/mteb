@@ -186,7 +186,20 @@ SampleCreationMethod = Literal[
 ]
 """How the text was created. It can be an important factor for understanding the quality of a dataset. E.g. used to filter out machine-translated datasets."""
 
-MIEB_TASK_TYPE = (
+TaskType = Literal[
+    "BitextMining",
+    "Classification",
+    "MultilabelClassification",
+    "Clustering",
+    "PairClassification",
+    "Regression",
+    "Reranking",
+    "Retrieval",
+    "STS",
+    "Summarization",
+    "InstructionRetrieval",
+    "InstructionReranking",
+    # MIEB
     "Any2AnyReranking",
     "Any2AnyRetrieval",
     "Any2AnyMultilingualRetrieval",
@@ -198,52 +211,21 @@ MIEB_TASK_TYPE = (
     "VisualSTS(multi)",
     "ZeroShotClassification",
     "Compositionality",
-)
-
-MAEB_TASK_TYPE = (
-    "Any2AnyReranking",
+    # MAEB
     "AudioClustering",
     "AudioMultilabelClassification",
     "AudioReranking",
     "AudioZeroshotClassification",
     "AudioClassification",
     "AudioPairClassification",
-    "Any2AnyRetrieval",
-)
-
-MVEB_TASK_TYPE = (
-    "Any2AnyReranking",
+    # MVEB
     "VideoClassification",
     "VideoClustering",
     "VideoMultilabelClassification",
     "VideoPairClassification",
     "VideoZeroshotClassification",
     "VideoCentricQA",
-    "Any2AnyRetrieval",
-)
-
-
-_TASK_TYPE = (
-    (
-        "BitextMining",
-        "Classification",
-        "MultilabelClassification",
-        "Clustering",
-        "PairClassification",
-        "Regression",
-        "Reranking",
-        "Retrieval",
-        "STS",
-        "Summarization",
-        "InstructionRetrieval",
-        "InstructionReranking",
-    )
-    + MIEB_TASK_TYPE
-    + MAEB_TASK_TYPE
-    + MVEB_TASK_TYPE
-)
-
-TaskType = Literal[_TASK_TYPE]  # type: ignore[valid-type]
+]
 """The type of the task. E.g. includes "Classification", "Retrieval" and "Clustering"."""
 
 
@@ -475,7 +457,9 @@ class TaskMetadata(BaseModel):
         sample_creation: The method of text creation. Includes "found", "created", "machine-translated", "machine-translated and verified", and
             "machine-translated and localized".
         prompt: The prompt used for the task. Can be a string or a dictionary containing the query and passage prompts.
-        bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
+        bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available. As non-existing citations can
+            cause authors citing the work to be penalized, we recommend to use an empty string if no citation is available. Similarly, if no article
+            exist, we recommend to use an empty string instead of citing e.g. the dataset's website. It is allowed to cite multiple articles.
         adapted_from: Datasets adapted (translated, sampled from, etc.) from other datasets.
         is_public: Whether the dataset is publicly available. If False (closed/private), a HuggingFace token is required to run the datasets.
         contributed_by: The name of the organization or individual who contributed the dataset. This is especially useful for private datasets
@@ -647,10 +631,11 @@ class TaskMetadata(BaseModel):
     def descriptive_stat_path(self) -> Path:
         """The path to the descriptive statistics file."""
         descriptive_stat_base_dir = Path(__file__).parent.parent / "descriptive_stats"
-        if self.type in MIEB_TASK_TYPE:
-            descriptive_stat_base_dir = descriptive_stat_base_dir / "Image"  # noqa: PLR6104
-        task_type_dir = descriptive_stat_base_dir / str(self.type)
-        return task_type_dir / f"{self.name}.json"
+        # Image task types (and Any2Any types) keep their stats under an extra "Image/" folder
+        image_task_type_dir = descriptive_stat_base_dir / "Image" / str(self.type)
+        if image_task_type_dir.is_dir():
+            return image_task_type_dir / f"{self.name}.json"
+        return descriptive_stat_base_dir / str(self.type) / f"{self.name}.json"
 
     @property
     def n_samples(self) -> dict[str, int] | None:

@@ -262,14 +262,14 @@ bge_reranker_v2_m3 = ModelMeta(
     training_datasets=bge_m3_training_data,
     framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
     citation="""
-    @misc{li2023making,
-      title={Making Large Language Models A Better Foundation For Dense Retrieval},
-      author={Chaofan Li and Zheng Liu and Shitao Xiao and Yingxia Shao},
-      year={2023},
-      eprint={2312.15503},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
-    }
+@misc{li2023making,
+  archiveprefix = {arXiv},
+  author = {Zheng Liu and Chaofan Li and Shitao Xiao and Yingxia Shao and Defu Lian},
+  eprint = {2312.15503},
+  title = {Llama2Vec: Unsupervised Adaptation of Large Language Models for Dense Retrieval},
+  url = {https://arxiv.org/abs/2312.15503},
+  year = {2023},
+}
     @misc{bge-m3,
       archiveprefix = {arXiv},
       author = {Jianlv Chen and Shitao Xiao and Peitian Zhang and Kun Luo and Defu Lian and Zheng Liu},

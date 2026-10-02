@@ -347,13 +347,6 @@ class LightOnListwiseRerankerWrapper:
             return np.asarray(scores)
 
 
-LIGHTON_CITATION = r"""@misc{ananya2026lightonrerank,
-  title={One Adapter, Both Modalities: Field Notes from Building and Serving a Multimodal Reranker},
-  author={Ananya, Ishrat Jahan and Chatelain, Amelie},
-  year={2026},
-  howpublished={\url{https://huggingface.co/blog/lightonai/lighton-rerank}},
-}"""
-
 # MS MARCO and NQ for text; the visual-document training mix overlaps the ViDoRe v1
 # train splits (same lineage as the colpali train set).
 lighton_rerank_training_data = {
@@ -381,7 +374,6 @@ _LIGHTON_COMMON = dict(
     training_datasets=lighton_rerank_training_data,
     modalities=["image", "text"],
     model_type=["cross-encoder"],
-    citation=LIGHTON_CITATION,
     superseded_by=None,
     contacts=["coreprinciple6"],
 )
