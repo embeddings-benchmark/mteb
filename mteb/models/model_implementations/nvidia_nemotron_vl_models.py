@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Any
 
 from tqdm.auto import tqdm
 
+import mteb.models.sentence_transformer_wrapper as st_wrapper
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
 from mteb.types import OutputDType, PromptType
@@ -406,6 +407,51 @@ class LlamaNemotronEmbedVL(AbsEncoder):
             return concatenated_embeddings
 
 
+LLAMA_NEMOTRON_VL_1B_V2_LANGUAGES = [
+    "eng-Latn",
+    "ara-Arab",
+    "ben-Beng",
+    "zho-Hans",
+    "ces-Latn",
+    "dan-Latn",
+    "nld-Latn",
+    "fin-Latn",
+    "fra-Latn",
+    "deu-Latn",
+    "heb-Hebr",
+    "hin-Deva",
+    "hun-Latn",
+    "ind-Latn",
+    "ita-Latn",
+    "jpn-Jpan",
+    "kor-Hang",
+    "nor-Latn",
+    "fas-Arab",
+    "pol-Latn",
+    "por-Latn",
+    "rus-Cyrl",
+    "spa-Latn",
+    "swe-Latn",
+    "tha-Thai",
+    "tur-Latn",
+]
+
+LLAMA_NEMOTRON_VL_1B_V2_CITATION = """@inproceedings{moreira2025_nvretriever,
+  author = {Moreira, Gabriel de Souza P. and Osmulski, Radek and Xu, Mengyao and Ak, Ronay and Schifferer, Benedikt and Oldridge, Even},
+  title = {Improving Text Embedding Models with Positive-aware Hard-negative Mining},
+  year = {2025},
+  isbn = {9798400720406},
+  publisher = {Association for Computing Machinery},
+  address = {New York, NY, USA},
+  url = {https://doi.org/10.1145/3746252.3761254},
+  doi = {10.1145/3746252.3761254},
+  pages = {2169–2178},
+  numpages = {10},
+  keywords = {contrastive learning, distillation, embedding models, hard-negative mining, rag, text retrieval, transformers},
+  location = {Seoul, Republic of Korea},
+  series = {CIKM '25},
+}"""
+
 TRAINING_DATA_EMBED_VL_1B_V2 = {
     "VidoreDocVQARetrieval",
     "VidoreInfoVQARetrieval",
@@ -431,7 +477,7 @@ llama_nemotron_embed_vl_1b_v2 = ModelMeta(
         trust_remote_code=True,
     ),
     name="nvidia/llama-nemotron-embed-vl-1b-v2",
-    languages=["eng-Latn"],
+    languages=LLAMA_NEMOTRON_VL_1B_V2_LANGUAGES,
     revision="859e1f2dac29c56c37a5279cf55f53f3e74efc6b",
     release_date="2026-01-06",
     modalities=["image", "text"],
@@ -449,5 +495,45 @@ llama_nemotron_embed_vl_1b_v2 = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=True,
     training_datasets=TRAINING_DATA_EMBED_VL_1B_V2,
+    citation=LLAMA_NEMOTRON_VL_1B_V2_CITATION,
     extra_requirements_groups=["llama-nemotron-colembed-vl"],
+)
+
+
+llama_nemotron_rerank_vl_1b_v2 = ModelMeta(
+    loader=st_wrapper.CrossEncoderWrapper,
+    loader_kwargs={"trust_remote_code": True},
+    name="nvidia/llama-nemotron-rerank-vl-1b-v2",
+    revision="b8a9987b05b75db5ad949c825cbcbf6eb7c48b5a",
+    release_date="2025-12-18",
+    languages=LLAMA_NEMOTRON_VL_1B_V2_LANGUAGES,
+    n_parameters=1_678_256_576,
+    n_embedding_parameters=262_690_816,
+    memory_usage_mb=3201,
+    max_tokens=10240,
+    embed_dim=None,
+    license="https://huggingface.co/nvidia/llama-nemotron-rerank-vl-1b-v2/blob/main/LICENSE",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data="https://huggingface.co/nvidia/llama-nemotron-rerank-vl-1b-v2#training-dataset",
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/nvidia/llama-nemotron-rerank-vl-1b-v2",
+    similarity_fn_name=None,
+    use_instructions=True,
+    training_datasets={
+        # Training inherited from the text reranker backbone.
+        "NQ",
+        "HotpotQA",
+        "MIRACLRetrieval",
+        "MLQARetrieval",
+        "MultiLongDocRetrieval",
+        # Vision-language training.
+        "VidoreDocVQARetrieval",
+        "VidoreTatdqaRetrieval",
+        "VidoreArxivQARetrieval",
+        "VidoreInfoVQARetrieval",
+    },
+    modalities=["image", "text"],
+    model_type=["cross-encoder"],
+    citation=LLAMA_NEMOTRON_VL_1B_V2_CITATION,
 )
