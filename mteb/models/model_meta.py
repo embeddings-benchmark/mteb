@@ -60,10 +60,11 @@ if TYPE_CHECKING:
     from sentence_transformers import (
         CrossEncoder,
         CrossEncoderModelCardData,
+        MultiVectorEncoder,
         SentenceTransformer,
         SentenceTransformerModelCardData,
+        SparseEncoder,
     )
-    from sentence_transformers.sparse_encoder import SparseEncoder
     from typing_extensions import Self
 
     from mteb.abstasks import AbsTask
@@ -518,12 +519,15 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             updates["embed_dim"] = embed_dim
             kwargs["embed_dim"] = embed_dim
 
-        merged_exp_kwargs = {**base_exp_kwargs, **kwargs} if kwargs else base_exp_kwargs
-        updates["experiment_kwargs"] = merged_exp_kwargs or None
+        merged_kwargs = {**base_exp_kwargs, **kwargs} if kwargs else base_exp_kwargs
+        meaningful_exp_kwargs = {
+            k: v for k, v in merged_kwargs.items() if _has_meaningful_value(v)
+        }
+        updates["experiment_kwargs"] = meaningful_exp_kwargs or None
 
         # Allow overwrites
         _kwargs = _self.loader_kwargs.copy()
-        _kwargs.update(merged_exp_kwargs)
+        _kwargs.update(merged_kwargs)
         if device is not None:
             _kwargs["device"] = device
 
@@ -758,18 +762,25 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         - SentenceTransformer  → SentenceTransformerEncoderWrapper
         - CrossEncoder         → CrossEncoderWrapper
         - SparseEncoder        → SparseEncoderWrapper
+        - MultiVectorEncoder   → MultiVectorWrapper
         """
         from mteb.models import (
             CrossEncoderWrapper,
+            MultiVectorWrapper,
             SentenceTransformerEncoderWrapper,
             SparseEncoderWrapper,
         )
 
         st_model_type = config_sbert.get("model_type") if config_sbert else None
+        # "ColBERT" is the legacy PyLate v3 spelling; sentence-transformers' MultiVectorEncoder
+        # itself normalizes it the same way when reading config_sentence_transformers.json.
+        if st_model_type == "ColBERT":
+            st_model_type = "MultiVectorEncoder"
         if st_model_type not in {
             "SentenceTransformer",
             "CrossEncoder",
             "SparseEncoder",
+            "MultiVectorEncoder",
         }:
             if cls._modules_indicate_sparse_encoder(modules_config):
                 st_model_type = "SparseEncoder"
@@ -789,6 +800,8 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             return CrossEncoderWrapper, "cross-encoder", modalities
         if st_model_type == "SparseEncoder":
             return SparseEncoderWrapper, "sparse", modalities
+        if st_model_type == "MultiVectorEncoder":
+            return MultiVectorWrapper, "late-interaction", modalities
         if st_model_type == "SentenceTransformer":
             return SentenceTransformerEncoderWrapper, "dense", modalities
         raise ValueError("Unsupported model type")
@@ -1009,6 +1022,32 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 else None,
                 framework=["Sentence Transformers", "PyTorch"],
                 model_type=["sparse"],
+                adapted_from=_get_source_model(model.model_card_data)  # type: ignore[arg-type]
+                if hasattr(model, "model_card_data")
+                else None,
+            )
+        )
+
+    @classmethod
+    def _from_multi_vector_encoder_model(cls, model: MultiVectorEncoder) -> Self:
+        """Generates a ModelMeta from only a MultiVectorEncoder model, without fetching any additional metadata from HuggingFace Hub."""
+        from mteb.models import MultiVectorWrapper
+
+        name: str | None = (
+            model.model_card_data.model_name
+            if model.model_card_data.model_name
+            else model.model_card_data.base_model
+        )
+        return cls.create_empty(
+            overwrites=dict(
+                name=name,
+                revision=model.model_card_data.base_model_revision,
+                loader=MultiVectorWrapper,
+                max_tokens=model.get_max_seq_length(),
+                embed_dim=model.get_embedding_dimension(),
+                similarity_fn_name=ScoringFunction.MAX_SIM,
+                framework=["Sentence Transformers", "PyTorch"],
+                model_type=["late-interaction"],
                 adapted_from=_get_source_model(model.model_card_data)  # type: ignore[arg-type]
                 if hasattr(model, "model_card_data")
                 else None,
@@ -1293,6 +1332,38 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             if meta.name is None:
                 logger.warning(
                     "Model name is not set in metadata extracted from SparseEncoder model. Cannot fetch additional metadata from HuggingFace Hub."
+                )
+            else:
+                name = meta.name
+                meta_hub = cls._from_hub(name, revision)
+                # prioritize metadata from the model card but fill missing fields from the hub
+                meta = meta_hub.merge(meta)
+
+        return meta
+
+    @classmethod
+    def from_multi_vector_encoder_model(
+        cls,
+        model: MultiVectorEncoder,
+        revision: str | None = None,
+        fetch_from_hf: bool = False,
+    ) -> Self:
+        """Generates a ModelMeta from a MultiVectorEncoder model.
+
+        Args:
+            model: MultiVectorEncoder model.
+            revision: Revision of the model.
+            fetch_from_hf: Whether to fetch additional metadata from HuggingFace Hub based on the model name. If False, only metadata that can be
+                extracted from the MultiVectorEncoder model will be used.
+
+        Returns:
+            The generated ModelMeta.
+        """
+        meta = cls._from_multi_vector_encoder_model(model)
+        if fetch_from_hf:
+            if meta.name is None:
+                logger.warning(
+                    "Model name is not set in metadata extracted from MultiVectorEncoder model. Cannot fetch additional metadata from HuggingFace Hub."
                 )
             else:
                 name = meta.name
@@ -1848,6 +1919,34 @@ def _collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
             similar.update(_collect_similar_tasks(parent, visited))
 
     return similar
+
+
+def _merge_precision_into_experiment_kwargs(
+    experiment_kwargs: Mapping[str, Any] | None,
+    encode_kwargs: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Fold a ``precision`` encode kwarg into ``experiment_kwargs["output_dtypes"]``.
+
+    ``precision`` is forwarded to ``encode`` and changes the dtype of the produced
+    embeddings, so it must be folded into the same experiment namespace.
+    """
+    merged = dict(experiment_kwargs) if experiment_kwargs else {}
+    precision = encode_kwargs.get("precision")
+    if precision is not None:
+        merged["output_dtypes"] = OutputDType.from_str(precision).value
+    return merged
+
+
+def _has_meaningful_value(value: Any) -> bool:  # noqa: ANN401
+    """``False`` for ``None`` or an empty collection (dict/list/tuple/set/str).
+
+    Filters out no-op values like ``model_kwargs={}`` while keeping meaningful.
+    """
+    if value is None:
+        return False
+    if isinstance(value, (dict, list, tuple, set, str)):
+        return len(value) > 0
+    return True
 
 
 def _serialize_experiment_kwargs_to_name(

@@ -309,6 +309,47 @@ class TestCachedEmbeddingWrapper:
         np.testing.assert_allclose(cached_embeddings, embeddings)
         assert model.call_count == 1
 
+    def test_cache_isolated_by_experiment(self, cache_dir: Path):
+        """Runs that produce different embeddings (e.g. a ``precision`` encode kwarg)
+        must not share the embedding cache with the default run.
+
+        Regression test for https://github.com/embeddings-benchmark/mteb/issues/5394
+        """
+        model = DummyModel("test_model", revision=None)
+        wrapped_model = CachedEmbeddingWrapper(model, cache_dir)
+        task_metadata = MockRetrievalTask().metadata
+        inputs = DataLoader(Dataset.from_dict({"id": ["1"], "text": ["same input"]}))
+
+        def cached_encode(**kwargs: Any):
+            return wrapped_model.encode(
+                inputs,
+                task_metadata=task_metadata,
+                hf_subset="default",
+                hf_split="test",
+                **kwargs,
+            )
+
+        try:
+            default_embeddings = cached_encode()
+            int8_embeddings = cached_encode(precision="int8")
+            cached_default = cached_encode()
+            cached_int8 = cached_encode(precision="int8")
+        finally:
+            wrapped_model.close()
+
+        # the int8 run re-encoded instead of reusing the default cache entry
+        assert model.call_count == 2
+        np.testing.assert_allclose(cached_default, default_embeddings)
+        np.testing.assert_allclose(cached_int8, int8_embeddings)
+        assert (cache_dir / task_metadata.name / "vectors.npy").exists()
+        assert (
+            cache_dir
+            / task_metadata.name
+            / "experiments"
+            / "output_dtypes_int8"
+            / "vectors.npy"
+        ).exists()
+
 
 @pytest.mark.parametrize("n_first", [1, 3])
 def test_numpy_cache_reload_and_grow(tmp_path: Path, n_first: int):
