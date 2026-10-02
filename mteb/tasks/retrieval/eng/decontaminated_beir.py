@@ -6,16 +6,17 @@ from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _DECONTAMINATED_BEIR_CITATION = r"""
-@article{lighton2024decontaminated_beir,
-  author = {Raphaël Stylianou and LightOn AI},
-  title = {Decontaminated BEIR: Evaluating Dense and Late-Interaction Retrievers without Contamination},
-  url = {https://huggingface.co/blog/lightonai/denseon-lateon#decontaminated-beir},
-  year = {2024},
+@misc{sourty2026denseonlateon,
+  author = {Sourty, Raphael and Chaffin, Antoine and Weller, Orion and Moura Junior, Paulo Roberto and Chatelain, Amelie},
+  howpublished = {\url{https://huggingface.co/blog/lightonai/denseon-lateon}},
+  title = {DenseOn with the LateOn: Open State-of-the-Art Single and Multi-Vector Models},
+  year = {2026},
 }
 
 @inproceedings{thakur2021beir,
   author = {Nandan Thakur and Nils Reimers and Andreas R{\"u}ckl{\'e} and Abhishek Srivastava and Iryna Gurevych},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)},
+  eprint = {2104.08663},
   title = {{BEIR}: A Heterogeneous Benchmark for Zero-shot Evaluation of Information Retrieval Models},
   url = {https://openreview.net/forum?id=wCu6T5xFjeJ},
   year = {2021},
