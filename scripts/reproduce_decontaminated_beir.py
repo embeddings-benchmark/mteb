@@ -56,6 +56,7 @@ def main() -> None:
                 encode_kwargs={
                     "batch_size": args.batch_size,
                     "convert_to_tensor": True,
+                    "show_progress_bar": True,
                 },
                 co2_tracker=False,
             )
