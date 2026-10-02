@@ -1,5 +1,6 @@
 """Tests for the BenchmarkResult class"""
 
+import importlib
 import os
 from pathlib import Path
 
@@ -355,3 +356,133 @@ def test_generate_model_card_with_table_and_benchmarks(
         assert output_row == golden_row, (
             f"Row {i} doesn't match.\nExpected: {golden_row}\nGot: {output_row}"
         )
+
+
+# ---------------------------------------------------------------------------
+# task_metric_overrides in the long-frame / leaderboard-cache path
+# ---------------------------------------------------------------------------
+
+_OVERRIDE_TASK = "NanoArguAnaRetrieval"
+_OVERRIDE_METRIC = "hit_rate_at_5"
+_MINILM = "sentence-transformers/all-MiniLM-L6-v2"
+_ARGUANA_NDCG10 = 0.54867
+_ARGUANA_HR5 = 0.76
+
+
+def _override_benchmarks() -> tuple[Benchmark, Benchmark]:
+    tasks = mteb.get_tasks([_OVERRIDE_TASK, "Banking77Classification"])
+    overridden = Benchmark(
+        name="mock_split_override",
+        tasks=tasks,
+        task_metric_overrides={_OVERRIDE_TASK: _OVERRIDE_METRIC},
+    )
+    plain = Benchmark(name="mock_split_plain", tasks=tasks)
+    return overridden, plain
+
+
+def _arguana_score(frame: pl.DataFrame) -> float:
+    return (
+        frame.filter(
+            (pl.col("model_name") == _MINILM) & (pl.col("task_name") == _OVERRIDE_TASK)
+        )
+        .get_column("score")
+        .item()
+    )
+
+
+def _patch_registry(monkeypatch: pytest.MonkeyPatch, benches: list[Benchmark]) -> None:
+    """Make the registry-driven helpers see only ``benches``."""
+    # ``mteb.benchmarks.get_benchmark`` the *attribute* is the function; fetch
+    # the submodule explicitly.
+    registry = importlib.import_module("mteb.benchmarks.get_benchmark")
+
+    by_task: dict[str, set[str]] = {}
+    for b in benches:
+        for t, m in b.task_metric_overrides.items():
+            by_task.setdefault(t, set()).add(m)
+    frozen = {t: frozenset(ms) for t, ms in by_task.items()}
+    monkeypatch.setattr(registry, "_override_metrics_by_task", lambda: frozen)
+    monkeypatch.setattr(mteb, "get_benchmarks", lambda *a, **k: benches)
+
+
+@pytest.mark.skipif(_POLARS_TOO_OLD, reason="needs polars >= 1.40")
+def test_to_results_df_applies_metric_overrides(cache_path: Path) -> None:
+    results = mteb.load_results(download_latest=False, require_model_meta=False)
+    overridden, _ = _override_benchmarks()
+    frame = results._to_results_df(
+        overridden.tasks, metric_overrides=overridden.task_metric_overrides
+    )
+    assert _arguana_score(frame) == pytest.approx(_ARGUANA_HR5)
+    assert _OVERRIDE_METRIC not in frame.columns
+    # Without overrides the same call stays on main_score.
+    plain = results._to_results_df(overridden.tasks)
+    assert _arguana_score(plain) == pytest.approx(_ARGUANA_NDCG10)
+
+
+@pytest.mark.skipif(_POLARS_TOO_OLD, reason="needs polars >= 1.40")
+def test_full_dump_carries_override_metric_and_split_applies_it(
+    cache_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """An all-results dump keeps the override metric as its own column; splitting
+    it per benchmark swaps ``score`` for the overriding benchmark only."""
+    overridden, plain = _override_benchmarks()
+    _patch_registry(monkeypatch, [overridden, plain])
+    results = mteb.load_results(download_latest=False, require_model_meta=False)
+
+    combined = results._to_results_df()
+    assert _OVERRIDE_METRIC in combined.columns
+    assert _arguana_score(combined) == pytest.approx(_ARGUANA_NDCG10)
+
+    parts = BenchmarkResults.split_leaderboard_frame(combined)
+    assert _arguana_score(parts[overridden.name]) == pytest.approx(_ARGUANA_HR5)
+    assert _arguana_score(parts[plain.name]) == pytest.approx(_ARGUANA_NDCG10)
+    for part in parts.values():
+        assert _OVERRIDE_METRIC not in part.columns
+
+
+@pytest.mark.skipif(_POLARS_TOO_OLD, reason="needs polars >= 1.40")
+def test_split_prefers_benchmark_tag_over_task_matching(
+    cache_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Per-benchmark frames saved with the ``__benchmark__`` tag keep their own
+    scores on re-split: the override must not leak into the plain benchmark."""
+    overridden, plain = _override_benchmarks()
+    _patch_registry(monkeypatch, [overridden, plain])
+    results = mteb.load_results(download_latest=False, require_model_meta=False)
+
+    per_benchmark = {
+        b.name: results._to_results_df(
+            b.tasks, metric_overrides=b.task_metric_overrides
+        )
+        for b in (overridden, plain)
+    }
+    tagged = BenchmarkResults._combine_leaderboard_frames(per_benchmark)
+    parts = BenchmarkResults.split_leaderboard_frame(tagged)
+
+    assert _arguana_score(parts[overridden.name]) == pytest.approx(_ARGUANA_HR5)
+    assert _arguana_score(parts[plain.name]) == pytest.approx(_ARGUANA_NDCG10)
+    # No duplicated rows from the other benchmark's frame.
+    n_rows = (
+        parts[plain.name]
+        .filter(
+            (pl.col("model_name") == _MINILM) & (pl.col("task_name") == _OVERRIDE_TASK)
+        )
+        .height
+    )
+    assert n_rows == 1
+
+
+@pytest.mark.skipif(_POLARS_TOO_OLD, reason="needs polars >= 1.40")
+def test_split_falls_back_to_main_score_when_metric_column_missing(
+    cache_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A combined frame built before the override existed has no metric
+    column; the benchmark still renders, on main_score."""
+    overridden, _ = _override_benchmarks()
+    results = mteb.load_results(download_latest=False, require_model_meta=False)
+    combined = results._to_results_df()  # registry has no overrides -> no column
+    assert _OVERRIDE_METRIC not in combined.columns
+    _patch_registry(monkeypatch, [overridden])
+
+    parts = BenchmarkResults.split_leaderboard_frame(combined)
+    assert _arguana_score(parts[overridden.name]) == pytest.approx(_ARGUANA_NDCG10)

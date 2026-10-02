@@ -1,4 +1,5 @@
 import numpy as np
+import polars as pl
 import pytest
 
 import mteb
@@ -949,3 +950,98 @@ def test_get_score_matches_summary_table_custom_groups_scoped(
     assert checked > 0, (
         "Parity test never matched a model — fixture or registry change?"
     )
+
+
+# ---------------------------------------------------------------------------
+# Benchmark.task_metric_overrides
+# ---------------------------------------------------------------------------
+
+_OVERRIDE_TASKS = [
+    "NanoSCIDOCSRetrieval",
+    "Banking77Classification",
+    "NanoArguAnaRetrieval",
+]
+_MINILM = "sentence-transformers/all-MiniLM-L6-v2"
+# NanoArguAnaRetrieval for all-MiniLM-L6-v2 in the mock cache.
+_ARGUANA_NDCG10 = 0.54867
+_ARGUANA_HR5 = 0.76
+
+
+def test_task_metric_overrides_rejects_unknown_task_and_main_score():
+    tasks = mteb.get_tasks(_OVERRIDE_TASKS)
+    with pytest.raises(ValueError, match="not a task of benchmark"):
+        Benchmark(
+            name="mock_bad_override",
+            tasks=tasks,
+            task_metric_overrides={"NotATask": "hit_rate_at_5"},
+        )
+    with pytest.raises(ValueError, match="concrete metric"):
+        Benchmark(
+            name="mock_bad_override",
+            tasks=tasks,
+            task_metric_overrides={"NanoArguAnaRetrieval": "main_score"},
+        )
+
+
+def test_get_score_uses_task_metric_override(mock_mteb_cache: ResultCache):
+    """An overridden task contributes its override metric to every aggregate;
+    unlisted tasks and the un-overridden benchmark are unaffected."""
+    tasks = mteb.get_tasks(_OVERRIDE_TASKS)
+    plain = Benchmark(name="mock_plain", tasks=tasks)
+    overridden = Benchmark(
+        name="mock_override",
+        tasks=tasks,
+        task_metric_overrides={"NanoArguAnaRetrieval": "hit_rate_at_5"},
+    )
+    mock_results = mock_mteb_cache.load_results()
+
+    plain_scores = plain.get_score(mock_results)[_MINILM]
+    over_scores = overridden.get_score(mock_results)[_MINILM]
+
+    delta = _ARGUANA_HR5 - _ARGUANA_NDCG10
+    assert over_scores["Mean(Task)"] - plain_scores["Mean(Task)"] == pytest.approx(
+        delta / len(tasks)
+    )
+    # Retrieval type has two tasks, one overridden.
+    assert over_scores["Retrieval"] - plain_scores["Retrieval"] == pytest.approx(
+        delta / 2
+    )
+    assert over_scores["Classification"] == pytest.approx(
+        plain_scores["Classification"]
+    )
+
+
+@_skip_if_datasets_too_old
+def test_get_score_matches_summary_table_with_metric_override(
+    mock_mteb_cache: ResultCache,
+):
+    """Python ``get_score`` and the polars summary table agree once both apply
+    the same ``task_metric_overrides``."""
+    tasks = mteb.get_tasks(_OVERRIDE_TASKS)
+    bench = Benchmark(
+        name="mock_override_parity",
+        tasks=tasks,
+        task_metric_overrides={"NanoArguAnaRetrieval": "hit_rate_at_5"},
+    )
+    mock_results = mock_mteb_cache.load_results()
+
+    get_score_out = bench.get_score(mock_results)[_MINILM]
+    pl_df = mock_results.select_tasks(bench.tasks)._to_results_df(
+        bench.tasks, metric_overrides=bench.task_metric_overrides
+    )
+    summary_by_model = {
+        row["Model"]: row
+        for row in bench._create_summary_table(pl_df).df.iter_rows(named=True)
+    }
+    srow = summary_by_model[_MINILM]
+    for gs_key, summary_col in [
+        ("Mean(Task)", "Mean (Task)"),
+        ("Mean(TaskType)", "Mean (TaskType)"),
+        ("Retrieval", "Retrieval"),
+    ]:
+        assert get_score_out[gs_key] == pytest.approx(srow[summary_col]), gs_key
+
+    # And the table really is on the override metric, not main_score.
+    per_task = bench._create_per_task_table(pl_df)
+    arguana = per_task.filter(pl.col("Model") == _MINILM)["NanoArguAnaRetrieval"][0]
+    assert arguana == pytest.approx(_ARGUANA_HR5)

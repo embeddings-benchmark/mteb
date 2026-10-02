@@ -168,3 +168,32 @@ class TestRebuildFromFullRepository:
             mock_load_results.side_effect = Exception("Load failed")
             with pytest.raises(Exception, match="Load failed"):
                 cache._rebuild_from_full_repository(quick_cache_path)
+
+
+def test_only_main_score_keeps_registered_override_metrics(
+    mock_mteb_cache: ResultCache, monkeypatch: pytest.MonkeyPatch
+):
+    """``only_main_score=True`` strips everything except ``main_score`` and the
+    metrics some registered benchmark's ``task_metric_overrides`` reference."""
+    import mteb.cache.result_cache as rc
+
+    monkeypatch.setattr(
+        rc,
+        "_override_metrics_by_task",
+        lambda: {"NanoArguAnaRetrieval": frozenset({"hit_rate_at_5"})},
+    )
+    results = mock_mteb_cache.load_results(
+        models=["sentence-transformers/all-MiniLM-L6-v2"],
+        tasks=["NanoArguAnaRetrieval", "NanoSCIDOCSRetrieval"],
+        only_main_score=True,
+    )
+    by_task = {tr.task_name: tr for mr in results for tr in mr.task_results}
+
+    (arguana,) = by_task["NanoArguAnaRetrieval"].scores["train"]
+    assert "hit_rate_at_5" in arguana
+    assert "ndcg_at_10" not in arguana
+
+    # Unregistered task: still stripped to main_score only.
+    (scidocs,) = next(iter(by_task["NanoSCIDOCSRetrieval"].scores.values()))
+    assert "hit_rate_at_5" not in scidocs
+    assert "ndcg_at_10" not in scidocs
