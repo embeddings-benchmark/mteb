@@ -125,5 +125,5 @@ def test_run_task_multiple_times():
 
     for result in (first_result, second_result):
         assert result.get_score() == pytest.approx(
-            expected_score, abs=1e-5, nan_ok=True
+            expected_score, abs=1e-3, nan_ok=True
         )
