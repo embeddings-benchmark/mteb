@@ -103,7 +103,7 @@ There is no default threshold, as what is too short depends on the task: the one
 
 A character carries more meaning in some scripts than in others, so a threshold does not travel between languages. In MassiveIntentClassification the median test text is 32 characters in English but 10 in Chinese, and `min_length=10` removes 1.8% of the English subset against 48.5% of the Chinese one. Counting words is worse: Chinese, Japanese and Thai leave no spaces between words, so a threshold of three words removes 99% of that Chinese subset.
 
-Filter a multilingual task one language at a time; the calls chain into a single cleaned task:
+Filter a multilingual task one language at a time, or give a quantile bound and let each language set its own:
 
 ```python
 cleaned = remove_by_text_length(task, min_length=10, subsets=["en"])
@@ -111,6 +111,21 @@ cleaned = remove_by_text_length(cleaned, min_length=2, subsets=["zh-CN"])
 ```
 
 Two details follow from counting code points rather than characters as a reader sees them. A zero-width space is not whitespace, so it survives `min_length=1`. And a vowel sign or virama counts on its own, so this task's Tamil texts measure 1.6 times, and its Thai texts 1.3 times, their length in characters -- which makes a threshold that much more permissive for them. Pass `length_fn` if either matters, e.g. `lambda text: len(regex.findall(r"\X", text))` to count characters.
+
+### Bounds from the task's own distribution
+
+A [`Quantile`][mteb.data_cleaning.Quantile] stands in for either bound and is read off the data being filtered, so it needs no threshold of its own:
+
+```python
+from mteb.data_cleaning import Quantile, remove_by_text_length
+
+cleaned = remove_by_text_length(
+    task, min_length=Quantile(0.05)
+)  # about the shortest 5%
+cleaned = remove_by_text_length(task, max_length=Quantile(0.99))  # about the longest 1%
+```
+
+It is taken per split, per subset and per compared column, and per side of a retrieval split, so a single call adapts to each language: on MassiveIntentClassification `min_length=Quantile(0.05)` removes between 2.6% and 4.8% of each subset, where `min_length=10` ranges from 1.3% of the Tamil subset to 48.5% of the Chinese one. It does always remove about that share, though, even from a split with nothing wrong with it, so prefer an absolute bound once you know what counts as too short.
 
 ### Images, audio and video
 

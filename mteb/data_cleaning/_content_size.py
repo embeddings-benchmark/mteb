@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import functools
+from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any
 
 from mteb.abstasks._statistics_calculation import (
@@ -22,13 +23,52 @@ if TYPE_CHECKING:
     from ._filtering import T
 
 
+@dataclass(frozen=True)
+class Quantile:
+    """A bound given as a quantile of the task's own sizes rather than as an absolute one.
+
+    `Quantile(0.05)` as a lower bound keeps the values at or above the 5th percentile, removing about the smallest 5%,
+    and `Quantile(0.95)` as an upper bound removes about the largest 5%. The quantile is taken per split, per subset
+    and per compared column, and for a retrieval task per side, as each of those is filtered on its own. It therefore
+    needs no threshold of its own, which makes it the easier bound for a multilingual task, where a length in
+    characters is not comparable between languages.
+
+    Attributes:
+        value: The quantile, between 0 and 1.
+
+    Raises:
+        ValueError: If `value` lies outside 0 to 1.
+
+    Examples:
+        >>> import mteb
+        >>> from mteb.data_cleaning import Quantile, remove_by_text_length
+        >>> task = mteb.get_task("MassiveIntentClassification")
+        >>> cleaned = remove_by_text_length(task, min_length=Quantile(0.05))  # the shortest 5%
+    """
+
+    value: float
+
+    def __post_init__(self) -> None:
+        if not 0 <= self.value <= 1:
+            raise ValueError(
+                f"A quantile lies between 0 and 1, but {self.value} does not."
+            )
+
+
+def _resolve_bound(bound: float | Quantile | None) -> tuple[float | None, float | None]:
+    """Split a bound into its absolute value and its quantile, whichever of the two it was given as."""
+    if isinstance(bound, Quantile):
+        return None, bound.value
+    return bound, None
+
+
 def _remove_outside_bounds(
     task: T,
     name: str,
     modality: Modalities,
     measure_fn: Callable[[Any], float | None],
     *,
-    bounds: Mapping[str, float | None],
+    bounds: Mapping[str, float | Quantile | None],
     columns: Sequence[str] | None,
     splits: Sequence[str] | None,
     subsets: Sequence[HFSubset] | None,
@@ -42,7 +82,7 @@ def _remove_outside_bounds(
         modality: The modality to measure.
         measure_fn: The size of a value, or None if it cannot be told.
         bounds: The lower and then the upper bound, each under the name the caller takes it as, so that a message
-            about them can name the argument the caller passed.
+            about them can name the argument the caller passed. Either may be a `Quantile`.
         columns: The columns to measure. Defaults to every column of `modality`.
         splits: The splits to filter. Defaults to every split of the dataset.
         subsets: The Huggingface subsets to filter. Defaults to every loaded subset.
@@ -54,13 +94,16 @@ def _remove_outside_bounds(
     Raises:
         ValueError: If neither bound is given, or if they cannot be met together.
     """
-    (lower, minimum), (upper, maximum) = bounds.items()
-    if minimum is None and maximum is None:
+    (lower, lower_bound), (upper, upper_bound) = bounds.items()
+    if lower_bound is None and upper_bound is None:
         raise ValueError(f"`{name}` needs a bound: pass `{lower}`, `{upper}`, or both.")
-    if minimum is not None and maximum is not None and minimum > maximum:
-        raise ValueError(
-            f"`{name}` was given {lower}={minimum} above {upper}={maximum}, which no sample can meet."
-        )
+    minimum, min_quantile = _resolve_bound(lower_bound)
+    maximum, max_quantile = _resolve_bound(upper_bound)
+    for low, high in ((minimum, maximum), (min_quantile, max_quantile)):
+        if low is not None and high is not None and low > high:
+            raise ValueError(
+                f"`{name}` was given {lower}={lower_bound} above {upper}={upper_bound}, which no sample can meet."
+            )
 
     return _filter_task_rows(
         task,
@@ -70,6 +113,8 @@ def _remove_outside_bounds(
                 _keep_within_bounds,
                 minimum=minimum,
                 maximum=maximum,
+                min_quantile=min_quantile,
+                max_quantile=max_quantile,
                 measure_fn=measure_fn,
             ),
             modalities=frozenset({modality}),
@@ -85,8 +130,8 @@ def _remove_outside_bounds(
 def remove_by_text_length(
     task: T,
     *,
-    min_length: int | None = None,
-    max_length: int | None = None,
+    min_length: int | Quantile | None = None,
+    max_length: int | Quantile | None = None,
     length_fn: Callable[[str], int] = len,
     columns: Sequence[str] | None = None,
     splits: Sequence[str] | None = None,
@@ -95,6 +140,7 @@ def remove_by_text_length(
 ) -> T:
     """Remove samples with a text shorter than `min_length` or longer than `max_length`.
 
+    Either bound may be an absolute length or a [`Quantile`][mteb.data_cleaning.Quantile] of the task's own lengths.
     A sample is removed when any of its texts is out of bounds, e.g. either sentence of a pair. Texts are counted in
     characters, ignoring surrounding whitespace, so `min_length=1` removes the empty and whitespace-only ones; a
     missing text counts as empty. A retrieval document is measured on its title and text together and a query on its
@@ -108,7 +154,7 @@ def remove_by_text_length(
         task: The task to filter. It is not modified.
         min_length: The shortest length a text may have. `1` removes only empty and whitespace-only texts. What
             counts as too short depends on the language, as a character carries more meaning in e.g. Chinese than
-            in English.
+            in English, so a `Quantile` can be the better bound there.
         max_length: The longest length a text may have, for dropping the outliers a corpus sometimes holds, such as
             the 1M character document of MSMARCOv2 against its 341 character average.
         length_fn: How to measure a text. Defaults to its number of characters. Counting words with
@@ -135,6 +181,9 @@ def remove_by_text_length(
         >>> cleaned = remove_by_text_length(task, min_length=1)  # empty and whitespace-only texts
         >>> cleaned = remove_by_text_length(task, min_length=3, max_length=10_000)
         >>> cleaned = remove_by_text_length(task, min_length=3, length_fn=lambda text: len(text.split()))
+        >>> # or let the task's own distribution set the bounds
+        >>> from mteb.data_cleaning import Quantile
+        >>> cleaned = remove_by_text_length(task, min_length=Quantile(0.05), max_length=Quantile(0.99))
     """
     return _remove_outside_bounds(
         task,
@@ -157,8 +206,8 @@ def _shorter_side(image: Image.Image) -> int:
 def remove_by_image_size(
     task: T,
     *,
-    min_size: int | None = None,
-    max_size: int | None = None,
+    min_size: int | Quantile | None = None,
+    max_size: int | Quantile | None = None,
     size_fn: Callable[[Image.Image], float] = _shorter_side,
     columns: Sequence[str] | None = None,
     splits: Sequence[str] | None = None,
@@ -174,8 +223,8 @@ def remove_by_image_size(
 
     Args:
         task: The task to filter. It is not modified.
-        min_size: The smallest size, by `size_fn`, an image may have.
-        max_size: The largest size, by `size_fn`, an image may have.
+        min_size: The smallest size, by `size_fn`, an image may have, or a `Quantile` of the task's own sizes.
+        max_size: The largest size, by `size_fn`, an image may have, or a `Quantile` of them.
         size_fn: How to measure an image. Defaults to its shorter side in pixels; `lambda image: image.width *
             image.height` measures its area instead, in which case the bounds are numbers of pixels.
         columns: The image columns to measure. Defaults to every image column of the task.
@@ -209,8 +258,8 @@ def remove_by_image_size(
 def remove_by_audio_duration(
     task: T,
     *,
-    min_seconds: float | None = None,
-    max_seconds: float | None = None,
+    min_seconds: float | Quantile | None = None,
+    max_seconds: float | Quantile | None = None,
     columns: Sequence[str] | None = None,
     splits: Sequence[str] | None = None,
     subsets: Sequence[HFSubset] | None = None,
@@ -224,8 +273,9 @@ def remove_by_audio_duration(
 
     Args:
         task: The task to filter. It is not modified.
-        min_seconds: The shortest duration, in seconds, an audio clip may have.
-        max_seconds: The longest duration, in seconds, an audio clip may have.
+        min_seconds: The shortest duration, in seconds, an audio clip may have, or a `Quantile` of the task's own
+            durations.
+        max_seconds: The longest duration, in seconds, an audio clip may have, or a `Quantile` of them.
         columns: The audio columns to measure. Defaults to every audio column of the task.
         splits: The splits to filter. Defaults to every split of the dataset.
         subsets: The Huggingface subsets to filter. Defaults to every loaded subset.
@@ -257,8 +307,8 @@ def remove_by_audio_duration(
 def remove_by_video_duration(
     task: T,
     *,
-    min_seconds: float | None = None,
-    max_seconds: float | None = None,
+    min_seconds: float | Quantile | None = None,
+    max_seconds: float | Quantile | None = None,
     columns: Sequence[str] | None = None,
     splits: Sequence[str] | None = None,
     subsets: Sequence[HFSubset] | None = None,
@@ -272,8 +322,9 @@ def remove_by_video_duration(
 
     Args:
         task: The task to filter. It is not modified.
-        min_seconds: The shortest duration, in seconds, a video may have.
-        max_seconds: The longest duration, in seconds, a video may have.
+        min_seconds: The shortest duration, in seconds, a video may have, or a `Quantile` of the task's own
+            durations.
+        max_seconds: The longest duration, in seconds, a video may have, or a `Quantile` of them.
         columns: The video columns to measure. Defaults to every video column of the task.
         splits: The splits to filter. Defaults to every split of the dataset.
         subsets: The Huggingface subsets to filter. Defaults to every loaded subset.

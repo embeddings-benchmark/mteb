@@ -25,6 +25,10 @@ print(
 )  # MassiveIntentClassification (remove_duplicates, remove_by_text_length)
 ```
 
+Either bound can also be a `Quantile` of the task's own sizes, e.g. `min_length=Quantile(0.05)` for about the
+shortest 5%, taken per split and per subset. That needs no threshold of its own, which helps for a multilingual task,
+where a length in characters is not comparable between languages.
+
 Each filter measures its content the way the task's descriptive statistics do, except that texts are measured without
 their surrounding whitespace, so you can judge a threshold before downloading any data: a task whose `min_text_length`
 is 0 contains empty texts, which `min_length=1` removes. The thresholds have no default, as what counts as too small

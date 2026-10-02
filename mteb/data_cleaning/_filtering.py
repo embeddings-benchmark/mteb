@@ -20,6 +20,7 @@ from collections.abc import (
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, TypeVar, cast
 
+import numpy as np
 from datasets import Dataset, DatasetDict
 
 from mteb._content_hashes import MODALITY_HASH_FNS
@@ -541,31 +542,74 @@ def _filter_task_rows(
     return cleaned
 
 
+def _quantile_cutoffs(
+    sizes: Sequence[tuple[float | None, ...]], quantile: float
+) -> list[float | None]:
+    """The `quantile` of each column's measurable sizes, or None for a column that has none."""
+    cutoffs: list[float | None] = []
+    for column in zip(*sizes, strict=True):
+        measured = [size for size in column if size is not None]
+        cutoffs.append(float(np.quantile(measured, quantile)) if measured else None)
+    return cutoffs
+
+
 def _keep_within_bounds(
     rows: Iterable[tuple[Any, ...]],
     *,
     minimum: float | None,
     maximum: float | None,
+    min_quantile: float | None,
+    max_quantile: float | None,
     measure_fn: Callable[[Any], float | None],
 ) -> list[int]:
-    """Keep the rows whose values all measure between `minimum` and `maximum`, inclusive.
+    """Keep the rows whose values all measure within the bounds, inclusive.
+
+    A bound given as a quantile is read off the rows themselves, per compared column, so it adapts to the data it
+    filters: the rows of one split of one subset, or of one side of a retrieval split, as each is filtered on its own.
+    Measuring every row first is what a quantile costs; an absolute bound judges each row as it is read.
 
     Args:
         rows: The content of each row, one tuple per row with one entry per compared column.
-        minimum: The smallest size a value may have, or None for no lower bound.
-        maximum: The largest size a value may have, or None for no upper bound.
+        minimum: The smallest size a value may have, or None for no absolute lower bound.
+        maximum: The largest size a value may have, or None for no absolute upper bound.
+        min_quantile: The quantile to take the lower bound from, or None.
+        max_quantile: The quantile to take the upper bound from, or None.
         measure_fn: The size of a value, or None if it cannot be told, in which case the value is kept.
 
     Returns:
         The indices of the rows whose values all lie within the bounds.
     """
+    if min_quantile is None and max_quantile is None:
 
-    def within_bounds(value: object) -> bool:
-        size = measure_fn(value)
-        if size is None:
-            return True
-        return (minimum is None or size >= minimum) and (
-            maximum is None or size <= maximum
+        def within_bounds(value: object) -> bool:
+            size = measure_fn(value)
+            if size is None:
+                return True
+            return (minimum is None or size >= minimum) and (
+                maximum is None or size <= maximum
+            )
+
+        return [i for i, row in enumerate(rows) if all(map(within_bounds, row))]
+
+    sizes = [tuple(measure_fn(value) for value in row) for row in rows]
+    if not sizes:
+        return []
+    lower = (
+        [minimum] * len(sizes[0])
+        if min_quantile is None
+        else _quantile_cutoffs(sizes, min_quantile)
+    )
+    upper = (
+        [maximum] * len(sizes[0])
+        if max_quantile is None
+        else _quantile_cutoffs(sizes, max_quantile)
+    )
+    return [
+        i
+        for i, row in enumerate(sizes)
+        if all(
+            size is None
+            or ((low is None or size >= low) and (high is None or size <= high))
+            for size, low, high in zip(row, lower, upper, strict=True)
         )
-
-    return [i for i, row in enumerate(rows) if all(map(within_bounds, row))]
+    ]
