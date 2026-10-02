@@ -331,7 +331,7 @@ def _derived_task_name(name: str, filter_name: str) -> str:
     Cleaning produces a different task, so it gets an id of its own rather than reusing the published one:
     `MassiveIntentClassification` becomes `MassiveIntentClassification (remove_duplicates)`. A second filter
     extends the list rather than nesting, giving
-    `MassiveIntentClassification (remove_duplicates, remove_short_texts)`.
+    `MassiveIntentClassification (remove_duplicates, remove_by_text_length)`.
     """
     applied_to = _APPLIED_FILTERS.match(name)
     if applied_to is None:
@@ -541,25 +541,31 @@ def _filter_task_rows(
     return cleaned
 
 
-def _keep_at_least(
+def _keep_within_bounds(
     rows: Iterable[tuple[Any, ...]],
     *,
-    minimum: float,
+    minimum: float | None,
+    maximum: float | None,
     measure_fn: Callable[[Any], float | None],
 ) -> list[int]:
-    """Keep the rows whose values all measure at least `minimum`.
+    """Keep the rows whose values all measure between `minimum` and `maximum`, inclusive.
 
     Args:
         rows: The content of each row, one tuple per row with one entry per compared column.
-        minimum: The smallest size a value may have.
+        minimum: The smallest size a value may have, or None for no lower bound.
+        maximum: The largest size a value may have, or None for no upper bound.
         measure_fn: The size of a value, or None if it cannot be told, in which case the value is kept.
 
     Returns:
-        The indices of the rows without a value smaller than `minimum`.
+        The indices of the rows whose values all lie within the bounds.
     """
 
-    def large_enough(value: object) -> bool:
+    def within_bounds(value: object) -> bool:
         size = measure_fn(value)
-        return size is None or size >= minimum
+        if size is None:
+            return True
+        return (minimum is None or size >= minimum) and (
+            maximum is None or size <= maximum
+        )
 
-    return [i for i, row in enumerate(rows) if all(map(large_enough, row))]
+    return [i for i, row in enumerate(rows) if all(map(within_bounds, row))]

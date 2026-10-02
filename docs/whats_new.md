@@ -9,19 +9,20 @@ This section is an overview of releases for more information check out the autog
 
 ## New in v2.23
 
-### Removing empty and tiny samples
+### Removing samples by size
 
-[`mteb.data_cleaning`](get_started/advanced_usage/cleaning_task_data.md) gains four filters that remove samples
-too small to carry meaning: `remove_short_texts`, `remove_small_images`, `remove_short_audio` and
-`remove_short_videos`. Like `remove_duplicates`, each returns a cleaned copy named after the filters applied to it:
+[`mteb.data_cleaning`](get_started/advanced_usage/cleaning_task_data.md) gains four filters that remove samples whose
+content is too small, or too large, to be worth scoring: `remove_by_text_length`, `remove_by_image_size`,
+`remove_by_audio_duration` and `remove_by_video_duration`. Each takes a lower bound, an upper bound, or both, and
+returns a cleaned copy named after the filters applied to it:
 
 ```python
-from mteb.data_cleaning import remove_duplicates, remove_short_texts
+from mteb.data_cleaning import remove_duplicates, remove_by_text_length
 
-cleaned = remove_short_texts(remove_duplicates(task), min_length=1)
+cleaned = remove_by_text_length(remove_duplicates(task), min_length=1)
 print(
     cleaned.metadata.name
-)  # MassiveIntentClassification (remove_duplicates, remove_short_texts)
+)  # MassiveIntentClassification (remove_duplicates, remove_by_text_length)
 ```
 
 Each filter measures its content the way the task's descriptive statistics do, except that texts are measured without

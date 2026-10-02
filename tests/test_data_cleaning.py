@@ -9,11 +9,11 @@ from datasets import Dataset, DatasetDict
 import mteb
 from mteb.abstasks.abstask import AbsTask
 from mteb.data_cleaning import (
+    remove_by_audio_duration,
+    remove_by_image_size,
+    remove_by_text_length,
+    remove_by_video_duration,
     remove_duplicates,
-    remove_short_audio,
-    remove_short_texts,
-    remove_short_videos,
-    remove_small_images,
 )
 from mteb.data_cleaning._duplicates import _keep_first_occurrence
 from mteb.data_cleaning._filtering import _derived_task_name, _row_key
@@ -599,8 +599,8 @@ def test_remove_duplicates_accepts_any_normalization_callable() -> None:
         ("Task", "remove_duplicates", "Task (remove_duplicates)"),
         (
             "Task (remove_duplicates)",
-            "remove_short_texts",
-            "Task (remove_duplicates, remove_short_texts)",
+            "remove_by_text_length",
+            "Task (remove_duplicates, remove_by_text_length)",
         ),
         ("Task (remove_duplicates)", "remove_duplicates", "Task (remove_duplicates)"),
         ("Task.v2", "remove_duplicates", "Task.v2 (remove_duplicates)"),
@@ -794,26 +794,28 @@ def _create_texts_task(texts: list[str | None]) -> MockClassificationTask:
         (1, ["\u3000", "\u4f60\u597d"], ["\u4f60\u597d"]),
     ],
 )
-def test_remove_short_texts_removes_texts_under_min_length(
+def test_remove_by_text_length_removes_texts_outside_the_bounds(
     min_length: int, texts: list[str | None], expected: list[str]
 ) -> None:
     task = _create_texts_task(texts)
 
-    cleaned = remove_short_texts(task, min_length=min_length)
+    cleaned = remove_by_text_length(task, min_length=min_length)
 
     assert cleaned.dataset["test"]["text"] == expected
-    assert cleaned.metadata.name == "MockClassificationTask (remove_short_texts)"
+    assert cleaned.metadata.name == "MockClassificationTask (remove_by_text_length)"
 
 
-def test_remove_short_texts_measures_with_the_given_length_fn() -> None:
+def test_remove_by_text_length_measures_with_the_given_length_fn() -> None:
     task = _create_texts_task(["incomprehensibilities", "three short words"])
 
-    cleaned = remove_short_texts(task, min_length=3, length_fn=lambda t: len(t.split()))
+    cleaned = remove_by_text_length(
+        task, min_length=3, length_fn=lambda t: len(t.split())
+    )
 
     assert cleaned.dataset["test"]["text"] == ["three short words"]
 
 
-def test_remove_short_texts_removes_a_pair_with_either_side_short() -> None:
+def test_remove_by_text_length_removes_a_pair_with_either_side_short() -> None:
     task = MockPairClassificationTask()
     task.dataset = DatasetDict(
         {
@@ -828,12 +830,12 @@ def test_remove_short_texts_removes_a_pair_with_either_side_short() -> None:
     )
     task.data_loaded = True
 
-    cleaned = remove_short_texts(task, min_length=1)
+    cleaned = remove_by_text_length(task, min_length=1)
 
     assert cleaned.dataset["test"]["labels"] == [1]
 
 
-def test_remove_short_texts_applies_within_a_row_of_a_clustering_task() -> None:
+def test_remove_by_text_length_applies_within_a_row_of_a_clustering_task() -> None:
     task = MockClusteringTask()
     task.dataset = DatasetDict(
         {
@@ -844,14 +846,14 @@ def test_remove_short_texts_applies_within_a_row_of_a_clustering_task() -> None:
     )
     task.data_loaded = True
 
-    cleaned = remove_short_texts(task, min_length=1)
+    cleaned = remove_by_text_length(task, min_length=1)
 
     row = cleaned.dataset["test"][0]
     assert row["sentences"] == ["long enough", "also long"]
     assert row["labels"] == [0, 2]
 
 
-def test_remove_short_texts_measures_only_the_text_of_a_multimodal_task() -> None:
+def test_remove_by_text_length_measures_only_the_text_of_a_multimodal_task() -> None:
     task = MockImageTextPairClassificationTask()
     _load_or_skip(task)
     split = next(iter(task.dataset))
@@ -860,27 +862,27 @@ def test_remove_short_texts_measures_only_the_text_of_a_multimodal_task() -> Non
         task.dataset[split].remove_columns("caption").add_column("caption", captions)
     )
 
-    cleaned = remove_short_texts(task, min_length=1)
+    cleaned = remove_by_text_length(task, min_length=1)
 
     assert len(cleaned.dataset[split]) == len(task.dataset[split]) - 1
 
 
-def test_remove_short_texts_refuses_a_task_without_text() -> None:
+def test_remove_by_text_length_refuses_a_task_without_text() -> None:
     task = MockImageClassificationTask()
 
     with pytest.raises(ValueError, match="only applies to \\['text'\\]"):
-        remove_short_texts(task, min_length=1)
+        remove_by_text_length(task, min_length=1)
 
 
-def test_remove_short_texts_raises_for_a_column_that_is_not_text() -> None:
+def test_remove_by_text_length_raises_for_a_column_that_is_not_text() -> None:
     task = MockImageTextPairClassificationTask()
     _load_or_skip(task)
 
     with pytest.raises(KeyError, match="image"):
-        remove_short_texts(task, min_length=1, columns=["image"])
+        remove_by_text_length(task, min_length=1, columns=["image"])
 
 
-def test_remove_short_texts_measures_a_document_as_its_title_and_text() -> None:
+def test_remove_by_text_length_measures_a_document_as_its_title_and_text() -> None:
     task = MockRetrievalTask()
     task.load_data()
     subset, split = _retrieval_split(task)
@@ -897,7 +899,7 @@ def test_remove_short_texts_measures_a_document_as_its_title_and_text() -> None:
         "top_ranked": None,
     }
 
-    cleaned = remove_short_texts(task, min_length=1)
+    cleaned = remove_by_text_length(task, min_length=1)
 
     data = cleaned.dataset[subset][split]
     # an empty title or body alone does not make a document short, only both together
@@ -907,7 +909,7 @@ def test_remove_short_texts_measures_a_document_as_its_title_and_text() -> None:
     assert data["relevant_docs"] == {"q1": {"d1": 1}}
 
 
-def test_remove_short_texts_leaves_the_non_text_side_of_a_retrieval_task() -> None:
+def test_remove_by_text_length_leaves_the_non_text_side_of_a_retrieval_task() -> None:
     task = MockAny2AnyRetrievalI2TTask()
     _load_or_skip(task)
     subset, split = _retrieval_split(task)
@@ -917,7 +919,7 @@ def test_remove_short_texts_leaves_the_non_text_side_of_a_retrieval_task() -> No
     data["relevant_docs"] = {query_id: {"d1": 1} for query_id in data["queries"]["id"]}
     data["top_ranked"] = None
 
-    cleaned = remove_short_texts(task, min_length=1)
+    cleaned = remove_by_text_length(task, min_length=1)
 
     cleaned_data = cleaned.dataset[subset][split]
     assert cleaned_data["corpus"]["id"] == ["d1"]
@@ -925,7 +927,7 @@ def test_remove_short_texts_leaves_the_non_text_side_of_a_retrieval_task() -> No
     assert len(cleaned_data["queries"]) == n_queries
 
 
-def test_remove_short_texts_keeps_an_entry_combining_text_with_an_image() -> None:
+def test_remove_by_text_length_keeps_an_entry_combining_text_with_an_image() -> None:
     task = MockAny2AnyRetrievalT2ITask()
     _load_or_skip(task)
     # a text-to-(image and text) task, e.g. document pages with their extracted text
@@ -940,7 +942,7 @@ def test_remove_short_texts_keeps_an_entry_combining_text_with_an_image() -> Non
     }
     data["top_ranked"] = None
 
-    cleaned = remove_short_texts(task, min_length=1)
+    cleaned = remove_by_text_length(task, min_length=1)
 
     cleaned_data = cleaned.dataset[subset][split]
     # the document's image is content in its own right, so an empty text does not make it empty
@@ -948,7 +950,7 @@ def test_remove_short_texts_keeps_an_entry_combining_text_with_an_image() -> Non
     assert cleaned_data["queries"]["id"] == ["q1"]
 
 
-def test_remove_small_images_removes_images_under_min_size() -> None:
+def test_remove_by_image_size_removes_images_under_min_size() -> None:
     task = MockImageClassificationTask()
     _load_or_skip(task)
     split = next(iter(task.dataset))
@@ -959,36 +961,36 @@ def test_remove_small_images_removes_images_under_min_size() -> None:
         features=data.features,
     )
 
-    cleaned = remove_small_images(task, min_size=2)
+    cleaned = remove_by_image_size(task, min_size=2)
 
     assert cleaned.dataset[split]["label"] == [0]
-    assert cleaned.metadata.name == "MockImageClassification (remove_small_images)"
+    assert cleaned.metadata.name == "MockImageClassification (remove_by_image_size)"
 
 
-def test_remove_short_audio_removes_clips_under_min_seconds() -> None:
+def test_remove_by_audio_duration_removes_clips_under_min_seconds() -> None:
     task = MockAudioClassification()
     _load_or_skip(task)
     split = next(iter(task.dataset))
     # the mock's clips last one and two seconds
-    cleaned = remove_short_audio(task, min_seconds=1.5)
+    cleaned = remove_by_audio_duration(task, min_seconds=1.5)
 
     assert len(cleaned.dataset[split]) == len(task.dataset[split]) - 1
 
 
 @pytest.mark.parametrize(("min_seconds", "expected"), [(0.5, 2), (2.0, 0)])
-def test_remove_short_videos_removes_videos_under_min_seconds(
+def test_remove_by_video_duration_removes_videos_under_min_seconds(
     min_seconds: float, expected: int
 ) -> None:
     task = MockVideoClassification()
     _load_or_skip(task)
     split = next(iter(task.dataset))
     # the mock's videos last one second
-    cleaned = remove_short_videos(task, min_seconds=min_seconds)
+    cleaned = remove_by_video_duration(task, min_seconds=min_seconds)
 
     assert len(cleaned.dataset[split]) == expected
 
 
-def test_remove_small_images_does_not_order_the_sides_of_a_symmetric_task() -> None:
+def test_remove_by_image_size_does_not_order_the_sides_of_a_symmetric_task() -> None:
     """Ordering the sides of a pair only matters when comparing rows, and images cannot be ordered."""
     task = MockVisualSTSTask()
     _load_or_skip(task)
@@ -1000,12 +1002,12 @@ def test_remove_small_images_does_not_order_the_sides_of_a_symmetric_task() -> N
         features=data.features,
     )
 
-    cleaned = remove_small_images(task, min_size=1)
+    cleaned = remove_by_image_size(task, min_size=1)
 
     assert len(cleaned.dataset[split]) == 1
 
 
-def test_remove_small_images_measures_with_the_given_size_fn() -> None:
+def test_remove_by_image_size_measures_with_the_given_size_fn() -> None:
     task = MockImageClassificationTask()
     _load_or_skip(task)
     split = next(iter(task.dataset))
@@ -1016,9 +1018,52 @@ def test_remove_small_images_measures_with_the_given_size_fn() -> None:
         features=data.features,
     )
 
-    cleaned = remove_small_images(
+    cleaned = remove_by_image_size(
         task, min_size=1000, size_fn=lambda image: image.width * image.height
     )
 
     # both images are wider than the default threshold would ask, but one covers only 400 pixels
     assert cleaned.dataset[split]["label"] == [0]
+
+
+@pytest.mark.parametrize(
+    ("bounds", "expected"),
+    [
+        ({"max_length": 5}, ["short"]),
+        ({"min_length": 6}, ["a much longer text"]),
+        ({"min_length": 3, "max_length": 10}, ["short"]),
+    ],
+)
+def test_remove_by_text_length_takes_either_bound(
+    bounds: dict[str, int], expected: list[str]
+) -> None:
+    task = _create_texts_task(["short", "a much longer text"])
+
+    cleaned = remove_by_text_length(task, **bounds)
+
+    assert cleaned.dataset["test"]["text"] == expected
+
+
+def test_remove_by_text_length_needs_a_bound() -> None:
+    task = _create_texts_task(["a text"])
+
+    with pytest.raises(ValueError, match="needs a bound"):
+        remove_by_text_length(task)
+
+
+def test_remove_by_text_length_refuses_bounds_no_sample_can_meet() -> None:
+    task = _create_texts_task(["a text"])
+
+    with pytest.raises(ValueError, match="above max_length"):
+        remove_by_text_length(task, min_length=10, max_length=5)
+
+
+def test_remove_by_audio_duration_removes_clips_over_max_seconds() -> None:
+    task = MockAudioClassification()
+    _load_or_skip(task)
+    split = next(iter(task.dataset))
+
+    # the mock's clips last one and two seconds
+    cleaned = remove_by_audio_duration(task, max_seconds=1.5)
+
+    assert len(cleaned.dataset[split]) == len(task.dataset[split]) - 1
