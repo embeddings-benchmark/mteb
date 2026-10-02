@@ -14,13 +14,13 @@ task = remove_short_texts(task, min_length=1)
 
 from __future__ import annotations
 
-from ._filters import (
-    remove_duplicates,
+from ._content_size import (
     remove_short_audio,
     remove_short_texts,
     remove_short_videos,
     remove_small_images,
 )
+from ._duplicates import remove_duplicates
 
 __all__ = [
     "remove_duplicates",

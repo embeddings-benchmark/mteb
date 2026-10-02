@@ -9,7 +9,7 @@ from mteb._create_dataloaders import _retrieval_texts
 from mteb.abstasks.retrieval import _filter_queries_without_positives
 from mteb.types import PromptType
 
-from ._filters import _content_readers, _iter_row_content, _normalize, _row_key
+from ._filtering import _content_readers, _iter_row_content, _normalize, _row_key
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterable, Mapping, Sequence
@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Modalities
 
-    from ._filters import Normalization, _CleaningFilter
+    from ._filtering import Normalization, _CleaningFilter
 
 logger = logging.getLogger(__name__)
 

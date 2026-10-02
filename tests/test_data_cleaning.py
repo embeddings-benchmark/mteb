@@ -15,11 +15,8 @@ from mteb.data_cleaning import (
     remove_short_videos,
     remove_small_images,
 )
-from mteb.data_cleaning._filters import (
-    _derived_task_name,
-    _keep_first_occurrence,
-    _row_key,
-)
+from mteb.data_cleaning._duplicates import _keep_first_occurrence
+from mteb.data_cleaning._filtering import _derived_task_name, _row_key
 from mteb.mocks import (
     MockAny2AnyRetrievalI2TTask,
     MockAny2AnyRetrievalT2ITask,
