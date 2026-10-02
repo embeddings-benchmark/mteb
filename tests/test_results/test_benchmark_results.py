@@ -74,6 +74,7 @@ def test_select_tasks(benchmark_results: BenchmarkResults) -> None:
     assert task_names[0] == "STS12"
 
 
+@pytest.mark.full_install
 def test_select_tasks_preserves_model_meta(tmp_path: Path) -> None:
     """`select_tasks` must not drop `model_meta` (and with it, experiment identity).
 
