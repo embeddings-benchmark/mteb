@@ -69,7 +69,7 @@ def alphanumeric_text(text: str) -> str:
 cleaned = remove_duplicates(task, normalization=casefold_text)
 ```
 
-Text is compared exactly as written, so two strings that a reader cannot tell apart are duplicates only if Unicode spells them the same way. Normalize them if your data mixes forms, as a fifth of this task's Vietnamese texts do:
+Text is compared exactly as written, and Unicode can spell an accented letter either as one code point or as a letter followed by a combining mark. Composing it with NFC lets duplicates that differ only in that match, which this task's Vietnamese split needs, as a fifth of its texts are decomposed:
 
 ```python
 import unicodedata

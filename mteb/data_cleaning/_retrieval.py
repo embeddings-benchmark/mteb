@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Modalities
 
-    from ._filters import Normalization, _Filter
+    from ._filters import Normalization, _CleaningFilter
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +29,7 @@ def _side_columns(
     dataset: Dataset,
     declared_columns: Mapping[str, Modalities],
     modalities: Sequence[Modalities],
-    filter_: _Filter,
+    cleaning_filter: _CleaningFilter,
 ) -> dict[str, Modalities]:
     """The declared content columns that the model reads from one side of a retrieval split.
 
@@ -39,10 +39,13 @@ def _side_columns(
     column that a side merely carries, such as an empty `text` column next to the images of a corpus. A side left
     without any compared column is not filtered.
 
-    Neither is a side holding a modality that `filter_` does not apply to: each of its entries is a single input
+    Neither is a side holding a modality that `cleaning_filter` does not apply to: each of its entries is a single input
     combining its modalities, so e.g. a document page whose text is empty still has its image.
     """
-    if filter_.modalities is not None and not filter_.modalities.issuperset(modalities):
+    if (
+        cleaning_filter.modalities is not None
+        and not cleaning_filter.modalities.issuperset(modalities)
+    ):
         return {}
     return {
         column: modality
@@ -84,14 +87,14 @@ def _side_readers(
 
 def _select_kept_entries(
     dataset: Dataset,
-    filter_: _Filter,
+    cleaning_filter: _CleaningFilter,
     col_modalities: Mapping[str, Modalities],
     prompt_type: PromptType,
     *,
     normalization: Normalization,
     num_proc: int | None,
 ) -> tuple[Dataset, set[str], dict[str, str]]:
-    """Apply `filter_` to a corpus or query dataset.
+    """Apply `cleaning_filter` to a corpus or query dataset.
 
     Remapping assumes that a filter removing duplicates keeps the *first* entry of each group of equal rows, which
     lets the replacements be collected in a single pass: a removed entry always follows the entry it is remapped
@@ -99,7 +102,7 @@ def _select_kept_entries(
 
     Returns:
         The filtered dataset, the ids it kept, and a mapping from the id of a removed entry to the id of the first
-        kept entry with the same content. That mapping is empty unless `filter_` removes duplicates.
+        kept entry with the same content. That mapping is empty unless `cleaning_filter` removes duplicates.
     """
     ids = dataset["id"]
     if not col_modalities:
@@ -111,14 +114,14 @@ def _select_kept_entries(
         col_modalities,
         prompt_type,
         normalization=normalization,
-        hash_non_text=filter_.compares_rows,
+        hash_non_text=cleaning_filter.compares_rows,
         num_proc=num_proc,
     )
-    keep = filter_.keep_fn(_iter_row_content(readers))
+    keep = cleaning_filter.keep_fn(_iter_row_content(readers))
     kept_ids = {ids[i] for i in keep}
 
     replacements: dict[str, str] = {}
-    if filter_.removes_duplicates:
+    if cleaning_filter.removes_duplicates:
         keep_set = set(keep)
         canonical: dict[bytes, str] = {}
         for i, row in enumerate(_iter_row_content(readers)):
@@ -133,21 +136,21 @@ def _select_kept_entries(
 
 def _filter_retrieval_split(  # noqa: PLR0914
     split_data: RetrievalSplitData,
-    filter_: _Filter,
+    cleaning_filter: _CleaningFilter,
     declared_columns: Mapping[str, Modalities],
     metadata: TaskMetadata,
     *,
     normalization: Normalization,
     num_proc: int | None = None,
 ) -> tuple[RetrievalSplitData, int]:
-    """Apply `filter_` to the corpus and the queries of a single split, keeping the relevance judgements valid.
+    """Apply `cleaning_filter` to the corpus and the queries of a single split, keeping the relevance judgements valid.
 
     A removed document or query that duplicates a kept one hands its relevance judgements over to it when
-    `filter_.removes_duplicates` is set, which is what makes deduplication lossless.
+    `cleaning_filter.removes_duplicates` is set, which is what makes deduplication lossless.
 
     Args:
         split_data: The corpus, queries, relevance judgements and top-ranked documents of one split.
-        filter_: Decides which documents and queries to keep.
+        cleaning_filter: Decides which documents and queries to keep.
         declared_columns: Every content column the task declares, mapped to its modality. Each of the corpus
             and the queries is compared on those of its own modalities, so the two sides need not match.
         metadata: The task's metadata, whose category gives the modalities of the corpus and of the queries.
@@ -162,18 +165,18 @@ def _filter_retrieval_split(  # noqa: PLR0914
         old_corpus,
         declared_columns,
         metadata.get_modalities(prompt_type=PromptType.document),
-        filter_,
+        cleaning_filter,
     )
     query_columns = _side_columns(
         old_queries,
         declared_columns,
         metadata.get_modalities(prompt_type=PromptType.query),
-        filter_,
+        cleaning_filter,
     )
 
     corpus, kept_doc_ids, doc_replacements = _select_kept_entries(
         old_corpus,
-        filter_,
+        cleaning_filter,
         corpus_columns,
         PromptType.document,
         normalization=normalization,
@@ -181,7 +184,7 @@ def _filter_retrieval_split(  # noqa: PLR0914
     )
     queries, kept_query_ids, query_replacements = _select_kept_entries(
         old_queries,
-        filter_,
+        cleaning_filter,
         query_columns,
         PromptType.query,
         normalization=normalization,

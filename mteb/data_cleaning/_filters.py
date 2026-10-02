@@ -71,7 +71,7 @@ not require holding all of its content in memory at the same time.
 
 
 @dataclass(frozen=True)
-class _Filter:
+class _CleaningFilter:
     """What a filter removes, and what that means for the relevance judgements of a retrieval task.
 
     Grouping these keeps them from drifting apart: `removes_duplicates` is only sound because `keep_fn` drops a row
@@ -288,13 +288,13 @@ def _count_values(dataset: Dataset, column: str, grouped: bool) -> int:
 def _apply_row_filter(
     dataset: Dataset,
     col_modalities: Mapping[str, Modalities],
-    filter_: _Filter,
+    cleaning_filter: _CleaningFilter,
     *,
     normalization: Normalization = _strip_whitespace,
     num_proc: int | None = None,
     symmetric_sides: tuple[list[str], list[str]] | None = None,
 ) -> tuple[Dataset, int]:
-    """Filter `dataset` down to the rows that `filter_` keeps.
+    """Filter `dataset` down to the rows that `cleaning_filter` keeps.
 
     For a regular dataset this drops whole rows. For a grouped dataset -- one where each row holds a list of values,
     as clustering tasks do -- the filter is applied within each row instead, and the parallel columns of that row
@@ -303,7 +303,7 @@ def _apply_row_filter(
     Args:
         dataset: The dataset to filter.
         col_modalities: The columns to compare, mapped to the modality of their content.
-        filter_: Decides which rows to keep.
+        cleaning_filter: Decides which rows to keep.
         normalization: How to rewrite text before comparing it.
         num_proc: Number of processes to use for hashing and for filtering a grouped dataset.
         symmetric_sides: The two sides to order within each row, for a task where swapping them means the same.
@@ -338,7 +338,7 @@ def _apply_row_filter(
             _filter_within_row,
             fn_kwargs={
                 "columns": columns,
-                "keep_fn": filter_.keep_fn,
+                "keep_fn": cleaning_filter.keep_fn,
                 "normalization": normalization,
             },
             num_proc=num_proc,
@@ -348,13 +348,13 @@ def _apply_row_filter(
             dataset,
             col_modalities,
             normalization=normalization,
-            hash_non_text=filter_.compares_rows,
+            hash_non_text=cleaning_filter.compares_rows,
             num_proc=num_proc,
         )
         rows = _iter_row_content(
             readers, columns=columns, symmetric_sides=symmetric_sides
         )
-        filtered = dataset.select(filter_.keep_fn(rows))
+        filtered = dataset.select(cleaning_filter.keep_fn(rows))
 
     return filtered, before - _count_values(filtered, columns[0], grouped)
 
@@ -434,25 +434,25 @@ def _no_split_matched_message(
 
 
 def _resolve_columns(
-    task: AbsTask, filter_: _Filter, columns: Sequence[str] | None
+    task: AbsTask, cleaning_filter: _CleaningFilter, columns: Sequence[str] | None
 ) -> dict[str, Modalities]:
     """The columns a filter should compare, mapped to the modality of their content."""
     col_modalities = task._get_content_columns()
     if not col_modalities:
         raise NotImplementedError(
-            f"`{filter_.name}` does not know which columns of '{task.metadata.name}' hold its content. Please "
+            f"`{cleaning_filter.name}` does not know which columns of '{task.metadata.name}' hold its content. Please "
             "open an issue at https://github.com/embeddings-benchmark/mteb/issues so the task can declare them."
         )
 
-    if filter_.modalities is not None:
+    if cleaning_filter.modalities is not None:
         col_modalities = {
             column: modality
             for column, modality in col_modalities.items()
-            if modality in filter_.modalities
+            if modality in cleaning_filter.modalities
         }
         if not col_modalities:
             raise ValueError(
-                f"`{filter_.name}` only applies to {sorted(filter_.modalities)} content, which "
+                f"`{cleaning_filter.name}` only applies to {sorted(cleaning_filter.modalities)} content, which "
                 f"'{task.metadata.name}' does not have."
             )
 
@@ -463,7 +463,7 @@ def _resolve_columns(
     unsupported = sorted(set(col_modalities.values()) - _SUPPORTED_MODALITIES)
     if unsupported:
         raise NotImplementedError(
-            f"`{filter_.name}` cannot compare the {unsupported} content of '{task.metadata.name}'. Supported "
+            f"`{cleaning_filter.name}` cannot compare the {unsupported} content of '{task.metadata.name}'. Supported "
             f"modalities are {sorted(_SUPPORTED_MODALITIES)}."
         )
     return col_modalities
@@ -480,7 +480,7 @@ def _split_containers(task: AbsTask) -> tuple[Mapping[str, Any], bool]:
 
 def _filter_task_rows(
     task: T,
-    filter_: _Filter,
+    cleaning_filter: _CleaningFilter,
     *,
     normalization: Normalization = _strip_whitespace,
     columns: Sequence[str] | None = None,
@@ -488,7 +488,7 @@ def _filter_task_rows(
     subsets: Sequence[HFSubset] | None = None,
     num_proc: int | None = None,
 ) -> T:
-    """Apply `filter_` to every selected split of `task`, returning a cleaned copy.
+    """Apply `cleaning_filter` to every selected split of `task`, returning a cleaned copy.
 
     The task passed in is never changed, not even by loading its data: the copy is made first and the data is
     loaded onto that. The copy holds new containers for any filtered splits; unfiltered splits and subsets may
@@ -497,7 +497,7 @@ def _filter_task_rows(
 
     Args:
         task: The task to filter.
-        filter_: What to remove.
+        cleaning_filter: What to remove.
         normalization: How to rewrite text before comparing it.
         columns: The columns to compare. Defaults to every content column of the task.
         splits: The splits to filter. Defaults to every split of the dataset.
@@ -509,7 +509,7 @@ def _filter_task_rows(
 
     Raises:
         NotImplementedError: If `task` aggregates other tasks, which hold the data instead.
-        ValueError: If `task` holds none of the content `filter_` applies to, or if `splits` and `subsets`
+        ValueError: If `task` holds none of the content `cleaning_filter` applies to, or if `splits` and `subsets`
             together match none of the task's splits.
         KeyError: If `columns` names a column the task does not declare.
     """
@@ -530,11 +530,11 @@ def _filter_task_rows(
         # some tasks still load the older corpus/queries layout, which evaluation converts first as well
         cleaned.convert_v1_dataset_format_to_v2(num_proc=num_proc)
 
-    col_modalities = _resolve_columns(cleaned, filter_, columns)
+    col_modalities = _resolve_columns(cleaned, cleaning_filter, columns)
     # a pair and its swap only need to meet when rows are compared with each other
     symmetric_sides = (
         _resolve_symmetric_sides(cleaned, col_modalities)
-        if filter_.compares_rows
+        if cleaning_filter.compares_rows
         else None
     )
     is_retrieval = isinstance(cleaned, AbsTaskRetrieval)
@@ -553,7 +553,7 @@ def _filter_task_rows(
             if is_retrieval:
                 new_splits[split], removed = _filter_retrieval_split(
                     splits_data[split],
-                    filter_,
+                    cleaning_filter,
                     col_modalities,
                     original,
                     normalization=normalization,
@@ -563,7 +563,7 @@ def _filter_task_rows(
                 new_splits[split], removed = _apply_row_filter(
                     splits_data[split],
                     col_modalities,
-                    filter_,
+                    cleaning_filter,
                     normalization=normalization,
                     num_proc=num_proc,
                     symmetric_sides=symmetric_sides,
@@ -577,15 +577,15 @@ def _filter_task_rows(
 
     cleaned.dataset = by_subset["default"] if flat else by_subset
     if n_removed:
-        _rename_as_cleaned(cleaned, original, filter_.name)
+        _rename_as_cleaned(cleaned, original, cleaning_filter.name)
         logger.warning(
-            f"`{filter_.name}` removed {n_removed} samples from '{original.name}' "
+            f"`{cleaning_filter.name}` removed {n_removed} samples from '{original.name}' "
             f"(columns={sorted(col_modalities)}). The cleaned task is '{cleaned.metadata.name}', and its scores "
             f"are not comparable to results on '{original.name}'."
         )
     else:
         logger.info(
-            f"`{filter_.name}` removed nothing from '{original.name}' "
+            f"`{cleaning_filter.name}` removed nothing from '{original.name}' "
             f"(columns={sorted(col_modalities)})."
         )
     return cleaned
@@ -646,7 +646,9 @@ def remove_duplicates(
     """
     return _filter_task_rows(
         task,
-        _Filter("remove_duplicates", _keep_first_occurrence, removes_duplicates=True),
+        _CleaningFilter(
+            "remove_duplicates", _keep_first_occurrence, removes_duplicates=True
+        ),
         normalization=normalization,
         columns=columns,
         splits=splits,
@@ -670,7 +672,7 @@ def _remove_small(
     """Remove the samples holding a `modality` value that `measure_fn` finds smaller than `minimum`."""
     return _filter_task_rows(
         task,
-        _Filter(
+        _CleaningFilter(
             name,
             functools.partial(_keep_at_least, minimum=minimum, measure_fn=measure_fn),
             modalities=frozenset({modality}),
