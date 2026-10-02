@@ -82,3 +82,30 @@ ko_embed_nli = ModelMeta(
     modalities=["text"],
     model_type=["dense"],
 )
+
+
+ja_embed_sts = ModelMeta(
+    name="NGA-KR/ja-embed-sts",
+    loader=SentenceTransformerEncoderWrapper,
+    loader_kwargs=dict(),
+    revision="3f7bb715ea8e05d50a468d5d4f8a69328b225f03",
+    release_date="2026-09-15",
+    languages=["jpn-Jpan"],
+    open_weights=True,
+    n_parameters=337441792,
+    n_embedding_parameters=33554432,
+    memory_usage_mb=1287,
+    embed_dim=1024,
+    max_tokens=512,
+    license="apache-2.0",
+    reference="https://huggingface.co/NGA-KR/ja-embed-sts",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets={"JSICK", "JSTS"},
+    adapted_from="cl-nagoya/ruri-large-v2",
+    modalities=["text"],
+    model_type=["dense"],
+)

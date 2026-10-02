@@ -2,17 +2,14 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
-from transformers import (
-    AutoProcessor,
-)
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator, VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -33,6 +30,9 @@ class QwenOmniWrapper(AbsEncoder):
         num_frames: int | None = None,
         **kwargs: Any,
     ) -> None:
+        import torch
+        from transformers import AutoProcessor
+
         self.device = device or (
             "cuda"
             if torch.cuda.is_available()
@@ -101,7 +101,6 @@ class QwenOmniWrapper(AbsEncoder):
             )
         return messages
 
-    @torch.no_grad()
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -112,65 +111,68 @@ class QwenOmniWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        has_video = "video" in inputs.dataset.features
-        has_audio = "audio" in inputs.dataset.features
-        if has_video:
-            inputs.collate_fn = VideoCollator(
-                target_sampling_rate=self.sampling_rate,
-                fps=self.fps,
-                max_frames=self.max_frames,
-                num_frames=self.num_frames,
-                max_samples=self.max_samples,
-            )
-        elif has_audio:
-            inputs.collate_fn = AudioCollator(
-                target_sampling_rate=self.sampling_rate,
-                max_samples=self.max_samples,
-            )
+        import torch
 
-        all_embeddings: list[torch.Tensor] = []
-
-        for batch in tqdm(inputs, desc="Encoding"):
-            messages = self._build_messages(batch)
-
-            texts = [
-                self.processor.apply_chat_template(
-                    msg, tokenize=False, add_generation_prompt=False
+        with torch.no_grad():
+            has_video = "video" in inputs.dataset.features
+            has_audio = "audio" in inputs.dataset.features
+            if has_video:
+                inputs.collate_fn = VideoCollator(
+                    target_sampling_rate=self.sampling_rate,
+                    fps=self.fps,
+                    max_frames=self.max_frames,
+                    num_frames=self.num_frames,
+                    max_samples=self.max_samples,
                 )
-                for msg in messages
-            ]
+            elif has_audio:
+                inputs.collate_fn = AudioCollator(
+                    target_sampling_rate=self.sampling_rate,
+                    max_samples=self.max_samples,
+                )
 
-            videos = batch.get("video")
-            images = batch.get("image")
-            audios = batch.get("audio")
-            if audios:
-                audios = [
-                    a["array"] if isinstance(a, dict) and "array" in a else a
-                    for a in audios
+            all_embeddings: list[torch.Tensor] = []
+
+            for batch in tqdm(inputs, desc="Encoding"):
+                messages = self._build_messages(batch)
+
+                texts = [
+                    self.processor.apply_chat_template(
+                        msg, tokenize=False, add_generation_prompt=False
+                    )
+                    for msg in messages
                 ]
 
-            model_inputs = self.processor(
-                text=texts,
-                audio=audios or None,
-                images=images or None,
-                videos=videos or None,
-                padding=True,
-                return_tensors="pt",
-                videos_kwargs={
-                    "do_sample_frames": False,
-                    "use_audio_in_video": False,
-                },
-                audio_kwargs={"max_length": self.max_samples},
-            ).to(self.device, dtype=torch.bfloat16)
+                videos = batch.get("video")
+                images = batch.get("image")
+                audios = batch.get("audio")
+                if audios:
+                    audios = [
+                        a["array"] if isinstance(a, dict) and "array" in a else a
+                        for a in audios
+                    ]
 
-            outputs = self.model(
-                **model_inputs, output_hidden_states=True, return_dict=True
-            )
-            embeddings = outputs.hidden_states[-1][:, -1]
-            embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=-1)
-            all_embeddings.append(embeddings.cpu())
+                model_inputs = self.processor(
+                    text=texts,
+                    audio=audios or None,
+                    images=images or None,
+                    videos=videos or None,
+                    padding=True,
+                    return_tensors="pt",
+                    videos_kwargs={
+                        "do_sample_frames": False,
+                        "use_audio_in_video": False,
+                    },
+                    audio_kwargs={"max_length": self.max_samples},
+                ).to(self.device, dtype=torch.bfloat16)
 
-        return torch.cat(all_embeddings, dim=0).float()
+                outputs = self.model(
+                    **model_inputs, output_hidden_states=True, return_dict=True
+                )
+                embeddings = outputs.hidden_states[-1][:, -1]
+                embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=-1)
+                all_embeddings.append(embeddings.cpu())
+
+            return torch.cat(all_embeddings, dim=0).float()
 
 
 qwen25_omni_7b = ModelMeta(

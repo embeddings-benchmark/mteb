@@ -104,6 +104,14 @@ from .clotho import (
 )
 from .clotho_moment import ClothoMomentRetrieval
 from .cmu_arctic import CMUArcticA2TRetrieval, CMUArcticT2ARetrieval
+from .coco_modality_equivalence import (
+    COCOModalEquivA2IHumanRetrieval,
+    COCOModalEquivA2ITTSRetrieval,
+    COCOModalEquivI2AHumanRetrieval,
+    COCOModalEquivI2ATTSRetrieval,
+    COCOModalEquivI2TRetrieval,
+    COCOModalEquivT2IRetrieval,
+)
 from .covers80_retrieval import Covers80A2ARetrieval
 from .covr_r_retrieval import CoVRRVT2VRetrieval
 from .cqa_dupstack_android_retrieval import CQADupstackAndroidRetrieval
@@ -314,6 +322,7 @@ from .narrative_qa_retrieval import NarrativeQARetrieval
 from .nf_corpus_retrieval import NFCorpus
 from .nights_i2i_retrieval import NIGHTSI2IRetrieval
 from .nq_retrieval import NQ, NQHardNegatives
+from .nq_tables_retrieval import NQTablesRetrieval
 from .obliq_bench_retrieval import (
     OBLIQBenchCongressRetrieval,
     OBLIQBenchMathRetrieval,
@@ -322,6 +331,7 @@ from .obliq_bench_retrieval import (
     OBLIQBenchWritingRetrieval,
 )
 from .okvqa_it2t_retrieval import OKVQAIT2TRetrieval
+from .omni_wiki_retrieval import OmniWikiV2IRetrieval, OmniWikiV2TRetrieval
 from .oven_it2it_retrieval import OVENIT2ITRetrieval
 from .oven_it2t_retrieval import OVENIT2TRetrieval
 from .panda70m_retrieval import (
@@ -587,6 +597,12 @@ __all__ = [
     "CLDAT2ARetrieval",
     "CMUArcticA2TRetrieval",
     "CMUArcticT2ARetrieval",
+    "COCOModalEquivA2IHumanRetrieval",
+    "COCOModalEquivA2ITTSRetrieval",
+    "COCOModalEquivI2AHumanRetrieval",
+    "COCOModalEquivI2ATTSRetrieval",
+    "COCOModalEquivI2TRetrieval",
+    "COCOModalEquivT2IRetrieval",
     "CQADupstackAndroidRetrieval",
     "CQADupstackEnglishRetrieval",
     "CQADupstackGamingRetrieval",
@@ -770,6 +786,7 @@ __all__ = [
     "NFCorpusDecontaminated",
     "NIGHTSI2IRetrieval",
     "NQHardNegatives",
+    "NQTablesRetrieval",
     "NanoArguAnaRetrieval",
     "NanoClimateFeverRetrieval",
     "NanoDBPediaRetrieval",
@@ -793,6 +810,8 @@ __all__ = [
     "OKVQAIT2TRetrieval",
     "OVENIT2ITRetrieval",
     "OVENIT2TRetrieval",
+    "OmniWikiV2IRetrieval",
+    "OmniWikiV2TRetrieval",
     "Panda70MT2VARetrieval",
     "Panda70MT2VRetrieval",
     "Panda70MV2TRetrieval",

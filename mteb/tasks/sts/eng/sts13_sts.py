@@ -28,11 +28,22 @@ class STS13STS(AbsTaskSTS):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{Agirre2013SEM2S,
-  author = {Eneko Agirre and Daniel Matthew Cer and Mona T. Diab and Aitor Gonzalez-Agirre and Weiwei Guo},
-  booktitle = {International Workshop on Semantic Evaluation},
-  title = {*SEM 2013 shared task: Semantic Textual Similarity},
-  url = {https://api.semanticscholar.org/CorpusID:10241043},
+@inproceedings{agirre-etal-2013-sem,
+  address = {Atlanta, Georgia, USA},
+  author = {Agirre, Eneko  and
+Cer, Daniel  and
+Diab, Mona  and
+Gonzalez-Agirre, Aitor  and
+Guo, Weiwei},
+  booktitle = {Second Joint Conference on Lexical and Computational Semantics (*{SEM}), Volume 1: Proceedings of the Main Conference and the Shared Task: Semantic Textual Similarity},
+  editor = {Diab, Mona  and
+Baldwin, Tim  and
+Baroni, Marco},
+  month = jun,
+  pages = {32--43},
+  publisher = {Association for Computational Linguistics},
+  title = {*{SEM} 2013 shared task: Semantic Textual Similarity},
+  url = {https://aclanthology.org/S13-1004/},
   year = {2013},
 }
 """,

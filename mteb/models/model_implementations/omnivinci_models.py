@@ -6,15 +6,14 @@ import pathlib
 import tempfile
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
-from transformers import AutoModel, AutoProcessor
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
     from numpy.typing import NDArray
     from PIL import Image
     from torch.utils.data import DataLoader
@@ -43,6 +42,9 @@ class OmniVinciWrapper(AbsEncoder):
         max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ) -> None:
+        import torch
+        from transformers import AutoModel, AutoProcessor
+
         self.device = device or (
             "cuda"
             if torch.cuda.is_available()
@@ -109,6 +111,7 @@ class OmniVinciWrapper(AbsEncoder):
         """Write an audio array or ``AudioInputItem`` dict to a temporary WAV."""
         import numpy as np
         import soundfile as sf
+        import torch
 
         fd, path = tempfile.mkstemp(suffix=".wav")
         os.close(fd)
@@ -165,6 +168,8 @@ class OmniVinciWrapper(AbsEncoder):
 
     def _encode_batch(self, batch: BatchedInput) -> torch.Tensor:
         """Encode a batch of multimodal samples and return L2-normalised embeddings."""
+        import torch
+
         conversations, temp_files = self._build_conversations(batch)
         try:
             text_prompts = [
@@ -191,7 +196,6 @@ class OmniVinciWrapper(AbsEncoder):
                 with contextlib.suppress(OSError):
                     pathlib.Path(f).unlink()
 
-    @torch.inference_mode()
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -202,22 +206,25 @@ class OmniVinciWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        has_video = "video" in inputs.dataset.features
-        has_audio = "audio" in inputs.dataset.features
+        import torch
 
-        if has_video or has_audio:
-            inputs.collate_fn = VideoCollator(
-                target_sampling_rate=self.AUDIO_SAMPLING_RATE,
-                num_frames=self.num_frames,
-                max_samples=self.max_audio_samples,
-            )
+        with torch.inference_mode():
+            has_video = "video" in inputs.dataset.features
+            has_audio = "audio" in inputs.dataset.features
 
-        all_embeddings: list[torch.Tensor] = []
-        for batch in tqdm(inputs, desc="Encoding"):
-            embeddings = self._encode_batch(batch)
-            all_embeddings.append(embeddings.cpu())
+            if has_video or has_audio:
+                inputs.collate_fn = VideoCollator(
+                    target_sampling_rate=self.AUDIO_SAMPLING_RATE,
+                    num_frames=self.num_frames,
+                    max_samples=self.max_audio_samples,
+                )
 
-        return torch.cat(all_embeddings, dim=0).float()
+            all_embeddings: list[torch.Tensor] = []
+            for batch in tqdm(inputs, desc="Encoding"):
+                embeddings = self._encode_batch(batch)
+                all_embeddings.append(embeddings.cpu())
+
+            return torch.cat(all_embeddings, dim=0).float()
 
 
 _OMNIVINCI_CITATION = r"""

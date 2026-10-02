@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -26,15 +25,21 @@ OPENCLIP_CITATION = """@inproceedings{cherti2023reproducible,
 
 def openclip_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
     import open_clip
+    import torch
 
     class OpenCLIPModel(AbsEncoder):
         def __init__(
             self,
             model_name: str,
             revision: str,
-            device: str = "cuda" if torch.cuda.is_available() else "cpu",
+            device: str | None = None,
             **kwargs: Any,
         ):
+            import torch
+
+            if device is None:
+                device = "cuda" if torch.cuda.is_available() else "cpu"
+
             self.model_name = model_name
             self.device = device
             self.model, _, self.img_preprocess = open_clip.create_model_and_transforms(

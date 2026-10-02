@@ -1,9 +1,7 @@
-import torch
-
 from mteb.models import ModelMeta
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ScoringFunction
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 F2LLM_CITATION = """@article{2025F2LLM,
     title={F2LLM Technical Report: Matching SOTA Embedding Performance with 6 Million Open-Source Data},
@@ -958,7 +956,7 @@ F2LLM_v2_80M = ModelMeta(
         add_eos_token=True,
         max_seq_length=8192,
         model_kwargs={
-            "torch_dtype": torch.bfloat16,
+            "torch_dtype": OutputDType.BF16,
         },
     ),
     name="codefuse-ai/F2LLM-v2-80M",
@@ -997,7 +995,7 @@ F2LLM_v2_160M = ModelMeta(
         add_eos_token=True,
         max_seq_length=8192,
         model_kwargs={
-            "torch_dtype": torch.bfloat16,
+            "torch_dtype": OutputDType.BF16,
         },
     ),
     name="codefuse-ai/F2LLM-v2-160M",
@@ -1036,7 +1034,7 @@ F2LLM_v2_330M = ModelMeta(
         add_eos_token=True,
         max_seq_length=8192,
         model_kwargs={
-            "torch_dtype": torch.bfloat16,
+            "torch_dtype": OutputDType.BF16,
         },
     ),
     name="codefuse-ai/F2LLM-v2-330M",
@@ -1075,7 +1073,7 @@ F2LLM_v2_0B6 = ModelMeta(
         add_eos_token=True,
         max_seq_length=8192,
         model_kwargs={
-            "torch_dtype": torch.bfloat16,
+            "torch_dtype": OutputDType.BF16,
         },
     ),
     name="codefuse-ai/F2LLM-v2-0.6B",
@@ -1114,7 +1112,7 @@ F2LLM_v2_1B7 = ModelMeta(
         add_eos_token=True,
         max_seq_length=8192,
         model_kwargs={
-            "torch_dtype": torch.bfloat16,
+            "torch_dtype": OutputDType.BF16,
         },
     ),
     name="codefuse-ai/F2LLM-v2-1.7B",
@@ -1153,7 +1151,7 @@ F2LLM_v2_4B = ModelMeta(
         add_eos_token=True,
         max_seq_length=8192,
         model_kwargs={
-            "torch_dtype": torch.bfloat16,
+            "torch_dtype": OutputDType.BF16,
         },
     ),
     name="codefuse-ai/F2LLM-v2-4B",
@@ -1192,7 +1190,7 @@ F2LLM_v2_8B = ModelMeta(
         add_eos_token=True,
         max_seq_length=8192,
         model_kwargs={
-            "torch_dtype": torch.bfloat16,
+            "torch_dtype": OutputDType.BF16,
         },
     ),
     name="codefuse-ai/F2LLM-v2-8B",
@@ -1231,7 +1229,7 @@ F2LLM_v2_14B = ModelMeta(
         add_eos_token=True,
         max_seq_length=8192,
         model_kwargs={
-            "torch_dtype": torch.bfloat16,
+            "torch_dtype": OutputDType.BF16,
         },
     ),
     name="codefuse-ai/F2LLM-v2-14B",

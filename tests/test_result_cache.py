@@ -266,6 +266,22 @@ def test_cache_load_different_subsets():
     assert result2.model_results[0].task_results[0].get_score() == 0.01035
 
 
+def test_cache_validate_and_filter_without_tasks():
+    cache = ResultCache(cache_path=test_cache_path)
+    model = mteb.get_model_meta("mteb/baseline-random-encoder")
+
+    all_tasks = cache.load_results(models=[model], validate_and_filter=True)
+    task_names = sorted(
+        task_result.task_name for task_result in all_tasks.model_results[0].task_results
+    )
+    assert "BelebeleRetrieval" in task_names
+
+    by_name = cache.load_results(
+        models=[model], tasks=task_names, validate_and_filter=True
+    )
+    assert all_tasks.to_dataframe().equals(by_name.to_dataframe())
+
+
 def test_load_experiment_results(tmp_path: Path):
     """Test that results from an experiment can be loaded correctly."""
     model = mteb.get_model("mteb/baseline-random-encoder")
@@ -386,6 +402,47 @@ def test_load_experiment_results(tmp_path: Path):
         experiment_kwargs=[model.mteb_model_meta.experiment_kwargs],
     )
     assert len(model_meta_res.model_results) == 1
+
+
+def test_plain_revision_folder_without_model_meta_derives_from_path(
+    tmp_path: Path,
+) -> None:
+    """A *plain* (non-experiment) revision folder without model_meta.json still resolves.
+
+    `results/<model>/<revision>/` is unambiguous enough to derive
+    model_name/revision from directly; model_meta falls back to the static
+    MODEL_REGISTRY entry for that model_name.
+    """
+    revision_dir = (
+        tmp_path / "results" / "sentence-transformers__all-MiniLM-L6-v2" / "some_rev"
+    )
+    revision_dir.mkdir(parents=True)
+    # No model_meta.json here — only a task result file.
+    (revision_dir / "SomeTask.json").write_text("{}")
+
+    identity = ResultCache._get_model_name_and_revision_from_path(revision_dir)
+    assert identity is not None
+    model_name, revision, experiment_name, meta = identity
+    assert model_name == "sentence-transformers/all-MiniLM-L6-v2"
+    assert revision == "some_rev"
+    assert experiment_name is None
+    assert meta is not None
+    assert meta.name == "sentence-transformers/all-MiniLM-L6-v2"
+
+
+def test_plain_revision_folder_unregistered_model_has_no_meta(
+    tmp_path: Path,
+) -> None:
+    """A plain revision folder for a model not in MODEL_REGISTRY gets model_meta=None."""
+    revision_dir = tmp_path / "results" / "totally__unregistered-model" / "some_rev"
+    revision_dir.mkdir(parents=True)
+    (revision_dir / "SomeTask.json").write_text("{}")
+
+    identity = ResultCache._get_model_name_and_revision_from_path(revision_dir)
+    assert identity is not None
+    model_name, revision, experiment_name, meta = identity
+    assert model_name == "totally/unregistered-model"
+    assert meta is None
 
 
 def _setup_fake_remote(tmp_path: Path) -> tuple[Path, Path]:

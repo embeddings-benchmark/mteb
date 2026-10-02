@@ -26,14 +26,20 @@ class FinToxicityClassification(AbsTaskClassification):
         sample_creation="machine-translated",
         bibtex_citation=r"""
 @inproceedings{eskelinen-etal-2023-toxicity,
+  address = {T{\'o}rshavn, Faroe Islands},
   author = {Eskelinen, Anni  and
 Silvala, Laura  and
 Ginter, Filip  and
 Pyysalo, Sampo  and
 Laippala, Veronika},
   booktitle = {Proceedings of the 24th Nordic Conference on Computational Linguistics (NoDaLiDa)},
+  editor = {Alum{\"a}e, Tanel  and
+Fishel, Mark},
   month = may,
+  pages = {685--697},
+  publisher = {University of Tartu Library},
   title = {Toxicity Detection in {F}innish Using Machine Translation},
+  url = {https://aclanthology.org/2023.nodalida-1.68/},
   year = {2023},
 }
 """,
@@ -77,14 +83,20 @@ class FinToxicityClassificationV2(AbsTaskClassification):
         sample_creation="machine-translated",
         bibtex_citation=r"""
 @inproceedings{eskelinen-etal-2023-toxicity,
+  address = {T{\'o}rshavn, Faroe Islands},
   author = {Eskelinen, Anni  and
 Silvala, Laura  and
 Ginter, Filip  and
 Pyysalo, Sampo  and
 Laippala, Veronika},
   booktitle = {Proceedings of the 24th Nordic Conference on Computational Linguistics (NoDaLiDa)},
+  editor = {Alum{\"a}e, Tanel  and
+Fishel, Mark},
   month = may,
+  pages = {685--697},
+  publisher = {University of Tartu Library},
   title = {Toxicity Detection in {F}innish Using Machine Translation},
+  url = {https://aclanthology.org/2023.nodalida-1.68/},
   year = {2023},
 }
 """,

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -25,6 +24,7 @@ MOCOV3_CITATION = """@Article{chen2021mocov3,
 
 def mocov3_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
     import timm
+    import torch
 
     class MOCOv3Model(AbsEncoder):
         """A wrapper class for MOCOv3 models that supports image encoding.
@@ -34,9 +34,14 @@ def mocov3_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
         def __init__(
             self,
             model_name: str = "nyu-visionx/moco-v3-vit-b",
-            device: str = "cuda" if torch.cuda.is_available() else "cpu",
+            device: str | None = None,
             **kwargs: Any,
         ):
+            import torch
+
+            if device is None:
+                device = "cuda" if torch.cuda.is_available() else "cpu"
+
             self.model_name = model_name
             self.device = device
             name = "vit_base_patch16_224"

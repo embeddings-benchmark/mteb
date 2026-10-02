@@ -1,6 +1,7 @@
 from .afri_mcqa_retrieval import AfriMCQAA2IRetrieval, AfriMCQAI2ARetrieval
 from .audio_caps import AudioCapsA2TRetrieval, AudioCapsT2ARetrieval
 from .belebele_retrieval import BelebeleRetrieval
+from .chinaopen_retrieval import ChinaOpenT2VRetrieval, ChinaOpenV2TRetrieval
 from .common_voice import (
     CommonVoiceMini17A2TRetrieval,
     CommonVoiceMini17T2ARetrieval,
@@ -103,6 +104,16 @@ from .nanobeir_multilingual import (
     MultilingualNanoSciFactRetrieval,
     MultilingualNanoTouche2020Retrieval,
 )
+from .nayanair_monobench_retrieval import (
+    NayanaIRMonoBenchGujaratiRetrieval,
+    NayanaIRMonoBenchKannadaRetrieval,
+    NayanaIRMonoBenchMalayalamRetrieval,
+    NayanaIRMonoBenchMarathiRetrieval,
+    NayanaIRMonoBenchOdiaRetrieval,
+    NayanaIRMonoBenchPunjabiRetrieval,
+    NayanaIRMonoBenchSanskritRetrieval,
+    NayanaIRMonoBenchTamilRetrieval,
+)
 from .neu_clir2022_retrieval import (
     NeuCLIR2022Retrieval,
     NeuCLIR2022RetrievalHardNegatives,
@@ -172,6 +183,8 @@ __all__ = [
     "AudioCapsT2ARetrieval",
     "BelebeleRetrieval",
     "CUREv1Retrieval",
+    "ChinaOpenT2VRetrieval",
+    "ChinaOpenV2TRetrieval",
     "CommonVoiceMini17A2TRetrieval",
     "CommonVoiceMini17T2ARetrieval",
     "CommonVoiceMini21A2TRetrieval",
@@ -261,6 +274,14 @@ __all__ = [
     "MultilingualNanoSCIDOCSRetrieval",
     "MultilingualNanoSciFactRetrieval",
     "MultilingualNanoTouche2020Retrieval",
+    "NayanaIRMonoBenchGujaratiRetrieval",
+    "NayanaIRMonoBenchKannadaRetrieval",
+    "NayanaIRMonoBenchMalayalamRetrieval",
+    "NayanaIRMonoBenchMarathiRetrieval",
+    "NayanaIRMonoBenchOdiaRetrieval",
+    "NayanaIRMonoBenchPunjabiRetrieval",
+    "NayanaIRMonoBenchSanskritRetrieval",
+    "NayanaIRMonoBenchTamilRetrieval",
     "NeuCLIR2022Retrieval",
     "NeuCLIR2022RetrievalHardNegatives",
     "NeuCLIR2023Retrieval",
