@@ -63,13 +63,14 @@ class ASTWrapper(AbsEncoder):
                 # the extractor always emits max_length=1024 frames (10.24 s)
                 # https://huggingface.co/MIT/ast-finetuned-audioset-10-10-0.4593/blob/main/preprocessor_config.json
                 # pad up to the 400-sample FFT window so short clips do not crash
-                audio_arrays = [
-                    np.pad(
-                        np.asarray(a["array"]),
-                        (0, max(0, 401 - np.asarray(a["array"]).shape[-1])),
+                audio_arrays = []
+                for a in batch["audio"]:
+                    array = np.asarray(a["array"])
+                    pad = max(0, 401 - array.shape[-1])
+                    # pad only the time axis, also for (channels, T) input
+                    audio_arrays.append(
+                        np.pad(array, [(0, 0)] * (array.ndim - 1) + [(0, pad)])
                     )
-                    for a in batch["audio"]
-                ]
 
                 features = self.feature_extractor(
                     audio_arrays,

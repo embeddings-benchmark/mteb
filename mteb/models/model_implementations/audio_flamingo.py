@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Any
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import AudioCollator, seconds_to_samples
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import OutputDType
 
@@ -103,8 +103,10 @@ class AudioFlamingoWrapper(AbsEncoder):
                         {"audio": audio_row},
                         target_sampling_rate=self.sampling_rate,
                     )
-                    if self.max_audio_length_seconds:
-                        cap = int(self.max_audio_length_seconds * self.sampling_rate)
+                    cap = seconds_to_samples(
+                        self.max_audio_length_seconds, self.sampling_rate
+                    )
+                    if cap is not None:
                         array = array[..., :cap]
                     content.append({"type": "audio", "audio": array})
 

@@ -7,7 +7,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import AudioCollator, seconds_to_samples
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -72,8 +72,8 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
             inputs, desc="Processing audio batches", disable=not show_progress_bar
         ):
             audio_arrays = [audio["array"] for audio in batch["audio"]]
-            if self.max_audio_length_seconds:
-                cap = int(self.max_audio_length_seconds * self.sampling_rate)
+            cap = seconds_to_samples(self.max_audio_length_seconds, self.sampling_rate)
+            if cap is not None:
                 audio_arrays = [w[..., :cap] for w in audio_arrays]
 
             # one clip per call: padding and wav2clip's batch-wide input

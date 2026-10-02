@@ -7,7 +7,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import AudioCollator, SingleClipBatches
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +25,8 @@ class SewDWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
-        # None: relative-position horizon, read from the checkpoint below
+        # None: an mteb cap at the relative-position horizon read below; the
+        # encoder runs past it, so this is not a hard model limit
         max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
@@ -46,6 +47,10 @@ class SewDWrapper(AbsEncoder):
             self.device
         )
         self.model.eval()
+        # group-norm feature encoders normalise over the padded batch, so a clip's
+        # embedding depends on its batch-mates; layer-norm ones are exact batched
+        # https://huggingface.co/docs/transformers/model_doc/wav2vec2#transformers.Wav2Vec2FeatureExtractor
+        self.per_clip = self.model.config.feat_extract_norm != "layer"
         self.sampling_rate = self.feature_extractor.sampling_rate
 
         # samples: max_position_embeddings x conv_stride x squeeze_factor
@@ -77,11 +82,9 @@ class SewDWrapper(AbsEncoder):
         inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
         all_embeddings = []
 
-        # one clip per forward: padding to the batch's longest clip shifts the
-        # shorter clips' embeddings (feature normalisation, group norm)
-        clips = ({"audio": [a]} for b in inputs for a in b["audio"])
+        batches = SingleClipBatches(inputs) if self.per_clip else inputs
         for batch in tqdm(
-            clips,
+            batches,
             disable=not show_progress_bar,
         ):
             audio_arrays = [audio["array"] for audio in batch["audio"]]

@@ -7,7 +7,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import AudioCollator, seconds_to_samples
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -60,10 +60,8 @@ class Qwen3VoiceEmbeddingWrapper(AbsEncoder):
     ) -> Array:
         import torch
 
-        max_samples = (
-            int(self.max_audio_length_seconds * self.sampling_rate)
-            if self.max_audio_length_seconds
-            else None
+        max_samples = seconds_to_samples(
+            self.max_audio_length_seconds, self.sampling_rate
         )
         inputs.collate_fn = AudioCollator(
             target_sampling_rate=self.sampling_rate, max_samples=max_samples

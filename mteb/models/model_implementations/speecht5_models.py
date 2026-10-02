@@ -8,6 +8,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import SingleClipBatches
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +26,8 @@ class SpeechT5Audio(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
-        # None: relative-position horizon, read from the checkpoint below
+        # None: an mteb cap at the relative-position horizon read below; the
+        # encoder runs past it, so this is not a hard model limit
         max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
@@ -46,6 +48,10 @@ class SpeechT5Audio(AbsEncoder):
             revision=revision,
         ).to(self.device)
         self.asr_model.eval()
+        # group-norm feature encoders normalise over the padded batch, so a clip's
+        # embedding depends on its batch-mates; layer-norm ones are exact batched
+        # https://huggingface.co/docs/transformers/model_doc/wav2vec2#transformers.Wav2Vec2FeatureExtractor
+        self.per_clip = self.asr_model.config.feat_extract_norm != "layer"
 
         self.sampling_rate = self.asr_processor.feature_extractor.sampling_rate
 
@@ -76,11 +82,9 @@ class SpeechT5Audio(AbsEncoder):
 
         all_embeddings = []
 
-        # one clip per forward: padding to the batch's longest clip shifts the
-        # shorter clips' embeddings (feature normalisation, group norm)
-        clips = ({"audio": [a]} for b in inputs for a in b["audio"])
+        batches = SingleClipBatches(inputs) if self.per_clip else inputs
         for batch in tqdm(
-            clips,
+            batches,
             disable=not show_progress_bar,
         ):
             batch_arrays = []
@@ -255,7 +259,8 @@ class SpeechT2Multimodal(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
-        # None: relative-position horizon, read from the checkpoint below
+        # None: an mteb cap at the relative-position horizon read below; the
+        # encoder runs past it, so this is not a hard model limit
         max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):

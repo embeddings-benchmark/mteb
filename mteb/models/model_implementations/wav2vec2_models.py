@@ -6,7 +6,11 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import (
+    AudioCollator,
+    SingleClipBatches,
+    seconds_to_samples,
+)
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -111,6 +115,10 @@ class Wav2Vec2AudioWrapper(AbsEncoder):
             self.is_ctc_model = True
 
         self.model.eval()
+        # group-norm feature encoders normalise over the padded batch, so a clip's
+        # embedding depends on its batch-mates; layer-norm ones are exact batched
+        # https://huggingface.co/docs/transformers/model_doc/wav2vec2#transformers.Wav2Vec2FeatureExtractor
+        self.per_clip = self.model.config.feat_extract_norm != "layer"
 
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(model_name)
         self.sampling_rate = self.feature_extractor.sampling_rate
@@ -123,10 +131,8 @@ class Wav2Vec2AudioWrapper(AbsEncoder):
     ) -> Array:
         import torch
 
-        max_samples = (
-            int(self.max_audio_length_seconds * self.sampling_rate)
-            if self.max_audio_length_seconds
-            else None
+        max_samples = seconds_to_samples(
+            self.max_audio_length_seconds, self.sampling_rate
         )
         inputs.collate_fn = AudioCollator(
             target_sampling_rate=self.sampling_rate, max_samples=max_samples
@@ -134,11 +140,9 @@ class Wav2Vec2AudioWrapper(AbsEncoder):
 
         all_embeddings = []
 
-        # one clip per forward: padding to the batch's longest clip shifts the
-        # shorter clips' embeddings (feature normalisation, group norm)
-        clips = ({"audio": [a]} for b in inputs for a in b["audio"])
+        batches = SingleClipBatches(inputs) if self.per_clip else inputs
         for batch in tqdm(
-            clips,
+            batches,
             disable=not show_progress_bar,
         ):
             audio_arrays = [audio["array"] for audio in batch["audio"]]

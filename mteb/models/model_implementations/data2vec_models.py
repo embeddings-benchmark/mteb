@@ -6,7 +6,11 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import (
+    AudioCollator,
+    SingleClipBatches,
+    seconds_to_samples,
+)
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -54,10 +58,8 @@ class Data2VecAudioWrapper(AbsEncoder):
     ) -> Array:
         import torch
 
-        max_samples = (
-            int(self.max_audio_length_seconds * self.sampling_rate)
-            if self.max_audio_length_seconds
-            else None
+        max_samples = seconds_to_samples(
+            self.max_audio_length_seconds, self.sampling_rate
         )
         inputs.collate_fn = AudioCollator(
             target_sampling_rate=self.sampling_rate, max_samples=max_samples
@@ -65,11 +67,10 @@ class Data2VecAudioWrapper(AbsEncoder):
 
         all_embeddings = []
 
-        # one clip per forward: padding to the batch's longest clip shifts the
-        # shorter clips' embeddings (feature normalisation, group norm)
-        clips = ({"audio": [a]} for b in inputs for a in b["audio"])
+        # one clip per forward: padding leaks into data2vec's convolutional
+        # positional embedding, so batched clips change each other's embeddings
         for batch in tqdm(
-            clips,
+            SingleClipBatches(inputs),
             disable=not show_progress_bar,
         ):
             audio_arrays = [audio["array"] for audio in batch["audio"]]

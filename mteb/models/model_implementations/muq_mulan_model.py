@@ -7,7 +7,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import AudioCollator, seconds_to_samples
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -39,10 +39,8 @@ class MuQMuLanWrapper(AbsEncoder):
         self.device = device
         self.sampling_rate = 24000
         self.max_audio_length_seconds = max_audio_length_seconds
-        self.max_length_samples = (
-            int(self.max_audio_length_seconds * self.sampling_rate)
-            if self.max_audio_length_seconds
-            else None
+        self.max_length_samples = seconds_to_samples(
+            self.max_audio_length_seconds, self.sampling_rate
         )
 
         # Load the model

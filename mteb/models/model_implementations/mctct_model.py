@@ -7,7 +7,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import AudioCollator, SingleClipBatches
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -86,7 +86,8 @@ class MCTCTWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
-        # None: relative-position horizon, read from the checkpoint below
+        # None: an mteb cap at the relative-position horizon read below; the
+        # encoder runs past it, so this is not a hard model limit
         max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
@@ -140,11 +141,9 @@ class MCTCTWrapper(AbsEncoder):
 
         all_embeddings = []
 
-        # one clip per forward: padding to the batch's longest clip shifts the
-        # shorter clips' embeddings (feature normalisation, group norm)
-        clips = ({"audio": [a]} for b in inputs for a in b["audio"])
+        # one clip per forward: batch independence is not verified for M-CTC-T
         for batch in tqdm(
-            clips,
+            SingleClipBatches(inputs),
             disable=not show_progress_bar,
         ):
             audio_arrays = [audio["array"] for audio in batch["audio"]]

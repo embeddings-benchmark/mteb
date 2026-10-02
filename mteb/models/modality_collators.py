@@ -8,7 +8,10 @@ import numpy as np
 from mteb.types._encoder_io import AudioInputItem
 
 if TYPE_CHECKING:
+    from collections.abc import Iterator
+
     import torch
+    from torch.utils.data import DataLoader
     from torchcodec.decoders import VideoDecoder  # type: ignore[attr-defined]
 
     from mteb.types import BatchedInput
@@ -118,6 +121,35 @@ class AudioCollator:
             audio_array,
         )
         return audio_array
+
+
+def seconds_to_samples(seconds: float | None, sampling_rate: int) -> int | None:
+    """Convert an optional duration cap to samples. None means no cap."""
+    if seconds is None:
+        return None
+    if seconds <= 0:
+        raise ValueError(f"Audio duration cap must be positive, got {seconds}.")
+    return int(seconds * sampling_rate)
+
+
+class SingleClipBatches:
+    """Re-yield an audio DataLoader one clip per batch.
+
+    Some speech encoders (group-norm feature encoders, data2vec) let padding
+    change the embeddings of shorter clips, so they must never see a padded
+    batch. ``len`` stays defined so progress bars keep their total.
+    """
+
+    def __init__(self, inputs: DataLoader[BatchedInput]) -> None:
+        self.inputs = inputs
+
+    def __len__(self) -> int:
+        return len(self.inputs.dataset)  # type: ignore[arg-type]
+
+    def __iter__(self) -> Iterator[BatchedInput]:
+        for batch in self.inputs:
+            for audio in batch["audio"]:
+                yield cast("BatchedInput", {"audio": [audio]})
 
 
 class FramesCollator:
