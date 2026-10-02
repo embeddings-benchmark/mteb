@@ -9,14 +9,14 @@ from mteb.models.sentence_transformer_wrapper import (
     _encode_batches,
     _select_encode_function,
 )
-from mteb.types import OutputDType, PromptType
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
     from typing_extensions import Unpack
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput, EncodeKwargs
+    from mteb.types import Array, BatchedInput, EncodeKwargs, PromptType
 
 
 class TopkEmbedWrapper(MultiVectorWrapper):
@@ -81,55 +81,55 @@ TOPK_EMBED_V1_LANGUAGES = [
     "por-Latn",
 ]
 
-TOPK_EMBED_V1_SOURCE_DATASETS = [
-    "mMARCO",
-    "CLIRMatrix",
-    "WebFAQ",
-    "MQA",
-    "CORD-19",
-    "WikiOmnia",
-    "DBPedia",
-    "FEVER-NL",
-    "PubMedQA",
-    "MedicalQA_ru",
-    "HotpotQA-NL",
-    "ESCI",
-    "MedQuAD",
-    "SPECTER",
+TOPK_EMBED_V1_SOURCE_DATASETS = {
     "ArguAna",
-    "SciFact",
-    "MedMCQA",
-    "NFCorpus",
-    "MedQA",
-    "MKQA",
-    "stackexchange_qa",
-    "webfaq_fra",
-    "gooaq_qa",
-    "msmarco",
-    "nq",
-    "trivia",
-    "hotpotqa",
-    "fever",
-    "squadv2",
-    "fiqa",
-    "MLDR",
-    "MIRACL",
-    "AgentIR",
+    "DBPedia",
+    "ESCIReranking",
+    "FEVER",
+    "FEVER-NL",
+    "FiQA2018",
     "GerDaLIR",
-    "NarrativeQA",
-    "2WikiMultihopQA",
-    "CaseHOLD",
-    "MuSiQue",
+    "HotpotQA",
+    "HotpotQA-NL",
+    "MultiLongDocRetrieval",
+    "MIRACLRetrieval",
+    "MKQARetrieval",
+    "MMarcoRetrievalMultilingual",
+    "MSMARCO",
+    "NFCorpus",
+    "NQ",
+    "NarrativeQARetrieval",
     "QASPER",
-    "Financial-QA-10K",
-    "DocVQA",
-    "InfoVQA",
-    "TAT-DQA",
-    "ArxivQA",
-    "ChartQA",
-    "PlotQA",
-    "SlideVQA",
-]
+    "SciFact",
+    "VidoreArxivQARetrieval",
+    "VidoreDocVQARetrieval",
+    "VidoreInfoVQARetrieval",
+    "VidoreTatdqaRetrieval",
+    "WebFAQRetrieval",
+    # not in mteb
+    # "2WikiMultihopQA"
+    # "AgentIR"
+    # "CaseHOLD"
+    # "ChartQA"
+    # "CLIRMatrix"
+    # "CORD-19"
+    # "Financial-QA-10K"
+    # "gooaq_qa"
+    # "MedicalQA_ru"
+    # "MedMCQA"
+    # "MedQA"
+    # "MedQuAD"
+    # "MQA"
+    # "MuSiQue"
+    # "PlotQA"
+    # "PubMedQA"
+    # "SlideVQA"
+    # "SPECTER"
+    # "squadv2"
+    # "stackexchange_qa"
+    # "trivia"
+    # "WikiOmnia"
+}
 
 topk_embed_v1_xsmall = ModelMeta(
     loader=TopkEmbedWrapper,
