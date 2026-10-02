@@ -6,6 +6,7 @@ Example:
 Uses the registered BGE v1.5 encoders (CLS pooling, 512-token limit, cosine
 similarity, and the standard query instruction). Model and dataset revisions
 come from MTEB's registry. The cache contains full task JSONs and model metadata.
+Tensor output lets MTEB convert embeddings to float32 for CPU scoring.
 """
 
 from __future__ import annotations
@@ -52,7 +53,10 @@ def main() -> None:
                 model,
                 mteb.get_task(task_name),
                 cache=cache,
-                encode_kwargs={"batch_size": args.batch_size},
+                encode_kwargs={
+                    "batch_size": args.batch_size,
+                    "convert_to_tensor": True,
+                },
                 co2_tracker=False,
             )
         del model
