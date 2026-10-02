@@ -194,14 +194,23 @@ async def build_benchmark_summary(  # noqa: PLR0914
     bench_schema = benchmark_to_schema(bench)
     # Scoped: when a benchmark pins a shared task to specific languages
     # (e.g. MIRACL → ['eng']), per-task ``languages`` reflects that pin.
-    tasks_meta: list[TaskMetaSchema] = [scoped_task_meta_schema(t) for t in bench.tasks]
+    tasks_meta: list[TaskMetaSchema] = [
+        scoped_task_meta_schema(t).model_copy(
+            update={"main_score": bench.task_metric_overrides[t.metadata.name]}
+        )
+        if t.metadata.name in bench.task_metric_overrides
+        else scoped_task_meta_schema(t)
+        for t in bench.tasks
+    ]
 
     frames, _ = _load_per_benchmark_frames()
     long_df = frames.get(bench.name)
     if long_df is None:
         # Benchmark missing from the parquet cache (newly added).
         results = cache.load_results(tasks=bench, require_model_meta=True)
-        long_df = results._to_results_df(bench.tasks)
+        long_df = results._to_results_df(
+            bench.tasks, metric_overrides=bench.task_metric_overrides
+        )
 
     if long_df.is_empty() or "model_name" not in long_df.columns:
         return _empty_summary(bench.name, bench_schema, tasks_meta)

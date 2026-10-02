@@ -145,3 +145,20 @@ def test_build_summary_rows_strict_when_not_language_filtered():
     )
 
     assert rows[0].scores_by_custom_group["WholeDim"]["G1"] == 0.5
+
+
+def test_benchmark_schema_exposes_task_metric_overrides():
+    pytest.importorskip("fastapi")
+    from mteb.api.schemas import BenchmarkSchema
+
+    bench = Benchmark(
+        name="mock_metric_override_schema",
+        tasks=mteb.get_tasks(["NanoArguAnaRetrieval", "Banking77Classification"]),
+        task_metric_overrides={"NanoArguAnaRetrieval": "hit_rate_at_5"},
+    )
+    schema = BenchmarkSchema.from_benchmark(bench)
+    assert schema.task_metric_overrides == {"NanoArguAnaRetrieval": "hit_rate_at_5"}
+    # Serialises under the camelCase alias the frontend reads.
+    assert schema.model_dump(by_alias=True)["taskMetricOverrides"] == {
+        "NanoArguAnaRetrieval": "hit_rate_at_5"
+    }

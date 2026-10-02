@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import tempfile
-from collections.abc import Iterator, Sequence
+from collections.abc import Iterator, Mapping, Sequence
 from dataclasses import dataclass, field
 from functools import lru_cache
 from pathlib import Path
@@ -301,6 +301,10 @@ class Benchmark:
             [CustomGrouping][mteb.benchmarks.benchmark.CustomGrouping]
             instances — a `CustomGrouping`'s mere presence in this sequence
             turns on its dynamic per-group columns, no separate field needed.
+        task_metric_overrides: Task name -> metric to score that task with
+            instead of its ``main_score``, e.g. ``{"InfoSeekIT2TRetrieval":
+            "hit_rate_at_5"}``. Applies to ``get_score`` and the leaderboard
+            tables alike; unlisted tasks keep ``main_score``.
         summary_sort_column: The column to sort benchmarks by on leaderboard
 
     Examples:
@@ -332,6 +336,7 @@ class Benchmark:
         BenchmarkAggregation.TASK_TYPES,
     )
     show_zero_shot: bool = True
+    task_metric_overrides: Mapping[str, str] = field(default_factory=dict)
     # Sort column(s) for the leaderboard summary. ``None`` keeps the default
     # ``Rank (Borda)`` sort; a string or tuple of strings sorts by those
     # columns descending and adds a 1-indexed ``summary_rank_column`` rank.
@@ -351,6 +356,20 @@ class Benchmark:
                     "Custom grouping names must be unique within a benchmark."
                 )
             seen_names.add(aggregation.name)
+
+        if self.task_metric_overrides:
+            task_names = {t.metadata.name for t in self.tasks}
+            for task_name, metric in self.task_metric_overrides.items():
+                if task_name not in task_names:
+                    raise ValueError(
+                        f"task_metric_overrides names {task_name!r}, which is not a "
+                        f"task of benchmark {self.name!r}"
+                    )
+                if not metric or metric == "main_score":
+                    raise ValueError(
+                        f"task_metric_overrides[{task_name!r}] must name a concrete "
+                        f"metric, got {metric!r}"
+                    )
 
     @property
     def display_on_leaderboard(self) -> bool:
@@ -606,6 +625,22 @@ class Benchmark:
             ],
         )
 
+    def _select_task_results(self, model_result: ModelResult) -> list[TaskResult]:
+        """Select this benchmark's task results, with ``task_metric_overrides`` applied.
+
+        Overridden tasks come back as copies whose ``main_score`` is the
+        override metric, so downstream aggregation needs no override logic.
+        """
+        filtered = model_result.select_tasks(self.tasks).task_results
+        if not self.task_metric_overrides:
+            return filtered
+        return [
+            tr._with_main_score_from(self.task_metric_overrides[tr.task_name])
+            if tr.task_name in self.task_metric_overrides
+            else tr
+            for tr in filtered
+        ]
+
     def _get_model_score(
         self,
         model_result: ModelResult,
@@ -630,7 +665,7 @@ class Benchmark:
         Raises:
             ValueError: If the model is missing results for some benchmark tasks.
         """
-        filtered = model_result.select_tasks(self.tasks).task_results
+        filtered = self._select_task_results(model_result)
         if len(filtered) < len(self.tasks):
             raise ValueError(
                 "Some scores of benchmark are missing. Please, run model on full benchmark tasks"
@@ -695,7 +730,7 @@ class Benchmark:
 
         for model_result in bench_results:
             per_task_rows[model_result.model_name] = {}
-            filtered = model_result.select_tasks(self.tasks).task_results
+            filtered = self._select_task_results(model_result)
             try:
                 scores[model_result.model_name] = self._get_model_score(model_result)
             except ValueError:

@@ -35,7 +35,7 @@ from mteb._reversible_workflow.reversible_workflow import (
 )
 from mteb.abstasks import AbsTask
 from mteb.benchmarks.benchmark import Benchmark
-from mteb.benchmarks.get_benchmark import get_benchmark
+from mteb.benchmarks.get_benchmark import _override_metrics_by_task, get_benchmark
 from mteb.models import ModelMeta
 from mteb.models.get_model_meta import get_model_metas
 from mteb.models.model_implementations import MODEL_REGISTRY
@@ -1429,11 +1429,14 @@ class ResultCache:
                 for params in experiment_kwargs
             }
         model_metas: dict[tuple[ModelName, Revision, str | None], ModelMeta | None] = {}
+        keep_metrics = _override_metrics_by_task() if only_main_score else {}
         for path in paths:
             task_result = TaskResult.from_disk(path)
 
             if only_main_score:
-                task_result = task_result.only_main_score()
+                task_result = task_result.only_main_score(
+                    keep=keep_metrics.get(task_result.task_name, ())
+                )
 
             identity = self._get_model_name_and_revision_from_path(path.parent)
             if identity is None:

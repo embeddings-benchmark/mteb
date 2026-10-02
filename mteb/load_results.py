@@ -105,6 +105,12 @@ def load_results(  # noqa: PLR0914
             else:
                 task_names[task_] = None
 
+    keep_metrics: dict[str, frozenset[str]] = {}
+    if only_main_score:
+        from mteb.benchmarks.get_benchmark import _override_metrics_by_task
+
+        keep_metrics = _override_metrics_by_task()
+
     model_results = []
     for model_path in model_paths:  # noqa: PLR1702
         model_revisions = model_path.glob("*")
@@ -134,7 +140,9 @@ def load_results(  # noqa: PLR0914
             for f in task_json_files:
                 task_res = TaskResult.from_disk(f)
                 if only_main_score:
-                    task_res = task_res.only_main_score()
+                    task_res = task_res.only_main_score(
+                        keep=keep_metrics.get(task_res.task_name, ())
+                    )
                 _results.append(task_res)
 
             # filter out tasks that are not in the tasks list

@@ -137,7 +137,10 @@ def load_all_benchmark_results(
 
         t0 = time.perf_counter()
         per_benchmark = {
-            b.name: all_results._to_results_df(b.tasks) for b in benchmarks
+            b.name: all_results._to_results_df(
+                b.tasks, metric_overrides=b.task_metric_overrides
+            )
+            for b in benchmarks
         }
         build_ms = (time.perf_counter() - t0) * 1000
         print(
