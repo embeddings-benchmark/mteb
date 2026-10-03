@@ -23,6 +23,28 @@ test:
 	@echo "--- 🧪 Running tests ---"
 	uv run --no-sync --group test pytest -n auto -m "not (test_datasets or leaderboard_stability or test_reference_models)"
 
+install-core:
+	@echo "--- 🚀 Installing mteb-core, the minimal install without torch ---"
+	@echo "This rewrites pyproject.toml, so only run it in a throwaway checkout"
+	uv venv
+	uv pip install packaging
+	uv run --no-sync python scripts/build_core_package.py --edit-pyproject
+	uv pip install . --group test
+
+test-core:
+	@echo "--- 🧪 Running the tests that must pass without torch ---"
+	uv run --no-sync python -c "import importlib.util; assert importlib.util.find_spec('torch') is None, 'torch must not be installed'"
+	uv run --no-sync pytest -n auto -m "not (full_install or test_datasets or test_reference_models)" \
+		tests/test_benchmarks \
+		tests/test_ensure_no_torch_at_import.py \
+		tests/test_filter_tasks.py \
+		tests/test_get_tasks.py \
+		tests/test_import_hygiene.py \
+		tests/test_languages.py \
+		tests/test_result_cache_load_from_cache.py \
+		tests/test_results \
+		tests/test_validate_metadata
+
 
 test-with-coverage:
 	@echo "--- 🧪 Running tests with coverage ---"

@@ -74,6 +74,7 @@ def test_select_tasks(benchmark_results: BenchmarkResults) -> None:
     assert task_names[0] == "STS12"
 
 
+@pytest.mark.full_install
 def test_select_tasks_preserves_model_meta(tmp_path: Path) -> None:
     """`select_tasks` must not drop `model_meta` (and with it, experiment identity).
 
@@ -253,6 +254,7 @@ def test_benchmark_results_model_filters_keep_benchmark(cache_path: Path) -> Non
 
 
 @pytest.mark.skipif(_POLARS_TOO_OLD, reason="requires polars >= 1.40.0")
+@pytest.mark.full_install  # model cards are rendered with jinja2, which comes with torch
 def test_generate_model_card_with_table_and_benchmarks(
     cache_path: Path, tmp_path: Path
 ) -> None:

@@ -1,7 +1,6 @@
 import json
 import logging
 from copy import copy
-from importlib.metadata import version
 from pathlib import Path
 from typing import Any
 
@@ -635,7 +634,7 @@ def test_task_result_from_task_results_merging():
         }
     }
 
-    current_version = version("mteb")
+    current_version = mteb.__version__
     result = TaskResult.from_task_results(
         task=task,
         scores=scores,
