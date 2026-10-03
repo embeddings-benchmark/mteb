@@ -1,0 +1,291 @@
+{
+    "test": {
+        "num_samples": 11856,
+        "num_queries": 1812,
+        "num_documents": 10044,
+        "number_of_characters": 6697364,
+        "documents_text_statistics": {
+            "total_text_length": 6476856,
+            "min_text_length": 55,
+            "average_text_length": 644.8482676224612,
+            "max_text_length": 5746,
+            "unique_texts": 1670
+        },
+        "documents_image_statistics": null,
+        "documents_audio_statistics": null,
+        "documents_video_statistics": null,
+        "queries_text_statistics": {
+            "total_text_length": 220508,
+            "min_text_length": 37,
+            "average_text_length": 121.69315673289184,
+            "max_text_length": 286,
+            "unique_texts": 1812
+        },
+        "queries_image_statistics": null,
+        "queries_audio_statistics": null,
+        "queries_video_statistics": null,
+        "relevant_docs_statistics": {
+            "num_relevant_docs": 13068,
+            "min_relevant_docs_per_query": 1,
+            "average_relevant_docs_per_query": 7.211920529801325,
+            "max_relevant_docs_per_query": 28,
+            "unique_relevant_docs": 10006,
+            "num_missing_query_ids": 0,
+            "num_missing_corpus_ids": 0
+        },
+        "top_ranked_statistics": {
+            "num_top_ranked": 271800,
+            "min_top_ranked_per_query": 150,
+            "average_top_ranked_per_query": 150.0,
+            "max_top_ranked_per_query": 150
+        },
+        "hf_subset_descriptive_stats": {
+            "physics__english": {
+                "num_samples": 1976,
+                "num_queries": 302,
+                "num_documents": 1674,
+                "number_of_characters": 1113568,
+                "documents_text_statistics": {
+                    "total_text_length": 1079476,
+                    "min_text_length": 55,
+                    "average_text_length": 644.8482676224612,
+                    "max_text_length": 5746,
+                    "unique_texts": 1670
+                },
+                "documents_image_statistics": null,
+                "documents_audio_statistics": null,
+                "documents_video_statistics": null,
+                "queries_text_statistics": {
+                    "total_text_length": 34092,
+                    "min_text_length": 38,
+                    "average_text_length": 112.88741721854305,
+                    "max_text_length": 244,
+                    "unique_texts": 302
+                },
+                "queries_image_statistics": null,
+                "queries_audio_statistics": null,
+                "queries_video_statistics": null,
+                "relevant_docs_statistics": {
+                    "num_relevant_docs": 2178,
+                    "min_relevant_docs_per_query": 1,
+                    "average_relevant_docs_per_query": 7.211920529801325,
+                    "max_relevant_docs_per_query": 28,
+                    "unique_relevant_docs": 1668,
+                    "num_missing_query_ids": 0,
+                    "num_missing_corpus_ids": 0
+                },
+                "top_ranked_statistics": {
+                    "num_top_ranked": 45300,
+                    "min_top_ranked_per_query": 150,
+                    "average_top_ranked_per_query": 150.0,
+                    "max_top_ranked_per_query": 150
+                }
+            },
+            "physics__french": {
+                "num_samples": 1976,
+                "num_queries": 302,
+                "num_documents": 1674,
+                "number_of_characters": 1117692,
+                "documents_text_statistics": {
+                    "total_text_length": 1079476,
+                    "min_text_length": 55,
+                    "average_text_length": 644.8482676224612,
+                    "max_text_length": 5746,
+                    "unique_texts": 1670
+                },
+                "documents_image_statistics": null,
+                "documents_audio_statistics": null,
+                "documents_video_statistics": null,
+                "queries_text_statistics": {
+                    "total_text_length": 38216,
+                    "min_text_length": 40,
+                    "average_text_length": 126.54304635761589,
+                    "max_text_length": 267,
+                    "unique_texts": 302
+                },
+                "queries_image_statistics": null,
+                "queries_audio_statistics": null,
+                "queries_video_statistics": null,
+                "relevant_docs_statistics": {
+                    "num_relevant_docs": 2178,
+                    "min_relevant_docs_per_query": 1,
+                    "average_relevant_docs_per_query": 7.211920529801325,
+                    "max_relevant_docs_per_query": 28,
+                    "unique_relevant_docs": 1673,
+                    "num_missing_query_ids": 0,
+                    "num_missing_corpus_ids": 0
+                },
+                "top_ranked_statistics": {
+                    "num_top_ranked": 45300,
+                    "min_top_ranked_per_query": 150,
+                    "average_top_ranked_per_query": 150.0,
+                    "max_top_ranked_per_query": 150
+                }
+            },
+            "physics__german": {
+                "num_samples": 1976,
+                "num_queries": 302,
+                "num_documents": 1674,
+                "number_of_characters": 1119079,
+                "documents_text_statistics": {
+                    "total_text_length": 1079476,
+                    "min_text_length": 55,
+                    "average_text_length": 644.8482676224612,
+                    "max_text_length": 5746,
+                    "unique_texts": 1670
+                },
+                "documents_image_statistics": null,
+                "documents_audio_statistics": null,
+                "documents_video_statistics": null,
+                "queries_text_statistics": {
+                    "total_text_length": 39603,
+                    "min_text_length": 37,
+                    "average_text_length": 131.13576158940398,
+                    "max_text_length": 286,
+                    "unique_texts": 302
+                },
+                "queries_image_statistics": null,
+                "queries_audio_statistics": null,
+                "queries_video_statistics": null,
+                "relevant_docs_statistics": {
+                    "num_relevant_docs": 2178,
+                    "min_relevant_docs_per_query": 1,
+                    "average_relevant_docs_per_query": 7.211920529801325,
+                    "max_relevant_docs_per_query": 28,
+                    "unique_relevant_docs": 1667,
+                    "num_missing_query_ids": 0,
+                    "num_missing_corpus_ids": 0
+                },
+                "top_ranked_statistics": {
+                    "num_top_ranked": 45300,
+                    "min_top_ranked_per_query": 150,
+                    "average_top_ranked_per_query": 150.0,
+                    "max_top_ranked_per_query": 150
+                }
+            },
+            "physics__italian": {
+                "num_samples": 1976,
+                "num_queries": 302,
+                "num_documents": 1674,
+                "number_of_characters": 1115961,
+                "documents_text_statistics": {
+                    "total_text_length": 1079476,
+                    "min_text_length": 55,
+                    "average_text_length": 644.8482676224612,
+                    "max_text_length": 5746,
+                    "unique_texts": 1670
+                },
+                "documents_image_statistics": null,
+                "documents_audio_statistics": null,
+                "documents_video_statistics": null,
+                "queries_text_statistics": {
+                    "total_text_length": 36485,
+                    "min_text_length": 39,
+                    "average_text_length": 120.8112582781457,
+                    "max_text_length": 253,
+                    "unique_texts": 302
+                },
+                "queries_image_statistics": null,
+                "queries_audio_statistics": null,
+                "queries_video_statistics": null,
+                "relevant_docs_statistics": {
+                    "num_relevant_docs": 2178,
+                    "min_relevant_docs_per_query": 1,
+                    "average_relevant_docs_per_query": 7.211920529801325,
+                    "max_relevant_docs_per_query": 28,
+                    "unique_relevant_docs": 1668,
+                    "num_missing_query_ids": 0,
+                    "num_missing_corpus_ids": 0
+                },
+                "top_ranked_statistics": {
+                    "num_top_ranked": 45300,
+                    "min_top_ranked_per_query": 150,
+                    "average_top_ranked_per_query": 150.0,
+                    "max_top_ranked_per_query": 150
+                }
+            },
+            "physics__portuguese": {
+                "num_samples": 1976,
+                "num_queries": 302,
+                "num_documents": 1674,
+                "number_of_characters": 1114419,
+                "documents_text_statistics": {
+                    "total_text_length": 1079476,
+                    "min_text_length": 55,
+                    "average_text_length": 644.8482676224612,
+                    "max_text_length": 5746,
+                    "unique_texts": 1670
+                },
+                "documents_image_statistics": null,
+                "documents_audio_statistics": null,
+                "documents_video_statistics": null,
+                "queries_text_statistics": {
+                    "total_text_length": 34943,
+                    "min_text_length": 38,
+                    "average_text_length": 115.70529801324503,
+                    "max_text_length": 240,
+                    "unique_texts": 302
+                },
+                "queries_image_statistics": null,
+                "queries_audio_statistics": null,
+                "queries_video_statistics": null,
+                "relevant_docs_statistics": {
+                    "num_relevant_docs": 2178,
+                    "min_relevant_docs_per_query": 1,
+                    "average_relevant_docs_per_query": 7.211920529801325,
+                    "max_relevant_docs_per_query": 28,
+                    "unique_relevant_docs": 1663,
+                    "num_missing_query_ids": 0,
+                    "num_missing_corpus_ids": 0
+                },
+                "top_ranked_statistics": {
+                    "num_top_ranked": 45300,
+                    "min_top_ranked_per_query": 150,
+                    "average_top_ranked_per_query": 150.0,
+                    "max_top_ranked_per_query": 150
+                }
+            },
+            "physics__spanish": {
+                "num_samples": 1976,
+                "num_queries": 302,
+                "num_documents": 1674,
+                "number_of_characters": 1116645,
+                "documents_text_statistics": {
+                    "total_text_length": 1079476,
+                    "min_text_length": 55,
+                    "average_text_length": 644.8482676224612,
+                    "max_text_length": 5746,
+                    "unique_texts": 1670
+                },
+                "documents_image_statistics": null,
+                "documents_audio_statistics": null,
+                "documents_video_statistics": null,
+                "queries_text_statistics": {
+                    "total_text_length": 37169,
+                    "min_text_length": 39,
+                    "average_text_length": 123.07615894039735,
+                    "max_text_length": 263,
+                    "unique_texts": 302
+                },
+                "queries_image_statistics": null,
+                "queries_audio_statistics": null,
+                "queries_video_statistics": null,
+                "relevant_docs_statistics": {
+                    "num_relevant_docs": 2178,
+                    "min_relevant_docs_per_query": 1,
+                    "average_relevant_docs_per_query": 7.211920529801325,
+                    "max_relevant_docs_per_query": 28,
+                    "unique_relevant_docs": 1667,
+                    "num_missing_query_ids": 0,
+                    "num_missing_corpus_ids": 0
+                },
+                "top_ranked_statistics": {
+                    "num_top_ranked": 45300,
+                    "min_top_ranked_per_query": 150,
+                    "average_top_ranked_per_query": 150.0,
+                    "max_top_ranked_per_query": 150
+                }
+            }
+        }
+    }
+}

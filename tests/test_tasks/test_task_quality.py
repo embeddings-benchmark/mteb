@@ -341,6 +341,8 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "TRECCOVID-PL",
         "TRECDL2019",
         "TRECDL2020",
+        "TRECDL2019RCPRetrieval",  # same short MS MARCO passages as the upstream TRECDL2019 task
+        "TRECDL2020RCPRetrieval",  # same short MS MARCO passages as the upstream TRECDL2020 task
         "TUBerlinT2IRetrieval",
         "TalemaaderPC",
         "Tatoeba",
@@ -415,6 +417,35 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "BrightProRoboticsRetrieval",
         "BrightProStackoverflowRetrieval",
         "BrightProSustainableLivingRetrieval",
+        # RCP-nDCG tasks: same upstream corpus/queries as their `adapted_from` originals
+        "BrightBiologyRCPRetrieval",
+        "BrightEarthScienceRCPRetrieval",
+        "BrightEconomicsRCPRetrieval",
+        "BrightPsychologyRCPRetrieval",
+        "BrightRoboticsRCPRetrieval",
+        "BrightStackoverflowRCPRetrieval",
+        "BrightSustainableLivingRCPRetrieval",
+        "NanoDBPediaRCPRetrieval",
+        "NanoFiQA2018RCPRetrieval",
+        "NanoNQRCPRetrieval",
+        "NanoQuoraRCPRetrieval",
+        "NanoSCIDOCSRCPRetrieval",
+        "NanoTouche2020RCPRetrieval",
+        # ViDoRe(v3, RCP): same corpus as the Vidore3*.v2 originals
+        "Vidore3ComputerScienceRCPRetrieval",
+        "Vidore3EnergyRCPRetrieval",
+        "Vidore3FinanceEnRCPRetrieval",
+        "Vidore3FinanceFrRCPRetrieval",
+        "Vidore3HrRCPRetrieval",
+        "Vidore3IndustrialRCPRetrieval",
+        # ViDoRe(v3, RCP, OCR): same corpus as the multimodal RCP tasks, read as OCR'ed
+        # markdown (some pages are empty)
+        "Vidore3ComputerScienceRCPRetrievalOCR",
+        "Vidore3EnergyRCPRetrievalOCR",
+        "Vidore3FinanceEnRCPRetrievalOCR",
+        "Vidore3FinanceFrRCPRetrievalOCR",
+        "Vidore3HrRCPRetrievalOCR",
+        "Vidore3IndustrialRCPRetrievalOCR",
     ],
     "duplicate_text": [
         "AfriHateClassification",
@@ -705,6 +736,42 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "BrightProRoboticsRetrieval",
         "BrightProStackoverflowRetrieval",
         "BrightProSustainableLivingRetrieval",
+        # RCP-nDCG tasks: same upstream corpus/queries as their `adapted_from` originals
+        "BrightAopsRCPRetrieval",
+        "BrightBiologyRCPRetrieval",
+        "BrightEarthScienceRCPRetrieval",
+        "BrightEconomicsRCPRetrieval",
+        "BrightPonyRCPRetrieval",
+        "BrightPsychologyRCPRetrieval",
+        "BrightRoboticsRCPRetrieval",
+        "BrightStackoverflowRCPRetrieval",
+        "BrightSustainableLivingRCPRetrieval",
+        "BrightTheoremQAQuestionsRCPRetrieval",
+        "NanoNFCorpusRCPRetrieval",
+        "NanoNQRCPRetrieval",
+        "NanoSCIDOCSRCPRetrieval",
+        "NanoTouche2020RCPRetrieval",
+        # ViDoRe(v3, RCP): same corpus as the Vidore3*.v2 originals (identical unique text/image
+        # counts); those pass only because their older stats lack `num_documents`
+        "Vidore3EnergyRCPRetrieval",
+        "Vidore3FinanceEnRCPRetrieval",
+        "Vidore3FinanceFrRCPRetrieval",
+        "Vidore3HrRCPRetrieval",
+        "Vidore3IndustrialRCPRetrieval",
+        "Vidore3PharmaceuticalsRCPRetrieval",
+        # ViDoRe(v3, RCP): the 6 language subsets share one corpus, so split-level stats count each page 6x
+        "Vidore3ComputerScienceRCPRetrieval",
+        "Vidore3PhysicsRCPRetrieval",
+        # ViDoRe(v3, RCP, OCR): same corpus as the multimodal RCP tasks; the 6 language
+        # subsets share one OCR'ed corpus, so split-level stats count each page 6x
+        "Vidore3ComputerScienceRCPRetrievalOCR",
+        "Vidore3EnergyRCPRetrievalOCR",
+        "Vidore3FinanceEnRCPRetrievalOCR",
+        "Vidore3FinanceFrRCPRetrievalOCR",
+        "Vidore3HrRCPRetrievalOCR",
+        "Vidore3IndustrialRCPRetrievalOCR",
+        "Vidore3PharmaceuticalsRCPRetrievalOCR",
+        "Vidore3PhysicsRCPRetrievalOCR",
     ],
     "train_test_leakage": [
         "AVEDatasetClassification",
@@ -897,6 +964,17 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "XModBenchIT2AReranking",
         "XModBenchIT2TReranking",
         "XModBenchT2IReranking",
+        # ViDoRe(v3, RCP): same corpus as the Vidore3*.v2 originals (identical unique text/image
+        # counts); those pass only because their older stats lack `num_documents`
+        "Vidore3HrRCPRetrieval",
+        "Vidore3IndustrialRCPRetrieval",
+        # ViDoRe(v3, RCP): the 6 language subsets share one corpus, so split-level stats count each page 6x
+        "Vidore3ComputerScienceRCPRetrieval",
+        "Vidore3EnergyRCPRetrieval",
+        "Vidore3FinanceEnRCPRetrieval",
+        "Vidore3FinanceFrRCPRetrieval",
+        "Vidore3PharmaceuticalsRCPRetrieval",
+        "Vidore3PhysicsRCPRetrieval",
     ],
     "duplicate_pairs": [
         "BibleNLPBitextMining",

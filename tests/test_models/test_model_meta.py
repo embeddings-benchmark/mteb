@@ -153,6 +153,7 @@ def test_model_similar_tasks(training_datasets):
     expected = sorted(
         [
             "MultilingualNanoTouche2020Retrieval",
+            "NanoTouche2020RCPRetrieval",
             "NanoTouche2020Retrieval",
             "Touche2020",
             "Touche2020-Fa",

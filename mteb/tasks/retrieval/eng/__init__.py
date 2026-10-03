@@ -57,6 +57,20 @@ from .bright_pro_retrieval import (
     BrightProStackoverflowRetrieval,
     BrightProSustainableLivingRetrieval,
 )
+from .bright_rcp_retrieval import (
+    BrightAopsRCPRetrieval,
+    BrightBiologyRCPRetrieval,
+    BrightEarthScienceRCPRetrieval,
+    BrightEconomicsRCPRetrieval,
+    BrightLeetcodeRCPRetrieval,
+    BrightPonyRCPRetrieval,
+    BrightPsychologyRCPRetrieval,
+    BrightRoboticsRCPRetrieval,
+    BrightStackoverflowRCPRetrieval,
+    BrightSustainableLivingRCPRetrieval,
+    BrightTheoremQAQuestionsRCPRetrieval,
+    BrightTheoremQATheoremsRCPRetrieval,
+)
 from .bright_retrieval import BrightLongRetrieval, BrightRetrieval
 from .bright_v1_1_retrieval import (
     BrightAopsRetrieval,
@@ -296,6 +310,21 @@ from .msr_vtt import (
 from .msvd_t2v_retrieval import MSVDT2VRetrieval
 from .msvd_v2t_retrieval import MSVDV2TRetrieval
 from .nano_argu_ana_retrieval import NanoArguAnaRetrieval
+from .nano_beir_rcp_retrieval import (
+    NanoArguAnaRCPRetrieval,
+    NanoClimateFeverRCPRetrieval,
+    NanoDBPediaRCPRetrieval,
+    NanoFEVERRCPRetrieval,
+    NanoFiQA2018RCPRetrieval,
+    NanoHotpotQARCPRetrieval,
+    NanoMSMARCORCPRetrieval,
+    NanoNFCorpusRCPRetrieval,
+    NanoNQRCPRetrieval,
+    NanoQuoraRCPRetrieval,
+    NanoSCIDOCSRCPRetrieval,
+    NanoSciFactRCPRetrieval,
+    NanoTouche2020RCPRetrieval,
+)
 from .nano_climate_fever_retrieval import NanoClimateFeverRetrieval
 from .nano_db_pedia_retrieval import NanoDBPediaRetrieval
 from .nano_fever_retrieval import NanoFEVERRetrieval
@@ -410,6 +439,7 @@ from .tool_retrieval import ToolRetrieval, ToolRetrievalInstruction
 from .topi_ocqa_retrieval import TopiOCQARetrieval, TopiOCQARetrievalHardNegatives
 from .touche2020_retrieval import Touche2020, Touche2020v3Retrieval
 from .treccovid_retrieval import TRECCOVID
+from .trecdl_rcp_retrieval import TRECDL2019RCPRetrieval, TRECDL2020RCPRetrieval
 from .trecdl_retrieval import TRECDL2019, TRECDL2020
 from .tu_berlin_t2i_retrieval import TUBerlinT2IRetrieval
 from .tuna_bench_t2v_retrieval import TUNABenchT2VRetrieval
@@ -549,16 +579,22 @@ __all__ = [
     "BarExamQARetrieval",
     "BillSumCARetrieval",
     "BillSumUSRetrieval",
+    "BrightAopsRCPRetrieval",
     "BrightAopsRetrieval",
     "BrightBiologyLongRetrieval",
+    "BrightBiologyRCPRetrieval",
     "BrightBiologyRetrieval",
     "BrightEarthScienceLongRetrieval",
+    "BrightEarthScienceRCPRetrieval",
     "BrightEarthScienceRetrieval",
     "BrightEconomicsLongRetrieval",
+    "BrightEconomicsRCPRetrieval",
     "BrightEconomicsRetrieval",
+    "BrightLeetcodeRCPRetrieval",
     "BrightLeetcodeRetrieval",
     "BrightLongRetrieval",
     "BrightPonyLongRetrieval",
+    "BrightPonyRCPRetrieval",
     "BrightPonyRetrieval",
     "BrightProBiologyRetrieval",
     "BrightProEarthScienceRetrieval",
@@ -568,15 +604,21 @@ __all__ = [
     "BrightProStackoverflowRetrieval",
     "BrightProSustainableLivingRetrieval",
     "BrightPsychologyLongRetrieval",
+    "BrightPsychologyRCPRetrieval",
     "BrightPsychologyRetrieval",
     "BrightRetrieval",
     "BrightRoboticsLongRetrieval",
+    "BrightRoboticsRCPRetrieval",
     "BrightRoboticsRetrieval",
     "BrightStackoverflowLongRetrieval",
+    "BrightStackoverflowRCPRetrieval",
     "BrightStackoverflowRetrieval",
     "BrightSustainableLivingLongRetrieval",
+    "BrightSustainableLivingRCPRetrieval",
     "BrightSustainableLivingRetrieval",
+    "BrightTheoremQAQuestionsRCPRetrieval",
     "BrightTheoremQAQuestionsRetrieval",
+    "BrightTheoremQATheoremsRCPRetrieval",
     "BrightTheoremQATheoremsRetrieval",
     "BrowseCompPlusRetrieval",
     "BuiltBenchRetrieval",
@@ -774,18 +816,31 @@ __all__ = [
     "NIGHTSI2IRetrieval",
     "NQHardNegatives",
     "NQTablesRetrieval",
+    "NanoArguAnaRCPRetrieval",
     "NanoArguAnaRetrieval",
+    "NanoClimateFeverRCPRetrieval",
     "NanoClimateFeverRetrieval",
+    "NanoDBPediaRCPRetrieval",
     "NanoDBPediaRetrieval",
+    "NanoFEVERRCPRetrieval",
     "NanoFEVERRetrieval",
+    "NanoFiQA2018RCPRetrieval",
     "NanoFiQA2018Retrieval",
+    "NanoHotpotQARCPRetrieval",
     "NanoHotpotQARetrieval",
+    "NanoMSMARCORCPRetrieval",
     "NanoMSMARCORetrieval",
+    "NanoNFCorpusRCPRetrieval",
     "NanoNFCorpusRetrieval",
+    "NanoNQRCPRetrieval",
     "NanoNQRetrieval",
+    "NanoQuoraRCPRetrieval",
     "NanoQuoraRetrieval",
+    "NanoSCIDOCSRCPRetrieval",
     "NanoSCIDOCSRetrieval",
+    "NanoSciFactRCPRetrieval",
     "NanoSciFactRetrieval",
+    "NanoTouche2020RCPRetrieval",
     "NanoTouche2020Retrieval",
     "NarrativeQARetrieval",
     "NovelQA",
@@ -863,6 +918,8 @@ __all__ = [
     "SpokenCOCOI2ARetrieval",
     "SpokenSQuADT2ARetrieval",
     "StanfordCarsI2I",
+    "TRECDL2019RCPRetrieval",
+    "TRECDL2020RCPRetrieval",
     "TUBerlinT2IRetrieval",
     "TUNABenchT2VRetrieval",
     "TUNABenchV2TRetrieval",
