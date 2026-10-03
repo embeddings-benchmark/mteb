@@ -659,23 +659,52 @@ class TaskResult(BaseModel):  # noqa: PLR0904
     def __repr__(self) -> str:
         return f"TaskResult(task_name={self.task_name}, main_score={self.main_score:.2f}, scores=..., ...)"
 
-    def only_main_score(self) -> TaskResult:
+    def only_main_score(self, keep: Iterable[str] = ()) -> TaskResult:
         """Return a new TaskResult object with only the main score.
 
+        Args:
+            keep: Extra metric names to retain alongside ``main_score``, e.g.
+                the metrics some benchmark's
+                [task_metric_overrides][mteb.benchmarks.benchmark.Benchmark.task_metric_overrides]
+                reference. Missing metrics are silently skipped.
+
         Returns:
-            A new TaskResult object with only the main score.
+            A new TaskResult object with only the main score (plus ``keep``).
         """
+        keep = tuple(keep)
         new_scores: dict[str, list[Score]] = {}
         for split in self.scores:
             new_scores[split] = []
             for subset_scores in self.scores[split]:
-                new_scores[split].append(
-                    {
-                        "hf_subset": subset_scores.get("hf_subset", "default"),
-                        "main_score": subset_scores.get("main_score", np.nan),
-                        "languages": subset_scores.get("languages", []),
-                    }
-                )
+                entry: dict[str, Any] = {
+                    "hf_subset": subset_scores.get("hf_subset", "default"),
+                    "main_score": subset_scores.get("main_score", np.nan),
+                    "languages": subset_scores.get("languages", []),
+                }
+                for metric in keep:
+                    if metric in subset_scores:
+                        entry[metric] = subset_scores[metric]
+                new_scores[split].append(entry)
+        new_res = {**self.to_dict(), "scores": new_scores}
+        return TaskResult.from_validated(**new_res)
+
+    def _with_main_score_from(self, metric: str) -> TaskResult:
+        """Return a copy whose ``main_score`` is taken from ``metric`` in every cell.
+
+        Cells lacking ``metric`` get ``main_score=None`` so downstream
+        aggregation nulls the model rather than silently falling back.
+        """
+        new_scores: dict[str, list[Score]] = {}
+        for split, cells in self.scores.items():
+            new_cells = []
+            for cell in cells:
+                if metric not in cell:
+                    log_once.warning(
+                        f"{self.task_name}: metric {metric!r} missing from scores; "
+                        "treating as no result"
+                    )
+                new_cells.append({**cell, "main_score": cell.get(metric)})
+            new_scores[split] = new_cells
         new_res = {**self.to_dict(), "scores": new_scores}
         return TaskResult.from_validated(**new_res)
 

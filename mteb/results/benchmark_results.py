@@ -15,6 +15,7 @@ from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict
 from tqdm.auto import tqdm
 
+from mteb._log_once import LogOnce
 from mteb.benchmarks.benchmark import Benchmark
 from mteb.models import ModelMeta
 from mteb.models.get_model_meta import get_model_metas
@@ -24,7 +25,7 @@ from mteb.models.model_meta import _has_meaningful_value
 from .model_result import ModelResult, _aggregate_and_pivot
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterable, Iterator
+    from collections.abc import Callable, Iterable, Iterator, Mapping
 
     import datasets
     from typing_extensions import Self
@@ -45,8 +46,34 @@ if TYPE_CHECKING:
 
 
 logger = logging.getLogger(__name__)
+_log_once = LogOnce(logger)
 
 _BENCHMARK_COLUMN = "__benchmark__"
+
+
+def _apply_metric_overrides(frame: pl.DataFrame, bench: Benchmark) -> pl.DataFrame:
+    """Swap ``score`` for the override metric column on ``bench``'s overridden tasks.
+
+    A missing metric column keeps ``main_score`` and warns once, so a parquet
+    built before the override was declared still renders.
+    """
+    overrides = bench.task_metric_overrides
+    if not overrides or "score" not in frame.columns:
+        return frame
+    score = pl.col("score")
+    for task_name, metric in overrides.items():
+        if metric not in frame.columns:
+            _log_once.warning(
+                f"{bench.name}: override metric {metric!r} for {task_name!r} is "
+                "missing from the results frame; falling back to main_score"
+            )
+            continue
+        score = (
+            pl.when(pl.col("task_name") == task_name)
+            .then(pl.col(metric))
+            .otherwise(score)
+        )
+    return frame.with_columns(score.alias("score"))
 
 
 def _build_valid_triples(
@@ -464,11 +491,35 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
             result[col] = result[col].astype(object)
         return result
 
-    def _build_pre_agg_df(self, include_model_revision: bool) -> pd.DataFrame | None:  # noqa: PLR0914
-        """Build the pre-aggregation long DataFrame; returns None when no scores exist."""
+    def _build_pre_agg_df(  # noqa: PLR0914
+        self,
+        include_model_revision: bool,
+        metric_overrides: Mapping[str, str] | None = None,
+        include_override_metrics: bool = False,
+    ) -> pd.DataFrame | None:
+        """Build the pre-aggregation long DataFrame; returns None when no scores exist.
+
+        Args:
+            include_model_revision: Whether to include the model_revision column.
+            metric_overrides: Task name -> metric to put in ``score`` instead
+                of ``main_score`` (a benchmark's ``task_metric_overrides``).
+            include_override_metrics: Add one column per metric any registered
+                benchmark overrides with, so an all-results dump can be split
+                per benchmark later with each override applied.
+        """
         bench_results = self
         if include_model_revision is False:
             bench_results = bench_results.join_revisions()
+
+        metric_overrides = metric_overrides or {}
+        extra_metrics: list[str] = []
+        if include_override_metrics:
+            from mteb.benchmarks.get_benchmark import _override_metrics_by_task
+
+            extra_metrics = sorted(
+                {m for ms in _override_metrics_by_task().values() for m in ms}
+            )
+        col_extra: dict[str, list[Any]] = {m: [] for m in extra_metrics}
 
         # Collect parallel arrays rather than a list of dicts:
         # pd.DataFrame(dict_of_lists) is ~10x faster than pd.DataFrame(list_of_dicts).
@@ -521,8 +572,12 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                         col_split.append(split)
                         col_language.append(score_item.get("languages", ["Unknown"]))
                         col_subset.append(score_item.get("hf_subset", "default"))
-                        col_score.append(score_item.get("main_score", None))
+                        col_score.append(
+                            score_item.get(metric_overrides.get(tn, "main_score"))
+                        )
                         col_experiments.append(exp_kwargs)
+                        for metric in extra_metrics:
+                            col_extra[metric].append(score_item.get(metric))
 
         if not col_model_name:
             return None
@@ -537,6 +592,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                 "subset": col_subset,
                 "score": col_score,
                 "experiments": col_experiments,
+                **col_extra,
             }
         )
         if include_model_revision is False:
@@ -587,6 +643,8 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         include_model_revision: bool = True,
         push_to_hub: bool = False,
         repo_id: str | None = None,
+        metric_overrides: Mapping[str, str] | None = None,
+        include_override_metrics: bool | None = None,
         **push_kwargs: Any,
     ) -> datasets.Dataset:
         """Export benchmark results to a HuggingFace Dataset (parquet-backed).
@@ -596,6 +654,9 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
 
         Args:
             include_model_revision: Whether to include the model_revision column.
+            metric_overrides: See ``_build_pre_agg_df``.
+            include_override_metrics: See ``_build_pre_agg_df``. Defaults to
+                ``True`` when ``metric_overrides`` is ``None`` (a full dump).
             push_to_hub: Push the dataset to the HuggingFace Hub.
             repo_id: Hub repository ID. Required when push_to_hub=True.
             **push_kwargs: Forwarded to ``datasets.Dataset.push_to_hub()``
@@ -608,7 +669,13 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         if push_to_hub and repo_id is None:
             raise ValueError("`repo_id` must be provided when `push_to_hub=True`.")
 
-        df = self._build_pre_agg_df(include_model_revision=include_model_revision)
+        if include_override_metrics is None:
+            include_override_metrics = metric_overrides is None
+        df = self._build_pre_agg_df(
+            include_model_revision=include_model_revision,
+            metric_overrides=metric_overrides,
+            include_override_metrics=include_override_metrics,
+        )
         if df is None or df.empty:
             return Dataset.from_dict({})
 
@@ -683,7 +750,10 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
             raise ValueError("Getting scores for multiple benchmarks is unsupported")
 
         return self.benchmark._create_summary_table(
-            self._to_results_df(self.benchmark.tasks)
+            self._to_results_df(
+                self.benchmark.tasks,
+                metric_overrides=self.benchmark.task_metric_overrides,
+            )
         ).df.to_pandas()
 
     def __iter__(self) -> Iterator[ModelResult]:  # type: ignore[override]
@@ -738,7 +808,12 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
             data = json.loads(in_file.read())
         return cls.from_dict(data)
 
-    def _to_results_df(self, tasks: Iterable[AbsTask] | None = None) -> pl.DataFrame:
+    def _to_results_df(
+        self,
+        tasks: Iterable[AbsTask] | None = None,
+        *,
+        metric_overrides: Mapping[str, str] | None = None,
+    ) -> pl.DataFrame:
         """Return results as a long polars frame (one row per score).
 
         Revisions are joined and, when ``tasks`` is given, scores are validated and
@@ -748,11 +823,19 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         Args:
             tasks: Tasks to validate/restrict scores to (e.g. one benchmark's tasks).
                 If None, all results are exported as-is (no per-task validation).
+            metric_overrides: The benchmark's ``task_metric_overrides``;
+                ``score`` for those tasks is taken from the named metric.
+                A full dump (``tasks`` is None) instead keeps every override
+                metric registered benchmarks reference as its own column.
         """
         results = self if tasks is None else self.select_tasks(tasks)
         return (  # type: ignore[no-any-return]
             results.join_revisions()
-            ._to_dataset(include_model_revision=True)
+            ._to_dataset(
+                include_model_revision=True,
+                metric_overrides=metric_overrides,
+                include_override_metrics=tasks is None and metric_overrides is None,
+            )
             .to_polars()
         )
 
@@ -854,12 +937,24 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         from concurrent.futures import ThreadPoolExecutor
 
         import mteb
+        from mteb.benchmarks.get_benchmark import _override_metrics_by_task
 
         parts: dict[str, pl.DataFrame] = {}
         if "task_name" not in combined.columns or combined.height == 0:
             return parts
         has_split = "split" in combined.columns
         has_subset = "subset" in combined.columns
+
+        metric_cols = sorted(
+            {m for ms in _override_metrics_by_task().values() for m in ms}
+            & set(combined.columns)
+        )
+
+        tagged = (
+            combined.partition_by(_BENCHMARK_COLUMN, as_dict=True)
+            if _BENCHMARK_COLUMN in combined.columns
+            else {}
+        )
 
         def _split_one(bench: Benchmark) -> tuple[str, pl.DataFrame | None]:
             triples = _build_valid_triples(bench.tasks, has_split, has_subset)
@@ -868,8 +963,20 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
             join_keys = [
                 c for c in ("task_name", "split", "subset") if c in triples.columns
             ]
-            sub = combined.join(triples, on=join_keys, how="inner")
-            return bench.name, sub if not sub.is_empty() else None
+            # A tagged (per-benchmark) frame already holds this benchmark's
+            # own scores, overrides included; re-bucketing by task would let
+            # another benchmark's override for a shared task leak in.
+            own = tagged.get((bench.name,))
+            sub = (own if own is not None else combined).join(
+                triples, on=join_keys, how="inner"
+            )
+            if sub.is_empty():
+                return bench.name, None
+            if own is None:
+                sub = _apply_metric_overrides(sub, bench)
+            if metric_cols:
+                sub = sub.drop(metric_cols)
+            return bench.name, sub
 
         benches = list(mteb.get_benchmarks())
         with ThreadPoolExecutor(max_workers=8, thread_name_prefix="split") as ex:
