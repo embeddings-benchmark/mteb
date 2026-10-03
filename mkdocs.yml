@@ -96,6 +96,7 @@ nav:
       - Adding a Model: contributing/adding_a_model.md
       - Submit Results: contributing/submitting_results.md
       - Adding a Task: contributing/adding_a_dataset.md
+      - Downsampling a Dataset: contributing/downsampling.md
       - Adding a Benchmark: contributing/adding_a_benchmark.md
       - CONTRIBUTING.md
   - Overview:
