@@ -58,15 +58,51 @@ class VOC2007Classification(AbsTaskMultilabelClassification):
     evaluator = MultiOutputClassifier(estimator=LogisticRegression())
 
 
-class VOC2007ClassificationV2(VOC2007Classification):
-    metadata = VOC2007Classification.metadata.model_copy(
-        update={
-            "name": "VOC2007.v2",
-            "description": VOC2007Classification.metadata.description
-            + " This version scores at most 3000 rows of each evaluation split, sampled with iterative stratification over the labels.",
-            "superseded_by": None,
-            "adapted_from": ["VOC2007"],
+class VOC2007ClassificationV2(AbsTaskMultilabelClassification):
+    metadata = TaskMetadata(
+        name="VOC2007.v2",
+        description="Classifying bird images from 500 species. This version scores at most 3000 rows of each evaluation split, sampled with iterative stratification over the labels.",
+        reference="http://host.robots.ox.ac.uk/pascal/VOC/",
+        dataset={
+            "path": "mteb/VOC2007",
+            "revision": "96d47458fb2f40713997b0ea271688c02bac840b",
         },
-        deep=True,
+        type="ImageClassification",
+        category="i2c",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="lrap",
+        date=(
+            "2005-01-01",
+            "2014-01-01",
+        ),  # Estimated range for the collection of reviews
+        domains=["Encyclopaedic"],
+        task_subtypes=["Object recognition"],
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["image"],
+        sample_creation="created",
+        bibtex_citation=r"""
+@article{Everingham10,
+  author = {Everingham, M. and Van~Gool, L. and Williams, C. K. I. and Winn, J. and Zisserman, A.},
+  journal = {International Journal of Computer Vision},
+  month = jun,
+  number = {2},
+  pages = {303--338},
+  title = {The Pascal Visual Object Classes (VOC) Challenge},
+  volume = {88},
+  year = {2010},
+}
+""",
+        adapted_from=["VOC2007"],
     )
     max_eval_samples = 3000
+
+    # Override default column name in the subclass
+    label_column_name: str = "classes"
+
+    # To be removed when we want full results
+    n_experiments: int = 5
+    input_column_name: str = "image"
+    evaluator = MultiOutputClassifier(estimator=LogisticRegression())

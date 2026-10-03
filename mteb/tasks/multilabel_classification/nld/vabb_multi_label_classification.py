@@ -48,15 +48,44 @@ class VABBMultiLabelClassification(AbsTaskMultilabelClassification):
     max_eval_samples: int | None = None
 
 
-class VABBMultiLabelClassificationV2(VABBMultiLabelClassification):
-    metadata = VABBMultiLabelClassification.metadata.model_copy(
-        update={
-            "name": "VABBMultiLabelClassification.v2",
-            "description": VABBMultiLabelClassification.metadata.description
-            + " This version scores at most 3000 rows of each evaluation split, sampled with iterative stratification over the labels.",
-            "superseded_by": None,
-            "adapted_from": ["VABBMultiLabelClassification"],
+class VABBMultiLabelClassificationV2(AbsTaskMultilabelClassification):
+    samples_per_label = 128
+    metadata = TaskMetadata(
+        name="VABBMultiLabelClassification.v2",
+        dataset={
+            "path": "clips/mteb-nl-vabb-mlcls-pr",
+            "revision": "584c70f5104671772119f21e9f8a3c912ac07d4a",
         },
-        deep=True,
+        description="This dataset contains the fourteenth edition of the Flemish Academic Bibliography for the Social "
+        "Sciences and Humanities (VABB-SHW), a database of academic publications from the social sciences "
+        "and humanities authored by researchers affiliated to Flemish universities (more information). "
+        "Publications in the database are used as one of the parameters of the Flemish performance-based "
+        "research funding system This version scores at most 3000 rows of each evaluation split, sampled with iterative stratification over the labels.",
+        reference="https://zenodo.org/records/14214806",
+        type="MultilabelClassification",
+        category="t2c",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["nld-Latn"],
+        main_score="f1",
+        date=("2020-01-01", "2021-04-01"),
+        domains=["Academic", "Written"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=r"""
+@dataset{aspeslagh2024vabb,
+  author = {Aspeslagh, Pieter and Guns, Raf and Engels, Tim C. E.},
+  doi = {10.5281/zenodo.14214806},
+  publisher = {Zenodo},
+  title = {VABB-SHW: Dataset of Flemish Academic Bibliography for the Social Sciences and Humanities (edition 14)},
+  url = {https://doi.org/10.5281/zenodo.14214806},
+  year = {2024},
+}
+""",
+        prompt="Classificeer de onderwerpen van een wetenschappelijk artikel op basis van de abstract",
+        adapted_from=["VABBMultiLabelClassification"],
     )
     max_eval_samples = 3000
