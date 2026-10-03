@@ -143,6 +143,25 @@ def test_create_meta(tmp_path: Path):
     assert result.returncode == 0, "Command failed"
 
 
+def test_create_meta_uses_selected_benchmarks(tmp_path: Path):
+    """--benchmarks should only pass the named benchmarks to the model card"""
+    args = Namespace(
+        model_name="sentence-transformers/all-MiniLM-L6-v2",
+        results_folder=Path(__file__).parent / "create_meta",
+        output_path=tmp_path / "model_card.md",
+        overwrite=True,
+        from_existing=None,
+        tasks=None,
+        benchmarks=["MTEB(eng, v2)"],
+    )
+
+    with patch("mteb.cli.build_cli.generate_model_card") as mock_generate:
+        _create_meta(args)
+
+    benchmarks = mock_generate.call_args.kwargs["benchmarks"]
+    assert [b.name for b in benchmarks] == ["MTEB(eng, v2)"]
+
+
 @pytest.mark.parametrize(
     ("existing_readme_name", "gold_readme_name"),
     [

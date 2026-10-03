@@ -6,7 +6,7 @@ class SpokenSQuADT2ARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SpokenSQuADT2ARetrieval",
         description="Text-to-audio retrieval task based on SpokenSQuAD dataset. Given a text question, retrieve relevant audio segments that contain the answer. Questions are derived from SQuAD reading comprehension dataset with corresponding spoken passages.",
-        reference="https://github.com/chiuwy/Spoken-SQuAD",
+        reference="https://github.com/Chia-Hsuan-Lee/Spoken-SQuAD",
         dataset={
             "path": "mteb/spoken-squad-t2a",
             "revision": "b311394fa5ab5e003012304799d0d724d64303b3",
@@ -25,9 +25,9 @@ class SpokenSQuADT2ARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{li2018spokensquad,
-  author = {Li, Chia-Hsuan and Ma, Szu-Lin and Zhang, Hsin-Wei and Lee, Hung-yi and Lee, Lin-shan},
-  booktitle = {Interspeech},
+@article{lee2018spoken,
+  author = {Lee, Chia-Hsuan and Wu, Szu-Lin and Liu, Chi-Liang and Lee, Hung-yi},
+  journal = {Proc. Interspeech 2018},
   pages = {3459--3463},
   title = {Spoken SQuAD: A Study of Mitigating the Impact of Speech Recognition Errors on Listening Comprehension},
   year = {2018},

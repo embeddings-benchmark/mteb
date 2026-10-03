@@ -3,12 +3,13 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.model_meta import ModelMeta
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
+    import torch
     from PIL import Image
     from torch.utils.data import DataLoader
 
@@ -27,6 +28,7 @@ class GraniteVisionEmbeddingWrapper:
         attn_implementation: str | None = None,
         **kwargs: Any,
     ):
+        import torch
         from transformers import AutoModel, AutoProcessor
         from transformers.utils.import_utils import is_flash_attn_2_available
 
@@ -62,6 +64,8 @@ class GraniteVisionEmbeddingWrapper:
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         all_embeds = []
         with torch.no_grad():
             for batch in tqdm(
@@ -83,6 +87,8 @@ class GraniteVisionEmbeddingWrapper:
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         all_embeds = []
 
         with torch.no_grad():
@@ -155,7 +161,7 @@ class GraniteVisionEmbeddingWrapper:
 granite_vision_embedding = ModelMeta(
     loader=GraniteVisionEmbeddingWrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float16,
+        torch_dtype=OutputDType.FLOAT16,
     ),
     name="ibm-granite/granite-vision-3.3-2b-embedding",
     model_type=["dense"],

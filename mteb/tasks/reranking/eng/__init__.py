@@ -1,5 +1,14 @@
 from .ask_ubuntu_dup_questions import AskUbuntuDupQuestions
+from .biovita import (
+    BioVITAA2IReranking,
+    BioVITAA2TReranking,
+    BioVITAI2AReranking,
+    BioVITAI2TReranking,
+    BioVITAT2AReranking,
+    BioVITAT2IReranking,
+)
 from .built_bench_reranking import BuiltBenchReranking
+from .colder_reranking import ColDeRReranking
 from .ecommerce_product_relevance_reranking import ERESSReranking
 from .fs_dnoisy18k_audio_reranking import FSDnoisy18kAudioReranking
 from .hume_core17_instruction_reranking import HUMECore17InstructionReranking
@@ -32,7 +41,14 @@ from .xmod_bench import (
 
 __all__ = [
     "AskUbuntuDupQuestions",
+    "BioVITAA2IReranking",
+    "BioVITAA2TReranking",
+    "BioVITAI2AReranking",
+    "BioVITAI2TReranking",
+    "BioVITAT2AReranking",
+    "BioVITAT2IReranking",
     "BuiltBenchReranking",
+    "ColDeRReranking",
     "ERESSReranking",
     "FSDnoisy18kAudioReranking",
     "HUMECore17InstructionReranking",

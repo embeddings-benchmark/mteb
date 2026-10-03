@@ -1,4 +1,6 @@
-**Native MTEB integration with the ngnn-encoder 0.1.0 installed from public PyPI and actual anonymous Hugging Face downloads. Provider embeddings are synthetic; no new paid OpenAI calls or model-quality claim.**
+Run date: 2026-10-03. MTEB source 2.22.2 at upstream base `73ed2a32d590f310fa6d21fbdbf873716aea0cce`, loaded via PYTHONPATH in the existing MTEB 2.20.10 distribution environment. This is a source compatibility check, not a fresh installation from the regenerated universal lock. No Hub download was performed.
+
+**The test uses ngnn-encoder 0.1.0 previously installed from public PyPI, the local hash-verified compressor and a synthetic provider. No new paid OpenAI calls or model-quality claim.**
 
 HF artifact commit: `bab7d30011438e52f22be540067c73ca37f462eb`. Canonical MTEB revision remains `d6969c26400944d4f5200ebddfdc04a083fd7b75`.
 

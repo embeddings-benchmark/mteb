@@ -4,11 +4,10 @@ import logging
 import warnings
 from typing import TYPE_CHECKING, Any
 
-import torch
-
 from mteb.types import OutputDType
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -45,6 +44,8 @@ class CompressionWrapper:
             output_dtype: The output data type to compress to. Has to be supported by the quantize_embeddings method.
             clipping_margin: Optional lower and upper percentiles to crop embeddings before integer quantization.
         """
+        import torch
+
         self.model = model
         self._quantization_level = output_dtype
         self.clipping_margin = None
@@ -114,6 +115,8 @@ class CompressionWrapper:
         Returns:
             The encoded and quantized input in an array of the shape (Number of sentences) x (Embedding dimension).
         """
+        import torch
+
         embeddings = self.model.encode(
             inputs,
             task_metadata=task_metadata,
@@ -145,6 +148,8 @@ class CompressionWrapper:
         Returns:
             The quantized embeddings.
         """
+        import torch
+
         torch_dtype = self._quantization_level.get_dtype()
         if self._quantization_level in [  # noqa: PLR6201
             OutputDType.FLOAT8_E4M3FN,
@@ -205,6 +210,8 @@ class CompressionWrapper:
         Returns:
             The minimum and maximum values per embedding dimension.
         """
+        import torch
+
         if len(embeddings) < self.min_embeds:
             msg = (
                 f"Estimating quantization parameters on less than {self.min_embeds} embeddings (only "

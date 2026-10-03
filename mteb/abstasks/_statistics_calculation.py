@@ -1,12 +1,18 @@
 from __future__ import annotations
 
-import hashlib
 from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from typing import TYPE_CHECKING, Any, cast
 
 from tqdm.auto import tqdm
 
+from mteb._content_hashes import (
+    MODALITY_HASH_FNS,
+    compute_audio_hashes,
+    compute_image_hashes,
+    compute_text_hashes,
+    compute_video_hashes,
+)
 from mteb.types.statistics import (
     AudioStatistics,
     ImageStatistics,
@@ -21,82 +27,13 @@ from mteb.types.statistics import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterable, Mapping
+    from collections.abc import Callable, Container, Iterable, Mapping
 
     from PIL import Image
     from torchcodec.decoders import VideoDecoder  # type: ignore[attr-defined]
 
     from mteb.types import Modalities, TopRankedDocumentsType
     from mteb.types._encoder_io import AudioInputItem
-
-
-def compute_text_hashes(texts: list[str], max_workers: int | None = None) -> list[str]:
-    """Return a hash per text — for text, the string itself is the identity key."""
-    return texts
-
-
-def compute_image_hashes(
-    images: list[Image.Image], max_workers: int | None = None
-) -> list[str]:
-    """Return a per-image MD5 hash of the raw pixel bytes."""
-
-    def _hash_one(img: Image.Image) -> str:
-        return hashlib.md5(img.tobytes(), usedforsecurity=False).hexdigest()
-
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        return list(executor.map(_hash_one, images))
-
-
-def compute_audio_hashes(
-    audios: list[AudioInputItem], max_workers: int | None = None
-) -> list[str]:
-    """Return a per-audio MD5 hash of the raw sample array bytes."""
-
-    def _hash_one(audio: AudioInputItem) -> str:
-        return hashlib.md5(audio["array"].tobytes(), usedforsecurity=False).hexdigest()
-
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        return list(executor.map(_hash_one, audios))
-
-
-def compute_video_hashes(
-    videos: list[VideoDecoder], max_workers: int | None = None
-) -> list[str]:
-    """Return a per-video MD5 hash derived from the first decoded frame.
-
-    Decoding a frame is the most expensive part of video statistics; this function
-    is extracted so callers can pass the resulting list to ``calculate_video_statistics``
-    and avoid repeating the decode.
-    """
-
-    def _hash_one(video: VideoDecoder) -> str:
-        meta = video.metadata
-        # Drop the last frame index because some container metadata over-counts
-        # by one (the final claimed frame fails to decode).
-        num_frames = meta.num_frames - 1 if meta.num_frames else meta.num_frames
-        avg_fps = meta.average_fps
-
-        if num_frames is None or num_frames == 0:
-            raise ValueError(f"Number of frames is {num_frames}")
-
-        if num_frames is not None and avg_fps is not None and avg_fps > 0:
-            step = max(1, round(avg_fps))
-            frame_indices = list(range(0, num_frames, step))
-        else:
-            frame_indices = [0]
-
-        frames = video.get_frames_at(frame_indices).data
-        return hashlib.md5(frames.numpy().tobytes(), usedforsecurity=False).hexdigest()
-
-    with ThreadPoolExecutor(max_workers=max_workers) as executor:
-        futures = list(
-            tqdm(
-                executor.map(_hash_one, videos),
-                total=len(videos),
-                desc="Computing video hashes",
-            )
-        )
-    return futures
 
 
 def calculate_text_statistics(
@@ -125,9 +62,42 @@ def calculate_text_statistics(
     )
 
 
+def is_black_or_white_image(image: Image.Image) -> bool:
+    """Return whether the image is pure black or pure white once converted to RGB."""
+    extrema = image.convert("RGB").getextrema()
+    return all(band == (0, 0) for band in extrema) or all(
+        band == (255, 255) for band in extrema
+    )
+
+
+def compute_black_or_white_image_flags(
+    images: list[Image.Image], max_workers: int | None = None
+) -> list[bool]:
+    """Return a per-image flag saying whether that image is pure black or white.
+
+    The flags can be matched to corpus IDs to inspect relevant documents.
+    """
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        return list(executor.map(is_black_or_white_image, images))
+
+
+def count_queries_with_all_gold_black_or_white(
+    relevant_docs: Mapping[str, Mapping[str, int]],
+    black_or_white_doc_ids: Container[str],
+) -> int:
+    """Count queries whose positive judgments all reference pure black/white images."""
+    count = 0
+    for docs in relevant_docs.values():
+        gold = [doc_id for doc_id, score in docs.items() if score > 0]
+        if gold and all(doc_id in black_or_white_doc_ids for doc_id in gold):
+            count += 1
+    return count
+
+
 def calculate_image_statistics(
     images: list[Image.Image],
     hashes: list[str] | None = None,
+    black_or_white_flags: list[bool] | None = None,
     max_workers: int | None = None,
 ) -> ImageStatistics:
     """Calculate descriptive statistics for a list of images.
@@ -137,6 +107,9 @@ def calculate_image_statistics(
             attribute returning ``(width, height)``.
         hashes: Optional pre-computed MD5 hashes (from `compute_image_hashes`).
             When provided the function skips recomputing them.
+        black_or_white_flags: Optional pre-computed flags (from
+            `compute_black_or_white_image_flags`). When provided the function
+            skips recomputing them.
         max_workers: Maximum number of worker threads for parallel hash computation.
 
     Returns:
@@ -144,6 +117,10 @@ def calculate_image_statistics(
     """
     if hashes is None:
         hashes = compute_image_hashes(images, max_workers=max_workers)
+    if black_or_white_flags is None:
+        black_or_white_flags = compute_black_or_white_image_flags(
+            images, max_workers=max_workers
+        )
     img_widths, img_heights = [], []
     for img in tqdm(images, desc="Computing image statistics"):
         width, height = img.size
@@ -158,6 +135,7 @@ def calculate_image_statistics(
         average_image_height=sum(img_heights) / len(img_heights),
         max_image_height=max(img_heights),
         unique_images=len(set(hashes)),
+        black_or_white_images=sum(black_or_white_flags),
     )
 
 
@@ -400,6 +378,7 @@ def calculate_relevant_docs_statistics(
     relevant_docs: Mapping[str, Mapping[str, int]],
     query_ids: Iterable[str],
     corpus_ids: Iterable[str],
+    black_or_white_doc_ids: Container[str] | None = None,
 ) -> RelevantDocsStatistics:
     qrel_query_ids = set(relevant_docs)
     qrel_corpus_ids = {doc for qid in relevant_docs for doc in relevant_docs[qid]}
@@ -418,12 +397,20 @@ def calculate_relevant_docs_statistics(
         unique_relevant_docs=len(qrel_corpus_ids),
         num_missing_query_ids=len(qrel_query_ids.difference(query_ids)),
         num_missing_corpus_ids=len(qrel_corpus_ids.difference(corpus_ids)),
+        queries_with_all_gold_black_or_white=(
+            count_queries_with_all_gold_black_or_white(
+                relevant_docs, black_or_white_doc_ids
+            )
+            if black_or_white_doc_ids is not None
+            else 0
+        ),
     )
 
 
 def calculate_single_input_modality_statistics(
     col_inputs: dict[Modalities, list[Any]],
     hashes: dict[str, list[str]] | None = None,
+    image_black_or_white_flags: list[bool] | None = None,
     max_workers: int | None = None,
 ) -> SingleInputModalityStatistics:
     """Compute per-modality statistics for a single-input dataset."""
@@ -435,7 +422,10 @@ def calculate_single_input_modality_statistics(
         if "text" in col_inputs
         else None,
         image_statistics=calculate_image_statistics(
-            col_inputs["image"], hashes=_hashes.get("image"), max_workers=max_workers
+            col_inputs["image"],
+            hashes=_hashes.get("image"),
+            black_or_white_flags=image_black_or_white_flags,
+            max_workers=max_workers,
         )
         if "image" in col_inputs
         else None,
@@ -488,7 +478,7 @@ def _compute_side_statistics(
     all_hashes: list[list[str]] = [[] for _ in range(n)]
     for col, modality in col_modalities.items():
         data = load_col(col)
-        hashes = _HASH_FN[modality](data, max_workers=max_workers)
+        hashes = MODALITY_HASH_FNS[modality](data, max_workers=max_workers)
         stats[f"{modality}_statistics"] = _STAT_FN[modality](data, hashes=hashes)
         for i, h in enumerate(hashes):
             all_hashes[i].append(h)
@@ -540,30 +530,6 @@ def calculate_pair_modality_statistics(
         video2_statistics=s2["video_statistics"],
         unique_pairs=unique_pairs,
     )
-
-
-_HASH_FN: dict[str, Any] = {
-    "text": compute_text_hashes,
-    "image": compute_image_hashes,
-    "audio": compute_audio_hashes,
-    "video": compute_video_hashes,
-}
-
-
-def _compute_modality_hashes(
-    col_inputs: dict[Modalities, list[Any]],
-    max_workers: int | None = None,
-) -> dict[str, list[str]]:
-    """Compute per-sample hashes for each modality using the shared hash functions.
-
-    Reuses the same hashing logic as the ``calculate_*_statistics`` functions so that
-    callers can pass the result to both statistics functions and intersection checks
-    without decoding the data twice.
-    """
-    return {
-        mod: _HASH_FN[mod](values, max_workers=max_workers)
-        for mod, values in col_inputs.items()
-    }
 
 
 def _count_samples_in_train(

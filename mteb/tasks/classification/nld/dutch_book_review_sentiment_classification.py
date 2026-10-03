@@ -25,19 +25,13 @@ class DutchBookReviewSentimentClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{DBLP:journals/corr/abs-1910-00896,
+@misc{vanderburgh2019meritsuniversallanguagemodel,
   archiveprefix = {arXiv},
-  author = {Benjamin, van der Burgh and
-Suzan, Verberne},
-  bibsource = {dblp computer science bibliography, https://dblp.org},
-  biburl = {https://dblp.org/rec/journals/corr/abs-1910-00896.bib},
+  author = {Benjamin van der Burgh and Suzan Verberne},
   eprint = {1910.00896},
-  journal = {CoRR},
-  timestamp = {Fri, 04 Oct 2019 12:28:06 +0200},
-  title = {The merits of Universal Language Model Fine-tuning for Small Datasets
-- a case with Dutch book reviews},
-  url = {http://arxiv.org/abs/1910.00896},
-  volume = {abs/1910.00896},
+  primaryclass = {cs.IR},
+  title = {The merits of Universal Language Model Fine-tuning for Small Datasets -- a case with Dutch book reviews},
+  url = {https://arxiv.org/abs/1910.00896},
   year = {2019},
 }
 """,
@@ -68,19 +62,13 @@ class DutchBookReviewSentimentClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{DBLP:journals/corr/abs-1910-00896,
+@misc{vanderburgh2019meritsuniversallanguagemodel,
   archiveprefix = {arXiv},
-  author = {Benjamin, van der Burgh and
-Suzan, Verberne},
-  bibsource = {dblp computer science bibliography, https://dblp.org},
-  biburl = {https://dblp.org/rec/journals/corr/abs-1910-00896.bib},
+  author = {Benjamin van der Burgh and Suzan Verberne},
   eprint = {1910.00896},
-  journal = {CoRR},
-  timestamp = {Fri, 04 Oct 2019 12:28:06 +0200},
-  title = {The merits of Universal Language Model Fine-tuning for Small Datasets
-- a case with Dutch book reviews},
-  url = {http://arxiv.org/abs/1910.00896},
-  volume = {abs/1910.00896},
+  primaryclass = {cs.IR},
+  title = {The merits of Universal Language Model Fine-tuning for Small Datasets -- a case with Dutch book reviews},
+  url = {https://arxiv.org/abs/1910.00896},
   year = {2019},
 }
 """,

@@ -24,18 +24,7 @@ class TalemaaderPC(AbsTaskPairClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="created",
-        bibtex_citation=r"""
-@misc{DSLDK1000Talemader,
-  author = {{Det Danske Sprog- og Litteraturselskab}},
-  howpublished = {Sprogteknologi.dk},
-  language = {Danish},
-  note = {CC-BY licensed dataset of 1000 Danish sayings and expressions},
-  publisher = {Digitaliseringsstyrelsen \& Det Danske Sprog- og Litteraturselskab},
-  title = {1000 danske talemåder - evalueringsdatasæt},
-  url = {https://sprogteknologi.dk/dataset/1000-talemader-evalueringsdatasaet},
-  year = {2024},
-}
-""",
+        bibtex_citation="",
     )
 
     def dataset_transform(

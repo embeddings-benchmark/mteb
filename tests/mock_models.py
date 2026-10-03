@@ -34,6 +34,7 @@ class MockSentenceTransformer(SentenceTransformer):
 
     def __init__(self):
         self._modules = {}
+        self._similarity_fn_name = None
 
     def encode(  # noqa: PLR0913, PLR0917
         self,
@@ -65,10 +66,6 @@ class MockSentenceTransformer(SentenceTransformer):
 
     def max_seq_length(self) -> int:
         return 10
-
-    @property
-    def similarity_fn_name(self) -> Literal["cosine", "dot", "euclidean", "manhattan"]:
-        return "cosine"
 
 
 class MockSentenceTransformersbf16Encoder(MockSentenceTransformer):

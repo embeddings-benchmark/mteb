@@ -15,13 +15,14 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -42,6 +43,8 @@ def _weighted_mean_pooling(
     Later tokens get larger weight via the cumulative sum of the mask.
     Reproduces the snippet on the model card exactly.
     """
+    import torch
+
     attention_mask_ = attention_mask * attention_mask.cumsum(dim=1)
     s = torch.sum(hidden * attention_mask_.unsqueeze(-1).float(), dim=1)
     d = attention_mask_.sum(dim=1, keepdim=True).float()
@@ -56,9 +59,14 @@ class VisRAGRetWrapper(AbsEncoder):
         model_name: str = "openbmb/VisRAG-Ret",
         revision: str | None = None,
         device: str | None = None,
-        torch_dtype: torch.dtype = torch.bfloat16,
+        torch_dtype: OutputDType | torch.dtype = OutputDType.BF16,
         **kwargs: Any,
     ) -> None:
+        import torch
+
+        if isinstance(torch_dtype, OutputDType):
+            torch_dtype = torch_dtype.get_dtype()
+
         from transformers import AutoConfig, AutoModel, AutoTokenizer
 
         self.model_name = model_name
@@ -87,12 +95,18 @@ class VisRAGRetWrapper(AbsEncoder):
         ).to(self.device)
         self.mdl.eval()
 
-    @torch.no_grad()
     def _encode(self, *, texts: list[str], images: list[Any]) -> torch.Tensor:
         """Run the custom VisRAG forward and apply the published pooling/norm."""
-        outputs = self.mdl(text=texts, image=images, tokenizer=self.tokenizer)
-        reps = _weighted_mean_pooling(outputs.last_hidden_state, outputs.attention_mask)
-        return torch.nn.functional.normalize(reps, p=2, dim=1).to(torch.float32).cpu()
+        import torch
+
+        with torch.no_grad():
+            outputs = self.mdl(text=texts, image=images, tokenizer=self.tokenizer)
+            reps = _weighted_mean_pooling(
+                outputs.last_hidden_state, outputs.attention_mask
+            )
+            return (
+                torch.nn.functional.normalize(reps, p=2, dim=1).to(torch.float32).cpu()
+            )
 
     def get_text_embeddings(
         self,
@@ -101,6 +115,8 @@ class VisRAGRetWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> torch.Tensor:
+        import torch
+
         all_embeds = []
         for batch in tqdm(texts, disable=not show_progress_bar, desc="Text Encoding"):
             queries = [VISRAG_QUERY_INSTRUCTION + t for t in batch["text"]]
@@ -115,6 +131,8 @@ class VisRAGRetWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> torch.Tensor:
+        import torch
+
         all_embeds = []
         for batch in tqdm(images, disable=not show_progress_bar, desc="Image Encoding"):
             imgs = [img.convert("RGB") for img in batch["image"]]
@@ -173,7 +191,7 @@ VISRAG_RET_TRAINING_DATASETS = {
 
 visrag_ret = ModelMeta(
     loader=VisRAGRetWrapper,
-    loader_kwargs=dict(torch_dtype=torch.bfloat16),
+    loader_kwargs=dict(torch_dtype=OutputDType.BF16),
     name="openbmb/VisRAG-Ret",
     revision="95ef596df871b606167cb7e4b7215caf1bfdf761",
     release_date="2024-10-14",

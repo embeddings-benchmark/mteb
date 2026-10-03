@@ -31,7 +31,9 @@ def get_cache() -> ResultCache:
 
 
 # Bump when the on-disk parquet schema changes so old caches are rebuilt.
-_CACHE_SCHEMA_VERSION = 2
+# v3: model_meta's model_type/embed_dim/output_dtypes folded into the
+# `experiments` struct column (no more separate `model_meta` column).
+_CACHE_SCHEMA_VERSION = 3
 
 _UNIFIED_SCHEMA = {
     "model_name": pl.Utf8,

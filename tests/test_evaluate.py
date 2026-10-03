@@ -7,6 +7,7 @@ from typing import Any
 
 import pytest
 from datasets.exceptions import DatasetNotFoundError
+from torch.utils.data import DataLoader
 
 import mteb
 from mteb import SentenceTransformerEncoderWrapper
@@ -20,15 +21,23 @@ from mteb.mocks import (
 from mteb.mocks.mock_tasks import (
     MockAggregatedTask,
     MockClassificationTask,
+    MockMultilabelClassification,
     MockMultilingualClassificationTask,
     MockMultilingualRetrievalTask,
+    MockPairClassificationTask,
     MockRetrievalTask,
+    MockSTSTask,
+    MockSummarizationTask,
+    MockTextZeroShotClassificationTask,
+    MockZeroShotClassificationTask,
 )
 from mteb.models import ModelMeta
+from mteb.models.model_implementations.random_baseline import RandomEncoderBaseline
+from mteb.models.model_meta import ScoringFunction
 from mteb.models.models_protocols import EncoderProtocol
 from mteb.results.task_result import TaskResult
 from mteb.timing import TimingStack
-from mteb.types import OutputDType
+from mteb.types import Array, BatchedInput, OutputDType
 from tests.mock_models import MockSentenceTransformer
 
 mock_classification = (MockSentenceTransformer(), MockClassificationTask(), 1)
@@ -492,14 +501,77 @@ def test_mrl_unsupported_dim():
         )
 
 
-def test_precision_arg():
-    model = SentenceTransformerEncoderWrapper(MockSentenceTransformer())
-    task = MockRetrievalTask()
-    mteb.evaluate(model, task, cache=None, encode_kwargs={"precision": "float16"})
+def test_precision_arg(tmp_path: Path):
+    """A ``precision`` encode kwarg is recorded as ``output_dtypes`` before the cache
+    lookup, so precision-specific runs live in their own experiment namespace and do
+    not reuse (or overwrite) the default cached result.
 
-    assert (
-        model.mteb_model_meta.experiment_kwargs["output_dtypes"] == OutputDType.FLOAT16
+    Regression test for https://github.com/embeddings-benchmark/mteb/issues/5394
+    """
+    model = SentenceTransformerEncoderWrapper(MockSentenceTransformer())
+    task = MockClassificationTask()
+    cache = ResultCache(tmp_path)
+
+    mteb.evaluate(model, task, cache=cache, encode_kwargs={"precision": "int8"})
+
+    default_path = (
+        tmp_path
+        / "results"
+        / model.mteb_model_meta.model_name_as_path()
+        / model.mteb_model_meta.revision
+        / f"{task.metadata.name}.json"
     )
+    experiment_path = (
+        default_path.parent / "experiments" / "output_dtypes_int8" / default_path.name
+    )
+    assert not default_path.exists()
+    assert experiment_path.exists()
+
+    saved_meta = json.loads((experiment_path.parent / "model_meta.json").read_text())
+    assert saved_meta["experiment_kwargs"]["output_dtypes"] == OutputDType.INT8
+
+    # a later default evaluation must not reuse the quantized result
+    mteb.evaluate(model, task, cache=cache)
+    assert default_path.exists()
+
+
+@pytest.mark.parametrize(
+    "task",
+    [
+        MockClassificationTask(),
+        MockMultilabelClassification(),
+        MockPairClassificationTask(),
+        MockSTSTask(),
+        MockSummarizationTask(),
+        MockTextZeroShotClassificationTask(),
+        MockZeroShotClassificationTask(),
+    ],
+    ids=lambda x: x.metadata.name,
+)
+def test_num_proc_reaches_every_dataloader(task: AbsTask) -> None:
+    class _NumWorkersRecordingBaseline(RandomEncoderBaseline):
+        """Random baseline that records the num_workers of every dataloader it encodes."""
+
+        def __init__(self, *args: Any, **kwargs: Any) -> None:
+            super().__init__(*args, **kwargs)
+            self.num_workers: list[int] = []
+            self.mteb_model_meta = ModelMeta.create_empty(
+                overwrites=dict(
+                    similarity_fn_name=ScoringFunction.COSINE,
+                    modalities=["image", "text"],
+                )
+            )
+
+        def encode(self, inputs: DataLoader[BatchedInput], **kwargs: Any) -> Array:
+            self.num_workers.append(inputs.num_workers)
+            inputs.num_workers = 0  # only record the request, iterate in-process
+            return super().encode(inputs, **kwargs)
+
+    model = _NumWorkersRecordingBaseline("test_model", revision=None)
+    mteb.evaluate(model, task, cache=None, num_proc=2)
+
+    assert model.num_workers
+    assert all(n == 2 for n in model.num_workers)
 
 
 @pytest.mark.parametrize("task", MOCK_MAEB_TASK_GRID)

@@ -1,6 +1,7 @@
 from .afri_mcqa_retrieval import AfriMCQAA2IRetrieval, AfriMCQAI2ARetrieval
 from .audio_caps import AudioCapsA2TRetrieval, AudioCapsT2ARetrieval
 from .belebele_retrieval import BelebeleRetrieval
+from .chinaopen_retrieval import ChinaOpenT2VRetrieval, ChinaOpenV2TRetrieval
 from .common_voice import (
     CommonVoiceMini17A2TRetrieval,
     CommonVoiceMini17T2ARetrieval,
@@ -85,6 +86,7 @@ from .mkqa_retrieval import MKQARetrieval
 from .mlqa_retrieval import MLQARetrieval
 from .mmarco_retrieval import MMarcoRetrievalMultilingual
 from .mr_tidy_retrieval import MrTidyRetrieval
+from .multi30k_retrieval import Multi30kI2TRetrieval, Multi30kT2IRetrieval
 from .multi_long_doc_retrieval import MultiLongDocRetrieval
 from .mupler_retrieval import MuPLeRRetrieval
 from .nanobeir_multilingual import (
@@ -102,6 +104,16 @@ from .nanobeir_multilingual import (
     MultilingualNanoSciFactRetrieval,
     MultilingualNanoTouche2020Retrieval,
 )
+from .nayanair_monobench_retrieval import (
+    NayanaIRMonoBenchGujaratiRetrieval,
+    NayanaIRMonoBenchKannadaRetrieval,
+    NayanaIRMonoBenchMalayalamRetrieval,
+    NayanaIRMonoBenchMarathiRetrieval,
+    NayanaIRMonoBenchOdiaRetrieval,
+    NayanaIRMonoBenchPunjabiRetrieval,
+    NayanaIRMonoBenchSanskritRetrieval,
+    NayanaIRMonoBenchTamilRetrieval,
+)
 from .neu_clir2022_retrieval import (
     NeuCLIR2022Retrieval,
     NeuCLIR2022RetrievalHardNegatives,
@@ -117,6 +129,10 @@ from .omnilingual_asr_retrieval import (
 )
 from .public_health_qa_retrieval import PublicHealthQARetrieval
 from .ru_sci_bench_retrieval import RuSciBenchCiteRetrieval, RuSciBenchCociteRetrieval
+from .spoken_wikipedia_retrieval import (
+    SpokenWikipediaA2TRetrieval,
+    SpokenWikipediaT2ARetrieval,
+)
 from .statcan_dialogue_dataset_retrieval import StatcanDialogueDatasetRetrieval
 from .vaani_speech_text_retrieval import VaaniA2TRetrieval, VaaniT2ARetrieval
 from .vdr_multilingual_retrieval import VDRMultilingualRetrieval
@@ -167,6 +183,8 @@ __all__ = [
     "AudioCapsT2ARetrieval",
     "BelebeleRetrieval",
     "CUREv1Retrieval",
+    "ChinaOpenT2VRetrieval",
+    "ChinaOpenV2TRetrieval",
     "CommonVoiceMini17A2TRetrieval",
     "CommonVoiceMini17T2ARetrieval",
     "CommonVoiceMini21A2TRetrieval",
@@ -240,6 +258,8 @@ __all__ = [
     "MintakaRetrieval",
     "MrTidyRetrieval",
     "MuPLeRRetrieval",
+    "Multi30kI2TRetrieval",
+    "Multi30kT2IRetrieval",
     "MultiLongDocRetrieval",
     "MultilingualNanoArguAnaRetrieval",
     "MultilingualNanoClimateFeverRetrieval",
@@ -254,6 +274,14 @@ __all__ = [
     "MultilingualNanoSCIDOCSRetrieval",
     "MultilingualNanoSciFactRetrieval",
     "MultilingualNanoTouche2020Retrieval",
+    "NayanaIRMonoBenchGujaratiRetrieval",
+    "NayanaIRMonoBenchKannadaRetrieval",
+    "NayanaIRMonoBenchMalayalamRetrieval",
+    "NayanaIRMonoBenchMarathiRetrieval",
+    "NayanaIRMonoBenchOdiaRetrieval",
+    "NayanaIRMonoBenchPunjabiRetrieval",
+    "NayanaIRMonoBenchSanskritRetrieval",
+    "NayanaIRMonoBenchTamilRetrieval",
     "NeuCLIR2022Retrieval",
     "NeuCLIR2022RetrievalHardNegatives",
     "NeuCLIR2023Retrieval",
@@ -264,6 +292,8 @@ __all__ = [
     "PublicNewsRetrieval",
     "RuSciBenchCiteRetrieval",
     "RuSciBenchCociteRetrieval",
+    "SpokenWikipediaA2TRetrieval",
+    "SpokenWikipediaT2ARetrieval",
     "StatcanDialogueDatasetRetrieval",
     "VDRMultilingualRetrieval",
     "VaaniA2TRetrieval",

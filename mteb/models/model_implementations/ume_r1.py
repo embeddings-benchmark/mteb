@@ -3,13 +3,13 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -37,6 +37,7 @@ class UMER1Wrapper(AbsEncoder):
         num_frames: int | None = None,
         **kwargs: Any,
     ) -> None:
+        import torch
         from transformers import AutoProcessor, Qwen2VLForConditionalGeneration
         from transformers.utils.import_utils import is_flash_attn_2_available
 
@@ -88,6 +89,8 @@ class UMER1Wrapper(AbsEncoder):
         **kwargs: Any,
     ) -> Array:
         """Encode inputs (text and/or images) into discriminative embeddings."""
+        import torch
+
         if "video" in inputs.dataset.features:
             from mteb.models.modality_collators import VideoCollator
 
@@ -188,6 +191,8 @@ class UMER1Wrapper(AbsEncoder):
         model_inputs: dict,
     ) -> torch.Tensor:
         """Helper to extract embeddings from the generated output."""
+        import torch
+
         sequences = output.sequences
         input_len = model_inputs["input_ids"].shape[1]
 

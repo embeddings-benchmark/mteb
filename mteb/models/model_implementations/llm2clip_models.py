@@ -3,7 +3,6 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -34,6 +33,7 @@ MODEL2PROCESSOR = {
 
 
 def llm2clip_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
+    import torch
     from llm2vec import LLM2Vec
     from transformers import AutoConfig, AutoModel, AutoTokenizer, CLIPImageProcessor
     from transformers.modeling_outputs import BaseModelOutputWithPooling
@@ -42,9 +42,14 @@ def llm2clip_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
         def __init__(
             self,
             model_name: str,
-            device: str = "cuda" if torch.cuda.is_available() else "cpu",
+            device: str | None = None,
             **kwargs: Any,
         ):
+            import torch
+
+            if device is None:
+                device = "cuda" if torch.cuda.is_available() else "cpu"
+
             if model_name not in MODEL2PROCESSOR:
                 raise Exception(
                     f"This model {model_name} is not in the supported mode list: {list(MODEL2PROCESSOR.keys())}."

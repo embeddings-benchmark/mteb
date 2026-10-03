@@ -2,16 +2,17 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
-from torch.nn.functional import normalize
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
+import mteb.models.sentence_transformer_wrapper as st_wrapper
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
+    import torch
+    from torch.utils.data import DataLoader
+
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput
 
@@ -36,14 +37,6 @@ NEMOTRON_COLEMBED_CITATION_V2 = """
     url={https://arxiv.org/abs/2602.03992},
 }"""
 
-NEMOTRON_EMBED_VL_1B_V2_CITATION = """
-@misc{ronay2026smallyetmighty,
-    title={Small Yet Mighty: Improve Accuracy In Multimodal Search and Visual Document Retrieval with Llama Nemotron RAG Models},
-    author={Ronay Ak, Gabriel de Souza Pereira Moreira and Bo Liu},
-    year={2026},
-    howpublished = {Available at: https://huggingface.co/blog/nvidia/llama-nemotron-vl-1b},
-}"""
-
 
 class NemotronColEmbedVL(AbsEncoder):
     """Encoder for the NemotronColEmbedVL family of models."""
@@ -54,10 +47,13 @@ class NemotronColEmbedVL(AbsEncoder):
         revision: str,
         trust_remote_code: bool,
         device_map: str = "cuda",
-        torch_dtype: torch.dtype = torch.bfloat16,
+        torch_dtype: OutputDType | torch.dtype = OutputDType.BF16,
         attn_implementation: str = "flash_attention_2",
         **kwargs: Any,
     ):
+        if isinstance(torch_dtype, OutputDType):
+            torch_dtype = torch_dtype.get_dtype()
+
         from transformers import AutoModel
 
         self.model = AutoModel.from_pretrained(
@@ -82,6 +78,7 @@ class NemotronColEmbedVL(AbsEncoder):
     ) -> Array:
         import torchvision.transforms.functional as F
         from PIL import Image
+        from torch.utils.data import DataLoader
 
         all_images = []
         if isinstance(images, DataLoader):
@@ -329,12 +326,15 @@ class LlamaNemotronEmbedVL(AbsEncoder):
         trust_remote_code: bool,
         extra_name: str = "llama-nemotron-embed-vl-1b-v2",
         device_map: str = "cuda",
-        torch_dtype: torch.dtype = torch.bfloat16,
+        torch_dtype: OutputDType | torch.dtype = OutputDType.BF16,
         attn_implementation: str = "flash_attention_2",
         use_image_modality: bool = True,
         use_text_modality: bool = True,
         **kwargs: Any,
     ):
+        if isinstance(torch_dtype, OutputDType):
+            torch_dtype = torch_dtype.get_dtype()
+
         self.use_image_modality = use_image_modality
         self.use_text_modality = use_text_modality
         if not self.use_image_modality and not self.use_text_modality:
@@ -367,6 +367,9 @@ class LlamaNemotronEmbedVL(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+        from torch.nn.functional import normalize
+
         with torch.inference_mode():
             embeddings_list = []
             for batch in tqdm(
@@ -404,6 +407,51 @@ class LlamaNemotronEmbedVL(AbsEncoder):
             return concatenated_embeddings
 
 
+LLAMA_NEMOTRON_VL_1B_V2_LANGUAGES = [
+    "eng-Latn",
+    "ara-Arab",
+    "ben-Beng",
+    "zho-Hans",
+    "ces-Latn",
+    "dan-Latn",
+    "nld-Latn",
+    "fin-Latn",
+    "fra-Latn",
+    "deu-Latn",
+    "heb-Hebr",
+    "hin-Deva",
+    "hun-Latn",
+    "ind-Latn",
+    "ita-Latn",
+    "jpn-Jpan",
+    "kor-Hang",
+    "nor-Latn",
+    "fas-Arab",
+    "pol-Latn",
+    "por-Latn",
+    "rus-Cyrl",
+    "spa-Latn",
+    "swe-Latn",
+    "tha-Thai",
+    "tur-Latn",
+]
+
+LLAMA_NEMOTRON_VL_1B_V2_CITATION = """@inproceedings{moreira2025_nvretriever,
+  author = {Moreira, Gabriel de Souza P. and Osmulski, Radek and Xu, Mengyao and Ak, Ronay and Schifferer, Benedikt and Oldridge, Even},
+  title = {Improving Text Embedding Models with Positive-aware Hard-negative Mining},
+  year = {2025},
+  isbn = {9798400720406},
+  publisher = {Association for Computing Machinery},
+  address = {New York, NY, USA},
+  url = {https://doi.org/10.1145/3746252.3761254},
+  doi = {10.1145/3746252.3761254},
+  pages = {2169–2178},
+  numpages = {10},
+  keywords = {contrastive learning, distillation, embedding models, hard-negative mining, rag, text retrieval, transformers},
+  location = {Seoul, Republic of Korea},
+  series = {CIKM '25},
+}"""
+
 TRAINING_DATA_EMBED_VL_1B_V2 = {
     "VidoreDocVQARetrieval",
     "VidoreInfoVQARetrieval",
@@ -429,7 +477,7 @@ llama_nemotron_embed_vl_1b_v2 = ModelMeta(
         trust_remote_code=True,
     ),
     name="nvidia/llama-nemotron-embed-vl-1b-v2",
-    languages=["eng-Latn"],
+    languages=LLAMA_NEMOTRON_VL_1B_V2_LANGUAGES,
     revision="859e1f2dac29c56c37a5279cf55f53f3e74efc6b",
     release_date="2026-01-06",
     modalities=["image", "text"],
@@ -440,13 +488,52 @@ llama_nemotron_embed_vl_1b_v2 = ModelMeta(
     embed_dim=2048,
     license="https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
     open_weights=True,
-    public_training_code=None,
+    public_training_code="https://github.com/NVIDIA-NeMo/Automodel/tree/main/examples/retrieval/bi_encoder/nemotron_vl_1b",
     public_training_data="https://huggingface.co/nvidia/llama-nemotron-embed-vl-1b-v2#training-dataset",
     framework=["PyTorch"],
     reference="https://huggingface.co/nvidia/llama-nemotron-embed-vl-1b-v2",
     similarity_fn_name="cosine",
     use_instructions=True,
     training_datasets=TRAINING_DATA_EMBED_VL_1B_V2,
-    citation=NEMOTRON_EMBED_VL_1B_V2_CITATION,
+    citation=LLAMA_NEMOTRON_VL_1B_V2_CITATION,
     extra_requirements_groups=["llama-nemotron-colembed-vl"],
+)
+
+
+llama_nemotron_rerank_vl_1b_v2 = ModelMeta(
+    loader=st_wrapper.CrossEncoderWrapper,
+    loader_kwargs={"trust_remote_code": True},
+    name="nvidia/llama-nemotron-rerank-vl-1b-v2",
+    revision="b8a9987b05b75db5ad949c825cbcbf6eb7c48b5a",
+    release_date="2025-12-18",
+    languages=LLAMA_NEMOTRON_VL_1B_V2_LANGUAGES,
+    n_parameters=1_678_256_576,
+    n_embedding_parameters=262_690_816,
+    memory_usage_mb=3201,
+    max_tokens=10240,
+    embed_dim=None,
+    license="https://huggingface.co/nvidia/llama-nemotron-rerank-vl-1b-v2/blob/main/LICENSE",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data="https://huggingface.co/nvidia/llama-nemotron-rerank-vl-1b-v2#training-dataset",
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/nvidia/llama-nemotron-rerank-vl-1b-v2",
+    similarity_fn_name=None,
+    use_instructions=True,
+    training_datasets={
+        # Training inherited from the text reranker backbone.
+        "NQ",
+        "HotpotQA",
+        "MIRACLRetrieval",
+        "MLQARetrieval",
+        "MultiLongDocRetrieval",
+        # Vision-language training.
+        "VidoreDocVQARetrieval",
+        "VidoreTatdqaRetrieval",
+        "VidoreArxivQARetrieval",
+        "VidoreInfoVQARetrieval",
+    },
+    modalities=["image", "text"],
+    model_type=["cross-encoder"],
+    citation=LLAMA_NEMOTRON_VL_1B_V2_CITATION,
 )

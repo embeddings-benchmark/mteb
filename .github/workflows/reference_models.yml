@@ -30,7 +30,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv sync --group test
+          uv sync --group test --frozen
 
       - name: Run reference model coverage test
         run: |

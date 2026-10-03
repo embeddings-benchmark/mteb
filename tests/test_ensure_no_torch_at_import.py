@@ -6,31 +6,39 @@ modules that have already been made torch-free so the eager imports do not creep
 
 from __future__ import annotations
 
+import pathlib
 import subprocess
 import sys
 import textwrap
 
-# `mteb/__init__.py` still pulls torch in via `mteb.models` and `mteb.abstasks`, so a plain
-# `import mteb.types` would import it transitively. Stubbing the package in `sys.modules` lets us
-# import the submodule on its own. Once those two are lazy as well this can become `import mteb`.
-_IMPORT_TYPES_WITHOUT_PACKAGE_INIT = """
+_REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
+
+# Importing a submodule normally imports its parent packages first, which would drag in every
+# other submodule (and any heavy dependency they import). Stubbing the parent packages in
+# `sys.modules` lets us import the submodule on its own to check it in isolation.
+_PREAMBLE = """
 import pathlib
 import sys
 import types
 
-pkg = types.ModuleType("mteb")
-pkg.__path__ = [str(pathlib.Path("mteb").resolve())]
-sys.modules["mteb"] = pkg
+_root = pathlib.Path({root!r})
+sys.path.insert(0, str(_root))
+for _name in {stubs!r}:
+    _stub = types.ModuleType(_name)
+    _stub.__path__ = [str(_root.joinpath(*_name.split(".")))]
+    sys.modules[_name] = _stub
 
-import mteb.types  # noqa: F401
+import {module}  # noqa: F401
 """
 
+_HEAVY = ("torch", "sentence_transformers", "transformers")
 
-def _run(extra: str) -> str:
-    """Import `mteb.types` in a fresh interpreter, then run `extra` and return its stdout."""
-    script = _IMPORT_TYPES_WITHOUT_PACKAGE_INIT + textwrap.dedent(extra)
+
+def _run(module: str, stubs: tuple[str, ...], extra: str = "") -> str:
+    """Import `module` in a fresh interpreter with `stubs` faked, then run `extra`."""
+    script = _PREAMBLE.format(root=str(_REPO_ROOT), stubs=stubs, module=module)
     result = subprocess.run(
-        [sys.executable, "-c", script],
+        [sys.executable, "-c", script + textwrap.dedent(extra)],
         capture_output=True,
         text=True,
         check=False,
@@ -39,15 +47,21 @@ def _run(extra: str) -> str:
     return result.stdout.strip()
 
 
+def _loaded_heavy_deps(module: str, stubs: tuple[str, ...]) -> list[str]:
+    out = _run(
+        module,
+        stubs,
+        f"""
+        print(",".join(d for d in {_HEAVY!r} if d in sys.modules))
+        """,
+    )
+    return [d for d in out.split(",") if d]
+
+
 def test_importing_types_does_not_import_torch() -> None:
     """`mteb.types` must stay importable without torch."""
-    loaded = _run(
-        """
-        print("torch" in sys.modules)
-        """
-    )
-    assert loaded == "False", (
-        "importing mteb.types pulled in torch; keep torch under `TYPE_CHECKING` "
+    assert _loaded_heavy_deps("mteb.types", ("mteb",)) == [], (
+        "importing mteb.types pulled in a heavy dependency; keep it under `TYPE_CHECKING` "
         "or move it into the function that needs it"
     )
 
@@ -59,6 +73,8 @@ def test_array_is_still_importable_at_runtime() -> None:
     numpy-only fallback, which is fine because `Array` is only ever used as an annotation.
     """
     output = _run(
+        "mteb.types",
+        ("mteb",),
         """
         import numpy as np
         from numpy.typing import NDArray
@@ -67,6 +83,273 @@ def test_array_is_still_importable_at_runtime() -> None:
 
         print(Array == NDArray[np.floating | np.integer | np.bool_])
         print("torch" in sys.modules)
-        """
+        """,
     )
     assert output.splitlines() == ["True", "False"]
+
+
+def test_importing_model_meta_does_not_import_torch() -> None:
+    """`ModelMeta` is pure metadata; describing a model must not require loading one."""
+    assert (
+        _loaded_heavy_deps("mteb.models.model_meta", ("mteb", "mteb.models")) == []
+    ), (
+        "importing mteb.models.model_meta pulled in a heavy dependency; keep it under "
+        "`TYPE_CHECKING` or move it into the function that needs it"
+    )
+
+
+def test_model_meta_is_usable_without_torch() -> None:
+    """Constructing and serialising a ModelMeta must work on a torch-free install."""
+    output = _run(
+        "mteb.models.model_meta",
+        ("mteb", "mteb.models"),
+        """
+        from mteb.models.model_meta import ModelMeta
+
+        meta = ModelMeta(
+            loader=None,
+            name="test/model",
+            revision="abc123",
+            release_date="2024-01-01",
+            languages=["eng-Latn"],
+            n_parameters=1000,
+            memory_usage_mb=1.0,
+            max_tokens=512,
+            embed_dim=64,
+            license="mit",
+            open_weights=True,
+            public_training_code=None,
+            public_training_data=None,
+            similarity_fn_name="cosine",
+            framework=["Sentence Transformers"],
+            reference=None,
+            use_instructions=False,
+            training_datasets=None,
+        )
+        print(meta.name, meta.revision)
+        print("torch" in sys.modules)
+        """,
+    )
+    assert output.splitlines() == ["test/model abc123", "False"]
+
+
+def test_importing_set_seed_does_not_import_torch() -> None:
+    """`AbsTask.__init__` seeds on construction, so this runs on the metadata-only path."""
+    assert _loaded_heavy_deps("mteb._set_seed", ("mteb",)) == [], (
+        "importing mteb._set_seed pulled in a heavy dependency; import torch inside the "
+        "function that needs it"
+    )
+
+
+def test_set_seed_still_seeds_torch_when_available() -> None:
+    """The lazy import must not stop torch actually being seeded on a full install."""
+    import torch
+
+    from mteb._set_seed import _set_seed
+
+    _set_seed(42)
+    first = torch.randn(4)
+    _set_seed(42)
+    second = torch.randn(4)
+    assert torch.equal(first, second)
+
+
+def test_import_mteb_does_not_import_torch() -> None:
+    """Tasks are seeded when `mteb` is imported; that must not import torch even when it is installed."""
+    result = subprocess.run(
+        [sys.executable, "-c", "import sys, mteb; print('torch' in sys.modules)"],
+        capture_output=True,
+        text=True,
+        check=False,
+        cwd=_REPO_ROOT,
+    )
+    assert result.returncode == 0, result.stderr[-3000:]
+    assert result.stdout.split()[-1] == "False"
+
+
+def test_importing_create_dataloaders_does_not_import_torch() -> None:
+    """Dataloaders are only built when a task actually runs, so importing must not need torch."""
+    assert _loaded_heavy_deps("mteb._create_dataloaders", ("mteb",)) == [], (
+        "importing mteb._create_dataloaders pulled in a heavy dependency; move the import "
+        "into the function that uses it"
+    )
+
+
+def test_image_dataset_works_in_dataloader_worker_processes() -> None:
+    """With `num_proc > 1` the image dataset and collate fn are pickled into worker processes.
+
+    `spawn` (the default on macOS and Windows) cannot pickle anything defined inside a function.
+    """
+    from PIL import Image
+    from torch.utils.data import DataLoader
+
+    from mteb._evaluators.image.imagetext_pairclassification_evaluator import (
+        _build_image_dataset,
+        _image_collate_fn,
+    )
+
+    loader = DataLoader(
+        _build_image_dataset([Image.new("RGB", (8, 8)) for _ in range(3)]),
+        batch_size=2,
+        num_workers=2,
+        collate_fn=_image_collate_fn,
+        multiprocessing_context="spawn",
+    )
+    assert [len(batch["image"]) for batch in loader] == [2, 1]
+
+
+def test_mteb_distribution_prefers_the_package_that_ships_the_code(monkeypatch) -> None:
+    """Once split, `mteb` only depends on `mteb-core`, which holds the version, extras and requirements."""
+    import importlib.metadata
+
+    from mteb._requires_package import _mteb_distribution
+
+    def installed(*names: str):
+        def distribution(name: str) -> str:
+            if name in names:
+                return name
+            raise importlib.metadata.PackageNotFoundError(name)
+
+        return distribution
+
+    cases = [
+        (("mteb",), "mteb"),  # today
+        (("mteb", "mteb-core"), "mteb-core"),  # full install after the split
+        (("mteb-core",), "mteb-core"),  # core-only install
+    ]
+    try:
+        for names, expected in cases:
+            monkeypatch.setattr(importlib.metadata, "distribution", installed(*names))
+            _mteb_distribution.cache_clear()
+            assert _mteb_distribution() == expected
+    finally:
+        _mteb_distribution.cache_clear()
+
+
+def test_importing_abstasks_does_not_import_torch() -> None:
+    """Task classes carry the metadata the leaderboard and API read; describing them needs no torch."""
+    assert _loaded_heavy_deps("mteb.abstasks", ("mteb",)) == [], (
+        "importing mteb.abstasks pulled in a heavy dependency; move the import into the "
+        "method that uses it"
+    )
+
+
+def test_importing_benchmarks_does_not_import_torch() -> None:
+    """Benchmark definitions are metadata over tasks, so they must not need torch either."""
+    assert _loaded_heavy_deps("mteb.benchmarks.benchmark", ("mteb",)) == [], (
+        "importing mteb.benchmarks.benchmark pulled in a heavy dependency"
+    )
+
+
+def test_model_meta_dtypes_are_named_not_torch_objects() -> None:
+    """`ModelMeta` declares load dtypes by name, so metadata stays importable without torch.
+
+    `OutputDType` is a `str` enum, so it resolves through both `getattr(torch, ...)` (the path
+    transformers takes for a string dtype) and `OutputDType.get_dtype()`.
+    """
+    import torch
+
+    import mteb
+    from mteb.types import OutputDType
+
+    meta = mteb.get_model_meta("vidore/colpali-v1.1")
+    declared = meta.loader_kwargs["torch_dtype"]
+
+    assert isinstance(declared, OutputDType)
+    assert declared.get_dtype() is torch.float16
+    assert getattr(torch, declared) is torch.float16
+
+
+def test_model_implementations_declare_no_import_time_torch_dtypes() -> None:
+    """No model file may evaluate a `torch.<dtype>` at import time; use `OutputDType` instead.
+
+    Everything outside a function body runs at import -- module-level `ModelMeta(...)` calls,
+    class bodies, decorators and signature defaults -- so only function bodies are exempt.
+    """
+    import ast
+
+    import torch
+
+    # every torch attribute that is itself a dtype, e.g. "float32", "bfloat16", but also
+    # aliases like "float", "half" and "long" that OutputDType has no member for
+    dtypes = {
+        name for name in dir(torch) if isinstance(getattr(torch, name), torch.dtype)
+    }
+
+    offenders = []
+    for path in sorted(
+        (_REPO_ROOT / "mteb/models/model_implementations").rglob("*.py")
+    ):
+        tree = ast.parse(path.read_text(encoding="utf-8"))
+        # nodes actually inside a function/method body are evaluated lazily and exempt;
+        # matched by identity (not line number) so a one-line `def f(x=torch.bfloat16): ...`
+        # doesn't let the signature default hide behind its body's line number
+        in_body = {
+            id(sub)
+            for node in ast.walk(tree)
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+            for stmt in node.body
+            for sub in ast.walk(stmt)
+        }
+        offenders += [
+            f"{path.name}:{node.lineno} torch.{node.attr}"
+            for node in ast.walk(tree)
+            if isinstance(node, ast.Attribute)
+            and isinstance(node.value, ast.Name)
+            and node.value.id == "torch"
+            and node.attr in dtypes
+            and id(node) not in in_body
+        ]
+
+    assert not offenders, (
+        "these evaluate a torch dtype at import time; use the matching OutputDType member "
+        f"instead: {offenders}"
+    )
+
+
+# Hides packages from the import system as if they were not installed: `import torch` fails and
+# `importlib.util.find_spec("torch")` returns None. (Setting `sys.modules["torch"] = None` is not
+# faithful -- libraries such as scipy see the key and dereference it.)
+_WITHOUT_TORCH = """
+import importlib.machinery
+import sys
+
+
+class _Hide(importlib.machinery.PathFinder):
+    @classmethod
+    def find_spec(cls, fullname, path=None, target=None):
+        if fullname.split(".")[0] in {"torch", "transformers", "sentence_transformers"}:
+            return None
+        return super().find_spec(fullname, path, target)
+
+
+sys.meta_path = [_Hide if f is importlib.machinery.PathFinder else f for f in sys.meta_path]
+"""
+
+
+def test_mteb_and_model_metadata_work_without_torch_installed() -> None:
+    """`import mteb`, the CLI and reading every model's metadata must work on an install without torch.
+
+    Building the model registry imports all model implementation files, so any of them importing
+    torch, transformers or sentence-transformers at module scope fails this test.
+    """
+    script = _WITHOUT_TORCH + textwrap.dedent(
+        """
+        import mteb
+        import mteb.cli
+
+        print(len(mteb.get_model_metas()))
+        print(len(mteb.get_tasks(tasks=["NFCorpus"])))
+        """
+    )
+    result = subprocess.run(
+        [sys.executable, "-c", script],
+        capture_output=True,
+        text=True,
+        check=False,
+        cwd=_REPO_ROOT,
+    )
+    assert result.returncode == 0, result.stderr[-3000:]
+    n_models, n_tasks = (int(line) for line in result.stdout.split()[-2:])
+    assert n_models > 0
+    assert n_tasks == 1
