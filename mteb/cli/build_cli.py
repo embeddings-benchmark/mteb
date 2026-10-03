@@ -104,6 +104,7 @@ def run(args: argparse.Namespace) -> None:
         overwrite_strategy=overwrite_strategy,
         encode_kwargs=encode_kwargs,
         prediction_folder=prediction_folder,
+        video_frames=args.video_frames,
     )
 
 
@@ -250,6 +251,12 @@ def _add_run_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
         type=int,
         default=None,
         help="Batch size of the encode. Will be passed to the MTEB as `mteb.evaluate(model, task, encode_kwargs={'batch_size': value})`.",
+    )
+    parser.add_argument(
+        "--video-frames",
+        type=int,
+        default=None,
+        help="Number of frames sampled per video when running an image model on a video task. If not set, a default is used and a warning is emitted. Will be passed to the MTEB as `mteb.evaluate(model, task, video_frames=value)`.",
     )
     # for backward compatibility
     parser.add_argument(

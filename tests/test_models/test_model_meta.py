@@ -5,7 +5,7 @@ from typing import Any
 import pytest
 
 import mteb
-from mteb.models.model_meta import ModelMeta
+from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 # Historic models with n_embedding_parameters=None. Do NOT add new models to this list.
 _MISSING_N_EMBEDDING_MODELS = [
@@ -667,3 +667,17 @@ def test_get_model_metas_iso_code_matches_language_script():
 def test_get_model_metas_invalid_language():
     with pytest.raises(ValueError, match="Invalid language code"):
         mteb.get_model_metas(languages=["english"])
+
+
+def test_max_sim_models_are_not_registered_as_dense():
+    """MaxSim scoring means multi-vector output, which `model_type=["dense"]` denies.
+
+    Anything keying off `model_type` (e.g. `Video2ImagesWrapper`, which mean-pools one
+    embedding per input) will mishandle a model that is mislabelled this way.
+    """
+    mislabelled = [
+        m.name
+        for m in mteb.get_model_metas()
+        if m.similarity_fn_name == ScoringFunction.MAX_SIM and "dense" in m.model_type
+    ]
+    assert not mislabelled
