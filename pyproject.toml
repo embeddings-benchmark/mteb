@@ -561,6 +561,7 @@ conflicts = [
         { extra = "gme" }, # requires transformers<4.52.0
         { extra = "jina" }, # remote code needs transformers<5
         { extra = "arctic-embed-m-v2" }, # remote code (GTE) needs transformers<5
+        { extra = "colnanovdr" },
     ],
 ]
 
