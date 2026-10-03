@@ -17,6 +17,7 @@ class VGHierarchicalClusteringP2P(AbsTaskClustering):
 
     metadata = TaskMetadata(
         name="VGHierarchicalClusteringP2P",
+        superseded_by="VGHierarchicalClusteringP2P.v2",
         dataset={
             "path": "navjordj/VG_summarization",
             "revision": "d4c5a8ba10ae71224752c727094ac4c46947fa29",
@@ -64,6 +65,7 @@ class VGHierarchicalClusteringS2S(AbsTaskClustering):
 
     metadata = TaskMetadata(
         name="VGHierarchicalClusteringS2S",
+        superseded_by="VGHierarchicalClusteringS2S.v2",
         dataset={
             "path": "navjordj/VG_summarization",
             "revision": "d4c5a8ba10ae71224752c727094ac4c46947fa29",
@@ -103,3 +105,103 @@ class VGHierarchicalClusteringS2S(AbsTaskClustering):
         self.dataset["test"] = self.dataset["test"].train_test_split(
             test_size=N_SAMPLES, seed=self.seed
         )["test"]
+
+
+class VGHierarchicalClusteringP2PV2(AbsTaskClustering):
+    max_document_to_embed = N_SAMPLES
+    max_fraction_of_documents_to_embed = None
+
+    metadata = TaskMetadata(
+        name="VGHierarchicalClusteringP2P.v2",
+        dataset={
+            "path": "navjordj/VG_summarization",
+            "revision": "d4c5a8ba10ae71224752c727094ac4c46947fa29",
+        },
+        description="Articles and their classes (e.g. sports) from VG news articles extracted from Norsk Aviskorpus. This version drops documents that have no label at the level being scored, instead of grouping them into one class under a sentinel label.",
+        reference="https://huggingface.co/datasets/navjordj/VG_summarization",
+        type="Clustering",
+        category="t2c",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["nob-Latn"],
+        main_score="v_measure",
+        date=("2020-01-01", "2024-12-31"),  # best guess
+        domains=["News", "Non-fiction", "Written"],
+        license="cc-by-nc-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        task_subtypes=["Thematic clustering"],
+        sample_creation="found",
+        bibtex_citation=r"""
+@mastersthesis{navjord2023beyond,
+  author = {Navjord, J{\\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
+  school = {Norwegian University of Life Sciences, {\\AA}s},
+  title = {Beyond extractive: advancing abstractive automatic text summarization in Norwegian with transformers},
+  year = {2023},
+}
+""",
+        prompt="Identify the categories (e.g. sports) of given articles in Norwegian",
+        adapted_from=["VGHierarchicalClusteringP2P"],
+    )
+
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+        self.dataset = self.dataset.rename_columns(
+            {"article": "sentences", "classes": "labels"}
+        )
+        self.dataset = self.dataset.map(split_labels)
+        # Subsampling the dataset
+        self.dataset["test"] = self.dataset["test"].train_test_split(
+            test_size=N_SAMPLES, seed=self.seed
+        )["test"]
+
+    drop_unlabelled_documents = True
+
+
+class VGHierarchicalClusteringS2SV2(AbsTaskClustering):
+    max_document_to_embed = N_SAMPLES
+    max_fraction_of_documents_to_embed = None
+
+    metadata = TaskMetadata(
+        name="VGHierarchicalClusteringS2S.v2",
+        dataset={
+            "path": "navjordj/VG_summarization",
+            "revision": "d4c5a8ba10ae71224752c727094ac4c46947fa29",
+        },
+        description="Articles and their classes (e.g. sports) from VG news articles extracted from Norsk Aviskorpus. This version drops documents that have no label at the level being scored, instead of grouping them into one class under a sentinel label.",
+        reference="https://huggingface.co/datasets/navjordj/VG_summarization",
+        type="Clustering",
+        category="t2c",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["nob-Latn"],
+        main_score="v_measure",
+        date=("2020-01-01", "2024-12-31"),  # best guess
+        domains=["News", "Non-fiction", "Written"],
+        license="cc-by-nc-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        task_subtypes=["Thematic clustering"],
+        sample_creation="found",
+        bibtex_citation=r"""
+@mastersthesis{navjord2023beyond,
+  author = {Navjord, J{\\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
+  school = {Norwegian University of Life Sciences, {\\AA}s},
+  title = {Beyond extractive: advancing abstractive automatic text summarization in Norwegian with transformers},
+  year = {2023},
+}
+""",
+        prompt="Identify the categories (e.g. sports) of given articles in Norwegian",
+        adapted_from=["VGHierarchicalClusteringS2S"],
+    )
+
+    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+        self.dataset = self.dataset.rename_columns(
+            {"ingress": "sentences", "classes": "labels"}
+        )
+        self.dataset = self.dataset.map(split_labels)
+        # Subsampling the dataset
+        self.dataset["test"] = self.dataset["test"].train_test_split(
+            test_size=N_SAMPLES, seed=self.seed
+        )["test"]
+
+    drop_unlabelled_documents = True
