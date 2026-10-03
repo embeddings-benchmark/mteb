@@ -35,6 +35,15 @@ mteb run -m sentence-transformers/average_word_embeddings_komninos \
 This will create a folder `mteb_output/{model_name}/{model_revision}` containing the results of the model on the specified tasks supplied as a json
 file; `{task_name}.json`.
 
+### Multi-GPU encoding
+
+Pass a comma-separated list to `--device` to encode on multiple GPUs (SentenceTransformer models):
+
+```bash
+mteb run -m <model> -t NFCorpus --device 0            # single GPU
+mteb run -m <model> -t NFCorpus --device 0,1,2,3      # 4 GPUs on the node
+```
+
 
 ## Listing Available Tasks
 
@@ -108,7 +117,7 @@ This will run the model on all compatible mock tasks, print a Markdown summary t
 Available options:
 - `-m, --model MODEL`: The model to use. Prioritizes the model implementation from MTEB's model registry, or defaults to loading via `sentence-transformers`.
 - `--model-revision REVISION`: Revision of the model to load.
-- `--device DEVICE`: Device to use for computation (e.g. `cpu`, `cuda`).
+- `--device DEVICE`: Device for computation (e.g. `cpu`, `0`, `cuda:0`).
 - `-v, --verbosity VERBOSITY`: Verbosity level (0 to 4, default: 2).
 
 The same checks are available from Python using [`mteb.mock_run`](../../contributing/adding_a_model.md#local-model-verification-using-mock-tasks), which returns the per-task status instead of writing a file.
