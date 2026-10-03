@@ -1001,6 +1001,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
     ],
     "zero_relevant_docs": [
         "BrightRetrieval",
+        "SciDocsDecontaminated",  # retain 71 source queries with only zero-score judgments to reproduce the published evaluation
         "TwitterHjerneRetrieval",
     ],
     "impossible_unique_count": [

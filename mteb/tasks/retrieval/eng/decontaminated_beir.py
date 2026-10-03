@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Any
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -25,7 +23,7 @@ _DECONTAMINATED_BEIR_CITATION = r"""
 
 
 class ArguAnaDecontaminated(AbsTaskRetrieval):
-    ignore_identical_ids = True
+    ignore_identical_ids = False
 
     metadata = TaskMetadata(
         name="ArguAnaDecontaminated",
@@ -174,33 +172,6 @@ class SciDocsDecontaminated(AbsTaskRetrieval):
             "query": "Given a scientific paper title, retrieve paper abstracts that are cited by the given paper"
         },
     )
-
-    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        """Drop the explicit negatives SCIDOCS ships in its qrels.
-
-        SCIDOCS qrels carry score-0 rows for non-cited papers. Keeping them
-        would count those documents as judged-relevant, so they are removed
-        along with any query left without a positive judgement.
-        """
-        for subset in self.dataset:
-            for split in self.dataset[subset]:
-                split_data = self.dataset[subset][split]
-                rel_docs = split_data["relevant_docs"]
-                filtered_rel_docs = {
-                    qid: {doc_id: score for doc_id, score in docs.items() if score > 0}
-                    for qid, docs in rel_docs.items()
-                }
-                valid_qids = {
-                    qid for qid, docs in filtered_rel_docs.items() if len(docs) > 0
-                }
-                split_data["relevant_docs"] = {
-                    qid: filtered_rel_docs[qid] for qid in valid_qids
-                }
-                queries = split_data["queries"]
-                indices = [
-                    i for i, qid in enumerate(queries["id"]) if qid in valid_qids
-                ]
-                split_data["queries"] = queries.select(indices)
 
 
 class TrecCOVIDDecontaminated(AbsTaskRetrieval):
