@@ -28,7 +28,9 @@ class MSClapWrapper(AbsEncoder):
         self,
         model_name: str = "microsoft/msclap-2023",
         device: str | None = None,
-        max_audio_length_s: float = 30.0,
+        # None: msclap's own duration; longer input hits its random-window branch
+        # https://github.com/microsoft/CLAP/blob/main/msclap/configs/config_2023.yml
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
         import torch
@@ -40,8 +42,6 @@ class MSClapWrapper(AbsEncoder):
 
         self.model_name = model_name
         self.device = device
-        self.sampling_rate = 48000
-        self.max_audio_length_s = max_audio_length_s
 
         if "2022" in self.model_name:
             self.version = "2022"
@@ -57,6 +57,12 @@ class MSClapWrapper(AbsEncoder):
         self.model = CLAP(version=self.version, use_cuda=self.use_cuda)
         self.model.clap = self.model.clap.to(self.device)
         self.tokenizer = self.model.tokenizer
+        # 44100 for 2022 and 2023: msclap's own config
+        # https://github.com/microsoft/CLAP/blob/main/msclap/configs/config_2023.yml
+        self.sampling_rate = int(self.model.args.sampling_rate)
+        self.max_audio_length_seconds = max_audio_length_seconds or float(
+            self.model.args.duration
+        )
 
     def get_audio_embeddings(
         self,
@@ -67,7 +73,10 @@ class MSClapWrapper(AbsEncoder):
         import soundfile as sf
         import torch
 
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate,
+            max_samples=int(self.max_audio_length_seconds * self.sampling_rate),
+        )
 
         all_embeddings = []
         for batch in tqdm(

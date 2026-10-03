@@ -31,10 +31,14 @@ class PEAudioVisualWrapper(AbsEncoder):
         self,
         model_name: str = "facebook/pe-av-large",
         device: str | None = None,
+        # fps=2 is an mteb default; PE-AV declares no frame rate
         fps: float | None = 2.0,
+        # 64 is an mteb cap; PE-AV declares no frame count
         max_frames: int | None = 64,
         num_frames: int | None = None,
-        max_samples: int | None = 30 * 48000,  # 30s * sampling rate
+        # 400 s: max_position_embeddings=10000 at 25 frames/s
+        # https://huggingface.co/facebook/pe-av-large/blob/main/config.json
+        max_samples: int | None = 400 * 48000,
         **kwargs: Any,
     ):
         import torch

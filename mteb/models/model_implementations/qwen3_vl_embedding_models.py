@@ -32,7 +32,10 @@ class Qwen3VLEmbeddingWrapper(InstructSentenceTransformerModel):
         device: str | None = None,
         min_pixels: int = MIN_PIXELS,
         max_pixels: int = MAX_PIXELS,
+        # fps=2 is the mteb default
         fps: float | None = 2.0,
+        # 64 frames: MAX_FRAMES=64
+        # https://huggingface.co/Qwen/Qwen3-VL-Embedding-2B/blob/main/scripts/qwen3_vl_embedding.py
         max_frames: int | None = 64,
         num_frames: int | None = None,
         **kwargs: Any,

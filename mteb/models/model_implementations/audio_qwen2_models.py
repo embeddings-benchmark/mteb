@@ -24,6 +24,8 @@ class Qwen2AudioWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
+        # 30 s: chunk_length=30
+        # https://huggingface.co/Qwen/Qwen2-Audio-7B/blob/main/preprocessor_config.json
         max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):

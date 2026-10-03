@@ -6,7 +6,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import AudioCollator, SingleClipBatches
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -22,7 +22,9 @@ class SeamlessM4TWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
-        max_audio_length_seconds: float = 5.0,
+        # 60 s: MAX_INPUT_AUDIO_LENGTH in Meta's M4T v2 demo, not a model config
+        # https://github.com/facebookresearch/seamless_communication/blob/main/demo/m4tv2/app.py
+        max_audio_length_seconds: float = 60.0,
         **kwargs: Any,
     ):
         import torch
@@ -54,11 +56,14 @@ class SeamlessM4TWrapper(AbsEncoder):
     ) -> Array:
         import torch
 
-        inputs.collate_fn = AudioCollator(self.sampling_rate, self.max_samples)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate, max_samples=self.max_samples
+        )
         all_embeddings = []
 
+        # one clip per forward: batch independence is not verified for SeamlessM4T
         for batch in tqdm(
-            inputs,
+            SingleClipBatches(inputs),
             disable=not show_progress_bar,
         ):
             audio_arrays = [audio["array"] for audio in batch["audio"]]

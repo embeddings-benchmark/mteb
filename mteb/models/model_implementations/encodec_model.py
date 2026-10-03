@@ -3,11 +3,12 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
+import numpy as np
 from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import AudioCollator, seconds_to_samples
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -26,7 +27,9 @@ class EncodecWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
-        max_audio_length_seconds: float = 30.0,
+        # no limit: chunk_length_s=null
+        # https://huggingface.co/facebook/encodec_24khz/blob/main/config.json
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
         import torch
@@ -45,7 +48,7 @@ class EncodecWrapper(AbsEncoder):
         self.model.eval()
 
         self.processor = AutoProcessor.from_pretrained(model_name)
-        self.sampling_rate = self.processor.sampling_rate  # 24000 Hz typically
+        self.sampling_rate = self.processor.sampling_rate  # from checkpoint (24 kHz)
 
     def get_audio_embeddings(
         self,
@@ -55,8 +58,12 @@ class EncodecWrapper(AbsEncoder):
     ) -> Array:
         import torch
 
-        max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
-        inputs.collate_fn = AudioCollator(self.sampling_rate, max_samples)
+        max_samples = seconds_to_samples(
+            self.max_audio_length_seconds, self.sampling_rate
+        )
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate, max_samples=max_samples
+        )
 
         all_embeddings = []
 
@@ -69,44 +76,49 @@ class EncodecWrapper(AbsEncoder):
             for array in audio_array:
                 # Ensure minimum length for encoder (Encodec needs ~320 samples per frame)
                 # Use 1 second minimum to be safe
+                # AudioCollator yields numpy
                 min_samples = self.sampling_rate
+                array = np.asarray(array)  # noqa: PLW2901
                 if array.shape[-1] < min_samples:
-                    padding = torch.zeros(min_samples - array.shape[-1])
-                    array = torch.cat([array, padding])  # noqa: PLW2901
-
-                audio_arrays.append(array.numpy())
-
-            with torch.no_grad():
-                # Use processor for batch padding (truncation/min-length done manually above)
-                processed = self.processor(
-                    raw_audio=audio_arrays,
-                    sampling_rate=self.sampling_rate,
-                    padding=True,
-                    return_tensors="pt",
-                )
-                input_values = processed["input_values"].to(self.device)
-
-                # Add channel dimension if needed (B, T) -> (B, 1, T)
-                if input_values.dim() == 2:
-                    input_values = input_values.unsqueeze(1)
-
-                # Get the latent representations directly from the encoder
-                latent = self.model.encoder(input_values)
-
-                # Validate latent has time frames
-                if latent.shape[2] == 0:
-                    raise ValueError(
-                        f"Encodec encoder produced 0 time frames. "
-                        f"Input shape: {input_values.shape}, latent shape: {latent.shape}"
+                    array = np.pad(  # noqa: PLW2901
+                        array, (0, min_samples - array.shape[-1])
                     )
 
-                # Apply mean pooling over the time dimension to get fixed-size embeddings
-                embeddings = torch.mean(latent, dim=2)  # Average over time dimension
+                audio_arrays.append(array)
 
-                # Normalize embeddings
-                embeddings = embeddings / embeddings.norm(dim=-1, keepdim=True)  # noqa: PLR6104
+            with torch.no_grad():
+                # one clip per forward: batch padding would enter the time mean
+                for array in audio_arrays:
+                    processed = self.processor(
+                        raw_audio=[array],
+                        sampling_rate=self.sampling_rate,
+                        return_tensors="pt",
+                    )
+                    input_values = processed["input_values"].to(self.device)
 
-                all_embeddings.append(embeddings.cpu().detach())
+                    # Add channel dimension if needed (B, T) -> (B, 1, T)
+                    if input_values.dim() == 2:
+                        input_values = input_values.unsqueeze(1)
+
+                    # Get the latent representations directly from the encoder
+                    latent = self.model.encoder(input_values)
+
+                    # Validate latent has time frames
+                    if latent.shape[2] == 0:
+                        raise ValueError(
+                            f"Encodec encoder produced 0 time frames. "
+                            f"Input shape: {input_values.shape}, latent shape: {latent.shape}"
+                        )
+
+                    # Apply mean pooling over the time dimension to get fixed-size embeddings
+                    embeddings = torch.mean(
+                        latent, dim=2
+                    )  # Average over time dimension
+
+                    # Normalize embeddings
+                    embeddings = embeddings / embeddings.norm(dim=-1, keepdim=True)  # noqa: PLR6104
+
+                    all_embeddings.append(embeddings.cpu().detach())
 
         return torch.cat(all_embeddings, dim=0).numpy()
 

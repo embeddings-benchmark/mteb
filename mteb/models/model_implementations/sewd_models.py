@@ -1,12 +1,15 @@
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING, Any
 
 from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import AudioCollator, SingleClipBatches
+
+logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -22,7 +25,9 @@ class SewDWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
-        max_audio_length_seconds: float = 30.0,
+        # None: an mteb cap at the relative-position horizon read below; the
+        # encoder runs past it, so this is not a hard model limit
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
         import torch
@@ -33,7 +38,6 @@ class SewDWrapper(AbsEncoder):
 
         self.model_name = model_name
         self.device = device
-        self.max_audio_length_seconds = max_audio_length_seconds
 
         # SewD uses the same feature extractor as Wav2Vec2
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(
@@ -43,7 +47,29 @@ class SewDWrapper(AbsEncoder):
             self.device
         )
         self.model.eval()
+        # group-norm feature encoders normalise over the padded batch, so a clip's
+        # embedding depends on its batch-mates; layer-norm ones are exact batched
+        # https://huggingface.co/docs/transformers/model_doc/wav2vec2#transformers.Wav2Vec2FeatureExtractor
+        self.per_clip = self.model.config.feat_extract_norm != "layer"
         self.sampling_rate = self.feature_extractor.sampling_rate
+
+        # samples: max_position_embeddings x conv_stride x squeeze_factor
+        # https://huggingface.co/asapp/sew-d-base-plus-400k-ft-ls100h/blob/main/config.json
+        config = self.model.config
+        stride = 1
+        for st in config.conv_stride:
+            stride *= st
+        self.max_samples = (
+            config.max_position_embeddings * stride * config.squeeze_factor
+        )
+        if max_audio_length_seconds is not None:
+            self.max_samples = int(max_audio_length_seconds * self.sampling_rate)
+        logger.info(
+            "%s: audio capped at %d samples (%.1f s)",
+            model_name,
+            self.max_samples,
+            self.max_samples / self.sampling_rate,
+        )
 
     def get_audio_embeddings(  # noqa: PLR0914
         self,
@@ -56,8 +82,9 @@ class SewDWrapper(AbsEncoder):
         inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
         all_embeddings = []
 
+        batches = SingleClipBatches(inputs) if self.per_clip else inputs
         for batch in tqdm(
-            inputs,
+            batches,
             disable=not show_progress_bar,
         ):
             audio_arrays = [audio["array"] for audio in batch["audio"]]
@@ -67,7 +94,7 @@ class SewDWrapper(AbsEncoder):
                 return_tensors="pt",
                 padding="longest",
                 truncation=True,
-                max_length=int(self.max_audio_length_seconds * self.sampling_rate),
+                max_length=self.max_samples,
                 return_attention_mask=True,
             ).to(self.device)
 

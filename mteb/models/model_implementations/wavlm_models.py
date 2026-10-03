@@ -6,7 +6,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import AudioCollator, SingleClipBatches
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -22,7 +22,9 @@ class WavlmWrapper(AbsEncoder):
         model_name: str,
         revision: str | None = None,
         device: str | None = None,
-        max_audio_length_seconds: float = 30.0,
+        # 90 s: an mteb memory cap, not a model limit. WavLM declares no length
+        # limit but has no SDPA, so attention memory grows quadratically
+        max_audio_length_seconds: float = 90.0,
         **kwargs: Any,
     ):
         import torch
@@ -57,8 +59,10 @@ class WavlmWrapper(AbsEncoder):
 
         all_embeddings = []
 
+        # one clip per forward: group-norm checkpoints are batch dependent, and
+        # WavLM has no SDPA, so batching long clips is also a memory risk
         for batch in tqdm(
-            inputs,
+            SingleClipBatches(inputs),
             disable=not show_progress_bar,
         ):
             audio_arrays = [audio["array"] for audio in batch["audio"]]

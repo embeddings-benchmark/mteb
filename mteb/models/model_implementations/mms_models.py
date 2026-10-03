@@ -7,7 +7,11 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import (
+    AudioCollator,
+    SingleClipBatches,
+    seconds_to_samples,
+)
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -26,7 +30,9 @@ class MMSWrapper(AbsEncoder):
         revision: str | None = None,
         target_lang: str = "eng",
         device: str | None = None,
-        max_audio_length_seconds: float = 30.0,
+        # uncapped: conv positional embedding, no max_position_embeddings
+        # https://huggingface.co/facebook/mms-1b-all/blob/main/config.json
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
         import torch
@@ -60,6 +66,10 @@ class MMSWrapper(AbsEncoder):
             )
 
         self.model.eval()
+        # group-norm feature encoders normalise over the padded batch, so a clip's
+        # embedding depends on its batch-mates; layer-norm ones are exact batched
+        # https://huggingface.co/docs/transformers/model_doc/wav2vec2#transformers.Wav2Vec2FeatureExtractor
+        self.per_clip = self.model.config.feat_extract_norm != "layer"
         self.sampling_rate = self.feature_extractor.sampling_rate
 
     def get_audio_embeddings(  # noqa: PLR0914
@@ -70,12 +80,18 @@ class MMSWrapper(AbsEncoder):
     ) -> Array:
         import torch
 
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+        max_samples = seconds_to_samples(
+            self.max_audio_length_seconds, self.sampling_rate
+        )
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate, max_samples=max_samples
+        )
 
         all_embeddings = []
 
+        batches = SingleClipBatches(inputs) if self.per_clip else inputs
         for batch in tqdm(
-            inputs,
+            batches,
             disable=not show_progress_bar,
         ):
             audio_arrays = [audio["array"] for audio in batch["audio"]]
@@ -85,8 +101,6 @@ class MMSWrapper(AbsEncoder):
                 sampling_rate=self.sampling_rate,
                 return_tensors="pt",
                 padding="longest",
-                truncation=True,
-                max_length=int(self.max_audio_length_seconds * self.sampling_rate),
                 return_attention_mask=True,
             ).to(self.device)
 
