@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.22.1"
+version = "2.22.2"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -108,6 +108,7 @@ topk-embed = ["sentence-transformers>=6.0.1", "transformers>=5.9.0,<5.13.0", "fl
 openai = ["openai>=1.41.0", "tiktoken>=0.8.0"]
 model2vec = ["model2vec>=0.3.0"]
 pylate = ["pylate>=1.3.1"]
+colnanovdr = ["sentence-transformers>=6.0.0", "transformers>=5.0.0"]
 msclap = ["msclap>=1.3.4", "soundfile>=0.13.1"]
 bm25s = ["bm25s>=0.2.6", "PyStemmer>=2.2.0.3"]
 boto3 = ["boto3>=1.34.0"]
@@ -562,6 +563,7 @@ conflicts = [
         { extra = "gme" }, # requires transformers<4.52.0
         { extra = "jina" }, # remote code needs transformers<5
         { extra = "arctic-embed-m-v2" }, # remote code (GTE) needs transformers<5
+        { extra = "colnanovdr" },
     ],
 ]
 
