@@ -993,6 +993,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
     ],
     "zero_relevant_docs": [
         "BrightRetrieval",
+        "NeuCLIR2023Retrieval",  # 4 queries (2 fas, 1 rus, 1 zho) only have score-0 judgments in the original qrels
         "TwitterHjerneRetrieval",
     ],
     "impossible_unique_count": [
