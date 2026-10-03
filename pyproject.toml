@@ -202,7 +202,6 @@ test = [
     "bibtexparser>=2.0.0,<3.0.0", # used for tests/test_citation_formatting.py
     "refaudit>=0.4.9", # used for tests/test_validate_metadata/check_citations.py
     "av>=17.0.0",
-    "jinja2>=3.0.0", # used for tests/test_results/test_benchmark_results.py
 ]
 docs = [
     "zensical==0.0.64",

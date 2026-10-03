@@ -14,9 +14,9 @@ import textwrap
 
 import pytest
 
-_REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
+from mteb.models.model_meta import _FULL_INSTALL_DEPENDENCIES
 
-_HEAVY = ("torch", "transformers", "sentence_transformers")
+_REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 
 
 def _run(script: str) -> str:
@@ -40,7 +40,7 @@ def test_import_mteb_does_not_import_torch() -> None:
         import mteb
         import mteb.cli
 
-        print("loaded:", ",".join(d for d in {_HEAVY!r} if d in sys.modules))
+        print("loaded:", ",".join(d for d in {sorted(_FULL_INSTALL_DEPENDENCIES)!r} if d in sys.modules))
         """
     )
     assert loaded == "loaded:", (

@@ -553,7 +553,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             if e.name is None or e.name.split(".")[0] not in _FULL_INSTALL_DEPENDENCIES:
                 raise
             # not a precondition like the other call sites: which packages a model needs depends on
-            # the model, e.g. API models only need their client and work on `mteb-core`
+            # the model
             raise ModuleNotFoundError(
                 _full_installation_message(f"Loading {name}"), name=e.name
             ) from e
