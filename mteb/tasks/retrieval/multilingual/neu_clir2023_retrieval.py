@@ -14,8 +14,8 @@ class NeuCLIR2023Retrieval(AbsTaskRetrieval):
         description="The task involves identifying and retrieving the documents that are relevant to the queries.",
         reference="https://neuclir.github.io/",
         dataset={
-            "path": "mteb/NeuCLIR2022Retrieval",
-            "revision": "95cad8671c1c31908766a689755c307f4770411f",
+            "path": "mteb/NeuCLIR2023Retrieval",
+            "revision": "d14b466dd438f8d5bb4739721c644eb69618d432",
         },
         type="Retrieval",
         category="t2t",
