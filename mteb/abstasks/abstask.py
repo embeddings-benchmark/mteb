@@ -76,7 +76,7 @@ def _multilabel_subsampling(
         _, test_idx = _iterative_train_test_split(
             x_np, labels_np, test_size=n_samples / n_split, random_state=seed
         )
-        dataset_dict.update({split: Dataset.from_dict(dataset_dict[split][test_idx])})
+        dataset_dict.update({split: dataset_dict[split].select(test_idx)})
     return dataset_dict
 
 
