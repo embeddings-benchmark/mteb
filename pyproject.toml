@@ -106,6 +106,7 @@ omniretriever = ["peft>=0.11.0", "transformers>=4.51.0,<4.52.0"]
 colvec1_1 = ["transformers>=5.14.1,<6.0.0"]
 topk-embed = ["sentence-transformers>=6.0.1", "transformers>=5.9.0,<5.13.0", "flash-linear-attention>=0.5.1", "kernels>=0.14.1,<0.15"]
 openai = ["openai>=1.41.0", "tiktoken>=0.8.0"]
+ngnn = ["ngnn-encoder==0.1.0"]
 model2vec = ["model2vec>=0.3.0"]
 pylate = ["pylate>=1.3.1"]
 colnanovdr = ["sentence-transformers>=6.0.0", "transformers>=5.0.0"]
@@ -516,6 +517,7 @@ override-dependencies = [
 ]
 conflicts = [
     [
+        { extra = "ngnn" }, # pins shared core dependencies
         { extra = "timm" },
         { extra = "radio" }, # pins timm, same conflict as the timm extra
         { extra = "blip2" },
