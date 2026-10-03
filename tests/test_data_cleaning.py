@@ -9,7 +9,6 @@ from datasets import Dataset, DatasetDict
 import mteb
 from mteb.abstasks.abstask import AbsTask
 from mteb.data_cleaning import (
-    Quantile,
     remove_by_audio_duration,
     remove_by_image_size,
     remove_by_text_length,
@@ -1074,15 +1073,15 @@ def test_remove_by_audio_duration_removes_clips_over_max_seconds() -> None:
     ("bounds", "expected"),
     [
         # 10 texts of 1 to 10 characters, so the 0.2 quantile is 2.8 and the 0.8 one is 8.2
-        ({"min_length": Quantile(0.2)}, 8),
-        ({"max_length": Quantile(0.8)}, 8),
-        ({"min_length": Quantile(0.2), "max_length": Quantile(0.8)}, 6),
-        # the two kinds of bound can be mixed
-        ({"min_length": 3, "max_length": Quantile(0.8)}, 6),
+        ({"min_quantile": 0.2}, 8),
+        ({"max_quantile": 0.8}, 8),
+        ({"min_quantile": 0.2, "max_quantile": 0.8}, 6),
+        # a size and a quantile can bound the two ends
+        ({"min_length": 3, "max_quantile": 0.8}, 6),
     ],
 )
 def test_remove_by_text_length_takes_a_quantile_bound(
-    bounds: dict[str, int | Quantile], expected: int
+    bounds: dict[str, float], expected: int
 ) -> None:
     task = _create_texts_task(["x" * n for n in range(1, 11)])
 
@@ -1102,13 +1101,22 @@ def test_remove_by_text_length_takes_the_quantile_of_each_subset() -> None:
             }
         )
 
-    cleaned = remove_by_text_length(task, min_length=Quantile(0.5))
+    cleaned = remove_by_text_length(task, min_quantile=0.5)
 
     # each subset is filtered against its own distribution, not a shared threshold
     for subset in ("eng", "fra"):
         assert len(cleaned.dataset[subset]["test"]) == 5
 
 
-def test_quantile_refuses_a_value_outside_zero_to_one() -> None:
-    with pytest.raises(ValueError, match="lies between 0 and 1"):
-        Quantile(5)
+def test_remove_by_text_length_refuses_a_quantile_outside_zero_to_one() -> None:
+    task = _create_texts_task(["a text"])
+
+    with pytest.raises(ValueError, match="quantile between 0 and 1"):
+        remove_by_text_length(task, min_quantile=5)
+
+
+def test_remove_by_text_length_refuses_a_bound_given_twice() -> None:
+    task = _create_texts_task(["a text"])
+
+    with pytest.raises(ValueError, match="both `min_length` and `min_quantile`"):
+        remove_by_text_length(task, min_length=3, min_quantile=0.05)

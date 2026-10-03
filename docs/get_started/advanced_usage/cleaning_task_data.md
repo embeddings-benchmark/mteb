@@ -114,18 +114,14 @@ Two details follow from counting code points rather than characters as a reader 
 
 ### Bounds from the task's own distribution
 
-A [`Quantile`][mteb.data_cleaning.Quantile] stands in for either bound and is read off the data being filtered, so it needs no threshold of its own:
+Instead of a size, a bound can be given as a quantile of the task's own sizes, which needs no threshold of its own:
 
 ```python
-from mteb.data_cleaning import Quantile, remove_by_text_length
-
-cleaned = remove_by_text_length(
-    task, min_length=Quantile(0.05)
-)  # about the shortest 5%
-cleaned = remove_by_text_length(task, max_length=Quantile(0.99))  # about the longest 1%
+cleaned = remove_by_text_length(task, min_quantile=0.05)  # about the shortest 5%
+cleaned = remove_by_text_length(task, max_quantile=0.99)  # about the longest 1%
 ```
 
-It is taken per split, per subset and per compared column, and per side of a retrieval split, so a single call adapts to each language: on MassiveIntentClassification `min_length=Quantile(0.05)` removes between 2.6% and 4.8% of each subset, where `min_length=10` ranges from 1.3% of the Tamil subset to 48.5% of the Chinese one. It does always remove about that share, though, even from a split with nothing wrong with it, so prefer an absolute bound once you know what counts as too short.
+A quantile is taken per split, per subset and per compared column, and per side of a retrieval split, so a single call adapts to each language: on MassiveIntentClassification `min_quantile=0.05` removes between 2.6% and 4.8% of each subset, where `min_length=10` ranges from 1.3% of the Tamil subset to 48.5% of the Chinese one. It does always remove about that share, though, even from a split with nothing wrong with it, so prefer a size once you know what counts as too short.
 
 ### Images, audio and video
 
