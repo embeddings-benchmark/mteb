@@ -1,14 +1,23 @@
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING
 
 from mteb.models.model_meta import ScoringFunction
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     import torch
 
     from mteb.models import EncoderProtocol
     from mteb.types import Array
+
+logger = logging.getLogger(__name__)
+
+# Element budget for max_sim's (queries, documents, query_tokens, document_tokens) intermediate,
+# about 400 MB in float32.
+_MAX_SIM_CHUNK_ELEMENTS = 100_000_000
 
 
 def _use_torch_compile() -> bool:
@@ -35,6 +44,58 @@ def _convert_to_tensor(a: Array, dtype: torch.dtype | None = None) -> torch.Tens
             torch.float32
         )  # upcast sub-float32 floats (fp8/float16/bfloat16) to break ties
     return a
+
+
+def _select_device(a: torch.Tensor, b: torch.Tensor) -> torch.device:
+    """Pick the device to score `a` against `b` on.
+
+    Inputs already on an accelerator are scored there. CPU inputs are moved to CUDA or MPS
+    when one is available and the amount of work (multiply-adds) is large enough to pay for the copy.
+    """
+    import torch
+
+    if a.device.type != "cpu":
+        return a.device
+    if b.device.type != "cpu":
+        return b.device
+
+    if torch.cuda.is_available():
+        return torch.device("cuda")
+    if torch.backends.mps.is_available() and torch.float64 not in {a.dtype, b.dtype}:
+        return torch.device("mps")
+    return a.device
+
+
+def _compute_on_best_device(
+    core_fn: Callable[[torch.Tensor, torch.Tensor, torch.device], torch.Tensor],
+    a: torch.Tensor,
+    b: torch.Tensor,
+) -> torch.Tensor:
+    """Run `core_fn(a, b, device)` on the selected device and return the result on `a`'s device.
+
+    `core_fn` is responsible for moving its inputs to `device`, so it can stream large inputs in
+    chunks. Falls back to the CPU if the accelerator runs out of memory.
+    """
+    import torch
+
+    device = _select_device(a, b)
+    if device == a.device == b.device:
+        return core_fn(a, b, device)
+    try:
+        return core_fn(a, b, device).to(a.device)
+    except RuntimeError as e:
+        # torch.OutOfMemoryError (CUDA) subclasses RuntimeError; MPS raises a plain RuntimeError
+        if "out of memory" not in str(e).lower():
+            raise
+        logger.warning(
+            f"Ran out of memory computing similarity on {device}, falling back to CPU."
+        )
+        if device.type == "cuda":
+            torch.cuda.empty_cache()
+        elif device.type == "mps":
+            torch.mps.empty_cache()
+        cpu = torch.device("cpu")
+        return core_fn(a.to(cpu), b.to(cpu), cpu).to(a.device)
 
 
 def compute_pairwise_similarity(
@@ -154,10 +215,10 @@ def cos_sim(a: Array, b: Array) -> torch.Tensor:
         and _use_torch_compile()
         and (isinstance(a, torch.Tensor) and isinstance(b, torch.Tensor))
     )
-    if should_compile:
-        _cos_sim_core_compiled = torch.compile(_cos_sim_core)
-        return _cos_sim_core_compiled(a, b)
-    return _cos_sim_core(a, b)
+    core_fn = torch.compile(_cos_sim_core) if should_compile else _cos_sim_core
+    return _compute_on_best_device(
+        lambda a_, b_, device: core_fn(a_.to(device), b_.to(device)), a, b
+    )
 
 
 # https://github.com/UKPLab/sentence-transformers/blob/3fd59c3d122f2148e22b6338447b45d850fb6ea4/sentence_transformers/util.py#L125
@@ -183,16 +244,16 @@ def max_sim(a: Array, b: Array, batch_size: int = 128) -> torch.Tensor:
     this function computes the maximum similarity `max_sim(a[i], b[j])` for all
     pairs of tokens `i` and `j` across the two inputs.
 
-    `a` and `b` are scored in `batch_size`-sized chunks along their leading (batch)
-    dimension, rather than all at once: the full `(len(a), len(b), num_tokens_a,
-    num_tokens_b)` intermediate tensor from a single `einsum` call would otherwise be
-    held in memory simultaneously, which can exhaust memory even for moderately
-    sized inputs (e.g. a few thousand documents).
+    `a` is scored in `batch_size`-sized chunks and `b` in chunks sized so that the
+    `(a_chunk, b_chunk, num_tokens_a, num_tokens_b)` intermediate from each `einsum` call
+    stays within `_MAX_SIM_CHUNK_ELEMENTS`: the full intermediate would otherwise be
+    held in memory at once, which exhausts memory even for moderately sized inputs
+    (e.g. a few thousand long documents).
 
     Args:
         a: Tensor of shape (batch_size, num_tokens, token_dim).
         b: Tensor of shape (batch_size, num_tokens, token_dim).
-        batch_size: Number of rows of `a` and of `b` to score against each other at a time.
+        batch_size: Maximum number of rows of `a` to score at a time.
 
     Returns:
         A tensor containing the maximum similarity values for each batch.
@@ -208,17 +269,39 @@ def max_sim(a: Array, b: Array, batch_size: int = 128) -> torch.Tensor:
     if len(b.shape) == 2:
         b = b.reshape(1, *b.shape)
 
-    row_chunks = []
-    for a_start in range(0, a.size(0), batch_size):
-        a_chunk = a[a_start : a_start + batch_size]
-        col_chunks = []
-        for b_start in range(0, b.size(0), batch_size):
-            b_chunk = b[b_start : b_start + batch_size]
-            scores = torch.einsum("ash,bth->abst", a_chunk, b_chunk)
-            col_chunks.append(scores.max(axis=-1).values.sum(axis=-1))  # type: ignore[call-overload]
-        row_chunks.append(torch.cat(col_chunks, dim=1))
+    def _max_sim_core(
+        a_tensor: torch.Tensor, b_tensor: torch.Tensor, device: torch.device
+    ) -> torch.Tensor:
+        out = torch.empty(
+            a_tensor.size(0),
+            b_tensor.size(0),
+            dtype=torch.promote_types(a_tensor.dtype, b_tensor.dtype),
+            device=a_tensor.device,
+        )
+        # Bound the rows of `a` too: with long tokens on both sides, even one row of `b`
+        # against `batch_size` rows of `a` can exceed the budget.
+        tokens_per_pair = max(1, a_tensor.size(1) * b_tensor.size(1))
+        a_rows = max(
+            1,
+            min(
+                batch_size,
+                a_tensor.size(0),
+                _MAX_SIM_CHUNK_ELEMENTS // tokens_per_pair,
+            ),
+        )
+        b_chunk_size = max(1, _MAX_SIM_CHUNK_ELEMENTS // (a_rows * tokens_per_pair))
+        for b_start in range(0, b_tensor.size(0), b_chunk_size):
+            b_chunk = b_tensor[b_start : b_start + b_chunk_size].to(device)
+            for a_start in range(0, a_tensor.size(0), a_rows):
+                a_chunk = a_tensor[a_start : a_start + a_rows].to(device)
+                scores = torch.einsum("ash,bth->abst", a_chunk, b_chunk)
+                out[
+                    a_start : a_start + a_chunk.size(0),
+                    b_start : b_start + b_chunk.size(0),
+                ] = scores.max(axis=-1).values.sum(axis=-1)  # type: ignore[call-overload]
+        return out
 
-    return torch.cat(row_chunks, dim=0)
+    return _compute_on_best_device(_max_sim_core, a, b)
 
 
 # https://github.com/lightonai/pylate/blob/2d094a724866d6e15701781528368438081c0157/pylate/scores/scores.py#L67C1-L122C38
@@ -284,14 +367,15 @@ def dot_score(a: Array, b: Array) -> torch.Tensor:
         return a_tensor @ b_tensor.transpose(0, 1)
 
     # Compile the core function once
-    if (
+    should_compile = (
         hasattr(torch, "compile")
         and _use_torch_compile()
         and isinstance(a, torch.Tensor)
-    ):
-        _dot_score_core_compiled = torch.compile(_dot_score_core)
-        return _dot_score_core_compiled(a, b)
-    return _dot_score_core(a, b)
+    )
+    core_fn = torch.compile(_dot_score_core) if should_compile else _dot_score_core
+    return _compute_on_best_device(
+        lambda a_, b_, device: core_fn(a_.to(device), b_.to(device)), a, b
+    )
 
 
 def pairwise_dot_score(a: Array, b: Array) -> Array:
@@ -325,7 +409,9 @@ def euclidean_sim(a: Array, b: Array) -> Array:
     a = _convert_to_tensor(a)
     b = _convert_to_tensor(b)
 
-    return -torch.cdist(a, b, p=2.0)
+    return _compute_on_best_device(
+        lambda a_, b_, device: -torch.cdist(a_.to(device), b_.to(device), p=2.0), a, b
+    )
 
 
 def pairwise_euclidean_sim(a: Array, b: Array) -> Array:
