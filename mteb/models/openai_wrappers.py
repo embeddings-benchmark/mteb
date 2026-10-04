@@ -1317,6 +1317,7 @@ class OpenAIAPITokenEmbedWrapper(OpenAIBaseWrapper):
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
         num_proc: int | None,
+        **kwargs: Any,
     ) -> None:
         """Encode the corpus into multi-vector embeddings and keep them in memory.
 
@@ -1327,6 +1328,7 @@ class OpenAIAPITokenEmbedWrapper(OpenAIBaseWrapper):
             hf_subset: Subset of current task.
             encode_kwargs: Additional arguments to pass to `_encode`.
             num_proc: Number of processes to use for dataloading.
+            **kwargs: Additional arguments, reserved for future extensions.
         """
         documents_loader = create_dataloader(
             corpus,
@@ -1356,6 +1358,7 @@ class OpenAIAPITokenEmbedWrapper(OpenAIBaseWrapper):
         encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
         num_proc: int | None,
+        **kwargs: Any,
     ) -> RetrievalOutputType:
         """Score queries against the indexed corpus using brute-force MaxSim.
 
@@ -1370,6 +1373,7 @@ class OpenAIAPITokenEmbedWrapper(OpenAIBaseWrapper):
                 these candidate document IDs per query instead of the full
                 indexed corpus.
             num_proc: Number of processes to use for dataloading.
+            **kwargs: Additional arguments, reserved for future extensions.
 
         Returns:
             Mapping of query ID to a mapping of document ID to relevance score.

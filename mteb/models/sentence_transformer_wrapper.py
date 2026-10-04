@@ -722,6 +722,7 @@ class MultiVectorSearchEncoderWrapper:
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
         num_proc: int | None,
+        **kwargs: Any,
     ) -> None:
         """Store the corpus; documents are encoded lazily, in chunks, during `search`.
 
@@ -732,6 +733,7 @@ class MultiVectorSearchEncoderWrapper:
             hf_subset: Subset of current task. Similar to `hf_split` to get more information
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
             num_proc: Number of processes to use for indexing.
+            **kwargs: Additional arguments, reserved for future extensions.
         """
         self.task_corpus = corpus
 
@@ -746,6 +748,7 @@ class MultiVectorSearchEncoderWrapper:
         encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
         num_proc: int | None,
+        **kwargs: Any,
     ) -> RetrievalOutputType:
         """Search the indexed corpus for the given queries, or rerank `top_ranked` candidates.
 
@@ -759,6 +762,7 @@ class MultiVectorSearchEncoderWrapper:
             top_k: Number of top documents to return for each query.
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
             num_proc: Number of processes to use for dataloading.
+            **kwargs: Additional arguments, reserved for future extensions.
 
         Returns:
             Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.

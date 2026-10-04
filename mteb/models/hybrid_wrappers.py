@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
 from tqdm.auto import tqdm
@@ -145,6 +145,7 @@ class HybridSearch:
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> None:
         """Index the corpus dataset using all sub-models."""
         logger.info("Indexing corpus using sub-models...")
@@ -169,6 +170,7 @@ class HybridSearch:
         encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> RetrievalOutputType:
         """Search the queries using all sub-models and fuse the results."""
         if self.sub_model_top_k is None:

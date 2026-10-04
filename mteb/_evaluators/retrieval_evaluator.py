@@ -90,6 +90,23 @@ class RetrievalEvaluator(Evaluator):
                 subset=self.hf_subset,
             )
 
+        search_kwargs: dict[str, Any] = dict(
+            queries=self.queries,
+            top_k=self.top_k,
+            task_metadata=self.task_metadata,
+            hf_split=self.hf_split,
+            hf_subset=self.hf_subset,
+            encode_kwargs=encode_kwargs,
+            top_ranked=self.top_ranked,
+            num_proc=num_proc,
+        )
+
+        # The wrapper records finer-grained phases (queries, corpus, similarity) itself
+        if isinstance(search_model, SearchEncoderWrapper):
+            search_model.timer = self.timer
+            logger.info("Running retrieval task - Searching queries...")
+            return search_model.search(**search_kwargs)
+
         search_phase_name = (
             "Encoding queries and documents"
             if encodes_corpus_during_search
@@ -102,16 +119,7 @@ class RetrievalEvaluator(Evaluator):
             subset=self.hf_subset,
             log_message="Running retrieval task - Searching queries...",
         ):
-            return search_model.search(
-                queries=self.queries,
-                top_k=self.top_k,
-                task_metadata=self.task_metadata,
-                hf_split=self.hf_split,
-                hf_subset=self.hf_subset,
-                encode_kwargs=encode_kwargs,
-                top_ranked=self.top_ranked,
-                num_proc=num_proc,
-            )
+            return search_model.search(**search_kwargs)
 
     def evaluate(  # noqa: PLR6301
         self,
