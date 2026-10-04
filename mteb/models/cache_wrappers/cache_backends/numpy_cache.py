@@ -120,7 +120,7 @@ class NumpyCache:
         self.vectors = new_vectors
 
     def _save_dimension(self) -> None:
-        with self.dimension_file.open("w") as f:
+        with self.dimension_file.open("w", encoding="utf-8") as f:
             f.write(str(self.vector_dim))
         logger.info(
             f"Saved vector dimension {self.vector_dim} to {self.dimension_file}"
@@ -128,7 +128,7 @@ class NumpyCache:
 
     def _load_dimension(self) -> None:
         if self.dimension_file.exists():
-            with self.dimension_file.open() as f:
+            with self.dimension_file.open(encoding="utf-8") as f:
                 self.vector_dim = int(f.read().strip())
             logger.info(
                 f"Loaded vector dimension {self.vector_dim} from {self.dimension_file}"

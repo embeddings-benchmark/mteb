@@ -350,6 +350,7 @@ select = [
     "RET",     # flake8-return
     "SIM",     # flake8-simplify
     "ANN",     # flake8-annotations
+    "PLW",
 ]
 
 ignore = [

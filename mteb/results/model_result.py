@@ -453,7 +453,7 @@ class ModelResult(BaseModel):
         Args:
             path: The path to the file to save.
         """
-        with path.open("w") as f:  # noqa: PLW1514
+        with path.open("w", encoding="utf-8") as f:
             f.write(self.model_dump_json(indent=2))
 
     @classmethod

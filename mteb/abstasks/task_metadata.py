@@ -622,7 +622,7 @@ class TaskMetadata(BaseModel):
     def descriptive_stats(self) -> dict[str, DescriptiveStatistics] | None:
         """The descriptive statistics for the dataset."""
         if self.descriptive_stat_path.exists():
-            with self.descriptive_stat_path.open("r") as f:
+            with self.descriptive_stat_path.open("r", encoding="utf-8") as f:
                 js = cast("dict[str, DescriptiveStatistics]", json.load(f))
                 return js
         return None
