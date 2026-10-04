@@ -73,7 +73,7 @@ if TYPE_CHECKING:
     # PYTHONPATH.
     from mteb.api.schemas import BenchmarkSchema, ModelMetaSchema, TaskMetaSchema
 
-logger = logging.getLogger("scripts.generate_og_images_mpl")
+logger = logging.getLogger("tools.generate_og_images_mpl")
 
 
 Kind = Literal["benchmark", "task", "model"]
@@ -704,7 +704,7 @@ def _draw_brand(ax: Axes) -> None:
 
     Matches the HTML template's geometry — 36 × 36 icon, 14 px gap,
     eyebrow above site name. When the icon file isn't present (e.g.
-    in tests using a stripped-down ``scripts/og-template/`` directory)
+    in tests using a stripped-down ``tools/og-template/`` directory)
     the text alone still renders sensibly on the left edge.
     """
     icon = _icon_array()

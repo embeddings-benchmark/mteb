@@ -3,7 +3,7 @@ import ast
 import logging
 import os
 
-from scripts.extract_model_names import get_changed_files
+from tools.extract_model_names import get_changed_files
 
 logging.basicConfig(level=logging.INFO)
 
@@ -125,7 +125,7 @@ if __name__ == "__main__":
     Extract datasets from changed task files compared to a base branch.i
 
     Can pass in base branch as an argument. Defaults to 'main'.
-    e.g. python -m scripts.extract_datasets mieb
+    e.g. python -m tools.extract_datasets mieb
     """
     logging.basicConfig(level=logging.INFO)
 
