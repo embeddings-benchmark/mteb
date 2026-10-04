@@ -3085,43 +3085,6 @@ VIDORE_V3_RCP_OCR = Benchmark(
 )
 
 
-TREC_DL_RCP = Benchmark(
-    name="TREC-DL(RCP)",
-    aliases=["rcp-trecdl"],
-    display_name="TREC-DL (RCP)",
-    tasks=get_tasks(
-        tasks=[
-            "TRECDL2019RCPRetrieval",
-            "TRECDL2020RCPRetrieval",
-        ],
-    ),
-    description="TREC Deep Learning Track passage ranking (2019, 2020) with calibrated graded relevance. Rerankers are scored over the judged candidate pool with NDCG over continuous relevance gains (ndcg_float_at_10): rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.6-27B-FP8, a different judge from the NanoBEIR/BRIGHT/ViDoRe RCP benchmarks), calibrated with a 2PL item-response model. The NIST qrels (grades 0-3) are unchanged.",
-    reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-trecdl",
-    citation=r"""
-@misc{schmidt2026rubriccalibratedpreferencescrossquerycalibration,
-  title = {Rubric-Calibrated Preferences: Cross-Query Calibration of LLM Judgments via Item Response Theory},
-  author = {Fabian David Schmidt and Donato Crisostomi and Carlos Lassance and Nils Reimers},
-  year = {2026},
-  eprint = {2609.35739},
-  archivePrefix = {arXiv},
-  primaryClass = {cs.IR},
-  url = {https://arxiv.org/abs/2609.35739},
-}
-
-@misc{bajaj2018msmarcohumangenerated,
-  archiveprefix = {arXiv},
-  author = {Payal Bajaj and Daniel Campos and Nick Craswell and Li Deng and Jianfeng Gao and Xiaodong Liu and Rangan Majumder and Andrew McNamara and Bhaskar Mitra and Tri Nguyen and Mir Rosenberg and Xia Song and Alina Stoica and Saurabh Tiwary and Tong Wang},
-  eprint = {1611.09268},
-  primaryclass = {cs.CL},
-  title = {MS MARCO: A Human Generated MAchine Reading COmprehension Dataset},
-  url = {https://arxiv.org/abs/1611.09268},
-  year = {2018},
-}
-""",
-    contacts=["fabianschmidt-cohere"],
-)
-
-
 VISUAL_DOCUMENT_RETRIEVAL = Benchmark(
     name="ViDoRe(v1&v2)",
     aliases=["VisualDocumentRetrieval"],
