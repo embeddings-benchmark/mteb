@@ -383,7 +383,16 @@ preview = true
 
 [tool.ruff.lint.per-file-ignores]
 "scripts/*" = ["ALL"]
-"tools/*" = ["ALL"]
+"tools/*" = [
+    "T201",  # scripts report on stdout
+    "D1",  # docstrings
+    "PLR0913",
+    "PLR0914",
+    "PLR0917",
+    "PLR1702",
+    "PLW0603",
+    "ASYNC240",
+]
 # a script rather than a test: it reports what it checked on stdout
 "tests/test_validate_metadata/check_citations.py" = ["T201"]
 "docs/*" = [
@@ -667,7 +676,6 @@ extend-exclude = [
     "*.txt",  # zero shot labels
     "docs/mmteb",
     "scripts/",
-    "tools/",
     "mteb/models/model_implementations/gme_v_models.py",  # video_grid_thw `thw`
     "mteb/models/model_implementations/vista_models.py",  # self.normlized: in visual bge
     "mteb/models/model_implementations/salesforce_models.py", # multiligual in paper title

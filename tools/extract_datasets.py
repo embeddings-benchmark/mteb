@@ -2,10 +2,12 @@ import argparse
 import ast
 import logging
 import os
+import pathlib
 
 from tools.extract_model_names import get_changed_files
 
 logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 def extract_datasets(files: list[str]) -> list[tuple[str, str]]:
@@ -13,7 +15,7 @@ def extract_datasets(files: list[str]) -> list[tuple[str, str]]:
     datasets = []
 
     for file in files:
-        with open(file) as f:
+        with pathlib.Path(file).open(encoding="utf-8") as f:
             try:
                 tree = ast.parse(f.read())
                 for node in ast.walk(tree):
@@ -48,7 +50,7 @@ def extract_datasets(files: list[str]) -> list[tuple[str, str]]:
                                     datasets.append(dataset_info)
 
             except SyntaxError as e:
-                logging.warning(f"Could not parse {file}: {e}")
+                logger.warning(f"Could not parse {file}: {e}")
                 continue
 
     # Remove duplicates while preserving order
@@ -60,8 +62,7 @@ def extract_datasets(files: list[str]) -> list[tuple[str, str]]:
             f"{path}:{revision}" for path, revision in unique_datasets
         )
         os.environ["CUSTOM_DATASET_REVISIONS"] = custom_revisions
-        logging.debug(f"Set CUSTOM_DATASET_REVISIONS={custom_revisions}")
-
+        logger.debug(f"Set CUSTOM_DATASET_REVISIONS={custom_revisions}")
         print(f'export CUSTOM_DATASET_REVISIONS="{custom_revisions}"')
     else:
         # Keep the test module from falling back to the full dataset sweep.
@@ -89,7 +90,7 @@ def extract_dataset_from_dict(dict_node: ast.Dict) -> tuple[str, str] | None:
     path = None
     revision = None
 
-    for key, value in zip(dict_node.keys, dict_node.values):
+    for key, value in zip(dict_node.keys, dict_node.values, strict=True):
         if isinstance(key, ast.Constant) and key.value == "path":
             if isinstance(value, ast.Constant):
                 path = value.value
@@ -97,19 +98,23 @@ def extract_dataset_from_dict(dict_node: ast.Dict) -> tuple[str, str] | None:
             if isinstance(value, ast.Constant):
                 revision = value.value
         # Handle older Python versions with ast.Str
-        elif isinstance(key, ast.Str) and key.s == "path":
-            if isinstance(value, ast.Str):
-                path = value.s
-        elif isinstance(key, ast.Str) and key.s == "revision":
-            if isinstance(value, ast.Str):
-                revision = value.s
+        elif (
+            isinstance(key, ast.Str) and key.s == "path" and isinstance(value, ast.Str)
+        ):
+            path = value.s
+        elif (
+            isinstance(key, ast.Str)
+            and key.s == "revision"
+            and isinstance(value, ast.Str)
+        ):
+            revision = value.s
 
     if path and revision:
-        return (path, revision)
+        return path, revision
     return None
 
 
-def parse_args():
+def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "base_branch",
@@ -135,4 +140,4 @@ if __name__ == "__main__":
     changed_files = get_changed_files(base_branch, startswith="mteb/tasks/")
     dataset_tuples = extract_datasets(changed_files)
 
-    logging.debug(f"Found {len(dataset_tuples)} unique datasets.")
+    logger.debug(f"Found {len(dataset_tuples)} unique datasets.")

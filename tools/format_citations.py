@@ -56,7 +56,7 @@ class KeywordLiteralFinder(ast.NodeVisitor):
             else:
                 msg = f"Could not get end location for a {self.target_keyword_arg} string. Skipping this instance."
                 logger.warning(msg)
-                warnings.warn(msg)
+                warnings.warn(msg, stacklevel=2)
         self.generic_visit(node)
 
 
@@ -101,7 +101,7 @@ def format_bibtex(bibtex_str: str) -> str | None:
         if not library.entries:
             msg = f"No entries found in BibTeX string. {bibtex_str}"
             logger.warning(msg)
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
             return None
         for comment in list(library.comments):
             library.remove(comment)
@@ -115,7 +115,7 @@ def format_bibtex(bibtex_str: str) -> str | None:
     except Exception as e:
         msg = f"Failed to parse BibTeX: {e}"
         logger.warning(msg)
-        warnings.warn(msg)
+        warnings.warn(msg, stacklevel=2)
         return None
 
 
@@ -130,7 +130,7 @@ def process_file(
     replacements_for_file = []
 
     try:
-        content = file_path.read_text()
+        content = file_path.read_text(encoding="utf-8")
         tree = ast.parse(content, filename=str(file_path))
 
         finder = KeywordLiteralFinder(target_function_name, target_keyword_arg)
@@ -199,7 +199,7 @@ def process_file(
             except ValueError:
                 msg = f"In {file_path.name}: Could not find exact original literal match for {target_keyword_arg} at {location}. Using offset-based replacement."
                 logger.warning(msg)
-                warnings.warn(msg)
+                warnings.warn(msg, stacklevel=2)
                 replacements_for_file.append(
                     (start_char_index, end_char_index, new_literal)
                 )
@@ -212,7 +212,7 @@ def process_file(
                 new_content = new_content[:start] + literal + new_content[end:]
 
             if not dry_run:
-                file_path.write_text(new_content)
+                file_path.write_text(new_content, encoding="utf-8")
             file_modified = True
 
     except SyntaxError as e:
@@ -234,7 +234,7 @@ def process_file(
     )
 
 
-def tasks(args):
+def tasks(args: argparse.Namespace) -> None:
     tasks_dir = Path(args.tasks_dir)
     dry_run = args.dry_run
     error_on_change = args.error_on_change
@@ -283,7 +283,7 @@ def tasks(args):
         raise RuntimeError
 
 
-def benchmarks(args):
+def benchmarks(args: argparse.Namespace) -> None:
     benchmarks_file = Path(args.benchmarks_file)
     dry_run = args.dry_run
     error_on_change = args.error_on_change
@@ -318,7 +318,7 @@ def benchmarks(args):
     if file_error:
         logger.warning("Errors occurred during processing. Check logs above.")
         return
-    elif not file_modified and not file_error:
+    if not file_modified and not file_error:
         logger.info("No changes needed.")
 
 

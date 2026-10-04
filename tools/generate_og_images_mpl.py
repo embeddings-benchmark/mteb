@@ -1,5 +1,6 @@
-"""Render every benchmark / task / model Open Graph hero card using
-matplotlib instead of headless Chromium.
+"""Render every benchmark / task / model Open Graph hero card.
+
+Uses matplotlib instead of headless Chromium.
 
 Drop-in alternative to ``generate_og_images.py``: same output layout,
 same sidecar-hash incremental skip, same CLI surface (``--workers``
@@ -45,32 +46,34 @@ import multiprocessing as mp
 import os
 import sys
 import time
-from collections.abc import Iterable, Sequence
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Final, Literal, TypedDict
 
-import matplotlib
+import matplotlib as mpl
 
 # Force the Agg backend before any pyplot import. Agg is the only
 # matplotlib backend that runs entirely off-screen without a display
 # server, and it's what we'd want in a Docker build anyway.
-matplotlib.use("Agg")
+mpl.use("Agg")
 
-import textwrap  # noqa: E402
+import textwrap
 
-import numpy as np  # noqa: E402
-from matplotlib import font_manager as fm  # noqa: E402
-from matplotlib.axes import Axes  # noqa: E402
-from matplotlib.backends.backend_agg import FigureCanvasAgg  # noqa: E402
-from matplotlib.figure import Figure  # noqa: E402
-from matplotlib.image import imread  # noqa: E402
-from matplotlib.patches import Circle, Rectangle  # noqa: E402
-from matplotlib.text import Text  # noqa: E402
+import numpy as np
+from matplotlib import font_manager as fm
+from matplotlib.backends.backend_agg import FigureCanvasAgg
+from matplotlib.figure import Figure
+from matplotlib.image import imread
+from matplotlib.patches import Circle, Rectangle
 
 if TYPE_CHECKING:
     # Type-only — actual import happens lazily in ``_load_catalogue``
     # so the script can be imported in environments without mteb on
     # PYTHONPATH.
+    from collections.abc import Iterable, Sequence
+
+    from matplotlib.axes import Axes
+    from matplotlib.text import Text
+
     from mteb.api.schemas import BenchmarkSchema, ModelMetaSchema, TaskMetaSchema
 
 logger = logging.getLogger("tools.generate_og_images_mpl")
@@ -262,8 +265,9 @@ def _trim_description(desc: str | None, max_len: int = 140) -> str:
 
 
 def _wrap_tagline(text: str, chars_per_line: int = 70, max_lines: int = 2) -> str:
-    """Break ``text`` into at most ``max_lines`` lines that visually fit
-    the card's left-column body width (~920 px).
+    """Break ``text`` into at most ``max_lines`` lines.
+
+    The lines visually fit the card's left-column body width (~920 px).
 
     Word-boundary wrap via :mod:`textwrap`, then keep only the first
     ``max_lines`` segments and append an ellipsis if there's more.
@@ -402,7 +406,7 @@ def _should_skip(out_path: Path, hash_path: Path, expected: str, force: bool) ->
     if not out_path.is_file():
         return False
     try:
-        return hash_path.read_text().strip() == expected
+        return hash_path.read_text(encoding="utf-8").strip() == expected
     except OSError:
         return False
 

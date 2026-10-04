@@ -1,5 +1,6 @@
-"""Render every benchmark / task / model OG hero card by screenshotting
-the parameterised template at ``tools/og-template/template.html``.
+"""Render every benchmark / task / model OG hero card.
+
+Screenshots the parameterised template at ``tools/og-template/template.html``.
 
 Imports the mteb registry directly — no HTTP round-trip needed since
 this script ships in the same repo as the data it's rendering. The
@@ -41,16 +42,19 @@ import logging
 import os
 import sys
 import time
-from collections.abc import Iterable, Sequence
 from pathlib import Path
 from typing import TYPE_CHECKING, Final, Literal, TypedDict
 
-from playwright.async_api import Browser, BrowserContext, Page, async_playwright
+from playwright.async_api import async_playwright
 
 if TYPE_CHECKING:
     # Type-only imports — runtime users go through ``_load_catalogue``
     # which does the actual import lazily so the script can be imported
     # without mteb on PYTHONPATH (handy for tests).
+    from collections.abc import Iterable, Sequence
+
+    from playwright.async_api import Browser, BrowserContext, Page
+
     from mteb.api.schemas import BenchmarkSchema, ModelMetaSchema, TaskMetaSchema
 
 logger = logging.getLogger("tools.generate_og_images")
@@ -359,7 +363,7 @@ def _should_skip(out_path: Path, hash_path: Path, expected: str, force: bool) ->
     if not out_path.is_file():
         return False
     try:
-        return hash_path.read_text().strip() == expected
+        return hash_path.read_text(encoding="utf-8").strip() == expected
     except OSError:
         return False
 
