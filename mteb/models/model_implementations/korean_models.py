@@ -286,9 +286,6 @@ ko_sroberta_multitask = ModelMeta(
 )
 
 
-# --------------------------------------------------------------------------- #
-# nlpai-lab KURE rerankers (Sentence Transformers cross-encoders)
-# --------------------------------------------------------------------------- #
 kure_reranker_nano = ModelMeta(
     loader=CrossEncoderWrapper,
     loader_kwargs=dict(max_length=8192),
@@ -299,7 +296,7 @@ kure_reranker_nano = ModelMeta(
     revision="c32a78ae89fbfeaa4e77c9f2854bd8ba07501c7b",
     release_date="2026-09-09",
     n_parameters=149_323_009,
-    embed_dim=None,
+    embed_dim=768,
     license="apache-2.0",
     max_tokens=8192,
     memory_usage_mb=570,
@@ -327,7 +324,7 @@ kure_reranker_base = ModelMeta(
     revision="53e42a46af81f71df6b37ba553bb0c49f3008433",
     release_date="2026-09-23",
     n_parameters=1_720_574_976,
-    embed_dim=None,
+    embed_dim=2048,
     license="apache-2.0",
     max_tokens=8192,
     memory_usage_mb=3282,
