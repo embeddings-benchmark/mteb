@@ -816,6 +816,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SDSGlovesClassification",
         "SIB200Classification",
         "SIB200Classification.v2",
+        "SIB200Classification.v3",
         "SIDClassification",
         "ScandiSentClassification",
         "SentiRuEval2016",
