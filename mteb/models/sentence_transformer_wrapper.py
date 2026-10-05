@@ -1052,15 +1052,10 @@ class MultiVectorWrapper(MultiVectorSearchEncoderWrapper):
 
         Scoring runs on the model's device; the scores are returned on the documents' device.
         """
-        # Token embeddings are kept on CPU after encoding (see `_to_cpu_in_place`), because a corpus
-        # chunk of long documents doesn't fit next to the model. Documents are therefore moved to the
-        # model's device here in blocks, each block once, and scored against every query group.
-        #
-        # sentence-transformers bounds its (queries, documents, query_tokens, document_tokens)
-        # intermediate only along the documents: all queries are padded to the longest one, with a
-        # floor of one document per chunk. Many or long queries (e.g. legal retrieval) then allocate
-        # far beyond its budget, so queries are grouped here as well, sorted by length so that one
-        # long query doesn't pad all the others.
+        # Token embeddings stay on the CPU after encoding, so documents are moved to the model's
+        # device in blocks, each block once, and scored against every query group. Queries are
+        # grouped by length as well, because sentence-transformers pads all of them to the longest
+        # and only chunks along the documents.
         import torch
 
         device = self.model.device
@@ -1083,7 +1078,7 @@ class MultiVectorWrapper(MultiVectorSearchEncoderWrapper):
                 torch.as_tensor(d).to(device, non_blocking=True)
                 for d in documents[doc_start:doc_end]
             ]
-            # Cap padded query tokens per group so that `queries * widest document` fits the budget
+            # Padded query tokens per group, so that group * widest document fits the budget
             query_token_budget = max(
                 1, _MAX_SIM_CHUNK_ELEMENTS // max(len(d) for d in block)
             )

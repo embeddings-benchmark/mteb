@@ -20,12 +20,11 @@ logger = logging.getLogger(__name__)
 # about 400 MB in float32.
 _MAX_SIM_CHUNK_ELEMENTS = 100_000_000
 
-# Padded tokens in one chunk of queries or of documents. Scoring a query chunk against a document
-# chunk then allocates at most `_MAX_SIM_CHUNK_ELEMENTS` elements.
+# Padded tokens per chunk of queries or documents, so that a chunk pair stays within the element budget.
 _MAX_SIM_CHUNK_TOKENS = isqrt(_MAX_SIM_CHUNK_ELEMENTS)
 
-# Ragged inputs are scored in length groups only if padding all of them to the longest input costs
-# more than this many times the number of token pairs that are actually compared.
+# Ragged inputs are grouped by length only if padding them all would compare more than this many
+# times the number of real token pairs.
 _MAX_SIM_PADDING_OVERHEAD = 2
 
 
@@ -82,9 +81,9 @@ def _compute_on_best_device(
 ) -> torch.Tensor:
     """Run `core_fn(a, b, device)` on the selected device and return the result on `a`'s device.
 
-    `a` and `b` are tensors, or non-empty lists of tensors that share a device.
-    `core_fn` is responsible for moving its inputs to `device`, so it can stream large inputs in
-    chunks. Falls back to the CPU if the accelerator runs out of memory.
+    `a` and `b` are tensors or non-empty lists of tensors. `core_fn` moves its inputs to `device`
+    itself, so it can stream large inputs in chunks. Falls back to the CPU if the accelerator runs
+    out of memory.
     """
     import torch
 
@@ -258,18 +257,14 @@ def pairwise_cos_sim(a: Array, b: Array) -> Array:
 
 
 def _is_ragged(x: Array | Sequence[Array]) -> bool:
-    """Whether `x` is a non-empty list of 2D `(num_tokens, token_dim)` embeddings, one per input."""
+    """Whether `x` is a non-empty list of 2D `(num_tokens, token_dim)` embeddings."""
     return (
         isinstance(x, (list, tuple)) and len(x) > 0 and getattr(x[0], "ndim", None) == 2
     )
 
 
 def _as_token_tensors(x: Array | Sequence[Array]) -> list[torch.Tensor]:
-    """Return `x` as a list with one 2D `(num_tokens, token_dim)` tensor per input.
-
-    A list of 2D embeddings is converted item by item, a 3D tensor is split along its first
-    dimension, and a single 2D tensor becomes a list of one.
-    """
+    """Split `x` into one 2D `(num_tokens, token_dim)` tensor per input."""
     import torch
 
     if _is_ragged(x):
@@ -281,12 +276,10 @@ def _as_token_tensors(x: Array | Sequence[Array]) -> list[torch.Tensor]:
 def _token_budget_chunks(
     widths: Sequence[int], max_tokens: int = _MAX_SIM_CHUNK_TOKENS
 ) -> list[list[int]]:
-    """Group input indices by length so that each group, padded to its widest input, fits `max_tokens`.
+    """Group input indices by length so each group, padded to its widest input, fits `max_tokens`.
 
-    Indices are sorted by width and added to the current group until one more input would push
-    `group size * widest width` over `max_tokens`, which starts a new group. An input wider than
-    `max_tokens` gets a group of its own. Because similar widths end up together, a long input only
-    pads the inputs in its own group.
+    Indices are sorted by width and added to a group until `group size * widest width` would exceed
+    `max_tokens`. An input wider than `max_tokens` gets its own group.
     """
     order = sorted(range(len(widths)), key=widths.__getitem__)
     chunks: list[list[int]] = []
@@ -310,12 +303,9 @@ def _max_sim_ragged_core(
 ) -> torch.Tensor:
     """Compute MaxSim between two lists of `(num_tokens, token_dim)` tensors of varying length.
 
-    Queries and documents are each split into groups of similar length (see `_token_budget_chunks`)
-    and padded with zeros within their group only. The query groups are padded and moved to
-    `device` once. Each document group is then padded, moved to `device`, and scored against every
-    query group: for each query token the best document token similarity is taken, and these are
-    summed over the query tokens. The scores are collected into one `(len(a), len(b))` tensor on
-    `device`.
+    Queries and documents are grouped by length (see `_token_budget_chunks`) and zero-padded within
+    their group. Query groups are moved to `device` once, and each document group is scored against
+    all of them in turn. Returns a `(len(a), len(b))` tensor on `device`.
     """
     import torch
     from torch.nn.utils.rnn import pad_sequence
@@ -354,26 +344,22 @@ def max_sim(
     this function computes the maximum similarity `max_sim(a[i], b[j])` for all
     pairs of tokens `i` and `j` across the two inputs.
 
-    Either input may instead be a list with one `(num_tokens, token_dim)` tensor per input, where
-    `num_tokens` varies. Such lists are padded with zeros before scoring. If padding everything to
-    the longest input would cost more than `_MAX_SIM_PADDING_OVERHEAD` times the number of token
-    pairs actually compared (e.g. one long query among short ones), queries and documents are
-    instead split into groups of similar length and each group is padded on its own, so a long
-    input only inflates its own group. Both ways use zero padding, so they give the same scores.
+    Either input may also be a list of `(num_tokens, token_dim)` tensors with varying `num_tokens`.
+    These are zero-padded, and if that would compare more than `_MAX_SIM_PADDING_OVERHEAD` times the
+    real token pairs (e.g. one long query among short ones), they are padded per group of similar
+    length instead. Both give the same scores.
 
-    For tensor inputs, `a` is scored in `batch_size`-sized chunks and `b` in chunks sized so that the
+    `a` is scored in `batch_size`-sized chunks and `b` in chunks sized so that the
     `(a_chunk, b_chunk, num_tokens_a, num_tokens_b)` intermediate from each `einsum` call
-    stays within `_MAX_SIM_CHUNK_ELEMENTS`: the full intermediate would otherwise be
-    held in memory at once, which exhausts memory even for moderately sized inputs
-    (e.g. a few thousand long documents).
+    stays within `_MAX_SIM_CHUNK_ELEMENTS`, instead of holding the full intermediate in memory.
 
     Args:
         a: Tensor of shape (batch_size, num_tokens, token_dim), or a list of
             `(num_tokens, token_dim)` tensors.
         b: Tensor of shape (batch_size, num_tokens, token_dim), or a list of
             `(num_tokens, token_dim)` tensors.
-        batch_size: Maximum number of rows of `a` to score at a time. Ragged inputs that are scored
-            in length groups are chunked by `_MAX_SIM_CHUNK_TOKENS` instead.
+        batch_size: Maximum number of rows of `a` to score at a time. Not used when ragged inputs
+            are grouped by length.
 
     Returns:
         A tensor containing the maximum similarity values for each batch.
@@ -385,7 +371,7 @@ def max_sim(
         b_tokens = _as_token_tensors(b)
         a_widths = [len(t) for t in a_tokens]
         b_widths = [len(t) for t in b_tokens]
-        # token pairs compared after padding everything to the longest input vs. the real ones
+        # token pairs compared when padding everything to the longest input, vs. real ones
         padded = len(a_widths) * max(a_widths) * len(b_widths) * max(b_widths)
         real = sum(a_widths) * sum(b_widths)
         if padded > _MAX_SIM_PADDING_OVERHEAD * real:

@@ -112,8 +112,7 @@ def _ragged(
 
 def test_max_sim_ragged_matches_padded():
     torch.manual_seed(0)
-    # Zero padding clips negative token similarities to 0, so the reference only matches
-    # padded scores when no similarity is negative.
+    # zero padding clips negative similarities to 0, so use non-negative embeddings
     queries = _ragged([3, 5, 2, 40], non_negative=True)
     documents = _ragged([7, 4, 9, 6, 5], non_negative=True)
     padded = max_sim(
@@ -154,7 +153,7 @@ def test_token_budget_chunks_respect_budget():
     for chunk in chunks:
         padded_tokens = len(chunk) * max(widths[i] for i in chunk)
         assert len(chunk) == 1 or padded_tokens <= 20
-    # the 60 token input is over budget alone, and doesn't pad any other group
+    # the 60 token input exceeds the budget and sits in a group of its own
     assert [3] in chunks
 
 
@@ -170,7 +169,7 @@ def test_max_sim_ragged_accepts_tensor_and_list():
 
 @pytest.fixture
 def st_util() -> ModuleType:
-    """`sentence_transformers.util`, skipping when sentence-transformers is missing or too old."""
+    """`sentence_transformers.util`, skipped if it has no `maxsim` (needs sentence-transformers>=6)."""
     from sentence_transformers import util
 
     if not hasattr(util, "maxsim"):
@@ -190,8 +189,7 @@ def test_max_sim_matches_sentence_transformers(
     st_util: ModuleType, query_widths: list[int], document_widths: list[int]
 ):
     torch.manual_seed(0)
-    # Zero padding clips negative token similarities to 0, while sentence-transformers masks
-    # padding, so the two only agree when no similarity is negative.
+    # sentence-transformers masks padding while we zero-pad, so use non-negative embeddings
     queries = _ragged(query_widths, non_negative=True)
     documents = _ragged(document_widths, non_negative=True)
 
@@ -248,7 +246,7 @@ def test_dot_score_values():
 
 
 def test_euclidean_sim_values():
-    # negative distances, e.g. |(1, 0) - (0, 4)| = sqrt(17) and |(0, 2) - (3, 0)| = sqrt(13)
+    # negative distances, e.g. -|(1, 0) - (0, 4)| = -sqrt(17)
     expected = -torch.tensor([[2.0, 17.0**0.5], [13.0**0.5, 2.0]])
     torch.testing.assert_close(euclidean_sim(A, B), expected)
     torch.testing.assert_close(pairwise_euclidean_sim(A, B), torch.tensor([-2.0, -2.0]))
