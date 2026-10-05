@@ -7,6 +7,10 @@ fetched from the Hugging Face Hub. Loaders mirror each model's base family
 (bge-m3 / multilingual-e5 / arctic-embed / plain sentence-transformers).
 """
 
+from mteb.models.model_implementations.pylate_models import (
+    denseon_lateon_supervised_data,
+    denseon_lateon_unsupervised_data,
+)
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
@@ -26,6 +30,21 @@ ARCTIC_QUERY_PROMPTS = {
 }
 
 KOR_EN = ["kor-Hang", "eng-Latn"]
+
+# KURE-Reranker: the public data is the same as for KURE-v2; the private Korean data
+# contains the train splits of Ko-StrategyQA, MIRACL and MultiLongDoc (per the authors,
+# https://github.com/embeddings-benchmark/mteb/pull/5574)
+kure_reranker_training_data = (
+    denseon_lateon_unsupervised_data
+    | denseon_lateon_supervised_data
+    | {
+        "Ko-StrategyQA",
+        "MIRACLRetrieval",
+        "MIRACLRetrievalHardNegatives",
+        "MIRACLReranking",
+        "MultiLongDocRetrieval",
+    }
+)
 
 # --------------------------------------------------------------------------- #
 # BAAI/bge-m3 Korean fine-tunes (dense, no query instruction, cosine)
@@ -307,9 +326,8 @@ kure_reranker_nano = ModelMeta(
     use_instructions=False,
     adapted_from="skt/A.X-Encoder-base",
     public_training_code=None,
-    public_training_data=None,
-    # The model card does not name the training data.
-    training_datasets=None,
+    public_training_data="https://huggingface.co/datasets/lightonai/embeddings-fine-tuning",
+    training_datasets=kure_reranker_training_data,
 )
 
 kure_reranker_base = ModelMeta(
@@ -335,7 +353,6 @@ kure_reranker_base = ModelMeta(
     use_instructions=False,
     adapted_from="Qwen/Qwen3-1.7B",
     public_training_code=None,
-    public_training_data=None,
-    # The model card does not name the training data.
-    training_datasets=None,
+    public_training_data="https://huggingface.co/datasets/lightonai/embeddings-fine-tuning",
+    training_datasets=kure_reranker_training_data,
 )
