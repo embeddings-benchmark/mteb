@@ -12,7 +12,10 @@ from typing_extensions import deprecated
 from mteb._create_dataloaders import create_dataloader
 from mteb._log_once import LogOnce
 from mteb.models import ModelMeta
-from mteb.similarity_functions import _MAX_SIM_CHUNK_ELEMENTS
+from mteb.similarity_functions import (
+    _MAX_SIM_CHUNK_ELEMENTS,
+    _token_budget_chunks,
+)
 from mteb.types import PromptType
 
 from .abs_encoder import AbsEncoder, get_prompt_name
@@ -215,30 +218,6 @@ def _concatenate_ragged_batches(batches: list[list[Any]]) -> list[Any]:
     embeddings, so batches can't be stacked with `np.concatenate` like fixed-size dense embeddings.
     """
     return [embedding for batch in batches for embedding in batch]
-
-
-def _max_sim_query_chunks(
-    query_widths: list[int], max_document_width: int
-) -> list[list[int]]:
-    """Group query indices, shortest first, so each group's padded MaxSim intermediate fits the budget.
-
-    A group scored against a single document of `max_document_width` tokens allocates
-    `len(group) * max(group widths) * max_document_width` elements, which is kept within
-    `_MAX_SIM_CHUNK_ELEMENTS`, with a floor of one query per group.
-    """
-    order = sorted(range(len(query_widths)), key=lambda i: query_widths[i])
-    chunks: list[list[int]] = []
-    current: list[int] = []
-    for index in order:
-        # Ascending order, so the newest query is the widest in the group
-        padded = (len(current) + 1) * query_widths[index] * max_document_width
-        if current and padded > _MAX_SIM_CHUNK_ELEMENTS:
-            chunks.append(current)
-            current = []
-        current.append(index)
-    if current:
-        chunks.append(current)
-    return chunks
 
 
 def _max_sim_document_blocks(documents: Sequence[Array]) -> list[tuple[int, int]]:
@@ -1104,9 +1083,11 @@ class MultiVectorWrapper(MultiVectorSearchEncoderWrapper):
                 torch.as_tensor(d).to(device, non_blocking=True)
                 for d in documents[doc_start:doc_end]
             ]
-            for query_indices in _max_sim_query_chunks(
-                query_widths, max(len(d) for d in block)
-            ):
+            # Cap padded query tokens per group so that `queries * widest document` fits the budget
+            query_token_budget = max(
+                1, _MAX_SIM_CHUNK_ELEMENTS // max(len(d) for d in block)
+            )
+            for query_indices in _token_budget_chunks(query_widths, query_token_budget):
                 block_scores = self.model.similarity(
                     [queries[i] for i in query_indices], block, device=device
                 )
