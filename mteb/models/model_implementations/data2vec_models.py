@@ -8,8 +8,8 @@ from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import (
     AudioCollator,
-    SingleClipBatches,
     seconds_to_samples,
+    single_clip_dataloader,
 )
 
 if TYPE_CHECKING:
@@ -70,7 +70,7 @@ class Data2VecAudioWrapper(AbsEncoder):
         # one clip per forward: padding leaks into data2vec's convolutional
         # positional embedding, so batched clips change each other's embeddings
         for batch in tqdm(
-            SingleClipBatches(inputs),
+            single_clip_dataloader(inputs),
             disable=not show_progress_bar,
         ):
             audio_arrays = [audio["array"] for audio in batch["audio"]]

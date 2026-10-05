@@ -7,9 +7,10 @@ from torch.utils.data import DataLoader
 
 from mteb._create_dataloaders import _custom_collate_fn
 from mteb.models.modality_collators import (
+    AudioCollator,
     FramesCollator,
-    SingleClipBatches,
     seconds_to_samples,
+    single_clip_dataloader,
 )
 
 
@@ -64,10 +65,18 @@ def test_seconds_to_samples() -> None:
         seconds_to_samples(0, 16_000)
 
 
-def test_single_clip_batches() -> None:
+def test_single_clip_dataloader() -> None:
     rows = [{"audio": {"array": [float(i)], "sampling_rate": 16_000}} for i in range(5)]
     loader = DataLoader(rows, batch_size=2, collate_fn=_custom_collate_fn)  # type: ignore[arg-type]
-    batches = list(SingleClipBatches(loader))
-    assert len(SingleClipBatches(loader)) == 5
+    single = single_clip_dataloader(loader)
+    assert single.batch_size == 1
+    assert len(single) == 5
+    batches = list(single)
     assert [len(b["audio"]) for b in batches] == [1] * 5
     assert [b["audio"][0]["array"] for b in batches] == [[float(i)] for i in range(5)]
+
+
+def test_audio_collator_rejects_non_positive_cap() -> None:
+    audio = {"array": [0.0] * 10, "sampling_rate": 16_000}
+    with pytest.raises(ValueError, match="must be positive"):
+        AudioCollator.resample_audio(audio, target_sampling_rate=16_000, max_samples=0)

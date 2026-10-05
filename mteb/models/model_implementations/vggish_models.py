@@ -8,6 +8,7 @@ import numpy as np
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import seconds_to_samples
 from mteb.models.model_meta import ModelMeta
 
 if TYPE_CHECKING:
@@ -76,10 +77,11 @@ def vggish_loader(*args: Any, **kwargs: Any) -> EncoderProtocol:
                 audio = audio.mean(dim=0)
 
             # Apply audio truncation
-            if self.max_audio_length_seconds is not None:
-                max_length = int(self.max_audio_length_seconds * self.sampling_rate)
-                if audio.shape[-1] > max_length:
-                    audio = audio[..., :max_length]
+            max_length = seconds_to_samples(
+                self.max_audio_length_seconds, self.sampling_rate
+            )
+            if max_length is not None and audio.shape[-1] > max_length:
+                audio = audio[..., :max_length]
 
             # Normalize to [-1.0, 1.0]
             if audio.numel() > 0 and audio.abs().max() > 1.0:

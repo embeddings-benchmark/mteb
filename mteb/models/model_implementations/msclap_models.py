@@ -11,7 +11,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import AudioCollator, seconds_to_samples
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -60,8 +60,10 @@ class MSClapWrapper(AbsEncoder):
         # 44100 for 2022 and 2023: msclap's own config
         # https://github.com/microsoft/CLAP/blob/main/msclap/configs/config_2023.yml
         self.sampling_rate = int(self.model.args.sampling_rate)
-        self.max_audio_length_seconds = max_audio_length_seconds or float(
-            self.model.args.duration
+        self.max_audio_length_seconds = (
+            float(self.model.args.duration)
+            if max_audio_length_seconds is None
+            else max_audio_length_seconds
         )
 
     def get_audio_embeddings(
@@ -75,7 +77,9 @@ class MSClapWrapper(AbsEncoder):
 
         inputs.collate_fn = AudioCollator(
             target_sampling_rate=self.sampling_rate,
-            max_samples=int(self.max_audio_length_seconds * self.sampling_rate),
+            max_samples=seconds_to_samples(
+                self.max_audio_length_seconds, self.sampling_rate
+            ),
         )
 
         all_embeddings = []

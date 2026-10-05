@@ -7,7 +7,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator, SingleClipBatches
+from mteb.models.modality_collators import AudioCollator, single_clip_dataloader
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -143,7 +143,7 @@ class MCTCTWrapper(AbsEncoder):
 
         # one clip per forward: batch independence is not verified for M-CTC-T
         for batch in tqdm(
-            SingleClipBatches(inputs),
+            single_clip_dataloader(inputs),
             disable=not show_progress_bar,
         ):
             audio_arrays = [audio["array"] for audio in batch["audio"]]

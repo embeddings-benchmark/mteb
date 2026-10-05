@@ -8,8 +8,6 @@ import numpy as np
 from mteb.types._encoder_io import AudioInputItem
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
-
     import torch
     from torch.utils.data import DataLoader
     from torchcodec.decoders import VideoDecoder  # type: ignore[attr-defined]
@@ -89,6 +87,8 @@ class AudioCollator:
             target_sampling_rate: The sampling rate to resample the audio to.
             max_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
         """
+        if max_samples is not None and max_samples <= 0:
+            raise ValueError(f"max_samples must be positive, got {max_samples}.")
         import torch
         import torchaudio
 
@@ -132,24 +132,23 @@ def seconds_to_samples(seconds: float | None, sampling_rate: int) -> int | None:
     return int(seconds * sampling_rate)
 
 
-class SingleClipBatches:
-    """Re-yield an audio DataLoader one clip per batch.
+def single_clip_dataloader(
+    inputs: DataLoader[BatchedInput],
+) -> DataLoader[BatchedInput]:
+    """Rebuild an audio DataLoader with batch_size=1.
 
     Some speech encoders (group-norm feature encoders, data2vec) let padding
     change the embeddings of shorter clips, so they must never see a padded
-    batch. ``len`` stays defined so progress bars keep their total.
+    batch. ``DataLoader.batch_size`` cannot be changed after creation.
     """
+    from torch.utils.data import DataLoader
 
-    def __init__(self, inputs: DataLoader[BatchedInput]) -> None:
-        self.inputs = inputs
-
-    def __len__(self) -> int:
-        return len(self.inputs.dataset)  # type: ignore[arg-type]
-
-    def __iter__(self) -> Iterator[BatchedInput]:
-        for batch in self.inputs:
-            for audio in batch["audio"]:
-                yield cast("BatchedInput", {"audio": [audio]})
+    return DataLoader(
+        inputs.dataset,
+        batch_size=1,
+        collate_fn=inputs.collate_fn,
+        num_workers=inputs.num_workers,
+    )
 
 
 class FramesCollator:

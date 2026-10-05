@@ -8,7 +8,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import SingleClipBatches
+from mteb.models.modality_collators import single_clip_dataloader
 
 logger = logging.getLogger(__name__)
 
@@ -82,9 +82,10 @@ class SpeechT5Audio(AbsEncoder):
 
         all_embeddings = []
 
-        batches = SingleClipBatches(inputs) if self.per_clip else inputs
+        if self.per_clip:
+            inputs = single_clip_dataloader(inputs)
         for batch in tqdm(
-            batches,
+            inputs,
             disable=not show_progress_bar,
         ):
             batch_arrays = []

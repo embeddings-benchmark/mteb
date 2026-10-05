@@ -6,7 +6,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import AudioCollator, seconds_to_samples
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -72,10 +72,11 @@ class CNN14Wrapper(AbsEncoder):
                 array = array.squeeze()
 
                 # Apply audio truncation (configurable limit)
-                if self.max_audio_length_seconds is not None:
-                    max_length = int(self.max_audio_length_seconds * self.sampling_rate)
-                    if array.shape[-1] > max_length:
-                        array = array[..., :max_length]
+                max_length = seconds_to_samples(
+                    self.max_audio_length_seconds, self.sampling_rate
+                )
+                if max_length is not None and array.shape[-1] > max_length:
+                    array = array[..., :max_length]
 
                 audio_tensors.append(array)
 

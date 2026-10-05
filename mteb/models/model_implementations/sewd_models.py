@@ -7,7 +7,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator, SingleClipBatches
+from mteb.models.modality_collators import AudioCollator, single_clip_dataloader
 
 logger = logging.getLogger(__name__)
 
@@ -82,9 +82,10 @@ class SewDWrapper(AbsEncoder):
         inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
         all_embeddings = []
 
-        batches = SingleClipBatches(inputs) if self.per_clip else inputs
+        if self.per_clip:
+            inputs = single_clip_dataloader(inputs)
         for batch in tqdm(
-            batches,
+            inputs,
             disable=not show_progress_bar,
         ):
             audio_arrays = [audio["array"] for audio in batch["audio"]]

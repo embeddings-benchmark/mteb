@@ -8,8 +8,8 @@ from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import (
     AudioCollator,
-    SingleClipBatches,
     seconds_to_samples,
+    single_clip_dataloader,
 )
 
 if TYPE_CHECKING:
@@ -69,9 +69,10 @@ class HubertWrapper(AbsEncoder):
         )
         all_embeddings = []
 
-        batches = SingleClipBatches(inputs) if self.per_clip else inputs
+        if self.per_clip:
+            inputs = single_clip_dataloader(inputs)
         for batch in tqdm(
-            batches,
+            inputs,
             disable=not show_progress_bar,
         ):
             audio_arrays = [audio["array"] for audio in batch["audio"]]
