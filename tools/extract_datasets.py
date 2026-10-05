@@ -91,23 +91,12 @@ def extract_dataset_from_dict(dict_node: ast.Dict) -> tuple[str, str] | None:
     revision = None
 
     for key, value in zip(dict_node.keys, dict_node.values, strict=True):
-        if isinstance(key, ast.Constant) and key.value == "path":
-            if isinstance(value, ast.Constant):
-                path = value.value
-        elif isinstance(key, ast.Constant) and key.value == "revision":
-            if isinstance(value, ast.Constant):
-                revision = value.value
-        # Handle older Python versions with ast.Str
-        elif (
-            isinstance(key, ast.Str) and key.s == "path" and isinstance(value, ast.Str)
-        ):
-            path = value.s
-        elif (
-            isinstance(key, ast.Str)
-            and key.s == "revision"
-            and isinstance(value, ast.Str)
-        ):
-            revision = value.s
+        if not (isinstance(key, ast.Constant) and isinstance(value, ast.Constant)):
+            continue
+        if key.value == "path":
+            path = value.value
+        elif key.value == "revision":
+            revision = value.value
 
     if path and revision:
         return path, revision
