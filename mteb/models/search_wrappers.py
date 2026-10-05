@@ -123,6 +123,9 @@ def chunked_full_corpus_search(  # noqa: PLR0913
         )
         top_k_idx_list = top_k_idx.cpu().tolist()
         top_k_values_list = top_k_values.cpu().tolist()
+        # Release this chunk before the next one is encoded; otherwise both chunks' embeddings
+        # (possibly on the GPU, e.g. multi-vector models) are alive during the next encode.
+        del sub_corpus_embeddings, scores, top_k_values, top_k_idx
 
         for q_idx, qid in query_idx_to_id.items():
             for idx, score in zip(
