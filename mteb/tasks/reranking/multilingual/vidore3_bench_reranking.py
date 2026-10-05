@@ -132,6 +132,8 @@ class Vidore3ComputerScienceQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3ComputerScienceRetrieval.v2"],
     )
+
+
 class Vidore3EnergyBGEm3Rerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3EnergyBGEm3Reranking.v2",
