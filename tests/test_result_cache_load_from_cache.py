@@ -18,7 +18,7 @@ class TestLoadFromCache:
         cache_filename = "test_cache.json"
         expected_path = tmp_path / "leaderboard" / cache_filename
         expected_path.parent.mkdir(parents=True, exist_ok=True)
-        expected_path.write_text('{"test": "should be ignored"}')
+        expected_path.write_text('{"test": "should be ignored"}', encoding="utf-8")
 
         with patch.object(cache, "_rebuild_from_full_repository") as mock_rebuild:
             mock_result = MagicMock(spec=BenchmarkResults)
@@ -36,7 +36,7 @@ class TestLoadFromCache:
         mock_result = MagicMock(spec=BenchmarkResults)
 
         # Test 1: Load from existing local cache
-        expected_path.write_text("{}")
+        expected_path.write_text("{}", encoding="utf-8")
         with patch("mteb.results.BenchmarkResults.from_disk") as mock_from_disk:
             mock_from_disk.return_value = mock_result
             result = cache._load_from_cache(cache_filename, rebuild=False)
@@ -72,7 +72,7 @@ class TestLoadFromCache:
         cache_filename = "test_cache.json"
         expected_path = tmp_path / "leaderboard" / cache_filename
         expected_path.parent.mkdir(parents=True, exist_ok=True)
-        expected_path.write_text("invalid json {{{")
+        expected_path.write_text("invalid json {{{", encoding="utf-8")
 
         with (
             patch("mteb.results.BenchmarkResults.from_disk") as mock_from_disk,

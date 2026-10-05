@@ -131,7 +131,7 @@ def _read_disk_cache(  # noqa: PLR0911
     if not manifest_path.exists():
         return None
     try:
-        manifest = json.loads(manifest_path.read_text())
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         logger.warning("disk cache manifest unreadable (%s); rebuilding", exc)
         return None
@@ -203,7 +203,8 @@ def _write_disk_cache(
                     "sha": sha,
                     "schema_version": _CACHE_SCHEMA_VERSION,
                 }
-            )
+            ),
+            encoding="utf-8",
         )
         manifest_tmp.replace(manifest_path)
 

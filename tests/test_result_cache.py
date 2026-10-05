@@ -418,7 +418,7 @@ def test_plain_revision_folder_without_model_meta_derives_from_path(
     )
     revision_dir.mkdir(parents=True)
     # No model_meta.json here — only a task result file.
-    (revision_dir / "SomeTask.json").write_text("{}")
+    (revision_dir / "SomeTask.json").write_text("{}", encoding="utf-8")
 
     identity = ResultCache._get_model_name_and_revision_from_path(revision_dir)
     assert identity is not None
@@ -436,7 +436,7 @@ def test_plain_revision_folder_unregistered_model_has_no_meta(
     """A plain revision folder for a model not in MODEL_REGISTRY gets model_meta=None."""
     revision_dir = tmp_path / "results" / "totally__unregistered-model" / "some_rev"
     revision_dir.mkdir(parents=True)
-    (revision_dir / "SomeTask.json").write_text("{}")
+    (revision_dir / "SomeTask.json").write_text("{}", encoding="utf-8")
 
     identity = ResultCache._get_model_name_and_revision_from_path(revision_dir)
     assert identity is not None
@@ -483,7 +483,7 @@ def _setup_fake_remote(tmp_path: Path) -> tuple[Path, Path]:
         capture_output=True,
     )
 
-    (remote_path / "README.md").write_text("# MTEB Results\n")
+    (remote_path / "README.md").write_text("# MTEB Results\n", encoding="utf-8")
     subprocess.run(
         ["git", "add", "README.md"],
         cwd=remote_path,
@@ -532,7 +532,9 @@ def test_submit_results_with_fake_remote(tmp_path: Path):
     with patch.object(cache, "download_from_remote", return_value=None):
         # Verify whether pre-flight checks detect uncommitted changes (error path)
         unrelated_file = remote_path / "unrelated_staged_file.txt"
-        unrelated_file.write_text("This should not be committed with results")
+        unrelated_file.write_text(
+            "This should not be committed with results", encoding="utf-8"
+        )
 
         subprocess.run(
             ["git", "add", "unrelated_staged_file.txt"],

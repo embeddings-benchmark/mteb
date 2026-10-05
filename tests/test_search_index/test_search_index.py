@@ -59,11 +59,11 @@ def test_retrieval_backends(
         == faiss_results.task_results[0].get_score()
     )
 
-    with task._predictions_path(python_backend_predictions).open() as f:
+    with task._predictions_path(python_backend_predictions).open(encoding="utf-8") as f:
         full_python_predictions = json.load(f)
         python_predictions = full_python_predictions["default"]["test"]
 
-    with task._predictions_path(faiss_backend_predictions).open() as f:
+    with task._predictions_path(faiss_backend_predictions).open(encoding="utf-8") as f:
         full_faiss_predictions = json.load(f)
         faiss_predictions = full_faiss_predictions["default"]["test"]
 
