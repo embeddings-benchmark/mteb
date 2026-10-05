@@ -279,7 +279,6 @@ class SearchEncoderWrapper:
         model: EncoderProtocol,
         corpus_chunk_size: int = 50_000,
         index_backend: IndexEncoderSearchProtocol | None = None,
-        timer: TimingStack | None = None,
     ) -> None:
         """Wrap an encoder for search.
 
@@ -287,15 +286,12 @@ class SearchEncoderWrapper:
             model: Encoder used to embed queries and documents.
             corpus_chunk_size: Number of documents to encode and score at once in full corpus search.
             index_backend: Optional search index; when given, the corpus is encoded during `index`.
-            timer: `search` records its phases (encoding queries, encoding corpus,
-                computing similarity) on it.
         """
         self.model = model
         self.task_corpus = None
         self.mteb_model_meta = model.mteb_model_meta
         self.corpus_chunk_size = corpus_chunk_size
         self.index_backend = index_backend
-        self.timer = timer or TimingStack()
 
     def index(
         self,
@@ -350,6 +346,7 @@ class SearchEncoderWrapper:
         encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
         num_proc: int | None = None,
+        timer: TimingStack | None = None,
         **kwargs: Any,
     ) -> RetrievalOutputType:
         """Search the corpus for the given queries.
@@ -364,6 +361,8 @@ class SearchEncoderWrapper:
             top_k: Number of top documents to return for each query.
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
             num_proc: Number of processes to use for dataloading.
+            timer: Records the "Encoding queries", "Encoding corpus" and "Computing similarity"
+                phases. A new stack is used when not given.
             **kwargs: Additional arguments, reserved for future extensions.
 
         Returns:
@@ -373,6 +372,7 @@ class SearchEncoderWrapper:
 
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
+        timer = timer or TimingStack()
 
         queries_dataloader = create_dataloader(
             queries,
@@ -382,7 +382,7 @@ class SearchEncoderWrapper:
             **encode_kwargs,
         )
 
-        with self.timer("Encoding queries", split=hf_split, subset=hf_subset):
+        with timer("Encoding queries", split=hf_split, subset=hf_subset):
             query_embeddings = self.model.encode(
                 queries_dataloader,
                 task_metadata=task_metadata,
@@ -405,11 +405,10 @@ class SearchEncoderWrapper:
                     hf_subset=hf_subset,
                     hf_split=hf_split,
                     encode_kwargs=encode_kwargs,
+                    timer=timer,
                 )
             else:
-                with self.timer(
-                    "Computing similarity", split=hf_split, subset=hf_subset
-                ):
+                with timer("Computing similarity", split=hf_split, subset=hf_subset):
                     cos_scores_top_k_values, cos_scores_top_k_idx = (
                         self.index_backend.search(
                             query_embeddings,
@@ -444,11 +443,10 @@ class SearchEncoderWrapper:
                     hf_split=hf_split,
                     top_k=top_k,
                     encode_kwargs=encode_kwargs,
+                    timer=timer,
                 )
             else:
-                with self.timer(
-                    "Computing similarity", split=hf_split, subset=hf_subset
-                ):
+                with timer("Computing similarity", split=hf_split, subset=hf_subset):
                     cos_scores_top_k_values, cos_scores_top_k_idx = (
                         self.index_backend.search(
                             query_embeddings,
@@ -490,6 +488,7 @@ class SearchEncoderWrapper:
         hf_split: str,
         top_k: int,
         encode_kwargs: EncodeKwargs,
+        timer: TimingStack,
     ) -> dict[str, list[tuple[float, str]]]:
 
         logger.info("Encoding Corpus in batches (this might take a while)...")
@@ -509,7 +508,7 @@ class SearchEncoderWrapper:
             encode_fn=self.model.encode,
             similarity_fn=self.model.similarity,
             search_k_offset=1,
-            timer=self.timer,
+            timer=timer,
         )
 
     def _sort_full_corpus_results(  # noqa: PLR6301
@@ -555,6 +554,7 @@ class SearchEncoderWrapper:
         hf_subset: str,
         hf_split: str,
         encode_kwargs: EncodeKwargs,
+        timer: TimingStack,
     ) -> dict[str, list[tuple[float, str]]]:
         """Rerank documents based on pre-ranked documents.
 
@@ -576,7 +576,7 @@ class SearchEncoderWrapper:
             encode_kwargs=encode_kwargs,
             encode_fn=self.model.encode,
             similarity_fn=self.model.similarity,
-            timer=self.timer,
+            timer=timer,
         )
 
     def _rerank_sort_results(  # noqa: PLR6301

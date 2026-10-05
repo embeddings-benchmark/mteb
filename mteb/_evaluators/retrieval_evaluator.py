@@ -5,6 +5,7 @@ import time
 from typing import TYPE_CHECKING, Any
 
 from mteb.models.search_wrappers import SearchCrossEncoderWrapper, SearchEncoderWrapper
+from mteb.models.sentence_transformer_wrapper import MultiVectorSearchEncoderWrapper
 
 from .evaluator import Evaluator
 from .retrieval_metrics import (
@@ -76,7 +77,7 @@ class RetrievalEvaluator(Evaluator):
         )
         end_time = time.monotonic()
         encodes_corpus_during_search = isinstance(
-            search_model, SearchCrossEncoderWrapper
+            search_model, (SearchCrossEncoderWrapper, MultiVectorSearchEncoderWrapper)
         ) or (
             isinstance(search_model, SearchEncoderWrapper)
             and search_model.index_backend is None
@@ -101,11 +102,12 @@ class RetrievalEvaluator(Evaluator):
             num_proc=num_proc,
         )
 
-        # The wrapper records finer-grained phases (queries, corpus, similarity) itself
-        if isinstance(search_model, SearchEncoderWrapper):
-            search_model.timer = self.timer
+        # These wrappers record finer-grained phases (queries, corpus, similarity) themselves
+        if isinstance(
+            search_model, (SearchEncoderWrapper, MultiVectorSearchEncoderWrapper)
+        ):
             logger.info("Running retrieval task - Searching queries...")
-            return search_model.search(**search_kwargs)
+            return search_model.search(**search_kwargs, timer=self.timer)
 
         search_phase_name = (
             "Encoding queries and documents"
