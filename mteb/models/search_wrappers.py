@@ -654,20 +654,18 @@ class SearchCrossEncoderWrapper:
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
 
-        query_id_to_idx = {row: i for i, row in enumerate(queries["id"])}
         doc_id_to_idx = {doc: idx for idx, doc in enumerate(self.task_corpus["id"])}
 
         query_indices: list[int] = []
         doc_indices: list[int] = []
         doc_pairs_ids: list[tuple[str, str]] = []
-        for query_id, corpus_ids in top_ranked.items():
+        for query_idx, query_id in enumerate(queries["id"]):
             if query_id not in top_ranked:
                 msg = f"No pre-ranked documents found for query {query_id}"
                 logger.warning(msg)
                 continue
 
-            query_idx = query_id_to_idx[query_id]
-            for corpus_id in corpus_ids:
+            for corpus_id in top_ranked[query_id]:
                 doc_pairs_ids.append((query_id, corpus_id))
                 query_indices.append(query_idx)
                 doc_indices.append(doc_id_to_idx[corpus_id])
