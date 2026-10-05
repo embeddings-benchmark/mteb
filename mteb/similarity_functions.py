@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from math import isqrt
+from typing import TYPE_CHECKING, Any, cast
 
 from mteb.models.model_meta import ScoringFunction
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from collections.abc import Callable, Sequence
 
     import torch
 
@@ -18,6 +19,14 @@ logger = logging.getLogger(__name__)
 # Element budget for max_sim's (queries, documents, query_tokens, document_tokens) intermediate,
 # about 400 MB in float32.
 _MAX_SIM_CHUNK_ELEMENTS = 100_000_000
+
+# Padded tokens in one chunk of queries or of documents. Scoring a query chunk against a document
+# chunk then allocates at most `_MAX_SIM_CHUNK_ELEMENTS` elements.
+_MAX_SIM_CHUNK_TOKENS = isqrt(_MAX_SIM_CHUNK_ELEMENTS)
+
+# Ragged inputs are scored in length groups only if padding all of them to the longest input costs
+# more than this many times the number of token pairs that are actually compared.
+_MAX_SIM_PADDING_OVERHEAD = 2
 
 
 def _use_torch_compile() -> bool:
@@ -67,22 +76,33 @@ def _select_device(a: torch.Tensor, b: torch.Tensor) -> torch.device:
 
 
 def _compute_on_best_device(
-    core_fn: Callable[[torch.Tensor, torch.Tensor, torch.device], torch.Tensor],
-    a: torch.Tensor,
-    b: torch.Tensor,
+    core_fn: Callable[[Any, Any, torch.device], torch.Tensor],
+    a: torch.Tensor | list[torch.Tensor],
+    b: torch.Tensor | list[torch.Tensor],
 ) -> torch.Tensor:
     """Run `core_fn(a, b, device)` on the selected device and return the result on `a`'s device.
 
+    `a` and `b` are tensors, or non-empty lists of tensors that share a device.
     `core_fn` is responsible for moving its inputs to `device`, so it can stream large inputs in
     chunks. Falls back to the CPU if the accelerator runs out of memory.
     """
     import torch
 
-    device = _select_device(a, b)
-    if device == a.device == b.device:
+    def first(x: torch.Tensor | list[torch.Tensor]) -> torch.Tensor:
+        return x[0] if isinstance(x, list) else x
+
+    def to(
+        x: torch.Tensor | list[torch.Tensor], device: torch.device
+    ) -> torch.Tensor | list[torch.Tensor]:
+        return [t.to(device) for t in x] if isinstance(x, list) else x.to(device)
+
+    a_device = first(a).device
+    b_device = first(b).device
+    device = _select_device(first(a), first(b))
+    if device == a_device == b_device:
         return core_fn(a, b, device)
     try:
-        return core_fn(a, b, device).to(a.device)
+        return core_fn(a, b, device).to(a_device)
     except RuntimeError as e:
         # torch.OutOfMemoryError (CUDA) subclasses RuntimeError; MPS raises a plain RuntimeError
         if "out of memory" not in str(e).lower():
@@ -95,7 +115,7 @@ def _compute_on_best_device(
         elif device.type == "mps":
             torch.mps.empty_cache()
         cpu = torch.device("cpu")
-        return core_fn(a.to(cpu), b.to(cpu), cpu).to(a.device)
+        return core_fn(to(a, cpu), to(b, cpu), cpu).to(a_device)
 
 
 def compute_pairwise_similarity(
@@ -237,31 +257,146 @@ def pairwise_cos_sim(a: Array, b: Array) -> Array:
     return pairwise_dot_score(_normalize_embeddings(a), _normalize_embeddings(b))
 
 
-def max_sim(a: Array, b: Array, batch_size: int = 128) -> torch.Tensor:
+def _is_ragged(x: Array | Sequence[Array]) -> bool:
+    """Whether `x` is a non-empty list of 2D `(num_tokens, token_dim)` embeddings, one per input."""
+    return (
+        isinstance(x, (list, tuple)) and len(x) > 0 and getattr(x[0], "ndim", None) == 2
+    )
+
+
+def _as_token_tensors(x: Array | Sequence[Array]) -> list[torch.Tensor]:
+    """Return `x` as a list with one 2D `(num_tokens, token_dim)` tensor per input.
+
+    A list of 2D embeddings is converted item by item, a 3D tensor is split along its first
+    dimension, and a single 2D tensor becomes a list of one.
+    """
+    import torch
+
+    if _is_ragged(x):
+        return [_convert_to_tensor(t) for t in cast("Sequence[Array]", x)]
+    tensor = _convert_to_tensor(cast("Array", x))
+    return [tensor] if tensor.ndim == 2 else list(torch.unbind(tensor))
+
+
+def _token_budget_chunks(
+    widths: Sequence[int], max_tokens: int = _MAX_SIM_CHUNK_TOKENS
+) -> list[list[int]]:
+    """Group input indices by length so that each group, padded to its widest input, fits `max_tokens`.
+
+    Indices are sorted by width and added to the current group until one more input would push
+    `group size * widest width` over `max_tokens`, which starts a new group. An input wider than
+    `max_tokens` gets a group of its own. Because similar widths end up together, a long input only
+    pads the inputs in its own group.
+    """
+    order = sorted(range(len(widths)), key=widths.__getitem__)
+    chunks: list[list[int]] = []
+    current: list[int] = []
+    for index in order:
+        # Ascending order, so the newest input is the widest in the group
+        if current and (len(current) + 1) * widths[index] > max_tokens:
+            chunks.append(current)
+            current = []
+        current.append(index)
+    if current:
+        chunks.append(current)
+    return chunks
+
+
+def _max_sim_ragged_core(
+    a: list[torch.Tensor],
+    b: list[torch.Tensor],
+    device: torch.device,
+    max_chunk_tokens: int = _MAX_SIM_CHUNK_TOKENS,
+) -> torch.Tensor:
+    """Compute MaxSim between two lists of `(num_tokens, token_dim)` tensors of varying length.
+
+    Queries and documents are each split into groups of similar length (see `_token_budget_chunks`)
+    and padded with zeros within their group only. The query groups are padded and moved to
+    `device` once. Each document group is then padded, moved to `device`, and scored against every
+    query group: for each query token the best document token similarity is taken, and these are
+    summed over the query tokens. The scores are collected into one `(len(a), len(b))` tensor on
+    `device`.
+    """
+    import torch
+    from torch.nn.utils.rnn import pad_sequence
+
+    out = torch.empty(
+        len(a),
+        len(b),
+        dtype=torch.promote_types(a[0].dtype, b[0].dtype),
+        device=device,
+    )
+    query_chunks = [
+        (
+            torch.as_tensor(indices, device=device),
+            pad_sequence([a[i].to(device) for i in indices], batch_first=True),
+        )
+        for indices in _token_budget_chunks([len(t) for t in a], max_chunk_tokens)
+    ]
+    for doc_indices in _token_budget_chunks([len(t) for t in b], max_chunk_tokens):
+        doc_index = torch.as_tensor(doc_indices, device=device)
+        documents = pad_sequence(
+            [b[i].to(device) for i in doc_indices], batch_first=True
+        )
+        for query_index, queries in query_chunks:
+            scores = torch.einsum("ash,bth->abst", queries, documents)
+            maxima = scores.max(axis=-1).values.sum(axis=-1)  # type: ignore[call-overload]
+            out[query_index[:, None], doc_index[None, :]] = maxima
+    return out
+
+
+def max_sim(
+    a: Array | Sequence[Array], b: Array | Sequence[Array], batch_size: int = 128
+) -> torch.Tensor:
     """Compute the maximum pairwise similarity between tokens.
 
     Given two tensors `a` and `b` of shape (batch_size, num_tokens, token_dim),
     this function computes the maximum similarity `max_sim(a[i], b[j])` for all
     pairs of tokens `i` and `j` across the two inputs.
 
-    `a` is scored in `batch_size`-sized chunks and `b` in chunks sized so that the
+    Either input may instead be a list with one `(num_tokens, token_dim)` tensor per input, where
+    `num_tokens` varies. Such lists are padded with zeros before scoring. If padding everything to
+    the longest input would cost more than `_MAX_SIM_PADDING_OVERHEAD` times the number of token
+    pairs actually compared (e.g. one long query among short ones), queries and documents are
+    instead split into groups of similar length and each group is padded on its own, so a long
+    input only inflates its own group. Both ways use zero padding, so they give the same scores.
+
+    For tensor inputs, `a` is scored in `batch_size`-sized chunks and `b` in chunks sized so that the
     `(a_chunk, b_chunk, num_tokens_a, num_tokens_b)` intermediate from each `einsum` call
     stays within `_MAX_SIM_CHUNK_ELEMENTS`: the full intermediate would otherwise be
     held in memory at once, which exhausts memory even for moderately sized inputs
     (e.g. a few thousand long documents).
 
     Args:
-        a: Tensor of shape (batch_size, num_tokens, token_dim).
-        b: Tensor of shape (batch_size, num_tokens, token_dim).
-        batch_size: Maximum number of rows of `a` to score at a time.
+        a: Tensor of shape (batch_size, num_tokens, token_dim), or a list of
+            `(num_tokens, token_dim)` tensors.
+        b: Tensor of shape (batch_size, num_tokens, token_dim), or a list of
+            `(num_tokens, token_dim)` tensors.
+        batch_size: Maximum number of rows of `a` to score at a time. Ragged inputs that are scored
+            in length groups are chunked by `_MAX_SIM_CHUNK_TOKENS` instead.
 
     Returns:
         A tensor containing the maximum similarity values for each batch.
     """
     import torch
 
-    a = _convert_to_tensor(a)
-    b = _convert_to_tensor(b)
+    if _is_ragged(a) or _is_ragged(b):
+        a_tokens = _as_token_tensors(a)
+        b_tokens = _as_token_tensors(b)
+        a_widths = [len(t) for t in a_tokens]
+        b_widths = [len(t) for t in b_tokens]
+        # token pairs compared after padding everything to the longest input vs. the real ones
+        padded = len(a_widths) * max(a_widths) * len(b_widths) * max(b_widths)
+        real = sum(a_widths) * sum(b_widths)
+        if padded > _MAX_SIM_PADDING_OVERHEAD * real:
+            return _compute_on_best_device(_max_sim_ragged_core, a_tokens, b_tokens)
+        from torch.nn.utils.rnn import pad_sequence
+
+        a = pad_sequence(a_tokens, batch_first=True)
+        b = pad_sequence(b_tokens, batch_first=True)
+
+    a = _convert_to_tensor(cast("Array", a))
+    b = _convert_to_tensor(cast("Array", b))
 
     if len(a.shape) == 2:
         a = a.reshape(1, *a.shape)  # eq. to a.unsqueeze(0)
@@ -306,8 +441,8 @@ def max_sim(a: Array, b: Array, batch_size: int = 128) -> torch.Tensor:
 
 # https://github.com/lightonai/pylate/blob/2d094a724866d6e15701781528368438081c0157/pylate/scores/scores.py#L67C1-L122C38
 def pairwise_max_sim(
-    queries_embeddings: Array,
-    documents_embeddings: Array,
+    queries_embeddings: Array | Sequence[Array],
+    documents_embeddings: Array | Sequence[Array],
 ) -> torch.Tensor:
     """Computes the ColBERT score for each query-document pair. The score is computed as the sum of maximum similarities between the query and the document for corresponding pairs.
 
