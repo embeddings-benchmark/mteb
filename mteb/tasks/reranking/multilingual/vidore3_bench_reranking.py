@@ -142,7 +142,7 @@ class Vidore3EnergyBGEm3Rerankingv2(AbsTaskRetrieval):
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3EnergyBGEm3Reranking.v2",
-            "revision": "575fbadfa82b5b5f1d503f4201d1a7d88602b4d8",
+            "revision": "39d566f868623dacd6a7529d60eb68f2b1f1580f",
         },
         type="Reranking",
         category="t2it",
