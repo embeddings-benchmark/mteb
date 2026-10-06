@@ -16,8 +16,8 @@ class SpanishWikiClusteringP2P(AbsTaskClustering):
         ),
         reference="https://huggingface.co/datasets/ClementeH/SpanishWikiClustering-v2",
         dataset={
-            "path": "ClementeH/SpanishWikiClustering-v2",
-            "revision": "f23479438e369c36dda6b54211824b87d7010213",
+            "path": "mteb/SpanishWikiClustering",
+            "revision": "8913161772d459ea5012368440a59bf0ea059d74",
         },
         type="Clustering",
         category="t2c",
@@ -32,14 +32,6 @@ class SpanishWikiClusteringP2P(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@dataset{henriquez2026spanishwikiclusteringv2,
-  author = {Henríquez, Clemente},
-  publisher = {Hugging Face},
-  title = {SpanishWikiClustering v2},
-  url = {https://huggingface.co/datasets/ClementeH/SpanishWikiClustering-v2},
-  year = {2026},
-}
-""",
+        bibtex_citation=""
         prompt="Agrupa los pasajes enciclopédicos en español según el asunto tratado.",
     )
