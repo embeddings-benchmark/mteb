@@ -68,9 +68,10 @@ class SeamlessM4TWrapper(AbsEncoder):
         ):
             audio_arrays = [audio["array"] for audio in batch["audio"]]
 
-            # Process the entire batch at once
-            features = self.processor(
-                audios=audio_arrays,
+            # call the feature extractor directly: the processor's audio keyword
+            # is `audios` before transformers 4.57 and `audio` from v5
+            features = self.processor.feature_extractor(
+                audio_arrays,
                 sampling_rate=self.sampling_rate,
                 return_tensors="pt",
                 padding=True,
