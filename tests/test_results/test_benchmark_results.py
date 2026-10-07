@@ -286,11 +286,11 @@ def test_generate_model_card_with_table_and_benchmarks(
     assert output_path.exists(), "Model card file not created"
     assert output_path.stat().st_size > 0, "Model card file is empty"
 
-    with output_path.open("r") as f:
+    with output_path.open("r", encoding="utf-8") as f:
         output_content = f.read()
 
     assert golden_file.exists(), f"Golden file not found: {golden_file}"
-    with golden_file.open("r") as f:
+    with golden_file.open("r", encoding="utf-8") as f:
         golden_content = f.read()
 
     def extract_table(content: str) -> list[str]:

@@ -70,6 +70,7 @@
   "schmidt-etal-2022-sentiment": "Correct as cited (KONVENS 2022, https://aclanthology.org/2022.konvens-1.9/)",
   "shinoda2026biovita": "Correct as cited (CVPR 2026)",
   "snaebjarnarson-etal-2023-transfer": "Correct as cited (NoDaLiDa 2023, https://aclanthology.org/2023.nodalida-1.74/), indexes transliterate Snaebjarnarson",
+  "sourty2026denseonlateon": "Correct as cited (LightOn Hugging Face blog, April 21, 2026, https://huggingface.co/blog/lightonai/denseon-lateon#citation), the authors provide this BibTeX citation; a blog post is not in the scholarly indexes",
   "suppa-adamec-2020-summarization": "Correct as cited (LREC 2020, https://aclanthology.org/2020.lrec-1.830/)",
   "tweet-sentiment-extraction": "Correct as cited (Kaggle's own citation, https://kaggle.com/competitions/tweet-sentiment-extraction), the authors are Kaggle handles",
   "velldal-etal-2018-norec": "Correct as cited (LREC 2018, https://aclanthology.org/L18-1661/)",

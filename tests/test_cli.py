@@ -117,12 +117,12 @@ def test_create_meta(tmp_path: Path):
 
     assert output_path.exists(), "Output file not created"
 
-    with output_path.open("r") as f:
+    with output_path.open("r", encoding="utf-8") as f:
         meta = f.read()
         meta = meta[meta.index("---") + 3 : meta.index("---", meta.index("---") + 3)]
         frontmatter = yaml.safe_load(meta)
 
-    with (output_folder / "model_card_gold.md").open("r") as f:
+    with (output_folder / "model_card_gold.md").open("r", encoding="utf-8") as f:
         gold = f.read()
         gold = gold[gold.index("---") + 3 : gold.index("---", gold.index("---") + 3)]
         frontmatter_gold = yaml.safe_load(gold)
@@ -196,7 +196,7 @@ def test_create_meta_from_existing(  # noqa: PLR0914
     yaml_start_sep = "---"
     yaml_end_sep = "\n---\n"  # newline to avoid matching "---" in the content
 
-    with output_path.open("r") as f:
+    with output_path.open("r", encoding="utf-8") as f:
         meta = f.read()
         start_yaml = meta.index(yaml_start_sep) + len(yaml_start_sep)
         end_yaml = meta.index(yaml_end_sep, start_yaml)
@@ -204,7 +204,7 @@ def test_create_meta_from_existing(  # noqa: PLR0914
         meta = meta[start_yaml:end_yaml]
         frontmatter = yaml.safe_load(meta)
 
-    with (output_folder / gold_readme_name).open("r") as f:
+    with (output_folder / gold_readme_name).open("r", encoding="utf-8") as f:
         gold = f.read()
         start_yaml = gold.index(yaml_start_sep) + len(yaml_start_sep)
         end_yaml = gold.index(yaml_end_sep, start_yaml)
