@@ -317,7 +317,7 @@ class LanguageBindAudioWrapper(_LanguageBindBase):
                 processed = []
                 for a in audio_arrays:
                     # the audio processor picks random chunks of long clips
-                    # https://github.com/PKU-YuanGroup/LanguageBind/blob/main/languagebind/audio/processing_audio.py
+                    # https://github.com/PKU-YuanGroup/LanguageBind/blob/5be0c7821fe7fbed821ca806110767fcf79edb3c/languagebind/audio/processing_audio.py#L70-L72
                     with fixed_numpy_seed():
                         processed.append(self._transform_audio(a))
                 processed = torch.stack(processed).to(self.device)

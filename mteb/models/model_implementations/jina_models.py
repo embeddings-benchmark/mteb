@@ -1086,8 +1086,9 @@ jina_embeddings_v5_omni_small = ModelMeta(
     loader=JinaV5OmniWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
-        # 32 frames, evenly spaced over the clip: EVAL_VIDEO_NUM_FRAMES=32
-        # https://huggingface.co/jinaai/jina-embeddings-v5-omni-small/blob/main/custom_st.py
+        # 32 frames, evenly spaced over the clip: the model's inference default
+        # (EVAL_VIDEO_NUM_FRAMES=32 in its sentence-transformers code)
+        # https://huggingface.co/jinaai/jina-embeddings-v5-omni-small/blob/main/custom_st.py#L39
         fps=None,
         num_frames=32,
         target_sampling_rate=16000,
@@ -1139,8 +1140,9 @@ jina_embeddings_v5_omni_nano = ModelMeta(
     loader=JinaV5OmniWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
-        # 32 frames, evenly spaced over the clip: EVAL_VIDEO_NUM_FRAMES=32
-        # https://huggingface.co/jinaai/jina-embeddings-v5-omni-nano/blob/main/custom_st.py
+        # 32 frames, evenly spaced over the clip: the model's inference default
+        # (EVAL_VIDEO_NUM_FRAMES=32 in its sentence-transformers code)
+        # https://huggingface.co/jinaai/jina-embeddings-v5-omni-nano/blob/main/custom_st.py#L39
         fps=None,
         num_frames=32,
         target_sampling_rate=16000,

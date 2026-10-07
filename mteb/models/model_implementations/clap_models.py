@@ -71,7 +71,7 @@ class ClapZeroShotWrapper(AbsEncoder):
         all_features = []
 
         if fe.truncation == "fusion":
-            # https://github.com/huggingface/transformers/blob/main/src/transformers/models/clap/feature_extraction_clap.py
+            # https://github.com/huggingface/transformers/blob/2df80c4f5863192f1d4cc698bd4f1e1d254e14ba/src/transformers/models/clap/feature_extraction_clap.py#L348-L350
             inputs = single_clip_dataloader(
                 inputs,
                 "CLAP fusion marks a random clip in the batch as long when none is",
@@ -82,6 +82,7 @@ class ClapZeroShotWrapper(AbsEncoder):
         ):
             audio_array = [audio["array"] for audio in batch["audio"]]
             # fusion picks random chunks of long clips
+            # https://github.com/huggingface/transformers/blob/2df80c4f5863192f1d4cc698bd4f1e1d254e14ba/src/transformers/models/clap/feature_extraction_clap.py#L188-L190
             with fixed_numpy_seed():
                 features = self.processor(
                     audio=audio_array,
