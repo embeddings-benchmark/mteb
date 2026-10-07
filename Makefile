@@ -29,7 +29,7 @@ install-core:
 	uv venv
 	uv pip install packaging
 	uv run --no-sync python scripts/build_core_package.py --edit-pyproject
-	uv pip install . --group test
+	uv pip install ".[api,leaderboard]" --group test
 
 test-core:
 	@echo "--- 🧪 Running the tests that must pass without torch ---"
