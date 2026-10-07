@@ -34,6 +34,8 @@ their surrounding whitespace, so you can judge a threshold before downloading an
 is 0 contains empty texts, which `min_length=1` removes. The thresholds have no default, as what counts as too small
 depends on the task.
 
+### Other changes
+
 `remove_duplicates` now compares retrieval documents and queries the way the model reads them. Queries that share their
 text but differ in their instruction or conversation are no longer merged, which previously halved the queries of
 instruction-following tasks such as `Core17InstructionRetrieval`.
