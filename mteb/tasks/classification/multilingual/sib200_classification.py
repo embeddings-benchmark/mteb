@@ -366,8 +366,8 @@ class SIB200ClassificationV3(SIB200ClassificationV2):
         ),
         reference="https://arxiv.org/abs/2309.07445",
         dataset={
-            "path": "Davlan/sib200_14classes",
-            "revision": "9a9b57434ee6eac80271059112704ccfcad83402",
+            "path": "mteb/sib200.v3",
+            "revision": "4b3a328cb8d7f78de58780c2194c9a1443786795",
         },
         type="Classification",
         category="t2c",
