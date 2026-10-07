@@ -35,7 +35,12 @@ def _run(script: str) -> str:
 
 @pytest.mark.core
 def test_import_mteb_does_not_import_torch() -> None:
-    """Even when torch is installed, `import mteb` must not import it, nor the parts it does not load itself."""
+    """`import mteb` must not load torch, transformers or sentence-transformers, even when they are installed.
+
+    Also checks `mteb.api`, `mteb.cli`, `mteb.data_cleaning` and `mteb.leaderboard`, which `import mteb` does
+    not import itself. `make test-core` cannot catch this: code that imports torch only when it is installed
+    works on `mteb-core`, but slows down `import mteb` for everyone with the full install.
+    """
     modules = ["mteb", "mteb.cli", "mteb.data_cleaning"]
     # these need their extras, which some test jobs do not install
     for module, extra_dependency in [
