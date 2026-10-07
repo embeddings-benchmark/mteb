@@ -1,6 +1,3 @@
-import warnings
-from unittest.mock import patch
-
 import numpy as np
 import pytest
 from datasets import Dataset
@@ -17,13 +14,10 @@ from mteb.mocks import (
     MockVideoZeroshotClassificationTask,
 )
 from mteb.mocks.mock_tasks.create_mock_samples import create_mock_video_bytes
-from mteb.models import ModelMeta, Video2ImagesWrapper
+from mteb.models import Video2ImagesWrapper
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_implementations.random_baseline import _image_to_vector
 from mteb.models.video_wrappers import DEFAULT_NUM_FRAMES
-from mteb.models.video_wrappers.video2images_wrapper import (
-    video2images_frames_for_task,
-)
 from mteb.types import PromptType
 
 pytest.importorskip("torchcodec", reason="Video dependencies are not installed")
@@ -144,79 +138,37 @@ def test_pooled_embedding_is_mean_of_frame_embeddings(sampling):
 
 
 @pytest.mark.parametrize("task", VIDEO_TASKS)
-def test_evaluate_wraps_image_models_automatically(task):
-    with pytest.warns(UserWarning, match=DEFAULT_WARNING):
+def test_evaluate_does_not_autowrap_image_models(task):
+    with pytest.raises(ValueError, match="Video2ImagesWrapper"):
         mteb.evaluate(_image_model(), task, cache=None)
 
 
-def test_evaluate_video_frames_silences_default_warning():
-    with warnings.catch_warnings(record=True) as caught:
-        warnings.simplefilter("always")
-        mteb.evaluate(
-            _image_model(), MockVideoRetrievalT2V(), cache=None, video_frames=4
-        )
-    assert not [w for w in caught if "frames per video" in str(w.message)]
+def test_evaluate_rejects_text_only_models_on_video_without_hint():
+    with pytest.raises(ValueError, match="none overlap") as exc:
+        mteb.evaluate(_model(["text"]), MockVideoRetrievalT2V(), cache=None)
+    assert "Video2ImagesWrapper" not in str(exc.value)
 
 
-@pytest.mark.parametrize("video_frames", [None, DEFAULT_NUM_FRAMES])
-def test_evaluate_stores_default_protocol_as_regular_results(tmp_path, video_frames):
-    model = _image_model()
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore")
-        mteb.evaluate(
-            model,
-            MockVideoRetrievalT2V(),
-            cache=ResultCache(tmp_path),
-            video_frames=video_frames,
-        )
+@pytest.mark.parametrize("task", VIDEO_TASKS)
+def test_evaluate_with_explicit_wrapper(task):
+    wrapper = Video2ImagesWrapper(_image_model(), num_frames=4)
+    mteb.evaluate(wrapper, task, cache=None)
+
+
+@pytest.mark.parametrize("num_frames", [None, DEFAULT_NUM_FRAMES])
+def test_default_protocol_is_stored_as_regular_results(tmp_path, num_frames):
+    wrapper = Video2ImagesWrapper(_image_model(), num_frames=num_frames)
+    mteb.evaluate(wrapper, MockVideoRetrievalT2V(), cache=ResultCache(tmp_path))
     (result_file,) = tmp_path.rglob("MockVideoRetrievalT2V.json")
     assert "experiments" not in result_file.parts
-    assert result_file.parent.name == model.mteb_model_meta.revision
 
 
-def test_evaluate_stores_other_frame_counts_as_experiment(tmp_path):
-    mteb.evaluate(
-        _image_model(),
-        MockVideoRetrievalT2V(),
-        cache=ResultCache(tmp_path),
-        video_frames=4,
-    )
+def test_other_frame_counts_are_stored_as_experiment(tmp_path):
+    wrapper = Video2ImagesWrapper(_image_model(), num_frames=4)
+    mteb.evaluate(wrapper, MockVideoRetrievalT2V(), cache=ResultCache(tmp_path))
     (result_file,) = tmp_path.rglob("MockVideoRetrievalT2V.json")
     assert result_file.parent.name == "video_frame_pooling_mean__video_num_frames_4"
     assert result_file.parent.parent.name == "experiments"
-
-
-def test_evaluate_does_not_rewrap_explicit_wrapper():
-    wrapper = Video2ImagesWrapper(_image_model(), num_frames=4)
-    with warnings.catch_warnings(record=True) as caught:
-        warnings.simplefilter("always")
-        mteb.evaluate(wrapper, MockVideoRetrievalT2V(), cache=None)
-    assert not [w for w in caught if "frames per video" in str(w.message)]
-
-
-def test_evaluate_still_rejects_text_only_models_on_video():
-    with pytest.raises(ValueError, match="none overlap"):
-        mteb.evaluate(_model(["text"]), MockVideoRetrievalT2V(), cache=None)
-
-
-def test_evaluate_checks_cache_before_loading_image_model(tmp_path):
-    """The wrapped meta must be derivable without loading the model (see #5537)."""
-    meta = mteb.get_model_meta("mteb/baseline-random-encoder").model_copy(
-        update={"modalities": ["text", "image"]}
-    )
-    with (
-        warnings.catch_warnings(),
-        patch.object(ModelMeta, "load_model", autospec=True) as load_model,
-    ):
-        warnings.simplefilter("ignore")
-        with pytest.raises(ValueError, match="no results found in cache"):
-            mteb.evaluate(
-                meta,
-                MockVideoRetrievalT2V(),
-                cache=ResultCache(tmp_path),
-                overwrite_strategy="only-cache",
-            )
-    load_model.assert_not_called()
 
 
 @pytest.mark.parametrize("model_type", NON_DENSE_TYPES)
@@ -225,51 +177,20 @@ def test_requires_dense_model(model_type):
         Video2ImagesWrapper(_model(["text", "image"], [model_type]))
 
 
-@pytest.mark.parametrize("model_type", NON_DENSE_TYPES)
-def test_evaluate_still_rejects_non_dense_image_models_on_video(model_type):
-    """Only dense image encoders may be wrapped; the rest stay rejected (see #5537)."""
-    with pytest.raises(ValueError, match="none overlap"):
-        mteb.evaluate(
-            _model(["text", "image"], [model_type]),
-            MockVideoRetrievalT2V(),
-            cache=None,
-        )
-
-
 def test_rejects_models_that_already_support_video():
     with pytest.raises(ValueError, match="already supports the 'video' modality"):
         Video2ImagesWrapper(_model(["text", "image", "video"]))
 
 
-MIXED_VIDEO_SIDE_TASKS = [
-    # query=['video', 'text'], document=['text'] -> partial overlap, as before the wrapper
-    ("XModBenchVT2TReranking", "warns"),
-    # query=['video', 'text'], document=['video'] -> no document overlap
-    ("CoVRRVT2VRetrieval", "rejects"),
-    # query=document=['video', 'audio'] -> audio is never covered
-    ("VCDBCoreAudioVideoRetrieval", "rejects"),
-]
-
-
-@pytest.mark.parametrize(("task_name", "outcome"), MIXED_VIDEO_SIDE_TASKS)
-def test_video_mixed_with_other_modalities_is_not_wrapped(task_name, outcome):
-    """A dataloader mixing video with text/audio raises inside the wrapper (see #5537)."""
-    task = mteb.get_task(task_name)
-    meta = mteb.get_model_meta("openai/clip-vit-base-patch32")
-
-    assert video2images_frames_for_task(meta, task, None) is None
-
-    if outcome == "rejects":
-        with pytest.raises(ValueError, match="none overlap"):
-            _check_model_modalities(meta, task)
-    else:
-        _check_model_modalities(meta, task)
-
-
-@pytest.mark.parametrize("task", VIDEO_TASKS)
-def test_video_only_sides_are_still_wrapped(task):
+def test_partial_overlap_with_video_only_warns():
+    """Tasks mixing video with modalities the model supports are not rejected."""
+    task = mteb.get_task("XModBenchVT2TReranking")
     meta = mteb.get_model_meta("openai/clip-vit-base-patch32")
     _check_model_modalities(meta, task)
-    assert video2images_frames_for_task(meta, task, DEFAULT_NUM_FRAMES) == (
-        DEFAULT_NUM_FRAMES
-    )
+
+
+def test_video_task_error_points_to_wrapper():
+    task = mteb.get_task("CoVRRVT2VRetrieval")
+    meta = mteb.get_model_meta("openai/clip-vit-base-patch32")
+    with pytest.raises(ValueError, match="Video2ImagesWrapper"):
+        _check_model_modalities(meta, task)

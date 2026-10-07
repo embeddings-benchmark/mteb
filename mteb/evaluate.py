@@ -21,11 +21,6 @@ from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
 )
-from mteb.models.video_wrappers.video2images_wrapper import (
-    video2images_frames_for_task,
-    video2images_model_meta,
-    wrap_image_model_for_video,
-)
 from mteb.results import ModelResult, TaskResult
 from mteb.results.task_result import TaskError
 from mteb.timing import TimingStack
@@ -39,7 +34,7 @@ if TYPE_CHECKING:
     from mteb.models.models_protocols import (
         MTEBModels,
     )
-    from mteb.types import EncodeKwargs, HFSubset, Modalities, ScoresDict, SplitName
+    from mteb.types import EncodeKwargs, HFSubset, ScoresDict, SplitName
     from mteb.types._metadata import ModelName, Revision
 
 
@@ -277,6 +272,15 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
     return result
 
 
+def _task_modalities(task: AbsTask) -> set[str]:
+    """All modalities a task encodes, including both sides of retrieval tasks."""
+    if isinstance(task, AbsTaskRetrieval):
+        return set(task.metadata.get_modalities(PromptType.query)) | set(
+            task.metadata.get_modalities(PromptType.document)
+        )
+    return set(task.metadata.modalities)
+
+
 def _check_model_modalities(
     model: ModelMeta,
     tasks: AbsTask | Iterable[AbsTask],
@@ -293,18 +297,6 @@ def _check_model_modalities(
         return
 
     model_modalities = set(model.modalities)
-    # dense image models run on video tasks through Video2ImagesWrapper; other model
-    # types cannot be mean-pooled across frames and stay rejected
-    wraps_video = "image" in model_modalities and "dense" in model.model_type
-
-    def covers(input_modalities: set[Modalities]) -> bool:
-        """Whether the model can encode one group of inputs, wrapping video if needed."""
-        if input_modalities.issubset(model_modalities):
-            return True
-        # Video2ImagesWrapper encodes a video-only dataloader; video mixed with other
-        # modalities in the same dataloader raises inside the wrapper, so it is not covered
-        return wraps_video and input_modalities == {"video"}
-
     check_tasks: Iterable[AbsTask] = []
     if isinstance(tasks, AbsTask):
         check_tasks = [tasks]
@@ -316,6 +308,16 @@ def _check_model_modalities(
 
     warnings, errors = [], []
 
+    def with_video_hint(msg: str, task: AbsTask) -> str:
+        if "image" in model_modalities and "video" in _task_modalities(task):
+            msg += (
+                f" {model.name} does not run on video and {task.metadata.name} contains video. "
+                "If you wish to evaluate it on frames sampled from the videos, wrap it in "
+                "`mteb.models.Video2ImagesWrapper` "
+                "(see https://embeddings-benchmark.github.io/mteb/get_started/advanced_usage/image_models_on_video/)."
+            )
+        return msg
+
     for task in check_tasks:
         # only retrieval tasks have different modalities for query and document and can be run with partial overlaps
         if isinstance(task, AbsTaskRetrieval):
@@ -325,8 +327,11 @@ def _check_model_modalities(
             query_overlap = model_modalities & query_mods
             doc_overlap = model_modalities & doc_mods
 
-            if covers(query_mods) and covers(doc_mods):
+            if (
                 # both query and document modalities are fully supported by the model
+                doc_mods.issubset(model_modalities)
+                and query_mods.issubset(model_modalities)
+            ):
                 continue
             if query_overlap and doc_overlap:
                 warnings.append(
@@ -336,23 +341,23 @@ def _check_model_modalities(
                 )
             else:
                 errors.append(
-                    f"Model {model.name} supports {model.modalities}, but none overlap with "
-                    f"task {task.metadata.name} query={sorted(query_mods)}, document={sorted(doc_mods)}."
+                    with_video_hint(
+                        f"Model {model.name} supports {model.modalities}, but none overlap with "
+                        f"task {task.metadata.name} query={sorted(query_mods)}, document={sorted(doc_mods)}.",
+                        task,
+                    )
                 )
         else:
             task_mods = set(task.metadata.modalities)
 
-            # non-retrieval tasks encode each modality in its own dataloader (e.g. zeroshot
-            # classification encodes the text labels separately from the videos), so their
-            # modalities are a union across calls rather than one dataloader's features
-            supported = (
-                model_modalities | {"video"} if wraps_video else model_modalities
-            )
-            if task_mods.issubset(supported):
+            if task_mods.issubset(model_modalities):
                 continue
             errors.append(
-                f"Model {model.name} supports {model.modalities}, but none overlap with "
-                f"task {task.metadata.name} modalities={task.metadata.modalities}."
+                with_video_hint(
+                    f"Model {model.name} supports {model.modalities}, but none overlap with "
+                    f"task {task.metadata.name} modalities={task.metadata.modalities}.",
+                    task,
+                )
             )
 
     if errors:
@@ -465,7 +470,6 @@ def evaluate(  # noqa: PLR0913, PLR0914
     public_only: bool | None = None,
     num_proc: int | None = None,
     timer: TimingStack | None = None,
-    video_frames: int | None = None,
 ) -> ModelResult:
     """This function runs a model on a given task and returns the results.
 
@@ -492,8 +496,6 @@ def evaluate(  # noqa: PLR0913, PLR0914
         public_only: Run only public tasks. If None, it will attempt to run the private task.
         num_proc: Number of processes to use during data loading and transformation. Defaults to 1.
         timer: A context manager that tracks the timing of evaluation phases.
-        video_frames: Number of frames sampled per video when a model that supports images but not video is run on a video task.
-            Frames are encoded as images and mean-pooled (see `Video2ImagesWrapper`). If None, 8 frames are used and a warning is emitted.
 
     Returns:
         The results of the evaluation.
@@ -566,7 +568,6 @@ def evaluate(  # noqa: PLR0913, PLR0914
             public_only=public_only,
             num_proc=num_proc,
             timer=timer,
-            video_frames=video_frames,
         )
         combined_results = tasks.combine_task_results(results.task_results)
 
@@ -612,7 +613,6 @@ def evaluate(  # noqa: PLR0913, PLR0914
                 public_only=public_only,
                 num_proc=num_proc,
                 timer=timer,
-                video_frames=video_frames,
             )
             evaluate_results.extend(_res.task_results)
             if _res.exceptions:
@@ -623,12 +623,6 @@ def evaluate(  # noqa: PLR0913, PLR0914
             task_results=evaluate_results,
             exceptions=exceptions,
         )
-
-    # resolved before the cache check so cached video results can be found without
-    # loading the image model that would produce them
-    video_num_frames = video2images_frames_for_task(meta, task, video_frames)
-    if video_num_frames is not None:
-        meta = video2images_model_meta(meta, num_frames=video_num_frames)
 
     existing_results, missing_eval = _check_cache(task, meta, cache, overwrite_strategy)
 
@@ -657,9 +651,6 @@ def evaluate(  # noqa: PLR0913, PLR0914
         )
         model = model.load_model()
         logger.info("✓ Model loaded")
-
-    if video_num_frames is not None:
-        model = wrap_image_model_for_video(model, video_num_frames)
 
     if raise_error is False:
         try:

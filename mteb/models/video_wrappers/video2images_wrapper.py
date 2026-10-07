@@ -1,15 +1,13 @@
 from __future__ import annotations
 
-import warnings
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
-    from mteb.abstasks.abstask import AbsTask
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models.model_meta import ModelMeta
-    from mteb.models.models_protocols import EncoderProtocol, MTEBModels
+    from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
 
 DEFAULT_NUM_FRAMES = 8
@@ -58,8 +56,8 @@ class Video2ImagesWrapper:
     Results with the default ``DEFAULT_NUM_FRAMES`` frames are stored as the model's regular
     results; any other sampling is stored as an experiment.
 
-    ``mteb.evaluate`` applies this wrapper automatically when an image model is run on a
-    video task, so it only needs to be used directly for custom pipelines.
+    ``mteb.evaluate`` never applies this wrapper implicitly: wrap the model explicitly to run it
+    on video tasks.
 
     Examples:
         >>> import mteb
@@ -217,67 +215,6 @@ class Video2ImagesWrapper:
     def similarity_pairwise(self, embeddings1: Array, embeddings2: Array) -> Array:
         """Refer to [EncoderProtocol.similarity_pairwise][mteb.models.EncoderProtocol.similarity_pairwise] for more details."""
         return self.model.similarity_pairwise(embeddings1, embeddings2)
-
-
-def _has_mixed_video_side(task: AbsTask) -> bool:
-    """Whether a retrieval side pairs video with another modality in one dataloader.
-
-    `Video2ImagesWrapper.encode` raises on such inputs, so these tasks must not be
-    wrapped. Only retrieval sides are checked: other task types encode each modality
-    in its own dataloader, so their metadata is a union across calls and says nothing
-    about what any single dataloader holds.
-    """
-    from mteb.abstasks.retrieval import AbsTaskRetrieval
-    from mteb.types import PromptType
-
-    if not isinstance(task, AbsTaskRetrieval):
-        return False
-    sides = (
-        set(task.metadata.get_modalities(PromptType.query)),
-        set(task.metadata.get_modalities(PromptType.document)),
-    )
-    return any("video" in side and side != {"video"} for side in sides)
-
-
-def video2images_frames_for_task(
-    meta: ModelMeta,
-    task: AbsTask,
-    video_frames: int | None,
-) -> int | None:
-    """Frames to sample per video when running an image model on ``task``.
-
-    Returns ``None`` when no wrapping is needed, so callers can derive the recorded
-    meta with `video2images_model_meta` and check the cache before loading the model.
-    Only dense encoders qualify; see `Video2ImagesWrapper` for why.
-    """
-    modalities = set(meta.modalities or [])
-    if not (
-        "video" in task.metadata.modalities
-        and "image" in modalities
-        and "video" not in modalities
-        and "dense" in meta.model_type
-        and not _has_mixed_video_side(task)
-    ):
-        return None
-
-    if video_frames is None:
-        warnings.warn(
-            f"{meta.name} supports images but not video. Running {task.metadata.name} by sampling "
-            f"and mean-pooling the default {DEFAULT_NUM_FRAMES} frames per video. Pass `video_frames` "
-            "to `mteb.evaluate` (or `--video-frames` on the CLI) to set it explicitly.",
-            stacklevel=3,
-        )
-        video_frames = DEFAULT_NUM_FRAMES
-
-    return video_frames
-
-
-def wrap_image_model_for_video(
-    model: MTEBModels,
-    num_frames: int,
-) -> Video2ImagesWrapper:
-    """Wrap an already-loaded image encoder so it can run on video tasks."""
-    return Video2ImagesWrapper(cast("EncoderProtocol", model), num_frames=num_frames)
 
 
 def _video_to_image_metadata(task_metadata: TaskMetadata) -> TaskMetadata:
