@@ -14,9 +14,10 @@ from mteb.models.sentence_transformer_wrapper import (
 class OmniEmbedNemotronWrapper(SentenceTransformerEncoderWrapper):
     """Thin wrapper that configures video/audio processing kwargs after loading."""
 
-    # batched audio embeddings drift far from single-clip ones on real clips,
-    # and padded batches of long clips use up to ~60 GB
+    # batched audio and video embeddings differ from single-item ones
+    # (min cosine below 0.999 on real clips)
     audio_one_clip_reason = "batched audio embeddings change with their batch-mates"
+    video_one_clip_reason = "batched video embeddings change with their batch-mates"
 
     def __init__(
         self,

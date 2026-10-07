@@ -20,10 +20,6 @@ if TYPE_CHECKING:
 class E5OmniWrapper(SentenceTransformerEncoderWrapper):
     """Thin wrapper that configures video processing kwargs after loading."""
 
-    # batched audio embeddings drift far from single-clip ones on real clips,
-    # and padded batches of long clips use up to ~60 GB
-    audio_one_clip_reason = "batched audio embeddings change with their batch-mates"
-
     def __init__(
         self,
         model: str,

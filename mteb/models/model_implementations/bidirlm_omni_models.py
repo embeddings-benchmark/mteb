@@ -5,11 +5,7 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import (
-    AudioCollator,
-    VideoCollator,
-    single_clip_dataloader,
-)
+from mteb.models.modality_collators import AudioCollator, VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
@@ -215,11 +211,6 @@ class BidirLMOmniEncoder(AbsEncoder):
             inputs.collate_fn = AudioCollator(
                 target_sampling_rate=self.sampling_rate,
                 max_samples=self.max_samples,
-            )
-        if has_audio:
-            inputs = single_clip_dataloader(
-                inputs,
-                "padding shifts this LLM's audio embeddings (min cosine ~0.99 batched)",
             )
         instruction = self._get_instruction(task_metadata, prompt_type)
 

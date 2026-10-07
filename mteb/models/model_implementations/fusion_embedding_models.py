@@ -7,11 +7,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import (
-    AudioCollator,
-    VideoCollator,
-    single_clip_dataloader,
-)
+from mteb.models.modality_collators import AudioCollator, VideoCollator
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -85,10 +81,6 @@ class FusionEmbeddingWrapper(AbsEncoder):
 
         embeddings = []
 
-        inputs = single_clip_dataloader(
-            inputs,
-            "padding shifts this LLM's audio embeddings slightly (min cosine ~0.9997 batched)",
-        )
         for batch in tqdm(inputs, disable=not show_progress_bar):
             waveforms = []
             for audio in batch["audio"]:

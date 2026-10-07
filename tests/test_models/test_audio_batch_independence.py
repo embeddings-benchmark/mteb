@@ -58,7 +58,7 @@ TINY_CHECKPOINTS = [
         "hf-internal-testing/tiny-random-Data2VecAudioModel",
         "73f503fdff73b7616154f64dbe38a685cc48e8eb",
     ),
-    # layer norm
+    # layer norm: batched with an attention mask, which is exact
     (
         Wav2Vec2AudioWrapper,
         "hf-internal-testing/tiny-random-wav2vec2",
@@ -103,3 +103,23 @@ def test_embedding_independent_of_batch_mates(wrapper, name, revision) -> None:
     batched = _embed(model, [short, long])[0]
 
     np.testing.assert_allclose(alone, batched, rtol=1e-4, atol=1e-5)
+
+
+@pytest.mark.parametrize(
+    ("name", "revision", "per_clip"),
+    [
+        (
+            "hf-internal-testing/tiny-random-wav2vec2",
+            "9123c4c809823cc53466e9868a1cf1c476be2e54",
+            False,
+        ),
+        (
+            "hf-internal-testing/tiny-random-Wav2Vec2Model",
+            "7a998ee3ee0619a52828a79c3eed6872fd053f37",
+            True,
+        ),
+    ],
+)
+def test_only_group_norm_checkpoints_drop_batching(name, revision, per_clip) -> None:
+    model = Wav2Vec2AudioWrapper(model_name=name, revision=revision, device="cpu")
+    assert model.per_clip is per_clip

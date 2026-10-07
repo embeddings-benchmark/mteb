@@ -222,10 +222,10 @@ class OmniVinciWrapper(AbsEncoder):
                     num_frames=self.num_frames,
                     max_samples=self.max_audio_samples,
                 )
-            if has_audio:
+            if has_audio or has_video:
                 inputs = single_clip_dataloader(
                     inputs,
-                    "padded batches of long clips run out of memory, and padding shifts this LLM's embeddings",
+                    "batched audio and video embeddings change with their batch-mates",
                 )
 
             all_embeddings: list[torch.Tensor] = []

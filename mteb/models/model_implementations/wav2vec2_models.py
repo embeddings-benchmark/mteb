@@ -130,6 +130,11 @@ class Wav2Vec2AudioWrapper(AbsEncoder):
                 self.is_ctc_model = True
 
         self.model.eval()
+        # group-norm feature encoders were trained without an attention mask and
+        # normalise over the padded input, so batching changes the embeddings
+        # (cosine down to 0.12 on real clips); layer-norm ones batch exactly
+        # https://huggingface.co/docs/transformers/model_doc/wav2vec2#transformers.Wav2Vec2FeatureExtractor
+        self.per_clip = self.model.config.feat_extract_norm != "layer"
 
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(model_name)
         self.sampling_rate = self.feature_extractor.sampling_rate
@@ -151,13 +156,12 @@ class Wav2Vec2AudioWrapper(AbsEncoder):
 
         all_embeddings = []
 
-        for batch in tqdm(
-            single_clip_dataloader(
+        if self.per_clip:
+            inputs = single_clip_dataloader(
                 inputs,
-                "padding changes group-norm embeddings, and a padded batch of long uncapped clips runs out of memory",
-            ),
-            disable=not show_progress_bar,
-        ):
+                "group-norm feature encoder: padding changes the embeddings",
+            )
+        for batch in tqdm(inputs, disable=not show_progress_bar):
             audio_arrays = [audio["array"] for audio in batch["audio"]]
 
             feature_inputs = self.feature_extractor(

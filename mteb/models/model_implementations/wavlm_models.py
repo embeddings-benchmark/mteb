@@ -46,6 +46,10 @@ class WavlmWrapper(AbsEncoder):
             self.device
         )
         self.model.eval()
+        # group-norm checkpoints (wavlm-base*) normalise over the padded input, so
+        # batching changes their embeddings (cosine 0.40 on real clips);
+        # wavlm-large uses layer norm and batches within 0.999
+        self.per_clip = self.model.config.feat_extract_norm != "layer"
 
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(
             self.model_name, revision=revision
@@ -64,13 +68,12 @@ class WavlmWrapper(AbsEncoder):
 
         all_embeddings = []
 
-        for batch in tqdm(
-            single_clip_dataloader(
+        if self.per_clip:
+            inputs = single_clip_dataloader(
                 inputs,
-                "group-norm checkpoints are batch dependent, and WavLM has no SDPA, so batching long clips is also a memory risk",
-            ),
-            disable=not show_progress_bar,
-        ):
+                "group-norm feature encoder: padding changes the embeddings",
+            )
+        for batch in tqdm(inputs, disable=not show_progress_bar):
             audio_arrays = [audio["array"] for audio in batch["audio"]]
 
             feature_inputs = self.feature_extractor(

@@ -21,10 +21,6 @@ if TYPE_CHECKING:
 class TevatronOmniEmbedWrapper(SentenceTransformerEncoderWrapper):
     """Thin wrapper that configures video processing kwargs after loading."""
 
-    # batched audio embeddings drift far from single-clip ones on real clips,
-    # and padded batches of long clips use ~40 GB
-    audio_one_clip_reason = "batched audio embeddings change with their batch-mates"
-
     def __init__(
         self,
         model: str,

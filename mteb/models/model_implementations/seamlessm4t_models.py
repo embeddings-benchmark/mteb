@@ -6,7 +6,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator, single_clip_dataloader
+from mteb.models.modality_collators import AudioCollator
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -61,13 +61,7 @@ class SeamlessM4TWrapper(AbsEncoder):
         )
         all_embeddings = []
 
-        for batch in tqdm(
-            single_clip_dataloader(
-                inputs,
-                "batch independence is not verified for SeamlessM4T",
-            ),
-            disable=not show_progress_bar,
-        ):
+        for batch in tqdm(inputs, disable=not show_progress_bar):
             audio_arrays = [audio["array"] for audio in batch["audio"]]
 
             # call the feature extractor directly: the processor's audio keyword

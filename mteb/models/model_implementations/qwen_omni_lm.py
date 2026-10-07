@@ -62,6 +62,9 @@ class QwenOmniWrapper(AbsEncoder):
             from transformers import Qwen3OmniMoeThinkerForConditionalGeneration
 
             model_class = Qwen3OmniMoeThinkerForConditionalGeneration
+        # Qwen3-Omni (mixture of experts) changes with its batch-mates (batched vs
+        # single cosine 0.96 on real clips); Qwen2.5-Omni stays within 0.999
+        self.per_clip = model_class.__name__.startswith("Qwen3OmniMoe")
 
         self.model = model_class.from_pretrained(
             model_name, revision=revision, torch_dtype=torch.bfloat16, **kwargs
@@ -138,10 +141,10 @@ class QwenOmniWrapper(AbsEncoder):
                     target_sampling_rate=self.sampling_rate,
                     max_samples=self.max_samples,
                 )
-            if has_audio:
+
+            if self.per_clip and (has_audio or has_video):
                 inputs = single_clip_dataloader(
-                    inputs,
-                    "padded batches of long clips run out of memory, and padding shifts this LLM's embeddings",
+                    inputs, "batched embeddings change with their batch-mates"
                 )
 
             all_embeddings: list[torch.Tensor] = []

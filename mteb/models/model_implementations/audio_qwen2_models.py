@@ -7,11 +7,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import (
-    AudioCollator,
-    check_duration_cap,
-    single_clip_dataloader,
-)
+from mteb.models.modality_collators import AudioCollator, check_duration_cap
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -67,11 +63,6 @@ class Qwen2AudioWrapper(AbsEncoder):
 
         all_embeddings = []
 
-        if "audio" in inputs.dataset.features:
-            inputs = single_clip_dataloader(
-                inputs,
-                "padded batches run out of memory, and padding shifts this LLM's embeddings",
-            )
         for batch in tqdm(inputs, disable=not show_progress_bar):
             audio_arrays = []
             texts = []

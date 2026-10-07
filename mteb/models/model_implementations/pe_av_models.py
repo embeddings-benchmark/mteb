@@ -7,7 +7,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import VideoCollator, single_clip_dataloader
+from mteb.models.modality_collators import VideoCollator
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -154,9 +154,7 @@ class PEAudioVisualWrapper(AbsEncoder):
             all_embeddings = []
 
             for batch in tqdm(
-                single_clip_dataloader(
-                    inputs, "padded batches of clips up to 400 s run out of memory"
-                ),
+                inputs,
                 disable=not show_progress_bar,
                 desc="Processing audio batches",
             ):
@@ -192,9 +190,7 @@ class PEAudioVisualWrapper(AbsEncoder):
             all_embeddings = []
 
             for batch in tqdm(
-                single_clip_dataloader(
-                    inputs, "padded batches of clips up to 400 s run out of memory"
-                ),
+                inputs,
                 disable=not show_progress_bar,
                 desc="Processing audio-video batches",
             ):

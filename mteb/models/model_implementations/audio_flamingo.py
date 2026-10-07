@@ -6,11 +6,7 @@ from typing import TYPE_CHECKING, Any
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import (
-    AudioCollator,
-    seconds_to_samples,
-    single_clip_dataloader,
-)
+from mteb.models.modality_collators import AudioCollator, seconds_to_samples
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import OutputDType
 
@@ -88,11 +84,6 @@ class AudioFlamingoWrapper(AbsEncoder):
 
         all_embeddings = []
 
-        if "audio" in inputs.dataset.features:
-            inputs = single_clip_dataloader(
-                inputs,
-                "padded batches of clips up to 600 s run out of memory, and padding shifts this LLM's embeddings",
-            )
         cap = seconds_to_samples(self.max_audio_length_seconds, self.sampling_rate)
         for batch_data in tqdm(inputs, disable=not show_progress_bar):
             audio_list = batch_data.get("audio", [])

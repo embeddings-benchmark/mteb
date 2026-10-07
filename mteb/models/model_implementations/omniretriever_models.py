@@ -7,7 +7,7 @@ import numpy as np
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import VideoCollator, single_clip_dataloader
+from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
@@ -371,10 +371,6 @@ class OmniRetrieverWrapper(AbsEncoder):
                 )
             elif "audio" in features:
                 inputs.collate_fn = self._collate
-                inputs = single_clip_dataloader(
-                    inputs,
-                    "padding shifts this LLM's audio embeddings slightly (min cosine ~0.9997 batched)",
-                )
 
             all_embeddings: list[torch.Tensor] = []
             for batch in tqdm(inputs, desc="Encoding"):
