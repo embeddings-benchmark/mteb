@@ -53,6 +53,23 @@ def test_get_tasks_filtering():
                 )
 
 
+def test_get_task_script_filters_subsets():
+    """A script filter keeps only the subsets written in that script, also when no language is given"""
+    task = get_task("STS22", script=["Cyrl"])
+    assert task.hf_subsets == ["ru"]
+
+    task = get_task("STS22", languages=["eng", "rus"], script=["Cyrl"])
+    assert task.hf_subsets == ["ru"]
+
+    task = get_task("STS22", languages=["eng", "rus"], script=["Cyrl", "Latn"])
+    assert "ru" in task.hf_subsets
+    assert "en" in task.hf_subsets
+    assert "ar" not in task.hf_subsets
+
+    with pytest.raises(ValueError, match="No subsets were found"):
+        get_task("STS22", languages=["eng"], script=["Cyrl"])
+
+
 @pytest.mark.parametrize("script", [["Cyrl"], None])
 @pytest.mark.parametrize("task_types", [["Classification"], ["Clustering"], None])
 @pytest.mark.parametrize("modalities", [["text"], ["image"], None])
