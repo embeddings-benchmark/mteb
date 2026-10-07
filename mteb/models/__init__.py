@@ -28,6 +28,7 @@ from .sentence_transformer_wrapper import (
     SparseEncoderWrapper,
     sentence_transformers_loader,
 )
+from .spectral_models import spectral_embed_v1_140m
 
 __all__ = [
     "CacheBackendProtocol",
@@ -51,4 +52,5 @@ __all__ = [
     "SentenceTransformerEncoderWrapper",
     "SparseEncoderWrapper",
     "sentence_transformers_loader",
+    "spectral_embed_v1_140m",
 ]
