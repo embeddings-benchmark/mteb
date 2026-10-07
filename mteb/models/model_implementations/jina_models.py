@@ -1086,11 +1086,10 @@ jina_embeddings_v5_omni_small = ModelMeta(
     loader=JinaV5OmniWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
-        # fps=2 is the mteb default
-        fps=2.0,
-        # 32 frames: EVAL_VIDEO_NUM_FRAMES=32
+        # 32 frames, evenly spaced over the clip: EVAL_VIDEO_NUM_FRAMES=32
         # https://huggingface.co/jinaai/jina-embeddings-v5-omni-small/blob/main/custom_st.py
-        max_frames=32,
+        fps=None,
+        num_frames=32,
         target_sampling_rate=16000,
         # 30 s: audio_config.max_source_positions=1500 frames at 50 Hz
         # https://huggingface.co/jinaai/jina-embeddings-v5-omni-small/blob/main/config.json
@@ -1140,11 +1139,10 @@ jina_embeddings_v5_omni_nano = ModelMeta(
     loader=JinaV5OmniWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
-        # fps=2 is the mteb default
-        fps=2.0,
-        # 32 frames: EVAL_VIDEO_NUM_FRAMES=32
+        # 32 frames, evenly spaced over the clip: EVAL_VIDEO_NUM_FRAMES=32
         # https://huggingface.co/jinaai/jina-embeddings-v5-omni-nano/blob/main/custom_st.py
-        max_frames=32,
+        fps=None,
+        num_frames=32,
         target_sampling_rate=16000,
         # 30 s: audio_config.max_source_positions=1500 frames at 50 Hz
         # https://huggingface.co/jinaai/jina-embeddings-v5-omni-nano/blob/main/config.json

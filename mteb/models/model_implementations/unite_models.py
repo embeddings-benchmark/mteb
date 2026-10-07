@@ -131,7 +131,8 @@ class UniteWrapper(AbsEncoder):
         max_image_tokens: int = 1280,
         fps: float | None = None,
         max_frames: int | None = None,
-        # 32 fixed frames: UNITE's eval samples fixed counts (nframes=48/32/16)
+        # 32 fixed frames: an mteb pick among UNITE's eval counts (48 for
+        # retrieval, 32 for CaReBench, 16 for CoVR)
         # https://github.com/friedrichor/UNITE/blob/main/eval/task_config.py
         num_frames: int | None = 32,
         target_sampling_rate: int = 16000,

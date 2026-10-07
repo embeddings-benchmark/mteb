@@ -75,10 +75,10 @@ class Qwen3VLRerankerWrapper(CrossEncoderWrapper):
         device: str | None = None,
         min_pixels: int | None = None,
         max_pixels: int | None = None,
-        # fps=2 is the mteb default
-        fps: float | None = 2.0,
-        # 64 frames: MAX_FRAMES=64
+        # fps=1, 64 frames: FPS=1 and MAX_FRAMES=64 in the official script (the
+        # generic Qwen3-VL video processor default is fps=2)
         # https://huggingface.co/Qwen/Qwen3-VL-Reranker-2B/blob/main/scripts/qwen3_vl_reranker.py
+        fps: float | None = 1.0,
         max_frames: int | None = 64,
         num_frames: int | None = None,
         use_instructions: bool = True,
@@ -90,7 +90,7 @@ class Qwen3VLRerankerWrapper(CrossEncoderWrapper):
         # (useful if you need to bound memory on a small GPU).
         processor_kwargs = dict(kwargs.pop("processor_kwargs", {}) or {})
         # VideoCollator already samples frames; without this the processor
-        # resamples them again assuming 24 fps (64 frames -> 6)
+        # resamples them again assuming 24 fps (64 frames -> 5, padded to 6)
         processor_kwargs.setdefault("do_sample_frames", False)
         if min_pixels is not None:
             processor_kwargs.setdefault("min_pixels", min_pixels)

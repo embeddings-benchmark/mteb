@@ -410,11 +410,12 @@ class VLM2VEC2Wrapper(AbsEncoder):
         revision: str | None = None,
         *,
         device: str | None = None,
-        # fps=2 is the mteb default
-        fps: float | None = 2.0,
-        # 64 is an mteb cap; the card sets no frame limit
-        max_frames: int | None = 64,
-        num_frames: int | None = None,
+        # 8 frames, evenly spaced: num_frames=8 on every video task in the
+        # official eval config
+        # https://github.com/TIGER-AI-Lab/VLM2Vec/blob/main/experiments/public/eval/video.yaml
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = 8,
         **kwargs: Any,
     ) -> None:
         import torch
