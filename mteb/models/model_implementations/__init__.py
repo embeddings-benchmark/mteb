@@ -4,9 +4,9 @@ from pathlib import Path
 from mteb.models.model_meta import ModelMeta
 
 
-def get_all_model_meta_objects() -> dict[str, ModelMeta]:
+def get_all_model_meta_objects() -> list[ModelMeta]:
     """Import all ModelMeta objects from all modules in the implementations package."""
-    model_meta_objects = []
+    model_meta_objects: list[ModelMeta] = []
 
     # Get the directory containing this __init__.py file
     package_dir = Path(__file__).parent
@@ -38,3 +38,8 @@ def get_all_model_meta_objects() -> dict[str, ModelMeta]:
 MODEL_REGISTRY: dict[str, ModelMeta] = {
     meta.name: meta for meta in get_all_model_meta_objects()
 }
+
+__all__ = [
+    "MODEL_REGISTRY",
+    "get_all_model_meta_objects",
+]
