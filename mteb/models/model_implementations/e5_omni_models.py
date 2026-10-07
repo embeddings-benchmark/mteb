@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from mteb.models.modality_collators import check_duration_cap
 from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
@@ -48,7 +47,7 @@ class E5OmniWrapper(SentenceTransformerEncoderWrapper):
             fps=fps,
             max_frames=max_frames,
             num_frames=num_frames,
-            max_samples=check_duration_cap(max_samples),
+            max_samples=max_samples,
             **kwargs,
         )
         self.target_sampling_rate = self.model[

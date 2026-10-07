@@ -8,7 +8,6 @@ from tqdm.auto import tqdm
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import (
     AudioCollator,
-    check_duration_cap,
     seconds_to_samples,
     single_clip_dataloader,
 )
@@ -53,7 +52,7 @@ class AudioFlamingoWrapper(AbsEncoder):
             if torch.backends.mps.is_available()
             else "cpu"
         )
-        self.max_audio_length_seconds = check_duration_cap(max_audio_length_seconds)
+        self.max_audio_length_seconds = max_audio_length_seconds
 
         self.processor = AutoProcessor.from_pretrained(model_name, revision=revision)
 

@@ -8,7 +8,6 @@ from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import (
     AudioCollator,
-    check_duration_cap,
     seconds_to_samples,
     single_clip_dataloader,
 )
@@ -106,7 +105,7 @@ class Wav2Vec2AudioWrapper(AbsEncoder):
 
         self.model_name = model_name
         self.device = device
-        self.max_audio_length_seconds = check_duration_cap(max_audio_length_seconds)
+        self.max_audio_length_seconds = max_audio_length_seconds
 
         config = AutoConfig.from_pretrained(model_name, revision=revision)
         if config.model_type == "speech-encoder-decoder":

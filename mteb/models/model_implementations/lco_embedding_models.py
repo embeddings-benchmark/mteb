@@ -10,7 +10,6 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import (
     AudioCollator,
     VideoCollator,
-    check_duration_cap,
     single_clip_dataloader,
 )
 
@@ -59,7 +58,7 @@ class LCOEmbedding(AbsEncoder):
         self.fps = fps
         self.max_frames = max_frames
         self.num_frames = num_frames
-        self.max_audio_length = check_duration_cap(max_audio_length)
+        self.max_audio_length = max_audio_length
 
         self.processor = Qwen2_5OmniProcessor.from_pretrained(
             model_name, revision=revision

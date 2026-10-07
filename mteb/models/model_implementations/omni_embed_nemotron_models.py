@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import Any
 
-from mteb.models.modality_collators import check_duration_cap
 from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
@@ -42,7 +41,7 @@ class OmniEmbedNemotronWrapper(SentenceTransformerEncoderWrapper):
             fps=fps,
             max_frames=max_frames,
             num_frames=num_frames,
-            max_samples=check_duration_cap(max_audio_length),
+            max_samples=max_audio_length,
             **kwargs,
         )
         self.target_sampling_rate = self.model[

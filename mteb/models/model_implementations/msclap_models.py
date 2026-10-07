@@ -11,11 +11,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import (
-    AudioCollator,
-    check_duration_cap,
-    seconds_to_samples,
-)
+from mteb.models.modality_collators import AudioCollator, seconds_to_samples
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -37,7 +33,6 @@ class MSClapWrapper(AbsEncoder):
         max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
-        check_duration_cap(max_audio_length_seconds)
         import torch
 
         if device is None:

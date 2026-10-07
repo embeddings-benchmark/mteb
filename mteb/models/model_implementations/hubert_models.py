@@ -8,7 +8,6 @@ from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import (
     AudioCollator,
-    check_duration_cap,
     seconds_to_samples,
     single_clip_dataloader,
 )
@@ -40,7 +39,7 @@ class HubertWrapper(AbsEncoder):
 
         self.model_name = model_name
         self.device = device
-        self.max_audio_length_seconds = check_duration_cap(max_audio_length_seconds)
+        self.max_audio_length_seconds = max_audio_length_seconds
 
         # HuBERT uses the same feature extractor as Wav2Vec2
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(model_name)

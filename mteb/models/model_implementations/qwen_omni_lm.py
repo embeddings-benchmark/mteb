@@ -8,7 +8,6 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import (
     AudioCollator,
     VideoCollator,
-    check_duration_cap,
     single_clip_dataloader,
 )
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -50,7 +49,7 @@ class QwenOmniWrapper(AbsEncoder):
             if torch.backends.mps.is_available()
             else "cpu"
         )
-        self.max_audio_length_seconds = check_duration_cap(max_audio_length_seconds)
+        self.max_audio_length_seconds = max_audio_length_seconds
         self.fps = fps
         self.max_frames = max_frames
         self.num_frames = num_frames

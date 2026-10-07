@@ -8,7 +8,6 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import (
     AudioCollator,
     VideoCollator,
-    check_duration_cap,
     single_clip_dataloader,
 )
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -105,7 +104,6 @@ class BidirLMOmniEncoder(AbsEncoder):
         max_samples: int | None = 30 * 16_000,
         **kwargs: Any,
     ) -> None:
-        check_duration_cap(max_samples)
         import torch
         from sentence_transformers import SentenceTransformer
 

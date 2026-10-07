@@ -10,7 +10,6 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import (
     AudioCollator,
     VideoCollator,
-    check_duration_cap,
     fixed_numpy_seed,
 )
 
@@ -138,7 +137,6 @@ class LanguageBindVideoWrapper(_LanguageBindBase):
         max_samples: int | None = None,
         **kwargs: Any,
     ):
-        check_duration_cap(max_samples)
         import torch
 
         if device is None:

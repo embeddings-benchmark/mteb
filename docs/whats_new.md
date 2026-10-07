@@ -21,7 +21,7 @@ Audio and video models previously shared fixed defaults, most notably a 30 secon
 
 Scores for the affected audio and video models change. Results computed with earlier versions are not comparable; rerun them with `overwrite_strategy="always"`.
 
-The `max_audio_length_s` argument of the CNN14, MS-CLAP, MuQ-MuLan, SpeechT5 and Wav2CLIP wrappers is renamed to `max_audio_length_seconds`, matching the other audio wrappers. Audio length caps must be positive; zero or negative values now raise when the model is created.
+The `max_audio_length_s` argument of the CNN14, MS-CLAP, MuQ-MuLan, SpeechT5 and Wav2CLIP wrappers is renamed to `max_audio_length_seconds`, matching the other audio wrappers. Audio length caps must be positive; zero or negative values now raise an error instead of being ignored or producing empty audio.
 
 ## New in v2.23
 

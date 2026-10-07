@@ -7,11 +7,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import (
-    VideoCollator,
-    check_duration_cap,
-    single_clip_dataloader,
-)
+from mteb.models.modality_collators import VideoCollator, single_clip_dataloader
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -60,7 +56,7 @@ class PEAudioVisualWrapper(AbsEncoder):
         self.fps = fps
         self.max_frames = max_frames
         self.num_frames = num_frames
-        self.max_samples = check_duration_cap(max_samples)
+        self.max_samples = max_samples
         self.model = PeAudioVideoModel.from_pretrained(model_name).to(self.device)
         self.model.eval()
         self.processor = PeAudioVideoProcessor.from_pretrained(model_name)
