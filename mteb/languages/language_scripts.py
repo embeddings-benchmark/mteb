@@ -7,8 +7,7 @@ from mteb.languages.check_language_code import check_language_code
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Sequence
-
-    from typing_extensions import Self
+    from typing import Self
 
 
 @dataclass

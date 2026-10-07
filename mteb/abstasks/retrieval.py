@@ -42,8 +42,7 @@ from .retrieval_dataset_loaders import (
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Mapping, Sequence
-
-    from typing_extensions import Self
+    from typing import Self
 
     from mteb.models import (
         MTEBModels,

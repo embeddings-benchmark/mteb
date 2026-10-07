@@ -56,6 +56,7 @@ from mteb.types import (
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
+    from typing import Self
 
     from sentence_transformers import (
         CrossEncoder,
@@ -65,7 +66,6 @@ if TYPE_CHECKING:
         SentenceTransformerModelCardData,
         SparseEncoder,
     )
-    from typing_extensions import Self
 
     from mteb.abstasks import AbsTask
     from mteb.benchmarks.benchmark import Benchmark
