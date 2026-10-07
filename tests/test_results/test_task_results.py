@@ -88,6 +88,13 @@ def test_task_results_get_score(task_result: TaskResult):
     assert task_result.get_score(languages=["fra"]) == 0.6
 
 
+def test_task_results_get_score_subsets(task_result: TaskResult):
+    assert task_result.get_score(subsets=["en-de"]) == 0.5
+    assert task_result.get_score(subsets=["en-fr"], languages=["fra"]) == 0.6
+    assert task_result.get_score(subsets=["en-de", "en-fr"]) == 0.55
+    assert task_result.get_score(subsets=["en-fr"], aggregation=max) == 0.6
+
+
 def test_task_results_get_score_scripts():
     task_result = TaskResult.from_validated(
         task_name="dummy_task",

@@ -34,6 +34,7 @@ from .abstask import AbsTask
 from .retrieval_dataset_loaders import (
     RetrievalDatasetLoader,
     _combine_queries_with_instructions_datasets,
+    validate_reranking_candidates,
 )
 
 if TYPE_CHECKING:
@@ -240,6 +241,7 @@ class AbsTaskRetrieval(AbsTask):
         eval_splits = self.eval_splits
         trust_remote_code = self.metadata.dataset.get("trust_remote_code", False)
         revision = self.metadata.dataset["revision"]
+        shared_data: dict[tuple[str, str], RetrievalSplitData] = {}
 
         def _process_data(split: str, hf_subset: str = "default") -> None:
             """Helper function to load and process data for a given split and language"""
@@ -249,14 +251,29 @@ class AbsTaskRetrieval(AbsTask):
             if hf_subset not in self.dataset:
                 self.dataset[hf_subset] = {}
 
-            self.dataset[hf_subset][split] = RetrievalDatasetLoader(
+            loader = RetrievalDatasetLoader(
                 hf_repo=dataset_path,
                 revision=revision,
                 trust_remote_code=trust_remote_code,
                 split=split,
                 config=hf_subset,
-            ).load(
-                num_proc=num_proc,
+            )
+            if self.metadata.reranking_subsets is None:
+                self.dataset[hf_subset][split] = loader.load(num_proc=num_proc)
+                return
+
+            data_subset = self.metadata.reranking_subsets[hf_subset]
+            key = (data_subset, split)
+            if key not in shared_data:
+                shared_data[key] = RetrievalDatasetLoader(
+                    hf_repo=dataset_path,
+                    revision=revision,
+                    trust_remote_code=trust_remote_code,
+                    split=split,
+                    config=data_subset,
+                ).load(num_proc=num_proc)
+            self.dataset[hf_subset][split] = loader.load_reranking(
+                shared_data[key], num_proc=num_proc
             )
 
         timer = timer or TimingStack()
@@ -641,6 +658,38 @@ class AbsTaskRetrieval(AbsTask):
             top_ranked_statistics=top_ranked_statistics,
         )
 
+    def _shared_reranking_data(self) -> dict[str, dict[str, RetrievalSplitData]]:
+        """Validate shared data before any upload, avoiding silent data loss."""
+        if self.metadata.reranking_subsets is None:
+            return self.dataset
+
+        shared_data: dict[str, dict[str, RetrievalSplitData]] = {}
+        for subset, splits in self.dataset.items():
+            data_subset = self.metadata.reranking_subsets[subset]
+            for data in splits.values():
+                validate_reranking_candidates(data)
+            if data_subset not in shared_data:
+                shared_data[data_subset] = splits
+                continue
+            reference = shared_data[data_subset]
+            if reference.keys() != splits.keys():
+                raise ValueError(f"Shared data splits differ for {subset!r}.")
+            for split, data in splits.items():
+                for section in ("corpus", "queries"):
+                    # Fingerprints include row selection/order and transformations,
+                    # and comparing them does not decode image or audio columns.
+                    if (
+                        data[section]._fingerprint
+                        != reference[split][section]._fingerprint
+                    ):
+                        raise ValueError(
+                            f"Shared {section} differs for {subset!r}/{split!r}. "
+                            "Reuse the same Dataset for each retriever subset."
+                        )
+                if data["relevant_docs"] != reference[split]["relevant_docs"]:
+                    raise ValueError(f"Shared qrels differ for {subset!r}/{split!r}.")
+        return shared_data
+
     def _push_dataset_to_hub(
         self,
         repo_name: str,
@@ -648,6 +697,7 @@ class AbsTaskRetrieval(AbsTask):
         **kwargs: Any,
     ) -> None:
         self.convert_v1_dataset_format_to_v2(num_proc)
+        shared_data = self._shared_reranking_data()
 
         def _push_section(
             data: dict[str, RetrievalSplitData],
@@ -691,21 +741,21 @@ class AbsTaskRetrieval(AbsTask):
                     **kwargs,
                 )
 
-        for subset in self.dataset:
+        for subset, data in shared_data.items():
             logger.info(f"Converting {subset} of {self.metadata.name}")
             _push_section(
-                self.dataset[subset],
+                data,
                 "queries",
                 f"{subset}-queries" if subset != "default" else "queries",
             )
             _push_section(
-                self.dataset[subset],
+                data,
                 "corpus",
                 f"{subset}-corpus" if subset != "default" else "corpus",
             )
             # Handle relevant_docs separately since one entry expands to multiple records.
             relevant_sections = {}
-            for split, values in self.dataset[subset].items():
+            for split, values in data.items():
                 relevant_docs = values["relevant_docs"]
                 entries = []
                 for query_id, docs in relevant_docs.items():
@@ -723,8 +773,10 @@ class AbsTaskRetrieval(AbsTask):
                 f"{subset}-qrels" if subset != "default" else "qrels",
                 commit_message=f"Add {subset}-qrels",
                 num_proc=num_proc,
+                **kwargs,
             )
 
+        for subset in self.dataset:
             _push_section(
                 self.dataset[subset],
                 "top_ranked",

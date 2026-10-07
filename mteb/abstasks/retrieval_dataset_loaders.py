@@ -41,6 +41,34 @@ class RetrievalSplitData(TypedDict):
     top_ranked: TopRankedDocumentsType | None
 
 
+def validate_reranking_candidates(data: RetrievalSplitData) -> None:
+    """Require a nonempty, distinct candidate list for every evaluated query.
+
+    Relevance judgments remain independent of candidates: a query with no relevant
+    candidates is valid and must still contribute to the evaluation.
+    """
+    candidates = data["top_ranked"]
+    if candidates is None:
+        raise ValueError("Reranking subsets require top_ranked candidates.")
+    query_ids = set(data["queries"]["id"])
+    if set(candidates) != query_ids:
+        raise ValueError(
+            "Reranking candidates must cover exactly the evaluated query IDs. "
+            f"Missing: {len(query_ids - candidates.keys())}; "
+            f"unknown: {len(candidates.keys() - query_ids)}."
+        )
+    corpus_ids = set(data["corpus"]["id"])
+    for query_id, doc_ids in candidates.items():
+        if not doc_ids:
+            raise ValueError(f"Empty reranking candidate list for query {query_id!r}.")
+        if len(doc_ids) != len(set(doc_ids)):
+            raise ValueError(f"Duplicate reranking candidates for query {query_id!r}.")
+        if not set(doc_ids) <= corpus_ids:
+            raise ValueError(
+                f"Unknown corpus IDs in candidates for query {query_id!r}."
+            )
+
+
 class RetrievalDatasetLoader:
     """This dataloader handles the dataloading for retrieval-oriented tasks, including standard retrieval, reranking, and instruction-based variants.
 
@@ -119,6 +147,17 @@ class RetrievalDatasetLoader:
             relevant_docs=qrels,
             top_ranked=top_ranked,
         )
+
+    def load_reranking(
+        self,
+        shared_data: RetrievalSplitData,
+        num_proc: int | None = None,
+    ) -> RetrievalSplitData:
+        """Attach this subset's candidates to shared corpus, queries, and qrels."""
+        data = shared_data.copy()
+        data["top_ranked"] = self._load_top_ranked(num_proc, strict=True)
+        validate_reranking_candidates(data)
+        return data
 
     def _get_split(self, config: str) -> str:
         splits = get_dataset_split_names(
@@ -225,11 +264,15 @@ class RetrievalDatasetLoader:
     def _load_top_ranked(
         self,
         num_proc: int | None,
+        *,
+        strict: bool = False,
     ) -> TopRankedDocumentsType:
         config = (
             f"{self.config}-top_ranked" if self.config is not None else "top_ranked"
         )
         logger.info("Loading top ranked subset: %s", config)
+        if strict and config not in self.dataset_configs:
+            raise ValueError(f"Missing reranking candidate configuration {config!r}.")
         top_ranked_ds = self._load_dataset_split(config, num_proc)
         top_ranked_ds = top_ranked_ds.cast(
             Features(
@@ -244,6 +287,8 @@ class RetrievalDatasetLoader:
 
         queries = top_ranked_ds["query-id"].to_list()
         corpus_lists = top_ranked_ds["corpus-ids"].to_list()
+        if strict and len(queries) != len(set(queries)):
+            raise ValueError(f"Duplicate query IDs in {config}.")
         top_ranked_dict = dict(zip(queries, corpus_lists, strict=True))
         logger.info(f"Top ranked loaded: {len(top_ranked_ds)}")
         return top_ranked_dict

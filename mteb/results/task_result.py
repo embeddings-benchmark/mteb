@@ -553,6 +553,8 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         scripts: list[ISOLanguageScript] | None = None,
         getter: Callable[[ScoresDict], Score] = lambda scores: scores["main_score"],
         aggregation: Callable[[list[Score]], float] = np.mean,
+        *,
+        subsets: list[str] | None = None,
     ) -> float:
         """Get a score for the specified splits, languages, scripts and aggregation function.
 
@@ -562,6 +564,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             scripts: The scripts to consider.
             getter: A function that takes a scores dictionary and returns a score e.g. "main_score" or "evaluation_time".
             aggregation: The aggregation function to use.
+            subsets: Evaluation subsets to include, such as retriever names. None includes all subsets.
 
         Returns:
             The result of the aggregation function on the scores.
@@ -577,6 +580,8 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                 raise ValueError(f"Split {split} not found in scores")
 
             for scores in self.scores[split]:
+                if subsets is not None and scores["hf_subset"] not in subsets:
+                    continue
                 eval_langs = scores["languages"]
                 for lang in eval_langs:
                     if lang_scripts.contains_language(lang) and (

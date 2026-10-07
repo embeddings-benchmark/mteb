@@ -24,6 +24,7 @@ from pydantic import (
     BaseModel,
     ConfigDict,
     field_validator,
+    model_validator,
 )
 from typing_extensions import TypedDict
 
@@ -452,6 +453,9 @@ class TaskMetadata(BaseModel):
             (e.g. "Latn"). Can be either a list of languages or a dictionary mapping huggingface subsets to lists of languages (e.g. if a the
             huggingface dataset contain different languages).
         main_score: The main score used for evaluation.
+        reranking_subsets: Optional mapping from evaluation subsets (e.g. "bm25", "qwen") to the
+            shared retrieval data subset (e.g. "default"). Each evaluation subset supplies its own
+            top_ranked configuration; corpus, queries, and qrels are loaded from the mapped subset.
         date: The date when the data was collected. Specified as a tuple of two dates.
         domains: The domains of the data. This includes "Non-fiction", "Social", "Fiction", "News", "Academic", "Blog", "Encyclopaedic",
             "Government", "Legal", "Medical", "Poetry", "Religious", "Reviews", "Web", "Spoken", "Written". A dataset can belong to multiple domains.
@@ -492,6 +496,7 @@ class TaskMetadata(BaseModel):
     eval_splits: list[str] = ["test"]
     eval_langs: Languages
     main_score: str
+    reranking_subsets: dict[str, str] | None = None
 
     date: tuple[StrDate, StrDate] | None = None
     domains: list[TaskDomain] | None = None
@@ -511,6 +516,19 @@ class TaskMetadata(BaseModel):
 
     def _validate_metadata(self) -> None:
         self._eval_langs_are_valid(self.eval_langs)
+
+    @model_validator(mode="after")
+    def _check_reranking_subsets(self) -> TaskMetadata:
+        if self.reranking_subsets is not None:
+            if not self.reranking_subsets or set(self.reranking_subsets) != set(
+                self.hf_subsets
+            ):
+                raise ValueError(
+                    "reranking_subsets must map every evaluation subset in eval_langs."
+                )
+            if any(not name for name in self.reranking_subsets.values()):
+                raise ValueError("Shared data subset names must not be empty.")
+        return self
 
     @field_validator("prompt")
     @classmethod
@@ -601,7 +619,13 @@ class TaskMetadata(BaseModel):
             getattr(self, field_name) is not None
             for field_name in self.__class__.model_fields
             if field_name
-            not in ["prompt", "adapted_from", "contributed_by", "superseded_by"]  # noqa: PLR6201
+            not in [  # noqa: PLR6201
+                "prompt",
+                "adapted_from",
+                "contributed_by",
+                "superseded_by",
+                "reranking_subsets",
+            ]
         )
 
     @property
