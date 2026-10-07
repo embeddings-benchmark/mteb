@@ -6,6 +6,7 @@ import pytest
 
 import mteb
 from mteb.models.model_meta import ModelMeta
+from mteb.types import OutputDType
 
 # Historic models with n_embedding_parameters=None. Do NOT add new models to this list.
 _MISSING_N_EMBEDDING_MODELS = [
@@ -676,9 +677,6 @@ def test_model_meta_dtypes_are_named_not_torch_objects() -> None:
     transformers takes for a string dtype) and `OutputDType.get_dtype()`.
     """
     import torch
-
-    import mteb
-    from mteb.types import OutputDType
 
     meta = mteb.get_model_meta("vidore/colpali-v1.1")
     declared = meta.loader_kwargs["torch_dtype"]

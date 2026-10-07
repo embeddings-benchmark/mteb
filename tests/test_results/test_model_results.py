@@ -6,6 +6,8 @@ import pytest
 import mteb
 from mteb.results import ModelResult, TaskResult
 
+pytestmark = pytest.mark.core
+
 
 @pytest.fixture
 def model_result() -> ModelResult:

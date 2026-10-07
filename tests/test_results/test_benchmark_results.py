@@ -30,6 +30,7 @@ def benchmark_results(cache_path: Path) -> BenchmarkResults:
     return mteb.load_results(download_latest=False, require_model_meta=False)
 
 
+@pytest.mark.core
 def test_indexing(benchmark_results: BenchmarkResults) -> None:
     model_res = benchmark_results.model_results[0]
     assert isinstance(model_res, ModelResult), (
@@ -37,6 +38,7 @@ def test_indexing(benchmark_results: BenchmarkResults) -> None:
     )
 
 
+@pytest.mark.core
 def test_select_models(benchmark_results: BenchmarkResults) -> None:
     model_name = "sentence-transformers/all-MiniLM-L6-v2"
     bench_res = benchmark_results.select_models([model_name])
@@ -65,6 +67,7 @@ def test_select_models(benchmark_results: BenchmarkResults) -> None:
     assert len(bench_res.model_results) == 1  # only one revision
 
 
+@pytest.mark.core
 def test_select_tasks(benchmark_results: BenchmarkResults) -> None:
     tasks = [mteb.get_task("STS12")]
     bench_res = benchmark_results.select_tasks(tasks=tasks)
@@ -74,7 +77,6 @@ def test_select_tasks(benchmark_results: BenchmarkResults) -> None:
     assert task_names[0] == "STS12"
 
 
-@pytest.mark.full_install
 def test_select_tasks_preserves_model_meta(tmp_path: Path) -> None:
     """`select_tasks` must not drop `model_meta` (and with it, experiment identity).
 
@@ -103,6 +105,7 @@ def test_select_tasks_preserves_model_meta(tmp_path: Path) -> None:
     assert filtered.model_meta.experiment_kwargs == {"a": "test"}
 
 
+@pytest.mark.core
 def test_join_revisions(benchmark_results: BenchmarkResults) -> None:
     model_name = "sentence-transformers/all-MiniLM-L6-v2"
     bench_res = benchmark_results.select_models([model_name])
@@ -118,6 +121,7 @@ def test_join_revisions(benchmark_results: BenchmarkResults) -> None:
     assert revision == mteb.get_model_meta(model_name).revision
 
 
+@pytest.mark.core
 def test_to_dataframe(
     benchmark_results: BenchmarkResults,
 ) -> None:
@@ -180,6 +184,7 @@ def test_to_dataframe(
     )
 
 
+@pytest.mark.core
 def test_utility_properties(
     benchmark_results: BenchmarkResults,
 ) -> None:
@@ -201,6 +206,7 @@ def test_utility_properties(
     assert isinstance(br.domains[0], str)
 
 
+@pytest.mark.core
 @pytest.mark.skipif(_POLARS_TOO_OLD, reason="requires polars >= 1.40.0")
 def test_benchmark_results(cache_path: Path) -> None:
     cache = ResultCache(cache_path)
@@ -228,6 +234,7 @@ def test_benchmark_results(cache_path: Path) -> None:
     assert df.loc[0, "Mean (Task)"] == pytest.approx(0.616616)
 
 
+@pytest.mark.core
 @pytest.mark.skipif(_POLARS_TOO_OLD, reason="requires polars >= 1.40.0")
 def test_benchmark_results_model_filters_keep_benchmark(cache_path: Path) -> None:
     cache = ResultCache(cache_path)
@@ -254,7 +261,6 @@ def test_benchmark_results_model_filters_keep_benchmark(cache_path: Path) -> Non
 
 
 @pytest.mark.skipif(_POLARS_TOO_OLD, reason="requires polars >= 1.40.0")
-@pytest.mark.full_install  # model cards are rendered with jinja2, which comes with torch
 def test_generate_model_card_with_table_and_benchmarks(
     cache_path: Path, tmp_path: Path
 ) -> None:

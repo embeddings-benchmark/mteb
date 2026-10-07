@@ -34,16 +34,7 @@ install-core:
 test-core:
 	@echo "--- 🧪 Running the tests that must pass without torch ---"
 	uv run --no-sync python -c "import importlib.util; assert importlib.util.find_spec('torch') is None, 'torch must not be installed'"
-	uv run --no-sync pytest -n auto -m "not (full_install or test_datasets or test_reference_models)" \
-		tests/test_benchmarks \
-		tests/test_ensure_no_torch_at_import.py \
-		tests/test_filter_tasks.py \
-		tests/test_get_tasks.py \
-		tests/test_import_hygiene.py \
-		tests/test_languages.py \
-		tests/test_result_cache_load_from_cache.py \
-		tests/test_results \
-		tests/test_validate_metadata
+	uv run --no-sync pytest -n auto -m core
 
 
 test-with-coverage:

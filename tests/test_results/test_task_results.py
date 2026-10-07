@@ -13,6 +13,8 @@ from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.results import TaskResult
 from mteb.timing import PhaseTiming
 
+pytestmark = pytest.mark.core
+
 tests_folder = Path(__file__).parent.parent
 
 

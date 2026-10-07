@@ -32,6 +32,7 @@ def _run(script: str) -> str:
     return result.stdout.strip().splitlines()[-1]
 
 
+@pytest.mark.core
 def test_import_mteb_does_not_import_torch() -> None:
     """Even when torch is installed, `import mteb` and the CLI must not import it."""
     loaded = _run(
@@ -49,6 +50,7 @@ def test_import_mteb_does_not_import_torch() -> None:
     )
 
 
+@pytest.mark.core
 def test_missing_full_installation_says_what_to_install(monkeypatch) -> None:
     """On `mteb-core`, anything that needs torch must say how to get a full installation."""
     import mteb._requires_package as requires_package
@@ -58,7 +60,6 @@ def test_missing_full_installation_says_what_to_install(monkeypatch) -> None:
         requires_package._requires_full_installation("torch", "Evaluating a model")
 
 
-@pytest.mark.full_install
 def test_model_implementations_declare_no_import_time_torch_dtypes() -> None:
     """No model file may evaluate a `torch.<dtype>` at import time; use `OutputDType` instead.
 
