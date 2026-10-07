@@ -165,6 +165,18 @@ class LanguageBindVideoWrapper(_LanguageBindBase):
             model_name, revision=revision
         )
         self.processor = LanguageBindVideoProcessor(self.model.config, self.tokenizer)
+        # the upstream video transform flips each clip left-right at random, even
+        # at inference, so the same video embedded differently on every call
+        # https://github.com/PKU-YuanGroup/LanguageBind/blob/main/languagebind/video/processing_video.py
+        from torchvision.transforms import Compose
+
+        self.processor.transform = Compose(
+            [
+                t
+                for t in self.processor.transform.transforms
+                if "RandomHorizontalFlip" not in type(t).__name__
+            ]
+        )
 
     def _transform_video_frames(self, frames: torch.Tensor) -> torch.Tensor:
         """Apply LanguageBind's video transform to pre-decoded frames.

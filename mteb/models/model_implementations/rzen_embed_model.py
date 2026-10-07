@@ -229,6 +229,8 @@ class RzenEmbedWrapper(AbsEncoder):
         instruction: str,
     ) -> tuple[list[str], list[Image.Image] | None]:
         """Assembles prompt strings and collects visual frame sequences for a single batch."""
+        from PIL import Image
+
         texts = batch.get("text")
         images = batch.get("image")
         videos = batch.get("video")
@@ -244,7 +246,12 @@ class RzenEmbedWrapper(AbsEncoder):
             if images is not None and i < len(images) and images[i] is not None:
                 sample_visuals.append(images[i])
             if videos is not None and i < len(videos) and videos[i] is not None:
-                sample_visuals.append(videos[i])
+                # the model card passes a video as a list of frame images
+                # https://huggingface.co/qihoo360/RzenEmbed
+                sample_visuals.extend(
+                    Image.fromarray(frame.permute(1, 2, 0).cpu().numpy())
+                    for frame in videos[i]
+                )
 
             v = sample_visuals if sample_visuals else None
 
@@ -274,11 +281,9 @@ class RzenEmbedWrapper(AbsEncoder):
         with torch.no_grad():
             has_video = "video" in inputs.dataset.features
 
-            from torch.utils.data import default_collate
-
-            if has_video and (
-                inputs.collate_fn is None or inputs.collate_fn is default_collate
-            ):
+            # mteb's dataloaders always set their own collate_fn, so attach the
+            # video collator unconditionally (it was never applied before)
+            if has_video:
                 inputs.collate_fn = VideoCollator(
                     target_sampling_rate=16000,
                     fps=self.fps,

@@ -343,9 +343,15 @@ larger_clap_music_and_speech = ModelMeta(
 """,
 )
 
+
 clap_large_v2 = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
-    loader_kwargs={"trust_remote_code": True},
+    loader_kwargs={
+        "trust_remote_code": True,
+        # 300 s at 16 kHz: chunk_length=300
+        # https://huggingface.co/laion/voiceclap-large-v2/blob/main/preprocessor_config.json
+        "max_samples": 4_800_000,
+    },
     name="laion/voiceclap-large-v2",
     languages=["eng-Latn", "deu-Latn", "fra-Latn", "spa-Latn", "zho-Hans"],
     revision="68ee637005607c8736e70bb5133270b60c1f8228",

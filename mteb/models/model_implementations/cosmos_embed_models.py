@@ -40,12 +40,14 @@ class CosmosEmbed1Model(AbsEncoder):
         self.device = torch.device(device)
         dtype = torch.bfloat16 if self.device.type == "cuda" else torch.float32
         self.dtype = dtype
+        # the 336p/448p checkpoints resize their 224p position embedding in fp32
+        # at load, which then clashes with the bf16 layers; cast it back
         self.model = AutoModel.from_pretrained(
             model_name,
             revision=revision,
             trust_remote_code=True,
             torch_dtype=dtype,
-        ).to(self.device)
+        ).to(self.device, dtype=dtype)
         self.model.eval()
         self.processor = AutoProcessor.from_pretrained(
             model_name,
