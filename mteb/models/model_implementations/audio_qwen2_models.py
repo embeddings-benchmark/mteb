@@ -29,6 +29,7 @@ class Qwen2AudioWrapper(AbsEncoder):
         max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
+        check_duration_cap(max_audio_length_seconds)
         import torch
 
         if device is None:
@@ -38,7 +39,7 @@ class Qwen2AudioWrapper(AbsEncoder):
 
         self.model_name = model_name
         self.device = device
-        self.max_audio_length_seconds = check_duration_cap(max_audio_length_seconds)
+        self.max_audio_length_seconds = max_audio_length_seconds
 
         self.processor = AutoProcessor.from_pretrained(model_name, revision=revision)
         self.model = Qwen2AudioForConditionalGeneration.from_pretrained(

@@ -32,6 +32,7 @@ class WavlmWrapper(AbsEncoder):
         max_audio_length_seconds: float = 240.0,
         **kwargs: Any,
     ):
+        check_duration_cap(max_audio_length_seconds)
         import torch
         from transformers import Wav2Vec2FeatureExtractor, WavLMModel
 
@@ -40,7 +41,7 @@ class WavlmWrapper(AbsEncoder):
 
         self.model_name = model_name
         self.device = device
-        self.max_audio_length_seconds = check_duration_cap(max_audio_length_seconds)
+        self.max_audio_length_seconds = max_audio_length_seconds
 
         self.model = WavLMModel.from_pretrained(self.model_name, revision=revision).to(
             self.device
