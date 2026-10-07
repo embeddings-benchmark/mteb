@@ -7,7 +7,11 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator, seconds_to_samples
+from mteb.models.modality_collators import (
+    AudioCollator,
+    check_duration_cap,
+    seconds_to_samples,
+)
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -23,12 +27,12 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
-        # uncapped: Wav2CLIP pools over the spectrogram, so length is unbounded.
-        # Set this to truncate; it was previously declared but never applied.
-        # https://arxiv.org/abs/2110.11499
+        # uncapped: Wav2CLIP declares no input length. Set this to truncate; it
+        # was previously declared but never applied.
         max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
+        check_duration_cap(max_audio_length_seconds)
         import torch
         from transformers import CLIPModel, CLIPProcessor
 

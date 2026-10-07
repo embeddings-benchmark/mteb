@@ -7,7 +7,11 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator, seconds_to_samples
+from mteb.models.modality_collators import (
+    AudioCollator,
+    check_duration_cap,
+    seconds_to_samples,
+)
 from mteb.models.model_meta import ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
@@ -38,6 +42,7 @@ class VoiceCLAPSmallWrapper(AbsEncoder):
         max_audio_length_seconds: float | None = 30.0,
         **kwargs: Any,
     ):
+        check_duration_cap(max_audio_length_seconds)
         import torch
 
         if device is None:

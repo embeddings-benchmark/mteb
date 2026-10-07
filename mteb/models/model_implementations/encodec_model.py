@@ -8,7 +8,11 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator, seconds_to_samples
+from mteb.models.modality_collators import (
+    AudioCollator,
+    check_duration_cap,
+    seconds_to_samples,
+)
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -40,7 +44,7 @@ class EncodecWrapper(AbsEncoder):
 
         self.model_name = model_name
         self.device = device
-        self.max_audio_length_seconds = max_audio_length_seconds
+        self.max_audio_length_seconds = check_duration_cap(max_audio_length_seconds)
 
         self.model = EncodecModel.from_pretrained(model_name, revision=revision).to(
             device
@@ -100,8 +104,11 @@ class EncodecWrapper(AbsEncoder):
                     if input_values.dim() == 2:
                         input_values = input_values.unsqueeze(1)
 
-                    # Get the latent representations directly from the encoder
-                    latent = self.model.encoder(input_values)
+                    # Get the latent representations directly from the encoder;
+                    # cuDNN rejects the encoder's input past ~850 s of audio
+                    # (CUDNN_STATUS_NOT_SUPPORTED), the native kernels do not
+                    with torch.backends.cudnn.flags(enabled=False):
+                        latent = self.model.encoder(input_values)
 
                     # Validate latent has time frames
                     if latent.shape[2] == 0:

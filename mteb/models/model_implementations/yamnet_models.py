@@ -9,7 +9,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import seconds_to_samples
+from mteb.models.modality_collators import check_duration_cap, seconds_to_samples
 
 if TYPE_CHECKING:
     import torch
@@ -39,6 +39,7 @@ def yamnet_loader(*args: Any, **kwargs: Any) -> EncoderProtocol:
             max_audio_length_seconds: float | None = None,
             **kwargs: Any,
         ):
+            check_duration_cap(max_audio_length_seconds)
             import torch
 
             if device is None:

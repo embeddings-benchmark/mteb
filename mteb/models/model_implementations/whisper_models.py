@@ -6,7 +6,11 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator, seconds_to_samples
+from mteb.models.modality_collators import (
+    AudioCollator,
+    check_duration_cap,
+    seconds_to_samples,
+)
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -35,7 +39,7 @@ class WhisperAudioWrapper(AbsEncoder):
 
         self.model_name = model_name
         self.device = device
-        self.max_audio_length_seconds = max_audio_length_seconds
+        self.max_audio_length_seconds = check_duration_cap(max_audio_length_seconds)
 
         self.model = WhisperModel.from_pretrained(model_name, revision=revision).to(
             device
