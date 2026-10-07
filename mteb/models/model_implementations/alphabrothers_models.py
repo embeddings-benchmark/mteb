@@ -5,7 +5,6 @@ from mteb.models import ModelMeta, SentenceTransformerEncoderWrapper
 alpha_sts_v0 = ModelMeta(
     name="alphabrothers/alpha-sts-v0",
     loader=SentenceTransformerEncoderWrapper,
-    loader_kwargs=dict(),
     revision="e737a8ac80fcd6c33f1945f2596c853a18f4cd06",
     release_date="2026-10-07",
     languages=["kor-Hang"],
