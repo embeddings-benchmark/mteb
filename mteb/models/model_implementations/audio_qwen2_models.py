@@ -7,7 +7,11 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import (
+    AudioCollator,
+    check_duration_cap,
+    single_clip_dataloader,
+)
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -38,7 +42,7 @@ class Qwen2AudioWrapper(AbsEncoder):
 
         self.model_name = model_name
         self.device = device
-        self.max_audio_length_seconds = max_audio_length_seconds
+        self.max_audio_length_seconds = check_duration_cap(max_audio_length_seconds)
 
         self.processor = AutoProcessor.from_pretrained(model_name, revision=revision)
         self.model = Qwen2AudioForConditionalGeneration.from_pretrained(
@@ -63,6 +67,11 @@ class Qwen2AudioWrapper(AbsEncoder):
 
         all_embeddings = []
 
+        if "audio" in inputs.dataset.features:
+            inputs = single_clip_dataloader(
+                inputs,
+                "padded batches run out of memory, and padding shifts this LLM's embeddings",
+            )
         for batch in tqdm(inputs, disable=not show_progress_bar):
             audio_arrays = []
             texts = []
@@ -108,9 +117,9 @@ class Qwen2AudioWrapper(AbsEncoder):
                 hidden = outputs.hidden_states[-1]
                 mask = processor_inputs["attention_mask"]
 
-                # last non-pad index per item
-                last_idx = mask.sum(dim=1) - 1
-                last_idx = last_idx.clamp(min=0)
+                # last non-pad index per item; the tokenizer pads on the left, so
+                # this is not mask.sum() - 1
+                last_idx = mask.shape[1] - 1 - mask.flip(dims=[1]).argmax(dim=1)
 
                 # gather last-token embeddings
                 batch_indices = torch.arange(hidden.size(0), device=self.device)
@@ -118,7 +127,7 @@ class Qwen2AudioWrapper(AbsEncoder):
 
                 all_embeddings.append(embeddings.cpu().detach())
 
-        return torch.cat(all_embeddings, dim=0).numpy()
+        return torch.cat(all_embeddings, dim=0).float().numpy()
 
 
 qwen2_audio_meta = ModelMeta(

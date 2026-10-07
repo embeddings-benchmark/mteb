@@ -7,7 +7,12 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator, VideoCollator
+from mteb.models.modality_collators import (
+    AudioCollator,
+    VideoCollator,
+    check_duration_cap,
+    single_clip_dataloader,
+)
 
 if TYPE_CHECKING:
     import torch
@@ -54,7 +59,7 @@ class LCOEmbedding(AbsEncoder):
         self.fps = fps
         self.max_frames = max_frames
         self.num_frames = num_frames
-        self.max_audio_length = max_audio_length
+        self.max_audio_length = check_duration_cap(max_audio_length)
 
         self.processor = Qwen2_5OmniProcessor.from_pretrained(
             model_name, revision=revision
@@ -133,6 +138,11 @@ class LCOEmbedding(AbsEncoder):
                 inputs.collate_fn = AudioCollator(
                     target_sampling_rate=self.sampling_rate,
                     max_samples=self.max_audio_length,
+                )
+            if has_audio:
+                inputs = single_clip_dataloader(
+                    inputs,
+                    "padded batches of long clips run out of memory, and padding shifts this LLM's embeddings",
                 )
 
             all_embeddings: list[torch.Tensor] = []

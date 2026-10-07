@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
+from mteb.models.modality_collators import check_duration_cap
 from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
@@ -10,9 +11,19 @@ from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
 )
 
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+
 
 class E5OmniWrapper(SentenceTransformerEncoderWrapper):
     """Thin wrapper that configures video processing kwargs after loading."""
+
+    # batched audio embeddings drift far from single-clip ones on real clips,
+    # and padded batches of long clips use up to ~60 GB
+    audio_one_clip_reason = "batched audio embeddings change with their batch-mates"
 
     def __init__(
         self,
@@ -37,7 +48,7 @@ class E5OmniWrapper(SentenceTransformerEncoderWrapper):
             fps=fps,
             max_frames=max_frames,
             num_frames=num_frames,
-            max_samples=max_samples,
+            max_samples=check_duration_cap(max_samples),
             **kwargs,
         )
         self.target_sampling_rate = self.model[
@@ -52,6 +63,33 @@ class E5OmniWrapper(SentenceTransformerEncoderWrapper):
                 },
                 "text": {"truncation": True, "max_length": 512},
             }
+        )
+
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        # the 512-token limit is for text; audio and video become tokens in the
+        # same sequence, so truncating there would cut them (~20 s of audio)
+        text_only = not any(
+            m in inputs.dataset.features for m in ("image", "audio", "video")
+        )
+        self.model[0].processing_kwargs["text"] = (
+            {"truncation": True, "max_length": 512} if text_only else {}
+        )
+        return super().encode(
+            inputs,
+            task_metadata=task_metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            prompt_type=prompt_type,
+            **kwargs,
         )
 
 

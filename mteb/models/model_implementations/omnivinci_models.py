@@ -9,7 +9,12 @@ from typing import TYPE_CHECKING, Any
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import VideoCollator
+from mteb.models.modality_collators import (
+    VideoCollator,
+    check_duration_cap,
+    seconds_to_samples,
+    single_clip_dataloader,
+)
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
@@ -41,11 +46,12 @@ class OmniVinciWrapper(AbsEncoder):
         # 32 frames: num_video_frames=32 (fps=0.0, so a fixed count, not a rate)
         # https://huggingface.co/nvidia/omnivinci/blob/main/config.json
         num_frames: int = 32,
-        # 120 s: audio_chunk_length=120, chunks internally
+        # 120 s: audio_chunk_length=120; upstream keeps only the first 120 s
         # https://huggingface.co/nvidia/omnivinci/blob/main/config.json
         max_audio_length_seconds: float = 120.0,
         **kwargs: Any,
     ) -> None:
+        check_duration_cap(max_audio_length_seconds)
         import torch
         from transformers import AutoModel, AutoProcessor
 
@@ -57,8 +63,8 @@ class OmniVinciWrapper(AbsEncoder):
             else "cpu"
         )
         self.num_frames = num_frames
-        self.max_audio_samples = int(
-            max_audio_length_seconds * self.AUDIO_SAMPLING_RATE
+        self.max_audio_samples = seconds_to_samples(
+            max_audio_length_seconds, self.AUDIO_SAMPLING_RATE
         )
 
         # VILA's vision tower and mm_projector are loaded as fp16 internally
@@ -221,6 +227,11 @@ class OmniVinciWrapper(AbsEncoder):
                     target_sampling_rate=self.AUDIO_SAMPLING_RATE,
                     num_frames=self.num_frames,
                     max_samples=self.max_audio_samples,
+                )
+            if has_audio:
+                inputs = single_clip_dataloader(
+                    inputs,
+                    "padded batches of long clips run out of memory, and padding shifts this LLM's embeddings",
                 )
 
             all_embeddings: list[torch.Tensor] = []

@@ -7,7 +7,11 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import (
+    AudioCollator,
+    fixed_numpy_seed,
+    single_clip_dataloader,
+)
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 if TYPE_CHECKING:
@@ -66,16 +70,24 @@ class ClapZeroShotWrapper(AbsEncoder):
 
         all_features = []
 
+        if fe.truncation == "fusion":
+            # https://github.com/huggingface/transformers/blob/main/src/transformers/models/clap/feature_extraction_clap.py
+            inputs = single_clip_dataloader(
+                inputs,
+                "CLAP fusion marks a random clip in the batch as long when none is",
+            )
         for batch in tqdm(
             inputs,
             disable=not show_progress_bar,
         ):
             audio_array = [audio["array"] for audio in batch["audio"]]
-            features = self.processor(
-                audio=audio_array,
-                sampling_rate=self.sampling_rate,
-                return_tensors="pt",
-            )  # no padding=/truncation=: keeps the checkpoint's own setting
+            # fusion picks random chunks of long clips
+            with fixed_numpy_seed():
+                features = self.processor(
+                    audio=audio_array,
+                    sampling_rate=self.sampling_rate,
+                    return_tensors="pt",
+                )  # no padding=/truncation=: keeps the checkpoint's own setting
             # https://github.com/huggingface/transformers/blob/main/src/transformers/models/clap/feature_extraction_clap.py
             features = {k: v.to(self.device) for k, v in features.items()}
 

@@ -5,7 +5,12 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator, VideoCollator
+from mteb.models.modality_collators import (
+    AudioCollator,
+    VideoCollator,
+    check_duration_cap,
+    single_clip_dataloader,
+)
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
@@ -88,17 +93,19 @@ class BidirLMOmniEncoder(AbsEncoder):
         device: str | None = None,
         trust_remote_code: bool = True,
         max_text_length: int = 1024,
-        # fps=2: qwen-omni-utils FPS=2.0
-        # https://github.com/QwenLM/Qwen2.5-Omni/blob/main/qwen-omni-utils/src/qwen_omni_utils/v2_5/vision_process.py
+        # fps=2: the checkpoint's own video config
+        # https://huggingface.co/BidirLM/BidirLM-Omni-2.5B-Embedding/blob/main/video_preprocessor_config.json
         fps: float | None = 2.0,
-        # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
+        # 64 is an mteb cap; the checkpoint's video config has max_frames=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
-        # 30 s: chunk_length=30; the processor itself sets truncation=False
-        # https://huggingface.co/BidirLM/BidirLM-Omni-2.5B-Embedding/blob/main/preprocessor_config.json
+        # 30 s: an mteb cap at chunk_length=30; the processor itself sets
+        # truncation=False, so upstream does not cut
+        # https://huggingface.co/BidirLM/BidirLM-Omni-2.5B-Embedding/blob/main/processing_bidirlm_omni.py
         max_samples: int | None = 30 * 16_000,
         **kwargs: Any,
     ) -> None:
+        check_duration_cap(max_samples)
         import torch
         from sentence_transformers import SentenceTransformer
 
@@ -210,6 +217,11 @@ class BidirLMOmniEncoder(AbsEncoder):
             inputs.collate_fn = AudioCollator(
                 target_sampling_rate=self.sampling_rate,
                 max_samples=self.max_samples,
+            )
+        if has_audio:
+            inputs = single_clip_dataloader(
+                inputs,
+                "padding shifts this LLM's audio embeddings (min cosine ~0.99 batched)",
             )
         instruction = self._get_instruction(task_metadata, prompt_type)
 

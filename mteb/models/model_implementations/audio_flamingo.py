@@ -6,7 +6,12 @@ from typing import TYPE_CHECKING, Any
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator, seconds_to_samples
+from mteb.models.modality_collators import (
+    AudioCollator,
+    check_duration_cap,
+    seconds_to_samples,
+    single_clip_dataloader,
+)
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import OutputDType
 
@@ -48,7 +53,7 @@ class AudioFlamingoWrapper(AbsEncoder):
             if torch.backends.mps.is_available()
             else "cpu"
         )
-        self.max_audio_length_seconds = max_audio_length_seconds
+        self.max_audio_length_seconds = check_duration_cap(max_audio_length_seconds)
 
         self.processor = AutoProcessor.from_pretrained(model_name, revision=revision)
 
@@ -84,6 +89,12 @@ class AudioFlamingoWrapper(AbsEncoder):
 
         all_embeddings = []
 
+        if "audio" in inputs.dataset.features:
+            inputs = single_clip_dataloader(
+                inputs,
+                "padded batches of clips up to 600 s run out of memory, and padding shifts this LLM's embeddings",
+            )
+        cap = seconds_to_samples(self.max_audio_length_seconds, self.sampling_rate)
         for batch_data in tqdm(inputs, disable=not show_progress_bar):
             audio_list = batch_data.get("audio", [])
             text_list = batch_data.get("text", [])
@@ -102,12 +113,8 @@ class AudioFlamingoWrapper(AbsEncoder):
                     array = AudioCollator.resample_audio(
                         {"audio": audio_row},
                         target_sampling_rate=self.sampling_rate,
+                        max_samples=cap,
                     )
-                    cap = seconds_to_samples(
-                        self.max_audio_length_seconds, self.sampling_rate
-                    )
-                    if cap is not None:
-                        array = array[..., :cap]
                     content.append({"type": "audio", "audio": array})
 
                 conversations.append([{"role": "user", "content": content}])

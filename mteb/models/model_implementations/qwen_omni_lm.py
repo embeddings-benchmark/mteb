@@ -5,7 +5,12 @@ from typing import TYPE_CHECKING, Any
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator, VideoCollator
+from mteb.models.modality_collators import (
+    AudioCollator,
+    VideoCollator,
+    check_duration_cap,
+    single_clip_dataloader,
+)
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
@@ -45,7 +50,7 @@ class QwenOmniWrapper(AbsEncoder):
             if torch.backends.mps.is_available()
             else "cpu"
         )
-        self.max_audio_length_seconds = max_audio_length_seconds
+        self.max_audio_length_seconds = check_duration_cap(max_audio_length_seconds)
         self.fps = fps
         self.max_frames = max_frames
         self.num_frames = num_frames
@@ -133,6 +138,11 @@ class QwenOmniWrapper(AbsEncoder):
                 inputs.collate_fn = AudioCollator(
                     target_sampling_rate=self.sampling_rate,
                     max_samples=self.max_samples,
+                )
+            if has_audio:
+                inputs = single_clip_dataloader(
+                    inputs,
+                    "padded batches of long clips run out of memory, and padding shifts this LLM's embeddings",
                 )
 
             all_embeddings: list[torch.Tensor] = []

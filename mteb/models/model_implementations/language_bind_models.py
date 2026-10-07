@@ -7,7 +7,12 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator, VideoCollator
+from mteb.models.modality_collators import (
+    AudioCollator,
+    VideoCollator,
+    check_duration_cap,
+    fixed_numpy_seed,
+)
 
 if TYPE_CHECKING:
     import torch
@@ -127,12 +132,13 @@ class LanguageBindVideoWrapper(_LanguageBindBase):
         revision: str | None = None,
         fps: float | None = None,
         max_frames: int | None = None,
-        # 8 frames: 8-frame clips
-        # https://github.com/PKU-YuanGroup/LanguageBind
+        # 8 frames: num_frames=8
+        # https://huggingface.co/LanguageBind/LanguageBind_Video_FT/blob/main/config.json
         num_frames: int | None = 8,
         max_samples: int | None = None,
         **kwargs: Any,
     ):
+        check_duration_cap(max_samples)
         import torch
 
         if device is None:
@@ -308,9 +314,13 @@ class LanguageBindAudioWrapper(_LanguageBindBase):
                 desc="Processing audio batches",
             ):
                 audio_arrays = [audio["array"] for audio in batch["audio"]]
-                processed = torch.stack(
-                    [self._transform_audio(a) for a in audio_arrays]
-                ).to(self.device)
+                processed = []
+                for a in audio_arrays:
+                    # the audio processor picks random chunks of long clips
+                    # https://github.com/PKU-YuanGroup/LanguageBind/blob/main/languagebind/audio/processing_audio.py
+                    with fixed_numpy_seed():
+                        processed.append(self._transform_audio(a))
+                processed = torch.stack(processed).to(self.device)
 
                 with torch.autocast(str(self.device), dtype=torch.bfloat16):
                     audio_outputs = self.model.vision_model(pixel_values=processed)

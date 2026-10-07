@@ -7,7 +7,11 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator, VideoCollator
+from mteb.models.modality_collators import (
+    AudioCollator,
+    VideoCollator,
+    single_clip_dataloader,
+)
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -44,7 +48,8 @@ class FusionEmbeddingWrapper(AbsEncoder):
 
     sampling_rate = 16_000
     max_text_tokens = 254
-    # 64 frames: _V_DEFAULT_MAX_FRAMES=64, sampled uniformly
+    # 64 frames: _V_DEFAULT_MAX_FRAMES=64, the reference cap (it samples at
+    # fps=1 up to 64 for files); mteb always samples 64 evenly
     # https://huggingface.co/EximiusLabs/fusion-embedding-1-2b-preview/blob/main/inference.py
     video_num_frames = 64
 
@@ -80,6 +85,10 @@ class FusionEmbeddingWrapper(AbsEncoder):
 
         embeddings = []
 
+        inputs = single_clip_dataloader(
+            inputs,
+            "padding shifts this LLM's audio embeddings slightly (min cosine ~0.9997 batched)",
+        )
         for batch in tqdm(inputs, disable=not show_progress_bar):
             waveforms = []
             for audio in batch["audio"]:

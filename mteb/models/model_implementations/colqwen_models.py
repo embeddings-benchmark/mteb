@@ -6,7 +6,11 @@ from typing import TYPE_CHECKING, Any
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator, VideoCollator
+from mteb.models.modality_collators import (
+    AudioCollator,
+    VideoCollator,
+    check_duration_cap,
+)
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import OutputDType
 
@@ -357,6 +361,7 @@ class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
         max_audio_length: int | None = 4_800_000,
         **kwargs: Any,
     ):
+        check_duration_cap(max_audio_length)
         from colpali_engine.models import ColQwen2_5Omni, ColQwen2_5OmniProcessor
 
         self.fps = fps

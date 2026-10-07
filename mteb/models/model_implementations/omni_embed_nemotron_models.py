@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from mteb.models.modality_collators import check_duration_cap
 from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
@@ -14,6 +15,10 @@ from mteb.models.sentence_transformer_wrapper import (
 class OmniEmbedNemotronWrapper(SentenceTransformerEncoderWrapper):
     """Thin wrapper that configures video/audio processing kwargs after loading."""
 
+    # batched audio embeddings drift far from single-clip ones on real clips,
+    # and padded batches of long clips use up to ~60 GB
+    audio_one_clip_reason = "batched audio embeddings change with their batch-mates"
+
     def __init__(
         self,
         model: str,
@@ -25,9 +30,9 @@ class OmniEmbedNemotronWrapper(SentenceTransformerEncoderWrapper):
         # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
-        # 300 s: chunk_length=300
-        # https://huggingface.co/nvidia/omni-embed-nemotron-3b/blob/main/preprocessor_config.json
-        max_audio_length: int = 4_800_000,
+        # 128 s: the model card sets "audio": {"max_length": 2048000}
+        # https://huggingface.co/nvidia/omni-embed-nemotron-3b
+        max_audio_length: int = 2_048_000,
         **kwargs: Any,
     ) -> None:
         super().__init__(
@@ -37,7 +42,7 @@ class OmniEmbedNemotronWrapper(SentenceTransformerEncoderWrapper):
             fps=fps,
             max_frames=max_frames,
             num_frames=num_frames,
-            max_samples=max_audio_length,
+            max_samples=check_duration_cap(max_audio_length),
             **kwargs,
         )
         self.target_sampling_rate = self.model[

@@ -7,7 +7,11 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import VideoCollator
+from mteb.models.modality_collators import (
+    VideoCollator,
+    check_duration_cap,
+    single_clip_dataloader,
+)
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -31,14 +35,17 @@ class PEAudioVisualWrapper(AbsEncoder):
         self,
         model_name: str = "facebook/pe-av-large",
         device: str | None = None,
-        # fps=2 is an mteb default; PE-AV declares no frame rate
+        # PE-AV evaluates on every frame (30 fps); fps=2 with at most 64 frames
+        # is an mteb cap for memory
+        # https://huggingface.co/facebook/pe-av-large/blob/main/video_preprocessor_config.json
         fps: float | None = 2.0,
-        # 64 is an mteb cap; PE-AV declares no frame count
         max_frames: int | None = 64,
         num_frames: int | None = None,
-        # 400 s: max_position_embeddings=10000 at 25 frames/s
-        # https://huggingface.co/facebook/pe-av-large/blob/main/config.json
-        max_samples: int | None = 400 * 48000,
+        # full clips, as in Meta's eval, up to the rotary table: 10000 positions
+        # (max_position_embeddings) minus CLS, at one per 1920 samples (~400 s);
+        # Meta's code fails past it
+        # https://github.com/facebookresearch/perception_models/blob/main/core/audio_visual_encoder/transformer.py
+        max_samples: int | None = (10_000 - 1) * 1920,
         **kwargs: Any,
     ):
         import torch
@@ -53,7 +60,7 @@ class PEAudioVisualWrapper(AbsEncoder):
         self.fps = fps
         self.max_frames = max_frames
         self.num_frames = num_frames
-        self.max_samples = max_samples
+        self.max_samples = check_duration_cap(max_samples)
         self.model = PeAudioVideoModel.from_pretrained(model_name).to(self.device)
         self.model.eval()
         self.processor = PeAudioVideoProcessor.from_pretrained(model_name)
@@ -151,7 +158,9 @@ class PEAudioVisualWrapper(AbsEncoder):
             all_embeddings = []
 
             for batch in tqdm(
-                inputs,
+                single_clip_dataloader(
+                    inputs, "padded batches of clips up to 400 s run out of memory"
+                ),
                 disable=not show_progress_bar,
                 desc="Processing audio batches",
             ):
@@ -187,7 +196,9 @@ class PEAudioVisualWrapper(AbsEncoder):
             all_embeddings = []
 
             for batch in tqdm(
-                inputs,
+                single_clip_dataloader(
+                    inputs, "padded batches of clips up to 400 s run out of memory"
+                ),
                 disable=not show_progress_bar,
                 desc="Processing audio-video batches",
             ):
