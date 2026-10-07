@@ -705,7 +705,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         """Save the BenchmarkResults to a JSON file."""
         path = Path(path)
         path.parent.mkdir(parents=True, exist_ok=True)
-        with path.open("w") as out_file:
+        with path.open("w", encoding="utf-8") as out_file:
             out_file.write(self.model_dump_json(indent=2))
 
     @classmethod
@@ -734,7 +734,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
             An instance of BenchmarkResults.
         """
         path = Path(path)
-        with path.open() as in_file:
+        with path.open(encoding="utf-8") as in_file:
             data = json.loads(in_file.read())
         return cls.from_dict(data)
 

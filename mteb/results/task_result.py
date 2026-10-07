@@ -383,7 +383,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         json_obj["date"] = self.date.timestamp() if self.date else None
         self._round_scores(json_obj["scores"], 6)
 
-        with path.open("w") as f:  # noqa: PLW1514
+        with path.open("w", encoding="utf-8") as f:
             json.dump(json_obj, f, indent=2)
 
     @classmethod

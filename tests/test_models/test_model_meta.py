@@ -160,6 +160,7 @@ def test_model_similar_tasks(training_datasets):
             "Touche2020-NL",
             "Touche2020-VN",
             "Touche2020-PL",
+            "Touche2020Decontaminated",
             "Touche2020Retrieval.v3",
         ]
     )

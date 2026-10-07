@@ -762,7 +762,7 @@ class AbsTaskRetrieval(AbsTask):
                 f"Can't find previous results for this task. File {top_ranked_path} does not exist."
             )
 
-        with top_ranked_path.open("r") as previous_results_file:
+        with top_ranked_path.open("r", encoding="utf-8") as previous_results_file:
             previous_results = json.load(previous_results_file)
 
         if not self.data_loaded:
