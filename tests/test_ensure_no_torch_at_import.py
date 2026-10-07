@@ -7,6 +7,7 @@ or a torch dtype evaluated at import time would otherwise go unnoticed.
 
 from __future__ import annotations
 
+import importlib.util
 import pathlib
 import subprocess
 import sys
@@ -35,14 +36,22 @@ def _run(script: str) -> str:
 @pytest.mark.core
 def test_import_mteb_does_not_import_torch() -> None:
     """Even when torch is installed, `import mteb` must not import it, nor the parts it does not load itself."""
+    modules = ["mteb", "mteb.cli", "mteb.data_cleaning"]
+    # these need their extras, which some test jobs do not install
+    for module, extra_dependency in [
+        ("mteb.api.app", "fastapi"),
+        ("mteb.leaderboard", "gradio"),
+    ]:
+        if importlib.util.find_spec(extra_dependency) is not None:
+            modules.append(module)
+
     loaded = _run(
         f"""
+        import importlib
         import sys
-        import mteb
-        import mteb.api.app
-        import mteb.cli
-        import mteb.data_cleaning
-        import mteb.leaderboard
+
+        for module in {modules!r}:
+            importlib.import_module(module)
 
         print("loaded:", ",".join(d for d in {sorted(_FULL_INSTALL_DEPENDENCIES)!r} if d in sys.modules))
         """
