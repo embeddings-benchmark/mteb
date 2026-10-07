@@ -4,7 +4,9 @@ from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
+from tqdm.auto import tqdm
 
+from mteb.models._cross_encoder import warn_if_unsupported_precision
 from mteb.models.model_meta import ModelMeta
 from mteb.types import OutputDType
 
@@ -292,10 +294,13 @@ class KaLMRerankerWrapper:
         hf_subset: str,
         prompt_type: PromptType | None = None,
         batch_size: int = 32,
+        show_progress_bar: bool = False,
+        precision: str | None = None,
     ) -> Array:
         """Return ``P(yes)`` scores in the same order as ``pairs``."""
         import torch
 
+        warn_if_unsupported_precision(precision)
         queries = [text for batch in inputs1 for text in batch["text"]]
         documents = [text for batch in inputs2 for text in batch["text"]]
         pairs = [
@@ -320,7 +325,11 @@ class KaLMRerankerWrapper:
 
         sorted_scores: list[float] = []
         try:
-            for start in range(0, len(sorted_pairs), batch_size):
+            for start in tqdm(
+                range(0, len(sorted_pairs), batch_size),
+                disable=not show_progress_bar,
+                desc="Computing relevance scores",
+            ):
                 sorted_scores.extend(
                     self._predict_batch(
                         sorted_pairs[start : start + batch_size],
