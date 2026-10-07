@@ -31,6 +31,19 @@ def _build_aliases_registry() -> dict[str, Benchmark]:
     return aliases
 
 
+@lru_cache
+def _override_metrics_by_task() -> dict[str, frozenset[str]]:
+    """Map task name to the metrics registered benchmarks override it with.
+
+    Drives what ``only_main_score`` keeps when the results cache is rebuilt.
+    """
+    out: dict[str, set[str]] = {}
+    for bench in _build_registry().values():
+        for task_name, metric in bench.task_metric_overrides.items():
+            out.setdefault(task_name, set()).add(metric)
+    return {name: frozenset(metrics) for name, metrics in out.items()}
+
+
 def get_benchmark(
     benchmark_name: str,
 ) -> Benchmark:

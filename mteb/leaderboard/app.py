@@ -525,7 +525,12 @@ def get_leaderboard_app(  # noqa: PLR0914
     if loaded is None:
         all_results = cache._load_from_cache(rebuild=True)
         # Per-benchmark validated frames (scores filtered to each benchmark's task config).
-        loaded = {b.name: all_results._to_results_df(b.tasks) for b in benchmarks}
+        loaded = {
+            b.name: all_results._to_results_df(
+                b.tasks, metric_overrides=b.task_metric_overrides
+            )
+            for b in benchmarks
+        }
         BenchmarkResults.save_leaderboard_cache(loaded, parquet_path)
         logger.info(
             f"Step 2/6 complete: Built {len(benchmarks)} benchmarks and saved "

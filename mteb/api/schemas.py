@@ -99,6 +99,8 @@ class BenchmarkSchema(_CamelModel):
     aggregations: list[str]
     # Static declaration of every CustomGrouping in `benchmark.aggregations`.
     custom_groupings: list[CustomGroupingSchema] = Field(default_factory=list)
+    # Task name -> metric this benchmark scores it with instead of main_score.
+    task_metric_overrides: dict[str, str] = Field(default_factory=dict)
     # False on benchmarks whose tasks aren't tracked in training-data annotations (e.g. ViDoRe).
     show_zero_shot: bool = True
     # Distinct models evaluated on every task in this benchmark.
@@ -184,6 +186,7 @@ class BenchmarkSchema(_CamelModel):
             ],
             show_zero_shot=bool(benchmark.show_zero_shot),
             language_view=language_view,
+            task_metric_overrides=dict(benchmark.task_metric_overrides),
         )
 
 

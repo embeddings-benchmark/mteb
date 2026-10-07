@@ -537,3 +537,46 @@ def test_merge_evaluation_phases() -> None:
             "subset": "fr",
         },
     ]
+
+
+# ---------------------------------------------------------------------------
+# Benchmark.task_metric_overrides plumbing on TaskResult
+# ---------------------------------------------------------------------------
+
+_ARGUANA_MINILM = (
+    tests_folder
+    / "mock_mteb_cache"
+    / "results"
+    / "sentence-transformers__all-MiniLM-L6-v2"
+    / "8b3219a92973c328a8e22fadcfa821b5dc75636a"
+    / "NanoArguAnaRetrieval.json"
+)
+
+
+def test_only_main_score_keeps_requested_metrics():
+    tr = TaskResult.from_disk(_ARGUANA_MINILM)
+    stripped = tr.only_main_score(keep=["hit_rate_at_5", "does_not_exist"])
+    (cell,) = stripped.scores["train"]
+    assert set(cell) == {"hf_subset", "main_score", "languages", "hit_rate_at_5"}
+    assert cell["hit_rate_at_5"] == pytest.approx(0.76)
+    # default behaviour unchanged
+    (plain,) = tr.only_main_score().scores["train"]
+    assert set(plain) == {"hf_subset", "main_score", "languages"}
+
+
+def test_with_main_score_from_rewrites_main_score_only():
+    tr = TaskResult.from_disk(_ARGUANA_MINILM)
+    assert tr.get_score() == pytest.approx(0.54867)
+    swapped = tr._with_main_score_from("hit_rate_at_5")
+    assert swapped.get_score() == pytest.approx(0.76)
+    # original untouched, other metrics preserved on the copy
+    assert tr.get_score() == pytest.approx(0.54867)
+    (cell,) = swapped.scores["train"]
+    assert cell["ndcg_at_10"] == pytest.approx(0.54867)
+
+
+def test_with_main_score_from_missing_metric_nulls_main_score():
+    tr = TaskResult.from_disk(_ARGUANA_MINILM)
+    swapped = tr._with_main_score_from("no_such_metric")
+    (cell,) = swapped.scores["train"]
+    assert cell["main_score"] is None
