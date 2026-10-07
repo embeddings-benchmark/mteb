@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 from tqdm.auto import tqdm
 
-from mteb.models._cross_encoder import warn_if_unsupported_precision
 from mteb.models.model_meta import ModelMeta
 from mteb.types import OutputDType
 
@@ -118,11 +117,9 @@ class Qwen3RerankerWrapper:
         prompt_type: PromptType | None = None,
         batch_size: int = 32,
         show_progress_bar: bool = True,
-        precision: str | None = None,
     ) -> Array:
         import torch
 
-        warn_if_unsupported_precision(precision)
         with torch.inference_mode():
             queries = [text for batch in inputs1 for text in batch["text"]]
             instructions = None

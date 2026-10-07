@@ -18,7 +18,6 @@ from mteb.similarity_functions import (
 )
 from mteb.types import PromptType
 
-from ._cross_encoder import warn_if_unsupported_precision
 from .abs_encoder import AbsEncoder, get_prompt_name
 from .model_meta import ScoringFunction
 from .search_wrappers import chunked_full_corpus_search, rerank_top_ranked_documents
@@ -636,13 +635,11 @@ class CrossEncoderWrapper:
                 E.g. Current language
             hf_subset: Subset of current task. Similar to `hf_split` to get more information
             prompt_type: The name type of prompt. (query or passage)
-            **kwargs: Additional arguments to pass to the cross-encoder. Embedding
-                quantization (`precision`) is ignored; non-default values warn.
+            **kwargs: Additional arguments to pass to the cross-encoder.
 
         Returns:
             The predicted relevance scores for each inputs pair.
         """
-        warn_if_unsupported_precision(kwargs.pop("precision", None))
         queries = self._collect_inputs(inputs1, self.query_prefix)
         corpus = self._collect_inputs(inputs2, self.passage_prefix)
 
