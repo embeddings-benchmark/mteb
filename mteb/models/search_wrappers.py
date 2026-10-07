@@ -693,12 +693,19 @@ class SearchCrossEncoderWrapper:
             num_proc=num_proc,
             **encode_kwargs,
         )
+        # Cross-encoders may rebatch the loader contents for inference. Forward
+        # the requested batch size, but preserve strict predict() signatures
+        # that do not accept other encoder options (e.g. precision).
+        predict_kwargs: EncodeKwargs = {}
+        if "batch_size" in encode_kwargs:
+            predict_kwargs["batch_size"] = encode_kwargs["batch_size"]
         predictions = self.model.predict(
             inputs1=queries_loader,
             inputs2=corpus_loader,
             task_metadata=task_metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
+            **predict_kwargs,
         )
 
         results: RetrievalOutputType = {qid: {} for qid in queries["id"]}
