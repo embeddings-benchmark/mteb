@@ -34,12 +34,15 @@ def _run(script: str) -> str:
 
 @pytest.mark.core
 def test_import_mteb_does_not_import_torch() -> None:
-    """Even when torch is installed, `import mteb` and the CLI must not import it."""
+    """Even when torch is installed, `import mteb` must not import it, nor the parts it does not load itself."""
     loaded = _run(
         f"""
         import sys
         import mteb
+        import mteb.api.app
         import mteb.cli
+        import mteb.data_cleaning
+        import mteb.leaderboard
 
         print("loaded:", ",".join(d for d in {sorted(_FULL_INSTALL_DEPENDENCIES)!r} if d in sys.modules))
         """
