@@ -14,8 +14,7 @@ _LANGS = {
 class Vidore3ComputerScienceBGEm3Rerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3ComputerScienceBGEm3Reranking.v2",
-        description="This task is used to evaluate the reranking performance for visual document retrieval. The candidates for reranking are the top-50 pages retrieved by the BAAI/bge-m3 model. This dataset, Computer Science, is a corpus of textbooks from the openstacks website, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        description="Reranking task for retrieval on Computer Science domain. The corpus is composed by textbooks from the OpenStax website, intended for long-document understanding tasks. Original queries were created in English, then translated to French, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the BAAI/bge-m3 model.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3ComputerScienceBGEm3Reranking.v2",
@@ -55,8 +54,7 @@ class Vidore3ComputerScienceBGEm3Rerankingv2(AbsTaskRetrieval):
 class Vidore3ComputerScienceBM25sRerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3ComputerScienceBM25sReranking.v2",
-        description="This task is used to evaluate the reranking performance for visual document retrieval. The candidates for reranking are the top-50 pages retrieved by the mteb/baseline-bm25s model. This dataset, Computer Science, is a corpus of textbooks from the openstacks website, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        description="Reranking task for retrieval on Computer Science domain. The corpus is composed by textbooks from the OpenStax website, intended for long-document understanding tasks. Original queries were created in English, then translated to French, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the mteb/baseline-bm25s model.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3ComputerScienceBM25sReranking.v2",
@@ -96,8 +94,7 @@ class Vidore3ComputerScienceBM25sRerankingv2(AbsTaskRetrieval):
 class Vidore3ComputerScienceQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3ComputerScienceQwen3VLEmbedding2BReranking.v2",
-        description="This task is used to evaluate the reranking performance for visual document retrieval. The candidates for reranking are the top-50 pages retrieved by the Qwen/Qwen3-VL-Embedding-2B model. This dataset, Computer Science, is a corpus of textbooks from the openstacks website, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        description="Reranking task for retrieval on Computer Science domain. The corpus is composed by textbooks from the OpenStax website, intended for long-document understanding tasks. Original queries were created in English, then translated to French, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the Qwen/Qwen3-VL-Embedding-2B model.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3ComputerScienceQwen3VLEmbedding2BReranking.v2",
@@ -137,8 +134,7 @@ class Vidore3ComputerScienceQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
 class Vidore3EnergyBGEm3Rerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3EnergyBGEm3Reranking.v2",
-        description="This task is used to evaluate the reranking performance for visual document retrieval. The candidates for reranking are the top-50 pages retrieved by the BAAI/bge-m3 model. This dataset, Energy Fr, is a corpus of reports on energy supply in europe, intended for complex-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish."
-        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        description="Reranking task for retrieval on Energy domain. The corpus is composed by reports on energy supply in Europe, intended for complex-document understanding tasks. Original queries were created in French, then translated to English, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the BAAI/bge-m3 model.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3EnergyBGEm3Reranking.v2",
@@ -178,8 +174,7 @@ class Vidore3EnergyBGEm3Rerankingv2(AbsTaskRetrieval):
 class Vidore3EnergyBM25sRerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3EnergyBM25sReranking.v2",
-        description="This task is used to evaluate the reranking performance for visual document retrieval. The candidates for reranking are the top-50 pages retrieved by the mteb/baseline-bm25s model. This dataset, Energy Fr, is a corpus of reports on energy supply in europe, intended for complex-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish."
-        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        description="Reranking task for retrieval on Energy domain. The corpus is composed by reports on energy supply in Europe, intended for complex-document understanding tasks. Original queries were created in French, then translated to English, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the mteb/baseline-bm25s model.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3EnergyBM25sReranking.v2",
@@ -219,8 +214,7 @@ class Vidore3EnergyBM25sRerankingv2(AbsTaskRetrieval):
 class Vidore3EnergyQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3EnergyQwen3VLEmbedding2BReranking.v2",
-        description="This task is used to evaluate the reranking performance for visual document retrieval. The candidates for reranking are the top-50 pages retrieved by the Qwen/Qwen3-VL-Embedding-2B model. This dataset, Energy Fr, is a corpus of reports on energy supply in europe, intended for complex-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish."
-        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        description="Reranking task for retrieval on Energy domain. The corpus is composed by reports on energy supply in Europe, intended for complex-document understanding tasks. Original queries were created in French, then translated to English, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the Qwen/Qwen3-VL-Embedding-2B model.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3EnergyQwen3VLEmbedding2BReranking.v2",
@@ -260,8 +254,7 @@ class Vidore3EnergyQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
 class Vidore3FinanceEnBGEm3Rerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3FinanceEnBGEm3Reranking.v2",
-        description="This task is used to evaluate the reranking performance for visual document retrieval. The candidates for reranking are the top-50 pages retrieved by the BAAI/bge-m3 model. This task, Finance - EN, is a corpus of reports from american banking companies, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        description="Reranking task for retrieval on Finance - EN domain. The corpus is composed by reports from American banking companies, intended for long-document understanding tasks. Original queries were created in English, then translated to French, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the BAAI/bge-m3 model.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3FinanceEnBGEm3Reranking.v2",
@@ -300,8 +293,7 @@ class Vidore3FinanceEnBGEm3Rerankingv2(AbsTaskRetrieval):
 class Vidore3FinanceEnBM25sRerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3FinanceEnBM25sReranking.v2",
-        description="This task is used to evaluate the reranking performance for visual document retrieval. The candidates for reranking are the top-50 pages retrieved by the mteb/baseline-bm25s model. This task, Finance - EN, is a corpus of reports from american banking companies, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        description="Reranking task for retrieval on Finance - EN domain. The corpus is composed by reports from American banking companies, intended for long-document understanding tasks. Original queries were created in English, then translated to French, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the mteb/baseline-bm25s model.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3FinanceEnBM25sReranking.v2",
@@ -340,8 +332,7 @@ class Vidore3FinanceEnBM25sRerankingv2(AbsTaskRetrieval):
 class Vidore3FinanceEnQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3FinanceEnQwen3VLEmbedding2BReranking.v2",
-        description="This task is used to evaluate the reranking performance for visual document retrieval. The candidates for reranking are the top-50 pages retrieved by the Qwen/Qwen3-VL-Embedding-2B model. This task, Finance - EN, is a corpus of reports from american banking companies, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        description="Reranking task for retrieval on Finance - EN domain. The corpus is composed by reports from American banking companies, intended for long-document understanding tasks. Original queries were created in English, then translated to French, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the Qwen/Qwen3-VL-Embedding-2B model.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3FinanceEnQwen3VLEmbedding2BReranking.v2",
@@ -380,8 +371,7 @@ class Vidore3FinanceEnQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
 class Vidore3FinanceFrBGEm3Rerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3FinanceFrBGEm3Reranking.v2",
-        description="This task is used to evaluate the reranking performance for visual document retrieval. The candidates for reranking are the top-50 pages retrieved by the BAAI/bge-m3 model. This task, Finance - FR, is a corpus of reports from french companies in the luxury domain, intended for long-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish."
-        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        description="Reranking task for retrieval on Finance - FR domain. The corpus is composed by reports from French companies in the luxury domain, intended for long-document understanding tasks. Original queries were created in French, then translated to English, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the BAAI/bge-m3 model.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3FinanceFrBGEm3Reranking.v2",
@@ -421,8 +411,7 @@ class Vidore3FinanceFrBGEm3Rerankingv2(AbsTaskRetrieval):
 class Vidore3FinanceFrBM25sRerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3FinanceFrBM25sReranking.v2",
-        description="This task is used to evaluate the reranking performance for visual document retrieval. The candidates for reranking are the top-50 pages retrieved by the mteb/baseline-bm25s model. This task, Finance - FR, is a corpus of reports from french companies in the luxury domain, intended for long-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish."
-        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        description="Reranking task for retrieval on Finance - FR domain. The corpus is composed by reports from French companies in the luxury domain, intended for long-document understanding tasks. Original queries were created in French, then translated to English, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the mteb/baseline-bm25s model.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3FinanceFrBM25sReranking.v2",
@@ -462,8 +451,7 @@ class Vidore3FinanceFrBM25sRerankingv2(AbsTaskRetrieval):
 class Vidore3FinanceFrQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3FinanceFrQwen3VLEmbedding2BReranking.v2",
-        description="This task is used to evaluate the reranking performance for visual document retrieval. The candidates for reranking are the top-50 pages retrieved by the Qwen/Qwen3-VL-Embedding-2B model. This task, Finance - FR, is a corpus of reports from french companies in the luxury domain, intended for long-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish."
-        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        description="Reranking task for retrieval on Finance - FR domain. The corpus is composed by reports from French companies in the luxury domain, intended for long-document understanding tasks. Original queries were created in French, then translated to English, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the Qwen/Qwen3-VL-Embedding-2B model.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3FinanceFrQwen3VLEmbedding2BReranking.v2",
@@ -503,8 +491,7 @@ class Vidore3FinanceFrQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
 class Vidore3HrBGEm3Rerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3HrBGEm3Reranking.v2",
-        description="This task is used to evaluate the reranking performance for visual document retrieval. The candidates for reranking are the top-50 pages retrieved by the BAAI/bge-m3 model. This dataset, HR, is a corpus of reports released by the european union, intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        description="Reranking task for retrieval on HR domain. The corpus is composed by reports released by the European Union, intended for complex-document understanding tasks. Original queries were created in English, then translated to French, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the BAAI/bge-m3 model.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3HrBGEm3Reranking.v2",
@@ -544,8 +531,7 @@ class Vidore3HrBGEm3Rerankingv2(AbsTaskRetrieval):
 class Vidore3HrBM25sRerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3HrBM25sReranking.v2",
-        description="This task is used to evaluate the reranking performance for visual document retrieval. The candidates for reranking are the top-50 pages retrieved by the mteb/baseline-bm25s model. This dataset, HR, is a corpus of reports released by the european union, intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        description="Reranking task for retrieval on HR domain. The corpus is composed by reports released by the European Union, intended for complex-document understanding tasks. Original queries were created in English, then translated to French, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the mteb/baseline-bm25s model.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3HrBM25sReranking.v2",
@@ -585,8 +571,7 @@ class Vidore3HrBM25sRerankingv2(AbsTaskRetrieval):
 class Vidore3HrQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3HrQwen3VLEmbedding2BReranking.v2",
-        description="This task is used to evaluate the reranking performance for visual document retrieval. The candidates for reranking are the top-50 pages retrieved by the Qwen/Qwen3-VL-Embedding-2B model. This dataset, HR, is a corpus of reports released by the european union, intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        description="Reranking task for retrieval on HR domain. The corpus is composed by reports released by the European Union, intended for complex-document understanding tasks. Original queries were created in English, then translated to French, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the Qwen/Qwen3-VL-Embedding-2B model.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3HrQwen3VLEmbedding2BReranking.v2",
@@ -626,8 +611,7 @@ class Vidore3HrQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
 class Vidore3IndustrialBGEm3Rerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3IndustrialBGEm3Reranking.v2",
-        description="This task is used to evaluate the reranking performance for visual document retrieval. The candidates for reranking are the top-50 pages retrieved by the BAAI/bge-m3 model. This dataset, Industrial reports, is a corpus of technical documents on military aircraft (fueling, mechanics...), intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        description="Reranking task for retrieval on Industrial Reports domain. The corpus is composed by technical documents on military aircraft (fueling, mechanics, etc.), intended for complex-document understanding tasks. Original queries were created in English, then translated to French, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the BAAI/bge-m3 model.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3IndustrialBGEm3Reranking.v2",
@@ -667,8 +651,7 @@ class Vidore3IndustrialBGEm3Rerankingv2(AbsTaskRetrieval):
 class Vidore3IndustrialBM25sRerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3IndustrialBM25sReranking.v2",
-        description="This task is used to evaluate the reranking performance for visual document retrieval. The candidates for reranking are the top-50 pages retrieved by the mteb/baseline-bm25s model. This dataset, Industrial reports, is a corpus of technical documents on military aircraft (fueling, mechanics...), intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        description="Reranking task for retrieval on Industrial Reports domain. The corpus is composed by technical documents on military aircraft (fueling, mechanics, etc.), intended for complex-document understanding tasks. Original queries were created in English, then translated to French, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the mteb/baseline-bm25s model.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3IndustrialBM25sReranking.v2",
@@ -708,8 +691,7 @@ class Vidore3IndustrialBM25sRerankingv2(AbsTaskRetrieval):
 class Vidore3IndustrialQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3IndustrialQwen3VLEmbedding2BReranking.v2",
-        description="This task is used to evaluate the reranking performance for visual document retrieval. The candidates for reranking are the top-50 pages retrieved by the Qwen/Qwen3-VL-Embedding-2B model. This dataset, Industrial reports, is a corpus of technical documents on military aircraft (fueling, mechanics...), intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        description="Reranking task for retrieval on Industrial Reports domain. The corpus is composed by technical documents on military aircraft (fueling, mechanics, etc.), intended for complex-document understanding tasks. Original queries were created in English, then translated to French, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the Qwen/Qwen3-VL-Embedding-2B model.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3IndustrialQwen3VLEmbedding2BReranking.v2",
@@ -749,8 +731,7 @@ class Vidore3IndustrialQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
 class Vidore3PharmaceuticalsBGEm3Rerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3PharmaceuticalsBGEm3Reranking.v2",
-        description="This task is used to evaluate the reranking performance for visual document retrieval. The candidates for reranking are the top-50 pages retrieved by the BAAI/bge-m3 model. This dataset, Pharmaceutical, is a corpus of slides from the FDA, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        description="Reranking task for retrieval on Pharmaceutical domain. The corpus is composed by slides from the FDA, intended for long-document understanding tasks. Original queries were created in English, then translated to French, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the BAAI/bge-m3 model.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3PharmaceuticalsBGEm3Reranking.v2",
@@ -790,8 +771,7 @@ class Vidore3PharmaceuticalsBGEm3Rerankingv2(AbsTaskRetrieval):
 class Vidore3PharmaceuticalsBM25sRerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3PharmaceuticalsBM25sReranking.v2",
-        description="This task is used to evaluate the reranking performance for visual document retrieval. The candidates for reranking are the top-50 pages retrieved by the mteb/baseline-bm25s model. This dataset, Pharmaceutical, is a corpus of slides from the FDA, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        description="Reranking task for retrieval on Pharmaceutical domain. The corpus is composed by slides from the FDA, intended for long-document understanding tasks. Original queries were created in English, then translated to French, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the mteb/baseline-bm25s model.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3PharmaceuticalsBM25sReranking.v2",
@@ -831,8 +811,7 @@ class Vidore3PharmaceuticalsBM25sRerankingv2(AbsTaskRetrieval):
 class Vidore3PharmaceuticalsQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3PharmaceuticalsQwen3VLEmbedding2BReranking.v2",
-        description="This task is used to evaluate the reranking performance for visual document retrieval. The candidates for reranking are the top-50 pages retrieved by the Qwen/Qwen3-VL-Embedding-2B model. This dataset, Pharmaceutical, is a corpus of slides from the FDA, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        description="Reranking task for retrieval on Pharmaceutical domain. The corpus is composed by slides from the FDA, intended for long-document understanding tasks. Original queries were created in English, then translated to French, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the Qwen/Qwen3-VL-Embedding-2B model.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3PharmaceuticalsQwen3VLEmbedding2BReranking.v2",
@@ -872,8 +851,7 @@ class Vidore3PharmaceuticalsQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
 class Vidore3PhysicsBGEm3Rerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3PhysicsBGEm3Reranking.v2",
-        description="This task is used to evaluate the reranking performance for visual document retrieval. The candidates for reranking are the top-50 pages retrieved by the BAAI/bge-m3 model. This dataset, Physics, is a corpus of course slides on french bachelor level physics lectures, intended for complex visual understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish."
-        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        description="Reranking task for retrieval on Physics domain. The corpus is composed by course slides on French bachelor level physics lectures, intended for complex visual understanding tasks. Original queries were created in French, then translated to English, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the BAAI/bge-m3 model.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3PhysicsBGEm3Reranking.v2",
@@ -913,8 +891,7 @@ class Vidore3PhysicsBGEm3Rerankingv2(AbsTaskRetrieval):
 class Vidore3PhysicsBM25sRerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3PhysicsBM25sReranking.v2",
-        description="This task is used to evaluate the reranking performance for visual document retrieval. The candidates for reranking are the top-50 pages retrieved by the mteb/baseline-bm25s model. This dataset, Physics, is a corpus of course slides on french bachelor level physics lectures, intended for complex visual understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish."
-        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        description="Reranking task for retrieval on Physics domain. The corpus is composed by course slides on French bachelor level physics lectures, intended for complex visual understanding tasks. Original queries were created in French, then translated to English, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the mteb/baseline-bm25s model.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3PhysicsBM25sReranking.v2",
@@ -954,8 +931,7 @@ class Vidore3PhysicsBM25sRerankingv2(AbsTaskRetrieval):
 class Vidore3PhysicsQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3PhysicsQwen3VLEmbedding2BReranking.v2",
-        description="This task is used to evaluate the reranking performance for visual document retrieval. The candidates for reranking are the top-50 pages retrieved by the Qwen/Qwen3-VL-Embedding-2B model. This dataset, Physics, is a corpus of course slides on french bachelor level physics lectures, intended for complex visual understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish."
-        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        description="Reranking task for retrieval on Physics domain. The corpus is composed by course slides on French bachelor level physics lectures, intended for complex visual understanding tasks. Original queries were created in French, then translated to English, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the Qwen/Qwen3-VL-Embedding-2B model.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3PhysicsQwen3VLEmbedding2BReranking.v2",
