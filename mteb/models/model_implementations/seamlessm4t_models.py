@@ -6,7 +6,11 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator, single_clip_dataloader
+from mteb.models.modality_collators import (
+    AudioCollator,
+    check_duration_cap,
+    single_clip_dataloader,
+)
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -35,7 +39,7 @@ class SeamlessM4TWrapper(AbsEncoder):
 
         self.model_name = model_name
         self.device = device
-        self.max_audio_length_seconds = max_audio_length_seconds
+        self.max_audio_length_seconds = check_duration_cap(max_audio_length_seconds)
 
         self.model = SeamlessM4Tv2Model.from_pretrained(model_name, revision=revision)
         self.model.eval()
@@ -61,9 +65,11 @@ class SeamlessM4TWrapper(AbsEncoder):
         )
         all_embeddings = []
 
-        # one clip per forward: batch independence is not verified for SeamlessM4T
         for batch in tqdm(
-            single_clip_dataloader(inputs),
+            single_clip_dataloader(
+                inputs,
+                "batch independence is not verified for SeamlessM4T",
+            ),
             disable=not show_progress_bar,
         ):
             audio_arrays = [audio["array"] for audio in batch["audio"]]

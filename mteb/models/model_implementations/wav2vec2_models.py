@@ -8,6 +8,7 @@ from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import (
     AudioCollator,
+    check_duration_cap,
     seconds_to_samples,
     single_clip_dataloader,
 )
@@ -92,33 +93,44 @@ class Wav2Vec2AudioWrapper(AbsEncoder):
         **kwargs: Any,
     ):
         import torch
-        from transformers import Wav2Vec2FeatureExtractor, Wav2Vec2ForCTC, Wav2Vec2Model
+        from transformers import (
+            AutoConfig,
+            SpeechEncoderDecoderModel,
+            Wav2Vec2FeatureExtractor,
+            Wav2Vec2ForCTC,
+            Wav2Vec2Model,
+        )
 
         if device is None:
             device = "cuda" if torch.cuda.is_available() else "cpu"
 
         self.model_name = model_name
         self.device = device
-        self.max_audio_length_seconds = max_audio_length_seconds
+        self.max_audio_length_seconds = check_duration_cap(max_audio_length_seconds)
 
-        # Try to load base model first, fallback to CTC if needed
-        try:
-            self.model = Wav2Vec2Model.from_pretrained(
+        config = AutoConfig.from_pretrained(model_name, revision=revision)
+        if config.model_type == "speech-encoder-decoder":
+            # speech-to-text checkpoint (e.g. xls-r-2b-21-to-en): its wav2vec2
+            # weights sit under "encoder.", so Wav2Vec2Model would load none
+            self.model = SpeechEncoderDecoderModel.from_pretrained(
                 model_name, revision=revision
-            ).to(self.device)
+            ).encoder.to(self.device)
             self.is_ctc_model = False
-        except Exception:
-            # Fallback to CTC model for models that don't have base versions
-            self.model = Wav2Vec2ForCTC.from_pretrained(
-                model_name, revision=revision
-            ).to(self.device)
-            self.is_ctc_model = True
+        else:
+            # Try to load base model first, fallback to CTC if needed
+            try:
+                self.model = Wav2Vec2Model.from_pretrained(
+                    model_name, revision=revision
+                ).to(self.device)
+                self.is_ctc_model = False
+            except Exception:
+                # Fallback to CTC model for models that don't have base versions
+                self.model = Wav2Vec2ForCTC.from_pretrained(
+                    model_name, revision=revision
+                ).to(self.device)
+                self.is_ctc_model = True
 
         self.model.eval()
-        # group-norm feature encoders normalise over the padded batch, so a clip's
-        # embedding depends on its batch-mates; layer-norm ones are exact batched
-        # https://huggingface.co/docs/transformers/model_doc/wav2vec2#transformers.Wav2Vec2FeatureExtractor
-        self.per_clip = self.model.config.feat_extract_norm != "layer"
 
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(model_name)
         self.sampling_rate = self.feature_extractor.sampling_rate
@@ -140,10 +152,11 @@ class Wav2Vec2AudioWrapper(AbsEncoder):
 
         all_embeddings = []
 
-        if self.per_clip:
-            inputs = single_clip_dataloader(inputs)
         for batch in tqdm(
-            inputs,
+            single_clip_dataloader(
+                inputs,
+                "padding changes group-norm embeddings, and a padded batch of long uncapped clips runs out of memory",
+            ),
             disable=not show_progress_bar,
         ):
             audio_arrays = [audio["array"] for audio in batch["audio"]]

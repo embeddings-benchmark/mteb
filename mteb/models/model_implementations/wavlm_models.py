@@ -6,7 +6,11 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator, single_clip_dataloader
+from mteb.models.modality_collators import (
+    AudioCollator,
+    check_duration_cap,
+    single_clip_dataloader,
+)
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -22,9 +26,10 @@ class WavlmWrapper(AbsEncoder):
         model_name: str,
         revision: str | None = None,
         device: str | None = None,
-        # 90 s: an mteb memory cap, not a model limit. WavLM declares no length
-        # limit but has no SDPA, so attention memory grows quadratically
-        max_audio_length_seconds: float = 90.0,
+        # 240 s: an mteb memory cap, not a model limit. WavLM declares no length
+        # limit but has no SDPA, so attention memory grows quadratically; one
+        # 240 s clip takes ~62 GB on wavlm-large and 300 s runs out on 80 GB
+        max_audio_length_seconds: float = 240.0,
         **kwargs: Any,
     ):
         import torch
@@ -35,7 +40,7 @@ class WavlmWrapper(AbsEncoder):
 
         self.model_name = model_name
         self.device = device
-        self.max_audio_length_seconds = max_audio_length_seconds
+        self.max_audio_length_seconds = check_duration_cap(max_audio_length_seconds)
 
         self.model = WavLMModel.from_pretrained(self.model_name, revision=revision).to(
             self.device
@@ -59,10 +64,11 @@ class WavlmWrapper(AbsEncoder):
 
         all_embeddings = []
 
-        # one clip per forward: group-norm checkpoints are batch dependent, and
-        # WavLM has no SDPA, so batching long clips is also a memory risk
         for batch in tqdm(
-            single_clip_dataloader(inputs),
+            single_clip_dataloader(
+                inputs,
+                "group-norm checkpoints are batch dependent, and WavLM has no SDPA, so batching long clips is also a memory risk",
+            ),
             disable=not show_progress_bar,
         ):
             audio_arrays = [audio["array"] for audio in batch["audio"]]

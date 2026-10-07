@@ -16,7 +16,7 @@ Audio and video models previously shared fixed defaults, most notably a 30 secon
 - **Audio length:** omni and LLM-based models keep their native limits (for example 300 s for Qwen2.5-Omni based models and 600 s for Audio Flamingo 3). Speech encoders that declare no limit are no longer truncated. WavLM keeps a 90 s cap, since it has no memory-efficient attention.
 - **Sampling rates and frame counts** follow the checkpoint, for example 44.1 kHz for CNN14 and MS-CLAP.
 - **Video frames** are now sampled evenly across the whole clip. Previously, sampling could cover only the start of a clip.
-- **Batch independence:** several speech encoders (wav2vec2, HuBERT, WavLM, SEW-D, UniSpeech and SpeechT5 checkpoints with group-norm feature encoders, and data2vec) let padding change the embeddings of shorter clips in a batch. A clip's embedding could depend on its batch-mates. These models now encode one clip at a time, while layer-norm checkpoints keep batching.
+- **Batch independence:** speech encoders with group-norm feature encoders (wav2vec2, HuBERT, WavLM, SEW-D, UniSpeech, SpeechT5) and data2vec let padding change the embeddings of shorter clips in a batch, so a clip's embedding could depend on its batch-mates. All speech encoders (wav2vec2, HuBERT, MMS, WavLM, SEW-D, UniSpeech, SpeechT5, data2vec) now encode one clip at a time. This also keeps memory bounded for long uncapped clips, since a padded batch grows with batch size times its longest clip.
 
 Scores for the affected audio and video models change. Results computed with earlier versions are not comparable; rerun them with `overwrite_strategy="always"`.
 

@@ -8,6 +8,7 @@ from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import (
     AudioCollator,
+    check_duration_cap,
     seconds_to_samples,
     single_clip_dataloader,
 )
@@ -39,7 +40,7 @@ class Data2VecAudioWrapper(AbsEncoder):
 
         self.model_name = model_name
         self.device = device
-        self.max_audio_length_seconds = max_audio_length_seconds
+        self.max_audio_length_seconds = check_duration_cap(max_audio_length_seconds)
 
         # Data2Vec Audio also uses Wav2Vec2 feature extractor
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(model_name)
@@ -67,10 +68,11 @@ class Data2VecAudioWrapper(AbsEncoder):
 
         all_embeddings = []
 
-        # one clip per forward: padding leaks into data2vec's convolutional
-        # positional embedding, so batched clips change each other's embeddings
         for batch in tqdm(
-            single_clip_dataloader(inputs),
+            single_clip_dataloader(
+                inputs,
+                "padding leaks into data2vec's convolutional positional embedding, so batched clips change each other's embeddings",
+            ),
             disable=not show_progress_bar,
         ):
             audio_arrays = [audio["array"] for audio in batch["audio"]]

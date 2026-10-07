@@ -1,13 +1,17 @@
 from __future__ import annotations
 
 import logging
+from contextlib import contextmanager
 from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
 
+from mteb._log_once import LogOnce
 from mteb.types._encoder_io import AudioInputItem
 
 if TYPE_CHECKING:
+    from collections.abc import Iterator
+
     import torch
     from torch.utils.data import DataLoader
     from torchcodec.decoders import VideoDecoder  # type: ignore[attr-defined]
@@ -15,6 +19,7 @@ if TYPE_CHECKING:
     from mteb.types import BatchedInput
 
 logger = logging.getLogger(__name__)
+log_once = LogOnce(logger)
 
 
 class AudioCollator:
@@ -114,6 +119,10 @@ class AudioCollator:
         if max_samples is not None:
             num_samples = audio_array.shape[-1]
             if num_samples > max_samples:
+                log_once.info(
+                    f"Truncating audio longer than {max_samples / target_sampling_rate:g} s "
+                    "(the configured audio cap); only the start of each longer clip is encoded."
+                )
                 audio_array = audio_array[..., :max_samples]
 
         audio_array = cast(
@@ -123,25 +132,50 @@ class AudioCollator:
         return audio_array
 
 
+def check_duration_cap(seconds: float | None) -> float | None:
+    """Validate an optional audio length cap (seconds or samples). None means no cap."""
+    if seconds is not None and seconds <= 0:
+        raise ValueError(f"Audio length cap must be positive, got {seconds}.")
+    return seconds
+
+
 def seconds_to_samples(seconds: float | None, sampling_rate: int) -> int | None:
     """Convert an optional duration cap to samples. None means no cap."""
+    seconds = check_duration_cap(seconds)
     if seconds is None:
         return None
-    if seconds <= 0:
-        raise ValueError(f"Audio duration cap must be positive, got {seconds}.")
     return int(seconds * sampling_rate)
+
+
+@contextmanager
+def fixed_numpy_seed(seed: int = 0) -> Iterator[None]:
+    """Seed numpy's global RNG for a block, then restore it.
+
+    Some feature extractors pick random crops of long clips from the global
+    RNG (CLAP fusion, LanguageBind audio); seeding per clip makes the
+    embeddings reproducible.
+    """
+    state = np.random.get_state()  # noqa: NPY002
+    np.random.seed(seed)  # noqa: NPY002
+    try:
+        yield
+    finally:
+        np.random.set_state(state)  # noqa: NPY002
 
 
 def single_clip_dataloader(
     inputs: DataLoader[BatchedInput],
+    reason: str,
 ) -> DataLoader[BatchedInput]:
     """Rebuild an audio DataLoader with batch_size=1.
 
-    Some speech encoders (group-norm feature encoders, data2vec) let padding
-    change the embeddings of shorter clips, so they must never see a padded
-    batch. ``DataLoader.batch_size`` cannot be changed after creation.
+    For models whose embeddings change with their batch-mates, or whose padded
+    batches of long clips run out of memory. ``reason`` is logged once.
+    ``DataLoader.batch_size`` cannot be changed after creation.
     """
     from torch.utils.data import DataLoader
+
+    log_once.info(f"Encoding audio one clip at a time (batch_size ignored): {reason}.")
 
     return DataLoader(
         inputs.dataset,
