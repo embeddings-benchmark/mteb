@@ -4,13 +4,12 @@ import logging
 import tempfile
 import warnings
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Literal, cast
+from typing import TYPE_CHECKING, Any, Literal, cast, overload
 
 import huggingface_hub
 import numpy as np
 import pandas as pd
 from pydantic import BaseModel, ConfigDict
-from typing_extensions import overload
 
 from mteb._hf_integration.eval_result_model import (
     HFEvalResult,

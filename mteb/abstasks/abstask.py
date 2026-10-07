@@ -32,8 +32,7 @@ from mteb.timing import TimingStack
 
 if TYPE_CHECKING:
     from collections.abc import Iterator, Mapping
-
-    from typing_extensions import Self
+    from typing import Self
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import (

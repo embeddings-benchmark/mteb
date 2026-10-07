@@ -5,7 +5,13 @@ import logging
 import re
 from collections.abc import Sequence
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Literal, cast
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Literal,
+    Required,
+    cast,
+)
 
 from huggingface_hub import (
     DatasetCard,
@@ -19,7 +25,7 @@ from pydantic import (
     ConfigDict,
     field_validator,
 )
-from typing_extensions import Required, TypedDict  # noqa: TC002
+from typing_extensions import TypedDict
 
 from mteb.languages import check_language_code
 from mteb.types import (

@@ -36,8 +36,7 @@ from mteb.types import (
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterable, Iterator, Mapping, Sequence
     from pathlib import Path
-
-    from typing_extensions import Self
+    from typing import Self
 
     from mteb.abstasks.task_metadata import TaskDomain
     from mteb.types import (

@@ -7,7 +7,7 @@ import sys
 import traceback
 import warnings
 from copy import deepcopy
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from itertools import chain
 from pathlib import Path
 from time import time
@@ -555,9 +555,7 @@ class MTEB:
                     f"Please check all the error logs at: {self.err_logs_path}"
                 )
                 with self.err_logs_path.open("a", encoding="utf-8") as f_out:
-                    f_out.write(
-                        f"{datetime.now(timezone.utc)} >>> {task.metadata.name}\n"
-                    )
+                    f_out.write(f"{datetime.now(UTC)} >>> {task.metadata.name}\n")
                     f_out.write(traceback.format_exc())
                     f_out.write("\n\n")
 
