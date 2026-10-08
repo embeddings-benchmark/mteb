@@ -56,10 +56,10 @@ def _multilabel_subsampling(
     """Multilabel subsampling the dataset with stratification by the supplied label.
 
     Args:
-        dataset_dict: The datasetDict to subsample.
-        seed: The random seed.
-        splits: The splits of the dataset.
-        label: The label with which the stratified sampling is based on.
+        dataset_dict: the DatasetDict object.
+        seed: the random seed.
+        splits: the splits of the dataset.
+        label: the label with which the stratified sampling is based on.
         n_samples: Optional, number of samples to subsample. Default is max_n_samples.
 
     Returns:
@@ -154,7 +154,7 @@ class AbsTask(ABC):  # noqa: PLR0904
     def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:  # noqa: B027 -- optional hook, deliberately not abstract
         """A transform operations applied to the dataset after loading.
 
-        This method is useful when the dataset from the Huggingface is not in an `mteb` compatible format.
+        This method is useful when the dataset from Huggingface is not in an `mteb` compatible format.
         Override this method if your dataset requires additional transformation.
 
         Args:
@@ -335,7 +335,7 @@ class AbsTask(ABC):  # noqa: PLR0904
         """Subsamples the dataset with stratification by the supplied label.
 
         Args:
-            dataset_dict: the DatasetDict.
+            dataset_dict: the DatasetDict object.
             seed: the random seed.
             splits: the splits of the dataset.
             label: the label with which the stratified sampling is based on.
@@ -708,9 +708,10 @@ class AbsTask(ABC):  # noqa: PLR0904
 
         Args:
             repo_name: The name of the repository to push the dataset to.
-            num_proc: Number of processes to use for loading the dataset or processing.
+            num_proc: Number of processes to use for loading the dataset.
             push_eval: Whether to also push the eval.yaml file to the Hub
             kwargs: Additional keyword arguments passed to the [push_to_hub](https://huggingface.co/docs/datasets/main/en/package_reference/main_classes#datasets.DatasetDict.push_to_hub).
+                This can include things like `private=True` to make the dataset private.
 
         Examples:
             >>> import mteb
@@ -868,8 +869,8 @@ def get_abstask_prompt(task_name: str) -> str:
     if task_name not in _task_name_to_prompt:
         prompt = ""
         for task_cls in _iter_task_subclasses():
-            # `abstask_prompt` is defined on the abstask class (`AbsTask`), so abstasks such as
-            # `AbsTaskAggregate` don't define one
+            # `abstask_prompt` is defined on the abstask class, e.g. `AbsTaskRetrieval`, and is only
+            # annotated on `AbsTask`, so abstasks such as `AbsTaskAggregate` don't define one
             if task_cls.metadata.name == task_name:
                 prompt = getattr(task_cls, "abstask_prompt", "")
                 if prompt:
