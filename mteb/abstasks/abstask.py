@@ -610,6 +610,15 @@ class AbsTask(ABC):  # noqa: PLR0904
                 exclusive_language_filter is True
                 and languages
                 and lang_scripts.contains_languages(langs)
+                and (
+                    not script
+                    or all(
+                        lang_scripts.contains_script(
+                            langscript.rsplit("-", maxsplit=1)[-1]
+                        )
+                        for langscript in langs
+                    )
+                )
             ):
                 subsets_to_keep.append(hf_subset)
 
