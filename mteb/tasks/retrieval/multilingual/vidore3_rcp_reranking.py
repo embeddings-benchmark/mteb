@@ -57,9 +57,9 @@ def load_float_gains(
     return dict(gains)
 
 
-class Vidore3ComputerScienceRCPRetrieval(AbsTaskRetrieval):
+class Vidore3ComputerScienceRCPReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3ComputerScienceRCPRetrieval",
+        name="Vidore3ComputerScienceRCPReranking",
         description="Retrieve associated pages according to questions. This dataset, Computer Science, is a corpus of textbooks from the openstacks website, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models. Reranking over a 150-page candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The graded human qrels are unchanged. The main score averages the six language versions of each question; the paper reports the native-language questions. Gains come from judging the pages' OCR text.",
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-vidore-v3",
         dataset={
@@ -104,9 +104,9 @@ class Vidore3ComputerScienceRCPRetrieval(AbsTaskRetrieval):
         return ndcg_float_scores(gains, results, self.k_values)
 
 
-class Vidore3EnergyRCPRetrieval(AbsTaskRetrieval):
+class Vidore3EnergyRCPReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3EnergyRCPRetrieval",
+        name="Vidore3EnergyRCPReranking",
         description="Retrieve associated pages according to questions. This dataset, Energy Fr, is a corpus of reports on energy supply in europe, intended for complex-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models. Reranking over a 150-page candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The graded human qrels are unchanged. The main score averages the six language versions of each question; the paper reports the native-language questions. Gains come from judging the pages' OCR text.",
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-vidore-v3",
         dataset={
@@ -151,9 +151,9 @@ class Vidore3EnergyRCPRetrieval(AbsTaskRetrieval):
         return ndcg_float_scores(gains, results, self.k_values)
 
 
-class Vidore3FinanceEnRCPRetrieval(AbsTaskRetrieval):
+class Vidore3FinanceEnRCPReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3FinanceEnRCPRetrieval",
+        name="Vidore3FinanceEnRCPReranking",
         description="Retrieve associated pages according to questions. This task, Finance - EN, is a corpus of reports from american banking companies, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models. Reranking over a 150-page candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The graded human qrels are unchanged. The main score averages the six language versions of each question; the paper reports the native-language questions. Gains come from judging the pages' OCR text.",
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-vidore-v3",
         dataset={
@@ -198,9 +198,9 @@ class Vidore3FinanceEnRCPRetrieval(AbsTaskRetrieval):
         return ndcg_float_scores(gains, results, self.k_values)
 
 
-class Vidore3FinanceFrRCPRetrieval(AbsTaskRetrieval):
+class Vidore3FinanceFrRCPReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3FinanceFrRCPRetrieval",
+        name="Vidore3FinanceFrRCPReranking",
         description="Retrieve associated pages according to questions. This task, Finance - FR, is a corpus of reports from french companies in the luxury domain, intended for long-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models. Reranking over a 150-page candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The graded human qrels are unchanged. The main score averages the six language versions of each question; the paper reports the native-language questions. Gains come from judging the pages' OCR text.",
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-vidore-v3",
         dataset={
@@ -245,9 +245,9 @@ class Vidore3FinanceFrRCPRetrieval(AbsTaskRetrieval):
         return ndcg_float_scores(gains, results, self.k_values)
 
 
-class Vidore3HrRCPRetrieval(AbsTaskRetrieval):
+class Vidore3HrRCPReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3HrRCPRetrieval",
+        name="Vidore3HrRCPReranking",
         description="Retrieve associated pages according to questions. This dataset, HR, is a corpus of reports released by the european union, intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models. Reranking over a 150-page candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The graded human qrels are unchanged. The main score averages the six language versions of each question; the paper reports the native-language questions. Gains come from judging the pages' OCR text.",
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-vidore-v3",
         dataset={
@@ -292,9 +292,9 @@ class Vidore3HrRCPRetrieval(AbsTaskRetrieval):
         return ndcg_float_scores(gains, results, self.k_values)
 
 
-class Vidore3IndustrialRCPRetrieval(AbsTaskRetrieval):
+class Vidore3IndustrialRCPReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3IndustrialRCPRetrieval",
+        name="Vidore3IndustrialRCPReranking",
         description="Retrieve associated pages according to questions. This dataset, Industrial reports, is a corpus of technical documents on military aircraft (fueling, mechanics...), intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models. Reranking over a 150-page candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The graded human qrels are unchanged. The main score averages the six language versions of each question; the paper reports the native-language questions. Gains come from judging the pages' OCR text.",
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-vidore-v3",
         dataset={
@@ -339,9 +339,9 @@ class Vidore3IndustrialRCPRetrieval(AbsTaskRetrieval):
         return ndcg_float_scores(gains, results, self.k_values)
 
 
-class Vidore3PharmaceuticalsRCPRetrieval(AbsTaskRetrieval):
+class Vidore3PharmaceuticalsRCPReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3PharmaceuticalsRCPRetrieval",
+        name="Vidore3PharmaceuticalsRCPReranking",
         description="Retrieve associated pages according to questions. This dataset, Pharmaceutical, is a corpus of slides from the FDA, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models. Reranking over a 150-page candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The graded human qrels are unchanged. The main score averages the six language versions of each question; the paper reports the native-language questions. Gains come from judging the pages' OCR text.",
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-vidore-v3",
         dataset={
@@ -386,9 +386,9 @@ class Vidore3PharmaceuticalsRCPRetrieval(AbsTaskRetrieval):
         return ndcg_float_scores(gains, results, self.k_values)
 
 
-class Vidore3PhysicsRCPRetrieval(AbsTaskRetrieval):
+class Vidore3PhysicsRCPReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Vidore3PhysicsRCPRetrieval",
+        name="Vidore3PhysicsRCPReranking",
         description="Retrieve associated pages according to questions. This dataset, Physics, is a corpus of course slides on french bachelor level physics lectures, intended for complex visual understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models. Reranking over a 150-page candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The graded human qrels are unchanged. The main score averages the six language versions of each question; the paper reports the native-language questions. Gains come from judging the pages' OCR text.",
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-vidore-v3",
         dataset={
@@ -443,6 +443,7 @@ def _ocr_view_metadata(cls: type[AbsTaskRetrieval]) -> TaskMetadata:
     """
     md = copy.deepcopy(cls.metadata)
     md.name = f"{cls.metadata.name}OCR"
+    md.type = "Reranking"
     md.category = "t2t"
     md.modalities = ["text"]
     md.task_subtypes = ["Question answering"]
@@ -454,33 +455,33 @@ def _ocr_view_metadata(cls: type[AbsTaskRetrieval]) -> TaskMetadata:
     return md
 
 
-class Vidore3ComputerScienceRCPRetrievalOCR(Vidore3ComputerScienceRCPRetrieval):
-    metadata = _ocr_view_metadata(Vidore3ComputerScienceRCPRetrieval)
+class Vidore3ComputerScienceRCPRerankingOCR(Vidore3ComputerScienceRCPReranking):
+    metadata = _ocr_view_metadata(Vidore3ComputerScienceRCPReranking)
 
 
-class Vidore3EnergyRCPRetrievalOCR(Vidore3EnergyRCPRetrieval):
-    metadata = _ocr_view_metadata(Vidore3EnergyRCPRetrieval)
+class Vidore3EnergyRCPRerankingOCR(Vidore3EnergyRCPReranking):
+    metadata = _ocr_view_metadata(Vidore3EnergyRCPReranking)
 
 
-class Vidore3FinanceEnRCPRetrievalOCR(Vidore3FinanceEnRCPRetrieval):
-    metadata = _ocr_view_metadata(Vidore3FinanceEnRCPRetrieval)
+class Vidore3FinanceEnRCPRerankingOCR(Vidore3FinanceEnRCPReranking):
+    metadata = _ocr_view_metadata(Vidore3FinanceEnRCPReranking)
 
 
-class Vidore3FinanceFrRCPRetrievalOCR(Vidore3FinanceFrRCPRetrieval):
-    metadata = _ocr_view_metadata(Vidore3FinanceFrRCPRetrieval)
+class Vidore3FinanceFrRCPRerankingOCR(Vidore3FinanceFrRCPReranking):
+    metadata = _ocr_view_metadata(Vidore3FinanceFrRCPReranking)
 
 
-class Vidore3HrRCPRetrievalOCR(Vidore3HrRCPRetrieval):
-    metadata = _ocr_view_metadata(Vidore3HrRCPRetrieval)
+class Vidore3HrRCPRerankingOCR(Vidore3HrRCPReranking):
+    metadata = _ocr_view_metadata(Vidore3HrRCPReranking)
 
 
-class Vidore3IndustrialRCPRetrievalOCR(Vidore3IndustrialRCPRetrieval):
-    metadata = _ocr_view_metadata(Vidore3IndustrialRCPRetrieval)
+class Vidore3IndustrialRCPRerankingOCR(Vidore3IndustrialRCPReranking):
+    metadata = _ocr_view_metadata(Vidore3IndustrialRCPReranking)
 
 
-class Vidore3PharmaceuticalsRCPRetrievalOCR(Vidore3PharmaceuticalsRCPRetrieval):
-    metadata = _ocr_view_metadata(Vidore3PharmaceuticalsRCPRetrieval)
+class Vidore3PharmaceuticalsRCPRerankingOCR(Vidore3PharmaceuticalsRCPReranking):
+    metadata = _ocr_view_metadata(Vidore3PharmaceuticalsRCPReranking)
 
 
-class Vidore3PhysicsRCPRetrievalOCR(Vidore3PhysicsRCPRetrieval):
-    metadata = _ocr_view_metadata(Vidore3PhysicsRCPRetrieval)
+class Vidore3PhysicsRCPRerankingOCR(Vidore3PhysicsRCPReranking):
+    metadata = _ocr_view_metadata(Vidore3PhysicsRCPReranking)

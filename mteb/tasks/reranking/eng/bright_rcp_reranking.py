@@ -56,16 +56,16 @@ def load_float_gains(
     return dict(gains)
 
 
-class BrightAopsRCPRetrieval(AbsTaskRetrieval):
+class BrightAopsRCPReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="BrightAopsRCPRetrieval",
+        name="BrightAopsRCPReranking",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of similar Math Olympiad problems from Art of Problem Solving. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. BRIGHT's `excluded_ids` are removed from the candidates. The integer qrels are upstream `xlangai/BRIGHT@a75a0eb4` gold_ids (as in `BrightRetrieval`). These differ from the later-corrected qrels of the BRIGHT(v1.1) tasks on some queries, so `ndcg_at_10` is not comparable to BRIGHT(v1.1).",
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-bright",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-bright",
             "revision": "3f42b638ae5c7b55faa93379c29825095de28085",
         },
-        type="Retrieval",
+        type="Reranking",
         category="t2t",
         modalities=["text"],
         eval_splits=["standard"],
@@ -98,16 +98,16 @@ class BrightAopsRCPRetrieval(AbsTaskRetrieval):
         return ndcg_float_scores(gains, results, self.k_values)
 
 
-class BrightBiologyRCPRetrieval(AbsTaskRetrieval):
+class BrightBiologyRCPReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="BrightBiologyRCPRetrieval",
+        name="BrightBiologyRCPReranking",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Biology StackExchange answers. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. BRIGHT's `excluded_ids` are removed from the candidates. The integer qrels are upstream `xlangai/BRIGHT@a75a0eb4` gold_ids (as in `BrightRetrieval`). These differ from the later-corrected qrels of the BRIGHT(v1.1) tasks on some queries, so `ndcg_at_10` is not comparable to BRIGHT(v1.1).",
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-bright",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-bright",
             "revision": "3f42b638ae5c7b55faa93379c29825095de28085",
         },
-        type="Retrieval",
+        type="Reranking",
         category="t2t",
         modalities=["text"],
         eval_splits=["standard"],
@@ -140,16 +140,16 @@ class BrightBiologyRCPRetrieval(AbsTaskRetrieval):
         return ndcg_float_scores(gains, results, self.k_values)
 
 
-class BrightEarthScienceRCPRetrieval(AbsTaskRetrieval):
+class BrightEarthScienceRCPReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="BrightEarthScienceRCPRetrieval",
+        name="BrightEarthScienceRCPReranking",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Earth Science StackExchange answers. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. BRIGHT's `excluded_ids` are removed from the candidates. The integer qrels are upstream `xlangai/BRIGHT@a75a0eb4` gold_ids (as in `BrightRetrieval`). These differ from the later-corrected qrels of the BRIGHT(v1.1) tasks on some queries, so `ndcg_at_10` is not comparable to BRIGHT(v1.1).",
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-bright",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-bright",
             "revision": "3f42b638ae5c7b55faa93379c29825095de28085",
         },
-        type="Retrieval",
+        type="Reranking",
         category="t2t",
         modalities=["text"],
         eval_splits=["standard"],
@@ -182,16 +182,16 @@ class BrightEarthScienceRCPRetrieval(AbsTaskRetrieval):
         return ndcg_float_scores(gains, results, self.k_values)
 
 
-class BrightEconomicsRCPRetrieval(AbsTaskRetrieval):
+class BrightEconomicsRCPReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="BrightEconomicsRCPRetrieval",
+        name="BrightEconomicsRCPReranking",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Economics StackExchange answers. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. BRIGHT's `excluded_ids` are removed from the candidates. The integer qrels are upstream `xlangai/BRIGHT@a75a0eb4` gold_ids (as in `BrightRetrieval`). These differ from the later-corrected qrels of the BRIGHT(v1.1) tasks on some queries, so `ndcg_at_10` is not comparable to BRIGHT(v1.1).",
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-bright",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-bright",
             "revision": "3f42b638ae5c7b55faa93379c29825095de28085",
         },
-        type="Retrieval",
+        type="Reranking",
         category="t2t",
         modalities=["text"],
         eval_splits=["standard"],
@@ -224,16 +224,16 @@ class BrightEconomicsRCPRetrieval(AbsTaskRetrieval):
         return ndcg_float_scores(gains, results, self.k_values)
 
 
-class BrightLeetcodeRCPRetrieval(AbsTaskRetrieval):
+class BrightLeetcodeRCPReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="BrightLeetcodeRCPRetrieval",
+        name="BrightLeetcodeRCPReranking",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of similar algorithmic problems based on shared solution techniques. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. BRIGHT's `excluded_ids` are removed from the candidates. The integer qrels are upstream `xlangai/BRIGHT@a75a0eb4` gold_ids (as in `BrightRetrieval`). These differ from the later-corrected qrels of the BRIGHT(v1.1) tasks on some queries, so `ndcg_at_10` is not comparable to BRIGHT(v1.1).",
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-bright",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-bright",
             "revision": "3f42b638ae5c7b55faa93379c29825095de28085",
         },
-        type="Retrieval",
+        type="Reranking",
         category="t2t",
         modalities=["text"],
         eval_splits=["standard"],
@@ -266,16 +266,16 @@ class BrightLeetcodeRCPRetrieval(AbsTaskRetrieval):
         return ndcg_float_scores(gains, results, self.k_values)
 
 
-class BrightPonyRCPRetrieval(AbsTaskRetrieval):
+class BrightPonyRCPReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="BrightPonyRCPRetrieval",
+        name="BrightPonyRCPReranking",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of Pony programming language syntax documentation. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. BRIGHT's `excluded_ids` are removed from the candidates. The integer qrels are upstream `xlangai/BRIGHT@a75a0eb4` gold_ids (as in `BrightRetrieval`). These differ from the later-corrected qrels of the BRIGHT(v1.1) tasks on some queries, so `ndcg_at_10` is not comparable to BRIGHT(v1.1).",
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-bright",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-bright",
             "revision": "3f42b638ae5c7b55faa93379c29825095de28085",
         },
-        type="Retrieval",
+        type="Reranking",
         category="t2t",
         modalities=["text"],
         eval_splits=["standard"],
@@ -308,16 +308,16 @@ class BrightPonyRCPRetrieval(AbsTaskRetrieval):
         return ndcg_float_scores(gains, results, self.k_values)
 
 
-class BrightPsychologyRCPRetrieval(AbsTaskRetrieval):
+class BrightPsychologyRCPReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="BrightPsychologyRCPRetrieval",
+        name="BrightPsychologyRCPReranking",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Psychology StackExchange answers. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. BRIGHT's `excluded_ids` are removed from the candidates. The integer qrels are upstream `xlangai/BRIGHT@a75a0eb4` gold_ids (as in `BrightRetrieval`). These differ from the later-corrected qrels of the BRIGHT(v1.1) tasks on some queries, so `ndcg_at_10` is not comparable to BRIGHT(v1.1).",
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-bright",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-bright",
             "revision": "3f42b638ae5c7b55faa93379c29825095de28085",
         },
-        type="Retrieval",
+        type="Reranking",
         category="t2t",
         modalities=["text"],
         eval_splits=["standard"],
@@ -350,16 +350,16 @@ class BrightPsychologyRCPRetrieval(AbsTaskRetrieval):
         return ndcg_float_scores(gains, results, self.k_values)
 
 
-class BrightRoboticsRCPRetrieval(AbsTaskRetrieval):
+class BrightRoboticsRCPReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="BrightRoboticsRCPRetrieval",
+        name="BrightRoboticsRCPReranking",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Robotics StackExchange answers. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. BRIGHT's `excluded_ids` are removed from the candidates. The integer qrels are upstream `xlangai/BRIGHT@a75a0eb4` gold_ids (as in `BrightRetrieval`). These differ from the later-corrected qrels of the BRIGHT(v1.1) tasks on some queries, so `ndcg_at_10` is not comparable to BRIGHT(v1.1).",
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-bright",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-bright",
             "revision": "3f42b638ae5c7b55faa93379c29825095de28085",
         },
-        type="Retrieval",
+        type="Reranking",
         category="t2t",
         modalities=["text"],
         eval_splits=["standard"],
@@ -392,16 +392,16 @@ class BrightRoboticsRCPRetrieval(AbsTaskRetrieval):
         return ndcg_float_scores(gains, results, self.k_values)
 
 
-class BrightStackoverflowRCPRetrieval(AbsTaskRetrieval):
+class BrightStackoverflowRCPReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="BrightStackoverflowRCPRetrieval",
+        name="BrightStackoverflowRCPReranking",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Stack Overflow answers. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. BRIGHT's `excluded_ids` are removed from the candidates. The integer qrels are upstream `xlangai/BRIGHT@a75a0eb4` gold_ids (as in `BrightRetrieval`). These differ from the later-corrected qrels of the BRIGHT(v1.1) tasks on some queries, so `ndcg_at_10` is not comparable to BRIGHT(v1.1).",
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-bright",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-bright",
             "revision": "3f42b638ae5c7b55faa93379c29825095de28085",
         },
-        type="Retrieval",
+        type="Reranking",
         category="t2t",
         modalities=["text"],
         eval_splits=["standard"],
@@ -434,16 +434,16 @@ class BrightStackoverflowRCPRetrieval(AbsTaskRetrieval):
         return ndcg_float_scores(gains, results, self.k_values)
 
 
-class BrightSustainableLivingRCPRetrieval(AbsTaskRetrieval):
+class BrightSustainableLivingRCPReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="BrightSustainableLivingRCPRetrieval",
+        name="BrightSustainableLivingRCPReranking",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Sustainable Living StackExchange answers. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. BRIGHT's `excluded_ids` are removed from the candidates. The integer qrels are upstream `xlangai/BRIGHT@a75a0eb4` gold_ids (as in `BrightRetrieval`). These differ from the later-corrected qrels of the BRIGHT(v1.1) tasks on some queries, so `ndcg_at_10` is not comparable to BRIGHT(v1.1).",
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-bright",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-bright",
             "revision": "3f42b638ae5c7b55faa93379c29825095de28085",
         },
-        type="Retrieval",
+        type="Reranking",
         category="t2t",
         modalities=["text"],
         eval_splits=["standard"],
@@ -476,16 +476,16 @@ class BrightSustainableLivingRCPRetrieval(AbsTaskRetrieval):
         return ndcg_float_scores(gains, results, self.k_values)
 
 
-class BrightTheoremQAQuestionsRCPRetrieval(AbsTaskRetrieval):
+class BrightTheoremQAQuestionsRCPReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="BrightTheoremQAQuestionsRCPRetrieval",
+        name="BrightTheoremQAQuestionsRCPReranking",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of theorem definitions from ProofWiki given questions rephrased as real-world scenarios. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. BRIGHT's `excluded_ids` are removed from the candidates. The integer qrels are upstream `xlangai/BRIGHT@a75a0eb4` gold_ids (as in `BrightRetrieval`). These differ from the later-corrected qrels of the BRIGHT(v1.1) tasks on some queries, so `ndcg_at_10` is not comparable to BRIGHT(v1.1).",
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-bright",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-bright",
             "revision": "3f42b638ae5c7b55faa93379c29825095de28085",
         },
-        type="Retrieval",
+        type="Reranking",
         category="t2t",
         modalities=["text"],
         eval_splits=["standard"],
@@ -518,16 +518,16 @@ class BrightTheoremQAQuestionsRCPRetrieval(AbsTaskRetrieval):
         return ndcg_float_scores(gains, results, self.k_values)
 
 
-class BrightTheoremQATheoremsRCPRetrieval(AbsTaskRetrieval):
+class BrightTheoremQATheoremsRCPReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="BrightTheoremQATheoremsRCPRetrieval",
+        name="BrightTheoremQATheoremsRCPReranking",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of theorem definitions and proofs from ProofWiki. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. BRIGHT's `excluded_ids` are removed from the candidates. The integer qrels are upstream `xlangai/BRIGHT@a75a0eb4` gold_ids (as in `BrightRetrieval`). These differ from the later-corrected qrels of the BRIGHT(v1.1) tasks on some queries, so `ndcg_at_10` is not comparable to BRIGHT(v1.1).",
         reference="https://huggingface.co/datasets/fabianschmidt-cohere/rcp-ndcg-bright",
         dataset={
             "path": "fabianschmidt-cohere/rcp-ndcg-bright",
             "revision": "3f42b638ae5c7b55faa93379c29825095de28085",
         },
-        type="Retrieval",
+        type="Reranking",
         category="t2t",
         modalities=["text"],
         eval_splits=["standard"],

@@ -13,8 +13,8 @@ from mteb._evaluators.retrieval_metrics import ndcg_float_scores
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.mocks.mock_tasks import MockRetrievalFloatGainsTask, MockRetrievalTask
 from mteb.models.model_meta import ModelMeta
-from mteb.tasks.retrieval.eng import bright_rcp_retrieval, nano_beir_rcp_retrieval
-from mteb.tasks.retrieval.multilingual import vidore3_rcp_retrieval
+from mteb.tasks.reranking.eng import bright_rcp_reranking, nano_beir_rcp_reranking
+from mteb.tasks.retrieval.multilingual import vidore3_rcp_reranking
 from mteb.types import CorpusDatasetType
 
 if TYPE_CHECKING:
@@ -29,9 +29,9 @@ if TYPE_CHECKING:
 GAINS_LOADERS = pytest.mark.parametrize(
     "load_float_gains",
     [
-        nano_beir_rcp_retrieval.load_float_gains,
-        bright_rcp_retrieval.load_float_gains,
-        vidore3_rcp_retrieval.load_float_gains,
+        nano_beir_rcp_reranking.load_float_gains,
+        bright_rcp_reranking.load_float_gains,
+        vidore3_rcp_reranking.load_float_gains,
     ],
     ids=["nanobeir", "bright", "vidore"],
 )
