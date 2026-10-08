@@ -17,7 +17,7 @@ from collections.abc import (
     Iterable,
     Mapping,  # noqa: TC003
 )
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import TYPE_CHECKING, Any, TypeVar, cast
 
 import numpy as np
@@ -62,6 +62,9 @@ A row arrives as one tuple holding the content of each compared column: text as 
 audio and video as a hash of their content, or as they are for a filter that measures rows rather than comparing
 them. The rows are passed as a lazy iterable and may only be consumed once, so that filtering a large corpus does
 not require holding all of its content in memory at the same time.
+
+A filter with a `_CleaningFilter.reference_split` takes that split's row keys as a second argument, which
+`_filter_for_subset` binds before the rows of a subset are read.
 """
 
 
@@ -82,6 +85,9 @@ class _CleaningFilter:
             other modality are left out of what `keep_fn` sees.
         compares_rows: Whether `keep_fn` compares rows with each other, which it does by the hash of their
             images, audio and video. A filter that measures each row on its own sees them as they are instead.
+        reference_split: The split the other splits of a subset are compared against, e.g. the train split a
+            leaked sample also appears in. `keep_fn` then takes that split's row keys as its second argument, and
+            the split itself is left alone.
     """
 
     name: str
@@ -89,6 +95,7 @@ class _CleaningFilter:
     removes_duplicates: bool = False
     modalities: frozenset[Modalities] | None = None
     compares_rows: bool = True
+    reference_split: str | None = None
 
 
 _SUPPORTED_MODALITIES: frozenset[str] = frozenset(MODALITY_HASH_FNS)
@@ -234,6 +241,35 @@ def _count_values(dataset: Dataset, column: str, grouped: bool) -> int:
     if not grouped:
         return len(dataset)
     return sum(len(values) for values in dataset[column])
+
+
+def _row_keys(
+    dataset: Dataset,
+    col_modalities: Mapping[str, Modalities],
+    *,
+    normalization: Normalization,
+    num_proc: int | None,
+    symmetric_sides: tuple[list[str], list[str]] | None,
+) -> set[bytes]:
+    """The key of every row of `dataset`, or of every value of a grouped one, as `_apply_row_filter` compares them."""
+    columns = list(col_modalities)
+    if len(dataset) == 0:
+        return set()
+    if _is_grouped(dataset, columns):
+        return {
+            _row_key(tuple(_normalize(value, normalization) for value in values))
+            for row in dataset
+            for values in zip(*(row[column] for column in columns), strict=True)
+        }
+    readers = _content_readers(
+        dataset,
+        col_modalities,
+        normalization=normalization,
+        hash_non_text=True,
+        num_proc=num_proc,
+    )
+    rows = _iter_row_content(readers, columns=columns, symmetric_sides=symmetric_sides)
+    return {_row_key(row) for row in rows}
 
 
 def _apply_row_filter(
@@ -429,6 +465,43 @@ def _split_containers(task: AbsTask) -> tuple[Mapping[str, Any], bool]:
     return by_subset, flat
 
 
+def _filter_for_subset(
+    cleaning_filter: _CleaningFilter,
+    splits_data: Mapping[str, Any],
+    col_modalities: Mapping[str, Modalities],
+    *,
+    normalization: Normalization,
+    num_proc: int | None,
+    symmetric_sides: tuple[list[str], list[str]] | None,
+) -> _CleaningFilter | None:
+    """The filter to apply to the splits of one subset.
+
+    A filter comparing against a `reference_split` is specialized here, by reading that split of this subset and
+    binding its row keys to `keep_fn`, so that each subset is compared against its own.
+
+    Returns:
+        The filter itself when it needs no reference split, a copy bound to the keys of this subset's one when it
+        has it, and None when it does not, leaving the subset unfiltered.
+    """
+    if cleaning_filter.reference_split is None:
+        return cleaning_filter
+    reference = splits_data.get(cleaning_filter.reference_split)
+    if reference is None:
+        return None
+    keys = _row_keys(
+        reference,
+        col_modalities,
+        normalization=normalization,
+        num_proc=num_proc,
+        symmetric_sides=symmetric_sides,
+    )
+    keep_fn = cleaning_filter.keep_fn
+    return replace(
+        cleaning_filter,
+        keep_fn=lambda rows: keep_fn(rows, keys),  # type: ignore[call-arg]
+    )
+
+
 def _filter_task_rows(
     task: T,
     cleaning_filter: _CleaningFilter,
@@ -496,15 +569,25 @@ def _filter_task_rows(
     by_subset: dict[str, Any] = {}
     for subset, splits_data in available.items():
         new_splits = dict(splits_data)
+        subset_filter = _filter_for_subset(
+            cleaning_filter,
+            splits_data,
+            col_modalities,
+            normalization=normalization,
+            num_proc=num_proc,
+            symmetric_sides=symmetric_sides,
+        )
         for split in splits_data:
             if subsets is not None and subset not in subsets:
                 continue
             if splits is not None and split not in splits:
                 continue
+            if subset_filter is None or split == cleaning_filter.reference_split:
+                continue
             if is_retrieval:
                 new_splits[split], removed = _filter_retrieval_split(
                     splits_data[split],
-                    cleaning_filter,
+                    subset_filter,
                     col_modalities,
                     original,
                     normalization=normalization,
@@ -514,7 +597,7 @@ def _filter_task_rows(
                 new_splits[split], removed = _apply_row_filter(
                     splits_data[split],
                     col_modalities,
-                    cleaning_filter,
+                    subset_filter,
                     normalization=normalization,
                     num_proc=num_proc,
                     symmetric_sides=symmetric_sides,
