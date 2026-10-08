@@ -434,14 +434,14 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "NanoQuoraRCPReranking",
         "NanoSCIDOCSRCPReranking",
         "NanoTouche2020RCPReranking",
-        # ViDoRe(v3, RCP): same corpus as the Vidore3*.v2 originals
+        # ViDoRe RCP tasks: same corpus as the Vidore3*.v2 originals
         "Vidore3ComputerScienceRCPReranking",
         "Vidore3EnergyRCPReranking",
         "Vidore3FinanceEnRCPReranking",
         "Vidore3FinanceFrRCPReranking",
         "Vidore3HrRCPReranking",
         "Vidore3IndustrialRCPReranking",
-        # ViDoRe(v3, RCP, OCR): same corpus as the multimodal RCP tasks, read as OCR'ed
+        # ViDoRe RCP OCR tasks: same corpus as the multimodal RCP tasks, read as OCR'ed
         # markdown (some pages are empty)
         "Vidore3ComputerScienceRCPRerankingOCR",
         "Vidore3EnergyRCPRerankingOCR",
@@ -756,7 +756,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "NanoNQRCPReranking",
         "NanoSCIDOCSRCPReranking",
         "NanoTouche2020RCPReranking",
-        # ViDoRe(v3, RCP): same corpus as the Vidore3*.v2 originals (identical unique text/image
+        # ViDoRe RCP tasks: same corpus as the Vidore3*.v2 originals (identical unique text/image
         # counts); those pass only because their older stats lack `num_documents`
         "Vidore3EnergyRCPReranking",
         "Vidore3FinanceEnRCPReranking",
@@ -764,10 +764,10 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "Vidore3HrRCPReranking",
         "Vidore3IndustrialRCPReranking",
         "Vidore3PharmaceuticalsRCPReranking",
-        # ViDoRe(v3, RCP): the 6 language subsets share one corpus, so split-level stats count each page 6x
+        # ViDoRe RCP tasks: the 6 language subsets share one corpus, so split-level stats count each page 6x
         "Vidore3ComputerScienceRCPReranking",
         "Vidore3PhysicsRCPReranking",
-        # ViDoRe(v3, RCP, OCR): same corpus as the multimodal RCP tasks; the 6 language
+        # ViDoRe RCP OCR tasks: same corpus as the multimodal RCP tasks; the 6 language
         # subsets share one OCR'ed corpus, so split-level stats count each page 6x
         "Vidore3ComputerScienceRCPRerankingOCR",
         "Vidore3EnergyRCPRerankingOCR",
@@ -969,11 +969,11 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "XModBenchIT2AReranking",
         "XModBenchIT2TReranking",
         "XModBenchT2IReranking",
-        # ViDoRe(v3, RCP): same corpus as the Vidore3*.v2 originals (identical unique text/image
+        # ViDoRe RCP tasks: same corpus as the Vidore3*.v2 originals (identical unique text/image
         # counts); those pass only because their older stats lack `num_documents`
         "Vidore3HrRCPReranking",
         "Vidore3IndustrialRCPReranking",
-        # ViDoRe(v3, RCP): the 6 language subsets share one corpus, so split-level stats count each page 6x
+        # ViDoRe RCP tasks: the 6 language subsets share one corpus, so split-level stats count each page 6x
         "Vidore3ComputerScienceRCPReranking",
         "Vidore3EnergyRCPReranking",
         "Vidore3FinanceEnRCPReranking",
