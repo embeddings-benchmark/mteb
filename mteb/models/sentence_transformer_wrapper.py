@@ -9,27 +9,52 @@ from packaging.version import Version
 from tqdm.auto import tqdm
 from typing_extensions import deprecated
 
+from mteb._create_dataloaders import create_dataloader
 from mteb._log_once import LogOnce
 from mteb.models import ModelMeta
-from mteb.types import OutputDType, PromptType
+from mteb.similarity_functions import (
+    _MAX_SIM_CHUNK_ELEMENTS,
+    _token_budget_chunks,
+)
+from mteb.types import PromptType
 
 from .abs_encoder import AbsEncoder, get_prompt_name
+from .model_meta import ScoringFunction
+from .search_wrappers import chunked_full_corpus_search, rerank_top_ranked_documents
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from collections.abc import Callable, Sequence
 
     import torch
-    from sentence_transformers import CrossEncoder, SentenceTransformer
+    from sentence_transformers import (
+        CrossEncoder,
+        MultiVectorEncoder,
+        SentenceTransformer,
+    )
     from sentence_transformers.sparse_encoder import SparseEncoder
     from torch.utils.data import DataLoader
     from typing_extensions import Unpack
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput, EncodeKwargs, Modalities
+    from mteb.types import (
+        Array,
+        BatchedInput,
+        CorpusDatasetType,
+        EncodeKwargs,
+        Modalities,
+        QueryDatasetType,
+        RetrievalOutputType,
+        TopRankedDocumentsType,
+    )
 
 logger = logging.getLogger(__name__)
 
 SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION = "5.0.0"
+SENTENCE_TRANSFORMERS_MULTI_VECTOR_VERSION = "6.0.0"
+
+# Embedding values of documents moved to the device at once for MaxSim scoring
+# (about 2 GB in float16).
+_MAX_SIM_DOCUMENT_BLOCK_ELEMENTS = 1_000_000_000
 
 
 @deprecated(
@@ -155,7 +180,7 @@ def _resolve_prompt(
 
 
 def _select_encode_function(
-    model: SentenceTransformer | SparseEncoder,
+    model: SentenceTransformer | SparseEncoder | MultiVectorEncoder,
     prompt_type: PromptType | None,
     *,
     has_query_encode: bool = True,
@@ -184,6 +209,64 @@ def _concatenate_sparse_batches(batches: list[torch.Tensor]) -> torch.Tensor:
     import torch
 
     return torch.cat(batches, dim=0)
+
+
+def _concatenate_ragged_batches(batches: list[list[Any]]) -> list[Any]:
+    """Flatten per-batch lists of variable-length (ragged) multi-vector embeddings into one list.
+
+    Multi-vector encoders return one tensor per input, each with its own number of token
+    embeddings, so batches can't be stacked with `np.concatenate` like fixed-size dense embeddings.
+    """
+    return [embedding for batch in batches for embedding in batch]
+
+
+def _max_sim_document_blocks(documents: Sequence[Array]) -> list[tuple[int, int]]:
+    """Split documents into contiguous `(start, end)` blocks to move to the device at once.
+
+    Each block holds at most `_MAX_SIM_DOCUMENT_BLOCK_ELEMENTS` embedding values, with a floor of one
+    document per block.
+    """
+    blocks: list[tuple[int, int]] = []
+    start = 0
+    elements = 0
+    for index, document in enumerate(documents):
+        document_elements = int(np.prod(document.shape))
+        if (
+            index > start
+            and elements + document_elements > _MAX_SIM_DOCUMENT_BLOCK_ELEMENTS
+        ):
+            blocks.append((start, index))
+            start = index
+            elements = 0
+        elements += document_elements
+    blocks.append((start, len(documents)))
+    return blocks
+
+
+def _as_vector_list(embeddings: Array) -> list[Any]:
+    """Return multi-vector embeddings as a list with one `(num_tokens, dim)` entry per input.
+
+    A single 2D tensor or array is one input, scored as a batch of one.
+    """
+    import torch
+
+    if isinstance(embeddings, (torch.Tensor, np.ndarray)) and embeddings.ndim == 2:
+        return [embeddings]
+    return list(embeddings)
+
+
+def _to_cpu_in_place(batch: list[Any]) -> list[Any]:
+    """Move token embeddings to the CPU one at a time, replacing them in `batch`.
+
+    Freeing each device tensor as soon as its CPU copy exists keeps both copies of the whole batch
+    from being alive at once.
+    """
+    import torch
+
+    for index, vector in enumerate(batch):
+        if isinstance(vector, torch.Tensor):
+            batch[index] = vector.cpu()
+    return batch
 
 
 def _is_sparse_compatible_task(task_metadata: TaskMetadata) -> bool:
@@ -216,32 +299,64 @@ def _encode_batches(
     modalities: list[Modalities],
     postprocess_batch: Callable[[Any], Any] | None = None,
     concatenate_batches: Callable[[list[Any]], Any] | None = None,
-    **kwargs: Any,
+    encode_text_per_batch: bool = False,
+    **kwargs: Unpack[EncodeKwargs],
 ) -> Array:
     """Encode `inputs` with `encode_function`, handling the multimodal vs text-only cases.
 
     Multimodal inputs are encoded batch by batch as per-sample modality dicts and combined via
     `concatenate_batches` (default `np.concatenate`); text-only inputs are collected up front and
     encoded in one call. `postprocess_batch` (default identity) is applied to each batch's output.
+
+    With `encode_text_per_batch`, text-only inputs are instead encoded `batch_size` at a time,
+    longest first, and `postprocess_batch` is applied to each batch's output. This bounds what
+    `encode_function` holds at once (e.g. per-token embeddings kept on the device until the call
+    returns) while keeping inputs of similar length together. `postprocess_batch` must then return
+    one entry per input (a list), which are returned in the original order.
     """
     postprocess = postprocess_batch or (lambda embeddings: embeddings)
     concatenate = concatenate_batches or (
         lambda batches: np.concatenate(batches, axis=0)
     )
+    show_progress_bar = kwargs.get("show_progress_bar", True)
+    batch_size = kwargs.get("batch_size", 32)
+    # Per-batch calls below show one outer progress bar instead of one bar per call
+    per_batch_kwargs = {**kwargs, "show_progress_bar": False}
 
     if is_multimodal:
         all_embeddings = []
-        for batch in tqdm(inputs, desc="Building multimodal embeddings"):
+        for batch in tqdm(
+            inputs, desc="Building multimodal embeddings", disable=not show_progress_bar
+        ):
             batched_input = _batch_to_modality_dicts(batch, modalities)
-            _embeddings = encode_function(batched_input, prompt=prompt, **kwargs)
+            _embeddings = encode_function(
+                batched_input, prompt=prompt, **per_batch_kwargs
+            )
             all_embeddings.append(postprocess(_embeddings))
         embeddings = concatenate(all_embeddings)
-    else:
+    elif not encode_text_per_batch:
         sentences = [text for batch in inputs for text in batch["text"]]
 
         embeddings = encode_function(sentences, prompt=prompt, **kwargs)
 
         embeddings = postprocess(embeddings)
+    else:
+        sentences = [text for batch in inputs for text in batch["text"]]
+        # Longest first, like sentence-transformers sorts within a call, so that grouping
+        # doesn't add padding.
+        order = sorted(range(len(sentences)), key=lambda i: -len(sentences[i]))
+        batched_embeddings: list[Any] = []
+        for start in tqdm(
+            range(0, len(order), batch_size),
+            desc="Encoding",
+            disable=not show_progress_bar,
+        ):
+            batch = [sentences[i] for i in order[start : start + batch_size]]
+            batch_embeddings = encode_function(batch, prompt=prompt, **per_batch_kwargs)
+            batched_embeddings.extend(postprocess(batch_embeddings))
+        embeddings = [None] * len(sentences)
+        for position, index in enumerate(order):
+            embeddings[index] = batched_embeddings[position]
 
     return cast("Array", embeddings)
 
@@ -369,23 +484,6 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         Returns:
             The encoded sentences.
         """
-        if "precision" in kwargs:
-            existing_experiment_kwargs = self.mteb_model_meta.experiment_kwargs
-            output_dtype = OutputDType.from_str(kwargs["precision"])
-            if existing_experiment_kwargs is not None:
-                existing_experiment_kwargs["output_dtypes"] = output_dtype  # type: ignore[index]
-            else:
-                existing_experiment_kwargs = {"output_dtypes": output_dtype.value}
-            logger.warning(
-                f"The 'precision' argument passed in encode_kwargs setting output_dtypes to {output_dtype.value}."
-            )
-            self.mteb_model_meta = self.mteb_model_meta.model_copy(
-                update={
-                    "experiment_kwargs": existing_experiment_kwargs,
-                },
-                deep=True,
-            )
-
         prompt = _resolve_prompt(self.model_prompts, task_metadata, prompt_type)
 
         is_multimodal = _setup_modality_collator(
@@ -694,5 +792,374 @@ class SparseEncoderWrapper(AbsEncoder):
             modalities=self.mteb_model_meta.modalities,
             postprocess_batch=postprocess_batch,
             concatenate_batches=_concatenate_sparse_batches,
+            **kwargs,
+        )
+
+
+class MultiVectorSearchEncoderWrapper:
+    """Mixin class to add MaxSim indexing and search to a MultiVectorEncoder-backed encoder."""
+
+    task_corpus: CorpusDatasetType | None = None
+    corpus_chunk_size: int = 50_000
+
+    def index(
+        self,
+        corpus: CorpusDatasetType,
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        encode_kwargs: EncodeKwargs,
+        num_proc: int | None,
+    ) -> None:
+        """Store the corpus; documents are encoded lazily, in chunks, during `search`.
+
+        Args:
+            corpus: Corpus dataset to index.
+            task_metadata: Metadata of the task.
+            hf_split: Split of current task, allows to know some additional information about current split.
+            hf_subset: Subset of current task. Similar to `hf_split` to get more information
+            encode_kwargs: Additional arguments to pass to the encoder during indexing.
+            num_proc: Number of processes to use for indexing.
+        """
+        self.task_corpus = corpus
+
+    def search(
+        self,
+        queries: QueryDatasetType,
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        top_k: int,
+        encode_kwargs: EncodeKwargs,
+        top_ranked: TopRankedDocumentsType | None = None,
+        num_proc: int | None,
+    ) -> RetrievalOutputType:
+        """Search the indexed corpus for the given queries, or rerank `top_ranked` candidates.
+
+        Args:
+            queries: Queries to find
+            task_metadata: Task metadata
+            hf_split: split of the dataset
+            hf_subset: subset of the dataset
+            top_ranked: Top-ranked documents for each query, mapping query IDs to a list of document IDs.
+                Passed only from Reranking tasks.
+            top_k: Number of top documents to return for each query.
+            encode_kwargs: Additional arguments to pass to the encoder during indexing.
+            num_proc: Number of processes to use for dataloading.
+
+        Returns:
+            Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.
+        """
+        if self.task_corpus is None:
+            raise ValueError("Corpus must be indexed before searching.")
+
+        queries_dataloader = create_dataloader(
+            queries,
+            task_metadata=task_metadata,
+            prompt_type=PromptType.query,
+            batch_size=encode_kwargs.get("batch_size", 32),
+            num_proc=num_proc,
+        )
+        query_embeddings = self._encode(  # type: ignore[attr-defined]
+            queries_dataloader,
+            task_metadata=task_metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            prompt_type=PromptType.query,
+            **encode_kwargs,
+        )
+        query_idx_to_id = {i: row["id"] for i, row in enumerate(queries)}
+
+        if top_ranked is not None:
+            logger.info("Reranking pre-ranked documents with MaxSim...")
+            result_heaps = self._rerank_documents(
+                query_idx_to_id=query_idx_to_id,
+                query_embeddings=query_embeddings,
+                top_ranked=top_ranked,
+                top_k=top_k,
+                task_metadata=task_metadata,
+                hf_subset=hf_subset,
+                hf_split=hf_split,
+                encode_kwargs=encode_kwargs,
+                num_proc=num_proc,
+            )
+        else:
+            logger.info("Performing full corpus search with MaxSim...")
+            result_heaps = self._full_corpus_search(
+                query_idx_to_id=query_idx_to_id,
+                query_embeddings=query_embeddings,
+                top_k=top_k,
+                task_metadata=task_metadata,
+                hf_subset=hf_subset,
+                hf_split=hf_split,
+                encode_kwargs=encode_kwargs,
+                num_proc=num_proc,
+            )
+
+        # Free the corpus reference now that search is done
+        self.task_corpus = None
+
+        results: RetrievalOutputType = {qid: {} for qid in query_idx_to_id.values()}
+        for qid in result_heaps:
+            for score, corpus_id in result_heaps[qid]:
+                results[qid][corpus_id] = score
+        return results
+
+    def _full_corpus_search(
+        self,
+        *,
+        query_idx_to_id: dict[int, str],
+        query_embeddings: Array,
+        task_metadata: TaskMetadata,
+        hf_subset: str,
+        hf_split: str,
+        top_k: int,
+        encode_kwargs: EncodeKwargs,
+        num_proc: int | None,
+    ) -> dict[str, list[tuple[float, str]]]:
+        if self.task_corpus is None:
+            raise ValueError("Corpus must be indexed before searching.")
+
+        return chunked_full_corpus_search(
+            task_corpus=self.task_corpus,
+            corpus_chunk_size=self.corpus_chunk_size,
+            query_idx_to_id=query_idx_to_id,
+            query_embeddings=query_embeddings,
+            task_metadata=task_metadata,
+            hf_subset=hf_subset,
+            hf_split=hf_split,
+            top_k=top_k,
+            encode_kwargs=encode_kwargs,
+            encode_fn=self._encode,  # type: ignore[attr-defined]
+            similarity_fn=self.similarity,  # type: ignore[attr-defined]
+            num_proc=num_proc,
+        )
+
+    def _rerank_documents(
+        self,
+        *,
+        query_idx_to_id: dict[int, str],
+        query_embeddings: Array,
+        top_ranked: TopRankedDocumentsType,
+        top_k: int,
+        task_metadata: TaskMetadata,
+        hf_subset: str,
+        hf_split: str,
+        encode_kwargs: EncodeKwargs,
+        num_proc: int | None = None,
+    ) -> dict[str, list[tuple[float, str]]]:
+        """Rerank each query's pre-ranked candidates with MaxSim.
+
+        Returns:
+            A dictionary mapping query IDs to a list of tuples, each containing a score and a document ID.
+        """
+        if self.task_corpus is None:
+            raise ValueError("Corpus must be set before reranking.")
+
+        return rerank_top_ranked_documents(
+            task_corpus=self.task_corpus,
+            query_idx_to_id=query_idx_to_id,
+            query_embeddings=query_embeddings,
+            top_ranked=top_ranked,
+            top_k=top_k,
+            task_metadata=task_metadata,
+            hf_subset=hf_subset,
+            hf_split=hf_split,
+            encode_kwargs=encode_kwargs,
+            encode_fn=self._encode,  # type: ignore[attr-defined]
+            similarity_fn=self.similarity,  # type: ignore[attr-defined]
+            num_proc=num_proc,
+        )
+
+
+class MultiVectorWrapper(MultiVectorSearchEncoderWrapper):
+    """Loads and encodes sentence-transformers' native `MultiVectorEncoder` models."""
+
+    mteb_model_meta: ModelMeta
+
+    def __init__(  # noqa: PLR0913
+        self,
+        model: str | MultiVectorEncoder,
+        revision: str | None = None,
+        device: str | None = None,
+        model_prompts: dict[str, str] | None = None,
+        corpus_chunk_size: int = 50_000,
+        *,
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = None,
+        target_sampling_rate: int | None = None,
+        max_samples: int | None = None,
+        **kwargs: Any,
+    ) -> None:
+        """Wrapper for MultiVectorEncoder models.
+
+        Args:
+            model: The MultiVectorEncoder model to use.
+            revision: The revision of the model to use.
+            device: The device used to load the model.
+            model_prompts: A dictionary mapping task names to prompt names.
+            corpus_chunk_size: Number of corpus documents to encode and score against the queries at
+                once, during a full-corpus search.
+            fps: Target frames per second for video sampling (multimodal inputs only).
+            max_frames: Safety cap on frames per video for FPS mode (multimodal inputs only).
+            num_frames: If set, use fixed-sample mode instead of FPS-based (multimodal inputs only).
+            target_sampling_rate: Sampling rate to resample audio to (multimodal inputs only). Defaults to 16000 when an audio/video collator is applied.
+            max_samples: Maximum number of audio samples to keep (multimodal inputs only).
+            **kwargs: Additional arguments to pass to the MultiVectorEncoder model.
+        """
+        import sentence_transformers
+
+        if (
+            Version(sentence_transformers.__version__).release
+            < Version(SENTENCE_TRANSFORMERS_MULTI_VECTOR_VERSION).release
+        ):
+            raise ImportError(
+                f"sentence-transformers version must be >= {SENTENCE_TRANSFORMERS_MULTI_VECTOR_VERSION} to load a MultiVectorEncoder model."
+            )
+        from sentence_transformers import MultiVectorEncoder
+
+        if isinstance(model, str):
+            self.model = MultiVectorEncoder(
+                model, revision=revision, device=device, **kwargs
+            )
+            self.mteb_model_meta = ModelMeta.create_empty(
+                overwrites=dict(
+                    name=model,
+                    revision=revision,
+                    loader=type(self),
+                    model_type=["late-interaction"],
+                    similarity_fn_name=ScoringFunction.MAX_SIM,
+                )
+            )
+        else:
+            self.model = model
+            self.mteb_model_meta = ModelMeta.from_multi_vector_encoder_model(self.model)
+
+        self.model_prompts = _resolve_model_prompts(self.model, model_prompts)  # type: ignore[arg-type]
+        self.corpus_chunk_size = corpus_chunk_size
+
+        self.fps = fps
+        self.max_frames = max_frames
+        self.num_frames = num_frames
+        self.target_sampling_rate = target_sampling_rate
+        self.max_samples = max_samples
+
+    def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
+        """Compute the MaxSim similarity between two collections of multi-vector embeddings.
+
+        Scoring runs on the model's device; the scores are returned on the documents' device.
+        """
+        # Token embeddings stay on the CPU after encoding, so documents are moved to the model's
+        # device in blocks, each block once, and scored against every query group. Queries are
+        # grouped by length as well, because sentence-transformers pads all of them to the longest
+        # and only chunks along the documents.
+        import torch
+
+        device = self.model.device
+        queries = [torch.as_tensor(q).to(device) for q in _as_vector_list(embeddings1)]
+        documents = _as_vector_list(embeddings2)
+        result_device = (
+            documents[0].device
+            if documents and isinstance(documents[0], torch.Tensor)
+            else torch.device("cpu")
+        )
+        scores = torch.empty(
+            len(queries), len(documents), dtype=torch.float32, device=result_device
+        )
+        if not queries or not documents:
+            return scores
+
+        query_widths = [len(q) for q in queries]
+        for doc_start, doc_end in _max_sim_document_blocks(documents):
+            block = [
+                torch.as_tensor(d).to(device, non_blocking=True)
+                for d in documents[doc_start:doc_end]
+            ]
+            # Padded query tokens per group, so that group * widest document fits the budget
+            query_token_budget = max(
+                1, _MAX_SIM_CHUNK_ELEMENTS // max(len(d) for d in block)
+            )
+            for query_indices in _token_budget_chunks(query_widths, query_token_budget):
+                block_scores = self.model.similarity(
+                    [queries[i] for i in query_indices], block, device=device
+                )
+                scores[
+                    torch.as_tensor(query_indices, device=result_device),
+                    doc_start:doc_end,
+                ] = block_scores.to(result_device, torch.float32)
+            del block
+        return scores
+
+    def similarity_pairwise(self, embeddings1: Array, embeddings2: Array) -> Array:
+        """Compute the pairwise MaxSim similarity between matched multi-vector embedding pairs.
+
+        Scoring runs on the model's device; the scores are returned on the documents' device.
+        """
+        return cast(
+            "Array",
+            self.model.similarity_pairwise(
+                embeddings1, embeddings2, device=self.model.device
+            ),
+        )
+
+    def _encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Unpack[EncodeKwargs],
+    ) -> Array:
+        """Encode the given inputs into per-token multi-vector embeddings.
+
+        Args:
+            inputs: The inputs to encode.
+            task_metadata: The metadata of the task
+            hf_split: Split of current task.
+            hf_subset: Subset of current task.
+            prompt_type: The name type of prompt (query or document).
+            **kwargs: Additional arguments to pass to the encoder.
+
+        Returns:
+            A list of per-input token embeddings, one variable-length `(num_tokens, embed_dim)` tensor per input.
+        """
+        precision = kwargs.pop("precision", None)
+        if precision not in {None, "float32"}:
+            msg = (
+                "MultiVectorWrapper does not support the 'precision' argument: token "
+                f"embeddings are always returned in full precision. Ignoring precision={precision!r}."
+            )
+            logger.warning(msg)
+            warnings.warn(msg, stacklevel=2)
+
+        prompt = _resolve_prompt(self.model_prompts, task_metadata, prompt_type)
+
+        is_multimodal = _setup_modality_collator(
+            inputs,
+            fps=self.fps,
+            max_frames=self.max_frames,
+            num_frames=self.num_frames,
+            target_sampling_rate=self.target_sampling_rate,
+            max_samples=self.max_samples,
+        )
+        encode_function = _select_encode_function(self.model, prompt_type)
+
+        return _encode_batches(
+            inputs,
+            is_multimodal=is_multimodal,
+            encode_function=encode_function,
+            prompt=prompt,
+            modalities=self.mteb_model_meta.modalities,
+            # Keep token embeddings on CPU; `similarity` moves them back to the device in blocks.
+            postprocess_batch=_to_cpu_in_place,
+            concatenate_batches=_concatenate_ragged_batches,
+            # `MultiVectorEncoder.encode` keeps all of a call's per-token embeddings on the device
+            # until it returns, so text is encoded and moved to CPU one batch at a time.
+            encode_text_per_batch=True,
             **kwargs,
         )

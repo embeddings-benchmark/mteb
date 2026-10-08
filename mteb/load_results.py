@@ -36,7 +36,7 @@ def _model_name_and_revision(
     elif not model_meta.exists():
         return None
     else:
-        with model_meta.open("r") as f:
+        with model_meta.open("r", encoding="utf-8") as f:
             model_meta_json = json.load(f)
             model_name = model_meta_json["name"]
             revision = model_meta_json["revision"]

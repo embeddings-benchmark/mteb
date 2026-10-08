@@ -36,14 +36,14 @@ from mteb.types import (
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterable, Iterator, Mapping, Sequence
     from pathlib import Path
-
-    from typing_extensions import Self
+    from typing import Self
 
     from mteb.abstasks.task_metadata import TaskDomain
     from mteb.types import (
         HFSubset,
         ISOLanguage,
         ISOLanguageScript,
+        Modalities,
         Score,
     )
 
@@ -297,6 +297,11 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         return doms
 
     @property
+    def modalities(self) -> list[Modalities]:
+        """The modalities of the task."""
+        return self.task.metadata.modalities
+
+    @property
     def task_type(self) -> str:
         """The type of the task."""
         return cast("str", self.task.metadata.type)
@@ -377,7 +382,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         json_obj["date"] = self.date.timestamp() if self.date else None
         self._round_scores(json_obj["scores"], 6)
 
-        with path.open("w") as f:  # noqa: PLW1514
+        with path.open("w", encoding="utf-8") as f:
             json.dump(json_obj, f, indent=2)
 
     @classmethod

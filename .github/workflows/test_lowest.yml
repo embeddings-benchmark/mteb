@@ -30,13 +30,13 @@ jobs:
         uses: astral-sh/setup-uv@v8.2.0
         with:
           enable-cache: true
-          python-version: "3.10"
+          python-version: "3.11"
 
 
       - name: Install dependencies
         shell: bash
         run: |
-          uv venv --python 3.10
+          uv venv
           # with uv sync conflict with flash-attn
           uv pip install -e . --resolution lowest-direct --group test
 

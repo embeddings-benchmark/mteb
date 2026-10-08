@@ -1,8 +1,9 @@
-"""The filters of `mteb.data_cleaning`, and the machinery that applies them to a task.
+"""The machinery that applies a filter of `mteb.data_cleaning` to a task.
 
-The primitives at the top work on a single `datasets.Dataset` and know nothing about task types: the caller
-supplies the columns to compare and a `KeepIndicesFn` deciding which rows to keep. `_filter_task_rows` then walks
-a task's subsets and splits, dispatching to `_retrieval` for the parts that differ per task type. The public filters are at the bottom.
+A filter is a `_CleaningFilter`, pairing a name with the `KeepRowsFn` that decides which rows survive. The primitives
+here work on a single `datasets.Dataset` and know nothing about task types; `_filter_task_rows` then walks a task's
+subsets and splits, dispatching to `_retrieval` for the parts that differ there. Each public filter lives in a module
+of its own, e.g. `_duplicates` and `_content_size`.
 """
 
 from __future__ import annotations
@@ -19,6 +20,7 @@ from collections.abc import (
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, TypeVar, cast
 
+import numpy as np
 from datasets import Dataset, DatasetDict
 
 from mteb._content_hashes import MODALITY_HASH_FNS
@@ -53,17 +55,18 @@ def _strip_whitespace(text: str) -> str:
     return text.strip()
 
 
-KeepIndicesFn = Callable[[Iterable[tuple[str, ...]]], list[int]]
-"""Given the comparable content of each row, return the (ascending) indices of the rows to keep.
+KeepRowsFn = Callable[[Iterable[tuple[Any, ...]]], list[int]]
+"""Given the content of each row, return the (ascending) indices of the rows to keep.
 
-A row arrives as one tuple holding the content of each compared column. The rows are passed as a lazy iterable and
-may only be consumed once, so that filtering a large corpus does not require holding all of its content in memory
-at the same time.
+A row arrives as one tuple holding the content of each compared column: text as a normalized string, and images,
+audio and video as a hash of their content, or as they are for a filter that measures rows rather than comparing
+them. The rows are passed as a lazy iterable and may only be consumed once, so that filtering a large corpus does
+not require holding all of its content in memory at the same time.
 """
 
 
 @dataclass(frozen=True)
-class _Filter:
+class _CleaningFilter:
     """What a filter removes, and what that means for the relevance judgements of a retrieval task.
 
     Grouping these keeps them from drifting apart: `removes_duplicates` is only sound because `keep_fn` drops a row
@@ -75,11 +78,17 @@ class _Filter:
         removes_duplicates: Whether a row is removed for being identical to a kept one. When it is, a retrieval
             task moves the removed row's relevance judgements to the row it duplicated, so that deduplication
             costs no query its positives. A filter that removes rows on their own merit must leave this False.
+        modalities: The modalities the filter applies to, or None for every one. The content columns of any
+            other modality are left out of what `keep_fn` sees.
+        compares_rows: Whether `keep_fn` compares rows with each other, which it does by the hash of their
+            images, audio and video. A filter that measures each row on its own sees them as they are instead.
     """
 
     name: str
-    keep_fn: KeepIndicesFn
+    keep_fn: KeepRowsFn
     removes_duplicates: bool = False
+    modalities: frozenset[Modalities] | None = None
+    compares_rows: bool = True
 
 
 _SUPPORTED_MODALITIES: frozenset[str] = frozenset(MODALITY_HASH_FNS)
@@ -107,40 +116,21 @@ def _row_key(row: tuple[str, ...]) -> bytes:
     return digest.digest()
 
 
-def _keep_first_occurrence(rows: Iterable[tuple[str, ...]]) -> list[int]:
-    """Keep the rows whose content has not been seen before.
-
-    Args:
-        rows: The comparable content of each row, one tuple per row with one entry per compared column.
-
-    Returns:
-        The indices of the first occurrence of each distinct row.
-    """
-    seen: set[bytes] = set()
-    keep = []
-    for i, row in enumerate(rows):
-        key = _row_key(row)
-        if key in seen:
-            continue
-        seen.add(key)
-        keep.append(i)
-    return keep
-
-
 def _content_readers(
     dataset: Dataset,
     col_modalities: Mapping[str, Modalities],
     *,
     normalization: Normalization,
+    hash_non_text: bool,
     num_proc: int | None,
-) -> list[Callable[[], Iterable[str]]]:
-    """One reader per compared column, each returning that column's comparable content when called.
+) -> list[Callable[[], Iterable[Any]]]:
+    """One reader per compared column, each returning that column's content when called.
 
     Hashing images, audio or video is expensive, so it happens once here and the result is reused every time the
-    rows are read. Text is cheap to re-read and stays lazy, so comparing a large text corpus never holds all of it
-    in memory at once.
+    rows are read. Text, and non-text content that is not hashed, stays lazy, so a large corpus is never held in
+    memory at once.
     """
-    readers: list[Callable[[], Iterable[str]]] = []
+    readers: list[Callable[[], Iterable[Any]]] = []
     for column, modality in col_modalities.items():
         if modality == "text":
 
@@ -148,18 +138,20 @@ def _content_readers(
                 return (_normalize(value, normalization) for value in dataset[column])
 
             readers.append(_read_text)
-        else:
+        elif hash_non_text:
             hashes = MODALITY_HASH_FNS[modality](dataset[column], max_workers=num_proc)
             readers.append(lambda hashes=hashes: hashes)  # type: ignore[misc]
+        else:
+            readers.append(lambda column=column: dataset[column])  # type: ignore[misc]
     return readers
 
 
 def _iter_row_content(
-    readers: Sequence[Callable[[], Iterable[str]]],
+    readers: Sequence[Callable[[], Iterable[Any]]],
     *,
     columns: Sequence[str] = (),
     symmetric_sides: tuple[list[str], list[str]] | None = None,
-) -> Iterator[tuple[str, ...]]:
+) -> Iterator[tuple[Any, ...]]:
     """Iterate the comparable content of each row, one entry per reader.
 
     When `symmetric_sides` names the two sides of a symmetric task, they are ordered within each row, so that a
@@ -211,7 +203,7 @@ def _is_grouped(dataset: Dataset, columns: Sequence[str]) -> bool:
 def _filter_within_row(
     example: dict[str, Any],
     columns: Sequence[str],
-    keep_fn: KeepIndicesFn,
+    keep_fn: KeepRowsFn,
     normalization: Normalization,
 ) -> dict[str, Any]:
     """Apply `keep_fn` inside a single row of a grouped dataset.
@@ -247,13 +239,13 @@ def _count_values(dataset: Dataset, column: str, grouped: bool) -> int:
 def _apply_row_filter(
     dataset: Dataset,
     col_modalities: Mapping[str, Modalities],
-    keep_fn: KeepIndicesFn,
+    cleaning_filter: _CleaningFilter,
     *,
     normalization: Normalization = _strip_whitespace,
     num_proc: int | None = None,
     symmetric_sides: tuple[list[str], list[str]] | None = None,
 ) -> tuple[Dataset, int]:
-    """Filter `dataset` down to the rows that `keep_fn` keeps.
+    """Filter `dataset` down to the rows that `cleaning_filter` keeps.
 
     For a regular dataset this drops whole rows. For a grouped dataset -- one where each row holds a list of values,
     as clustering tasks do -- the filter is applied within each row instead, and the parallel columns of that row
@@ -262,7 +254,7 @@ def _apply_row_filter(
     Args:
         dataset: The dataset to filter.
         col_modalities: The columns to compare, mapped to the modality of their content.
-        keep_fn: Decides which rows to keep.
+        cleaning_filter: Decides which rows to keep.
         normalization: How to rewrite text before comparing it.
         num_proc: Number of processes to use for hashing and for filtering a grouped dataset.
         symmetric_sides: The two sides to order within each row, for a task where swapping them means the same.
@@ -297,19 +289,23 @@ def _apply_row_filter(
             _filter_within_row,
             fn_kwargs={
                 "columns": columns,
-                "keep_fn": keep_fn,
+                "keep_fn": cleaning_filter.keep_fn,
                 "normalization": normalization,
             },
             num_proc=num_proc,
         )
     else:
         readers = _content_readers(
-            dataset, col_modalities, normalization=normalization, num_proc=num_proc
+            dataset,
+            col_modalities,
+            normalization=normalization,
+            hash_non_text=cleaning_filter.compares_rows,
+            num_proc=num_proc,
         )
         rows = _iter_row_content(
             readers, columns=columns, symmetric_sides=symmetric_sides
         )
-        filtered = dataset.select(keep_fn(rows))
+        filtered = dataset.select(cleaning_filter.keep_fn(rows))
 
     return filtered, before - _count_values(filtered, columns[0], grouped)
 
@@ -335,7 +331,8 @@ def _derived_task_name(name: str, filter_name: str) -> str:
 
     Cleaning produces a different task, so it gets an id of its own rather than reusing the published one:
     `MassiveIntentClassification` becomes `MassiveIntentClassification (remove_duplicates)`. A second filter
-    extends the list rather than nesting, giving `MassiveIntentClassification (remove_duplicates, filter_short)`.
+    extends the list rather than nesting, giving
+    `MassiveIntentClassification (remove_duplicates, remove_by_text_length)`.
     """
     applied_to = _APPLIED_FILTERS.match(name)
     if applied_to is None:
@@ -388,24 +385,36 @@ def _no_split_matched_message(
 
 
 def _resolve_columns(
-    task: AbsTask, filter_name: str, columns: Sequence[str] | None
+    task: AbsTask, cleaning_filter: _CleaningFilter, columns: Sequence[str] | None
 ) -> dict[str, Modalities]:
     """The columns a filter should compare, mapped to the modality of their content."""
     col_modalities = task._get_content_columns()
-    if columns is not None:
-        # a column the task does not declare raises a KeyError naming it
-        col_modalities = {column: col_modalities[column] for column in columns}
-
     if not col_modalities:
         raise NotImplementedError(
-            f"`{filter_name}` does not know which columns of '{task.metadata.name}' hold its content. Please "
+            f"`{cleaning_filter.name}` does not know which columns of '{task.metadata.name}' hold its content. Please "
             "open an issue at https://github.com/embeddings-benchmark/mteb/issues so the task can declare them."
         )
+
+    if cleaning_filter.modalities is not None:
+        col_modalities = {
+            column: modality
+            for column, modality in col_modalities.items()
+            if modality in cleaning_filter.modalities
+        }
+        if not col_modalities:
+            raise ValueError(
+                f"`{cleaning_filter.name}` only applies to {sorted(cleaning_filter.modalities)} content, which "
+                f"'{task.metadata.name}' does not have."
+            )
+
+    if columns is not None:
+        # a column the task does not declare, or that the filter does not apply to, raises a KeyError naming it
+        col_modalities = {column: col_modalities[column] for column in columns}
 
     unsupported = sorted(set(col_modalities.values()) - _SUPPORTED_MODALITIES)
     if unsupported:
         raise NotImplementedError(
-            f"`{filter_name}` cannot compare the {unsupported} content of '{task.metadata.name}'. Supported "
+            f"`{cleaning_filter.name}` cannot compare the {unsupported} content of '{task.metadata.name}'. Supported "
             f"modalities are {sorted(_SUPPORTED_MODALITIES)}."
         )
     return col_modalities
@@ -422,7 +431,7 @@ def _split_containers(task: AbsTask) -> tuple[Mapping[str, Any], bool]:
 
 def _filter_task_rows(
     task: T,
-    filter_: _Filter,
+    cleaning_filter: _CleaningFilter,
     *,
     normalization: Normalization = _strip_whitespace,
     columns: Sequence[str] | None = None,
@@ -430,7 +439,7 @@ def _filter_task_rows(
     subsets: Sequence[HFSubset] | None = None,
     num_proc: int | None = None,
 ) -> T:
-    """Apply `filter_` to every selected split of `task`, returning a cleaned copy.
+    """Apply `cleaning_filter` to every selected split of `task`, returning a cleaned copy.
 
     The task passed in is never changed, not even by loading its data: the copy is made first and the data is
     loaded onto that. The copy holds new containers for any filtered splits; unfiltered splits and subsets may
@@ -439,7 +448,7 @@ def _filter_task_rows(
 
     Args:
         task: The task to filter.
-        filter_: What to remove.
+        cleaning_filter: What to remove.
         normalization: How to rewrite text before comparing it.
         columns: The columns to compare. Defaults to every content column of the task.
         splits: The splits to filter. Defaults to every split of the dataset.
@@ -451,7 +460,8 @@ def _filter_task_rows(
 
     Raises:
         NotImplementedError: If `task` aggregates other tasks, which hold the data instead.
-        ValueError: If `splits` and `subsets` together match none of the task's splits.
+        ValueError: If `task` holds none of the content `cleaning_filter` applies to, or if `splits` and `subsets`
+            together match none of the task's splits.
         KeyError: If `columns` names a column the task does not declare.
     """
     from ._retrieval import _filter_retrieval_split
@@ -467,9 +477,17 @@ def _filter_task_rows(
     original = cleaned.metadata
     if not cleaned.data_loaded:
         cleaned.load_data(num_proc=num_proc)
+    if isinstance(cleaned, AbsTaskRetrieval):
+        # some tasks still load the older corpus/queries layout, which evaluation converts first as well
+        cleaned.convert_v1_dataset_format_to_v2(num_proc=num_proc)
 
-    col_modalities = _resolve_columns(cleaned, filter_.name, columns)
-    symmetric_sides = _resolve_symmetric_sides(cleaned, col_modalities)
+    col_modalities = _resolve_columns(cleaned, cleaning_filter, columns)
+    # a pair and its swap only need to meet when rows are compared with each other
+    symmetric_sides = (
+        _resolve_symmetric_sides(cleaned, col_modalities)
+        if cleaning_filter.compares_rows
+        else None
+    )
     is_retrieval = isinstance(cleaned, AbsTaskRetrieval)
     available, flat = _split_containers(cleaned)
 
@@ -486,17 +504,17 @@ def _filter_task_rows(
             if is_retrieval:
                 new_splits[split], removed = _filter_retrieval_split(
                     splits_data[split],
-                    filter_.keep_fn,
+                    cleaning_filter,
                     col_modalities,
+                    original,
                     normalization=normalization,
-                    remap_duplicates=filter_.removes_duplicates,
                     num_proc=num_proc,
                 )
             else:
                 new_splits[split], removed = _apply_row_filter(
                     splits_data[split],
                     col_modalities,
-                    filter_.keep_fn,
+                    cleaning_filter,
                     normalization=normalization,
                     num_proc=num_proc,
                     symmetric_sides=symmetric_sides,
@@ -510,77 +528,88 @@ def _filter_task_rows(
 
     cleaned.dataset = by_subset["default"] if flat else by_subset
     if n_removed:
-        _rename_as_cleaned(cleaned, original, filter_.name)
+        _rename_as_cleaned(cleaned, original, cleaning_filter.name)
         logger.warning(
-            f"`{filter_.name}` removed {n_removed} samples from '{original.name}' "
+            f"`{cleaning_filter.name}` removed {n_removed} samples from '{original.name}' "
             f"(columns={sorted(col_modalities)}). The cleaned task is '{cleaned.metadata.name}', and its scores "
             f"are not comparable to results on '{original.name}'."
         )
     else:
         logger.info(
-            f"`{filter_.name}` removed nothing from '{original.name}' "
+            f"`{cleaning_filter.name}` removed nothing from '{original.name}' "
             f"(columns={sorted(col_modalities)})."
         )
     return cleaned
 
 
-def remove_duplicates(
-    task: T,
+def _quantile_cutoffs(
+    sizes: Sequence[tuple[float | None, ...]], quantile: float
+) -> list[float | None]:
+    """The `quantile` of each column's measurable sizes, or None for a column that has none."""
+    cutoffs: list[float | None] = []
+    for column in zip(*sizes, strict=True):
+        measured = [size for size in column if size is not None]
+        cutoffs.append(float(np.quantile(measured, quantile)) if measured else None)
+    return cutoffs
+
+
+def _keep_within_bounds(
+    rows: Iterable[tuple[Any, ...]],
     *,
-    normalization: Normalization = _strip_whitespace,
-    columns: Sequence[str] | None = None,
-    splits: Sequence[str] | None = None,
-    subsets: Sequence[HFSubset] | None = None,
-    num_proc: int | None = None,
-) -> T:
-    """Remove duplicated samples from a task, keeping the first occurrence of each.
+    minimum: float | None,
+    maximum: float | None,
+    min_quantile: float | None,
+    max_quantile: float | None,
+    measure_fn: Callable[[Any], float | None],
+) -> list[int]:
+    """Keep the rows whose values all measure within the bounds, inclusive.
 
-    Two samples are duplicates when all of their content columns match. Text matches when `normalization` rewrites
-    both to the same string; images, audio and video match when their content hashes are equal. Duplicates are
-    removed within each split, so a sample appearing in both the train and the test split is kept in both.
-
-    The task passed in is left untouched, and a cleaned copy is returned. The copy is named after the filters
-    applied to it, e.g. `MassiveIntentClassification (remove_duplicates)`, so that its scores are recorded against
-    that id rather than against the published dataset.
-
-    For a retrieval task the corpus and the queries are deduplicated together with their relevance judgements: a
-    judgement pointing at a removed duplicate is moved to the copy that was kept, so no query loses a positive
-    document, and any query left without one afterwards is dropped, as it cannot be scored.
+    A bound given as a quantile is read off the rows themselves, per compared column, so it adapts to the data it
+    filters: the rows of one split of one subset, or of one side of a retrieval split, as each is filtered on its own.
+    Measuring every row first is what a quantile costs; an absolute bound judges each row as it is read.
 
     Args:
-        task: The task to deduplicate. It is not modified.
-        normalization: How to rewrite a text before comparing it. The default ignores surrounding whitespace only.
-            Looser comparisons catch more duplicates but can merge samples that a reader would tell apart, so
-            prefer the narrowest one that finds the duplicates you care about.
-        columns: The content columns to compare. Defaults to every content column of the task, e.g. `["text"]` for
-            classification or `["sentence1", "sentence2"]` for pair classification.
-        splits: The splits to filter. Defaults to every split of the dataset.
-        subsets: The Huggingface subsets to filter. Defaults to every loaded subset.
-        num_proc: Number of processes to use for loading the dataset and for hashing non-text content.
+        rows: The content of each row, one tuple per row with one entry per compared column.
+        minimum: The smallest size a value may have, or None for no absolute lower bound.
+        maximum: The largest size a value may have, or None for no absolute upper bound.
+        min_quantile: The quantile to take the lower bound from, or None.
+        max_quantile: The quantile to take the upper bound from, or None.
+        measure_fn: The size of a value, or None if it cannot be told, in which case the value is kept.
 
     Returns:
-        A copy of the task holding the deduplicated data.
-
-    Raises:
-        NotImplementedError: If `task` aggregates other tasks, which hold the data instead.
-        ValueError: If `splits` and `subsets` together match none of the task's splits, which would otherwise
-            filter nothing at all.
-        KeyError: If `columns` names a column the task does not declare.
-
-    Examples:
-        >>> import mteb
-        >>> from mteb.data_cleaning import remove_duplicates
-        >>> task = mteb.get_task("MassiveIntentClassification")
-        >>> cleaned = remove_duplicates(task)
-        >>> # ignore case too, so that "Wake me up!" and "wake me up!" are duplicates
-        >>> cleaned = remove_duplicates(task, normalization=lambda t: t.strip().casefold())
+        The indices of the rows whose values all lie within the bounds.
     """
-    return _filter_task_rows(
-        task,
-        _Filter("remove_duplicates", _keep_first_occurrence, removes_duplicates=True),
-        normalization=normalization,
-        columns=columns,
-        splits=splits,
-        subsets=subsets,
-        num_proc=num_proc,
+    if min_quantile is None and max_quantile is None:
+
+        def within_bounds(value: object) -> bool:
+            size = measure_fn(value)
+            if size is None:
+                return True
+            return (minimum is None or size >= minimum) and (
+                maximum is None or size <= maximum
+            )
+
+        return [i for i, row in enumerate(rows) if all(map(within_bounds, row))]
+
+    sizes = [tuple(measure_fn(value) for value in row) for row in rows]
+    if not sizes:
+        return []
+    lower = (
+        [minimum] * len(sizes[0])
+        if min_quantile is None
+        else _quantile_cutoffs(sizes, min_quantile)
     )
+    upper = (
+        [maximum] * len(sizes[0])
+        if max_quantile is None
+        else _quantile_cutoffs(sizes, max_quantile)
+    )
+    return [
+        i
+        for i, row in enumerate(sizes)
+        if all(
+            size is None
+            or ((low is None or size >= low) and (high is None or size <= high))
+            for size, low, high in zip(row, lower, upper, strict=True)
+        )
+    ]

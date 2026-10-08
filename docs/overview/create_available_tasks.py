@@ -175,7 +175,7 @@ def insert_content(input_path: Path, output_path: Path, content: str, tag: str) 
     end_tag = f"<!-- END-{tag} -->"
 
     if input_path.exists():
-        doc_content = input_path.read_text()  # noqa: PLW1514
+        doc_content = input_path.read_text(encoding="utf-8")
         if start_tag in doc_content and end_tag in doc_content:
             before = doc_content.split(start_tag)[0]
             after = doc_content.split(end_tag)[1]
@@ -189,7 +189,7 @@ def insert_content(input_path: Path, output_path: Path, content: str, tag: str) 
         # Create new file with content between tags
         new_content = start_tag + "\n" + content + "\n" + end_tag
 
-    output_path.write_text(new_content)  # noqa: PLW1514
+    output_path.write_text(new_content, encoding="utf-8")
 
 
 def main(input_path: Path, output_path: Path) -> None:

@@ -90,7 +90,7 @@ class FaissCache:
 
         if self.index is not None:
             faiss.write_index(self.index, str(self.index_file))
-        with self.map_file.open("w") as f:
+        with self.map_file.open("w", encoding="utf-8") as f:
             json.dump(self.hash_to_index, f, indent=2)
         logger.info(f"Saved FAISS cache to {self.directory}")
 
@@ -99,7 +99,7 @@ class FaissCache:
         import faiss
 
         if self.map_file.exists():
-            with self.map_file.open() as f:
+            with self.map_file.open(encoding="utf-8") as f:
                 self.hash_to_index = json.load(f)
         if self.index_file.exists():
             try:
