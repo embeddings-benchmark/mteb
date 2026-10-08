@@ -5,7 +5,7 @@ candidate pool (`top_ranked`) and continuous relevance gains in the qrels' `gain
 Scored by `ndcg_float_at_10`, which each task adds in `task_specific_scores` from the `gain`
 column (`load_float_gains`, `ndcg_float_scores`). Metadata is copied from the original task
 except for name, description, reference, dataset, eval_langs, main_score, annotations_creators,
-citation and adapted_from.
+citation, adapted_from and contributed_by (not set: these are not the original authors' tasks).
 """
 
 from __future__ import annotations
