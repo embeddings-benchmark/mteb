@@ -249,6 +249,7 @@ class MockRetrievalFloatGainsTask(AbsTaskRetrieval):
                 "unique_relevant_docs": 2,
                 "num_missing_query_ids": 0,
                 "num_missing_corpus_ids": 0,
+                "queries_with_all_gold_black_or_white": 0,
             },
             "top_ranked_statistics": {
                 "num_top_ranked": 4,
