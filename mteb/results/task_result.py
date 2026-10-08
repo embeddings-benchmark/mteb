@@ -5,7 +5,6 @@ import json
 import logging
 from collections import defaultdict
 from functools import cached_property
-from importlib.metadata import version
 from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
@@ -22,6 +21,7 @@ from mteb._hf_integration.eval_result_model import (
     HFEvalResultSource,
 )
 from mteb._log_once import LogOnce
+from mteb._requires_package import _mteb_distribution
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -36,14 +36,14 @@ from mteb.types import (
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterable, Iterator, Mapping, Sequence
     from pathlib import Path
-
-    from typing_extensions import Self
+    from typing import Self
 
     from mteb.abstasks.task_metadata import TaskDomain
     from mteb.types import (
         HFSubset,
         ISOLanguage,
         ISOLanguageScript,
+        Modalities,
         Score,
     )
 
@@ -199,7 +199,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         """
         task_meta = task.metadata
         subset2langscripts = task_meta.hf_subsets_to_langscripts
-        mteb_ver = version("mteb")
+        mteb_ver = _mteb_distribution().version
         flat_scores: dict[SplitName, list[ScoresDict]] = defaultdict(list)
         for split, hf_subset_scores in scores.items():
             for hf_subset, hf_scores in hf_subset_scores.items():
@@ -297,6 +297,11 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         return doms
 
     @property
+    def modalities(self) -> list[Modalities]:
+        """The modalities of the task."""
+        return self.task.metadata.modalities
+
+    @property
     def task_type(self) -> str:
         """The type of the task."""
         return cast("str", self.task.metadata.type)
@@ -377,7 +382,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         json_obj["date"] = self.date.timestamp() if self.date else None
         self._round_scores(json_obj["scores"], 6)
 
-        with path.open("w") as f:  # noqa: PLW1514
+        with path.open("w", encoding="utf-8") as f:
             json.dump(json_obj, f, indent=2)
 
     @classmethod
@@ -788,7 +793,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             revision = result.dataset_revision
             mteb_version = result.mteb_version
         elif isinstance(result, AbsTask):
-            mteb_version = version("mteb")
+            mteb_version = _mteb_distribution().version
             name = result.metadata.name
             revision = result.metadata.revision
         else:

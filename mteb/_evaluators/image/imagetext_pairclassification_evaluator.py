@@ -51,12 +51,22 @@ def _build_image_dataset(
                 "image": self.images[idx],
             }
 
+        def __reduce__(self) -> tuple[Any, ...]:
+            # rebuilt through `_build_image_dataset`, as a local class cannot be pickled into
+            # DataLoader worker processes (`num_proc > 1`)
+            return _build_image_dataset, (self.images,)
+
         @property
         def features(self) -> dict[str, Any]:
             # for correct wrapper handling
             return {"image": []}
 
     return CustomImageDataset(images)
+
+
+def _image_collate_fn(batch: list[dict[str, Any]]) -> dict[str, list[Any]]:
+    """Collate function for image batches; module level so worker processes can unpickle it."""
+    return {"image": [item["image"] for item in batch]}
 
 
 class ImageTextPairClassificationEvaluator(Evaluator):
@@ -148,10 +158,6 @@ class ImageTextPairClassificationEvaluator(Evaluator):
             text_embeddings,
             dim=-1,
         ).view(len(self.dataset), self.num_texts_per_sample, -1)
-
-        def _image_collate_fn(batch: list[dict[str, Any]]) -> dict[str, list[Any]]:
-            """Collate function for image batches."""
-            return {"image": [item["image"] for item in batch]}
 
         _image_dl = DataLoader(
             _build_image_dataset(images),

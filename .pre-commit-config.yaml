@@ -10,6 +10,7 @@ repos:
     rev: v6.0.0
     hooks:
     -   id: check-yaml
+        args: ["--unsafe"]  # mkdocs.yml uses !!python/name tags
     -   id: check-json
     -   id: pretty-format-json
         args:
