@@ -270,5 +270,8 @@ omnivinci = ModelMeta(
     modalities=["text", "image", "audio", "video"],
     model_type=["dense"],
     citation=_OMNIVINCI_CITATION,
-    extra_requirements_groups=["omnivinci"],
+    # the remote code needs transformers 4.46 plus packages mteb does not ship
+    # (openai-whisper, kaldiio, decord, s2wrapper from git); see the model card
+    # https://huggingface.co/nvidia/omnivinci
+    extra_requirements_groups=["audio", "video", "transformers-v4"],
 )

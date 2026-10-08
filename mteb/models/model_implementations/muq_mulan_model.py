@@ -188,5 +188,6 @@ muq_mulan_large = ModelMeta(
   primaryClass={cs.SD},
   url={https://arxiv.org/abs/2501.01108},
 }""",
-    extra_requirements_groups=["muq"],
+    # the muq package fails on transformers 5 (EasyDict has no _attn_implementation)
+    extra_requirements_groups=["muq", "transformers-v4"],
 )

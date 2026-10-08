@@ -208,7 +208,9 @@ _EBIND_COMMON = dict(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     citation=_EBIND_CITATION,
-    extra_requirements_groups=["ebind"],
+    # ebind is installed from git and not on PyPI, so it cannot be an mteb extra:
+    # pip install "ebind @ git+https://github.com/encord-team/ebind@7909701e9372353ca678b9515f9f61cf87c83c71"
+    extra_requirements_groups=["audio", "video"],
 )
 
 _EBIND_AV_TRAINING = {

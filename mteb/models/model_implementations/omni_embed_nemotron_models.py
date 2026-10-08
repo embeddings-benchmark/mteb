@@ -14,11 +14,6 @@ from mteb.models.sentence_transformer_wrapper import (
 class OmniEmbedNemotronWrapper(SentenceTransformerEncoderWrapper):
     """Thin wrapper that configures video/audio processing kwargs after loading."""
 
-    # batched audio and video embeddings differ from single-item ones
-    # (min cosine 0.73 for audio, 0.87 for video, on real clips)
-    audio_one_clip_reason = "batched audio embeddings change with their batch-mates"
-    video_one_clip_reason = "batched video embeddings change with their batch-mates"
-
     def __init__(
         self,
         model: str,
@@ -58,6 +53,13 @@ class OmniEmbedNemotronWrapper(SentenceTransformerEncoderWrapper):
                 "audio": {"max_length": max_audio_length},
             }
         )
+        # the decoder is trained bidirectional, but the remote code's
+        # _update_causal_mask override is never called on transformers 5, so
+        # padded batches ran causal (batched vs single cosine 0.73) while single
+        # items ran bidirectional; is_causal=False selects the bidirectional mask
+        for module in self.model.modules():
+            if type(module).__name__ == "BidirectQwen2_5OmniThinkerTextModel":
+                module.config.is_causal = False
 
 
 _OMNI_EMBED_NEMOTRON_CITATION = r"""
