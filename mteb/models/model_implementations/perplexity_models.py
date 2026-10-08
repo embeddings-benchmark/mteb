@@ -126,6 +126,7 @@ pplx_embed_v1_0_6b = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     citation=PERPLEXITY_CITATION,
+    extra_requirements_groups=["transformers-v4"],
 )
 
 pplx_embed_v1_4b = ModelMeta(
@@ -160,6 +161,7 @@ pplx_embed_v1_4b = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     citation=PERPLEXITY_CITATION,
+    extra_requirements_groups=["transformers-v4"],
 )
 
 pplx_embed_v2_late_0_6b = ModelMeta(
