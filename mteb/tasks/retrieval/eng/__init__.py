@@ -278,6 +278,7 @@ from .lombard_grid_retrieval import (
 from .lotte_retrieval import LoTTERetrieval
 from .macs import MACSA2TRetrieval, MACST2ARetrieval
 from .mars_vl_pairs import MarsVLPairsI2TRetrieval, MarsVLPairsT2IRetrieval
+from .mathnet_retrieval import MathNetRetrieval
 from .medical_qa_retrieval import MedicalQARetrieval
 from .memotion_i2t_retrieval import MemotionI2TRetrieval
 from .memotion_t2i_retrieval import MemotionT2IRetrieval
@@ -775,6 +776,7 @@ __all__ = [
     "MSVDV2TRetrieval",
     "MarsVLPairsI2TRetrieval",
     "MarsVLPairsT2IRetrieval",
+    "MathNetRetrieval",
     "MedicalQARetrieval",
     "MemBench",
     "MemGovern",
