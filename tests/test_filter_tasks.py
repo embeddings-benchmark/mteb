@@ -1,6 +1,6 @@
 import pytest
 
-from mteb import get_tasks
+from mteb import get_task, get_tasks
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.task_metadata import TaskDomain, TaskType
 from mteb.filter_tasks import filter_tasks
@@ -175,3 +175,30 @@ def test_filter_tasks_language_script_and_programming_language(
 def test_filter_tasks_invalid_language(all_tasks: list[AbsTask], language: str):
     with pytest.raises(ValueError, match="Invalid"):
         filter_tasks(all_tasks, languages=[language])
+
+
+@pytest.mark.parametrize(
+    ("languages", "script", "expected_subsets"),
+    [
+        (None, ["Cyrl"], ["ru"]),
+        (None, ["Hans"], ["zh", "zh-en"]),
+        (["eng"], None, ["de-en", "en", "es-en", "pl-en", "zh-en"]),
+        (["eng", "rus"], ["Cyrl"], ["ru"]),
+    ],
+)
+def test_filter_languages_script(
+    languages: list[str] | None,
+    script: list[str] | None,
+    expected_subsets: list[str],
+):
+    """Regression test for #5594: `script` was silently ignored for multilingual subsets."""
+    task = get_task("STS22.v2")
+    task.filter_languages(languages=languages, script=script)
+    assert sorted(task.hf_subsets) == expected_subsets
+
+
+def test_filter_languages_script_mismatch_raises():
+    task = get_task("STS22.v2")
+    # "eng" only occurs in Latin subsets, so no subset matches eng + Cyrl.
+    with pytest.raises(ValueError, match="No subsets were found"):
+        task.filter_languages(languages=["eng"], script=["Cyrl"])

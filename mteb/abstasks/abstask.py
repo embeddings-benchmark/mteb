@@ -597,9 +597,12 @@ class AbsTask(ABC):  # noqa: PLR0904
                 continue
             if exclusive_language_filter is False:
                 for langscript in langs:
-                    if lang_scripts.contains_language(
-                        langscript
-                    ) or lang_scripts.contains_script(langscript):
+                    if lang_scripts.contains_language(langscript) and (
+                        not script
+                        or lang_scripts.contains_script(
+                            langscript.rsplit("-", maxsplit=1)[-1]
+                        )
+                    ):
                         subsets_to_keep.append(hf_subset)
                         break
 
