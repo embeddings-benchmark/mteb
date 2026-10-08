@@ -65,6 +65,17 @@ def test_all_zero_gains_score_zero_without_dividing_by_zero():
     assert scores["ndcg_float_at_10"] == 0.0
 
 
+def test_query_without_gains_scores_zero_and_stays_in_the_mean():
+    # q2 has no gains at all (e.g. its qrels gain entries are all null): it scores
+    # 0.0 and still counts in the mean instead of being dropped from it.
+    gains = {"q1": {"d1": 1.0, "d2": 0.0}}
+    results = {"q1": {"d1": 0.9, "d2": 0.1}, "q2": {"d1": 0.9, "d2": 0.1}}
+
+    scores = ndcg_float_scores(gains, results, [10])
+
+    assert scores["ndcg_float_at_10"] == pytest.approx(0.5, abs=TOL)
+
+
 @pytest.mark.parametrize("bad_gain", [-0.1, float("nan"), float("inf")])
 def test_non_finite_or_negative_gains_raise(bad_gain: float):
     # `nan < 0` is False, so a finiteness check has to precede the sign check;

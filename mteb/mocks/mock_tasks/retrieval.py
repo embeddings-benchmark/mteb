@@ -203,79 +203,66 @@ class MockRetrievalTask(AbsTaskRetrieval):
 
 
 class MockRetrievalFloatGainsTask(AbsTaskRetrieval):
-    """Retrieval task with float gains in the qrels. One split per behaviour under test.
-
-    Splits:
-        test: distinct model scores; gains cover every candidate.
-        ties: all candidates of q1 tie, so each is credited the group-mean gain.
-        zero_gains: q2's gains are all zero, so it scores 0.0 and still counts in the mean.
-
-    The gains are held in memory (keyed by split) instead of being loaded from the qrels'
-    `gain` column; the real loader is tested in
-    ``tests/test_abstasks/test_retrieval_float_gains.py``.
+    """Retrieval task with float gains, shaped like the RCP tasks: the main score
+    `ndcg_float_at_10` comes from `task_specific_scores`. The gains are held in memory
+    instead of being read from the qrels' `gain` column.
     """
 
     metadata = TaskMetadata(
         type="Retrieval",
         name="MockRetrievalFloatGainsTask",
         main_score="ndcg_float_at_10",
-        **dict(general_args | {"eval_splits": ["test", "ties", "zero_gains"]}),
+        **dict(general_args | {"eval_splits": ["test"]}),
     )
 
-    # identical stats for every split: the splits differ only in their gains
-    _split_stats = {
-        "num_samples": 4,
-        "num_queries": 2,
-        "num_documents": 2,
-        "number_of_characters": 136,
-        "documents_text_statistics": {
-            "total_text_length": 84,
-            "min_text_length": 39,
-            "average_text_length": 42.0,
-            "max_text_length": 45,
-            "unique_texts": 2,
-        },
-        "documents_image_statistics": None,
-        "documents_audio_statistics": None,
-        "documents_video_statistics": None,
-        "queries_text_statistics": {
-            "total_text_length": 52,
-            "min_text_length": 23,
-            "average_text_length": 26.0,
-            "max_text_length": 29,
-            "unique_texts": 2,
-        },
-        "queries_image_statistics": None,
-        "queries_audio_statistics": None,
-        "queries_video_statistics": None,
-        "relevant_docs_statistics": {
-            "num_relevant_docs": 2,
-            "min_relevant_docs_per_query": 1,
-            "average_relevant_docs_per_query": 1.0,
-            "max_relevant_docs_per_query": 1,
-            "unique_relevant_docs": 2,
-            "num_missing_query_ids": 0,
-            "num_missing_corpus_ids": 0,
-        },
-        "top_ranked_statistics": {
-            "num_top_ranked": 4,
-            "min_top_ranked_per_query": 2,
-            "average_top_ranked_per_query": 2.0,
-            "max_top_ranked_per_query": 2,
-        },
+    expected_stats = {
+        "test": {
+            "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
+            "number_of_characters": 136,
+            "documents_text_statistics": {
+                "total_text_length": 84,
+                "min_text_length": 39,
+                "average_text_length": 42.0,
+                "max_text_length": 45,
+                "unique_texts": 2,
+            },
+            "documents_image_statistics": None,
+            "documents_audio_statistics": None,
+            "documents_video_statistics": None,
+            "queries_text_statistics": {
+                "total_text_length": 52,
+                "min_text_length": 23,
+                "average_text_length": 26.0,
+                "max_text_length": 29,
+                "unique_texts": 2,
+            },
+            "queries_image_statistics": None,
+            "queries_audio_statistics": None,
+            "queries_video_statistics": None,
+            "relevant_docs_statistics": {
+                "num_relevant_docs": 2,
+                "min_relevant_docs_per_query": 1,
+                "average_relevant_docs_per_query": 1.0,
+                "max_relevant_docs_per_query": 1,
+                "unique_relevant_docs": 2,
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
+            },
+            "top_ranked_statistics": {
+                "num_top_ranked": 4,
+                "min_top_ranked_per_query": 2,
+                "average_top_ranked_per_query": 2.0,
+                "max_top_ranked_per_query": 2,
+            },
+        }
     }
-    expected_stats = dict.fromkeys(("test", "ties", "zero_gains"), _split_stats)
 
-    float_gains = {
-        "test": {"q1": {"d1": 0.9, "d2": 0.1}, "q2": {"d1": 0.2, "d2": 0.8}},
-        "ties": {"q1": {"d1": 0.9, "d2": 0.1}, "q2": {"d1": 0.2, "d2": 0.8}},
-        "zero_gains": {"q1": {"d1": 0.9, "d2": 0.1}, "q2": {"d1": 0.0, "d2": 0.0}},
-    }
+    float_gains = {"q1": {"d1": 0.9, "d2": 0.1}, "q2": {"d1": 0.2, "d2": 0.8}}
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        self.dataset = {
-            "default": {split: base_retrieval_datasplit() for split in self.float_gains}
-        }
+        self.dataset = {"default": {"test": base_retrieval_datasplit()}}
         self.data_loaded = True
 
     def task_specific_scores(
@@ -286,7 +273,7 @@ class MockRetrievalFloatGainsTask(AbsTaskRetrieval):
         hf_split: str,
         hf_subset: str,
     ) -> dict[str, float]:
-        return ndcg_float_scores(self.float_gains[hf_split], results, self.k_values)
+        return ndcg_float_scores(self.float_gains, results, self.k_values)
 
 
 class MockRetrievalDialogTask(AbsTaskRetrieval):
