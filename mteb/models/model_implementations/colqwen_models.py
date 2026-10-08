@@ -345,9 +345,9 @@ class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
         model_name: str = "vidore/colqwen-omni-v0.1",
         revision: str | None = None,
         device: str | None = None,
-        # fps=2: qwen-omni-utils FPS=2.0
-        # https://github.com/QwenLM/Qwen2.5-Omni/blob/main/qwen-omni-utils/src/qwen_omni_utils/v2_5/vision_process.py
-        fps: float | None = 2.0,
+        # fps=1: the checkpoint's video config ("fps": 1, do_sample_frames)
+        # https://huggingface.co/vidore/colqwen-omni-v0.1/blob/61e78ef2f9c826cac588a01e44df51672ce957bd/video_preprocessor_config.json#L17
+        fps: float | None = 1.0,
         # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
