@@ -372,10 +372,6 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
     """
 
     mteb_model_meta: ModelMeta
-    # set by subclasses whose audio or video embeddings change with their
-    # batch-mates (batched vs single cosine below 0.99); logged once
-    audio_one_clip_reason: str | None = None
-    video_one_clip_reason: str | None = None
 
     def __init__(  # noqa: PLR0913
         self,
@@ -489,15 +485,6 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
             The encoded sentences.
         """
         prompt = _resolve_prompt(self.model_prompts, task_metadata, prompt_type)
-
-        features = inputs.dataset.features  # type: ignore[attr-defined]
-        reason = (self.audio_one_clip_reason if "audio" in features else None) or (
-            self.video_one_clip_reason if "video" in features else None
-        )
-        if reason:
-            from mteb.models.modality_collators import single_clip_dataloader
-
-            inputs = single_clip_dataloader(inputs, reason)
 
         is_multimodal = _setup_modality_collator(
             inputs,
