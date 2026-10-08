@@ -2,15 +2,25 @@
 
 Each task adapts an existing mteb task (see `adapted_from`): the same queries and corpus, plus a
 candidate pool (`top_ranked`) and continuous relevance gains in the qrels' `gain` column.
-Scored by `ndcg_float_at_10` (see `AbsTaskRetrievalFloatGains`). Metadata is copied from the
-original task except for name, description, reference, dataset, eval_langs, main_score,
-annotations_creators, citation and adapted_from.
+Scored by `ndcg_float_at_10`, which each task adds in `task_specific_scores` from the `gain`
+column (`load_float_gains`, `ndcg_float_scores`). Metadata is copied from the original task
+except for name, description, reference, dataset, eval_langs, main_score, annotations_creators,
+citation and adapted_from.
 """
 
 from __future__ import annotations
 
-from mteb.abstasks.retrieval import AbsTaskRetrievalFloatGains
+from collections import defaultdict
+from typing import TYPE_CHECKING
+
+import datasets
+
+from mteb._evaluators.retrieval_metrics import ndcg_float_scores
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+
+if TYPE_CHECKING:
+    from mteb.types import RelevantDocumentsType
 
 _CITATION = r"""@misc{schmidt2026rubriccalibratedpreferencescrossquerycalibration,
   title = {Rubric-Calibrated Preferences: Cross-Query Calibration of LLM Judgments via Item Response Theory},
@@ -24,7 +34,29 @@ _CITATION = r"""@misc{schmidt2026rubriccalibratedpreferencescrossquerycalibratio
 """
 
 
-class BrightAopsRCPRetrieval(AbsTaskRetrievalFloatGains):
+def load_float_gains(
+    metadata: TaskMetadata, hf_subset: str, split: str
+) -> dict[str, dict[str, float]]:
+    """Load the float `gain` column of a subset's qrels.
+
+    The standard loader keeps only the integer `score`. Rows whose `gain` is null are skipped.
+    """
+    qrels = datasets.load_dataset(
+        metadata.dataset["path"],
+        f"{hf_subset}-qrels",
+        split=split,
+        revision=metadata.dataset["revision"],
+    )
+    gains: dict[str, dict[str, float]] = defaultdict(dict)
+    for query_id, doc_id, gain in zip(
+        qrels["query-id"], qrels["corpus-id"], qrels["gain"], strict=True
+    ):
+        if gain is not None:
+            gains[str(query_id)][str(doc_id)] = float(gain)
+    return dict(gains)
+
+
+class BrightAopsRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightAopsRCPRetrieval",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of similar Math Olympiad problems from Art of Problem Solving. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. BRIGHT's `excluded_ids` are removed from the candidates. The integer qrels are upstream `xlangai/BRIGHT@a75a0eb4` gold_ids (as in `BrightRetrieval`). These differ from the later-corrected qrels of the BRIGHT(v1.1) tasks on some queries, so `ndcg_at_10` is not comparable to BRIGHT(v1.1).",
@@ -54,8 +86,19 @@ class BrightAopsRCPRetrieval(AbsTaskRetrievalFloatGains):
         },
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class BrightBiologyRCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class BrightBiologyRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightBiologyRCPRetrieval",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Biology StackExchange answers. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. BRIGHT's `excluded_ids` are removed from the candidates. The integer qrels are upstream `xlangai/BRIGHT@a75a0eb4` gold_ids (as in `BrightRetrieval`). These differ from the later-corrected qrels of the BRIGHT(v1.1) tasks on some queries, so `ndcg_at_10` is not comparable to BRIGHT(v1.1).",
@@ -85,8 +128,19 @@ class BrightBiologyRCPRetrieval(AbsTaskRetrievalFloatGains):
         },
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class BrightEarthScienceRCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class BrightEarthScienceRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightEarthScienceRCPRetrieval",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Earth Science StackExchange answers. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. BRIGHT's `excluded_ids` are removed from the candidates. The integer qrels are upstream `xlangai/BRIGHT@a75a0eb4` gold_ids (as in `BrightRetrieval`). These differ from the later-corrected qrels of the BRIGHT(v1.1) tasks on some queries, so `ndcg_at_10` is not comparable to BRIGHT(v1.1).",
@@ -116,8 +170,19 @@ class BrightEarthScienceRCPRetrieval(AbsTaskRetrievalFloatGains):
         },
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class BrightEconomicsRCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class BrightEconomicsRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightEconomicsRCPRetrieval",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Economics StackExchange answers. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. BRIGHT's `excluded_ids` are removed from the candidates. The integer qrels are upstream `xlangai/BRIGHT@a75a0eb4` gold_ids (as in `BrightRetrieval`). These differ from the later-corrected qrels of the BRIGHT(v1.1) tasks on some queries, so `ndcg_at_10` is not comparable to BRIGHT(v1.1).",
@@ -147,8 +212,19 @@ class BrightEconomicsRCPRetrieval(AbsTaskRetrievalFloatGains):
         },
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class BrightLeetcodeRCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class BrightLeetcodeRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightLeetcodeRCPRetrieval",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of similar algorithmic problems based on shared solution techniques. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. BRIGHT's `excluded_ids` are removed from the candidates. The integer qrels are upstream `xlangai/BRIGHT@a75a0eb4` gold_ids (as in `BrightRetrieval`). These differ from the later-corrected qrels of the BRIGHT(v1.1) tasks on some queries, so `ndcg_at_10` is not comparable to BRIGHT(v1.1).",
@@ -178,8 +254,19 @@ class BrightLeetcodeRCPRetrieval(AbsTaskRetrievalFloatGains):
         },
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class BrightPonyRCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class BrightPonyRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightPonyRCPRetrieval",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of Pony programming language syntax documentation. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. BRIGHT's `excluded_ids` are removed from the candidates. The integer qrels are upstream `xlangai/BRIGHT@a75a0eb4` gold_ids (as in `BrightRetrieval`). These differ from the later-corrected qrels of the BRIGHT(v1.1) tasks on some queries, so `ndcg_at_10` is not comparable to BRIGHT(v1.1).",
@@ -209,8 +296,19 @@ class BrightPonyRCPRetrieval(AbsTaskRetrievalFloatGains):
         },
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class BrightPsychologyRCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class BrightPsychologyRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightPsychologyRCPRetrieval",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Psychology StackExchange answers. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. BRIGHT's `excluded_ids` are removed from the candidates. The integer qrels are upstream `xlangai/BRIGHT@a75a0eb4` gold_ids (as in `BrightRetrieval`). These differ from the later-corrected qrels of the BRIGHT(v1.1) tasks on some queries, so `ndcg_at_10` is not comparable to BRIGHT(v1.1).",
@@ -240,8 +338,19 @@ class BrightPsychologyRCPRetrieval(AbsTaskRetrievalFloatGains):
         },
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class BrightRoboticsRCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class BrightRoboticsRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightRoboticsRCPRetrieval",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Robotics StackExchange answers. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. BRIGHT's `excluded_ids` are removed from the candidates. The integer qrels are upstream `xlangai/BRIGHT@a75a0eb4` gold_ids (as in `BrightRetrieval`). These differ from the later-corrected qrels of the BRIGHT(v1.1) tasks on some queries, so `ndcg_at_10` is not comparable to BRIGHT(v1.1).",
@@ -271,8 +380,19 @@ class BrightRoboticsRCPRetrieval(AbsTaskRetrievalFloatGains):
         },
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class BrightStackoverflowRCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class BrightStackoverflowRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightStackoverflowRCPRetrieval",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Stack Overflow answers. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. BRIGHT's `excluded_ids` are removed from the candidates. The integer qrels are upstream `xlangai/BRIGHT@a75a0eb4` gold_ids (as in `BrightRetrieval`). These differ from the later-corrected qrels of the BRIGHT(v1.1) tasks on some queries, so `ndcg_at_10` is not comparable to BRIGHT(v1.1).",
@@ -302,8 +422,19 @@ class BrightStackoverflowRCPRetrieval(AbsTaskRetrievalFloatGains):
         },
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class BrightSustainableLivingRCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class BrightSustainableLivingRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightSustainableLivingRCPRetrieval",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of web documents cited in Sustainable Living StackExchange answers. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. BRIGHT's `excluded_ids` are removed from the candidates. The integer qrels are upstream `xlangai/BRIGHT@a75a0eb4` gold_ids (as in `BrightRetrieval`). These differ from the later-corrected qrels of the BRIGHT(v1.1) tasks on some queries, so `ndcg_at_10` is not comparable to BRIGHT(v1.1).",
@@ -333,8 +464,19 @@ class BrightSustainableLivingRCPRetrieval(AbsTaskRetrievalFloatGains):
         },
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class BrightTheoremQAQuestionsRCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class BrightTheoremQAQuestionsRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightTheoremQAQuestionsRCPRetrieval",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of theorem definitions from ProofWiki given questions rephrased as real-world scenarios. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. BRIGHT's `excluded_ids` are removed from the candidates. The integer qrels are upstream `xlangai/BRIGHT@a75a0eb4` gold_ids (as in `BrightRetrieval`). These differ from the later-corrected qrels of the BRIGHT(v1.1) tasks on some queries, so `ndcg_at_10` is not comparable to BRIGHT(v1.1).",
@@ -364,8 +506,19 @@ class BrightTheoremQAQuestionsRCPRetrieval(AbsTaskRetrievalFloatGains):
         },
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class BrightTheoremQATheoremsRCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class BrightTheoremQATheoremsRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightTheoremQATheoremsRCPRetrieval",
         description="Part of the BRIGHT benchmark for reasoning-intensive retrieval. Retrieval of theorem definitions and proofs from ProofWiki. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. BRIGHT's `excluded_ids` are removed from the candidates. The integer qrels are upstream `xlangai/BRIGHT@a75a0eb4` gold_ids (as in `BrightRetrieval`). These differ from the later-corrected qrels of the BRIGHT(v1.1) tasks on some queries, so `ndcg_at_10` is not comparable to BRIGHT(v1.1).",
@@ -394,3 +547,14 @@ class BrightTheoremQATheoremsRCPRetrieval(AbsTaskRetrievalFloatGains):
             "query": "Represent this Math problem for searching relevant theorems: "
         },
     )
+
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)

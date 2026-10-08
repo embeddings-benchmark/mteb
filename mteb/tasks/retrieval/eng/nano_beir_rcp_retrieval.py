@@ -2,15 +2,25 @@
 
 Each task adapts an existing mteb task (see `adapted_from`): the same queries and corpus, plus a
 candidate pool (`top_ranked`) and continuous relevance gains in the qrels' `gain` column.
-Scored by `ndcg_float_at_10` (see `AbsTaskRetrievalFloatGains`). Metadata is copied from the
-original task except for name, description, reference, dataset, eval_langs, main_score,
-annotations_creators, citation and adapted_from.
+Scored by `ndcg_float_at_10`, which each task adds in `task_specific_scores` from the `gain`
+column (`load_float_gains`, `ndcg_float_scores`). Metadata is copied from the original task
+except for name, description, reference, dataset, eval_langs, main_score, annotations_creators,
+citation and adapted_from.
 """
 
 from __future__ import annotations
 
-from mteb.abstasks.retrieval import AbsTaskRetrievalFloatGains
+from collections import defaultdict
+from typing import TYPE_CHECKING
+
+import datasets
+
+from mteb._evaluators.retrieval_metrics import ndcg_float_scores
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+
+if TYPE_CHECKING:
+    from mteb.types import RelevantDocumentsType
 
 _CITATION = r"""@misc{schmidt2026rubriccalibratedpreferencescrossquerycalibration,
   title = {Rubric-Calibrated Preferences: Cross-Query Calibration of LLM Judgments via Item Response Theory},
@@ -24,7 +34,29 @@ _CITATION = r"""@misc{schmidt2026rubriccalibratedpreferencescrossquerycalibratio
 """
 
 
-class NanoArguAnaRCPRetrieval(AbsTaskRetrievalFloatGains):
+def load_float_gains(
+    metadata: TaskMetadata, hf_subset: str, split: str
+) -> dict[str, dict[str, float]]:
+    """Load the float `gain` column of a subset's qrels.
+
+    The standard loader keeps only the integer `score`. Rows whose `gain` is null are skipped.
+    """
+    qrels = datasets.load_dataset(
+        metadata.dataset["path"],
+        f"{hf_subset}-qrels",
+        split=split,
+        revision=metadata.dataset["revision"],
+    )
+    gains: dict[str, dict[str, float]] = defaultdict(dict)
+    for query_id, doc_id, gain in zip(
+        qrels["query-id"], qrels["corpus-id"], qrels["gain"], strict=True
+    ):
+        if gain is not None:
+            gains[str(query_id)][str(doc_id)] = float(gain)
+    return dict(gains)
+
+
+class NanoArguAnaRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NanoArguAnaRCPRetrieval",
         description="NanoArguAna is a smaller subset of ArguAna, a dataset for argument retrieval in debate contexts. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The human integer qrels are unchanged and still drive `ndcg_at_10`, which here reranks the fixed pool. The query argument's own copy in the corpus (21 of 50 queries) is removed from the candidates.",
@@ -52,8 +84,19 @@ class NanoArguAnaRCPRetrieval(AbsTaskRetrievalFloatGains):
         prompt={"query": "Given a claim, find documents that refute the claim"},
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class NanoClimateFeverRCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class NanoClimateFeverRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NanoClimateFeverRCPRetrieval",
         description="NanoClimateFever is a small version of the BEIR dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The human integer qrels are unchanged and still drive `ndcg_at_10`, which here reranks the fixed pool.",
@@ -83,8 +126,19 @@ class NanoClimateFeverRCPRetrieval(AbsTaskRetrievalFloatGains):
         },
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class NanoDBPediaRCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class NanoDBPediaRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NanoDBPediaRCPRetrieval",
         description="NanoDBPediaRetrieval is a small version of the standard test collection for entity search over the DBpedia knowledge base. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The human integer qrels are unchanged and still drive `ndcg_at_10`, which here reranks the fixed pool.",
@@ -114,8 +168,19 @@ class NanoDBPediaRCPRetrieval(AbsTaskRetrievalFloatGains):
         },
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class NanoFEVERRCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class NanoFEVERRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NanoFEVERRCPRetrieval",
         description="NanoFEVER is a smaller version of FEVER (Fact Extraction and VERification), which consists of 185,445 claims generated by altering sentences extracted from Wikipedia and subsequently verified without knowledge of the sentence they were derived from. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The human integer qrels are unchanged and still drive `ndcg_at_10`, which here reranks the fixed pool.",
@@ -145,8 +210,19 @@ class NanoFEVERRCPRetrieval(AbsTaskRetrievalFloatGains):
         },
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class NanoFiQA2018RCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class NanoFiQA2018RCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NanoFiQA2018RCPRetrieval",
         description="NanoFiQA2018 is a smaller subset of the Financial Opinion Mining and Question Answering dataset. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The human integer qrels are unchanged and still drive `ndcg_at_10`, which here reranks the fixed pool.",
@@ -176,8 +252,19 @@ class NanoFiQA2018RCPRetrieval(AbsTaskRetrievalFloatGains):
         },
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class NanoHotpotQARCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class NanoHotpotQARCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NanoHotpotQARCPRetrieval",
         description="NanoHotpotQARetrieval is a smaller subset of the HotpotQA dataset, which is a question answering dataset featuring natural, multi-hop questions, with strong supervision for supporting facts to enable more explainable question answering systems. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The human integer qrels are unchanged and still drive `ndcg_at_10`, which here reranks the fixed pool.",
@@ -207,8 +294,19 @@ class NanoHotpotQARCPRetrieval(AbsTaskRetrievalFloatGains):
         },
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class NanoMSMARCORCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class NanoMSMARCORCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NanoMSMARCORCPRetrieval",
         description="NanoMSMARCORetrieval is a smaller subset of MS MARCO, a collection of datasets focused on deep learning in search. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The human integer qrels are unchanged and still drive `ndcg_at_10`, which here reranks the fixed pool.",
@@ -238,8 +336,19 @@ class NanoMSMARCORCPRetrieval(AbsTaskRetrievalFloatGains):
         },
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class NanoNFCorpusRCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class NanoNFCorpusRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NanoNFCorpusRCPRetrieval",
         description="NanoNFCorpus is a smaller subset of NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The human integer qrels are unchanged and still drive `ndcg_at_10`, which here reranks the fixed pool.",
@@ -269,8 +378,19 @@ class NanoNFCorpusRCPRetrieval(AbsTaskRetrievalFloatGains):
         },
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class NanoNQRCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class NanoNQRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NanoNQRCPRetrieval",
         description="NanoNQ is a smaller subset of a dataset which contains questions from real users, and it requires QA systems to read and comprehend an entire Wikipedia article that may or may not contain the answer to the question. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The human integer qrels are unchanged and still drive `ndcg_at_10`, which here reranks the fixed pool.",
@@ -300,8 +420,19 @@ class NanoNQRCPRetrieval(AbsTaskRetrievalFloatGains):
         },
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class NanoQuoraRCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class NanoQuoraRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NanoQuoraRCPRetrieval",
         description="NanoQuoraRetrieval is a smaller subset of the QuoraRetrieval dataset, which is based on questions that are marked as duplicates on the Quora platform. Given a question, find other (duplicate) questions. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The human integer qrels are unchanged and still drive `ndcg_at_10`, which here reranks the fixed pool.",
@@ -331,8 +462,19 @@ class NanoQuoraRCPRetrieval(AbsTaskRetrievalFloatGains):
         },
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class NanoSCIDOCSRCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class NanoSCIDOCSRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NanoSCIDOCSRCPRetrieval",
         description="NanoFiQA2018 is a smaller subset of SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation prediction, to document classification and recommendation. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The human integer qrels are unchanged and still drive `ndcg_at_10`, which here reranks the fixed pool.",
@@ -362,8 +504,19 @@ class NanoSCIDOCSRCPRetrieval(AbsTaskRetrievalFloatGains):
         },
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class NanoSciFactRCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class NanoSciFactRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NanoSciFactRCPRetrieval",
         description="NanoSciFact is a smaller subset of SciFact, which verifies scientific claims using evidence from the research literature containing scientific paper abstracts. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The human integer qrels are unchanged and still drive `ndcg_at_10`, which here reranks the fixed pool.",
@@ -393,8 +546,19 @@ class NanoSciFactRCPRetrieval(AbsTaskRetrievalFloatGains):
         },
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class NanoTouche2020RCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class NanoTouche2020RCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NanoTouche2020RCPRetrieval",
         description="NanoTouche2020 is a smaller subset of Touché Task 1: Argument Retrieval for Controversial Questions. Reranking over a 150-document candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The human integer qrels are unchanged and still drive `ndcg_at_10`, which here reranks the fixed pool.",
@@ -423,3 +587,14 @@ class NanoTouche2020RCPRetrieval(AbsTaskRetrievalFloatGains):
             "query": "Given a question, retrieve detailed and persuasive arguments that answer the question"
         },
     )
+
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)

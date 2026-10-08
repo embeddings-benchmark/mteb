@@ -2,17 +2,26 @@
 
 Each task adapts an existing mteb task (see `adapted_from`): the same queries and corpus, plus a
 candidate pool (`top_ranked`) and continuous relevance gains in the qrels' `gain` column.
-Scored by `ndcg_float_at_10` (see `AbsTaskRetrievalFloatGains`). Metadata is copied from the
-original task except for name, description, reference, dataset, eval_langs, main_score,
-annotations_creators, citation and adapted_from.
+Scored by `ndcg_float_at_10`, which each task adds in `task_specific_scores` from the `gain`
+column (`load_float_gains`, `ndcg_float_scores`). Metadata is copied from the original task
+except for name, description, reference, dataset, eval_langs, main_score, annotations_creators,
+citation and adapted_from.
 """
 
 from __future__ import annotations
 
 import copy
+from collections import defaultdict
+from typing import TYPE_CHECKING
 
-from mteb.abstasks.retrieval import AbsTaskRetrievalFloatGains
+import datasets
+
+from mteb._evaluators.retrieval_metrics import ndcg_float_scores
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+
+if TYPE_CHECKING:
+    from mteb.types import RelevantDocumentsType
 
 _CITATION = r"""@misc{schmidt2026rubriccalibratedpreferencescrossquerycalibration,
   title = {Rubric-Calibrated Preferences: Cross-Query Calibration of LLM Judgments via Item Response Theory},
@@ -26,7 +35,29 @@ _CITATION = r"""@misc{schmidt2026rubriccalibratedpreferencescrossquerycalibratio
 """
 
 
-class Vidore3ComputerScienceRCPRetrieval(AbsTaskRetrievalFloatGains):
+def load_float_gains(
+    metadata: TaskMetadata, hf_subset: str, split: str
+) -> dict[str, dict[str, float]]:
+    """Load the float `gain` column of a subset's qrels.
+
+    The standard loader keeps only the integer `score`. Rows whose `gain` is null are skipped.
+    """
+    qrels = datasets.load_dataset(
+        metadata.dataset["path"],
+        f"{hf_subset}-qrels",
+        split=split,
+        revision=metadata.dataset["revision"],
+    )
+    gains: dict[str, dict[str, float]] = defaultdict(dict)
+    for query_id, doc_id, gain in zip(
+        qrels["query-id"], qrels["corpus-id"], qrels["gain"], strict=True
+    ):
+        if gain is not None:
+            gains[str(query_id)][str(doc_id)] = float(gain)
+    return dict(gains)
+
+
+class Vidore3ComputerScienceRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3ComputerScienceRCPRetrieval",
         description="Retrieve associated pages according to questions. This dataset, Computer Science, is a corpus of textbooks from the openstacks website, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models. Reranking over a 150-page candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The graded human qrels are unchanged. The main score averages the six language versions of each question; the paper reports the native-language questions. Gains come from judging the pages' OCR text.",
@@ -61,8 +92,19 @@ class Vidore3ComputerScienceRCPRetrieval(AbsTaskRetrievalFloatGains):
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class Vidore3EnergyRCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class Vidore3EnergyRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3EnergyRCPRetrieval",
         description="Retrieve associated pages according to questions. This dataset, Energy Fr, is a corpus of reports on energy supply in europe, intended for complex-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models. Reranking over a 150-page candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The graded human qrels are unchanged. The main score averages the six language versions of each question; the paper reports the native-language questions. Gains come from judging the pages' OCR text.",
@@ -97,8 +139,19 @@ class Vidore3EnergyRCPRetrieval(AbsTaskRetrievalFloatGains):
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class Vidore3FinanceEnRCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class Vidore3FinanceEnRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3FinanceEnRCPRetrieval",
         description="Retrieve associated pages according to questions. This task, Finance - EN, is a corpus of reports from american banking companies, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models. Reranking over a 150-page candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The graded human qrels are unchanged. The main score averages the six language versions of each question; the paper reports the native-language questions. Gains come from judging the pages' OCR text.",
@@ -133,8 +186,19 @@ class Vidore3FinanceEnRCPRetrieval(AbsTaskRetrievalFloatGains):
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class Vidore3FinanceFrRCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class Vidore3FinanceFrRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3FinanceFrRCPRetrieval",
         description="Retrieve associated pages according to questions. This task, Finance - FR, is a corpus of reports from french companies in the luxury domain, intended for long-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models. Reranking over a 150-page candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The graded human qrels are unchanged. The main score averages the six language versions of each question; the paper reports the native-language questions. Gains come from judging the pages' OCR text.",
@@ -169,8 +233,19 @@ class Vidore3FinanceFrRCPRetrieval(AbsTaskRetrievalFloatGains):
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class Vidore3HrRCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class Vidore3HrRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3HrRCPRetrieval",
         description="Retrieve associated pages according to questions. This dataset, HR, is a corpus of reports released by the european union, intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models. Reranking over a 150-page candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The graded human qrels are unchanged. The main score averages the six language versions of each question; the paper reports the native-language questions. Gains come from judging the pages' OCR text.",
@@ -205,8 +280,19 @@ class Vidore3HrRCPRetrieval(AbsTaskRetrievalFloatGains):
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class Vidore3IndustrialRCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class Vidore3IndustrialRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3IndustrialRCPRetrieval",
         description="Retrieve associated pages according to questions. This dataset, Industrial reports, is a corpus of technical documents on military aircraft (fueling, mechanics...), intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models. Reranking over a 150-page candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The graded human qrels are unchanged. The main score averages the six language versions of each question; the paper reports the native-language questions. Gains come from judging the pages' OCR text.",
@@ -241,8 +327,19 @@ class Vidore3IndustrialRCPRetrieval(AbsTaskRetrievalFloatGains):
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class Vidore3PharmaceuticalsRCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class Vidore3PharmaceuticalsRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3PharmaceuticalsRCPRetrieval",
         description="Retrieve associated pages according to questions. This dataset, Pharmaceutical, is a corpus of slides from the FDA, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models. Reranking over a 150-page candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The graded human qrels are unchanged. The main score averages the six language versions of each question; the paper reports the native-language questions. Gains come from judging the pages' OCR text.",
@@ -277,8 +374,19 @@ class Vidore3PharmaceuticalsRCPRetrieval(AbsTaskRetrievalFloatGains):
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-class Vidore3PhysicsRCPRetrieval(AbsTaskRetrievalFloatGains):
+
+class Vidore3PhysicsRCPRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3PhysicsRCPRetrieval",
         description="Retrieve associated pages according to questions. This dataset, Physics, is a corpus of course slides on french bachelor level physics lectures, intended for complex visual understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish.This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models. Reranking over a 150-page candidate pool, scored with NDCG over continuous relevance gains (`ndcg_float_at_10`). Gains are rubric-calibrated preferences (RCP) from an LLM judge (Qwen3.5-397B-A17B), calibrated with a 2PL item-response model. The graded human qrels are unchanged. The main score averages the six language versions of each question; the paper reports the native-language questions. Gains come from judging the pages' OCR text.",
@@ -313,8 +421,19 @@ class Vidore3PhysicsRCPRetrieval(AbsTaskRetrievalFloatGains):
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        gains = load_float_gains(self.metadata, hf_subset, hf_split)
+        return ndcg_float_scores(gains, results, self.k_values)
 
-def _ocr_view_metadata(cls: type[AbsTaskRetrievalFloatGains]) -> TaskMetadata:
+
+def _ocr_view_metadata(cls: type[AbsTaskRetrieval]) -> TaskMetadata:
     """Derive the text-only (OCR) variant of a ViDoRe v3 RCP task.
 
     The dataset, queries, pools, qrels and gains are unchanged; documents are the

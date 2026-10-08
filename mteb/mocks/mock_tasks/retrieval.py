@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from datasets import Audio, Dataset, DatasetDict
 
-from mteb.abstasks.retrieval import AbsTaskRetrieval, AbsTaskRetrievalFloatGains
+from mteb._evaluators.retrieval_metrics import ndcg_float_scores
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -13,6 +14,9 @@ from .create_mock_samples import (
     create_mock_images,
     create_mock_video_bytes,
 )
+
+if TYPE_CHECKING:
+    from mteb.types import RelevantDocumentsType
 
 multilingual_eval_langs = {
     "eng": ["eng-Latn"],
@@ -196,7 +200,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
         self.data_loaded = True
 
 
-class MockRetrievalFloatGainsTask(AbsTaskRetrievalFloatGains):
+class MockRetrievalFloatGainsTask(AbsTaskRetrieval):
     """Retrieval task with float gains in the qrels. One split per behaviour under test.
 
     Splits:
@@ -204,7 +208,8 @@ class MockRetrievalFloatGainsTask(AbsTaskRetrievalFloatGains):
         ties: all candidates of q1 tie, so each is credited the group-mean gain.
         zero_gains: q2's gains are all zero, so it scores 0.0 and still counts in the mean.
 
-    Identical-id handling and the real gain-column loader are tested in
+    The gains are held in memory (keyed by split) instead of being loaded from the qrels'
+    `gain` column; the real loader is tested in
     ``tests/test_abstasks/test_retrieval_float_gains.py``.
     """
 
@@ -269,13 +274,17 @@ class MockRetrievalFloatGainsTask(AbsTaskRetrievalFloatGains):
         self.dataset = {
             "default": {split: base_retrieval_datasplit() for split in self.float_gains}
         }
-        self.dataset_transform(num_proc=num_proc)
         self.data_loaded = True
 
-    def _load_float_gains(
-        self, hf_subset: str, split: str, num_proc: int | None
-    ) -> dict[str, dict[str, float]]:
-        return self.float_gains[split]
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        return ndcg_float_scores(self.float_gains[hf_split], results, self.k_values)
 
 
 class MockRetrievalDialogTask(AbsTaskRetrieval):

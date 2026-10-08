@@ -1,18 +1,40 @@
-"""Retrieval tasks with float gains in the qrels (`AbsTaskRetrievalFloatGains`)."""
+"""Retrieval tasks scored with float gains via `AbsTaskRetrieval.task_specific_scores`."""
 
 from __future__ import annotations
 
 import math
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pytest
 from datasets import Dataset
 
-from mteb.abstasks.retrieval import AbsTaskRetrievalFloatGains
+from mteb._evaluators.retrieval_metrics import ndcg_float_scores
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.mocks.mock_tasks import MockRetrievalFloatGainsTask, MockRetrievalTask
 from mteb.models.model_meta import ModelMeta
+from mteb.tasks.retrieval.eng import bright_rcp_retrieval, nano_beir_rcp_retrieval
+from mteb.tasks.retrieval.multilingual import vidore3_rcp_retrieval
 from mteb.types import CorpusDatasetType
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Sequence
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import RelevantDocumentsType
+
+    GainsLoader = Callable[[TaskMetadata, str, str], dict[str, dict[str, float]]]
+
+# each RCP task module carries its own copy of the gains loader; all of them are tested
+GAINS_LOADERS = pytest.mark.parametrize(
+    "load_float_gains",
+    [
+        nano_beir_rcp_retrieval.load_float_gains,
+        bright_rcp_retrieval.load_float_gains,
+        vidore3_rcp_retrieval.load_float_gains,
+    ],
+    ids=["nanobeir", "bright", "vidore"],
+)
 
 FIXED_SEARCH_META = ModelMeta.create_empty(
     overwrites={"name": "mock/fixed-score-search", "revision": "1"},
@@ -39,6 +61,36 @@ def _ndcg(credited: list[float], gains: list[float]) -> float:
     dcg = sum(g / math.log2(r + 2) for r, g in enumerate(credited))
     idcg = sum(g / math.log2(r + 2) for r, g in enumerate(sorted(gains, reverse=True)))
     return dcg / idcg if idcg else 0.0
+
+
+def _local_float_gains_task(
+    path: Path, load_float_gains: GainsLoader
+) -> AbsTaskRetrieval:
+    """A task in exactly the shipped tasks' shape, reading a local dataset: the override
+    loads the `gain` column of the subset's qrels and scores `ndcg_float_at_k` on it."""
+
+    class LocalFloatGainsTask(AbsTaskRetrieval):
+        metadata = MockRetrievalFloatGainsTask.metadata.model_copy(
+            update={
+                "name": "LocalFloatGainsTask",
+                "dataset": {"path": str(path), "revision": "local"},
+                "eval_splits": ["test"],
+                "eval_langs": {SUBSET: ["eng-Latn"]},
+            }
+        )
+
+        def task_specific_scores(
+            self,
+            scores: dict[str, dict[str, float]],
+            qrels: RelevantDocumentsType,
+            results: dict[str, dict[str, float]],
+            hf_split: str,
+            hf_subset: str,
+        ) -> dict[str, float]:
+            gains = load_float_gains(self.metadata, hf_subset, hf_split)
+            return ndcg_float_scores(gains, results, self.k_values)
+
+    return LocalFloatGainsTask()
 
 
 @pytest.fixture
@@ -83,6 +135,23 @@ def test_all_zero_gains_score_zero_and_stay_in_the_mean(
     assert scores["ndcg_float_at_10"] == pytest.approx(round((1.0 + 0.0) / 2, 5))
 
 
+def test_skip_first_result_is_not_applied_to_the_float_metric(
+    task: MockRetrievalFloatGainsTask,
+) -> None:
+    """The documented contract (see `ndcg_float_scores`): the skip only affects the
+    integer-qrels metrics; the float metric is computed on the unskipped ranking."""
+    model = FixedScoreSearch(
+        {"q1": {"d1": 0.9, "d2": 0.1}, "q2": {"d2": 0.9, "d1": 0.1}}
+    )
+    without = task.evaluate(model, split="test", encode_kwargs={})["default"]
+    task.skip_first_result = True
+    with_skip = task.evaluate(model, split="test", encode_kwargs={})["default"]
+
+    assert with_skip["ndcg_float_at_10"] == without["ndcg_float_at_10"]
+    assert with_skip["ndcg_at_10"] != without["ndcg_at_10"]  # the skip applies there
+    assert with_skip["main_score"] == with_skip["ndcg_float_at_10"]
+
+
 def test_all_null_gains_query_scores_zero_and_stays_in_the_mean(
     task: MockRetrievalFloatGainsTask,
 ) -> None:
@@ -124,66 +193,14 @@ def test_integer_metrics_match_a_plain_retrieval_task() -> None:
     assert not any(key.startswith("ndcg_float") for key in plain)
 
 
-def test_corpus_is_restricted_to_top_ranked(task: MockRetrievalFloatGainsTask) -> None:
-    task.load_data()
-    split = task.dataset["default"]["test"]
-    split["top_ranked"] = {"q1": ["d1"], "q2": ["d1"]}
-    task.dataset_transform()
-
-    assert task.dataset["default"]["test"]["corpus"]["id"] == ["d1"]
+SUBSET = "named"
 
 
-def test_ignore_identical_ids_drops_the_query_document_from_the_gains() -> None:
-    # The evaluator drops each query's own document from the ranking in place. The
-    # float metric must drop it from the gains too; otherwise its gain inflates the
-    # ideal DCG and a perfect ranking of the remaining documents cannot reach 1.0.
-    class IdenticalIdsTask(MockRetrievalFloatGainsTask):
-        ignore_identical_ids = True
-        float_gains = {
-            **MockRetrievalFloatGainsTask.float_gains,
-            "test": {"q1": {"q1": 1.0, "d1": 0.9, "d2": 0.1}, "q2": {"d2": 0.8}},
-        }
-
-    model = FixedScoreSearch(
-        {"q1": {"q1": 0.99, "d1": 0.9, "d2": 0.1}, "q2": {"d2": 0.9, "d1": 0.1}}
-    )
-    scores = IdenticalIdsTask().evaluate(model, split="test", encode_kwargs={})[
-        "default"
-    ]
-
-    assert scores["ndcg_float_at_10"] == pytest.approx(1.0)
-
-
-def test_skip_first_result_is_rejected(task: MockRetrievalFloatGainsTask) -> None:
-    task.skip_first_result = True
-    model = FixedScoreSearch(
-        {"q1": {"d1": 0.9, "d2": 0.1}, "q2": {"d2": 0.9, "d1": 0.1}}
-    )
-    with pytest.raises(ValueError, match="skip_first_result"):
-        task.evaluate(model, split="test", encode_kwargs={})
-
-
-def test_gains_are_loaded_lazily_without_dataset_transform() -> None:
-    # The gains are loaded on first use in `task_specific_scores`; `dataset_transform`
-    # never loads them, so a caller that injects `task.dataset` directly still works.
-    task = MockRetrievalFloatGainsTask()
-    task.load_data()
-    assert not hasattr(task, "_float_gains")
-    model = FixedScoreSearch(
-        {"q1": {"d1": 0.9, "d2": 0.1}, "q2": {"d2": 0.9, "d1": 0.1}}
-    )
-    scores = task.evaluate(model, split="test", encode_kwargs={})["default"]
-
-    assert scores["ndcg_float_at_10"] == pytest.approx(1.0)
-
-
-def _write_local_dataset(root: Path, subset: str | None) -> None:
-    """A tiny parquet dataset whose qrels config carries a `gain` column.
-
-    ``subset=None`` writes the default-subset layout (configs ``corpus``, ``queries``,
-    ``qrels``, ``top_ranked``); otherwise every config is prefixed ``{subset}-``.
-    """
-    prefix = f"{subset}-" if subset else ""
+def _write_local_dataset(
+    root: Path, extra_qrels: Sequence[dict[str, Any]] = ()
+) -> None:
+    """A tiny parquet dataset in the RCP layout: configs ``{SUBSET}-corpus``, ``-queries``,
+    ``-qrels`` (with a float ``gain`` column next to the integer ``score``) and ``-top_ranked``."""
     tables = {
         "corpus": [
             {"id": "d1", "title": "", "text": "first document"},
@@ -191,46 +208,20 @@ def _write_local_dataset(root: Path, subset: str | None) -> None:
         ],
         "queries": [{"id": "q1", "text": "a query"}, {"id": "q2", "text": "another"}],
         "qrels": [
-            {
-                "query-id": "q1",
-                "corpus-id": "d1",
-                "score": 1,
-                "gain": 0.9,
-                "theta": 1.0,
-            },
-            {
-                "query-id": "q1",
-                "corpus-id": "d2",
-                "score": 0,
-                "gain": 0.1,
-                "theta": -1.0,
-            },
-            {
-                "query-id": "q2",
-                "corpus-id": "d1",
-                "score": 0,
-                "gain": 0.2,
-                "theta": -0.5,
-            },
-            {
-                "query-id": "q2",
-                "corpus-id": "d2",
-                "score": 1,
-                "gain": 0.8,
-                "theta": 0.5,
-            },
+            {"query-id": "q1", "corpus-id": "d1", "score": 1, "gain": 0.9},
+            {"query-id": "q1", "corpus-id": "d2", "score": 0, "gain": 0.1},
+            {"query-id": "q2", "corpus-id": "d1", "score": 0, "gain": 0.2},
+            {"query-id": "q2", "corpus-id": "d2", "score": 1, "gain": 0.8},
+            *extra_qrels,
         ],
         "top_ranked": [
             {"query-id": "q1", "corpus-ids": ["d1", "d2"]},
             {"query-id": "q2", "corpus-ids": ["d2", "d1"]},
         ],
     }
-    if subset:
-        # the named subset also excludes d2 for q1 (like BRIGHT's excluded_ids)
-        tables["excluded"] = [{"query-id": "q1", "excluded-corpus-ids": ["d2"]}]
     configs = []
     for name, rows in tables.items():
-        config = prefix + name
+        config = f"{SUBSET}-{name}"
         (root / config).mkdir(parents=True)
         Dataset.from_list(rows).to_parquet(str(root / config / "test.parquet"))
         configs.append(
@@ -240,256 +231,34 @@ def _write_local_dataset(root: Path, subset: str | None) -> None:
     (root / "README.md").write_text("---\nconfigs:\n" + "".join(configs) + "---\n")
 
 
-@pytest.mark.parametrize("subset", [None, "named"])
-def test_gains_are_read_from_the_qrels_gain_column(
-    tmp_path: Path, subset: str | None
+@GAINS_LOADERS
+def test_gains_are_read_from_the_subset_qrels(
+    tmp_path: Path, load_float_gains: GainsLoader
 ) -> None:
-    """The real loader path: the `gain` column of the (subset's) qrels config."""
-    _write_local_dataset(tmp_path, subset)
-    hf_subset = subset or "default"
-
-    class LocalFloatGainsTask(AbsTaskRetrievalFloatGains):
-        metadata = MockRetrievalFloatGainsTask.metadata.model_copy(
-            update={
-                "name": "LocalFloatGainsTask",
-                "dataset": {"path": str(tmp_path), "revision": "local"},
-                "eval_splits": ["test"],
-                "eval_langs": {hf_subset: ["eng-Latn"]} if subset else ["eng-Latn"],
-            }
-        )
-
-    task = LocalFloatGainsTask()
+    """The real loader path: the `gain` column of the subset's qrels config."""
+    _write_local_dataset(tmp_path)
+    task = _local_float_gains_task(tmp_path, load_float_gains)
     task.load_data()
 
-    assert task._gains_for(hf_subset, "test") == {
+    assert load_float_gains(task.metadata, SUBSET, "test") == {
         "q1": {"d1": 0.9, "d2": 0.1},
         "q2": {"d1": 0.2, "d2": 0.8},
     }
     model = FixedScoreSearch(
         {"q1": {"d1": 0.9, "d2": 0.1}, "q2": {"d2": 0.9, "d1": 0.1}}
     )
-    scores = task.evaluate(model, split="test", encode_kwargs={})[hf_subset]
+    scores = task.evaluate(model, split="test", encode_kwargs={})[SUBSET]
     assert scores["ndcg_float_at_10"] == pytest.approx(1.0)
 
 
-def test_gain_split_falls_back_to_the_only_split(tmp_path: Path) -> None:
-    """Like the core loader: a requested split missing from a single-split config falls back."""
-    _write_local_dataset(tmp_path, None)
-
-    class LocalFloatGainsTask(AbsTaskRetrievalFloatGains):
-        metadata = MockRetrievalFloatGainsTask.metadata.model_copy(
-            update={
-                "name": "LocalFloatGainsTask",
-                "dataset": {"path": str(tmp_path), "revision": "local"},
-                "eval_splits": ["test"],
-                "eval_langs": ["eng-Latn"],
-            }
-        )
-
-    gains = LocalFloatGainsTask()._load_float_gains("default", "dev", None)
-    assert gains["q2"] == {"d1": 0.2, "d2": 0.8}
-
-
-@pytest.mark.parametrize("subset", [None, "named"])
-def test_full_corpus_retrieval_mode(tmp_path: Path, subset: str | None) -> None:
-    """``rerank_top_ranked = False``: search the whole corpus minus excluded ids; both
-    metric families are reported on the full-corpus ranking."""
-    _write_local_dataset(tmp_path, subset)
-    hf_subset = subset or "default"
-
-    class LocalRetrievalView(AbsTaskRetrievalFloatGains):
-        rerank_top_ranked = False
-        metadata = MockRetrievalFloatGainsTask.metadata.model_copy(
-            update={
-                "name": "LocalRetrievalView",
-                "main_score": "ndcg_at_10",
-                "dataset": {"path": str(tmp_path), "revision": "local"},
-                "eval_splits": ["test"],
-                "eval_langs": {hf_subset: ["eng-Latn"]} if subset else ["eng-Latn"],
-            }
-        )
-
-    task = LocalRetrievalView()
-    task.load_data()
-    split = task.dataset[hf_subset]["test"]
-    if subset:
-        assert split["top_ranked"] == {"q1": ["d1"], "q2": ["d1", "d2"]}
-    else:
-        assert split["top_ranked"] is None
-    assert sorted(split["corpus"]["id"]) == ["d1", "d2"]  # the corpus is not trimmed
-
-    model = FixedScoreSearch(
-        {"q1": {"d1": 0.9, "d2": 0.1}, "q2": {"d2": 0.9, "d1": 0.1}}
-    )
-    scores = task.evaluate(model, split="test", encode_kwargs={})[hf_subset]
-    assert scores["main_score"] == scores["ndcg_at_10"]
-    assert "ndcg_float_at_10" in scores  # both families, on the full-corpus ranking
-
-
-def test_full_corpus_mode_on_a_float_gains_main_score_task(tmp_path: Path) -> None:
-    """Full-corpus mode reports both metric families; the main score is never mutated."""
-    _write_local_dataset(tmp_path, "named")
-
-    class ShippedLikeTask(AbsTaskRetrievalFloatGains):
-        metadata = MockRetrievalFloatGainsTask.metadata.model_copy(
-            update={
-                "name": "ShippedLikeTask",
-                "main_score": "ndcg_float_at_10",
-                "dataset": {"path": str(tmp_path), "revision": "local"},
-                "eval_splits": ["test"],
-                "eval_langs": {"named": ["eng-Latn"]},
-            }
-        )
-
-    task = ShippedLikeTask()
-    task.rerank_top_ranked = False
-    model = FixedScoreSearch(
-        {"q1": {"d1": 0.9, "d2": 0.1}, "q2": {"d2": 0.9, "d1": 0.1}}
-    )
-    scores = task.evaluate(model, split="test", encode_kwargs={})["named"]
-    assert scores["main_score"] == scores["ndcg_float_at_10"]
-    assert "ndcg_at_10" in scores  # the integer-qrels metrics, alongside
-
-
-def test_as_full_corpus_retrieval_is_a_separate_task(tmp_path: Path) -> None:
-    _write_local_dataset(tmp_path, "named")
-
-    class ShippedLikeTask(AbsTaskRetrievalFloatGains):
-        metadata = MockRetrievalFloatGainsTask.metadata.model_copy(
-            update={
-                "name": "ShippedLikeTask",
-                "main_score": "ndcg_float_at_10",
-                "dataset": {"path": str(tmp_path), "revision": "local"},
-                "eval_splits": ["test"],
-                "eval_langs": {"named": ["eng-Latn"]},
-            }
-        )
-
-    reranking = ShippedLikeTask()
-    retrieval = reranking.as_full_corpus_retrieval()
-    assert retrieval.metadata.name == "ShippedLikeTask.retrieval"
-    assert retrieval.metadata.main_score == "ndcg_float_at_10"  # never mutated
-    assert reranking.rerank_top_ranked and not retrieval.rerank_top_ranked
-    assert not retrieval.restrict_corpus_to_top_ranked  # the corpus stays full
-    assert ShippedLikeTask.metadata.name == "ShippedLikeTask"  # the class is untouched
-
-    model = FixedScoreSearch(
-        {"q1": {"d1": 0.9, "d2": 0.1}, "q2": {"d2": 0.9, "d1": 0.1}}
-    )
-    scores = retrieval.evaluate(model, split="test", encode_kwargs={})["named"]
-    assert scores["main_score"] == scores["ndcg_float_at_10"]
-    assert "ndcg_at_10" in scores  # both families, on the full-corpus ranking
-    assert retrieval.dataset["named"]["test"]["top_ranked"] == {
-        "q1": ["d1"],
-        "q2": ["d1", "d2"],
-    }
-
-
-def test_default_config_wins_over_qrels_for_the_default_subset(tmp_path: Path) -> None:
-    """Like the core loader: for the default subset, a ``default`` config is read before ``qrels``."""
-    _write_local_dataset(tmp_path, None)
-    rows = [
-        {"query-id": "q1", "corpus-id": "d1", "score": 1, "gain": 0.3, "theta": 0.0}
-    ]
-    (tmp_path / "default").mkdir()
-    Dataset.from_list(rows).to_parquet(str(tmp_path / "default" / "test.parquet"))
-    readme = (
-        (tmp_path / "README.md")
-        .read_text()
-        .replace(
-            "configs:\n",
-            "configs:\n- config_name: default\n  data_files:\n"
-            "  - split: test\n    path: default/test.parquet\n",
-            1,
-        )
-    )
-    (tmp_path / "README.md").write_text(readme)
-
-    class LocalFloatGainsTask(AbsTaskRetrievalFloatGains):
-        metadata = MockRetrievalFloatGainsTask.metadata.model_copy(
-            update={
-                "name": "LocalFloatGainsTask",
-                "dataset": {"path": str(tmp_path), "revision": "local"},
-                "eval_splits": ["test"],
-                "eval_langs": ["eng-Latn"],
-            }
-        )
-
-    gains = LocalFloatGainsTask()._load_float_gains("default", "test", None)
-    assert gains == {"q1": {"d1": 0.3}}
-
-
-def test_null_gains_are_skipped(
-    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
-) -> None:
+@GAINS_LOADERS
+def test_null_gains_are_skipped(tmp_path: Path, load_float_gains: GainsLoader) -> None:
     """A qrels row without a gain (``gain`` null) is not a candidate gain."""
-    _write_local_dataset(tmp_path, "named")
-    task_cls = type(
-        "LocalFloatGainsTask",
-        (AbsTaskRetrievalFloatGains,),
-        {
-            "metadata": MockRetrievalFloatGainsTask.metadata.model_copy(
-                update={
-                    "name": "LocalFloatGainsTask",
-                    "dataset": {"path": str(tmp_path), "revision": "local"},
-                    "eval_splits": ["test"],
-                    "eval_langs": {"named": ["eng-Latn"]},
-                }
-            )
-        },
-    )
-    rows = [
-        {"query-id": "q1", "corpus-id": "d1", "gain": 0.9},
-        {"query-id": "q1", "corpus-id": "d9", "gain": None},
-    ]
-    import mteb.abstasks.retrieval as module
+    null_row = {"query-id": "q1", "corpus-id": "d9", "score": 0, "gain": None}
+    _write_local_dataset(tmp_path, extra_qrels=[null_row])
+    task = _local_float_gains_task(tmp_path, load_float_gains)
 
-    monkeypatch.setattr(module, "load_dataset", lambda *a, **k: Dataset.from_list(rows))
-    assert task_cls()._load_float_gains("named", "test", None) == {"q1": {"d1": 0.9}}
-
-
-def test_default_subset_reads_the_excluded_config(tmp_path: Path) -> None:
-    """Full-corpus mode on the default subset reads the plain ``excluded`` config."""
-    _write_local_dataset(tmp_path, None)
-    (tmp_path / "excluded").mkdir()
-    Dataset.from_list([{"query-id": "q2", "excluded-corpus-ids": ["d1"]}]).to_parquet(
-        str(tmp_path / "excluded" / "test.parquet")
-    )
-    readme = (
-        (tmp_path / "README.md")
-        .read_text()
-        .replace(
-            "configs:\n",
-            "configs:\n- config_name: excluded\n  data_files:\n"
-            "  - split: test\n    path: excluded/test.parquet\n",
-            1,
-        )
-    )
-    (tmp_path / "README.md").write_text(readme)
-
-    class LocalRetrievalView(AbsTaskRetrievalFloatGains):
-        rerank_top_ranked = False
-        metadata = MockRetrievalFloatGainsTask.metadata.model_copy(
-            update={
-                "name": "LocalRetrievalView",
-                "main_score": "ndcg_at_10",
-                "dataset": {"path": str(tmp_path), "revision": "local"},
-                "eval_splits": ["test"],
-                "eval_langs": ["eng-Latn"],
-            }
-        )
-
-    task = LocalRetrievalView()
-    task.load_data()
-    assert task.dataset["default"]["test"]["top_ranked"] == {
-        "q1": ["d1", "d2"],
-        "q2": ["d2"],
+    assert load_float_gains(task.metadata, SUBSET, "test")["q1"] == {
+        "d1": 0.9,
+        "d2": 0.1,
     }
-
-
-def test_full_corpus_mode_refuses_cross_encoders() -> None:
-    reranking = MockRetrievalFloatGainsTask()
-    retrieval = MockRetrievalFloatGainsTask()
-    retrieval.rerank_top_ranked = False
-    assert reranking._support_cross_encoder
-    assert not retrieval._support_cross_encoder
