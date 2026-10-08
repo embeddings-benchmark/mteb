@@ -222,11 +222,11 @@ class OmniVinciWrapper(AbsEncoder):
                     num_frames=self.num_frames,
                     max_samples=self.max_audio_samples,
                 )
-            if has_audio or has_video:
-                inputs = single_clip_dataloader(
-                    inputs,
-                    "batched audio and video embeddings change with their batch-mates",
-                )
+                if has_audio:
+                    inputs = single_clip_dataloader(
+                        inputs,
+                        "batched audio embeddings change with their batch-mates",
+                    )
 
             all_embeddings: list[torch.Tensor] = []
             for batch in tqdm(inputs, desc="Encoding"):

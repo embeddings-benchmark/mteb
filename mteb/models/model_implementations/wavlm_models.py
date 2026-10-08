@@ -49,7 +49,7 @@ class WavlmWrapper(AbsEncoder):
         self.model.eval()
         # group-norm checkpoints (wavlm-base*) normalise over the padded input, so
         # batching changes their embeddings (cosine 0.40 on real clips);
-        # wavlm-large uses layer norm and batches within 0.999
+        # wavlm-large uses layer norm and batches at cosine 0.9988
         self.per_clip = self.model.config.feat_extract_norm != "layer"
 
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(

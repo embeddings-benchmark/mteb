@@ -86,7 +86,7 @@ class SewDWrapper(AbsEncoder):
         for batch in tqdm(
             single_clip_dataloader(
                 inputs,
-                "padding changes group-norm embeddings, and a padded batch of long uncapped clips runs out of memory",
+                "group-norm feature encoder: padding changes the embeddings",
             ),
             disable=not show_progress_bar,
         ):

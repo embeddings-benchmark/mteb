@@ -68,7 +68,7 @@ class MMSWrapper(AbsEncoder):
         self.model.eval()
         # group-norm feature encoders were trained without an attention mask and
         # normalise over the padded input, so batching changes the embeddings
-        # (cosine down to 0.12 on real clips); layer-norm ones batch exactly
+        # (cosine down to 0.12 on real clips); layer-norm ones batch at cosine >= 0.9999
         # https://huggingface.co/docs/transformers/model_doc/wav2vec2#transformers.Wav2Vec2FeatureExtractor
         self.per_clip = self.model.config.feat_extract_norm != "layer"
         self.sampling_rate = self.feature_extractor.sampling_rate

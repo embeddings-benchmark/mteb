@@ -89,7 +89,6 @@ class ClapZeroShotWrapper(AbsEncoder):
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
                 )  # no padding=/truncation=: keeps the checkpoint's own setting
-            # https://github.com/huggingface/transformers/blob/main/src/transformers/models/clap/feature_extraction_clap.py
             features = {k: v.to(self.device) for k, v in features.items()}
 
             with torch.no_grad():

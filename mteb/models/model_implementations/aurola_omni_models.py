@@ -49,7 +49,13 @@ class AuroLAOmniWrapper(SentenceTransformerEncoderWrapper):
         ].processor.feature_extractor.sampling_rate
         # processor_kwargs max_pixels only reaches images; videos need it per call
         self.model[0].processing_kwargs.update(
-            {"video": {"max_pixels": 64 * 28 * 28, "do_sample_frames": False}}
+            {
+                "video": {
+                    "max_pixels": 64 * 28 * 28,
+                    "do_sample_frames": False,
+                    "fps": 1.0,
+                }
+            }
         )
 
 

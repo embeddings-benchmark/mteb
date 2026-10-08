@@ -44,9 +44,10 @@ class FusionEmbeddingWrapper(AbsEncoder):
 
     sampling_rate = 16_000
     max_text_tokens = 254
-    # 64 frames: _V_DEFAULT_MAX_FRAMES=64, the reference cap (it samples at
-    # fps=1 up to 64 for files); mteb always samples 64 evenly
+    # fps=1 up to 64 frames: _V_DEFAULT_FPS=1.0, _V_DEFAULT_MAX_FRAMES=64, the
+    # reference's sampling for video files
     # https://huggingface.co/EximiusLabs/fusion-embedding-1-2b-preview/blob/main/inference.py
+    video_fps = 1.0
     video_num_frames = 64
 
     def __init__(
@@ -191,7 +192,8 @@ class FusionEmbeddingWrapper(AbsEncoder):
             if modality in {"audio", "video"} and "video" in present:
                 inputs.collate_fn = VideoCollator(
                     target_sampling_rate=self.sampling_rate,
-                    num_frames=self.video_num_frames,
+                    fps=self.video_fps,
+                    max_frames=self.video_num_frames,
                 )
             elif modality == "audio":
                 inputs.collate_fn = AudioCollator(

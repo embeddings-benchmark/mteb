@@ -373,7 +373,7 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
 
     mteb_model_meta: ModelMeta
     # set by subclasses whose audio or video embeddings change with their
-    # batch-mates (batched vs single cosine below 0.999); logged once
+    # batch-mates (batched vs single cosine below 0.99); logged once
     audio_one_clip_reason: str | None = None
     video_one_clip_reason: str | None = None
 

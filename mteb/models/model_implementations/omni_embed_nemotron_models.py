@@ -15,7 +15,7 @@ class OmniEmbedNemotronWrapper(SentenceTransformerEncoderWrapper):
     """Thin wrapper that configures video/audio processing kwargs after loading."""
 
     # batched audio and video embeddings differ from single-item ones
-    # (min cosine below 0.999 on real clips)
+    # (min cosine 0.73 for audio, 0.87 for video, on real clips)
     audio_one_clip_reason = "batched audio embeddings change with their batch-mates"
     video_one_clip_reason = "batched video embeddings change with their batch-mates"
 

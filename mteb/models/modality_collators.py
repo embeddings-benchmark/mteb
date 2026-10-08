@@ -167,15 +167,15 @@ def single_clip_dataloader(
     inputs: DataLoader[BatchedInput],
     reason: str,
 ) -> DataLoader[BatchedInput]:
-    """Rebuild an audio DataLoader with batch_size=1.
+    """Rebuild an audio or video DataLoader with batch_size=1.
 
-    For models whose embeddings change with their batch-mates, or whose padded
-    batches of long clips run out of memory. ``reason`` is logged once.
+    For models whose embeddings change with their batch-mates (batched vs single
+    cosine below 0.99 on real clips). ``reason`` is logged once.
     ``DataLoader.batch_size`` cannot be changed after creation.
     """
     from torch.utils.data import DataLoader
 
-    log_once.info(f"Encoding audio one clip at a time (batch_size ignored): {reason}.")
+    log_once.info(f"Encoding one item at a time (batch_size ignored): {reason}.")
 
     return DataLoader(
         inputs.dataset,

@@ -31,8 +31,9 @@ class PEAudioVisualWrapper(AbsEncoder):
         self,
         model_name: str = "facebook/pe-av-large",
         device: str | None = None,
-        # PE-AV evaluates on every frame (30 fps); fps=2 with at most 64 frames
-        # is an mteb cap for memory
+        # PE-AV processes every frame it is given (do_sample_frames=false; the
+        # paper samples at 30 fps); fps=2 with at most 64 frames is an mteb cap
+        # for memory
         # https://huggingface.co/facebook/pe-av-large/blob/main/video_preprocessor_config.json
         fps: float | None = 2.0,
         max_frames: int | None = 64,
