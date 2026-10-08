@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.models.sentence_transformer_wrapper import (
+    MultiVectorWrapper,
+    SentenceTransformerEncoderWrapper,
+)
 
 langs = [
     "afr-Latn",
@@ -157,4 +160,58 @@ pplx_embed_v1_4b = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     citation=PERPLEXITY_CITATION,
+)
+
+pplx_embed_v2_late_0_6b = ModelMeta(
+    loader=MultiVectorWrapper,
+    name="perplexity-ai/pplx-embed-v2-late-0.6b",
+    model_type=["late-interaction"],
+    modalities=["image", "text"],
+    languages=langs,
+    open_weights=True,
+    revision="dd4e95b836a73f6f0c32e46ea127c0b86b02169e",
+    release_date="2026-10-05",
+    n_parameters=594_321_600,
+    n_embedding_parameters=254_279_680,
+    memory_usage_mb=2267,
+    embed_dim=128,
+    license="mit",
+    max_tokens=4096,
+    reference="https://huggingface.co/perplexity-ai/pplx-embed-v2-late-0.6b",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
+    use_instructions=False,
+    superseded_by=None,
+    adapted_from="Qwen/Qwen3.5-0.8B",
+    training_datasets=None,
+    public_training_code=None,
+    public_training_data=None,
+    extra_requirements_groups=["pplx-embed-v2", "image"],
+)
+
+pplx_embed_v2_late_9b = ModelMeta(
+    loader=MultiVectorWrapper,
+    name="perplexity-ai/pplx-embed-v2-late-9b",
+    model_type=["late-interaction"],
+    modalities=["image", "text"],
+    languages=langs,
+    open_weights=True,
+    revision="77e936a1b18ed2ac00b7c76fccd70dc6a1bb1c18",
+    release_date="2026-10-05",
+    n_parameters=8_392_695_024,
+    n_embedding_parameters=1_017_118_720,
+    memory_usage_mb=32016,
+    embed_dim=128,
+    license="mit",
+    max_tokens=4096,
+    reference="https://huggingface.co/perplexity-ai/pplx-embed-v2-late-9b",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
+    use_instructions=False,
+    superseded_by=None,
+    adapted_from="Qwen/Qwen3.5-9B",
+    training_datasets=None,
+    public_training_code=None,
+    public_training_data=None,
+    extra_requirements_groups=["pplx-embed-v2", "image"],
 )
