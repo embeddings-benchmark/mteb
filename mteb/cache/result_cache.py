@@ -51,10 +51,19 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
 
     from mteb._reversible_workflow.reversible_workflow import ReversibleAction
+    from mteb.abstasks.first_stage_predictions import RerankingConfiguration
     from mteb.types import ModelName, Revision
 
 logger = logging.getLogger(__name__)
 _EXPERIMENTS_FOLDER_NAME = "experiments"
+_RERANKING_FOLDER_NAME = "reranking"
+
+
+def _model_result_directory(directory: Path) -> Path:
+    """Find the model revision/experiment directory above a reranking context."""
+    if directory.parent.name == _RERANKING_FOLDER_NAME:
+        return directory.parent.parent
+    return directory
 
 
 def _get_package_versions() -> dict[str, str | None]:
@@ -118,7 +127,11 @@ class CopyResultsAction:
             dest_dir.mkdir(parents=True, exist_ok=True)
 
             for result_file in result_files:
-                dest_file = dest_dir / result_file.name
+                relative = result_file.relative_to(
+                    _model_result_directory(result_file.parent)
+                )
+                dest_file = dest_dir / relative
+                dest_file.parent.mkdir(parents=True, exist_ok=True)
                 if (
                     dest_file.exists()
                     and dest_file not in self._overwritten_file_contents
@@ -134,7 +147,11 @@ class CopyResultsAction:
                 logger.debug(f"Copied {result_file} to {dest_file}")
 
             # Copy model_meta.json if it exists in the source directory
-            source_model_dir = result_files[0].parent if result_files else None
+            source_model_dir = (
+                _model_result_directory(result_files[0].parent)
+                if result_files
+                else None
+            )
             if source_model_dir and source_model_dir.exists():
                 model_meta_file = source_model_dir / "model_meta.json"
                 if model_meta_file.exists():
@@ -269,6 +286,8 @@ class ResultCache:
         model_revision: str | None = None,
         remote: bool = False,
         experiment_name: str | None = None,
+        *,
+        reranking: RerankingConfiguration | None = None,
     ) -> Path:
         """Get the path to the results of a specific task for a specific model and revision.
 
@@ -277,6 +296,7 @@ class ResultCache:
             model_name: The name of the model as a valid directory name or a ModelMeta object.
             model_revision: The revision of the model. Must be specified if model_name is a string.
             remote: If True, it will return the path to the remote results repository, otherwise it will return the path to the local results repository.
+            reranking: First-stage configuration selecting a separate result directory.
             experiment_name: The name of the experiment as a valid directory name. If model_name is a ModelMeta object, its experiment_name will be used.
 
         Returns:
@@ -316,15 +336,12 @@ class ResultCache:
                     revisions.sort(key=lambda p: p.stat().st_mtime, reverse=True)
                 model_revision = revisions[0].name
 
+        directory = model_path / model_revision
         if experiment_name:
-            return (
-                model_path
-                / model_revision
-                / _EXPERIMENTS_FOLDER_NAME
-                / experiment_name
-                / f"{task_name}.json"
-            )
-        return model_path / model_revision / f"{task_name}.json"
+            directory /= Path(_EXPERIMENTS_FOLDER_NAME) / experiment_name
+        if reranking is not None:
+            directory /= Path(_RERANKING_FOLDER_NAME) / reranking.configuration_id
+        return directory / f"{task_name}.json"
 
     def load_task_result(
         self,
@@ -334,6 +351,7 @@ class ResultCache:
         raise_if_not_found: bool = False,
         prioritize_remote: bool = False,
         experiment_name: str | None = None,
+        reranking: RerankingConfiguration | None = None,
     ) -> TaskResult | None:
         """Load the results from the local cache directory.
 
@@ -343,6 +361,7 @@ class ResultCache:
             model_revision: The revision of the model. Must be specified if model_name is a string.
             raise_if_not_found: If True, raise an error if the results are not found.
             prioritize_remote: If True, it will first try to load the results from the remote repository, if available.
+            reranking: First-stage configuration to load; None selects ordinary results.
             experiment_name: Optional experiment folder name (a valid directory name). If None, the default is used.
 
         Returns:
@@ -353,6 +372,7 @@ class ResultCache:
             model_revision=model_revision,
             task_name=task_name,
             experiment_name=experiment_name,
+            reranking=reranking,
         )
 
         if self.has_remote:
@@ -362,6 +382,7 @@ class ResultCache:
                 task_name=task_name,
                 remote=True,
                 experiment_name=experiment_name,
+                reranking=reranking,
             )
             if (
                 remote_result_path.exists() and prioritize_remote
@@ -375,7 +396,12 @@ class ResultCache:
             logger.debug(msg)
             return None
 
-        return TaskResult.from_disk(result_path)
+        result = TaskResult.from_disk(result_path)
+        if result.reranking != reranking:
+            raise ValueError(
+                "Cached first-stage prediction provenance differs; use overwrite_strategy='always' to replace it."
+            )
+        return result
 
     def save_to_cache(
         self,
@@ -400,11 +426,14 @@ class ResultCache:
             model_name=model_name,
             model_revision=model_revision,
             task_name=task_result.task_name,
+            reranking=task_result.reranking,
         )
         result_path.parent.mkdir(parents=True, exist_ok=True)
         task_result.to_disk(result_path)
 
-        model_meta_path = result_path.parent / "model_meta.json"
+        model_meta_path = (
+            _model_result_directory(result_path.parent) / "model_meta.json"
+        )
         if isinstance(model_name, ModelMeta):
             meta = model_name
             with model_meta_path.open("w", encoding="utf-8") as f:
@@ -890,8 +919,10 @@ class ResultCache:
 
         def _get_paths(base_path: Path, experiments: LoadExperimentEnum) -> list[Path]:
             paths = _cache_paths(base_path)
+            paths += list(base_path.glob("*/*/reranking/*/*.json"))
             if experiments != LoadExperimentEnum.NO_EXPERIMENTS:
                 paths += _experiments_paths(base_path)
+                paths += list(base_path.glob("*/*/experiments/*/reranking/*/*.json"))
             return paths
 
         results_path = self.cache_path / "results"
@@ -911,7 +942,9 @@ class ResultCache:
 
         if require_model_meta:
             cache_paths = [
-                p for p in cache_paths if (p.parent / "model_meta.json").exists()
+                p
+                for p in cache_paths
+                if (_model_result_directory(p.parent) / "model_meta.json").exists()
             ]
         return cache_paths
 
@@ -936,7 +969,8 @@ class ResultCache:
             require_model_meta=require_model_meta,
             include_remote=include_remote,
         )
-        models = [(p.parent.parent.name, p.parent.name) for p in cache_paths]
+        directories = [_model_result_directory(path.parent) for path in cache_paths]
+        models = [(directory.parent.name, directory.name) for directory in directories]
         return list(set(models))
 
     def get_task_names(
@@ -983,6 +1017,7 @@ class ResultCache:
             (``results/<model>/<revision>/`` is unambiguous), falling back
             to the static ``MODEL_REGISTRY`` entry for ``model_meta``.
         """
+        revision_path = _model_result_directory(revision_path)
         model_meta_path = revision_path / "model_meta.json"
         if not model_meta_path.exists():
             if _EXPERIMENTS_FOLDER_NAME in revision_path.parts:
@@ -1033,7 +1068,8 @@ class ResultCache:
                 for m in models
             }
             model_name_and_revision = list()
-            for path in paths:
+            for result_path in paths:
+                path = _model_result_directory(result_path.parent) / result_path.name
                 if _EXPERIMENTS_FOLDER_NAME in path.parts:
                     revision = path.parent.parent.parent.name
                     model_name = path.parent.parent.parent.parent.name
@@ -1059,10 +1095,11 @@ class ResultCache:
         model_names = {m.replace("/", "__").replace(" ", "_") for m in str_models}
         filtered_paths = []
         for p in paths:
-            if _EXPERIMENTS_FOLDER_NAME in p.parts:
-                model_name = p.parent.parent.parent.parent.name
+            directory = _model_result_directory(p.parent)
+            if _EXPERIMENTS_FOLDER_NAME in directory.parts:
+                model_name = directory.parent.parent.parent.name
             else:
-                model_name = p.parent.parent.name
+                model_name = directory.parent.name
             if model_name in model_names:
                 filtered_paths.append(p)
         return filtered_paths
@@ -1431,6 +1468,18 @@ class ResultCache:
         model_metas: dict[tuple[ModelName, Revision, str | None], ModelMeta | None] = {}
         for path in paths:
             task_result = TaskResult.from_disk(path)
+            if path.parent.parent.name == _RERANKING_FOLDER_NAME:
+                if (
+                    task_result.reranking is None
+                    or task_result.reranking.configuration_id != path.parent.name
+                ):
+                    raise ValueError(
+                        f"Reranking configuration does not match result path: {path}"
+                    )
+            elif task_result.reranking is not None:
+                raise ValueError(
+                    f"Reranking result is outside its configuration directory: {path}"
+                )
 
             if only_main_score:
                 task_result = task_result.only_main_score()

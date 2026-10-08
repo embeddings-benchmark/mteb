@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-import json
 import logging
 from collections import defaultdict
-from pathlib import Path
+from copy import deepcopy
 from typing import TYPE_CHECKING, Any, Literal
 
 from datasets import Dataset, DatasetDict, concatenate_datasets
@@ -31,14 +30,20 @@ from ._statistics_calculation import (
     compute_black_or_white_image_flags,
 )
 from .abstask import AbsTask
+from .first_stage_predictions import (
+    FirstStagePredictionSource,
+    PredictionArtifact,
+    RerankingConfiguration,
+    load_first_stage_predictions,
+)
 from .retrieval_dataset_loaders import (
     RetrievalDatasetLoader,
     _combine_queries_with_instructions_datasets,
-    validate_reranking_candidates,
 )
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Mapping, Sequence
+    from pathlib import Path
     from typing import Self
 
     from mteb.models import (
@@ -50,7 +55,6 @@ if TYPE_CHECKING:
         Modalities,
         QueryDatasetType,
         RelevantDocumentsType,
-        RetrievalOutputType,
         ScoresDict,
     )
 
@@ -101,7 +105,14 @@ class AbsTaskRetrieval(AbsTask):
     _support_cross_encoder: bool = True
     _support_search: bool = True
     _previous_results_model_meta: dict[str, Any] | None = None
+    first_stage_predictions: Mapping[str, str | Path | FirstStagePredictionSource] = {}
+    _reranking_configuration: RerankingConfiguration | None = None
     skip_first_result: bool = False
+
+    @property
+    def reranking_configuration(self) -> RerankingConfiguration | None:
+        """Candidate provenance used to isolate converted evaluations in the cache."""
+        return deepcopy(self._reranking_configuration)
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
@@ -241,7 +252,6 @@ class AbsTaskRetrieval(AbsTask):
         eval_splits = self.eval_splits
         trust_remote_code = self.metadata.dataset.get("trust_remote_code", False)
         revision = self.metadata.dataset["revision"]
-        shared_data: dict[tuple[str, str], RetrievalSplitData] = {}
 
         def _process_data(split: str, hf_subset: str = "default") -> None:
             """Helper function to load and process data for a given split and language"""
@@ -251,29 +261,14 @@ class AbsTaskRetrieval(AbsTask):
             if hf_subset not in self.dataset:
                 self.dataset[hf_subset] = {}
 
-            loader = RetrievalDatasetLoader(
+            self.dataset[hf_subset][split] = RetrievalDatasetLoader(
                 hf_repo=dataset_path,
                 revision=revision,
                 trust_remote_code=trust_remote_code,
                 split=split,
                 config=hf_subset,
-            )
-            if self.metadata.reranking_subsets is None:
-                self.dataset[hf_subset][split] = loader.load(num_proc=num_proc)
-                return
-
-            data_subset = self.metadata.reranking_subsets[hf_subset]
-            key = (data_subset, split)
-            if key not in shared_data:
-                shared_data[key] = RetrievalDatasetLoader(
-                    hf_repo=dataset_path,
-                    revision=revision,
-                    trust_remote_code=trust_remote_code,
-                    split=split,
-                    config=data_subset,
-                ).load(num_proc=num_proc)
-            self.dataset[hf_subset][split] = loader.load_reranking(
-                shared_data[key], num_proc=num_proc
+            ).load(
+                num_proc=num_proc,
             )
 
         timer = timer or TimingStack()
@@ -453,7 +448,7 @@ class AbsTaskRetrieval(AbsTask):
             hf_subset=hf_subset,
         )
         logger.info("Running retrieval task - Finished.")
-        return make_score_dict(
+        scores = make_score_dict(
             ndcg=ndcg,
             _map=_map,
             recall=recall,
@@ -465,6 +460,7 @@ class AbsTaskRetrieval(AbsTask):
             task_scores=task_specific_scores,
             previous_results_model_meta=self._previous_results_model_meta,
         )
+        return scores
 
     def task_specific_scores(  # noqa: PLR6301
         self,
@@ -658,38 +654,6 @@ class AbsTaskRetrieval(AbsTask):
             top_ranked_statistics=top_ranked_statistics,
         )
 
-    def _shared_reranking_data(self) -> dict[str, dict[str, RetrievalSplitData]]:
-        """Validate shared data before any upload, avoiding silent data loss."""
-        if self.metadata.reranking_subsets is None:
-            return self.dataset
-
-        shared_data: dict[str, dict[str, RetrievalSplitData]] = {}
-        for subset, splits in self.dataset.items():
-            data_subset = self.metadata.reranking_subsets[subset]
-            for data in splits.values():
-                validate_reranking_candidates(data)
-            if data_subset not in shared_data:
-                shared_data[data_subset] = splits
-                continue
-            reference = shared_data[data_subset]
-            if reference.keys() != splits.keys():
-                raise ValueError(f"Shared data splits differ for {subset!r}.")
-            for split, data in splits.items():
-                for section in ("corpus", "queries"):
-                    # Fingerprints include row selection/order and transformations,
-                    # and comparing them does not decode image or audio columns.
-                    if (
-                        data[section]._fingerprint
-                        != reference[split][section]._fingerprint
-                    ):
-                        raise ValueError(
-                            f"Shared {section} differs for {subset!r}/{split!r}. "
-                            "Reuse the same Dataset for each retriever subset."
-                        )
-                if data["relevant_docs"] != reference[split]["relevant_docs"]:
-                    raise ValueError(f"Shared qrels differ for {subset!r}/{split!r}.")
-        return shared_data
-
     def _push_dataset_to_hub(
         self,
         repo_name: str,
@@ -697,7 +661,6 @@ class AbsTaskRetrieval(AbsTask):
         **kwargs: Any,
     ) -> None:
         self.convert_v1_dataset_format_to_v2(num_proc)
-        shared_data = self._shared_reranking_data()
 
         def _push_section(
             data: dict[str, RetrievalSplitData],
@@ -741,21 +704,21 @@ class AbsTaskRetrieval(AbsTask):
                     **kwargs,
                 )
 
-        for subset, data in shared_data.items():
+        for subset in self.dataset:
             logger.info(f"Converting {subset} of {self.metadata.name}")
             _push_section(
-                data,
+                self.dataset[subset],
                 "queries",
                 f"{subset}-queries" if subset != "default" else "queries",
             )
             _push_section(
-                data,
+                self.dataset[subset],
                 "corpus",
                 f"{subset}-corpus" if subset != "default" else "corpus",
             )
             # Handle relevant_docs separately since one entry expands to multiple records.
             relevant_sections = {}
-            for split, values in data.items():
+            for split, values in self.dataset[subset].items():
                 relevant_docs = values["relevant_docs"]
                 entries = []
                 for query_id, docs in relevant_docs.items():
@@ -773,10 +736,8 @@ class AbsTaskRetrieval(AbsTask):
                 f"{subset}-qrels" if subset != "default" else "qrels",
                 commit_message=f"Add {subset}-qrels",
                 num_proc=num_proc,
-                **kwargs,
             )
 
-        for subset in self.dataset:
             _push_section(
                 self.dataset[subset],
                 "top_ranked",
@@ -786,53 +747,80 @@ class AbsTaskRetrieval(AbsTask):
 
     def convert_to_reranking(
         self,
-        top_ranked_path: str | Path,
+        top_ranked_path: str | Path | None = None,
         top_k: int = 10,
+        *,
+        first_stage: str | None = None,
     ) -> Self:
-        """Converts a reranking task to re-ranking by loading predictions from previous model run where the `prediction_folder` was specified.
+        """Attach saved first-stage candidates to this task, preserving its subsets.
 
         Args:
-            top_ranked_path: Path to file or folder with the top ranked predictions.
-            top_k: Number of results to load.
+            top_ranked_path: Local prediction file or directory.
+            top_k: Maximum candidates per query.
+            first_stage: A name in ``first_stage_predictions``. Supply exactly one
+                of ``top_ranked_path`` or ``first_stage``.
 
-        Returns:
-            The current task reformulated as a reranking task
-
-        Raises:
-            FileNotFoundError: If the specified path does not exist.
-            ValueError: If the loaded top ranked results are not in the expected format.
+        Named sources may point to local files or pinned
+        ``FirstStagePredictionSource`` objects. Conversion mutates this task;
+        instantiate another task for a separate candidate source. ``evaluate``
+        saves converted runs under a separate ``reranking/<configuration-id>``
+        directory, with the source and exact prediction provenance on TaskResult.
         """
-        self._top_k = top_k
-
-        top_ranked_path = Path(top_ranked_path)
-        if top_ranked_path.is_dir():
-            top_ranked_path = self._predictions_path(top_ranked_path)
-
-        if not top_ranked_path.exists():
-            raise FileNotFoundError(
-                f"Can't find previous results for this task. File {top_ranked_path} does not exist."
+        if (top_ranked_path is None) == (first_stage is None):
+            raise ValueError("Supply exactly one of top_ranked_path or first_stage.")
+        if top_k <= 0:
+            raise ValueError("top_k must be positive.")
+        source: str | Path | FirstStagePredictionSource
+        if top_ranked_path is not None:
+            source = top_ranked_path
+        elif first_stage is not None and first_stage in self.first_stage_predictions:
+            source = self.first_stage_predictions[first_stage]
+        else:
+            raise ValueError(
+                f"Unknown first_stage {first_stage!r}. "
+                f"Available sources: {list(self.first_stage_predictions)}"
             )
-
-        with top_ranked_path.open("r", encoding="utf-8") as previous_results_file:
-            previous_results = json.load(previous_results_file)
-
+        predictions, digest = load_first_stage_predictions(
+            source, self.prediction_file_name
+        )
         if not self.data_loaded:
             self.load_data()
 
-        self._previous_results_model_meta = previous_results["mteb_model_meta"]
-
+        previous_model_meta = predictions["mteb_model_meta"]
+        converted = {}
         for subset in self.dataset:
             for split in self.dataset[subset]:
-                top_ranked: RetrievalOutputType = previous_results[subset][split]
+                top_ranked = predictions[subset][split]
                 if not isinstance(top_ranked, dict):
                     raise ValueError("Previous top ranked results is not a dictionary.")
 
                 top_k_sorted = defaultdict(list)
                 for query_id, values in top_ranked.items():
                     sorted_keys = sorted(values, key=lambda k: values[k], reverse=True)
-                    top_k_sorted[query_id] = sorted_keys[: self._top_k]
+                    top_k_sorted[query_id] = sorted_keys[:top_k]
 
-                self.dataset[subset][split]["top_ranked"] = top_k_sorted
+                converted[subset, split] = top_k_sorted
+
+        artifact = PredictionArtifact(sha256=digest)
+        if isinstance(source, FirstStagePredictionSource):
+            artifact.repo_id = source.repo_id
+            artifact.revision = source.revision
+            artifact.filename = source.filename
+        configuration = RerankingConfiguration(
+            first_stage=first_stage if first_stage is not None else "local",
+            top_k=top_k,
+            document_representation=(
+                source.document_representation
+                if isinstance(source, FirstStagePredictionSource)
+                else None
+            ),
+            predictions=artifact,
+        )
+        for (subset, split), candidates in converted.items():
+            self.dataset[subset][split]["top_ranked"] = candidates
+        self._top_k = top_k
+        self._previous_results_model_meta = previous_model_meta
+        self._reranking_configuration = configuration
         return self
 
 

@@ -24,6 +24,7 @@ from mteb._log_once import LogOnce
 from mteb._requires_package import _mteb_distribution
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.abstask import AbsTask
+from mteb.abstasks.first_stage_predictions import RerankingConfiguration
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.languages import LanguageScripts
 from mteb.models.model_meta import ScoringFunction
@@ -49,6 +50,19 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 log_once = LogOnce(logger)
+
+
+def _check_reranking_configuration(results: Iterable[TaskResult]) -> None:
+    configurations = {
+        result.reranking.configuration_id if result.reranking else None
+        for result in results
+    }
+    if len(configurations) > 1:
+        raise ValueError(
+            "Select one reranking configuration before summarising scores. "
+            "Use BenchmarkResults.filter_reranking(configuration_id), or export "
+            "all configurations with BenchmarkResults._to_dataset()."
+        )
 
 
 class Criteria(HelpfulStrEnum):
@@ -174,6 +188,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
     kg_co2_emissions: float | None = None
     date: datetime.datetime | None = None
     evaluation_phases: list[PhaseTiming] | None = None
+    reranking: RerankingConfiguration | None = None
 
     @classmethod
     def from_task_results(
@@ -232,6 +247,9 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             kg_co2_emissions=kg_co2_emissions,
             date=date,
             evaluation_phases=evaluation_phases,
+            reranking=getattr(task, "reranking_configuration", None)
+            if isinstance(task, AbsTask)
+            else None,
         )
 
     @field_validator("scores")
@@ -343,7 +361,9 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         Returns:
             The TaskResult as a dictionary.
         """
-        return self.model_dump()
+        return self.model_dump(
+            exclude={"reranking"} if self.reranking is None else None
+        )
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Self:
@@ -378,7 +398,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         Args:
             path: The path to the file to save.
         """
-        json_obj = self.model_dump()
+        json_obj = self.to_dict()
         json_obj["date"] = self.date.timestamp() if self.date else None
         self._round_scores(json_obj["scores"], 6)
 
@@ -553,8 +573,6 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         scripts: list[ISOLanguageScript] | None = None,
         getter: Callable[[ScoresDict], Score] = lambda scores: scores["main_score"],
         aggregation: Callable[[list[Score]], float] = np.mean,
-        *,
-        subsets: list[str] | None = None,
     ) -> float:
         """Get a score for the specified splits, languages, scripts and aggregation function.
 
@@ -564,7 +582,6 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             scripts: The scripts to consider.
             getter: A function that takes a scores dictionary and returns a score e.g. "main_score" or "evaluation_time".
             aggregation: The aggregation function to use.
-            subsets: Evaluation subsets to include, such as retriever names. None includes all subsets.
 
         Returns:
             The result of the aggregation function on the scores.
@@ -580,8 +597,6 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                 raise ValueError(f"Split {split} not found in scores")
 
             for scores in self.scores[split]:
-                if subsets is not None and scores["hf_subset"] not in subsets:
-                    continue
                 eval_langs = scores["languages"]
                 for lang in eval_langs:
                     if lang_scripts.contains_language(lang) and (
@@ -658,6 +673,8 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         Returns:
             The created TaskResult object.
         """
+        if isinstance(data.get("reranking"), dict):
+            data["reranking"] = RerankingConfiguration.model_validate(data["reranking"])
         return cls.model_construct(**data)
 
     def __repr__(self) -> str:
@@ -680,6 +697,10 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                         "languages": subset_scores.get("languages", []),
                     }
                 )
+                if "previous_results_model_meta" in subset_scores:
+                    new_scores[split][-1]["previous_results_model_meta"] = (
+                        subset_scores["previous_results_model_meta"]
+                    )
         new_res = {**self.to_dict(), "scores": new_scores}
         return TaskResult.from_validated(**new_res)
 
@@ -773,7 +794,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                     )
         data = self.model_dump()
         data["scores"] = new_scores
-        return type(self).model_construct(**data)
+        return type(self).from_validated(**data)
 
     def is_mergeable(
         self,
@@ -803,6 +824,18 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             revision = result.metadata.revision
         else:
             msg = "result must be a TaskResult or AbsTask object"
+            if raise_error:
+                raise ValueError(msg)
+            logger.debug(msg)
+            return False
+
+        reranking = (
+            result.reranking
+            if isinstance(result, TaskResult)
+            else getattr(result, "reranking_configuration", None)
+        )
+        if self.reranking != reranking:
+            msg = "Cannot merge results with different first-stage predictions or reranking configurations."
             if raise_error:
                 raise ValueError(msg)
             logger.debug(msg)
@@ -912,6 +945,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             kg_co2_emissions=merged_kg_co2_emissions,
             date=date,
             evaluation_phases=merged_evaluation_phases,
+            reranking=self.reranking,
         )
 
         return merged_results

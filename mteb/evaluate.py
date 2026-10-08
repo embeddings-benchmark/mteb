@@ -472,7 +472,11 @@ def _check_cache(
     # Load results from the cache if the overwrite strategy allows it
     existing_results: TaskResult | None = None
     if cache and overwrite_strategy != OverwriteStrategy.ALWAYS:
-        existing_results = cache.load_task_result(task.metadata.name, meta)
+        existing_results = cache.load_task_result(
+            task.metadata.name,
+            meta,
+            reranking=getattr(task, "reranking_configuration", None),
+        )
 
     dont_overwrite = overwrite_strategy in {
         OverwriteStrategy.NEVER,
@@ -623,6 +627,12 @@ def evaluate(  # noqa: PLR0913
     )
 
 
+def _has_reranking_candidates(task: AbsTask) -> bool:
+    if isinstance(task, AbsTaskAggregate):
+        return any(_has_reranking_candidates(child) for child in task.metadata.tasks)
+    return getattr(task, "reranking_configuration", None) is not None
+
+
 def _evaluate_resolved(  # noqa: PLR0913
     model: MTEBModels | ModelMeta,
     meta: ModelMeta,
@@ -642,6 +652,21 @@ def _evaluate_resolved(  # noqa: PLR0913
     timer: TimingStack | None,
 ) -> ModelResult:
     """Recursive core of `evaluate`, run against an already-sanitized model/meta."""
+    if (
+        isinstance(tasks, AbsTaskRetrieval)
+        and tasks.reranking_configuration is not None
+        and prediction_folder is not None
+    ):
+        prediction_folder = Path(prediction_folder)
+        if meta.experiment_name:
+            prediction_folder /= Path("experiments") / meta.experiment_name
+        prediction_folder /= (
+            Path("reranking") / tasks.reranking_configuration.configuration_id
+        )
+    if isinstance(tasks, AbsTaskAggregate) and _has_reranking_candidates(tasks):
+        raise ValueError(
+            "Evaluate converted child tasks individually, then select a first-stage configuration before aggregating results."
+        )
     # AbsTaskAggregate is a special case where we have to run multiple tasks and combine the results
     if isinstance(tasks, AbsTaskAggregate):
         existing_results, missing_eval = _check_cache(
@@ -660,6 +685,8 @@ def _evaluate_resolved(  # noqa: PLR0913
                 model_name=model_name,
                 model_revision=model_revision,
                 task_results=[existing_results],
+                experiment_name=meta.experiment_name,
+                model_meta=meta,
             )
 
         results = _evaluate_resolved(
@@ -696,6 +723,8 @@ def _evaluate_resolved(  # noqa: PLR0913
             model_revision=results.model_revision,
             task_results=[combined_results],
             exceptions=results.exceptions,
+            experiment_name=meta.experiment_name,
+            model_meta=meta,
         )
 
     if isinstance(tasks, AbsTask):
@@ -735,6 +764,8 @@ def _evaluate_resolved(  # noqa: PLR0913
             model_revision=_res.model_revision,
             task_results=evaluate_results,
             exceptions=exceptions,
+            experiment_name=meta.experiment_name,
+            model_meta=meta,
         )
 
     existing_results, missing_eval = _check_cache(task, meta, cache, overwrite_strategy)
@@ -752,6 +783,8 @@ def _evaluate_resolved(  # noqa: PLR0913
             model_name=model_name,
             model_revision=model_revision,
             task_results=[existing_results],
+            experiment_name=meta.experiment_name,
+            model_meta=meta,
         )
     if existing_results:
         logger.info(
@@ -807,6 +840,8 @@ def _evaluate_resolved(  # noqa: PLR0913
             model_revision=model_revision,
             task_results=[],
             exceptions=[result],
+            experiment_name=meta.experiment_name,
+            model_meta=meta,
         )
 
     if cache:
@@ -820,4 +855,6 @@ def _evaluate_resolved(  # noqa: PLR0913
         model_name=model_name,
         model_revision=model_revision,
         task_results=[result],
+        experiment_name=meta.experiment_name,
+        model_meta=meta,
     )

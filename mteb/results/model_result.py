@@ -20,7 +20,7 @@ from mteb._hf_integration.eval_result_model import (
 from mteb.benchmarks import Benchmark
 from mteb.models.model_meta import ModelMeta
 
-from .task_result import TaskError, TaskResult
+from .task_result import TaskError, TaskResult, _check_reranking_configuration
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterable, Sequence
@@ -224,6 +224,7 @@ class ModelResult(BaseModel):
         aggregation: Callable[[list[Score]], Any] | None = None,
         output_format: Literal["wide", "long"] = "wide",
     ) -> dict[str, float] | list[dict[str, str | float | None]]:
+        _check_reranking_configuration(self.task_results)
         if (getter is not None) or (aggregation is not None) or (scripts is not None):
             use_fast = False
             getter = (
@@ -352,6 +353,7 @@ class ModelResult(BaseModel):
         Returns:
             A DataFrame with the scores for all models and tasks.
         """
+        _check_reranking_configuration(self.task_results)
         scores_data = self._get_score_for_table()
 
         if not scores_data:
