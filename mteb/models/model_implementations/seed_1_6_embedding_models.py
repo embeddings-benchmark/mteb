@@ -9,8 +9,6 @@ from io import BytesIO
 from typing import TYPE_CHECKING, Any
 
 import requests
-import torch
-from torch.utils.data import DataLoader
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_implementations.bge_models import bge_chinese_training_data
@@ -21,7 +19,9 @@ from mteb.types import PromptType
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
+    import torch
     from PIL import Image
+    from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput
@@ -96,6 +96,8 @@ def multimodal_embedding(
 def multi_thread_encode(
     sentences: list[str], batch_size: int = 1, max_workers: int = 8
 ) -> torch.Tensor:
+    import torch
+
     batches = []
     for idx in range(0, len(sentences), batch_size):
         batches.append((idx // batch_size, sentences[idx : idx + batch_size]))
@@ -196,6 +198,8 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         batch_size: int = 32,
     ) -> Array:
+        import torch
+
         trimmed_sentences = []
         for sentence in sentences:
             encoded_sentence = self._encoding.encode(sentence)
@@ -236,7 +240,9 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         batch_size: int = 32,
         **kwargs: Any,
     ) -> Array:
+        import torch
         import torchvision.transforms.functional as F
+        from torch.utils.data import DataLoader
 
         if (
             self._embed_dim is not None
@@ -284,6 +290,8 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         fusion_mode: str = "sum",
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         if (
             self._embed_dim is not None
             and self._embed_dim not in self._available_embed_dims

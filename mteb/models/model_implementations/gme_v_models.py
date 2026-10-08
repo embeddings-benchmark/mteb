@@ -1,11 +1,11 @@
 from __future__ import annotations
 
+import functools
 import logging
 import math
 import warnings
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.autonotebook import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -13,6 +13,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    import torch
     from PIL import Image
     from torch.utils.data import DataLoader
     from transformers import PreTrainedModel, ProcessorMixin
@@ -33,111 +34,122 @@ GME_CITATION = """@misc{zhang2024gme,
 }"""
 
 
-class Encoder(torch.nn.Module):
-    def __init__(
-        self,
-        base: PreTrainedModel,
-        processor: ProcessorMixin,
-        max_length: int = 1800,
-        normalize: bool = True,
-    ) -> None:
-        super().__init__()
-        self.base = base
-        self.processor = processor
-        self.max_length = max_length
-        self.normalize = normalize
-        self.processor.tokenizer.padding_side = "right"
-        self.default_instruction = "You are a helpful assistant."
+@functools.cache
+def _encoder_class() -> type[torch.nn.Module]:
+    """Build the `Encoder` module class.
 
-    def forward(
-        self,
-        input_ids: torch.LongTensor | None = None,
-        attention_mask: torch.Tensor | None = None,
-        position_ids: torch.LongTensor | None = None,
-        past_key_values: list[torch.FloatTensor] | None = None,
-        inputs_embeds: torch.FloatTensor | None = None,
-        pixel_values: torch.Tensor | None = None,
-        # pixel_values_videos: torch.FloatTensor | None = None,
-        image_grid_thw: torch.LongTensor | None = None,
-        # video_grid_thw: torch.LongTensor | None = None,
-        pooling_mask: torch.LongTensor | None = None,
-        **kwargs: Any,
-    ) -> torch.Tensor:
-        if inputs_embeds is None:
-            inputs_embeds = self.base.model.embed_tokens(input_ids)
-            if pixel_values is not None:
-                pixel_values = pixel_values.type(self.base.visual.get_dtype())
-                image_embeds = self.base.visual(
-                    pixel_values, grid_thw=image_grid_thw
-                ).to(inputs_embeds.device)
-                image_mask = input_ids == self.base.config.image_token_id
-                inputs_embeds[image_mask] = image_embeds
-            # if pixel_values_videos is not None:
-            #     pixel_values_videos = pixel_values_videos.type(self.base.visual.get_dtype())
-            #     video_embeds = self.base.visual(pixel_values_videos, grid_thw=video_grid_thw).to(inputs_embeds.device)
-            #     video_mask = input_ids == self.base.config.video_token_id
-            #     inputs_embeds[video_mask] = video_embeds
-            if attention_mask is not None:
-                attention_mask = attention_mask.to(inputs_embeds.device)
+    Subclassing `torch.nn.Module` runs at import time, so the class is created on first use instead.
+    Cached, so every model instance shares one class.
+    """
+    import torch
 
-        outputs = self.base.model(
-            input_ids=None,
-            position_ids=position_ids,
-            attention_mask=attention_mask,
-            past_key_values=past_key_values,
-            inputs_embeds=inputs_embeds,
-        )
+    class Encoder(torch.nn.Module):
+        def __init__(
+            self,
+            base: PreTrainedModel,
+            processor: ProcessorMixin,
+            max_length: int = 1800,
+            normalize: bool = True,
+        ) -> None:
+            super().__init__()
+            self.base = base
+            self.processor = processor
+            self.max_length = max_length
+            self.normalize = normalize
+            self.processor.tokenizer.padding_side = "right"
+            self.default_instruction = "You are a helpful assistant."
 
-        pooling_mask = attention_mask if pooling_mask is None else pooling_mask
-        left_padding = pooling_mask[:, -1].sum() == pooling_mask.shape[0]  # TODO
-        if left_padding:
-            embeddings = outputs.last_hidden_state[:, -1]
-        else:
-            sequence_lengths = pooling_mask.sum(dim=1) - 1
-            batch_size = outputs.last_hidden_state.shape[0]
-            embeddings = outputs.last_hidden_state[
-                torch.arange(batch_size, device=outputs.last_hidden_state.device),
-                sequence_lengths,
-            ]
-        if self.normalize:
-            embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=1)
-        return embeddings.contiguous()
+        def forward(
+            self,
+            input_ids: torch.LongTensor | None = None,
+            attention_mask: torch.Tensor | None = None,
+            position_ids: torch.LongTensor | None = None,
+            past_key_values: list[torch.FloatTensor] | None = None,
+            inputs_embeds: torch.FloatTensor | None = None,
+            pixel_values: torch.Tensor | None = None,
+            # pixel_values_videos: torch.FloatTensor | None = None,
+            image_grid_thw: torch.LongTensor | None = None,
+            # video_grid_thw: torch.LongTensor | None = None,
+            pooling_mask: torch.LongTensor | None = None,
+            **kwargs: Any,
+        ) -> torch.Tensor:
+            if inputs_embeds is None:
+                inputs_embeds = self.base.model.embed_tokens(input_ids)
+                if pixel_values is not None:
+                    pixel_values = pixel_values.type(self.base.visual.get_dtype())
+                    image_embeds = self.base.visual(
+                        pixel_values, grid_thw=image_grid_thw
+                    ).to(inputs_embeds.device)
+                    image_mask = input_ids == self.base.config.image_token_id
+                    inputs_embeds[image_mask] = image_embeds
+                # if pixel_values_videos is not None:
+                #     pixel_values_videos = pixel_values_videos.type(self.base.visual.get_dtype())
+                #     video_embeds = self.base.visual(pixel_values_videos, grid_thw=video_grid_thw).to(inputs_embeds.device)
+                #     video_mask = input_ids == self.base.config.video_token_id
+                #     inputs_embeds[video_mask] = video_embeds
+                if attention_mask is not None:
+                    attention_mask = attention_mask.to(inputs_embeds.device)
 
-    def embed(
-        self,
-        texts: list[str],
-        images: list[Image.Image],
-        device: str,
-        instruction: str | None = None,
-        **kwargs: Any,
-    ) -> torch.Tensor:
-        instruction = instruction or self.default_instruction
-        # Inputs must be batched
-        input_texts, input_images = [], []
-        for t, i in zip(texts, images, strict=True):
-            input_str = ""
-            if i is None:
-                input_images = None  # All examples in the same batch are consistent
+            outputs = self.base.model(
+                input_ids=None,
+                position_ids=position_ids,
+                attention_mask=attention_mask,
+                past_key_values=past_key_values,
+                inputs_embeds=inputs_embeds,
+            )
+
+            pooling_mask = attention_mask if pooling_mask is None else pooling_mask
+            left_padding = pooling_mask[:, -1].sum() == pooling_mask.shape[0]  # TODO
+            if left_padding:
+                embeddings = outputs.last_hidden_state[:, -1]
             else:
-                input_str += "<|vision_start|><|image_pad|><|vision_end|>"
-                i = fetch_image(i)  # noqa: PLW2901
-                input_images.append(i)
-            if t is not None:
-                input_str += t
-            msg = f"<|im_start|>system\n{instruction}<|im_end|>\n<|im_start|>user\n{input_str}<|im_end|>\n<|im_start|>assistant\n<|endoftext|>"
-            input_texts.append(msg)
+                sequence_lengths = pooling_mask.sum(dim=1) - 1
+                batch_size = outputs.last_hidden_state.shape[0]
+                embeddings = outputs.last_hidden_state[
+                    torch.arange(batch_size, device=outputs.last_hidden_state.device),
+                    sequence_lengths,
+                ]
+            if self.normalize:
+                embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=1)
+            return embeddings.contiguous()
 
-        inputs = self.processor(
-            text=input_texts,
-            images=input_images,
-            padding=True,
-            truncation=True,
-            max_length=self.max_length,
-            return_tensors="pt",
-        )
-        inputs = {k: v.to(device) for k, v in inputs.items()}  # TODO
-        embeddings = self.forward(**inputs)
-        return embeddings
+        def embed(
+            self,
+            texts: list[str],
+            images: list[Image.Image],
+            device: str,
+            instruction: str | None = None,
+            **kwargs: Any,
+        ) -> torch.Tensor:
+            instruction = instruction or self.default_instruction
+            # Inputs must be batched
+            input_texts, input_images = [], []
+            for t, i in zip(texts, images, strict=True):
+                input_str = ""
+                if i is None:
+                    input_images = None  # All examples in the same batch are consistent
+                else:
+                    input_str += "<|vision_start|><|image_pad|><|vision_end|>"
+                    i = fetch_image(i)  # noqa: PLW2901
+                    input_images.append(i)
+                if t is not None:
+                    input_str += t
+                msg = f"<|im_start|>system\n{instruction}<|im_end|>\n<|im_start|>user\n{input_str}<|im_end|>\n<|im_start|>assistant\n<|endoftext|>"
+                input_texts.append(msg)
+
+            inputs = self.processor(
+                text=input_texts,
+                images=input_images,
+                padding=True,
+                truncation=True,
+                max_length=self.max_length,
+                return_tensors="pt",
+            )
+            inputs = {k: v.to(device) for k, v in inputs.items()}  # TODO
+            embeddings = self.forward(**inputs)
+            return embeddings
+
+    return Encoder
 
 
 class GmeQwen2VL(AbsEncoder):
@@ -146,12 +158,17 @@ class GmeQwen2VL(AbsEncoder):
         model_name: str,
         revision: str,
         model_path: str | None = None,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         min_image_tokens: int = 4,
         max_image_tokens: int = 1280,
         max_length: int = 1800,
         **kwargs: Any,
     ) -> None:
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         from transformers import AutoModelForVision2Seq, AutoProcessor
 
         model_name = model_path or model_name
@@ -167,7 +184,7 @@ class GmeQwen2VL(AbsEncoder):
             max_pixels=max_pixels,
             **kwargs,
         )
-        self.model = Encoder(base, processor, max_length=max_length)
+        self.model = _encoder_class()(base, processor, max_length=max_length)
         self.model.eval()
         self.device = device
         self.sep = " "
@@ -183,6 +200,8 @@ class GmeQwen2VL(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         instruction = self.get_instruction(task_metadata, prompt_type)
         if prompt_type == PromptType.document:
             instruction = None

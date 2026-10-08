@@ -190,7 +190,7 @@ When using a benchmark from MTEB please cite `mteb` along with the citations of 
 
 ## Selecting a Task
 
-`mteb` comes with the utility function [`get_task`](../../api/task.md#mteb.get_task) and [`get_tasks`](../../api/task.md#mteb.get_tasks) for fetching and analysing the tasks of interest.
+`mteb` comes with the utility function [`get_task`](../../api/task.md#mteb.get_task) and [`get_tasks`](../../api/task.md#mteb.get_tasks.get_tasks) for fetching and analysing the tasks of interest.
 
 This can be done in multiple ways, e.g.:
 

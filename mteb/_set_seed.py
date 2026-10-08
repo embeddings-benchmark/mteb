@@ -3,14 +3,10 @@
 Derived from `transformers.trainer_utils.set_seed`.
 """
 
-import logging
 import random
+import sys
 
 import numpy as np
-
-from mteb._requires_package import _is_package_available
-
-logger = logging.getLogger(__name__)
 
 
 def _set_seed(seed: int) -> tuple[random.Random, np.random.Generator]:
@@ -23,6 +19,9 @@ def _set_seed(seed: int) -> tuple[random.Random, np.random.Generator]:
     set_seed(seed)
     ```
 
+    Torch and tensorflow are only seeded if they are already imported, as tasks are created (and seeded) when
+    `mteb` is imported. Evaluators seed again when they are created, after the model is loaded.
+
     Args:
         seed: The seed to set.
 
@@ -32,24 +31,16 @@ def _set_seed(seed: int) -> tuple[random.Random, np.random.Generator]:
     random.seed(seed)
     np.random.seed(seed)  # noqa: NPY002
 
-    # `AbsTask.__init__` seeds every task it constructs, and `get_tasks()` constructs them all, so
-    # this runs on the metadata-only path too. Checking availability rather than catching
-    # ImportError means an installed-but-broken torch still raises instead of silently leaving the
-    # run unseeded.
-    if _is_package_available("torch"):
+    if "torch" in sys.modules:
         import torch
 
         torch.manual_seed(seed)
         torch.cuda.manual_seed_all(seed)
         # ^^ safe to call this function even if cuda is not available
-    else:
-        logger.debug("torch is not installed; skipping torch seeding.")
 
-    try:
+    if "tensorflow" in sys.modules:
         import tensorflow as tf
 
         tf.random.set_seed(seed)
-    except ImportError:
-        pass  # not installed
 
     return random.Random(seed), np.random.default_rng(seed)

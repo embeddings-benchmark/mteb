@@ -25,12 +25,13 @@ class SyntecReranking(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{ciancone2024extending,
+@misc{ciancone2024mteb,
   archiveprefix = {arXiv},
   author = {Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
   eprint = {2405.20468},
   primaryclass = {cs.CL},
-  title = {Extending the Massive Text Embedding Benchmark to French},
+  title = {MTEB-French: Resources for French Sentence Embedding Evaluation and Analysis},
+  url = {https://arxiv.org/abs/2405.20468},
   year = {2024},
 }
 """,

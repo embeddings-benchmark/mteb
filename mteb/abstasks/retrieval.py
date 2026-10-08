@@ -8,11 +8,7 @@ from typing import TYPE_CHECKING, Any, Literal
 
 from datasets import Dataset, DatasetDict, concatenate_datasets
 
-from mteb._create_dataloaders import (
-    _combine_queries_with_instruction_text,
-    _convert_conv_history_to_query,
-    _corpus_to_dict,
-)
+from mteb._create_dataloaders import _retrieval_texts
 from mteb._evaluators import RetrievalEvaluator
 from mteb._evaluators.retrieval_metrics import make_score_dict
 from mteb.models import (
@@ -32,6 +28,7 @@ from ._statistics_calculation import (
     calculate_relevant_docs_statistics,
     calculate_single_input_modality_statistics,
     calculate_top_ranked_statistics,
+    compute_black_or_white_image_flags,
 )
 from .abstask import AbsTask
 from .retrieval_dataset_loaders import (
@@ -41,8 +38,7 @@ from .retrieval_dataset_loaders import (
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Mapping, Sequence
-
-    from typing_extensions import Self
+    from typing import Self
 
     from mteb.models import (
         MTEBModels,
@@ -282,18 +278,11 @@ class AbsTaskRetrieval(AbsTask):
     def _get_content_columns(self) -> dict[str, Modalities]:
         """The corpus and query columns holding the documents, mapped to their modality.
 
-        Retrieval stores each modality in a column named after the modality itself. Text also carries an optional
-        `title`, which is part of the document: a corpus entry is encoded as `"{title} {text}"`. Queries have no
-        title, so a filter compares whichever of these columns the corpus and the queries actually have.
+        Retrieval stores each modality in a column named after the modality itself. `text` stands for the text the
+        model reads, which for a document includes its optional `title` and for a query its instruction. The corpus
+        and the queries are each compared on the modalities the task's category gives them.
         """
-        columns: dict[str, Modalities] = {}
-        for modality in self.metadata.modalities:
-            if modality == "text":
-                columns["title"] = "text"
-                columns["text"] = "text"
-            else:
-                columns[modality] = modality
-        return columns
+        return {modality: modality for modality in self.metadata.modalities}
 
     def evaluate(
         self,
@@ -495,13 +484,15 @@ class AbsTaskRetrieval(AbsTask):
             relevant_docs = split_data["relevant_docs"]
             top_ranked = split_data["top_ranked"]
             query_ids = set(queries["id"])
-            corpus_ids = set(corpus["id"])
+            corpus_id_list = list(corpus["id"])
+            corpus_ids = set(corpus_id_list)
         elif compute_overall:
             queries = None
             corpus = None
             relevant_docs = {}
             top_ranked = {}
             query_ids = set()
+            corpus_id_list = []
             corpus_ids = set()
             for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
                 split_data = self.dataset[hf_subset][split]
@@ -518,10 +509,12 @@ class AbsTaskRetrieval(AbsTask):
                     f"{split}_{hf_subset}_{query_id}"
                     for query_id in split_data["queries"]["id"]
                 )
-                corpus_ids.update(
+                prefixed_corpus_ids = [
                     f"{split}_{hf_subset}_{corpus_id}"
                     for corpus_id in split_data["corpus"]["id"]
-                )
+                ]
+                corpus_id_list.extend(prefixed_corpus_ids)
+                corpus_ids.update(prefixed_corpus_ids)
                 relevant_docs.update(
                     _process_relevant_docs(
                         split_data["relevant_docs"], hf_subset, split
@@ -546,7 +539,8 @@ class AbsTaskRetrieval(AbsTask):
             relevant_docs = split_data["relevant_docs"]
             top_ranked = split_data["top_ranked"]
             query_ids = set(queries["id"])
-            corpus_ids = set(corpus["id"])
+            corpus_id_list = list(corpus["id"])
+            corpus_ids = set(corpus_id_list)
 
         num_documents = len(corpus)
         num_queries = len(queries)
@@ -565,7 +559,7 @@ class AbsTaskRetrieval(AbsTask):
         # Build corpus col_inputs — text needs special mapping from the corpus dict format.
         corpus_col_inputs: dict[Modalities, list[Any]] = {}
         if "text" in corpus_modalities:
-            corpus_col_inputs["text"] = corpus.map(_corpus_to_dict)["text"]
+            corpus_col_inputs["text"] = _retrieval_texts(corpus, PromptType.document)
         if "image" in corpus_modalities:
             corpus_col_inputs["image"] = corpus["image"]
         if "audio" in corpus_modalities:
@@ -576,12 +570,7 @@ class AbsTaskRetrieval(AbsTask):
         # Build queries col_inputs — text may need instruction/conversation transformations.
         queries_col_inputs: dict[Modalities, list[Any]] = {}
         if "text" in queries_modalities:
-            queries_ = queries
-            if "instruction" in queries_[0]:
-                queries_ = _combine_queries_with_instruction_text(queries_)
-            if isinstance(queries_["text"][0], dict | list):
-                queries_ = queries_.map(_convert_conv_history_to_query)
-            queries_col_inputs["text"] = queries_["text"]
+            queries_col_inputs["text"] = _retrieval_texts(queries, PromptType.query)
         if "image" in queries_modalities:
             queries_col_inputs["image"] = queries["image"]
         if "audio" in queries_modalities:
@@ -589,8 +578,29 @@ class AbsTaskRetrieval(AbsTask):
         if "video" in queries_modalities:
             queries_col_inputs["video"] = queries["video"]
 
+        black_or_white_image_flags = (
+            compute_black_or_white_image_flags(
+                corpus_col_inputs["image"], max_workers=num_proc
+            )
+            if "image" in corpus_col_inputs
+            else None
+        )
+        black_or_white_doc_ids = (
+            {
+                doc_id
+                for doc_id, is_black_or_white in zip(
+                    corpus_id_list, black_or_white_image_flags, strict=True
+                )
+                if is_black_or_white
+            }
+            if black_or_white_image_flags is not None
+            else None
+        )
+
         corpus_stats = calculate_single_input_modality_statistics(
-            corpus_col_inputs, max_workers=num_proc
+            corpus_col_inputs,
+            image_black_or_white_flags=black_or_white_image_flags,
+            max_workers=num_proc,
         )
         queries_stats = calculate_single_input_modality_statistics(
             queries_col_inputs, max_workers=num_proc
@@ -606,7 +616,7 @@ class AbsTaskRetrieval(AbsTask):
         )
 
         relevant_docs_statistics = calculate_relevant_docs_statistics(
-            relevant_docs, query_ids, corpus_ids
+            relevant_docs, query_ids, corpus_ids, black_or_white_doc_ids
         )
         top_ranked_statistics = (
             calculate_top_ranked_statistics(top_ranked, num_queries)
@@ -751,7 +761,7 @@ class AbsTaskRetrieval(AbsTask):
                 f"Can't find previous results for this task. File {top_ranked_path} does not exist."
             )
 
-        with top_ranked_path.open("r") as previous_results_file:
+        with top_ranked_path.open("r", encoding="utf-8") as previous_results_file:
             previous_results = json.load(previous_results_file)
 
         if not self.data_loaded:

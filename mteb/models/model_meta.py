@@ -13,7 +13,7 @@ from collections.abc import Callable, Mapping, Sequence
 from dataclasses import field
 from enum import Enum
 from functools import partial
-from importlib.metadata import PackageNotFoundError, distribution, requires
+from importlib.metadata import PackageNotFoundError
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, cast
 
@@ -41,6 +41,7 @@ from mteb._hf_integration.hf_hub_utils import (
     _get_repo_commits,
     _repo_exists,
 )
+from mteb._requires_package import _mteb_distribution
 from mteb.languages import check_language_code
 from mteb.languages.iso_mappings import _hf_langs_to_iso_lang_scripts
 from mteb.models.models_protocols import MTEBModels
@@ -55,15 +56,16 @@ from mteb.types import (
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
+    from typing import Self
 
     from sentence_transformers import (
         CrossEncoder,
         CrossEncoderModelCardData,
+        MultiVectorEncoder,
         SentenceTransformer,
         SentenceTransformerModelCardData,
+        SparseEncoder,
     )
-    from sentence_transformers.sparse_encoder import SparseEncoder
-    from typing_extensions import Self
 
     from mteb.abstasks import AbsTask
     from mteb.benchmarks.benchmark import Benchmark
@@ -214,7 +216,9 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             in the Latin script.
         use_instructions: Whether the model uses instructions E.g. for prompt-based models. This also includes models that require a specific format for
             input, such as "query: {document}" or "passage: {document}".
-        citation: The citation for the model. This is a bibtex string.
+        citation: The citation for the model, as a BibTeX string. As non-existing citations can cause
+            authors citing the work to be penalized, leave it out if the model has no article to cite,
+            rather than citing e.g. its model card. It is allowed to cite multiple articles.
         training_datasets: A dictionary of datasets that the model was trained on. Names should be names as their appear in `mteb` for example
             {"ArguAna"} if the model is trained on the ArguAna test set. This field is used to determine if a model generalizes zero-shot to
             a benchmark as well as mark dataset contaminations.
@@ -515,12 +519,15 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             updates["embed_dim"] = embed_dim
             kwargs["embed_dim"] = embed_dim
 
-        merged_exp_kwargs = {**base_exp_kwargs, **kwargs} if kwargs else base_exp_kwargs
-        updates["experiment_kwargs"] = merged_exp_kwargs or None
+        merged_kwargs = {**base_exp_kwargs, **kwargs} if kwargs else base_exp_kwargs
+        meaningful_exp_kwargs = {
+            k: v for k, v in merged_kwargs.items() if _has_meaningful_value(v)
+        }
+        updates["experiment_kwargs"] = meaningful_exp_kwargs or None
 
         # Allow overwrites
         _kwargs = _self.loader_kwargs.copy()
-        _kwargs.update(merged_exp_kwargs)
+        _kwargs.update(merged_kwargs)
         if device is not None:
             _kwargs["device"] = device
 
@@ -572,7 +579,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
     def _validate_extras_groups(groups: Sequence[str]) -> None:
         """Raise if any group is not a valid mteb extra."""
         available_extras = set(
-            distribution("mteb").metadata.get_all("Provides-Extra") or []
+            _mteb_distribution().metadata.get_all("Provides-Extra") or []
         )
 
         def _norm(s: str) -> str:
@@ -591,7 +598,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         """Return the requirement strings of the given groups that are not satisfied."""
         missing_dependencies = []
 
-        mteb_requires = requires("mteb")
+        mteb_requires = _mteb_distribution().requires
         if mteb_requires is None:
             raise RuntimeError(
                 "Could not retrieve mteb package requirements. Make sure mteb is installed properly."
@@ -755,18 +762,25 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         - SentenceTransformer  → SentenceTransformerEncoderWrapper
         - CrossEncoder         → CrossEncoderWrapper
         - SparseEncoder        → SparseEncoderWrapper
+        - MultiVectorEncoder   → MultiVectorWrapper
         """
         from mteb.models import (
             CrossEncoderWrapper,
+            MultiVectorWrapper,
             SentenceTransformerEncoderWrapper,
             SparseEncoderWrapper,
         )
 
         st_model_type = config_sbert.get("model_type") if config_sbert else None
+        # "ColBERT" is the legacy PyLate v3 spelling; sentence-transformers' MultiVectorEncoder
+        # itself normalizes it the same way when reading config_sentence_transformers.json.
+        if st_model_type == "ColBERT":
+            st_model_type = "MultiVectorEncoder"
         if st_model_type not in {
             "SentenceTransformer",
             "CrossEncoder",
             "SparseEncoder",
+            "MultiVectorEncoder",
         }:
             if cls._modules_indicate_sparse_encoder(modules_config):
                 st_model_type = "SparseEncoder"
@@ -786,6 +800,8 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             return CrossEncoderWrapper, "cross-encoder", modalities
         if st_model_type == "SparseEncoder":
             return SparseEncoderWrapper, "sparse", modalities
+        if st_model_type == "MultiVectorEncoder":
+            return MultiVectorWrapper, "late-interaction", modalities
         if st_model_type == "SentenceTransformer":
             return SentenceTransformerEncoderWrapper, "dense", modalities
         raise ValueError("Unsupported model type")
@@ -1013,6 +1029,32 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         )
 
     @classmethod
+    def _from_multi_vector_encoder_model(cls, model: MultiVectorEncoder) -> Self:
+        """Generates a ModelMeta from only a MultiVectorEncoder model, without fetching any additional metadata from HuggingFace Hub."""
+        from mteb.models import MultiVectorWrapper
+
+        name: str | None = (
+            model.model_card_data.model_name
+            if model.model_card_data.model_name
+            else model.model_card_data.base_model
+        )
+        return cls.create_empty(
+            overwrites=dict(
+                name=name,
+                revision=model.model_card_data.base_model_revision,
+                loader=MultiVectorWrapper,
+                max_tokens=model.get_max_seq_length(),
+                embed_dim=model.get_embedding_dimension(),
+                similarity_fn_name=ScoringFunction.MAX_SIM,
+                framework=["Sentence Transformers", "PyTorch"],
+                model_type=["late-interaction"],
+                adapted_from=_get_source_model(model.model_card_data)  # type: ignore[arg-type]
+                if hasattr(model, "model_card_data")
+                else None,
+            )
+        )
+
+    @classmethod
     def _from_hub(  # noqa: PLR0914
         cls,
         model_name: str,
@@ -1095,12 +1137,15 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         config_sbert = _get_json_from_hub(
             model_name, "config_sentence_transformers.json", "model", revision=revision
         )
-        similarity_fn_name = (
-            ScoringFunction.from_str(config_sbert["similarity_fn_name"])
-            if config_sbert is not None
+        similarity_fn_name = ScoringFunction.COSINE
+        if (
+            config_sbert is not None
             and config_sbert.get("similarity_fn_name") is not None
-            else ScoringFunction.COSINE
-        )
+        ):
+            sbert_similarity_fn_name = config_sbert["similarity_fn_name"]
+            if sbert_similarity_fn_name in {"maxsim", "meanmaxsim"}:
+                sbert_similarity_fn_name = ScoringFunction.MAX_SIM.value
+            similarity_fn_name = ScoringFunction.from_str(sbert_similarity_fn_name)
 
         return cls.create_empty(
             overwrites=dict(
@@ -1290,6 +1335,38 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             if meta.name is None:
                 logger.warning(
                     "Model name is not set in metadata extracted from SparseEncoder model. Cannot fetch additional metadata from HuggingFace Hub."
+                )
+            else:
+                name = meta.name
+                meta_hub = cls._from_hub(name, revision)
+                # prioritize metadata from the model card but fill missing fields from the hub
+                meta = meta_hub.merge(meta)
+
+        return meta
+
+    @classmethod
+    def from_multi_vector_encoder_model(
+        cls,
+        model: MultiVectorEncoder,
+        revision: str | None = None,
+        fetch_from_hf: bool = False,
+    ) -> Self:
+        """Generates a ModelMeta from a MultiVectorEncoder model.
+
+        Args:
+            model: MultiVectorEncoder model.
+            revision: Revision of the model.
+            fetch_from_hf: Whether to fetch additional metadata from HuggingFace Hub based on the model name. If False, only metadata that can be
+                extracted from the MultiVectorEncoder model will be used.
+
+        Returns:
+            The generated ModelMeta.
+        """
+        meta = cls._from_multi_vector_encoder_model(model)
+        if fetch_from_hf:
+            if meta.name is None:
+                logger.warning(
+                    "Model name is not set in metadata extracted from MultiVectorEncoder model. Cannot fetch additional metadata from HuggingFace Hub."
                 )
             else:
                 name = meta.name
@@ -1845,6 +1922,34 @@ def _collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
             similar.update(_collect_similar_tasks(parent, visited))
 
     return similar
+
+
+def _merge_precision_into_experiment_kwargs(
+    experiment_kwargs: Mapping[str, Any] | None,
+    encode_kwargs: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Fold a ``precision`` encode kwarg into ``experiment_kwargs["output_dtypes"]``.
+
+    ``precision`` is forwarded to ``encode`` and changes the dtype of the produced
+    embeddings, so it must be folded into the same experiment namespace.
+    """
+    merged = dict(experiment_kwargs) if experiment_kwargs else {}
+    precision = encode_kwargs.get("precision")
+    if precision is not None:
+        merged["output_dtypes"] = OutputDType.from_str(precision).value
+    return merged
+
+
+def _has_meaningful_value(value: Any) -> bool:  # noqa: ANN401
+    """``False`` for ``None`` or an empty collection (dict/list/tuple/set/str).
+
+    Filters out no-op values like ``model_kwargs={}`` while keeping meaningful.
+    """
+    if value is None:
+        return False
+    if isinstance(value, (dict, list, tuple, set, str)):
+        return len(value) > 0
+    return True
 
 
 def _serialize_experiment_kwargs_to_name(

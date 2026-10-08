@@ -26,12 +26,6 @@ elephant_embeddings_v1_text_small = ModelMeta(
     training_datasets=bge_m3_training_data,
     public_training_code=None,
     public_training_data=None,
-    citation="""@misc{mmbert-embed-2d-matryoshka,
-  title={mmBERT-Embed: Multilingual Embedding Model with 2D Matryoshka Training},
-  author={vLLM Semantic Router Team},
-  year={2025},
-  url={https://huggingface.co/llm-semantic-router/mmbert-embed-32k-2d-matryoshka}
-}""",
 )
 
 mmbert_embed_32k_2d_matryoshka = ModelMeta(
@@ -59,10 +53,4 @@ mmbert_embed_32k_2d_matryoshka = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation="""@misc{mmbert-embed-2d-matryoshka,
-  title={mmBERT-Embed: Multilingual Embedding Model with 2D Matryoshka Training},
-  author={vLLM Semantic Router Team},
-  year={2025},
-  url={https://huggingface.co/llm-semantic-router/mmbert-embed-32k-2d-matryoshka}
-}""",
 )

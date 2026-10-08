@@ -39,10 +39,12 @@ class MintakaRetrieval(AbsTaskRetrieval):
         bibtex_citation=r"""
 @inproceedings{sen-etal-2022-mintaka,
   address = {Gyeongju, Republic of Korea},
+  archiveprefix = {arXiv},
   author = {Sen, Priyanka  and
 Aji, Alham Fikri  and
 Saffari, Amir},
   booktitle = {Proceedings of the 29th International Conference on Computational Linguistics},
+  eprint = {2210.01613},
   month = oct,
   pages = {1604--1619},
   publisher = {International Committee on Computational Linguistics},

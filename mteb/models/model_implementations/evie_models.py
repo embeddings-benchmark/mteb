@@ -11,7 +11,7 @@ from .colqwen_models import ColQwen3_5Wrapper
 logger = logging.getLogger(__name__)
 
 
-def _enable_bidirectional_attention(model: Any) -> None:  # ruff: ignore[any-type]
+def _enable_bidirectional_attention(model: Any) -> None:  # noqa: ANN401
     """Encoder-ize the full-attention layers of a ColQwen3.5 backbone.
 
     Mirrors `ColQwen3_5.enable_bidirectional_attention` from the EVIE release:
@@ -94,15 +94,6 @@ class EvieWrapper(ColQwen3_5Wrapper):
         )
 
 
-EVIE_CITATION = """
-@misc{tencent2026evie,
-  title        = {EVIE: Evidence-Vector-Informed Embedding for Visual Document Retrieval},
-  author       = {Wang, Zifei and Wen, Wei},
-  year         = {2026},
-  howpublished = {\\url{https://github.com/Tencent/EVIE}}
-}
-"""
-
 EVIE_TRAINING_DATA = {
     # from https://huggingface.co/datasets/vidore/colpali_train_set
     "VidoreDocVQARetrieval",
@@ -153,7 +144,6 @@ evie_8b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=False,
     training_datasets=EVIE_TRAINING_DATA,
-    citation=EVIE_CITATION,
     extra_requirements_groups=["evie"],
 )
 
@@ -184,6 +174,5 @@ evie_4_5b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=False,
     training_datasets=EVIE_TRAINING_DATA,
-    citation=EVIE_CITATION,
     extra_requirements_groups=["evie"],
 )

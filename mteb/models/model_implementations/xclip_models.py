@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -21,10 +20,15 @@ class XCLIPModel(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         num_frames: int = 8,
         **kwargs: Any,
     ):
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         from transformers import XCLIPModel as HFXCLIPModel
         from transformers import XCLIPProcessor
 
@@ -37,59 +41,67 @@ class XCLIPModel(AbsEncoder):
         self.model.eval()
         self.processor = XCLIPProcessor.from_pretrained(model_name, revision=revision)
 
-    @torch.no_grad()
     def get_text_embeddings(
         self,
         texts: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        all_embeddings = []
+        import torch
 
-        for batch in tqdm(texts, disable=not show_progress_bar, desc="Text Encoding"):
-            inputs = self.processor(
-                text=batch["text"],
-                return_tensors="pt",
-                padding=True,
-                truncation=True,
-            )
-            inputs = {k: v.to(self.device) for k, v in inputs.items()}
-            text_features = self.model.get_text_features(**inputs)
-            if hasattr(text_features, "pooler_output"):
-                text_features = text_features.pooler_output
-            all_embeddings.append(text_features.cpu())
+        with torch.no_grad():
+            all_embeddings = []
 
-        return torch.cat(all_embeddings, dim=0)
+            for batch in tqdm(
+                texts, disable=not show_progress_bar, desc="Text Encoding"
+            ):
+                inputs = self.processor(
+                    text=batch["text"],
+                    return_tensors="pt",
+                    padding=True,
+                    truncation=True,
+                )
+                inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                text_features = self.model.get_text_features(**inputs)
+                if hasattr(text_features, "pooler_output"):
+                    text_features = text_features.pooler_output
+                all_embeddings.append(text_features.cpu())
 
-    @torch.no_grad()
+            return torch.cat(all_embeddings, dim=0)
+
     def get_video_embeddings(
         self,
         videos: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        all_embeddings = []
+        import torch
 
-        for batch in tqdm(videos, disable=not show_progress_bar, desc="Video Encoding"):
-            # XCLIPProcessor.__call__ doesn't route videos correctly;
-            # use image_processor directly which returns pixel_values.
-            # Collator returns [N, C, H, W] tensors; image_processor
-            # expects [H, W, C] numpy frames.
-            video_list = [
-                v.permute(0, 2, 3, 1).numpy() if isinstance(v, torch.Tensor) else v
-                for v in batch["video"]
-            ]
-            inputs = self.processor.image_processor(
-                video_list,
-                return_tensors="pt",
-            )
-            inputs = {k: v.to(self.device) for k, v in inputs.items()}
-            video_features = self.model.get_video_features(**inputs)
-            if hasattr(video_features, "pooler_output"):
-                video_features = video_features.pooler_output
-            all_embeddings.append(video_features.cpu())
+        with torch.no_grad():
+            all_embeddings = []
 
-        return torch.cat(all_embeddings, dim=0)
+            for batch in tqdm(
+                videos, disable=not show_progress_bar, desc="Video Encoding"
+            ):
+                # XCLIPProcessor.__call__ doesn't route videos correctly;
+                # use image_processor directly which returns pixel_values.
+                # Collator returns [N, C, H, W] tensors; image_processor
+                # expects [H, W, C] numpy frames.
+                video_list = [
+                    v.permute(0, 2, 3, 1).numpy() if isinstance(v, torch.Tensor) else v
+                    for v in batch["video"]
+                ]
+                inputs = self.processor.image_processor(
+                    video_list,
+                    return_tensors="pt",
+                )
+                inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                video_features = self.model.get_video_features(**inputs)
+                if hasattr(video_features, "pooler_output"):
+                    video_features = video_features.pooler_output
+                all_embeddings.append(video_features.cpu())
+
+            return torch.cat(all_embeddings, dim=0)
 
     def encode(
         self,

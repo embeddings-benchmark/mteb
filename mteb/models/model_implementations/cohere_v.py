@@ -6,7 +6,6 @@ import os
 import time
 from typing import TYPE_CHECKING, Any, Literal, get_args
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
@@ -20,6 +19,7 @@ from mteb.models.model_meta import ScoringFunction
 from mteb.types import OutputDType
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -31,6 +31,8 @@ def _post_process_embeddings(
     embeddings_array: torch.Tensor, embedding_type: str
 ) -> torch.Tensor:
     """Post-process embeddings based on type (similar to voyage_models.py)"""
+    import torch
+
     if embedding_type == "binary":
         # Unpack bit-packed embeddings: each byte contains 8 embedding values
         unpacked_embeddings = []
@@ -182,6 +184,7 @@ OUTPUT_TYPES = [
 
 def cohere_v_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
     import cohere
+    import torch
 
     class CohereMultiModalModelWrapper(AbsEncoder):
         def __init__(

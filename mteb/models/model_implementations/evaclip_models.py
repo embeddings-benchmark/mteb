@@ -3,7 +3,6 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -25,6 +24,8 @@ EVA_CLIP_CITATION = """@article{EVA-CLIP,
 
 
 def evaclip_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
+    import torch
+
     try:
         import sys
 
@@ -44,9 +45,14 @@ def evaclip_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
         def __init__(
             self,
             model_name: str,
-            device: str = "cuda" if torch.cuda.is_available() else "cpu",
+            device: str | None = None,
             **kwargs: Any,
         ):
+            import torch
+
+            if device is None:
+                device = "cuda" if torch.cuda.is_available() else "cpu"
+
             self.model_name = model_name
             self.device = device
             pretrained = "eva_clip"  # or "/path/to/EVA02_CLIP_B_psz16_s8B.pt"

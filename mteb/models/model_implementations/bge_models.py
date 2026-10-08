@@ -29,12 +29,12 @@ model_prompts = {
     "BrightSustainableLivingLongRetrieval-query": "Represent this sustainable_living post for searching relevant documents: ",
     "BrightPonyLongRetrieval-query": "Represent this Pony question for searching relevant documents: ",
 }
-BGE_15_CITATION = """@misc{xiao2024cpackpackagedresourcesadvance,
+BGE_15_CITATION = """@misc{xiao2024cpackpackedresourcesgeneral,
   archiveprefix = {arXiv},
   author = {Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
   eprint = {2309.07597},
   primaryclass = {cs.CL},
-  title = {C-Pack: Packaged Resources To Advance General Chinese Embedding},
+  title = {C-Pack: Packed Resources For General Chinese Embeddings},
   url = {https://arxiv.org/abs/2309.07597},
   year = {2024},
 }
@@ -351,7 +351,7 @@ bge_small_en_v1_5 = ModelMeta(
     n_parameters=33_400_000,
     n_embedding_parameters=11_720_448,
     memory_usage_mb=127,
-    embed_dim=512,
+    embed_dim=384,
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/BAAI/bge-small-en-v1.5",
@@ -534,7 +534,7 @@ bge_small_en = ModelMeta(
     n_parameters=33_400_000,
     n_embedding_parameters=11_720_448,
     memory_usage_mb=127,
-    embed_dim=512,
+    embed_dim=384,
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/BAAI/bge-small-en",
@@ -825,12 +825,12 @@ bge_multilingual_gemma2 = ModelMeta(
 }
 
 
-@misc{xiao2024cpackpackagedresourcesadvance,
+@misc{xiao2024cpackpackedresourcesgeneral,
   archiveprefix = {arXiv},
   author = {Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
   eprint = {2309.07597},
   primaryclass = {cs.CL},
-  title = {C-Pack: Packaged Resources To Advance General Chinese Embedding},
+  title = {C-Pack: Packed Resources For General Chinese Embeddings},
   url = {https://arxiv.org/abs/2309.07597},
   year = {2024},
 }""",

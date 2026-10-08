@@ -6,7 +6,6 @@ from functools import wraps
 from typing import TYPE_CHECKING, Any, Literal, TypeVar, get_args
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -19,6 +18,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
     import cohere
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -262,6 +262,8 @@ class CohereTextEmbeddingModel(AbsEncoder):
         cohere_task_type: str,
         show_progress_bar: bool = False,
     ) -> torch.Tensor:
+        import torch
+
         all_embeddings = []
         index = 0
 

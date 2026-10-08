@@ -2,14 +2,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
-import torch.nn.functional as F
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
     from PIL import Image
     from torch.utils.data import DataLoader
     from transformers import BatchFeature
@@ -36,9 +35,14 @@ class NomicVisionModel(AbsEncoder):
         revision: str,
         text_model_name: str,
         text_model_revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ):
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         from transformers import AutoImageProcessor, AutoModel, AutoTokenizer
 
         self.vision_model_name = model_name
@@ -78,6 +82,9 @@ class NomicVisionModel(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+        import torch.nn.functional as F
+
         all_text_embeddings = []
 
         with torch.no_grad():
@@ -104,6 +111,8 @@ class NomicVisionModel(AbsEncoder):
     def mean_pooling(  # noqa: PLR6301
         self, model_output: BaseModelOutput, attention_mask: torch.Tensor
     ) -> torch.Tensor:
+        import torch
+
         token_embeddings = model_output[0]
         input_mask_expanded = (
             attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
@@ -118,6 +127,9 @@ class NomicVisionModel(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+        import torch.nn.functional as F
+
         all_image_embeddings = []
 
         with torch.no_grad():

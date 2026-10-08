@@ -120,21 +120,6 @@ model = ModelMeta(
 )
 ```
 
-If your model must be loaded in a specific precision, name the dtype with an [`OutputDType`][mteb.types.OutputDType] member rather than passing a `torch.dtype` object:
-
-```python
-model = ModelMeta(
-    loader=MyWrapper,
-    loader_kwargs=dict(
-        torch_dtype=OutputDType.BF16,  # not torch.bfloat16
-    ),
-    ...
-)
-```
-
-`ModelMeta` entries are evaluated when `mteb` is imported, so a `torch.dtype` here would make reading model metadata require torch. `OutputDType` is a string enum: it resolves via
-`OutputDType.get_dtype()`, and `transformers` accepts it directly wherever it accepts a string dtype.
-
 ### Using a custom Implementation
 
 If you need to use a custom implementation, you can specify the `loader` parameter in the [`ModelMeta`][mteb.models.model_meta.ModelMeta] class. It should implement one of the following protocols: [Encoder][mteb.models.EncoderProtocol], [CrossEncoder][mteb.models.CrossEncoderProtocol], or [Search][mteb.models.SearchProtocol].
@@ -181,6 +166,100 @@ your_model = ModelMeta(
 )
 ```
 
+
+### Loading dependencies only when needed
+
+`mteb` imports every model implementation to list models and read their metadata, for example in`mteb.get_model_metas()`, the leaderboard, or when loading results. To keep this fast, a model file should only load the packages it depends on (`torch`, `transformers`, `sentence_transformers` or any model-specific
+package) when the model is actually used, not when the file is imported.
+
+This means nothing that runs at import time may use them: top-level imports, decorators, default arguments, base classes and values inside `ModelMeta(...)`. The patterns below cover the common cases.
+
+=== "Imports"
+    Import packages inside the functions that use them. Imports needed only for type hints go under `TYPE_CHECKING`:
+
+    ```python
+    from __future__ import annotations
+
+    from typing import TYPE_CHECKING
+
+    if TYPE_CHECKING:
+        import torch  # only used in type hints
+
+
+    class MyModel(AbsEncoder):
+        def __init__(self, model_name: str, revision: str, **kwargs):
+            from transformers import AutoModel  # not at the top of the file
+
+            self.model = AutoModel.from_pretrained(model_name, revision=revision)
+
+        def encode(self, inputs, **kwargs) -> torch.Tensor: ...
+    ```
+
+    For optional packages, also add them as a requirement group, see [Adding model dependencies](#adding-model-dependencies).
+
+=== "No-grad / inference mode"
+    Use `torch.no_grad()` or `torch.inference_mode()` as a context manager instead of a decorator,
+    since a decorator runs when the file is imported:
+
+    ```python
+    def encode(self, inputs, **kwargs):
+        import torch
+
+        with torch.inference_mode():  # instead of @torch.inference_mode()
+            ...
+    ```
+
+=== "Device"
+    Default `device` to `None` and pick one inside the function, since a default argument runs when the file is imported. A device passed by the user is always used as is:
+
+    ```python
+    def __init__(self, model_name: str, revision: str, device: str | None = None, **kwargs):
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+    ```
+
+    To default to MPS on Apple Silicon, check for it explicitly:
+
+    ```python
+    if device is None:
+        if torch.cuda.is_available():
+            device = "cuda"
+        elif torch.backends.mps.is_available():
+            device = "mps"
+        else:
+            device = "cpu"
+    ```
+
+=== "Dtypes"
+    `ModelMeta` entries are created when the file is imported, so name dtypes with [`OutputDType`][mteb.types.OutputDType] instead of passing a `torch.dtype`:
+
+    ```python
+    model = ModelMeta(
+        loader=MyWrapper,
+        loader_kwargs=dict(torch_dtype=OutputDType.BF16),  # not torch.bfloat16
+        ...
+    )
+    ```
+
+    `OutputDType` is a string enum, so `transformers` accepts it directly, and `OutputDType.get_dtype()` returns the matching `torch.dtype`.
+
+=== "torch.nn.Module subclasses"
+    A class that subclasses `torch.nn.Module` needs torch when it is defined, so define it inside the
+    function that uses it:
+
+    ```python
+    class MyModel(AbsEncoder):
+        def __init__(self, model_name: str, revision: str, **kwargs):
+            import torch
+
+            class Pooler(torch.nn.Module):
+                def forward(self, hidden_states):
+                    return hidden_states.mean(dim=1)
+
+            self.pooler = Pooler()
+    ```
 
 ### Adding model dependencies
 If you are adding a model that requires additional dependencies, you can add them to the `pyproject.toml` file, under optional dependencies:
