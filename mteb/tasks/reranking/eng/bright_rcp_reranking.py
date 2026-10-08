@@ -31,6 +31,13 @@ _CITATION = r"""@misc{schmidt2026rubriccalibratedpreferencescrossquerycalibratio
   primaryClass = {cs.IR},
   url = {https://arxiv.org/abs/2609.35739},
 }
+
+@article{su2024bright,
+  author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},
+  journal = {arXiv preprint arXiv:2407.12883},
+  title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},
+  year = {2024},
+}
 """
 
 
@@ -78,8 +85,7 @@ class BrightAopsRCPReranking(AbsTaskRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=_CITATION
-        + "\n@article{su2024bright,\n  author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},\n  journal = {arXiv preprint arXiv:2407.12883},\n  title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},\n  year = {2024},\n}\n",
+        bibtex_citation=_CITATION,
         adapted_from=["BrightRetrieval", "BrightAopsRetrieval"],
         prompt={
             "query": "Represent this Math problem for searching relevant examples: "
@@ -120,8 +126,7 @@ class BrightBiologyRCPReranking(AbsTaskRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=_CITATION
-        + "\n@article{su2024bright,\n  author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},\n  journal = {arXiv preprint arXiv:2407.12883},\n  title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},\n  year = {2024},\n}\n",
+        bibtex_citation=_CITATION,
         adapted_from=["BrightRetrieval", "BrightBiologyRetrieval"],
         prompt={
             "query": "Represent this biology post for searching relevant passages: "
@@ -162,8 +167,7 @@ class BrightEarthScienceRCPReranking(AbsTaskRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=_CITATION
-        + "\n@article{su2024bright,\n  author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},\n  journal = {arXiv preprint arXiv:2407.12883},\n  title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},\n  year = {2024},\n}\n",
+        bibtex_citation=_CITATION,
         adapted_from=["BrightRetrieval", "BrightEarthScienceRetrieval"],
         prompt={
             "query": "Represent this earth_science post for searching relevant passages: "
@@ -204,8 +208,7 @@ class BrightEconomicsRCPReranking(AbsTaskRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=_CITATION
-        + "\n@article{su2024bright,\n  author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},\n  journal = {arXiv preprint arXiv:2407.12883},\n  title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},\n  year = {2024},\n}\n",
+        bibtex_citation=_CITATION,
         adapted_from=["BrightRetrieval", "BrightEconomicsRetrieval"],
         prompt={
             "query": "Represent this economics post for searching relevant passages: "
@@ -246,8 +249,7 @@ class BrightLeetcodeRCPReranking(AbsTaskRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=_CITATION
-        + "\n@article{su2024bright,\n  author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},\n  journal = {arXiv preprint arXiv:2407.12883},\n  title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},\n  year = {2024},\n}\n",
+        bibtex_citation=_CITATION,
         adapted_from=["BrightRetrieval", "BrightLeetcodeRetrieval"],
         prompt={
             "query": "Represent this Coding problem for searching relevant examples: "
@@ -288,8 +290,7 @@ class BrightPonyRCPReranking(AbsTaskRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=_CITATION
-        + "\n@article{su2024bright,\n  author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},\n  journal = {arXiv preprint arXiv:2407.12883},\n  title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},\n  year = {2024},\n}\n",
+        bibtex_citation=_CITATION,
         adapted_from=["BrightRetrieval", "BrightPonyRetrieval"],
         prompt={
             "query": "Represent this Pony question for searching relevant passages: "
@@ -330,8 +331,7 @@ class BrightPsychologyRCPReranking(AbsTaskRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=_CITATION
-        + "\n@article{su2024bright,\n  author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},\n  journal = {arXiv preprint arXiv:2407.12883},\n  title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},\n  year = {2024},\n}\n",
+        bibtex_citation=_CITATION,
         adapted_from=["BrightRetrieval", "BrightPsychologyRetrieval"],
         prompt={
             "query": "Represent this psychology post for searching relevant passages: "
@@ -372,8 +372,7 @@ class BrightRoboticsRCPReranking(AbsTaskRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=_CITATION
-        + "\n@article{su2024bright,\n  author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},\n  journal = {arXiv preprint arXiv:2407.12883},\n  title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},\n  year = {2024},\n}\n",
+        bibtex_citation=_CITATION,
         adapted_from=["BrightRetrieval", "BrightRoboticsRetrieval"],
         prompt={
             "query": "Represent this robotics post for searching relevant passages: "
@@ -414,8 +413,7 @@ class BrightStackoverflowRCPReranking(AbsTaskRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=_CITATION
-        + "\n@article{su2024bright,\n  author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},\n  journal = {arXiv preprint arXiv:2407.12883},\n  title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},\n  year = {2024},\n}\n",
+        bibtex_citation=_CITATION,
         adapted_from=["BrightRetrieval", "BrightStackoverflowRetrieval"],
         prompt={
             "query": "Represent this stackoverflow post for searching relevant passages: "
@@ -456,8 +454,7 @@ class BrightSustainableLivingRCPReranking(AbsTaskRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=_CITATION
-        + "\n@article{su2024bright,\n  author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},\n  journal = {arXiv preprint arXiv:2407.12883},\n  title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},\n  year = {2024},\n}\n",
+        bibtex_citation=_CITATION,
         adapted_from=["BrightRetrieval", "BrightSustainableLivingRetrieval"],
         prompt={
             "query": "Represent this sustainable_living post for searching relevant passages: "
@@ -498,8 +495,7 @@ class BrightTheoremQAQuestionsRCPReranking(AbsTaskRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=_CITATION
-        + "\n@article{su2024bright,\n  author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},\n  journal = {arXiv preprint arXiv:2407.12883},\n  title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},\n  year = {2024},\n}\n",
+        bibtex_citation=_CITATION,
         adapted_from=["BrightRetrieval", "BrightTheoremQAQuestionsRetrieval"],
         prompt={
             "query": "Represent this Math problem for searching relevant examples: "
@@ -540,8 +536,7 @@ class BrightTheoremQATheoremsRCPReranking(AbsTaskRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=_CITATION
-        + "\n@article{su2024bright,\n  author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},\n  journal = {arXiv preprint arXiv:2407.12883},\n  title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},\n  year = {2024},\n}\n",
+        bibtex_citation=_CITATION,
         adapted_from=["BrightRetrieval", "BrightTheoremQATheoremsRetrieval"],
         prompt={
             "query": "Represent this Math problem for searching relevant theorems: "

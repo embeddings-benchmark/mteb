@@ -32,6 +32,16 @@ _CITATION = r"""@misc{schmidt2026rubriccalibratedpreferencescrossquerycalibratio
   primaryClass = {cs.IR},
   url = {https://arxiv.org/abs/2609.35739},
 }
+
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
 """
 
 
@@ -86,8 +96,7 @@ class Vidore3ComputerScienceRCPReranking(AbsTaskRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="created and machine-translated",
-        bibtex_citation=_CITATION
-        + "\n@article{loison2026vidorev3comprehensiveevaluation,\n  archiveprefix = {arXiv},\n  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},\n  eprint = {2601.08620},\n  primaryclass = {cs.AI},\n  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},\n  url = {https://arxiv.org/abs/2601.08620},\n  year = {2026},\n}\n",
+        bibtex_citation=_CITATION,
         adapted_from=["Vidore3ComputerScienceRetrieval.v2"],
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
@@ -133,8 +142,7 @@ class Vidore3EnergyRCPReranking(AbsTaskRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="created and machine-translated",
-        bibtex_citation=_CITATION
-        + "\n@article{loison2026vidorev3comprehensiveevaluation,\n  archiveprefix = {arXiv},\n  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},\n  eprint = {2601.08620},\n  primaryclass = {cs.AI},\n  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},\n  url = {https://arxiv.org/abs/2601.08620},\n  year = {2026},\n}\n",
+        bibtex_citation=_CITATION,
         adapted_from=["Vidore3EnergyRetrieval.v2"],
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
@@ -180,8 +188,7 @@ class Vidore3FinanceEnRCPReranking(AbsTaskRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="created and machine-translated",
-        bibtex_citation=_CITATION
-        + "\n@article{loison2026vidorev3comprehensiveevaluation,\n  archiveprefix = {arXiv},\n  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},\n  eprint = {2601.08620},\n  primaryclass = {cs.AI},\n  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},\n  url = {https://arxiv.org/abs/2601.08620},\n  year = {2026},\n}\n",
+        bibtex_citation=_CITATION,
         adapted_from=["Vidore3FinanceEnRetrieval.v2"],
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
@@ -227,8 +234,7 @@ class Vidore3FinanceFrRCPReranking(AbsTaskRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="created and machine-translated",
-        bibtex_citation=_CITATION
-        + "\n@article{loison2026vidorev3comprehensiveevaluation,\n  archiveprefix = {arXiv},\n  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},\n  eprint = {2601.08620},\n  primaryclass = {cs.AI},\n  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},\n  url = {https://arxiv.org/abs/2601.08620},\n  year = {2026},\n}\n",
+        bibtex_citation=_CITATION,
         adapted_from=["Vidore3FinanceFrRetrieval.v2"],
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
@@ -274,8 +280,7 @@ class Vidore3HrRCPReranking(AbsTaskRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="created and machine-translated",
-        bibtex_citation=_CITATION
-        + "\n@article{loison2026vidorev3comprehensiveevaluation,\n  archiveprefix = {arXiv},\n  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},\n  eprint = {2601.08620},\n  primaryclass = {cs.AI},\n  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},\n  url = {https://arxiv.org/abs/2601.08620},\n  year = {2026},\n}\n",
+        bibtex_citation=_CITATION,
         adapted_from=["Vidore3HrRetrieval.v2"],
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
@@ -321,8 +326,7 @@ class Vidore3IndustrialRCPReranking(AbsTaskRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="created and machine-translated",
-        bibtex_citation=_CITATION
-        + "\n@article{loison2026vidorev3comprehensiveevaluation,\n  archiveprefix = {arXiv},\n  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},\n  eprint = {2601.08620},\n  primaryclass = {cs.AI},\n  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},\n  url = {https://arxiv.org/abs/2601.08620},\n  year = {2026},\n}\n",
+        bibtex_citation=_CITATION,
         adapted_from=["Vidore3IndustrialRetrieval.v2"],
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
@@ -368,8 +372,7 @@ class Vidore3PharmaceuticalsRCPReranking(AbsTaskRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="created and machine-translated",
-        bibtex_citation=_CITATION
-        + "\n@article{loison2026vidorev3comprehensiveevaluation,\n  archiveprefix = {arXiv},\n  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},\n  eprint = {2601.08620},\n  primaryclass = {cs.AI},\n  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},\n  url = {https://arxiv.org/abs/2601.08620},\n  year = {2026},\n}\n",
+        bibtex_citation=_CITATION,
         adapted_from=["Vidore3PharmaceuticalsRetrieval.v2"],
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
@@ -415,8 +418,7 @@ class Vidore3PhysicsRCPReranking(AbsTaskRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="created and machine-translated",
-        bibtex_citation=_CITATION
-        + "\n@article{loison2026vidorev3comprehensiveevaluation,\n  archiveprefix = {arXiv},\n  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},\n  eprint = {2601.08620},\n  primaryclass = {cs.AI},\n  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},\n  url = {https://arxiv.org/abs/2601.08620},\n  year = {2026},\n}\n",
+        bibtex_citation=_CITATION,
         adapted_from=["Vidore3PhysicsRetrieval.v2"],
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
