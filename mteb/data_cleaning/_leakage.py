@@ -39,6 +39,7 @@ def _keep_unseen(
 def remove_train_leakage(
     task: T,
     *,
+    pool_subsets: bool = False,
     normalization: Normalization = _strip_whitespace,
     columns: Sequence[str] | None = None,
     splits: Sequence[str] | None = None,
@@ -51,10 +52,13 @@ def remove_train_leakage(
     images, audio and video by their content hash -- which is what the `samples_in_train` of the task's descriptive
     statistics reports, except that it counts the distinct leaked samples while this removes every leaking row.
     Labels are not compared, as the same content under another label leaks just as much, and each subset is compared
-    against its own train split, which is itself left untouched.
+    against its own train split, which is itself left untouched. It is `remove_duplicates` with the train split as
+    its reference, without removing the duplicates a split holds of its own.
 
     Args:
         task: The task to filter. It is not modified.
+        pool_subsets: Whether a sample is compared against the train split of every subset, as the task's own
+            `samples_in_train` counts it, rather than against its own subset's, as that subset is evaluated.
         normalization: How to rewrite a text before comparing it. The default ignores surrounding whitespace only.
         columns: The content columns to compare. Defaults to every content column of the task.
         splits: The splits to filter. Defaults to every split but the train one.
@@ -89,7 +93,8 @@ def remove_train_leakage(
         _CleaningFilter(
             "remove_train_leakage",
             _keep_unseen,
-            reference_split=getattr(task, "train_split", "train"),
+            reference_splits=(getattr(task, "train_split", "train"),),
+            pools_subsets=pool_subsets,
         ),
         normalization=normalization,
         columns=columns,

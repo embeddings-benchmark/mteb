@@ -1226,3 +1226,42 @@ def test_remove_train_leakage_compares_non_text_by_content() -> None:
 
     # the first image is in train, so only the others survive
     assert len(cleaned.dataset[split]) == len(data) - 1
+
+
+def test_remove_duplicates_can_take_a_reference_split() -> None:
+    task = _classification_task()
+
+    cleaned = remove_duplicates(task, reference_splits=["train"])
+
+    # what train holds goes, and so does the repeat the test split holds of its own
+    assert cleaned.dataset["test"]["text"] == ["hi", "long text"]
+    assert cleaned.dataset["train"]["text"] == ["a shared text", "train only"]
+
+
+def test_remove_duplicates_pools_the_reference_of_every_subset() -> None:
+    task = _multilingual_task()
+    task.dataset["eng"]["train"] = Dataset.from_dict(
+        {"text": ["duplicated"], "label": [0]}
+    )
+    task.dataset["fra"]["train"] = Dataset.from_dict({"text": ["other"], "label": [0]})
+
+    own = remove_duplicates(task, reference_splits=["train"], subsets=["fra"])
+    pooled = remove_duplicates(
+        task, reference_splits=["train"], pool_subsets=True, subsets=["fra"]
+    )
+
+    # "duplicated" only leaks into fra once eng's train split is pooled in
+    assert len(own.dataset["fra"]["test"]) == 1
+    assert len(pooled.dataset["fra"]["test"]) == 0
+
+
+def test_remove_train_leakage_can_pool_the_subsets() -> None:
+    task = _multilingual_task()
+    task.dataset["eng"]["train"] = Dataset.from_dict(
+        {"text": ["duplicated"], "label": [0]}
+    )
+    task.dataset["fra"]["train"] = Dataset.from_dict({"text": ["other"], "label": [0]})
+
+    cleaned = remove_train_leakage(task, pool_subsets=True, subsets=["fra"])
+
+    assert len(cleaned.dataset["fra"]["test"]) == 0

@@ -22,6 +22,9 @@ cleaned = remove_train_leakage(task)
 It leaks when every content column matches a train sample's, which is what `samples_in_train` already reports in the descriptive statistics: 62 tasks report some today, from 4.8% of MassiveIntentClassification's test split to every row
 of HUMEToxicConversationsClassification's. The train split itself is left untouched.
 
+`remove_duplicates` gains the same reach: `reference_splits` names the splits a kept sample may not repeat, and
+`pool_subsets` takes them from every subset rather than the sample's own, which matters where subsets overlap.
+
 ## New in v2.23
 
 ### Removing samples by size
