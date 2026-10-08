@@ -32,8 +32,7 @@ from mteb.timing import TimingStack
 
 if TYPE_CHECKING:
     from collections.abc import Iterator, Mapping
-
-    from typing_extensions import Self
+    from typing import Self
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import (
@@ -57,10 +56,10 @@ def _multilabel_subsampling(
     """Multilabel subsampling the dataset with stratification by the supplied label.
 
     Args:
-        dataset_dict: the DatasetDict object.
-        seed: the random seed.
-        splits: the splits of the dataset.
-        label: the label with which the stratified sampling is based on.
+        dataset_dict: The datasetDict to subsample.
+        seed: The random seed.
+        splits: The splits of the dataset.
+        label: The label with which the stratified sampling is based on.
         n_samples: Optional, number of samples to subsample. Default is max_n_samples.
 
     Returns:
@@ -155,7 +154,7 @@ class AbsTask(ABC):  # noqa: PLR0904
     def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:  # noqa: B027 -- optional hook, deliberately not abstract
         """A transform operations applied to the dataset after loading.
 
-        This method is useful when the dataset from Huggingface is not in an `mteb` compatible format.
+        This method is useful when the dataset from the Huggingface is not in an `mteb` compatible format.
         Override this method if your dataset requires additional transformation.
 
         Args:
@@ -299,14 +298,14 @@ class AbsTask(ABC):  # noqa: PLR0904
             }
         }
         if predictions_path.exists():
-            with predictions_path.open("r") as predictions_file:
+            with predictions_path.open("r", encoding="utf-8") as predictions_file:
                 existing_results = json.load(predictions_file)
 
         if hf_subset not in existing_results:
             existing_results[hf_subset] = {}
 
         existing_results[hf_subset][hf_split] = predictions
-        with predictions_path.open("w") as predictions_file:
+        with predictions_path.open("w", encoding="utf-8") as predictions_file:
             json.dump(existing_results, predictions_file)
 
     def _predictions_path(
@@ -336,7 +335,7 @@ class AbsTask(ABC):  # noqa: PLR0904
         """Subsamples the dataset with stratification by the supplied label.
 
         Args:
-            dataset_dict: the DatasetDict object.
+            dataset_dict: the DatasetDict.
             seed: the random seed.
             splits: the splits of the dataset.
             label: the label with which the stratified sampling is based on.
@@ -514,7 +513,7 @@ class AbsTask(ABC):  # noqa: PLR0904
         stat_path = self.metadata.descriptive_stat_path
         if not stat_path.parent.exists():
             stat_path.parent.mkdir(parents=True, exist_ok=True)
-        with stat_path.open("w") as f:
+        with stat_path.open("w", encoding="utf-8") as f:
             json.dump(descriptive_stats, f, indent=4)
 
         return descriptive_stats
@@ -598,9 +597,12 @@ class AbsTask(ABC):  # noqa: PLR0904
                 continue
             if exclusive_language_filter is False:
                 for langscript in langs:
-                    if lang_scripts.contains_language(
-                        langscript
-                    ) or lang_scripts.contains_script(langscript):
+                    if lang_scripts.contains_language(langscript) and (
+                        not script
+                        or lang_scripts.contains_script(
+                            langscript.rsplit("-", maxsplit=1)[-1]
+                        )
+                    ):
                         subsets_to_keep.append(hf_subset)
                         break
 
@@ -706,10 +708,9 @@ class AbsTask(ABC):  # noqa: PLR0904
 
         Args:
             repo_name: The name of the repository to push the dataset to.
-            num_proc: Number of processes to use for loading the dataset.
+            num_proc: Number of processes to use for loading the dataset or processing.
             push_eval: Whether to also push the eval.yaml file to the Hub
             kwargs: Additional keyword arguments passed to the [push_to_hub](https://huggingface.co/docs/datasets/main/en/package_reference/main_classes#datasets.DatasetDict.push_to_hub).
-                This can include things like `private=True` to make the dataset private.
 
         Examples:
             >>> import mteb
@@ -748,14 +749,14 @@ class AbsTask(ABC):  # noqa: PLR0904
         # handle multiple tasks in one repo (e.g. MIRACLRetrievalHardNegatives, MIRACLRetrievalHardNegativesV2)
         existing_eval = None
         if existing_eval_path is not None:
-            with Path(existing_eval_path).open() as f:  # noqa: PLW1514
+            with Path(existing_eval_path).open(encoding="utf-8") as f:
                 existing_eval_dict = yaml.safe_load(f)
             if existing_eval_dict is not None:
                 existing_eval = HFEvalMeta.model_validate(existing_eval_dict)
 
         task_config = self._create_task_hf_config(existing_eval)
 
-        with tempfile.NamedTemporaryFile(mode="w") as tmp_file:  # noqa: PLW1514
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8") as tmp_file:
             tmp_file.write(task_config.to_yaml())
             tmp_file.flush()
 
@@ -867,8 +868,8 @@ def get_abstask_prompt(task_name: str) -> str:
     if task_name not in _task_name_to_prompt:
         prompt = ""
         for task_cls in _iter_task_subclasses():
-            # `abstask_prompt` is defined on the abstask class, e.g. `AbsTaskRetrieval`, and is only
-            # annotated on `AbsTask`, so abstasks such as `AbsTaskAggregate` don't define one
+            # `abstask_prompt` is defined on the abstask class (`AbsTask`), so abstasks such as
+            # `AbsTaskAggregate` don't define one
             if task_cls.metadata.name == task_name:
                 prompt = getattr(task_cls, "abstask_prompt", "")
                 if prompt:
