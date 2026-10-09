@@ -6,60 +6,90 @@ icon: lucide/list-ordered
 
 # Run the Leaderboard
 
-This section contains information on how to interact with the leaderboard including running it locally, analysing the results, annotating contamination and more.
+This section contains information on how to interact with the leaderboard including running it locally and annotating contamination.
+
+The public leaderboard is available at [leaderboard.mteb.org](https://leaderboard.mteb.org/).
 
 ### Running the Leaderboard Locally
 
-It is possible to completely deploy the leaderboard locally or self-host it. This can e.g. be relevant for companies that might want to
-integrate build their own benchmarks or integrate custom tasks into existing benchmarks.
+It is possible to deploy the leaderboard locally or self-host it. This can e.g. be relevant to check how a new benchmark looks before submitting it, or for companies that want to build their own benchmarks or integrate custom tasks into existing benchmarks.
 
-The leaderboard can be run in two ways:
+The leaderboard consists of two parts:
 
-#### Using the CLI Command
+- **Backend** — a [FastAPI](https://fastapi.tiangolo.com/) service that lives in this repository under [`mteb/api`](https://github.com/embeddings-benchmark/mteb/tree/main/mteb/api). It loads the results, aggregates the scores and serves them as JSON.
+- **Frontend** — a SvelteKit app in the [leaderboard-frontend](https://github.com/embeddings-benchmark/leaderboard-frontend) repository that renders the data from the backend.
 
-The easiest way to run the leaderboard is using the MTEB CLI:
+#### Running the backend
 
-```bash
-mteb leaderboard
-```
-
-You can also specify a custom cache path for model results:
+Install `mteb` with the `api` extra:
 
 ```bash
-mteb leaderboard --cache-path results
+pip install "mteb[api]"
+# or, from a checkout of the repository
+uv sync --extra api
 ```
 
-Additional options:
-- `--host HOST`: Specify the host to run the server on (default: 0.0.0.0)
-- `--port PORT`: Specify the port to run the server on (default: 7860)
-- `--share`: Create a public URL for the leaderboard
-- `--rebuild`: Force rebuild from full results repository, bypassing cached JSON. This is useful when you suspect the cache is stale or corrupted.
+Then start the service:
 
-Example with all options:
 ```bash
-mteb leaderboard --cache-path results --port 8080 --share --rebuild
+make serve-api
+# or directly
+uvicorn mteb.api.app:app --port 8000
 ```
 
-#### Cache Directory Structure
+The API is now available on `http://localhost:8000` (e.g. `http://localhost:8000/v1/benchmarks`). An overview of the endpoints can be found in the [API README](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/api/README.md) or in the interactive docs at `http://localhost:8000/docs`.
 
-The leaderboard stores data in the cache directory (default: `~/.cache/mteb` or set via `MTEB_CACHE` environment variable):
+By default, the results are downloaded from the [`mteb/results`](https://huggingface.co/datasets/mteb/results) dataset on the Hugging Face Hub and stored in the cache directory (default: `~/.cache/mteb`, can be changed via the `MTEB_CACHE` environment variable), so only the first start is slow.
 
-- `results/` - Your locally run evaluation results
-- `remote/` - Cloned results from the [results repository](https://github.com/embeddings-benchmark/results)
-- `leaderboard/` - Pre-computed leaderboard cache for fast loading
+The service is configured using environment variables:
 
-#### Using Make Command
+| Variable       | Description                                                                                                                                                                                   |
+|----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `CACHE_REPO`   | Hugging Face dataset to load results from (default: `mteb/results`). Set it to an empty string to build the results from the local results cache instead, e.g. to include your own results. |
+| `DISK_CACHE`   | `1` (default) to persist the processed results on disk between restarts, `0` to always rebuild.                                                                                               |
+| `PRELOAD`      | `1` to pre-compute all benchmark summaries on startup in the background.                                                                                                                      |
+| `HTTP_MAX_AGE` | `Cache-Control` max-age in seconds for JSON responses (default: 4 hours). Set it to `0` during development to always get fresh data.                                                          |
+| `CORS_ORIGINS` | Comma-separated list of allowed origins (default: `*`).                                                                                                                                       |
 
-Alternatively, you can use the Makefile:
+For example, to serve the leaderboard using the results in your local cache:
+
 ```bash
-make run-leaderboard
+CACHE_REPO="" DISK_CACHE=0 HTTP_MAX_AGE=0 uvicorn mteb.api.app:app --port 8000
 ```
 
-The leaderboard requires gradio install, which can be installed using `pip install mteb[leaderboard]` or `uv add "mteb[leaderboard]"` and requires python >=3.11.
+!!! note
+    New benchmarks are only shown in the leaderboard if they are added to the leaderboard menu in [`_leaderboard_menu.py`](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/benchmarks/_leaderboard_menu.py).
+
+#### Running the frontend
+
+Clone the [leaderboard-frontend](https://github.com/embeddings-benchmark/leaderboard-frontend) repository and point it to your backend:
+
+```bash
+git clone https://github.com/embeddings-benchmark/leaderboard-frontend
+cd leaderboard-frontend
+make setup  # installs npm dependencies
+cp .env.example .env.local  # sets PUBLIC_API_URL=http://localhost:8000
+make dev  # starts the app on http://localhost:5173
+```
+
+If you only want to work on the frontend, `make dev-mock` starts it against a mock API, so no backend is needed.
+
+See the frontend [README](https://github.com/embeddings-benchmark/leaderboard-frontend#readme) for building and deploying it.
+
+#### Legacy Gradio leaderboard
+
+The previous Gradio-based leaderboard is still available through the `mteb leaderboard` CLI command (requires `pip install "mteb[leaderboard]"`):
+
+```bash
+mteb leaderboard --cache-path results --port 7860
+```
+
+!!! warning
+    The Gradio leaderboard is no longer actively maintained and is slow to start, as it has to load and process all results. It may not reflect all features of the current leaderboard. We recommend using the setup described above instead.
 
 ### Annotate Contamination
 
-have your found contamination in the training data of a model? Please let us know, either by opening an [issue](https://github.com/embeddings-benchmark/mteb/issues) or ideally by submitting a PR annotating the training datasets of the model:
+Have you found contamination in the training data of a model? Please let us know, either by opening an [issue](https://github.com/embeddings-benchmark/mteb/issues) or ideally by submitting a PR annotating the training datasets of the model:
 
 ```python
 model_w_contamination = ModelMeta(
