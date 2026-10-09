@@ -20,7 +20,6 @@ from mteb.models import ModelMeta
 from mteb.models.get_model_meta import get_model_metas
 from mteb.models.model_implementations import MODEL_REGISTRY
 from mteb.models.model_meta import _has_meaningful_value
-from mteb.results.task_result import _check_reranking_configuration
 
 from .model_result import ModelResult, _aggregate_and_pivot
 
@@ -278,9 +277,6 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                         model=model_result.model_name,
                         revision=model_result.model_revision,
                         experiment_name=experiment_name,
-                        reranking_id=task_result.reranking.configuration_id
-                        if task_result.reranking
-                        else "",
                         task_name=task_result.task_name,
                         mteb_version=task_result.mteb_version,
                         task_result=task_result,
@@ -333,7 +329,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         )
 
         task_df = task_df.groupby(
-            ["model", "experiment_name", "reranking_id", "task_name"], as_index=False
+            ["model", "experiment_name", "task_name"], as_index=False
         ).first()
 
         # Reconstruct model results
@@ -362,7 +358,6 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         aggregation: Callable[[list[Score]], Any] | None = None,
         output_format: Literal["wide", "long"] = "wide",
     ) -> list[dict[str, Any]]:
-        self._check_reranking_configuration()
         entries: list[dict[str, Any]] = []
         if output_format == "wide":
             for model_res in self:
@@ -445,7 +440,6 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         Returns:
             A DataFrame with the scores for all models and tasks.
         """
-        self._check_reranking_configuration()
         df = self._build_pre_agg_df(include_model_revision)
         if df is None:
             msg = "No scores data available. Returning empty DataFrame."
@@ -486,9 +480,6 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         col_subset: list[Any] = []
         col_score: list[Any] = []
         col_experiments: list[Any] = []
-        col_previous_results_model_meta: list[Any] = []
-        col_reranking: list[Any] = []
-        col_reranking_id: list[str | None] = []
 
         for model_result in bench_results:
             mn = model_result.model_name
@@ -532,16 +523,6 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                         col_subset.append(score_item.get("hf_subset", "default"))
                         col_score.append(score_item.get("main_score", None))
                         col_experiments.append(exp_kwargs)
-                        col_previous_results_model_meta.append(
-                            score_item.get("previous_results_model_meta")
-                        )
-                        configuration = task_result.reranking
-                        col_reranking.append(
-                            configuration.model_dump() if configuration else None
-                        )
-                        col_reranking_id.append(
-                            configuration.configuration_id if configuration else None
-                        )
 
         if not col_model_name:
             return None
@@ -556,9 +537,6 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                 "subset": col_subset,
                 "score": col_score,
                 "experiments": col_experiments,
-                "previous_results_model_meta": col_previous_results_model_meta,
-                "reranking": col_reranking,
-                "reranking_id": col_reranking_id,
             }
         )
         if include_model_revision is False:
@@ -602,30 +580,6 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
             df["trained_on"] = False
 
         return df
-
-    def _check_reranking_configuration(self) -> None:
-        # Also protect comparisons between models evaluated with different candidates.
-        _check_reranking_configuration(
-            task for model in self for task in model.task_results
-        )
-
-    def filter_reranking(self, configuration_id: str | None) -> BenchmarkResults:
-        """Select one first-stage configuration, or ordinary results with None.
-
-        Configuration IDs are exported in the ``reranking_id`` column. This
-        selection is explicit: no mean or best score across retrievers is implied.
-        """
-        models = []
-        for model in self:
-            tasks = [
-                task
-                for task in model.task_results
-                if (task.reranking.configuration_id if task.reranking else None)
-                == configuration_id
-            ]
-            if tasks:
-                models.append(model.model_copy(update={"task_results": tasks}))
-        return self.model_copy(update={"model_results": models})
 
     def _to_dataset(
         self,
@@ -691,7 +645,6 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                 "model2": {"Mean(Task)": 0.45, "Mean(TaskType)": 0.48},
             }
         """
-        self._check_reranking_configuration()
         if self.benchmark is not None:
             if isinstance(self.benchmark, Sequence):
                 return {b.name: b.get_score(self) for b in self.benchmark}
@@ -719,7 +672,6 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         Returns:
             A DataFrame with the aggregated benchmark scores for each model.
         """
-        self._check_reranking_configuration()
         if self.benchmark is None:
             raise ValueError(
                 "No benchmark associated with these results (self.benchmark is None). "

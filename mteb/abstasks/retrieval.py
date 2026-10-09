@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import hashlib
+import json
 import logging
 from collections import defaultdict
-from copy import deepcopy
+from pathlib import PurePosixPath
 from typing import TYPE_CHECKING, Any, Literal
 
 from datasets import Dataset, DatasetDict, concatenate_datasets
@@ -32,8 +34,6 @@ from ._statistics_calculation import (
 from .abstask import AbsTask
 from .first_stage_predictions import (
     FirstStagePredictionSource,
-    PredictionArtifact,
-    RerankingConfiguration,
     load_first_stage_predictions,
 )
 from .retrieval_dataset_loaders import (
@@ -106,13 +106,8 @@ class AbsTaskRetrieval(AbsTask):
     _support_search: bool = True
     _previous_results_model_meta: dict[str, Any] | None = None
     first_stage_predictions: Mapping[str, str | Path | FirstStagePredictionSource] = {}
-    _reranking_configuration: RerankingConfiguration | None = None
+    _reranking_experiment: dict[str, Any] | None = None
     skip_first_result: bool = False
-
-    @property
-    def reranking_configuration(self) -> RerankingConfiguration | None:
-        """Candidate provenance used to isolate converted evaluations in the cache."""
-        return deepcopy(self._reranking_configuration)
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
@@ -448,7 +443,7 @@ class AbsTaskRetrieval(AbsTask):
             hf_subset=hf_subset,
         )
         logger.info("Running retrieval task - Finished.")
-        scores = make_score_dict(
+        return make_score_dict(
             ndcg=ndcg,
             _map=_map,
             recall=recall,
@@ -460,7 +455,6 @@ class AbsTaskRetrieval(AbsTask):
             task_scores=task_specific_scores,
             previous_results_model_meta=self._previous_results_model_meta,
         )
-        return scores
 
     def task_specific_scores(  # noqa: PLR6301
         self,
@@ -763,8 +757,8 @@ class AbsTaskRetrieval(AbsTask):
         Named sources may point to local files or pinned
         ``FirstStagePredictionSource`` objects. Conversion mutates this task;
         instantiate another task for a separate candidate source. ``evaluate``
-        saves converted runs under a separate ``reranking/<configuration-id>``
-        directory, with the source and exact prediction provenance on TaskResult.
+        records the first-stage settings in the existing model experiment metadata
+        and saves converted runs in a separate experiment directory.
         """
         if top_ranked_path is None and first_stage is None:
             raise ValueError("Supply top_ranked_path or first_stage.")
@@ -805,26 +799,34 @@ class AbsTaskRetrieval(AbsTask):
 
                 converted[subset, split] = top_k_sorted
 
-        artifact = PredictionArtifact(sha256=digest)
+        prediction_identity: dict[str, Any]
         if isinstance(source, FirstStagePredictionSource):
-            artifact.repo_id = source.repo_id
-            artifact.revision = source.revision
-            artifact.filename = source.filename
-        configuration = RerankingConfiguration(
-            first_stage=first_stage if first_stage is not None else "local",
-            top_k=top_k,
-            document_modalities=(
-                source.document_modalities
-                if isinstance(source, FirstStagePredictionSource)
-                else None
-            ),
-            predictions=artifact,
-        )
+            # A pinned collection groups domains; each task resolves its own file.
+            filename = PurePosixPath(source.filename)
+            if filename.name == self.prediction_file_name:
+                filename = filename.with_name("{task}_predictions.json")
+            prediction_identity = {
+                "repo_id": source.repo_id,
+                "revision": source.revision,
+                "filename": str(filename),
+            }
+        else:
+            prediction_identity = {"sha256": digest}
+        experiment = {
+            "name": first_stage if first_stage is not None else "local",
+            "model": previous_model_meta,
+            "top_k": top_k,
+            "predictions": prediction_identity,
+        }
+        # Experiment names sanitize paths; retain a digest of the unsanitized identity.
+        experiment["id"] = hashlib.sha256(
+            json.dumps(experiment, sort_keys=True).encode()
+        ).hexdigest()
         for (subset, split), candidates in converted.items():
             self.dataset[subset][split]["top_ranked"] = candidates
         self._top_k = top_k
         self._previous_results_model_meta = previous_model_meta
-        self._reranking_configuration = configuration
+        self._reranking_experiment = experiment
         return self
 
 

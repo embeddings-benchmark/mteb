@@ -1,11 +1,6 @@
-from typing import TYPE_CHECKING
-
 from mteb.abstasks.first_stage_predictions import FirstStagePredictionSource
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-
-if TYPE_CHECKING:
-    from mteb.types import Modalities
 
 _LANGS = {
     "french": ["fra-Latn"],
@@ -18,19 +13,18 @@ _LANGS = {
 
 
 def _prediction_sources(retrieval_name: str) -> dict[str, FirstStagePredictionSource]:
-    sources: tuple[tuple[str, str, list[Modalities]], ...] = (
-        ("bm25-text", "mteb__baseline-bm25s", ["text"]),
-        ("bge-text", "BAAI__bge-m3", ["text"]),
-        ("qwen-text-image", "Qwen__Qwen3-VL-Embedding-2B", ["text", "image"]),
+    sources: tuple[tuple[str, str, str], ...] = (
+        ("bm25-text", "mteb__baseline-bm25s", "text"),
+        ("bge-text", "BAAI__bge-m3", "text"),
+        ("qwen-text-image", "Qwen__Qwen3-VL-Embedding-2B", "text-image"),
     )
     return {
         name: FirstStagePredictionSource(
             repo_id="mteb/Vidore3RetrievalPredictions",
-            filename=f"{model}/{'-'.join(modalities)}/{retrieval_name}_predictions.json",
+            filename=f"{model}/{representation}/{retrieval_name}_predictions.json",
             revision="3d6834bc0d3aded9de65eb2e431d875f654c96e8",
-            document_modalities=modalities,
         )
-        for name, model, modalities in sources
+        for name, model, representation in sources
     }
 
 

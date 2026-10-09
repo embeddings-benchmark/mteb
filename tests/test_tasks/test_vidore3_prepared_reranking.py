@@ -42,12 +42,8 @@ def test_existing_task_declares_prepared_sources(domain):
         source.revision == "3d6834bc0d3aded9de65eb2e431d875f654c96e8"
         for source in task.first_stage_predictions.values()
     )
-    assert task.first_stage_predictions["qwen-text-image"].document_modalities == [
-        "text",
-        "image",
-    ]
     assert task.metadata.descriptive_stats is not None
-    assert task.reranking_configuration is None
+    assert task._reranking_experiment is None
     assert not task.data_loaded
 
 
@@ -87,34 +83,28 @@ def test_retrieval_and_reranking_keep_task_identity(
         )
     model = mteb.get_model("mteb/baseline-random-encoder")
     cache = mteb.ResultCache(tmp_path / "cache")
-    retrieval = mteb.evaluate(model, task, cache=cache, co2_tracker=False)[0]
-    assert retrieval.reranking is None
+    retrieval = mteb.evaluate(model, task, cache=cache, co2_tracker=False)
+    assert retrieval.experiment_name is None
     qrels = shared["relevant_docs"]
     task.convert_to_reranking(first_stage=source, top_k=1)
     assert shared["top_ranked"] == {"q1": [expected], "q2": [expected]}
     assert shared["relevant_docs"] is qrels
-    assert task.reranking_configuration.first_stage == source
+    assert task._reranking_experiment["name"] == source
     assert (
-        task.reranking_configuration.predictions.repo_id
+        task._reranking_experiment["predictions"]["repo_id"]
         == "mteb/Vidore3RetrievalPredictions"
     )
-
-    reranking = mteb.evaluate(model, task, cache=cache, co2_tracker=False)[0]
-    assert reranking.task_name == retrieval.task_name == "Vidore3HrRetrieval.v2"
+    reranking = mteb.evaluate(model, task, cache=cache, co2_tracker=False)
+    assert reranking[0].task_name == retrieval[0].task_name == "Vidore3HrRetrieval.v2"
     assert task.metadata.model_dump() == before
-    assert reranking.reranking == task.reranking_configuration
     assert (
-        cache.load_task_result(task.metadata.name, model.mteb_model_meta).reranking
-        is None
-    )
-    assert (
-        cache.load_task_result(
-            task.metadata.name, model.mteb_model_meta, reranking=reranking.reranking
-        ).reranking
-        == reranking.reranking
+        reranking.model_meta.experiment_kwargs["first_stage"]
+        == task._reranking_experiment
     )
     rows = cache.load_results(
-        models=[model.mteb_model_meta], tasks=[task], include_remote=False
+        models=[retrieval.model_meta, reranking.model_meta],
+        tasks=[task],
+        include_remote=False,
     )._to_dataset()
     assert len(rows) == 2
-    assert set(rows["reranking_id"]) == {None, reranking.reranking.configuration_id}
+    assert {row["experiments"] is None for row in rows} == {True, False}

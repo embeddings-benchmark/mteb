@@ -687,7 +687,6 @@ class Benchmark:
                 with the highest total is ranked 1. Matches the leaderboard.
                 Always present.
         """
-        results._check_reranking_configuration()
         from mteb.benchmarks._create_table import _get_borda_rank
 
         bench_results = results.join_revisions()

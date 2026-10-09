@@ -1,11 +1,10 @@
-"""Evaluate shared ViDoRe candidate sources and export the proposed result format."""
+"""Evaluate prepared ViDoRe candidates using existing model experiments."""
 
 import argparse
 from pathlib import Path
 
 import mteb
 from mteb.abstasks.retrieval import AbsTaskRetrieval
-from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
 
 
 def main() -> None:
@@ -14,12 +13,6 @@ def main() -> None:
         "--model",
         default="mteb/baseline-random-encoder",
         help="Reranker model ID; the default only checks the workflow on CPU.",
-    )
-    parser.add_argument(
-        "--document-modalities",
-        nargs="+",
-        choices=["text", "image", "audio", "video"],
-        help="Document inputs for models using CrossEncoderWrapper (recorded as an experiment).",
     )
     parser.add_argument("--domains", nargs="+", default=["Hr", "Energy"])
     parser.add_argument(
@@ -32,20 +25,9 @@ def main() -> None:
     parser.add_argument("--output", type=Path, default=Path("vidore-reranking-output"))
     args = parser.parse_args()
     cache = mteb.ResultCache(args.output)
-    model_kwargs = (
-        {"document_modalities": args.document_modalities}
-        if args.document_modalities is not None
-        else {}
-    )
-    model = mteb.get_model(args.model, **model_kwargs)
-    if args.document_modalities is not None and not isinstance(
-        model, CrossEncoderWrapper
-    ):
-        parser.error(
-            "--document-modalities requires a model using CrossEncoderWrapper."
-        )
+    model = mteb.get_model(args.model)
     tasks = []
-    configurations = set()
+    experiments = {}
     for domain in args.domains:
         for first_stage in args.first_stages:
             task = mteb.get_task(
@@ -54,15 +36,13 @@ def main() -> None:
             assert isinstance(task, AbsTaskRetrieval)
             task.convert_to_reranking(first_stage=first_stage, top_k=args.top_k)
             result = mteb.evaluate(model, task, cache=cache, co2_tracker=False)
-            configuration = result[0].reranking
-            assert configuration is not None
-            configurations.add(configuration.configuration_id)
+            experiments[result.experiment_name] = result.model_meta
             tasks.append(task.metadata.name)
-            print(domain, first_stage, result[0].get_score())
+            print(domain, first_stage, result[0].get_score(), result.experiment_name)
 
-    # Reload the files that a results-repository submission would contain.
+    # Use the returned metadata to select exactly the experiments just evaluated.
     results = cache.load_results(
-        models=[model.mteb_model_meta],
+        models=list(experiments.values()),
         tasks=[
             mteb.get_task(name, hf_subsets=args.subsets) for name in sorted(set(tasks))
         ],
@@ -70,13 +50,8 @@ def main() -> None:
         only_main_score=True,
     )
     rows = results._to_dataset()
-    # The output directory may also contain earlier runs with other depths/pins.
-    rows = rows.filter(lambda row: row["reranking_id"] in configurations)
     rows.to_parquet(args.output / "reranking-results.parquet")
     rows.to_json(args.output / "reranking-results.jsonl")
-    for configuration_id in sorted(configurations):
-        print(configuration_id)
-        print(results.filter_reranking(configuration_id).to_dataframe())
     print(f"Saved result JSONs and exports in {args.output.resolve()}")
 
 

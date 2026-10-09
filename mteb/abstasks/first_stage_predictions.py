@@ -6,13 +6,10 @@ import hashlib
 import json
 import re
 from dataclasses import dataclass
-from pathlib import Path, PurePosixPath
+from pathlib import Path
 from typing import Any
 
 from huggingface_hub import hf_hub_download
-from pydantic import BaseModel, Field
-
-from mteb.types import Modalities
 
 
 @dataclass(frozen=True)
@@ -27,8 +24,6 @@ class FirstStagePredictionSource:
     repo_id: str
     filename: str
     revision: str
-    # Document inputs used by the retriever, independent of the reranker's inputs.
-    document_modalities: list[Modalities] | None = None
 
     def __post_init__(self) -> None:
         if not re.fullmatch(r"[0-9a-fA-F]{40}", self.revision):
@@ -61,45 +56,3 @@ def load_first_stage_predictions(
         path /= prediction_filename
     payload = path.read_bytes()
     return json.loads(payload), hashlib.sha256(payload).hexdigest()
-
-
-class PredictionArtifact(BaseModel):
-    """The exact prediction bytes used in an evaluation."""
-
-    sha256: str
-    repo_id: str | None = None
-    revision: str | None = None
-    filename: str | None = None
-
-
-class RerankingConfiguration(BaseModel):
-    """First-stage evaluation context, independent of reranker model settings."""
-
-    first_stage: str
-    top_k: int = Field(gt=0)
-    document_modalities: list[Modalities] | None = None
-    predictions: PredictionArtifact
-
-    @property
-    def configuration_id(self) -> str:
-        """Group domains from one pinned prediction collection and candidate depth.
-
-        Local files instead use their content hash. A pinned Hub directory defines
-        a collection; filenames and checksums remain per-task provenance and are
-        checked when reusing or merging that task's results.
-        """
-        identity = self.model_dump()
-        if self.predictions.repo_id is not None:
-            if self.predictions.filename is None or self.predictions.revision is None:
-                raise ValueError(
-                    "Hub prediction provenance requires a filename and revision."
-                )
-            identity["predictions"] = {
-                "repo_id": self.predictions.repo_id,
-                "revision": self.predictions.revision,
-                "directory": str(PurePosixPath(self.predictions.filename).parent),
-            }
-        digest = hashlib.sha256(
-            json.dumps(identity, sort_keys=True).encode()
-        ).hexdigest()
-        return f"cfg_{digest[:16]}"

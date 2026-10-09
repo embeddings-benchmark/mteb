@@ -501,6 +501,9 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             dict(_self.experiment_kwargs) if _self.experiment_kwargs else {}
         )
 
+        # First-stage settings identify an evaluation, not model construction.
+        base_exp_kwargs.pop("first_stage", None)
+
         if embed_dim is not None:
             if (
                 _self.embed_dim is not None
