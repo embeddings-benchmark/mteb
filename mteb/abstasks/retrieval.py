@@ -766,8 +766,12 @@ class AbsTaskRetrieval(AbsTask):
         saves converted runs under a separate ``reranking/<configuration-id>``
         directory, with the source and exact prediction provenance on TaskResult.
         """
-        if (top_ranked_path is None) == (first_stage is None):
-            raise ValueError("Supply exactly one of top_ranked_path or first_stage.")
+        if top_ranked_path is None and first_stage is None:
+            raise ValueError("Supply top_ranked_path or first_stage.")
+        if top_ranked_path is not None and first_stage is not None:
+            raise ValueError(
+                "Supply only one of top_ranked_path or first_stage, not both."
+            )
         if top_k <= 0:
             raise ValueError("top_k must be positive.")
         source: str | Path | FirstStagePredictionSource

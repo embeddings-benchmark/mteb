@@ -305,8 +305,8 @@ def test_failed_conversion_preserves_candidates_and_context(tmp_path):
 @pytest.mark.parametrize(
     ("kwargs", "message"),
     [
-        ({}, "exactly one"),
-        ({"top_ranked_path": "bm25.json", "first_stage": "bm25"}, "exactly one"),
+        ({}, "Supply top_ranked_path or first_stage"),
+        ({"top_ranked_path": "bm25.json", "first_stage": "bm25"}, "not both"),
         ({"first_stage": "missing"}, "Available sources:.*bm25.*qwen"),
         ({"first_stage": "bm25", "top_k": 0}, "positive"),
     ],
