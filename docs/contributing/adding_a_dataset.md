@@ -53,6 +53,9 @@ class MyNewTask(AbsTaskClassification):
 
 ### Select an appropriate task
 
+For a reproducible smaller dataset, see [Downsampling a Dataset](downsampling.md),
+including how to preserve queries, corpus documents, and relevance judgments for retrieval.
+
 To add a dataset you first need to figure out which type of task is the best suited for the dataset. Below we will give you an overview of the most common,
 but do see [abstasks](../api/task.md#multimodal-tasks) for an overview of all the tasks available.
 
