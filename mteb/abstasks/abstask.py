@@ -599,9 +599,7 @@ class AbsTask(ABC):  # noqa: PLR0904
                 for langscript in langs:
                     if lang_scripts.contains_language(langscript) and (
                         not script
-                        or lang_scripts.contains_script(
-                            langscript.rsplit("-", maxsplit=1)[-1]
-                        )
+                        or lang_scripts.contains_langscript_script(langscript)
                     ):
                         subsets_to_keep.append(hf_subset)
                         break
@@ -612,12 +610,7 @@ class AbsTask(ABC):  # noqa: PLR0904
                 and lang_scripts.contains_languages(langs)
                 and (
                     not script
-                    or all(
-                        lang_scripts.contains_script(
-                            langscript.rsplit("-", maxsplit=1)[-1]
-                        )
-                        for langscript in langs
-                    )
+                    or all(lang_scripts.contains_langscript_script(ls) for ls in langs)
                 )
             ):
                 subsets_to_keep.append(hf_subset)

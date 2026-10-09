@@ -21,7 +21,7 @@ class RuNLUIntentClassification(AbsTaskClassification):
         eval_langs={
             "rus-eng": [
                 "rus-Cyrl",
-                "rus-Latn",
+                "eng-Latn",
             ],
             "rus": [
                 "rus-Cyrl",

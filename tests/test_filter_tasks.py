@@ -205,26 +205,33 @@ def test_filter_languages_script_mismatch_raises():
 
 
 @pytest.mark.parametrize(
-    ("task_name", "languages", "script", "exclusive", "expected_subsets"),
+    ("task_name", "languages", "script", "expected_subsets"),
     [
-        # RuNLUIntentClassification has a pure-Cyrillic subset ("rus" = [rus-Cyrl])
-        # and a mixed-script subset ("rus-eng" = [rus-Cyrl, rus-Latn]).
+        # RuNLUIntentClassification has a Russian subset ("rus" = [rus-Cyrl]) and a
+        # mixed subset ("rus-eng" = [rus-Cyrl, eng-Latn]).
         # Under exclusive filtering a subset must be *entirely* within the (language,
-        # script) filter, so the script part must be honoured just like the language part.
-        ("RuNLUIntentClassification", ["rus"], ["Cyrl"], True, ["rus"]),
-        # Without a script filter both subsets are purely Russian, so both survive.
-        ("RuNLUIntentClassification", ["rus"], None, True, ["rus", "rus-eng"]),
+        # script) filter, so "rus-eng" is dropped by the language filter alone.
+        ("RuNLUIntentClassification", ["rus"], ["Cyrl"], ["rus"]),
+        ("RuNLUIntentClassification", ["rus"], None, ["rus"]),
+        # The mixed subset has a Latin-script part, so the script filter must drop it
+        # even though both of its languages are requested.
+        ("RuNLUIntentClassification", ["rus", "eng"], ["Cyrl"], ["rus"]),
+        (
+            "RuNLUIntentClassification",
+            ["rus", "eng"],
+            ["Cyrl", "Latn"],
+            ["rus", "rus-eng"],
+        ),
         # STS22.v2: "ru" is the only Russian subset, and it is Cyrillic.
-        ("STS22.v2", ["rus"], ["Cyrl"], True, ["ru"]),
+        ("STS22.v2", ["rus"], ["Cyrl"], ["ru"]),
         # Sanity: exclusive (without script) keeps only the purely-English subset.
-        ("STS22.v2", ["eng"], None, True, ["en"]),
+        ("STS22.v2", ["eng"], None, ["en"]),
     ],
 )
 def test_filter_languages_script_exclusive(
     task_name: str,
     languages: list[str],
     script: list[str] | None,
-    exclusive: bool,
     expected_subsets: list[str],
 ):
     """`script` must also be applied when `exclusive_language_filter=True`.
@@ -235,7 +242,7 @@ def test_filter_languages_script_exclusive(
     """
     task = get_task(task_name)
     task.filter_languages(
-        languages=languages, script=script, exclusive_language_filter=exclusive
+        languages=languages, script=script, exclusive_language_filter=True
     )
     assert sorted(task.hf_subsets) == expected_subsets
 
@@ -244,7 +251,7 @@ def test_filter_languages_script_exclusive(
     ("task_name", "languages", "script"),
     [
         # No subset is purely Russian in Latin script: "rus" is Cyrillic and "rus-eng"
-        # mixes Cyrillic with Latin, so neither survives exclusive filtering.
+        # contains English, so neither survives exclusive filtering.
         ("RuNLUIntentClassification", ["rus"], ["Latn"]),
         # STS22 has no Latin-script Russian subset at all.
         ("STS22.v2", ["rus"], ["Latn"]),
