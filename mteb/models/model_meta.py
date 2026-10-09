@@ -56,6 +56,7 @@ from mteb.types import (
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
+    from typing import Self
 
     from sentence_transformers import (
         CrossEncoder,
@@ -65,7 +66,6 @@ if TYPE_CHECKING:
         SentenceTransformerModelCardData,
         SparseEncoder,
     )
-    from typing_extensions import Self
 
     from mteb.abstasks import AbsTask
     from mteb.benchmarks.benchmark import Benchmark
@@ -1137,12 +1137,15 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         config_sbert = _get_json_from_hub(
             model_name, "config_sentence_transformers.json", "model", revision=revision
         )
-        similarity_fn_name = (
-            ScoringFunction.from_str(config_sbert["similarity_fn_name"])
-            if config_sbert is not None
+        similarity_fn_name = ScoringFunction.COSINE
+        if (
+            config_sbert is not None
             and config_sbert.get("similarity_fn_name") is not None
-            else ScoringFunction.COSINE
-        )
+        ):
+            sbert_similarity_fn_name = config_sbert["similarity_fn_name"]
+            if sbert_similarity_fn_name in {"maxsim", "meanmaxsim"}:
+                sbert_similarity_fn_name = ScoringFunction.MAX_SIM.value
+            similarity_fn_name = ScoringFunction.from_str(sbert_similarity_fn_name)
 
         return cls.create_empty(
             overwrites=dict(

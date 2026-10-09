@@ -331,7 +331,7 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
                         task_results,
                         evaluation_time=evaluation_time + (tock_ss - tick),
                         kg_co2_emissions=existing_co2,
-                        date=datetime.datetime.now(tz=datetime.timezone.utc),
+                        date=datetime.datetime.now(tz=datetime.UTC),
                         evaluation_phases=timer.phases if timer.phases else None,
                     )
                     cache.save_to_cache(new_result, model_meta)
@@ -355,7 +355,7 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
         task_results,
         evaluation_time=evaluation_time,
         kg_co2_emissions=existing_co2,
-        date=datetime.datetime.now(tz=datetime.timezone.utc),
+        date=datetime.datetime.now(tz=datetime.UTC),
         evaluation_phases=timer.phases if timer.phases else None,
     )
 

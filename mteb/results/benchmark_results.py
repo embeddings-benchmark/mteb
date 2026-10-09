@@ -25,9 +25,9 @@ from .model_result import ModelResult, _aggregate_and_pivot
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterable, Iterator
+    from typing import Self
 
     import datasets
-    from typing_extensions import Self
 
     from mteb.abstasks.abstask import AbsTask
     from mteb.abstasks.task_metadata import (
