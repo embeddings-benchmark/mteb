@@ -26,6 +26,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable, Sequence
 
     import torch
+    from datasets import Dataset
     from sentence_transformers import (
         CrossEncoder,
         MultiVectorEncoder,
@@ -542,6 +543,9 @@ class CrossEncoderWrapper:
         device: The device used to load the model.
         query_prefix: A prefix to add to all queries.
         passage_prefix: A prefix to add to all passages.
+        document_modalities: Document input modalities to use, such as ["text"] or
+            ["text", "image"]. None preserves the default input handling. Queries
+            are unaffected. Explicit choices are recorded as model experiments.
         **kwargs: Additional arguments to pass to the CrossEncoder model.
     """
 
@@ -553,6 +557,7 @@ class CrossEncoderWrapper:
         query_prefix: str = "",
         passage_prefix: str = "",
         *,
+        document_modalities: list[Modalities] | None = None,
         fps: float | None = None,
         max_frames: int | None = None,
         num_frames: int | None = None,
@@ -562,6 +567,16 @@ class CrossEncoderWrapper:
     ) -> None:
         from sentence_transformers import CrossEncoder
 
+        if document_modalities is not None and (
+            not document_modalities
+            or not set(document_modalities) <= {"text", "image", "audio", "video"}
+        ):
+            raise ValueError(
+                "document_modalities must be a non-empty selection of text, image, audio or video."
+            )
+        self.document_modalities = (
+            list(document_modalities) if document_modalities is not None else None
+        )
         if isinstance(model, CrossEncoder):
             self.model = model
             self.mteb_model_meta = ModelMeta.from_cross_encoder(self.model)
@@ -573,6 +588,16 @@ class CrossEncoderWrapper:
                     revision=revision,
                     loader=CrossEncoderWrapper,
                 )
+            )
+        if self.document_modalities is not None:
+            # Also retain the setting when the wrapper is constructed directly.
+            self.mteb_model_meta = self.mteb_model_meta.model_copy(
+                update={
+                    "experiment_kwargs": {
+                        **(self.mteb_model_meta.experiment_kwargs or {}),
+                        "document_modalities": self.document_modalities,
+                    }
+                }
             )
         self.query_prefix = query_prefix
         self.passage_prefix = passage_prefix
@@ -586,12 +611,36 @@ class CrossEncoderWrapper:
         self,
         loader: DataLoader[BatchedInput],
         prefix: str,
+        modalities: list[Modalities] | None = None,
     ) -> list[Any]:
         """Return a list of items to feed to the cross-encoder.
 
         For text-only inputs this is a list of prefix-prepended strings; for
         multimodal inputs it is a list of per-sample modality dicts.
         """
+        if modalities is not None:
+            from torch.utils.data import DataLoader
+
+            dataset = cast("Dataset", loader.dataset)
+            if not set(modalities) <= set(self.mteb_model_meta.modalities):
+                raise ValueError(
+                    f"Requested document modalities {modalities} are not supported "
+                    f"by this model ({self.mteb_model_meta.modalities})."
+                )
+            missing = set(modalities) - set(dataset.features)
+            if missing:
+                raise ValueError(
+                    f"Requested document modalities are missing: {sorted(missing)}"
+                )
+            # Project before iteration so excluded images/audio/video are not decoded.
+            # Reuse the batch sampler to preserve query/document pair ordering.
+            loader = DataLoader(
+                dataset.select_columns(modalities),
+                batch_sampler=loader.batch_sampler,
+                collate_fn=loader.collate_fn,
+                num_workers=loader.num_workers,
+                pin_memory=loader.pin_memory,
+            )
         is_multimodal = _setup_modality_collator(
             loader,
             fps=self.fps,
@@ -641,7 +690,9 @@ class CrossEncoderWrapper:
             The predicted relevance scores for each inputs pair.
         """
         queries = self._collect_inputs(inputs1, self.query_prefix)
-        corpus = self._collect_inputs(inputs2, self.passage_prefix)
+        corpus = self._collect_inputs(
+            inputs2, self.passage_prefix, self.document_modalities
+        )
 
         return cast(
             "Array",

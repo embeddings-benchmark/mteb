@@ -59,6 +59,38 @@ Call `convert_to_reranking` to select candidates before a reranking evaluation.
 Without conversion, the same task runs its usual full-corpus retrieval evaluation.
 Instantiate a fresh task for each first-stage source or ordinary retrieval run.
 
+## Select the reranker's document inputs
+
+For models using `CrossEncoderWrapper`, including Qwen3-VL, set the document
+modalities when loading the model:
+
+```python
+reranker = mteb.get_model(
+    "Qwen/Qwen3-VL-Reranker-2B", document_modalities=["text"]
+)
+```
+
+Use `["image"]` or `["text", "image"]` for the other document representations.
+This selects the actual document columns passed to the model; query inputs stay
+unchanged. Missing or unsupported modalities raise an error. Omitting the option
+preserves the wrapper's default handling and does not assert which inputs were
+used. Other model wrappers must support this option before it can be used with them.
+
+The choice is saved in `model_meta.json` under
+`experiment_kwargs.document_modalities`, retained in the exported `experiments`
+column, and selects a separate `experiments/<experiment-id>/` directory above
+`reranking/<configuration-id>/`. `ModelMeta.modalities` continues to describe
+model capabilities. The first-stage `document_modalities` describes the
+retriever's inputs independently of this reranker setting.
+
+For a small text-only run:
+
+```bash
+python -m scripts.run_vidore_reranking \
+  --model cross-encoder/ms-marco-MiniLM-L6-v2 \
+  --document-modalities text --domains Hr --output vidore-text-reranker
+```
+
 ## Proposed results layout
 
 ```text

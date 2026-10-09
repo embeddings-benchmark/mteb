@@ -7,10 +7,12 @@ import json
 import re
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
-from typing import Any, Literal
+from typing import Any
 
 from huggingface_hub import hf_hub_download
 from pydantic import BaseModel, Field
+
+from mteb.types import Modalities
 
 
 @dataclass(frozen=True)
@@ -25,7 +27,8 @@ class FirstStagePredictionSource:
     repo_id: str
     filename: str
     revision: str
-    document_representation: Literal["text", "image", "text-image"] | None = None
+    # Document inputs used by the retriever, independent of the reranker's inputs.
+    document_modalities: list[Modalities] | None = None
 
     def __post_init__(self) -> None:
         if not re.fullmatch(r"[0-9a-fA-F]{40}", self.revision):
@@ -74,7 +77,7 @@ class RerankingConfiguration(BaseModel):
 
     first_stage: str
     top_k: int = Field(gt=0)
-    document_representation: Literal["text", "image", "text-image"] | None = None
+    document_modalities: list[Modalities] | None = None
     predictions: PredictionArtifact
 
     @property

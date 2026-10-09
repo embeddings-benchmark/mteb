@@ -42,10 +42,10 @@ def test_existing_task_declares_prepared_sources(domain):
         source.revision == "3d6834bc0d3aded9de65eb2e431d875f654c96e8"
         for source in task.first_stage_predictions.values()
     )
-    assert (
-        task.first_stage_predictions["qwen-text-image"].document_representation
-        == "text-image"
-    )
+    assert task.first_stage_predictions["qwen-text-image"].document_modalities == [
+        "text",
+        "image",
+    ]
     assert task.metadata.descriptive_stats is not None
     assert task.reranking_configuration is None
     assert not task.data_loaded

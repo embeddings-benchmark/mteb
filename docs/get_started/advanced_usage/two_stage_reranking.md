@@ -102,17 +102,19 @@ Converted evaluations have a separate result directory:
 ```
 
 A task result has an optional top-level `reranking` object with `first_stage`,
-`top_k`, `document_representation`, and
+`top_k`, `document_modalities`, and
 `predictions` (the file SHA256 and, for Hub sources, repository, revision and
-filename). Source declarations can set `document_representation` to `text`,
-`image`, or `text-image`; this describes the retriever's inputs, not the reranker's.
+filename). Source declarations can set `document_modalities` to `["text"]`,
+`["image"]`, or `["text", "image"]`; this describes the retriever's inputs.
+The reranker's own `document_modalities` setting is recorded independently in
+its model experiment metadata.
 The producer model name and revision remain in the existing
 `previous_results_model_meta` field on each score row. They are retained when
 loading only main scores and included in dataset exports. Language subsets
 remain unchanged inside `scores["test"]`.
 
 The configuration ID groups tasks using the same named first stage,
-representation, pinned Hub directory and top-k. Each directory should contain
+document modalities, pinned Hub directory and top-k. Each directory should contain
 one retriever and document representation across tasks. The filename and
 checksum remain per-task provenance and must match when reusing or merging
 results. Local files use their content hash in the configuration ID. Different

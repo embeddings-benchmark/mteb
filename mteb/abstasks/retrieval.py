@@ -813,8 +813,8 @@ class AbsTaskRetrieval(AbsTask):
         configuration = RerankingConfiguration(
             first_stage=first_stage if first_stage is not None else "local",
             top_k=top_k,
-            document_representation=(
-                source.document_representation
+            document_modalities=(
+                source.document_modalities
                 if isinstance(source, FirstStagePredictionSource)
                 else None
             ),

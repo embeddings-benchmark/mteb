@@ -5,6 +5,7 @@ from pathlib import Path
 
 import mteb
 from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
 
 
 def main() -> None:
@@ -13,6 +14,12 @@ def main() -> None:
         "--model",
         default="mteb/baseline-random-encoder",
         help="Reranker model ID; the default only checks the workflow on CPU.",
+    )
+    parser.add_argument(
+        "--document-modalities",
+        nargs="+",
+        choices=["text", "image", "audio", "video"],
+        help="Document inputs for models using CrossEncoderWrapper (recorded as an experiment).",
     )
     parser.add_argument("--domains", nargs="+", default=["Hr", "Energy"])
     parser.add_argument(
@@ -25,7 +32,18 @@ def main() -> None:
     parser.add_argument("--output", type=Path, default=Path("vidore-reranking-output"))
     args = parser.parse_args()
     cache = mteb.ResultCache(args.output)
-    model = mteb.get_model(args.model)
+    model_kwargs = (
+        {"document_modalities": args.document_modalities}
+        if args.document_modalities is not None
+        else {}
+    )
+    model = mteb.get_model(args.model, **model_kwargs)
+    if args.document_modalities is not None and not isinstance(
+        model, CrossEncoderWrapper
+    ):
+        parser.error(
+            "--document-modalities requires a model using CrossEncoderWrapper."
+        )
     tasks = []
     configurations = set()
     for domain in args.domains:

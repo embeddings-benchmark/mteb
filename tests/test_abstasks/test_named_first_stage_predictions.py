@@ -85,13 +85,13 @@ def test_pinned_hub_source_and_tied_scores(tmp_path, monkeypatch):
     task = MockRetrievalTask()
     task.first_stage_predictions = {
         "frozen": FirstStagePredictionSource(
-            "org/predictions", "bm25.json", "a" * 40, "text"
+            "org/predictions", "bm25.json", "a" * 40, ["text"]
         )
     }
     task.convert_to_reranking(first_stage="frozen", top_k=2)
     assert task.dataset["default"]["test"]["top_ranked"]["q1"] == ["d2", "d1"]
     assert task.reranking_configuration.predictions.revision == "a" * 40
-    assert task.reranking_configuration.document_representation == "text"
+    assert task.reranking_configuration.document_modalities == ["text"]
     assert calls == [
         {
             "repo_id": "org/predictions",
@@ -180,10 +180,10 @@ def test_two_domains_three_sources_survive_submission_and_export(tmp_path, monke
     cache = ResultCache(tmp_path / "cache")
     tasks = []
     for domain in ("One", "Two"):
-        for name, modality in [
-            ("bm25", "text"),
-            ("bge", "text"),
-            ("qwen", "text-image"),
+        for name, modalities in [
+            ("bm25", ["text"]),
+            ("bge", ["text"]),
+            ("qwen", ["text", "image"]),
         ]:
             task = MockRetrievalTask()
             task.metadata = task.metadata.model_copy(
@@ -191,7 +191,10 @@ def test_two_domains_three_sources_survive_submission_and_export(tmp_path, monke
             )
             task.first_stage_predictions = {
                 name: FirstStagePredictionSource(
-                    "org/preds", f"{name}/{modality}/{domain}.json", "a" * 40, modality
+                    "org/preds",
+                    f"{name}/{'-'.join(modalities)}/{domain}.json",
+                    "a" * 40,
+                    modalities,
                 )
             }
             task.convert_to_reranking(first_stage=name, top_k=1)
@@ -214,6 +217,11 @@ def test_two_domains_three_sources_survive_submission_and_export(tmp_path, monke
         == {"model_name": "test/retriever", "revision": "abc"}
         for row in exported
     )
+    for row in exported:
+        assert row["reranking"]["document_modalities"] == (
+            ["text", "image"] if row["reranking"]["first_stage"] == "qwen" else ["text"]
+        )
+        assert "document_representation" not in row["reranking"]
     for cfg in set(exported["reranking_id"]):
         selected = loaded.filter_reranking(cfg)
         assert len(selected[0].task_results) == 2
