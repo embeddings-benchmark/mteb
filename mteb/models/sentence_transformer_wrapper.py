@@ -647,7 +647,8 @@ class CrossEncoderWrapper:
             "Array",
             self.model.predict(
                 list(zip(queries, corpus, strict=True)),
-                **kwargs,
+                # `precision` only applies to embeddings
+                **{k: v for k, v in kwargs.items() if k != "precision"},
             ),
         )
 
