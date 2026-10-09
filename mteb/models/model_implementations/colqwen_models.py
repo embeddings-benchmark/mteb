@@ -923,7 +923,11 @@ vultron_core_qwen35_4b = ModelMeta(
 
 colqwen_omni = ModelMeta(
     loader=ColQwen2_5OmniWrapper,
-    loader_kwargs=dict(torch_dtype=OutputDType.BF16),
+    loader_kwargs=dict(
+        torch_dtype=OutputDType.BF16,
+        # LoRA adapter; its adapter_config.json names vidore/colqwen2.5omni-base without a revision
+        base_revision="59289e054b63a1164c0f26c33f3550f3cde7399b",
+    ),
     name="vidore/colqwen-omni-v0.1",
     model_type=["late-interaction"],
     languages=["eng-Latn"],
