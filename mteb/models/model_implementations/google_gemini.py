@@ -211,8 +211,8 @@ def _audio_to_wav_bytes(audio_item: dict) -> bytes:
         )
         array = array[..., :max_samples]
 
-    # Convert float audio to 16-bit PCM
-    pcm = (array * 32767).astype(np.int16)
+    # Convert float audio to 16-bit PCM; clip so loud samples do not wrap around
+    pcm = (np.clip(array, -1.0, 1.0) * 32767).astype(np.int16)
     buf = io.BytesIO()
     with wave.open(buf, "wb") as wf:
         wf.setnchannels(1)
