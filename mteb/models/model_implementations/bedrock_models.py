@@ -14,6 +14,7 @@ from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import PromptType
 
 from .cohere_models import (
     model_prompts as cohere_model_prompts,
@@ -27,7 +28,7 @@ if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types import Array, BatchedInput
 
 
 logger = logging.getLogger(__name__)
@@ -320,10 +321,19 @@ NOVA_MAX_VIDEO_SECONDS = 30
 NOVA_MAX_AUDIO_SECONDS = 30
 NOVA_VIDEO_MODE = "AUDIO_VIDEO_COMBINED"
 
-_NOVA_CLASSIFICATION_TASKS = {
-    "Classification",
-    "MultilabelClassification",
-    "PairClassification",
+# "Max length: 8192 characters" for text.value, and inline sources are capped
+# at "25 MB" after base64 encoding.
+# https://docs.aws.amazon.com/nova/latest/userguide/embeddings-schema.html
+NOVA_MAX_TEXT_CHARS = 8192
+NOVA_MAX_INLINE_BYTES = 25_000_000  # read conservatively as decimal MB
+
+# Retrieval queries use the purpose matching the modality of the documents
+# searched; mixed-modality corpora keep GENERIC_RETRIEVAL (schema docs).
+_NOVA_QUERY_PURPOSE_BY_DOC_MODALITY = {
+    "text": "TEXT_RETRIEVAL",
+    "image": "IMAGE_RETRIEVAL",
+    "audio": "AUDIO_RETRIEVAL",
+    "video": "VIDEO_RETRIEVAL",
 }
 
 
@@ -340,6 +350,8 @@ class NovaMultimodalEmbeddingsModel(AbsEncoder):
 
     def __init__(
         self,
+        model_name: str | None = None,
+        revision: str | None = None,
         model_id: str = "amazon.nova-2-multimodal-embeddings-v1:0",
         region_name: str = "us-east-1",
         embedding_dimension: int = 3072,
@@ -352,7 +364,7 @@ class NovaMultimodalEmbeddingsModel(AbsEncoder):
         self._model_id = model_id
         self._embedding_dimension = embedding_dimension
         self._max_workers = max_workers
-        self._max_chars = int(max_tokens * CHARS_PER_TOKEN)
+        self._max_chars = min(int(max_tokens * CHARS_PER_TOKEN), NOVA_MAX_TEXT_CHARS)
         self._client = get_bedrock_runtime_client(
             region_name,
             config=Config(retries={"max_attempts": 10, "mode": "adaptive"}),
@@ -360,14 +372,19 @@ class NovaMultimodalEmbeddingsModel(AbsEncoder):
 
     @staticmethod
     def _purpose(task_metadata: TaskMetadata, prompt_type: PromptType | None) -> str:
-        if task_metadata.type in _NOVA_CLASSIFICATION_TASKS:
+        task_type = task_metadata.simplified_task_type
+        if task_type in {"classification", "pair-classification"}:
             return NOVA_PURPOSE_CLASSIFICATION
-        if task_metadata.type == "Clustering":
+        if task_type == "clustering":
             return NOVA_PURPOSE_CLUSTERING
-        if (
-            prompt_type is not None
-            and getattr(prompt_type, "value", prompt_type) == "query"
-        ):
+        if prompt_type == PromptType.query:
+            doc_modalities = (
+                task_metadata.get_modalities(PromptType.document)
+                if task_type == "retrieval"
+                else []
+            )
+            if len(doc_modalities) == 1:
+                return _NOVA_QUERY_PURPOSE_BY_DOC_MODALITY[doc_modalities[0]]
             return NOVA_PURPOSE_QUERY
         return NOVA_PURPOSE_DOCUMENT
 
@@ -424,6 +441,7 @@ class NovaMultimodalEmbeddingsModel(AbsEncoder):
         video: Any,  # noqa: ANN401 -- raw video payload handed to the Bedrock SDK
         purpose: str,
     ) -> dict[str, Any]:
+        from torch.nn import functional as F
         from torchcodec.encoders import VideoEncoder
 
         metadata = video.metadata
@@ -454,14 +472,29 @@ class NovaMultimodalEmbeddingsModel(AbsEncoder):
         if height % 2 or width % 2:
             frames = frames[..., : height - (height % 2), : width - (width % 2)]
 
-        encoded = VideoEncoder(frames, frame_rate=frame_rate).to_tensor(format="mp4")
-        raw = encoded.numpy().tobytes()
+        # Pin the codec rather than leaving it to the local ffmpeg build, and
+        # halve the resolution until the base64 payload fits the inline limit.
+        while True:
+            encoded = VideoEncoder(frames, frame_rate=frame_rate).to_tensor(
+                format="mp4", codec="h264", pixel_format="yuv420p"
+            )
+            source = base64.b64encode(encoded.numpy().tobytes())
+            height, width = frames.shape[-2:]
+            if len(source) <= NOVA_MAX_INLINE_BYTES or min(height, width) < 64:
+                break
+            frames = (
+                F.interpolate(
+                    frames.float(), size=(height // 4 * 2, width // 4 * 2), mode="area"
+                )
+                .round()
+                .to(frames.dtype)
+            )
 
         params = self._params(purpose)
         params["video"] = {
             "embeddingMode": NOVA_VIDEO_MODE,
             "format": "mp4",
-            "source": {"bytes": base64.b64encode(raw).decode()},
+            "source": {"bytes": source.decode()},
         }
         return {"taskType": "SINGLE_EMBEDDING", "singleEmbeddingParams": params}
 
