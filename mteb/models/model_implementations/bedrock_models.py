@@ -320,6 +320,8 @@ NOVA_PURPOSE_CLUSTERING = "CLUSTERING"
 NOVA_MAX_VIDEO_SECONDS = 30
 NOVA_MAX_AUDIO_SECONDS = 30
 NOVA_VIDEO_MODE = "AUDIO_VIDEO_COMBINED"
+# Sample rates the AAC encoder accepts; others are resampled to 48 kHz.
+_AAC_SAMPLE_RATES = {8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000}
 
 # "Max length: 8192 characters" for text.value, and inline sources are capped
 # at "25 MB" after base64 encoding.
@@ -337,6 +339,47 @@ _NOVA_QUERY_PURPOSE_BY_DOC_MODALITY = {
 }
 
 
+def _mux_audio_into_mp4(
+    video_mp4: bytes, audio: dict[str, Any], max_seconds: float
+) -> bytes:
+    """Add ``audio``, cut to ``max_seconds``, to ``video_mp4`` as an AAC track."""
+    import av
+
+    array = np.asarray(audio["array"], dtype=np.float32)
+    sampling_rate = int(audio["sampling_rate"])
+    if array.ndim > 1:
+        array = array.mean(axis=0)
+    max_samples = int(min(max_seconds, NOVA_MAX_AUDIO_SECONDS) * sampling_rate)
+    array = np.clip(array[:max_samples], -1.0, 1.0)
+    if array.size == 0:
+        return video_mp4
+    rate = sampling_rate if sampling_rate in _AAC_SAMPLE_RATES else 48_000
+
+    output = io.BytesIO()
+    with (
+        av.open(io.BytesIO(video_mp4)) as source,
+        av.open(output, mode="w", format="mp4") as target,
+    ):
+        video_in = source.streams.video[0]
+        video_out = target.add_stream_from_template(video_in)
+        audio_out = target.add_stream("aac", rate=rate, layout="mono")
+        for packet in source.demux(video_in):
+            if packet.dts is None:  # flush packet
+                continue
+            packet.stream = video_out
+            target.mux(packet)
+
+        frame = av.AudioFrame.from_ndarray(
+            np.ascontiguousarray(array[None, :]), format="flt", layout="mono"
+        )
+        frame.sample_rate = sampling_rate
+        resampler = av.AudioResampler(format="fltp", layout="mono", rate=rate)
+        for resampled in [*resampler.resample(frame), *resampler.resample(None)]:
+            target.mux(audio_out.encode(resampled))
+        target.mux(audio_out.encode(None))
+    return output.getvalue()
+
+
 class NovaMultimodalEmbeddingsModel(AbsEncoder):
     """Amazon Nova Multimodal Embeddings via the Bedrock synchronous InvokeModel API.
 
@@ -345,7 +388,9 @@ class NovaMultimodalEmbeddingsModel(AbsEncoder):
     Video arrives as a torchcodec ``VideoDecoder``, so frames are re-encoded to
     mp4 at the source frame rate before upload; Nova validates the container
     against the declared format and does not accept every source container.
-    Segments are capped at ``NOVA_MAX_VIDEO_SECONDS``.
+    Segments are capped at ``NOVA_MAX_VIDEO_SECONDS``. For video+audio items
+    the audio is muxed into the mp4 as its audio track, which Nova embeds
+    together with the frames (``AUDIO_VIDEO_COMBINED``).
     """
 
     def __init__(
@@ -383,6 +428,9 @@ class NovaMultimodalEmbeddingsModel(AbsEncoder):
                 if task_type == "retrieval"
                 else []
             )
+            # video+audio documents are AUDIO_VIDEO_COMBINED video embeddings
+            if set(doc_modalities) == {"audio", "video"}:
+                doc_modalities = ["video"]
             if len(doc_modalities) == 1:
                 return _NOVA_QUERY_PURPOSE_BY_DOC_MODALITY[doc_modalities[0]]
             return NOVA_PURPOSE_QUERY
@@ -440,7 +488,9 @@ class NovaMultimodalEmbeddingsModel(AbsEncoder):
         self,
         video: Any,  # noqa: ANN401 -- raw video payload handed to the Bedrock SDK
         purpose: str,
+        audio: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
+        import torch
         from torch.nn import functional as F
         from torchcodec.encoders import VideoEncoder
 
@@ -478,16 +528,22 @@ class NovaMultimodalEmbeddingsModel(AbsEncoder):
             encoded = VideoEncoder(frames, frame_rate=frame_rate).to_tensor(
                 format="mp4", codec="h264", pixel_format="yuv420p"
             )
-            source = base64.b64encode(encoded.numpy().tobytes())
+            raw = encoded.numpy().tobytes()
+            if audio is not None:
+                raw = _mux_audio_into_mp4(raw, audio, keep / frame_rate)
+            source = base64.b64encode(raw)
             height, width = frames.shape[-2:]
             if len(source) <= NOVA_MAX_INLINE_BYTES or min(height, width) < 64:
                 break
-            frames = (
-                F.interpolate(
-                    frames.float(), size=(height // 4 * 2, width // 4 * 2), mode="area"
-                )
-                .round()
-                .to(frames.dtype)
+            # resize a few frames at a time to bound memory on long 4K clips
+            size = (height // 4 * 2, width // 4 * 2)
+            frames = torch.cat(
+                [
+                    F.interpolate(chunk.float(), size=size, mode="area")
+                    .round()
+                    .to(frames.dtype)
+                    for chunk in frames.split(16)
+                ]
             )
 
         params = self._params(purpose)
@@ -530,12 +586,17 @@ class NovaMultimodalEmbeddingsModel(AbsEncoder):
                 present = [
                     k for k in ("image", "audio", "video", "text") if batch.get(k)
                 ]
-                if len(present) > 1:
+                if set(present) == {"audio", "video"}:
+                    payloads = [
+                        self._video_payload(v, purpose, audio=a)
+                        for v, a in zip(videos, audios, strict=True)
+                    ]
+                elif len(present) > 1:
                     raise NotImplementedError(
                         "Interleaved multi-modality input is not yet supported "
                         f"for Nova Multimodal Embeddings. Got: {present}"
                     )
-                if images:
+                elif images:
                     payloads = [self._image_payload(im, purpose) for im in images]
                 elif audios:
                     payloads = [self._audio_payload(a, purpose) for a in audios]
@@ -583,5 +644,5 @@ amazon_nova_2_multimodal_embeddings = ModelMeta(
     framework=["API"],
     use_instructions=False,
     modalities=["text", "image", "audio", "video"],
-    extra_requirements_groups=["boto3"],
+    extra_requirements_groups=["boto3", "video", "av"],
 )
