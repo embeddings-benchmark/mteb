@@ -97,8 +97,10 @@ class MSClapWrapper(AbsEncoder):
                         suffix=".wav", delete=False
                     ) as temp_file:
                         temp_files.append(temp_file.name)
-                    # write after closing the handle so soundfile owns the file
-                    sf.write(temp_file.name, array, self.sampling_rate)
+                    # write after closing the handle so soundfile owns the file;
+                    # float, because resampled audio is off the 16-bit grid and
+                    # 2023 is sensitive to that quantisation
+                    sf.write(temp_file.name, array, self.sampling_rate, subtype="FLOAT")
 
                 with torch.no_grad():
                     # Use the official msclap API that expects file paths
@@ -133,6 +135,11 @@ class MSClapWrapper(AbsEncoder):
             inputs, disable=not show_progress_bar, desc="Processing text batches"
         ):
             texts = batch["text"]
+            # msclap appends this for the GPT-2 text encoder (2023), which pools
+            # on it; BERT (2022) gets no suffix
+            # https://github.com/microsoft/CLAP/blob/main/msclap/CLAPWrapper.py
+            if "gpt" in self.model.args.text_model:
+                texts = [text + " <|endoftext|>" for text in texts]
 
             features = self.tokenizer(
                 texts,
