@@ -436,6 +436,9 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
             inputs.collate_fn = FramesCollator(
                 fps=GEMINI_VIDEO_FPS,
                 max_frames=GEMINI_MAX_VIDEO_FRAMES,
+                # frames are re-encoded at GEMINI_VIDEO_FPS; padding would stretch the clip
+                min_frames=1,
+                frame_factor=1,
             )
 
         modality_keys = (text_key, "title", "image", "audio", "video")

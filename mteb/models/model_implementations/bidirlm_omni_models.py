@@ -206,6 +206,9 @@ class BidirLMOmniEncoder(AbsEncoder):
                 max_frames=self.max_frames,
                 num_frames=self.num_frames,
                 max_samples=self.max_samples,
+                # the Qwen3-VL video processor keeps an odd frame count and pads
+                # the last frame itself, so do not drop one
+                frame_factor=1,
             )
         elif has_audio:
             inputs.collate_fn = AudioCollator(
