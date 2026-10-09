@@ -147,7 +147,7 @@ faiss-cpu = ["faiss-cpu>=1.12.0"]
 eager_embed = ["qwen_vl_utils>=0.0.14"]
 speechbrain = ["speechbrain>=0.5.12"]
 muq = ["muq==0.1.0"]
-wav2clip = ["wav2clip==0.1.0"]
+wav2clip = ["wav2clip==0.1.0", "accelerate>=0.26.0"]
 fusion-embedding = ["librosa>=0.10.0", "soundfile>=0.13.1", "torchvision>=0.22.1", "pillow>=10.0.1", "accelerate>=0.26.0"]
 torch-vggish-yamnet = ["torch-vggish-yamnet==0.2.1"]
 vllm = ["vllm>=0.11.1"]
@@ -185,7 +185,13 @@ languagebind = [
     "datasets>=3.3.0,<5.0.0",
 ]
 gme = ["transformers<4.52.0"]
-imagebind = ["imagebind-unofficial>=0.1.0", "soundfile>=0.13.1"]
+imagebind = ["imagebind-unofficial>=0.1.0", "soundfile>=0.13.1", "einops>=0.8.0", "setuptools<81"]  # imagebind imports pkg_resources
+speecht5 = ["sentencepiece>=0.2.0"]
+seamless-m4t = ["sentencepiece>=0.2.0", "protobuf>=3.0.0"]
+audio-flamingo-3 = ["accelerate>=0.26.0"]
+bidirlm-omni = ["librosa>=0.10.0"]
+# ViCLIP remote code; setuptools<81 for its `from pkg_resources import packaging`
+viclip = ["einops>=0.8.0", "timm>=1.0.15,<1.1.0", "ftfy>=6.0", "regex", "fvcore", "setuptools<81", "transformers<5"]
 
 [dependency-groups]
 lint = [
@@ -558,6 +564,7 @@ conflicts = [
         { extra = "internvideo2" }, # conflicting versions of transformers
         { extra = "transformers-v5" },
         { extra = "cosmos-embed1" }, # remote code needs transformers<5
+        { extra = "viclip" }, # remote code needs transformers<5
         { extra = "qwen-vl" },
         { extra = "wemm" },
         { extra = "uembed" }, # needs transformers>=5.4.0

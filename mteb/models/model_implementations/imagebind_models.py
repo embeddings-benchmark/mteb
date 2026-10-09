@@ -25,6 +25,18 @@ IMAGEBIND_CITATION = """@inproceedings{girdhar2023imagebind,
 }"""
 
 
+def _apply_imagebind_compat() -> None:
+    """Alias ``torchvision.transforms.functional_tensor`` (removed in torchvision 0.17) for pytorchvideo."""
+    import sys
+
+    try:
+        import torchvision.transforms.functional_tensor  # noqa: F401
+    except ImportError:
+        import torchvision.transforms.functional as _tv_functional
+
+        sys.modules["torchvision.transforms.functional_tensor"] = _tv_functional
+
+
 class ImageBindWrapper(AbsEncoder):
     """MTEB wrapper for Meta's ImageBind model.
 
@@ -44,6 +56,8 @@ class ImageBindWrapper(AbsEncoder):
         **kwargs: Any,
     ) -> None:
         import torch
+
+        _apply_imagebind_compat()
         from imagebind.models import imagebind_model
 
         self.device = device or (
