@@ -349,6 +349,9 @@ class SummaryRowSchema(_CamelModel):
     mean_task_type: float | None
     mean_public: float | None = None
     mean_private: float | None = None
+    elo: float | None = None
+    elo_low: float | None = None
+    elo_high: float | None = None
     scores_by_task_type: dict[str, float]
     scores_by_task: dict[str, float]
     scores_by_custom_group: dict[str, dict[str, float]] = Field(default_factory=dict)
