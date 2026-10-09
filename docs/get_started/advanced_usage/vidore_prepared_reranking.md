@@ -65,9 +65,7 @@ For models using `CrossEncoderWrapper`, including Qwen3-VL, set the document
 modalities when loading the model:
 
 ```python
-reranker = mteb.get_model(
-    "Qwen/Qwen3-VL-Reranker-2B", document_modalities=["text"]
-)
+reranker = mteb.get_model("Qwen/Qwen3-VL-Reranker-2B", document_modalities=["text"])
 ```
 
 Use `["image"]` or `["text", "image"]` for the other document representations.

@@ -6,7 +6,6 @@ from typing import Any
 import numpy as np
 import pytest
 from datasets import Dataset, Image
-from PIL import Image as PILImage
 
 import mteb
 from mteb._create_dataloaders import create_dataloader
@@ -14,6 +13,10 @@ from mteb.mocks.mock_tasks import MockRetrievalTask
 from mteb.models import ModelMeta
 from mteb.models.model_implementations.qwen3_vl_reranker import Qwen3VLRerankerWrapper
 from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
+
+PILImage = pytest.importorskip(
+    "PIL.Image", reason="Image dependencies are not installed"
+)
 
 
 @pytest.fixture

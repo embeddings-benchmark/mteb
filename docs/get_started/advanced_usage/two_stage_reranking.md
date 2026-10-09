@@ -141,7 +141,8 @@ domains. Reloading, revision joining and submission retain each configuration:
 
 ```python
 results = cache.load_results(include_remote=False)
-rows = results._to_dataset()  # Includes `reranking_id`, `reranking`, and `previous_results_model_meta`.
+# Includes `reranking_id`, `reranking`, and `previous_results_model_meta`.
+rows = results._to_dataset()
 rows.to_parquet("reranking-results.parquet")
 
 # Summary helpers require an explicit first-stage selection.
