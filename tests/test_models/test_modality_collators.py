@@ -9,6 +9,7 @@ from mteb._create_dataloaders import _custom_collate_fn
 from mteb.models.modality_collators import (
     AudioCollator,
     FramesCollator,
+    VideoCollator,
     seconds_to_samples,
     single_clip_dataloader,
 )
@@ -56,6 +57,43 @@ def test_resample_video_fps_spans_clip_and_respects_cap() -> None:
 def test_resample_video_without_sampling_keeps_all_frames() -> None:
     video = _StubDecoder(12, seconds=1.0)
     assert FramesCollator.resample_video(video) == list(range(12))
+
+
+@pytest.mark.parametrize(
+    "collator",
+    [
+        VideoCollator(target_sampling_rate=16_000, num_frames=2),
+        FramesCollator(num_frames=2),
+    ],
+)
+def test_video_collators_keep_column_order(
+    collator: VideoCollator | FramesCollator,
+) -> None:
+    """Chat templates that follow the dict order must see video before audio."""
+    row = {
+        "id": "a",
+        "video": _StubDecoder(4, seconds=1.0),
+        "text": "caption",
+    }
+    if isinstance(collator, VideoCollator):
+        row["audio"] = {"array": [0.0] * 10, "sampling_rate": 16_000}
+    columns = list(row)
+    batch = collator([row])
+    assert list(batch) == columns
+    assert batch["video"] == [[0, 3]]
+
+
+def test_video_collator_puts_video_before_audio() -> None:
+    """Even when the dataset lists audio first, video must come before audio."""
+    collator = VideoCollator(target_sampling_rate=16_000, num_frames=2)
+    row = {
+        "id": "a",
+        "audio": {"array": [0.0] * 10, "sampling_rate": 16_000},
+        "video": _StubDecoder(4, seconds=1.0),
+        "text": "caption",
+    }
+    batch = collator([row])
+    assert list(batch) == ["id", "video", "text", "audio"]
 
 
 def test_seconds_to_samples() -> None:

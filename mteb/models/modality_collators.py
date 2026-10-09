@@ -233,9 +233,9 @@ class FramesCollator:
         """Collate a batch of video inputs by resampling the video frames according to the specified parameters."""
         collated_inputs = []
         for row in inputs:
-            video = row.pop("video")
+            # assign in place (no pop) to keep the dataset's column order
             row["video"] = self.resample_video(
-                video,
+                row["video"],
                 fps=self.fps,
                 max_frames=self.max_frames,
                 num_frames=self.num_frames,
@@ -349,9 +349,10 @@ class VideoCollator:
         collated_inputs = []
         for row in inputs:
             if "video" in row:
-                video = row.pop("video")
+                # assign in place (no pop) to keep the dataset's column order: chat
+                # templates that follow the dict order expect video before audio
                 row["video"] = FramesCollator.resample_video(
-                    video,
+                    row["video"],
                     fps=self.fps,
                     max_frames=self.max_frames,
                     num_frames=self.num_frames,
@@ -365,6 +366,10 @@ class VideoCollator:
                 row["audio"] = AudioInputItem(
                     array=audio_array, sampling_rate=self.target_sampling_rate
                 )
+                if "video" in row:
+                    # the authors' omni prompts put a clip's video before its audio,
+                    # whatever the dataset's column order
+                    row["audio"] = row.pop("audio")
             collated_inputs.append(row)
         return cast(
             "BatchedInput",
