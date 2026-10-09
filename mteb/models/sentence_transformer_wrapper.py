@@ -243,6 +243,41 @@ def _max_sim_document_blocks(documents: Sequence[Array]) -> list[tuple[int, int]
     return blocks
 
 
+def _score_on_device(
+    similarity_fn: Callable[..., Any],
+    device: str | torch.device,
+    embeddings1: Array,
+    embeddings2: Array,
+) -> Array:
+    """Run a dense/sparse similarity function on `device` and return scores on the inputs' device.
+
+    Embeddings are returned on the CPU by `encode` (and always by multi-process pools), so scoring
+    would otherwise run on the CPU.
+    """
+    import torch
+
+    first = (
+        torch.as_tensor(embeddings1)
+        if isinstance(embeddings1, np.ndarray)
+        else embeddings1
+    )
+    result_device = (
+        first.device if isinstance(first, torch.Tensor) else torch.device("cpu")
+    )
+    scores = similarity_fn(
+        _to_device(embeddings1, device), _to_device(embeddings2, device)
+    )
+    return cast("Array", scores.to(result_device))
+
+
+def _to_device(embeddings: Array, device: str | torch.device) -> Array:
+    import torch
+
+    if isinstance(embeddings, (np.ndarray, torch.Tensor)):
+        return torch.as_tensor(embeddings).to(device)
+    return embeddings
+
+
 def _as_vector_list(embeddings: Array) -> list[Any]:
     """Return multi-vector embeddings as a list with one `(num_tokens, dim)` entry per input.
 
@@ -427,6 +462,8 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
             self.model = model
             self.mteb_model_meta = ModelMeta.from_sentence_transformer_model(self.model)
 
+        # `start_multi_process_pool` moves the model to the CPU, so the device is captured here.
+        self._scoring_device = self.model.device
         self.model_prompts = _resolve_model_prompts(self.model, model_prompts)
 
         if (
@@ -450,7 +487,9 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
     def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
         """Compute the similarity between two collections of embeddings."""
         if hasattr(self.model, "similarity") and callable(self.model.similarity):
-            return cast("Array", self.model.similarity(embeddings1, embeddings2))
+            return _score_on_device(
+                self.model.similarity, self._scoring_device, embeddings1, embeddings2
+            )
         return super().similarity(embeddings1, embeddings2)
 
     def encode(
@@ -717,6 +756,8 @@ class SparseEncoderWrapper(AbsEncoder):
             self.model = model
             self.mteb_model_meta = ModelMeta.from_sparse_encoder_model(self.model)
 
+        # `start_multi_process_pool` moves the model to the CPU, so the device is captured here.
+        self._scoring_device = self.model.device
         self.model_prompts = _resolve_model_prompts(self.model, model_prompts)
 
         self.fps = fps
@@ -739,7 +780,9 @@ class SparseEncoderWrapper(AbsEncoder):
         Returns:
             Similarity matrix of shape (num_queries, num_corpus).
         """
-        return cast("Array", self.model.similarity(embeddings1, embeddings2))
+        return _score_on_device(
+            self.model.similarity, self._scoring_device, embeddings1, embeddings2
+        )
 
     def encode(
         self,
@@ -1038,6 +1081,8 @@ class MultiVectorWrapper(MultiVectorSearchEncoderWrapper):
             self.model = model
             self.mteb_model_meta = ModelMeta.from_multi_vector_encoder_model(self.model)
 
+        # `start_multi_process_pool` moves the model to the CPU, so the device is captured here.
+        self._scoring_device = self.model.device
         self.model_prompts = _resolve_model_prompts(self.model, model_prompts)  # type: ignore[arg-type]
         self.corpus_chunk_size = corpus_chunk_size
 
@@ -1058,7 +1103,7 @@ class MultiVectorWrapper(MultiVectorSearchEncoderWrapper):
         # and only chunks along the documents.
         import torch
 
-        device = self.model.device
+        device = self._scoring_device
         queries = [torch.as_tensor(q).to(device) for q in _as_vector_list(embeddings1)]
         documents = _as_vector_list(embeddings2)
         result_device = (
@@ -1101,7 +1146,7 @@ class MultiVectorWrapper(MultiVectorSearchEncoderWrapper):
         return cast(
             "Array",
             self.model.similarity_pairwise(
-                embeddings1, embeddings2, device=self.model.device
+                embeddings1, embeddings2, device=self._scoring_device
             ),
         )
 
