@@ -440,15 +440,19 @@ class EmbeddingGemma2Wrapper(SentenceTransformerEncoderWrapper):
     delegating, because the document template ``title: {title} | text: {body}`` is not a
     plain prefix of mteb's ``"{title} {body}"`` corpus text.
 
+    ``use_image`` / ``use_audio`` are the model's experiments: one ``ModelMeta`` covers all
+    settings and the loaded towers decide the reported modalities and parameter count
+    (text 271M, text+image 439M, text+audio 577M, all 744M).
+
     Args:
         model_name: HF model id.
         revision: HF revision.
-        modalities: Modalities to load; towers for other modalities are dropped at load
-            time (``vision_config=None`` / ``audio_config=None``). The model-card text
-            numbers use ``("text",)`` and the MIEB numbers ``("text", "image")``.
+        use_image: Load the vision tower (image/video inputs). Used for MIEB.
+        use_audio: Load the audio tower. Used for MAEB.
         recipe: Which benchmark's per-task settings to use (a key of
             ``EMBEDDING_GEMMA_2_RECIPES``); ``None`` picks the first benchmark listing the task.
-        default_max_seq_length: Sequence length for tasks not covered by the recipe.
+        default_max_seq_length: Sequence length for tasks not covered by the recipe
+            (380 when the vision tower is loaded, 512 otherwise).
         **kwargs: Forwarded to ``SentenceTransformerEncoderWrapper`` (e.g. ``embed_dim``).
     """
 
@@ -457,19 +461,22 @@ class EmbeddingGemma2Wrapper(SentenceTransformerEncoderWrapper):
         model_name: str = "google/embeddinggemma-2",
         revision: str | None = None,
         *,
-        modalities: tuple[str, ...] = ("text",),
+        use_image: bool = False,
+        use_audio: bool = False,
         recipe: str | None = None,
-        default_max_seq_length: int = 512,
+        default_max_seq_length: int | None = None,
         **kwargs: Any,
     ) -> None:
         if recipe is not None and recipe not in EMBEDDING_GEMMA_2_RECIPES:
             raise ValueError(
                 f"Unknown recipe {recipe!r}; expected one of {list(EMBEDDING_GEMMA_2_RECIPES)}"
             )
+        self.use_image = use_image
+        self.use_audio = use_audio
         config_kwargs = dict(kwargs.pop("config_kwargs", {}))
-        if "image" not in modalities and "video" not in modalities:
+        if not use_image:
             config_kwargs["vision_config"] = None
-        if "audio" not in modalities:
+        if not use_audio:
             config_kwargs["audio_config"] = None
         model_kwargs = {"torch_dtype": torch.bfloat16, **kwargs.pop("model_kwargs", {})}
         super().__init__(
@@ -485,9 +492,37 @@ class EmbeddingGemma2Wrapper(SentenceTransformerEncoderWrapper):
         self.model_prompts = {}
         self.model.prompts = {}
         self.model.default_prompt_name = None
-        self.mteb_model_meta.modalities = list(modalities)
         self.recipe = recipe
-        self.default_max_seq_length = default_max_seq_length
+        self.default_max_seq_length = default_max_seq_length or (
+            380 if use_image else 512
+        )
+
+    @property
+    def mteb_model_meta(self) -> ModelMeta:
+        return self._mteb_model_meta
+
+    @mteb_model_meta.setter
+    def mteb_model_meta(self, meta: ModelMeta) -> None:
+        """Report the modalities, parameter count and memory of the towers actually loaded."""
+        modalities: list[str] = ["text"]
+        n_parameters, memory_usage_mb = 271_002_624, 1034
+        if self.use_image and self.use_audio:
+            modalities += ["image", "audio", "video"]
+            n_parameters, memory_usage_mb = 744_371_992, 2840
+        elif self.use_image:
+            modalities += ["image", "video"]
+            n_parameters, memory_usage_mb = 438_760_448, 1674
+        elif self.use_audio:
+            modalities += ["audio"]
+            n_parameters, memory_usage_mb = 576_613_664, 2200
+        self._mteb_model_meta = meta.model_copy(
+            update={
+                "modalities": modalities,
+                "n_parameters": n_parameters,
+                "memory_usage_mb": memory_usage_mb,
+            },
+            deep=True,
+        )
 
     def _task_settings(self, task_metadata: TaskMetadata) -> tuple[str, int]:
         """Return the recipe's (instruction, max_seq_length) for a task."""
@@ -550,89 +585,19 @@ class EmbeddingGemma2Wrapper(SentenceTransformerEncoderWrapper):
         )
 
 
-def _embedding_gemma_2_loader(
-    model_name: str,
-    revision: str | None = None,
-    *,
-    modalities: tuple[str, ...] = ("text",),
-    **kwargs: Any,
-) -> EmbeddingGemma2Wrapper:
-    return EmbeddingGemma2Wrapper(
-        "google/embeddinggemma-2", revision=revision, modalities=modalities, **kwargs
-    )
-
-
-def _embedding_gemma_2_text_loader(
-    model_name: str, revision: str | None = None, **kwargs: Any
-) -> EmbeddingGemma2Wrapper:
-    return _embedding_gemma_2_loader(
-        model_name, revision, modalities=("text",), **kwargs
-    )
-
-
-def _embedding_gemma_2_vision_text_loader(
-    model_name: str, revision: str | None = None, **kwargs: Any
-) -> EmbeddingGemma2Wrapper:
-    kwargs.setdefault("default_max_seq_length", 380)
-    return _embedding_gemma_2_loader(
-        model_name, revision, modalities=("text", "image", "video"), **kwargs
-    )
-
-
-def _embedding_gemma_2_audio_text_loader(
-    model_name: str, revision: str | None = None, **kwargs: Any
-) -> EmbeddingGemma2Wrapper:
-    return _embedding_gemma_2_loader(
-        model_name, revision, modalities=("text", "audio"), **kwargs
-    )
-
-
-def _embedding_gemma_2_full_loader(
-    model_name: str, revision: str | None = None, **kwargs: Any
-) -> EmbeddingGemma2Wrapper:
-    return _embedding_gemma_2_loader(
-        model_name, revision, modalities=("text", "image", "audio", "video"), **kwargs
-    )
-
-
 embedding_gemma_2 = ModelMeta(
-    loader=_embedding_gemma_2_full_loader,
+    loader=EmbeddingGemma2Wrapper,  # type: ignore[call-arg]
     name="google/embeddinggemma-2",
     model_type=["dense"],
     languages=MULTILINGUAL_EVALUATED_LANGUAGES,
     open_weights=True,
     revision="914f7f89142e33e77833254d9c9b90c3cef7303b",
     release_date="2026-10-06",
-    n_parameters=744_371_992,
-    n_embedding_parameters=134_217_728,
-    embed_dim=768,
-    max_tokens=8192,
-    license="gemma",
-    reference="https://huggingface.co/google/embeddinggemma-2",
-    framework=["Sentence Transformers", "PyTorch", "safetensors"],
-    use_instructions=True,
-    public_training_code=None,
-    public_training_data=None,
-    training_datasets=GECKO_TRAINING_DATA,
-    similarity_fn_name="cosine",
-    memory_usage_mb=2840,
-    modalities=["text", "image", "audio", "video"],
-    citation=EMBEDDING_GEMMA_CITATION,
-    extra_requirements_groups=["embeddinggemma"],
-)
-
-
-embedding_gemma_2_text = ModelMeta(
-    loader=_embedding_gemma_2_text_loader,
-    name="google/embeddinggemma-2-text",
-    model_type=["dense"],
-    languages=MULTILINGUAL_EVALUATED_LANGUAGES,
-    open_weights=True,
-    revision="914f7f89142e33e77833254d9c9b90c3cef7303b",
-    release_date="2026-10-06",
+    # Text-only towers (the default experiment); EmbeddingGemma2Wrapper updates
+    # n_parameters / memory_usage_mb / modalities when use_image / use_audio are set.
     n_parameters=271_002_624,
     n_embedding_parameters=134_217_728,
-    embed_dim=768,
+    embed_dim=[768, 512, 256, 128],
     max_tokens=8192,
     license="gemma",
     reference="https://huggingface.co/google/embeddinggemma-2",
@@ -643,61 +608,7 @@ embedding_gemma_2_text = ModelMeta(
     training_datasets=GECKO_TRAINING_DATA,
     similarity_fn_name="cosine",
     memory_usage_mb=1034,
-    modalities=["text"],
-    citation=EMBEDDING_GEMMA_CITATION,
-    extra_requirements_groups=["embeddinggemma"],
-)
-
-
-embedding_gemma_2_vision_text = ModelMeta(
-    loader=_embedding_gemma_2_vision_text_loader,
-    name="google/embeddinggemma-2-vision-text",
-    model_type=["dense"],
-    languages=MULTILINGUAL_EVALUATED_LANGUAGES,
-    open_weights=True,
-    revision="914f7f89142e33e77833254d9c9b90c3cef7303b",
-    release_date="2026-10-06",
-    n_parameters=438_760_448,
-    n_embedding_parameters=134_217_728,
-    embed_dim=768,
-    max_tokens=8192,
-    license="gemma",
-    reference="https://huggingface.co/google/embeddinggemma-2",
-    framework=["Sentence Transformers", "PyTorch", "safetensors"],
-    use_instructions=True,
-    public_training_code=None,
-    public_training_data=None,
-    training_datasets=GECKO_TRAINING_DATA,
-    similarity_fn_name="cosine",
-    memory_usage_mb=1674,
-    modalities=["text", "image", "video"],
-    citation=EMBEDDING_GEMMA_CITATION,
-    extra_requirements_groups=["embeddinggemma"],
-)
-
-
-embedding_gemma_2_audio_text = ModelMeta(
-    loader=_embedding_gemma_2_audio_text_loader,
-    name="google/embeddinggemma-2-audio-text",
-    model_type=["dense"],
-    languages=MULTILINGUAL_EVALUATED_LANGUAGES,
-    open_weights=True,
-    revision="914f7f89142e33e77833254d9c9b90c3cef7303b",
-    release_date="2026-10-06",
-    n_parameters=576_613_664,
-    n_embedding_parameters=134_217_728,
-    embed_dim=768,
-    max_tokens=8192,
-    license="gemma",
-    reference="https://huggingface.co/google/embeddinggemma-2",
-    framework=["Sentence Transformers", "PyTorch", "safetensors"],
-    use_instructions=True,
-    public_training_code=None,
-    public_training_data=None,
-    training_datasets=GECKO_TRAINING_DATA,
-    similarity_fn_name="cosine",
-    memory_usage_mb=2200,
-    modalities=["text", "audio"],
+    modalities=["text", "image", "audio", "video"],
     citation=EMBEDDING_GEMMA_CITATION,
     extra_requirements_groups=["embeddinggemma"],
 )
