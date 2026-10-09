@@ -1,7 +1,8 @@
-"""Registered ViDoRe views reuse retrieval data and select prepared candidates."""
+"""Existing ViDoRe tasks support ordinary retrieval and prepared candidates."""
 
 import json
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -21,21 +22,15 @@ _DOMAINS = (
 
 
 @pytest.mark.parametrize("domain", _DOMAINS)
-def test_registered_reranking_view_preserves_parent(domain):
-    parent = mteb.get_task(f"Vidore3{domain}Retrieval.v2")
-    before = parent.metadata.model_dump()
-    task = mteb.get_task(f"Vidore3{domain}Reranking", hf_subsets=["english"])
-    assert isinstance(task, type(parent))
-    assert task.metadata.dataset == parent.metadata.dataset
-    assert task.metadata.type == "Reranking"
+def test_existing_task_declares_prepared_sources(domain):
+    task = mteb.get_task(f"Vidore3{domain}Retrieval.v2", hf_subsets=["english"])
+    assert task.metadata.type == "DocumentUnderstanding"
     assert task.metadata.prompt == {
-        "query": "Retrieve images or text relevant to the user's query."
+        "query": "Find a screenshot that is relevant to the user's question."
     }
-    assert task.metadata.adapted_from == [parent.metadata.name]
-    assert task.metadata.is_beta
     assert task.hf_subsets == ["english"]
     assert all(
-        Path(source.filename).name == parent.prediction_file_name
+        Path(source.filename).name == task.prediction_file_name
         for source in task.first_stage_predictions.values()
     )
     assert set(task.first_stage_predictions) == {
@@ -51,8 +46,8 @@ def test_registered_reranking_view_preserves_parent(domain):
         task.first_stage_predictions["qwen-text-image"].document_representation
         == "text-image"
     )
-    assert task.metadata.descriptive_stats == parent.metadata.descriptive_stats
-    assert mteb.get_task(parent.metadata.name).metadata.model_dump() == before
+    assert task.metadata.descriptive_stats is not None
+    assert task.reranking_configuration is None
     assert not task.data_loaded
 
 
@@ -60,19 +55,20 @@ def test_registered_reranking_view_preserves_parent(domain):
     ("source", "expected"),
     [("bm25-text", "d1"), ("bge-text", "d2"), ("qwen-text-image", "d2")],
 )
-def test_prepared_source_uses_parent_data(tmp_path, monkeypatch, source, expected):
-    task = mteb.get_task("Vidore3HrReranking", hf_subsets=["english"])
-    parent = mteb.get_task("Vidore3HrRetrieval.v2")
+def test_retrieval_and_reranking_keep_task_identity(
+    tmp_path, monkeypatch, source, expected
+):
+    task = mteb.get_task("Vidore3HrRetrieval.v2", hf_subsets=["english"])
+    before = task.metadata.model_dump()
     mock = MockRetrievalTask()
     mock.load_data()
     shared = mock.dataset["default"]["test"]
-    qrels = shared["relevant_docs"]
 
-    def load_data(self):
+    def load_data(self, **kwargs: Any):
         self.dataset = {"english": {"test": shared}}
         self.data_loaded = True
 
-    monkeypatch.setattr(type(parent), "load_data", load_data)
+    monkeypatch.setattr(type(task), "load_data", load_data)
     monkeypatch.setattr(
         "mteb.abstasks.first_stage_predictions.hf_hub_download",
         lambda **kwargs: str(tmp_path / kwargs["filename"]),
@@ -89,6 +85,11 @@ def test_prepared_source_uses_parent_data(tmp_path, monkeypatch, source, expecte
                 }
             )
         )
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    cache = mteb.ResultCache(tmp_path / "cache")
+    retrieval = mteb.evaluate(model, task, cache=cache, co2_tracker=False)[0]
+    assert retrieval.reranking is None
+    qrels = shared["relevant_docs"]
     task.convert_to_reranking(first_stage=source, top_k=1)
     assert shared["top_ranked"] == {"q1": [expected], "q2": [expected]}
     assert shared["relevant_docs"] is qrels
@@ -98,8 +99,22 @@ def test_prepared_source_uses_parent_data(tmp_path, monkeypatch, source, expecte
         == "mteb/Vidore3RetrievalPredictions"
     )
 
-
-def test_requires_candidate_selection_before_evaluation():
-    task = mteb.get_task("Vidore3HrReranking")
-    with pytest.raises(ValueError, match="Select candidates"):
-        task.evaluate(None, encode_kwargs={})
+    reranking = mteb.evaluate(model, task, cache=cache, co2_tracker=False)[0]
+    assert reranking.task_name == retrieval.task_name == "Vidore3HrRetrieval.v2"
+    assert task.metadata.model_dump() == before
+    assert reranking.reranking == task.reranking_configuration
+    assert (
+        cache.load_task_result(task.metadata.name, model.mteb_model_meta).reranking
+        is None
+    )
+    assert (
+        cache.load_task_result(
+            task.metadata.name, model.mteb_model_meta, reranking=reranking.reranking
+        ).reranking
+        == reranking.reranking
+    )
+    rows = cache.load_results(
+        models=[model.mteb_model_meta], tasks=[task], include_remote=False
+    )._to_dataset()
+    assert len(rows) == 2
+    assert set(rows["reranking_id"]) == {None, reranking.reranking.configuration_id}

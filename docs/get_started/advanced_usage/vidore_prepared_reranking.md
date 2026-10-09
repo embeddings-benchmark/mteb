@@ -1,14 +1,14 @@
 ---
-title: "ViDoRe reranking task views"
+title: "Reranking ViDoRe with prepared predictions"
 icon: lucide/list-ordered
 ---
 
-# ViDoRe reranking task views
+# Reranking ViDoRe with prepared predictions
 
-Eight beta tasks named `Vidore3<Domain>Reranking` inherit their existing
-`Vidore3<Domain>Retrieval.v2` task. They reuse its pinned dataset, corpus, queries,
-full qrels and language subsets. Domains are ComputerScience, Energy, FinanceEn,
-FinanceFr, Hr, Industrial, Pharmaceuticals and Physics.
+The existing `Vidore3<Domain>Retrieval.v2` tasks declare prepared first-stage
+predictions for reranking. They retain their task names, pinned datasets, corpus,
+queries, full qrels, prompts and language subsets. Domains are ComputerScience,
+Energy, FinanceEn, FinanceFr, Hr, Industrial, Pharmaceuticals and Physics.
 
 Candidates come from [mteb/Vidore3RetrievalPredictions](https://huggingface.co/datasets/mteb/Vidore3RetrievalPredictions/tree/3d6834bc0d3aded9de65eb2e431d875f654c96e8),
 pinned to `3d6834bc0d3aded9de65eb2e431d875f654c96e8`:
@@ -25,7 +25,7 @@ representation does not select the reranker's inputs.
 ## Run and inspect the format
 
 ```bash
-# From a checkout containing the ViDoRe reranking tasks:
+# From a checkout containing the prepared ViDoRe prediction sources:
 pip install -e .
 
 # Two domains, three first stages, English subset, top-50 candidates.
@@ -48,31 +48,33 @@ The equivalent single-task API is:
 ```python
 import mteb
 
-task = mteb.get_task("Vidore3HrReranking", hf_subsets=["english"])
+task = mteb.get_task("Vidore3HrRetrieval.v2", hf_subsets=["english"])
 task.convert_to_reranking(first_stage="qwen-text-image", top_k=50)
 reranker = mteb.get_model("Qwen/Qwen3-VL-Reranker-2B")
 result = mteb.evaluate(reranker, task, cache=mteb.ResultCache("mteb-cache"))
 print(result[0].reranking.model_dump())
 ```
 
-Select candidates before evaluating; these tasks reject evaluation without them.
-Instantiate a fresh task for each first-stage source.
+Call `convert_to_reranking` to select candidates before a reranking evaluation.
+Without conversion, the same task runs its usual full-corpus retrieval evaluation.
+Instantiate a fresh task for each first-stage source or ordinary retrieval run.
 
 ## Proposed results layout
 
 ```text
 results/<reranker>/<revision>/
   model_meta.json
+  Vidore3HrRetrieval.v2.json  # Ordinary retrieval, if evaluated with this model.
   reranking/
     <bm25-configuration-id>/
-      Vidore3HrReranking.json
-      Vidore3EnergyReranking.json
+      Vidore3HrRetrieval.v2.json
+      Vidore3EnergyRetrieval.v2.json
     <bge-configuration-id>/
-      Vidore3HrReranking.json
-      Vidore3EnergyReranking.json
+      Vidore3HrRetrieval.v2.json
+      Vidore3EnergyRetrieval.v2.json
     <qwen-configuration-id>/
-      Vidore3HrReranking.json
-      Vidore3EnergyReranking.json
+      Vidore3HrRetrieval.v2.json
+      Vidore3EnergyRetrieval.v2.json
 ```
 
 Each task JSON retains normal scores and language subsets. Its top-level
@@ -88,13 +90,14 @@ Filter by `results.filter_reranking(configuration_id)` before creating a summary
 The proposed leaderboard can then compare rerankers within each configuration;
 no average across retrievers or best-retriever selection is implied. Results-repo
 validation and leaderboard grouping/UI need corresponding changes before
-upstream publication. These tasks remain beta while that format is discussed.
+upstream publication. Task metadata remains `DocumentUnderstanding`; consumers
+should use the result's `reranking` configuration to identify converted runs.
 
-The query prompt matches the separate reranking tasks in
-[PR #5584](https://github.com/embeddings-benchmark/mteb/pull/5584). For comparisons,
-match candidate depth, language subset, reranker inputs/settings and any custom
-task-name-specific instructions. This change does not migrate historical metrics
-or require regenerating first-stage predictions. A random-model smoke run does
+The existing retrieval task prompt is preserved. It differs from the prompt on
+the separate reranking tasks in [PR #5584](https://github.com/embeddings-benchmark/mteb/pull/5584).
+For comparisons, match the actual model instructions as well as candidate depth,
+language subset and reranker inputs/settings. This change does not migrate
+historical metrics or require regenerating first-stage predictions. A random-model smoke run does
 not establish parity with an earlier model evaluation.
 
 Focused task checks:

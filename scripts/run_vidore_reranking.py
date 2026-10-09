@@ -30,7 +30,9 @@ def main() -> None:
     configurations = set()
     for domain in args.domains:
         for first_stage in args.first_stages:
-            task = mteb.get_task(f"Vidore3{domain}Reranking", hf_subsets=args.subsets)
+            task = mteb.get_task(
+                f"Vidore3{domain}Retrieval.v2", hf_subsets=args.subsets
+            )
             assert isinstance(task, AbsTaskRetrieval)
             task.convert_to_reranking(first_stage=first_stage, top_k=args.top_k)
             result = mteb.evaluate(model, task, cache=cache, co2_tracker=False)
