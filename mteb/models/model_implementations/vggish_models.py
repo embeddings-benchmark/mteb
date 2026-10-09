@@ -47,6 +47,9 @@ def vggish_loader(*args: Any, **kwargs: Any) -> EncoderProtocol:
             self.device = device
             self.max_audio_length_seconds = max_audio_length_seconds
             self.model = vggish.get_vggish(with_classifier=False, pretrained=True)
+            # drop the port's final ReLU: the official embedding layer has no activation
+            # https://github.com/tensorflow/models/blob/master/research/audioset/vggish/vggish_slim.py
+            self.model.embeddings = self.model.embeddings[:-1]
             self.model.eval().to(self.device)
 
             self.converter = WaveformToInput()
