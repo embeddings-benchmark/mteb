@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 import tempfile
 from typing import TYPE_CHECKING, Any
 
@@ -75,8 +76,8 @@ class EBindWrapper(AbsEncoder):
         for item in audio_items:
             array = np.asarray(item["array"])
             sr = item["sampling_rate"]
-            # pad clips shorter than the mel-spectrogram window
-            min_samples = max(int(sr * 0.5), 1)
+            # pad only below one 25 ms fbank window; the processor pads longer clips itself
+            min_samples = math.ceil(sr * 0.025)
             if array.shape[0] < min_samples:
                 array = np.pad(array, (0, min_samples - array.shape[0]))
             with tempfile.NamedTemporaryFile(suffix=".wav", delete=True) as tmp:
