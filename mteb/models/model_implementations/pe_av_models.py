@@ -10,11 +10,25 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import VideoCollator
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
     from mteb.types._encoder_io import AudioInput, TextInput, VideoInput
+
+
+def _fp32_forward(forward: Callable[..., Any]) -> Callable[..., Any]:
+    """Wrap a module's forward so it runs in fp32 even under autocast."""
+    import torch
+
+    def wrapped(x: torch.Tensor, *args: Any, **kwargs: Any) -> torch.Tensor:
+        with torch.autocast(x.device.type, enabled=False):
+            return forward(x.float(), *args, **kwargs)
+
+    return wrapped
 
 
 class PEAudioVisualWrapper(AbsEncoder):
@@ -30,6 +44,7 @@ class PEAudioVisualWrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str = "facebook/pe-av-large",
+        revision: str | None = None,
         device: str | None = None,
         # PE-AV processes every frame it is given (do_sample_frames=false; the
         # paper samples at 30 fps); fps=2 with at most 64 frames is an mteb cap
@@ -58,21 +73,58 @@ class PEAudioVisualWrapper(AbsEncoder):
         self.max_frames = max_frames
         self.num_frames = num_frames
         self.max_samples = max_samples
-        self.model = PeAudioVideoModel.from_pretrained(model_name).to(self.device)
+        self.model = PeAudioVideoModel.from_pretrained(
+            model_name, revision=revision
+        ).to(self.device)
         self.model.eval()
-        self.processor = PeAudioVideoProcessor.from_pretrained(model_name)
+        # Meta's code pools the CLS token before ModernBERT's final norm
+        # https://github.com/facebookresearch/perception_models/blob/main/core/audio_visual_encoder/pe.py
+        self.model.text_model.final_norm = torch.nn.Identity()
+        # Meta evaluates in fp32; the DAC codec encoder drifts under bf16 autocast
+        for module in self.model.modules():
+            if type(module).__name__ == "PeAudioDacEncoder":
+                module.forward = _fp32_forward(module.forward)
+        self.processor = PeAudioVideoProcessor.from_pretrained(
+            model_name, revision=revision
+        )
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
+
+    def _text_cls(self, texts: list[str]) -> torch.Tensor:
+        processed = self.processor(
+            text=texts,
+            return_tensors="pt",
+            padding=True,
+            truncation=True,
+            max_length=512,
+        )
+        processed = {k: v.to(self.device) for k, v in processed.items()}
+        text_outputs = self.model.text_model(
+            input_ids=processed["input_ids"],
+            attention_mask=processed.get("attention_mask"),
+        )
+        return text_outputs.last_hidden_state[:, 0]
 
     def get_text_embeddings(
         self,
         inputs: DataLoader[TextInput],
+        task_metadata: TaskMetadata,
         prompt_type: PromptType | None = None,
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
-        """Get text embeddings aligned to audio-video space."""
+        """Get text embeddings in the space of the task's other modality."""
         import torch
 
+        # Meta's eval embeds text with the head of the modality it is compared with
+        # (encode_video_text / encode_audio_text / encode_audio_video_text)
+        query, _, document = task_metadata.category.partition("2")
+        other = document if "t" not in document else query if "t" not in query else ""
+        if "v" in other and "a" not in other:
+            head = self.model.video_model.text_video_head
+        elif "a" in other and "v" not in other:
+            head = self.model.audio_model.text_audio_head
+        else:
+            head = self.model.text_audio_video_head
         with torch.inference_mode():
             all_embeddings = []
 
@@ -81,24 +133,8 @@ class PEAudioVisualWrapper(AbsEncoder):
                 disable=not show_progress_bar,
                 desc="Processing text batches",
             ):
-                texts = batch["text"]
-                processed = self.processor(
-                    text=texts,
-                    return_tensors="pt",
-                    padding=True,
-                    truncation=True,
-                )
-                processed = {k: v.to(self.device) for k, v in processed.items()}
-
                 with torch.autocast(str(self.device), dtype=torch.bfloat16):
-                    text_outputs = self.model.text_model(
-                        input_ids=processed["input_ids"],
-                        attention_mask=processed.get("attention_mask"),
-                        output_hidden_states=True,
-                    )
-                    # Use last hidden layer CLS token, matching the HF wrapper's intent.
-                    text_pooler = text_outputs.hidden_states[-1][:, 0]
-                    text_embeds = self.model.text_audio_video_head(text_pooler)
+                    text_embeds = head(self._text_cls(batch["text"]))
                     text_embeds /= text_embeds.norm(dim=-1, keepdim=True)
                     all_embeddings.append(text_embeds.cpu().float().numpy())
 
@@ -219,6 +255,56 @@ class PEAudioVisualWrapper(AbsEncoder):
 
             return np.vstack(all_embeddings)
 
+    def get_media_plus_text_embeddings(
+        self,
+        inputs: DataLoader[BatchedInput],
+        use_video: bool,
+        show_progress_bar: bool = True,
+        **kwargs: Any,
+    ) -> np.ndarray:
+        """Embed video+text or audio+text with the fused head, as Meta's encode_*_plus_text."""
+        import torch
+
+        all_embeddings = []
+        with torch.inference_mode():
+            for batch in tqdm(
+                inputs,
+                disable=not show_progress_bar,
+                desc="Processing media+text batches",
+            ):
+                with torch.autocast(str(self.device), dtype=torch.bfloat16):
+                    text_cls = self._text_cls(batch["text"])
+                    if use_video:
+                        processed = self.processor(
+                            videos=list(batch["video"]),
+                            return_tensors="pt",
+                            padding=True,
+                        )
+                        processed = {k: v.to(self.device) for k, v in processed.items()}
+                        media = self.model.video_model.video_encoder(
+                            pixel_values_videos=processed["pixel_values_videos"],
+                            padding_mask_videos=processed.get("padding_mask_videos"),
+                        ).pooler_output
+                        head = self.model.video_plus_text_head
+                    else:
+                        processed = self.processor(
+                            audio=[a["array"] for a in batch["audio"]],
+                            sampling_rate=self.sampling_rate,
+                            return_tensors="pt",
+                            padding=True,
+                        )
+                        processed = {k: v.to(self.device) for k, v in processed.items()}
+                        media = self.model.audio_model.audio_encoder(
+                            input_values=processed["input_values"],
+                            padding_mask=processed.get("padding_mask"),
+                        ).pooler_output
+                        head = self.model.audio_plus_text_head
+                    # media first, then text (pe.py encode_*_plus_text)
+                    embeds = head(torch.cat([media, text_cls], dim=-1))
+                    embeds /= embeds.norm(dim=-1, keepdim=True)
+                all_embeddings.append(embeds.cpu().float().numpy())
+        return np.vstack(all_embeddings)
+
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -255,14 +341,22 @@ class PEAudioVisualWrapper(AbsEncoder):
 
         # Text-only
         if has_text and not has_video and not has_audio:
-            return self.get_text_embeddings(inputs, prompt_type=prompt_type, **kwargs)
+            return self.get_text_embeddings(
+                inputs, prompt_type=prompt_type, task_metadata=task_metadata, **kwargs
+            )
 
-        # Mixed modality: fuse embeddings by addition
+        # video+text -> audio / audio+text -> video queries: the model's fused heads
+        if task_metadata.category in {"vt2a", "at2v"} and has_video != has_audio:
+            return self.get_media_plus_text_embeddings(
+                inputs, use_video=has_video, **kwargs
+            )
+
+        # Other mixed inputs (no dedicated head): fuse embeddings by addition
         embeddings = None
 
         if has_text:
             text_emb = self.get_text_embeddings(
-                inputs, prompt_type=prompt_type, **kwargs
+                inputs, prompt_type=prompt_type, task_metadata=task_metadata, **kwargs
             )
             embeddings = text_emb
 
