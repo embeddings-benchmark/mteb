@@ -11,6 +11,7 @@ from tqdm.auto import tqdm
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import seconds_to_samples
+from mteb.models.model_implementations.vggish_models import _log_mel
 
 if TYPE_CHECKING:
     import torch
@@ -29,7 +30,6 @@ def yamnet_loader(*args: Any, **kwargs: Any) -> EncoderProtocol:
     """Factory function to create a YAMNet model wrapper."""
     import torch
     from torch_vggish_yamnet import yamnet
-    from torch_vggish_yamnet.input_proc import WaveformToInput
 
     class YAMNetWrapper(AbsEncoder):
         def __init__(
@@ -50,7 +50,6 @@ def yamnet_loader(*args: Any, **kwargs: Any) -> EncoderProtocol:
             self.model = yamnet.yamnet(pretrained=True)
             self.model.eval().to(self.device)
 
-            self.converter = WaveformToInput()
             self.sampling_rate = 16000  # YAMNet requires 16kHz audio
             self.embed_dim = 1024  # YAMNet embedding dimension
             # official patching: 0.96 s patches with a 0.48 s hop, the waveform padded
@@ -109,9 +108,8 @@ def yamnet_loader(*args: Any, **kwargs: Any) -> EncoderProtocol:
             if audio_data.ndim == 1:
                 audio_data = audio_data.unsqueeze(0)
 
-            # [1, mels, frames] -> [frames, mels]; the port's WaveformToInput cuts
-            # patches with a 0.96 s hop instead of 0.48 s
-            log_mel = self.converter.mel_trans_ope(audio_data.float()).squeeze(0).T
+            # features.py computes the same log-mel as VGGish, with a 0.001 log offset
+            log_mel = _log_mel(audio_data.float().squeeze(0), log_offset=0.001)
             patches = log_mel.unfold(0, 96, 48)
             # [patches, mels, frames] -> [patches, 1, frames, mels]
             input_tensor = patches.transpose(1, 2).unsqueeze(1).to(self.device)
