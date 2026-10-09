@@ -70,6 +70,10 @@ class OpsMMEmbeddingWrapper(AbsEncoder):
         ).to(self.device)
 
         self.base_model.eval()
+        # only hidden states are used: run the LM head on the last position, not every token
+        self.base_model.get_output_embeddings().register_forward_pre_hook(
+            lambda _module, args: (args[0][:, -1:, :],)
+        )
 
         self.processor = AutoProcessor.from_pretrained(
             model_name,
