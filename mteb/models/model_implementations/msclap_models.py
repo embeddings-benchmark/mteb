@@ -27,6 +27,7 @@ class MSClapWrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str = "microsoft/msclap-2023",
+        revision: str | None = None,
         device: str | None = None,
         # None: msclap's own duration; longer input hits its random-window branch
         # https://github.com/microsoft/CLAP/blob/main/msclap/configs/config_2023.yml
@@ -38,6 +39,7 @@ class MSClapWrapper(AbsEncoder):
         if device is None:
             device = "cuda" if torch.cuda.is_available() else "cpu"
 
+        from huggingface_hub import hf_hub_download
         from msclap import CLAP
 
         self.model_name = model_name
@@ -54,7 +56,14 @@ class MSClapWrapper(AbsEncoder):
             self.text_length = 77
 
         self.use_cuda = device == "cuda"
-        self.model = CLAP(version=self.version, use_cuda=self.use_cuda)
+        # msclap downloads its weights from microsoft/msclap at main; fetch them
+        # at the pinned revision instead.
+        model_fp = hf_hub_download(
+            CLAP.model_repo, CLAP.model_name[self.version], revision=revision
+        )
+        self.model = CLAP(
+            model_fp=model_fp, version=self.version, use_cuda=self.use_cuda
+        )
         self.model.clap = self.model.clap.to(self.device)
         self.tokenizer = self.model.tokenizer
         # 44100 for 2022 and 2023: msclap's own config
@@ -187,7 +196,7 @@ ms_clap_2022 = ModelMeta(
     loader=MSClapWrapper,
     name="microsoft/msclap-2022",
     languages=["eng-Latn"],
-    revision="no_revision",
+    revision="c47d441165daa21986ead0850660917636a81775",  # microsoft/msclap
     release_date="2022-12-01",
     modalities=["audio", "text"],
     n_parameters=196_000_000,
@@ -229,7 +238,7 @@ ms_clap_2023 = ModelMeta(
     loader=MSClapWrapper,
     name="microsoft/msclap-2023",
     languages=["eng-Latn"],
-    revision="no_revision",
+    revision="c47d441165daa21986ead0850660917636a81775",  # microsoft/msclap
     release_date="2023-09-01",
     modalities=["audio", "text"],
     n_parameters=160_000_000,

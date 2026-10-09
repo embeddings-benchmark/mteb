@@ -371,5 +371,6 @@ clap_large_v2 = ModelMeta(
     use_instructions=False,
     training_datasets=None,
     adapted_from="LCO-Embedding/LCO-Embedding-Omni-7B",
-    extra_requirements_groups=["multimodal-sbert"],
+    # the checkpoint's Qwen2-VL processor needs torchvision and Pillow
+    extra_requirements_groups=["multimodal-sbert", "image"],
 )

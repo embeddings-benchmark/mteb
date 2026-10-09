@@ -20,6 +20,7 @@ class CNN14Wrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str,
+        revision: str | None = None,
         device: str | None = None,
         # no limit: no duration declared
         # https://huggingface.co/speechbrain/cnn14-esc50/blob/main/hyperparams.yaml
@@ -37,11 +38,21 @@ class CNN14Wrapper(AbsEncoder):
 
         from speechbrain.inference.classifiers import AudioClassifier
 
+        try:
+            from speechbrain.utils.fetching import FetchConfig
+
+            fetch_kwargs: dict[str, Any] = {
+                "fetch_config": FetchConfig(revision=revision)
+            }
+        except ImportError:  # speechbrain < 1.0
+            fetch_kwargs = {"revision": revision}
+
         # Load the SpeechBrain model
         self.model = AudioClassifier.from_hparams(
             source=model_name,
             savedir="pretrained_models/cnn14-esc50",
             run_opts={"device": device},
+            **fetch_kwargs,
         )
 
         # 44.1 kHz: sample_rate=44100
