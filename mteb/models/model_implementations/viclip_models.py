@@ -15,9 +15,10 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
 
-# https://github.com/OpenGVLab/InternVideo/blob/main/InternVideo2/multi_modality/data/process_video.py#L17-L18
-_VICLIP_MEAN = (0.48145466, 0.4578275, 0.40821073)
-_VICLIP_STD = (0.26862954, 0.26130258, 0.27577711)
+# ImageNet statistics, as in the official ViCLIP demo
+# https://github.com/OpenGVLab/InternVideo/blob/main/Data/InternVid/viclip/__init__.py#L35-L38
+_VICLIP_MEAN = (0.485, 0.456, 0.406)
+_VICLIP_STD = (0.229, 0.224, 0.225)
 _VICLIP_SIZE = 224
 
 VICLIP_CITATION = """@article{wang2023internvid,
