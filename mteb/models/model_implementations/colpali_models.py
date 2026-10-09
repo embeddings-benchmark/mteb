@@ -52,7 +52,7 @@ class ColPaliEngineWrapper(AbsEncoder):
         self.mdl.eval()
 
         # Load processor
-        self.processor = processor_class.from_pretrained(model_name)
+        self.processor = processor_class.from_pretrained(model_name, revision=revision)
         if query_prefix is not None:
             self.processor.query_prefix = query_prefix
 

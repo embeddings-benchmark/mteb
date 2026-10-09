@@ -94,6 +94,7 @@ class RzenEmbedWrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str = "qihoo360/RzenEmbed",
+        revision: str | None = None,
         device: str | None = None,
         max_length: int = 2000,
         # 8 frames, evenly spaced: extract_frames(num_frames=8) in the model card
@@ -121,13 +122,16 @@ class RzenEmbedWrapper(AbsEncoder):
         self.max_frames = max_frames
         self.num_frames = num_frames
 
-        config = AutoConfig.from_pretrained(model_name, trust_remote_code=True)
+        config = AutoConfig.from_pretrained(
+            model_name, revision=revision, trust_remote_code=True
+        )
         config.padding_side = "right"
         config.use_cache = False
 
         torch_dtype = torch.bfloat16 if "cuda" in str(self.device) else torch.float32
         self.model = Qwen2VLForConditionalGeneration.from_pretrained(
             model_name,
+            revision=revision,
             config=config,
             torch_dtype=torch_dtype,
             low_cpu_mem_usage=True,
@@ -136,6 +140,7 @@ class RzenEmbedWrapper(AbsEncoder):
 
         self.processor = AutoProcessor.from_pretrained(
             model_name,
+            revision=revision,
             min_pixels=min_image_tokens * 28 * 28,
             max_pixels=max_image_tokens * 28 * 28,
         )
@@ -143,6 +148,7 @@ class RzenEmbedWrapper(AbsEncoder):
 
         self.video_processor = AutoProcessor.from_pretrained(
             model_name,
+            revision=revision,
             min_pixels=min_video_tokens * 28 * 28,
             max_pixels=max_video_tokens * 28 * 28,
         )
