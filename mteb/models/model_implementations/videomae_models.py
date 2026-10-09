@@ -45,7 +45,8 @@ class VideoMAEWrapper(AbsEncoder):
 
     VideoMAE has no CLS token and trains with ``use_mean_pooling=True``, so
     ``VideoMAEForVideoClassification`` averages ``last_hidden_state`` over the
-    token axis before its head. We pool the same way.
+    token axis and applies ``fc_norm`` before its head. We pool the same way;
+    pre-training checkpoints have no ``fc_norm`` and use the plain mean.
 
     Uses ``AutoVideoProcessor``, which requires transformers v5. v5 refactored
     VideoMAE attention to standard Linear layers and ships no mapping for the
@@ -64,7 +65,12 @@ class VideoMAEWrapper(AbsEncoder):
         **kwargs: Any,
     ) -> None:
         import torch
-        from transformers import AutoModel, AutoVideoProcessor
+        from transformers import (
+            AutoConfig,
+            AutoModel,
+            AutoVideoProcessor,
+            VideoMAEForVideoClassification,
+        )
 
         self.model_name = model_name
         self.revision = revision
@@ -80,7 +86,20 @@ class VideoMAEWrapper(AbsEncoder):
         self.processor = AutoVideoProcessor.from_pretrained(
             model_name, revision=revision
         )
-        self.model = AutoModel.from_pretrained(model_name, revision=revision)
+        # fine-tuned checkpoints use fc_norm(mean(tokens)), as forward_features in
+        # https://github.com/MCG-NJU/VideoMAE/blob/main/modeling_finetune.py
+        config = AutoConfig.from_pretrained(model_name, revision=revision)
+        self.fc_norm = None
+        if config.use_mean_pooling and "VideoMAEForVideoClassification" in (
+            config.architectures or []
+        ):
+            classifier = VideoMAEForVideoClassification.from_pretrained(
+                model_name, revision=revision
+            )
+            self.model = classifier.videomae
+            self.fc_norm = classifier.fc_norm.eval().to(self.device)
+        else:
+            self.model = AutoModel.from_pretrained(model_name, revision=revision)
         self.model.eval()
         self._restore_qkv_bias()
 
@@ -174,6 +193,8 @@ class VideoMAEWrapper(AbsEncoder):
 
                 outputs = self.model(**processed)
                 pooled = outputs.last_hidden_state.mean(dim=1)
+                if self.fc_norm is not None:
+                    pooled = self.fc_norm(pooled)
                 embeddings.append(pooled.cpu())
             return torch.cat(embeddings, dim=0).numpy()
 
