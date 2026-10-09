@@ -214,7 +214,7 @@ amazon_titan_embed_text_v1 = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=False,
-    extra_requirements_groups=["boto3", "video"],
+    extra_requirements_groups=["boto3"],
 )
 
 amazon_titan_embed_text_v2 = ModelMeta(
