@@ -11,7 +11,7 @@ import subprocess
 import warnings
 from collections import defaultdict
 from collections.abc import Mapping, Sequence
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from importlib.metadata import version
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, cast
@@ -407,7 +407,7 @@ class ResultCache:
         model_meta_path = result_path.parent / "model_meta.json"
         if isinstance(model_name, ModelMeta):
             meta = model_name
-            with model_meta_path.open("w") as f:
+            with model_meta_path.open("w", encoding="utf-8") as f:
                 json.dump(meta.to_dict(), f, default=str, indent=4)
 
         version_dict = _get_package_versions()
@@ -995,7 +995,7 @@ class ResultCache:
             revision = revision_path.name
             return model_name, revision, None, MODEL_REGISTRY.get(model_name)
 
-        with model_meta_path.open("r") as f:
+        with model_meta_path.open("r", encoding="utf-8") as f:
             raw = f.read()
         model_meta_json = json.loads(raw)
         model_name = model_meta_json["name"]
@@ -1110,7 +1110,7 @@ class ResultCache:
             return None
 
         try:
-            with meta_file.open("r") as f:
+            with meta_file.open("r", encoding="utf-8") as f:
                 meta_dict = f.read()
             return ModelMeta.model_validate_json_resolved(meta_dict)
         except Exception as e:
@@ -1259,7 +1259,7 @@ class ResultCache:
             >>> print(f"PR created: {submission['pr_url']}")
         """
         # Always create a new branch to keep the original branch clean
-        branch_name = f"mteb-results-{int(datetime.now(timezone.utc).timestamp())}"
+        branch_name = f"mteb-results-{int(datetime.now(UTC).timestamp())}"
         normalized_models = self._normalize_models(models)
 
         try:

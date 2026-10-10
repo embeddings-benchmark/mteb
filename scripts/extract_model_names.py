@@ -34,7 +34,7 @@ def extract_model_names(
     model_names = []
     first_model_found = False
     for file in files:
-        with open(file) as f:
+        with open(file, encoding="utf-8") as f:
             tree = ast.parse(f.read())
             for node in ast.walk(tree):
                 if isinstance(node, ast.Assign):
@@ -106,5 +106,5 @@ if __name__ == "__main__":
         return_one_model_name_per_file=args.return_one_model_name_per_file,
     )
     output_file = Path(__file__).parent / "model_names.txt"
-    with output_file.open("w") as f:
+    with output_file.open("w", encoding="utf-8") as f:
         f.write(" ".join(model_names))

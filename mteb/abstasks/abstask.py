@@ -32,8 +32,7 @@ from mteb.timing import TimingStack
 
 if TYPE_CHECKING:
     from collections.abc import Iterator, Mapping
-
-    from typing_extensions import Self
+    from typing import Self
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import (
@@ -299,14 +298,14 @@ class AbsTask(ABC):  # noqa: PLR0904
             }
         }
         if predictions_path.exists():
-            with predictions_path.open("r") as predictions_file:
+            with predictions_path.open("r", encoding="utf-8") as predictions_file:
                 existing_results = json.load(predictions_file)
 
         if hf_subset not in existing_results:
             existing_results[hf_subset] = {}
 
         existing_results[hf_subset][hf_split] = predictions
-        with predictions_path.open("w") as predictions_file:
+        with predictions_path.open("w", encoding="utf-8") as predictions_file:
             json.dump(existing_results, predictions_file)
 
     def _predictions_path(
@@ -514,7 +513,7 @@ class AbsTask(ABC):  # noqa: PLR0904
         stat_path = self.metadata.descriptive_stat_path
         if not stat_path.parent.exists():
             stat_path.parent.mkdir(parents=True, exist_ok=True)
-        with stat_path.open("w") as f:
+        with stat_path.open("w", encoding="utf-8") as f:
             json.dump(descriptive_stats, f, indent=4)
 
         return descriptive_stats
@@ -598,9 +597,10 @@ class AbsTask(ABC):  # noqa: PLR0904
                 continue
             if exclusive_language_filter is False:
                 for langscript in langs:
-                    if lang_scripts.contains_language(
-                        langscript
-                    ) or lang_scripts.contains_script(langscript):
+                    if lang_scripts.contains_language(langscript) and (
+                        not script
+                        or lang_scripts.contains_langscript_script(langscript)
+                    ):
                         subsets_to_keep.append(hf_subset)
                         break
 
@@ -608,6 +608,10 @@ class AbsTask(ABC):  # noqa: PLR0904
                 exclusive_language_filter is True
                 and languages
                 and lang_scripts.contains_languages(langs)
+                and (
+                    not script
+                    or all(lang_scripts.contains_langscript_script(ls) for ls in langs)
+                )
             ):
                 subsets_to_keep.append(hf_subset)
 
@@ -748,14 +752,14 @@ class AbsTask(ABC):  # noqa: PLR0904
         # handle multiple tasks in one repo (e.g. MIRACLRetrievalHardNegatives, MIRACLRetrievalHardNegativesV2)
         existing_eval = None
         if existing_eval_path is not None:
-            with Path(existing_eval_path).open() as f:  # noqa: PLW1514
+            with Path(existing_eval_path).open(encoding="utf-8") as f:
                 existing_eval_dict = yaml.safe_load(f)
             if existing_eval_dict is not None:
                 existing_eval = HFEvalMeta.model_validate(existing_eval_dict)
 
         task_config = self._create_task_hf_config(existing_eval)
 
-        with tempfile.NamedTemporaryFile(mode="w") as tmp_file:  # noqa: PLW1514
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8") as tmp_file:
             tmp_file.write(task_config.to_yaml())
             tmp_file.flush()
 

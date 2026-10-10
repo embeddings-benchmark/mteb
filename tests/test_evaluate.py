@@ -473,7 +473,7 @@ def test_evaluate_mrl(tmp_path: Path, embed_dim):
     if embed_dim is not None:
         model_meta_path = model_meta_path / "experiments" / "embed_dim_10"
     model_meta_path = model_meta_path / "model_meta.json"  # noqa: PLR6104
-    with model_meta_path.open() as f:
+    with model_meta_path.open(encoding="utf-8") as f:
         model_meta_json = json.load(f)
     model_meta_json["loader"] = None  # otherwise meta won't be validated
     model_meta = ModelMeta.model_validate(model_meta_json)
@@ -527,7 +527,9 @@ def test_precision_arg(tmp_path: Path):
     assert not default_path.exists()
     assert experiment_path.exists()
 
-    saved_meta = json.loads((experiment_path.parent / "model_meta.json").read_text())
+    saved_meta = json.loads(
+        (experiment_path.parent / "model_meta.json").read_text(encoding="utf-8")
+    )
     assert saved_meta["experiment_kwargs"]["output_dtypes"] == OutputDType.INT8
 
     # a later default evaluation must not reuse the quantized result

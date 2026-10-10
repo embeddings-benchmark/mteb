@@ -12,11 +12,24 @@ from mteb.models.sentence_transformer_wrapper import (
 from mteb.types import OutputDType
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
     from typing_extensions import Unpack
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, EncodeKwargs, PromptType
+
+
+def _to_half_cpu_in_place(batch: list[torch.Tensor]) -> list[torch.Tensor]:
+    """Convert token vectors to FP16 and move them to the CPU one at a time, replacing them in `batch`.
+
+    Text inputs are encoded as a whole corpus chunk in one call, so building a new list would keep
+    both copies of the whole chunk alive at once. On the CPU they no longer occupy device memory;
+    `MultiVectorWrapper.similarity` moves them back in blocks for scoring.
+    """
+    for index, vector in enumerate(batch):
+        batch[index] = vector.half().cpu()
+    return batch
 
 
 class TopkEmbedWrapper(MultiVectorWrapper):
@@ -66,8 +79,9 @@ class TopkEmbedWrapper(MultiVectorWrapper):
             encode_function=_select_encode_function(self.model, prompt_type),
             prompt=None,
             modalities=[modality],
-            postprocess_batch=lambda batch: [vector.half() for vector in batch],
+            postprocess_batch=_to_half_cpu_in_place,
             concatenate_batches=_concatenate_ragged_batches,
+            encode_text_per_batch=True,
             **kwargs,
         )
 

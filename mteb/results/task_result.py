@@ -36,8 +36,7 @@ from mteb.types import (
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterable, Iterator, Mapping, Sequence
     from pathlib import Path
-
-    from typing_extensions import Self
+    from typing import Self
 
     from mteb.abstasks.task_metadata import TaskDomain
     from mteb.types import (
@@ -383,7 +382,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         json_obj["date"] = self.date.timestamp() if self.date else None
         self._round_scores(json_obj["scores"], 6)
 
-        with path.open("w") as f:  # noqa: PLW1514
+        with path.open("w", encoding="utf-8") as f:
             json.dump(json_obj, f, indent=2)
 
     @classmethod
@@ -581,10 +580,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                 eval_langs = scores["languages"]
                 for lang in eval_langs:
                     if lang_scripts.contains_language(lang) and (
-                        not scripts
-                        or lang_scripts.contains_script(
-                            lang.rsplit("-", maxsplit=1)[-1]
-                        )
+                        not scripts or lang_scripts.contains_langscript_script(lang)
                     ):
                         values.append(getter(scores))
                         break

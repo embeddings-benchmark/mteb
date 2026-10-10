@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Any, Literal, NamedTuple
 from typing_extensions import TypedDict
 
 if TYPE_CHECKING:
-    from typing_extensions import NotRequired
+    from typing import NotRequired
 
 HFSubset = str
 """The name of a HuggingFace dataset subset, e.g. 'en-de', 'en', 'default' (default is used when there is no subset)."""
