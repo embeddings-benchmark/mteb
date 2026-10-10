@@ -23,6 +23,7 @@ from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
     SparseEncoderWrapper,
 )
+from mteb.models.video_wrappers import Video2ImagesWrapper
 from mteb.results import ModelResult, TaskResult
 from mteb.results.task_result import TaskError
 from mteb.timing import TimingStack
@@ -365,6 +366,44 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
     return result
 
 
+def _check_video_only_inputs(
+    model: ModelMeta,
+    tasks: AbsTask | Iterable[AbsTask],
+) -> None:
+    """Reject retrieval tasks that mix video with other modalities on one side.
+
+    `Video2ImagesWrapper` only handles video-only inputs, so these tasks would fail mid-run.
+
+    Args:
+        model: The metadata of the wrapped model.
+        tasks: A single task or an iterable of tasks to check.
+    """
+    check_tasks: Iterable[AbsTask]
+    if isinstance(tasks, AbsTask):
+        check_tasks = [tasks]
+    elif isinstance(tasks, Benchmark):
+        check_tasks = tasks.tasks
+    else:
+        check_tasks = tasks
+
+    errors = []
+    for task in check_tasks:
+        if not isinstance(task, AbsTaskRetrieval):
+            continue
+        query_mods = set(task.metadata.get_modalities(PromptType.query))
+        doc_mods = set(task.metadata.get_modalities(PromptType.document))
+        if any(
+            "video" in side and side != {"video"} for side in (query_mods, doc_mods)
+        ):
+            errors.append(
+                f"Model {model.name} only supports video-only inputs, but task {task.metadata.name} "
+                f"mixes video with other modalities on one side: query={sorted(query_mods)}, "
+                f"document={sorted(doc_mods)}."
+            )
+    if errors:
+        raise ValueError("\n".join(errors))
+
+
 def _check_model_modalities(
     model: ModelMeta,
     tasks: AbsTask | Iterable[AbsTask],
@@ -392,6 +431,21 @@ def _check_model_modalities(
 
     warnings, errors = [], []
 
+    def with_video_hint(msg: str, task: AbsTask) -> str:
+        if (
+            "image" in model_modalities
+            and "video" not in model_modalities
+            and "dense" in model.model_type
+            and "video" in task.metadata.modalities
+        ):
+            msg += (
+                f" {model.name} does not run on video and {task.metadata.name} contains video. "
+                "If you wish to evaluate it on frames sampled from the videos, wrap it in "
+                "`mteb.models.Video2ImagesWrapper` "
+                "(see https://embeddings-benchmark.github.io/mteb/get_started/advanced_usage/image_models_on_video/)."
+            )
+        return msg
+
     for task in check_tasks:
         # only retrieval tasks have different modalities for query and document and can be run with partial overlaps
         if isinstance(task, AbsTaskRetrieval):
@@ -415,8 +469,11 @@ def _check_model_modalities(
                 )
             else:
                 errors.append(
-                    f"Model {model.name} supports {model.modalities}, but none overlap with "
-                    f"task {task.metadata.name} query={sorted(query_mods)}, document={sorted(doc_mods)}."
+                    with_video_hint(
+                        f"Model {model.name} supports {model.modalities}, but none overlap with "
+                        f"task {task.metadata.name} query={sorted(query_mods)}, document={sorted(doc_mods)}.",
+                        task,
+                    )
                 )
         else:
             task_mods = set(task.metadata.modalities)
@@ -424,8 +481,11 @@ def _check_model_modalities(
             if task_mods.issubset(model_modalities):
                 continue
             errors.append(
-                f"Model {model.name} supports {model.modalities}, but none overlap with "
-                f"task {task.metadata.name} modalities={task.metadata.modalities}."
+                with_video_hint(
+                    f"Model {model.name} supports {model.modalities}, but none overlap with "
+                    f"task {task.metadata.name} modalities={task.metadata.modalities}.",
+                    task,
+                )
             )
 
     if errors:
@@ -603,6 +663,8 @@ def evaluate(  # noqa: PLR0913
     meta = _apply_precision_to_meta(meta, encode_kwargs)
     _check_model_modalities(meta, tasks)
     overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
+    if isinstance(model, Video2ImagesWrapper):
+        _check_video_only_inputs(meta, tasks)
 
     return _evaluate_resolved(
         model,
