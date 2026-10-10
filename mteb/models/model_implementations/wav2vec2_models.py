@@ -6,7 +6,11 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import (
+    AudioCollator,
+    seconds_to_samples,
+    single_clip_dataloader,
+)
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -82,11 +86,19 @@ class Wav2Vec2AudioWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
-        max_audio_length_seconds: float = 30.0,
+        # uncapped: conv positional embedding, no max_position_embeddings
+        # https://huggingface.co/facebook/wav2vec2-base/blob/main/config.json
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
         import torch
-        from transformers import Wav2Vec2FeatureExtractor, Wav2Vec2ForCTC, Wav2Vec2Model
+        from transformers import (
+            AutoConfig,
+            SpeechEncoderDecoderModel,
+            Wav2Vec2FeatureExtractor,
+            Wav2Vec2ForCTC,
+            Wav2Vec2Model,
+        )
 
         if device is None:
             device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -95,20 +107,34 @@ class Wav2Vec2AudioWrapper(AbsEncoder):
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds
 
-        # Try to load base model first, fallback to CTC if needed
-        try:
-            self.model = Wav2Vec2Model.from_pretrained(
+        config = AutoConfig.from_pretrained(model_name, revision=revision)
+        if config.model_type == "speech-encoder-decoder":
+            # speech-to-text checkpoint (e.g. xls-r-2b-21-to-en): its wav2vec2
+            # weights sit under "encoder.", so Wav2Vec2Model would load none
+            self.model = SpeechEncoderDecoderModel.from_pretrained(
                 model_name, revision=revision
-            ).to(self.device)
+            ).encoder.to(self.device)
             self.is_ctc_model = False
-        except Exception:
-            # Fallback to CTC model for models that don't have base versions
-            self.model = Wav2Vec2ForCTC.from_pretrained(
-                model_name, revision=revision
-            ).to(self.device)
-            self.is_ctc_model = True
+        else:
+            # Try to load base model first, fallback to CTC if needed
+            try:
+                self.model = Wav2Vec2Model.from_pretrained(
+                    model_name, revision=revision
+                ).to(self.device)
+                self.is_ctc_model = False
+            except Exception:
+                # Fallback to CTC model for models that don't have base versions
+                self.model = Wav2Vec2ForCTC.from_pretrained(
+                    model_name, revision=revision
+                ).to(self.device)
+                self.is_ctc_model = True
 
         self.model.eval()
+        # group-norm feature encoders were trained without an attention mask and
+        # normalise over the padded input, so batching changes the embeddings
+        # (cosine down to 0.12 on real clips); layer-norm ones batch at cosine >= 0.9999
+        # https://huggingface.co/docs/transformers/model_doc/wav2vec2#transformers.Wav2Vec2FeatureExtractor
+        self.per_clip = self.model.config.feat_extract_norm != "layer"
 
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(model_name)
         self.sampling_rate = self.feature_extractor.sampling_rate
@@ -121,14 +147,21 @@ class Wav2Vec2AudioWrapper(AbsEncoder):
     ) -> Array:
         import torch
 
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+        max_samples = seconds_to_samples(
+            self.max_audio_length_seconds, self.sampling_rate
+        )
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate, max_samples=max_samples
+        )
 
         all_embeddings = []
 
-        for batch in tqdm(
-            inputs,
-            disable=not show_progress_bar,
-        ):
+        if self.per_clip:
+            inputs = single_clip_dataloader(
+                inputs,
+                "group-norm feature encoder: padding changes the embeddings",
+            )
+        for batch in tqdm(inputs, disable=not show_progress_bar):
             audio_arrays = [audio["array"] for audio in batch["audio"]]
 
             feature_inputs = self.feature_extractor(
@@ -136,8 +169,6 @@ class Wav2Vec2AudioWrapper(AbsEncoder):
                 sampling_rate=self.sampling_rate,
                 return_tensors="pt",
                 padding="longest",
-                truncation=True,
-                max_length=int(self.max_audio_length_seconds * self.sampling_rate),
                 return_attention_mask=True,
             ).to(self.device)
 

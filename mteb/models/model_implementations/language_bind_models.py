@@ -7,7 +7,11 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator, VideoCollator
+from mteb.models.modality_collators import (
+    AudioCollator,
+    VideoCollator,
+    fixed_numpy_seed,
+)
 
 if TYPE_CHECKING:
     import torch
@@ -20,6 +24,8 @@ if TYPE_CHECKING:
 
 
 # LanguageBind expects audio sampled at 16 kHz (its audio mel-spectrogram pipeline).
+# 16 kHz: vision_config.audio_sample_rate
+# https://huggingface.co/LanguageBind/LanguageBind_Audio_FT/blob/main/config.json
 _LANGUAGE_BIND_AUDIO_SR = 16000
 
 _LANGUAGEBIND_SHIM_APPLIED: list[bool] = []
@@ -125,6 +131,8 @@ class LanguageBindVideoWrapper(_LanguageBindBase):
         revision: str | None = None,
         fps: float | None = None,
         max_frames: int | None = None,
+        # 8 frames: num_frames=8
+        # https://huggingface.co/LanguageBind/LanguageBind_Video_FT/blob/main/config.json
         num_frames: int | None = 8,
         max_samples: int | None = None,
         **kwargs: Any,
@@ -157,6 +165,18 @@ class LanguageBindVideoWrapper(_LanguageBindBase):
             model_name, revision=revision
         )
         self.processor = LanguageBindVideoProcessor(self.model.config, self.tokenizer)
+        # the upstream video transform flips each clip left-right at random, even
+        # at inference, so the same video embedded differently on every call
+        # https://github.com/PKU-YuanGroup/LanguageBind/blob/main/languagebind/video/processing_video.py
+        from torchvision.transforms import Compose
+
+        self.processor.transform = Compose(
+            [
+                t
+                for t in self.processor.transform.transforms
+                if "RandomHorizontalFlip" not in type(t).__name__
+            ]
+        )
 
     def _transform_video_frames(self, frames: torch.Tensor) -> torch.Tensor:
         """Apply LanguageBind's video transform to pre-decoded frames.
@@ -304,9 +324,13 @@ class LanguageBindAudioWrapper(_LanguageBindBase):
                 desc="Processing audio batches",
             ):
                 audio_arrays = [audio["array"] for audio in batch["audio"]]
-                processed = torch.stack(
-                    [self._transform_audio(a) for a in audio_arrays]
-                ).to(self.device)
+                processed = []
+                for a in audio_arrays:
+                    # the audio processor picks random chunks of long clips
+                    # https://github.com/PKU-YuanGroup/LanguageBind/blob/5be0c7821fe7fbed821ca806110767fcf79edb3c/languagebind/audio/processing_audio.py#L70-L72
+                    with fixed_numpy_seed():
+                        processed.append(self._transform_audio(a))
+                processed = torch.stack(processed).to(self.device)
 
                 with torch.autocast(str(self.device), dtype=torch.bfloat16):
                     audio_outputs = self.model.vision_model(pixel_values=processed)

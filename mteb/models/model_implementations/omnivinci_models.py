@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, Any
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import VideoCollator
+from mteb.models.modality_collators import VideoCollator, single_clip_dataloader
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
@@ -38,8 +38,12 @@ class OmniVinciWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
-        num_frames: int = 64,
-        max_audio_length_seconds: float = 30.0,
+        # 32 frames: num_video_frames=32 (fps=0.0, so a fixed count, not a rate)
+        # https://huggingface.co/nvidia/omnivinci/blob/main/config.json
+        num_frames: int = 32,
+        # 120 s: audio_chunk_length=120; upstream keeps only the first 120 s
+        # https://huggingface.co/nvidia/omnivinci/blob/main/config.json
+        max_audio_length_seconds: float = 120.0,
         **kwargs: Any,
     ) -> None:
         import torch
@@ -218,6 +222,11 @@ class OmniVinciWrapper(AbsEncoder):
                     num_frames=self.num_frames,
                     max_samples=self.max_audio_samples,
                 )
+                if has_audio:
+                    inputs = single_clip_dataloader(
+                        inputs,
+                        "batched audio embeddings change with their batch-mates",
+                    )
 
             all_embeddings: list[torch.Tensor] = []
             for batch in tqdm(inputs, desc="Encoding"):
@@ -261,5 +270,8 @@ omnivinci = ModelMeta(
     modalities=["text", "image", "audio", "video"],
     model_type=["dense"],
     citation=_OMNIVINCI_CITATION,
-    extra_requirements_groups=["omnivinci"],
+    # the remote code needs transformers 4.46 plus packages mteb does not ship
+    # (openai-whisper, kaldiio, decord, s2wrapper from git); see the model card
+    # https://huggingface.co/nvidia/omnivinci
+    extra_requirements_groups=["audio", "video", "transformers-v4"],
 )

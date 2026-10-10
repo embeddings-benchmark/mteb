@@ -345,13 +345,21 @@ class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
         model_name: str = "vidore/colqwen-omni-v0.1",
         revision: str | None = None,
         device: str | None = None,
+        # fps=1: the checkpoint's video config ("fps": 1, do_sample_frames)
+        # https://huggingface.co/vidore/colqwen-omni-v0.1/blob/61e78ef2f9c826cac588a01e44df51672ce957bd/video_preprocessor_config.json#L17
+        fps: float | None = 1.0,
+        # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
-        max_audio_length: int | None = None,
+        # 300 s at 16 kHz: Qwen2.5-Omni chunk_length=300; this is max_samples,
+        # so it is in samples, not seconds
+        # https://huggingface.co/Qwen/Qwen2.5-Omni-7B/blob/main/preprocessor_config.json
+        max_audio_length: int | None = 4_800_000,
         **kwargs: Any,
     ):
         from colpali_engine.models import ColQwen2_5Omni, ColQwen2_5OmniProcessor
 
+        self.fps = fps
         self.max_frames = max_frames
         self.num_frames = num_frames
         self.max_audio_length = max_audio_length
@@ -385,7 +393,7 @@ class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
         if "video" in features:
             inputs.collate_fn = VideoCollator(
                 target_sampling_rate=self.sampling_rate,
-                fps=None,
+                fps=self.fps,
                 max_frames=self.max_frames,
                 num_frames=self.num_frames,
                 max_samples=self.max_audio_length,

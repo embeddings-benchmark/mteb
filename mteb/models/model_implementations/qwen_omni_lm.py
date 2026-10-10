@@ -5,7 +5,11 @@ from typing import TYPE_CHECKING, Any
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator, VideoCollator
+from mteb.models.modality_collators import (
+    AudioCollator,
+    VideoCollator,
+    single_clip_dataloader,
+)
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
@@ -24,8 +28,13 @@ class QwenOmniWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
+        # 300 s: chunk_length=300
+        # https://huggingface.co/Qwen/Qwen2.5-Omni-7B/blob/main/preprocessor_config.json
         max_audio_length_seconds: int = 300,
+        # fps=2: qwen-omni-utils FPS=2.0
+        # https://github.com/QwenLM/Qwen2.5-Omni/blob/main/qwen-omni-utils/src/qwen_omni_utils/v2_5/vision_process.py
         fps: float | None = 2.0,
+        # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
         **kwargs: Any,
@@ -53,6 +62,9 @@ class QwenOmniWrapper(AbsEncoder):
             from transformers import Qwen3OmniMoeThinkerForConditionalGeneration
 
             model_class = Qwen3OmniMoeThinkerForConditionalGeneration
+        # Qwen3-Omni (mixture of experts) changes with its batch-mates (batched vs
+        # single cosine 0.96 on real clips); Qwen2.5-Omni stays within 0.999
+        self.per_clip = model_class.__name__.startswith("Qwen3OmniMoe")
 
         self.model = model_class.from_pretrained(
             model_name, revision=revision, torch_dtype=torch.bfloat16, **kwargs
@@ -128,6 +140,11 @@ class QwenOmniWrapper(AbsEncoder):
                 inputs.collate_fn = AudioCollator(
                     target_sampling_rate=self.sampling_rate,
                     max_samples=self.max_samples,
+                )
+
+            if self.per_clip and (has_audio or has_video):
+                inputs = single_clip_dataloader(
+                    inputs, "batched embeddings change with their batch-mates"
                 )
 
             all_embeddings: list[torch.Tensor] = []

@@ -31,10 +31,18 @@ class PEAudioVisualWrapper(AbsEncoder):
         self,
         model_name: str = "facebook/pe-av-large",
         device: str | None = None,
+        # PE-AV processes every frame it is given (do_sample_frames=false; the
+        # paper samples at 30 fps); fps=2 with at most 64 frames is an mteb cap
+        # for memory
+        # https://huggingface.co/facebook/pe-av-large/blob/main/video_preprocessor_config.json
         fps: float | None = 2.0,
         max_frames: int | None = 64,
         num_frames: int | None = None,
-        max_samples: int | None = 30 * 48000,  # 30s * sampling rate
+        # full clips, as in Meta's eval, up to the rotary table: 10000 positions
+        # (max_position_embeddings) minus CLS, at one per 1920 samples (~400 s);
+        # Meta's code fails past it
+        # https://github.com/facebookresearch/perception_models/blob/main/core/audio_visual_encoder/transformer.py
+        max_samples: int | None = (10_000 - 1) * 1920,
         **kwargs: Any,
     ):
         import torch

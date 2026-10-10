@@ -32,7 +32,10 @@ class UMER1Wrapper(AbsEncoder):
         model: str,
         revision: str | None = None,
         device: str | None = None,
+        # fps=2: qwen-vl-utils FPS=2.0
+        # https://github.com/QwenLM/Qwen2.5-VL/blob/main/qwen-vl-utils/src/qwen_vl_utils/vision_process.py
         fps: float | None = 2.0,
+        # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
         **kwargs: Any,
@@ -92,12 +95,21 @@ class UMER1Wrapper(AbsEncoder):
         import torch
 
         if "video" in inputs.dataset.features:
-            from mteb.models.modality_collators import VideoCollator
+            from mteb.models.modality_collators import (
+                VideoCollator,
+                single_clip_dataloader,
+            )
 
             inputs.collate_fn = VideoCollator(
                 target_sampling_rate=16000,
                 fps=self.fps,
                 max_frames=self.max_frames,
+                num_frames=self.num_frames,
+            )
+            # the embedding follows generated reasoning text, and batching changes
+            # that text (batched vs single cosine 0.97 on real videos)
+            inputs = single_clip_dataloader(
+                inputs, "batched video embeddings change with their batch-mates"
             )
 
         all_embeddings: list[torch.Tensor] = []
@@ -115,9 +127,12 @@ class UMER1Wrapper(AbsEncoder):
                 ).to(self.device)
 
                 # Inference: Generation of the output
+                # greedy: the 7B generation_config samples (do_sample=true), so its
+                # reasoning text and embedding were random on every call
                 output = self.model.generate(
                     **model_inputs,
                     max_new_tokens=8192,
+                    do_sample=False,
                     output_hidden_states=True,
                     return_dict_in_generate=True,
                     use_cache=True,
@@ -176,13 +191,19 @@ class UMER1Wrapper(AbsEncoder):
         if self.gen_emb_id is None:
             return [-1] * generated_ids_trimmed.shape[0]
 
+        eos = self.model.generation_config.eos_token_id
+        eos_ids = set(eos if isinstance(eos, list) else [eos])
         for out_ids in generated_ids_trimmed:
             indices = (out_ids == self.gen_emb_id).nonzero(as_tuple=True)[0]
             if indices.numel() > 0:
                 # Add 1 because step 0 in output.hidden_states is the prefill
                 embedding_idx.append(indices[-1].item() + 1)
             else:
-                embedding_idx.append(-1)
+                # no embedding token: use this sequence's own last step, not the
+                # batch's last step, which a sequence that ended early only padded
+                ids = out_ids.tolist()
+                end = next((j for j, t in enumerate(ids) if t in eos_ids), None)
+                embedding_idx.append(end if end is not None else -1)
         return embedding_idx
 
     def _extract_generative_reasoning_embeddings(

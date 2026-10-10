@@ -107,7 +107,10 @@ _WEMM_CITATION = """@article{wemm-embedding,
 
 _WEMM_LOADER_KWARGS = dict(
     trust_remote_code=True,
+    # fps=2: video_processor.fps=2
+    # https://huggingface.co/tencent/WeMM-Embedding-2B/blob/main/processor_config.json
     fps=2.0,
+    # 64 is an mteb cap; upstream ships max_frames=768
     max_frames=64,
 )
 

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
@@ -11,6 +13,51 @@ AUROLA_TRAINING_DATASETS = {
     "ClothoA2TRetrieval",
     "ClothoT2ARetrieval",
 }
+
+
+class AuroLAOmniWrapper(SentenceTransformerEncoderWrapper):
+    """Sets AuroLA's video and audio limits, which the generic wrapper leaves open."""
+
+    def __init__(
+        self,
+        model: str,
+        revision: str | None = None,
+        device: str | None = None,
+        # fps=1 and max_pixels=64*28*28: the model card's video example
+        # https://huggingface.co/Jazzcharles/AuroLA-Omni-3B/blob/main/README.md
+        fps: float | None = 1.0,
+        # 64 is an mteb cap; the checkpoint's video config allows max_frames=768
+        max_frames: int | None = 64,
+        num_frames: int | None = None,
+        # 300 s at 16 kHz: chunk_length=300
+        # https://huggingface.co/Jazzcharles/AuroLA-Omni-3B/blob/main/preprocessor_config.json
+        max_samples: int | None = 4_800_000,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(
+            model,
+            revision=revision,
+            device=device,
+            fps=fps,
+            max_frames=max_frames,
+            num_frames=num_frames,
+            max_samples=max_samples,
+            **kwargs,
+        )
+        self.target_sampling_rate = self.model[
+            0
+        ].processor.feature_extractor.sampling_rate
+        # processor_kwargs max_pixels only reaches images; videos need it per call
+        self.model[0].processing_kwargs.update(
+            {
+                "video": {
+                    "max_pixels": 64 * 28 * 28,
+                    "do_sample_frames": False,
+                    "fps": 1.0,
+                }
+            }
+        )
+
 
 _AUROLA_CITATION = r"""
 @misc{xu2026scalingaudiotextretrievalmultimodal,
@@ -25,7 +72,7 @@ _AUROLA_CITATION = r"""
 """
 
 aurola_omni_7b = ModelMeta(
-    loader=SentenceTransformerEncoderWrapper,
+    loader=AuroLAOmniWrapper,
     loader_kwargs={
         "trust_remote_code": True,
         "model_kwargs": {
@@ -62,7 +109,7 @@ aurola_omni_7b = ModelMeta(
 )
 
 aurola_omni_3b = ModelMeta(
-    loader=SentenceTransformerEncoderWrapper,
+    loader=AuroLAOmniWrapper,
     loader_kwargs={
         "trust_remote_code": True,
         "model_kwargs": {

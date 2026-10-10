@@ -7,7 +7,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import AudioCollator, seconds_to_samples
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -22,7 +22,10 @@ class MuQMuLanWrapper(AbsEncoder):
         self,
         model_name: str = "OpenMuQ/MuQ-MuLan-large",
         device: str | None = None,
-        max_audio_length_s: float = 30.0,
+        # uncapped: MuQ-MuLan splits anything over clip_secs=10 into clips itself
+        # and returns their average latent, so truncating would discard that
+        # https://github.com/tencent-ailab/MuQ/blob/main/src/muq/muq_mulan/muq_mulan.py
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
         import torch
@@ -35,9 +38,10 @@ class MuQMuLanWrapper(AbsEncoder):
         self.model_name = model_name
         self.device = device
         self.sampling_rate = 24000
-        self.max_audio_length_s = max_audio_length_s
-        # Apply audio truncation (30 seconds max)
-        self.max_length_samples = int(self.max_audio_length_s * self.sampling_rate)
+        self.max_audio_length_seconds = max_audio_length_seconds
+        self.max_length_samples = seconds_to_samples(
+            self.max_audio_length_seconds, self.sampling_rate
+        )
 
         # Load the model
         self.model = MuQMuLan.from_pretrained(model_name).eval().to(self.device)
@@ -62,32 +66,21 @@ class MuQMuLanWrapper(AbsEncoder):
             audio_arrays = []
             audio_array = [audio["array"] for audio in batch["audio"]]
             for array in audio_array:
-                # Apply audio truncation (30 seconds max)
-                if array.shape[-1] > self.max_length_samples:
+                if (
+                    self.max_length_samples is not None
+                    and array.shape[-1] > self.max_length_samples
+                ):
                     array = array[..., : self.max_length_samples]  # noqa: PLW2901
                 audio_arrays.append(array)
 
-            # Find max length and pad all tensors
-            max_length = max(arr.shape[-1] for arr in audio_arrays)
-            batch_tensor = torch.zeros(
-                len(audio_arrays), max_length, dtype=torch.float32
-            )
-
-            for idx, arr in enumerate(audio_arrays):
-                length = arr.shape[-1]
-                batch_tensor[idx, :length] = arr
-
-            batch_tensor = batch_tensor.to(self.device)
-
             with torch.no_grad():
-                # Process entire batch at once
-                audio_embeds = self.model(wavs=batch_tensor)
-                all_features.extend(
-                    [
-                        embed.cpu().detach().numpy().reshape(1, -1)
-                        for embed in audio_embeds
-                    ]
-                )
+                # one clip per forward: zero padding would be averaged in as silent 10 s clips
+                for arr in audio_arrays:
+                    wav = torch.from_numpy(np.ascontiguousarray(arr, dtype=np.float32))
+                    audio_embeds = self.model(wavs=wav.unsqueeze(0).to(self.device))
+                    all_features.append(
+                        audio_embeds.cpu().detach().numpy().reshape(1, -1)
+                    )
 
         return np.vstack(all_features)
 
@@ -195,5 +188,6 @@ muq_mulan_large = ModelMeta(
   primaryClass={cs.SD},
   url={https://arxiv.org/abs/2501.01108},
 }""",
-    extra_requirements_groups=["muq"],
+    # the muq package fails on transformers 5 (EasyDict has no _attn_implementation)
+    extra_requirements_groups=["muq", "transformers-v4"],
 )

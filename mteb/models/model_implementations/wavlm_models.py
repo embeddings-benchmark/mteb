@@ -6,7 +6,11 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import (
+    AudioCollator,
+    check_duration_cap,
+    single_clip_dataloader,
+)
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -22,9 +26,13 @@ class WavlmWrapper(AbsEncoder):
         model_name: str,
         revision: str | None = None,
         device: str | None = None,
-        max_audio_length_seconds: float = 30.0,
+        # 240 s: an mteb memory cap, not a model limit. WavLM declares no length
+        # limit but has no SDPA, so attention memory grows quadratically; one
+        # 240 s clip takes ~62 GB on wavlm-large and 300 s runs out on 80 GB
+        max_audio_length_seconds: float = 240.0,
         **kwargs: Any,
     ):
+        check_duration_cap(max_audio_length_seconds)
         import torch
         from transformers import Wav2Vec2FeatureExtractor, WavLMModel
 
@@ -39,6 +47,10 @@ class WavlmWrapper(AbsEncoder):
             self.device
         )
         self.model.eval()
+        # group-norm checkpoints (wavlm-base*) normalise over the padded input, so
+        # batching changes their embeddings (cosine 0.40 on real clips);
+        # wavlm-large uses layer norm and batches at cosine 0.9988
+        self.per_clip = self.model.config.feat_extract_norm != "layer"
 
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(
             self.model_name, revision=revision
@@ -57,10 +69,12 @@ class WavlmWrapper(AbsEncoder):
 
         all_embeddings = []
 
-        for batch in tqdm(
-            inputs,
-            disable=not show_progress_bar,
-        ):
+        if self.per_clip:
+            inputs = single_clip_dataloader(
+                inputs,
+                "group-norm feature encoder: padding changes the embeddings",
+            )
+        for batch in tqdm(inputs, disable=not show_progress_bar):
             audio_arrays = [audio["array"] for audio in batch["audio"]]
 
             feature_inputs = self.feature_extractor(

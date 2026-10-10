@@ -19,9 +19,14 @@ class OmniEmbedNemotronWrapper(SentenceTransformerEncoderWrapper):
         model: str,
         revision: str | None = None,
         device: str | None = None,
+        # fps=2: qwen-omni-utils FPS=2.0
+        # https://github.com/QwenLM/Qwen2.5-Omni/blob/main/qwen-omni-utils/src/qwen_omni_utils/v2_5/vision_process.py
         fps: float | None = 2.0,
+        # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
+        # 128 s: the model card sets "audio": {"max_length": 2048000}
+        # https://huggingface.co/nvidia/omni-embed-nemotron-3b
         max_audio_length: int = 2_048_000,
         **kwargs: Any,
     ) -> None:
@@ -48,6 +53,13 @@ class OmniEmbedNemotronWrapper(SentenceTransformerEncoderWrapper):
                 "audio": {"max_length": max_audio_length},
             }
         )
+        # the decoder is trained bidirectional, but the remote code's
+        # _update_causal_mask override is never called on transformers 5, so
+        # padded batches ran causal (batched vs single cosine 0.73) while single
+        # items ran bidirectional; is_causal=False selects the bidirectional mask
+        for module in self.model.modules():
+            if type(module).__name__ == "BidirectQwen2_5OmniThinkerTextModel":
+                module.config.is_causal = False
 
 
 _OMNI_EMBED_NEMOTRON_CITATION = r"""

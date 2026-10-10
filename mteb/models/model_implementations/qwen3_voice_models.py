@@ -7,7 +7,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import AudioCollator, seconds_to_samples
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -25,7 +25,10 @@ class Qwen3VoiceEmbeddingWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
-        max_audio_length_seconds: float = 30.0,
+        # no limit: ECAPA-TDNN is convolutional and pools over the whole clip
+        # (AttentiveStatisticsPooling), so length is unbounded and cost linear
+        # https://huggingface.co/marksverdhei/Qwen3-Voice-Embedding-12Hz-1.7B/blob/main/modeling_ecapa_tdnn.py
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
         import torch
@@ -57,7 +60,9 @@ class Qwen3VoiceEmbeddingWrapper(AbsEncoder):
     ) -> Array:
         import torch
 
-        max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
+        max_samples = seconds_to_samples(
+            self.max_audio_length_seconds, self.sampling_rate
+        )
         inputs.collate_fn = AudioCollator(
             target_sampling_rate=self.sampling_rate, max_samples=max_samples
         )
@@ -67,19 +72,21 @@ class Qwen3VoiceEmbeddingWrapper(AbsEncoder):
             inputs,
             disable=not show_progress_bar,
         ):
-            audio_arrays = [audio["array"] for audio in batch["audio"]]
+            # one clip per forward: padded frames are not masked in the pooling
+            for audio in batch["audio"]:
+                feature_inputs = self.feature_extractor(
+                    [audio["array"]],
+                    sampling_rate=self.sampling_rate,
+                    return_tensors="pt",
+                )
+                feature_inputs = {
+                    k: v.to(self.device) for k, v in feature_inputs.items()
+                }
 
-            feature_inputs = self.feature_extractor(
-                audio_arrays,
-                sampling_rate=self.sampling_rate,
-                return_tensors="pt",
-            )
-            feature_inputs = {k: v.to(self.device) for k, v in feature_inputs.items()}
-
-            with torch.no_grad():
-                outputs = self.model(**feature_inputs)
-                embeddings = outputs.last_hidden_state
-                all_embeddings.append(embeddings.cpu().detach())
+                with torch.no_grad():
+                    outputs = self.model(**feature_inputs)
+                    embeddings = outputs.last_hidden_state
+                    all_embeddings.append(embeddings.cpu().detach())
 
         return torch.cat(all_embeddings, dim=0).numpy()
 
