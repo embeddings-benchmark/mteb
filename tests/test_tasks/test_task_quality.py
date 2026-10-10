@@ -122,6 +122,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "EcomRetrieval",
         "EmitClassification",
         "EmotionAnalysisPlus",
+        "EmotionAnalysisPlus.v2",
         "FEVER",
         "FEVER-NL",
         "FEVER-VN",
@@ -494,6 +495,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "EmoVDBA2TRetrieval",
         "EmoVDBT2ARetrieval",
         "EmotionAnalysisPlus",
+        "EmotionAnalysisPlus.v2",
         "EncyclopediaVQAIT2ITRetrieval",
         "EuroPIRQRetrieval",
         "FEVER",
@@ -743,6 +745,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "DutchNewsArticlesClassification",
         "EmitClassification",
         "EmotionAnalysisPlus",
+        "EmotionAnalysisPlus.v2",
         "EmotionClassification",
         "EmotionVNClassification",
         "EstonianValenceClassification",
@@ -840,6 +843,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "TweetSentimentExtractionVNClassification",
         "UkrFormalityClassification",
         "VABBMultiLabelClassification",
+        "VABBMultiLabelClassification.v2",
         "VaccinChatNLClassification",
         "WRIMEClassification",
         "Waimai",
@@ -938,6 +942,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "ClothoMomentRetrieval",  # same audio with different instruction
         "CLDAT2ARetrieval",
         "FSD2019Kaggle",
+        "FSD2019Kaggle.v2",
         "GTZANGenre",  # repeated short clips sampled from the same tracks
         "GTZANGenreClustering",  # repeated short clips sampled from the same tracks
         "Kinetics400VA",  # multiple clips can share the same soundtrack/source video
