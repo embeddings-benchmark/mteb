@@ -33,6 +33,7 @@ Each filter takes a task and returns a cleaned copy, leaving the task you passed
 - [`remove_duplicates`][mteb.data_cleaning.remove_duplicates] removes [repeated samples](#removing-duplicates).
 - [`remove_by_text_length`][mteb.data_cleaning.remove_by_text_length] removes [texts that are empty, too short or too long](#removing-samples-by-size).
 - [`remove_by_image_size`][mteb.data_cleaning.remove_by_image_size], [`remove_by_audio_duration`][mteb.data_cleaning.remove_by_audio_duration] and [`remove_by_video_duration`][mteb.data_cleaning.remove_by_video_duration] do the same for [images, audio and video](#images-audio-and-video).
+- [`remove_train_leakage`][mteb.data_cleaning.remove_train_leakage] removes [evaluation samples that are also in train](#removing-train-leakage).
 
 Filters can be chained, e.g. `remove_by_text_length(remove_duplicates(task), min_length=1)`.
 
@@ -78,6 +79,13 @@ cleaned = remove_duplicates(
     task, normalization=lambda text: unicodedata.normalize("NFC", text.strip())
 )
 # finds 98 duplicates in the Vietnamese train split that the default comparison misses
+```
+
+Duplicates are removed within each split of each subset, so a sample in both the train and the test split is kept in both. Name the splits a sample may not repeat in `reference_splits` to remove it across splits too, and set `pool_subsets` to take those splits from every subset rather than the sample's own:
+
+```python
+cleaned = remove_duplicates(task, reference_splits=["train"])
+cleaned = remove_duplicates(task, reference_splits=["train"], pool_subsets=True)
 ```
 
 Only text is normalized; images, audio and video are compared by an exact hash of their content, so the filter works on any task but does not match a re-encoded or rescaled copy of a sample. Retrieval tasks keep their relevance judgements valid: a judgement pointing at a removed duplicate moves to the copy that was kept. Their documents and queries are compared as the model reads them, so a document's title is part of its text, and two queries that differ only in their instruction are not duplicates.
@@ -144,6 +152,22 @@ An image counts as small by its shorter side, so `min_size=32` asks for 32 pixel
 ### How samples are measured
 
 A sample is removed when any of its values is too small, e.g. either sentence of a pair. Each filter only measures its own modality, so `remove_by_text_length` keeps the images of a task whatever their size. In a retrieval task a document is measured on its title and text together, and a query together with its instruction, as that is what the model reads. A document or query that combines modalities, such as a page image with its extracted text, is left alone, as one may carry what the other lacks. The relevance judgements of a removed document are dropped with it, and a query left without any relevant document is dropped as well, as it can no longer be scored.
+
+## Removing train leakage
+
+An evaluation sample that also sits in the train split may be one the model was trained on. [`remove_train_leakage`][mteb.data_cleaning.remove_train_leakage] drops those, leaving the train split as it is:
+
+```python
+from mteb.data_cleaning import remove_train_leakage
+
+cleaned = remove_train_leakage(task)
+```
+
+A sample leaks when all of its content columns match a train sample's, which is what `samples_in_train` reports in the descriptive statistics, so you can see how much a task leaks before downloading it: 62 tasks report some today, from 4.8% of MassiveIntentClassification's test split to every row of HUMEToxicConversationsClassification's. Labels are not compared, as the same text under another label leaks just as much, and each subset is compared against its own train split.
+
+The statistic counts the distinct leaked samples of a subset while the filter removes every leaking row, so the filter removes a few more where an eval split repeats a leaked text. A retrieval task is refused rather than filtered: its corpus is commonly shared between splits by design.
+
+Subsets can leak into each other where they overlap: 1097 of AmazonCounterfactualClassification's test rows sit in another subset's train split rather than their own, as its `en` and `en-ext` subsets share content. Pass `pool_subsets=True` to compare against every subset's train split, which is what a task's own `samples_in_train` counts. This filter is `remove_duplicates` with the train split as its reference, minus the duplicates a split holds of its own, and it only has something to do where a task ships a train split -- which in MTEB today means the classification family and two regression tasks.
 
 ## Cleaning produces a new task
 

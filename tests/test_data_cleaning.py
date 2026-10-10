@@ -14,6 +14,7 @@ from mteb.data_cleaning import (
     remove_by_text_length,
     remove_by_video_duration,
     remove_duplicates,
+    remove_train_leakage,
 )
 from mteb.data_cleaning._duplicates import _keep_first_occurrence
 from mteb.data_cleaning._filtering import _derived_task_name, _row_key
@@ -1120,3 +1121,147 @@ def test_remove_by_text_length_refuses_a_bound_given_twice() -> None:
 
     with pytest.raises(ValueError, match="both `min_length` and `min_quantile`"):
         remove_by_text_length(task, min_length=3, min_quantile=0.05)
+
+
+def test_remove_train_leakage_removes_the_samples_that_appear_in_train() -> None:
+    task = _classification_task()
+
+    cleaned = remove_train_leakage(task)
+
+    # the test rows repeating a train text go, whatever their label, and the train split stays as it is
+    assert cleaned.dataset["test"]["text"] == ["hi", "long text"]
+    assert cleaned.dataset["train"]["text"] == ["a shared text", "train only"]
+
+
+def test_remove_train_leakage_compares_within_each_subset() -> None:
+    task = _multilingual_task()
+    for subset in ("eng", "fra"):
+        task.dataset[subset]["train"] = Dataset.from_dict(
+            {"text": ["duplicated" if subset == "eng" else "other"], "label": [0]}
+        )
+
+    cleaned = remove_train_leakage(task)
+
+    assert len(cleaned.dataset["eng"]["test"]) == 0
+    assert len(cleaned.dataset["fra"]["test"]) == 2
+
+
+def test_remove_train_leakage_uses_the_split_the_task_trains_on() -> None:
+    task = _classification_task()
+    task.dataset["training"] = task.dataset.pop("train")
+    task.train_split = "training"
+
+    cleaned = remove_train_leakage(task)
+
+    assert cleaned.dataset["test"]["text"] == ["hi", "long text"]
+
+
+def test_remove_train_leakage_applies_within_a_row_of_a_clustering_task() -> None:
+    task = MockClusteringTask()
+    task.dataset = DatasetDict(
+        {
+            "train": Dataset.from_dict(
+                {"sentences": [["leaked"]], "labels": [[0]]},
+            ),
+            "test": Dataset.from_dict(
+                {"sentences": [["leaked", "its own"]], "labels": [[0, 1]]},
+            ),
+        }
+    )
+    task.data_loaded = True
+
+    cleaned = remove_train_leakage(task)
+
+    row = cleaned.dataset["test"][0]
+    assert row["sentences"] == ["its own"]
+    assert row["labels"] == [1]
+
+
+def test_remove_train_leakage_counts_a_swapped_pair_of_a_symmetric_task() -> None:
+    task = MockSTSTask()
+    task.dataset = DatasetDict(
+        {
+            "train": Dataset.from_dict(
+                {"sentence1": ["alpha"], "sentence2": ["beta"], "score": [1.0]}
+            ),
+            "test": Dataset.from_dict(
+                {
+                    "sentence1": ["beta", "gamma"],
+                    "sentence2": ["alpha", "delta"],
+                    "score": [1.0, 2.0],
+                }
+            ),
+        }
+    )
+    task.data_loaded = True
+
+    cleaned = remove_train_leakage(task)
+
+    # ("beta", "alpha") is the train pair swapped, which an STS model sees as the same sample
+    assert cleaned.dataset["test"]["sentence1"] == ["gamma"]
+
+
+def test_remove_train_leakage_refuses_a_retrieval_task() -> None:
+    task = MockRetrievalTask()
+
+    with pytest.raises(NotImplementedError, match="shares its corpus between splits"):
+        remove_train_leakage(task)
+
+
+def test_remove_train_leakage_raises_without_a_train_split() -> None:
+    task = _create_texts_task(["a text"])
+
+    with pytest.raises(ValueError, match="do not select any data"):
+        remove_train_leakage(task)
+
+
+def test_remove_train_leakage_compares_non_text_by_content() -> None:
+    task = MockImageClassificationTask()
+    _load_or_skip(task)
+    split = next(iter(task.dataset))
+    data = task.dataset[split]
+    task.dataset = DatasetDict({"train": data.select([0]), split: data})
+
+    cleaned = remove_train_leakage(task)
+
+    # the first image is in train, so only the others survive
+    assert len(cleaned.dataset[split]) == len(data) - 1
+
+
+def test_remove_duplicates_can_take_a_reference_split() -> None:
+    task = _classification_task()
+
+    cleaned = remove_duplicates(task, reference_splits=["train"])
+
+    # what train holds goes, and so does the repeat the test split holds of its own
+    assert cleaned.dataset["test"]["text"] == ["hi", "long text"]
+    assert cleaned.dataset["train"]["text"] == ["a shared text", "train only"]
+
+
+def test_remove_duplicates_pools_the_reference_of_every_subset() -> None:
+    task = _multilingual_task()
+    task.dataset["eng"]["train"] = Dataset.from_dict(
+        {"text": ["duplicated"], "label": [0]}
+    )
+    task.dataset["fra"]["train"] = Dataset.from_dict({"text": ["other"], "label": [0]})
+
+    own = remove_duplicates(task, reference_splits=["train"], subsets=["fra"])
+    pooled = remove_duplicates(
+        task, reference_splits=["train"], pool_subsets=True, subsets=["fra"]
+    )
+
+    # "duplicated" only leaks into fra once eng's train split is pooled in
+    assert len(own.dataset["fra"]["test"]) == 1
+    assert len(pooled.dataset["fra"]["test"]) == 0
+
+
+def test_remove_train_leakage_can_pool_the_subsets() -> None:
+    task = _multilingual_task()
+    task.dataset["eng"]["train"] = Dataset.from_dict(
+        {"text": ["duplicated"], "label": [0]}
+    )
+    task.dataset["fra"]["train"] = Dataset.from_dict({"text": ["other"], "label": [0]})
+
+    cleaned = remove_train_leakage(task, pool_subsets=True, subsets=["fra"])
+
+    assert len(cleaned.dataset["fra"]["test"]) == 0

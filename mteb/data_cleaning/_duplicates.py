@@ -12,23 +12,26 @@ from ._filtering import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable, Sequence
+    from collections.abc import Collection, Iterable, Sequence
 
     from mteb.types import HFSubset
 
     from ._filtering import Normalization, T
 
 
-def _keep_first_occurrence(rows: Iterable[tuple[str, ...]]) -> list[int]:
+def _keep_first_occurrence(
+    rows: Iterable[tuple[str, ...]], reference: Collection[bytes] = ()
+) -> list[int]:
     """Keep the rows whose content has not been seen before.
 
     Args:
         rows: The comparable content of each row, one tuple per row with one entry per compared column.
+        reference: The keys of rows to count as already seen, which the filter binds per subset.
 
     Returns:
         The indices of the first occurrence of each distinct row.
     """
-    seen: set[bytes] = set()
+    seen: set[bytes] = set(reference)
     keep = []
     for i, row in enumerate(rows):
         key = _row_key(row)
@@ -42,6 +45,8 @@ def _keep_first_occurrence(rows: Iterable[tuple[str, ...]]) -> list[int]:
 def remove_duplicates(
     task: T,
     *,
+    reference_splits: Sequence[str] | None = None,
+    pool_subsets: bool = False,
     normalization: Normalization = _strip_whitespace,
     columns: Sequence[str] | None = None,
     splits: Sequence[str] | None = None,
@@ -52,7 +57,9 @@ def remove_duplicates(
 
     Two samples are duplicates when all of their content columns match. Text matches when `normalization` rewrites
     both to the same string; images, audio and video match when their content hashes are equal. Duplicates are
-    removed within each split, so a sample appearing in both the train and the test split is kept in both.
+    removed within each split of each subset, so a sample appearing in both the train and the test split is kept in
+    both. Name the splits a sample may not repeat in `reference_splits` to remove it across splits as well, and set
+    `pool_subsets` to take those splits from every subset rather than from the sample's own.
 
     The task passed in is left untouched, and a cleaned copy is returned. The copy is named after the filters
     applied to it, e.g. `MassiveIntentClassification (remove_duplicates)`, so that its scores are recorded against
@@ -66,6 +73,10 @@ def remove_duplicates(
 
     Args:
         task: The task to deduplicate. It is not modified.
+        reference_splits: The splits a kept sample may not repeat, e.g. `["train"]` to remove the evaluation
+            samples that a model may have trained on. They are compared against and left untouched.
+        pool_subsets: Whether `reference_splits` are taken from every subset at once, rather than each subset being
+            compared against its own.
         normalization: How to rewrite a text before comparing it. The default ignores surrounding whitespace only.
             Looser comparisons catch more duplicates but can merge samples that a reader would tell apart, so
             prefer the narrowest one that finds the duplicates you care about.
@@ -91,11 +102,17 @@ def remove_duplicates(
         >>> cleaned = remove_duplicates(task)
         >>> # ignore case too, so that "Wake me up!" and "wake me up!" are duplicates
         >>> cleaned = remove_duplicates(task, normalization=lambda t: t.strip().casefold())
+        >>> # or drop whatever the train split already holds
+        >>> cleaned = remove_duplicates(task, reference_splits=["train"])
     """
     return _filter_task_rows(
         task,
         _CleaningFilter(
-            "remove_duplicates", _keep_first_occurrence, removes_duplicates=True
+            "remove_duplicates",
+            _keep_first_occurrence,
+            removes_duplicates=True,
+            reference_splits=tuple(reference_splits or ()),
+            pools_subsets=pool_subsets,
         ),
         normalization=normalization,
         columns=columns,
