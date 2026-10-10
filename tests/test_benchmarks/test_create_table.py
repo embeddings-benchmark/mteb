@@ -25,6 +25,8 @@ from mteb.benchmarks._create_table import (
 from mteb.benchmarks.benchmark import BenchmarkAggregation, CustomGroup, CustomGrouping
 from tests.conftest import _skip_if_datasets_too_old
 
+pytestmark = pytest.mark.core
+
 FULL_MODEL = "mteb/baseline-random-encoder"
 PARTIAL_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 

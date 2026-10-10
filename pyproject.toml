@@ -471,7 +471,8 @@ max-args = 9
 [tool.semantic_release]
 branch = "main"
 version_toml = ["pyproject.toml:project.version"]
-build_command = "python -m pip install build; python -m build"
+# builds `mteb` and `mteb-core` (the same code without torch) into dist/, which the release workflow publishes
+build_command = "python -m pip install build packaging tomli && python -m build && python scripts/build_core_package.py"
 tag_format = "{version}"
 
 [tool.semantic_release.commit_parser_options]
@@ -505,6 +506,7 @@ addopts = """
 # --reruns-delay 10 -> Delay between reruns in seconds to avoid running into the same issue again
 
 markers = [
+    "core: marks tests that must pass on a minimal `mteb-core` installation, without torch (`make test-core`)",
     "test_datasets: marks tests that tests dataset availability",
     "test_reference_models: marks tests that verify reference model result coverage (requires downloading results repo)",
 ]
