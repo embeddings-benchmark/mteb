@@ -1,3 +1,4 @@
+import warnings
 from types import SimpleNamespace
 
 import numpy as np
@@ -78,3 +79,23 @@ def test_corpus_is_scored_in_blocks(monkeypatch, sparse: bool) -> None:
         queries.to_dense() @ corpus.to_dense().T if sparse else queries @ corpus.T
     )
     torch.testing.assert_close(scores, expected)
+
+
+@pytest.mark.parametrize("accelerator_available", [True, False])
+def test_warns_when_model_on_cpu_but_accelerator_available(
+    monkeypatch, accelerator_available: bool
+) -> None:
+    from mteb.models import sentence_transformer_wrapper as module
+
+    monkeypatch.setattr(torch.cuda, "is_available", lambda: accelerator_available)
+    monkeypatch.setattr(torch.backends.mps, "is_available", lambda: False)
+    model = SimpleNamespace(device=torch.device("cpu"))
+
+    if accelerator_available:
+        with pytest.warns(UserWarning, match="scored on the CPU"):
+            device = module._capture_scoring_device(model)
+    else:
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+            device = module._capture_scoring_device(model)
+    assert device == torch.device("cpu")

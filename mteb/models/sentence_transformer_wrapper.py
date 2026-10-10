@@ -246,6 +246,30 @@ def _max_sim_document_blocks(documents: Sequence[Array]) -> list[tuple[int, int]
     return blocks
 
 
+def _capture_scoring_device(
+    model: SentenceTransformer | SparseEncoder | MultiVectorEncoder,
+) -> torch.device:
+    """Return the device similarity is scored on, captured when the wrapper is created.
+
+    `start_multi_process_pool` moves the model to the CPU, so reading `model.device` later would
+    give the CPU. Warns if the model is on the CPU although an accelerator is available, which is
+    what a pool started before wrapping the model looks like.
+    """
+    import torch
+
+    device = model.device
+    if device.type == "cpu" and (
+        torch.cuda.is_available() or torch.backends.mps.is_available()
+    ):
+        warnings.warn(
+            "The model is on the CPU although an accelerator is available, so similarity will be "
+            "scored on the CPU. If you started a multi-process pool (`start_multi_process_pool`) "
+            "before creating the mteb model, create the model first: the pool moves the model to the CPU.",
+            stacklevel=3,
+        )
+    return device
+
+
 def _score_on_device(
     similarity_fn: Callable[..., Any],
     device: str | torch.device,
@@ -464,7 +488,7 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
             self.mteb_model_meta = ModelMeta.from_sentence_transformer_model(self.model)
 
         # `start_multi_process_pool` moves the model to the CPU, so the device is captured here.
-        self._scoring_device = self.model.device
+        self._scoring_device = _capture_scoring_device(self.model)
         self.model_prompts = _resolve_model_prompts(self.model, model_prompts)
 
         if (
@@ -758,7 +782,7 @@ class SparseEncoderWrapper(AbsEncoder):
             self.mteb_model_meta = ModelMeta.from_sparse_encoder_model(self.model)
 
         # `start_multi_process_pool` moves the model to the CPU, so the device is captured here.
-        self._scoring_device = self.model.device
+        self._scoring_device = _capture_scoring_device(self.model)
         self.model_prompts = _resolve_model_prompts(self.model, model_prompts)
 
         self.fps = fps
@@ -1083,7 +1107,7 @@ class MultiVectorWrapper(MultiVectorSearchEncoderWrapper):
             self.mteb_model_meta = ModelMeta.from_multi_vector_encoder_model(self.model)
 
         # `start_multi_process_pool` moves the model to the CPU, so the device is captured here.
-        self._scoring_device = self.model.device
+        self._scoring_device = _capture_scoring_device(self.model)
         self.model_prompts = _resolve_model_prompts(self.model, model_prompts)  # type: ignore[arg-type]
         self.corpus_chunk_size = corpus_chunk_size
 
