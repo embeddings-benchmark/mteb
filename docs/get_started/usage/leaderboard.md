@@ -23,11 +23,15 @@ The leaderboard consists of two parts:
 
 Install `mteb` with the `api` extra:
 
-```bash
-pip install "mteb[api]"
-# or, from a checkout of the repository
-uv sync --extra api
-```
+=== "pip"
+    ```bash
+    pip install "mteb[api]"
+    ```
+
+=== "uv"
+    ```bash
+    uv add "mteb[api]"
+    ```
 
 Then start the service:
 
@@ -56,9 +60,6 @@ For example, to serve the leaderboard using the results in your local cache:
 ```bash
 CACHE_REPO="" DISK_CACHE=0 HTTP_MAX_AGE=0 uvicorn mteb.api.app:app --port 8000
 ```
-
-!!! note
-    New benchmarks are only shown in the leaderboard if they are added to the leaderboard menu in [`_leaderboard_menu.py`](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/benchmarks/_leaderboard_menu.py).
 
 #### Running the frontend
 
@@ -89,13 +90,17 @@ mteb leaderboard --cache-path results --port 7860
 
 ### Annotate Contamination
 
-Have you found contamination in the training data of a model? Please let us know, either by opening an [issue](https://github.com/embeddings-benchmark/mteb/issues) or ideally by submitting a PR annotating the training datasets of the model:
+The leaderboard shows how zero-shot each model is on a benchmark, i.e. the percentage of the benchmark's tasks that are not part of the model's training data. This is computed from the `training_datasets` field of the model's [`ModelMeta`][mteb.models.model_meta.ModelMeta].
+
+Have you found that a model was trained on data from an MTEB task? Please let us know, either by opening an [issue](https://github.com/embeddings-benchmark/mteb/issues) or ideally by submitting a PR that adds the dataset to the model's `training_datasets`:
 
 ```python
-model_w_contamination = ModelMeta(
-    name = "model-with-contamination"
-    ...
-    training_datasets = {"ArguAna", ...} # name of dataset within MTEB
-    ...
+model_meta = ModelMeta(
+    name="org/model-with-contamination",
+    ...,
+    training_datasets={"ArguAna", "MSMARCO"},  # names of the tasks in MTEB
+    ...,
 )
 ```
+
+Use the task names as they appear in MTEB (e.g. `mteb.get_task("ArguAna").metadata.name`). Datasets of models listed in `adapted_from` are included automatically, so for fine-tuned models you only need to add the additional training data.
