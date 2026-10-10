@@ -260,7 +260,7 @@ def _capture_scoring_device(
     """
     import torch
 
-    device = getattr(model, "device", None)
+    device: torch.device | None = getattr(model, "device", None)
     if device is None:
         return torch.device("cpu")
     if device.type == "cpu" and (
