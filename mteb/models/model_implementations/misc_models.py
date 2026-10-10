@@ -38,6 +38,7 @@ Haon_Chen__speed_embedding_7b_instruct = ModelMeta(
     journal={arXiv preprint arXiv:2410.18634},
     year={2024}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 Gameselo__STS_multilingual_mpnet_base_v2 = ModelMeta(
     name="Gameselo/STS-multilingual-mpnet-base-v2",
@@ -208,6 +209,7 @@ Hum_Works__lodestone_base_4096_v1 = ModelMeta(
     },
     adapted_from="hum-lodestone-v1",
     superseded_by=None,
+    output_dtypes=OutputDType.BF16,
 )
 Jaume__gemma_2b_embeddings = ModelMeta(
     name="Jaume/gemma-2b-embeddings",
@@ -310,6 +312,7 @@ Lajavaness__bilingual_embedding_base = ModelMeta(
   year={2020}
 }
 """,
+    output_dtypes=OutputDType.FLOAT16,
 )
 Lajavaness__bilingual_embedding_large = ModelMeta(
     name="Lajavaness/bilingual-embedding-large",
@@ -379,6 +382,7 @@ Lajavaness__bilingual_embedding_large = ModelMeta(
   year={2020}
 }
 """,
+    output_dtypes=OutputDType.FLOAT16,
 )
 Lajavaness__bilingual_embedding_small = ModelMeta(
     name="Lajavaness/bilingual-embedding-small",
@@ -923,6 +927,7 @@ manu__sentence_croissant_alpha_v0_2 = ModelMeta(
     training_datasets=SENTENCE_CROISSANT_TRAINING_DATA,
     adapted_from="croissantllm/CroissantCool",
     superseded_by="manu/sentence_croissant_alpha_v0.3",
+    output_dtypes=OutputDType.BF16,
 )
 manu__sentence_croissant_alpha_v0_3 = ModelMeta(
     name="manu/sentence_croissant_alpha_v0.3",
@@ -947,6 +952,7 @@ manu__sentence_croissant_alpha_v0_3 = ModelMeta(
     training_datasets=SENTENCE_CROISSANT_TRAINING_DATA,
     adapted_from="croissantllm/CroissantCool-v0.2",
     superseded_by="manu/sentence_croissant_alpha_v0.4",
+    output_dtypes=OutputDType.BF16,
 )
 manu__sentence_croissant_alpha_v0_4 = ModelMeta(
     name="manu/sentence_croissant_alpha_v0.4",
@@ -972,6 +978,7 @@ manu__sentence_croissant_alpha_v0_4 = ModelMeta(
     # Not in MTEB: {"manu/embedding_data_v2_100k"},
     adapted_from="croissantllm/CroissantCool-v0.2",
     superseded_by=None,
+    output_dtypes=OutputDType.BF16,
 )
 thenlper__gte_base = ModelMeta(
     name="thenlper/gte-base",
@@ -1002,6 +1009,7 @@ thenlper__gte_base = ModelMeta(
   journal={arXiv preprint arXiv:2308.03281},
   year={2023}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 thenlper__gte_large = ModelMeta(
     name="thenlper/gte-large",
@@ -1032,6 +1040,7 @@ thenlper__gte_large = ModelMeta(
   journal={arXiv preprint arXiv:2308.03281},
   year={2023}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 thenlper__gte_small = ModelMeta(
     name="thenlper/gte-small",
@@ -1062,6 +1071,7 @@ thenlper__gte_small = ModelMeta(
   journal={arXiv preprint arXiv:2308.03281},
   year={2023}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 sdadas__mmlw_e5_base = ModelMeta(
     name="sdadas/mmlw-e5-base",
@@ -1124,6 +1134,7 @@ dwzhu__e5_base_4k = ModelMeta(
   journal={arXiv preprint arXiv:2404.12096},
   year={2024}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 sdadas__mmlw_e5_large = ModelMeta(
     name="sdadas/mmlw-e5-large",
@@ -1815,6 +1826,7 @@ infgrad__stella_base_en_v2 = ModelMeta(
     training_datasets=None,
     adapted_from=None,
     superseded_by=None,
+    output_dtypes=OutputDType.FLOAT16,
 )
 malenia1__ternary_weight_embedding = ModelMeta(
     name="malenia1/ternary-weight-embedding",
@@ -1904,6 +1916,7 @@ openbmb__minicpm_embedding = ModelMeta(
     training_datasets=None,
     adapted_from=None,
     superseded_by=None,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 silma_ai__silma_embedding_matryoshka_v0_1 = ModelMeta(

@@ -1,6 +1,7 @@
 from mteb.models import ModelMeta, sentence_transformers_loader
 from mteb.models.model_meta import ScoringFunction
 from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
+from mteb.types import OutputDType
 
 multilingual_langs = [
     "eng-Latn",
@@ -58,6 +59,7 @@ zeroentropy_zembed_1 = ModelMeta(
       url={https://arxiv.org/abs/2509.12541},
 }""",
     contacts=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -97,6 +99,7 @@ zeroentropy_zerank_1 = ModelMeta(
       url={https://arxiv.org/abs/2509.12541},
 }""",
     contacts=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 zeroentropy_zerank_1_small = ModelMeta(
@@ -135,6 +138,7 @@ zeroentropy_zerank_1_small = ModelMeta(
       url={https://arxiv.org/abs/2509.12541},
 }""",
     contacts=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 zeroentropy_zerank_2 = ModelMeta(
@@ -173,4 +177,5 @@ zeroentropy_zerank_2 = ModelMeta(
       url={https://arxiv.org/abs/2509.12541},
 }""",
     contacts=None,
+    output_dtypes=OutputDType.BF16,
 )

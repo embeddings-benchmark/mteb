@@ -154,4 +154,5 @@ Eager_Embed_V1 = ModelMeta(
     public_training_code="https://github.com/eagerworks/eager-embed",
     public_training_data="https://github.com/eagerworks/eager-embed/blob/main/dataset_config.yaml",
     extra_requirements_groups=["eager_embed"],
+    output_dtypes=OutputDType.FLOAT16,
 )

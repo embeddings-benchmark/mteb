@@ -4,6 +4,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
 )
+from mteb.types import OutputDType
 
 MEGAPAIRS_CITATION = """@article{zhou2024megapairs,
   title={MegaPairs: Massive Data Synthesis For Universal Multimodal Retrieval},
@@ -38,6 +39,7 @@ bge_vl_base = ModelMeta(
     use_instructions=True,
     training_datasets=BGE_VL_TRAINING_DATASETS,
     citation=MEGAPAIRS_CITATION,
+    output_dtypes=OutputDType.BF16,
 )
 
 bge_vl_large = ModelMeta(
@@ -64,6 +66,7 @@ bge_vl_large = ModelMeta(
     use_instructions=True,
     training_datasets=BGE_VL_TRAINING_DATASETS,
     citation=MEGAPAIRS_CITATION,
+    output_dtypes=OutputDType.BF16,
 )
 
 bge_vl_mllm_s1 = ModelMeta(
@@ -90,6 +93,7 @@ bge_vl_mllm_s1 = ModelMeta(
     use_instructions=True,
     training_datasets=BGE_VL_TRAINING_DATASETS,
     citation=MEGAPAIRS_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 bge_vl_mllm_s2 = ModelMeta(
@@ -116,6 +120,7 @@ bge_vl_mllm_s2 = ModelMeta(
     use_instructions=True,
     training_datasets=BGE_VL_TRAINING_DATASETS,
     citation=MEGAPAIRS_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 bge_vl_v1_5_zs = ModelMeta(
@@ -142,6 +147,7 @@ bge_vl_v1_5_zs = ModelMeta(
     use_instructions=True,
     training_datasets=BGE_VL_TRAINING_DATASETS,
     citation=MEGAPAIRS_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 bge_vl_v1_5_mmeb = ModelMeta(
@@ -168,4 +174,5 @@ bge_vl_v1_5_mmeb = ModelMeta(
     use_instructions=True,
     training_datasets=BGE_VL_TRAINING_DATASETS,
     citation=MEGAPAIRS_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )

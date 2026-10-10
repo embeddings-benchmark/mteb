@@ -4,6 +4,7 @@ import numpy as np
 
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
 
 paraphrase_langs = [
     "ara-Arab",
@@ -564,6 +565,7 @@ sentence_t5_base = ModelMeta(
     public_training_data=None,
     training_datasets={"SNLI", "Community QA"},
     citation=SENTENCE_T5_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 sentence_t5_large = ModelMeta(
@@ -588,6 +590,7 @@ sentence_t5_large = ModelMeta(
     public_training_data=None,
     training_datasets={"SNLI", "Community QA"},
     citation=SENTENCE_T5_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 sentence_t5_xl = ModelMeta(
@@ -612,6 +615,7 @@ sentence_t5_xl = ModelMeta(
     public_training_data=None,
     training_datasets={"SNLI", "Community QA"},
     citation=SENTENCE_T5_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 sentence_t5_xxl = ModelMeta(
@@ -636,6 +640,7 @@ sentence_t5_xxl = ModelMeta(
     public_training_data=None,
     training_datasets={"SNLI", "Community QA"},
     citation=SENTENCE_T5_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )
 GTR_CITATION = """
 @misc{ni2021largedualencodersgeneralizable,
@@ -682,6 +687,7 @@ gtr_t5_large = ModelMeta(
         "Community QA",
     },
     citation=GTR_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 gtr_t5_xl = ModelMeta(
@@ -718,6 +724,7 @@ gtr_t5_xl = ModelMeta(
         "Community QA",
     },
     citation=GTR_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )
 gtr_t5_xxl = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
@@ -753,6 +760,7 @@ gtr_t5_xxl = ModelMeta(
         "Community QA",
     },
     citation=GTR_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 gtr_t5_base = ModelMeta(
@@ -789,6 +797,7 @@ gtr_t5_base = ModelMeta(
         "Community QA",
     },
     citation=GTR_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 static_retrieval_mrl_en_v1 = ModelMeta(
@@ -908,6 +917,7 @@ qwen_indic_v1 = ModelMeta(
     model_type=["dense"],
     public_training_code=None,
     public_training_data=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 FlowVec_v1 = ModelMeta(

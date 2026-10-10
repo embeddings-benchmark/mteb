@@ -8,6 +8,7 @@ from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -487,4 +488,5 @@ biovita = ModelMeta(
         "open_clip_torch",
         "transformers-v5",
     ],
+    output_dtypes=OutputDType.FLOAT16,
 )

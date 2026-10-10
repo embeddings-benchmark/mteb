@@ -7,7 +7,7 @@ from tqdm.auto import tqdm
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     import torch
@@ -258,4 +258,5 @@ unime_v2_llava_onevision_8b = ModelMeta(
     model_type=["dense"],
     citation=_UNIME_V2_CITATION,
     extra_requirements_groups=["transformers-v5"],
+    output_dtypes=OutputDType.BF16,
 )

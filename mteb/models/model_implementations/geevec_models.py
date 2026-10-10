@@ -701,6 +701,7 @@ geevec_embeddings_1_0_lite = ModelMeta(
     training_datasets=None,
     adapted_from=None,
     citation=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 geevec_embeddings_1_0 = ModelMeta(

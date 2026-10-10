@@ -6,6 +6,7 @@ from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -181,4 +182,5 @@ e5_v = ModelMeta(
         # princeton-nlp/datasets-for-simcse
     ),
     citation=E5_V_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )

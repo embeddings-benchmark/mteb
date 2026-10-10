@@ -11,6 +11,7 @@ from tqdm.auto import tqdm
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -262,4 +263,5 @@ omnivinci = ModelMeta(
     model_type=["dense"],
     citation=_OMNIVINCI_CITATION,
     extra_requirements_groups=["omnivinci"],
+    output_dtypes=OutputDType.FLOAT16,
 )

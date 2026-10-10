@@ -67,6 +67,7 @@ e5_instruct = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=ME5_TRAINING_DATA,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 
@@ -95,6 +96,7 @@ me5_instruct_afri_large_instruct = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=ME5_TRAINING_DATA,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 
@@ -240,6 +242,7 @@ zeta_alpha_ai__zeta_alpha_e5_mistral = ModelMeta(
     | E5_MISTRAL_TRAINING_DATA,
     adapted_from="intfloat/e5-mistral-7b-instruct",
     superseded_by=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 E5_R_MISTRAL_7B_INSTRUCTION = "{instruction}\n"

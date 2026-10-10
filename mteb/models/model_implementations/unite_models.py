@@ -8,6 +8,7 @@ from tqdm.autonotebook import tqdm
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -293,4 +294,5 @@ unite_base_qwen2vl_2b = ModelMeta(
     adapted_from="Qwen/Qwen2-VL-2B-Instruct",
     citation=UNITE_CITATION,
     extra_requirements_groups=["transformers-v4"],
+    output_dtypes=OutputDType.BF16,
 )

@@ -59,6 +59,7 @@ gte_qwen2_7b_instruct = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     max_tokens=32_768,
+    output_dtypes=OutputDType.BF16,
 )
 
 gte_qwen1_5_7b_instruct = ModelMeta(
@@ -94,6 +95,7 @@ gte_qwen1_5_7b_instruct = ModelMeta(
   journal={arXiv preprint arXiv:2308.03281},
   year={2023}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 gte_qwen2_1_5b_instruct = ModelMeta(
@@ -129,6 +131,7 @@ gte_qwen2_1_5b_instruct = ModelMeta(
   journal={arXiv preprint arXiv:2308.03281},
   year={2023}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 gte_small_zh = ModelMeta(
@@ -158,6 +161,7 @@ gte_small_zh = ModelMeta(
   journal={arXiv preprint arXiv:2308.03281},
   year={2023}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 gte_base_zh = ModelMeta(
@@ -187,6 +191,7 @@ gte_base_zh = ModelMeta(
   journal={arXiv preprint arXiv:2308.03281},
   year={2023}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 gte_large_zh = ModelMeta(
@@ -216,6 +221,7 @@ gte_large_zh = ModelMeta(
   journal={arXiv preprint arXiv:2308.03281},
   year={2023}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 gte_multilingual_langs = [
@@ -348,6 +354,7 @@ gte_multilingual_base = ModelMeta(
   pages={1393--1412},
   year={2024}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 gte_modernbert_base = ModelMeta(
@@ -391,6 +398,7 @@ gte_modernbert_base = ModelMeta(
   journal={arXiv preprint arXiv:2308.03281},
   year={2023}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 

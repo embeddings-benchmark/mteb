@@ -11,7 +11,7 @@ from mteb._requires_package import (
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     import torch
@@ -574,6 +574,7 @@ vlm2vec_lora = ModelMeta(
     training_datasets=vlm2vec_training_datasets,
     citation=VLM2VEC_CITATION,
     extra_requirements_groups=["peft"],
+    output_dtypes=OutputDType.BF16,
 )
 
 vlm2vec_full = ModelMeta(
@@ -600,6 +601,7 @@ vlm2vec_full = ModelMeta(
     training_datasets=vlm2vec_training_datasets,
     citation=VLM2VEC_CITATION,
     extra_requirements_groups=["peft"],
+    output_dtypes=OutputDType.BF16,
 )
 
 vlm2vec2 = ModelMeta(
@@ -637,6 +639,6 @@ vlm2vec2 = ModelMeta(
     url={https://arxiv.org/abs/2507.04590},
 }""",
     contacts=None,
-    output_dtypes=None,
+    output_dtypes=OutputDType.BF16,
     extra_requirements_groups=["peft", "transformers-v4"],
 )

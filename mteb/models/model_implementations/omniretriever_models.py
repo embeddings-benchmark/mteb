@@ -9,6 +9,7 @@ from tqdm.auto import tqdm
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -415,4 +416,5 @@ omniretriever_7b = ModelMeta(
     # is not, and "omniretriever" carries peft plus the transformers pin the
     # WAVE-7B remote code needs.
     extra_requirements_groups=["omniretriever", "video"],
+    output_dtypes=OutputDType.BF16,
 )

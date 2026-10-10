@@ -9,6 +9,7 @@ from tqdm.auto import tqdm
 from mteb._requires_package import suggest_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -295,4 +296,5 @@ moca_qwen25vl_3b = ModelMeta(
     adapted_from="Qwen/Qwen2.5-VL-3B-Instruct",
     citation=MOCA_CITATION,
     extra_requirements_groups=["moca"],
+    output_dtypes=OutputDType.BF16,
 )
