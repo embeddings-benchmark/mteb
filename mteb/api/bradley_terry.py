@@ -1,30 +1,15 @@
-"""Bradley-Terry ("BT score") aggregation of per-task scores.
-
-Each task is a head-to-head round between every pair of models: the model with the
-higher score wins, equal scores tie (0.5 each). A model that has a score beats one
-that has none (an unevaluated task counts as an "always lose", so skipping tasks
-never inflates a rating); two models that both lack a score are not compared.
-Win counts are summed over tasks and a Bradley-Terry model is fit with Hunter's
-MM iterations, then mapped to an Elo-like scale (``BASE + 400/ln(10) * log-strength``,
-centered on ``BASE``). Uncertainty comes from bootstrapping over tasks.
-
-The frontend (``src/lib/bt-score.ts`` in the leaderboard repo) mirrors this algorithm so
-ratings can be recomputed when the user narrows the task or model set; keep the two
-in sync.
-"""
-
 from __future__ import annotations
 
 import math
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, TypeVar
+from typing import TYPE_CHECKING
 
 import numpy as np
 
 if TYPE_CHECKING:
     from collections.abc import Mapping, Sequence
 
-K = TypeVar("K")
+    from numpy.typing import NDArray
 
 BT_SCORE_BASE = 1000.0
 BT_SCORE_SCALE = 400.0 / math.log(10.0)
@@ -45,7 +30,7 @@ class BtScoreResult:
     high: float | None = None
 
 
-def _task_win_matrices(scores: np.ndarray) -> np.ndarray:
+def _task_win_matrices(scores: NDArray[np.float64]) -> NDArray[np.float32]:
     """Per-task pairwise win matrices, shape ``(T, M, M)`` (float32).
 
     ``scores`` is ``(M, T)`` with NaN for missing. ``out[t, i, j]`` is 1 if model i
@@ -66,7 +51,9 @@ def _task_win_matrices(scores: np.ndarray) -> np.ndarray:
     return out
 
 
-def _fit(wins: np.ndarray, init: np.ndarray | None = None) -> np.ndarray:
+def _fit(
+    wins: NDArray[np.floating], init: NDArray[np.float64] | None = None
+) -> NDArray[np.float64]:
     """Bradley-Terry log-strengths (mean-centered) from a ``(M, M)`` win matrix."""
     n_models = wins.shape[0]
     w = wins.astype(np.float64) + _PSEUDO_WINS * (1.0 - np.eye(n_models))
@@ -82,16 +69,17 @@ def _fit(wins: np.ndarray, init: np.ndarray | None = None) -> np.ndarray:
             break
         p = new_p
     log_p = np.log(p)
-    return log_p - log_p.mean()
+    centered: NDArray[np.float64] = log_p - log_p.mean()
+    return centered
 
 
-def _to_score(log_strength: np.ndarray) -> np.ndarray:
+def _to_score(log_strength: NDArray[np.float64]) -> NDArray[np.float64]:
     return BT_SCORE_BASE + BT_SCORE_SCALE * log_strength
 
 
 def _bootstrap_interval(
-    per_task: np.ndarray, base_log: np.ndarray, n_boot: int, seed: int
-) -> tuple[np.ndarray, np.ndarray]:
+    per_task: NDArray[np.float32], base_log: NDArray[np.float64], n_boot: int, seed: int
+) -> tuple[NDArray[np.float64], NDArray[np.float64]]:
     """95% interval of each row's BT score over task resamples (with replacement)."""
     n_tasks, n_models, _ = per_task.shape
     rng = np.random.default_rng(seed)
@@ -109,22 +97,22 @@ def _bootstrap_interval(
 
 
 def compute_bt_score(
-    scores: Mapping[K, Mapping[str, float]],
+    scores: Mapping[tuple[str, str], Mapping[str, float]],
     tasks: Sequence[str],
     *,
     n_boot: int = 100,
     seed: int = 0,
-) -> dict[K, BtScoreResult]:
-    """Rate every row of ``scores`` (``row_key -> {task: score}``) over ``tasks``.
+) -> dict[tuple[str, str], BtScoreResult]:
+    """Rate every row of ``scores`` over ``tasks``.
 
     Args:
-        scores: Per-row task scores; a task absent from the mapping (or NaN) is missing.
+        scores: ``(model name, experiment id) -> {task: score}``; a task absent from the mapping (or NaN) is missing.
         tasks: Tasks to compare on; scores for other tasks are ignored.
         n_boot: Bootstrap resamples over tasks for the 95% interval; ``0`` disables it.
         seed: RNG seed so the output is deterministic (and cacheable).
 
     Returns:
-        ``row_key -> BtScoreResult``. Empty if there are fewer than two rows or no tasks.
+        ``(model name, experiment id) -> BtScoreResult``. Empty if there are fewer than two rows or no tasks.
     """
     keys = list(scores)
     tasks = list(dict.fromkeys(tasks))
@@ -155,6 +143,3 @@ def compute_bt_score(
         )
         for i, key in enumerate(keys)
     }
-
-
-__all__ = ["BT_SCORE_BASE", "BtScoreResult", "compute_bt_score"]
