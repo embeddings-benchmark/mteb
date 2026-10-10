@@ -7,6 +7,9 @@ Models that run through Sentence Transformers (dense `SentenceTransformer`, `Spa
 
 For details on the pool itself, see the Sentence Transformers documentation on [multi-process / multi-GPU encoding](https://sbert.net/examples/sentence_transformer/applications/computing-embeddings/README.html#multi-process-multi-gpu-encoding).
 
+!!! warning "Only for Sentence Transformers-compatible models"
+    Multi-GPU encoding works only for models whose mteb implementation wraps a Sentence Transformers model and passes `encode_kwargs` on to its `encode` method. Models with their own `encode` implementation (custom wrappers, API models, Transformers only wrappers and so on) don't use the pool or the `device` list, and the arguments may be ignored or raise an error. Check the model's implementation (`ModelMeta.loader` in `mteb/models/model_implementations/`) before relying on it.
+
 ## Encoding with a multi-process pool
 
 Create the mteb model first, start a pool on its underlying Sentence Transformers model, and pass the pool through `encode_kwargs`. Start the pool once and reuse it for all tasks.
