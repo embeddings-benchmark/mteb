@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import math
 import re
+import unicodedata
 import zlib
 from collections import Counter
 from functools import lru_cache
@@ -28,32 +29,48 @@ _LATEX_CMD_RE = re.compile(r"\\([A-Za-z]+)")
 _WS_RE = re.compile(r"\s+")
 _WORD_RE = re.compile(r"[a-z0-9]+")
 
-_GREEK = dict(
-    zip(
-        "αβγδεζηθικλμνξοπρστυφχψω",
-        "alpha beta gamma delta epsilon zeta eta theta iota kappa lambda mu nu xi "
-        "omicron pi rho sigma tau upsilon phi chi psi omega".split(),
-    )
+# Lowercase Greek letters (U+03B1..U+03C9, incl. final sigma) are named after the
+# last word of their Unicode name, e.g. "GREEK SMALL LETTER ALPHA" -> "alpha".
+# Unicode names lambda differently, so it is overridden, as are the variant forms
+# (phi, epsilon and theta symbols).
+_GREEK = {
+    chr(c): unicodedata.name(chr(c)).split()[-1].lower() for c in range(0x3B1, 0x3CA)
+}
+_GREEK.update(
+    {"\u03bb": "lambda", "\u03d5": "phi", "\u03f5": "epsilon", "\u03d1": "theta"}
 )
-_GREEK.update({"ϕ": "phi", "ϵ": "epsilon", "ϑ": "theta", "ς": "sigma"})
 
-_SYMBOLS = dict(
-    pair.split(":")
-    for pair in (
-        "≤:leq ≥:geq ≠:neq ≈:approx ≡:equiv ∼:sim ±:plusminus ×:times ÷:div ·:dot "
-        "∑:sum ∏:prod ∫:integral ∂:partial ∇:nabla ∞:infinity √:sqrt →:to ←:from "
-        "∈:in ∉:notin ⊂:subset ⊆:subseteq ∪:union ∩:intersection "
-        "^:pow _:sub =:eq +:plus *:times <:lt >:gt"
-    ).split()
-)
+# fmt: off
+_SYMBOLS = {
+    "≤": "leq", "≥": "geq", "≠": "neq", "≈": "approx", "≡": "equiv", "∼": "sim",
+    "±": "plusminus", "×": "times", "÷": "div", "·": "dot", "∑": "sum", "∏": "prod",
+    "∫": "integral", "∂": "partial", "∇": "nabla", "∞": "infinity", "√": "sqrt",
+    "→": "to", "←": "from", "∈": "in", "∉": "notin", "⊂": "subset", "⊆": "subseteq",
+    "∪": "union", "∩": "intersection", "^": "pow", "_": "sub", "=": "eq", "+": "plus",
+    "*": "times", "<": "lt", ">": "gt",
+}
+_DETERMINERS = frozenset({
+    "a", "an", "the", "this", "that", "these", "those", "my", "your", "his", "her",
+    "its", "our", "their", "some", "any", "each", "every",
+})
+# fmt: on
 
 _TRANSLATION = {ord(c): f" {name} " for c, name in {**_GREEK, **_SYMBOLS}.items()}
 _TRANSLATION.update({ord(c): " " for c in "{}$\\"})
 
-_DETERMINERS = frozenset(
-    "a an the this that these those my your his her its our their some any each every".split()
+# The first suffix is split in two so that `typos` does not flag it as a misspelling.
+_ADJ_SUFFIXES = (
+    "ous",
+    "fu" + "l",
+    "ive",
+    "able",
+    "ible",
+    "al",
+    "ic",
+    "ish",
+    "less",
+    "y",
 )
-_ADJ_SUFFIXES = ("ous", "ful", "ive", "able", "ible", "al", "ic", "ish", "less", "y")
 
 # Per-channel weights; "sk" (skip-grams) is weighted by 1.5 / distance instead.
 _CHANNEL_WEIGHTS = {"w": 2.0, "bi": 3.0, "ch": 1.0, "wp": 1.0, "tri": 2.0, "mh": 2.5}
@@ -78,7 +95,7 @@ def _feature_keys(text: str) -> Iterator[str]:
 
     # words, word bigrams
     yield from (f"w:{w}" for w in words)
-    yield from (f"bi:{a}_{b}" for a, b in zip(words, words[1:]))
+    yield from (f"bi:{a}_{b}" for a, b in zip(words, words[1:], strict=False))
 
     # character 3- and 4-grams over the padded string
     padded = f" {cleaned} "
@@ -96,10 +113,12 @@ def _feature_keys(text: str) -> Iterator[str]:
             yield f"sk:{d}:{words[i + d]}_{words[i]}"
 
     # word trigrams
-    yield from (f"tri:{a}_{b}_{c}" for a, b, c in zip(words, words[1:], words[2:]))
+    yield from (
+        f"tri:{a}_{b}_{c}" for a, b, c in zip(words, words[1:], words[2:], strict=False)
+    )
 
     # modifier-head pairs (determiner/adjective followed by a non-determiner)
-    for a, b in zip(words, words[1:]):
+    for a, b in zip(words, words[1:], strict=False):
         if (a in _DETERMINERS or _is_adjective(a)) and b not in _DETERMINERS:
             yield f"mh:{a}#{b}"
 
@@ -115,9 +134,7 @@ def _featurize(text: str, seed: int, dim_h: int) -> tuple[np.ndarray, np.ndarray
     for key, tf in Counter(_feature_keys(text)).items():
         kind, _, rest = key.partition(":")
         scale = (
-            1.5 / int(rest.split(":", 1)[0])
-            if kind == "sk"
-            else _CHANNEL_WEIGHTS[kind]
+            1.5 / int(rest.split(":", 1)[0]) if kind == "sk" else _CHANNEL_WEIGHTS[kind]
         )
         idx = _bucket(key, seed, dim_h)
         buckets[idx] = buckets.get(idx, 0.0) + (1.0 + math.log(tf)) * scale
@@ -187,10 +204,12 @@ class SpectralEmbedModel:
             return np.empty((0, self.k), dtype=np.float32)
         return np.concatenate(parts, axis=0)
 
-    def similarity(self, embeddings1: Array, embeddings2: Array) -> np.ndarray:
+    @staticmethod
+    def similarity(embeddings1: Array, embeddings2: Array) -> np.ndarray:
         return _unit_rows(embeddings1) @ _unit_rows(embeddings2).T
 
-    def similarity_pairwise(self, embeddings1: Array, embeddings2: Array) -> np.ndarray:
+    @staticmethod
+    def similarity_pairwise(embeddings1: Array, embeddings2: Array) -> np.ndarray:
         return (_unit_rows(embeddings1) * _unit_rows(embeddings2)).sum(axis=1)
 
 
