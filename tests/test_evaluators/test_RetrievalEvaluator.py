@@ -1,8 +1,16 @@
+import logging
+from typing import Any
+
 import pytest
+import torch
+from datasets import Dataset
 
 from mteb._evaluators import RetrievalEvaluator
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.mocks.mock_tasks.retrieval import general_args
+from mteb.models.search_wrappers import SearchEncoderWrapper
+from mteb.models.sentence_transformer_wrapper import MultiVectorSearchEncoderWrapper
+from mteb.similarity_functions import cos_sim, max_sim
 from mteb.timing import TimingStack
 
 TOL = 0.0001
@@ -160,3 +168,128 @@ class TestRetrievalEvaluator:
         aucs = ["nAUC_NDCG@3_max", "nAUC_NDCG@3_std", "nAUC_NDCG@3_diff1"]
         for auc in aucs:
             assert naucs[auc] == pytest.approx(expected_naucs[auc], TOL)
+
+
+METADATA = TaskMetadata(
+    type="Retrieval",
+    name="MockRetrievalTask",
+    main_score="ndcg_at_10",
+    **general_args,
+)
+CORPUS = Dataset.from_dict(
+    {"id": [f"d{i}" for i in range(10)], "text": [f"document {i}" for i in range(10)]}
+)
+QUERIES = Dataset.from_dict(
+    {"id": [f"q{i}" for i in range(3)], "text": [f"query {i}" for i in range(3)]}
+)
+TOP_RANKED = {f"q{i}": ["d0", "d1", "d2"] for i in range(3)}
+ENCODE_KWARGS = {"batch_size": 4, "show_progress_bar": False}
+
+
+class _DenseEncoder:
+    mteb_model_meta = None
+
+    def encode(self, inputs, **kwargs: Any):
+        return torch.randn(sum(len(batch["text"]) for batch in inputs), 8)
+
+    def similarity(self, embeddings1, embeddings2):
+        return cos_sim(embeddings1, embeddings2)
+
+
+class _MultiVectorModel:
+    def similarity(self, embeddings1, embeddings2):
+        pad = lambda embeddings: torch.nn.utils.rnn.pad_sequence(  # noqa: E731
+            list(embeddings), batch_first=True
+        )
+        return max_sim(pad(embeddings1), pad(embeddings2))
+
+
+class _MultiVectorWrapper(MultiVectorSearchEncoderWrapper):
+    corpus_chunk_size = 4
+
+    def __init__(self):
+        self.model = _MultiVectorModel()
+
+    def _encode(self, inputs, **kwargs: Any):
+        return [torch.randn(3, 8) for batch in inputs for _ in batch["text"]]
+
+    def similarity(self, embeddings1, embeddings2):
+        return self.model.similarity(embeddings1, embeddings2)
+
+
+def _run_retrieval(search_model, top_ranked=None) -> TimingStack:
+    timer = TimingStack()
+    evaluator = RetrievalEvaluator(
+        corpus=CORPUS,
+        queries=QUERIES,
+        task_metadata=METADATA,
+        hf_split="test",
+        hf_subset="default",
+        top_ranked=top_ranked,
+        top_k=2,
+        timer=timer,
+    )
+    evaluator(search_model, encode_kwargs=ENCODE_KWARGS)
+    return timer
+
+
+@pytest.mark.parametrize(
+    ("search_model", "top_ranked", "expected_phases"),
+    [
+        (
+            SearchEncoderWrapper(_DenseEncoder(), corpus_chunk_size=4),
+            None,
+            ["Encoding queries", "Searching corpus"],
+        ),
+        (
+            SearchEncoderWrapper(_DenseEncoder(), corpus_chunk_size=4),
+            TOP_RANKED,
+            ["Encoding queries", "Encoding corpus", "Computing similarity"],
+        ),
+        (
+            _MultiVectorWrapper(),
+            None,
+            ["Encoding queries", "Searching corpus"],
+        ),
+        (
+            _MultiVectorWrapper(),
+            TOP_RANKED,
+            ["Encoding queries", "Encoding corpus", "Computing similarity"],
+        ),
+    ],
+    ids=["dense-search", "dense-rerank", "multi-vector-search", "multi-vector-rerank"],
+)
+def test_search_phases(search_model, top_ranked, expected_phases):
+    timer = _run_retrieval(search_model, top_ranked)
+
+    assert [phase["name"] for phase in timer.phases] == expected_phases
+    assert all(
+        (phase["split"], phase["subset"]) == ("test", "default")
+        for phase in timer.phases
+    )
+
+
+def test_full_corpus_search_logs_chunk_timings(caplog):
+    # 10 documents in chunks of 4 -> 3 chunks, recorded as a single phase
+    with caplog.at_level(logging.INFO, logger="mteb.models.search_wrappers"):
+        timer = _run_retrieval(
+            SearchEncoderWrapper(_DenseEncoder(), corpus_chunk_size=4)
+        )
+
+    assert [phase["name"] for phase in timer.phases].count("Searching corpus") == 1
+    assert sum("Corpus chunk" in message for message in caplog.messages) == 3
+    assert any("Searched 3 corpus chunk(s)" in message for message in caplog.messages)
+
+
+def test_reused_wrapper_records_to_each_tasks_timer():
+    wrapper = SearchEncoderWrapper(_DenseEncoder(), corpus_chunk_size=4)
+    first_timer = _run_retrieval(wrapper)
+    first_phases = list(first_timer.phases)
+
+    second_timer = _run_retrieval(wrapper)
+
+    assert first_timer.phases == first_phases
+    assert [phase["name"] for phase in second_timer.phases] == [
+        "Encoding queries",
+        "Searching corpus",
+    ]

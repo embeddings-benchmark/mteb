@@ -5,6 +5,7 @@ import time
 from typing import TYPE_CHECKING, Any
 
 from mteb.models.search_wrappers import SearchCrossEncoderWrapper, SearchEncoderWrapper
+from mteb.models.sentence_transformer_wrapper import MultiVectorSearchEncoderWrapper
 
 from .evaluator import Evaluator
 from .retrieval_metrics import (
@@ -76,7 +77,7 @@ class RetrievalEvaluator(Evaluator):
         )
         end_time = time.monotonic()
         encodes_corpus_during_search = isinstance(
-            search_model, SearchCrossEncoderWrapper
+            search_model, (SearchCrossEncoderWrapper, MultiVectorSearchEncoderWrapper)
         ) or (
             isinstance(search_model, SearchEncoderWrapper)
             and search_model.index_backend is None
@@ -90,6 +91,24 @@ class RetrievalEvaluator(Evaluator):
                 subset=self.hf_subset,
             )
 
+        search_kwargs: dict[str, Any] = dict(
+            queries=self.queries,
+            top_k=self.top_k,
+            task_metadata=self.task_metadata,
+            hf_split=self.hf_split,
+            hf_subset=self.hf_subset,
+            encode_kwargs=encode_kwargs,
+            top_ranked=self.top_ranked,
+            num_proc=num_proc,
+        )
+
+        # These wrappers record finer-grained phases (queries, corpus, similarity) themselves
+        if isinstance(
+            search_model, (SearchEncoderWrapper, MultiVectorSearchEncoderWrapper)
+        ):
+            logger.info("Running retrieval task - Searching queries...")
+            return search_model.search(**search_kwargs, timer=self.timer)
+
         search_phase_name = (
             "Encoding queries and documents"
             if encodes_corpus_during_search
@@ -102,16 +121,7 @@ class RetrievalEvaluator(Evaluator):
             subset=self.hf_subset,
             log_message="Running retrieval task - Searching queries...",
         ):
-            return search_model.search(
-                queries=self.queries,
-                top_k=self.top_k,
-                task_metadata=self.task_metadata,
-                hf_split=self.hf_split,
-                hf_subset=self.hf_subset,
-                encode_kwargs=encode_kwargs,
-                top_ranked=self.top_ranked,
-                num_proc=num_proc,
-            )
+            return search_model.search(**search_kwargs)
 
     def evaluate(  # noqa: PLR6301
         self,

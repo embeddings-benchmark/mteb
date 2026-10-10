@@ -693,6 +693,7 @@ class RandomColBERTBaseline:
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> None:
         """Index the corpus for retrieval.
 
@@ -703,6 +704,7 @@ class RandomColBERTBaseline:
             hf_subset: Subset of current task. Similar to `hf_split` to get more information
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
             num_proc: Number of processes to use for dataloading.
+            **kwargs: Additional arguments. Currently unused.
         """
         self.task_corpus = corpus
 
@@ -717,6 +719,7 @@ class RandomColBERTBaseline:
         encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> RetrievalOutputType:
         """Search the indexed corpus using MaxSim similarity between multi-vector embeddings.
 
@@ -730,6 +733,7 @@ class RandomColBERTBaseline:
             top_k: Number of top documents to return for each query.
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
             num_proc: Number of processes to use for dataloading.
+            **kwargs: Additional arguments. Currently unused.
 
         Returns:
             Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.

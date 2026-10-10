@@ -49,6 +49,7 @@ class PylateSearchEncoder:
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
         num_proc: int | None,
+        **kwargs: Any,
     ) -> None:
         """Index the corpus for retrieval.
 
@@ -59,6 +60,7 @@ class PylateSearchEncoder:
             hf_subset: Subset of current task. Similar to `hf_split` to get more information
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
             num_proc: Number of processes to use for indexing.
+            **kwargs: Additional arguments. Currently unused.
         """
         self.task_corpus = corpus
 
@@ -85,6 +87,7 @@ class PylateSearchEncoder:
         encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
         num_proc: int | None,
+        **kwargs: Any,
     ) -> RetrievalOutputType:
         from mteb._create_dataloaders import create_dataloader
 
