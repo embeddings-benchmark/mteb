@@ -693,12 +693,19 @@ class SearchCrossEncoderWrapper:
             num_proc=num_proc,
             **encode_kwargs,
         )
+        # Forward inference controls, excluding embedding-only precision.
+        predict_kwargs: EncodeKwargs = {}
+        if "batch_size" in encode_kwargs:
+            predict_kwargs["batch_size"] = encode_kwargs["batch_size"]
+        if "show_progress_bar" in encode_kwargs:
+            predict_kwargs["show_progress_bar"] = encode_kwargs["show_progress_bar"]
         predictions = self.model.predict(
             inputs1=queries_loader,
             inputs2=corpus_loader,
             task_metadata=task_metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
+            **predict_kwargs,
         )
 
         results: RetrievalOutputType = {qid: {} for qid in queries["id"]}
