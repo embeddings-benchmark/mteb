@@ -420,6 +420,35 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "BrightProRoboticsRetrieval",
         "BrightProStackoverflowRetrieval",
         "BrightProSustainableLivingRetrieval",
+        # RCP-nDCG tasks: same upstream corpus/queries as their `adapted_from` originals
+        "BrightBiologyRCPReranking",
+        "BrightEarthScienceRCPReranking",
+        "BrightEconomicsRCPReranking",
+        "BrightPsychologyRCPReranking",
+        "BrightRoboticsRCPReranking",
+        "BrightStackoverflowRCPReranking",
+        "BrightSustainableLivingRCPReranking",
+        "NanoDBPediaRCPReranking",
+        "NanoFiQA2018RCPReranking",
+        "NanoNQRCPReranking",
+        "NanoQuoraRCPReranking",
+        "NanoSCIDOCSRCPReranking",
+        "NanoTouche2020RCPReranking",
+        # ViDoRe RCP tasks: same corpus as the Vidore3*.v2 originals
+        "Vidore3ComputerScienceRCPReranking",
+        "Vidore3EnergyRCPReranking",
+        "Vidore3FinanceEnRCPReranking",
+        "Vidore3FinanceFrRCPReranking",
+        "Vidore3HrRCPReranking",
+        "Vidore3IndustrialRCPReranking",
+        # ViDoRe RCP OCR tasks: same corpus as the multimodal RCP tasks, read as OCR'ed
+        # markdown (some pages are empty)
+        "Vidore3ComputerScienceRCPRerankingOCR",
+        "Vidore3EnergyRCPRerankingOCR",
+        "Vidore3FinanceEnRCPRerankingOCR",
+        "Vidore3FinanceFrRCPRerankingOCR",
+        "Vidore3HrRCPRerankingOCR",
+        "Vidore3IndustrialRCPRerankingOCR",
     ],
     "duplicate_text": [
         "AfriHateClassification",
@@ -712,6 +741,42 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "BrightProRoboticsRetrieval",
         "BrightProStackoverflowRetrieval",
         "BrightProSustainableLivingRetrieval",
+        # RCP-nDCG tasks: same upstream corpus/queries as their `adapted_from` originals
+        "BrightAopsRCPReranking",
+        "BrightBiologyRCPReranking",
+        "BrightEarthScienceRCPReranking",
+        "BrightEconomicsRCPReranking",
+        "BrightPonyRCPReranking",
+        "BrightPsychologyRCPReranking",
+        "BrightRoboticsRCPReranking",
+        "BrightStackoverflowRCPReranking",
+        "BrightSustainableLivingRCPReranking",
+        "BrightTheoremQAQuestionsRCPReranking",
+        "NanoNFCorpusRCPReranking",
+        "NanoNQRCPReranking",
+        "NanoSCIDOCSRCPReranking",
+        "NanoTouche2020RCPReranking",
+        # ViDoRe RCP tasks: same corpus as the Vidore3*.v2 originals (identical unique text/image
+        # counts); those pass only because their older stats lack `num_documents`
+        "Vidore3EnergyRCPReranking",
+        "Vidore3FinanceEnRCPReranking",
+        "Vidore3FinanceFrRCPReranking",
+        "Vidore3HrRCPReranking",
+        "Vidore3IndustrialRCPReranking",
+        "Vidore3PharmaceuticalsRCPReranking",
+        # ViDoRe RCP tasks: the 6 language subsets share one corpus, so split-level stats count each page 6x
+        "Vidore3ComputerScienceRCPReranking",
+        "Vidore3PhysicsRCPReranking",
+        # ViDoRe RCP OCR tasks: same corpus as the multimodal RCP tasks; the 6 language
+        # subsets share one OCR'ed corpus, so split-level stats count each page 6x
+        "Vidore3ComputerScienceRCPRerankingOCR",
+        "Vidore3EnergyRCPRerankingOCR",
+        "Vidore3FinanceEnRCPRerankingOCR",
+        "Vidore3FinanceFrRCPRerankingOCR",
+        "Vidore3HrRCPRerankingOCR",
+        "Vidore3IndustrialRCPRerankingOCR",
+        "Vidore3PharmaceuticalsRCPRerankingOCR",
+        "Vidore3PhysicsRCPRerankingOCR",
     ],
     "train_test_leakage": [
         "AVEDatasetClassification",
@@ -904,6 +969,17 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "XModBenchIT2AReranking",
         "XModBenchIT2TReranking",
         "XModBenchT2IReranking",
+        # ViDoRe RCP tasks: same corpus as the Vidore3*.v2 originals (identical unique text/image
+        # counts); those pass only because their older stats lack `num_documents`
+        "Vidore3HrRCPReranking",
+        "Vidore3IndustrialRCPReranking",
+        # ViDoRe RCP tasks: the 6 language subsets share one corpus, so split-level stats count each page 6x
+        "Vidore3ComputerScienceRCPReranking",
+        "Vidore3EnergyRCPReranking",
+        "Vidore3FinanceEnRCPReranking",
+        "Vidore3FinanceFrRCPReranking",
+        "Vidore3PharmaceuticalsRCPReranking",
+        "Vidore3PhysicsRCPReranking",
     ],
     "duplicate_pairs": [
         "BibleNLPBitextMining",
