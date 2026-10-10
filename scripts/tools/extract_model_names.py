@@ -13,7 +13,7 @@ def get_changed_files(
     base_branch: str = "main",
     startswith: str = "mteb/models/model_implementations/",
 ) -> list[str]:
-    repo_path = Path(__file__).parent.parent
+    repo_path = Path(__file__).resolve().parents[2]
     repo = Repo(repo_path)
     repo.remotes.origin.fetch(base_branch)
 
