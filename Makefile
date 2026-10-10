@@ -56,8 +56,8 @@ install-for-model-load-test:
 
 model-load-test:
 	@echo "--- 🚀 Running model load test ---"
-	uv run --no-sync python tools/extract_model_names.py $(BASE_BRANCH) --return_one_model_name_per_file
-	uv run --no-sync python tests/test_models/model_loading.py --model_name_file tools/model_names.txt
+	uv run --no-sync python scripts/tools/extract_model_names.py $(BASE_BRANCH) --return_one_model_name_per_file
+	uv run --no-sync python tests/test_models/model_loading.py --model_name_file scripts/tools/model_names.txt
 
 
 dataset-load-test:
@@ -66,7 +66,7 @@ dataset-load-test:
 
 dataset-load-test-pr:
 	@echo "--- 🚀 Running dataset load test for PR ---"
-	eval "$$(uv run --no-sync python -m tools.extract_datasets $(BASE_BRANCH))" && uv run --no-sync --group test pytest -m test_datasets
+	eval "$$(uv run --no-sync python -m scripts.tools.extract_datasets $(BASE_BRANCH))" && uv run --no-sync --group test pytest -m test_datasets
 
 citation-check:
 	@echo "--- 🔍 Checking that the cited works exist ---"
@@ -87,8 +87,8 @@ serve-api:
 
 format-citations:
 	@echo "--- 🧹 Formatting citations ---"
-	uv run --no-sync python tools/format_citations.py benchmarks
-	uv run --no-sync python tools/format_citations.py tasks
+	uv run --no-sync python scripts/tools/format_citations.py benchmarks
+	uv run --no-sync python scripts/tools/format_citations.py tasks
 
 
 .PHONY: check

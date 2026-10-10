@@ -382,8 +382,10 @@ preview = true
 
 
 [tool.ruff.lint.per-file-ignores]
-"scripts/*" = ["ALL"]
-"tools/*" = [
+# every script except scripts/tools, which is used in CI and is linted
+"scripts/[!t]*" = ["ALL"]
+"scripts/t[!o]*" = ["ALL"]
+"scripts/tools/*" = [
     "T201",  # scripts report on stdout
     "D1",  # docstrings
     "PLR0913",

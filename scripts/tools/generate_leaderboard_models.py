@@ -5,7 +5,7 @@ names registered in MTEB. The leaderboard space imports this to know
 which models are available.
 
 Usage:
-    python tools/generate_leaderboard_models.py > models.py
+    python scripts/tools/generate_leaderboard_models.py > models.py
 """
 
 from __future__ import annotations

@@ -1,6 +1,6 @@
 """Render every benchmark / task / model OG hero card.
 
-Screenshots the parameterised template at ``tools/og-template/template.html``.
+Screenshots the parameterised template at ``scripts/tools/og-template/template.html``.
 
 Imports the mteb registry directly — no HTTP round-trip needed since
 this script ships in the same repo as the data it's rendering. The
@@ -25,11 +25,11 @@ Output layout::
 
 Usage::
 
-    python tools/generate_og_images.py                       # all defaults
-    python tools/generate_og_images.py --out=/data/og
-    python tools/generate_og_images.py --only benchmarks
-    python tools/generate_og_images.py --concurrency=8
-    python tools/generate_og_images.py --force               # bypass incremental skip
+    python scripts/tools/generate_og_images.py                       # all defaults
+    python scripts/tools/generate_og_images.py --out=/data/og
+    python scripts/tools/generate_og_images.py --only benchmarks
+    python scripts/tools/generate_og_images.py --concurrency=8
+    python scripts/tools/generate_og_images.py --force               # bypass incremental skip
 """
 
 from __future__ import annotations
@@ -57,7 +57,7 @@ if TYPE_CHECKING:
 
     from mteb.api.schemas import BenchmarkSchema, ModelMetaSchema, TaskMetaSchema
 
-logger = logging.getLogger("tools.generate_og_images")
+logger = logging.getLogger("scripts.tools.generate_og_images")
 
 Kind = Literal["benchmark", "task", "model"]
 
@@ -489,7 +489,7 @@ _TEMPLATE_DIR = Path(__file__).resolve().parent / "og-template"
 def _template_url() -> str:
     """Return the ``file://`` URL of the bundled template.
 
-    Lives next to this script under ``tools/og-template/`` so the
+    Lives next to this script under ``scripts/tools/og-template/`` so the
     template + ``dots-icon.png`` it references stay co-located with the
     generator that uses them, instead of inside the runtime package.
     Playwright resolves the relative ``dots-icon.png`` against this URL.
