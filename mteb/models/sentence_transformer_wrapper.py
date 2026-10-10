@@ -281,6 +281,7 @@ def _score_on_device(
     | InstructSentenceTransformerModel,
     embeddings1: Array,
     embeddings2: Array,
+    block_elements: int = _SCORING_BLOCK_ELEMENTS,
 ) -> Array:
     """Run the wrapper's model similarity on its scoring device and return scores on the inputs' device.
 
@@ -313,7 +314,7 @@ def _score_on_device(
         device = torch.device("cpu")  # sparse similarity isn't supported on MPS
     queries_on_device = queries.to(device)
 
-    block_rows = max(1, _SCORING_BLOCK_ELEMENTS // max(1, documents.shape[1]))
+    block_rows = max(1, block_elements // max(1, documents.shape[1]))
     scores = torch.empty(
         queries.shape[0], documents.shape[0], dtype=torch.float32, device=queries.device
     )
