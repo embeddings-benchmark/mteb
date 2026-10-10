@@ -1328,7 +1328,7 @@ class OpenAIAPITokenEmbedWrapper(OpenAIBaseWrapper):
             hf_subset: Subset of current task.
             encode_kwargs: Additional arguments to pass to `_encode`.
             num_proc: Number of processes to use for dataloading.
-            **kwargs: Additional arguments, reserved for future extensions.
+            **kwargs: Additional arguments. Currently unused.
         """
         documents_loader = create_dataloader(
             corpus,
@@ -1373,7 +1373,7 @@ class OpenAIAPITokenEmbedWrapper(OpenAIBaseWrapper):
                 these candidate document IDs per query instead of the full
                 indexed corpus.
             num_proc: Number of processes to use for dataloading.
-            **kwargs: Additional arguments, reserved for future extensions.
+            **kwargs: Additional arguments. Currently unused.
 
         Returns:
             Mapping of query ID to a mapping of document ID to relevance score.

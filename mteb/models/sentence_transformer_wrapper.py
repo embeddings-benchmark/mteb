@@ -823,7 +823,7 @@ class MultiVectorSearchEncoderWrapper:
             hf_subset: Subset of current task. Similar to `hf_split` to get more information
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
             num_proc: Number of processes to use for indexing.
-            **kwargs: Additional arguments, reserved for future extensions.
+            **kwargs: Additional arguments. Currently unused.
         """
         self.task_corpus = corpus
 
@@ -853,9 +853,10 @@ class MultiVectorSearchEncoderWrapper:
             top_k: Number of top documents to return for each query.
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
             num_proc: Number of processes to use for dataloading.
-            timer: Records the "Encoding queries", "Encoding corpus" and "Computing similarity"
-                phases. A new stack is used when not given.
-            **kwargs: Additional arguments, reserved for future extensions.
+            timer: Records the search phases: "Encoding queries", then "Searching corpus" for a
+                full corpus search, or "Encoding corpus" and "Computing similarity" when reranking.
+                A new stack is used when not given.
+            **kwargs: Additional arguments. Currently unused.
 
         Returns:
             Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.

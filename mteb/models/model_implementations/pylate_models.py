@@ -60,7 +60,7 @@ class PylateSearchEncoder:
             hf_subset: Subset of current task. Similar to `hf_split` to get more information
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
             num_proc: Number of processes to use for indexing.
-            **kwargs: Additional arguments, reserved for future extensions.
+            **kwargs: Additional arguments. Currently unused.
         """
         self.task_corpus = corpus
 

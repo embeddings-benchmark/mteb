@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import heapq
 import logging
+import time
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
@@ -86,7 +87,8 @@ def chunked_full_corpus_search(  # noqa: PLR0913
             cross-chunk heap merge trims back down to `top_k`). `SearchEncoderWrapper` has
             historically used 1 here; `MultiVectorSearchEncoderWrapper` uses 0.
         num_proc: Number of processes to use for dataloading.
-        timer: Records "Encoding corpus" and "Computing similarity" phases for each chunk.
+        timer: Records a single "Searching corpus" phase; the per-chunk split between encoding
+            and computing similarity is logged.
 
     Returns:
         A dictionary mapping query IDs to a list of `(score, corpus_id)` tuples.
@@ -98,19 +100,25 @@ def chunked_full_corpus_search(  # noqa: PLR0913
         qid: [] for qid in query_idx_to_id.values()
     }
     itr = range(0, len(task_corpus), corpus_chunk_size)
-    for batch_num, corpus_start_idx in enumerate(
-        tqdm(
-            itr,
-            desc="Searching corpus chunks",
-            disable=not encode_kwargs.get("show_progress_bar", True),
-        )
-    ):
-        logger.info(f"Encoding corpus chunk {batch_num + 1}/{len(itr)}...")
-        corpus_end_idx = min(corpus_start_idx + corpus_chunk_size, len(task_corpus))
-        sub_corpus = task_corpus.select(range(corpus_start_idx, corpus_end_idx))
-        sub_corpus_ids = list(sub_corpus["id"])
+    # Encoding and similarity alternate per chunk, so the timer gets a single phase for the
+    # whole search (one row per chunk would bloat the saved results); the per-chunk split
+    # is only logged.
+    encoding_time = 0.0
+    similarity_time = 0.0
+    with timer("Searching corpus", split=hf_split, subset=hf_subset):
+        for batch_num, corpus_start_idx in enumerate(
+            tqdm(
+                itr,
+                desc="Searching corpus chunks",
+                disable=not encode_kwargs.get("show_progress_bar", True),
+            )
+        ):
+            logger.info(f"Encoding corpus chunk {batch_num + 1}/{len(itr)}...")
+            corpus_end_idx = min(corpus_start_idx + corpus_chunk_size, len(task_corpus))
+            sub_corpus = task_corpus.select(range(corpus_start_idx, corpus_end_idx))
+            sub_corpus_ids = list(sub_corpus["id"])
 
-        with timer("Encoding corpus", split=hf_split, subset=hf_subset):
+            chunk_start = time.monotonic()
             sub_corpus_embeddings = encode_fn(
                 create_dataloader(
                     sub_corpus,
@@ -125,8 +133,8 @@ def chunked_full_corpus_search(  # noqa: PLR0913
                 prompt_type=PromptType.document,
                 **encode_kwargs,
             )
+            chunk_encoded = time.monotonic()
 
-        with timer("Computing similarity", split=hf_split, subset=hf_subset):
             scores = torch.as_tensor(
                 similarity_fn(query_embeddings, sub_corpus_embeddings)
             )
@@ -151,6 +159,19 @@ def chunked_full_corpus_search(  # noqa: PLR0913
                         heapq.heappush(result_heaps[qid], (score, corpus_id))
                     else:
                         heapq.heappushpop(result_heaps[qid], (score, corpus_id))
+            chunk_done = time.monotonic()
+
+            encoding_time += chunk_encoded - chunk_start
+            similarity_time += chunk_done - chunk_encoded
+            logger.info(
+                f"Corpus chunk {batch_num + 1}/{len(itr)}: encoding took "
+                f"{chunk_encoded - chunk_start:.1f}s, computing similarity took "
+                f"{chunk_done - chunk_encoded:.1f}s"
+            )
+    logger.info(
+        f"Searched {len(itr)} corpus chunk(s): encoding took {encoding_time:.1f}s, "
+        f"computing similarity took {similarity_time:.1f}s"
+    )
     return result_heaps
 
 
@@ -316,7 +337,7 @@ class SearchEncoderWrapper:
             hf_subset: Subset of current task. Similar to `hf_split` to get more information
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
             num_proc: Number of processes to use for dataloading.
-            **kwargs: Additional arguments, reserved for future extensions.
+            **kwargs: Additional arguments. Currently unused.
         """
         # Always retain corpus for potential reranking or fallback flows
         self.task_corpus = corpus
@@ -364,9 +385,10 @@ class SearchEncoderWrapper:
             top_k: Number of top documents to return for each query.
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
             num_proc: Number of processes to use for dataloading.
-            timer: Records the "Encoding queries", "Encoding corpus" and "Computing similarity"
-                phases. A new stack is used when not given.
-            **kwargs: Additional arguments, reserved for future extensions.
+            timer: Records the search phases: "Encoding queries", then "Searching corpus" for a
+                full corpus search, or "Encoding corpus" and "Computing similarity" when reranking.
+                A new stack is used when not given.
+            **kwargs: Additional arguments. Currently unused.
 
         Returns:
             Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.
@@ -671,7 +693,7 @@ class SearchCrossEncoderWrapper:
             hf_subset: Subset of current task. Similar to `hf_split` to get more information
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
             num_proc: Number of processes to use.
-            **kwargs: Additional arguments, reserved for future extensions.
+            **kwargs: Additional arguments. Currently unused.
         """
         self.task_corpus = corpus
 
@@ -700,7 +722,7 @@ class SearchCrossEncoderWrapper:
             top_k: Number of top documents to return for each query.
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
             num_proc: Number of processes to use.
-            **kwargs: Additional arguments, reserved for future extensions.
+            **kwargs: Additional arguments. Currently unused.
 
         Returns:
             Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.
