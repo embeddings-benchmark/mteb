@@ -147,8 +147,8 @@ def test_build_summary_rows_strict_when_not_language_filtered():
     assert rows[0].scores_by_custom_group["WholeDim"]["G1"] == 0.5
 
 
-def test_build_summary_rows_attaches_elo():
-    """Rows get a Bradley-Terry rating from their per-task scores; a model
+def test_build_summary_rows_attaches_bt_score():
+    """Rows get a BT (Bradley-Terry) score from their per-task scores; a model
     missing a task is treated as losing it."""
     pytest.importorskip("fastapi")
     from mteb.api.aggregators import _build_summary_rows
@@ -177,6 +177,6 @@ def test_build_summary_rows_attaches_elo():
 
     by_name = {r.model.name: r for r in rows}
     best, worst = by_name[FULL_MODEL], by_name[other]
-    assert best.elo is not None and worst.elo is not None
-    assert best.elo > worst.elo
-    assert best.elo_low <= best.elo <= best.elo_high
+    assert best.bt_score is not None and worst.bt_score is not None
+    assert best.bt_score > worst.bt_score
+    assert best.bt_score_low <= best.bt_score <= best.bt_score_high

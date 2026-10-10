@@ -1,4 +1,4 @@
-"""Bradley-Terry ("ELO") aggregation of per-task scores.
+"""Bradley-Terry ("BT score") aggregation of per-task scores.
 
 Each task is a head-to-head round between every pair of models: the model with the
 higher score wins, equal scores tie (0.5 each). A model that has a score beats one
@@ -8,7 +8,7 @@ Win counts are summed over tasks and a Bradley-Terry model is fit with Hunter's
 MM iterations, then mapped to an Elo-like scale (``BASE + 400/ln(10) * log-strength``,
 centered on ``BASE``). Uncertainty comes from bootstrapping over tasks.
 
-The frontend (``src/lib/elo.ts`` in the leaderboard repo) mirrors this algorithm so
+The frontend (``src/lib/bt-score.ts`` in the leaderboard repo) mirrors this algorithm so
 ratings can be recomputed when the user narrows the task or model set; keep the two
 in sync.
 """
@@ -26,8 +26,8 @@ if TYPE_CHECKING:
 
 K = TypeVar("K")
 
-ELO_BASE = 1000.0
-ELO_SCALE = 400.0 / math.log(10.0)
+BT_SCORE_BASE = 1000.0
+BT_SCORE_SCALE = 400.0 / math.log(10.0)
 # Virtual draws added to every ordered pair so undefeated / winless models stay finite.
 _PSEUDO_WINS = 0.5
 _MAX_ITER = 200
@@ -37,10 +37,10 @@ _BOOT_CHUNK = 16
 
 
 @dataclass(frozen=True, slots=True)
-class EloResult:
+class BtScoreResult:
     """Rating for one row, with an optional 95% bootstrap interval."""
 
-    elo: float
+    score: float
     low: float | None = None
     high: float | None = None
 
@@ -85,14 +85,14 @@ def _fit(wins: np.ndarray, init: np.ndarray | None = None) -> np.ndarray:
     return log_p - log_p.mean()
 
 
-def _to_elo(log_strength: np.ndarray) -> np.ndarray:
-    return ELO_BASE + ELO_SCALE * log_strength
+def _to_score(log_strength: np.ndarray) -> np.ndarray:
+    return BT_SCORE_BASE + BT_SCORE_SCALE * log_strength
 
 
 def _bootstrap_interval(
     per_task: np.ndarray, base_log: np.ndarray, n_boot: int, seed: int
 ) -> tuple[np.ndarray, np.ndarray]:
-    """95% interval of each row's Elo over task resamples (with replacement)."""
+    """95% interval of each row's BT score over task resamples (with replacement)."""
     n_tasks, n_models, _ = per_task.shape
     rng = np.random.default_rng(seed)
     draws = rng.multinomial(n_tasks, np.full(n_tasks, 1.0 / n_tasks), size=n_boot)
@@ -103,18 +103,18 @@ def _bootstrap_interval(
         chunk = draws[start : start + _BOOT_CHUNK]
         wins_b = (chunk @ flat).reshape(len(chunk), n_models, n_models)
         for b in range(len(chunk)):
-            boot[start + b] = _to_elo(_fit(wins_b[b], init=base_log))
+            boot[start + b] = _to_score(_fit(wins_b[b], init=base_log))
     low, high = np.percentile(boot, [2.5, 97.5], axis=0)
     return low, high
 
 
-def compute_elo(
+def compute_bt_score(
     scores: Mapping[K, Mapping[str, float]],
     tasks: Sequence[str],
     *,
     n_boot: int = 100,
     seed: int = 0,
-) -> dict[K, EloResult]:
+) -> dict[K, BtScoreResult]:
     """Rate every row of ``scores`` (``row_key -> {task: score}``) over ``tasks``.
 
     Args:
@@ -124,7 +124,7 @@ def compute_elo(
         seed: RNG seed so the output is deterministic (and cacheable).
 
     Returns:
-        ``row_key -> EloResult``. Empty if there are fewer than two rows or no tasks.
+        ``row_key -> BtScoreResult``. Empty if there are fewer than two rows or no tasks.
     """
     keys = list(scores)
     tasks = list(dict.fromkeys(tasks))
@@ -141,20 +141,20 @@ def compute_elo(
 
     per_task = _task_win_matrices(matrix)
     base_log = _fit(per_task.sum(axis=0))
-    elo = _to_elo(base_log)
+    score = _to_score(base_log)
 
     low = high = None
     if n_boot > 0 and len(tasks) > 1:
         low, high = _bootstrap_interval(per_task, base_log, n_boot, seed)
 
     return {
-        key: EloResult(
-            elo=float(elo[i]),
-            low=None if low is None else float(min(low[i], elo[i])),
-            high=None if high is None else float(max(high[i], elo[i])),
+        key: BtScoreResult(
+            score=float(score[i]),
+            low=None if low is None else float(min(low[i], score[i])),
+            high=None if high is None else float(max(high[i], score[i])),
         )
         for i, key in enumerate(keys)
     }
 
 
-__all__ = ["ELO_BASE", "EloResult", "compute_elo"]
+__all__ = ["BT_SCORE_BASE", "BtScoreResult", "compute_bt_score"]
