@@ -56,6 +56,9 @@ SENTENCE_TRANSFORMERS_MULTI_VECTOR_VERSION = "6.0.0"
 # (about 2 GB in float16).
 _MAX_SIM_DOCUMENT_BLOCK_ELEMENTS = 1_000_000_000
 
+# Embedding values of corpus rows moved to the device at once for dense/sparse scoring.
+_SCORING_BLOCK_ELEMENTS = 100_000_000
+
 
 @deprecated(
     "sentence_transformers_loader is deprecated, use SentenceTransformerEncoderWrapper directly instead."
@@ -252,30 +255,28 @@ def _score_on_device(
     """Run a dense/sparse similarity function on `device` and return scores on the inputs' device.
 
     Embeddings are returned on the CPU by `encode` (and always by multi-process pools), so scoring
-    would otherwise run on the CPU.
+    would otherwise run on the CPU. The second collection (the corpus) is moved to the device in
+    row blocks, so a large corpus chunk is never resident on the device at once.
     """
     import torch
 
-    first = (
-        torch.as_tensor(embeddings1)
-        if isinstance(embeddings1, np.ndarray)
-        else embeddings1
-    )
-    result_device = (
-        first.device if isinstance(first, torch.Tensor) else torch.device("cpu")
-    )
-    scores = similarity_fn(
-        _to_device(embeddings1, device), _to_device(embeddings2, device)
-    )
-    return cast("Array", scores.to(result_device))
+    queries = torch.as_tensor(embeddings1)
+    documents = torch.as_tensor(embeddings2)
+    queries_on_device = queries.to(device)
 
-
-def _to_device(embeddings: Array, device: str | torch.device) -> Array:
-    import torch
-
-    if isinstance(embeddings, (np.ndarray, torch.Tensor)):
-        return torch.as_tensor(embeddings).to(device)
-    return embeddings
+    block_rows = max(1, _SCORING_BLOCK_ELEMENTS // max(1, documents.shape[1]))
+    scores = torch.empty(
+        queries.shape[0], documents.shape[0], dtype=torch.float32, device=queries.device
+    )
+    for start in range(0, documents.shape[0], block_rows):
+        end = min(start + block_rows, documents.shape[0])
+        # `index_select` rather than slicing: sparse tensors don't support basic slicing
+        block = documents.index_select(0, torch.arange(start, end)).to(device)
+        scores[:, start:end] = similarity_fn(queries_on_device, block).to(
+            queries.device, torch.float32
+        )
+        del block
+    return cast("Array", scores)
 
 
 def _as_vector_list(embeddings: Array) -> list[Any]:
