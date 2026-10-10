@@ -36,6 +36,7 @@ if TYPE_CHECKING:
     from typing_extensions import Unpack
 
     from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
     from mteb.types import (
         Array,
         BatchedInput,
@@ -253,11 +254,14 @@ def _capture_scoring_device(
 
     `start_multi_process_pool` moves the model to the CPU, so reading `model.device` later would
     give the CPU. Warns if the model is on the CPU although an accelerator is available, which is
-    what a pool started before wrapping the model looks like.
+    what a pool started before wrapping the model looks like. Models without a `device` are scored
+    on the CPU.
     """
     import torch
 
-    device = model.device
+    device = getattr(model, "device", None)
+    if device is None:
+        return torch.device("cpu")
     if device.type == "cpu" and (
         torch.cuda.is_available() or torch.backends.mps.is_available()
     ):
@@ -271,12 +275,13 @@ def _capture_scoring_device(
 
 
 def _score_on_device(
-    similarity_fn: Callable[..., Any],
-    device: str | torch.device,
+    wrapper: SentenceTransformerEncoderWrapper
+    | SparseEncoderWrapper
+    | InstructSentenceTransformerModel,
     embeddings1: Array,
     embeddings2: Array,
 ) -> Array:
-    """Run a dense/sparse similarity function on `device` and return scores on the inputs' device.
+    """Run the wrapper's model similarity on its scoring device and return scores on the inputs' device.
 
     Embeddings are returned on the CPU by `encode` (and always by multi-process pools), so scoring
     would otherwise run on the CPU. The second collection (the corpus) is moved to the device in
@@ -284,8 +289,27 @@ def _score_on_device(
     """
     import torch
 
+    # Subclasses that don't call the parent `__init__` never captured the device
+    device = getattr(wrapper, "_scoring_device", None)
+    if device is None:
+        device = wrapper._scoring_device = _capture_scoring_device(wrapper.model)
+
+    # A single embedding is scored as a collection of one, like `model.similarity` does
     queries = torch.as_tensor(embeddings1)
     documents = torch.as_tensor(embeddings2)
+    if documents.device.type != "cpu":
+        # Already on an accelerator (e.g. sparse retrieval keeps its embeddings there): nothing to move
+        return cast("Array", wrapper.model.similarity(embeddings1, embeddings2))
+    if queries.ndim == 1:
+        queries = queries.unsqueeze(0)
+    if documents.ndim == 1:
+        documents = documents.unsqueeze(0)
+    if device.type == "mps" and (
+        isinstance(wrapper, SparseEncoderWrapper)
+        or queries.is_sparse
+        or documents.is_sparse
+    ):
+        device = torch.device("cpu")  # sparse similarity isn't supported on MPS
     queries_on_device = queries.to(device)
 
     block_rows = max(1, _SCORING_BLOCK_ELEMENTS // max(1, documents.shape[1]))
@@ -296,7 +320,7 @@ def _score_on_device(
         end = min(start + block_rows, documents.shape[0])
         # `index_select` rather than slicing: sparse tensors don't support basic slicing
         block = documents.index_select(0, torch.arange(start, end)).to(device)
-        scores[:, start:end] = similarity_fn(queries_on_device, block).to(
+        scores[:, start:end] = wrapper.model.similarity(queries_on_device, block).to(
             queries.device, torch.float32
         )
         del block
@@ -512,9 +536,7 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
     def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
         """Compute the similarity between two collections of embeddings."""
         if hasattr(self.model, "similarity") and callable(self.model.similarity):
-            return _score_on_device(
-                self.model.similarity, self._scoring_device, embeddings1, embeddings2
-            )
+            return _score_on_device(self, embeddings1, embeddings2)
         return super().similarity(embeddings1, embeddings2)
 
     def encode(
@@ -805,9 +827,7 @@ class SparseEncoderWrapper(AbsEncoder):
         Returns:
             Similarity matrix of shape (num_queries, num_corpus).
         """
-        return _score_on_device(
-            self.model.similarity, self._scoring_device, embeddings1, embeddings2
-        )
+        return _score_on_device(self, embeddings1, embeddings2)
 
     def encode(
         self,
