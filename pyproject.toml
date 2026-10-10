@@ -383,7 +383,19 @@ preview = true
 
 
 [tool.ruff.lint.per-file-ignores]
-"scripts/*" = ["ALL"]
+# every script except scripts/tools, which is used in CI and is linted
+"scripts/[!t]*" = ["ALL"]
+"scripts/t[!o]*" = ["ALL"]
+"scripts/tools/*" = [
+    "T201",  # scripts report on stdout
+    "D1",  # docstrings
+    "PLR0913",
+    "PLR0914",
+    "PLR0917",
+    "PLR1702",
+    "PLW0603",
+    "ASYNC240",
+]
 # a script rather than a test: it reports what it checked on stdout
 "tests/test_validate_metadata/check_citations.py" = ["T201"]
 "docs/*" = [

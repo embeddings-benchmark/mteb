@@ -6,12 +6,14 @@ from pathlib import Path
 from git import Repo
 
 logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 def get_changed_files(
-    base_branch="main", startswith="mteb/models/model_implementations/"
+    base_branch: str = "main",
+    startswith: str = "mteb/models/model_implementations/",
 ) -> list[str]:
-    repo_path = Path(__file__).parent.parent
+    repo_path = Path(__file__).resolve().parents[2]
     repo = Repo(repo_path)
     repo.remotes.origin.fetch(base_branch)
 
@@ -29,12 +31,12 @@ def get_changed_files(
 
 
 def extract_model_names(
-    files: list[str], return_one_model_name_per_file=False
+    files: list[str], return_one_model_name_per_file: bool = False
 ) -> list[str]:
     model_names = []
     first_model_found = False
     for file in files:
-        with open(file, encoding="utf-8") as f:
+        with Path(file).open(encoding="utf-8") as f:
             tree = ast.parse(f.read())
             for node in ast.walk(tree):
                 if isinstance(node, ast.Assign):
@@ -69,12 +71,12 @@ def extract_model_names(
                                 model_names.append(model_name)
                                 first_model_found = True
                 if return_one_model_name_per_file and first_model_found:
-                    logging.info(f"Found model name {model_name} in file {file}")
+                    logger.info(f"Found model name {model_name} in file {file}")
                     break  # NOTE: Only take the first model_name per file to avoid disk out of space issue.
     return model_names
 
 
-def parse_args():
+def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "base_branch",
