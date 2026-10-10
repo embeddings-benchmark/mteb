@@ -232,10 +232,5 @@ spectral_embed_v1_140m = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets={"NFCorpus"},
-    citation="""@misc{spectral_embed_v1_140m,
-  author = {Mullings, J.},
-  title  = {spectral-embed-v1-140m: A CPU-only linear-spectral embedding model},
-  year   = {2026},
-  url    = {https://huggingface.co/JMullings/spectral-embed-v1-140m}
-}""",
+    citation=None
 )
