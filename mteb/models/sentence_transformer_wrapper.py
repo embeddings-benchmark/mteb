@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import math
 import warnings
 from typing import TYPE_CHECKING, Any, cast
 
@@ -317,6 +318,7 @@ def _score_on_device(
         queries.shape[0], documents.shape[0], dtype=torch.float32, device=queries.device
     )
     num_documents = documents.shape[0]
+    num_blocks = math.ceil(num_documents / block_rows)
     # `encode` remembers the user's setting; `similarity` itself gets no encode kwargs
     show_progress_bar = getattr(wrapper, "_show_progress_bar", True)
     with tqdm(
@@ -325,9 +327,12 @@ def _score_on_device(
         unit="doc",
         leave=False,
         # a single block finishes before a bar is useful
-        disable=not show_progress_bar or num_documents <= block_rows,
+        disable=not show_progress_bar or num_blocks <= 1,
     ) as progress:
-        for start in range(0, num_documents, block_rows):
+        for block_idx, start in enumerate(range(0, num_documents, block_rows), start=1):
+            logger.info(
+                f"Computing similarities on {device} [{block_idx}/{num_blocks}]"
+            )
             end = min(start + block_rows, num_documents)
             # `index_select` rather than slicing: sparse tensors don't support basic slicing
             block = documents.index_select(0, torch.arange(start, end)).to(device)
