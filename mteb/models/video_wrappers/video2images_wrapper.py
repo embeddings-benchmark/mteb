@@ -1,8 +1,17 @@
 from __future__ import annotations
 
+import io
 from typing import TYPE_CHECKING, Any
 
+from datasets import Dataset, Features
+from datasets import Image as ImageFeature
+from tqdm.auto import tqdm
+
+from mteb._create_dataloaders import create_dataloader
+from mteb.models.modality_collators import FramesCollator
+
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -128,6 +137,7 @@ class Video2ImagesWrapper:
         hf_split: str,
         hf_subset: str,
         prompt_type: PromptType | None = None,
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
         """Encode inputs, turning video rows into mean-pooled frame embeddings.
@@ -140,6 +150,7 @@ class Video2ImagesWrapper:
             hf_split: Split of current task.
             hf_subset: Subset of current task.
             prompt_type: The name type of prompt (query or passage).
+            show_progress_bar: Whether to show a progress bar over the videos.
             **kwargs: Additional arguments to pass to the wrapped encoder.
 
         Returns:
@@ -153,6 +164,7 @@ class Video2ImagesWrapper:
                 hf_split=hf_split,
                 hf_subset=hf_subset,
                 prompt_type=prompt_type,
+                show_progress_bar=show_progress_bar,
                 **kwargs,
             )
 
@@ -164,25 +176,17 @@ class Video2ImagesWrapper:
             )
 
         import torch
-        from datasets import Dataset, Features
-        from datasets import Image as ImageFeature
-        from torchvision.transforms.functional import to_pil_image
-        from tqdm.auto import tqdm
-
-        from mteb._create_dataloaders import create_dataloader
-        from mteb.models.modality_collators import FramesCollator
 
         inputs.collate_fn = FramesCollator(
             num_frames=self.num_frames, fps=self.fps, max_frames=self.max_frames
         )
         image_task_metadata = _video_to_image_metadata(task_metadata)
-        show_progress_bar = kwargs.pop("show_progress_bar", True)
 
         video_embeddings: list[torch.Tensor] = []
         for batch in tqdm(inputs, desc="Video Encoding", disable=not show_progress_bar):
             videos = batch["video"]
             frame_counts = [len(video) for video in videos]
-            images = [to_pil_image(frame) for video in videos for frame in video]
+            images = [_frame_to_bytes(frame) for video in videos for frame in video]
             image_loader = create_dataloader(
                 Dataset.from_dict(
                     {"image": images}, features=Features({"image": ImageFeature()})
@@ -215,6 +219,15 @@ class Video2ImagesWrapper:
     def similarity_pairwise(self, embeddings1: Array, embeddings2: Array) -> Array:
         """Refer to [EncoderProtocol.similarity_pairwise][mteb.models.EncoderProtocol.similarity_pairwise] for more details."""
         return self.model.similarity_pairwise(embeddings1, embeddings2)
+
+
+def _frame_to_bytes(frame: torch.Tensor) -> dict[str, Any]:
+    """Encode a frame as BMP bytes: lossless and much cheaper than the default PNG encoding."""
+    from torchvision.transforms.functional import to_pil_image
+
+    buffer = io.BytesIO()
+    to_pil_image(frame).save(buffer, format="BMP")
+    return {"bytes": buffer.getvalue(), "path": None}
 
 
 def _video_to_image_metadata(task_metadata: TaskMetadata) -> TaskMetadata:

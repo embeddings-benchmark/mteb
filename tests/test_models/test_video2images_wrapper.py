@@ -1,3 +1,5 @@
+from types import SimpleNamespace
+
 import numpy as np
 import pytest
 from datasets import Dataset
@@ -17,7 +19,8 @@ from mteb.mocks.mock_tasks.create_mock_samples import create_mock_video_bytes
 from mteb.models import Video2ImagesWrapper
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_implementations.random_baseline import _image_to_vector
-from mteb.models.video_wrappers import DEFAULT_NUM_FRAMES
+from mteb.models.video_wrappers import video2images_wrapper
+from mteb.models.video_wrappers.video2images_wrapper import DEFAULT_NUM_FRAMES
 from mteb.types import PromptType
 
 pytest.importorskip("torchcodec", reason="Video dependencies are not installed")
@@ -194,3 +197,109 @@ def test_video_task_error_points_to_wrapper():
     meta = mteb.get_model_meta("openai/clip-vit-base-patch32")
     with pytest.raises(ValueError, match="Video2ImagesWrapper"):
         _check_model_modalities(meta, task)
+
+
+def test_hint_is_not_shown_for_models_the_wrapper_rejects():
+    task = mteb.get_task("CoVRRVT2VRetrieval")
+    meta = mteb.get_model_meta("openai/clip-vit-base-patch32").model_copy(
+        update={"model_type": ["late-interaction"]}
+    )
+    with pytest.raises(ValueError, match="none overlap") as exc:
+        _check_model_modalities(meta, task)
+    assert "Video2ImagesWrapper" not in str(exc.value)
+
+
+def test_hint_is_not_shown_for_models_that_support_video():
+    task = mteb.get_task("GreatestHitsA2VRetrieval")
+    meta = mteb.get_model_meta("openai/clip-vit-base-patch32").model_copy(
+        update={"modalities": ["image", "text", "video"]}
+    )
+    with pytest.raises(ValueError, match="none overlap") as exc:
+        _check_model_modalities(meta, task)
+    assert "does not run on video" not in str(exc.value)
+
+
+@pytest.mark.parametrize(
+    "task_name",
+    ["XModBenchVT2TReranking", "CoVRRVT2VRetrieval", "VCDBCoreAudioVideoRetrieval"],
+)
+def test_wrapped_model_rejects_mixed_video_tasks_upfront(task_name):
+    wrapper = Video2ImagesWrapper(_image_model(), num_frames=4)
+    with pytest.raises(ValueError, match="only supports video-only inputs"):
+        mteb.evaluate(wrapper, mteb.get_task(task_name), cache=None)
+
+
+def test_video_with_text_input_raises_at_encode():
+    wrapper = Video2ImagesWrapper(_image_model(), num_frames=4)
+    loader = SimpleNamespace(
+        dataset=SimpleNamespace(features={"video": None, "text": None})
+    )
+    with pytest.raises(NotImplementedError, match="video-only"):
+        wrapper.encode(
+            loader,  # type: ignore[arg-type]
+            task_metadata=MockVideoRetrievalT2V().metadata,
+            hf_split="test",
+            hf_subset="default",
+        )
+
+
+def test_show_progress_bar_reaches_wrapped_model_for_text_inputs():
+    model = _image_model()
+    seen: dict = {}
+    original = model.encode
+
+    def spy(inputs, **kwargs: object):
+        seen.update(kwargs)
+        return original(inputs, **kwargs)
+
+    model.encode = spy
+    wrapper = Video2ImagesWrapper(model, num_frames=4)
+    metadata = MockVideoRetrievalT2V().metadata
+    text_metadata = metadata.model_copy(update={"modalities": ["text"]})
+    texts = create_dataloader(
+        Dataset.from_dict({"text": ["a", "b"]}),
+        task_metadata=text_metadata,
+        prompt_type=PromptType.query,
+        batch_size=2,
+    )
+    wrapper.encode(
+        texts,
+        task_metadata=metadata,
+        hf_split="test",
+        hf_subset="default",
+        prompt_type=PromptType.query,
+        show_progress_bar=False,
+    )
+    assert seen["show_progress_bar"] is False
+
+
+def test_show_progress_bar_false_silences_the_video_progress_bar(monkeypatch):
+    from datasets import Video
+
+    disabled = []
+    real_tqdm = video2images_wrapper.tqdm
+
+    def spy(*args: object, **kwargs: object):
+        disabled.append(kwargs.get("disable"))
+        return real_tqdm(*args, **kwargs)
+
+    monkeypatch.setattr(video2images_wrapper, "tqdm", spy)
+    videos = Dataset.from_dict(
+        {"video": create_mock_video_bytes(np.random.default_rng(0), n=3)}
+    ).cast_column("video", Video())
+    metadata = MockVideoRetrievalT2V().metadata
+    loader = create_dataloader(
+        videos,
+        task_metadata=metadata,
+        prompt_type=PromptType.document,
+        batch_size=2,
+    )
+    Video2ImagesWrapper(_image_model(), num_frames=4).encode(
+        loader,
+        task_metadata=metadata,
+        hf_split="test",
+        hf_subset="default",
+        prompt_type=PromptType.document,
+        show_progress_bar=False,
+    )
+    assert disabled == [True]

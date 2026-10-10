@@ -21,6 +21,7 @@ from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
 )
+from mteb.models.video_wrappers import Video2ImagesWrapper
 from mteb.results import ModelResult, TaskResult
 from mteb.results.task_result import TaskError
 from mteb.timing import TimingStack
@@ -272,13 +273,42 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
     return result
 
 
-def _task_modalities(task: AbsTask) -> set[str]:
-    """All modalities a task encodes, including both sides of retrieval tasks."""
-    if isinstance(task, AbsTaskRetrieval):
-        return set(task.metadata.get_modalities(PromptType.query)) | set(
-            task.metadata.get_modalities(PromptType.document)
-        )
-    return set(task.metadata.modalities)
+def _check_video_only_inputs(
+    model: ModelMeta,
+    tasks: AbsTask | Iterable[AbsTask],
+) -> None:
+    """Reject retrieval tasks that mix video with other modalities on one side.
+
+    `Video2ImagesWrapper` only handles video-only inputs, so these tasks would fail mid-run.
+
+    Args:
+        model: The metadata of the wrapped model.
+        tasks: A single task or an iterable of tasks to check.
+    """
+    check_tasks: Iterable[AbsTask]
+    if isinstance(tasks, AbsTask):
+        check_tasks = [tasks]
+    elif isinstance(tasks, Benchmark):
+        check_tasks = tasks.tasks
+    else:
+        check_tasks = tasks
+
+    errors = []
+    for task in check_tasks:
+        if not isinstance(task, AbsTaskRetrieval):
+            continue
+        query_mods = set(task.metadata.get_modalities(PromptType.query))
+        doc_mods = set(task.metadata.get_modalities(PromptType.document))
+        if any(
+            "video" in side and side != {"video"} for side in (query_mods, doc_mods)
+        ):
+            errors.append(
+                f"Model {model.name} only supports video-only inputs, but task {task.metadata.name} "
+                f"mixes video with other modalities on one side: query={sorted(query_mods)}, "
+                f"document={sorted(doc_mods)}."
+            )
+    if errors:
+        raise ValueError("\n".join(errors))
 
 
 def _check_model_modalities(
@@ -309,7 +339,12 @@ def _check_model_modalities(
     warnings, errors = [], []
 
     def with_video_hint(msg: str, task: AbsTask) -> str:
-        if "image" in model_modalities and "video" in _task_modalities(task):
+        if (
+            "image" in model_modalities
+            and "video" not in model_modalities
+            and "dense" in model.model_type
+            and "video" in task.metadata.modalities
+        ):
             msg += (
                 f" {model.name} does not run on video and {task.metadata.name} contains video. "
                 "If you wish to evaluate it on frames sampled from the videos, wrap it in "
@@ -534,6 +569,8 @@ def evaluate(  # noqa: PLR0913, PLR0914
     model, meta, model_name, model_revision = _sanitize_model(model)
     _check_model_modalities(meta, tasks)
     overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
+    if isinstance(model, Video2ImagesWrapper):
+        _check_video_only_inputs(meta, tasks)
 
     # AbsTaskAggregate is a special case where we have to run multiple tasks and combine the results
     if isinstance(tasks, AbsTaskAggregate):

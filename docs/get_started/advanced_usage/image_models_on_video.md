@@ -32,5 +32,5 @@ Any other sampling (`num_frames=16`, or `fps` / `max_frames`) is recorded in the
 
 ### Limitations
 
-- Only video-only inputs are pooled. Tasks whose rows combine video with text or audio in a single input (e.g. `vt2t`) are not supported and raise `NotImplementedError`.
+- Only video-only inputs are supported for now. Text inputs are passed through, but a wrapped model is rejected by `mteb.evaluate` on tasks that combine video with text or audio on one side (e.g. `CoVRRVT2VRetrieval`), and calling `encode` on such an input directly raises `NotImplementedError`.
 - Decoding video requires the `video` extra (`pip install "mteb[video]"`).
