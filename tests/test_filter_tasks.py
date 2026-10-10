@@ -202,3 +202,68 @@ def test_filter_languages_script_mismatch_raises():
     # "eng" only occurs in Latin subsets, so no subset matches eng + Cyrl.
     with pytest.raises(ValueError, match="No subsets were found"):
         task.filter_languages(languages=["eng"], script=["Cyrl"])
+
+
+@pytest.mark.parametrize(
+    ("task_name", "languages", "script", "expected_subsets"),
+    [
+        # RuNLUIntentClassification has a Russian subset ("rus" = [rus-Cyrl]) and a
+        # mixed subset ("rus-eng" = [rus-Cyrl, eng-Latn]).
+        # Under exclusive filtering a subset must be *entirely* within the (language,
+        # script) filter, so "rus-eng" is dropped by the language filter alone.
+        ("RuNLUIntentClassification", ["rus"], ["Cyrl"], ["rus"]),
+        ("RuNLUIntentClassification", ["rus"], None, ["rus"]),
+        # The mixed subset has a Latin-script part, so the script filter must drop it
+        # even though both of its languages are requested.
+        ("RuNLUIntentClassification", ["rus", "eng"], ["Cyrl"], ["rus"]),
+        (
+            "RuNLUIntentClassification",
+            ["rus", "eng"],
+            ["Cyrl", "Latn"],
+            ["rus", "rus-eng"],
+        ),
+        # STS22.v2: "ru" is the only Russian subset, and it is Cyrillic.
+        ("STS22.v2", ["rus"], ["Cyrl"], ["ru"]),
+        # Sanity: exclusive (without script) keeps only the purely-English subset.
+        ("STS22.v2", ["eng"], None, ["en"]),
+    ],
+)
+def test_filter_languages_script_exclusive(
+    task_name: str,
+    languages: list[str],
+    script: list[str] | None,
+    expected_subsets: list[str],
+):
+    """`script` must also be applied when `exclusive_language_filter=True`.
+
+    Regression for the follow-up to #5608: the non-exclusive branch filters by script,
+    but the exclusive branch only checked the language, so e.g. a pure-Cyrillic Russian
+    subset was kept even when the user asked for Latin script.
+    """
+    task = get_task(task_name)
+    task.filter_languages(
+        languages=languages, script=script, exclusive_language_filter=True
+    )
+    assert sorted(task.hf_subsets) == expected_subsets
+
+
+@pytest.mark.parametrize(
+    ("task_name", "languages", "script"),
+    [
+        # No subset is purely Russian in Latin script: "rus" is Cyrillic and "rus-eng"
+        # contains English, so neither survives exclusive filtering.
+        ("RuNLUIntentClassification", ["rus"], ["Latn"]),
+        # STS22 has no Latin-script Russian subset at all.
+        ("STS22.v2", ["rus"], ["Latn"]),
+    ],
+)
+def test_filter_languages_script_exclusive_mismatch_raises(
+    task_name: str,
+    languages: list[str],
+    script: list[str],
+):
+    task = get_task(task_name)
+    with pytest.raises(ValueError, match="No subsets were found"):
+        task.filter_languages(
+            languages=languages, script=script, exclusive_language_filter=True
+        )
