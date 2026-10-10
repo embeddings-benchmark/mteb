@@ -168,6 +168,23 @@ sentence_trf_model.half()  # half precision
 
 A last option is to make a [custom implementation](defining_the_model.md#using-a-custom-model) of the model. This way you have full flexibility of how the model handles the input.
 
+### Multi-GPU encoding
+
+To encode on multiple GPUs on a single node, pass a list of devices in `encode_kwargs` (SentenceTransformer models):
+
+=== "Python"
+    ```python
+    results = mteb.evaluate(
+        model,
+        tasks,
+        encode_kwargs={"device": ["cuda:0", "cuda:1", "cuda:2", "cuda:3"]},
+    )
+    ```
+=== "CLI"
+    ```bash
+    mteb run -t NFCorpus -m <model> --device 0,1,2,3
+    ```
+
 
 ### Speeding Download
 
