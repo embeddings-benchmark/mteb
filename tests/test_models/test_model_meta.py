@@ -668,3 +668,16 @@ def test_get_model_metas_iso_code_matches_language_script():
 def test_get_model_metas_invalid_language():
     with pytest.raises(ValueError, match="Invalid language code"):
         mteb.get_model_metas(languages=["english"])
+
+
+@pytest.mark.parametrize("dtype_name", ["float16", "float32", "bfloat16"])
+def test_torch_dtype_experiment_name_matches_saved_metadata(dtype_name):
+    import torch
+
+    meta = ModelMeta.create_empty(
+        overwrites={"experiment_kwargs": {"dtype": getattr(torch, dtype_name)}}
+    )
+    saved_kwargs = json.loads(json.dumps(meta.experiment_kwargs, default=str))
+    restored = meta.model_copy(update={"experiment_kwargs": saved_kwargs})
+    assert meta.experiment_name == f"dtype_torch.{dtype_name}"
+    assert restored.experiment_name == meta.experiment_name

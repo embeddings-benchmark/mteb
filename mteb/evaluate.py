@@ -5,7 +5,7 @@ import logging
 import warnings
 from pathlib import Path
 from time import monotonic
-from typing import TYPE_CHECKING, TypeGuard, cast
+from typing import TYPE_CHECKING, Any, TypeGuard, cast
 
 from datasets.exceptions import DatasetNotFoundError
 from tqdm.auto import tqdm
@@ -600,7 +600,28 @@ def evaluate(  # noqa: PLR0913
         )
 
     model, meta, model_name, model_revision = _sanitize_model(model)
+    if "first_stage" in (meta.experiment_kwargs or {}):
+        # Always derive evaluation context from the tasks, including reused metadata.
+        model_kwargs = dict(meta.experiment_kwargs or {})
+        model_kwargs.pop("first_stage")
+        meta = meta.model_copy(update={"experiment_kwargs": model_kwargs or None})
     meta = _apply_precision_to_meta(meta, encode_kwargs)
+    if not isinstance(tasks, AbsTask):
+        tasks = list(tasks)
+    first_stage = _first_stage_experiment(tasks)
+    if first_stage is not None:
+        # Evaluation context belongs to saved results, not the model loader kwargs.
+        meta = meta.model_copy(
+            update={
+                "experiment_kwargs": {
+                    **(meta.experiment_kwargs or {}),
+                    "first_stage": first_stage,
+                }
+            },
+            deep=True,
+        )
+        if prediction_folder is not None:
+            prediction_folder /= Path("experiments") / cast("str", meta.experiment_name)
     _check_model_modalities(meta, tasks)
     overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
 
@@ -621,6 +642,24 @@ def evaluate(  # noqa: PLR0913
         num_proc=num_proc,
         timer=timer,
     )
+
+
+def _first_stage_experiment(
+    tasks: AbsTask | Iterable[AbsTask],
+) -> dict[str, Any] | None:
+    """One evaluate call returns one model experiment, including for aggregates."""
+    if isinstance(tasks, AbsTaskAggregate):
+        return _first_stage_experiment(tasks.metadata.tasks)
+    if isinstance(tasks, AbsTask):
+        return (
+            tasks._reranking_experiment if isinstance(tasks, AbsTaskRetrieval) else None
+        )
+    configurations = [_first_stage_experiment(task) for task in tasks]
+    if any(configuration != configurations[0] for configuration in configurations):
+        raise ValueError(
+            "Evaluate different first-stage configurations separately, including ordinary retrieval."
+        )
+    return configurations[0] if configurations else None
 
 
 def _evaluate_resolved(  # noqa: PLR0913
@@ -660,6 +699,8 @@ def _evaluate_resolved(  # noqa: PLR0913
                 model_name=model_name,
                 model_revision=model_revision,
                 task_results=[existing_results],
+                experiment_name=meta.experiment_name,
+                model_meta=meta,
             )
 
         results = _evaluate_resolved(
@@ -696,6 +737,8 @@ def _evaluate_resolved(  # noqa: PLR0913
             model_revision=results.model_revision,
             task_results=[combined_results],
             exceptions=results.exceptions,
+            experiment_name=meta.experiment_name,
+            model_meta=meta,
         )
 
     if isinstance(tasks, AbsTask):
@@ -735,6 +778,8 @@ def _evaluate_resolved(  # noqa: PLR0913
             model_revision=_res.model_revision,
             task_results=evaluate_results,
             exceptions=exceptions,
+            experiment_name=meta.experiment_name,
+            model_meta=meta,
         )
 
     existing_results, missing_eval = _check_cache(task, meta, cache, overwrite_strategy)
@@ -752,6 +797,8 @@ def _evaluate_resolved(  # noqa: PLR0913
             model_name=model_name,
             model_revision=model_revision,
             task_results=[existing_results],
+            experiment_name=meta.experiment_name,
+            model_meta=meta,
         )
     if existing_results:
         logger.info(
@@ -807,6 +854,8 @@ def _evaluate_resolved(  # noqa: PLR0913
             model_revision=model_revision,
             task_results=[],
             exceptions=[result],
+            experiment_name=meta.experiment_name,
+            model_meta=meta,
         )
 
     if cache:
@@ -820,4 +869,6 @@ def _evaluate_resolved(  # noqa: PLR0913
         model_name=model_name,
         model_revision=model_revision,
         task_results=[result],
+        experiment_name=meta.experiment_name,
+        model_meta=meta,
     )

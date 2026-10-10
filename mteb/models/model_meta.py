@@ -501,6 +501,9 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             dict(_self.experiment_kwargs) if _self.experiment_kwargs else {}
         )
 
+        # First-stage settings identify an evaluation, not model construction.
+        base_exp_kwargs.pop("first_stage", None)
+
         if embed_dim is not None:
             if (
                 _self.embed_dim is not None
@@ -1960,11 +1963,14 @@ def _serialize_experiment_kwargs_to_name(
     if experiment_kwargs is None or len(experiment_kwargs) == 0:
         return None
 
+    from torch import dtype
+
     invalid_chars = set('<>:"|?*\\/\0')
 
     def _serialize_value(value: Any) -> str:  # noqa: ANN401 -- serialises arbitrary values
         """Convert value to deterministic string representation."""
-        if isinstance(value, (str, int, float, bool)) or value is None:
+        # Dtypes use the same string representation saved in model_meta.json.
+        if isinstance(value, (str, int, float, bool, dtype)) or value is None:
             str_value = str(value)
             for invalid_char in invalid_chars:
                 str_value = str_value.replace(invalid_char, "_")
@@ -1992,7 +1998,7 @@ def _serialize_experiment_kwargs_to_name(
         raise ValueError(
             f"experiment_kwargs contains non-serializable type {type(value).__name__}. "
             f"Only JSON-serializable types (str, int, float, bool, list, dict, None), "
-            f"Enums, numpy arrays, and Pydantic models are supported."
+            f"Enums, torch dtypes, numpy arrays, and Pydantic models are supported."
         )
 
     params_str = kwargs_separator.join(

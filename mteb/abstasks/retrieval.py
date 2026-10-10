@@ -1,9 +1,10 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import logging
 from collections import defaultdict
-from pathlib import Path
+from pathlib import PurePosixPath
 from typing import TYPE_CHECKING, Any, Literal
 
 from datasets import Dataset, DatasetDict, concatenate_datasets
@@ -31,6 +32,10 @@ from ._statistics_calculation import (
     compute_black_or_white_image_flags,
 )
 from .abstask import AbsTask
+from .first_stage_predictions import (
+    FirstStagePredictionSource,
+    load_first_stage_predictions,
+)
 from .retrieval_dataset_loaders import (
     RetrievalDatasetLoader,
     _combine_queries_with_instructions_datasets,
@@ -38,6 +43,7 @@ from .retrieval_dataset_loaders import (
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Mapping, Sequence
+    from pathlib import Path
     from typing import Self
 
     from mteb.models import (
@@ -49,7 +55,6 @@ if TYPE_CHECKING:
         Modalities,
         QueryDatasetType,
         RelevantDocumentsType,
-        RetrievalOutputType,
         ScoresDict,
     )
 
@@ -100,6 +105,8 @@ class AbsTaskRetrieval(AbsTask):
     _support_cross_encoder: bool = True
     _support_search: bool = True
     _previous_results_model_meta: dict[str, Any] | None = None
+    first_stage_predictions: Mapping[str, str | Path | FirstStagePredictionSource] = {}
+    _reranking_experiment: dict[str, Any] | None = None
     skip_first_result: bool = False
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -734,53 +741,92 @@ class AbsTaskRetrieval(AbsTask):
 
     def convert_to_reranking(
         self,
-        top_ranked_path: str | Path,
+        top_ranked_path: str | Path | None = None,
         top_k: int = 10,
+        *,
+        first_stage: str | None = None,
     ) -> Self:
-        """Converts a reranking task to re-ranking by loading predictions from previous model run where the `prediction_folder` was specified.
+        """Attach saved first-stage candidates to this task, preserving its subsets.
 
         Args:
-            top_ranked_path: Path to file or folder with the top ranked predictions.
-            top_k: Number of results to load.
+            top_ranked_path: Local prediction file or directory.
+            top_k: Maximum candidates per query.
+            first_stage: A name in ``first_stage_predictions``. Supply exactly one
+                of ``top_ranked_path`` or ``first_stage``.
 
-        Returns:
-            The current task reformulated as a reranking task
-
-        Raises:
-            FileNotFoundError: If the specified path does not exist.
-            ValueError: If the loaded top ranked results are not in the expected format.
+        Named sources may point to local files or pinned
+        ``FirstStagePredictionSource`` objects. Conversion mutates this task;
+        instantiate another task for a separate candidate source. ``evaluate``
+        records the first-stage settings in the existing model experiment metadata
+        and saves converted runs in a separate experiment directory.
         """
-        self._top_k = top_k
-
-        top_ranked_path = Path(top_ranked_path)
-        if top_ranked_path.is_dir():
-            top_ranked_path = self._predictions_path(top_ranked_path)
-
-        if not top_ranked_path.exists():
-            raise FileNotFoundError(
-                f"Can't find previous results for this task. File {top_ranked_path} does not exist."
+        if top_ranked_path is None and first_stage is None:
+            raise ValueError("Supply top_ranked_path or first_stage.")
+        if top_ranked_path is not None and first_stage is not None:
+            raise ValueError(
+                "Supply only one of top_ranked_path or first_stage, not both."
             )
-
-        with top_ranked_path.open("r", encoding="utf-8") as previous_results_file:
-            previous_results = json.load(previous_results_file)
-
+        if top_k <= 0:
+            raise ValueError("top_k must be positive.")
+        source: str | Path | FirstStagePredictionSource
+        if top_ranked_path is not None:
+            source = top_ranked_path
+        elif first_stage is not None and first_stage in self.first_stage_predictions:
+            source = self.first_stage_predictions[first_stage]
+        else:
+            raise ValueError(
+                f"Unknown first_stage {first_stage!r}. "
+                f"Available sources: {list(self.first_stage_predictions)}"
+            )
+        predictions, digest = load_first_stage_predictions(
+            source, self.prediction_file_name
+        )
         if not self.data_loaded:
             self.load_data()
 
-        self._previous_results_model_meta = previous_results["mteb_model_meta"]
-
+        previous_model_meta = predictions["mteb_model_meta"]
+        converted = {}
         for subset in self.dataset:
             for split in self.dataset[subset]:
-                top_ranked: RetrievalOutputType = previous_results[subset][split]
+                top_ranked = predictions[subset][split]
                 if not isinstance(top_ranked, dict):
                     raise ValueError("Previous top ranked results is not a dictionary.")
 
                 top_k_sorted = defaultdict(list)
                 for query_id, values in top_ranked.items():
                     sorted_keys = sorted(values, key=lambda k: values[k], reverse=True)
-                    top_k_sorted[query_id] = sorted_keys[: self._top_k]
+                    top_k_sorted[query_id] = sorted_keys[:top_k]
 
-                self.dataset[subset][split]["top_ranked"] = top_k_sorted
+                converted[subset, split] = top_k_sorted
+
+        prediction_identity: dict[str, Any]
+        if isinstance(source, FirstStagePredictionSource):
+            # A pinned collection groups domains; each task resolves its own file.
+            filename = PurePosixPath(source.filename)
+            if filename.name == self.prediction_file_name:
+                filename = filename.with_name("{task}_predictions.json")
+            prediction_identity = {
+                "repo_id": source.repo_id,
+                "revision": source.revision,
+                "filename": str(filename),
+            }
+        else:
+            prediction_identity = {"sha256": digest}
+        experiment = {
+            "name": first_stage if first_stage is not None else "local",
+            "model": previous_model_meta,
+            "top_k": top_k,
+            "predictions": prediction_identity,
+        }
+        # Experiment names sanitize paths; retain a digest of the unsanitized identity.
+        experiment["id"] = hashlib.sha256(
+            json.dumps(experiment, sort_keys=True).encode()
+        ).hexdigest()
+        for (subset, split), candidates in converted.items():
+            self.dataset[subset][split]["top_ranked"] = candidates
+        self._top_k = top_k
+        self._previous_results_model_meta = previous_model_meta
+        self._reranking_experiment = experiment
         return self
 
 
