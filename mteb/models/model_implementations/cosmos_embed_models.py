@@ -7,6 +7,7 @@ from tqdm.auto import tqdm
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -216,6 +217,7 @@ cosmos_embed1_224p = ModelMeta(
     embed_dim=256,
     reference="https://huggingface.co/nvidia/Cosmos-Embed1-224p",
     **_COSMOS_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
 
 cosmos_embed1_336p = ModelMeta(
@@ -227,6 +229,7 @@ cosmos_embed1_336p = ModelMeta(
     embed_dim=768,
     reference="https://huggingface.co/nvidia/Cosmos-Embed1-336p",
     **_COSMOS_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
 
 cosmos_embed1_448p = ModelMeta(
@@ -238,4 +241,5 @@ cosmos_embed1_448p = ModelMeta(
     embed_dim=768,
     reference="https://huggingface.co/nvidia/Cosmos-Embed1-448p",
     **_COSMOS_COMMON,
+    output_dtypes=OutputDType.BF16,
 )

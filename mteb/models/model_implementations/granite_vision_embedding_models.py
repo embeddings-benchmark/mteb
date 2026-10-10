@@ -189,4 +189,5 @@ granite_vision_embedding = ModelMeta(
   journal={arXiv preprint arXiv:2502.09927},
   year={2025}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )

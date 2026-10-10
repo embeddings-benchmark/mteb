@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 from mteb.models.model_meta import ModelMeta
+from mteb.types import OutputDType
 
 from .rerankers_custom import RerankerWrapper
 
@@ -141,4 +142,5 @@ listconranker = ModelMeta(
     public_training_data=None,
     modalities=["text"],
     citation=LISTCONRANKER_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )

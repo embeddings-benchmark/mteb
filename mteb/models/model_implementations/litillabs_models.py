@@ -7,6 +7,7 @@ from mteb.models.model_implementations.octen_models import (
 )
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
 
 litillabs_octen_law_8b_v1 = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
@@ -33,6 +34,7 @@ litillabs_octen_law_8b_v1 = ModelMeta(
     # cross-direction benchmark-adjacent near-duplicates for those tasks.
     training_datasets={"GerDaLIRSmall", "LeCaRDv2", "WikiQA"},
     adapted_from="Octen/Octen-Embedding-8B",
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -65,4 +67,5 @@ litillabs_litil_embed_0b6 = ModelMeta(
     public_training_data=None,
     training_datasets={"GerDaLIRSmall", "LeCaRDv2"},
     adapted_from="Octen/Octen-Embedding-0.6B",
+    output_dtypes=OutputDType.BF16,
 )

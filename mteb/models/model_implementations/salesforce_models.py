@@ -6,6 +6,7 @@ from mteb.models.instruct_wrapper import (
     InstructSentenceTransformerModel,
 )
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 from .e5_instruct import E5_MISTRAL_TRAINING_DATA
 
@@ -105,6 +106,7 @@ SFR_Embedding_Code_2B_R = ModelMeta(
   year={2024}
 }
 """,
+    output_dtypes=OutputDType.BF16,
 )
 
 SFR_Embedding_Mistral = ModelMeta(
@@ -134,4 +136,5 @@ SFR_Embedding_Mistral = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=SFR_TRAINING_DATA,
+    output_dtypes=OutputDType.FLOAT16,
 )

@@ -2,6 +2,7 @@
 
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
 
 piccolo_base_zh = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
@@ -25,7 +26,8 @@ piccolo_base_zh = ModelMeta(
     adapted_from=None,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,  # They don't specify
+    training_datasets=None,  # They don't specify,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 piccolo_large_zh_v2 = ModelMeta(

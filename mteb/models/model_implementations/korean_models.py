@@ -355,4 +355,5 @@ kure_reranker_base = ModelMeta(
     public_training_code=None,
     public_training_data="https://huggingface.co/datasets/lightonai/embeddings-fine-tuning",
     training_datasets=kure_reranker_training_data,
+    output_dtypes=OutputDType.BF16,
 )

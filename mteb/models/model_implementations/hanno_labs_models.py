@@ -5,6 +5,7 @@ from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
 )
+from mteb.types import OutputDType
 
 # dinghy-law-0.6b-v1: a legal-domain contrastive fine-tune of Qwen/Qwen3-Embedding-0.6B, keeping the base interface
 # (last-token pooling, cosine, query-side "Instruct: {instruction}\nQuery:" prefix, unprefixed documents). Training
@@ -58,6 +59,7 @@ dinghy_law_0_6b = ModelMeta(
     public_training_data="https://huggingface.co/datasets/Hanno-Labs/legal-retrieval-pairs-v1",
     training_datasets=training_data,
     adapted_from="Qwen/Qwen3-Embedding-0.6B",
+    output_dtypes=OutputDType.BF16,
 )
 
 # Per-task query instruction (the dominant eval lever); query-side only (apply_instruction_to_passages=False).
@@ -100,6 +102,7 @@ dinghy_law_4b = ModelMeta(
     public_training_data="https://huggingface.co/datasets/Hanno-Labs/legal-retrieval-pairs-v2",
     training_datasets=training_data,
     adapted_from="Qwen/Qwen3-Embedding-4B",
+    output_dtypes=OutputDType.BF16,
 )
 
 dinghy_law_8b = ModelMeta(
@@ -125,4 +128,5 @@ dinghy_law_8b = ModelMeta(
     training_datasets=training_data,
     adapted_from="nvidia/Nemotron-3-Embed-8B-BF16",
     extra_requirements_groups=["nemotron-3-embed"],
+    output_dtypes=OutputDType.BF16,
 )

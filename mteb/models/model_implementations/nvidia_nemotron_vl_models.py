@@ -197,6 +197,7 @@ llama_nemoretriever_colembed_1b_v1 = ModelMeta(
     training_datasets=TRAINING_DATA,
     citation=LLAMA_NEMORETRIEVER_CITATION,
     extra_requirements_groups=["llama-nemotron-colembed-vl"],
+    output_dtypes=OutputDType.BF16,
 )
 
 llama_nemoretriever_colembed_3b_v1 = ModelMeta(
@@ -226,6 +227,7 @@ llama_nemoretriever_colembed_3b_v1 = ModelMeta(
     training_datasets=TRAINING_DATA,
     citation=LLAMA_NEMORETRIEVER_CITATION,
     extra_requirements_groups=["llama-nemotron-colembed-vl"],
+    output_dtypes=OutputDType.BF16,
 )
 
 llama_nemotron_colembed_vl_3b_v2 = ModelMeta(
@@ -255,6 +257,7 @@ llama_nemotron_colembed_vl_3b_v2 = ModelMeta(
     training_datasets=TRAINING_DATA,
     citation=NEMOTRON_COLEMBED_CITATION_V2,
     extra_requirements_groups=["llama-nemotron-colembed-vl"],
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -285,6 +288,7 @@ nemotron_colembed_vl_4b_v2 = ModelMeta(
     citation=NEMOTRON_COLEMBED_CITATION_V2,
     model_type=["late-interaction"],
     extra_requirements_groups=["nemotron-colembed-vl-v2"],
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -315,6 +319,7 @@ nemotron_colembed_vl_8b_v2 = ModelMeta(
     citation=NEMOTRON_COLEMBED_CITATION_V2,
     model_type=["late-interaction"],
     extra_requirements_groups=["nemotron-colembed-vl-v2"],
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -497,6 +502,7 @@ llama_nemotron_embed_vl_1b_v2 = ModelMeta(
     training_datasets=TRAINING_DATA_EMBED_VL_1B_V2,
     citation=LLAMA_NEMOTRON_VL_1B_V2_CITATION,
     extra_requirements_groups=["llama-nemotron-colembed-vl"],
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -536,4 +542,5 @@ llama_nemotron_rerank_vl_1b_v2 = ModelMeta(
     modalities=["image", "text"],
     model_type=["cross-encoder"],
     citation=LLAMA_NEMOTRON_VL_1B_V2_CITATION,
+    output_dtypes=OutputDType.BF16,
 )

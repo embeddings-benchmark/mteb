@@ -6,6 +6,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
 )
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -137,6 +138,7 @@ wemm_embedding_2b = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     extra_requirements_groups=["wemm"],
+    output_dtypes=OutputDType.BF16,
 )
 
 wemm_embedding_4b = ModelMeta(
@@ -164,6 +166,7 @@ wemm_embedding_4b = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     extra_requirements_groups=["wemm"],
+    output_dtypes=OutputDType.BF16,
 )
 
 wemm_embedding_9b = ModelMeta(
@@ -191,4 +194,5 @@ wemm_embedding_9b = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     extra_requirements_groups=["wemm"],
+    output_dtypes=OutputDType.BF16,
 )

@@ -8,6 +8,7 @@ from tqdm.auto import tqdm
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_implementations.ops_colqwen3_models import multilingual_langs
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -241,6 +242,7 @@ ops_mm_embedding_v1_2b = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 ops_mm_embedding_v1_7b = ModelMeta(
@@ -265,4 +267,5 @@ ops_mm_embedding_v1_7b = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
+    output_dtypes=OutputDType.BF16,
 )

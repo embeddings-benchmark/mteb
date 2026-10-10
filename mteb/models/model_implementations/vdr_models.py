@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from mteb.types import PromptType
@@ -53,4 +54,5 @@ vdr_2b_multi_v1 = ModelMeta(
         # llamaindex/vdr-multilingual-train
         "VDRMultilingualRetrieval",
     ),
+    output_dtypes=OutputDType.BF16,
 )

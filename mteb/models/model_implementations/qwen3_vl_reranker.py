@@ -8,6 +8,7 @@ from mteb.models.model_implementations.qwen3_vl_embedding_models import (
 )
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -182,6 +183,7 @@ qwen3_vl_reranker_2b = ModelMeta(
     training_datasets=None,
     citation=QWEN3_VL_EMBEDDING_CITATION,
     extra_requirements_groups=["multimodal-sbert"],
+    output_dtypes=OutputDType.BF16,
 )
 
 qwen3_vl_reranker_8b = ModelMeta(
@@ -208,4 +210,5 @@ qwen3_vl_reranker_8b = ModelMeta(
     training_datasets=None,
     citation=QWEN3_VL_EMBEDDING_CITATION,
     extra_requirements_groups=["multimodal-sbert"],
+    output_dtypes=OutputDType.BF16,
 )

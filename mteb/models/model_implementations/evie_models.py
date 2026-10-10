@@ -145,6 +145,7 @@ evie_8b = ModelMeta(
     use_instructions=False,
     training_datasets=EVIE_TRAINING_DATA,
     extra_requirements_groups=["evie"],
+    output_dtypes=OutputDType.BF16,
 )
 
 evie_4_5b = ModelMeta(
@@ -175,4 +176,5 @@ evie_4_5b = ModelMeta(
     use_instructions=False,
     training_datasets=EVIE_TRAINING_DATA,
     extra_requirements_groups=["evie"],
+    output_dtypes=OutputDType.BF16,
 )

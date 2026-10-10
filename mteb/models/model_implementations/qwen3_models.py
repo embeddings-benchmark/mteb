@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Any
 
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     from mteb.models.models_protocols import EncoderProtocol
@@ -160,6 +160,7 @@ Qwen3_Embedding_0B6 = ModelMeta(
     public_training_data=None,
     training_datasets=training_data,
     citation=QWEN3_CITATION,
+    output_dtypes=OutputDType.BF16,
 )
 
 Qwen3_Embedding_4B = ModelMeta(
@@ -184,6 +185,7 @@ Qwen3_Embedding_4B = ModelMeta(
     public_training_data=None,
     training_datasets=training_data,
     citation=QWEN3_CITATION,
+    output_dtypes=OutputDType.BF16,
 )
 
 Qwen3_Embedding_8B = ModelMeta(
@@ -208,4 +210,5 @@ Qwen3_Embedding_8B = ModelMeta(
     public_training_data=None,
     training_datasets=training_data,
     citation=QWEN3_CITATION,
+    output_dtypes=OutputDType.BF16,
 )

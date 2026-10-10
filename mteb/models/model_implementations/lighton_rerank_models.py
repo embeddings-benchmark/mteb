@@ -402,6 +402,7 @@ lighton_rerank_pw_0_8b = ModelMeta(
     reference="https://huggingface.co/lightonai/LightOn-rerank-PW-0.8B",
     adapted_from="Qwen/Qwen3.5-0.8B",
     **_PW_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
 
 lighton_rerank_pw_2b = ModelMeta(
@@ -413,6 +414,7 @@ lighton_rerank_pw_2b = ModelMeta(
     reference="https://huggingface.co/lightonai/LightOn-rerank-PW-2B",
     adapted_from="Qwen/Qwen3.5-2B",
     **_PW_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
 
 lighton_rerank_pw_4b = ModelMeta(
@@ -424,6 +426,7 @@ lighton_rerank_pw_4b = ModelMeta(
     reference="https://huggingface.co/lightonai/LightOn-rerank-PW-4B",
     adapted_from="Qwen/Qwen3.5-4B",
     **_PW_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
 
 lighton_rerank_lw_0_8b = ModelMeta(
@@ -435,6 +438,7 @@ lighton_rerank_lw_0_8b = ModelMeta(
     reference="https://huggingface.co/lightonai/LightOn-rerank-LW-0.8B",
     adapted_from="Qwen/Qwen3.5-0.8B",
     **_LW_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
 
 lighton_rerank_lw_2b = ModelMeta(
@@ -446,6 +450,7 @@ lighton_rerank_lw_2b = ModelMeta(
     reference="https://huggingface.co/lightonai/LightOn-rerank-LW-2B",
     adapted_from="Qwen/Qwen3.5-2B",
     **_LW_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
 
 lighton_rerank_lw_4b = ModelMeta(
@@ -458,4 +463,5 @@ lighton_rerank_lw_4b = ModelMeta(
     adapted_from="Qwen/Qwen3.5-4B",
     loader_kwargs=dict(use_think_block=True),
     **_LW_COMMON,
+    output_dtypes=OutputDType.BF16,
 )

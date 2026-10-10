@@ -334,6 +334,7 @@ jasper_en_v1 = ModelMeta(
       url={https://arxiv.org/abs/2412.19048},
 }
 """,
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -375,4 +376,5 @@ Jasper_Token_Compression_600M = ModelMeta(
       url={https://arxiv.org/abs/2511.14405},
 }
 """,
+    output_dtypes=OutputDType.BF16,
 )

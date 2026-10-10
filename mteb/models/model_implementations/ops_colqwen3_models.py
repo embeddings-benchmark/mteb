@@ -262,4 +262,5 @@ ops_colqwen3_4b = ModelMeta(
     use_instructions=True,
     training_datasets=OPS_COLQWEN3_TRAINING_DATA,
     model_type=["late-interaction"],
+    output_dtypes=OutputDType.FLOAT16,
 )

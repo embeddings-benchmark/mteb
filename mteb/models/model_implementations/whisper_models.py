@@ -7,6 +7,7 @@ from tqdm.auto import tqdm
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -433,6 +434,7 @@ whisper_large_v3 = ModelMeta(
       primaryClass={eess.AS},
       url={https://arxiv.org/abs/2212.04356},
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 whisper_large_v3_turbo = ModelMeta(
@@ -468,4 +470,5 @@ whisper_large_v3_turbo = ModelMeta(
       primaryClass={eess.AS},
       url={https://arxiv.org/abs/2212.04356},
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )

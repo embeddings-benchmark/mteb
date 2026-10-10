@@ -8,6 +8,7 @@ from tqdm.auto import tqdm
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator, VideoCollator
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -208,6 +209,7 @@ lco_3b = ModelMeta(
   primaryClass={cs.CL},
   url={https://arxiv.org/abs/2510.11693},
 }""",
+    output_dtypes=OutputDType.BF16,
 )
 
 lco_3b_2605 = ModelMeta(
@@ -243,6 +245,7 @@ lco_3b_2605 = ModelMeta(
   primaryClass={cs.CL},
   url={https://arxiv.org/abs/2510.11693},
 }""",
+    output_dtypes=OutputDType.BF16,
 )
 
 lco_7b = ModelMeta(
@@ -278,4 +281,5 @@ lco_7b = ModelMeta(
   primaryClass={cs.CL},
   url={https://arxiv.org/abs/2510.11693},
 }""",
+    output_dtypes=OutputDType.BF16,
 )

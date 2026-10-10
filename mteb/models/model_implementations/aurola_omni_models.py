@@ -4,6 +4,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
 )
+from mteb.types import OutputDType
 
 AUROLA_TRAINING_DATASETS = {
     "AudioCapsA2TRetrieval",
@@ -59,6 +60,7 @@ aurola_omni_7b = ModelMeta(
     model_type=["dense"],
     citation=_AUROLA_CITATION,
     extra_requirements_groups=["qwen-vl"],
+    output_dtypes=OutputDType.BF16,
 )
 
 aurola_omni_3b = ModelMeta(
@@ -96,4 +98,5 @@ aurola_omni_3b = ModelMeta(
     model_type=["dense"],
     citation=_AUROLA_CITATION,
     extra_requirements_groups=["qwen-vl"],
+    output_dtypes=OutputDType.BF16,
 )

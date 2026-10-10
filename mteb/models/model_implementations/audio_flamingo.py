@@ -172,4 +172,5 @@ audio_flamingo_meta = ModelMeta(
   year = {2025},
 }
 """,
+    output_dtypes=OutputDType.BF16,
 )

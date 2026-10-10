@@ -9,6 +9,7 @@ from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -346,4 +347,5 @@ clap_large_v2 = ModelMeta(
     training_datasets=None,
     adapted_from="LCO-Embedding/LCO-Embedding-Omni-7B",
     extra_requirements_groups=["multimodal-sbert"],
+    output_dtypes=OutputDType.BF16,
 )

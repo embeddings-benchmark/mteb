@@ -1023,6 +1023,7 @@ jina_embeddings_v5_text_small = ModelMeta(
       url={https://arxiv.org/abs/2602.15547},
 }""",
     extra_requirements_groups=["peft"],
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -1128,6 +1129,7 @@ jina_embeddings_v5_omni_small = ModelMeta(
       url={https://arxiv.org/abs/2602.15547},
 }""",
     extra_requirements_groups=["peft"],
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -1177,6 +1179,7 @@ jina_embeddings_v5_omni_nano = ModelMeta(
       url={https://arxiv.org/abs/2602.15547},
 }""",
     extra_requirements_groups=["peft"],
+    output_dtypes=OutputDType.BF16,
 )
 
 jina_reranker_v3 = ModelMeta(
@@ -1215,6 +1218,7 @@ jina_reranker_v3 = ModelMeta(
       url={https://arxiv.org/abs/2509.25085},}
 """,
     superseded_by="jinaai/jina-reranker-v3.5",
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -1253,6 +1257,7 @@ jina_reranker_v3_5 = ModelMeta(
       primaryClass={cs.IR},
       url={https://arxiv.org/abs/2607.18152},
 }""",
+    output_dtypes=OutputDType.BF16,
 )
 
 jina_embeddings_v4 = Jinav4ModelMeta(
@@ -1298,6 +1303,7 @@ jina_embeddings_v4 = Jinav4ModelMeta(
       url={https://arxiv.org/abs/2506.18902},
 }""",
     extra_requirements_groups=["jina-v4"],
+    output_dtypes=OutputDType.BF16,
 )
 
 jina_embeddings_v3 = ModelMeta(

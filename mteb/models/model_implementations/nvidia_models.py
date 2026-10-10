@@ -199,6 +199,7 @@ NV_embed_v2 = ModelMeta(
     public_training_data=None,
     citation=NV_RETRIEVER_CITATION,
     extra_requirements_groups=["flash_attention", "nvembed"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 NV_embed_v1 = ModelMeta(
@@ -232,6 +233,7 @@ NV_embed_v1 = ModelMeta(
     public_training_data=None,
     citation=NV_RETRIEVER_CITATION,
     extra_requirements_groups=["flash_attention", "nvembed"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 llama_embed_nemotron_evaluated_languages = [
@@ -619,6 +621,7 @@ llama_embed_nemotron_8b = ModelMeta(
     contacts=["ybabakhin"],
     citation=LlamaEmbedNemotron_CITATION,
     extra_requirements_groups=["flash_attention", "llama-embed-nemotron"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 

@@ -827,6 +827,7 @@ F2LLM_0B6 = ModelMeta(
     public_training_data="https://huggingface.co/datasets/codefuse-ai/F2LLM",
     training_datasets=training_datasets,
     citation=F2LLM_CITATION,
+    output_dtypes=OutputDType.BF16,
 )
 
 F2LLM_1B7 = ModelMeta(
@@ -858,6 +859,7 @@ F2LLM_1B7 = ModelMeta(
     public_training_data="https://huggingface.co/datasets/codefuse-ai/F2LLM",
     training_datasets=training_datasets,
     citation=F2LLM_CITATION,
+    output_dtypes=OutputDType.BF16,
 )
 
 F2LLM_4B = ModelMeta(
@@ -889,6 +891,7 @@ F2LLM_4B = ModelMeta(
     public_training_data="https://huggingface.co/datasets/codefuse-ai/F2LLM",
     training_datasets=training_datasets,
     citation=F2LLM_CITATION,
+    output_dtypes=OutputDType.BF16,
 )
 
 C2LLM_0B5 = ModelMeta(
@@ -917,6 +920,7 @@ C2LLM_0B5 = ModelMeta(
     modalities=["text"],
     citation=C2LLM_CITATION,
     contacts=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 C2LLM_7B = ModelMeta(
@@ -945,6 +949,7 @@ C2LLM_7B = ModelMeta(
     modalities=["text"],
     citation=C2LLM_CITATION,
     contacts=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 F2LLM_v2_80M = ModelMeta(
@@ -984,6 +989,7 @@ F2LLM_v2_80M = ModelMeta(
     model_type=["dense"],
     citation=F2LLMV2_CITATION,
     contacts=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 F2LLM_v2_160M = ModelMeta(
@@ -1023,6 +1029,7 @@ F2LLM_v2_160M = ModelMeta(
     model_type=["dense"],
     citation=F2LLMV2_CITATION,
     contacts=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 F2LLM_v2_330M = ModelMeta(
@@ -1062,6 +1069,7 @@ F2LLM_v2_330M = ModelMeta(
     model_type=["dense"],
     citation=F2LLMV2_CITATION,
     contacts=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 F2LLM_v2_0B6 = ModelMeta(
@@ -1101,6 +1109,7 @@ F2LLM_v2_0B6 = ModelMeta(
     model_type=["dense"],
     citation=F2LLMV2_CITATION,
     contacts=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 F2LLM_v2_1B7 = ModelMeta(
@@ -1140,6 +1149,7 @@ F2LLM_v2_1B7 = ModelMeta(
     model_type=["dense"],
     citation=F2LLMV2_CITATION,
     contacts=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 F2LLM_v2_4B = ModelMeta(
@@ -1179,6 +1189,7 @@ F2LLM_v2_4B = ModelMeta(
     model_type=["dense"],
     citation=F2LLMV2_CITATION,
     contacts=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 F2LLM_v2_8B = ModelMeta(
@@ -1218,6 +1229,7 @@ F2LLM_v2_8B = ModelMeta(
     model_type=["dense"],
     citation=F2LLMV2_CITATION,
     contacts=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 F2LLM_v2_14B = ModelMeta(
@@ -1257,4 +1269,5 @@ F2LLM_v2_14B = ModelMeta(
     model_type=["dense"],
     citation=F2LLMV2_CITATION,
     contacts=None,
+    output_dtypes=OutputDType.BF16,
 )

@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING, Any, Literal, cast, get_args, overload
 
 from mteb.abstasks.task_metadata import TaskType
 from mteb.similarity_functions import (
+    _upcast_low_precision,
     cos_sim,
     dot_score,
     max_sim,
@@ -296,7 +297,10 @@ class AbsEncoder(ABC):
                 and hasattr(self.model, "similarity")
                 and callable(self.model.similarity)
             ):
-                arr = self.model.similarity(embeddings1, embeddings2)
+                arr = self.model.similarity(
+                    _upcast_low_precision(embeddings1),
+                    _upcast_low_precision(embeddings2),
+                )
                 # We assume that the model returns an Array-like object:
                 arr = cast("Array", arr)
                 return arr
@@ -334,7 +338,10 @@ class AbsEncoder(ABC):
                 and hasattr(self.model, "similarity_pairwise")
                 and callable(self.model.similarity_pairwise)
             ):
-                arr = self.model.similarity_pairwise(embeddings1, embeddings2)
+                arr = self.model.similarity_pairwise(
+                    _upcast_low_precision(embeddings1),
+                    _upcast_low_precision(embeddings2),
+                )
                 # We assume that the model returns an Array-like object:
                 arr = cast("Array", arr)
                 return arr

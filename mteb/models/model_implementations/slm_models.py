@@ -23,6 +23,7 @@ from mteb.models.model_implementations.colpali_models import (
     COLPALI_TRAINING_DATA,
 )
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -283,6 +284,7 @@ slm_colqwen3_1_7b_turbo = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
     extra_requirements_groups=["sauerkrautlm-colpali"],
+    output_dtypes=OutputDType.BF16,
 )
 
 slm_colqwen3_2b = ModelMeta(
@@ -310,6 +312,7 @@ slm_colqwen3_2b = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
     extra_requirements_groups=["sauerkrautlm-colpali"],
+    output_dtypes=OutputDType.BF16,
 )
 
 slm_colqwen3_4b = ModelMeta(
@@ -337,6 +340,7 @@ slm_colqwen3_4b = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
     extra_requirements_groups=["sauerkrautlm-colpali"],
+    output_dtypes=OutputDType.BF16,
 )
 
 slm_colqwen3_8b = ModelMeta(
@@ -364,6 +368,7 @@ slm_colqwen3_8b = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
     extra_requirements_groups=["sauerkrautlm-colpali"],
+    output_dtypes=OutputDType.BF16,
 )
 
 slm_collfm2_450m = ModelMeta(
@@ -390,6 +395,7 @@ slm_collfm2_450m = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
     extra_requirements_groups=["sauerkrautlm-colpali"],
+    output_dtypes=OutputDType.BF16,
 )
 
 slm_colministral3_3b = ModelMeta(
@@ -417,4 +423,5 @@ slm_colministral3_3b = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
     extra_requirements_groups=["sauerkrautlm-colpali"],
+    output_dtypes=OutputDType.BF16,
 )
