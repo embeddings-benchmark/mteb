@@ -59,6 +59,7 @@
   "norregaard-derczynski-2021-danfever": "Correct as cited (NoDaLiDa 2021, https://aclanthology.org/2021.nodalida-main.47), NoDaLiDa proceedings have no DOIs",
   "ogr:kob:19:poleval": "Correct as cited (PolEval 2019 proceedings, http://2019.poleval.pl/files/poleval2019.pdf), not indexed",
   "opus4": "Correct as cited (EAMT 2020, https://aclanthology.org/2020.eamt-1.61/)",
+  "ozan2026turkishrageval": "Correct as cited (our own dataset, https://github.com/RizgarOzan/turkish-rag-eval), not indexed; the title search finds an unrelated Turkuaz-RAG paper",
   "pereira2020msds": "Correct as cited (15th Doctoral Symposium in Informatics Engineering, 2020, https://www.researchgate.net/publication/347759854_MSDS-OPP_Operator_Procedures_Prediction_in_Material_Safety_Data_Sheets), the symposium proceedings are not indexed",
   "piczak2015dataset": "Correct as cited (ACM Multimedia 2015, https://doi.org/10.1145/2733373.2806390), Crossref holds the record under the short title 'ESC'",
   "pmlr-v15-coates11a": "Correct as cited (AISTATS 2011, https://proceedings.mlr.press/v15/coates11a.html), PMLR is not in Crossref",
