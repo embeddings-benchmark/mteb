@@ -278,6 +278,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
         Returns:
             The encoded input in a numpy array or torch tensor of the shape (Number of sentences) x (Embedding dimension).
         """
+        self._show_progress_bar = kwargs.get("show_progress_bar", True)
         instruction: str | None = self.get_task_instruction(task_metadata, prompt_type)
 
         # to passage prompts won't be applied to passages

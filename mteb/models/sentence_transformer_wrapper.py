@@ -316,14 +316,26 @@ def _score_on_device(
     scores = torch.empty(
         queries.shape[0], documents.shape[0], dtype=torch.float32, device=queries.device
     )
-    for start in range(0, documents.shape[0], block_rows):
-        end = min(start + block_rows, documents.shape[0])
-        # `index_select` rather than slicing: sparse tensors don't support basic slicing
-        block = documents.index_select(0, torch.arange(start, end)).to(device)
-        scores[:, start:end] = wrapper.model.similarity(queries_on_device, block).to(
-            queries.device, torch.float32
-        )
-        del block
+    num_documents = documents.shape[0]
+    # `encode` remembers the user's setting; `similarity` itself gets no encode kwargs
+    show_progress_bar = getattr(wrapper, "_show_progress_bar", True)
+    with tqdm(
+        total=num_documents,
+        desc="Computing similarities",
+        unit="doc",
+        leave=False,
+        # a single block finishes before a bar is useful
+        disable=not show_progress_bar or num_documents <= block_rows,
+    ) as progress:
+        for start in range(0, num_documents, block_rows):
+            end = min(start + block_rows, num_documents)
+            # `index_select` rather than slicing: sparse tensors don't support basic slicing
+            block = documents.index_select(0, torch.arange(start, end)).to(device)
+            scores[:, start:end] = wrapper.model.similarity(
+                queries_on_device, block
+            ).to(queries.device, torch.float32)
+            del block
+            progress.update(end - start)
     return cast("Array", scores)
 
 
@@ -570,6 +582,7 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         Returns:
             The encoded sentences.
         """
+        self._show_progress_bar = kwargs.get("show_progress_bar", True)
         prompt = _resolve_prompt(self.model_prompts, task_metadata, prompt_type)
 
         is_multimodal = _setup_modality_collator(
@@ -854,6 +867,7 @@ class SparseEncoderWrapper(AbsEncoder):
             The encoded inputs, as sparse tensors where the task supports it (see
             `_is_sparse_compatible_task`), densified otherwise.
         """
+        self._show_progress_bar = kwargs.get("show_progress_bar", True)
         prompt = _resolve_prompt(self.model_prompts, task_metadata, prompt_type)
 
         is_multimodal = _setup_modality_collator(
