@@ -6,7 +6,7 @@ import math
 
 import pytest
 
-from mteb.api.bradley_terry import BT_SCORE_BASE, compute_bt_score
+pytest.importorskip("fastapi")
 
 TASKS = ["t1", "t2", "t3", "t4"]
 
@@ -16,6 +16,8 @@ def _scores(**rows: dict[str, float]) -> dict[str, dict[str, float]]:
 
 
 def test_strict_dominance_orders_models():
+    from mteb.api.bradley_terry import compute_bt_score
+
     res = compute_bt_score(
         _scores(
             a=dict.fromkeys(TASKS, 3.0),
@@ -30,6 +32,8 @@ def test_strict_dominance_orders_models():
 
 
 def test_identical_models_tie_and_center_on_base():
+    from mteb.api.bradley_terry import BT_SCORE_BASE, compute_bt_score
+
     res = compute_bt_score(
         _scores(a=dict.fromkeys(TASKS, 0.5), b=dict.fromkeys(TASKS, 0.5)),
         TASKS,
@@ -39,7 +43,9 @@ def test_identical_models_tie_and_center_on_base():
     assert res["a"].score == pytest.approx(BT_SCORE_BASE)
 
 
-def test_mean_elo_is_base():
+def test_mean_bt_score_is_base():
+    from mteb.api.bradley_terry import BT_SCORE_BASE, compute_bt_score
+
     res = compute_bt_score(
         _scores(
             a={"t1": 3, "t2": 1, "t3": 2, "t4": 5},
@@ -53,6 +59,8 @@ def test_mean_elo_is_base():
 
 
 def test_missing_task_counts_as_loss():
+    from mteb.api.bradley_terry import compute_bt_score
+
     full = dict.fromkeys(TASKS, 0.9)
     partial = {"t1": 0.9}
     other = dict.fromkeys(TASKS, 0.5)
@@ -64,6 +72,8 @@ def test_missing_task_counts_as_loss():
 
 
 def test_skipping_tasks_does_not_inflate():
+    from mteb.api.bradley_terry import compute_bt_score
+
     strong = dict.fromkeys(TASKS, 1.0)
     weak = dict.fromkeys(TASKS, 0.1)
     cherry = {"t1": 2.0}  # best score on the one task it ran, nothing elsewhere
@@ -74,6 +84,8 @@ def test_skipping_tasks_does_not_inflate():
 
 
 def test_invariant_to_monotone_rescale_of_a_task():
+    from mteb.api.bradley_terry import compute_bt_score
+
     base = {
         "a": {"t1": 0.2, "t2": 70.0, "t3": 0.5, "t4": 3.0},
         "b": {"t1": 0.4, "t2": 60.0, "t3": 0.1, "t4": 2.0},
@@ -87,6 +99,8 @@ def test_invariant_to_monotone_rescale_of_a_task():
 
 
 def test_ci_contains_point_estimate_and_is_deterministic():
+    from mteb.api.bradley_terry import compute_bt_score
+
     data = {
         "a": {"t1": 3, "t2": 1, "t3": 2, "t4": 5},
         "b": {"t1": 2, "t2": 3, "t3": 1, "t4": 4},
@@ -101,11 +115,15 @@ def test_ci_contains_point_estimate_and_is_deterministic():
 
 
 def test_degenerate_inputs_return_empty():
+    from mteb.api.bradley_terry import compute_bt_score
+
     assert compute_bt_score({"a": {"t1": 1.0}}, TASKS) == {}
     assert compute_bt_score({"a": {"t1": 1.0}, "b": {"t1": 2.0}}, []) == {}
 
 
 def test_nan_scores_are_missing():
+    from mteb.api.bradley_terry import compute_bt_score
+
     res = compute_bt_score(
         _scores(a={"t1": float("nan")}, b={"t1": 0.1}), ["t1"], n_boot=0
     )
