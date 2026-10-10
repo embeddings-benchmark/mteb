@@ -2,12 +2,17 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from mteb.models import SentenceTransformerEncoderWrapper
 from mteb.models.model_implementations.google_gemini import GECKO_TRAINING_DATA
 from mteb.models.model_meta import ModelMeta
+from mteb.models.sentence_transformer_wrapper import (
+    SentenceTransformerEncoderWrapper,
+    _setup_modality_collator,
+)
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -79,23 +84,24 @@ embedding_gemma_300m = ModelMeta(
 # ---------------------------------------------------------------------------
 # EmbeddingGemma 2 evaluation recipe
 # ---------------------------------------------------------------------------
-# The model-card numbers for MTEB(Multilingual, v2), MTEB(eng, v2), MTEB(Code, v1) and
-# MIEB(lite) were produced with ONE instruction and ONE max sequence length PER TASK
-# (the model was tuned against these), so a task-type prompt dictionary does not
-# reproduce them. Formatting, identical to the internal evaluation pipeline:
+# The numbers for MTEB(Multilingual, v2), MTEB(eng, v2), MTEB(Code, v1), MIEB(lite)
+# and MAEB were produced with one instruction per task (and, for text, sometimes a
+# longer sequence length), so a task-type prompt dictionary does not reproduce them.
+# Formatting:
 #   * query / symmetric input ........ "task: {instruction} | query: {text}"
 #   * document side of asymmetric tasks "title: {title} | text: {text}"
 #                                        (title = "none" when the corpus has no title)
-#   * asymmetric = task type "Retrieval" + the MIEB retrieval tasks listed below;
-#     Reranking tasks are symmetric.
+#   * asymmetric = retrieval tasks, based on metadata and on an explicit list for
+#     MIEB below.
 #   * MIEB: max_seq_length 380 for every task (image tokens included); for the tasks in
 #     _MIEB_NO_PROMPT_ON_IMAGE_INPUTS any input containing an image gets no prompt.
+#   * MAEB: max_seq_length 1024 for every task (audio tokens included). Raw audio
+#     inputs are resampled to 16 kHz float32 mono with channel-averaging prior to
+#     tokenization. All audio documents and retrieval corpora are embedded with prefix
+#     "title: none | text: <|audio|>".
 #   * bf16, mean pooling, L2-normalised, 768d (MRL truncation via ``embed_dim``).
-# Where a task is shared by two benchmarks with different settings (17 Multilingual/eng
-# tasks, StackOverflowQA in Multilingual/Code) the entry below is the one the reported
-# per-task score was computed with; for all but a handful the alternative gives the same
-# score. Tasks outside these benchmarks fall back to a task-type instruction and 512
-# tokens (380 with the vision tower).
+# Tasks outside these benchmarks fall back to a simplified task-type instruction
+# and 512 tokens (380 with vision, 1024 with audio).
 
 EMBEDDING_GEMMA_2_TASK_RECIPE: dict[str, tuple[str, int]] = {
     "AfriSentiClassification": ("classification", 512),
@@ -114,11 +120,13 @@ EMBEDDING_GEMMA_2_TASK_RECIPE: dict[str, tuple[str, int]] = {
     "ArXivHierarchicalClusteringS2S": ("clustering", 512),
     "AskUbuntuDupQuestions": ("search result", 2048),
     "Banking77Classification": ("classification", 512),
+    "BeijingOpera": ("classification", 1024),
     "BelebeleRetrieval": ("question answering", 2048),
     "BibleNLPBitextMining": ("search result", 2048),
     "BigPatentClustering.v2": ("sentence similarity", 2048),
     "BiorxivClusteringP2P.v2": ("code retrieval", 2048),
     "BIOSSES": ("search result", 2048),
+    "BirdCLEF": ("sentence similarity", 1024),
     "BLINKIT2IMultiChoice": ("sentence similarity", 380),
     "BornholmBitextMining": ("sentence similarity", 512),
     "BrazilianToxicTweetsClassification": ("classification", 1024),
@@ -129,6 +137,7 @@ EMBEDDING_GEMMA_2_TASK_RECIPE: dict[str, tuple[str, int]] = {
     "CIFAR100ZeroShot": ("sentence similarity", 380),
     "CIRRIT2IRetrieval": ("clustering", 380),
     "ClimateFEVERHardNegatives": ("question answering", 1024),
+    "ClothoT2ARetrieval": ("search result", 1024),
     "CLSClusteringP2P.v2": ("code retrieval", 2048),
     "CodeEditSearchRetrieval": ("code retrieval", 512),
     "CodeFeedbackMT": ("code retrieval", 2048),
@@ -138,6 +147,8 @@ EMBEDDING_GEMMA_2_TASK_RECIPE: dict[str, tuple[str, int]] = {
     "CodeTransOceanContest": ("code retrieval", 2048),
     "CodeTransOceanDL": ("code retrieval", 1024),
     "COIRCodeSearchNetRetrieval": ("code retrieval", 2048),
+    "CommonLanguageAgeDetection": ("clustering", 1024),
+    "CommonVoiceMini21T2ARetrieval": ("sentence similarity", 1024),
     "Core17InstructionRetrieval": ("question answering", 2048),
     "CosQA": ("code retrieval", 1024),
     "Country211": ("clustering", 380),
@@ -145,6 +156,9 @@ EMBEDDING_GEMMA_2_TASK_RECIPE: dict[str, tuple[str, int]] = {
     "CovidRetrieval": ("search result", 1024),
     "CQADupstackGamingRetrieval": ("search result", 2048),
     "CQADupstackUnixRetrieval": ("question answering", 512),
+    "CREMA_D": ("clustering", 1024),
+    "CREMA_DClustering": ("fact checking", 1024),
+    "CREMADPairClassification": ("clustering", 1024),
     "CSFDSKMovieReviewSentimentClassification": ("classification", 2048),
     "CTKFactsNLI": ("classification", 512),
     "CUB200I2IRetrieval": ("clustering", 380),
@@ -169,16 +183,22 @@ EMBEDDING_GEMMA_2_TASK_RECIPE: dict[str, tuple[str, int]] = {
     "FinancialPhrasebankClassification": ("sentence similarity", 512),
     "FinParaSTS": ("code retrieval", 2048),
     "FiQA2018": ("question answering", 2048),
+    "FleursT2ARetrieval": ("search result", 1024),
     "FloresBitextMining": ("search result", 1024),
     "Food101ZeroShot": ("question answering", 380),
+    "FSD2019Kaggle": ("classification", 1024),
     "GermanSTSBenchmark": ("sentence similarity", 512),
+    "GigaSpeechT2ARetrieval": ("question answering", 1024),
     "GreekLegalCodeClassification": ("question answering", 2048),
     "GTSRB": ("question answering", 380),
+    "GTZANAudioReranking": ("code retrieval", 1024),
+    "GTZANGenre": ("fact checking", 1024),
     "GujaratiNewsClassification": ("clustering", 512),
     "HagridRetrieval": ("sentence similarity", 512),
     "HALClusteringS2S.v2": ("clustering", 512),
     "HatefulMemesI2TRetrieval": ("question answering", 380),
     "HotpotQAHardNegatives": ("question answering", 1024),
+    "IEMOCAPGender": ("clustering", 1024),
     "ImageCoDe": ("fact checking", 380),
     "ImageNetDog15Clustering": ("clustering", 380),
     "ImdbClassification": ("classification", 2048),
@@ -191,6 +211,8 @@ EMBEDDING_GEMMA_2_TASK_RECIPE: dict[str, tuple[str, int]] = {
     "InfoSeekIT2TRetrieval": ("fact checking", 380),
     "IsiZuluNewsClassification": ("fact checking", 512),
     "ItaCaseholdClassification": ("clustering", 512),
+    "JamAltArtistA2ARetrieval": ("fact checking", 1024),
+    "JamAltLyricA2TRetrieval": ("search result", 1024),
     "JSICK": ("sentence similarity", 1024),
     "KorHateSpeechMLClassification": ("search result", 512),
     "KorSarcasmClassification": ("question answering", 512),
@@ -198,6 +220,7 @@ EMBEDDING_GEMMA_2_TASK_RECIPE: dict[str, tuple[str, int]] = {
     "LegalBenchCorporateLobbying": ("search result", 2048),
     "LEMBPasskeyRetrieval": ("sentence similarity", 2048),
     "MacedonianTweetSentimentClassification": ("classification", 512),
+    "MACST2ARetrieval": ("sentence similarity", 1024),
     "MalteseNewsClassification": ("clustering", 2048),
     "MasakhaNEWSClassification": ("clustering", 1024),
     "MasakhaNEWSClusteringS2S": ("clustering", 512),
@@ -205,15 +228,18 @@ EMBEDDING_GEMMA_2_TASK_RECIPE: dict[str, tuple[str, int]] = {
     "MassiveScenarioClassification": ("classification", 2048),
     "MedrxivClusteringP2P.v2": ("clustering", 512),
     "MedrxivClusteringS2S.v2": ("clustering", 2048),
+    "MInDS14": ("question answering", 1024),
     "MindSmallReranking": ("clustering", 512),
     "MIRACLRetrievalHardNegatives": ("fact checking", 2048),
     "MLQARetrieval": ("search result", 2048),
+    "MridinghamTonic": ("question answering", 1024),
     "MTOPDomainClassification": ("classification", 2048),
     "MultiEURLEXMultilabelClassification": ("question answering", 1024),
     "MultiHateClassification": ("sentence similarity", 512),
     "NepaliNewsClassification": ("clustering", 512),
     "News21InstructionRetrieval": ("classification", 512),
     "NIGHTSI2IRetrieval": ("clustering", 380),
+    "NMSQAPairClassification": ("sentence similarity", 1024),
     "NollySentiBitextMining": ("question answering", 1024),
     "NordicLangClassification": ("clustering", 2048),
     "NorwegianCourtsBitextMining": ("sentence similarity", 512),
@@ -235,6 +261,7 @@ EMBEDDING_GEMMA_2_TASK_RECIPE: dict[str, tuple[str, int]] = {
     "PolEmo2.0-OUT": ("classification", 512),
     "PpcPC": ("sentence similarity", 1024),
     "PunjabiNewsClassification": ("sentence similarity", 2048),
+    "RavdessZeroshot": ("clustering", 1024),
     "RESISC45": ("sentence similarity", 380),
     "Robust04InstructionRetrieval": ("question answering", 1024),
     "RomaniBibleClustering": ("fact checking", 2048),
@@ -246,11 +273,14 @@ EMBEDDING_GEMMA_2_TASK_RECIPE: dict[str, tuple[str, int]] = {
     "SemRel24STS": ("sentence similarity", 1024),
     "SentimentAnalysisHindi": ("classification", 512),
     "SIB200ClusteringS2S": ("sentence similarity", 512),
+    "SIBFLEURS": ("clustering", 1024),
     "SICK-R": ("sentence similarity", 512),
     "SinhalaNewsClassification": ("clustering", 512),
     "SiswatiNewsClassification": ("search result", 1024),
     "SlovakMovieReviewSentimentClassification": ("classification", 512),
     "SpartQA": ("question answering", 512),
+    "SpeechCommandsZeroshotv0.02": ("sentence similarity", 1024),
+    "SpokenSQuADT2ARetrieval": ("fact checking", 1024),
     "SprintDuplicateQuestions": ("search result", 512),
     "StackExchangeClustering.v2": ("clustering", 512),
     "StackExchangeClusteringP2P.v2": ("clustering", 512),
@@ -291,6 +321,8 @@ EMBEDDING_GEMMA_2_TASK_RECIPE: dict[str, tuple[str, int]] = {
     "TwitterHjerneRetrieval": ("search result", 2048),
     "TwitterSemEval2015": ("sentence similarity", 512),
     "TwitterURLCorpus": ("sentence similarity", 512),
+    "UrbanSound8KT2ARetrieval": ("fact checking", 1024),
+    "VehicleSoundClustering": ("sentence similarity", 1024),
     "VidoreDocVQARetrieval": ("question answering", 380),
     "VidoreInfoVQARetrieval": ("search result", 380),
     "VidoreShiftProjectRetrieval": ("search result", 380),
@@ -300,6 +332,10 @@ EMBEDDING_GEMMA_2_TASK_RECIPE: dict[str, tuple[str, int]] = {
     "VisualNewsI2TRetrieval": ("fact checking", 380),
     "VisualSTS-b-Multilingual": ("sentence similarity", 380),
     "VisualSTS17Multilingual": ("sentence similarity", 380),
+    "VoxCelebSA": ("classification", 1024),
+    "VoxPopuliAccentPairClassification": ("clustering", 1024),
+    "VoxPopuliGenderClustering": ("sentence similarity", 1024),
+    "VoxPopuliLanguageID": ("clustering", 1024),
     "VoyageMMarcoReranking": ("fact checking", 2048),
     "VQA2IT2TRetrieval": ("clustering", 380),
     "WebLINXCandidatesReranking": ("classification", 2048),
@@ -361,19 +397,13 @@ _MIEB_NO_PROMPT_ON_IMAGE_INPUTS = {
     "XM3600T2IRetrieval",
 }
 
-# Instruction fallback for tasks outside the four benchmarks.
+# Instruction fallback for tasks outside the evaluated benchmarks.
 _TASK_TYPE_INSTRUCTION = {
-    "Retrieval": "search result",
-    "Reranking": "search result",
-    "InstructionRetrieval": "search result",
-    "InstructionReranking": "search result",
-    "BitextMining": "search result",
-    "Classification": "classification",
-    "MultilabelClassification": "classification",
-    "Clustering": "clustering",
-    "STS": "sentence similarity",
-    "PairClassification": "sentence similarity",
-    "Summarization": "sentence similarity",
+    "retrieval": "search result",
+    "clustering": "clustering",
+    "classification": "classification",
+    "semantic-similarity": "sentence similarity",
+    "pair-classification": "sentence similarity",
 }
 
 
@@ -427,6 +457,7 @@ class EmbeddingGemma2Wrapper(SentenceTransformerEncoderWrapper):
             revision=revision,
             model_kwargs={"torch_dtype": "bfloat16"},
             config_kwargs=config_kwargs,
+            target_sampling_rate=16000,
             **kwargs,
         )
         # Templates are written into the batch text in encode(). Disable both mteb's
@@ -467,13 +498,28 @@ class EmbeddingGemma2Wrapper(SentenceTransformerEncoderWrapper):
     ) -> Array:
         name = task_metadata.name
         instruction, seq_len = EMBEDDING_GEMMA_2_TASK_RECIPE.get(name) or (
-            _TASK_TYPE_INSTRUCTION.get(task_metadata.type, "search result"),
-            380 if self.use_image else 512,
+            _TASK_TYPE_INSTRUCTION.get(
+                task_metadata.simplified_task_type, "search result"
+            ),
+            1024 if self.use_audio else (380 if self.use_image else 512),
         )
         self.model.max_seq_length = seq_len
-        asymmetric = task_metadata.type == "Retrieval" or name in _MIEB_ASYMMETRIC_TASKS
+        asymmetric = (
+            task_metadata.type in {"Retrieval", "Any2AnyRetrieval"}
+            or name in _MIEB_ASYMMETRIC_TASKS
+        )
         is_document = asymmetric and prompt_type == PromptType.document
         prompt_on_images = name not in _MIEB_NO_PROMPT_ON_IMAGE_INPUTS
+
+        # Attach audio/video collator (resamples raw audio to 16 kHz float32 mono with channel-averaging)
+        _setup_modality_collator(
+            inputs,
+            fps=self.fps,
+            max_frames=self.max_frames,
+            num_frames=self.num_frames,
+            target_sampling_rate=self.target_sampling_rate or 16000,
+            max_samples=self.max_samples,
+        )
         base_collate = inputs.collate_fn
 
         def collate(rows: list[dict[str, Any]]) -> dict[str, Any]:
@@ -492,17 +538,32 @@ class EmbeddingGemma2Wrapper(SentenceTransformerEncoderWrapper):
                 ]
             else:
                 batch["text"] = [f"task: {instruction} | query: {t}" for t in texts]
-            return batch
+            return {"text": batch.pop("text"), **batch}
 
-        inputs.collate_fn = collate
-        return super().encode(
-            inputs,
-            task_metadata=task_metadata,
-            hf_split=hf_split,
-            hf_subset=hf_subset,
-            prompt_type=prompt_type,
-            **kwargs,
-        )
+        original_class = inputs.__class__
+
+        class _PreserveCollate(original_class):  # type: ignore[valid-type,misc]
+            @property
+            def collate_fn(self) -> Callable[[list[dict[str, Any]]], dict[str, Any]]:
+                return collate
+
+            @collate_fn.setter
+            def collate_fn(self, value: object) -> None:
+                pass
+
+        try:
+            inputs.__class__ = _PreserveCollate
+            return super().encode(
+                inputs,
+                task_metadata=task_metadata,
+                hf_split=hf_split,
+                hf_subset=hf_subset,
+                prompt_type=prompt_type,
+                **kwargs,
+            )
+        finally:
+            inputs.__class__ = original_class
+            inputs.collate_fn = base_collate
 
 
 embedding_gemma_2 = ModelMeta(
