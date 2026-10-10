@@ -15,6 +15,7 @@ from mteb.api.adapters import (
     scoped_task_meta_schema,
     task_to_meta_schema,
 )
+from mteb.api.bradley_terry import compute_bt_score
 from mteb.api.schemas import (
     BenchmarkLeadersSchema,
     BenchmarkPerLanguageRowSchema,
@@ -320,6 +321,7 @@ def _build_summary_rows(  # noqa: PLR0914
     """Sync row-construction loop; off-loaded via ``asyncio.to_thread``."""
     custom_group_cols_by_dim = custom_group_cols_by_dim or {}
     rows: list[SummaryRowSchema] = []
+    row_keys: list[tuple[str, str]] = []
     for idx, row in enumerate(summary_pl.iter_rows(named=True)):
         full = row["Model"]
         experiment_id = row.get("_experiment_id") or ""
@@ -396,7 +398,29 @@ def _build_summary_rows(  # noqa: PLR0914
                 else None,
             )
         )
+        row_keys.append((full, experiment_id))
+    _attach_bt_score(rows, row_keys)
     return rows
+
+
+def _attach_bt_score(
+    rows: list[SummaryRowSchema], row_keys: list[tuple[str, str]]
+) -> None:
+    """Fill ``bt_score`` / ``bt_score_low`` / ``bt_score_high`` from each row's ``scores_by_task``.
+
+    Tasks a row lacks count as losses (see ``mteb.api.bradley_terry``), so ratings
+    are computed over the union of tasks present in any row.
+    """
+    tasks = sorted({t for r in rows for t in r.scores_by_task})
+    ratings = compute_bt_score(
+        {k: r.scores_by_task for k, r in zip(row_keys, rows, strict=True)}, tasks
+    )
+    for key, row in zip(row_keys, rows, strict=True):
+        result = ratings.get(key)
+        if result is not None:
+            row.bt_score = result.score
+            row.bt_score_low = result.low
+            row.bt_score_high = result.high
 
 
 async def build_benchmark_per_language(name: str) -> BenchmarkPerLanguageSchema:

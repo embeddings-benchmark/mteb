@@ -145,3 +145,38 @@ def test_build_summary_rows_strict_when_not_language_filtered():
     )
 
     assert rows[0].scores_by_custom_group["WholeDim"]["G1"] == 0.5
+
+
+def test_build_summary_rows_attaches_bt_score():
+    """Rows get a BT (Bradley-Terry) score from their per-task scores; a model
+    missing a task is treated as losing it."""
+    pytest.importorskip("fastapi")
+    from mteb.api.aggregators import _build_summary_rows
+
+    other = "mteb/baseline-bm25s"
+    summary_pl = _summary_pl(
+        {
+            "Model": [FULL_MODEL, other],
+            "Rank (Borda)": [1, 2],
+            "Mean (Task)": [0.7, 0.4],
+            "Mean (TaskType)": [0.7, 0.4],
+        }
+    )
+    rows = _build_summary_rows(
+        summary_pl,
+        SummaryTable(df=summary_pl),
+        type_cols=[],
+        per_task_rows={
+            (FULL_MODEL, ""): {"t1": 0.9, "t2": 0.8},
+            (other, ""): {"t1": 0.2},
+        },
+        trained_on_by_model={},
+        task_to_type={},
+        language_filtered=False,
+    )
+
+    by_name = {r.model.name: r for r in rows}
+    best, worst = by_name[FULL_MODEL], by_name[other]
+    assert best.bt_score is not None and worst.bt_score is not None
+    assert best.bt_score > worst.bt_score
+    assert best.bt_score_low <= best.bt_score <= best.bt_score_high
