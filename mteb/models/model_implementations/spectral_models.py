@@ -232,5 +232,5 @@ spectral_embed_v1_140m = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets={"NFCorpus"},
-    citation=None
+    citation=None,
 )
