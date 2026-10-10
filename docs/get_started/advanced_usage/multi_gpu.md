@@ -5,6 +5,8 @@ icon: lucide/cpu
 
 Models that run through Sentence Transformers (dense `SentenceTransformer`, `SparseEncoder` and `MultiVectorEncoder` models) can encode on several GPUs. Each worker process holds its own copy of the model and encodes a share of the inputs. There are two ways to ask for it, and it works the same way for models from mteb's registry and for Sentence Transformers models you load yourself.
 
+For details on the pool itself, see the Sentence Transformers documentation on [multi-process / multi-GPU encoding](https://sbert.net/examples/sentence_transformer/applications/computing-embeddings/README.html#multi-process-multi-gpu-encoding).
+
 ## Encoding with a multi-process pool
 
 Create the mteb model first, start a pool on its underlying Sentence Transformers model, and pass the pool through `encode_kwargs`. Start the pool once and reuse it for all tasks.
