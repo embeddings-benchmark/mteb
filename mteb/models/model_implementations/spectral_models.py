@@ -220,6 +220,7 @@ spectral_embed_v1_140m = ModelMeta(
     release_date="2026-10-06",
     languages=["eng-Latn"],
     n_parameters=134_219_776,
+    n_embedding_parameters=134_219_776,
     memory_usage_mb=512,
     max_tokens=512,
     embed_dim=2048,
