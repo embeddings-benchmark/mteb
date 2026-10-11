@@ -7,7 +7,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import AudioCollator, seconds_to_samples
 from mteb.models.model_meta import ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
@@ -32,6 +32,10 @@ class VoiceCLAPSmallWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
+        # 30 s: chunk_length=30 (n_ctx=1500 positions); this wrapper serves
+        # voiceclap-small, large loads through SentenceTransformerEncoderWrapper
+        # https://huggingface.co/VoiceNet/voiceclap-small/blob/main/preprocessor_config.json
+        max_audio_length_seconds: float | None = 30.0,
         **kwargs: Any,
     ):
         import torch
@@ -51,8 +55,10 @@ class VoiceCLAPSmallWrapper(AbsEncoder):
             .eval()
         )
         self.tokenizer = AutoTokenizer.from_pretrained(model_name, revision=revision)
-        # VoiceCLAP-Small expects 16 kHz mono waveforms.
+        # 16 kHz: sampling_rate=16000
+        # https://huggingface.co/VoiceNet/voiceclap-small/blob/main/preprocessor_config.json
         self.sampling_rate = 16000
+        self.max_audio_length_seconds = max_audio_length_seconds
 
     def get_text_embeddings(
         self,
@@ -88,7 +94,12 @@ class VoiceCLAPSmallWrapper(AbsEncoder):
     ) -> np.ndarray:
         import torch
 
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate,
+            max_samples=seconds_to_samples(
+                self.max_audio_length_seconds, self.sampling_rate
+            ),
+        )
 
         all_features = []
         for batch in tqdm(inputs, disable=not show_progress_bar):

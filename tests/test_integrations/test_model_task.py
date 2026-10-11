@@ -153,9 +153,9 @@ DENSE_MODEL = ModelInfo(
         MockVideoClassification: 1.0,
         MockVideoClusteringTask: 1.0,
         MockVideoMultilabelClassificationTask: 1.0,
-        MockVideoZeroshotClassificationTask: 1.0,
+        MockVideoZeroshotClassificationTask: 0.5,
         MockVideoPairClassificationTask: 1.0,
-        MockVideoRetrievalV2T: 0.81546,
+        MockVideoRetrievalV2T: 0.63093,
         MockVideoRetrievalT2V: 0.81546,
     },
 )
@@ -218,10 +218,10 @@ SPARSE_MODEL = ModelInfo(
         MockVideoClassification: 1.0,
         MockVideoClusteringTask: 1.0,
         MockVideoMultilabelClassificationTask: 1.0,
-        MockVideoZeroshotClassificationTask: 0.0,
+        MockVideoZeroshotClassificationTask: 0.5,
         MockVideoPairClassificationTask: 0.5,
-        MockVideoRetrievalV2T: 1.0,
-        MockVideoRetrievalT2V: 1.0,
+        MockVideoRetrievalV2T: 0.63093,
+        MockVideoRetrievalT2V: 0.63093,
     },
 )
 COLBERT_MODEL = ModelInfo(
@@ -245,7 +245,7 @@ COLBERT_MODEL = ModelInfo(
         MockMultiChoiceTask: 1.0,
         MockMultilingualMultiChoiceTask: 1.0,
         MockVideoRetrievalV2T: 0.81546,
-        MockVideoRetrievalT2V: 0.81546,
+        MockVideoRetrievalT2V: 0.63093,
     },
 )
 CROSS_ENCODER_MODEL = ModelInfo(

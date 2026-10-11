@@ -53,8 +53,13 @@ MULTILINGUAL_EVALUATED_LANGUAGES = [
     "zho-Hans",
 ]
 
+# 1 fps, 32 frames: "a maximum of 32 frames per video: short videos (<=32s)
+# are sampled at 1 fps"
+# https://ai.google.dev/gemini-api/docs/embeddings
 GEMINI_VIDEO_FPS = 1.0
 GEMINI_MAX_VIDEO_FRAMES = 32
+# 180 s: "Maximum duration of 180 seconds"
+# https://ai.google.dev/gemini-api/docs/embeddings
 GEMINI_MAX_AUDIO_SECONDS = 180
 
 GEMINI_EMBEDDING_CITATION = """@misc{lee2025geminiembeddinggeneralizableembeddings,

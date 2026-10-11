@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.24.0"
+version = "2.24.5"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -109,6 +109,7 @@ openai = ["openai>=1.41.0", "tiktoken>=0.8.0"]
 model2vec = ["model2vec>=0.3.0"]
 pylate = ["pylate>=1.3.1"]
 colnanovdr = ["sentence-transformers>=6.0.0", "transformers>=5.0.0"]
+pplx-embed-v2 = ["sentence-transformers>=6.0.0", "transformers>=5.4.0"]
 msclap = ["msclap>=1.3.4", "soundfile>=0.13.1"]
 bm25s = ["bm25s>=0.2.6", "PyStemmer>=2.2.0.3"]
 boto3 = ["boto3>=1.34.0"]
@@ -382,7 +383,19 @@ preview = true
 
 
 [tool.ruff.lint.per-file-ignores]
-"scripts/*" = ["ALL"]
+# every script except scripts/tools, which is used in CI and is linted
+"scripts/[!t]*" = ["ALL"]
+"scripts/t[!o]*" = ["ALL"]
+"scripts/tools/*" = [
+    "T201",  # scripts report on stdout
+    "D1",  # docstrings
+    "PLR0913",
+    "PLR0914",
+    "PLR0917",
+    "PLR1702",
+    "PLW0603",
+    "ASYNC240",
+]
 # a script rather than a test: it reports what it checked on stdout
 "tests/test_validate_metadata/check_citations.py" = ["T201"]
 "docs/*" = [
@@ -470,7 +483,8 @@ max-args = 9
 [tool.semantic_release]
 branch = "main"
 version_toml = ["pyproject.toml:project.version"]
-build_command = "python -m pip install build; python -m build"
+# builds `mteb` and `mteb-core` (the same code without torch) into dist/, which the release workflow publishes
+build_command = "python -m pip install build packaging tomli && python -m build && python scripts/build_core_package.py"
 tag_format = "{version}"
 
 [tool.semantic_release.commit_parser_options]
@@ -504,6 +518,7 @@ addopts = """
 # --reruns-delay 10 -> Delay between reruns in seconds to avoid running into the same issue again
 
 markers = [
+    "core: marks tests that must pass on a minimal `mteb-core` installation, without torch (`make test-core`)",
     "test_datasets: marks tests that tests dataset availability",
     "test_reference_models: marks tests that verify reference model result coverage (requires downloading results repo)",
 ]
@@ -564,6 +579,7 @@ conflicts = [
         { extra = "jina" }, # remote code needs transformers<5
         { extra = "arctic-embed-m-v2" }, # remote code (GTE) needs transformers<5
         { extra = "colnanovdr" },
+        { extra = "pplx-embed-v2" }, # needs transformers>=5.4.0
     ],
 ]
 

@@ -6,10 +6,9 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import AudioCollator, seconds_to_samples
 
 if TYPE_CHECKING:
-    import torch
     from torch.utils.data import DataLoader
 
     from mteb import TaskMetadata
@@ -22,7 +21,9 @@ class CNN14Wrapper(AbsEncoder):
         self,
         model_name: str,
         device: str | None = None,
-        max_audio_length_s: float = 30.0,
+        # no limit: no duration declared
+        # https://huggingface.co/speechbrain/cnn14-esc50/blob/main/hyperparams.yaml
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
         import torch
@@ -32,7 +33,7 @@ class CNN14Wrapper(AbsEncoder):
 
         self.model_name = model_name
         self.device = device
-        self.max_audio_length_s = max_audio_length_s
+        self.max_audio_length_seconds = max_audio_length_seconds
 
         from speechbrain.inference.classifiers import AudioClassifier
 
@@ -43,15 +44,9 @@ class CNN14Wrapper(AbsEncoder):
             run_opts={"device": device},
         )
 
-        # SpeechBrain uses a 16kHz sampling rate for audio
-        self.sampling_rate = 16_000
-
-    def _pad_audio_batch(self, batch: list[torch.Tensor]) -> torch.Tensor:  # noqa: PLR6301
-        import torch
-
-        max_len = max(w.shape[0] for w in batch)
-        padded = [torch.nn.functional.pad(w, (0, max_len - w.shape[0])) for w in batch]
-        return torch.stack(padded)
+        # 44.1 kHz: sample_rate=44100
+        # https://huggingface.co/speechbrain/cnn14-esc50/blob/main/hyperparams.yaml
+        self.sampling_rate = 44_100
 
     def get_audio_embeddings(
         self,
@@ -60,6 +55,7 @@ class CNN14Wrapper(AbsEncoder):
         **kwargs: Any,
     ) -> Array:
         import torch
+        from speechbrain.processing.features import spectral_magnitude
 
         inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
 
@@ -76,29 +72,41 @@ class CNN14Wrapper(AbsEncoder):
                 array = array.squeeze()
 
                 # Apply audio truncation (configurable limit)
-                max_length = int(self.max_audio_length_s * self.sampling_rate)
-                if array.shape[-1] > max_length:
+                max_length = seconds_to_samples(
+                    self.max_audio_length_seconds, self.sampling_rate
+                )
+                if max_length is not None and array.shape[-1] > max_length:
                     array = array[..., :max_length]
 
                 audio_tensors.append(array)
 
-            with torch.no_grad():
-                # Convert batch to tensors and move to device
-                batch_tensor = self._pad_audio_batch(audio_tensors).to(self.device)
+            # one clip per forward: zero padding would enter Cnn14's global pooling
+            for wav in audio_tensors:
+                with torch.no_grad():
+                    # front end of AudioClassifier.classify_batch, which the
+                    # checkpoint ships for: compute_stft -> magnitude -> compute_fbank
+                    stft = self.model.mods.compute_stft(
+                        wav.unsqueeze(0).to(self.device)
+                    )
+                    feats = self.model.mods.compute_fbank(
+                        spectral_magnitude(
+                            stft, power=self.model.hparams.spec_mag_power
+                        )
+                    )
+                    b, f, t = feats.shape
+                    if f < 64 or t < 80:
+                        # zero-pad in the frequency or time dimension until it's at least [64, 80]
+                        pad_freq = max(0, 64 - f)
+                        pad_time = max(0, 80 - t)
+                        feats = torch.nn.functional.pad(
+                            feats, (0, pad_time, 0, pad_freq)
+                        )
+                    embeddings = self.model.mods.embedding_model(feats)
+                    # Apply mean pooling over time dimension if needed
+                    if embeddings.dim() > 2:
+                        embeddings = torch.mean(embeddings, dim=1)
 
-                feats = self.model.mods.compute_features(batch_tensor)
-                b, f, t = feats.shape
-                if f < 64 or t < 80:
-                    # zero-pad in the frequency or time dimension until it's at least [64, 80]
-                    pad_freq = max(0, 64 - f)
-                    pad_time = max(0, 80 - t)
-                    feats = torch.nn.functional.pad(feats, (0, pad_time, 0, pad_freq))
-                embeddings = self.model.mods.embedding_model(feats)
-                # Apply mean pooling over time dimension if needed
-                if embeddings.dim() > 2:
-                    embeddings = torch.mean(embeddings, dim=1)
-
-                all_embeddings.append(embeddings.cpu().detach())
+                    all_embeddings.append(embeddings.cpu().detach())
 
         return torch.cat(all_embeddings, dim=0).numpy()
 

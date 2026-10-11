@@ -1,5 +1,6 @@
-"""Render every benchmark / task / model OG hero card by screenshotting
-the parameterised template at ``scripts/og-template/template.html``.
+"""Render every benchmark / task / model OG hero card.
+
+Screenshots the parameterised template at ``scripts/tools/og-template/template.html``.
 
 Imports the mteb registry directly — no HTTP round-trip needed since
 this script ships in the same repo as the data it's rendering. The
@@ -24,11 +25,11 @@ Output layout::
 
 Usage::
 
-    python scripts/generate_og_images.py                       # all defaults
-    python scripts/generate_og_images.py --out=/data/og
-    python scripts/generate_og_images.py --only benchmarks
-    python scripts/generate_og_images.py --concurrency=8
-    python scripts/generate_og_images.py --force               # bypass incremental skip
+    python scripts/tools/generate_og_images.py                       # all defaults
+    python scripts/tools/generate_og_images.py --out=/data/og
+    python scripts/tools/generate_og_images.py --only benchmarks
+    python scripts/tools/generate_og_images.py --concurrency=8
+    python scripts/tools/generate_og_images.py --force               # bypass incremental skip
 """
 
 from __future__ import annotations
@@ -41,19 +42,22 @@ import logging
 import os
 import sys
 import time
-from collections.abc import Iterable, Sequence
 from pathlib import Path
 from typing import TYPE_CHECKING, Final, Literal, TypedDict
 
-from playwright.async_api import Browser, BrowserContext, Page, async_playwright
+from playwright.async_api import async_playwright
 
 if TYPE_CHECKING:
     # Type-only imports — runtime users go through ``_load_catalogue``
     # which does the actual import lazily so the script can be imported
     # without mteb on PYTHONPATH (handy for tests).
+    from collections.abc import Iterable, Sequence
+
+    from playwright.async_api import Browser, BrowserContext, Page
+
     from mteb.api.schemas import BenchmarkSchema, ModelMetaSchema, TaskMetaSchema
 
-logger = logging.getLogger("scripts.generate_og_images")
+logger = logging.getLogger("scripts.tools.generate_og_images")
 
 Kind = Literal["benchmark", "task", "model"]
 
@@ -359,7 +363,7 @@ def _should_skip(out_path: Path, hash_path: Path, expected: str, force: bool) ->
     if not out_path.is_file():
         return False
     try:
-        return hash_path.read_text().strip() == expected
+        return hash_path.read_text(encoding="utf-8").strip() == expected
     except OSError:
         return False
 
@@ -485,7 +489,7 @@ _TEMPLATE_DIR = Path(__file__).resolve().parent / "og-template"
 def _template_url() -> str:
     """Return the ``file://`` URL of the bundled template.
 
-    Lives next to this script under ``scripts/og-template/`` so the
+    Lives next to this script under ``scripts/tools/og-template/`` so the
     template + ``dots-icon.png`` it references stay co-located with the
     generator that uses them, instead of inside the runtime package.
     Playwright resolves the relative ``dots-icon.png`` against this URL.
