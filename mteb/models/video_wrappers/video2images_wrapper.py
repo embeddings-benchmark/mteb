@@ -11,9 +11,12 @@ from mteb._create_dataloaders import create_dataloader
 from mteb.models.modality_collators import FramesCollator
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable
+
     import torch
     from torch.utils.data import DataLoader
 
+    from mteb.abstasks.abstask import AbsTask
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models.model_meta import ModelMeta
     from mteb.models.models_protocols import EncoderProtocol
@@ -31,26 +34,74 @@ def video2images_model_meta(
 ) -> ModelMeta:
     """Meta of an image model evaluated on video through frame sampling and mean pooling.
 
-    Adds ``"video"`` to the modalities. The default protocol (``DEFAULT_NUM_FRAMES`` uniform
-    frames) is stored as the model's regular results; any other sampling is recorded in
-    ``experiment_kwargs`` and stored as an experiment, like loader overrides on native
-    video models.
+    Adds ``"video"`` to the modalities and records the sampling in ``experiment_kwargs``, so the
+    results are stored as an experiment and stay distinguishable from native video models.
     """
     modalities = list(meta.modalities)
     if "video" not in modalities:
         modalities.append("video")
-    update: dict[str, Any] = {"modalities": modalities}
-    if num_frames != DEFAULT_NUM_FRAMES:
-        experiment_kwargs = dict(meta.experiment_kwargs or {})
-        experiment_kwargs["video_frame_pooling"] = "mean"
-        if num_frames is not None:
-            experiment_kwargs["video_num_frames"] = num_frames
-        if fps is not None:
-            experiment_kwargs["video_fps"] = fps
-        if max_frames is not None:
-            experiment_kwargs["video_max_frames"] = max_frames
-        update["experiment_kwargs"] = experiment_kwargs
-    return meta.model_copy(update=update)
+    experiment_kwargs = dict(meta.experiment_kwargs or {})
+    experiment_kwargs["video_frame_pooling"] = "mean"
+    if num_frames is not None:
+        experiment_kwargs["video_num_frames"] = num_frames
+    if fps is not None:
+        experiment_kwargs["video_fps"] = fps
+    if max_frames is not None:
+        experiment_kwargs["video_max_frames"] = max_frames
+    return meta.model_copy(
+        update={"modalities": modalities, "experiment_kwargs": experiment_kwargs}
+    )
+
+
+def _has_mixed_video_side(task: AbsTask) -> bool:
+    """Whether a retrieval task combines video with another modality on its query or document side.
+
+    Only retrieval sides are checked: other task types encode each modality in its own
+    dataloader, so their metadata is a union across calls rather than one dataloader's features.
+    """
+    from mteb.abstasks.retrieval import AbsTaskRetrieval
+    from mteb.types import PromptType
+
+    if not isinstance(task, AbsTaskRetrieval):
+        return False
+    sides = (
+        set(task.metadata.get_modalities(PromptType.query)),
+        set(task.metadata.get_modalities(PromptType.document)),
+    )
+    return any("video" in side and side != {"video"} for side in sides)
+
+
+def _wrapper_can_run(meta: ModelMeta, task: AbsTask) -> bool:
+    """Whether wrapping the model would let it run `task`: video added passes the modality check, no mixed video side."""
+    from mteb.abstasks.retrieval import AbsTaskRetrieval
+    from mteb.types import PromptType
+
+    if _has_mixed_video_side(task):
+        return False
+    supported = set(meta.modalities) | {"video"}
+    if isinstance(task, AbsTaskRetrieval):
+        return bool(
+            supported & set(task.metadata.get_modalities(PromptType.query))
+        ) and bool(supported & set(task.metadata.get_modalities(PromptType.document)))
+    return set(task.metadata.modalities).issubset(supported)
+
+
+def video2images_hint(meta: ModelMeta, task: AbsTask) -> str:
+    """A sentence pointing to `Video2ImagesWrapper`, or an empty string if wrapping would not help."""
+    if (
+        "image" not in meta.modalities
+        or "video" in meta.modalities
+        or "dense" not in meta.model_type
+        or "video" not in task.metadata.modalities
+        or not _wrapper_can_run(meta, task)
+    ):
+        return ""
+    return (
+        f" {meta.name} does not run on video and {task.metadata.name} contains video. "
+        "If you wish to evaluate it on frames sampled from the videos, wrap it in "
+        "`mteb.models.Video2ImagesWrapper` "
+        "(see https://embeddings-benchmark.github.io/mteb/get_started/advanced_usage/image_models_on_video/)."
+    )
 
 
 class Video2ImagesWrapper:
@@ -62,8 +113,7 @@ class Video2ImagesWrapper:
 
     Frames are sampled either as a fixed number per clip (``num_frames``, the default) or at a
     rate (``fps``, optionally capped by ``max_frames``), matching the video models in MTEB.
-    Results with the default ``DEFAULT_NUM_FRAMES`` frames are stored as the model's regular
-    results; any other sampling is stored as an experiment.
+    The sampling is recorded in ``experiment_kwargs``, so results are stored as an experiment.
 
     ``mteb.evaluate`` never applies this wrapper implicitly: wrap the model explicitly to run it
     on video tasks.
@@ -128,6 +178,25 @@ class Video2ImagesWrapper:
         self.mteb_model_meta = video2images_model_meta(
             meta, num_frames=num_frames, fps=fps, max_frames=max_frames
         )
+
+    def validate_tasks(self, tasks: Iterable[AbsTask]) -> None:
+        """Reject tasks this wrapper cannot run, before any model work is done.
+
+        Only video-only inputs are supported, so retrieval tasks that mix video with another
+        modality on one side would fail mid-run.
+
+        Args:
+            tasks: The tasks about to be evaluated.
+        """
+        errors = []
+        for task in tasks:
+            if _has_mixed_video_side(task):
+                errors.append(
+                    f"{type(self).__name__} only supports video-only inputs, but task "
+                    f"{task.metadata.name} mixes video with other modalities on one side."
+                )
+        if errors:
+            raise ValueError("\n".join(errors))
 
     def encode(
         self,

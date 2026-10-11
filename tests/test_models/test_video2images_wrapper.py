@@ -7,7 +7,7 @@ from datasets import Dataset
 import mteb
 from mteb._create_dataloaders import create_dataloader
 from mteb.cache import ResultCache
-from mteb.evaluate import _check_model_modalities, _check_video_only_inputs
+from mteb.evaluate import _check_model_modalities
 from mteb.mocks import (
     MockVideoClassification,
     MockVideoClusteringTask,
@@ -84,12 +84,14 @@ def test_wrapper_meta_leaves_inner_model_untouched():
     assert "video_num_frames" not in (model.mteb_model_meta.experiment_kwargs or {})
 
 
-def test_default_num_frames_is_not_an_experiment():
+def test_default_num_frames_is_recorded_as_an_experiment():
     wrapper = Video2ImagesWrapper(_image_model())
     assert wrapper.num_frames == DEFAULT_NUM_FRAMES == 8
     assert wrapper.mteb_model_meta.modalities == ["text", "image", "video"]
-    assert not wrapper.mteb_model_meta.experiment_kwargs
-    assert wrapper.mteb_model_meta.experiment_name is None
+    assert wrapper.mteb_model_meta.experiment_kwargs == {
+        "video_frame_pooling": "mean",
+        "video_num_frames": 8,
+    }
 
 
 def test_fps_mode_records_meta_without_num_frames():
@@ -161,19 +163,18 @@ def test_evaluate_with_explicit_wrapper(task):
     mteb.evaluate(wrapper, task, cache=None)
 
 
-@pytest.mark.parametrize("num_frames", [None, DEFAULT_NUM_FRAMES])
-def test_default_protocol_is_stored_as_regular_results(tmp_path, num_frames):
+@pytest.mark.parametrize(
+    ("num_frames", "folder"),
+    [
+        (None, "video_frame_pooling_mean__video_num_frames_8"),
+        (4, "video_frame_pooling_mean__video_num_frames_4"),
+    ],
+)
+def test_results_are_stored_as_an_experiment(tmp_path, num_frames, folder):
     wrapper = Video2ImagesWrapper(_image_model(), num_frames=num_frames)
     mteb.evaluate(wrapper, MockVideoRetrievalT2V(), cache=ResultCache(tmp_path))
     (result_file,) = tmp_path.rglob("MockVideoRetrievalT2V.json")
-    assert "experiments" not in result_file.parts
-
-
-def test_other_frame_counts_are_stored_as_experiment(tmp_path):
-    wrapper = Video2ImagesWrapper(_image_model(), num_frames=4)
-    mteb.evaluate(wrapper, MockVideoRetrievalT2V(), cache=ResultCache(tmp_path))
-    (result_file,) = tmp_path.rglob("MockVideoRetrievalT2V.json")
-    assert result_file.parent.name == "video_frame_pooling_mean__video_num_frames_4"
+    assert result_file.parent.name == folder
     assert result_file.parent.parent.name == "experiments"
 
 
@@ -234,7 +235,7 @@ def test_hint_matches_whether_the_wrapper_accepts_the_task(task):
     wrapped = video2images_model_meta(meta, num_frames=DEFAULT_NUM_FRAMES)
     try:
         _check_model_modalities(wrapped, task)
-        _check_video_only_inputs(wrapped, task)
+        Video2ImagesWrapper(_image_model()).validate_tasks([task])
     except ValueError:
         accepted = False
     else:
@@ -270,6 +271,16 @@ def test_wrapped_model_rejects_mixed_video_tasks_upfront(task_name):
     wrapper = Video2ImagesWrapper(_image_model(), num_frames=4)
     with pytest.raises(ValueError, match="only supports video-only inputs"):
         mteb.evaluate(wrapper, mteb.get_task(task_name), cache=None)
+
+
+def test_mixed_video_tasks_are_rejected_through_the_cache_wrapper(tmp_path):
+    from mteb.models.cache_wrappers import CachedEmbeddingWrapper
+
+    cached = CachedEmbeddingWrapper(
+        Video2ImagesWrapper(_image_model(), num_frames=4), tmp_path
+    )
+    with pytest.raises(ValueError, match="only supports video-only inputs"):
+        mteb.evaluate(cached, mteb.get_task("CoVRRVT2VRetrieval"), cache=None)
 
 
 def test_video_with_text_input_raises_at_encode():

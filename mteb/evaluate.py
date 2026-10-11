@@ -24,7 +24,7 @@ from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
     SparseEncoderWrapper,
 )
-from mteb.models.video_wrappers import Video2ImagesWrapper
+from mteb.models.video_wrappers.video2images_wrapper import video2images_hint
 from mteb.results import ModelResult, TaskResult
 from mteb.results.task_result import TaskError
 from mteb.timing import TimingStack
@@ -367,69 +367,12 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
     return result
 
 
-def _has_mixed_video_side(task: AbsTask) -> bool:
-    """Whether a retrieval task combines video with another modality on its query or document side.
-
-    Only retrieval sides are checked: other task types encode each modality in its own
-    dataloader, so their metadata is a union across calls rather than one dataloader's features.
-    """
-    if not isinstance(task, AbsTaskRetrieval):
-        return False
-    sides = (
-        set(task.metadata.get_modalities(PromptType.query)),
-        set(task.metadata.get_modalities(PromptType.document)),
-    )
-    return any("video" in side and side != {"video"} for side in sides)
-
-
-def _video_wrapper_can_run(model_modalities: Iterable[str], task: AbsTask) -> bool:
-    """Whether wrapping an image model in `Video2ImagesWrapper` would let it run `task`.
-
-    That is the case when adding `video` to the model's modalities passes the modality check
-    and no retrieval side mixes video with another modality.
-    """
-    if _has_mixed_video_side(task):
-        return False
-    supported = set(model_modalities) | {"video"}
-    if isinstance(task, AbsTaskRetrieval):
-        return bool(
-            supported & set(task.metadata.get_modalities(PromptType.query))
-        ) and bool(supported & set(task.metadata.get_modalities(PromptType.document)))
-    return set(task.metadata.modalities).issubset(supported)
-
-
-def _check_video_only_inputs(
-    model: ModelMeta,
-    tasks: AbsTask | Iterable[AbsTask],
-) -> None:
-    """Reject retrieval tasks that mix video with other modalities on one side.
-
-    `Video2ImagesWrapper` only handles video-only inputs, so these tasks would fail mid-run.
-
-    Args:
-        model: The metadata of the wrapped model.
-        tasks: A single task or an iterable of tasks to check.
-    """
-    check_tasks: Iterable[AbsTask]
+def _as_task_list(tasks: AbsTask | Iterable[AbsTask]) -> Iterable[AbsTask]:
     if isinstance(tasks, AbsTask):
-        check_tasks = [tasks]
-    elif isinstance(tasks, Benchmark):
-        check_tasks = tasks.tasks
-    else:
-        check_tasks = tasks
-
-    errors = []
-    for task in check_tasks:
-        if _has_mixed_video_side(task):
-            query_mods = set(task.metadata.get_modalities(PromptType.query))
-            doc_mods = set(task.metadata.get_modalities(PromptType.document))
-            errors.append(
-                f"Model {model.name} only supports video-only inputs, but task {task.metadata.name} "
-                f"mixes video with other modalities on one side: query={sorted(query_mods)}, "
-                f"document={sorted(doc_mods)}."
-            )
-    if errors:
-        raise ValueError("\n".join(errors))
+        return [tasks]
+    if isinstance(tasks, Benchmark):
+        return tasks.tasks
+    return tasks
 
 
 def _check_model_modalities(
@@ -460,20 +403,7 @@ def _check_model_modalities(
     warnings, errors = [], []
 
     def with_video_hint(msg: str, task: AbsTask) -> str:
-        if (
-            "image" in model_modalities
-            and "video" not in model_modalities
-            and "dense" in model.model_type
-            and "video" in task.metadata.modalities
-            and _video_wrapper_can_run(model_modalities, task)
-        ):
-            msg += (
-                f" {model.name} does not run on video and {task.metadata.name} contains video. "
-                "If you wish to evaluate it on frames sampled from the videos, wrap it in "
-                "`mteb.models.Video2ImagesWrapper` "
-                "(see https://embeddings-benchmark.github.io/mteb/get_started/advanced_usage/image_models_on_video/)."
-            )
-        return msg
+        return msg + video2images_hint(model, task)
 
     for task in check_tasks:
         # only retrieval tasks have different modalities for query and document and can be run with partial overlaps
@@ -695,8 +625,9 @@ def evaluate(  # noqa: PLR0913
     meta = _apply_precision_to_meta(meta, encode_kwargs)
     _check_model_modalities(meta, tasks)
     overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
-    if isinstance(model, Video2ImagesWrapper):
-        _check_video_only_inputs(meta, tasks)
+    validate_tasks = getattr(model, "validate_tasks", None)
+    if validate_tasks is not None:
+        validate_tasks(_as_task_list(tasks))
 
     return _evaluate_resolved(
         model,

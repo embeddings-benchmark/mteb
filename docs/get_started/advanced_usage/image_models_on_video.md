@@ -26,9 +26,9 @@ For tasks that mix video with other modalities the model does support, `mteb.eva
 
 ### Provenance
 
-Sampling 8 frames uniformly and mean-pooling is the default protocol, the same frame count X-CLIP, ViCLIP, LanguageBind and InternVideo2 use by default in MTEB. Results produced with it are stored as the model's regular results and appear on the leaderboard like those of native video models.
+Sampling 8 frames uniformly and mean-pooling is the default protocol, the same frame count X-CLIP, ViCLIP, LanguageBind and InternVideo2 use by default in MTEB.
 
-Any other sampling (`num_frames=16`, or `fps` / `max_frames`) is recorded in the model's `experiment_kwargs` and stored under an `experiments/` folder next to the regular results, exactly as loader overrides such as `mteb.get_model("microsoft/xclip-base-patch32", num_frames=16)` are handled for native video models. Those results never overwrite the default-protocol ones and are not shown on the leaderboard.
+The sampling is always recorded in the model's `experiment_kwargs` (for example `video_frame_pooling` and `video_num_frames`), so the results are stored under an `experiments/` folder next to the model's regular results, exactly as loader overrides such as `mteb.get_model("microsoft/xclip-base-patch32", num_frames=16)` are handled for native video models. This keeps an image model evaluated on video distinguishable from a native video model, and runs with different sampling never overwrite each other.
 
 ### Limitations
 
