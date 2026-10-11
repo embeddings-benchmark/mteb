@@ -46,6 +46,7 @@ class Vidore3ComputerScienceBGEm3Rerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
+        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3ComputerScienceRetrieval.v2"],
     )
@@ -86,6 +87,7 @@ class Vidore3ComputerScienceBM25sRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
+        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3ComputerScienceRetrieval.v2"],
     )
@@ -126,6 +128,7 @@ class Vidore3ComputerScienceQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
+        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3ComputerScienceRetrieval.v2"],
     )
@@ -166,6 +169,7 @@ class Vidore3EnergyBGEm3Rerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
+        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3EnergyRetrieval.v2"],
     )
@@ -206,6 +210,7 @@ class Vidore3EnergyBM25sRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
+        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3EnergyRetrieval.v2"],
     )
@@ -246,6 +251,7 @@ class Vidore3EnergyQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
+        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3EnergyRetrieval.v2"],
     )
@@ -285,6 +291,7 @@ class Vidore3FinanceEnBGEm3Rerankingv2(AbsTaskRetrieval):
 }
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
+        is_beta=True,
         adapted_from=["Vidore3FinanceEnRetrieval.v2"],
         contributed_by="Illuin Technology",
     )
@@ -324,6 +331,7 @@ class Vidore3FinanceEnBM25sRerankingv2(AbsTaskRetrieval):
 }
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
+        is_beta=True,
         adapted_from=["Vidore3FinanceEnRetrieval.v2"],
         contributed_by="Illuin Technology",
     )
@@ -363,6 +371,7 @@ class Vidore3FinanceEnQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
 }
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
+        is_beta=True,
         adapted_from=["Vidore3FinanceEnRetrieval.v2"],
         contributed_by="Illuin Technology",
     )
@@ -403,6 +412,7 @@ class Vidore3FinanceFrBGEm3Rerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
+        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3FinanceFrRetrieval.v2"],
     )
@@ -443,6 +453,7 @@ class Vidore3FinanceFrBM25sRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
+        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3FinanceFrRetrieval.v2"],
     )
@@ -483,6 +494,7 @@ class Vidore3FinanceFrQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
+        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3FinanceFrRetrieval.v2"],
     )
@@ -523,6 +535,7 @@ class Vidore3HrBGEm3Rerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
+        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3HrRetrieval.v2"],
     )
@@ -563,6 +576,7 @@ class Vidore3HrBM25sRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
+        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3HrRetrieval.v2"],
     )
@@ -603,6 +617,7 @@ class Vidore3HrQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
+        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3HrRetrieval.v2"],
     )
@@ -643,6 +658,7 @@ class Vidore3IndustrialBGEm3Rerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
+        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3IndustrialRetrieval.v2"],
     )
@@ -683,6 +699,7 @@ class Vidore3IndustrialBM25sRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
+        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3IndustrialRetrieval.v2"],
     )
@@ -723,6 +740,7 @@ class Vidore3IndustrialQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
+        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3IndustrialRetrieval.v2"],
     )
@@ -763,6 +781,7 @@ class Vidore3PharmaceuticalsBGEm3Rerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
+        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3PharmaceuticalsRetrieval.v2"],
     )
@@ -803,6 +822,7 @@ class Vidore3PharmaceuticalsBM25sRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
+        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3PharmaceuticalsRetrieval.v2"],
     )
@@ -843,6 +863,7 @@ class Vidore3PharmaceuticalsQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
+        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3PharmaceuticalsRetrieval.v2"],
     )
@@ -883,6 +904,7 @@ class Vidore3PhysicsBGEm3Rerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
+        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3PhysicsRetrieval.v2"],
     )
@@ -923,6 +945,7 @@ class Vidore3PhysicsBM25sRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
+        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3PhysicsRetrieval.v2"],
     )
@@ -963,6 +986,253 @@ class Vidore3PhysicsQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
+        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3PhysicsRetrieval.v2"],
+    )
+
+
+class Vidore3TelecomBGEm3Rerankingv2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Vidore3TelecomBGEm3Reranking.v2",
+        description="Reranking task for retrieval on the Telecom domain, a private (held-out) subset of ViDoRe V3. Queries are available in English, French, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the BAAI/bge-m3 model.",
+        reference="https://arxiv.org/abs/2601.08620",
+        dataset={
+            "path": "mteb-private/Vidore3TelecomBGEm3Reranking.v2",
+            "revision": "683ec7e303e6e4a293f556a422424e61988be7e5",
+        },
+        type="Reranking",
+        category="t2it",
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        date=("2025-10-01", "2025-11-01"),
+        domains=["Engineering", "Programming"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="created and machine-translated",
+        bibtex_citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+        prompt={"query": "Retrieve images or text relevant to the user's query."},
+        is_public=False,
+        is_beta=True,
+        contributed_by="Illuin Technology",
+        adapted_from=["Vidore3TelecomRetrieval.v2"],
+    )
+
+
+class Vidore3TelecomBM25sRerankingv2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Vidore3TelecomBM25sReranking.v2",
+        description="Reranking task for retrieval on the Telecom domain, a private (held-out) subset of ViDoRe V3. Queries are available in English, French, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the mteb/baseline-bm25s model.",
+        reference="https://arxiv.org/abs/2601.08620",
+        dataset={
+            "path": "mteb-private/Vidore3TelecomBM25sReranking.v2",
+            "revision": "56cef947981ee1263be298081ab126f9493a3065",
+        },
+        type="Reranking",
+        category="t2it",
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        date=("2025-10-01", "2025-11-01"),
+        domains=["Engineering", "Programming"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="created and machine-translated",
+        bibtex_citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+        prompt={"query": "Retrieve images or text relevant to the user's query."},
+        is_public=False,
+        is_beta=True,
+        contributed_by="Illuin Technology",
+        adapted_from=["Vidore3TelecomRetrieval.v2"],
+    )
+
+
+class Vidore3TelecomQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Vidore3TelecomQwen3VLEmbedding2BReranking.v2",
+        description="Reranking task for retrieval on the Telecom domain, a private (held-out) subset of ViDoRe V3. Queries are available in English, French, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the Qwen/Qwen3-VL-Embedding-2B model.",
+        reference="https://arxiv.org/abs/2601.08620",
+        dataset={
+            "path": "mteb-private/Vidore3TelecomQwen3VLEmbedding2BReranking.v2",
+            "revision": "c01b67a6822a029210a8b61aff8263d23365d781",
+        },
+        type="Reranking",
+        category="t2it",
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        date=("2025-10-01", "2025-11-01"),
+        domains=["Engineering", "Programming"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="created and machine-translated",
+        bibtex_citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+        prompt={"query": "Retrieve images or text relevant to the user's query."},
+        is_public=False,
+        is_beta=True,
+        contributed_by="Illuin Technology",
+        adapted_from=["Vidore3TelecomRetrieval.v2"],
+    )
+
+
+class Vidore3NuclearBGEm3Rerankingv2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Vidore3NuclearBGEm3Reranking.v2",
+        description="Reranking task for retrieval on the Nuclear domain, a private (held-out) subset of ViDoRe V3. Queries are available in English, French, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the BAAI/bge-m3 model.",
+        reference="https://arxiv.org/abs/2601.08620",
+        dataset={
+            "path": "mteb-private/Vidore3NuclearBGEm3Reranking.v2",
+            "revision": "62bb4857fe4a30f9e9e3c7ddb5c913f6dfc15261",
+        },
+        type="Reranking",
+        category="t2it",
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        date=("2025-10-01", "2025-11-01"),
+        domains=["Engineering", "Chemistry"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="created and machine-translated",
+        bibtex_citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+        prompt={"query": "Retrieve images or text relevant to the user's query."},
+        is_public=False,
+        is_beta=True,
+        contributed_by="Illuin Technology",
+        adapted_from=["Vidore3NuclearRetrieval.v2"],
+    )
+
+
+class Vidore3NuclearBM25sRerankingv2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Vidore3NuclearBM25sReranking.v2",
+        description="Reranking task for retrieval on the Nuclear domain, a private (held-out) subset of ViDoRe V3. Queries are available in English, French, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the mteb/baseline-bm25s model.",
+        reference="https://arxiv.org/abs/2601.08620",
+        dataset={
+            "path": "mteb-private/Vidore3NuclearBM25sReranking.v2",
+            "revision": "b039dd73c6364a63e54e93271b47a645e6fdffb5",
+        },
+        type="Reranking",
+        category="t2it",
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        date=("2025-10-01", "2025-11-01"),
+        domains=["Engineering", "Chemistry"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="created and machine-translated",
+        bibtex_citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+        prompt={"query": "Retrieve images or text relevant to the user's query."},
+        is_public=False,
+        is_beta=True,
+        contributed_by="Illuin Technology",
+        adapted_from=["Vidore3NuclearRetrieval.v2"],
+    )
+
+
+class Vidore3NuclearQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Vidore3NuclearQwen3VLEmbedding2BReranking.v2",
+        description="Reranking task for retrieval on the Nuclear domain, a private (held-out) subset of ViDoRe V3. Queries are available in English, French, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the Qwen/Qwen3-VL-Embedding-2B model.",
+        reference="https://arxiv.org/abs/2601.08620",
+        dataset={
+            "path": "mteb-private/Vidore3NuclearQwen3VLEmbedding2BReranking.v2",
+            "revision": "65505c327cc18706f88179f6d505b5636ce08ba3",
+        },
+        type="Reranking",
+        category="t2it",
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        date=("2025-10-01", "2025-11-01"),
+        domains=["Engineering", "Chemistry"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="created and machine-translated",
+        bibtex_citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+        prompt={"query": "Retrieve images or text relevant to the user's query."},
+        is_public=False,
+        is_beta=True,
+        contributed_by="Illuin Technology",
+        adapted_from=["Vidore3NuclearRetrieval.v2"],
     )

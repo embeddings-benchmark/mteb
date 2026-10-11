@@ -3055,6 +3055,78 @@ VIDORE_V3_1 = VidoreBenchmark(
 """,
 )
 
+_VIDORE_V3_1_RERANKING_DOMAINS = [
+    "ComputerScience",
+    "Energy",
+    "FinanceEn",
+    "FinanceFr",
+    "Hr",
+    "Industrial",
+    "Pharmaceuticals",
+    "Physics",
+    "Telecom",
+    "Nuclear",
+]
+# first-stage retriever -> (task name tag, description of the candidate source)
+_VIDORE_V3_1_RERANKING_RETRIEVERS = {
+    "BM25s": ("BM25s", "mteb/baseline-bm25s"),
+    "BGE-M3": ("BGEm3", "BAAI/bge-m3"),
+    "Qwen3-VL-Embedding-2B": ("Qwen3VLEmbedding2B", "Qwen/Qwen3-VL-Embedding-2B"),
+}
+_VIDORE_V3_1_RERANKING_TASKS = {
+    label: [
+        f"Vidore3{domain}{tag}Reranking.v2" for domain in _VIDORE_V3_1_RERANKING_DOMAINS
+    ]
+    for label, (tag, _) in _VIDORE_V3_1_RERANKING_RETRIEVERS.items()
+}
+
+VIDORE_V3_1_RERANKING = VidoreBenchmark(
+    name="ViDoRe(v3.1, reranking, beta)",
+    display_name="ViDoRe v3.1 Reranking (beta)",
+    language_view=[
+        "deu-Latn",
+        "eng-Latn",
+        "fra-Latn",
+        "ita-Latn",
+        "por-Latn",
+        "spa-Latn",
+    ],
+    icon="https://cdn-uploads.huggingface.co/production/uploads/66e16a677c2eb2da5109fb5c/x99xqw__fl2UaPbiIdC_f.png",
+    tasks=get_tasks(
+        tasks=[
+            task for tasks in _VIDORE_V3_1_RERANKING_TASKS.values() for task in tasks
+        ]
+    ),
+    description="Reranking of visual documents on the ViDoRe v3.1 domains. For each domain, the candidates are the top-50 pages retrieved by one of three first-stage retrievers (mteb/baseline-bm25s, BAAI/bge-m3 and Qwen/Qwen3-VL-Embedding-2B), so rerankers are compared on candidate lists of varying quality. Includes both open and closed datasets; to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml). This benchmark is in beta.",
+    reference="https://arxiv.org/abs/2601.08620",
+    citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+    aggregations=(
+        BenchmarkAggregation.MEAN_TASK,
+        BenchmarkAggregation.PUBLIC_PRIVATE,
+        CustomGrouping(
+            name="First-stage retriever",
+            groups=tuple(
+                CustomGroup(
+                    label=label,
+                    tasks=get_tasks(tasks=_VIDORE_V3_1_RERANKING_TASKS[label]),
+                    description=f"Mean over the domains when reranking the top-50 candidates retrieved by {model}.",
+                )
+                for label, (_, model) in _VIDORE_V3_1_RERANKING_RETRIEVERS.items()
+            ),
+        ),
+    ),
+)
+
 VISUAL_DOCUMENT_RETRIEVAL = Benchmark(
     name="ViDoRe(v1&v2)",
     aliases=["VisualDocumentRetrieval"],
