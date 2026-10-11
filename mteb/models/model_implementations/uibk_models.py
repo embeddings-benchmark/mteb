@@ -12,26 +12,23 @@ from mteb.models.model_implementations.pylate_models import (
     denseon_lateon_unsupervised_data,
 )
 from mteb.models.model_meta import ModelMeta
-
-NAME = "DataScience-UIBK/uibk-embedding-v1"  # Hugging Face repo id
-REVISION = "b18df82e77306006a1dd0162199f6dfeacb5492e"  # Hub commit hash
+from mteb.types import OutputDType
 
 uibk_embedding_v1 = ModelMeta(
     loader=MultiVectorModel,
     loader_kwargs=dict(
         trust_remote_code=True,  # branched_transformer.py / hybrid_tokens.py in the model repo
-        # the precision of every reported number; a string, so that this file does not import torch
-        model_kwargs={"torch_dtype": "bfloat16"},
+        model_kwargs={"torch_dtype": OutputDType.BF16},
         # FastPlaid picks its scoring batch from the free GPU memory. PyLate's fixed default (2**18) runs out of
         # memory on the corpora of several million documents, because this model indexes documents of up to 2048
         # tokens. Batching only: the scores do not depend on it.
         index_kwargs={"batch_size": "auto"},
     ),
-    name=NAME,
+    name="DataScience-UIBK/uibk-embedding-v1",
     model_type=["late-interaction"],
     languages=["eng-Latn"],
     open_weights=True,
-    revision=REVISION,
+    revision="b18df82e77306006a1dd0162199f6dfeacb5492e",
     public_training_code=None,
     # LightOn's public pre-training and fine-tuning collections (the data behind DenseOn / LateOn), BEIR test queries
     # removed; plus pairs mined from the same pre-training collection
@@ -45,7 +42,7 @@ uibk_embedding_v1 = ModelMeta(
     license="apache-2.0",
     similarity_fn_name="MaxSim",
     framework=["PyLate", "ColBERT", "safetensors", "Sentence Transformers"],
-    reference=f"https://huggingface.co/{NAME}",
+    reference="https://huggingface.co/DataScience-UIBK/uibk-embedding-v1",
     use_instructions=False,
     adapted_from="answerdotai/ModernBERT-base",
     superseded_by=None,
