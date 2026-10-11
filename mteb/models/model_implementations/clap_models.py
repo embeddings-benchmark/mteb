@@ -9,6 +9,7 @@ from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator, fixed_numpy_seed
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -71,7 +72,10 @@ class ClapZeroShotWrapper(AbsEncoder):
         ):
             clips = []
             for audio in batch["audio"]:
-                array = audio["array"]
+                # laion_clap rounds every clip to 16-bit, in training and inference
+                # https://github.com/LAION-AI/CLAP/blob/1fd4c37df5ffbfcfbad5415c170bc66cf94c9994/src/laion_clap/hook.py#L176-L178
+                int16 = (np.clip(audio["array"], -1.0, 1.0) * 32767.0).astype(np.int16)
+                array = int16 / np.float32(32767.0)
                 # fusion picks random chunks of long clips; seeding each clip
                 # alone keeps its embedding independent of its batch-mates
                 # https://github.com/huggingface/transformers/blob/2df80c4f5863192f1d4cc698bd4f1e1d254e14ba/src/transformers/models/clap/feature_extraction_clap.py#L188-L190
@@ -120,6 +124,9 @@ class ClapZeroShotWrapper(AbsEncoder):
                 return_tensors="pt",
                 padding=True,
                 truncation=True,
+                # laion_clap's text context length
+                # https://github.com/LAION-AI/CLAP/blob/1fd4c37df5ffbfcfbad5415c170bc66cf94c9994/src/laion_clap/hook.py#L64-L72
+                max_length=77,
             )
             inputs = {k: v.to(self.device) for k, v in inputs.items()}
 
@@ -371,5 +378,7 @@ clap_large_v2 = ModelMeta(
     use_instructions=False,
     training_datasets=None,
     adapted_from="LCO-Embedding/LCO-Embedding-Omni-7B",
-    extra_requirements_groups=["multimodal-sbert"],
+    # the checkpoint's Qwen2-VL processor needs torchvision and Pillow
+    extra_requirements_groups=["multimodal-sbert", "image"],
+    output_dtypes=OutputDType.BF16,
 )

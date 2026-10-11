@@ -285,7 +285,9 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                     )
                 )
         if not records:
-            return BenchmarkResults.model_construct(model_results=[])
+            return BenchmarkResults.model_construct(
+                model_results=[], benchmark=self.benchmark
+            )
         task_df = pd.DataFrame.from_records(records)
 
         # Use cached model metas
@@ -346,7 +348,9 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                 model_meta=group["model_meta"].iloc[0],
             )
             model_results.append(model_result)
-        return BenchmarkResults.model_construct(model_results=model_results)
+        return BenchmarkResults.model_construct(
+            model_results=model_results, benchmark=self.benchmark
+        )
 
     def _get_scores(
         self,

@@ -7,6 +7,7 @@ from tqdm.auto import tqdm
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -288,6 +289,7 @@ videoprism_base_f16r288 = ModelMeta(
     reference="https://huggingface.co/google/videoprism-base-f16r288",
     loader_kwargs=dict(num_frames=16),
     **_VIDEOPRISM_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
 
 videoprism_large_f8r288 = ModelMeta(
@@ -304,6 +306,7 @@ videoprism_large_f8r288 = ModelMeta(
     reference="https://huggingface.co/google/videoprism-large-f8r288",
     loader_kwargs=dict(num_frames=8),
     **_VIDEOPRISM_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
 
 videoprism_lvt_base_f16r288 = ModelMeta(
@@ -320,6 +323,7 @@ videoprism_lvt_base_f16r288 = ModelMeta(
     reference="https://huggingface.co/google/videoprism-lvt-base-f16r288",
     loader_kwargs=dict(num_frames=16),
     **_VIDEOPRISM_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
 
 videoprism_lvt_large_f8r288 = ModelMeta(
@@ -336,4 +340,5 @@ videoprism_lvt_large_f8r288 = ModelMeta(
     reference="https://huggingface.co/google/videoprism-lvt-large-f8r288",
     loader_kwargs=dict(num_frames=8),
     **_VIDEOPRISM_COMMON,
+    output_dtypes=OutputDType.BF16,
 )

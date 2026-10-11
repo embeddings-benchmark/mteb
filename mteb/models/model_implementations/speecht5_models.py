@@ -365,6 +365,7 @@ speecht5_asr = ModelMeta(
       primaryClass={eess.AS},
       url={https://arxiv.org/abs/2110.07205},
 }""",
+    extra_requirements_groups=["speecht5"],
 )
 
 # TTS model - Optimized for Text-to-Speech tasks
@@ -401,6 +402,7 @@ speecht5_tts = ModelMeta(
       primaryClass={eess.AS},
       url={https://arxiv.org/abs/2110.07205},
 }""",
+    extra_requirements_groups=["speecht5"],
 )
 
 # This model meta is for a multimodal model that combined from asr and tts.
@@ -437,4 +439,5 @@ speecht5_multimodal = ModelMeta(
       primaryClass={eess.AS},
       url={https://arxiv.org/abs/2110.07205},
 }""",
+    extra_requirements_groups=["speecht5"],
 )

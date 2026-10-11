@@ -36,23 +36,26 @@ class ColPaliEngineWrapper(AbsEncoder):
         revision: str | None = None,
         device: str | None = None,
         query_prefix: str | None = None,
+        base_revision: str | None = None,
         **kwargs: Any,
     ):
         import torch
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
 
-        # Load model
+        # Load model. For a LoRA adapter, `revision` pins the adapter; the base model named in
+        # its adapter_config.json is loaded at `base_revision` (the Hub's main branch if None).
         self.mdl = model_class.from_pretrained(
             model_name,
             device_map=self.device,
+            revision=base_revision,
             adapter_kwargs={"revision": revision},
             **kwargs,
         )
         self.mdl.eval()
 
         # Load processor
-        self.processor = processor_class.from_pretrained(model_name)
+        self.processor = processor_class.from_pretrained(model_name, revision=revision)
         if query_prefix is not None:
             self.processor.query_prefix = query_prefix
 
@@ -237,6 +240,7 @@ colpali_v1_1 = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
     extra_requirements_groups=_REQUIREMENT_GROUPS,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 colpali_v1_2 = ModelMeta(
@@ -266,6 +270,7 @@ colpali_v1_2 = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
     extra_requirements_groups=_REQUIREMENT_GROUPS,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 colpali_v1_3 = ModelMeta(
@@ -295,4 +300,5 @@ colpali_v1_3 = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
     extra_requirements_groups=_REQUIREMENT_GROUPS,
+    output_dtypes=OutputDType.FLOAT16,
 )

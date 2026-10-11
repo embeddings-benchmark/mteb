@@ -21,6 +21,7 @@ class MuQMuLanWrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str = "OpenMuQ/MuQ-MuLan-large",
+        revision: str | None = None,
         device: str | None = None,
         # uncapped: MuQ-MuLan splits anything over clip_secs=10 into clips itself
         # and returns their average latent, so truncating would discard that
@@ -44,7 +45,11 @@ class MuQMuLanWrapper(AbsEncoder):
         )
 
         # Load the model
-        self.model = MuQMuLan.from_pretrained(model_name).eval().to(self.device)
+        self.model = (
+            MuQMuLan.from_pretrained(model_name, revision=revision)
+            .eval()
+            .to(self.device)
+        )
         self.model.eval()
 
     def get_audio_embeddings(

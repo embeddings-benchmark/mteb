@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import SparseEncoderWrapper
+from mteb.types import OutputDType
 
 splade_code_languages = [
     "python-Code",
@@ -36,6 +37,7 @@ splade_code_06b = ModelMeta(
     loader_kwargs=dict(
         trust_remote_code=True,
     ),
+    output_dtypes=OutputDType.BF16,
 )
 
 splade_code_8b = ModelMeta(
@@ -62,4 +64,5 @@ splade_code_8b = ModelMeta(
     loader_kwargs=dict(
         trust_remote_code=True,
     ),
+    output_dtypes=OutputDType.BF16,
 )
