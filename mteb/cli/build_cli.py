@@ -11,7 +11,12 @@ from rich.console import Console
 from rich.logging import RichHandler
 
 import mteb
-from mteb._requires_package import _requires_full_installation
+from mteb._requires_package import (
+    _install_command,
+    _is_package_available,
+    _requires_full_installation,
+)
+from mteb._reversible_workflow.git_utils import get_github_token
 from mteb.cache import ResultCache
 from mteb.cli._display_tasks import _display_benchmarks, _display_tasks
 from mteb.cli.generate_model_card import generate_model_card
@@ -57,6 +62,15 @@ def run(args: argparse.Namespace) -> None:
 
     logger.info("Running with parameters: %s", args)
 
+    create_pr = args.submit == "pr"
+    if create_pr:
+        # check before evaluating, so that a missing setup does not surface only after the evaluation
+        if not _is_package_available("github"):
+            raise ImportError(
+                f"Creating a PR requires PyGithub. Install it with `{_install_command(['github'])}`."
+            )
+        get_github_token()
+
     if args.device is None:
         device = "cuda" if torch.cuda.is_available() else "cpu"
     else:
@@ -98,15 +112,19 @@ def run(args: argparse.Namespace) -> None:
         )
         prediction_folder = args.output_folder
 
+    cache = ResultCache(args.output_folder)
     mteb.evaluate(
         model,
         tasks,
-        cache=ResultCache(args.output_folder),
+        cache=cache,
         co2_tracker=args.co2_tracker,
         overwrite_strategy=overwrite_strategy,
         encode_kwargs=encode_kwargs,
         prediction_folder=prediction_folder,
     )
+
+    if args.submit:
+        cache.submit_results(model.mteb_model_meta, create_pr=create_pr)
 
 
 def _available_benchmarks(args: argparse.Namespace) -> None:
@@ -281,6 +299,17 @@ def _add_run_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
         type=str,
         default=None,
         help="Folder to save the model predictions in. If None, predictions will not be saved.",
+    )
+    parser.add_argument(
+        "--submit",
+        nargs="?",
+        const="local",
+        default=None,
+        choices=["local", "pr"],
+        help="Submit the results to the results repository (https://github.com/embeddings-benchmark/results) after the evaluation. "
+        "`--submit` (same as `--submit local`) commits them to a new branch in a local clone of the repository, ready to be pushed and opened as a PR manually. "
+        "`--submit pr` also pushes the branch to your fork and opens a PR, which requires `mteb[github]` and GitHub authentication "
+        "(`gh auth login` or a git credential helper).",
     )
 
     parser.set_defaults(func=run)

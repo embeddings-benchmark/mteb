@@ -5,6 +5,7 @@ import subprocess
 import sys
 from argparse import Namespace
 from pathlib import Path
+from typing import Any
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -45,6 +46,30 @@ def test_available_benchmarks(capsys: pytest.CaptureFixture[str]):
     )
 
 
+def _run_args(**kwargs: Any) -> Namespace:
+    defaults = dict(
+        model="sentence-transformers/all-MiniLM-L6-v2",
+        tasks=None,
+        model_revision=None,
+        output_folder="results",
+        device=None,
+        categories=None,
+        task_types=None,
+        languages=None,
+        batch_size=None,
+        verbosity=3,
+        co2_tracker=None,
+        overwrite_strategy="only-missing",
+        eval_splits=None,
+        prediction_folder=None,
+        benchmarks=None,
+        overwrite=False,
+        save_predictions=None,
+        submit=None,
+    )
+    return Namespace(**{**defaults, **kwargs})
+
+
 run_task_fixures = [
     (
         "sentence-transformers/all-MiniLM-L6-v2",
@@ -63,24 +88,12 @@ def test_run_task(
     model_revision: str,
     tmp_path: Path,
 ):
-    args = Namespace(
+    args = _run_args(
         model=model_name,
         tasks=[task_name],
         model_revision=model_revision,
         output_folder=tmp_path.as_posix(),
-        device=None,
-        categories=None,
-        task_types=None,
-        languages=None,
-        batch_size=None,
-        verbosity=3,
-        co2_tracker=None,
         overwrite_strategy="always",
-        eval_splits=None,
-        prediction_folder=None,
-        benchmarks=None,
-        overwrite=False,
-        save_predictions=None,
     )
 
     run(args)
@@ -94,6 +107,55 @@ def test_run_task(
     assert f"{task_name}.json" in [f.name for f in list(results_path.glob("*.json"))], (
         f"{task_name} not found in output folder"
     )
+
+
+@pytest.mark.parametrize(
+    ("submit", "expected_create_pr"),
+    [(None, None), ("local", False), ("pr", True)],
+)
+def test_run_submit(
+    submit: str | None, expected_create_pr: bool | None, tmp_path: Path
+):
+    """--submit submits the evaluated model's results, without it nothing is submitted"""
+    args = _run_args(
+        tasks=["BornholmBitextMining"],
+        output_folder=tmp_path.as_posix(),
+        submit=submit,
+    )
+    model = MagicMock()
+
+    with (
+        patch("mteb.get_model", return_value=model),
+        patch("mteb.evaluate"),
+        patch("mteb.cli.build_cli._is_package_available", return_value=True),
+        patch("mteb.cli.build_cli.get_github_token"),
+        patch("mteb.cli.build_cli.ResultCache.submit_results") as mock_submit,
+    ):
+        run(args)
+
+    if expected_create_pr is None:
+        mock_submit.assert_not_called()
+    else:
+        mock_submit.assert_called_once_with(
+            model.mteb_model_meta, create_pr=expected_create_pr
+        )
+
+
+def test_run_create_pr_checks_requirements_before_evaluating(tmp_path: Path):
+    args = _run_args(
+        tasks=["BornholmBitextMining"],
+        output_folder=tmp_path.as_posix(),
+        submit="pr",
+    )
+
+    with (
+        patch("mteb.cli.build_cli._is_package_available", return_value=False),
+        patch("mteb.evaluate") as mock_evaluate,
+        pytest.raises(ImportError, match="PyGithub"),
+    ):
+        run(args)
+
+    mock_evaluate.assert_not_called()
 
 
 def test_create_meta(tmp_path: Path):

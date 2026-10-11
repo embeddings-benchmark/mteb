@@ -35,6 +35,12 @@ mteb.evaluate(model_meta, task, cache=cache)
 cache.submit_results(model_meta, create_pr=False)  # manual review before pushing
 ```
 
+The same can be done from the command line, where `--submit` (or `--submit local`) corresponds to `create_pr=False` and `--submit pr` to `create_pr=True`:
+
+```bash
+mteb run -m sentence-transformers/all-MiniLM-L6-v2 -t ArguAna --submit pr
+```
+
 ## Submitting Results
 === "Manual Submission"
     !!! note Requirements

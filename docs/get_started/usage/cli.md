@@ -35,6 +35,14 @@ mteb run -m sentence-transformers/average_word_embeddings_komninos \
 This will create a folder `mteb_output/{model_name}/{model_revision}` containing the results of the model on the specified tasks supplied as a json
 file; `{task_name}.json`.
 
+To also submit the results to the [results repository](https://github.com/embeddings-benchmark/results), add `--submit`. On its own (or as `--submit local`) it commits the results to a new branch in a local clone of the repository for you to push and open a PR manually, while `--submit pr` also opens the PR for you. See [Submit Results](../../contributing/submitting_results.md) for the requirements.
+
+```bash
+mteb run -m sentence-transformers/all-MiniLM-L6-v2 \
+         -t ArguAna \
+         --submit pr
+```
+
 
 ## Listing Available Tasks
 
