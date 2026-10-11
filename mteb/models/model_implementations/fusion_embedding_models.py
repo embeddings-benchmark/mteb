@@ -236,7 +236,7 @@ fusion_embedding_1_2b_preview = ModelMeta(
     n_embedding_parameters=311_164_928,
     memory_usage_mb=10681,
     max_tokens=254,
-    embed_dim=[2048, 1536, 1024, 512, 256, 128, 64],
+    embed_dim=1024,
     license="cc-by-nc-4.0",
     reference="https://huggingface.co/EximiusLabs/fusion-embedding-1-2b-preview",
     similarity_fn_name="cosine",
@@ -299,7 +299,7 @@ fusion_embedding_2_2b_preview = ModelMeta(
     # generation-2 adapters sit inside the 2.8B rounding
     memory_usage_mb=10681,
     max_tokens=254,
-    embed_dim=[2048, 1536, 1024, 512, 256, 128, 64],
+    embed_dim=1024,
     license="cc-by-nc-4.0",
     reference="https://huggingface.co/EximiusLabs/fusion-embedding-2-2b-preview",
     similarity_fn_name="cosine",

@@ -63,7 +63,7 @@ class LCOEmbedding(AbsEncoder):
         self.processor.tokenizer.padding_side = "left"
 
         self.model = Qwen2_5OmniThinkerForConditionalGeneration.from_pretrained(
-            model_name, torch_dtype=torch.bfloat16, **kwargs
+            model_name, revision=revision, torch_dtype=torch.bfloat16, **kwargs
         ).to(self.device)
         self.model.eval()
 
