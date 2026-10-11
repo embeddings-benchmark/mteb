@@ -31,20 +31,33 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
+def _set_verbosity(verbosity: int) -> None:
+    if verbosity == 0:
+        logging.getLogger("mteb").setLevel(logging.CRITICAL)
+    elif verbosity == 1:
+        logging.getLogger("mteb").setLevel(logging.WARNING)
+    elif verbosity == 2:
+        logging.getLogger("mteb").setLevel(logging.INFO)
+    elif verbosity == 3:
+        logging.getLogger("mteb").setLevel(logging.DEBUG)
+
+
+def _check_create_pr_requirements() -> None:
+    """Fail early if a PR cannot be created, instead of after the evaluation or submission."""
+    if not _is_package_available("github"):
+        raise ImportError(
+            f"Creating a PR requires PyGithub. Install it with `{_install_command(['github'])}`."
+        )
+    get_github_token()
+
+
 def run(args: argparse.Namespace) -> None:
     """Run a model on a set of tasks."""
-    # set logging based on verbosity level
     _requires_full_installation("torch", "Running a model")
     import torch
 
-    if args.verbosity == 0:
-        logging.getLogger("mteb").setLevel(logging.CRITICAL)
-    elif args.verbosity == 1:
-        logging.getLogger("mteb").setLevel(logging.WARNING)
-    elif args.verbosity == 2:
-        logging.getLogger("mteb").setLevel(logging.INFO)
-    elif args.verbosity == 3:
-        logging.getLogger("mteb").setLevel(logging.DEBUG)
+    # set logging based on verbosity level
+    _set_verbosity(args.verbosity)
 
     if args.benchmarks and (  # noqa: PLR0916
         args.tasks
@@ -62,14 +75,8 @@ def run(args: argparse.Namespace) -> None:
 
     logger.info("Running with parameters: %s", args)
 
-    create_pr = args.submit == "pr"
-    if create_pr:
-        # check before evaluating, so that a missing setup does not surface only after the evaluation
-        if not _is_package_available("github"):
-            raise ImportError(
-                f"Creating a PR requires PyGithub. Install it with `{_install_command(['github'])}`."
-            )
-        get_github_token()
+    if args.create_pr:
+        _check_create_pr_requirements()
 
     if args.device is None:
         device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -123,8 +130,8 @@ def run(args: argparse.Namespace) -> None:
         prediction_folder=prediction_folder,
     )
 
-    if args.submit:
-        cache.submit_results(model.mteb_model_meta, tasks=tasks, create_pr=create_pr)
+    if args.create_pr:
+        cache.submit_results(model.mteb_model_meta, tasks=tasks, create_pr=True)
 
 
 def _available_benchmarks(args: argparse.Namespace) -> None:
@@ -301,18 +308,77 @@ def _add_run_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
         help="Folder to save the model predictions in. If None, predictions will not be saved.",
     )
     parser.add_argument(
-        "--submit",
-        nargs="?",
-        const="local",
-        default=None,
-        choices=["local", "pr"],
-        help="Submit the results to the results repository (https://github.com/embeddings-benchmark/results) after the evaluation. "
-        "`--submit` (same as `--submit local`) commits them to a new branch in a local clone of the repository, ready to be pushed and opened as a PR manually. "
-        "`--submit pr` also pushes the branch to your fork and opens a PR, which requires `mteb[github]` and GitHub authentication "
-        "(`gh auth login` or a git credential helper).",
+        "--create-pr",
+        action="store_true",
+        default=False,
+        help="After the evaluation, open a PR with the results of the evaluated tasks to the results repository "
+        "(https://github.com/embeddings-benchmark/results), like `mteb submit-results --create-pr`. "
+        "Requires `mteb[github]` and GitHub authentication (`gh auth login` or a git credential helper).",
     )
 
     parser.set_defaults(func=run)
+
+
+def _submit_results(args: argparse.Namespace) -> None:
+    _set_verbosity(args.verbosity)
+    if args.create_pr:
+        _check_create_pr_requirements()
+
+    ResultCache(args.output_folder).submit_results(
+        args.models,
+        tasks=args.tasks,
+        create_pr=args.create_pr,
+        message=args.message,
+    )
+
+
+def _add_submit_results_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
+    parser = subparsers.add_parser(
+        "submit-results",
+        help="Submit results to the results repository (https://github.com/embeddings-benchmark/results)",
+        description="Submit the results that the results repository does not have yet. By default, they are committed to a new "
+        "branch in a local clone of the repository, ready to be pushed and opened as a PR manually. Use `--create-pr` to open the PR directly.",
+    )
+    parser.add_argument(
+        "-m",
+        "--models",
+        nargs="+",
+        type=str,
+        default=None,
+        help="Models whose results to submit. If not set, the results of all models in the results folder are submitted.",
+    )
+    parser.add_argument(
+        "-t",
+        "--tasks",
+        nargs="+",
+        type=str,
+        default=None,
+        help="Tasks whose results to submit. If not set, the results of all tasks are submitted.",
+    )
+    parser.add_argument(
+        "--output-folder",
+        type=str,
+        default="results",  # same default as `mteb run`
+        help="Folder containing the results, i.e. the `--output-folder` used with `mteb run`.",
+    )
+    parser.add_argument(
+        "--create-pr",
+        action="store_true",
+        default=False,
+        help="Push the results to your fork and open a PR. Requires `mteb[github]` and GitHub authentication "
+        "(`gh auth login` or a git credential helper).",
+    )
+    parser.add_argument(
+        "--message",
+        type=str,
+        default=None,
+        help="Title of the commit and PR, e.g. 'Add ArguAna results for my-org/my-model'. If not set, a title listing the submitted models is used.",
+    )
+    parser.add_argument(
+        "-v", "--verbosity", type=int, default=2, help="Verbosity level"
+    )
+
+    parser.set_defaults(func=_submit_results)
 
 
 def _create_meta(args: argparse.Namespace) -> None:
@@ -632,6 +698,7 @@ def build_cli() -> argparse.ArgumentParser:
     _add_available_tasks_parser(subparsers)
     _add_available_benchmarks_parser(subparsers)
     _add_create_meta_parser(subparsers)
+    _add_submit_results_parser(subparsers)
     _add_leaderboard_parser(subparsers)
     _add_mock_run_parser(subparsers)
 

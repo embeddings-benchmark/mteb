@@ -1,5 +1,6 @@
 """Test cases for the ResultCache class in the mteb.cache module."""
 
+import shutil
 import subprocess
 from pathlib import Path
 from typing import Any, cast
@@ -10,7 +11,11 @@ import pytest
 
 import mteb
 from mteb.cache import LoadExperimentEnum, ResultCache
-from mteb.cache.result_cache import CopyResultsAction
+from mteb.cache.result_cache import (
+    CopyResultsAction,
+    _format_model_names,
+    _remote_model_dir,
+)
 from mteb.mocks.mock_tasks import MockRetrievalTask
 from mteb.mocks.mock_tasks.clustering import MockMultilingualClusteringTask
 from mteb.models import ModelMeta
@@ -643,6 +648,105 @@ def test_submit_results_only_given_tasks(tmp_path: Path):
     committed = _committed_files(remote_path)
     assert f"{MockRetrievalTask.metadata.name}.json" in committed
     assert f"{other_task.metadata.name}.json" not in committed
+
+
+def _commit_all(remote_path: Path, message: str) -> None:
+    subprocess.run(["git", "add", "-A"], cwd=remote_path, check=True)
+    subprocess.run(
+        ["git", "commit", "-m", message],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+    )
+
+
+def test_submit_results_skips_submitted_results(tmp_path: Path):
+    """Results already in the results repository are not submitted again"""
+    cache_path, remote_path = _setup_fake_remote(tmp_path)
+    test_model, _ = _setup_test_model_results(cache_path)
+    cache = ResultCache(cache_path=cache_path)
+    remote_dir = _remote_model_dir(cache.remote_results_path, test_model)
+    shutil.copytree(
+        cache.cache_path
+        / "results"
+        / remote_dir.relative_to(cache.remote_results_path),
+        remote_dir,
+    )
+    _commit_all(remote_path, "Add results")
+
+    with patch.object(cache, "download_from_remote", return_value=None):
+        result = cache.submit_results(models=[test_model], create_pr=False)
+
+    assert result["status"] == "no_changes"
+
+
+def test_submit_results_skips_results_of_other_dataset_revision(
+    tmp_path: Path, caplog: pytest.LogCaptureFixture
+):
+    cache_path, remote_path = _setup_fake_remote(tmp_path)
+    test_model, _ = _setup_test_model_results(cache_path)
+    cache = ResultCache(cache_path=cache_path)
+    task_name = MockRetrievalTask.metadata.name
+    local_file = (
+        cache.cache_path
+        / "results"
+        / test_model.model_name_as_path()
+        / cast("str", test_model.revision)
+        / f"{task_name}.json"
+    )
+
+    remote_result = TaskResult.from_disk(local_file)
+    remote_result.dataset_revision = "other-revision"
+    remote_result.scores = {}
+    remote_dir = _remote_model_dir(cache.remote_results_path, test_model)
+    remote_dir.mkdir(parents=True)
+    remote_result.to_disk(remote_dir / f"{task_name}.json")
+    _commit_all(remote_path, "Add results of another dataset revision")
+
+    with patch.object(cache, "download_from_remote", return_value=None):
+        result = cache.submit_results(models=[test_model], create_pr=False)
+
+    assert result["status"] == "no_changes"
+    assert "other-revision" in caplog.text
+
+
+def test_submit_results_message(tmp_path: Path):
+    cache_path, remote_path = _setup_fake_remote(tmp_path)
+    test_model, _ = _setup_test_model_results(cache_path)
+    cache = ResultCache(cache_path=cache_path)
+
+    with (
+        patch.object(cache, "download_from_remote", return_value=None),
+        patch(
+            "mteb.cache.result_cache.handle_pr_creation_with_cleanup"
+        ) as mock_create_pr,
+    ):
+        cache.submit_results(
+            models=[test_model], create_pr=True, message="Add mock results"
+        )
+
+    commit_title = subprocess.run(
+        ["git", "log", "-1", "--format=%s"],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    assert commit_title == "Add mock results"
+    assert mock_create_pr.call_args.kwargs["pr_title"] == "Add mock results"
+
+
+@pytest.mark.parametrize(
+    ("names", "expected"),
+    [
+        (["org/a"], "org/a"),
+        (["org/a", "org/b"], "org/a, org/b"),
+        (["org/a", "org/b", "org/c", "org/d"], "org/a, org/b (+2 more)"),
+    ],
+)
+def test_format_model_names(names: list[str], expected: str):
+    models = [ModelMeta.create_empty(overwrites={"name": name}) for name in names]
+    assert _format_model_names(models) == expected
 
 
 def test_copy_results_action_reverts_partial_copy_on_failure(tmp_path: Path):

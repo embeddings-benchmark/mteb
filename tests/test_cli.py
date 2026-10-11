@@ -17,6 +17,7 @@ from mteb.cli.build_cli import (
     _create_meta,
     _leaderboard,
     _mock_run,
+    build_cli,
     run,
 )
 
@@ -65,7 +66,7 @@ def _run_args(**kwargs: Any) -> Namespace:
         benchmarks=None,
         overwrite=False,
         save_predictions=None,
-        submit=None,
+        create_pr=False,
     )
     return Namespace(**{**defaults, **kwargs})
 
@@ -109,48 +110,42 @@ def test_run_task(
     )
 
 
-@pytest.mark.parametrize(
-    ("submit", "expected_create_pr"),
-    [(None, None), ("local", False), ("pr", True)],
-)
-def test_run_submit(
-    submit: str | None, expected_create_pr: bool | None, tmp_path: Path
-):
-    """--submit submits the evaluated model's results, without it nothing is submitted"""
+@pytest.mark.parametrize("create_pr", [False, True])
+def test_run_create_pr(create_pr: bool, tmp_path: Path):
+    """--create-pr opens a PR with the results of the evaluated tasks, without it nothing is submitted"""
     args = _run_args(
         tasks=["BornholmBitextMining"],
         output_folder=tmp_path.as_posix(),
-        submit=submit,
+        create_pr=create_pr,
     )
     model = MagicMock()
 
     with (
         patch("mteb.get_model", return_value=model),
         patch("mteb.evaluate"),
-        patch("mteb.cli.build_cli._is_package_available", return_value=True),
-        patch("mteb.cli.build_cli.get_github_token"),
+        patch("mteb.cli.build_cli._check_create_pr_requirements"),
         patch("mteb.cli.build_cli.ResultCache.submit_results") as mock_submit,
     ):
         run(args)
 
-    if expected_create_pr is None:
+    if not create_pr:
         mock_submit.assert_not_called()
-    else:
-        mock_submit.assert_called_once()
-        (submitted_model,) = mock_submit.call_args.args
-        assert submitted_model is model.mteb_model_meta
-        assert mock_submit.call_args.kwargs["create_pr"] is expected_create_pr
-        # only the results of the evaluated tasks are submitted
-        assert [t.metadata.name for t in mock_submit.call_args.kwargs["tasks"]] == [
-            "BornholmBitextMining"
-        ]
+        return
+    mock_submit.assert_called_once()
+    (submitted_model,) = mock_submit.call_args.args
+    assert submitted_model is model.mteb_model_meta
+    assert mock_submit.call_args.kwargs["create_pr"] is True
+    # only the results of the evaluated tasks are submitted
+    assert [t.metadata.name for t in mock_submit.call_args.kwargs["tasks"]] == [
+        "BornholmBitextMining"
+    ]
 
 
 def test_run_create_pr_checks_requirements_before_evaluating(tmp_path: Path):
     args = _run_args(
         tasks=["BornholmBitextMining"],
         output_folder=tmp_path.as_posix(),
-        submit="pr",
+        create_pr=True,
     )
 
     with (
@@ -161,6 +156,45 @@ def test_run_create_pr_checks_requirements_before_evaluating(tmp_path: Path):
         run(args)
 
     mock_evaluate.assert_not_called()
+
+
+@pytest.mark.parametrize(
+    ("argv", "expected"),
+    [
+        (
+            [],
+            {"models": None, "tasks": None, "create_pr": False, "message": None},
+        ),
+        (
+            ["-m", "org/model1", "org/model2", "-t", "ArguAna", "--create-pr"]
+            + ["--message", "Add ArguAna results"],
+            {
+                "models": ["org/model1", "org/model2"],
+                "tasks": ["ArguAna"],
+                "create_pr": True,
+                "message": "Add ArguAna results",
+            },
+        ),
+    ],
+)
+def test_submit_results_cli(argv: list[str], expected: dict[str, Any], tmp_path: Path):
+    args = build_cli().parse_args(
+        ["submit-results", "--output-folder", tmp_path.as_posix(), *argv]
+    )
+
+    with (
+        patch("mteb.cli.build_cli._check_create_pr_requirements") as mock_check,
+        patch("mteb.cli.build_cli.ResultCache.submit_results") as mock_submit,
+    ):
+        args.func(args)
+
+    assert mock_check.called is expected["create_pr"]
+    mock_submit.assert_called_once_with(
+        expected["models"],
+        tasks=expected["tasks"],
+        create_pr=expected["create_pr"],
+        message=expected["message"],
+    )
 
 
 def test_create_meta(tmp_path: Path):

@@ -203,6 +203,7 @@ def handle_pr_creation_with_cleanup(
     branch_name: str | None,
     models: list[ModelMeta],
     result_count: int,
+    pr_title: str,
     pr_body: str,
 ) -> SubmitResultsResponse:
     """Create a pull request and clean up branch state on success or failure.
@@ -213,6 +214,7 @@ def handle_pr_creation_with_cleanup(
         result_count: Total number of results.
         branch_name: Name of the branch to create.
         original_branch: Original branch name for restoration.
+        pr_title: The title of the pull request.
         pr_body: The body text for the pull request.
 
     Returns:
@@ -227,6 +229,7 @@ def handle_pr_creation_with_cleanup(
             models=models,
             result_count=result_count,
             branch_name=branch_name,
+            pr_title=pr_title,
             pr_body=pr_body,
         )
         # After successful PR, restore to original branch
@@ -261,6 +264,7 @@ def create_pull_request(
     models: list[ModelMeta],
     result_count: int,
     branch_name: str | None,
+    pr_title: str,
     pr_body: str,
 ) -> SubmitResultsResponse:
     """Create a pull request on GitHub using PyGithub and gh CLI.
@@ -270,6 +274,7 @@ def create_pull_request(
         models: List of ModelMeta objects.
         result_count: Total number of results.
         branch_name: Name of the branch to create.
+        pr_title: The title of the pull request.
         pr_body: The body text for the pull request.
 
     Returns:
@@ -378,7 +383,7 @@ def create_pull_request(
 
         logger.info("Creating pull request...")
         pr = upstream.create_pull(
-            title=f"MTEB Evaluation Results: {model_str}",
+            title=pr_title,
             body=pr_body,
             head=f"{user.login}:{branch_name}",
             base="main",

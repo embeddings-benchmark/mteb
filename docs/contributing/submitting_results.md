@@ -19,27 +19,41 @@ For a full guide on loading and working with results — including filtering, da
 
 Complete example: evaluate, cache, and submit results:
 
-```python
-import mteb
+=== "Python"
 
-# 1. Initialize cache
-cache = mteb.ResultCache()
+    ```python
+    import mteb
 
-# 2. Evaluate model
-model_meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
-task = mteb.get_task("ArguAna")
+    # 1. Initialize cache
+    cache = mteb.ResultCache()
 
-mteb.evaluate(model_meta, task, cache=cache)
+    # 2. Evaluate model
+    model_meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
+    task = mteb.get_task("ArguAna")
 
-# 3. Submit results
-cache.submit_results(model_meta, create_pr=False)  # manual review before pushing
-```
+    mteb.evaluate(model_meta, task, cache=cache)
 
-The same can be done from the command line, where `--submit` (or `--submit local`) corresponds to `create_pr=False` and `--submit pr` to `create_pr=True`:
+    # 3. Submit results
+    cache.submit_results(model_meta, create_pr=False)  # manual review before pushing
+    ```
 
-```bash
-mteb run -m sentence-transformers/all-MiniLM-L6-v2 -t ArguAna --submit pr
-```
+=== "CLI"
+
+    ```bash
+    # 1. Evaluate model
+    mteb run -m sentence-transformers/all-MiniLM-L6-v2 -t ArguAna
+
+    # 2. Submit results
+    mteb submit-results -m sentence-transformers/all-MiniLM-L6-v2  # manual review before pushing
+    ```
+
+    To evaluate and open a PR in a single command, add `--create-pr` to `mteb run`. Only the results of the evaluated tasks are submitted:
+
+    ```bash
+    mteb run -m sentence-transformers/all-MiniLM-L6-v2 -t ArguAna --create-pr
+    ```
+
+Only results that the results repository does not have yet are submitted. Results computed on a different dataset revision than those in the repository are skipped with a warning.
 
 ## Submitting Results
 === "Manual Submission"
@@ -48,14 +62,23 @@ mteb run -m sentence-transformers/all-MiniLM-L6-v2 -t ArguAna --submit pr
 
     Prepare results without automatically creating a PR:
 
-    ```python
-    submission_info = cache.submit_results(
-        models=["sentence-transformers/all-MiniLM-L6-v2"], create_pr=False
-    )
+    === "Python"
 
-    # submit_results logs the manual submission instructions
-    print(f"Prepared submission at: {submission_info['path']}")
-    ```
+        ```python
+        submission_info = cache.submit_results(
+            models=["sentence-transformers/all-MiniLM-L6-v2"], create_pr=False
+        )
+
+        # submit_results logs the manual submission instructions
+        print(f"Prepared submission at: {submission_info['path']}")
+        ```
+
+    === "CLI"
+
+        ```bash
+        # logs the manual submission instructions
+        mteb submit-results -m sentence-transformers/all-MiniLM-L6-v2
+        ```
 
 === "Automated Submission"
     !!! note Requirements
@@ -71,28 +94,57 @@ mteb run -m sentence-transformers/all-MiniLM-L6-v2 -t ArguAna --submit pr
             ```
     Then run your code:
 
-    ```python
-    submission_info = cache.submit_results(
-        models=["sentence-transformers/all-MiniLM-L6-v2"], create_pr=True
-    )
+    === "Python"
 
-    if submission_info.get("pr_url"):
-        print(f"PR created: {submission_info['pr_url']}")
-    ```
+        ```python
+        submission_info = cache.submit_results(
+            models=["sentence-transformers/all-MiniLM-L6-v2"],
+            create_pr=True,
+            message="Add ArguAna results for all-MiniLM-L6-v2",
+        )
+
+        if submission_info.get("pr_url"):
+            print(f"PR created: {submission_info['pr_url']}")
+        ```
+
+    === "CLI"
+
+        ```bash
+        mteb submit-results -m sentence-transformers/all-MiniLM-L6-v2 \
+            --create-pr \
+            --message "Add ArguAna results for all-MiniLM-L6-v2"
+        ```
+
+    The message is used as the title of the commit and PR; if omitted, a title listing the submitted models is used.
 
 ### Batch Submission
 
 Submit multiple models at once:
 
-```python
-models = [
-    "sentence-transformers/all-MiniLM-L6-v2",
-    "sentence-transformers/all-mpnet-base-v2",
-    "BAAI/bge-base-en-v1.5",
-]
+=== "Python"
 
-cache.submit_results(models=models, create_pr=False)
-```
+    ```python
+    models = [
+        "sentence-transformers/all-MiniLM-L6-v2",
+        "sentence-transformers/all-mpnet-base-v2",
+        "BAAI/bge-base-en-v1.5",
+    ]
+
+    cache.submit_results(models=models, create_pr=False)
+    ```
+
+=== "CLI"
+
+    ```bash
+    mteb submit-results -m sentence-transformers/all-MiniLM-L6-v2 \
+        sentence-transformers/all-mpnet-base-v2 \
+        BAAI/bge-base-en-v1.5
+
+    # without -m, the results of all models are submitted
+    mteb submit-results
+    ```
+
+You can also restrict the submission to specific tasks with `tasks=[...]` in Python or `-t` in the CLI.
 
 
 ### After submission
