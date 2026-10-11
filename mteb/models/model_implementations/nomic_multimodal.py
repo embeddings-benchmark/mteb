@@ -167,6 +167,7 @@ nomic_embed_multimodal_3b = ModelMeta(
     use_instructions=True,
     training_datasets=TRAINING_DATA,
     extra_requirements_groups=["colpali_engine"],
+    output_dtypes=OutputDType.BF16,
 )
 
 nomic_embed_multimodal_7b = ModelMeta(
@@ -196,4 +197,5 @@ nomic_embed_multimodal_7b = ModelMeta(
     use_instructions=True,
     training_datasets=TRAINING_DATA,
     extra_requirements_groups=["colpali_engine"],
+    output_dtypes=OutputDType.BF16,
 )

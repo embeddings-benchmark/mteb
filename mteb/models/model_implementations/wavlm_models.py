@@ -91,10 +91,9 @@ class WavlmWrapper(AbsEncoder):
                 outputs = self.model(
                     feature_inputs.input_values,
                     attention_mask=feature_inputs.attention_mask,
-                    output_hidden_states=True,
                 )
 
-                last_hidden_state = outputs.hidden_states[-1]
+                last_hidden_state = outputs.last_hidden_state
 
                 # Apply attention-masked pooling to exclude padding tokens
                 batch_size, hidden_seq_len, hidden_size = last_hidden_state.shape

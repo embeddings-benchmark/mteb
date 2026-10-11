@@ -7,6 +7,8 @@ from mteb.filter_tasks import filter_tasks
 from mteb.tasks.aggregated_tasks import CQADupstackRetrieval
 from mteb.types import Modalities
 
+pytestmark = pytest.mark.core
+
 
 @pytest.fixture
 def all_tasks():

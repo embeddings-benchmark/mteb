@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
@@ -48,11 +49,9 @@ class HeARS11AudioWrapper(AbsEncoder):
 
     @classmethod
     def _prepare_audio(cls, audio: np.ndarray) -> torch.Tensor:
-        """Convert decoded audio to the fixed 2-second, 16 kHz input expected by HeAR-s1.1.
+        """Split mono audio into 2 s windows (2 s hop, last one zero-padded), as in the author's MAEB run.
 
-        MTEB's audio collator handles decoding and resampling, but audio clips can still
-        have different lengths and channel layouts. This normalizes each waveform to
-        mono float32 audio with exactly 32,000 samples so the batch can be stacked.
+        https://huggingface.co/matthewagi/HeAR-s1.1/blob/main/maeb_run_config.json
         """
         import torch
 
@@ -61,13 +60,10 @@ class HeARS11AudioWrapper(AbsEncoder):
             audio = audio.mean(axis=0)
         audio = audio.reshape(-1)
 
-        if audio.shape[0] > cls.clip_samples:
-            start = (audio.shape[0] - cls.clip_samples) // 2
-            audio = audio[start : start + cls.clip_samples]
-        elif audio.shape[0] < cls.clip_samples:
-            audio = np.pad(audio, (0, cls.clip_samples - audio.shape[0]))
+        n_windows = max(1, math.ceil(audio.shape[0] / cls.clip_samples))
+        audio = np.pad(audio, (0, n_windows * cls.clip_samples - audio.shape[0]))
 
-        return torch.from_numpy(audio)
+        return torch.from_numpy(audio.reshape(n_windows, cls.clip_samples))
 
     def get_audio_embeddings(
         self,
@@ -84,14 +80,19 @@ class HeARS11AudioWrapper(AbsEncoder):
             "HeAR's model code changes a clip's embedding with its batch-mates, even at a fixed 2 s length",
         )
         for batch in tqdm(inputs, disable=not show_progress_bar):
-            audio = torch.stack(
-                [self._prepare_audio(item["array"]) for item in batch["audio"]]
-            ).to(self.device)
-
-            with torch.no_grad():
-                output = self.model(input_values=audio, return_dict=True)
-
-            embeddings.append(output.pooler_output.cpu().detach())
+            for item in batch["audio"]:
+                windows = self._prepare_audio(item["array"]).to(self.device)
+                with torch.no_grad():
+                    # one window at a time, for the same batch dependence
+                    window_embeddings = [
+                        self.model(
+                            input_values=window[None], return_dict=True
+                        ).pooler_output
+                        for window in windows
+                    ]
+                embeddings.append(
+                    torch.cat(window_embeddings).mean(dim=0, keepdim=True).cpu()
+                )
 
         return torch.cat(embeddings, dim=0).numpy()
 

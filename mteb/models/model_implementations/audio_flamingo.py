@@ -177,4 +177,5 @@ audio_flamingo_meta = ModelMeta(
 }
 """,
     extra_requirements_groups=["audio-flamingo-3"],
+    output_dtypes=OutputDType.BF16,
 )

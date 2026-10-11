@@ -194,6 +194,49 @@ GEMINI_EMBEDDING_2_PROMPTS = {
 }
 
 
+GEMINI_MAX_ATTEMPTS = 10
+GEMINI_MAX_BACKOFF_SECONDS = 60.0
+# Transient HTTP statuses (same set as google-genai's own HttpRetryOptions default)
+GEMINI_RETRYABLE_STATUS_CODES = {408, 429, 500, 502, 503, 504}
+
+
+def _gemini_retry_delay(error: Exception, attempt: int) -> float | None:
+    """Seconds to wait before retrying ``error``, or None if it is not transient.
+
+    Rate limits, server errors and network timeouts are retried with exponential
+    backoff (the server's "retry in Xs" hint wins for 429). Everything else,
+    e.g. 400 invalid argument or a local encoding error, fails immediately.
+    """
+    import httpx
+    from google.genai.errors import APIError
+
+    # google-genai's async client uses aiohttp when it is installed, httpx otherwise
+    network_errors: tuple[type[Exception], ...] = (
+        httpx.TransportError,
+        TimeoutError,
+        ConnectionError,
+    )
+    try:
+        import aiohttp
+
+        network_errors += (aiohttp.ClientConnectionError,)
+    except ImportError:
+        pass
+
+    if isinstance(error, APIError):
+        if error.code not in GEMINI_RETRYABLE_STATUS_CODES:
+            return None
+    elif not isinstance(error, network_errors):
+        return None
+
+    wait = min(2.0**attempt, GEMINI_MAX_BACKOFF_SECONDS)
+    if isinstance(error, APIError) and error.code == 429:
+        match = re.search(r"retry in (\d+(?:\.\d+)?)s", str(error), re.IGNORECASE)
+        if match:
+            wait = float(match.group(1))
+    return wait + random.uniform(0, 1)
+
+
 def _audio_to_wav_bytes(audio_item: dict) -> bytes:
     """Convert an AudioInputItem (numpy array + sampling_rate) to WAV bytes."""
 
@@ -211,8 +254,8 @@ def _audio_to_wav_bytes(audio_item: dict) -> bytes:
         )
         array = array[..., :max_samples]
 
-    # Convert float audio to 16-bit PCM
-    pcm = (array * 32767).astype(np.int16)
+    # Convert float audio to 16-bit PCM; clip so loud samples do not wrap around
+    pcm = (np.clip(array, -1.0, 1.0) * 32767).astype(np.int16)
     buf = io.BytesIO()
     with wave.open(buf, "wb") as wf:
         wf.setnchannels(1)
@@ -354,32 +397,22 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
             async def embed_one(
                 item: Any,  # noqa: ANN401 -- google-genai content payload
             ) -> list[float]:
-                wait_time = 1.0
                 async with semaphore:
-                    for attempt in range(10):
+                    for attempt in range(GEMINI_MAX_ATTEMPTS):
                         try:
                             response = await self.client.aio.models.embed_content(
                                 model=self.model_name, contents=item, config=config
                             )
                             return response.embeddings[0].values
                         except Exception as e:
-                            if "429" in str(e) and attempt < 9:
-                                match = re.search(
-                                    r"retry in (\d+(?:\.\d+)?)s", str(e), re.IGNORECASE
-                                )
-                                wait = float(match.group(1)) if match else wait_time
-                                wait += random.uniform(0, 5)
-                                logger.warning(
-                                    f"Rate limited, waiting {wait:.1f}s (attempt {attempt + 1}/10)"
-                                )
-                                await asyncio.sleep(wait)
-                                wait_time = min(wait_time * 2, 60)
-                            elif attempt < 9:
-                                logger.warning(
-                                    f"Retrying after error (attempt {attempt + 1}/10): {e}"
-                                )
-                            else:
+                            wait = _gemini_retry_delay(e, attempt)
+                            if wait is None or attempt == GEMINI_MAX_ATTEMPTS - 1:
                                 raise
+                            logger.warning(
+                                f"Retrying after error in {wait:.1f}s "
+                                f"(attempt {attempt + 1}/{GEMINI_MAX_ATTEMPTS}): {e}"
+                            )
+                            await asyncio.sleep(wait)
                     raise RuntimeError(
                         "embed_one exhausted all retries without returning or raising"
                     )

@@ -511,6 +511,7 @@ kalm_reranker_v1_nano = ModelMeta(
     model_type=["cross-encoder"],
     citation=KALM_RERANKER_V1_CITATION,
     contacts=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -543,6 +544,7 @@ kalm_reranker_v1_small = ModelMeta(
     model_type=["cross-encoder"],
     citation=KALM_RERANKER_V1_CITATION,
     contacts=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 kalm_reranker_v1_large = ModelMeta(
@@ -574,4 +576,5 @@ kalm_reranker_v1_large = ModelMeta(
     model_type=["cross-encoder"],
     citation=KALM_RERANKER_V1_CITATION,
     contacts=None,
+    output_dtypes=OutputDType.BF16,
 )

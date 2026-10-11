@@ -9,6 +9,7 @@ from mteb.models.model_meta import (
 from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
 )
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -134,6 +135,7 @@ e5_omni_3b = ModelMeta(
     model_type=["dense"],
     citation=_E5_OMNI_CITATION,
     extra_requirements_groups=["multimodal-sbert"],
+    output_dtypes=OutputDType.BF16,
 )
 
 e5_omni_7b = ModelMeta(
@@ -173,4 +175,5 @@ e5_omni_7b = ModelMeta(
     model_type=["dense"],
     citation=_E5_OMNI_CITATION,
     extra_requirements_groups=["multimodal-sbert"],
+    output_dtypes=OutputDType.BF16,
 )
