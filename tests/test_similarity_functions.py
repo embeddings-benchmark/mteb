@@ -19,7 +19,6 @@ from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderW
 from mteb.similarity_functions import (
     _max_sim_ragged_core,
     _token_budget_chunks,
-    _upcast_low_precision,
     cos_sim,
     dot_score,
     euclidean_sim,
@@ -312,36 +311,6 @@ def test_pairwise_similarity_matches_sentence_transformers(
     torch.testing.assert_close(
         torch.as_tensor(ours(a.numpy(), b.numpy())), expected(a.numpy(), b.numpy())
     )
-
-
-@pytest.mark.parametrize("dtype", LOW_PRECISION_DTYPES)
-def test_upcast_low_precision_tensor(dtype):
-    a = torch.randn(4, 8).to(dtype)
-    upcast = _upcast_low_precision(a)
-    assert upcast.dtype == torch.float32
-    torch.testing.assert_close(upcast, a.to(torch.float32))
-
-
-def test_upcast_low_precision_numpy():
-    a = np.random.default_rng(0).standard_normal((4, 8)).astype(np.float16)
-    upcast = _upcast_low_precision(a)
-    assert upcast.dtype == np.float32
-    np.testing.assert_array_equal(upcast, a.astype(np.float32))
-
-
-@pytest.mark.parametrize(
-    "a",
-    [
-        torch.randn(4, 8),
-        torch.randn(4, 8, dtype=torch.float64),
-        torch.randint(0, 10, (4, 8)),
-        np.ones((4, 8), dtype=np.float32),
-        np.ones((4, 8), dtype=np.int8),
-        [[1.0, 2.0]],
-    ],
-)
-def test_upcast_low_precision_leaves_other_inputs_unchanged(a):
-    assert _upcast_low_precision(a) is a
 
 
 class _DtypeRecordingModel:
