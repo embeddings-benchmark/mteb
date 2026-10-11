@@ -272,4 +272,5 @@ bidirlm_omni_2_5b = ModelMeta(
     public_training_data="https://huggingface.co/datasets/BidirLM/BidirLM-Omni-Contrastive",
     training_datasets=BIDIRLM_OMNI_TRAINING_DATASETS,
     citation=BIDIRLM_CITATION,
+    extra_requirements_groups=["bidirlm-omni"],
 )

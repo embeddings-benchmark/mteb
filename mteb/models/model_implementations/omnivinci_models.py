@@ -11,6 +11,7 @@ from tqdm.auto import tqdm
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import VideoCollator, single_clip_dataloader
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -274,4 +275,5 @@ omnivinci = ModelMeta(
     # (openai-whisper, kaldiio, decord, s2wrapper from git); see the model card
     # https://huggingface.co/nvidia/omnivinci
     extra_requirements_groups=["audio", "video", "transformers-v4"],
+    output_dtypes=OutputDType.FLOAT16,
 )

@@ -1,9 +1,15 @@
+from __future__ import annotations
+
 import functools
 import importlib.metadata
 import importlib.util
 import logging
+from typing import TYPE_CHECKING
 
 from typing_extensions import deprecated
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 logger = logging.getLogger(__name__)
 
@@ -12,15 +18,64 @@ logger = logging.getLogger(__name__)
 def _mteb_distribution() -> importlib.metadata.Distribution:
     """Return the installed distribution that provides the `mteb` package.
 
-    The package can be installed as `mteb`, or as `mteb-core` with `mteb` as a metapackage depending on it.
-    `mteb-core` is checked first, as it holds the version, extras and requirements of the code.
+    The code is published both as `mteb` and as `mteb-core`, a minimal install of the same code without the
+    dependencies needed to load and run models. `mteb-core` is checked first, so that the install instructions
+    say to switch to `mteb`.
     """
     for name in ("mteb-core", "mteb"):
         try:
-            return importlib.metadata.distribution(name)
+            distribution = importlib.metadata.distribution(name)
         except importlib.metadata.PackageNotFoundError:
             continue
+        if name == "mteb-core" and _is_installed("mteb"):
+            logger.warning(
+                "`mteb` and `mteb-core` are both installed. They contain the same files, so uninstalling "
+                "either one removes the files of the other. Uninstall both, then install only one of them."
+            )
+        return distribution
     raise importlib.metadata.PackageNotFoundError("mteb")
+
+
+def _is_installed(distribution_name: str) -> bool:
+    try:
+        importlib.metadata.distribution(distribution_name)
+    except importlib.metadata.PackageNotFoundError:
+        return False
+    return True
+
+
+def _extras_requirement(groups: Sequence[str]) -> str:
+    """The requirement that installs the given extras groups for the installed distribution."""
+    return f"{_mteb_distribution().metadata['Name']}[{','.join(groups)}]"
+
+
+def _install_command(groups: Sequence[str] = ()) -> str:
+    """The command to install the given extras groups, or a full mteb installation if there are none.
+
+    A full installation means `mteb`, so on `mteb-core` it means switching. Both contain the same files, so
+    `mteb-core` has to be uninstalled first, rather than leaving two distributions owning them.
+    """
+    if groups:
+        return f"pip install {_extras_requirement(groups)}"
+    if _mteb_distribution().metadata["Name"] == "mteb-core":
+        return "pip uninstall -y mteb-core && pip install mteb"
+    return "pip install mteb"
+
+
+def _full_installation_message(what: str) -> str:
+    """The error message for something that a minimal `mteb-core` installation cannot do."""
+    return f"{what} requires a full mteb installation. Install it with `{_install_command()}`."
+
+
+def _requires_full_installation(package: str, what: str) -> None:
+    """Raise an error saying what to install if this is a minimal `mteb-core` installation.
+
+    Args:
+        package: The package to check, one of the dependencies that `mteb-core` leaves out.
+        what: What the user was doing, e.g. "Evaluating a model".
+    """
+    if not _is_package_available(package):
+        raise ImportError(_full_installation_message(what))
 
 
 def _is_package_available(pkg_name: str) -> bool:

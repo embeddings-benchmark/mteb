@@ -25,6 +25,18 @@ IMAGEBIND_CITATION = """@inproceedings{girdhar2023imagebind,
 }"""
 
 
+def _apply_imagebind_compat() -> None:
+    """Alias ``torchvision.transforms.functional_tensor`` (removed in torchvision 0.17) for pytorchvideo."""
+    import sys
+
+    try:
+        import torchvision.transforms.functional_tensor  # noqa: F401
+    except ImportError:
+        import torchvision.transforms.functional as _tv_functional
+
+        sys.modules["torchvision.transforms.functional_tensor"] = _tv_functional
+
+
 class ImageBindWrapper(AbsEncoder):
     """MTEB wrapper for Meta's ImageBind model.
 
@@ -44,6 +56,8 @@ class ImageBindWrapper(AbsEncoder):
         **kwargs: Any,
     ) -> None:
         import torch
+
+        _apply_imagebind_compat()
         from imagebind.models import imagebind_model
 
         self.device = device or (
@@ -116,7 +130,9 @@ class ImageBindWrapper(AbsEncoder):
                 waveform = torchaudio.functional.resample(
                     waveform, orig_freq=sr, new_freq=sample_rate
                 )
-            min_len = 2 * sample_rate
+            # waveform2melspec pads short fbanks itself; only one 25 ms fbank
+            # window is needed
+            min_len = int(0.025 * sample_rate)
             if waveform.shape[1] < min_len:
                 waveform = torch.nn.functional.pad(
                     waveform, (0, min_len - waveform.shape[1])
@@ -153,8 +169,11 @@ class ImageBindWrapper(AbsEncoder):
 
             outputs = self.model(inputs)
 
+            # normalise each modality before summing, as ImageBind's embedding
+            # arithmetic does (raw text has norm 100, audio ~20, vision 1)
             embeddings = None
             for emb in outputs.values():
+                emb = torch.nn.functional.normalize(emb, p=2, dim=-1)  # noqa: PLW2901
                 embeddings = emb if embeddings is None else embeddings + emb
 
             return torch.nn.functional.normalize(embeddings, p=2, dim=-1)

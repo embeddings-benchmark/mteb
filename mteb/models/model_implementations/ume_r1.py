@@ -7,6 +7,7 @@ from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -326,6 +327,7 @@ ume_r1_2b = ModelMeta(
     embed_dim=1536,
     reference="https://huggingface.co/zhibinlan/UME-R1-2B",
     **_UME_R1_BASE_KWARGS,
+    output_dtypes=OutputDType.BF16,
 )
 
 ume_r1_7b = ModelMeta(
@@ -338,4 +340,5 @@ ume_r1_7b = ModelMeta(
     embed_dim=3584,
     reference="https://huggingface.co/zhibinlan/UME-R1-7B",
     **_UME_R1_BASE_KWARGS,
+    output_dtypes=OutputDType.BF16,
 )
