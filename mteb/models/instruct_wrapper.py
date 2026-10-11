@@ -164,6 +164,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
         fps: float | None = None,
         max_frames: int | None = None,
         num_frames: int | None = None,
+        min_frames: int = 1,
         target_sampling_rate: int | None = None,
         max_samples: int | None = None,
         **kwargs: Any,
@@ -188,6 +189,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
             fps: Target frames per second for video sampling (multimodal inputs only).
             max_frames: Maximum number of video frames to sample (multimodal inputs only).
             num_frames: Fixed number of video frames to sample (multimodal inputs only).
+            min_frames: Minimum number of video frames in FPS mode (multimodal inputs only).
             target_sampling_rate: Audio target sampling rate (multimodal inputs only). Defaults to 16000 when an audio/video collator is applied.
             max_samples: Audio maximum number of samples (multimodal inputs only).
             **kwargs: Kwargs for Sentence Transformer model.
@@ -236,6 +238,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
         self.fps = fps
         self.max_frames = max_frames
         self.num_frames = num_frames
+        self.min_frames = min_frames
         self.target_sampling_rate = target_sampling_rate
         self.max_samples = max_samples
 
@@ -302,6 +305,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
                 max_frames=self.max_frames,
                 num_frames=self.num_frames,
                 max_samples=self.max_samples,
+                min_frames=self.min_frames,
             )
         elif has_audio:
             from mteb.models.modality_collators import AudioCollator

@@ -602,6 +602,9 @@ class UEmbedEncoder(AbsEncoder):
                 target_sampling_rate=16_000,
                 fps=self.fps,
                 max_frames=self.max_frames,
+                # at least 4 frames: FPS_MIN_FRAMES of qwen-vl-utils, which UEmbed's
+                # code samples with; the processor fails on a single frame
+                min_frames=4,
             )
 
         batches: list[torch.Tensor] = []
