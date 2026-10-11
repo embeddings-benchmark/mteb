@@ -1,5 +1,8 @@
+from typing import Any
+
 import mteb
 from mteb.mocks.mock_tasks import MockRerankingTask
+from mteb.types import Array
 
 
 def test_evaluate_forwards_encode_kwargs_to_cross_encoder():
@@ -8,7 +11,7 @@ def test_evaluate_forwards_encode_kwargs_to_cross_encoder():
     predict = model.predict
     received = {}
 
-    def recording_predict(*args, **kwargs):
+    def recording_predict(*args: Any, **kwargs: Any) -> Array:
         received.update(kwargs)
         return predict(*args, **kwargs)
 
