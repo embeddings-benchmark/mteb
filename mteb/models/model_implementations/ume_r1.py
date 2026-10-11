@@ -27,7 +27,7 @@ UME_R1_EMBED_PROMPT = (
 VIDEO_FRAME_MIN_PIXELS = 128 * 28 * 28
 VIDEO_FRAME_MAX_PIXELS = 768 * 28 * 28
 # the official eval collator gives text-only inputs a white image (56x56 after resizing)
-# https://github.com/DeepLearnXMU/UME-R1/blob/main/src/eval/VLM2Vec/src/data/collator/eval_collator.py
+# https://github.com/XMUDeepLIT/UME-R1/blob/ab4fc06667df63791e21efefc3fbfd2fac0faf0b/src/eval/VLM2Vec/src/data/collator/eval_collator.py
 BLANK_IMAGE_SIZE = (56, 56)
 
 
@@ -186,11 +186,15 @@ class UMER1Wrapper(AbsEncoder):
                 video_content = batch_videos[i]
                 content.append({"type": "video", "video": video_content})
 
-            if not content:
+            text = batch_texts[i] if batch_texts else ""
+            if content:
+                # with media, the eval collator drops placeholder tokens and strips
+                text = text.replace("<|image_pad|>", "").replace("<|video_pad|>", "")
+                text = text.strip()
+            else:
                 blank = Image.new("RGB", BLANK_IMAGE_SIZE, (255, 255, 255))
                 content.append({"type": "image", "image": blank})
 
-            text = batch_texts[i] if batch_texts else ""
             final_text = f"{text}\n<disc_emb>\n{UME_R1_EMBED_PROMPT}"
             content.append({"type": "text", "text": final_text})
             messages.append([{"role": "user", "content": content}])
