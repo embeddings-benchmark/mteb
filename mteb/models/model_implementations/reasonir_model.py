@@ -1,6 +1,6 @@
 from mteb.models import ModelMeta
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 REASONIR_CITATION = """@article{shao2025reasonir,
       title={ReasonIR: Training Retrievers for Reasoning Tasks},
@@ -146,4 +146,5 @@ ReasonIR_8B = ModelMeta(
     public_training_code="https://github.com/facebookresearch/ReasonIR/tree/main/training",
     public_training_data="https://huggingface.co/datasets/reasonir/reasonir-data",
     citation=REASONIR_CITATION,
+    output_dtypes=OutputDType.BF16,
 )

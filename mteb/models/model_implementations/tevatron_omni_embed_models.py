@@ -10,12 +10,39 @@ from mteb.models.model_meta import (
 from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
 )
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
+
+
+def _adapter_snapshot_with_base_revision(
+    model: str, revision: str | None, base_revision: str
+) -> str:
+    """Return a local view of a LoRA adapter whose adapter_config.json points to the base model at `base_revision`.
+
+    sentence-transformers does not pass `revision` on to the base model, so it would load from main.
+    """
+    import json
+    import tempfile
+    from pathlib import Path
+
+    from huggingface_hub import snapshot_download
+
+    snapshot = Path(snapshot_download(model, revision=revision))
+    adapter_config = json.loads((snapshot / "adapter_config.json").read_text())
+    adapter_config["base_model_name_or_path"] = snapshot_download(
+        adapter_config["base_model_name_or_path"], revision=base_revision
+    )
+    local = Path(tempfile.mkdtemp(prefix=f"mteb_{model.replace('/', '__')}_"))
+    for entry in snapshot.iterdir():
+        if entry.name != "adapter_config.json":
+            (local / entry.name).symlink_to(entry)
+    (local / "adapter_config.json").write_text(json.dumps(adapter_config, indent=2))
+    return str(local)
 
 
 class TevatronOmniEmbedWrapper(SentenceTransformerEncoderWrapper):
@@ -35,8 +62,12 @@ class TevatronOmniEmbedWrapper(SentenceTransformerEncoderWrapper):
         # 300 s at 16 kHz: chunk_length=300
         # https://huggingface.co/Tevatron/OmniEmbed-v0.1/blob/main/preprocessor_config.json
         max_samples: int | None = 4_800_000,
+        base_revision: str | None = None,
         **kwargs: Any,
     ) -> None:
+        if base_revision is not None:
+            model = _adapter_snapshot_with_base_revision(model, revision, base_revision)
+            revision = None
         super().__init__(
             model,
             revision=revision,
@@ -112,6 +143,8 @@ omni_embed_v01 = ModelMeta(
         "model_kwargs": {
             "torch_dtype": "bfloat16",
         },
+        # LoRA adapter; its adapter_config.json names Tevatron/Qwen2.5-Omni-7B-Thinker without a revision
+        "base_revision": "8876e9bc7e6af2ecbdfb14e0416e2c1105f0f7bb",
     },
     name="Tevatron/OmniEmbed-v0.1",
     revision="fa8be315e74d07f563b07c0d053525de6dc7eda8",
@@ -148,4 +181,5 @@ omni_embed_v01 = ModelMeta(
     model_type=["dense"],
     citation=_OMNI_EMBED_CITATION,
     extra_requirements_groups=["multimodal-sbert", "peft"],
+    output_dtypes=OutputDType.BF16,
 )

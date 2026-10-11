@@ -8,6 +8,8 @@ import pytest
 from mteb.cache import LoadExperimentEnum, ResultCache
 from mteb.results import BenchmarkResults
 
+pytestmark = pytest.mark.core
+
 
 class TestLoadFromCache:
     """Test the _load_from_cache method."""

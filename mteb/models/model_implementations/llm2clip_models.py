@@ -7,6 +7,7 @@ from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -213,6 +214,7 @@ llm2clip_openai_l_14_336 = ModelMeta(
     training_datasets=llm2clip_training_sets,
     citation=LLM2CLIP_CITATION,
     extra_requirements_groups=["llm2vec"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 # NOTE: https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-224/discussions/1
@@ -240,6 +242,7 @@ llm2clip_openai_l_14_224 = ModelMeta(
     training_datasets=llm2clip_training_sets,
     citation=LLM2CLIP_CITATION,
     extra_requirements_groups=["llm2vec"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 llm2clip_openai_b_16 = ModelMeta(
@@ -266,4 +269,5 @@ llm2clip_openai_b_16 = ModelMeta(
     training_datasets=llm2clip_training_sets,
     citation=LLM2CLIP_CITATION,
     extra_requirements_groups=["llm2vec"],
+    output_dtypes=OutputDType.FLOAT16,
 )
