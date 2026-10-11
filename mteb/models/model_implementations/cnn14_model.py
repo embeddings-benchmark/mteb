@@ -93,14 +93,11 @@ class CNN14Wrapper(AbsEncoder):
                             stft, power=self.model.hparams.spec_mag_power
                         )
                     )
-                    b, f, t = feats.shape
-                    if f < 64 or t < 80:
-                        # zero-pad in the frequency or time dimension until it's at least [64, 80]
-                        pad_freq = max(0, 64 - f)
-                        pad_time = max(0, 80 - t)
-                        feats = torch.nn.functional.pad(
-                            feats, (0, pad_time, 0, pad_freq)
-                        )
+                    # feats: [1, frames, n_mels]; Cnn14's five 2x2 poolings need
+                    # at least 32 frames (0.37 s), so only pad clips below that
+                    n_frames = feats.shape[1]
+                    if n_frames < 32:
+                        feats = torch.nn.functional.pad(feats, (0, 0, 0, 32 - n_frames))
                     embeddings = self.model.mods.embedding_model(feats)
                     # Apply mean pooling over time dimension if needed
                     if embeddings.dim() > 2:
