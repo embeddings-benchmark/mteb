@@ -50,4 +50,5 @@ uibk_embedding_v1 = ModelMeta(
     training_datasets=denseon_lateon_unsupervised_data | denseon_lateon_supervised_data,
     citation=None,
     extra_requirements_groups=["pylate"],
+    output_dtypes=[OutputDType.BF16],
 )
