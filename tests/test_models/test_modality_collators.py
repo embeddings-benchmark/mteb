@@ -120,6 +120,7 @@ def test_video_collators_keep_column_order(
         "text": "caption",
     }
     if isinstance(collator, VideoCollator):
+        pytest.importorskip("torchaudio")
         row["audio"] = {"array": [0.0] * 10, "sampling_rate": 16_000}
     columns = list(row)
     batch = collator([row])
@@ -129,6 +130,7 @@ def test_video_collators_keep_column_order(
 
 def test_video_collator_puts_video_before_audio() -> None:
     """Even when the dataset lists audio first, video must come before audio."""
+    pytest.importorskip("torchaudio")
     collator = VideoCollator(target_sampling_rate=16_000, num_frames=2)
     row = {
         "id": "a",
