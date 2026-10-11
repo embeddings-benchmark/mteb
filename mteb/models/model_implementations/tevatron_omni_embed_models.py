@@ -10,6 +10,7 @@ from mteb.models.model_meta import (
 from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
 )
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -148,4 +149,5 @@ omni_embed_v01 = ModelMeta(
     model_type=["dense"],
     citation=_OMNI_EMBED_CITATION,
     extra_requirements_groups=["multimodal-sbert", "peft"],
+    output_dtypes=OutputDType.BF16,
 )
