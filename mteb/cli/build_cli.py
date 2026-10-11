@@ -124,7 +124,7 @@ def run(args: argparse.Namespace) -> None:
     )
 
     if args.submit:
-        cache.submit_results(model.mteb_model_meta, create_pr=create_pr)
+        cache.submit_results(model.mteb_model_meta, tasks=tasks, create_pr=create_pr)
 
 
 def _available_benchmarks(args: argparse.Namespace) -> None:

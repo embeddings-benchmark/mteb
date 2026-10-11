@@ -136,9 +136,14 @@ def test_run_submit(
     if expected_create_pr is None:
         mock_submit.assert_not_called()
     else:
-        mock_submit.assert_called_once_with(
-            model.mteb_model_meta, create_pr=expected_create_pr
-        )
+        mock_submit.assert_called_once()
+        (submitted_model,) = mock_submit.call_args.args
+        assert submitted_model is model.mteb_model_meta
+        assert mock_submit.call_args.kwargs["create_pr"] is expected_create_pr
+        # only the results of the evaluated tasks are submitted
+        assert [t.metadata.name for t in mock_submit.call_args.kwargs["tasks"]] == [
+            "BornholmBitextMining"
+        ]
 
 
 def test_run_create_pr_checks_requirements_before_evaluating(tmp_path: Path):

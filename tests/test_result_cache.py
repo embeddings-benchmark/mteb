@@ -10,6 +10,7 @@ import pytest
 
 import mteb
 from mteb.cache import LoadExperimentEnum, ResultCache
+from mteb.cache.result_cache import CopyResultsAction
 from mteb.mocks.mock_tasks import MockRetrievalTask
 from mteb.mocks.mock_tasks.clustering import MockMultilingualClusteringTask
 from mteb.models import ModelMeta
@@ -620,6 +621,51 @@ def test_submit_results_with_fake_remote(tmp_path: Path):
         assert current_branch.startswith("mteb-results-"), (
             f"Should be on submission branch but got '{current_branch}'"
         )
+
+
+def test_submit_results_only_given_tasks(tmp_path: Path):
+    cache_path, remote_path = _setup_fake_remote(tmp_path)
+    test_model, _ = _setup_test_model_results(cache_path)
+    other_task = MockMultilingualClusteringTask()
+    mteb.evaluate(
+        mteb.get_model("mteb/baseline-random-encoder"),
+        other_task,
+        cache=ResultCache(cache_path=cache_path),
+    )
+    cache = ResultCache(cache_path=cache_path)
+
+    with patch.object(cache, "download_from_remote", return_value=None):
+        result = cache.submit_results(
+            models=[test_model], tasks=[MockRetrievalTask()], create_pr=False
+        )
+
+    assert result["result_count"] == 1
+    committed = _committed_files(remote_path)
+    assert f"{MockRetrievalTask.metadata.name}.json" in committed
+    assert f"{other_task.metadata.name}.json" not in committed
+
+
+def test_copy_results_action_reverts_partial_copy_on_failure(tmp_path: Path):
+    """CopyResultsAction is not undone by the workflow when it fails itself, so it has to revert its own copies"""
+    source_dir = tmp_path / "source"
+    source_dir.mkdir()
+    copied, unmergeable = source_dir / "A.json", source_dir / "B.json"
+    copied.write_text("{}", encoding="utf-8")
+    unmergeable.write_text("{}", encoding="utf-8")
+
+    model_meta = ModelMeta.create_empty(
+        overwrites={"name": "org/model", "revision": "1"}
+    )
+    dest_dir = tmp_path / "remote" / model_meta.model_name_as_path() / "1"
+    dest_dir.mkdir(parents=True)
+    (dest_dir / "B.json").write_text("not a task result", encoding="utf-8")
+
+    action = CopyResultsAction({model_meta: [copied, unmergeable]}, tmp_path / "remote")
+    with pytest.raises(Exception):  # noqa: B017, PT011
+        action.do()
+
+    assert not (dest_dir / "A.json").exists()
+    assert (dest_dir / "B.json").read_text(encoding="utf-8") == "not a task result"
 
 
 def test_submit_results(tmp_path: Path):

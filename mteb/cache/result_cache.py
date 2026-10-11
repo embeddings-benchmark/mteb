@@ -101,6 +101,14 @@ class CopyResultsAction:
 
     def do(self) -> None:
         """Copy listed json result files and optional model_meta.json to remote paths."""
+        try:
+            self._copy()
+        except Exception:
+            # the workflow only undoes completed steps, so revert the files copied before the failure here
+            self.undo()
+            raise
+
+    def _copy(self) -> None:
         for model_meta, result_files in self.unsubmitted.items():
             if model_meta.name is None or model_meta.revision is None:
                 logger.warning(
@@ -1191,11 +1199,13 @@ class ResultCache:
     def _get_unsubmitted_results(
         self,
         models: list[ModelMeta],
+        tasks: Sequence[str] | Iterable[AbsTask] | None = None,
     ) -> dict[ModelMeta, list[Path]]:
         """Find unsubmitted results.
 
         Args:
             models: List of ModelMeta objects.
+            tasks: Tasks to restrict the results to. If None, results for all tasks are returned.
 
         Returns:
             Dict mapping ModelMeta to list of unsubmitted result file paths.
@@ -1203,6 +1213,7 @@ class ResultCache:
         return {
             model: self.get_cache_paths(
                 models=[model],
+                tasks=tasks,
                 require_model_meta=False,
                 include_remote=False,
                 load_experiments=LoadExperimentEnum.MATCH_KWARGS,
@@ -1214,6 +1225,7 @@ class ResultCache:
         self,
         models: Sequence[str] | Sequence[ModelMeta] | str | ModelMeta | None = None,
         *,
+        tasks: Sequence[str] | Iterable[AbsTask] | None = None,
         create_pr: bool = False,
     ) -> SubmitResultsResponse:
         """Create a commit of the results to the official MTEB results repository (https://github.com/embeddings-benchmark/results).
@@ -1225,6 +1237,7 @@ class ResultCache:
         Args:
             models: Model(s) whose results should be submitted. Can either a list of string or ModelMeta objects.
                 If None it will get all models from local cache.
+            tasks: Tasks whose results should be submitted. If None, results for all tasks of the models are submitted.
             create_pr: If True, create a PR directly to the remote. If False, prints
                   instructions for manual submission.
 
@@ -1264,7 +1277,7 @@ class ResultCache:
 
         try:
             self.download_from_remote()
-            unsubmitted = self._get_unsubmitted_results(normalized_models)
+            unsubmitted = self._get_unsubmitted_results(normalized_models, tasks)
 
             if not unsubmitted:
                 logger.warning("No unsubmitted results found.")
