@@ -211,10 +211,10 @@ viclip_large_patch14 = ModelMeta(
     n_parameters=427_616_513,
     n_embedding_parameters=2_162_688,
     memory_usage_mb=1632,
-    max_tokens=77,
+    max_tokens=32,  # ViCLIP.max_txt_l (text positional embedding has 32 rows)
     embed_dim=768,
     reference="https://huggingface.co/OpenGVLab/ViCLIP-L-14-hf",
-    extra_requirements_groups=["image", "video", "transformers-v4"],
+    extra_requirements_groups=["image", "video", "viclip"],
     **_VICLIP_COMMON,
 )
 
@@ -224,9 +224,9 @@ viclip_base_patch16 = ModelMeta(
     n_parameters=149_620_993,
     n_embedding_parameters=1_048_576,
     memory_usage_mb=571,
-    max_tokens=77,
+    max_tokens=32,  # ViCLIP.max_txt_l (text positional embedding has 32 rows)
     embed_dim=512,
     reference="https://huggingface.co/OpenGVLab/ViCLIP-B-16-hf",
-    extra_requirements_groups=["image", "video", "transformers-v4"],
+    extra_requirements_groups=["image", "video", "viclip"],
     **_VICLIP_COMMON,
 )

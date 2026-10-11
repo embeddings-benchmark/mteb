@@ -186,4 +186,5 @@ seamless_m4t_v2_large = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2312.05187},
 }""",
+    extra_requirements_groups=["seamless-m4t"],
 )
