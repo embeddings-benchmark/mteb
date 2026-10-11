@@ -1,67 +1,54 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any, TypedDict, cast
+from typing import TYPE_CHECKING, Any, cast
 
-import numpy as np
 from datasets import Dataset
-from sklearn import metrics
+from typing_extensions import deprecated
 
-from mteb._evaluators import ZeroShotClassificationEvaluator
-from mteb.models import EncoderProtocol
-from mteb.types.statistics import ZeroShotClassificationDescriptiveStatistics
-
-from ._statistics_calculation import (
-    calculate_label_statistics,
-    calculate_single_input_modality_statistics,
-    calculate_text_statistics,
-)
 from .abstask import AbsTask
+from .retrieval import AbsTaskRetrieval
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
-    from pathlib import Path
 
-    from mteb.models import MTEBModels
     from mteb.timing import TimingStack
-    from mteb.types import Array, EncodeKwargs, Modalities
+    from mteb.types import Modalities
+
+    from .retrieval_dataset_loaders import RetrievalSplitData
+
 
 logger = logging.getLogger(__name__)
 
-
-class ZeroShotClassificationMetrics(TypedDict):
-    """Metrics for ZeroShotClassification
-
-    Attributes:
-        accuracy: Accuracy of the model.
-        f1: F1 score (macro).
-        f1_weighted: Weighted F1 score.
-        precision: Precision score (macro).
-        precision_weighted: Weighted precision score.
-        recall: Recall score (macro).
-        recall_weighted: Weighted recall score.
-        ap: Average precision score (macro) for binary classification.
-        ap_weighted: Weighted average precision score for binary classification.
-    """
-
-    accuracy: float
-    f1: float
-    f1_weighted: float
-    precision: float
-    precision_weighted: float
-    recall: float
-    recall_weighted: float
-    ap: float | None
-    ap_weighted: float | None
+# Tasks whose HF repository is already stored in the retrieval format (`corpus`, `queries`, `qrels`).
+# Other tasks are loaded in the legacy format (input and label columns + `get_candidate_labels`) and converted on the fly.
+# You can reupload a task using `task.push_dataset_to_hub('your/repository')` and add its name here.
+NEW_FORMAT_ZEROSHOT_TASKS: list[str] = []
 
 
-class AbsTaskZeroShotClassification(AbsTask):
+@deprecated(
+    "This class is deprecated and will be removed in future versions. Please use the updated retrieval tasks instead. "
+    "You can add your task name to mteb.abstasks.zeroshot_classification.NEW_FORMAT_ZEROSHOT_TASKS to load it in the retrieval format. "
+    "You can reupload it using `task.push_dataset_to_hub('your/repository')` after loading the data."
+)
+class AbsTaskZeroShotClassification(AbsTaskRetrieval):
     """Abstract class for ZeroShot Classification tasks for any modality.
+
+    Warning: Deprecated
+        This class is deprecated and will be removed in future versions. Please use [AbsTaskRetrieval][mteb.abstasks.retrieval.AbsTaskRetrieval] instead.
+        You can add your task name to `mteb.abstasks.zeroshot_classification.NEW_FORMAT_ZEROSHOT_TASKS` to load it in the retrieval format.
+        You can reupload it using `task.push_dataset_to_hub('your/repository')` after loading the data.
 
     The similarity between an input (can be image or text) and candidate text prompts, such as this is a dog/this is a cat.
 
+    Zero-shot classification is a retrieval task: queries are the inputs, the corpus is the set of candidate labels and
+    the only relevant document of a query is its correct label. Datasets stored as input and label columns are converted
+    to this format on the fly, so classification metrics (`accuracy`, `f1`, ...) are reported next to the retrieval ones.
+    For the dataformat and other information, see [AbsTaskRetrieval][mteb.abstasks.retrieval.AbsTaskRetrieval].
+
     Attributes:
         dataset: Huggingface dataset containing the data for the task. Dataset must contain columns specified by self.input_column_name and self.label_column_name.
+            After loading it is converted to the retrieval format.
         input_column_name: Name of the column containing the inputs (image or text).
         label_column_name: Name of the column containing the labels. Labels must be
             integer indices of the candidate labels or strings matching an entry of
@@ -72,118 +59,79 @@ class AbsTaskZeroShotClassification(AbsTask):
     input_column_name: str | Sequence[Modalities] = "image"
     label_column_name: str = "label"
     abstask_prompt = "Classify the given input into one of the candidate labels."
+    # the correct label is the only relevant document, so there is nothing to rank beyond the label set
+    k_values: Sequence[int] = (1, 3, 5, 10)
 
-    def _get_content_columns(self) -> dict[str, Modalities]:
-        # a multimodal task names each of its input columns after the modality it holds
-        if isinstance(self.input_column_name, str):
-            return {self.input_column_name: self.modalities[0]}
-        return {column: column for column in self.input_column_name}
-
-    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        """Keep only eval splits. Zero-shot tasks don't need train splits."""
-        if self.dataset is None:
-            return
-        splits_to_keep = set(self.metadata.eval_splits)
-        for split in list(self.dataset.keys()):
-            if split not in splits_to_keep:
-                del self.dataset[split]
-
-    def _calculate_descriptive_statistics_from_split(
+    def load_data(
         self,
-        split: str,
-        *,
-        hf_subset: str | None = None,
-        compute_overall: bool = False,
         num_proc: int | None = None,
-    ) -> ZeroShotClassificationDescriptiveStatistics:
-        if isinstance(self.input_column_name, str):
-            col_map = {self.metadata.modalities[0]: self.input_column_name}
-        else:
-            col_map = {col: col for col in self.input_column_name}
-
-        if hf_subset:
-            ds = self.dataset[hf_subset][split]
-            col_inputs = {mod: ds[col] for mod, col in col_map.items()}
-            labels = ds[self.label_column_name]
-        elif compute_overall:
-            col_inputs = {mod: [] for mod in col_map}
-            labels = []
-            for subset in self.metadata.eval_langs:
-                ds = self.dataset[subset][split]
-                for mod, col in col_map.items():
-                    col_inputs[mod].extend(ds[col])
-                labels.extend(ds[self.label_column_name])
-        else:
-            ds = self.dataset[split]
-            col_inputs = {mod: ds[col] for mod, col in col_map.items()}
-            labels = ds[self.label_column_name]
-
-        modality_stats = calculate_single_input_modality_statistics(
-            col_inputs, max_workers=num_proc
-        )
-        return ZeroShotClassificationDescriptiveStatistics(
-            num_samples=len(ds[self.label_column_name]),
-            **modality_stats,
-            label_statistics=calculate_label_statistics(labels),
-            candidates_labels_text_statistics=calculate_text_statistics(
-                self.get_candidate_labels()
-            ),
-        )
-
-    def _evaluate_subset(
-        self,
-        model: MTEBModels,
-        data_split: Dataset,
         *,
-        hf_split: str,
-        hf_subset: str,
-        encode_kwargs: EncodeKwargs,
-        prediction_folder: Path | None = None,
-        num_proc: int | None = None,
-        timer: TimingStack,
+        timer: TimingStack | None = None,
         **kwargs: Any,
-    ) -> ZeroShotClassificationMetrics:
-        if not isinstance(model, EncoderProtocol):
-            raise TypeError("Expected model to be an instance of EncoderProtocol")
+    ) -> None:
+        """Load the dataset and convert it to the retrieval format.
+
+        Datasets with input and label columns are converted: inputs become queries, candidate labels become the corpus
+        and the correct label of a query is its only relevant document.
+        """
+        if self.data_loaded:
+            return
+
+        if self.metadata.name in NEW_FORMAT_ZEROSHOT_TASKS:
+            super().load_data(num_proc=num_proc, timer=timer, **kwargs)
+            return
+
+        # a task can provide the raw dataset itself (e.g. mock tasks)
+        if self.dataset is None:
+            AbsTask.load_data(self, num_proc=num_proc, timer=timer, **kwargs)
 
         candidate_labels = self.get_candidate_labels()
-        data_split = data_split.select_columns(
-            [self.input_column_name, self.label_column_name]
-            if isinstance(self.input_column_name, str)
-            else [*self.input_column_name, self.label_column_name]
+        corpus = Dataset.from_dict(
+            {
+                "id": [str(i) for i in range(len(candidate_labels))],
+                "text": candidate_labels,
+            }
         )
-        evaluator = ZeroShotClassificationEvaluator(
-            data_split,
-            self.input_column_name,
-            candidate_labels,
-            task_metadata=self.metadata,
-            hf_split=hf_split,
-            hf_subset=hf_subset,
-            timer=timer,
-            **kwargs,
-        )
-        probs = evaluator(
-            model,
-            encode_kwargs=encode_kwargs,
-            num_proc=num_proc,
-        )
+        # a multimodal task names each of its input columns after the modality it holds
+        if isinstance(self.input_column_name, str):
+            columns = {self.input_column_name: self.modalities[0]}
+        else:
+            columns = {column: column for column in self.input_column_name}
 
-        if prediction_folder:
-            self._save_task_predictions(
-                probs.tolist(),
-                model,
-                prediction_folder,
-                hf_subset=hf_subset,
-                hf_split=hf_split,
+        def _convert_split(split_data: Dataset) -> RetrievalSplitData:
+            labels = self._normalize_labels(
+                split_data[self.label_column_name], candidate_labels
             )
+            queries = split_data.select_columns(list(columns)).rename_columns(columns)
+            queries = queries.add_column("id", [str(i) for i in range(len(queries))])
+            return {
+                "corpus": corpus,
+                "queries": queries,
+                "relevant_docs": {
+                    str(i): {str(label): 1} for i, label in enumerate(labels)
+                },
+                "top_ranked": None,
+            }
 
-        return self._calculate_scores(
-            self._normalize_labels(
-                data_split[self.label_column_name],
-                candidate_labels,
-            ),
-            probs,
-        )
+        eval_splits = set(self.metadata.eval_splits)
+        if self.metadata.is_multilingual:
+            self.dataset = {
+                subset: {
+                    split: _convert_split(data)
+                    for split, data in subset_data.items()
+                    if split in eval_splits
+                }
+                for subset, subset_data in self.dataset.items()
+            }
+        else:
+            self.dataset = {
+                "default": {
+                    split: _convert_split(data)
+                    for split, data in self.dataset.items()
+                    if split in eval_splits
+                }
+            }
+        self.data_loaded = True
 
     @staticmethod
     def _normalize_labels(
@@ -221,60 +169,9 @@ class AbsTaskZeroShotClassification(AbsTask):
             )
         return [label_to_index[label] for label in labels]
 
-    def _calculate_scores(  # noqa: PLR6301
-        self,
-        labels: list[int],
-        probs: Array,
-    ) -> ZeroShotClassificationMetrics:
-        predictions = probs.argmax(1)
-        scores = ZeroShotClassificationMetrics(
-            accuracy=metrics.accuracy_score(labels, predictions),
-            f1=metrics.f1_score(labels, predictions, average="macro"),
-            f1_weighted=metrics.f1_score(labels, predictions, average="weighted"),
-            precision=metrics.precision_score(labels, predictions, average="macro"),
-            precision_weighted=metrics.precision_score(
-                labels, predictions, average="weighted"
-            ),
-            recall=metrics.recall_score(labels, predictions, average="macro"),
-            recall_weighted=metrics.recall_score(
-                labels, predictions, average="weighted"
-            ),
-            ap=None,
-            ap_weighted=None,
-        )
-
-        if len(np.unique(labels)) == 2:
-            positive_scores = probs[:, 1]
-            scores["ap"] = metrics.average_precision_score(
-                labels, positive_scores, average="macro"
-            )
-            scores["ap_weighted"] = metrics.average_precision_score(
-                labels, positive_scores, average="weighted"
-            )
-        return scores
-
-    def _push_dataset_to_hub(
-        self,
-        repo_name: str,
-        num_proc: int | None = None,
-        **kwargs: Any,
-    ) -> None:
-        self._upload_dataset_to_hub(
-            repo_name,
-            [
-                self.input_column_name,
-                self.label_column_name,
-            ]
-            if isinstance(self.input_column_name, str)
-            else [
-                *self.input_column_name,
-                self.label_column_name,
-            ],
-            num_proc=num_proc,
-        )
-        labels_dataset = Dataset.from_dict({"labels": self.get_candidate_labels()})
-        labels_dataset.push_to_hub(repo_name, config_name="labels", **kwargs)
-
     def get_candidate_labels(self) -> list[str]:
-        """Return the text candidates for zeroshot classification"""
+        """Return the text candidates for zeroshot classification.
+
+        Only needed for datasets stored as inputs and labels. Datasets in the retrieval format keep them in the corpus.
+        """
         raise NotImplementedError("This method should be overridden by subclasses")
