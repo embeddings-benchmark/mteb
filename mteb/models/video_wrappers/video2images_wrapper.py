@@ -8,7 +8,6 @@ from datasets import Image as ImageFeature
 from tqdm.auto import tqdm
 
 from mteb._create_dataloaders import create_dataloader
-from mteb._requires_package import _install_command, _is_package_available
 from mteb.models.modality_collators import FramesCollator
 
 if TYPE_CHECKING:
@@ -96,11 +95,6 @@ class Video2ImagesWrapper:
                 with ``num_frames``.
             max_frames: Cap on the number of frames per video when sampling by ``fps``.
         """
-        if not _is_package_available("torchvision"):
-            raise ImportError(
-                f"{type(self).__name__} needs `torchvision` to turn video frames into images. "
-                f"Install it with `{_install_command(['image', 'video'])}`."
-            )
         meta = model.mteb_model_meta
         if meta is None or "image" not in meta.modalities:
             raise ValueError(

@@ -33,4 +33,4 @@ Any other sampling (`num_frames=16`, or `fps` / `max_frames`) is recorded in the
 ### Limitations
 
 - Only video-only inputs are supported for now. Text inputs are passed through, but a wrapped model is rejected by `mteb.evaluate` on tasks that combine video with text or audio on one side (e.g. `CoVRRVT2VRetrieval`), and calling `encode` on such an input directly raises `NotImplementedError`.
-- Running an image model on video needs both extras (`pip install "mteb[image,video]"`): `video` decodes the clips and `image` provides `torchvision` and Pillow for the frames.
+- Image models need the `image` extra, which `mteb.get_model` already checks, and decoding video needs the `video` extra (`pip install "mteb[image,video]"`).

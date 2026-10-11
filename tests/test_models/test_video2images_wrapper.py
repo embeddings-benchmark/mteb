@@ -242,14 +242,6 @@ def test_hint_matches_whether_the_wrapper_accepts_the_task(task):
     assert hinted == accepted
 
 
-def test_requires_torchvision(monkeypatch):
-    monkeypatch.setattr(
-        video2images_wrapper, "_is_package_available", lambda name: False
-    )
-    with pytest.raises(ImportError, match=r"mteb\[image,video\]"):
-        Video2ImagesWrapper(_image_model())
-
-
 def test_hint_is_not_shown_for_models_the_wrapper_rejects():
     task = mteb.get_task("CoVRRVT2VRetrieval")
     meta = mteb.get_model_meta("openai/clip-vit-base-patch32").model_copy(
