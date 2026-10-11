@@ -70,10 +70,6 @@ class OpsMMEmbeddingWrapper(AbsEncoder):
         ).to(self.device)
 
         self.base_model.eval()
-        # only hidden states are used: run the LM head on the last position, not every token
-        self.base_model.get_output_embeddings().register_forward_pre_hook(
-            lambda _module, args: (args[0][:, -1:, :],)
-        )
 
         self.processor = AutoProcessor.from_pretrained(
             model_name,
@@ -86,7 +82,7 @@ class OpsMMEmbeddingWrapper(AbsEncoder):
 
     def encode_input(self, inputs: dict[str, Any]) -> torch.Tensor:
         hidden_states = self.base_model(
-            **inputs, return_dict=True, output_hidden_states=True
+            **inputs, return_dict=True, output_hidden_states=True, logits_to_keep=1
         )
         hidden_states = hidden_states.hidden_states[-1]
         pooled_output = self._pooling(hidden_states)
