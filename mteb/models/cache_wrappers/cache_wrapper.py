@@ -17,11 +17,8 @@ from mteb.models.model_meta import (
 _EXPERIMENTS_FOLDER_NAME = "experiments"
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
-
     from torch.utils.data import DataLoader
 
-    from mteb.abstasks.abstask import AbsTask
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models.cache_wrappers.cache_backend_protocol import (
         CacheBackendProtocol,
@@ -216,12 +213,6 @@ class CachedEmbeddingWrapper:
         """Unload cache from memory."""
         for task in list(self.cache_dict.keys()):
             self.cache_dict[task].close()
-
-    def validate_tasks(self, tasks: Iterable[AbsTask]) -> None:
-        """Forward the task validation of the wrapped model, if it has one."""
-        validate_tasks = getattr(self._model, "validate_tasks", None)
-        if validate_tasks is not None:
-            validate_tasks(tasks)
 
     def similarity(
         self,

@@ -24,6 +24,19 @@ results = mteb.evaluate(video_model, tasks=[task])
 
 For tasks that mix video with other modalities the model does support, `mteb.evaluate` only warns about the partial overlap, so images can still be evaluated without the wrapper.
 
+### Caching frame embeddings
+
+To cache the frame embeddings, wrap the cache inside the video wrapper:
+
+```python
+from mteb.models import Video2ImagesWrapper
+from mteb.models.cache_wrappers import CachedEmbeddingWrapper
+
+video_model = Video2ImagesWrapper(CachedEmbeddingWrapper(model, "path/to/cache"), num_frames=8)
+```
+
+The other order, `CachedEmbeddingWrapper(Video2ImagesWrapper(...))`, does not work because the cache can hash text and images but not video.
+
 ### Provenance
 
 Sampling 8 frames uniformly and mean-pooling is the default protocol, the same frame count X-CLIP, ViCLIP, LanguageBind and InternVideo2 use by default in MTEB.

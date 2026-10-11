@@ -273,14 +273,47 @@ def test_wrapped_model_rejects_mixed_video_tasks_upfront(task_name):
         mteb.evaluate(wrapper, mteb.get_task(task_name), cache=None)
 
 
-def test_mixed_video_tasks_are_rejected_through_the_cache_wrapper(tmp_path):
+def test_cache_the_frames_by_wrapping_the_cache_inside(tmp_path):
+    """The cache hashes text and images but not video, so it goes inside the wrapper."""
     from mteb.models.cache_wrappers import CachedEmbeddingWrapper
 
-    cached = CachedEmbeddingWrapper(
-        Video2ImagesWrapper(_image_model(), num_frames=4), tmp_path
+    def run() -> tuple[float, int]:
+        model = _image_model()
+        calls = []
+        original = model.encode
+
+        def spy(*args: object, **kwargs: object):
+            calls.append(1)
+            return original(*args, **kwargs)
+
+        model.encode = spy
+        wrapper = Video2ImagesWrapper(
+            CachedEmbeddingWrapper(model, tmp_path), num_frames=4
+        )
+        result = mteb.evaluate(wrapper, MockVideoRetrievalT2V(), cache=None)
+        return result.task_results[0].get_score(), len(calls)
+
+    plain = mteb.evaluate(
+        Video2ImagesWrapper(_image_model(), num_frames=4),
+        MockVideoRetrievalT2V(),
+        cache=None,
+    )
+    first_score, first_calls = run()
+    second_score, second_calls = run()
+
+    assert first_calls > 0
+    assert second_calls == 0
+    assert first_score == second_score == plain.task_results[0].get_score()
+
+
+def test_mixed_video_tasks_are_rejected_with_the_cache_inside(tmp_path):
+    from mteb.models.cache_wrappers import CachedEmbeddingWrapper
+
+    wrapper = Video2ImagesWrapper(
+        CachedEmbeddingWrapper(_image_model(), tmp_path), num_frames=4
     )
     with pytest.raises(ValueError, match="only supports video-only inputs"):
-        mteb.evaluate(cached, mteb.get_task("CoVRRVT2VRetrieval"), cache=None)
+        mteb.evaluate(wrapper, mteb.get_task("CoVRRVT2VRetrieval"), cache=None)
 
 
 def test_video_with_text_input_raises_at_encode():
