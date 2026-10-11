@@ -239,9 +239,6 @@ class PEAudioVisualWrapper(AbsEncoder):
             max_frames=self.max_frames,
             num_frames=self.num_frames,
             max_samples=self.max_samples,
-            # PE-AV takes any frame count (do_sample_frames=false), so do not
-            # drop a real frame to reach an even count
-            frame_factor=1,
         )
 
         # Joint audio-video embedding

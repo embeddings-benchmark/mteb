@@ -361,9 +361,6 @@ class OpenAIBaseWrapper:
                 max_frames=self.max_frames,
                 num_frames=self.num_frames,
                 max_samples=self.max_samples,
-                # frames are re-encoded at `fps`; padding would stretch the clip
-                min_frames=1,
-                frame_factor=1,
             )
         elif has_audio:
             from mteb.models.modality_collators import AudioCollator

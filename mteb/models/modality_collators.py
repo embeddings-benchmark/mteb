@@ -21,11 +21,20 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 log_once = LogOnce(logger)
 
-# FPS-based sampling follows qwen-vl-utils (FPS_MIN_FRAMES, FRAME_FACTOR), which
-# almost every fps-sampled model here was trained with. Qwen-VL video
-# processors need at least 2 frames (`t:1 must be larger than temporal_factor:2`).
-DEFAULT_MIN_FRAMES = 4
-DEFAULT_FRAME_FACTOR = 2
+# Minimum number of frames in FPS-based sampling; wrappers whose video processor
+# needs more raise it (Qwen3-VL fails on 1 frame: `t:1 must be larger than
+# temporal_factor:2`).
+DEFAULT_MIN_FRAMES = 1
+
+# Order of the modality columns in a collated row. Wrappers that build a prompt in
+# row order (e.g. Qwen-Omni based ones) then match the authors' text, image, video,
+# audio order, whatever the dataset's column order.
+_MODALITY_ORDER = ("text", "image", "video", "audio")
+
+
+def _order_modalities(row: dict[str, Any]) -> dict[str, Any]:
+    other = {k: v for k, v in row.items() if k not in _MODALITY_ORDER}
+    return other | {k: row[k] for k in _MODALITY_ORDER if k in row}
 
 
 def frame_indices(n_source: int, target: int) -> list[int]:
@@ -207,9 +216,8 @@ class FramesCollator:
     - FPS-based: downsamples to ``fps`` frames per second, so the number of
       selected frames scales with video duration. Videos already below the
       target rate keep all frames. ``max_frames`` caps the total to prevent
-      OOM on very long videos. As in qwen-vl-utils, at least ``min_frames``
-      frames are taken and the count is rounded down to a multiple of
-      ``frame_factor``.
+      OOM on very long videos, and ``min_frames`` sets a floor (Qwen3-VL video
+      processors need at least 2 frames).
     - Fixed-sample: always selects exactly ``num_frames`` frames uniformly
       across the video, regardless of duration. Clips with fewer frames
       repeat each frame in place.
@@ -226,7 +234,6 @@ class FramesCollator:
         max_frames: int | None = None,
         num_frames: int | None = None,
         min_frames: int = DEFAULT_MIN_FRAMES,
-        frame_factor: int = DEFAULT_FRAME_FACTOR,
     ) -> None:
         """Initialize the collator.
 
@@ -240,8 +247,6 @@ class FramesCollator:
             num_frames: If set, use fixed-sample mode: always select this many
                 frames uniformly from the video.
             min_frames: Minimum number of frames in FPS-based sampling.
-            frame_factor: In FPS-based sampling, round the frame count down to
-                a multiple of this.
         """
         if num_frames is not None and fps is not None:
             raise ValueError(
@@ -252,7 +257,6 @@ class FramesCollator:
         self.max_frames = max_frames
         self.num_frames = num_frames
         self.min_frames = min_frames
-        self.frame_factor = frame_factor
 
     def __call__(self, inputs: list[dict[str, Any]]) -> BatchedInput:
         """Collate a batch of video inputs by resampling the video frames according to the specified parameters."""
@@ -265,7 +269,6 @@ class FramesCollator:
                 max_frames=self.max_frames,
                 num_frames=self.num_frames,
                 min_frames=self.min_frames,
-                frame_factor=self.frame_factor,
             )
             collated_inputs.append(row)
         return cast(
@@ -281,7 +284,6 @@ class FramesCollator:
         max_frames: int | None = None,
         num_frames: int | None = None,
         min_frames: int = DEFAULT_MIN_FRAMES,
-        frame_factor: int = DEFAULT_FRAME_FACTOR,
     ) -> torch.Tensor:
         """Resample a video input to a target number of frames.
 
@@ -296,8 +298,6 @@ class FramesCollator:
             num_frames: If set, select exactly this many frames uniformly
                 (fixed-sample mode).
             min_frames: Minimum number of frames in FPS-based sampling.
-            frame_factor: In FPS-based sampling, round the frame count down to
-                a multiple of this.
         """
 
         def _indices(n_source: int) -> list[int]:
@@ -314,11 +314,8 @@ class FramesCollator:
                 target = max(min_frames, int(duration * fps))
                 if max_frames is not None:
                     target = min(target, max_frames)
-                # only downsample, then round down to a multiple of frame_factor, as
-                # qwen-vl-utils does (a 3-frame clip gives 2 frames); wrappers whose
-                # processor needs no even count set frame_factor=1 and keep them all
+                # only downsample
                 target = min(target, n_source)
-                target = max(frame_factor, target - target % frame_factor)
             else:
                 raise RuntimeError("`fps` is not set; cannot use FPS-based sampling")
             return frame_indices(n_source, target)
@@ -361,7 +358,6 @@ class VideoCollator:
         num_frames: int | None = None,
         max_samples: int | None = None,
         min_frames: int = DEFAULT_MIN_FRAMES,
-        frame_factor: int = DEFAULT_FRAME_FACTOR,
     ) -> None:
         """Initialize the collator.
 
@@ -372,14 +368,11 @@ class VideoCollator:
             num_frames: If set, use fixed-sample mode instead of FPS-based.
             max_samples: Maximum number of audio samples to keep. If None, no truncation.
             min_frames: Minimum number of frames in FPS-based sampling.
-            frame_factor: In FPS-based sampling, round the frame count down to
-                a multiple of this.
         """
         self.fps = fps
         self.max_frames = max_frames
         self.num_frames = num_frames
         self.min_frames = min_frames
-        self.frame_factor = frame_factor
         self.target_sampling_rate = target_sampling_rate
         self.max_samples = max_samples
 
@@ -388,15 +381,12 @@ class VideoCollator:
         collated_inputs = []
         for row in inputs:
             if "video" in row:
-                # assign in place (no pop) to keep the dataset's column order: chat
-                # templates that follow the dict order expect video before audio
                 row["video"] = FramesCollator.resample_video(
                     row["video"],
                     fps=self.fps,
                     max_frames=self.max_frames,
                     num_frames=self.num_frames,
                     min_frames=self.min_frames,
-                    frame_factor=self.frame_factor,
                 )
             if "audio" in row:
                 audio_array = AudioCollator.resample_audio(
@@ -407,11 +397,7 @@ class VideoCollator:
                 row["audio"] = AudioInputItem(
                     array=audio_array, sampling_rate=self.target_sampling_rate
                 )
-                if "video" in row:
-                    # the authors' omni prompts put a clip's video before its audio,
-                    # whatever the dataset's column order
-                    row["audio"] = row.pop("audio")
-            collated_inputs.append(row)
+            collated_inputs.append(_order_modalities(row))
         return cast(
             "BatchedInput",
             {key: [row[key] for row in collated_inputs] for key in collated_inputs[0]},
