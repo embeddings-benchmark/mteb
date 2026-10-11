@@ -3,6 +3,7 @@ from mteb.models.model_meta import (
     ScoringFunction,
 )
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
 
 GRANITE_EMBEDDING_CITATION = """@article{awasthy2025graniteembedding,
   title={Granite Embedding Models},
@@ -216,6 +217,7 @@ granite_107m_multilingual = ModelMeta(
     use_instructions=False,
     training_datasets=granite_training_data,
     citation=GRANITE_EMBEDDING_CITATION,
+    output_dtypes=OutputDType.BF16,
 )
 
 granite_278m_multilingual = ModelMeta(
@@ -248,6 +250,7 @@ granite_278m_multilingual = ModelMeta(
     use_instructions=False,
     training_datasets=granite_training_data,
     citation=GRANITE_EMBEDDING_CITATION,
+    output_dtypes=OutputDType.BF16,
 )
 
 granite_30m_english = ModelMeta(
@@ -280,6 +283,7 @@ granite_30m_english = ModelMeta(
     use_instructions=False,
     training_datasets=granite_training_data,
     citation=GRANITE_EMBEDDING_CITATION,
+    output_dtypes=OutputDType.BF16,
 )
 
 granite_125m_english = ModelMeta(
@@ -312,6 +316,7 @@ granite_125m_english = ModelMeta(
     use_instructions=False,
     training_datasets=granite_training_data,
     citation=GRANITE_EMBEDDING_CITATION,
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -339,6 +344,7 @@ granite_english_r2 = ModelMeta(
     use_instructions=False,
     training_datasets=granite_training_data,
     citation=GRANITE_EMBEDDING_R2_CITATION,
+    output_dtypes=OutputDType.BF16,
 )
 
 granite_small_english_r2 = ModelMeta(
@@ -365,6 +371,7 @@ granite_small_english_r2 = ModelMeta(
     use_instructions=False,
     training_datasets=granite_training_data,
     citation=GRANITE_EMBEDDING_R2_CITATION,
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -402,7 +409,7 @@ granite_311m_multilingual_r2 = ModelMeta(
     model_type=["dense"],
     citation=GRANITE_EMBEDDING_MULTILINGUAL_R2_CITATION,
     contacts=["aashka-trivedi", "pawasthy", "hansolosan"],
-    output_dtypes=None,
+    output_dtypes=OutputDType.BF16,
     extra_requirements_groups=None,
 )
 
@@ -440,6 +447,6 @@ granite_97m_multilingual_r2 = ModelMeta(
     model_type=["dense"],
     citation=GRANITE_EMBEDDING_MULTILINGUAL_R2_CITATION,
     contacts=["aashka-trivedi", "pawasthy", "hansolosan"],
-    output_dtypes=None,
+    output_dtypes=OutputDType.BF16,
     extra_requirements_groups=None,
 )

@@ -8,6 +8,7 @@ from tqdm.auto import tqdm
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import VideoCollator
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -31,10 +32,18 @@ class PEAudioVisualWrapper(AbsEncoder):
         self,
         model_name: str = "facebook/pe-av-large",
         device: str | None = None,
+        # PE-AV processes every frame it is given (do_sample_frames=false; the
+        # paper samples at 30 fps); fps=2 with at most 64 frames is an mteb cap
+        # for memory
+        # https://huggingface.co/facebook/pe-av-large/blob/main/video_preprocessor_config.json
         fps: float | None = 2.0,
         max_frames: int | None = 64,
         num_frames: int | None = None,
-        max_samples: int | None = 30 * 48000,  # 30s * sampling rate
+        # full clips, as in Meta's eval, up to the rotary table: 10000 positions
+        # (max_position_embeddings) minus CLS, at one per 1920 samples (~400 s);
+        # Meta's code fails past it
+        # https://github.com/facebookresearch/perception_models/blob/main/core/audio_visual_encoder/transformer.py
+        max_samples: int | None = (10_000 - 1) * 1920,
         **kwargs: Any,
     ):
         import torch
@@ -382,6 +391,7 @@ pe_av_small_16_frame = ModelMeta(
     reference="https://huggingface.co/facebook/pe-av-small-16-frame",
     loader_kwargs=dict(fps=None, num_frames=16),
     **_PE_AV_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
 
 pe_av_base_16_frame = ModelMeta(
@@ -396,6 +406,7 @@ pe_av_base_16_frame = ModelMeta(
     reference="https://huggingface.co/facebook/pe-av-base-16-frame",
     loader_kwargs=dict(fps=None, num_frames=16),
     **_PE_AV_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
 
 pe_av_large_16_frame = ModelMeta(
@@ -410,6 +421,7 @@ pe_av_large_16_frame = ModelMeta(
     reference="https://huggingface.co/facebook/pe-av-large-16-frame",
     loader_kwargs=dict(fps=None, num_frames=16),
     **_PE_AV_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
 
 pe_av_small = ModelMeta(
@@ -423,6 +435,7 @@ pe_av_small = ModelMeta(
     embed_dim=1024,
     reference="https://huggingface.co/facebook/pe-av-small",
     **_PE_AV_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
 
 pe_av_base = ModelMeta(
@@ -436,6 +449,7 @@ pe_av_base = ModelMeta(
     embed_dim=1024,
     reference="https://huggingface.co/facebook/pe-av-base",
     **_PE_AV_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
 
 pe_av_large = ModelMeta(
@@ -449,4 +463,5 @@ pe_av_large = ModelMeta(
     embed_dim=1024,
     reference="https://huggingface.co/facebook/pe-av-large",
     **_PE_AV_COMMON,
+    output_dtypes=OutputDType.BF16,
 )

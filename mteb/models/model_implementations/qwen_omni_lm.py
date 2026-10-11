@@ -5,8 +5,13 @@ from typing import TYPE_CHECKING, Any
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator, VideoCollator
+from mteb.models.modality_collators import (
+    AudioCollator,
+    VideoCollator,
+    single_clip_dataloader,
+)
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -24,8 +29,13 @@ class QwenOmniWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
+        # 300 s: chunk_length=300
+        # https://huggingface.co/Qwen/Qwen2.5-Omni-7B/blob/main/preprocessor_config.json
         max_audio_length_seconds: int = 300,
+        # fps=2: qwen-omni-utils FPS=2.0
+        # https://github.com/QwenLM/Qwen2.5-Omni/blob/main/qwen-omni-utils/src/qwen_omni_utils/v2_5/vision_process.py
         fps: float | None = 2.0,
+        # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
         **kwargs: Any,
@@ -53,6 +63,9 @@ class QwenOmniWrapper(AbsEncoder):
             from transformers import Qwen3OmniMoeThinkerForConditionalGeneration
 
             model_class = Qwen3OmniMoeThinkerForConditionalGeneration
+        # Qwen3-Omni (mixture of experts) changes with its batch-mates (batched vs
+        # single cosine 0.96 on real clips); Qwen2.5-Omni stays within 0.999
+        self.per_clip = model_class.__name__.startswith("Qwen3OmniMoe")
 
         self.model = model_class.from_pretrained(
             model_name, revision=revision, torch_dtype=torch.bfloat16, **kwargs
@@ -128,6 +141,11 @@ class QwenOmniWrapper(AbsEncoder):
                 inputs.collate_fn = AudioCollator(
                     target_sampling_rate=self.sampling_rate,
                     max_samples=self.max_samples,
+                )
+
+            if self.per_clip and (has_audio or has_video):
+                inputs = single_clip_dataloader(
+                    inputs, "batched embeddings change with their batch-mates"
                 )
 
             all_embeddings: list[torch.Tensor] = []
@@ -214,6 +232,7 @@ qwen25_omni_7b = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2503.20215},
 }""",
+    output_dtypes=OutputDType.BF16,
 )
 
 qwen25_omni_3b = ModelMeta(
@@ -255,6 +274,7 @@ qwen25_omni_3b = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2503.20215},
 }""",
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -266,7 +286,7 @@ qwen3_omni_30b_a3b_instruct = ModelMeta(
     languages=["eng-Latn"],
     n_parameters=35259818545,
     memory_usage_mb=67253.0,
-    max_tokens=151_643,
+    max_tokens=65_536,  # thinker text_config.max_position_embeddings
     embed_dim=2048,
     n_embedding_parameters=155_713_536,
     license="apache-2.0",
@@ -297,6 +317,7 @@ qwen3_omni_30b_a3b_instruct = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2509.17765},
 }""",
+    output_dtypes=OutputDType.BF16,
 )
 
 qwen3_omni_30b_a3b_thinking = ModelMeta(
@@ -307,7 +328,7 @@ qwen3_omni_30b_a3b_thinking = ModelMeta(
     languages=["eng-Latn"],
     n_parameters=31719205488,
     memory_usage_mb=60500.0,
-    max_tokens=151_643,
+    max_tokens=65_536,  # thinker text_config.max_position_embeddings
     embed_dim=2048,
     n_embedding_parameters=155_713_536,
     license="apache-2.0",
@@ -338,6 +359,7 @@ qwen3_omni_30b_a3b_thinking = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2509.17765},
 }""",
+    output_dtypes=OutputDType.BF16,
 )
 
 qwen3_omni_30b_a3b_captioner = ModelMeta(
@@ -348,7 +370,7 @@ qwen3_omni_30b_a3b_captioner = ModelMeta(
     languages=["eng-Latn"],
     n_parameters=31719205488,
     memory_usage_mb=60500.0,
-    max_tokens=151_643,
+    max_tokens=65_536,  # thinker text_config.max_position_embeddings
     embed_dim=2048,
     n_embedding_parameters=155_713_536,
     license="apache-2.0",
@@ -379,4 +401,5 @@ qwen3_omni_30b_a3b_captioner = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2509.17765},
 }""",
+    output_dtypes=OutputDType.BF16,
 )

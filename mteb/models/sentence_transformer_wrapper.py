@@ -16,6 +16,7 @@ from mteb.models import ModelMeta
 from mteb.similarity_functions import (
     _MAX_SIM_CHUNK_ELEMENTS,
     _token_budget_chunks,
+    _upcast_low_precision,
 )
 from mteb.types import PromptType
 
@@ -301,7 +302,12 @@ def _score_on_device(
     documents = torch.as_tensor(embeddings2)
     if documents.device.type != "cpu":
         # Already on an accelerator (e.g. sparse retrieval keeps its embeddings there): nothing to move
-        return cast("Array", wrapper.model.similarity(embeddings1, embeddings2))
+        return cast(
+            "Array",
+            wrapper.model.similarity(
+                _upcast_low_precision(embeddings1), _upcast_low_precision(embeddings2)
+            ),
+        )
     if queries.ndim == 1:
         queries = queries.unsqueeze(0)
     if documents.ndim == 1:
@@ -312,7 +318,8 @@ def _score_on_device(
         or documents.is_sparse
     ):
         device = torch.device("cpu")  # sparse similarity isn't supported on MPS
-    queries_on_device = queries.to(device)
+    # sentence-transformers < 6 scores in the embedding dtype, which ties nearby scores
+    queries_on_device = _upcast_low_precision(queries.to(device))
 
     block_rows = max(1, block_elements // max(1, documents.shape[1]))
     scores = torch.empty(
@@ -336,7 +343,9 @@ def _score_on_device(
             )
             end = min(start + block_rows, num_documents)
             # `index_select` rather than slicing: sparse tensors don't support basic slicing
-            block = documents.index_select(0, torch.arange(start, end)).to(device)
+            block = _upcast_low_precision(
+                documents.index_select(0, torch.arange(start, end)).to(device)
+            )
             scores[:, start:end] = wrapper.model.similarity(
                 queries_on_device, block
             ).to(queries.device, torch.float32)

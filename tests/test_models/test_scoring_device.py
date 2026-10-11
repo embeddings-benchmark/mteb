@@ -36,6 +36,7 @@ class FakeSentenceTransformer(MockSentenceTransformer):
         super().__init__()
         self._device = torch.device(device)
         self.scored_on: list[torch.device] = []
+        self.scored_dtypes: list[torch.dtype | None] = []
 
     @property
     def device(self) -> torch.device:
@@ -47,6 +48,7 @@ class FakeSentenceTransformer(MockSentenceTransformer):
 
     def similarity(self, a, b, device=None):
         self.scored_on.append(device or a.device)
+        self.scored_dtypes.append(getattr(b, "dtype", None))  # multi-vector gets lists
         return torch.zeros(len(a), len(b))
 
 
@@ -149,3 +151,16 @@ def test_embeddings_already_on_an_accelerator_are_scored_as_is() -> None:
     )
 
     assert model.scored_on == [LOAD_DEVICE]
+
+
+@pytest.mark.parametrize("device", [CPU, LOAD_DEVICE])
+def test_low_precision_embeddings_are_upcast_before_scoring(
+    device: torch.device,
+) -> None:
+    """sentence-transformers < 6 scores in the input dtype, which ties nearby scores."""
+    model = FakeSentenceTransformer(device)
+    wrapper = SentenceTransformerEncoderWrapper(model)
+
+    wrapper.similarity(torch.ones(2, 4, dtype=torch.bfloat16), torch.ones(3, 4).half())
+
+    assert model.scored_dtypes == [torch.float32]

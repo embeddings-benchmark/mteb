@@ -6,6 +6,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
 )
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -107,7 +108,10 @@ _WEMM_CITATION = """@article{wemm-embedding,
 
 _WEMM_LOADER_KWARGS = dict(
     trust_remote_code=True,
+    # fps=2: video_processor.fps=2
+    # https://huggingface.co/tencent/WeMM-Embedding-2B/blob/main/processor_config.json
     fps=2.0,
+    # 64 is an mteb cap; upstream ships max_frames=768
     max_frames=64,
 )
 
@@ -137,6 +141,7 @@ wemm_embedding_2b = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     extra_requirements_groups=["wemm"],
+    output_dtypes=OutputDType.BF16,
 )
 
 wemm_embedding_4b = ModelMeta(
@@ -164,6 +169,7 @@ wemm_embedding_4b = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     extra_requirements_groups=["wemm"],
+    output_dtypes=OutputDType.BF16,
 )
 
 wemm_embedding_9b = ModelMeta(
@@ -191,4 +197,5 @@ wemm_embedding_9b = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     extra_requirements_groups=["wemm"],
+    output_dtypes=OutputDType.BF16,
 )

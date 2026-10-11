@@ -50,13 +50,22 @@ class ViCLIPWrapper(AbsEncoder):
         if device is None:
             device = "cuda" if torch.cuda.is_available() else "cpu"
 
+        from huggingface_hub import hf_hub_download
         from transformers import AutoModel
 
         self.model_name = model_name
         self.device = device
         self.num_frames = num_frames
+        # the checkpoint's config points tokenizer_path at "./bpe_simple_vocab_16e6.txt.gz",
+        # relative to the launch directory, so pass the downloaded file instead
+        bpe_path = hf_hub_download(
+            model_name, "bpe_simple_vocab_16e6.txt.gz", revision=revision
+        )
         self.model = AutoModel.from_pretrained(
-            model_name, revision=revision, trust_remote_code=True
+            model_name,
+            revision=revision,
+            trust_remote_code=True,
+            tokenizer_path=bpe_path,
         ).to(self.device)
         self.model.eval()
         self.tokenizer = self.model.tokenizer
@@ -178,6 +187,8 @@ class ViCLIPWrapper(AbsEncoder):
 
 _VICLIP_COMMON = dict(
     loader=ViCLIPWrapper,
+    # 8 frames: video_input_num_frames = 8 in ViCLIP's source
+    # https://github.com/OpenGVLab/InternVideo/blob/main/Data/InternVid/viclip/viclip.py
     loader_kwargs=dict(num_frames=8),
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -200,10 +211,10 @@ viclip_large_patch14 = ModelMeta(
     n_parameters=427_616_513,
     n_embedding_parameters=2_162_688,
     memory_usage_mb=1632,
-    max_tokens=77,
+    max_tokens=32,  # ViCLIP.max_txt_l (text positional embedding has 32 rows)
     embed_dim=768,
     reference="https://huggingface.co/OpenGVLab/ViCLIP-L-14-hf",
-    extra_requirements_groups=["image", "video"],
+    extra_requirements_groups=["image", "video", "viclip"],
     **_VICLIP_COMMON,
 )
 
@@ -213,9 +224,9 @@ viclip_base_patch16 = ModelMeta(
     n_parameters=149_620_993,
     n_embedding_parameters=1_048_576,
     memory_usage_mb=571,
-    max_tokens=77,
+    max_tokens=32,  # ViCLIP.max_txt_l (text positional embedding has 32 rows)
     embed_dim=512,
     reference="https://huggingface.co/OpenGVLab/ViCLIP-B-16-hf",
-    extra_requirements_groups=["image", "video"],
+    extra_requirements_groups=["image", "video", "viclip"],
     **_VICLIP_COMMON,
 )

@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING, Any
 
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -32,7 +33,10 @@ class Qwen3VLEmbeddingWrapper(InstructSentenceTransformerModel):
         device: str | None = None,
         min_pixels: int = MIN_PIXELS,
         max_pixels: int = MAX_PIXELS,
-        fps: float | None = 2.0,
+        # fps=1, 64 frames: FPS=1 and MAX_FRAMES=64 in the official script (the
+        # generic Qwen3-VL video processor default is fps=2)
+        # https://huggingface.co/Qwen/Qwen3-VL-Embedding-2B/blob/main/scripts/qwen3_vl_embedding.py
+        fps: float | None = 1.0,
         max_frames: int | None = 64,
         num_frames: int | None = None,
         **kwargs: Any,
@@ -114,6 +118,7 @@ qwen3_vl_embedding_2b = ModelMeta(
     training_datasets=None,
     citation=QWEN3_VL_EMBEDDING_CITATION,
     extra_requirements_groups=["multimodal-sbert"],
+    output_dtypes=OutputDType.BF16,
 )
 
 qwen3_vl_embedding_8b = ModelMeta(
@@ -140,6 +145,7 @@ qwen3_vl_embedding_8b = ModelMeta(
     training_datasets=None,
     citation=QWEN3_VL_EMBEDDING_CITATION,
     extra_requirements_groups=["multimodal-sbert"],
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -207,4 +213,5 @@ dna_vl_steer_2b = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     extra_requirements_groups=["multimodal-sbert"],
+    output_dtypes=OutputDType.BF16,
 )

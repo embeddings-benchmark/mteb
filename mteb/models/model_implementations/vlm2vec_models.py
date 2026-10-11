@@ -11,7 +11,7 @@ from mteb._requires_package import (
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     import torch
@@ -410,9 +410,12 @@ class VLM2VEC2Wrapper(AbsEncoder):
         revision: str | None = None,
         *,
         device: str | None = None,
-        fps: float | None = 2.0,
-        max_frames: int | None = 64,
-        num_frames: int | None = None,
+        # 8 frames, evenly spaced: num_frames=8 on every video task in the
+        # official eval config
+        # https://github.com/TIGER-AI-Lab/VLM2Vec/blob/main/experiments/public/eval/video.yaml
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = 8,
         **kwargs: Any,
     ) -> None:
         import torch
@@ -574,6 +577,7 @@ vlm2vec_lora = ModelMeta(
     training_datasets=vlm2vec_training_datasets,
     citation=VLM2VEC_CITATION,
     extra_requirements_groups=["peft"],
+    output_dtypes=OutputDType.BF16,
 )
 
 vlm2vec_full = ModelMeta(
@@ -600,6 +604,7 @@ vlm2vec_full = ModelMeta(
     training_datasets=vlm2vec_training_datasets,
     citation=VLM2VEC_CITATION,
     extra_requirements_groups=["peft"],
+    output_dtypes=OutputDType.BF16,
 )
 
 vlm2vec2 = ModelMeta(
@@ -637,6 +642,6 @@ vlm2vec2 = ModelMeta(
     url={https://arxiv.org/abs/2507.04590},
 }""",
     contacts=None,
-    output_dtypes=None,
+    output_dtypes=OutputDType.BF16,
     extra_requirements_groups=["peft", "transformers-v4"],
 )
