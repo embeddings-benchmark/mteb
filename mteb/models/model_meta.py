@@ -592,6 +592,8 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 groups.append("image")
             if "audio" in self.modalities and "audio" not in groups:
                 groups.append("audio")
+            if "video" in self.modalities and "video" not in groups:
+                groups.append("video")
 
         return groups
 
