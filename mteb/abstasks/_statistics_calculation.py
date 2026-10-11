@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections import Counter, defaultdict
+from concurrent.futures import ThreadPoolExecutor
 from typing import TYPE_CHECKING, Any, cast
 
 from tqdm.auto import tqdm
@@ -26,13 +27,28 @@ from mteb.types.statistics import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterable, Mapping
+    from collections.abc import Callable, Container, Iterable, Mapping
 
     from PIL import Image
     from torchcodec.decoders import VideoDecoder  # type: ignore[attr-defined]
 
     from mteb.types import Modalities, TopRankedDocumentsType
     from mteb.types._encoder_io import AudioInputItem
+
+
+def _audio_duration_seconds(audio: AudioInputItem) -> float:
+    """The duration of an audio clip in seconds."""
+    return len(audio["array"]) / audio["sampling_rate"]
+
+
+def _video_duration_seconds(video: VideoDecoder) -> float | None:
+    """The duration of a video in seconds, from its container or else from its frame count and rate, if known."""
+    meta = video.metadata
+    if meta.duration_seconds is not None:
+        return meta.duration_seconds
+    if meta.num_frames is not None and meta.average_fps:
+        return meta.num_frames / meta.average_fps
+    return None
 
 
 def calculate_text_statistics(
@@ -61,9 +77,42 @@ def calculate_text_statistics(
     )
 
 
+def is_black_or_white_image(image: Image.Image) -> bool:
+    """Return whether the image is pure black or pure white once converted to RGB."""
+    extrema = image.convert("RGB").getextrema()
+    return all(band == (0, 0) for band in extrema) or all(
+        band == (255, 255) for band in extrema
+    )
+
+
+def compute_black_or_white_image_flags(
+    images: list[Image.Image], max_workers: int | None = None
+) -> list[bool]:
+    """Return a per-image flag saying whether that image is pure black or white.
+
+    The flags can be matched to corpus IDs to inspect relevant documents.
+    """
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        return list(executor.map(is_black_or_white_image, images))
+
+
+def count_queries_with_all_gold_black_or_white(
+    relevant_docs: Mapping[str, Mapping[str, int]],
+    black_or_white_doc_ids: Container[str],
+) -> int:
+    """Count queries whose positive judgments all reference pure black/white images."""
+    count = 0
+    for docs in relevant_docs.values():
+        gold = [doc_id for doc_id, score in docs.items() if score > 0]
+        if gold and all(doc_id in black_or_white_doc_ids for doc_id in gold):
+            count += 1
+    return count
+
+
 def calculate_image_statistics(
     images: list[Image.Image],
     hashes: list[str] | None = None,
+    black_or_white_flags: list[bool] | None = None,
     max_workers: int | None = None,
 ) -> ImageStatistics:
     """Calculate descriptive statistics for a list of images.
@@ -73,6 +122,9 @@ def calculate_image_statistics(
             attribute returning ``(width, height)``.
         hashes: Optional pre-computed MD5 hashes (from `compute_image_hashes`).
             When provided the function skips recomputing them.
+        black_or_white_flags: Optional pre-computed flags (from
+            `compute_black_or_white_image_flags`). When provided the function
+            skips recomputing them.
         max_workers: Maximum number of worker threads for parallel hash computation.
 
     Returns:
@@ -80,6 +132,10 @@ def calculate_image_statistics(
     """
     if hashes is None:
         hashes = compute_image_hashes(images, max_workers=max_workers)
+    if black_or_white_flags is None:
+        black_or_white_flags = compute_black_or_white_image_flags(
+            images, max_workers=max_workers
+        )
     img_widths, img_heights = [], []
     for img in tqdm(images, desc="Computing image statistics"):
         width, height = img.size
@@ -94,6 +150,7 @@ def calculate_image_statistics(
         average_image_height=sum(img_heights) / len(img_heights),
         max_image_height=max(img_heights),
         unique_images=len(set(hashes)),
+        black_or_white_images=sum(black_or_white_flags),
     )
 
 
@@ -120,10 +177,8 @@ def calculate_audio_statistics(
     sampling_rates: dict[int, int] = defaultdict(int)
 
     for audio in tqdm(audios, desc="Computing audio statistics"):
-        array = audio["array"]
-        sampling_rate = audio["sampling_rate"]
-        audio_lengths.append(len(array) / sampling_rate)
-        sampling_rates[sampling_rate] += 1
+        audio_lengths.append(_audio_duration_seconds(audio))
+        sampling_rates[audio["sampling_rate"]] += 1
 
     return AudioStatistics(
         total_duration_seconds=sum(audio_lengths),
@@ -169,16 +224,8 @@ def calculate_video_statistics(  # noqa: PLR0914
 
         num_frames = meta.num_frames
         avg_fps = meta.average_fps
-        duration = meta.duration_seconds
-        if (
-            duration is None
-            and num_frames is not None
-            and avg_fps is not None
-            and avg_fps > 0
-        ):
-            duration = num_frames / avg_fps
 
-        durations.append(duration)
+        durations.append(_video_duration_seconds(video))
         frames_counts.append(num_frames)
         widths.append(meta.width)
         heights.append(meta.height)
@@ -336,6 +383,7 @@ def calculate_relevant_docs_statistics(
     relevant_docs: Mapping[str, Mapping[str, int]],
     query_ids: Iterable[str],
     corpus_ids: Iterable[str],
+    black_or_white_doc_ids: Container[str] | None = None,
 ) -> RelevantDocsStatistics:
     qrel_query_ids = set(relevant_docs)
     qrel_corpus_ids = {doc for qid in relevant_docs for doc in relevant_docs[qid]}
@@ -354,12 +402,20 @@ def calculate_relevant_docs_statistics(
         unique_relevant_docs=len(qrel_corpus_ids),
         num_missing_query_ids=len(qrel_query_ids.difference(query_ids)),
         num_missing_corpus_ids=len(qrel_corpus_ids.difference(corpus_ids)),
+        queries_with_all_gold_black_or_white=(
+            count_queries_with_all_gold_black_or_white(
+                relevant_docs, black_or_white_doc_ids
+            )
+            if black_or_white_doc_ids is not None
+            else 0
+        ),
     )
 
 
 def calculate_single_input_modality_statistics(
     col_inputs: dict[Modalities, list[Any]],
     hashes: dict[str, list[str]] | None = None,
+    image_black_or_white_flags: list[bool] | None = None,
     max_workers: int | None = None,
 ) -> SingleInputModalityStatistics:
     """Compute per-modality statistics for a single-input dataset."""
@@ -371,7 +427,10 @@ def calculate_single_input_modality_statistics(
         if "text" in col_inputs
         else None,
         image_statistics=calculate_image_statistics(
-            col_inputs["image"], hashes=_hashes.get("image"), max_workers=max_workers
+            col_inputs["image"],
+            hashes=_hashes.get("image"),
+            black_or_white_flags=image_black_or_white_flags,
+            max_workers=max_workers,
         )
         if "image" in col_inputs
         else None,

@@ -25,7 +25,7 @@ This section provides an overview of available tasks, models and benchmarks in M
 
     Reproduce models implementations, for any modality and language.
 
-    [:lucide-corner-down-right: See models](./available_models/text.md)
+    [:lucide-corner-down-right: See models](#models)
 
 -   :lucide-square: __Tasks__
 
@@ -33,7 +33,7 @@ This section provides an overview of available tasks, models and benchmarks in M
 
     Our comprehensive collection of tasks for evaluating embeddings
 
-    [:lucide-corner-down-right: See tasks](available_tasks/retrieval.md)
+    [:lucide-corner-down-right: See tasks](#tasks)
 
 
 

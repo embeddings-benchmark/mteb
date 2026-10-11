@@ -148,6 +148,16 @@ from .dapfam_patent_retrieval import (
     DAPFAMOutTitlAbsToTitlAbsRetrieval,
 )
 from .dbpedia_retrieval import DBPedia, DBPediaHardNegatives, DBPediaHardNegativesV2
+from .decontaminated_beir import (
+    ArguAnaDecontaminated,
+    FiQADecontaminated,
+    NFCorpusDecontaminated,
+    QuoraRetrievalDecontaminated,
+    SciDocsDecontaminated,
+    SciFactDecontaminated,
+    Touche2020Decontaminated,
+    TrecCOVIDDecontaminated,
+)
 from .dense_webvid_covr_retrieval import DenseWebVidCoVRVT2VRetrieval
 from .didemo_retrieval import (
     DiDeMoA2VRetrieval,
@@ -529,6 +539,7 @@ __all__ = [
     "ActivityNetCaptionsV2TRetrieval",
     "AlphaNLI",
     "ArguAna",
+    "ArguAnaDecontaminated",
     "AudioCapsAVA2VRetrieval",
     "AudioCapsAVAT2VRetrieval",
     "AudioCapsAVT2VARetrieval",
@@ -683,6 +694,7 @@ __all__ = [
     "FashionIQIT2IRetrieval",
     "FeedbackQARetrieval",
     "FiQA2018",
+    "FiQADecontaminated",
     "FinQARetrieval",
     "FinanceBenchRetrieval",
     "Flickr30kI2TRetrieval",
@@ -771,6 +783,7 @@ __all__ = [
     "MomentSeekerTI2VRetrieval",
     "MomentSeekerTV2VRetrieval",
     "NFCorpus",
+    "NFCorpusDecontaminated",
     "NIGHTSI2IRetrieval",
     "NQHardNegatives",
     "NQTablesRetrieval",
@@ -807,6 +820,7 @@ __all__ = [
     "ProceduralMemBench",
     "Quail",
     "QuoraRetrieval",
+    "QuoraRetrievalDecontaminated",
     "QuoraRetrievalHardNegatives",
     "QuoraRetrievalHardNegativesV2",
     "R2MEDBioinformaticsRetrieval",
@@ -839,7 +853,9 @@ __all__ = [
     "SOPI2IRetrieval",
     "SSW60A2IRetrieval",
     "SSW60I2ARetrieval",
+    "SciDocsDecontaminated",
     "SciFact",
+    "SciFactDecontaminated",
     "SciMMIRI2TRetrieval",
     "SciMMIRT2IRetrieval",
     "SeaVLCrawlingI2TRetrieval",
@@ -879,7 +895,9 @@ __all__ = [
     "TopiOCQARetrieval",
     "TopiOCQARetrievalHardNegatives",
     "Touche2020",
+    "Touche2020Decontaminated",
     "Touche2020v3Retrieval",
+    "TrecCOVIDDecontaminated",
     "VALOR32KA2VRetrieval",
     "VALOR32KAT2VRetrieval",
     "VALOR32KT2VARetrieval",

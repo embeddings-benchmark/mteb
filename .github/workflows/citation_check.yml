@@ -49,15 +49,19 @@ jobs:
       run: make citation-check
 
   citation-check-main:
-    if: github.event_name == 'push' ||
+    # forks would otherwise push cache commits to their own main
+    if: github.repository == 'embeddings-benchmark/mteb' && (
+        github.event_name == 'push' ||
         github.event_name == 'schedule' ||
-        github.event_name == 'workflow_dispatch'
+        github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     # the lookups are rate-limited, and a shared runner IP gets throttled harder than
     # a laptop does; fail rather than sit in the queue for hours
     timeout-minutes: 45
     permissions:
-      contents: write
+      contents: read
+    outputs:
+      cache-changed: ${{ steps.cache.outputs.changed }}
     steps:
     - name: Checkout repository
       uses: actions/checkout@v6
@@ -75,15 +79,48 @@ jobs:
       run: make citation-check
 
     # Keep what the run looked up so later runs start from the refreshed cache.
-    - name: Commit the citation cache
+    - name: Check whether the citation cache changed
+      id: cache
       if: success() && github.ref == 'refs/heads/main'
       run: |
-        if git diff --quiet -- tests/test_validate_metadata/citation_cache.json; then
-          exit 0
-        fi
+        git diff --quiet -- tests/test_validate_metadata/citation_cache.json ||
+          echo "changed=true" >> "$GITHUB_OUTPUT"
 
+    - name: Upload the citation cache
+      if: steps.cache.outputs.changed == 'true'
+      uses: actions/upload-artifact@v7
+      with:
+        name: citation-cache
+        path: tests/test_validate_metadata/citation_cache.json
+        retention-days: 1
+
+  # A separate job, so the push token never shares a runner with the dependencies
+  # the check installs and runs. main is protected, so this pushes with the
+  # `RELEASE` token (see release.yml): GITHUB_TOKEN cannot bypass the required checks.
+  commit-citation-cache:
+    needs: citation-check-main
+    if: needs.citation-check-main.outputs.cache-changed == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v6
+      with:
+        token: ${{ secrets.RELEASE }}
+
+    - name: Download the citation cache
+      uses: actions/download-artifact@v8
+      with:
+        name: citation-cache
+        path: tests/test_validate_metadata
+
+    - name: Commit the citation cache
+      run: |
         git config user.name "github-actions[bot]"
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git add tests/test_validate_metadata/citation_cache.json
         git commit -m "chore: update the citation cache [skip ci]"
+        # main may have moved while the lookups ran
+        git pull --rebase origin main
         git push origin HEAD:main

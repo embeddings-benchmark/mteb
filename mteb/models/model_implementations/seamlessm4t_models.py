@@ -22,7 +22,9 @@ class SeamlessM4TWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
-        max_audio_length_seconds: float = 5.0,
+        # 60 s: MAX_INPUT_AUDIO_LENGTH in Meta's M4T v2 demo, not a model config
+        # https://github.com/facebookresearch/seamless_communication/blob/main/demo/m4tv2/app.py
+        max_audio_length_seconds: float = 60.0,
         **kwargs: Any,
     ):
         import torch
@@ -54,18 +56,18 @@ class SeamlessM4TWrapper(AbsEncoder):
     ) -> Array:
         import torch
 
-        inputs.collate_fn = AudioCollator(self.sampling_rate, self.max_samples)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate, max_samples=self.max_samples
+        )
         all_embeddings = []
 
-        for batch in tqdm(
-            inputs,
-            disable=not show_progress_bar,
-        ):
+        for batch in tqdm(inputs, disable=not show_progress_bar):
             audio_arrays = [audio["array"] for audio in batch["audio"]]
 
-            # Process the entire batch at once
-            features = self.processor(
-                audios=audio_arrays,
+            # call the feature extractor directly: the processor's audio keyword
+            # is `audios` before transformers 4.57 and `audio` from v5
+            features = self.processor.feature_extractor(
+                audio_arrays,
                 sampling_rate=self.sampling_rate,
                 return_tensors="pt",
                 padding=True,

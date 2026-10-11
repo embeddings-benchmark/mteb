@@ -6,7 +6,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import AudioCollator, seconds_to_samples
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -22,6 +22,8 @@ class WhisperAudioWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
+        # 30 s: chunk_length=30
+        # https://huggingface.co/openai/whisper-large-v3/blob/main/preprocessor_config.json
         max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
@@ -67,7 +69,9 @@ class WhisperAudioWrapper(AbsEncoder):
                 return_tensors="pt",
                 padding="max_length",
                 truncation=True,
-                max_length=int(self.max_audio_length_seconds * self.sampling_rate),
+                max_length=seconds_to_samples(
+                    self.max_audio_length_seconds, self.sampling_rate
+                ),
                 return_attention_mask=True,
             ).to(self.device)
             # Some Whisper checkpoints load as fp16;

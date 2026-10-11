@@ -9,7 +9,7 @@ from tqdm.auto import tqdm
 from typing_extensions import deprecated
 
 from mteb._requires_package import _is_package_available
-from mteb.types import OutputDType, PromptType
+from mteb.types import PromptType
 
 from .abs_encoder import AbsEncoder
 
@@ -272,23 +272,6 @@ class InstructSentenceTransformerModel(AbsEncoder):
             The encoded input in a numpy array or torch tensor of the shape (Number of sentences) x (Embedding dimension).
         """
         instruction: str | None = self.get_task_instruction(task_metadata, prompt_type)
-
-        if "precision" in kwargs and self.mteb_model_meta is not None:
-            existing_experiment_kwargs = self.mteb_model_meta.experiment_kwargs
-            output_dtype = OutputDType.from_str(kwargs["precision"])
-            if existing_experiment_kwargs is not None:
-                existing_experiment_kwargs["output_dtypes"] = output_dtype  # type: ignore[index]
-            else:
-                existing_experiment_kwargs = {"output_dtypes": output_dtype.value}
-            logger.warning(
-                f"The 'precision' argument passed in encode_kwargs setting output_dtypes to {output_dtype.value}."
-            )
-            self.mteb_model_meta = self.mteb_model_meta.model_copy(
-                update={
-                    "experiment_kwargs": existing_experiment_kwargs,
-                },
-                deep=True,
-            )
 
         # to passage prompts won't be applied to passages
         if (

@@ -6,6 +6,7 @@ import pytest
 
 import mteb
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 # Historic models with n_embedding_parameters=None. Do NOT add new models to this list.
 _MISSING_N_EMBEDDING_MODELS = [
@@ -160,6 +161,7 @@ def test_model_similar_tasks(training_datasets):
             "Touche2020-NL",
             "Touche2020-VN",
             "Touche2020-PL",
+            "Touche2020Decontaminated",
             "Touche2020Retrieval.v3",
         ]
     )
@@ -345,6 +347,28 @@ def test_get_model_kwargs_does_not_mutate_registry_meta():
 
     current_registry_meta = mteb.get_model_meta(model_name)
     assert current_registry_meta.experiment_kwargs is None
+
+
+def test_get_model_with_only_empty_kwargs_is_not_an_experiment():
+    """`get_model(name, model_kwargs={})` shouldn't spin up a distinct experiment.
+
+    An explicit-but-empty override changes nothing about the run, so it
+    shouldn't generate a separate results folder from the base model.
+    """
+    model_name = "mteb/baseline-random-encoder"
+
+    model = mteb.get_model(model_name, model_kwargs={})
+    assert model.mteb_model_meta.experiment_kwargs is None
+    # The loader still receives it — only experiment identity is affected.
+    assert model.mteb_model_meta.loader_kwargs.get("model_kwargs") == {}
+
+
+def test_get_model_meaningless_kwarg_dropped_alongside_meaningful_one():
+    """A meaningless kwarg is dropped from the experiment identity; a real one stays."""
+    model_name = "mteb/baseline-random-encoder"
+
+    model = mteb.get_model(model_name, model_kwargs={}, not_existing_param=123)
+    assert model.mteb_model_meta.experiment_kwargs == {"not_existing_param": 123}
 
 
 def test_fill_missing_parameter():
@@ -659,3 +683,19 @@ def test_max_sim_models_are_not_registered_as_dense():
         if m.similarity_fn_name == ScoringFunction.MAX_SIM and "dense" in m.model_type
     ]
     assert not mislabelled
+
+
+def test_model_meta_dtypes_are_named_not_torch_objects() -> None:
+    """`ModelMeta` declares load dtypes by name, so metadata stays importable without torch.
+
+    `OutputDType` is a `str` enum, so it resolves through both `getattr(torch, ...)` (the path
+    transformers takes for a string dtype) and `OutputDType.get_dtype()`.
+    """
+    import torch
+
+    meta = mteb.get_model_meta("vidore/colpali-v1.1")
+    declared = meta.loader_kwargs["torch_dtype"]
+
+    assert isinstance(declared, OutputDType)
+    assert declared.get_dtype() is torch.float16
+    assert getattr(torch, declared) is torch.float16

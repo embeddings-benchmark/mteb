@@ -104,7 +104,7 @@ FROM og-deps AS og-builder
 # the Playwright browser cache already present in og-deps.
 COPY --from=data --chown=user:user /home/user/.cache /home/user/.cache
 
-RUN python scripts/generate_og_images.py --out=/og-cache
+RUN python scripts/tools/generate_og_images.py --out=/og-cache
 
 
 # ─── Stage: runtime ─────────────────────────────────────────────────

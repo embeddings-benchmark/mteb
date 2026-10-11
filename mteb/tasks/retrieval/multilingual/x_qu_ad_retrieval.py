@@ -1,8 +1,3 @@
-from hashlib import sha256
-from typing import Any
-
-import datasets
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -26,8 +21,8 @@ class XQuADRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="XQuADRetrieval",
         dataset={
-            "path": "google/xquad",
-            "revision": "51adfef1c1287aab1d2d91b5bead9bcfb9c68583",
+            "path": "mteb/XQuADRetrieval",
+            "revision": "194842d6a49baddf6cd3f4d5130ab3c7756268d2",
         },
         description="XQuAD is a benchmark dataset for evaluating cross-lingual question answering performance. It is repurposed retrieving relevant context for each question.",
         reference="https://huggingface.co/datasets/xquad",
@@ -64,47 +59,3 @@ class XQuADRetrieval(AbsTaskRetrieval):
 }
 """,
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        split = "validation"
-        queries = {lang: {split: {}} for lang in self.hf_subsets}
-        corpus = {lang: {split: {}} for lang in self.hf_subsets}
-        relevant_docs = {lang: {split: {}} for lang in self.hf_subsets}
-
-        for lang in self.hf_subsets:
-            data = datasets.load_dataset(name=f"xquad.{lang}", **self.metadata.dataset)[
-                split
-            ]
-            data = data.filter(lambda x: x["answers"]["text"] != "")  # noqa: PLC1901
-
-            question_ids = {
-                question: question_id
-                for question_id, question in zip(
-                    data["id"], data["question"], strict=True
-                )
-            }
-            context_ids = {
-                context: sha256(context.encode("utf-8")).hexdigest()
-                for context in set(data["context"])
-            }
-
-            for row in data:
-                question = row["question"]
-                context = row["context"]
-                query_id = question_ids[question]
-                queries[lang][split][query_id] = question
-
-                doc_id = context_ids[context]
-                corpus[lang][split][doc_id] = {"text": context}
-                if query_id not in relevant_docs[lang][split]:
-                    relevant_docs[lang][split][query_id] = {}
-                relevant_docs[lang][split][query_id][doc_id] = 1
-
-        self.corpus = datasets.DatasetDict(corpus)
-        self.queries = datasets.DatasetDict(queries)
-        self.relevant_docs = datasets.DatasetDict(relevant_docs)
-
-        self.data_loaded = True

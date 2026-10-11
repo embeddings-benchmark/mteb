@@ -1,5 +1,6 @@
 """Shared test fixtures and configuration for all tests."""
 
+import importlib.util
 from pathlib import Path
 
 import polars as pl
@@ -7,6 +8,24 @@ import pytest
 from datasets import Dataset
 
 from mteb import ResultCache
+
+_HAS_TORCH = importlib.util.find_spec("torch") is not None
+
+
+def pytest_ignore_collect(collection_path: Path) -> bool | None:
+    """Without torch (`make test-core`), only collect the test modules that have tests marked `core`.
+
+    pytest imports a module to read its markers, and most test modules import torch, so collecting
+    them on `mteb-core` fails before `-m core` can deselect their tests.
+    """
+    if _HAS_TORCH or not collection_path.name.startswith("test_"):
+        return None
+    if (
+        collection_path.suffix == ".py"
+        and "pytest.mark.core" not in collection_path.read_text("utf-8")
+    ):
+        return True
+    return None
 
 
 @pytest.fixture

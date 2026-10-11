@@ -10,6 +10,7 @@ repos:
     rev: v6.0.0
     hooks:
     -   id: check-yaml
+        args: ["--unsafe"]  # mkdocs.yml uses !!python/name tags
     -   id: check-json
     -   id: pretty-format-json
         args:
@@ -40,7 +41,7 @@ repos:
       - id: format-benchmarks-citations
         name: format-benchmarks-citations
         description: "Format benchmarks citations"
-        entry: python scripts/format_citations.py benchmarks --error-on-change
+        entry: python scripts/tools/format_citations.py benchmarks --error-on-change
         language: python
         files: 'mteb/benchmarks/'
         pass_filenames: false
@@ -51,7 +52,7 @@ repos:
       - id: format-tasks-citations
         name: format-tasks-citations
         description: "Format tasks citations"
-        entry: python scripts/format_citations.py tasks --error-on-change
+        entry: python scripts/tools/format_citations.py tasks --error-on-change
         language: python
         files: 'mteb/tasks/'
         pass_filenames: false

@@ -1,18 +1,7 @@
 from __future__ import annotations
 
-import csv
-from pathlib import Path
-from typing import TYPE_CHECKING, Any
-
-from huggingface_hub import snapshot_download
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-
-if TYPE_CHECKING:
-    from datasets import Dataset
-
-    from mteb.types import RelevantDocumentsType
 
 
 class MLQuestionsRetrieval(AbsTaskRetrieval):
@@ -21,8 +10,8 @@ class MLQuestionsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MLQuestions",
         dataset={
-            "path": "McGill-NLP/mlquestions",
-            "revision": "83b690cb666c5a8869e7f213a877bbd24a642d7c",
+            "path": "mteb/MLQuestions",
+            "revision": "99f13956087b5c2e21beeec8022a5f0f86d9f577",
         },
         reference="https://github.com/McGill-NLP/MLQuestions",
         description=(
@@ -62,51 +51,3 @@ Reddy, Siva},
 }
 """,
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-        self.corpus, self.queries, self.relevant_docs = {}, {}, {}
-        dataset_path = self.metadata.dataset["path"]
-        revision = self.metadata.dataset.get("revision", None)
-        download_dir = snapshot_download(
-            repo_id=dataset_path, repo_type="dataset", revision=revision
-        )
-        for split in self.metadata.eval_splits:
-            corpus, queries, qrels = self._load_data_for_split(download_dir, split)
-            self.corpus[split], self.queries[split], self.relevant_docs[split] = (
-                corpus,
-                queries,
-                qrels,
-            )
-
-        self.data_loaded = True
-
-    def _load_data_for_split(  # noqa: PLR6301
-        self, download_dir: str, split: str
-    ) -> tuple[Dataset, Dataset, RelevantDocumentsType]:
-        queries, corpus, qrels = {}, {}, {}
-
-        download_dir = Path(download_dir)
-        dataset_path = download_dir / f"{split}.csv"
-        with dataset_path.open() as csvfile:
-            reader = csv.DictReader(csvfile)
-            for i, row in enumerate(reader):
-                query_id = f"Q{str(i)}"
-                doc_id = row["indexes"]
-                query = row["target_text"]
-                queries[query_id] = query
-                qrels[query_id] = {f"C{doc_id}": 1}
-
-        # Same corpus for all splits
-        corpus_path = download_dir / "test_passages.csv"
-        with corpus_path.open() as csvfile:
-            reader = csv.DictReader(csvfile)
-            for i, row in enumerate(reader):
-                doc_id = f"C{str(i)}"
-                corpus[doc_id] = {
-                    "title": "",
-                    "text": row["input_text"],
-                }
-
-        return corpus, queries, qrels

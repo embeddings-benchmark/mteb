@@ -7,9 +7,16 @@ fetched from the Hugging Face Hub. Loaders mirror each model's base family
 (bge-m3 / multilingual-e5 / arctic-embed / plain sentence-transformers).
 """
 
+from mteb.models.model_implementations.pylate_models import (
+    denseon_lateon_supervised_data,
+    denseon_lateon_unsupervised_data,
+)
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
-from mteb.types import PromptType
+from mteb.models.sentence_transformer_wrapper import (
+    CrossEncoderWrapper,
+    SentenceTransformerEncoderWrapper,
+)
+from mteb.types import OutputDType, PromptType
 
 # E5-style query/passage prefixes (multilingual-e5 family)
 E5_PROMPTS = {
@@ -23,6 +30,21 @@ ARCTIC_QUERY_PROMPTS = {
 }
 
 KOR_EN = ["kor-Hang", "eng-Latn"]
+
+# KURE-Reranker: the public data is the same as for KURE-v2; the private Korean data
+# contains the train splits of Ko-StrategyQA, MIRACL and MultiLongDoc (per the authors,
+# https://github.com/embeddings-benchmark/mteb/pull/5574)
+kure_reranker_training_data = (
+    denseon_lateon_unsupervised_data
+    | denseon_lateon_supervised_data
+    | {
+        "Ko-StrategyQA",
+        "MIRACLRetrieval",
+        "MIRACLRetrievalHardNegatives",
+        "MIRACLReranking",
+        "MultiLongDocRetrieval",
+    }
+)
 
 # --------------------------------------------------------------------------- #
 # BAAI/bge-m3 Korean fine-tunes (dense, no query instruction, cosine)
@@ -280,4 +302,57 @@ ko_sroberta_multitask = ModelMeta(
     # Model card: multi-task trained on the KorSTS and KorNLI training sets
     # (KorNLI has no mteb task).
     training_datasets={"KorSTS"},
+)
+
+
+kure_reranker_nano = ModelMeta(
+    loader=CrossEncoderWrapper,
+    loader_kwargs=dict(max_length=8192),
+    name="nlpai-lab/KURE-Reranker-nano",
+    model_type=["cross-encoder"],
+    languages=KOR_EN,
+    open_weights=True,
+    revision="c32a78ae89fbfeaa4e77c9f2854bd8ba07501c7b",
+    release_date="2026-09-09",
+    n_parameters=149_323_009,
+    embed_dim=None,
+    license="apache-2.0",
+    max_tokens=8192,
+    memory_usage_mb=570,
+    n_embedding_parameters=38_400_000,
+    reference="https://huggingface.co/nlpai-lab/KURE-Reranker-nano",
+    similarity_fn_name=None,
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
+    use_instructions=False,
+    adapted_from="skt/A.X-Encoder-base",
+    public_training_code=None,
+    public_training_data="https://huggingface.co/datasets/lightonai/embeddings-fine-tuning",
+    training_datasets=kure_reranker_training_data,
+)
+
+kure_reranker_base = ModelMeta(
+    loader=CrossEncoderWrapper,
+    # Qwen3-1.7B scored as logit("yes") - logit("no") through the chat template
+    # shipped with the model, which also adds the default instruction.
+    loader_kwargs=dict(max_length=8192, model_kwargs=dict(dtype=OutputDType.BF16)),
+    name="nlpai-lab/KURE-Reranker-base",
+    model_type=["cross-encoder"],
+    languages=KOR_EN,
+    open_weights=True,
+    revision="53e42a46af81f71df6b37ba553bb0c49f3008433",
+    release_date="2026-09-23",
+    n_parameters=1_720_574_976,
+    embed_dim=None,
+    license="apache-2.0",
+    max_tokens=8192,
+    memory_usage_mb=3282,
+    n_embedding_parameters=311_164_928,
+    reference="https://huggingface.co/nlpai-lab/KURE-Reranker-base",
+    similarity_fn_name=None,
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
+    use_instructions=False,
+    adapted_from="Qwen/Qwen3-1.7B",
+    public_training_code=None,
+    public_training_data="https://huggingface.co/datasets/lightonai/embeddings-fine-tuning",
+    training_datasets=kure_reranker_training_data,
 )

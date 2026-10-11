@@ -6,10 +6,11 @@ from typing import TYPE_CHECKING, Any, Protocol
 from .evaluator import Evaluator
 
 if TYPE_CHECKING:
+    from typing import Self
+
     import numpy as np
     from datasets import Dataset
     from numpy.typing import NDArray
-    from typing_extensions import Self
 
     from mteb.types import Array
 
