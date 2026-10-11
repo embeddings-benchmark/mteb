@@ -84,7 +84,6 @@ class UCF101VideoAudioClassification(AbsTaskClassification):
   year = {2012},
 }
 """,
-        is_beta=True,
     )
     max_fraction_of_documents_to_embed = None
     input_column_name = ("video", "audio")
