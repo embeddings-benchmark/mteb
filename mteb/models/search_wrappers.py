@@ -387,7 +387,8 @@ class SearchEncoderWrapper:
             num_proc: Number of processes to use for dataloading.
             timer: Records the search phases: "Encoding queries", then "Searching corpus" for a
                 full corpus search, or "Encoding corpus" and "Computing similarity" when reranking.
-                A new stack is used when not given.
+                With an `index_backend`, the corpus is already encoded in `index`, so only
+                "Computing similarity" follows. A new stack is used when not given.
             **kwargs: Additional arguments. Currently unused.
 
         Returns:

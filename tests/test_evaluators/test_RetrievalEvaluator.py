@@ -217,6 +217,38 @@ class _MultiVectorWrapper(MultiVectorSearchEncoderWrapper):
         return self.model.similarity(embeddings1, embeddings2)
 
 
+class _InMemoryIndex:
+    """Minimal `IndexEncoderSearchProtocol` backend (full corpus search only)."""
+
+    def __init__(self):
+        self.embeddings = None
+
+    def add_documents(self, embeddings, idxs):
+        self.embeddings = torch.as_tensor(embeddings)
+
+    def search(
+        self, embeddings, top_k, similarity_fn, top_ranked=None, query_idx_to_id=None
+    ):
+        scores = torch.as_tensor(similarity_fn(embeddings, self.embeddings))
+        values, indices = torch.topk(scores, min(top_k, scores.shape[1]), dim=1)
+        return values.tolist(), indices.tolist()
+
+    def clear(self):
+        self.embeddings = None
+
+
+class _PlainSearchModel:
+    """A `SearchProtocol` model that isn't one of mteb's search wrappers."""
+
+    mteb_model_meta = None
+
+    def index(self, corpus, **kwargs: Any):
+        self.corpus_ids = list(corpus["id"])
+
+    def search(self, queries, **kwargs: Any):
+        return {qid: {self.corpus_ids[0]: 1.0} for qid in queries["id"]}
+
+
 def _run_retrieval(search_model, top_ranked=None) -> TimingStack:
     timer = TimingStack()
     evaluator = RetrievalEvaluator(
@@ -256,8 +288,27 @@ def _run_retrieval(search_model, top_ranked=None) -> TimingStack:
             TOP_RANKED,
             ["Encoding queries", "Encoding corpus", "Computing similarity"],
         ),
+        (
+            # The corpus is encoded in `index`, which the evaluator times itself
+            SearchEncoderWrapper(_DenseEncoder(), index_backend=_InMemoryIndex()),
+            None,
+            ["Encoding corpus", "Encoding queries", "Computing similarity"],
+        ),
+        (
+            # Other search models get the evaluator's own phases around `index` and `search`
+            _PlainSearchModel(),
+            None,
+            ["Encoding corpus", "Encoding queries"],
+        ),
     ],
-    ids=["dense-search", "dense-rerank", "multi-vector-search", "multi-vector-rerank"],
+    ids=[
+        "dense-search",
+        "dense-rerank",
+        "multi-vector-search",
+        "multi-vector-rerank",
+        "dense-index-backend",
+        "plain-search-protocol",
+    ],
 )
 def test_search_phases(search_model, top_ranked, expected_phases):
     timer = _run_retrieval(search_model, top_ranked)
