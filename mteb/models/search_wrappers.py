@@ -699,6 +699,7 @@ class SearchCrossEncoderWrapper:
             task_metadata=task_metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
+            **encode_kwargs,
         )
 
         results: RetrievalOutputType = {qid: {} for qid in queries["id"]}
