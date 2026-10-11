@@ -8,27 +8,15 @@ from tqdm.auto import tqdm
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import VideoCollator
+from mteb.types import PromptType
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
-
     import torch
     from torch.utils.data import DataLoader
 
     from mteb import TaskMetadata
-    from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types import Array, BatchedInput
     from mteb.types._encoder_io import AudioInput, TextInput, VideoInput
-
-
-def _fp32_forward(forward: Callable[..., Any]) -> Callable[..., Any]:
-    """Wrap a module's forward so it runs in fp32 even under autocast."""
-    import torch
-
-    def wrapped(x: torch.Tensor, *args: Any, **kwargs: Any) -> torch.Tensor:
-        with torch.autocast(x.device.type, enabled=False):
-            return forward(x.float(), *args, **kwargs)
-
-    return wrapped
 
 
 class PEAudioVisualWrapper(AbsEncoder):
@@ -80,10 +68,6 @@ class PEAudioVisualWrapper(AbsEncoder):
         # Meta's code pools the CLS token before ModernBERT's final norm
         # https://github.com/facebookresearch/perception_models/blob/main/core/audio_visual_encoder/pe.py
         self.model.text_model.final_norm = torch.nn.Identity()
-        # Meta evaluates in fp32; the DAC codec encoder drifts under bf16 autocast
-        for module in self.model.modules():
-            if type(module).__name__ == "PeAudioDacEncoder":
-                module.forward = _fp32_forward(module.forward)
         self.processor = PeAudioVideoProcessor.from_pretrained(
             model_name, revision=revision
         )
@@ -117,11 +101,18 @@ class PEAudioVisualWrapper(AbsEncoder):
 
         # Meta's eval embeds text with the head of the modality it is compared with
         # (encode_video_text / encode_audio_text / encode_audio_video_text)
-        query, _, document = task_metadata.category.partition("2")
-        other = document if "t" not in document else query if "t" not in query else ""
-        if "v" in other and "a" not in other:
+        if prompt_type is None:
+            other = set(task_metadata.modalities) - {"text"}
+        else:
+            other_side = (
+                PromptType.document
+                if prompt_type == PromptType.query
+                else PromptType.query
+            )
+            other = set(task_metadata.get_modalities(other_side)) - {"text"}
+        if other == {"video"}:
             head = self.model.video_model.text_video_head
-        elif "a" in other and "v" not in other:
+        elif other == {"audio"}:
             head = self.model.audio_model.text_audio_head
         else:
             head = self.model.text_audio_video_head
@@ -133,10 +124,9 @@ class PEAudioVisualWrapper(AbsEncoder):
                 disable=not show_progress_bar,
                 desc="Processing text batches",
             ):
-                with torch.autocast(str(self.device), dtype=torch.bfloat16):
-                    text_embeds = head(self._text_cls(batch["text"]))
-                    text_embeds /= text_embeds.norm(dim=-1, keepdim=True)
-                    all_embeddings.append(text_embeds.cpu().float().numpy())
+                text_embeds = head(self._text_cls(batch["text"]))
+                text_embeds /= text_embeds.norm(dim=-1, keepdim=True)
+                all_embeddings.append(text_embeds.cpu().float().numpy())
 
             return np.vstack(all_embeddings)
 
@@ -165,16 +155,15 @@ class PEAudioVisualWrapper(AbsEncoder):
                 )
                 processed = {k: v.to(self.device) for k, v in processed.items()}
 
-                with torch.autocast(str(self.device), dtype=torch.bfloat16):
-                    video_out = self.model.video_model.video_encoder(
-                        pixel_values_videos=processed["pixel_values_videos"],
-                        padding_mask_videos=processed.get("padding_mask_videos"),
-                    )
-                    video_embeds = self.model.video_model.video_head(
-                        video_out.pooler_output
-                    )
-                    video_embeds /= video_embeds.norm(dim=-1, keepdim=True)
-                    all_embeddings.append(video_embeds.cpu().float().numpy())
+                video_out = self.model.video_model.video_encoder(
+                    pixel_values_videos=processed["pixel_values_videos"],
+                    padding_mask_videos=processed.get("padding_mask_videos"),
+                )
+                video_embeds = self.model.video_model.video_head(
+                    video_out.pooler_output
+                )
+                video_embeds /= video_embeds.norm(dim=-1, keepdim=True)
+                all_embeddings.append(video_embeds.cpu().float().numpy())
 
             return np.vstack(all_embeddings)
 
@@ -204,13 +193,12 @@ class PEAudioVisualWrapper(AbsEncoder):
                 )
                 processed = {k: v.to(self.device) for k, v in processed.items()}
 
-                with torch.autocast(str(self.device), dtype=torch.bfloat16):
-                    audio_embeds = self.model.get_audio_embeds(
-                        input_values=processed["input_values"],
-                        padding_mask=processed.get("padding_mask"),
-                    )
-                    audio_embeds /= audio_embeds.norm(dim=-1, keepdim=True)
-                    all_embeddings.append(audio_embeds.cpu().float().numpy())
+                audio_embeds = self.model.get_audio_embeds(
+                    input_values=processed["input_values"],
+                    padding_mask=processed.get("padding_mask"),
+                )
+                audio_embeds /= audio_embeds.norm(dim=-1, keepdim=True)
+                all_embeddings.append(audio_embeds.cpu().float().numpy())
 
             return np.vstack(all_embeddings)
 
@@ -242,16 +230,15 @@ class PEAudioVisualWrapper(AbsEncoder):
                 )
                 processed = {k: v.to(self.device) for k, v in processed.items()}
 
-                with torch.autocast(str(self.device), dtype=torch.bfloat16):
-                    av_output = self.model.get_audio_video_embeds(
-                        input_values=processed["input_values"],
-                        pixel_values_videos=processed["pixel_values_videos"],
-                        padding_mask=processed.get("padding_mask"),
-                        padding_mask_videos=processed.get("padding_mask_videos"),
-                    )
-                    av_embeds = av_output.audio_video_embeds
-                    av_embeds /= av_embeds.norm(dim=-1, keepdim=True)
-                    all_embeddings.append(av_embeds.cpu().float().numpy())
+                av_output = self.model.get_audio_video_embeds(
+                    input_values=processed["input_values"],
+                    pixel_values_videos=processed["pixel_values_videos"],
+                    padding_mask=processed.get("padding_mask"),
+                    padding_mask_videos=processed.get("padding_mask_videos"),
+                )
+                av_embeds = av_output.audio_video_embeds
+                av_embeds /= av_embeds.norm(dim=-1, keepdim=True)
+                all_embeddings.append(av_embeds.cpu().float().numpy())
 
             return np.vstack(all_embeddings)
 
@@ -272,36 +259,35 @@ class PEAudioVisualWrapper(AbsEncoder):
                 disable=not show_progress_bar,
                 desc="Processing media+text batches",
             ):
-                with torch.autocast(str(self.device), dtype=torch.bfloat16):
-                    text_cls = self._text_cls(batch["text"])
-                    if use_video:
-                        processed = self.processor(
-                            videos=list(batch["video"]),
-                            return_tensors="pt",
-                            padding=True,
-                        )
-                        processed = {k: v.to(self.device) for k, v in processed.items()}
-                        media = self.model.video_model.video_encoder(
-                            pixel_values_videos=processed["pixel_values_videos"],
-                            padding_mask_videos=processed.get("padding_mask_videos"),
-                        ).pooler_output
-                        head = self.model.video_plus_text_head
-                    else:
-                        processed = self.processor(
-                            audio=[a["array"] for a in batch["audio"]],
-                            sampling_rate=self.sampling_rate,
-                            return_tensors="pt",
-                            padding=True,
-                        )
-                        processed = {k: v.to(self.device) for k, v in processed.items()}
-                        media = self.model.audio_model.audio_encoder(
-                            input_values=processed["input_values"],
-                            padding_mask=processed.get("padding_mask"),
-                        ).pooler_output
-                        head = self.model.audio_plus_text_head
-                    # media first, then text (pe.py encode_*_plus_text)
-                    embeds = head(torch.cat([media, text_cls], dim=-1))
-                    embeds /= embeds.norm(dim=-1, keepdim=True)
+                text_cls = self._text_cls(batch["text"])
+                if use_video:
+                    processed = self.processor(
+                        videos=list(batch["video"]),
+                        return_tensors="pt",
+                        padding=True,
+                    )
+                    processed = {k: v.to(self.device) for k, v in processed.items()}
+                    media = self.model.video_model.video_encoder(
+                        pixel_values_videos=processed["pixel_values_videos"],
+                        padding_mask_videos=processed.get("padding_mask_videos"),
+                    ).pooler_output
+                    head = self.model.video_plus_text_head
+                else:
+                    processed = self.processor(
+                        audio=[a["array"] for a in batch["audio"]],
+                        sampling_rate=self.sampling_rate,
+                        return_tensors="pt",
+                        padding=True,
+                    )
+                    processed = {k: v.to(self.device) for k, v in processed.items()}
+                    media = self.model.audio_model.audio_encoder(
+                        input_values=processed["input_values"],
+                        padding_mask=processed.get("padding_mask"),
+                    ).pooler_output
+                    head = self.model.audio_plus_text_head
+                # media first, then text (pe.py encode_*_plus_text)
+                embeds = head(torch.cat([media, text_cls], dim=-1))
+                embeds /= embeds.norm(dim=-1, keepdim=True)
                 all_embeddings.append(embeds.cpu().float().numpy())
         return np.vstack(all_embeddings)
 
@@ -346,7 +332,7 @@ class PEAudioVisualWrapper(AbsEncoder):
             )
 
         # video+text -> audio / audio+text -> video queries: the model's fused heads
-        if task_metadata.category in {"vt2a", "at2v"} and has_video != has_audio:
+        if has_text and has_video != has_audio:
             return self.get_media_plus_text_embeddings(
                 inputs, use_video=has_video, **kwargs
             )
