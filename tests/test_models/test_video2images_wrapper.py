@@ -7,7 +7,7 @@ from datasets import Dataset
 import mteb
 from mteb._create_dataloaders import create_dataloader
 from mteb.cache import ResultCache
-from mteb.evaluate import _check_model_modalities
+from mteb.evaluate import _check_model_modalities, _check_video_only_inputs
 from mteb.mocks import (
     MockVideoClassification,
     MockVideoClusteringTask,
@@ -20,7 +20,10 @@ from mteb.models import Video2ImagesWrapper
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_implementations.random_baseline import _image_to_vector
 from mteb.models.video_wrappers import video2images_wrapper
-from mteb.models.video_wrappers.video2images_wrapper import DEFAULT_NUM_FRAMES
+from mteb.models.video_wrappers.video2images_wrapper import (
+    DEFAULT_NUM_FRAMES,
+    video2images_model_meta,
+)
 from mteb.types import PromptType
 
 pytest.importorskip("torchcodec", reason="Video dependencies are not installed")
@@ -193,10 +196,58 @@ def test_partial_overlap_with_video_only_warns():
 
 
 def test_video_task_error_points_to_wrapper():
-    task = mteb.get_task("CoVRRVT2VRetrieval")
+    task = mteb.get_task("MSRVTTT2V")
     meta = mteb.get_model_meta("openai/clip-vit-base-patch32")
     with pytest.raises(ValueError, match="Video2ImagesWrapper"):
         _check_model_modalities(meta, task)
+
+
+@pytest.mark.parametrize(
+    "task_name",
+    [
+        "CoVRRVT2VRetrieval",
+        "GreatestHitsA2VRetrieval",
+        "GreatestHitsV2ARetrieval",
+        "VCDBCoreAudioVideoRetrieval",
+    ],
+)
+def test_hint_is_not_shown_when_wrapping_would_not_help(task_name):
+    """Audio on a side, or video mixed with another modality, is rejected even when wrapped."""
+    meta = mteb.get_model_meta("openai/clip-vit-base-patch32")
+    with pytest.raises(ValueError, match="none overlap") as exc:
+        _check_model_modalities(meta, mteb.get_task(task_name))
+    assert "Video2ImagesWrapper" not in str(exc.value)
+
+
+@pytest.mark.parametrize(
+    "task", mteb.get_tasks(modalities=["video"]), ids=lambda t: t.metadata.name
+)
+def test_hint_matches_whether_the_wrapper_accepts_the_task(task):
+    meta = mteb.get_model_meta("openai/clip-vit-base-patch32")
+    try:
+        _check_model_modalities(meta, task)
+    except ValueError as e:
+        hinted = "Video2ImagesWrapper" in str(e)
+    else:
+        return  # runs without the wrapper, so there is nothing to hint at
+
+    wrapped = video2images_model_meta(meta, num_frames=DEFAULT_NUM_FRAMES)
+    try:
+        _check_model_modalities(wrapped, task)
+        _check_video_only_inputs(wrapped, task)
+    except ValueError:
+        accepted = False
+    else:
+        accepted = True
+    assert hinted == accepted
+
+
+def test_requires_torchvision(monkeypatch):
+    monkeypatch.setattr(
+        video2images_wrapper, "_is_package_available", lambda name: False
+    )
+    with pytest.raises(ImportError, match=r"mteb\[image,video\]"):
+        Video2ImagesWrapper(_image_model())
 
 
 def test_hint_is_not_shown_for_models_the_wrapper_rejects():

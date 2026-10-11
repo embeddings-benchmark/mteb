@@ -367,6 +367,37 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
     return result
 
 
+def _has_mixed_video_side(task: AbsTask) -> bool:
+    """Whether a retrieval task combines video with another modality on its query or document side.
+
+    Only retrieval sides are checked: other task types encode each modality in its own
+    dataloader, so their metadata is a union across calls rather than one dataloader's features.
+    """
+    if not isinstance(task, AbsTaskRetrieval):
+        return False
+    sides = (
+        set(task.metadata.get_modalities(PromptType.query)),
+        set(task.metadata.get_modalities(PromptType.document)),
+    )
+    return any("video" in side and side != {"video"} for side in sides)
+
+
+def _video_wrapper_can_run(model_modalities: Iterable[str], task: AbsTask) -> bool:
+    """Whether wrapping an image model in `Video2ImagesWrapper` would let it run `task`.
+
+    That is the case when adding `video` to the model's modalities passes the modality check
+    and no retrieval side mixes video with another modality.
+    """
+    if _has_mixed_video_side(task):
+        return False
+    supported = set(model_modalities) | {"video"}
+    if isinstance(task, AbsTaskRetrieval):
+        return bool(
+            supported & set(task.metadata.get_modalities(PromptType.query))
+        ) and bool(supported & set(task.metadata.get_modalities(PromptType.document)))
+    return set(task.metadata.modalities).issubset(supported)
+
+
 def _check_video_only_inputs(
     model: ModelMeta,
     tasks: AbsTask | Iterable[AbsTask],
@@ -389,13 +420,9 @@ def _check_video_only_inputs(
 
     errors = []
     for task in check_tasks:
-        if not isinstance(task, AbsTaskRetrieval):
-            continue
-        query_mods = set(task.metadata.get_modalities(PromptType.query))
-        doc_mods = set(task.metadata.get_modalities(PromptType.document))
-        if any(
-            "video" in side and side != {"video"} for side in (query_mods, doc_mods)
-        ):
+        if _has_mixed_video_side(task):
+            query_mods = set(task.metadata.get_modalities(PromptType.query))
+            doc_mods = set(task.metadata.get_modalities(PromptType.document))
             errors.append(
                 f"Model {model.name} only supports video-only inputs, but task {task.metadata.name} "
                 f"mixes video with other modalities on one side: query={sorted(query_mods)}, "
@@ -438,6 +465,7 @@ def _check_model_modalities(
             and "video" not in model_modalities
             and "dense" in model.model_type
             and "video" in task.metadata.modalities
+            and _video_wrapper_can_run(model_modalities, task)
         ):
             msg += (
                 f" {model.name} does not run on video and {task.metadata.name} contains video. "
