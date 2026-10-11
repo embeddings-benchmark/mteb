@@ -8,6 +8,7 @@ from mteb.models.model_implementations.qwen3_vl_embedding_models import (
 )
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -187,6 +188,7 @@ qwen3_vl_reranker_2b = ModelMeta(
     training_datasets=None,
     citation=QWEN3_VL_EMBEDDING_CITATION,
     extra_requirements_groups=["multimodal-sbert"],
+    output_dtypes=OutputDType.BF16,
 )
 
 qwen3_vl_reranker_8b = ModelMeta(
@@ -195,7 +197,9 @@ qwen3_vl_reranker_8b = ModelMeta(
     model_type=["cross-encoder"],
     languages=QWEN3_VL_LANGUAGES,
     open_weights=True,
-    revision="b212dc8c91a8164aef1ea2de9c1a867611e75c04",
+    # main (b212dc8c) has a broken modules.json, so it fails to load; this is the
+    # commit from https://huggingface.co/Qwen/Qwen3-VL-Reranker-8B/discussions/11 that fixes it
+    revision="407993db318a67dbb333bbeb8b1521fb703a3bb1",
     release_date="2026-01-07",
     modalities=["image", "text", "video"],
     n_parameters=8_767_123_696,
@@ -213,4 +217,5 @@ qwen3_vl_reranker_8b = ModelMeta(
     training_datasets=None,
     citation=QWEN3_VL_EMBEDDING_CITATION,
     extra_requirements_groups=["multimodal-sbert"],
+    output_dtypes=OutputDType.BF16,
 )

@@ -109,7 +109,10 @@ def _multimodal_embed_small_class() -> type[nn.Module]:
             device = next(self.parameters()).device
             inputs = {k: v.to(device) for k, v in inputs.items()}
             outputs = self.text_encoder(**inputs)
-            embeddings = outputs.last_hidden_state.mean(dim=1)
+            # mean over real tokens only: the card's plain mean, without padding
+            hidden = outputs.last_hidden_state
+            mask = inputs["attention_mask"].unsqueeze(-1).to(hidden.dtype)
+            embeddings = (hidden * mask).sum(dim=1) / mask.sum(dim=1)
             return F.normalize(embeddings, p=2, dim=-1)
 
         def encode_image(self, images: list[Any]) -> torch.Tensor:

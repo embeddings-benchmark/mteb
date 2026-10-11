@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 
 def instruction_template(
@@ -78,4 +78,5 @@ RTRIEVER_4B = ModelMeta(
     training_datasets=set(),
     adapted_from="Qwen/Qwen3-Embedding-4B",
     citation=RTRIEVER_CITATION,
+    output_dtypes=OutputDType.BF16,
 )

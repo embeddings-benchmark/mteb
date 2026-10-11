@@ -49,6 +49,7 @@ class EncodecWrapper(AbsEncoder):
 
         self.processor = AutoProcessor.from_pretrained(model_name)
         self.sampling_rate = self.processor.sampling_rate  # from checkpoint (24 kHz)
+        self.hop_length = int(np.prod(self.model.config.upsampling_ratios))  # 320
 
     def get_audio_embeddings(
         self,
@@ -74,10 +75,9 @@ class EncodecWrapper(AbsEncoder):
             audio_array = [audio["array"] for audio in batch["audio"]]
             audio_arrays = []
             for array in audio_array:
-                # Ensure minimum length for encoder (Encodec needs ~320 samples per frame)
-                # Use 1 second minimum to be safe
+                # pad only to one latent frame: the encoder takes any length.
                 # AudioCollator yields numpy
-                min_samples = self.sampling_rate
+                min_samples = self.hop_length
                 array = np.asarray(array)  # noqa: PLW2901
                 if array.shape[-1] < min_samples:
                     array = np.pad(  # noqa: PLW2901

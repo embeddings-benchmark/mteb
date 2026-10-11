@@ -8,6 +8,7 @@ from tqdm.auto import tqdm
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator, check_duration_cap
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -132,7 +133,7 @@ qwen2_audio_meta = ModelMeta(
     max_tokens=131_072,
     n_parameters=7_000_000_000,
     memory_usage_mb=None,
-    embed_dim=1280,
+    embed_dim=4096,
     license="mit",
     reference="https://huggingface.co/Qwen/Qwen2-Audio-7B",
     similarity_fn_name="cosine",
@@ -153,4 +154,5 @@ qwen2_audio_meta = ModelMeta(
       url={https://arxiv.org/abs/2407.10759},
 }
 """,
+    output_dtypes=OutputDType.BF16,
 )
