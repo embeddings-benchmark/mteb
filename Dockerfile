@@ -8,7 +8,8 @@
 # daily refresh via the DATA_REFRESH build arg:
 #
 #   base        — python:3.12-bookworm + a non-root user + the local
-#                 checkout installed with the [api] extra.
+#                 checkout installed as `mteb-core` (no torch) with
+#                 the [api] extra.
 #   og-deps     — extends `base` with Chromium runtime libs +
 #                 Playwright. Depends only on code, so it stays cached
 #                 across daily data refreshes.
@@ -48,7 +49,13 @@ WORKDIR /home/user/app
 
 COPY --chown=user:user . /home/user/app
 
-RUN pip install --user --extra-index-url https://download.pytorch.org/whl/cpu ".[api]"
+# The service only reads results / metadata, so it installs as `mteb-core`
+# (no torch, transformers or sentence-transformers). The script rewrites the
+# pyproject.toml of this image's copy of the checkout only, then we install
+# from the current dir as before.
+RUN pip install --user packaging \
+ && python scripts/build_core_package.py --edit-pyproject \
+ && pip install --user ".[api]"
 
 
 # ─── Stage: og-deps ─────────────────────────────────────────────────
