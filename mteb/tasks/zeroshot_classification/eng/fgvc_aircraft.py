@@ -1,15 +1,17 @@
-from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.zeroshot_classification import (
+    AbsTaskZeroShotClassification,
+)
 
 
-class FGVCAircraftZeroShotClassification(AbsTaskRetrieval):
+class FGVCAircraftZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="FGVCAircraftZeroShot",
         description="Classifying aircraft images from 41 manufacturers and 102 variants.",
         reference="https://arxiv.org/abs/1306.5151",
         dataset={
             "path": "mteb/FGVCAircraftZeroShot",
-            "revision": "ac55b9c810fc5e8f47bc02b8392926a25a7ce021",
+            "revision": "2d33d00400099b87bfec8b04f2876fb10ca07487",
         },
         type="ZeroShotClassification",
         category="i2t",
@@ -39,3 +41,10 @@ class FGVCAircraftZeroShotClassification(AbsTaskRetrieval):
 }
 """,
     )
+    label_column_name: str = "variant"  # could be family, manufacturer, or variant. Variant has the higher number of classes.
+
+    def get_candidate_labels(self) -> list[str]:
+        return [
+            f"a photo of a {name}, a type of aircraft."
+            for name in self.dataset["test"].features[self.label_column_name].names
+        ]
