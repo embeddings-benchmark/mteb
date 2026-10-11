@@ -1,17 +1,15 @@
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import (
-    AbsTaskZeroShotClassification,
-)
 
 
-class RESISC45ZeroShotClassification(AbsTaskZeroShotClassification):
+class RESISC45ZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="RESISC45ZeroShot",
         description="Remote Sensing Image Scene Classification by Northwestern Polytechnical University (NWPU).",
         reference="https://ieeexplore.ieee.org/abstract/document/7891544",
         dataset={
-            "path": "mteb/resisc45",
-            "revision": "a5b7c0d47eb6544fb2ef0d380b9c105f3c6dc259",
+            "path": "mteb/RESISC45ZeroShot",
+            "revision": "4a14056761865bdaeb2aea2759be92ae3e745f49",
         },
         type="ZeroShotClassification",
         category="i2t",
@@ -43,9 +41,3 @@ class RESISC45ZeroShotClassification(AbsTaskZeroShotClassification):
 }
 """,
     )
-
-    def get_candidate_labels(self) -> list[str]:
-        return [
-            f"satellite imagery of {name}."
-            for name in self.dataset["test"].features[self.label_column_name].names
-        ]

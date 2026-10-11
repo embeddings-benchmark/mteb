@@ -1,15 +1,15 @@
-from mteb.abstasks import AbsTaskZeroShotClassification
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class SpeechCommandsZeroshotClassificationV01(AbsTaskZeroShotClassification):
+class SpeechCommandsZeroshotClassificationV01(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SpeechCommandsZeroshotv0.01",
         description="Sound Classification/Keyword Spotting Dataset. This is a set of one-second audio clips containing a single spoken English word or background noise. These words are from a small set of commands such as 'yes', 'no', and 'stop' spoken by various speakers. With a total of 10 labels/commands for keyword spotting and a total of 30 labels for other auxiliary tasks",
         reference="https://huggingface.co/datasets/google/speech_commands",
         dataset={
             "path": "mteb/SpeechCommandsZeroshotv0.01",
-            "revision": "200a38f4d145460758244d6613cb08dffe70fa8a",
+            "revision": "d6586ab5d32da4626f1997764285605c47fb495a",
         },
         type="AudioZeroshotClassification",
         category="a2t",
@@ -40,34 +40,16 @@ class SpeechCommandsZeroshotClassificationV01(AbsTaskZeroShotClassification):
 }
 """,
     )
-    input_column_name: str = "audio"
-    label_column_name: str = "label"
-
-    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
-        """Return the text candidates for zeroshot classification"""
-        return [
-            "Yes",
-            "No",
-            "Up",
-            "Down",
-            "Left",
-            "Right",
-            "On",
-            "Off",
-            "Stop",
-            "Go",
-            # Dataset has 30 labels, but only first 10 are used for zeroshot classification since they are considered as commands, others are considered as auxiliary labels for v1.1
-        ]
 
 
-class SpeechCommandsZeroshotClassificationv02(AbsTaskZeroShotClassification):
+class SpeechCommandsZeroshotClassificationv02(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SpeechCommandsZeroshotv0.02",
         description="Sound Classification/Keyword Spotting Dataset. This is a set of one-second audio clips containing a single spoken English word or background noise. These words are from a small set of commands such as 'yes', 'no', and 'stop' spoken by various speakers. With a total of 10 labels/commands for keyword spotting and a total of 30 labels for other auxiliary tasks",
         reference="https://huggingface.co/datasets/google/speech_commands",
         dataset={
             "path": "mteb/SpeechCommandsZeroshotv0.02",
-            "revision": "d5491b288ab76356a5f3cbc634f1dc38e23da2b8",
+            "revision": "fe1b597b42c477cba88c86b47520436d959e7912",
         },
         type="AudioZeroshotClassification",
         category="a2t",
@@ -98,22 +80,3 @@ class SpeechCommandsZeroshotClassificationv02(AbsTaskZeroShotClassification):
 }
 """,
     )
-
-    input_column_name: str = "audio"
-    label_column_name: str = "label"
-
-    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
-        """Return the text candidates for zeroshot classification"""
-        return [
-            "Yes",
-            "No",
-            "Up",
-            "Down",
-            "Left",
-            "Right",
-            "On",
-            "Off",
-            "Stop",
-            "Go",
-            # Dataset has 30 labels, but only first 10 are used for zeroshot classification since they are considered as commands, others are considered as auxiliary labels for v1.1
-        ]

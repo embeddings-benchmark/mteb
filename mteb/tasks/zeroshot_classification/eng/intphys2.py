@@ -1,15 +1,8 @@
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import AbsTaskZeroShotClassification
 
 
-class IntPhys2VideoZeroShot(AbsTaskZeroShotClassification):
-    _DATASET_PATH = "mteb/IntPhys2VideoZeroShot"
-    _DATASET_REVISION = "503c0a2f8e624472ff3e44cdc6065ec68c9df2ed"
-    _LABEL_NAMES = (
-        "object behavior is inconsistent with Earth's physical laws",
-        "object behavior is consistent with Earth's physical laws",
-    )
-
+class IntPhys2VideoZeroShot(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="IntPhys2VideoZeroShot",
         description=(
@@ -17,7 +10,10 @@ class IntPhys2VideoZeroShot(AbsTaskZeroShotClassification):
             "permanence, immutability, continuity, and solidity conditions."
         ),
         reference="https://arxiv.org/abs/2506.09849",
-        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        dataset={
+            "path": "mteb/IntPhys2VideoZeroShot",
+            "revision": "9b5e30585a03e1f96d6f3120edb72672be559935",
+        },
         type="VideoZeroshotClassification",
         category="v2t",
         eval_splits=["test"],
@@ -45,9 +41,3 @@ class IntPhys2VideoZeroShot(AbsTaskZeroShotClassification):
 """,
         is_beta=True,
     )
-
-    input_column_name = "video"
-    label_column_name = "label"
-
-    def get_candidate_labels(self) -> list[str]:
-        return [f"a video where {label}" for label in self._LABEL_NAMES]

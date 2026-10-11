@@ -1,9 +1,7 @@
 from __future__ import annotations
 
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import (
-    AbsTaskZeroShotClassification,
-)
 
 CITATION = r"""
 @inproceedings{Tian_2018_ECCV,
@@ -16,14 +14,14 @@ CITATION = r"""
 """
 
 
-class AVEDatasetZeroShotClassification(AbsTaskZeroShotClassification):
+class AVEDatasetZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="AVEDatasetZeroShot",
         description="Audio-Visual Event (AVE) classification dataset containing 28 event categories such as church bell, truck, dog barking, and other everyday sounds sourced from YouTube videos. The goal is to predict the sound event category from synchronized video and audio. This variant uses both video and audio modalities. Used the official train and test splits across 28 audio-visual event classes (~3,312 train / ~402 test).",
         reference="https://openaccess.thecvf.com/content_ECCV_2018/papers/Yapeng_Tian_Audio-Visual_Event_Localization_ECCV_2018_paper.pdf",
         dataset={
-            "path": "mteb/AVE-Dataset",
-            "revision": "f6eb93b4e89456277a242583b5565b801bc1981d",
+            "path": "mteb/AVEDatasetZeroShot",
+            "revision": "00a4288e4e190645e6d60638b919c3b14ddde4c3",
         },
         type="VideoZeroshotClassification",
         category="va2t",
@@ -42,24 +40,15 @@ class AVEDatasetZeroShotClassification(AbsTaskZeroShotClassification):
         is_beta=True,
     )
 
-    input_column_name = ("video", "audio")
-    label_column_name: str = "label"
 
-    def get_candidate_labels(self) -> list[str]:
-        return [
-            f"a video of {name.replace('_', ' ')}"
-            for name in self.dataset["test"].features[self.label_column_name].names
-        ]
-
-
-class AVEDatasetVideoZeroShotClassification(AbsTaskZeroShotClassification):
+class AVEDatasetVideoZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="AVEDatasetVideoZeroShot",
         description="Audio-Visual Event (AVE) classification dataset containing 28 event categories such as church bell, truck, dog barking, and other everyday sounds sourced from YouTube videos. The goal is to predict the sound event category from video only. Used the official train and test splits across 28 audio-visual event classes (~3,312 train / ~402 test).",
         reference="https://openaccess.thecvf.com/content_ECCV_2018/papers/Yapeng_Tian_Audio-Visual_Event_Localization_ECCV_2018_paper.pdf",
         dataset={
-            "path": "mteb/AVE-Dataset",
-            "revision": "f6eb93b4e89456277a242583b5565b801bc1981d",
+            "path": "mteb/AVEDatasetVideoZeroShot",
+            "revision": "7ae5311ef340164a87cebec006b2a225e3961b8d",
         },
         type="VideoZeroshotClassification",
         category="v2t",
@@ -77,12 +66,3 @@ class AVEDatasetVideoZeroShotClassification(AbsTaskZeroShotClassification):
         bibtex_citation=CITATION,
         is_beta=True,
     )
-
-    input_column_name: str = "video"
-    label_column_name: str = "label"
-
-    def get_candidate_labels(self) -> list[str]:
-        return [
-            f"a video of {name.replace('_', ' ')}"
-            for name in self.dataset["test"].features[self.label_column_name].names
-        ]

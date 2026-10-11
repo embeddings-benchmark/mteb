@@ -20,24 +20,17 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-# Tasks whose HF repository is already stored in the retrieval format (`corpus`, `queries`, `qrels`).
-# Other tasks are loaded in the legacy format (input and label columns + `get_candidate_labels`) and converted on the fly.
-# You can reupload a task using `task.push_dataset_to_hub('your/repository')` and add its name here.
-NEW_FORMAT_ZEROSHOT_TASKS: list[str] = []
-
 
 @deprecated(
     "This class is deprecated and will be removed in future versions. Please use the updated retrieval tasks instead. "
-    "You can add your task name to mteb.abstasks.zeroshot_classification.NEW_FORMAT_ZEROSHOT_TASKS to load it in the retrieval format. "
-    "You can reupload it using `task.push_dataset_to_hub('your/repository')` after loading the data."
+    "You can reupload it in the retrieval format using `task.push_dataset_to_hub('your/repository')` after loading the data."
 )
 class AbsTaskZeroShotClassification(AbsTaskRetrieval):
     """Abstract class for ZeroShot Classification tasks for any modality.
 
     Warning: Deprecated
         This class is deprecated and will be removed in future versions. Please use [AbsTaskRetrieval][mteb.abstasks.retrieval.AbsTaskRetrieval] instead.
-        You can add your task name to `mteb.abstasks.zeroshot_classification.NEW_FORMAT_ZEROSHOT_TASKS` to load it in the retrieval format.
-        You can reupload it using `task.push_dataset_to_hub('your/repository')` after loading the data.
+        You can reupload it in the retrieval format using `task.push_dataset_to_hub('your/repository')` after loading the data.
 
     The similarity between an input (can be image or text) and candidate text prompts, such as this is a dog/this is a cat.
 
@@ -77,10 +70,6 @@ class AbsTaskZeroShotClassification(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        if self.metadata.name in NEW_FORMAT_ZEROSHOT_TASKS:
-            super().load_data(num_proc=num_proc, timer=timer, **kwargs)
-            return
-
         # a task can provide the raw dataset itself (e.g. mock tasks)
         if self.dataset is None:
             AbsTask.load_data(self, num_proc=num_proc, timer=timer, **kwargs)
@@ -94,7 +83,12 @@ class AbsTaskZeroShotClassification(AbsTaskRetrieval):
         )
         # a multimodal task names each of its input columns after the modality it holds
         if isinstance(self.input_column_name, str):
-            columns = {self.input_column_name: self.modalities[0]}
+            # the input is the non-text modality, text is only used for the candidate labels
+            query_modality = next(
+                (modality for modality in self.modalities if modality != "text"),
+                "text",
+            )
+            columns = {self.input_column_name: query_modality}
         else:
             columns = {column: column for column in self.input_column_name}
 
