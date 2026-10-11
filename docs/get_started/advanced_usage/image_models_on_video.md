@@ -32,7 +32,9 @@ To cache the frame embeddings, wrap the cache inside the video wrapper:
 from mteb.models import Video2ImagesWrapper
 from mteb.models.cache_wrappers import CachedEmbeddingWrapper
 
-video_model = Video2ImagesWrapper(CachedEmbeddingWrapper(model, "path/to/cache"), num_frames=8)
+video_model = Video2ImagesWrapper(
+    CachedEmbeddingWrapper(model, "path/to/cache"), num_frames=8
+)
 ```
 
 The other order, `CachedEmbeddingWrapper(Video2ImagesWrapper(...))`, does not work because the cache can hash text and images but not video.
