@@ -55,12 +55,8 @@ logger = logging.getLogger(__name__)
 SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION = "5.0.0"
 SENTENCE_TRANSFORMERS_MULTI_VECTOR_VERSION = "6.0.0"
 
-# Embedding values of documents moved to the device at once for MaxSim scoring
-# (about 2 GB in float16).
-_MAX_SIM_DOCUMENT_BLOCK_ELEMENTS = 1_000_000_000
-
-# Embedding values of corpus rows moved to the device at once for dense/sparse scoring.
-_SCORING_BLOCK_ELEMENTS = 100_000_000
+# Embedding values moved to the device at once when scoring similarity (2 GB in float16).
+_SCORING_BLOCK_ELEMENTS = 1_000_000_000
 
 
 @deprecated(
@@ -229,7 +225,7 @@ def _concatenate_ragged_batches(batches: list[list[Any]]) -> list[Any]:
 def _max_sim_document_blocks(documents: Sequence[Array]) -> list[tuple[int, int]]:
     """Split documents into contiguous `(start, end)` blocks to move to the device at once.
 
-    Each block holds at most `_MAX_SIM_DOCUMENT_BLOCK_ELEMENTS` embedding values, with a floor of one
+    Each block holds at most `_SCORING_BLOCK_ELEMENTS` embedding values, with a floor of one
     document per block.
     """
     blocks: list[tuple[int, int]] = []
@@ -237,10 +233,7 @@ def _max_sim_document_blocks(documents: Sequence[Array]) -> list[tuple[int, int]
     elements = 0
     for index, document in enumerate(documents):
         document_elements = int(np.prod(document.shape))
-        if (
-            index > start
-            and elements + document_elements > _MAX_SIM_DOCUMENT_BLOCK_ELEMENTS
-        ):
+        if index > start and elements + document_elements > _SCORING_BLOCK_ELEMENTS:
             blocks.append((start, index))
             start = index
             elements = 0
@@ -252,12 +245,10 @@ def _max_sim_document_blocks(documents: Sequence[Array]) -> list[tuple[int, int]
 def _capture_scoring_device(
     model: SentenceTransformer | SparseEncoder | MultiVectorEncoder,
 ) -> torch.device:
-    """Return the device similarity is scored on, captured when the wrapper is created.
+    """Return the device the model is on, to score similarity on.
 
-    `start_multi_process_pool` moves the model to the CPU, so reading `model.device` later would
-    give the CPU. Warns if the model is on the CPU although an accelerator is available, which is
-    what a pool started before wrapping the model looks like. Models without a `device` are scored
-    on the CPU.
+    Warns if the model is on the CPU although an accelerator is available. Models without a
+    `device` are scored on the CPU.
     """
     import torch
 
@@ -284,24 +275,22 @@ def _score_on_device(
     embeddings2: Array,
     block_elements: int = _SCORING_BLOCK_ELEMENTS,
 ) -> Array:
-    """Run the wrapper's model similarity on its scoring device and return scores on the inputs' device.
+    """Compute the model's similarity on its scoring device, in blocks to bound device memory.
 
-    Embeddings are returned on the CPU by `encode` (and always by multi-process pools), so scoring
-    would otherwise run on the CPU. The second collection (the corpus) is moved to the device in
-    row blocks, so a large corpus chunk is never resident on the device at once.
+    Embeddings from `encode` are on the CPU, so they are moved to the device here. The scores are
+    returned on the inputs' device.
     """
     import torch
 
-    # Subclasses that don't call the parent `__init__` never captured the device
+    # Subclasses that skip the parent `__init__` have not captured it yet
     device = getattr(wrapper, "_scoring_device", None)
     if device is None:
         device = wrapper._scoring_device = _capture_scoring_device(wrapper.model)
 
-    # A single embedding is scored as a collection of one, like `model.similarity` does
     queries = torch.as_tensor(embeddings1)
     documents = torch.as_tensor(embeddings2)
     if documents.device.type != "cpu":
-        # Already on an accelerator (e.g. sparse retrieval keeps its embeddings there): nothing to move
+        # Already on an accelerator, e.g. sparse retrieval: nothing to move
         return cast(
             "Array",
             wrapper.model.similarity(
@@ -317,38 +306,52 @@ def _score_on_device(
         or queries.is_sparse
         or documents.is_sparse
     ):
-        device = torch.device("cpu")  # sparse similarity isn't supported on MPS
-    # sentence-transformers < 6 scores in the embedding dtype, which ties nearby scores
-    queries_on_device = _upcast_low_precision(queries.to(device))
-
+        device = torch.device("cpu")  # MPS has no sparse similarity
     block_rows = max(1, block_elements // max(1, documents.shape[1]))
+    # Queries are tiled too, as densified sparse embeddings are as wide as the vocabulary
+    num_queries = queries.shape[0]
+    query_rows = max(1, block_elements // max(1, queries.shape[1]))
+    query_starts = range(0, num_queries, query_rows)
+    # sentence-transformers < 6 scores in the input dtype, which ties nearby scores
+    queries_on_device = (
+        _upcast_low_precision(queries.to(device)) if len(query_starts) == 1 else None
+    )
     scores = torch.empty(
         queries.shape[0], documents.shape[0], dtype=torch.float32, device=queries.device
     )
     num_documents = documents.shape[0]
     num_blocks = math.ceil(num_documents / block_rows)
-    # `encode` remembers the user's setting; `similarity` itself gets no encode kwargs
+    # Set by `encode`, as `similarity` gets no encode kwargs
     show_progress_bar = getattr(wrapper, "_show_progress_bar", True)
+    logger.info(f"Computing similarities on {device}")
+
     with tqdm(
         total=num_documents,
         desc="Computing similarities",
         unit="doc",
         leave=False,
-        # a single block finishes before a bar is useful
         disable=not show_progress_bar or num_blocks <= 1,
     ) as progress:
-        for block_idx, start in enumerate(range(0, num_documents, block_rows), start=1):
-            logger.info(
-                f"Computing similarities on {device} [{block_idx}/{num_blocks}]"
-            )
+        for start in range(0, num_documents, block_rows):
             end = min(start + block_rows, num_documents)
-            # `index_select` rather than slicing: sparse tensors don't support basic slicing
+            # `index_select`, as sparse tensors can't be sliced
             block = _upcast_low_precision(
                 documents.index_select(0, torch.arange(start, end)).to(device)
             )
-            scores[:, start:end] = wrapper.model.similarity(
-                queries_on_device, block
-            ).to(queries.device, torch.float32)
+            for query_start in query_starts:
+                query_end = min(query_start + query_rows, num_queries)
+                query_block = (
+                    queries_on_device
+                    if queries_on_device is not None
+                    else _upcast_low_precision(
+                        queries.index_select(
+                            0, torch.arange(query_start, query_end)
+                        ).to(device)
+                    )
+                )
+                scores[query_start:query_end, start:end] = wrapper.model.similarity(
+                    query_block, block
+                ).to(queries.device, torch.float32)
             del block
             progress.update(end - start)
     return cast("Array", scores)
@@ -538,7 +541,7 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
             self.model = model
             self.mteb_model_meta = ModelMeta.from_sentence_transformer_model(self.model)
 
-        # `start_multi_process_pool` moves the model to the CPU, so the device is captured here.
+        # Captured now: a multi-process pool later moves the model to the CPU
         self._scoring_device = _capture_scoring_device(self.model)
         self.model_prompts = _resolve_model_prompts(self.model, model_prompts)
 
@@ -831,7 +834,7 @@ class SparseEncoderWrapper(AbsEncoder):
             self.model = model
             self.mteb_model_meta = ModelMeta.from_sparse_encoder_model(self.model)
 
-        # `start_multi_process_pool` moves the model to the CPU, so the device is captured here.
+        # Captured now: a multi-process pool later moves the model to the CPU
         self._scoring_device = _capture_scoring_device(self.model)
         self.model_prompts = _resolve_model_prompts(self.model, model_prompts)
 
@@ -1155,7 +1158,7 @@ class MultiVectorWrapper(MultiVectorSearchEncoderWrapper):
             self.model = model
             self.mteb_model_meta = ModelMeta.from_multi_vector_encoder_model(self.model)
 
-        # `start_multi_process_pool` moves the model to the CPU, so the device is captured here.
+        # Captured now: a multi-process pool later moves the model to the CPU
         self._scoring_device = _capture_scoring_device(self.model)
         self.model_prompts = _resolve_model_prompts(self.model, model_prompts)  # type: ignore[arg-type]
         self.corpus_chunk_size = corpus_chunk_size

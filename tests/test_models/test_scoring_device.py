@@ -114,19 +114,30 @@ def test_device_is_captured_on_first_use_when_parent_init_was_skipped(
 
 
 @pytest.mark.parametrize("sparse_inputs", [False, True])
-def test_corpus_is_scored_in_blocks(sparse_inputs: bool) -> None:
+@pytest.mark.parametrize(
+    ("num_queries", "expected_blocks"),
+    [
+        # 2 rows of dim 4 per block: 3 queries are tiled for every corpus block ...
+        (3, [(2, 2), (1, 2), (2, 2), (1, 2), (2, 1), (1, 1)]),
+        # ... while 2 queries fit and are scored together
+        (2, [(2, 2), (2, 2), (2, 1)]),
+    ],
+)
+def test_queries_and_corpus_are_scored_in_blocks(
+    sparse_inputs: bool, num_queries: int, expected_blocks: list[tuple[int, int]]
+) -> None:
     class ProductModel(FakeSentenceTransformer):
         def __init__(self, device: torch.device | str) -> None:
             super().__init__(device)
-            self.block_sizes: list[int] = []
+            self.blocks: list[tuple[int, int]] = []
 
         def similarity(self, a, b, device=None):
-            self.block_sizes.append(b.shape[0])
+            self.blocks.append((a.shape[0], b.shape[0]))
             return a.to_dense() @ b.to_dense().T
 
     model = ProductModel(CPU)
     wrapper = SentenceTransformerEncoderWrapper(model)
-    queries, corpus = torch.randn(3, 4), torch.randn(5, 4)
+    queries, corpus = torch.randn(num_queries, 4), torch.randn(5, 4)
     expected = queries @ corpus.T
     if sparse_inputs:
         queries, corpus = queries.to_sparse(), corpus.to_sparse()
@@ -138,7 +149,7 @@ def test_corpus_is_scored_in_blocks(sparse_inputs: bool) -> None:
         block_elements=8,  # 2 rows of dim 4
     )
 
-    assert model.block_sizes == [2, 2, 1]
+    assert model.blocks == expected_blocks
     torch.testing.assert_close(scores, expected)
 
 

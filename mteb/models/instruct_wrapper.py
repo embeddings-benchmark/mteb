@@ -227,7 +227,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
             truncate_dim=embed_dim,
             **kwargs,
         )
-        # `start_multi_process_pool` moves the model to the CPU, so the device is captured here.
+        # Captured now: a multi-process pool later moves the model to the CPU
         self._scoring_device = _capture_scoring_device(self.model)
         if max_seq_length:
             # https://github.com/huggingface/sentence-transformers/issues/3575
