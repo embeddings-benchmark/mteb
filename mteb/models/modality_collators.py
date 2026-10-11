@@ -1,19 +1,25 @@
 from __future__ import annotations
 
 import logging
+from contextlib import contextmanager
 from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
 
+from mteb._log_once import LogOnce
 from mteb.types._encoder_io import AudioInputItem
 
 if TYPE_CHECKING:
+    from collections.abc import Iterator
+
     import torch
+    from torch.utils.data import DataLoader
     from torchcodec.decoders import VideoDecoder  # type: ignore[attr-defined]
 
     from mteb.types import BatchedInput
 
 logger = logging.getLogger(__name__)
+log_once = LogOnce(logger)
 
 
 class AudioCollator:
@@ -86,6 +92,8 @@ class AudioCollator:
             target_sampling_rate: The sampling rate to resample the audio to.
             max_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
         """
+        if max_samples is not None and max_samples <= 0:
+            raise ValueError(f"max_samples must be positive, got {max_samples}.")
         import torch
         import torchaudio
 
@@ -111,6 +119,10 @@ class AudioCollator:
         if max_samples is not None:
             num_samples = audio_array.shape[-1]
             if num_samples > max_samples:
+                log_once.info(
+                    f"Truncating audio longer than {max_samples / target_sampling_rate:g} s "
+                    "(the configured audio cap); only the start of each longer clip is encoded."
+                )
                 audio_array = audio_array[..., :max_samples]
 
         audio_array = cast(
@@ -118,6 +130,59 @@ class AudioCollator:
             audio_array,
         )
         return audio_array
+
+
+def check_duration_cap(seconds: float | None) -> float | None:
+    """Validate an optional audio length cap (seconds or samples). None means no cap."""
+    if seconds is not None and seconds <= 0:
+        raise ValueError(f"Audio length cap must be positive, got {seconds}.")
+    return seconds
+
+
+def seconds_to_samples(seconds: float | None, sampling_rate: int) -> int | None:
+    """Convert an optional duration cap to samples. None means no cap."""
+    seconds = check_duration_cap(seconds)
+    if seconds is None:
+        return None
+    return int(seconds * sampling_rate)
+
+
+@contextmanager
+def fixed_numpy_seed(seed: int = 0) -> Iterator[None]:
+    """Seed numpy's global RNG for a block, then restore it.
+
+    Some feature extractors pick random crops of long clips from the global
+    RNG (CLAP fusion, LanguageBind audio); seeding per clip makes the
+    embeddings reproducible.
+    """
+    state = np.random.get_state()  # noqa: NPY002
+    np.random.seed(seed)  # noqa: NPY002
+    try:
+        yield
+    finally:
+        np.random.set_state(state)  # noqa: NPY002
+
+
+def single_clip_dataloader(
+    inputs: DataLoader[BatchedInput],
+    reason: str,
+) -> DataLoader[BatchedInput]:
+    """Rebuild an audio or video DataLoader with batch_size=1.
+
+    For models whose embeddings change with their batch-mates (batched vs single
+    cosine below 0.99 on real clips). ``reason`` is logged once.
+    ``DataLoader.batch_size`` cannot be changed after creation.
+    """
+    from torch.utils.data import DataLoader
+
+    log_once.info(f"Encoding one item at a time (batch_size ignored): {reason}.")
+
+    return DataLoader(
+        inputs.dataset,
+        batch_size=1,
+        collate_fn=inputs.collate_fn,
+        num_workers=inputs.num_workers,
+    )
 
 
 class FramesCollator:
@@ -221,8 +286,10 @@ class FramesCollator:
                 raise RuntimeError("`fps` is not set; cannot use FPS-based sampling")
             if num_frames is not None and n_source < target:
                 return (list(range(n_source)) * ((target // n_source) + 1))[:target]
-            step = max(1, n_source // target)
-            return list(range(0, n_source, step))[:target]
+            if n_source <= target:
+                return list(range(n_source))
+            # evenly spaced over the whole clip, as upstream samplers do
+            return [int(i) for i in np.linspace(0, n_source - 1, target).round()]
 
         # Retry on the actual call: decrement source count when trailing
         # frames fail to decode.

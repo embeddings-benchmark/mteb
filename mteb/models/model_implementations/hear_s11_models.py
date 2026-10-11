@@ -7,7 +7,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import AudioCollator, single_clip_dataloader
 
 if TYPE_CHECKING:
     import torch
@@ -20,6 +20,8 @@ if TYPE_CHECKING:
 
 class HeARS11AudioWrapper(AbsEncoder):
     sampling_rate = 16_000
+    # 2 s: clip_seconds=2.0
+    # https://huggingface.co/matthewagi/HeAR-s1.1/blob/main/config.json
     clip_samples = 32_000
 
     def __init__(
@@ -77,6 +79,10 @@ class HeARS11AudioWrapper(AbsEncoder):
 
         embeddings = []
 
+        inputs = single_clip_dataloader(
+            inputs,
+            "HeAR's model code changes a clip's embedding with its batch-mates, even at a fixed 2 s length",
+        )
         for batch in tqdm(inputs, disable=not show_progress_bar):
             audio = torch.stack(
                 [self._prepare_audio(item["array"]) for item in batch["audio"]]

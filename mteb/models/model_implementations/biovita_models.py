@@ -24,6 +24,8 @@ CLAP_MODEL_ID = "laion/clap-htsat-unfused"
 CLAP_REVISION = "8fa0f1c6d0433df6e97c127f64b2a1d6c0dcda8a"
 
 TARGET_SAMPLING_RATE = 48_000
+# 48 kHz / 10 s: audio encoder is laion/clap-htsat-unfused, nb_max_samples=480000
+# https://huggingface.co/laion/clap-htsat-unfused/blob/main/preprocessor_config.json
 AUDIO_SECONDS = 10.0
 AUDIO_SAMPLES = int(TARGET_SAMPLING_RATE * AUDIO_SECONDS)
 
