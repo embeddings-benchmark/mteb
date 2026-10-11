@@ -261,6 +261,32 @@ def test_benchmark_results_model_filters_keep_benchmark(cache_path: Path) -> Non
 
 
 @pytest.mark.skipif(_POLARS_TOO_OLD, reason="requires polars >= 1.40.0")
+def test_join_revisions_keeps_benchmark(cache_path: Path) -> None:
+    cache = ResultCache(cache_path)
+    bench = Benchmark(
+        name="MockBenchmark",
+        tasks=mteb.get_tasks(
+            [
+                "NanoSCIDOCSRetrieval",
+                "Banking77Classification",
+            ],
+        ),
+    )
+    results = cache.load_results(tasks=bench)
+    model_name = "sentence-transformers/all-MiniLM-L6-v2"
+
+    joined = results.select_models([model_name]).join_revisions()
+    assert joined.benchmark is bench
+    df = joined.get_benchmark_result()
+    assert df.shape[0] == 1
+    assert df.loc[0, "Mean (Task)"] == pytest.approx(0.616616)
+
+    # the early return for results without any task results keeps it as well
+    empty = results.select_models(["no-such-model"]).join_revisions()
+    assert empty.benchmark is bench
+
+
+@pytest.mark.skipif(_POLARS_TOO_OLD, reason="requires polars >= 1.40.0")
 def test_generate_model_card_with_table_and_benchmarks(
     cache_path: Path, tmp_path: Path
 ) -> None:
