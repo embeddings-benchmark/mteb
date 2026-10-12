@@ -78,7 +78,6 @@ class VGGSoundVClassification(AbsTaskClassification):
         modalities=["video"],
         sample_creation="found",
         bibtex_citation=CITATION,
-        is_beta=True,
     )
 
     input_column_name = "video"
