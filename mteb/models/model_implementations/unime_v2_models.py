@@ -222,10 +222,12 @@ class UniMEV2Wrapper(AbsEncoder):
                         return_tensors="pt",
                         processor_kwargs={"padding": True},
                     ).to(self.device)
+                    # logits_to_keep=1 skips computing vocab logits we don't use
                     output = self.model(
                         **model_inputs,
                         output_hidden_states=True,
                         return_dict=True,
+                        logits_to_keep=1,
                     )
                     embeddings = self._pooling(
                         output.hidden_states[-1], model_inputs["attention_mask"]
