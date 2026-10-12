@@ -8,7 +8,7 @@ from tqdm.auto import tqdm
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import VideoCollator
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     import torch
@@ -470,6 +470,7 @@ pe_av_small_16_frame = ModelMeta(
     reference="https://huggingface.co/facebook/pe-av-small-16-frame",
     loader_kwargs=dict(fps=None, num_frames=16),
     **_PE_AV_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
 
 pe_av_base_16_frame = ModelMeta(
@@ -484,6 +485,7 @@ pe_av_base_16_frame = ModelMeta(
     reference="https://huggingface.co/facebook/pe-av-base-16-frame",
     loader_kwargs=dict(fps=None, num_frames=16),
     **_PE_AV_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
 
 pe_av_large_16_frame = ModelMeta(
@@ -498,6 +500,7 @@ pe_av_large_16_frame = ModelMeta(
     reference="https://huggingface.co/facebook/pe-av-large-16-frame",
     loader_kwargs=dict(fps=None, num_frames=16),
     **_PE_AV_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
 
 pe_av_small = ModelMeta(
@@ -511,6 +514,7 @@ pe_av_small = ModelMeta(
     embed_dim=1024,
     reference="https://huggingface.co/facebook/pe-av-small",
     **_PE_AV_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
 
 pe_av_base = ModelMeta(
@@ -524,6 +528,7 @@ pe_av_base = ModelMeta(
     embed_dim=1024,
     reference="https://huggingface.co/facebook/pe-av-base",
     **_PE_AV_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
 
 pe_av_large = ModelMeta(
@@ -537,4 +542,5 @@ pe_av_large = ModelMeta(
     embed_dim=1024,
     reference="https://huggingface.co/facebook/pe-av-large",
     **_PE_AV_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
