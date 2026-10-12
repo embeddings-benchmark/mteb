@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import AbsTaskZeroShotClassification
 
 CITATION = r"""
 @article{10.1371/journal.pone.0196391,
@@ -19,28 +19,22 @@ CITATION = r"""
 }
 """
 
-DATASET = {
-    "path": "mteb/RAVDESS_AV",
-    "revision": "13af08387c3ce5e86c179a3718eb158669268d65",
-}
-
 DESCRIPTION_BASE = (
     "Emotion zero-shot classification on RAVDESS for 8 emotions: neutral, "
     "calm, happy, sad, angry, fearful, surprise, and disgust expressions."
 )
 
 
-def _emotion_prompts(names: list[str]) -> list[str]:
-    return [f"this person is feeling {name}" for name in names]
-
-
-class RAVDESSAVZeroShotClassification(AbsTaskZeroShotClassification):
+class RAVDESSAVZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="RAVDESSAVZeroShot",
         description=DESCRIPTION_BASE
         + " This variant uses both video and audio. Used the metadata train split remapped to audio-visual filenames (~1,440 examples).",
         reference="https://doi.org/10.1371/journal.pone.0196391",
-        dataset=DATASET,
+        dataset={
+            "path": "mteb/RAVDESSAVZeroShot",
+            "revision": "02a545ce207cd34abfedb0a923c9c8340b8d70c6",
+        },
         type="VideoZeroshotClassification",
         category="va2t",
         eval_splits=["test"],
@@ -58,22 +52,17 @@ class RAVDESSAVZeroShotClassification(AbsTaskZeroShotClassification):
         is_beta=True,
     )
 
-    input_column_name = ("video", "audio")
-    label_column_name: str = "emotion"
 
-    def get_candidate_labels(self) -> list[str]:
-        return _emotion_prompts(
-            self.dataset["test"].features[self.label_column_name].names
-        )
-
-
-class RAVDESSVZeroShotClassification(AbsTaskZeroShotClassification):
+class RAVDESSVZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="RAVDESSVZeroShot",
         description=DESCRIPTION_BASE
         + " This variant uses video only. Used the metadata train split remapped to audio-visual filenames (~1,440 examples).",
         reference="https://doi.org/10.1371/journal.pone.0196391",
-        dataset=DATASET,
+        dataset={
+            "path": "mteb/RAVDESSVZeroShot",
+            "revision": "28feb00db1dfee21583e960788f85dea15802b04",
+        },
         type="VideoZeroshotClassification",
         category="v2t",
         eval_splits=["test"],
@@ -90,11 +79,3 @@ class RAVDESSVZeroShotClassification(AbsTaskZeroShotClassification):
         bibtex_citation=CITATION,
         is_beta=True,
     )
-
-    input_column_name: str = "video"
-    label_column_name: str = "emotion"
-
-    def get_candidate_labels(self) -> list[str]:
-        return _emotion_prompts(
-            self.dataset["test"].features[self.label_column_name].names
-        )

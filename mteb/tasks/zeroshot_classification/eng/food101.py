@@ -1,17 +1,15 @@
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import (
-    AbsTaskZeroShotClassification,
-)
 
 
-class Food101ZeroShotClassification(AbsTaskZeroShotClassification):
+class Food101ZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Food101ZeroShot",
         description="Classifying food.",
         reference="https://huggingface.co/datasets/ethz/food101",
         dataset={
-            "path": "mteb/food101",
-            "revision": "7cca05bfde8fdad4a9b39ed14a881c800cc1dca2",
+            "path": "mteb/Food101ZeroShot",
+            "revision": "9cd17df6fbc36afc45cbadf47ae474365a8ae623",
         },
         type="ZeroShotClassification",
         category="i2t",
@@ -38,11 +36,3 @@ class Food101ZeroShotClassification(AbsTaskZeroShotClassification):
 }
 """,
     )
-
-    def get_candidate_labels(self) -> list[str]:
-        return [
-            f"a photo of {name}, a type of food."
-            for name in self.dataset["validation"]
-            .features[self.label_column_name]
-            .names
-        ]

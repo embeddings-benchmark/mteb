@@ -1,17 +1,15 @@
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import (
-    AbsTaskZeroShotClassification,
-)
 
 
-class FER2013ZeroShotClassification(AbsTaskZeroShotClassification):
+class FER2013ZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="FER2013ZeroShot",
         description="Classifying facial emotions.",
         reference="https://arxiv.org/abs/1412.6572",
         dataset={
-            "path": "mteb/wds_fer2013",
-            "revision": "d9cabab388cb32bc071a1601ef68cb2f70ca0ba7",
+            "path": "mteb/FER2013ZeroShot",
+            "revision": "a6c51377a3ea46b68a3e1e3635525052d73fb4c7",
         },
         type="ZeroShotClassification",
         category="i2t",
@@ -41,9 +39,3 @@ class FER2013ZeroShotClassification(AbsTaskZeroShotClassification):
 }
 """,
     )
-    input_column_name: str = "jpg"
-    label_column_name: str = "cls"
-
-    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
-        labels = ["angry", "disgust", "fear", "happy", "neutral", "sad", "surprise"]
-        return [f"a photo of a {name} looking face." for name in labels]
