@@ -1,5 +1,6 @@
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
 
 Euler_Legal_Embedding_V1 = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
@@ -24,4 +25,5 @@ Euler_Legal_Embedding_V1 = ModelMeta(
     training_datasets=set(),  # final-data-new-anonymized-grok4-filtered
     adapted_from="Qwen/Qwen3-Embedding-8B",
     superseded_by=None,
+    output_dtypes=OutputDType.BF16,
 )

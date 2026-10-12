@@ -14,6 +14,8 @@ import pytest
 import torch
 from packaging.version import Version
 
+from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.similarity_functions import (
     _max_sim_ragged_core,
     _token_budget_chunks,
@@ -309,3 +311,58 @@ def test_pairwise_similarity_matches_sentence_transformers(
     torch.testing.assert_close(
         torch.as_tensor(ours(a.numpy(), b.numpy())), expected(a.numpy(), b.numpy())
     )
+
+
+class _DtypeRecordingModel:
+    """Stands in for a sentence-transformers model and records the dtypes it is asked to score."""
+
+    def __init__(self) -> None:
+        self.dtypes: list[torch.dtype] = []
+
+    def _record(self, a, b) -> torch.Tensor:
+        a, b = torch.as_tensor(a), torch.as_tensor(b)
+        self.dtypes += [a.dtype, b.dtype]
+        return a @ b.T
+
+    def similarity(self, a, b) -> torch.Tensor:
+        return self._record(a, b)
+
+    def similarity_pairwise(self, a, b) -> torch.Tensor:
+        return self._record(a, b)
+
+
+@pytest.mark.parametrize("dtype", LOW_PRECISION_DTYPES)
+@pytest.mark.parametrize("as_numpy", [False, True])
+def test_st_wrapper_similarity_upcasts_before_delegating(dtype, as_numpy):
+    """sentence-transformers < 6 scores in the embedding dtype, so the wrapper must upcast first."""
+    if as_numpy and dtype == torch.bfloat16:
+        pytest.skip("numpy has no bfloat16")
+    wrapper = object.__new__(SentenceTransformerEncoderWrapper)
+    wrapper.model = _DtypeRecordingModel()
+    a = torch.randn(4, 8).to(dtype)
+    b = torch.randn(6, 8).to(dtype)
+    if as_numpy:
+        a, b = a.numpy(), b.numpy()
+
+    wrapper.similarity(a, b)
+
+    assert wrapper.model.dtypes == [torch.float32, torch.float32]
+
+
+class _DelegatingEncoder(AbsEncoder):
+    def encode(self, *args: object, **kwargs: object) -> None:
+        raise NotImplementedError
+
+
+@pytest.mark.parametrize("method", ["similarity", "similarity_pairwise"])
+@pytest.mark.parametrize("dtype", LOW_PRECISION_DTYPES)
+def test_abs_encoder_delegated_similarity_upcasts(method, dtype):
+    """Without a `similarity_fn_name`, AbsEncoder delegates to the model and must upcast first."""
+    encoder = object.__new__(_DelegatingEncoder)
+    encoder.mteb_model_meta = None
+    encoder.model = _DtypeRecordingModel()
+    a = torch.randn(4, 8).to(dtype)
+
+    getattr(encoder, method)(a, a)
+
+    assert encoder.model.dtypes == [torch.float32, torch.float32]
