@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import math
 import warnings
 from typing import TYPE_CHECKING, Any
 
@@ -10,6 +11,7 @@ from tqdm.auto import tqdm
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import seconds_to_samples
+from mteb.models.model_implementations.vggish_models import _log_mel
 
 if TYPE_CHECKING:
     import torch
@@ -28,7 +30,6 @@ def yamnet_loader(*args: Any, **kwargs: Any) -> EncoderProtocol:
     """Factory function to create a YAMNet model wrapper."""
     import torch
     from torch_vggish_yamnet import yamnet
-    from torch_vggish_yamnet.input_proc import WaveformToInput
 
     class YAMNetWrapper(AbsEncoder):
         def __init__(
@@ -49,12 +50,13 @@ def yamnet_loader(*args: Any, **kwargs: Any) -> EncoderProtocol:
             self.model = yamnet.yamnet(pretrained=True)
             self.model.eval().to(self.device)
 
-            self.converter = WaveformToInput()
             self.sampling_rate = 16000  # YAMNet requires 16kHz audio
             self.embed_dim = 1024  # YAMNet embedding dimension
-            # 0.96 s patches
-            # https://arxiv.org/abs/1609.09430
-            self.min_samples = int(0.96 * self.sampling_rate)  # 15,360 samples
+            # official patching: 0.96 s patches with a 0.48 s hop, the waveform padded
+            # to one patch (0.975 s with the STFT window) plus a whole number of hops
+            # https://github.com/tensorflow/models/blob/master/research/audioset/yamnet/features.py
+            self.min_samples = 15_600
+            self.hop_samples = 7_680
 
         def _resample_audio(
             self, audio: torch.Tensor, source_rate: int
@@ -89,10 +91,12 @@ def yamnet_loader(*args: Any, **kwargs: Any) -> EncoderProtocol:
             if audio.numel() > 0 and audio.abs().max() > 1.0:
                 audio = audio / audio.abs().max()  # noqa: PLR6104
 
-            # Pad to minimum length
-            if audio.shape[-1] < self.min_samples:
-                pad_amount = self.min_samples - audio.shape[-1]
-                audio = torch.nn.functional.pad(audio, (0, pad_amount))
+            # Pad to one patch plus a whole number of hops
+            num_hops = math.ceil(
+                max(audio.shape[-1] - self.min_samples, 0) / self.hop_samples
+            )
+            target = self.min_samples + num_hops * self.hop_samples
+            audio = torch.nn.functional.pad(audio, (0, target - audio.shape[-1]))
 
             return audio
 
@@ -104,27 +108,14 @@ def yamnet_loader(*args: Any, **kwargs: Any) -> EncoderProtocol:
             if audio_data.ndim == 1:
                 audio_data = audio_data.unsqueeze(0)
 
-            input_tensor = self.converter(audio_data.float(), self.sampling_rate).to(
-                self.device
-            )
+            # features.py computes the same log-mel as VGGish, with a 0.001 log offset
+            log_mel = _log_mel(audio_data.float().squeeze(0), log_offset=0.001)
+            patches = log_mel.unfold(0, 96, 48)
+            # [patches, mels, frames] -> [patches, 1, frames, mels]
+            input_tensor = patches.transpose(1, 2).unsqueeze(1).to(self.device)
 
             if input_tensor.numel() == 0:
                 return None
-
-            # Handle different tensor dimensions
-            if input_tensor.dim() == 4 and input_tensor.shape[0] == 2:
-                # [2, batch, height, width] -> [1, batch, height, width]
-                input_tensor = input_tensor.mean(dim=0, keepdim=True)
-            elif input_tensor.dim() == 3:
-                if input_tensor.shape[0] == 3:
-                    # [3, height, width] -> [1, 1, height, width]
-                    input_tensor = input_tensor.mean(dim=0, keepdim=True).unsqueeze(0)
-                else:
-                    # [batch, height, width] -> [batch, 1, height, width]
-                    input_tensor = input_tensor.unsqueeze(1)
-            elif input_tensor.dim() == 2:
-                # [height, width] -> [1, 1, height, width]
-                input_tensor = input_tensor.unsqueeze(0).unsqueeze(0)
 
             return input_tensor
 

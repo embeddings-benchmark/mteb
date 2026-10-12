@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, Any
 from tqdm.auto import tqdm
 
 from mteb.models.model_meta import ModelMeta
+from mteb.types import OutputDType
 
 from .rerankers_custom import RerankerWrapper
 
@@ -265,6 +266,7 @@ Querit_Reranker_A0_4B = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     citation=QUERIT_CITATION,
+    output_dtypes=OutputDType.BF16,
 )
 
 Querit_Reranker_4B = ModelMeta(
@@ -293,4 +295,5 @@ Querit_Reranker_4B = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     citation=QUERIT_CITATION,
+    output_dtypes=OutputDType.BF16,
 )

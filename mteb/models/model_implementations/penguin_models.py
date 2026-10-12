@@ -6,6 +6,7 @@ from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -123,7 +124,7 @@ penguin_encoder = ModelMeta(
     model_type=["dense"],
     citation=PENGUIN_CITATION,
     contacts=None,
-    output_dtypes=None,
+    output_dtypes=OutputDType.BF16,
     extra_requirements_groups=[
         "transformers-v4",  # have rope init error with transformers v5
         "flash_attention",

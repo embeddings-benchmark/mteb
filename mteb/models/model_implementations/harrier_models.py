@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 from .facebookai import XLMR_LANGUAGES
 
@@ -237,6 +237,7 @@ Harrier_OSS_v1_270m = ModelMeta(
     training_datasets=harrier_training_data,
     adapted_from="google/gemma-3-270m",
     superseded_by=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 Harrier_OSS_v1_0B6 = ModelMeta(
@@ -267,6 +268,7 @@ Harrier_OSS_v1_0B6 = ModelMeta(
     training_datasets=harrier_training_data,
     adapted_from="Qwen/Qwen3-0.6B",
     superseded_by=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 Harrier_OSS_v1_27b = ModelMeta(
@@ -297,4 +299,5 @@ Harrier_OSS_v1_27b = ModelMeta(
     training_datasets=harrier_training_data,
     adapted_from="google/gemma-3-27b-pt",
     superseded_by=None,
+    output_dtypes=OutputDType.BF16,
 )

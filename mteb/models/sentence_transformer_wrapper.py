@@ -15,6 +15,7 @@ from mteb.models import ModelMeta
 from mteb.similarity_functions import (
     _MAX_SIM_CHUNK_ELEMENTS,
     _token_budget_chunks,
+    _upcast_low_precision,
 )
 from mteb.types import PromptType
 
@@ -450,7 +451,14 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
     def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
         """Compute the similarity between two collections of embeddings."""
         if hasattr(self.model, "similarity") and callable(self.model.similarity):
-            return cast("Array", self.model.similarity(embeddings1, embeddings2))
+            # sentence-transformers < 6 scores in the embedding dtype
+            return cast(
+                "Array",
+                self.model.similarity(
+                    _upcast_low_precision(embeddings1),
+                    _upcast_low_precision(embeddings2),
+                ),
+            )
         return super().similarity(embeddings1, embeddings2)
 
     def encode(

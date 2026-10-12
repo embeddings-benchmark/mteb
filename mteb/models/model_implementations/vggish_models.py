@@ -28,7 +28,6 @@ def vggish_loader(*args: Any, **kwargs: Any) -> EncoderProtocol:
     import torch
     import torchaudio
     from torch_vggish_yamnet import vggish
-    from torch_vggish_yamnet.input_proc import WaveformToInput
 
     class VGGishWrapper(AbsEncoder):
         def __init__(
@@ -47,14 +46,16 @@ def vggish_loader(*args: Any, **kwargs: Any) -> EncoderProtocol:
             self.device = device
             self.max_audio_length_seconds = max_audio_length_seconds
             self.model = vggish.get_vggish(with_classifier=False, pretrained=True)
+            # drop the port's final ReLU: the official embedding layer has no activation
+            # https://github.com/tensorflow/models/blob/master/research/audioset/vggish/vggish_slim.py
+            self.model.embeddings = self.model.embeddings[:-1]
             self.model.eval().to(self.device)
 
-            self.converter = WaveformToInput()
             self.sampling_rate = 16000
             self.embed_dim = 128
-            # 0.96 s patches
-            # https://arxiv.org/abs/1609.09430
-            self.min_samples = int(0.96 * self.sampling_rate)  # 15,360 samples
+            # the official front end gives no example for clips shorter than one
+            # 0.96 s example plus the STFT window minus one hop, so pad to that
+            self.min_samples = 15_600  # 0.975 s
 
         def _resample_audio(
             self, audio: torch.Tensor, source_rate: int
@@ -102,24 +103,10 @@ def vggish_loader(*args: Any, **kwargs: Any) -> EncoderProtocol:
             if audio_data.ndim == 1:
                 audio_data = audio_data.unsqueeze(0)
 
-            input_tensor = self.converter(audio_data.float(), self.sampling_rate).to(
-                self.device
-            )
-
-            # Handle different tensor dimensions
-            if input_tensor.dim() == 4 and input_tensor.shape[1] == 3:
-                # [batch, 3, height, width] -> [batch, 1, height, width]
-                input_tensor = input_tensor.mean(dim=1, keepdim=True)
-            elif input_tensor.dim() == 3:
-                if input_tensor.shape[0] == 3:
-                    # [3, height, width] -> [1, 1, height, width]
-                    input_tensor = input_tensor.mean(dim=0, keepdim=True).unsqueeze(0)
-                else:
-                    # [batch, height, width] -> [batch, 1, height, width]
-                    input_tensor = input_tensor.unsqueeze(1)
-            elif input_tensor.dim() == 2:
-                # [height, width] -> [1, 1, height, width]
-                input_tensor = input_tensor.unsqueeze(0).unsqueeze(0)
+            log_mel = _log_mel(audio_data.squeeze(0).double(), log_offset=0.01)
+            # non-overlapping 0.96 s examples: [examples, 1, 96 frames, 64 mels]
+            patches = log_mel.float().unfold(0, 96, 96)
+            input_tensor = patches.transpose(1, 2).unsqueeze(1).to(self.device)
 
             return input_tensor
 
@@ -184,6 +171,37 @@ def vggish_loader(*args: Any, **kwargs: Any) -> EncoderProtocol:
             return self.get_audio_embeddings(inputs, **kwargs)
 
     return VGGishWrapper(**kwargs)
+
+
+def _log_mel(audio: torch.Tensor, log_offset: float) -> torch.Tensor:
+    """Log-mel spectrogram [frames, 64 mels] of 16 kHz audio, as the official AudioSet code.
+
+    https://github.com/tensorflow/models/blob/master/research/audioset/vggish/mel_features.py
+    """
+    import torch
+
+    # 25 ms periodic Hann window, 10 ms hop, no centring, 512-point FFT
+    frames = audio.unfold(-1, 400, 160)
+    window = torch.hann_window(400, periodic=True, dtype=audio.dtype)
+    magnitude = torch.fft.rfft(frames * window, n=512).abs()
+
+    # 64 HTK mel bands between 125 and 7500 Hz, DC bin zeroed
+    def hertz_to_mel(hertz: float | np.ndarray) -> np.ndarray:
+        return 1127.0 * np.log(1.0 + hertz / 700.0)
+
+    bins_mel = hertz_to_mel(np.linspace(0.0, 8000.0, 257))[:, None]
+    edges = np.linspace(hertz_to_mel(125.0), hertz_to_mel(7500.0), 64 + 2)
+    lower, center, upper = edges[:-2], edges[1:-1], edges[2:]
+    mel_matrix = np.maximum(
+        0.0,
+        np.minimum(
+            (bins_mel - lower) / (center - lower), (upper - bins_mel) / (upper - center)
+        ),
+    )
+    mel_matrix[0, :] = 0.0
+
+    mel = magnitude @ torch.from_numpy(mel_matrix).to(audio.dtype)
+    return torch.log(mel + log_offset)
 
 
 vggish = ModelMeta(

@@ -5,6 +5,7 @@ from mteb.models.model_meta import (
 from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
 )
+from mteb.types import OutputDType
 
 mme5_mllama = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
@@ -40,4 +41,5 @@ mme5_mllama = ModelMeta(
   year={2025}
 }
 """,
+    output_dtypes=OutputDType.BF16,
 )
