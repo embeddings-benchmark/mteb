@@ -3,7 +3,7 @@ from __future__ import annotations
 import heapq
 import logging
 import time
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, get_args
 
 import numpy as np
 from tqdm.auto import tqdm
@@ -13,11 +13,12 @@ from mteb._create_dataloaders import (
 )
 from mteb.timing import TimingStack
 from mteb.types import (
+    Modalities,
     PromptType,
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from collections.abc import Callable, Sequence
 
     import torch
     from torch.utils.data import DataLoader
@@ -669,10 +670,47 @@ class SearchCrossEncoderWrapper:
 
     task_corpus: CorpusDatasetType | None
 
-    def __init__(self, model: CrossEncoderProtocol):
+    def __init__(
+        self,
+        model: CrossEncoderProtocol,
+        *,
+        document_modalities: Sequence[Modalities] | None = None,
+    ) -> None:
+        """Wrap a cross-encoder, optionally selecting its document inputs.
+
+        Args:
+            model: The cross-encoder to use for reranking.
+            document_modalities: Modalities to supply for documents, e.g. ["text"],
+                ["image"] or ["text", "image"]. Queries are unchanged. Each selected
+                modality must be available in the task corpus and supported by the
+                model. None preserves the task's default inputs and cache identity.
+                Explicit selections are recorded in the model's experiment_kwargs
+                so that their cached results remain separate.
+        """
         self.model = model
         self.task_corpus = None
         self.mteb_model_meta = model.mteb_model_meta
+        self.document_modalities: tuple[Modalities, ...] | None = None
+        if document_modalities is not None:
+            if (
+                isinstance(document_modalities, str)
+                or not document_modalities
+                or not set(document_modalities).issubset(get_args(Modalities))
+            ):
+                raise ValueError(
+                    "document_modalities must be a non-empty sequence of text, image, audio or video."
+                )
+            self.document_modalities = tuple(sorted(set(document_modalities)))
+            supported = self.mteb_model_meta.modalities
+            if supported and not set(self.document_modalities).issubset(supported):
+                raise ValueError(
+                    f"Model supports {supported}, but document_modalities={list(self.document_modalities)} was requested."
+                )
+            experiment_kwargs = dict(self.mteb_model_meta.experiment_kwargs or {})
+            experiment_kwargs["document_modalities"] = list(self.document_modalities)
+            self.mteb_model_meta = self.mteb_model_meta.model_copy(
+                update={"experiment_kwargs": experiment_kwargs}, deep=True
+            )
 
     def index(
         self,
@@ -696,6 +734,21 @@ class SearchCrossEncoderWrapper:
             num_proc: Number of processes to use.
             **kwargs: Additional arguments. Currently unused.
         """
+        if self.document_modalities is not None:
+            available = set(task_metadata.get_modalities(PromptType.document)) & set(
+                corpus.column_names
+            )
+            missing = set(self.document_modalities) - available
+            if missing:
+                raise ValueError(
+                    f"Task {task_metadata.name} ({hf_subset}/{hf_split}) is missing document modalities: {sorted(missing)}."
+                )
+            excluded = set(get_args(Modalities)) - set(self.document_modalities)
+            if "text" in excluded:
+                excluded.update(["title", "body"])
+            corpus = corpus.remove_columns(
+                [column for column in corpus.column_names if column in excluded]
+            )
         self.task_corpus = corpus
 
     def search(
@@ -764,9 +817,16 @@ class SearchCrossEncoderWrapper:
             num_proc=num_proc,
             **encode_kwargs,
         )
+        # Only the document loader uses the selected modalities. Keep the task's
+        # metadata for query preparation and model prompts.
+        corpus_metadata = task_metadata
+        if self.document_modalities is not None:
+            corpus_metadata = task_metadata.model_copy(
+                update={"modalities": list(self.document_modalities), "category": None}
+            )
         corpus_loader = create_dataloader(
             self.task_corpus.select(doc_indices),
-            task_metadata=task_metadata,
+            task_metadata=corpus_metadata,
             prompt_type=PromptType.document,
             num_proc=num_proc,
             **encode_kwargs,
