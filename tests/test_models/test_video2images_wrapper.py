@@ -9,6 +9,7 @@ from mteb._create_dataloaders import create_dataloader
 from mteb.cache import ResultCache
 from mteb.evaluate import _check_model_modalities
 from mteb.mocks import (
+    MockVideoAudioClassification,
     MockVideoClassification,
     MockVideoClusteringTask,
     MockVideoRetrievalT2V,
@@ -390,3 +391,31 @@ def test_show_progress_bar_false_silences_the_video_progress_bar(monkeypatch):
         show_progress_bar=False,
     )
     assert disabled == [True]
+
+
+def test_validate_tasks_rejects_mixed_video_input_for_non_retrieval_tasks():
+    """Video with audio in one input fails for classification too, not only retrieval sides."""
+    wrapper = Video2ImagesWrapper(_image_model(), num_frames=2)
+    wrapper.validate_tasks(
+        [MockVideoClassification(), MockVideoZeroshotClassificationTask()]
+    )
+    with pytest.raises(ValueError, match="mixes video with other modalities"):
+        wrapper.validate_tasks([MockVideoAudioClassification()])
+
+
+@pytest.mark.parametrize(
+    ("task_name", "mixed"),
+    [
+        ("HMDB51Classification", False),  # v2c
+        ("HMDB51ZeroShot", False),  # v2t: video input, text labels
+        ("UCF101VideoZeroShotClassification", False),  # category va2t, no audio listed
+        ("Kinetics700VA", True),  # va2c
+        ("MusicAVQAVAPairClassification", True),  # va2va
+        ("CoVRRVT2VRetrieval", True),  # vt2v
+        ("MSVDT2VRetrieval", False),
+    ],
+)
+def test_mixed_video_input_detection(task_name, mixed):
+    from mteb.models.video_wrappers.video2images_wrapper import _has_mixed_video_input
+
+    assert _has_mixed_video_input(mteb.get_task(task_name)) is mixed

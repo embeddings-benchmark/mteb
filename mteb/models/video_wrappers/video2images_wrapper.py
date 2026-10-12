@@ -53,22 +53,51 @@ def video2images_model_meta(
     )
 
 
-def _has_mixed_video_side(task: AbsTask) -> bool:
-    """Whether a retrieval task combines video with another modality on its query or document side.
+_CATEGORY_MODALITIES: dict[str, str] = {
+    "t": "text",
+    "i": "image",
+    "a": "audio",
+    "v": "video",
+}
 
-    Only retrieval sides are checked: other task types encode each modality in its own
-    dataloader, so their metadata is a union across calls rather than one dataloader's features.
+
+def _input_modality_groups(task: AbsTask) -> list[set[str]]:
+    """Groups of modalities that are encoded together in one input of `task`.
+
+    Retrieval tasks have a query and a document side. For other task types every side of the
+    category that names modalities is an input (e.g. both sides of ``va2va`` pair
+    classification, the left side of ``va2c`` classification); sides naming a label, such as the
+    ``c`` of ``v2c``, are not. The modalities listed in the task metadata win over a stale
+    category, so a side is only taken as far as the task actually has those modalities.
     """
     from mteb.abstasks.retrieval import AbsTaskRetrieval
     from mteb.types import PromptType
 
-    if not isinstance(task, AbsTaskRetrieval):
-        return False
-    sides = (
-        set(task.metadata.get_modalities(PromptType.query)),
-        set(task.metadata.get_modalities(PromptType.document)),
+    metadata = task.metadata
+    if isinstance(task, AbsTaskRetrieval):
+        return [
+            set(metadata.get_modalities(PromptType.query)),
+            set(metadata.get_modalities(PromptType.document)),
+        ]
+    if metadata.category is None:
+        return []
+    sides = metadata.category.split("2")
+    return [
+        {_CATEGORY_MODALITIES[m] for m in side if m in _CATEGORY_MODALITIES}
+        & set(metadata.modalities)
+        for side in sides
+    ]
+
+
+def _has_mixed_video_input(task: AbsTask) -> bool:
+    """Whether `task` combines video with another modality in a single input.
+
+    `Video2ImagesWrapper` pools frames of video-only inputs, so such tasks would fail mid-run.
+    """
+    return any(
+        "video" in group and group != {"video"}
+        for group in _input_modality_groups(task)
     )
-    return any("video" in side and side != {"video"} for side in sides)
 
 
 def _wrapper_can_run(meta: ModelMeta, task: AbsTask) -> bool:
@@ -76,7 +105,7 @@ def _wrapper_can_run(meta: ModelMeta, task: AbsTask) -> bool:
     from mteb.abstasks.retrieval import AbsTaskRetrieval
     from mteb.types import PromptType
 
-    if _has_mixed_video_side(task):
+    if _has_mixed_video_input(task):
         return False
     supported = set(meta.modalities) | {"video"}
     if isinstance(task, AbsTaskRetrieval):
@@ -182,18 +211,18 @@ class Video2ImagesWrapper:
     def validate_tasks(self, tasks: Iterable[AbsTask]) -> None:
         """Reject tasks this wrapper cannot run, before any model work is done.
 
-        Only video-only inputs are supported, so retrieval tasks that mix video with another
-        modality on one side would fail mid-run.
+        Only video-only inputs are supported, so tasks that mix video with another modality in
+        one input would fail mid-run.
 
         Args:
             tasks: The tasks about to be evaluated.
         """
         errors = []
         for task in tasks:
-            if _has_mixed_video_side(task):
+            if _has_mixed_video_input(task):
                 errors.append(
                     f"{type(self).__name__} only supports video-only inputs, but task "
-                    f"{task.metadata.name} mixes video with other modalities on one side."
+                    f"{task.metadata.name} mixes video with other modalities in one input."
                 )
         if errors:
             raise ValueError("\n".join(errors))

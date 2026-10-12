@@ -7,7 +7,7 @@ icon: lucide/film
 
 Image-text models such as CLIP or SigLIP are commonly reported on video benchmarks even though they have no notion of time. However, a common approach is to sample a fixed number of frames uniformly from each clip and then encode each frame and mean-pool those into a single video embedding. This is the protocol used for CLIP-style baselines in CLIP4Clip, X-CLIP and ChinaOpen, among others.
 
-By default, evaluating a model that supports `image` but not `video` on a video task raises an error. However, MTEB supplies a [`Video2ImagesWrapper`][mteb.models.video_wrappers.video2images_wrapper.Video2ImagesWrapper] to make it easier to quickly establish such baselines:
+By default, evaluating a model that supports `image` but not `video` on a video task raises an error. However, MTEB supplies a [`Video2ImagesWrapper`][mteb.models.video_wrappers.video2images_wrapper.Video2ImagesWrapper] to make it easier to quickly establish such baselines (see [Define the Model](../usage/defining_the_model.md) and [Run the Evaluation](../usage/running_the_evaluation.md) for the general workflow):
 
 ```python
 import mteb
@@ -24,7 +24,7 @@ results = mteb.evaluate(video_model, tasks=[task])
 
 ### Caching frame embeddings
 
-To cache the frame embeddings, wrap the cache inside the video wrapper:
+To cache the frame embeddings (see [Cache embeddings](cache_embeddings.md) for the cache wrapper), wrap the cache inside the video wrapper:
 
 ```python
 from mteb.models import Video2ImagesWrapper
