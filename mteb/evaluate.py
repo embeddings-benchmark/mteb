@@ -367,14 +367,6 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
     return result
 
 
-def _as_task_list(tasks: AbsTask | Iterable[AbsTask]) -> Iterable[AbsTask]:
-    if isinstance(tasks, AbsTask):
-        return [tasks]
-    if isinstance(tasks, Benchmark):
-        return tasks.tasks
-    return tasks
-
-
 def _check_model_modalities(
     model: ModelMeta,
     tasks: AbsTask | Iterable[AbsTask],
@@ -402,10 +394,8 @@ def _check_model_modalities(
 
     warnings, errors = [], []
 
-    def with_video_hint(msg: str, task: AbsTask) -> str:
-        return msg + video2images_hint(model, task)
-
     for task in check_tasks:
+        video_hint = video2images_hint(model, task)
         # only retrieval tasks have different modalities for query and document and can be run with partial overlaps
         if isinstance(task, AbsTaskRetrieval):
             query_mods = set(task.metadata.get_modalities(PromptType.query))
@@ -428,11 +418,9 @@ def _check_model_modalities(
                 )
             else:
                 errors.append(
-                    with_video_hint(
-                        f"Model {model.name} supports {model.modalities}, but none overlap with "
-                        f"task {task.metadata.name} query={sorted(query_mods)}, document={sorted(doc_mods)}.",
-                        task,
-                    )
+                    f"Model {model.name} supports {model.modalities}, but none overlap with "
+                    f"task {task.metadata.name} query={sorted(query_mods)}, document={sorted(doc_mods)}."
+                    + video_hint
                 )
         else:
             task_mods = set(task.metadata.modalities)
@@ -440,11 +428,9 @@ def _check_model_modalities(
             if task_mods.issubset(model_modalities):
                 continue
             errors.append(
-                with_video_hint(
-                    f"Model {model.name} supports {model.modalities}, but none overlap with "
-                    f"task {task.metadata.name} modalities={task.metadata.modalities}.",
-                    task,
-                )
+                f"Model {model.name} supports {model.modalities}, but none overlap with "
+                f"task {task.metadata.name} modalities={task.metadata.modalities}."
+                + video_hint
             )
 
     if errors:
@@ -627,7 +613,7 @@ def evaluate(  # noqa: PLR0913
     overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
     validate_tasks = getattr(model, "validate_tasks", None)
     if validate_tasks is not None:
-        validate_tasks(_as_task_list(tasks))
+        validate_tasks([tasks] if isinstance(tasks, AbsTask) else tasks)
 
     return _evaluate_resolved(
         model,
