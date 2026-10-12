@@ -39,16 +39,16 @@ def _sources(task: type[AbsTaskRetrieval]) -> dict[str, FirstStagePredictionSour
     }
 
 
-def _metadata(task: type[AbsTaskRetrieval]) -> TaskMetadata:
+def _metadata(task: type[AbsTaskRetrieval], top_k: int) -> TaskMetadata:
     return task.metadata.model_copy(
         update={
             "name": task.metadata.name.replace("Retrieval.v2", "Reranking"),
             "type": "Reranking",
             "description": task.metadata.description
-            + " Rerank the top-50 candidates from BM25, BGE-M3 and Qwen3-VL-Embedding-2B,"
+            + f" Rerank the top-{top_k} candidates from BM25, BGE-M3 and Qwen3-VL-Embedding-2B,"
             " evaluated separately for each retriever and language.",
             "eval_langs": {
-                f"{source}__{subset}": languages
+                f"{source}__top{top_k}__{subset}": languages
                 for source in _FIRST_STAGES
                 for subset, languages in task.metadata.hf_subsets_to_langscripts.items()
             },
@@ -65,53 +65,53 @@ class Vidore3ComputerScienceReranking(AbsTaskRerankingFromPredictions):
     retrieval_task = Vidore3ComputerScienceRetrievalv2
     first_stage_predictions = _sources(retrieval_task)
     top_k = 50
-    metadata = _metadata(retrieval_task)
+    metadata = _metadata(retrieval_task, top_k)
 
 
 class Vidore3EnergyReranking(AbsTaskRerankingFromPredictions):
     retrieval_task = Vidore3EnergyRetrievalv2
     first_stage_predictions = _sources(retrieval_task)
     top_k = 50
-    metadata = _metadata(retrieval_task)
+    metadata = _metadata(retrieval_task, top_k)
 
 
 class Vidore3FinanceEnReranking(AbsTaskRerankingFromPredictions):
     retrieval_task = Vidore3FinanceEnRetrievalv2
     first_stage_predictions = _sources(retrieval_task)
     top_k = 50
-    metadata = _metadata(retrieval_task)
+    metadata = _metadata(retrieval_task, top_k)
 
 
 class Vidore3FinanceFrReranking(AbsTaskRerankingFromPredictions):
     retrieval_task = Vidore3FinanceFrRetrievalv2
     first_stage_predictions = _sources(retrieval_task)
     top_k = 50
-    metadata = _metadata(retrieval_task)
+    metadata = _metadata(retrieval_task, top_k)
 
 
 class Vidore3HrReranking(AbsTaskRerankingFromPredictions):
     retrieval_task = Vidore3HrRetrievalv2
     first_stage_predictions = _sources(retrieval_task)
     top_k = 50
-    metadata = _metadata(retrieval_task)
+    metadata = _metadata(retrieval_task, top_k)
 
 
 class Vidore3IndustrialReranking(AbsTaskRerankingFromPredictions):
     retrieval_task = Vidore3IndustrialRetrievalv2
     first_stage_predictions = _sources(retrieval_task)
     top_k = 50
-    metadata = _metadata(retrieval_task)
+    metadata = _metadata(retrieval_task, top_k)
 
 
 class Vidore3PharmaceuticalsReranking(AbsTaskRerankingFromPredictions):
     retrieval_task = Vidore3PharmaceuticalsRetrievalv2
     first_stage_predictions = _sources(retrieval_task)
     top_k = 50
-    metadata = _metadata(retrieval_task)
+    metadata = _metadata(retrieval_task, top_k)
 
 
 class Vidore3PhysicsReranking(AbsTaskRerankingFromPredictions):
     retrieval_task = Vidore3PhysicsRetrievalv2
     first_stage_predictions = _sources(retrieval_task)
     top_k = 50
-    metadata = _metadata(retrieval_task)
+    metadata = _metadata(retrieval_task, top_k)

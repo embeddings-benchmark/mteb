@@ -42,7 +42,7 @@
       "max_top_ranked_per_query": 50
     },
     "hf_subset_descriptive_stats": {
-      "bm25-text__french": {
+      "bm25-text__top50__french": {
         "num_samples": 3251,
         "number_of_characters": 11384626,
         "documents_text_statistics": {
@@ -85,7 +85,7 @@
           "max_top_ranked_per_query": 50
         }
       },
-      "bm25-text__spanish": {
+      "bm25-text__top50__spanish": {
         "num_samples": 3251,
         "number_of_characters": 11382911,
         "documents_text_statistics": {
@@ -128,7 +128,7 @@
           "max_top_ranked_per_query": 50
         }
       },
-      "bm25-text__english": {
+      "bm25-text__top50__english": {
         "num_samples": 3251,
         "number_of_characters": 11377669,
         "documents_text_statistics": {
@@ -171,7 +171,7 @@
           "max_top_ranked_per_query": 50
         }
       },
-      "bm25-text__german": {
+      "bm25-text__top50__german": {
         "num_samples": 3251,
         "number_of_characters": 11383518,
         "documents_text_statistics": {
@@ -214,7 +214,7 @@
           "max_top_ranked_per_query": 50
         }
       },
-      "bm25-text__italian": {
+      "bm25-text__top50__italian": {
         "num_samples": 3251,
         "number_of_characters": 11383216,
         "documents_text_statistics": {
@@ -257,7 +257,7 @@
           "max_top_ranked_per_query": 50
         }
       },
-      "bm25-text__portuguese": {
+      "bm25-text__top50__portuguese": {
         "num_samples": 3251,
         "number_of_characters": 11381350,
         "documents_text_statistics": {
@@ -300,7 +300,7 @@
           "max_top_ranked_per_query": 50
         }
       },
-      "bge-text__french": {
+      "bge-text__top50__french": {
         "num_samples": 3251,
         "number_of_characters": 11384626,
         "documents_text_statistics": {
@@ -343,7 +343,7 @@
           "max_top_ranked_per_query": 50
         }
       },
-      "bge-text__spanish": {
+      "bge-text__top50__spanish": {
         "num_samples": 3251,
         "number_of_characters": 11382911,
         "documents_text_statistics": {
@@ -386,7 +386,7 @@
           "max_top_ranked_per_query": 50
         }
       },
-      "bge-text__english": {
+      "bge-text__top50__english": {
         "num_samples": 3251,
         "number_of_characters": 11377669,
         "documents_text_statistics": {
@@ -429,7 +429,7 @@
           "max_top_ranked_per_query": 50
         }
       },
-      "bge-text__german": {
+      "bge-text__top50__german": {
         "num_samples": 3251,
         "number_of_characters": 11383518,
         "documents_text_statistics": {
@@ -472,7 +472,7 @@
           "max_top_ranked_per_query": 50
         }
       },
-      "bge-text__italian": {
+      "bge-text__top50__italian": {
         "num_samples": 3251,
         "number_of_characters": 11383216,
         "documents_text_statistics": {
@@ -515,7 +515,7 @@
           "max_top_ranked_per_query": 50
         }
       },
-      "bge-text__portuguese": {
+      "bge-text__top50__portuguese": {
         "num_samples": 3251,
         "number_of_characters": 11381350,
         "documents_text_statistics": {
@@ -558,7 +558,7 @@
           "max_top_ranked_per_query": 50
         }
       },
-      "qwen-text-image__french": {
+      "qwen-text-image__top50__french": {
         "num_samples": 3251,
         "number_of_characters": 11384626,
         "documents_text_statistics": {
@@ -601,7 +601,7 @@
           "max_top_ranked_per_query": 50
         }
       },
-      "qwen-text-image__spanish": {
+      "qwen-text-image__top50__spanish": {
         "num_samples": 3251,
         "number_of_characters": 11382911,
         "documents_text_statistics": {
@@ -644,7 +644,7 @@
           "max_top_ranked_per_query": 50
         }
       },
-      "qwen-text-image__english": {
+      "qwen-text-image__top50__english": {
         "num_samples": 3251,
         "number_of_characters": 11377669,
         "documents_text_statistics": {
@@ -687,7 +687,7 @@
           "max_top_ranked_per_query": 50
         }
       },
-      "qwen-text-image__german": {
+      "qwen-text-image__top50__german": {
         "num_samples": 3251,
         "number_of_characters": 11383518,
         "documents_text_statistics": {
@@ -730,7 +730,7 @@
           "max_top_ranked_per_query": 50
         }
       },
-      "qwen-text-image__italian": {
+      "qwen-text-image__top50__italian": {
         "num_samples": 3251,
         "number_of_characters": 11383216,
         "documents_text_statistics": {
@@ -773,7 +773,7 @@
           "max_top_ranked_per_query": 50
         }
       },
-      "qwen-text-image__portuguese": {
+      "qwen-text-image__top50__portuguese": {
         "num_samples": 3251,
         "number_of_characters": 11381350,
         "documents_text_statistics": {

@@ -37,12 +37,12 @@ def test_registered_task_defaults_and_language_selection(domain):
     assert task.top_k == 50
     assert not task.data_loaded
     english = mteb.get_task(task.metadata.name, languages=["eng"])
-    assert english.hf_subsets == [f"{source}__english" for source in _SOURCES]
+    assert english.hf_subsets == [f"{source}__top50__english" for source in _SOURCES]
     for source in task.first_stage_predictions.values():
         assert Path(source.filename).name == retrieval.prediction_file_name
         assert source.revision == "3d6834bc0d3aded9de65eb2e431d875f654c96e8"
     with pytest.raises(ValueError, match="No subsets"):
-        mteb.get_task(task.metadata.name, hf_subsets=["unknown__english"])
+        mteb.get_task(task.metadata.name, hf_subsets=["unknown__top50__english"])
 
 
 @pytest.fixture
@@ -102,13 +102,27 @@ def test_default_load_shares_data_and_preserves_each_candidate_set(prepared):
     assert shared["top_ranked"] is None
 
 
+def test_candidates_are_truncated_to_subset_depth(prepared, tmp_path):
+    task, _, _, _, _ = prepared
+    source = task.first_stage_predictions["bge-text"]
+    path = tmp_path / source.filename
+    predictions = json.loads(path.read_text())
+    predictions["english"]["test"]["q1"] = {f"d{i}": float(i) for i in range(60)}
+    path.write_text(json.dumps(predictions))
+    task.filter_languages(languages=None, hf_subsets=["bge-text__top50__english"])
+    task.load_data()
+    assert task.dataset["bge-text__top50__english"]["test"]["top_ranked"]["q1"] == [
+        f"d{i}" for i in range(59, 9, -1)
+    ]
+
+
 def test_filter_loads_only_requested_sources_and_languages(prepared):
     _, _, _, loads, downloads = prepared
-    task = mteb.get_task("Vidore3HrReranking", hf_subsets=["bge-text__english"])
+    task = mteb.get_task("Vidore3HrReranking", hf_subsets=["bge-text__top50__english"])
     task.load_data()
     assert loads == [["english"]]
     assert len(downloads) == 1 and "BAAI__bge-m3" in downloads[0]
-    assert list(task.dataset) == ["bge-text__english"]
+    assert list(task.dataset) == ["bge-text__top50__english"]
 
 
 def test_one_result_file_resumes_subsets_and_exports_retriever_groups(  # noqa: PLR0914
@@ -126,7 +140,7 @@ def test_one_result_file_resumes_subsets_and_exports_retriever_groups(  # noqa: 
         return original(self, *args, hf_subset=hf_subset, **kwargs)
 
     monkeypatch.setattr(type(task), "_evaluate_subset", evaluate_subset)
-    one = mteb.get_task(task.metadata.name, hf_subsets=["bge-text__english"])
+    one = mteb.get_task(task.metadata.name, hf_subsets=["bge-text__top50__english"])
     mteb.evaluate(
         model, one, cache=cache, co2_tracker=False, prediction_folder=prediction_dir
     )
@@ -138,7 +152,7 @@ def test_one_result_file_resumes_subsets_and_exports_retriever_groups(  # noqa: 
         co2_tracker=False,
         prediction_folder=prediction_dir,
     )
-    assert sorted(calls) == sorted(f"{source}__english" for source in _SOURCES)
+    assert sorted(calls) == sorted(f"{source}__top50__english" for source in _SOURCES)
     assert result.experiment_name is None
     assert model.mteb_model_meta.experiment_kwargs is None
     assert len(result[0].scores["test"]) == 3
@@ -146,6 +160,10 @@ def test_one_result_file_resumes_subsets_and_exports_retriever_groups(  # noqa: 
         source = score["hf_subset"].split("__")[0]
         assert score["previous_results_model_meta"]["model_name"] == source
         assert score["languages"] == ["eng-Latn"]
+        assert score["reranking_top_k"] == 50
+        for k in (1, 3, 5, 10, 20, 50, 100, 1000):
+            assert f"ndcg_at_{k}" in score
+            assert f"recall_at_{k}" in score
     files = list((tmp_path / "cache").rglob(f"{task.metadata.name}.json"))
     assert len(files) == 1 and "experiments" not in files[0].parts
     cached = mteb.evaluate(
@@ -157,8 +175,17 @@ def test_one_result_file_resumes_subsets_and_exports_retriever_groups(  # noqa: 
     )
     assert len(calls) == 3
     assert cached[0].get_score() == result[0].get_score()
+    for score, cached_score in zip(
+        result[0].scores["test"], cached[0].scores["test"], strict=True
+    ):
+        assert cached_score["hf_subset"] == score["hf_subset"]
+        assert cached_score["reranking_top_k"] == 50
+        assert cached_score["ndcg_at_50"] == score["ndcg_at_50"]
+        assert cached_score["recall_at_50"] == score["recall_at_50"]
+    saved = json.loads(files[0].read_text())
+    assert all(score["reranking_top_k"] == 50 for score in saved["scores"]["test"])
     predictions = json.loads((prediction_dir / task.prediction_file_name).read_text())
-    assert all(f"{source}__english" in predictions for source in _SOURCES)
+    assert all(f"{source}__top50__english" in predictions for source in _SOURCES)
     loaded = cache.load_results(
         models=[model.mteb_model_meta], tasks=[all_english], include_remote=False
     )
@@ -171,7 +198,9 @@ def test_one_result_file_resumes_subsets_and_exports_retriever_groups(  # noqa: 
             CustomGroup(
                 label=source,
                 tasks=[
-                    mteb.get_task(task.metadata.name, hf_subsets=[f"{source}__english"])
+                    mteb.get_task(
+                        task.metadata.name, hf_subsets=[f"{source}__top50__english"]
+                    )
                 ],
             )
             for source in _SOURCES

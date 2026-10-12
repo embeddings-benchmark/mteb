@@ -22,7 +22,7 @@ class AbsTaskRerankingFromPredictions(AbsTaskRetrieval):
     """Reuse a retrieval dataset with fixed candidates from multiple first stages.
 
     Declare ``retrieval_task``, ``first_stage_predictions`` and ``top_k`` on the
-    task class. Metadata subsets are named ``{first_stage}__{retrieval_subset}``,
+    task class. Metadata subsets are named ``{first_stage}__top{top_k}__{retrieval_subset}``,
     with the language mapping from the retrieval task. All subsets run by default;
     the usual language and ``hf_subsets`` filters select a smaller evaluation.
 
@@ -33,6 +33,7 @@ class AbsTaskRerankingFromPredictions(AbsTaskRetrieval):
     retrieval_task: type[AbsTaskRetrieval]
     first_stage_predictions: Mapping[str, str | Path | FirstStagePredictionSource]
     top_k: int
+    k_values = (1, 3, 5, 10, 20, 50, 100, 1000)
 
     def load_data(
         self,
@@ -47,7 +48,7 @@ class AbsTaskRerankingFromPredictions(AbsTaskRetrieval):
         if self.top_k <= 0:
             raise ValueError("top_k must be positive.")
         subsets = {
-            f"{first_stage}__{subset}": (first_stage, subset)
+            f"{first_stage}__top{self.top_k}__{subset}": (first_stage, subset)
             for first_stage in self.first_stage_predictions
             for subset in self.retrieval_task.metadata.hf_subsets
         }
@@ -106,4 +107,5 @@ class AbsTaskRerankingFromPredictions(AbsTaskRetrieval):
             model, data_split, hf_subset=hf_subset, **kwargs
         )
         scores["previous_results_model_meta"] = self._first_stage_model_metas[hf_subset]
+        scores["reranking_top_k"] = self._top_k
         return scores
