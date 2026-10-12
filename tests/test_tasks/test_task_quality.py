@@ -381,11 +381,17 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "VaccinChatNLClassification",
         "VideoConPairClassification",
         "VideoRetrieval",
+        "Vidore3ComputerScienceReranking",  # same OCR corpus as the retrieval task
         "Vidore3ComputerScienceRetrieval.v2",
+        "Vidore3EnergyReranking",  # same OCR corpus as the retrieval task
         "Vidore3EnergyRetrieval.v2",
+        "Vidore3FinanceEnReranking",  # same OCR corpus as the retrieval task
         "Vidore3FinanceEnRetrieval.v2",
+        "Vidore3FinanceFrReranking",  # same OCR corpus as the retrieval task
         "Vidore3FinanceFrRetrieval.v2",
+        "Vidore3HrReranking",  # same OCR corpus as the retrieval task
         "Vidore3HrRetrieval.v2",
+        "Vidore3IndustrialReranking",  # same OCR corpus as the retrieval task
         "Vidore3IndustrialRetrieval.v2",
         "VisualNewsI2TRetrieval",
         "VisualNewsT2IRetrieval",

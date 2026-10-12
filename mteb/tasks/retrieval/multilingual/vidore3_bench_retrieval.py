@@ -1,4 +1,3 @@
-from mteb.abstasks.first_stage_predictions import FirstStagePredictionSource
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -10,22 +9,6 @@ _LANGS = {
     "italian": ["ita-Latn"],
     "portuguese": ["por-Latn"],
 }
-
-
-def _prediction_sources(retrieval_name: str) -> dict[str, FirstStagePredictionSource]:
-    sources: tuple[tuple[str, str, str], ...] = (
-        ("bm25-text", "mteb__baseline-bm25s", "text"),
-        ("bge-text", "BAAI__bge-m3", "text"),
-        ("qwen-text-image", "Qwen__Qwen3-VL-Embedding-2B", "text-image"),
-    )
-    return {
-        name: FirstStagePredictionSource(
-            repo_id="mteb/Vidore3RetrievalPredictions",
-            filename=f"{model}/{representation}/{retrieval_name}_predictions.json",
-            revision="3d6834bc0d3aded9de65eb2e431d875f654c96e8",
-        )
-        for name, model, representation in sources
-    }
 
 
 class Vidore3FinanceEnRetrieval(AbsTaskRetrieval):
@@ -106,8 +89,6 @@ class Vidore3FinanceEnRetrievalv2(AbsTaskRetrieval):
         adapted_from=["Vidore3FinanceEnRetrieval"],
         contributed_by="Illuin Technology",
     )
-
-    first_stage_predictions = _prediction_sources(metadata.name)
 
 
 class Vidore3FinanceFrRetrieval(AbsTaskRetrieval):
@@ -190,8 +171,6 @@ class Vidore3FinanceFrRetrievalv2(AbsTaskRetrieval):
         adapted_from=["Vidore3FinanceFrRetrieval"],
     )
 
-    first_stage_predictions = _prediction_sources(metadata.name)
-
 
 class Vidore3IndustrialRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -272,8 +251,6 @@ class Vidore3IndustrialRetrievalv2(AbsTaskRetrieval):
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3IndustrialRetrieval"],
     )
-
-    first_stage_predictions = _prediction_sources(metadata.name)
 
 
 class Vidore3PharmaceuticalsRetrieval(AbsTaskRetrieval):
@@ -356,8 +333,6 @@ class Vidore3PharmaceuticalsRetrievalv2(AbsTaskRetrieval):
         adapted_from=["Vidore3PharmaceuticalsRetrieval"],
     )
 
-    first_stage_predictions = _prediction_sources(metadata.name)
-
 
 class Vidore3ComputerScienceRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -438,8 +413,6 @@ class Vidore3ComputerScienceRetrievalv2(AbsTaskRetrieval):
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3ComputerScienceRetrieval"],
     )
-
-    first_stage_predictions = _prediction_sources(metadata.name)
 
 
 class Vidore3HrRetrieval(AbsTaskRetrieval):
@@ -522,8 +495,6 @@ class Vidore3HrRetrievalv2(AbsTaskRetrieval):
         adapted_from=["Vidore3HrRetrieval"],
     )
 
-    first_stage_predictions = _prediction_sources(metadata.name)
-
 
 class Vidore3EnergyRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -605,8 +576,6 @@ class Vidore3EnergyRetrievalv2(AbsTaskRetrieval):
         adapted_from=["Vidore3EnergyRetrieval"],
     )
 
-    first_stage_predictions = _prediction_sources(metadata.name)
-
 
 class Vidore3PhysicsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -687,8 +656,6 @@ class Vidore3PhysicsRetrievalv2(AbsTaskRetrieval):
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3PhysicsRetrieval"],
     )
-
-    first_stage_predictions = _prediction_sources(metadata.name)
 
 
 class Vidore3NuclearRetrieval(AbsTaskRetrieval):

@@ -43,72 +43,48 @@ res[0].get_score()  # 0.286
 cross_enc_results[0].get_score()  # 0.338
 ```
 
+## Reranking tasks with fixed first stages
 
-## Reuse prepared first-stage predictions
-
-Tasks can declare named local files or predictions from a pinned Hugging Face dataset:
+A prepared reranking task defines its candidate sources and depth. All first-stage
+subsets run by default, using the normal task API:
 
 ```python
-from mteb.abstasks.first_stage_predictions import FirstStagePredictionSource
-
-task.first_stage_predictions = {
-    "bm25": FirstStagePredictionSource(
-        repo_id="your-org/first-stage-predictions",
-        filename="bm25/NanoArguAnaRetrieval_predictions.json",
-        revision="<full-40-character-dataset-commit-sha>",
-    ),
-    "local": prediction_folder,
-}
-task.convert_to_reranking(first_stage="bm25", top_k=50)
+# Each language is evaluated with BM25, BGE-M3 and Qwen candidates at top-50.
+task = mteb.get_task("Vidore3HrReranking")
+model = mteb.get_model("Qwen/Qwen3-VL-Reranker-2B")
 cache = mteb.ResultCache("mteb-cache")
-result = mteb.evaluate(cross_encoder, task, cache=cache)
+results = mteb.evaluate(model, task, cache=cache)
+
+# All three first stages, English only.
+task = mteb.get_task("Vidore3HrReranking", languages=["eng"])
+
+# One condition. Subset names are listed in task.metadata.hf_subsets.
+task = mteb.get_task("Vidore3HrReranking", hf_subsets=["bge-text__english"])
 ```
 
-The positional argument remains a local file or directory. Use the `first_stage`
-keyword to select a declared source. Prediction files use the existing MTEB format,
-including `mteb_model_meta`. Conversion preserves the corpus, queries, relevance
-labels and language subsets; only the candidate lists change. Instantiate a fresh
-task for ordinary retrieval or another first-stage source.
-
-## Results use model experiments
-
-Converted runs use the existing experiment directories:
+A single task result file contains separate scores for each first-stage/language
+subset, such as `bm25-text__english`, `bge-text__english` and
+`qwen-text-image__english`. The existing `previous_results_model_meta` field records
+the retriever for each subset. A later evaluation of more subsets fills in the same
+result file using the normal cache behaviour. Export and benchmark grouping use
+these subsets just as they do for other tasks.
 
 ```text
-<cache>/results/<reranker>/<revision>/experiments/<experiment-id>/
+results/<reranker>/<revision>/
   model_meta.json
-  <task-name>.json
-  run_settings.jsonl
+  Vidore3HrReranking.json
 ```
 
-The result's model metadata contains `experiment_kwargs["first_stage"]`: the
-source name, retriever metadata, top-k, prediction identity and an identity digest.
-Existing reranker experiment settings are preserved. There is no additional
-reranking result schema. The task JSON retains the existing
-`previous_results_model_meta` score field; dataset exports identify the first
-stage through the existing `experiments` column.
+First stages are task conditions, so they do not create model experiments. Explicit
+model experiments still use MTEB's normal experiment directories. Candidate depth
+and pinned prediction sources are fixed by the task; changes require a new task
+version. For an exploratory two-stage run, use `convert_to_reranking` as above.
 
-Pinned Hub sources use repository, revision and filename. Standard task filenames
-are stored as `{task}_predictions.json` templates so domains from the same
-collection share an experiment. Other filenames remain literal. Local sources use
-a hash of the prediction file's bytes, so changed files select a different
-experiment. Older results are not migrated automatically.
-
-One `evaluate` call returns one model experiment. Evaluate different first stages,
-top-k values, or ordinary retrieval separately. Tasks from the same pinned
-collection and candidate depth can be evaluated together. First-stage settings
-are evaluation context: they are derived from the tasks and are not forwarded
-to model loaders. If `prediction_folder` is supplied, predictions are also placed
-under `experiments/<experiment-id>/`.
-
-Use the returned metadata to reload exactly that experiment:
-
-```python
-results = cache.load_results(models=[result.model_meta], include_remote=False)
-rows = results._to_dataset()
-rows.to_parquet("reranking-results.parquet")
-```
-
-To inspect all experiments for a reranker, use `load_experiments="match_name"`.
-Select one experimental condition before benchmark summaries. Leaderboard
-presentation and aggregation across first stages are separate follow-up work.
+Task authors can subclass
+[`AbsTaskRerankingFromPredictions`][mteb.abstasks.reranking_from_predictions.AbsTaskRerankingFromPredictions]
+to reuse an existing retrieval task's corpus, queries and qrels. Declare the
+`retrieval_task` class, a `first_stage_predictions` mapping of source names to
+pinned `FirstStagePredictionSource` objects (or local paths), and `top_k`. Declare
+`eval_langs` with `{first_stage}__{retrieval_subset}` keys mapped to the original
+language codes. Only selected languages and prediction sources are loaded; corpus,
+queries and qrels are shared across first stages. Candidate sets remain separate.

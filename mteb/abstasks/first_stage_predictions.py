@@ -1,13 +1,12 @@
-"""Named, reproducible sources for the existing two-stage reranking workflow."""
+"""Pinned or local prediction sources for prepared reranking tasks."""
 
 from __future__ import annotations
 
-import hashlib
 import json
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 from huggingface_hub import hf_hub_download
 
@@ -45,8 +44,8 @@ class FirstStagePredictionSource:
 
 def load_first_stage_predictions(
     source: str | Path | FirstStagePredictionSource, prediction_filename: str
-) -> tuple[dict[str, Any], str]:
-    """Read and fingerprint exactly the bytes used for conversion."""
+) -> dict[str, Any]:
+    """Read predictions in the existing MTEB format."""
     path = (
         source.download()
         if isinstance(source, FirstStagePredictionSource)
@@ -54,5 +53,4 @@ def load_first_stage_predictions(
     )
     if path.is_dir():
         path /= prediction_filename
-    payload = path.read_bytes()
-    return json.loads(payload), hashlib.sha256(payload).hexdigest()
+    return cast("dict[str, Any]", json.loads(path.read_text(encoding="utf-8")))
