@@ -39,7 +39,7 @@ def _keep_unseen(
 def remove_train_leakage(
     task: T,
     *,
-    pool_subsets: bool = False,
+    pool_subsets: bool = True,
     normalization: Normalization = _strip_whitespace,
     columns: Sequence[str] | None = None,
     splits: Sequence[str] | None = None,
@@ -51,14 +51,16 @@ def remove_train_leakage(
     A sample leaks when all of its content columns match a train sample's -- text as `normalization` rewrites it,
     images, audio and video by their content hash -- which is what the `samples_in_train` of the task's descriptive
     statistics reports, except that it counts the distinct leaked samples while this removes every leaking row.
-    Labels are not compared, as the same content under another label leaks just as much, and each subset is compared
-    against its own train split, which is itself left untouched. It is `remove_duplicates` with the train split as
-    its reference, without removing the duplicates a split holds of its own.
+    Labels are not compared, as the same content under another label leaks just as much, and the train splits are
+    themselves left untouched. It is `remove_duplicates` with the train split as its reference, without removing the
+    duplicates a split holds of its own.
 
     Args:
         task: The task to filter. It is not modified.
-        pool_subsets: Whether a sample is compared against the train split of every subset, as the task's own
-            `samples_in_train` counts it, rather than against its own subset's, as that subset is evaluated.
+        pool_subsets: Whether to compare against the train split of every subset combined, rather than only against
+            the sample's own subset. A test sample of the `en` subset is then removed when the `de` subset's train
+            split holds it too, which subsets that overlap in content do. Pass False to compare each subset against
+            its own train split alone, as that subset is evaluated.
         normalization: How to rewrite a text before comparing it. The default ignores surrounding whitespace only.
         columns: The content columns to compare. Defaults to every content column of the task.
         splits: The splits to filter. Defaults to every split but the train one.

@@ -1133,14 +1133,14 @@ def test_remove_train_leakage_removes_the_samples_that_appear_in_train() -> None
     assert cleaned.dataset["train"]["text"] == ["a shared text", "train only"]
 
 
-def test_remove_train_leakage_compares_within_each_subset() -> None:
+def test_remove_train_leakage_can_compare_within_each_subset() -> None:
     task = _multilingual_task()
     for subset in ("eng", "fra"):
         task.dataset[subset]["train"] = Dataset.from_dict(
             {"text": ["duplicated" if subset == "eng" else "other"], "label": [0]}
         )
 
-    cleaned = remove_train_leakage(task)
+    cleaned = remove_train_leakage(task, pool_subsets=False)
 
     assert len(cleaned.dataset["eng"]["test"]) == 0
     assert len(cleaned.dataset["fra"]["test"]) == 2
@@ -1245,23 +1245,23 @@ def test_remove_duplicates_pools_the_reference_of_every_subset() -> None:
     )
     task.dataset["fra"]["train"] = Dataset.from_dict({"text": ["other"], "label": [0]})
 
-    own = remove_duplicates(task, reference_splits=["train"], subsets=["fra"])
-    pooled = remove_duplicates(
-        task, reference_splits=["train"], pool_subsets=True, subsets=["fra"]
+    own = remove_duplicates(
+        task, reference_splits=["train"], pool_subsets=False, subsets=["fra"]
     )
+    pooled = remove_duplicates(task, reference_splits=["train"], subsets=["fra"])
 
     # "duplicated" only leaks into fra once eng's train split is pooled in
     assert len(own.dataset["fra"]["test"]) == 1
     assert len(pooled.dataset["fra"]["test"]) == 0
 
 
-def test_remove_train_leakage_can_pool_the_subsets() -> None:
+def test_remove_train_leakage_pools_the_subsets_by_default() -> None:
     task = _multilingual_task()
     task.dataset["eng"]["train"] = Dataset.from_dict(
         {"text": ["duplicated"], "label": [0]}
     )
     task.dataset["fra"]["train"] = Dataset.from_dict({"text": ["other"], "label": [0]})
 
-    cleaned = remove_train_leakage(task, pool_subsets=True, subsets=["fra"])
+    cleaned = remove_train_leakage(task, subsets=["fra"])
 
     assert len(cleaned.dataset["fra"]["test"]) == 0

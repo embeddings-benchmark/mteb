@@ -11,7 +11,8 @@ This section is an overview of releases for more information check out the autog
 
 ### Removing train leakage
 
-[`mteb.data_cleaning`](get_started/advanced_usage/cleaning_task_data.md) gains `remove_train_leakage`, which removes the evaluation samples a task also holds in its train split on which model may have trained:
+This update adds utilities to [`mteb.data_cleaning`](get_started/advanced_usage/cleaning_task_data.md) to allow you to
+prevent train leakage from other splits:
 
 ```python
 from mteb.data_cleaning import remove_train_leakage
@@ -19,11 +20,8 @@ from mteb.data_cleaning import remove_train_leakage
 cleaned = remove_train_leakage(task)
 ```
 
-It leaks when every content column matches a train sample's, which is what `samples_in_train` already reports in the descriptive statistics: 62 tasks report some today, from 4.8% of MassiveIntentClassification's test split to every row
-of HUMEToxicConversationsClassification's. The train split itself is left untouched.
-
-`remove_duplicates` gains the same reach: `reference_splits` names the splits a kept sample may not repeat, and
-`pool_subsets` takes them from every subset rather than the sample's own, which matters where subsets overlap.
+See [cleaning task data](get_started/advanced_usage/cleaning_task_data.md#removing-train-leakage) for what counts as a
+leak and for removing duplicates across splits with `remove_duplicates`.
 
 ## New in v2.25
 

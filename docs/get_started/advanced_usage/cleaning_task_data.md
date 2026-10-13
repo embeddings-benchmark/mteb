@@ -81,11 +81,11 @@ cleaned = remove_duplicates(
 # finds 98 duplicates in the Vietnamese train split that the default comparison misses
 ```
 
-Duplicates are removed within each split of each subset, so a sample in both the train and the test split is kept in both. Name the splits a sample may not repeat in `reference_splits` to remove it across splits too, and set `pool_subsets` to take those splits from every subset rather than the sample's own:
+Duplicates are removed within each split, so a sample in both the train and the test split is kept in both. Name the splits a sample may not repeat in `reference_splits` to remove it across splits as well, leaving those splits as they are:
 
 ```python
+# drop the test and validation samples that the train split already holds
 cleaned = remove_duplicates(task, reference_splits=["train"])
-cleaned = remove_duplicates(task, reference_splits=["train"], pool_subsets=True)
 ```
 
 Only text is normalized; images, audio and video are compared by an exact hash of their content, so the filter works on any task but does not match a re-encoded or rescaled copy of a sample. Retrieval tasks keep their relevance judgements valid: a judgement pointing at a removed duplicate moves to the copy that was kept. Their documents and queries are compared as the model reads them, so a document's title is part of its text, and two queries that differ only in their instruction are not duplicates.
@@ -163,11 +163,9 @@ from mteb.data_cleaning import remove_train_leakage
 cleaned = remove_train_leakage(task)
 ```
 
-A sample leaks when all of its content columns match a train sample's, which is what `samples_in_train` reports in the descriptive statistics, so you can see how much a task leaks before downloading it: 62 tasks report some today, from 4.8% of MassiveIntentClassification's test split to every row of HUMEToxicConversationsClassification's. Labels are not compared, as the same text under another label leaks just as much, and each subset is compared against its own train split.
+A sample leaks when all of its content columns match a train sample's, whatever their labels, as the same text under another label leaks just as much. The `samples_in_train` count in a task's [descriptive statistics](#spotting-the-issue) says how much of it leaks before you download anything: 62 tasks report some today, from 4.8% of MassiveIntentClassification's test split to every row of HUMEToxicConversationsClassification's. It counts the distinct leaked samples, so the filter removes a few more where a split repeats one.
 
-The statistic counts the distinct leaked samples of a subset while the filter removes every leaking row, so the filter removes a few more where an eval split repeats a leaked text. A retrieval task is refused rather than filtered: its corpus is commonly shared between splits by design.
-
-Subsets can leak into each other where they overlap: 1097 of AmazonCounterfactualClassification's test rows sit in another subset's train split rather than their own, as its `en` and `en-ext` subsets share content. Pass `pool_subsets=True` to compare against every subset's train split, which is what a task's own `samples_in_train` counts. This filter is `remove_duplicates` with the train split as its reference, minus the duplicates a split holds of its own, and it only has something to do where a task ships a train split -- which in MTEB today means the classification family and two regression tasks.
+A retrieval task is refused rather than filtered, as its corpus is commonly shared between splits by design, and only a task that ships a train split has anything to filter -- in MTEB that is the classification family and two regression tasks.
 
 ## Cleaning produces a new task
 

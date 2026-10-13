@@ -46,7 +46,7 @@ def remove_duplicates(
     task: T,
     *,
     reference_splits: Sequence[str] | None = None,
-    pool_subsets: bool = False,
+    pool_subsets: bool = True,
     normalization: Normalization = _strip_whitespace,
     columns: Sequence[str] | None = None,
     splits: Sequence[str] | None = None,
@@ -58,8 +58,8 @@ def remove_duplicates(
     Two samples are duplicates when all of their content columns match. Text matches when `normalization` rewrites
     both to the same string; images, audio and video match when their content hashes are equal. Duplicates are
     removed within each split of each subset, so a sample appearing in both the train and the test split is kept in
-    both. Name the splits a sample may not repeat in `reference_splits` to remove it across splits as well, and set
-    `pool_subsets` to take those splits from every subset rather than from the sample's own.
+    both. Name the splits a sample may not repeat in `reference_splits` to remove it across splits as well, which by
+    default compares against those splits of every subset at once.
 
     The task passed in is left untouched, and a cleaned copy is returned. The copy is named after the filters
     applied to it, e.g. `MassiveIntentClassification (remove_duplicates)`, so that its scores are recorded against
@@ -75,8 +75,9 @@ def remove_duplicates(
         task: The task to deduplicate. It is not modified.
         reference_splits: The splits a kept sample may not repeat, e.g. `["train"]` to remove the evaluation
             samples that a model may have trained on. They are compared against and left untouched.
-        pool_subsets: Whether `reference_splits` are taken from every subset at once, rather than each subset being
-            compared against its own.
+        pool_subsets: Whether to compare against the `reference_splits` of every subset combined, rather than only
+            against those of the sample's own subset. With `reference_splits=["train"]`, a test sample of the `en`
+            subset is then removed when the `de` subset's train split holds it too.
         normalization: How to rewrite a text before comparing it. The default ignores surrounding whitespace only.
             Looser comparisons catch more duplicates but can merge samples that a reader would tell apart, so
             prefer the narrowest one that finds the duplicates you care about.
