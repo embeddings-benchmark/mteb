@@ -170,6 +170,10 @@ class UniteWrapper(AbsEncoder):
         if vp is not None:
             size = dict(getattr(vp, "size", None) or {})
             size["longest_edge"] = video_max_pixels
+            # qwen_vl_utils' VIDEO_MIN_PIXELS, which the reference uses (it sets
+            # no video min_pixels)
+            # https://github.com/friedrichor/UNITE/blob/main/inference/inference_demo.py
+            size["shortest_edge"] = 128 * 28 * 28
             vp.size = size
 
     @staticmethod
