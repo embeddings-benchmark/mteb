@@ -11,12 +11,7 @@ from rich.console import Console
 from rich.logging import RichHandler
 
 import mteb
-from mteb._requires_package import (
-    _install_command,
-    _is_package_available,
-    _requires_full_installation,
-)
-from mteb._reversible_workflow.git_utils import get_github_token
+from mteb._requires_package import _requires_full_installation
 from mteb.cache import ResultCache
 from mteb.cli._display_tasks import _display_benchmarks, _display_tasks
 from mteb.cli.generate_model_card import generate_model_card
@@ -31,24 +26,20 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def _set_verbosity(verbosity: int) -> None:
-    if verbosity == 0:
-        logging.getLogger("mteb").setLevel(logging.CRITICAL)
-    elif verbosity == 1:
-        logging.getLogger("mteb").setLevel(logging.WARNING)
-    elif verbosity == 2:
-        logging.getLogger("mteb").setLevel(logging.INFO)
-    elif verbosity == 3:
-        logging.getLogger("mteb").setLevel(logging.DEBUG)
-
-
 def run(args: argparse.Namespace) -> None:
     """Run a model on a set of tasks."""
     # set logging based on verbosity level
     _requires_full_installation("torch", "Running a model")
     import torch
 
-    _set_verbosity(args.verbosity)
+    if args.verbosity == 0:
+        logging.getLogger("mteb").setLevel(logging.CRITICAL)
+    elif args.verbosity == 1:
+        logging.getLogger("mteb").setLevel(logging.WARNING)
+    elif args.verbosity == 2:
+        logging.getLogger("mteb").setLevel(logging.INFO)
+    elif args.verbosity == 3:
+        logging.getLogger("mteb").setLevel(logging.DEBUG)
 
     if args.benchmarks and (  # noqa: PLR0916
         args.tasks
@@ -296,15 +287,8 @@ def _add_run_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
 
 
 def _submit_results(args: argparse.Namespace) -> None:
-    _set_verbosity(args.verbosity)
-    if args.create_pr:
-        # check before cloning the results repository and committing, so a missing setup fails right away
-        if not _is_package_available("github"):
-            raise ImportError(
-                f"Creating a PR requires PyGithub. Install it with `{_install_command(['github'])}`."
-            )
-        get_github_token()
-
+    # show the PR link or the instructions for manual submission
+    logging.getLogger("mteb").setLevel(logging.INFO)
     ResultCache(args.output_folder).submit_results(
         args.models,
         tasks=args.tasks,
@@ -354,9 +338,6 @@ def _add_submit_results_parser(subparsers: argparse._SubParsersAction[Any]) -> N
         type=str,
         default=None,
         help="Title of the commit and PR, e.g. 'Add ArguAna results for my-org/my-model'. If not set, a title listing the submitted models is used.",
-    )
-    parser.add_argument(
-        "-v", "--verbosity", type=int, default=2, help="Verbosity level"
     )
 
     parser.set_defaults(func=_submit_results)

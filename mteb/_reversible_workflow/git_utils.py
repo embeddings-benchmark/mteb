@@ -4,6 +4,7 @@ import logging
 import subprocess
 from typing import TYPE_CHECKING
 
+from mteb._requires_package import _is_package_available
 from mteb.types import SubmitResultsResponse
 
 if TYPE_CHECKING:
@@ -196,6 +197,23 @@ def get_github_token() -> str:
     )
 
 
+def check_pr_requirements() -> str:
+    """Check that a PR can be created, i.e. that PyGithub is installed and a GitHub token is available.
+
+    Returns:
+        GitHub token string
+
+    Raises:
+        ImportError: If PyGithub is not installed.
+        RuntimeError: If no GitHub token is found.
+    """
+    if not _is_package_available("github"):
+        raise ImportError(
+            "PyGithub is not installed. Please install it using `pip install 'mteb[github]'`"
+        )
+    return get_github_token()
+
+
 def handle_pr_creation_with_cleanup(
     *,
     remote_repo_path: Path,
@@ -281,22 +299,18 @@ def create_pull_request(
         Dictionary with PR information.
 
     Raises:
+        ImportError: If PyGithub is not installed.
         RuntimeError: If authentication fails.
         GithubException: If GitHub API call fails.
     """
-    try:
-        from github import (
-            Auth,
-            Github,
-            GithubException,
-        )
-    except ImportError:
-        raise ImportError(
-            "PyGithub is not installed. Please install it using `pip install 'mteb[github]'`"
-        ) from None
+    token = check_pr_requirements()
+    from github import (
+        Auth,
+        Github,
+        GithubException,
+    )
 
     logger.info("Creating PR using PyGithub")
-    token = get_github_token()
 
     try:
         auth = Auth.Token(token)

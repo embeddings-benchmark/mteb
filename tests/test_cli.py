@@ -122,36 +122,15 @@ def test_submit_results_cli(argv: list[str], expected: dict[str, Any], tmp_path:
         ["submit-results", "--output-folder", tmp_path.as_posix(), *argv]
     )
 
-    with (
-        patch("mteb.cli.build_cli._is_package_available", return_value=True),
-        patch("mteb.cli.build_cli.get_github_token") as mock_get_token,
-        patch("mteb.cli.build_cli.ResultCache.submit_results") as mock_submit,
-    ):
+    with patch("mteb.cli.build_cli.ResultCache.submit_results") as mock_submit:
         args.func(args)
 
-    # the PR requirements are only checked when creating a PR
-    assert mock_get_token.called is expected["create_pr"]
     mock_submit.assert_called_once_with(
         expected["models"],
         tasks=expected["tasks"],
         create_pr=expected["create_pr"],
         message=expected["message"],
     )
-
-
-def test_submit_results_cli_create_pr_checks_requirements_first(tmp_path: Path):
-    args = build_cli().parse_args(
-        ["submit-results", "--output-folder", tmp_path.as_posix(), "--create-pr"]
-    )
-
-    with (
-        patch("mteb.cli.build_cli._is_package_available", return_value=False),
-        patch("mteb.cli.build_cli.ResultCache.submit_results") as mock_submit,
-        pytest.raises(ImportError, match="PyGithub"),
-    ):
-        args.func(args)
-
-    mock_submit.assert_not_called()
 
 
 def test_create_meta(tmp_path: Path):

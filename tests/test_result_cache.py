@@ -717,6 +717,7 @@ def test_submit_results_message(tmp_path: Path):
 
     with (
         patch.object(cache, "download_from_remote", return_value=None),
+        patch("mteb.cache.result_cache.check_pr_requirements"),
         patch(
             "mteb.cache.result_cache.handle_pr_creation_with_cleanup"
         ) as mock_create_pr,
@@ -734,6 +735,23 @@ def test_submit_results_message(tmp_path: Path):
     ).stdout.strip()
     assert commit_title == "Add mock results"
     assert mock_create_pr.call_args.kwargs["pr_title"] == "Add mock results"
+
+
+def test_submit_results_create_pr_checks_requirements_first(tmp_path: Path):
+    """A missing PR setup fails before the results repository is downloaded"""
+    cache = ResultCache(cache_path=tmp_path)
+
+    with (
+        patch(
+            "mteb._reversible_workflow.git_utils._is_package_available",
+            return_value=False,
+        ),
+        patch.object(cache, "download_from_remote") as mock_download,
+        pytest.raises(ImportError, match="PyGithub"),
+    ):
+        cache.submit_results(create_pr=True)
+
+    mock_download.assert_not_called()
 
 
 @pytest.mark.parametrize(
@@ -844,6 +862,7 @@ def test_pr_creation_failure_cleans_up_branch(tmp_path: Path):
     # Mock _create_pull_request to fail.
     with (
         patch.object(cache, "download_from_remote", return_value=None),
+        patch("mteb.cache.result_cache.check_pr_requirements"),
         patch(
             "mteb._reversible_workflow.git_utils.create_pull_request",
             side_effect=Exception("GitHub API error"),

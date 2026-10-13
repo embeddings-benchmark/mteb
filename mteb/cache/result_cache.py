@@ -26,6 +26,7 @@ from mteb._reversible_workflow.git_actions import (
 )
 from mteb._reversible_workflow.git_utils import (
     check_detached_head,
+    check_pr_requirements,
     check_uncommitted_changes,
     get_current_branch,
     handle_pr_creation_with_cleanup,
@@ -1258,7 +1259,7 @@ class ResultCache:
 
         Raises:
             ValueError: If no models found or invalid input.
-            RuntimeError: If git operations fail.
+            RuntimeError: If git operations fail, or if create_pr=True and no GitHub token is found.
             ImportError: If create_pr=True and PyGithub is not installed.
             GithubException: If GitHub API operations fail.
 
@@ -1277,6 +1278,10 @@ class ResultCache:
             >>> submission = cache.submit_results(model_meta, create_pr=True)
             >>> print(f"PR created: {submission['pr_url']}")
         """
+        if create_pr:
+            # fail before downloading the results repository and committing, if a PR cannot be created
+            check_pr_requirements()
+
         # Always create a new branch to keep the original branch clean
         branch_name = f"mteb-results-{int(datetime.now(UTC).timestamp())}"
         normalized_models = self._normalize_models(models)
@@ -1286,9 +1291,7 @@ class ResultCache:
             unsubmitted = self._get_unsubmitted_results(normalized_models, tasks)
 
             if not unsubmitted:
-                logger.warning(
-                    "No unsubmitted results found, the results repository already contains all of them."
-                )
+                logger.warning("No unsubmitted results found.")
                 return SubmitResultsResponse(
                     status="no_changes",
                     models_submitted=[(m.name, m.revision) for m in normalized_models],
