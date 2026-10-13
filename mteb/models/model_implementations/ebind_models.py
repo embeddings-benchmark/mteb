@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 import tempfile
 from typing import TYPE_CHECKING, Any
 
@@ -75,8 +76,8 @@ class EBindWrapper(AbsEncoder):
         for item in audio_items:
             array = np.asarray(item["array"])
             sr = item["sampling_rate"]
-            # pad clips shorter than the mel-spectrogram window
-            min_samples = max(int(sr * 0.5), 1)
+            # pad only below one 25 ms fbank window; the processor pads longer clips itself
+            min_samples = math.ceil(sr * 0.025)
             if array.shape[0] < min_samples:
                 array = np.pad(array, (0, min_samples - array.shape[0]))
             with tempfile.NamedTemporaryFile(suffix=".wav", delete=True) as tmp:
@@ -198,7 +199,7 @@ _EBIND_CITATION = r"""
 _EBIND_COMMON = dict(
     languages=["eng-Latn"],
     release_date="2025-11-19",
-    max_tokens=512,
+    max_tokens=32,  # PE-Core-L14-336 text context_length
     n_embedding_parameters=50_593_792,  # PE text encoder: 49408 vocab * 1024 hidden
     license="cc-by-nc-sa-4.0",
     open_weights=True,

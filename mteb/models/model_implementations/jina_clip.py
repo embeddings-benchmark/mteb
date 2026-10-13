@@ -7,6 +7,7 @@ from tqdm.auto import tqdm
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_implementations.colpali_models import COLPALI_TRAINING_DATA
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -200,4 +201,5 @@ jina_clip_v2 = ModelMeta(
 }
 """,
     extra_requirements_groups=["jina-clip"],
+    output_dtypes=OutputDType.BF16,
 )

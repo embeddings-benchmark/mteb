@@ -7,6 +7,7 @@ from tqdm.auto import tqdm
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator, seconds_to_samples
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -269,13 +270,13 @@ whisper_tiny = ModelMeta(
     name="openai/whisper-tiny",
     languages=whisper_langs,
     open_weights=True,
-    revision="main",
+    revision="169d4a4341b33bc18d8881c4b69c2e104e1cc0af",
     release_date="2022-09-27",
     max_tokens=float("inf"),
     n_parameters=39_000_000,
     n_embedding_parameters=0,
     memory_usage_mb=144,
-    embed_dim=512,
+    embed_dim=384,
     license="mit",
     reference="https://huggingface.co/openai/whisper-tiny",
     similarity_fn_name="cosine",
@@ -304,7 +305,7 @@ whisper_base = ModelMeta(
     name="openai/whisper-base",
     languages=whisper_langs,
     open_weights=True,
-    revision="main",
+    revision="e37978b90ca9030d5170a5c07aadb050351a65bb",
     release_date="2022-09-27",
     max_tokens=float("inf"),
     n_parameters=74_000_000,
@@ -339,7 +340,7 @@ whisper_small = ModelMeta(
     name="openai/whisper-small",
     languages=whisper_langs,
     open_weights=True,
-    revision="main",
+    revision="973afd24965f72e36ca33b3055d56a652f456b4d",
     release_date="2022-09-27",
     max_tokens=float("inf"),
     n_parameters=244_000_000,
@@ -374,7 +375,7 @@ whisper_medium = ModelMeta(
     name="openai/whisper-medium",
     languages=whisper_langs,
     open_weights=True,
-    revision="main",
+    revision="abdf7c39ab9d0397620ccaea8974cc764cd0953e",
     release_date="2022-09-27",
     max_tokens=float("inf"),
     n_parameters=769_000_000,
@@ -409,7 +410,7 @@ whisper_large_v3 = ModelMeta(
     name="openai/whisper-large-v3",
     languages=whisper_langs,
     open_weights=True,
-    revision="main",
+    revision="06f233fe06e710322aca913c1bc4249a0d71fce1",
     release_date="2022-09-27",
     max_tokens=float("inf"),
     n_parameters=1_550_000_000,
@@ -437,6 +438,7 @@ whisper_large_v3 = ModelMeta(
       primaryClass={eess.AS},
       url={https://arxiv.org/abs/2212.04356},
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 whisper_large_v3_turbo = ModelMeta(
@@ -444,7 +446,7 @@ whisper_large_v3_turbo = ModelMeta(
     name="openai/whisper-large-v3-turbo",
     languages=whisper_langs,
     open_weights=True,
-    revision="main",
+    revision="41f01f3fe87f28c78e2fbf8b568835947dd65ed9",
     release_date="2022-09-27",
     max_tokens=float("inf"),
     n_parameters=809_000_000,
@@ -472,4 +474,5 @@ whisper_large_v3_turbo = ModelMeta(
       primaryClass={eess.AS},
       url={https://arxiv.org/abs/2212.04356},
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )

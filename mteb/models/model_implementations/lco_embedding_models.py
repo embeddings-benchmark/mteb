@@ -8,6 +8,7 @@ from tqdm.auto import tqdm
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator, VideoCollator
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -62,9 +63,14 @@ class LCOEmbedding(AbsEncoder):
         self.processor.tokenizer.padding_side = "left"
 
         self.model = Qwen2_5OmniThinkerForConditionalGeneration.from_pretrained(
-            model_name, torch_dtype=torch.bfloat16, **kwargs
+            model_name, revision=revision, torch_dtype=torch.bfloat16, **kwargs
         ).to(self.device)
         self.model.eval()
+        # only hidden states are used; the Omni thinker forward has no logits_to_keep,
+        # so run the LM head on the last position only
+        self.model.lm_head.register_forward_pre_hook(
+            lambda _module, args: (args[0][:, -1:, :],)
+        )
 
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
 
@@ -214,6 +220,7 @@ lco_3b = ModelMeta(
   primaryClass={cs.CL},
   url={https://arxiv.org/abs/2510.11693},
 }""",
+    output_dtypes=OutputDType.BF16,
 )
 
 lco_3b_2605 = ModelMeta(
@@ -249,6 +256,7 @@ lco_3b_2605 = ModelMeta(
   primaryClass={cs.CL},
   url={https://arxiv.org/abs/2510.11693},
 }""",
+    output_dtypes=OutputDType.BF16,
 )
 
 lco_7b = ModelMeta(
@@ -284,4 +292,5 @@ lco_7b = ModelMeta(
   primaryClass={cs.CL},
   url={https://arxiv.org/abs/2510.11693},
 }""",
+    output_dtypes=OutputDType.BF16,
 )

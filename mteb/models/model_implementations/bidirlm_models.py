@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 BIDIRLM_LANGUAGES = [
     "afr-Latn",
@@ -486,6 +486,7 @@ bidirlm_270m = ModelMeta(
     public_training_data="https://huggingface.co/datasets/BidirLM/BidirLM-Contrastive",
     training_datasets=bidirlm_training_data,
     citation=BIDIRLM_CITATION,
+    output_dtypes=OutputDType.BF16,
 )
 
 bidirlm_0_6b = ModelMeta(
@@ -517,6 +518,7 @@ bidirlm_0_6b = ModelMeta(
     public_training_data="https://huggingface.co/datasets/BidirLM/BidirLM-Contrastive",
     training_datasets=bidirlm_training_data,
     citation=BIDIRLM_CITATION,
+    output_dtypes=OutputDType.BF16,
 )
 
 bidirlm_1b = ModelMeta(
@@ -548,6 +550,7 @@ bidirlm_1b = ModelMeta(
     public_training_data="https://huggingface.co/datasets/BidirLM/BidirLM-Contrastive",
     training_datasets=bidirlm_training_data,
     citation=BIDIRLM_CITATION,
+    output_dtypes=OutputDType.BF16,
 )
 
 bidirlm_1_7b = ModelMeta(
@@ -579,4 +582,5 @@ bidirlm_1_7b = ModelMeta(
     public_training_data="https://huggingface.co/datasets/BidirLM/BidirLM-Contrastive",
     training_datasets=bidirlm_training_data,
     citation=BIDIRLM_CITATION,
+    output_dtypes=OutputDType.BF16,
 )

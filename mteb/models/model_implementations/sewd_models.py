@@ -102,15 +102,14 @@ class SewDWrapper(AbsEncoder):
             ).to(self.device)
 
             with torch.no_grad():
-                # SewD model outputs
-                outputs = self.model(
+                # base model output, as read by the CTC head (hidden_states[-1] is half-rate)
+                outputs = self.model.sew_d(
                     feature_inputs.input_values,
                     attention_mask=feature_inputs.attention_mask,
-                    output_hidden_states=True,
                 )
 
                 # Get embeddings from last hidden state
-                last_hidden_state = outputs.hidden_states[-1]
+                last_hidden_state = outputs.last_hidden_state
 
                 # Apply attention-masked pooling to exclude padding tokens
                 batch_size, hidden_seq_len, hidden_size = last_hidden_state.shape
@@ -197,7 +196,7 @@ sewd_tiny = ModelMeta(
     n_parameters=19_700_000,
     n_embedding_parameters=None,
     memory_usage_mb=92,
-    embed_dim=256,
+    embed_dim=384,
     license="apache-2.0",
     reference="https://huggingface.co/asapp/sew-d-tiny-100k-ft-ls100h",
     similarity_fn_name="cosine",
@@ -230,7 +229,7 @@ sewd_mid = ModelMeta(
     n_parameters=139_000_000,
     n_embedding_parameters=None,
     memory_usage_mb=530,
-    embed_dim=768,
+    embed_dim=512,
     license="apache-2.0",
     reference="https://huggingface.co/asapp/sew-d-mid-400k-ft-ls100h",
     similarity_fn_name="cosine",

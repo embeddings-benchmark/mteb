@@ -929,6 +929,7 @@ giga_embeddings = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 berta_training_datasets = (

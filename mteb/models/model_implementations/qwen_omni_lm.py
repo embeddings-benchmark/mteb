@@ -11,6 +11,7 @@ from mteb.models.modality_collators import (
     single_clip_dataloader,
 )
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -71,6 +72,11 @@ class QwenOmniWrapper(AbsEncoder):
         )
         self.model.eval()
         self.model.to(self.device)
+        # only hidden states are used; the Omni thinker forward has no logits_to_keep,
+        # so run the LM head on the last position only
+        self.model.get_output_embeddings().register_forward_pre_hook(
+            lambda _module, args: (args[0][:, -1:, :],)
+        )
 
         self.processor = AutoProcessor.from_pretrained(model_name, revision=revision)
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
@@ -231,6 +237,7 @@ qwen25_omni_7b = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2503.20215},
 }""",
+    output_dtypes=OutputDType.BF16,
 )
 
 qwen25_omni_3b = ModelMeta(
@@ -272,6 +279,7 @@ qwen25_omni_3b = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2503.20215},
 }""",
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -283,7 +291,7 @@ qwen3_omni_30b_a3b_instruct = ModelMeta(
     languages=["eng-Latn"],
     n_parameters=35259818545,
     memory_usage_mb=67253.0,
-    max_tokens=151_643,
+    max_tokens=65_536,  # thinker text_config.max_position_embeddings
     embed_dim=2048,
     n_embedding_parameters=155_713_536,
     license="apache-2.0",
@@ -314,6 +322,7 @@ qwen3_omni_30b_a3b_instruct = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2509.17765},
 }""",
+    output_dtypes=OutputDType.BF16,
 )
 
 qwen3_omni_30b_a3b_thinking = ModelMeta(
@@ -324,7 +333,7 @@ qwen3_omni_30b_a3b_thinking = ModelMeta(
     languages=["eng-Latn"],
     n_parameters=31719205488,
     memory_usage_mb=60500.0,
-    max_tokens=151_643,
+    max_tokens=65_536,  # thinker text_config.max_position_embeddings
     embed_dim=2048,
     n_embedding_parameters=155_713_536,
     license="apache-2.0",
@@ -355,6 +364,7 @@ qwen3_omni_30b_a3b_thinking = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2509.17765},
 }""",
+    output_dtypes=OutputDType.BF16,
 )
 
 qwen3_omni_30b_a3b_captioner = ModelMeta(
@@ -365,7 +375,7 @@ qwen3_omni_30b_a3b_captioner = ModelMeta(
     languages=["eng-Latn"],
     n_parameters=31719205488,
     memory_usage_mb=60500.0,
-    max_tokens=151_643,
+    max_tokens=65_536,  # thinker text_config.max_position_embeddings
     embed_dim=2048,
     n_embedding_parameters=155_713_536,
     license="apache-2.0",
@@ -396,4 +406,5 @@ qwen3_omni_30b_a3b_captioner = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2509.17765},
 }""",
+    output_dtypes=OutputDType.BF16,
 )
