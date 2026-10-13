@@ -284,7 +284,7 @@ _VIDEOPRISM_COMMON = dict(
     citation=_VIDEOPRISM_CITATION,
     # The video extra ships datasets and torchcodec but not torchvision or
     # pillow, which every transformers video processor imports.
-    extra_requirements_groups=["image"],
+    extra_requirements_groups=["image", "transformers-v5"],
 )
 
 videoprism_base_f16r288 = ModelMeta(

@@ -466,6 +466,8 @@ _PE_AV_COMMON = dict(
     use_instructions=False,
     training_datasets=_PE_AV_TRAINING,
     citation=_PE_AV_CITATION,
+    # PeAudioVideoModel ships with transformers 5
+    extra_requirements_groups=["transformers-v5"],
 )
 
 

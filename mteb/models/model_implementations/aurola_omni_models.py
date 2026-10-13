@@ -103,7 +103,7 @@ aurola_omni_7b = ModelMeta(
     modalities=["text", "image", "audio", "video"],
     model_type=["dense"],
     citation=_AUROLA_CITATION,
-    extra_requirements_groups=["qwen-vl"],
+    extra_requirements_groups=["multimodal-sbert"],
     output_dtypes=OutputDType.BF16,
 )
 
@@ -138,6 +138,6 @@ aurola_omni_3b = ModelMeta(
     modalities=["text", "image", "audio", "video"],
     model_type=["dense"],
     citation=_AUROLA_CITATION,
-    extra_requirements_groups=["qwen-vl"],
+    extra_requirements_groups=["multimodal-sbert"],
     output_dtypes=OutputDType.BF16,
 )
