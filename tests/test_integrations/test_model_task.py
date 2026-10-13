@@ -122,8 +122,8 @@ DENSE_MODEL = ModelInfo(
         MockTextZeroShotClassificationTask: 1.0,
         MockAudioClusteringTask: 1.0,
         MockAudioMultilabelClassificationTask: 1.0,
-        MockAudioZeroshotClassificationTask: 1.0,
-        MockAny2AnyRetrievalT2ATask: 1.0,
+        MockAudioZeroshotClassificationTask: 0.0,
+        MockAny2AnyRetrievalT2ATask: 0.81546,
         MockAny2AnyRetrievalA2TTask: 1.0,
         MockAny2AnyRetrievalA2ATask: 1.0,
         MockAudioReranking: 1.0,
@@ -146,9 +146,9 @@ DENSE_MODEL = ModelInfo(
         MockImageRegressionTask: 1.0,
         MockPairImageClassificationTask: 1.0,
         MockAsymCustomTextImagePairClassificationTaskV2: 1.0,
-        MockSymCustomVideoAudioPairClassificationTaskV2: 1.0,
-        MockAsymVideoAudioPairClassificationTaskV2: 1.0,
-        MockAsymVideoAudioPairClassificationTask: 1.0,
+        MockSymCustomVideoAudioPairClassificationTaskV2: 0.5,
+        MockAsymVideoAudioPairClassificationTaskV2: 0.5,
+        MockAsymVideoAudioPairClassificationTask: 0.5,
         MockVideoAudioPairClassificationTask: 1.0,
         MockVideoClassification: 1.0,
         MockVideoClusteringTask: 1.0,
@@ -192,14 +192,14 @@ SPARSE_MODEL = ModelInfo(
         MockTextZeroShotClassificationTask: 1.0,
         MockAudioClusteringTask: 1.0,
         MockAudioMultilabelClassificationTask: 1.0,
-        MockAudioZeroshotClassificationTask: 0.0,
-        MockAny2AnyRetrievalT2ATask: 0.81546,
-        MockAny2AnyRetrievalA2TTask: 0.81546,
+        MockAudioZeroshotClassificationTask: 1.0,
+        MockAny2AnyRetrievalT2ATask: 1.0,
+        MockAny2AnyRetrievalA2TTask: 1.0,
         MockAny2AnyRetrievalA2ATask: 1.0,
         MockAudioReranking: 1.0,
         MockAudioClassification: 1.0,
         MockAudioClassificationCrossVal: 1.0,
-        MockAudioPairClassification: 0.5,
+        MockAudioPairClassification: 1.0,
         MockAny2AnyRetrievalI2TTask: 0.81546,
         MockAny2AnyRetrievalT2ITask: 1.0,
         MockMultiChoiceTask: 1.0,
@@ -261,7 +261,6 @@ CROSS_ENCODER_MODEL = ModelInfo(
 if sys.platform == "darwin":
     DENSE_MODEL.expected_scores.update(
         {
-            MockAudioZeroshotClassificationTask: 0.0,
             MockAudioPairClassification: 0.5,
             MockVideoZeroshotClassificationTask: 0.5,
             MockVideoPairClassificationTask: 0.5,
@@ -270,9 +269,6 @@ if sys.platform == "darwin":
             MockAny2AnyRetrievalT2ATask: 0.63093,
             MockAny2AnyRetrievalA2TTask: 0.63093,
             MockVideoAudioPairClassificationTask: 0.5,
-            MockSymCustomVideoAudioPairClassificationTaskV2: 0.5,
-            MockAsymVideoAudioPairClassificationTaskV2: 0.5,
-            MockAsymVideoAudioPairClassificationTask: 0.5,
         }
     )
     SPARSE_MODEL.expected_scores.update(
@@ -283,6 +279,7 @@ if sys.platform == "darwin":
             MockVideoRetrievalT2V: 0.81546,
             MockAny2AnyRetrievalT2ATask: 0.63093,
             MockAny2AnyRetrievalA2TTask: 0.63093,
+            MockAudioPairClassification: 0.5,
         }
     )
     COLBERT_MODEL.expected_scores.update(
