@@ -876,6 +876,21 @@ def _video_frames_to_channels_last(
 
 
 class JinaV5OmniWrapper(SentenceTransformerEncoderWrapper):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        # custom_st's _align_eval_processor only sets the video size when it is a
+        # dict; on transformers 5 it is a SizeDict, so set the eval sizes here
+        # https://huggingface.co/jinaai/jina-embeddings-v5-omni-small/blob/dfdcc361ec47c69a5afcd81e4bd148abb9d0568e/custom_st.py#L301-L319
+        transformer = next(iter(self.model), None)
+        video_processor = getattr(
+            getattr(transformer, "processor", None), "video_processor", None
+        )
+        if video_processor is not None:
+            video_processor.size = {
+                "longest_edge": 12_845_056,  # EVAL_VIDEO_MAX_PIXELS
+                "shortest_edge": 262_144,  # EVAL_IMAGE_MIN_PIXELS
+            }
+
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
