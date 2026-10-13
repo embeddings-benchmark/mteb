@@ -23,6 +23,13 @@ UME_R1_EMBED_PROMPT = (
     "First output the thinking process in <think> </think> tags and then summarize the entire input in a word or sentence. "
     "Finally, use the <gen_emb> tag to represent the entire input."
 )
+# per-frame video pixels of qwen-vl-utils, which the official eval uses to load videos
+# https://github.com/QwenLM/Qwen2.5-VL/blob/main/qwen-vl-utils/src/qwen_vl_utils/vision_process.py
+VIDEO_FRAME_MIN_PIXELS = 128 * 28 * 28
+VIDEO_FRAME_MAX_PIXELS = 768 * 28 * 28
+# the official eval collator gives text-only inputs a white image (56x56 after resizing)
+# https://github.com/XMUDeepLIT/UME-R1/blob/ab4fc06667df63791e21efefc3fbfd2fac0faf0b/src/eval/VLM2Vec/src/data/collator/eval_collator.py
+BLANK_IMAGE_SIZE = (56, 56)
 
 
 class UMER1Wrapper(AbsEncoder):
@@ -60,6 +67,7 @@ class UMER1Wrapper(AbsEncoder):
         # Load model
         self.model = Qwen2VLForConditionalGeneration.from_pretrained(
             model,
+            revision=revision,
             torch_dtype=torch.bfloat16,
             attn_implementation=kwargs.get(
                 "attn_implementation",
@@ -70,14 +78,13 @@ class UMER1Wrapper(AbsEncoder):
         self.model = self.model.to(self.device)
         self.model.eval()
 
-        # Load processor
-        self.processor = AutoProcessor.from_pretrained(
-            model,
-            revision=revision,
-            min_pixels=4 * 28 * 28,
-            max_pixels=256 * 28 * 28,
-        )
+        # images keep the checkpoint's pixel limits, as in the official eval
+        self.processor = AutoProcessor.from_pretrained(model, revision=revision)
         self.processor.tokenizer.padding_side = "left"
+        self.processor.video_processor.size = {
+            "shortest_edge": VIDEO_FRAME_MIN_PIXELS,
+            "longest_edge": VIDEO_FRAME_MAX_PIXELS,
+        }
 
         self.gen_emb_id = self.processor.tokenizer.get_vocab().get("<gen_emb>")
 
@@ -154,6 +161,9 @@ class UMER1Wrapper(AbsEncoder):
 
     @staticmethod
     def _build_messages(batch: dict[str, Any]) -> list[list[dict]]:
+        """Media first, then the text with the <disc_emb> prompt (official eval collator)."""
+        from PIL import Image
+
         batch_texts = batch.get("text", [])
         batch_images = batch.get("image", [])
         batch_videos = batch.get("video", [])
@@ -162,9 +172,6 @@ class UMER1Wrapper(AbsEncoder):
         messages = []
         for i in range(batch_size):
             content = []
-
-            if batch_texts:
-                content.append({"type": "text", "text": batch_texts[i]})
 
             if batch_images:
                 image_content = batch_images[i]
@@ -180,7 +187,16 @@ class UMER1Wrapper(AbsEncoder):
                 video_content = batch_videos[i]
                 content.append({"type": "video", "video": video_content})
 
-            final_text = f"<disc_emb>\n{UME_R1_EMBED_PROMPT}"
+            text = batch_texts[i] if batch_texts else ""
+            if content:
+                # with media, the eval collator drops placeholder tokens and strips
+                text = text.replace("<|image_pad|>", "").replace("<|video_pad|>", "")
+                text = text.strip()
+            else:
+                blank = Image.new("RGB", BLANK_IMAGE_SIZE, (255, 255, 255))
+                content.append({"type": "image", "image": blank})
+
+            final_text = f"{text}\n<disc_emb>\n{UME_R1_EMBED_PROMPT}"
             content.append({"type": "text", "text": final_text})
             messages.append([{"role": "user", "content": content}])
 
