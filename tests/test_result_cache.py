@@ -13,7 +13,6 @@ import mteb
 from mteb.cache import LoadExperimentEnum, ResultCache
 from mteb.cache.result_cache import (
     CopyResultsAction,
-    _format_model_names,
     _remote_model_dir,
 )
 from mteb.mocks.mock_tasks import MockRetrievalTask
@@ -752,19 +751,6 @@ def test_submit_results_create_pr_checks_requirements_first(tmp_path: Path):
         cache.submit_results(create_pr=True)
 
     mock_download.assert_not_called()
-
-
-@pytest.mark.parametrize(
-    ("names", "expected"),
-    [
-        (["org/a"], "org/a"),
-        (["org/a", "org/b"], "org/a, org/b"),
-        (["org/a", "org/b", "org/c", "org/d"], "org/a, org/b (+2 more)"),
-    ],
-)
-def test_format_model_names(names: list[str], expected: str):
-    models = [ModelMeta.create_empty(overwrites={"name": name}) for name in names]
-    assert _format_model_names(models) == expected
 
 
 def test_copy_results_action_reverts_partial_copy_on_failure(tmp_path: Path):
