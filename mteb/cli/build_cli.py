@@ -42,21 +42,12 @@ def _set_verbosity(verbosity: int) -> None:
         logging.getLogger("mteb").setLevel(logging.DEBUG)
 
 
-def _check_create_pr_requirements() -> None:
-    """Fail early if a PR cannot be created, instead of after the evaluation or submission."""
-    if not _is_package_available("github"):
-        raise ImportError(
-            f"Creating a PR requires PyGithub. Install it with `{_install_command(['github'])}`."
-        )
-    get_github_token()
-
-
 def run(args: argparse.Namespace) -> None:
     """Run a model on a set of tasks."""
+    # set logging based on verbosity level
     _requires_full_installation("torch", "Running a model")
     import torch
 
-    # set logging based on verbosity level
     _set_verbosity(args.verbosity)
 
     if args.benchmarks and (  # noqa: PLR0916
@@ -74,9 +65,6 @@ def run(args: argparse.Namespace) -> None:
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
     logger.info("Running with parameters: %s", args)
-
-    if args.create_pr:
-        _check_create_pr_requirements()
 
     if args.device is None:
         device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -119,19 +107,15 @@ def run(args: argparse.Namespace) -> None:
         )
         prediction_folder = args.output_folder
 
-    cache = ResultCache(args.output_folder)
     mteb.evaluate(
         model,
         tasks,
-        cache=cache,
+        cache=ResultCache(args.output_folder),
         co2_tracker=args.co2_tracker,
         overwrite_strategy=overwrite_strategy,
         encode_kwargs=encode_kwargs,
         prediction_folder=prediction_folder,
     )
-
-    if args.create_pr:
-        cache.submit_results(model.mteb_model_meta, tasks=tasks, create_pr=True)
 
 
 def _available_benchmarks(args: argparse.Namespace) -> None:
@@ -307,14 +291,6 @@ def _add_run_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
         default=None,
         help="Folder to save the model predictions in. If None, predictions will not be saved.",
     )
-    parser.add_argument(
-        "--create-pr",
-        action="store_true",
-        default=False,
-        help="After the evaluation, open a PR with the results of the evaluated tasks to the results repository "
-        "(https://github.com/embeddings-benchmark/results), like `mteb submit-results --create-pr`. "
-        "Requires `mteb[github]` and GitHub authentication (`gh auth login` or a git credential helper).",
-    )
 
     parser.set_defaults(func=run)
 
@@ -322,7 +298,12 @@ def _add_run_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
 def _submit_results(args: argparse.Namespace) -> None:
     _set_verbosity(args.verbosity)
     if args.create_pr:
-        _check_create_pr_requirements()
+        # check before cloning the results repository and committing, so a missing setup fails right away
+        if not _is_package_available("github"):
+            raise ImportError(
+                f"Creating a PR requires PyGithub. Install it with `{_install_command(['github'])}`."
+            )
+        get_github_token()
 
     ResultCache(args.output_folder).submit_results(
         args.models,

@@ -36,26 +36,23 @@ mteb run -m sentence-transformers/average_word_embeddings_komninos \
 This will create a folder `mteb_output/{model_name}/{model_revision}` containing the results of the model on the specified tasks supplied as a json
 file; `{task_name}.json`.
 
-To also open a PR with the results to the [results repository](https://github.com/embeddings-benchmark/results), add `--create-pr` (see [Submitting Results](#submitting-results)).
-
 ## Submitting Results
 
 To submit results to the [results repository](https://github.com/embeddings-benchmark/results), use the `mteb submit-results` command. It submits the results that the repository does not have yet, from the same folder that `mteb run` writes to (`--output-folder`, `results` by default). For example:
 
 ```bash
-# commit the results to a new branch in a local clone of the repository, to push and open a PR manually
-mteb submit-results -m sentence-transformers/all-MiniLM-L6-v2
+# run task
+mteb run -m sentence-transformers/all-MiniLM-L6-v2 -t ArguAna
 
-# open the PR directly, with a title describing the submission
-mteb submit-results --create-pr --message "Add ArguAna results for all-MiniLM-L6-v2"
+# submit all unsubmitted results
+mteb submit-results --create-pr
+
+# submit specific results, with a title describing the submission
+mteb submit-results --create-pr -m sentence-transformers/all-MiniLM-L6-v2 -t ArguAna \
+    --message "Add ArguAna results for all-MiniLM-L6-v2"
 ```
 
-Without `-m`, the results of all models are submitted, and `-t` restricts the submission to specific tasks. To evaluate and open a PR in a single command, use `mteb run ... --create-pr`, which only submits the results of the evaluated tasks:
-
-```bash
-mteb run -m sentence-transformers/all-MiniLM-L6-v2 -t ArguAna --create-pr
-```
-
+Without `--create-pr`, the results are committed to a new branch in a local clone of the repository, to push and open a PR manually.
 `--create-pr` requires the `mteb[github]` extra and GitHub authentication, see [Submit Results](../../contributing/submitting_results.md) for the requirements.
 
 

@@ -44,13 +44,7 @@ Complete example: evaluate, cache, and submit results:
     mteb run -m sentence-transformers/all-MiniLM-L6-v2 -t ArguAna
 
     # 2. Submit results
-    mteb submit-results -m sentence-transformers/all-MiniLM-L6-v2  # manual review before pushing
-    ```
-
-    To evaluate and open a PR in a single command, add `--create-pr` to `mteb run`. Only the results of the evaluated tasks are submitted:
-
-    ```bash
-    mteb run -m sentence-transformers/all-MiniLM-L6-v2 -t ArguAna --create-pr
+    mteb submit-results -m sentence-transformers/all-MiniLM-L6-v2 -t ArguAna  # manual review before pushing
     ```
 
 Only results that the results repository does not have yet are submitted. Results computed on a different dataset revision than those in the repository are skipped with a warning.
