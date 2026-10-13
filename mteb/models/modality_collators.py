@@ -380,7 +380,8 @@ class VideoCollator:
         """Collate a batch of inputs containing video and/or audio by resampling videos and audios according to the specified parameters."""
         collated_inputs = []
         for row in inputs:
-            if "video" in row:
+            # rows can lack one modality (None) in mixed-modality datasets
+            if row.get("video") is not None:
                 row["video"] = FramesCollator.resample_video(
                     row["video"],
                     fps=self.fps,
@@ -388,7 +389,7 @@ class VideoCollator:
                     num_frames=self.num_frames,
                     min_frames=self.min_frames,
                 )
-            if "audio" in row:
+            if row.get("audio") is not None:
                 audio_array = AudioCollator.resample_audio(
                     row,
                     target_sampling_rate=self.target_sampling_rate,
