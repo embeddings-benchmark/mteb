@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-import hashlib
 from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
 from tqdm.auto import tqdm
 
+from mteb._content_hashes import _sha256_digest, hash_item
 from mteb._requires_package import (
     requires_audio_dependencies,
     requires_image_dependencies,
@@ -22,13 +22,11 @@ from mteb.types import PromptType
 if TYPE_CHECKING:
     import torch
     from numpy.typing import NDArray
-    from PIL import Image
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types._encoder_io import (
         Array,
-        AudioInputItem,
         BatchedInput,
         CorpusDatasetType,
         EncodeKwargs,
@@ -38,52 +36,35 @@ if TYPE_CHECKING:
     )
 
 
-def _text_to_bytes(text: str | None) -> bytes:
-    """Convert a (possibly missing) text sample into bytes for deterministic seeding."""
-    return (text or "").encode("utf-8")
+def _video_key(item: torch.Tensor) -> str:
+    """Content hash of a video frames tensor (already decoded by the collator)."""
+    return _sha256_digest(item.numpy().tobytes())
 
 
-def _image_to_bytes(image: Image.Image) -> bytes:
-    """Convert a PIL image sample into bytes for deterministic seeding."""
-    return image.tobytes()
-
-
-def _audio_to_bytes(audio: AudioInputItem) -> bytes:
-    """Convert an audio sample into bytes for deterministic seeding."""
-    return audio["array"].tobytes()
-
-
-def _video_to_bytes(item: torch.Tensor) -> bytes:
-    """Convert a video frames tensor into bytes for deterministic seeding."""
-    return item.numpy().tobytes()
-
-
-def _bytes_to_vector(data: bytes, size: int) -> NDArray[np.floating]:
-    """Generate a deterministic random vector based on raw bytes.
+def _key_to_vector(key: str, size: int) -> NDArray[np.floating]:
+    """Generate a deterministic random vector based on a content hash.
 
     Args:
-        data: Input bytes.
+        key: Content hash of the input (see `mteb._content_hashes`).
         size: Size of the output vector.
 
     Returns:
         A numpy array of shape (size,) containing the random vector.
     """
     # numpy rng seed must be between 0 and 2**32
-    seed = int(hashlib.sha256(data).hexdigest(), 16) % 2**32
+    seed = int(key, 16) % 2**32
     rng = np.random.default_rng(seed)
     return rng.random(size, dtype=np.float32)
 
 
-def _bytes_to_multi_vector(
-    data: bytes, num_tokens: int, size: int
-) -> NDArray[np.floating]:
-    """Generate a deterministic sequence of unit-norm token vectors based on raw bytes.
+def _key_to_multi_vector(key: str, num_tokens: int, size: int) -> NDArray[np.floating]:
+    """Generate a deterministic sequence of unit-norm token vectors based on a content hash.
 
     Mimics a late-interaction (ColBERT-style) encoder, which represents each input
     as one embedding per token rather than a single pooled vector.
 
     Args:
-        data: Input bytes.
+        key: Content hash of the input (see `mteb._content_hashes`).
         num_tokens: Number of token vectors to generate.
         size: Dimensionality of each token vector.
 
@@ -92,67 +73,12 @@ def _bytes_to_multi_vector(
     """
     vectors = np.stack(
         [
-            _bytes_to_vector(data + i.to_bytes(4, "little"), size)
+            _key_to_vector(_sha256_digest(f"{key}{i}".encode()), size)
             for i in range(num_tokens)
         ]
     )
     norms = np.linalg.norm(vectors, axis=-1, keepdims=True)
     return (vectors / (norms + 1e-10)).astype(np.float32)
-
-
-def _string_to_vector(text: str | None, size: int) -> NDArray[np.floating]:
-    """Generate a deterministic random vector based on a string.
-
-    Args:
-        text: Input string.
-        size: Size of the output vector.
-
-    Returns:
-        A numpy array of shape (size,) containing the random vector.
-    """
-    return _bytes_to_vector(_text_to_bytes(text), size)
-
-
-def _image_to_vector(image: Image.Image, size: int) -> NDArray[np.floating]:
-    """Generate a deterministic random vector based on image content.
-
-    Args:
-        image: PIL Image object.
-        size: Size of the output vector.
-
-    Returns:
-        A numpy array of shape (size,) containing the random vector.
-    """
-    return _bytes_to_vector(_image_to_bytes(image), size)
-
-
-def _audio_to_vector(audio: AudioInputItem, size: int) -> NDArray[np.floating]:
-    """Generate a deterministic random vector based on audio content.
-
-    Args:
-        audio: Audio data (e.g., numpy array).
-        size: Size of the output vector.
-
-    Returns:
-        A numpy array of shape (size,) containing the random vector.
-    """
-    return _bytes_to_vector(_audio_to_bytes(audio), size)
-
-
-def _video_to_vector(
-    item: torch.Tensor,
-    size: int,
-) -> NDArray[np.floating]:
-    """Generate a deterministic random vector based on video content.
-
-    Args:
-        item: Video frames tensor.
-        size: Size of the output vector.
-
-    Returns:
-        A numpy array of shape (size,) containing the random vector.
-    """
-    return _bytes_to_vector(_video_to_bytes(item), size)
 
 
 def _attach_modality_collator(
@@ -189,7 +115,7 @@ _EMBEDDING_DIM = 32
 _common_mock_metadata = dict(
     languages=None,
     open_weights=True,
-    revision="1",
+    revision="2",
     release_date=None,
     n_parameters=0,
     n_embedding_parameters=0,
@@ -228,22 +154,22 @@ def _batch_to_embeddings(
 
         if "text" in batch:
             text_embeddings = [
-                _string_to_vector(txt, embedding_dim) for txt in batch["text"]
+                _key_to_vector(hash_item({"text": txt}), embedding_dim)
+                for txt in batch["text"]
             ]
         if "image" in batch:
             image_embeddings = [
-                _image_to_vector(img, embedding_dim) for img in batch["image"]
+                _key_to_vector(hash_item({"image": img}), embedding_dim)
+                for img in batch["image"]
             ]
         if "audio" in batch:
             audio_embeddings = [
-                _audio_to_vector(audio, embedding_dim) for audio in batch["audio"]
+                _key_to_vector(hash_item({"audio": audio}), embedding_dim)
+                for audio in batch["audio"]
             ]
         if "video" in batch:
             video_embeddings = [
-                _video_to_vector(
-                    video,
-                    embedding_dim,
-                )
+                _key_to_vector(_video_key(video), embedding_dim)
                 for video in batch["video"]
             ]
 
@@ -350,26 +276,28 @@ def _batch_to_multi_vector_embeddings(
 
         if "text" in batch:
             text_embeddings = [
-                _bytes_to_multi_vector(_text_to_bytes(txt), num_tokens, embedding_dim)
+                _key_to_multi_vector(
+                    hash_item({"text": txt}), num_tokens, embedding_dim
+                )
                 for txt in batch["text"]
             ]
         if "image" in batch:
             image_embeddings = [
-                _bytes_to_multi_vector(_image_to_bytes(img), num_tokens, embedding_dim)
+                _key_to_multi_vector(
+                    hash_item({"image": img}), num_tokens, embedding_dim
+                )
                 for img in batch["image"]
             ]
         if "audio" in batch:
             audio_embeddings = [
-                _bytes_to_multi_vector(
-                    _audio_to_bytes(audio), num_tokens, embedding_dim
+                _key_to_multi_vector(
+                    hash_item({"audio": audio}), num_tokens, embedding_dim
                 )
                 for audio in batch["audio"]
             ]
         if "video" in batch:
             video_embeddings = [
-                _bytes_to_multi_vector(
-                    _video_to_bytes(video), num_tokens, embedding_dim
-                )
+                _key_to_multi_vector(_video_key(video), num_tokens, embedding_dim)
                 for video in batch["video"]
             ]
 
