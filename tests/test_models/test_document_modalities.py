@@ -11,8 +11,16 @@ from PIL import Image as PILImage
 
 import mteb
 from mteb.mocks.mock_tasks import MockRerankingTask
-from mteb.models import SearchCrossEncoderWrapper
-from mteb.types import Modalities
+from mteb.models import (
+    CachedEmbeddingWrapper,
+    SearchCrossEncoderWrapper,
+    SearchEncoderWrapper,
+)
+from mteb.models.model_meta import ScoringFunction
+from mteb.models.search_encoder_index.search_indexes.faiss_search_index import (
+    FaissSearchIndex,
+)
+from mteb.types import Modalities, PromptType
 
 
 class RecordingReranker:
@@ -54,7 +62,10 @@ def multimodal_task():
             split[key]
             .add_column(
                 "image",
-                [Image().encode_example(PILImage.new("RGB", (2, 2)))] * len(split[key]),
+                [
+                    Image().encode_example(PILImage.new("RGB", (2, 2), (i * 100, 0, 0)))
+                    for i in range(len(split[key]))
+                ],
             )
             .cast_column("image", Image())
         )
@@ -87,12 +98,14 @@ def test_selected_document_inputs_leave_queries_and_task_unchanged(
     assert model.mteb_model_meta.model_dump() == original_meta
 
 
-def test_document_modalities_cache_round_trip(tmp_path: Path, multimodal_task):
-    model = RecordingReranker()
+@pytest.mark.parametrize("encoder", [False, True])
+def test_document_modalities_cache_round_trip(tmp_path: Path, multimodal_task, encoder):
+    model = RecordingEncoder() if encoder else RecordingReranker()
+    wrapper_cls = SearchEncoderWrapper if encoder else SearchCrossEncoderWrapper
     cache = mteb.ResultCache(tmp_path)
     paths = set()
     for modalities in (None, ["text"], ["image"], ["text", "image"]):
-        wrapper = SearchCrossEncoderWrapper(model, document_modalities=modalities)
+        wrapper = wrapper_cls(model, document_modalities=modalities)
         result = mteb.evaluate(wrapper, multimodal_task, cache=cache, co2_tracker=False)
         path = cache.get_task_result_path(
             multimodal_task.metadata.name, wrapper.mteb_model_meta
@@ -107,13 +120,12 @@ def test_document_modalities_cache_round_trip(tmp_path: Path, multimodal_task):
             multimodal_task.metadata.name, wrapper.mteb_model_meta
         )
         assert cached.get_score() == result[0].get_score()
-    assert len(paths) == len(model.calls) == 4
+    assert len(paths) == 4
+    calls = len(model.calls)
     # Reordered/duplicated selections reuse the same complete cache entry.
-    reordered = SearchCrossEncoderWrapper(
-        model, document_modalities=["image", "text", "image"]
-    )
+    reordered = wrapper_cls(model, document_modalities=["image", "text", "image"])
     mteb.evaluate(reordered, multimodal_task, cache=cache, co2_tracker=False)
-    assert len(model.calls) == 4
+    assert len(model.calls) == calls
     loaded = list(
         cache.load_results(include_remote=False, load_experiments="match_name")
     )
@@ -186,6 +198,137 @@ def test_load_model_restores_document_selection(multimodal_task):
     assert "document_modalities" not in meta.experiment_kwargs
 
 
-def test_get_model_rejects_document_selection_for_encoders():
-    with pytest.raises(ValueError, match="requires a cross-encoder"):
-        mteb.get_model("mteb/baseline-random-encoder", document_modalities=["text"])
+class RecordingEncoder:
+    def __init__(self):
+        self.mteb_model_meta = RecordingReranker().mteb_model_meta.model_copy(
+            update={"similarity_fn_name": ScoringFunction.DOT_PRODUCT}
+        )
+        self.calls = []
+
+    def encode(self, inputs, *, prompt_type=None, **kwargs: Any):
+        batches = list(inputs)
+        self.calls.append((prompt_type, batches))
+        return np.array(
+            [
+                [1.0, 0.0]
+                if prompt_type == PromptType.query
+                else [
+                    float("text" in batch) + 2 * float("image" in batch),
+                    float(doc_id[-1]),
+                ]
+                for batch in batches
+                for doc_id in batch["id"]
+            ],
+            dtype=np.float32,
+        )
+
+    def similarity(self, a, b):
+        return a @ b.T
+
+    def similarity_pairwise(self, a, b):
+        return (a * b).sum(axis=-1)
+
+
+@pytest.mark.parametrize("modalities", [["text"], ["image"], ["text", "image"]])
+@pytest.mark.parametrize("route", ["full", "candidates", "index"])
+def test_encoder_document_selection(modalities, route, multimodal_task):
+    model = RecordingEncoder()
+    if route != "candidates":
+        multimodal_task.dataset["default"]["test"]["top_ranked"] = None
+    if route == "index":
+        pytest.importorskip("faiss")
+    index = FaissSearchIndex(model) if route == "index" else None
+    wrapper = SearchEncoderWrapper(
+        model, document_modalities=modalities, index_backend=index
+    )
+    mteb.evaluate(wrapper, multimodal_task, cache=None, co2_tracker=False)
+    for prompt_type, batches in model.calls:
+        expected = (
+            set(modalities) if prompt_type == PromptType.document else {"text", "image"}
+        )
+        assert all(set(batch) & {"text", "image"} == expected for batch in batches)
+        if prompt_type == PromptType.document:
+            assert all(("title" in batch) == ("text" in expected) for batch in batches)
+            assert all(("body" in batch) == ("text" in expected) for batch in batches)
+    assert model.mteb_model_meta.experiment_kwargs == {"existing_option": True}
+    assert multimodal_task.metadata.category == "it2it"
+    assert "image" in multimodal_task.dataset["default"]["test"]["corpus"].column_names
+
+
+def test_encoder_embedding_cache_preserves_document_selection(
+    tmp_path: Path, multimodal_task
+):
+    split = multimodal_task.dataset["default"]["test"]
+    model = RecordingEncoder()
+    cached = CachedEmbeddingWrapper(model, tmp_path)
+    selections = [["text"], ["image"], ["text", "image"]]
+
+    def search(modalities):
+        wrapper = SearchEncoderWrapper(cached, document_modalities=modalities)
+        kwargs = dict(
+            task_metadata=multimodal_task.metadata,
+            hf_subset="default",
+            hf_split="test",
+            encode_kwargs={},
+        )
+        wrapper.index(split["corpus"], **kwargs)
+        return wrapper.search(split["queries"], top_k=2, **kwargs)
+
+    results = {}
+    for modalities in selections:
+        result = search(modalities)
+        expected_score = float("text" in modalities) + 2 * float("image" in modalities)
+        assert all(
+            score == expected_score
+            for documents in result.values()
+            for score in documents.values()
+        )
+        results[tuple(modalities)] = result
+        mode, batches = model.calls[-1]
+        assert mode == PromptType.document
+        assert all(
+            set(batch) & {"text", "image"} == set(modalities) for batch in batches
+        )
+    calls = len(model.calls)
+    assert calls == 4  # Shared query embeddings, three distinct document inputs.
+    # Repeat in reverse order: all inputs must reuse their own embeddings.
+    for modalities in reversed(selections):
+        assert search(modalities) == results[tuple(modalities)]
+    assert len(model.calls) == calls
+    doc_cache = next(
+        cache
+        for (_, prompt_type, _), cache in cached.cache_dict.items()
+        if prompt_type == PromptType.document
+    )
+    assert len(doc_cache.hash_to_index) == 6  # Two documents in each representation.
+
+
+def test_get_model_document_selection_for_encoders(multimodal_task):
+    model = mteb.get_model(
+        "mteb/baseline-random-encoder", document_modalities=["image"]
+    )
+    assert isinstance(model, SearchEncoderWrapper)
+    assert model.document_modalities == ("image",)
+    restored = model.mteb_model_meta.load_model()
+    assert isinstance(restored, SearchEncoderWrapper)
+    assert restored.document_modalities == ("image",)
+    assert (
+        restored.mteb_model_meta.experiment_name
+        == model.mteb_model_meta.experiment_name
+    )
+    mteb.evaluate(restored, multimodal_task, cache=None, co2_tracker=False)
+
+
+def test_get_model_rejects_custom_search_document_selection():
+    class CustomSearchEncoder(RecordingEncoder):
+        def index(self, *args: Any, **kwargs: Any):
+            pass
+
+        def search(self, *args: Any, **kwargs: Any):
+            pass
+
+    meta = RecordingEncoder().mteb_model_meta.model_copy(
+        update={"loader": lambda name, revision, **kwargs: CustomSearchEncoder()}
+    )
+    with pytest.raises(ValueError, match="custom search implementation"):
+        meta.load_model(document_modalities=["text"])

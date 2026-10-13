@@ -46,7 +46,8 @@ cross_enc_results[0].get_score()  # 0.338
 ## Selecting document modalities
 
 Use [`SearchCrossEncoderWrapper`][mteb.models.SearchCrossEncoderWrapper] to select
-which document inputs a reranker receives:
+which document inputs a reranker receives. The same option is available on
+[`SearchEncoderWrapper`][mteb.models.SearchEncoderWrapper] for embedding retrieval:
 
 ```python
 from mteb.models import SearchCrossEncoderWrapper
@@ -58,15 +59,24 @@ text_reranker = SearchCrossEncoderWrapper(
 results = mteb.evaluate(text_reranker, task)
 ```
 
-You can also pass the selection when loading a registered reranker:
+You can also pass the selection when loading a registered encoder or reranker:
 
 ```python
 text_reranker = mteb.get_model(
     "cross-encoder/ms-marco-TinyBERT-L2-v2", document_modalities=["text"]
 )
+text_encoder = mteb.get_model(
+    "sentence-transformers/all-MiniLM-L6-v2", document_modalities=["text"]
+)
+retrieval_results = mteb.evaluate(
+    text_encoder, mteb.get_task("NanoArguAnaRetrieval")
+)
 ```
 
-For a multimodal corpus and a compatible reranker, use `["image"]` for document
+This uses the standard search wrappers. Models with their own custom search
+implementation do not support this option through `get_model`.
+
+For a multimodal corpus and a compatible model, use `["image"]` for document
 images or `["text", "image"]` for both. Each requested modality must be present in
 the task corpus and supported by the model. Query inputs, candidate documents and
 relevance labels are unchanged. Text selection includes document titles and bodies;
@@ -83,13 +93,17 @@ The list is sorted and deduplicated, and other experiment settings are preserved
 The normal result cache gives each configuration a separate directory:
 
 ```text
-results/<reranker>/<revision>/experiments/<experiment_id>/
+results/<model>/<revision>/experiments/<experiment_id>/
     model_meta.json
     <task>.json
 ```
 
-This records the document modalities supplied to the reranker, separately from its
+This records the document modalities supplied to the model, separately from its
 supported `modalities`. It lets a leaderboard group configurations under the same
 model and filter by document inputs without overwriting another run. Omitted
 selections remain unspecified; their modality cannot be inferred from capabilities.
 Leaderboard grouping is separate from this input-selection feature.
+
+When an encoder is wrapped in `CachedEmbeddingWrapper`, document embeddings are
+cached by their selected inputs. Query embeddings can be reused across document
+selections because the query inputs are unchanged.
