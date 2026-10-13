@@ -1211,7 +1211,9 @@ def test_remove_train_leakage_refuses_a_retrieval_task() -> None:
 def test_remove_train_leakage_raises_without_a_train_split() -> None:
     task = _create_texts_task(["a text"])
 
-    with pytest.raises(ValueError, match="do not select any data"):
+    with pytest.raises(
+        ValueError, match=r"\['train'\] split of 'MockClassificationTask'"
+    ):
         remove_train_leakage(task)
 
 

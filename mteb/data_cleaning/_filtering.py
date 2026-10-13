@@ -412,14 +412,21 @@ def _datasets_by_subset(task: AbsTask) -> dict[HFSubset, DatasetDict]:
     return task.dataset
 
 
+def _available_splits(available: Mapping[str, Mapping[str, Any]]) -> str:
+    """The splits a task holds, per subset, to name in a message about the ones a filter could not find."""
+    return ", ".join(
+        f"{subset}: {sorted(splits)}" for subset, splits in available.items()
+    )
+
+
 def _no_split_matched_message(
     task_name: str, available: Mapping[str, Mapping[str, Any]]
 ) -> str:
     """The message raised when the `splits`/`subsets` given to a filter select nothing."""
-    listed = ", ".join(
-        f"{subset}: {sorted(splits)}" for subset, splits in available.items()
+    return (
+        f"The given splits and subsets do not select any data of '{task_name}'. "
+        f"The task has {_available_splits(available)}."
     )
-    return f"The given splits and subsets do not select any data of '{task_name}'. The task has {listed}."
 
 
 def _resolve_columns(
@@ -633,6 +640,12 @@ def _filter_task_rows(
             n_filtered_splits += 1
         by_subset[subset] = new_splits if is_retrieval else DatasetDict(new_splits)
 
+    if cleaning_filter.reference_splits and not any(subset_filters.values()):
+        raise ValueError(
+            f"`{cleaning_filter.name}` compares the data against the "
+            f"{list(cleaning_filter.reference_splits)} split of '{original.name}', which the task does not have. "
+            f"The task has {_available_splits(available)}."
+        )
     if n_filtered_splits == 0:
         raise ValueError(_no_split_matched_message(original.name, available))
 

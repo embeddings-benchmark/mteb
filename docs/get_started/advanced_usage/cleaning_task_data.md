@@ -161,11 +161,12 @@ An evaluation sample that also sits in the train split may be one the model was 
 from mteb.data_cleaning import remove_train_leakage
 
 cleaned = remove_train_leakage(task)
+
+print({split: len(data) for split, data in cleaned.dataset["en"].items()})
+# {'train': 11514, 'test': 2953, 'validation': 2022}, from 11514 / 2974 / 2033
 ```
 
-A sample leaks when all of its content columns match a train sample's, whatever their labels, as the same text under another label leaks just as much. The `samples_in_train` count in a task's [descriptive statistics](#spotting-the-issue) says how much of it leaks before you download anything: 62 tasks report some today, from 4.8% of MassiveIntentClassification's test split to every row of HUMEToxicConversationsClassification's. It counts the distinct leaked samples, so the filter removes a few more where a split repeats one.
-
-A retrieval task is refused rather than filtered, as its corpus is commonly shared between splits by design, and only a task that ships a train split has anything to filter -- in MTEB that is the classification family and two regression tasks.
+A sample leaks when all of its content columns match a train sample's, whatever their labels, as the same text under another label leaks just as much. The `samples_in_train` of a task's [descriptive statistics](#spotting-the-issue) counts how much leaks, so you can see it before downloading the data.
 
 ## Cleaning produces a new task
 
