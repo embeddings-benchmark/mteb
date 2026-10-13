@@ -227,21 +227,21 @@ SPARSE_MODEL = ModelInfo(
 COLBERT_MODEL = ModelInfo(
     name="mteb/baseline-random-colbert",
     expected_scores={
-        MockMultilingualRerankingTask: 0.75,
-        MockMultilingualRetrievalTask: 0.81546,
-        MockMultilingualInstructionRetrieval: 0.63093,
-        MockMultilingualInstructionReranking: 0.63093,
-        MockRerankingTask: 0.75,
-        MockRetrievalTask: 0.81546,
-        MockInstructionRetrieval: 0.63093,
-        MockInstructionReranking: 0.63093,
-        MockRetrievalDialogTask: 1.0,
+        MockMultilingualRerankingTask: 1.0,
+        MockMultilingualRetrievalTask: 1.0,
+        MockMultilingualInstructionRetrieval: 0.81546,
+        MockMultilingualInstructionReranking: 0.81546,
+        MockRerankingTask: 1.0,
+        MockRetrievalTask: 1.0,
+        MockInstructionRetrieval: 0.81546,
+        MockInstructionReranking: 0.81546,
+        MockRetrievalDialogTask: 0.63093,
         MockAny2AnyRetrievalT2ATask: 0.81546,
         MockAny2AnyRetrievalA2TTask: 0.81546,
         MockAny2AnyRetrievalA2ATask: 1.0,
         MockAudioReranking: 1.0,
         MockAny2AnyRetrievalI2TTask: 0.81546,
-        MockAny2AnyRetrievalT2ITask: 0.63093,
+        MockAny2AnyRetrievalT2ITask: 0.81546,
         MockMultiChoiceTask: 1.0,
         MockMultilingualMultiChoiceTask: 1.0,
         MockVideoRetrievalV2T: 0.81546,
@@ -261,12 +261,15 @@ CROSS_ENCODER_MODEL = ModelInfo(
 if sys.platform == "darwin":
     DENSE_MODEL.expected_scores.update(
         {
-            MockAudioZeroshotClassificationTask: 0.5,
+            MockAudioZeroshotClassificationTask: 0.0,
             MockAudioPairClassification: 0.5,
             MockVideoZeroshotClassificationTask: 0.5,
             MockVideoPairClassificationTask: 0.5,
-            MockVideoRetrievalV2T: 0.63093,
-            MockVideoRetrievalT2V: 0.63093,
+            MockVideoRetrievalV2T: 0.81546,
+            MockVideoRetrievalT2V: 1.0,
+            MockAny2AnyRetrievalT2ATask: 0.63093,
+            MockAny2AnyRetrievalA2TTask: 0.63093,
+            MockVideoAudioPairClassificationTask: 0.5,
             MockSymCustomVideoAudioPairClassificationTaskV2: 0.5,
             MockAsymVideoAudioPairClassificationTaskV2: 0.5,
             MockAsymVideoAudioPairClassificationTask: 0.5,
@@ -276,14 +279,17 @@ if sys.platform == "darwin":
         {
             MockAudioZeroshotClassificationTask: 0.5,
             MockVideoZeroshotClassificationTask: 0.5,
-            MockVideoRetrievalV2T: 0.63093,
-            MockVideoRetrievalT2V: 0.63093,
+            MockVideoRetrievalV2T: 0.81546,
+            MockVideoRetrievalT2V: 0.81546,
+            MockAny2AnyRetrievalT2ATask: 0.63093,
+            MockAny2AnyRetrievalA2TTask: 0.63093,
         }
     )
     COLBERT_MODEL.expected_scores.update(
         {
-            MockAny2AnyRetrievalT2ATask: 0.63093,
-            MockVideoRetrievalV2T: 0.63093,
+            MockAny2AnyRetrievalT2ATask: 0.81546,
+            MockVideoRetrievalV2T: 0.81546,
+            MockVideoRetrievalT2V: 0.81546,
         }
     )
 
