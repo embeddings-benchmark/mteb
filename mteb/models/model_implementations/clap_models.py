@@ -7,8 +7,9 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import AudioCollator, fixed_numpy_seed
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -54,21 +55,44 @@ class ClapZeroShotWrapper(AbsEncoder):
         import torch
         from transformers.modeling_outputs import BaseModelOutputWithPooling
 
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+        # rand_trunc picks a random crop of anything over nb_max_samples, so the
+        # same clip scores differently each run; cutting there keeps it on the
+        # deterministic repeatpad branch. fusion is the checkpoint's own
+        # long-audio path, so it is left whole.
+        fe = self.processor.feature_extractor
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate,
+            max_samples=(None if fe.truncation == "fusion" else fe.nb_max_samples),
+        )
 
         all_features = []
-
         for batch in tqdm(
             inputs,
             disable=not show_progress_bar,
         ):
-            audio_array = [audio["array"] for audio in batch["audio"]]
-            features = self.processor(
-                audio=audio_array,
-                sampling_rate=self.sampling_rate,
-                return_tensors="pt",
-                padding=True,
-            )
+            clips = []
+            for audio in batch["audio"]:
+                # laion_clap rounds every clip to 16-bit, in training and inference
+                # https://github.com/LAION-AI/CLAP/blob/1fd4c37df5ffbfcfbad5415c170bc66cf94c9994/src/laion_clap/hook.py#L176-L178
+                int16 = (np.clip(audio["array"], -1.0, 1.0) * 32767.0).astype(np.int16)
+                array = int16 / np.float32(32767.0)
+                # fusion picks random chunks of long clips; seeding each clip
+                # alone keeps its embedding independent of its batch-mates
+                # https://github.com/huggingface/transformers/blob/2df80c4f5863192f1d4cc698bd4f1e1d254e14ba/src/transformers/models/clap/feature_extraction_clap.py#L188-L190
+                with fixed_numpy_seed():
+                    clip = self.processor(
+                        audio=array,
+                        sampling_rate=self.sampling_rate,
+                        return_tensors="pt",
+                    )  # no padding=/truncation=: keeps the checkpoint's own setting
+                if fe.truncation == "fusion":
+                    # the extractor marks a random clip as long when none is
+                    # (a training trick); at inference only clips over the
+                    # window are fused, as in laion_clap
+                    # https://github.com/huggingface/transformers/blob/2df80c4f5863192f1d4cc698bd4f1e1d254e14ba/src/transformers/models/clap/feature_extraction_clap.py#L348-L350
+                    clip["is_longer"][:] = len(array) > fe.nb_max_samples
+                clips.append(clip)
+            features = {k: torch.cat([c[k] for c in clips]) for k in clips[0]}
             features = {k: v.to(self.device) for k, v in features.items()}
 
             with torch.no_grad():
@@ -100,6 +124,9 @@ class ClapZeroShotWrapper(AbsEncoder):
                 return_tensors="pt",
                 padding=True,
                 truncation=True,
+                # laion_clap's text context length
+                # https://github.com/LAION-AI/CLAP/blob/1fd4c37df5ffbfcfbad5415c170bc66cf94c9994/src/laion_clap/hook.py#L64-L72
+                max_length=77,
             )
             inputs = {k: v.to(self.device) for k, v in inputs.items()}
 
@@ -322,9 +349,15 @@ larger_clap_music_and_speech = ModelMeta(
 """,
 )
 
+
 clap_large_v2 = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
-    loader_kwargs={"trust_remote_code": True},
+    loader_kwargs={
+        "trust_remote_code": True,
+        # 300 s at 16 kHz: chunk_length=300
+        # https://huggingface.co/laion/voiceclap-large-v2/blob/main/preprocessor_config.json
+        "max_samples": 4_800_000,
+    },
     name="laion/voiceclap-large-v2",
     languages=["eng-Latn", "deu-Latn", "fra-Latn", "spa-Latn", "zho-Hans"],
     revision="68ee637005607c8736e70bb5133270b60c1f8228",
@@ -345,5 +378,7 @@ clap_large_v2 = ModelMeta(
     use_instructions=False,
     training_datasets=None,
     adapted_from="LCO-Embedding/LCO-Embedding-Omni-7B",
-    extra_requirements_groups=["multimodal-sbert"],
+    # the checkpoint's Qwen2-VL processor needs torchvision and Pillow
+    extra_requirements_groups=["multimodal-sbert", "image"],
+    output_dtypes=OutputDType.BF16,
 )

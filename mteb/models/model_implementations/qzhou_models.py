@@ -6,7 +6,7 @@ from mteb.models.model_implementations.bge_models import (
 )
 from mteb.models.model_implementations.e5_instruct import E5_MISTRAL_TRAINING_DATA
 from mteb.models.model_meta import ModelMeta
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 QZHOU_EMBEDDING_CITATION = """@misc{yu2025qzhouembeddingtechnicalreport,
       title={QZhou-Embedding Technical Report},
@@ -84,6 +84,7 @@ QZhou_Embedding = ModelMeta(
     # "FreedomIntelligence/Huatuo26M-Lite",
     # "infgrad/retrieval_data_llm",
     citation=QZHOU_EMBEDDING_CITATION,
+    output_dtypes=OutputDType.BF16,
 )
 
 QZhou_Embedding_Zh = ModelMeta(
@@ -112,4 +113,5 @@ QZhou_Embedding_Zh = ModelMeta(
     public_training_data=None,
     training_datasets=qzhou_zh_training_data,
     citation=QZHOU_EMBEDDING_CITATION,
+    output_dtypes=OutputDType.BF16,
 )

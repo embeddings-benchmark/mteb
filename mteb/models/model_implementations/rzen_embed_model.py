@@ -10,6 +10,7 @@ from tqdm.auto import tqdm
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -94,11 +95,14 @@ class RzenEmbedWrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str = "qihoo360/RzenEmbed",
+        revision: str | None = None,
         device: str | None = None,
         max_length: int = 2000,
-        fps: float = 2.0,
-        max_frames: int = 64,
-        num_frames: int | None = None,
+        # 8 frames, evenly spaced: extract_frames(num_frames=8) in the model card
+        # https://huggingface.co/qihoo360/RzenEmbed
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = 8,
         **kwargs: Any,
     ) -> None:
         import torch
@@ -119,13 +123,16 @@ class RzenEmbedWrapper(AbsEncoder):
         self.max_frames = max_frames
         self.num_frames = num_frames
 
-        config = AutoConfig.from_pretrained(model_name, trust_remote_code=True)
+        config = AutoConfig.from_pretrained(
+            model_name, revision=revision, trust_remote_code=True
+        )
         config.padding_side = "right"
         config.use_cache = False
 
         torch_dtype = torch.bfloat16 if "cuda" in str(self.device) else torch.float32
         self.model = Qwen2VLForConditionalGeneration.from_pretrained(
             model_name,
+            revision=revision,
             config=config,
             torch_dtype=torch_dtype,
             low_cpu_mem_usage=True,
@@ -134,6 +141,7 @@ class RzenEmbedWrapper(AbsEncoder):
 
         self.processor = AutoProcessor.from_pretrained(
             model_name,
+            revision=revision,
             min_pixels=min_image_tokens * 28 * 28,
             max_pixels=max_image_tokens * 28 * 28,
         )
@@ -141,6 +149,7 @@ class RzenEmbedWrapper(AbsEncoder):
 
         self.video_processor = AutoProcessor.from_pretrained(
             model_name,
+            revision=revision,
             min_pixels=min_video_tokens * 28 * 28,
             max_pixels=max_video_tokens * 28 * 28,
         )
@@ -227,6 +236,8 @@ class RzenEmbedWrapper(AbsEncoder):
         instruction: str,
     ) -> tuple[list[str], list[Image.Image] | None]:
         """Assembles prompt strings and collects visual frame sequences for a single batch."""
+        from PIL import Image
+
         texts = batch.get("text")
         images = batch.get("image")
         videos = batch.get("video")
@@ -242,7 +253,12 @@ class RzenEmbedWrapper(AbsEncoder):
             if images is not None and i < len(images) and images[i] is not None:
                 sample_visuals.append(images[i])
             if videos is not None and i < len(videos) and videos[i] is not None:
-                sample_visuals.append(videos[i])
+                # the model card passes a video as a list of frame images
+                # https://huggingface.co/qihoo360/RzenEmbed
+                sample_visuals.extend(
+                    Image.fromarray(frame.permute(1, 2, 0).cpu().numpy())
+                    for frame in videos[i]
+                )
 
             v = sample_visuals if sample_visuals else None
 
@@ -272,11 +288,9 @@ class RzenEmbedWrapper(AbsEncoder):
         with torch.no_grad():
             has_video = "video" in inputs.dataset.features
 
-            from torch.utils.data import default_collate
-
-            if has_video and (
-                inputs.collate_fn is None or inputs.collate_fn is default_collate
-            ):
+            # mteb's dataloaders always set their own collate_fn, so attach the
+            # video collator unconditionally (it was never applied before)
+            if has_video:
                 inputs.collate_fn = VideoCollator(
                     target_sampling_rate=16000,
                     fps=self.fps,
@@ -414,4 +428,5 @@ rzen_embed = ModelMeta(
     training_datasets=RZEN_TRAINING_DATA,
     citation=CITATION,
     extra_requirements_groups=["qwen-vl"],
+    output_dtypes=OutputDType.BF16,
 )

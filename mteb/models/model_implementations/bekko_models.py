@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Any
 
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from mteb.types import Array
@@ -194,6 +195,7 @@ bekko_embedding_v1_a8m = ModelMeta(
     release_date="2026-07-28",
     reference="https://huggingface.co/hotchpotch/bekko-embedding-v1-a8m",
     **BEKKO_COMMON_KWARGS,
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -205,4 +207,5 @@ bekko_embedding_v1_a25m = ModelMeta(
     release_date="2026-07-28",
     reference="https://huggingface.co/hotchpotch/bekko-embedding-v1-a25m",
     **BEKKO_COMMON_KWARGS,
+    output_dtypes=OutputDType.BF16,
 )

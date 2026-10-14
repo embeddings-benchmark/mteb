@@ -112,8 +112,12 @@ class EagerEmbedV1Wrapper(AbsEncoder):
                 ).to(self.device)
 
                 # Get embeddings
+                # logits_to_keep=1 skips computing vocab logits we don't use
                 output = self.mdl(
-                    **model_inputs, return_dict=True, output_hidden_states=True
+                    **model_inputs,
+                    return_dict=True,
+                    output_hidden_states=True,
+                    logits_to_keep=1,
                 )
                 embeddings = self.get_embedding(output.hidden_states[-1])
                 embeddings = embeddings.cpu().to(torch.float32)
@@ -154,4 +158,5 @@ Eager_Embed_V1 = ModelMeta(
     public_training_code="https://github.com/eagerworks/eager-embed",
     public_training_data="https://github.com/eagerworks/eager-embed/blob/main/dataset_config.yaml",
     extra_requirements_groups=["eager_embed"],
+    output_dtypes=OutputDType.FLOAT16,
 )

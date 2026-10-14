@@ -15,6 +15,7 @@ from mteb.models import ModelMeta
 from mteb.similarity_functions import (
     _MAX_SIM_CHUNK_ELEMENTS,
     _token_budget_chunks,
+    _upcast_low_precision,
 )
 from mteb.types import PromptType
 
@@ -23,7 +24,7 @@ from .model_meta import ScoringFunction
 from .search_wrappers import chunked_full_corpus_search, rerank_top_ranked_documents
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Sequence
+    from collections.abc import Callable, Iterator, Sequence
 
     import torch
     from sentence_transformers import (
@@ -90,6 +91,7 @@ def _setup_modality_collator(
     num_frames: int | None,
     target_sampling_rate: int | None,
     max_samples: int | None,
+    min_frames: int = 1,
 ) -> bool:
     """Attach a VideoCollator/AudioCollator to ``inputs`` if needed.
 
@@ -108,6 +110,7 @@ def _setup_modality_collator(
             max_frames=max_frames,
             num_frames=num_frames,
             max_samples=max_samples,
+            min_frames=min_frames,
         )
     elif has_audio:
         from mteb.models.modality_collators import AudioCollator
@@ -450,7 +453,14 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
     def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
         """Compute the similarity between two collections of embeddings."""
         if hasattr(self.model, "similarity") and callable(self.model.similarity):
-            return cast("Array", self.model.similarity(embeddings1, embeddings2))
+            # sentence-transformers < 6 scores in the embedding dtype
+            return cast(
+                "Array",
+                self.model.similarity(
+                    _upcast_low_precision(embeddings1),
+                    _upcast_low_precision(embeddings2),
+                ),
+            )
         return super().similarity(embeddings1, embeddings2)
 
     def encode(
@@ -556,6 +566,7 @@ class CrossEncoderWrapper:
         fps: float | None = None,
         max_frames: int | None = None,
         num_frames: int | None = None,
+        min_frames: int = 1,
         target_sampling_rate: int | None = None,
         max_samples: int | None = None,
         **kwargs: Any,
@@ -579,18 +590,20 @@ class CrossEncoderWrapper:
         self.fps = fps
         self.max_frames = max_frames
         self.num_frames = num_frames
+        self.min_frames = min_frames
         self.target_sampling_rate = target_sampling_rate
         self.max_samples = max_samples
 
-    def _collect_inputs(
+    def _iter_inputs(
         self,
         loader: DataLoader[BatchedInput],
         prefix: str,
-    ) -> list[Any]:
-        """Return a list of items to feed to the cross-encoder.
+    ) -> Iterator[list[Any]]:
+        """Yield the items to feed to the cross-encoder, one dataloader batch at a time.
 
-        For text-only inputs this is a list of prefix-prepended strings; for
-        multimodal inputs it is a list of per-sample modality dicts.
+        For text-only inputs these are prefix-prepended strings; for multimodal
+        inputs they are per-sample modality dicts. Yielding per batch keeps only
+        one batch of (possibly decoded image or video) inputs in memory.
         """
         is_multimodal = _setup_modality_collator(
             loader,
@@ -599,12 +612,13 @@ class CrossEncoderWrapper:
             num_frames=self.num_frames,
             target_sampling_rate=self.target_sampling_rate,
             max_samples=self.max_samples,
+            min_frames=self.min_frames,
         )
-        if not is_multimodal:
-            return [prefix + text for batch in loader for text in batch["text"]]
-
-        items: list[dict[str, Any]] = []
-        for batch in tqdm(loader, desc="Collecting multimodal inputs"):
+        for batch in loader:
+            if not is_multimodal:
+                yield [prefix + text for text in batch["text"]]
+                continue
+            items: list[dict[str, Any]] = []
             for sample in _batch_to_modality_dicts(
                 batch,
                 self.mteb_model_meta.modalities,
@@ -612,7 +626,7 @@ class CrossEncoderWrapper:
                 if prefix and "text" in sample:
                     sample["text"] = prefix + sample["text"]
                 items.append(sample)
-        return items
+            yield items
 
     def predict(
         self,
@@ -627,6 +641,9 @@ class CrossEncoderWrapper:
     ) -> Array:
         """Predicts relevance scores for pairs of inputs. Note that, unlike the encoder, the cross-encoder can compare across inputs.
 
+        The pairs are scored one dataloader batch at a time, so only a single batch of
+        inputs is held in memory (both dataloaders are expected to use the same batch size).
+
         Args:
             inputs1: First Dataloader of inputs to encode. For reranking tasks, these are queries (for text only tasks `QueryDatasetType`).
             inputs2: Second Dataloader of inputs to encode. For reranking, these are documents (for text only tasks `RetrievalOutputType`).
@@ -640,16 +657,28 @@ class CrossEncoderWrapper:
         Returns:
             The predicted relevance scores for each inputs pair.
         """
-        queries = self._collect_inputs(inputs1, self.query_prefix)
-        corpus = self._collect_inputs(inputs2, self.passage_prefix)
-
-        return cast(
-            "Array",
-            self.model.predict(
-                list(zip(queries, corpus, strict=True)),
-                **kwargs,
-            ),
+        show_progress_bar = kwargs.pop("show_progress_bar", True)
+        batches = zip(
+            self._iter_inputs(inputs1, self.query_prefix),
+            self._iter_inputs(inputs2, self.passage_prefix),
+            strict=True,
         )
+        scores = [
+            np.asarray(
+                self.model.predict(
+                    list(zip(queries, documents, strict=True)),
+                    show_progress_bar=False,
+                    **kwargs,
+                )
+            )
+            for queries, documents in tqdm(
+                batches,
+                total=len(inputs1),
+                desc="Scoring pairs",
+                disable=not show_progress_bar,
+            )
+        ]
+        return np.concatenate(scores) if scores else np.array([])
 
 
 class SparseEncoderWrapper(AbsEncoder):

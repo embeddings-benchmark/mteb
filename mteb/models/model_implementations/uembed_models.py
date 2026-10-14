@@ -21,7 +21,7 @@ from typing_extensions import override
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     import torch
@@ -40,6 +40,8 @@ IMAGE_BASE_FACTOR = 16
 IMAGE_FACTOR = IMAGE_BASE_FACTOR * 2
 MIN_PIXELS = 4 * IMAGE_FACTOR * IMAGE_FACTOR
 MAX_PIXELS = 1800 * IMAGE_FACTOR * IMAGE_FACTOR
+# fps=1, max_frames=64: UEmbed's own FPS / MAX_FRAMES
+# https://github.com/Alibaba-NLP/UEmbed/blob/main/src/models/qwen35_embedding.py
 DEFAULT_FPS = 1.0
 DEFAULT_MAX_FRAMES = 64
 SPARSE_DIM = 184_016
@@ -600,6 +602,9 @@ class UEmbedEncoder(AbsEncoder):
                 target_sampling_rate=16_000,
                 fps=self.fps,
                 max_frames=self.max_frames,
+                # at least 4 frames: FPS_MIN_FRAMES of qwen-vl-utils, which UEmbed's
+                # code samples with; the processor fails on a single frame
+                min_frames=4,
             )
 
         batches: list[torch.Tensor] = []
@@ -705,6 +710,7 @@ uembed_2b = ModelMeta(
     embed_dim=2048,
     reference="https://huggingface.co/Alibaba-NLP/UEmbed-2B",
     **_COMMON_METADATA,
+    output_dtypes=OutputDType.BF16,
 )
 
 uembed_4b = ModelMeta(
@@ -716,6 +722,7 @@ uembed_4b = ModelMeta(
     embed_dim=2560,
     reference="https://huggingface.co/Alibaba-NLP/UEmbed-4B",
     **_COMMON_METADATA,
+    output_dtypes=OutputDType.BF16,
 )
 
 uembed_9b = ModelMeta(
@@ -727,4 +734,5 @@ uembed_9b = ModelMeta(
     embed_dim=4096,
     reference="https://huggingface.co/Alibaba-NLP/UEmbed-9B",
     **_COMMON_METADATA,
+    output_dtypes=OutputDType.BF16,
 )

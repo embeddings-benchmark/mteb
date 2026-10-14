@@ -3539,7 +3539,7 @@ _MAEB_CITATION = """@misc{assadi2026maebmassiveaudioembedding,
 }"""
 
 
-# Named so MAEB(beta)'s "Benchmark Variant" CustomGrouping (below) can reuse
+# Named so MAEB(v1)'s "Benchmark Variant" CustomGrouping (below) can reuse
 # it without depending on MAEB_AUDIO's own definition.
 _MAEB_AUDIO_ONLY_TASKS = [
     # Any2AnyRetrieval (1)
@@ -3569,19 +3569,19 @@ _MAEB_AUDIO_ONLY_TASKS = [
 ]
 
 MAEB_AUDIO = Benchmark(
-    name="MAEB(beta, audio-only)",
-    aliases=["MAEB(audio-only)"],
+    name="MAEB(v1, audio-only)",
+    aliases=["MAEB(beta, audio-only)", "MAEB(audio-only)"],
     display_name="MAEB Audio-Only",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(tasks=_MAEB_AUDIO_ONLY_TASKS),
-    description="Audio-only embedding quality across classification, clustering, pair classification, reranking, and retrieval tasks. Currently in beta pending peer review.",
+    description="Audio-only embedding quality across classification, clustering, pair classification, reranking, and retrieval tasks.",
     reference=None,
     citation=_MAEB_CITATION,
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 MAEB = Benchmark(
-    name="MAEB(beta)",
-    aliases=["MAEB"],
+    name="MAEB(v1)",
+    aliases=["MAEB(beta)", "MAEB"],
     display_name="MAEB",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=MTEBTasks(
@@ -3629,7 +3629,7 @@ MAEB = Benchmark(
             get_task("FSD2019Kaggle", hf_subsets=["curated"]),
         )
     ),
-    description="Audio embedding quality across both audio-only and audio-text cross-modal tasks, spanning retrieval, classification, clustering, multilabel classification, pair classification, reranking, and zero-shot classification. Currently in beta pending peer review.",
+    description="Audio embedding quality across both audio-only and audio-text cross-modal tasks, spanning retrieval, classification, clustering, multilabel classification, pair classification, reranking, and zero-shot classification.",
     reference=None,
     citation=_MAEB_CITATION,
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
@@ -3643,7 +3643,7 @@ MAEB = Benchmark(
                 CustomGroup(
                     label="Audio-Only",
                     tasks=get_tasks(_MAEB_AUDIO_ONLY_TASKS),
-                    description="This model's score restricted to audio only tasks. It is equivalent to  MAEB(beta, audio-only).",
+                    description="This model's score restricted to audio only tasks. It is equivalent to MAEB(v1, audio-only).",
                 ),
             ),
         ),
@@ -3652,8 +3652,8 @@ MAEB = Benchmark(
 
 
 MVEB = Benchmark(
-    name="MVEB(beta)",
-    aliases=["MVEB"],
+    name="MVEB(v1)",
+    aliases=["MVEB(beta)", "MVEB"],
     display_name="MVEB",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-video.svg",
     tasks=get_tasks(
@@ -3691,14 +3691,22 @@ MVEB = Benchmark(
     ),
     description="Audio-visual video embedding quality across retrieval, classification, clustering, pair classification, zero-shot classification, and video-centric QA, with tasks selected to maximize coverage of audio-video joint modality inputs.",
     reference=None,
-    citation="",
+    citation=r"""
+@inproceedings{anonymous2026mveb,
+  author = {Adnan El Assadi and Roman Solomatin and Isaac Chung and Chenghao Xiao and Deep Shah and Shriya Sudhakar and Ayush Sunil Munot and M{\'a}rton Kardos and Niklas Muennighoff and Kenneth Enevoldsen},
+  booktitle = {The 2026 Conference on Empirical Methods in Natural Language Processing},
+  title = {{MVEB}: Massive Video Embedding Benchmark},
+  url = {https://openreview.net/forum?id=p5KyLtjRPo},
+  year = {2026},
+}
+""",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 
 
 MVEB_TEXT_VIDEO = Benchmark(
-    name="MVEB(text, video, beta)",
-    aliases=["MVEB(text, video)"],
+    name="MVEB(text, video, v1)",
+    aliases=["MVEB(text, video, beta)", "MVEB(text, video)"],
     display_name="MVEB Video-Text",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-video.svg",
     tasks=get_tasks(
@@ -3732,14 +3740,22 @@ MVEB_TEXT_VIDEO = Benchmark(
     ),
     description="Text and video embedding quality across retrieval, classification, clustering, pair classification, zero-shot classification, and video-centric QA, for models without an audio encoder.",
     reference=None,
-    citation="",
+    citation=r"""
+@inproceedings{anonymous2026mveb,
+  author = {Adnan El Assadi and Roman Solomatin and Isaac Chung and Chenghao Xiao and Deep Shah and Shriya Sudhakar and Ayush Sunil Munot and M{\'a}rton Kardos and Niklas Muennighoff and Kenneth Enevoldsen},
+  booktitle = {The 2026 Conference on Empirical Methods in Natural Language Processing},
+  title = {{MVEB}: Massive Video Embedding Benchmark},
+  url = {https://openreview.net/forum?id=p5KyLtjRPo},
+  year = {2026},
+}
+""",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 
 
 MVEB_VIDEO = Benchmark(
-    name="MVEB(video, beta)",
-    aliases=["MVEB(video)"],
+    name="MVEB(video, v1)",
+    aliases=["MVEB(video, beta)", "MVEB(video)"],
     display_name="MVEB Video-Only",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-video.svg",
     tasks=get_tasks(
@@ -3759,7 +3775,15 @@ MVEB_VIDEO = Benchmark(
     ),
     description="Video-only embedding quality across classification and pair classification, for encoders without a text component. Retrieval, QA, and zero-shot tasks are excluded as they require a text encoder.",
     reference=None,
-    citation="",
+    citation=r"""
+@inproceedings{anonymous2026mveb,
+  author = {Adnan El Assadi and Roman Solomatin and Isaac Chung and Chenghao Xiao and Deep Shah and Shriya Sudhakar and Ayush Sunil Munot and M{\'a}rton Kardos and Niklas Muennighoff and Kenneth Enevoldsen},
+  booktitle = {The 2026 Conference on Empirical Methods in Natural Language Processing},
+  title = {{MVEB}: Massive Video Embedding Benchmark},
+  url = {https://openreview.net/forum?id=p5KyLtjRPo},
+  year = {2026},
+}
+""",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 

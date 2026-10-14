@@ -117,6 +117,17 @@ class LanguageScripts:
         """
         return script in self.scripts
 
+    def contains_langscript_script(self, langscript: str) -> bool:
+        """Whether the set contains the script of a language-script code.
+
+        Args:
+            langscript: A code in the form "eng-Latn". Only the script part is checked.
+
+        Returns:
+            True if the script of the code is contained in the set, False otherwise.
+        """
+        return self.contains_script(langscript.rsplit("-", maxsplit=1)[-1])
+
     def contains_scripts(self, scripts: Iterable[str]) -> bool:
         """Whether is containing all the scripts
 

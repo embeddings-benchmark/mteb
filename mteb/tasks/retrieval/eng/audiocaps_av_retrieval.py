@@ -113,7 +113,6 @@ class AudioCapsAVT2VRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the video clip that matches the given caption."},
-        is_beta=True,
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
@@ -146,7 +145,6 @@ class AudioCapsAVVA2TRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the caption that describes the following video."},
-        is_beta=True,
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
@@ -286,7 +284,6 @@ class AudioCapsAVVT2ARetrieval(AbsTaskRetrieval):
         prompt={
             "query": "Find the audio that corresponds to the following video and its description."
         },
-        is_beta=True,
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:

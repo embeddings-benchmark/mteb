@@ -8,6 +8,7 @@ from tqdm.auto import tqdm
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator, VideoCollator
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -25,10 +26,16 @@ class LCOEmbedding(AbsEncoder):
         model_name: str,
         revision: str | None = None,
         device: str | None = None,
+        # fps=2: qwen-omni-utils FPS=2.0
+        # https://github.com/QwenLM/Qwen2.5-Omni/blob/main/qwen-omni-utils/src/qwen_omni_utils/v2_5/vision_process.py
         fps: float | None = 2.0,
+        # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
-        max_audio_length: int | None = None,
+        # 300 s at 16 kHz: Qwen2.5-Omni chunk_length=300; this is max_samples,
+        # so it is in samples, not seconds
+        # https://huggingface.co/Qwen/Qwen2.5-Omni-7B/blob/main/preprocessor_config.json
+        max_audio_length: int | None = 4_800_000,
         **kwargs: Any,
     ):
         import torch
@@ -56,9 +63,14 @@ class LCOEmbedding(AbsEncoder):
         self.processor.tokenizer.padding_side = "left"
 
         self.model = Qwen2_5OmniThinkerForConditionalGeneration.from_pretrained(
-            model_name, torch_dtype=torch.bfloat16, **kwargs
+            model_name, revision=revision, torch_dtype=torch.bfloat16, **kwargs
         ).to(self.device)
         self.model.eval()
+        # only hidden states are used; the Omni thinker forward has no logits_to_keep,
+        # so run the LM head on the last position only
+        self.model.lm_head.register_forward_pre_hook(
+            lambda _module, args: (args[0][:, -1:, :],)
+        )
 
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
 
@@ -208,6 +220,7 @@ lco_3b = ModelMeta(
   primaryClass={cs.CL},
   url={https://arxiv.org/abs/2510.11693},
 }""",
+    output_dtypes=OutputDType.BF16,
 )
 
 lco_3b_2605 = ModelMeta(
@@ -243,6 +256,7 @@ lco_3b_2605 = ModelMeta(
   primaryClass={cs.CL},
   url={https://arxiv.org/abs/2510.11693},
 }""",
+    output_dtypes=OutputDType.BF16,
 )
 
 lco_7b = ModelMeta(
@@ -278,4 +292,5 @@ lco_7b = ModelMeta(
   primaryClass={cs.CL},
   url={https://arxiv.org/abs/2510.11693},
 }""",
+    output_dtypes=OutputDType.BF16,
 )
