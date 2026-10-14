@@ -238,7 +238,7 @@ COLBERT_MODEL = ModelInfo(
         MockRetrievalTask: 1.0,
         MockInstructionRetrieval: 0.81546,
         MockInstructionReranking: 0.81546,
-        MockRetrievalFloatGainsTask: 0.84671,
+        MockRetrievalFloatGainsTask: 1.0,
         MockRetrievalDialogTask: 0.63093,
         MockAny2AnyRetrievalT2ATask: 0.81546,
         MockAny2AnyRetrievalA2TTask: 0.81546,
