@@ -7,6 +7,7 @@ from .multilabel_classification import AbsTaskMultilabelClassification
 from .pair_classification import AbsTaskPairClassification
 from .regression import AbsTaskRegression
 from .retrieval import AbsTaskRetrieval
+from .spatial_arrangement import AbsTaskSpatialArrangement
 from .sts import AbsTaskSTS
 from .text.bitext_mining import AbsTaskBitextMining
 from .text.reranking import AbsTaskReranking
@@ -26,6 +27,7 @@ __all__ = [
     "AbsTaskReranking",
     "AbsTaskRetrieval",
     "AbsTaskSTS",
+    "AbsTaskSpatialArrangement",
     "AbsTaskSummarization",
     "AbsTaskZeroShotClassification",
 ]

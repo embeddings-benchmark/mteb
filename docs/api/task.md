@@ -76,6 +76,8 @@ Tasks that support any modality (text, image, etc.) inherit from the following a
 
 :::mteb.abstasks.regression.AbsTaskRegression
 
+:::mteb.abstasks.spatial_arrangement.AbsTaskSpatialArrangement
+
 :::mteb.abstasks.clustering_legacy.AbsTaskClusteringLegacy
 
 ## Text Tasks

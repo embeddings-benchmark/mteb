@@ -1084,6 +1084,7 @@ _DUPLICATE_CHECK_EXEMPT_SUFFIXES = ("1_statistics", "2_statistics")
 # each row, so `unique_texts` naturally exceeding num_samples several-fold
 # isn't a stats bug, just a field this test has no accurate count for.
 _DUPLICATE_CHECK_EXEMPT_FIELDS = {
+    "arranged_texts_statistics",  # SpatialArrangement: one row arranges many texts
     "candidates_labels_text_statistics",
     "human_summaries_statistics",
     "machine_summaries_statistics",

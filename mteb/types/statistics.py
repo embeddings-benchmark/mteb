@@ -563,6 +563,26 @@ class SummarizationDescriptiveStatistics(SplitDescriptiveStatistics):
     score_statistics: ScoreStatistics
 
 
+class SpatialArrangementDescriptiveStatistics(SplitDescriptiveStatistics):
+    """Descriptive statistics for SpatialArrangement.
+
+    Attributes:
+        num_samples: number of arrangements (rounds) in the dataset.
+        number_of_characters: Total number of symbols in the dataset.
+        num_raters: Number of unique raters.
+        num_triplets: Number of (anchor, item, item) triplets across all arrangements.
+
+        arranged_texts_statistics: Statistics for the texts, counted once per arrangement they appear in
+    """
+
+    num_samples: int
+    number_of_characters: int
+    num_raters: int
+    num_triplets: int
+
+    arranged_texts_statistics: TextStatistics
+
+
 class ImageTextPairClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
     """Descriptive statistics for ImageTextPairClassification.
 
@@ -651,6 +671,14 @@ class RetrievalStatistics(RetrievalDescriptiveStatistics):
     ]
 
 
+class SpatialArrangementStatistics(SpatialArrangementDescriptiveStatistics):
+    """Spatial arrangement descriptive statistics, optionally with multilingual subsets."""
+
+    hf_subset_descriptive_stats: NotRequired[
+        dict[HFSubset, SpatialArrangementDescriptiveStatistics]
+    ]
+
+
 class SummarizationStatistics(SummarizationDescriptiveStatistics):
     """Summarization descriptive statistics, optionally with multilingual subsets."""
 
@@ -677,6 +705,7 @@ DescriptiveStatsValue: TypeAlias = (
     | PairClassificationStatistics
     | RegressionStatistics
     | RetrievalStatistics
+    | SpatialArrangementStatistics
     | SummarizationStatistics
     | ZeroShotClassificationStatistics
 )

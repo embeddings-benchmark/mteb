@@ -11,6 +11,7 @@ from .pair_classification import *
 from .regression import *
 from .reranking import *
 from .retrieval import *
+from .spatial_arrangement import *
 from .sts import *
 from .summarization import *
 from .zeroshot_classification import *

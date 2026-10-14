@@ -71,6 +71,7 @@ from .retrieval import (
     MockVideoRetrievalT2V,
     MockVideoRetrievalV2T,
 )
+from .spatial_arrangement import MockSpatialArrangementTask
 from .sts import (
     MockMultilingualSTSTask,
     MockSTSTask,
@@ -138,6 +139,7 @@ __all__ = [
     "MockRetrievalDialogTask",
     "MockRetrievalTask",
     "MockSTSTask",
+    "MockSpatialArrangementTask",
     "MockSummarizationTask",
     "MockSymCustomVideoAudiSTSTask",
     "MockSymCustomVideoAudioPairClassificationTaskV2",
