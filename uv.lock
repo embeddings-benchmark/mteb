@@ -6326,6 +6326,7 @@ transformers-v5 = [
     { name = "transformers", version = "5.14.1", source = { registry = "https://pypi.org/simple" } },
 ]
 uembed = [
+    { name = "qwen-vl-utils" },
     { name = "transformers", version = "5.14.1", source = { registry = "https://pypi.org/simple" } },
 ]
 vertexai = [
@@ -6569,6 +6570,7 @@ requires-dist = [
     { name = "qwen-omni-utils", marker = "extra == 'qwen-omni-utils'" },
     { name = "qwen-vl-utils", marker = "extra == 'eager-embed'", specifier = ">=0.0.14" },
     { name = "qwen-vl-utils", marker = "extra == 'qwen-vl'", specifier = ">=0.0.14" },
+    { name = "qwen-vl-utils", marker = "extra == 'uembed'", specifier = ">=0.0.14" },
     { name = "qwen-vl-utils", marker = "extra == 'wemm'", specifier = ">=0.0.14" },
     { name = "regex", marker = "extra == 'viclip'" },
     { name = "requests", specifier = ">=2.26.0" },
