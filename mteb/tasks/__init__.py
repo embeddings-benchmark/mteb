@@ -1,4 +1,5 @@
 from .aggregated_tasks import *
+from .analogy import *
 from .bitext_mining import *
 from .classification import *
 from .clustering import *

@@ -1,3 +1,4 @@
+from .analogy_evaluator import AnalogyEvaluator
 from .any_sts_evaluator import AnySTSEvaluator
 from .clustering_evaluator import ClusteringEvaluator
 from .evaluator import Evaluator
@@ -15,6 +16,7 @@ from .text.summarization_evaluator import (
 from .zeroshot_classification_evaluator import ZeroShotClassificationEvaluator
 
 __all__ = [
+    "AnalogyEvaluator",
     "AnySTSEvaluator",
     "BitextMiningEvaluator",
     "ClusteringEvaluator",

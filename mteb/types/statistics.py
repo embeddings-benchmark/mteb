@@ -284,6 +284,41 @@ class PairModalityStatistics(TypedDict):
     unique_pairs: int
 
 
+class AnalogyDescriptiveStatistics(SplitDescriptiveStatistics):
+    """Descriptive statistics for Analogy.
+
+    The documents are the inputs representing the concepts, which are the candidate answers. A concept can be
+    represented by several documents (e.g. images), whose embeddings are mean-pooled to find the "average" embedding.
+
+    Attributes:
+        num_samples: number of analogies in the dataset.
+        num_concepts: number of distinct concepts, which are the candidate answers.
+        num_documents: number of inputs representing the concepts.
+        number_of_characters: Total number of characters in the text documents
+        min_documents_per_concept: Minimum number of documents representing a concept
+        average_documents_per_concept: Average number of documents representing a concept
+        max_documents_per_concept: Maximum number of documents representing a concept
+
+        documents_text_statistics: Statistics for text documents
+        documents_image_statistics: Statistics for image documents
+        documents_audio_statistics: Statistics for audio documents
+        documents_video_statistics: Statistics for video documents
+    """
+
+    num_samples: int
+    num_concepts: int
+    num_documents: int
+    number_of_characters: int | None
+    min_documents_per_concept: int
+    average_documents_per_concept: float
+    max_documents_per_concept: int
+
+    documents_text_statistics: TextStatistics | None
+    documents_image_statistics: ImageStatistics | None
+    documents_audio_statistics: AudioStatistics | None
+    documents_video_statistics: VideoStatistics | None
+
+
 class AnySTSDescriptiveStatistics(SplitDescriptiveStatistics):
     """Descriptive statistics for STS.
 
@@ -577,6 +612,14 @@ class ImageTextPairClassificationDescriptiveStatistics(SplitDescriptiveStatistic
     image_statistics: ImageStatistics
 
 
+class AnalogyStatistics(AnalogyDescriptiveStatistics):
+    """Analogy descriptive statistics, optionally with multilingual subsets."""
+
+    hf_subset_descriptive_stats: NotRequired[
+        dict[HFSubset, AnalogyDescriptiveStatistics]
+    ]
+
+
 class AnySTSStatistics(AnySTSDescriptiveStatistics):
     """STS descriptive statistics, optionally with multilingual subsets."""
 
@@ -668,7 +711,8 @@ class ZeroShotClassificationStatistics(ZeroShotClassificationDescriptiveStatisti
 
 
 DescriptiveStatsValue: TypeAlias = (
-    AnySTSStatistics
+    AnalogyStatistics
+    | AnySTSStatistics
     | BitextStatistics
     | ClassificationStatistics
     | ClusteringStatistics

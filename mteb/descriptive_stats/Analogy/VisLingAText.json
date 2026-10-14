@@ -1,0 +1,21 @@
+{
+    "test": {
+        "num_samples": 15455,
+        "num_concepts": 746,
+        "num_documents": 746,
+        "number_of_characters": 5088,
+        "min_documents_per_concept": 1,
+        "average_documents_per_concept": 1.0,
+        "max_documents_per_concept": 1,
+        "documents_text_statistics": {
+            "total_text_length": 5088,
+            "min_text_length": 2,
+            "average_text_length": 6.8203753351206435,
+            "max_text_length": 13,
+            "unique_texts": 746
+        },
+        "documents_image_statistics": null,
+        "documents_audio_statistics": null,
+        "documents_video_statistics": null
+    }
+}
