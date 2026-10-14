@@ -1,0 +1,24 @@
+{
+    "test": {
+        "num_samples": 15455,
+        "num_concepts": 746,
+        "num_documents": 7365,
+        "number_of_characters": null,
+        "min_documents_per_concept": 4,
+        "average_documents_per_concept": 9.872654155495978,
+        "max_documents_per_concept": 11,
+        "documents_text_statistics": null,
+        "documents_image_statistics": {
+            "min_image_width": 3,
+            "average_image_width": 845.5208418194162,
+            "max_image_width": 1000,
+            "min_image_height": 2,
+            "average_image_height": 707.2042090970808,
+            "max_image_height": 1000,
+            "unique_images": 6717,
+            "black_or_white_images": 10
+        },
+        "documents_audio_statistics": null,
+        "documents_video_statistics": null
+    }
+}

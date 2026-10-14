@@ -205,6 +205,7 @@ TaskType = Literal[
     "Summarization",
     "InstructionRetrieval",
     "InstructionReranking",
+    "Analogy",
     # MIEB
     "Any2AnyReranking",
     "Any2AnyRetrieval",
@@ -388,6 +389,7 @@ _TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {
     "Retrieval": "retrieval",
     "InstructionRetrieval": "retrieval",
     "InstructionReranking": "retrieval",
+    "Analogy": "retrieval",
     "Clustering": "clustering",
     "ImageClustering": "clustering",
     "AudioClustering": "clustering",
@@ -982,6 +984,7 @@ class TaskMetadata(BaseModel):
             "Summarization": ["summarization"],
             "InstructionRetrieval": ["text-retrieval"],
             "InstructionReranking": ["text-ranking"],
+            "Analogy": ["other"],
             # Image
             "Any2AnyMultiChoice": ["visual-question-answering"],
             "Any2AnyReranking": ["visual-question-answering"],

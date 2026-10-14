@@ -1,4 +1,5 @@
 from .abstask import AbsTask
+from .analogy import AbsTaskAnalogy
 from .classification import AbsTaskClassification
 from .clustering import AbsTaskClustering
 from .clustering_legacy import AbsTaskClusteringLegacy
@@ -15,6 +16,7 @@ from .zeroshot_classification import AbsTaskZeroShotClassification
 
 __all__ = [
     "AbsTask",
+    "AbsTaskAnalogy",
     "AbsTaskBitextMining",
     "AbsTaskClassification",
     "AbsTaskClustering",

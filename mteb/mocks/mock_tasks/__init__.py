@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from .analogy import MockAnalogyTask, MockImageAnalogyTask
 from .bitext_mining import (
     MockBitextMiningTask,
     MockMultilingualBitextMiningTask,
@@ -90,6 +91,7 @@ from .zeroshot_classification import (
 __all__ = [
     "LegacyMockClusteringFastTask",
     "MockAggregatedTask",
+    "MockAnalogyTask",
     "MockAny2AnyRetrievalA2ATask",
     "MockAny2AnyRetrievalA2TTask",
     "MockAny2AnyRetrievalI2TTask",
@@ -107,6 +109,7 @@ __all__ = [
     "MockAudioZeroshotClassificationTask",
     "MockBitextMiningTask",
     "MockClassificationTask",
+    "MockImageAnalogyTask",
     "MockImageClassificationTask",
     "MockImageClusteringFastTask",
     "MockImageMultilabelClassificationTask",
