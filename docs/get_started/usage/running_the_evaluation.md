@@ -168,6 +168,19 @@ sentence_trf_model.half()  # half precision
 
 A last option is to make a [custom implementation](defining_the_model.md#using-a-custom-model) of the model. This way you have full flexibility of how the model handles the input.
 
+### Reduce Memory During Evaluation
+
+For retrieval tasks, the corpus is encoded in chunks of 50,000 documents. If you run out of memory on large corpora, you can lower the chunk size by wrapping the model in a `SearchEncoderWrapper`:
+
+```python
+import mteb
+from mteb.models import SearchEncoderWrapper
+
+model = mteb.get_model(...)
+model = SearchEncoderWrapper(model, corpus_chunk_size=512)
+mteb.evaluate(model, task)
+```
+
 
 ### Speeding Download
 
