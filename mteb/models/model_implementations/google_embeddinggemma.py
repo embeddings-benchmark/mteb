@@ -416,6 +416,12 @@ _TOWERS = {
 }
 
 
+# Tokens one image expands to (256 soft tokens + begin/end markers) plus slack for the
+# processor's wrapper tokens; text in front of an image is truncated to keep the whole
+# image block inside max_seq_length (otherwise the processor raises a token-count mismatch).
+_IMAGE_BLOCK_TOKENS = 260 + 24
+
+
 class EmbeddingGemma2Wrapper(SentenceTransformerEncoderWrapper):
     """SentenceTransformer wrapper that applies the EmbeddingGemma 2 per-task recipe.
 
@@ -434,6 +440,11 @@ class EmbeddingGemma2Wrapper(SentenceTransformerEncoderWrapper):
         revision: HF revision.
         use_image: Load the vision tower (image/video inputs). Used for MIEB.
         use_audio: Load the audio tower. Used for MAEB.
+        media_first: Put the image/audio tokens *before* the prompt text instead of after
+            it. The SentenceTransformer processor emits tokens in the order of the input
+            dict's keys. ``False`` (text first) is the default; ``True`` reproduces the
+            model-card MIEB(lite) run, whose internal pipeline inserted images at text
+            position 0 (scores differ by ~0.4 Mean(TaskType), up to ±10 on single tasks).
         **kwargs: Forwarded to ``SentenceTransformerEncoderWrapper`` (e.g. ``embed_dim``).
     """
 
@@ -444,9 +455,11 @@ class EmbeddingGemma2Wrapper(SentenceTransformerEncoderWrapper):
         *,
         use_image: bool = False,
         use_audio: bool = False,
+        media_first: bool = False,
         **kwargs: Any,
     ) -> None:
         self.use_image, self.use_audio = use_image, use_audio
+        self.media_first = media_first
         config_kwargs = {}  # drop the towers that are not needed
         if not use_image:
             config_kwargs["vision_config"] = None
@@ -485,6 +498,14 @@ class EmbeddingGemma2Wrapper(SentenceTransformerEncoderWrapper):
             },
             deep=True,
         )
+
+    def _fit_before_image(self, text: str, seq_len: int) -> str:
+        """Truncate text that precedes an image so the image block still fits in seq_len."""
+        budget = seq_len - _IMAGE_BLOCK_TOKENS
+        ids = self.model.tokenizer(text, add_special_tokens=False)["input_ids"]
+        if len(ids) <= budget:
+            return text
+        return self.model.tokenizer.decode(ids[:budget])
 
     def encode(
         self,
@@ -538,7 +559,12 @@ class EmbeddingGemma2Wrapper(SentenceTransformerEncoderWrapper):
                 ]
             else:
                 batch["text"] = [f"task: {instruction} | query: {t}" for t in texts]
-            return {"text": batch.pop("text"), **batch}
+            texts = batch.pop("text")
+            if self.media_first:
+                return {**batch, "text": texts}
+            if "image" in batch:
+                texts = [self._fit_before_image(t, seq_len) for t in texts]
+            return {"text": texts, **batch}
 
         original_class = inputs.__class__
 
