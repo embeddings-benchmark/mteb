@@ -5,6 +5,7 @@ import pytest
 from datasets import Dataset
 
 import mteb
+from mteb._content_hashes import hash_item
 from mteb._create_dataloaders import create_dataloader
 from mteb.cache import ResultCache
 from mteb.evaluate import _check_model_modalities
@@ -19,7 +20,7 @@ from mteb.mocks import (
 from mteb.mocks.mock_tasks.create_mock_samples import create_mock_video_bytes
 from mteb.models import Video2ImagesWrapper
 from mteb.models.modality_collators import FramesCollator
-from mteb.models.model_implementations.random_baseline import _image_to_vector
+from mteb.models.model_implementations.random_baseline import _key_to_vector
 from mteb.models.video_wrappers import video2images_wrapper
 from mteb.models.video_wrappers.video2images_wrapper import (
     DEFAULT_NUM_FRAMES,
@@ -138,7 +139,8 @@ def test_pooled_embedding_is_mean_of_frame_embeddings(sampling):
     for row in videos:
         frames = FramesCollator.resample_video(row["video"], **sampling)
         frame_vectors = [
-            _image_to_vector(to_pil_image(frame), embed_dim) for frame in frames
+            _key_to_vector(hash_item({"image": to_pil_image(frame)}), embed_dim)
+            for frame in frames
         ]
         expected.append(np.mean(frame_vectors, axis=0))
     np.testing.assert_allclose(
