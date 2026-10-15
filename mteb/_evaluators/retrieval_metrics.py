@@ -342,7 +342,7 @@ def nauc(
         else:
             conf_scores_argsort = np.argsort(conf_scores, stable=True)
         if conf_scores.size == 0:
-            return np.nan
+            return np.full(len(abstention_rates), np.nan)
         # A cutoff can land inside a group of equal confidence scores, and which member
         # is retained then depends on the input order. Use each tied group's mean metric
         # instead: the expected retained score under random tie-breaking (#5613).
