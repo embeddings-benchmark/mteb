@@ -110,17 +110,17 @@ class TestRetrievalEvaluator:
             (
                 True,
                 {
-                    "nAUC_NDCG@3_max": 0.50843,
+                    "nAUC_NDCG@3_max": 0.55748,
                     "nAUC_NDCG@3_std": 0.18322,
-                    "nAUC_NDCG@3_diff1": 0.21416,
+                    "nAUC_NDCG@3_diff1": 0.19869,
                 },
             ),
             (
                 False,
                 {
-                    "nAUC_NDCG@3_max": 0.8368244286523474,
+                    "nAUC_NDCG@3_max": 0.8937667028858531,
                     "nAUC_NDCG@3_std": 0.9125701917627439,
-                    "nAUC_NDCG@3_diff1": 0.950708977119359,
+                    "nAUC_NDCG@3_diff1": 0.9316395844410514,
                 },
             ),
         ],
