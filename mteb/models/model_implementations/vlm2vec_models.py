@@ -437,8 +437,7 @@ class VLM2VEC2Wrapper(AbsEncoder):
         base_model_name = "Qwen/Qwen2-VL-2B-Instruct"
         self.processor = AutoProcessor.from_pretrained(model, revision=revision)
         self.processor.padding_side = "left"
-        if hasattr(self.processor, "image_processor"):
-            self.processor.image_processor.max_pixels = 360 * 420
+        # images keep the checkpoint's max_pixels=1003520, as in the official eval
 
         torch_dtype = kwargs.pop("torch_dtype", torch.bfloat16)
         base_model = Qwen2VLForConditionalGeneration.from_pretrained(

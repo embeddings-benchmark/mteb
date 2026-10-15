@@ -83,7 +83,7 @@ class OpsMMEmbeddingWrapper(AbsEncoder):
 
     def encode_input(self, inputs: dict[str, Any]) -> torch.Tensor:
         hidden_states = self.base_model(
-            **inputs, return_dict=True, output_hidden_states=True
+            **inputs, return_dict=True, output_hidden_states=True, logits_to_keep=1
         )
         hidden_states = hidden_states.hidden_states[-1]
         pooled_output = self._pooling(hidden_states)

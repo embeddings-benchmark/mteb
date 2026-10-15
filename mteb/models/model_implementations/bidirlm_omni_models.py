@@ -206,6 +206,8 @@ class BidirLMOmniEncoder(AbsEncoder):
                 max_frames=self.max_frames,
                 num_frames=self.num_frames,
                 max_samples=self.max_samples,
+                # min_frames=4: the checkpoint's own video config
+                min_frames=4,
             )
         elif has_audio:
             inputs.collate_fn = AudioCollator(

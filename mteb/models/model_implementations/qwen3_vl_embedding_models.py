@@ -77,6 +77,9 @@ class Qwen3VLEmbeddingWrapper(InstructSentenceTransformerModel):
             fps=fps,
             max_frames=max_frames,
             num_frames=num_frames,
+            # at least 4 frames: FPS_MIN_FRAMES of qwen-vl-utils, which the official
+            # script samples with; the processor fails on a single frame
+            min_frames=4,
             **kwargs,
         )
 

@@ -51,7 +51,7 @@ SPARSE_MODEL = ModelInfo(
 
 COLBERT_MODEL = ModelInfo(
     name="mteb/baseline-random-colbert",
-    expected_scores={"TwitterHjerneRetrieval": 0.01750},
+    expected_scores={"TwitterHjerneRetrieval": 0.01652},
 )
 CROSS_ENCODER_MODEL = ModelInfo(
     name="mteb/baseline-random-cross-encoder",

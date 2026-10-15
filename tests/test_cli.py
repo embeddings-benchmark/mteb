@@ -5,6 +5,7 @@ import subprocess
 import sys
 from argparse import Namespace
 from pathlib import Path
+from typing import Any
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -16,6 +17,7 @@ from mteb.cli.build_cli import (
     _create_meta,
     _leaderboard,
     _mock_run,
+    build_cli,
     run,
 )
 
@@ -93,6 +95,41 @@ def test_run_task(
     )
     assert f"{task_name}.json" in [f.name for f in list(results_path.glob("*.json"))], (
         f"{task_name} not found in output folder"
+    )
+
+
+@pytest.mark.parametrize(
+    ("argv", "expected"),
+    [
+        (
+            [],
+            {"models": None, "tasks": None, "create_pr": False, "message": None},
+        ),
+        (
+            ["-m", "org/model1", "org/model2", "-t", "ArguAna", "--create-pr"]
+            + ["--message", "Add ArguAna results"],
+            {
+                "models": ["org/model1", "org/model2"],
+                "tasks": ["ArguAna"],
+                "create_pr": True,
+                "message": "Add ArguAna results",
+            },
+        ),
+    ],
+)
+def test_submit_results_cli(argv: list[str], expected: dict[str, Any], tmp_path: Path):
+    args = build_cli().parse_args(
+        ["submit-results", "--output-folder", tmp_path.as_posix(), *argv]
+    )
+
+    with patch("mteb.cli.build_cli.ResultCache.submit_results") as mock_submit:
+        args.func(args)
+
+    mock_submit.assert_called_once_with(
+        expected["models"],
+        tasks=expected["tasks"],
+        create_pr=expected["create_pr"],
+        message=expected["message"],
     )
 
 

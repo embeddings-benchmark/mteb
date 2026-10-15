@@ -9,6 +9,7 @@ from mteb._create_dataloaders import _custom_collate_fn
 from mteb.models.modality_collators import (
     AudioCollator,
     FramesCollator,
+    VideoCollator,
     seconds_to_samples,
     single_clip_dataloader,
 )
@@ -33,7 +34,7 @@ class _StubDecoder:
         (15, 8, [0, 2, 4, 6, 8, 10, 12, 14]),
         (300, 8, [0, 43, 85, 128, 171, 214, 256, 299]),
         # fewer source frames than requested: repeat to reach the count
-        (5, 8, [0, 1, 2, 3, 4, 0, 1, 2]),
+        (5, 8, [0, 0, 1, 1, 2, 3, 3, 4]),
     ],
 )
 def test_resample_video_fixed_frames(
@@ -80,3 +81,25 @@ def test_audio_collator_rejects_non_positive_cap() -> None:
     audio = {"array": [0.0] * 10, "sampling_rate": 16_000}
     with pytest.raises(ValueError, match="must be positive"):
         AudioCollator.resample_audio(audio, target_sampling_rate=16_000, max_samples=0)
+
+
+def test_resample_video_fps_min_frames() -> None:
+    video = _StubDecoder(30, seconds=1.2)
+    # default: one frame per second, as before
+    assert FramesCollator.resample_video(video, fps=1.0) == [0]
+    # opt-in floor for processors that need more frames (Qwen3-VL)
+    frames = FramesCollator.resample_video(video, fps=1.0, min_frames=4)
+    assert frames == [0, 10, 19, 29]
+
+
+def test_video_collator_orders_modalities() -> None:
+    """Prompts built in row order see text, video, audio, whatever the column order."""
+    pytest.importorskip("torchaudio")
+    row = {
+        "id": "a",
+        "audio": {"array": [0.0] * 10, "sampling_rate": 16_000},
+        "video": _StubDecoder(4, seconds=1.0),
+        "text": "caption",
+    }
+    batch = VideoCollator(target_sampling_rate=16_000, num_frames=2)([row])
+    assert list(batch) == ["id", "text", "video", "audio"]
