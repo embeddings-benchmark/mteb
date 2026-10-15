@@ -141,6 +141,14 @@ youtu = ["tencentcloud-sdk-python-common>=3.0.1454", "tencentcloud-sdk-python-lk
 llama-embed-nemotron = ["transformers==4.51.0"]
 llama-nemotron-colembed-vl = ["transformers[torch]==4.49.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
 nemotron-colembed-vl-v2 = ["transformers[torch]==5.0.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
+nemotron-3-5-vl = [
+    "torch>=2.8",
+    "flash-attn==2.8.3.post2",
+    "sentence-transformers>=6.1.0",
+    "transformers[torch]>=5.12.1,<5.17.0",
+    "torchvision>=0.22.0",
+    "accelerate>=0.26.0",
+]
 llama-nemotron-embed-vl-1b-v2 = ["transformers[torch]>=4.56.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
 nemotron-3-embed = ["sentence-transformers>=5.4.1", "transformers[torch]>=5.2.0"]
 multimodal-sbert = ["sentence-transformers>=5.4.0", "transformers>=5.3.0"]
@@ -549,6 +557,7 @@ conflicts = [
         { extra = "nemotron-colembed-vl-v2" }, # conflicting versions of transformers
         { extra = "llama-nemotron-embed-vl-1b-v2" }, # conflicting versions of transformers
         { extra = "nemotron-3-embed" }, # conflicting versions of transformers
+        { extra = "nemotron-3-5-vl" }, # conflicting versions of transformers
         { extra = "multimodal-sbert" }, # conflicting version of sentence-transformers
         { extra = "colpali_engine" },
         { extra = "evie" }, # transformers>=5.13.1 conflicts with visrag-ret etc.
