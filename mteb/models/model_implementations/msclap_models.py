@@ -11,7 +11,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import AudioCollator, seconds_to_samples
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -27,8 +27,11 @@ class MSClapWrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str = "microsoft/msclap-2023",
+        revision: str | None = None,
         device: str | None = None,
-        max_audio_length_s: float = 30.0,
+        # None: msclap's own duration; longer input hits its random-window branch
+        # https://github.com/microsoft/CLAP/blob/main/msclap/configs/config_2023.yml
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
         import torch
@@ -36,12 +39,11 @@ class MSClapWrapper(AbsEncoder):
         if device is None:
             device = "cuda" if torch.cuda.is_available() else "cpu"
 
+        from huggingface_hub import hf_hub_download
         from msclap import CLAP
 
         self.model_name = model_name
         self.device = device
-        self.sampling_rate = 48000
-        self.max_audio_length_s = max_audio_length_s
 
         if "2022" in self.model_name:
             self.version = "2022"
@@ -54,9 +56,24 @@ class MSClapWrapper(AbsEncoder):
             self.text_length = 77
 
         self.use_cuda = device == "cuda"
-        self.model = CLAP(version=self.version, use_cuda=self.use_cuda)
+        # msclap downloads its weights from microsoft/msclap at main; fetch them
+        # at the pinned revision instead.
+        model_fp = hf_hub_download(
+            CLAP.model_repo, CLAP.model_name[self.version], revision=revision
+        )
+        self.model = CLAP(
+            model_fp=model_fp, version=self.version, use_cuda=self.use_cuda
+        )
         self.model.clap = self.model.clap.to(self.device)
         self.tokenizer = self.model.tokenizer
+        # 44100 for 2022 and 2023: msclap's own config
+        # https://github.com/microsoft/CLAP/blob/main/msclap/configs/config_2023.yml
+        self.sampling_rate = int(self.model.args.sampling_rate)
+        self.max_audio_length_seconds = (
+            float(self.model.args.duration)
+            if max_audio_length_seconds is None
+            else max_audio_length_seconds
+        )
 
     def get_audio_embeddings(
         self,
@@ -67,7 +84,12 @@ class MSClapWrapper(AbsEncoder):
         import soundfile as sf
         import torch
 
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate,
+            max_samples=seconds_to_samples(
+                self.max_audio_length_seconds, self.sampling_rate
+            ),
+        )
 
         all_embeddings = []
         for batch in tqdm(
@@ -84,8 +106,10 @@ class MSClapWrapper(AbsEncoder):
                         suffix=".wav", delete=False
                     ) as temp_file:
                         temp_files.append(temp_file.name)
-                    # write after closing the handle so soundfile owns the file
-                    sf.write(temp_file.name, array, self.sampling_rate)
+                    # write after closing the handle so soundfile owns the file;
+                    # float, because resampled audio is off the 16-bit grid and
+                    # 2023 is sensitive to that quantisation
+                    sf.write(temp_file.name, array, self.sampling_rate, subtype="FLOAT")
 
                 with torch.no_grad():
                     # Use the official msclap API that expects file paths
@@ -120,6 +144,11 @@ class MSClapWrapper(AbsEncoder):
             inputs, disable=not show_progress_bar, desc="Processing text batches"
         ):
             texts = batch["text"]
+            # msclap appends this for the GPT-2 text encoder (2023), which pools
+            # on it; BERT (2022) gets no suffix
+            # https://github.com/microsoft/CLAP/blob/main/msclap/CLAPWrapper.py
+            if "gpt" in self.model.args.text_model:
+                texts = [text + " <|endoftext|>" for text in texts]
 
             features = self.tokenizer(
                 texts,
@@ -174,7 +203,7 @@ ms_clap_2022 = ModelMeta(
     loader=MSClapWrapper,
     name="microsoft/msclap-2022",
     languages=["eng-Latn"],
-    revision="no_revision",
+    revision="c47d441165daa21986ead0850660917636a81775",  # microsoft/msclap
     release_date="2022-12-01",
     modalities=["audio", "text"],
     n_parameters=196_000_000,
@@ -216,7 +245,7 @@ ms_clap_2023 = ModelMeta(
     loader=MSClapWrapper,
     name="microsoft/msclap-2023",
     languages=["eng-Latn"],
-    revision="no_revision",
+    revision="c47d441165daa21986ead0850660917636a81775",  # microsoft/msclap
     release_date="2023-09-01",
     modalities=["audio", "text"],
     n_parameters=160_000_000,

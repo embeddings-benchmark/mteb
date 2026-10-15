@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, Any
 from tqdm.auto import tqdm
 
 from mteb.models.model_meta import ModelMeta
+from mteb.types import OutputDType
 
 from .rerankers_custom import RerankerWrapper
 
@@ -248,7 +249,7 @@ Querit_Reranker_A0_4B = ModelMeta(
     model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
-    revision="5e8f6532a690fb8a3312d24ca0741aded9bbb4ad",
+    revision="cd502a5e87bed13dba6e2b804fd865ca540b7d60",
     release_date="2026-05-14",
     n_parameters=4919636992,
     n_embedding_parameters=131907584,
@@ -265,6 +266,7 @@ Querit_Reranker_A0_4B = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     citation=QUERIT_CITATION,
+    output_dtypes=OutputDType.BF16,
 )
 
 Querit_Reranker_4B = ModelMeta(
@@ -293,4 +295,5 @@ Querit_Reranker_4B = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     citation=QUERIT_CITATION,
+    output_dtypes=OutputDType.BF16,
 )

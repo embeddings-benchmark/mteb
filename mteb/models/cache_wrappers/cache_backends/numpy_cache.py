@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
 
-from ._hash_utils import _hash_item
+from mteb._content_hashes import hash_item
 
 if TYPE_CHECKING:
     from mteb.types import Array
@@ -49,7 +49,7 @@ class NumpyCache:
                 )
 
             for item, vec in zip(items, vectors, strict=True):
-                item_hash = _hash_item(item)
+                item_hash = hash_item(item)
                 if item_hash in self.hash_to_index:
                     msg = f"Hash collision or duplicate item for hash {item_hash}. Overwriting existing vector."
                     logger.warning(msg)
@@ -120,7 +120,7 @@ class NumpyCache:
         self.vectors = new_vectors
 
     def _save_dimension(self) -> None:
-        with self.dimension_file.open("w") as f:
+        with self.dimension_file.open("w", encoding="utf-8") as f:
             f.write(str(self.vector_dim))
         logger.info(
             f"Saved vector dimension {self.vector_dim} to {self.dimension_file}"
@@ -128,7 +128,7 @@ class NumpyCache:
 
     def _load_dimension(self) -> None:
         if self.dimension_file.exists():
-            with self.dimension_file.open() as f:
+            with self.dimension_file.open(encoding="utf-8") as f:
                 self.vector_dim = int(f.read().strip())
             logger.info(
                 f"Loaded vector dimension {self.vector_dim} from {self.dimension_file}"
@@ -193,7 +193,7 @@ class NumpyCache:
             return None
 
         try:
-            item_hash = _hash_item(item)
+            item_hash = hash_item(item)
             if item_hash not in self.hash_to_index:
                 logger.debug(f"Item hash not found in index: {item_hash}")
                 return None
@@ -205,7 +205,7 @@ class NumpyCache:
             raise
 
     def __contains__(self, item: dict[str, Any]) -> bool:
-        return _hash_item(item) in self.hash_to_index
+        return hash_item(item) in self.hash_to_index
 
     def __del__(self) -> None:
         self.close()

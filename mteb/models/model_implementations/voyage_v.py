@@ -200,7 +200,7 @@ def voyage_v_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
 
 voyage_v = ModelMeta(
     loader=voyage_v_loader,
-    name="voyageai/voyage-multimodal-3",
+    name="mongodb/voyage-multimodal-3",
     model_type=["dense"],
     languages=[],  # Unknown
     revision="1",

@@ -72,7 +72,10 @@ discoverable on the MTEB leaderboard.
 
 ## Running the Leaderboard
 
-To run the MTEB leaderboard locally, use the `mteb leaderboard` command. For example:
+!!! warning
+    `mteb leaderboard` launches the legacy Gradio leaderboard, which is no longer actively maintained. See the [leaderboard documentation](leaderboard.md#running-the-leaderboard-locally) for how to run the current leaderboard.
+
+To run the legacy MTEB leaderboard locally, use the `mteb leaderboard` command. For example:
 
 ```bash
 mteb leaderboard

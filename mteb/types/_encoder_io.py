@@ -9,11 +9,12 @@ from numpy.typing import NDArray
 from mteb._helpful_enum import HelpfulStrEnum
 
 if TYPE_CHECKING:
+    from typing import NotRequired
+
     import numpy.typing as npt
     import torch
     from datasets import Dataset
     from PIL import Image
-    from typing_extensions import NotRequired
 
 
 class EncodeKwargs(TypedDict):

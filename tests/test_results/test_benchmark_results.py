@@ -30,6 +30,7 @@ def benchmark_results(cache_path: Path) -> BenchmarkResults:
     return mteb.load_results(download_latest=False, require_model_meta=False)
 
 
+@pytest.mark.core
 def test_indexing(benchmark_results: BenchmarkResults) -> None:
     model_res = benchmark_results.model_results[0]
     assert isinstance(model_res, ModelResult), (
@@ -37,6 +38,7 @@ def test_indexing(benchmark_results: BenchmarkResults) -> None:
     )
 
 
+@pytest.mark.core
 def test_select_models(benchmark_results: BenchmarkResults) -> None:
     model_name = "sentence-transformers/all-MiniLM-L6-v2"
     bench_res = benchmark_results.select_models([model_name])
@@ -65,6 +67,7 @@ def test_select_models(benchmark_results: BenchmarkResults) -> None:
     assert len(bench_res.model_results) == 1  # only one revision
 
 
+@pytest.mark.core
 def test_select_tasks(benchmark_results: BenchmarkResults) -> None:
     tasks = [mteb.get_task("STS12")]
     bench_res = benchmark_results.select_tasks(tasks=tasks)
@@ -74,6 +77,35 @@ def test_select_tasks(benchmark_results: BenchmarkResults) -> None:
     assert task_names[0] == "STS12"
 
 
+def test_select_tasks_preserves_model_meta(tmp_path: Path) -> None:
+    """`select_tasks` must not drop `model_meta` (and with it, experiment identity).
+
+    Regression test: `select_tasks`/`_filter_tasks` reconstructed a new
+    `ModelResult` via `model_construct` without passing `model_meta`
+    through, silently dropping any experiment row's `experiment_kwargs`.
+    """
+    from mteb.mocks.mock_tasks import MockRetrievalTask
+
+    model_name = "mteb/baseline-random-encoder"
+    task = MockRetrievalTask()
+    cache = mteb.ResultCache(tmp_path)
+
+    model = mteb.get_model(model_name, a="test")
+    mteb.evaluate(model, task, cache=cache)
+
+    from mteb.cache import LoadExperimentEnum
+
+    results = cache.load_results(load_experiments=LoadExperimentEnum.MATCH_NAME)
+    model_res = results.model_results[0]
+    assert model_res.model_meta is not None
+    assert model_res.model_meta.experiment_kwargs == {"a": "test"}
+
+    filtered = model_res.select_tasks([task])
+    assert filtered.model_meta is not None
+    assert filtered.model_meta.experiment_kwargs == {"a": "test"}
+
+
+@pytest.mark.core
 def test_join_revisions(benchmark_results: BenchmarkResults) -> None:
     model_name = "sentence-transformers/all-MiniLM-L6-v2"
     bench_res = benchmark_results.select_models([model_name])
@@ -89,6 +121,7 @@ def test_join_revisions(benchmark_results: BenchmarkResults) -> None:
     assert revision == mteb.get_model_meta(model_name).revision
 
 
+@pytest.mark.core
 def test_to_dataframe(
     benchmark_results: BenchmarkResults,
 ) -> None:
@@ -151,6 +184,7 @@ def test_to_dataframe(
     )
 
 
+@pytest.mark.core
 def test_utility_properties(
     benchmark_results: BenchmarkResults,
 ) -> None:
@@ -172,6 +206,7 @@ def test_utility_properties(
     assert isinstance(br.domains[0], str)
 
 
+@pytest.mark.core
 @pytest.mark.skipif(_POLARS_TOO_OLD, reason="requires polars >= 1.40.0")
 def test_benchmark_results(cache_path: Path) -> None:
     cache = ResultCache(cache_path)
@@ -199,6 +234,7 @@ def test_benchmark_results(cache_path: Path) -> None:
     assert df.loc[0, "Mean (Task)"] == pytest.approx(0.616616)
 
 
+@pytest.mark.core
 @pytest.mark.skipif(_POLARS_TOO_OLD, reason="requires polars >= 1.40.0")
 def test_benchmark_results_model_filters_keep_benchmark(cache_path: Path) -> None:
     cache = ResultCache(cache_path)
@@ -222,6 +258,32 @@ def test_benchmark_results_model_filters_keep_benchmark(cache_path: Path) -> Non
         df = filtered.get_benchmark_result()
         assert df.shape[0] == 1
         assert df.loc[0, "Mean (Task)"] == pytest.approx(0.616616)
+
+
+@pytest.mark.skipif(_POLARS_TOO_OLD, reason="requires polars >= 1.40.0")
+def test_join_revisions_keeps_benchmark(cache_path: Path) -> None:
+    cache = ResultCache(cache_path)
+    bench = Benchmark(
+        name="MockBenchmark",
+        tasks=mteb.get_tasks(
+            [
+                "NanoSCIDOCSRetrieval",
+                "Banking77Classification",
+            ],
+        ),
+    )
+    results = cache.load_results(tasks=bench)
+    model_name = "sentence-transformers/all-MiniLM-L6-v2"
+
+    joined = results.select_models([model_name]).join_revisions()
+    assert joined.benchmark is bench
+    df = joined.get_benchmark_result()
+    assert df.shape[0] == 1
+    assert df.loc[0, "Mean (Task)"] == pytest.approx(0.616616)
+
+    # the early return for results without any task results keeps it as well
+    empty = results.select_models(["no-such-model"]).join_revisions()
+    assert empty.benchmark is bench
 
 
 @pytest.mark.skipif(_POLARS_TOO_OLD, reason="requires polars >= 1.40.0")
@@ -258,11 +320,11 @@ def test_generate_model_card_with_table_and_benchmarks(
     assert output_path.exists(), "Model card file not created"
     assert output_path.stat().st_size > 0, "Model card file is empty"
 
-    with output_path.open("r") as f:
+    with output_path.open("r", encoding="utf-8") as f:
         output_content = f.read()
 
     assert golden_file.exists(), f"Golden file not found: {golden_file}"
-    with golden_file.open("r") as f:
+    with golden_file.open("r", encoding="utf-8") as f:
         golden_content = f.read()
 
     def extract_table(content: str) -> list[str]:

@@ -1,6 +1,10 @@
 import logging
 
+import pytest
+
 import mteb
+
+pytestmark = pytest.mark.core
 
 logging.basicConfig(level=logging.INFO)
 

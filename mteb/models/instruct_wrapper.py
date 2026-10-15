@@ -9,7 +9,7 @@ from tqdm.auto import tqdm
 from typing_extensions import deprecated
 
 from mteb._requires_package import _is_package_available
-from mteb.types import OutputDType, PromptType
+from mteb.types import PromptType
 
 from .abs_encoder import AbsEncoder
 
@@ -164,6 +164,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
         fps: float | None = None,
         max_frames: int | None = None,
         num_frames: int | None = None,
+        min_frames: int = 1,
         target_sampling_rate: int | None = None,
         max_samples: int | None = None,
         **kwargs: Any,
@@ -188,6 +189,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
             fps: Target frames per second for video sampling (multimodal inputs only).
             max_frames: Maximum number of video frames to sample (multimodal inputs only).
             num_frames: Fixed number of video frames to sample (multimodal inputs only).
+            min_frames: Minimum number of video frames in FPS mode (multimodal inputs only).
             target_sampling_rate: Audio target sampling rate (multimodal inputs only). Defaults to 16000 when an audio/video collator is applied.
             max_samples: Audio maximum number of samples (multimodal inputs only).
             **kwargs: Kwargs for Sentence Transformer model.
@@ -236,6 +238,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
         self.fps = fps
         self.max_frames = max_frames
         self.num_frames = num_frames
+        self.min_frames = min_frames
         self.target_sampling_rate = target_sampling_rate
         self.max_samples = max_samples
 
@@ -273,23 +276,6 @@ class InstructSentenceTransformerModel(AbsEncoder):
         """
         instruction: str | None = self.get_task_instruction(task_metadata, prompt_type)
 
-        if "precision" in kwargs and self.mteb_model_meta is not None:
-            existing_experiment_kwargs = self.mteb_model_meta.experiment_kwargs
-            output_dtype = OutputDType.from_str(kwargs["precision"])
-            if existing_experiment_kwargs is not None:
-                existing_experiment_kwargs["output_dtypes"] = output_dtype  # type: ignore[index]
-            else:
-                existing_experiment_kwargs = {"output_dtypes": output_dtype.value}
-            logger.warning(
-                f"The 'precision' argument passed in encode_kwargs setting output_dtypes to {output_dtype.value}."
-            )
-            self.mteb_model_meta = self.mteb_model_meta.model_copy(
-                update={
-                    "experiment_kwargs": existing_experiment_kwargs,
-                },
-                deep=True,
-            )
-
         # to passage prompts won't be applied to passages
         if (
             not self.apply_instruction_to_passages
@@ -319,6 +305,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
                 max_frames=self.max_frames,
                 num_frames=self.num_frames,
                 max_samples=self.max_samples,
+                min_frames=self.min_frames,
             )
         elif has_audio:
             from mteb.models.modality_collators import AudioCollator

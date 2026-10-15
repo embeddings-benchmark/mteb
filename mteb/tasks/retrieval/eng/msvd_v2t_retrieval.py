@@ -55,7 +55,6 @@ Mihalcea, Rada},
         prompt={
             "query": "Find the caption that best describes the following video.",
         },
-        is_beta=True,
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:

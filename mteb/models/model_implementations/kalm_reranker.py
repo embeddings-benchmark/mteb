@@ -4,6 +4,7 @@ from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
+from tqdm.auto import tqdm
 
 from mteb.models.model_meta import ModelMeta
 from mteb.types import OutputDType
@@ -292,6 +293,7 @@ class KaLMRerankerWrapper:
         hf_subset: str,
         prompt_type: PromptType | None = None,
         batch_size: int = 32,
+        show_progress_bar: bool = False,
     ) -> Array:
         """Return ``P(yes)`` scores in the same order as ``pairs``."""
         import torch
@@ -320,7 +322,11 @@ class KaLMRerankerWrapper:
 
         sorted_scores: list[float] = []
         try:
-            for start in range(0, len(sorted_pairs), batch_size):
+            for start in tqdm(
+                range(0, len(sorted_pairs), batch_size),
+                disable=not show_progress_bar,
+                desc="Computing relevance scores",
+            ):
                 sorted_scores.extend(
                     self._predict_batch(
                         sorted_pairs[start : start + batch_size],
@@ -511,6 +517,7 @@ kalm_reranker_v1_nano = ModelMeta(
     model_type=["cross-encoder"],
     citation=KALM_RERANKER_V1_CITATION,
     contacts=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -543,6 +550,7 @@ kalm_reranker_v1_small = ModelMeta(
     model_type=["cross-encoder"],
     citation=KALM_RERANKER_V1_CITATION,
     contacts=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 kalm_reranker_v1_large = ModelMeta(
@@ -574,4 +582,5 @@ kalm_reranker_v1_large = ModelMeta(
     model_type=["cross-encoder"],
     citation=KALM_RERANKER_V1_CITATION,
     contacts=None,
+    output_dtypes=OutputDType.BF16,
 )

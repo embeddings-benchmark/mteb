@@ -20,7 +20,7 @@ jobs:
         uses: astral-sh/setup-uv@v8.2.0
         with:
           enable-cache: true
-          python-version: "3.10"
+          python-version: "3.11"
 
       - name: Configure GitHub Pages
         if: github.event_name == 'push'

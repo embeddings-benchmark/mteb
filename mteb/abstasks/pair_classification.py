@@ -336,6 +336,10 @@ class AbsTaskPairClassification(AbsTask):
             else:
                 remaining_negatives -= 1
 
+            # a threshold can't split tied scores, otherwise their row order leaks into the metric
+            if score == rows[i + 1][0]:
+                continue
+
             acc = (positive_so_far + remaining_negatives) / len(labels)
             if acc > max_acc:
                 max_acc = acc
@@ -357,9 +361,13 @@ class AbsTaskPairClassification(AbsTask):
         ncorrect = 0
         total_num_duplicates = sum(labels)
 
-        for i, (_score, label) in enumerate(rows[:-1]):
+        for i, (score, label) in enumerate(rows[:-1]):
             if label == 1:
                 ncorrect += 1
+
+            # a threshold can't split tied scores, otherwise their row order leaks into the metric
+            if score == rows[i + 1][0]:
+                continue
 
             if ncorrect > 0:
                 # i is 0-based, so i + 1 is the number of rows extracted so far

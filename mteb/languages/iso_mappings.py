@@ -24,13 +24,13 @@ _PATH_ISO1_TO_ISO3 = Path(__file__).parent / "iso_639_1_to_3.json"
 _PATH_DEFAULT_SCRIPTS = Path(__file__).parent / "iso_639_3_to_default_script.json"
 
 
-with path_to_lang_codes.open("r") as f:
+with path_to_lang_codes.open("r", encoding="utf-8") as f:
     ISO_TO_LANGUAGE = json.load(f)
 
-with path_to_lang_scripts.open("r") as f:
+with path_to_lang_scripts.open("r", encoding="utf-8") as f:
     ISO_TO_SCRIPT = json.load(f)
 
-with path_to_lang_fam.open("r") as f:
+with path_to_lang_fam.open("r", encoding="utf-8") as f:
     ISO_TO_FAM = json.load(f)
 
 ISO_TO_FAM_LEVEL0 = {k: v["level0"] for k, v in ISO_TO_FAM.items()}
@@ -39,14 +39,14 @@ ISO_TO_FAM_LEVEL0 = {k: v["level0"] for k, v in ISO_TO_FAM.items()}
 @cache
 def _get_iso1_to_iso3() -> dict[str, str]:
     """Lazy-load ISO 639-1 to ISO 639-3 mapping."""
-    with _PATH_ISO1_TO_ISO3.open("r") as f:
+    with _PATH_ISO1_TO_ISO3.open("r", encoding="utf-8") as f:
         return cast("dict[str, str]", json.load(f))
 
 
 @cache
 def _get_iso3_to_default_script() -> dict[str, str]:
     """Lazy-load ISO 639-3 to default script mapping."""
-    with _PATH_DEFAULT_SCRIPTS.open("r") as f:
+    with _PATH_DEFAULT_SCRIPTS.open("r", encoding="utf-8") as f:
         return cast("dict[str, str]", json.load(f))
 
 

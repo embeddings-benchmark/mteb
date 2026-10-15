@@ -12,6 +12,8 @@ from mteb.abstasks.task_metadata import TaskType
 from mteb.get_tasks import MTEBTasks
 from mteb.types import Modalities
 
+pytestmark = pytest.mark.core
+
 
 @pytest.mark.parametrize(
     "task_name", ["BornholmBitextMining", "CQADupstackRetrieval", "Birdsnap"]
