@@ -115,7 +115,6 @@ _EMBEDDING_DIM = 32
 _common_mock_metadata = dict(
     languages=None,
     open_weights=True,
-    revision="2",
     release_date=None,
     n_parameters=0,
     n_embedding_parameters=0,
@@ -418,6 +417,7 @@ class RandomEncoderBaseline:
 random_encoder_baseline = ModelMeta(
     loader=RandomEncoderBaseline,
     name="mteb/baseline-random-encoder",
+    revision="2",
     model_type=["dense"],
     embed_dim=[_EMBEDDING_DIM, 10],
     similarity_fn_name="cosine",
@@ -474,6 +474,7 @@ class RandomCrossEncoderBaseline:
 random_cross_encoder_baseline = ModelMeta(
     loader=RandomCrossEncoderBaseline,
     name="mteb/baseline-random-cross-encoder",
+    revision="2",
     model_type=["cross-encoder"],
     embed_dim=None,
     similarity_fn_name="cosine",
@@ -517,6 +518,7 @@ class NoRerankingBaseline:
 no_reranking_baseline = ModelMeta(
     loader=NoRerankingBaseline,
     name="mteb/baseline-no-reranking",
+    revision="2",
     model_type=["cross-encoder"],
     embed_dim=None,
     similarity_fn_name=None,
@@ -608,6 +610,7 @@ class RandomSparseEncoderBaseline:
 random_sparse_encoder_baseline = ModelMeta(
     loader=RandomSparseEncoderBaseline,
     name="mteb/baseline-random-sparse-encoder",
+    revision="2",
     model_type=["sparse"],
     embed_dim=_SPARSE_EMBEDDING_DIM,
     similarity_fn_name="dot",
@@ -761,6 +764,7 @@ class RandomColBERTBaseline:
 random_colbert_baseline = ModelMeta(
     loader=RandomColBERTBaseline,
     name="mteb/baseline-random-colbert",
+    revision="2",
     model_type=["late-interaction"],
     embed_dim=_LATE_INTERACTION_EMBEDDING_DIM,
     similarity_fn_name="MaxSim",
