@@ -1238,8 +1238,6 @@ class Vidore3NuclearQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
     )
 
 
-
-
 class Vidore3ComputerScienceNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3ComputerScienceNemotron35Embed8BReranking.v2",
@@ -1278,7 +1276,6 @@ class Vidore3ComputerScienceNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3ComputerScienceRetrieval.v2"],
     )
-
 
 
 class Vidore3EnergyNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
@@ -1321,7 +1318,6 @@ class Vidore3EnergyNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
     )
 
 
-
 class Vidore3FinanceEnNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3FinanceEnNemotron35Embed8BReranking.v2",
@@ -1359,7 +1355,6 @@ class Vidore3FinanceEnNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
         adapted_from=["Vidore3FinanceEnRetrieval.v2"],
         contributed_by="Illuin Technology",
     )
-
 
 
 class Vidore3FinanceFrNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
@@ -1402,7 +1397,6 @@ class Vidore3FinanceFrNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
     )
 
 
-
 class Vidore3HrNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3HrNemotron35Embed8BReranking.v2",
@@ -1443,7 +1437,6 @@ class Vidore3HrNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
     )
 
 
-
 class Vidore3IndustrialNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3IndustrialNemotron35Embed8BReranking.v2",
@@ -1482,7 +1475,6 @@ class Vidore3IndustrialNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3IndustrialRetrieval.v2"],
     )
-
 
 
 class Vidore3PharmaceuticalsNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
