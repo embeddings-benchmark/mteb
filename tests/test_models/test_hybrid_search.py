@@ -7,6 +7,7 @@ from datasets import Dataset
 import mteb
 from mteb import HybridSearch
 from mteb.mocks.mock_tasks import MockRetrievalTask
+from mteb.models.hybrid_wrappers import fuse_rrf
 
 
 def test_hybrid_search_init_and_meta():
@@ -90,6 +91,67 @@ def test_rrf_fusion_logic():
 
     assert pytest.approx(fused["doc1"]) == expected_doc1
     assert pytest.approx(fused["doc2"]) == expected_doc2
+
+
+@pytest.mark.parametrize("rrf_k", [0, 60])
+@pytest.mark.parametrize("reverse_first", [False, True])
+@pytest.mark.parametrize("reverse_second", [False, True])
+def test_rrf_ties_are_independent_of_insertion_order(
+    rrf_k, reverse_first, reverse_second
+):
+    scores1 = {"doc_a": 1.0, "doc_z": 1.0, "doc_top": 2.0}
+    scores2 = {"doc_a": 0.0, "doc_z": 0.0, "doc_top": -1.0}
+    if reverse_first:
+        scores1 = dict(reversed(scores1.items()))
+    if reverse_second:
+        scores2 = dict(reversed(scores2.items()))
+
+    fused = fuse_rrf([scores1, scores2], [0.7, 0.3], rrf_k=rrf_k)
+
+    # Match retrieval evaluation's descending document ID tie break.
+    assert fused == pytest.approx(
+        {
+            "doc_top": 0.7 / (rrf_k + 1) + 0.3 / (rrf_k + 3),
+            "doc_z": 0.7 / (rrf_k + 2) + 0.3 / (rrf_k + 1),
+            "doc_a": 0.7 / (rrf_k + 3) + 0.3 / (rrf_k + 2),
+        }
+    )
+
+
+@pytest.mark.parametrize("fusion_strategy", ["rrf", "dbsf", "rsf"])
+@pytest.mark.parametrize("reverse_order", [False, True])
+@pytest.mark.parametrize("reverse_models", [False, True])
+def test_hybrid_search_breaks_fused_ties_before_top_k(
+    monkeypatch, fusion_strategy, reverse_order, reverse_models
+):
+    models = [
+        mteb.get_model("mteb/baseline-random-encoder", embed_dim=32) for _ in range(2)
+    ]
+    hybrid = HybridSearch(models, fusion_strategy=fusion_strategy)
+    scores1 = {"doc_a": 2.0, "doc_z": 1.0}
+    scores2 = {"doc_a": 1.0, "doc_z": 2.0}
+    if reverse_order:
+        scores1 = dict(reversed(scores1.items()))
+        scores2 = dict(reversed(scores2.items()))
+    if reverse_models:
+        scores1, scores2 = scores2, scores1
+    monkeypatch.setattr(
+        hybrid.wrapped_models[0], "search", lambda **kwargs: {"q1": scores1}
+    )
+    monkeypatch.setattr(
+        hybrid.wrapped_models[1], "search", lambda **kwargs: {"q1": scores2}
+    )
+
+    results = hybrid.search(
+        queries=Dataset.from_list([{"id": "q1", "text": "query"}]),
+        task_metadata=MockRetrievalTask.metadata,
+        hf_split="test",
+        hf_subset="default",
+        top_k=1,
+        encode_kwargs={},
+    )
+
+    assert list(results["q1"]) == ["doc_z"]
 
 
 def test_relative_score_fusion_logic():
