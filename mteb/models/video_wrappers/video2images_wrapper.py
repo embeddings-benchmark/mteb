@@ -11,8 +11,6 @@ from mteb._create_dataloaders import create_dataloader
 from mteb.models.modality_collators import FramesCollator
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
-
     import torch
     from torch.utils.data import DataLoader
 
@@ -49,7 +47,11 @@ def video2images_model_meta(
     if max_frames is not None:
         experiment_kwargs["video_max_frames"] = max_frames
     return meta.model_copy(
-        update={"modalities": modalities, "experiment_kwargs": experiment_kwargs}
+        update={
+            "modalities": modalities,
+            "experiment_kwargs": experiment_kwargs,
+            "video_only_inputs": True,
+        }
     )
 
 
@@ -207,25 +209,6 @@ class Video2ImagesWrapper:
         self.mteb_model_meta = video2images_model_meta(
             meta, num_frames=num_frames, fps=fps, max_frames=max_frames
         )
-
-    def validate_tasks(self, tasks: Iterable[AbsTask]) -> None:
-        """Reject tasks this wrapper cannot run, before any model work is done.
-
-        Only video-only inputs are supported, so tasks that mix video with another modality in
-        one input would fail mid-run.
-
-        Args:
-            tasks: The tasks about to be evaluated.
-        """
-        errors = []
-        for task in tasks:
-            if _has_mixed_video_input(task):
-                errors.append(
-                    f"{type(self).__name__} only supports video-only inputs, but task "
-                    f"{task.metadata.name} mixes video with other modalities in one input."
-                )
-        if errors:
-            raise ValueError("\n".join(errors))
 
     def encode(
         self,

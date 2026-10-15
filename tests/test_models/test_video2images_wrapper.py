@@ -238,7 +238,6 @@ def test_hint_matches_whether_the_wrapper_accepts_the_task(task):
     wrapped = video2images_model_meta(meta, num_frames=DEFAULT_NUM_FRAMES)
     try:
         _check_model_modalities(wrapped, task)
-        Video2ImagesWrapper(_image_model()).validate_tasks([task])
     except ValueError:
         accepted = False
     else:
@@ -395,14 +394,43 @@ def test_show_progress_bar_false_silences_the_video_progress_bar(monkeypatch):
     assert disabled == [True]
 
 
-def test_validate_tasks_rejects_mixed_video_input_for_non_retrieval_tasks():
-    """Video with audio in one input fails for classification too, not only retrieval sides."""
-    wrapper = Video2ImagesWrapper(_image_model(), num_frames=2)
-    wrapper.validate_tasks(
-        [MockVideoClassification(), MockVideoZeroshotClassificationTask()]
+def test_wrapped_meta_sets_video_only_inputs_without_serializing_it():
+    meta = video2images_model_meta(
+        mteb.get_model_meta("openai/clip-vit-base-patch32"), num_frames=2
     )
+    assert meta.video_only_inputs
+    assert "video_only_inputs" not in meta.to_dict()
+    assert not mteb.get_model_meta("openai/clip-vit-base-patch32").video_only_inputs
+
+
+@pytest.mark.parametrize(
+    ("task", "rejected"),
+    [
+        (MockVideoClassification(), False),
+        (MockVideoZeroshotClassificationTask(), False),
+        (MockVideoRetrievalT2V(), False),
+        (MockVideoAudioClassification(), True),
+        (mteb.get_task("CoVRRVT2VRetrieval"), True),
+        (mteb.get_task("XModBenchVT2TReranking"), True),
+        (mteb.get_task("EgoSchemaVideoCentricQA"), True),
+        (mteb.get_task("VCDBCoreAudioVideoRetrieval"), True),
+    ],
+    ids=lambda p: getattr(getattr(p, "metadata", None), "name", str(p)),
+)
+def test_mixed_video_inputs_fail_fast_from_metadata_alone(task, rejected):
+    """The check needs only the wrapped meta and the task metadata, no data or model."""
+    meta = video2images_model_meta(_image_model().mteb_model_meta, num_frames=2)
+    if not rejected:
+        _check_model_modalities(meta, task)
+        return
     with pytest.raises(ValueError, match="mixes video with other modalities"):
-        wrapper.validate_tasks([MockVideoAudioClassification()])
+        _check_model_modalities(meta, task)
+
+
+def test_evaluate_rejects_mixed_video_task_before_touching_data():
+    wrapper = Video2ImagesWrapper(_image_model(), num_frames=2)
+    with pytest.raises(ValueError, match="mixes video with other modalities"):
+        mteb.evaluate(wrapper, mteb.get_task("CoVRRVT2VRetrieval"), cache=None)
 
 
 @pytest.mark.parametrize(

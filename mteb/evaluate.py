@@ -24,7 +24,10 @@ from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
     SparseEncoderWrapper,
 )
-from mteb.models.video_wrappers.video2images_wrapper import video2images_hint
+from mteb.models.video_wrappers.video2images_wrapper import (
+    _has_mixed_video_input,
+    video2images_hint,
+)
 from mteb.results import ModelResult, TaskResult
 from mteb.results.task_result import TaskError
 from mteb.timing import TimingStack
@@ -395,6 +398,12 @@ def _check_model_modalities(
     warnings, errors = [], []
 
     for task in check_tasks:
+        if model.video_only_inputs and _has_mixed_video_input(task):
+            errors.append(
+                f"Model {model.name} only supports video-only inputs, but task "
+                f"{task.metadata.name} mixes video with other modalities in one input."
+            )
+            continue
         video_hint = video2images_hint(model, task)
         # only retrieval tasks have different modalities for query and document and can be run with partial overlaps
         if isinstance(task, AbsTaskRetrieval):
@@ -611,9 +620,6 @@ def evaluate(  # noqa: PLR0913
     meta = _apply_precision_to_meta(meta, encode_kwargs)
     _check_model_modalities(meta, tasks)
     overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
-    validate_tasks = getattr(model, "validate_tasks", None)
-    if validate_tasks is not None:
-        validate_tasks([tasks] if isinstance(tasks, AbsTask) else tasks)
 
     return _evaluate_resolved(
         model,

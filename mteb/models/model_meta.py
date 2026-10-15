@@ -33,7 +33,7 @@ from huggingface_hub.errors import (
 )
 from packaging.requirements import Requirement
 from packaging.version import InvalidVersion, Version
-from pydantic import BaseModel, ConfigDict, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from mteb._helpful_enum import HelpfulStrEnum
 from mteb._hf_integration.hf_hub_utils import (
@@ -237,6 +237,8 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         modalities: A list of strings representing the modalities the model supports. Default is ["text"].
         contacts: The people to contact in case of a problem in the model, preferably a GitHub handle.
         experiment_kwargs: A dictionary of parameters used in the experiment that are not covered by other fields. This is used to create experiment names for ablation studies and similar experiments.
+        video_only_inputs: Whether video is only supported as a standalone input, e.g. because frames are sampled and pooled by `Video2ImagesWrapper`.
+            Tasks that combine video with another modality in one input are then rejected before evaluation. Run-time flag, not written to `model_meta.json`.
         output_dtypes: Output embedding data types (e.g. int8, binary, float) natively supported by the model. If None, it is assumed that the model only returns float32 embeddings.
             Models loaded in lower precision should declare it here (e.g. `OutputDType.BF16` when loading with `torch_dtype=OutputDType.BF16`).
         extra_requirements_groups: Name of group of extra requirements (mteb extras) needed to run the model, e.g. `["flagembedding"]`.
@@ -275,6 +277,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
     citation: str | None = None
     contacts: list[str] | None = None
     experiment_kwargs: Mapping[str, Any] | None = None
+    video_only_inputs: bool = Field(default=False, exclude=True)
     output_dtypes: OutputDType | list[OutputDType] | None = None
     extra_requirements_groups: Sequence[str] | None = None
 
@@ -1676,7 +1679,9 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
 
     def to_python(self) -> str:
         """Returns a string representation of the model."""
-        return _pydantic_instance_to_code(self, exclude_fields=["experiment_kwargs"])
+        return _pydantic_instance_to_code(
+            self, exclude_fields=["experiment_kwargs", "video_only_inputs"]
+        )
 
     def push_model_card_to_hub(
         self,
