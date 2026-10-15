@@ -481,6 +481,49 @@ random_cross_encoder_baseline = ModelMeta(
 )
 
 
+class NoRerankingBaseline:
+    """A reranking baseline that keeps the first-stage order (an identity mapping).
+
+    Reranking tasks pass the candidates of each query in the order of the first-stage
+    ranking, so scoring each pair by its position within its query reproduces the
+    first-stage ranking. Useful as the reference point that a reranker should improve on.
+    """
+
+    mteb_model_meta: ModelMeta | None = None
+
+    def __init__(self, model_name: str, revision: str | None, **kwargs: Any) -> None:
+        pass
+
+    def predict(  # noqa: PLR6301
+        self,
+        inputs1: DataLoader[BatchedInput],
+        inputs2: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        query_ids = inputs1.dataset["id"]
+        scores = []
+        rank = 0
+        for i, query_id in enumerate(query_ids):
+            rank = rank + 1 if i > 0 and query_id == query_ids[i - 1] else 0
+            scores.append(-rank)
+        return np.array(scores, dtype=np.float32)
+
+
+no_reranking_baseline = ModelMeta(
+    loader=NoRerankingBaseline,
+    name="mteb/baseline-no-reranking",
+    model_type=["cross-encoder"],
+    embed_dim=None,
+    similarity_fn_name=None,
+    **_common_mock_metadata,
+)
+
+
 class RandomSparseEncoderBaseline:
     """A random baseline that generates random sparse embeddings. Useful to establish a lower bound for sparse/lexical retrieval performance.
     The embeddings are conditioned on the input, so that the same input always gets the same embedding.
