@@ -3109,7 +3109,7 @@ VIDORE_V3_1_RERANKING = VidoreBenchmark(
         + _VIDORE_V3_1_RERANKING_BGEM3
         + _VIDORE_V3_1_RERANKING_QWEN3_VL_EMBEDDING_2B
     ),
-    description="Reranking of visual documents on the ViDoRe v3.1 domains. For each domain, the candidates are the top-50 pages retrieved by one of three first-stage retrievers (mteb/baseline-bm25s, BAAI/bge-m3 and Qwen/Qwen3-VL-Embedding-2B), so rerankers are compared on candidate lists of varying quality. Includes both open and closed datasets; to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml). This benchmark is in beta.",
+    description="Reranking of visual documents on the ViDoRe v3.1 domains. For each domain, the candidates are the top-50 pages retrieved by one of three first-stage retrievers; BM25, bge-m3 and Qwen3-VL-Embedding-2B, so rerankers are compared on candidate lists from various model types. Includes both open and closed datasets; to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml).",
     reference="https://arxiv.org/abs/2601.08620",
     citation=r"""
 @article{loison2026vidorev3comprehensiveevaluation,
