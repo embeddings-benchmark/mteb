@@ -208,6 +208,10 @@ class BidirLMOmniEncoder(AbsEncoder):
                 max_samples=self.max_samples,
                 # min_frames=4: the checkpoint's own video config
                 min_frames=4,
+                # real frame timing: without it the processor assumes 24 fps for
+                # the timestamps it writes into the prompt
+                # https://huggingface.co/BidirLM/BidirLM-Omni-2.5B-Embedding/blob/4d8a7d34095ef8c4ab760744015825b809756dfe/processing_bidirlm_omni.py#L230-L238
+                video_metadata=True,
             )
         elif has_audio:
             inputs.collate_fn = AudioCollator(
