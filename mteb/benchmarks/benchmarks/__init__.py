@@ -58,7 +58,7 @@ from mteb.benchmarks.benchmarks.benchmarks import (
     VIDORE_V2,
     VIDORE_V3,
     VIDORE_V3_1,
-    VIDORE_V3_1_RERANKING,
+    # VIDORE_V3_1_RERANKING,  # commented out until reference models have been run
     VISUAL_DOCUMENT_RETRIEVAL,
     VN_MTEB,
     CoIR,
@@ -151,7 +151,7 @@ __all__ = [
     "VIDORE_V2",
     "VIDORE_V3",
     "VIDORE_V3_1",
-    "VIDORE_V3_1_RERANKING",
+    # "VIDORE_V3_1_RERANKING",  # commented out until reference models have been run
     "VISUAL_DOCUMENT_RETRIEVAL",
     "VN_MTEB",
     "CoIR",

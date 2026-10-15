@@ -3055,98 +3055,100 @@ VIDORE_V3_1 = VidoreBenchmark(
 """,
 )
 
-_VIDORE_V3_1_RERANKING_BM25S = [
-    "Vidore3ComputerScienceBM25sReranking.v2",
-    "Vidore3EnergyBM25sReranking.v2",
-    "Vidore3FinanceEnBM25sReranking.v2",
-    "Vidore3FinanceFrBM25sReranking.v2",
-    "Vidore3HrBM25sReranking.v2",
-    "Vidore3IndustrialBM25sReranking.v2",
-    "Vidore3PharmaceuticalsBM25sReranking.v2",
-    "Vidore3PhysicsBM25sReranking.v2",
-    "Vidore3TelecomBM25sReranking.v2",
-    "Vidore3NuclearBM25sReranking.v2",
-]
-_VIDORE_V3_1_RERANKING_BGEM3 = [
-    "Vidore3ComputerScienceBGEm3Reranking.v2",
-    "Vidore3EnergyBGEm3Reranking.v2",
-    "Vidore3FinanceEnBGEm3Reranking.v2",
-    "Vidore3FinanceFrBGEm3Reranking.v2",
-    "Vidore3HrBGEm3Reranking.v2",
-    "Vidore3IndustrialBGEm3Reranking.v2",
-    "Vidore3PharmaceuticalsBGEm3Reranking.v2",
-    "Vidore3PhysicsBGEm3Reranking.v2",
-    "Vidore3TelecomBGEm3Reranking.v2",
-    "Vidore3NuclearBGEm3Reranking.v2",
-]
-_VIDORE_V3_1_RERANKING_QWEN3_VL_EMBEDDING_2B = [
-    "Vidore3ComputerScienceQwen3VLEmbedding2BReranking.v2",
-    "Vidore3EnergyQwen3VLEmbedding2BReranking.v2",
-    "Vidore3FinanceEnQwen3VLEmbedding2BReranking.v2",
-    "Vidore3FinanceFrQwen3VLEmbedding2BReranking.v2",
-    "Vidore3HrQwen3VLEmbedding2BReranking.v2",
-    "Vidore3IndustrialQwen3VLEmbedding2BReranking.v2",
-    "Vidore3PharmaceuticalsQwen3VLEmbedding2BReranking.v2",
-    "Vidore3PhysicsQwen3VLEmbedding2BReranking.v2",
-    "Vidore3TelecomQwen3VLEmbedding2BReranking.v2",
-    "Vidore3NuclearQwen3VLEmbedding2BReranking.v2",
-]
+# commented out until reference models have been run
+# _VIDORE_V3_1_RERANKING_BM25S = [
+#     "Vidore3ComputerScienceBM25sReranking.v2",
+#     "Vidore3EnergyBM25sReranking.v2",
+#     "Vidore3FinanceEnBM25sReranking.v2",
+#     "Vidore3FinanceFrBM25sReranking.v2",
+#     "Vidore3HrBM25sReranking.v2",
+#     "Vidore3IndustrialBM25sReranking.v2",
+#     "Vidore3PharmaceuticalsBM25sReranking.v2",
+#     "Vidore3PhysicsBM25sReranking.v2",
+#     "Vidore3TelecomBM25sReranking.v2",
+#     "Vidore3NuclearBM25sReranking.v2",
+# ]
+# _VIDORE_V3_1_RERANKING_BGEM3 = [
+#     "Vidore3ComputerScienceBGEm3Reranking.v2",
+#     "Vidore3EnergyBGEm3Reranking.v2",
+#     "Vidore3FinanceEnBGEm3Reranking.v2",
+#     "Vidore3FinanceFrBGEm3Reranking.v2",
+#     "Vidore3HrBGEm3Reranking.v2",
+#     "Vidore3IndustrialBGEm3Reranking.v2",
+#     "Vidore3PharmaceuticalsBGEm3Reranking.v2",
+#     "Vidore3PhysicsBGEm3Reranking.v2",
+#     "Vidore3TelecomBGEm3Reranking.v2",
+#     "Vidore3NuclearBGEm3Reranking.v2",
+# ]
+# _VIDORE_V3_1_RERANKING_QWEN3_VL_EMBEDDING_2B = [
+#     "Vidore3ComputerScienceQwen3VLEmbedding2BReranking.v2",
+#     "Vidore3EnergyQwen3VLEmbedding2BReranking.v2",
+#     "Vidore3FinanceEnQwen3VLEmbedding2BReranking.v2",
+#     "Vidore3FinanceFrQwen3VLEmbedding2BReranking.v2",
+#     "Vidore3HrQwen3VLEmbedding2BReranking.v2",
+#     "Vidore3IndustrialQwen3VLEmbedding2BReranking.v2",
+#     "Vidore3PharmaceuticalsQwen3VLEmbedding2BReranking.v2",
+#     "Vidore3PhysicsQwen3VLEmbedding2BReranking.v2",
+#     "Vidore3TelecomQwen3VLEmbedding2BReranking.v2",
+#     "Vidore3NuclearQwen3VLEmbedding2BReranking.v2",
+# ]
+#
+# VIDORE_V3_1_RERANKING = VidoreBenchmark(
+#     name="ViDoRe(v3.1, reranking, beta)",
+#     display_name="ViDoRe v3.1 Reranking",
+#     language_view=[
+#         "deu-Latn",
+#         "eng-Latn",
+#         "fra-Latn",
+#         "ita-Latn",
+#         "por-Latn",
+#         "spa-Latn",
+#     ],
+#     icon="https://cdn-uploads.huggingface.co/production/uploads/66e16a677c2eb2da5109fb5c/x99xqw__fl2UaPbiIdC_f.png",
+#     tasks=get_tasks(
+#         tasks=_VIDORE_V3_1_RERANKING_BM25S
+#         + _VIDORE_V3_1_RERANKING_BGEM3
+#         + _VIDORE_V3_1_RERANKING_QWEN3_VL_EMBEDDING_2B
+#     ),
+#     description="Reranking of visual documents on the ViDoRe v3.1 domains. For each domain, the candidates are the top-50 pages retrieved by one of three first-stage retrievers (mteb/baseline-bm25s, BAAI/bge-m3 and Qwen/Qwen3-VL-Embedding-2B), so rerankers are compared on candidate lists of varying quality. Includes both open and closed datasets; to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml). This benchmark is in beta.",
+#     reference="https://arxiv.org/abs/2601.08620",
+#     citation=r"""
+# @article{loison2026vidorev3comprehensiveevaluation,
+#   archiveprefix = {arXiv},
+#   author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+#   eprint = {2601.08620},
+#   primaryclass = {cs.AI},
+#   title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+#   url = {https://arxiv.org/abs/2601.08620},
+#   year = {2026},
+# }
+# """,
+#     aggregations=(
+#         BenchmarkAggregation.MEAN_TASK,
+#         BenchmarkAggregation.PUBLIC_PRIVATE,
+#         CustomGrouping(
+#             name="First-stage retriever",
+#             groups=(
+#                 CustomGroup(
+#                     label="BM25s",
+#                     tasks=get_tasks(tasks=_VIDORE_V3_1_RERANKING_BM25S),
+#                     description="Mean over the domains when reranking the top-50 candidates retrieved by mteb/baseline-bm25s.",
+#                 ),
+#                 CustomGroup(
+#                     label="BGE-M3",
+#                     tasks=get_tasks(tasks=_VIDORE_V3_1_RERANKING_BGEM3),
+#                     description="Mean over the domains when reranking the top-50 candidates retrieved by BAAI/bge-m3.",
+#                 ),
+#                 CustomGroup(
+#                     label="Qwen3-VL-Embedding-2B",
+#                     tasks=get_tasks(tasks=_VIDORE_V3_1_RERANKING_QWEN3_VL_EMBEDDING_2B),
+#                     description="Mean over the domains when reranking the top-50 candidates retrieved by Qwen/Qwen3-VL-Embedding-2B.",
+#                 ),
+#             ),
+#         ),
+#     ),
+# )
 
-VIDORE_V3_1_RERANKING = VidoreBenchmark(
-    name="ViDoRe(v3.1, reranking, beta)",
-    display_name="ViDoRe v3.1 Reranking",
-    language_view=[
-        "deu-Latn",
-        "eng-Latn",
-        "fra-Latn",
-        "ita-Latn",
-        "por-Latn",
-        "spa-Latn",
-    ],
-    icon="https://cdn-uploads.huggingface.co/production/uploads/66e16a677c2eb2da5109fb5c/x99xqw__fl2UaPbiIdC_f.png",
-    tasks=get_tasks(
-        tasks=_VIDORE_V3_1_RERANKING_BM25S
-        + _VIDORE_V3_1_RERANKING_BGEM3
-        + _VIDORE_V3_1_RERANKING_QWEN3_VL_EMBEDDING_2B
-    ),
-    description="Reranking of visual documents on the ViDoRe v3.1 domains. For each domain, the candidates are the top-50 pages retrieved by one of three first-stage retrievers (mteb/baseline-bm25s, BAAI/bge-m3 and Qwen/Qwen3-VL-Embedding-2B), so rerankers are compared on candidate lists of varying quality. Includes both open and closed datasets; to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml). This benchmark is in beta.",
-    reference="https://arxiv.org/abs/2601.08620",
-    citation=r"""
-@article{loison2026vidorev3comprehensiveevaluation,
-  archiveprefix = {arXiv},
-  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
-  eprint = {2601.08620},
-  primaryclass = {cs.AI},
-  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
-  url = {https://arxiv.org/abs/2601.08620},
-  year = {2026},
-}
-""",
-    aggregations=(
-        BenchmarkAggregation.MEAN_TASK,
-        BenchmarkAggregation.PUBLIC_PRIVATE,
-        CustomGrouping(
-            name="First-stage retriever",
-            groups=(
-                CustomGroup(
-                    label="BM25s",
-                    tasks=get_tasks(tasks=_VIDORE_V3_1_RERANKING_BM25S),
-                    description="Mean over the domains when reranking the top-50 candidates retrieved by mteb/baseline-bm25s.",
-                ),
-                CustomGroup(
-                    label="BGE-M3",
-                    tasks=get_tasks(tasks=_VIDORE_V3_1_RERANKING_BGEM3),
-                    description="Mean over the domains when reranking the top-50 candidates retrieved by BAAI/bge-m3.",
-                ),
-                CustomGroup(
-                    label="Qwen3-VL-Embedding-2B",
-                    tasks=get_tasks(tasks=_VIDORE_V3_1_RERANKING_QWEN3_VL_EMBEDDING_2B),
-                    description="Mean over the domains when reranking the top-50 candidates retrieved by Qwen/Qwen3-VL-Embedding-2B.",
-                ),
-            ),
-        ),
-    ),
-)
 
 VISUAL_DOCUMENT_RETRIEVAL = Benchmark(
     name="ViDoRe(v1&v2)",
