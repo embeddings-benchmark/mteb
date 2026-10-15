@@ -22,20 +22,20 @@ results = mteb.evaluate(video_model, tasks=[task])
 
 `num_frames` controls how many frames are sampled uniformly from each video; alternatively sample at a rate with `fps` (optionally capped by `max_frames`). Text inputs (for example the queries of a text-to-video task) are passed through to the model unchanged.
 
-### Caching frame embeddings
+??? note "Caching frame embeddings"
 
-To cache the frame embeddings (see [Cache embeddings](cache_embeddings.md) for the cache wrapper), wrap the cache inside the video wrapper:
+    To cache the frame embeddings (see [Cache embeddings](cache_embeddings.md) for the cache wrapper), wrap the cache inside the video wrapper:
 
-```python
-from mteb.models import Video2ImagesWrapper
-from mteb.models.cache_wrappers import CachedEmbeddingWrapper
+    ```python
+    from mteb.models import Video2ImagesWrapper
+    from mteb.models.cache_wrappers import CachedEmbeddingWrapper
 
-video_model = Video2ImagesWrapper(
-    CachedEmbeddingWrapper(model, "path/to/cache"), num_frames=8
-)
-```
+    video_model = Video2ImagesWrapper(
+        CachedEmbeddingWrapper(model, "path/to/cache"), num_frames=8
+    )
+    ```
 
-The other order, `CachedEmbeddingWrapper(Video2ImagesWrapper(...))`, does not work because the cache can hash text and images but not video.
+    The other order, `CachedEmbeddingWrapper(Video2ImagesWrapper(...))`, does not work because the cache can hash text and images but not video.
 
 ### Provenance
 
