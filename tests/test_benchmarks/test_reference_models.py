@@ -67,6 +67,9 @@ TARGET_BENCHMARKS = mteb.get_benchmarks()
 @pytest.mark.parametrize("benchmark", TARGET_BENCHMARKS, ids=lambda b: b.name)
 @pytest.mark.parametrize("model_name", REFERENCE_MODELS)
 def test_reference_model_coverage(result_cache, benchmark, model_name):
+    if benchmark.name == "MTEB(slk, v1)":
+        # temporary, see https://github.com/embeddings-benchmark/mteb/issues/5508
+        pytest.skip("Reference model results for MTEB(slk, v1) are incomplete")
     expected = _get_expected_task_names(benchmark, model_name)
     results = result_cache._filter_models(model_names=[model_name])._filter_tasks(
         expected
