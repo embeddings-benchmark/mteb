@@ -66,6 +66,11 @@ class LCOEmbedding(AbsEncoder):
             model_name, revision=revision, torch_dtype=torch.bfloat16, **kwargs
         ).to(self.device)
         self.model.eval()
+        # only hidden states are used; the Omni thinker forward has no logits_to_keep,
+        # so run the LM head on the last position only
+        self.model.lm_head.register_forward_pre_hook(
+            lambda _module, args: (args[0][:, -1:, :],)
+        )
 
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
 

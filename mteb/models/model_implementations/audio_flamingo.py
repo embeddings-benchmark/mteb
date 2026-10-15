@@ -123,9 +123,11 @@ class AudioFlamingoWrapper(AbsEncoder):
                     dtype=torch.bfloat16,
                 ),
             ):
+                # logits_to_keep=1 skips computing vocab logits we don't use
                 outputs = self.model(
                     **processor_inputs,
                     output_hidden_states=True,
+                    logits_to_keep=1,
                 )
 
                 hidden = outputs.hidden_states[-1]

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import string
 from typing import TYPE_CHECKING, Any
 
 from tqdm.auto import tqdm
@@ -26,6 +27,17 @@ if TYPE_CHECKING:
 # elementwise, so a longer sequence raises a shape mismatch instead of being
 # truncated internally. Every text batch is padded and truncated to this length.
 MAX_TEXT_TOKENS = 64
+
+
+def _canonicalize_text(text: str) -> str:
+    """Text canonicalisation applied by the official ``tokenize_texts`` (default on).
+
+    https://github.com/google-deepmind/videoprism/blob/main/videoprism/utils.py
+    Punctuation -> space, lower case, single spaces, trailing period.
+    """
+    p = string.punctuation
+    text = text.translate(str.maketrans(p, " " * len(p))).lower()
+    return " ".join(text.split()) + "."
 
 
 def _resolve_device(device: str | int | torch.device | None) -> torch.device:
@@ -162,7 +174,7 @@ class VideoPrismClipWrapper(AbsEncoder):
                 texts, disable=not show_progress_bar, desc="Text Encoding"
             ):
                 encoded = self.processor.tokenizer(
-                    batch["text"],
+                    [_canonicalize_text(text) for text in batch["text"]],
                     padding="max_length",
                     truncation=True,
                     max_length=MAX_TEXT_TOKENS,

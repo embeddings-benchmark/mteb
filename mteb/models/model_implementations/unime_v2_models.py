@@ -21,6 +21,9 @@ if TYPE_CHECKING:
 _IMAGE_DOCUMENT_PROMPT = "Find an image caption describing the given image."
 _QUERY_DEFAULT_PROMPT = "Represent the given input for retrieval."
 _VIDEO_DOCUMENT_PROMPT = "Describe this video in detail."
+# the official evaluation runs with --image_resolution high: every image is resized to 1344x1344
+# https://github.com/GaryGuTC/UniME-v2/blob/main/Embedding/shells/testing_embedding/test_UniMEv2_llavaOV_8B.sh
+_IMAGE_SIZE = (1344, 1344)
 
 _UNIME_V2_CITATION = r"""
 @misc{gu2025unimev2mllmasajudgeuniversalmultimodal,
@@ -133,7 +136,7 @@ class UniMEV2Wrapper(AbsEncoder):
     ) -> list[dict[str, Any]]:
         content: list[dict[str, Any]] = []
         if image is not None:
-            content.append({"type": "image", "image": image})
+            content.append({"type": "image", "image": image.resize(_IMAGE_SIZE)})
         if video is not None:
             content.append({"type": "video", "video": video})
 
@@ -222,10 +225,12 @@ class UniMEV2Wrapper(AbsEncoder):
                         return_tensors="pt",
                         processor_kwargs={"padding": True},
                     ).to(self.device)
+                    # logits_to_keep=1 skips computing vocab logits we don't use
                     output = self.model(
                         **model_inputs,
                         output_hidden_states=True,
                         return_dict=True,
+                        logits_to_keep=1,
                     )
                     embeddings = self._pooling(
                         output.hidden_states[-1], model_inputs["attention_mask"]

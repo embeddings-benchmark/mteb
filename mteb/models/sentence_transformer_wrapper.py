@@ -91,6 +91,7 @@ def _setup_modality_collator(
     num_frames: int | None,
     target_sampling_rate: int | None,
     max_samples: int | None,
+    min_frames: int = 1,
 ) -> bool:
     """Attach a VideoCollator/AudioCollator to ``inputs`` if needed.
 
@@ -109,6 +110,7 @@ def _setup_modality_collator(
             max_frames=max_frames,
             num_frames=num_frames,
             max_samples=max_samples,
+            min_frames=min_frames,
         )
     elif has_audio:
         from mteb.models.modality_collators import AudioCollator
@@ -564,6 +566,7 @@ class CrossEncoderWrapper:
         fps: float | None = None,
         max_frames: int | None = None,
         num_frames: int | None = None,
+        min_frames: int = 1,
         target_sampling_rate: int | None = None,
         max_samples: int | None = None,
         **kwargs: Any,
@@ -587,6 +590,7 @@ class CrossEncoderWrapper:
         self.fps = fps
         self.max_frames = max_frames
         self.num_frames = num_frames
+        self.min_frames = min_frames
         self.target_sampling_rate = target_sampling_rate
         self.max_samples = max_samples
 
@@ -608,6 +612,7 @@ class CrossEncoderWrapper:
             num_frames=self.num_frames,
             target_sampling_rate=self.target_sampling_rate,
             max_samples=self.max_samples,
+            min_frames=self.min_frames,
         )
         for batch in loader:
             if not is_multimodal:
