@@ -389,3 +389,114 @@ def test_generate_model_card_with_table_and_benchmarks(
         assert output_row == golden_row, (
             f"Row {i} doesn't match.\nExpected: {golden_row}\nGot: {output_row}"
         )
+
+
+# ---------------------------------------------------------------------------
+# split_leaderboard_frame on a tagged (per-benchmark) frame
+# ---------------------------------------------------------------------------
+
+_SHARED_TASK = "NanoArguAnaRetrieval"
+_MINILM = "sentence-transformers/all-MiniLM-L6-v2"
+
+
+def _two_benchmarks_sharing_a_task() -> tuple[Benchmark, Benchmark]:
+    shared = mteb.get_tasks([_SHARED_TASK])
+    a = Benchmark(
+        name="mock_tag_a", tasks=shared + mteb.get_tasks(["Banking77Classification"])
+    )
+    b = Benchmark(
+        name="mock_tag_b", tasks=shared + mteb.get_tasks(["NanoSCIDOCSRetrieval"])
+    )
+    return a, b
+
+
+def _rows_for(frame: pl.DataFrame, task: str) -> int:
+    return frame.filter(
+        (pl.col("model_name") == _MINILM) & (pl.col("task_name") == task)
+    ).height
+
+
+@pytest.mark.skipif(_POLARS_TOO_OLD, reason="needs polars >= 1.40")
+def test_split_tagged_frame_keeps_one_row_per_cell(
+    cache_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A frame saved per benchmark (``__benchmark__`` tag) must split by tag.
+
+    Re-bucketing by task would give a task shared by two benchmarks one row
+    from each benchmark's frame, doubling it in both parts."""
+    a, b = _two_benchmarks_sharing_a_task()
+    monkeypatch.setattr(mteb, "get_benchmarks", lambda *_, **__: [a, b])
+    results = mteb.load_results(download_latest=False, require_model_meta=False)
+
+    tagged = BenchmarkResults._combine_leaderboard_frames(
+        {bench.name: results._to_results_df(bench.tasks) for bench in (a, b)}
+    )
+    parts = BenchmarkResults.split_leaderboard_frame(tagged)
+
+    # NanoArguAnaRetrieval has one (split, subset) cell for this model.
+    assert _rows_for(parts[a.name], _SHARED_TASK) == 1
+    assert _rows_for(parts[b.name], _SHARED_TASK) == 1
+    # Each part still only holds its own tasks.
+    assert set(parts[a.name]["task_name"].unique()) == {
+        _SHARED_TASK,
+        "Banking77Classification",
+    }
+
+
+@pytest.mark.skipif(_POLARS_TOO_OLD, reason="needs polars >= 1.40")
+def test_split_tagged_frame_falls_back_for_untagged_benchmark(
+    cache_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A benchmark missing from the tagged frame (declared after the frame was
+    saved) is still reconstructed by task matching, as before."""
+    a, b = _two_benchmarks_sharing_a_task()
+    results = mteb.load_results(download_latest=False, require_model_meta=False)
+    tagged = BenchmarkResults._combine_leaderboard_frames(
+        {a.name: results._to_results_df(a.tasks)}
+    )
+    monkeypatch.setattr(mteb, "get_benchmarks", lambda *_, **__: [a, b])
+
+    parts = BenchmarkResults.split_leaderboard_frame(tagged)
+
+    assert _rows_for(parts[a.name], _SHARED_TASK) == 1
+    assert b.name in parts
+    assert _rows_for(parts[b.name], _SHARED_TASK) == 1
+
+
+@pytest.mark.skipif(_POLARS_TOO_OLD, reason="needs polars >= 1.40")
+@pytest.mark.parametrize("tagged", [True, False])
+def test_split_frame_preserves_subset_weighting(
+    monkeypatch: pytest.MonkeyPatch,
+    tagged: bool,
+) -> None:
+    multilingual = Benchmark(
+        name="mock_multilingual",
+        tasks=[mteb.get_task("STS22.v2", hf_subsets=["en", "zh"])],
+    )
+    english = Benchmark(
+        name="mock_english",
+        tasks=[mteb.get_task("STS22.v2", hf_subsets=["en"])],
+    )
+    monkeypatch.setattr(mteb, "get_benchmarks", lambda: [multilingual, english])
+    frame = pl.DataFrame(
+        {
+            "model_name": [_MINILM, _MINILM],
+            "task_name": ["STS22.v2", "STS22.v2"],
+            "split": ["test", "test"],
+            "subset": ["en", "zh"],
+            "score": [0.8, 0.6],
+        }
+    )
+    combined = BenchmarkResults._combine_leaderboard_frames(
+        {
+            multilingual.name: frame,
+            english.name: frame.filter(pl.col("subset") == "en"),
+        }
+    )
+
+    parts = BenchmarkResults.split_leaderboard_frame(combined if tagged else frame)
+
+    summary = multilingual._create_summary_table(parts[multilingual.name])
+    assert summary.df["Mean (Task)"].item() == pytest.approx(0.7)
+    english_summary = english._create_summary_table(parts[english.name])
+    assert english_summary.df["Mean (Task)"].item() == pytest.approx(0.8)
