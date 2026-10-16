@@ -355,7 +355,7 @@ Tetreault, Joel},
 class PacClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PAC",
-        description="Polish Paraphrase Corpus",
+        description="Polish Abusive Clauses Dataset (PAC): binary classification of whether a clause in a Polish consumer contract is abusive (unfair).",
         reference="https://arxiv.org/pdf/2211.13112.pdf",
         dataset={
             "path": "mteb/PAC",
@@ -392,7 +392,7 @@ class PacClassification(AbsTaskClassification):
 class PacClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PAC.v2",
-        description="Polish Paraphrase Corpus This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
+        description="Polish Abusive Clauses Dataset (PAC): binary classification of whether a clause in a Polish consumer contract is abusive (unfair). This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
         reference="https://arxiv.org/pdf/2211.13112.pdf",
         dataset={
             "path": "mteb/pac",

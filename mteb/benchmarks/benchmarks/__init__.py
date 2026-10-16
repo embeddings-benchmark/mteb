@@ -64,9 +64,11 @@ from mteb.benchmarks.benchmarks.benchmarks import (
     CoIR,
     CoREB,
     MTEB_code,
+    MTEB_EU_v2,
     MTEB_MAIN_RU_v1_1,
     MTEB_multilingual_v1,
     MTEB_multilingual_v2,
+    MTEB_multilingual_v3,
     RAR_b,
 )
 from mteb.benchmarks.benchmarks.rteb_benchmarks import (
@@ -156,9 +158,11 @@ __all__ = [
     "VN_MTEB",
     "CoIR",
     "CoREB",
+    "MTEB_EU_v2",
     "MTEB_MAIN_RU_v1_1",
     "MTEB_code",
     "MTEB_multilingual_v1",
     "MTEB_multilingual_v2",
+    "MTEB_multilingual_v3",
     "RAR_b",
 ]
