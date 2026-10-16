@@ -3091,9 +3091,22 @@ _VIDORE_V3_1_RERANKING_QWEN3_VL_EMBEDDING_2B = [
     "Vidore3TelecomQwen3VLEmbedding2BReranking.v2",
     "Vidore3NuclearQwen3VLEmbedding2BReranking.v2",
 ]
+_VIDORE_V3_1_RERANKING_NEMOTRON_3_5_EMBED_8B = [
+    "Vidore3ComputerScienceNemotron35Embed8BReranking.v2",
+    "Vidore3EnergyNemotron35Embed8BReranking.v2",
+    "Vidore3FinanceEnNemotron35Embed8BReranking.v2",
+    "Vidore3FinanceFrNemotron35Embed8BReranking.v2",
+    "Vidore3HrNemotron35Embed8BReranking.v2",
+    "Vidore3IndustrialNemotron35Embed8BReranking.v2",
+    "Vidore3PharmaceuticalsNemotron35Embed8BReranking.v2",
+    "Vidore3PhysicsNemotron35Embed8BReranking.v2",
+    "Vidore3TelecomNemotron35Embed8BReranking.v2",
+    "Vidore3NuclearNemotron35Embed8BReranking.v2",
+]
 
 VIDORE_V3_1_RERANKING = VidoreBenchmark(
-    name="ViDoRe(v3.1, reranking, beta)",
+    name="ViDoRe(v3.1, reranking)",
+    aliases=["ViDoRe(v3.1, reranking, beta)"],
     display_name="ViDoRe v3.1 Reranking",
     language_view=[
         "deu-Latn",
@@ -3108,8 +3121,9 @@ VIDORE_V3_1_RERANKING = VidoreBenchmark(
         tasks=_VIDORE_V3_1_RERANKING_BM25S
         + _VIDORE_V3_1_RERANKING_BGEM3
         + _VIDORE_V3_1_RERANKING_QWEN3_VL_EMBEDDING_2B
+        + _VIDORE_V3_1_RERANKING_NEMOTRON_3_5_EMBED_8B
     ),
-    description="Reranking of visual documents on the ViDoRe v3.1 domains. For each domain, the candidates are the top-50 pages retrieved by one of three first-stage retrievers; BM25, bge-m3 and Qwen3-VL-Embedding-2B, so rerankers are compared on candidate lists from various model types. Includes both open and closed datasets; to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml).",
+    description="Reranking of visual documents on the ViDoRe v3.1 domains. For each domain, the candidates are the top-50 pages retrieved by one of four first-stage retrievers; BM25, bge-m3, Qwen3-VL-Embedding-2B and Nemotron-3.5-Embed-8B, so rerankers are compared on candidate lists from various model types. Includes both open and closed datasets; to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml).",
     reference="https://arxiv.org/abs/2601.08620",
     citation=r"""
 @article{loison2026vidorev3comprehensiveevaluation,
@@ -3142,6 +3156,11 @@ VIDORE_V3_1_RERANKING = VidoreBenchmark(
                     label="Qwen3-VL-Embedding-2B",
                     tasks=get_tasks(tasks=_VIDORE_V3_1_RERANKING_QWEN3_VL_EMBEDDING_2B),
                     description="Mean over the domains when reranking the top-50 candidates retrieved by Qwen/Qwen3-VL-Embedding-2B.",
+                ),
+                CustomGroup(
+                    label="Nemotron-3.5-Embed-8B",
+                    tasks=get_tasks(tasks=_VIDORE_V3_1_RERANKING_NEMOTRON_3_5_EMBED_8B),
+                    description="Mean over the domains when reranking the top-50 candidates retrieved by nvidia/Nemotron-3.5-Embed-8B-BF16.",
                 ),
             ),
         ),

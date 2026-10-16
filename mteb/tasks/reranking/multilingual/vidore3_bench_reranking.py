@@ -1565,3 +1565,43 @@ class Vidore3NuclearNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3NuclearRetrieval.v2"],
     )
+
+
+class Vidore3TelecomNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Vidore3TelecomNemotron35Embed8BReranking.v2",
+        description="Reranking task for retrieval on the Telecom domain, a private (held-out) subset of ViDoRe V3. Queries are available in English, French, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the nvidia/Nemotron-3.5-Embed-8B-BF16 model.",
+        reference="https://arxiv.org/abs/2601.08620",
+        dataset={
+            "path": "mteb-private/Vidore3TelecomNemotron35Embed8BReranking.v2",
+            "revision": "8cac8232b1113de3b06cf67e2cb482f3043a9979",
+        },
+        type="Reranking",
+        category="t2it",
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        date=("2025-10-01", "2025-11-01"),
+        domains=["Engineering", "Programming"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="created and machine-translated",
+        bibtex_citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+        prompt={"query": "Retrieve images or text relevant to the user's query."},
+        is_public=False,
+        contributed_by="Illuin Technology",
+        adapted_from=["Vidore3TelecomRetrieval.v2"],
+    )

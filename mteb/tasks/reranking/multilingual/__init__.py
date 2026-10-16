@@ -42,6 +42,7 @@ from .vidore3_bench_reranking import (
     Vidore3PhysicsQwen3VLEmbedding2BRerankingv2,
     Vidore3TelecomBGEm3Rerankingv2,
     Vidore3TelecomBM25sRerankingv2,
+    Vidore3TelecomNemotron35Embed8BRerankingv2,
     Vidore3TelecomQwen3VLEmbedding2BRerankingv2,
 )
 from .wikipedia_reranking_multilingual import WikipediaRerankingMultilingual
@@ -91,6 +92,7 @@ __all__ = [
     "Vidore3PhysicsQwen3VLEmbedding2BRerankingv2",
     "Vidore3TelecomBGEm3Rerankingv2",
     "Vidore3TelecomBM25sRerankingv2",
+    "Vidore3TelecomNemotron35Embed8BRerankingv2",
     "Vidore3TelecomQwen3VLEmbedding2BRerankingv2",
     "WikipediaRerankingMultilingual",
     "XGlueWPRReranking",
