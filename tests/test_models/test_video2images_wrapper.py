@@ -23,7 +23,6 @@ from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_implementations.random_baseline import _key_to_vector
 from mteb.models.video_wrappers import video2images_wrapper
 from mteb.models.video_wrappers.video2images_wrapper import (
-    DEFAULT_NUM_FRAMES,
     is_video2images_meta,
     video2images_model_meta,
 )
@@ -42,7 +41,6 @@ VIDEO_TASKS = [
     MockVideoClassification(),
     MockVideoClusteringTask(),
 ]
-DEFAULT_WARNING = f"default {DEFAULT_NUM_FRAMES} frames per video"
 
 
 def _model(modalities: list[str], model_type: list[str] | None = None):
@@ -89,7 +87,7 @@ def test_wrapper_meta_leaves_inner_model_untouched():
 
 def test_default_num_frames_is_recorded_as_an_experiment():
     wrapper = Video2ImagesWrapper(_image_model())
-    assert wrapper.num_frames == DEFAULT_NUM_FRAMES == 8
+    assert wrapper.num_frames == 8
     assert wrapper.mteb_model_meta.modalities == ["text", "image", "video"]
     assert wrapper.mteb_model_meta.experiment_kwargs == {
         "video_frame_pooling": "mean",
@@ -236,7 +234,7 @@ def test_hint_matches_whether_the_wrapper_accepts_the_task(task):
     else:
         return  # runs without the wrapper, so there is nothing to hint at
 
-    wrapped = video2images_model_meta(meta, num_frames=DEFAULT_NUM_FRAMES)
+    wrapped = video2images_model_meta(meta, num_frames=8)
     try:
         _check_model_modalities(wrapped, task)
     except ValueError:

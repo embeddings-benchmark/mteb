@@ -20,9 +20,6 @@ if TYPE_CHECKING:
     from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
 
-DEFAULT_NUM_FRAMES = 8
-
-
 VIDEO_FRAME_POOLING_KEY = "video_frame_pooling"
 
 
@@ -183,7 +180,7 @@ class Video2ImagesWrapper:
         Args:
             model: An encoder whose ``mteb_model_meta.modalities`` includes ``"image"``.
             num_frames: Number of frames sampled uniformly from each video. Defaults to
-                ``DEFAULT_NUM_FRAMES`` when ``fps`` is not given.
+                8 when ``fps`` is not given.
             fps: Sample frames at this rate instead of a fixed count. Cannot be combined
                 with ``num_frames``.
             max_frames: Cap on the number of frames per video when sampling by ``fps``.
@@ -210,7 +207,7 @@ class Video2ImagesWrapper:
         if num_frames is not None and fps is not None:
             raise ValueError("Use either `num_frames` or `fps`, not both.")
         if num_frames is None and fps is None:
-            num_frames = DEFAULT_NUM_FRAMES
+            num_frames = 8
         if num_frames is not None and num_frames < 1:
             raise ValueError(f"`num_frames` must be at least 1, got {num_frames}.")
 
