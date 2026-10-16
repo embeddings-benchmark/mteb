@@ -588,7 +588,6 @@ def _nemotron_3_5_reranker(
 
 nemotron_3_5_rerank_8b_bf16 = ModelMeta(
     loader=_nemotron_3_5_reranker,
-    loader_kwargs={"model_kwargs": {"attn_implementation": "flash_attention_2"}},
     name="nvidia/Nemotron-3.5-Rerank-8B-BF16",
     revision="708e844c3da0bbaa923e9dc310b07da4ffb6a6b5",
     release_date="2026-10-20",
@@ -619,4 +618,72 @@ nemotron_3_5_rerank_8b_bf16 = ModelMeta(
     model_type=["cross-encoder"],
     extra_requirements_groups=["nemotron-3-5-vl"],
     output_dtypes=OutputDType.BF16,  # Backbone precision; the scoring head remains FP32.
+)
+
+
+nemotron_3_5_embed_1b_bf16 = ModelMeta(
+    loader=st_wrapper.SentenceTransformerEncoderWrapper,
+    name="nvidia/Nemotron-3.5-Embed-1B-BF16",
+    revision="afdf14ebb254bacbaa466a041f5a4b8a3f6550e6",
+    release_date="2026-10-20",
+    languages=nemotron_3_embed_supported_languages,
+    n_parameters=1_554_710_528,
+    n_embedding_parameters=268_435_456,
+    memory_usage_mb=2965,
+    max_tokens=32768,
+    embed_dim=2048,
+    license="openmdw-1.1",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data="https://huggingface.co/nvidia/Nemotron-3.5-Embed-1B-BF16#training-dataset",
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/nvidia/Nemotron-3.5-Embed-1B-BF16",
+    similarity_fn_name="cosine",
+    use_instructions=False,
+    training_datasets=nemotron_3_embed_training_datasets
+    | {
+        "VidoreArxivQARetrieval",
+        "VidoreInfoVQARetrieval",
+        "VidoreDocVQARetrieval",
+        "VidoreTatdqaRetrieval",
+        "VDRMultilingualRetrieval",
+    },
+    modalities=["image", "text"],
+    model_type=["dense"],
+    extra_requirements_groups=["nemotron-3-5-vl"],
+    output_dtypes=OutputDType.BF16,
+)
+
+
+nemotron_3_5_embed_8b_bf16 = ModelMeta(
+    loader=st_wrapper.SentenceTransformerEncoderWrapper,
+    name="nvidia/Nemotron-3.5-Embed-8B-BF16",
+    revision="615e74a2e37b255fb61bd4be021253860bd64e01",
+    release_date="2026-10-20",
+    languages=nemotron_3_embed_supported_languages,
+    n_parameters=8_381_155_328,
+    n_embedding_parameters=536_870_912,
+    memory_usage_mb=15986,
+    max_tokens=32768,
+    embed_dim=4096,
+    license="openmdw-1.1",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data="https://huggingface.co/nvidia/Nemotron-3.5-Embed-8B-BF16#training-dataset",
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/nvidia/Nemotron-3.5-Embed-8B-BF16",
+    similarity_fn_name="cosine",
+    use_instructions=False,
+    training_datasets=nemotron_3_embed_training_datasets
+    | {
+        "VidoreArxivQARetrieval",
+        "VidoreInfoVQARetrieval",
+        "VidoreDocVQARetrieval",
+        "VidoreTatdqaRetrieval",
+        "VDRMultilingualRetrieval",
+    },
+    modalities=["image", "text"],
+    model_type=["dense"],
+    extra_requirements_groups=["nemotron-3-5-vl"],
+    output_dtypes=OutputDType.BF16,
 )
