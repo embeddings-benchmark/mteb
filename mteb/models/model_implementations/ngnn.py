@@ -7,8 +7,6 @@ from typing import TYPE_CHECKING, Any
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
-    from pathlib import Path
-
     from mteb.models.models_protocols import EncoderProtocol
 
 MODEL_NAME = "steffen-negabo/ngnn-general-encoder-v1"
@@ -22,9 +20,8 @@ def load_ngnn_model(
     model_name: str = MODEL_NAME,
     revision: str | None = MODEL_REVISION,
     *,
-    artifact_path: str | Path | None = None,
-    cache_dir: str | Path | None = None,
-    client: Any | None = None,  # noqa: ANN401 -- accepts OpenAI-compatible clients
+    base_model: str = "text-embedding-3-large",
+    base_url: str = "https://api.openai.com/v1",
     provider_batch_size: int = 100,
     device: str | None = None,
     **kwargs: Any,
@@ -40,30 +37,33 @@ def load_ngnn_model(
         raise ValueError("Unsupported NGNN model revision")
     if device not in {None, "cpu"}:
         raise ValueError("This NGNN revision uses CPU inference")
+    if (
+        base_model != "text-embedding-3-large"
+        or base_url != "https://api.openai.com/v1"
+    ):
+        raise ValueError("This NGNN revision requires its registered OpenAI provider")
     from ngnn_encoder import NgnnGeneralEncoder
+    from openai import OpenAI
 
-    if artifact_path is not None:
-        model = NgnnGeneralEncoder(
-            artifact_path,
-            client=client,
-            provider_batch_size=provider_batch_size,
-        )
-    else:
-        model = NgnnGeneralEncoder.from_pretrained(
-            HF_REPO_ID,
-            revision=HF_ARTIFACT_REVISION,
-            cache_dir=cache_dir,
-            client=client,
-            provider_batch_size=provider_batch_size,
-        )
+    # Explicit endpoint prevents OPENAI_BASE_URL from changing model identity.
+    model = NgnnGeneralEncoder.from_pretrained(
+        HF_REPO_ID,
+        revision=HF_ARTIFACT_REVISION,
+        client=OpenAI(base_url=base_url, max_retries=2),
+        provider_batch_size=provider_batch_size,
+    )
     model.mteb_model_meta = ngnn_general_encoder.model_copy(deep=True)
     return model
 
 
 ngnn_general_encoder = ModelMeta(
-    name=MODEL_NAME,
+    name="steffen-negabo/ngnn-general-encoder-v1",
     revision=MODEL_REVISION,
     loader=load_ngnn_model,
+    loader_kwargs={
+        "base_model": "text-embedding-3-large",
+        "base_url": "https://api.openai.com/v1",
+    },
     release_date="2026-09-06",
     languages=["eng-Latn"],
     # The local dictionary has 1,572,864 values plus 512 fixed unit scales.
