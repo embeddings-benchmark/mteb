@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.26.1"
+version = "2.26.3"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -143,7 +143,6 @@ llama-nemotron-colembed-vl = ["transformers[torch]==4.49.0", "torchvision>=0.22.
 nemotron-colembed-vl-v2 = ["transformers[torch]==5.0.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
 nemotron-3-5-vl = [
     "torch>=2.8",
-    "flash-attn==2.8.3.post2",
     "sentence-transformers>=6.1.0",
     "transformers[torch]>=5.12.1,<5.17.0",
     "torchvision>=0.22.0",

@@ -1236,3 +1236,322 @@ class Vidore3NuclearQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3NuclearRetrieval.v2"],
     )
+
+
+class Vidore3ComputerScienceNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Vidore3ComputerScienceNemotron35Embed8BReranking.v2",
+        description="Reranking task for retrieval on Computer Science domain. The corpus is composed by textbooks from the OpenStax website, intended for long-document understanding tasks. Original queries were created in English, then translated to French, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the nvidia/Nemotron-3.5-Embed-8B-BF16 model.",
+        reference="https://arxiv.org/abs/2601.08620",
+        dataset={
+            "path": "mteb/Vidore3ComputerScienceNemotron35Embed8BReranking.v2",
+            "revision": "db6672a2ed617fbea371d1e469a085b07f14eec7",
+        },
+        type="Reranking",
+        category="t2it",
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        date=("2025-10-01", "2025-11-01"),
+        domains=["Engineering", "Programming"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="created and machine-translated",
+        bibtex_citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+        prompt={"query": "Retrieve images or text relevant to the user's query."},
+        is_public=True,
+        contributed_by="Illuin Technology",
+        adapted_from=["Vidore3ComputerScienceRetrieval.v2"],
+    )
+
+
+class Vidore3EnergyNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Vidore3EnergyNemotron35Embed8BReranking.v2",
+        description="Reranking task for retrieval on Energy domain. The corpus is composed by reports on energy supply in Europe, intended for complex-document understanding tasks. Original queries were created in French, then translated to English, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the nvidia/Nemotron-3.5-Embed-8B-BF16 model.",
+        reference="https://arxiv.org/abs/2601.08620",
+        dataset={
+            "path": "mteb/Vidore3EnergyNemotron35Embed8BReranking.v2",
+            "revision": "185e9f5499e358a81a762b47c5c7ee9e637b536b",
+        },
+        type="Reranking",
+        category="t2it",
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        date=("2025-10-01", "2025-11-01"),
+        domains=["Engineering", "Chemistry", "Academic"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="created and machine-translated",
+        bibtex_citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+        prompt={"query": "Retrieve images or text relevant to the user's query."},
+        is_public=True,
+        contributed_by="Illuin Technology",
+        adapted_from=["Vidore3EnergyRetrieval.v2"],
+    )
+
+
+class Vidore3FinanceEnNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Vidore3FinanceEnNemotron35Embed8BReranking.v2",
+        description="Reranking task for retrieval on Finance - EN domain. The corpus is composed by reports from American banking companies, intended for long-document understanding tasks. Original queries were created in English, then translated to French, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the nvidia/Nemotron-3.5-Embed-8B-BF16 model.",
+        reference="https://arxiv.org/abs/2601.08620",
+        dataset={
+            "path": "mteb/Vidore3FinanceEnNemotron35Embed8BReranking.v2",
+            "revision": "b577059556bd4fc81285bcf8f4e78b9a21ce7554",
+        },
+        type="Reranking",
+        category="t2it",
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        date=("2025-10-01", "2025-11-01"),
+        domains=["Financial"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="created and machine-translated",
+        bibtex_citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+        prompt={"query": "Retrieve images or text relevant to the user's query."},
+        adapted_from=["Vidore3FinanceEnRetrieval.v2"],
+        contributed_by="Illuin Technology",
+    )
+
+
+class Vidore3FinanceFrNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Vidore3FinanceFrNemotron35Embed8BReranking.v2",
+        description="Reranking task for retrieval on Finance - FR domain. The corpus is composed by reports from French companies in the luxury domain, intended for long-document understanding tasks. Original queries were created in French, then translated to English, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the nvidia/Nemotron-3.5-Embed-8B-BF16 model.",
+        reference="https://arxiv.org/abs/2601.08620",
+        dataset={
+            "path": "mteb/Vidore3FinanceFrNemotron35Embed8BReranking.v2",
+            "revision": "6ac1d4b04bd04c8d5521f5ab87c2c93ff0016cce",
+        },
+        type="Reranking",
+        category="t2it",
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        date=("2025-10-01", "2025-11-01"),
+        domains=["Financial"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="created and machine-translated",
+        bibtex_citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+        prompt={"query": "Retrieve images or text relevant to the user's query."},
+        is_public=True,
+        contributed_by="Illuin Technology",
+        adapted_from=["Vidore3FinanceFrRetrieval.v2"],
+    )
+
+
+class Vidore3HrNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Vidore3HrNemotron35Embed8BReranking.v2",
+        description="Reranking task for retrieval on HR domain. The corpus is composed by reports released by the European Union, intended for complex-document understanding tasks. Original queries were created in English, then translated to French, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the nvidia/Nemotron-3.5-Embed-8B-BF16 model.",
+        reference="https://arxiv.org/abs/2601.08620",
+        dataset={
+            "path": "mteb/Vidore3HrNemotron35Embed8BReranking.v2",
+            "revision": "98b1e4f8d01c7561c7a699db4a6769e85ce02d00",
+        },
+        type="Reranking",
+        category="t2it",
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        date=("2025-10-01", "2025-11-01"),
+        domains=["Social"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="created and machine-translated",
+        bibtex_citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+        prompt={"query": "Retrieve images or text relevant to the user's query."},
+        is_public=True,
+        contributed_by="Illuin Technology",
+        adapted_from=["Vidore3HrRetrieval.v2"],
+    )
+
+
+class Vidore3IndustrialNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Vidore3IndustrialNemotron35Embed8BReranking.v2",
+        description="Reranking task for retrieval on Industrial Reports domain. The corpus is composed by technical documents on military aircraft (fueling, mechanics, etc.), intended for complex-document understanding tasks. Original queries were created in English, then translated to French, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the nvidia/Nemotron-3.5-Embed-8B-BF16 model.",
+        reference="https://arxiv.org/abs/2601.08620",
+        dataset={
+            "path": "mteb/Vidore3IndustrialNemotron35Embed8BReranking.v2",
+            "revision": "02ea8440ac79a625a298df07d4ded4a6c0d2010b",
+        },
+        type="Reranking",
+        category="t2it",
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        date=("2025-10-01", "2025-11-01"),
+        domains=["Engineering"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="created and machine-translated",
+        bibtex_citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+        prompt={"query": "Retrieve images or text relevant to the user's query."},
+        is_public=True,
+        contributed_by="Illuin Technology",
+        adapted_from=["Vidore3IndustrialRetrieval.v2"],
+    )
+
+
+class Vidore3PharmaceuticalsNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Vidore3PharmaceuticalsNemotron35Embed8BReranking.v2",
+        description="Reranking task for retrieval on Pharmaceutical domain. The corpus is composed by slides from the FDA, intended for long-document understanding tasks. Original queries were created in English, then translated to French, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the nvidia/Nemotron-3.5-Embed-8B-BF16 model.",
+        reference="https://arxiv.org/abs/2601.08620",
+        dataset={
+            "path": "mteb/Vidore3PharmaceuticalsNemotron35Embed8BReranking.v2",
+            "revision": "38938fd6211b2bb4a839023da485afff74572584",
+        },
+        type="Reranking",
+        category="t2it",
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        date=("2025-10-01", "2025-11-01"),
+        domains=["Medical"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="created and machine-translated",
+        bibtex_citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+        prompt={"query": "Retrieve images or text relevant to the user's query."},
+        is_public=True,
+        contributed_by="Illuin Technology",
+        adapted_from=["Vidore3PharmaceuticalsRetrieval.v2"],
+    )
+
+
+class Vidore3PhysicsNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Vidore3PhysicsNemotron35Embed8BReranking.v2",
+        description="Reranking task for retrieval on Physics domain. The corpus is composed by course slides on French bachelor level physics lectures, intended for complex visual understanding tasks. Original queries were created in French, then translated to English, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the nvidia/Nemotron-3.5-Embed-8B-BF16 model.",
+        reference="https://arxiv.org/abs/2601.08620",
+        dataset={
+            "path": "mteb/Vidore3PhysicsNemotron35Embed8BReranking.v2",
+            "revision": "b481115fa35a5c31a0ed1e847da006be392b9930",
+        },
+        type="Reranking",
+        category="t2it",
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        date=("2025-10-01", "2025-11-01"),
+        domains=["Engineering", "Academic"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="created and machine-translated",
+        bibtex_citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+        prompt={"query": "Retrieve images or text relevant to the user's query."},
+        is_public=True,
+        contributed_by="Illuin Technology",
+        adapted_from=["Vidore3PhysicsRetrieval.v2"],
+    )

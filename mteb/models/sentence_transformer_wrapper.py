@@ -17,6 +17,7 @@ from mteb.similarity_functions import (
     _token_budget_chunks,
     _upcast_low_precision,
 )
+from mteb.timing import TimingStack
 from mteb.types import PromptType
 
 from .abs_encoder import AbsEncoder, get_prompt_name
@@ -958,6 +959,7 @@ class MultiVectorSearchEncoderWrapper:
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
         num_proc: int | None,
+        **kwargs: Any,
     ) -> None:
         """Store the corpus; documents are encoded lazily, in chunks, during `search`.
 
@@ -968,6 +970,7 @@ class MultiVectorSearchEncoderWrapper:
             hf_subset: Subset of current task. Similar to `hf_split` to get more information
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
             num_proc: Number of processes to use for indexing.
+            **kwargs: Additional arguments. Currently unused.
         """
         self.task_corpus = corpus
 
@@ -982,6 +985,8 @@ class MultiVectorSearchEncoderWrapper:
         encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
         num_proc: int | None,
+        timer: TimingStack | None = None,
+        **kwargs: Any,
     ) -> RetrievalOutputType:
         """Search the indexed corpus for the given queries, or rerank `top_ranked` candidates.
 
@@ -995,12 +1000,17 @@ class MultiVectorSearchEncoderWrapper:
             top_k: Number of top documents to return for each query.
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
             num_proc: Number of processes to use for dataloading.
+            timer: Records the search phases: "Encoding queries", then "Searching corpus" for a
+                full corpus search, or "Encoding corpus" and "Computing similarity" when reranking.
+                A new stack is used when not given.
+            **kwargs: Additional arguments. Currently unused.
 
         Returns:
             Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.
         """
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
+        timer = timer or TimingStack()
 
         queries_dataloader = create_dataloader(
             queries,
@@ -1009,14 +1019,15 @@ class MultiVectorSearchEncoderWrapper:
             batch_size=encode_kwargs.get("batch_size", 32),
             num_proc=num_proc,
         )
-        query_embeddings = self._encode(  # type: ignore[attr-defined]
-            queries_dataloader,
-            task_metadata=task_metadata,
-            hf_split=hf_split,
-            hf_subset=hf_subset,
-            prompt_type=PromptType.query,
-            **encode_kwargs,
-        )
+        with timer("Encoding queries", split=hf_split, subset=hf_subset):
+            query_embeddings = self._encode(  # type: ignore[attr-defined]
+                queries_dataloader,
+                task_metadata=task_metadata,
+                hf_split=hf_split,
+                hf_subset=hf_subset,
+                prompt_type=PromptType.query,
+                **encode_kwargs,
+            )
         query_idx_to_id = {i: row["id"] for i, row in enumerate(queries)}
 
         if top_ranked is not None:
@@ -1031,6 +1042,7 @@ class MultiVectorSearchEncoderWrapper:
                 hf_split=hf_split,
                 encode_kwargs=encode_kwargs,
                 num_proc=num_proc,
+                timer=timer,
             )
         else:
             logger.info("Performing full corpus search with MaxSim...")
@@ -1043,6 +1055,7 @@ class MultiVectorSearchEncoderWrapper:
                 hf_split=hf_split,
                 encode_kwargs=encode_kwargs,
                 num_proc=num_proc,
+                timer=timer,
             )
 
         # Free the corpus reference now that search is done
@@ -1065,6 +1078,7 @@ class MultiVectorSearchEncoderWrapper:
         top_k: int,
         encode_kwargs: EncodeKwargs,
         num_proc: int | None,
+        timer: TimingStack,
     ) -> dict[str, list[tuple[float, str]]]:
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
@@ -1082,9 +1096,10 @@ class MultiVectorSearchEncoderWrapper:
             encode_fn=self._encode,  # type: ignore[attr-defined]
             similarity_fn=self.similarity,  # type: ignore[attr-defined]
             num_proc=num_proc,
+            timer=timer,
         )
 
-    def _rerank_documents(
+    def _rerank_documents(  # noqa: PLR0913
         self,
         *,
         query_idx_to_id: dict[int, str],
@@ -1095,6 +1110,7 @@ class MultiVectorSearchEncoderWrapper:
         hf_subset: str,
         hf_split: str,
         encode_kwargs: EncodeKwargs,
+        timer: TimingStack,
         num_proc: int | None = None,
     ) -> dict[str, list[tuple[float, str]]]:
         """Rerank each query's pre-ranked candidates with MaxSim.
@@ -1118,6 +1134,7 @@ class MultiVectorSearchEncoderWrapper:
             encode_fn=self._encode,  # type: ignore[attr-defined]
             similarity_fn=self.similarity,  # type: ignore[attr-defined]
             num_proc=num_proc,
+            timer=timer,
         )
 
 
