@@ -1,6 +1,7 @@
 from typing import Any
 
 import numpy as np
+import torch
 from datasets import Dataset
 from sentence_transformers import CrossEncoder
 
@@ -44,3 +45,21 @@ def test_cross_encoder_predicts_one_batch_at_a_time():
 
     assert batch_sizes == [2, 2, 1]
     np.testing.assert_allclose(scores, expected, rtol=1e-5)
+
+
+def test_low_precision_scoring_head_runs_in_fp32():
+    """bf16 logits collapse nearby scores into ties, so the head is computed in fp32."""
+    cross_encoder = CrossEncoder(
+        "cross-encoder/ms-marco-TinyBERT-L2-v2",
+        model_kwargs={"dtype": torch.bfloat16},
+    )
+    pairs = [("what is a cat", "a small feline"), ("what is a cat", "a loyal pet")]
+    CrossEncoderWrapper(cross_encoder)
+
+    head = cross_encoder.model.classifier
+    assert head.weight.dtype == torch.float32
+    hidden = torch.randn(
+        4, head.in_features, dtype=torch.bfloat16, device=head.weight.device
+    )
+    assert head(hidden).dtype == torch.float32
+    assert cross_encoder.predict(pairs).dtype == np.float32

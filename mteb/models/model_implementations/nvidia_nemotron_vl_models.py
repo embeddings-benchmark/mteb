@@ -550,44 +550,8 @@ llama_nemotron_rerank_vl_1b_v2 = ModelMeta(
 )
 
 
-def _nemotron_3_5_reranker(
-    model: str, revision: str, **kwargs: Any
-) -> st_wrapper.CrossEncoderWrapper:
-    import torch
-    import torch.nn.functional as F
-
-    class FP32ScoringHead(torch.nn.Linear):
-        """Keep the scoring projection in FP32, including under caller autocast."""
-
-        def __init__(self, linear: torch.nn.Linear) -> None:
-            super().__init__(
-                linear.in_features,
-                linear.out_features,
-                bias=linear.bias is not None,
-                device=linear.weight.device,
-                dtype=torch.float32,
-            )
-            self.load_state_dict(linear.state_dict())
-            self.train(linear.training)
-
-        def forward(self, inputs: torch.Tensor) -> torch.Tensor:
-            with torch.autocast(device_type=inputs.device.type, enabled=False):
-                return F.linear(
-                    inputs.float(),
-                    self.weight.float(),
-                    None if self.bias is None else self.bias.float(),
-                )
-
-    wrapper = st_wrapper.CrossEncoderWrapper(model=model, revision=revision, **kwargs)
-    # Sentence Transformers casts Dense to the backbone dtype on load.
-    # The pinned checkpoint uses Transformer -> Pooling -> Dense.
-    dense = wrapper.model[2]
-    dense.linear = FP32ScoringHead(dense.linear)
-    return wrapper
-
-
 nemotron_3_5_rerank_8b_bf16 = ModelMeta(
-    loader=_nemotron_3_5_reranker,
+    loader=st_wrapper.CrossEncoderWrapper,
     loader_kwargs={"model_kwargs": {"attn_implementation": "flash_attention_2"}},
     name="nvidia/Nemotron-3.5-Rerank-8B-BF16",
     revision="708e844c3da0bbaa923e9dc310b07da4ffb6a6b5",
@@ -618,5 +582,5 @@ nemotron_3_5_rerank_8b_bf16 = ModelMeta(
     modalities=["image", "text"],
     model_type=["cross-encoder"],
     extra_requirements_groups=["nemotron-3-5-vl"],
-    output_dtypes=OutputDType.BF16,  # Backbone precision; the scoring head remains FP32.
+    output_dtypes=OutputDType.BF16,  # backbone; CrossEncoderWrapper runs the scoring head in FP32
 )

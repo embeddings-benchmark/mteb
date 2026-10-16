@@ -543,8 +543,63 @@ class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrap
         super().__init__(*args, **kwargs)
 
 
+def _run_scoring_head_in_fp32(model: CrossEncoder) -> None:
+    """Compute the final scoring projection of a low-precision cross-encoder in float32.
+
+    sentence-transformers runs the head in the backbone dtype, so bf16/fp16 logits are
+    already rounded before any later upcast and nearby scores tie.
+    """
+    import torch
+    import torch.nn.functional as F
+
+    # sentence-transformers < 4 keeps the transformers model on `.model` and has no `num_labels`
+    root = (
+        model if isinstance(model, torch.nn.Module) else getattr(model, "model", None)
+    )
+    if not isinstance(root, torch.nn.Module):
+        return
+    num_labels = getattr(model, "num_labels", None) or root.config.num_labels
+    heads = [
+        (name, module)
+        for name, module in root.named_modules()
+        if isinstance(module, torch.nn.Linear) and module.out_features == num_labels
+    ]
+    if not heads:  # e.g. scores read from LM logits (LogitScore)
+        return
+    name, head = heads[-1]
+    if (
+        not torch.is_floating_point(head.weight)
+        or torch.finfo(head.weight.dtype).bits >= 32
+    ):
+        return
+
+    class FP32ScoringHead(torch.nn.Linear):
+        """Keep the scoring projection in FP32, including under caller autocast."""
+
+        def __init__(self, linear: torch.nn.Linear) -> None:
+            super().__init__(
+                linear.in_features,
+                linear.out_features,
+                bias=linear.bias is not None,
+                device=linear.weight.device,
+                dtype=torch.float32,
+            )
+            self.load_state_dict(linear.state_dict())
+            self.train(linear.training)
+
+        def forward(self, inputs: torch.Tensor) -> torch.Tensor:
+            with torch.autocast(device_type=inputs.device.type, enabled=False):
+                return F.linear(inputs.float(), self.weight, self.bias)
+
+    parent_name, _, attribute = name.rpartition(".")
+    setattr(root.get_submodule(parent_name), attribute, FP32ScoringHead(head))
+
+
 class CrossEncoderWrapper:
     """Wrapper for CrossEncoder models.
+
+    The scoring head of low-precision models runs in float32, so bf16/fp16 logits do not
+    collapse nearby scores into ties.
 
     Args:
         model: The CrossEncoder model to use. Can be a string (model name) or a CrossEncoder model.
@@ -585,6 +640,7 @@ class CrossEncoderWrapper:
                     loader=CrossEncoderWrapper,
                 )
             )
+        _run_scoring_head_in_fp32(self.model)
         self.query_prefix = query_prefix
         self.passage_prefix = passage_prefix
         self.fps = fps
