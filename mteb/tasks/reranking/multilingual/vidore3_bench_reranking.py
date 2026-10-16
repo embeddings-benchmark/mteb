@@ -46,7 +46,6 @@ class Vidore3ComputerScienceBGEm3Rerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
-        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3ComputerScienceRetrieval.v2"],
     )
@@ -87,7 +86,6 @@ class Vidore3ComputerScienceBM25sRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
-        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3ComputerScienceRetrieval.v2"],
     )
@@ -128,7 +126,6 @@ class Vidore3ComputerScienceQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
-        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3ComputerScienceRetrieval.v2"],
     )
@@ -169,7 +166,6 @@ class Vidore3EnergyBGEm3Rerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
-        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3EnergyRetrieval.v2"],
     )
@@ -210,7 +206,6 @@ class Vidore3EnergyBM25sRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
-        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3EnergyRetrieval.v2"],
     )
@@ -251,7 +246,6 @@ class Vidore3EnergyQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
-        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3EnergyRetrieval.v2"],
     )
@@ -291,7 +285,6 @@ class Vidore3FinanceEnBGEm3Rerankingv2(AbsTaskRetrieval):
 }
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
-        is_beta=True,
         adapted_from=["Vidore3FinanceEnRetrieval.v2"],
         contributed_by="Illuin Technology",
     )
@@ -331,7 +324,6 @@ class Vidore3FinanceEnBM25sRerankingv2(AbsTaskRetrieval):
 }
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
-        is_beta=True,
         adapted_from=["Vidore3FinanceEnRetrieval.v2"],
         contributed_by="Illuin Technology",
     )
@@ -371,7 +363,6 @@ class Vidore3FinanceEnQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
 }
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
-        is_beta=True,
         adapted_from=["Vidore3FinanceEnRetrieval.v2"],
         contributed_by="Illuin Technology",
     )
@@ -412,7 +403,6 @@ class Vidore3FinanceFrBGEm3Rerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
-        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3FinanceFrRetrieval.v2"],
     )
@@ -453,7 +443,6 @@ class Vidore3FinanceFrBM25sRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
-        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3FinanceFrRetrieval.v2"],
     )
@@ -494,7 +483,6 @@ class Vidore3FinanceFrQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
-        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3FinanceFrRetrieval.v2"],
     )
@@ -535,7 +523,6 @@ class Vidore3HrBGEm3Rerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
-        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3HrRetrieval.v2"],
     )
@@ -576,7 +563,6 @@ class Vidore3HrBM25sRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
-        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3HrRetrieval.v2"],
     )
@@ -617,7 +603,6 @@ class Vidore3HrQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
-        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3HrRetrieval.v2"],
     )
@@ -658,7 +643,6 @@ class Vidore3IndustrialBGEm3Rerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
-        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3IndustrialRetrieval.v2"],
     )
@@ -699,7 +683,6 @@ class Vidore3IndustrialBM25sRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
-        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3IndustrialRetrieval.v2"],
     )
@@ -740,7 +723,6 @@ class Vidore3IndustrialQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
-        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3IndustrialRetrieval.v2"],
     )
@@ -781,7 +763,6 @@ class Vidore3PharmaceuticalsBGEm3Rerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
-        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3PharmaceuticalsRetrieval.v2"],
     )
@@ -822,7 +803,6 @@ class Vidore3PharmaceuticalsBM25sRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
-        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3PharmaceuticalsRetrieval.v2"],
     )
@@ -863,7 +843,6 @@ class Vidore3PharmaceuticalsQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
-        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3PharmaceuticalsRetrieval.v2"],
     )
@@ -904,7 +883,6 @@ class Vidore3PhysicsBGEm3Rerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
-        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3PhysicsRetrieval.v2"],
     )
@@ -945,7 +923,6 @@ class Vidore3PhysicsBM25sRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
-        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3PhysicsRetrieval.v2"],
     )
@@ -986,7 +963,6 @@ class Vidore3PhysicsQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=True,
-        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3PhysicsRetrieval.v2"],
     )
@@ -1027,7 +1003,6 @@ class Vidore3TelecomBGEm3Rerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=False,
-        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3TelecomRetrieval.v2"],
     )
@@ -1068,7 +1043,6 @@ class Vidore3TelecomBM25sRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=False,
-        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3TelecomRetrieval.v2"],
     )
@@ -1109,7 +1083,6 @@ class Vidore3TelecomQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=False,
-        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3TelecomRetrieval.v2"],
     )
@@ -1150,7 +1123,6 @@ class Vidore3NuclearBGEm3Rerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=False,
-        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3NuclearRetrieval.v2"],
     )
@@ -1191,7 +1163,6 @@ class Vidore3NuclearBM25sRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=False,
-        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3NuclearRetrieval.v2"],
     )
@@ -1232,7 +1203,6 @@ class Vidore3NuclearQwen3VLEmbedding2BRerankingv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve images or text relevant to the user's query."},
         is_public=False,
-        is_beta=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3NuclearRetrieval.v2"],
     )
@@ -1247,7 +1217,7 @@ class Vidore3ComputerScienceNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
             "path": "mteb/Vidore3ComputerScienceNemotron35Embed8BReranking.v2",
             "revision": "db6672a2ed617fbea371d1e469a085b07f14eec7",
         },
-        type="DocumentUnderstanding",
+        type="Reranking",
         category="t2it",
         eval_splits=["test"],
         eval_langs=_LANGS,
@@ -1287,7 +1257,7 @@ class Vidore3EnergyNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
             "path": "mteb/Vidore3EnergyNemotron35Embed8BReranking.v2",
             "revision": "185e9f5499e358a81a762b47c5c7ee9e637b536b",
         },
-        type="DocumentUnderstanding",
+        type="Reranking",
         category="t2it",
         eval_splits=["test"],
         eval_langs=_LANGS,
@@ -1327,7 +1297,7 @@ class Vidore3FinanceEnNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
             "path": "mteb/Vidore3FinanceEnNemotron35Embed8BReranking.v2",
             "revision": "b577059556bd4fc81285bcf8f4e78b9a21ce7554",
         },
-        type="DocumentUnderstanding",
+        type="Reranking",
         category="t2it",
         eval_splits=["test"],
         eval_langs=_LANGS,
@@ -1366,7 +1336,7 @@ class Vidore3FinanceFrNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
             "path": "mteb/Vidore3FinanceFrNemotron35Embed8BReranking.v2",
             "revision": "6ac1d4b04bd04c8d5521f5ab87c2c93ff0016cce",
         },
-        type="DocumentUnderstanding",
+        type="Reranking",
         category="t2it",
         eval_splits=["test"],
         eval_langs=_LANGS,
@@ -1406,7 +1376,7 @@ class Vidore3HrNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
             "path": "mteb/Vidore3HrNemotron35Embed8BReranking.v2",
             "revision": "98b1e4f8d01c7561c7a699db4a6769e85ce02d00",
         },
-        type="DocumentUnderstanding",
+        type="Reranking",
         category="t2it",
         eval_splits=["test"],
         eval_langs=_LANGS,
@@ -1446,7 +1416,7 @@ class Vidore3IndustrialNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
             "path": "mteb/Vidore3IndustrialNemotron35Embed8BReranking.v2",
             "revision": "02ea8440ac79a625a298df07d4ded4a6c0d2010b",
         },
-        type="DocumentUnderstanding",
+        type="Reranking",
         category="t2it",
         eval_splits=["test"],
         eval_langs=_LANGS,
@@ -1486,7 +1456,7 @@ class Vidore3PharmaceuticalsNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
             "path": "mteb/Vidore3PharmaceuticalsNemotron35Embed8BReranking.v2",
             "revision": "38938fd6211b2bb4a839023da485afff74572584",
         },
-        type="DocumentUnderstanding",
+        type="Reranking",
         category="t2it",
         eval_splits=["test"],
         eval_langs=_LANGS,
@@ -1526,7 +1496,7 @@ class Vidore3PhysicsNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
             "path": "mteb/Vidore3PhysicsNemotron35Embed8BReranking.v2",
             "revision": "b481115fa35a5c31a0ed1e847da006be392b9930",
         },
-        type="DocumentUnderstanding",
+        type="Reranking",
         category="t2it",
         eval_splits=["test"],
         eval_langs=_LANGS,
@@ -1554,4 +1524,44 @@ class Vidore3PhysicsNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
         is_public=True,
         contributed_by="Illuin Technology",
         adapted_from=["Vidore3PhysicsRetrieval.v2"],
+    )
+
+
+class Vidore3NuclearNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="Vidore3NuclearNemotron35Embed8BReranking.v2",
+        description="Reranking task for retrieval on the Nuclear domain, a private (held-out) subset of ViDoRe V3. Queries are available in English, French, German, Italian, Portuguese and Spanish. The candidates for reranking are the top-50 pages retrieved by the nvidia/Nemotron-3.5-Embed-8B-BF16 model.",
+        reference="https://arxiv.org/abs/2601.08620",
+        dataset={
+            "path": "mteb-private/Vidore3NuclearNemotron35Embed8BReranking.v2",
+            "revision": "2257498b70708115557fb03e5f3193beab4bffd1",
+        },
+        type="Reranking",
+        category="t2it",
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        date=("2025-10-01", "2025-11-01"),
+        domains=["Engineering", "Chemistry"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="created and machine-translated",
+        bibtex_citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+        prompt={"query": "Retrieve images or text relevant to the user's query."},
+        is_public=False,
+        contributed_by="Illuin Technology",
+        adapted_from=["Vidore3NuclearRetrieval.v2"],
     )
