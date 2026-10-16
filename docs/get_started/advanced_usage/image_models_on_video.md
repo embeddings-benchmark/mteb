@@ -40,5 +40,3 @@ results = mteb.evaluate(video_model, tasks=[task])
 ### Provenance
 
 Sampling 8 frames uniformly and mean-pooling is the default protocol, the same frame count X-CLIP, ViCLIP, LanguageBind and InternVideo2 use by default in MTEB.
-
-The sampling is always recorded in the model's `experiment_kwargs` (for example `video_frame_pooling` and `video_num_frames`), so the results are stored under an `experiments/` folder next to the model's regular results, exactly as loader overrides such as `mteb.get_model("microsoft/xclip-base-patch32", num_frames=16)` are handled for native video models. This keeps an image model evaluated on video distinguishable from a native video model, and runs with different sampling never overwrite each other.
