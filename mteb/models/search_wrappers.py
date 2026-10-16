@@ -11,6 +11,7 @@ from tqdm.auto import tqdm
 from mteb._create_dataloaders import (
     create_dataloader,
 )
+from mteb.models.cache_wrappers.cache_wrapper import CachedEmbeddingWrapper
 from mteb.timing import TimingStack
 from mteb.types import (
     Modalities,
@@ -300,6 +301,10 @@ def _document_modalities_meta(
 ) -> tuple[tuple[Modalities, ...] | None, ModelMeta]:
     """Validate document inputs and give explicit selections a distinct run identity."""
     if document_modalities is None:
+        document_modalities = (
+            (meta.experiment_kwargs or {}).get("document_modalities") if meta else None
+        )
+    if document_modalities is None:
         return None, meta
     if (
         isinstance(document_modalities, str)
@@ -343,10 +348,24 @@ def _select_document_modalities(
     corpus = corpus.remove_columns(
         [column for column in corpus.column_names if column in excluded]
     )
-    # Document-only metadata also keeps cache-miss batching from preparing
-    # excluded fields using the original task category.
+    # Encoders can choose their embedding head from the other side's modality.
+    # Preserve that context while describing the document inputs actually supplied.
+    query_modalities = task_metadata.get_modalities(PromptType.query)
+    codes = {"video": "v", "audio": "a", "image": "i", "text": "t"}
+    query_code = "".join(
+        code for modality, code in codes.items() if modality in query_modalities
+    )
+    document_code = "".join(
+        code for modality, code in codes.items() if modality in document_modalities
+    )
+    effective_modalities = set(query_modalities) | set(document_modalities)
     metadata = task_metadata.model_copy(
-        update={"modalities": list(document_modalities), "category": None}
+        update={
+            "modalities": [
+                modality for modality in codes if modality in effective_modalities
+            ],
+            "category": f"{query_code}2{document_code}",
+        }
     )
     return corpus, metadata
 
@@ -371,14 +390,19 @@ class SearchEncoderWrapper:
             corpus_chunk_size: Number of documents to encode and score at once in full corpus search.
             index_backend: Optional search index; when given, the corpus is encoded during `index`.
             document_modalities: Document inputs to supply, e.g. ["text"], ["image"]
-                or ["text", "image"]. Queries are unchanged. Explicit selections
-                are recorded in experiment_kwargs; None preserves default behavior.
+                or ["text", "image"]. Query inputs are unchanged. Explicit selections
+                are recorded in experiment_kwargs. None inherits a recorded selection,
+                otherwise preserving default behavior.
         """
         self.model = model
         self.task_corpus = None
         self.document_modalities, self.mteb_model_meta = _document_modalities_meta(
             model.mteb_model_meta, document_modalities
         )
+        if self.document_modalities is not None and isinstance(
+            model, CachedEmbeddingWrapper
+        ):
+            self.model = model._with_model_meta(self.mteb_model_meta)
         self.corpus_chunk_size = corpus_chunk_size
         self.index_backend = index_backend
 
@@ -404,7 +428,7 @@ class SearchEncoderWrapper:
             num_proc: Number of processes to use for dataloading.
             **kwargs: Additional arguments. Currently unused.
         """
-        corpus, self._corpus_metadata = _select_document_modalities(
+        corpus, self._search_metadata = _select_document_modalities(
             corpus, task_metadata, self.document_modalities
         )
         # Always retain corpus for potential reranking or fallback flows
@@ -413,12 +437,12 @@ class SearchEncoderWrapper:
             all_doc_embeddings = self.model.encode(
                 create_dataloader(
                     corpus,
-                    task_metadata=self._corpus_metadata,
+                    task_metadata=self._search_metadata,
                     prompt_type=PromptType.document,
                     num_proc=num_proc,
                     **encode_kwargs,
                 ),
-                task_metadata=self._corpus_metadata,
+                task_metadata=self._search_metadata,
                 hf_split=hf_split,
                 hf_subset=hf_subset,
                 prompt_type=PromptType.document,
@@ -468,6 +492,7 @@ class SearchEncoderWrapper:
             raise ValueError("Corpus must be indexed before searching.")
         timer = timer or TimingStack()
 
+        task_metadata = self._search_metadata
         queries_dataloader = create_dataloader(
             queries,
             task_metadata=task_metadata,
@@ -495,7 +520,7 @@ class SearchEncoderWrapper:
                     query_embeddings=query_embeddings,
                     top_ranked=top_ranked,
                     top_k=top_k,
-                    task_metadata=self._corpus_metadata,
+                    task_metadata=self._search_metadata,
                     hf_subset=hf_subset,
                     hf_split=hf_split,
                     encode_kwargs=encode_kwargs,
@@ -532,7 +557,7 @@ class SearchEncoderWrapper:
                 result_heaps = self._full_corpus_search(
                     query_idx_to_id=query_idx_to_id,
                     query_embeddings=query_embeddings,
-                    task_metadata=self._corpus_metadata,
+                    task_metadata=self._search_metadata,
                     hf_subset=hf_subset,
                     hf_split=hf_split,
                     top_k=top_k,
@@ -748,11 +773,11 @@ class SearchCrossEncoderWrapper:
         Args:
             model: The cross-encoder to use for reranking.
             document_modalities: Modalities to supply for documents, e.g. ["text"],
-                ["image"] or ["text", "image"]. Queries are unchanged. Each selected
+                ["image"] or ["text", "image"]. Query inputs are unchanged. Each selected
                 modality must be available in the task corpus and supported by the
-                model. None preserves the task's default inputs and cache identity.
-                Explicit selections are recorded in the model's experiment_kwargs
-                so that their cached results remain separate.
+                model. None inherits a recorded selection, otherwise preserving the
+                task's default inputs and cache identity. Explicit selections are
+                recorded in experiment_kwargs so their cached results remain separate.
         """
         self.model = model
         self.task_corpus = None
@@ -782,7 +807,7 @@ class SearchCrossEncoderWrapper:
             num_proc: Number of processes to use.
             **kwargs: Additional arguments. Currently unused.
         """
-        self.task_corpus, self._corpus_metadata = _select_document_modalities(
+        self.task_corpus, self._search_metadata = _select_document_modalities(
             corpus, task_metadata, self.document_modalities
         )
 
@@ -823,6 +848,7 @@ class SearchCrossEncoderWrapper:
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
 
+        task_metadata = self._search_metadata
         doc_id_to_idx = {doc: idx for idx, doc in enumerate(self.task_corpus["id"])}
 
         query_indices: list[int] = []
@@ -854,7 +880,7 @@ class SearchCrossEncoderWrapper:
         )
         corpus_loader = create_dataloader(
             self.task_corpus.select(doc_indices),
-            task_metadata=self._corpus_metadata,
+            task_metadata=self._search_metadata,
             prompt_type=PromptType.document,
             num_proc=num_proc,
             **encode_kwargs,

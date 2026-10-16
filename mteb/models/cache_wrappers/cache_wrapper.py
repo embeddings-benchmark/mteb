@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import logging
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -58,6 +59,7 @@ class CachedEmbeddingWrapper:
             cache_backend: Cache backend class to use for storing embeddings.
         """
         self._model = model
+        self._model_meta: ModelMeta | None = None
         self.cache_path = Path(cache_path)
         self.cache_path.mkdir(parents=True, exist_ok=True)
         if not hasattr(model, "encode"):
@@ -71,7 +73,18 @@ class CachedEmbeddingWrapper:
     @property
     def mteb_model_meta(self) -> ModelMeta | None:
         """The wrapped model meta data."""
-        return self._model.mteb_model_meta
+        return (
+            self._model_meta
+            if self._model_meta is not None
+            else self._model.mteb_model_meta
+        )
+
+    def _with_model_meta(self, model_meta: ModelMeta) -> CachedEmbeddingWrapper:
+        """Bind cache identity to a search configuration without mutating the original."""
+        wrapper = copy.copy(self)
+        wrapper._model_meta = model_meta
+        wrapper.cache_dict = {}
+        return wrapper
 
     def encode(
         self,

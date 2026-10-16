@@ -80,8 +80,9 @@ For a multimodal corpus and a compatible model, use `["image"]` for document
 images or `["text", "image"]` for both. Each requested modality must be present in
 the task corpus and supported by the model. Query inputs, candidate documents and
 relevance labels are unchanged. Text selection includes document titles and bodies;
-image-only selection removes those text fields. Without `document_modalities`,
-the wrapper keeps the existing task inputs and cache behavior.
+image-only selection removes those text fields. An omitted selection inherits any
+selection already recorded on the model. For an unconfigured model, the wrapper
+keeps the existing task inputs and cache behavior.
 
 Explicit selections are saved in `model_meta.json`, for example:
 
@@ -100,10 +101,11 @@ results/<model>/<revision>/experiments/<experiment_id>/
 
 This records the document modalities supplied to the model, separately from its
 supported `modalities`. It lets a leaderboard group configurations under the same
-model and filter by document inputs without overwriting another run. Omitted
-selections remain unspecified; their modality cannot be inferred from capabilities.
+model and filter by document inputs without overwriting another run. Runs without
+a recorded selection remain unspecified; their inputs cannot be inferred from capabilities.
 Leaderboard grouping is separate from this input-selection feature.
 
-When an encoder is wrapped in `CachedEmbeddingWrapper`, document embeddings are
-cached by their selected inputs. Query embeddings can be reused across document
-selections because the query inputs are unchanged.
+`CachedEmbeddingWrapper` keeps both query and document embeddings separate for
+each selection, in either wrapper order. Query inputs stay the same, but some
+models choose a query embedding head based on the document modality. Models receive
+task metadata describing the original query modalities and selected document modalities.

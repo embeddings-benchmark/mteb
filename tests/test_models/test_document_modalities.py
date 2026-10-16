@@ -2,10 +2,12 @@
 
 import json
 from pathlib import Path
+from types import SimpleNamespace
 from typing import Any
 
 import numpy as np
 import pytest
+import torch
 from datasets import Image
 from PIL import Image as PILImage
 
@@ -92,21 +94,38 @@ def test_selected_document_inputs_leave_queries_and_task_unchanged(
         "d2",
         "d1",
     ]
-    assert kwargs["task_metadata"] is multimodal_task.metadata
+    effective = kwargs["task_metadata"]
+    assert effective.get_modalities(
+        PromptType.query
+    ) == multimodal_task.metadata.get_modalities(PromptType.query)
+    assert set(effective.get_modalities(PromptType.document)) == expected
+    if modalities is None:
+        assert effective is multimodal_task.metadata
     assert multimodal_task.metadata.category == "it2it"
     assert "image" in multimodal_task.dataset["default"]["test"]["corpus"].column_names
     assert model.mteb_model_meta.model_dump() == original_meta
 
 
-@pytest.mark.parametrize("encoder", [False, True])
-def test_document_modalities_cache_round_trip(tmp_path: Path, multimodal_task, encoder):
+@pytest.mark.parametrize(
+    ("encoder", "cache_embeddings"), [(False, False), (True, False), (True, True)]
+)
+def test_document_modalities_cache_round_trip(
+    tmp_path: Path, multimodal_task, encoder, cache_embeddings
+):
     model = RecordingEncoder() if encoder else RecordingReranker()
     wrapper_cls = SearchEncoderWrapper if encoder else SearchCrossEncoderWrapper
     cache = mteb.ResultCache(tmp_path)
     paths = set()
     for modalities in (None, ["text"], ["image"], ["text", "image"]):
         wrapper = wrapper_cls(model, document_modalities=modalities)
+        if cache_embeddings:
+            wrapper = CachedEmbeddingWrapper(wrapper, tmp_path / "embeddings")
         result = mteb.evaluate(wrapper, multimodal_task, cache=cache, co2_tracker=False)
+        expected_inputs = set(modalities or ["text", "image"])
+        assert all(
+            set(batch) & {"text", "image"} == expected_inputs
+            for batch in model.calls[-1][1]
+        )
         path = cache.get_task_result_path(
             multimodal_task.metadata.name, wrapper.mteb_model_meta
         )
@@ -255,16 +274,33 @@ def test_encoder_document_selection(modalities, route, multimodal_task):
     assert "image" in multimodal_task.dataset["default"]["test"]["corpus"].column_names
 
 
+class ModalityAwareEncoder(RecordingEncoder):
+    """Like cross-modal adapters, choose query embeddings for the document modality."""
+
+    def encode(self, inputs, *, task_metadata, prompt_type=None, **kwargs: Any):
+        embeddings = super().encode(inputs, prompt_type=prompt_type, **kwargs)
+        if prompt_type == PromptType.query:
+            modalities = task_metadata.get_modalities(PromptType.document)
+            embeddings *= float("text" in modalities) + 2 * float("image" in modalities)
+        return embeddings
+
+
+@pytest.mark.parametrize("cache_outermost", [False, True])
 def test_encoder_embedding_cache_preserves_document_selection(
-    tmp_path: Path, multimodal_task
+    tmp_path: Path, multimodal_task, cache_outermost
 ):
     split = multimodal_task.dataset["default"]["test"]
-    model = RecordingEncoder()
+    model = ModalityAwareEncoder()
     cached = CachedEmbeddingWrapper(model, tmp_path)
     selections = [["text"], ["image"], ["text", "image"]]
 
     def search(modalities):
-        wrapper = SearchEncoderWrapper(cached, document_modalities=modalities)
+        if cache_outermost:
+            selected = SearchEncoderWrapper(model, document_modalities=modalities)
+            # evaluate() adds this outer search wrapper around the cached encoder.
+            wrapper = SearchEncoderWrapper(CachedEmbeddingWrapper(selected, tmp_path))
+        else:
+            wrapper = SearchEncoderWrapper(cached, document_modalities=modalities)
         kwargs = dict(
             task_metadata=multimodal_task.metadata,
             hf_subset="default",
@@ -272,12 +308,20 @@ def test_encoder_embedding_cache_preserves_document_selection(
             encode_kwargs={},
         )
         wrapper.index(split["corpus"], **kwargs)
+        assert wrapper.mteb_model_meta.experiment_kwargs[
+            "document_modalities"
+        ] == sorted(modalities)
+        assert wrapper.model.mteb_model_meta.experiment_kwargs[
+            "document_modalities"
+        ] == sorted(modalities)
         return wrapper.search(split["queries"], top_k=2, **kwargs)
 
     results = {}
     for modalities in selections:
         result = search(modalities)
-        expected_score = float("text" in modalities) + 2 * float("image" in modalities)
+        expected_score = (
+            float("text" in modalities) + 2 * float("image" in modalities)
+        ) ** 2
         assert all(
             score == expected_score
             for documents in result.values()
@@ -290,17 +334,59 @@ def test_encoder_embedding_cache_preserves_document_selection(
             set(batch) & {"text", "image"} == set(modalities) for batch in batches
         )
     calls = len(model.calls)
-    assert calls == 4  # Shared query embeddings, three distinct document inputs.
-    # Repeat in reverse order: all inputs must reuse their own embeddings.
+    assert calls == 6  # Both query and document encodings depend on configuration.
+    # Fresh wrappers reload only their own vectors, in either wrapper order.
     for modalities in reversed(selections):
         assert search(modalities) == results[tuple(modalities)]
     assert len(model.calls) == calls
-    doc_cache = next(
-        cache
-        for (_, prompt_type, _), cache in cached.cache_dict.items()
-        if prompt_type == PromptType.document
+    assert cached.mteb_model_meta.experiment_kwargs == {"existing_option": True}
+    assert model.mteb_model_meta.experiment_kwargs == {"existing_option": True}
+    assert not cached.cache_dict
+
+
+def test_text_document_selection_preserves_audio_query_context():
+    from mteb.models.model_implementations.pe_av_models import PEAudioVisualWrapper
+
+    task = mteb.get_task("AudioCapsA2TRetrieval")
+    # Use the real adapter's head selection with small deterministic heads.
+    adapter = PEAudioVisualWrapper.__new__(PEAudioVisualWrapper)
+    adapter._text_cls = lambda texts: torch.ones((len(texts), 2))
+    adapter.model = SimpleNamespace(
+        audio_model=SimpleNamespace(
+            text_audio_head=lambda x: x * torch.tensor([1.0, 0.0])
+        ),
+        video_model=SimpleNamespace(
+            text_video_head=lambda x: x * torch.tensor([0.0, 1.0])
+        ),
+        text_audio_video_head=lambda x: x,
     )
-    assert len(doc_cache.hash_to_index) == 6  # Two documents in each representation.
+    model = RecordingEncoder()
+    model.mteb_model_meta = model.mteb_model_meta.model_copy(
+        update={"modalities": ["text", "audio"]}
+    )
+    corpus = MockRerankingTask()
+    corpus.load_data()
+    corpus = corpus.dataset["default"]["test"]["corpus"]
+    embeddings = []
+    for modalities in (None, ["text"]):
+        wrapper = SearchEncoderWrapper(model, document_modalities=modalities)
+        wrapper.index(
+            corpus,
+            task_metadata=task.metadata,
+            hf_subset="default",
+            hf_split="test",
+            encode_kwargs={},
+        )
+        embeddings.append(
+            adapter.get_text_embeddings(
+                [{"text": ["document"]}],
+                task_metadata=wrapper._search_metadata,
+                prompt_type=PromptType.document,
+                show_progress_bar=False,
+            )
+        )
+    np.testing.assert_array_equal(embeddings[0], [[1.0, 0.0]])
+    np.testing.assert_array_equal(embeddings[1], embeddings[0])
 
 
 def test_get_model_document_selection_for_encoders(multimodal_task):
