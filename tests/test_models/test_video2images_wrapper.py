@@ -24,6 +24,7 @@ from mteb.models.model_implementations.random_baseline import _key_to_vector
 from mteb.models.video_wrappers import video2images_wrapper
 from mteb.models.video_wrappers.video2images_wrapper import (
     DEFAULT_NUM_FRAMES,
+    is_video2images_meta,
     video2images_model_meta,
 )
 from mteb.types import PromptType
@@ -394,13 +395,11 @@ def test_show_progress_bar_false_silences_the_video_progress_bar(monkeypatch):
     assert disabled == [True]
 
 
-def test_wrapped_meta_sets_video_only_inputs_without_serializing_it():
-    meta = video2images_model_meta(
-        mteb.get_model_meta("openai/clip-vit-base-patch32"), num_frames=2
-    )
-    assert meta.video_only_inputs
-    assert "video_only_inputs" not in meta.to_dict()
-    assert not mteb.get_model_meta("openai/clip-vit-base-patch32").video_only_inputs
+def test_only_wrapped_meta_is_recognised_as_video2images():
+    meta = mteb.get_model_meta("openai/clip-vit-base-patch32")
+    assert not is_video2images_meta(meta)
+    assert is_video2images_meta(video2images_model_meta(meta, num_frames=2))
+    assert is_video2images_meta(video2images_model_meta(meta, fps=2.0, max_frames=8))
 
 
 @pytest.mark.parametrize(

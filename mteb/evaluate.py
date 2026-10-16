@@ -26,6 +26,7 @@ from mteb.models.sentence_transformer_wrapper import (
 )
 from mteb.models.video_wrappers.video2images_wrapper import (
     _has_mixed_video_input,
+    is_video2images_meta,
     video2images_hint,
 )
 from mteb.results import ModelResult, TaskResult
@@ -398,7 +399,7 @@ def _check_model_modalities(
     warnings, errors = [], []
 
     for task in check_tasks:
-        if model.video_only_inputs and _has_mixed_video_input(task):
+        if is_video2images_meta(model) and _has_mixed_video_input(task):
             errors.append(
                 f"Model {model.name} only supports video-only inputs, but task "
                 f"{task.metadata.name} mixes video with other modalities in one input."

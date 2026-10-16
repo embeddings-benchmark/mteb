@@ -23,6 +23,19 @@ if TYPE_CHECKING:
 DEFAULT_NUM_FRAMES = 8
 
 
+VIDEO_FRAME_POOLING_KEY = "video_frame_pooling"
+
+
+def is_video2images_meta(meta: ModelMeta) -> bool:
+    """Whether `meta` belongs to a model wrapped in `Video2ImagesWrapper`.
+
+    Wrapped models are recognised by the frame-pooling entry that `video2images_model_meta`
+    always records in ``experiment_kwargs``. A model that set the same key itself would be
+    treated as wrapped.
+    """
+    return VIDEO_FRAME_POOLING_KEY in (meta.experiment_kwargs or {})
+
+
 def video2images_model_meta(
     meta: ModelMeta,
     *,
@@ -39,7 +52,7 @@ def video2images_model_meta(
     if "video" not in modalities:
         modalities.append("video")
     experiment_kwargs = dict(meta.experiment_kwargs or {})
-    experiment_kwargs["video_frame_pooling"] = "mean"
+    experiment_kwargs[VIDEO_FRAME_POOLING_KEY] = "mean"
     if num_frames is not None:
         experiment_kwargs["video_num_frames"] = num_frames
     if fps is not None:
@@ -50,7 +63,6 @@ def video2images_model_meta(
         update={
             "modalities": modalities,
             "experiment_kwargs": experiment_kwargs,
-            "video_only_inputs": True,
         }
     )
 
