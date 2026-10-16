@@ -49,17 +49,15 @@ def test_cross_encoder_predicts_one_batch_at_a_time():
 
 def test_low_precision_scoring_head_runs_in_fp32():
     """bf16 logits collapse nearby scores into ties, so the head is computed in fp32."""
-    cross_encoder = CrossEncoder(
-        "cross-encoder/ms-marco-TinyBERT-L2-v2",
-        model_kwargs={"dtype": torch.bfloat16},
-    )
+    cross_encoder = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L2-v2", device="cpu")
+    # cast after loading: model_kwargs needs sentence-transformers>=4
+    cross_encoder.model.to(torch.bfloat16)
     pairs = [("what is a cat", "a small feline"), ("what is a cat", "a loyal pet")]
     CrossEncoderWrapper(cross_encoder)
 
     head = cross_encoder.model.classifier
     assert head.weight.dtype == torch.float32
-    hidden = torch.randn(
-        4, head.in_features, dtype=torch.bfloat16, device=head.weight.device
+    assert head(torch.randn(4, head.in_features, dtype=torch.bfloat16)).dtype == (
+        torch.float32
     )
-    assert head(hidden).dtype == torch.float32
     assert cross_encoder.predict(pairs).dtype == np.float32

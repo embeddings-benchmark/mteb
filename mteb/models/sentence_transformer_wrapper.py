@@ -558,7 +558,9 @@ def _run_scoring_head_in_fp32(model: CrossEncoder) -> None:
     )
     if not isinstance(root, torch.nn.Module):
         return
-    num_labels = getattr(model, "num_labels", None) or root.config.num_labels
+    num_labels = getattr(model, "num_labels", None) or getattr(
+        getattr(root, "config", None), "num_labels", 1
+    )
     heads = [
         (name, module)
         for name, module in root.named_modules()
