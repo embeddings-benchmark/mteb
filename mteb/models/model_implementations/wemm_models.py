@@ -6,6 +6,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
 )
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -16,6 +17,19 @@ if TYPE_CHECKING:
 
 class WeMMEncoderWrapper(SentenceTransformerEncoderWrapper):
     """Custom SentenceTransformer encoder wrapper for WeChat WeMM Embedding models."""
+
+    def __init__(self, model: str, revision: str | None = None, **kwargs: Any) -> None:
+        from huggingface_hub import hf_hub_download
+        from tokenizers import Tokenizer
+
+        super().__init__(model, revision=revision, **kwargs)
+        # transformers>=5.18 rebuilds this tokenizer's normalizer and drops the checkpoint's
+        # `\n$` -> "" rule, which shapes the prompt; restore it from tokenizer.json
+        tokenizer = self.model[0].processor.tokenizer
+        tokenizer_file = hf_hub_download(model, "tokenizer.json", revision=revision)
+        tokenizer.backend_tokenizer.normalizer = Tokenizer.from_file(
+            tokenizer_file
+        ).normalizer
 
     def encode(
         self,
@@ -107,7 +121,10 @@ _WEMM_CITATION = """@article{wemm-embedding,
 
 _WEMM_LOADER_KWARGS = dict(
     trust_remote_code=True,
+    # fps=2: video_processor.fps=2
+    # https://huggingface.co/tencent/WeMM-Embedding-2B/blob/main/processor_config.json
     fps=2.0,
+    # 64 is an mteb cap; upstream ships max_frames=768
     max_frames=64,
 )
 
@@ -137,6 +154,7 @@ wemm_embedding_2b = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     extra_requirements_groups=["wemm"],
+    output_dtypes=OutputDType.BF16,
 )
 
 wemm_embedding_4b = ModelMeta(
@@ -164,6 +182,7 @@ wemm_embedding_4b = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     extra_requirements_groups=["wemm"],
+    output_dtypes=OutputDType.BF16,
 )
 
 wemm_embedding_9b = ModelMeta(
@@ -191,4 +210,5 @@ wemm_embedding_9b = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     extra_requirements_groups=["wemm"],
+    output_dtypes=OutputDType.BF16,
 )

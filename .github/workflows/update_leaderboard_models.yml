@@ -28,7 +28,7 @@ jobs:
         uses: astral-sh/setup-uv@v8.2.0
         with:
           enable-cache: true
-          python-version: "3.10"
+          python-version: "3.11"
 
 
       - name: Install mteb
@@ -40,7 +40,7 @@ jobs:
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
       - name: Generate model list
-        run: uv run --no-sync python scripts/generate_leaderboard_models.py > models.py
+        run: uv run --no-sync python scripts/tools/generate_leaderboard_models.py > models.py
 
       - name: Check if models.py changed in HF Space
         id: diff

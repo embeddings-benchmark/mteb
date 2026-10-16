@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 from typing import TYPE_CHECKING, Any
 
 from datasets import DatasetDict, load_dataset
@@ -20,7 +20,7 @@ _LANGUAGES = {
 }
 
 
-class CUREv1Splits(str, Enum):
+class CUREv1Splits(StrEnum):
     all = "All"
     dentistry_and_oral_health = "Dentistry and Oral Health"
     dermatology = "Dermatology"

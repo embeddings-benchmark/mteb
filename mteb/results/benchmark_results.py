@@ -25,9 +25,9 @@ from .model_result import ModelResult, _aggregate_and_pivot
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterable, Iterator
+    from typing import Self
 
     import datasets
-    from typing_extensions import Self
 
     from mteb.abstasks.abstask import AbsTask
     from mteb.abstasks.task_metadata import (
@@ -285,7 +285,9 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                     )
                 )
         if not records:
-            return BenchmarkResults.model_construct(model_results=[])
+            return BenchmarkResults.model_construct(
+                model_results=[], benchmark=self.benchmark
+            )
         task_df = pd.DataFrame.from_records(records)
 
         # Use cached model metas
@@ -346,7 +348,9 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                 model_meta=group["model_meta"].iloc[0],
             )
             model_results.append(model_result)
-        return BenchmarkResults.model_construct(model_results=model_results)
+        return BenchmarkResults.model_construct(
+            model_results=model_results, benchmark=self.benchmark
+        )
 
     def _get_scores(
         self,
@@ -705,7 +709,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         """Save the BenchmarkResults to a JSON file."""
         path = Path(path)
         path.parent.mkdir(parents=True, exist_ok=True)
-        with path.open("w") as out_file:
+        with path.open("w", encoding="utf-8") as out_file:
             out_file.write(self.model_dump_json(indent=2))
 
     @classmethod
@@ -734,7 +738,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
             An instance of BenchmarkResults.
         """
         path = Path(path)
-        with path.open() as in_file:
+        with path.open(encoding="utf-8") as in_file:
             data = json.loads(in_file.read())
         return cls.from_dict(data)
 

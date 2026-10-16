@@ -6,6 +6,10 @@ from tqdm.auto import tqdm
 
 import mteb.models.sentence_transformer_wrapper as st_wrapper
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.model_implementations.nvidia_models import (
+    nemotron_3_embed_supported_languages,
+    nemotron_3_embed_training_datasets,
+)
 from mteb.models.model_meta import ModelMeta
 from mteb.types import OutputDType, PromptType
 
@@ -197,6 +201,7 @@ llama_nemoretriever_colembed_1b_v1 = ModelMeta(
     training_datasets=TRAINING_DATA,
     citation=LLAMA_NEMORETRIEVER_CITATION,
     extra_requirements_groups=["llama-nemotron-colembed-vl"],
+    output_dtypes=OutputDType.BF16,
 )
 
 llama_nemoretriever_colembed_3b_v1 = ModelMeta(
@@ -226,6 +231,7 @@ llama_nemoretriever_colembed_3b_v1 = ModelMeta(
     training_datasets=TRAINING_DATA,
     citation=LLAMA_NEMORETRIEVER_CITATION,
     extra_requirements_groups=["llama-nemotron-colembed-vl"],
+    output_dtypes=OutputDType.BF16,
 )
 
 llama_nemotron_colembed_vl_3b_v2 = ModelMeta(
@@ -255,6 +261,7 @@ llama_nemotron_colembed_vl_3b_v2 = ModelMeta(
     training_datasets=TRAINING_DATA,
     citation=NEMOTRON_COLEMBED_CITATION_V2,
     extra_requirements_groups=["llama-nemotron-colembed-vl"],
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -285,6 +292,7 @@ nemotron_colembed_vl_4b_v2 = ModelMeta(
     citation=NEMOTRON_COLEMBED_CITATION_V2,
     model_type=["late-interaction"],
     extra_requirements_groups=["nemotron-colembed-vl-v2"],
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -315,6 +323,7 @@ nemotron_colembed_vl_8b_v2 = ModelMeta(
     citation=NEMOTRON_COLEMBED_CITATION_V2,
     model_type=["late-interaction"],
     extra_requirements_groups=["nemotron-colembed-vl-v2"],
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -497,6 +506,7 @@ llama_nemotron_embed_vl_1b_v2 = ModelMeta(
     training_datasets=TRAINING_DATA_EMBED_VL_1B_V2,
     citation=LLAMA_NEMOTRON_VL_1B_V2_CITATION,
     extra_requirements_groups=["llama-nemotron-colembed-vl"],
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -536,4 +546,144 @@ llama_nemotron_rerank_vl_1b_v2 = ModelMeta(
     modalities=["image", "text"],
     model_type=["cross-encoder"],
     citation=LLAMA_NEMOTRON_VL_1B_V2_CITATION,
+    output_dtypes=OutputDType.BF16,
+)
+
+
+def _nemotron_3_5_reranker(
+    model: str, revision: str, **kwargs: Any
+) -> st_wrapper.CrossEncoderWrapper:
+    import torch
+    import torch.nn.functional as F
+
+    class FP32ScoringHead(torch.nn.Linear):
+        """Keep the scoring projection in FP32, including under caller autocast."""
+
+        def __init__(self, linear: torch.nn.Linear) -> None:
+            super().__init__(
+                linear.in_features,
+                linear.out_features,
+                bias=linear.bias is not None,
+                device=linear.weight.device,
+                dtype=torch.float32,
+            )
+            self.load_state_dict(linear.state_dict())
+            self.train(linear.training)
+
+        def forward(self, inputs: torch.Tensor) -> torch.Tensor:
+            with torch.autocast(device_type=inputs.device.type, enabled=False):
+                return F.linear(
+                    inputs.float(),
+                    self.weight.float(),
+                    None if self.bias is None else self.bias.float(),
+                )
+
+    wrapper = st_wrapper.CrossEncoderWrapper(model=model, revision=revision, **kwargs)
+    # Sentence Transformers casts Dense to the backbone dtype on load.
+    # The pinned checkpoint uses Transformer -> Pooling -> Dense.
+    dense = wrapper.model[2]
+    dense.linear = FP32ScoringHead(dense.linear)
+    return wrapper
+
+
+nemotron_3_5_rerank_8b_bf16 = ModelMeta(
+    loader=_nemotron_3_5_reranker,
+    name="nvidia/Nemotron-3.5-Rerank-8B-BF16",
+    revision="708e844c3da0bbaa923e9dc310b07da4ffb6a6b5",
+    release_date="2026-10-20",
+    languages=nemotron_3_embed_supported_languages,
+    n_parameters=8_381_159_424,
+    n_embedding_parameters=536_870_912,
+    memory_usage_mb=15986,
+    max_tokens=32768,
+    embed_dim=None,
+    license="openmdw-1.1",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data="https://huggingface.co/nvidia/Nemotron-3.5-Rerank-8B-BF16#training-dataset",
+    framework=["Sentence Transformers", "PyTorch", "Transformers"],
+    reference="https://huggingface.co/nvidia/Nemotron-3.5-Rerank-8B-BF16",
+    similarity_fn_name=None,
+    use_instructions=False,
+    training_datasets=nemotron_3_embed_training_datasets
+    | {
+        "VidoreArxivQARetrieval",
+        "VidoreInfoVQARetrieval",
+        "VidoreDocVQARetrieval",
+        "VidoreTatdqaRetrieval",
+        "VDRMultilingualRetrieval",
+    },
+    adapted_from="mistralai/Ministral-3-8B-Instruct-2512",
+    modalities=["image", "text"],
+    model_type=["cross-encoder"],
+    extra_requirements_groups=["nemotron-3-5-vl"],
+    output_dtypes=OutputDType.BF16,  # Backbone precision; the scoring head remains FP32.
+)
+
+
+nemotron_3_5_embed_1b_bf16 = ModelMeta(
+    loader=st_wrapper.SentenceTransformerEncoderWrapper,
+    name="nvidia/Nemotron-3.5-Embed-1B-BF16",
+    revision="afdf14ebb254bacbaa466a041f5a4b8a3f6550e6",
+    release_date="2026-10-20",
+    languages=nemotron_3_embed_supported_languages,
+    n_parameters=1_554_710_528,
+    n_embedding_parameters=268_435_456,
+    memory_usage_mb=2965,
+    max_tokens=32768,
+    embed_dim=2048,
+    license="openmdw-1.1",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data="https://huggingface.co/nvidia/Nemotron-3.5-Embed-1B-BF16#training-dataset",
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/nvidia/Nemotron-3.5-Embed-1B-BF16",
+    similarity_fn_name="cosine",
+    use_instructions=False,
+    training_datasets=nemotron_3_embed_training_datasets
+    | {
+        "VidoreArxivQARetrieval",
+        "VidoreInfoVQARetrieval",
+        "VidoreDocVQARetrieval",
+        "VidoreTatdqaRetrieval",
+        "VDRMultilingualRetrieval",
+    },
+    modalities=["image", "text"],
+    model_type=["dense"],
+    extra_requirements_groups=["nemotron-3-5-vl"],
+    output_dtypes=OutputDType.BF16,
+)
+
+
+nemotron_3_5_embed_8b_bf16 = ModelMeta(
+    loader=st_wrapper.SentenceTransformerEncoderWrapper,
+    name="nvidia/Nemotron-3.5-Embed-8B-BF16",
+    revision="615e74a2e37b255fb61bd4be021253860bd64e01",
+    release_date="2026-10-20",
+    languages=nemotron_3_embed_supported_languages,
+    n_parameters=8_381_155_328,
+    n_embedding_parameters=536_870_912,
+    memory_usage_mb=15986,
+    max_tokens=32768,
+    embed_dim=4096,
+    license="openmdw-1.1",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data="https://huggingface.co/nvidia/Nemotron-3.5-Embed-8B-BF16#training-dataset",
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/nvidia/Nemotron-3.5-Embed-8B-BF16",
+    similarity_fn_name="cosine",
+    use_instructions=False,
+    training_datasets=nemotron_3_embed_training_datasets
+    | {
+        "VidoreArxivQARetrieval",
+        "VidoreInfoVQARetrieval",
+        "VidoreDocVQARetrieval",
+        "VidoreTatdqaRetrieval",
+        "VDRMultilingualRetrieval",
+    },
+    modalities=["image", "text"],
+    model_type=["dense"],
+    extra_requirements_groups=["nemotron-3-5-vl"],
+    output_dtypes=OutputDType.BF16,
 )

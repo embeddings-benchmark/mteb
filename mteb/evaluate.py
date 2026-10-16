@@ -11,6 +11,7 @@ from datasets.exceptions import DatasetNotFoundError
 from tqdm.auto import tqdm
 
 from mteb._helpful_enum import HelpfulStrEnum
+from mteb._requires_package import _requires_full_installation
 from mteb.abstasks import AbsTaskBitextMining, AbsTaskRetrieval
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
@@ -331,7 +332,7 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
                         task_results,
                         evaluation_time=evaluation_time + (tock_ss - tick),
                         kg_co2_emissions=existing_co2,
-                        date=datetime.datetime.now(tz=datetime.timezone.utc),
+                        date=datetime.datetime.now(tz=datetime.UTC),
                         evaluation_phases=timer.phases if timer.phases else None,
                     )
                     cache.save_to_cache(new_result, model_meta)
@@ -355,7 +356,7 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
         task_results,
         evaluation_time=evaluation_time,
         kg_co2_emissions=existing_co2,
-        date=datetime.datetime.now(tz=datetime.timezone.utc),
+        date=datetime.datetime.now(tz=datetime.UTC),
         evaluation_phases=timer.phases if timer.phases else None,
     )
 
@@ -598,6 +599,9 @@ def evaluate(  # noqa: PLR0913
         logger.info(
             "No batch size defined in encode_kwargs. Setting `encode_kwargs['batch_size'] = 32`. Explicitly set the batch size to silence this message."
         )
+
+    # encoding runs through torch dataloaders, so check before doing any work
+    _requires_full_installation("torch", "Evaluating a model")
 
     model, meta, model_name, model_revision = _sanitize_model(model)
     meta = _apply_precision_to_meta(meta, encode_kwargs)

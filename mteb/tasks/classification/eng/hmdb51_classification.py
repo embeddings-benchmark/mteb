@@ -29,7 +29,6 @@ class HMDB51Classification(AbsTaskClassification):
         dialect=[],
         modalities=["video"],
         sample_creation="found",
-        is_beta=True,
         bibtex_citation=r"""
 @inproceedings{kuehne2011hmdb,
   author = {Kuehne, Hildegard and Jhuang, Hueihan and Garrote, Est{\'\i}baliz and Poggio, Tomaso and Serre, Thomas},

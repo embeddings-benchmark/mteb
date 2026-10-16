@@ -218,7 +218,7 @@ def main(folder: Path) -> None:
             )
             modalities_string = modality_to_string(model_modalities)
             doc_task = folder / modality_to_filename(model_modalities)
-            with doc_task.open("w") as f:
+            with doc_task.open("w", encoding="utf-8") as f:
                 icon = modality_to_icon.get(
                     modalities_string, modality_to_icon["Multimodal"]
                 )

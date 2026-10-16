@@ -1,4 +1,5 @@
 site_name: Massive Text Embedding Benchmark
+site_url: https://docs.mteb.org/
 docs_dir: "docs/"
 repo_url: https://github.com/embeddings-benchmark/mteb
 watch: [mteb/, docs/]
@@ -17,6 +18,7 @@ theme:
     - search.highlight
     - content.action.edit
     - content.action.view
+    - content.action.copy
     - content.code.copy
     - content.code.annotate
     - content.code.annotation
@@ -125,7 +127,7 @@ nav:
       - Additional Types: api/types.md
   - Blog:
       - blog/index.md
-  - Leaderboard: https://huggingface.co/spaces/mteb/leaderboard
+  - Leaderboard: https://leaderboard.mteb.org/
 
 copyright: This site made available under a Creative Commons Attribution 4.0 license
 
@@ -149,6 +151,13 @@ plugins:
       post_date_format: long
       post_url_format: "{slug}"
       post_excerpt: required
+  - social
+  - llmstxt:
+      full_output: llms-full.txt
+      sections:
+        Docs:
+          - "*.md"
+          - "**/*.md"
 
 
 extra_javascript:
@@ -160,6 +169,13 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/embeddings-benchmark/mteb
+      name: MTEB on GitHub
+    - icon: fontawesome/brands/bluesky
+      link: https://bsky.app/profile/mteb.org
+      name: MTEB on Bluesky
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/company/mteb/posts/
+      name: MTEB on LinkedIn
 
 validation:
   invalid_links: false

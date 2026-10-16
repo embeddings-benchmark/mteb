@@ -7,7 +7,7 @@ from tqdm.auto import tqdm
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -40,10 +40,8 @@ class GVEWrapper(AbsEncoder):
     `output_hidden_states`. Embeddings are the L2-normalized last-token
     hidden state with left padding, following the model card.
 
-    Frame sampling defaults to fps=2 capped at 32 frames, denser than the
-    model card's 8-frame demo: with the 200*28*28 per-frame pixel budget,
-    max_length is 4096 (vs the demo's 1200) so dense video batches never
-    truncate vision tokens; text-only batches still pad to longest-in-batch.
+    Frame sampling follows the model card's inference example: fps=1,
+    max_frames=8.
     """
 
     def __init__(
@@ -53,8 +51,10 @@ class GVEWrapper(AbsEncoder):
         *,
         device: str | None = None,
         max_length: int = 4096,
-        fps: float | None = 2.0,
-        max_frames: int | None = 32,
+        # fps=1, max_frames=8: the video config in GVE's own inference example
+        # https://huggingface.co/Alibaba-NLP/GVE-3B/blob/main/README.md
+        fps: float | None = 1.0,
+        max_frames: int | None = 8,
         num_frames: int | None = None,
         **kwargs: Any,
     ) -> None:
@@ -208,6 +208,7 @@ gve_3b = ModelMeta(
     training_datasets=gve_training_datasets,
     adapted_from="Qwen/Qwen2.5-VL-3B-Instruct",
     citation=GVE_CITATION,
+    output_dtypes=OutputDType.BF16,
 )
 
 gve_7b = ModelMeta(
@@ -234,4 +235,5 @@ gve_7b = ModelMeta(
     training_datasets=gve_training_datasets,
     adapted_from="Qwen/Qwen2.5-VL-7B-Instruct",
     citation=GVE_CITATION,
+    output_dtypes=OutputDType.BF16,
 )

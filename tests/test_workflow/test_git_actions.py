@@ -56,7 +56,7 @@ def git_repo(tmp_path: Path) -> Path:
         )
 
     # Create initial commit
-    (repo_path / "file.txt").write_text("content")
+    (repo_path / "file.txt").write_text("content", encoding="utf-8")
     subprocess.run(["git", "add", "."], cwd=repo_path, check=True, capture_output=True)
     subprocess.run(
         ["git", "commit", "-m", "initial"],
@@ -133,7 +133,7 @@ def test_commit_action_saves_shas_and_undo_resets(git_repo: Path) -> None:
     )
     initial_sha = result.stdout.strip()
 
-    (git_repo / "new_file.txt").write_text("new content")
+    (git_repo / "new_file.txt").write_text("new content", encoding="utf-8")
 
     action = CommitAction(repo_path=git_repo, message="Add new file")
     action.do()
@@ -182,7 +182,7 @@ def test_push_to_fork_action_do_and_undo(git_repo: Path) -> None:
         check=True,
         capture_output=True,
     )
-    (git_repo / "feature.txt").write_text("feature content")
+    (git_repo / "feature.txt").write_text("feature content", encoding="utf-8")
     subprocess.run(["git", "add", "."], cwd=git_repo, check=True, capture_output=True)
     subprocess.run(
         ["git", "commit", "-m", "feature commit"],

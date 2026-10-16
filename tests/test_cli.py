@@ -5,6 +5,7 @@ import subprocess
 import sys
 from argparse import Namespace
 from pathlib import Path
+from typing import Any
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -16,6 +17,7 @@ from mteb.cli.build_cli import (
     _create_meta,
     _leaderboard,
     _mock_run,
+    build_cli,
     run,
 )
 
@@ -96,6 +98,41 @@ def test_run_task(
     )
 
 
+@pytest.mark.parametrize(
+    ("argv", "expected"),
+    [
+        (
+            [],
+            {"models": None, "tasks": None, "create_pr": False, "message": None},
+        ),
+        (
+            ["-m", "org/model1", "org/model2", "-t", "ArguAna", "--create-pr"]
+            + ["--message", "Add ArguAna results"],
+            {
+                "models": ["org/model1", "org/model2"],
+                "tasks": ["ArguAna"],
+                "create_pr": True,
+                "message": "Add ArguAna results",
+            },
+        ),
+    ],
+)
+def test_submit_results_cli(argv: list[str], expected: dict[str, Any], tmp_path: Path):
+    args = build_cli().parse_args(
+        ["submit-results", "--output-folder", tmp_path.as_posix(), *argv]
+    )
+
+    with patch("mteb.cli.build_cli.ResultCache.submit_results") as mock_submit:
+        args.func(args)
+
+    mock_submit.assert_called_once_with(
+        expected["models"],
+        tasks=expected["tasks"],
+        create_pr=expected["create_pr"],
+        message=expected["message"],
+    )
+
+
 def test_create_meta(tmp_path: Path):
     """Test create_meta function directly as well as through the command line interface"""
     test_folder = Path(__file__).parent
@@ -117,12 +154,12 @@ def test_create_meta(tmp_path: Path):
 
     assert output_path.exists(), "Output file not created"
 
-    with output_path.open("r") as f:
+    with output_path.open("r", encoding="utf-8") as f:
         meta = f.read()
         meta = meta[meta.index("---") + 3 : meta.index("---", meta.index("---") + 3)]
         frontmatter = yaml.safe_load(meta)
 
-    with (output_folder / "model_card_gold.md").open("r") as f:
+    with (output_folder / "model_card_gold.md").open("r", encoding="utf-8") as f:
         gold = f.read()
         gold = gold[gold.index("---") + 3 : gold.index("---", gold.index("---") + 3)]
         frontmatter_gold = yaml.safe_load(gold)
@@ -196,7 +233,7 @@ def test_create_meta_from_existing(  # noqa: PLR0914
     yaml_start_sep = "---"
     yaml_end_sep = "\n---\n"  # newline to avoid matching "---" in the content
 
-    with output_path.open("r") as f:
+    with output_path.open("r", encoding="utf-8") as f:
         meta = f.read()
         start_yaml = meta.index(yaml_start_sep) + len(yaml_start_sep)
         end_yaml = meta.index(yaml_end_sep, start_yaml)
@@ -204,7 +241,7 @@ def test_create_meta_from_existing(  # noqa: PLR0914
         meta = meta[start_yaml:end_yaml]
         frontmatter = yaml.safe_load(meta)
 
-    with (output_folder / gold_readme_name).open("r") as f:
+    with (output_folder / gold_readme_name).open("r", encoding="utf-8") as f:
         gold = f.read()
         start_yaml = gold.index(yaml_start_sep) + len(yaml_start_sep)
         end_yaml = gold.index(yaml_end_sep, start_yaml)

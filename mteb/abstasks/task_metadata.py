@@ -5,7 +5,13 @@ import logging
 import re
 from collections.abc import Sequence
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Literal, cast
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Literal,
+    Required,
+    cast,
+)
 
 from huggingface_hub import (
     DatasetCard,
@@ -19,7 +25,7 @@ from pydantic import (
     ConfigDict,
     field_validator,
 )
-from typing_extensions import Required, TypedDict  # noqa: TC002
+from typing_extensions import TypedDict
 
 from mteb.languages import check_language_code
 from mteb.types import (
@@ -622,7 +628,7 @@ class TaskMetadata(BaseModel):
     def descriptive_stats(self) -> dict[str, DescriptiveStatistics] | None:
         """The descriptive statistics for the dataset."""
         if self.descriptive_stat_path.exists():
-            with self.descriptive_stat_path.open("r") as f:
+            with self.descriptive_stat_path.open("r", encoding="utf-8") as f:
                 js = cast("dict[str, DescriptiveStatistics]", json.load(f))
                 return js
         return None

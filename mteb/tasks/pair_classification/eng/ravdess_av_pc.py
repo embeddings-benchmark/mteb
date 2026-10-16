@@ -55,7 +55,6 @@ class RAVDESSAVVPairClassification(AbsTaskPairClassification):
         modalities=["video"],
         sample_creation="found",
         bibtex_citation=BIBTEX,
-        is_beta=True,
     )
 
     input1_column_name: str = "video1"

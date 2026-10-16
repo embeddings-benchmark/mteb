@@ -8,6 +8,7 @@ from tqdm.auto import tqdm
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_implementations.ops_colqwen3_models import multilingual_langs
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -29,7 +30,10 @@ class OpsMMEmbeddingWrapper(AbsEncoder):
         device: str | None = None,
         torch_dtype: torch.dtype | None = None,  # ruff: any-type
         attn_implementation: str | None = None,
+        # fps=2: qwen-vl-utils FPS=2.0
+        # https://github.com/QwenLM/Qwen2.5-VL/blob/main/qwen-vl-utils/src/qwen_vl_utils/vision_process.py
         fps: float | None = 2.0,
+        # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
         trust_remote_code: bool = True,
@@ -79,7 +83,7 @@ class OpsMMEmbeddingWrapper(AbsEncoder):
 
     def encode_input(self, inputs: dict[str, Any]) -> torch.Tensor:
         hidden_states = self.base_model(
-            **inputs, return_dict=True, output_hidden_states=True
+            **inputs, return_dict=True, output_hidden_states=True, logits_to_keep=1
         )
         hidden_states = hidden_states.hidden_states[-1]
         pooled_output = self._pooling(hidden_states)
@@ -241,6 +245,7 @@ ops_mm_embedding_v1_2b = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 ops_mm_embedding_v1_7b = ModelMeta(
@@ -265,4 +270,5 @@ ops_mm_embedding_v1_7b = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
+    output_dtypes=OutputDType.BF16,
 )

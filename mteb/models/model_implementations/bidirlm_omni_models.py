@@ -88,9 +88,15 @@ class BidirLMOmniEncoder(AbsEncoder):
         device: str | None = None,
         trust_remote_code: bool = True,
         max_text_length: int = 1024,
+        # fps=2: the checkpoint's own video config
+        # https://huggingface.co/BidirLM/BidirLM-Omni-2.5B-Embedding/blob/main/video_preprocessor_config.json
         fps: float | None = 2.0,
+        # 64 is an mteb cap; the checkpoint's video config has max_frames=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
+        # 30 s: an mteb cap at chunk_length=30; the processor itself sets
+        # truncation=False, so upstream does not cut
+        # https://huggingface.co/BidirLM/BidirLM-Omni-2.5B-Embedding/blob/main/processing_bidirlm_omni.py
         max_samples: int | None = 30 * 16_000,
         **kwargs: Any,
     ) -> None:
@@ -200,6 +206,8 @@ class BidirLMOmniEncoder(AbsEncoder):
                 max_frames=self.max_frames,
                 num_frames=self.num_frames,
                 max_samples=self.max_samples,
+                # min_frames=4: the checkpoint's own video config
+                min_frames=4,
             )
         elif has_audio:
             inputs.collate_fn = AudioCollator(
@@ -266,4 +274,5 @@ bidirlm_omni_2_5b = ModelMeta(
     public_training_data="https://huggingface.co/datasets/BidirLM/BidirLM-Omni-Contrastive",
     training_datasets=BIDIRLM_OMNI_TRAINING_DATASETS,
     citation=BIDIRLM_CITATION,
+    extra_requirements_groups=["bidirlm-omni"],
 )

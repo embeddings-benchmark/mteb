@@ -7,6 +7,7 @@ from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -22,6 +23,13 @@ UME_R1_EMBED_PROMPT = (
     "First output the thinking process in <think> </think> tags and then summarize the entire input in a word or sentence. "
     "Finally, use the <gen_emb> tag to represent the entire input."
 )
+# per-frame video pixels of qwen-vl-utils, which the official eval uses to load videos
+# https://github.com/QwenLM/Qwen2.5-VL/blob/main/qwen-vl-utils/src/qwen_vl_utils/vision_process.py
+VIDEO_FRAME_MIN_PIXELS = 128 * 28 * 28
+VIDEO_FRAME_MAX_PIXELS = 768 * 28 * 28
+# the official eval collator gives text-only inputs a white image (56x56 after resizing)
+# https://github.com/XMUDeepLIT/UME-R1/blob/ab4fc06667df63791e21efefc3fbfd2fac0faf0b/src/eval/VLM2Vec/src/data/collator/eval_collator.py
+BLANK_IMAGE_SIZE = (56, 56)
 
 
 class UMER1Wrapper(AbsEncoder):
@@ -32,7 +40,10 @@ class UMER1Wrapper(AbsEncoder):
         model: str,
         revision: str | None = None,
         device: str | None = None,
+        # fps=2: qwen-vl-utils FPS=2.0
+        # https://github.com/QwenLM/Qwen2.5-VL/blob/main/qwen-vl-utils/src/qwen_vl_utils/vision_process.py
         fps: float | None = 2.0,
+        # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
         **kwargs: Any,
@@ -56,6 +67,7 @@ class UMER1Wrapper(AbsEncoder):
         # Load model
         self.model = Qwen2VLForConditionalGeneration.from_pretrained(
             model,
+            revision=revision,
             torch_dtype=torch.bfloat16,
             attn_implementation=kwargs.get(
                 "attn_implementation",
@@ -66,14 +78,13 @@ class UMER1Wrapper(AbsEncoder):
         self.model = self.model.to(self.device)
         self.model.eval()
 
-        # Load processor
-        self.processor = AutoProcessor.from_pretrained(
-            model,
-            revision=revision,
-            min_pixels=4 * 28 * 28,
-            max_pixels=256 * 28 * 28,
-        )
+        # images keep the checkpoint's pixel limits, as in the official eval
+        self.processor = AutoProcessor.from_pretrained(model, revision=revision)
         self.processor.tokenizer.padding_side = "left"
+        self.processor.video_processor.size = {
+            "shortest_edge": VIDEO_FRAME_MIN_PIXELS,
+            "longest_edge": VIDEO_FRAME_MAX_PIXELS,
+        }
 
         self.gen_emb_id = self.processor.tokenizer.get_vocab().get("<gen_emb>")
 
@@ -92,12 +103,21 @@ class UMER1Wrapper(AbsEncoder):
         import torch
 
         if "video" in inputs.dataset.features:
-            from mteb.models.modality_collators import VideoCollator
+            from mteb.models.modality_collators import (
+                VideoCollator,
+                single_clip_dataloader,
+            )
 
             inputs.collate_fn = VideoCollator(
                 target_sampling_rate=16000,
                 fps=self.fps,
                 max_frames=self.max_frames,
+                num_frames=self.num_frames,
+            )
+            # the embedding follows generated reasoning text, and batching changes
+            # that text (batched vs single cosine 0.97 on real videos)
+            inputs = single_clip_dataloader(
+                inputs, "batched video embeddings change with their batch-mates"
             )
 
         all_embeddings: list[torch.Tensor] = []
@@ -115,9 +135,12 @@ class UMER1Wrapper(AbsEncoder):
                 ).to(self.device)
 
                 # Inference: Generation of the output
+                # greedy: the 7B generation_config samples (do_sample=true), so its
+                # reasoning text and embedding were random on every call
                 output = self.model.generate(
                     **model_inputs,
                     max_new_tokens=8192,
+                    do_sample=False,
                     output_hidden_states=True,
                     return_dict_in_generate=True,
                     use_cache=True,
@@ -138,6 +161,9 @@ class UMER1Wrapper(AbsEncoder):
 
     @staticmethod
     def _build_messages(batch: dict[str, Any]) -> list[list[dict]]:
+        """Media first, then the text with the <disc_emb> prompt (official eval collator)."""
+        from PIL import Image
+
         batch_texts = batch.get("text", [])
         batch_images = batch.get("image", [])
         batch_videos = batch.get("video", [])
@@ -146,9 +172,6 @@ class UMER1Wrapper(AbsEncoder):
         messages = []
         for i in range(batch_size):
             content = []
-
-            if batch_texts:
-                content.append({"type": "text", "text": batch_texts[i]})
 
             if batch_images:
                 image_content = batch_images[i]
@@ -164,7 +187,16 @@ class UMER1Wrapper(AbsEncoder):
                 video_content = batch_videos[i]
                 content.append({"type": "video", "video": video_content})
 
-            final_text = f"<disc_emb>\n{UME_R1_EMBED_PROMPT}"
+            text = batch_texts[i] if batch_texts else ""
+            if content:
+                # with media, the eval collator drops placeholder tokens and strips
+                text = text.replace("<|image_pad|>", "").replace("<|video_pad|>", "")
+                text = text.strip()
+            else:
+                blank = Image.new("RGB", BLANK_IMAGE_SIZE, (255, 255, 255))
+                content.append({"type": "image", "image": blank})
+
+            final_text = f"{text}\n<disc_emb>\n{UME_R1_EMBED_PROMPT}"
             content.append({"type": "text", "text": final_text})
             messages.append([{"role": "user", "content": content}])
 
@@ -176,13 +208,19 @@ class UMER1Wrapper(AbsEncoder):
         if self.gen_emb_id is None:
             return [-1] * generated_ids_trimmed.shape[0]
 
+        eos = self.model.generation_config.eos_token_id
+        eos_ids = set(eos if isinstance(eos, list) else [eos])
         for out_ids in generated_ids_trimmed:
             indices = (out_ids == self.gen_emb_id).nonzero(as_tuple=True)[0]
             if indices.numel() > 0:
                 # Add 1 because step 0 in output.hidden_states is the prefill
                 embedding_idx.append(indices[-1].item() + 1)
             else:
-                embedding_idx.append(-1)
+                # no embedding token: use this sequence's own last step, not the
+                # batch's last step, which a sequence that ended early only padded
+                ids = out_ids.tolist()
+                end = next((j for j, t in enumerate(ids) if t in eos_ids), None)
+                embedding_idx.append(end if end is not None else -1)
         return embedding_idx
 
     def _extract_generative_reasoning_embeddings(
@@ -305,6 +343,7 @@ ume_r1_2b = ModelMeta(
     embed_dim=1536,
     reference="https://huggingface.co/zhibinlan/UME-R1-2B",
     **_UME_R1_BASE_KWARGS,
+    output_dtypes=OutputDType.BF16,
 )
 
 ume_r1_7b = ModelMeta(
@@ -317,4 +356,5 @@ ume_r1_7b = ModelMeta(
     embed_dim=3584,
     reference="https://huggingface.co/zhibinlan/UME-R1-7B",
     **_UME_R1_BASE_KWARGS,
+    output_dtypes=OutputDType.BF16,
 )

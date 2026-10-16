@@ -136,7 +136,7 @@ class AbsTaskAggregate(AbsTask):
             scores=self.task_results_to_scores(task_results),
             evaluation_time=eval_time,
             kg_co2_emissions=kg_co2_emissions,
-            date=datetime.datetime.now(tz=datetime.timezone.utc),
+            date=datetime.datetime.now(tz=datetime.UTC),
         )
         mteb_versions = {tr.mteb_version for tr in task_results}
         if len(mteb_versions) != 1:

@@ -8,14 +8,13 @@ from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
 
+from mteb._content_hashes import hash_item
 from mteb._requires_package import _is_package_available
-
-from ._hash_utils import _hash_item
 
 if TYPE_CHECKING:
     import faiss
 
-    from mteb.types import Array, BatchedInput
+    from mteb.types import Array
 
 logger = logging.getLogger(__name__)
 
@@ -56,7 +55,7 @@ class FaissCache:
         start_id = len(self.hash_to_index)
         vectors_to_add = []
         for i, (item, vector) in enumerate(zip(items, vectors, strict=True)):
-            item_hash = _hash_item(item)
+            item_hash = hash_item(item)
             if item_hash in self.hash_to_index:
                 continue
             self.hash_to_index[item_hash] = start_id + i
@@ -69,7 +68,7 @@ class FaissCache:
         """Retrieve vector from index by hash."""
         if self.index is None:
             return None
-        item_hash = _hash_item(item)
+        item_hash = hash_item(item)
         if item_hash not in self.hash_to_index:
             return None
         idx = self.hash_to_index[item_hash]
@@ -90,7 +89,7 @@ class FaissCache:
 
         if self.index is not None:
             faiss.write_index(self.index, str(self.index_file))
-        with self.map_file.open("w") as f:
+        with self.map_file.open("w", encoding="utf-8") as f:
             json.dump(self.hash_to_index, f, indent=2)
         logger.info(f"Saved FAISS cache to {self.directory}")
 
@@ -99,7 +98,7 @@ class FaissCache:
         import faiss
 
         if self.map_file.exists():
-            with self.map_file.open() as f:
+            with self.map_file.open(encoding="utf-8") as f:
                 self.hash_to_index = json.load(f)
         if self.index_file.exists():
             try:
@@ -116,8 +115,8 @@ class FaissCache:
         self.save()
         self.index = None
 
-    def __contains__(self, item: BatchedInput) -> bool:
-        return _hash_item(item) in self.hash_to_index
+    def __contains__(self, item: dict[str, Any]) -> bool:
+        return hash_item(item) in self.hash_to_index
 
     def __del__(self) -> None:
         self.close()

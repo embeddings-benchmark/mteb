@@ -40,7 +40,6 @@ class Kinetics400ZeroShotClassification(AbsTaskZeroShotClassification):
   year = {2017},
 }
 """,
-        is_beta=True,
     )
 
     input_column_name = "video"

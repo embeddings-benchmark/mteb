@@ -12,6 +12,12 @@ from typing_extensions import deprecated
 from mteb._create_dataloaders import create_dataloader
 from mteb._log_once import LogOnce
 from mteb.models import ModelMeta
+from mteb.similarity_functions import (
+    _MAX_SIM_CHUNK_ELEMENTS,
+    _token_budget_chunks,
+    _upcast_low_precision,
+)
+from mteb.timing import TimingStack
 from mteb.types import PromptType
 
 from .abs_encoder import AbsEncoder, get_prompt_name
@@ -19,7 +25,7 @@ from .model_meta import ScoringFunction
 from .search_wrappers import chunked_full_corpus_search, rerank_top_ranked_documents
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from collections.abc import Callable, Iterator, Sequence
 
     import torch
     from sentence_transformers import (
@@ -47,6 +53,10 @@ logger = logging.getLogger(__name__)
 
 SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION = "5.0.0"
 SENTENCE_TRANSFORMERS_MULTI_VECTOR_VERSION = "6.0.0"
+
+# Embedding values of documents moved to the device at once for MaxSim scoring
+# (about 2 GB in float16).
+_MAX_SIM_DOCUMENT_BLOCK_ELEMENTS = 1_000_000_000
 
 
 @deprecated(
@@ -82,6 +92,7 @@ def _setup_modality_collator(
     num_frames: int | None,
     target_sampling_rate: int | None,
     max_samples: int | None,
+    min_frames: int = 1,
 ) -> bool:
     """Attach a VideoCollator/AudioCollator to ``inputs`` if needed.
 
@@ -100,6 +111,7 @@ def _setup_modality_collator(
             max_frames=max_frames,
             num_frames=num_frames,
             max_samples=max_samples,
+            min_frames=min_frames,
         )
     elif has_audio:
         from mteb.models.modality_collators import AudioCollator
@@ -212,6 +224,55 @@ def _concatenate_ragged_batches(batches: list[list[Any]]) -> list[Any]:
     return [embedding for batch in batches for embedding in batch]
 
 
+def _max_sim_document_blocks(documents: Sequence[Array]) -> list[tuple[int, int]]:
+    """Split documents into contiguous `(start, end)` blocks to move to the device at once.
+
+    Each block holds at most `_MAX_SIM_DOCUMENT_BLOCK_ELEMENTS` embedding values, with a floor of one
+    document per block.
+    """
+    blocks: list[tuple[int, int]] = []
+    start = 0
+    elements = 0
+    for index, document in enumerate(documents):
+        document_elements = int(np.prod(document.shape))
+        if (
+            index > start
+            and elements + document_elements > _MAX_SIM_DOCUMENT_BLOCK_ELEMENTS
+        ):
+            blocks.append((start, index))
+            start = index
+            elements = 0
+        elements += document_elements
+    blocks.append((start, len(documents)))
+    return blocks
+
+
+def _as_vector_list(embeddings: Array) -> list[Any]:
+    """Return multi-vector embeddings as a list with one `(num_tokens, dim)` entry per input.
+
+    A single 2D tensor or array is one input, scored as a batch of one.
+    """
+    import torch
+
+    if isinstance(embeddings, (torch.Tensor, np.ndarray)) and embeddings.ndim == 2:
+        return [embeddings]
+    return list(embeddings)
+
+
+def _to_cpu_in_place(batch: list[Any]) -> list[Any]:
+    """Move token embeddings to the CPU one at a time, replacing them in `batch`.
+
+    Freeing each device tensor as soon as its CPU copy exists keeps both copies of the whole batch
+    from being alive at once.
+    """
+    import torch
+
+    for index, vector in enumerate(batch):
+        if isinstance(vector, torch.Tensor):
+            batch[index] = vector.cpu()
+    return batch
+
+
 def _is_sparse_compatible_task(task_metadata: TaskMetadata) -> bool:
     """Whether this task's evaluator can work with sparse tensors, rather than needing dense ones.
 
@@ -242,32 +303,64 @@ def _encode_batches(
     modalities: list[Modalities],
     postprocess_batch: Callable[[Any], Any] | None = None,
     concatenate_batches: Callable[[list[Any]], Any] | None = None,
-    **kwargs: Any,
+    encode_text_per_batch: bool = False,
+    **kwargs: Unpack[EncodeKwargs],
 ) -> Array:
     """Encode `inputs` with `encode_function`, handling the multimodal vs text-only cases.
 
     Multimodal inputs are encoded batch by batch as per-sample modality dicts and combined via
     `concatenate_batches` (default `np.concatenate`); text-only inputs are collected up front and
     encoded in one call. `postprocess_batch` (default identity) is applied to each batch's output.
+
+    With `encode_text_per_batch`, text-only inputs are instead encoded `batch_size` at a time,
+    longest first, and `postprocess_batch` is applied to each batch's output. This bounds what
+    `encode_function` holds at once (e.g. per-token embeddings kept on the device until the call
+    returns) while keeping inputs of similar length together. `postprocess_batch` must then return
+    one entry per input (a list), which are returned in the original order.
     """
     postprocess = postprocess_batch or (lambda embeddings: embeddings)
     concatenate = concatenate_batches or (
         lambda batches: np.concatenate(batches, axis=0)
     )
+    show_progress_bar = kwargs.get("show_progress_bar", True)
+    batch_size = kwargs.get("batch_size", 32)
+    # Per-batch calls below show one outer progress bar instead of one bar per call
+    per_batch_kwargs = {**kwargs, "show_progress_bar": False}
 
     if is_multimodal:
         all_embeddings = []
-        for batch in tqdm(inputs, desc="Building multimodal embeddings"):
+        for batch in tqdm(
+            inputs, desc="Building multimodal embeddings", disable=not show_progress_bar
+        ):
             batched_input = _batch_to_modality_dicts(batch, modalities)
-            _embeddings = encode_function(batched_input, prompt=prompt, **kwargs)
+            _embeddings = encode_function(
+                batched_input, prompt=prompt, **per_batch_kwargs
+            )
             all_embeddings.append(postprocess(_embeddings))
         embeddings = concatenate(all_embeddings)
-    else:
+    elif not encode_text_per_batch:
         sentences = [text for batch in inputs for text in batch["text"]]
 
         embeddings = encode_function(sentences, prompt=prompt, **kwargs)
 
         embeddings = postprocess(embeddings)
+    else:
+        sentences = [text for batch in inputs for text in batch["text"]]
+        # Longest first, like sentence-transformers sorts within a call, so that grouping
+        # doesn't add padding.
+        order = sorted(range(len(sentences)), key=lambda i: -len(sentences[i]))
+        batched_embeddings: list[Any] = []
+        for start in tqdm(
+            range(0, len(order), batch_size),
+            desc="Encoding",
+            disable=not show_progress_bar,
+        ):
+            batch = [sentences[i] for i in order[start : start + batch_size]]
+            batch_embeddings = encode_function(batch, prompt=prompt, **per_batch_kwargs)
+            batched_embeddings.extend(postprocess(batch_embeddings))
+        embeddings = [None] * len(sentences)
+        for position, index in enumerate(order):
+            embeddings[index] = batched_embeddings[position]
 
     return cast("Array", embeddings)
 
@@ -361,7 +454,14 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
     def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
         """Compute the similarity between two collections of embeddings."""
         if hasattr(self.model, "similarity") and callable(self.model.similarity):
-            return cast("Array", self.model.similarity(embeddings1, embeddings2))
+            # sentence-transformers < 6 scores in the embedding dtype
+            return cast(
+                "Array",
+                self.model.similarity(
+                    _upcast_low_precision(embeddings1),
+                    _upcast_low_precision(embeddings2),
+                ),
+            )
         return super().similarity(embeddings1, embeddings2)
 
     def encode(
@@ -467,6 +567,7 @@ class CrossEncoderWrapper:
         fps: float | None = None,
         max_frames: int | None = None,
         num_frames: int | None = None,
+        min_frames: int = 1,
         target_sampling_rate: int | None = None,
         max_samples: int | None = None,
         **kwargs: Any,
@@ -490,18 +591,20 @@ class CrossEncoderWrapper:
         self.fps = fps
         self.max_frames = max_frames
         self.num_frames = num_frames
+        self.min_frames = min_frames
         self.target_sampling_rate = target_sampling_rate
         self.max_samples = max_samples
 
-    def _collect_inputs(
+    def _iter_inputs(
         self,
         loader: DataLoader[BatchedInput],
         prefix: str,
-    ) -> list[Any]:
-        """Return a list of items to feed to the cross-encoder.
+    ) -> Iterator[list[Any]]:
+        """Yield the items to feed to the cross-encoder, one dataloader batch at a time.
 
-        For text-only inputs this is a list of prefix-prepended strings; for
-        multimodal inputs it is a list of per-sample modality dicts.
+        For text-only inputs these are prefix-prepended strings; for multimodal
+        inputs they are per-sample modality dicts. Yielding per batch keeps only
+        one batch of (possibly decoded image or video) inputs in memory.
         """
         is_multimodal = _setup_modality_collator(
             loader,
@@ -510,12 +613,13 @@ class CrossEncoderWrapper:
             num_frames=self.num_frames,
             target_sampling_rate=self.target_sampling_rate,
             max_samples=self.max_samples,
+            min_frames=self.min_frames,
         )
-        if not is_multimodal:
-            return [prefix + text for batch in loader for text in batch["text"]]
-
-        items: list[dict[str, Any]] = []
-        for batch in tqdm(loader, desc="Collecting multimodal inputs"):
+        for batch in loader:
+            if not is_multimodal:
+                yield [prefix + text for text in batch["text"]]
+                continue
+            items: list[dict[str, Any]] = []
             for sample in _batch_to_modality_dicts(
                 batch,
                 self.mteb_model_meta.modalities,
@@ -523,7 +627,7 @@ class CrossEncoderWrapper:
                 if prefix and "text" in sample:
                     sample["text"] = prefix + sample["text"]
                 items.append(sample)
-        return items
+            yield items
 
     def predict(
         self,
@@ -538,6 +642,9 @@ class CrossEncoderWrapper:
     ) -> Array:
         """Predicts relevance scores for pairs of inputs. Note that, unlike the encoder, the cross-encoder can compare across inputs.
 
+        The pairs are scored one dataloader batch at a time, so only a single batch of
+        inputs is held in memory (both dataloaders are expected to use the same batch size).
+
         Args:
             inputs1: First Dataloader of inputs to encode. For reranking tasks, these are queries (for text only tasks `QueryDatasetType`).
             inputs2: Second Dataloader of inputs to encode. For reranking, these are documents (for text only tasks `RetrievalOutputType`).
@@ -551,16 +658,28 @@ class CrossEncoderWrapper:
         Returns:
             The predicted relevance scores for each inputs pair.
         """
-        queries = self._collect_inputs(inputs1, self.query_prefix)
-        corpus = self._collect_inputs(inputs2, self.passage_prefix)
-
-        return cast(
-            "Array",
-            self.model.predict(
-                list(zip(queries, corpus, strict=True)),
-                **kwargs,
-            ),
+        show_progress_bar = kwargs.pop("show_progress_bar", True)
+        batches = zip(
+            self._iter_inputs(inputs1, self.query_prefix),
+            self._iter_inputs(inputs2, self.passage_prefix),
+            strict=True,
         )
+        scores = [
+            np.asarray(
+                self.model.predict(
+                    list(zip(queries, documents, strict=True)),
+                    show_progress_bar=False,
+                    **kwargs,
+                )
+            )
+            for queries, documents in tqdm(
+                batches,
+                total=len(inputs1),
+                desc="Scoring pairs",
+                disable=not show_progress_bar,
+            )
+        ]
+        return np.concatenate(scores) if scores else np.array([])
 
 
 class SparseEncoderWrapper(AbsEncoder):
@@ -722,6 +841,7 @@ class MultiVectorSearchEncoderWrapper:
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
         num_proc: int | None,
+        **kwargs: Any,
     ) -> None:
         """Store the corpus; documents are encoded lazily, in chunks, during `search`.
 
@@ -732,6 +852,7 @@ class MultiVectorSearchEncoderWrapper:
             hf_subset: Subset of current task. Similar to `hf_split` to get more information
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
             num_proc: Number of processes to use for indexing.
+            **kwargs: Additional arguments. Currently unused.
         """
         self.task_corpus = corpus
 
@@ -746,6 +867,8 @@ class MultiVectorSearchEncoderWrapper:
         encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
         num_proc: int | None,
+        timer: TimingStack | None = None,
+        **kwargs: Any,
     ) -> RetrievalOutputType:
         """Search the indexed corpus for the given queries, or rerank `top_ranked` candidates.
 
@@ -759,12 +882,17 @@ class MultiVectorSearchEncoderWrapper:
             top_k: Number of top documents to return for each query.
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
             num_proc: Number of processes to use for dataloading.
+            timer: Records the search phases: "Encoding queries", then "Searching corpus" for a
+                full corpus search, or "Encoding corpus" and "Computing similarity" when reranking.
+                A new stack is used when not given.
+            **kwargs: Additional arguments. Currently unused.
 
         Returns:
             Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.
         """
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
+        timer = timer or TimingStack()
 
         queries_dataloader = create_dataloader(
             queries,
@@ -773,14 +901,15 @@ class MultiVectorSearchEncoderWrapper:
             batch_size=encode_kwargs.get("batch_size", 32),
             num_proc=num_proc,
         )
-        query_embeddings = self._encode(  # type: ignore[attr-defined]
-            queries_dataloader,
-            task_metadata=task_metadata,
-            hf_split=hf_split,
-            hf_subset=hf_subset,
-            prompt_type=PromptType.query,
-            **encode_kwargs,
-        )
+        with timer("Encoding queries", split=hf_split, subset=hf_subset):
+            query_embeddings = self._encode(  # type: ignore[attr-defined]
+                queries_dataloader,
+                task_metadata=task_metadata,
+                hf_split=hf_split,
+                hf_subset=hf_subset,
+                prompt_type=PromptType.query,
+                **encode_kwargs,
+            )
         query_idx_to_id = {i: row["id"] for i, row in enumerate(queries)}
 
         if top_ranked is not None:
@@ -795,6 +924,7 @@ class MultiVectorSearchEncoderWrapper:
                 hf_split=hf_split,
                 encode_kwargs=encode_kwargs,
                 num_proc=num_proc,
+                timer=timer,
             )
         else:
             logger.info("Performing full corpus search with MaxSim...")
@@ -807,6 +937,7 @@ class MultiVectorSearchEncoderWrapper:
                 hf_split=hf_split,
                 encode_kwargs=encode_kwargs,
                 num_proc=num_proc,
+                timer=timer,
             )
 
         # Free the corpus reference now that search is done
@@ -829,6 +960,7 @@ class MultiVectorSearchEncoderWrapper:
         top_k: int,
         encode_kwargs: EncodeKwargs,
         num_proc: int | None,
+        timer: TimingStack,
     ) -> dict[str, list[tuple[float, str]]]:
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
@@ -844,11 +976,12 @@ class MultiVectorSearchEncoderWrapper:
             top_k=top_k,
             encode_kwargs=encode_kwargs,
             encode_fn=self._encode,  # type: ignore[attr-defined]
-            similarity_fn=self.model.similarity,  # type: ignore[attr-defined]
+            similarity_fn=self.similarity,  # type: ignore[attr-defined]
             num_proc=num_proc,
+            timer=timer,
         )
 
-    def _rerank_documents(
+    def _rerank_documents(  # noqa: PLR0913
         self,
         *,
         query_idx_to_id: dict[int, str],
@@ -859,6 +992,7 @@ class MultiVectorSearchEncoderWrapper:
         hf_subset: str,
         hf_split: str,
         encode_kwargs: EncodeKwargs,
+        timer: TimingStack,
         num_proc: int | None = None,
     ) -> dict[str, list[tuple[float, str]]]:
         """Rerank each query's pre-ranked candidates with MaxSim.
@@ -880,8 +1014,9 @@ class MultiVectorSearchEncoderWrapper:
             hf_split=hf_split,
             encode_kwargs=encode_kwargs,
             encode_fn=self._encode,  # type: ignore[attr-defined]
-            similarity_fn=self.model.similarity,  # type: ignore[attr-defined]
+            similarity_fn=self.similarity,  # type: ignore[attr-defined]
             num_proc=num_proc,
+            timer=timer,
         )
 
 
@@ -959,12 +1094,62 @@ class MultiVectorWrapper(MultiVectorSearchEncoderWrapper):
         self.max_samples = max_samples
 
     def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
-        """Compute the MaxSim similarity between two collections of multi-vector embeddings."""
-        return cast("Array", self.model.similarity(embeddings1, embeddings2))
+        """Compute the MaxSim similarity between two collections of multi-vector embeddings.
+
+        Scoring runs on the model's device; the scores are returned on the documents' device.
+        """
+        # Token embeddings stay on the CPU after encoding, so documents are moved to the model's
+        # device in blocks, each block once, and scored against every query group. Queries are
+        # grouped by length as well, because sentence-transformers pads all of them to the longest
+        # and only chunks along the documents.
+        import torch
+
+        device = self.model.device
+        queries = [torch.as_tensor(q).to(device) for q in _as_vector_list(embeddings1)]
+        documents = _as_vector_list(embeddings2)
+        result_device = (
+            documents[0].device
+            if documents and isinstance(documents[0], torch.Tensor)
+            else torch.device("cpu")
+        )
+        scores = torch.empty(
+            len(queries), len(documents), dtype=torch.float32, device=result_device
+        )
+        if not queries or not documents:
+            return scores
+
+        query_widths = [len(q) for q in queries]
+        for doc_start, doc_end in _max_sim_document_blocks(documents):
+            block = [
+                torch.as_tensor(d).to(device, non_blocking=True)
+                for d in documents[doc_start:doc_end]
+            ]
+            # Padded query tokens per group, so that group * widest document fits the budget
+            query_token_budget = max(
+                1, _MAX_SIM_CHUNK_ELEMENTS // max(len(d) for d in block)
+            )
+            for query_indices in _token_budget_chunks(query_widths, query_token_budget):
+                block_scores = self.model.similarity(
+                    [queries[i] for i in query_indices], block, device=device
+                )
+                scores[
+                    torch.as_tensor(query_indices, device=result_device),
+                    doc_start:doc_end,
+                ] = block_scores.to(result_device, torch.float32)
+            del block
+        return scores
 
     def similarity_pairwise(self, embeddings1: Array, embeddings2: Array) -> Array:
-        """Compute the pairwise MaxSim similarity between matched multi-vector embedding pairs."""
-        return cast("Array", self.model.similarity_pairwise(embeddings1, embeddings2))
+        """Compute the pairwise MaxSim similarity between matched multi-vector embedding pairs.
+
+        Scoring runs on the model's device; the scores are returned on the documents' device.
+        """
+        return cast(
+            "Array",
+            self.model.similarity_pairwise(
+                embeddings1, embeddings2, device=self.model.device
+            ),
+        )
 
     def _encode(
         self,
@@ -1016,6 +1201,11 @@ class MultiVectorWrapper(MultiVectorSearchEncoderWrapper):
             encode_function=encode_function,
             prompt=prompt,
             modalities=self.mteb_model_meta.modalities,
+            # Keep token embeddings on CPU; `similarity` moves them back to the device in blocks.
+            postprocess_batch=_to_cpu_in_place,
             concatenate_batches=_concatenate_ragged_batches,
+            # `MultiVectorEncoder.encode` keeps all of a call's per-token embeddings on the device
+            # until it returns, so text is encoded and moved to CPU one batch at a time.
+            encode_text_per_batch=True,
             **kwargs,
         )

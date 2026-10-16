@@ -6,6 +6,8 @@ import mteb
 from mteb.abstasks import AbsTask
 from mteb.benchmarks.benchmark import Benchmark
 
+pytestmark = pytest.mark.core
+
 
 def format_bibtex(bibtex_str: str) -> str | None:
     library = bibtexparser.parse_string(bibtex_str)

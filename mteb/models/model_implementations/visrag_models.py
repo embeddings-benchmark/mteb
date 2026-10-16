@@ -214,4 +214,5 @@ visrag_ret = ModelMeta(
     model_type=["dense"],
     citation=VISRAG_CITATION,
     extra_requirements_groups=("visrag-ret",),
+    output_dtypes=OutputDType.BF16,
 )

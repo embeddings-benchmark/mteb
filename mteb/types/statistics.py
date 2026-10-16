@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from typing import TypeAlias
+from typing import NotRequired, TypeAlias
 
-from typing_extensions import NotRequired, TypedDict
+from typing_extensions import TypedDict
 
 from mteb.types._result import HFSubset
 
