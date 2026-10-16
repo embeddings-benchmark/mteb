@@ -142,7 +142,8 @@ llama-embed-nemotron = ["transformers==4.51.0"]
 llama-nemotron-colembed-vl = ["transformers[torch]==4.49.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
 nemotron-colembed-vl-v2 = ["transformers[torch]==5.0.0", "torchvision>=0.22.0", "flash-attn>=2.6.3", "accelerate"]
 nemotron-3-5-vl = [
-    "torch>=2.8",
+    # PyTorch #187684 fixes SDPA mask-offset overflow for large image batches.
+    "torch>=2.13.0",
     "sentence-transformers>=6.1.0",
     "transformers[torch]>=5.12.1,<5.17.0",
     "torchvision>=0.22.0",
