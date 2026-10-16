@@ -85,14 +85,17 @@ embedding_gemma_300m = ModelMeta(
 # EmbeddingGemma 2 evaluation recipe
 # ---------------------------------------------------------------------------
 # The numbers for MTEB(Multilingual, v2), MTEB(eng, v2), MTEB(Code, v1), MIEB(lite)
-# and MAEB were produced with one instruction per task (and, for text, sometimes a
-# longer sequence length), so a task-type prompt dictionary does not reproduce them.
+# and MAEB were produced with one instruction per task, so a task-type prompt
+# dictionary does not reproduce them. Instructions that did not match the task were
+# replaced by the task-type instruction (_task_type_instruction); the submitted instruction is
+# kept as a comment on those entries.
 # Formatting:
 #   * query / symmetric input ........ "task: {instruction} | query: {text}"
 #   * document side of asymmetric tasks "title: {title} | text: {text}"
 #                                        (title = "none" when the corpus has no title)
 #   * asymmetric = retrieval tasks, based on metadata and on an explicit list for
 #     MIEB below.
+#   * Text-only: the model's default max_seq_length for every task.
 #   * MIEB: max_seq_length 380 for every task (image tokens included); for the tasks in
 #     _MIEB_NO_PROMPT_ON_IMAGE_INPUTS any input containing an image gets no prompt.
 #   * MAEB: max_seq_length 1024 for every task (audio tokens included). Raw audio
@@ -100,255 +103,254 @@ embedding_gemma_300m = ModelMeta(
 #     tokenization. All audio documents and retrieval corpora are embedded with prefix
 #     "title: none | text: <|audio|>".
 #   * bf16, mean pooling, L2-normalised, 768d (MRL truncation via ``embed_dim``).
-# Tasks outside these benchmarks fall back to a simplified task-type instruction
-# and 512 tokens (380 with vision, 1024 with audio).
+# Tasks outside these benchmarks fall back to a simplified task-type instruction.
 
-EMBEDDING_GEMMA_2_TASK_RECIPE: dict[str, tuple[str, int]] = {
-    "AfriSentiClassification": ("classification", 512),
-    "AILAStatutes": ("sentence similarity", 512),
-    "AlloProfClusteringS2S.v2": ("code retrieval", 2048),
-    "AlloprofReranking": ("search result", 2048),
-    "AmazonCounterfactualClassification": ("classification", 512),
-    "AppsRetrieval": ("code retrieval", 2048),
-    "ArguAna": ("fact checking", 512),
-    "ArmenianParaphrasePC": ("classification", 1024),
-    "AROCocoOrder": ("question answering", 380),
-    "AROFlickrOrder": ("clustering", 380),
-    "AROVisualAttribution": ("search result", 380),
-    "AROVisualRelation": ("classification", 380),
-    "ArXivHierarchicalClusteringP2P": ("clustering", 512),
-    "ArXivHierarchicalClusteringS2S": ("clustering", 512),
-    "AskUbuntuDupQuestions": ("search result", 2048),
-    "Banking77Classification": ("classification", 512),
-    "BeijingOpera": ("classification", 1024),
-    "BelebeleRetrieval": ("question answering", 2048),
-    "BibleNLPBitextMining": ("search result", 2048),
-    "BigPatentClustering.v2": ("sentence similarity", 2048),
-    "BiorxivClusteringP2P.v2": ("code retrieval", 2048),
-    "BIOSSES": ("search result", 2048),
-    "BirdCLEF": ("sentence similarity", 1024),
-    "BLINKIT2IMultiChoice": ("sentence similarity", 380),
-    "BornholmBitextMining": ("sentence similarity", 512),
-    "BrazilianToxicTweetsClassification": ("classification", 1024),
-    "BUCC.v2": ("sentence similarity", 512),
-    "BulgarianStoreReviewSentimentClassfication": ("classification", 512),
-    "CataloniaTweetClassification": ("code retrieval", 2048),
-    "CEDRClassification": ("classification", 512),
-    "CIFAR100ZeroShot": ("sentence similarity", 380),
-    "CIRRIT2IRetrieval": ("clustering", 380),
-    "ClimateFEVERHardNegatives": ("question answering", 1024),
-    "ClothoT2ARetrieval": ("search result", 1024),
-    "CLSClusteringP2P.v2": ("code retrieval", 2048),
-    "CodeEditSearchRetrieval": ("code retrieval", 512),
-    "CodeFeedbackMT": ("code retrieval", 2048),
-    "CodeFeedbackST": ("code retrieval", 2048),
-    "CodeSearchNetCCRetrieval": ("code retrieval", 1024),
-    "CodeSearchNetRetrieval": ("code retrieval", 2048),
-    "CodeTransOceanContest": ("code retrieval", 2048),
-    "CodeTransOceanDL": ("code retrieval", 1024),
-    "COIRCodeSearchNetRetrieval": ("code retrieval", 2048),
-    "CommonLanguageAgeDetection": ("clustering", 1024),
-    "CommonVoiceMini21T2ARetrieval": ("sentence similarity", 1024),
-    "Core17InstructionRetrieval": ("question answering", 2048),
-    "CosQA": ("code retrieval", 1024),
-    "Country211": ("clustering", 380),
-    "Country211ZeroShot": ("code retrieval", 380),
-    "CovidRetrieval": ("search result", 1024),
-    "CQADupstackGamingRetrieval": ("search result", 2048),
-    "CQADupstackUnixRetrieval": ("question answering", 512),
-    "CREMA_D": ("clustering", 1024),
-    "CREMA_DClustering": ("fact checking", 1024),
-    "CREMADPairClassification": ("clustering", 1024),
-    "CSFDSKMovieReviewSentimentClassification": ("classification", 2048),
-    "CTKFactsNLI": ("classification", 512),
-    "CUB200I2IRetrieval": ("clustering", 380),
-    "CVBenchCount": ("code retrieval", 380),
-    "CVBenchDepth": ("sentence similarity", 380),
-    "CVBenchDistance": ("classification", 380),
-    "CVBenchRelation": ("classification", 380),
-    "CyrillicTurkicLangClassification": ("clustering", 1024),
-    "CzechProductReviewSentimentClassification": ("classification", 1024),
-    "DalajClassification": ("classification", 512),
-    "DBpediaClassification": ("classification", 1024),
-    "DiaBlaBitextMining": ("sentence similarity", 512),
-    "DTD": ("question answering", 380),
-    "EstonianValenceClassification": ("classification", 512),
-    "EuroSAT": ("sentence similarity", 380),
-    "FaroeseSTS": ("sentence similarity", 512),
-    "Fashion200kI2TRetrieval": ("search result", 380),
-    "FER2013ZeroShot": ("question answering", 380),
-    "FEVERHardNegatives": ("search result", 1024),
-    "FGVCAircraftZeroShot": ("question answering", 380),
-    "FilipinoShopeeReviewsClassification": ("classification", 512),
-    "FinancialPhrasebankClassification": ("sentence similarity", 512),
-    "FinParaSTS": ("code retrieval", 2048),
-    "FiQA2018": ("question answering", 2048),
-    "FleursT2ARetrieval": ("search result", 1024),
-    "FloresBitextMining": ("search result", 1024),
-    "Food101ZeroShot": ("question answering", 380),
-    "FSD2019Kaggle": ("classification", 1024),
-    "GermanSTSBenchmark": ("sentence similarity", 512),
-    "GigaSpeechT2ARetrieval": ("question answering", 1024),
-    "GreekLegalCodeClassification": ("question answering", 2048),
-    "GTSRB": ("question answering", 380),
-    "GTZANAudioReranking": ("code retrieval", 1024),
-    "GTZANGenre": ("fact checking", 1024),
-    "GujaratiNewsClassification": ("clustering", 512),
-    "HagridRetrieval": ("sentence similarity", 512),
-    "HALClusteringS2S.v2": ("clustering", 512),
-    "HatefulMemesI2TRetrieval": ("question answering", 380),
-    "HotpotQAHardNegatives": ("question answering", 1024),
-    "IEMOCAPGender": ("clustering", 1024),
-    "ImageCoDe": ("fact checking", 380),
-    "ImageNetDog15Clustering": ("clustering", 380),
-    "ImdbClassification": ("classification", 2048),
-    "IN22GenBitextMining": ("sentence similarity", 512),
-    "IndicCrosslingualSTS": ("search result", 1024),
-    "IndicGenBenchFloresBitextMining": ("sentence similarity", 1024),
-    "IndicLangClassification": ("clustering", 1024),
-    "IndonesianIdClickbaitClassification": ("classification", 512),
-    "indonli": ("sentence similarity", 1024),
-    "InfoSeekIT2TRetrieval": ("fact checking", 380),
-    "IsiZuluNewsClassification": ("fact checking", 512),
-    "ItaCaseholdClassification": ("clustering", 512),
-    "JamAltArtistA2ARetrieval": ("fact checking", 1024),
-    "JamAltLyricA2TRetrieval": ("search result", 1024),
-    "JSICK": ("sentence similarity", 1024),
-    "KorHateSpeechMLClassification": ("search result", 512),
-    "KorSarcasmClassification": ("question answering", 512),
-    "KurdishSentimentClassification": ("classification", 1024),
-    "LegalBenchCorporateLobbying": ("search result", 2048),
-    "LEMBPasskeyRetrieval": ("sentence similarity", 2048),
-    "MacedonianTweetSentimentClassification": ("classification", 512),
-    "MACST2ARetrieval": ("sentence similarity", 1024),
-    "MalteseNewsClassification": ("clustering", 2048),
-    "MasakhaNEWSClassification": ("clustering", 1024),
-    "MasakhaNEWSClusteringS2S": ("clustering", 512),
-    "MassiveIntentClassification": ("classification", 1024),
-    "MassiveScenarioClassification": ("classification", 2048),
-    "MedrxivClusteringP2P.v2": ("clustering", 512),
-    "MedrxivClusteringS2S.v2": ("clustering", 2048),
-    "MInDS14": ("question answering", 1024),
-    "MindSmallReranking": ("clustering", 512),
-    "MIRACLRetrievalHardNegatives": ("fact checking", 2048),
-    "MLQARetrieval": ("search result", 2048),
-    "MridinghamTonic": ("question answering", 1024),
-    "MTOPDomainClassification": ("classification", 2048),
-    "MultiEURLEXMultilabelClassification": ("question answering", 1024),
-    "MultiHateClassification": ("sentence similarity", 512),
-    "NepaliNewsClassification": ("clustering", 512),
-    "News21InstructionRetrieval": ("classification", 512),
-    "NIGHTSI2IRetrieval": ("clustering", 380),
-    "NMSQAPairClassification": ("sentence similarity", 1024),
-    "NollySentiBitextMining": ("question answering", 1024),
-    "NordicLangClassification": ("clustering", 2048),
-    "NorwegianCourtsBitextMining": ("sentence similarity", 512),
-    "NTREXBitextMining": ("search result", 2048),
-    "NusaParagraphEmotionClassification": ("classification", 512),
-    "NusaTranslationBitextMining": ("sentence similarity", 512),
-    "NusaX-senti": ("classification", 512),
-    "NusaXBitextMining": ("search result", 512),
-    "OdiaNewsClassification": ("clustering", 1024),
-    "OpusparcusPC": ("sentence similarity", 1024),
-    "OVENIT2TRetrieval": ("question answering", 380),
-    "OxfordPets": ("fact checking", 380),
-    "OxfordPetsZeroShot": ("fact checking", 380),
-    "PAC": ("classification", 512),
-    "PatchCamelyon": ("clustering", 380),
-    "PawsXPairClassification": ("question answering", 1024),
-    "PlscClusteringP2P.v2": ("clustering", 512),
-    "PoemSentimentClassification": ("sentence similarity", 512),
-    "PolEmo2.0-OUT": ("classification", 512),
-    "PpcPC": ("sentence similarity", 1024),
-    "PunjabiNewsClassification": ("sentence similarity", 2048),
-    "RavdessZeroshot": ("clustering", 1024),
-    "RESISC45": ("sentence similarity", 380),
-    "Robust04InstructionRetrieval": ("question answering", 1024),
-    "RomaniBibleClustering": ("fact checking", 2048),
-    "RP2kI2IRetrieval": ("clustering", 380),
-    "RTE3": ("sentence similarity", 512),
-    "RuBQReranking": ("fact checking", 512),
-    "ScalaClassification": ("sentence similarity", 2048),
-    "SCIDOCS": ("question answering", 1024),
-    "SemRel24STS": ("sentence similarity", 1024),
-    "SentimentAnalysisHindi": ("classification", 512),
-    "SIB200ClusteringS2S": ("sentence similarity", 512),
-    "SIBFLEURS": ("clustering", 1024),
-    "SICK-R": ("sentence similarity", 512),
-    "SinhalaNewsClassification": ("clustering", 512),
-    "SiswatiNewsClassification": ("search result", 1024),
-    "SlovakMovieReviewSentimentClassification": ("classification", 512),
-    "SpartQA": ("question answering", 512),
-    "SpeechCommandsZeroshotv0.02": ("sentence similarity", 1024),
-    "SpokenSQuADT2ARetrieval": ("fact checking", 1024),
-    "SprintDuplicateQuestions": ("search result", 512),
-    "StackExchangeClustering.v2": ("clustering", 512),
-    "StackExchangeClusteringP2P.v2": ("clustering", 512),
-    "StackOverflowQA": ("code retrieval", 2048),
-    "StanfordCarsZeroShot": ("question answering", 380),
-    "StatcanDialogueDatasetRetrieval": ("search result", 2048),
-    "STS12": ("sentence similarity", 512),
-    "STS13": ("sentence similarity", 512),
-    "STS13VisualSTS": ("sentence similarity", 380),
-    "STS14": ("sentence similarity", 512),
-    "STS15": ("sentence similarity", 1024),
-    "STS15VisualSTS": ("sentence similarity", 380),
-    "STS17": ("sentence similarity", 512),
-    "STS17MultilingualVisualSTS": ("sentence similarity", 380),
-    "STS22.v2": ("sentence similarity", 1024),
-    "STSB": ("sentence similarity", 512),
-    "STSBenchmark": ("sentence similarity", 1024),
-    "STSBenchmarkMultilingualVisualSTS": ("sentence similarity", 380),
-    "STSES": ("sentence similarity", 512),
-    "SummEvalSummarization.v2": ("sentence similarity", 2048),
-    "SUN397": ("sentence similarity", 380),
-    "SwahiliNewsClassification": ("clustering", 1024),
-    "SwednClusteringP2P": ("clustering", 1024),
-    "SwissJudgementClassification": ("question answering", 2048),
-    "SyntheticText2SQL": ("code retrieval", 2048),
-    "T2Reranking": ("fact checking", 512),
-    "Tatoeba": ("sentence similarity", 1024),
-    "TempReasonL1": ("search result", 512),
-    "TERRa": ("sentence similarity", 512),
-    "TinyImageNetClustering": ("fact checking", 380),
-    "Touche2020Retrieval.v3": ("question answering", 1024),
-    "ToxicConversationsClassification": ("classification", 512),
-    "TRECCOVID": ("search result", 2048),
-    "TswanaNewsClassification": ("search result", 2048),
-    "TweetSentimentExtractionClassification": ("classification", 2048),
-    "TweetTopicSingleClassification": ("clustering", 512),
-    "TwentyNewsgroupsClustering.v2": ("clustering", 2048),
-    "TwitterHjerneRetrieval": ("search result", 2048),
-    "TwitterSemEval2015": ("sentence similarity", 512),
-    "TwitterURLCorpus": ("sentence similarity", 512),
-    "UrbanSound8KT2ARetrieval": ("fact checking", 1024),
-    "VehicleSoundClustering": ("sentence similarity", 1024),
-    "VidoreDocVQARetrieval": ("question answering", 380),
-    "VidoreInfoVQARetrieval": ("search result", 380),
-    "VidoreShiftProjectRetrieval": ("search result", 380),
-    "VidoreSyntheticDocQAAIRetrieval": ("search result", 380),
-    "VidoreTabfquadRetrieval": ("question answering", 380),
-    "VidoreTatdqaRetrieval": ("search result", 380),
-    "VisualNewsI2TRetrieval": ("fact checking", 380),
-    "VisualSTS-b-Multilingual": ("sentence similarity", 380),
-    "VisualSTS17Multilingual": ("sentence similarity", 380),
-    "VoxCelebSA": ("classification", 1024),
-    "VoxPopuliAccentPairClassification": ("clustering", 1024),
-    "VoxPopuliGenderClustering": ("sentence similarity", 1024),
-    "VoxPopuliLanguageID": ("clustering", 1024),
-    "VoyageMMarcoReranking": ("fact checking", 2048),
-    "VQA2IT2TRetrieval": ("clustering", 380),
-    "WebLINXCandidatesReranking": ("classification", 2048),
-    "WebQAT2ITRetrieval": ("search result", 380),
-    "WikiCitiesClustering": ("clustering", 1024),
-    "WikiClusteringP2P.v2": ("classification", 1024),
-    "WikipediaRerankingMultilingual": ("sentence similarity", 1024),
-    "WikipediaRetrievalMultilingual": ("search result", 512),
-    "WinoGrande": ("search result", 512),
-    "Winoground": ("search result", 380),
-    "WITT2IRetrieval": ("question answering", 380),
-    "XM3600T2IRetrieval": ("question answering", 380),
-    "XNLI": ("sentence similarity", 512),
+EMBEDDING_GEMMA_2_TASK_INSTRUCTIONS: dict[str, str] = {
+    "AfriSentiClassification": "classification",
+    "AILAStatutes": "search result",  # originally submitted as "sentence similarity"
+    "AlloProfClusteringS2S.v2": "clustering",  # originally submitted as "code retrieval"
+    "AlloprofReranking": "search result",
+    "AmazonCounterfactualClassification": "classification",
+    "AppsRetrieval": "code retrieval",
+    "ArguAna": "fact checking",
+    "ArmenianParaphrasePC": "classification",
+    "AROCocoOrder": "sentence similarity",  # originally submitted as "question answering"
+    "AROFlickrOrder": "sentence similarity",  # originally submitted as "clustering"
+    "AROVisualAttribution": "search result",
+    "AROVisualRelation": "classification",
+    "ArXivHierarchicalClusteringP2P": "clustering",
+    "ArXivHierarchicalClusteringS2S": "clustering",
+    "AskUbuntuDupQuestions": "search result",
+    "Banking77Classification": "classification",
+    "BeijingOpera": "classification",
+    "BelebeleRetrieval": "question answering",
+    "BibleNLPBitextMining": "search result",
+    "BigPatentClustering.v2": "clustering",  # originally submitted as "sentence similarity"
+    "BiorxivClusteringP2P.v2": "clustering",  # originally submitted as "code retrieval"
+    "BIOSSES": "sentence similarity",  # originally submitted as "search result"
+    "BirdCLEF": "classification",  # originally submitted as "sentence similarity"
+    "BLINKIT2IMultiChoice": "search result",  # originally submitted as "sentence similarity"
+    "BornholmBitextMining": "sentence similarity",
+    "BrazilianToxicTweetsClassification": "classification",
+    "BUCC.v2": "sentence similarity",
+    "BulgarianStoreReviewSentimentClassfication": "classification",
+    "CataloniaTweetClassification": "classification",  # originally submitted as "code retrieval"
+    "CEDRClassification": "classification",
+    "CIFAR100ZeroShot": "sentence similarity",
+    "CIRRIT2IRetrieval": "search result",  # originally submitted as "clustering"
+    "ClimateFEVERHardNegatives": "question answering",
+    "ClothoT2ARetrieval": "search result",
+    "CLSClusteringP2P.v2": "clustering",  # originally submitted as "code retrieval"
+    "CodeEditSearchRetrieval": "code retrieval",
+    "CodeFeedbackMT": "code retrieval",
+    "CodeFeedbackST": "code retrieval",
+    "CodeSearchNetCCRetrieval": "code retrieval",
+    "CodeSearchNetRetrieval": "code retrieval",
+    "CodeTransOceanContest": "code retrieval",
+    "CodeTransOceanDL": "code retrieval",
+    "COIRCodeSearchNetRetrieval": "code retrieval",
+    "CommonLanguageAgeDetection": "clustering",
+    "CommonVoiceMini21T2ARetrieval": "sentence similarity",
+    "Core17InstructionRetrieval": "question answering",
+    "CosQA": "code retrieval",
+    "Country211": "clustering",
+    "Country211ZeroShot": "classification",  # originally submitted as "code retrieval"
+    "CovidRetrieval": "search result",
+    "CQADupstackGamingRetrieval": "search result",
+    "CQADupstackUnixRetrieval": "question answering",
+    "CREMA_D": "clustering",
+    "CREMA_DClustering": "clustering",  # originally submitted as "fact checking"
+    "CREMADPairClassification": "clustering",
+    "CSFDSKMovieReviewSentimentClassification": "classification",
+    "CTKFactsNLI": "classification",
+    "CUB200I2IRetrieval": "clustering",
+    "CVBenchCount": "question answering",  # originally submitted as "code retrieval"
+    "CVBenchDepth": "question answering",  # originally submitted as "sentence similarity"
+    "CVBenchDistance": "classification",
+    "CVBenchRelation": "classification",
+    "CyrillicTurkicLangClassification": "clustering",
+    "CzechProductReviewSentimentClassification": "classification",
+    "DalajClassification": "classification",
+    "DBpediaClassification": "classification",
+    "DiaBlaBitextMining": "sentence similarity",
+    "DTD": "classification",  # originally submitted as "question answering"
+    "EstonianValenceClassification": "classification",
+    "EuroSAT": "classification",  # originally submitted as "sentence similarity"
+    "FaroeseSTS": "sentence similarity",
+    "Fashion200kI2TRetrieval": "search result",
+    "FER2013ZeroShot": "classification",  # originally submitted as "question answering"
+    "FEVERHardNegatives": "search result",
+    "FGVCAircraftZeroShot": "classification",  # originally submitted as "question answering"
+    "FilipinoShopeeReviewsClassification": "classification",
+    "FinancialPhrasebankClassification": "classification",  # originally submitted as "sentence similarity"
+    "FinParaSTS": "sentence similarity",  # originally submitted as "code retrieval"
+    "FiQA2018": "question answering",
+    "FleursT2ARetrieval": "search result",
+    "FloresBitextMining": "search result",
+    "Food101ZeroShot": "classification",  # originally submitted as "question answering"
+    "FSD2019Kaggle": "classification",
+    "GermanSTSBenchmark": "sentence similarity",
+    "GigaSpeechT2ARetrieval": "search result",  # originally submitted as "question answering"
+    "GreekLegalCodeClassification": "classification",  # originally submitted as "question answering"
+    "GTSRB": "classification",  # originally submitted as "question answering"
+    "GTZANAudioReranking": "search result",  # originally submitted as "code retrieval"
+    "GTZANGenre": "classification",  # originally submitted as "fact checking"
+    "GujaratiNewsClassification": "clustering",
+    "HagridRetrieval": "search result",  # originally submitted as "sentence similarity"
+    "HALClusteringS2S.v2": "clustering",
+    "HatefulMemesI2TRetrieval": "search result",  # originally submitted as "question answering"
+    "HotpotQAHardNegatives": "question answering",
+    "IEMOCAPGender": "clustering",
+    "ImageCoDe": "sentence similarity",  # originally submitted as "fact checking"
+    "ImageNetDog15Clustering": "clustering",
+    "ImdbClassification": "classification",
+    "IN22GenBitextMining": "sentence similarity",
+    "IndicCrosslingualSTS": "sentence similarity",  # originally submitted as "search result"
+    "IndicGenBenchFloresBitextMining": "sentence similarity",
+    "IndicLangClassification": "clustering",
+    "IndonesianIdClickbaitClassification": "classification",
+    "indonli": "sentence similarity",
+    "InfoSeekIT2TRetrieval": "search result",  # originally submitted as "fact checking"
+    "IsiZuluNewsClassification": "classification",  # originally submitted as "fact checking"
+    "ItaCaseholdClassification": "clustering",
+    "JamAltArtistA2ARetrieval": "search result",  # originally submitted as "fact checking"
+    "JamAltLyricA2TRetrieval": "search result",
+    "JSICK": "sentence similarity",
+    "KorHateSpeechMLClassification": "classification",  # originally submitted as "search result"
+    "KorSarcasmClassification": "classification",  # originally submitted as "question answering"
+    "KurdishSentimentClassification": "classification",
+    "LegalBenchCorporateLobbying": "search result",
+    "LEMBPasskeyRetrieval": "search result",  # originally submitted as "sentence similarity"
+    "MacedonianTweetSentimentClassification": "classification",
+    "MACST2ARetrieval": "search result",  # originally submitted as "sentence similarity"
+    "MalteseNewsClassification": "clustering",
+    "MasakhaNEWSClassification": "clustering",
+    "MasakhaNEWSClusteringS2S": "clustering",
+    "MassiveIntentClassification": "classification",
+    "MassiveScenarioClassification": "classification",
+    "MedrxivClusteringP2P.v2": "clustering",
+    "MedrxivClusteringS2S.v2": "clustering",
+    "MInDS14": "classification",  # originally submitted as "question answering"
+    "MindSmallReranking": "search result",  # originally submitted as "clustering"
+    "MIRACLRetrievalHardNegatives": "search result",  # originally submitted as "fact checking"
+    "MLQARetrieval": "search result",
+    "MridinghamTonic": "classification",  # originally submitted as "question answering"
+    "MTOPDomainClassification": "classification",
+    "MultiEURLEXMultilabelClassification": "classification",  # originally submitted as "question answering"
+    "MultiHateClassification": "classification",  # originally submitted as "sentence similarity"
+    "NepaliNewsClassification": "clustering",
+    "News21InstructionRetrieval": "search result",  # originally submitted as "classification"
+    "NIGHTSI2IRetrieval": "search result",  # originally submitted as "clustering"
+    "NMSQAPairClassification": "sentence similarity",
+    "NollySentiBitextMining": "sentence similarity",  # originally submitted as "question answering"
+    "NordicLangClassification": "clustering",
+    "NorwegianCourtsBitextMining": "sentence similarity",
+    "NTREXBitextMining": "search result",
+    "NusaParagraphEmotionClassification": "classification",
+    "NusaTranslationBitextMining": "sentence similarity",
+    "NusaX-senti": "classification",
+    "NusaXBitextMining": "search result",
+    "OdiaNewsClassification": "clustering",
+    "OpusparcusPC": "sentence similarity",
+    "OVENIT2TRetrieval": "question answering",
+    "OxfordPets": "classification",  # originally submitted as "fact checking"
+    "OxfordPetsZeroShot": "classification",  # originally submitted as "fact checking"
+    "PAC": "classification",
+    "PatchCamelyon": "clustering",
+    "PawsXPairClassification": "sentence similarity",  # originally submitted as "question answering"
+    "PlscClusteringP2P.v2": "clustering",
+    "PoemSentimentClassification": "classification",  # originally submitted as "sentence similarity"
+    "PolEmo2.0-OUT": "classification",
+    "PpcPC": "sentence similarity",
+    "PunjabiNewsClassification": "classification",  # originally submitted as "sentence similarity"
+    "RavdessZeroshot": "clustering",
+    "RESISC45": "classification",  # originally submitted as "sentence similarity"
+    "Robust04InstructionRetrieval": "question answering",
+    "RomaniBibleClustering": "clustering",  # originally submitted as "fact checking"
+    "RP2kI2IRetrieval": "clustering",
+    "RTE3": "sentence similarity",
+    "RuBQReranking": "search result",  # originally submitted as "fact checking"
+    "ScalaClassification": "classification",  # originally submitted as "sentence similarity"
+    "SCIDOCS": "question answering",
+    "SemRel24STS": "sentence similarity",
+    "SentimentAnalysisHindi": "classification",
+    "SIB200ClusteringS2S": "clustering",  # originally submitted as "sentence similarity"
+    "SIBFLEURS": "clustering",
+    "SICK-R": "sentence similarity",
+    "SinhalaNewsClassification": "clustering",
+    "SiswatiNewsClassification": "classification",  # originally submitted as "search result"
+    "SlovakMovieReviewSentimentClassification": "classification",
+    "SpartQA": "question answering",
+    "SpeechCommandsZeroshotv0.02": "sentence similarity",
+    "SpokenSQuADT2ARetrieval": "search result",  # originally submitted as "fact checking"
+    "SprintDuplicateQuestions": "search result",
+    "StackExchangeClustering.v2": "clustering",
+    "StackExchangeClusteringP2P.v2": "clustering",
+    "StackOverflowQA": "code retrieval",
+    "StanfordCarsZeroShot": "classification",  # originally submitted as "question answering"
+    "StatcanDialogueDatasetRetrieval": "search result",
+    "STS12": "sentence similarity",
+    "STS13": "sentence similarity",
+    "STS13VisualSTS": "sentence similarity",
+    "STS14": "sentence similarity",
+    "STS15": "sentence similarity",
+    "STS15VisualSTS": "sentence similarity",
+    "STS17": "sentence similarity",
+    "STS17MultilingualVisualSTS": "sentence similarity",
+    "STS22.v2": "sentence similarity",
+    "STSB": "sentence similarity",
+    "STSBenchmark": "sentence similarity",
+    "STSBenchmarkMultilingualVisualSTS": "sentence similarity",
+    "STSES": "sentence similarity",
+    "SummEvalSummarization.v2": "sentence similarity",
+    "SUN397": "classification",  # originally submitted as "sentence similarity"
+    "SwahiliNewsClassification": "clustering",
+    "SwednClusteringP2P": "clustering",
+    "SwissJudgementClassification": "classification",  # originally submitted as "question answering"
+    "SyntheticText2SQL": "code retrieval",
+    "T2Reranking": "question answering",  # originally submitted as "fact checking"
+    "Tatoeba": "sentence similarity",
+    "TempReasonL1": "search result",
+    "TERRa": "sentence similarity",
+    "TinyImageNetClustering": "clustering",  # originally submitted as "fact checking"
+    "Touche2020Retrieval.v3": "question answering",
+    "ToxicConversationsClassification": "classification",
+    "TRECCOVID": "search result",
+    "TswanaNewsClassification": "classification",  # originally submitted as "search result"
+    "TweetSentimentExtractionClassification": "classification",
+    "TweetTopicSingleClassification": "clustering",
+    "TwentyNewsgroupsClustering.v2": "clustering",
+    "TwitterHjerneRetrieval": "search result",
+    "TwitterSemEval2015": "sentence similarity",
+    "TwitterURLCorpus": "sentence similarity",
+    "UrbanSound8KT2ARetrieval": "search result",  # originally submitted as "fact checking"
+    "VehicleSoundClustering": "clustering",  # originally submitted as "sentence similarity"
+    "VidoreDocVQARetrieval": "question answering",
+    "VidoreInfoVQARetrieval": "search result",
+    "VidoreShiftProjectRetrieval": "search result",
+    "VidoreSyntheticDocQAAIRetrieval": "search result",
+    "VidoreTabfquadRetrieval": "question answering",
+    "VidoreTatdqaRetrieval": "search result",
+    "VisualNewsI2TRetrieval": "search result",  # originally submitted as "fact checking"
+    "VisualSTS-b-Multilingual": "sentence similarity",
+    "VisualSTS17Multilingual": "sentence similarity",
+    "VoxCelebSA": "classification",
+    "VoxPopuliAccentPairClassification": "clustering",
+    "VoxPopuliGenderClustering": "clustering",  # originally submitted as "sentence similarity"
+    "VoxPopuliLanguageID": "clustering",
+    "VoyageMMarcoReranking": "search result",  # originally submitted as "fact checking"
+    "VQA2IT2TRetrieval": "search result",  # originally submitted as "clustering"
+    "WebLINXCandidatesReranking": "code retrieval",  # originally submitted as "classification"
+    "WebQAT2ITRetrieval": "search result",
+    "WikiCitiesClustering": "clustering",
+    "WikiClusteringP2P.v2": "classification",
+    "WikipediaRerankingMultilingual": "search result",  # originally submitted as "sentence similarity"
+    "WikipediaRetrievalMultilingual": "search result",
+    "WinoGrande": "search result",
+    "Winoground": "search result",
+    "WITT2IRetrieval": "search result",  # originally submitted as "question answering"
+    "XM3600T2IRetrieval": "search result",  # originally submitted as "question answering"
+    "XNLI": "sentence similarity",
 }
 
 # MIEB tasks encoded asymmetrically (query template vs. "title: ... | text: ..." template).
@@ -406,6 +408,24 @@ _TASK_TYPE_INSTRUCTION = {
     "pair-classification": "sentence similarity",
 }
 
+# Retrieval subtypes that have a more specific instruction, in order of precedence.
+_RETRIEVAL_SUBTYPE_INSTRUCTION = {
+    "Code retrieval": "code retrieval",
+    "Claim verification": "fact checking",
+    "Question answering": "question answering",
+}
+
+
+def _task_type_instruction(task_metadata: TaskMetadata) -> str:
+    """Instruction from the simplified task type, refined by subtype for retrieval."""
+    task_type = task_metadata.simplified_task_type
+    if task_type == "retrieval":
+        subtypes = task_metadata.task_subtypes or []
+        for subtype, instruction in _RETRIEVAL_SUBTYPE_INSTRUCTION.items():
+            if subtype in subtypes:
+                return instruction
+    return _TASK_TYPE_INSTRUCTION.get(task_type, "search result")
+
 
 # (use_image, use_audio) -> modalities, n_parameters, memory_usage_mb of the loaded towers
 _TOWERS = {
@@ -427,8 +447,8 @@ class EmbeddingGemma2Wrapper(SentenceTransformerEncoderWrapper):
 
     Everything (prompt handling, multimodal inputs, MRL truncation via ``embed_dim``,
     normalisation) is inherited from ``SentenceTransformerEncoderWrapper``; this class only
-    (1) loads just the requested modality towers, (2) sets the per-task ``max_seq_length``
-    and (3) writes the per-task query / document templates into the batch text before
+    (1) loads just the requested modality towers, (2) sets ``max_seq_length`` for the
+    loaded towers and (3) writes the per-task query / document templates into the batch text before
     delegating, because the document template ``title: {title} | text: {body}`` is not a
     plain prefix of mteb's ``"{title} {body}"`` corpus text.
 
@@ -479,6 +499,11 @@ class EmbeddingGemma2Wrapper(SentenceTransformerEncoderWrapper):
         self.model_prompts = {}
         self.model.prompts = {}
         self.model.default_prompt_name = None
+        # One sequence length per tower configuration, the same for every task.
+        if use_audio:
+            self.model.max_seq_length = 1024
+        elif use_image:
+            self.model.max_seq_length = 380
 
     @property
     def mteb_model_meta(self) -> ModelMeta:
@@ -499,9 +524,9 @@ class EmbeddingGemma2Wrapper(SentenceTransformerEncoderWrapper):
             deep=True,
         )
 
-    def _fit_before_image(self, text: str, seq_len: int) -> str:
-        """Truncate text that precedes an image so the image block still fits in seq_len."""
-        budget = seq_len - _IMAGE_BLOCK_TOKENS
+    def _fit_before_image(self, text: str) -> str:
+        """Truncate text that precedes an image so the image block still fits in max_seq_length."""
+        budget = self.model.max_seq_length - _IMAGE_BLOCK_TOKENS
         ids = self.model.tokenizer(text, add_special_tokens=False)["input_ids"]
         if len(ids) <= budget:
             return text
@@ -518,13 +543,9 @@ class EmbeddingGemma2Wrapper(SentenceTransformerEncoderWrapper):
         **kwargs: Any,
     ) -> Array:
         name = task_metadata.name
-        instruction, seq_len = EMBEDDING_GEMMA_2_TASK_RECIPE.get(name) or (
-            _TASK_TYPE_INSTRUCTION.get(
-                task_metadata.simplified_task_type, "search result"
-            ),
-            1024 if self.use_audio else (380 if self.use_image else 512),
-        )
-        self.model.max_seq_length = seq_len
+        instruction = EMBEDDING_GEMMA_2_TASK_INSTRUCTIONS.get(
+            name
+        ) or _task_type_instruction(task_metadata)
         asymmetric = (
             task_metadata.type in {"Retrieval", "Any2AnyRetrieval"}
             or name in _MIEB_ASYMMETRIC_TASKS
@@ -563,7 +584,7 @@ class EmbeddingGemma2Wrapper(SentenceTransformerEncoderWrapper):
             if self.media_first:
                 return {**batch, "text": texts}
             if "image" in batch:
-                texts = [self._fit_before_image(t, seq_len) for t in texts]
+                texts = [self._fit_before_image(t) for t in texts]
             return {"text": texts, **batch}
 
         original_class = inputs.__class__
