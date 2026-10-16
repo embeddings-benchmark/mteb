@@ -62,11 +62,14 @@ task_result.plot_evaluation_phases()
 This will print a text-based Gantt chart of the recorded evaluation phases:
 
 ```text
-Data loading                                   |███████████████████████████                       | 14.2s
-Dataset transform                              |                           █                      | 0.0s
+Data loading                     |███████████████████████████                       | 14.2s
+Dataset transform                |                           █                      | 0.0s
 
-Encoding queries and documents (test, default) |                           ██████████████████████ | 11.7s
-Scoring (test, default)                        |                                                 █| 0.2s
-                                                26.1s (untracked: 0.0s)
+Encoding queries (test, default) |                           █                      | 0.5s
+Searching corpus (test, default) |                            █████████████████████ | 11.2s
+Scoring (test, default)          |                                                 █| 0.2s
+                                  26.1s (untracked: 0.0s)
 ```
+
+For retrieval, "Searching corpus" covers encoding the corpus and computing similarities, which alternate per corpus chunk. How that time splits between the two is logged at the `INFO` level, per chunk and in total.
 </details>
