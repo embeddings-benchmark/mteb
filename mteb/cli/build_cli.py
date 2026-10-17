@@ -140,7 +140,6 @@ def _load_endpoint_model(args: argparse.Namespace) -> EncoderProtocol:
         max_retries=args.max_retries,
         verify_ssl=args.verify_ssl,
         max_length=args.max_length,
-        modalities=args.modalities,
         use_chat_template=args.chat_template,
     )
     if args.model_revision is not None and model.mteb_model_meta is not None:
@@ -277,19 +276,11 @@ def _add_endpoint_args(parser: argparse.ArgumentParser) -> None:
         help="Maximum number of tokens per input. If not set, it is read from the server's model metadata when available.",
     )
     group.add_argument(
-        "--modalities",
-        nargs="+",
-        type=str,
-        default=None,
-        choices=["text", "image", "audio", "video"],
-        help="Modalities supported by the served model. If not set, all of text, image, audio and video are assumed.",
-    )
-    group.add_argument(
         "--chat-template",
         action=argparse.BooleanOptionalAction,
-        default=True,
-        help="Send text inputs through vLLM's chat embeddings API (`messages`). "
-        "Use `--no-chat-template` for the OpenAI API, other non-vLLM servers, or vLLM models without a chat template.",
+        default=None,
+        help="Whether to send text inputs through vLLM's chat embeddings API (`messages`). "
+        "If not set, this is only done for tasks with image, audio or video inputs.",
     )
 
 

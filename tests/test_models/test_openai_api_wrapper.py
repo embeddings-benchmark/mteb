@@ -78,9 +78,24 @@ class TestOpenAIAPIEncodeWrapper:
                 instruction_template="query: ",
             )
 
+    @pytest.mark.parametrize(
+        ("task_modalities", "payload_field"),
+        [
+            # text-only tasks use the plain `input` field by default
+            (["text"], "input"),
+            # tasks with other modalities send text through `messages` as well
+            (["text", "image"], "messages"),
+        ],
+    )
     @patch("requests.post")
     @patch("requests.get")
-    def test_basic_encoding(self, mock_get: MagicMock, mock_post: MagicMock):
+    def test_basic_encoding(
+        self,
+        mock_get: MagicMock,
+        mock_post: MagicMock,
+        task_modalities: list[str],
+        payload_field: str,
+    ):
         """Test basic text encoding functionality with mocked responses."""
         from mteb.abstasks.task_metadata import TaskMetadata
         from mteb.types import PromptType
@@ -114,6 +129,7 @@ class TestOpenAIAPIEncodeWrapper:
         # Mock task metadata
         mock_metadata = MagicMock(spec=TaskMetadata)
         mock_metadata.name = "test_task"
+        mock_metadata.modalities = task_modalities
 
         # Encode
         embeddings = wrapper.encode(
@@ -129,6 +145,24 @@ class TestOpenAIAPIEncodeWrapper:
         assert isinstance(embeddings, np.ndarray)
         assert embeddings.shape == (2, 3)
         assert embeddings.dtype == np.float32
+        assert payload_field in mock_post.call_args.kwargs["json"]
+
+    @patch("requests.get")
+    def test_registered_model_saved_as_experiment(
+        self, mock_get: MagicMock, caplog: pytest.LogCaptureFixture
+    ):
+        """Test that a model from the MTEB registry is marked as an experiment, with a warning."""
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {"data": []}
+        mock_get.return_value = mock_response
+
+        wrapper = OpenAIAPIEncodeWrapper(
+            endpoint_url="http://localhost:8000",
+            model_name="sentence-transformers/all-MiniLM-L6-v2",
+        )
+        assert wrapper.mteb_model_meta.experiment_name == "served_via_openai_api"
+        assert "registered MTEB model" in caplog.text
 
     @patch("requests.get")
     def test_ssl_verification(self, mock_get: MagicMock):
@@ -293,6 +327,7 @@ class TestOpenAIAPIEncodeWrapper:
 
         mock_metadata = MagicMock(spec=TaskMetadata)
         mock_metadata.name = "test"
+        mock_metadata.modalities = ["text"]
 
         # Pass batch_size=2 to encode()
         wrapper.encode(

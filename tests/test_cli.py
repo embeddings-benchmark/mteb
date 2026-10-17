@@ -126,8 +126,6 @@ def test_run_endpoint(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
             "--no-verify-ssl",
             "--max-length",
             "128",
-            "--modalities",
-            "text",
             "--no-chat-template",
         ]
     )
@@ -151,7 +149,6 @@ def test_run_endpoint(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     assert model.use_chat_template is False
     assert model.mteb_model_meta.name == "org/served-model"
     assert model.mteb_model_meta.revision == "v1"
-    assert model.mteb_model_meta.modalities == ["text"]
 
 
 def test_run_endpoint_requires_model():
