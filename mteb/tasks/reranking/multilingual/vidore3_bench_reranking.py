@@ -1534,7 +1534,7 @@ class Vidore3NuclearNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb-private/Vidore3NuclearNemotron35Embed8BReranking.v2",
-            "revision": "2257498b70708115557fb03e5f3193beab4bffd1",
+            "revision": "97ff9e10e265e64abece589ff40c552215754f26",
         },
         type="Reranking",
         category="t2it",
@@ -1574,7 +1574,7 @@ class Vidore3TelecomNemotron35Embed8BRerankingv2(AbsTaskRetrieval):
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb-private/Vidore3TelecomNemotron35Embed8BReranking.v2",
-            "revision": "8cac8232b1113de3b06cf67e2cb482f3043a9979",
+            "revision": "47c9b703527792f3fbf0a082f4589ff40c1aa8cc",
         },
         type="Reranking",
         category="t2it",
