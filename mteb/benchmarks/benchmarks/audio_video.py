@@ -6,8 +6,17 @@ from mteb.benchmarks.benchmark import (
     CustomGroup,
     CustomGrouping,
 )
-from mteb.benchmarks.benchmarks._citations import _MAEB_CITATION
 from mteb.get_tasks import MTEBTasks, get_task, get_tasks
+
+_MAEB_CITATION = """@misc{assadi2026maebmassiveaudioembedding,
+  archiveprefix = {arXiv},
+  author = {Adnan El Assadi and Isaac Chung and Chenghao Xiao and Roman Solomatin and Animesh Jha and Rahul Chand and Silky Singh and Kaitlyn Wang and Ali Sartaz Khan and Marc Moussa Nasser and Sufen Fong and Pengfei He and Alan Xiao and Ayush Sunil Munot and Aditya Shrivastava and Artem Gazizov and Niklas Muennighoff and Kenneth Enevoldsen},
+  eprint = {2602.16008},
+  primaryclass = {cs.SD},
+  title = {MAEB: Massive Audio Embedding Benchmark},
+  url = {https://arxiv.org/abs/2602.16008},
+  year = {2026},
+}"""
 
 _MAEB_AUDIO_ONLY_TASKS = [
     # Any2AnyRetrieval (1)

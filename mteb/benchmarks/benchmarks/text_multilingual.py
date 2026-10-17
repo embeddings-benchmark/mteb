@@ -4,7 +4,7 @@ from mteb.benchmarks.benchmark import (
     Benchmark,
     HUMEBenchmark,
 )
-from mteb.benchmarks.benchmarks._citations import MMTEB_CITATION
+from mteb.benchmarks.benchmarks.text_language import MMTEB_CITATION
 from mteb.get_tasks import MTEBTasks, get_tasks
 
 MTEB_MINERS_BITEXT_MINING = Benchmark(
