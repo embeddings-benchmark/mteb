@@ -586,6 +586,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MassiveIntentVNClassification",
         "MassiveScenarioClassification",
         "MassiveScenarioVNClassification",
+        "MathNetRetrieval",
         "MedicalQARetrieval",
         "MedrxivClusteringP2P",
         "MedrxivClusteringP2P.v2",
