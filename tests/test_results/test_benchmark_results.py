@@ -422,11 +422,14 @@ def test_split_frame_preserves_subset_weighting(
 
     parts = BenchmarkResults.split_leaderboard_frame(frame)
 
-    for benchmark, subsets, mean in [
-        (multilingual, ["en", "zh"], 0.7),
-        (english, ["en"], 0.8),
-    ]:
-        part = parts[benchmark.name]
-        assert part["subset"].sort().to_list() == subsets
-        summary = benchmark._create_summary_table(part)
-        assert summary.df["Mean (Task)"].item() == pytest.approx(mean)
+    multilingual_part = parts[multilingual.name]
+    assert multilingual_part["subset"].sort().to_list() == ["en", "zh"]
+    multilingual_mean = (
+        multilingual._create_summary_table(multilingual_part).df["Mean (Task)"].item()
+    )
+    assert multilingual_mean == pytest.approx(0.7)  # (0.8 + 0.6) / 2
+
+    english_part = parts[english.name]
+    assert english_part["subset"].sort().to_list() == ["en"]
+    english_mean = english._create_summary_table(english_part).df["Mean (Task)"].item()
+    assert english_mean == pytest.approx(0.8)
