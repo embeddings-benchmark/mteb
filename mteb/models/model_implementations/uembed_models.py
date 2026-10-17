@@ -356,14 +356,47 @@ class _UEmbedInference:
 
     @staticmethod
     def _resize_video(video: torch.Tensor) -> torch.Tensor:
-        from PIL import Image
-        from qwen_vl_utils import fetch_video
+        """Resize a clip to UEmbed's total pixel budget, as qwen-vl-utils' fetch_video does.
 
-        frames = [Image.fromarray(f.permute(1, 2, 0).cpu().numpy()) for f in video]
-        return fetch_video(
-            {"video": frames, "total_pixels": MAX_TOTAL_PIXELS},
-            image_patch_size=IMAGE_BASE_FACTOR,
+        https://github.com/QwenLM/Qwen3-VL/blob/96588727e44c78b25ba03ea03b8e12f7e64fd0da/qwen-vl-utils/src/qwen_vl_utils/vision_process.py#L430-L475
+        """
+        import torch
+        from qwen_vl_utils.vision_process import (
+            FRAME_FACTOR,
+            VIDEO_MAX_TOKEN_NUM,
+            VIDEO_MIN_TOKEN_NUM,
+            ceil_by_factor,
+            smart_resize,
         )
+        from torchvision.transforms import InterpolationMode
+        from torchvision.transforms.functional import resize
+
+        nframes = ceil_by_factor(len(video), FRAME_FACTOR)
+        if nframes > len(video):
+            video = torch.cat(
+                [video, video[-1:].expand(nframes - len(video), -1, -1, -1)]
+            )
+        min_pixels = VIDEO_MIN_TOKEN_NUM * IMAGE_FACTOR * IMAGE_FACTOR
+        max_pixels = max(
+            min(
+                VIDEO_MAX_TOKEN_NUM * IMAGE_FACTOR * IMAGE_FACTOR,
+                MAX_TOTAL_PIXELS / nframes * FRAME_FACTOR,
+            ),
+            int(min_pixels * 1.05),
+        )
+        height, width = smart_resize(
+            video.shape[2],
+            video.shape[3],
+            factor=IMAGE_FACTOR,
+            min_pixels=min_pixels,
+            max_pixels=max_pixels,
+        )
+        return resize(
+            video.cpu(),
+            [height, width],
+            interpolation=InterpolationMode.BICUBIC,
+            antialias=True,
+        ).float()
 
     def _preprocess_inputs(
         self,
