@@ -48,7 +48,7 @@ class AuroLAOmniWrapper(SentenceTransformerEncoderWrapper):
         self.target_sampling_rate = self.model[
             0
         ].processor.feature_extractor.sampling_rate
-        # processor_kwargs max_pixels only reaches images; videos need it per call
+        # the card caps video only; images keep the checkpoint's own limit
         self.model[0].processing_kwargs.update(
             {
                 "video": {
@@ -79,9 +79,6 @@ aurola_omni_7b = ModelMeta(
         "model_kwargs": {
             "torch_dtype": "bfloat16",
         },
-        "processor_kwargs": {
-            "max_pixels": 64 * 28 * 28,
-        },
     },
     name="Jazzcharles/AuroLA-Omni-7B",
     revision="414ec2ae4f35782a019fff87c80db6a19d347bc4",
@@ -106,7 +103,7 @@ aurola_omni_7b = ModelMeta(
     modalities=["text", "image", "audio", "video"],
     model_type=["dense"],
     citation=_AUROLA_CITATION,
-    extra_requirements_groups=["qwen-vl"],
+    extra_requirements_groups=["multimodal-sbert"],
     output_dtypes=OutputDType.BF16,
 )
 
@@ -116,9 +113,6 @@ aurola_omni_3b = ModelMeta(
         "trust_remote_code": True,
         "model_kwargs": {
             "torch_dtype": "bfloat16",
-        },
-        "processor_kwargs": {
-            "max_pixels": 64 * 28 * 28,
         },
     },
     name="Jazzcharles/AuroLA-Omni-3B",
@@ -144,6 +138,6 @@ aurola_omni_3b = ModelMeta(
     modalities=["text", "image", "audio", "video"],
     model_type=["dense"],
     citation=_AUROLA_CITATION,
-    extra_requirements_groups=["qwen-vl"],
+    extra_requirements_groups=["multimodal-sbert"],
     output_dtypes=OutputDType.BF16,
 )

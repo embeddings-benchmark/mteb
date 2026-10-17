@@ -45,15 +45,7 @@ class MSClapWrapper(AbsEncoder):
         self.model_name = model_name
         self.device = device
 
-        if "2022" in self.model_name:
-            self.version = "2022"
-            self.text_length = 100
-        elif "2023" in self.model_name:
-            self.version = "2023"
-            self.text_length = 77
-        else:
-            self.version = "2023"
-            self.text_length = 77
+        self.version = "2022" if "2022" in self.model_name else "2023"
 
         self.use_cuda = device == "cuda"
         # msclap downloads its weights from microsoft/msclap at main; fetch them
@@ -150,12 +142,16 @@ class MSClapWrapper(AbsEncoder):
             if "gpt" in self.model.args.text_model:
                 texts = [text + " <|endoftext|>" for text in texts]
 
+            # msclap pads to text_len but does not truncate, so long captions keep
+            # their end-of-text token; cut only at the encoder's position limit.
+            # Padding length does not matter: pads are id 0 and the GPT-2 encoder
+            # pools at the last non-zero id (BERT, 2022, uses CLS).
             features = self.tokenizer(
                 texts,
                 return_tensors="pt",
-                padding="max_length",
+                padding="longest",
                 truncation=True,
-                max_length=self.text_length,
+                max_length=self.tokenizer.model_max_length,
             )
             features = {k: v.to(self.device) for k, v in features.items()}
 

@@ -18,7 +18,7 @@ from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     import torch
-    from sentence_transformers import CrossEncoder
+    from sentence_transformers import CrossEncoder, SentenceTransformer
     from torch.utils.data import DataLoader
     from typing_extensions import Unpack
 
@@ -876,6 +876,34 @@ def _video_frames_to_channels_last(
 
 
 class JinaV5OmniWrapper(SentenceTransformerEncoderWrapper):
+    def __init__(
+        self,
+        model: str | SentenceTransformer,
+        revision: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        if isinstance(model, str):
+            from transformers import AutoVideoProcessor
+
+            # custom_st's _align_eval_processor only sets the video size when it is
+            # a dict; on transformers 5 it is a SizeDict, so pass a video processor
+            # with the eval sizes (processor-level size kwargs are overridden by
+            # the image min/max pixels custom_st passes)
+            # https://huggingface.co/jinaai/jina-embeddings-v5-omni-small/blob/dfdcc361ec47c69a5afcd81e4bd148abb9d0568e/custom_st.py#L301-L319
+            video_processor = AutoVideoProcessor.from_pretrained(
+                model,
+                revision=revision,
+                trust_remote_code=True,
+                size={
+                    "longest_edge": 12_845_056,  # EVAL_VIDEO_MAX_PIXELS
+                    "shortest_edge": 262_144,  # EVAL_IMAGE_MIN_PIXELS
+                },
+            )
+            kwargs["processor_kwargs"] = kwargs.get("processor_kwargs", {}) | {
+                "video_processor": video_processor
+            }
+        super().__init__(model, revision=revision, **kwargs)
+
     def encode(
         self,
         inputs: DataLoader[BatchedInput],

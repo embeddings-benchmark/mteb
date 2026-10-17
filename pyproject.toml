@@ -181,7 +181,8 @@ wemm = [
     "qwen-vl-utils>=0.0.14",
     "accelerate>=1.1.0",
 ]
-uembed = ["transformers>=5.4.0,<6.0.0"]
+uembed = ["transformers>=5.4.0,<6.0.0", "qwen-vl-utils>=0.0.14"]
+videoprism = ["transformers>=5.13.0"]  # first release with VideoPrism
 # omnivinci = ["transformers==4.46.0", "torch==2.8.*", "einops>=0.8.0", "openai-whisper>=20240930", "soundfile>=0.13.1", "opencv-python-headless>=4.0.0", "kaldiio>=2.18.0", "decord>=0.6.0", "librosa>=0.10.0", "beartype>=0.18.0", "accelerate>=1.0.0", "s2wrapper @ git+https://github.com/bfshi/scaling_on_scales", "deepspeed>=0.9.0", "torchvision>=0.15.0", "torchaudio>=2.0.0", "torchcodec==0.7.0", "av>=10.0.0", "numpy>=1.23.0,<2.0.0", "flash-attn>=2.6.3"]
 qwen_omni_utils = ["qwen_omni_utils"]
 embeddinggemma = ["transformers>=4.56.0"]
@@ -580,6 +581,7 @@ conflicts = [
         { extra = "qwen-vl" },
         { extra = "wemm" },
         { extra = "uembed" }, # needs transformers>=5.4.0
+        { extra = "videoprism" }, # needs transformers>=5.13.0
         { extra = "ps3" }, # ps3-torch pins transformers<=4.49.0
         # { extra = "omnivinci" },
         { extra = "embeddinggemma" },
