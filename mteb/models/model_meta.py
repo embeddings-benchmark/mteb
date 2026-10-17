@@ -237,8 +237,11 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         modalities: A list of strings representing the modalities the model supports. Default is ["text"].
         contacts: The people to contact in case of a problem in the model, preferably a GitHub handle.
         experiment_kwargs: A dictionary of parameters used in the experiment that are not covered by other fields. This is used to create experiment names for ablation studies and similar experiments.
-        output_dtypes: Output embedding data types (e.g. int8, binary, float) natively supported by the model. If None, it is assumed that the model only returns float32 embeddings.
-            Models loaded in lower precision should declare it here (e.g. `OutputDType.BF16` when loading with `torch_dtype=OutputDType.BF16`).
+        output_dtypes: The data types the model computes in. If None, float32 is assumed.
+            For encoders this is the dtype of the returned embeddings, so models loaded in lower precision should declare it
+            (e.g. `OutputDType.BF16` when loading with `torch_dtype=OutputDType.BF16`). For cross-encoders it is the dtype of
+            the backbone, not of the returned scores, which are always float32. API models also list the quantized output
+            formats they natively support (e.g. int8, binary).
         extra_requirements_groups: Name of group of extra requirements (mteb extras) needed to run the model, e.g. `["flagembedding"]`.
             When a required group is missing, loading the model raises with install instructions. Set the environment variable
             `MTEB_AUTO_INSTALL_EXTRAS=1` to let mteb install the missing extras automatically (using `uv` if available, otherwise `pip`).
