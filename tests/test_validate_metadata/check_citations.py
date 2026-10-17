@@ -78,6 +78,21 @@ def citations() -> dict[str, tuple[Entry, set[str]]]:
     return entries
 
 
+def flush(cache: Cache) -> None:
+    """Write the cache, laid out the way the `pretty-format-json` pre-commit hook does.
+
+    refaudit writes the whole cache on a single line, so every update showed up in
+    the diff as one changed line that could not be reviewed.
+    """
+    cache.flush()
+    if not CACHE_PATH.exists():
+        return
+    data = json.loads(CACHE_PATH.read_text(encoding="utf-8"))
+    tmp = CACHE_PATH.with_suffix(".json.tmp")
+    tmp.write_text(json.dumps(data, indent=4) + "\n", encoding="utf-8", newline="\n")
+    tmp.replace(CACHE_PATH)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -110,9 +125,9 @@ def main() -> int:
     for result in checker.check_all(to_check, workers=args.workers):
         results.append(result)
         if len(results) % FLUSH_EVERY == 0:
-            cache.flush()
+            flush(cache)
             print(f"  {len(results)}/{len(to_check)}", flush=True)
-    cache.flush()
+    flush(cache)
 
     print(
         "\n"

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.26.4"
+version = "2.26.5"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -619,6 +619,7 @@ module = [
     "faiss",
     "vllm",
     "torchaudio",
+    "torchvision.*",
 ]
 ignore_missing_imports = true
 
