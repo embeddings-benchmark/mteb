@@ -136,6 +136,8 @@ class RAVENEAI2TRetrieval(AbsTaskRetrieval):
 @inproceedings{li2026ravenea,
   author = {Jiaang Li and Yifei Yuan and Wenyan Li and Mohammad Aliannejadi and Daniel Hershcovich and Anders S{\o}gaard and Ivan Vuli{\'c} and Wenxuan Zhang and Paul Pu Liang and Yang Deng and Serge Belongie},
   booktitle = {The Fourteenth International Conference on Learning Representations},
+  eprint = {2505.14462},
+  archivePrefix = {arXiv},
   title = {{RAVENEA}: A Benchmark for Multimodal Retrieval-Augmented Visual Culture Understanding},
   url = {https://openreview.net/forum?id=4zAbkxQ23i},
   year = {2026},

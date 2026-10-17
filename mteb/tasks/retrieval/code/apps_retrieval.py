@@ -31,7 +31,7 @@ class AppsRetrieval(AbsTaskRetrieval):
   author = {Dan Hendrycks and Steven Basart and Saurav Kadavath and Mantas Mazeika and Akul Arora and Ethan Guo and Collin Burns and Samir Puranik and Horace He and Dawn Song and Jacob Steinhardt},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)},
   title = {Measuring Coding Challenge Competence With {APPS}},
-  url = {https://openreview.net/forum?id=sD93GOzH3i5},
+  url = {https://arxiv.org/abs/2105.09938},
   year = {2021},
 }
 """,

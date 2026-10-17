@@ -27,7 +27,8 @@ class RonSTS(AbsTaskSTS):
         bibtex_citation=r"""
 @inproceedings{dumitrescu2021liro,
   author = {Dumitrescu, Stefan Daniel and Rebeja, Petru and Lorincz, Beata and Gaman, Mihaela and Avram, Andrei and Ilie, Mihai and Pruteanu, Andrei and Stan, Adriana and Rosia, Lorena and Iacobescu, Cristina and others},
-  booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
+  booktitle = {Proceedings of the Neural Information Processing Systems Track on Datasets and Benchmarks 1 (NeurIPS Datasets and Benchmarks 2021)},
+  url = {https://openreview.net/forum?id=JH61CD7afTv},
   title = {LiRo: Benchmark and leaderboard for Romanian language tasks},
   year = {2021},
 }

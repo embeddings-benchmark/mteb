@@ -35,7 +35,7 @@ class CMUArcticA2TRetrieval(AbsTaskRetrieval):
   institution = {Language Technologies Institute, School of Computer Science,
 Carnegie Mellon University},
   number = {CMU-LTI-03-177},
-  title = {CMU ARCTIC  databases for speech synthesis},
+  title = {CMU ARCTIC databases for speech synthesis},
   url = {http://festvox.org/cmu_arctic/},
   year = {2003},
 }
@@ -45,6 +45,7 @@ Carnegie Mellon University},
 
 class CMUArcticT2ARetrieval(AbsTaskRetrieval):
     """Text-to-audio retrieval on CMU Arctic transcription ↔ audio pairs."""
+
 
     metadata = TaskMetadata(
         name="CMUArcticT2ARetrieval",
@@ -78,7 +79,7 @@ class CMUArcticT2ARetrieval(AbsTaskRetrieval):
   institution = {Language Technologies Institute, School of Computer Science,
 Carnegie Mellon University},
   number = {CMU-LTI-03-177},
-  title = {CMU ARCTIC  databases for speech synthesis},
+  title = {CMU ARCTIC databases for speech synthesis},
   url = {http://festvox.org/cmu_arctic/},
   year = {2003},
 }
