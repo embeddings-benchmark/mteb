@@ -151,8 +151,8 @@ class MuQMuLanWrapper(AbsEncoder):
         """Calculate similarity between audio and text embeddings."""
         import torch
 
-        embeddings1 = torch.from_numpy(embeddings1).to(self.device)
-        embeddings2 = torch.from_numpy(embeddings2).to(self.device)
+        embeddings1 = torch.as_tensor(embeddings1).to(self.device)
+        embeddings2 = torch.as_tensor(embeddings2).to(self.device)
 
         with torch.no_grad():
             similarity = self.model.calc_similarity(embeddings1, embeddings2)
