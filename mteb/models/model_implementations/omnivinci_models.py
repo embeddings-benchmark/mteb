@@ -99,8 +99,13 @@ class OmniVinciWrapper(AbsEncoder):
         from fractions import Fraction
 
         import torchvision
+        from torch.nn import functional as F
 
         frames = video["array"]
+        # H.264 (yuv420p) needs even dimensions, e.g. NExT-QA has 500x375 clips
+        pad_h, pad_w = frames.shape[2] % 2, frames.shape[3] % 2
+        if pad_h or pad_w:
+            frames = F.pad(frames, (0, pad_w, 0, pad_h), mode="replicate")
         fd, path = tempfile.mkstemp(suffix=".mp4")
         os.close(fd)
         # torchvision.io.write_video expects (T, H, W, C) uint8
@@ -240,11 +245,13 @@ class OmniVinciWrapper(AbsEncoder):
                     max_samples=self.max_audio_samples,
                     video_metadata=True,
                 )
-                if has_audio:
-                    inputs = single_clip_dataloader(
-                        inputs,
-                        "batched audio embeddings change with their batch-mates",
-                    )
+            # the remote processor's pad_fn cuts the padding to the sequence's own
+            # length, so a batch with a sequence under half the longest crashes
+            # ("Sizes of tensors must match"); batched audio embeddings also change
+            # with their batch-mates
+            inputs = single_clip_dataloader(
+                inputs, "OmniVinci encodes one item at a time"
+            )
 
             all_embeddings: list[torch.Tensor] = []
             for batch in tqdm(inputs, desc="Encoding"):

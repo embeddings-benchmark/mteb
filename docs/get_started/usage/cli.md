@@ -12,6 +12,7 @@ This described the is the command line interface for `mteb`.
 - [`mteb run`](#running-models-on-tasks): Runs a model on a set of tasks
 - [`mteb available_tasks`](#listing-available-tasks): Lists the available tasks within MTEB
 - [`mteb available_benchmarks`](#listing-available-benchmarks): Lists the available benchmarks
+- [`mteb submit-results`](#submitting-results): Submits results to the results repository
 - [`mteb create_meta`](#creating-model-metadata): Creates the metadata for a model card from a folder of results
 - [`mteb leaderboard`](#running-the-leaderboard): Runs the MTEB leaderboard locally
 - [`mteb mock-run`](#checking-model-implementations): Sanity checks a model implementation using mock tasks
@@ -34,6 +35,25 @@ mteb run -m sentence-transformers/average_word_embeddings_komninos \
 
 This will create a folder `mteb_output/{model_name}/{model_revision}` containing the results of the model on the specified tasks supplied as a json
 file; `{task_name}.json`.
+
+## Submitting Results
+
+To submit results to the [results repository](https://github.com/embeddings-benchmark/results), use the `mteb submit-results` command. It submits the results that the repository does not have yet, from the same folder that `mteb run` writes to (`--output-folder`, `results` by default). For example:
+
+```bash
+# run task
+mteb run -m sentence-transformers/all-MiniLM-L6-v2 -t ArguAna
+
+# submit all unsubmitted results
+mteb submit-results --create-pr
+
+# submit specific results, with a title describing the submission
+mteb submit-results --create-pr -m sentence-transformers/all-MiniLM-L6-v2 -t ArguAna \
+    --message "Add ArguAna results for all-MiniLM-L6-v2"
+```
+
+Without `--create-pr`, the results are committed to a new branch in a local clone of the repository, to push and open a PR manually.
+`--create-pr` requires the `mteb[github]` extra and GitHub authentication, see [Submit Results](../../contributing/submitting_results.md) for the requirements.
 
 
 ## Listing Available Tasks

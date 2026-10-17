@@ -125,3 +125,16 @@ def test_sampled_frame_rate_spans_the_source_clip() -> None:
     """A file of sampled frames written at this rate lasts as long as the source."""
     rate = sampled_frame_rate({"fps": 30.0, "frames_indices": [0, 100, 199, 299]})
     assert rate == pytest.approx(3 / (299 / 30), rel=1e-3)
+
+
+def test_video_collator_skips_missing_modalities() -> None:
+    """Mixed-modality datasets can have None for a row's audio or video."""
+    pytest.importorskip("torchaudio")
+    rows = [
+        {"video": _StubDecoder(4, seconds=1.0), "audio": None},
+        {"video": None, "audio": {"array": [0.0] * 10, "sampling_rate": 16_000}},
+    ]
+    batch = VideoCollator(target_sampling_rate=16_000, num_frames=2)(rows)
+    assert batch["video"][0] == [0, 3]
+    assert batch["audio"][0] is None
+    assert batch["video"][1] is None
