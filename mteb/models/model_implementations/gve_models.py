@@ -115,6 +115,12 @@ class GVEWrapper(AbsEncoder):
                     fps=self.fps,
                     max_frames=self.max_frames,
                     num_frames=self.num_frames,
+                    # real frame timing: without video_metadata Qwen2.5-VL assumes
+                    # 24 fps for its temporal positions (second_per_grid_ts)
+                    # https://github.com/huggingface/transformers/blob/v5.19.0/src/transformers/video_utils.py#L109-L113
+                    # the model card passes qwen-vl-utils' video_kwargs (fps)
+                    # https://huggingface.co/Alibaba-NLP/GVE-3B/blob/2c2962d4bb1503b478b8a0d975d7b9fdcefbd3f3/README.md?code=true#L112-L121
+                    video_metadata=True,
                 )
 
             all_embeddings = []
@@ -156,8 +162,13 @@ class GVEWrapper(AbsEncoder):
                 processed = self.processor(
                     text=prompts,
                     images=image_inputs or None,
-                    videos=video_inputs or None,
-                    videos_kwargs=self.videos_kwargs,
+                    videos=[v["array"] for v in video_inputs] or None,
+                    videos_kwargs=self.videos_kwargs
+                    | (
+                        {"video_metadata": [v["video_metadata"] for v in video_inputs]}
+                        if video_inputs
+                        else {}
+                    ),
                     padding=True,
                     truncation=True,
                     max_length=self.max_length,

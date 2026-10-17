@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import FramesCollator
+from mteb.models.modality_collators import FramesCollator, sampled_frame_rate
 from mteb.models.model_implementations.google_text_embedding import (
     GECKO_TRAINING_DATA,
     MODEL_PROMPTS,
@@ -355,7 +355,11 @@ def _build_gemini_content(
     if video is not None:
         parts.append(
             Part.from_bytes(
-                data=_video_to_mp4_bytes(video, fps=GEMINI_VIDEO_FPS),
+                # play back at the frames' real spacing, so a long clip capped
+                # at 32 frames still lasts as long as the source
+                data=_video_to_mp4_bytes(
+                    video["array"], fps=sampled_frame_rate(video["video_metadata"])
+                ),
                 mime_type="video/mp4",
             )
         )
@@ -469,6 +473,7 @@ class GoogleGeminiEmbeddingModel(AbsEncoder):
             inputs.collate_fn = FramesCollator(
                 fps=GEMINI_VIDEO_FPS,
                 max_frames=GEMINI_MAX_VIDEO_FRAMES,
+                video_metadata=True,
             )
 
         modality_keys = (text_key, "title", "image", "audio", "video")

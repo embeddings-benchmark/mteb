@@ -10,6 +10,7 @@ from mteb.models.modality_collators import (
     AudioCollator,
     FramesCollator,
     VideoCollator,
+    sampled_frame_rate,
     seconds_to_samples,
     single_clip_dataloader,
 )
@@ -20,7 +21,9 @@ class _StubDecoder:
 
     def __init__(self, num_frames: int, seconds: float) -> None:
         self.metadata = SimpleNamespace(
-            num_frames=num_frames, end_stream_seconds=seconds
+            num_frames=num_frames,
+            end_stream_seconds=seconds,
+            average_fps=num_frames / seconds,
         )
 
     def get_frames_at(self, indices: list[int]) -> SimpleNamespace:
@@ -103,3 +106,22 @@ def test_video_collator_orders_modalities() -> None:
     }
     batch = VideoCollator(target_sampling_rate=16_000, num_frames=2)([row])
     assert list(batch) == ["id", "text", "video", "audio"]
+
+
+def test_frames_collator_returns_video_timing() -> None:
+    """With video_metadata, each video carries its sampled frames' real timing."""
+    collator = FramesCollator(fps=1.0, max_frames=4, video_metadata=True)
+    video = collator([{"video": _StubDecoder(300, seconds=10.0)}])["video"][0]
+    assert video["array"] == [0, 100, 199, 299]
+    assert video["video_metadata"] == {
+        "fps": 30.0,
+        "total_num_frames": 300,
+        "duration": 10.0,
+        "frames_indices": [0, 100, 199, 299],
+    }
+
+
+def test_sampled_frame_rate_spans_the_source_clip() -> None:
+    """A file of sampled frames written at this rate lasts as long as the source."""
+    rate = sampled_frame_rate({"fps": 30.0, "frames_indices": [0, 100, 199, 299]})
+    assert rate == pytest.approx(3 / (299 / 30), rel=1e-3)

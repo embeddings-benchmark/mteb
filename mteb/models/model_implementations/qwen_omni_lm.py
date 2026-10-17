@@ -184,6 +184,9 @@ class QwenOmniWrapper(AbsEncoder):
                     videos_kwargs={
                         "do_sample_frames": False,
                         "use_audio_in_video": False,
+                        # the rate frames were sampled at; the processor would
+                        # assume 2 fps (Qwen2.5-Omni) or 1 fps (Qwen3-Omni)
+                        "fps": self.fps,
                     },
                     audio_kwargs={"max_length": self.max_samples},
                 ).to(self.device, dtype=torch.bfloat16)

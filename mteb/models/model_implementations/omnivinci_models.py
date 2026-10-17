@@ -9,7 +9,11 @@ from typing import TYPE_CHECKING, Any
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import VideoCollator, single_clip_dataloader
+from mteb.models.modality_collators import (
+    VideoCollator,
+    sampled_frame_rate,
+    single_clip_dataloader,
+)
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import OutputDType
 
@@ -86,15 +90,27 @@ class OmniVinciWrapper(AbsEncoder):
         self.processor.config.load_audio_in_video = False
 
     @staticmethod
-    def _save_frames_as_video(frames: torch.Tensor) -> str:
-        """Write a ``(T, C, H, W)`` uint8 tensor to a temporary MP4 file."""
+    def _save_frames_as_video(video: dict[str, Any]) -> str:
+        """Write sampled frames to a temporary MP4 that plays at their real spacing.
+
+        OmniVinci's loader times each frame as index / container fps and feeds
+        these times to its time embeddings (it was a fixed 24 fps).
+        """
+        from fractions import Fraction
+
         import torchvision
 
+        frames = video["array"]
         fd, path = tempfile.mkstemp(suffix=".mp4")
         os.close(fd)
         # torchvision.io.write_video expects (T, H, W, C) uint8
         torchvision.io.write_video(
-            path, frames.permute(0, 2, 3, 1).contiguous(), fps=24
+            path,
+            frames.permute(0, 2, 3, 1).contiguous(),
+            # a Fraction: torchvision rounds float rates to integers
+            fps=Fraction(sampled_frame_rate(video["video_metadata"])).limit_denominator(
+                1000
+            ),
         )
         return path
 
@@ -222,6 +238,7 @@ class OmniVinciWrapper(AbsEncoder):
                     target_sampling_rate=self.AUDIO_SAMPLING_RATE,
                     num_frames=self.num_frames,
                     max_samples=self.max_audio_samples,
+                    video_metadata=True,
                 )
                 if has_audio:
                     inputs = single_clip_dataloader(
