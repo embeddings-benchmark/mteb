@@ -40,12 +40,11 @@ class UMER1Wrapper(AbsEncoder):
         model: str,
         revision: str | None = None,
         device: str | None = None,
-        # fps=2: qwen-vl-utils FPS=2.0
-        # https://github.com/QwenLM/Qwen2.5-VL/blob/main/qwen-vl-utils/src/qwen_vl_utils/vision_process.py
-        fps: float | None = 2.0,
-        # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
-        max_frames: int | None = 64,
-        num_frames: int | None = None,
+        fps: float | None = None,
+        max_frames: int | None = None,
+        # 8 frames: num_frames in the official video eval config
+        # https://github.com/XMUDeepLIT/UME-R1/blob/ab4fc06667df63791e21efefc3fbfd2fac0faf0b/src/eval/VLM2Vec/experiments/public/eval/video.yaml
+        num_frames: int | None = 8,
         **kwargs: Any,
     ) -> None:
         import torch

@@ -116,9 +116,13 @@ class VideoPrismVisionWrapper(AbsEncoder):
                 for video in batch["video"]:
                     clip = video.to(torch.uint8)
                     processed.append(
-                        self.processor(videos=[clip.numpy()], return_tensors="pt")[
-                            "pixel_values_videos"
-                        ]
+                        self.processor(
+                            videos=[clip.numpy()],
+                            # frames are already sampled; the processor would
+                            # resample them to its own num_frames
+                            do_sample_frames=False,
+                            return_tensors="pt",
+                        )["pixel_values_videos"]
                     )
                 pixel_values_videos = torch.cat(processed, dim=0).to(
                     self.device, dtype=self.dtype
@@ -201,9 +205,13 @@ class VideoPrismClipWrapper(AbsEncoder):
                 for video in batch["video"]:
                     clip = video.to(torch.uint8)
                     processed.append(
-                        self.processor(videos=[clip.numpy()], return_tensors="pt")[
-                            "pixel_values_videos"
-                        ]
+                        self.processor(
+                            videos=[clip.numpy()],
+                            # frames are already sampled; the processor would
+                            # resample them to its own num_frames
+                            do_sample_frames=False,
+                            return_tensors="pt",
+                        )["pixel_values_videos"]
                     )
                 pixel_values_videos = torch.cat(processed, dim=0).to(
                     self.device, dtype=self.dtype
@@ -284,7 +292,7 @@ _VIDEOPRISM_COMMON = dict(
     citation=_VIDEOPRISM_CITATION,
     # The video extra ships datasets and torchcodec but not torchvision or
     # pillow, which every transformers video processor imports.
-    extra_requirements_groups=["image"],
+    extra_requirements_groups=["image", "videoprism"],
 )
 
 videoprism_base_f16r288 = ModelMeta(
