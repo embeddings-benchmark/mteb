@@ -35,7 +35,7 @@ class RARbMath(AbsTaskRetrieval):
 @article{hendrycks2021measuring,
   author = {Hendrycks, Dan and Burns, Collin and Kadavath, Saurav and Arora, Akul and Basart, Steven and Tang, Eric and Song, Dawn and Steinhardt, Jacob},
   journal = {arXiv preprint arXiv:2103.03874},
-  title = {Measuring mathematical problem solving with the math dataset},
+  title = {Measuring Mathematical Problem Solving With the {MATH} Dataset},
   year = {2021},
 }
 

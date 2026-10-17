@@ -25,7 +25,7 @@ class HUMESTS12(AbsTaskSTS):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{10.5555/2387636.2387697,
+@inproceedings{agirre-etal-2012-semeval,
   address = {USA},
   author = {Agirre, Eneko and Diab, Mona and Cer, Daniel and Gonzalez-Agirre, Aitor},
   booktitle = {Proceedings of the First Joint Conference on Lexical and Computational Semantics - Volume 1: Proceedings of the Main Conference and the Shared Task, and Volume 2: Proceedings of the Sixth International Workshop on Semantic Evaluation},
@@ -34,6 +34,7 @@ class HUMESTS12(AbsTaskSTS):
   pages = {385–393},
   publisher = {Association for Computational Linguistics},
   series = {SemEval '12},
+  url = {https://aclanthology.org/S12-1051/},
   title = {SemEval-2012 task 6: a pilot on semantic textual similarity},
   year = {2012},
 }

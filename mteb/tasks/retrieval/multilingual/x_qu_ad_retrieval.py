@@ -52,9 +52,9 @@ class XQuADRetrieval(AbsTaskRetrieval):
 
 @inproceedings{dumitrescu2021liro,
   author = {Stefan Daniel Dumitrescu and Petru Rebeja and Beata Lorincz and Mihaela Gaman and Andrei Avram and Mihai Ilie and Andrei Pruteanu and Adriana Stan and Lorena Rosia and Cristina Iacobescu and Luciana Morogan and George Dima and Gabriel Marchidan and Traian Rebedea and Madalina Chitez and Dani Yogatama and Sebastian Ruder and Radu Tudor Ionescu and Razvan Pascanu and Viorica Patraucean},
-  booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
-  title = {LiRo: Benchmark and leaderboard for Romanian language tasks},
+  booktitle = {Proceedings of the Neural Information Processing Systems Track on Datasets and Benchmarks 1 (NeurIPS Datasets and Benchmarks 2021)},
   url = {https://openreview.net/forum?id=JH61CD7afTv},
+  title = {LiRo: Benchmark and leaderboard for Romanian language tasks},
   year = {2021},
 }
 """,

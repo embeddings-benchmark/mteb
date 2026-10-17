@@ -368,9 +368,11 @@ class MultilingualNanoNQRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@article{47761,
+@article{kwiatkowski-etal-2019-natural,
   author = {Tom Kwiatkowski and Jennimaria Palomaki and Olivia Redfield and Michael Collins and Ankur Parikh and Chris Alberti and Danielle Epstein and Illia Polosukhin and Matthew Kelcey and Jacob Devlin and Kenton Lee and Kristina N. Toutanova and Llion Jones and Ming-Wei Chang and Andrew Dai and Jakob Uszkoreit and Quoc Le and Slav Petrov},
   journal = {Transactions of the Association of Computational Linguistics},
+  doi = {10.1162/tacl_a_00276},
+  url = {https://aclanthology.org/Q19-1026/},
   title = {Natural Questions: a Benchmark for Question Answering Research},
   year = {2019},
 }

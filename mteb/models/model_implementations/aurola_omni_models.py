@@ -62,7 +62,7 @@ class AuroLAOmniWrapper(SentenceTransformerEncoderWrapper):
 
 _AUROLA_CITATION = r"""
 @misc{xu2026scalingaudiotextretrievalmultimodal,
-    title={Scaling Audio-Text Retrieval with Multimodal Large Language Models},
+    title={Re-purposing Multimodal Large Language Models for Audio-Text Retrieval},
     author={Jilan Xu and Carl Thom{\'e} and Danijela Horak and Weidi Xie and Andrew Zisserman},
     year={2026},
     eprint={2602.18010},

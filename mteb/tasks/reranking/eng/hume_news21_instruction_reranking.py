@@ -29,7 +29,7 @@ class HUMENews21InstructionReranking(AbsTaskRetrieval):
   author = {Soboroff, Ian and Macdonald, Craig and McCreadie, Richard},
   booktitle = {TREC},
   title = {TREC 2021 News Track Overview},
-  year = {2021},
+  year = {2022},
 }
 """,
         prompt="Given a query, rerank the documents by their relevance to the query",
