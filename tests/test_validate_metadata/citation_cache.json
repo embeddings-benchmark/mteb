@@ -9280,6 +9280,16 @@
                 "similarity": 1.0,
                 "note": ""
             }
+        },
+        "rystrom2026grounding||2605.27168|grounding text embeddings in stakeholder associations|2026": {
+            "stored_at": 1791990116.460855,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Grounding Text Embeddings in Stakeholder Associations",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
         }
     }
 }

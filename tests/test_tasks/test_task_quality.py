@@ -1013,6 +1013,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "RUParaPhraserSTS",
         "SICK-R-VN",
         "SICKFr",
+        "StakeholderGrounding",  # statements recur across arrangements
         "STS12",
         "STS14",
         "STS22",
