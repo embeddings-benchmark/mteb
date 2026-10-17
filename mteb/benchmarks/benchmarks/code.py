@@ -1,7 +1,7 @@
 """Code embedding and code retrieval benchmarks."""
 
 from mteb.benchmarks.benchmark import Benchmark
-from mteb.benchmarks.benchmarks._citations import MMTEB_CITATION
+from mteb.benchmarks.benchmarks.text_language import MMTEB_CITATION
 from mteb.get_tasks import get_tasks
 
 CoIR = Benchmark(
