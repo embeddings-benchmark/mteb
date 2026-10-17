@@ -36,6 +36,41 @@ mteb run -m sentence-transformers/average_word_embeddings_komninos \
 This will create a folder `mteb_output/{model_name}/{model_revision}` containing the results of the model on the specified tasks supplied as a json
 file; `{task_name}.json`.
 
+### Running models served by an OpenAI-compatible API
+
+Embedding models served by an OpenAI-compatible `/v1/embeddings` endpoint (e.g. [vLLM](https://docs.vllm.ai/) or the [OpenAI API](https://platform.openai.com/)) can be evaluated with `--endpoint-url`. `--model` is the name of the served model:
+
+```bash
+# start a server: vllm serve BAAI/bge-small-en-v1.5 --runner pooling --port 8000
+mteb run -m BAAI/bge-small-en-v1.5 \
+         -t Banking77Classification \
+         --endpoint-url http://localhost:8000 \
+         --modalities text \
+         --no-chat-template
+```
+
+The API key is read from the `OPENAI_API_KEY` environment variable, use `--api-key-env` to read it from a different variable. For example, to evaluate an OpenAI model:
+
+```bash
+export OPENAI_API_KEY=sk-...
+mteb run -m text-embedding-3-small \
+         -t Banking77Classification \
+         --endpoint-url https://api.openai.com/v1 \
+         --modalities text \
+         --no-chat-template
+```
+
+Other options:
+
+- `--timeout SECONDS`: Request timeout (default: 300)
+- `--max-retries N`: Maximum number of attempts for a failed request (default: 3)
+- `--no-verify-ssl`: Disable SSL certificate verification
+- `--max-length N`: Maximum number of tokens per input. Read from the server's model metadata if not set
+- `--modalities MODALITY [MODALITY ...]`: Modalities supported by the served model (default: text, image, audio and video)
+- `--no-chat-template`: Send text through the plain `input` field instead of vLLM's chat embeddings API (`messages`). Required for the OpenAI API, other non-vLLM servers and vLLM models without a chat template
+
+Reranking and token-level (ColBERT-style) models served this way are only supported through the [Python API](../advanced_usage/openai_api_wrappers.md).
+
 ## Submitting Results
 
 To submit results to the [results repository](https://github.com/embeddings-benchmark/results), use the `mteb submit-results` command. It submits the results that the repository does not have yet, from the same folder that `mteb run` writes to (`--output-folder`, `results` by default). For example:

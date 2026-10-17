@@ -19,7 +19,7 @@ This is useful for:
 - Using hosted embedding and reranking APIs
 
 !!! note "CLI support"
-    The MTEB CLI does not currently support OpenAI-compatible API wrappers. Use the Python API directly as shown in the examples below.
+    Embedding models can also be evaluated from the command line with `mteb run --endpoint-url ...`, see [Command Line](../usage/cli.md#running-models-served-by-an-openai-compatible-api). Reranking and token-level models are only supported through the Python API shown below.
 
 ## Usage
 
@@ -46,6 +46,8 @@ This is useful for:
         endpoint_url="https://api.openai.com/v1",
         model_name="text-embedding-3-small",
         api_key="sk-...",
+        modalities=["text"],
+        use_chat_template=False,  # the OpenAI API does not support `messages`
     )
 
     # Evaluate on MTEB tasks

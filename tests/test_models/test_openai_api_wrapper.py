@@ -33,10 +33,10 @@ class TestOpenAIAPIEncodeWrapper:
         mock_get.return_value = mock_response
 
         wrapper = OpenAIAPIEncodeWrapper(
-            endpoint_url="http://localhost:8000",
+            endpoint_url="http://localhost:8000/v1/",
             model_name="test-model",
         )
-        assert wrapper.endpoint_url == "http://localhost:8000"
+        assert wrapper.endpoint_url == "http://localhost:8000"  # trailing /v1 stripped
         assert wrapper.mteb_model_meta.name == "test-model"
         assert wrapper.max_length == 512  # Auto-detected
 
@@ -156,7 +156,7 @@ class TestOpenAIAPIEncodeWrapper:
 
     @patch("requests.get")
     def test_api_key_header(self, mock_get: MagicMock):
-        """Test that API key is stored correctly."""
+        """Test that the API key is sent when checking the server's models."""
         mock_response = MagicMock()
         mock_response.status_code = 200
         mock_response.json.return_value = {"data": [{"id": "test-model"}]}
@@ -168,6 +168,10 @@ class TestOpenAIAPIEncodeWrapper:
             api_key="test-key-123",
         )
         assert wrapper.api_key == "test-key-123"
+        # Called in _verify_server and _detect_max_length
+        assert mock_get.call_count == 2
+        for call in mock_get.call_args_list:
+            assert call.kwargs["headers"]["Authorization"] == "Bearer test-key-123"
 
     @patch("requests.post")
     @patch("requests.get")

@@ -42,7 +42,9 @@ Examples:
         >>> wrapper = OpenAIAPIEncodeWrapper(
         ...     endpoint_url="https://api.openai.com/v1",
         ...     model_name="text-embedding-3-small",
-        ...     api_key="sk-..."
+        ...     api_key="sk-...",
+        ...     modalities=["text"],
+        ...     use_chat_template=False,
         ... )
 """
 
@@ -275,7 +277,10 @@ class OpenAIBaseWrapper:
     Provides shared HTTP connection, retry logic, and error handling.
 
     Args:
-        endpoint_url: URL of the OpenAI-compatible server
+        endpoint_url: Base URL of the OpenAI-compatible server, e.g.
+            `http://localhost:8000`. A trailing `/v1` (as in
+            `https://api.openai.com/v1`) is stripped, since the wrapper adds it
+            to each request.
         model_name: Name of the model to use
         api_key: Optional API key for authentication
         timeout: Request timeout in seconds (default: 300)
@@ -315,7 +320,7 @@ class OpenAIBaseWrapper:
         target_sampling_rate: int | None = None,
         max_samples: int | None = None,
     ):
-        self.endpoint_url = endpoint_url.rstrip("/")
+        self.endpoint_url = endpoint_url.rstrip("/").removesuffix("/v1")
         self.model_name = model_name
         self.api_key = api_key
         self.timeout = timeout
@@ -370,6 +375,13 @@ class OpenAIBaseWrapper:
                 max_samples=self.max_samples,
             )
 
+    def _headers(self) -> dict[str, str]:
+        """Headers sent with every request, including the API key if set."""
+        headers = {"Content-Type": "application/json"}
+        if self.api_key:
+            headers["Authorization"] = f"Bearer {self.api_key}"
+        return headers
+
     def _make_request(self, endpoint: str, payload: dict[str, Any]) -> dict[str, Any]:
         """Make an HTTP POST request with retry logic.
 
@@ -383,16 +395,12 @@ class OpenAIBaseWrapper:
         Raises:
             RuntimeError: If all retries fail
         """
-        headers = {"Content-Type": "application/json"}
-        if self.api_key:
-            headers["Authorization"] = f"Bearer {self.api_key}"
-
         for attempt in range(self.max_retries):
             try:
                 response = requests.post(
                     f"{self.endpoint_url}{endpoint}",
                     json=payload,
-                    headers=headers,
+                    headers=self._headers(),
                     timeout=self.timeout,
                     verify=self.verify_ssl,
                 )
@@ -437,6 +445,7 @@ class OpenAIBaseWrapper:
         try:
             response = requests.get(
                 f"{self.endpoint_url}/v1/models",
+                headers=self._headers(),
                 timeout=10,
                 verify=self.verify_ssl,
             )
@@ -595,6 +604,7 @@ class OpenAIAPIEncodeWrapper(OpenAIBaseWrapper, AbsEncoder):
         try:
             response = requests.get(
                 f"{self.endpoint_url}/v1/models",
+                headers=self._headers(),
                 timeout=10,
                 verify=self.verify_ssl,
             )
