@@ -7,6 +7,20 @@ from .biovita import (
     BioVITAT2AReranking,
     BioVITAT2IReranking,
 )
+from .bright_rcp_reranking import (
+    BrightAopsRCPReranking,
+    BrightBiologyRCPReranking,
+    BrightEarthScienceRCPReranking,
+    BrightEconomicsRCPReranking,
+    BrightLeetcodeRCPReranking,
+    BrightPonyRCPReranking,
+    BrightPsychologyRCPReranking,
+    BrightRoboticsRCPReranking,
+    BrightStackoverflowRCPReranking,
+    BrightSustainableLivingRCPReranking,
+    BrightTheoremQAQuestionsRCPReranking,
+    BrightTheoremQATheoremsRCPReranking,
+)
 from .built_bench_reranking import BuiltBenchReranking
 from .colder_reranking import ColDeRReranking
 from .ecommerce_product_relevance_reranking import ERESSReranking
@@ -17,6 +31,21 @@ from .hume_robust04_instruction_reranking import HUMERobust04InstructionRerankin
 from .loc_bench_reranking import LocBenchReranking
 from .mind_small_reranking import MindSmallReranking
 from .multi_swe_bench_reranking import MultiSWEbenchReranking
+from .nano_beir_rcp_reranking import (
+    NanoArguAnaRCPReranking,
+    NanoClimateFeverRCPReranking,
+    NanoDBPediaRCPReranking,
+    NanoFEVERRCPReranking,
+    NanoFiQA2018RCPReranking,
+    NanoHotpotQARCPReranking,
+    NanoMSMARCORCPReranking,
+    NanoNFCorpusRCPReranking,
+    NanoNQRCPReranking,
+    NanoQuoraRCPReranking,
+    NanoSCIDOCSRCPReranking,
+    NanoSciFactRCPReranking,
+    NanoTouche2020RCPReranking,
+)
 from .nev_ir import NevIR
 from .sci_docs_reranking import SciDocsReranking
 from .stack_overflow_dup_questions import StackOverflowDupQuestions
@@ -47,6 +76,18 @@ __all__ = [
     "BioVITAI2TReranking",
     "BioVITAT2AReranking",
     "BioVITAT2IReranking",
+    "BrightAopsRCPReranking",
+    "BrightBiologyRCPReranking",
+    "BrightEarthScienceRCPReranking",
+    "BrightEconomicsRCPReranking",
+    "BrightLeetcodeRCPReranking",
+    "BrightPonyRCPReranking",
+    "BrightPsychologyRCPReranking",
+    "BrightRoboticsRCPReranking",
+    "BrightStackoverflowRCPReranking",
+    "BrightSustainableLivingRCPReranking",
+    "BrightTheoremQAQuestionsRCPReranking",
+    "BrightTheoremQATheoremsRCPReranking",
     "BuiltBenchReranking",
     "ColDeRReranking",
     "ERESSReranking",
@@ -57,6 +98,19 @@ __all__ = [
     "LocBenchReranking",
     "MindSmallReranking",
     "MultiSWEbenchReranking",
+    "NanoArguAnaRCPReranking",
+    "NanoClimateFeverRCPReranking",
+    "NanoDBPediaRCPReranking",
+    "NanoFEVERRCPReranking",
+    "NanoFiQA2018RCPReranking",
+    "NanoHotpotQARCPReranking",
+    "NanoMSMARCORCPReranking",
+    "NanoNFCorpusRCPReranking",
+    "NanoNQRCPReranking",
+    "NanoQuoraRCPReranking",
+    "NanoSCIDOCSRCPReranking",
+    "NanoSciFactRCPReranking",
+    "NanoTouche2020RCPReranking",
     "NevIR",
     "SWEPolyBenchReranking",
     "SWEbenchLiteReranking",
