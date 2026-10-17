@@ -8,6 +8,7 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import (
     AudioCollator,
     VideoCollator,
+    sampled_frame_rate,
     single_clip_dataloader,
 )
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -141,6 +142,7 @@ class QwenOmniWrapper(AbsEncoder):
                     max_frames=self.max_frames,
                     num_frames=self.num_frames,
                     max_samples=self.max_samples,
+                    video_metadata=True,
                 )
             elif has_audio:
                 inputs.collate_fn = AudioCollator(
@@ -151,6 +153,10 @@ class QwenOmniWrapper(AbsEncoder):
             if self.per_clip and (has_audio or has_video):
                 inputs = single_clip_dataloader(
                     inputs, "batched embeddings change with their batch-mates"
+                )
+            elif has_video:
+                inputs = single_clip_dataloader(
+                    inputs, "the processor takes one frame rate per call"
                 )
 
             all_embeddings: list[torch.Tensor] = []
@@ -166,6 +172,14 @@ class QwenOmniWrapper(AbsEncoder):
                 ]
 
                 videos = batch.get("video")
+                # one video per batch: the rate its frames were sampled at, which
+                # the processor would otherwise assume (2 fps for Qwen2.5-Omni,
+                # 1 fps for Qwen3-Omni)
+                fps = (
+                    sampled_frame_rate(videos[0]["video_metadata"]) if videos else None
+                )
+                if videos:
+                    videos = [v["array"] for v in videos]
                 images = batch.get("image")
                 audios = batch.get("audio")
                 if audios:
@@ -184,9 +198,7 @@ class QwenOmniWrapper(AbsEncoder):
                     videos_kwargs={
                         "do_sample_frames": False,
                         "use_audio_in_video": False,
-                        # the rate frames were sampled at; the processor would
-                        # assume 2 fps (Qwen2.5-Omni) or 1 fps (Qwen3-Omni)
-                        "fps": self.fps,
+                        "fps": fps,
                     },
                     audio_kwargs={"max_length": self.max_samples},
                 ).to(self.device, dtype=torch.bfloat16)

@@ -17,6 +17,7 @@ if TYPE_CHECKING:
     from torchcodec.decoders import VideoDecoder  # type: ignore[attr-defined]
 
     from mteb.types import BatchedInput
+    from mteb.types._encoder_io import VideoInputItem, VideoMetadata
 
 logger = logging.getLogger(__name__)
 log_once = LogOnce(logger)
@@ -248,9 +249,9 @@ class FramesCollator:
             num_frames: If set, use fixed-sample mode: always select this many
                 frames uniformly from the video.
             min_frames: Minimum number of frames in FPS-based sampling.
-            video_metadata: Return each video as ``{"array": frames,
-                "video_metadata": timing}`` instead of a bare frame tensor,
-                for wrappers that need the sampled frames' real timing.
+            video_metadata: Return each video as a ``VideoInputItem`` (frames and
+                their timing) instead of a bare frame tensor, for wrappers that
+                need the sampled frames' real timing.
         """
         if num_frames is not None and fps is not None:
             raise ValueError(
@@ -284,7 +285,7 @@ class FramesCollator:
         num_frames: int | None = None,
         min_frames: int = DEFAULT_MIN_FRAMES,
         return_metadata: bool = False,
-    ) -> torch.Tensor | tuple[torch.Tensor, dict[str, Any]]:
+    ) -> torch.Tensor | tuple[torch.Tensor, VideoMetadata]:
         """Resample a video input to a target number of frames.
 
         When both ``fps`` and ``num_frames`` are None, all frames are returned
@@ -298,9 +299,7 @@ class FramesCollator:
             num_frames: If set, select exactly this many frames uniformly
                 (fixed-sample mode).
             min_frames: Minimum number of frames in FPS-based sampling.
-            return_metadata: Also return the sampled frames' timing (source fps,
-                frame count, duration and indices), in the format of
-                transformers' ``VideoMetadata``.
+            return_metadata: Also return the sampled frames' timing.
         """
 
         def _indices(n_source: int) -> list[int]:
@@ -344,12 +343,13 @@ class FramesCollator:
                 source_fps = video.metadata.average_fps or (
                     original_n / duration if duration else None
                 )
-                return frames, {
+                metadata: VideoMetadata = {
                     "fps": source_fps,
                     "total_num_frames": n,
                     "duration": duration,
                     "frames_indices": indices,
                 }
+                return frames, metadata
             except RuntimeError as e:
                 if "no more frames" not in str(e):
                     raise
@@ -384,9 +384,9 @@ class VideoCollator:
             num_frames: If set, use fixed-sample mode instead of FPS-based.
             max_samples: Maximum number of audio samples to keep. If None, no truncation.
             min_frames: Minimum number of frames in FPS-based sampling.
-            video_metadata: Return each video as ``{"array": frames,
-                "video_metadata": timing}`` instead of a bare frame tensor,
-                for wrappers that need the sampled frames' real timing.
+            video_metadata: Return each video as a ``VideoInputItem`` (frames and
+                their timing) instead of a bare frame tensor, for wrappers that
+                need the sampled frames' real timing.
         """
         self.fps = fps
         self.max_frames = max_frames
@@ -420,7 +420,7 @@ class VideoCollator:
 
 def _sample_video(
     video: VideoDecoder, collator: FramesCollator | VideoCollator
-) -> torch.Tensor | dict[str, Any]:
+) -> torch.Tensor | VideoInputItem:
     """Sample a video with a collator's settings, with its timing if requested."""
     sampled = FramesCollator.resample_video(
         video,
@@ -436,11 +436,12 @@ def _sample_video(
     return sampled
 
 
-def sampled_frame_rate(metadata: dict[str, Any]) -> float:
+def sampled_frame_rate(metadata: VideoMetadata) -> float:
     """Frame rate at which sampled frames play back at their real spacing.
 
-    For writing sampled frames to a video file (OmniVinci, Gemini), so the
-    file lasts as long as the source clip.
+    For processors that take one frame rate per video (Qwen-Omni) and for writing
+    sampled frames to a video file (OmniVinci), so the clip lasts as long as the
+    source.
     """
     from fractions import Fraction
 

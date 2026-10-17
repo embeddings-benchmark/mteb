@@ -143,14 +143,47 @@ class AudioInput(TypedDict):
     audio: list[AudioInputItem]
 
 
+class VideoMetadata(TypedDict):
+    """Timing of a video's sampled frames, in the format of transformers' ``VideoMetadata``.
+
+    https://github.com/huggingface/transformers/blob/9fb4b5a9458a83a0bb9d8ddb6d4443a7bd146a62/src/transformers/video_utils.py#L80
+
+    Attributes:
+        fps: Frame rate of the source video.
+        total_num_frames: Number of frames in the source video.
+        duration: Duration of the source video in seconds.
+        frames_indices: Indices of the sampled frames in the source video.
+    """
+
+    fps: float | None
+    total_num_frames: int
+    duration: float | None
+    frames_indices: list[int]
+
+
+class VideoInputItem(TypedDict):
+    """A video with the timing of its sampled frames.
+
+    The video collators return this format when created with ``video_metadata=True``.
+
+    Attributes:
+        array: The sampled video frames.
+        video_metadata: The timing of the sampled frames.
+    """
+
+    array: torch.Tensor
+    video_metadata: VideoMetadata
+
+
 class VideoInput(TypedDict):
     """The input to the encoder for video frames. Audio is currently included in the AudioInput.
 
     Attributes:
-        video: The video frames as Tensor.
+        video: The video frames as Tensor, or with their timing (`VideoInputItem`)
+            for wrappers that request it.
     """
 
-    video: torch.Tensor
+    video: torch.Tensor | list[VideoInputItem]
 
 
 class MultimodalInput(  # type: ignore[misc]
