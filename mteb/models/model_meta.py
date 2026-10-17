@@ -491,7 +491,12 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         embed_dim: int | None = None,
         **kwargs: Any,
     ) -> MTEBModels:
-        """Loads the model using the specified loader function."""
+        """Loads the model using the specified loader function.
+
+        The optional ``document_modalities`` kwarg selects document inputs for a
+        search model through ``SearchEncoderWrapper`` or ``SearchCrossEncoderWrapper``.
+        It is not forwarded to the underlying model constructor.
+        """
         # create a copy so that changing the model meta on the model does not influence the original meta
         self._check_requirements()
         _self = self.model_copy(deep=True)
@@ -538,6 +543,8 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         # Allow overwrites
         _kwargs = _self.loader_kwargs.copy()
         _kwargs.update(merged_kwargs)
+        # Input selection belongs to the search adapter, not the model constructor.
+        document_modalities = _kwargs.pop("document_modalities", None)
         if device is not None:
             _kwargs["device"] = device
 
@@ -559,6 +566,30 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 _full_installation_message(f"Loading {name}"), name=e.name
             ) from e
         model.mteb_model_meta = _self  # type: ignore[misc]
+        if document_modalities is not None:
+            from mteb.models.models_protocols import (
+                CrossEncoderProtocol,
+                EncoderProtocol,
+                SearchProtocol,
+            )
+            from mteb.models.search_wrappers import (
+                SearchCrossEncoderWrapper,
+                SearchEncoderWrapper,
+            )
+
+            if isinstance(model, CrossEncoderProtocol):
+                return SearchCrossEncoderWrapper(
+                    model, document_modalities=document_modalities
+                )
+            if isinstance(model, EncoderProtocol) and not isinstance(
+                model, SearchProtocol
+            ):
+                return SearchEncoderWrapper(
+                    model, document_modalities=document_modalities
+                )
+            raise ValueError(
+                "document_modalities requires an encoder or cross-encoder without a custom search implementation."
+            )
         return model
 
     def _check_requirements(self) -> None:

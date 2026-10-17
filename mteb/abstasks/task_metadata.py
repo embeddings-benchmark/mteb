@@ -271,6 +271,8 @@ TaskCategory = Literal[
     "t2va",
     "vat2t",
     "va2va",
+    "va2a",
+    "va2v",
     "v2a",
     "a2v",
     "vt2a",
@@ -333,6 +335,8 @@ TaskCategory = Literal[
 45. it2v: image+text to video
 46. v2i: video to image
 47. it2c: image+text to category
+48. va2a: video+audio to audio
+49. va2v: video+audio to video
 """
 
 _MODALITY_CODES: dict[str, str] = {
