@@ -24,6 +24,11 @@ from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
     SparseEncoderWrapper,
 )
+from mteb.models.video_wrappers.video2images_wrapper import (
+    _has_mixed_video_input,
+    is_video2images_meta,
+    video2images_hint,
+)
 from mteb.results import ModelResult, TaskResult
 from mteb.results.task_result import TaskError
 from mteb.timing import TimingStack
@@ -394,6 +399,13 @@ def _check_model_modalities(
     warnings, errors = [], []
 
     for task in check_tasks:
+        if is_video2images_meta(model) and _has_mixed_video_input(task):
+            errors.append(
+                f"Model {model.name} only supports video-only inputs, but task "
+                f"{task.metadata.name} mixes video with other modalities in one input."
+            )
+            continue
+        video_hint = video2images_hint(model, task)
         # only retrieval tasks have different modalities for query and document and can be run with partial overlaps
         if isinstance(task, AbsTaskRetrieval):
             query_mods = set(task.metadata.get_modalities(PromptType.query))
@@ -418,6 +430,7 @@ def _check_model_modalities(
                 errors.append(
                     f"Model {model.name} supports {model.modalities}, but none overlap with "
                     f"task {task.metadata.name} query={sorted(query_mods)}, document={sorted(doc_mods)}."
+                    + video_hint
                 )
         else:
             task_mods = set(task.metadata.modalities)
@@ -427,6 +440,7 @@ def _check_model_modalities(
             errors.append(
                 f"Model {model.name} supports {model.modalities}, but none overlap with "
                 f"task {task.metadata.name} modalities={task.metadata.modalities}."
+                + video_hint
             )
 
     if errors:

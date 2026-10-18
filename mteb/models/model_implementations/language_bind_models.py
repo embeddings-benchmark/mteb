@@ -105,7 +105,9 @@ class _LanguageBindBase(AbsEncoder):
                 texts = list(batch["text"])
                 tokens = self._tokenize(texts)
 
-                with torch.autocast(str(self.device), dtype=torch.bfloat16):
+                with torch.autocast(
+                    torch.device(self.device).type, dtype=torch.bfloat16
+                ):
                     text_outputs = self.model.text_model(
                         input_ids=tokens["input_ids"],
                         attention_mask=tokens.get("attention_mask"),
@@ -222,7 +224,9 @@ class LanguageBindVideoWrapper(_LanguageBindBase):
                     [self._transform_video_frames(frames) for frames in frames_list]
                 ).to(self.device)
 
-                with torch.autocast(str(self.device), dtype=torch.bfloat16):
+                with torch.autocast(
+                    torch.device(self.device).type, dtype=torch.bfloat16
+                ):
                     vision_outputs = self.model.vision_model(pixel_values=processed)
                     video_embeds = self.model.visual_projection(vision_outputs[1])
                     video_embeds /= video_embeds.norm(dim=-1, keepdim=True)
@@ -333,7 +337,9 @@ class LanguageBindAudioWrapper(_LanguageBindBase):
                         processed.append(self._transform_audio(a))
                 processed = torch.stack(processed).to(self.device)
 
-                with torch.autocast(str(self.device), dtype=torch.bfloat16):
+                with torch.autocast(
+                    torch.device(self.device).type, dtype=torch.bfloat16
+                ):
                     audio_outputs = self.model.vision_model(pixel_values=processed)
                     audio_embeds = self.model.visual_projection(audio_outputs[1])
                     audio_embeds /= audio_embeds.norm(dim=-1, keepdim=True)
@@ -429,7 +435,9 @@ class LanguageBindImageWrapper(_LanguageBindBase):
                     [self.processor.transform(img) for img in images]
                 ).to(self.device)
 
-                with torch.autocast(str(self.device), dtype=torch.bfloat16):
+                with torch.autocast(
+                    torch.device(self.device).type, dtype=torch.bfloat16
+                ):
                     vision_outputs = self.model.vision_model(pixel_values=processed)
                     image_embeds = self.model.visual_projection(vision_outputs[1])
                     image_embeds /= image_embeds.norm(dim=-1, keepdim=True)

@@ -83,7 +83,7 @@ dataset-load-test-pr:
 
 citation-check:
 	@echo "--- 🔍 Checking that the cited works exist ---"
-	uv run --no-sync --group test python tests/test_validate_metadata/check_citations.py
+	uv run --no-sync --group test python tests/test_validate_metadata/check_citations.py $(CITATION_CHECK_ARGS)
 
 reference-model-test:
 	@echo "--- Running reference model coverage test ---"

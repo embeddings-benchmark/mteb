@@ -30,6 +30,7 @@ from .vidore3_bench_reranking import (
     Vidore3IndustrialQwen3VLEmbedding2BRerankingv2,
     Vidore3NuclearBGEm3Rerankingv2,
     Vidore3NuclearBM25sRerankingv2,
+    Vidore3NuclearNemotron35Embed8BRerankingv2,
     Vidore3NuclearQwen3VLEmbedding2BRerankingv2,
     Vidore3PharmaceuticalsBGEm3Rerankingv2,
     Vidore3PharmaceuticalsBM25sRerankingv2,
@@ -41,6 +42,7 @@ from .vidore3_bench_reranking import (
     Vidore3PhysicsQwen3VLEmbedding2BRerankingv2,
     Vidore3TelecomBGEm3Rerankingv2,
     Vidore3TelecomBM25sRerankingv2,
+    Vidore3TelecomNemotron35Embed8BRerankingv2,
     Vidore3TelecomQwen3VLEmbedding2BRerankingv2,
 )
 from .wikipedia_reranking_multilingual import WikipediaRerankingMultilingual
@@ -78,6 +80,7 @@ __all__ = [
     "Vidore3IndustrialQwen3VLEmbedding2BRerankingv2",
     "Vidore3NuclearBGEm3Rerankingv2",
     "Vidore3NuclearBM25sRerankingv2",
+    "Vidore3NuclearNemotron35Embed8BRerankingv2",
     "Vidore3NuclearQwen3VLEmbedding2BRerankingv2",
     "Vidore3PharmaceuticalsBGEm3Rerankingv2",
     "Vidore3PharmaceuticalsBM25sRerankingv2",
@@ -89,6 +92,7 @@ __all__ = [
     "Vidore3PhysicsQwen3VLEmbedding2BRerankingv2",
     "Vidore3TelecomBGEm3Rerankingv2",
     "Vidore3TelecomBM25sRerankingv2",
+    "Vidore3TelecomNemotron35Embed8BRerankingv2",
     "Vidore3TelecomQwen3VLEmbedding2BRerankingv2",
     "WikipediaRerankingMultilingual",
     "XGlueWPRReranking",

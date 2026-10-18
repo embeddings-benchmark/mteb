@@ -1,3 +1,4 @@
+from .dan import *
 from .deu import *
 from .eng import *
 from .fao import *

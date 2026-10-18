@@ -12,12 +12,18 @@ DBLP and OpenAlex.
 
 Run it with `make citation-check`, or directly:
 
-    python tests/test_validate_metadata/check_citations.py [--recheck-days 3650]
+    python tests/test_validate_metadata/check_citations.py [--recheck-days 3650] [--only-new]
 
 Results are cached in `citation_cache.json`, which is checked into the repository:
 an entry checked less than `--recheck-days` days ago is not looked up again, so a
 run normally only checks the citations that were added since. The script updates
 that file, so commit it together with your citation.
+
+Pull requests run with `--only-new`: they look up only the citations missing from
+the cache, i.e. the ones they add or change, and never re-check the others. Title
+lookups are flaky, so re-checking every citation on a PR fails it on citations it
+never touched. Expired entries are re-checked on main, which saves the refreshed
+cache.
 
 Citations that cannot be verified but are correct - a workshop paper with no DOI,
 a dataset card, a thesis - are listed in `citation_allowlist.json` with the reason
@@ -78,6 +84,21 @@ def citations() -> dict[str, tuple[Entry, set[str]]]:
     return entries
 
 
+def flush(cache: Cache) -> None:
+    """Write the cache, laid out the way the `pretty-format-json` pre-commit hook does.
+
+    refaudit writes the whole cache on a single line, so every update showed up in
+    the diff as one changed line that could not be reviewed.
+    """
+    cache.flush()
+    if not CACHE_PATH.exists():
+        return
+    data = json.loads(CACHE_PATH.read_text(encoding="utf-8"))
+    tmp = CACHE_PATH.with_suffix(".json.tmp")
+    tmp.write_text(json.dumps(data, indent=4) + "\n", encoding="utf-8", newline="\n")
+    tmp.replace(CACHE_PATH)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -85,6 +106,13 @@ def main() -> int:
         type=float,
         default=30.0,
         help="look a citation up again once its cached result is this old (default: 30)",
+    )
+    parser.add_argument(
+        "--only-new",
+        action="store_true",
+        help="only look up citations that are not in the cache yet, and trust the "
+        "cached result for the rest however old it is; used on pull requests so they "
+        "only check the citations they add or change",
     )
     parser.add_argument(
         "--workers",
@@ -98,7 +126,8 @@ def main() -> int:
     allowlist = json.loads(ALLOWLIST_PATH.read_text(encoding="utf-8"))
     to_check = [entry for key, (entry, _) in entries.items() if key not in allowlist]
 
-    cache = Cache(CACHE_PATH, ttl_days=args.recheck_days)
+    # refaudit never expires a cached result when the ttl is 0
+    cache = Cache(CACHE_PATH, ttl_days=0 if args.only_new else args.recheck_days)
     checker = Checker(default_resolvers(CONTACT_EMAIL), cache=cache)
     print(
         f"checking {len(to_check)} citations "
@@ -110,9 +139,9 @@ def main() -> int:
     for result in checker.check_all(to_check, workers=args.workers):
         results.append(result)
         if len(results) % FLUSH_EVERY == 0:
-            cache.flush()
+            flush(cache)
             print(f"  {len(results)}/{len(to_check)}", flush=True)
-    cache.flush()
+    flush(cache)
 
     print(
         "\n"
