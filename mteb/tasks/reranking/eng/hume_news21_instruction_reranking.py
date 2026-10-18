@@ -25,11 +25,13 @@ class HUMENews21InstructionReranking(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{soboroff2021trec,
-  author = {Soboroff, Ian and Macdonald, Craig and McCreadie, Richard},
-  booktitle = {TREC},
-  title = {TREC 2021 News Track Overview},
-  year = {2021},
+@misc{weller2024followir,
+  archiveprefix = {arXiv},
+  author = {Orion Weller and Benjamin Chang and Sean MacAvaney and Kyle Lo and Arman Cohan and Benjamin Van Durme and Dawn Lawrie and Luca Soldaini},
+  eprint = {2403.15246},
+  primaryclass = {cs.IR},
+  title = {FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions},
+  year = {2024},
 }
 """,
         prompt="Given a query, rerank the documents by their relevance to the query",

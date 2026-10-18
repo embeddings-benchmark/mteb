@@ -45,8 +45,9 @@ jobs:
     - name: Install dependencies
       run: uv sync --group test --frozen
 
+    # Only the citations the PR adds or changes; the rest are re-checked on main.
     - name: Check citations
-      run: make citation-check
+      run: make citation-check CITATION_CHECK_ARGS=--only-new
 
   citation-check-main:
     # forks would otherwise push cache commits to their own main
