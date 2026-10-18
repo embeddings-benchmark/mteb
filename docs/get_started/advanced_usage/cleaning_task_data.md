@@ -34,6 +34,7 @@ Each filter takes a task and returns a cleaned copy, leaving the task you passed
 - [`remove_by_text_length`][mteb.data_cleaning.remove_by_text_length] removes [texts that are empty, too short or too long](#removing-samples-by-size).
 - [`remove_by_image_size`][mteb.data_cleaning.remove_by_image_size], [`remove_by_audio_duration`][mteb.data_cleaning.remove_by_audio_duration] and [`remove_by_video_duration`][mteb.data_cleaning.remove_by_video_duration] do the same for [images, audio and video](#images-audio-and-video).
 - [`remove_train_leakage`][mteb.data_cleaning.remove_train_leakage] removes [evaluation samples that are also in train](#removing-train-leakage).
+- [`remove_unclear_labels`][mteb.data_cleaning.remove_unclear_labels] removes [samples whose label says nothing](#removing-unclear-labels).
 
 Filters can be chained, e.g. `remove_by_text_length(remove_duplicates(task), min_length=1)`.
 
@@ -167,6 +168,18 @@ print({split: len(data) for split, data in cleaned.dataset["en"].items()})
 ```
 
 A sample leaks when all of its content columns match a train sample's, whatever their labels, as the same text under another label leaks just as much. The `samples_in_train` of a task's [descriptive statistics](#spotting-the-issue) counts how much leaks, so you can see it before downloading the data.
+
+## Removing unclear labels
+
+A sample with no label cannot be scored, and one whose content appears under two labels has no answer a model could get right. [`remove_unclear_labels`][mteb.data_cleaning.remove_unclear_labels] drops both:
+
+```python
+from mteb.data_cleaning import remove_unclear_labels
+
+cleaned = remove_unclear_labels(task)
+```
+
+A label is missing when it is `None`, an empty text or an empty list. It contradicts when the same content carries another label in the same split, and then every occurrence goes, as none of them can be told to be the correct one. A list of labels is read as a set, so the same labels in another order agree. For content that the train split labels differently, use [`remove_train_leakage`](#removing-train-leakage).
 
 ## Cleaning produces a new task
 
