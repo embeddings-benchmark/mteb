@@ -59,3 +59,40 @@ def test_get_task_instruction(template, prompt_type, expected):
     meta = _meta(prompt={"query": QUERY_INSTR})
     result = enc.get_task_instruction(meta, prompt_type)
     assert (result or "") == expected
+
+
+TASK_FIRST = ("custom_task", "default_task", "task_type", "prompt_type")
+
+
+@pytest.mark.parametrize(
+    ("prompts_dict", "prompt_priority", "prompt_type", "expected"),
+    [
+        # default order: generic model prompts override the task prompt
+        (
+            {"Retrieval": "task type", "query": "query"},
+            None,
+            PromptType.query,
+            "task type",
+        ),
+        # task first: task prompt overrides generic model prompts
+        (
+            {"Retrieval": "task type", "query": "query"},
+            TASK_FIRST,
+            PromptType.query,
+            QUERY_INSTR,
+        ),
+        # task first: task name prompt from the model is still used first
+        ({"MockRetrievalTask": "custom"}, TASK_FIRST, PromptType.query, "custom"),
+        # task first: falls back to model prompts when the task has no prompt for the prompt type
+        ({"document": "document"}, TASK_FIRST, PromptType.document, "document"),
+    ],
+)
+def test_get_instruction_prompt_priority(
+    prompts_dict, prompt_priority, prompt_type, expected
+):
+    enc = _FakeEncoder(instruction_template=None)
+    enc.prompts_dict = prompts_dict
+    if prompt_priority:
+        enc.prompt_priority = prompt_priority
+    meta = _meta(prompt={"query": QUERY_INSTR})
+    assert enc.get_instruction(meta, prompt_type) == expected

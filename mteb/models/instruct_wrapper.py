@@ -14,13 +14,15 @@ from mteb.types import PromptType
 from .abs_encoder import AbsEncoder
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from collections.abc import Callable, Sequence
 
     from torch.utils.data import DataLoader
     from typing_extensions import Unpack
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, EncodeKwargs
+
+    from .abs_encoder import PromptSource
 
 
 logger = logging.getLogger(__name__)
@@ -159,6 +161,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
         padding_side: str | None = None,
         add_eos_token: bool = False,
         prompts_dict: dict[str, str] | None = None,
+        prompt_priority: Sequence[PromptSource] | None = None,
         include_prompt: bool = True,
         embed_dim: int | None = None,
         fps: float | None = None,
@@ -184,6 +187,9 @@ class InstructSentenceTransformerModel(AbsEncoder):
             add_eos_token: Whether to add the eos token to each input example.
             prompts_dict: Dictionary of task names to prompt names. If task name is missing in the dict or prompts dict is None, prompt from task metadata or
                 AbsTask.abstask_prompt will be used.
+            prompt_priority: Order in which instruction sources are checked. If None, the default order of
+                `AbsEncoder.prompt_priority` is used. E.g. `("custom_task", "default_task", "task_type", "prompt_type")`
+                prefers the prompt from the task metadata over generic prompts in `prompts_dict`.
             include_prompt: Whether to include the prompt tokens in the pooling.
             embed_dim: The embedding dimension of the model to use.
             fps: Target frames per second for video sampling (multimodal inputs only).
@@ -235,6 +241,8 @@ class InstructSentenceTransformerModel(AbsEncoder):
             self.model.set_pooling_include_prompt(include_prompt=False)
         self.apply_instruction_to_passages = apply_instruction_to_passages
         self.prompts_dict = prompts_dict
+        if prompt_priority is not None:
+            self.prompt_priority = prompt_priority
         self.fps = fps
         self.max_frames = max_frames
         self.num_frames = num_frames
