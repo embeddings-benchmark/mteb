@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
+from mteb.languages import PROGRAMMING_LANGS
 from mteb.models.model_implementations.google_gemini import GECKO_TRAINING_DATA
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import (
@@ -417,9 +418,11 @@ _RETRIEVAL_SUBTYPE_INSTRUCTION = {
 
 
 def _task_type_instruction(task_metadata: TaskMetadata) -> str:
-    """Instruction from the simplified task type, refined by subtype for retrieval."""
+    """Instruction from the simplified task type, refined by subtype and language for retrieval."""
     task_type = task_metadata.simplified_task_type
     if task_type == "retrieval":
+        if any(lang in PROGRAMMING_LANGS for lang in task_metadata.languages):
+            return "code retrieval"
         subtypes = task_metadata.task_subtypes or []
         for subtype, instruction in _RETRIEVAL_SUBTYPE_INSTRUCTION.items():
             if subtype in subtypes:
