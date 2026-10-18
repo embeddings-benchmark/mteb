@@ -183,7 +183,7 @@ class VideoInput(TypedDict):
             for wrappers that request it.
     """
 
-    video: torch.Tensor | list[VideoInputItem]
+    video: torch.Tensor | VideoInputItem
 
 
 class MultimodalInput(  # type: ignore[misc]
