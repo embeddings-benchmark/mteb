@@ -581,8 +581,13 @@ def _run_scoring_head_in_fp32(model: CrossEncoder) -> None:
             self.train(linear.training)
 
         def forward(self, inputs: torch.Tensor) -> torch.Tensor:
+            # a later model.half() / .to(bf16) also casts this head, so upcast here too
             with torch.autocast(device_type=inputs.device.type, enabled=False):
-                return F.linear(inputs.float(), self.weight, self.bias)
+                return F.linear(
+                    inputs.float(),
+                    self.weight.float(),
+                    None if self.bias is None else self.bias.float(),
+                )
 
     def upcast(name: str) -> None:
         head = root.get_submodule(name)
