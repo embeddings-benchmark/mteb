@@ -232,6 +232,24 @@ def _borda_rank_from_long(
     )
 
 
+def _borda_rank_from_pivot(
+    per_task: pl.DataFrame, task_cols: list[str]
+) -> pl.DataFrame:
+    """Borda rank over the per-task pivot, so it ranks the scores the tables show.
+
+    Ranking the raw long frame instead would score a partially evaluated task
+    (nulled in the pivot by :func:`_null_incomplete_scores`) as if it were
+    complete, so a model could rank on results its row shows as missing.
+    """
+    per_task_long = per_task.unpivot(
+        on=task_cols,
+        index="model_name",
+        variable_name="task_name",
+        value_name="score",
+    )
+    return _borda_rank_from_long(per_task_long, n_models=per_task.height)
+
+
 def _split_on_capital(s: str) -> str:
     """Splits on capital letters and joins with spaces
 
@@ -1024,7 +1042,7 @@ def _create_summary_table(  # noqa: PLR0914
             keyed, partition_col="_ts", n_models=per_task.height
         )
     else:
-        borda_df = _borda_rank_from_long(pl_df, n_models=per_task.height)
+        borda_df = _borda_rank_from_pivot(per_task, task_cols)
 
     joint_table = joint_table.join(borda_df, on="model_name", how="left")
 
@@ -1075,7 +1093,7 @@ def _create_per_task_table_from_benchmark_results(
         return _no_results_frame()
     per_task, task_cols = pivot
 
-    borda_df = _borda_rank_from_long(pl_df, n_models=per_task.height)
+    borda_df = _borda_rank_from_pivot(per_task, task_cols)
     select_cols = ["Model"]
     if _EXPERIMENT_ID_COL in per_task.columns:
         select_cols.append(_EXPERIMENT_ID_COL)

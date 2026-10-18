@@ -18,6 +18,7 @@ from mteb.benchmarks._create_table import (
     _EXPERIMENT_ID_COL,
     _build_per_scope_pivot,
     _build_per_task_pivot,
+    _create_per_task_table_from_benchmark_results,
     _create_summary_table,
     _incomplete_subset_pairs,
     _incomplete_task_pairs,
@@ -98,6 +99,31 @@ def test_create_summary_table_nulls_mean_task_on_partial_split_coverage(
     assert rows[PARTIAL_MODEL]["Classification"] is None
     assert rows[PARTIAL_MODEL]["Mean (Task)"] is None
     assert rows[PARTIAL_MODEL]["Mean (TaskType)"] is None
+
+
+@_skip_if_datasets_too_old
+def test_create_summary_table_borda_ignores_partial_split_coverage(
+    mock_mteb_cache: ResultCache,
+):
+    pl_df = _task_frame(mock_mteb_cache, [POEM, CATALONIA, BANKING77])
+    summary = _create_summary_table(pl_df)
+    rows = {r["Model"]: r for r in summary.df.to_dicts()}
+
+    # The partial model beats the full one on every (subset, split) it ran, but
+    # Poem and Catalonia are incomplete for it and show as null in its row, so
+    # Borda only credits its Banking77 win.
+    assert rows[FULL_MODEL]["Rank (Borda)"] == 1
+    assert rows[PARTIAL_MODEL]["Rank (Borda)"] == 2
+
+
+@_skip_if_datasets_too_old
+def test_per_task_table_borda_order_ignores_partial_split_coverage(
+    mock_mteb_cache: ResultCache,
+):
+    pl_df = _task_frame(mock_mteb_cache, [POEM, CATALONIA, BANKING77])
+    per_task = _create_per_task_table_from_benchmark_results(pl_df)
+    models = per_task["Model"].to_list()
+    assert models.index(FULL_MODEL) < models.index(PARTIAL_MODEL)
 
 
 @_skip_if_datasets_too_old
