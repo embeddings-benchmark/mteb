@@ -357,12 +357,22 @@ class TestCachedEmbeddingWrapper:
 
 
 @pytest.mark.parametrize("n_first", [1, 3])
-def test_numpy_cache_reload_and_grow(tmp_path: Path, n_first: int):
+@pytest.mark.parametrize("cache_backend", [NumpyCache, FaissCache])
+def test_cache_reload_and_grow(
+    tmp_path: Path, n_first: int, cache_backend: type[CacheBackendProtocol]
+):
+    if cache_backend is FaissCache:
+        pytest.importorskip("faiss")
+
     items = [{"text": f"item {i}"} for i in range(n_first + 3)]
     vectors = np.random.default_rng(0).random((len(items), 4), dtype=np.float32)
 
-    def open_cache() -> NumpyCache:
-        cache = NumpyCache(tmp_path, initial_vectors=1)
+    def open_cache() -> CacheBackendProtocol:
+        cache = (
+            NumpyCache(tmp_path, initial_vectors=1)
+            if cache_backend is NumpyCache
+            else cache_backend(tmp_path)
+        )
         cache.load()
         return cache
 
@@ -372,7 +382,7 @@ def test_numpy_cache_reload_and_grow(tmp_path: Path, n_first: int):
     cache.save()
     cache.close()
 
-    # reopen and add enough vectors to grow the file past its current size
+    # Reopen and append without losing the previously cached vectors.
     cache = open_cache()
     cache.add(items[n_first:], vectors[n_first:])
     cache.save()
