@@ -9,7 +9,7 @@ class MridinghamTonic(AbsTaskClassification):
         reference="https://huggingface.co/datasets/silky1708/Mridingham-Tonic",
         dataset={
             "path": "mteb/mridingham-tonic",
-            "revision": "9304553355441e3d2bf2432691b6209ff9a9339c",
+            "revision": "85e01491363d49437e20513afaccac86495bb626",
         },
         type="AudioClassification",
         category="a2c",

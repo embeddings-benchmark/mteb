@@ -203,7 +203,12 @@ from .flickr_audio_image_retrieval import (
     FlickrImageToAudioRetrieval,
 )
 from .forb_i2i_retrieval import FORBI2I
-from .giga_speech import GigaSpeechA2TRetrieval, GigaSpeechT2ARetrieval
+from .giga_speech import (
+    GigaSpeechA2TRetrieval,
+    GigaSpeechA2TRetrievalV2,
+    GigaSpeechT2ARetrieval,
+    GigaSpeechT2ARetrievalV2,
+)
 from .gl_dv2_i2i_retrieval import GLDv2I2IRetrieval
 from .gl_dv2_i2t_retrieval import GLDv2I2TRetrieval
 from .gov_report_retrieval import GovReportRetrieval
@@ -704,7 +709,9 @@ __all__ = [
     "GLDv2I2IRetrieval",
     "GLDv2I2TRetrieval",
     "GigaSpeechA2TRetrieval",
+    "GigaSpeechA2TRetrievalV2",
     "GigaSpeechT2ARetrieval",
+    "GigaSpeechT2ARetrievalV2",
     "Gorilla",
     "GovReportRetrieval",
     "GreatestHitsA2VRetrieval",

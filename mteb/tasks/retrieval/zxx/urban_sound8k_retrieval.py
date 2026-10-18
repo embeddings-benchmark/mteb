@@ -24,6 +24,7 @@ class UrbanSound8KA2TRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
+        superseded_by="UrbanSound8kZeroshot",
         bibtex_citation=r"""
 @inproceedings{Salamon:UrbanSound:ACMMM:14,
   author = {Salamon, Justin and Jacoby, Christopher and Bello, Juan Pablo},
@@ -59,6 +60,7 @@ class UrbanSound8KT2ARetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
+        superseded_by="UrbanSound8kZeroshot",
         bibtex_citation=r"""
 @inproceedings{Salamon:UrbanSound:ACMMM:14,
   author = {Salamon, Justin and Jacoby, Christopher and Bello, Juan Pablo},
