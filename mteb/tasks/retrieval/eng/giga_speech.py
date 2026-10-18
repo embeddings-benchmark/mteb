@@ -91,12 +91,13 @@ class GigaSpeechA2TRetrievalV2(AbsTaskRetrieval):
             "which originates from ≈40 000 hours of transcribed audiobooks, podcasts, "
             "and YouTube."
             "Version 2 drops the garbage-only utterances (<SIL>, <MUSIC>, <NOISE>, <OTHER>) that the "
-            "GigaSpeech authors recommend discarding, and turns the punctuation tags into punctuation."
+            "GigaSpeech authors recommend discarding, turns the punctuation tags into punctuation, "
+            "and drops transcripts of 3 characters or less or that occur more than once."
         ),
         reference="https://github.com/SpeechColab/GigaSpeech",
         dataset={
             "path": "mteb/gigaspeech_a2t",
-            "revision": "c44d2a7562e36a4156eff7b3abdfc84689626819",
+            "revision": "21830264114e8083a80178993158b20f0cd21026",
         },
         type="Any2AnyRetrieval",
         category="a2t",
@@ -134,12 +135,13 @@ class GigaSpeechT2ARetrievalV2(AbsTaskRetrieval):
             "sourced from ≈40 000 hours of transcribed audiobooks, podcasts, "
             "and YouTube."
             "Version 2 drops the garbage-only utterances (<SIL>, <MUSIC>, <NOISE>, <OTHER>) that the "
-            "GigaSpeech authors recommend discarding, and turns the punctuation tags into punctuation."
+            "GigaSpeech authors recommend discarding, turns the punctuation tags into punctuation, "
+            "and drops transcripts of 3 characters or less or that occur more than once."
         ),
         reference="https://github.com/SpeechColab/GigaSpeech",
         dataset={
             "path": "mteb/gigaspeech_t2a",
-            "revision": "e3a3cb7fd1777d555c65ef01f335f902926c7951",
+            "revision": "3b0c235907f6d6cf454826880192c47c91cbda41",
         },
         type="Any2AnyRetrieval",
         category="t2a",
