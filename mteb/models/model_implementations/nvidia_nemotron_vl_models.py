@@ -581,7 +581,7 @@ nemotron_3_5_rerank_8b_bf16 = ModelMeta(
     modalities=["image", "text"],
     model_type=["cross-encoder"],
     extra_requirements_groups=["nemotron-3-5-vl"],
-    output_dtypes=OutputDType.BF16,  # backbone; CrossEncoderWrapper runs the scoring head in FP32
+    output_dtypes=OutputDType.BF16,  # Backbone precision; the scoring head remains FP32.
 )
 
 
