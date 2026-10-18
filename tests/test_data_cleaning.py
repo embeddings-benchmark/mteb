@@ -1371,3 +1371,22 @@ def test_remove_unclear_labels_needs_a_label_column() -> None:
 
     with pytest.raises(ValueError, match="declares no `label_column_name`"):
         remove_unclear_labels(task)
+
+
+def test_remove_unclear_labels_compares_non_text_by_content() -> None:
+    task = MockImageClassificationTask()
+    _load_or_skip(task)
+    split = next(iter(task.dataset))
+    data = task.dataset[split]
+    task.dataset[split] = Dataset.from_dict(
+        {
+            "image": [data["image"][0], data["image"][0], data["image"][1]],
+            "label": [0, 1, 0],
+        },
+        features=data.features,
+    )
+
+    cleaned = remove_unclear_labels(task)
+
+    # the repeated image carries both labels, so neither copy can be the right one
+    assert cleaned.dataset[split]["label"] == [0]
