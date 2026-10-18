@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import contextlib
+import hashlib
+import json
 import math
 import re
 import unicodedata
@@ -21,6 +24,12 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
+
+
+def _unit_rows(x: Array) -> np.ndarray:
+    a = np.atleast_2d(np.asarray(x, dtype=np.float32))
+    return a / np.maximum(np.linalg.norm(a, axis=1, keepdims=True), 1e-12)
+
 
 # Text normalisation and featurisation. These must match the training setup
 # exactly, otherwise the learned projection matrix no longer lines up.
@@ -234,4 +243,380 @@ spectral_embed_v1_140m = ModelMeta(
     use_instructions=False,
     training_datasets={"NFCorpus"},
     citation=None,
+)
+
+
+# ============================================================================
+# VERSION 2 IMPLEMENTATION (Canonical spectral_v6: BLAKE2b + Porter + Stop)
+# ============================================================================
+
+_WORD_RE_UNICODE = re.compile(r"[^\W_]+")
+
+CODEC_STOPWORDS: frozenset[str] = frozenset(
+    [
+        "a",
+        "about",
+        "above",
+        "after",
+        "again",
+        "against",
+        "all",
+        "am",
+        "an",
+        "and",
+        "any",
+        "are",
+        "as",
+        "at",
+        "be",
+        "because",
+        "been",
+        "before",
+        "being",
+        "below",
+        "between",
+        "both",
+        "but",
+        "by",
+        "could",
+        "did",
+        "do",
+        "does",
+        "doing",
+        "down",
+        "during",
+        "each",
+        "few",
+        "for",
+        "from",
+        "further",
+        "had",
+        "has",
+        "have",
+        "having",
+        "he",
+        "her",
+        "here",
+        "hers",
+        "herself",
+        "him",
+        "himself",
+        "his",
+        "how",
+        "i",
+        "if",
+        "in",
+        "into",
+        "is",
+        "it",
+        "its",
+        "itself",
+        "just",
+        "me",
+        "more",
+        "most",
+        "my",
+        "myself",
+        "no",
+        "nor",
+        "not",
+        "of",
+        "off",
+        "on",
+        "once",
+        "only",
+        "or",
+        "other",
+        "ought",
+        "our",
+        "ours",
+        "ourselves",
+        "out",
+        "over",
+        "own",
+        "same",
+        "she",
+        "should",
+        "so",
+        "some",
+        "such",
+        "than",
+        "that",
+        "the",
+        "their",
+        "theirs",
+        "them",
+        "themselves",
+        "then",
+        "there",
+        "these",
+        "they",
+        "this",
+        "those",
+        "through",
+        "to",
+        "too",
+        "under",
+        "until",
+        "up",
+        "very",
+        "was",
+        "we",
+        "were",
+        "what",
+        "when",
+        "where",
+        "which",
+        "while",
+        "who",
+        "whom",
+        "why",
+        "with",
+        "would",
+        "you",
+        "your",
+        "yours",
+        "yourself",
+        "yourselves",
+    ]
+)
+
+CHANNELS_V6 = {
+    "w": (0, 24576),
+    "bi": (24576, 32768),
+    "ch3": (32768, 49152),
+    "ch4": (49152, 65536),
+}
+
+
+class SpectralFeaturizer:
+    """Exact self-contained implementation of the canonical spectral_v6 schema."""
+
+    def __init__(self, dim_h: int, seed: int, avgdl: float, k1: float, b: float):
+        self.H = dim_h
+        self.seed = seed
+        self.avgdl = max(float(avgdl), 1.0)
+        self.k1 = k1
+        self.b = b
+        self._pre = f"{seed}:"
+
+        try:
+            from nltk.stem import PorterStemmer
+        except ImportError as e:
+            raise ImportError(
+                "spectral-embed-v2-140m needs nltk for stemming: pip install nltk"
+            ) from e
+        self._stem = lru_cache(maxsize=500_000)(PorterStemmer().stem)
+
+        base_total = 65536
+        current = 0
+        self.channels: dict[str, tuple[int, int]] = {}
+        for name, (start, end) in CHANNELS_V6.items():
+            fraction = (end - start) / base_total
+            next_val = current + int(fraction * dim_h)
+            self.channels[name] = (current, next_val if name != "ch4" else dim_h)
+            current = self.channels[name][1]
+
+    def tokenize(self, text: str) -> list[str]:
+        normalized = unicodedata.normalize("NFC", str(text)).lower()
+        raw = _WORD_RE_UNICODE.findall(normalized)
+        out: list[str] = []
+        for w in raw:
+            if len(w) < 1:
+                continue
+            if w.isascii():
+                if w in CODEC_STOPWORDS:
+                    continue
+                out.append(self._stem(w))
+            else:
+                out.append(w)
+        return out
+
+    def _hash(self, ch: str, sub: str) -> tuple[int, float]:
+        h = int.from_bytes(
+            hashlib.blake2b((self._pre + sub).encode("utf-8"), digest_size=8).digest(),
+            "little",
+        )
+        lo, hi = self.channels[ch]
+        idx = h % max(hi - lo, 1) + lo
+        sign = 1.0 if ((h >> 40) & 1) == 0 else -1.0
+        return idx, sign
+
+    def _accumulate(self, text: str) -> dict[int, float]:
+        low = text.lower()
+        words = self.tokenize(low)
+        n = max(len(words), 1)
+        raw: dict[tuple[str, str], float] = {}
+
+        for w in words:
+            raw[("w", w)] = raw.get(("w", w), 0.0) + 1.0
+        for j in range(len(words) - 1):
+            raw[("bi", f"{words[j]}_{words[j + 1]}")] = (
+                raw.get(("bi", f"{words[j]}_{words[j + 1]}"), 0.0) + 1.0
+            )
+
+        padded = f" {low} "
+        for j in range(len(padded) - 2):
+            raw[("ch3", padded[j : j + 3])] = (
+                raw.get(("ch3", padded[j : j + 3]), 0.0) + 1.0
+            )
+        for j in range(len(padded) - 3):
+            raw[("ch4", padded[j : j + 4])] = (
+                raw.get(("ch4", padded[j : j + 4]), 0.0) + 1.0
+            )
+
+        counts: dict[int, float] = {}
+        for (ch, sub), tf in raw.items():
+            w = (
+                (1.0 + math.log(tf))
+                * tf
+                * (self.k1 + 1.0)
+                / (tf + self.k1 * (1.0 - self.b + self.b * n / self.avgdl))
+            )
+            idx, sign = self._hash(ch, sub)
+            counts[idx] = counts.get(idx, 0.0) + sign * w
+        return counts
+
+    def transform(
+        self, texts: list[str], idf: np.ndarray | None = None
+    ) -> sp.csr_matrix:
+        indptr = [0]
+        indices: list[int] = []
+        data: list[float] = []
+
+        for t in texts:
+            c = self._accumulate(t)
+            if c:
+                i = np.fromiter(c.keys(), dtype=np.int32, count=len(c))
+                v = np.fromiter(c.values(), dtype=np.float32, count=len(c))
+                if idf is not None:
+                    v *= idf[i]
+                norm = float(np.linalg.norm(v))
+                if norm > 1e-12:
+                    v /= norm
+                indices.extend(i.tolist())
+                data.extend(v.tolist())
+            indptr.append(len(indices))
+
+        x = sp.csr_matrix(
+            (
+                np.asarray(data, np.float32),
+                np.asarray(indices, np.int32),
+                np.asarray(indptr, np.int64),
+            ),
+            shape=(len(texts), self.H),
+        )
+        return x
+
+
+class SpectralEmbedV2Model:
+    def __init__(
+        self,
+        model_name: str,
+        revision: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        npz_file = hf_hub_download(
+            repo_id=model_name,
+            filename="spectral-embed-v2-140m.npz",
+            revision=revision,
+        )
+        with np.load(npz_file, allow_pickle=True) as d:
+            self.w_t = np.ascontiguousarray(d["W"].T, dtype=np.float32)
+            self.b = np.asarray(d["b"], dtype=np.float32)
+            self.k = int(d["k"]) if "k" in d.files else int(self.w_t.shape[1])
+            self.dim_h = int(d["H"]) if "H" in d.files else int(self.w_t.shape[0])
+            self.seed = int(d["hash_seed"]) if "hash_seed" in d.files else 42
+            self.idf = (
+                np.asarray(d["idf"], dtype=np.float32) if "idf" in d.files else None
+            )
+
+            codec_params = {}
+            if "codec_params_json" in d.files:
+                with contextlib.suppress(Exception):
+                    codec_params = json.loads(str(d["codec_params_json"]))
+
+            w_cfg = codec_params.get("weighting", {}) or {}
+            avgdl = float(d.get("avgdl", w_cfg.get("avgdl", 166.7)))
+            k1 = float(d.get("bm25_k1", w_cfg.get("k1", 1.5)))
+            bm25_b = float(d.get("bm25_b", w_cfg.get("b", 0.75)))
+
+        self.featurizer = SpectralFeaturizer(
+            dim_h=self.dim_h, seed=self.seed, avgdl=avgdl, k1=k1, b=bm25_b
+        )
+
+    def _embed(self, texts: list[str]) -> np.ndarray:
+        if not texts:
+            return np.empty((0, self.k), dtype=np.float32)
+        x = self.featurizer.transform(texts, idf=self.idf)
+        z = np.asarray(x @ self.w_t, dtype=np.float32) + self.b
+        return _unit_rows(z)
+
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput] | list[str],
+        *,
+        task_metadata: TaskMetadata | None = None,
+        hf_split: str | None = None,
+        hf_subset: str | None = None,
+        prompt_type: PromptType | None = None,
+        batch_size: int = 128,
+        **kwargs: Any,
+    ) -> np.ndarray:
+        if isinstance(inputs, (list, tuple)) and (
+            not inputs or isinstance(inputs[0], str)
+        ):
+            texts = [str(x) for x in inputs]
+            parts = [
+                self._embed(texts[i : i + batch_size])
+                for i in range(0, len(texts), batch_size)
+            ]
+            return (
+                np.vstack(parts) if parts else np.empty((0, self.k), dtype=np.float32)
+            )
+
+        parts = []
+        for batch in inputs:
+            val = (
+                batch.get("text", batch.get("query", []))
+                if isinstance(batch, dict)
+                else batch
+            )
+            texts = list(val) if isinstance(val, (list, tuple)) else [str(val)]
+            if texts:
+                parts.append(self._embed(texts))
+        return np.vstack(parts) if parts else np.empty((0, self.k), dtype=np.float32)
+
+    @staticmethod
+    def similarity(embeddings1: Array, embeddings2: Array) -> np.ndarray:
+        return _unit_rows(embeddings1) @ _unit_rows(embeddings2).T
+
+    @staticmethod
+    def similarity_pairwise(embeddings1: Array, embeddings2: Array) -> np.ndarray:
+        return (_unit_rows(embeddings1) * _unit_rows(embeddings2)).sum(axis=1)
+
+
+spectral_embed_v2_140m = ModelMeta(
+    loader=SpectralEmbedV2Model,
+    name="JMullings/spectral-embed-v2-140m",
+    revision="49ba7894e39a91bb6aef54b6b7bbc2bd2b6609c5",
+    release_date="2026-10-06",
+    languages=["eng-Latn"],
+    n_parameters=139_471_360,
+    n_embedding_parameters=139_471_360,
+    memory_usage_mb=560,
+    max_tokens=512,
+    embed_dim=2048,
+    license="mit",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["NumPy"],
+    reference="https://huggingface.co/JMullings/spectral-embed-v2-140m",
+    similarity_fn_name="cosine",
+    use_instructions=False,
+    training_datasets={"NFCorpus"},
+    citation=None,
+    adapted_from="JMullings/spectral-embed-v1-140m",
+    superseded_by=None,
 )
