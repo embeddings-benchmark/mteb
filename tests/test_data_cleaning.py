@@ -15,6 +15,7 @@ from mteb.data_cleaning import (
     remove_by_video_duration,
     remove_duplicates,
     remove_train_leakage,
+    remove_unclear_labels,
 )
 from mteb.data_cleaning._duplicates import _keep_first_occurrence
 from mteb.data_cleaning._filtering import _derived_task_name, _row_key
@@ -27,8 +28,10 @@ from mteb.mocks import (
     MockClusteringTask,
     MockImageClassificationTask,
     MockImageTextPairClassificationTask,
+    MockMultilabelClassification,
     MockMultilingualClassificationTask,
     MockPairClassificationTask,
+    MockRegressionTask,
     MockRerankingTask,
     MockRetrievalTask,
     MockSTSTask,
@@ -1267,3 +1270,104 @@ def test_remove_train_leakage_pools_the_subsets_by_default() -> None:
     cleaned = remove_train_leakage(task, subsets=["fra"])
 
     assert len(cleaned.dataset["fra"]["test"]) == 0
+
+
+def test_remove_unclear_labels_removes_contradicted_and_missing_labels() -> None:
+    task = MockClassificationTask()
+    task.dataset = DatasetDict(
+        {
+            "test": Dataset.from_dict(
+                {
+                    "text": [
+                        "same",
+                        "same",
+                        "clear",
+                        "unlabelled",
+                        " agrees ",
+                        "agrees",
+                    ],
+                    "label": [0, 1, 0, None, 2, 2],
+                }
+            )
+        }
+    )
+    task.data_loaded = True
+
+    cleaned = remove_unclear_labels(task)
+
+    # the contradicted text goes whichever label it carries, as does the one with none
+    assert cleaned.dataset["test"]["text"] == ["clear", " agrees ", "agrees"]
+
+
+def test_remove_unclear_labels_reads_a_list_of_labels_as_a_set() -> None:
+    task = MockMultilabelClassification()
+    task.dataset = DatasetDict(
+        {
+            "test": Dataset.from_dict(
+                {
+                    "text": ["reordered", "reordered", "differs", "differs", "empty"],
+                    "label": [[0, 1], [1, 0], [0, 1], [0, 2], []],
+                }
+            )
+        }
+    )
+    task.data_loaded = True
+
+    cleaned = remove_unclear_labels(task)
+
+    assert cleaned.dataset["test"]["text"] == ["reordered", "reordered"]
+
+
+def test_remove_unclear_labels_filters_each_split_on_its_own() -> None:
+    task = MockClassificationTask()
+    task.dataset = DatasetDict(
+        {
+            "train": Dataset.from_dict(
+                {"text": ["shared", "conflicts", "conflicts"], "label": [0, 0, 1]}
+            ),
+            "test": Dataset.from_dict({"text": ["shared"], "label": [1]}),
+        }
+    )
+    task.data_loaded = True
+
+    cleaned = remove_unclear_labels(task)
+
+    # "conflicts" carries both labels within train, while "shared" differs only between splits, which
+    # `remove_train_leakage` is the filter for
+    assert cleaned.dataset["train"]["text"] == ["shared"]
+    assert cleaned.dataset["test"]["text"] == ["shared"]
+
+
+def test_remove_unclear_labels_applies_within_a_row_of_a_clustering_task() -> None:
+    task = MockClusteringTask()
+    task.dataset = DatasetDict(
+        {
+            "test": Dataset.from_dict(
+                {
+                    "sentences": [["two clusters", "two clusters", "its own"]],
+                    "labels": [[0, 1, 0]],
+                }
+            )
+        }
+    )
+    task.data_loaded = True
+
+    cleaned = remove_unclear_labels(task)
+
+    row = cleaned.dataset["test"][0]
+    assert row["sentences"] == ["its own"]
+    assert row["labels"] == [0]
+
+
+def test_remove_unclear_labels_refuses_a_continuous_score() -> None:
+    task = MockRegressionTask()
+
+    with pytest.raises(NotImplementedError, match="continuous scale"):
+        remove_unclear_labels(task)
+
+
+def test_remove_unclear_labels_needs_a_label_column() -> None:
+    task = MockSTSTask()
+
+    with pytest.raises(ValueError, match="declares no `label_column_name`"):
+        remove_unclear_labels(task)
