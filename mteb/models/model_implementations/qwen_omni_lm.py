@@ -8,7 +8,6 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import (
     AudioCollator,
     VideoCollator,
-    sampled_frame_rate,
     single_clip_dataloader,
 )
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -172,13 +171,20 @@ class QwenOmniWrapper(AbsEncoder):
                 ]
 
                 videos = batch.get("video")
-                # one video per batch: the rate its frames were sampled at, which
-                # the processor would otherwise assume (2 fps for Qwen2.5-Omni,
-                # 1 fps for Qwen3-Omni)
-                fps = (
-                    sampled_frame_rate(videos[0]["video_metadata"]) if videos else None
-                )
+                # one video per batch: the rate its frames were sampled at, as
+                # qwen-omni-utils computes it (sampled / source frames * source
+                # fps); the processor would otherwise assume 2 fps (Qwen2.5-Omni)
+                # or 1 fps (Qwen3-Omni)
+                # https://github.com/QwenLM/Qwen2.5-Omni/blob/main/qwen-omni-utils/src/qwen_omni_utils/v2_5/vision_process.py
+                fps = None
                 if videos:
+                    timing = videos[0]["video_metadata"]
+                    if timing["fps"]:
+                        fps = (
+                            len(timing["frames_indices"])
+                            / timing["total_num_frames"]
+                            * timing["fps"]
+                        )
                     videos = [v["array"] for v in videos]
                 images = batch.get("image")
                 audios = batch.get("audio")

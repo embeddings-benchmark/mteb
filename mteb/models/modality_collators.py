@@ -440,9 +440,8 @@ def _sample_video(
 def sampled_frame_rate(metadata: VideoMetadata) -> float:
     """Frame rate at which sampled frames play back at their real spacing.
 
-    For processors that take one frame rate per video (Qwen-Omni) and for writing
-    sampled frames to a video file (OmniVinci), so the clip lasts as long as the
-    source.
+    For writing sampled frames to a video file (OmniVinci), so the file lasts as
+    long as the source clip.
     """
     from fractions import Fraction
 
