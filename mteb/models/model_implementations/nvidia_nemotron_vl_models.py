@@ -550,44 +550,8 @@ llama_nemotron_rerank_vl_1b_v2 = ModelMeta(
 )
 
 
-def _nemotron_3_5_reranker(
-    model: str, revision: str, **kwargs: Any
-) -> st_wrapper.CrossEncoderWrapper:
-    import torch
-    import torch.nn.functional as F
-
-    class FP32ScoringHead(torch.nn.Linear):
-        """Keep the scoring projection in FP32, including under caller autocast."""
-
-        def __init__(self, linear: torch.nn.Linear) -> None:
-            super().__init__(
-                linear.in_features,
-                linear.out_features,
-                bias=linear.bias is not None,
-                device=linear.weight.device,
-                dtype=torch.float32,
-            )
-            self.load_state_dict(linear.state_dict())
-            self.train(linear.training)
-
-        def forward(self, inputs: torch.Tensor) -> torch.Tensor:
-            with torch.autocast(device_type=inputs.device.type, enabled=False):
-                return F.linear(
-                    inputs.float(),
-                    self.weight.float(),
-                    None if self.bias is None else self.bias.float(),
-                )
-
-    wrapper = st_wrapper.CrossEncoderWrapper(model=model, revision=revision, **kwargs)
-    # Sentence Transformers casts Dense to the backbone dtype on load.
-    # The pinned checkpoint uses Transformer -> Pooling -> Dense.
-    dense = wrapper.model[2]
-    dense.linear = FP32ScoringHead(dense.linear)
-    return wrapper
-
-
 nemotron_3_5_rerank_8b_bf16 = ModelMeta(
-    loader=_nemotron_3_5_reranker,
+    loader=st_wrapper.CrossEncoderWrapper,
     name="nvidia/Nemotron-3.5-Rerank-8B-BF16",
     revision="708e844c3da0bbaa923e9dc310b07da4ffb6a6b5",
     release_date="2026-10-20",
