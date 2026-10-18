@@ -38,13 +38,15 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-PromptSource = Literal["custom_task", "default_task", "task_type", "prompt_type"]
+PromptSource = Literal[
+    "custom_prompt", "default_task_prompt", "task_type_prompt", "encode_type_prompt"
+]
 """Source of an instruction used by `AbsEncoder.get_instruction`.
 
-- `custom_task`: `prompts_dict[task_name]` defined in the model implementation.
-- `default_task`: The `prompt` defined in the task metadata.
-- `task_type`: `prompts_dict[task_type]` defined in the model implementation.
-- `prompt_type`: `prompts_dict[prompt_type]` (e.g. `"query"`) defined in the model implementation.
+- `custom_prompt`: `prompts_dict[task_name]` defined in the model implementation.
+- `default_task_prompt`: The `prompt` defined in the task metadata.
+- `task_type_prompt`: `prompts_dict[task_type]` defined in the model implementation.
+- `encode_type_prompt`: `prompts_dict[prompt_type]` (e.g. `"query"`) defined in the model implementation.
 """
 
 
@@ -70,10 +72,10 @@ class AbsEncoder(ABC):
     instruction_template: str | Callable[[str, PromptType | None], str] | None = None
     prompts_dict: dict[str, str] | None = None
     prompt_priority: Sequence[PromptSource] = (
-        "custom_task",
-        "task_type",
-        "prompt_type",
-        "default_task",
+        "custom_prompt",
+        "task_type_prompt",
+        "encode_type_prompt",
+        "default_task_prompt",
     )
 
     def get_prompt_name(
@@ -223,12 +225,12 @@ class AbsEncoder(ABC):
         """
         prompt = task_metadata.prompt
         prompt_dict_keys: dict[PromptSource, str | None] = {
-            "custom_task": task_metadata.name,
-            "task_type": task_metadata.type,
-            "prompt_type": prompt_type.value if prompt_type else None,
+            "custom_prompt": task_metadata.name,
+            "task_type_prompt": task_metadata.type,
+            "encode_type_prompt": prompt_type.value if prompt_type else None,
         }
         for source in self.prompt_priority:
-            if source == "default_task":
+            if source == "default_task_prompt":
                 task_prompt = task_metadata.prompt
                 if isinstance(task_prompt, dict) and prompt_type:
                     task_prompt = task_prompt.get(prompt_type.value)

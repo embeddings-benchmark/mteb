@@ -61,7 +61,12 @@ def test_get_task_instruction(template, prompt_type, expected):
     assert (result or "") == expected
 
 
-TASK_FIRST = ("custom_task", "default_task", "task_type", "prompt_type")
+TASK_FIRST = (
+    "custom_prompt",
+    "default_task_prompt",
+    "task_type_prompt",
+    "encode_type_prompt",
+)
 
 
 @pytest.mark.parametrize(

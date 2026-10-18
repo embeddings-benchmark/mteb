@@ -188,7 +188,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
             prompts_dict: Dictionary of task names to prompt names. If task name is missing in the dict or prompts dict is None, prompt from task metadata or
                 AbsTask.abstask_prompt will be used.
             prompt_priority: Order in which instruction sources are checked. If None, the default order of
-                `AbsEncoder.prompt_priority` is used. E.g. `("custom_task", "default_task", "task_type", "prompt_type")`
+                `AbsEncoder.prompt_priority` is used. E.g. `("custom_prompt", "default_task_prompt", "task_type_prompt", "encode_type_prompt")`
                 prefers the prompt from the task metadata over generic prompts in `prompts_dict`.
             include_prompt: Whether to include the prompt tokens in the pooling.
             embed_dim: The embedding dimension of the model to use.
