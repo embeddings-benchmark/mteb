@@ -341,13 +341,24 @@ def nauc(
             conf_scores_argsort = np.argsort(conf_scores)
         else:
             conf_scores_argsort = np.argsort(conf_scores, stable=True)
+        if conf_scores.size == 0:
+            return np.full(len(abstention_rates), np.nan)
+        # A cutoff can land inside a group of equal confidence scores, and which member
+        # is retained then depends on the input order. Use each tied group's mean metric
+        # instead: the expected retained score under random tie-breaking (#5613).
+        sorted_conf = conf_scores[conf_scores_argsort]
+        sorted_metrics = metrics[conf_scores_argsort]
+        group_start = np.flatnonzero(np.r_[True, sorted_conf[1:] != sorted_conf[:-1]])
+        group_size = np.diff(np.r_[group_start, len(sorted_conf)])
+        group_mean = np.add.reduceat(sorted_metrics, group_start) / group_size
+        sorted_metrics = np.repeat(group_mean, group_size)
         abst_curve = np.zeros(len(abstention_rates))
 
         for i, rate in enumerate(abstention_rates):
             num_instances_abst = min(
                 round(rate * conf_scores_argsort.shape[0]), len(conf_scores) - 1
             )
-            abst_curve[i] = metrics[conf_scores_argsort[num_instances_abst:]].mean()
+            abst_curve[i] = sorted_metrics[num_instances_abst:].mean()
 
         return abst_curve
 

@@ -337,6 +337,13 @@ class ColQwen3Wrapper(AbsEncoder):
         return self.processor.score_multi_vector(a, b, device=self.device)
 
 
+# colpali-engine's ColQwen2_5OmniProcessor.process_videos system prompt
+_COLQWEN_OMNI_SYSTEM_PROMPT = (
+    "You are Qwen, a virtual human developed by the Qwen Team, Alibaba Group, capable "
+    "of perceiving auditory and visual inputs, as well as generating text and speech."
+)
+
+
 class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
     """Wrapper for ColQwen-Omni: late interaction over text, image, audio and video."""
 
@@ -460,11 +467,43 @@ class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
 
         return self._encode_batches(audios, "audio", _process, "Encoding audio")
 
+    def similarity(self, a: Array, b: Array) -> Array:
+        # a video document has thousands of vectors; colpali's default scoring
+        # batch of 128 documents needs ~70 GiB on DiDeMo
+        return self.processor.score(a, b, device=self.device, batch_size=16)
+
     def get_video_embeddings(
         self, videos: DataLoader[BatchedInput], batch_size: int = 32, **kwargs: Any
     ) -> Array:
         def _process(clip: torch.Tensor) -> Mapping[str, torch.Tensor]:
-            return self.processor.process_videos([clip])
+            # colpali's process_videos, plus the checkpoint's video size: the
+            # Qwen2.5-Omni processor defaults (up to 602112 px per frame) would
+            # override its 200704 px, and long clips then run out of memory
+            # https://huggingface.co/vidore/colqwen-omni-v0.1/blob/61e78ef2f9c826cac588a01e44df51672ce957bd/video_preprocessor_config.json
+            conversation = [
+                {
+                    "role": "system",
+                    "content": [{"type": "text", "text": _COLQWEN_OMNI_SYSTEM_PROMPT}],
+                },
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "video", "path": clip},
+                        {"type": "text", "text": "Describe the content."},
+                    ],
+                },
+            ]
+            return self.processor.apply_chat_template(
+                [conversation],
+                load_audio_from_video=False,
+                add_generation_prompt=True,
+                tokenize=True,
+                return_dict=True,
+                return_tensors="pt",
+                padding=True,
+                use_audio_in_video=False,
+                videos_kwargs={"size": dict(self.processor.video_processor.size)},
+            )
 
         return self._encode_batches(videos, "video", _process, "Encoding video")
 

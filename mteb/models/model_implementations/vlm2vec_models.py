@@ -286,6 +286,16 @@ class VLM2VecWrapper(AbsEncoder):
 _VLM2VEC2_VIDEO_TOKEN = "<|video_pad|>"  # noqa: S105
 _VLM2VEC2_IMAGE_TOKEN = "<|image_pad|>"  # noqa: S105
 
+# MMEB-V2's instruction for the video side of video classification
+# https://github.com/TIGER-AI-Lab/VLM2Vec/blob/d00b5dcdeaa099f9ddb221ea081128d609c22acb/src/data/eval_dataset/video_classification_utils.py
+_VLM2VEC2_VIDEO_CLS_INSTRUCTIONS: dict[str, str] = {
+    "Kinetics700VZeroShot": "Recognize the category of the video content.",
+    "SomethingSomethingV2Classification": "What actions or object interactions are being performed by the person in the video?",
+    "UCF101VideoZeroShotClassification": "What activities or sports are being performed by the person in the video?",
+    "HMDB51ZeroShot": "What actions or objects interactions are the person in the video doing?",
+    "BreakfastZeroShot": "Recognize the breakfast type that the person is cooking in the video.",
+}
+
 _VLM2VEC2_TASK_PROMPTS: dict[str, dict[str, str]] = {
     # --- Video retrieval ---
     "DiDeMoT2VRetrieval": {
@@ -495,6 +505,10 @@ class VLM2VEC2Wrapper(AbsEncoder):
             task_prompts = _VLM2VEC2_TASK_PROMPTS.get(task_metadata.name, {})
             prompt_key = "query" if prompt_type == PromptType.query else "document"
             instruction = task_prompts.get(prompt_key, "")
+            if has_video and task_metadata.name in _VLM2VEC2_VIDEO_CLS_INSTRUCTIONS:
+                # classification passes no prompt_type; the video side gets the
+                # dataset instruction, the labels none
+                instruction = _VLM2VEC2_VIDEO_CLS_INSTRUCTIONS[task_metadata.name]
 
             prefix_tokens: list[str] = []
             if has_image:

@@ -1,0 +1,64 @@
+{
+    "test": {
+        "num_samples": 11020,
+        "number_of_characters": 2544138,
+        "unique_pairs": 5130,
+        "text1_statistics": {
+            "total_text_length": 1192532,
+            "min_text_length": 8,
+            "average_text_length": 108.21524500907441,
+            "max_text_length": 299,
+            "unique_texts": 284
+        },
+        "text2_statistics": {
+            "total_text_length": 1351606,
+            "min_text_length": 8,
+            "average_text_length": 122.6502722323049,
+            "max_text_length": 299,
+            "unique_texts": 288
+        },
+        "image1_statistics": null,
+        "image2_statistics": null,
+        "audio1_statistics": null,
+        "audio2_statistics": null,
+        "video1_statistics": null,
+        "video2_statistics": null,
+        "label_statistics": {
+            "min_score": 0.0,
+            "avg_score": 0.5752968012816596,
+            "max_score": 0.9442539239162606
+        },
+        "hf_subset_descriptive_stats": {
+            "rai": {
+                "num_samples": 11020,
+                "number_of_characters": 2544138,
+                "unique_pairs": 5130,
+                "text1_statistics": {
+                    "total_text_length": 1192532,
+                    "min_text_length": 8,
+                    "average_text_length": 108.21524500907441,
+                    "max_text_length": 299,
+                    "unique_texts": 284
+                },
+                "text2_statistics": {
+                    "total_text_length": 1351606,
+                    "min_text_length": 8,
+                    "average_text_length": 122.6502722323049,
+                    "max_text_length": 299,
+                    "unique_texts": 288
+                },
+                "image1_statistics": null,
+                "image2_statistics": null,
+                "audio1_statistics": null,
+                "audio2_statistics": null,
+                "video1_statistics": null,
+                "video2_statistics": null,
+                "label_statistics": {
+                    "min_score": 0.0,
+                    "avg_score": 0.5752968012816596,
+                    "max_score": 0.9442539239162606
+                }
+            }
+        }
+    }
+}

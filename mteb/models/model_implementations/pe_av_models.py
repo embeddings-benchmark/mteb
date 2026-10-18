@@ -19,6 +19,18 @@ if TYPE_CHECKING:
     from mteb.types._encoder_io import AudioInput, TextInput, VideoInput
 
 
+def _other_side_modalities(
+    task_metadata: TaskMetadata, prompt_type: PromptType | None
+) -> set[str]:
+    """Modalities of the side this input is compared with."""
+    if prompt_type is None:
+        return set(task_metadata.modalities)
+    other_side = (
+        PromptType.document if prompt_type == PromptType.query else PromptType.query
+    )
+    return set(task_metadata.get_modalities(other_side))
+
+
 class PEAudioVisualWrapper(AbsEncoder):
     """MTEB wrapper for PE-AV (Perception Encoder Audio-Visual).
 
@@ -101,15 +113,7 @@ class PEAudioVisualWrapper(AbsEncoder):
 
         # Meta's eval embeds text with the head of the modality it is compared with
         # (encode_video_text / encode_audio_text / encode_audio_video_text)
-        if prompt_type is None:
-            other = set(task_metadata.modalities) - {"text"}
-        else:
-            other_side = (
-                PromptType.document
-                if prompt_type == PromptType.query
-                else PromptType.query
-            )
-            other = set(task_metadata.get_modalities(other_side)) - {"text"}
+        other = _other_side_modalities(task_metadata, prompt_type) - {"text"}
         if other == {"video"}:
             head = self.model.video_model.text_video_head
         elif other == {"audio"}:
@@ -331,8 +335,15 @@ class PEAudioVisualWrapper(AbsEncoder):
                 inputs, prompt_type=prompt_type, task_metadata=task_metadata, **kwargs
             )
 
-        # video+text -> audio / audio+text -> video queries: the model's fused heads
-        if has_text and has_video != has_audio:
+        # video+text -> audio / audio+text -> video: the fused heads are only
+        # trained against that other modality (PeAudioVideoModel.forward scores
+        # audio_plus_text @ video.T and video_plus_text @ audio.T)
+        fused_target = {"audio"} if has_video else {"video"}
+        if (
+            has_text
+            and has_video != has_audio
+            and _other_side_modalities(task_metadata, prompt_type) == fused_target
+        ):
             return self.get_media_plus_text_embeddings(
                 inputs, use_video=has_video, **kwargs
             )
@@ -455,6 +466,8 @@ _PE_AV_COMMON = dict(
     use_instructions=False,
     training_datasets=_PE_AV_TRAINING,
     citation=_PE_AV_CITATION,
+    # PeAudioVideoModel ships with transformers 5
+    extra_requirements_groups=["transformers-v5"],
 )
 
 
