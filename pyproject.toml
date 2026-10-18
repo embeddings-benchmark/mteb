@@ -414,6 +414,7 @@ preview = true
 ]
 # a script rather than a test: it reports what it checked on stdout
 "tests/test_validate_metadata/check_citations.py" = ["T201"]
+"tests/test_validate_metadata/check_preprints.py" = ["T201"]
 "docs/*" = [
     "D",
     "DOC",
