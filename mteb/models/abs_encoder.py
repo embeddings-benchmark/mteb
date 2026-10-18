@@ -5,6 +5,7 @@ import warnings
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any, Literal, cast, get_args, overload
 
+from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks.task_metadata import TaskType
 from mteb.similarity_functions import (
     _upcast_low_precision,
@@ -38,16 +39,21 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-PromptSource = Literal[
-    "custom_prompt", "default_task_prompt", "task_type_prompt", "encode_type_prompt"
-]
-"""Source of an instruction used by `AbsEncoder.get_instruction`.
 
-- `custom_prompt`: `prompts_dict[task_name]` defined in the model implementation.
-- `default_task_prompt`: The `prompt` defined in the task metadata.
-- `task_type_prompt`: `prompts_dict[task_type]` defined in the model implementation.
-- `encode_type_prompt`: `prompts_dict[prompt_type]` (e.g. `"query"`) defined in the model implementation.
-"""
+class PromptSource(HelpfulStrEnum):
+    """Source of an instruction used by `AbsEncoder.get_instruction`.
+
+    Attributes:
+        CUSTOM_PROMPT: `prompts_dict[task_name]` defined in the model implementation.
+        DEFAULT_TASK_PROMPT: The `prompt` defined in the task metadata.
+        TASK_TYPE_PROMPT: `prompts_dict[task_type]` defined in the model implementation.
+        ENCODE_TYPE_PROMPT: `prompts_dict[prompt_type]` (e.g. `"query"`) defined in the model implementation.
+    """
+
+    CUSTOM_PROMPT = "custom_prompt"
+    DEFAULT_TASK_PROMPT = "default_task_prompt"
+    TASK_TYPE_PROMPT = "task_type_prompt"
+    ENCODE_TYPE_PROMPT = "encode_type_prompt"
 
 
 class AbsEncoder(ABC):
@@ -72,10 +78,10 @@ class AbsEncoder(ABC):
     instruction_template: str | Callable[[str, PromptType | None], str] | None = None
     prompts_dict: dict[str, str] | None = None
     prompt_priority: Sequence[PromptSource] = (
-        "custom_prompt",
-        "task_type_prompt",
-        "encode_type_prompt",
-        "default_task_prompt",
+        PromptSource.CUSTOM_PROMPT,
+        PromptSource.TASK_TYPE_PROMPT,
+        PromptSource.ENCODE_TYPE_PROMPT,
+        PromptSource.DEFAULT_TASK_PROMPT,
     )
 
     def get_prompt_name(
@@ -225,12 +231,12 @@ class AbsEncoder(ABC):
         """
         prompt = task_metadata.prompt
         prompt_dict_keys: dict[PromptSource, str | None] = {
-            "custom_prompt": task_metadata.name,
-            "task_type_prompt": task_metadata.type,
-            "encode_type_prompt": prompt_type.value if prompt_type else None,
+            PromptSource.CUSTOM_PROMPT: task_metadata.name,
+            PromptSource.TASK_TYPE_PROMPT: task_metadata.type,
+            PromptSource.ENCODE_TYPE_PROMPT: prompt_type.value if prompt_type else None,
         }
         for source in self.prompt_priority:
-            if source == "default_task_prompt":
+            if source == PromptSource.DEFAULT_TASK_PROMPT:
                 task_prompt = task_metadata.prompt
                 if isinstance(task_prompt, dict) and prompt_type:
                     task_prompt = task_prompt.get(prompt_type.value)

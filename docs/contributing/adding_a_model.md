@@ -122,21 +122,28 @@ model = ModelMeta(
 
 For instruction models that use `InstructSentenceTransformerModel` (or another wrapper built on `AbsEncoder.get_instruction`), instructions defined in `prompts_dict` are selected in the following order by default:
 
-1. Task name prompt from `prompts_dict` (`"custom_prompt"`)
-2. Task type prompt from `prompts_dict` (`"task_type_prompt"`)
-3. Prompt type (`"query"` or `"document"`) prompt from `prompts_dict` (`"encode_type_prompt"`)
-4. Prompt defined in the task metadata (`"default_task_prompt"`)
+1. Task name prompt from `prompts_dict` (`PromptSource.CUSTOM_PROMPT`)
+2. Task type prompt from `prompts_dict` (`PromptSource.TASK_TYPE_PROMPT`)
+3. Prompt type (`"query"` or `"document"`) prompt from `prompts_dict` (`PromptSource.ENCODE_TYPE_PROMPT`)
+4. Prompt defined in the task metadata (`PromptSource.DEFAULT_TASK_PROMPT`)
 
 This means that generic task type or prompt type prompts override the prompt defined in the task.
 If you want the prompt from the task metadata to take priority over the generic prompts of the model, change the order with `prompt_priority`:
 
 ```python
+from mteb.models.abs_encoder import PromptSource
+
 model = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template="Instruct: {instruction}\nQuery: ",
         prompts_dict={"query": "Given a query, retrieve relevant passages"},
-        prompt_priority=("custom_prompt", "default_task_prompt", "task_type_prompt", "encode_type_prompt"),
+        prompt_priority=[
+            PromptSource.CUSTOM_PROMPT,
+            PromptSource.DEFAULT_TASK_PROMPT,
+            PromptSource.TASK_TYPE_PROMPT,
+            PromptSource.ENCODE_TYPE_PROMPT,
+        ],
     ),
     ...
 )

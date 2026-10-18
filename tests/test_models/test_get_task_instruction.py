@@ -5,7 +5,8 @@ import pytest
 
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.mocks.mock_tasks import MockRetrievalTask
-from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.abs_encoder import AbsEncoder, PromptSource
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.types import PromptType
 
 
@@ -62,10 +63,10 @@ def test_get_task_instruction(template, prompt_type, expected):
 
 
 TASK_FIRST = (
-    "custom_prompt",
-    "default_task_prompt",
-    "task_type_prompt",
-    "encode_type_prompt",
+    PromptSource.CUSTOM_PROMPT,
+    PromptSource.DEFAULT_TASK_PROMPT,
+    PromptSource.TASK_TYPE_PROMPT,
+    PromptSource.ENCODE_TYPE_PROMPT,
 )
 
 
@@ -101,3 +102,11 @@ def test_get_instruction_prompt_priority(
         enc.prompt_priority = prompt_priority
     meta = _meta(prompt={"query": QUERY_INSTR})
     assert enc.get_instruction(meta, prompt_type) == expected
+
+
+def test_instruct_wrapper_invalid_prompt_priority():
+    # validated before the model is loaded
+    with pytest.raises(ValueError, match="not a valid PromptSource"):
+        InstructSentenceTransformerModel(
+            "unused", revision="unused", prompt_priority=["custom_task"]
+        )
