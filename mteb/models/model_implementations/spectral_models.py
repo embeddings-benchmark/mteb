@@ -410,9 +410,7 @@ class SpectralFeaturizer:
         return x
 
 
-# ============================================================================
 # UNIFIED MODEL LOADER (Serves both V1 and V2)
-# ============================================================================
 
 
 class SpectralEmbedModel:
@@ -501,9 +499,7 @@ class SpectralEmbedModel:
         return (_unit_rows(embeddings1) * _unit_rows(embeddings2)).sum(axis=1)
 
 
-# ============================================================================
 # MODEL METADATA DEFINITIONS
-# ============================================================================
 
 spectral_embed_v1_140m = ModelMeta(
     loader=SpectralEmbedModel,
