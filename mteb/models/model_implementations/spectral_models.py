@@ -31,28 +31,21 @@ def _unit_rows(x: Array) -> np.ndarray:
 
 
 def _cosine_similarity(embeddings1: Array, embeddings2: Array) -> np.ndarray:
-    """Cosine similarity that returns a 0-d array for two single vectors.
-
-    Some evaluators (e.g. summarization) call ``float(model.similarity(a, b))`` on
-    1D embeddings, which fails on a 1x1 array. Matrix inputs are unchanged.
-    """
+    """Cosine similarity that returns a 0-d array for two single vectors."""
     a = np.asarray(embeddings1)
     b = np.asarray(embeddings2)
     sim = _unit_rows(a) @ _unit_rows(b).T
     return sim.reshape(()) if a.ndim == 1 and b.ndim == 1 else sim
 
 
-# Text normalisation and featurisation. These must match the training setup
-# exactly, otherwise the learned projection matrix no longer lines up.
+# ============================================================================
+# V1 FEATURIZATION & NORMALIZATION (Retained for V1 backward compatibility)
+# ============================================================================
 
 _LATEX_CMD_RE = re.compile(r"\\([A-Za-z]+)")
 _WS_RE = re.compile(r"\s+")
 _WORD_RE = re.compile(r"[a-z0-9]+")
 
-# Lowercase Greek letters (U+03B1..U+03C9, incl. final sigma) are named after the
-# last word of their Unicode name, e.g. "GREEK SMALL LETTER ALPHA" -> "alpha".
-# Unicode names lambda differently, so it is overridden, as are the variant forms
-# (phi, epsilon and theta symbols).
 _GREEK = {
     chr(c): unicodedata.name(chr(c)).split()[-1].lower() for c in range(0x3B1, 0x3CA)
 }
@@ -78,7 +71,6 @@ _DETERMINERS = frozenset({
 _TRANSLATION = {ord(c): f" {name} " for c, name in {**_GREEK, **_SYMBOLS}.items()}
 _TRANSLATION.update({ord(c): " " for c in "{}$\\"})
 
-# The first suffix is split in two so that `typos` does not flag it as a misspelling.
 _ADJ_SUFFIXES = (
     "ous",
     "fu" + "l",
@@ -92,13 +84,12 @@ _ADJ_SUFFIXES = (
     "y",
 )
 
-# Per-channel weights; "sk" (skip-grams) is weighted by 1.5 / distance instead.
 _CHANNEL_WEIGHTS = {"w": 2.0, "bi": 3.0, "ch": 1.0, "wp": 1.0, "tri": 2.0, "mh": 2.5}
 _POS_BINS = 4
 _SKIP_WINDOW = 3
 
 
-def _normalize(text: str) -> str:
+def _normalize_v1(text: str) -> str:
     text = _LATEX_CMD_RE.sub(r" \1 ", str(text)).translate(_TRANSLATION)
     return _WS_RE.sub(" ", text).strip().lower()
 
@@ -107,56 +98,48 @@ def _is_adjective(word: str) -> bool:
     return len(word) > 3 and word.endswith(_ADJ_SUFFIXES)
 
 
-def _feature_keys(text: str) -> Iterator[str]:
-    """Yield one string key per feature occurrence, tagged by channel."""
-    cleaned = _normalize(text)
+def _feature_keys_v1(text: str) -> Iterator[str]:
+    cleaned = _normalize_v1(text)
     words = _WORD_RE.findall(cleaned)
     n = len(words)
 
-    # words, word bigrams
     yield from (f"w:{w}" for w in words)
     yield from (f"bi:{a}_{b}" for a, b in zip(words, words[1:], strict=False))
 
-    # character 3- and 4-grams over the padded string
     padded = f" {cleaned} "
     for size in (3, 4):
         yield from (f"ch:{padded[i : i + size]}" for i in range(len(padded) - size + 1))
 
-    # word + coarse position in the text
     for i, w in enumerate(words):
         yield f"wp:{w}@{min(i * _POS_BINS // n, _POS_BINS - 1)}"
 
-    # symmetric skip-grams
     for i in range(n):
         for d in range(1, min(_SKIP_WINDOW, n - 1 - i) + 1):
             yield f"sk:{d}:{words[i]}_{words[i + d]}"
             yield f"sk:{d}:{words[i + d]}_{words[i]}"
 
-    # word trigrams
     yield from (
         f"tri:{a}_{b}_{c}" for a, b, c in zip(words, words[1:], words[2:], strict=False)
     )
 
-    # modifier-head pairs (determiner/adjective followed by a non-determiner)
     for a, b in zip(words, words[1:], strict=False):
         if (a in _DETERMINERS or _is_adjective(a)) and b not in _DETERMINERS:
             yield f"mh:{a}#{b}"
 
 
 @lru_cache(maxsize=500_000)
-def _bucket(key: str, seed: int, dim_h: int) -> int:
+def _bucket_v1(key: str, seed: int, dim_h: int) -> int:
     return zlib.crc32(f"{seed}:{key}".encode()) % dim_h
 
 
-def _featurize(text: str, seed: int, dim_h: int) -> tuple[np.ndarray, np.ndarray]:
-    """Hash a text into an L2-normalised sparse vector (indices, values)."""
+def _featurize_v1(text: str, seed: int, dim_h: int) -> tuple[np.ndarray, np.ndarray]:
     buckets: dict[int, float] = {}
-    for key, tf in Counter(_feature_keys(text)).items():
+    for key, tf in Counter(_feature_keys_v1(text)).items():
         kind, _, rest = key.partition(":")
         scale = (
             1.5 / int(rest.split(":", 1)[0]) if kind == "sk" else _CHANNEL_WEIGHTS[kind]
         )
-        idx = _bucket(key, seed, dim_h)
+        idx = _bucket_v1(key, seed, dim_h)
         buckets[idx] = buckets.get(idx, 0.0) + (1.0 + math.log(tf)) * scale
 
     n = len(buckets)
@@ -168,93 +151,8 @@ def _featurize(text: str, seed: int, dim_h: int) -> tuple[np.ndarray, np.ndarray
     return indices, values
 
 
-class SpectralEmbedModel:
-    """CPU-only embedding model: hashed n-gram features -> linear projection."""
-
-    def __init__(
-        self,
-        model_name: str,
-        revision: str | None = None,
-        **kwargs: Any,
-    ) -> None:
-        npz_file = hf_hub_download(
-            repo_id=model_name,
-            filename="spectral-embed-v1-140m.npz",
-            revision=revision,
-        )
-        with np.load(npz_file, allow_pickle=False) as d:
-            # Stored as (k, H); keep only the transposed (H, k) copy for X @ W.T
-            self.w_t = np.ascontiguousarray(d["W"].T, dtype=np.float32)
-            self.b = np.asarray(d["b"], dtype=np.float32)
-            self.k = int(d["k"])
-            self.dim_h = int(d["H"])
-            self.seed = int(d["hash_seed"])
-
-    def _embed(self, texts: list[str]) -> np.ndarray:
-        feats = [_featurize(t, self.seed, self.dim_h) for t in texts]
-        indptr = np.cumsum([0, *(len(idx) for idx, _ in feats)])
-        x = sp.csr_matrix(
-            (
-                np.concatenate([val for _, val in feats]),
-                np.concatenate([idx for idx, _ in feats]),
-                indptr,
-            ),
-            shape=(len(texts), self.dim_h),
-        )
-        z = np.asarray(x @ self.w_t) + self.b
-        return z / np.maximum(np.linalg.norm(z, axis=1, keepdims=True), 1e-12)
-
-    def encode(
-        self,
-        inputs: DataLoader[BatchedInput],
-        *,
-        task_metadata: TaskMetadata,
-        hf_split: str,
-        hf_subset: str,
-        prompt_type: PromptType | None = None,
-        **kwargs: Any,
-    ) -> np.ndarray:
-        parts = [self._embed(list(batch["text"])) for batch in inputs]
-        if not parts:
-            return np.empty((0, self.k), dtype=np.float32)
-        return np.concatenate(parts, axis=0)
-
-    @staticmethod
-    def similarity(embeddings1: Array, embeddings2: Array) -> np.ndarray:
-        return _unit_rows(embeddings1) @ _unit_rows(embeddings2).T
-
-    @staticmethod
-    def similarity_pairwise(embeddings1: Array, embeddings2: Array) -> np.ndarray:
-        return (_unit_rows(embeddings1) * _unit_rows(embeddings2)).sum(axis=1)
-
-
-spectral_embed_v1_140m = ModelMeta(
-    loader=SpectralEmbedModel,
-    name="JMullings/spectral-embed-v1-140m",
-    revision="39169ba7aa8d1de29da32d97a6129bca790e9193",
-    release_date="2026-10-06",
-    languages=["eng-Latn"],
-    n_parameters=134_219_776,
-    n_embedding_parameters=134_219_776,
-    memory_usage_mb=512,
-    max_tokens=512,
-    embed_dim=2048,
-    license="mit",
-    superseded_by="JMullings/spectral-embed-v2-140m",
-    open_weights=True,
-    public_training_code=None,
-    public_training_data=None,
-    framework=["NumPy"],
-    reference="https://huggingface.co/JMullings/spectral-embed-v1-140m",
-    similarity_fn_name="cosine",
-    use_instructions=False,
-    training_datasets={"NFCorpus"},
-    citation=None,
-)
-
-
 # ============================================================================
-# VERSION 2 IMPLEMENTATION (Canonical spectral_v6: BLAKE2b + Porter + Stop)
+# V2 FEATURIZATION (Canonical spectral_v6: BLAKE2b + Porter + Stop)
 # ============================================================================
 
 _WORD_RE_UNICODE = re.compile(r"[^\W_]+")
@@ -397,7 +295,7 @@ CHANNELS_V6 = {
 
 
 class SpectralFeaturizer:
-    """Exact self-contained implementation of the canonical spectral_v6 schema."""
+    """Self-contained implementation of the canonical spectral_v6 schema."""
 
     def __init__(self, dim_h: int, seed: int, avgdl: float, k1: float, b: float):
         self.H = dim_h
@@ -516,16 +414,29 @@ class SpectralFeaturizer:
         return x
 
 
-class SpectralEmbedV2Model:
+# ============================================================================
+# UNIFIED MODEL LOADER (Serves both V1 and V2)
+# ============================================================================
+
+
+class SpectralEmbedModel:
+    """CPU-only linear spectral embedding model (supports v1 and v2)."""
+
     def __init__(
         self,
         model_name: str,
         revision: str | None = None,
         **kwargs: Any,
     ) -> None:
+        self.model_name = model_name
+        self.is_v2 = "v2" in model_name
+
+        filename = (
+            "spectral-embed-v2-140m.npz" if self.is_v2 else "spectral-embed-v1-140m.npz"
+        )
         npz_file = hf_hub_download(
             repo_id=model_name,
-            filename="spectral-embed-v2-140m.npz",
+            filename=filename,
             revision=revision,
         )
         with np.load(npz_file, allow_pickle=False) as d:
@@ -534,20 +445,35 @@ class SpectralEmbedV2Model:
             self.k = int(d["k"])
             self.dim_h = int(d["H"])
             self.seed = int(d["hash_seed"])
-            self.idf = np.asarray(d["idf"], dtype=np.float32)
-            avgdl = float(d["avgdl"])
-            weighting = json.loads(str(d["codec_params_json"]))["weighting"]
-            k1 = float(weighting["k1"])
-            bm25_b = float(weighting["b"])
 
-        self.featurizer = SpectralFeaturizer(
-            dim_h=self.dim_h, seed=self.seed, avgdl=avgdl, k1=k1, b=bm25_b
-        )
+            if self.is_v2:
+                self.idf = np.asarray(d["idf"], dtype=np.float32)
+                avgdl = float(d["avgdl"])
+                weighting = json.loads(str(d["codec_params_json"]))["weighting"]
+                k1 = float(weighting["k1"])
+                bm25_b = float(weighting["b"])
+                self.featurizer = SpectralFeaturizer(
+                    dim_h=self.dim_h, seed=self.seed, avgdl=avgdl, k1=k1, b=bm25_b
+                )
 
     def _embed(self, texts: list[str]) -> np.ndarray:
         if not texts:
             return np.empty((0, self.k), dtype=np.float32)
-        x = self.featurizer.transform(texts, idf=self.idf)
+
+        if self.is_v2:
+            x = self.featurizer.transform(texts, idf=self.idf)
+        else:
+            feats = [_featurize_v1(t, self.seed, self.dim_h) for t in texts]
+            indptr = np.cumsum([0, *(len(idx) for idx, _ in feats)])
+            x = sp.csr_matrix(
+                (
+                    np.concatenate([val for _, val in feats]),
+                    np.concatenate([idx for idx, _ in feats]),
+                    indptr,
+                ),
+                shape=(len(texts), self.dim_h),
+            )
+
         z = np.asarray(x @ self.w_t, dtype=np.float32) + self.b
         return _unit_rows(z)
 
@@ -595,8 +521,36 @@ class SpectralEmbedV2Model:
         return (_unit_rows(embeddings1) * _unit_rows(embeddings2)).sum(axis=1)
 
 
+# ============================================================================
+# MODEL METADATA DEFINITIONS
+# ============================================================================
+
+spectral_embed_v1_140m = ModelMeta(
+    loader=SpectralEmbedModel,
+    name="JMullings/spectral-embed-v1-140m",
+    revision="39169ba7aa8d1de29da32d97a6129bca790e9193",
+    release_date="2026-10-06",
+    languages=["eng-Latn"],
+    n_parameters=134_219_776,
+    n_embedding_parameters=134_219_776,
+    memory_usage_mb=512,
+    max_tokens=512,
+    embed_dim=2048,
+    license="mit",
+    superseded_by="JMullings/spectral-embed-v2-140m",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["NumPy"],
+    reference="https://huggingface.co/JMullings/spectral-embed-v1-140m",
+    similarity_fn_name="cosine",
+    use_instructions=False,
+    training_datasets={"NFCorpus"},
+    citation=None,
+)
+
 spectral_embed_v2_140m = ModelMeta(
-    loader=SpectralEmbedV2Model,
+    loader=SpectralEmbedModel,
     name="JMullings/spectral-embed-v2-140m",
     revision="6943d55ebe5e317f00701b574c12d4f39ca6f03b",
     release_date="2026-10-06",
