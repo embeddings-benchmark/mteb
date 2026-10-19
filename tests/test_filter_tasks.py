@@ -158,7 +158,7 @@ def test_filter_tasks_exclude_aggregate_with_task_classes():
     assert len(tasks) == 1
 
 
-@pytest.mark.parametrize("language", ["eng-Latn", "rus-Cyrl", "python"])
+@pytest.mark.parametrize("language", ["eng-Latn", "rus-Cyrl", "zho-Hant", "python"])
 def test_filter_tasks_language_script_and_programming_language(
     all_tasks: list[AbsTask], language: str
 ):

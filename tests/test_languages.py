@@ -43,6 +43,20 @@ test_cases = [
         contains_script=["Latn"],
         not_contains_script=["Cyrl"],
     ),
+    LangScriptTestCase(
+        args={"languages": ["srp-Latn"]},
+        contains_language=["srp", "srp-Latn"],
+        not_contains_language=["srp-Cyrl", "eng-Latn"],
+        contains_script=["Latn"],
+        not_contains_script=["Cyrl"],
+    ),
+    LangScriptTestCase(
+        args={"languages": ["srp", "srp-Latn", "eng-Latn"]},
+        contains_language=["srp-Cyrl", "srp-Latn", "eng-Latn"],
+        not_contains_language=["eng-Cyrl"],
+        contains_script=["Latn"],
+        not_contains_script=["Cyrl"],
+    ),
 ]
 
 

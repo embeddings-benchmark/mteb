@@ -55,6 +55,14 @@ def test_get_tasks_filtering():
                 )
 
 
+def test_get_tasks_language_script_with_script_filter():
+    tasks = get_tasks(languages=["srp-Latn"], script=["Latn"])
+
+    assert tasks
+    for task in tasks:
+        assert "srp-Latn" in task.metadata.bcp47_codes
+
+
 @pytest.mark.parametrize("script", [["Cyrl"], None])
 @pytest.mark.parametrize("task_types", [["Classification"], ["Clustering"], None])
 @pytest.mark.parametrize("modalities", [["text"], ["image"], None])
