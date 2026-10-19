@@ -38,9 +38,7 @@ def _cosine_similarity(embeddings1: Array, embeddings2: Array) -> np.ndarray:
     return sim.reshape(()) if a.ndim == 1 and b.ndim == 1 else sim
 
 
-# ============================================================================
 # V1 FEATURIZATION & NORMALIZATION (Retained for V1 backward compatibility)
-# ============================================================================
 
 _LATEX_CMD_RE = re.compile(r"\\([A-Za-z]+)")
 _WS_RE = re.compile(r"\s+")
@@ -151,9 +149,7 @@ def _featurize_v1(text: str, seed: int, dim_h: int) -> tuple[np.ndarray, np.ndar
     return indices, values
 
 
-# ============================================================================
 # V2 FEATURIZATION (Canonical spectral_v6: BLAKE2b + Porter + Stop)
-# ============================================================================
 
 _WORD_RE_UNICODE = re.compile(r"[^\W_]+")
 
@@ -479,38 +475,22 @@ class SpectralEmbedModel:
 
     def encode(
         self,
-        inputs: DataLoader[BatchedInput] | list[str],
+        inputs: DataLoader[BatchedInput],
         *,
-        task_metadata: TaskMetadata | None = None,
-        hf_split: str | None = None,
-        hf_subset: str | None = None,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
-        batch_size: int = 128,
         **kwargs: Any,
     ) -> np.ndarray:
-        if isinstance(inputs, (list, tuple)) and (
-            not inputs or isinstance(inputs[0], str)
-        ):
+        if isinstance(inputs, (list, tuple)):
             texts = [str(x) for x in inputs]
-            parts = [
-                self._embed(texts[i : i + batch_size])
-                for i in range(0, len(texts), batch_size)
-            ]
-            return (
-                np.vstack(parts) if parts else np.empty((0, self.k), dtype=np.float32)
-            )
+            return self._embed(texts)
 
-        parts = []
-        for batch in inputs:
-            val = (
-                batch.get("text", batch.get("query", []))
-                if isinstance(batch, dict)
-                else batch
-            )
-            texts = list(val) if isinstance(val, (list, tuple)) else [str(val)]
-            if texts:
-                parts.append(self._embed(texts))
-        return np.vstack(parts) if parts else np.empty((0, self.k), dtype=np.float32)
+        parts = [self._embed(list(batch["text"])) for batch in inputs]
+        if not parts:
+            return np.empty((0, self.k), dtype=np.float32)
+        return np.concatenate(parts, axis=0)
 
     @staticmethod
     def similarity(embeddings1: Array, embeddings2: Array) -> np.ndarray:
