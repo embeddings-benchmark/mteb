@@ -399,7 +399,7 @@ class SpectralFeaturizer:
             from nltk.stem import PorterStemmer
         except ImportError as e:
             raise ImportError(
-                "spectral-embed-v2-140m needs nltk for stemming: pip install nltk"
+                "spectral-embed-v2-140m needs nltk for stemming: pip install mteb[spectral]"
             ) from e
         self._stem = lru_cache(maxsize=500_000)(PorterStemmer().stem)
 
@@ -606,4 +606,5 @@ spectral_embed_v2_140m = ModelMeta(
     citation=None,
     adapted_from="JMullings/spectral-embed-v1-140m",
     superseded_by=None,
+    extra_requirements_groups=["spectral"],
 )
