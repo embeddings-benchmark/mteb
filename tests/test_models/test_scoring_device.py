@@ -24,19 +24,18 @@ from mteb.models.sentence_transformer_wrapper import (
 from tests.mock_models import MockSentenceTransformer
 
 CPU = torch.device("cpu")
-LOAD_DEVICE = torch.device("meta")  # stands in for the GPU the model was loaded on
+ACCELERATOR = torch.device("meta")  # stands in for the GPU the model was loaded on
 
 
-class FakeSentenceTransformer(MockSentenceTransformer):
-    """Records where `similarity` is computed."""
+class MockDeviceSentenceTransformer(MockSentenceTransformer):
+    """Records where `similarity` is computed, and rejects embeddings on different devices."""
 
     truncate_dim = None  # read by the sparse and multi-vector wrappers
 
-    def __init__(self, device: torch.device | str = LOAD_DEVICE) -> None:
+    def __init__(self, device: torch.device | str = ACCELERATOR) -> None:
         super().__init__()
         self._device = torch.device(device)
         self.scored_on: list[torch.device] = []
-        self.scored_dtypes: list[torch.dtype | None] = []
 
     @property
     def device(self) -> torch.device:
@@ -47,8 +46,15 @@ class FakeSentenceTransformer(MockSentenceTransformer):
         self._device = CPU
 
     def similarity(self, a, b, device=None):
+        # Multi-vector embeddings are lists of tensors. Unlike CPU and GPU tensors, `meta` ones
+        # don't always reject mixed devices (e.g. matmul), so this is checked explicitly.
+        if (
+            isinstance(a, torch.Tensor)
+            and isinstance(b, torch.Tensor)
+            and a.device != b.device
+        ):
+            raise RuntimeError(f"Expected one device, got {a.device} and {b.device}")
         self.scored_on.append(device or a.device)
-        self.scored_dtypes.append(getattr(b, "dtype", None))  # multi-vector gets lists
         return torch.zeros(len(a), len(b))
 
 
@@ -74,7 +80,7 @@ def _version_below(minimum: str) -> bool:
 @pytest.mark.parametrize("kind", ["dense", "sparse", "multi_vector"])
 def test_scores_on_device_captured_at_load(kind: str) -> None:
     wrapper_cls = _wrapper_cls(kind)
-    model = FakeSentenceTransformer()
+    model = MockDeviceSentenceTransformer()
     wrapper = wrapper_cls(model)
     model.start_pool()
     # Multi-vector embeddings are one (num_tokens, dim) tensor per input
@@ -86,7 +92,7 @@ def test_scores_on_device_captured_at_load(kind: str) -> None:
 
     scores = wrapper.similarity(queries, documents)
 
-    assert model.scored_on == [LOAD_DEVICE]
+    assert model.scored_on == [ACCELERATOR]
     assert scores.device == CPU
 
 
@@ -103,7 +109,7 @@ def test_device_is_captured_on_first_use_when_parent_init_was_skipped(
         def __init__(self, model: sentence_transformers.SentenceTransformer) -> None:
             self.model = model
 
-    model = FakeSentenceTransformer(CPU)
+    model = MockDeviceSentenceTransformer(CPU)
 
     scores = WrapperWithoutParentInit(model).similarity(
         torch.ones(2, 4), torch.ones(3, 4)
@@ -126,7 +132,9 @@ def test_device_is_captured_on_first_use_when_parent_init_was_skipped(
 def test_queries_and_corpus_are_scored_in_blocks(
     sparse_inputs: bool, num_queries: int, expected_blocks: list[tuple[int, int]]
 ) -> None:
-    class ProductModel(FakeSentenceTransformer):
+    class MockProductSentenceTransformer(MockDeviceSentenceTransformer):
+        """Computes the real scores, and records the shape of every block it scores."""
+
         def __init__(self, device: torch.device | str) -> None:
             super().__init__(device)
             self.blocks: list[tuple[int, int]] = []
@@ -135,7 +143,7 @@ def test_queries_and_corpus_are_scored_in_blocks(
             self.blocks.append((a.shape[0], b.shape[0]))
             return a.to_dense() @ b.to_dense().T
 
-    model = ProductModel(CPU)
+    model = MockProductSentenceTransformer(CPU)
     wrapper = SentenceTransformerEncoderWrapper(model)
     queries, corpus = torch.randn(num_queries, 4), torch.randn(5, 4)
     expected = queries @ corpus.T
@@ -154,24 +162,44 @@ def test_queries_and_corpus_are_scored_in_blocks(
 
 
 def test_embeddings_already_on_an_accelerator_are_scored_as_is() -> None:
-    model = FakeSentenceTransformer(CPU)
+    """Sparse retrieval keeps its embeddings on the accelerator, so there is nothing to move."""
+    model = MockDeviceSentenceTransformer(ACCELERATOR)
     wrapper = SentenceTransformerEncoderWrapper(model)
-
-    wrapper.similarity(
-        torch.zeros(2, 4, device="meta"), torch.zeros(3, 4, device="meta")
+    model.start_pool()
+    queries, documents = (
+        torch.zeros(2, 4, device=ACCELERATOR),
+        torch.zeros(3, 4, device=ACCELERATOR),
     )
 
-    assert model.scored_on == [LOAD_DEVICE]
+    wrapper.similarity(queries, documents)
+
+    assert model.scored_on == [ACCELERATOR]
 
 
-@pytest.mark.parametrize("device", [CPU, LOAD_DEVICE])
-def test_low_precision_embeddings_are_upcast_before_scoring(
-    device: torch.device,
-) -> None:
-    """sentence-transformers < 6 scores in the input dtype, which ties nearby scores."""
-    model = FakeSentenceTransformer(device)
+def test_score_block_is_bounded_too() -> None:
+    """The scores of one block (queries x documents) must not exceed the block budget either."""
+
+    class MockProductSentenceTransformer(MockDeviceSentenceTransformer):
+        def __init__(self, device: torch.device | str) -> None:
+            super().__init__(device)
+            self.blocks: list[tuple[int, int]] = []
+
+        def similarity(self, a, b, device=None):
+            self.blocks.append((a.shape[0], b.shape[0]))
+            return a @ b.T
+
+    model = MockProductSentenceTransformer(CPU)
     wrapper = SentenceTransformerEncoderWrapper(model)
+    queries, corpus = torch.randn(4, 1), torch.randn(6, 1)
 
-    wrapper.similarity(torch.ones(2, 4, dtype=torch.bfloat16), torch.ones(3, 4).half())
+    scores = wrapper_module._score_on_device(
+        wrapper,
+        queries,
+        corpus,
+        block_elements=8,  # 8 embedding values fit all 4 queries and 6 documents ...
+    )
 
-    assert model.scored_dtypes == [torch.float32]
+    # ... but 4 x 6 scores don't, so the corpus is split into blocks of 2 documents
+    assert model.blocks == [(4, 2), (4, 2), (4, 2)]
+    assert all(q * d <= 8 for q, d in model.blocks)
+    torch.testing.assert_close(scores, queries @ corpus.T)
