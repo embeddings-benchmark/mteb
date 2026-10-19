@@ -1,5 +1,6 @@
 """Test cases for the ResultCache class in the mteb.cache module."""
 
+import shutil
 import subprocess
 from pathlib import Path
 from typing import Any, cast
@@ -10,6 +11,10 @@ import pytest
 
 import mteb
 from mteb.cache import LoadExperimentEnum, ResultCache
+from mteb.cache.result_cache import (
+    CopyResultsAction,
+    _remote_model_dir,
+)
 from mteb.mocks.mock_tasks import MockRetrievalTask
 from mteb.mocks.mock_tasks.clustering import MockMultilingualClusteringTask
 from mteb.models import ModelMeta
@@ -622,6 +627,155 @@ def test_submit_results_with_fake_remote(tmp_path: Path):
         )
 
 
+def test_submit_results_only_given_tasks(tmp_path: Path):
+    cache_path, remote_path = _setup_fake_remote(tmp_path)
+    test_model, _ = _setup_test_model_results(cache_path)
+    other_task = MockMultilingualClusteringTask()
+    mteb.evaluate(
+        mteb.get_model("mteb/baseline-random-encoder"),
+        other_task,
+        cache=ResultCache(cache_path=cache_path),
+    )
+    cache = ResultCache(cache_path=cache_path)
+
+    with patch.object(cache, "download_from_remote", return_value=None):
+        result = cache.submit_results(
+            models=[test_model], tasks=[MockRetrievalTask()], create_pr=False
+        )
+
+    assert result["result_count"] == 1
+    committed = _committed_files(remote_path)
+    assert f"{MockRetrievalTask.metadata.name}.json" in committed
+    assert f"{other_task.metadata.name}.json" not in committed
+
+
+def _commit_all(remote_path: Path, message: str) -> None:
+    subprocess.run(["git", "add", "-A"], cwd=remote_path, check=True)
+    subprocess.run(
+        ["git", "commit", "-m", message],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+    )
+
+
+def test_submit_results_skips_submitted_results(tmp_path: Path):
+    """Results already in the results repository are not submitted again"""
+    cache_path, remote_path = _setup_fake_remote(tmp_path)
+    test_model, _ = _setup_test_model_results(cache_path)
+    cache = ResultCache(cache_path=cache_path)
+    remote_dir = _remote_model_dir(cache.remote_results_path, test_model)
+    shutil.copytree(
+        cache.cache_path
+        / "results"
+        / remote_dir.relative_to(cache.remote_results_path),
+        remote_dir,
+    )
+    _commit_all(remote_path, "Add results")
+
+    with patch.object(cache, "download_from_remote", return_value=None):
+        result = cache.submit_results(models=[test_model], create_pr=False)
+
+    assert result["status"] == "no_changes"
+
+
+def test_submit_results_skips_results_of_other_dataset_revision(
+    tmp_path: Path, caplog: pytest.LogCaptureFixture
+):
+    cache_path, remote_path = _setup_fake_remote(tmp_path)
+    test_model, _ = _setup_test_model_results(cache_path)
+    cache = ResultCache(cache_path=cache_path)
+    task_name = MockRetrievalTask.metadata.name
+    local_file = (
+        cache.cache_path
+        / "results"
+        / test_model.model_name_as_path()
+        / cast("str", test_model.revision)
+        / f"{task_name}.json"
+    )
+
+    remote_result = TaskResult.from_disk(local_file)
+    remote_result.dataset_revision = "other-revision"
+    remote_result.scores = {}
+    remote_dir = _remote_model_dir(cache.remote_results_path, test_model)
+    remote_dir.mkdir(parents=True)
+    remote_result.to_disk(remote_dir / f"{task_name}.json")
+    _commit_all(remote_path, "Add results of another dataset revision")
+
+    with patch.object(cache, "download_from_remote", return_value=None):
+        result = cache.submit_results(models=[test_model], create_pr=False)
+
+    assert result["status"] == "no_changes"
+    assert "other-revision" in caplog.text
+
+
+def test_submit_results_message(tmp_path: Path):
+    cache_path, remote_path = _setup_fake_remote(tmp_path)
+    test_model, _ = _setup_test_model_results(cache_path)
+    cache = ResultCache(cache_path=cache_path)
+
+    with (
+        patch.object(cache, "download_from_remote", return_value=None),
+        patch("mteb.cache.result_cache.check_pr_requirements"),
+        patch(
+            "mteb.cache.result_cache.handle_pr_creation_with_cleanup"
+        ) as mock_create_pr,
+    ):
+        cache.submit_results(
+            models=[test_model], create_pr=True, message="Add mock results"
+        )
+
+    commit_title = subprocess.run(
+        ["git", "log", "-1", "--format=%s"],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    assert commit_title == "Add mock results"
+    assert mock_create_pr.call_args.kwargs["pr_title"] == "Add mock results"
+
+
+def test_submit_results_create_pr_checks_requirements_first(tmp_path: Path):
+    """A missing PR setup fails before the results repository is downloaded"""
+    cache = ResultCache(cache_path=tmp_path)
+
+    with (
+        patch(
+            "mteb._reversible_workflow.git_utils._is_package_available",
+            return_value=False,
+        ),
+        patch.object(cache, "download_from_remote") as mock_download,
+        pytest.raises(ImportError, match="PyGithub"),
+    ):
+        cache.submit_results(create_pr=True)
+
+    mock_download.assert_not_called()
+
+
+def test_copy_results_action_reverts_partial_copy_on_failure(tmp_path: Path):
+    """CopyResultsAction is not undone by the workflow when it fails itself, so it has to revert its own copies"""
+    source_dir = tmp_path / "source"
+    source_dir.mkdir()
+    copied, unmergeable = source_dir / "A.json", source_dir / "B.json"
+    copied.write_text("{}", encoding="utf-8")
+    unmergeable.write_text("{}", encoding="utf-8")
+
+    model_meta = ModelMeta.create_empty(
+        overwrites={"name": "org/model", "revision": "1"}
+    )
+    dest_dir = tmp_path / "remote" / model_meta.model_name_as_path() / "1"
+    dest_dir.mkdir(parents=True)
+    (dest_dir / "B.json").write_text("not a task result", encoding="utf-8")
+
+    action = CopyResultsAction({model_meta: [copied, unmergeable]}, tmp_path / "remote")
+    with pytest.raises(Exception):  # noqa: B017, PT011
+        action.do()
+
+    assert not (dest_dir / "A.json").exists()
+    assert (dest_dir / "B.json").read_text(encoding="utf-8") == "not a task result"
+
+
 def test_submit_results(tmp_path: Path):
     cache_path, remote_path = _setup_fake_remote(tmp_path)
     test_model, result_files_copied = _setup_test_model_results(cache_path)
@@ -694,6 +848,7 @@ def test_pr_creation_failure_cleans_up_branch(tmp_path: Path):
     # Mock _create_pull_request to fail.
     with (
         patch.object(cache, "download_from_remote", return_value=None),
+        patch("mteb.cache.result_cache.check_pr_requirements"),
         patch(
             "mteb._reversible_workflow.git_utils.create_pull_request",
             side_effect=Exception("GitHub API error"),

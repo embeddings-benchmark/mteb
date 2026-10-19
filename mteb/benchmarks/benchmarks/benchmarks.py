@@ -3055,6 +3055,119 @@ VIDORE_V3_1 = VidoreBenchmark(
 """,
 )
 
+_VIDORE_V3_1_RERANKING_BM25S = [
+    "Vidore3ComputerScienceBM25sReranking.v2",
+    "Vidore3EnergyBM25sReranking.v2",
+    "Vidore3FinanceEnBM25sReranking.v2",
+    "Vidore3FinanceFrBM25sReranking.v2",
+    "Vidore3HrBM25sReranking.v2",
+    "Vidore3IndustrialBM25sReranking.v2",
+    "Vidore3PharmaceuticalsBM25sReranking.v2",
+    "Vidore3PhysicsBM25sReranking.v2",
+    "Vidore3TelecomBM25sReranking.v2",
+    "Vidore3NuclearBM25sReranking.v2",
+]
+_VIDORE_V3_1_RERANKING_BGEM3 = [
+    "Vidore3ComputerScienceBGEm3Reranking.v2",
+    "Vidore3EnergyBGEm3Reranking.v2",
+    "Vidore3FinanceEnBGEm3Reranking.v2",
+    "Vidore3FinanceFrBGEm3Reranking.v2",
+    "Vidore3HrBGEm3Reranking.v2",
+    "Vidore3IndustrialBGEm3Reranking.v2",
+    "Vidore3PharmaceuticalsBGEm3Reranking.v2",
+    "Vidore3PhysicsBGEm3Reranking.v2",
+    "Vidore3TelecomBGEm3Reranking.v2",
+    "Vidore3NuclearBGEm3Reranking.v2",
+]
+_VIDORE_V3_1_RERANKING_QWEN3_VL_EMBEDDING_2B = [
+    "Vidore3ComputerScienceQwen3VLEmbedding2BReranking.v2",
+    "Vidore3EnergyQwen3VLEmbedding2BReranking.v2",
+    "Vidore3FinanceEnQwen3VLEmbedding2BReranking.v2",
+    "Vidore3FinanceFrQwen3VLEmbedding2BReranking.v2",
+    "Vidore3HrQwen3VLEmbedding2BReranking.v2",
+    "Vidore3IndustrialQwen3VLEmbedding2BReranking.v2",
+    "Vidore3PharmaceuticalsQwen3VLEmbedding2BReranking.v2",
+    "Vidore3PhysicsQwen3VLEmbedding2BReranking.v2",
+    "Vidore3TelecomQwen3VLEmbedding2BReranking.v2",
+    "Vidore3NuclearQwen3VLEmbedding2BReranking.v2",
+]
+_VIDORE_V3_1_RERANKING_NEMOTRON_3_5_EMBED_8B = [
+    "Vidore3ComputerScienceNemotron35Embed8BReranking.v2",
+    "Vidore3EnergyNemotron35Embed8BReranking.v2",
+    "Vidore3FinanceEnNemotron35Embed8BReranking.v2",
+    "Vidore3FinanceFrNemotron35Embed8BReranking.v2",
+    "Vidore3HrNemotron35Embed8BReranking.v2",
+    "Vidore3IndustrialNemotron35Embed8BReranking.v2",
+    "Vidore3PharmaceuticalsNemotron35Embed8BReranking.v2",
+    "Vidore3PhysicsNemotron35Embed8BReranking.v2",
+    "Vidore3TelecomNemotron35Embed8BReranking.v2",
+    "Vidore3NuclearNemotron35Embed8BReranking.v2",
+]
+
+VIDORE_V3_1_RERANKING = VidoreBenchmark(
+    name="ViDoRe(v3.1, reranking)",
+    aliases=["ViDoRe(v3.1, reranking, beta)"],
+    display_name="ViDoRe v3.1 Reranking",
+    language_view=[
+        "deu-Latn",
+        "eng-Latn",
+        "fra-Latn",
+        "ita-Latn",
+        "por-Latn",
+        "spa-Latn",
+    ],
+    icon="https://cdn-uploads.huggingface.co/production/uploads/66e16a677c2eb2da5109fb5c/x99xqw__fl2UaPbiIdC_f.png",
+    tasks=get_tasks(
+        tasks=_VIDORE_V3_1_RERANKING_BM25S
+        + _VIDORE_V3_1_RERANKING_BGEM3
+        + _VIDORE_V3_1_RERANKING_QWEN3_VL_EMBEDDING_2B
+        + _VIDORE_V3_1_RERANKING_NEMOTRON_3_5_EMBED_8B
+    ),
+    description="Reranking of visual documents on the ViDoRe v3.1 domains. For each domain, the candidates are the top-50 pages retrieved by one of four first-stage retrievers; BM25, bge-m3, Qwen3-VL-Embedding-2B and Nemotron-3.5-Embed-8B, so rerankers are compared on candidate lists from various model types. Includes both open and closed datasets; to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml).",
+    reference="https://arxiv.org/abs/2601.08620",
+    citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+    aggregations=(
+        BenchmarkAggregation.MEAN_TASK,
+        BenchmarkAggregation.PUBLIC_PRIVATE,
+        CustomGrouping(
+            name="First-stage retriever",
+            groups=(
+                CustomGroup(
+                    label="BM25s",
+                    tasks=get_tasks(tasks=_VIDORE_V3_1_RERANKING_BM25S),
+                    description="Mean over the domains when reranking the top-50 candidates retrieved by mteb/baseline-bm25s.",
+                ),
+                CustomGroup(
+                    label="BGE-M3",
+                    tasks=get_tasks(tasks=_VIDORE_V3_1_RERANKING_BGEM3),
+                    description="Mean over the domains when reranking the top-50 candidates retrieved by BAAI/bge-m3.",
+                ),
+                CustomGroup(
+                    label="Qwen3-VL-Embedding-2B",
+                    tasks=get_tasks(tasks=_VIDORE_V3_1_RERANKING_QWEN3_VL_EMBEDDING_2B),
+                    description="Mean over the domains when reranking the top-50 candidates retrieved by Qwen/Qwen3-VL-Embedding-2B.",
+                ),
+                CustomGroup(
+                    label="Nemotron-3.5-Embed-8B",
+                    tasks=get_tasks(tasks=_VIDORE_V3_1_RERANKING_NEMOTRON_3_5_EMBED_8B),
+                    description="Mean over the domains when reranking the top-50 candidates retrieved by nvidia/Nemotron-3.5-Embed-8B-BF16.",
+                ),
+            ),
+        ),
+    ),
+)
+
+
 VISUAL_DOCUMENT_RETRIEVAL = Benchmark(
     name="ViDoRe(v1&v2)",
     aliases=["VisualDocumentRetrieval"],
@@ -3539,7 +3652,7 @@ _MAEB_CITATION = """@misc{assadi2026maebmassiveaudioembedding,
 }"""
 
 
-# Named so MAEB(beta)'s "Benchmark Variant" CustomGrouping (below) can reuse
+# Named so MAEB(v1)'s "Benchmark Variant" CustomGrouping (below) can reuse
 # it without depending on MAEB_AUDIO's own definition.
 _MAEB_AUDIO_ONLY_TASKS = [
     # Any2AnyRetrieval (1)
@@ -3569,19 +3682,19 @@ _MAEB_AUDIO_ONLY_TASKS = [
 ]
 
 MAEB_AUDIO = Benchmark(
-    name="MAEB(beta, audio-only)",
-    aliases=["MAEB(audio-only)"],
+    name="MAEB(v1, audio-only)",
+    aliases=["MAEB(beta, audio-only)", "MAEB(audio-only)"],
     display_name="MAEB Audio-Only",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=get_tasks(tasks=_MAEB_AUDIO_ONLY_TASKS),
-    description="Audio-only embedding quality across classification, clustering, pair classification, reranking, and retrieval tasks. Currently in beta pending peer review.",
+    description="Audio-only embedding quality across classification, clustering, pair classification, reranking, and retrieval tasks.",
     reference=None,
     citation=_MAEB_CITATION,
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 MAEB = Benchmark(
-    name="MAEB(beta)",
-    aliases=["MAEB"],
+    name="MAEB(v1)",
+    aliases=["MAEB(beta)", "MAEB"],
     display_name="MAEB",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
     tasks=MTEBTasks(
@@ -3629,7 +3742,7 @@ MAEB = Benchmark(
             get_task("FSD2019Kaggle", hf_subsets=["curated"]),
         )
     ),
-    description="Audio embedding quality across both audio-only and audio-text cross-modal tasks, spanning retrieval, classification, clustering, multilabel classification, pair classification, reranking, and zero-shot classification. Currently in beta pending peer review.",
+    description="Audio embedding quality across both audio-only and audio-text cross-modal tasks, spanning retrieval, classification, clustering, multilabel classification, pair classification, reranking, and zero-shot classification.",
     reference=None,
     citation=_MAEB_CITATION,
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
@@ -3643,7 +3756,7 @@ MAEB = Benchmark(
                 CustomGroup(
                     label="Audio-Only",
                     tasks=get_tasks(_MAEB_AUDIO_ONLY_TASKS),
-                    description="This model's score restricted to audio only tasks. It is equivalent to  MAEB(beta, audio-only).",
+                    description="This model's score restricted to audio only tasks. It is equivalent to MAEB(v1, audio-only).",
                 ),
             ),
         ),
@@ -3652,8 +3765,8 @@ MAEB = Benchmark(
 
 
 MVEB = Benchmark(
-    name="MVEB(beta)",
-    aliases=["MVEB"],
+    name="MVEB(v1)",
+    aliases=["MVEB(beta)", "MVEB"],
     display_name="MVEB",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-video.svg",
     tasks=get_tasks(
@@ -3691,14 +3804,22 @@ MVEB = Benchmark(
     ),
     description="Audio-visual video embedding quality across retrieval, classification, clustering, pair classification, zero-shot classification, and video-centric QA, with tasks selected to maximize coverage of audio-video joint modality inputs.",
     reference=None,
-    citation="",
+    citation=r"""
+@inproceedings{anonymous2026mveb,
+  author = {Adnan El Assadi and Roman Solomatin and Isaac Chung and Chenghao Xiao and Deep Shah and Shriya Sudhakar and Ayush Sunil Munot and M{\'a}rton Kardos and Niklas Muennighoff and Kenneth Enevoldsen},
+  booktitle = {The 2026 Conference on Empirical Methods in Natural Language Processing},
+  title = {{MVEB}: Massive Video Embedding Benchmark},
+  url = {https://openreview.net/forum?id=p5KyLtjRPo},
+  year = {2026},
+}
+""",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 
 
 MVEB_TEXT_VIDEO = Benchmark(
-    name="MVEB(text, video, beta)",
-    aliases=["MVEB(text, video)"],
+    name="MVEB(text, video, v1)",
+    aliases=["MVEB(text, video, beta)", "MVEB(text, video)"],
     display_name="MVEB Video-Text",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-video.svg",
     tasks=get_tasks(
@@ -3732,14 +3853,22 @@ MVEB_TEXT_VIDEO = Benchmark(
     ),
     description="Text and video embedding quality across retrieval, classification, clustering, pair classification, zero-shot classification, and video-centric QA, for models without an audio encoder.",
     reference=None,
-    citation="",
+    citation=r"""
+@inproceedings{anonymous2026mveb,
+  author = {Adnan El Assadi and Roman Solomatin and Isaac Chung and Chenghao Xiao and Deep Shah and Shriya Sudhakar and Ayush Sunil Munot and M{\'a}rton Kardos and Niklas Muennighoff and Kenneth Enevoldsen},
+  booktitle = {The 2026 Conference on Empirical Methods in Natural Language Processing},
+  title = {{MVEB}: Massive Video Embedding Benchmark},
+  url = {https://openreview.net/forum?id=p5KyLtjRPo},
+  year = {2026},
+}
+""",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 
 
 MVEB_VIDEO = Benchmark(
-    name="MVEB(video, beta)",
-    aliases=["MVEB(video)"],
+    name="MVEB(video, v1)",
+    aliases=["MVEB(video, beta)", "MVEB(video)"],
     display_name="MVEB Video-Only",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-video.svg",
     tasks=get_tasks(
@@ -3759,7 +3888,15 @@ MVEB_VIDEO = Benchmark(
     ),
     description="Video-only embedding quality across classification and pair classification, for encoders without a text component. Retrieval, QA, and zero-shot tasks are excluded as they require a text encoder.",
     reference=None,
-    citation="",
+    citation=r"""
+@inproceedings{anonymous2026mveb,
+  author = {Adnan El Assadi and Roman Solomatin and Isaac Chung and Chenghao Xiao and Deep Shah and Shriya Sudhakar and Ayush Sunil Munot and M{\'a}rton Kardos and Niklas Muennighoff and Kenneth Enevoldsen},
+  booktitle = {The 2026 Conference on Empirical Methods in Natural Language Processing},
+  title = {{MVEB}: Massive Video Embedding Benchmark},
+  url = {https://openreview.net/forum?id=p5KyLtjRPo},
+  year = {2026},
+}
+""",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 

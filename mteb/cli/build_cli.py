@@ -286,6 +286,63 @@ def _add_run_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
     parser.set_defaults(func=run)
 
 
+def _submit_results(args: argparse.Namespace) -> None:
+    # show the PR link or the instructions for manual submission
+    logging.getLogger("mteb").setLevel(logging.INFO)
+    ResultCache(args.output_folder).submit_results(
+        args.models,
+        tasks=args.tasks,
+        create_pr=args.create_pr,
+        message=args.message,
+    )
+
+
+def _add_submit_results_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
+    parser = subparsers.add_parser(
+        "submit-results",
+        help="Submit results to the results repository (https://github.com/embeddings-benchmark/results)",
+        description="Submit the results that the results repository does not have yet. By default, they are committed to a new "
+        "branch in a local clone of the repository, ready to be pushed and opened as a PR manually. Use `--create-pr` to open the PR directly.",
+    )
+    parser.add_argument(
+        "-m",
+        "--models",
+        nargs="+",
+        type=str,
+        default=None,
+        help="Models whose results to submit. If not set, the results of all models in the results folder are submitted.",
+    )
+    parser.add_argument(
+        "-t",
+        "--tasks",
+        nargs="+",
+        type=str,
+        default=None,
+        help="Tasks whose results to submit. If not set, the results of all tasks are submitted.",
+    )
+    parser.add_argument(
+        "--output-folder",
+        type=str,
+        default="results",  # same default as `mteb run`
+        help="Folder containing the results, i.e. the `--output-folder` used with `mteb run`.",
+    )
+    parser.add_argument(
+        "--create-pr",
+        action="store_true",
+        default=False,
+        help="Push the results to your fork and open a PR. Requires `mteb[github]` and GitHub authentication "
+        "(`gh auth login` or a git credential helper).",
+    )
+    parser.add_argument(
+        "--message",
+        type=str,
+        default=None,
+        help="Title of the commit and PR, e.g. 'Add ArguAna results for my-org/my-model'. If not set, a title listing the submitted models is used.",
+    )
+
+    parser.set_defaults(func=_submit_results)
+
+
 def _create_meta(args: argparse.Namespace) -> None:
     model_name = args.model_name
     tasks_names = args.tasks
@@ -603,6 +660,7 @@ def build_cli() -> argparse.ArgumentParser:
     _add_available_tasks_parser(subparsers)
     _add_available_benchmarks_parser(subparsers)
     _add_create_meta_parser(subparsers)
+    _add_submit_results_parser(subparsers)
     _add_leaderboard_parser(subparsers)
     _add_mock_run_parser(subparsers)
 

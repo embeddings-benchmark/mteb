@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import string
 from typing import TYPE_CHECKING, Any
 
 from tqdm.auto import tqdm
@@ -26,6 +27,17 @@ if TYPE_CHECKING:
 # elementwise, so a longer sequence raises a shape mismatch instead of being
 # truncated internally. Every text batch is padded and truncated to this length.
 MAX_TEXT_TOKENS = 64
+
+
+def _canonicalize_text(text: str) -> str:
+    """Text canonicalisation applied by the official ``tokenize_texts`` (default on).
+
+    https://github.com/google-deepmind/videoprism/blob/main/videoprism/utils.py
+    Punctuation -> space, lower case, single spaces, trailing period.
+    """
+    p = string.punctuation
+    text = text.translate(str.maketrans(p, " " * len(p))).lower()
+    return " ".join(text.split()) + "."
 
 
 def _resolve_device(device: str | int | torch.device | None) -> torch.device:
@@ -104,9 +116,13 @@ class VideoPrismVisionWrapper(AbsEncoder):
                 for video in batch["video"]:
                     clip = video.to(torch.uint8)
                     processed.append(
-                        self.processor(videos=[clip.numpy()], return_tensors="pt")[
-                            "pixel_values_videos"
-                        ]
+                        self.processor(
+                            videos=[clip.numpy()],
+                            # frames are already sampled; the processor would
+                            # resample them to its own num_frames
+                            do_sample_frames=False,
+                            return_tensors="pt",
+                        )["pixel_values_videos"]
                     )
                 pixel_values_videos = torch.cat(processed, dim=0).to(
                     self.device, dtype=self.dtype
@@ -162,7 +178,7 @@ class VideoPrismClipWrapper(AbsEncoder):
                 texts, disable=not show_progress_bar, desc="Text Encoding"
             ):
                 encoded = self.processor.tokenizer(
-                    batch["text"],
+                    [_canonicalize_text(text) for text in batch["text"]],
                     padding="max_length",
                     truncation=True,
                     max_length=MAX_TEXT_TOKENS,
@@ -189,9 +205,13 @@ class VideoPrismClipWrapper(AbsEncoder):
                 for video in batch["video"]:
                     clip = video.to(torch.uint8)
                     processed.append(
-                        self.processor(videos=[clip.numpy()], return_tensors="pt")[
-                            "pixel_values_videos"
-                        ]
+                        self.processor(
+                            videos=[clip.numpy()],
+                            # frames are already sampled; the processor would
+                            # resample them to its own num_frames
+                            do_sample_frames=False,
+                            return_tensors="pt",
+                        )["pixel_values_videos"]
                     )
                 pixel_values_videos = torch.cat(processed, dim=0).to(
                     self.device, dtype=self.dtype
@@ -272,7 +292,7 @@ _VIDEOPRISM_COMMON = dict(
     citation=_VIDEOPRISM_CITATION,
     # The video extra ships datasets and torchcodec but not torchvision or
     # pillow, which every transformers video processor imports.
-    extra_requirements_groups=["image"],
+    extra_requirements_groups=["image", "videoprism"],
 )
 
 videoprism_base_f16r288 = ModelMeta(

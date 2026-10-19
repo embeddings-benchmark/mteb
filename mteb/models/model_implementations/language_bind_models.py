@@ -105,7 +105,9 @@ class _LanguageBindBase(AbsEncoder):
                 texts = list(batch["text"])
                 tokens = self._tokenize(texts)
 
-                with torch.autocast(str(self.device), dtype=torch.bfloat16):
+                with torch.autocast(
+                    torch.device(self.device).type, dtype=torch.bfloat16
+                ):
                     text_outputs = self.model.text_model(
                         input_ids=tokens["input_ids"],
                         attention_mask=tokens.get("attention_mask"),
@@ -222,7 +224,9 @@ class LanguageBindVideoWrapper(_LanguageBindBase):
                     [self._transform_video_frames(frames) for frames in frames_list]
                 ).to(self.device)
 
-                with torch.autocast(str(self.device), dtype=torch.bfloat16):
+                with torch.autocast(
+                    torch.device(self.device).type, dtype=torch.bfloat16
+                ):
                     vision_outputs = self.model.vision_model(pixel_values=processed)
                     video_embeds = self.model.visual_projection(vision_outputs[1])
                     video_embeds /= video_embeds.norm(dim=-1, keepdim=True)
@@ -333,7 +337,9 @@ class LanguageBindAudioWrapper(_LanguageBindBase):
                         processed.append(self._transform_audio(a))
                 processed = torch.stack(processed).to(self.device)
 
-                with torch.autocast(str(self.device), dtype=torch.bfloat16):
+                with torch.autocast(
+                    torch.device(self.device).type, dtype=torch.bfloat16
+                ):
                     audio_outputs = self.model.vision_model(pixel_values=processed)
                     audio_embeds = self.model.visual_projection(audio_outputs[1])
                     audio_embeds /= audio_embeds.norm(dim=-1, keepdim=True)
@@ -429,7 +435,9 @@ class LanguageBindImageWrapper(_LanguageBindBase):
                     [self.processor.transform(img) for img in images]
                 ).to(self.device)
 
-                with torch.autocast(str(self.device), dtype=torch.bfloat16):
+                with torch.autocast(
+                    torch.device(self.device).type, dtype=torch.bfloat16
+                ):
                     vision_outputs = self.model.vision_model(pixel_values=processed)
                     image_embeds = self.model.visual_projection(vision_outputs[1])
                     image_embeds /= image_embeds.norm(dim=-1, keepdim=True)
@@ -474,9 +482,11 @@ class LanguageBindOmniWrapper(AbsEncoder):
 
     Wraps :class:`LanguageBindVideoWrapper`, :class:`LanguageBindAudioWrapper`,
     and :class:`LanguageBindImageWrapper`, dispatching each input to the
-    sub-model for its modality. Text is encoded via the shared OpenCLIP text
-    tower. For inputs spanning multiple modalities the per-modality embeddings
-    are summed, producing a single embedding for text / image / audio / video.
+    sub-model for its modality. Text is encoded with the audio model's own text
+    tower when audio is the task's only other modality, and with the tower
+    shared by video and image otherwise. For inputs spanning multiple modalities
+    the per-modality embeddings are summed, producing a single embedding for
+    text / image / audio / video.
     """
 
     def __init__(
@@ -498,7 +508,8 @@ class LanguageBindOmniWrapper(AbsEncoder):
             device = "cuda" if torch.cuda.is_available() else "cpu"
 
         self.video_model = LanguageBindVideoWrapper(
-            "LanguageBind/LanguageBind_Video_FT",
+            language_bind_video_ft.name,
+            revision=language_bind_video_ft.revision,
             device=device,
             fps=fps,
             max_frames=max_frames,
@@ -506,11 +517,13 @@ class LanguageBindOmniWrapper(AbsEncoder):
             max_samples=max_samples,
         )
         self.audio_model = LanguageBindAudioWrapper(
-            "LanguageBind/LanguageBind_Audio_FT",
+            language_bind_audio_ft.name,
+            revision=language_bind_audio_ft.revision,
             device=device,
         )
         self.image_model = LanguageBindImageWrapper(
-            "LanguageBind/LanguageBind_Image",
+            language_bind_image.name,
+            revision=language_bind_image.revision,
             device=device,
         )
 
@@ -532,7 +545,13 @@ class LanguageBindOmniWrapper(AbsEncoder):
 
         embeddings = None
         if has_text:
-            text_emb = self.video_model.get_text_embeddings(
+            modalities = set(task_metadata.modalities)
+            text_model = (
+                self.audio_model
+                if "audio" in modalities and not modalities & {"video", "image"}
+                else self.video_model
+            )
+            text_emb = text_model.get_text_embeddings(
                 inputs, prompt_type=prompt_type, **kwargs
             )
             embeddings = text_emb if embeddings is None else embeddings + text_emb

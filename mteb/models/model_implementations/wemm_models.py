@@ -18,6 +18,19 @@ if TYPE_CHECKING:
 class WeMMEncoderWrapper(SentenceTransformerEncoderWrapper):
     """Custom SentenceTransformer encoder wrapper for WeChat WeMM Embedding models."""
 
+    def __init__(self, model: str, revision: str | None = None, **kwargs: Any) -> None:
+        from huggingface_hub import hf_hub_download
+        from tokenizers import Tokenizer
+
+        super().__init__(model, revision=revision, **kwargs)
+        # transformers>=5.18 rebuilds this tokenizer's normalizer and drops the checkpoint's
+        # `\n$` -> "" rule, which shapes the prompt; restore it from tokenizer.json
+        tokenizer = self.model[0].processor.tokenizer
+        tokenizer_file = hf_hub_download(model, "tokenizer.json", revision=revision)
+        tokenizer.backend_tokenizer.normalizer = Tokenizer.from_file(
+            tokenizer_file
+        ).normalizer
+
     def encode(
         self,
         inputs: DataLoader[BatchedInput],

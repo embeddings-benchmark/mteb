@@ -287,7 +287,7 @@ potion_base_2m = ModelMeta(
     superseded_by=None,
     training_datasets=bge_training_data,  # distilled
     public_training_code="https://github.com/MinishLab/model2vec",
-    public_training_data=None,
+    public_training_data="https://huggingface.co/datasets/minishlab/tokenlearn-c4-en-bge-base-en-v1.5",
 )
 
 potion_base_4m = ModelMeta(
@@ -312,7 +312,7 @@ potion_base_4m = ModelMeta(
     superseded_by=None,
     training_datasets=bge_training_data,  # distilled
     public_training_code="https://github.com/MinishLab/model2vec",
-    public_training_data=None,
+    public_training_data="https://huggingface.co/datasets/minishlab/tokenlearn-c4-en-bge-base-en-v1.5",
 )
 
 potion_base_8m = ModelMeta(
@@ -337,7 +337,7 @@ potion_base_8m = ModelMeta(
     superseded_by=None,
     training_datasets=bge_training_data,  # distilled
     public_training_code="https://github.com/MinishLab/model2vec",
-    public_training_data=None,
+    public_training_data="https://huggingface.co/datasets/minishlab/tokenlearn-c4-en-bge-base-en-v1.5",
 )
 
 potion_base_32m = ModelMeta(
@@ -362,7 +362,7 @@ potion_base_32m = ModelMeta(
     superseded_by=None,
     training_datasets=bge_training_data,  # distilled
     public_training_code="https://github.com/MinishLab/model2vec",
-    public_training_data=None,
+    public_training_data="https://huggingface.co/datasets/minishlab/tokenlearn-c4-en-bge-base-en-v1.5",
 )
 
 potion_retrieval_32m = ModelMeta(
@@ -412,7 +412,7 @@ potion_multilingual_128m = ModelMeta(
     superseded_by=None,
     training_datasets=bge_training_data,  # distilled
     public_training_code="https://github.com/MinishLab/model2vec",
-    public_training_data=None,
+    public_training_data="https://huggingface.co/datasets/minishlab/tokenlearn-c4-multilingual-bge-m3",
 )
 
 potion_code_16m_v2 = ModelMeta(

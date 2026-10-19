@@ -106,6 +106,9 @@ class Qwen3VLRerankerWrapper(CrossEncoderWrapper):
             fps=fps,
             max_frames=max_frames,
             num_frames=num_frames,
+            # at least 4 frames: FPS_MIN_FRAMES of qwen-vl-utils, which the official
+            # script samples with; the processor fails on a single frame
+            min_frames=4,
             **kwargs,
         )
         self.use_instructions = use_instructions
@@ -197,7 +200,9 @@ qwen3_vl_reranker_8b = ModelMeta(
     model_type=["cross-encoder"],
     languages=QWEN3_VL_LANGUAGES,
     open_weights=True,
-    revision="b212dc8c91a8164aef1ea2de9c1a867611e75c04",
+    # main (b212dc8c) has a broken modules.json, so it fails to load; this is the
+    # commit from https://huggingface.co/Qwen/Qwen3-VL-Reranker-8B/discussions/11 that fixes it
+    revision="407993db318a67dbb333bbeb8b1521fb703a3bb1",
     release_date="2026-01-07",
     modalities=["image", "text", "video"],
     n_parameters=8_767_123_696,

@@ -15,6 +15,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.mocks.mock_tasks import (
     MockMultiChoiceTask,
     MockRetrievalTask,
+    MockVideoAudioTextRetrievalVAT2T,
 )
 from mteb.models.cache_wrappers.cache_backend_protocol import CacheBackendProtocol
 from mteb.models.cache_wrappers.cache_backends.faiss_cache import FaissCache
@@ -30,6 +31,10 @@ if TYPE_CHECKING:
 
 class DummyModel(RandomEncoderBaseline):
     call_count = 0
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self.mteb_model_meta = mteb.get_model_meta("mteb/baseline-random-encoder")
 
     def encode(
         self,
@@ -352,12 +357,22 @@ class TestCachedEmbeddingWrapper:
 
 
 @pytest.mark.parametrize("n_first", [1, 3])
-def test_numpy_cache_reload_and_grow(tmp_path: Path, n_first: int):
+@pytest.mark.parametrize("cache_backend", [NumpyCache, FaissCache])
+def test_cache_reload_and_grow(
+    tmp_path: Path, n_first: int, cache_backend: type[CacheBackendProtocol]
+):
+    if cache_backend is FaissCache:
+        pytest.importorskip("faiss")
+
     items = [{"text": f"item {i}"} for i in range(n_first + 3)]
     vectors = np.random.default_rng(0).random((len(items), 4), dtype=np.float32)
 
-    def open_cache() -> NumpyCache:
-        cache = NumpyCache(tmp_path, initial_vectors=1)
+    def open_cache() -> CacheBackendProtocol:
+        cache = (
+            NumpyCache(tmp_path, initial_vectors=1)
+            if cache_backend is NumpyCache
+            else cache_backend(tmp_path)
+        )
         cache.load()
         return cache
 
@@ -367,7 +382,7 @@ def test_numpy_cache_reload_and_grow(tmp_path: Path, n_first: int):
     cache.save()
     cache.close()
 
-    # reopen and add enough vectors to grow the file past its current size
+    # Reopen and append without losing the previously cached vectors.
     cache = open_cache()
     cache.add(items[n_first:], vectors[n_first:])
     cache.save()
@@ -403,3 +418,31 @@ def test_wrapper_mock_tasks(task: AbsTask, model: EncoderProtocol, tmp_path: Pat
         cached_model.close()
 
     assert results[0].task_name == task.metadata.name
+
+
+def test_wrapper_caches_multimodal_items(tmp_path: Path):
+    """Items combining text, audio, and video together are cached and reused.
+
+    Exercises `hash_item` combining all three modalities into one cache key
+    (`MockVideoAudioTextRetrievalVAT2T` queries carry video+audio+text on the
+    same row), not just single-modality items.
+    """
+    task = MockVideoAudioTextRetrievalVAT2T()
+    try:
+        task.load_data()
+    except ImportError as error:
+        pytest.skip(f"modality dependencies are not installed: {error}")
+
+    dummy_model = DummyModel("multimodal_test_model", revision=None)
+    wrapped_model = CachedEmbeddingWrapper(dummy_model, tmp_path)
+    try:
+        mteb.evaluate(wrapped_model, task, cache=None)
+        first_run_call_count = dummy_model.call_count
+        assert first_run_call_count > 0
+
+        # Every item was cached on the first run, so re-evaluating the same
+        # task must not trigger any further encode() calls.
+        mteb.evaluate(wrapped_model, task, cache=None)
+        assert dummy_model.call_count == first_run_call_count
+    finally:
+        wrapped_model.close()

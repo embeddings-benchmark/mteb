@@ -54,8 +54,8 @@ GP_BENCHMARK_ENTRIES = [
                 "Audio",
                 mteb.get_benchmarks(
                     [
-                        "MAEB(beta)",
-                        "MAEB(beta, audio-only)",
+                        "MAEB(v1)",
+                        "MAEB(v1, audio-only)",
                     ]
                 ),
             ),
@@ -63,9 +63,9 @@ GP_BENCHMARK_ENTRIES = [
                 "Video",
                 mteb.get_benchmarks(
                     [
-                        "MVEB(beta)",
-                        "MVEB(video, beta)",
-                        "MVEB(text, video, beta)",
+                        "MVEB(v1)",
+                        "MVEB(video, v1)",
+                        "MVEB(text, video, v1)",
                     ]
                 ),
             ),
@@ -224,14 +224,14 @@ HOME_BENCHMARK_ENTRIES = [
         benchmarks=mteb.get_benchmarks(
             [
                 "MIEB(Multilingual)",
-                "MAEB(beta)",
-                "MVEB(beta)",
+                "MAEB(v1)",
+                "MVEB(v1)",
                 "MIEB(eng)",
                 "MIEB(lite)",
                 "MIEB(Img)",
-                "MAEB(beta, audio-only)",
-                "MVEB(video, beta)",
-                "MVEB(text, video, beta)",
+                "MAEB(v1, audio-only)",
+                "MVEB(video, v1)",
+                "MVEB(text, video, v1)",
             ]
         ),
     ),

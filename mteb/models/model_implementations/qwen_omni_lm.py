@@ -72,6 +72,11 @@ class QwenOmniWrapper(AbsEncoder):
         )
         self.model.eval()
         self.model.to(self.device)
+        # only hidden states are used; the Omni thinker forward has no logits_to_keep,
+        # so run the LM head on the last position only
+        self.model.get_output_embeddings().register_forward_pre_hook(
+            lambda _module, args: (args[0][:, -1:, :],)
+        )
 
         self.processor = AutoProcessor.from_pretrained(model_name, revision=revision)
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
