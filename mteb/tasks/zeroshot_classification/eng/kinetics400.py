@@ -38,7 +38,6 @@ class Kinetics400ZeroShotClassification(AbsTaskRetrieval):
   year = {2017},
 }
 """,
-        is_beta=True,
     )
 
 

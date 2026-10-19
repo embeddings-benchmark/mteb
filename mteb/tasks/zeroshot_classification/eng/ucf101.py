@@ -127,6 +127,5 @@ class UCF101VideoZeroShotClassification(AbsTaskRetrieval):
   year = {2012},
 }
 """,
-        is_beta=True,
     )
     max_fraction_of_documents_to_embed = None

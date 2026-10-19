@@ -36,7 +36,6 @@ class WorldSenseAudioVideoZeroShotClassification(AbsTaskRetrieval):
         modalities=["video", "audio", "text"],
         sample_creation="found",
         bibtex_citation=CITATION,
-        is_beta=True,
     )
 
 
@@ -63,5 +62,4 @@ class WorldSenseVideoZeroShotClassification(AbsTaskRetrieval):
         modalities=["video", "text"],
         sample_creation="found",
         bibtex_citation=CITATION,
-        is_beta=True,
     )

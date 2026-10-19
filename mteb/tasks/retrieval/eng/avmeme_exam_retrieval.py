@@ -112,7 +112,6 @@ class AVMemeExamT2VRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the meme video clip that matches the given summary."},
-        is_beta=True,
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
@@ -324,7 +323,6 @@ class AVMemeExamAT2VRetrieval(AbsTaskRetrieval):
         prompt={
             "query": "Find the meme video that corresponds to the following audio and its description."
         },
-        is_beta=True,
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:

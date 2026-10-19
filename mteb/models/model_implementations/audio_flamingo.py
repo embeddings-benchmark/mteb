@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Any
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import AudioCollator, seconds_to_samples
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import OutputDType
 
@@ -26,7 +26,9 @@ class AudioFlamingoWrapper(AbsEncoder):
         model_name: str,
         revision: str | None = None,
         device: str | None = None,
-        max_audio_length_seconds: float = 30.0,
+        # 600 s: "Max Audio Length: 10 Minutes"
+        # https://huggingface.co/nvidia/audio-flamingo-3-hf
+        max_audio_length_seconds: float = 600.0,
         torch_dtype: OutputDType | torch.dtype = OutputDType.BF16,
         device_map: str | dict | None = None,
         **kwargs: Any,
@@ -82,6 +84,7 @@ class AudioFlamingoWrapper(AbsEncoder):
 
         all_embeddings = []
 
+        cap = seconds_to_samples(self.max_audio_length_seconds, self.sampling_rate)
         for batch_data in tqdm(inputs, disable=not show_progress_bar):
             audio_list = batch_data.get("audio", [])
             text_list = batch_data.get("text", [])
@@ -100,6 +103,7 @@ class AudioFlamingoWrapper(AbsEncoder):
                     array = AudioCollator.resample_audio(
                         {"audio": audio_row},
                         target_sampling_rate=self.sampling_rate,
+                        max_samples=cap,
                     )
                     content.append({"type": "audio", "audio": array})
 
@@ -119,9 +123,11 @@ class AudioFlamingoWrapper(AbsEncoder):
                     dtype=torch.bfloat16,
                 ),
             ):
+                # logits_to_keep=1 skips computing vocab logits we don't use
                 outputs = self.model(
                     **processor_inputs,
                     output_hidden_states=True,
+                    logits_to_keep=1,
                 )
 
                 hidden = outputs.hidden_states[-1]
@@ -172,4 +178,6 @@ audio_flamingo_meta = ModelMeta(
   year = {2025},
 }
 """,
+    extra_requirements_groups=["audio-flamingo-3"],
+    output_dtypes=OutputDType.BF16,
 )

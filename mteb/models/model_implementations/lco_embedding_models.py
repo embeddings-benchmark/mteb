@@ -8,6 +8,7 @@ from tqdm.auto import tqdm
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator, VideoCollator
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -25,10 +26,16 @@ class LCOEmbedding(AbsEncoder):
         model_name: str,
         revision: str | None = None,
         device: str | None = None,
+        # fps=2: qwen-omni-utils FPS=2.0
+        # https://github.com/QwenLM/Qwen2.5-Omni/blob/main/qwen-omni-utils/src/qwen_omni_utils/v2_5/vision_process.py
         fps: float | None = 2.0,
+        # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
-        max_audio_length: int | None = None,
+        # 300 s at 16 kHz: Qwen2.5-Omni chunk_length=300; this is max_samples,
+        # so it is in samples, not seconds
+        # https://huggingface.co/Qwen/Qwen2.5-Omni-7B/blob/main/preprocessor_config.json
+        max_audio_length: int | None = 4_800_000,
         **kwargs: Any,
     ):
         import torch
@@ -56,23 +63,18 @@ class LCOEmbedding(AbsEncoder):
         self.processor.tokenizer.padding_side = "left"
 
         self.model = Qwen2_5OmniThinkerForConditionalGeneration.from_pretrained(
-            model_name, torch_dtype=torch.bfloat16, **kwargs
+            model_name, revision=revision, torch_dtype=torch.bfloat16, **kwargs
         ).to(self.device)
         self.model.eval()
+        # only hidden states are used; the Omni thinker forward has no logits_to_keep,
+        # so run the LM head on the last position only
+        self.model.lm_head.register_forward_pre_hook(
+            lambda _module, args: (args[0][:, -1:, :],)
+        )
 
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
 
-    @staticmethod
-    def _prompt_suffix(batch: BatchedInput) -> str:
-        """Return the prompt suffix based on the primary modality in the batch."""
-        for modality in ("audio", "video", "image"):
-            if batch.get(modality):
-                return f"\nSummarize the above {modality} in one word:"
-        return "\nSummarize the above text in one word:"
-
-    def _build_messages(
-        self, batch: BatchedInput, suffix: str
-    ) -> list[list[dict[str, Any]]]:
+    def _build_messages(self, batch: BatchedInput) -> list[list[dict[str, Any]]]:
         """Build chat messages for each item in the batch."""
         texts = batch.get("text", [])
         images = batch.get("image", [])
@@ -96,7 +98,18 @@ class LCOEmbedding(AbsEncoder):
                 if len(ids) > 300:
                     text = self.processor.tokenizer.decode(ids[:300])
                 content.append({"type": "text", "text": text})
-            content.append({"type": "text", "text": suffix})
+            # per item, image > video > audio > text, as in the authors' template
+            # https://huggingface.co/LCO-Embedding/LCO-Embedding-Omni-3B/blob/main/additional_chat_templates/sentence_transformers.jinja
+            types = {c["type"] for c in content}
+            modality = next(
+                (m for m in ("image", "video", "audio") if m in types), "text"
+            )
+            content.append(
+                {
+                    "type": "text",
+                    "text": f"\nSummarize the above {modality} in one word:",
+                }
+            )
             messages.append([{"role": "user", "content": content}])
         return messages
 
@@ -132,8 +145,7 @@ class LCOEmbedding(AbsEncoder):
             all_embeddings: list[torch.Tensor] = []
 
             for batch in tqdm(inputs, desc="Encoding"):
-                suffix = self._prompt_suffix(batch)
-                messages = self._build_messages(batch, suffix)
+                messages = self._build_messages(batch)
 
                 texts = [
                     self.processor.apply_chat_template(
@@ -208,6 +220,7 @@ lco_3b = ModelMeta(
   primaryClass={cs.CL},
   url={https://arxiv.org/abs/2510.11693},
 }""",
+    output_dtypes=OutputDType.BF16,
 )
 
 lco_3b_2605 = ModelMeta(
@@ -243,6 +256,7 @@ lco_3b_2605 = ModelMeta(
   primaryClass={cs.CL},
   url={https://arxiv.org/abs/2510.11693},
 }""",
+    output_dtypes=OutputDType.BF16,
 )
 
 lco_7b = ModelMeta(
@@ -278,4 +292,5 @@ lco_7b = ModelMeta(
   primaryClass={cs.CL},
   url={https://arxiv.org/abs/2510.11693},
 }""",
+    output_dtypes=OutputDType.BF16,
 )

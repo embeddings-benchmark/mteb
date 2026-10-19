@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import string
 from typing import TYPE_CHECKING, Any
 
 from tqdm.auto import tqdm
@@ -7,6 +8,7 @@ from tqdm.auto import tqdm
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -25,6 +27,17 @@ if TYPE_CHECKING:
 # elementwise, so a longer sequence raises a shape mismatch instead of being
 # truncated internally. Every text batch is padded and truncated to this length.
 MAX_TEXT_TOKENS = 64
+
+
+def _canonicalize_text(text: str) -> str:
+    """Text canonicalisation applied by the official ``tokenize_texts`` (default on).
+
+    https://github.com/google-deepmind/videoprism/blob/main/videoprism/utils.py
+    Punctuation -> space, lower case, single spaces, trailing period.
+    """
+    p = string.punctuation
+    text = text.translate(str.maketrans(p, " " * len(p))).lower()
+    return " ".join(text.split()) + "."
 
 
 def _resolve_device(device: str | int | torch.device | None) -> torch.device:
@@ -50,6 +63,8 @@ class VideoPrismVisionWrapper(AbsEncoder):
         device: str | int | torch.device | None = None,
         fps: float | None = None,
         max_frames: int | None = None,
+        # 16 frames: encoded in the checkpoint name
+        # https://github.com/google-deepmind/videoprism
         num_frames: int | None = 16,
         **kwargs: Any,
     ) -> None:
@@ -101,9 +116,13 @@ class VideoPrismVisionWrapper(AbsEncoder):
                 for video in batch["video"]:
                     clip = video.to(torch.uint8)
                     processed.append(
-                        self.processor(videos=[clip.numpy()], return_tensors="pt")[
-                            "pixel_values_videos"
-                        ]
+                        self.processor(
+                            videos=[clip.numpy()],
+                            # frames are already sampled; the processor would
+                            # resample them to its own num_frames
+                            do_sample_frames=False,
+                            return_tensors="pt",
+                        )["pixel_values_videos"]
                     )
                 pixel_values_videos = torch.cat(processed, dim=0).to(
                     self.device, dtype=self.dtype
@@ -159,7 +178,7 @@ class VideoPrismClipWrapper(AbsEncoder):
                 texts, disable=not show_progress_bar, desc="Text Encoding"
             ):
                 encoded = self.processor.tokenizer(
-                    batch["text"],
+                    [_canonicalize_text(text) for text in batch["text"]],
                     padding="max_length",
                     truncation=True,
                     max_length=MAX_TEXT_TOKENS,
@@ -186,9 +205,13 @@ class VideoPrismClipWrapper(AbsEncoder):
                 for video in batch["video"]:
                     clip = video.to(torch.uint8)
                     processed.append(
-                        self.processor(videos=[clip.numpy()], return_tensors="pt")[
-                            "pixel_values_videos"
-                        ]
+                        self.processor(
+                            videos=[clip.numpy()],
+                            # frames are already sampled; the processor would
+                            # resample them to its own num_frames
+                            do_sample_frames=False,
+                            return_tensors="pt",
+                        )["pixel_values_videos"]
                     )
                 pixel_values_videos = torch.cat(processed, dim=0).to(
                     self.device, dtype=self.dtype
@@ -269,7 +292,7 @@ _VIDEOPRISM_COMMON = dict(
     citation=_VIDEOPRISM_CITATION,
     # The video extra ships datasets and torchcodec but not torchvision or
     # pillow, which every transformers video processor imports.
-    extra_requirements_groups=["image"],
+    extra_requirements_groups=["image", "videoprism"],
 )
 
 videoprism_base_f16r288 = ModelMeta(
@@ -286,6 +309,7 @@ videoprism_base_f16r288 = ModelMeta(
     reference="https://huggingface.co/google/videoprism-base-f16r288",
     loader_kwargs=dict(num_frames=16),
     **_VIDEOPRISM_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
 
 videoprism_large_f8r288 = ModelMeta(
@@ -302,6 +326,7 @@ videoprism_large_f8r288 = ModelMeta(
     reference="https://huggingface.co/google/videoprism-large-f8r288",
     loader_kwargs=dict(num_frames=8),
     **_VIDEOPRISM_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
 
 videoprism_lvt_base_f16r288 = ModelMeta(
@@ -318,6 +343,7 @@ videoprism_lvt_base_f16r288 = ModelMeta(
     reference="https://huggingface.co/google/videoprism-lvt-base-f16r288",
     loader_kwargs=dict(num_frames=16),
     **_VIDEOPRISM_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
 
 videoprism_lvt_large_f8r288 = ModelMeta(
@@ -334,4 +360,5 @@ videoprism_lvt_large_f8r288 = ModelMeta(
     reference="https://huggingface.co/google/videoprism-lvt-large-f8r288",
     loader_kwargs=dict(num_frames=8),
     **_VIDEOPRISM_COMMON,
+    output_dtypes=OutputDType.BF16,
 )

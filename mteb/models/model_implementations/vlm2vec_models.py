@@ -11,7 +11,7 @@ from mteb._requires_package import (
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     import torch
@@ -286,6 +286,16 @@ class VLM2VecWrapper(AbsEncoder):
 _VLM2VEC2_VIDEO_TOKEN = "<|video_pad|>"  # noqa: S105
 _VLM2VEC2_IMAGE_TOKEN = "<|image_pad|>"  # noqa: S105
 
+# MMEB-V2's instruction for the video side of video classification
+# https://github.com/TIGER-AI-Lab/VLM2Vec/blob/d00b5dcdeaa099f9ddb221ea081128d609c22acb/src/data/eval_dataset/video_classification_utils.py
+_VLM2VEC2_VIDEO_CLS_INSTRUCTIONS: dict[str, str] = {
+    "Kinetics700VZeroShot": "Recognize the category of the video content.",
+    "SomethingSomethingV2Classification": "What actions or object interactions are being performed by the person in the video?",
+    "UCF101VideoZeroShotClassification": "What activities or sports are being performed by the person in the video?",
+    "HMDB51ZeroShot": "What actions or objects interactions are the person in the video doing?",
+    "BreakfastZeroShot": "Recognize the breakfast type that the person is cooking in the video.",
+}
+
 _VLM2VEC2_TASK_PROMPTS: dict[str, dict[str, str]] = {
     # --- Video retrieval ---
     "DiDeMoT2VRetrieval": {
@@ -410,9 +420,12 @@ class VLM2VEC2Wrapper(AbsEncoder):
         revision: str | None = None,
         *,
         device: str | None = None,
-        fps: float | None = 2.0,
-        max_frames: int | None = 64,
-        num_frames: int | None = None,
+        # 8 frames, evenly spaced: num_frames=8 on every video task in the
+        # official eval config
+        # https://github.com/TIGER-AI-Lab/VLM2Vec/blob/main/experiments/public/eval/video.yaml
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = 8,
         **kwargs: Any,
     ) -> None:
         import torch
@@ -434,8 +447,7 @@ class VLM2VEC2Wrapper(AbsEncoder):
         base_model_name = "Qwen/Qwen2-VL-2B-Instruct"
         self.processor = AutoProcessor.from_pretrained(model, revision=revision)
         self.processor.padding_side = "left"
-        if hasattr(self.processor, "image_processor"):
-            self.processor.image_processor.max_pixels = 360 * 420
+        # images keep the checkpoint's max_pixels=1003520, as in the official eval
 
         torch_dtype = kwargs.pop("torch_dtype", torch.bfloat16)
         base_model = Qwen2VLForConditionalGeneration.from_pretrained(
@@ -493,6 +505,10 @@ class VLM2VEC2Wrapper(AbsEncoder):
             task_prompts = _VLM2VEC2_TASK_PROMPTS.get(task_metadata.name, {})
             prompt_key = "query" if prompt_type == PromptType.query else "document"
             instruction = task_prompts.get(prompt_key, "")
+            if has_video and task_metadata.name in _VLM2VEC2_VIDEO_CLS_INSTRUCTIONS:
+                # classification passes no prompt_type; the video side gets the
+                # dataset instruction, the labels none
+                instruction = _VLM2VEC2_VIDEO_CLS_INSTRUCTIONS[task_metadata.name]
 
             prefix_tokens: list[str] = []
             if has_image:
@@ -574,6 +590,7 @@ vlm2vec_lora = ModelMeta(
     training_datasets=vlm2vec_training_datasets,
     citation=VLM2VEC_CITATION,
     extra_requirements_groups=["peft"],
+    output_dtypes=OutputDType.BF16,
 )
 
 vlm2vec_full = ModelMeta(
@@ -600,6 +617,7 @@ vlm2vec_full = ModelMeta(
     training_datasets=vlm2vec_training_datasets,
     citation=VLM2VEC_CITATION,
     extra_requirements_groups=["peft"],
+    output_dtypes=OutputDType.BF16,
 )
 
 vlm2vec2 = ModelMeta(
@@ -637,6 +655,6 @@ vlm2vec2 = ModelMeta(
     url={https://arxiv.org/abs/2507.04590},
 }""",
     contacts=None,
-    output_dtypes=None,
+    output_dtypes=OutputDType.BF16,
     extra_requirements_groups=["peft", "transformers-v4"],
 )

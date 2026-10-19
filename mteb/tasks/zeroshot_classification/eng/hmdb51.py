@@ -37,5 +37,4 @@ class HMDB51ZeroShotClassification(AbsTaskRetrieval):
   year = {2011},
 }
 """,
-        is_beta=True,
     )

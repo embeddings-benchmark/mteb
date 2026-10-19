@@ -49,7 +49,75 @@ Xavier Serra},
   year = {2020},
 }
 """,
+        superseded_by="FSD2019Kaggle.v2",
     )
+    # Published results score the whole evaluation split, so the cap stays off to keep them comparable.
+    max_eval_samples: int | None = None
+
+    evaluator_model = MultiOutputClassifier(estimator=LogisticRegression())
+    input_column_name: str = "audio"
+    label_column_name: str = "sound"
+    samples_per_label: int = 8
+
+    def load_data(self, **kwargs: Any):
+        """Load dataset from HuggingFace hub and convert it to the standard format."""
+        if self.data_loaded:
+            return
+
+        self.dataset = {}
+        for lang in self.hf_subsets:
+            self.dataset[lang] = datasets.load_dataset(
+                name=lang, **self.metadata.dataset
+            )
+
+        self.dataset_transform()
+        self.data_loaded = True
+
+
+class FSD2019KaggleMultilingualClassificationV2(AbsTaskMultilabelClassification):
+    metadata = TaskMetadata(
+        name="FSD2019Kaggle.v2",
+        description="Multilabel Audio Classification. This version scores at most 3000 rows of each evaluation split, sampled with iterative stratification over the labels.",
+        reference="https://huggingface.co/datasets/confit/fsdkaggle2019-parquet",  # "https://huggingface.co/datasets/CLAPv2/FSD50K",
+        dataset={
+            "path": "mteb/fsdkaggle2019-parquet",
+            "revision": "ff7e6d9e57951b90024fcb6d4aef95d97f4fc64e",
+        },  # this is actually used to download the data
+        type="AudioMultilabelClassification",
+        category="a2t",
+        eval_splits=["test"],
+        eval_langs={"curated": ["eng-Latn"], "noisy": ["eng-Latn"]},
+        main_score="lrap",
+        date=(
+            "2020-01-01",
+            "2020-01-30",
+        ),  # Estimated date when this dataset was committed, what should be the second tuple?
+        domains=["Web"],  # obtained from Freesound - online collaborative platform
+        task_subtypes=["Environment Sound Classification"],
+        license="cc-by-4.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        modalities=["audio"],
+        sample_creation="found",
+        bibtex_citation=r"""
+@dataset{eduardo_fonseca_2020_3612637,
+  author = {Eduardo Fonseca and
+Manoj Plakal and
+Frederic Font and
+Daniel P. W. Ellis and
+Xavier Serra},
+  doi = {10.5281/zenodo.3612637},
+  month = jan,
+  publisher = {Zenodo},
+  title = {FSDKaggle2019},
+  url = {https://doi.org/10.5281/zenodo.3612637},
+  version = {1.0},
+  year = {2020},
+}
+""",
+        adapted_from=["FSD2019Kaggle"],
+    )
+    max_eval_samples = 3000
 
     evaluator_model = MultiOutputClassifier(estimator=LogisticRegression())
     input_column_name: str = "audio"

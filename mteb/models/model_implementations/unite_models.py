@@ -8,6 +8,7 @@ from tqdm.autonotebook import tqdm
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -131,6 +132,9 @@ class UniteWrapper(AbsEncoder):
         max_image_tokens: int = 1280,
         fps: float | None = None,
         max_frames: int | None = None,
+        # 32 fixed frames: an mteb pick among UNITE's eval counts (48 for
+        # retrieval, 32 for CaReBench, 16 for CoVR)
+        # https://github.com/friedrichor/UNITE/blob/main/eval/task_config.py
         num_frames: int | None = 32,
         target_sampling_rate: int = 16000,
         video_max_pixels: int = 360 * 420,
@@ -166,6 +170,10 @@ class UniteWrapper(AbsEncoder):
         if vp is not None:
             size = dict(getattr(vp, "size", None) or {})
             size["longest_edge"] = video_max_pixels
+            # qwen_vl_utils' VIDEO_MIN_PIXELS, which the reference uses (it sets
+            # no video min_pixels)
+            # https://github.com/friedrichor/UNITE/blob/main/inference/inference_demo.py
+            size["shortest_edge"] = 128 * 28 * 28
             vp.size = size
 
     @staticmethod
@@ -293,4 +301,5 @@ unite_base_qwen2vl_2b = ModelMeta(
     adapted_from="Qwen/Qwen2-VL-2B-Instruct",
     citation=UNITE_CITATION,
     extra_requirements_groups=["transformers-v4"],
+    output_dtypes=OutputDType.BF16,
 )

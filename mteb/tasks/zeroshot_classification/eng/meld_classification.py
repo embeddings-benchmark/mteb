@@ -63,6 +63,5 @@ class MELDVideoZeroShotClassification(AbsTaskRetrieval):
         dialect=[],
         modalities=["video", "text"],
         sample_creation="found",
-        is_beta=True,
         bibtex_citation=CITATION,
     )

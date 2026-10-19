@@ -21,7 +21,7 @@ from typing_extensions import override
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     import torch
@@ -40,6 +40,11 @@ IMAGE_BASE_FACTOR = 16
 IMAGE_FACTOR = IMAGE_BASE_FACTOR * 2
 MIN_PIXELS = 4 * IMAGE_FACTOR * IMAGE_FACTOR
 MAX_PIXELS = 1800 * IMAGE_FACTOR * IMAGE_FACTOR
+# pixel budget for a whole frame list: UEmbed's MAX_TOTAL_PIXELS, which
+# qwen-vl-utils spreads over the frames before the processor (do_resize=False)
+MAX_TOTAL_PIXELS = 10 * 768 * IMAGE_FACTOR * IMAGE_FACTOR
+# fps=1, max_frames=64: UEmbed's own FPS / MAX_FRAMES
+# https://github.com/Alibaba-NLP/UEmbed/blob/main/src/models/qwen35_embedding.py
 DEFAULT_FPS = 1.0
 DEFAULT_MAX_FRAMES = 64
 SPARSE_DIM = 184_016
@@ -349,6 +354,50 @@ class _UEmbedInference:
         )
         return conversation, pil_images, video_frames
 
+    @staticmethod
+    def _resize_video(video: torch.Tensor) -> torch.Tensor:
+        """Resize a clip to UEmbed's total pixel budget, as qwen-vl-utils' fetch_video does.
+
+        https://github.com/QwenLM/Qwen3-VL/blob/96588727e44c78b25ba03ea03b8e12f7e64fd0da/qwen-vl-utils/src/qwen_vl_utils/vision_process.py#L430-L475
+        """
+        import torch
+        from qwen_vl_utils.vision_process import (
+            FRAME_FACTOR,
+            VIDEO_MAX_TOKEN_NUM,
+            VIDEO_MIN_TOKEN_NUM,
+            ceil_by_factor,
+            smart_resize,
+        )
+        from torchvision.transforms import InterpolationMode
+        from torchvision.transforms.functional import resize
+
+        nframes = ceil_by_factor(len(video), FRAME_FACTOR)
+        if nframes > len(video):
+            video = torch.cat(
+                [video, video[-1:].expand(nframes - len(video), -1, -1, -1)]
+            )
+        min_pixels = VIDEO_MIN_TOKEN_NUM * IMAGE_FACTOR * IMAGE_FACTOR
+        max_pixels = max(
+            min(
+                VIDEO_MAX_TOKEN_NUM * IMAGE_FACTOR * IMAGE_FACTOR,
+                MAX_TOTAL_PIXELS / nframes * FRAME_FACTOR,
+            ),
+            int(min_pixels * 1.05),
+        )
+        height, width = smart_resize(
+            video.shape[2],
+            video.shape[3],
+            factor=IMAGE_FACTOR,
+            min_pixels=min_pixels,
+            max_pixels=max_pixels,
+        )
+        return resize(
+            video.cpu(),
+            [height, width],
+            interpolation=InterpolationMode.BICUBIC,
+            antialias=True,
+        ).float()
+
     def _preprocess_inputs(
         self,
         conversations: list[list[dict[str, Any]]],
@@ -362,6 +411,10 @@ class _UEmbedInference:
             add_generation_prompt=True,
             tokenize=False,
         )
+        # frames are sized as UEmbed sizes a frame list (qwen-vl-utils with
+        # total_pixels), then passed with do_resize=False; the video processor's
+        # own size would ignore the budget
+        videos = [self._resize_video(video) for video in videos]
         # Qwen3-VL renders frame timestamps into the prompt, so report the rate
         # VideoCollator sampled at rather than let the processor assume 24 fps.
         video_metadata = [
@@ -381,6 +434,7 @@ class _UEmbedInference:
             truncation=True,
             max_length=self.max_length,
             padding=True,
+            videos_kwargs={"do_resize": False},
             return_tensors="pt",
         )
         return {
@@ -600,6 +654,9 @@ class UEmbedEncoder(AbsEncoder):
                 target_sampling_rate=16_000,
                 fps=self.fps,
                 max_frames=self.max_frames,
+                # at least 4 frames: FPS_MIN_FRAMES of qwen-vl-utils, which UEmbed's
+                # code samples with; the processor fails on a single frame
+                min_frames=4,
             )
 
         batches: list[torch.Tensor] = []
@@ -705,6 +762,7 @@ uembed_2b = ModelMeta(
     embed_dim=2048,
     reference="https://huggingface.co/Alibaba-NLP/UEmbed-2B",
     **_COMMON_METADATA,
+    output_dtypes=OutputDType.BF16,
 )
 
 uembed_4b = ModelMeta(
@@ -716,6 +774,7 @@ uembed_4b = ModelMeta(
     embed_dim=2560,
     reference="https://huggingface.co/Alibaba-NLP/UEmbed-4B",
     **_COMMON_METADATA,
+    output_dtypes=OutputDType.BF16,
 )
 
 uembed_9b = ModelMeta(
@@ -727,4 +786,5 @@ uembed_9b = ModelMeta(
     embed_dim=4096,
     reference="https://huggingface.co/Alibaba-NLP/UEmbed-9B",
     **_COMMON_METADATA,
+    output_dtypes=OutputDType.BF16,
 )
