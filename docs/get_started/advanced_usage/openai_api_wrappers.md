@@ -19,7 +19,10 @@ This is useful for:
 - Using hosted embedding and reranking APIs
 
 !!! note "CLI support"
-    The MTEB CLI does not currently support OpenAI-compatible API wrappers. Use the Python API directly as shown in the examples below.
+    Embedding models can also be evaluated from the command line with `mteb run --endpoint-url ...`, see [Command Line](../usage/cli.md#running-models-served-by-an-openai-compatible-api). Reranking and token-level models are only supported through the Python API shown below.
+
+!!! note "Registered models"
+    If `model_name` is a model registered in MTEB, the results are saved as an experiment (`served_via_openai_api`) next to the model's results, since the served model can differ from the registered implementation. Such results are not submitted by `mteb submit-results`.
 
 ## Usage
 
@@ -143,7 +146,7 @@ print(results)
     Image/audio/video content is always sent via `messages`, which vLLM renders through the model's **chat template**. Non-chat text-encoder models — e.g. `BAAI/bge-small-en-v1.5`, `BAAI/bge-m3` — don't define one and will reject `messages` requests with a 400 error (`"...default chat template is no longer allowed..."`).
 
     - `OpenAIAPITokenEmbedWrapper` defaults to `use_chat_template=True` (every request, including pure text, goes through `messages`), since it's vLLM-only.
-    - `OpenAIAPIEncodeWrapper` also defaults to `use_chat_template=True`, but is commonly pointed at the real OpenAI API or non-chat vLLM models — neither supports `messages` for embeddings — so set `use_chat_template=False` for those; pure-text requests then use the plain `input` field instead.
+    - `OpenAIAPIEncodeWrapper` defaults to `use_chat_template=None`: text uses the plain `input` field for text-only tasks (which works with the OpenAI API and non-chat vLLM models), and goes through `messages` for tasks with image/audio/video inputs, so text and media are embedded the same way. Set it to `True` or `False` to force either.
     - `OpenAIAPIRerankWrapper` has no such flag: text-only rerank/score requests never use `messages` in the first place (they use the `query`/`documents` string fields), so this only matters for the two wrappers above.
 
 ## Live testing scripts

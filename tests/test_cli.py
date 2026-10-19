@@ -16,10 +16,12 @@ from mteb.cli.build_cli import (
     _available_tasks,
     _create_meta,
     _leaderboard,
+    _load_endpoint_model,
     _mock_run,
     build_cli,
     run,
 )
+from mteb.models import OpenAIAPIEncodeWrapper
 
 
 def test_available_tasks(capsys: pytest.CaptureFixture[str]):
@@ -83,6 +85,7 @@ def test_run_task(
         benchmarks=None,
         overwrite=False,
         save_predictions=None,
+        endpoint_url=None,
     )
 
     run(args)
@@ -96,6 +99,63 @@ def test_run_task(
     assert f"{task_name}.json" in [f.name for f in list(results_path.glob("*.json"))], (
         f"{task_name} not found in output folder"
     )
+
+
+def test_run_endpoint(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    """`--endpoint-url` evaluates the served model through OpenAIAPIEncodeWrapper."""
+    monkeypatch.setenv("MY_API_KEY", "secret")
+    args = build_cli().parse_args(
+        [
+            "run",
+            "-m",
+            "org/served-model",
+            "--model-revision",
+            "v1",
+            "-t",
+            "BornholmBitextMining",
+            "--output-folder",
+            tmp_path.as_posix(),
+            "--endpoint-url",
+            "http://localhost:8000/",
+            "--api-key-env",
+            "MY_API_KEY",
+            "--timeout",
+            "10",
+            "--max-retries",
+            "5",
+            "--no-verify-ssl",
+            "--max-length",
+            "128",
+            "--no-chat-template",
+        ]
+    )
+    models_response = MagicMock()
+    models_response.json.return_value = {"data": [{"id": "org/served-model"}]}
+
+    with (
+        patch("mteb.models.openai_wrappers.requests.get", return_value=models_response),
+        patch("mteb.cli.build_cli.mteb.evaluate") as mock_evaluate,
+    ):
+        args.func(args)
+
+    model = mock_evaluate.call_args.args[0]
+    assert isinstance(model, OpenAIAPIEncodeWrapper)
+    assert model.endpoint_url == "http://localhost:8000"
+    assert model.api_key == "secret"
+    assert model.timeout == 10
+    assert model.max_retries == 5
+    assert model.verify_ssl is False
+    assert model.max_length == 128
+    assert model.use_chat_template is False
+    assert model.mteb_model_meta.name == "org/served-model"
+    assert model.mteb_model_meta.revision == "v1"
+
+
+def test_run_endpoint_requires_model():
+    args = build_cli().parse_args(["run", "--endpoint-url", "http://localhost:8000"])
+
+    with pytest.raises(ValueError, match="--model"):
+        _load_endpoint_model(args)
 
 
 @pytest.mark.parametrize(
