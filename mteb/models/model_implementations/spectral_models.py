@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import contextlib
 import hashlib
 import json
 import math
@@ -155,11 +154,6 @@ def _featurize(text: str, seed: int, dim_h: int) -> tuple[np.ndarray, np.ndarray
     if norm > 1e-12:
         values /= np.float32(norm)
     return indices, values
-
-
-def _unit_rows(x: Array) -> np.ndarray:
-    a = np.atleast_2d(np.asarray(x, dtype=np.float32))
-    return a / np.maximum(np.linalg.norm(a, axis=1, keepdims=True), 1e-12)
 
 
 class SpectralEmbedModel:
@@ -519,28 +513,20 @@ class SpectralEmbedV2Model:
     ) -> None:
         npz_file = hf_hub_download(
             repo_id=model_name,
-            filename="spectral_embed-v2-140m.npz",
+            filename="spectral-embed-v2-140m.npz",
             revision=revision,
         )
         with np.load(npz_file, allow_pickle=False) as d:
             self.w_t = np.ascontiguousarray(d["W"].T, dtype=np.float32)
             self.b = np.asarray(d["b"], dtype=np.float32)
-            self.k = int(d["k"]) if "k" in d.files else int(self.w_t.shape[1])
-            self.dim_h = int(d["H"]) if "H" in d.files else int(self.w_t.shape[0])
-            self.seed = int(d["hash_seed"]) if "hash_seed" in d.files else 42
-            self.idf = (
-                np.asarray(d["idf"], dtype=np.float32) if "idf" in d.files else None
-            )
-
-            codec_params = {}
-            if "codec_params_json" in d.files:
-                with contextlib.suppress(Exception):
-                    codec_params = json.loads(str(d["codec_params_json"]))
-
-            w_cfg = codec_params.get("weighting", {}) or {}
-            avgdl = float(d.get("avgdl", w_cfg.get("avgdl", 166.7)))
-            k1 = float(d.get("bm25_k1", w_cfg.get("k1", 1.5)))
-            bm25_b = float(d.get("bm25_b", w_cfg.get("b", 0.75)))
+            self.k = int(d["k"])
+            self.dim_h = int(d["H"])
+            self.seed = int(d["hash_seed"])
+            self.idf = np.asarray(d["idf"], dtype=np.float32)
+            avgdl = float(d["avgdl"])
+            weighting = json.loads(str(d["codec_params_json"]))["weighting"]
+            k1 = float(weighting["k1"])
+            bm25_b = float(weighting["b"])
 
         self.featurizer = SpectralFeaturizer(
             dim_h=self.dim_h, seed=self.seed, avgdl=avgdl, k1=k1, b=bm25_b
@@ -600,7 +586,7 @@ class SpectralEmbedV2Model:
 spectral_embed_v2_140m = ModelMeta(
     loader=SpectralEmbedV2Model,
     name="JMullings/spectral-embed-v2-140m",
-    revision="49ba7894e39a91bb6aef54b6b7bbc2bd2b6609c5",
+    revision="6943d55ebe5e317f00701b574c12d4f39ca6f03b",
     release_date="2026-10-06",
     languages=["eng-Latn"],
     n_parameters=134_219_776,
