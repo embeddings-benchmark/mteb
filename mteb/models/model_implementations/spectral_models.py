@@ -30,6 +30,18 @@ def _unit_rows(x: Array) -> np.ndarray:
     return a / np.maximum(np.linalg.norm(a, axis=1, keepdims=True), 1e-12)
 
 
+def _cosine_similarity(embeddings1: Array, embeddings2: Array) -> np.ndarray:
+    """Cosine similarity that returns a 0-d array for two single vectors.
+
+    Some evaluators (e.g. summarization) call ``float(model.similarity(a, b))`` on
+    1D embeddings, which fails on a 1x1 array. Matrix inputs are unchanged.
+    """
+    a = np.asarray(embeddings1)
+    b = np.asarray(embeddings2)
+    sim = _unit_rows(a) @ _unit_rows(b).T
+    return sim.reshape(()) if a.ndim == 1 and b.ndim == 1 else sim
+
+
 # Text normalisation and featurisation. These must match the training setup
 # exactly, otherwise the learned projection matrix no longer lines up.
 
@@ -576,7 +588,7 @@ class SpectralEmbedV2Model:
 
     @staticmethod
     def similarity(embeddings1: Array, embeddings2: Array) -> np.ndarray:
-        return _unit_rows(embeddings1) @ _unit_rows(embeddings2).T
+        return _cosine_similarity(embeddings1, embeddings2)
 
     @staticmethod
     def similarity_pairwise(embeddings1: Array, embeddings2: Array) -> np.ndarray:
