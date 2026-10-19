@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import math
 
+import numpy as np
 import pytest
 
 pytest.importorskip("fastapi")
@@ -116,3 +117,15 @@ def test_degenerate_inputs_return_empty():
 def test_nan_scores_are_missing():
     res = _rate(_scores(a={"t1": float("nan")}, b={"t1": 0.1}), ["t1"], n_boot=0)
     assert res["b"].score > res["a"].score
+
+
+def test_both_missing_is_a_tie():
+    from mteb.api.bradley_terry import _task_win_matrices
+
+    nan = float("nan")
+    out = _task_win_matrices(np.array([[1.0, nan], [2.0, nan], [nan, nan]]))
+    # t2: nobody has a score, so every pair ties
+    assert out[1][0, 1] == out[1][1, 0] == out[1][0, 2] == 0.5
+    assert out[1][0, 0] == 0
+    # t1: a model with a score beats the one without
+    assert out[0][0, 2] == 1 and out[0][2, 0] == 0

@@ -34,7 +34,8 @@ def _task_win_matrices(scores: NDArray[np.float64]) -> NDArray[np.float32]:
     """Per-task pairwise win matrices, shape ``(T, M, M)`` (float32).
 
     ``scores`` is ``(M, T)`` with NaN for missing. ``out[t, i, j]`` is 1 if model i
-    beats j on task t, 0.5 on a tie, 0 otherwise; pairs where both lack a score are 0.
+    beats j on task t, 0.5 on a tie, 0 otherwise. A model with a score beats one without;
+    pairs where both lack a score count as a tie.
     """
     n_models, n_tasks = scores.shape
     out = np.zeros((n_tasks, n_models, n_models), dtype=np.float32)
@@ -42,9 +43,8 @@ def _task_win_matrices(scores: NDArray[np.float64]) -> NDArray[np.float32]:
         col = scores[:, t]
         present = ~np.isnan(col)
         filled = np.where(present, col, -np.inf)
-        both_missing = ~present[:, None] & ~present[None, :]
         wins = (filled[:, None] > filled[None, :]).astype(np.float32)
-        ties = (filled[:, None] == filled[None, :]) & ~both_missing
+        ties = filled[:, None] == filled[None, :]
         wins += 0.5 * ties
         np.fill_diagonal(wins, 0.0)
         out[t] = wins
