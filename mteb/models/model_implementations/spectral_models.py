@@ -519,10 +519,10 @@ class SpectralEmbedV2Model:
     ) -> None:
         npz_file = hf_hub_download(
             repo_id=model_name,
-            filename="spectral-embed-v2-140m.npz",
+            filename="spectral_embed-v2-140m.npz",
             revision=revision,
         )
-        with np.load(npz_file, allow_pickle=True) as d:
+        with np.load(npz_file, allow_pickle=False) as d:
             self.w_t = np.ascontiguousarray(d["W"].T, dtype=np.float32)
             self.b = np.asarray(d["b"], dtype=np.float32)
             self.k = int(d["k"]) if "k" in d.files else int(self.w_t.shape[1])
@@ -603,8 +603,8 @@ spectral_embed_v2_140m = ModelMeta(
     revision="49ba7894e39a91bb6aef54b6b7bbc2bd2b6609c5",
     release_date="2026-10-06",
     languages=["eng-Latn"],
-    n_parameters=139_471_360,
-    n_embedding_parameters=139_471_360,
+    n_parameters=134_219_776,
+    n_embedding_parameters=134_219_776,
     memory_usage_mb=560,
     max_tokens=512,
     embed_dim=2048,
