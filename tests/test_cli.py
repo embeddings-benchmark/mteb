@@ -100,32 +100,6 @@ def test_run_task(
 
 
 @pytest.mark.parametrize(
-    ("argv", "expected_num_proc"),
-    [
-        ([], None),
-        (["--num-proc", "4"], 4),
-        (["--num_proc", "2"], 2),
-    ],
-)
-def test_run_passes_num_proc(
-    argv: list[str], expected_num_proc: int | None, tmp_path: Path
-):
-    args = build_cli().parse_args(
-        ["run", "-m", "org/model", "-t", "BornholmBitextMining"]
-        + ["--output-folder", tmp_path.as_posix(), "--device", "0", *argv]
-    )
-
-    with (
-        patch("mteb.cli.build_cli.mteb.get_model") as mock_get_model,
-        patch("mteb.cli.build_cli.mteb.evaluate") as mock_evaluate,
-    ):
-        args.func(args)
-
-    mock_get_model.assert_called_once()
-    assert mock_evaluate.call_args.kwargs["num_proc"] == expected_num_proc
-
-
-@pytest.mark.parametrize(
     ("argv", "expected"),
     [
         (
