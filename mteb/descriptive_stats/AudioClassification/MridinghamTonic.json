@@ -1,21 +1,20 @@
 {
     "train": {
-        "num_samples": 6976,
+        "num_samples": 6977,
         "samples_in_train": null,
         "text_statistics": null,
         "image_statistics": null,
         "audio_statistics": {
-            "total_duration_seconds": 2461.5259410430963,
-            "min_duration_seconds": 0.0809297052154195,
-            "average_duration_seconds": 0.35285635622750805,
+            "total_duration_seconds": 2461.5489342403753,
+            "min_duration_seconds": 0.022993197278911564,
+            "average_duration_seconds": 0.35280907757494273,
             "max_duration_seconds": 2.3439909297052153,
-            "unique_audios": 6976,
+            "unique_audios": 6977,
             "average_sampling_rate": 44100.0,
             "sampling_rates": {
-                "44100": 6976
+                "44100": 6977
             }
         },
-        "video_statistics": null,
         "label_statistics": {
             "min_labels_per_text": 1,
             "average_label_per_text": 1.0,
@@ -35,7 +34,7 @@
                     "count": 1463
                 },
                 "3": {
-                    "count": 879
+                    "count": 880
                 },
                 "5": {
                     "count": 1097

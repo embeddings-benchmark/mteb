@@ -9,7 +9,7 @@ class MridinghamStroke(AbsTaskClassification):
         reference="https://huggingface.co/datasets/silky1708/Mridingham-Stroke",
         dataset={
             "path": "mteb/mridingham-stroke",
-            "revision": "70d4c43381da9938b6b1bc2b849ed1b440e3c14f",
+            "revision": "2b6d06ff3da6da9609f078b6bc92c248016a5112",
         },
         type="AudioClassification",
         category="a2c",
