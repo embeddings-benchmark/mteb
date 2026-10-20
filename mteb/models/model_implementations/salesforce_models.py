@@ -106,7 +106,6 @@ SFR_Embedding_Code_2B_R = ModelMeta(
   year={2024}
 }
 """,
-    output_dtypes=OutputDType.BF16,
 )
 
 SFR_Embedding_Mistral = ModelMeta(

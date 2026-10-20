@@ -9,7 +9,6 @@ from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator, fixed_numpy_seed
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
-from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -380,5 +379,4 @@ clap_large_v2 = ModelMeta(
     adapted_from="LCO-Embedding/LCO-Embedding-Omni-7B",
     # the checkpoint's Qwen2-VL processor needs torchvision and Pillow
     extra_requirements_groups=["multimodal-sbert", "image"],
-    output_dtypes=OutputDType.BF16,
 )

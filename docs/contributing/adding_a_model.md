@@ -52,9 +52,10 @@ Typically, it only requires that you fill in metadata about the model and add it
         public_training_data="https://huggingface.co/datasets/user-or-org/full-dataset",
         training_datasets={"MSMARCO"},  # if you trained on the MSMARCO training set
         output_dtypes=[
+            OutputDType.FLOAT32,
             OutputDType.INT8,
             OutputDType.BINARY,
-        ],  # Alternative output types supported by the model
+        ],  # dtypes of the returned embeddings; defaults to float32 (None for cross-encoders)
     )
     ```
 

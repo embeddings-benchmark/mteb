@@ -133,6 +133,7 @@ VOYAGE_TOTAL_TOKEN_LIMITS = {
 }
 
 OUTPUT_TYPES = [
+    OutputDType.FLOAT32,  # default; the quantized types are opt-in via the API
     OutputDType.INT8,
     OutputDType.UINT8,
     OutputDType.BINARY,

@@ -74,7 +74,6 @@ e5_large_matryoshka_sts_pt = ModelMeta(
     model_type=["dense"],
     citation=PT_MATRYOSHKA_EMBEDDING_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=None,
 )
 
@@ -106,7 +105,6 @@ BERTimbau_large_matryoshka_sts_pt = ModelMeta(
     model_type=["dense"],
     citation=PT_MATRYOSHKA_EMBEDDING_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=None,
 )
 
@@ -138,7 +136,6 @@ ModBERTBr_matryoshka_sts_pt = ModelMeta(
     model_type=["dense"],
     citation=PT_MATRYOSHKA_EMBEDDING_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=None,
 )
 
@@ -170,7 +167,6 @@ Legal_BERTimbau_sts_large_ma_v3 = ModelMeta(
     model_type=["dense"],
     citation=None,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=None,
 )
 
@@ -202,7 +198,6 @@ serafim_100m_portuguese_pt_sentence_encoder = ModelMeta(
     model_type=["dense"],
     citation=SERAFIM_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=None,
 )
 
@@ -234,7 +229,6 @@ serafim_335m_portuguese_pt_sentence_encoder = ModelMeta(
     model_type=["dense"],
     citation=SERAFIM_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=None,
 )
 
@@ -266,7 +260,6 @@ serafim_335m_portuguese_pt_sentence_encoder_ir = ModelMeta(
     model_type=["dense"],
     citation=SERAFIM_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=None,
 )
 
@@ -298,7 +291,6 @@ serafim_100m_portuguese_pt_sentence_encoder_ir = ModelMeta(
     model_type=["dense"],
     citation=SERAFIM_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=None,
 )
 
@@ -330,7 +322,6 @@ serafim_900m_portuguese_pt_sentence_encoder_ir = ModelMeta(
     model_type=["dense"],
     citation=SERAFIM_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=None,
 )
 
@@ -362,6 +353,5 @@ serafim_900m_portuguese_pt_sentence_encoder = ModelMeta(
     model_type=["dense"],
     citation=SERAFIM_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=None,
 )

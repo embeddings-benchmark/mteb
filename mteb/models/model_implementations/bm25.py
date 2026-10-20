@@ -614,6 +614,7 @@ bm25_s = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     citation=_BM25_CITATION,
+    output_dtypes=None,
 )
 
 bm25_s_subword = ModelMeta(
@@ -640,4 +641,5 @@ bm25_s_subword = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     citation=_BM25_CITATION,
+    output_dtypes=None,
 )

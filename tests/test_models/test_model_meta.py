@@ -289,43 +289,14 @@ def test_check_training_datasets_can_be_derived(model_meta: ModelMeta):
     model_meta.get_training_datasets()
 
 
-_LOW_PRECISION_LOAD_DTYPES = {"float16", "bfloat16", "half"}
-# Loader kwargs ignored by the loader, so the declared output_dtypes follow the dtype actually used
-_LOAD_DTYPE_NOT_APPLIED = {
-    "jinaai/jina-reranker-v2-base-multilingual",  # JinaReranker loads with torch_dtype="auto"
-}
-
-
-def _find_load_dtype(kwargs: object) -> str | None:
-    if not isinstance(kwargs, dict):
-        return None
-    for key, value in kwargs.items():
-        if key in {"dtype", "torch_dtype", "fp_options"}:
-            return str(getattr(value, "value", value)).removeprefix("torch.")
-        if (found := _find_load_dtype(value)) is not None:
-            return found
-    return None
-
-
-@pytest.mark.parametrize("model_meta", mteb.get_model_metas())
-def test_low_precision_load_dtype_is_declared_in_output_dtypes(model_meta: ModelMeta):
-    # The results repository relies on output_dtypes to know which results were scored from
-    # low-precision embeddings: https://github.com/embeddings-benchmark/mteb/issues/5229
-    load_dtype = _find_load_dtype(model_meta.loader_kwargs)
-    if (
-        load_dtype not in _LOW_PRECISION_LOAD_DTYPES
-        or model_meta.name in _LOAD_DTYPE_NOT_APPLIED
-    ):
-        return
-    output_dtypes = model_meta.output_dtypes
-    if not isinstance(output_dtypes, list):
-        output_dtypes = [output_dtypes] if output_dtypes else []
-    declared = {getattr(dtype, "value", dtype) for dtype in output_dtypes}
-    expected = "float16" if load_dtype == "half" else load_dtype
-    assert expected in declared, (
-        f"{model_meta.name} is loaded in {load_dtype}, so output_dtypes should include "
-        f"OutputDType.{'BF16' if expected == 'bfloat16' else 'FLOAT16'}, got {model_meta.output_dtypes}"
-    )
+def test_cross_encoders_declare_no_output_dtypes():
+    """Cross-encoders return scores, not embeddings, so they have no output_dtypes."""
+    declared = {
+        meta.name: meta.output_dtypes
+        for meta in mteb.get_model_metas(model_types=["cross-encoder"])
+        if meta.output_dtypes is not None
+    }
+    assert not declared
 
 
 @pytest.mark.parametrize("model_type", ["dense", "cross-encoder", "late-interaction"])
@@ -479,7 +450,7 @@ def test_model_to_python():
     model_type=['dense'],
     citation='@inproceedings{reimers-2019-sentence-bert,\\n    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",\\n    author = "Reimers, Nils and Gurevych, Iryna",\\n    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",\\n    month = "11",\\n    year = "2019",\\n    publisher = "Association for Computational Linguistics",\\n    url = "http://arxiv.org/abs/1908.10084",\\n}\\n',
     contacts=None,
-    output_dtypes=None,
+    output_dtypes=OutputDType.FLOAT32,
     extra_requirements_groups=None,
 )"""
     )

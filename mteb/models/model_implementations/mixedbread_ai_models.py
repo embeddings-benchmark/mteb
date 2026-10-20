@@ -193,7 +193,6 @@ mxbai_rerank_xsmall_v1 = ModelMeta(
     model_type=["cross-encoder"],
     citation=None,
     contacts=None,
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 mxbai_rerank_base_v1 = ModelMeta(
@@ -228,7 +227,6 @@ mxbai_rerank_base_v1 = ModelMeta(
     model_type=["cross-encoder"],
     citation=None,
     contacts=None,
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 mxbai_rerank_large_v1 = ModelMeta(
@@ -263,7 +261,6 @@ mxbai_rerank_large_v1 = ModelMeta(
     model_type=["cross-encoder"],
     citation=None,
     contacts=None,
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 # Languages from the model card (ISO 639-1) mapped to MTEB codes via
@@ -429,7 +426,6 @@ mxbai_rerank_base_v2 = ModelMeta(
     extra_requirements_groups=["multimodal-sbert"],
     citation=MXBAI_RERANK_V2_CITATION,
     contacts=None,
-    output_dtypes=OutputDType.BF16,
 )
 
 mxbai_rerank_large_v2 = ModelMeta(
@@ -460,7 +456,6 @@ mxbai_rerank_large_v2 = ModelMeta(
     extra_requirements_groups=["multimodal-sbert"],
     citation=MXBAI_RERANK_V2_CITATION,
     contacts=None,
-    output_dtypes=OutputDType.BF16,
 )
 
 mxbai_edge_colbert_v0_17m = ModelMeta(

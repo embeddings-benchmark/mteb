@@ -39,7 +39,6 @@ bge_vl_base = ModelMeta(
     use_instructions=True,
     training_datasets=BGE_VL_TRAINING_DATASETS,
     citation=MEGAPAIRS_CITATION,
-    output_dtypes=OutputDType.BF16,
 )
 
 bge_vl_large = ModelMeta(
@@ -66,7 +65,6 @@ bge_vl_large = ModelMeta(
     use_instructions=True,
     training_datasets=BGE_VL_TRAINING_DATASETS,
     citation=MEGAPAIRS_CITATION,
-    output_dtypes=OutputDType.BF16,
 )
 
 bge_vl_mllm_s1 = ModelMeta(

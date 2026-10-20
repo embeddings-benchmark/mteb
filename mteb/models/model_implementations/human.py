@@ -21,4 +21,5 @@ human = ModelMeta(
     training_datasets=None,
     public_training_code=None,
     public_training_data=None,
+    output_dtypes=None,
 )

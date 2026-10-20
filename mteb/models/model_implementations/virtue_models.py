@@ -7,7 +7,6 @@ from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -175,7 +174,6 @@ virtue_2b_scar = ModelMeta(
     training_datasets=virtue_training_datasets,
     adapted_from="Qwen/Qwen2-VL-2B-Instruct",
     citation=VIRTUE_CITATION,
-    output_dtypes=OutputDType.BF16,
 )
 
 virtue_7b_scar = ModelMeta(
@@ -202,5 +200,4 @@ virtue_7b_scar = ModelMeta(
     training_datasets=virtue_training_datasets,
     adapted_from="Qwen/Qwen2-VL-7B-Instruct",
     citation=VIRTUE_CITATION,
-    output_dtypes=OutputDType.BF16,
 )
