@@ -24,6 +24,7 @@ from .swe_bench_lite_reranking import SWEbenchLiteReranking
 from .swe_bench_multilingual_reranking import SWEbenchMultilingualRR
 from .swe_bench_verified_reranking import SWEbenchVerifiedReranking
 from .swe_poly_bench_reranking import SWEPolyBenchReranking
+from .vislinga import VisLingAImage, VisLingAText
 from .vocal_sound_audio_reranking import VocalSoundAudioReranking
 from .web_linx_candidates_reranking import WebLINXCandidatesReranking
 from .xmod_bench import (
@@ -64,6 +65,8 @@ __all__ = [
     "SWEbenchVerifiedReranking",
     "SciDocsReranking",
     "StackOverflowDupQuestions",
+    "VisLingAImage",
+    "VisLingAText",
     "VocalSoundAudioReranking",
     "WebLINXCandidatesReranking",
     "XModBenchAT2IReranking",
