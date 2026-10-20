@@ -25,21 +25,6 @@ if TYPE_CHECKING:
     from mteb.types import Array, BatchedInput, PromptType
 
 
-def _unit_rows(x: Array) -> np.ndarray:
-    a = np.atleast_2d(np.asarray(x, dtype=np.float32))
-    return a / np.maximum(np.linalg.norm(a, axis=1, keepdims=True), 1e-12)
-
-
-def _cosine_similarity(embeddings1: Array, embeddings2: Array) -> np.ndarray:
-    """Cosine similarity that returns a 0-d array for two single vectors."""
-    a = np.asarray(embeddings1)
-    b = np.asarray(embeddings2)
-    sim = _unit_rows(a) @ _unit_rows(b).T
-    return sim.reshape(()) if a.ndim == 1 and b.ndim == 1 else sim
-
-
-# V1 FEATURIZATION & NORMALIZATION (Retained for V1 backward compatibility)
-
 _LATEX_CMD_RE = re.compile(r"\\([A-Za-z]+)")
 _WS_RE = re.compile(r"\s+")
 _WORD_RE = re.compile(r"[a-z0-9]+")
@@ -51,20 +36,62 @@ _GREEK.update(
     {"\u03bb": "lambda", "\u03d5": "phi", "\u03f5": "epsilon", "\u03d1": "theta"}
 )
 
-# fmt: off
 _SYMBOLS = {
-    "≤": "leq", "≥": "geq", "≠": "neq", "≈": "approx", "≡": "equiv", "∼": "sim",
-    "±": "plusminus", "×": "times", "÷": "div", "·": "dot", "∑": "sum", "∏": "prod",
-    "∫": "integral", "∂": "partial", "∇": "nabla", "∞": "infinity", "√": "sqrt",
-    "→": "to", "←": "from", "∈": "in", "∉": "notin", "⊂": "subset", "⊆": "subseteq",
-    "∪": "union", "∩": "intersection", "^": "pow", "_": "sub", "=": "eq", "+": "plus",
-    "*": "times", "<": "lt", ">": "gt",
+    "≤": "leq",
+    "≥": "geq",
+    "≠": "neq",
+    "≈": "approx",
+    "≡": "equiv",
+    "∼": "sim",
+    "±": "plusminus",
+    "×": "times",
+    "÷": "div",
+    "·": "dot",
+    "∑": "sum",
+    "∏": "prod",
+    "∫": "integral",
+    "∂": "partial",
+    "∇": "nabla",
+    "∞": "infinity",
+    "√": "sqrt",
+    "→": "to",
+    "←": "from",
+    "∈": "in",
+    "∉": "notin",
+    "⊂": "subset",
+    "⊆": "subseteq",
+    "∪": "union",
+    "∩": "intersection",
+    "^": "pow",
+    "_": "sub",
+    "=": "eq",
+    "+": "plus",
+    "*": "times",
+    "<": "lt",
+    ">": "gt",
 }
-_DETERMINERS = frozenset({
-    "a", "an", "the", "this", "that", "these", "those", "my", "your", "his", "her",
-    "its", "our", "their", "some", "any", "each", "every",
-})
-# fmt: on
+_DETERMINERS = frozenset(
+    {
+        "a",
+        "an",
+        "the",
+        "this",
+        "that",
+        "these",
+        "those",
+        "my",
+        "your",
+        "his",
+        "her",
+        "its",
+        "our",
+        "their",
+        "some",
+        "any",
+        "each",
+        "every",
+    }
+)
 
 _TRANSLATION = {ord(c): f" {name} " for c, name in {**_GREEK, **_SYMBOLS}.items()}
 _TRANSLATION.update({ord(c): " " for c in "{}$\\"})
@@ -87,7 +114,7 @@ _POS_BINS = 4
 _SKIP_WINDOW = 3
 
 
-def _normalize_v1(text: str) -> str:
+def _normalize(text: str) -> str:
     text = _LATEX_CMD_RE.sub(r" \1 ", str(text)).translate(_TRANSLATION)
     return _WS_RE.sub(" ", text).strip().lower()
 
@@ -96,8 +123,9 @@ def _is_adjective(word: str) -> bool:
     return len(word) > 3 and word.endswith(_ADJ_SUFFIXES)
 
 
-def _feature_keys_v1(text: str) -> Iterator[str]:
-    cleaned = _normalize_v1(text)
+def _feature_keys(text: str) -> Iterator[str]:
+    """Yield one string key per feature occurrence, tagged by channel."""
+    cleaned = _normalize(text)
     words = _WORD_RE.findall(cleaned)
     n = len(words)
 
@@ -126,18 +154,19 @@ def _feature_keys_v1(text: str) -> Iterator[str]:
 
 
 @lru_cache(maxsize=500_000)
-def _bucket_v1(key: str, seed: int, dim_h: int) -> int:
+def _bucket(key: str, seed: int, dim_h: int) -> int:
     return zlib.crc32(f"{seed}:{key}".encode()) % dim_h
 
 
-def _featurize_v1(text: str, seed: int, dim_h: int) -> tuple[np.ndarray, np.ndarray]:
+def _featurize(text: str, seed: int, dim_h: int) -> tuple[np.ndarray, np.ndarray]:
+    """Hash a text into an L2-normalised sparse vector (indices, values)."""
     buckets: dict[int, float] = {}
-    for key, tf in Counter(_feature_keys_v1(text)).items():
+    for key, tf in Counter(_feature_keys(text)).items():
         kind, _, rest = key.partition(":")
         scale = (
             1.5 / int(rest.split(":", 1)[0]) if kind == "sk" else _CHANNEL_WEIGHTS[kind]
         )
-        idx = _bucket_v1(key, seed, dim_h)
+        idx = _bucket(key, seed, dim_h)
         buckets[idx] = buckets.get(idx, 0.0) + (1.0 + math.log(tf)) * scale
 
     n = len(buckets)
@@ -149,7 +178,18 @@ def _featurize_v1(text: str, seed: int, dim_h: int) -> tuple[np.ndarray, np.ndar
     return indices, values
 
 
-# V2 FEATURIZATION (Canonical spectral_v6: BLAKE2b + Porter + Stop)
+def _unit_rows(x: Array) -> np.ndarray:
+    a = np.atleast_2d(np.asarray(x, dtype=np.float32))
+    return a / np.maximum(np.linalg.norm(a, axis=1, keepdims=True), 1e-12)
+
+
+def _cosine_similarity(embeddings1: Array, embeddings2: Array) -> np.ndarray:
+    """Cosine similarity that returns a 0-d array for two single vectors."""
+    a = np.asarray(embeddings1)
+    b = np.asarray(embeddings2)
+    sim = _unit_rows(a) @ _unit_rows(b).T
+    return sim.reshape(()) if a.ndim == 1 and b.ndim == 1 else sim
+
 
 _WORD_RE_UNICODE = re.compile(r"[^\W_]+")
 
@@ -410,9 +450,6 @@ class SpectralFeaturizer:
         return x
 
 
-# UNIFIED MODEL LOADER (Serves both V1 and V2)
-
-
 class SpectralEmbedModel:
     """CPU-only linear spectral embedding model (supports v1 and v2)."""
 
@@ -457,7 +494,7 @@ class SpectralEmbedModel:
         if self.is_v2:
             x = self.featurizer.transform(texts, idf=self.idf)
         else:
-            feats = [_featurize_v1(t, self.seed, self.dim_h) for t in texts]
+            feats = [_featurize(t, self.seed, self.dim_h) for t in texts]
             indptr = np.cumsum([0, *(len(idx) for idx, _ in feats)])
             x = sp.csr_matrix(
                 (
@@ -498,8 +535,6 @@ class SpectralEmbedModel:
     def similarity_pairwise(embeddings1: Array, embeddings2: Array) -> np.ndarray:
         return (_unit_rows(embeddings1) * _unit_rows(embeddings2)).sum(axis=1)
 
-
-# MODEL METADATA DEFINITIONS
 
 spectral_embed_v1_140m = ModelMeta(
     loader=SpectralEmbedModel,
