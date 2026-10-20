@@ -6,7 +6,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import AudioCollator, pad_to_min_samples
 
 if TYPE_CHECKING:
     import torch
@@ -87,8 +87,11 @@ class DashengAudioWrapper(AbsEncoder):
             for batch in tqdm(
                 inputs, disable=not show_progress_bar, desc="Encoding audio"
             ):
+                # the patch embedding needs at least 480 samples (30 ms at 16 kHz)
                 arrays = [
-                    item["array"] if isinstance(item, dict) else item
+                    pad_to_min_samples(
+                        item["array"] if isinstance(item, dict) else item, 480
+                    )
                     for item in batch["audio"]
                 ]
                 # The feature extractor pads to the longest clip and emits no

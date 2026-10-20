@@ -8,7 +8,11 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import check_duration_cap, single_clip_dataloader
+from mteb.models.modality_collators import (
+    check_duration_cap,
+    pad_to_min_samples,
+    single_clip_dataloader,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -103,7 +107,8 @@ class SpeechT5Audio(AbsEncoder):
                         orig_freq=sr, new_freq=self.sampling_rate
                     )
                     array = resampler(array)
-                batch_arrays.append(array.numpy())
+                # the conv speech prenet needs at least 400 samples (25 ms at 16 kHz)
+                batch_arrays.append(pad_to_min_samples(array.numpy(), 400))
 
             if batch_arrays[0].ndim == 0:
                 batch_arrays = [x.reshape(-1) for x in batch_arrays]

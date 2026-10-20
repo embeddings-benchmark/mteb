@@ -8,6 +8,7 @@ from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import (
     AudioCollator,
+    pad_to_min_samples,
     seconds_to_samples,
     single_clip_dataloader,
 )
@@ -75,7 +76,10 @@ class UniSpeechWrapper(AbsEncoder):
             ),
             disable=not show_progress_bar,
         ):
-            audio_arrays = [audio["array"] for audio in batch["audio"]]
+            # the conv feature encoder needs at least 400 samples (25 ms at 16 kHz)
+            audio_arrays = [
+                pad_to_min_samples(audio["array"], 400) for audio in batch["audio"]
+            ]
 
             feature_inputs = self.feature_extractor(
                 audio_arrays,
