@@ -25,6 +25,19 @@ if TYPE_CHECKING:
     from mteb.types import Array, BatchedInput, PromptType
 
 
+def _unit_rows(x: Array) -> np.ndarray:
+    a = np.atleast_2d(np.asarray(x, dtype=np.float32))
+    return a / np.maximum(np.linalg.norm(a, axis=1, keepdims=True), 1e-12)
+
+
+def _cosine_similarity(embeddings1: Array, embeddings2: Array) -> np.ndarray:
+    """Cosine similarity that returns a 0-d array for two single vectors."""
+    a = np.asarray(embeddings1)
+    b = np.asarray(embeddings2)
+    sim = _unit_rows(a) @ _unit_rows(b).T
+    return sim.reshape(()) if a.ndim == 1 and b.ndim == 1 else sim
+
+
 _LATEX_CMD_RE = re.compile(r"\\([A-Za-z]+)")
 _WS_RE = re.compile(r"\s+")
 _WORD_RE = re.compile(r"[a-z0-9]+")
@@ -176,19 +189,6 @@ def _featurize(text: str, seed: int, dim_h: int) -> tuple[np.ndarray, np.ndarray
     if norm > 1e-12:
         values /= np.float32(norm)
     return indices, values
-
-
-def _unit_rows(x: Array) -> np.ndarray:
-    a = np.atleast_2d(np.asarray(x, dtype=np.float32))
-    return a / np.maximum(np.linalg.norm(a, axis=1, keepdims=True), 1e-12)
-
-
-def _cosine_similarity(embeddings1: Array, embeddings2: Array) -> np.ndarray:
-    """Cosine similarity that returns a 0-d array for two single vectors."""
-    a = np.asarray(embeddings1)
-    b = np.asarray(embeddings2)
-    sim = _unit_rows(a) @ _unit_rows(b).T
-    return sim.reshape(()) if a.ndim == 1 and b.ndim == 1 else sim
 
 
 _WORD_RE_UNICODE = re.compile(r"[^\W_]+")
