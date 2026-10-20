@@ -4,10 +4,17 @@ from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _BIBTEX = r"""
-@article{ma2024unifying,
+@inproceedings{ma2024unifying,
+  address = {Miami, Florida, USA},
   author = {Ma, Xueguang and Lin, Sheng-Chieh and Li, Minghan and Chen, Wenhu and Lin, Jimmy},
-  journal = {arXiv preprint arXiv:2406.11251},
+  booktitle = {Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing},
+  doi = {10.18653/v1/2024.emnlp-main.373},
+  editor = {Al-Onaizan, Yaser and Bansal, Mohit and Chen, Yun-Nung},
+  month = {nov},
+  pages = {6492--6505},
+  publisher = {Association for Computational Linguistics},
   title = {Unifying Multimodal Retrieval via Document Screenshot Embedding},
+  url = {https://aclanthology.org/2024.emnlp-main.373/},
   year = {2024},
 }
 """

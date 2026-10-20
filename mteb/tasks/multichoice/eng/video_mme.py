@@ -33,11 +33,16 @@ class VideoMMEShortVideoCentricQA(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@article{fu2024video,
-  author = {Fu, Chaoyou and Dai, Yuhan and Luo, Yondong and Li, Lei and Ren, Shuhuai and Zhang, Renrui and Wang, Zihan and Zhou, Chenyu and Shen, Yunhang and Zhang, Mengdan and others},
-  journal = {arXiv preprint arXiv:2405.21075},
+@inproceedings{fu2024video,
+  author = {Fu, Chaoyou and Dai, Yuhan and Luo, Yongdong and Li, Lei and Ren, Shuhuai and Zhang, Renrui and Wang, Zihan and Zhou, Chenyu and Shen, Yunhang and Zhang, Mengdan and Chen, Peixian and Li, Yanwei and Lin, Shaohui and Zhao, Sirui and Li, Ke and Xu, Tong and Zheng, Xiawu and Chen, Enhong and Shan, Caifeng and He, Ran and Sun, Xing},
+  booktitle = {2025 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  doi = {10.1109/cvpr52734.2025.02245},
+  month = {June},
+  pages = {24108–24118},
+  publisher = {IEEE},
   title = {Video-MME: The First-Ever Comprehensive Evaluation Benchmark of Multi-modal LLMs in Video Analysis},
-  year = {2024},
+  url = {https://doi.org/10.1109/cvpr52734.2025.02245},
+  year = {2025},
 }
 """,
     )
@@ -106,11 +111,16 @@ class VideoMMEShortVideoAudioCentricQA(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@article{fu2024video,
-  author = {Fu, Chaoyou and Dai, Yuhan and Luo, Yondong and Li, Lei and Ren, Shuhuai and Zhang, Renrui and Wang, Zihan and Zhou, Chenyu and Shen, Yunhang and Zhang, Mengdan and others},
-  journal = {arXiv preprint arXiv:2405.21075},
+@inproceedings{fu2024video,
+  author = {Fu, Chaoyou and Dai, Yuhan and Luo, Yongdong and Li, Lei and Ren, Shuhuai and Zhang, Renrui and Wang, Zihan and Zhou, Chenyu and Shen, Yunhang and Zhang, Mengdan and Chen, Peixian and Li, Yanwei and Lin, Shaohui and Zhao, Sirui and Li, Ke and Xu, Tong and Zheng, Xiawu and Chen, Enhong and Shan, Caifeng and He, Ran and Sun, Xing},
+  booktitle = {2025 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  doi = {10.1109/cvpr52734.2025.02245},
+  month = {June},
+  pages = {24108–24118},
+  publisher = {IEEE},
   title = {Video-MME: The First-Ever Comprehensive Evaluation Benchmark of Multi-modal LLMs in Video Analysis},
-  year = {2024},
+  url = {https://doi.org/10.1109/cvpr52734.2025.02245},
+  year = {2025},
 }
 """,
     )

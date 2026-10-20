@@ -34,11 +34,14 @@ class AVSpeakerBenchPairClassification(AbsTaskPairClassification):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@article{nguyen2025avspeakerbench,
+@inproceedings{nguyen2025avspeakerbench,
   author = {Nguyen, Le Thien Phuc and Yu, Zhuoran and Hang, Samuel Low Yu and An, Subin and Lee, Jeongik and Ban, Yohan and Chung, SeungEun and Nguyen, Thanh-Huy and Maeng, JuWan and Lee, Soochahn and Lee, Yong Jae},
-  journal = {arXiv preprint arXiv:2512.02231},
+  booktitle = {2026 IEEE/CVF Conference on Computer Vision and Pattern Recognition - Findings Track (CVPRF)},
+  doi = {10.1109/cvprf71909.2026.00222},
+  pages = {2272--2283},
+  publisher = {IEEE},
   title = {See, Hear, and Understand: Benchmarking Audiovisual Human Speech Understanding in Multimodal Large Language Models},
-  year = {2025},
+  year = {2026},
 }
 """,
     )
