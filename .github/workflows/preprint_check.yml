@@ -31,6 +31,8 @@ jobs:
     # crashes; only the first writes the report.
     - name: Check whether cited preprints have been published
       id: check
+      env:
+        SEMANTIC_SCHOLAR_API_KEY: ${{ secrets.SEMANTIC_SCHOLAR_API_KEY }}
       run: |
         if ! make preprint-check PREPRINT_CHECK_ARGS="--report preprints.md"; then
           test -s preprints.md
