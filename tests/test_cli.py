@@ -99,6 +99,78 @@ def test_run_task(
     )
 
 
+@pytest.mark.parametrize("subcommand", ["evaluate", "run"])
+def test_evaluate_and_run_cli_parser_parity(subcommand: str):
+    """Ensure `evaluate` and `run` parse identical flags and map to the same runner function."""
+    argv = [
+        subcommand,
+        "-m",
+        "sentence-transformers/all-MiniLM-L6-v2",
+        "-t",
+        "ArguAna",
+        "--batch-size",
+        "16",
+        "--num-proc",
+        "4",
+        "--overwrite-strategy",
+        "always",
+    ]
+    parser = build_cli()
+    args = parser.parse_args(argv)
+    assert args.model == "sentence-transformers/all-MiniLM-L6-v2"
+    assert args.tasks == ["ArguAna"]
+    assert args.batch_size == 16
+    assert args.num_proc == 4
+    assert args.overwrite_strategy == "always"
+    assert args.func == run
+
+
+@pytest.mark.parametrize("subcommand", ["evaluate", "run"])
+def test_evaluate_cli_dispatch(subcommand: str, tmp_path: Path):
+    """Test that both `evaluate` and `run` subcommands parse flags and dispatch to mteb.evaluate."""
+    argv = [
+        subcommand,
+        "-m",
+        "mock-org/mock-model",
+        "-t",
+        "ArguAna",
+        "--output-folder",
+        tmp_path.as_posix(),
+        "--batch-size",
+        "32",
+        "--num-proc",
+        "2",
+        "--overwrite-strategy",
+        "always",
+    ]
+    args = build_cli().parse_args(argv)
+
+    mock_model = MagicMock()
+    mock_tasks = (MagicMock(),)
+
+    with (
+        patch("mteb.get_model", return_value=mock_model) as mock_get_model,
+        patch("mteb.get_tasks", return_value=mock_tasks) as mock_get_tasks,
+        patch("mteb.evaluate") as mock_evaluate,
+    ):
+        args.func(args)
+
+    mock_get_model.assert_called_once_with("mock-org/mock-model", None, device="cpu")
+    mock_get_tasks.assert_called_once_with(
+        categories=None,
+        task_types=None,
+        languages=None,
+        tasks=["ArguAna"],
+        eval_splits=None,
+    )
+    mock_evaluate.assert_called_once()
+    _, kwargs = mock_evaluate.call_args
+    assert kwargs["encode_kwargs"] == {"batch_size": 32}
+    assert kwargs["num_proc"] == 2
+    assert kwargs["overwrite_strategy"] == "always"
+    assert kwargs["prediction_folder"] is None
+
+
 @pytest.mark.parametrize(
     ("argv", "expected"),
     [
