@@ -1411,6 +1411,22 @@ afri_languages_lite = [
     "zul",
 ]
 
+_sib200_v3_new_subsets = {
+    "ace_Arab",
+    "arb_Arab",
+    "bjn_Arab",
+    "kas_Arab",
+    "knc_Arab",
+    "min_Arab",
+    "taq_Latn",
+    "zho_Hans",
+}
+_sib200_v2_subsets = [
+    subset
+    for subset in get_task("SIB200Classification.v3").metadata.hf_subsets_to_langscripts
+    if subset not in _sib200_v3_new_subsets
+]
+
 MTEB_AFRICA = Benchmark(
     name="MTEB(Africa, v1)",
     aliases=["AfriMTEB"],
@@ -1430,7 +1446,6 @@ MTEB_AFRICA = Benchmark(
             "AfriHateClassification",
             "KinNewsClassification",
             "InjongoIntent",
-            "SIB200Classification.v3",
             # Additional comprehensive tasks
             # Retrieval tasks
             "BelebeleRetrieval",
@@ -1463,6 +1478,17 @@ MTEB_AFRICA = Benchmark(
         ],
         languages=afri_languages,
         exclusive_language_filter=True,
+    )
+    + (
+        # SIB200Classification.v3 only adds subsets on top of v2; three of them
+        # (arb_Arab, knc_Arab, taq_Latn) are African, so keep the v2 subsets to
+        # leave the benchmark scores unchanged.
+        get_task(
+            "SIB200Classification.v3",
+            languages=afri_languages,
+            exclusive_language_filter=True,
+            hf_subsets=_sib200_v2_subsets,
+        ),
     ),
     description="Text embedding quality across African languages spanning bitext mining, classification, clustering, pair classification, retrieval, reranking, and semantic similarity.",
     reference="https://arxiv.org/abs/2510.23896",
