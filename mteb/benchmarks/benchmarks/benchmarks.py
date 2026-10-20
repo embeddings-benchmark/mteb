@@ -1430,7 +1430,7 @@ MTEB_AFRICA = Benchmark(
             "AfriHateClassification",
             "KinNewsClassification",
             "InjongoIntent",
-            "SIB200Classification.v2",
+            "SIB200Classification.v3",
             # Additional comprehensive tasks
             # Retrieval tasks
             "BelebeleRetrieval",
@@ -1486,7 +1486,7 @@ MTEB_AFRICA_LITE = Benchmark(
             "FloresBitextMining",
             "InjongoIntent",
             "NTREXBitextMining",
-            "SIB200Classification.v2",
+            "SIB200Classification.v3",
             "SIB200Classification",
             "SIB200ClusteringS2S",
             "BelebeleRetrieval",
