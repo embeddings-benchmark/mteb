@@ -78,13 +78,9 @@ class Qwen3VoiceEmbeddingWrapper(AbsEncoder):
         ):
             # one clip per forward: padded frames are not masked in the pooling
             for audio in batch["audio"]:
-                # pad clips shorter than 5 mel hops (the first encoder kernel is 5 frames, reflect-padded);
-                # shorter input fails in the encoder's conv padding. Longer clips are unchanged
-                array = pad_to_min_samples(
-                    audio["array"], 5 * self.feature_extractor.hop_length
-                )
+                # the audio encoder needs at least 1280 samples (5 mel hops at 24 kHz)
                 feature_inputs = self.feature_extractor(
-                    [array],
+                    [pad_to_min_samples(audio["array"], 1280)],
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
                 )

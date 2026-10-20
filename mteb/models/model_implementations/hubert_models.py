@@ -8,7 +8,6 @@ from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import (
     AudioCollator,
-    conv_receptive_field,
     pad_to_min_samples,
     seconds_to_samples,
     single_clip_dataloader,
@@ -78,13 +77,9 @@ class HubertWrapper(AbsEncoder):
                 "group-norm feature encoder: padding changes the embeddings",
             )
         for batch in tqdm(inputs, disable=not show_progress_bar):
-            # pad clips shorter than one output frame of the conv encoder; longer clips are unchanged
-            min_samples = conv_receptive_field(
-                self.model.config.conv_kernel, self.model.config.conv_stride
-            )
+            # the conv feature encoder needs at least 400 samples (25 ms at 16 kHz)
             audio_arrays = [
-                pad_to_min_samples(audio["array"], min_samples)
-                for audio in batch["audio"]
+                pad_to_min_samples(audio["array"], 400) for audio in batch["audio"]
             ]
 
             feature_inputs = self.feature_extractor(

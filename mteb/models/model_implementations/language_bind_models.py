@@ -306,9 +306,8 @@ class LanguageBindAudioWrapper(_LanguageBindBase):
         """Apply LanguageBind's audio transform to a raw waveform array."""
         import torch
 
-        # pad clips shorter than one 25 ms fbank window (Kaldi frame_length=25.0); longer clips are unchanged
-        # https://github.com/pytorch/audio/blob/v2.10.0/src/torchaudio/compliance/kaldi.py#L139-L142
-        audio_array = pad_to_min_samples(audio_array, int(0.025 * self.sampling_rate))
+        # the fbank needs at least one 25 ms window (400 samples at 16 kHz)
+        audio_array = pad_to_min_samples(audio_array, 400)
         waveform = torch.as_tensor(audio_array, dtype=torch.float32)
         if waveform.ndim == 1:
             waveform = waveform.unsqueeze(0)
