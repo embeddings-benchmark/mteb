@@ -105,15 +105,15 @@ def test_video_collator_orders_modalities() -> None:
         "text": "caption",
     }
     batch = VideoCollator(target_sampling_rate=16_000, num_frames=2)([row])
-    assert list(batch) == ["id", "text", "video", "audio"]
+    assert list(batch) == ["id", "text", "video", "video_metadata", "audio"]
 
 
 def test_frames_collator_returns_video_timing() -> None:
-    """With video_metadata, each video carries its sampled frames' real timing."""
-    collator = FramesCollator(fps=1.0, max_frames=4, video_metadata=True)
-    video = collator([{"video": _StubDecoder(300, seconds=10.0)}])["video"][0]
-    assert video["array"] == [0, 100, 199, 299]
-    assert video["video_metadata"] == {
+    """Each video comes with its sampled frames' real timing."""
+    collator = FramesCollator(fps=1.0, max_frames=4)
+    batch = collator([{"video": _StubDecoder(300, seconds=10.0)}])
+    assert batch["video"][0] == [0, 100, 199, 299]
+    assert batch["video_metadata"][0] == {
         "fps": 30.0,
         "total_num_frames": 300,
         "duration": 10.0,
@@ -138,3 +138,4 @@ def test_video_collator_skips_missing_modalities() -> None:
     assert batch["video"][0] == [0, 3]
     assert batch["audio"][0] is None
     assert batch["video"][1] is None
+    assert batch["video_metadata"][1] is None

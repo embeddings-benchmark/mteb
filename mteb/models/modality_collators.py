@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from torchcodec.decoders import VideoDecoder  # type: ignore[attr-defined]
 
     from mteb.types import BatchedInput
-    from mteb.types._encoder_io import VideoInputItem, VideoMetadata
+    from mteb.types._encoder_io import VideoMetadata
 
 logger = logging.getLogger(__name__)
 log_once = LogOnce(logger)
@@ -29,8 +29,8 @@ DEFAULT_MIN_FRAMES = 1
 
 # Order of the modality columns in a collated row. Wrappers that build a prompt in
 # row order (e.g. Qwen-Omni based ones) then match the authors' text, image, video,
-# audio order, whatever the dataset's column order.
-_MODALITY_ORDER = ("text", "image", "video", "audio")
+# audio order, whatever the dataset's column order. The frames' timing follows them.
+_MODALITY_ORDER = ("text", "image", "video", "video_metadata", "audio")
 
 
 def _order_modalities(row: dict[str, Any]) -> dict[str, Any]:
@@ -235,7 +235,6 @@ class FramesCollator:
         max_frames: int | None = None,
         num_frames: int | None = None,
         min_frames: int = DEFAULT_MIN_FRAMES,
-        video_metadata: bool = False,
     ) -> None:
         """Initialize the collator.
 
@@ -249,9 +248,6 @@ class FramesCollator:
             num_frames: If set, use fixed-sample mode: always select this many
                 frames uniformly from the video.
             min_frames: Minimum number of frames in FPS-based sampling.
-            video_metadata: Return each video as a ``VideoInputItem`` (frames and
-                their timing) instead of a bare frame tensor, for wrappers that
-                need the sampled frames' real timing.
         """
         if num_frames is not None and fps is not None:
             raise ValueError(
@@ -262,14 +258,13 @@ class FramesCollator:
         self.max_frames = max_frames
         self.num_frames = num_frames
         self.min_frames = min_frames
-        self.video_metadata = video_metadata
 
     def __call__(self, inputs: list[dict[str, Any]]) -> BatchedInput:
         """Collate a batch of video inputs by resampling the video frames according to the specified parameters."""
         collated_inputs = []
         for row in inputs:
             # assign in place (no pop) to keep the dataset's column order
-            row["video"] = _sample_video(row["video"], self)
+            _sample_video(row, self)
             collated_inputs.append(row)
         return cast(
             "BatchedInput",
@@ -373,7 +368,6 @@ class VideoCollator:
         num_frames: int | None = None,
         max_samples: int | None = None,
         min_frames: int = DEFAULT_MIN_FRAMES,
-        video_metadata: bool = False,
     ) -> None:
         """Initialize the collator.
 
@@ -384,15 +378,11 @@ class VideoCollator:
             num_frames: If set, use fixed-sample mode instead of FPS-based.
             max_samples: Maximum number of audio samples to keep. If None, no truncation.
             min_frames: Minimum number of frames in FPS-based sampling.
-            video_metadata: Return each video as a ``VideoInputItem`` (frames and
-                their timing) instead of a bare frame tensor, for wrappers that
-                need the sampled frames' real timing.
         """
         self.fps = fps
         self.max_frames = max_frames
         self.num_frames = num_frames
         self.min_frames = min_frames
-        self.video_metadata = video_metadata
         self.target_sampling_rate = target_sampling_rate
         self.max_samples = max_samples
 
@@ -401,8 +391,8 @@ class VideoCollator:
         collated_inputs = []
         for row in inputs:
             # rows can lack one modality (None) in mixed-modality datasets
-            if row.get("video") is not None:
-                row["video"] = _sample_video(row["video"], self)
+            if "video" in row:
+                _sample_video(row, self)
             if row.get("audio") is not None:
                 audio_array = AudioCollator.resample_audio(
                     row,
@@ -420,21 +410,24 @@ class VideoCollator:
 
 
 def _sample_video(
-    video: VideoDecoder, collator: FramesCollator | VideoCollator
-) -> torch.Tensor | VideoInputItem:
-    """Sample a video with a collator's settings, with its timing if requested."""
-    sampled = FramesCollator.resample_video(
-        video,
+    row: dict[str, Any], collator: FramesCollator | VideoCollator
+) -> None:
+    """Sample a row's video with a collator's settings and add the frames' timing.
+
+    The frames replace ``row["video"]`` and their timing is set as
+    ``row["video_metadata"]`` (None when the row has no video).
+    """
+    if row["video"] is None:
+        row["video_metadata"] = None
+        return
+    row["video"], row["video_metadata"] = FramesCollator.resample_video(
+        row["video"],
         fps=collator.fps,
         max_frames=collator.max_frames,
         num_frames=collator.num_frames,
         min_frames=collator.min_frames,
-        return_metadata=collator.video_metadata,
+        return_metadata=True,
     )
-    if isinstance(sampled, tuple):
-        frames, metadata = sampled
-        return {"array": frames, "video_metadata": metadata}
-    return sampled
 
 
 def sampled_frame_rate(metadata: VideoMetadata) -> float:

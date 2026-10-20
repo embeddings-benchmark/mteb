@@ -141,7 +141,6 @@ class QwenOmniWrapper(AbsEncoder):
                     max_frames=self.max_frames,
                     num_frames=self.num_frames,
                     max_samples=self.max_samples,
-                    video_metadata=True,
                 )
             elif has_audio:
                 inputs.collate_fn = AudioCollator(
@@ -178,14 +177,13 @@ class QwenOmniWrapper(AbsEncoder):
                 # https://github.com/QwenLM/Qwen2.5-Omni/blob/main/qwen-omni-utils/src/qwen_omni_utils/v2_5/vision_process.py
                 fps = None
                 if videos:
-                    timing = videos[0]["video_metadata"]
-                    if timing["fps"]:
+                    timing = batch["video_metadata"][0]
+                    if timing and timing["fps"]:
                         fps = (
                             len(timing["frames_indices"])
                             / timing["total_num_frames"]
                             * timing["fps"]
                         )
-                    videos = [v["array"] for v in videos]
                 images = batch.get("image")
                 audios = batch.get("audio")
                 if audios:

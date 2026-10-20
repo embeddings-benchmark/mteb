@@ -161,29 +161,16 @@ class VideoMetadata(TypedDict):
     frames_indices: list[int]
 
 
-class VideoInputItem(TypedDict):
-    """A video with the timing of its sampled frames.
-
-    The video collators return this format when created with ``video_metadata=True``.
-
-    Attributes:
-        array: The sampled video frames.
-        video_metadata: The timing of the sampled frames.
-    """
-
-    array: torch.Tensor
-    video_metadata: VideoMetadata
-
-
 class VideoInput(TypedDict):
     """The input to the encoder for video frames. Audio is currently included in the AudioInput.
 
     Attributes:
-        video: The video frames as Tensor, or with their timing (`VideoInputItem`)
-            for wrappers that request it.
+        video: The video frames as Tensor.
+        video_metadata: The timing of the sampled frames.
     """
 
-    video: torch.Tensor | VideoInputItem
+    video: torch.Tensor
+    video_metadata: VideoMetadata
 
 
 class MultimodalInput(  # type: ignore[misc]

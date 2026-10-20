@@ -309,7 +309,6 @@ class InstructSentenceTransformerModel(AbsEncoder):
                 num_frames=self.num_frames,
                 max_samples=self.max_samples,
                 min_frames=self.min_frames,
-                video_metadata=self.video_metadata,
             )
         elif has_audio:
             from mteb.models.modality_collators import AudioCollator
@@ -324,6 +323,15 @@ class InstructSentenceTransformerModel(AbsEncoder):
             all_embeddings = []
             for batch in tqdm(inputs, desc="Building multimodal embeddings"):
                 modality_batch = {k: v for k, v in batch.items() if k in _modality_keys}
+                if self.video_metadata and "video" in modality_batch:
+                    modality_batch["video"] = [
+                        {"array": video, "video_metadata": metadata}
+                        if video is not None
+                        else None
+                        for video, metadata in zip(
+                            batch["video"], batch["video_metadata"], strict=True
+                        )
+                    ]
                 batched_input = [
                     dict(zip(modality_batch, sample, strict=True))
                     for sample in zip(*modality_batch.values(), strict=True)
