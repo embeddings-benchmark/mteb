@@ -100,32 +100,6 @@ def test_run_task(
 
 
 @pytest.mark.parametrize("subcommand", ["evaluate", "run"])
-def test_evaluate_and_run_cli_parser_parity(subcommand: str):
-    """Ensure `evaluate` and `run` parse identical flags and map to the same runner function."""
-    argv = [
-        subcommand,
-        "-m",
-        "sentence-transformers/all-MiniLM-L6-v2",
-        "-t",
-        "ArguAna",
-        "--batch-size",
-        "16",
-        "--num-proc",
-        "4",
-        "--overwrite-strategy",
-        "always",
-    ]
-    parser = build_cli()
-    args = parser.parse_args(argv)
-    assert args.model == "sentence-transformers/all-MiniLM-L6-v2"
-    assert args.tasks == ["ArguAna"]
-    assert args.batch_size == 16
-    assert args.num_proc == 4
-    assert args.overwrite_strategy == "always"
-    assert args.func == run
-
-
-@pytest.mark.parametrize("subcommand", ["evaluate", "run"])
 def test_evaluate_cli_dispatch(subcommand: str, tmp_path: Path):
     """Test that both `evaluate` and `run` subcommands parse flags and dispatch to mteb.evaluate."""
     argv = [
@@ -143,7 +117,15 @@ def test_evaluate_cli_dispatch(subcommand: str, tmp_path: Path):
         "--overwrite-strategy",
         "always",
     ]
-    args = build_cli().parse_args(argv)
+    parser = build_cli()
+    args = parser.parse_args(argv)
+
+    assert args.model == "mock-org/mock-model"
+    assert args.tasks == ["ArguAna"]
+    assert args.batch_size == 32
+    assert args.num_proc == 2
+    assert args.overwrite_strategy == "always"
+    assert args.func == run
 
     mock_model = MagicMock()
     mock_tasks = (MagicMock(),)
