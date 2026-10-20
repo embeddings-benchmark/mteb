@@ -7,7 +7,11 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator, seconds_to_samples
+from mteb.models.modality_collators import (
+    AudioCollator,
+    pad_to_min_samples,
+    seconds_to_samples,
+)
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -74,8 +78,13 @@ class Qwen3VoiceEmbeddingWrapper(AbsEncoder):
         ):
             # one clip per forward: padded frames are not masked in the pooling
             for audio in batch["audio"]:
+                # pad clips shorter than 5 mel hops (the first encoder kernel is 5 frames, reflect-padded);
+                # shorter input fails in the encoder's conv padding. Longer clips are unchanged
+                array = pad_to_min_samples(
+                    audio["array"], 5 * self.feature_extractor.hop_length
+                )
                 feature_inputs = self.feature_extractor(
-                    [audio["array"]],
+                    [array],
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
                 )

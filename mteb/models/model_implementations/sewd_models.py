@@ -10,6 +10,8 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import (
     AudioCollator,
     check_duration_cap,
+    conv_receptive_field,
+    pad_to_min_samples,
     single_clip_dataloader,
 )
 
@@ -90,7 +92,17 @@ class SewDWrapper(AbsEncoder):
             ),
             disable=not show_progress_bar,
         ):
-            audio_arrays = [audio["array"] for audio in batch["audio"]]
+            # pad clips too short for the conv encoder and frame squeezing; longer clips are unchanged
+            min_samples = conv_receptive_field(
+                self.model.config.conv_kernel,
+                self.model.config.conv_stride,
+                # SEW-D squeezes frames by squeeze_factor after the conv encoder
+                min_frames=self.model.config.squeeze_factor,
+            )
+            audio_arrays = [
+                pad_to_min_samples(audio["array"], min_samples)
+                for audio in batch["audio"]
+            ]
             feature_inputs = self.feature_extractor(
                 audio_arrays,
                 sampling_rate=self.sampling_rate,

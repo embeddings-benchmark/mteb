@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import math
 from contextlib import contextmanager
 from typing import TYPE_CHECKING, Any, cast
 
@@ -10,7 +11,7 @@ from mteb._log_once import LogOnce
 from mteb.types._encoder_io import AudioInputItem
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
+    from collections.abc import Iterator, Sequence
 
     import torch
     from torch.utils.data import DataLoader
@@ -169,6 +170,35 @@ def seconds_to_samples(seconds: float | None, sampling_rate: int) -> int | None:
     if seconds is None:
         return None
     return int(seconds * sampling_rate)
+
+
+def pad_to_min_samples(array: np.ndarray, min_samples: int) -> np.ndarray:
+    """Zero-pad the end of a clip shorter than a model's first analysis window.
+
+    Longer clips are returned unchanged, so this only affects clips that would otherwise crash.
+    """
+    array = np.asarray(array)
+    if array.shape[-1] >= min_samples:
+        return array
+    return np.pad(
+        array, [(0, 0)] * (array.ndim - 1) + [(0, min_samples - array.shape[-1])]
+    )
+
+
+def conv_receptive_field(
+    conv_kernel: Sequence[int], conv_stride: Sequence[int], min_frames: int = 1
+) -> int:
+    """Shortest input (in samples) that gives a wav2vec2-style conv feature encoder `min_frames` frames.
+
+    e.g. wav2vec2-base: kernels (10, 3, 3, 3, 3, 2, 2), strides (5, 2, 2, 2, 2, 2, 2) -> 400 samples (25 ms at 16 kHz)
+    https://huggingface.co/facebook/wav2vec2-base/blob/main/config.json
+    """
+    field = 1
+    for kernel, stride in zip(
+        reversed(conv_kernel), reversed(conv_stride), strict=True
+    ):
+        field = (field - 1) * stride + kernel
+    return field + (min_frames - 1) * math.prod(conv_stride)
 
 
 @contextmanager
