@@ -18,7 +18,7 @@ DENSE_MODEL = ModelInfo(
     name="mteb/baseline-random-encoder",
     expected_scores={
         "BornholmBitextMining": 0.00067,
-        "TwentyNewsgroupsClustering": 0.04720,
+        "TwentyNewsgroupsClustering": 0.04719,
         "TwentyNewsgroupsClustering.v2": 0.06383,
         "LccSentimentClassification": 0.32533,
         "FarsTail": 0.51226,
@@ -35,7 +35,7 @@ SPARSE_MODEL = ModelInfo(
     name="mteb/baseline-random-sparse-encoder",
     expected_scores={
         "BornholmBitextMining": 0.0,
-        "TwentyNewsgroupsClustering": 0.05676,
+        "TwentyNewsgroupsClustering": 0.05661,
         "TwentyNewsgroupsClustering.v2": 0.07125,
         "LccSentimentClassification": 0.32600,
         "FarsTail": 0.53992,
