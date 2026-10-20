@@ -11,7 +11,7 @@ from typing_extensions import deprecated
 
 from mteb._create_dataloaders import create_dataloader
 from mteb._log_once import LogOnce
-from mteb.models import ModelMeta
+from mteb.models.model_meta import ModelMeta
 from mteb.similarity_functions import (
     _MAX_SIM_CHUNK_ELEMENTS,
     _token_budget_chunks,

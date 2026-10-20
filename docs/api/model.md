@@ -44,11 +44,17 @@ length, valid frameworks, license, and degree of openness.
 
 :::mteb.models.CachedEmbeddingWrapper
 
+:::mteb.models.CachedMultiVectorWrapper
+
 :::mteb.models.cache_wrappers.CacheBackendProtocol
 
 :::mteb.models.cache_wrappers.cache_backends.NumpyCache
 
 :::mteb.models.cache_wrappers.cache_backends.FaissCache
+
+:::mteb.models.cache_wrappers.cache_backends.SparseCache
+
+:::mteb.models.cache_wrappers.cache_backends.MultiVectorCache
 
 
 ## Compression Wrapper

@@ -6,26 +6,44 @@ from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import pytest
+import torch
 from datasets import Dataset
 from torch.utils.data import DataLoader
 
 import mteb
+from mteb._content_hashes import hash_item
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.mocks.mock_tasks import (
     MockMultiChoiceTask,
+    MockRerankingTask,
     MockRetrievalTask,
     MockVideoAudioTextRetrievalVAT2T,
 )
+from mteb.models import MultiVectorSearchEncoderWrapper
 from mteb.models.cache_wrappers.cache_backend_protocol import CacheBackendProtocol
 from mteb.models.cache_wrappers.cache_backends.faiss_cache import FaissCache
+from mteb.models.cache_wrappers.cache_backends.multi_vector_cache import (
+    MultiVectorCache,
+)
 from mteb.models.cache_wrappers.cache_backends.numpy_cache import NumpyCache
-from mteb.models.cache_wrappers.cache_wrapper import CachedEmbeddingWrapper
-from mteb.models.model_implementations.random_baseline import RandomEncoderBaseline
+from mteb.models.cache_wrappers.cache_backends.sparse_cache import SparseCache
+from mteb.models.cache_wrappers.cache_wrapper import (
+    CachedEmbeddingWrapper,
+    CachedMultiVectorWrapper,
+)
+from mteb.models.model_implementations.random_baseline import (
+    RandomEncoderBaseline,
+    RandomSparseEncoderBaseline,
+    _key_to_multi_vector,
+)
 from mteb.models.models_protocols import EncoderProtocol
+from mteb.similarity_functions import max_sim, pairwise_max_sim
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from mteb.types import Array, BatchedInput
 
 
@@ -446,3 +464,216 @@ def test_wrapper_caches_multimodal_items(tmp_path: Path):
         assert dummy_model.call_count == first_run_call_count
     finally:
         wrapped_model.close()
+
+
+class DummySparseModel(RandomSparseEncoderBaseline):
+    """Returns sparse COO tensors, like `SparseEncoderWrapper` does for retrieval tasks."""
+
+    call_count = 0
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self.mteb_model_meta = mteb.get_model_meta(
+            "mteb/baseline-random-sparse-encoder"
+        )
+
+    def encode(self, inputs: DataLoader[BatchedInput], **kwargs: Any) -> Array:
+        self.call_count += 1
+        return torch.from_numpy(super().encode(inputs, **kwargs)).to_sparse()
+
+    def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
+        assert embeddings1.is_sparse
+        assert embeddings2.is_sparse
+        return super().similarity(embeddings1.to_dense(), embeddings2.to_dense())
+
+
+class DummyMultiVectorModel(MultiVectorSearchEncoderWrapper):
+    """Search-only model returning a variable number of token embeddings per input."""
+
+    call_count = 0
+
+    def __init__(self) -> None:
+        self.mteb_model_meta = mteb.get_model_meta("mteb/baseline-random-colbert")
+
+    def _encode(self, inputs: DataLoader[BatchedInput], **kwargs: Any) -> Array:
+        self.call_count += 1
+        return [
+            torch.from_numpy(
+                _key_to_multi_vector(hash_item({"text": text}), 2 + len(text) % 5, 8)
+            ).float()
+            for text in inputs.dataset["text"]
+        ]
+
+    def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
+        return max_sim(embeddings1, embeddings2)
+
+    def similarity_pairwise(self, embeddings1: Array, embeddings2: Array) -> Array:
+        return pairwise_max_sim(embeddings1, embeddings2)
+
+
+def _sparse_vectors(n: int) -> torch.Tensor:
+    dense = torch.from_numpy(np.random.default_rng(0).random((n, 10), dtype=np.float32))
+    dense[dense < 0.7] = 0
+    dense[0] = 0  # an all-zero row
+    return dense.to_sparse()
+
+
+def _multi_vectors(n: int) -> list[np.ndarray]:
+    rng = np.random.default_rng(0)
+    return [rng.random((i + 1, 4), dtype=np.float32) for i in range(n)]
+
+
+def _assert_sparse_equal(cached: Array, expected: Array) -> None:
+    assert cached.is_sparse
+    torch.testing.assert_close(cached.to_dense(), expected.to_dense())
+
+
+@pytest.mark.parametrize(
+    ("cache_backend", "make_vectors", "assert_equal"),
+    [
+        (SparseCache, _sparse_vectors, _assert_sparse_equal),
+        (
+            SparseCache,
+            lambda n: _sparse_vectors(n).to_dense().numpy(),
+            np.testing.assert_array_equal,
+        ),
+        (MultiVectorCache, _multi_vectors, np.testing.assert_array_equal),
+    ],
+    ids=["sparse", "sparse-dense-input", "multi-vector"],
+)
+def test_ragged_cache_reload_and_grow(
+    tmp_path: Path,
+    cache_backend: type[SparseCache | MultiVectorCache],
+    make_vectors: Callable[[int], Any],
+    assert_equal: Callable[[Any, Any], None],
+):
+    items = [{"text": f"item {i}"} for i in range(6)]
+    vectors = make_vectors(len(items))
+
+    def open_cache() -> SparseCache | MultiVectorCache:
+        cache = cache_backend(tmp_path, initial_rows=1)
+        cache.load()
+        return cache
+
+    cache = open_cache()
+    assert cache.get_vector(items[0]) is None
+    cache.add(items, vectors)
+    cache.save()
+    cache.close()
+
+    # Reopen and add again: cached items are skipped, nothing is lost
+    cache = open_cache()
+    cache.add(items, vectors)
+    cache.save()
+    cache.close()
+
+    cache = open_cache()
+    assert len(cache.hash_to_range) == len(items)
+    assert items[3] in cache
+    for i, item in enumerate(items):
+        assert_equal(cache.get_vector(item), vectors[i])
+    cache.close()
+
+
+def test_sparse_cache_rejects_mixed_vector_kinds(tmp_path: Path):
+    cache = SparseCache(tmp_path)
+    cache.add([{"text": "a"}], _sparse_vectors(1))
+    with pytest.raises(ValueError, match="stores sparse vectors"):
+        cache.add([{"text": "b"}], _sparse_vectors(1).to_dense().numpy())
+
+
+@pytest.mark.parametrize(
+    ("make_model", "make_wrapper"),
+    [
+        (
+            lambda: DummySparseModel("sparse_test_model", revision=None),
+            lambda model, path: CachedEmbeddingWrapper(
+                model, path, cache_backend=SparseCache
+            ),
+        ),
+        (DummyMultiVectorModel, CachedMultiVectorWrapper),
+    ],
+    ids=["sparse", "multi-vector"],
+)
+def test_wrapper_combines_cached_and_new_vectors(
+    tmp_path: Path,
+    make_model: Callable[[], Any],
+    make_wrapper: Callable[[Any, Path], Any],
+):
+    """A partly cached batch returns the cached and newly encoded vectors in input order."""
+    task_metadata = MockRetrievalTask().metadata
+    texts = [f"text number {i}" for i in range(6)]
+
+    def encode(model: object, batch: list[str]) -> Array:
+        encode_fn = model.encode if hasattr(model, "encode") else model._encode
+        return encode_fn(
+            DataLoader(Dataset.from_dict({"text": batch})),
+            task_metadata=task_metadata,
+            hf_split="test",
+            hf_subset="default",
+        )
+
+    model = make_model()
+    expected = encode(model, texts)
+    wrapped_model = make_wrapper(model, tmp_path)
+    try:
+        encode(wrapped_model, texts[1::2])
+        combined = encode(wrapped_model, texts)
+    finally:
+        wrapped_model.close()
+
+    for i in range(len(texts)):
+        torch.testing.assert_close(
+            torch.as_tensor(combined[i]).to_dense(),
+            torch.as_tensor(expected[i]).to_dense(),
+        )
+
+
+@pytest.mark.parametrize(
+    ("make_model", "make_wrapper", "tasks"),
+    [
+        (
+            lambda: DummyModel("dense_test_model", revision=None),
+            CachedEmbeddingWrapper,
+            [MockRetrievalTask()],
+        ),
+        (
+            lambda: DummySparseModel("sparse_test_model", revision=None),
+            lambda model, path: CachedEmbeddingWrapper(
+                model, path, cache_backend=SparseCache
+            ),
+            [MockRetrievalTask()],
+        ),
+        (
+            DummyMultiVectorModel,
+            CachedMultiVectorWrapper,
+            [MockRetrievalTask(), MockRerankingTask()],
+        ),
+    ],
+    ids=["dense", "sparse", "multi-vector"],
+)
+def test_wrapper_matches_uncached_scores(
+    tmp_path: Path,
+    make_model: Callable[[], Any],
+    make_wrapper: Callable[[Any, Path], Any],
+    tasks: list[AbsTask],
+):
+    """Cached runs score like uncached ones (e.g. corpus titles aren't joined twice) and reuse the cache."""
+    for task in tasks:
+        model = make_model()
+        uncached = mteb.evaluate(model, task, cache=None)
+
+        wrapped_model = make_wrapper(model, tmp_path / task.metadata.name)
+        try:
+            first = mteb.evaluate(wrapped_model, task, cache=None)
+            first_run_call_count = model.call_count
+            second = mteb.evaluate(wrapped_model, task, cache=None)
+            assert model.call_count == first_run_call_count
+            assert uncached[0].scores == first[0].scores == second[0].scores
+        finally:
+            wrapped_model.close()
+
+
+def test_cached_embedding_wrapper_rejects_multi_vector_model(tmp_path: Path):
+    with pytest.raises(ValueError, match="CachedMultiVectorWrapper"):
+        CachedEmbeddingWrapper(DummyMultiVectorModel(), tmp_path)  # type: ignore[arg-type]
