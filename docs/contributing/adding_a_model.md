@@ -55,7 +55,7 @@ Typically, it only requires that you fill in metadata about the model and add it
             OutputDType.FLOAT32,
             OutputDType.INT8,
             OutputDType.BINARY,
-        ],  # dtypes of the returned embeddings; defaults to float32 (None for cross-encoders)
+        ],
     )
     ```
 
