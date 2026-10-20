@@ -2,19 +2,13 @@ import logging
 
 import pytest
 
-import mteb
-
 pytestmark = pytest.mark.core
 
 logging.basicConfig(level=logging.INFO)
 
 
 def test_benchmark_names_must_be_unique():
-    import mteb.benchmarks.benchmarks as benchmark_module
+    from mteb.benchmarks.benchmarks import get_all_benchmark_objects
 
-    names = [
-        inst.name
-        for _, inst in benchmark_module.__dict__.items()
-        if isinstance(inst, mteb.Benchmark)
-    ]
+    names = [inst.name for inst in get_all_benchmark_objects()]
     assert len(names) == len(set(names))

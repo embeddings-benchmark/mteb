@@ -1,164 +1,42 @@
-from mteb.benchmarks.benchmarks.benchmarks import (
-    BEIR,
-    BEIR_NL,
-    BRIGHT,
-    BRIGHT_LONG,
-    BRIGHT_PRO,
-    BRIGHT_V1_1,
-    BUILT_MTEB,
-    C_MTEB,
-    CHEMTEB,
-    CHEMTEB_V1_1,
-    CODE_RAG,
-    ENCODECHKA,
-    FA_MTEB,
-    FA_MTEB_2,
-    HUME,
-    JINA_VDR,
-    JMTEB_LITE_V1,
-    JMTEB_V2,
-    KOVIDORE_V2,
-    LMEB,
-    LONG_EMBED,
-    MAEB,
-    MAEB_AUDIO,
-    MIEB_ENG,
-    MIEB_IMG,
-    MIEB_LITE,
-    MIEB_MULTILINGUAL,
-    MTEB_DEU,
-    MTEB_EN,
-    MTEB_ENG_CLASSIC,
-    MTEB_EU,
-    MTEB_FRA,
-    MTEB_INDIC,
-    MTEB_JPN,
-    MTEB_KOR,
-    MTEB_KOR_V2,
-    MTEB_MAIN_RU,
-    MTEB_MINERS_BITEXT_MINING,
-    MTEB_NL,
-    MTEB_POL,
-    MTEB_PT,
-    MTEB_RETRIEVAL_LAW,
-    MTEB_RETRIEVAL_MEDICAL,
-    MTEB_RETRIEVAL_WITH_INSTRUCTIONS,
-    MTEB_SLK,
-    MTEB_SPA,
-    MTEB_THA,
-    MVEB,
-    MVEB_TEXT_VIDEO,
-    MVEB_VIDEO,
-    NANOBEIR,
-    NANOBEIR_EXTENDED,
-    R2MED,
-    RU_SCI_BENCH,
-    SEB,
-    VIDORE,
-    VIDORE_V2,
-    VIDORE_V3,
-    VIDORE_V3_1,
-    VIDORE_V3_1_RERANKING,
-    VISUAL_DOCUMENT_RETRIEVAL,
-    VN_MTEB,
-    CoIR,
-    CoREB,
-    MTEB_code,
-    MTEB_MAIN_RU_v1_1,
-    MTEB_multilingual_v1,
-    MTEB_multilingual_v2,
-    RAR_b,
-)
-from mteb.benchmarks.benchmarks.rteb_benchmarks import (
-    RTEB_CODE,
-    RTEB_ENGLISH,
-    RTEB_FINANCE,
-    RTEB_FRENCH,
-    RTEB_GERMAN,
-    RTEB_HEALTHCARE,
-    RTEB_JAPANESE,
-    RTEB_LEGAL,
-    RTEB_MAIN,
-)
+import importlib
+from pathlib import Path
 
-__all__ = [
-    "BEIR",
-    "BEIR_NL",
-    "BRIGHT",
-    "BRIGHT_LONG",
-    "BRIGHT_PRO",
-    "BRIGHT_V1_1",
-    "BUILT_MTEB",
-    "CHEMTEB",
-    "CHEMTEB_V1_1",
-    "CODE_RAG",
-    "C_MTEB",
-    "ENCODECHKA",
-    "FA_MTEB",
-    "FA_MTEB_2",
-    "HUME",
-    "HUME",
-    "JINA_VDR",
-    "JMTEB_LITE_V1",
-    "JMTEB_V2",
-    "KOVIDORE_V2",
-    "LMEB",
-    "LONG_EMBED",
-    "MAEB",
-    "MAEB_AUDIO",
-    "MIEB_ENG",
-    "MIEB_IMG",
-    "MIEB_LITE",
-    "MIEB_MULTILINGUAL",
-    "MTEB_DEU",
-    "MTEB_EN",
-    "MTEB_ENG_CLASSIC",
-    "MTEB_EU",
-    "MTEB_FRA",
-    "MTEB_INDIC",
-    "MTEB_JPN",
-    "MTEB_KOR",
-    "MTEB_KOR_V2",
-    "MTEB_MAIN_RU",
-    "MTEB_MINERS_BITEXT_MINING",
-    "MTEB_NL",
-    "MTEB_POL",
-    "MTEB_PT",
-    "MTEB_RETRIEVAL_LAW",
-    "MTEB_RETRIEVAL_MEDICAL",
-    "MTEB_RETRIEVAL_WITH_INSTRUCTIONS",
-    "MTEB_SLK",
-    "MTEB_SPA",
-    "MTEB_THA",
-    "MVEB",
-    "MVEB_TEXT_VIDEO",
-    "MVEB_VIDEO",
-    "NANOBEIR",
-    "NANOBEIR_EXTENDED",
-    "R2MED",
-    "RTEB_CODE",
-    "RTEB_ENGLISH",
-    "RTEB_FINANCE",
-    "RTEB_FRENCH",
-    "RTEB_GERMAN",
-    "RTEB_HEALTHCARE",
-    "RTEB_JAPANESE",
-    "RTEB_LEGAL",
-    "RTEB_MAIN",
-    "RU_SCI_BENCH",
-    "SEB",
-    "VIDORE",
-    "VIDORE_V2",
-    "VIDORE_V3",
-    "VIDORE_V3_1",
-    "VIDORE_V3_1_RERANKING",
-    "VISUAL_DOCUMENT_RETRIEVAL",
-    "VN_MTEB",
-    "CoIR",
-    "CoREB",
-    "MTEB_MAIN_RU_v1_1",
-    "MTEB_code",
-    "MTEB_multilingual_v1",
-    "MTEB_multilingual_v2",
-    "RAR_b",
-]
+from mteb.benchmarks.benchmark import Benchmark
+
+
+def _collect_benchmarks() -> tuple[list[Benchmark], list[str]]:
+    """Import all Benchmark objects from all modules in the benchmarks package."""
+    benchmark_objects = []
+    names = []
+
+    package_dir = Path(__file__).parent
+
+    for file_path in sorted(package_dir.glob("*.py")):
+        if file_path.name == "__init__.py":
+            continue
+
+        module = importlib.import_module(f".{file_path.stem}", package=__name__)
+
+        for attr_name in dir(module):
+            attr = getattr(module, attr_name)
+
+            if isinstance(attr, Benchmark):
+                benchmark_objects.append(attr)
+                names.append(attr_name)
+
+    return benchmark_objects, names
+
+
+def get_all_benchmark_objects() -> list[Benchmark]:
+    """Get all Benchmark objects defined in the benchmarks package."""
+    return _collect_benchmarks()[0]
+
+
+# keep `from mteb.benchmarks.benchmarks import MTEB_EN` working for backward compatibility
+_benchmarks, _names = _collect_benchmarks()
+globals().update(zip(_names, _benchmarks, strict=True))
+
+# build a registry of all benchmark objects
+BENCHMARK_REGISTRY: dict[str, Benchmark] = {
+    benchmark.name: benchmark for benchmark in _benchmarks
+}
