@@ -87,7 +87,7 @@ citation-check:
 
 preprint-check:
 	@echo "--- 🔍 Checking whether cited preprints have been published ---"
-	uv run --no-sync --group test python tests/test_validate_metadata/check_preprints.py $(PREPRINT_CHECK_ARGS)
+	uv run --no-sync --group test python -m scripts.tools.check_preprints $(PREPRINT_CHECK_ARGS)
 
 reference-model-test:
 	@echo "--- Running reference model coverage test ---"

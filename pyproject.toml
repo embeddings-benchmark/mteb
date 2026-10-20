@@ -219,7 +219,7 @@ test = [
     "GitPython>=3.0.0",
     "tabulate>=0.9.0",
     "bibtexparser>=2.0.0,<3.0.0", # used for tests/test_citation_formatting.py
-    "refaudit>=0.4.9", # used for tests/test_validate_metadata/check_citations.py
+    "refaudit>=0.4.9", # used for tests/test_validate_metadata/check_citations.py and scripts/tools/check_preprints.py
     "av>=17.0.0",
 ]
 docs = [
@@ -414,7 +414,6 @@ preview = true
 ]
 # a script rather than a test: it reports what it checked on stdout
 "tests/test_validate_metadata/check_citations.py" = ["T201"]
-"tests/test_validate_metadata/check_preprints.py" = ["T201"]
 "docs/*" = [
     "D",
     "DOC",

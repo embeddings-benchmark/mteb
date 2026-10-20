@@ -13,7 +13,7 @@ venue without a DOI (e.g. NeurIPS or ICLR) only when the titles match.
 
 Run it with `make preprint-check`, or directly:
 
-    python tests/test_validate_metadata/check_preprints.py [--report preprints.md]
+    python -m scripts.tools.check_preprints [--report preprints.md]
 
 Set `SEMANTIC_SCHOLAR_API_KEY` to use mteb's API key; without one the requests go
 to a shared pool that is often refused. It exits with 1 when it finds a published
@@ -36,12 +36,17 @@ import sys
 import time
 from dataclasses import dataclass
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import requests
-from check_citations import CONTACT_EMAIL, citations
 from refaudit import Entry, default_resolvers
 from refaudit.models import Found
 from refaudit.normalize import clean_arxiv_id, clean_doi, similarity
+
+from tests.test_validate_metadata.check_citations import CONTACT_EMAIL, citations
+
+if TYPE_CHECKING:
+    from refaudit.resolvers import Resolver
 
 ALLOWLIST_PATH = Path(__file__).parent / "preprint_allowlist.json"
 
@@ -136,7 +141,7 @@ def published_version(paper: dict) -> tuple[str, str] | None:
 
 
 def confirm(
-    entry: Entry, paper: dict, doi: str, crossref
+    entry: Entry, paper: dict, doi: str, crossref: Resolver
 ) -> tuple[str, int | None] | None:
     """The title and year of the published version, if it is the cited work.
 
@@ -214,7 +219,7 @@ def write_report(path: Path, published: list[Published]) -> None:
     path.write_text(
         f"{len(published)} works cited as arXiv preprints have since been "
         "published. Please update their citations to the published version, "
-        "or add the key to `tests/test_validate_metadata/preprint_allowlist.json` "
+        "or add the key to `scripts/tools/preprint_allowlist.json` "
         "with the reason it should stay on the preprint.\n\n"
         "| Citation | Cited by | arXiv | Published in | Link |\n"
         "| --- | --- | --- | --- | --- |\n"
