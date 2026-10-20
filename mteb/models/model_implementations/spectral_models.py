@@ -11,7 +11,6 @@ from functools import lru_cache
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import scipy.sparse as sp
 from huggingface_hub import hf_hub_download
 
 from mteb.models.model_meta import ModelMeta
@@ -23,19 +22,6 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
-
-
-def _unit_rows(x: Array) -> np.ndarray:
-    a = np.atleast_2d(np.asarray(x, dtype=np.float32))
-    return a / np.maximum(np.linalg.norm(a, axis=1, keepdims=True), 1e-12)
-
-
-def _cosine_similarity(embeddings1: Array, embeddings2: Array) -> np.ndarray:
-    """Cosine similarity that returns a 0-d array for two single vectors."""
-    a = np.asarray(embeddings1)
-    b = np.asarray(embeddings2)
-    sim = _unit_rows(a) @ _unit_rows(b).T
-    return sim.reshape(()) if a.ndim == 1 and b.ndim == 1 else sim
 
 
 _LATEX_CMD_RE = re.compile(r"\\([A-Za-z]+)")
@@ -189,6 +175,41 @@ def _featurize(text: str, seed: int, dim_h: int) -> tuple[np.ndarray, np.ndarray
     if norm > 1e-12:
         values /= np.float32(norm)
     return indices, values
+
+
+def _unit_rows(x: Array) -> np.ndarray:
+    a = np.atleast_2d(np.asarray(x, dtype=np.float32))
+    return a / np.maximum(np.linalg.norm(a, axis=1, keepdims=True), 1e-12)
+
+
+_PROJECTION_CHUNK = 512
+
+SparseRow = tuple[np.ndarray, np.ndarray]
+
+
+def _project(rows: list[SparseRow], w_t: np.ndarray) -> np.ndarray:
+    out = np.zeros((len(rows), w_t.shape[1]), dtype=np.float32)
+    buf = np.empty((_PROJECTION_CHUNK + 1, w_t.shape[1]), dtype=np.float32)
+    for r, (idx, val) in enumerate(rows):
+        acc = out[r]
+        for start in range(0, len(idx), _PROJECTION_CHUNK):
+            n = min(_PROJECTION_CHUNK, len(idx) - start)
+            buf[0] = acc
+            np.multiply(
+                w_t[idx[start : start + n]],
+                val[start : start + n, None],
+                out=buf[1 : n + 1],
+            )
+            np.add.reduce(buf[: n + 1], axis=0, out=acc)
+    return out
+
+
+def _cosine_similarity(embeddings1: Array, embeddings2: Array) -> np.ndarray:
+    """Cosine similarity that returns a 0-d array for two single vectors."""
+    a = np.asarray(embeddings1)
+    b = np.asarray(embeddings2)
+    sim = _unit_rows(a) @ _unit_rows(b).T
+    return sim.reshape(()) if a.ndim == 1 and b.ndim == 1 else sim
 
 
 _WORD_RE_UNICODE = re.compile(r"[^\W_]+")
@@ -420,34 +441,20 @@ class SpectralFeaturizer:
 
     def transform(
         self, texts: list[str], idf: np.ndarray | None = None
-    ) -> sp.csr_matrix:
-        indptr = [0]
-        indices: list[int] = []
-        data: list[float] = []
-
+    ) -> list[SparseRow]:
+        rows: list[SparseRow] = []
         for t in texts:
             c = self._accumulate(t)
+            i = np.fromiter(c.keys(), dtype=np.int32, count=len(c))
+            v = np.fromiter(c.values(), dtype=np.float32, count=len(c))
             if c:
-                i = np.fromiter(c.keys(), dtype=np.int32, count=len(c))
-                v = np.fromiter(c.values(), dtype=np.float32, count=len(c))
                 if idf is not None:
                     v *= idf[i]
                 norm = float(np.linalg.norm(v))
                 if norm > 1e-12:
                     v /= norm
-                indices.extend(i.tolist())
-                data.extend(v.tolist())
-            indptr.append(len(indices))
-
-        x = sp.csr_matrix(
-            (
-                np.asarray(data, np.float32),
-                np.asarray(indices, np.int32),
-                np.asarray(indptr, np.int64),
-            ),
-            shape=(len(texts), self.H),
-        )
-        return x
+            rows.append((i, v))
+        return rows
 
 
 class SpectralEmbedModel:
@@ -492,20 +499,11 @@ class SpectralEmbedModel:
             return np.empty((0, self.k), dtype=np.float32)
 
         if self.is_v2:
-            x = self.featurizer.transform(texts, idf=self.idf)
+            rows = self.featurizer.transform(texts, idf=self.idf)
         else:
-            feats = [_featurize(t, self.seed, self.dim_h) for t in texts]
-            indptr = np.cumsum([0, *(len(idx) for idx, _ in feats)])
-            x = sp.csr_matrix(
-                (
-                    np.concatenate([val for _, val in feats]),
-                    np.concatenate([idx for idx, _ in feats]),
-                    indptr,
-                ),
-                shape=(len(texts), self.dim_h),
-            )
+            rows = [_featurize(t, self.seed, self.dim_h) for t in texts]
 
-        z = np.asarray(x @ self.w_t, dtype=np.float32) + self.b
+        z = _project(rows, self.w_t) + self.b
         return _unit_rows(z)
 
     def encode(
