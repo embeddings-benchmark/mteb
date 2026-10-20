@@ -76,6 +76,29 @@ class LanguageScripts:
             bare_languages=bare_langs,
         )
 
+    @staticmethod
+    def check_filters(
+        languages: Sequence[str] | None = None,
+        scripts: Sequence[str] | None = None,
+    ) -> None:
+        """Check that a script filter is not combined with a language code that includes a script.
+
+        Args:
+            languages: A list of language codes (e.g. ["eng", "fra-Latn"]).
+            scripts: A list of script codes (e.g. ["Latn", "Cyrl"]).
+
+        Raises:
+            ValueError: If `scripts` is given and a language code in `languages` includes a script.
+        """
+        if not scripts or not languages:
+            return
+        with_script = [lang for lang in languages if "-" in lang]
+        if with_script:
+            raise ValueError(
+                f"Language codes with a script {with_script} cannot be combined with the script filter {list(scripts)}, "
+                "use the language code without its script (e.g. languages=['zho'], script=['Hant']) or drop `script`."
+            )
+
     def contains_language(self, language: str) -> bool:
         """Whether the set contains a specific language.
 

@@ -207,6 +207,24 @@ def test_filter_languages_script_mismatch_raises():
 
 
 @pytest.mark.parametrize(
+    ("languages", "script"),
+    [
+        (["srp-Latn"], ["Latn"]),
+        (["srp-Latn"], ["Cyrl"]),
+        (["rus", "eng-Latn"], ["Latn"]),
+    ],
+)
+def test_filter_languages_script_in_language_code_raises(
+    languages: list[str], script: list[str]
+):
+    task = get_task("STS22.v2")
+    with pytest.raises(ValueError, match="cannot be combined"):
+        task.filter_languages(languages=languages, script=script)
+    with pytest.raises(ValueError, match="cannot be combined"):
+        filter_tasks([task], languages=languages, script=script)
+
+
+@pytest.mark.parametrize(
     ("task_name", "languages", "script", "expected_subsets"),
     [
         # RuNLUIntentClassification has a Russian subset ("rus" = [rus-Cyrl]) and a
