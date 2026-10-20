@@ -9,18 +9,20 @@ This section is an overview of releases for more information check out the autog
 
 ## New in v2.27
 
-### Removing unclear labels
+### Removing samples by their label
 
-This update add utilities to [`mteb.data_cleaning`](get_started/advanced_usage/cleaning_task_data.md) to removes the samples that carry no label, and those whose content carries a contradicting one:
+This update adds utilities to [`mteb.data_cleaning`](get_started/advanced_usage/cleaning_task_data.md) to remove the
+samples whose content carries more than one label, and those that carry none:
 
 ```python
-from mteb.data_cleaning import remove_unclear_labels
+from mteb.data_cleaning import remove_conflicting_labels, remove_unlabeled
 
-cleaned = remove_unclear_labels(task)
+cleaned = remove_conflicting_labels(task)  # content carrying more than one label
+cleaned = remove_unlabeled(task)  # samples carrying no label
 ```
 
-See [cleaning task data](get_started/advanced_usage/cleaning_task_data.md#removing-unclear-labels) for what counts as
-unclear lables.
+See [cleaning task data](get_started/advanced_usage/cleaning_task_data.md#removing-samples-by-their-label) for what
+each of them removes.
 
 ## New in v2.26
 

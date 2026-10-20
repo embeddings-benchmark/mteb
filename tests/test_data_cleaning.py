@@ -13,9 +13,10 @@ from mteb.data_cleaning import (
     remove_by_image_size,
     remove_by_text_length,
     remove_by_video_duration,
+    remove_conflicting_labels,
     remove_duplicates,
     remove_train_leakage,
-    remove_unclear_labels,
+    remove_unlabeled,
 )
 from mteb.data_cleaning._duplicates import _keep_first_occurrence
 from mteb.data_cleaning._filtering import _derived_task_name, _row_key
@@ -1272,53 +1273,46 @@ def test_remove_train_leakage_pools_the_subsets_by_default() -> None:
     assert len(cleaned.dataset["fra"]["test"]) == 0
 
 
-def test_remove_unclear_labels_removes_contradicted_and_missing_labels() -> None:
+def test_remove_conflicting_labels_removes_every_copy_of_a_contradicted_text() -> None:
     task = MockClassificationTask()
     task.dataset = DatasetDict(
         {
             "test": Dataset.from_dict(
                 {
-                    "text": [
-                        "same",
-                        "same",
-                        "clear",
-                        "unlabelled",
-                        " agrees ",
-                        "agrees",
-                    ],
-                    "label": [0, 1, 0, None, 2, 2],
+                    "text": ["same", "same", "clear", " agrees ", "agrees"],
+                    "label": [0, 1, 0, 2, 2],
                 }
             )
         }
     )
     task.data_loaded = True
 
-    cleaned = remove_unclear_labels(task)
+    cleaned = remove_conflicting_labels(task)
 
-    # the contradicted text goes whichever label it carries, as does the one with none
+    # both copies of the contradicted text go, and the two that agree once stripped stay
     assert cleaned.dataset["test"]["text"] == ["clear", " agrees ", "agrees"]
 
 
-def test_remove_unclear_labels_reads_a_list_of_labels_as_a_set() -> None:
+def test_remove_conflicting_labels_reads_a_list_of_labels_as_a_set() -> None:
     task = MockMultilabelClassification()
     task.dataset = DatasetDict(
         {
             "test": Dataset.from_dict(
                 {
-                    "text": ["reordered", "reordered", "differs", "differs", "empty"],
-                    "label": [[0, 1], [1, 0], [0, 1], [0, 2], []],
+                    "text": ["reordered", "reordered", "differs", "differs"],
+                    "label": [[0, 1], [1, 0], [0, 1], [0, 2]],
                 }
             )
         }
     )
     task.data_loaded = True
 
-    cleaned = remove_unclear_labels(task)
+    cleaned = remove_conflicting_labels(task)
 
     assert cleaned.dataset["test"]["text"] == ["reordered", "reordered"]
 
 
-def test_remove_unclear_labels_filters_each_split_on_its_own() -> None:
+def test_remove_conflicting_labels_filters_each_split_on_its_own() -> None:
     task = MockClassificationTask()
     task.dataset = DatasetDict(
         {
@@ -1330,7 +1324,7 @@ def test_remove_unclear_labels_filters_each_split_on_its_own() -> None:
     )
     task.data_loaded = True
 
-    cleaned = remove_unclear_labels(task)
+    cleaned = remove_conflicting_labels(task)
 
     # "conflicts" carries both labels within train, while "shared" differs only between splits, which
     # `remove_train_leakage` is the filter for
@@ -1338,7 +1332,7 @@ def test_remove_unclear_labels_filters_each_split_on_its_own() -> None:
     assert cleaned.dataset["test"]["text"] == ["shared"]
 
 
-def test_remove_unclear_labels_applies_within_a_row_of_a_clustering_task() -> None:
+def test_remove_conflicting_labels_applies_within_a_row_of_a_clustering_task() -> None:
     task = MockClusteringTask()
     task.dataset = DatasetDict(
         {
@@ -1352,28 +1346,28 @@ def test_remove_unclear_labels_applies_within_a_row_of_a_clustering_task() -> No
     )
     task.data_loaded = True
 
-    cleaned = remove_unclear_labels(task)
+    cleaned = remove_conflicting_labels(task)
 
     row = cleaned.dataset["test"][0]
     assert row["sentences"] == ["its own"]
     assert row["labels"] == [0]
 
 
-def test_remove_unclear_labels_refuses_a_continuous_score() -> None:
+def test_remove_conflicting_labels_refuses_a_continuous_score() -> None:
     task = MockRegressionTask()
 
     with pytest.raises(NotImplementedError, match="continuous scale"):
-        remove_unclear_labels(task)
+        remove_conflicting_labels(task)
 
 
-def test_remove_unclear_labels_needs_a_label_column() -> None:
+def test_remove_conflicting_labels_needs_a_label_column() -> None:
     task = MockSTSTask()
 
     with pytest.raises(ValueError, match="declares no `label_column_name`"):
-        remove_unclear_labels(task)
+        remove_conflicting_labels(task)
 
 
-def test_remove_unclear_labels_compares_non_text_by_content() -> None:
+def test_remove_conflicting_labels_compares_non_text_by_content() -> None:
     task = MockImageClassificationTask()
     _load_or_skip(task)
     split = next(iter(task.dataset))
@@ -1386,7 +1380,53 @@ def test_remove_unclear_labels_compares_non_text_by_content() -> None:
         features=data.features,
     )
 
-    cleaned = remove_unclear_labels(task)
+    cleaned = remove_conflicting_labels(task)
 
     # the repeated image carries both labels, so neither copy can be the right one
     assert cleaned.dataset[split]["label"] == [0]
+
+
+def test_remove_unlabeled_removes_the_samples_without_a_label() -> None:
+    task = MockClassificationTask()
+    task.dataset = DatasetDict(
+        {
+            "test": Dataset.from_dict(
+                {
+                    "text": [
+                        "labelled",
+                        "none",
+                        "not a number",
+                        "contradicted",
+                        "contradicted",
+                    ],
+                    "label": [0, None, float("nan"), 1, 2],
+                }
+            )
+        }
+    )
+    task.data_loaded = True
+
+    cleaned = remove_unlabeled(task)
+
+    # a None and a NaN are both missing labels; a contradiction is for `remove_conflicting_labels`
+    assert cleaned.dataset["test"]["text"] == [
+        "labelled",
+        "contradicted",
+        "contradicted",
+    ]
+
+
+def test_remove_unlabeled_reads_an_empty_list_of_labels_as_none() -> None:
+    task = MockMultilabelClassification()
+    task.dataset = DatasetDict(
+        {
+            "test": Dataset.from_dict(
+                {"text": ["labelled", "empty"], "label": [[0, 1], []]}
+            )
+        }
+    )
+    task.data_loaded = True
+
+    cleaned = remove_unlabeled(task)
+
+    assert cleaned.dataset["test"]["text"] == ["labelled"]

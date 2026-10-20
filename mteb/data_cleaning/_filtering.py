@@ -11,6 +11,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import logging
+import math
 import re
 from collections.abc import (
     Callable,
@@ -114,9 +115,10 @@ def _normalize(value: object, normalization: Normalization) -> str:
 def _label_text(value: object) -> str:
     """A label as the text a filter compares it by, empty when the sample carries none.
 
-    A list of labels is read as a set, so that the same labels in another order are the same annotation.
+    A list of labels is read as a set, so that the same labels in another order are the same annotation. A `NaN`,
+    which is how a numeric column holds a missing value, counts as no label rather than as one reading "nan".
     """
-    if value is None:
+    if value is None or (isinstance(value, float) and math.isnan(value)):
         return ""
     if isinstance(value, list | tuple):
         return repr(sorted({_label_text(label) for label in value})) if value else ""
