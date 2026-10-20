@@ -19,7 +19,6 @@ from mteb.types import (
 if TYPE_CHECKING:
     from collections.abc import Callable
 
-    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -33,6 +32,7 @@ if TYPE_CHECKING:
         TopRankedDocumentsType,
     )
 
+    from .model_meta import ModelMeta
     from .models_protocols import CrossEncoderProtocol, EncoderProtocol
     from .search_encoder_index.search_backend_protocol import IndexEncoderSearchProtocol
 
@@ -52,23 +52,10 @@ def chunked_full_corpus_search(  # noqa: PLR0913
     encode_kwargs: EncodeKwargs,
     encode_fn: Callable[..., Array],
     similarity_fn: Callable[[Array, Array], Array],
-    search_k_offset: int = 0,
     num_proc: int | None = None,
     timer: TimingStack | None = None,
 ) -> dict[str, list[tuple[float, str]]]:
     """Chunk over `task_corpus`, encode + score each chunk against `query_embeddings`, and merge per-query top-k results with a heap.
-
-    Shared by `SearchEncoderWrapper` (for any `EncoderProtocol` model, via
-    `encode_fn=model.encode`/`similarity_fn=model.similarity`) and
-    `MultiVectorSearchEncoderWrapper` ([mteb.models.sentence_transformer_wrapper][], via
-    `encode_fn=self._encode`/`similarity_fn=self.model.similarity`, since `MultiVectorWrapper`
-    deliberately has no public `encode()` -- see its docstring). Kept as a plain function taking
-    `encode_fn`/`similarity_fn` callables, rather than a shared base class, since the two callers
-    can't share one via inheritance: `SearchEncoderWrapper` wraps an *external* `EncoderProtocol`
-    object (`self.model.encode(...)`), while `MultiVectorSearchEncoderWrapper` is a self-referential mixin
-    (`self._encode(...)`) -- inheriting one from the other would collide on the meaning of
-    `self.model` and reintroduce the very `encode()` exposure `MultiVectorWrapper` is built to
-    avoid.
 
     Args:
         task_corpus: The (already-indexed) corpus to search.
@@ -83,9 +70,6 @@ def chunked_full_corpus_search(  # noqa: PLR0913
         encode_fn: Encodes a document dataloader into embeddings, matching `EncoderProtocol.encode`.
         similarity_fn: Scores query embeddings against document embeddings, matching
             `EncoderProtocol.similarity`.
-        search_k_offset: Added to `top_k` for the per-chunk `torch.topk` call (before the
-            cross-chunk heap merge trims back down to `top_k`). `SearchEncoderWrapper` has
-            historically used 1 here; `MultiVectorSearchEncoderWrapper` uses 0.
         num_proc: Number of processes to use for dataloading.
         timer: Records a single "Searching corpus" phase; the per-chunk split between encoding
             and computing similarity is logged.
@@ -140,7 +124,7 @@ def chunked_full_corpus_search(  # noqa: PLR0913
             )
             top_k_values, top_k_idx = torch.topk(
                 scores,
-                min(top_k + search_k_offset, scores.shape[1]),
+                min(top_k + 1, scores.shape[1]),
                 dim=1,
                 largest=True,
             )
@@ -192,9 +176,6 @@ def rerank_top_ranked_documents(  # noqa: PLR0913
     timer: TimingStack | None = None,
 ) -> dict[str, list[tuple[float, str]]]:
     """Encode the full corpus once, then rerank each query's pre-ranked `top_ranked` candidates against it.
-
-    Shared by `SearchEncoderWrapper` and `MultiVectorSearchEncoderWrapper` -- see
-    `chunked_full_corpus_search` for why this is a plain function rather than a shared base class.
 
     Args:
         task_corpus: The (already-indexed) corpus the `top_ranked` document IDs are drawn from.
@@ -293,29 +274,45 @@ def rerank_top_ranked_documents(  # noqa: PLR0913
     return result_heaps
 
 
-class SearchEncoderWrapper:
-    """Wrapper for Encoder models to be used in search tasks."""
+def _add_index_backend_experiment_kwargs(
+    meta: ModelMeta, index_backend: IndexEncoderSearchProtocol | None
+) -> ModelMeta:
+    """Return a copy of `meta` whose `experiment_kwargs` include the backend's `experiment_kwargs`.
 
-    task_corpus: CorpusDatasetType | None
+    Approximate backends (e.g. `FastPlaidSearchIndex`) expose `experiment_kwargs`, so their results
+    are saved as an experiment instead of overwriting exact search results. Exact backends, such
+    as `FaissSearchIndex`, don't, and leave `meta` unchanged.
+    """
+    backend_kwargs = getattr(index_backend, "experiment_kwargs", None)
+    if not backend_kwargs:
+        return meta
+    experiment_kwargs = {**(meta.experiment_kwargs or {}), **backend_kwargs}
+    return meta.model_copy(update={"experiment_kwargs": experiment_kwargs}, deep=True)
 
-    def __init__(
+
+class EncoderSearchMixin:
+    """Shared indexing and search for encoder-based search models."""
+
+    task_corpus: CorpusDatasetType | None = None
+    corpus_chunk_size: int = 50_000
+    index_backend: IndexEncoderSearchProtocol | None = None
+
+    def _search_encode(
         self,
-        model: EncoderProtocol,
-        corpus_chunk_size: int = 50_000,
-        index_backend: IndexEncoderSearchProtocol | None = None,
-    ) -> None:
-        """Wrap an encoder for search.
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        """Encode queries or documents for search."""
+        raise NotImplementedError
 
-        Args:
-            model: Encoder used to embed queries and documents.
-            corpus_chunk_size: Number of documents to encode and score at once in full corpus search.
-            index_backend: Optional search index; when given, the corpus is encoded during `index`.
-        """
-        self.model = model
-        self.task_corpus = None
-        self.mteb_model_meta = model.mteb_model_meta
-        self.corpus_chunk_size = corpus_chunk_size
-        self.index_backend = index_backend
+    def _search_similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
+        """Score query embeddings against document embeddings for search."""
+        raise NotImplementedError
 
     def index(
         self,
@@ -342,7 +339,7 @@ class SearchEncoderWrapper:
         # Always retain corpus for potential reranking or fallback flows
         self.task_corpus = corpus
         if self.index_backend is not None:
-            all_doc_embeddings = self.model.encode(
+            all_doc_embeddings = self._search_encode(
                 create_dataloader(
                     corpus,
                     task_metadata=task_metadata,
@@ -394,8 +391,6 @@ class SearchEncoderWrapper:
         Returns:
             Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.
         """
-        import torch
-
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
         timer = timer or TimingStack()
@@ -409,7 +404,7 @@ class SearchEncoderWrapper:
         )
 
         with timer("Encoding queries", split=hf_split, subset=hf_subset):
-            query_embeddings = self.model.encode(
+            query_embeddings = self._search_encode(
                 queries_dataloader,
                 task_metadata=task_metadata,
                 hf_split=hf_split,
@@ -419,80 +414,44 @@ class SearchEncoderWrapper:
             )
         query_idx_to_id = dict(enumerate(queries["id"]))
 
-        if top_ranked is not None:
+        if self.index_backend is not None:
+            logger.info("Searching with the index backend...")
+            result_heaps = self._index_backend_search(
+                query_idx_to_id=query_idx_to_id,
+                query_embeddings=query_embeddings,
+                top_ranked=top_ranked,
+                top_k=top_k,
+                hf_subset=hf_subset,
+                hf_split=hf_split,
+                timer=timer,
+            )
+        elif top_ranked is not None:
             logger.info("Reranking pre-ranked documents...")
-            if self.index_backend is None:
-                result_heaps = self._rerank_documents(
-                    query_idx_to_id=query_idx_to_id,
-                    query_embeddings=query_embeddings,
-                    top_ranked=top_ranked,
-                    top_k=top_k,
-                    task_metadata=task_metadata,
-                    hf_subset=hf_subset,
-                    hf_split=hf_split,
-                    encode_kwargs=encode_kwargs,
-                    timer=timer,
-                )
-            else:
-                with timer("Computing similarity", split=hf_split, subset=hf_subset):
-                    cos_scores_top_k_values, cos_scores_top_k_idx = (
-                        self.index_backend.search(
-                            query_embeddings,
-                            top_k,
-                            similarity_fn=self.model.similarity,
-                            top_ranked=top_ranked,
-                            query_idx_to_id=query_idx_to_id,
-                        )
-                    )
-                result_heaps = {qid: [] for qid in query_idx_to_id.values()}
-                for query_itr in range(len(query_embeddings)):
-                    result_heaps = self._rerank_sort_results(
-                        result_heaps=result_heaps,
-                        query_id=query_idx_to_id[query_itr],
-                        ranked_ids=top_ranked[query_idx_to_id[query_itr]],
-                        scores_top_k_idx=torch.tensor(
-                            [cos_scores_top_k_idx[query_itr]]
-                        ),
-                        scores_top_k_values=torch.tensor(
-                            [cos_scores_top_k_values[query_itr]]
-                        ),
-                    )
-                self.index_backend.clear()
+            result_heaps = self._rerank_documents(
+                query_idx_to_id=query_idx_to_id,
+                query_embeddings=query_embeddings,
+                top_ranked=top_ranked,
+                top_k=top_k,
+                task_metadata=task_metadata,
+                hf_subset=hf_subset,
+                hf_split=hf_split,
+                encode_kwargs=encode_kwargs,
+                timer=timer,
+                num_proc=num_proc,
+            )
         else:
             logger.info("Performing full corpus search...")
-            if self.index_backend is None:
-                result_heaps = self._full_corpus_search(
-                    query_idx_to_id=query_idx_to_id,
-                    query_embeddings=query_embeddings,
-                    task_metadata=task_metadata,
-                    hf_subset=hf_subset,
-                    hf_split=hf_split,
-                    top_k=top_k,
-                    encode_kwargs=encode_kwargs,
-                    timer=timer,
-                )
-            else:
-                with timer("Computing similarity", split=hf_split, subset=hf_subset):
-                    cos_scores_top_k_values, cos_scores_top_k_idx = (
-                        self.index_backend.search(
-                            query_embeddings,
-                            top_k,
-                            similarity_fn=self.model.similarity,
-                            top_ranked=None,
-                            query_idx_to_id=None,
-                        )
-                    )
-                result_heaps = {qid: [] for qid in query_idx_to_id.values()}
-                result_heaps = self._sort_full_corpus_results(
-                    result_heaps=result_heaps,
-                    query_idx_to_id=query_idx_to_id,
-                    query_embeddings=query_embeddings,
-                    cos_scores_top_k_idx=cos_scores_top_k_idx,
-                    cos_scores_top_k_values=cos_scores_top_k_values,
-                    sub_corpus_ids=self.task_corpus["id"],
-                    top_k=top_k,
-                )
-                self.index_backend.clear()
+            result_heaps = self._full_corpus_search(
+                query_idx_to_id=query_idx_to_id,
+                query_embeddings=query_embeddings,
+                task_metadata=task_metadata,
+                hf_subset=hf_subset,
+                hf_split=hf_split,
+                top_k=top_k,
+                encode_kwargs=encode_kwargs,
+                timer=timer,
+                num_proc=num_proc,
+            )
 
         # Reset the task corpus dataloader to None to free up memory
         self.task_corpus = None
@@ -515,6 +474,7 @@ class SearchEncoderWrapper:
         top_k: int,
         encode_kwargs: EncodeKwargs,
         timer: TimingStack,
+        num_proc: int | None = None,
     ) -> dict[str, list[tuple[float, str]]]:
 
         logger.info("Encoding Corpus in batches (this might take a while)...")
@@ -531,45 +491,13 @@ class SearchEncoderWrapper:
             hf_split=hf_split,
             top_k=top_k,
             encode_kwargs=encode_kwargs,
-            encode_fn=self.model.encode,
-            similarity_fn=self.model.similarity,
-            search_k_offset=1,
+            encode_fn=self._search_encode,
+            similarity_fn=self._search_similarity,
+            num_proc=num_proc,
             timer=timer,
         )
 
-    def _sort_full_corpus_results(  # noqa: PLR6301
-        self,
-        *,
-        result_heaps: dict[str, list[tuple[float, str]]],
-        query_idx_to_id: dict[int, str],
-        query_embeddings: Array,
-        cos_scores_top_k_idx: list[list[int]],
-        cos_scores_top_k_values: list[list[float]],
-        sub_corpus_ids: list[str],
-        top_k: int,
-    ) -> dict[str, list[tuple[float, str]]]:
-        """Sort the heaps into descending order lists.
-
-        Returns:
-            A dictionary mapping query IDs to a sorted list of tuples, each containing a relevance score and a document ID.
-        """
-        for query_itr in range(len(query_embeddings)):
-            query_id = query_idx_to_id[query_itr]
-            for sub_corpus_id, score in zip(
-                cos_scores_top_k_idx[query_itr],
-                cos_scores_top_k_values[query_itr],
-                strict=True,
-            ):
-                corpus_id = sub_corpus_ids[sub_corpus_id]
-                if len(result_heaps[query_id]) < top_k:
-                    # push item on the heap
-                    heapq.heappush(result_heaps[query_id], (score, corpus_id))
-                else:
-                    # If item is larger than the smallest in the heap, push it on the heap then pop the smallest element
-                    heapq.heappushpop(result_heaps[query_id], (score, corpus_id))
-        return result_heaps
-
-    def _rerank_documents(
+    def _rerank_documents(  # noqa: PLR0913
         self,
         *,
         query_idx_to_id: dict[int, str],
@@ -581,6 +509,7 @@ class SearchEncoderWrapper:
         hf_split: str,
         encode_kwargs: EncodeKwargs,
         timer: TimingStack,
+        num_proc: int | None = None,
     ) -> dict[str, list[tuple[float, str]]]:
         """Rerank documents based on pre-ranked documents.
 
@@ -600,32 +529,117 @@ class SearchEncoderWrapper:
             hf_subset=hf_subset,
             hf_split=hf_split,
             encode_kwargs=encode_kwargs,
-            encode_fn=self.model.encode,
-            similarity_fn=self.model.similarity,
+            encode_fn=self._search_encode,
+            similarity_fn=self._search_similarity,
+            num_proc=num_proc,
             timer=timer,
         )
 
-    def _rerank_sort_results(  # noqa: PLR6301
+    def _index_backend_search(
         self,
-        result_heaps: dict[str, list[tuple[float, str]]],
-        query_id: str,
-        ranked_ids: list[str],
-        scores_top_k_idx: torch.Tensor,
-        scores_top_k_values: torch.Tensor,
+        *,
+        query_idx_to_id: dict[int, str],
+        query_embeddings: Array,
+        top_ranked: TopRankedDocumentsType | None,
+        top_k: int,
+        hf_subset: str,
+        hf_split: str,
+        timer: TimingStack,
     ) -> dict[str, list[tuple[float, str]]]:
-        """Sort the heap into descending order list.
+        """Search (or rerank `top_ranked` candidates) with `index_backend`, which holds the corpus added in `index`, then clear it.
 
         Returns:
-            A sorted list of tuples, each containing a relevance score and a document ID.
+            A dictionary mapping query IDs to a list of `(score, corpus_id)` tuples.
         """
-        for doc_idx, score in zip(
-            scores_top_k_idx[0].tolist(),
-            scores_top_k_values[0].tolist(),
-            strict=True,
-        ):
-            corpus_id = ranked_ids[doc_idx]
-            heapq.heappush(result_heaps[query_id], (score, corpus_id))
+        if self.index_backend is None or self.task_corpus is None:
+            raise ValueError("Corpus must be indexed before searching.")
+
+        with timer("Computing similarity", split=hf_split, subset=hf_subset):
+            top_k_values, top_k_idx = self.index_backend.search(
+                query_embeddings,
+                top_k,
+                similarity_fn=self._search_similarity,
+                top_ranked=top_ranked,
+                query_idx_to_id=query_idx_to_id if top_ranked is not None else None,
+            )
+        self.index_backend.clear()
+
+        corpus_ids = self.task_corpus["id"]
+        result_heaps: dict[str, list[tuple[float, str]]] = {
+            qid: [] for qid in query_idx_to_id.values()
+        }
+        for q_idx, qid in query_idx_to_id.items():
+            # In reranking mode the backend indexes into the query's own candidate list
+            candidate_ids = (
+                top_ranked.get(qid, []) if top_ranked is not None else corpus_ids
+            )
+            for idx, score in zip(top_k_idx[q_idx], top_k_values[q_idx], strict=True):
+                corpus_id = candidate_ids[idx]
+                if len(result_heaps[qid]) < top_k:
+                    heapq.heappush(result_heaps[qid], (score, corpus_id))
+                else:
+                    heapq.heappushpop(result_heaps[qid], (score, corpus_id))
         return result_heaps
+
+
+class SearchEncoderWrapper(EncoderSearchMixin):
+    """Wrapper for Encoder models to be used in search tasks.
+
+    Works with any embedding type: dense, sparse or multi-vector. An `index_backend` matching the
+    embeddings can be passed, e.g. `FaissSearchIndex` for dense or `FastPlaidSearchIndex` for
+    multi-vector models.
+    """
+
+    def __init__(
+        self,
+        model: EncoderProtocol,
+        corpus_chunk_size: int = 50_000,
+        index_backend: IndexEncoderSearchProtocol | None = None,
+    ) -> None:
+        """Wrap an encoder for search.
+
+        Args:
+            model: Encoder used to embed queries and documents. Models without a public `encode`,
+                such as `MultiVectorWrapper`, are encoded with their `_encode`.
+            corpus_chunk_size: Number of documents to encode and score at once in full corpus search.
+            index_backend: Optional search index; when given, the corpus is encoded during `index`.
+        """
+        self.model = model
+        # `MultiVectorWrapper` has no public `encode` (it is a search model itself), only `_encode`
+        encode_fn = getattr(model, "encode", None) or getattr(model, "_encode", None)
+        if encode_fn is None:
+            raise TypeError(
+                f"{type(model).__name__} has neither `encode` nor `_encode`, so it can't be wrapped by SearchEncoderWrapper."
+            )
+        self._encode_fn: Callable[..., Array] = encode_fn
+        self.task_corpus = None
+        self.mteb_model_meta = _add_index_backend_experiment_kwargs(
+            model.mteb_model_meta, index_backend
+        )
+        self.corpus_chunk_size = corpus_chunk_size
+        self.index_backend = index_backend
+
+    def _search_encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        return self._encode_fn(
+            inputs,
+            task_metadata=task_metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            prompt_type=prompt_type,
+            **kwargs,
+        )
+
+    def _search_similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
+        return self.model.similarity(embeddings1, embeddings2)
 
     def encode(
         self,
@@ -638,7 +652,7 @@ class SearchEncoderWrapper:
         **kwargs: Any,
     ) -> Array:
         """Encode inputs using the model' s encode."""
-        return self.model.encode(
+        return self._encode_fn(
             inputs,
             task_metadata=task_metadata,
             hf_split=hf_split,

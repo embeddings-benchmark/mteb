@@ -19,7 +19,8 @@ class IndexEncoderSearchProtocol(Protocol):
         """Add documents to the search backend.
 
         Args:
-            embeddings: Embeddings of the documents to add.
+            embeddings: Embeddings of the documents to add. Single-vector models give an array of
+                shape (num_documents, dim); multi-vector models give a list of (num_tokens, dim) arrays.
             idxs: IDs of the documents to add.
         """
 
@@ -38,7 +39,8 @@ class IndexEncoderSearchProtocol(Protocol):
             - Reranking mode:  `top_ranked` contains mapping {query_id: [doc_ids]}.
 
         Args:
-            embeddings: Query embeddings, shape (num_queries, dim).
+            embeddings: Query embeddings, shape (num_queries, dim), or a list of (num_tokens, dim)
+                arrays for multi-vector models.
             top_k: Number of top results to return.
             similarity_fn: Function to compute similarity between query and corpus.
             top_ranked: Mapping of query_id -> list of candidate doc_ids. Used for reranking.

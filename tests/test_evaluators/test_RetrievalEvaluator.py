@@ -206,6 +206,7 @@ class _MultiVectorModel:
 
 class _MultiVectorWrapper(MultiVectorSearchEncoderWrapper):
     corpus_chunk_size = 4
+    mteb_model_meta = None
 
     def __init__(self):
         self.model = _MultiVectorModel()
@@ -235,6 +236,13 @@ class _InMemoryIndex:
 
     def clear(self):
         self.embeddings = None
+
+
+class _InMemoryMultiVectorIndex(_InMemoryIndex):
+    """`_InMemoryIndex` for ragged multi-vector embeddings."""
+
+    def add_documents(self, embeddings, idxs):
+        self.embeddings = list(embeddings)
 
 
 class _PlainSearchModel:
@@ -295,6 +303,14 @@ def _run_retrieval(search_model, top_ranked=None) -> TimingStack:
             ["Encoding corpus", "Encoding queries", "Computing similarity"],
         ),
         (
+            # Multi-vector models (no public `encode`) can be wrapped to use an index backend
+            SearchEncoderWrapper(
+                _MultiVectorWrapper(), index_backend=_InMemoryMultiVectorIndex()
+            ),
+            None,
+            ["Encoding corpus", "Encoding queries", "Computing similarity"],
+        ),
+        (
             # Other search models get the evaluator's own phases around `index` and `search`
             _PlainSearchModel(),
             None,
@@ -307,6 +323,7 @@ def _run_retrieval(search_model, top_ranked=None) -> TimingStack:
         "multi-vector-search",
         "multi-vector-rerank",
         "dense-index-backend",
+        "multi-vector-index-backend",
         "plain-search-protocol",
     ],
 )

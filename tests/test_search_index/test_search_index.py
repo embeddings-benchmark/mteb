@@ -37,6 +37,8 @@ def test_retrieval_backends(
     model.mteb_model_meta = model_meta
 
     faiss_backend = SearchEncoderWrapper(model, index_backend=FaissSearchIndex(model))
+    # FAISS flat search is exact, so it isn't recorded as an experiment
+    assert faiss_backend.mteb_model_meta == model.mteb_model_meta
 
     python_backend_predictions = tmp_path / "python_backend_predictions"
     faiss_backend_predictions = tmp_path / "faiss_backend_predictions"
