@@ -274,6 +274,23 @@ def rerank_top_ranked_documents(  # noqa: PLR0913
     return result_heaps
 
 
+def _check_index_backend_model_type(
+    meta: ModelMeta, index_backend: IndexEncoderSearchProtocol
+) -> None:
+    """Raise if `index_backend` can't index embeddings of the model's type.
+
+    Every type of the model must be supported, e.g. a `["dense", "sparse"]` model can produce
+    sparse embeddings, which `FaissSearchIndex` can't index.
+    """
+    unsupported = set(meta.model_type) - set(index_backend.supported_model_types)
+    if unsupported:
+        raise ValueError(
+            f"{type(index_backend).__name__} supports models of type "
+            f"{list(index_backend.supported_model_types)}, but {meta.name} has model_type "
+            f"{meta.model_type}."
+        )
+
+
 def _add_index_backend_experiment_kwargs(
     meta: ModelMeta, index_backend: IndexEncoderSearchProtocol | None
 ) -> ModelMeta:
@@ -612,6 +629,8 @@ class SearchEncoderWrapper(EncoderSearchMixin):
                 f"{type(model).__name__} has neither `encode` nor `_encode`, so it can't be wrapped by SearchEncoderWrapper."
             )
         self._encode_fn: Callable[..., Array] = encode_fn
+        if index_backend is not None:
+            _check_index_backend_model_type(model.mteb_model_meta, index_backend)
         self.task_corpus = None
         self.mteb_model_meta = _add_index_backend_experiment_kwargs(
             model.mteb_model_meta, index_backend

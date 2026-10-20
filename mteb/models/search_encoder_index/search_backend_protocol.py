@@ -1,15 +1,20 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Protocol
+from typing import TYPE_CHECKING, ClassVar, Protocol
 
 if TYPE_CHECKING:
     from collections.abc import Callable
 
+    from mteb.models.model_meta import MODEL_TYPES
     from mteb.types import Array, TopRankedDocumentsType
 
 
 class IndexEncoderSearchProtocol(Protocol):
     """Protocol for search backends used in encoder-based retrieval."""
+
+    supported_model_types: ClassVar[tuple[MODEL_TYPES, ...]]
+    """Model types (`ModelMeta.model_type`) this backend can index. `SearchEncoderWrapper`
+    refuses a model with any other type in its `model_type`."""
 
     def add_documents(
         self,

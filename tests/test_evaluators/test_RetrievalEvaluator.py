@@ -8,6 +8,7 @@ from datasets import Dataset
 from mteb._evaluators import RetrievalEvaluator
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.mocks.mock_tasks.retrieval import general_args
+from mteb.models.model_meta import ModelMeta
 from mteb.models.search_wrappers import SearchEncoderWrapper
 from mteb.models.sentence_transformer_wrapper import MultiVectorSearchEncoderWrapper
 from mteb.similarity_functions import cos_sim, max_sim
@@ -187,7 +188,7 @@ ENCODE_KWARGS = {"batch_size": 4, "show_progress_bar": False}
 
 
 class _DenseEncoder:
-    mteb_model_meta = None
+    mteb_model_meta = ModelMeta.create_empty(overwrites={"model_type": ["dense"]})
 
     def encode(self, inputs, **kwargs: Any):
         return torch.randn(sum(len(batch["text"]) for batch in inputs), 8)
@@ -206,7 +207,9 @@ class _MultiVectorModel:
 
 class _MultiVectorWrapper(MultiVectorSearchEncoderWrapper):
     corpus_chunk_size = 4
-    mteb_model_meta = None
+    mteb_model_meta = ModelMeta.create_empty(
+        overwrites={"model_type": ["late-interaction"]}
+    )
 
     def __init__(self):
         self.model = _MultiVectorModel()
@@ -220,6 +223,8 @@ class _MultiVectorWrapper(MultiVectorSearchEncoderWrapper):
 
 class _InMemoryIndex:
     """Minimal `IndexEncoderSearchProtocol` backend (full corpus search only)."""
+
+    supported_model_types = ("dense",)
 
     def __init__(self):
         self.embeddings = None
@@ -240,6 +245,8 @@ class _InMemoryIndex:
 
 class _InMemoryMultiVectorIndex(_InMemoryIndex):
     """`_InMemoryIndex` for ragged multi-vector embeddings."""
+
+    supported_model_types = ("late-interaction",)
 
     def add_documents(self, embeddings, idxs):
         self.embeddings = list(embeddings)
@@ -361,3 +368,16 @@ def test_reused_wrapper_records_to_each_tasks_timer():
         "Encoding queries",
         "Searching corpus",
     ]
+
+
+@pytest.mark.parametrize(
+    "model_type", [["sparse"], ["dense", "sparse"], ["late-interaction"]]
+)
+def test_index_backend_rejects_unsupported_model_type(model_type):
+    encoder = _DenseEncoder()
+    encoder.mteb_model_meta = ModelMeta.create_empty(
+        overwrites={"model_type": model_type}
+    )
+
+    with pytest.raises(ValueError, match="_InMemoryIndex supports models of type"):
+        SearchEncoderWrapper(encoder, index_backend=_InMemoryIndex())

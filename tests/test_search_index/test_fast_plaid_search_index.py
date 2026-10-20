@@ -21,11 +21,18 @@ TOP_K = 10
 
 
 class _MaxSimModel:
-    def __init__(self, similarity_fn_name: ScoringFunction = ScoringFunction.MAX_SIM):
+    def __init__(
+        self,
+        similarity_fn_name: ScoringFunction = ScoringFunction.MAX_SIM,
+        model_type: tuple[str, ...] = ("late-interaction",),
+    ):
         model = mteb.get_model("mteb/baseline-random-encoder")
         meta = deepcopy(model.mteb_model_meta)
         self.mteb_model_meta = meta.model_copy(
-            update={"similarity_fn_name": similarity_fn_name}
+            update={
+                "similarity_fn_name": similarity_fn_name,
+                "model_type": list(model_type),
+            }
         )
 
     def encode(self, *args: Any, **kwargs: Any):
@@ -200,3 +207,11 @@ def test_wrapper_saves_plaid_args_as_experiment():
     assert "plaid_nbits_2" in wrapper.mteb_model_meta.experiment_name
     # the wrapped model's own meta is left untouched
     assert model.mteb_model_meta.experiment_kwargs is None
+
+
+def test_wrapper_rejects_non_late_interaction_model():
+    model = _MaxSimModel(model_type=("dense",))
+    with pytest.raises(
+        ValueError, match="FastPlaidSearchIndex supports models of type"
+    ):
+        SearchEncoderWrapper(model, index_backend=FastPlaidSearchIndex(model))

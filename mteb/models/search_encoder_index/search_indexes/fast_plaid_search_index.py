@@ -6,7 +6,7 @@ import tempfile
 import warnings
 import weakref
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from mteb._requires_package import _is_package_available
 from mteb.models.model_meta import ScoringFunction
@@ -17,6 +17,7 @@ if TYPE_CHECKING:
     import torch
     from fast_plaid import search as fast_plaid_search
 
+    from mteb.models.model_meta import MODEL_TYPES
     from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, TopRankedDocumentsType
 
@@ -46,6 +47,8 @@ class FastPlaidSearchIndex:
         - Because results are approximate, the index parameters are saved as `experiment_kwargs`
           of the model when used through `SearchEncoderWrapper` (see `experiment_kwargs`).
     """
+
+    supported_model_types: ClassVar[tuple[MODEL_TYPES, ...]] = ("late-interaction",)
 
     def __init__(
         self,
