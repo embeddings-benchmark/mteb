@@ -9,8 +9,8 @@ from tqdm.auto import tqdm
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import (
+    AudioCollator,
     check_duration_cap,
-    pad_to_min_samples,
     single_clip_dataloader,
 )
 
@@ -82,6 +82,10 @@ class SpeechT5Audio(AbsEncoder):
         import torchaudio
 
         all_embeddings = []
+        # the conv speech prenet needs at least 400 samples (25 ms at 16 kHz)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate, min_samples=400
+        )
 
         for batch in tqdm(
             single_clip_dataloader(
@@ -107,8 +111,7 @@ class SpeechT5Audio(AbsEncoder):
                         orig_freq=sr, new_freq=self.sampling_rate
                     )
                     array = resampler(array)
-                # the conv speech prenet needs at least 400 samples (25 ms at 16 kHz)
-                batch_arrays.append(pad_to_min_samples(array.numpy(), 400))
+                batch_arrays.append(array.numpy())
 
             if batch_arrays[0].ndim == 0:
                 batch_arrays = [x.reshape(-1) for x in batch_arrays]

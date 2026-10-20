@@ -9,7 +9,6 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import (
     AudioCollator,
     check_duration_cap,
-    pad_to_min_samples,
     single_clip_dataloader,
 )
 
@@ -66,7 +65,10 @@ class WavlmWrapper(AbsEncoder):
     ) -> Array:
         import torch
 
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+        # the conv feature encoder needs at least 400 samples (25 ms at 16 kHz)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate, min_samples=400
+        )
 
         all_embeddings = []
 
@@ -76,10 +78,7 @@ class WavlmWrapper(AbsEncoder):
                 "group-norm feature encoder: padding changes the embeddings",
             )
         for batch in tqdm(inputs, disable=not show_progress_bar):
-            # the conv feature encoder needs at least 400 samples (25 ms at 16 kHz)
-            audio_arrays = [
-                pad_to_min_samples(audio["array"], 400) for audio in batch["audio"]
-            ]
+            audio_arrays = [audio["array"] for audio in batch["audio"]]
 
             feature_inputs = self.feature_extractor(
                 audio_arrays,

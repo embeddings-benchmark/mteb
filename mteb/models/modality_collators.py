@@ -54,15 +54,18 @@ class AudioCollator:
         *,
         target_sampling_rate: int,
         max_samples: int | None = None,
+        min_samples: int | None = None,
     ) -> None:
         """Initialize the collator.
 
         Args:
             target_sampling_rate: The sampling rate to resample the audio to.
             max_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
+            min_samples: Zero-pad (silence) shorter audio to this many samples, for models whose first layer needs a minimum input length. If None, no padding is applied.
         """
         self.target_sampling_rate = target_sampling_rate
         self.max_samples = max_samples
+        self.min_samples = min_samples
 
     def __call__(self, inputs: list[dict[str, Any]]) -> BatchedInput:
         """Collate a batch of audio inputs by resampling them to the target sampling rate and optionally truncating to a maximum number of samples."""
@@ -70,6 +73,7 @@ class AudioCollator:
             inputs,
             target_sampling_rate=self.target_sampling_rate,
             max_samples=self.max_samples,
+            min_samples=self.min_samples,
         )
 
     @staticmethod
@@ -78,6 +82,7 @@ class AudioCollator:
         *,
         target_sampling_rate: int,
         max_samples: int | None = None,
+        min_samples: int | None = None,
     ) -> BatchedInput:
         """Resample a batch of audio inputs to a target sampling rate and optionally truncate to a maximum number of samples.
 
@@ -85,6 +90,7 @@ class AudioCollator:
             inputs: A list of dictionaries containing audio data under the "audio" key, where each audio is a dictionary with "array" and "sampling_rate" keys.
             target_sampling_rate: The sampling rate to resample the audio to.
             max_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
+            min_samples: Zero-pad shorter audio to this many samples. If None, no padding is applied.
         """
         collated_inputs = []
         for row in inputs:
@@ -92,6 +98,7 @@ class AudioCollator:
                 row,
                 target_sampling_rate=target_sampling_rate,
                 max_samples=max_samples,
+                min_samples=min_samples,
             )
             row["audio"] = AudioInputItem(
                 array=audio_array, sampling_rate=target_sampling_rate
@@ -108,6 +115,7 @@ class AudioCollator:
         *,
         target_sampling_rate: int,
         max_samples: int | None = None,
+        min_samples: int | None = None,
     ) -> np.typing.NDArray[np.floating]:
         """Resample an audio input to a target sampling rate and optionally truncate to a maximum number of samples.
 
@@ -115,6 +123,7 @@ class AudioCollator:
             audio: A list of dictionaries containing audio data under the "audio" key, where each audio is a dictionary with "array" and "sampling_rate" keys.
             target_sampling_rate: The sampling rate to resample the audio to.
             max_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
+            min_samples: Zero-pad shorter audio to this many samples. If None, no padding is applied.
         """
         if max_samples is not None and max_samples <= 0:
             raise ValueError(f"max_samples must be positive, got {max_samples}.")
@@ -149,6 +158,13 @@ class AudioCollator:
                 )
                 audio_array = audio_array[..., :max_samples]
 
+        if min_samples is not None and audio_array.shape[-1] < min_samples:
+            # pad the time axis only, with silence
+            pad = [(0, 0)] * (audio_array.ndim - 1) + [
+                (0, min_samples - audio_array.shape[-1])
+            ]
+            audio_array = np.pad(audio_array, pad)
+
         audio_array = cast(
             "np.ndarray[tuple[Any, ...], np.dtype[np.floating[Any]]]",
             audio_array,
@@ -169,16 +185,6 @@ def seconds_to_samples(seconds: float | None, sampling_rate: int) -> int | None:
     if seconds is None:
         return None
     return int(seconds * sampling_rate)
-
-
-def pad_to_min_samples(array: np.ndarray, min_samples: int) -> np.ndarray:
-    """Zero-pad a clip that is shorter than `min_samples`; longer clips are returned unchanged."""
-    array = np.asarray(array)
-    if array.shape[-1] >= min_samples:
-        return array
-    return np.pad(
-        array, [(0, 0)] * (array.ndim - 1) + [(0, min_samples - array.shape[-1])]
-    )
 
 
 @contextmanager

@@ -11,7 +11,6 @@ from mteb.models.modality_collators import (
     AudioCollator,
     VideoCollator,
     fixed_numpy_seed,
-    pad_to_min_samples,
 )
 from mteb.types import OutputDType
 
@@ -306,8 +305,6 @@ class LanguageBindAudioWrapper(_LanguageBindBase):
         """Apply LanguageBind's audio transform to a raw waveform array."""
         import torch
 
-        # the fbank needs at least one 25 ms window (400 samples at 16 kHz)
-        audio_array = pad_to_min_samples(audio_array, 400)
         waveform = torch.as_tensor(audio_array, dtype=torch.float32)
         if waveform.ndim == 1:
             waveform = waveform.unsqueeze(0)
@@ -324,7 +321,10 @@ class LanguageBindAudioWrapper(_LanguageBindBase):
 
         with torch.inference_mode():
             all_embeddings = []
-            inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+            # the fbank needs at least one 25 ms window (400 samples at 16 kHz)
+            inputs.collate_fn = AudioCollator(
+                target_sampling_rate=self.sampling_rate, min_samples=400
+            )
 
             for batch in tqdm(
                 inputs,

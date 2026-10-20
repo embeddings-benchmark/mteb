@@ -7,11 +7,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import (
-    AudioCollator,
-    pad_to_min_samples,
-    seconds_to_samples,
-)
+from mteb.models.modality_collators import AudioCollator, seconds_to_samples
 from mteb.models.model_meta import ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import OutputDType
@@ -99,21 +95,20 @@ class VoiceCLAPSmallWrapper(AbsEncoder):
     ) -> np.ndarray:
         import torch
 
+        # the audio encoder needs at least 480 samples (30 ms at 16 kHz)
         inputs.collate_fn = AudioCollator(
             target_sampling_rate=self.sampling_rate,
             max_samples=seconds_to_samples(
                 self.max_audio_length_seconds, self.sampling_rate
             ),
+            min_samples=480,
         )
 
         all_features = []
         for batch in tqdm(inputs, disable=not show_progress_bar):
             for audio in batch["audio"]:
-                # the audio encoder needs at least 480 samples (30 ms at 16 kHz)
                 waveform = (
-                    torch.from_numpy(pad_to_min_samples(audio["array"], 480))
-                    .float()
-                    .to(self.device)
+                    torch.from_numpy(np.asarray(audio["array"])).float().to(self.device)
                 )
                 with torch.no_grad():
                     features = self.model.encode_waveform(waveform)
