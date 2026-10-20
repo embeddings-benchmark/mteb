@@ -52,7 +52,8 @@ S2_ATTEMPTS = 6
 
 ARXIV_DOI_PREFIX = "10.48550/arxiv."
 PREPRINT_VENUE = re.compile(
-    r"arxiv|corr|preprint|biorxiv|medrxiv|ssrn|research square|techrxiv",
+    r"arxiv|corr|preprint|biorxiv|medrxiv|ssrn|social science research network"
+    r"|research square|techrxiv",
     re.IGNORECASE,
 )
 
@@ -157,6 +158,15 @@ def confirm(
     return outcome.record.title, outcome.record.year
 
 
+def url(paper: dict, doi: str) -> str:
+    """Where to get the published version's BibTeX."""
+    if doi:
+        return f"https://doi.org/{doi}"
+    if acl_id := (paper.get("externalIds") or {}).get("ACL"):
+        return f"https://aclanthology.org/{acl_id}"
+    return f"https://www.semanticscholar.org/paper/{paper['paperId']}"
+
+
 def find_published(
     entries: dict[str, tuple[Entry, set[str]]], preprints: dict[str, str]
 ) -> list[Published]:
@@ -185,9 +195,7 @@ def find_published(
                     title,
                     venue,
                     year,
-                    f"https://doi.org/{doi}"
-                    if doi
-                    else f"https://www.semanticscholar.org/paper/{paper['paperId']}",
+                    url(paper, doi),
                 )
             )
         else:
