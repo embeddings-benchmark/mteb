@@ -7,10 +7,6 @@ import numpy as np
 from datasets import Dataset, load_dataset
 
 from mteb._create_dataloaders import create_dataloader
-from mteb._evaluators.retrieval_metrics import (
-    calculate_retrieval_scores,
-    make_score_dict,
-)
 from mteb.abstasks._statistics_calculation import (
     calculate_relevant_docs_statistics,
     calculate_single_input_modality_statistics,
@@ -20,14 +16,19 @@ from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.models import EncoderProtocol
+from mteb.types import PromptType
 from mteb.types.statistics import RetrievalDescriptiveStatistics
 
 if TYPE_CHECKING:
     from pathlib import Path
 
+    import torch
+    from torch.utils.data import DataLoader
+
     from mteb.models import MTEBModels
+    from mteb.models.model_meta import ModelMeta
     from mteb.timing import TimingStack
-    from mteb.types import EncodeKwargs, ScoresDict
+    from mteb.types import Array, BatchedInput, EncodeKwargs, ScoresDict
 
 logger = logging.getLogger(__name__)
 
@@ -144,9 +145,8 @@ class _VisLingAReranking(AbsTaskRetrieval):
             raise TypeError("Expected model to be an instance of EncoderProtocol")
 
         concept_inputs = self.concept_inputs[hf_split]
-
         with timer(
-            "Encoding",
+            "Encoding concepts",
             split=hf_split,
             subset=hf_subset,
             log_message="Running VisLingA - Encoding concepts...",
@@ -163,112 +163,116 @@ class _VisLingAReranking(AbsTaskRetrieval):
                 hf_subset=hf_subset,
                 **encode_kwargs,
             )
-
-        with timer(
-            "Scoring",
-            split=hf_split,
-            subset=hf_subset,
-            log_message="Running VisLingA - Ranking candidates...",
-        ):
-            results, ranks = _rank_candidates(
-                np.asarray(embeddings, dtype=np.float32),
-                list(concept_inputs["concept"]),
-                data_split,
-                self.query_terms[hf_split],
-            )
-
-        if prediction_folder:
-            self._save_task_predictions(
-                results,
-                model,
-                prediction_folder,
-                hf_subset=hf_subset,
-                hf_split=hf_split,
-            )
-
-        (
-            _all_scores,
-            ndcg,
-            _map,
-            recall,
-            precision,
-            naucs,
-            mrr,
-            naucs_mrr,
-            hit_rate,
-        ) = calculate_retrieval_scores(
-            results,
-            data_split["relevant_docs"],
-            list(self.k_values),
-            self.skip_first_result,
+        concept_index = {name: i for i, name in enumerate(data_split["corpus"]["id"])}
+        concepts = _mean_pool(
+            np.asarray(embeddings, dtype=np.float32),
+            np.array([concept_index[name] for name in concept_inputs["concept"]]),
+            len(concept_index),
         )
-        logger.info("Running VisLingA - Finished.")
-        return make_score_dict(
-            ndcg=ndcg,
-            _map=_map,
-            recall=recall,
-            precision=precision,
-            mrr=mrr,
-            naucs=naucs,
-            naucs_mrr=naucs_mrr,
-            hit_rate=hit_rate,
-            task_scores={
-                "avg_rank": float(np.mean(ranks)),
-                "median_rank": float(np.median(ranks)),
-            },
-            previous_results_model_meta=self._previous_results_model_meta,
+        return super()._evaluate_subset(
+            _AnalogyEncoder(model, concepts, concept_index, self.query_terms[hf_split]),
+            data_split,
+            encode_kwargs=encode_kwargs,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            prediction_folder=prediction_folder,
+            num_proc=num_proc,
+            timer=timer,
+            **kwargs,
         )
+
+    def task_specific_scores(  # noqa: PLR6301
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: dict[str, dict[str, int]],
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        """Mean and median rank of each query's answer, with exact ties broken by descending document id."""
+        ranks = [
+            _rank(results[qid], answer)
+            for qid, docs in qrels.items()
+            for answer in docs
+        ]
+        return {
+            "avg_rank": float(np.mean(ranks)),
+            "median_rank": float(np.median(ranks)),
+        }
+
+
+class _AnalogyEncoder:
+    """Exposes an encoder's concept embeddings to the standard retrieval pipeline.
+
+    Calculate documents' (concepts) mean-pooled concept embedding, query (analogies A:B::C:?) B - A + C, and
+    L2-normalise so we use cosine similarity.
+    """
+
+    def __init__(
+        self,
+        model: EncoderProtocol,
+        concepts: np.ndarray,
+        concept_index: dict[str, int],
+        query_terms: dict[str, tuple[str, str, str]],
+    ) -> None:
+        self.model = model
+        self.concepts = concepts
+        self.concept_index = concept_index
+        self.query_terms = query_terms
+
+    @property
+    def mteb_model_meta(self) -> ModelMeta:
+        return self.model.mteb_model_meta
+
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> np.ndarray:
+        ids = [input_id for batch in inputs for input_id in batch["id"]]
+        if prompt_type != PromptType.query:
+            return self.concepts[[self.concept_index[input_id] for input_id in ids]]
+        a, b, c = (
+            self.concepts[
+                [self.concept_index[self.query_terms[input_id][i]] for input_id in ids]
+            ]
+            for i in range(3)
+        )
+        targets = b - a + c
+        normalized: np.ndarray = targets / np.linalg.norm(
+            targets, axis=1, keepdims=True
+        )
+        return normalized
+
+    def similarity(self, embeddings1: Array, embeddings2: Array) -> torch.Tensor:  # noqa: PLR6301
+        import torch
+
+        return torch.as_tensor(embeddings1) @ torch.as_tensor(embeddings2).T
+
+    def similarity_pairwise(  # noqa: PLR6301
+        self, embeddings1: Array, embeddings2: Array
+    ) -> torch.Tensor:
+        import torch
+
+        return (torch.as_tensor(embeddings1) * torch.as_tensor(embeddings2)).sum(dim=1)
 
 
 def _candidates(names: list[str], excluded: set[str]) -> list[str]:
     return [name for name in names if name not in excluded]
 
 
-def _rank_candidates(
-    embeddings: np.ndarray,
-    embedding_concepts: list[str],
-    data_split: RetrievalSplitData,
-    query_terms: dict[str, tuple[str, str, str]],
-) -> tuple[dict[str, dict[str, float]], list[int]]:
-    """Score each query's candidates by cosine similarity to B - A + C.
-
-    Returns the retrieval results and the rank of each query's answer. Exact ties are broken by descending document
-    id, as pytrec_eval does, so the ranks agree with the standard retrieval metrics.
-    """
-    names = list(data_split["corpus"]["id"])
-    concept_index = {name: i for i, name in enumerate(names)}
-    concepts = _mean_pool(
-        embeddings,
-        np.array([concept_index[name] for name in embedding_concepts]),
-        len(names),
-    )
-    query_ids = list(data_split["queries"]["id"])
-    a, b, c = (
-        np.array([concept_index[query_terms[qid][i]] for qid in query_ids])
-        for i in range(3)
-    )
-    targets = concepts[b] - concepts[a] + concepts[c]
-    targets /= np.linalg.norm(targets, axis=1, keepdims=True)
-    similarities = targets @ concepts.T
-
-    results: dict[str, dict[str, float]] = {}
-    ranks = []
-    for row, qid in enumerate(query_ids):
-        candidates = data_split["top_ranked"][qid]
-        scores = similarities[row, [concept_index[name] for name in candidates]]
-        results[qid] = dict(zip(candidates, scores.tolist(), strict=True))
-        (answer,) = data_split["relevant_docs"][qid]
-        ranks.append(
-            _rank(scores, candidates, similarities[row, concept_index[answer]], answer)
-        )
-    return results, ranks
-
-
-def _rank(
-    scores: np.ndarray, candidates: list[str], answer_score: float, answer: str
-) -> int:
-    tied_above = (scores == answer_score) & (np.array(candidates) > answer)
-    return 1 + int((scores > answer_score).sum() + tied_above.sum())
+def _rank(doc_scores: dict[str, float], answer: str) -> int:
+    """1 + the number of candidates ranked above the answer, breaking exact ties by descending document id."""
+    answer_score = doc_scores[answer]
+    ids = np.array(list(doc_scores))
+    values = np.fromiter(doc_scores.values(), dtype=float, count=len(doc_scores))
+    above = (values > answer_score) | ((values == answer_score) & (ids > answer))
+    return 1 + int(above.sum())
 
 
 def _mean_pool(embeddings: np.ndarray, groups: np.ndarray, n_groups: int) -> np.ndarray:
