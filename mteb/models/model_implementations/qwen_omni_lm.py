@@ -286,6 +286,8 @@ qwen25_omni_3b = ModelMeta(
 qwen3_omni_30b_a3b_instruct = ModelMeta(
     loader=QwenOmniWrapper,
     name="Qwen/Qwen3-Omni-30B-A3B-Instruct",
+    # 60 s: an mteb memory cap so the 30B model fits one 80 GB GPU (300 s runs out on audio-video tasks)
+    loader_kwargs=dict(max_audio_length_seconds=60),
     revision="26291f793822fb6be9555850f06dfe95f2d7e695",
     release_date="2025-09-20",
     languages=["eng-Latn"],
@@ -328,6 +330,8 @@ qwen3_omni_30b_a3b_instruct = ModelMeta(
 qwen3_omni_30b_a3b_thinking = ModelMeta(
     loader=QwenOmniWrapper,
     name="Qwen/Qwen3-Omni-30B-A3B-Thinking",
+    # 60 s: an mteb memory cap so the 30B model fits one 80 GB GPU (300 s runs out on audio-video tasks)
+    loader_kwargs=dict(max_audio_length_seconds=60),
     revision="2f443cfc4c54b14a815c0e2bb9a9d6cbcd9a748b",
     release_date="2025-09-15",
     languages=["eng-Latn"],
@@ -370,6 +374,8 @@ qwen3_omni_30b_a3b_thinking = ModelMeta(
 qwen3_omni_30b_a3b_captioner = ModelMeta(
     loader=QwenOmniWrapper,
     name="Qwen/Qwen3-Omni-30B-A3B-Captioner",
+    # 60 s: an mteb memory cap so the 30B model fits one 80 GB GPU (300 s runs out on audio-video tasks)
+    loader_kwargs=dict(max_audio_length_seconds=60),
     revision="a2bd106cbf527db5676e79662674da22b0545ec0",
     release_date="2025-09-15",
     languages=["eng-Latn"],
