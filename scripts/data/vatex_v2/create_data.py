@@ -4,6 +4,8 @@ The v1 files are the full YouTube videos, while each VATEX caption describes one
 The official test annotations name every clip "<youtube id>_<start>_<end>"; each v1 caption
 matches exactly one of them, which gives its window.
 https://eric-xw.github.io/vatex-website/download.html
+The v1 videos are the files of lmms-eval/VATEX on the Hub, which are named by these clip
+ids, and every caption's clip matches its file name.
 
 - Files longer than one window are cut to [start, end] (or to the end of the file if the
   source stops early); shorter files already are the clip and are kept as is.

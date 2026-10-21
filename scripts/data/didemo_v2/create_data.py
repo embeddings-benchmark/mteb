@@ -4,6 +4,7 @@ DiDeMo's descriptions only cover the first 30 s of each video: "Some videos are 
 30 seconds. These videos were truncated to 30 seconds during annotation."
 https://github.com/LisaAnne/LocalizingMoments#dataset
 CLIP4Clip's paragraph retrieval likewise uses seconds 0-31.
+The v1 videos and captions are the DiDeMo test set of VLM2Vec/DiDeMo (MMEB-V2) on the Hub.
 
 - Videos longer than 30 s are cut to [0, 30]; shorter ones are kept as is.
 - Rows whose audio does not cover the clip or is silent throughout are dropped.
