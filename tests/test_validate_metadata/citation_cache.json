@@ -11180,6 +11180,66 @@
                 "similarity": 1.0,
                 "note": ""
             }
+        },
+        "shahinmoghadam2024benchmarking|10.1038/s41598-025-09052-5||benchmarking pre-trained text embedding models in aligning built asset information|2025": {
+            "stored_at": 1792560677.789432,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Benchmarking pre-trained text embedding models in aligning built asset information",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "sap2019socialiqa|10.18653/v1/D19-1454||social {iq}a: commonsense reasoning about social interactions|2019": {
+            "stored_at": 1792560677.8042638,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Social IQa: Commonsense Reasoning about Social Interactions",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "okamura2026multilingualaveragesmtebptbenchmark|10.1007/978-3-032-39892-5_33||beyond multilingual averages: mteb-pt, a benchmark for portuguese sentence encoders|2026": {
+            "stored_at": 1792560678.29282,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Beyond Multilingual Averages: MTEB-PT, a\u00a0Benchmark for\u00a0Portuguese Sentence Encoders",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "zhou2024megapairs|10.18653/v1/2025.acl-long.935||{m}ega{p}airs: massive data synthesis for universal multimodal retrieval|2025": {
+            "stored_at": 1792560678.798101,
+            "value": {
+                "verdict": "OK",
+                "found_title": "MegaPairs: Massive Data Synthesis for Universal Multimodal Retrieval",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "Ruri|10.5715/jnlp.33.591||ruri: japanese general text embeddings|2026": {
+            "stored_at": 1792560679.30663,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Ruri: Japanese General Text Embeddings",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "yu2025injongo|10.18653/v1/2025.acl-long.464||{injongo}: a multicultural intent detection and slot-filling dataset for 16 {a}frican languages|2025": {
+            "stored_at": 1792560679.815606,
+            "value": {
+                "verdict": "OK",
+                "found_title": "INJONGO: A Multicultural Intent Detection and Slot-filling Dataset for 16 African Languages",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
         }
     }
 }
