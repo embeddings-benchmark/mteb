@@ -1,0 +1,60 @@
+from __future__ import annotations
+
+from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+
+code_embed_meta = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    name="divakantpandey/code-embed",
+    model_type=["dense"],
+    languages=["eng-Latn", "python-Code"],
+    open_weights=True,
+    revision="0f0286c84171deb4d9f1fbfb126ad207d5ec42a6",
+    release_date="2026-10-18",
+    n_parameters=131_434_752,
+    n_embedding_parameters=39_487_488,
+    memory_usage_mb=501,
+    embed_dim=768,
+    license="cc-by-nc-4.0",
+    max_tokens=8194,
+    reference="https://huggingface.co/divakantpandey/code-embed",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
+    use_instructions=False,
+    public_training_code="https://github.com/divakantpandey/code-embed",
+    public_training_data="https://huggingface.co/datasets/code-search-net/code_search_net",
+    training_datasets={"CodeSearchNetRetrieval"},
+    contacts=["divakantpandey"],
+)
+
+code_embed_v2_meta = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    name="divakantpandey/code-embed-v2",
+    model_type=["dense"],
+    languages=[
+        "eng-Latn",
+        "python-Code",
+        "javascript-Code",
+        "go-Code",
+        "java-Code",
+        "ruby-Code",
+        "php-Code",
+    ],
+    open_weights=True,
+    revision="5d860cf1624dba73130d2b20e2d39ccf3e1fc02c",
+    release_date="2026-10-21",
+    n_parameters=131_434_752,
+    n_embedding_parameters=78_974_976,
+    memory_usage_mb=501,
+    embed_dim=1536,
+    license="cc-by-nc-4.0",
+    max_tokens=8192,
+    reference="https://huggingface.co/divakantpandey/code-embed-v2",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
+    use_instructions=False,
+    public_training_code="https://github.com/divakantpandey/code-embed",
+    public_training_data="https://huggingface.co/datasets/code-search-net/code_search_net",
+    training_datasets={"CodeSearchNetRetrieval"},
+    contacts=["divakantpandey"],
+)
