@@ -22,7 +22,7 @@ class EmotionAnalysisPlus(AbsTaskMultilabelClassification):
         reference="https://github.com/emotion-analysis-project/SemEval2025-Task11",
         dataset={
             "path": "mteb/EmotionAnalysis",
-            "revision": "554dbe305cad4f86705c8b6389c76f7f33fc6fd8",
+            "revision": "685471a409449f8f8c6337dabac334ecb762d4f0",
         },
         type="MultilabelClassification",
         category="t2c",
@@ -92,7 +92,7 @@ class EmotionAnalysisPlusV2(AbsTaskMultilabelClassification):
         reference="https://github.com/emotion-analysis-project/SemEval2025-Task11",
         dataset={
             "path": "mteb/EmotionAnalysis",
-            "revision": "554dbe305cad4f86705c8b6389c76f7f33fc6fd8",
+            "revision": "685471a409449f8f8c6337dabac334ecb762d4f0",
         },
         type="MultilabelClassification",
         category="t2c",
