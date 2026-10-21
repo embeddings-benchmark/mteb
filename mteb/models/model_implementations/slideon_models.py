@@ -31,14 +31,6 @@ mslideon_training_data = slideon_training_data | {
     "CodeEditSearchRetrieval",
 }
 
-slideon_mslideon_citation = r"""@misc{moura2026slideon,
-  author       = {Moura Junior, Paulo Roberto and Sourty, Raphaël},
-  title        = {{SlideOn} \& {mSlideOn}: Sparsified late-interaction and dense retrievers},
-  year         = {2026},
-  howpublished = {Hugging Face Blog},
-  url          = {https://huggingface.co/blog/lightonai/slideon-mslideon}
-}"""
-
 lightonai_slideon = ModelMeta(
     loader=SparseEncoderWrapper,
     loader_kwargs={
@@ -58,7 +50,6 @@ lightonai_slideon = ModelMeta(
     embed_dim=32_768,
     license="apache-2.0",
     reference="https://huggingface.co/lightonai/SlideOn",
-    citation=slideon_mslideon_citation,
     similarity_fn_name=ScoringFunction.DOT_PRODUCT,
     framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
     output_dtypes=[OutputDType.BF16],
@@ -88,7 +79,6 @@ lightonai_mslideon = ModelMeta(
     embed_dim=32_768,
     license="apache-2.0",
     reference="https://huggingface.co/lightonai/mSlideOn",
-    citation=slideon_mslideon_citation,
     similarity_fn_name=ScoringFunction.DOT_PRODUCT,
     framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
     output_dtypes=[OutputDType.BF16],
