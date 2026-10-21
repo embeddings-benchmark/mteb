@@ -9,7 +9,12 @@ from .aila_statutes_retrieval import AILAStatutes
 from .alpha_nli_retrieval import AlphaNLI
 from .arc_challenge_retrieval import ARCChallenge
 from .argu_ana_retrieval import ArguAna
-from .audio_set_strong import AudioSetStrongA2TRetrieval, AudioSetStrongT2ARetrieval
+from .audio_set_strong import (
+    AudioSetStrongA2TRetrieval,
+    AudioSetStrongA2TRetrievalV2,
+    AudioSetStrongT2ARetrieval,
+    AudioSetStrongT2ARetrievalV2,
+)
 from .audiocaps_av_retrieval import (
     AudioCapsAVA2VRetrieval,
     AudioCapsAVAT2VRetrieval,
@@ -83,7 +88,7 @@ from .bright_v1_1_retrieval import (
 from .browse_comp_plus_retrieval import BrowseCompPlusRetrieval
 from .built_bench_retrieval import BuiltBenchRetrieval
 from .carebench_retrieval import CaReBenchT2VRetrieval, CaReBenchV2TRetrieval
-from .castella_amr import CASTELLAAMRRetrieval
+from .castella_amr import CASTELLAAMRRetrieval, CASTELLAAMRRetrievalV2
 from .chat_doctor_retrieval import ChatDoctorRetrieval
 from .chem_hotpot_qa_retrieval import ChemHotpotQARetrieval
 from .chem_nq_retrieval import ChemNQRetrieval
@@ -103,7 +108,12 @@ from .clotho import (
     ClothoT2ARetrievalV2,
 )
 from .clotho_moment import ClothoMomentRetrieval
-from .cmu_arctic import CMUArcticA2TRetrieval, CMUArcticT2ARetrieval
+from .cmu_arctic import (
+    CMUArcticA2TRetrieval,
+    CMUArcticA2TRetrievalV2,
+    CMUArcticT2ARetrieval,
+    CMUArcticT2ARetrievalV2,
+)
 from .coco_modality_equivalence import (
     COCOModalEquivA2IHumanRetrieval,
     COCOModalEquivA2ITTSRetrieval,
@@ -174,7 +184,12 @@ from .edir_it2i_retrieval import EDIRIT2IRetrieval
 from .edis_t2it_retrieval import EDIST2ITRetrieval
 from .elastic_kb_retrieval import ElasticKBRetrieval
 from .emid_retrieval import EMIDA2IRetrieval, EMIDI2ARetrieval
-from .emo_vdb import EmoVDBA2TRetrieval, EmoVDBT2ARetrieval
+from .emo_vdb import (
+    EmoVDBA2TRetrieval,
+    EmoVDBA2TRetrievalV2,
+    EmoVDBT2ARetrieval,
+    EmoVDBT2ARetrievalV2,
+)
 from .encyclopedia_vqa_it2it_retrieval import EncyclopediaVQAIT2ITRetrieval
 from .english_finance1_retrieval import EnglishFinance1Retrieval
 from .english_finance2_retrieval import EnglishFinance2Retrieval
@@ -218,7 +233,12 @@ from .hateful_memes_i2t_retrieval import HatefulMemesI2TRetrieval
 from .hateful_memes_t2i_retrieval import HatefulMemesT2IRetrieval
 from .hc3_finance_retrieval import HC3FinanceRetrieval
 from .hella_swag_retrieval import HellaSwag
-from .hi_fi_tts import HiFiTTSA2TRetrieval, HiFiTTST2ARetrieval
+from .hi_fi_tts import (
+    HiFiTTSA2TRetrieval,
+    HiFiTTSA2TRetrievalV2,
+    HiFiTTST2ARetrieval,
+    HiFiTTST2ARetrievalV2,
+)
 from .hotpot_qa_retrieval import (
     HotpotQA,
     HotpotQAHardNegatives,
@@ -235,7 +255,12 @@ from .insave_vt2v_retrieval import InsAVE80KVT2VRetrieval
 from .irpapers_t2i_retrieval import IRPapersT2IRetrieval
 from .irpapers_t2it_retrieval import IRPapersT2ITRetrieval
 from .jl_corpus import JLCorpusA2TRetrieval, JLCorpusT2ARetrieval
-from .lass import LASSA2TRetrieval, LASST2ARetrieval
+from .lass import (
+    LASSA2TRetrieval,
+    LASSA2TRetrievalV2,
+    LASST2ARetrieval,
+    LASST2ARetrievalV2,
+)
 from .legal_bench_consumer_contracts_qa_retrieval import LegalBenchConsumerContractsQA
 from .legal_bench_corporate_lobbying_retrieval import LegalBenchCorporateLobbying
 from .legal_summarization_retrieval import LegalSummarization
@@ -245,7 +270,12 @@ from .lemb_passkey_retrieval import LEMBPasskeyRetrieval
 from .lemb_summ_screen_fd_retrieval import LEMBSummScreenFDRetrieval
 from .lemb_wikim_qa_retrieval import LEMBWikimQARetrieval
 from .lembqm_sum_retrieval import LEMBQMSumRetrieval
-from .libri_tts import LibriTTSA2TRetrieval, LibriTTST2ARetrieval
+from .libri_tts import (
+    LibriTTSA2TRetrieval,
+    LibriTTSA2TRetrievalV2,
+    LibriTTST2ARetrieval,
+    LibriTTST2ARetrievalV2,
+)
 from .librispeech_speaker_retrieval import LibriSpeechSpeakerA2ARetrieval
 from .limit_retrieval import LIMITRetrieval, LIMITSmallRetrieval
 from .lit_search_retrieval import LitSearchRetrieval
@@ -281,7 +311,12 @@ from .lombard_grid_retrieval import (
     LombardGridVA2VARetrieval,
 )
 from .lotte_retrieval import LoTTERetrieval
-from .macs import MACSA2TRetrieval, MACST2ARetrieval
+from .macs import (
+    MACSA2TRetrieval,
+    MACSA2TRetrievalV2,
+    MACST2ARetrieval,
+    MACST2ARetrievalV2,
+)
 from .mars_vl_pairs import MarsVLPairsI2TRetrieval, MarsVLPairsT2IRetrieval
 from .medical_qa_retrieval import MedicalQARetrieval
 from .memotion_i2t_retrieval import MemotionI2TRetrieval
@@ -406,7 +441,12 @@ from .shs100k_retrieval import SHS100KA2ARetrieval
 from .siqa_retrieval import SIQA
 from .sketchy_i2i_retrieval import SketchyI2IRetrieval
 from .sop_i2i_retrieval import SOPI2IRetrieval
-from .sounding_earth import SoundingEarthA2IRetrieval, SoundingEarthI2ARetrieval
+from .sounding_earth import (
+    SoundingEarthA2IRetrieval,
+    SoundingEarthA2IRetrievalV2,
+    SoundingEarthI2ARetrieval,
+    SoundingEarthI2ARetrievalV2,
+)
 from .spart_qa_retrieval import SpartQA
 from .speech_coco import SpeechCocoA2IRetrieval, SpeechCocoI2ARetrieval
 from .speech_edit_acoustic import SpeechEditAcousticRetrieval
@@ -554,7 +594,9 @@ __all__ = [
     "AudioCapsAVVA2TRetrieval",
     "AudioCapsAVVT2ARetrieval",
     "AudioSetStrongA2TRetrieval",
+    "AudioSetStrongA2TRetrievalV2",
     "AudioSetStrongT2ARetrieval",
+    "AudioSetStrongT2ARetrievalV2",
     "BIRCOArguAnaReranking",
     "BIRCOClinicalTrialReranking",
     "BIRCODorisMaeReranking",
@@ -597,11 +639,14 @@ __all__ = [
     "BrowseCompPlusRetrieval",
     "BuiltBenchRetrieval",
     "CASTELLAAMRRetrieval",
+    "CASTELLAAMRRetrievalV2",
     "CIRRIT2IRetrieval",
     "CLDA2TRetrieval",
     "CLDAT2ARetrieval",
     "CMUArcticA2TRetrieval",
+    "CMUArcticA2TRetrievalV2",
     "CMUArcticT2ARetrieval",
+    "CMUArcticT2ARetrievalV2",
     "COCOModalEquivA2IHumanRetrieval",
     "COCOModalEquivA2ITTSRetrieval",
     "COCOModalEquivI2AHumanRetrieval",
@@ -679,7 +724,9 @@ __all__ = [
     "ESGReports",
     "ElasticKBRetrieval",
     "EmoVDBA2TRetrieval",
+    "EmoVDBA2TRetrievalV2",
     "EmoVDBT2ARetrieval",
+    "EmoVDBT2ARetrievalV2",
     "EncyclopediaVQAIT2ITRetrieval",
     "EnglishFinance1Retrieval",
     "EnglishFinance2Retrieval",
@@ -722,7 +769,9 @@ __all__ = [
     "HatefulMemesT2IRetrieval",
     "HellaSwag",
     "HiFiTTSA2TRetrieval",
+    "HiFiTTSA2TRetrievalV2",
     "HiFiTTST2ARetrieval",
+    "HiFiTTST2ARetrievalV2",
     "HotpotQA",
     "HotpotQAHardNegatives",
     "HotpotQAHardNegativesV2",
@@ -738,7 +787,9 @@ __all__ = [
     "JLCorpusT2ARetrieval",
     "KnowMeBench",
     "LASSA2TRetrieval",
+    "LASSA2TRetrievalV2",
     "LASST2ARetrieval",
+    "LASST2ARetrievalV2",
     "LEMBNarrativeQARetrieval",
     "LEMBNeedleRetrieval",
     "LEMBPasskeyRetrieval",
@@ -754,7 +805,9 @@ __all__ = [
     "LegalSummarization",
     "LibriSpeechSpeakerA2ARetrieval",
     "LibriTTSA2TRetrieval",
+    "LibriTTSA2TRetrievalV2",
     "LibriTTST2ARetrieval",
+    "LibriTTST2ARetrievalV2",
     "LitSearchRetrieval",
     "LoCoMo",
     "LoTTERetrieval",
@@ -765,7 +818,9 @@ __all__ = [
     "LongMemEval",
     "LooGLE",
     "MACSA2TRetrieval",
+    "MACSA2TRetrievalV2",
     "MACST2ARetrieval",
+    "MACST2ARetrievalV2",
     "METI2IRetrieval",
     "MIAOA2IRetrieval",
     "MIAOI2ARetrieval",
@@ -877,7 +932,9 @@ __all__ = [
     "Shot2Story20KVT2ARetrieval",
     "SketchyI2IRetrieval",
     "SoundingEarthA2IRetrieval",
+    "SoundingEarthA2IRetrievalV2",
     "SoundingEarthI2ARetrieval",
+    "SoundingEarthI2ARetrievalV2",
     "SpartQA",
     "SpeechCocoA2IRetrieval",
     "SpeechCocoI2ARetrieval",
