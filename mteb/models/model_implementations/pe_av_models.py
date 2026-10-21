@@ -511,8 +511,7 @@ pe_av_large_16_frame = ModelMeta(
     max_tokens=512,
     embed_dim=1024,
     reference="https://huggingface.co/facebook/pe-av-large-16-frame",
-    # 300 s: an mteb memory cap so the large model fits one 80 GB GPU (the ~400 s default runs out on VATEX)
-    loader_kwargs=dict(fps=None, num_frames=16, max_samples=300 * 48_000),
+    loader_kwargs=dict(fps=None, num_frames=16),
     **_PE_AV_COMMON,
     output_dtypes=OutputDType.BF16,
 )
@@ -548,8 +547,6 @@ pe_av_base = ModelMeta(
 pe_av_large = ModelMeta(
     loader=PEAudioVisualWrapper,
     name="facebook/pe-av-large",
-    # 300 s: an mteb memory cap so the large model fits one 80 GB GPU (the ~400 s default runs out on VATEX)
-    loader_kwargs=dict(max_samples=300 * 48_000),
     revision="0d24878d4107d64bef49e53602fc34ce6f94f6d8",
     n_parameters=2_234_700_748,
     n_embedding_parameters=51576832,
