@@ -1,40 +1,40 @@
 {
     "test": {
-        "num_samples": 1994,
-        "num_queries": 997,
-        "num_documents": 997,
-        "number_of_characters": 154487,
+        "num_samples": 1986,
+        "num_queries": 993,
+        "num_documents": 993,
+        "number_of_characters": 153953,
         "documents_text_statistics": null,
         "documents_image_statistics": null,
         "documents_audio_statistics": {
-            "total_duration_seconds": 28992.204750000015,
+            "total_duration_seconds": 28872.20475000001,
             "min_duration_seconds": 21.942875,
-            "average_duration_seconds": 29.079443079237727,
+            "average_duration_seconds": 29.07573489425983,
             "max_duration_seconds": 30.4878125,
             "unique_audios": 993,
             "average_sampling_rate": 16000.0,
             "sampling_rates": {
-                "16000": 997
+                "16000": 993
             }
         },
         "documents_video_statistics": {
-            "total_duration_seconds": 29002.811920999848,
-            "total_frames": 824968,
+            "total_duration_seconds": 28882.75192099985,
+            "total_frames": 821698,
             "min_width": 80,
-            "average_width": 584.4774322968907,
+            "average_width": 584.2537764350453,
             "max_width": 1920,
             "min_height": 112,
-            "average_height": 409.0,
+            "average_height": 408.83484390735146,
             "max_height": 1138,
             "min_duration_seconds": 21.988,
-            "average_duration_seconds": 29.090082167502356,
+            "average_duration_seconds": 29.08635641591123,
             "max_duration_seconds": 30.463767,
             "unique_videos": 993,
-            "average_fps": 28.46740220661986,
+            "average_fps": 28.472306143001006,
             "fps": {
-                "30": 768,
-                "25": 80,
-                "24": 123,
+                "30": 766,
+                "25": 79,
+                "24": 122,
                 "15": 26
             },
             "min_resolution": [
@@ -42,20 +42,20 @@
                 144
             ],
             "average_resolution": [
-                584.4774322968907,
-                409.0
+                584.2537764350453,
+                408.83484390735146
             ],
             "max_resolution": [
                 1920,
                 1080
             ],
             "resolutions": {
-                "640x480": 365,
+                "640x480": 362,
                 "640x524": 3,
                 "480x360": 25,
                 "640x426": 9,
                 "640x512": 2,
-                "640x360": 333,
+                "640x360": 332,
                 "640x424": 6,
                 "640x428": 15,
                 "320x240": 79,
@@ -90,21 +90,21 @@
             }
         },
         "queries_text_statistics": {
-            "total_text_length": 154487,
+            "total_text_length": 153953,
             "min_text_length": 17,
-            "average_text_length": 154.9518555667001,
+            "average_text_length": 155.03826787512588,
             "max_text_length": 396,
-            "unique_texts": 997
+            "unique_texts": 993
         },
         "queries_image_statistics": null,
         "queries_audio_statistics": null,
         "queries_video_statistics": null,
         "relevant_docs_statistics": {
-            "num_relevant_docs": 997,
+            "num_relevant_docs": 993,
             "min_relevant_docs_per_query": 1,
             "average_relevant_docs_per_query": 1.0,
             "max_relevant_docs_per_query": 1,
-            "unique_relevant_docs": 997,
+            "unique_relevant_docs": 993,
             "num_missing_query_ids": 0,
             "num_missing_corpus_ids": 0,
             "queries_with_all_gold_black_or_white": 0

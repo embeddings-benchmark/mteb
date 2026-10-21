@@ -8,6 +8,8 @@ The v1 videos and captions are the DiDeMo test set of VLM2Vec/DiDeMo (MMEB-V2) o
 
 - Videos longer than 30 s are cut to [0, 30]; shorter ones are kept as is.
 - Rows whose audio does not cover the clip or is silent throughout are dropped.
+- A few test videos were uploaded twice under different ids (same video stream, different
+  captions); only the first row of each is kept.
 
 usage: HF_TOKEN=... python create_data.py OUT_DIR [--push]
 """
@@ -38,6 +40,16 @@ def duration(path: str) -> float:
         path,
     ]
     return float(subprocess.run(cmd, capture_output=True, text=True, check=True).stdout)
+
+
+def video_stream_md5(video: bytes) -> str:
+    with tempfile.NamedTemporaryFile(suffix=".mp4") as f:
+        f.write(video)
+        f.flush()
+        cmd = ["ffmpeg", "-v", "error", "-i", f.name, "-map", "0:v:0", "-c", "copy"]
+        return subprocess.run(
+            [*cmd, "-f", "md5", "-"], capture_output=True, text=True, check=True
+        ).stdout
 
 
 def has_sound(audio: bytes) -> bool:
@@ -114,6 +126,15 @@ def main(out_dir: Path, push: bool) -> None:
     print(
         f"kept {len(keep)} of {len(ds)}; dropped (audio missing or silent): {[i for i in range(len(ds)) if i not in keep]}"
     )
+    with ProcessPoolExecutor(8) as pool:
+        streams = list(pool.map(video_stream_md5, [row[0] for row in rows]))
+    first = {}
+    for i in keep:
+        first.setdefault(streams[i], i)
+    print(
+        f"dropped (same video as an earlier row): {sorted(set(keep) - set(first.values()))}"
+    )
+    keep = sorted(first.values())
 
     shards = []
     for chunk in [

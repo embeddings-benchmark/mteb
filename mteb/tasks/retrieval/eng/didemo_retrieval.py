@@ -9,7 +9,7 @@ from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _DATASET_PATH = "mteb/DiDeMo"
-_DATASET_REVISION_V2 = "a4899325882af84dc5ef13d0967c48f0f3ea2aa4"
+_DATASET_REVISION_V2 = "a47066169360d555b7a33132d7195843dc71997f"
 _DATASET_REVISION = "746689f644b66022540a9a39136e842bee164e6b"
 _BIBTEX = r"""
 @inproceedings{hendricks2017localizing,
