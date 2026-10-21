@@ -619,14 +619,42 @@ def test_wrapper_combines_cached_and_new_vectors(
     try:
         encode(wrapped_model, texts[1::2])
         combined = encode(wrapped_model, texts)
+        fully_cached = encode(wrapped_model, texts)
     finally:
         wrapped_model.close()
 
-    for i in range(len(texts)):
-        torch.testing.assert_close(
-            torch.as_tensor(combined[i]).to_dense(),
-            torch.as_tensor(expected[i]).to_dense(),
-        )
+    for result in (combined, fully_cached):
+        assert type(result) is type(expected)
+        if isinstance(result, torch.Tensor) and result.is_sparse:
+            assert result.is_coalesced()
+        for i in range(len(texts)):
+            # Cached vectors have the same type as newly encoded ones, so they can be mixed
+            assert type(result[i]) is type(expected[i])
+            torch.testing.assert_close(
+                torch.as_tensor(result[i]).to_dense(),
+                torch.as_tensor(expected[i]).to_dense(),
+            )
+
+
+def test_multi_vector_cache_keeps_torch_dtype(tmp_path: Path):
+    items = [{"text": "a"}, {"text": "b"}]
+    vectors = [
+        torch.ones(2, 4, dtype=torch.bfloat16),
+        torch.ones(3, 4, dtype=torch.bfloat16),
+    ]
+    cache = MultiVectorCache(tmp_path)
+    cache.add(items, vectors)
+    cache.save()
+    cache.close()
+
+    cache = MultiVectorCache(tmp_path)
+    cache.load()
+    for item, vector in zip(items, vectors, strict=True):
+        cached = cache.get_vector(item)
+        assert isinstance(cached, torch.Tensor)
+        assert cached.dtype == torch.bfloat16
+        torch.testing.assert_close(cached, vector)
+    cache.close()
 
 
 @pytest.mark.parametrize(

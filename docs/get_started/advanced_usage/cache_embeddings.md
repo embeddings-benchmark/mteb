@@ -62,7 +62,9 @@ import mteb
 from mteb.models import CachedEmbeddingWrapper
 from mteb.models.cache_wrappers.cache_backends import SparseCache
 
-model = mteb.get_model("naver/splade-v3")
+model = mteb.get_model(
+    "opensearch-project/opensearch-neural-sparse-encoding-doc-v3-distill"
+)
 cached_model = CachedEmbeddingWrapper(model, "cache_dir", cache_backend=SparseCache)
 ```
 

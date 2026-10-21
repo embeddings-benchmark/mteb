@@ -57,12 +57,16 @@ class _MultiVectorModel(Protocol):
     def similarity_pairwise(self, embeddings1: Array, embeddings2: Array) -> Array: ...
 
 
-def _to_numpy_if_dense(vectors: Array) -> Array:
-    """Move dense torch tensors to numpy; sparse tensors and ragged lists are kept as they are."""
+def _to_cpu(vectors: Array) -> Array:
+    """Move torch tensors to the CPU, like the cached vectors: dense ones as numpy arrays, sparse ones as tensors.
+
+    Ragged lists are kept as they are.
+    """
     import torch
 
-    if isinstance(vectors, torch.Tensor) and not vectors.is_sparse:
-        return vectors.detach().cpu().numpy()
+    if isinstance(vectors, torch.Tensor):
+        vectors = vectors.detach().cpu()
+        return vectors if vectors.is_sparse else vectors.numpy()
     return vectors
 
 
@@ -133,9 +137,12 @@ class _CachedEncoderBase:
                     batch_size=inputs.batch_size,
                     collate_fn=inputs.collate_fn,
                     num_workers=inputs.num_workers,
+                    pin_memory=inputs.pin_memory,
+                    prefetch_factor=inputs.prefetch_factor,
+                    persistent_workers=inputs.persistent_workers,
                     shuffle=False,
                 )
-                new_vectors = _to_numpy_if_dense(
+                new_vectors = _to_cpu(
                     encode_fn(
                         dl,
                         task_metadata=task_metadata,
@@ -167,7 +174,9 @@ class _CachedEncoderBase:
         parts: list[Array] = []
         if cached_vectors:
             if isinstance(cached_vectors[0], torch.Tensor):
-                parts.append(torch.stack(cast("list[torch.Tensor]", cached_vectors)))
+                # Stacking sparse tensors loses their coalesced flag, so coalesce to match the mixed case
+                stacked = torch.stack(cast("list[torch.Tensor]", cached_vectors))
+                parts.append(stacked.coalesce() if stacked.is_sparse else stacked)
             else:
                 parts.append(np.stack(cached_vectors))
         if new_vectors is not None:
