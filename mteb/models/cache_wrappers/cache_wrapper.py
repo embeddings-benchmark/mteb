@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Protocol, cast
+from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
 
@@ -35,28 +35,6 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class _MultiVectorModel(Protocol):
-    """A search-only multi-vector model, such as [`MultiVectorWrapper`][mteb.models.MultiVectorWrapper]."""
-
-    mteb_model_meta: ModelMeta
-    corpus_chunk_size: int
-
-    def _encode(
-        self,
-        inputs: DataLoader[BatchedInput],
-        *,
-        task_metadata: TaskMetadata,
-        hf_split: str,
-        hf_subset: str,
-        prompt_type: PromptType | None = None,
-        **kwargs: Any,
-    ) -> Array: ...
-
-    def similarity(self, embeddings1: Array, embeddings2: Array) -> Array: ...
-
-    def similarity_pairwise(self, embeddings1: Array, embeddings2: Array) -> Array: ...
-
-
 def _to_cpu(vectors: Array) -> Array:
     """Move torch tensors to the CPU, like the cached vectors: dense ones as numpy arrays, sparse ones as tensors.
 
@@ -73,11 +51,11 @@ def _to_cpu(vectors: Array) -> Array:
 class _CachedEncoderBase:
     """Shared caching logic for the cached encoder wrappers."""
 
-    _model: EncoderProtocol | _MultiVectorModel
+    _model: EncoderProtocol | MultiVectorSearchEncoderWrapper
 
     def __init__(
         self,
-        model: EncoderProtocol | _MultiVectorModel,
+        model: EncoderProtocol | MultiVectorSearchEncoderWrapper,
         cache_path: str | Path,
         cache_backend: type[CacheBackendProtocol],
     ) -> None:
@@ -93,7 +71,7 @@ class _CachedEncoderBase:
     @property
     def mteb_model_meta(self) -> ModelMeta | None:
         """The wrapped model meta data."""
-        return self._model.mteb_model_meta
+        return self._model.mteb_model_meta  # type: ignore[union-attr]
 
     def _cached_encode(
         self,
@@ -251,7 +229,7 @@ class _CachedEncoderBase:
         embeddings2: Array,
     ) -> Array:
         """Refer to [EncoderProtocol.similarity][mteb.models.EncoderProtocol.similarity] for more details."""
-        return self._model.similarity(embeddings1, embeddings2)
+        return self._model.similarity(embeddings1, embeddings2)  # type: ignore[union-attr]
 
     def similarity_pairwise(
         self,
@@ -259,7 +237,7 @@ class _CachedEncoderBase:
         embeddings2: Array,
     ) -> Array:
         """Refer to [EncoderProtocol.similarity][mteb.models.EncoderProtocol.similarity_pairwise] for more details."""
-        return self._model.similarity_pairwise(embeddings1, embeddings2)
+        return self._model.similarity_pairwise(embeddings1, embeddings2)  # type: ignore[union-attr]
 
 
 class CachedEmbeddingWrapper(_CachedEncoderBase):
@@ -355,11 +333,11 @@ class CachedMultiVectorWrapper(MultiVectorSearchEncoderWrapper, _CachedEncoderBa
         >>> mteb.evaluate(cached_model, task)
     """
 
-    _model: _MultiVectorModel
+    _model: MultiVectorSearchEncoderWrapper
 
     def __init__(
         self,
-        model: _MultiVectorModel,
+        model: MultiVectorSearchEncoderWrapper,
         cache_path: str | Path,
         cache_backend: type[CacheBackendProtocol] = MultiVectorCache,
     ) -> None:
@@ -370,8 +348,10 @@ class CachedMultiVectorWrapper(MultiVectorSearchEncoderWrapper, _CachedEncoderBa
             cache_path: Path to the directory where cached embeddings are stored.
             cache_backend: Cache backend class to use for storing embeddings.
         """
-        if not hasattr(model, "_encode"):
-            raise ValueError("Model must have an '_encode' method.")
+        if not isinstance(model, MultiVectorSearchEncoderWrapper):
+            raise ValueError(
+                "Model must be a multi-vector model with MaxSim search, such as MultiVectorWrapper."
+            )
         super().__init__(model, cache_path, cache_backend)
         self.corpus_chunk_size = model.corpus_chunk_size
 
@@ -386,7 +366,7 @@ class CachedMultiVectorWrapper(MultiVectorSearchEncoderWrapper, _CachedEncoderBa
         **kwargs: Any,
     ) -> Array:
         return self._cached_encode(
-            self._model._encode,
+            self._model._encode,  # type: ignore[attr-defined]
             inputs,
             task_metadata=task_metadata,
             hf_split=hf_split,
