@@ -195,7 +195,6 @@ repllama_llama2_original = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     extra_requirements_groups=["peft"],
-    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -228,5 +227,4 @@ repllama_llama2_reproduced = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     extra_requirements_groups=["peft"],
-    output_dtypes=OutputDType.BF16,
 )

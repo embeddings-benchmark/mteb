@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
-from mteb.types import OutputDType, PromptType
+from mteb.types import PromptType
 
 
 def instruction_template(
@@ -85,7 +85,6 @@ DIVER_RETRIEVER_4B_1020 = ModelMeta(
     training_datasets=DIVER_TRAINING_DATA,
     adapted_from="Qwen/Qwen3-Embedding-4B",
     citation=DIVER_CITATION,
-    output_dtypes=OutputDType.BF16,
 )
 
 DIVER_RETRIEVER_4B = ModelMeta(
@@ -116,7 +115,6 @@ DIVER_RETRIEVER_4B = ModelMeta(
     adapted_from="Qwen/Qwen3-Embedding-4B",
     superseded_by="AQ-MedAI/Diver-Retriever-4B-1020",
     citation=DIVER_CITATION,
-    output_dtypes=OutputDType.BF16,
 )
 
 DIVER_RETRIEVER_1B7 = ModelMeta(
@@ -150,7 +148,6 @@ DIVER_RETRIEVER_1B7 = ModelMeta(
     training_datasets=DIVER_TRAINING_DATA,
     adapted_from="Qwen/Qwen3-1.7B-Base",
     citation=DIVER_CITATION,
-    output_dtypes=OutputDType.BF16,
 )
 
 DIVER_RETRIEVER_0B6 = ModelMeta(
@@ -180,5 +177,4 @@ DIVER_RETRIEVER_0B6 = ModelMeta(
     training_datasets=DIVER_TRAINING_DATA,
     adapted_from="Qwen/Qwen3-Embedding-0.6B",
     citation=DIVER_CITATION,
-    output_dtypes=OutputDType.BF16,
 )

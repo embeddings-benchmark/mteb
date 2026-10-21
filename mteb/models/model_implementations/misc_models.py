@@ -209,7 +209,6 @@ Hum_Works__lodestone_base_4096_v1 = ModelMeta(
     },
     adapted_from="hum-lodestone-v1",
     superseded_by=None,
-    output_dtypes=OutputDType.BF16,
 )
 Jaume__gemma_2b_embeddings = ModelMeta(
     name="Jaume/gemma-2b-embeddings",
@@ -927,7 +926,6 @@ manu__sentence_croissant_alpha_v0_2 = ModelMeta(
     training_datasets=SENTENCE_CROISSANT_TRAINING_DATA,
     adapted_from="croissantllm/CroissantCool",
     superseded_by="manu/sentence_croissant_alpha_v0.3",
-    output_dtypes=OutputDType.BF16,
 )
 manu__sentence_croissant_alpha_v0_3 = ModelMeta(
     name="manu/sentence_croissant_alpha_v0.3",
@@ -952,7 +950,6 @@ manu__sentence_croissant_alpha_v0_3 = ModelMeta(
     training_datasets=SENTENCE_CROISSANT_TRAINING_DATA,
     adapted_from="croissantllm/CroissantCool-v0.2",
     superseded_by="manu/sentence_croissant_alpha_v0.4",
-    output_dtypes=OutputDType.BF16,
 )
 manu__sentence_croissant_alpha_v0_4 = ModelMeta(
     name="manu/sentence_croissant_alpha_v0.4",
@@ -978,7 +975,6 @@ manu__sentence_croissant_alpha_v0_4 = ModelMeta(
     # Not in MTEB: {"manu/embedding_data_v2_100k"},
     adapted_from="croissantllm/CroissantCool-v0.2",
     superseded_by=None,
-    output_dtypes=OutputDType.BF16,
 )
 thenlper__gte_base = ModelMeta(
     name="thenlper/gte-base",

@@ -621,7 +621,6 @@ llama_embed_nemotron_8b = ModelMeta(
     contacts=["ybabakhin"],
     citation=LlamaEmbedNemotron_CITATION,
     extra_requirements_groups=["flash_attention", "llama-embed-nemotron"],
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 
@@ -717,7 +716,6 @@ nemotron_3_embed_1b_bf16 = ModelMeta(
     modalities=["text"],
     model_type=["dense"],
     contacts=["ybabakhin"],
-    output_dtypes=OutputDType.BF16,
     extra_requirements_groups=["nemotron-3-embed"],
 )
 
@@ -748,7 +746,6 @@ nemotron_3_embed_8b_bf16 = ModelMeta(
     modalities=["text"],
     model_type=["dense"],
     contacts=["ybabakhin"],
-    output_dtypes=OutputDType.BF16,
     extra_requirements_groups=["nemotron-3-embed"],
 )
 

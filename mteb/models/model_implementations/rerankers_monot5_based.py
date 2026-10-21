@@ -4,7 +4,6 @@ import logging
 from typing import TYPE_CHECKING, Any, TypeVar
 
 from mteb.models.model_meta import ModelMeta
-from mteb.types import OutputDType
 
 from .rerankers_custom import RerankerWrapper
 
@@ -376,7 +375,6 @@ monot5_small = ModelMeta(
       primaryClass={cs.IR},
       url={https://arxiv.org/abs/2206.02873},
     }""",
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 monot5_base = ModelMeta(
@@ -411,7 +409,6 @@ monot5_base = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch", "Transformers"],
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 monot5_large = ModelMeta(
@@ -446,7 +443,6 @@ monot5_large = ModelMeta(
       primaryClass={cs.IR},
       url={https://arxiv.org/abs/2206.02873},
     }""",
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 monot5_3b = ModelMeta(
@@ -482,7 +478,6 @@ monot5_3b = ModelMeta(
       primaryClass={cs.IR},
       url={https://arxiv.org/abs/2206.02873},
     }""",
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 flant5_base = ModelMeta(
@@ -531,7 +526,6 @@ flant5_base = ModelMeta(
     use_instructions=None,
     framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/google/flan-t5-base",
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 flant5_large = ModelMeta(
@@ -580,7 +574,6 @@ flant5_large = ModelMeta(
     use_instructions=None,
     framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/google/flan-t5-large",
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 flant5_xl = ModelMeta(
@@ -628,7 +621,6 @@ flant5_xl = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch", "Transformers", "safetensors"],
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 flant5_xxl = ModelMeta(
@@ -676,7 +668,6 @@ flant5_xxl = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch", "Transformers", "safetensors"],
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 
@@ -712,7 +703,6 @@ llama2_7b = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2307.09288},
     }""",
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 llama2_7b_chat = ModelMeta(
@@ -748,7 +738,6 @@ llama2_7b_chat = ModelMeta(
     training_datasets=None,
     framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/meta-llama/Llama-2-7b-chat-hf",
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 mistral_7b = ModelMeta(
@@ -784,7 +773,6 @@ mistral_7b = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2310.06825},
     }""",
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 followir_7b = ModelMeta(
@@ -823,7 +811,6 @@ followir_7b = ModelMeta(
       primaryClass={cs.IR}
     }
     """,
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 
@@ -973,5 +960,4 @@ Rodrigo Frassetto Nogueira},
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch", "Transformers"],
-    output_dtypes=OutputDType.FLOAT16,
 )

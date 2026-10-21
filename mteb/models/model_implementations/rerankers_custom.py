@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Any
 
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
-from mteb.types import OutputDType
 
 from .bge_models import bge_m3_training_data
 
@@ -204,7 +203,6 @@ jina_reranker_multilingual = ModelMeta(
         "ONNX",
         "safetensors",
     ],
-    output_dtypes=OutputDType.BF16,  # loaded with torch_dtype="auto"; fp_options is not applied
 )
 
 bge_reranker_v2_m3 = ModelMeta(
@@ -282,7 +280,6 @@ bge_reranker_v2_m3 = ModelMeta(
     }
     """,
     extra_requirements_groups=["flagembedding"],
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 # SBERT MS MARCO CrossEncoders (Version 2 models). Same training/data/citation for all.

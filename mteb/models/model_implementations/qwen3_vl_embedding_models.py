@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Any
 
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -121,7 +120,6 @@ qwen3_vl_embedding_2b = ModelMeta(
     training_datasets=None,
     citation=QWEN3_VL_EMBEDDING_CITATION,
     extra_requirements_groups=["multimodal-sbert"],
-    output_dtypes=OutputDType.BF16,
 )
 
 qwen3_vl_embedding_8b = ModelMeta(
@@ -148,7 +146,6 @@ qwen3_vl_embedding_8b = ModelMeta(
     training_datasets=None,
     citation=QWEN3_VL_EMBEDDING_CITATION,
     extra_requirements_groups=["multimodal-sbert"],
-    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -216,5 +213,4 @@ dna_vl_steer_2b = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     extra_requirements_groups=["multimodal-sbert"],
-    output_dtypes=OutputDType.BF16,
 )

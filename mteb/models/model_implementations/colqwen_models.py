@@ -535,7 +535,6 @@ colqwen2 = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
     extra_requirements_groups=["colpali_engine"],
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 colqwen2_5 = ModelMeta(
@@ -565,7 +564,6 @@ colqwen2_5 = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
     extra_requirements_groups=["colpali_engine"],
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 TOMORO_TRAINING_DATA = {
@@ -602,7 +600,6 @@ colqwen3_8b = ModelMeta(
     use_instructions=True,
     training_datasets=TOMORO_TRAINING_DATA,
     extra_requirements_groups=["colqwen3"],
-    output_dtypes=OutputDType.BF16,
 )
 
 colqwen3_4b = ModelMeta(
@@ -628,7 +625,6 @@ colqwen3_4b = ModelMeta(
     use_instructions=True,
     training_datasets=TOMORO_TRAINING_DATA,
     extra_requirements_groups=["colqwen3"],
-    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -667,7 +663,6 @@ colnomic_3b = ModelMeta(
     use_instructions=True,
     training_datasets=COLNOMIC_TRAINING_DATA,
     extra_requirements_groups=["colpali_engine"],
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 colnomic_7b = ModelMeta(
@@ -695,7 +690,6 @@ colnomic_7b = ModelMeta(
     use_instructions=True,
     training_datasets=COLNOMIC_TRAINING_DATA,
     extra_requirements_groups=["colpali_engine"],
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 
@@ -735,7 +729,6 @@ evoqwen25_vl_retriever_3b_v1 = ModelMeta(
     use_instructions=True,
     training_datasets=EVOQWEN_TRAINING_DATA,
     extra_requirements_groups=["colpali_engine"],
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 evoqwen25_vl_retriever_7b_v1 = ModelMeta(
@@ -764,7 +757,6 @@ evoqwen25_vl_retriever_7b_v1 = ModelMeta(
     use_instructions=True,
     training_datasets=EVOQWEN_TRAINING_DATA,
     extra_requirements_groups=["colpali_engine"],
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 
@@ -810,7 +802,6 @@ colqwen3_5_v3 = ModelMeta(
     use_instructions=False,
     training_datasets=COLQWEN35_V3_TRAINING_DATA,
     extra_requirements_groups=["colpali_engine"],
-    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -863,7 +854,6 @@ colturk_vdr_4b = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
     extra_requirements_groups=["colpali_engine"],
     adapted_from="Qwen/Qwen3-VL-4B-Instruct",
-    output_dtypes=OutputDType.BF16,
 )
 
 VULTRON_PRIME_8B_TRAINING_DATA = {
@@ -912,7 +902,6 @@ vultron_prime_qwen35_8b = ModelMeta(
     use_instructions=False,
     training_datasets=VULTRON_PRIME_8B_TRAINING_DATA,
     extra_requirements_groups=["colpali_engine"],
-    output_dtypes=OutputDType.BF16,
 )
 
 vultron_flash_qwen35_0_8b = ModelMeta(
@@ -941,7 +930,6 @@ vultron_flash_qwen35_0_8b = ModelMeta(
     use_instructions=False,
     training_datasets=VULTRON_PRIME_8B_TRAINING_DATA,  # 0.8B sibling, same training pool as the 8B Prime
     extra_requirements_groups=["colpali_engine"],
-    output_dtypes=OutputDType.BF16,
 )
 
 vultron_core_qwen35_4b = ModelMeta(
@@ -970,7 +958,6 @@ vultron_core_qwen35_4b = ModelMeta(
     use_instructions=False,
     training_datasets=VULTRON_PRIME_8B_TRAINING_DATA,  # 4B sibling, same training pool as Prime/Flash
     extra_requirements_groups=["colpali_engine"],
-    output_dtypes=OutputDType.BF16,
 )
 
 colqwen_omni = ModelMeta(
@@ -1002,5 +989,4 @@ colqwen_omni = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
     extra_requirements_groups=["colpali_engine"],
-    output_dtypes=OutputDType.BF16,
 )

@@ -237,8 +237,10 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         modalities: A list of strings representing the modalities the model supports. Default is ["text"].
         contacts: The people to contact in case of a problem in the model, preferably a GitHub handle.
         experiment_kwargs: A dictionary of parameters used in the experiment that are not covered by other fields. This is used to create experiment names for ablation studies and similar experiments.
-        output_dtypes: Output embedding data types (e.g. int8, binary, float) natively supported by the model. If None, it is assumed that the model only returns float32 embeddings.
-            Models loaded in lower precision should declare it here (e.g. `OutputDType.BF16` when loading with `torch_dtype=OutputDType.BF16`).
+        output_dtypes: Data type(s) of the embeddings the model returns (e.g. float32, bfloat16, or int8/binary for models
+            that natively return quantized embeddings). Defaults to float32. This describes the returned embeddings, not the
+            precision the model computes in: a model loaded in bf16 that returns float32 embeddings is float32. None for models
+            that return no embeddings, such as cross-encoders (the default for them) and search-only models like BM25.
         extra_requirements_groups: Name of group of extra requirements (mteb extras) needed to run the model, e.g. `["flagembedding"]`.
             When a required group is missing, loading the model raises with install instructions. Set the environment variable
             `MTEB_AUTO_INSTALL_EXTRAS=1` to let mteb install the missing extras automatically (using `uv` if available, otherwise `pip`).
@@ -275,7 +277,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
     citation: str | None = None
     contacts: list[str] | None = None
     experiment_kwargs: Mapping[str, Any] | None = None
-    output_dtypes: OutputDType | list[OutputDType] | None = None
+    output_dtypes: OutputDType | list[OutputDType] | None = OutputDType.FLOAT32
     extra_requirements_groups: Sequence[str] | None = None
 
     def __setattr__(self, name: str, value: Any) -> None:  # noqa: ANN401 -- dunder contract
@@ -287,6 +289,21 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             stacklevel=2,
         )
         super().__setattr__(name, value)
+
+    @model_validator(mode="before")
+    @classmethod
+    def _cross_encoders_return_no_embeddings(cls, data: Any) -> Any:  # noqa: ANN401 -- pydantic mode='before' receives raw input
+        """Default output_dtypes to None for cross-encoders, which return scores rather than embeddings."""
+        if (
+            isinstance(data, dict)
+            and "output_dtypes" not in data
+            and (
+                "cross-encoder" in (data.get("model_type") or [])
+                or data.get("is_cross_encoder")
+            )
+        ):
+            data["output_dtypes"] = None
+        return data
 
     @model_validator(mode="before")
     @classmethod

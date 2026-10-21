@@ -7,7 +7,7 @@ from tqdm.auto import tqdm
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import OutputDType, PromptType
+from mteb.types import PromptType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -209,7 +209,6 @@ gve_3b = ModelMeta(
     training_datasets=gve_training_datasets,
     adapted_from="Qwen/Qwen2.5-VL-3B-Instruct",
     citation=GVE_CITATION,
-    output_dtypes=OutputDType.BF16,
 )
 
 gve_7b = ModelMeta(
@@ -236,5 +235,4 @@ gve_7b = ModelMeta(
     training_datasets=gve_training_datasets,
     adapted_from="Qwen/Qwen2.5-VL-7B-Instruct",
     citation=GVE_CITATION,
-    output_dtypes=OutputDType.BF16,
 )

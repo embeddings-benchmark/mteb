@@ -917,7 +917,6 @@ qwen_indic_v1 = ModelMeta(
     model_type=["dense"],
     public_training_code=None,
     public_training_data=None,
-    output_dtypes=OutputDType.BF16,
 )
 
 FlowVec_v1 = ModelMeta(

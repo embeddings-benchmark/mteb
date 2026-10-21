@@ -173,7 +173,6 @@ vjepa2_vitl_fpc64_256 = ModelMeta(
     model_type=["dense"],
     citation=_JEPA_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=None,
 )
 
@@ -204,7 +203,6 @@ vjepa2_vith_fpc64_256 = ModelMeta(
     model_type=["dense"],
     citation=_JEPA_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=None,
 )
 
@@ -235,7 +233,6 @@ vjepa2_vitg_fpc64_256 = ModelMeta(
     model_type=["dense"],
     citation=_JEPA_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=None,
 )
 
@@ -266,7 +263,6 @@ vjepa2_vitg_fpc64_384 = ModelMeta(
     model_type=["dense"],
     citation=_JEPA_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=None,
 )
 
@@ -297,7 +293,6 @@ vjepa2_vitg_fpc64_384_ssv2 = ModelMeta(
     model_type=["dense"],
     citation=_JEPA_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=None,
 )
 
@@ -328,7 +323,6 @@ vjepa2_vitl_fpc16_256_ssv2 = ModelMeta(
     model_type=["dense"],
     citation=_JEPA_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=None,
 )
 
@@ -360,7 +354,6 @@ vjepa2_vitg_fpc32_384_diving48 = ModelMeta(
     model_type=["dense"],
     citation=_JEPA_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=None,
 )
 
@@ -392,6 +385,5 @@ vjepa2_vitl_fpc32_256_diving48 = ModelMeta(
     model_type=["dense"],
     citation=_JEPA_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=None,
 )

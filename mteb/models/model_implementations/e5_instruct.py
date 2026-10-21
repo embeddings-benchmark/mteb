@@ -242,7 +242,6 @@ zeta_alpha_ai__zeta_alpha_e5_mistral = ModelMeta(
     | E5_MISTRAL_TRAINING_DATA,
     adapted_from="intfloat/e5-mistral-7b-instruct",
     superseded_by=None,
-    output_dtypes=OutputDType.BF16,
 )
 
 E5_R_MISTRAL_7B_INSTRUCTION = "{instruction}\n"

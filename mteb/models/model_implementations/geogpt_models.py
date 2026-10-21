@@ -60,5 +60,4 @@ geoembedding = ModelMeta(
         "STSBenchmark",
         "StackOverflowDupQuestions",
     },
-    output_dtypes=OutputDType.BF16,
 )
