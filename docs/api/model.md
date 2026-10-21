@@ -65,3 +65,5 @@ length, valid frameworks, license, and degree of openness.
 :::mteb.models.search_encoder_index.search_backend_protocol.IndexEncoderSearchProtocol
 
 :::mteb.models.search_encoder_index.search_indexes.faiss_search_index.FaissSearchIndex
+
+:::mteb.models.search_encoder_index.search_indexes.fast_plaid_search_index.FastPlaidSearchIndex

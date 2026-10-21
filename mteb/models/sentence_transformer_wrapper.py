@@ -9,7 +9,6 @@ from packaging.version import Version
 from tqdm.auto import tqdm
 from typing_extensions import deprecated
 
-from mteb._create_dataloaders import create_dataloader
 from mteb._log_once import LogOnce
 from mteb.models import ModelMeta
 from mteb.similarity_functions import (
@@ -17,12 +16,11 @@ from mteb.similarity_functions import (
     _token_budget_chunks,
     _upcast_low_precision,
 )
-from mteb.timing import TimingStack
 from mteb.types import PromptType
 
 from .abs_encoder import AbsEncoder, get_prompt_name
 from .model_meta import ScoringFunction
-from .search_wrappers import chunked_full_corpus_search, rerank_top_ranked_documents
+from .search_wrappers import EncoderSearchMixin
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterator, Sequence
@@ -41,12 +39,8 @@ if TYPE_CHECKING:
     from mteb.types import (
         Array,
         BatchedInput,
-        CorpusDatasetType,
         EncodeKwargs,
         Modalities,
-        QueryDatasetType,
-        RetrievalOutputType,
-        TopRankedDocumentsType,
     )
 
 logger = logging.getLogger(__name__)
@@ -949,198 +943,34 @@ class SparseEncoderWrapper(AbsEncoder):
         )
 
 
-class MultiVectorSearchEncoderWrapper:
-    """Mixin class to add MaxSim indexing and search to a MultiVectorEncoder-backed encoder."""
+class MultiVectorSearchEncoderWrapper(EncoderSearchMixin):
+    """Mixin class to add MaxSim indexing and search to a MultiVectorEncoder-backed encoder.
 
-    task_corpus: CorpusDatasetType | None = None
-    corpus_chunk_size: int = 50_000
+    Search itself lives in `EncoderSearchMixin`; this class only routes it to the encoder's own
+    `_encode` and `similarity`.
+    """
 
-    def index(
+    def _search_encode(
         self,
-        corpus: CorpusDatasetType,
+        inputs: DataLoader[BatchedInput],
         *,
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: EncodeKwargs,
-        num_proc: int | None,
+        prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ) -> None:
-        """Store the corpus; documents are encoded lazily, in chunks, during `search`.
-
-        Args:
-            corpus: Corpus dataset to index.
-            task_metadata: Metadata of the task.
-            hf_split: Split of current task, allows to know some additional information about current split.
-            hf_subset: Subset of current task. Similar to `hf_split` to get more information
-            encode_kwargs: Additional arguments to pass to the encoder during indexing.
-            num_proc: Number of processes to use for indexing.
-            **kwargs: Additional arguments. Currently unused.
-        """
-        self.task_corpus = corpus
-
-    def search(
-        self,
-        queries: QueryDatasetType,
-        *,
-        task_metadata: TaskMetadata,
-        hf_split: str,
-        hf_subset: str,
-        top_k: int,
-        encode_kwargs: EncodeKwargs,
-        top_ranked: TopRankedDocumentsType | None = None,
-        num_proc: int | None,
-        timer: TimingStack | None = None,
-        **kwargs: Any,
-    ) -> RetrievalOutputType:
-        """Search the indexed corpus for the given queries, or rerank `top_ranked` candidates.
-
-        Args:
-            queries: Queries to find
-            task_metadata: Task metadata
-            hf_split: split of the dataset
-            hf_subset: subset of the dataset
-            top_ranked: Top-ranked documents for each query, mapping query IDs to a list of document IDs.
-                Passed only from Reranking tasks.
-            top_k: Number of top documents to return for each query.
-            encode_kwargs: Additional arguments to pass to the encoder during indexing.
-            num_proc: Number of processes to use for dataloading.
-            timer: Records the search phases: "Encoding queries", then "Searching corpus" for a
-                full corpus search, or "Encoding corpus" and "Computing similarity" when reranking.
-                A new stack is used when not given.
-            **kwargs: Additional arguments. Currently unused.
-
-        Returns:
-            Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.
-        """
-        if self.task_corpus is None:
-            raise ValueError("Corpus must be indexed before searching.")
-        timer = timer or TimingStack()
-
-        queries_dataloader = create_dataloader(
-            queries,
+    ) -> Array:
+        return self._encode(  # type: ignore[attr-defined,no-any-return]
+            inputs,
             task_metadata=task_metadata,
-            prompt_type=PromptType.query,
-            batch_size=encode_kwargs.get("batch_size", 32),
-            num_proc=num_proc,
-        )
-        with timer("Encoding queries", split=hf_split, subset=hf_subset):
-            query_embeddings = self._encode(  # type: ignore[attr-defined]
-                queries_dataloader,
-                task_metadata=task_metadata,
-                hf_split=hf_split,
-                hf_subset=hf_subset,
-                prompt_type=PromptType.query,
-                **encode_kwargs,
-            )
-        query_idx_to_id = {i: row["id"] for i, row in enumerate(queries)}
-
-        if top_ranked is not None:
-            logger.info("Reranking pre-ranked documents with MaxSim...")
-            result_heaps = self._rerank_documents(
-                query_idx_to_id=query_idx_to_id,
-                query_embeddings=query_embeddings,
-                top_ranked=top_ranked,
-                top_k=top_k,
-                task_metadata=task_metadata,
-                hf_subset=hf_subset,
-                hf_split=hf_split,
-                encode_kwargs=encode_kwargs,
-                num_proc=num_proc,
-                timer=timer,
-            )
-        else:
-            logger.info("Performing full corpus search with MaxSim...")
-            result_heaps = self._full_corpus_search(
-                query_idx_to_id=query_idx_to_id,
-                query_embeddings=query_embeddings,
-                top_k=top_k,
-                task_metadata=task_metadata,
-                hf_subset=hf_subset,
-                hf_split=hf_split,
-                encode_kwargs=encode_kwargs,
-                num_proc=num_proc,
-                timer=timer,
-            )
-
-        # Free the corpus reference now that search is done
-        self.task_corpus = None
-
-        results: RetrievalOutputType = {qid: {} for qid in query_idx_to_id.values()}
-        for qid in result_heaps:
-            for score, corpus_id in result_heaps[qid]:
-                results[qid][corpus_id] = score
-        return results
-
-    def _full_corpus_search(
-        self,
-        *,
-        query_idx_to_id: dict[int, str],
-        query_embeddings: Array,
-        task_metadata: TaskMetadata,
-        hf_subset: str,
-        hf_split: str,
-        top_k: int,
-        encode_kwargs: EncodeKwargs,
-        num_proc: int | None,
-        timer: TimingStack,
-    ) -> dict[str, list[tuple[float, str]]]:
-        if self.task_corpus is None:
-            raise ValueError("Corpus must be indexed before searching.")
-
-        return chunked_full_corpus_search(
-            task_corpus=self.task_corpus,
-            corpus_chunk_size=self.corpus_chunk_size,
-            query_idx_to_id=query_idx_to_id,
-            query_embeddings=query_embeddings,
-            task_metadata=task_metadata,
-            hf_subset=hf_subset,
             hf_split=hf_split,
-            top_k=top_k,
-            encode_kwargs=encode_kwargs,
-            encode_fn=self._encode,  # type: ignore[attr-defined]
-            similarity_fn=self.similarity,  # type: ignore[attr-defined]
-            num_proc=num_proc,
-            timer=timer,
-        )
-
-    def _rerank_documents(  # noqa: PLR0913
-        self,
-        *,
-        query_idx_to_id: dict[int, str],
-        query_embeddings: Array,
-        top_ranked: TopRankedDocumentsType,
-        top_k: int,
-        task_metadata: TaskMetadata,
-        hf_subset: str,
-        hf_split: str,
-        encode_kwargs: EncodeKwargs,
-        timer: TimingStack,
-        num_proc: int | None = None,
-    ) -> dict[str, list[tuple[float, str]]]:
-        """Rerank each query's pre-ranked candidates with MaxSim.
-
-        Returns:
-            A dictionary mapping query IDs to a list of tuples, each containing a score and a document ID.
-        """
-        if self.task_corpus is None:
-            raise ValueError("Corpus must be set before reranking.")
-
-        return rerank_top_ranked_documents(
-            task_corpus=self.task_corpus,
-            query_idx_to_id=query_idx_to_id,
-            query_embeddings=query_embeddings,
-            top_ranked=top_ranked,
-            top_k=top_k,
-            task_metadata=task_metadata,
             hf_subset=hf_subset,
-            hf_split=hf_split,
-            encode_kwargs=encode_kwargs,
-            encode_fn=self._encode,  # type: ignore[attr-defined]
-            similarity_fn=self.similarity,  # type: ignore[attr-defined]
-            num_proc=num_proc,
-            timer=timer,
+            prompt_type=prompt_type,
+            **kwargs,
         )
+
+    def _search_similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
+        return self.similarity(embeddings1, embeddings2)  # type: ignore[attr-defined,no-any-return]
 
 
 class MultiVectorWrapper(MultiVectorSearchEncoderWrapper):

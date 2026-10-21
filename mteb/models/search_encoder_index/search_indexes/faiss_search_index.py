@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 import warnings
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, ClassVar, cast
 
 import numpy as np
 
@@ -15,6 +15,7 @@ if TYPE_CHECKING:
     import faiss
     from numpy.typing import NDArray
 
+    from mteb.models.model_meta import MODEL_TYPES
     from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, TopRankedDocumentsType
 
@@ -32,6 +33,7 @@ class FaissSearchIndex:
         - Expects embeddings to be normalized if cosine similarity is desired.
     """
 
+    supported_model_types: ClassVar[tuple[MODEL_TYPES, ...]] = ("dense",)
     _normalize: bool = False
 
     def __init__(self, model: EncoderProtocol) -> None:

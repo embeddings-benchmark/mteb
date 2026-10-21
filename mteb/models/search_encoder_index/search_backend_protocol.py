@@ -1,15 +1,20 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Protocol
+from typing import TYPE_CHECKING, ClassVar, Protocol
 
 if TYPE_CHECKING:
     from collections.abc import Callable
 
+    from mteb.models.model_meta import MODEL_TYPES
     from mteb.types import Array, TopRankedDocumentsType
 
 
 class IndexEncoderSearchProtocol(Protocol):
     """Protocol for search backends used in encoder-based retrieval."""
+
+    supported_model_types: ClassVar[tuple[MODEL_TYPES, ...]]
+    """Model types (`ModelMeta.model_type`) this backend can index. `SearchEncoderWrapper`
+    refuses a model with any other type in its `model_type`."""
 
     def add_documents(
         self,
@@ -19,7 +24,8 @@ class IndexEncoderSearchProtocol(Protocol):
         """Add documents to the search backend.
 
         Args:
-            embeddings: Embeddings of the documents to add.
+            embeddings: Embeddings of the documents to add. Single-vector models give an array of
+                shape (num_documents, dim); multi-vector models give a list of (num_tokens, dim) arrays.
             idxs: IDs of the documents to add.
         """
 
@@ -38,7 +44,8 @@ class IndexEncoderSearchProtocol(Protocol):
             - Reranking mode:  `top_ranked` contains mapping {query_id: [doc_ids]}.
 
         Args:
-            embeddings: Query embeddings, shape (num_queries, dim).
+            embeddings: Query embeddings, shape (num_queries, dim), or a list of (num_tokens, dim)
+                arrays for multi-vector models.
             top_k: Number of top results to return.
             similarity_fn: Function to compute similarity between query and corpus.
             top_ranked: Mapping of query_id -> list of candidate doc_ids. Used for reranking.
