@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import AbsTaskZeroShotClassification
 
 CITATION = r"""
 @inproceedings{hong2025worldsense,
@@ -13,14 +13,14 @@ CITATION = r"""
 """
 
 
-class WorldSenseAudioVideoZeroShotClassification(AbsTaskZeroShotClassification):
+class WorldSenseAudioVideoZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="WorldSenseAudioVideoZeroShot",
         description="WorldSense is a multimodal video understanding benchmark encompassing visual, audio, and text inputs. Videos are categorized into 8 primary domains across 67 fine-grained subcategories. This zero-shot classification task predicts the domain category of a video clip Filtered the test split to short (<1min) clips (~1,047 examples).",
         reference="https://arxiv.org/abs/2502.04326",
         dataset={
-            "path": "mteb/WorldSense_1min",
-            "revision": "10c7ce0eb32d620f1f685bfedde2724066068a1c",
+            "path": "mteb/WorldSenseAudioVideoZeroShot",
+            "revision": "02540a42ac70c9bd11c12d9e730fad034006d3bf",
         },
         type="VideoZeroshotClassification",
         category="va2t",
@@ -38,21 +38,15 @@ class WorldSenseAudioVideoZeroShotClassification(AbsTaskZeroShotClassification):
         bibtex_citation=CITATION,
     )
 
-    input_column_name = ("video", "audio")
-    label_column_name: str = "domain"
 
-    def get_candidate_labels(self) -> list[str]:
-        return self.dataset["test"].features[self.label_column_name].names
-
-
-class WorldSenseVideoZeroShotClassification(AbsTaskZeroShotClassification):
+class WorldSenseVideoZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="WorldSenseVideoZeroShot",
         description="WorldSense is a multimodal video understanding benchmark encompassing visual, audio, and text inputs. Videos are categorized into 8 primary domains across 67 fine-grained subcategories. This zero-shot classification task predicts the domain category of a video clip Filtered the test split to short (<1min) clips (~1,047 examples).",
         reference="https://arxiv.org/abs/2502.04326",
         dataset={
-            "path": "mteb/WorldSense_1min",
-            "revision": "10c7ce0eb32d620f1f685bfedde2724066068a1c",
+            "path": "mteb/WorldSenseVideoZeroShot",
+            "revision": "da6d5ae9b19bfa22e4ea0b45280385243cf51438",
         },
         type="VideoZeroshotClassification",
         category="v2t",
@@ -69,9 +63,3 @@ class WorldSenseVideoZeroShotClassification(AbsTaskZeroShotClassification):
         sample_creation="found",
         bibtex_citation=CITATION,
     )
-
-    input_column_name = "video"
-    label_column_name: str = "domain"
-
-    def get_candidate_labels(self) -> list[str]:
-        return self.dataset["test"].features[self.label_column_name].names

@@ -1,19 +1,15 @@
-from pathlib import Path
-
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import (
-    AbsTaskZeroShotClassification,
-)
 
 
-class Country211ZeroShotClassification(AbsTaskZeroShotClassification):
+class Country211ZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Country211ZeroShot",
         description="Classifying images of 211 countries.",
         reference="https://huggingface.co/datasets/clip-benchmark/wds_country211",
         dataset={
-            "path": "mteb/wds_country211",
-            "revision": "c3875324cab4803fa6d3afcd5947a97c84fad4c6",
+            "path": "mteb/Country211ZeroShot",
+            "revision": "3f26e6143f15468ce4fd685d100dd8c31ec48ad6",
         },
         type="ZeroShotClassification",
         category="i2t",
@@ -40,13 +36,3 @@ class Country211ZeroShotClassification(AbsTaskZeroShotClassification):
 }
 """,
     )
-
-    input_column_name: str = "jpg"
-    label_column_name: str = "cls"
-
-    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
-        path = Path(__file__).parent / "templates" / "Country211_labels.txt"
-        with path.open(encoding="utf-8") as f:
-            labels = f.readlines()
-
-        return [f"a photo showing the country of {c}." for c in labels]

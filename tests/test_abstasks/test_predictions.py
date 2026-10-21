@@ -47,10 +47,16 @@ from mteb.mocks.mock_tasks.clustering import MockClusteringTask
         ),
         (
             MockTextZeroShotClassificationTask(),
-            [
-                pytest.approx([0.9999998807907104, 0.6840636730194092]),
-                pytest.approx([0.6840636730194092, 1.0]),
-            ],
+            {
+                "0": {
+                    "0": pytest.approx(1.0),
+                    "1": pytest.approx(0.684063732624054),
+                },
+                "1": {
+                    "0": pytest.approx(0.684063732624054),
+                    "1": pytest.approx(1.0),
+                },
+            },
         ),
         (
             MockRetrievalTask(),
