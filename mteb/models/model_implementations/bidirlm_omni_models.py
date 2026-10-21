@@ -131,6 +131,7 @@ class BidirLMOmniEncoder(AbsEncoder):
             **kwargs,
         )
         self.model.eval()
+        self.temporal_patch_size = video_processor.temporal_patch_size
         self.max_text_length = max_text_length
         self.fps = fps
         self.max_frames = max_frames
@@ -234,6 +235,14 @@ class BidirLMOmniEncoder(AbsEncoder):
                     for key in modality_keys
                     if key in batch and batch[key][i] is not None
                 }
+                if "video" in row and len(row["video"]) < self.temporal_patch_size:
+                    # the Qwen3-VL video processor needs temporal_patch_size frames; repeat
+                    # the last one, as it already does for an odd frame count
+                    # https://github.com/huggingface/transformers/blob/v5.19.0/src/transformers/models/qwen3_vl/video_processing_qwen3_vl.py#L236-L238
+                    pad = self.temporal_patch_size - len(row["video"])
+                    row["video"] = torch.cat(
+                        [row["video"], row["video"][-1:].repeat(pad, 1, 1, 1)]
+                    )
                 batch_inputs.append(row)
 
             embeddings = self.model.encode(
