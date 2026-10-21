@@ -145,3 +145,63 @@ def test_build_summary_rows_strict_when_not_language_filtered():
     )
 
     assert rows[0].scores_by_custom_group["WholeDim"]["G1"] == 0.5
+
+
+def test_build_task_scores_ignores_splits_outside_eval_splits(monkeypatch):
+    # SprintDuplicateQuestions now declares only ``test``; older results also
+    # carry ``validation``, which must not appear as a split or null out the
+    # score of models that only ran ``test``.
+    from mteb.api import frames
+    from mteb.api.aggregators import build_task_scores
+
+    task = "SprintDuplicateQuestions"
+    assert list(mteb.get_task(task).metadata.eval_splits) == ["test"]
+    other_model = "sentence-transformers/all-MiniLM-L6-v2"
+    unified = pl.DataFrame(
+        {
+            "model_name": [FULL_MODEL, FULL_MODEL, other_model],
+            "task_name": [task] * 3,
+            "split": ["test", "validation", "test"],
+            "subset": ["default"] * 3,
+            "score": [0.6, 0.9, 0.7],
+        }
+    )
+    monkeypatch.setattr(frames, "_load_per_benchmark_frames", lambda: ({}, unified))
+
+    result = build_task_scores(task)
+
+    assert result.splits == ["test"]
+    scores = {row.model.name: row.score for row in result.rows}
+    assert scores == {FULL_MODEL: 0.6, other_model: 0.7}
+    assert all(
+        "validation" not in s for row in result.rows for s in row.subset_scores.values()
+    )
+
+
+def test_build_task_scores_ignores_subsets_outside_hf_subsets(monkeypatch):
+    # HUME tasks declare ``en``; a stray ``eng`` result must not surface as a
+    # subset or null out models that only ran the declared ones.
+    from mteb.api import frames
+    from mteb.api.aggregators import build_task_scores
+
+    task = "HUMEWikipediaRerankingMultilingual"
+    subsets = list(mteb.get_task(task).metadata.hf_subsets)
+    assert "eng" not in subsets
+    other_model = "sentence-transformers/all-MiniLM-L6-v2"
+    unified = pl.DataFrame(
+        {
+            "model_name": [FULL_MODEL] * (len(subsets) + 1)
+            + [other_model] * len(subsets),
+            "task_name": [task] * (2 * len(subsets) + 1),
+            "split": ["test"] * (2 * len(subsets) + 1),
+            "subset": [*subsets, "eng", *subsets],
+            "score": [0.6] * len(subsets) + [0.9] + [0.7] * len(subsets),
+        }
+    )
+    monkeypatch.setattr(frames, "_load_per_benchmark_frames", lambda: ({}, unified))
+
+    result = build_task_scores(task)
+
+    assert result.subsets == sorted(subsets)
+    scores = {row.model.name: row.score for row in result.rows}
+    assert scores == pytest.approx({FULL_MODEL: 0.6, other_model: 0.7})
