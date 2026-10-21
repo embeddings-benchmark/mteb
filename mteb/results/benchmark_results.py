@@ -830,10 +830,10 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
 
     @staticmethod
     def _split_by_benchmark_tasks(combined: pl.DataFrame) -> dict[str, pl.DataFrame]:
-        """Bucket an untagged all-results frame into per-benchmark frames.
+        """Split tagged or untagged results into per-benchmark frames.
 
-        Used when the cache parquet was produced without the
-        ``__benchmark__`` tag column. Per benchmark, we build the set of
+        Use each benchmark's tagged rows when available, otherwise the full
+        frame. Per benchmark, we build the set of
         valid ``(task_name, split, subset)`` triples — one entry per
         cross of each task's ``eval_splits`` × ``hf_subsets`` — and
         inner-join the combined frame against it. Joining on tuples
@@ -865,6 +865,13 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         has_split = "split" in combined.columns
         has_subset = "subset" in combined.columns
 
+        # Preserve benchmark ownership to avoid duplicating shared tasks.
+        tagged = (
+            combined.partition_by(_BENCHMARK_COLUMN, as_dict=True)
+            if _BENCHMARK_COLUMN in combined.columns
+            else {}
+        )
+
         def _split_one(bench: Benchmark) -> tuple[str, pl.DataFrame | None]:
             triples = _build_valid_triples(bench.tasks, has_split, has_subset)
             if triples.is_empty():
@@ -872,7 +879,8 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
             join_keys = [
                 c for c in ("task_name", "split", "subset") if c in triples.columns
             ]
-            sub = combined.join(triples, on=join_keys, how="inner")
+            source = tagged.get((bench.name,), combined)
+            sub = source.join(triples, on=join_keys, how="inner")
             return bench.name, sub if not sub.is_empty() else None
 
         benches = list(mteb.get_benchmarks())
