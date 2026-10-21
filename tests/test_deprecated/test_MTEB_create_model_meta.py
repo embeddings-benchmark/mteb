@@ -45,6 +45,6 @@ def test_output_folder_model_meta(task: AbsTask, tmp_path: Path):
     output_path = Path(output_path)
     assert output_path.exists()
     assert output_path.is_dir()
-    assert output_path.name == model.config._commit_hash
+    assert output_path.name == model.model_card_data.base_model_revision
     assert output_path.parent.name == "cross-encoder__ms-marco-TinyBERT-L2-v2"
     assert output_path.parent.parent == tmp_path
