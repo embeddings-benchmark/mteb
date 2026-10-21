@@ -9300,6 +9300,16 @@
                 "similarity": 1.0,
                 "note": ""
             }
+        },
+        "gideoni2026persistent||2610.25252|persistent representational misalignment induces vision-language model failures|2026": {
+            "stored_at": 1792507101.716935,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Persistent Representational Misalignment Induces Vision-Language Model Failures",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
         }
     }
 }
