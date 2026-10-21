@@ -325,8 +325,7 @@ class VATEXV2TRetrievalV2(AbsTaskRetrieval):
         description=(
             "Retrieve the English caption that describes a given video clip (video "
             "only) from VATEX, a large-scale multilingual video description dataset."
-            " Used the `vatex_test` config with the first English caption, capped at 1,000 (~1,000 examples)."
-            " Version 2 cuts each video and audio to its official 10 s VATEX clip (v1 used the full YouTube videos); clips whose audio is missing or silent in that window are dropped."
+            " Version 2 cuts each video to the 10 s clip its caption describes and drops clips with missing or silent audio."
         ),
         reference="https://arxiv.org/abs/1904.03493",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
@@ -359,8 +358,7 @@ class VATEXT2VRetrievalV2(AbsTaskRetrieval):
         description=(
             "Retrieve the video clip (video only) that matches a given English "
             "caption from VATEX, a large-scale multilingual video description dataset."
-            " Used the `vatex_test` config with the first English caption, capped at 1,000 (~1,000 examples)."
-            " Version 2 cuts each video and audio to its official 10 s VATEX clip (v1 used the full YouTube videos); clips whose audio is missing or silent in that window are dropped."
+            " Version 2 cuts each video to the 10 s clip its caption describes and drops clips with missing or silent audio."
         ),
         reference="https://arxiv.org/abs/1904.03493",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
@@ -392,8 +390,7 @@ class VATEXVA2TRetrievalV2(AbsTaskRetrieval):
         description=(
             "Retrieve the English caption that describes a given video clip from "
             "VATEX, a large-scale multilingual video description dataset."
-            " Used the `vatex_test` config with the first English caption, capped at 1,000 (~1,000 examples)."
-            " Version 2 cuts each video and audio to its official 10 s VATEX clip (v1 used the full YouTube videos); clips whose audio is missing or silent in that window are dropped."
+            " Version 2 cuts each video to the 10 s clip its caption describes and drops clips with missing or silent audio."
         ),
         reference="https://arxiv.org/abs/1904.03493",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
@@ -425,8 +422,7 @@ class VATEXT2VARetrievalV2(AbsTaskRetrieval):
         description=(
             "Retrieve the video clip that matches a given English caption from "
             "VATEX, a large-scale multilingual video description dataset."
-            " Used the `vatex_test` config with the first English caption, capped at 1,000 (~1,000 examples)."
-            " Version 2 cuts each video and audio to its official 10 s VATEX clip (v1 used the full YouTube videos); clips whose audio is missing or silent in that window are dropped."
+            " Version 2 cuts each video to the 10 s clip its caption describes and drops clips with missing or silent audio."
         ),
         reference="https://arxiv.org/abs/1904.03493",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
@@ -459,8 +455,7 @@ class VATEXV2ARetrievalV2(AbsTaskRetrieval):
         description=(
             "Retrieve the audio track that matches a given video clip from the "
             "VATEX dataset. Tests cross-modal alignment between video frames and audio."
-            " Used the `vatex_test` config with the first English caption, capped at 1,000 (~1,000 examples)."
-            " Version 2 cuts each video and audio to its official 10 s VATEX clip (v1 used the full YouTube videos); clips whose audio is missing or silent in that window are dropped."
+            " Version 2 cuts each video to the 10 s clip its caption describes and drops clips with missing or silent audio."
         ),
         reference="https://arxiv.org/abs/1904.03493",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
@@ -492,8 +487,7 @@ class VATEXA2VRetrievalV2(AbsTaskRetrieval):
         description=(
             "Retrieve the video clip that matches a given audio track from the "
             "VATEX dataset. Tests cross-modal alignment between audio and video frames."
-            " Used the `vatex_test` config with the first English caption, capped at 1,000 (~1,000 examples)."
-            " Version 2 cuts each video and audio to its official 10 s VATEX clip (v1 used the full YouTube videos); clips whose audio is missing or silent in that window are dropped."
+            " Version 2 cuts each video to the 10 s clip its caption describes and drops clips with missing or silent audio."
         ),
         reference="https://arxiv.org/abs/1904.03493",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
@@ -526,8 +520,7 @@ class VATEXVT2ARetrievalV2(AbsTaskRetrieval):
         description=(
             "Retrieve the audio track that matches a given video clip and its English "
             "caption from VATEX, a large-scale multilingual video description dataset."
-            " Used the `vatex_test` config with the first English caption, capped at 1,000 (~1,000 examples)."
-            " Version 2 cuts each video and audio to its official 10 s VATEX clip (v1 used the full YouTube videos); clips whose audio is missing or silent in that window are dropped."
+            " Version 2 cuts each video to the 10 s clip its caption describes and drops clips with missing or silent audio."
         ),
         reference="https://arxiv.org/abs/1904.03493",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
@@ -562,8 +555,7 @@ class VATEXAT2VRetrievalV2(AbsTaskRetrieval):
         description=(
             "Retrieve the video clip that matches a given audio track and its English "
             "caption from VATEX, a large-scale multilingual video description dataset."
-            " Used the `vatex_test` config with the first English caption, capped at 1,000 (~1,000 examples)."
-            " Version 2 cuts each video and audio to its official 10 s VATEX clip (v1 used the full YouTube videos); clips whose audio is missing or silent in that window are dropped."
+            " Version 2 cuts each video to the 10 s clip its caption describes and drops clips with missing or silent audio."
         ),
         reference="https://arxiv.org/abs/1904.03493",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},

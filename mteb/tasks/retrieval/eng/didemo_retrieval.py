@@ -334,8 +334,7 @@ class DiDeMoV2TRetrievalV2(AbsTaskRetrieval):
             "Retrieve the English caption that describes a given video clip (video "
             "only) from the DiDeMo dataset of Flickr videos with temporally grounded "
             "sentence descriptions."
-            " Used the test split (~999 examples)."
-            " Version 2 cuts each video and audio to its first 30 s, which the descriptions cover (v1 used the full videos); videos whose audio is missing or silent, and repeat uploads of the same video, are dropped."
+            " Version 2 cuts each video to the first 30 s, which the descriptions cover, and drops clips with missing or silent audio and videos uploaded twice."
         ),
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
         type="Any2AnyRetrieval",
@@ -368,8 +367,7 @@ class DiDeMoT2VRetrievalV2(AbsTaskRetrieval):
             "Retrieve the video clip (video only) that matches a given English "
             "caption from the DiDeMo dataset of Flickr videos with temporally "
             "grounded sentence descriptions."
-            " Used the test split (~999 examples)."
-            " Version 2 cuts each video and audio to its first 30 s, which the descriptions cover (v1 used the full videos); videos whose audio is missing or silent, and repeat uploads of the same video, are dropped."
+            " Version 2 cuts each video to the first 30 s, which the descriptions cover, and drops clips with missing or silent audio and videos uploaded twice."
         ),
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
         type="Any2AnyRetrieval",
@@ -403,8 +401,7 @@ class DiDeMoVA2TRetrievalV2(AbsTaskRetrieval):
             "Retrieve the English caption that describes a given video clip "
             "from the DiDeMo dataset of Flickr videos with temporally grounded "
             "sentence descriptions."
-            " Used the test split (~999 examples)."
-            " Version 2 cuts each video and audio to its first 30 s, which the descriptions cover (v1 used the full videos); videos whose audio is missing or silent, and repeat uploads of the same video, are dropped."
+            " Version 2 cuts each video to the first 30 s, which the descriptions cover, and drops clips with missing or silent audio and videos uploaded twice."
         ),
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
         type="Any2AnyRetrieval",
@@ -438,8 +435,7 @@ class DiDeMoT2VARetrievalV2(AbsTaskRetrieval):
             "Retrieve the video clip that matches a given English caption "
             "from the DiDeMo dataset of Flickr videos with temporally grounded "
             "sentence descriptions."
-            " Used the test split (~999 examples)."
-            " Version 2 cuts each video and audio to its first 30 s, which the descriptions cover (v1 used the full videos); videos whose audio is missing or silent, and repeat uploads of the same video, are dropped."
+            " Version 2 cuts each video to the first 30 s, which the descriptions cover, and drops clips with missing or silent audio and videos uploaded twice."
         ),
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
         type="Any2AnyRetrieval",
@@ -472,8 +468,7 @@ class DiDeMoV2ARetrievalV2(AbsTaskRetrieval):
         description=(
             "Retrieve the audio track that matches a given video clip from the "
             "DiDeMo dataset. Tests cross-modal alignment between video frames and audio."
-            " Used the test split (~999 examples)."
-            " Version 2 cuts each video and audio to its first 30 s, which the descriptions cover (v1 used the full videos); videos whose audio is missing or silent, and repeat uploads of the same video, are dropped."
+            " Version 2 cuts each video to the first 30 s, which the descriptions cover, and drops clips with missing or silent audio and videos uploaded twice."
         ),
         reference="https://arxiv.org/abs/1708.01641",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
@@ -506,8 +501,7 @@ class DiDeMoA2VRetrievalV2(AbsTaskRetrieval):
         description=(
             "Retrieve the video clip that matches a given audio track from the "
             "DiDeMo dataset. Tests cross-modal alignment between audio and video frames."
-            " Used the test split (~999 examples)."
-            " Version 2 cuts each video and audio to its first 30 s, which the descriptions cover (v1 used the full videos); videos whose audio is missing or silent, and repeat uploads of the same video, are dropped."
+            " Version 2 cuts each video to the first 30 s, which the descriptions cover, and drops clips with missing or silent audio and videos uploaded twice."
         ),
         reference="https://arxiv.org/abs/1708.01641",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
@@ -541,8 +535,7 @@ class DiDeMoVT2ARetrievalV2(AbsTaskRetrieval):
             "Retrieve the audio track that matches a given video clip and its caption "
             "from the DiDeMo dataset of Flickr videos with temporally grounded "
             "sentence descriptions."
-            " Used the test split (~999 examples)."
-            " Version 2 cuts each video and audio to its first 30 s, which the descriptions cover (v1 used the full videos); videos whose audio is missing or silent, and repeat uploads of the same video, are dropped."
+            " Version 2 cuts each video to the first 30 s, which the descriptions cover, and drops clips with missing or silent audio and videos uploaded twice."
         ),
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
         type="Any2AnyRetrieval",
@@ -578,8 +571,7 @@ class DiDeMoAT2VRetrievalV2(AbsTaskRetrieval):
             "Retrieve the video clip that matches a given audio track and its caption "
             "from the DiDeMo dataset of Flickr videos with temporally grounded "
             "sentence descriptions."
-            " Used the test split (~999 examples)."
-            " Version 2 cuts each video and audio to its first 30 s, which the descriptions cover (v1 used the full videos); videos whose audio is missing or silent, and repeat uploads of the same video, are dropped."
+            " Version 2 cuts each video to the first 30 s, which the descriptions cover, and drops clips with missing or silent audio and videos uploaded twice."
         ),
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
         type="Any2AnyRetrieval",

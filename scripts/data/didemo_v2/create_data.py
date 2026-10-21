@@ -1,15 +1,12 @@
-"""Create DiDeMo v2: cut each video of mteb/DiDeMo to its first 30 s.
+"""Create DiDeMo v2 by cutting each video of mteb/DiDeMo to its first 30 s.
 
-DiDeMo's descriptions only cover the first 30 s of each video: "Some videos are longer than
-30 seconds. These videos were truncated to 30 seconds during annotation."
+v1 (taken from VLM2Vec/DiDeMo) stores the full videos, but DiDeMo's descriptions only cover the
+first 30 s: "These videos were truncated to 30 seconds during annotation."
 https://github.com/LisaAnne/LocalizingMoments#dataset
-CLIP4Clip's paragraph retrieval likewise uses seconds 0-31.
-The v1 videos and captions are the DiDeMo test set of VLM2Vec/DiDeMo (MMEB-V2) on the Hub.
 
-- Videos longer than 30 s are cut to [0, 30]; shorter ones are kept as is.
-- Rows whose audio does not cover the clip or is silent throughout are dropped.
-- A few test videos were uploaded twice under different ids (same video stream, different
-  captions); only the first row of each is kept.
+- Videos longer than 30 s are cut to [0, 30].
+- Rows whose audio is missing or silent are dropped.
+- Some videos were uploaded twice under different ids; only the first row of each is kept.
 
 usage: HF_TOKEN=... python create_data.py OUT_DIR [--push]
 """

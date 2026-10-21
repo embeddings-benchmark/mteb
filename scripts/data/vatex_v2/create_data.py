@@ -1,17 +1,12 @@
-"""Create VATEX v2: cut each clip of mteb/VATEX_test_1k to its official 10 s window.
+"""Create VATEX v2 by cutting each video of mteb/VATEX_test_1k to the clip its caption describes.
 
-The v1 files are the full YouTube videos, while each VATEX caption describes one ~10 s clip.
-The official test annotations name every clip "<youtube id>_<start>_<end>"; each v1 caption
-matches exactly one of them, which gives its window.
+v1 (taken from lmms-eval/VATEX) stores the full YouTube videos, but each VATEX caption describes
+a 10 s clip, named "<youtube id>_<start>_<end>" in the official test annotations:
 https://eric-xw.github.io/vatex-website/download.html
-The v1 videos are the files of lmms-eval/VATEX on the Hub, which are named by these clip
-ids, and every caption's clip matches its file name.
 
-- Files longer than one window are cut to [start, end] (or to the end of the file if the
-  source stops early); shorter files already are the clip and are kept as is.
-- Rows whose audio does not cover the clip (it stops before the window) or is silent
-  throughout are dropped.
-- `video_id`, `start` and `end` columns record each row's official clip.
+- Videos longer than one clip are cut to [start, end]; shorter ones already are the clip.
+- Rows whose audio is missing or silent in the clip are dropped.
+- `video_id`, `start` and `end` record each row's clip.
 
 usage: HF_TOKEN=... python create_data.py OUT_DIR [--push]
 """
