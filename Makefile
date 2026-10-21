@@ -83,7 +83,7 @@ dataset-load-test-pr:
 
 citation-check:
 	@echo "--- 🔍 Checking that the cited works exist ---"
-	uv run --no-sync --group test python tests/test_validate_metadata/check_citations.py $(CITATION_CHECK_ARGS)
+	uv run --no-sync --group test python -m scripts.tools.check_citations $(CITATION_CHECK_ARGS)
 
 preprint-check:
 	@echo "--- 🔍 Checking whether cited preprints have been published ---"
