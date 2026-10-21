@@ -142,16 +142,15 @@ class _RaggedCacheBase:
     def save(self) -> None:
         """Persist the vectors, metadata and newly added index entries to disk."""
         self.storage.flush()
+        tmp_metadata_file = self.metadata_file.with_suffix(".json.tmp")
+        with tmp_metadata_file.open("w", encoding="utf-8") as f:
+            json.dump(self._metadata(), f)
+        tmp_metadata_file.replace(self.metadata_file)
         with self.index_file.open("a", encoding="utf-8") as f:
             for item_hash in self._unsaved:
                 start, end = self.hash_to_range[item_hash]
                 f.write(json.dumps([item_hash, start, end]) + "\n")
         self._unsaved = []
-        # Write to a temporary file first, so a crash mid-write doesn't corrupt the metadata
-        tmp_metadata_file = self.metadata_file.with_suffix(".json.tmp")
-        with tmp_metadata_file.open("w", encoding="utf-8") as f:
-            json.dump(self._metadata(), f)
-        tmp_metadata_file.replace(self.metadata_file)
         logger.info(f"Saved {type(self).__name__} to {self.directory}")
 
     def load(self) -> None:

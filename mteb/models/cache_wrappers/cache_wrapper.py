@@ -15,6 +15,7 @@ from mteb.models.model_meta import (
     _serialize_experiment_kwargs_to_name,
 )
 from mteb.models.sentence_transformer_wrapper import MultiVectorSearchEncoderWrapper
+from mteb.similarity_functions import max_sim, pairwise_max_sim
 
 _EXPERIMENTS_FOLDER_NAME = "experiments"
 
@@ -28,6 +29,7 @@ if TYPE_CHECKING:
     from mteb.models.cache_wrappers.cache_backend_protocol import (
         CacheBackendProtocol,
     )
+    from mteb.models.model_implementations.pylate_models import PylateSearchEncoder
     from mteb.models.model_meta import ModelMeta
     from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
@@ -51,11 +53,11 @@ def _to_cpu(vectors: Array) -> Array:
 class _CachedEncoderBase:
     """Shared caching logic for the cached encoder wrappers."""
 
-    _model: EncoderProtocol | MultiVectorSearchEncoderWrapper
+    _model: EncoderProtocol | MultiVectorSearchEncoderWrapper | PylateSearchEncoder
 
     def __init__(
         self,
-        model: EncoderProtocol | MultiVectorSearchEncoderWrapper,
+        model: EncoderProtocol | MultiVectorSearchEncoderWrapper | PylateSearchEncoder,
         cache_path: str | Path,
         cache_backend: type[CacheBackendProtocol],
     ) -> None:
@@ -274,7 +276,7 @@ class CachedEmbeddingWrapper(_CachedEncoderBase):
             cache_path: Path to the directory where cached embeddings are stored.
             cache_backend: Cache backend class to use for storing embeddings.
         """
-        if isinstance(model, MultiVectorSearchEncoderWrapper):
+        if not hasattr(model, "encode") and hasattr(model, "_encode"):
             raise ValueError(
                 "Multi-vector models don't expose an 'encode' method. Use CachedMultiVectorWrapper instead."
             )
@@ -322,38 +324,57 @@ class CachedEmbeddingWrapper(_CachedEncoderBase):
 class CachedMultiVectorWrapper(MultiVectorSearchEncoderWrapper, _CachedEncoderBase):
     """Wraps a multi-vector (late-interaction) model and caches its per-token embeddings.
 
-    Like the wrapped model, it only supports search (retrieval and reranking) tasks.
+    Like the wrapped model, it only supports search (retrieval and reranking) tasks. Search uses
+    exact MaxSim, also for models with their own search, such as PyLate models (which search a
+    PLAID index), so their scores can differ slightly from an uncached run.
 
     Examples:
         >>> import mteb
-        >>> from mteb.models import CachedMultiVectorWrapper, MultiVectorWrapper
-        >>> model = MultiVectorWrapper("lightonai/LateOn")
+        >>> from mteb.models import CachedMultiVectorWrapper
+        >>> model = mteb.get_model("lightonai/LateOn")
         >>> cached_model = CachedMultiVectorWrapper(model, "cache")
         >>> task = mteb.get_task("NanoArguAnaRetrieval")
         >>> mteb.evaluate(cached_model, task)
     """
 
-    _model: MultiVectorSearchEncoderWrapper
+    _model: MultiVectorSearchEncoderWrapper | PylateSearchEncoder
 
     def __init__(
         self,
-        model: MultiVectorSearchEncoderWrapper,
+        model: MultiVectorSearchEncoderWrapper | PylateSearchEncoder,
         cache_path: str | Path,
         cache_backend: type[CacheBackendProtocol] = MultiVectorCache,
     ) -> None:
         """Init
 
         Args:
-            model: Multi-vector model to be wrapped, e.g. a [`MultiVectorWrapper`][mteb.models.MultiVectorWrapper].
+            model: Multi-vector model to be wrapped, e.g. a [`MultiVectorWrapper`][mteb.models.MultiVectorWrapper]
+                or a PyLate model.
             cache_path: Path to the directory where cached embeddings are stored.
             cache_backend: Cache backend class to use for storing embeddings.
         """
-        if not isinstance(model, MultiVectorSearchEncoderWrapper):
-            raise ValueError(
-                "Model must be a multi-vector model with MaxSim search, such as MultiVectorWrapper."
-            )
+        if not hasattr(model, "_encode"):
+            raise ValueError("Model must have an '_encode' method.")
         super().__init__(model, cache_path, cache_backend)
-        self.corpus_chunk_size = model.corpus_chunk_size
+        self.corpus_chunk_size = getattr(
+            model,
+            "corpus_chunk_size",
+            MultiVectorSearchEncoderWrapper.corpus_chunk_size,
+        )
+
+    def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
+        """Compute the MaxSim similarity, with the wrapped model's `similarity` if it has one."""
+        if hasattr(self._model, "similarity"):
+            return cast("Array", self._model.similarity(embeddings1, embeddings2))
+        return max_sim(embeddings1, embeddings2)
+
+    def similarity_pairwise(self, embeddings1: Array, embeddings2: Array) -> Array:
+        """Compute the pairwise MaxSim similarity, with the wrapped model's `similarity_pairwise` if it has one."""
+        if hasattr(self._model, "similarity_pairwise"):
+            return cast(
+                "Array", self._model.similarity_pairwise(embeddings1, embeddings2)
+            )
+        return pairwise_max_sim(embeddings1, embeddings2)
 
     def _encode(
         self,
@@ -366,7 +387,7 @@ class CachedMultiVectorWrapper(MultiVectorSearchEncoderWrapper, _CachedEncoderBa
         **kwargs: Any,
     ) -> Array:
         return self._cached_encode(
-            self._model._encode,  # type: ignore[attr-defined]
+            self._model._encode,  # type: ignore[union-attr]
             inputs,
             task_metadata=task_metadata,
             hf_split=hf_split,

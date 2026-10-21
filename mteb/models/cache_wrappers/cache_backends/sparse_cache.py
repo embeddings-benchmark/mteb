@@ -86,6 +86,11 @@ class SparseCache(_RaggedCacheBase):
                 f"SparseCache in {self.directory} stores {'sparse' if self.is_sparse else 'dense'} "
                 f"vectors, but {'sparse' if is_sparse else 'dense'} vectors were added."
             )
+        elif vectors.shape[1] != self.vector_dim:
+            raise ValueError(
+                f"SparseCache in {self.directory} stores vectors of dimension {self.vector_dim}, "
+                f"but vectors of dimension {vectors.shape[1]} were added."
+            )
 
         positions, hashes = self._new_items(items)
         if positions:

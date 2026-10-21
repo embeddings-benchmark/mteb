@@ -57,8 +57,16 @@ class MultiVectorCache(_RaggedCacheBase):
             if isinstance(vector, torch.Tensor):
                 vector = vector.detach().cpu().float().numpy()
             new_vectors.append(np.asarray(vector, dtype=np.float32))
+        # Validate before storing anything, as rows of another size would be silently reshaped
+        dim = self.vector_dim or int(new_vectors[0].shape[-1])
+        for vector in new_vectors:
+            if vector.ndim != 2 or vector.shape[1] != dim:
+                raise ValueError(
+                    f"MultiVectorCache in {self.directory} stores token embeddings of shape "
+                    f"(num_tokens, {dim}), but an embedding of shape {vector.shape} was added."
+                )
         if self.vector_dim is None:
-            self.vector_dim = int(new_vectors[0].shape[-1])
+            self.vector_dim = dim
             first = vectors[positions[0]]
             if isinstance(first, torch.Tensor):
                 self.torch_dtype = str(first.dtype).removeprefix("torch.")

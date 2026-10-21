@@ -72,9 +72,9 @@ Multi-vector (late-interaction) models only support search tasks and don't expos
 
 ```python
 import mteb
-from mteb.models import CachedMultiVectorWrapper, MultiVectorWrapper
+from mteb.models import CachedMultiVectorWrapper
 
-model = MultiVectorWrapper("lightonai/LateOn")
+model = mteb.get_model("lightonai/LateOn")
 cached_model = CachedMultiVectorWrapper(model, "cache_dir")
 results = mteb.evaluate(cached_model, tasks=[mteb.get_task("NanoArguAnaRetrieval")])
 ```
