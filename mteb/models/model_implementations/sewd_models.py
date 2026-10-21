@@ -80,7 +80,10 @@ class SewDWrapper(AbsEncoder):
     ) -> Array:
         import torch
 
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+        # the conv feature encoder plus squeeze_factor 2 needs at least 720 samples (45 ms at 16 kHz)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate, min_samples=720
+        )
         all_embeddings = []
 
         for batch in tqdm(
