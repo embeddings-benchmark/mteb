@@ -30,7 +30,6 @@ class BeytooteClustering(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
     )
 
     def dataset_transform(
@@ -67,7 +66,6 @@ class DigikalamagClustering(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
     )
 
 
@@ -93,7 +91,6 @@ class HamshahriClustring(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
     )
 
     def dataset_transform(
@@ -154,7 +151,6 @@ class NLPTwitterAnalysisClustering(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
     )
 
     def dataset_transform(
@@ -193,7 +189,6 @@ class SIDClustring(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
     )
 
     def dataset_transform(

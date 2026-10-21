@@ -322,7 +322,6 @@ class MultilingualSentiment(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         prompt="Classify sentiment of the customer review into positive, neutral, or negative",
         superseded_by="MultilingualSentiment.v2",
     )
@@ -352,7 +351,6 @@ class MultilingualSentimentV2(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         prompt="Classify sentiment of the customer review into positive, neutral, or negative",
         adapted_from=["MultilingualSentiment"],
     )

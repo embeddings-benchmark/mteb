@@ -34,6 +34,5 @@ class SpanishWikinewsClusteringS2S(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         prompt="Identifica el tema principal de la noticia a partir del título.",
     )

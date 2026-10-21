@@ -50,5 +50,4 @@ class AfriXNLI(AbsTaskPairClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="",
     )

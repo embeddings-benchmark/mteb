@@ -33,7 +33,6 @@ class PravdaSKTagClustering(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         prompt="Identify the topic or theme of the given text.",
     )
 
@@ -82,7 +81,6 @@ class PravdaSKURLClustering(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         prompt="Identify the topic or theme of the given text.",
     )
 

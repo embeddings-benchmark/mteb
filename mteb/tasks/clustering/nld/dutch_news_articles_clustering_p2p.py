@@ -27,7 +27,6 @@ class DutchNewsArticlesClusteringP2P(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         prompt="Identificeer de hoofdcategorie van nieuwsartikelen op basis van de titels en de inhoud",
     )
 
