@@ -8,7 +8,7 @@ class SlovakMovieReviewSentimentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SlovakMovieReviewSentimentClassification",
         description="User reviews of movies on the CSFD movie database, with 2 sentiment classes (positive, negative)",
-        reference="https://arxiv.org/pdf/2304.01922",
+        reference="https://aclanthology.org/2023.bsnlp-1.12/",
         dataset={
             "path": "mteb/SlovakMovieReviewSentimentClassification",
             "revision": "7d408f245f0d3df0eaaca08f89ab6a1936ada6f5",
@@ -49,7 +49,7 @@ class SlovakMovieReviewSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SlovakMovieReviewSentimentClassification.v2",
         description="User reviews of movies on the CSFD movie database, with 2 sentiment classes (positive, negative) This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
-        reference="https://arxiv.org/pdf/2304.01922",
+        reference="https://aclanthology.org/2023.bsnlp-1.12/",
         dataset={
             "path": "mteb/slovak_movie_review_sentiment",
             "revision": "29a7405aabcfd4860a51ae6f65a5650d63108f26",

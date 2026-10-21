@@ -6,7 +6,7 @@ class BuiltBenchRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BuiltBenchRetrieval",
         description="Retrieval of built asset entity type/class descriptions given a query describing an entity as represented in well-established industry classification systems such as Uniclass, IFC, etc.",
-        reference="https://arxiv.org/abs/2411.12056",
+        reference="https://doi.org/10.1038/s41598-025-09052-5",
         dataset={
             "path": "mteb/BuiltBenchRetrieval",
             "revision": "50e46f68a3f864bbc52161a0af461eaba8aa4492",

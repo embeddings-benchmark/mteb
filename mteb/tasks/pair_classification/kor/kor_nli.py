@@ -13,7 +13,7 @@ class KorNLI(AbsTaskPairClassification):
         description="Korean Natural Language Inference dataset (XNLI subset), where the "
         "Korean-translated XNLI dev/test sets are used to determine textual entailment "
         "between a premise and a hypothesis sentence. Part of KorNLI/KorSTS.",
-        reference="https://arxiv.org/abs/2004.03289",
+        reference="https://aclanthology.org/2020.findings-emnlp.39/",
         type="PairClassification",
         category="t2t",
         modalities=["text"],

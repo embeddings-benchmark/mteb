@@ -13,7 +13,7 @@ class VideoMMEShortVideoCentricQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VideoMMEShortVideoCentricQA",
         description='Video-MME is a comprehensive evaluation benchmark for multimodal LLMs in video analysis. The short-video subset contains videos under 2 minutes. Each example pairs a video with a question and 4 candidate answers. The task is formulated as multiple-choice retrieval: given the (video, question) pair, retrieve the correct candidate. Filtered the test split to `duration == "short"` clips, shuffled (seed=42), capped at 2,000 (~900 examples).',
-        reference="https://arxiv.org/abs/2405.21075",
+        reference="https://doi.org/10.1109/cvpr52734.2025.02245",
         dataset={
             "path": "mteb/Video-MME_short",
             "revision": "ebbd19d8ea051d64dd075752c274f5f430b3ff7a",
@@ -91,7 +91,7 @@ class VideoMMEShortVideoAudioCentricQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VideoMMEShortVideoAudioCentricQA",
         description='Video-MME is a comprehensive evaluation benchmark for multimodal LLMs in video analysis. The short-video subset contains videos under 2 minutes. Each example pairs a video with audio and a question and 4 candidate answers. The task is formulated as multiple-choice retrieval: given the (video, audio, question) tuple, retrieve the correct candidate. Filtered the test split to `duration == "short"` clips, shuffled (seed=42), capped at 2,000 (~900 examples).',
-        reference="https://arxiv.org/abs/2405.21075",
+        reference="https://doi.org/10.1109/cvpr52734.2025.02245",
         dataset={
             "path": "mteb/Video-MME_short",
             "revision": "ebbd19d8ea051d64dd075752c274f5f430b3ff7a",

@@ -9,7 +9,7 @@ class BLINKIT2IMultiChoice(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BLINKIT2IMultiChoice",
         description="Retrieve images based on images and specific retrieval instructions.",
-        reference="https://arxiv.org/abs/2404.12390",
+        reference="https://doi.org/10.1007/978-3-031-73337-6_9",
         dataset={
             "path": "mteb/blink-it2i-multi",
             "revision": "0418ecbea812ab97bda7eabe2c34065fdb81810f",

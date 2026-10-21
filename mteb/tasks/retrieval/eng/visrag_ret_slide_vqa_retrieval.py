@@ -12,7 +12,7 @@ class VisRAGRetSlideVQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VisRAGRetSlideVQA",
         description="Retrieve and reason across multiple slide images within a deck to answer multi-hop questions in a vision-centric retrieval-augmented generation pipeline.",
-        reference="https://arxiv.org/abs/2301.04883",
+        reference="https://doi.org/10.1609/aaai.v37i11.26598",
         type="Retrieval",
         category="t2i",
         modalities=["text", "image"],

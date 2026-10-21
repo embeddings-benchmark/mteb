@@ -13,7 +13,7 @@ class VisRAGRetPlotQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VisRAGRetPlotQA",
         description="Execute vision-based retrieval and numerical reasoning over scientific plots to answer questions without relying on structured data parsing.",
-        reference="https://arxiv.org/abs/1909.00997",
+        reference="https://doi.org/10.1109/wacv45572.2020.9093523",
         type="Retrieval",
         task_subtypes=["Image Text Retrieval"],
         category="t2i",

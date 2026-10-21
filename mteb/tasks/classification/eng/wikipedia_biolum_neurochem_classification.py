@@ -6,7 +6,7 @@ class WikipediaBiolumNeurochemClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WikipediaBiolumNeurochemClassification",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
-        reference="https://arxiv.org/abs/2412.00532",
+        reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
         dataset={
             "path": "BASF-AI/WikipediaMedium2BioluminescenceVsNeurochemistryClassification",
             "revision": "2f68b7d34c2be896e46b14533573b366e59e5aae",

@@ -14,7 +14,7 @@ class AVSpeakerBenchPairClassification(AbsTaskPairClassification):
             "Clips are grouped by their YouTube source video ID, so pairs "
             "from the same source share speakers and visual context."
         ),
-        reference="https://arxiv.org/abs/2512.02231",
+        reference="https://doi.org/10.1109/cvprf71909.2026.00222",
         dataset={
             "path": "zachz/AV-SpeakerBench-PC",
             "revision": "f27f6a1c6c35be08ccc9305e1a9db0cf9d0621d5",

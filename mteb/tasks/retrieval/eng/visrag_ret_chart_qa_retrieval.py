@@ -12,7 +12,7 @@ class VisRAGRetChartQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VisRAGRetChartQA",
         description="Assess end-to-end vision-based RAG performance on real-world charts requiring complex logical and visual reasoning from retrieved images.",
-        reference="https://arxiv.org/abs/2203.10244",
+        reference="https://aclanthology.org/2022.findings-acl.177/",
         type="Retrieval",
         task_subtypes=["Image Text Retrieval"],
         category="t2i",

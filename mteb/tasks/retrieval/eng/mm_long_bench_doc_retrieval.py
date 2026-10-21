@@ -75,7 +75,7 @@ class MMLongBenchDocRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MMLongBenchDocRetrieval",
         description="MMLongBench-Doc is a long-context, multimodal document understanding benchmark built from lengthy PDFs with rich layouts and content including text, tables, charts, and images. This retrieval adaptation asks models to retrieve pages from the source document for a question, assigning higher graded relevance to annotated evidence pages.",
-        reference="https://arxiv.org/abs/2407.01523",
+        reference="https://papers.nips.cc/paper_files/paper/2024/hash/ae0e43289bffea0c1fa34633fc608e92-Abstract-Datasets_and_Benchmarks_Track.html",
         dataset={
             "path": "VLM2Vec/MMLongBench-doc",
             "revision": "1c2ee8f611a6c552d4bd90daca3a92d7a55ff806",

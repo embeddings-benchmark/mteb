@@ -65,7 +65,7 @@ class MassiveIntentClassification(AbsTaskClassification):
             "revision": "4672e20407010da34463acc759c162ca9734bca6",
         },
         description="MASSIVE: A 1M-Example Multilingual Natural Language Understanding Dataset with 51 Typologically-Diverse Languages",
-        reference="https://arxiv.org/abs/2204.08582",
+        reference="https://aclanthology.org/2023.acl-long.235/",
         category="t2c",
         modalities=["text"],
         type="Classification",

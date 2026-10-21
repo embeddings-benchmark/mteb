@@ -6,7 +6,7 @@ class VisRAGRetArxivQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VisRAGRetArxivQA",
         description="evaluate vision-based retrieval and generation on scientific figures and their surrounding context to preserve complex layouts and mathematical notations.",
-        reference="https://arxiv.org/abs/2403.00231",
+        reference="https://aclanthology.org/2024.acl-long.775/",
         type="Retrieval",
         task_subtypes=["Image Text Retrieval"],
         category="t2i",

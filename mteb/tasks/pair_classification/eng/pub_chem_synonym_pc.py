@@ -6,7 +6,7 @@ class PubChemSynonymPC(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="PubChemSynonymPC",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
-        reference="https://arxiv.org/abs/2412.00532",
+        reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
         dataset={
             "path": "BASF-AI/PubChemSynonymPC",
             "revision": "5037d69d177c9628fb79cb57eea1299178b28c1b",

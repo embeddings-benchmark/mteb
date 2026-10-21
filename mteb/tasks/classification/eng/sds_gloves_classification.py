@@ -6,7 +6,7 @@ class SDSGlovesClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SDSGlovesClassification",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
-        reference="https://arxiv.org/abs/2412.00532",
+        reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
         dataset={
             "path": "BASF-AI/SDSGlovesClassification",
             "revision": "c723236c5ec417d79512e6104aca9d2cd88168f6",
@@ -52,7 +52,7 @@ class SDSGlovesClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SDSGlovesClassification.v2",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
-        reference="https://arxiv.org/abs/2412.00532",
+        reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
         dataset={
             "path": "mteb/sds_gloves",
             "revision": "09b09ee755ada02c68ad835971e22b1959d79448",

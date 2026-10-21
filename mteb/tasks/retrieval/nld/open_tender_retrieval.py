@@ -6,7 +6,7 @@ class OpenTenderRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="OpenTenderRetrieval",
         description="This dataset contains Belgian and Dutch tender calls from OpenTender in Dutch",
-        reference="https://arxiv.org/abs/2509.12340",
+        reference="https://aclanthology.org/2026.findings-acl.1236/",
         dataset={
             "path": "clips/mteb-nl-opentender-ret",
             "revision": "83eec1aa9c58f1dc8acfac015f653a9c25bda3f4",

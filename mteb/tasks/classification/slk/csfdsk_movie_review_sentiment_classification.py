@@ -10,7 +10,7 @@ class CSFDSKMovieReviewSentimentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CSFDSKMovieReviewSentimentClassification",
         description="The dataset contains 30k user reviews from csfd.cz in Slovak.",
-        reference="https://arxiv.org/abs/2304.01922",
+        reference="https://aclanthology.org/2023.bsnlp-1.12/",
         dataset={
             "path": "mteb/CSFDSKMovieReviewSentimentClassification",
             "revision": "029e0a726b46539547e872b90d3073a48ce9bc13",
@@ -54,7 +54,7 @@ class CSFDSKMovieReviewSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CSFDSKMovieReviewSentimentClassification.v2",
         description="The dataset contains 30k user reviews from csfd.cz in Slovak. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
-        reference="https://arxiv.org/abs/2304.01922",
+        reference="https://aclanthology.org/2023.bsnlp-1.12/",
         dataset={
             "path": "mteb/csfdsk_movie_review_sentiment",
             "revision": "257ee340c1399ab5e038a3aea38877f67940774d",

@@ -6,7 +6,7 @@ class LocBenchReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="LocBenchRR",
         description="Software Issue Localization.",
-        reference="https://arxiv.org/abs/2503.09089",
+        reference="https://aclanthology.org/2025.acl-long.426/",
         dataset={
             "path": "mteb/LocBenchRR",
             "revision": "4a1fe7be94481b1e5a47d072782c89b146b4fecf",

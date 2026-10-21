@@ -6,7 +6,7 @@ class HUMECore17InstructionReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="HUMECore17InstructionReranking",
         description="Human evaluation subset of Core17 instruction retrieval dataset for reranking evaluation.",
-        reference="https://arxiv.org/abs/2403.15246",
+        reference="https://aclanthology.org/2025.naacl-long.597/",
         dataset={
             "path": "mteb/HUMECore17InstructionReranking",
             "revision": "3a421a4b0596f6424c2a068d6eee99675ca5e43f",

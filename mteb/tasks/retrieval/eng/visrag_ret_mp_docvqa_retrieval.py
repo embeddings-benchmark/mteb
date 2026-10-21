@@ -13,7 +13,7 @@ class VisRAGRetMPDocVQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VisRAGRetMPDocVQA",
         description="Benchmark the ability to retrieve specific relevant pages from multi-page documents and generate answers based on visual evidence.",
-        reference="https://arxiv.org/abs/2212.05935",
+        reference="https://doi.org/10.1016/j.patcog.2023.109834",
         type="Retrieval",
         task_subtypes=["Image Text Retrieval"],
         category="t2i",

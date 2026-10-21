@@ -6,7 +6,7 @@ class Ocnli(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="Ocnli",
         description="Original Chinese Natural Language Inference dataset",
-        reference="https://arxiv.org/abs/2010.05444",
+        reference="https://aclanthology.org/2020.findings-emnlp.314/",
         dataset={
             "path": "C-MTEB/OCNLI",
             "revision": "66e76a618a34d6d565d5538088562851e6daa7ec",

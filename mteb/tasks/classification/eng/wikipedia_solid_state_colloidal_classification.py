@@ -6,7 +6,7 @@ class WikipediaSolidStateColloidalClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WikipediaSolidStateColloidalClassification",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
-        reference="https://arxiv.org/abs/2412.00532",
+        reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
         dataset={
             "path": "BASF-AI/WikipediaEasy2SolidStateVsColloidalClassification",
             "revision": "7d8df44e588b6143d4856c781f72f919fa0599a7",

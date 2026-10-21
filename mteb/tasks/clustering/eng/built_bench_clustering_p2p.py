@@ -6,7 +6,7 @@ class BuiltBenchClusteringP2P(AbsTaskClusteringLegacy):
     metadata = TaskMetadata(
         name="BuiltBenchClusteringP2P",
         description="Clustering of built asset item descriptions based on categories identified within industry classification systems such as IFC, Uniclass, etc.",
-        reference="https://arxiv.org/abs/2411.12056",
+        reference="https://doi.org/10.1038/s41598-025-09052-5",
         dataset={
             "path": "mehrzad-shahin/BuiltBench-clustering-p2p",
             "revision": "919bb71053e9de62a68998161ce4f0cee8f786fb",

@@ -6,7 +6,7 @@ class WikipediaCrystallographyAnalyticalClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WikipediaCrystallographyAnalyticalClassification",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
-        reference="https://arxiv.org/abs/2412.00532",
+        reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
         dataset={
             "path": "BASF-AI/WikipediaMedium2CrystallographyVsChromatographyTitrationpHClassification",
             "revision": "740565a6a853aaed1114a13bdfd5fd46857b4f11",
@@ -44,7 +44,7 @@ class WikipediaCrystallographyAnalyticalClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WikipediaCrystallographyAnalyticalClassification.v2",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
-        reference="https://arxiv.org/abs/2412.00532",
+        reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
         dataset={
             "path": "mteb/wikipedia_crystallography_analytical",
             "revision": "b98f3205a68a9a50ab345abc85f01911089a93de",

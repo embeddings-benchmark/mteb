@@ -17,7 +17,7 @@ class NSynthInstrumentFamilyClustering(AbsTaskClustering):
             "predicts instrument source (acoustic, electronic or synthetic) rather "
             "than instrument family."
         ),
-        reference="https://arxiv.org/abs/1704.01279",
+        reference="https://proceedings.mlr.press/v70/engel17a.html",
         dataset={
             "path": "mteb/nsynth-mini",
             "revision": "e32dfe9b65e121e64229a821fe1ff177e8962635",

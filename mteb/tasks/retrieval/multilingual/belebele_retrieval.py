@@ -192,7 +192,7 @@ class BelebeleRetrieval(AbsTaskRetrieval):
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=_LANGUAGES_MAPPING,
-        reference="https://arxiv.org/abs/2308.16884",
+        reference="https://aclanthology.org/2024.acl-long.44/",
         main_score="ndcg_at_10",
         license="cc-by-sa-4.0",
         domains=["Web", "News", "Written"],

@@ -9,7 +9,7 @@ class Core17InstructionRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Core17InstructionRetrieval",
         description="Measuring retrieval instruction following ability on Core17 narratives for the FollowIR benchmark.",
-        reference="https://arxiv.org/abs/2403.15246",
+        reference="https://aclanthology.org/2025.naacl-long.597/",
         dataset={
             "path": "mteb/Core17InstructionRetrieval",
             "revision": "67d8733dd0691f08f34ed9dda5941578cba8d91c",

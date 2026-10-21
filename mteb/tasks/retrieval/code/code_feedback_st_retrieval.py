@@ -8,7 +8,7 @@ class CodeFeedbackST(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CodeFeedbackST",
         description="The dataset is a collection of user queries and assistant responses. The task is to retrieve the most relevant response for a given query.",
-        reference="https://arxiv.org/abs/2407.02883",
+        reference="https://aclanthology.org/2025.acl-long.1072/",
         dataset={
             "path": "CoIR-Retrieval/codefeedback-st",
             "revision": "d213819e87aab9010628da8b73ab4eb337c89340",

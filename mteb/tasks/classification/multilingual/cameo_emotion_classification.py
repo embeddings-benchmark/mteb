@@ -41,7 +41,7 @@ class CAMEOEmotionClassification(AbsTaskClassification):
             "already evaluates both separately. Construction script: "
             "scripts/data/cameo_emotion/create_data.py."
         ),
-        reference="https://arxiv.org/abs/2505.11051",
+        reference="https://doi.org/10.1109/icassp55912.2026.11461331",
         dataset={
             "path": "vnahata/CAMEO-emotion-classification",
             "revision": "a8abf264b656456c255e2435ef5103f6a04525e0",

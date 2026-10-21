@@ -366,7 +366,7 @@ MTEB_RETRIEVAL_WITH_INSTRUCTIONS = Benchmark(
         ]
     ),
     description="Instruction-following retrieval quality, measuring how well models retrieve relevant documents when given detailed natural language instructions alongside queries.",
-    reference="https://arxiv.org/abs/2403.15246",
+    reference="https://aclanthology.org/2025.naacl-long.597/",
     citation=r"""
 @inproceedings{weller2024followir,
   address = {Albuquerque, New Mexico},
@@ -475,7 +475,7 @@ MTEB_MINERS_BITEXT_MINING = Benchmark(
         ]
     ),
     description="Multilingual bitext mining quality across diverse language pairs, drawn from the MINERS benchmark for evaluating semantic retrieval in multilingual settings.",
-    reference="https://arxiv.org/pdf/2406.07424",
+    reference="https://aclanthology.org/2024.findings-emnlp.155/",
     citation=r"""
 @inproceedings{winata2024miners,
   address = {Miami, Florida, USA},
@@ -724,7 +724,7 @@ MTEB_DEU = Benchmark(
         ],
     ),
     description="German text embedding quality across classification, clustering, pair classification, reranking, retrieval, and semantic similarity.",
-    reference="https://arxiv.org/html/2401.02709v1",
+    reference="https://aclanthology.org/2023.konvens-main.20/",
     citation=r"""
 @inproceedings{wehrli2024germantextembeddingclustering,
   address = {Ingolstadt, Germany},
@@ -854,7 +854,7 @@ MTEB_POL = Benchmark(
         + (get_task("STS22", eval_splits=["test"], hf_subsets=["pl"]),),
     ),
     description="Polish text embedding quality across classification, clustering, pair classification, retrieval, and semantic similarity, combining adapted community datasets with a novel Polish scientific literature corpus (PLSC).",
-    reference="https://arxiv.org/abs/2405.10138",
+    reference="https://aclanthology.org/2026.findings-acl.1773/",
     citation=r"""
 @inproceedings{poswiata2024plmteb,
   address = {San Diego, California, United States},
@@ -997,7 +997,7 @@ MTEB_SLK = Benchmark(
         + (get_task("WebFAQBitextMiningQAs", hf_subsets=["eng-slk", "ces-slk"]),)
     ),
     description="""Slovak Massive Text Embedding Benchmark (SkMTEB), the first comprehensive benchmark for text embeddings in Slovak, a low-resource West Slavic language. SkMTEB consists of 31 tasks across 7 task types, with tasks adapted from both existing and novel resources.""",
-    reference="https://arxiv.org/abs/2606.13647",
+    reference="https://aclanthology.org/2026.acl-long.2114/",
     citation=r"""
 @inproceedings{suppa2026skmteb,
   address = {San Diego, California, United States},
@@ -1718,7 +1718,7 @@ LONG_EMBED = Benchmark(
         ],
     ),
     description="Long-context retrieval quality across synthetic and real-world tasks featuring documents of varying length with dispersed target information.",
-    reference="https://arxiv.org/abs/2404.12096v2",
+    reference="https://aclanthology.org/2024.emnlp-main.47/",
     citation=r"""
 @inproceedings{zhu2024longembed,
   address = {Miami, Florida, USA},
@@ -1974,7 +1974,7 @@ CODE_RAG = Benchmark(
         ],
     ),
     description="Code retrieval quality for retrieval-augmented generation, covering programming solutions, online tutorials, library documentation, and Stack Overflow posts.",
-    reference="https://arxiv.org/abs/2406.14497",
+    reference="https://aclanthology.org/2025.findings-naacl.176/",
     citation=r"""
 @inproceedings{wang2024coderagbenchretrievalaugmentcode,
   address = {Albuquerque, New Mexico},
@@ -2227,7 +2227,7 @@ FA_MTEB = Benchmark(
         ],
     ),
     description="Persian text embedding quality across classification, clustering, pair classification, reranking, retrieval, semantic similarity, and summarization retrieval.",
-    reference="https://arxiv.org/abs/2502.11571",
+    reference="https://aclanthology.org/2025.findings-emnlp.614/",
     citation=r"""
 @inproceedings{zinvandi2025famteb,
   address = {Suzhou, China},
@@ -2317,7 +2317,7 @@ FA_MTEB_2 = Benchmark(
         ],
     ),
     description="Persian text embedding quality across classification, clustering, pair classification, reranking, retrieval, semantic similarity, and summarization retrieval. In v2, large datasets were optimized for accessibility, low-quality datasets were removed, and higher-quality data was added; see the [main PR](https://github.com/embeddings-benchmark/mteb/pull/3157) for details.",
-    reference="https://arxiv.org/abs/2502.11571",
+    reference="https://aclanthology.org/2025.findings-emnlp.614/",
     citation=r"""
 @inproceedings{zinvandi2025famteb,
   address = {Suzhou, China},
@@ -2374,7 +2374,7 @@ CHEMTEB = Benchmark(
         ],
     ),
     description="Chemical domain text embedding quality across bitext mining, classification, clustering, pair classification, and retrieval.",
-    reference="https://arxiv.org/abs/2412.00532",
+    reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
     citation=r"""
 @inproceedings{kasmaee2024chemteb,
   archiveprefix = {arXiv},
@@ -2427,7 +2427,7 @@ CHEMTEB_V1_1 = Benchmark(
         ],
     ),
     description="Chemical domain text embedding quality across bitext mining, classification, clustering, pair classification, and retrieval. v1.1 adds the ChemRxivRetrieval task.",
-    reference="https://arxiv.org/abs/2412.00532",
+    reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
     citation=r"""
 @inproceedings{kasmaee2024chemteb,
   archiveprefix = {arXiv},
@@ -2473,7 +2473,7 @@ BEIR_NL = Benchmark(
         ],
     ),
     description="Zero-shot retrieval quality in Dutch across the BEIR task suite, created through automated translation of the original English benchmark.",
-    reference="https://arxiv.org/abs/2412.08329",
+    reference="https://aclanthology.org/2025.bucc-1.5/",
     contacts=["nikolay-banar"],
     citation=r"""
 @inproceedings{banar2024beirnlzeroshotinformationretrieval,
@@ -2553,7 +2553,7 @@ MTEB_NL = Benchmark(
         )
     ),
     description="Dutch text embedding quality across classification, clustering, pair classification, multilabel classification, reranking, retrieval, and semantic similarity.",
-    reference="https://arxiv.org/abs/2509.12340",
+    reference="https://aclanthology.org/2026.findings-acl.1236/",
     contacts=["nikolay-banar"],
     citation=r"""
 @inproceedings{banar2025mtebnle5nlembeddingbenchmark,
@@ -2992,7 +2992,7 @@ BUILT_MTEB = Benchmark(
         ],
     ),
     description="Text embedding quality in the built environment domain across clustering, retrieval, and reranking, spanning architecture, engineering, construction, and operations management.",
-    reference="https://arxiv.org/abs/2411.12056",
+    reference="https://doi.org/10.1038/s41598-025-09052-5",
     citation=r"""
 @article{shahinmoghadam2024benchmarking,
   author = {Shahinmoghadam, Mehrzad and Motamedi, Ali},
@@ -3060,7 +3060,7 @@ VIDORE = Benchmark(
         ],
     ),
     description="Visual document retrieval across diverse document types and domains, matching natural language queries to document page images.",
-    reference="https://arxiv.org/abs/2407.01449",
+    reference="https://openreview.net/forum?id=ogjBpZ8uSi",
     citation=r"""
 @inproceedings{faysse2024colpali,
   archiveprefix = {arXiv},
@@ -3085,7 +3085,7 @@ VIDORE_V2 = Benchmark(
         ],
     ),
     description="Visual document retrieval across ESG reports, economics reports, biomedical lectures, and related enterprise document types, matching natural language queries to document page images.",
-    reference="https://arxiv.org/abs/2407.01449",
+    reference="https://openreview.net/forum?id=ogjBpZ8uSi",
     citation=r"""
 @article{mace2025vidorev2,
   author = {Macé, Quentin and Loison António and Faysse, Manuel},
@@ -3123,7 +3123,7 @@ VIDORE_V3 = VidoreBenchmark(
         ]
     ),
     description="Visual document retrieval across multi-modal enterprise documents spanning finance, industrial, computer science, pharmaceutical, and other professional domains. Includes both open and closed datasets; to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml).",
-    reference="https://arxiv.org/abs/2601.08620",
+    reference="https://aclanthology.org/2026.acl-long.755/",
     citation=r"""
 @inproceedings{loison2026vidorev3comprehensiveevaluation,
   address = {San Diego, California, United States},
@@ -3169,7 +3169,7 @@ VIDORE_V3_1 = VidoreBenchmark(
         ]
     ),
     description="Visual document retrieval across multi-modal enterprise documents spanning finance, industrial, computer science, pharmaceutical, and other professional domains. Includes both open and closed datasets; to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml). v3.1 adds markdown derived from OCR to support text-only and joint image-text baselines.",
-    reference="https://arxiv.org/abs/2601.08620",
+    reference="https://aclanthology.org/2026.acl-long.755/",
     citation=r"""
 @inproceedings{loison2026vidorev3comprehensiveevaluation,
   address = {San Diego, California, United States},
@@ -3257,7 +3257,7 @@ VIDORE_V3_1_RERANKING = VidoreBenchmark(
         + _VIDORE_V3_1_RERANKING_NEMOTRON_3_5_EMBED_8B
     ),
     description="Reranking of visual documents on the ViDoRe v3.1 domains. For each domain, the candidates are the top-50 pages retrieved by one of four first-stage retrievers; BM25, bge-m3, Qwen3-VL-Embedding-2B and Nemotron-3.5-Embed-8B, so rerankers are compared on candidate lists from various model types. Includes both open and closed datasets; to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml).",
-    reference="https://arxiv.org/abs/2601.08620",
+    reference="https://aclanthology.org/2026.acl-long.755/",
     citation=r"""
 @inproceedings{loison2026vidorev3comprehensiveevaluation,
   address = {San Diego, California, United States},
@@ -3331,7 +3331,7 @@ VISUAL_DOCUMENT_RETRIEVAL = Benchmark(
         ],
     ),
     description="Visual document retrieval across diverse document types and domains, combining the ViDoRe v1 and v2 task sets.",
-    reference="https://arxiv.org/abs/2407.01449",
+    reference="https://openreview.net/forum?id=ogjBpZ8uSi",
     citation=r"""
 @article{mace2025vidorev2,
   author = {Macé, Quentin and Loison António and Faysse, Manuel},
@@ -3441,7 +3441,7 @@ VN_MTEB = Benchmark(
         ],
     ),
     description="Vietnamese text embedding quality across retrieval, classification, pair classification, clustering, reranking, and semantic similarity.",
-    reference="https://arxiv.org/abs/2507.21500",
+    reference="https://aclanthology.org/2026.findings-eacl.86/",
     citation=r"""
 @inproceedings{pham2025vnmtebvietnamesemassivetext,
   address = {Rabat, Morocco},
@@ -3548,7 +3548,7 @@ JINA_VDR = Benchmark(
         ],
     ),
     description="Visual document retrieval across multilingual, domain-diverse, and layout-rich document types, spanning medical, legal, financial, technical, and other domains across multiple languages.",
-    reference="https://arxiv.org/abs/2506.18902",
+    reference="https://aclanthology.org/2025.mrl-main.36/",
     citation=r"""@inproceedings{günther2025jinaembeddingsv4universalembeddingsmultimodal,
   address = {Suzhuo, China},
   author = {G{\"u}nther, Michael and Sturua, Saba and Akram, Mohammad Kalim and Mohr, Isabelle and Ungureanu, Andrei and Wang, Bo and Eslami, Sedigheh and Martens, Scott and Werk, Maximilian and Wang, Nan and Xiao, Han},

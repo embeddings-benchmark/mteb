@@ -106,7 +106,7 @@ class CVBenchCount(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CVBenchCount",
         description="count the number of objects in the image.",
-        reference="https://arxiv.org/pdf/2406.16860",
+        reference="https://papers.nips.cc/paper_files/paper/2024/hash/9ee3a664ccfeabc0da16ac6f1f1cfe59-Abstract-Conference.html",
         dataset={
             "path": "mteb/CV-Bench",
             "revision": "9926abb226c15b55dd8cce8c91cac1abf2326a61",
@@ -151,7 +151,7 @@ class CVBenchRelation(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CVBenchRelation",
         description="decide the relation of the objects in the image.",
-        reference="https://arxiv.org/pdf/2406.16860",
+        reference="https://papers.nips.cc/paper_files/paper/2024/hash/9ee3a664ccfeabc0da16ac6f1f1cfe59-Abstract-Conference.html",
         dataset={
             "path": "mteb/CV-Bench",
             "revision": "9926abb226c15b55dd8cce8c91cac1abf2326a61",
@@ -196,7 +196,7 @@ class CVBenchDepth(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CVBenchDepth",
         description="judge the depth of the objects in the image with similarity matching.",
-        reference="https://arxiv.org/pdf/2406.16860",
+        reference="https://papers.nips.cc/paper_files/paper/2024/hash/9ee3a664ccfeabc0da16ac6f1f1cfe59-Abstract-Conference.html",
         dataset={
             "path": "mteb/CV-Bench",
             "revision": "9926abb226c15b55dd8cce8c91cac1abf2326a61",
@@ -241,7 +241,7 @@ class CVBenchDistance(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CVBenchDistance",
         description="judge the distance of the objects in the image with similarity matching.",
-        reference="https://arxiv.org/pdf/2406.16860",
+        reference="https://papers.nips.cc/paper_files/paper/2024/hash/9ee3a664ccfeabc0da16ac6f1f1cfe59-Abstract-Conference.html",
         dataset={
             "path": "mteb/CV-Bench",
             "revision": "9926abb226c15b55dd8cce8c91cac1abf2326a61",

@@ -6,7 +6,7 @@ class WikipediaIsotopesFissionClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WikipediaIsotopesFissionClassification",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
-        reference="https://arxiv.org/abs/2412.00532",
+        reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
         dataset={
             "path": "BASF-AI/WikipediaHard2IsotopesVsFissionProductsNuclearFissionClassification",
             "revision": "897743346c7c794264f7dbfadc3978aa2895e8e2",

@@ -31,7 +31,7 @@ class OmniWikiV2IRetrieval(AbsTaskRetrieval):
             "is those gold pages plus the BM25 hard negatives of the questions whose answer page "
             "carries a query video."
         ),
-        reference="https://arxiv.org/abs/2406.11251",
+        reference="https://aclanthology.org/2024.emnlp-main.373/",
         dataset={
             "path": "whybe-choi/OmniWikiRetrieval",
             "revision": "10dc41f341a15352ae3639f4779afd420ed86c86",
@@ -73,7 +73,7 @@ class OmniWikiV2TRetrieval(AbsTaskRetrieval):
             "corpus is those gold pages plus the BM25 hard negatives of the questions whose answer "
             "page carries a query video."
         ),
-        reference="https://arxiv.org/abs/2406.11251",
+        reference="https://aclanthology.org/2024.emnlp-main.373/",
         dataset={
             "path": "whybe-choi/OmniWikiRetrieval",
             "revision": "10dc41f341a15352ae3639f4779afd420ed86c86",

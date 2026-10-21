@@ -75,7 +75,7 @@ class PpcPC(AbsTaskPairClassification):
             "revision": "e7f83d7d05792c2c57c8708a102e4ea785b9c301",
         },
         description="Polish Paraphrase Corpus",
-        reference="https://arxiv.org/pdf/2207.12759.pdf",
+        reference="https://doi.org/10.1109/smc53654.2022.9945218",
         category="t2t",
         modalities=["text"],
         type="PairClassification",

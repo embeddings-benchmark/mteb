@@ -21,7 +21,7 @@ class KinNewsClassification(AbsTaskClassification):
             "economy, health, entertainment, history, technology, culture, religion, environment, "
             "education, relationship."
         ),
-        reference="https://arxiv.org/abs/2010.12174",
+        reference="https://aclanthology.org/2020.coling-main.480/",
         dataset={
             "path": "mteb/KinNewsClassification",
             "revision": "87c7621def3ed9d06e305037416f82eddb9dceac",

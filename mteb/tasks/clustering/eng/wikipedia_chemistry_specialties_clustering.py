@@ -6,7 +6,7 @@ class WikipediaChemistrySpecialtiesClustering(AbsTaskClusteringLegacy):
     metadata = TaskMetadata(
         name="WikipediaSpecialtiesInChemistryClustering",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
-        reference="https://arxiv.org/abs/2412.00532",
+        reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
         dataset={
             "path": "BASF-AI/WikipediaMedium5Clustering",
             "revision": "7754d8d296f9f4c3af1c6426fab36304730ccddf",

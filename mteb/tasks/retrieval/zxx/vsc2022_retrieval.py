@@ -18,7 +18,7 @@ class VSC2022Retrieval(AbsTaskRetrieval):
             "sources plus seeded distractors), re-encoded to 360p. Videos are "
             "Creative-Commons clips from YFCC100M."
         ),
-        reference="https://arxiv.org/abs/2306.09489",
+        reference="https://doi.org/10.1016/j.cviu.2024.103997",
         dataset={
             "path": "dukesun99/VSC2022",
             "revision": "ba6224b845a2181d3de4199aa4eeb8b5b874a1a3",

@@ -16,7 +16,7 @@ class HunSum2AbstractiveRetrieval(AbsTaskRetrieval):
         description=(
             "HunSum-2-abstractive is a Hungarian dataset containing news articles along with lead, titles and metadata."
         ),
-        reference="https://arxiv.org/abs/2404.03555",
+        reference="https://aclanthology.org/2024.lrec-main.662/",
         type="Retrieval",
         category="t2t",
         modalities=["text"],

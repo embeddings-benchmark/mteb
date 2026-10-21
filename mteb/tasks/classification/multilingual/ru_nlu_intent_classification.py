@@ -13,7 +13,7 @@ class RuNLUIntentClassification(AbsTaskClassification):
             "Contains natural language data for human-robot interaction in home domain which we collected and"
             " annotated for evaluating NLU Services/platforms."
         ),
-        reference="https://arxiv.org/abs/1903.05566",
+        reference="https://doi.org/10.1007/978-981-15-9323-9_15",
         type="Classification",
         category="t2t",
         modalities=["text"],

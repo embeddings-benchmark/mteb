@@ -11,7 +11,7 @@ class KlueSTS(AbsTaskSTS):
             "revision": "349481ec73fff722f88e0453ca05c77a447d967c",
         },
         description="Human-annotated STS dataset of Korean reviews, news, and spoken word sets. Part of the Korean Language Understanding Evaluation (KLUE).",
-        reference="https://arxiv.org/abs/2105.09680",
+        reference="https://openreview.net/forum?id=q-8h8-LZiUm",
         type="STS",
         category="t2t",
         modalities=["text"],

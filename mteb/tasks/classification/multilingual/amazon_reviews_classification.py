@@ -10,7 +10,7 @@ class AmazonReviewsClassification(AbsTaskClassification):
             "revision": "6b5d328eaae8ef408dd7d775040245cf86f92e9d",
         },
         description="A collection of Amazon reviews specifically designed to aid research in multilingual text classification.",
-        reference="https://arxiv.org/abs/2010.02573",
+        reference="https://aclanthology.org/2020.emnlp-main.369/",
         category="t2c",
         modalities=["text"],
         type="Classification",

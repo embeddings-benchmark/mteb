@@ -10,7 +10,7 @@ class KorSTS(AbsTaskSTS):
             "revision": "016f35f9b961daaaa7a352e927084e3da662ac1f",
         },
         description="Benchmark dataset for STS in Korean. Created by machine translation and human post editing of the STS-B dataset.",
-        reference="https://arxiv.org/abs/2004.03289",
+        reference="https://aclanthology.org/2020.findings-emnlp.39/",
         type="STS",
         category="t2t",
         modalities=["text"],

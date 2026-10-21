@@ -8,7 +8,7 @@ class T2Retrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="T2Retrieval",
         description="T2Ranking: A large-scale Chinese Benchmark for Passage Ranking",
-        reference="https://arxiv.org/abs/2304.03679",
+        reference="https://doi.org/10.1145/3539618.3591874",
         dataset={
             "path": "mteb/T2Retrieval",
             "revision": "cf778c0ea4168ec5174a34d888d6453e4cde9222",
@@ -59,7 +59,7 @@ class MMarcoRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MMarcoRetrieval",
         description="MMarcoRetrieval",
-        reference="https://arxiv.org/abs/2309.07597",
+        reference="https://doi.org/10.1145/3626772.3657878",
         dataset={
             "path": "mteb/MMarcoRetrieval",
             "revision": "4940a7b26bf53463cfe3435bb8e201963e9c31ae",

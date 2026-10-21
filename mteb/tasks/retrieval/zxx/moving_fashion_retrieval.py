@@ -16,7 +16,7 @@ class MovingFashionI2VRetrieval(AbsTaskRetrieval):
             "The official archive omits one annotated test video, so the shop image "
             "whose only positive video is unavailable is excluded with that qrel."
         ),
-        reference="https://arxiv.org/abs/2110.02627",
+        reference="https://doi.org/10.1109/wacv51458.2022.00059",
         dataset={
             "path": "pranitchawla/MovingFashionI2VRetrieval",
             "revision": "29906095b736d5319f14ec1800640b40612b6e8d",
@@ -67,7 +67,7 @@ class MovingFashionV2IRetrieval(AbsTaskRetrieval):
             "test video; that unavailable query and qrel are excluded while its "
             "product image remains in the corpus as a distractor."
         ),
-        reference="https://arxiv.org/abs/2110.02627",
+        reference="https://doi.org/10.1109/wacv51458.2022.00059",
         dataset={
             "path": "pranitchawla/MovingFashion",
             "revision": "29c9813e2826ef2f4398455528881ab3e181311b",

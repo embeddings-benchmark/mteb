@@ -6,7 +6,7 @@ class WikipediaChemFieldsClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WikipediaChemFieldsClassification",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
-        reference="https://arxiv.org/abs/2412.00532",
+        reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
         dataset={
             "path": "BASF-AI/WikipediaEZ10Classification",
             "revision": "a75fae77759acc115f015f2b856baa47776d733d",
@@ -44,7 +44,7 @@ class WikipediaChemFieldsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WikipediaChemFieldsClassification.v2",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
-        reference="https://arxiv.org/abs/2412.00532",
+        reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
         dataset={
             "path": "mteb/wikipedia_chem_fields",
             "revision": "70ff36ec5157fcc54c59f3b85d2b1fb232f8feec",

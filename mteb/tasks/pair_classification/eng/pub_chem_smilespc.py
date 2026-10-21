@@ -37,7 +37,7 @@ class PubChemSMILESPC(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="PubChemSMILESPC",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
-        reference="https://arxiv.org/abs/2412.00532",
+        reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
         dataset={
             "path": "BASF-AI/PubChemSMILESPairClassification",
             "revision": "7ba40b69f5fe6ffe4cc189aac9e1710913c73c8a",

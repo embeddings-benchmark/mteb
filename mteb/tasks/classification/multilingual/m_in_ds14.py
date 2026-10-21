@@ -21,7 +21,7 @@ class MInDS14Classification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="MInDS14",
         description="MInDS-14 is an evaluation resource for intent detection with spoken data in 14 diverse languages.",
-        reference="https://arxiv.org/abs/2104.08524",
+        reference="https://aclanthology.org/2021.emnlp-main.591/",
         dataset={
             "path": "mteb/minds14-multilingual",
             "revision": "58d73d2cddefab7df4bc0b814aa5c53c5fd4928e",

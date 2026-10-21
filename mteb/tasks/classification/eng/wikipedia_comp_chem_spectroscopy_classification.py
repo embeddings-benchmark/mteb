@@ -6,7 +6,7 @@ class WikipediaCompChemSpectroscopyClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WikipediaCompChemSpectroscopyClassification",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
-        reference="https://arxiv.org/abs/2412.00532",
+        reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
         dataset={
             "path": "BASF-AI/WikipediaMedium2ComputationalVsSpectroscopistsClassification",
             "revision": "474d706a22b0451b5846d623aa4b4234ba5b0513",
@@ -44,7 +44,7 @@ class WikipediaCompChemSpectroscopyClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WikipediaCompChemSpectroscopyClassification.v2",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
-        reference="https://arxiv.org/abs/2412.00532",
+        reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
         dataset={
             "path": "mteb/wikipedia_comp_chem_spectroscopy",
             "revision": "a1ef45291dc5304482c42b9c053a5f7801e1006b",

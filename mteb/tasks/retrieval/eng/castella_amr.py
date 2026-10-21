@@ -17,7 +17,7 @@ class CASTELLAAMRRetrieval(AbsTaskRetrieval):
             "which regresses a continuous time interval, to whole-recording "
             "retrieval for the mteb ranking format."
         ),
-        reference="https://arxiv.org/abs/2511.15131",
+        reference="https://doi.org/10.1109/icassp55912.2026.11464074",
         dataset={
             "path": "dukesun99/CASTELLA-AMR",
             "revision": "083b2816174890f60f36fa9f145cfe79c2f94d0a",

@@ -12,7 +12,7 @@ class VisRAGRetInfoVQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VisRAGRetInfoVQA",
         description="Evaluate the retrieval and understanding of complex infographics where layout and graphical elements are essential for cross-modal question answering.",
-        reference="https://arxiv.org/abs/2104.12756",
+        reference="https://doi.org/10.1109/wacv51458.2022.00264",
         type="Retrieval",
         task_subtypes=["Image Text Retrieval"],
         category="t2i",

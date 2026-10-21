@@ -6,7 +6,7 @@ class WikipediaLuminescenceClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WikipediaLuminescenceClassification",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
-        reference="https://arxiv.org/abs/2412.00532",
+        reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
         dataset={
             "path": "BASF-AI/WikipediaHard2BioluminescenceVsLuminescenceClassification",
             "revision": "21c4dcebe2c5b36a35292e6441e7a10b59bf4896",

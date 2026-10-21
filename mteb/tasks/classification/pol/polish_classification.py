@@ -356,7 +356,7 @@ class PacClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PAC",
         description="Polish Paraphrase Corpus",
-        reference="https://arxiv.org/pdf/2211.13112.pdf",
+        reference="https://openreview.net/forum?id=CZAd_6uiUx0",
         dataset={
             "path": "mteb/PAC",
             "revision": "d09e1c9f0f04f7f52f5cbfb74fa6c793c4eb84da",
@@ -393,7 +393,7 @@ class PacClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PAC.v2",
         description="Polish Paraphrase Corpus This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
-        reference="https://arxiv.org/pdf/2211.13112.pdf",
+        reference="https://openreview.net/forum?id=CZAd_6uiUx0",
         dataset={
             "path": "mteb/pac",
             "revision": "53c98e6a9173c550f1b60f0da9152e67e9618897",

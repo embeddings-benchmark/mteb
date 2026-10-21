@@ -6,7 +6,7 @@ class T2Reranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="T2Reranking",
         description="T2Ranking: A large-scale Chinese Benchmark for Passage Ranking",
-        reference="https://arxiv.org/abs/2304.03679",
+        reference="https://doi.org/10.1145/3539618.3591874",
         dataset={
             "path": "mteb/T2Reranking",
             "revision": "a34fe6bc0dff185af1228e49a0f6fb1de1565627",

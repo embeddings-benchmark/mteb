@@ -9,7 +9,7 @@ class News21InstructionRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="News21InstructionRetrieval",
         description="Measuring retrieval instruction following ability on News21 narratives for the FollowIR benchmark.",
-        reference="https://arxiv.org/abs/2403.15246",
+        reference="https://aclanthology.org/2025.naacl-long.597/",
         dataset={
             "path": "mteb/News21InstructionRetrieval",
             "revision": "c6fffeb9cdd95c1ffa81c62c687b48b56352872b",

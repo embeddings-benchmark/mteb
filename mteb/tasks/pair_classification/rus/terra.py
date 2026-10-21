@@ -7,7 +7,7 @@ _terra_metadata = dict(
         "path": "mteb/TERRa",
         "revision": "48312c334eb916d88481dc4a41bd0d8b2fa0d576",
     },
-    reference="https://arxiv.org/pdf/2010.15925",
+    reference="https://aclanthology.org/2020.emnlp-main.381/",
     type="PairClassification",
     category="t2t",
     modalities=["text"],

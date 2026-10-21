@@ -18,7 +18,7 @@ class InjongoIntent(AbsTaskClassification):
             "+ 1 779 English. From ‘INJONGO: A Multicultural Intent Detection and Slot-filling "
             "Dataset for 16 African Languages’ (Yu et al., 2025)."
         ),
-        reference="https://arxiv.org/abs/2502.09814",
+        reference="https://aclanthology.org/2025.acl-long.464/",
         dataset={
             "path": "mteb/InjongoIntent",
             # exact commit that matches the paper; bump when the HF repo updates

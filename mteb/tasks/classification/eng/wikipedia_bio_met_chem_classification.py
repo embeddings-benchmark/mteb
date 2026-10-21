@@ -6,7 +6,7 @@ class WikipediaBioMetChemClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WikipediaBioMetChemClassification",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
-        reference="https://arxiv.org/abs/2412.00532",
+        reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
         dataset={
             "path": "BASF-AI/WikipediaEasy2GeneExpressionVsMetallurgyClassification",
             "revision": "6ac491e5de9070c6dd434b31e76d3d379123dcff",
@@ -44,7 +44,7 @@ class WikipediaBioMetChemClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WikipediaBioMetChemClassification.v2",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
-        reference="https://arxiv.org/abs/2412.00532",
+        reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
         dataset={
             "path": "mteb/wikipedia_bio_met_chem",
             "revision": "5341bdf799e94949b5c2684bb54bfe462c528179",

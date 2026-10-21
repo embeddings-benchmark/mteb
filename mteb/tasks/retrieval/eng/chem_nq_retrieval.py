@@ -10,7 +10,7 @@ class ChemNQRetrieval(AbsTaskRetrieval):
             "revision": "5d958fb6b31055495347724d46431ba41309b03a",
         },
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
-        reference="https://arxiv.org/abs/2412.00532",
+        reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
         type="Retrieval",
         category="t2t",
         modalities=["text"],

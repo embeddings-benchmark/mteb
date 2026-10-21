@@ -19,7 +19,7 @@ class CLSClusteringFastS2S(AbsTaskClustering):
     metadata = TaskMetadata(
         name="CLSClusteringS2S.v2",
         description="Clustering of titles from CLS dataset. Clustering of 13 sets on the main category.",
-        reference="https://arxiv.org/abs/2209.05034",
+        reference="https://aclanthology.org/2022.coling-1.344/",
         dataset={
             "path": "C-MTEB/CLSClusteringS2S",
             "revision": "e458b3f5414b62b7f9f83499ac1f5497ae2e869f",
@@ -87,7 +87,7 @@ class CLSClusteringFastP2P(AbsTaskClustering):
     metadata = TaskMetadata(
         name="CLSClusteringP2P.v2",
         description="Clustering of titles + abstract from CLS dataset. Clustering of 13 sets on the main category.",
-        reference="https://arxiv.org/abs/2209.05034",
+        reference="https://aclanthology.org/2022.coling-1.344/",
         dataset={
             "path": "mteb/CLSClusteringP2P.v2",
             "revision": "4b012f4818da8625de8e2e90526db1570e7ed2c7",
@@ -130,7 +130,7 @@ class CLSClusteringS2S(AbsTaskClusteringLegacy):
     metadata = TaskMetadata(
         name="CLSClusteringS2S",
         description="Clustering of titles from CLS dataset. Clustering of 13 sets on the main category.",
-        reference="https://arxiv.org/abs/2209.05034",
+        reference="https://aclanthology.org/2022.coling-1.344/",
         dataset={
             "path": "C-MTEB/CLSClusteringS2S",
             "revision": "e458b3f5414b62b7f9f83499ac1f5497ae2e869f",
@@ -173,7 +173,7 @@ class CLSClusteringP2P(AbsTaskClusteringLegacy):
     metadata = TaskMetadata(
         name="CLSClusteringP2P",
         description="Clustering of titles + abstract from CLS dataset. Clustering of 13 sets on the main category.",
-        reference="https://arxiv.org/abs/2209.05034",
+        reference="https://aclanthology.org/2022.coling-1.344/",
         dataset={
             "path": "C-MTEB/CLSClusteringP2P",
             "revision": "4b6227591c6c1a73bc76b1055f3b7f3588e72476",

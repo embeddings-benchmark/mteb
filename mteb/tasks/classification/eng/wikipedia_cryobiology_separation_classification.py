@@ -6,7 +6,7 @@ class WikipediaCryobiologySeparationClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WikipediaCryobiologySeparationClassification",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
-        reference="https://arxiv.org/abs/2412.00532",
+        reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
         dataset={
             "path": "BASF-AI/WikipediaEasy5Classification",
             "revision": "858633e882dadd1ec6a0d220f7549bcafd379236",

@@ -13,7 +13,7 @@ class AVSpeakerBenchVideoCentricQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="AVSpeakerBenchVideoCentricQA",
         description="AV-SpeakerBench is an audio-visual benchmark for speaker-centric question answering in video, evaluating multimodal LLMs on human speech understanding. Each example pairs a video with a question about the speaker and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, question) pair, retrieve the correct candidate.",
-        reference="https://arxiv.org/abs/2512.02231",
+        reference="https://doi.org/10.1109/cvprf71909.2026.00222",
         dataset={
             "path": "mteb/AV-SpeakerBench",
             "revision": "46da53344c6a968d30cd72e28862732adf747802",
@@ -89,7 +89,7 @@ class AVSpeakerBenchVideoAudioCentricQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="AVSpeakerBenchVideoAudioCentricQA",
         description="AV-SpeakerBench is an audio-visual benchmark for speaker-centric question answering in video, evaluating multimodal LLMs on human speech understanding. Each example pairs a video with audio and a question about the speaker and multiple candidate answers. The task is formulated as multiple-choice retrieval: given the (video, audio, question) tuple, retrieve the correct candidate.",
-        reference="https://arxiv.org/abs/2512.02231",
+        reference="https://doi.org/10.1109/cvprf71909.2026.00222",
         dataset={
             "path": "mteb/AV-SpeakerBench",
             "revision": "46da53344c6a968d30cd72e28862732adf747802",

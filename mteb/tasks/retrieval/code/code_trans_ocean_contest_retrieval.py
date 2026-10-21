@@ -8,7 +8,7 @@ class CodeTransOceanContestRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CodeTransOceanContest",
         description="The dataset is a collection of code snippets and their corresponding natural language queries. The task is to retrieve the most relevant code snippet",
-        reference="https://arxiv.org/abs/2310.04951",
+        reference="https://aclanthology.org/2023.findings-emnlp.337/",
         dataset={
             "path": "CoIR-Retrieval/codetrans-contest",
             "revision": "20da4eb20a4b17300c0986ee148c90867a7f2a4d",

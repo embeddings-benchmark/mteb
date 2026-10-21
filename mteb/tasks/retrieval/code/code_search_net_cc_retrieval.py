@@ -80,7 +80,7 @@ class CodeSearchNetCCRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CodeSearchNetCCRetrieval",
         description="The dataset is a collection of code snippets. The task is to retrieve the most relevant code snippet for a given code snippet.",
-        reference="https://arxiv.org/abs/2407.02883",
+        reference="https://aclanthology.org/2025.acl-long.1072/",
         dataset={
             "path": "CoIR-Retrieval/CodeSearchNet-ccr",
             "revision": "6e1effa2c03723c5fde48ee912b5ee08d4f211e8",

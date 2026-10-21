@@ -6,7 +6,7 @@ class WikipediaChemEngSpecialtiesClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WikipediaChemEngSpecialtiesClassification",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
-        reference="https://arxiv.org/abs/2412.00532",
+        reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
         dataset={
             "path": "BASF-AI/WikipediaMedium5Classification",
             "revision": "f81a76a2fb690e5d5bd7a26dd07e85cdf8405dfb",

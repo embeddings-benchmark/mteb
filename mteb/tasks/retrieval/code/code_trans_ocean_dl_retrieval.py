@@ -8,7 +8,7 @@ class CodeTransOceanDLRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CodeTransOceanDL",
         description="The dataset is a collection of equivalent Python Deep Learning code snippets written in different machine learning framework. The task is to retrieve the equivalent code snippet in another framework, given a query code snippet from one framework.",
-        reference="https://arxiv.org/abs/2310.04951",
+        reference="https://aclanthology.org/2023.findings-emnlp.337/",
         dataset={
             "path": "CoIR-Retrieval/codetrans-dl",
             "revision": "281562cb8a1265ab5c0824bfa6ddcd9b0a15618f",

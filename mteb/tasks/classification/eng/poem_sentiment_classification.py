@@ -6,7 +6,7 @@ class PoemSentimentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PoemSentimentClassification",
         description="Poem Sentiment is a sentiment dataset of poem verses from Project Gutenberg.",
-        reference="https://arxiv.org/abs/2011.02686",
+        reference="https://aclanthology.org/2020.gebnlp-1.9/",
         dataset={
             "path": "mteb/PoemSentimentClassification",
             "revision": "84af4753ebb04ca836fb54ce89a339839b03b748",
@@ -48,7 +48,7 @@ class PoemSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PoemSentimentClassification.v2",
         description="Poem Sentiment consists of poem verses from Project Gutenberg annotated for sentiment using the labels negative (0), positive (1), no_impact (2) and mixed (3). This version was corrected as a part of [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900) to fix common issues on the original dataset, including removing duplicates, and train-test leakage.",
-        reference="https://arxiv.org/abs/2011.02686",
+        reference="https://aclanthology.org/2020.gebnlp-1.9/",
         dataset={
             "path": "mteb/poem_sentiment",
             "revision": "9fdc57b89ccc09a8d9256f376112d626878e51a7",

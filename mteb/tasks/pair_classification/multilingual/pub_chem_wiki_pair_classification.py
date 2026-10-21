@@ -27,7 +27,7 @@ class PubChemWikiPairClassification(AbsTaskPairClassification):
             "revision": "3412b208896a37e4ebb5ff7b96f6cc313ee9d2e3",
         },
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
-        reference="https://arxiv.org/abs/2412.00532",
+        reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
         category="t2t",
         modalities=["text"],
         type="PairClassification",

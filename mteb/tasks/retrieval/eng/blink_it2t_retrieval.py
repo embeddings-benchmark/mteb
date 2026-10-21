@@ -6,7 +6,7 @@ class BLINKIT2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BLINKIT2TRetrieval",
         description="Retrieve images based on images and specific retrieval instructions.",
-        reference="https://arxiv.org/abs/2404.12390",
+        reference="https://doi.org/10.1007/978-3-031-73337-6_9",
         dataset={
             "path": "mteb/blink-it2t",
             "revision": "1ce9401bf888d851ee1b221dbb6bec718128ce00",

@@ -6,7 +6,7 @@ class WikipediaGreenhouseEnantiopureClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WikipediaGreenhouseEnantiopureClassification",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
-        reference="https://arxiv.org/abs/2412.00532",
+        reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
         dataset={
             "path": "BASF-AI/WikipediaEasy2GreenhouseVsEnantiopureClassification",
             "revision": "0cfc1a83b6ed832454e8f4f93f7a0e26208274d9",

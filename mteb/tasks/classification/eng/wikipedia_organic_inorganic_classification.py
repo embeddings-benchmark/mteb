@@ -6,7 +6,7 @@ class WikipediaOrganicInorganicClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WikipediaOrganicInorganicClassification",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
-        reference="https://arxiv.org/abs/2412.00532",
+        reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
         dataset={
             "path": "BASF-AI/WikipediaEasy2SpecialClassification",
             "revision": "96d1d9b37c4693f74c46c83d63a290573f78d511",

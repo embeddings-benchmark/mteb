@@ -14,7 +14,7 @@ class VideoConPairClassification(AbsTaskPairClassification):
             "(e.g. entity/action/attribute swaps, event order flips). "
             "Tests video-language alignment robustness."
         ),
-        reference="https://arxiv.org/abs/2311.10111",
+        reference="https://doi.org/10.1109/cvpr52733.2024.01321",
         dataset={
             "path": "zachz/VideoCon-PC",
             "revision": "b0cb7112a3edfccf8ae697602442a828712b056b",

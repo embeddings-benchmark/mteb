@@ -12,7 +12,7 @@ class DenseWebVidCoVRVT2VRetrieval(AbsTaskRetrieval):
             "where the query consists of a reference video and an editing instruction. "
             "The corpus consists of candidate videos."
         ),
-        reference="https://arxiv.org/abs/2508.14039",
+        reference="https://doi.org/10.1109/iccv51701.2025.01900",
         dataset={
             "path": "nik1995/Dense-WebVid-CoVR",
             "revision": "988f558c4497429f98b2b16789863aba403449d7",

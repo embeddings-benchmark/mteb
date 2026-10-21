@@ -9,7 +9,7 @@ class Robust04InstructionRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Robust04InstructionRetrieval",
         description="Measuring retrieval instruction following ability on Robust04 narratives for the FollowIR benchmark.",
-        reference="https://arxiv.org/abs/2403.15246",
+        reference="https://aclanthology.org/2025.naacl-long.597/",
         dataset={
             "path": "mteb/Robust04InstructionRetrieval",
             "revision": "0495a5cb69aa8fa5bca81bd56ac248911c19eeb6",

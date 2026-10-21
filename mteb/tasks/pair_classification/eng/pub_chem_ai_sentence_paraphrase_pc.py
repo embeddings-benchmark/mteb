@@ -6,7 +6,7 @@ class PubChemAISentenceParaphrasePC(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="PubChemAISentenceParaphrasePC",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
-        reference="https://arxiv.org/abs/2412.00532",
+        reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
         dataset={
             "path": "BASF-AI/PubChemAISentenceParaphrasePC",
             "revision": "f33a205966ce032f957c3a22f4f9e378f89a2c56",

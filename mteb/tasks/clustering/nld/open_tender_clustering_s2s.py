@@ -13,7 +13,7 @@ class OpenTenderClusteringS2S(AbsTaskClustering):
         description="This dataset contains all the articles published by the NOS as of the 1st of January 2010. The "
         "data is obtained by scraping the NOS website. The NOS is one of the biggest (online) news "
         "organizations in the Netherlands.",
-        reference="https://arxiv.org/abs/2509.12340",
+        reference="https://aclanthology.org/2026.findings-acl.1236/",
         type="Clustering",
         category="t2c",
         modalities=["text"],

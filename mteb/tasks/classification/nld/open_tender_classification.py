@@ -10,7 +10,7 @@ class OpenTenderClassification(AbsTaskClassification):
             "revision": "9af5657575a669dc18c7f897a67287ff7d1a0c65",
         },
         description="This dataset contains Belgian and Dutch tender calls from OpenTender in Dutch",
-        reference="https://arxiv.org/abs/2509.12340",
+        reference="https://aclanthology.org/2026.findings-acl.1236/",
         type="Classification",
         category="t2c",
         modalities=["text"],

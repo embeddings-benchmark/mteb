@@ -8,7 +8,7 @@ class RomanianSentimentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="RomanianSentimentClassification",
         description="An Romanian dataset for sentiment classification.",
-        reference="https://arxiv.org/abs/2009.08712",
+        reference="https://aclanthology.org/2020.findings-emnlp.387/",
         dataset={
             "path": "mteb/RomanianSentimentClassification",
             "revision": "0f8df3d483924afb9130020e9f36ef09558fc9a1",
@@ -49,7 +49,7 @@ class RomanianSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="RomanianSentimentClassification.v2",
         description="An Romanian dataset for sentiment classification. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
-        reference="https://arxiv.org/abs/2009.08712",
+        reference="https://aclanthology.org/2020.findings-emnlp.387/",
         dataset={
             "path": "mteb/romanian_sentiment",
             "revision": "bf545b83db13cf73ed402749b21a7777e0afdc6a",
