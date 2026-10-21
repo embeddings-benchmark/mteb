@@ -30,8 +30,9 @@ class CacheBackendProtocol(Protocol):
         """Add a vector to the cache.
 
         Args:
-            item: Input item containing 'text', 'image', 'audio', or 'video'.
-            vectors: Embedding vector of shape (dim,) or (1, dim).
+            item: Input items containing 'text', 'image', 'audio', or 'video'.
+            vectors: Embeddings of the items, one per item: a `(num_items, dim)` dense or sparse array,
+                or, for ragged backends such as multi-vector caches, a sequence of `(num_tokens, dim)` arrays.
         """
 
     def get_vector(self, item: dict[str, Any]) -> Array | None:
@@ -41,7 +42,7 @@ class CacheBackendProtocol(Protocol):
             item: Input item.
 
         Returns:
-            Cached vector as np.ndarray, or None if not found.
+            Cached vector (an np.ndarray, or a torch tensor for sparse and multi-vector backends), or None if not found.
         """
 
     def save(self) -> None:

@@ -1,31 +1,51 @@
 from __future__ import annotations
 
+import json
 import shutil
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
+from unittest.mock import Mock
 
 import numpy as np
 import pytest
+import torch
 from datasets import Dataset
 from torch.utils.data import DataLoader
 
 import mteb
+from mteb._content_hashes import hash_item
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.mocks.mock_tasks import (
     MockMultiChoiceTask,
+    MockRerankingTask,
     MockRetrievalTask,
     MockVideoAudioTextRetrievalVAT2T,
 )
+from mteb.models import MultiVectorSearchEncoderWrapper
 from mteb.models.cache_wrappers.cache_backend_protocol import CacheBackendProtocol
 from mteb.models.cache_wrappers.cache_backends.faiss_cache import FaissCache
+from mteb.models.cache_wrappers.cache_backends.multi_vector_cache import (
+    MultiVectorCache,
+)
 from mteb.models.cache_wrappers.cache_backends.numpy_cache import NumpyCache
-from mteb.models.cache_wrappers.cache_wrapper import CachedEmbeddingWrapper
-from mteb.models.model_implementations.random_baseline import RandomEncoderBaseline
+from mteb.models.cache_wrappers.cache_backends.sparse_cache import SparseCache
+from mteb.models.cache_wrappers.cache_wrapper import (
+    CachedEmbeddingWrapper,
+    CachedMultiVectorWrapper,
+)
+from mteb.models.model_implementations.random_baseline import (
+    RandomEncoderBaseline,
+    RandomSparseEncoderBaseline,
+    _key_to_multi_vector,
+)
 from mteb.models.models_protocols import EncoderProtocol
+from mteb.similarity_functions import max_sim, pairwise_max_sim
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from mteb.types import Array, BatchedInput
 
 
@@ -446,3 +466,266 @@ def test_wrapper_caches_multimodal_items(tmp_path: Path):
         assert dummy_model.call_count == first_run_call_count
     finally:
         wrapped_model.close()
+
+
+class DummySparseModel(RandomSparseEncoderBaseline):
+    """Returns sparse COO tensors, like `SparseEncoderWrapper` does for retrieval tasks."""
+
+    call_count = 0
+
+    def __init__(self) -> None:
+        super().__init__("sparse_test_model", revision=None)
+        self.mteb_model_meta = mteb.get_model_meta(
+            "mteb/baseline-random-sparse-encoder"
+        )
+
+    def encode(self, inputs: DataLoader[BatchedInput], **kwargs: Any) -> Array:
+        self.call_count += 1
+        return torch.from_numpy(super().encode(inputs, **kwargs)).to_sparse()
+
+    def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
+        assert embeddings1.is_sparse
+        assert embeddings2.is_sparse
+        return super().similarity(embeddings1.to_dense(), embeddings2.to_dense())
+
+
+class DummyEncodeOnlyMultiVectorModel:
+    """Multi-vector model with only `_encode`, like PyLate models (no `similarity` or `corpus_chunk_size`)."""
+
+    call_count = 0
+
+    def __init__(self) -> None:
+        self.mteb_model_meta = mteb.get_model_meta("mteb/baseline-random-colbert")
+
+    def _encode(self, inputs: DataLoader[BatchedInput], **kwargs: Any) -> Array:
+        self.call_count += 1
+        return [
+            torch.from_numpy(
+                _key_to_multi_vector(hash_item({"text": text}), 2 + len(text) % 5, 8)
+            ).float()
+            for text in inputs.dataset["text"]
+        ]
+
+
+class DummyMultiVectorModel(
+    DummyEncodeOnlyMultiVectorModel, MultiVectorSearchEncoderWrapper
+):
+    """Search-only model returning a variable number of token embeddings per input."""
+
+    def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
+        return max_sim(embeddings1, embeddings2)
+
+    def similarity_pairwise(self, embeddings1: Array, embeddings2: Array) -> Array:
+        return pairwise_max_sim(embeddings1, embeddings2)
+
+
+def _cached_dense(path: Path) -> CachedEmbeddingWrapper:
+    return CachedEmbeddingWrapper(DummyModel("dense_test_model", revision=None), path)
+
+
+def _cached_sparse(path: Path) -> CachedEmbeddingWrapper:
+    return CachedEmbeddingWrapper(DummySparseModel(), path, cache_backend=SparseCache)
+
+
+def _cached_multi_vector(path: Path) -> CachedMultiVectorWrapper:
+    return CachedMultiVectorWrapper(DummyMultiVectorModel(), path)
+
+
+def _cached_encode_only_multi_vector(path: Path) -> CachedMultiVectorWrapper:
+    return CachedMultiVectorWrapper(DummyEncodeOnlyMultiVectorModel(), path)  # type: ignore[arg-type]
+
+
+def _sparse_vectors(n: int) -> torch.Tensor:
+    dense = torch.from_numpy(np.random.default_rng(0).random((n, 10), dtype=np.float32))
+    dense[dense < 0.7] = 0
+    dense[0] = 0  # an all-zero row
+    return dense.to_sparse()
+
+
+def _multi_vectors(n: int) -> list[torch.Tensor]:
+    # bfloat16, to check that cached embeddings keep the dtype they were added with
+    return [torch.rand(i + 1, 4).to(torch.bfloat16) for i in range(n)]
+
+
+@pytest.mark.parametrize(
+    ("cache_backend", "vectors"),
+    [
+        (SparseCache, _sparse_vectors(6)),
+        (SparseCache, _sparse_vectors(6).to_dense().numpy()),
+        (MultiVectorCache, _multi_vectors(6)),
+    ],
+    ids=["sparse", "sparse-dense-input", "multi-vector"],
+)
+def test_ragged_cache_reload_and_grow(
+    tmp_path: Path,
+    cache_backend: type[SparseCache | MultiVectorCache],
+    vectors: Array | list[torch.Tensor],
+):
+    items = [{"text": f"item {i}"} for i in range(len(vectors))]
+
+    def open_cache() -> SparseCache | MultiVectorCache:
+        cache = cache_backend(tmp_path, initial_rows=1)
+        cache.load()
+        return cache
+
+    cache = open_cache()
+    assert cache.get_vector(items[0]) is None
+    cache.add(items, vectors)
+    cache.save()
+    cache.close()
+
+    # Reopen and add again: cached items are skipped, nothing is lost
+    cache = open_cache()
+    cache.add(items, vectors)
+    cache.save()
+    cache.close()
+
+    cache = open_cache()
+    assert len(cache.hash_to_range) == len(items)
+    for i, item in enumerate(items):
+        cached, vector = cache.get_vector(item), vectors[i]
+        # Cached vectors come back in the form they were added: sparse, dense or of the same dtype
+        assert type(cached) is type(vector)
+        torch.testing.assert_close(
+            torch.as_tensor(cached).to_dense(), torch.as_tensor(vector).to_dense()
+        )
+    cache.close()
+
+
+@pytest.mark.parametrize(
+    ("cache_backend", "vectors", "other_vectors", "error"),
+    [
+        (
+            SparseCache,
+            _sparse_vectors(1),
+            _sparse_vectors(1).to_dense().numpy(),
+            "stores sparse vectors",
+        ),
+        (SparseCache, np.ones((1, 4)), np.ones((1, 6)), "dimension 4"),
+        (MultiVectorCache, [np.ones((2, 4))], [np.ones((2, 6))], r"\(num_tokens, 4\)"),
+    ],
+    ids=["sparse-kind", "sparse-dimension", "multi-vector-dimension"],
+)
+def test_ragged_cache_rejects_incompatible_vectors(
+    tmp_path: Path,
+    cache_backend: type[SparseCache | MultiVectorCache],
+    vectors: Array | list[np.ndarray],
+    other_vectors: Array | list[np.ndarray],
+    error: str,
+):
+    cache = cache_backend(tmp_path)
+    cache.add([{"text": "a"}], vectors)
+    with pytest.raises(ValueError, match=error):
+        cache.add([{"text": "b"}], other_vectors)
+    assert {"text": "b"} not in cache
+    cache.close()
+
+
+def test_ragged_cache_writes_metadata_before_index(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    """A save interrupted while writing the metadata leaves no index entries pointing at unsaved rows."""
+    cache = MultiVectorCache(tmp_path)
+    cache.add([{"text": "a"}], [np.ones((2, 4))])
+    monkeypatch.setattr(json, "dump", Mock(side_effect=OSError("disk full")))
+    with pytest.raises(OSError, match="disk full"):
+        cache.save()
+    assert not cache.index_file.exists()
+    cache.close()
+
+
+@pytest.mark.parametrize(
+    "make_cached_model",
+    [_cached_sparse, _cached_multi_vector],
+    ids=["sparse", "multi-vector"],
+)
+def test_wrapper_combines_cached_and_new_vectors(
+    tmp_path: Path,
+    make_cached_model: Callable[
+        [Path], CachedEmbeddingWrapper | CachedMultiVectorWrapper
+    ],
+):
+    """A partly cached batch returns the cached and newly encoded vectors in input order."""
+    texts = [f"text number {i}" for i in range(6)]
+
+    def encode(model: object, batch: list[str]) -> Array:
+        encode_fn = model.encode if hasattr(model, "encode") else model._encode
+        return encode_fn(
+            DataLoader(Dataset.from_dict({"text": batch})),
+            task_metadata=MockRetrievalTask().metadata,
+            hf_split="test",
+            hf_subset="default",
+        )
+
+    cached_model = make_cached_model(tmp_path)
+    try:
+        expected = encode(cached_model._model, texts)
+        encode(cached_model, texts[1::2])
+        partly_cached = encode(cached_model, texts)
+        fully_cached = encode(cached_model, texts)
+    finally:
+        cached_model.close()
+
+    for result in (partly_cached, fully_cached):
+        assert type(result) is type(expected)
+        if isinstance(result, torch.Tensor) and result.is_sparse:
+            assert result.is_coalesced()
+        for i in range(len(texts)):
+            vector, expected_vector = result[i], expected[i]
+            # Cached vectors have the same type as newly encoded ones, so they can be mixed
+            assert type(vector) is type(expected_vector)
+            torch.testing.assert_close(
+                torch.as_tensor(vector).to_dense(),
+                torch.as_tensor(expected_vector).to_dense(),
+            )
+
+
+@pytest.mark.parametrize(
+    ("make_model", "make_cached_model", "task"),
+    [
+        (
+            lambda: DummyModel("dense_test_model", revision=None),
+            _cached_dense,
+            MockRetrievalTask(),
+        ),
+        (DummySparseModel, _cached_sparse, MockRetrievalTask()),
+        (DummyMultiVectorModel, _cached_multi_vector, MockRetrievalTask()),
+        (DummyMultiVectorModel, _cached_multi_vector, MockRerankingTask()),
+        # Models with only `_encode`, like PyLate models, are searched with MaxSim
+        (DummyMultiVectorModel, _cached_encode_only_multi_vector, MockRetrievalTask()),
+        (DummyMultiVectorModel, _cached_encode_only_multi_vector, MockRerankingTask()),
+    ],
+    ids=[
+        "dense",
+        "sparse",
+        "multi-vector-retrieval",
+        "multi-vector-reranking",
+        "encode-only-multi-vector-retrieval",
+        "encode-only-multi-vector-reranking",
+    ],
+)
+def test_wrapper_matches_uncached_scores(
+    tmp_path: Path,
+    make_model: Callable[[], Any],
+    make_cached_model: Callable[
+        [Path], CachedEmbeddingWrapper | CachedMultiVectorWrapper
+    ],
+    task: AbsTask,
+):
+    """Cached runs score like uncached ones (e.g. corpus titles aren't joined twice) and reuse the cache."""
+    uncached = mteb.evaluate(make_model(), task, cache=None)
+
+    cached_model = make_cached_model(tmp_path)
+    try:
+        first = mteb.evaluate(cached_model, task, cache=None)
+        first_run_call_count = cached_model._model.call_count
+        second = mteb.evaluate(cached_model, task, cache=None)
+        assert cached_model._model.call_count == first_run_call_count
+        assert uncached[0].scores == first[0].scores == second[0].scores
+    finally:
+        cached_model.close()
+
+
+def test_cached_embedding_wrapper_rejects_multi_vector_model(tmp_path: Path):
+    with pytest.raises(ValueError, match="CachedMultiVectorWrapper"):
+        CachedEmbeddingWrapper(DummyEncodeOnlyMultiVectorModel(), tmp_path)  # type: ignore[arg-type]

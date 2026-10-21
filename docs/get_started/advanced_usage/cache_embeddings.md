@@ -42,7 +42,7 @@ vectors = vectors[~zero_mask]
 
 ### Different Cache backends
 
-By default, the [`CachedEmbeddingWrapper`][mteb.models.CachedEmbeddingWrapper] uses a NumPy memmap backend ([`NumpyCache`][mteb.models.cache_wrappers.cache_backends.NumpyCache]) to store embeddings. However, you can also use other backends. Currently, only [`FAISS`][mteb.models.cache_wrappers.cache_backends.FaissCache] is implemented, but you can provide your own custom backend that implements the [`CacheBackendProtocol`][mteb.models.cache_wrappers.CacheBackendProtocol] by passing it as the `cache_backend` parameter when initializing the [`CachedEmbeddingWrapper`][mteb.models.CachedEmbeddingWrapper]. For example:
+By default, the [`CachedEmbeddingWrapper`][mteb.models.CachedEmbeddingWrapper] uses a NumPy memmap backend ([`NumpyCache`][mteb.models.cache_wrappers.cache_backends.NumpyCache]) to store embeddings. However, you can also use other backends, such as [`FAISS`][mteb.models.cache_wrappers.cache_backends.FaissCache], or provide your own custom backend that implements the [`CacheBackendProtocol`][mteb.models.cache_wrappers.CacheBackendProtocol] by passing it as the `cache_backend` parameter when initializing the [`CachedEmbeddingWrapper`][mteb.models.CachedEmbeddingWrapper]. For example:
 
 ```python
 import mteb
@@ -51,4 +51,30 @@ from mteb.models import CachedEmbeddingWrapper
 
 model = mteb.get_model(...)
 cachedmodel = CachedEmbeddingWrapper(model, "cache_dir", cache_backend=FaissCache)
+```
+
+### Sparse and multi-vector models
+
+Sparse encoders (e.g. SPLADE) are cached with [`SparseCache`][mteb.models.cache_wrappers.cache_backends.SparseCache], which stores only the non-zero entries of each embedding and returns them in the same form (sparse or dense) the model produced:
+
+```python
+import mteb
+from mteb.models import CachedEmbeddingWrapper
+from mteb.models.cache_wrappers.cache_backends import SparseCache
+
+model = mteb.get_model(
+    "opensearch-project/opensearch-neural-sparse-encoding-doc-v3-distill"
+)
+cached_model = CachedEmbeddingWrapper(model, "cache_dir", cache_backend=SparseCache)
+```
+
+Multi-vector (late-interaction) models only support search tasks and don't expose an `encode` method, so they are wrapped with [`CachedMultiVectorWrapper`][mteb.models.CachedMultiVectorWrapper] instead. It stores the per-token embeddings of each input with [`MultiVectorCache`][mteb.models.cache_wrappers.cache_backends.MultiVectorCache]:
+
+```python
+import mteb
+from mteb.models import CachedMultiVectorWrapper
+
+model = mteb.get_model("lightonai/LateOn")
+cached_model = CachedMultiVectorWrapper(model, "cache_dir")
+results = mteb.evaluate(cached_model, tasks=[mteb.get_task("NanoArguAnaRetrieval")])
 ```

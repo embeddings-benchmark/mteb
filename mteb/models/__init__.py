@@ -1,4 +1,8 @@
-from .cache_wrappers import CacheBackendProtocol, CachedEmbeddingWrapper
+from .cache_wrappers import (
+    CacheBackendProtocol,
+    CachedEmbeddingWrapper,
+    CachedMultiVectorWrapper,
+)
 from .compression_wrappers import CompressionWrapper
 from .hybrid_wrappers import HybridSearch
 from .model_meta import ModelMeta
@@ -33,6 +37,7 @@ from .video_wrappers import Video2ImagesWrapper
 __all__ = [
     "CacheBackendProtocol",
     "CachedEmbeddingWrapper",
+    "CachedMultiVectorWrapper",
     "CompressionWrapper",
     "CrossEncoderProtocol",
     "CrossEncoderWrapper",
