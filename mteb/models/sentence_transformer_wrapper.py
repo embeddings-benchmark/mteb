@@ -16,6 +16,7 @@ from mteb.models import ModelMeta
 from mteb.similarity_functions import (
     _MAX_SIM_CHUNK_ELEMENTS,
     _token_budget_chunks,
+    _upcast_low_precision,
 )
 from mteb.timing import TimingStack
 from mteb.types import PromptType
@@ -293,7 +294,12 @@ def _score_on_device(
     documents = torch.as_tensor(embeddings2)
     if documents.device.type != "cpu":
         # Already on an accelerator, e.g. sparse retrieval: nothing to move
-        return cast("Array", wrapper.model.similarity(embeddings1, embeddings2))
+        return cast(
+            "Array",
+            wrapper.model.similarity(
+                _upcast_low_precision(embeddings1), _upcast_low_precision(embeddings2)
+            ),
+        )
     if queries.ndim == 1:
         queries = queries.unsqueeze(0)
     if documents.ndim == 1:
@@ -313,7 +319,10 @@ def _score_on_device(
         min(block_elements // max(1, documents.shape[1]), block_elements // query_rows),
     )
     query_starts = range(0, num_queries, query_rows)
-    queries_on_device = queries.to(device) if len(query_starts) == 1 else None
+    # sentence-transformers < 6 scores in the input dtype, which ties nearby scores
+    queries_on_device = (
+        _upcast_low_precision(queries.to(device)) if len(query_starts) == 1 else None
+    )
     scores = torch.empty(
         queries.shape[0], documents.shape[0], dtype=torch.float32, device=queries.device
     )
@@ -333,15 +342,19 @@ def _score_on_device(
         for start in range(0, num_documents, block_rows):
             end = min(start + block_rows, num_documents)
             # `index_select`, as sparse tensors can't be sliced
-            block = documents.index_select(0, torch.arange(start, end)).to(device)
+            block = _upcast_low_precision(
+                documents.index_select(0, torch.arange(start, end)).to(device)
+            )
             for query_start in query_starts:
                 query_end = min(query_start + query_rows, num_queries)
                 query_block = (
                     queries_on_device
                     if queries_on_device is not None
-                    else queries.index_select(
-                        0, torch.arange(query_start, query_end)
-                    ).to(device)
+                    else _upcast_low_precision(
+                        queries.index_select(
+                            0, torch.arange(query_start, query_end)
+                        ).to(device)
+                    )
                 )
                 scores[query_start:query_end, start:end] = wrapper.model.similarity(
                     query_block, block
