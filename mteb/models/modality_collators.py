@@ -264,7 +264,7 @@ class FramesCollator:
         collated_inputs = []
         for row in inputs:
             # assign in place (no pop) to keep the dataset's column order
-            _sample_video(row, self)
+            row["video"], row["video_metadata"] = _sample_video(row["video"], self)
             collated_inputs.append(row)
         return cast(
             "BatchedInput",
@@ -279,8 +279,7 @@ class FramesCollator:
         max_frames: int | None = None,
         num_frames: int | None = None,
         min_frames: int = DEFAULT_MIN_FRAMES,
-        return_metadata: bool = False,
-    ) -> torch.Tensor | tuple[torch.Tensor, VideoMetadata]:
+    ) -> tuple[torch.Tensor, VideoMetadata]:
         """Resample a video input to a target number of frames.
 
         When both ``fps`` and ``num_frames`` are None, all frames are returned
@@ -294,7 +293,9 @@ class FramesCollator:
             num_frames: If set, select exactly this many frames uniformly
                 (fixed-sample mode).
             min_frames: Minimum number of frames in FPS-based sampling.
-            return_metadata: Also return the sampled frames' timing.
+
+        Returns:
+            The sampled frames and their timing.
         """
 
         def _indices(n_source: int) -> list[int]:
@@ -332,8 +333,6 @@ class FramesCollator:
                         "Dropped %d undecodable trailing frame(s) from video",
                         original_n - n,
                     )
-                if not return_metadata:
-                    return frames
                 duration = video.metadata.end_stream_seconds
                 source_fps = video.metadata.average_fps or (
                     original_n / duration if duration else None
@@ -392,7 +391,7 @@ class VideoCollator:
         for row in inputs:
             # rows can lack one modality (None) in mixed-modality datasets
             if "video" in row:
-                _sample_video(row, self)
+                row["video"], row["video_metadata"] = _sample_video(row["video"], self)
             if row.get("audio") is not None:
                 audio_array = AudioCollator.resample_audio(
                     row,
@@ -410,23 +409,17 @@ class VideoCollator:
 
 
 def _sample_video(
-    row: dict[str, Any], collator: FramesCollator | VideoCollator
-) -> None:
-    """Sample a row's video with a collator's settings and add the frames' timing.
-
-    The frames replace ``row["video"]`` and their timing is set as
-    ``row["video_metadata"]`` (None when the row has no video).
-    """
-    if row["video"] is None:
-        row["video_metadata"] = None
-        return
-    row["video"], row["video_metadata"] = FramesCollator.resample_video(
-        row["video"],
+    video: VideoDecoder | None, collator: FramesCollator | VideoCollator
+) -> tuple[torch.Tensor | None, VideoMetadata | None]:
+    """Sample a video with a collator's settings; (None, None) when there is none."""
+    if video is None:
+        return None, None
+    return FramesCollator.resample_video(
+        video,
         fps=collator.fps,
         max_frames=collator.max_frames,
         num_frames=collator.num_frames,
         min_frames=collator.min_frames,
-        return_metadata=True,
     )
 
 
@@ -438,8 +431,10 @@ def sampled_frame_rate(metadata: VideoMetadata) -> float:
     """
     from fractions import Fraction
 
+    # 24 fps, a common video rate, when the source rate is unknown
+    fps = metadata["fps"] or 24.0
     idx = metadata["frames_indices"]
-    span = (idx[-1] - idx[0]) / metadata["fps"]
-    rate = (len(idx) - 1) / span if len(idx) > 1 and span > 0 else metadata["fps"]
+    span = (idx[-1] - idx[0]) / fps
+    rate = (len(idx) - 1) / span if len(idx) > 1 and span > 0 else fps
     # a simple fraction: video encoders drop frames at rates like 0.96704408...
     return float(Fraction(rate).limit_denominator(1000))

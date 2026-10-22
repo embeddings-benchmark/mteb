@@ -165,7 +165,6 @@ class InstructSentenceTransformerModel(AbsEncoder):
         max_frames: int | None = None,
         num_frames: int | None = None,
         min_frames: int = 1,
-        video_metadata: bool = False,
         target_sampling_rate: int | None = None,
         max_samples: int | None = None,
         **kwargs: Any,
@@ -191,7 +190,6 @@ class InstructSentenceTransformerModel(AbsEncoder):
             max_frames: Maximum number of video frames to sample (multimodal inputs only).
             num_frames: Fixed number of video frames to sample (multimodal inputs only).
             min_frames: Minimum number of video frames in FPS mode (multimodal inputs only).
-            video_metadata: Pass each video's frame timing to the processor (multimodal inputs only).
             target_sampling_rate: Audio target sampling rate (multimodal inputs only). Defaults to 16000 when an audio/video collator is applied.
             max_samples: Audio maximum number of samples (multimodal inputs only).
             **kwargs: Kwargs for Sentence Transformer model.
@@ -241,7 +239,6 @@ class InstructSentenceTransformerModel(AbsEncoder):
         self.max_frames = max_frames
         self.num_frames = num_frames
         self.min_frames = min_frames
-        self.video_metadata = video_metadata
         self.target_sampling_rate = target_sampling_rate
         self.max_samples = max_samples
 
@@ -323,7 +320,9 @@ class InstructSentenceTransformerModel(AbsEncoder):
             all_embeddings = []
             for batch in tqdm(inputs, desc="Building multimodal embeddings"):
                 modality_batch = {k: v for k, v in batch.items() if k in _modality_keys}
-                if self.video_metadata and "video" in modality_batch:
+                if "video" in modality_batch:
+                    # sentence-transformers' video format, which passes the frames'
+                    # timing to the processor
                     modality_batch["video"] = [
                         {"array": video, "video_metadata": metadata}
                         if video is not None

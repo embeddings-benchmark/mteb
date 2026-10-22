@@ -136,7 +136,7 @@ def test_pooled_embedding_is_mean_of_frame_embeddings(sampling):
 
     expected = []
     for row in videos:
-        frames = FramesCollator.resample_video(row["video"], **sampling)
+        frames, _ = FramesCollator.resample_video(row["video"], **sampling)
         frame_vectors = [
             _key_to_vector(hash_item({"image": to_pil_image(frame)}), embed_dim)
             for frame in frames

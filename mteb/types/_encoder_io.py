@@ -9,6 +9,7 @@ from numpy.typing import NDArray
 from mteb._helpful_enum import HelpfulStrEnum
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
     from typing import NotRequired
 
     import numpy.typing as npt
@@ -158,7 +159,7 @@ class VideoMetadata(TypedDict):
     fps: float | None
     total_num_frames: int
     duration: float | None
-    frames_indices: list[int]
+    frames_indices: Sequence[int]
 
 
 class VideoInput(TypedDict):

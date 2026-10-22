@@ -44,22 +44,22 @@ def test_resample_video_fixed_frames(
     n_source: int, num_frames: int, expected: list[int]
 ) -> None:
     video = _StubDecoder(n_source, seconds=10.0)
-    assert FramesCollator.resample_video(video, num_frames=num_frames) == expected
+    assert FramesCollator.resample_video(video, num_frames=num_frames)[0] == expected
 
 
 def test_resample_video_fps_spans_clip_and_respects_cap() -> None:
     video = _StubDecoder(300, seconds=10.0)
-    frames = FramesCollator.resample_video(video, fps=2.0)
+    frames = FramesCollator.resample_video(video, fps=2.0)[0]
     assert len(frames) == 20
     assert frames[0] == 0
     assert frames[-1] == 299
-    capped = FramesCollator.resample_video(video, fps=2.0, max_frames=8)
+    capped = FramesCollator.resample_video(video, fps=2.0, max_frames=8)[0]
     assert capped == [0, 43, 85, 128, 171, 214, 256, 299]
 
 
 def test_resample_video_without_sampling_keeps_all_frames() -> None:
     video = _StubDecoder(12, seconds=1.0)
-    assert FramesCollator.resample_video(video) == list(range(12))
+    assert FramesCollator.resample_video(video)[0] == list(range(12))
 
 
 def test_seconds_to_samples() -> None:
@@ -89,9 +89,9 @@ def test_audio_collator_rejects_non_positive_cap() -> None:
 def test_resample_video_fps_min_frames() -> None:
     video = _StubDecoder(30, seconds=1.2)
     # default: one frame per second, as before
-    assert FramesCollator.resample_video(video, fps=1.0) == [0]
+    assert FramesCollator.resample_video(video, fps=1.0)[0] == [0]
     # opt-in floor for processors that need more frames (Qwen3-VL)
-    frames = FramesCollator.resample_video(video, fps=1.0, min_frames=4)
+    frames = FramesCollator.resample_video(video, fps=1.0, min_frames=4)[0]
     assert frames == [0, 10, 19, 29]
 
 

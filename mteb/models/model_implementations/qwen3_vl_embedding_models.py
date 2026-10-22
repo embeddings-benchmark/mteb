@@ -80,12 +80,6 @@ class Qwen3VLEmbeddingWrapper(InstructSentenceTransformerModel):
             # at least 4 frames: FPS_MIN_FRAMES of qwen-vl-utils, which the official
             # script samples with; the processor fails on a single frame
             min_frames=4,
-            # real frame timing: without video_metadata the Qwen3-VL processor
-            # assumes 24 fps for the timestamps it writes into the prompt
-            # https://github.com/huggingface/transformers/blob/v5.19.0/src/transformers/models/qwen3_vl/processing_qwen3_vl.py#L88-L94
-            # the official code passes video_metadata from qwen-vl-utils
-            # https://github.com/QwenLM/Qwen3-VL-Embedding/blob/393e2978d27852b0d0230d6994f37f9c15bed73c/src/models/qwen3_vl_embedding.py#L333-L361
-            video_metadata=True,
             **kwargs,
         )
 
