@@ -70,10 +70,74 @@ bekko_static_embedding_v1 = ModelMeta(
     reference="https://huggingface.co/hotchpotch/bekko-static-embedding-v1",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    # Conservative task-family disclosures for MIRACL and all-nli training data.
-    # Further corpus exposure (DBpedia, AG News, Quora, StackExchange, etc.) is
-    # described in the submission notes; this is not an exhaustive overlap audit.
-    training_datasets={"MIRACLRetrieval", "MIRACLRetrievalHardNegatives", "XNLI"},
+    # Corpus-level exposure from the full 265-config training selection:
+    # https://huggingface.co/hotchpotch/bekko-static-embedding-v1/blob/c18167b8f244c1bc6de21ce9b710bac8a29c4615/training_scripts/bekko-unsupervised-multilingual-40-direct.json
+    # The public_training_data card documents every upstream source and the
+    # individual Nomic/LightOn subsets. Use MTEB task names here; sources without
+    # MTEB counterparts remain documented in that card. These conservative
+    # corpus-family disclosures do not assert evaluation-row duplication.
+    training_datasets={
+        # sentence-transformers/miracl (train split).
+        "MIRACLRetrieval",
+        "MIRACLRetrievalHardNegatives",
+        # sentence-transformers/all-nli (SNLI/MultiNLI) and their translations.
+        "XNLI",
+        "XNLIV2",
+        "AfriXNLI",
+        "IndicXnliPairClassification",
+        "Cmnli",
+        "KorNLI",
+        # LightOn: beir_dbpedia and webfaq_eng.
+        "DBPedia",
+        "DBpediaClassification",
+        "WebFAQRetrieval",
+        "WebFAQBitextMiningQuestions",
+        "WebFAQBitextMiningQAs",
+        # Nomic: amazon_reviews/amazonqa.
+        "AmazonPolarityClassification",
+        "AmazonReviewsClassification",
+        "AmazonCounterfactualClassification",
+        # Nomic: codesearch.
+        "CodeSearchNetRetrieval",
+        "CodeSearchNetCCRetrieval",
+        "COIRCodeSearchNetRetrieval",
+        # Nomic: yahoo_qa/yahoo_title_answer/yahoo_title_question.
+        "YahooAnswersTopicsClassification",
+        # Nomic: quora.
+        "QuoraRetrieval",
+        # Nomic: reddit_title_body.
+        "RedditClustering",
+        "RedditClusteringP2P",
+        # Nomic: stackexchange_body_body/duplicate_questions/title_body.
+        "StackExchangeClustering",
+        "StackExchangeClusteringP2P",
+        "AskUbuntuDupQuestions",
+        "StackOverflowDupQuestions",
+        "CQADupstackRetrieval",
+        "StackOverflowQA",
+        # Nomic: s2orc_abstract_citation/citation_titles/title_abstract.
+        "SCIDOCS",
+        "SciDocsRR",
+        # hotchpotch/arxiv-ir-simulated-search-queries and S2ORC.
+        "ArxivClassification",
+        "ArxivClusteringP2P",
+        "ArxivClusteringS2S",
+        "ArXivHierarchicalClusteringP2P",
+        "ArXivHierarchicalClusteringS2S",
+        # Wikipedia/FineWiki IR, related-document, synthetic-NLI and SWIM sources.
+        "WikipediaRetrievalMultilingual",
+        "WikipediaRerankingMultilingual",
+        "WikiCitiesClustering",
+    },
+    citation="""@misc{tateno2026bekko,
+  title={Bekko Embedding: Parameter-Efficient Multilingual Retrieval with Ultra-Compact Encoders},
+  author={Yuichi Tateno},
+  year={2026},
+  eprint={2607.25180},
+  archivePrefix={arXiv},
+  primaryClass={cs.IR},
+  url={https://arxiv.org/abs/2607.25180},
+}""",
     adapted_from=None,
     modalities=["text"],
     model_type=["dense"],
