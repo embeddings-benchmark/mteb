@@ -29,6 +29,7 @@ class CMUArcticA2TRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
+        superseded_by="CMUArcticA2TRetrieval.v2",
         bibtex_citation=r"""
 @techreport{kominek2003cmu,
   author = {Kominek, John and Black, Alan W.},
@@ -72,6 +73,95 @@ class CMUArcticT2ARetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
+        superseded_by="CMUArcticT2ARetrieval.v2",
+        bibtex_citation=r"""
+@techreport{kominek2003cmu,
+  author = {Kominek, John and Black, Alan W.},
+  institution = {Language Technologies Institute, School of Computer Science,
+Carnegie Mellon University},
+  number = {CMU-LTI-03-177},
+  title = {CMU ARCTIC  databases for speech synthesis},
+  url = {http://festvox.org/cmu_arctic/},
+  year = {2003},
+}
+""",
+    )
+
+
+class CMUArcticA2TRetrievalV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="CMUArcticA2TRetrieval.v2",
+        description=(
+            "Retrieve the correct transcription for an English speech segment. "
+            "The dataset is derived from the phonetically balanced CMU Arctic single-speaker TTS corpora. "
+            "The corpora contains 1150 samples based on read-aloud segments from books, which are out of copyright "
+            "and derived from the Gutenberg project."
+            " Version 2 merges queries and documents with identical content, so a repeated query counts every matching item as relevant, and drops texts of 3 characters or less."
+        ),
+        reference="http://festvox.org/cmu_arctic/",
+        dataset={
+            "path": "mteb/CMU_Arctic_a2t",
+            "revision": "e089493e9284a5b38d3b75bb79ef87acbbd0d2b6",
+        },
+        type="Any2AnyRetrieval",
+        category="a2t",
+        modalities=["text", "audio"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="hit_rate_at_5",
+        date=("2000-01-01", "2002-12-31"),
+        domains=["Spoken"],
+        task_subtypes=["Speech Transcription Retrieval"],
+        license="cc0-1.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        adapted_from=["CMUArcticA2TRetrieval"],
+        bibtex_citation=r"""
+@techreport{kominek2003cmu,
+  author = {Kominek, John and Black, Alan W.},
+  institution = {Language Technologies Institute, School of Computer Science,
+Carnegie Mellon University},
+  number = {CMU-LTI-03-177},
+  title = {CMU ARCTIC  databases for speech synthesis},
+  url = {http://festvox.org/cmu_arctic/},
+  year = {2003},
+}
+""",
+    )
+
+
+class CMUArcticT2ARetrievalV2(AbsTaskRetrieval):
+    """Text-to-audio retrieval on CMU Arctic transcription ↔ audio pairs."""
+
+    metadata = TaskMetadata(
+        name="CMUArcticT2ARetrieval.v2",
+        description=(
+            "Retrieve the correct audio segment for an English transcription. "
+            "The dataset is derived from the phonetically balanced CMU Arctic single-speaker TTS corpora. "
+            "The corpora contains 1150 audio-text pairs based on read-aloud segments from public domain books "
+            "originally sourced from the Gutenberg project."
+            " Version 2 merges queries and documents with identical content, so a repeated query counts every matching item as relevant, and drops texts of 3 characters or less."
+        ),
+        reference="http://festvox.org/cmu_arctic/",
+        dataset={
+            "path": "mteb/CMU_Arctic_t2a",
+            "revision": "f19bf203d965eed5b38fd157548e8cf0b9020a99",
+        },
+        type="Any2AnyRetrieval",
+        category="t2a",
+        modalities=["text", "audio"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="hit_rate_at_5",
+        date=("2000-01-01", "2002-12-31"),
+        domains=["Spoken"],
+        task_subtypes=["Speech Transcription Retrieval"],
+        license="cc0-1.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        adapted_from=["CMUArcticT2ARetrieval"],
         bibtex_citation=r"""
 @techreport{kominek2003cmu,
   author = {Kominek, John and Black, Alan W.},

@@ -539,6 +539,12 @@ def build_task_scores(name: str) -> TaskScoresSchema:  # noqa: PLR0914
     # benchmark's locale selection.
     _, all_df = _load_per_benchmark_frames()
     task_frame = all_df.filter(pl.col("task_name") == name)
+    eval_splits = list(cls.metadata.eval_splits)
+    if eval_splits:
+        task_frame = task_frame.filter(pl.col("split").is_in(eval_splits))
+    hf_subsets = list(cls.metadata.hf_subsets)
+    if hf_subsets:
+        task_frame = task_frame.filter(pl.col("subset").is_in(hf_subsets))
 
     # model_name -> subset -> split -> score
     seen: dict[str, dict[str, dict[str, float]]] = {}

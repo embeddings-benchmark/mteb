@@ -24,6 +24,7 @@ class EmoVDBA2TRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
+        superseded_by="EmoVDBA2TRetrieval.v2",
         bibtex_citation=r"""
 @misc{adigwe2018emotional,
   archiveprefix = {arXiv},
@@ -62,6 +63,85 @@ class EmoVDBT2ARetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
+        superseded_by="EmoVDBT2ARetrieval.v2",
+        bibtex_citation=r"""
+@misc{adigwe2018emotional,
+  archiveprefix = {arXiv},
+  author = {Adaeze Adigwe and Noé Tits and Kevin El Haddad and Sarah Ostadabbas and Thierry Dutoit},
+  eprint = {1806.09514},
+  primaryclass = {cs.CL},
+  title = {The Emotional Voices Database: Towards Controlling the Emotion Dimension in Voice Generation Systems},
+  url = {https://arxiv.org/abs/1806.09514},
+  year = {2018},
+}
+""",
+    )
+
+
+class EmoVDBA2TRetrievalV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="EmoVDBA2TRetrieval.v2",
+        description="Natural language emotional captions for speech segments from the EmoV-DB emotional voices database."
+        " Version 2 merges queries and documents with identical content, so a repeated query counts every matching item as relevant, and drops texts of 3 characters or less.",
+        reference="https://github.com/numediart/EmoV-DB?tab=readme-ov-file",
+        dataset={
+            "path": "mteb/EmoV_DB_a2t",
+            "revision": "07d619e811bdd532faf042c2ad40dba774a16140",
+        },
+        type="Any2AnyRetrieval",
+        category="a2t",
+        modalities=["text", "audio"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="hit_rate_at_5",
+        date=("2018-01-01", "2018-12-31"),
+        domains=["Spoken"],
+        task_subtypes=["Emotional Speech Retrieval"],
+        license="https://github.com/numediart/EmoV-DB/blob/master/LICENSE.md",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        adapted_from=["EmoVDBA2TRetrieval"],
+        bibtex_citation=r"""
+@misc{adigwe2018emotional,
+  archiveprefix = {arXiv},
+  author = {Adaeze Adigwe and Noé Tits and Kevin El Haddad and Sarah Ostadabbas and Thierry Dutoit},
+  eprint = {1806.09514},
+  primaryclass = {cs.CL},
+  title = {The Emotional Voices Database: Towards Controlling the Emotion Dimension in Voice Generation Systems},
+  url = {https://arxiv.org/abs/1806.09514},
+  year = {2018},
+}
+""",
+    )
+
+
+class EmoVDBT2ARetrievalV2(AbsTaskRetrieval):
+    """Text-to-audio retrieval on the EmoV-DB emotional voice captions ↔ audio pairs."""
+
+    metadata = TaskMetadata(
+        name="EmoVDBT2ARetrieval.v2",
+        description="Natural language emotional captions for speech segments from the EmoV-DB emotional voices database."
+        " Version 2 merges queries and documents with identical content, so a repeated query counts every matching item as relevant, and drops texts of 3 characters or less.",
+        reference="https://github.com/numediart/EmoV-DB?tab=readme-ov-file",
+        dataset={
+            "path": "mteb/EmoV_DB_t2a",
+            "revision": "f909ec50f6e532853ae374ef58e881a3fc1344cc",
+        },
+        type="Any2AnyRetrieval",
+        category="t2a",
+        modalities=["text", "audio"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="hit_rate_at_5",
+        date=("2018-01-01", "2018-12-31"),
+        domains=["Spoken"],
+        task_subtypes=["Emotional Speech Retrieval"],
+        license="https://github.com/numediart/EmoV-DB/blob/master/LICENSE.md",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        adapted_from=["EmoVDBT2ARetrieval"],
         bibtex_citation=r"""
 @misc{adigwe2018emotional,
   archiveprefix = {arXiv},

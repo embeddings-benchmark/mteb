@@ -116,8 +116,8 @@ from mteb.mocks.mock_tasks.clustering import MockClusteringTask
         (
             MockImageTextPairClassificationTask(),
             [
-                [pytest.approx([0.8081411123275757])],
-                [pytest.approx([0.6950531601905823])],
+                [pytest.approx([0.7708745002746582])],
+                [pytest.approx([0.7533516883850098])],
             ],
         ),
     ],

@@ -80,7 +80,10 @@ class DashengAudioWrapper(AbsEncoder):
 
         # no max_samples: Dasheng splits longer input into ~10 s chunks itself
         # (target_length=1008 frames)
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+        # the patch embedding needs at least 480 samples (30 ms at 16 kHz)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate, min_samples=480
+        )
 
         all_embeddings = []
         with torch.no_grad():

@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING, Any, Literal, cast
 import huggingface_hub
 import numpy as np
 import yaml
-from datasets import ClassLabel, Dataset, DatasetDict, load_dataset
+from datasets import ClassLabel, Dataset, DatasetDict, Value, load_dataset
 from sklearn.preprocessing import MultiLabelBinarizer
 from tqdm.auto import tqdm
 
@@ -346,14 +346,26 @@ class AbsTask(ABC):  # noqa: PLR0904
         """
         # Can only do this if the label column is of ClassLabel.
         if not isinstance(dataset_dict[splits[0]].features[label], ClassLabel):
-            try:
-                dataset_dict = dataset_dict.class_encode_column(label)
-            except ValueError as e:
-                if isinstance(dataset_dict[splits[0]][label][0], Sequence):
-                    return _multilabel_subsampling(
-                        dataset_dict, seed, splits, label, n_samples
-                    )
-                raise e
+            first = dataset_dict[splits[0]][label][0]
+            if isinstance(first, Sequence) and not isinstance(first, str):
+                return _multilabel_subsampling(
+                    dataset_dict, seed, splits, label, n_samples
+                )
+            # Encode all splits with one label set. DatasetDict.class_encode_column
+            # encodes each split on its own, so a label missing from one split
+            # shifts the ids of the labels after it. Names are sorted as strings,
+            # like class_encode_column, so unaffected tasks keep the same ids.
+            names = sorted(
+                {
+                    str(x)
+                    for ds in dataset_dict.values()
+                    for x in ds[label]
+                    if x is not None
+                }
+            )
+            dataset_dict = dataset_dict.cast_column(label, Value("string")).cast_column(
+                label, ClassLabel(names=names)
+            )
 
         for split in splits:
             if n_samples >= len(dataset_dict[split]):
