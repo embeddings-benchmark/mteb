@@ -79,11 +79,24 @@ def hash_video(video: VideoDecoder) -> str:
 
     frame_tensor = video.get_frames_at(frame_indices).data
     if isinstance(frame_tensor, torch.Tensor):
-        frame_bytes = frame_tensor.cpu().numpy().tobytes()
+        frame_array = frame_tensor.cpu().numpy()
     else:
-        frame_bytes = frame_tensor.tobytes()
+        frame_array = frame_tensor
 
-    return _sha256_digest(frame_bytes)
+    metadata = (
+        frame_array.shape,
+        str(frame_array.dtype),
+        meta.num_frames,
+        avg_fps,
+        meta.duration_seconds,
+        meta.rotation,
+        meta.pixel_aspect_ratio,
+    )
+    header = json.dumps(metadata, separators=(",", ":"), default=str).encode()
+    digest = hashlib.sha256(header)
+    digest.update(b"\0")
+    digest.update(frame_array.tobytes())
+    return digest.hexdigest()
 
 
 def compute_text_hashes(texts: list[str], max_workers: int | None = None) -> list[str]:
