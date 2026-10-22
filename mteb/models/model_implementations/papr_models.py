@@ -1,15 +1,12 @@
 from __future__ import annotations
 
-from mteb.models.model_implementations.qwen3_models import (
-    QWEN3_CITATION,
-    multilingual_langs,
-    q3e_instruct_loader,
-)
+from mteb.models.model_implementations.qwen3_models import multilingual_langs
 from mteb.models.model_meta import ModelMeta
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import OutputDType
 
-# Per-task instructions, shipped as task_prompts.json in each model repo (identical for both sizes).
-papr_embed_code_prompts = {
+# Per-task instructions (task_prompts.json in each model repo, identical for both sizes).
+_papr_embed_code_instructions = {
     "AppsRetrieval": "Given a question about code problem, retrieval code that can solve user's problem",
     "COIRCodeSearchNetRetrieval": "Given a code snippet, retrieve the comment corresponding to that code.",
     "CodeFeedbackMT": "Given a question about coding, retrieval code or passage that can solve user's question",
@@ -23,8 +20,17 @@ papr_embed_code_prompts = {
     "SciFact": "Given a scientific claim, retrieve documents that support or refute the claim",
 }
 
-# Qwen3-Embedding's own training sets (the models are fine-tuned from it) ...
-_qwen3_training = {
+# Queries carry the task instruction; documents are encoded bare.
+papr_embed_code_prompts = {
+    "document": "",
+    **{
+        f"{task}-query": f"Instruct: {instruction}\nQuery:"
+        for task, instruction in _papr_embed_code_instructions.items()
+    },
+}
+
+# Both models are fine-tuned from Qwen3-Embedding, so they inherit its training sets ...
+_base_training = {
     "T2Retrieval",
     "DuRetrieval",
     "MMarcoReranking",
@@ -48,15 +54,15 @@ _coir_train_4b = {
     "CosQA",
     "CodeTransOceanDL",
 }  # CodeFeedbackST and CodeTransOceanContest were not trained on
-papr_embed_code_4b_training_datasets = _qwen3_training | _coir_train_4b | {"SciFact"}
+papr_embed_code_4b_training_datasets = _base_training | _coir_train_4b | {"SciFact"}
 papr_embed_code_0b6_training_datasets = papr_embed_code_4b_training_datasets | {
     "CodeFeedbackST",
     "CodeTransOceanContest",
 }
 
 _common = dict(
-    loader=q3e_instruct_loader,
-    loader_kwargs=dict(prompts_dict=papr_embed_code_prompts, max_seq_length=8192),
+    loader=SentenceTransformerEncoderWrapper,
+    loader_kwargs=dict(model_prompts=papr_embed_code_prompts),
     model_type=["dense"],
     languages=multilingual_langs,
     open_weights=True,
@@ -68,7 +74,6 @@ _common = dict(
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
-    citation=QWEN3_CITATION,
     output_dtypes=OutputDType.BF16,
 )
 
