@@ -7,6 +7,7 @@ cross-task embedding cache in `mteb.models.cache_wrappers`.
 from __future__ import annotations
 
 import hashlib
+import json
 from concurrent.futures import ThreadPoolExecutor
 from typing import TYPE_CHECKING, Any
 
@@ -25,8 +26,22 @@ def _sha256_digest(data: bytes) -> str:
 
 
 def hash_image(image: Image.Image) -> str:
-    """Content hash for a single image, from its raw pixel bytes."""
-    return _sha256_digest(image.tobytes())
+    """Hash pixels together with the metadata needed to interpret them."""
+    pixels = image.tobytes()
+    transparency = image.info.get("transparency")
+    if isinstance(transparency, (bytes, bytearray)):
+        transparency = list(transparency)
+    metadata = (
+        image.mode,
+        image.size,
+        image.getpalette("RGBA"),
+        transparency,
+    )
+    header = json.dumps(metadata, separators=(",", ":")).encode()
+    digest = hashlib.sha256(header)
+    digest.update(b"\0")
+    digest.update(pixels)
+    return digest.hexdigest()
 
 
 def hash_audio(audio: AudioInputItem) -> str:

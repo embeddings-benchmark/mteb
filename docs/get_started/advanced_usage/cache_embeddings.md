@@ -24,6 +24,8 @@ results = mteb.evaluate(model_with_cached_emb, tasks=[task])
 
 For tasks that use query and document prompts, embeddings are stored separately in `<path_to_cache_dir>/<task_name>/<prompt_type>` so that inputs encoded with different prompts cannot share cached vectors.
 
+Image cache keys include pixel interpretation metadata, such as dimensions, color mode, palette, and transparency. Image entries written with older keys are recomputed on first use; text cache keys are unchanged.
+
 If you want to directly access the cached embeddings (e.g. for subsequent analyses) follow this example:
 
 ```python
