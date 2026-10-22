@@ -25,7 +25,7 @@ class IndonesianIdClickbaitClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         sample_creation="found",
         bibtex_citation=r"""
-@article{WILLIAM2020106231,
+@article{william_click-id_2020,
   author = {Andika William and Yunita Sari},
   doi = {https://doi.org/10.1016/j.dib.2020.106231},
   issn = {2352-3409},
@@ -65,7 +65,7 @@ class IndonesianIdClickbaitClassificationV2(AbsTaskClassification):
         annotations_creators="expert-annotated",
         sample_creation="found",
         bibtex_citation=r"""
-@article{WILLIAM2020106231,
+@article{william_click-id_2020,
   author = {Andika William and Yunita Sari},
   doi = {https://doi.org/10.1016/j.dib.2020.106231},
   issn = {2352-3409},

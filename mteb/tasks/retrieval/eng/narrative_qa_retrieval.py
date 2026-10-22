@@ -34,7 +34,7 @@ class NarrativeQARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{kocisky-etal-2018-narrativeqa,
+@article{kocisky_narrativeqa_2018,
   address = {Cambridge, MA},
   author = {Ko{\v{c}}isk{\'y}, Tom{\'a}{\v{s}}  and
 Schwarz, Jonathan  and

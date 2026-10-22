@@ -28,7 +28,7 @@ class SWEbenchVerifiedReranking(AbsTaskRetrieval):
             "query": "Given a github issue, identify the code that needs to be changed to fix the issue."
         },
         bibtex_citation=r"""
-@inproceedings{jimenez2024swebenchlanguagemodelsresolve,
+@inproceedings{jimenez_swe-bench_2024,
   archiveprefix = {arXiv},
   author = {Carlos E Jimenez and John Yang and Alexander Wettig and Shunyu Yao and Kexin Pei and Ofir Press and Karthik R Narasimhan},
   booktitle = {The Twelfth International Conference on Learning Representations},

@@ -28,7 +28,7 @@ class ImdbClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{maas-etal-2011-learning,
+@inproceedings{maas_learning_2011,
   address = {Portland, Oregon, USA},
   author = {Maas, Andrew L.  and
 Daly, Raymond E.  and
@@ -78,7 +78,7 @@ class ImdbClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{maas-etal-2011-learning,
+@inproceedings{maas_learning_2011,
   address = {Portland, Oregon, USA},
   author = {Maas, Andrew L.  and
 Daly, Raymond E.  and

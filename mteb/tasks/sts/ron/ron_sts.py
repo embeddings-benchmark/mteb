@@ -25,7 +25,7 @@ class RonSTS(AbsTaskSTS):
         dialect=[],
         sample_creation="machine-translated and verified",
         bibtex_citation=r"""
-@inproceedings{dumitrescu2021liro,
+@inproceedings{dumitrescu_liro_2021,
   author = {Dumitrescu, Stefan Daniel and Rebeja, Petru and Lorincz, Beata and Gaman, Mihaela and Avram, Andrei and Ilie, Mihai and Pruteanu, Andrei and Stan, Adriana and Rosia, Lorena and Iacobescu, Cristina and others},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
   title = {LiRo: Benchmark and leaderboard for Romanian language tasks},

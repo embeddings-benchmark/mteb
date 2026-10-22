@@ -25,7 +25,7 @@ class NamaaMrTydiReranking(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{muennighoff2022mteb,
+@inproceedings{muennighoff_mteb_2022,
   address = {Dubrovnik, Croatia},
   author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Loic and Reimers, Nils},
   booktitle = {Proceedings of the 17th Conference of the {E}uropean Chapter of the {A}ssociation for {C}omputational {L}inguistics},

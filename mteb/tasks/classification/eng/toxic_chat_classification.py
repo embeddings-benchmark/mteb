@@ -28,7 +28,7 @@ class ToxicChatClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{lin2023toxicchat,
+@inproceedings{lin_toxicchat_2023,
   address = {Singapore},
   author = {Lin, Zi and Wang, Zihan and Tong, Yongqi and Wang, Yangkun and Guo, Yuxin and Wang, Yujia and Shang, Jingbo},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2023},
@@ -89,7 +89,7 @@ class ToxicChatClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{lin2023toxicchat,
+@inproceedings{lin_toxicchat_2023,
   address = {Singapore},
   author = {Lin, Zi and Wang, Zihan and Tong, Yongqi and Wang, Yangkun and Guo, Yuxin and Wang, Yujia and Shang, Jingbo},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2023},

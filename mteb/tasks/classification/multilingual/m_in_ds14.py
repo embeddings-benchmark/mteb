@@ -40,7 +40,7 @@ class MInDS14Classification(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{DBLP:journals/corr/abs-2104-08524,
+@inproceedings{gerz_multilingual_2021,
   address = {Online and Punta Cana, Dominican Republic},
   author = {Gerz, Daniela and Su, Pei-Hao and Kusztos, Razvan and Mondal, Avishek and Lis, Micha{\l} and Singhal, Eshan and Mrk{\v{s}}i{\'c}, Nikola and Wen, Tsung-Hsien and Vuli{\'c}, Ivan},
   booktitle = {Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing},

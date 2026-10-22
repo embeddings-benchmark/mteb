@@ -27,7 +27,7 @@ class SICKNLSTS(AbsTaskSTS):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{wijnholds2021sick,
+@inproceedings{wijnholds_sick-nl_2021,
   author = {Wijnholds, Gijs and Moortgat, Michael},
   booktitle = {Proceedings of the 16th Conference of the European Chapter of the Association for Computational Linguistics: Main Volume},
   pages = {1474--1479},

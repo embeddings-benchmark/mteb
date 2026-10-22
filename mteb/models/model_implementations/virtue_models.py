@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-VIRTUE_CITATION = """@article{wang2025virtue,
+VIRTUE_CITATION = """@article{wang_virtue_2025,
   title={VIRTUE: Visual-Interactive Text-Image Universal Embedder},
   author={Wang, Wei-Yao and Tateishi, Kazuya and Wu, Qiyu and Takahashi, Shusuke and Mitsufuji, Yuki},
   journal={arXiv preprint arXiv:2510.00523},

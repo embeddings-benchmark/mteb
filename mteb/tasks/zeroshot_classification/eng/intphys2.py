@@ -33,7 +33,7 @@ class IntPhys2VideoZeroShot(AbsTaskZeroShotClassification):
         modalities=["video", "text"],
         sample_creation="created",
         bibtex_citation=r"""
-@misc{bordes2025intphys2benchmarkingintuitive,
+@misc{bordes_intphys_2025,
   archiveprefix = {arXiv},
   author = {Florian Bordes and Quentin Garrido and Justine T Kao and Adina Williams and Michael Rabbat and Emmanuel Dupoux},
   eprint = {2506.09849},

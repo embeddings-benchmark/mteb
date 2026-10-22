@@ -79,7 +79,7 @@ class IndicLangClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{madhani-etal-2023-bhasa,
+@inproceedings{madhani_bhasa-abhijnaanam_2023,
   address = {Toronto, Canada},
   author = {Madhani, Yash  and
 Khapra, Mitesh M.  and

@@ -25,7 +25,7 @@ class GermanPoliticiansTwitterSentimentClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{schmidt-etal-2022-sentiment,
+@inproceedings{schmidt_sentiment_2022,
   address = {Potsdam, Germany},
   author = {Schmidt, Thomas  and
 Fehle, Jakob  and
@@ -79,7 +79,7 @@ class GermanPoliticiansTwitterSentimentClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{schmidt-etal-2022-sentiment,
+@inproceedings{schmidt_sentiment_2022,
   address = {Potsdam, Germany},
   author = {Schmidt, Thomas  and
 Fehle, Jakob  and

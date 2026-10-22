@@ -29,7 +29,7 @@ class SprintDuplicateQuestionsPC(AbsTaskPairClassification):
         sample_creation="found",
         prompt="Retrieve duplicate questions from Sprint forum",
         bibtex_citation=r"""
-@inproceedings{shah-etal-2018-adversarial,
+@inproceedings{shah_adversarial_2018,
   address = {Brussels, Belgium},
   author = {Shah, Darsh  and
 Lei, Tao  and

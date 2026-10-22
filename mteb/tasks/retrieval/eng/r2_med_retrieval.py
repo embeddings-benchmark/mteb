@@ -69,7 +69,7 @@ class R2MEDBiologyRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@misc{zhang2026r2medbenchmarkreasoningdrivenmedical,
+@misc{zhang_r2med_2026,
   archiveprefix = {arXiv},
   author = {Xiangxu Zhang and Lei Li and Xiao Zhou and Zheng Liu},
   eprint = {2505.14558},
@@ -116,7 +116,7 @@ class R2MEDBioinformaticsRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@misc{zhang2026r2medbenchmarkreasoningdrivenmedical,
+@misc{zhang_r2med_2026,
   archiveprefix = {arXiv},
   author = {Xiangxu Zhang and Lei Li and Xiao Zhou and Zheng Liu},
   eprint = {2505.14558},
@@ -163,7 +163,7 @@ class R2MEDMedicalSciencesRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@misc{zhang2026r2medbenchmarkreasoningdrivenmedical,
+@misc{zhang_r2med_2026,
   archiveprefix = {arXiv},
   author = {Xiangxu Zhang and Lei Li and Xiao Zhou and Zheng Liu},
   eprint = {2505.14558},
@@ -210,7 +210,7 @@ class R2MEDMedXpertQAExamRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@misc{zhang2026r2medbenchmarkreasoningdrivenmedical,
+@misc{zhang_r2med_2026,
   archiveprefix = {arXiv},
   author = {Xiangxu Zhang and Lei Li and Xiao Zhou and Zheng Liu},
   eprint = {2505.14558},
@@ -257,7 +257,7 @@ class R2MEDMedQADiagRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@misc{zhang2026r2medbenchmarkreasoningdrivenmedical,
+@misc{zhang_r2med_2026,
   archiveprefix = {arXiv},
   author = {Xiangxu Zhang and Lei Li and Xiao Zhou and Zheng Liu},
   eprint = {2505.14558},
@@ -304,7 +304,7 @@ class R2MEDPMCTreatmentRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@misc{zhang2026r2medbenchmarkreasoningdrivenmedical,
+@misc{zhang_r2med_2026,
   archiveprefix = {arXiv},
   author = {Xiangxu Zhang and Lei Li and Xiao Zhou and Zheng Liu},
   eprint = {2505.14558},
@@ -351,7 +351,7 @@ class R2MEDPMCClinicalRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@misc{zhang2026r2medbenchmarkreasoningdrivenmedical,
+@misc{zhang_r2med_2026,
   archiveprefix = {arXiv},
   author = {Xiangxu Zhang and Lei Li and Xiao Zhou and Zheng Liu},
   eprint = {2505.14558},
@@ -398,7 +398,7 @@ class R2MEDIIYiClinicalRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@misc{zhang2026r2medbenchmarkreasoningdrivenmedical,
+@misc{zhang_r2med_2026,
   archiveprefix = {arXiv},
   author = {Xiangxu Zhang and Lei Li and Xiao Zhou and Zheng Liu},
   eprint = {2505.14558},

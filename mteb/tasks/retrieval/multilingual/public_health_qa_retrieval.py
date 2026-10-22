@@ -99,7 +99,7 @@ class PublicHealthQARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{xing_han_lu_2024,
+@misc{xinghanlu_publichealth-qa_2024,
   author = { {Xing Han Lu} },
   doi = { 10.57967/hf/2247 },
   publisher = { Hugging Face },

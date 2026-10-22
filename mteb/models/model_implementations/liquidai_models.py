@@ -5,7 +5,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import OutputDType
 
-LFM2_CITATION = """@article{liquidai2025lfm2,
+LFM2_CITATION = """@article{ai_lfm2_2025,
   title={LFM2 Technical Report},
   author={Liquid AI},
   journal={arXiv preprint arXiv:2511.23404},

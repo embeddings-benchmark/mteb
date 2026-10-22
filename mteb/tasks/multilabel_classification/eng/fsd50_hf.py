@@ -31,7 +31,7 @@ class FSD50HFMultilingualClassification(AbsTaskMultilabelClassification):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{9645159,
+@article{fonseca_fsd50k_2022,
   author = {Fonseca, Eduardo and Favory, Xavier and Pons, Jordi and Font, Frederic and Serra, Xavier},
   doi = {10.1109/TASLP.2021.3133208},
   journal = {IEEE/ACM Transactions on Audio, Speech, and Language Processing},

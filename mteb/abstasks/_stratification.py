@@ -15,7 +15,7 @@ Bibtex:
 
 .. code-block:: bibtex
 
-    @article{sechidis2011stratification,
+    @article{sechidis_stratification_2011,
       title={On the stratification of multi-label data},
       author={Sechidis, Konstantinos and Tsoumakas, Grigorios and Vlahavas, Ioannis},
       journal={Machine Learning and Knowledge Discovery in Databases},
@@ -24,7 +24,7 @@ Bibtex:
       publisher={Springer}
     }
 
-    @InProceedings{pmlr-v74-szymański17a,
+    @InProceedings{szymanski_network_2017,
       title =    {A Network Perspective on Stratification of Multi-Label Data},
       author =   {Piotr Szymański and Tomasz Kajdanowicz},
       booktitle =    {Proceedings of the First International Workshop on Learning with Imbalanced Domains: Theory and Applications},

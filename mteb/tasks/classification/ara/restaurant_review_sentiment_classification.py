@@ -25,7 +25,7 @@ class RestaurantReviewSentimentClassification(AbsTaskClassification):
         dialect=["ara-arab-EG", "ara-arab-JO", "ara-arab-SA"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{elsahar2015building,
+@inproceedings{elsahar_building_2015,
   author = {ElSahar, Hady and El-Beltagy, Samhaa R},
   booktitle = {International conference on intelligent text processing and computational linguistics},
   organization = {Springer},
@@ -71,7 +71,7 @@ class RestaurantReviewSentimentClassificationV2(AbsTaskClassification):
         dialect=["ara-arab-EG", "ara-arab-JO", "ara-arab-SA"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{elsahar2015building,
+@inproceedings{elsahar_building_2015,
   author = {ElSahar, Hady and El-Beltagy, Samhaa R},
   booktitle = {International conference on intelligent text processing and computational linguistics},
   organization = {Springer},

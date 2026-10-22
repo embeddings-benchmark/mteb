@@ -33,7 +33,7 @@ class TwentyNewsgroupsClustering(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@incollection{LANG1995331,
+@incollection{lang_newsweeder_1995,
   address = {San Francisco (CA)},
   author = {Ken Lang},
   booktitle = {Machine Learning Proceedings 1995},
@@ -75,7 +75,7 @@ class TwentyNewsgroupsClusteringFast(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@incollection{LANG1995331,
+@incollection{lang_newsweeder_1995,
   address = {San Francisco (CA)},
   author = {Ken Lang},
   booktitle = {Machine Learning Proceedings 1995},

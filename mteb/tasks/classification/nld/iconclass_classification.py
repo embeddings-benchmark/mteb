@@ -27,7 +27,7 @@ class IconclassClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{banar2023transfer,
+@article{banar_transfer_2023,
   author = {Banar, Nikolay and Daelemans, Walter and Kestemont, Mike},
   journal = {ACM Journal on Computing and Cultural Heritage},
   number = {2},

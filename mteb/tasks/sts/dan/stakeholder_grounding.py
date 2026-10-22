@@ -156,7 +156,7 @@ class StakeholderGrounding(AbsTaskSTS):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@misc{rystrom2026grounding,
+@misc{rystrom_grounding_2026,
   archiveprefix = {arXiv},
   author = {Jonathan Rystrøm and Sofie Burgos-Thorsen and Zihao Fu and Johan Irving Søltoft and Kenneth C. Enevoldsen and Chris Russell},
   eprint = {2605.27168},

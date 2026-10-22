@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
 
-EVA_CLIP_CITATION = """@article{EVA-CLIP,
+EVA_CLIP_CITATION = """@article{sun_eva-clip_2023,
       title={EVA-CLIP: Improved Training Techniques for CLIP at Scale},
       author={Sun, Quan and Fang, Yuxin and Wu, Ledell and Wang, Xinlong and Cao, Yue},
       journal={arXiv preprint arXiv:2303.15389},

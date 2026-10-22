@@ -72,7 +72,7 @@ class BrowseCompPlusRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""@article{chen2025BrowseCompPlus,
+        bibtex_citation=r"""@article{chen_browsecomp-plus_2025,
   author = {Chen, Zijian and Ma, Xueguang and Zhuang, Shengyao and Nie, Ping and Zou, Kai
 and Liu, Andrew and Green, Joshua and Patel, Kshama and Meng, Ruoxi and Su, Mingyi
 and Sharifymoghaddam, Sahel and Li, Yanxi and Hong, Haoran and Shi, Xinyu

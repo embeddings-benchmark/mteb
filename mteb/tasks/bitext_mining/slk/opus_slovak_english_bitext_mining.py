@@ -28,7 +28,7 @@ class OpusSlovakEnglishBitextMining(AbsTaskBitextMining):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{zhang2020improving,
+@inproceedings{zhang_improving_2020,
   address = {Online},
   author = {Zhang, Biao  and
 Williams, Philip  and

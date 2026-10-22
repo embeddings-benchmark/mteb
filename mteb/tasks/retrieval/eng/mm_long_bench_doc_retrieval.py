@@ -94,7 +94,7 @@ class MMLongBenchDocRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="multiple",
         bibtex_citation=r"""
-@inproceedings{ma2024mmlongbenchdocbenchmarkinglongcontextdocument,
+@inproceedings{ma_mmlongbench-doc_2024,
   archiveprefix = {arXiv},
   author = {Yubo Ma and Yuhang Zang and Liangyu Chen and Meiqi Chen and Yizhu Jiao and Xinze Li and Xinyuan Lu and Ziyu Liu and Yan Ma and Xiaoyi Dong and Pan Zhang and Liangming Pan and Yu-Gang Jiang and Jiaqi Wang and Yixin Cao and Aixin Sun},
   booktitle = {NeurIPS},

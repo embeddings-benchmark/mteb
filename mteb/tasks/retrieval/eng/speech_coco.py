@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 _REFERENCE = "https://arxiv.org/abs/1707.08435"
 _BIBTEX = r"""
-@inproceedings{havard2017speechcoco,
+@inproceedings{havard_speech-coco_2017,
   author = {Havard, William and Besacier, Laurent and Rosec, Olivier},
   booktitle = {Proceedings of the GLU 2017 International Workshop on Grounding Language Understanding},
   title = {SPEECH-COCO: 600k Visually Grounded Spoken Captions Aligned to MSCOCO Data Set},

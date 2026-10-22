@@ -28,7 +28,7 @@ class JLCorpusA2TRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{james2018open,
+@inproceedings{james_open_2018,
   author = {James, Jesin and Li, Tian and Watson, Catherine},
   booktitle = {Proc. Interspeech 2018},
   title = {An Open Source Emotional Speech Corpus for Human Robot Interaction Applications},
@@ -66,7 +66,7 @@ class JLCorpusT2ARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{james2018open,
+@inproceedings{james_open_2018,
   author = {James, Jesin and Li, Tian and Watson, Catherine},
   booktitle = {Proc. Interspeech 2018},
   title = {An Open Source Emotional Speech Corpus for Human Robot Interaction Applications},

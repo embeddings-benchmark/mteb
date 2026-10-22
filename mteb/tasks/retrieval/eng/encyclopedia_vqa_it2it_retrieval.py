@@ -25,7 +25,7 @@ class EncyclopediaVQAIT2ITRetrieval(AbsTaskRetrieval):
         modalities=["image", "text"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{mensink2023encyclopedic,
+@inproceedings{mensink_encyclopedic_2023,
   author = {Mensink, Thomas and Uijlings, Jasper and Castrejon, Lluis and Goel, Arushi and Cadar, Felipe and Zhou, Howard and Sha, Fei and Araujo, Andr{\'e} and Ferrari, Vittorio},
   booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision},
   pages = {3113--3124},

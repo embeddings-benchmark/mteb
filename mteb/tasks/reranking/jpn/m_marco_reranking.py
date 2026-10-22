@@ -26,7 +26,7 @@ class VoyageMMarcoReranking(AbsTaskRetrieval):
         sample_creation="found",
         prompt="Given a Japanese search query, retrieve web passages that answer the question",
         bibtex_citation=r"""
-@misc{clavie2023jacolbert,
+@misc{clavie_better_2023,
   archiveprefix = {arXiv},
   author = {Benjamin Clavié},
   eprint = {2312.16144},

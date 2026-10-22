@@ -30,7 +30,7 @@ class BBSARDNLRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{lotfi2025bilingual,
+@article{lotfi_bilingual_2025,
   author = {Lotfi, Ehsan and Banar, Nikolay and Yuzbashyan, Nerses and Daelemans, Walter},
   journal = {COLING 2025},
   pages = {10},

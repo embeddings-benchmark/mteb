@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput
 
-LLAMA_NEMORETRIEVER_CITATION = """@misc{xu2025llamanemoretrievercolembedtopperforming,
+LLAMA_NEMORETRIEVER_CITATION = """@misc{xu_llama_2025,
       title={Llama Nemoretriever Colembed: Top-Performing Text-Image Retrieval Model},
       author={Mengyao Xu and Gabriel Moreira and Ronay Ak and Radek Osmulski and Yauhen Babakhin and Zhiding Yu and Benedikt Schifferer and Even Oldridge},
       year={2025},
@@ -31,7 +31,7 @@ LLAMA_NEMORETRIEVER_CITATION = """@misc{xu2025llamanemoretrievercolembedtopperfo
 }"""
 
 NEMOTRON_COLEMBED_CITATION_V2 = """
-@misc{moreira2026nemotroncolembedv2topperforming,
+@misc{moreira_nemotron_2026,
     title={Nemotron ColEmbed V2: Top-Performing Late Interaction embedding models for Visual Document Retrieval},
     author={Gabriel de Souza P. Moreira and Ronay Ak and Mengyao Xu and Oliver Holworthy and Benedikt Schifferer and Zhiding Yu and Yauhen Babakhin and Radek Osmulski and Jiarui Cai and Ryan Chesler and Bo Liu and Even Oldridge},
     year={2026},
@@ -445,7 +445,7 @@ LLAMA_NEMOTRON_VL_1B_V2_LANGUAGES = [
     "tur-Latn",
 ]
 
-LLAMA_NEMOTRON_VL_1B_V2_CITATION = """@inproceedings{moreira2025_nvretriever,
+LLAMA_NEMOTRON_VL_1B_V2_CITATION = """@inproceedings{moreira_improving_2025,
   author = {Moreira, Gabriel de Souza P. and Osmulski, Radek and Xu, Mengyao and Ak, Ronay and Schifferer, Benedikt and Oldridge, Even},
   title = {Improving Text Embedding Models with Positive-aware Hard-negative Mining},
   year = {2025},

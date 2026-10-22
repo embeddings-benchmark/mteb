@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 _REFERENCE = "https://arxiv.org/abs/2503.07920"
 _BIBTEX = r"""
-@inproceedings{cahyawijaya-etal-2025-crowdsource,
+@inproceedings{cahyawijaya_crowdsource_2025,
     title = "Crowdsource, Crawl, or Generate? Creating {SEA}-{VL}, a Multicultural Vision-Language Dataset for {S}outheast {A}sia",
     author = {Cahyawijaya, Samuel  and
       Lovenia, Holy  and

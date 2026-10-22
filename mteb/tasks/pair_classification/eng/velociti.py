@@ -43,7 +43,7 @@ class VELOCITIPairClassification(AbsTaskPairClassification):
         sample_creation="LM-generated and verified",
         is_beta=True,
         bibtex_citation=r"""
-@inproceedings{saravanan2025velociti,
+@inproceedings{saravanan_velociti_2025,
   author = {Saravanan, Darshana and Gupta, Varun and Singh, Darshan and Khan, Zeeshan and Gandhi, Vineet and Tapaswi, Makarand},
   booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
   title = {VELOCITI: Benchmarking Video-Language Compositional Reasoning with Strict Entailment},

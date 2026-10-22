@@ -36,7 +36,7 @@ inf_retriever_v1_training_data = {
     # and other private data of INF TECH (not in MTEB),
 }
 
-INF_RETRIEVER_CITATION = """@misc{infly-ai_2025,
+INF_RETRIEVER_CITATION = """@misc{yang_inf-retriever-v1_2025,
   author       = {Junhan Yang and Jiahe Wan and Yichen Yao and Wei Chu and Yinghui Xu and Yuan Qi},
   title        = {inf-retriever-v1 (Revision 5f469d7)},
   year         = 2025,

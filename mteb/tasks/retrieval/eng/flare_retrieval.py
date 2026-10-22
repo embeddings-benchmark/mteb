@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 _REFERENCE = "https://arxiv.org/abs/2605.10228"
 _BIBTEX = r"""
-@misc{you2026flarefullmodalitylongvideoaudiovisual,
+@misc{you_flare_2026,
   title={FLARE: Full-Modality Long-Video Audiovisual Retrieval Benchmark with User-Simulated Queries},
   author={Qijie You and Hao Liang and Mingrui Chen and Bohan Zeng and Meiyi Qiang and Zhenhao Wong and Wentao Zhang},
   year={2026},

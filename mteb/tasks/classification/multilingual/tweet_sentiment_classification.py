@@ -37,7 +37,7 @@ class TweetSentimentClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{barbieri-etal-2022-xlm,
+@inproceedings{barbieri_xlm-t_2022,
   address = {Marseille, France},
   author = {Barbieri, Francesco  and
 Espinosa Anke, Luis  and

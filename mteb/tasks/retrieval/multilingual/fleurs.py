@@ -199,7 +199,7 @@ class FleursA2TRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{conneau2023fleurs,
+@inproceedings{conneau_fleurs_2023,
   author = {Conneau, Alexis and Ma, Min and Khanuja, Simran and Zhang, Yu and Axelrod, Vera and Dalmia, Siddharth and Riesa, Jason and Rivera, Clara and Bapna, Ankur},
   booktitle = {2022 IEEE Spoken Language Technology Workshop (SLT)},
   organization = {IEEE},
@@ -272,7 +272,7 @@ class FleursT2ARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{conneau2023fleurs,
+@inproceedings{conneau_fleurs_2023,
   author = {Conneau, Alexis and Ma, Min and Khanuja, Simran and Zhang, Yu and Axelrod, Vera and Dalmia, Siddharth and Riesa, Jason and Rivera, Clara and Bapna, Ankur},
   booktitle = {2022 IEEE Spoken Language Technology Workshop (SLT)},
   organization = {IEEE},
@@ -353,7 +353,7 @@ class FleursA2TRetrievalV2(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{conneau2023fleurs,
+@inproceedings{conneau_fleurs_2023,
   author = {Conneau, Alexis and Ma, Min and Khanuja, Simran and Zhang, Yu and Axelrod, Vera and Dalmia, Siddharth and Riesa, Jason and Rivera, Clara and Bapna, Ankur},
   booktitle = {2022 IEEE Spoken Language Technology Workshop (SLT)},
   organization = {IEEE},
@@ -421,7 +421,7 @@ class FleursT2ARetrievalV2(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{conneau2023fleurs,
+@inproceedings{conneau_fleurs_2023,
   author = {Conneau, Alexis and Ma, Min and Khanuja, Simran and Zhang, Yu and Axelrod, Vera and Dalmia, Siddharth and Riesa, Jason and Rivera, Clara and Bapna, Ankur},
   booktitle = {2022 IEEE Spoken Language Technology Workshop (SLT)},
   organization = {IEEE},

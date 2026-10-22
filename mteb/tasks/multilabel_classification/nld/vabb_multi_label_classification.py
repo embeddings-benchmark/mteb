@@ -32,7 +32,7 @@ class VABBMultiLabelClassification(AbsTaskMultilabelClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@dataset{aspeslagh2024vabb,
+@dataset{aspeslagh_vabb-shw_2024,
   author = {Aspeslagh, Pieter and Guns, Raf and Engels, Tim C. E.},
   doi = {10.5281/zenodo.14214806},
   publisher = {Zenodo},
@@ -76,7 +76,7 @@ class VABBMultiLabelClassificationV2(AbsTaskMultilabelClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@dataset{aspeslagh2024vabb,
+@dataset{aspeslagh_vabb-shw_2024,
   author = {Aspeslagh, Pieter and Guns, Raf and Engels, Tim C. E.},
   doi = {10.5281/zenodo.14214806},
   publisher = {Zenodo},

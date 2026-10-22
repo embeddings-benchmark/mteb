@@ -3,7 +3,7 @@ from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderW
 
 from .bge_models import bge_m3_training_data
 
-CADET_CITATION = """@article{tamber2025conventionalcontrastivelearningfalls,
+CADET_CITATION = """@article{tamber_conventional_2025,
     title={Conventional Contrastive Learning Often Falls Short: Improving Dense Retrieval with Cross-Encoder Listwise Distillation and Synthetic Data},
     author={Manveer Singh Tamber and Suleman Kazi and Vivek Sourabh and Jimmy Lin},
     journal={arXiv:2505.19274},

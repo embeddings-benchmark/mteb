@@ -30,7 +30,7 @@ class MIRACLJaRetrievalLite(AbsTaskRetrieval):
         sample_creation="created",
         adapted_from=["MIRACLRetrieval"],
         bibtex_citation=r"""
-@article{10.1162/tacl_a_00595,
+@article{zhang_miracl_2023,
   author = {Zhang, Xinyu and Thakur, Nandan and Ogundepo, Odunayo and Kamalloo, Ehsan and Alfonso-Hermelo, David
 and Li, Xiaoguang and Liu, Qun and Rezagholizadeh, Mehdi and Lin, Jimmy},
   doi = {10.1162/tacl_a_00595},
@@ -41,7 +41,7 @@ and Li, Xiaoguang and Liu, Qun and Rezagholizadeh, Mehdi and Lin, Jimmy},
   year = {2023},
 }
 
-@inproceedings{li-etal-2026-jmteb,
+@inproceedings{li_jmteb_2026,
   address = {Palma de Mallorca, Spain},
   author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan and Fukuchi, Akihiko and Shibata, Tomohide and Kawahara, Daisuke},
   booktitle = {Proceedings of the Fifteenth Language Resources and Evaluation Conference},

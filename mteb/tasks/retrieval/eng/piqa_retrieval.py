@@ -25,7 +25,7 @@ class PIQA(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{bisk2020piqa,
+@inproceedings{bisk_piqa_2020,
   author = {Bisk, Yonatan and Zellers, Rowan and Gao, Jianfeng and Choi, Yejin and others},
   booktitle = {Proceedings of the AAAI conference on artificial intelligence},
   number = {05},
@@ -35,7 +35,7 @@ class PIQA(AbsTaskRetrieval):
   year = {2020},
 }
 
-@article{xiao2024rar,
+@article{xiao_rar-b_2024,
   author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
   journal = {arXiv preprint arXiv:2404.06347},
   title = {RAR-b: Reasoning as Retrieval Benchmark},

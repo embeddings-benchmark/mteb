@@ -53,7 +53,7 @@ class BiModernVBertWrapper(ColPaliEngineWrapper):
 
 
 COLMODERNVBERT_CITATION = """
-@misc{teiletche2025modernvbertsmallervisualdocument,
+@misc{teiletche_modernvbert_2025,
   title={ModernVBERT: Towards Smaller Visual Document Retrievers},
   author={Paul Teiletche and Quentin Macé and Max Conti and Antonio Loison and Gautier Viaud and Pierre Colombo and Manuel Faysse},
   year={2025},

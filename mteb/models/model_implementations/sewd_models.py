@@ -174,7 +174,7 @@ sewd_base = ModelMeta(
     training_datasets={"LibriSpeech"},
     modalities=["audio"],
     citation="""
-@inproceedings{wu2021performanceefficiencytradeoffsunsupervisedpretraining,
+@inproceedings{wu_performance-efficiency_2022,
   author = {Wu, Felix and Kim, Kwangyoun and Pan, Jing and Han, Kyu J. and Weinberger, Kilian Q. and Artzi, Yoav},
   booktitle = {ICASSP 2022 - 2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp43922.2022.9747432},
@@ -209,7 +209,7 @@ sewd_tiny = ModelMeta(
     training_datasets={"LibriSpeech"},
     modalities=["audio"],
     citation="""
-@inproceedings{wu2021performanceefficiencytradeoffsunsupervisedpretraining,
+@inproceedings{wu_performance-efficiency_2022,
   author = {Wu, Felix and Kim, Kwangyoun and Pan, Jing and Han, Kyu J. and Weinberger, Kilian Q. and Artzi, Yoav},
   booktitle = {ICASSP 2022 - 2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp43922.2022.9747432},
@@ -244,7 +244,7 @@ sewd_mid = ModelMeta(
     training_datasets={"LibriSpeech"},
     modalities=["audio"],
     citation="""
-@inproceedings{wu2021performanceefficiencytradeoffsunsupervisedpretraining,
+@inproceedings{wu_performance-efficiency_2022,
   author = {Wu, Felix and Kim, Kwangyoun and Pan, Jing and Han, Kyu J. and Weinberger, Kilian Q. and Artzi, Yoav},
   booktitle = {ICASSP 2022 - 2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp43922.2022.9747432},

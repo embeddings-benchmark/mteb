@@ -33,7 +33,7 @@ class AVSpeakerBenchVideoCentricQA(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@inproceedings{nguyen2025avspeakerbench,
+@inproceedings{nguyen_see_2026,
   author = {Nguyen, Le Thien Phuc and Yu, Zhuoran and Hang, Samuel Low Yu and An, Subin and Lee, Jeongik and Ban, Yohan and Chung, SeungEun and Nguyen, Thanh-Huy and Maeng, JuWan and Lee, Soochahn and Lee, Yong Jae},
   booktitle = {2026 IEEE/CVF Conference on Computer Vision and Pattern Recognition - Findings Track (CVPRF)},
   doi = {10.1109/cvprf71909.2026.00222},
@@ -109,7 +109,7 @@ class AVSpeakerBenchVideoAudioCentricQA(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@inproceedings{nguyen2025avspeakerbench,
+@inproceedings{nguyen_see_2026,
   author = {Nguyen, Le Thien Phuc and Yu, Zhuoran and Hang, Samuel Low Yu and An, Subin and Lee, Jeongik and Ban, Yohan and Chung, SeungEun and Nguyen, Thanh-Huy and Maeng, JuWan and Lee, Soochahn and Lee, Yong Jae},
   booktitle = {2026 IEEE/CVF Conference on Computer Vision and Pattern Recognition - Findings Track (CVPRF)},
   doi = {10.1109/cvprf71909.2026.00222},

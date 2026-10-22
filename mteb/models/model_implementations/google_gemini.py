@@ -62,7 +62,7 @@ GEMINI_MAX_VIDEO_FRAMES = 32
 # https://ai.google.dev/gemini-api/docs/embeddings
 GEMINI_MAX_AUDIO_SECONDS = 180
 
-GEMINI_EMBEDDING_CITATION = """@misc{lee2025geminiembeddinggeneralizableembeddings,
+GEMINI_EMBEDDING_CITATION = """@misc{lee_gemini_2025,
   title={Gemini Embedding: Generalizable Embeddings from Gemini},
   author={Jinhyuk Lee and Feiyang Chen and Sahil Dua and Daniel Cer and Madhuri Shanbhogue and Iftekhar Naim and Gustavo Hernández Ábrego and Zhe Li and Kaifeng Chen and Henrique Schechter Vera and Xiaoqi Ren and Shanfeng Zhang and Daniel Salz and Michael Boratko and Jay Han and Blair Chen and Shuo Huang and Vikram Rao and Paul Suganthan and Feng Han and Andreas Doumanoglou and Nithi Gupta and Fedor Moiseev and Cathy Yip and Aashi Jain and Simon Baumgartner and Shahrokh Shahi and Frank Palma Gomez and Sandeep Mariserla and Min Choi and Parashar Shah and Sonam Goenka and Ke Chen and Ye Xia and Koert Chen and Sai Meher Karthik Duddu and Yichang Chen and Trevor Walker and Wenlei Zhou and Rakesh Ghiya and Zach Gleicher and Karan Gill and Zhe Dong and Mojtaba Seyedhosseini and Yunhsuan Sung and Raphael Hoffmann and Tom Duerig},
   year={2025},
@@ -72,7 +72,7 @@ GEMINI_EMBEDDING_CITATION = """@misc{lee2025geminiembeddinggeneralizableembeddin
   url={https://arxiv.org/abs/2503.07891},
 }"""
 
-GEMINI_EMBEDDING_2_CITATION = """@misc{shanbhogue2026geminiembedding2native,
+GEMINI_EMBEDDING_2_CITATION = """@misc{shanbhogue_gemini_2026,
   title={Gemini Embedding 2: A Native Multimodal Embedding Model from Gemini},
   author={Madhuri Shanbhogue and Zhe Li and Shanfeng Zhang and Gustavo Hernández Ábrego and Shih-Cheng Huang and Aashi Jain and Daniel Salz and Sonam Goenka and Chaitra Hegde and Ji Ma and Feiyang Chen and Jiaxing Wu and Tanmaya Dabral and Babak Samari and Kevin Poulet and Daniel Cer and Kaifeng Chen and Paul Suganathan and Hui Hui and Jovan Andonov and Philippe Schlattner and Jay Han and Iftekhar Naim and Wing Lowe and Vladimir Pchelin and Albert Yang and Yi-Ting Chen and Zhongli Ding and Grace Zhang and Georg Heigold and Yichang Chen and Antoine Reveillon and Brendan Mccloskey and Wenlei Zhou and Dahun Kim and Rui Meng and Emma Wang and Jack Zheng and Halley Fede and Zhen Yang and Keegan Mosley and Brian Potetz and Sahil Dua and Henrique Schechter Vera and Shen Gao and Hesen Zhang and Andreas Hess and Hengxuan Ying and Alberto Montes and Karan Gill and Min Choi and Sebastian Russo and Anja Hauth and Jinhyuk Lee and Michael Boratko and Megan Barnes and Vikram Rao and Claudiu Musat and Cyril Allauzen and Ehsan Variani and Shankar Kumar and Tom Bagby and Junyi Jiao and Yang Gu and Tengxin Li and Ayush Agrawal and Roberto Santana and Dev Nath and Stephen Karukas and Shuoxuan Han and Lucia Loher and Alice Twu and Nidhi Vyas and Siddharth Bhai and Frank Palma Gomez and Wangyuan Zhang and Chaoren Liu and Jizheng Yang and Steve Qiu and Shijie Zhang and Sujay Kulkarni and Sascha Rothe and Sean Nakamoto and Raphael Hoffmann and Zach Gleicher and Yunhsuan Sung and Qin Yin and Tom Duerig and Mojtaba Seyedhosseini},
   year={2026},

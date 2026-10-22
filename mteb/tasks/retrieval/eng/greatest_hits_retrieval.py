@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 _REFERENCE = "https://andrewowens.com/vis/"
 _BIBTEX = r"""
-@inproceedings{owens2016visually,
+@inproceedings{owens_visually_2016,
   author = {Owens, Andrew and Isola, Phillip and McDermott, Josh and Torralba, Antonio and Adelson, Edward H. and Freeman, William T.},
   booktitle = {IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
   title = {Visually Indicated Sounds},

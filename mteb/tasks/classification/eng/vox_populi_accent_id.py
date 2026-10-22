@@ -27,7 +27,7 @@ class VoxPopuliAccentID(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{wang-etal-2021-voxpopuli,
+@inproceedings{wang_voxpopuli_2021,
   address = {Online},
   author = {Wang, Changhan  and
 Riviere, Morgane  and

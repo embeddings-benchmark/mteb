@@ -25,7 +25,7 @@ class ArxivClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{8675939,
+@article{he_long_2019,
   author = {He, Jun and Wang, Liqun and Liu, Liu and Feng, Jiao and Wu, Hao},
   doi = {10.1109/ACCESS.2019.2907992},
   journal = {IEEE Access},
@@ -63,7 +63,7 @@ class ArxivClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{8675939,
+@article{he_long_2019,
   author = {He, Jun and Wang, Liqun and Liu, Liu and Feng, Jiao and Wu, Hao},
   doi = {10.1109/ACCESS.2019.2907992},
   journal = {IEEE Access},

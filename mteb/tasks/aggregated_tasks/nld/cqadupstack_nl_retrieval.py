@@ -51,7 +51,7 @@ class CQADupstackNLRetrieval(AbsTaskAggregate):
         dialect=[""],
         sample_creation="machine-translated and verified",  # manually checked a small subset
         bibtex_citation=r"""
-@inproceedings{banar2024beirnlzeroshotinformationretrieval,
+@inproceedings{lotfi_beir-nl_2025,
   address = {Abu Dhabi, UAE},
   archiveprefix = {arXiv},
   author = {Lotfi, Ehsan and Banar, Nikolay and Daelemans, Walter},

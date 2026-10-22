@@ -25,7 +25,7 @@ class STS14STS(AbsTaskSTS):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{bandhakavi-etal-2014-generating,
+@inproceedings{bandhakavi_generating_2014,
   address = {Dublin, Ireland},
   author = {Bandhakavi, Anil  and
 Wiratunga, Nirmalie  and

@@ -30,7 +30,7 @@ class CataloniaTweetClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{zotova-etal-2020-multilingual,
+@inproceedings{zotova_multilingual_2020,
   author = {Zotova, Elena  and
 Agerri, Rodrigo  and
 Nu{\~n}ez, Manuel  and

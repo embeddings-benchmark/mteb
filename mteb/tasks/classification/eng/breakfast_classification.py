@@ -30,7 +30,7 @@ class BreakfastClassification(AbsTaskClassification):
         modalities=["video"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{kuehne2014language,
+@inproceedings{kuehne_language_2014,
   author = {Kuehne, Hilde and Arslan, Ali and Serre, Thomas},
   booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
   pages = {780--787},

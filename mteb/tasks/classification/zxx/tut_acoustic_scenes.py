@@ -27,7 +27,7 @@ class TUTAcousticScenesClassification(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{Mesaros2018_DCASE,
+@inproceedings{mesaros_multi-device_2018,
   address = {Tampere, Finland},
   author = {Annamaria Mesaros and Toni Heittola and Tuomas Virtanen},
   booktitle = {Proceedings of the Detection and Classification of Acoustic Scenes and Events 2018 Workshop (DCASE2018)},

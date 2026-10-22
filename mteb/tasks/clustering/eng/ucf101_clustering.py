@@ -6,7 +6,7 @@ from mteb.abstasks import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 BIBTEX = r"""
-@misc{soomro2012ucf101dataset101human,
+@misc{soomro_ucf101_2012,
   archiveprefix = {arXiv},
   author = {Khurram Soomro and Amir Roshan Zamir and Mubarak Shah},
   eprint = {1212.0402},

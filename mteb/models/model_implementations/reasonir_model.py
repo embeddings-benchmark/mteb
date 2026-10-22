@@ -2,7 +2,7 @@ from mteb.models import ModelMeta
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.types import OutputDType, PromptType
 
-REASONIR_CITATION = """@article{shao2025reasonir,
+REASONIR_CITATION = """@article{shao_reasonir_2025,
       title={ReasonIR: Training Retrievers for Reasoning Tasks},
       author={Rulin Shao and Rui Qiao and Varsha Kishore and Niklas Muennighoff and Xi Victoria Lin and Daniela Rus and Bryan Kian Hsiang Low and Sewon Min and Wen-tau Yih and Pang Wei Koh and Luke Zettlemoyer},
       year={2025},

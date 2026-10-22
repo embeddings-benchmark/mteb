@@ -36,7 +36,7 @@ class WebVidCoVRIT2VRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{ventura23covr,
+@inproceedings{ventura_covr_2024,
   author = {Lucas Ventura and Antoine Yang and Cordelia Schmid and G{\"u}l Varol},
   booktitle = {Proceedings of the AAAI Conference on Artificial Intelligence},
   doi = {10.1609/aaai.v38i6.28334},

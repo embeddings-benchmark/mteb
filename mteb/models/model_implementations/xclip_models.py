@@ -144,7 +144,7 @@ class XCLIPModel(AbsEncoder):
 
 
 XCLIP_CITATION = """
-@inbook{ni2022expanding,
+@inbook{ni_expanding_2022,
   author = {Ni, Bolin and Peng, Houwen and Chen, Minghao and Zhang, Songyang and Meng, Gaofeng and Fu, Jianlong and Xiang, Shiming and Ling, Haibin},
   booktitle = {Computer Vision – ECCV 2022},
   doi = {10.1007/978-3-031-19772-7_1},

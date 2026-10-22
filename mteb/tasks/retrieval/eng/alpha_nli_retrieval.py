@@ -25,7 +25,7 @@ class AlphaNLI(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{bhagavatula2019abductive,
+@inproceedings{bhagavatula_abductive_2020,
   archiveprefix = {arXiv},
   author = {Bhagavatula, Chandra and Bras, Ronan Le and Malaviya, Chaitanya and Sakaguchi, Keisuke and Holtzman, Ari and Rashkin, Hannah and Downey, Doug and Yih, Scott Wen-tau and Choi, Yejin},
   booktitle = {8th International Conference on Learning Representations, {ICLR} 2020},
@@ -35,7 +35,7 @@ class AlphaNLI(AbsTaskRetrieval):
   year = {2020},
 }
 
-@article{xiao2024rar,
+@article{xiao_rar-b_2024,
   author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
   journal = {arXiv preprint arXiv:2404.06347},
   title = {RAR-b: Reasoning as Retrieval Benchmark},

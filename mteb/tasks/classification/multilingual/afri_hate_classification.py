@@ -55,7 +55,7 @@ class AfriHateClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""@inproceedings{muhammad-etal-2025-afrihate,
+        bibtex_citation=r"""@inproceedings{muhammad_afrihate_2025,
   address = {Albuquerque, New Mexico},
   author = {Muhammad, Shamsuddeen Hassan  and
 Abdulmumin, Idris  and

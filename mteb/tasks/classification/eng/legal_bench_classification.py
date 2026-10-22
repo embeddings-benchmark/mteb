@@ -25,7 +25,7 @@ class CanadaTaxCourtOutcomesLegalBenchClassification(AbsTaskClassification):
         dialect=["en-CA"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -66,7 +66,7 @@ class ContractNLIConfidentialityOfAgreementLegalBenchClassification(
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -79,7 +79,7 @@ class ContractNLIConfidentialityOfAgreementLegalBenchClassification(
   year = {2023},
 }
 
-@inproceedings{koreeda2021contractnli,
+@inproceedings{koreeda_contractnli_2021,
   address = {Punta Cana, Dominican Republic},
   author = {Koreeda, Yuta and Manning, Christopher},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2021},
@@ -119,7 +119,7 @@ class ContractNLIExplicitIdentificationLegalBenchClassification(AbsTaskClassific
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -132,7 +132,7 @@ class ContractNLIExplicitIdentificationLegalBenchClassification(AbsTaskClassific
   year = {2023},
 }
 
-@inproceedings{koreeda2021contractnli,
+@inproceedings{koreeda_contractnli_2021,
   address = {Punta Cana, Dominican Republic},
   author = {Koreeda, Yuta and Manning, Christopher},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2021},
@@ -174,7 +174,7 @@ class ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification(
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -187,7 +187,7 @@ class ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification(
   year = {2023},
 }
 
-@inproceedings{koreeda2021contractnli,
+@inproceedings{koreeda_contractnli_2021,
   address = {Punta Cana, Dominican Republic},
   author = {Koreeda, Yuta and Manning, Christopher},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2021},
@@ -227,7 +227,7 @@ class ContractNLILimitedUseLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -240,7 +240,7 @@ class ContractNLILimitedUseLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{koreeda2021contractnli,
+@inproceedings{koreeda_contractnli_2021,
   address = {Punta Cana, Dominican Republic},
   author = {Koreeda, Yuta and Manning, Christopher},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2021},
@@ -280,7 +280,7 @@ class ContractNLINoLicensingLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -293,7 +293,7 @@ class ContractNLINoLicensingLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{koreeda2021contractnli,
+@inproceedings{koreeda_contractnli_2021,
   address = {Punta Cana, Dominican Republic},
   author = {Koreeda, Yuta and Manning, Christopher},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2021},
@@ -335,7 +335,7 @@ class ContractNLINoticeOnCompelledDisclosureLegalBenchClassification(
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -348,7 +348,7 @@ class ContractNLINoticeOnCompelledDisclosureLegalBenchClassification(
   year = {2023},
 }
 
-@inproceedings{koreeda2021contractnli,
+@inproceedings{koreeda_contractnli_2021,
   address = {Punta Cana, Dominican Republic},
   author = {Koreeda, Yuta and Manning, Christopher},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2021},
@@ -390,7 +390,7 @@ class ContractNLIPermissibleAcquirementOfSimilarInformationLegalBenchClassificat
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -403,7 +403,7 @@ class ContractNLIPermissibleAcquirementOfSimilarInformationLegalBenchClassificat
   year = {2023},
 }
 
-@inproceedings{koreeda2021contractnli,
+@inproceedings{koreeda_contractnli_2021,
   address = {Punta Cana, Dominican Republic},
   author = {Koreeda, Yuta and Manning, Christopher},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2021},
@@ -443,7 +443,7 @@ class ContractNLIPermissibleCopyLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -456,7 +456,7 @@ class ContractNLIPermissibleCopyLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{koreeda2021contractnli,
+@inproceedings{koreeda_contractnli_2021,
   address = {Punta Cana, Dominican Republic},
   author = {Koreeda, Yuta and Manning, Christopher},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2021},
@@ -498,7 +498,7 @@ class ContractNLIPermissibleDevelopmentOfSimilarInformationLegalBenchClassificat
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -511,7 +511,7 @@ class ContractNLIPermissibleDevelopmentOfSimilarInformationLegalBenchClassificat
   year = {2023},
 }
 
-@inproceedings{koreeda2021contractnli,
+@inproceedings{koreeda_contractnli_2021,
   address = {Punta Cana, Dominican Republic},
   author = {Koreeda, Yuta and Manning, Christopher},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2021},
@@ -553,7 +553,7 @@ class ContractNLIPermissiblePostAgreementPossessionLegalBenchClassification(
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -566,7 +566,7 @@ class ContractNLIPermissiblePostAgreementPossessionLegalBenchClassification(
   year = {2023},
 }
 
-@inproceedings{koreeda2021contractnli,
+@inproceedings{koreeda_contractnli_2021,
   address = {Punta Cana, Dominican Republic},
   author = {Koreeda, Yuta and Manning, Christopher},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2021},
@@ -608,7 +608,7 @@ class ContractNLIReturnOfConfidentialInformationLegalBenchClassification(
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -621,7 +621,7 @@ class ContractNLIReturnOfConfidentialInformationLegalBenchClassification(
   year = {2023},
 }
 
-@inproceedings{koreeda2021contractnli,
+@inproceedings{koreeda_contractnli_2021,
   address = {Punta Cana, Dominican Republic},
   author = {Koreeda, Yuta and Manning, Christopher},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2021},
@@ -661,7 +661,7 @@ class ContractNLISharingWithEmployeesLegalBenchClassification(AbsTaskClassificat
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -674,7 +674,7 @@ class ContractNLISharingWithEmployeesLegalBenchClassification(AbsTaskClassificat
   year = {2023},
 }
 
-@inproceedings{koreeda2021contractnli,
+@inproceedings{koreeda_contractnli_2021,
   address = {Punta Cana, Dominican Republic},
   author = {Koreeda, Yuta and Manning, Christopher},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2021},
@@ -714,7 +714,7 @@ class ContractNLISharingWithThirdPartiesLegalBenchClassification(AbsTaskClassifi
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -727,7 +727,7 @@ class ContractNLISharingWithThirdPartiesLegalBenchClassification(AbsTaskClassifi
   year = {2023},
 }
 
-@inproceedings{koreeda2021contractnli,
+@inproceedings{koreeda_contractnli_2021,
   address = {Punta Cana, Dominican Republic},
   author = {Koreeda, Yuta and Manning, Christopher},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2021},
@@ -767,7 +767,7 @@ class ContractNLISurvivalOfObligationsLegalBenchClassification(AbsTaskClassifica
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -780,7 +780,7 @@ class ContractNLISurvivalOfObligationsLegalBenchClassification(AbsTaskClassifica
   year = {2023},
 }
 
-@inproceedings{koreeda2021contractnli,
+@inproceedings{koreeda_contractnli_2021,
   address = {Punta Cana, Dominican Republic},
   author = {Koreeda, Yuta and Manning, Christopher},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2021},
@@ -820,7 +820,7 @@ class CorporateLobbyingLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -859,7 +859,7 @@ class CUADAffiliateLicenseLicenseeLegalBenchClassification(AbsTaskClassification
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -872,7 +872,7 @@ class CUADAffiliateLicenseLicenseeLegalBenchClassification(AbsTaskClassification
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -908,7 +908,7 @@ class CUADAffiliateLicenseLicensorLegalBenchClassification(AbsTaskClassification
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -921,7 +921,7 @@ class CUADAffiliateLicenseLicensorLegalBenchClassification(AbsTaskClassification
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -957,7 +957,7 @@ class CUADAntiAssignmentLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -970,7 +970,7 @@ class CUADAntiAssignmentLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -1006,7 +1006,7 @@ class CUADAuditRightsLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -1019,7 +1019,7 @@ class CUADAuditRightsLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -1055,7 +1055,7 @@ class CUADCapOnLiabilityLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -1068,7 +1068,7 @@ class CUADCapOnLiabilityLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -1104,7 +1104,7 @@ class CUADChangeOfControlLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -1117,7 +1117,7 @@ class CUADChangeOfControlLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -1155,7 +1155,7 @@ class CUADCompetitiveRestrictionExceptionLegalBenchClassification(
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -1168,7 +1168,7 @@ class CUADCompetitiveRestrictionExceptionLegalBenchClassification(
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -1204,7 +1204,7 @@ class CUADCovenantNotToSueLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -1217,7 +1217,7 @@ class CUADCovenantNotToSueLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -1253,7 +1253,7 @@ class CUADEffectiveDateLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -1266,7 +1266,7 @@ class CUADEffectiveDateLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -1302,7 +1302,7 @@ class CUADExclusivityLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -1315,7 +1315,7 @@ class CUADExclusivityLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -1351,7 +1351,7 @@ class CUADExpirationDateLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -1364,7 +1364,7 @@ class CUADExpirationDateLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -1400,7 +1400,7 @@ class CUADGoverningLawLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -1413,7 +1413,7 @@ class CUADGoverningLawLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -1449,7 +1449,7 @@ class CUADInsuranceLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -1462,7 +1462,7 @@ class CUADInsuranceLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -1498,7 +1498,7 @@ class CUADIPOwnershipAssignmentLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -1511,7 +1511,7 @@ class CUADIPOwnershipAssignmentLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -1547,7 +1547,7 @@ class CUADIrrevocableOrPerpetualLicenseLegalBenchClassification(AbsTaskClassific
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -1560,7 +1560,7 @@ class CUADIrrevocableOrPerpetualLicenseLegalBenchClassification(AbsTaskClassific
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -1596,7 +1596,7 @@ class CUADJointIPOwnershipLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -1609,7 +1609,7 @@ class CUADJointIPOwnershipLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -1645,7 +1645,7 @@ class CUADLicenseGrantLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -1658,7 +1658,7 @@ class CUADLicenseGrantLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -1694,7 +1694,7 @@ class CUADLiquidatedDamagesLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -1707,7 +1707,7 @@ class CUADLiquidatedDamagesLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -1743,7 +1743,7 @@ class CUADMinimumCommitmentLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -1756,7 +1756,7 @@ class CUADMinimumCommitmentLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -1792,7 +1792,7 @@ class CUADMostFavoredNationLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -1805,7 +1805,7 @@ class CUADMostFavoredNationLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -1841,7 +1841,7 @@ class CUADNoSolicitOfCustomersLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -1854,7 +1854,7 @@ class CUADNoSolicitOfCustomersLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -1890,7 +1890,7 @@ class CUADNoSolicitOfEmployeesLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -1903,7 +1903,7 @@ class CUADNoSolicitOfEmployeesLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -1939,7 +1939,7 @@ class CUADNonCompeteLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -1952,7 +1952,7 @@ class CUADNonCompeteLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -1988,7 +1988,7 @@ class CUADNonDisparagementLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -2001,7 +2001,7 @@ class CUADNonDisparagementLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -2037,7 +2037,7 @@ class CUADNonTransferableLicenseLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -2050,7 +2050,7 @@ class CUADNonTransferableLicenseLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -2086,7 +2086,7 @@ class CUADNoticePeriodToTerminateRenewalLegalBenchClassification(AbsTaskClassifi
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -2099,7 +2099,7 @@ class CUADNoticePeriodToTerminateRenewalLegalBenchClassification(AbsTaskClassifi
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -2135,7 +2135,7 @@ class CUADPostTerminationServicesLegalBenchClassification(AbsTaskClassification)
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -2148,7 +2148,7 @@ class CUADPostTerminationServicesLegalBenchClassification(AbsTaskClassification)
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -2184,7 +2184,7 @@ class CUADPriceRestrictionsLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -2197,7 +2197,7 @@ class CUADPriceRestrictionsLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -2233,7 +2233,7 @@ class CUADRenewalTermLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -2246,7 +2246,7 @@ class CUADRenewalTermLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -2282,7 +2282,7 @@ class CUADRevenueProfitSharingLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -2295,7 +2295,7 @@ class CUADRevenueProfitSharingLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -2331,7 +2331,7 @@ class CUADRofrRofoRofnLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -2344,7 +2344,7 @@ class CUADRofrRofoRofnLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -2380,7 +2380,7 @@ class CUADSourceCodeEscrowLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -2393,7 +2393,7 @@ class CUADSourceCodeEscrowLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -2429,7 +2429,7 @@ class CUADTerminationForConvenienceLegalBenchClassification(AbsTaskClassificatio
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -2442,7 +2442,7 @@ class CUADTerminationForConvenienceLegalBenchClassification(AbsTaskClassificatio
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -2478,7 +2478,7 @@ class CUADThirdPartyBeneficiaryLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -2491,7 +2491,7 @@ class CUADThirdPartyBeneficiaryLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -2527,7 +2527,7 @@ class CUADUncappedLiabilityLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -2540,7 +2540,7 @@ class CUADUncappedLiabilityLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -2576,7 +2576,7 @@ class CUADUnlimitedAllYouCanEatLicenseLegalBenchClassification(AbsTaskClassifica
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -2589,7 +2589,7 @@ class CUADUnlimitedAllYouCanEatLicenseLegalBenchClassification(AbsTaskClassifica
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -2625,7 +2625,7 @@ class CUADVolumeRestrictionLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -2638,7 +2638,7 @@ class CUADVolumeRestrictionLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -2674,7 +2674,7 @@ class CUADWarrantyDurationLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -2687,7 +2687,7 @@ class CUADWarrantyDurationLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{hendrycks2021cuad,
+@inproceedings{hendrycks_cuad_2021,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -2723,7 +2723,7 @@ class DefinitionClassificationLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -2762,7 +2762,7 @@ class Diversity1LegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -2801,7 +2801,7 @@ class Diversity2LegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -2840,7 +2840,7 @@ class Diversity3LegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -2879,7 +2879,7 @@ class Diversity4LegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -2918,7 +2918,7 @@ class Diversity5LegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -2957,7 +2957,7 @@ class Diversity6LegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -2996,7 +2996,7 @@ class FunctionOfDecisionSectionLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -3035,7 +3035,7 @@ class InsurancePolicyInterpretationLegalBenchClassification(AbsTaskClassificatio
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -3074,7 +3074,7 @@ class InternationalCitizenshipQuestionsLegalBenchClassification(AbsTaskClassific
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -3087,7 +3087,7 @@ class InternationalCitizenshipQuestionsLegalBenchClassification(AbsTaskClassific
   year = {2023},
 }
 
-@misc{vink2023globalcit,
+@misc{vink_globalcit_2023,
   author = {Vink, Maarten and van der Baaren, Luuk and Bauböck, Rainer and Džankić, Jelena and Honohan, Iseult and Manby, Bronwen},
   howpublished = {https://hdl.handle.net/1814/73190},
   publisher = {Global Citizenship Observatory},
@@ -3122,7 +3122,7 @@ class JCrewBlockerLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -3162,7 +3162,7 @@ class JCrewBlockerLegalBenchClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -3202,7 +3202,7 @@ class LearnedHandsBenefitsLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -3215,7 +3215,7 @@ class LearnedHandsBenefitsLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@dataset{learned_hands,
+@dataset{suffolkuniversitylawschool_learnedhands_2022,
   author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
   note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
   title = {LearnedHands Dataset},
@@ -3250,7 +3250,7 @@ class LearnedHandsBusinessLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -3263,7 +3263,7 @@ class LearnedHandsBusinessLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@dataset{learned_hands,
+@dataset{suffolkuniversitylawschool_learnedhands_2022,
   author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
   note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
   title = {LearnedHands Dataset},
@@ -3298,7 +3298,7 @@ class LearnedHandsConsumerLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -3311,7 +3311,7 @@ class LearnedHandsConsumerLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@dataset{learned_hands,
+@dataset{suffolkuniversitylawschool_learnedhands_2022,
   author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
   note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
   title = {LearnedHands Dataset},
@@ -3346,7 +3346,7 @@ class LearnedHandsCourtsLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -3359,7 +3359,7 @@ class LearnedHandsCourtsLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@dataset{learned_hands,
+@dataset{suffolkuniversitylawschool_learnedhands_2022,
   author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
   note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
   title = {LearnedHands Dataset},
@@ -3394,7 +3394,7 @@ class LearnedHandsCrimeLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -3407,7 +3407,7 @@ class LearnedHandsCrimeLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@dataset{learned_hands,
+@dataset{suffolkuniversitylawschool_learnedhands_2022,
   author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
   note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
   title = {LearnedHands Dataset},
@@ -3442,7 +3442,7 @@ class LearnedHandsDivorceLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -3455,7 +3455,7 @@ class LearnedHandsDivorceLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@dataset{learned_hands,
+@dataset{suffolkuniversitylawschool_learnedhands_2022,
   author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
   note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
   title = {LearnedHands Dataset},
@@ -3490,7 +3490,7 @@ class LearnedHandsDomesticViolenceLegalBenchClassification(AbsTaskClassification
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -3503,7 +3503,7 @@ class LearnedHandsDomesticViolenceLegalBenchClassification(AbsTaskClassification
   year = {2023},
 }
 
-@dataset{learned_hands,
+@dataset{suffolkuniversitylawschool_learnedhands_2022,
   author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
   note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
   title = {LearnedHands Dataset},
@@ -3538,7 +3538,7 @@ class LearnedHandsEducationLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -3551,7 +3551,7 @@ class LearnedHandsEducationLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@dataset{learned_hands,
+@dataset{suffolkuniversitylawschool_learnedhands_2022,
   author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
   note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
   title = {LearnedHands Dataset},
@@ -3586,7 +3586,7 @@ class LearnedHandsEmploymentLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -3599,7 +3599,7 @@ class LearnedHandsEmploymentLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@dataset{learned_hands,
+@dataset{suffolkuniversitylawschool_learnedhands_2022,
   author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
   note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
   title = {LearnedHands Dataset},
@@ -3634,7 +3634,7 @@ class LearnedHandsEstatesLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -3647,7 +3647,7 @@ class LearnedHandsEstatesLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@dataset{learned_hands,
+@dataset{suffolkuniversitylawschool_learnedhands_2022,
   author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
   note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
   title = {LearnedHands Dataset},
@@ -3682,7 +3682,7 @@ class LearnedHandsFamilyLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -3695,7 +3695,7 @@ class LearnedHandsFamilyLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@dataset{learned_hands,
+@dataset{suffolkuniversitylawschool_learnedhands_2022,
   author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
   note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
   title = {LearnedHands Dataset},
@@ -3730,7 +3730,7 @@ class LearnedHandsHealthLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -3743,7 +3743,7 @@ class LearnedHandsHealthLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@dataset{learned_hands,
+@dataset{suffolkuniversitylawschool_learnedhands_2022,
   author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
   note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
   title = {LearnedHands Dataset},
@@ -3778,7 +3778,7 @@ class LearnedHandsHousingLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -3791,7 +3791,7 @@ class LearnedHandsHousingLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@dataset{learned_hands,
+@dataset{suffolkuniversitylawschool_learnedhands_2022,
   author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
   note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
   title = {LearnedHands Dataset},
@@ -3826,7 +3826,7 @@ class LearnedHandsImmigrationLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -3839,7 +3839,7 @@ class LearnedHandsImmigrationLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@dataset{learned_hands,
+@dataset{suffolkuniversitylawschool_learnedhands_2022,
   author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
   note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
   title = {LearnedHands Dataset},
@@ -3874,7 +3874,7 @@ class LearnedHandsTortsLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -3887,7 +3887,7 @@ class LearnedHandsTortsLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@dataset{learned_hands,
+@dataset{suffolkuniversitylawschool_learnedhands_2022,
   author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
   note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
   title = {LearnedHands Dataset},
@@ -3922,7 +3922,7 @@ class LearnedHandsTrafficLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -3935,7 +3935,7 @@ class LearnedHandsTrafficLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@dataset{learned_hands,
+@dataset{suffolkuniversitylawschool_learnedhands_2022,
   author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
   note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
   title = {LearnedHands Dataset},
@@ -3971,7 +3971,7 @@ class LegalReasoningCausalityLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -4011,7 +4011,7 @@ class LegalReasoningCausalityLegalBenchClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -4160,7 +4160,7 @@ class MAUDLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -4173,7 +4173,7 @@ class MAUDLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{wang2023maud,
+@inproceedings{wang_maud_2023,
   address = {Singapore},
   author = {Wang, Steven and Scardigli, Antoine and Tang, Leonard and Chen, Wei and Levkin, Dmitry and Chen, Anya and Ball, Spencer and Woodside, Thomas and Zhang, Oliver and Hendrycks, Dan},
   booktitle = {Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing},
@@ -4214,7 +4214,7 @@ class MAUDLegalBenchClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -4227,7 +4227,7 @@ class MAUDLegalBenchClassificationV2(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{wang2023maud,
+@inproceedings{wang_maud_2023,
   address = {Singapore},
   author = {Wang, Steven and Scardigli, Antoine and Tang, Leonard and Chen, Wei and Levkin, Dmitry and Chen, Anya and Ball, Spencer and Woodside, Thomas and Zhang, Oliver and Hendrycks, Dan},
   booktitle = {Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing},
@@ -4268,7 +4268,7 @@ class NYSJudicialEthicsLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -4307,7 +4307,7 @@ class OPP115DataRetentionLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -4320,7 +4320,7 @@ class OPP115DataRetentionLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{wilson2016creation,
+@inproceedings{wilson_creation_2016,
   author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
   booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
   pages = {1330--1340},
@@ -4355,7 +4355,7 @@ class OPP115DataSecurityLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -4368,7 +4368,7 @@ class OPP115DataSecurityLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{wilson2016creation,
+@inproceedings{wilson_creation_2016,
   author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
   booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
   pages = {1330--1340},
@@ -4403,7 +4403,7 @@ class OPP115DataSecurityLegalBenchClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -4416,7 +4416,7 @@ class OPP115DataSecurityLegalBenchClassificationV2(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{wilson2016creation,
+@inproceedings{wilson_creation_2016,
   author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
   booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
   pages = {1330--1340},
@@ -4452,7 +4452,7 @@ class OPP115DoNotTrackLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -4465,7 +4465,7 @@ class OPP115DoNotTrackLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{wilson2016creation,
+@inproceedings{wilson_creation_2016,
   author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
   booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
   pages = {1330--1340},
@@ -4500,7 +4500,7 @@ class OPP115DoNotTrackLegalBenchClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -4513,7 +4513,7 @@ class OPP115DoNotTrackLegalBenchClassificationV2(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{wilson2016creation,
+@inproceedings{wilson_creation_2016,
   author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
   booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
   pages = {1330--1340},
@@ -4548,7 +4548,7 @@ class OPP115FirstPartyCollectionUseLegalBenchClassification(AbsTaskClassificatio
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -4561,7 +4561,7 @@ class OPP115FirstPartyCollectionUseLegalBenchClassification(AbsTaskClassificatio
   year = {2023},
 }
 
-@inproceedings{wilson2016creation,
+@inproceedings{wilson_creation_2016,
   author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
   booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
   pages = {1330--1340},
@@ -4597,7 +4597,7 @@ class OPP115InternationalAndSpecificAudiencesLegalBenchClassification(
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -4610,7 +4610,7 @@ class OPP115InternationalAndSpecificAudiencesLegalBenchClassification(
   year = {2023},
 }
 
-@inproceedings{wilson2016creation,
+@inproceedings{wilson_creation_2016,
   author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
   booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
   pages = {1330--1340},
@@ -4644,7 +4644,7 @@ class OPP115PolicyChangeLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -4657,7 +4657,7 @@ class OPP115PolicyChangeLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{wilson2016creation,
+@inproceedings{wilson_creation_2016,
   author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
   booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
   pages = {1330--1340},
@@ -4691,7 +4691,7 @@ class OPP115ThirdPartySharingCollectionLegalBenchClassification(AbsTaskClassific
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -4704,7 +4704,7 @@ class OPP115ThirdPartySharingCollectionLegalBenchClassification(AbsTaskClassific
   year = {2023},
 }
 
-@inproceedings{wilson2016creation,
+@inproceedings{wilson_creation_2016,
   author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
   booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
   pages = {1330--1340},
@@ -4738,7 +4738,7 @@ class OPP115UserAccessEditAndDeletionLegalBenchClassification(AbsTaskClassificat
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -4751,7 +4751,7 @@ class OPP115UserAccessEditAndDeletionLegalBenchClassification(AbsTaskClassificat
   year = {2023},
 }
 
-@inproceedings{wilson2016creation,
+@inproceedings{wilson_creation_2016,
   author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
   booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
   pages = {1330--1340},
@@ -4786,7 +4786,7 @@ class OPP115UserChoiceControlLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -4799,7 +4799,7 @@ class OPP115UserChoiceControlLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{wilson2016creation,
+@inproceedings{wilson_creation_2016,
   author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
   booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
   pages = {1330--1340},
@@ -4834,7 +4834,7 @@ class OPP115UserChoiceControlLegalBenchClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -4847,7 +4847,7 @@ class OPP115UserChoiceControlLegalBenchClassificationV2(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{wilson2016creation,
+@inproceedings{wilson_creation_2016,
   author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
   booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
   pages = {1330--1340},
@@ -4883,7 +4883,7 @@ class OralArgumentQuestionPurposeLegalBenchClassification(AbsTaskClassification)
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -4923,7 +4923,7 @@ class OralArgumentQuestionPurposeLegalBenchClassificationV2(AbsTaskClassificatio
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -4964,7 +4964,7 @@ class OverrulingLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -4977,7 +4977,7 @@ class OverrulingLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{zheng2021does,
+@inproceedings{zheng_when_2021,
   author = {Zheng, Lucia and Guha, Neel and Anderson, Brandon R and Henderson, Peter and Ho, Daniel E},
   booktitle = {Proceedings of the eighteenth international conference on artificial intelligence and law},
   pages = {159--168},
@@ -5012,7 +5012,7 @@ class OverrulingLegalBenchClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -5025,7 +5025,7 @@ class OverrulingLegalBenchClassificationV2(AbsTaskClassification):
   year = {2023},
 }
 
-@inproceedings{zheng2021does,
+@inproceedings{zheng_when_2021,
   author = {Zheng, Lucia and Guha, Neel and Anderson, Brandon R and Henderson, Peter and Ho, Daniel E},
   booktitle = {Proceedings of the eighteenth international conference on artificial intelligence and law},
   pages = {159--168},
@@ -5060,7 +5060,7 @@ class PersonalJurisdictionLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -5099,7 +5099,7 @@ class PROALegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -5138,7 +5138,7 @@ class SCDBPAccountabilityLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{chilton2017limitations,
+@article{chilton_limitations_2017,
   author = {Chilton, Adam S and Sarfaty, Galit A},
   journal = {Stan. J. Int'l L.},
   pages = {1},
@@ -5148,7 +5148,7 @@ class SCDBPAccountabilityLegalBenchClassification(AbsTaskClassification):
   year = {2017},
 }
 
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -5187,7 +5187,7 @@ class SCDBPAuditsLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{chilton2017limitations,
+@article{chilton_limitations_2017,
   author = {Chilton, Adam S and Sarfaty, Galit A},
   journal = {Stan. J. Int'l L.},
   pages = {1},
@@ -5197,7 +5197,7 @@ class SCDBPAuditsLegalBenchClassification(AbsTaskClassification):
   year = {2017},
 }
 
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -5236,7 +5236,7 @@ class SCDBPCertificationLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{chilton2017limitations,
+@article{chilton_limitations_2017,
   author = {Chilton, Adam S and Sarfaty, Galit A},
   journal = {Stan. J. Int'l L.},
   pages = {1},
@@ -5246,7 +5246,7 @@ class SCDBPCertificationLegalBenchClassification(AbsTaskClassification):
   year = {2017},
 }
 
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -5285,7 +5285,7 @@ class SCDBPTrainingLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{chilton2017limitations,
+@article{chilton_limitations_2017,
   author = {Chilton, Adam S and Sarfaty, Galit A},
   journal = {Stan. J. Int'l L.},
   pages = {1},
@@ -5295,7 +5295,7 @@ class SCDBPTrainingLegalBenchClassification(AbsTaskClassification):
   year = {2017},
 }
 
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -5334,7 +5334,7 @@ class SCDBPVerificationLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{chilton2017limitations,
+@article{chilton_limitations_2017,
   author = {Chilton, Adam S and Sarfaty, Galit A},
   journal = {Stan. J. Int'l L.},
   pages = {1},
@@ -5344,7 +5344,7 @@ class SCDBPVerificationLegalBenchClassification(AbsTaskClassification):
   year = {2017},
 }
 
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -5383,7 +5383,7 @@ class SCDDAccountabilityLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{chilton2017limitations,
+@article{chilton_limitations_2017,
   author = {Chilton, Adam S and Sarfaty, Galit A},
   journal = {Stan. J. Int'l L.},
   pages = {1},
@@ -5393,7 +5393,7 @@ class SCDDAccountabilityLegalBenchClassification(AbsTaskClassification):
   year = {2017},
 }
 
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -5432,7 +5432,7 @@ class SCDDAuditsLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{chilton2017limitations,
+@article{chilton_limitations_2017,
   author = {Chilton, Adam S and Sarfaty, Galit A},
   journal = {Stan. J. Int'l L.},
   pages = {1},
@@ -5442,7 +5442,7 @@ class SCDDAuditsLegalBenchClassification(AbsTaskClassification):
   year = {2017},
 }
 
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -5481,7 +5481,7 @@ class SCDDCertificationLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{chilton2017limitations,
+@article{chilton_limitations_2017,
   author = {Chilton, Adam S and Sarfaty, Galit A},
   journal = {Stan. J. Int'l L.},
   pages = {1},
@@ -5491,7 +5491,7 @@ class SCDDCertificationLegalBenchClassification(AbsTaskClassification):
   year = {2017},
 }
 
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -5530,7 +5530,7 @@ class SCDDTrainingLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{chilton2017limitations,
+@article{chilton_limitations_2017,
   author = {Chilton, Adam S and Sarfaty, Galit A},
   journal = {Stan. J. Int'l L.},
   pages = {1},
@@ -5540,7 +5540,7 @@ class SCDDTrainingLegalBenchClassification(AbsTaskClassification):
   year = {2017},
 }
 
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -5579,7 +5579,7 @@ class SCDDVerificationLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{chilton2017limitations,
+@article{chilton_limitations_2017,
   author = {Chilton, Adam S and Sarfaty, Galit A},
   journal = {Stan. J. Int'l L.},
   pages = {1},
@@ -5589,7 +5589,7 @@ class SCDDVerificationLegalBenchClassification(AbsTaskClassification):
   year = {2017},
 }
 
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -5628,7 +5628,7 @@ class TelemarketingSalesRuleLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -5667,7 +5667,7 @@ class TextualismToolDictionariesLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -5706,7 +5706,7 @@ class TextualismToolPlainLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -5745,7 +5745,7 @@ class UCCVCommonLawLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -5784,7 +5784,7 @@ class UnfairTOSLegalBenchClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -5797,7 +5797,7 @@ class UnfairTOSLegalBenchClassification(AbsTaskClassification):
   year = {2023},
 }
 
-@article{lippi2019claudette,
+@article{lippi_claudette_2019,
   author = {Lippi, Marco and Pa{\l}ka, Przemys{\l}aw and Contissa, Giuseppe and Lagioia, Francesca and Micklitz, Hans-Wolfgang and Sartor, Giovanni and Torroni, Paolo},
   journal = {Artificial Intelligence and Law},
   pages = {117--139},

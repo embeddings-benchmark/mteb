@@ -26,7 +26,7 @@ class UkrSedUASmallSTSv1(AbsTaskSTS):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@proceedings{SED-UA-small2025,
+@proceedings{mediakov_sed-ua-small_2025,
   author = {Oleksandr Mediakov and Dmytro Martjanov and Vasyl Lytvyn},
   booktitle = {Proceedings of the Information Systems and Networks (SISN), Volume 17},
   doi = {10.23939/sisn2025.17.403},

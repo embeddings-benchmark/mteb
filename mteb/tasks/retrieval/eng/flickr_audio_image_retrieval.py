@@ -8,7 +8,7 @@ from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 CITATION = r"""
-@inproceedings{harwath2015deep,
+@inproceedings{harwath_deep_2015,
   title={Deep multimodal semantic embeddings for speech and images},
   author={Harwath, David and Glass, James},
   booktitle={2015 IEEE workshop on automatic speech recognition and understanding (ASRU)},

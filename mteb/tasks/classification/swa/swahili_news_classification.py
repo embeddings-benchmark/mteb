@@ -27,7 +27,7 @@ class SwahiliNewsClassification(AbsTaskClassification):
         annotations_creators="derived",
         sample_creation="found",
         bibtex_citation=r"""
-@dataset{davis_david_2020_5514203,
+@dataset{david_swahili_2020,
   author = {Davis David},
   doi = {10.5281/zenodo.5514203},
   month = dec,
@@ -65,7 +65,7 @@ class SwahiliNewsClassificationV2(AbsTaskClassification):
         annotations_creators="derived",
         sample_creation="found",
         bibtex_citation=r"""
-@dataset{davis_david_2020_5514203,
+@dataset{david_swahili_2020,
   author = {Davis David},
   doi = {10.5281/zenodo.5514203},
   month = dec,

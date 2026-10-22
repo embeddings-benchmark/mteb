@@ -21,7 +21,7 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-UNITE_CITATION = """@article{kong2025modality,
+UNITE_CITATION = """@article{kong_modality_2025,
   title={Modality Curation: Building Universal Embeddings for Advanced Multimodal Information Retrieval},
   author={Kong, Fanheng and Zhang, Jingyuan and Liu, Yahui and Zhang, Hongzhi and Feng, Shi and Yang, Xiaocui and Wang, Daling and Tian, Yu and W., Victoria and Zhang, Fuzheng and Zhou, Guorui},
   journal={arXiv preprint arXiv:2505.19650},

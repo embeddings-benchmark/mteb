@@ -25,7 +25,7 @@ class ItalianLinguisticAcceptabilityClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{trotta-etal-2021-monolingual-cross,
+@inproceedings{trotta_monolingual_2021,
   address = {Punta Cana, Dominican Republic},
   author = {Trotta, Daniela  and
 Guarasci, Raffaele  and
@@ -68,7 +68,7 @@ class ItalianLinguisticAcceptabilityClassificationV2(AbsTaskClassification):
         annotations_creators="expert-annotated",
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{trotta-etal-2021-monolingual-cross,
+@inproceedings{trotta_monolingual_2021,
   address = {Punta Cana, Dominican Republic},
   author = {Trotta, Daniela  and
 Guarasci, Raffaele  and

@@ -28,7 +28,7 @@ class KorFin(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{son2023removing,
+@article{son_removing_2023,
   author = {Son, Guijin and Lee, Hanwool and Kang, Nahyeon and Hahm, Moonjeong},
   journal = {arXiv preprint arXiv:2301.03136},
   title = {Removing Non-Stationary Knowledge From Pre-Trained Language Models for Entity-Level Sentiment Classification in Finance},

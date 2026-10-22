@@ -25,7 +25,7 @@ class Touche2020(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@dataset{potthast_2022_6862281,
+@dataset{potthast_touche20-argument-retrieval-for-controversial-_2022,
   author = {Potthast, Martin and
 Gienapp, Lukas and
 Wachsmuth, Henning and
@@ -74,7 +74,7 @@ class Touche2020v3Retrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{Thakur_etal_SIGIR2024,
+@inproceedings{thakur_systematic_2024,
   address_ = {Washington, D.C.},
   author = {Nandan Thakur and Luiz Bonifacio and Maik {Fr\"{o}be} and Alexander Bondarenko and Ehsan Kamalloo and Martin Potthast and Matthias Hagen and Jimmy Lin},
   booktitle = {Proceedings of the 47th International ACM SIGIR Conference on Research and Development in Information Retrieval},

@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from mteb import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
 
-IMAGEBIND_CITATION = """@inproceedings{girdhar2023imagebind,
+IMAGEBIND_CITATION = """@inproceedings{girdhar_imagebind_2023,
   title={ImageBind: One Embedding Space To Bind Them All},
   author={Girdhar, Rohit and El-Nouby, Alaaeldin and Liu, Zhuang and Singh, Mannat and
           Alwala, Kalyan Vasudev and Joulin, Armand and Misra, Ishan},

@@ -25,7 +25,7 @@ class MridinghamStroke(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{6637633,
+@inproceedings{anantapadmanabhan_modal_2013,
   author = {Anantapadmanabhan, Akshay and Bellur, Ashwin and Murthy, Hema A},
   booktitle = {2013 IEEE International Conference on Acoustics, Speech and Signal Processing},
   doi = {10.1109/ICASSP.2013.6637633},

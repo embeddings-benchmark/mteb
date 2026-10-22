@@ -33,7 +33,7 @@ class DailyOmniVideoCentricQA(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@article{zhou2025dailyomni,
+@article{zhou_daily-omni_2025,
   author = {Zhou, Ziwei and Wang, Rui and Wu, Zuxuan and Jiang, Yu-Gang},
   journal = {arXiv preprint arXiv:2505.17862},
   title = {Daily-Omni: Towards Audio-Visual Reasoning with Temporal Alignment across Modalities},
@@ -106,7 +106,7 @@ class DailyOmniVideoAudioCentricQA(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@article{zhou2025dailyomni,
+@article{zhou_daily-omni_2025,
   author = {Zhou, Ziwei and Wang, Rui and Wu, Zuxuan and Jiang, Yu-Gang},
   journal = {arXiv preprint arXiv:2505.17862},
   title = {Daily-Omni: Towards Audio-Visual Reasoning with Temporal Alignment across Modalities},

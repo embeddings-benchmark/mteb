@@ -25,7 +25,7 @@ class CExaPPC(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{9786243,
+@inproceedings{sadeghi_exappc_2022,
   author = {Sadeghi, Reyhaneh and Karbasi, Hamed and Akbari, Ahmad},
   booktitle = {2022 8th International Conference on Web Research (ICWR)},
   doi = {10.1109/ICWR54782.2022.9786243},
@@ -245,7 +245,7 @@ class ParsinluEntail(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{khashabi2021parsinlusuitelanguageunderstanding,
+@article{khashabi_scpparsinluscp_2021,
   author = {Khashabi, Daniel and Cohan, Arman and Shakeri, Siamak and Hosseini, Pedram and Pezeshkpour, Pouya and Alikhani, Malihe and Aminnaseri, Moin and Bitaab, Marzieh and Brahman, Faeze and Ghazarian, Sarik and Gheini, Mozhdeh and Kabiri, Arman and Mahabagdi, Rabeeh Karimi and Memarrast, Omid and Mosallanezhad, Ahmadreza and Noury, Erfan and Raji, Shahab and Rasooli, Mohammad Sadegh and Sadeghi, Sepideh and Azer, Erfan Sadeqi and Samghabadi, Niloofar Safi and Shafaei, Mahsa and Sheybani, Saber and Tazarv, Ali and Yaghoobzadeh, Yadollah},
   doi = {10.1162/tacl_a_00419},
   issn = {2307-387X},
@@ -284,7 +284,7 @@ class ParsinluQueryParaphPC(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{khashabi2021parsinlusuitelanguageunderstanding,
+@article{khashabi_scpparsinluscp_2021,
   author = {Khashabi, Daniel and Cohan, Arman and Shakeri, Siamak and Hosseini, Pedram and Pezeshkpour, Pouya and Alikhani, Malihe and Aminnaseri, Moin and Bitaab, Marzieh and Brahman, Faeze and Ghazarian, Sarik and Gheini, Mozhdeh and Kabiri, Arman and Mahabagdi, Rabeeh Karimi and Memarrast, Omid and Mosallanezhad, Ahmadreza and Noury, Erfan and Raji, Shahab and Rasooli, Mohammad Sadegh and Sadeghi, Sepideh and Azer, Erfan Sadeqi and Samghabadi, Niloofar Safi and Shafaei, Mahsa and Sheybani, Saber and Tazarv, Ali and Yaghoobzadeh, Yadollah},
   doi = {10.1162/tacl_a_00419},
   issn = {2307-387X},

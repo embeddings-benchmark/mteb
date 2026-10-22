@@ -117,7 +117,7 @@ class MemotionT2IRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{sharma2020semeval,
+@inproceedings{sharma_semeval-2020_2020,
   author = {Sharma, Chhavi and Bhageria, Deepesh and Scott, William and Pykl, Srinivas and Das, Amitava and Chakraborty, Tanmoy and Pulabaigari, Viswanath and Gamb{\"a}ck, Bj{\"o}rn},
   booktitle = {Proceedings of the Fourteenth Workshop on Semantic Evaluation},
   pages = {759--773},

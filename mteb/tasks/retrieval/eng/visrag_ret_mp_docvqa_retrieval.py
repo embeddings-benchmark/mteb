@@ -31,7 +31,7 @@ class VisRAGRetMPDocVQA(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{tito2023hierarchicalmultimodaltransformersmultipage,
+        bibtex_citation="""@article{tito_hierarchical_2023,
   author = {Tito, Rubèn and Karatzas, Dimosthenis and Valveny, Ernest},
   doi = {10.1016/j.patcog.2023.109834},
   issn = {0031-3203},

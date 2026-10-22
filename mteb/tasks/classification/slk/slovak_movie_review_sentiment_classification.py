@@ -27,7 +27,7 @@ class SlovakMovieReviewSentimentClassification(AbsTaskClassification):
         annotations_creators="derived",
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{štefánik2023resources,
+@inproceedings{stefanik_resources_2023,
   address = {Dubrovnik, Croatia},
   author = {{\v{S}}tef{\'a}nik, Michal and Kadl{\v{c}}{\'i}k, Marek and Gramacki, Piotr and Sojka, Petr},
   booktitle = {Proceedings of the 9th Workshop on {S}lavic Natural Language Processing 2023 ({S}lavic{NLP} 2023)},
@@ -68,7 +68,7 @@ class SlovakMovieReviewSentimentClassificationV2(AbsTaskClassification):
         annotations_creators="derived",
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{štefánik2023resources,
+@inproceedings{stefanik_resources_2023,
   address = {Dubrovnik, Croatia},
   author = {{\v{S}}tef{\'a}nik, Michal and Kadl{\v{c}}{\'i}k, Marek and Gramacki, Piotr and Sojka, Petr},
   booktitle = {Proceedings of the 9th Workshop on {S}lavic Natural Language Processing 2023 ({S}lavic{NLP} 2023)},

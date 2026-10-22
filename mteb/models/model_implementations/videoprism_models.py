@@ -269,7 +269,7 @@ class VideoPrismClipWrapper(AbsEncoder):
         )
 
 
-_VIDEOPRISM_CITATION = """@inproceedings{zhao2024videoprism,
+_VIDEOPRISM_CITATION = """@inproceedings{zhao_videoprism_2024,
   title = {{VideoPrism}: A Foundational Visual Encoder for Video Understanding},
   author = {Long Zhao and Nitesh B. Gundavarapu and Liangzhe Yuan and Hao Zhou and Shen Yan and Jennifer J. Sun and Luke Friedman and Rui Qian and Tobias Weyand and Yue Zhao and Rachel Hornung and Florian Schroff and Ming-Hsuan Yang and David A. Ross and Huisheng Wang and Hartwig Adam and Mikhail Sirotenko and Ting Liu and Boqing Gong},
   booktitle = {International Conference on Machine Learning (ICML)},

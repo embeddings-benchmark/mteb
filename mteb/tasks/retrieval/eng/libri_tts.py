@@ -29,7 +29,7 @@ class LibriTTSA2TRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{zen2019librittscorpusderivedlibrispeech,
+@inproceedings{zen_libritts_2019,
   author = {Zen, Heiga and Dang, Viet and Clark, Rob and Zhang, Yu and Weiss, Ron J. and Jia, Ye and Chen, Zhifeng and Wu, Yonghui},
   booktitle = {Interspeech 2019},
   collection = {interspeech_2019},
@@ -75,7 +75,7 @@ class LibriTTST2ARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{zen2019librittscorpusderivedlibrispeech,
+@inproceedings{zen_libritts_2019,
   author = {Zen, Heiga and Dang, Viet and Clark, Rob and Zhang, Yu and Weiss, Ron J. and Jia, Ye and Chen, Zhifeng and Wu, Yonghui},
   booktitle = {Interspeech 2019},
   collection = {interspeech_2019},

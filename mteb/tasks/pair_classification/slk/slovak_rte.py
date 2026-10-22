@@ -35,7 +35,7 @@ class SlovakRTE(AbsTaskPairClassification):
         dialect=[],
         sample_creation="machine-translated and verified",
         bibtex_citation=r"""
-@inproceedings{suppa-etal-2025-sklep,
+@inproceedings{suppa_sklep_2025,
   address = {Vienna, Austria},
   author = {Suppa, Marek and Ridzik, Andrej and Hl{\'a}dek, Daniel and Jav{\r{u}}rek, Tom{\'a}{\v{s}} and Ondrejov{\'a}, Vikt{\'o}ria and S{\'a}sikov{\'a}, Krist{\'i}na and Tamajka, Martin and Simko, Marian},
   booktitle = {Findings of the Association for Computational Linguistics: ACL 2025},

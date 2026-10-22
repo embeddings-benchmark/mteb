@@ -39,7 +39,7 @@ class LEMBNeedleRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{zhu2024longembed,
+@inproceedings{zhu_longembed_2024,
   address = {Miami, Florida, USA},
   author = {Zhu, Dawei and Wang, Liang and Yang, Nan and Song, Yifan and Wu, Wenhao and Wei, Furu and Li, Sujian},
   booktitle = {Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing},

@@ -33,7 +33,7 @@ class SciRepEvalBiomimicryClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{singh-etal-2023-scirepeval,
+@inproceedings{singh_scirepeval_2023,
   address = {Singapore},
   author = {Singh, Amanpreet  and
 D{'}Arcy, Mike  and

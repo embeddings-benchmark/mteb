@@ -29,7 +29,7 @@ class LitSearchRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",  # queries LLM generated, corpus samples are found (extracted from S2ORC)
         bibtex_citation=r"""
-@article{ajith2024litsearch,
+@article{ajith_litsearch_2024,
   author = {Ajith, Anirudh and Xia, Mengzhou and Chevalier, Alexis and Goyal, Tanya and Chen, Danqi and Gao, Tianyu},
   title = {LitSearch: A Retrieval Benchmark for Scientific Literature Search},
   year = {2024},

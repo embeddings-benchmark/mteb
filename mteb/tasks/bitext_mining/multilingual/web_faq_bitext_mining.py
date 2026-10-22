@@ -218,7 +218,7 @@ class WebFAQBitextMiningQuestions(AbsTaskBitextMining):
         dialect=[],
         sample_creation="human-translated",
         bibtex_citation=r"""
-@inproceedings{dinzinger2025webfaq,
+@inproceedings{dinzinger_webfaq_2025,
   author = {Dinzinger, Michael and Caspari, Laura and Ghosh Dastidar, Kanishka and Mitrović, Jelena and Granitzer, Michael},
   booktitle = {Proceedings of the 48th International ACM SIGIR Conference on Research and Development in Information Retrieval},
   collection = {SIGIR ’25},
@@ -279,7 +279,7 @@ class WebFAQBitextMiningQAs(AbsTaskBitextMining):
         dialect=[],
         sample_creation="human-translated",
         bibtex_citation=r"""
-@inproceedings{dinzinger2025webfaq,
+@inproceedings{dinzinger_webfaq_2025,
   author = {Dinzinger, Michael and Caspari, Laura and Ghosh Dastidar, Kanishka and Mitrović, Jelena and Granitzer, Michael},
   booktitle = {Proceedings of the 48th International ACM SIGIR Conference on Research and Development in Information Retrieval},
   collection = {SIGIR ’25},

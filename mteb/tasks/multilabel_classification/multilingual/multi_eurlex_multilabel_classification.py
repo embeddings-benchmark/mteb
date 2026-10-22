@@ -51,7 +51,7 @@ class MultiEURLEXMultilabelClassification(AbsTaskMultilabelClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{chalkidis-etal-2021-multieurlex,
+@inproceedings{chalkidis_multieurlex_2021,
   author = {Chalkidis, Ilias
 and Fergadiotis, Manos
 and Androutsopoulos, Ion},
@@ -118,7 +118,7 @@ class MultiEURLEXMultilabelClassificationV2(AbsTaskMultilabelClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{chalkidis-etal-2021-multieurlex,
+@inproceedings{chalkidis_multieurlex_2021,
   author = {Chalkidis, Ilias
 and Fergadiotis, Manos
 and Androutsopoulos, Ion},

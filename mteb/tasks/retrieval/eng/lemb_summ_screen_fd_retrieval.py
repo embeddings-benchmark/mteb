@@ -32,7 +32,7 @@ class LEMBSummScreenFDRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{chen-etal-2022-summscreen,
+@inproceedings{chen_summscreen_2022,
   address = {Dublin, Ireland},
   author = {Chen, Mingda  and
 Chu, Zewei  and

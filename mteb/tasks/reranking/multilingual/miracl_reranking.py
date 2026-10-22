@@ -27,7 +27,7 @@ _LANGUAGES = {
     "zh": ["zho-Hans"],
 }
 
-_CITATION = r"""@article{10.1162/tacl_a_00595,
+_CITATION = r"""@article{zhang_miracl_2023,
   author = {Zhang, Xinyu and Thakur, Nandan and Ogundepo, Odunayo and Kamalloo, Ehsan and Alfonso-Hermelo, David and Li, Xiaoguang and Liu, Qun and Rezagholizadeh, Mehdi and Lin, Jimmy},
   doi = {10.1162/tacl_a_00595},
   issn = {2307-387X},

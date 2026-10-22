@@ -25,7 +25,7 @@ class TweetEmotionClassification(AbsTaskClassification):
         dialect=["ara-arab-EG", "ara-arab-LB", "ara-arab-JO", "ara-arab-SA"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{al2018emotional,
+@inproceedings{al-khatib_emotional_2018,
   author = {Al-Khatib, Amr and El-Beltagy, Samhaa R},
   booktitle = {Computational Linguistics and Intelligent Text Processing: 18th International Conference, CICLing 2017, Budapest, Hungary, April 17--23, 2017, Revised Selected Papers, Part II 18},
   organization = {Springer},
@@ -61,7 +61,7 @@ class TweetEmotionClassificationV2(AbsTaskClassification):
         dialect=["ara-arab-EG", "ara-arab-LB", "ara-arab-JO", "ara-arab-SA"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{al2018emotional,
+@inproceedings{al-khatib_emotional_2018,
   author = {Al-Khatib, Amr and El-Beltagy, Samhaa R},
   booktitle = {Computational Linguistics and Intelligent Text Processing: 18th International Conference, CICLing 2017, Budapest, Hungary, April 17--23, 2017, Revised Selected Papers, Part II 18},
   organization = {Springer},

@@ -25,7 +25,7 @@ class DadoEvalCoarseClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{menini2020dadoeval,
+@inproceedings{menini_dadoeval_2020,
   author = {Menini, Stefano and Moretti, Giovanni and Sprugnoli, Rachele and Tonelli, Sara and others},
   booktitle = {Proceedings of the Seventh Evaluation Campaign of Natural Language Processing and Speech Tools for Italian. Final Workshop (EVALITA 2020)},
   organization = {Accademia University Press},

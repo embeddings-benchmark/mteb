@@ -30,7 +30,7 @@ class BeehiveStatesClassification(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{nolasco2019beehive,
+@inproceedings{nolasco_audio-based_2019,
   author = {Ines Nolasco and Alessandro Terenzi and Stefania Cecchi and Simone Orcioni and Helen L. Bear and Emmanouil Benetos},
   booktitle = {2019 IEEE International Conference on Acoustics, Speech and Signal Processing},
   doi = {10.1109/ICASSP.2019.8682981},

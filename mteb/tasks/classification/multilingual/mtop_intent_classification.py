@@ -34,7 +34,7 @@ class MTOPIntentClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{li-etal-2021-mtop,
+@inproceedings{li_mtop_2021,
   address = {Online},
   author = {Li, Haoran  and
 Arora, Abhinav  and

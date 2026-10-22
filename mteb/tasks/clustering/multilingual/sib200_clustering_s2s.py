@@ -230,7 +230,7 @@ class SIB200ClusteringFast(AbsTaskClustering):
         dialect=[],
         sample_creation="human-translated and localized",
         bibtex_citation=r"""
-@inproceedings{adelani-etal-2024-sib,
+@inproceedings{adelani_sib-200_2024,
   address = {St. Julian{'}s, Malta},
   author = {Adelani, David Ifeoluwa  and
 Liu, Hannah  and

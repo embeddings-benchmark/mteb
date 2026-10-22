@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from mteb.types import Array, BatchedInput, PromptType
 
 
-DASHENG_CITATION = """@inproceedings{dinkel2023scaling,
+DASHENG_CITATION = """@inproceedings{dinkel_scaling_2024,
     title={Scaling up masked audio encoder learning for general audio classification},
     author={Dinkel, Heinrich and Yan, Zhiyong and Wang, Yongqing and Zhang, Junbo and Wang, Yujun and Wang, Bin},
     booktitle={Interspeech 2024},

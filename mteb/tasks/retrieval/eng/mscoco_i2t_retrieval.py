@@ -25,7 +25,7 @@ class MSCOCOI2TRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{lin2014microsoft,
+@inproceedings{lin_microsoft_2014,
   author = {Lin, Tsung-Yi and Maire, Michael and Belongie, Serge and Hays, James and Perona, Pietro and Ramanan, Deva and Doll{\'a}r, Piotr and Zitnick, C Lawrence},
   booktitle = {Computer Vision--ECCV 2014: 13th European Conference, Zurich, Switzerland, September 6-12, 2014, Proceedings, Part V 13},
   organization = {Springer},

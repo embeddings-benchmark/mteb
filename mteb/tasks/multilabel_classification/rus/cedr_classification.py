@@ -27,7 +27,7 @@ class CEDRClassification(AbsTaskMultilabelClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{sboev2021data,
+@article{sboev_data-driven_2021,
   author = {Sboev, Alexander and Naumov, Aleksandr and Rybka, Roman},
   journal = {Procedia Computer Science},
   pages = {637--642},

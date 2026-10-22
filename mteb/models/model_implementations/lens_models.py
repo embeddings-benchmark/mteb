@@ -2,7 +2,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 from .bge_models import bge_full_data
 
-LENS_CITATION = """@inproceedings{lei2025lens,
+LENS_CITATION = """@inproceedings{lei_enhancing_2025,
   address = {Vienna, Austria},
   author = {Lei, Yibin and Shen, Tao and Cao, Yu and Yates, Andrew},
   booktitle = {Proceedings of the 63rd Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},

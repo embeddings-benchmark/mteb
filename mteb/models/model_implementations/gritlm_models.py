@@ -28,7 +28,7 @@ def gritlm_instruction(
 
 
 GRITLM_CITATION = """
-@misc{muennighoff2024generative,
+@misc{muennighoff_generative_2024,
       title={Generative Representational Instruction Tuning},
       author={Niklas Muennighoff and Hongjin Su and Liang Wang and Nan Yang and Furu Wei and Tao Yu and Amanpreet Singh and Douwe Kiela},
       year={2024},

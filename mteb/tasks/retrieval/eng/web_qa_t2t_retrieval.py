@@ -25,7 +25,7 @@ class WebQAT2TRetrieval(AbsTaskRetrieval):
         modalities=["text"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{chang2022webqa,
+@inproceedings{chang_webqa_2022,
   author = {Chang, Yingshan and Narang, Mridu and Suzuki, Hisami and Cao, Guihong and Gao, Jianfeng and Bisk, Yonatan},
   booktitle = {Proceedings of the IEEE/CVF conference on computer vision and pattern recognition},
   pages = {16495--16504},

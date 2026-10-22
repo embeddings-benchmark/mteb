@@ -35,7 +35,7 @@ class MLQuestionsRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{kulshreshtha-etal-2021-back,
+@inproceedings{kulshreshtha_back-training_2021,
   address = {Online and Punta Cana, Dominican Republic},
   author = {Kulshreshtha, Devang  and
 Belfer, Robert  and

@@ -51,7 +51,7 @@ COMMON_METADATA = {
     "task_subtypes": ["Image Text Retrieval"],
     "dialect": [],
     "modalities": ["text", "image"],
-    "bibtex_citation": r"""@inproceedings{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+    "bibtex_citation": r"""@inproceedings{gunther_jina-embeddings-v4_2025,
   address = {Suzhuo, China},
   author = {G{\"u}nther, Michael and Sturua, Saba and Akram, Mohammad Kalim and Mohr, Isabelle and Ungureanu, Andrei and Wang, Bo and Eslami, Sedigheh and Martens, Scott and Werk, Maximilian and Wang, Nan and Xiao, Han},
   booktitle = {Proceedings of the 5th Workshop on Multilingual Representation Learning ({MRL} 2025)},

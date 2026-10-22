@@ -4,7 +4,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.zeroshot_classification import AbsTaskZeroShotClassification
 
 CITATION = r"""
-@inproceedings{dong2023simmmdg,
+@inproceedings{dong_simmmdg_2023,
   title = {Sim{MMDG}: A Simple and Effective Framework for Multi-modal Domain Generalization},
   author = {Dong, Hao and Nejjar, Ismail and Sun, Han and Chatzi, Eleni and Fink, Olga},
   booktitle = {Advances in Neural Information Processing Systems},

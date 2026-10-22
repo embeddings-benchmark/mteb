@@ -11,7 +11,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 _DATASET_PATH = "mteb/panda-70m"
 _DATASET_REVISION = "62c3a1ae9adbaae91ca1ca6b0b7adcbf8f36409f"
 _BIBTEX = r"""
-@inproceedings{chen2024panda,
+@inproceedings{chen_panda-70m_2024,
   author = {Chen, Tsai-Shien and Siarohin, Aliaksandr and Menapace, Willi and Deyneka, Ekaterina and Chao, Hsiang-wei and Jeon, Byung Eun and Fang, Yuwei and Lee, Hsin-Ying and Ren, Jian and Yang, Ming-Hsuan and Tulyakov, Sergey},
   booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
   title = {Panda-70M: Captioning 70M Videos with Multiple Cross-Modality Teachers},

@@ -28,7 +28,7 @@ class STS12STS(AbsTaskSTS):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{10.5555/2387636.2387697,
+@inproceedings{agirre_semeval-2012_2012,
   address = {USA},
   author = {Agirre, Eneko and Diab, Mona and Cer, Daniel and Gonzalez-Agirre, Aitor},
   booktitle = {Proceedings of the First Joint Conference on Lexical and Computational Semantics - Volume 1: Proceedings of the Main Conference and the Shared Task, and Volume 2: Proceedings of the Sixth International Workshop on Semantic Evaluation},

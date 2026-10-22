@@ -30,7 +30,7 @@ class NaijaSenti(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{muhammad-etal-2022-naijasenti,
+@inproceedings{muhammad_naijasenti_2022,
   address = {Marseille, France},
   author = {Muhammad, Shamsuddeen Hassan  and
 Adelani, David Ifeoluwa  and

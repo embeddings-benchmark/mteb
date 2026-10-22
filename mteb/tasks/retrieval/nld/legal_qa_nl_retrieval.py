@@ -28,7 +28,7 @@ class LegalQANLRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{redelaar2024attributed,
+@inproceedings{redelaar_attributed_2024,
   author = {Redelaar, Felicia and Van Drie, Romy and Verberne, Suzan and De Boer, Maaike},
   booktitle = {Proceedings of the natural legal language processing workshop 2024},
   pages = {154--165},

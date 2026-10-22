@@ -3,7 +3,7 @@ from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
 from mteb.types import OutputDType
 
-Tarka_Embedding_150M_V1_CITATION = """@misc{tarka_ai_research_2025,
+Tarka_Embedding_150M_V1_CITATION = """@misc{research_tarka-embedding-150m-v1_2025,
 	author       = { Tarka AI Research },
 	title        = { Tarka-Embedding-150M-V1 (Revision c5f4f43) },
 	year         = 2025,
@@ -11,7 +11,7 @@ Tarka_Embedding_150M_V1_CITATION = """@misc{tarka_ai_research_2025,
 	doi          = { 10.57967/hf/6875 },
 	publisher    = { Hugging Face }
 }"""
-Tarka_Embedding_350M_V1_CITATION = """@misc{tarka_ai_research_2025,
+Tarka_Embedding_350M_V1_CITATION = """@misc{research_tarka-embedding-350m-v1_2025,
 	author       = { Tarka AI Research },
 	title        = { Tarka-Embedding-350M-V1 (Revision f4b5de8) },
 	year         = 2025,

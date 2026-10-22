@@ -27,7 +27,7 @@ class MusicAVQACLSAudioVideoClassification(AbsTaskClassification):
         modalities=["video", "audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{li2022learning,
+@inproceedings{li_learning_2022,
   author = {Li, Guangyao and Wei, Yake and Tian, Yapeng and Xu, Chenliang and Wen, Ji-Rong and Hu, Di},
   booktitle = {Proceedings of the IEEE/CVF conference on computer vision and pattern recognition},
   pages = {19108--19118},
@@ -66,7 +66,7 @@ class MusicAVQACLSVideoClassification(AbsTaskClassification):
         modalities=["video"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{li2022learning,
+@inproceedings{li_learning_2022,
   author = {Li, Guangyao and Wei, Yake and Tian, Yapeng and Xu, Chenliang and Wen, Ji-Rong and Hu, Di},
   booktitle = {Proceedings of the IEEE/CVF conference on computer vision and pattern recognition},
   pages = {19108--19118},

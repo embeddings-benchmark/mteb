@@ -36,7 +36,7 @@ class LoTTERetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{santhanam-etal-2022-colbertv2,
+@inproceedings{santhanam_colbertv2_2022,
   address = {Seattle, United States},
   author = {Santhanam, Keshav  and
 Khattab, Omar  and

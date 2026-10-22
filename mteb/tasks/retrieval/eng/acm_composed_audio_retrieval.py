@@ -41,7 +41,7 @@ class ACMComposedAudioRetrieval(AbsTaskRetrieval):
         is_beta=True,
         sample_creation="found",
         bibtex_citation=r"""
-@article{huynh2026omniret,
+@article{huynh_efficient_2026,
   author = {Huynh, Chuong and Luong, Manh and Shrivastava},
   journal = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
   title = {Efficient and High-Fidelity Omni Modality Retrieval},

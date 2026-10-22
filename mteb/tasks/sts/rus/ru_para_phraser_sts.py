@@ -25,7 +25,7 @@ class RUParaPhraserSTS(AbsTaskSTS):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{gudkov-etal-2020-automatically,
+@inproceedings{gudkov_automatically_2020,
   address = {Online},
   author = {Gudkov, Vadim  and
 Mitrofanova, Olga  and
@@ -40,7 +40,7 @@ Filippskikh, Elizaveta},
   year = {2020},
 }
 
-@inproceedings{pivovarova2017paraphraser,
+@inproceedings{pivovarova_paraphraser_2017,
   author = {Pivovarova, Lidia and Pronoza, Ekaterina and Yagunova, Elena and Pronoza, Anton},
   booktitle = {Conference on artificial intelligence and natural language},
   organization = {Springer},

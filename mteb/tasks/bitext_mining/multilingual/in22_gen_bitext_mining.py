@@ -83,7 +83,7 @@ class IN22GenBitextMining(AbsTaskBitextMining):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@article{gala2023indictrans,
+@article{gala_indictrans2_2023,
   author = {Jay Gala and Pranjal A Chitale and A K Raghavan and Varun Gumma and Sumanth Doddapaneni and Aswanth Kumar M and Janki Atul Nawale and Anupama Sujatha and Ratish Puduppully and Vivek Raghavan and Pratyush Kumar and Mitesh M Khapra and Raj Dabre and Anoop Kunchukuttan},
   issn = {2835-8856},
   journal = {Transactions on Machine Learning Research},

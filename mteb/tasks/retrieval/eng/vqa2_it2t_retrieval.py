@@ -25,7 +25,7 @@ class VQA2IT2TRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{Goyal_2017_CVPR,
+@inproceedings{goyal_making_2017,
   author = {Goyal, Yash and Khot, Tejas and Summers-Stay, Douglas and Batra, Dhruv and Parikh, Devi},
   booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
   month = {July},

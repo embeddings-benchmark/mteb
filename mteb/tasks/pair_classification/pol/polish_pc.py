@@ -25,7 +25,7 @@ class SickePLPC(AbsTaskPairClassification):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{dadas-etal-2020-evaluation,
+@inproceedings{dadas_evaluation_2020,
   address = {Marseille, France},
   archiveprefix = {arXiv},
   author = {Dadas, Slawomir  and
@@ -99,7 +99,7 @@ class PpcPC(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{dadas2022training,
+@inproceedings{dadas_training_2022,
   author = {Dadas, Slawomir},
   booktitle = {2022 IEEE International Conference on Systems, Man, and Cybernetics (SMC)},
   doi = {10.1109/smc53654.2022.9945218},
@@ -137,7 +137,7 @@ class CdscePC(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{wroblewska-krasnowska-kieras-2017-polish,
+@inproceedings{wroblewska_polish_2017,
   address = {Vancouver, Canada},
   author = {Wr{\'o}blewska, Alina  and
 Krasnowska-Kiera{\'s}, Katarzyna},
@@ -186,7 +186,7 @@ class PscPC(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{ogrodniczuk-kopec-2014-polish,
+@inproceedings{ogrodniczuk_polish_2014,
   address = {Reykjavik, Iceland},
   author = {Ogrodniczuk, Maciej  and
 Kope{\'c}, Mateusz},

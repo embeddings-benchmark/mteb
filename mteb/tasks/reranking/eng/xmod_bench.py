@@ -15,7 +15,7 @@ dataset = {
 }
 _REFERENCE = "https://arxiv.org/abs/2510.15148"
 _CITATION = r"""
-@inproceedings{wang2026xmodbench,
+@inproceedings{wang_xmodbench_2026,
   author = {Wang, Xingrui and Liu, Jiang and Huang, Chao and Yu, Xiaodong and Wang, Ze and Sun, Ximeng and Wu, Jialian and Yuille, Alan and Barsoum, Emad and Liu, Zicheng},
   booktitle = {The Fourteenth International Conference on Learning Representations},
   title = {XModBench: Benchmarking Cross-Modal Capabilities and Consistency in Omni-Language Models},

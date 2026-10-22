@@ -35,7 +35,7 @@ class CyrillicTurkicLangClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{goldhahn2012building,
+@inproceedings{goldhahn_building_2012,
   author = {Goldhahn, Dirk and Eckart, Thomas and Quasthoff, Uwe},
   booktitle = {Proceedings of the Eighth International Conference on Language Resources and Evaluation (LREC'12)},
   title = {Building Large Monolingual Dictionaries at the Leipzig Corpora Collection: From 100 to 200 Languages},

@@ -37,7 +37,7 @@ class MintakaRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="human-translated",
         bibtex_citation=r"""
-@inproceedings{sen-etal-2022-mintaka,
+@inproceedings{sen_mintaka_2022,
   address = {Gyeongju, Republic of Korea},
   archiveprefix = {arXiv},
   author = {Sen, Priyanka  and

@@ -41,7 +41,7 @@ class IndicReviewsClusteringP2P(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="machine-translated and verified",
         bibtex_citation=r"""
-@article{doddapaneni2022towards,
+@article{doddapaneni_leaving_2022,
   author = {Sumanth Doddapaneni and Rahul Aralikatte and Gowtham Ramesh and Shreyansh Goyal and Mitesh M. Khapra and Anoop Kunchukuttan and Pratyush Kumar},
   doi = {10.18653/v1/2023.acl-long.693},
   journal = {Annual Meeting of the Association for Computational Linguistics},

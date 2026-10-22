@@ -35,7 +35,7 @@ class LibriSpeechSpeakerA2ARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{panayotov2015librispeech,
+@inproceedings{panayotov_librispeech_2015,
   author = {Panayotov, Vassil and Chen, Guoguo and Povey, Daniel and Khudanpur, Sanjeev},
   booktitle = {2015 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   organization = {IEEE},

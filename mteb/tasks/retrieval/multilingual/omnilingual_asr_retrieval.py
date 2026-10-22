@@ -65,7 +65,7 @@ _LANGUAGES = {
 }
 
 _BIBTEX = r"""
-@article{omnilingualasr2025,
+@article{omnilingualasrteam_omnilingual_2025,
   author = {{Omnilingual ASR Team}},
   journal = {arXiv preprint arXiv:2511.09690},
   title = {Omnilingual {ASR}: Open-Source Multilingual Speech Recognition for 1600+ Languages},

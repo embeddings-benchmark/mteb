@@ -32,7 +32,7 @@ class CIFAR10Classification(AbsTaskClassification):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@techreport{Krizhevsky09learningmultiple,
+@techreport{krizhevsky_learning_2009,
   author = {Alex Krizhevsky},
   institution = {},
   title = {Learning multiple layers of features from tiny images},
@@ -73,7 +73,7 @@ class CIFAR100Classification(AbsTaskClassification):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@techreport{Krizhevsky09learningmultiple,
+@techreport{krizhevsky_learning_2009,
   author = {Alex Krizhevsky},
   institution = {},
   title = {Learning multiple layers of features from tiny images},

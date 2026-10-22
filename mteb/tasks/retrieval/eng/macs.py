@@ -25,7 +25,7 @@ class MACSA2TRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{martinmorato2021groundtruthreliabilitymultiannotator,
+@inproceedings{martin-morato_what_2021,
   author = {Martin-Morato, Irene and Mesaros, Annamaria},
   booktitle = {2021 29th European Signal Processing Conference (EUSIPCO)},
   doi = {10.23919/eusipco54536.2021.9616087},
@@ -63,7 +63,7 @@ class MACST2ARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{martinmorato2021groundtruthreliabilitymultiannotator,
+@inproceedings{martin-morato_what_2021,
   author = {Martin-Morato, Irene and Mesaros, Annamaria},
   booktitle = {2021 29th European Signal Processing Conference (EUSIPCO)},
   doi = {10.23919/eusipco54536.2021.9616087},

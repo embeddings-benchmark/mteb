@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from collections.abc import Mapping
 
 BIBTEX = r"""
-@inproceedings{dong2023simmmdg,
+@inproceedings{dong_simmmdg_2023,
   author = {Dong, Hao and Nejjar, Ismail and Sun, Han and Chatzi, Eleni and Fink, Olga},
   booktitle = {Advances in Neural Information Processing Systems},
   title = {Sim{MMDG}: A Simple and Effective Framework for Multi-modal Domain Generalization},

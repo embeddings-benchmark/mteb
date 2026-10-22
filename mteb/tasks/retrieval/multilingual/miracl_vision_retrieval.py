@@ -144,7 +144,7 @@ class MIRACLVisionRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created",
         bibtex_citation=r"""
-@article{osmulski2025miraclvisionlargemultilingualvisual,
+@article{osmulski_miracl-vision_2025,
   author = {Radek Osmulski and Gabriel de Souza P. Moreira and Ronay Ak and Mengyao Xu and Benedikt Schifferer and Even Oldridge},
   eprint = {2505.11651},
   journal = {arxiv},

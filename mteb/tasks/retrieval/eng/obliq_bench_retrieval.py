@@ -8,7 +8,7 @@ _DATASET = {
     "revision": "b630be644e0dbdc2fa5f712ae8383ebbb9cbee7e",
 }
 
-_CITATION = r"""@article{tchuindjo2026obliq,
+_CITATION = r"""@article{tchuindjo_obliq-bench_2026,
   author = {Tchuindjo, Diane and Shah, Devavrat and Khattab, Omar},
   journal = {arXiv preprint arXiv:2605.06235},
   title = {OBLIQ-Bench: Exposing Overlooked Bottlenecks in Modern Retrievers with Latent and Implicit Queries},

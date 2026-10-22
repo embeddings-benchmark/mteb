@@ -4,7 +4,7 @@ from mteb.models.model_implementations.colpali_models import COLPALI_TRAINING_DA
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SparseEncoderWrapper
 
-V_SPLADE_CITATION = """@misc{cho2026vsplade,
+V_SPLADE_CITATION = """@misc{cho_inference-free_2026,
   title         = {Inference-Free Multimodal Learned Sparse Retrieval for Production-Scale Visual Document Search},
   author        = {Cho, Gyu-Hwung and Lee, Youngjune and Jeong, Kiyoon and Lee, Siyoung and Han, Sanggyu and Dejean, Herv{\\'e} and Clinchant, St{\\'e}phane and Hwang, Seung-won},
   year          = {2026},

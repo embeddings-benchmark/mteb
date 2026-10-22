@@ -25,7 +25,7 @@ class SpeechCommandsZeroshotClassificationV01(AbsTaskZeroShotClassification):
         modalities=["audio", "text"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{DBLP:journals/corr/abs-1804-03209,
+@article{warden_speech_2018,
   author = {Pete Warden},
   bibsource = {dblp computer science bibliography, https://dblp.org},
   biburl = {https://dblp.org/rec/journals/corr/abs-1804-03209.bib},
@@ -83,7 +83,7 @@ class SpeechCommandsZeroshotClassificationv02(AbsTaskZeroShotClassification):
         modalities=["audio", "text"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{DBLP:journals/corr/abs-1804-03209,
+@article{warden_speech_2018,
   author = {Pete Warden},
   bibsource = {dblp computer science bibliography, https://dblp.org},
   biburl = {https://dblp.org/rec/journals/corr/abs-1804-03209.bib},

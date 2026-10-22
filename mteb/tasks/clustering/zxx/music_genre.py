@@ -26,7 +26,7 @@ class MusicGenreClustering(AbsTaskClustering):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{homburg2005benchmark,
+@inproceedings{homburg_benchmark_2005,
   author = {Homburg, Helge and Mierswa, Ingo and M{\"o}ller, B{\"u}lent and Morik, Katharina and Wurst, Michael},
   booktitle = {ISMIR},
   pages = {528--31},

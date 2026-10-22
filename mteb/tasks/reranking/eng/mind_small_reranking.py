@@ -31,7 +31,7 @@ class MindSmallReranking(AbsTaskRetrieval):
         sample_creation="found",
         prompt="Retrieve relevant news articles based on user browsing history",
         bibtex_citation=r"""
-@inproceedings{wu-etal-2020-mind,
+@inproceedings{wu_mind_2020,
   address = {Online},
   author = {Wu, Fangzhao  and Qiao, Ying  and Chen, Jiun-Hung  and Wu, Chuhan  and Qi,
 Tao  and Lian, Jianxun  and Liu, Danyang  and Xie, Xing  and Gao, Jianfeng  and Wu, Winnie  and Zhou, Ming},

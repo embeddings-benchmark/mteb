@@ -136,7 +136,7 @@ class JamAltArtistA2ARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{cifka-2024-jam-alt,
+@inproceedings{cifka_lyrics_2024,
   author = {Ond{\v{r}}ej C{\'{\i}}fka and
 Hendrik Schreiber and
 Luke Miner and
@@ -196,7 +196,7 @@ class JamAltLyricT2ARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{cifka-2024-jam-alt,
+@inproceedings{cifka_lyrics_2024,
   author = {Ond{\v{r}}ej C{\'{\i}}fka and
 Hendrik Schreiber and
 Luke Miner and
@@ -254,7 +254,7 @@ class JamAltLyricA2TRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{cifka-2024-jam-alt,
+@inproceedings{cifka_lyrics_2024,
   author = {Ond{\v{r}}ej C{\'{\i}}fka and
 Hendrik Schreiber and
 Luke Miner and

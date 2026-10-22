@@ -25,7 +25,7 @@ class LLaVAIT2TRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{lin-etal-2024-preflmr,
+@inproceedings{lin_preflmr_2024,
   address = {Bangkok, Thailand},
   author = {Lin, Weizhe  and
 Mei, Jingbiao  and
