@@ -148,9 +148,7 @@ def test_build_summary_rows_strict_when_not_language_filtered():
 
 
 def test_build_task_scores_ignores_splits_outside_eval_splits(monkeypatch):
-    # SprintDuplicateQuestions now declares only ``test``; older results also
-    # carry ``validation``, which must not appear as a split or null out the
-    # score of models that only ran ``test``.
+    pytest.importorskip("fastapi")
     from mteb.api import frames
     from mteb.api.aggregators import build_task_scores
 
@@ -179,8 +177,7 @@ def test_build_task_scores_ignores_splits_outside_eval_splits(monkeypatch):
 
 
 def test_build_task_scores_ignores_subsets_outside_hf_subsets(monkeypatch):
-    # HUME tasks declare ``en``; a stray ``eng`` result must not surface as a
-    # subset or null out models that only ran the declared ones.
+    pytest.importorskip("fastapi")
     from mteb.api import frames
     from mteb.api.aggregators import build_task_scores
 
