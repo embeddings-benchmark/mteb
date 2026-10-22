@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import pytest
+import torch
 from datasets import Dataset
 from torch.utils.data import DataLoader
 
@@ -67,6 +68,82 @@ class DummyModel(RandomEncoderBaseline):
             return embeddings
         prompt_offset = 1.0 if prompt_type is PromptType.query else 2.0
         return embeddings + prompt_offset
+
+
+class TestCachedTensorDtypes:
+    @pytest.mark.parametrize(
+        ("dtype_name", "numpy_dtype"),
+        [
+            ("bfloat16", "float32"),
+            ("float8_e4m3fn", "float32"),
+            ("float8_e5m2", "float32"),
+            ("float16", "float16"),
+            ("float32", "float32"),
+            ("float64", "float64"),
+            ("int8", "int8"),
+            ("uint8", "uint8"),
+        ],
+    )
+    def test_tensor_cache_roundtrip(self, tmp_path, dtype_name, numpy_dtype):
+        dtype = getattr(torch, dtype_name, None)
+        if dtype is None:
+            pytest.skip(f"{dtype_name} is not available in this PyTorch version")
+        values = {
+            "first": [1, 2, 4],
+            "second": [8, 16, 32],
+            "third": [0.5, 0.25, 0.125],
+        }
+
+        class Encoder:
+            mteb_model_meta = None
+            calls = 0
+
+            def encode(self, inputs, **kwargs: Any):
+                self.calls += 1
+                texts = [text for batch in inputs for text in batch["text"]]
+                return torch.tensor([values[text] for text in texts], dtype=dtype)
+
+        def inputs(texts):
+            return DataLoader(Dataset.from_dict({"text": texts}), batch_size=2)
+
+        def expected(texts):
+            return (
+                torch.tensor([values[text] for text in texts], dtype=dtype)
+                .float()
+                .numpy()
+            )
+
+        metadata = TaskMetadata(
+            name="TensorCacheTask",
+            description="Tensor dtype cache regression",
+            dataset={"path": "test", "revision": "test"},
+            type="Classification",
+            eval_langs=["eng-Latn"],
+            main_score="accuracy",
+        )
+        kwargs = dict(task_metadata=metadata, hf_split="test", hf_subset="default")
+        model = Encoder()
+        wrapper = CachedEmbeddingWrapper(model, tmp_path)
+        fresh = wrapper.encode(inputs(["first", "second"]), **kwargs)
+        assert fresh.dtype == np.dtype(numpy_dtype)
+        np.testing.assert_array_equal(fresh, expected(["first", "second"]))
+        np.testing.assert_array_equal(
+            wrapper.encode(inputs(["second", "first"]), **kwargs),
+            expected(["second", "first"]),
+        )
+        assert model.calls == 1
+        texts = ["third", "second", "first"]
+        np.testing.assert_array_equal(
+            wrapper.encode(inputs(texts), **kwargs), expected(texts)
+        )
+        assert model.calls == 2
+        wrapper.close()
+        restored = CachedEmbeddingWrapper(model, tmp_path)
+        np.testing.assert_array_equal(
+            restored.encode(inputs(texts), **kwargs), expected(texts)
+        )
+        assert model.calls == 2
+        restored.close()
 
 
 class TestCachedEmbeddingWrapper:
