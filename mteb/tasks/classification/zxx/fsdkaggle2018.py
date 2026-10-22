@@ -32,7 +32,7 @@ class FSDKaggle2018Classification(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{Fonseca2018_DCASE,
+@inproceedings{fonseca_general-purpose_2018,
   author = {Fonseca, Eduardo and Plakal, Manoj and Font, Frederic and Ellis, Daniel P. W. and Favory, Xavier and Pons, Jordi and Serra, Xavier},
   booktitle = {Proceedings of the Detection and Classification of Acoustic Scenes and Events 2018 Workshop},
   month = {November},

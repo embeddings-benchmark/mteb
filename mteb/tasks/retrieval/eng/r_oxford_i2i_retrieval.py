@@ -29,7 +29,7 @@ class ROxfordEasyI2IRetrieval(AbsTaskRetrieval):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{radenovic2018revisiting,
+@inproceedings{radenovic_revisiting_2018,
   author = {Radenovi{\'c}, Filip and Iscen, Ahmet and Tolias, Giorgos and Avrithis, Yannis and Chum, Ond{\v{r}}ej},
   booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
   pages = {5706--5715},
@@ -64,7 +64,7 @@ class ROxfordMediumI2IRetrieval(AbsTaskRetrieval):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{radenovic2018revisiting,
+@inproceedings{radenovic_revisiting_2018,
   author = {Radenovi{\'c}, Filip and Iscen, Ahmet and Tolias, Giorgos and Avrithis, Yannis and Chum, Ond{\v{r}}ej},
   booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
   pages = {5706--5715},
@@ -99,7 +99,7 @@ class ROxfordHardI2IRetrieval(AbsTaskRetrieval):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{radenovic2018revisiting,
+@inproceedings{radenovic_revisiting_2018,
   author = {Radenovi{\'c}, Filip and Iscen, Ahmet and Tolias, Giorgos and Avrithis, Yannis and Chum, Ond{\v{r}}ej},
   booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
   pages = {5706--5715},

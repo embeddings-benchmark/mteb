@@ -30,7 +30,7 @@ class IndonesianMongabayConservationClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{fransiska-etal-2023-utilizing,
+@inproceedings{fransiska_utilizing_2023,
   address = {Nusa Dua, Bali, Indonesia},
   author = {Fransiska, Mega  and
 Pitaloka, Diah  and
@@ -132,7 +132,7 @@ class IndonesianMongabayConservationClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{fransiska-etal-2023-utilizing,
+@inproceedings{fransiska_utilizing_2023,
   address = {Nusa Dua, Bali, Indonesia},
   author = {Fransiska, Mega  and
 Pitaloka, Diah  and

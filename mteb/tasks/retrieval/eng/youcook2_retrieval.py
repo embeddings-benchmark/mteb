@@ -11,7 +11,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 _DATASET_PATH = "mteb/YouCook2_val"
 _DATASET_REVISION = "be654b591daef1382364d563f6d3d66f61f79b35"
 _BIBTEX = r"""
-@inproceedings{zhou2018towards,
+@inproceedings{zhou_automatic_2018,
   author = {Zhou, Luowei and Xu, Chenliang and Corso, Jason J.},
   booktitle = {Proceedings of the AAAI Conference on Artificial Intelligence},
   title = {Towards Automatic Learning of Procedures from Web Instructional Videos},

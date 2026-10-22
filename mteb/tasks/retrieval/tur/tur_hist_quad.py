@@ -29,7 +29,7 @@ class TurHistQuadRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{9559013,
+@inproceedings{soygazi_thquad_2021,
   author = {Soygazi, Fatih and Çiftçi, Okan and Kök, Uğurcan and Cengiz, Soner},
   booktitle = {2021 6th International Conference on Computer Science and Engineering (UBMK)},
   doi = {10.1109/UBMK52708.2021.9559013},

@@ -39,7 +39,7 @@ class GTZANAudioReranking(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{1021072,
+@article{tzanetakis_musical_2002,
   author = {Tzanetakis, G. and Cook, P.},
   doi = {10.1109/TSA.2002.800560},
   journal = {IEEE Transactions on Speech and Audio Processing},

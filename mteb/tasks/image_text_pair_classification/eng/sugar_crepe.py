@@ -45,7 +45,7 @@ class SugarCrepe(AbsTaskImageTextPairClassification):
         modalities=["text", "image"],
         sample_creation="created",
         bibtex_citation=r"""
-@article{hsieh2024sugarcrepe,
+@article{hsieh_sugarcrepe_2024,
   author = {Hsieh, Cheng-Yu and Zhang, Jieyu and Ma, Zixian and Kembhavi, Aniruddha and Krishna, Ranjay},
   journal = {Advances in neural information processing systems},
   title = {Sugarcrepe: Fixing hackable benchmarks for vision-language compositionality},

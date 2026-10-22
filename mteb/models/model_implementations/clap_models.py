@@ -195,7 +195,7 @@ clap_htsat_fused = ModelMeta(
         # LAION-Audio-630K (not in MTEB)
     ),
     citation="""
-@inproceedings{wu2024largescalecontrastivelanguageaudiopretraining,
+@inproceedings{wu_large-scale_2023,
   author = {Wu, Yusong and Chen, Ke and Zhang, Tianyu and Hui, Yuchen and Berg-Kirkpatrick, Taylor and Dubnov, Shlomo},
   booktitle = {ICASSP 2023 - 2023 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp49357.2023.10095969},
@@ -234,7 +234,7 @@ clap_htsat_unfused = ModelMeta(
         # LAION-Audio-630K (not in MTEB)
     ),
     citation="""
-@inproceedings{wu2024largescalecontrastivelanguageaudiopretraining,
+@inproceedings{wu_large-scale_2023,
   author = {Wu, Yusong and Chen, Ke and Zhang, Tianyu and Hui, Yuchen and Berg-Kirkpatrick, Taylor and Dubnov, Shlomo},
   booktitle = {ICASSP 2023 - 2023 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp49357.2023.10095969},
@@ -271,7 +271,7 @@ larger_clap_general = ModelMeta(
         # LAION-Audio-630K (not in MTEB)
     ),
     citation="""
-@inproceedings{wu2024largescalecontrastivelanguageaudiopretraining,
+@inproceedings{wu_large-scale_2023,
   author = {Wu, Yusong and Chen, Ke and Zhang, Tianyu and Hui, Yuchen and Berg-Kirkpatrick, Taylor and Dubnov, Shlomo},
   booktitle = {ICASSP 2023 - 2023 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp49357.2023.10095969},
@@ -308,7 +308,7 @@ larger_clap_music = ModelMeta(
         # LAION-Audio-630K (not in MTEB)
     ),
     citation="""
-@inproceedings{wu2024largescalecontrastivelanguageaudiopretraining,
+@inproceedings{wu_large-scale_2023,
   author = {Wu, Yusong and Chen, Ke and Zhang, Tianyu and Hui, Yuchen and Berg-Kirkpatrick, Taylor and Dubnov, Shlomo},
   booktitle = {ICASSP 2023 - 2023 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp49357.2023.10095969},
@@ -345,7 +345,7 @@ larger_clap_music_and_speech = ModelMeta(
         # LAION-Audio-630K (not in MTEB)
     ),
     citation="""
-@inproceedings{wu2024largescalecontrastivelanguageaudiopretraining,
+@inproceedings{wu_large-scale_2023,
   author = {Wu, Yusong and Chen, Ke and Zhang, Tianyu and Hui, Yuchen and Berg-Kirkpatrick, Taylor and Dubnov, Shlomo},
   booktitle = {ICASSP 2023 - 2023 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp49357.2023.10095969},

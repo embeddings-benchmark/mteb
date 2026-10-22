@@ -10,7 +10,7 @@ TRAINING_DATA = {
     "MrTidyRetrieval",
 }
 
-CITATION = """@software{Tulkens2025pyNIFE,
+CITATION = """@software{tulkens_pynife_2025,
   author       = {St\'{e}phan Tulkens},
   title        = {pyNIFE: nearly inference free embeddings in python},
   year         = {2025},

@@ -441,7 +441,7 @@ jina_colbert_v2 = ModelMeta(
         "DuRetrieval",
         "MIRACL",
     },
-    citation="""@inproceedings{xiao-etal-2024-jina,
+    citation="""@inproceedings{jha_jina-colbert-v2_2024,
     title = "{J}ina-{C}ol{BERT}-v2: A General-Purpose Multilingual Late Interaction Retriever",
     author = {Jha, Rohan  and
       Wang, Bo  and
@@ -788,7 +788,7 @@ nomic_embed_supervised_data = {
     "HotpotQAHardNegatives.v2",
     "NanoHotpotQARetrieval",
 }
-colbert_zero_citation = """@misc{chaffin2026colbertzeropretrainpretraincolbert,
+colbert_zero_citation = """@misc{chaffin_colbert-zero_2026,
   title         = {ColBERT-Zero: To Pre-train Or Not To Pre-train ColBERT models},
   author        = {Antoine Chaffin and Luca Arnaboldi and Amélie Chatelain and Florent Krzakala},
   year          = {2026},
@@ -949,7 +949,7 @@ denseon_lateon_supervised_data = {
     "ClimateFEVER",
 }
 
-denseon_lateon_citation = r"""@misc{sourty2026denseonlateonfullyopen,
+denseon_lateon_citation = r"""@misc{sourty_denseon_2026,
   title         = {DenseOn with the LateOn: Fully Open Dense and Late-Interaction Models for Multilingual, Long-Context, and Code Search},
   author        = {Raphaël Sourty and Antoine Chaffin and Paulo Roberto Moura Junior and Amélie Chatelain},
   year          = {2026},

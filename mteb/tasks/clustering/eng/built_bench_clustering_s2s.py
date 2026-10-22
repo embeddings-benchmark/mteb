@@ -25,7 +25,7 @@ class BuiltBenchClusteringS2S(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@article{shahinmoghadam2024benchmarking,
+@article{shahinmoghadam_benchmarking_2025,
   author = {Shahinmoghadam, Mehrzad and Motamedi, Ali},
   doi = {10.1038/s41598-025-09052-5},
   issn = {2045-2322},

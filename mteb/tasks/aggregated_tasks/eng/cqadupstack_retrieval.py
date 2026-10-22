@@ -41,7 +41,7 @@ class CQADupstackRetrieval(AbsTaskAggregate):
         type="Retrieval",  # since everything is retrieval - otherwise it would be "Aggregated"
         eval_splits=["test"],
         bibtex_citation=r"""
-@inproceedings{hoogeveen2015,
+@inproceedings{hoogeveen_cqadupstack_2015,
   acmid = {2838934},
   address = {New York, NY, USA},
   articleno = {3},

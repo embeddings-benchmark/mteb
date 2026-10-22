@@ -32,7 +32,7 @@ class DTDClassification(AbsTaskClassification):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{cimpoi14describing,
+@inproceedings{cimpoi_describing_2014,
   author = {M. Cimpoi and S. Maji and I. Kokkinos and S. Mohamed and and A. Vedaldi},
   booktitle = {Proceedings of the {IEEE} Conf. on Computer Vision and Pattern Recognition ({CVPR})},
   title = {Describing Textures in the Wild},

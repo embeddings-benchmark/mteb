@@ -12,7 +12,7 @@ _DATASET_PATH = "vnahata/avcaps-retrieval"
 _DATASET_REVISION = "adda52e701ac328a63ab4cfbdfcf1ccdd593939f"
 
 _BIBTEX = r"""
-@article{sudarsanam2025avcaps,
+@article{sudarsanam_avcaps_2025,
   author = {Sudarsanam, Parthasaarathy and Martin-Morato, Irene and Hakala, Aapo and Virtanen, Tuomas},
   journal = {IEEE Open Journal of Signal Processing},
   pages = {691--704},

@@ -36,7 +36,7 @@ class MSVDT2VRetrieval(AbsTaskRetrieval):
         modalities=["text", "video"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{chen-dolan-2011-collecting,
+@inproceedings{chen_collecting_2011,
   address = {Portland, Oregon, USA},
   author = {Chen, David  and
 Dolan, William},

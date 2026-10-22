@@ -25,7 +25,7 @@ class MalayalamNewsClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{kunchukuttan2020indicnlpcorpus,
+@article{kunchukuttan_ai4bharat-indicnlp_2020,
   author = {Anoop Kunchukuttan and Divyanshu Kakwani and Satish Golla and Gokul N.C. and Avik Bhattacharyya and Mitesh M. Khapra and Pratyush Kumar},
   journal = {arXiv preprint arXiv:2005.00085},
   title = {AI4Bharat-IndicNLP Corpus: Monolingual Corpora and Word Embeddings for Indic Languages},
@@ -65,7 +65,7 @@ class MalayalamNewsClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{kunchukuttan2020indicnlpcorpus,
+@article{kunchukuttan_ai4bharat-indicnlp_2020,
   author = {Anoop Kunchukuttan and Divyanshu Kakwani and Satish Golla and Gokul N.C. and Avik Bhattacharyya and Mitesh M. Khapra and Pratyush Kumar},
   journal = {arXiv preprint arXiv:2005.00085},
   title = {AI4Bharat-IndicNLP Corpus: Monolingual Corpora and Word Embeddings for Indic Languages},

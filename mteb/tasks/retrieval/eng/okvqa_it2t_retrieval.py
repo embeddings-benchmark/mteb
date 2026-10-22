@@ -25,7 +25,7 @@ class OKVQAIT2TRetrieval(AbsTaskRetrieval):
         modalities=["image", "text"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{marino2019ok,
+@inproceedings{marino_ok-vqa_2019,
   author = {Marino, Kenneth and Rastegari, Mohammad and Farhadi, Ali and Mottaghi, Roozbeh},
   booktitle = {Proceedings of the IEEE/cvf conference on computer vision and pattern recognition},
   pages = {3195--3204},

@@ -35,7 +35,7 @@ class VinogroundPairClassification(AbsTaskPairClassification):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@article{zhang2024vinoground,
+@article{zhang_vinoground_2024,
   author = {Zhang, Jianrui and Cai, Mu and Lee, Yong Jae},
   journal = {arXiv preprint arXiv:2410.02763},
   title = {Vinoground: Scrutinizing LMMs over Dense Temporal Reasoning with Short Videos},

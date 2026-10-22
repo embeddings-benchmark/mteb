@@ -9,7 +9,7 @@ from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _BIBTEX = r"""
-@inproceedings{wu2024star,
+@inproceedings{wu_star_2024,
   author = {Wu, Bo and Yu, Shoubin and Chen, Zhenfang and Tenenbaum, Joshua B and Gan, Chuang},
   booktitle = {Advances in Neural Information Processing Systems},
   title = {STAR: Situated Reasoning in Real-World Videos},

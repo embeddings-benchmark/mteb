@@ -37,7 +37,7 @@ class StanfordI2VRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@inproceedings{araujo2015stanford,
+@inproceedings{araujo_stanford_2015,
   author = {Araujo, Andr{\'e} and Chaves, Jason and Chen, David and Angst, Roland and Girod, Bernd},
   booktitle = {Proceedings of the 6th ACM Multimedia Systems Conference},
   pages = {237--242},
@@ -45,7 +45,7 @@ class StanfordI2VRetrieval(AbsTaskRetrieval):
   year = {2015},
 }
 
-@article{AraujoArxiv2016,
+@article{araujo_large-scale_2016,
   author = {Araujo, A. and Chaves, J. and Lakshman, H. and Angst, R. and Girod, B.},
   journal = {arXiv preprint arXiv:1604.07939},
   title = {{Large-Scale Query-by-Image Video Retrieval Using Bloom Filters}},
@@ -94,7 +94,7 @@ class StanfordI2VVisualRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@inproceedings{araujo2015stanford,
+@inproceedings{araujo_stanford_2015,
   author = {Araujo, Andr{\'e} and Chaves, Jason and Chen, David and Angst, Roland and Girod, Bernd},
   booktitle = {Proceedings of the 6th ACM Multimedia Systems Conference},
   pages = {237--242},
@@ -102,7 +102,7 @@ class StanfordI2VVisualRetrieval(AbsTaskRetrieval):
   year = {2015},
 }
 
-@article{AraujoArxiv2016,
+@article{araujo_large-scale_2016,
   author = {Araujo, A. and Chaves, J. and Lakshman, H. and Angst, R. and Girod, B.},
   journal = {arXiv preprint arXiv:1604.07939},
   title = {{Large-Scale Query-by-Image Video Retrieval Using Bloom Filters}},

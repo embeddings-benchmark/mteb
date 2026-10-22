@@ -30,7 +30,7 @@ class STL10ZeroShotClassification(AbsTaskZeroShotClassification):
         modalities=["image", "text"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{pmlr-v15-coates11a,
+@inproceedings{coates_analysis_2011,
   address = {Fort Lauderdale, FL, USA},
   author = {Coates, Adam and Ng, Andrew and Lee, Honglak},
   booktitle = {Proceedings of the Fourteenth International Conference on Artificial Intelligence and Statistics},

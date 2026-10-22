@@ -40,7 +40,7 @@ class STS17Crosslingual(AbsTaskSTS):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{cer-etal-2017-semeval,
+@inproceedings{cer_semeval-2017_2017,
   address = {Vancouver, Canada},
   author = {Cer, Daniel  and
 Diab, Mona  and

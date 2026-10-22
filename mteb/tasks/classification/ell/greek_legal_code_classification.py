@@ -25,7 +25,7 @@ class GreekLegalCodeClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{papaloukas-etal-2021-glc,
+@inproceedings{papaloukas_multi-granular_2021,
   address = {Punta Cana, Dominican Republic},
   author = {Papaloukas, Christos and Chalkidis, Ilias and Athinaios, Konstantinos and Pantazi, Despina-Athanasia and Koubarakis, Manolis},
   booktitle = {Proceedings of the Natural Legal Language Processing Workshop 2021},

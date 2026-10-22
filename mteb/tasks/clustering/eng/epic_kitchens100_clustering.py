@@ -40,7 +40,7 @@ class EPICKitchens100Clustering(AbsTaskClustering):
         modalities=["video"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{Damen2021RESCALING,
+@article{damen_rescaling_2022,
   author = {Damen, Dima and Doughty, Hazel and Farinella, Giovanni Maria and Furnari, Antonino and Ma, Jian and Kazakos, Evangelos and Moltisanti, Davide and Munro, Jonathan and Perrett, Toby and Price, Will and Wray, Michael},
   journal = {International Journal of Computer Vision (IJCV)},
   title = {Rescaling Egocentric Vision: Collection, Pipeline and Challenges for EPIC-KITCHENS-100},
@@ -96,7 +96,7 @@ class EPICKitchens100ClusteringMini(AbsTaskClustering):
         modalities=["video"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{Damen2021RESCALING,
+@article{damen_rescaling_2022,
   author = {Damen, Dima and Doughty, Hazel and Farinella, Giovanni Maria and Furnari, Antonino and Ma, Jian and Kazakos, Evangelos and Moltisanti, Davide and Munro, Jonathan and Perrett, Toby and Price, Will and Wray, Michael},
   journal = {International Journal of Computer Vision (IJCV)},
   title = {Rescaling Egocentric Vision: Collection, Pipeline and Challenges for EPIC-KITCHENS-100},

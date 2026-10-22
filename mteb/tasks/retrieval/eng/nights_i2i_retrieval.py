@@ -27,7 +27,7 @@ class NIGHTSI2IRetrieval(AbsTaskRetrieval):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@article{fu2024dreamsim,
+@article{fu_dreamsim_2024,
   author = {Fu, Stephanie and Tamir, Netanel and Sundaram, Shobhita and Chai, Lucy and Zhang, Richard and Dekel, Tali and Isola, Phillip},
   journal = {Advances in Neural Information Processing Systems},
   title = {DreamSim: Learning New Dimensions of Human Visual Similarity using Synthetic Data},

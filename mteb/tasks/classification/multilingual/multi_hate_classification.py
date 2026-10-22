@@ -40,7 +40,7 @@ class MultiHateClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{rottger-etal-2021-hatecheck,
+@inproceedings{rottger_hatecheck_2021,
   address = {Online},
   author = {R{\"o}ttger, Paul  and
 Vidgen, Bertie  and
@@ -62,7 +62,7 @@ Navigli, Roberto},
   year = {2021},
 }
 
-@inproceedings{rottger-etal-2022-multilingual,
+@inproceedings{rottger_multilingual_2022,
   address = {Seattle, Washington (Hybrid)},
   author = {R{\"o}ttger, Paul  and
 Seelawi, Haitham  and

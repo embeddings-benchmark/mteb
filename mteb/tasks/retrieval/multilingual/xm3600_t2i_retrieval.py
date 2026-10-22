@@ -191,7 +191,7 @@ class XM3600T2IRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{thapliyal2022crossmodal,
+@inproceedings{thapliyal_crossmodal-3600_2022,
   author = {Thapliyal, Ashish V and Tuset, Jordi Pont and Chen, Xi and Soricut, Radu},
   booktitle = {Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing},
   pages = {715--729},
@@ -239,7 +239,7 @@ class XM3600I2TRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         adapted_from=["XM3600T2IRetrieval"],
         bibtex_citation=r"""
-@inproceedings{thapliyal2022crossmodal,
+@inproceedings{thapliyal_crossmodal-3600_2022,
   author = {Thapliyal, Ashish V and Tuset, Jordi Pont and Chen, Xi and Soricut, Radu},
   booktitle = {Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing},
   pages = {715--729},

@@ -25,7 +25,7 @@ class GLDv2I2IRetrieval(AbsTaskRetrieval):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{Weyand_2020_CVPR,
+@inproceedings{weyand_google_2020,
   author = {Weyand, Tobias and Araujo, Andre and Cao, Bingyi and Sim, Jack},
   booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
   month = {June},

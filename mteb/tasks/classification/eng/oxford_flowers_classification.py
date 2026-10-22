@@ -32,7 +32,7 @@ class OxfordFlowersClassification(AbsTaskClassification):
         modalities=["image"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{4756141,
+@inproceedings{nilsback_automated_2008,
   author = {Nilsback, Maria-Elena and Zisserman, Andrew},
   booktitle = {2008 Sixth Indian Conference on Computer Vision, Graphics & Image Processing},
   doi = {10.1109/ICVGIP.2008.47},

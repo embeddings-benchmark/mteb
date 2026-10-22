@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
 
-JINA_CLIP_CITATION = """@article{koukounas2024jinaclip,
+JINA_CLIP_CITATION = """@article{koukounas_jina_2024,
   title={Jina CLIP: Your CLIP Model Is Also Your Text Retriever},
   author={Koukounas, Andreas and Mastrapas, Georgios and Günther, Michael and Wang, Bo and Martens, Scott and Mohr, Isabelle and Sturua, Saba and Akram, Mohammad Kalim and Martínez, Joan Fontanals and Ognawala, Saahil and Guzman, Susana and Werk, Maximilian and Wang, Nan and Xiao, Han},
   journal={arXiv preprint arXiv:2405.20204},
@@ -190,7 +190,7 @@ jina_clip_v2 = ModelMeta(
     modalities=["text", "image"],
     model_type=["dense"],
     citation="""
-@misc{koukounas2024jinaclipv2multilingualmultimodalembeddings,
+@misc{koukounas_jina-clip-v2_2024,
       title={jina-clip-v2: Multilingual Multimodal Embeddings for Text and Images},
       author={Andreas Koukounas and Georgios Mastrapas and Bo Wang and Mohammad Kalim Akram and Sedigheh Eslami and Michael Günther and Isabelle Mohr and Saba Sturua and Scott Martens and Nan Wang and Han Xiao},
       year={2024},

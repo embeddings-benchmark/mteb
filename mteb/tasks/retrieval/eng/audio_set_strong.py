@@ -28,7 +28,7 @@ class AudioSetStrongA2TRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{hershey2021benefittemporallystronglabelsaudio,
+@inproceedings{hershey_benefit_2021,
   author = {Hershey, Shawn and Ellis, Daniel P W and Fonseca, Eduardo and Jansen, Aren and Liu, Caroline and Channing Moore, R and Plakal, Manoj},
   booktitle = {ICASSP 2021 - 2021 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp39728.2021.9414579},
@@ -71,7 +71,7 @@ class AudioSetStrongT2ARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{hershey2021benefittemporallystronglabelsaudio,
+@inproceedings{hershey_benefit_2021,
   author = {Hershey, Shawn and Ellis, Daniel P W and Fonseca, Eduardo and Jansen, Aren and Liu, Caroline and Channing Moore, R and Plakal, Manoj},
   booktitle = {ICASSP 2021 - 2021 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp39728.2021.9414579},

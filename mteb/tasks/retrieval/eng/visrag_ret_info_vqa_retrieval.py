@@ -30,7 +30,7 @@ class VisRAGRetInfoVQA(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{mathew2021infographicvqa,
+        bibtex_citation="""@inproceedings{mathew_infographicvqa_2022,
   author = {Mathew, Minesh and Bagal, Viraj and Tito, Ruben and Karatzas, Dimosthenis and Valveny, Ernest and Jawahar, C. V.},
   booktitle = {2022 IEEE/CVF Winter Conference on Applications of Computer Vision (WACV)},
   doi = {10.1109/wacv51458.2022.00264},

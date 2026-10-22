@@ -33,7 +33,7 @@ class WorldSense1MinVideoCentricQA(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@article{hong2025worldsense,
+@article{hong_worldsense_2025,
   author = {Hong, Jack and Yan, Shilin and Cai, Jiayin and Jiang, Xiaolong and Hu, Yao and Xie, Weidi},
   journal = {arXiv preprint arXiv:2502.04326},
   title = {WorldSense: Evaluating Real-world Omnimodal Understanding for Multimodal LLMs},
@@ -106,7 +106,7 @@ class WorldSense1MinVideoAudioCentricQA(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@article{hong2025worldsense,
+@article{hong_worldsense_2025,
   author = {Hong, Jack and Yan, Shilin and Cai, Jiayin and Jiang, Xiaolong and Hu, Yao and Xie, Weidi},
   journal = {arXiv preprint arXiv:2502.04326},
   title = {WorldSense: Evaluating Real-world Omnimodal Understanding for Multimodal LLMs},

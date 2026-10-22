@@ -25,7 +25,7 @@ class HC3FinanceRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{guo2023hc3,
+@article{guo_how_2023,
   author = {Guo, Biyang and Zhang, Xin and Wang, Zhiyuan and Jiang, Mingyuan and Nie, Jinran and Ding, Yuxuan and Yue, Jianwei and Wu, Yupeng},
   journal = {arXiv preprint arXiv:2301.07597},
   title = {How Close is ChatGPT to Human Experts? Comparison Corpus, Evaluation, and Detection},

@@ -17,7 +17,7 @@ _fever_metadata = dict(
     dialect=[],
     sample_creation="found",
     bibtex_citation=r"""
-@inproceedings{thorne-etal-2018-fever,
+@inproceedings{thorne_fever_2018,
   address = {New Orleans, Louisiana},
   author = {Thorne, James  and
 Vlachos, Andreas  and

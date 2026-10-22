@@ -25,7 +25,7 @@ class YelpReviewFullClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{NIPS2015_250cf8b5,
+@inproceedings{zhang_character-level_2015,
   author = {Zhang, Xiang and Zhao, Junbo and LeCun, Yann},
   booktitle = {Advances in Neural Information Processing Systems},
   editor = {C. Cortes and N. Lawrence and D. Lee and M. Sugiyama and R. Garnett},
@@ -74,7 +74,7 @@ class YelpReviewFullClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{NIPS2015_250cf8b5,
+@inproceedings{zhang_character-level_2015,
   author = {Zhang, Xiang and Zhao, Junbo and LeCun, Yann},
   booktitle = {Advances in Neural Information Processing Systems},
   editor = {C. Cortes and N. Lawrence and D. Lee and M. Sugiyama and R. Garnett},

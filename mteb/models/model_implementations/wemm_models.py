@@ -109,7 +109,7 @@ class WeMMEncoderWrapper(SentenceTransformerEncoderWrapper):
 
 # --- Private module-level constants ---
 
-_WEMM_CITATION = """@article{wemm-embedding,
+_WEMM_CITATION = """@article{zhou_wemm-embedding_2026,
       title={WeMM-Embedding: WeChat Multi-Modal Embedding Technical Report},
       author={Junjie Zhou and Ke Mei and Lei Li and Tianyi Wang and Fengyun Rao and Jing Lyu},
       year={2026},

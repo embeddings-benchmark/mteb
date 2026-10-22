@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from collections.abc import Mapping
 
 BIBTEX = r"""
-@inproceedings{poria2019meld,
+@inproceedings{poria_meld_2019,
   author = {Poria, Soujanya and Hazarika, Devamanyu and Majumder, Navonil and Naik, Gautam and Cambria, Erik and Mihalcea, Rada},
   booktitle = {Proceedings of the 57th annual meeting of the association for computational linguistics},
   pages = {527--536},

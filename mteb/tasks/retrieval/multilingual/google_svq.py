@@ -62,7 +62,7 @@ class GoogleSVQA2TRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{heigold2025massive,
+@inproceedings{heigold_massive_2025,
   author = {Georg Heigold and Ehsan Variani and Tom Bagby and Cyril Allauzen and Ji Ma and Shankar Kumar and Michael Riley},
   booktitle = {The Thirty-ninth Annual Conference on Neural Information Processing Systems Datasets and Benchmarks Track},
   title = {Massive Sound Embedding Benchmark ({MSEB})},
@@ -159,7 +159,7 @@ class GoogleSVQT2ARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{heigold2025massive,
+@inproceedings{heigold_massive_2025,
   author = {Georg Heigold and Ehsan Variani and Tom Bagby and Cyril Allauzen and Ji Ma and Shankar Kumar and Michael Riley},
   booktitle = {The Thirty-ninth Annual Conference on Neural Information Processing Systems Datasets and Benchmarks Track},
   title = {Massive Sound Embedding Benchmark ({MSEB})},

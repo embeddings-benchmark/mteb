@@ -135,7 +135,7 @@ class SIBFLEURSMultilingualClassification(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{schmidt2025fleursslumassivelymultilingualbenchmark,
+@misc{schmidt_fleurs-slu_2025,
   archiveprefix = {arXiv},
   author = {Fabian David Schmidt and Ivan Vulić and Goran Glavaš and David Ifeoluwa Adelani},
   eprint = {2501.06117},

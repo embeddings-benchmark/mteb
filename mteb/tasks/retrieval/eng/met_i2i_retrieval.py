@@ -25,7 +25,7 @@ class METI2IRetrieval(AbsTaskRetrieval):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{ypsilantis2021met,
+@inproceedings{ypsilantis_met_2021,
   author = {Ypsilantis, Nikolaos-Antonios and Garcia, Noa and Han, Guangxing and Ibrahimi, Sarah and Van Noord, Nanne and Tolias, Giorgos},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)},
   title = {The met dataset: Instance-level recognition for artworks},

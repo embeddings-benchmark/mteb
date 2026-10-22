@@ -66,7 +66,7 @@ class BMRetrieverWrapper(InstructSentenceTransformerModel):
 
 
 BMRETRIEVER_CITATION = """
-@inproceedings{xu-etal-2024-bmretriever,
+@inproceedings{xu_bmretriever_2024,
     title = "{BMR}etriever: Tuning Large Language Models as Better Biomedical Text Retrievers",
     author = "Xu, Ran and Shi, Wenqi and Yu, Yue and Zhuang, Yuchen and Zhu, Yanqiao and Wang, May Dongmei and Ho, Joyce C. and Zhang, Chao and Yang, Carl",
     booktitle = "Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing",

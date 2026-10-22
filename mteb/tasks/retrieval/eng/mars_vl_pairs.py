@@ -13,7 +13,7 @@ _DATASET_REVISION = "f0084ab0ba2f584b15dc72a82502b38ee490f58d"
 _FROZEN_PAIRS = 2_247
 _REFERENCE = "https://arxiv.org/abs/2602.13961"
 _BIBTEX = r"""
-@article{wang2026marsretrieval,
+@article{wang_marsretrieval_2026,
   author = {Wang, Shuoyuan and Wang, Yiran and Wei, Hongxin},
   journal = {arXiv preprint arXiv:2602.13961},
   title = {MarsRetrieval: Benchmarking Vision-Language Models for Planetary-Scale Geospatial Retrieval on Mars},

@@ -25,7 +25,7 @@ class KoVidore2CybersecurityRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{choi-etal-2026-kovidore,
+@inproceedings{choi_kovidore_2026,
   address = {San Diego, USA},
   author = {Choi, Yongbin  and
 Song, Yongwoo  and
@@ -70,7 +70,7 @@ class KoVidore2EconomicRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{choi-etal-2026-kovidore,
+@inproceedings{choi_kovidore_2026,
   address = {San Diego, USA},
   author = {Choi, Yongbin  and
 Song, Yongwoo  and
@@ -115,7 +115,7 @@ class KoVidore2EnergyRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{choi-etal-2026-kovidore,
+@inproceedings{choi_kovidore_2026,
   address = {San Diego, USA},
   author = {Choi, Yongbin  and
 Song, Yongwoo  and
@@ -160,7 +160,7 @@ class KoVidore2HrRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{choi-etal-2026-kovidore,
+@inproceedings{choi_kovidore_2026,
   address = {San Diego, USA},
   author = {Choi, Yongbin  and
 Song, Yongwoo  and

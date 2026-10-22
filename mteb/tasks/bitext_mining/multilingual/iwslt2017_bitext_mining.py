@@ -54,7 +54,7 @@ class IWSLT2017BitextMining(AbsTaskBitextMining):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{cettolo-etal-2017-overview,
+@inproceedings{cettolo_overview_2017,
   address = {Tokyo, Japan},
   author = {Cettolo, Mauro  and
 Federico, Marcello  and

@@ -27,7 +27,7 @@ class FinParaSTS(AbsTaskSTS):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{kanerva-etal-2021-finnish,
+@inproceedings{kanerva_finnish_2021,
   address = {Reykjavik, Iceland (Online)},
   author = {Kanerva, Jenna  and
 Ginter, Filip  and

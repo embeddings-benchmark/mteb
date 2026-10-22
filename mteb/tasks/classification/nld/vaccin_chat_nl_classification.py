@@ -25,7 +25,7 @@ class VaccinChatNLClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{buhmann-etal-2022-domain,
+@inproceedings{buhmann_domain-_2022,
   address = {Gyeongju, Republic of Korea},
   author = {Buhmann, Jeska and De Bruyn, Maxime and Lotfi, Ehsan and Daelemans, Walter},
   booktitle = {Proceedings of the 29th International Conference on Computational Linguistics},

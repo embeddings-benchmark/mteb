@@ -1,7 +1,7 @@
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
-fa_mteb = """@inproceedings{zinvandi2025famteb,
+fa_mteb = """@inproceedings{zinvandi_famteb_2025,
   address = {Suzhou, China},
   author = {Zinvandi, Erfan and Alikhani, Morteza and Sarmadi, Mehran and Pourbahman, Zahra and Arvin, Sepehr and Kazemi, Reza and Amini, Arash},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2025},

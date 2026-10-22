@@ -35,7 +35,7 @@ class AmazonCounterfactualClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{oneill-etal-2021-wish,
+@inproceedings{oneill_wish_2021,
   address = {Online and Punta Cana, Dominican Republic},
   author = {O{'}Neill, James  and
 Rozenshtein, Polina  and

@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import BatchedInput, PromptType
 
-LISTCONRANKER_CITATION = """@article{liu2025listconranker,
+LISTCONRANKER_CITATION = """@article{liu_listconranker_2025,
   title={ListConRanker: A Contrastive Text Reranker with Listwise Encoding},
   author={Liu, Junlong and Ma, Yue and Zhao, Ruihui and Zheng, Junhao and Ma, Qianli and Kang, Yangyang},
   journal={arXiv preprint arXiv:2501.07111},

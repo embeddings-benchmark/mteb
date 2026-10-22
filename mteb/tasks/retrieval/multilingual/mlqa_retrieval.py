@@ -95,7 +95,7 @@ class MLQARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{lewis2019mlqa,
+@inproceedings{lewis_mlqa_2020,
   address = {Online},
   author = {Lewis, Patrick and Oguz, Barlas and Rinott, Ruty and Riedel, Sebastian and Schwenk, Holger},
   booktitle = {Proceedings of the 58th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics},

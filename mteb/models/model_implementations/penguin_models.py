@@ -87,7 +87,7 @@ class PenguinEncoderModel(AbsEncoder):
             return torch.cat(all_image_embeddings, dim=0)
 
 
-PENGUIN_CITATION = """@misc{zhang2026penguinvlexploringefficiencylimits,
+PENGUIN_CITATION = """@misc{zhang_penguin-vl_2026,
     title={Penguin-VL: Exploring the Efficiency Limits of VLM with LLM-based Vision Encoders},
     author={Boqiang Zhang and Lei Ke and Ruihan Yang and Qi Gao and Tianyuan Qu and Rossell Chen and Dong Yu and Leoweiliang},
     year={2026},

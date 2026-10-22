@@ -25,7 +25,7 @@ class TwitterURLCorpus(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{lan-etal-2017-continuously,
+@inproceedings{lan_continuously_2017,
   address = {Copenhagen, Denmark},
   author = {Lan, Wuwei  and
 Qiu, Siyu  and

@@ -158,7 +158,7 @@ data2vec_audio_base = ModelMeta(
     ),
     modalities=["audio"],
     citation="""
-@inproceedings{baevski2022data2vecgeneralframeworkselfsupervised,
+@inproceedings{baevski_data2vec_2022,
   archiveprefix = {arXiv},
   author = {Alexei Baevski and Wei-Ning Hsu and Qiantong Xu and Arun Babu and Jiatao Gu and Michael Auli},
   booktitle = {ICML},
@@ -194,7 +194,7 @@ data2vec_audio_large = ModelMeta(
     ),
     modalities=["audio"],
     citation="""
-@inproceedings{baevski2022data2vecgeneralframeworkselfsupervised,
+@inproceedings{baevski_data2vec_2022,
   archiveprefix = {arXiv},
   author = {Alexei Baevski and Wei-Ning Hsu and Qiantong Xu and Arun Babu and Jiatao Gu and Michael Auli},
   booktitle = {ICML},

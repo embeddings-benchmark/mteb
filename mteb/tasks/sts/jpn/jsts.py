@@ -26,7 +26,7 @@ class JSTS(AbsTaskSTS):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{kurihara-etal-2022-jglue,
+@inproceedings{kurihara_jglue_2022,
   address = {Marseille, France},
   author = {Kurihara, Kentaro  and
 Kawahara, Daisuke  and

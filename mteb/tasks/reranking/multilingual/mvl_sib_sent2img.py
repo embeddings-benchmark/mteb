@@ -243,7 +243,7 @@ class MVLSIBSent2Img(AbsTaskRetrieval):
         adapted_from=["SIB200Classification"],
         is_beta=True,
         bibtex_citation=r"""
-@inproceedings{schmidt-etal-2025-mvl,
+@inproceedings{schmidt_mvl-sib_2025,
   address = {Vienna, Austria},
   author = {Fabian David Schmidt and Florian Schneider and Chris Biemann and Goran Glava{\v{s}}},
   booktitle = {Findings of the Association for Computational Linguistics: ACL 2025},

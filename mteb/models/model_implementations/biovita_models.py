@@ -453,7 +453,7 @@ class BioVITAWrapper(AbsEncoder):
 
 
 BIOVITA_CITATION = """
-@inproceedings{shinoda2026biovita,
+@inproceedings{shinoda_biovita_2026,
   title     = {BioVITA: Biological Dataset, Model, and Benchmark for Visual-Textual-Acoustic Alignment},
   author    = {Risa Shinoda and Kaede Shiohara and Nakamasa Inoue and Kuniaki Saito and Hiroaki Santo and Fumio Okura},
   booktitle = {CVPR},

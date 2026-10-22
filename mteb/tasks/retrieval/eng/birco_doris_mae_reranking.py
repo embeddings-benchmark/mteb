@@ -30,7 +30,7 @@ class BIRCODorisMaeReranking(AbsTaskRetrieval):
         sample_creation="found",
         prompt="Identify scientific abstracts that fulfill research requirements",
         bibtex_citation=r"""
-@misc{wang2024bircobenchmarkinformationretrieval,
+@misc{wang_birco_2024,
   archiveprefix = {arXiv},
   author = {Xiaoyue Wang and Jianyou Wang and Weili Cao and Kaicheng Wang and Ramamohan Paturi and Leon Bergen},
   eprint = {2402.14151},

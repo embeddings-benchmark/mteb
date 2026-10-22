@@ -27,7 +27,7 @@ class PersianFoodSentimentClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{ParsBERT,
+@article{mehrdadfarahani_parsbert_2020,
   author = {Mehrdad Farahani, Mohammad Gharachorloo, Marzieh Farahani, Mohammad Manthouri},
   journal = {ArXiv},
   title = {ParsBERT: Transformer-based Model for Persian Language Understanding},

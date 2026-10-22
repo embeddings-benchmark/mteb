@@ -4,7 +4,7 @@ from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderW
 
 from .nvidia_models import nvidia_training_datasets
 
-STELLA_CITATION = """@misc{zhang2025jasperstelladistillationsota,
+STELLA_CITATION = """@misc{zhang_jasper_2025,
       title={Jasper and Stella: distillation of SOTA embedding models},
       author={Dun Zhang and Jiacheng Li and Ziyang Zeng and Fulong Wang},
       year={2025},

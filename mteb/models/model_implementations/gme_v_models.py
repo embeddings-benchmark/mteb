@@ -23,7 +23,7 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-GME_CITATION = """@misc{zhang2024gme,
+GME_CITATION = """@misc{zhang_gme_2024,
       title={GME: Improving Universal Multimodal Retrieval by Multimodal LLMs},
       author={Zhang, Xin and Zhang, Yanzhao and Xie, Wen and Li, Mingxin and Dai, Ziqi and Long, Dingkun and Xie, Pengjun and Zhang, Meishan and Li, Wenjie and Zhang, Min},
       year={2024},

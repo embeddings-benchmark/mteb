@@ -28,7 +28,7 @@ class MewsC16JaClustering(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{nishikawa-etal-2022-ease,
+@inproceedings{nishikawa_ease_2022,
   address = {Seattle, United States},
   author = {Nishikawa, Sosuke  and
 Ri, Ryokan  and

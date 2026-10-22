@@ -25,7 +25,7 @@ class SinhalaNewsSourceClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{dhananjaya2022bertifying,
+@inproceedings{dhananjaya_bertifying_2022,
   author = {Dhananjaya, Vinura and Demotte, Piyumal and Ranathunga, Surangika and Jayasena, Sanath},
   booktitle = {Proceedings of the thirteenth language resources and evaluation conference},
   pages = {7377--7385},
@@ -69,7 +69,7 @@ class SinhalaNewsSourceClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{dhananjaya2022bertifying,
+@inproceedings{dhananjaya_bertifying_2022,
   author = {Dhananjaya, Vinura and Demotte, Piyumal and Ranathunga, Surangika and Jayasena, Sanath},
   booktitle = {Proceedings of the thirteenth language resources and evaluation conference},
   pages = {7377--7385},

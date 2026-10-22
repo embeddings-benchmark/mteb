@@ -28,7 +28,7 @@ class DanishPoliticalCommentsClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@techreport{SAMsentiment,
+@techreport{kongsbak_sentiment_2019,
   author = {Kongsbak, Mads Guldborg Kjeldgaard and Christensen, Steffan Eybye and Puvis de Chavannes, Lucas Høyberg and Jensen, Peter Due},
   institution = {IT University of Copenhagen},
   title = {Sentiment Analysis Multitool, SAM},
@@ -69,7 +69,7 @@ class DanishPoliticalCommentsClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@techreport{SAMsentiment,
+@techreport{kongsbak_sentiment_2019,
   author = {Kongsbak, Mads Guldborg Kjeldgaard and Christensen, Steffan Eybye and Puvis de Chavannes, Lucas Høyberg and Jensen, Peter Due},
   institution = {IT University of Copenhagen},
   title = {Sentiment Analysis Multitool, SAM},

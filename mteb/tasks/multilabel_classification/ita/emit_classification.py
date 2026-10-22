@@ -27,7 +27,7 @@ class EmitClassification(AbsTaskMultilabelClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{araque2023emit,
+@inproceedings{araque_emit_2023,
   author = {Araque, O and Frenda, S and Sprugnoli, R and Nozza, D and Patti, V and others},
   booktitle = {CEUR WORKSHOP PROCEEDINGS},
   organization = {CEUR-WS},

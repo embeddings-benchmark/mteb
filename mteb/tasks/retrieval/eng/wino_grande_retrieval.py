@@ -25,7 +25,7 @@ class WinoGrande(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{sakaguchi2021winogrande,
+@article{sakaguchi_winogrande_2021,
   author = {Sakaguchi, Keisuke and Bras, Ronan Le and Bhagavatula, Chandra and Choi, Yejin},
   journal = {Communications of the ACM},
   number = {9},
@@ -36,7 +36,7 @@ class WinoGrande(AbsTaskRetrieval):
   year = {2021},
 }
 
-@article{xiao2024rar,
+@article{xiao_rar-b_2024,
   author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
   journal = {arXiv preprint arXiv:2404.06347},
   title = {RAR-b: Reasoning as Retrieval Benchmark},

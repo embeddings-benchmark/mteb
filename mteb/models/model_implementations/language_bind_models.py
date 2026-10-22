@@ -574,7 +574,7 @@ class LanguageBindOmniWrapper(AbsEncoder):
 
 
 _LANGUAGE_BIND_CITATION = r"""
-@inproceedings{zhu2024languagebind,
+@inproceedings{binzhu_languagebind_2024,
   archiveprefix = {arXiv},
   author = {Bin Zhu and Bin Lin and Munan Ning and Yang Yan and Jiaxi Cui and WANG HongFa and Yatian Pang and Wenhao Jiang and Junwu Zhang and Zongwei Li and Cai Wan Zhang and Zhifeng Li and Wei Liu and Li Yuan},
   booktitle = {The Twelfth International Conference on Learning Representations},

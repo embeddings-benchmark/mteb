@@ -25,7 +25,7 @@ class Assin2RTE(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{real2020assin,
+@inproceedings{real_assin_2020,
   author = {Real, Livy and Fonseca, Erick and Oliveira, Hugo Goncalo},
   booktitle = {International Conference on Computational Processing of the Portuguese Language},
   organization = {Springer},

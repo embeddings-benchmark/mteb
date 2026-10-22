@@ -7,7 +7,7 @@ from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _BIBTEX_CITATION = r"""
-@inproceedings{wasserman-etal-2025-real,
+@inproceedings{wasserman_real-mm-rag_2025,
   address = {Vienna, Austria},
   author = {Wasserman, Navve and Pony, Roi and Naparstek, Oshri and Goldfarb, Adi Raz and Schwartz, Eli and Barzelay, Udi and Karlinsky, Leonid},
   booktitle = {Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},

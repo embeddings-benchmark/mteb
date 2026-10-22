@@ -25,7 +25,7 @@ class LegalQuAD(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{9723721,
+@inproceedings{hoppe_intelligent_2021,
   author = {Hoppe, Christoph and Pelkmann, David and Migenda, Nico and Hötte, Daniel and Schenck, Wolfram},
   booktitle = {2021 IEEE Fourth International Conference on Artificial Intelligence and Knowledge Engineering (AIKE)},
   doi = {10.1109/AIKE52691.2021.00011},

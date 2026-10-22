@@ -25,7 +25,7 @@ class NFCorpus(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{boteva2016,
+@inproceedings{boteva_full-text_2016,
   author = {Boteva, Vera and Gholipour, Demian and Sokolov, Artem and Riezler, Stefan},
   city = {Padova},
   country = {Italy},

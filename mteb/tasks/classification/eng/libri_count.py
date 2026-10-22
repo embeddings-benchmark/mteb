@@ -25,7 +25,7 @@ class LibriCount(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="created",  # from LibriSpeech dataset
         bibtex_citation=r"""
-@inproceedings{Stoter_2018,
+@inproceedings{stoter_classification_2018,
   author = {Stoter, Fabian-Robert and Chakrabarty, Soumitro and Edler, Bernd and Habets, Emanuel A. P.},
   booktitle = {2018 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp.2018.8462159},

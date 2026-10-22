@@ -25,7 +25,7 @@ class JavaneseIMDBClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{wongso2021causal,
+@inproceedings{wongso_causal_2021,
   author = {Wongso, Wilson and Setiawan, David Samuel and Suhartono, Derwin},
   booktitle = {2021 International Conference on Advanced Computer Science and Information Systems (ICACSIS)},
   organization = {IEEE},
@@ -61,7 +61,7 @@ class JavaneseIMDBClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{wongso2021causal,
+@inproceedings{wongso_causal_2021,
   author = {Wongso, Wilson and Setiawan, David Samuel and Suhartono, Derwin},
   booktitle = {2021 International Conference on Advanced Computer Science and Information Systems (ICACSIS)},
   organization = {IEEE},

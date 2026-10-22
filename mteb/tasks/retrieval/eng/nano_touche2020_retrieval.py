@@ -25,7 +25,7 @@ class NanoTouche2020Retrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@dataset{potthast_2022_6862281,
+@dataset{potthast_touche20-argument-retrieval-for-controversial-_2022,
   author = {Potthast, Martin and
 Gienapp, Lukas and
 Wachsmuth, Henning and

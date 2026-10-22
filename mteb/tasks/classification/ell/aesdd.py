@@ -25,7 +25,7 @@ class AESDD(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="created",
         bibtex_citation=r"""
-@article{vryzas2018speech,
+@article{vryzas_speech_2018,
   author = {Vryzas, Nikolaos and Kotsakis, Rigas and Liatsou, Aikaterini and Dimoulas, Charalampos A and Kalliris, George},
   journal = {Journal of the Audio Engineering Society},
   number = {6},

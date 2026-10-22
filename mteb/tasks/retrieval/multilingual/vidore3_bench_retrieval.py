@@ -34,7 +34,7 @@ class Vidore3FinanceEnRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created and machine-translated",
         bibtex_citation=r"""
-@inproceedings{loison2026vidorev3comprehensiveevaluation,
+@inproceedings{loison_vidore_2026,
   address = {San Diego, California, United States},
   author = {Loison, Ant{\'o}nio and Mac{\'e}, Quentin and Edy, Antoine and Xing, Victor and Balough, Tom and Moreira, Gabriel de Souza P. and Liu, Bo and Faysse, Manuel and Hudelot, Celine and Viaud, Gautier},
   booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -80,7 +80,7 @@ class Vidore3FinanceEnRetrievalv2(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created and machine-translated",
         bibtex_citation=r"""
-@inproceedings{loison2026vidorev3comprehensiveevaluation,
+@inproceedings{loison_vidore_2026,
   address = {San Diego, California, United States},
   author = {Loison, Ant{\'o}nio and Mac{\'e}, Quentin and Edy, Antoine and Xing, Victor and Balough, Tom and Moreira, Gabriel de Souza P. and Liu, Bo and Faysse, Manuel and Hudelot, Celine and Viaud, Gautier},
   booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -124,7 +124,7 @@ class Vidore3FinanceFrRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created and machine-translated",
         bibtex_citation=r"""
-@inproceedings{loison2026vidorev3comprehensiveevaluation,
+@inproceedings{loison_vidore_2026,
   address = {San Diego, California, United States},
   author = {Loison, Ant{\'o}nio and Mac{\'e}, Quentin and Edy, Antoine and Xing, Victor and Balough, Tom and Moreira, Gabriel de Souza P. and Liu, Bo and Faysse, Manuel and Hudelot, Celine and Viaud, Gautier},
   booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -170,7 +170,7 @@ class Vidore3FinanceFrRetrievalv2(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created and machine-translated",
         bibtex_citation=r"""
-@inproceedings{loison2026vidorev3comprehensiveevaluation,
+@inproceedings{loison_vidore_2026,
   address = {San Diego, California, United States},
   author = {Loison, Ant{\'o}nio and Mac{\'e}, Quentin and Edy, Antoine and Xing, Victor and Balough, Tom and Moreira, Gabriel de Souza P. and Liu, Bo and Faysse, Manuel and Hudelot, Celine and Viaud, Gautier},
   booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -215,7 +215,7 @@ class Vidore3IndustrialRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created and machine-translated",
         bibtex_citation=r"""
-@inproceedings{loison2026vidorev3comprehensiveevaluation,
+@inproceedings{loison_vidore_2026,
   address = {San Diego, California, United States},
   author = {Loison, Ant{\'o}nio and Mac{\'e}, Quentin and Edy, Antoine and Xing, Victor and Balough, Tom and Moreira, Gabriel de Souza P. and Liu, Bo and Faysse, Manuel and Hudelot, Celine and Viaud, Gautier},
   booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -261,7 +261,7 @@ class Vidore3IndustrialRetrievalv2(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created and machine-translated",
         bibtex_citation=r"""
-@inproceedings{loison2026vidorev3comprehensiveevaluation,
+@inproceedings{loison_vidore_2026,
   address = {San Diego, California, United States},
   author = {Loison, Ant{\'o}nio and Mac{\'e}, Quentin and Edy, Antoine and Xing, Victor and Balough, Tom and Moreira, Gabriel de Souza P. and Liu, Bo and Faysse, Manuel and Hudelot, Celine and Viaud, Gautier},
   booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -306,7 +306,7 @@ class Vidore3PharmaceuticalsRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created and machine-translated",
         bibtex_citation=r"""
-@inproceedings{loison2026vidorev3comprehensiveevaluation,
+@inproceedings{loison_vidore_2026,
   address = {San Diego, California, United States},
   author = {Loison, Ant{\'o}nio and Mac{\'e}, Quentin and Edy, Antoine and Xing, Victor and Balough, Tom and Moreira, Gabriel de Souza P. and Liu, Bo and Faysse, Manuel and Hudelot, Celine and Viaud, Gautier},
   booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -352,7 +352,7 @@ class Vidore3PharmaceuticalsRetrievalv2(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created and machine-translated",
         bibtex_citation=r"""
-@inproceedings{loison2026vidorev3comprehensiveevaluation,
+@inproceedings{loison_vidore_2026,
   address = {San Diego, California, United States},
   author = {Loison, Ant{\'o}nio and Mac{\'e}, Quentin and Edy, Antoine and Xing, Victor and Balough, Tom and Moreira, Gabriel de Souza P. and Liu, Bo and Faysse, Manuel and Hudelot, Celine and Viaud, Gautier},
   booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -397,7 +397,7 @@ class Vidore3ComputerScienceRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created and machine-translated",
         bibtex_citation=r"""
-@inproceedings{loison2026vidorev3comprehensiveevaluation,
+@inproceedings{loison_vidore_2026,
   address = {San Diego, California, United States},
   author = {Loison, Ant{\'o}nio and Mac{\'e}, Quentin and Edy, Antoine and Xing, Victor and Balough, Tom and Moreira, Gabriel de Souza P. and Liu, Bo and Faysse, Manuel and Hudelot, Celine and Viaud, Gautier},
   booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -443,7 +443,7 @@ class Vidore3ComputerScienceRetrievalv2(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created and machine-translated",
         bibtex_citation=r"""
-@inproceedings{loison2026vidorev3comprehensiveevaluation,
+@inproceedings{loison_vidore_2026,
   address = {San Diego, California, United States},
   author = {Loison, Ant{\'o}nio and Mac{\'e}, Quentin and Edy, Antoine and Xing, Victor and Balough, Tom and Moreira, Gabriel de Souza P. and Liu, Bo and Faysse, Manuel and Hudelot, Celine and Viaud, Gautier},
   booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -488,7 +488,7 @@ class Vidore3HrRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created and machine-translated",
         bibtex_citation=r"""
-@inproceedings{loison2026vidorev3comprehensiveevaluation,
+@inproceedings{loison_vidore_2026,
   address = {San Diego, California, United States},
   author = {Loison, Ant{\'o}nio and Mac{\'e}, Quentin and Edy, Antoine and Xing, Victor and Balough, Tom and Moreira, Gabriel de Souza P. and Liu, Bo and Faysse, Manuel and Hudelot, Celine and Viaud, Gautier},
   booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -534,7 +534,7 @@ class Vidore3HrRetrievalv2(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created and machine-translated",
         bibtex_citation=r"""
-@inproceedings{loison2026vidorev3comprehensiveevaluation,
+@inproceedings{loison_vidore_2026,
   address = {San Diego, California, United States},
   author = {Loison, Ant{\'o}nio and Mac{\'e}, Quentin and Edy, Antoine and Xing, Victor and Balough, Tom and Moreira, Gabriel de Souza P. and Liu, Bo and Faysse, Manuel and Hudelot, Celine and Viaud, Gautier},
   booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -579,7 +579,7 @@ class Vidore3EnergyRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created and machine-translated",
         bibtex_citation=r"""
-@inproceedings{loison2026vidorev3comprehensiveevaluation,
+@inproceedings{loison_vidore_2026,
   address = {San Diego, California, United States},
   author = {Loison, Ant{\'o}nio and Mac{\'e}, Quentin and Edy, Antoine and Xing, Victor and Balough, Tom and Moreira, Gabriel de Souza P. and Liu, Bo and Faysse, Manuel and Hudelot, Celine and Viaud, Gautier},
   booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -625,7 +625,7 @@ class Vidore3EnergyRetrievalv2(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created and machine-translated",
         bibtex_citation=r"""
-@inproceedings{loison2026vidorev3comprehensiveevaluation,
+@inproceedings{loison_vidore_2026,
   address = {San Diego, California, United States},
   author = {Loison, Ant{\'o}nio and Mac{\'e}, Quentin and Edy, Antoine and Xing, Victor and Balough, Tom and Moreira, Gabriel de Souza P. and Liu, Bo and Faysse, Manuel and Hudelot, Celine and Viaud, Gautier},
   booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -670,7 +670,7 @@ class Vidore3PhysicsRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created and machine-translated",
         bibtex_citation=r"""
-@inproceedings{loison2026vidorev3comprehensiveevaluation,
+@inproceedings{loison_vidore_2026,
   address = {San Diego, California, United States},
   author = {Loison, Ant{\'o}nio and Mac{\'e}, Quentin and Edy, Antoine and Xing, Victor and Balough, Tom and Moreira, Gabriel de Souza P. and Liu, Bo and Faysse, Manuel and Hudelot, Celine and Viaud, Gautier},
   booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -716,7 +716,7 @@ class Vidore3PhysicsRetrievalv2(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created and machine-translated",
         bibtex_citation=r"""
-@inproceedings{loison2026vidorev3comprehensiveevaluation,
+@inproceedings{loison_vidore_2026,
   address = {San Diego, California, United States},
   author = {Loison, Ant{\'o}nio and Mac{\'e}, Quentin and Edy, Antoine and Xing, Victor and Balough, Tom and Moreira, Gabriel de Souza P. and Liu, Bo and Faysse, Manuel and Hudelot, Celine and Viaud, Gautier},
   booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -761,7 +761,7 @@ class Vidore3NuclearRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created and machine-translated",
         bibtex_citation=r"""
-@inproceedings{loison2026vidorev3comprehensiveevaluation,
+@inproceedings{loison_vidore_2026,
   address = {San Diego, California, United States},
   author = {Loison, Ant{\'o}nio and Mac{\'e}, Quentin and Edy, Antoine and Xing, Victor and Balough, Tom and Moreira, Gabriel de Souza P. and Liu, Bo and Faysse, Manuel and Hudelot, Celine and Viaud, Gautier},
   booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -806,7 +806,7 @@ class Vidore3TelecomRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created and machine-translated",
         bibtex_citation=r"""
-@inproceedings{loison2026vidorev3comprehensiveevaluation,
+@inproceedings{loison_vidore_2026,
   address = {San Diego, California, United States},
   author = {Loison, Ant{\'o}nio and Mac{\'e}, Quentin and Edy, Antoine and Xing, Victor and Balough, Tom and Moreira, Gabriel de Souza P. and Liu, Bo and Faysse, Manuel and Hudelot, Celine and Viaud, Gautier},
   booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -852,7 +852,7 @@ class Vidore3TelecomRetrievalv2(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created and machine-translated",
         bibtex_citation=r"""
-@inproceedings{loison2026vidorev3comprehensiveevaluation,
+@inproceedings{loison_vidore_2026,
   address = {San Diego, California, United States},
   author = {Loison, Ant{\'o}nio and Mac{\'e}, Quentin and Edy, Antoine and Xing, Victor and Balough, Tom and Moreira, Gabriel de Souza P. and Liu, Bo and Faysse, Manuel and Hudelot, Celine and Viaud, Gautier},
   booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -898,7 +898,7 @@ class Vidore3NuclearRetrievalv2(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created and machine-translated",
         bibtex_citation=r"""
-@inproceedings{loison2026vidorev3comprehensiveevaluation,
+@inproceedings{loison_vidore_2026,
   address = {San Diego, California, United States},
   author = {Loison, Ant{\'o}nio and Mac{\'e}, Quentin and Edy, Antoine and Xing, Victor and Balough, Tom and Moreira, Gabriel de Souza P. and Liu, Bo and Faysse, Manuel and Hudelot, Celine and Viaud, Gautier},
   booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},

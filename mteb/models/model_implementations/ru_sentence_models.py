@@ -501,7 +501,7 @@ rubert_base_cased = ModelMeta(
         "WikipediaRetrievalMultilingual",
         "WikipediaRerankingMultilingual",
     },
-    citation="""@misc{kuratov2019adaptationdeepbidirectionalmultilingual,
+    citation="""@misc{kuratov_adaptation_2019,
       title={Adaptation of Deep Bidirectional Multilingual Transformers for Russian Language},
       author={Yuri Kuratov and Mikhail Arkhipov},
       year={2019},
@@ -536,7 +536,7 @@ distilrubert_small_cased_conversational = ModelMeta(
     training_datasets=set(
         # OpenSubtitles[1], Dirty, Pikabu, and a Social Media segment of Taiga corpus
     ),
-    citation="""@inproceedings{https://doi.org/10.48550/arxiv.2205.02340,
+    citation="""@inproceedings{kolesnikova_knowledge_2022,
   author = {Kolesnikova, Alina and Kuratov, Yuri and Konovalov, Vasily and Mikhail, Mikhail},
   booktitle = {Computational Linguistics and Intellectual Technologies},
   doi = {10.28995/2075-7182-2022-21-295-310},
@@ -745,7 +745,7 @@ rosberta_ru_en = ModelMeta(
     public_training_data=None,
     public_training_code=None,
     framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
-    citation="""@inproceedings{snegirev2024russianfocusedembeddersexplorationrumteb,
+    citation="""@inproceedings{snegirev_russian-focused_2025,
   address = {Albuquerque, New Mexico},
   author = {Snegirev, Artem and Tikhonova, Maria and Anna, Maksimova and Fenogenova, Alena and Abramov, Aleksandr},
   booktitle = {Proceedings of the 2025 Conference of the Nations of the {A}mericas Chapter of the {A}ssociation for {C}omputational {L}inguistics: Human Language Technologies (Volume 1: Long Papers)},

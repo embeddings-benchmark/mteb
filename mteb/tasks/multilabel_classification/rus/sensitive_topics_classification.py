@@ -27,7 +27,7 @@ class SensitiveTopicsClassification(AbsTaskMultilabelClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{babakov-etal-2021-detecting,
+@inproceedings{babakov_detecting_2021,
   address = {Kiyv, Ukraine},
   author = {Babakov, Nikolay  and
 Logacheva, Varvara  and

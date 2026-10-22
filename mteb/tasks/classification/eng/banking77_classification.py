@@ -28,7 +28,7 @@ class Banking77Classification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{casanueva-etal-2020-efficient,
+@inproceedings{casanueva_efficient_2020,
   address = {Online},
   author = {Casanueva, I{\~n}igo  and
 Tem{\v{c}}inas, Tadas  and
@@ -84,7 +84,7 @@ class Banking77ClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{casanueva-etal-2020-efficient,
+@inproceedings{casanueva_efficient_2020,
   address = {Online},
   author = {Casanueva, I{\~n}igo  and
 Tem{\v{c}}inas, Tadas  and

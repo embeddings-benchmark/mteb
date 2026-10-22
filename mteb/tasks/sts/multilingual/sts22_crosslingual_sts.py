@@ -47,7 +47,7 @@ class STS22CrosslingualSTSv2(AbsTaskSTS):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{chen-etal-2022-semeval,
+@inproceedings{chen_semeval-2022_2022,
   address = {Seattle, United States},
   author = {Chen, Xi  and
 Zeynali, Ali  and
@@ -107,7 +107,7 @@ class STS22CrosslingualSTS(AbsTaskSTS):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{chen-etal-2022-semeval,
+@inproceedings{chen_semeval-2022_2022,
   address = {Seattle, United States},
   author = {Chen, Xi  and
 Zeynali, Ali  and

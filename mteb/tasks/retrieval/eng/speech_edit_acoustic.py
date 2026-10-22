@@ -31,7 +31,7 @@ class SpeechEditAcousticRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@article{zhang2026speecheditbench,
+@article{zhang_speecheditbench_2026,
   author = {Zhang, Hanlin and Tan, Daxin and Tao, Dehua and Chen, Xiao and Tan, Haochen and Song, Linqi},
   journal = {arXiv preprint arXiv:2606.01804},
   title = {SpeechEditBench: A Bilingual Multi-Attribute Benchmark for Instruction-Guided Speech Editing},

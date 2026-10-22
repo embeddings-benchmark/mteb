@@ -70,7 +70,7 @@ class LegalBenchPC(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{guha2023legalbench,
+@inproceedings{guha_legalbench_2023,
   author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
   booktitle = {Advances in Neural Information Processing Systems 36},
   collection = {NeurIPS 2023},
@@ -83,7 +83,7 @@ class LegalBenchPC(AbsTaskPairClassification):
   year = {2023},
 }
 
-@article{kolt2022predicting,
+@article{kolt_predicting_2022,
   author = {Kolt, Noam},
   journal = {Berkeley Tech. LJ},
   pages = {71},
@@ -93,7 +93,7 @@ class LegalBenchPC(AbsTaskPairClassification):
   year = {2022},
 }
 
-@inproceedings{ravichander2019question,
+@inproceedings{ravichander_question_2019,
   author = {Ravichander, Abhilasha and Black, Alan W and Wilson, Shomir and Norton, Thomas and Sadeh, Norman},
   booktitle = {Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP)},
   doi = {10.18653/v1/d19-1500},
@@ -104,7 +104,7 @@ class LegalBenchPC(AbsTaskPairClassification):
   year = {2019},
 }
 
-@article{zimmeck2019maps,
+@article{zimmeck_maps_2019,
   author = {Zimmeck, Sebastian and Story, Peter and Smullen, Daniel and Ravichander, Abhilasha and Wang, Ziqi and Reidenberg, Joel R and Russell, N Cameron and Sadeh, Norman},
   journal = {Proc. Priv. Enhancing Tech.},
   pages = {66},

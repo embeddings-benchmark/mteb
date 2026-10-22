@@ -31,7 +31,7 @@ class NeuCLIR2022Retrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{lawrie2023overview,
+@inproceedings{lawrie_overview_2022,
   archiveprefix = {arXiv},
   author = {Lawrie, Dawn and MacAvaney, Sean and Mayfield, James and McNamee, Paul and Oard, Douglas W and Soldaini, Luca and Yang, Eugene},
   booktitle = {Proceedings of the Thirty-First Text REtrieval Conference, {TREC} 2022},
@@ -68,7 +68,7 @@ class NeuCLIR2022RetrievalHardNegatives(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{lawrie2023overview,
+@inproceedings{lawrie_overview_2022,
   archiveprefix = {arXiv},
   author = {Lawrie, Dawn and MacAvaney, Sean and Mayfield, James and McNamee, Paul and Oard, Douglas W and Soldaini, Luca and Yang, Eugene},
   booktitle = {Proceedings of the Thirty-First Text REtrieval Conference, {TREC} 2022},

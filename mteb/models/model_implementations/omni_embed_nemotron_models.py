@@ -64,7 +64,7 @@ class OmniEmbedNemotronWrapper(SentenceTransformerEncoderWrapper):
 
 
 _OMNI_EMBED_NEMOTRON_CITATION = r"""
-@article{xu2025omni,
+@article{xu_omni-embed-nemotron_2025,
     title={Omni-Embed-Nemotron: A Unified Multimodal Retrieval Model for Text, Image, Audio, and Video},
     author={Xu, Mengyao and Zhou, Wenfei and Babakhin, Yauhen and Moreira, Gabriel and Ak, Ronay and Osmulski, Radek and Liu, Bo and Oldridge, Even and Schifferer, Benedikt},
     journal={arXiv preprint arXiv:2510.03458},

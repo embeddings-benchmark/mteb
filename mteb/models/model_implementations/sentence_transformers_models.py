@@ -62,7 +62,7 @@ paraphrase_langs = [
     "zho-Hant",
 ]
 
-SBERT_CITATION = """@inproceedings{reimers-2019-sentence-bert,
+SBERT_CITATION = """@inproceedings{reimers_sentence-bert_2019,
     title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
     author = "Reimers, Nils and Gurevych, Iryna",
     booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
@@ -276,7 +276,7 @@ labse = ModelMeta(
     ),
     # scraped and mined webdata including CC, wiki, see section 3.1 https://aclanthology.org/2022.acl-long.62.pdf
     public_training_code="https://www.kaggle.com/models/google/labse/tensorFlow2/labse/2?tfhub-redirect=true",
-    citation="""@inproceedings{feng2022languageagnosticbertsentenceembedding,
+    citation="""@inproceedings{feng_language-agnostic_2022,
   address = {Dublin, Ireland},
   author = {Feng, Fangxiaoyu and Yang, Yinfei and Cer, Daniel and Arivazhagan, Naveen and Wang, Wei},
   booktitle = {Proceedings of the 60th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -458,7 +458,7 @@ static_similarity_mrl_multilingual_v1 = ModelMeta(
     training_datasets=static_multi_datasets,
     public_training_code="https://huggingface.co/blog/static-embeddings",
     public_training_data="https://huggingface.co/collections/sentence-transformers/embedding-model-datasets-6644d7a3673a511914aa7552",
-    citation="""@inproceedings{reimers-2019-sentence-bert,
+    citation="""@inproceedings{reimers_sentence-bert_2019,
     title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
     author = "Reimers, Nils and Gurevych, Iryna",
     booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
@@ -488,7 +488,7 @@ contriever = ModelMeta(
     framework=["Sentence Transformers", "PyTorch", "Transformers"],
     use_instructions=False,
     citation="""
-    @article{izacard2021contriever,
+    @article{izacard_unsupervised_2022,
   archiveprefix = {arXiv},
   author = {Gautier Izacard and Mathilde Caron and Lucas Hosseini and Sebastian Riedel and Piotr Bojanowski and Armand Joulin and Edouard Grave},
   eprint = {2112.09118},
@@ -541,7 +541,7 @@ microllama_text_embedding = ModelMeta(
 )
 
 SENTENCE_T5_CITATION = """
-@inproceedings{ni2021sentencet5scalablesentenceencoders,
+@inproceedings{ni_sentence-t5_2022,
   address = {Dublin, Ireland},
   author = {Ni, Jianmo and Hernandez Abrego, Gustavo and Constant, Noah and Ma, Ji and Hall, Keith and Cer, Daniel and Yang, Yinfei},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2022},
@@ -655,7 +655,7 @@ sentence_t5_xxl = ModelMeta(
     output_dtypes=OutputDType.FLOAT16,
 )
 GTR_CITATION = """
-@inproceedings{ni2021largedualencodersgeneralizable,
+@inproceedings{ni_large_2022,
   address = {Abu Dhabi, United Arab Emirates},
   author = {Ni, Jianmo and Qu, Chen and Lu, Jing and Dai, Zhuyun and Hernandez Abrego, Gustavo and Ma, Ji and Zhao, Vincent and Luan, Yi and Hall, Keith and Chang, Ming-Wei and Yang, Yinfei},
   booktitle = {Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing},

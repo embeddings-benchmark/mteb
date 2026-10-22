@@ -11,7 +11,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 _DATASET_PATH = "mteb/ActivityNet_Captions_val2"
 _DATASET_REVISION = "e87473c4832ea982bbeca1dde94bbebfa6ea6ada"
 _BIBTEX = r"""
-@inproceedings{krishna2017dense,
+@inproceedings{krishna_dense-captioning_2017,
   author = {Krishna, Ranjay and Hata, Kenji and Ren, Frederic and Fei-Fei, Li and Niebles, Juan Carlos},
   booktitle = {Proceedings of the IEEE International Conference on Computer Vision (ICCV)},
   title = {Dense-Captioning Events in Videos},

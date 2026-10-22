@@ -25,7 +25,7 @@ class HiFiTTSA2TRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{bakhturina2021hi,
+@inproceedings{bakhturina_hi-fi_2021,
   author = {Bakhturina, Evelina and Lavrukhin, Vitaly and Ginsburg, Boris and Zhang, Yang},
   booktitle = {Interspeech 2021},
   collection = {interspeech_2021},
@@ -65,7 +65,7 @@ class HiFiTTST2ARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{bakhturina2021hi,
+@inproceedings{bakhturina_hi-fi_2021,
   author = {Bakhturina, Evelina and Lavrukhin, Vitaly and Ginsburg, Boris and Zhang, Yang},
   booktitle = {Interspeech 2021},
   collection = {interspeech_2021},

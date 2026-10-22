@@ -48,7 +48,7 @@ class IndicCrosslingualSTS(AbsTaskSTS):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@article{10.1162/tacl_a_00452,
+@article{ramesh_samanantar_2022,
   author = {Ramesh, Gowtham and Doddapaneni, Sumanth and Bheemaraj, Aravinth and Jobanputra, Mayank and AK, Raghavan and Sharma, Ajitesh and Sahoo, Sujit and Diddee, Harshita and J, Mahalakshmi and Kakwani, Divyanshu and Kumar, Navneet and Pradeep, Aswin and Nagaraj, Srihari and Deepak, Kumar and Raghavan, Vivek and Kunchukuttan, Anoop and Kumar, Pratyush and Khapra, Mitesh Shantadevi},
   doi = {10.1162/tacl_a_00452},
   eprint = {https://direct.mit.edu/tacl/article-pdf/doi/10.1162/tacl\\_a\\_00452/1987010/tacl\\_a\\_00452.pdf},

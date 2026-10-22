@@ -29,7 +29,7 @@ class NorQuadRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{ivanova-etal-2023-norquad,
+@inproceedings{ivanova_norquad_2023,
   address = {T{\'o}rshavn, Faroe Islands},
   archiveprefix = {arXiv},
   author = {Ivanova, Sardana  and

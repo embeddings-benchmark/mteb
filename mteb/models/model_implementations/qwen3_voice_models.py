@@ -127,7 +127,7 @@ qwen3_voice_embedding_1_7b = ModelMeta(
     training_datasets=None,
     modalities=["audio"],
     citation="""
-@article{Qwen3-TTS,
+@article{hu_qwen3-tts_2026,
   title={Qwen3-TTS Technical Report},
   author={Hangrui Hu and Xinfa Zhu and Ting He and Dake Guo and Bin Zhang and Xiong Wang and Zhifang Guo and Ziyue Jiang and Hongkun Hao and Zishan Guo and Xinyu Zhang and Pei Zhang and Baosong Yang and Jin Xu and Jingren Zhou and Junyang Lin},
   journal={arXiv preprint arXiv:2601.15621},
@@ -160,7 +160,7 @@ qwen3_voice_embedding_0_6b = ModelMeta(
     training_datasets=None,
     modalities=["audio"],
     citation="""
-@article{Qwen3-TTS,
+@article{hu_qwen3-tts_2026,
   title={Qwen3-TTS Technical Report},
   author={Hangrui Hu and Xinfa Zhu and Ting He and Dake Guo and Bin Zhang and Xiong Wang and Zhifang Guo and Ziyue Jiang and Hongkun Hao and Zishan Guo and Xinyu Zhang and Pei Zhang and Baosong Yang and Jin Xu and Jingren Zhou and Junyang Lin},
   journal={arXiv preprint arXiv:2601.15621},

@@ -30,7 +30,7 @@ if TYPE_CHECKING:
     from mteb.types import Array, BatchedInput
 logger = logging.getLogger(__name__)
 
-CDE_CITATION = """@inproceedings{morris2024contextualdocumentembeddings,
+CDE_CITATION = """@inproceedings{morris_contextual_2025,
   archiveprefix = {arXiv},
   author = {John Xavier Morris and Alexander M Rush},
   booktitle = {The Thirteenth International Conference on Learning Representations},

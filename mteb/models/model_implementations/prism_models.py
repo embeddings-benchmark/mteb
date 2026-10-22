@@ -5,7 +5,7 @@ from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
 from mteb.types import OutputDType
 
 prism_reranker_citation = """
-@misc{zhang2026prismreranker,
+@misc{zhang_prism-reranker_2026,
   title={Prism-Reranker: Beyond Relevance Scoring -- Jointly Producing Contributions and Evidence for Agentic Retrieval},
   author={Dun Zhang},
   year={2026},

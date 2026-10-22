@@ -6,7 +6,7 @@ from mteb.abstasks import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 BIBTEX = r"""
-@article{li2022learning,
+@article{li_learning_2022,
   author = {Guangyao li, Yake Wei, Yapeng Tian, Chenliang Xu, Ji-Rong Wen, Di Hu},
   journal = {IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
   title = {Learning to Answer Questions in Dynamic Audio-Visual Scenarios},

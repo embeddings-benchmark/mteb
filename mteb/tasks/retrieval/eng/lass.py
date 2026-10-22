@@ -30,7 +30,7 @@ class LASSA2TRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{liu2022separate,
+@inproceedings{liu_separate_2022,
   author = {Liu, Xubo and Liu, Haohe and Kong, Qiuqiang and Mei, Xinhao and Zhao, Jinzheng and Huang, Qiushi and Plumbley, Mark D and Wang, Wenwu},
   booktitle = {INTERSPEEH},
   title = {Separate What You Describe: Language-Queried Audio Source Separation},
@@ -70,7 +70,7 @@ class LASST2ARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{liu2022separate,
+@inproceedings{liu_separate_2022,
   author = {Liu, Xubo and Liu, Haohe and Kong, Qiuqiang and Mei, Xinhao and Zhao, Jinzheng and Huang, Qiushi and Plumbley, Mark D and Wang, Wenwu},
   booktitle = {INTERSPEEH},
   title = {Separate What You Describe: Language-Queried Audio Source Separation},

@@ -25,7 +25,7 @@ class FrenkHrClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inbook{ljubešić2019frenk,
+@inbook{ljubesic_frenk_2019,
   author = {Ljubešić, Nikola and Fišer, Darja and Erjavec, Tomaž},
   booktitle = {Text, Speech, and Dialogue},
   doi = {10.1007/978-3-030-27947-9_9},
@@ -65,7 +65,7 @@ class FrenkHrClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inbook{ljubešić2019frenk,
+@inbook{ljubesic_frenk_2019,
   author = {Ljubešić, Nikola and Fišer, Darja and Erjavec, Tomaž},
   booktitle = {Text, Speech, and Dialogue},
   doi = {10.1007/978-3-030-27947-9_9},

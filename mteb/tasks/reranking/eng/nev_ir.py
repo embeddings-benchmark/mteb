@@ -26,7 +26,7 @@ class NevIR(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{Weller2023NevIRNI,
+@inproceedings{weller_nevir_2023,
   author = {{Orion Weller and Dawn J Lawrie and Benjamin Van Durme}},
   booktitle = {{Conference of the European Chapter of the Association for Computational Linguistics}},
   title = {{NevIR: Negation in Neural Information Retrieval}},

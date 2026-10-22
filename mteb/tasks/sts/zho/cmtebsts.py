@@ -25,7 +25,7 @@ class ATEC(AbsTaskSTS):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{xiao2024cpackpackedresourcesgeneral,
+@inproceedings{xiao_c-pack_2024,
   author = {Xiao, Shitao and Liu, Zheng and Zhang, Peitian and Muennighoff, Niklas and Lian, Defu and Nie, Jian-Yun},
   booktitle = {Proceedings of the 47th International ACM SIGIR Conference on Research and Development in Information Retrieval},
   collection = {SIGIR 2024},
@@ -68,7 +68,7 @@ class BQ(AbsTaskSTS):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{xiao2024cpackpackedresourcesgeneral,
+@inproceedings{xiao_c-pack_2024,
   author = {Xiao, Shitao and Liu, Zheng and Zhang, Peitian and Muennighoff, Niklas and Lian, Defu and Nie, Jian-Yun},
   booktitle = {Proceedings of the 47th International ACM SIGIR Conference on Research and Development in Information Retrieval},
   collection = {SIGIR 2024},
@@ -111,7 +111,7 @@ class LCQMC(AbsTaskSTS):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{xiao2024cpackpackedresourcesgeneral,
+@inproceedings{xiao_c-pack_2024,
   author = {Xiao, Shitao and Liu, Zheng and Zhang, Peitian and Muennighoff, Niklas and Lian, Defu and Nie, Jian-Yun},
   booktitle = {Proceedings of the 47th International ACM SIGIR Conference on Research and Development in Information Retrieval},
   collection = {SIGIR 2024},
@@ -154,7 +154,7 @@ class PAWSX(AbsTaskSTS):
         dialect=[],
         sample_creation="human-translated",
         bibtex_citation=r"""
-@inproceedings{xiao2024cpackpackedresourcesgeneral,
+@inproceedings{xiao_c-pack_2024,
   author = {Xiao, Shitao and Liu, Zheng and Zhang, Peitian and Muennighoff, Niklas and Lian, Defu and Nie, Jian-Yun},
   booktitle = {Proceedings of the 47th International ACM SIGIR Conference on Research and Development in Information Retrieval},
   collection = {SIGIR 2024},
@@ -197,7 +197,7 @@ class STSB(AbsTaskSTS):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{xiao2024cpackpackedresourcesgeneral,
+@inproceedings{xiao_c-pack_2024,
   author = {Xiao, Shitao and Liu, Zheng and Zhang, Peitian and Muennighoff, Niklas and Lian, Defu and Nie, Jian-Yun},
   booktitle = {Proceedings of the 47th International ACM SIGIR Conference on Research and Development in Information Retrieval},
   collection = {SIGIR 2024},
@@ -240,7 +240,7 @@ class AFQMC(AbsTaskSTS):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{raghu-etal-2021-end,
+@inproceedings{raghu_end-to-end_2021,
   address = {Online and Punta Cana, Dominican Republic},
   author = {Raghu, Dinesh  and
 Agarwal, Shantanu  and

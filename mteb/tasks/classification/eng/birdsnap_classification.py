@@ -48,7 +48,7 @@ class BirdsnapClassification(AbsTaskClassification):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{Berg_2014_CVPR,
+@inproceedings{berg_birdsnap_2014,
   author = {Berg, Thomas and Liu, Jiongxin and Woo Lee, Seung and Alexander, Michelle L. and Jacobs, David W. and Belhumeur, Peter N.},
   booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
   month = {June},

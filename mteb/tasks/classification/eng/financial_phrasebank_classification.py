@@ -25,7 +25,7 @@ class FinancialPhrasebankClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{Malo2014GoodDO,
+@article{malo_good_2014,
   author = {P. Malo and A. Sinha and P. Korhonen and J. Wallenius and P. Takala},
   journal = {Journal of the Association for Information Science and Technology},
   title = {Good debt or bad debt: Detecting semantic orientations in economic texts},
@@ -61,7 +61,7 @@ class FinancialPhrasebankClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{Malo2014GoodDO,
+@article{malo_good_2014,
   author = {P. Malo and A. Sinha and P. Korhonen and J. Wallenius and P. Takala},
   journal = {Journal of the Association for Information Science and Technology},
   title = {Good debt or bad debt: Detecting semantic orientations in economic texts},

@@ -157,7 +157,7 @@ ULTRABERT_EMBED_TRAINING_DATASETS = {
     "SyntheticClassificationData",
 }
 
-ULTRABERT_EMBED_CITATION = """@misc{park2026ultrabertlimitbertpretraining,
+ULTRABERT_EMBED_CITATION = """@misc{park_ultrabert_2026,
       title={UltraBERT: Beyond the Limit of BERT Pre-Training},
       author={Jungwoo Park and Taewhoo Lee and Jaewoo Kang},
       year={2026},

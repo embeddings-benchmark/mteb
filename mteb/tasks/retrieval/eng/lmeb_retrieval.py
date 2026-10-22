@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 _LMEB_DATE = ("2026-03-19", "2026-03-19")
 _LMEB_CITATION = r"""
-@misc{zhao2026lmeb,
+@misc{zhao_lmeb_2026,
   archiveprefix = {arXiv},
   author = {Zhao, Xinping and Hu, Xinshuo and Xu, Jiaxin and Tang, Danyu and Zhang, Xin and Zhou, Mengjia and Zhong, Yan and Zhou, Yao and Shan, Zifei and Zhang, Meishan and Hu, Baotian and Zhang, Min},
   eprint = {2603.12572},

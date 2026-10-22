@@ -27,7 +27,7 @@ class KorHateSpeechMLClassification(AbsTaskMultilabelClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{lee-etal-2022-k,
+@inproceedings{lee_k-mhas_2022,
   address = {Gyeongju, Republic of Korea},
   archiveprefix = {arXiv},
   author = {Lee, Jean  and

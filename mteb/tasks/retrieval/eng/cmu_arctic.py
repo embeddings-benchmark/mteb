@@ -30,7 +30,7 @@ class CMUArcticA2TRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@techreport{kominek2003cmu,
+@techreport{kominek_cmu_2003,
   author = {Kominek, John and Black, Alan W.},
   institution = {Language Technologies Institute, School of Computer Science,
 Carnegie Mellon University},
@@ -73,7 +73,7 @@ class CMUArcticT2ARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@techreport{kominek2003cmu,
+@techreport{kominek_cmu_2003,
   author = {Kominek, John and Black, Alan W.},
   institution = {Language Technologies Institute, School of Computer Science,
 Carnegie Mellon University},

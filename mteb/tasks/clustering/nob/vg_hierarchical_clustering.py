@@ -37,7 +37,7 @@ class VGHierarchicalClusteringP2P(AbsTaskClustering):
         task_subtypes=["Thematic clustering"],
         sample_creation="found",
         bibtex_citation=r"""
-@mastersthesis{navjord2023beyond,
+@mastersthesis{navjord_extractive_2023,
   author = {Navjord, J{\\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
   school = {Norwegian University of Life Sciences, {\\AA}s},
   title = {Beyond extractive: advancing abstractive automatic text summarization in Norwegian with transformers},
@@ -84,7 +84,7 @@ class VGHierarchicalClusteringS2S(AbsTaskClustering):
         task_subtypes=["Thematic clustering"],
         sample_creation="found",
         bibtex_citation=r"""
-@mastersthesis{navjord2023beyond,
+@mastersthesis{navjord_extractive_2023,
   author = {Navjord, J{\\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
   school = {Norwegian University of Life Sciences, {\\AA}s},
   title = {Beyond extractive: advancing abstractive automatic text summarization in Norwegian with transformers},

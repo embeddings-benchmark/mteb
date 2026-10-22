@@ -8,7 +8,7 @@ from mteb.models.model_implementations.e5_instruct import E5_MISTRAL_TRAINING_DA
 from mteb.models.model_meta import ModelMeta
 from mteb.types import OutputDType, PromptType
 
-QZHOU_EMBEDDING_CITATION = """@misc{yu2025qzhouembeddingtechnicalreport,
+QZHOU_EMBEDDING_CITATION = """@misc{yu_qzhou-embedding_2025,
       title={QZhou-Embedding Technical Report},
       author={Peng Yu and En Xu and Bin Chen and Haibiao Chen and Yinfei Xu},
       year={2025},

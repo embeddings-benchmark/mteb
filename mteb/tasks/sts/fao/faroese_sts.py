@@ -25,7 +25,7 @@ class FaroeseSTS(AbsTaskSTS):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{snaebjarnarson-etal-2023-transfer,
+@inproceedings{snaebjarnarson_transfer_2023,
   address = {Tórshavn, Faroe Islands},
   author = {Snæbjarnarson, Vésteinn  and
 Simonsen, Annika  and

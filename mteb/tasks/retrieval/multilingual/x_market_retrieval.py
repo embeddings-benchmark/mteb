@@ -33,7 +33,7 @@ class XMarket(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{Bonab_2021,
+@inproceedings{bonab_cross-market_2021,
   author = {Bonab, Hamed and Aliannejadi, Mohammad and Vardasbi, Ali and Kanoulas, Evangelos and Allan, James},
   booktitle = {Proceedings of the 30th ACM International Conference on Information &amp; Knowledge Management},
   collection = {CIKM ’21},

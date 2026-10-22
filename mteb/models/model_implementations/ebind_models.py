@@ -185,7 +185,7 @@ class EBindWrapper(AbsEncoder):
 
 
 _EBIND_CITATION = r"""
-@misc{broadbent2025ebindpracticalapproachspace,
+@misc{broadbent_ebind_2025,
       title={{EBind}: a practical approach to space binding},
       author={Jim Broadbent and Felix Cohen and Frederik Hvilshøj and Eric Landau and Eren Sasoglu},
       year={2025},

@@ -25,7 +25,7 @@ class AILACasedocs(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@dataset{paheli_bhattacharya_2020_4063986,
+@dataset{bhattacharya_aila_2020,
   author = {Paheli Bhattacharya and
 Kripabandhu Ghosh and
 Saptarshi Ghosh and

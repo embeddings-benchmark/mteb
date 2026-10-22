@@ -28,7 +28,7 @@ class KorNLI(AbsTaskPairClassification):
         dialect=[],
         sample_creation="machine-translated and verified",
         bibtex_citation=r"""
-@inproceedings{ham2020kornli,
+@inproceedings{ham_kornli_2020,
   address = {Online},
   author = {Ham, Jiyeon and Choe, Yo Joong and Park, Kyubyong and Choi, Ilji and Soh, Hyungjoon},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2020},

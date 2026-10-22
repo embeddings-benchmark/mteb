@@ -26,7 +26,7 @@ class StackOverflowDupQuestions(AbsTaskRetrieval):
         sample_creation="found",
         prompt="Retrieve duplicate questions from StackOverflow forum",
         bibtex_citation=r"""
-@article{Liu2018LinkSOAD,
+@article{liu_linkso_2018,
   author = {Xueqing Liu and Chi Wang and Yue Leng and ChengXiang Zhai},
   journal = {Proceedings of the 4th ACM SIGSOFT International Workshop on NLP for Software Engineering},
   title = {LinkSO: a dataset for learning to retrieve similar question answer pairs on software development forums},

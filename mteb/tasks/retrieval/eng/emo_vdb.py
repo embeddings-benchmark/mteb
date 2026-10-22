@@ -25,7 +25,7 @@ class EmoVDBA2TRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{adigwe2018emotional,
+@misc{adigwe_emotional_2018,
   archiveprefix = {arXiv},
   author = {Adaeze Adigwe and Noé Tits and Kevin El Haddad and Sarah Ostadabbas and Thierry Dutoit},
   eprint = {1806.09514},
@@ -63,7 +63,7 @@ class EmoVDBT2ARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{adigwe2018emotional,
+@misc{adigwe_emotional_2018,
   archiveprefix = {arXiv},
   author = {Adaeze Adigwe and Noé Tits and Kevin El Haddad and Sarah Ostadabbas and Thierry Dutoit},
   eprint = {1806.09514},

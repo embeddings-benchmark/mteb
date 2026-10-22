@@ -28,7 +28,7 @@ class WorldSenseAudioVideoClassification(AbsTaskClassification):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@inproceedings{hong2025worldsense,
+@inproceedings{hong_worldsense_2025,
   author = {Hong, Jack and Yan, Shilin and Cai, Jiayin and Jiang, Xiaolong and Hu, Yao and Xie, Weidi},
   journal = {arXiv preprint arXiv:2502.04326},
   title = {Worldsense: Evaluating real-world omnimodal understanding for multimodal llms},
@@ -65,7 +65,7 @@ class WorldSenseVideoClassification(AbsTaskClassification):
         modalities=["video"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{hong2025worldsense,
+@inproceedings{hong_worldsense_2025,
   author = {Hong, Jack and Yan, Shilin and Cai, Jiayin and Jiang, Xiaolong and Hu, Yao and Xie, Weidi},
   journal = {arXiv preprint arXiv:2502.04326},
   title = {Worldsense: Evaluating real-world omnimodal understanding for multimodal llms},

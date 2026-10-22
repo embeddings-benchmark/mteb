@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, EncodeKwargs, PromptType
 
-TIPSV2_CITATION = """@article{cao2026tipsv2,
+TIPSV2_CITATION = """@article{cao_tipsv2_2026,
   title={TIPSv2: Advancing Vision-Language Pretraining with Enhanced Patch-Text Alignment},
   author={Cao, Bingyi and Chen, Koert and Maninis, Kevis-Kokitsi and Chen, Kaifeng and Karpur, Arjun and Xia, Ye and Dua, Sahil and Dabral, Tanmaya and Han, Guangxing and Han, Bohyung and Ainslie, Joshua and Bewley, Alex and Jacob, Mithun and Wagner, René and Ramos, Washington and Choromanski, Krzysztof and Seyedhosseini, Mojtaba and Zhou, Howard and Araujo, André},
   journal={arXiv preprint arXiv:2604.12012},

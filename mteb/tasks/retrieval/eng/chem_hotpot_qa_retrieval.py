@@ -25,7 +25,7 @@ class ChemHotpotQARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{kasmaee2024chemteb,
+@inproceedings{kasmaee_chemteb_2024,
   archiveprefix = {arXiv},
   author = {Ali Shiraee Kasmaee and Mohammad Khodadad and Mohammad Arshi Saloot and Nick Sherck and Stephen Dokas and Hamidreza Mahyar and Soheila Samiee},
   booktitle = {ENLSP},
@@ -36,7 +36,7 @@ class ChemHotpotQARetrieval(AbsTaskRetrieval):
   year = {2024},
 }
 
-@inproceedings{yang-etal-2018-hotpotqa,
+@inproceedings{yang_hotpotqa_2018,
   address = {Brussels, Belgium},
   author = {Yang, Zhilin  and
 Qi, Peng  and

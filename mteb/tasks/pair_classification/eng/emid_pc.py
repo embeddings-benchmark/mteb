@@ -36,7 +36,7 @@ class EMIDPairClassification(AbsTaskPairClassification):
         modalities=["audio", "image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{zou2023emid,
+@inproceedings{zou_emid_2023,
   author = {Zou, Jialing and Mei, Jiahao and Ye, Guangze and Huai, Tianyu and Shen, Qiwei and Dong, Daoguo},
   booktitle = {Proceedings of the 1st International Workshop on Multimedia Content Generation and Evaluation: New Methods and Practice},
   doi = {10.1145/3607541.3616821},

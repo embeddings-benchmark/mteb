@@ -26,7 +26,7 @@ class NorwegianParliamentClassification(AbsTaskClassification):
         dialect=[],  # unknown
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{kummervold-etal-2021-operationalizing,
+@inproceedings{kummervold_operationalizing_2021,
   address = {Reykjavik, Iceland (Online)},
   author = {Kummervold, Per E  and
 De la Rosa, Javier  and
@@ -72,7 +72,7 @@ class NorwegianParliamentClassificationV2(AbsTaskClassification):
         dialect=[],  # unknown
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{kummervold-etal-2021-operationalizing,
+@inproceedings{kummervold_operationalizing_2021,
   address = {Reykjavik, Iceland (Online)},
   author = {Kummervold, Per E  and
 De la Rosa, Javier  and

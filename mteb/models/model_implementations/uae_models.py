@@ -88,7 +88,7 @@ uae_large_v1 = ModelMeta(
     reference="https://huggingface.co/WhereIsAI/UAE-Large-V1",
     use_instructions=True,
     citation="""
-    @article{li2023angle,
+    @article{li_angle-optimized_2023,
       title={AnglE-optimized Text Embeddings},
       author={Li, Xianming and Li, Jing},
       journal={arXiv preprint arXiv:2309.12871},

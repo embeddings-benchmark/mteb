@@ -34,7 +34,7 @@ class FSD2019KaggleMultilingualClassification(AbsTaskMultilabelClassification):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@dataset{eduardo_fonseca_2020_3612637,
+@dataset{fonseca_fsdkaggle2019_2020,
   author = {Eduardo Fonseca and
 Manoj Plakal and
 Frederic Font and
@@ -100,7 +100,7 @@ class FSD2019KaggleMultilingualClassificationV2(AbsTaskMultilabelClassification)
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@dataset{eduardo_fonseca_2020_3612637,
+@dataset{fonseca_fsdkaggle2019_2020,
   author = {Eduardo Fonseca and
 Manoj Plakal and
 Frederic Font and

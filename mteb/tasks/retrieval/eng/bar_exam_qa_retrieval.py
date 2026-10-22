@@ -25,7 +25,7 @@ class BarExamQARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{Zheng_2025,
+@inproceedings{zheng_reasoning-focused_2025,
   author = {Zheng, Lucia and Guha, Neel and Arifov, Javokhir and Zhang, Sarah and Skreta, Michal and Manning, Christopher D. and Henderson, Peter and Ho, Daniel E.},
   booktitle = {Proceedings of the Symposium on Computer Science and Law on ZZZ},
   collection = {CSLAW ’25},

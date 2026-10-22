@@ -25,7 +25,7 @@ class BornholmBitextMining(AbsTaskBitextMining):
         dialect=["da-dan-bornholm"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{derczynskiBornholmskNaturalLanguage2019,
+@inproceedings{derczynski_bornholmsk_2019,
   author = {Derczynski, Leon and Kjeldsen, Alex Speed},
   booktitle = {Proceedings of the Nordic Conference of Computational Linguistics (2019)},
   date = {2019},

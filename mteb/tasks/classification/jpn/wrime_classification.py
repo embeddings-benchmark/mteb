@@ -25,7 +25,7 @@ class WRIMEClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{kajiwara-etal-2021-wrime,
+@inproceedings{kajiwara_wrime_2021,
   address = {Online},
   author = {Kajiwara, Tomoyuki  and
 Chu, Chenhui  and
@@ -79,7 +79,7 @@ class WRIMEClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{kajiwara-etal-2021-wrime,
+@inproceedings{kajiwara_wrime_2021,
   address = {Online},
   author = {Kajiwara, Tomoyuki  and
 Chu, Chenhui  and

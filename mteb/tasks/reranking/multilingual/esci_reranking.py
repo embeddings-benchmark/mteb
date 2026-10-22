@@ -12,7 +12,7 @@ _LANGUAGES = {
     "jp": ["jpn-Jpan"],
 }
 
-_CITATION = r"""@article{reddy2022shopping,
+_CITATION = r"""@article{reddy_shopping_2022,
   archiveprefix = {arXiv},
   author = {Chandan K. Reddy and Lluís Màrquez and Fran Valero and Nikhil Rao and Hugo Zaragoza and Sambaran Bandyopadhyay and Arnab Biswas and Anlu Xing and Karthik Subbian},
   eprint = {2206.06588},

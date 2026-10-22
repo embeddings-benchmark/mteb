@@ -32,7 +32,7 @@ class NordicLangClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{haas-derczynski-2021-discriminating,
+@inproceedings{haas_discriminating_2021,
   address = {Kiyv, Ukraine},
   archiveprefix = {arXiv},
   author = {Haas, Ren{\'e}  and

@@ -25,14 +25,14 @@ class HellaSwag(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{xiao2024rar,
+@article{xiao_rar-b_2024,
   author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
   journal = {arXiv preprint arXiv:2404.06347},
   title = {RAR-b: Reasoning as Retrieval Benchmark},
   year = {2024},
 }
 
-@inproceedings{zellers2019hellaswag,
+@inproceedings{zellers_hellaswag_2019,
   author = {Zellers, Rowan and Holtzman, Ari and Bisk, Yonatan and Farhadi, Ali and Choi, Yejin},
   booktitle = {Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics},
   doi = {10.18653/v1/p19-1472},

@@ -274,7 +274,7 @@ fusion_embedding_1_2b_preview = ModelMeta(
     },
     model_type=["dense"],
     citation="""
-@article{tonmoy2026fusion,
+@article{tonmoy_fusion_2026,
   title   = {Fusion Embedding: A Unified Embedding Space for Text, Image, Video, and Audio},
   author  = {Tonmoy, Abdul Basit and Hoque, Kazi Fardinul and Arham, Md. Shahrier Islam and Luthra, Arman},
   journal = {arXiv preprint arXiv:2607.18666},
@@ -338,7 +338,7 @@ fusion_embedding_2_2b_preview = ModelMeta(
     },
     model_type=["dense"],
     citation="""
-@article{tonmoy2026fusion,
+@article{tonmoy_fusion_2026,
   title   = {Fusion Embedding: A Unified Embedding Space for Text, Image, Video, and Audio},
   author  = {Tonmoy, Abdul Basit and Hoque, Kazi Fardinul and Arham, Md. Shahrier Islam and Luthra, Arman},
   journal = {arXiv preprint arXiv:2607.18666},

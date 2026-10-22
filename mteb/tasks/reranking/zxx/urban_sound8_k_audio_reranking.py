@@ -39,7 +39,7 @@ class UrbanSound8KAudioReranking(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{Salamon:UrbanSound:ACMMM:14,
+@inproceedings{salamon_dataset_2014,
   author = {Salamon, Justin and Jacoby, Christopher and Bello, Juan Pablo},
   booktitle = {Proceedings of the 22nd ACM international conference on Multimedia},
   organization = {ACM},

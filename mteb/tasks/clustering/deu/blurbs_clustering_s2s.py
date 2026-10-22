@@ -36,7 +36,7 @@ class BlurbsClusteringS2S(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{Remus2019GermEval2T,
+@inproceedings{remus_germeval_2019,
   author = {Steffen Remus and Rami Aly and Chris Biemann},
   booktitle = {Conference on Natural Language Processing},
   title = {GermEval 2019 Task 1: Hierarchical Classification of Blurbs},
@@ -80,7 +80,7 @@ class BlurbsClusteringS2SFast(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{Remus2019GermEval2T,
+@inproceedings{remus_germeval_2019,
   author = {Steffen Remus and Rami Aly and Chris Biemann},
   booktitle = {Conference on Natural Language Processing},
   title = {GermEval 2019 Task 1: Hierarchical Classification of Blurbs},

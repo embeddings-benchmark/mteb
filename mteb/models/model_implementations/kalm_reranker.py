@@ -477,7 +477,7 @@ multilingual_langs = [
     "zho-Hans",
 ]
 
-KALM_RERANKER_V1_CITATION = """@misc{zhao2026kalmrerankerv1,
+KALM_RERANKER_V1_CITATION = """@misc{zhao_kalm-reranker-v1_2026,
       title={KaLM-Reranker-V1: Fast but Not Late Interaction for Compressed Document Reranking},
       author={Xinping Zhao and Jiaxin Xu and Ziqi Dai and Xin Zhang and Shouzheng Huang and Danyu Tang and Xinshuo Hu and Meishan Zhang and Baotian Hu and Min Zhang},
       year={2026},

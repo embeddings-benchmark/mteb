@@ -32,7 +32,7 @@ class MNISTClassification(AbsTaskClassification):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@article{lecun1998gradient,
+@article{lecun_gradient-based_1998,
   author = {LeCun, Yann and Bottou, L{\'e}on and Bengio, Yoshua and Haffner, Patrick},
   journal = {Proceedings of the IEEE},
   number = {11},

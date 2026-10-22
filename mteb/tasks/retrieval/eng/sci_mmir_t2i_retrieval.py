@@ -90,7 +90,7 @@ class SciMMIRT2IRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{wu2024scimmirbenchmarkingscientificmultimodal,
+@inproceedings{wu_scimmir_2024,
   address = {Bangkok, Thailand},
   author = {Wu, Siwei and Li, Yizhi and Zhu, Kang and Zhang, Ge and Liang, Yiming and Ma, Kaijing and Xiao, Chenghao and Zhang, Haoran and Yang, Bohao and Chen, Wenhu and Huang, Wenhao and Al Moubayed, Noura and Fu, Jie and Lin, Chenghua},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2024},
