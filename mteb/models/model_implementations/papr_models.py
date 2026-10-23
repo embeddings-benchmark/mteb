@@ -1,12 +1,12 @@
 from __future__ import annotations
 
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_implementations.qwen3_models import multilingual_langs
 from mteb.models.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import OutputDType
 
 # Per-task instructions (task_prompts.json in each model repo, identical for both sizes).
-_papr_embed_code_instructions = {
+papr_embed_code_prompts = {
     "AppsRetrieval": "Given a question about code problem, retrieval code that can solve user's problem",
     "COIRCodeSearchNetRetrieval": "Given a code snippet, retrieve the comment corresponding to that code.",
     "CodeFeedbackMT": "Given a question about coding, retrieval code or passage that can solve user's question",
@@ -20,14 +20,7 @@ _papr_embed_code_instructions = {
     "SciFact": "Given a scientific claim, retrieve documents that support or refute the claim",
 }
 
-# Queries carry the task instruction; documents are encoded bare.
-papr_embed_code_prompts = {
-    "document": "",
-    **{
-        f"{task}-query": f"Instruct: {instruction}\nQuery:"
-        for task, instruction in _papr_embed_code_instructions.items()
-    },
-}
+papr_embed_code_instruction_template = "Instruct: {instruction}\nQuery:"
 
 # Both models are fine-tuned from Qwen3-Embedding, so they inherit its training sets ...
 _base_training = {
@@ -61,8 +54,13 @@ papr_embed_code_0b6_training_datasets = papr_embed_code_4b_training_datasets | {
 }
 
 _common = dict(
-    loader=SentenceTransformerEncoderWrapper,
-    loader_kwargs=dict(model_prompts=papr_embed_code_prompts),
+    loader=InstructSentenceTransformerModel,
+    loader_kwargs=dict(
+        instruction_template=papr_embed_code_instruction_template,
+        apply_instruction_to_passages=False,  # queries carry the instruction, documents are bare
+        prompts_dict=papr_embed_code_prompts,
+        max_seq_length=8192,
+    ),
     model_type=["dense"],
     languages=multilingual_langs,
     open_weights=True,
