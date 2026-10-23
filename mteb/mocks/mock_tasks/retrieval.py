@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from datasets import Audio, Dataset, DatasetDict
 
+from mteb._evaluators.retrieval_metrics import ndcg_float_scores
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -13,6 +14,9 @@ from .create_mock_samples import (
     create_mock_images,
     create_mock_video_bytes,
 )
+
+if TYPE_CHECKING:
+    from mteb.types import RelevantDocumentsType
 
 multilingual_eval_langs = {
     "eng": ["eng-Latn"],
@@ -196,6 +200,81 @@ class MockRetrievalTask(AbsTaskRetrieval):
         base_datasplit["top_ranked"] = None
         self.dataset = {"default": {"test": base_datasplit, "val": base_datasplit}}
         self.data_loaded = True
+
+
+class MockRetrievalFloatGainsTask(AbsTaskRetrieval):
+    """Retrieval task with float gains, shaped like the RCP tasks: the main score
+    `ndcg_float_at_10` comes from `task_specific_scores`. The gains are held in memory
+    instead of being read from the qrels' `gain` column.
+    """
+
+    metadata = TaskMetadata(
+        type="Retrieval",
+        name="MockRetrievalFloatGainsTask",
+        main_score="ndcg_float_at_10",
+        **dict(general_args | {"eval_splits": ["test"]}),
+    )
+
+    expected_stats = {
+        "test": {
+            "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
+            "number_of_characters": 136,
+            "documents_text_statistics": {
+                "total_text_length": 84,
+                "min_text_length": 39,
+                "average_text_length": 42.0,
+                "max_text_length": 45,
+                "unique_texts": 2,
+            },
+            "documents_image_statistics": None,
+            "documents_audio_statistics": None,
+            "documents_video_statistics": None,
+            "queries_text_statistics": {
+                "total_text_length": 52,
+                "min_text_length": 23,
+                "average_text_length": 26.0,
+                "max_text_length": 29,
+                "unique_texts": 2,
+            },
+            "queries_image_statistics": None,
+            "queries_audio_statistics": None,
+            "queries_video_statistics": None,
+            "relevant_docs_statistics": {
+                "num_relevant_docs": 2,
+                "min_relevant_docs_per_query": 1,
+                "average_relevant_docs_per_query": 1.0,
+                "max_relevant_docs_per_query": 1,
+                "unique_relevant_docs": 2,
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
+                "queries_with_all_gold_black_or_white": 0,
+            },
+            "top_ranked_statistics": {
+                "num_top_ranked": 4,
+                "min_top_ranked_per_query": 2,
+                "average_top_ranked_per_query": 2.0,
+                "max_top_ranked_per_query": 2,
+            },
+        }
+    }
+
+    float_gains = {"q1": {"d1": 0.9, "d2": 0.1}, "q2": {"d1": 0.2, "d2": 0.8}}
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        self.dataset = {"default": {"test": base_retrieval_datasplit()}}
+        self.data_loaded = True
+
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: RelevantDocumentsType,
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        return ndcg_float_scores(self.float_gains, results, self.k_values)
 
 
 class MockRetrievalDialogTask(AbsTaskRetrieval):
