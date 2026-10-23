@@ -9,7 +9,11 @@ from typing import TYPE_CHECKING, Any
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import VideoCollator, single_clip_dataloader
+from mteb.models.modality_collators import (
+    VideoCollator,
+    sampled_frame_rate,
+    single_clip_dataloader,
+)
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import OutputDType
 
@@ -21,7 +25,7 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
-    from mteb.types._encoder_io import AudioInputItem
+    from mteb.types._encoder_io import AudioInputItem, VideoMetadata
 
 
 class OmniVinciWrapper(AbsEncoder):
@@ -86,8 +90,16 @@ class OmniVinciWrapper(AbsEncoder):
         self.processor.config.load_audio_in_video = False
 
     @staticmethod
-    def _save_frames_as_video(frames: torch.Tensor) -> str:
-        """Write a ``(T, C, H, W)`` uint8 tensor to a temporary MP4 file."""
+    def _save_frames_as_video(
+        frames: torch.Tensor, video_metadata: VideoMetadata
+    ) -> str:
+        """Write sampled frames to a temporary MP4 that plays at their real spacing.
+
+        OmniVinci's loader times each frame as index / container fps and feeds
+        these times to its time embeddings (it was a fixed 24 fps).
+        """
+        from fractions import Fraction
+
         import torchvision
         from torch.nn import functional as F
 
@@ -99,7 +111,10 @@ class OmniVinciWrapper(AbsEncoder):
         os.close(fd)
         # torchvision.io.write_video expects (T, H, W, C) uint8
         torchvision.io.write_video(
-            path, frames.permute(0, 2, 3, 1).contiguous(), fps=24
+            path,
+            frames.permute(0, 2, 3, 1).contiguous(),
+            # a Fraction: torchvision rounds float rates to integers
+            fps=Fraction(sampled_frame_rate(video_metadata)).limit_denominator(1000),
         )
         return path
 
@@ -157,7 +172,7 @@ class OmniVinciWrapper(AbsEncoder):
             content: list[dict[str, Any]] = []
 
             if i < len(videos) and videos[i] is not None:
-                path = self._save_frames_as_video(videos[i])
+                path = self._save_frames_as_video(videos[i], batch["video_metadata"][i])
                 temp_files.append(path)
                 content.append({"type": "video", "video": path})
 

@@ -329,6 +329,17 @@ class InstructSentenceTransformerModel(AbsEncoder):
             all_embeddings = []
             for batch in tqdm(inputs, desc="Building multimodal embeddings"):
                 modality_batch = {k: v for k, v in batch.items() if k in _modality_keys}
+                if "video" in modality_batch:
+                    # sentence-transformers' video format, which passes the frames'
+                    # timing to the processor
+                    modality_batch["video"] = [
+                        {"array": video, "video_metadata": metadata}
+                        if video is not None
+                        else None
+                        for video, metadata in zip(
+                            batch["video"], batch["video_metadata"], strict=True
+                        )
+                    ]
                 batched_input = [
                     dict(zip(modality_batch, sample, strict=True))
                     for sample in zip(*modality_batch.values(), strict=True)
