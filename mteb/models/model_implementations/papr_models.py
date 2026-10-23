@@ -3,7 +3,6 @@ from __future__ import annotations
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_implementations.qwen3_models import multilingual_langs
 from mteb.models.model_meta import ModelMeta
-from mteb.types import OutputDType
 
 # Per-task instructions (task_prompts.json in each model repo, identical for both sizes).
 papr_embed_code_prompts = {
@@ -72,7 +71,6 @@ _common = dict(
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
-    output_dtypes=OutputDType.BF16,
 )
 
 papr_embed_code_1_4b = ModelMeta(
