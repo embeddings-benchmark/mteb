@@ -39,7 +39,6 @@ class TbilisiCityHallBitextMining(AbsTaskBitextMining):
         license="not specified",
         annotations_creators="derived",
         dialect=[],
-        bibtex_citation="",
     )
 
     def load_data(self, **kwargs: Any) -> None:

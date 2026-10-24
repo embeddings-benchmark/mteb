@@ -24,5 +24,4 @@ class TurkishRAGEvalRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="",
     )

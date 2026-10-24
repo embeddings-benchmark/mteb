@@ -25,5 +25,4 @@ spartan8806_atles_champion_embedding = ModelMeta(
     adapted_from="sentence-transformers/all-mpnet-base-v2",
     public_training_code=None,
     public_training_data=None,
-    citation="",
 )

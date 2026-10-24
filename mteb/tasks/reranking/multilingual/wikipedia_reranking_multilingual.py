@@ -43,5 +43,4 @@ class WikipediaRerankingMultilingual(AbsTaskRetrieval):
         annotations_creators="LM-generated and reviewed",
         dialect=[],
         sample_creation="LM-generated and verified",
-        bibtex_citation="",
     )
