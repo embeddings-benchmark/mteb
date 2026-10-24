@@ -33,7 +33,7 @@ from mteb.api.adapters import (
     model_meta_to_schema,
     task_to_meta_schema,
 )
-from mteb.api.aggregators import build_benchmark_leaders
+from mteb.api.aggregators import build_benchmark_leaders, build_model_badge
 from mteb.api.cache import (
     CacheLayer,
     _cached_bytes,
@@ -56,6 +56,7 @@ from mteb.api.schemas import (
     BenchmarkSchema,
     BenchmarkSummarySchema,
     MenuEntrySchema,
+    ModelBadgeSchema,
     ModelMetaSchema,
     ModelScoresSchema,
     TaskMetaSchema,
@@ -86,7 +87,12 @@ router = APIRouter()
 
 # All cached payloads derive from data loaded at process start. Pre-formatted
 # so ``If-Modified-Since`` comparison is byte-equal, not parse-and-compare.
-_PROCESS_START_HTTP_DATE: str = email.utils.formatdate(time.time(), usegmt=True)
+_PROCESS_START: float = time.time()
+_PROCESS_START_HTTP_DATE: str = email.utils.formatdate(_PROCESS_START, usegmt=True)
+_PROCESS_START_DATE: str = time.strftime("%Y-%m-%d", time.gmtime(_PROCESS_START))
+
+# shields.io rejects ``cacheSeconds`` below 300.
+_MIN_BADGE_CACHE_SECONDS = 300
 
 
 def _cached_json(request: Request, payload: Serialized) -> Response:
@@ -705,6 +711,32 @@ async def model_scores(request: Request, name: str) -> Response:
     """Per-benchmark scores for model ``name``."""
     _require_model(name)
     return _cached_json(request, await get_model_scores_bytes(name))
+
+
+@router.get("/models/{name:path}/badge", response_model=ModelBadgeSchema)
+async def model_badge(
+    name: str,
+    benchmark: Annotated[
+        str,
+        Query(description="Benchmark to rank the model on, e.g. `MTEB(eng, v2)`."),
+    ],
+) -> ModelBadgeSchema:
+    """shields.io endpoint badge with the rank and score of model ``name`` on ``benchmark``.
+
+    Use it in a README as
+    ``https://img.shields.io/endpoint?url=<api>/v1/models/<name>/badge?benchmark=<benchmark>``
+    (URL-encode the inner URL). The date is when the leaderboard data was loaded.
+    """
+    _require_model(name)
+    _require_benchmark(benchmark)
+    cache_seconds = max(get_settings().http_max_age, _MIN_BADGE_CACHE_SECONDS)
+    badge = await build_model_badge(name, benchmark, _PROCESS_START_DATE, cache_seconds)
+    if badge is None:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Model {name} has no results on benchmark {benchmark}",
+        )
+    return badge
 
 
 @router.get("/models/{name:path}", response_model=ModelMetaSchema)
