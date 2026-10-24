@@ -1044,7 +1044,8 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SpeechCommandsZeroshotv0.02",
         "StanfordI2VRetrieval",  # official manifest contains repeated video+audio clips
         "VCDBCoreAudioVideoRetrieval",  # distinct copied videos can have identical soundtracks
-        "WorldSenseAudioVideoZeroShot",  # multiple QA rows share the same underlying video/audio
+        "WorldSenseAudioVideoClassification",  # multiple QA rows share the same underlying video/audio
+        "WorldSenseAudioVideoZeroShot",
         "XModBenchAT2IReranking",
         "XModBenchAT2TReranking",
         "XModBenchAT2VReranking",
@@ -1061,7 +1062,8 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MomentSeekerTV2VRetrieval",
         "StanfordI2VRetrieval",  # official 3,401-ID manifest contains 3,325 unique video contents
         "StanfordI2VVisualRetrieval",  # same official manifest as StanfordI2VRetrieval
-        "WorldSenseAudioVideoZeroShot",  # multiple QA rows share the same underlying video/audio
+        "WorldSenseAudioVideoClassification",  # multiple QA rows share the same underlying video/audio
+        "WorldSenseAudioVideoZeroShot",
         "WorldSenseVideoClassification",  # multiple QA rows share the same underlying video/audio
         "WorldSenseVideoZeroShot",
         "XModBenchAT2VReranking",

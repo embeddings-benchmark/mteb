@@ -1,92 +1,92 @@
 {
     "test": {
-        "num_samples": 568,
+        "num_samples": 1047,
         "samples_in_train": null,
         "text_statistics": null,
         "image_statistics": null,
         "audio_statistics": {
-            "total_duration_seconds": 27811.9103125,
+            "total_duration_seconds": 50236.026437499946,
             "min_duration_seconds": 15.6038125,
-            "average_duration_seconds": 48.964630831866195,
+            "average_duration_seconds": 47.98092305396366,
             "max_duration_seconds": 60.0235625,
             "unique_audios": 568,
             "average_sampling_rate": 16000.0,
             "sampling_rates": {
-                "16000": 568
+                "16000": 1047
             }
         },
         "video_statistics": {
-            "total_duration_seconds": 27808.730778892157,
-            "total_frames": 1096204,
+            "total_duration_seconds": 50231.42041700006,
+            "total_frames": 1881954,
             "min_width": 202,
-            "average_width": 604.5140845070423,
+            "average_width": 605.1537726838586,
             "max_width": 1280,
             "min_height": 226,
-            "average_height": 389.96830985915494,
+            "average_height": 388.93982808022923,
             "max_height": 720,
             "min_duration_seconds": 15.6,
-            "average_duration_seconds": 48.95903306142986,
-            "max_duration_seconds": 60,
+            "average_duration_seconds": 47.97652379847188,
+            "max_duration_seconds": 60.0,
             "unique_videos": 568,
-            "average_fps": 37.309859154929576,
+            "average_fps": 35.54727793696275,
             "fps": {
-                "60": 168,
-                "24": 62,
-                "30": 240,
-                "25": 94,
+                "60": 251,
+                "24": 116,
+                "30": 483,
+                "25": 192,
                 "15": 1,
                 "20": 1,
                 "29": 1,
-                "10": 1
+                "10": 2
             },
             "min_resolution": [
                 202,
                 360
             ],
             "average_resolution": [
-                604.5140845070423,
-                389.96830985915494
+                605.1537726838586,
+                388.93982808022923
             ],
             "max_resolution": [
                 1280,
                 720
             ],
             "resolutions": {
-                "640x352": 6,
-                "640x360": 433,
-                "1280x720": 8,
-                "480x360": 18,
-                "540x360": 6,
-                "400x226": 1,
-                "360x640": 47,
-                "480x320": 1,
-                "640x640": 2,
+                "640x352": 11,
+                "640x360": 811,
+                "1280x720": 11,
+                "480x360": 29,
+                "540x360": 10,
+                "400x226": 3,
+                "360x640": 90,
+                "480x320": 2,
+                "640x640": 5,
                 "470x360": 1,
-                "568x320": 5,
+                "568x320": 9,
                 "444x360": 1,
-                "450x360": 1,
+                "450x360": 2,
                 "576x360": 3,
                 "436x360": 1,
-                "512x288": 1,
+                "512x288": 2,
                 "492x360": 1,
                 "640x310": 1,
                 "400x290": 1,
-                "270x480": 4,
-                "202x360": 9,
+                "270x480": 6,
+                "202x360": 12,
                 "960x720": 1,
-                "640x316": 1,
-                "640x274": 1,
-                "360x638": 1,
-                "640x358": 2,
+                "640x316": 3,
+                "640x274": 3,
+                "360x638": 2,
+                "640x358": 6,
                 "362x640": 1,
-                "640x298": 1,
+                "640x298": 3,
                 "640x356": 1,
-                "640x350": 1,
-                "636x360": 2,
-                "500x360": 1,
-                "640x272": 1,
+                "640x350": 3,
+                "636x360": 4,
+                "500x360": 2,
+                "640x272": 2,
                 "640x296": 1,
-                "320x240": 1,
+                "320x240": 2,
                 "360x480": 1
             }
         },
@@ -97,28 +97,28 @@
             "unique_labels": 8,
             "labels": {
                 "4": {
-                    "count": 185
+                    "count": 291
                 },
                 "1": {
-                    "count": 65
+                    "count": 127
                 },
                 "7": {
-                    "count": 71
+                    "count": 134
                 },
                 "2": {
-                    "count": 91
+                    "count": 185
                 },
                 "6": {
-                    "count": 50
+                    "count": 105
                 },
                 "3": {
-                    "count": 28
+                    "count": 57
                 },
                 "0": {
-                    "count": 31
+                    "count": 58
                 },
                 "5": {
-                    "count": 47
+                    "count": 90
                 }
             }
         }
