@@ -30,12 +30,12 @@ class OpsMMEmbeddingWrapper(AbsEncoder):
         device: str | None = None,
         torch_dtype: torch.dtype | None = None,  # ruff: any-type
         attn_implementation: str | None = None,
-        # fps=2: qwen-vl-utils FPS=2.0
-        # https://github.com/QwenLM/Qwen2.5-VL/blob/main/qwen-vl-utils/src/qwen_vl_utils/vision_process.py
-        fps: float | None = 2.0,
-        # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
-        max_frames: int | None = 64,
-        num_frames: int | None = None,
+        # 8 frames, evenly spaced: the model card reports MMEB-V2, whose eval config
+        # uses num_frames=8 on every video task (video frames are passed as images)
+        # https://github.com/TIGER-AI-Lab/VLM2Vec/blob/main/experiments/public/eval/video.yaml
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = 8,
         trust_remote_code: bool = True,
         **kwargs: Any,
     ):
