@@ -175,4 +175,4 @@ CLAUDE.md
 tests/mock_mteb_cache/leaderboard/__cached_results.json
 
 # refaudit's lock file, next to the citation cache it guards
-tests/test_validate_metadata/citation_cache.json.lock
+scripts/tools/citation_cache.json.lock

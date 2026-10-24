@@ -5,7 +5,9 @@ on:
       - "mteb/tasks/**.py"
       - "mteb/benchmarks/**.py"
       - "mteb/models/**.py"
-      - "tests/test_validate_metadata/**"
+      - "scripts/tools/check_citations.py"
+      - "scripts/tools/citation_allowlist.json"
+      - "scripts/tools/citation_cache.json"
       - ".github/workflows/citation_check.yml"
   push:
     branches: [main]
@@ -13,10 +15,14 @@ on:
       - "mteb/tasks/**.py"
       - "mteb/benchmarks/**.py"
       - "mteb/models/**.py"
-      - "tests/test_validate_metadata/**"
+      - "scripts/tools/check_citations.py"
+      - "scripts/tools/citation_allowlist.json"
+      - "scripts/tools/citation_cache.json"
       - ".github/workflows/citation_check.yml"
   schedule:
-    - cron: "0 4 1 * *"  # monthly, citations are only re-checked every 30 days
+    # monthly: citations are only re-checked every 30 days, and cited preprints are
+    # checked for a published version
+    - cron: "0 4 1 * *"
   workflow_dispatch:
 
 concurrency:
@@ -84,7 +90,7 @@ jobs:
       id: cache
       if: success() && github.ref == 'refs/heads/main'
       run: |
-        git diff --quiet -- tests/test_validate_metadata/citation_cache.json ||
+        git diff --quiet -- scripts/tools/citation_cache.json ||
           echo "changed=true" >> "$GITHUB_OUTPUT"
 
     - name: Upload the citation cache
@@ -92,7 +98,7 @@ jobs:
       uses: actions/upload-artifact@v7
       with:
         name: citation-cache
-        path: tests/test_validate_metadata/citation_cache.json
+        path: scripts/tools/citation_cache.json
         retention-days: 1
 
   # A separate job, so the push token never shares a runner with the dependencies
@@ -114,14 +120,92 @@ jobs:
       uses: actions/download-artifact@v8
       with:
         name: citation-cache
-        path: tests/test_validate_metadata
+        path: scripts/tools
 
     - name: Commit the citation cache
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git add tests/test_validate_metadata/citation_cache.json
+        git add scripts/tools/citation_cache.json
         git commit -m "chore: update the citation cache [skip ci]"
         # main may have moved while the lookups ran
         git pull --rebase origin main
         git push origin HEAD:main
+
+  preprint-check:
+    # Not on PRs: like the citation lookups, it depends on external services.
+    # Forks would otherwise open issues on their own repository.
+    if: github.repository == 'embeddings-benchmark/mteb' && (
+        github.event_name == 'schedule' ||
+        github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    outputs:
+      found: ${{ steps.check.outputs.found }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v6
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v8.2.0
+      with:
+        enable-cache: true
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: uv sync --group test --frozen
+
+    # The script exits with 1 both when it finds published preprints and when it
+    # crashes; only the first writes the report.
+    - name: Check whether cited preprints have been published
+      id: check
+      env:
+        SEMANTIC_SCHOLAR_API_KEY: ${{ secrets.SEMANTIC_SCHOLAR_API_KEY }}
+      run: |
+        if ! make preprint-check PREPRINT_CHECK_ARGS="--report preprints.md"; then
+          test -s preprints.md
+          cat preprints.md >> "$GITHUB_STEP_SUMMARY"
+          echo "found=true" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: Upload the report
+      if: steps.check.outputs.found == 'true'
+      uses: actions/upload-artifact@v7
+      with:
+        name: preprints
+        path: preprints.md
+        retention-days: 1
+
+  # A separate job, so the token that can open issues never shares a runner with
+  # the dependencies the check installs and runs.
+  report-preprints:
+    needs: preprint-check
+    if: needs.preprint-check.outputs.found == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+    - name: Download the report
+      uses: actions/download-artifact@v8
+      with:
+        name: preprints
+
+    - name: Open or update the issue
+      env:
+        GH_TOKEN: ${{ github.token }}
+        GH_REPO: ${{ github.repository }}
+      run: |
+        set -euo pipefail
+        title="Cited preprints that have since been published"
+        run_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+        printf '\nFound by %s.\n' "$run_url" >> preprints.md
+
+        number=$(gh issue list --state open --search "\"$title\" in:title" \
+          --json number,title --jq ".[] | select(.title == \"$title\") | .number" | head -n 1)
+        if [[ -n "$number" ]]; then
+          gh issue edit "$number" --body-file preprints.md
+        else
+          gh issue create --title "$title" --body-file preprints.md
+        fi
