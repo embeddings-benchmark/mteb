@@ -102,6 +102,8 @@ def filter_tasks(  # noqa: PLR0913
         >>> text_image_tasks = filter_tasks(my_tasks, modalities=["text", "image"], exclusive_modality_filter=True)
 
     """
+    LanguageScripts.check_filters(languages, script)
+
     langs_to_keep = None
     if languages:
         langs_to_keep = LanguageScripts.from_languages_and_scripts(languages)

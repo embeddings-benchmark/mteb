@@ -15,6 +15,7 @@ from mteb.abstasks import (
     AbsTask,
 )
 from mteb.filter_tasks import filter_tasks
+from mteb.languages import LanguageScripts
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Sequence
@@ -277,6 +278,8 @@ def get_tasks(  # noqa: PLR0913, PLR0917
         >>> get_tasks(languages=["eng"], tasks=["WikipediaRetrievalMultilingual"], eval_splits=["test"])
         >>> get_tasks(tasks=["STS22"], languages=["eng"], exclusive_language_filter=True) # don't include multilingual subsets containing English
     """
+    LanguageScripts.check_filters(languages, script)
+
     if tasks:
         if domains or task_types or categories:
             logger.warning(

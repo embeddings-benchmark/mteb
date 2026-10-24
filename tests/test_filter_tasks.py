@@ -158,7 +158,7 @@ def test_filter_tasks_exclude_aggregate_with_task_classes():
     assert len(tasks) == 1
 
 
-@pytest.mark.parametrize("language", ["eng-Latn", "rus-Cyrl", "python"])
+@pytest.mark.parametrize("language", ["eng-Latn", "rus-Cyrl", "zho-Hant", "python"])
 def test_filter_tasks_language_script_and_programming_language(
     all_tasks: list[AbsTask], language: str
 ):
@@ -204,6 +204,24 @@ def test_filter_languages_script_mismatch_raises():
     # "eng" only occurs in Latin subsets, so no subset matches eng + Cyrl.
     with pytest.raises(ValueError, match="No subsets were found"):
         task.filter_languages(languages=["eng"], script=["Cyrl"])
+
+
+@pytest.mark.parametrize(
+    ("languages", "script"),
+    [
+        (["srp-Latn"], ["Latn"]),
+        (["srp-Latn"], ["Cyrl"]),
+        (["rus", "eng-Latn"], ["Latn"]),
+    ],
+)
+def test_filter_languages_script_in_language_code_raises(
+    languages: list[str], script: list[str]
+):
+    task = get_task("STS22.v2")
+    with pytest.raises(ValueError, match="cannot be combined"):
+        task.filter_languages(languages=languages, script=script)
+    with pytest.raises(ValueError, match="cannot be combined"):
+        filter_tasks([task], languages=languages, script=script)
 
 
 @pytest.mark.parametrize(
