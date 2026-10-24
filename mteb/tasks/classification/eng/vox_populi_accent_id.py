@@ -55,7 +55,7 @@ Dupoux, Emmanuel},
 
     is_cross_validation: bool = True
 
-    def dataset_transform(self, **kwargs: Any) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         import numpy as np
         from datasets import DatasetDict
 
@@ -71,7 +71,7 @@ Dupoux, Emmanuel},
                 return False
             return not (np.isnan(audio_arr).any() or np.isinf(audio_arr).any())
 
-        filtered_test = test_ds.filter(is_valid_audio)
+        filtered_test = test_ds.filter(is_valid_audio, num_proc=num_proc)
 
         # Create a new DatasetDict that has both "train" and "test" = filtered_test
         self.dataset = DatasetDict(
