@@ -45,7 +45,7 @@ BASE_REVISION = "914f7f89142e33e77833254d9c9b90c3cef7303b"
 HEAD_REPO_ID = "BrunoHays/embeddinggemma-2-nullspace-audio"
 HEAD_FILENAME = "nullspace_audio_head.safetensors"
 # TODO(before PR): pin to the commit hash returned by `hf upload` instead of the moving branch.
-HEAD_REVISION = "f7a7b63812f1c17408d96a60627be1c43e4a0644"
+HEAD_REVISION = "0222035d2bb6e8baa9949b026a87368c520f8eba"
 
 EPS = 1e-5
 HEAD_DIM = 256
