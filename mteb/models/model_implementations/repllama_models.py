@@ -155,11 +155,18 @@ model_prompts = {
 }
 
 REPLLAMA_CITATION = """
-@article{rankllama,
-      title={Fine-Tuning LLaMA for Multi-Stage Text Retrieval},
-      author={Xueguang Ma and Liang Wang and Nan Yang and Furu Wei and Jimmy Lin},
-      year={2023},
-      journal={arXiv:2310.08319},
+@inproceedings{rankllama,
+  author = {Ma, Xueguang and Wang, Liang and Yang, Nan and Wei, Furu and Lin, Jimmy},
+  booktitle = {Proceedings of the 47th International ACM SIGIR Conference on Research and Development in Information Retrieval},
+  collection = {SIGIR 2024},
+  doi = {10.1145/3626772.3657951},
+  month = {July},
+  pages = {2421–2425},
+  publisher = {ACM},
+  series = {SIGIR 2024},
+  title = {Fine-Tuning LLaMA for Multi-Stage Text Retrieval},
+  url = {https://doi.org/10.1145/3626772.3657951},
+  year = {2024},
 }
 """
 
