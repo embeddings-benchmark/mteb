@@ -191,8 +191,12 @@ def _add_available_benchmarks_parser(
     parser.set_defaults(func=_available_benchmarks)
 
 
-def _add_run_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
-    parser = subparsers.add_parser("run", help="Run a model on a set of tasks")
+def _add_evaluate_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
+    parser = subparsers.add_parser(
+        "evaluate",
+        aliases=["run"],
+        help="Evaluate a model on a set of tasks (alias: run)",
+    )
 
     parser.add_argument(
         "-m",
@@ -292,6 +296,10 @@ def _add_run_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
     )
 
     parser.set_defaults(func=run)
+
+
+_add_run_parser = _add_evaluate_parser
+evaluate = run
 
 
 def _submit_results(args: argparse.Namespace) -> None:
@@ -664,7 +672,7 @@ def build_cli() -> argparse.ArgumentParser:
         title="subcommands", description="valid subcommands", help="additional help"
     )
 
-    _add_run_parser(subparsers)
+    _add_evaluate_parser(subparsers)
     _add_available_tasks_parser(subparsers)
     _add_available_benchmarks_parser(subparsers)
     _add_create_meta_parser(subparsers)
