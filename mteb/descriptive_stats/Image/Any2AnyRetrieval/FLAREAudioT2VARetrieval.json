@@ -1,0 +1,84 @@
+{
+    "test": {
+        "num_samples": 5000,
+        "num_queries": 1000,
+        "num_documents": 4000,
+        "number_of_characters": 66038,
+        "documents_text_statistics": null,
+        "documents_image_statistics": null,
+        "documents_audio_statistics": {
+            "total_duration_seconds": 37155.851609977326,
+            "min_duration_seconds": 1.6950566893424037,
+            "average_duration_seconds": 9.288962902494331,
+            "max_duration_seconds": 78.92462585034014,
+            "unique_audios": 4000,
+            "average_sampling_rate": 44100.0,
+            "sampling_rates": {
+                "44100": 4000
+            }
+        },
+        "documents_video_statistics": {
+            "total_duration_seconds": 37118.00952005211,
+            "total_frames": 1003931,
+            "min_width": 540,
+            "average_width": 1205.582,
+            "max_width": 1280,
+            "min_height": 352,
+            "average_height": 676.2105,
+            "max_height": 720,
+            "min_duration_seconds": 1.7100416666666667,
+            "average_duration_seconds": 9.279502380013028,
+            "max_duration_seconds": 78.93333333333334,
+            "unique_videos": 4000,
+            "average_fps": 27.02525,
+            "fps": {
+                "24": 929,
+                "30": 1806,
+                "25": 1265
+            },
+            "min_resolution": [
+                540,
+                360
+            ],
+            "average_resolution": [
+                1205.582,
+                676.2105
+            ],
+            "max_resolution": [
+                1280,
+                720
+            ],
+            "resolutions": {
+                "1280x720": 3418,
+                "640x360": 448,
+                "1280x640": 51,
+                "1280x714": 18,
+                "1280x682": 11,
+                "1280x692": 5,
+                "960x720": 5,
+                "1280x654": 14,
+                "540x360": 2,
+                "624x352": 12,
+                "1280x528": 16
+            }
+        },
+        "queries_text_statistics": {
+            "total_text_length": 66038,
+            "min_text_length": 30,
+            "average_text_length": 66.038,
+            "max_text_length": 113,
+            "unique_texts": 1000
+        },
+        "queries_image_statistics": null,
+        "queries_audio_statistics": null,
+        "queries_video_statistics": null,
+        "relevant_docs_statistics": {
+            "num_relevant_docs": 1000,
+            "min_relevant_docs_per_query": 1,
+            "average_relevant_docs_per_query": 1.0,
+            "max_relevant_docs_per_query": 1,
+            "unique_relevant_docs": 996
+        },
+        "top_ranked_statistics": null
+    }
+}

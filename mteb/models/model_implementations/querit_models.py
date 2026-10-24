@@ -3,14 +3,15 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.model_meta import ModelMeta
+from mteb.types import OutputDType
 
 from .rerankers_custom import RerankerWrapper
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -30,6 +31,8 @@ class QueritWrapper(RerankerWrapper):
         model_name: str,
         **kwargs: Any,
     ) -> None:
+        import torch
+
         super().__init__(model_name, **kwargs)
         from transformers import AutoModel, AutoTokenizer
 
@@ -70,6 +73,8 @@ class QueritWrapper(RerankerWrapper):
         - Generate custom attention mask based on block types
         """
         # Construct input texts
+        import torch
+
         enc = self.tokenizer(
             pairs,
             add_special_tokens=False,
@@ -83,16 +88,16 @@ class QueritWrapper(RerankerWrapper):
 
         for ids in enc["input_ids"]:
             # Append [CLS] token
-            ids = ids + [self.cls_token_id]
+            ids = ids + [self.cls_token_id]  # noqa: PLR6104, PLW2901
             block_types = [1] * (len(ids) - 1) + [2]  # content + CLS
 
             # Pad or truncate
             if len(ids) < self.max_length:
                 pad_len = self.max_length - len(ids)
-                ids = [self.pad_token_id] * pad_len + ids
+                ids = [self.pad_token_id] * pad_len + ids  # noqa: PLW2901
                 block_types = [0] * pad_len + block_types
             else:
-                ids = ids[-self.max_length :]
+                ids = ids[-self.max_length :]  # noqa: PLW2901
                 block_types = block_types[-self.max_length :]
 
             attn = self.compute_mask_content_cls(block_types)
@@ -104,7 +109,6 @@ class QueritWrapper(RerankerWrapper):
 
         return {"input_ids": input_ids, "attention_mask": attention_mask}
 
-    @torch.inference_mode()
     def predict(
         self,
         inputs1: DataLoader[BatchedInput],
@@ -121,45 +125,52 @@ class QueritWrapper(RerankerWrapper):
         Supports both single-process and multi-process/multi-GPU modes.
         """
         # Flatten all pairs from mteb.mteb DataLoaders
-        queries = [text for batch in inputs1 for text in batch["text"]]
-        passages = [text for batch in inputs2 for text in batch["text"]]
+        import torch
 
-        instructions = None
-        if "instruction" in inputs2.dataset.features:
-            instructions = [text for batch in inputs1 for text in batch["instruction"]]
+        with torch.inference_mode():
+            queries = [text for batch in inputs1 for text in batch["text"]]
+            passages = [text for batch in inputs2 for text in batch["text"]]
 
-        num_pairs = len(queries)
-        if num_pairs == 0:
-            return []
-        final_scores: list[float] = []
-
-        batch_size = kwargs.get("batch_size", self.batch_size)
-        with tqdm(total=num_pairs, desc="Scoring", ncols=100) as pbar:
-            for start in range(0, num_pairs, batch_size):
-                end = min(start + batch_size, num_pairs)
-                batch_q = queries[start:end]
-                batch_d = passages[start:end]
-
-                batch_instructions = (
-                    instructions[start:end]
-                    if instructions is not None
-                    else [None] * len(batch_q)
-                )
-                pairs = [
-                    self.format_instruction(instr, query, doc)
-                    for instr, query, doc in zip(batch_instructions, batch_q, batch_d)
+            instructions = None
+            if "instruction" in inputs2.dataset.features:
+                instructions = [
+                    text for batch in inputs1 for text in batch["instruction"]
                 ]
-                enc = self.process_inputs(pairs)
-                out = self.model(**enc)
-                scores = out["score"].squeeze(-1).detach().float().cpu().tolist()
 
-                if not isinstance(scores, list):
-                    scores = [scores]
+            num_pairs = len(queries)
+            if num_pairs == 0:
+                return []
+            final_scores: list[float] = []
 
-                final_scores.extend(scores)
-                pbar.update(len(scores))
+            batch_size = kwargs.get("batch_size", self.batch_size)
+            with tqdm(total=num_pairs, desc="Scoring", ncols=100) as pbar:
+                for start in range(0, num_pairs, batch_size):
+                    end = min(start + batch_size, num_pairs)
+                    batch_q = queries[start:end]
+                    batch_d = passages[start:end]
 
-        return final_scores
+                    batch_instructions = (
+                        instructions[start:end]
+                        if instructions is not None
+                        else [None] * len(batch_q)
+                    )
+                    pairs = [
+                        self.format_instruction(instr, query, doc)
+                        for instr, query, doc in zip(
+                            batch_instructions, batch_q, batch_d, strict=True
+                        )
+                    ]
+                    enc = self.process_inputs(pairs)
+                    out = self.model(**enc)
+                    scores = out["score"].squeeze(-1).detach().float().cpu().tolist()
+
+                    if not isinstance(scores, list):
+                        scores = [scores]
+
+                    final_scores.extend(scores)
+                    pbar.update(len(scores))
+
+            return final_scores
 
     @staticmethod
     def format_instruction(instruction: str | None, query: str, doc: str) -> str:
@@ -183,6 +194,8 @@ class QueritWrapper(RerankerWrapper):
         Returns:
             [1, seq_len, seq_len] boolean attention mask (True = allowed to attend)
         """
+        import torch
+
         pos = torch.tensor(block_types, dtype=torch.long)
         n = pos.shape[0]
         if n == 0:
@@ -217,7 +230,17 @@ querit_reranker_training_data = {
     "T2Reranking",  # https://huggingface.co/datasets/THUIR/T2Ranking & The corpus and queries that overlap with mteb/T2Reranking have been removed.
 }
 
-model_meta = ModelMeta(
+QUERIT_CITATION = """@misc{zhong2026queritrerankertrainingcompactmultilingual,
+      title={Querit-Reranker: Training Compact Multilingual Rerankers via Efficient Label-Free Distribution Adaptation},
+      author={Yunfei Zhong and Jun Yang and Wei Huang and Yinqiong Cai and Haosheng Qian and Yixing Fan and Ruqing Zhang and Lixin Su and Daiting Shi and Jiafeng Guo},
+      year={2026},
+      eprint={2606.19037},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2606.19037},
+}"""
+
+Querit_Reranker_A0_4B = ModelMeta(
     loader=QueritWrapper,
     loader_kwargs={
         "fp_options": "bfloat16",
@@ -226,10 +249,11 @@ model_meta = ModelMeta(
     model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
-    revision="b611630803ed857ecb159ea9df75738bdd40d1c0",
-    release_date="2026-03-08",
+    revision="cd502a5e87bed13dba6e2b804fd865ca540b7d60",
+    release_date="2026-05-14",
     n_parameters=4919636992,
     n_embedding_parameters=131907584,
+    n_active_parameters_override=433_833_858,
     embed_dim=1024,
     memory_usage_mb=9383.0,
     max_tokens=4096,
@@ -241,5 +265,35 @@ model_meta = ModelMeta(
     use_instructions=None,
     public_training_code=None,
     public_training_data=None,
-    citation=None,
+    citation=QUERIT_CITATION,
+    output_dtypes=OutputDType.BF16,
+)
+
+Querit_Reranker_4B = ModelMeta(
+    loader=QueritWrapper,
+    loader_kwargs={
+        "fp_options": "bfloat16",
+    },
+    name="Querit/Querit-4B",
+    model_type=["cross-encoder"],
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="86b4aeea8f69ad15d9a619e0c6a04f2d01b08222",
+    release_date="2026-06-14",
+    n_parameters=4021782018,
+    n_embedding_parameters=388264960,
+    embed_dim=2560,
+    memory_usage_mb=7671,
+    max_tokens=40960,
+    reference="https://huggingface.co/Querit/Querit-4B",
+    similarity_fn_name=None,
+    training_datasets=querit_reranker_training_data,
+    adapted_from="Qwen/Qwen3-Embedding-4B",
+    license="apache-2.0",
+    framework=["PyTorch"],
+    use_instructions=None,
+    public_training_code=None,
+    public_training_data=None,
+    citation=QUERIT_CITATION,
+    output_dtypes=OutputDType.BF16,
 )

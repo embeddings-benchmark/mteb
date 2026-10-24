@@ -2,12 +2,14 @@ import logging
 import sys
 from collections import defaultdict
 from copy import copy
+from typing import Any
 
 import datasets
 from datasets import Dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
+from mteb.timing import TimingStack
 
 if sys.version_info >= (3, 13):
     from warnings import deprecated
@@ -34,18 +36,31 @@ class AbsTaskReranking(AbsTaskRetrieval):
         For dataformat and other information, see [AbsTaskRetrieval][mteb.abstasks.retrieval.AbsTaskRetrieval].
     """
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(
+        self,
+        num_proc: int | None = None,
+        *,
+        timer: TimingStack | None = None,
+        **kwargs: Any,
+    ) -> None:
         """Load the dataset."""
         if self.data_loaded:
             return
+
+        timer = timer or TimingStack()
 
         if self.metadata.name in OLD_FORMAT_RERANKING_TASKS:
             self.transform_old_dataset_format()
         else:
             # use AbsTaskRetrieval default to load the data
-            return super().load_data(num_proc=num_proc)
+            super().load_data(num_proc=num_proc, timer=timer)
 
-    def _process_example(self, example: dict, split: str, query_idx: int) -> dict:
+    def _process_example(  # noqa: PLR6301
+        self,
+        example: dict[str, Any],
+        split: str,
+        query_idx: int,
+    ) -> dict[str, Any]:
         """Process a single example from the dataset.
 
         Args:
@@ -91,7 +106,9 @@ class AbsTaskReranking(AbsTaskRetrieval):
 
         return example_data
 
-    def transform_old_dataset_format(self, given_dataset: Dataset | None = None):
+    def transform_old_dataset_format(
+        self, given_dataset: Dataset | None = None
+    ) -> None:
         """Transform the old format to the new format using HF datasets mapping. This is a one-time transformation for datasets which are in the old format.
 
         Args:
@@ -118,9 +135,10 @@ class AbsTaskReranking(AbsTaskRetrieval):
                     cur_dataset = cur_dataset[hf_subset]
             elif "name" in self.metadata.dataset:
                 cur_dataset = datasets.load_dataset(**self.metadata.dataset)
-                assert hf_subset == "default", (
-                    f"Only default subset is supported for {self.metadata.name} since `name` is given in the metadata."
-                )
+                if hf_subset != "default":
+                    raise ValueError(
+                        f"Only default subset is supported for {self.metadata.name} since `name` is given in the metadata."
+                    )
             else:
                 cur_dataset = datasets.load_dataset(
                     **self.metadata.dataset, name=hf_subset
@@ -144,8 +162,9 @@ class AbsTaskReranking(AbsTaskRetrieval):
 
                 # first, filter out the ones that have no positive or no negatives
                 enumerated_dataset = enumerated_dataset.filter(
-                    lambda example: len(example["positive"]) > 0
-                    and len(example["negative"]) > 0
+                    lambda example: (
+                        len(example["positive"]) > 0 and len(example["negative"]) > 0
+                    )
                 )
 
                 logger.info(
@@ -154,7 +173,9 @@ class AbsTaskReranking(AbsTaskRetrieval):
 
                 # Map the transformation function over the dataset
                 processed_dataset = enumerated_dataset.map(
-                    lambda example, idx: self._process_example(example, split, idx),
+                    lambda example, idx, split=split: self._process_example(
+                        example, split, idx
+                    ),
                     with_indices=True,
                     remove_columns=enumerated_dataset.column_names,
                 )
@@ -166,7 +187,10 @@ class AbsTaskReranking(AbsTaskRetrieval):
 
                     # Add documents and relevance information
                     for doc_id, doc_text, relevance in zip(
-                        item["doc_ids"], item["doc_texts"], item["relevance_scores"]
+                        item["doc_ids"],
+                        item["doc_texts"],
+                        item["relevance_scores"],
+                        strict=True,
                     ):
                         corpus.append(
                             {

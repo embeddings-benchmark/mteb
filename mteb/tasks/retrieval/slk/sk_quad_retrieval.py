@@ -1,7 +1,12 @@
+import logging
+from typing import Any
+
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+
+logger = logging.getLogger(__name__)
 
 
 class SKQuadRetrieval(AbsTaskRetrieval):
@@ -34,7 +39,7 @@ class SKQuadRetrieval(AbsTaskRetrieval):
         bibtex_citation="",
     )
 
-    def load_data(self, eval_splits=None, **kwargs):
+    def load_data(self, eval_splits: list[str] | None = None, **kwargs: Any) -> None:
         """Load and preprocess datasets for retrieval task."""
         eval_splits = eval_splits or ["test"]
 
@@ -61,6 +66,6 @@ class SKQuadRetrieval(AbsTaskRetrieval):
                     row["corpus-id"]
                 ] = int(row["score"])
 
-            print(
+            logger.info(
                 f"Data Loaded:\n- Corpus size: {len(self.corpus['test'])}\n- Query size: {len(self.queries['test'])}\n- Relevance entries: {len(self.relevant_docs['test'])}"
             )

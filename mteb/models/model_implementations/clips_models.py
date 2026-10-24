@@ -2,7 +2,8 @@ from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
 
 from .e5_models import ME5_TRAINING_DATA, model_prompts
 
@@ -19,7 +20,7 @@ E5_NL_CITATION = """
 """
 
 e5_nl_small = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -44,10 +45,11 @@ e5_nl_small = ModelMeta(
     training_datasets=ME5_TRAINING_DATA,  # mMARCO-NL, HotpotQA-NL, FEVER-NL, and LLM generated data
     adapted_from="intfloat/multilingual-e5-small",
     citation=E5_NL_CITATION,
+    output_dtypes=OutputDType.BF16,
 )
 
 e5_nl_base = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -72,10 +74,11 @@ e5_nl_base = ModelMeta(
     adapted_from="intfloat/multilingual-e5-base",
     training_datasets=ME5_TRAINING_DATA,  # mMARCO-NL, HotpotQA-NL, FEVER-NL, and LLM generated data
     citation=E5_NL_CITATION,
+    output_dtypes=OutputDType.BF16,
 )
 
 e5_nl_large = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),

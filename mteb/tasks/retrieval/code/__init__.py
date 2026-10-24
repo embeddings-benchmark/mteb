@@ -14,6 +14,11 @@ from .code_search_net_retrieval import CodeSearchNetRetrieval
 from .code_trans_ocean_contest_retrieval import CodeTransOceanContestRetrieval
 from .code_trans_ocean_dl_retrieval import CodeTransOceanDLRetrieval
 from .coir_code_search_net_retrieval import COIRCodeSearchNetRetrieval
+from .coreb_retrieval import (
+    CorebC2CRetrieval,
+    CorebC2TRetrieval,
+    CorebT2CRetrieval,
+)
 from .cos_qa_retrieval import CosQARetrieval
 from .ds1000_retrieval import DS1000Retrieval
 from .fresh_stack_retrieval import FreshStackRetrieval
@@ -21,6 +26,7 @@ from .human_eval_retrieval import HumanEvalRetrieval
 from .japanese_code1_retrieval import JapaneseCode1Retrieval
 from .mbpp_retrieval import MBPPRetrieval
 from .stack_overflow_qa_retrieval import StackOverflowQARetrieval
+from .swebench_code_retrieval import SWEbenchCodeRetrieval
 from .synthetic_text2_sql_retrieval import SyntheticText2SQLRetrieval
 from .wiki_sql_retrieval import WikiSQLRetrieval
 
@@ -39,12 +45,16 @@ __all__ = [
     "CodeSearchNetRetrieval",
     "CodeTransOceanContestRetrieval",
     "CodeTransOceanDLRetrieval",
+    "CorebC2CRetrieval",
+    "CorebC2TRetrieval",
+    "CorebT2CRetrieval",
     "CosQARetrieval",
     "DS1000Retrieval",
     "FreshStackRetrieval",
     "HumanEvalRetrieval",
     "JapaneseCode1Retrieval",
     "MBPPRetrieval",
+    "SWEbenchCodeRetrieval",
     "StackOverflowQARetrieval",
     "SyntheticText2SQLRetrieval",
     "WikiSQLRetrieval",

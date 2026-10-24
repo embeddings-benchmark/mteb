@@ -1,10 +1,23 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
+
 from datasets import concatenate_datasets, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
-def _load_data(path: str, splits: str, revision: str | None = None):
+    from datasets import Dataset
+
+    from mteb.types import RelevantDocumentsType
+
+
+def _load_data(
+    path: str, splits: str, revision: str | None = None
+) -> tuple[dict[str, Dataset], dict[str, Dataset], dict[str, RelevantDocumentsType]]:
     corpus = {}
     queries = {}
     relevant_docs = {}
@@ -15,7 +28,9 @@ def _load_data(path: str, splits: str, revision: str | None = None):
     )
     dataset_splits = list(dataset)
 
-    def map_function(split_name):
+    def map_function(
+        split_name: str,
+    ) -> Callable[[dict[str, Any], int], dict[str, Any]]:
         return lambda x, idx: {
             "id": f"corpus-{split_name}-{idx}",
             "text": x["text_corrected"],
@@ -53,7 +68,7 @@ def _load_data(path: str, splits: str, revision: str | None = None):
         split_dataset = split_datasets[split]
 
         queries[split] = split_dataset.map(
-            lambda x, idx: {
+            lambda x, idx, split=split: {
                 "id": f"query-{split}-{idx}",
                 "modality": "image",
             },
@@ -86,8 +101,8 @@ class MemotionI2TRetrieval(AbsTaskRetrieval):
         description="Retrieve captions based on memes.",
         reference="https://aclanthology.org/2020.semeval-1.99/",
         dataset={
-            "path": "mteb/MMSoc_Memotion",
-            "revision": "f77e225ae55c1987b0b8cbf6badd1c10296f5f34",
+            "path": "mteb/MMSoc_Memotion_corrected",
+            "revision": "15bac69b0c917ecd824b8a13827e517b83727878",
         },
         type="Any2AnyRetrieval",
         category="i2t",
@@ -113,7 +128,7 @@ class MemotionI2TRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = _load_data(

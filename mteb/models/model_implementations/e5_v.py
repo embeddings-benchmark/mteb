@@ -2,22 +2,17 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
-from packaging import version
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
-
-E5_V_TRANSFORMERS_VERSION = (
-    "4.44.2"  # Issue 1647: Only works with transformers==4.44.2.
-)
 
 E5_V_CITATION = """@article{jiang2024e5v,
       title={E5-V: Universal Embeddings with Multimodal Large Language Models},
@@ -36,18 +31,11 @@ class E5VModel(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
-        composed_prompt=None,
+        composed_prompt: str | None = None,
         **kwargs: Any,
     ):
-        import transformers
+        import torch
         from transformers import LlavaNextForConditionalGeneration, LlavaNextProcessor
-
-        if version.parse(transformers.__version__) > version.parse(
-            E5_V_TRANSFORMERS_VERSION
-        ):
-            raise ImportError(
-                f"This wrapper only works with transformers=={E5_V_TRANSFORMERS_VERSION}"
-            )
 
         self.model_name = model_name
         self.processor = LlavaNextProcessor.from_pretrained(
@@ -78,7 +66,9 @@ class E5VModel(AbsEncoder):
         texts: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ):
+    ) -> Array:
+        import torch
+
         all_text_embeddings = []
 
         with torch.no_grad():
@@ -104,7 +94,9 @@ class E5VModel(AbsEncoder):
         images: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ):
+    ) -> Array:
+        import torch
+
         all_image_embeddings = []
 
         with torch.no_grad():
@@ -134,6 +126,8 @@ class E5VModel(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         if "image" in inputs.dataset.features and "text" in inputs.dataset.features:
             all_fused_embeddings = []
 
@@ -152,9 +146,9 @@ class E5VModel(AbsEncoder):
                     ).hidden_states[-1][:, -1, :]
                     all_fused_embeddings.append(outputs.cpu())
             return torch.cat(all_fused_embeddings, dim=0)
-        elif "text" in inputs.dataset.features:
+        if "text" in inputs.dataset.features:
             return self.get_text_embeddings(inputs, **kwargs)
-        elif "image" in inputs.dataset.features:
+        if "image" in inputs.dataset.features:
             return self.get_image_embeddings(inputs, **kwargs)
         raise ValueError
 
@@ -166,6 +160,7 @@ e5_v = ModelMeta(
     ),
     name="royokong/e5-v",
     model_type=["dense"],
+    extra_requirements_groups=["e5-v"],
     languages=["eng-Latn"],
     revision="0c1f22679417b3ae925d779442221c40cd1861ab",
     release_date="2024-07-17",
@@ -187,4 +182,5 @@ e5_v = ModelMeta(
         # princeton-nlp/datasets-for-simcse
     ),
     citation=E5_V_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )

@@ -1,18 +1,24 @@
 """Test cases for the ResultCache class in the mteb.cache module."""
 
-import gzip
+import shutil
+import subprocess
 from pathlib import Path
-from typing import cast
-from unittest.mock import Mock, patch
+from typing import Any, cast
+from unittest.mock import patch
 
 import numpy as np
 import pytest
-import requests
 
 import mteb
 from mteb.cache import LoadExperimentEnum, ResultCache
+from mteb.cache.result_cache import (
+    CopyResultsAction,
+    _remote_model_dir,
+)
+from mteb.mocks.mock_tasks import MockRetrievalTask
+from mteb.mocks.mock_tasks.clustering import MockMultilingualClusteringTask
+from mteb.models import ModelMeta
 from mteb.results import TaskResult
-from tests.mock_tasks import MockMultilingualClusteringTask, MockRetrievalTask
 
 test_cache_path = Path(__file__).parent / "mock_mteb_cache"
 
@@ -265,7 +271,23 @@ def test_cache_load_different_subsets():
     assert result2.model_results[0].task_results[0].get_score() == 0.01035
 
 
-def test_load_experiment_results(tmp_path):
+def test_cache_validate_and_filter_without_tasks():
+    cache = ResultCache(cache_path=test_cache_path)
+    model = mteb.get_model_meta("mteb/baseline-random-encoder")
+
+    all_tasks = cache.load_results(models=[model], validate_and_filter=True)
+    task_names = sorted(
+        task_result.task_name for task_result in all_tasks.model_results[0].task_results
+    )
+    assert "BelebeleRetrieval" in task_names
+
+    by_name = cache.load_results(
+        models=[model], tasks=task_names, validate_and_filter=True
+    )
+    assert all_tasks.to_dataframe().equals(by_name.to_dataframe())
+
+
+def test_load_experiment_results(tmp_path: Path):
     """Test that results from an experiment can be loaded correctly."""
     model = mteb.get_model("mteb/baseline-random-encoder")
     task = MockRetrievalTask()
@@ -387,211 +409,543 @@ def test_load_experiment_results(tmp_path):
     assert len(model_meta_res.model_results) == 1
 
 
-# Tests for _download_cached_results_from_branch method
+def test_plain_revision_folder_without_model_meta_derives_from_path(
+    tmp_path: Path,
+) -> None:
+    """A *plain* (non-experiment) revision folder without model_meta.json still resolves.
+
+    `results/<model>/<revision>/` is unambiguous enough to derive
+    model_name/revision from directly; model_meta falls back to the static
+    MODEL_REGISTRY entry for that model_name.
+    """
+    revision_dir = (
+        tmp_path / "results" / "sentence-transformers__all-MiniLM-L6-v2" / "some_rev"
+    )
+    revision_dir.mkdir(parents=True)
+    # No model_meta.json here — only a task result file.
+    (revision_dir / "SomeTask.json").write_text("{}", encoding="utf-8")
+
+    identity = ResultCache._get_model_name_and_revision_from_path(revision_dir)
+    assert identity is not None
+    model_name, revision, experiment_name, meta = identity
+    assert model_name == "sentence-transformers/all-MiniLM-L6-v2"
+    assert revision == "some_rev"
+    assert experiment_name is None
+    assert meta is not None
+    assert meta.name == "sentence-transformers/all-MiniLM-L6-v2"
 
 
-class TestDownloadCachedResultsFromBranch:
-    """Test the _download_cached_results_from_branch method."""
+def test_plain_revision_folder_unregistered_model_has_no_meta(
+    tmp_path: Path,
+) -> None:
+    """A plain revision folder for a model not in MODEL_REGISTRY gets model_meta=None."""
+    revision_dir = tmp_path / "results" / "totally__unregistered-model" / "some_rev"
+    revision_dir.mkdir(parents=True)
+    (revision_dir / "SomeTask.json").write_text("{}", encoding="utf-8")
 
-    @patch("requests.get")
-    def test_successful_download(
-        self, mock_get, tmp_path, mock_benchmark_json, mock_gzipped_content
-    ):
-        """Test successful download and decompression, including parent directory creation."""
-        cache = ResultCache(cache_path=tmp_path)
+    identity = ResultCache._get_model_name_and_revision_from_path(revision_dir)
+    assert identity is not None
+    model_name, revision, experiment_name, meta = identity
+    assert model_name == "totally/unregistered-model"
+    assert meta is None
 
-        mock_response = Mock()
-        mock_response.status_code = 200
-        mock_response.headers = {"content-type": "application/gzip"}
-        mock_response.content = mock_gzipped_content(mock_benchmark_json)
-        mock_get.return_value = mock_response
 
-        # Test basic download
-        output_path = tmp_path / "test_cached_results.json"
-        result_path = cache._download_cached_results_from_branch(
-            output_path=output_path
+def _setup_fake_remote(tmp_path: Path) -> tuple[Path, Path]:
+    """Set up a fake remote git repository with initial commit."""
+    cache_path = tmp_path / "cache"
+    remote_path = cache_path / "remote"
+    remote_path.mkdir(parents=True)
+
+    # Initialize with explicit default branch to 'main' to avoids issues with git configurations that default to 'main' already
+    subprocess.run(
+        ["git", "init", "-b", "main"],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+    )
+    subprocess.run(
+        ["git", "config", "user.email", "test@mteb.com"],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+    )
+    subprocess.run(
+        ["git", "config", "user.name", "MTEB Test"],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+    )
+    subprocess.run(
+        [
+            "git",
+            "remote",
+            "add",
+            "origin",
+            "https://github.com/embeddings-benchmark/results",
+        ],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+    )
+
+    (remote_path / "README.md").write_text("# MTEB Results\n", encoding="utf-8")
+    subprocess.run(
+        ["git", "add", "README.md"],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+    )
+    subprocess.run(
+        ["git", "commit", "-m", "Initial commit"],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+    )
+
+    return cache_path, remote_path
+
+
+def _setup_test_model_results(cache_path: Path) -> tuple[ModelMeta, list[str]]:
+    """Generate test results by evaluating the baseline random encoder on a mock task."""
+    cache = ResultCache(cache_path=cache_path)
+    task = MockRetrievalTask()
+    model = mteb.get_model("mteb/baseline-random-encoder")
+
+    mteb.evaluate(model, task, cache=cache)
+
+    model_meta = model.mteb_model_meta
+    model_name_path = model_meta.model_name_as_path()
+    revision = cast("str", model_meta.revision)
+    model_dir = cache.cache_path / "results" / model_name_path / revision
+    result_files = [
+        result_file.name
+        for result_file in model_dir.glob("*.json")
+        if result_file.name != "model_meta.json"
+    ]
+    return model_meta, result_files
+
+
+def test_submit_results_with_fake_remote(tmp_path: Path):
+    """Comprehensive test for submit_results workflow: verifies file copying, commit creation, branch restoration, and pre-flight checks."""
+    cache_path, remote_path = _setup_fake_remote(tmp_path)
+    test_model, result_files_copied = _setup_test_model_results(cache_path)
+
+    revision = cast("str", test_model.revision)
+    cache = ResultCache(cache_path=cache_path)
+
+    # Avoid fetching from the remote so the test remains hermetic in CI.
+    with patch.object(cache, "download_from_remote", return_value=None):
+        # Verify whether pre-flight checks detect uncommitted changes (error path)
+        unrelated_file = remote_path / "unrelated_staged_file.txt"
+        unrelated_file.write_text(
+            "This should not be committed with results", encoding="utf-8"
         )
 
-        assert result_path == output_path
-        assert result_path.exists()
-        assert result_path.read_text(encoding="utf-8") == mock_benchmark_json
-        mock_response.raise_for_status.assert_called_once()
-
-        # Test parent directory creation
-        nested_output_path = tmp_path / "nested" / "dir" / "test_cache.json"
-        nested_result_path = cache._download_cached_results_from_branch(
-            output_path=nested_output_path
+        subprocess.run(
+            ["git", "add", "unrelated_staged_file.txt"],
+            cwd=remote_path,
+            check=True,
+            capture_output=True,
         )
 
-        assert nested_result_path.exists()
-        assert nested_result_path.read_text(encoding="utf-8") == mock_benchmark_json
+        with pytest.raises(RuntimeError, match="uncommitted changes"):
+            cache.submit_results(models=[test_model], create_pr=False)
 
-    @patch("requests.get")
-    def test_file_too_large(self, mock_get, tmp_path):
-        """Test that oversized files raise ValueError."""
-        cache = ResultCache(cache_path=tmp_path)
+        subprocess.run(
+            ["git", "reset", "HEAD", "unrelated_staged_file.txt"],
+            cwd=remote_path,
+            check=True,
+            capture_output=True,
+        )
+        unrelated_file.unlink()
 
-        # Create gzipped content that's 51MB (larger than the limit)
-        # We create the actual bytes directly rather than compressing,
-        # since we're testing the downloaded size check
-        mock_response = Mock()
-        mock_response.status_code = 200
-        mock_response.headers = {"content-type": "application/gzip"}
-        mock_response.content = b"x" * (51 * 1024 * 1024)  # 51MB of gzipped data
-        mock_get.return_value = mock_response
+        # Verify successful submission workflow
+        result = subprocess.run(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            check=False,
+            cwd=remote_path,
+            capture_output=True,
+            text=True,
+        )
+        original_branch = result.stdout.strip()
+        assert original_branch == "main"
 
-        with pytest.raises(ValueError, match="Downloaded file too large"):
-            cache._download_cached_results_from_branch(max_size_mb=50)
+        result = cache.submit_results(models=[test_model], create_pr=False)
 
-    @pytest.mark.parametrize(
-        "error_type,exception_class",
-        [
-            ("timeout", requests.exceptions.Timeout),
-            ("connection", requests.exceptions.ConnectionError),
-            ("http_404", requests.exceptions.HTTPError),
-            ("invalid_gzip", gzip.BadGzipFile),
-        ],
+        assert result["status"] == "ready_for_submission"
+        assert result["result_count"] == len(result_files_copied)
+        commit_sha = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            check=True,
+            cwd=remote_path,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        assert commit_sha
+        check = subprocess.run(
+            ["git", "cat-file", "-t", commit_sha],
+            check=False,
+            cwd=remote_path,
+            capture_output=True,
+            text=True,
+        )
+        assert check.returncode == 0
+        assert check.stdout.strip() == "commit"
+
+        for filename in result_files_copied:
+            check = subprocess.run(
+                ["git", "ls-tree", "-r", "--name-only", commit_sha],
+                check=False,
+                cwd=remote_path,
+                capture_output=True,
+                text=True,
+            )
+            assert check.returncode == 0
+            expected_path = f"{test_model.model_name_as_path()}/{revision}/{filename}"
+            assert expected_path in check.stdout, (
+                f"File {expected_path} not found in commit {commit_sha}"
+            )
+
+        expected_run_settings = (
+            f"{test_model.model_name_as_path()}/{revision}/run_settings.jsonl"
+        )
+        assert expected_run_settings in check.stdout, (
+            f"File {expected_run_settings} not found in commit {commit_sha}"
+        )
+
+        # For manual submission, verify we're on the submission branch with the commit
+        result_after = subprocess.run(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            check=False,
+            cwd=remote_path,
+            capture_output=True,
+            text=True,
+        )
+        current_branch = result_after.stdout.strip()
+        assert current_branch.startswith("mteb-results-"), (
+            f"Should be on submission branch but got '{current_branch}'"
+        )
+
+
+def test_submit_results_only_given_tasks(tmp_path: Path):
+    cache_path, remote_path = _setup_fake_remote(tmp_path)
+    test_model, _ = _setup_test_model_results(cache_path)
+    other_task = MockMultilingualClusteringTask()
+    mteb.evaluate(
+        mteb.get_model("mteb/baseline-random-encoder"),
+        other_task,
+        cache=ResultCache(cache_path=cache_path),
     )
-    @patch("requests.get")
-    def test_error_handling_consolidated(
-        self, mock_get, tmp_path, error_type, exception_class
-    ):
-        """Test various error conditions in a consolidated manner."""
-        cache = ResultCache(cache_path=tmp_path)
+    cache = ResultCache(cache_path=cache_path)
 
-        if error_type == "timeout":
-            mock_get.side_effect = requests.exceptions.Timeout("Request timed out")
-        elif error_type == "connection":
-            mock_get.side_effect = requests.exceptions.ConnectionError(
-                "Connection failed"
-            )
-        elif error_type == "http_404":
-            mock_response = Mock()
-            mock_response.status_code = 404
-            mock_response.raise_for_status.side_effect = requests.exceptions.HTTPError(
-                "404 Not Found"
-            )
-            mock_get.return_value = mock_response
-        elif error_type == "invalid_gzip":
-            mock_response = Mock()
-            mock_response.status_code = 200
-            mock_response.headers = {"content-type": "application/gzip"}
-            mock_response.content = b"not gzipped data"
-            mock_get.return_value = mock_response
+    with patch.object(cache, "download_from_remote", return_value=None):
+        result = cache.submit_results(
+            models=[test_model], tasks=[MockRetrievalTask()], create_pr=False
+        )
 
-        with pytest.raises(exception_class):
-            cache._download_cached_results_from_branch(timeout=30)
+    assert result["result_count"] == 1
+    committed = _committed_files(remote_path)
+    assert f"{MockRetrievalTask.metadata.name}.json" in committed
+    assert f"{other_task.metadata.name}.json" not in committed
 
-    @patch("requests.get")
-    def test_default_output_path(
-        self, mock_get, tmp_path, mock_benchmark_json, mock_gzipped_content
-    ):
-        """Test that default output path is {cache_path}/leaderboard/__cached_results.json when none provided."""
-        cache = ResultCache(cache_path=tmp_path)
 
-        mock_response = Mock()
-        mock_response.status_code = 200
-        mock_response.headers = {"content-type": "application/gzip"}
-        mock_response.content = mock_gzipped_content(mock_benchmark_json)
-        mock_get.return_value = mock_response
-
-        result_path = cache._download_cached_results_from_branch()
-
-        # Default path should be {cache_path}/leaderboard/__cached_results.json
-        expected_path = tmp_path / "leaderboard" / "__cached_results.json"
-        assert result_path == expected_path
-        assert result_path.exists()
-
-    @pytest.mark.parametrize(
-        "content_type,should_raise_exception",
-        [
-            ("application/gzip", False),  # Expected type
-            ("text/html", True),  # Unexpected type - should raise exception
-            ("", False),  # Empty content-type should not raise exception
-        ],
+def _commit_all(remote_path: Path, message: str) -> None:
+    subprocess.run(["git", "add", "-A"], cwd=remote_path, check=True)
+    subprocess.run(
+        ["git", "commit", "-m", message],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
     )
-    @patch("requests.get")
-    def test_content_type_handling(
-        self,
-        mock_get,
-        tmp_path,
-        content_type,
-        should_raise_exception,
-        mock_benchmark_json,
-        mock_gzipped_content,
-    ):
-        """Test various content-type header scenarios."""
-        cache = ResultCache(cache_path=tmp_path)
 
-        mock_response = Mock()
-        mock_response.status_code = 200
-        mock_response.headers = {"content-type": content_type}
-        mock_response.content = mock_gzipped_content(mock_benchmark_json)
-        mock_get.return_value = mock_response
 
-        output_path = tmp_path / "test.json"
-
-        if should_raise_exception:
-            with pytest.raises(Exception, match="Unexpected content-type"):
-                cache._download_cached_results_from_branch(output_path=output_path)
-        else:
-            result_path = cache._download_cached_results_from_branch(
-                output_path=output_path
-            )
-            assert result_path.exists()
-            assert result_path.read_text(encoding="utf-8") == mock_benchmark_json
-
-    @pytest.mark.parametrize(
-        "file_size,max_size_mb,should_fail",
-        [
-            (1024, 1, False),  # Small file - OK
-            (1024 * 1024, 1, False),  # At limit - OK
-            (51 * 1024 * 1024, 50, True),  # Over limit - Fail
-        ],
+def test_submit_results_skips_submitted_results(tmp_path: Path):
+    """Results already in the results repository are not submitted again"""
+    cache_path, remote_path = _setup_fake_remote(tmp_path)
+    test_model, _ = _setup_test_model_results(cache_path)
+    cache = ResultCache(cache_path=cache_path)
+    remote_dir = _remote_model_dir(cache.remote_results_path, test_model)
+    shutil.copytree(
+        cache.cache_path
+        / "results"
+        / remote_dir.relative_to(cache.remote_results_path),
+        remote_dir,
     )
-    @patch("requests.get")
-    def test_file_size_validation(
-        self,
-        mock_get,
-        tmp_path,
-        file_size,
-        max_size_mb,
-        should_fail,
-        mock_gzipped_content,
+    _commit_all(remote_path, "Add results")
+
+    with patch.object(cache, "download_from_remote", return_value=None):
+        result = cache.submit_results(models=[test_model], create_pr=False)
+
+    assert result["status"] == "no_changes"
+
+
+def test_submit_results_skips_results_of_other_dataset_revision(
+    tmp_path: Path, caplog: pytest.LogCaptureFixture
+):
+    cache_path, remote_path = _setup_fake_remote(tmp_path)
+    test_model, _ = _setup_test_model_results(cache_path)
+    cache = ResultCache(cache_path=cache_path)
+    task_name = MockRetrievalTask.metadata.name
+    local_file = (
+        cache.cache_path
+        / "results"
+        / test_model.model_name_as_path()
+        / cast("str", test_model.revision)
+        / f"{task_name}.json"
+    )
+
+    remote_result = TaskResult.from_disk(local_file)
+    remote_result.dataset_revision = "other-revision"
+    remote_result.scores = {}
+    remote_dir = _remote_model_dir(cache.remote_results_path, test_model)
+    remote_dir.mkdir(parents=True)
+    remote_result.to_disk(remote_dir / f"{task_name}.json")
+    _commit_all(remote_path, "Add results of another dataset revision")
+
+    with patch.object(cache, "download_from_remote", return_value=None):
+        result = cache.submit_results(models=[test_model], create_pr=False)
+
+    assert result["status"] == "no_changes"
+    assert "other-revision" in caplog.text
+
+
+def test_submit_results_message(tmp_path: Path):
+    cache_path, remote_path = _setup_fake_remote(tmp_path)
+    test_model, _ = _setup_test_model_results(cache_path)
+    cache = ResultCache(cache_path=cache_path)
+
+    with (
+        patch.object(cache, "download_from_remote", return_value=None),
+        patch("mteb.cache.result_cache.check_pr_requirements"),
+        patch(
+            "mteb.cache.result_cache.handle_pr_creation_with_cleanup"
+        ) as mock_create_pr,
     ):
-        """Test file size validation with various sizes.
+        cache.submit_results(
+            models=[test_model], create_pr=True, message="Add mock results"
+        )
 
-        Note: file_size represents the size of the gzipped (downloaded) content,
-        not the uncompressed size, since validation happens on download.
-        """
-        cache = ResultCache(cache_path=tmp_path)
+    commit_title = subprocess.run(
+        ["git", "log", "-1", "--format=%s"],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    assert commit_title == "Add mock results"
+    assert mock_create_pr.call_args.kwargs["pr_title"] == "Add mock results"
 
-        # For size validation, we care about the downloaded (gzipped) size
-        # So we mock the response.content directly with the desired byte size
-        # But we still need valid gzip content for decompression
-        if should_fail:
-            # For failure cases, just use raw bytes (will fail on decompression but that's after size check)
-            mock_response = Mock()
-            mock_response.status_code = 200
-            mock_response.headers = {"content-type": "application/gzip"}
-            mock_response.content = b"x" * file_size
-            mock_get.return_value = mock_response
 
-            with pytest.raises(ValueError, match="Downloaded file too large"):
-                cache._download_cached_results_from_branch(max_size_mb=max_size_mb)
-        else:
-            # For success cases, use valid gzipped content
-            # Create small content and gzip it
-            content = "x" * min(file_size, 1000)  # Keep content small for faster tests
-            gzipped = mock_gzipped_content(content)
+def test_submit_results_create_pr_checks_requirements_first(tmp_path: Path):
+    """A missing PR setup fails before the results repository is downloaded"""
+    cache = ResultCache(cache_path=tmp_path)
 
-            mock_response = Mock()
-            mock_response.status_code = 200
-            mock_response.headers = {"content-type": "application/gzip"}
-            mock_response.content = gzipped
-            mock_get.return_value = mock_response
+    with (
+        patch(
+            "mteb._reversible_workflow.git_utils._is_package_available",
+            return_value=False,
+        ),
+        patch.object(cache, "download_from_remote") as mock_download,
+        pytest.raises(ImportError, match="PyGithub"),
+    ):
+        cache.submit_results(create_pr=True)
 
-            result_path = cache._download_cached_results_from_branch(
-                max_size_mb=max_size_mb
-            )
-            assert result_path.exists()
+    mock_download.assert_not_called()
+
+
+def test_copy_results_action_reverts_partial_copy_on_failure(tmp_path: Path):
+    """CopyResultsAction is not undone by the workflow when it fails itself, so it has to revert its own copies"""
+    source_dir = tmp_path / "source"
+    source_dir.mkdir()
+    copied, unmergeable = source_dir / "A.json", source_dir / "B.json"
+    copied.write_text("{}", encoding="utf-8")
+    unmergeable.write_text("{}", encoding="utf-8")
+
+    model_meta = ModelMeta.create_empty(
+        overwrites={"name": "org/model", "revision": "1"}
+    )
+    dest_dir = tmp_path / "remote" / model_meta.model_name_as_path() / "1"
+    dest_dir.mkdir(parents=True)
+    (dest_dir / "B.json").write_text("not a task result", encoding="utf-8")
+
+    action = CopyResultsAction({model_meta: [copied, unmergeable]}, tmp_path / "remote")
+    with pytest.raises(Exception):  # noqa: B017, PT011
+        action.do()
+
+    assert not (dest_dir / "A.json").exists()
+    assert (dest_dir / "B.json").read_text(encoding="utf-8") == "not a task result"
+
+
+def test_submit_results(tmp_path: Path):
+    cache_path, remote_path = _setup_fake_remote(tmp_path)
+    test_model, result_files_copied = _setup_test_model_results(cache_path)
+
+    cache = ResultCache(cache_path=cache_path)
+
+    with patch.object(cache, "download_from_remote", return_value=None):
+        initial_result = cache.submit_results(models=[test_model], create_pr=False)
+        assert initial_result["status"] == "ready_for_submission"
+        assert initial_result["result_count"] > 0
+
+        submission_branch = subprocess.run(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            cwd=remote_path,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+
+        commit_sha = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            check=True,
+            cwd=remote_path,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        check = subprocess.run(
+            ["git", "ls-tree", "-r", "--name-only", commit_sha],
+            check=True,
+            cwd=remote_path,
+            capture_output=True,
+            text=True,
+        )
+        expected_run_settings = f"{test_model.model_name_as_path()}/{test_model.revision}/run_settings.jsonl"
+        assert expected_run_settings in check.stdout, (
+            f"File {expected_run_settings} not found in commit {commit_sha}"
+        )
+
+        # Merge submission branch back to main to simulate files being integrated
+        subprocess.run(
+            ["git", "checkout", "main"],
+            cwd=remote_path,
+            check=True,
+            capture_output=True,
+        )
+        subprocess.run(
+            ["git", "merge", submission_branch, "-m", "Integrate results"],
+            cwd=remote_path,
+            check=True,
+            capture_output=True,
+        )
+
+
+def test_pr_creation_failure_cleans_up_branch(tmp_path: Path):
+    """Verify that failed PR creation cleans up temporary branch and restores original branch."""
+    cache_path, remote_path = _setup_fake_remote(tmp_path)
+    test_model, _ = _setup_test_model_results(cache_path)
+
+    cache = ResultCache(cache_path=cache_path)
+    result = subprocess.run(
+        ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+        check=False,
+        cwd=remote_path,
+        capture_output=True,
+        text=True,
+    )
+    original_branch = result.stdout.strip()
+
+    # Avoid fetching from the remote so the test reliably reaches PR creation.
+    # Mock _create_pull_request to fail.
+    with (
+        patch.object(cache, "download_from_remote", return_value=None),
+        patch("mteb.cache.result_cache.check_pr_requirements"),
+        patch(
+            "mteb._reversible_workflow.git_utils.create_pull_request",
+            side_effect=Exception("GitHub API error"),
+        ),
+        pytest.raises(Exception, match="GitHub API error"),
+    ):
+        cache.submit_results(models=[test_model], create_pr=True)
+
+    # Verify user is back on original branch
+    result = subprocess.run(
+        ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+        check=False,
+        cwd=remote_path,
+        capture_output=True,
+        text=True,
+    )
+    current_branch = result.stdout.strip()
+    assert current_branch == original_branch, (
+        f"Should be on original branch '{original_branch}' but got '{current_branch}'"
+    )
+
+    # Verify temporary branch was deleted (should not appear in branch list)
+    result = subprocess.run(
+        ["git", "branch"],
+        check=False,
+        cwd=remote_path,
+        capture_output=True,
+        text=True,
+    )
+    # Strip whitespace and the leading * (for current branch indicator)
+    branches = [
+        b.strip().lstrip("*").strip() for b in result.stdout.split("\n") if b.strip()
+    ]
+    # Should only have 'main' branch, no temporary branches
+    assert all(not b.startswith("mteb-results-") for b in branches), (
+        f"Temporary branch should be deleted but found: {branches}"
+    )
+
+
+def _setup_experiment_model_results(
+    cache_path: Path, **kwargs: Any
+) -> tuple[ModelMeta, list[str]]:
+    """Generate experiment results by evaluating the baseline random encoder with experiment kwargs."""
+    cache = ResultCache(cache_path=cache_path)
+    task = MockRetrievalTask()
+    model = mteb.get_model("mteb/baseline-random-encoder", **kwargs)
+    mteb.evaluate(model, task, cache=cache)
+
+    model_meta = model.mteb_model_meta
+    revision = cast("str", model_meta.revision)
+    experiment_name = cast("str", model_meta.experiment_name)
+    model_dir = (
+        cache.cache_path
+        / "results"
+        / model_meta.model_name_as_path()
+        / revision
+        / "experiments"
+        / experiment_name
+    )
+    result_files = [
+        f.name for f in model_dir.glob("*.json") if f.name != "model_meta.json"
+    ]
+    return model_meta, result_files
+
+
+def _committed_files(remote_path: Path) -> str:
+    commit_sha = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    return subprocess.run(
+        ["git", "ls-tree", "-r", "--name-only", commit_sha],
+        cwd=remote_path,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout
+
+
+def test_submit_results_experiments_only(tmp_path: Path):
+    """Submit results for a model that only has experiment results (no base results)."""
+    cache_path, remote_path = _setup_fake_remote(tmp_path)
+    test_model, result_files = _setup_experiment_model_results(cache_path, a="test")
+    revision = cast("str", test_model.revision)
+    experiment_name = cast("str", test_model.experiment_name)
+    cache = ResultCache(cache_path=cache_path)
+
+    with patch.object(cache, "download_from_remote", return_value=None):
+        result = cache.submit_results(models=[test_model], create_pr=False)
+
+    assert result["status"] == "ready_for_submission"
+    assert result["result_count"] == len(result_files)
+
+    committed = _committed_files(remote_path)
+    for filename in result_files:
+        expected = f"{test_model.model_name_as_path()}/{revision}/experiments/{experiment_name}/{filename}"
+        assert expected in committed, f"{expected} not found in commit"

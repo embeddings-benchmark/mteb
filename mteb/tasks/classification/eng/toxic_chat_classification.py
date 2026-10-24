@@ -45,7 +45,7 @@ class ToxicChatClassification(AbsTaskClassification):
         num_proc: int | None = None,
     ):
         keep_cols = ["user_input", "toxicity"]
-        rename_dict = dict(zip(keep_cols, ["text", "label"]))
+        rename_dict = dict(zip(keep_cols, ["text", "label"], strict=True))
         remove_cols = [
             col
             for col in self.dataset[_EVAL_SPLITS[0]].column_names

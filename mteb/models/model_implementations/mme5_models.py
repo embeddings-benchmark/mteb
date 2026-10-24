@@ -3,11 +3,12 @@ from mteb.models.model_meta import (
     ScoringFunction,
 )
 from mteb.models.sentence_transformer_wrapper import (
-    SentenceTransformerMultimodalEncoderWrapper,
+    SentenceTransformerEncoderWrapper,
 )
+from mteb.types import OutputDType
 
 mme5_mllama = ModelMeta(
-    loader=SentenceTransformerMultimodalEncoderWrapper,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs={
         "trust_remote_code": True,
     },
@@ -17,7 +18,7 @@ mme5_mllama = ModelMeta(
     release_date="2025-02-12",
     languages=["eng-Latn"],
     n_parameters=10_600_000_000,
-    n_embedding_parameters=None,  # 10.6B
+    n_embedding_parameters=525336576,
     memory_usage_mb=20300,
     max_tokens=128_000,
     embed_dim=4096,
@@ -40,4 +41,5 @@ mme5_mllama = ModelMeta(
   year={2025}
 }
 """,
+    output_dtypes=OutputDType.BF16,
 )

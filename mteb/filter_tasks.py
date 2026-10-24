@@ -6,10 +6,7 @@ import logging
 from typing import TYPE_CHECKING, overload
 
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
-from mteb.languages import (
-    ISO_TO_LANGUAGE,
-    ISO_TO_SCRIPT,
-)
+from mteb.languages import LanguageScripts
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Sequence
@@ -21,20 +18,6 @@ if TYPE_CHECKING:
     from mteb.types import Modalities
 
 logger = logging.getLogger(__name__)
-
-
-def _check_is_valid_script(script: str) -> None:
-    if script not in ISO_TO_SCRIPT:
-        raise ValueError(
-            f"Invalid script code: '{script}', you can see valid ISO 15924 codes using `from mteb.languages import ISO_TO_SCRIPT`."
-        )
-
-
-def _check_is_valid_language(lang: str) -> None:
-    if lang not in ISO_TO_LANGUAGE:
-        raise ValueError(
-            f"Invalid language code: '{lang}', you can see valid ISO 639-3 codes using `from mteb.languages import ISO_TO_LANGUAGE`."
-        )
 
 
 @overload
@@ -51,6 +34,7 @@ def filter_tasks(
     exclude_superseded: bool = False,
     exclude_aggregate: bool = False,
     exclude_private: bool = False,
+    exclude_beta: bool = False,
 ) -> list[AbsTask]: ...
 
 
@@ -68,10 +52,11 @@ def filter_tasks(
     exclude_superseded: bool = False,
     exclude_aggregate: bool = False,
     exclude_private: bool = False,
+    exclude_beta: bool = False,
 ) -> list[type[AbsTask]]: ...
 
 
-def filter_tasks(
+def filter_tasks(  # noqa: PLR0913
     tasks: Iterable[AbsTask] | Iterable[type[AbsTask]],
     *,
     languages: Sequence[str] | None = None,
@@ -84,6 +69,7 @@ def filter_tasks(
     exclude_superseded: bool = False,
     exclude_aggregate: bool = False,
     exclude_private: bool = False,
+    exclude_beta: bool = False,
 ) -> list[AbsTask] | list[type[AbsTask]]:
     """Filter tasks based on the specified criteria.
 
@@ -103,6 +89,7 @@ def filter_tasks(
             If False, keep tasks if _any_ of the task's modalities match the filter modalities.
         exclude_aggregate: If True, exclude aggregate tasks. If False, both aggregate and non-aggregate tasks are returned.
         exclude_private: If True (default), exclude private/closed datasets (is_public=False). If False, include both public and private datasets.
+        exclude_beta: If True (default), exclude datasets that are in beta (is_beta=True). If False, include both beta and non-beta datasets.
 
     Returns:
         A list of tasks objects which pass all of the filters.
@@ -117,19 +104,19 @@ def filter_tasks(
     """
     langs_to_keep = None
     if languages:
-        [_check_is_valid_language(lang) for lang in languages]  # type: ignore[func-returns-value]
-        langs_to_keep = set(languages)
+        langs_to_keep = LanguageScripts.from_languages_and_scripts(languages)
 
     script_to_keep = None
     if script:
-        [_check_is_valid_script(s) for s in script]  # type: ignore[func-returns-value]
-        script_to_keep = set(script)
+        script_to_keep = LanguageScripts.from_languages_and_scripts(
+            scripts=script
+        ).scripts
 
     domains_to_keep = None
     if domains:
         domains_to_keep = set(domains)
 
-    def _convert_to_set(domain: list[TaskDomain] | None) -> set:
+    def _convert_to_set(domain: list[TaskDomain] | None) -> set[TaskDomain]:
         return set(domain) if domain is not None else set()
 
     task_types_to_keep = None
@@ -149,7 +136,9 @@ def filter_tasks(
         # For metadata and superseded_by, we can access them directly
         metadata = t.metadata
 
-        if langs_to_keep and not langs_to_keep.intersection(metadata.languages):
+        if langs_to_keep and not any(
+            langs_to_keep.contains_language(code) for code in metadata.bcp47_codes
+        ):
             continue
         if script_to_keep and not script_to_keep.intersection(metadata.scripts):
             continue
@@ -165,9 +154,8 @@ def filter_tasks(
             if exclusive_modality_filter:
                 if set(metadata.modalities) != modalities_to_keep:
                     continue
-            else:
-                if not modalities_to_keep.intersection(metadata.modalities):
-                    continue
+            elif not modalities_to_keep.intersection(metadata.modalities):
+                continue
         if exclude_superseded and metadata.superseded_by is not None:
             continue
         is_aggregate = (
@@ -179,7 +167,8 @@ def filter_tasks(
             continue
         if exclude_private and not metadata.is_public:
             continue
-
+        if exclude_beta and metadata.is_beta:
+            continue
         _tasks.append(t)
 
     return _tasks  # type: ignore[return-value]  # type checker cannot infer the overload return type

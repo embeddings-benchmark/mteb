@@ -6,10 +6,8 @@ import os
 import time
 from typing import TYPE_CHECKING, Any, Literal, get_args
 
-import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_image_dependencies, requires_package
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_implementations.cohere_models import (
@@ -18,11 +16,14 @@ from mteb.models.model_implementations.cohere_models import (
     retry_with_rate_limit,
 )
 from mteb.models.model_meta import ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
 
 
@@ -30,6 +31,8 @@ def _post_process_embeddings(
     embeddings_array: torch.Tensor, embedding_type: str
 ) -> torch.Tensor:
     """Post-process embeddings based on type (similar to voyage_models.py)"""
+    import torch
+
     if embedding_type == "binary":
         # Unpack bit-packed embeddings: each byte contains 8 embedding values
         unpacked_embeddings = []
@@ -44,12 +47,11 @@ def _post_process_embeddings(
                     unpacked.append(1.0 if bit_val else -1.0)
             unpacked_embeddings.append(unpacked)
         return torch.tensor(unpacked_embeddings, dtype=torch.float32)
-    elif embedding_type in ["int8", "uint8"]:
+    if embedding_type in ["int8", "uint8"]:  # noqa: PLR6201
         # Convert int8/uint8 embeddings to float32
         return embeddings_array.float()
-    else:
-        # For float and other types, return as-is
-        return embeddings_array
+    # For float and other types, return as-is
+    return embeddings_array
 
 
 all_languages = [
@@ -173,17 +175,22 @@ EmbeddingType = Literal[
     "binary",
 ]
 
+OUTPUT_TYPES = [
+    OutputDType.INT8,
+    OutputDType.UINT8,
+    OutputDType.BINARY,
+]
 
-def cohere_v_loader(model_name, **kwargs):
-    requires_package(
-        cohere_v_loader, "cohere", model_name, "pip install 'mteb[cohere]'"
-    )
+
+def cohere_v_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
     import cohere
+    import torch
 
     class CohereMultiModalModelWrapper(AbsEncoder):
         def __init__(
             self,
             model_name: str,
+            model_api_name: str,
             embedding_type: EmbeddingType = "float",
             output_dimension: int | None = None,
             **kwargs: Any,
@@ -194,10 +201,10 @@ def cohere_v_loader(model_name, **kwargs):
             Cohere currently supports 40 images/min, thus time.sleep(1.5) is applied after each image.
             Remove or adjust this after Cohere API changes capacity.
             """
-            requires_image_dependencies()
+
             from torchvision import transforms
 
-            self.model_name = model_name
+            self.model_name = model_api_name
             if embedding_type not in get_args(EmbeddingType):
                 raise ValueError(
                     f"Embedding type {embedding_type} not allowed. Choose from {get_args(EmbeddingType)}"
@@ -210,7 +217,7 @@ def cohere_v_loader(model_name, **kwargs):
             self.transform = transforms.Compose([transforms.PILToTensor()])
 
         @retry_with_rate_limit(max_retries=5, max_rpm=300)
-        def _embed_func(self, **kwargs):
+        def _embed_func(self, **kwargs: Any) -> cohere.EmbedByTypeResponse:
             """Call Cohere embed API with retry and rate limiting."""
             return self.client.embed(**kwargs)
 
@@ -219,12 +226,16 @@ def cohere_v_loader(model_name, **kwargs):
             inputs: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_text_embeddings = []
             index = 0
             texts = [text for batch in inputs for text in batch["text"]]
 
-            pbar = tqdm(total=len(texts), desc="Encoding text sentences")
+            pbar = tqdm(
+                total=len(texts),
+                desc="Encoding text sentences",
+                disable=not show_progress_bar,
+            )
 
             while index < len(texts):
                 # Build batch respecting both count and token limits
@@ -252,10 +263,6 @@ def cohere_v_loader(model_name, **kwargs):
                     batch.append(texts[index])
                     index += 1
 
-                # Embed the batch with retry logic handled by client
-            for batch in tqdm(
-                texts, disable=not show_progress_bar, desc="Text Encoding"
-            ):
                 embed_kwargs = {
                     "texts": batch,
                     "model": self.model_name,
@@ -298,7 +305,7 @@ def cohere_v_loader(model_name, **kwargs):
             images: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_image_embeddings = []
             images = [image for batch in images for image in batch["images"]]
 
@@ -308,7 +315,7 @@ def cohere_v_loader(model_name, **kwargs):
                 for image in batch:
                     # cohere only supports 1 image per call
                     buffered = io.BytesIO()
-                    image = self.transform(image)
+                    image = self.transform(image)  # noqa: PLW2901
                     image.save(buffered, format=self.image_format)
                     image_bytes = buffered.getvalue()
                     stringified_buffer = base64.b64encode(image_bytes).decode("utf-8")
@@ -323,23 +330,23 @@ def cohere_v_loader(model_name, **kwargs):
                     if self.output_dimension is not None:
                         embed_kwargs["output_dimension"] = self.output_dimension
 
-                        response = self._embed_func(**embed_kwargs)
+                    response = self._embed_func(**embed_kwargs)
 
-                        # Get embeddings based on requested type
-                        if self.embedding_type == "float":
-                            embeddings = response.embeddings.float
-                        elif self.embedding_type == "int8":
-                            embeddings = response.embeddings.int8
-                        elif self.embedding_type == "uint8":
-                            embeddings = response.embeddings.uint8
-                        elif self.embedding_type == "binary":
-                            embeddings = response.embeddings.binary
-                        else:
-                            raise ValueError(
-                                f"Embedding type {self.embedding_type} not allowed"
-                            )
-                        all_image_embeddings.append(torch.tensor(embeddings))
-                        time.sleep(1.5)
+                    # Get embeddings based on requested type
+                    if self.embedding_type == "float":
+                        embeddings = response.embeddings.float
+                    elif self.embedding_type == "int8":
+                        embeddings = response.embeddings.int8
+                    elif self.embedding_type == "uint8":
+                        embeddings = response.embeddings.uint8
+                    elif self.embedding_type == "binary":
+                        embeddings = response.embeddings.binary
+                    else:
+                        raise ValueError(
+                            f"Embedding type {self.embedding_type} not allowed"
+                        )
+                    all_image_embeddings.append(torch.tensor(embeddings))
+                    time.sleep(1.5)
             all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
 
             # Post-process embeddings based on type
@@ -373,9 +380,9 @@ def cohere_v_loader(model_name, **kwargs):
                     )
                 fused_embeddings = text_embeddings + image_embeddings
                 return fused_embeddings
-            elif text_embeddings is not None:
+            if text_embeddings is not None:
                 return text_embeddings
-            elif image_embeddings is not None:
+            if image_embeddings is not None:
                 return image_embeddings
             raise ValueError
 
@@ -384,7 +391,7 @@ def cohere_v_loader(model_name, **kwargs):
 
 cohere_mult_3 = ModelMeta(
     loader=cohere_v_loader,
-    loader_kwargs={"model_name": "embed-multilingual-v3.0"},
+    loader_kwargs={"model_api_name": "embed-multilingual-v3.0"},
     name="cohere/embed-multilingual-v3.0",
     model_type=["dense"],
     languages=[],  # Unknown, but support >100 languages
@@ -405,11 +412,13 @@ cohere_mult_3 = ModelMeta(
     reference="https://huggingface.co/Cohere/Cohere-embed-multilingual-v3.0",
     use_instructions=False,
     training_datasets=None,
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
 )
 
 cohere_eng_3 = ModelMeta(
     loader=cohere_v_loader,
-    loader_kwargs={"model_name": "embed-english-v3.0"},
+    loader_kwargs={"model_api_name": "embed-english-v3.0"},
     name="cohere/embed-english-v3.0",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -430,11 +439,13 @@ cohere_eng_3 = ModelMeta(
     reference="https://huggingface.co/Cohere/Cohere-embed-english-v3.0",
     use_instructions=False,
     training_datasets=None,
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
 )
 
 cohere_embed_v4_multimodal = ModelMeta(
     loader=cohere_v_loader,
-    loader_kwargs=dict(model_name="embed-v4.0"),
+    loader_kwargs=dict(model_api_name="embed-v4.0"),
     model_type=["dense"],
     name="Cohere/Cohere-embed-v4.0",
     languages=all_languages,
@@ -455,11 +466,13 @@ cohere_embed_v4_multimodal = ModelMeta(
     reference="https://docs.cohere.com/docs/cohere-embed",
     use_instructions=False,
     training_datasets=None,
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
 )
 
 cohere_embed_v4_multimodal_binary = ModelMeta(
     loader=cohere_v_loader,
-    loader_kwargs=dict(embedding_type="binary"),
+    loader_kwargs=dict(model_api_name="embed-v4.0", embedding_type="binary"),
     name="Cohere/Cohere-embed-v4.0 (output_dtype=binary)",
     model_type=["dense"],
     languages=all_languages,
@@ -481,11 +494,13 @@ cohere_embed_v4_multimodal_binary = ModelMeta(
     use_instructions=False,
     training_datasets=None,
     adapted_from="Cohere/Cohere-embed-v4.0",
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
 )
 
 cohere_embed_v4_multimodal_int8 = ModelMeta(
     loader=cohere_v_loader,
-    loader_kwargs=dict(embedding_type="int8"),
+    loader_kwargs=dict(model_api_name="embed-v4.0", embedding_type="int8"),
     name="Cohere/Cohere-embed-v4.0 (output_dtype=int8)",
     model_type=["dense"],
     languages=all_languages,
@@ -507,4 +522,6 @@ cohere_embed_v4_multimodal_int8 = ModelMeta(
     use_instructions=False,
     training_datasets=None,
     adapted_from="Cohere/Cohere-embed-v4.0",
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
 )

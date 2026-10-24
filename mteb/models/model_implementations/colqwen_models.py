@@ -3,21 +3,22 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import (
-    requires_image_dependencies,
-    requires_package,
-)
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import AudioCollator, VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
+    from collections.abc import Callable, Mapping
+
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
+    from mteb.types._encoder_io import AudioInputItem
 
 from .colpali_models import (
     COLPALI_CITATION,
@@ -36,11 +37,9 @@ class ColQwen2Wrapper(ColPaliEngineWrapper):
         model_name: str = "vidore/colqwen2-v1.0",
         revision: str | None = None,
         device: str | None = None,
-        **kwargs,
+        query_prefix: str = "Query: ",
+        **kwargs: Any,
     ):
-        requires_package(
-            self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
-        )
         from colpali_engine.models import ColQwen2, ColQwen2Processor
 
         super().__init__(
@@ -49,6 +48,7 @@ class ColQwen2Wrapper(ColPaliEngineWrapper):
             processor_class=ColQwen2Processor,
             revision=revision,
             device=device,
+            query_prefix=query_prefix,
             **kwargs,
         )
 
@@ -62,11 +62,9 @@ class ColQwen2_5Wrapper(ColPaliEngineWrapper):  # noqa: N801
         revision: str | None = None,
         device: str | None = None,
         attn_implementation: str | None = None,
-        **kwargs,
+        query_prefix: str = "Query: ",
+        **kwargs: Any,
     ):
-        requires_package(
-            self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
-        )
         from colpali_engine.models import ColQwen2_5, ColQwen2_5_Processor
         from transformers.utils.import_utils import is_flash_attn_2_available
 
@@ -81,8 +79,131 @@ class ColQwen2_5Wrapper(ColPaliEngineWrapper):  # noqa: N801
             processor_class=ColQwen2_5_Processor,
             revision=revision,
             device=device,
+            query_prefix=query_prefix,
             **kwargs,
         )
+
+
+class ColQwen3_5Wrapper(AbsEncoder):  # noqa: N801
+    """Wrapper for ColQwen3.5 models (colpali_engine)."""
+
+    def __init__(
+        self,
+        model_name: str = "athrael-soju/colqwen3.5-4.5B-v3",
+        revision: str | None = None,
+        device: str | None = None,
+        **kwargs: Any,
+    ):
+        import torch
+        from colpali_engine.models import ColQwen3_5, ColQwen3_5Processor
+
+        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+
+        self.model = ColQwen3_5.from_pretrained(
+            model_name,
+            revision=revision,
+            device_map=self.device,
+            **kwargs,
+        )
+        self.model.eval()
+
+        self.processor = ColQwen3_5Processor.from_pretrained(
+            model_name, revision=revision
+        )
+
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        if (
+            "text" not in inputs.dataset.features
+            and "image" not in inputs.dataset.features
+        ):
+            raise ValueError("No text or image features found in inputs.")
+        return self.get_fused_embeddings(inputs, **kwargs)
+
+    def _encode_inputs(self, encoded_inputs: dict[str, torch.Tensor]) -> torch.Tensor:
+        # Clear stale rope_deltas cache to avoid shape mismatches across batches
+        if hasattr(self.model, "rope_deltas"):
+            self.model.rope_deltas = None
+        # ColQwen3_5.forward returns the projection tensor directly (not a named tuple)
+        return self.model(**encoded_inputs)
+
+    def get_fused_embeddings(
+        self,
+        image_texts_pairs: DataLoader[BatchedInput] | None = None,
+        batch_size: int = 32,
+        show_progress_bar: bool = True,
+        **kwargs: Any,
+    ) -> Array:
+        import torch
+        import torchvision.transforms.functional as F
+        from PIL import Image
+
+        contains_image = "image" in image_texts_pairs.dataset.features
+        contains_text = "text" in image_texts_pairs.dataset.features
+        contains_both = contains_image and contains_text
+
+        if contains_both:
+            progress_desc = "Encoding images+texts"
+        elif contains_image:
+            progress_desc = "Encoding images"
+        elif contains_text:
+            progress_desc = "Encoding texts"
+        else:
+            raise ValueError("No text or image features found in inputs.")
+
+        all_embeds: list[torch.Tensor] = []
+        with torch.no_grad():
+            for batch in tqdm(
+                image_texts_pairs,
+                disable=not show_progress_bar,
+                desc=progress_desc,
+            ):
+                if contains_image:
+                    imgs = [
+                        F.to_pil_image(b.to(self.device))
+                        if not isinstance(b, Image.Image)
+                        else b
+                        for b in batch["image"]
+                    ]
+                else:
+                    imgs = None
+                if contains_text:
+                    texts = batch["text"]
+                else:
+                    texts = None
+                if contains_both and len(imgs) != len(texts):
+                    raise ValueError(
+                        f"The number of texts and images must have the same length, got {len(imgs)} and {len(texts)}"
+                    )
+
+                if contains_image:
+                    imgs = [img.convert("RGB") for img in imgs]
+                    inputs = self.processor.process_images(imgs)
+                else:
+                    inputs = self.processor.process_queries(texts)
+                inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                outs = self._encode_inputs(inputs)
+                all_embeds.extend(outs.cpu().to(torch.float32))
+
+        padded = torch.nn.utils.rnn.pad_sequence(
+            all_embeds, batch_first=True, padding_value=0
+        )
+        return padded
+
+    def similarity(self, a: Array, b: Array) -> Array:
+        import torch
+
+        a = [torch.as_tensor(x) for x in a]
+        b = [torch.as_tensor(x) for x in b]
+        return self.processor.score_multi_vector(a, b, device=self.device)
 
 
 class ColQwen3Wrapper(AbsEncoder):
@@ -94,11 +215,14 @@ class ColQwen3Wrapper(AbsEncoder):
         *,
         revision: str | None = None,
         device: str | None = None,
-        dtype: torch.dtype | str | None = torch.bfloat16,
+        dtype: OutputDType | torch.dtype | str | None = OutputDType.BF16,
         **kwargs: Any,
     ):
-        requires_image_dependencies()
-        requires_package(self, "transformers", model_name, "pip install mteb[colqwen3]")
+        import torch
+
+        if isinstance(dtype, OutputDType):
+            dtype = dtype.get_dtype()
+
         from transformers import AutoModel, AutoProcessor
 
         self.device = device or (
@@ -154,9 +278,10 @@ class ColQwen3Wrapper(AbsEncoder):
         image_texts_pairs: DataLoader[BatchedInput] | None = None,
         batch_size: int = 32,
         show_progress_bar: bool = True,
-        fusion_mode="concat",
+        fusion_mode: str = "concat",
         **kwargs: Any,
-    ):
+    ) -> Array:
+        import torch
         import torchvision.transforms.functional as F
         from PIL import Image
 
@@ -193,8 +318,8 @@ class ColQwen3Wrapper(AbsEncoder):
                     texts = batch["text"]
                 else:
                     texts = None
-                if contains_both:
-                    assert len(imgs) == len(texts), (
+                if contains_both and len(imgs) != len(texts):
+                    raise ValueError(
                         f"The number of texts and images must have the same length, got {len(imgs)} and {len(texts)}"
                     )
 
@@ -208,14 +333,185 @@ class ColQwen3Wrapper(AbsEncoder):
         )
         return padded
 
-    def similarity(self, a, b):
+    def similarity(self, a: Array, b: Array) -> Array:
         return self.processor.score_multi_vector(a, b, device=self.device)
+
+
+# colpali-engine's ColQwen2_5OmniProcessor.process_videos system prompt
+_COLQWEN_OMNI_SYSTEM_PROMPT = (
+    "You are Qwen, a virtual human developed by the Qwen Team, Alibaba Group, capable "
+    "of perceiving auditory and visual inputs, as well as generating text and speech."
+)
+
+
+class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
+    """Wrapper for ColQwen-Omni: late interaction over text, image, audio and video."""
+
+    def __init__(
+        self,
+        model_name: str = "vidore/colqwen-omni-v0.1",
+        revision: str | None = None,
+        device: str | None = None,
+        # fps=1: the checkpoint's video config ("fps": 1, do_sample_frames)
+        # https://huggingface.co/vidore/colqwen-omni-v0.1/blob/61e78ef2f9c826cac588a01e44df51672ce957bd/video_preprocessor_config.json#L17
+        fps: float | None = 1.0,
+        # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
+        max_frames: int | None = 64,
+        num_frames: int | None = None,
+        # 300 s at 16 kHz: Qwen2.5-Omni chunk_length=300; this is max_samples,
+        # so it is in samples, not seconds
+        # https://huggingface.co/Qwen/Qwen2.5-Omni-7B/blob/main/preprocessor_config.json
+        max_audio_length: int | None = 4_800_000,
+        **kwargs: Any,
+    ):
+        from colpali_engine.models import ColQwen2_5Omni, ColQwen2_5OmniProcessor
+
+        self.fps = fps
+        self.max_frames = max_frames
+        self.num_frames = num_frames
+        self.max_audio_length = max_audio_length
+
+        super().__init__(
+            model_name=model_name,
+            model_class=ColQwen2_5Omni,
+            processor_class=ColQwen2_5OmniProcessor,
+            revision=revision,
+            device=device,
+            **kwargs,
+        )
+        self.sampling_rate = self.processor.feature_extractor.sampling_rate
+        # VideoCollator has already selected the frames. The processor's own
+        # sampling would run on top of that, so switch it off once here.
+        self.processor.video_processor.do_sample_frames = False
+
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        import torch
+
+        features = inputs.dataset.features
+        if "video" in features:
+            inputs.collate_fn = VideoCollator(
+                target_sampling_rate=self.sampling_rate,
+                fps=self.fps,
+                max_frames=self.max_frames,
+                num_frames=self.num_frames,
+                max_samples=self.max_audio_length,
+            )
+        elif "audio" in features:
+            inputs.collate_fn = AudioCollator(
+                target_sampling_rate=self.sampling_rate,
+                max_samples=self.max_audio_length,
+            )
+
+        embeddings = []
+        if "text" in features:
+            embeddings.append(self.get_text_embeddings(inputs, **kwargs))
+        if "image" in features:
+            embeddings.append(self.get_image_embeddings(inputs, **kwargs))
+        if "audio" in features:
+            embeddings.append(self.get_audio_embeddings(inputs, **kwargs))
+        if "video" in features:
+            embeddings.append(self.get_video_embeddings(inputs, **kwargs))
+
+        if not embeddings:
+            raise ValueError(
+                "No supported modality found; expected one of text, image, audio, video."
+            )
+        if len(embeddings) == 1:
+            return embeddings[0]
+        if len({len(e) for e in embeddings}) != 1:
+            raise ValueError("All modalities must have the same number of items")
+        return torch.cat(embeddings, dim=1)
+
+    def _encode_batches(
+        self,
+        loader: DataLoader[BatchedInput],
+        key: str,
+        process_fn: Callable[[Any], Mapping[str, torch.Tensor]],
+        desc: str,
+    ) -> torch.Tensor:
+        import torch
+
+        all_embeds = []
+        with torch.no_grad():
+            for batch in tqdm(loader, desc=desc):
+                for item in batch[key]:
+                    inputs = process_fn(item)
+                    inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                    outs = self.encode_input(inputs)
+                    all_embeds.extend(outs.cpu().to(torch.float32))
+        return torch.nn.utils.rnn.pad_sequence(
+            all_embeds, batch_first=True, padding_value=0
+        )
+
+    def get_audio_embeddings(
+        self, audios: DataLoader[BatchedInput], batch_size: int = 32, **kwargs: Any
+    ) -> Array:
+        import torch
+
+        def _process(
+            audio: AudioInputItem | torch.Tensor,
+        ) -> Mapping[str, torch.Tensor]:
+            arr = audio["array"] if isinstance(audio, dict) else audio
+            if isinstance(arr, torch.Tensor):
+                arr = arr.numpy()
+            return self.processor.process_audios([arr])
+
+        return self._encode_batches(audios, "audio", _process, "Encoding audio")
+
+    def similarity(self, a: Array, b: Array) -> Array:
+        # a video document has thousands of vectors; colpali's default scoring
+        # batch of 128 documents needs ~70 GiB on DiDeMo
+        return self.processor.score(a, b, device=self.device, batch_size=16)
+
+    def get_video_embeddings(
+        self, videos: DataLoader[BatchedInput], batch_size: int = 32, **kwargs: Any
+    ) -> Array:
+        def _process(clip: torch.Tensor) -> Mapping[str, torch.Tensor]:
+            # colpali's process_videos, plus the checkpoint's video size: the
+            # Qwen2.5-Omni processor defaults (up to 602112 px per frame) would
+            # override its 200704 px, and long clips then run out of memory
+            # https://huggingface.co/vidore/colqwen-omni-v0.1/blob/61e78ef2f9c826cac588a01e44df51672ce957bd/video_preprocessor_config.json
+            conversation = [
+                {
+                    "role": "system",
+                    "content": [{"type": "text", "text": _COLQWEN_OMNI_SYSTEM_PROMPT}],
+                },
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "video", "path": clip},
+                        {"type": "text", "text": "Describe the content."},
+                    ],
+                },
+            ]
+            return self.processor.apply_chat_template(
+                [conversation],
+                load_audio_from_video=False,
+                add_generation_prompt=True,
+                tokenize=True,
+                return_dict=True,
+                return_tensors="pt",
+                padding=True,
+                use_audio_in_video=False,
+                videos_kwargs={"size": dict(self.processor.video_processor.size)},
+            )
+
+        return self._encode_batches(videos, "video", _process, "Encoding video")
 
 
 colqwen2 = ModelMeta(
     loader=ColQwen2Wrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float16,
+        torch_dtype=OutputDType.FLOAT16,
     ),
     name="vidore/colqwen2-v1.0",
     model_type=["late-interaction"],
@@ -238,12 +534,14 @@ colqwen2 = ModelMeta(
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
+    extra_requirements_groups=["colpali_engine"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 colqwen2_5 = ModelMeta(
     loader=ColQwen2_5Wrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float16,
+        torch_dtype=OutputDType.FLOAT16,
     ),
     name="vidore/colqwen2.5-v0.2",
     model_type=["late-interaction"],
@@ -266,6 +564,8 @@ colqwen2_5 = ModelMeta(
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
+    extra_requirements_groups=["colpali_engine"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 TOMORO_TRAINING_DATA = {
@@ -278,15 +578,6 @@ TOMORO_TRAINING_DATA = {
     "VisRAG-Ret-Train-Synthetic-data",
     "VisRAG-Ret-Train-In-domain-data",
 }
-
-TOMORO_CITATION = """
-@misc{huang2025tomoro_colqwen3_embed,
-  title={TomoroAI/tomoro-colqwen3-embed},
-  author={Xin Huang and Kye Min Tan and Albert Phelps},
-  year={2025},
-  url={https://huggingface.co/TomoroAI/tomoro-colqwen3-embed-8b}
-}
-"""
 
 colqwen3_8b = ModelMeta(
     loader=ColQwen3Wrapper,
@@ -310,7 +601,8 @@ colqwen3_8b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=TOMORO_TRAINING_DATA,
-    citation=TOMORO_CITATION,
+    extra_requirements_groups=["colqwen3"],
+    output_dtypes=OutputDType.BF16,
 )
 
 colqwen3_4b = ModelMeta(
@@ -335,18 +627,10 @@ colqwen3_4b = ModelMeta(
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
     training_datasets=TOMORO_TRAINING_DATA,
-    citation=TOMORO_CITATION,
+    extra_requirements_groups=["colqwen3"],
+    output_dtypes=OutputDType.BF16,
 )
 
-
-COLNOMIC_CITATION = """
-@misc{nomicembedmultimodal2025,
-  title={Nomic Embed Multimodal: Interleaved Text, Image, and Screenshots for Visual Document Retrieval},
-  author={Nomic Team},
-  year={2025},
-  publisher={Nomic AI},
-  url={https://nomic.ai/blog/posts/nomic-embed-multimodal}
-}"""
 
 COLNOMIC_TRAINING_DATA = {"VDRMultilingual"} | COLPALI_TRAINING_DATA
 COLNOMIC_LANGUAGES = [
@@ -360,7 +644,7 @@ COLNOMIC_LANGUAGES = [
 colnomic_3b = ModelMeta(
     loader=ColQwen2_5Wrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float16, attn_implementation="flash_attention_2"
+        torch_dtype=OutputDType.FLOAT16, attn_implementation="flash_attention_2"
     ),
     name="nomic-ai/colnomic-embed-multimodal-3b",
     model_type=["late-interaction"],
@@ -382,13 +666,14 @@ colnomic_3b = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=COLNOMIC_TRAINING_DATA,
-    citation=COLNOMIC_CITATION,
+    extra_requirements_groups=["colpali_engine"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 colnomic_7b = ModelMeta(
     loader=ColQwen2_5Wrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float16,
+        torch_dtype=OutputDType.FLOAT16,
     ),
     name="nomic-ai/colnomic-embed-multimodal-7b",
     model_type=["late-interaction"],
@@ -409,7 +694,8 @@ colnomic_7b = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=COLNOMIC_TRAINING_DATA,
-    citation=COLNOMIC_CITATION,
+    extra_requirements_groups=["colpali_engine"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 
@@ -426,7 +712,7 @@ EVOQWEN_TRAINING_DATA = {
 evoqwen25_vl_retriever_3b_v1 = ModelMeta(
     loader=ColQwen2_5Wrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float16, attn_implementation="flash_attention_2"
+        torch_dtype=OutputDType.FLOAT16, attn_implementation="flash_attention_2"
     ),
     name="ApsaraStackMaaS/EvoQwen2.5-VL-Retriever-3B-v1",
     model_type=["late-interaction"],
@@ -448,12 +734,14 @@ evoqwen25_vl_retriever_3b_v1 = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=EVOQWEN_TRAINING_DATA,
+    extra_requirements_groups=["colpali_engine"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 evoqwen25_vl_retriever_7b_v1 = ModelMeta(
     loader=ColQwen2_5Wrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float16, attn_implementation="flash_attention_2"
+        torch_dtype=OutputDType.FLOAT16, attn_implementation="flash_attention_2"
     ),
     name="ApsaraStackMaaS/EvoQwen2.5-VL-Retriever-7B-v1",
     model_type=["late-interaction"],
@@ -475,4 +763,244 @@ evoqwen25_vl_retriever_7b_v1 = ModelMeta(
     similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=EVOQWEN_TRAINING_DATA,
+    extra_requirements_groups=["colpali_engine"],
+    output_dtypes=OutputDType.FLOAT16,
+)
+
+
+COLQWEN35_V3_TRAINING_DATA = {
+    # from https://huggingface.co/datasets/vidore/colpali_train_set
+    "VidoreDocVQARetrieval",
+    "VidoreInfoVQARetrieval",
+    "VidoreTatdqaRetrieval",
+    "VidoreArxivQARetrieval",
+    # from https://huggingface.co/datasets/openbmb/VisRAG-Ret-Train-Synthetic-data
+    "VisRAG-Ret-Train-Synthetic-data",
+    # from https://huggingface.co/datasets/openbmb/VisRAG-Ret-Train-In-domain-data
+    "VisRAG-Ret-Train-In-domain-data",
+    # from https://huggingface.co/datasets/llamaindex/vdr-multilingual-train
+    "VDRMultilingualRetrieval",
+    # from https://huggingface.co/datasets/Metric-AI/tabfquad_train_set
+    "VidoreTabfquadRetrieval",
+}
+
+colqwen3_5_v3 = ModelMeta(
+    loader=ColQwen3_5Wrapper,
+    loader_kwargs=dict(
+        torch_dtype=OutputDType.BF16,
+    ),
+    name="athrael-soju/colqwen3.5-4.5B-v3",
+    model_type=["late-interaction"],
+    languages=["eng-Latn"],
+    revision="4ad8f151e39bce3adcf88e0bdd72e724c7606638",
+    release_date="2026-03-15",
+    modalities=["image", "text"],
+    n_parameters=4_600_000_000,
+    n_embedding_parameters=635_699_200,
+    memory_usage_mb=8660,
+    max_tokens=262144,
+    embed_dim=128,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch", "ColPali", "safetensors"],
+    reference="https://huggingface.co/athrael-soju/colqwen3.5-4.5B-v3",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    use_instructions=False,
+    training_datasets=COLQWEN35_V3_TRAINING_DATA,
+    extra_requirements_groups=["colpali_engine"],
+    output_dtypes=OutputDType.BF16,
+)
+
+
+class ColQwen3EngineWrapper(ColPaliEngineWrapper):
+    """Wrapper for colpali_engine ColQwen3 models (merged full checkpoints)."""
+
+    def __init__(
+        self,
+        model_name: str = "Verm1ion/ColTurk-VDR-Qwen3VL-4B-v1.0",
+        revision: str | None = None,
+        device: str | None = None,
+        **kwargs: Any,
+    ):
+        from colpali_engine.models import ColQwen3, ColQwen3Processor
+
+        super().__init__(
+            model_name=model_name,
+            model_class=ColQwen3,
+            processor_class=ColQwen3Processor,
+            revision=revision,
+            device=device,
+            **kwargs,
+        )
+
+
+colturk_vdr_4b = ModelMeta(
+    loader=ColQwen3EngineWrapper,
+    loader_kwargs=dict(
+        torch_dtype=OutputDType.BF16,
+    ),
+    name="Verm1ion/ColTurk-VDR-Qwen3VL-4B-v1.0",
+    model_type=["late-interaction"],
+    languages=["eng-Latn", "fra-Latn"],
+    revision="d56c7bbc278ba2fe4ac1c255fb0e55dd46b40bad",
+    release_date="2026-06-11",
+    modalities=["image", "text"],
+    n_parameters=4_505_515_136,
+    n_embedding_parameters=388_956_160,
+    memory_usage_mb=8593,
+    max_tokens=262144,
+    embed_dim=128,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code="https://github.com/Verm1lion/ColTurk-VDR",
+    public_training_data="https://huggingface.co/datasets/manu/colpali-queries",
+    framework=["ColPali", "safetensors"],
+    reference="https://huggingface.co/Verm1ion/ColTurk-VDR-Qwen3VL-4B-v1.0",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    use_instructions=True,
+    training_datasets=COLPALI_TRAINING_DATA,
+    extra_requirements_groups=["colpali_engine"],
+    adapted_from="Qwen/Qwen3-VL-4B-Instruct",
+    output_dtypes=OutputDType.BF16,
+)
+
+VULTRON_PRIME_8B_TRAINING_DATA = {
+    # from https://huggingface.co/datasets/vidore/colpali_train_set
+    "VidoreDocVQARetrieval",
+    "VidoreInfoVQARetrieval",
+    "VidoreTatdqaRetrieval",
+    "VidoreArxivQARetrieval",
+    # from https://huggingface.co/datasets/Metric-AI/tabfquad_train_set
+    "VidoreTabfquadRetrieval",
+    # from https://huggingface.co/datasets/llamaindex/vdr-multilingual-train
+    "VDRMultilingualRetrieval",
+    # from https://huggingface.co/datasets/openbmb/VisRAG-Ret-Train-Synthetic-data
+    "VisRAG-Ret-Train-Synthetic-data",
+    # from https://huggingface.co/datasets/openbmb/VisRAG-Ret-Train-In-domain-data
+    "VisRAG-Ret-Train-In-domain-data",
+    # from https://huggingface.co/datasets/HuggingFaceM4/Docmatix (IR adaptation)
+    "docmatix-ir",
+    # wiki-ss + Natural Questions document-screenshot retrieval
+    "wiki-ss-nq",
+}
+
+vultron_prime_qwen35_8b = ModelMeta(
+    loader=ColQwen3_5Wrapper,
+    loader_kwargs=dict(
+        torch_dtype=OutputDType.BF16,
+    ),
+    name="vultr/VultronRetrieverPrime-Qwen3.5-8B",
+    model_type=["late-interaction"],
+    languages=["eng-Latn", "fra-Latn", "deu-Latn", "spa-Latn", "ita-Latn", "por-Latn"],
+    revision="209b8d883c53b1e1d0ef7a8582885d4e5a1e05ba",
+    release_date="2026-06-18",
+    modalities=["image", "text"],
+    n_parameters=8_394_006_064,
+    n_embedding_parameters=1_017_118_720,  # vocab 248320 x hidden 4096 (token embedding matrix)
+    memory_usage_mb=16788,
+    max_tokens=262144,
+    embed_dim=320,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch", "ColPali", "safetensors"],
+    reference="https://huggingface.co/vultr/VultronRetrieverPrime-Qwen3.5-8B",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    use_instructions=False,
+    training_datasets=VULTRON_PRIME_8B_TRAINING_DATA,
+    extra_requirements_groups=["colpali_engine"],
+    output_dtypes=OutputDType.BF16,
+)
+
+vultron_flash_qwen35_0_8b = ModelMeta(
+    loader=ColQwen3_5Wrapper,
+    loader_kwargs=dict(
+        torch_dtype=OutputDType.BF16,
+    ),
+    name="vultr/VultronRetrieverFlash-Qwen3.5-0.8B",
+    model_type=["late-interaction"],
+    languages=["eng-Latn", "fra-Latn", "deu-Latn", "spa-Latn", "ita-Latn", "por-Latn"],
+    revision="a2bcbcda0472dff9863380621bcff09b3d0261ac",
+    release_date="2026-06-21",
+    modalities=["image", "text"],
+    n_parameters=853_341_916,
+    n_embedding_parameters=254_279_680,  # vocab 248320 x hidden 1024 (token embedding matrix)
+    memory_usage_mb=1707,
+    max_tokens=262144,
+    embed_dim=320,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch", "ColPali", "safetensors"],
+    reference="https://huggingface.co/vultr/VultronRetrieverFlash-Qwen3.5-0.8B",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    use_instructions=False,
+    training_datasets=VULTRON_PRIME_8B_TRAINING_DATA,  # 0.8B sibling, same training pool as the 8B Prime
+    extra_requirements_groups=["colpali_engine"],
+    output_dtypes=OutputDType.BF16,
+)
+
+vultron_core_qwen35_4b = ModelMeta(
+    loader=ColQwen3_5Wrapper,
+    loader_kwargs=dict(
+        torch_dtype=OutputDType.BF16,
+    ),
+    name="vultr/VultronRetrieverCore-Qwen3.5-4.5B",
+    model_type=["late-interaction"],
+    languages=["eng-Latn", "fra-Latn", "deu-Latn", "spa-Latn", "ita-Latn", "por-Latn"],
+    revision="461c7bc02d596932c76c12164596732dad9cf4f2",
+    release_date="2026-06-22",
+    modalities=["image", "text"],
+    n_parameters=4_540_085_056,
+    n_embedding_parameters=635_699_200,  # vocab 248320 x hidden 2560 (token embedding matrix)
+    memory_usage_mb=9080,
+    max_tokens=262144,
+    embed_dim=320,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch", "ColPali", "safetensors"],
+    reference="https://huggingface.co/vultr/VultronRetrieverCore-Qwen3.5-4.5B",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    use_instructions=False,
+    training_datasets=VULTRON_PRIME_8B_TRAINING_DATA,  # 4B sibling, same training pool as Prime/Flash
+    extra_requirements_groups=["colpali_engine"],
+    output_dtypes=OutputDType.BF16,
+)
+
+colqwen_omni = ModelMeta(
+    loader=ColQwen2_5OmniWrapper,
+    loader_kwargs=dict(
+        torch_dtype=OutputDType.BF16,
+        # LoRA adapter; its adapter_config.json names vidore/colqwen2.5omni-base without a revision
+        base_revision="59289e054b63a1164c0f26c33f3550f3cde7399b",
+    ),
+    name="vidore/colqwen-omni-v0.1",
+    model_type=["late-interaction"],
+    languages=["eng-Latn"],
+    revision="61e78ef2f9c826cac588a01e44df51672ce957bd",
+    release_date="2025-07-14",
+    modalities=["text", "image", "audio", "video"],
+    n_parameters=4_452_498_560,
+    n_embedding_parameters=311_164_928,  # vocab 151936 x hidden 2048 (token embedding matrix)
+    memory_usage_mb=8492,
+    max_tokens=32768,
+    embed_dim=128,
+    license="mit",
+    open_weights=True,
+    public_training_code="https://github.com/illuin-tech/colpali",
+    public_training_data="https://huggingface.co/datasets/vidore/colpali_train_set",
+    framework=["ColPali", "safetensors"],
+    reference="https://huggingface.co/vidore/colqwen-omni-v0.1",
+    similarity_fn_name="MaxSim",
+    use_instructions=True,
+    training_datasets=COLPALI_TRAINING_DATA,
+    citation=COLPALI_CITATION,
+    extra_requirements_groups=["colpali_engine"],
+    output_dtypes=OutputDType.BF16,
 )

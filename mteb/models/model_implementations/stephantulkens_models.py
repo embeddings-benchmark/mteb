@@ -1,5 +1,5 @@
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 TRAINING_DATA = {
     "MSMARCO",
@@ -21,7 +21,7 @@ CITATION = """@software{Tulkens2025pyNIFE,
 }"""
 
 nife_gte_modernbert_base_as_router_meta = ModelMeta(
-    loader=sentence_transformers_loader,  # type: ignore[call-arg]
+    loader=SentenceTransformerEncoderWrapper,  # type: ignore[call-arg]
     loader_kwargs={},
     name="stephantulkens/NIFE-gte-modernbert-base_as_router",
     revision="b038a184acffb51bd9f7002169b2f81575cb74c8",
@@ -51,7 +51,7 @@ nife_gte_modernbert_base_as_router_meta = ModelMeta(
 )
 
 nife_mxbai_embed_large_v1_as_router_meta = ModelMeta(
-    loader=sentence_transformers_loader,  # type: ignore[call-arg]
+    loader=SentenceTransformerEncoderWrapper,  # type: ignore[call-arg]
     loader_kwargs={},
     name="stephantulkens/NIFE-mxbai-embed-large-v1_as_router",
     revision="de89ee6357e2647d38e607d6ffb82c0139473d02",

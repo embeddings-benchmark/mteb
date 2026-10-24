@@ -3,17 +3,11 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
-from mteb import TaskMetadata
-from mteb._create_dataloaders import AudioCollator
-from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.types import Array, BatchedInput, PromptType
-from mteb.types._encoder_io import AudioInput
+from mteb.models.modality_collators import AudioCollator, check_duration_cap
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -21,7 +15,6 @@ if TYPE_CHECKING:
     from mteb import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
     from mteb.types._encoder_io import AudioInput
-
 
 logger = logging.getLogger(__name__)
 
@@ -92,21 +85,17 @@ class MCTCTWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_seconds: float = 30.0,
+        device: str | None = None,
+        # None: an mteb cap at the relative-position horizon read below; the
+        # encoder runs past it, so this is not a hard model limit
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
-        requires_audio_dependencies()
-        import transformers
-        from packaging import version
+        check_duration_cap(max_audio_length_seconds)
+        import torch
 
-        transformers_version = version.parse(transformers.__version__)
-        if transformers_version >= version.parse("5.0.0"):
-            raise RuntimeError(
-                f"transformers version {transformers.__version__} is not supported. "
-                "MCTCT requires transformers < 5.0.0. "
-                'You can run `pip install "mteb[mctct]"` to install the correct version.'
-            )
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
 
         from transformers import MCTCTFeatureExtractor, MCTCTModel
 
@@ -123,13 +112,33 @@ class MCTCTWrapper(AbsEncoder):
         )
         self.sampling_rate = self.feature_extractor.sampling_rate  # 16000 Hz
 
-    def get_audio_embeddings(
+        # filterbank frames: max_position_embeddings x conv_stride
+        # https://huggingface.co/speechbrain/m-ctc-t-large/blob/main/config.json
+        config = self.model.config
+        stride = 1
+        for st in config.conv_stride:
+            stride *= st
+        self.max_feature_frames = config.max_position_embeddings * stride
+        if max_audio_length_seconds is not None:
+            self.max_feature_frames = int(
+                max_audio_length_seconds * 1000 / self.feature_extractor.hop_length
+            )
+        logger.info(
+            "%s: audio capped at %d filterbank frames (%.1f s)",
+            model_name,
+            self.max_feature_frames,
+            self.max_feature_frames * self.feature_extractor.hop_length / 1000,
+        )
+
+    def get_audio_embeddings(  # noqa: PLR0914
         self,
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        inputs.collate_fn = AudioCollator(self.sampling_rate)
+        import torch
+
+        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
 
         all_embeddings = []
 
@@ -145,7 +154,7 @@ class MCTCTWrapper(AbsEncoder):
                 return_tensors="pt",
                 padding=True,
                 truncation=True,
-                max_length=int(self.max_audio_length_seconds * self.sampling_rate),
+                max_length=self.max_feature_frames,
             ).to(self.device)
 
             with torch.no_grad():
@@ -221,6 +230,7 @@ mctct_large = ModelMeta(
     release_date="2022-01-10",
     max_tokens=None,
     n_parameters=1_058_978_691,
+    n_embedding_parameters=12387840,
     memory_usage_mb=4039,
     embed_dim=1536,
     license="apache-2.0",
@@ -230,7 +240,7 @@ mctct_large = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/speechbrain/speechbrain",
     public_training_data="https://github.com/speechbrain/speechbrain",
-    training_datasets={"Common Voice", "VoxPopuli"},
+    training_datasets={"CommonVoiceMini17A2TRetrieval", "VoxPopuliLanguageID"},
     modalities=["audio"],
     citation="""
 @misc{lugosch2022pseudolabelingmassivelymultilingualspeech,
@@ -242,4 +252,5 @@ mctct_large = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2111.00161},
 }""",
+    extra_requirements_groups=["transformers-v4"],
 )

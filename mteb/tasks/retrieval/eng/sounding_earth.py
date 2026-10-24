@@ -1,0 +1,160 @@
+from __future__ import annotations
+
+from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.task_metadata import TaskMetadata
+
+_REFERENCE = "https://arxiv.org/abs/2108.00688"
+_BIBTEX = r"""
+@article{Heidler_2023,
+  author = {Heidler, Konrad and Mou, Lichao and Hu, Di and Jin, Pu and Li, Guangyao and Gan, Chuang and Wen, Ji-Rong and Zhu, Xiao Xiang},
+  doi = {10.1016/j.jag.2022.103130},
+  issn = {1569-8432},
+  journal = {International Journal of Applied Earth Observation and Geoinformation},
+  month = feb,
+  pages = {103130},
+  publisher = {Elsevier BV},
+  title = {Self-supervised audiovisual representation learning for remote sensing data},
+  url = {http://dx.doi.org/10.1016/j.jag.2022.103130},
+  volume = {116},
+  year = {2023},
+}
+"""
+_DESCRIPTION = (
+    "SoundingEarth pairs geotagged field recordings from the Radio Aporee sound "
+    "map with co-located aerial imagery; every location contributes exactly one "
+    "image and one recording, giving instance-level cross-modal ground truth. "
+    "This task uses 2,048 locations sampled with a fixed seed and 1,000 queries; recordings are "
+    "repair-transcoded to mono FLAC capped at 120 seconds. "
+)
+
+
+class SoundingEarthA2IRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="SoundingEarthA2IRetrieval",
+        description=_DESCRIPTION
+        + "Queries are field recordings and the corpus contains the aerial images; "
+        "the goal is to retrieve the image of the location where the recording was "
+        "made.",
+        reference=_REFERENCE,
+        dataset={
+            "path": "dukesun99/SoundingEarth-A2I",
+            "revision": "e97546c9ce77b71da1c8a97b6bb6c034f4378bee",
+        },
+        type="Any2AnyRetrieval",
+        category="a2i",
+        modalities=["audio", "image"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        date=("2006-01-01", "2021-10-01"),
+        domains=["AudioScene", "Scene"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        superseded_by="SoundingEarthA2IRetrieval.v2",
+        bibtex_citation=_BIBTEX,
+        prompt={
+            "query": "Retrieve the aerial image of the location where this field recording was made."
+        },
+    )
+
+
+class SoundingEarthI2ARetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="SoundingEarthI2ARetrieval",
+        description=_DESCRIPTION
+        + "Queries are aerial images and the corpus contains the field recordings; "
+        "the goal is to retrieve the recording made at the depicted location.",
+        reference=_REFERENCE,
+        dataset={
+            "path": "dukesun99/SoundingEarth-I2A",
+            "revision": "137f91ccf6a3ce892697bd6022560b22ac3342f8",
+        },
+        type="Any2AnyRetrieval",
+        category="i2a",
+        modalities=["image", "audio"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        date=("2006-01-01", "2021-10-01"),
+        domains=["AudioScene", "Scene"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        superseded_by="SoundingEarthI2ARetrieval.v2",
+        bibtex_citation=_BIBTEX,
+        prompt={
+            "query": "Retrieve the field recording made at the location shown in this aerial image."
+        },
+    )
+
+
+class SoundingEarthA2IRetrievalV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="SoundingEarthA2IRetrieval.v2",
+        description=_DESCRIPTION
+        + "Queries are field recordings and the corpus contains the aerial images; "
+        "the goal is to retrieve the image of the location where the recording was "
+        "made."
+        " Version 2 merges queries and documents with identical content, so a repeated query counts every matching item as relevant, and drops texts of 3 characters or less.",
+        reference=_REFERENCE,
+        dataset={
+            "path": "mteb/SoundingEarth-A2I",
+            "revision": "ddb411cf51e80dc66bd9e40c936ec0965dd87427",
+        },
+        type="Any2AnyRetrieval",
+        category="a2i",
+        modalities=["audio", "image"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        date=("2006-01-01", "2021-10-01"),
+        domains=["AudioScene", "Scene"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        adapted_from=["SoundingEarthA2IRetrieval"],
+        bibtex_citation=_BIBTEX,
+        prompt={
+            "query": "Retrieve the aerial image of the location where this field recording was made."
+        },
+    )
+
+
+class SoundingEarthI2ARetrievalV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="SoundingEarthI2ARetrieval.v2",
+        description=_DESCRIPTION
+        + "Queries are aerial images and the corpus contains the field recordings; "
+        "the goal is to retrieve the recording made at the depicted location."
+        " Version 2 merges queries and documents with identical content, so a repeated query counts every matching item as relevant, and drops texts of 3 characters or less.",
+        reference=_REFERENCE,
+        dataset={
+            "path": "mteb/SoundingEarth-I2A",
+            "revision": "33d657c0c307ceeeb2ec47f143970f7456981988",
+        },
+        type="Any2AnyRetrieval",
+        category="i2a",
+        modalities=["image", "audio"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        date=("2006-01-01", "2021-10-01"),
+        domains=["AudioScene", "Scene"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        adapted_from=["SoundingEarthI2ARetrieval"],
+        bibtex_citation=_BIBTEX,
+        prompt={
+            "query": "Retrieve the field recording made at the location shown in this aerial image."
+        },
+    )

@@ -44,7 +44,7 @@ class EuroSATZeroShotClassification(AbsTaskZeroShotClassification):
 """,
     )
 
-    def get_candidate_labels(self) -> list[str]:
+    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
         labels = [
             "annual crop land",
             "forest land",

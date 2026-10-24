@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -52,7 +54,7 @@ class IndicSentimentClassification(AbsTaskClassification):
 """,
     )
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         label_map = {"Negative": 0, "Positive": 1}
         # Convert to standard format
         for lang in self.hf_subsets:

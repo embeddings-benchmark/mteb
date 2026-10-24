@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -20,9 +19,14 @@ class ALIGNModel(AbsEncoder):
         self,
         model: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ):
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         from transformers import AutoModel, AutoProcessor
 
         self.model_name = model
@@ -34,8 +38,11 @@ class ALIGNModel(AbsEncoder):
         self,
         texts: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> Array:
+        import torch
+        from transformers.modeling_outputs import BaseModelOutputWithPooling
+
         all_text_embeddings = []
 
         with torch.no_grad():
@@ -50,6 +57,8 @@ class ALIGNModel(AbsEncoder):
                 )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 text_outputs = self.model.get_text_features(**inputs)
+                if isinstance(text_outputs, BaseModelOutputWithPooling):
+                    text_outputs = text_outputs.pooler_output
                 all_text_embeddings.append(text_outputs.cpu())
 
         all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
@@ -59,8 +68,11 @@ class ALIGNModel(AbsEncoder):
         self,
         images: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> Array:
+        import torch
+        from transformers.modeling_outputs import BaseModelOutputWithPooling
+
         all_image_embeddings = []
         with torch.no_grad():
             for batch in tqdm(
@@ -71,6 +83,8 @@ class ALIGNModel(AbsEncoder):
                 )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 image_outputs = self.model.get_image_features(**inputs)
+                if isinstance(image_outputs, BaseModelOutputWithPooling):
+                    image_outputs = image_outputs.pooler_output
                 all_image_embeddings.append(image_outputs.cpu())
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
         return all_image_embeddings
@@ -100,9 +114,9 @@ class ALIGNModel(AbsEncoder):
                 )
             fused_embeddings = text_embeddings + image_embeddings
             return fused_embeddings
-        elif text_embeddings is not None:
+        if text_embeddings is not None:
             return text_embeddings
-        elif image_embeddings is not None:
+        if image_embeddings is not None:
             return image_embeddings
         raise ValueError
 
@@ -116,7 +130,7 @@ align_base = ModelMeta(
     release_date="2023-02-24",
     modalities=["image", "text"],
     n_parameters=172117841,
-    n_embedding_parameters=None,
+    n_embedding_parameters=23440896,
     memory_usage_mb=671,
     max_tokens=64,
     embed_dim=768,
@@ -131,10 +145,4 @@ align_base = ModelMeta(
     training_datasets=set(
         #  COYO-700M
     ),
-    citation="""@misc{kakaobrain2022coyo-align,
-    title         = {COYO-ALIGN},
-    author        = {Yoon, Boogeo and Lee, Youhan and Baek, Woonhyuk},
-    year          = {2022},
-    howpublished  = {https://github.com/kakaobrain/coyo-align},
-}""",
 )

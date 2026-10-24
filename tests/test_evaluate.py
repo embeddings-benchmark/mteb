@@ -1,23 +1,45 @@
+import json
 import logging
 from copy import copy
 from pathlib import Path
+from typing import Any
 
 import pytest
 from datasets.exceptions import DatasetNotFoundError
+from torch.utils.data import DataLoader
 
 import mteb
+from mteb import SentenceTransformerEncoderWrapper
 from mteb.abstasks.abstask import AbsTask
 from mteb.cache import ResultCache
-from mteb.models.models_protocols import EncoderProtocol
-from tests.mock_models import MockSentenceTransformer
-from tests.mock_tasks import (
+from mteb.mocks import (
+    MOCK_MAEB_TASK_GRID,
+    MOCK_MULTIMODAL_TASKS,
+    MOCK_MVEB_TASK_GRID,
+)
+from mteb.mocks.mock_tasks import (
     MockAggregatedTask,
     MockClassificationTask,
+    MockMultilabelClassification,
+    MockMultilingualClassificationTask,
     MockMultilingualRetrievalTask,
+    MockPairClassificationTask,
     MockRetrievalTask,
+    MockSTSTask,
+    MockSummarizationTask,
+    MockTextZeroShotClassificationTask,
+    MockZeroShotClassificationTask,
 )
+from mteb.models import ModelMeta
+from mteb.models.model_implementations.random_baseline import RandomEncoderBaseline
+from mteb.models.model_meta import ScoringFunction
+from mteb.models.models_protocols import EncoderProtocol
+from mteb.results.task_result import TaskResult
+from mteb.timing import TimingStack
+from mteb.types import Array, BatchedInput, OutputDType
+from tests.mock_models import MockSentenceTransformer
 
-mock_classification = (MockSentenceTransformer(), MockClassificationTask(), 0.5)
+mock_classification = (MockSentenceTransformer(), MockClassificationTask(), 1)
 mock_retrieval = (
     MockSentenceTransformer(),
     MockRetrievalTask(),
@@ -26,7 +48,7 @@ mock_retrieval = (
 
 
 @pytest.mark.parametrize(
-    "model, task, expected_score",
+    ("model", "task", "expected_score"),
     [mock_classification, mock_retrieval],
     ids=["mock_classification", "mock_retrieval"],
 )
@@ -44,7 +66,7 @@ def test_evaluate(model: EncoderProtocol, task: AbsTask, expected_score: float):
 
 
 @pytest.mark.parametrize(
-    "model, tasks",
+    ("model", "tasks"),
     [(MockSentenceTransformer(), [MockClassificationTask(), MockRetrievalTask()])],
     ids=["mock_clf_and_retrieval"],
 )
@@ -54,7 +76,9 @@ def test_evaluate_w_multiple_tasks(model: EncoderProtocol, tasks: list[AbsTask])
 
 
 @pytest.mark.parametrize(
-    "model, task, expected_score", [mock_classification], ids=["mock_classification"]
+    ("model", "task", "expected_score"),
+    [mock_classification],
+    ids=["mock_classification"],
 )
 def test_evaluate_with_cache(
     model: EncoderProtocol, task: AbsTask, expected_score: float, tmp_path: Path
@@ -69,7 +93,8 @@ def test_evaluate_with_cache(
         results.model_revision,
     )
     model_meta_path = path.parent / "model_meta.json"
-    assert path.exists() and path.is_file(), "cache file should exist"
+    assert path.exists(), "cache file should exist"
+    assert path.is_file(), "cache path should be a file"
     assert path.suffix == ".json", "cache file should be a json file"
     assert model_meta_path.exists(), "no model meta path is saved"
 
@@ -93,10 +118,60 @@ def test_evaluate_with_cache(
     )
 
 
+def test_evaluate_with_overwrite_strategy_never(tmp_path: Path):
+    model = MockSentenceTransformer()
+    task = MockClassificationTask()
+    cache = ResultCache(tmp_path)
+
+    # First run should run evaluation and write to cache
+    results = mteb.evaluate(model, task, cache=cache, co2_tracker=False)
+    path = cache.get_task_result_path(
+        task.metadata.name,
+        results.model_name.replace("/", "__"),
+        results.model_revision,
+    )
+    assert path.exists(), "cache file should be written"
+    with Path(path).open("r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    dummy_score = 999.0
+    for split in data["scores"]:
+        for score_dict in data["scores"][split]:
+            score_dict["main_score"] = dummy_score
+
+    with Path(path).open("w", encoding="utf-8") as f:
+        json.dump(data, f)
+
+    initial_mtime = path.stat().st_mtime
+
+    # Second run with "never" should load from cache and NOT overwrite it
+    never_results = mteb.evaluate(
+        model, task, cache=cache, overwrite_strategy="never", co2_tracker=False
+    )
+
+    assert never_results[0].get_score() == dummy_score
+    assert path.stat().st_mtime == initial_mtime
+    with Path(path).open("r", encoding="utf-8") as f:
+        assert json.load(f)["scores"]["test"][0]["main_score"] == dummy_score
+
+    # Third run with an empty cache should run and write to cache
+    cache_empty = ResultCache(tmp_path / "empty")
+    results_empty = mteb.evaluate(
+        model, task, cache=cache_empty, overwrite_strategy="never", co2_tracker=False
+    )
+    assert len(results_empty.task_results) == 1
+    empty_path = cache_empty.get_task_result_path(
+        task.metadata.name,
+        results_empty.model_name.replace("/", "__"),
+        results_empty.model_revision,
+    )
+    assert empty_path.exists()
+
+
 @pytest.mark.parametrize(
-    "model, task, expected_score,splits",
+    ("model", "task", "expected_score", "splits"),
     [
-        (MockSentenceTransformer(), MockClassificationTask(), 0.5, ["train"])
+        (MockSentenceTransformer(), MockClassificationTask(), 1, ["train"])
     ],  # default split is "test" so this will run "train" and then ["test", "train"], also means that expected score can be different
     ids=["mock_classification"],
 )
@@ -137,13 +212,13 @@ def test_cache_hit(task: AbsTask):
     model = mteb.get_model("mteb/baseline-random-encoder")
     with pytest.raises(
         ValueError,
-        match="overwrite_strategy is set to 'only-cache' and the results file exists",
+        match="overwrite_strategy is set to 'only-cache'",
     ):
         mteb.evaluate(model, task, overwrite_strategy="only-cache")
 
 
 @pytest.mark.parametrize(
-    "model, task, expected_score",
+    ("model", "task", "expected_score"),
     [(MockSentenceTransformer(), MockMultilingualRetrievalTask(), 0.63093)],
     ids=["mock_retrieval"],
 )
@@ -175,7 +250,7 @@ def test_evaluate_w_missing_subset(
 
 
 @pytest.mark.parametrize(
-    "model, task, expected_score, splits",
+    ("model", "task", "expected_score", "splits"),
     [(*mock_classification, ["train"])],
     ids=["mock_classification"],
 )
@@ -196,12 +271,16 @@ def test_evaluate_overwrites(
 
     task._eval_splits = task.metadata.eval_splits  # reset splits to default
 
-    with pytest.raises(ValueError):
+    with pytest.raises(
+        ValueError, match="'only-cache' and the results file exists for task"
+    ):
         results = mteb.evaluate(
             model, task, cache=cache, overwrite_strategy="only-cache"
         )
 
-    with pytest.raises(ValueError):
+    with pytest.raises(
+        ValueError, match="'never' and the results file exists for task"
+    ):
         results = mteb.evaluate(model, task, cache=cache, overwrite_strategy="never")
 
     # should just overwrite
@@ -217,12 +296,60 @@ def test_evaluate_aggregated_task():
     mteb.evaluate(model, task, cache=None)
 
 
-def test_run_private_task_warning(caplog):
+def test_evaluate_aggregated_task_with_cache(tmp_path: Path):
+    """Test evaluating an aggregate task with caching.
+
+    Verifies both that:
+    1. If the aggregate file is missing but all sub-tasks are cached, it falls back
+       to combining the cached subtask results under ONLY_CACHE strategy.
+    2. Once the aggregate file is generated and saved, it can be loaded directly
+       on subsequent runs without re-evaluating or calling fallback (verified
+       by deleting the individual sub-task cache files prior to the second call).
+    """
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    task = MockAggregatedTask()
+    cache = ResultCache(tmp_path)
+    # evaluate tasks individually
+    mteb.evaluate(model, task.metadata.tasks, cache=cache)
+
+    path = cache.get_task_result_path(
+        task.metadata.name,
+        model.mteb_model_meta.model_name_as_path(),
+        model.mteb_model_meta.revision,
+    )
+    assert not path.exists()
+    # should be able to load results even if aggregated task results do not exist
+    results = mteb.evaluate(model, task, cache=cache, overwrite_strategy="only-cache")
+    assert len(results.task_results) == 1
+    score1 = results.task_results[0].get_score()
+    assert path.exists()
+
+    # Delete individual sub-task cache files to ensure we load from the aggregate file
+    for subtask in task.metadata.tasks:
+        sub_path = cache.get_task_result_path(
+            subtask.metadata.name,
+            model.mteb_model_meta.model_name_as_path(),
+            model.mteb_model_meta.revision,
+        )
+        sub_path.unlink()
+        assert not sub_path.exists()
+
+    cached_results = mteb.evaluate(
+        model, task, cache=cache, overwrite_strategy="only-cache"
+    )
+    assert len(cached_results.task_results) == 1
+    assert cached_results.task_results[0].get_score() == pytest.approx(score1)
+
+
+def test_run_private_task_warning(caplog: pytest.LogCaptureFixture):
     """Test that a warning is correctly logged in an attempt run a private dataset is made"""
     task = mteb.get_task("Code1Retrieval")
+    from mteb.timing import TimingStack
 
     def load_data_dataset_not_found(
-        num_proc: int | None,
+        num_proc: int | None = None,
+        timer: TimingStack | None = None,
+        **kwargs: Any,
     ):
         raise DatasetNotFoundError
 
@@ -251,7 +378,9 @@ def test_run_task_raise_error():
     task = MockRetrievalTask()
 
     def load_error(
-        num_proc: int | None,
+        num_proc: int | None = None,
+        timer: TimingStack | None = None,
+        **kwargs: Any,
     ):
         raise RuntimeError("Test error")
 
@@ -302,7 +431,7 @@ def test_evaluate_preserves_preloaded_data_across_multiple_calls():
     _ = task.dataset["test"]  # Verify dataset persists across multiple calls
 
 
-def test_evaluate_experiment(tmp_path):
+def test_evaluate_experiment(tmp_path: Path):
     """Test that evaluate() can be used in an experiment context."""
     model = mteb.get_model(
         "mteb/baseline-random-encoder", test_param=123, test_param2="abc"
@@ -314,10 +443,224 @@ def test_evaluate_experiment(tmp_path):
 
     expected_path = (
         Path("results")
-        / "mteb__baseline-random-encoder"
-        / "1"
+        / model.mteb_model_meta.model_name_as_path()
+        / model.mteb_model_meta.revision
         / "experiments"
         / "test_param_123__test_param2_abc"
         / "MockClassificationTask.json"
     )
     assert (tmp_path / expected_path).exists()
+
+
+@pytest.mark.parametrize("embed_dim", [None, 10])
+def test_evaluate_mrl(tmp_path: Path, embed_dim):
+    """Test that evaluate() can be used in an experiment context."""
+    model = mteb.get_model(
+        "mteb/baseline-random-encoder",
+        embed_dim=embed_dim,
+    )
+    task = MockRetrievalTask()
+    cache = ResultCache(tmp_path)
+    mteb.evaluate(model, task, cache=cache)
+
+    model_meta_path = (
+        tmp_path
+        / "results"
+        / model.mteb_model_meta.model_name_as_path()
+        / model.mteb_model_meta.revision
+    )
+    if embed_dim is not None:
+        model_meta_path = model_meta_path / "experiments" / "embed_dim_10"
+    model_meta_path = model_meta_path / "model_meta.json"  # noqa: PLR6104
+    with model_meta_path.open(encoding="utf-8") as f:
+        model_meta_json = json.load(f)
+    model_meta_json["loader"] = None  # otherwise meta won't be validated
+    model_meta = ModelMeta.model_validate(model_meta_json)
+    assert isinstance(model_meta.embed_dim, int)
+
+
+def test_mrl_unsupported_dim():
+    """Test that passing unsupported mrl dim raises an error."""
+    # try to load model with mrl, but wrong dim
+    with pytest.raises(
+        ValueError, match="is not in the model's supported embedding dimensions"
+    ):
+        mteb.get_model(
+            "mteb/baseline-random-encoder",
+            embed_dim=100,
+        )
+
+    # try to load model that don't support mrl
+    with pytest.raises(
+        ValueError, match="does not match the model's embedding dimension"
+    ):
+        mteb.get_model(
+            "intfloat/multilingual-e5-small",
+            embed_dim=100,
+        )
+
+
+def test_precision_arg(tmp_path: Path):
+    """A ``precision`` encode kwarg is recorded as ``output_dtypes`` before the cache
+    lookup, so precision-specific runs live in their own experiment namespace and do
+    not reuse (or overwrite) the default cached result.
+
+    Regression test for https://github.com/embeddings-benchmark/mteb/issues/5394
+    """
+    model = SentenceTransformerEncoderWrapper(MockSentenceTransformer())
+    task = MockClassificationTask()
+    cache = ResultCache(tmp_path)
+
+    mteb.evaluate(model, task, cache=cache, encode_kwargs={"precision": "int8"})
+
+    default_path = (
+        tmp_path
+        / "results"
+        / model.mteb_model_meta.model_name_as_path()
+        / model.mteb_model_meta.revision
+        / f"{task.metadata.name}.json"
+    )
+    experiment_path = (
+        default_path.parent / "experiments" / "output_dtypes_int8" / default_path.name
+    )
+    assert not default_path.exists()
+    assert experiment_path.exists()
+
+    saved_meta = json.loads(
+        (experiment_path.parent / "model_meta.json").read_text(encoding="utf-8")
+    )
+    assert saved_meta["experiment_kwargs"]["output_dtypes"] == OutputDType.INT8
+
+    # a later default evaluation must not reuse the quantized result
+    mteb.evaluate(model, task, cache=cache)
+    assert default_path.exists()
+
+
+@pytest.mark.parametrize(
+    "task",
+    [
+        MockClassificationTask(),
+        MockMultilabelClassification(),
+        MockPairClassificationTask(),
+        MockSTSTask(),
+        MockSummarizationTask(),
+        MockTextZeroShotClassificationTask(),
+        MockZeroShotClassificationTask(),
+    ],
+    ids=lambda x: x.metadata.name,
+)
+def test_num_proc_reaches_every_dataloader(task: AbsTask) -> None:
+    class _NumWorkersRecordingBaseline(RandomEncoderBaseline):
+        """Random baseline that records the num_workers of every dataloader it encodes."""
+
+        def __init__(self, *args: Any, **kwargs: Any) -> None:
+            super().__init__(*args, **kwargs)
+            self.num_workers: list[int] = []
+            self.mteb_model_meta = ModelMeta.create_empty(
+                overwrites=dict(
+                    similarity_fn_name=ScoringFunction.COSINE,
+                    modalities=["image", "text"],
+                )
+            )
+
+        def encode(self, inputs: DataLoader[BatchedInput], **kwargs: Any) -> Array:
+            self.num_workers.append(inputs.num_workers)
+            inputs.num_workers = 0  # only record the request, iterate in-process
+            return super().encode(inputs, **kwargs)
+
+    model = _NumWorkersRecordingBaseline("test_model", revision=None)
+    mteb.evaluate(model, task, cache=None, num_proc=2)
+
+    assert model.num_workers
+    assert all(n == 2 for n in model.num_workers)
+
+
+@pytest.mark.parametrize("task", MOCK_MAEB_TASK_GRID)
+def test_mock_maeb_tasks(task: AbsTask):
+    pytest.importorskip("torchaudio", reason="Audio dependencies are not installed")
+    model = mteb.get_model_meta("mteb/baseline-random-encoder")
+    mteb.evaluate(model, task, cache=None)
+
+
+@pytest.mark.parametrize("task", MOCK_MVEB_TASK_GRID)
+def test_mock_mveb_tasks(task: AbsTask):
+    pytest.importorskip("torchcodec", reason="Audio dependencies are not installed")
+    model = mteb.get_model_meta("mteb/baseline-random-encoder")
+    mteb.evaluate(model, task, cache=None)
+
+
+@pytest.mark.parametrize("task", MOCK_MULTIMODAL_TASKS, ids=lambda x: x.metadata.name)
+def test_mock_mmeb_tasks(task: AbsTask):
+    pytest.importorskip("torchcodec", reason="Audio dependencies are not installed")
+    model = mteb.get_model_meta("mteb/baseline-random-encoder")
+    mteb.evaluate(model, task, cache=None)
+
+
+class MockCrashTask(MockMultilingualClassificationTask):
+    def _evaluate_subset(self, model, data_split, hf_split, hf_subset, **kwargs: Any):
+        if hf_subset == "fra":
+            raise RuntimeError("Crash on fra")
+        return {"accuracy": 0.8}
+
+
+def test_evaluate_intermediate_cache_on_crash(tmp_path: Path):
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    task = MockCrashTask()
+    cache = ResultCache(tmp_path)
+
+    with pytest.raises(RuntimeError, match="Crash on fra"):
+        mteb.evaluate(model, task, cache=cache, co2_tracker=False)
+
+    cached_result = cache.load_task_result(task.metadata.name, model.mteb_model_meta)
+    assert cached_result is not None
+    assert "test" in cached_result.scores
+    scores = cached_result.scores["test"]
+    assert len(scores) == 1
+    assert scores[0]["hf_subset"] == "eng"
+    assert scores[0]["main_score"] == 0.8
+
+
+def test_task_result_from_task_results_merging():
+    task = MockClassificationTask()
+    scores = {
+        "test": {
+            "subset1": {
+                "main_score": 0.8,
+                "accuracy": 0.8,
+                "mteb_version": "1.0.0",
+            },
+            "subset2": {
+                "main_score": 0.9,
+                "accuracy": 0.9,
+            },
+        }
+    }
+
+    current_version = mteb.__version__
+    result = TaskResult.from_task_results(
+        task=task,
+        scores=scores,
+        evaluation_time=12.5,
+        kg_co2_emissions=0.07,
+    )
+
+    assert result.kg_co2_emissions == 0.07
+    assert result.evaluation_time == 12.5
+    assert len(result.scores["test"]) == 2
+
+    subset1_score = next(
+        s for s in result.scores["test"] if s["hf_subset"] == "subset1"
+    )
+    subset2_score = next(
+        s for s in result.scores["test"] if s["hf_subset"] == "subset2"
+    )
+
+    assert subset1_score["accuracy"] == 0.8
+    assert subset2_score["accuracy"] == 0.9
+    assert subset1_score["mteb_version"] == "1.0.0"
+    assert subset2_score["mteb_version"] == current_version
+
+    if current_version == "1.0.0":
+        assert result.mteb_version == "1.0.0"
+    else:
+        assert result.mteb_version == f"1.0.0-{current_version}"

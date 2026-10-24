@@ -63,7 +63,9 @@
                     "min_top_ranked_per_query": 2,
                     "average_top_ranked_per_query": 11.167364016736402,
                     "max_top_ranked_per_query": 57
-                }
+                },
+                "num_documents": 8007,
+                "num_queries": 717
             },
             "en": {
                 "num_samples": 8919,
@@ -96,7 +98,9 @@
                     "min_top_ranked_per_query": 2,
                     "average_top_ranked_per_query": 11.982532751091703,
                     "max_top_ranked_per_query": 58
-                }
+                },
+                "num_documents": 8232,
+                "num_queries": 687
             },
             "es": {
                 "num_samples": 9201,
@@ -129,7 +133,9 @@
                     "min_top_ranked_per_query": 2,
                     "average_top_ranked_per_query": 12.069602272727273,
                     "max_top_ranked_per_query": 69
-                }
+                },
+                "num_documents": 8497,
+                "num_queries": 704
             },
             "fr": {
                 "num_samples": 9055,
@@ -162,7 +168,9 @@
                     "min_top_ranked_per_query": 2,
                     "average_top_ranked_per_query": 11.089452603471296,
                     "max_top_ranked_per_query": 52
-                }
+                },
+                "num_documents": 8306,
+                "num_queries": 749
             },
             "it": {
                 "num_samples": 9052,
@@ -195,7 +203,9 @@
                     "min_top_ranked_per_query": 2,
                     "average_top_ranked_per_query": 10.989403973509933,
                     "max_top_ranked_per_query": 70
-                }
+                },
+                "num_documents": 8297,
+                "num_queries": 755
             },
             "pt": {
                 "num_samples": 9293,
@@ -228,7 +238,9 @@
                     "min_top_ranked_per_query": 2,
                     "average_top_ranked_per_query": 12.237891737891738,
                     "max_top_ranked_per_query": 80
-                }
+                },
+                "num_documents": 8591,
+                "num_queries": 702
             },
             "zh": {
                 "num_samples": 9070,
@@ -261,9 +273,13 @@
                     "min_top_ranked_per_query": 2,
                     "average_top_ranked_per_query": 13.396825396825397,
                     "max_top_ranked_per_query": 94
-                }
+                },
+                "num_documents": 8440,
+                "num_queries": 630
             }
-        }
+        },
+        "num_documents": 58370,
+        "num_queries": 4944
     },
     "test": {
         "num_samples": 62153,
@@ -329,7 +345,9 @@
                     "min_top_ranked_per_query": 2,
                     "average_top_ranked_per_query": 10.077905491698596,
                     "max_top_ranked_per_query": 78
-                }
+                },
+                "num_documents": 7891,
+                "num_queries": 783
             },
             "en": {
                 "num_samples": 8940,
@@ -362,7 +380,9 @@
                     "min_top_ranked_per_query": 2,
                     "average_top_ranked_per_query": 11.21311475409836,
                     "max_top_ranked_per_query": 87
-                }
+                },
+                "num_documents": 8208,
+                "num_queries": 732
             },
             "es": {
                 "num_samples": 8999,
@@ -395,7 +415,9 @@
                     "min_top_ranked_per_query": 2,
                     "average_top_ranked_per_query": 12.195014662756599,
                     "max_top_ranked_per_query": 60
-                }
+                },
+                "num_documents": 8317,
+                "num_queries": 682
             },
             "fr": {
                 "num_samples": 8936,
@@ -428,7 +450,9 @@
                     "min_top_ranked_per_query": 2,
                     "average_top_ranked_per_query": 11.950724637681159,
                     "max_top_ranked_per_query": 104
-                }
+                },
+                "num_documents": 8246,
+                "num_queries": 690
             },
             "it": {
                 "num_samples": 8742,
@@ -461,7 +485,9 @@
                     "min_top_ranked_per_query": 2,
                     "average_top_ranked_per_query": 10.250965250965251,
                     "max_top_ranked_per_query": 80
-                }
+                },
+                "num_documents": 7965,
+                "num_queries": 777
             },
             "pt": {
                 "num_samples": 8990,
@@ -494,7 +520,9 @@
                     "min_top_ranked_per_query": 2,
                     "average_top_ranked_per_query": 12.27917282127031,
                     "max_top_ranked_per_query": 65
-                }
+                },
+                "num_documents": 8313,
+                "num_queries": 677
             },
             "zh": {
                 "num_samples": 8872,
@@ -527,8 +555,12 @@
                     "min_top_ranked_per_query": 2,
                     "average_top_ranked_per_query": 12.442424242424243,
                     "max_top_ranked_per_query": 75
-                }
+                },
+                "num_documents": 8212,
+                "num_queries": 660
             }
-        }
+        },
+        "num_documents": 57152,
+        "num_queries": 5001
     }
 }

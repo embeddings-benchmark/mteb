@@ -4,7 +4,7 @@ MTEB ModelMeta for ManiacLabs/miniac-embed.
 LEAF-distilled embedding model: E5-small-unsupervised backbone, mxbai-embed-large teacher.
 """
 
-from mteb.models import ModelMeta, sentence_transformers_loader
+from mteb.models import ModelMeta, SentenceTransformerEncoderWrapper
 
 MINIAC_EMBED_TRAINING_DATASETS = {
     "fineweb",
@@ -18,7 +18,7 @@ MINIAC_EMBED_TRAINING_DATASETS = {
 }
 
 miniac_embed = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(),
     name="ManiacLabs/miniac-embed",
     model_type=["dense"],

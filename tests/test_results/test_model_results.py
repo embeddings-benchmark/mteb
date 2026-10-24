@@ -6,6 +6,8 @@ import pytest
 import mteb
 from mteb.results import ModelResult, TaskResult
 
+pytestmark = pytest.mark.core
+
 
 @pytest.fixture
 def model_result() -> ModelResult:
@@ -48,14 +50,15 @@ def test_utility_properties(
     model_result: ModelResult,
 ) -> None:
     mr = model_result
-    assert isinstance(mr.task_names, list) and isinstance(mr.task_names[0], str)
-    assert (
-        isinstance(mr.languages, list)
-        and isinstance(mr.languages[0], str)
-        and "eng" in mr.languages  # known from mock data
-    )
-    assert isinstance(mr.task_types, list) and isinstance(mr.task_types[0], str)
-    assert isinstance(mr.domains, list) and isinstance(mr.domains[0], str)
+    assert isinstance(mr.task_names, list)
+    assert isinstance(mr.task_names[0], str)
+    assert isinstance(mr.languages, list)
+    assert isinstance(mr.languages[0], str)
+    assert "eng" in mr.languages  # known from mock data
+    assert isinstance(mr.task_types, list)
+    assert isinstance(mr.task_types[0], str)
+    assert isinstance(mr.domains, list)
+    assert isinstance(mr.domains[0], str)
 
 
 def test_select_tasks(
@@ -88,7 +91,9 @@ def test_to_dataframe(
 
     t2 = mr.to_dataframe(aggregation_level="split", format="long")
     assert all(
-        col in t2.columns for col in required_columns if col not in ["subset"]
+        col in t2.columns
+        for col in required_columns
+        if col not in ["subset"]  # noqa: PLR6201
     ), "Columns are missing"
     assert "subset" not in t2.columns, "Subset column should not be present"
     assert t1.shape[0] >= t2.shape[0], (
@@ -97,7 +102,9 @@ def test_to_dataframe(
 
     t3 = mr.to_dataframe(aggregation_level="task", format="long")
     assert all(
-        col in t3.columns for col in required_columns if col not in ["subset", "split"]
+        col in t3.columns
+        for col in required_columns
+        if col not in ["subset", "split"]  # noqa: PLR6201
     ), "Columns are missing"
     assert "subset" not in t3.columns, "Subset column should not be present"
     assert "split" not in t3.columns, "Split column should not be present"
@@ -113,3 +120,38 @@ def test_to_dataframe(
     assert t4_wide[mr.model_name].tolist()[0] == t4_long["score"][0], (
         "The scores in wide and long format should be the same"
     )
+
+
+def test_modalities_from_task_results() -> None:
+    def task_result(task_name: str) -> TaskResult:
+        return TaskResult(
+            dataset_revision="1.0",
+            task_name=task_name,
+            mteb_version="1.0.0",
+            evaluation_time=1,
+            scores={
+                "test": [
+                    {
+                        "main_score": 0.5,
+                        "hf_subset": "default",
+                        "languages": ["eng-Latn"],
+                    }
+                ]
+            },
+        )
+
+    mr = ModelResult(
+        model_name="mock_model",
+        model_revision="dummy",
+        task_results=[
+            task_result("CIFAR10ZeroShot"),
+            task_result("Banking77Classification"),
+        ],
+    )
+
+    assert sorted(mr.modalities) == ["image", "text"]
+    assert mr._filter_tasks(modalities=["image"]).task_names == ["CIFAR10ZeroShot"]
+    assert mr._filter_tasks(modalities=["text"]).task_names == [
+        "CIFAR10ZeroShot",
+        "Banking77Classification",
+    ]

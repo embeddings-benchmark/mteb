@@ -1,11 +1,17 @@
 from __future__ import annotations
 
 from collections import defaultdict
+from typing import TYPE_CHECKING, Any
 
 import datasets
 
 from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+
+if TYPE_CHECKING:
+    from datasets import Dataset
+
+    from mteb.types import RelevantDocumentsType, TopRankedDocumentsType
 
 
 def load_bright_data(
@@ -14,7 +20,12 @@ def load_bright_data(
     eval_splits: list,
     cache_dir: str | None = None,
     revision: str | None = None,
-):
+) -> tuple[
+    dict[str, Dataset],
+    dict[str, Dataset],
+    dict[str, RelevantDocumentsType],
+    dict[str, TopRankedDocumentsType],
+]:
     eval_split = eval_splits[0]
     corpus_name = "documents" if eval_split == "standard" else "long_documents"
     gold_ids_field = "gold_ids" if eval_split == "standard" else "gold_ids_long"
@@ -113,7 +124,7 @@ class BrightBiologyRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -122,7 +133,7 @@ class BrightBiologyRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="biology",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -157,7 +168,7 @@ class BrightEarthScienceRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -166,7 +177,7 @@ class BrightEarthScienceRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="earth_science",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -201,7 +212,7 @@ class BrightEconomicsRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -210,7 +221,7 @@ class BrightEconomicsRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="economics",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -245,7 +256,7 @@ class BrightPsychologyRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -254,7 +265,7 @@ class BrightPsychologyRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="psychology",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -289,7 +300,7 @@ class BrightRoboticsRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -298,7 +309,7 @@ class BrightRoboticsRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="robotics",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -333,7 +344,7 @@ class BrightStackoverflowRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -342,7 +353,7 @@ class BrightStackoverflowRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="stackoverflow",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -377,7 +388,7 @@ class BrightSustainableLivingRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -386,7 +397,7 @@ class BrightSustainableLivingRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="sustainable_living",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -421,7 +432,7 @@ class BrightPonyRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -430,7 +441,7 @@ class BrightPonyRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="pony",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -465,7 +476,7 @@ class BrightLeetcodeRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -474,7 +485,7 @@ class BrightLeetcodeRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="leetcode",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -509,7 +520,7 @@ class BrightAopsRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -518,7 +529,7 @@ class BrightAopsRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="aops",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -553,7 +564,7 @@ class BrightTheoremQATheoremsRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -562,7 +573,7 @@ class BrightTheoremQATheoremsRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="theoremqa_theorems",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -597,7 +608,7 @@ class BrightTheoremQAQuestionsRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -606,7 +617,7 @@ class BrightTheoremQAQuestionsRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="theoremqa_questions",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -641,7 +652,7 @@ class BrightBiologyLongRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -650,7 +661,7 @@ class BrightBiologyLongRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="biology",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -685,7 +696,7 @@ class BrightEarthScienceLongRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -694,7 +705,7 @@ class BrightEarthScienceLongRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="earth_science",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -729,7 +740,7 @@ class BrightEconomicsLongRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -738,7 +749,7 @@ class BrightEconomicsLongRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="economics",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -773,7 +784,7 @@ class BrightPsychologyLongRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -782,7 +793,7 @@ class BrightPsychologyLongRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="psychology",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -817,7 +828,7 @@ class BrightRoboticsLongRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -826,7 +837,7 @@ class BrightRoboticsLongRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="robotics",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -861,7 +872,7 @@ class BrightStackoverflowLongRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -870,7 +881,7 @@ class BrightStackoverflowLongRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="stackoverflow",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -905,7 +916,7 @@ class BrightSustainableLivingLongRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -914,7 +925,7 @@ class BrightSustainableLivingLongRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="sustainable_living",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )
@@ -949,7 +960,7 @@ class BrightPonyLongRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
 
@@ -958,7 +969,7 @@ class BrightPonyLongRetrieval(AbsTaskRetrieval):
                 path=self.metadata.dataset["path"],
                 eval_splits=self.metadata.eval_splits,
                 domain="pony",
-                cache_dir=kwargs.get("cache_dir", None),
+                cache_dir=kwargs.get("cache_dir"),
                 revision=self.metadata.dataset["revision"],
             )
         )

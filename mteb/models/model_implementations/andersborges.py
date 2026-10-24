@@ -1,10 +1,10 @@
 import numpy as np
 
-from mteb.models.model_implementations.model2vec_models import Model2VecModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 model2vecdk = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="andersborges/model2vecdk",
     model_type=["dense"],
     languages=["dan-Latn"],
@@ -21,27 +21,21 @@ model2vecdk = ModelMeta(
     framework=["NumPy", "Sentence Transformers", "safetensors"],
     reference="https://huggingface.co/andersborges/model2vecdk",
     use_instructions=False,
-    adapted_from="https://huggingface.co/jealk/TTC-L2V-supervised-2",
+    adapted_from="jealk/TTC-L2V-supervised-2",
     superseded_by=None,
     training_datasets=set(),  # distilled
     public_training_code="https://github.com/andersborges/dkmodel2vec",
     public_training_data="https://huggingface.co/datasets/DDSC/nordic-embedding-training-data",
-    citation="""@article{minishlab2024model2vec,
-  author = {Tulkens, Stephan and {van Dongen}, Thomas},
-  title = {Model2Vec: Fast State-of-the-Art Static Embeddings},
-  year = {2024},
-  url = {https://github.com/MinishLab/model2vec}
-}""",
 )
 
 
 model2vecdk_stem = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="andersborges/model2vecdk-stem",
     model_type=["dense"],
     languages=["dan-Latn"],
     open_weights=True,
-    revision="cb576c78dcc1b729e4612645f61db59929d69e61",
+    revision="aa57f4b2450ca868106d900119fe1975e4d67ce3",
     release_date="2025-11-21",
     n_parameters=48578560,
     n_embedding_parameters=48578560,
@@ -53,15 +47,9 @@ model2vecdk_stem = ModelMeta(
     framework=["NumPy", "Sentence Transformers", "safetensors"],
     reference="https://huggingface.co/andersborges/model2vecdk-stem",
     use_instructions=False,
-    adapted_from="https://huggingface.co/jealk/TTC-L2V-supervised-2",
+    adapted_from="jealk/TTC-L2V-supervised-2",
     superseded_by=None,
     training_datasets=set(),  # distilled
     public_training_code="https://github.com/andersborges/dkmodel2vec",
     public_training_data="https://huggingface.co/datasets/DDSC/nordic-embedding-training-data",
-    citation="""@article{minishlab2024model2vec,
-  author = {Tulkens, Stephan and {van Dongen}, Thomas},
-  title = {Model2Vec: Fast State-of-the-Art Static Embeddings},
-  year = {2024},
-  url = {https://github.com/MinishLab/model2vec}
-}""",
 )

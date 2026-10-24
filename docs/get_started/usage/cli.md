@@ -12,8 +12,10 @@ This described the is the command line interface for `mteb`.
 - [`mteb run`](#running-models-on-tasks): Runs a model on a set of tasks
 - [`mteb available_tasks`](#listing-available-tasks): Lists the available tasks within MTEB
 - [`mteb available_benchmarks`](#listing-available-benchmarks): Lists the available benchmarks
+- [`mteb submit-results`](#submitting-results): Submits results to the results repository
 - [`mteb create_meta`](#creating-model-metadata): Creates the metadata for a model card from a folder of results
 - [`mteb leaderboard`](#running-the-leaderboard): Runs the MTEB leaderboard locally
+- [`mteb mock-run`](#checking-model-implementations): Sanity checks a model implementation using mock tasks
 
 In the following we outline some sample use cases, but if you want to learn more about the arguments for each command you can run:
 
@@ -33,6 +35,25 @@ mteb run -m sentence-transformers/average_word_embeddings_komninos \
 
 This will create a folder `mteb_output/{model_name}/{model_revision}` containing the results of the model on the specified tasks supplied as a json
 file; `{task_name}.json`.
+
+## Submitting Results
+
+To submit results to the [results repository](https://github.com/embeddings-benchmark/results), use the `mteb submit-results` command. It submits the results that the repository does not have yet, from the same folder that `mteb run` writes to (`--output-folder`, `results` by default). For example:
+
+```bash
+# run task
+mteb run -m sentence-transformers/all-MiniLM-L6-v2 -t ArguAna
+
+# submit all unsubmitted results
+mteb submit-results --create-pr
+
+# submit specific results, with a title describing the submission
+mteb submit-results --create-pr -m sentence-transformers/all-MiniLM-L6-v2 -t ArguAna \
+    --message "Add ArguAna results for all-MiniLM-L6-v2"
+```
+
+Without `--create-pr`, the results are committed to a new branch in a local clone of the repository, to push and open a PR manually.
+`--create-pr` requires the `mteb[github]` extra and GitHub authentication, see [Submit Results](../../contributing/submitting_results.md) for the requirements.
 
 
 ## Listing Available Tasks
@@ -69,14 +90,12 @@ mteb create-meta --results-folder mteb_output/sentence-transformers__average_wor
 This will create a model card at `model_card.md` containing the metadata for the model on MTEB within the YAML frontmatter. This will make the model
 discoverable on the MTEB leaderboard.
 
-An example frontmatter for a model card is shown below:
-
-```yaml
----
-
 ## Running the Leaderboard
 
-To run the MTEB leaderboard locally, use the `mteb leaderboard` command. For example:
+!!! warning
+    `mteb leaderboard` launches the legacy Gradio leaderboard, which is no longer actively maintained. See the [leaderboard documentation](leaderboard.md#running-the-leaderboard-locally) for how to run the current leaderboard.
+
+To run the legacy MTEB leaderboard locally, use the `mteb leaderboard` command. For example:
 
 ```bash
 mteb leaderboard
@@ -96,21 +115,23 @@ Available options:
 - `--rebuild`: Force rebuild from full results repository, bypassing cached JSON
 
 For more details on running the leaderboard, see the [leaderboard documentation](leaderboard.md).
-tags:
-- mteb
-model-index:
-- name: SGPT-5.8B-weightedmean-msmarco-specb-bitfit
-  results:
-  - task:
-      type: classification
-    dataset:
-      type: mteb/banking77
-      name: MTEB Banking77
-      config: default
-      split: test
-      revision: 44fa15921b4c889113cc5df03dd4901b49161ab7
-    metrics:
-    - type: accuracy
-      value: 84.49350649350649
----
+
+## Checking Model Implementations
+
+To sanity check a model implementation using a set of example test tasks, use the `mteb mock-run` command. This command evaluates the model on a set of tasks covering various modalities and task types, while not requiring any external datasets, making it a fast way to test that the implementation works as intended before running larger benchmarks or when implementing a model.
+
+For example:
+
+```bash
+mteb mock-run -m sentence-transformers/average_word_embeddings_komninos
 ```
+
+This will run the model on all compatible mock tasks, print a Markdown summary table to stdout, and save the markdown results to `mteb_mock_run_results.md`.
+
+Available options:
+- `-m, --model MODEL`: The model to use. Prioritizes the model implementation from MTEB's model registry, or defaults to loading via `sentence-transformers`.
+- `--model-revision REVISION`: Revision of the model to load.
+- `--device DEVICE`: Device to use for computation (e.g. `cpu`, `cuda`).
+- `-v, --verbosity VERBOSITY`: Verbosity level (0 to 4, default: 2).
+
+The same checks are available from Python using [`mteb.mock_run`](../../contributing/adding_a_model.md#local-model-verification-using-mock-tasks), which returns the per-task status instead of writing a file.

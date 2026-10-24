@@ -1,21 +1,26 @@
+from __future__ import annotations
+
 import argparse
 import logging
 import os
 import warnings
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
-import torch
+from rich.console import Console
 from rich.logging import RichHandler
 
 import mteb
+from mteb._requires_package import _requires_full_installation
 from mteb.cache import ResultCache
 from mteb.cli._display_tasks import _display_benchmarks, _display_tasks
 from mteb.cli.generate_model_card import generate_model_card
 from mteb.evaluate import OverwriteStrategy
+from mteb.mocks.mock_run import mock_run
 
 if TYPE_CHECKING:
     from mteb.abstasks.abstask import AbsTask
+    from mteb.mocks.mock_run import MockRunResults
     from mteb.types import EncodeKwargs
 
 logger = logging.getLogger(__name__)
@@ -24,6 +29,9 @@ logger = logging.getLogger(__name__)
 def run(args: argparse.Namespace) -> None:
     """Run a model on a set of tasks."""
     # set logging based on verbosity level
+    _requires_full_installation("torch", "Running a model")
+    import torch
+
     if args.verbosity == 0:
         logging.getLogger("mteb").setLevel(logging.CRITICAL)
     elif args.verbosity == 1:
@@ -33,7 +41,7 @@ def run(args: argparse.Namespace) -> None:
     elif args.verbosity == 3:
         logging.getLogger("mteb").setLevel(logging.DEBUG)
 
-    if args.benchmarks and (
+    if args.benchmarks and (  # noqa: PLR0916
         args.tasks
         or args.eval_splits
         or args.languages
@@ -77,6 +85,7 @@ def run(args: argparse.Namespace) -> None:
         warnings.warn(
             "`--overwrite` is deprecated, please use `--overwrite-strategy 'always'` instead.",
             DeprecationWarning,
+            stacklevel=2,
         )
         overwrite_strategy = OverwriteStrategy.ALWAYS.value
 
@@ -85,6 +94,7 @@ def run(args: argparse.Namespace) -> None:
         warnings.warn(
             "`--save_predictions` is deprecated, please use `--prediction-folder` instead.",
             DeprecationWarning,
+            stacklevel=2,
         )
         prediction_folder = args.output_folder
 
@@ -96,6 +106,7 @@ def run(args: argparse.Namespace) -> None:
         overwrite_strategy=overwrite_strategy,
         encode_kwargs=encode_kwargs,
         prediction_folder=prediction_folder,
+        num_proc=args.num_proc,
     )
 
 
@@ -160,7 +171,7 @@ def _add_task_selection_args(parser: argparse.ArgumentParser) -> None:
     )
 
 
-def _add_available_tasks_parser(subparsers: argparse._SubParsersAction) -> None:
+def _add_available_tasks_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
     parser = subparsers.add_parser(
         "available-tasks", help="List the available tasks within MTEB"
     )
@@ -169,7 +180,9 @@ def _add_available_tasks_parser(subparsers: argparse._SubParsersAction) -> None:
     parser.set_defaults(func=_available_tasks)
 
 
-def _add_available_benchmarks_parser(subparsers: argparse._SubParsersAction) -> None:
+def _add_available_benchmarks_parser(
+    subparsers: argparse._SubParsersAction[Any],
+) -> None:
     parser = subparsers.add_parser(
         "available-benchmarks", help="List the available benchmarks within MTEB"
     )
@@ -178,7 +191,7 @@ def _add_available_benchmarks_parser(subparsers: argparse._SubParsersAction) -> 
     parser.set_defaults(func=_available_benchmarks)
 
 
-def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
+def _add_run_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
     parser = subparsers.add_parser("run", help="Run a model on a set of tasks")
 
     parser.add_argument(
@@ -241,6 +254,13 @@ def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
         default=None,
         help="Batch size of the encode. Will be passed to the MTEB as `mteb.evaluate(model, task, encode_kwargs={'batch_size': value})`.",
     )
+    parser.add_argument(
+        "--num-proc",
+        "--num_proc",  # for consistency with the other underscore aliases
+        type=int,
+        default=None,
+        help="Number of processes to use during data loading and transformation. Will be passed to the MTEB as `mteb.evaluate(model, task, num_proc=value)`.",
+    )
     # for backward compatibility
     parser.add_argument(
         "--overwrite",
@@ -255,7 +275,7 @@ def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
         choices=[val.value for val in OverwriteStrategy],
         help=(
             "Strategy for when to overwrite. Can be 'always', 'never', 'only-missing'. 'only-missing' will only rerun the missing splits of a task."
-            + " It will not rerun the splits if the dataset revision or mteb version has changed."
+            " It will not rerun the splits if the dataset revision or mteb version has changed."
         ),
     )
     parser.add_argument(
@@ -274,10 +294,66 @@ def _add_run_parser(subparsers: argparse._SubParsersAction) -> None:
     parser.set_defaults(func=run)
 
 
+def _submit_results(args: argparse.Namespace) -> None:
+    # show the PR link or the instructions for manual submission
+    logging.getLogger("mteb").setLevel(logging.INFO)
+    ResultCache(args.output_folder).submit_results(
+        args.models,
+        tasks=args.tasks,
+        create_pr=args.create_pr,
+        message=args.message,
+    )
+
+
+def _add_submit_results_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
+    parser = subparsers.add_parser(
+        "submit-results",
+        help="Submit results to the results repository (https://github.com/embeddings-benchmark/results)",
+        description="Submit the results that the results repository does not have yet. By default, they are committed to a new "
+        "branch in a local clone of the repository, ready to be pushed and opened as a PR manually. Use `--create-pr` to open the PR directly.",
+    )
+    parser.add_argument(
+        "-m",
+        "--models",
+        nargs="+",
+        type=str,
+        default=None,
+        help="Models whose results to submit. If not set, the results of all models in the results folder are submitted.",
+    )
+    parser.add_argument(
+        "-t",
+        "--tasks",
+        nargs="+",
+        type=str,
+        default=None,
+        help="Tasks whose results to submit. If not set, the results of all tasks are submitted.",
+    )
+    parser.add_argument(
+        "--output-folder",
+        type=str,
+        default="results",  # same default as `mteb run`
+        help="Folder containing the results, i.e. the `--output-folder` used with `mteb run`.",
+    )
+    parser.add_argument(
+        "--create-pr",
+        action="store_true",
+        default=False,
+        help="Push the results to your fork and open a PR. Requires `mteb[github]` and GitHub authentication "
+        "(`gh auth login` or a git credential helper).",
+    )
+    parser.add_argument(
+        "--message",
+        type=str,
+        default=None,
+        help="Title of the commit and PR, e.g. 'Add ArguAna results for my-org/my-model'. If not set, a title listing the submitted models is used.",
+    )
+
+    parser.set_defaults(func=_submit_results)
+
+
 def _create_meta(args: argparse.Namespace) -> None:
     model_name = args.model_name
     tasks_names = args.tasks
-    benchmarks = args.benchmarks
     results_folder = Path(args.results_folder) if args.results_folder else None
     output_path = Path(args.output_path)
     overwrite = args.overwrite
@@ -288,7 +364,7 @@ def _create_meta(args: argparse.Namespace) -> None:
     if output_path.exists() and overwrite:
         msg = "Output path already exists, overwriting."
         logger.warning(msg)
-        warnings.warn(msg)
+        warnings.warn(msg, stacklevel=2)
     elif output_path.exists():
         raise FileExistsError(
             "Output path already exists, use --overwrite to overwrite."
@@ -298,20 +374,20 @@ def _create_meta(args: argparse.Namespace) -> None:
     tasks: list[AbsTask] = []
     if tasks_names is not None:
         tasks = list(mteb.get_tasks(tasks_names))
-    if benchmarks is not None:
-        benchmarks = mteb.get_benchmarks(benchmarks)
+    if args.benchmarks is not None:
+        benchmarks = mteb.get_benchmarks(args.benchmarks)
 
     generate_model_card(
         model_name,
-        tasks,
-        benchmarks,
+        tasks=tasks,
+        benchmarks=benchmarks,
         existing_model_card_id_or_path=from_existing,
         results_cache=ResultCache(results_folder),
         output_path=output_path,
     )
 
 
-def _add_create_meta_parser(subparsers) -> None:
+def _add_create_meta_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
     parser = subparsers.add_parser("create-model-results", help="Create model results")
 
     parser.add_argument(
@@ -365,7 +441,7 @@ def _add_create_meta_parser(subparsers) -> None:
     parser.set_defaults(func=_create_meta)
 
 
-def _add_leaderboard_parser(subparsers) -> None:
+def _add_leaderboard_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
     parser = subparsers.add_parser("leaderboard", help="Launch the MTEB leaderboard")
 
     parser.add_argument(
@@ -414,9 +490,9 @@ def _leaderboard(args: argparse.Namespace) -> None:
     except ImportError as e:
         raise ImportError(
             "Seems like some dependencies are not installed. "
-            + "You can likely install these using: `pip install mteb[leaderboard]`. "
-            + f"{e}"
-        )
+            "You can likely install these using: `pip install 'mteb[leaderboard]'`. "
+            f"{e}"
+        ) from e
 
     cache_path = args.cache_path
 
@@ -460,6 +536,119 @@ def _leaderboard(args: argparse.Namespace) -> None:
     )
 
 
+def _mock_run(args: argparse.Namespace) -> None:
+    """Run a model on the compatible mock tasks for verification."""
+    # set logging based on verbosity level
+    _requires_full_installation("torch", "Running a model")
+    import torch
+
+    if args.verbosity == 0:
+        logging.getLogger("mteb").setLevel(logging.CRITICAL)
+    elif args.verbosity == 1:
+        logging.getLogger("mteb").setLevel(logging.ERROR)
+    elif args.verbosity == 2:
+        logging.getLogger("mteb").setLevel(logging.WARNING)
+    elif args.verbosity == 3:
+        logging.getLogger("mteb").setLevel(logging.INFO)
+    elif args.verbosity >= 4:
+        logging.getLogger("mteb").setLevel(logging.DEBUG)
+
+    logger.info("Running mock-run with parameters: %s", args)
+
+    logger.debug("Setting environment variable TOKENIZERS_PARALLELISM to false")
+    old_tokenizer_parallelism = os.environ.get("TOKENIZERS_PARALLELISM")
+    os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
+    try:
+        model = mteb.get_model(
+            args.model,
+            args.model_revision,
+            device=args.device or ("cuda" if torch.cuda.is_available() else "cpu"),
+        )
+        results = mock_run(model)
+    finally:
+        if old_tokenizer_parallelism is not None:
+            os.environ["TOKENIZERS_PARALLELISM"] = old_tokenizer_parallelism
+        else:
+            os.environ.pop("TOKENIZERS_PARALLELISM", None)
+
+    output_path = Path("mteb_mock_run_results.md")
+    output_path.write_text(results.to_markdown(), encoding="utf-8")
+
+    _print_terminal_summary(results, output_path)
+
+
+def _print_terminal_summary(results: MockRunResults, output_path: Path) -> None:
+    console = Console()
+
+    md_rows = results.modality_summary()
+    model_name = results.model_name
+
+    if results.all_passed:
+        console.print(f"\n[bold green]✓ `{model_name}` passed all expected checks[/]")
+    else:
+        console.print(
+            f"\n[bold red]✗ `{model_name}` did not pass all expected checks[/]"
+        )
+
+    console.print("")
+
+    max_status_len = max([len(row[0]) for row in md_rows] + [len("Pass")])
+    max_mod_len = max([len(row[1]) for row in md_rows] + [len("Modality")])
+
+    console.print(
+        f"| {'Pass':<{max_status_len}} | {'Modality':<{max_mod_len}} | Failures |"
+    )
+    console.print(f"| {'-' * max_status_len} | {'-' * max_mod_len} | {'-' * 8} |")
+
+    for status, modality, failures in md_rows:
+        status_padded = f"{status:<{max_status_len}}"
+        mod_padded = f"{modality:<{max_mod_len}}"
+
+        if "✓" in status_padded:
+            status_colored = status_padded.replace("✓", "[green]✓[/]")
+        elif "✗" in status_padded:
+            status_colored = status_padded.replace("✗", "[red]✗[/]")
+        elif "skipped" in status_padded:
+            status_colored = status_padded.replace("skipped", "[yellow]skipped[/]")
+        else:
+            status_colored = status_padded
+
+        console.print(f"| {status_colored} | {mod_padded} | {failures} |")
+
+    console.print("")
+    console.print(f"For more information see `{output_path.resolve()}`")
+
+
+def _add_mock_run_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
+    parser = subparsers.add_parser(
+        "mock-run",
+        help="Sanity check a model implementation using mock tasks",
+    )
+
+    parser.add_argument(
+        "-m",
+        "--model",
+        type=str,
+        required=True,
+        help="Model to use. Will prioritize model implementation in MTEB's model registry, but default to loading the model using sentence-transformers.",
+    )
+    parser.add_argument(
+        "--model-revision",
+        "--model_revision",
+        type=str,
+        default=None,
+        help="Revision of the model to be loaded.",
+    )
+    parser.add_argument(
+        "--device", type=str, default=None, help="Device to use for computation."
+    )
+    parser.add_argument(
+        "-v", "--verbosity", type=int, default=2, help="Verbosity level"
+    )
+    parser.set_defaults(func=_mock_run)
+
+
 def build_cli() -> argparse.ArgumentParser:
     """Builds the argument parser for the MTEB CLI.
 
@@ -479,7 +668,9 @@ def build_cli() -> argparse.ArgumentParser:
     _add_available_tasks_parser(subparsers)
     _add_available_benchmarks_parser(subparsers)
     _add_create_meta_parser(subparsers)
+    _add_submit_results_parser(subparsers)
     _add_leaderboard_parser(subparsers)
+    _add_mock_run_parser(subparsers)
 
     return parser
 

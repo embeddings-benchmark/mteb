@@ -6,12 +6,13 @@ from typing import TYPE_CHECKING, Any, ClassVar
 import numpy as np
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
+    from openai import OpenAI
+    from openai.types import CreateEmbeddingResponse
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -33,31 +34,18 @@ class OpenAIModel(AbsEncoder):
         max_tokens: int,
         tokenizer_name: str = "cl100k_base",
         embed_dim: int | None = None,
-        client: Any | None = None,  # OpenAI
-        **kwargs,
+        client: OpenAI | None = None,
+        **kwargs: Any,
     ) -> None:
         """Wrapper for OpenAIs embedding API.
 
         To handle documents larger than 8191 tokens, we truncate the document to the specified sequence length. If the document is empty we return a zero vector.
         """
-        requires_package(
-            self,
-            "openai",
-            model_name,
-            install_instruction="pip install 'mteb[openai]'",
-        )
+        import tiktoken
         from openai import OpenAI
 
-        requires_package(
-            self,
-            "tiktoken",
-            model_name,
-            install_instruction="pip install 'mteb[openai]'",
-        )
-        import tiktoken
-
         self._client = OpenAI() if client is None else client
-        self.model_name = model_name.split("/")[-1].split(" ")[0]
+        self.model_name = model_name.split("/")[-1].split(" ")[0]  # noqa: PLC0207
 
         if embed_dim is None:
             if self.model_name not in self.default_embed_dims:
@@ -93,14 +81,14 @@ class OpenAIModel(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        requires_package(self, "openai", "Openai text embedding")
-
         from openai import NotGiven
 
         sentences = [text for batch in inputs for text in batch["text"]]
 
         mask_sents = [(i, t) for i, t in enumerate(sentences) if t.strip()]
-        mask, no_empty_sent = list(zip(*mask_sents)) if mask_sents else ([], [])
+        mask, no_empty_sent = (
+            list(zip(*mask_sents, strict=True)) if mask_sents else ([], [])
+        )
         trimmed_sentences = []
         for sentence in no_empty_sent:
             encoded_sentence = self._encoding.encode(sentence)
@@ -127,7 +115,7 @@ class OpenAIModel(AbsEncoder):
         # Set dimensions only for models that support it
         dimensions = (
             self._embed_dim or NotGiven()
-            if not self.model_name == "text-embedding-ada-002"
+            if self.model_name != "text-embedding-ada-002"
             else NotGiven()
         )
         default_kwargs = dict(
@@ -143,7 +131,7 @@ class OpenAIModel(AbsEncoder):
                 )
             except Exception as e:
                 # Sleep due to too many requests
-                logger.info("Sleeping for 10 seconds due to error", e)
+                logger.info("Sleeping for 10 seconds due to error: %s", e)
                 import time
 
                 time.sleep(10)
@@ -152,7 +140,7 @@ class OpenAIModel(AbsEncoder):
                         input=sublist, **default_kwargs
                     )
                 except Exception as e:
-                    logger.info("Sleeping for 60 seconds due to error", e)
+                    logger.info("Sleeping for 60 seconds due to error: %s", e)
                     time.sleep(60)
                     response = self._client.embeddings.create(
                         input=sublist, **default_kwargs
@@ -167,7 +155,9 @@ class OpenAIModel(AbsEncoder):
             all_embeddings[mask] = no_empty_embeddings
         return all_embeddings
 
-    def _to_numpy(self, embedding_response) -> NDArray[np.floating]:
+    def _to_numpy(  # noqa: PLR6301
+        self, embedding_response: CreateEmbeddingResponse
+    ) -> NDArray[np.floating]:
         return np.array([e.embedding for e in embedding_response.data])
 
 
@@ -196,6 +186,7 @@ text_embedding_3_small = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,
+    extra_requirements_groups=["openai"],
 )
 text_embedding_3_large = ModelMeta(
     name="openai/text-embedding-3-large",
@@ -222,6 +213,7 @@ text_embedding_3_large = ModelMeta(
     training_datasets=None,
     license=None,
     similarity_fn_name=None,
+    extra_requirements_groups=["openai"],
 )
 text_embedding_ada_002 = ModelMeta(
     name="openai/text-embedding-ada-002",
@@ -248,6 +240,7 @@ text_embedding_ada_002 = ModelMeta(
     training_datasets=None,
     license=None,
     similarity_fn_name=None,
+    extra_requirements_groups=["openai"],
 )
 
 text_embedding_3_small_512 = ModelMeta(
@@ -276,6 +269,7 @@ text_embedding_3_small_512 = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,
+    extra_requirements_groups=["openai"],
 )
 
 text_embedding_3_large_512 = ModelMeta(
@@ -304,4 +298,5 @@ text_embedding_3_large_512 = ModelMeta(
     training_datasets=None,
     license=None,
     similarity_fn_name=None,
+    extra_requirements_groups=["openai"],
 )

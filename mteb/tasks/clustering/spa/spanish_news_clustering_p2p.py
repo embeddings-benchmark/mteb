@@ -24,13 +24,5 @@ class SpanishNewsClusteringP2P(AbsTaskClusteringLegacy):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@misc{kevinmorgado2019spanish,
-  author = {Kevin Morgado},
-  howpublished = {Kaggle},
-  title = {Spanish News Classification},
-  url = {https://www.kaggle.com/datasets/kevinmorgado/spanish-news-classification},
-  year = {2019},
-}
-""",
+        bibtex_citation="",
     )

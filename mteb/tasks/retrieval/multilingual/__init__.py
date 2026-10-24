@@ -1,5 +1,7 @@
+from .afri_mcqa_retrieval import AfriMCQAA2IRetrieval, AfriMCQAI2ARetrieval
 from .audio_caps import AudioCapsA2TRetrieval, AudioCapsT2ARetrieval
 from .belebele_retrieval import BelebeleRetrieval
+from .chinaopen_retrieval import ChinaOpenT2VRetrieval, ChinaOpenV2TRetrieval
 from .common_voice import (
     CommonVoiceMini17A2TRetrieval,
     CommonVoiceMini17T2ARetrieval,
@@ -14,7 +16,13 @@ from .cross_lingual_semantic_discrimination_wmt21 import (
 )
 from .cur_ev1_retrieval import CUREv1Retrieval
 from .euro_pirq_retrieval import EuroPIRQRetrieval
-from .fleurs import FleursA2TRetrieval, FleursT2ARetrieval
+from .fleurs import (
+    FleursA2TRetrieval,
+    FleursA2TRetrievalV2,
+    FleursT2ARetrieval,
+    FleursT2ARetrievalV2,
+)
+from .glami_1m_retrieval import GLAMI1MI2TRetrieval, GLAMI1MT2IRetrieval
 from .google_svq import GoogleSVQA2TRetrieval, GoogleSVQT2ARetrieval
 from .indic_qa_retrieval import IndicQARetrieval
 from .jam_alt import (
@@ -76,8 +84,36 @@ from .miracl_retrieval import (
 from .miracl_vision_retrieval import MIRACLVisionRetrieval
 from .mkqa_retrieval import MKQARetrieval
 from .mlqa_retrieval import MLQARetrieval
+from .mmarco_retrieval import MMarcoRetrievalMultilingual
 from .mr_tidy_retrieval import MrTidyRetrieval
+from .multi30k_retrieval import Multi30kI2TRetrieval, Multi30kT2IRetrieval
 from .multi_long_doc_retrieval import MultiLongDocRetrieval
+from .mupler_retrieval import MuPLeRRetrieval
+from .nanobeir_multilingual import (
+    MultilingualNanoArguAnaRetrieval,
+    MultilingualNanoClimateFeverRetrieval,
+    MultilingualNanoDBPediaRetrieval,
+    MultilingualNanoFEVERRetrieval,
+    MultilingualNanoFiQA2018Retrieval,
+    MultilingualNanoHotpotQARetrieval,
+    MultilingualNanoMSMARCORetrieval,
+    MultilingualNanoNFCorpusRetrieval,
+    MultilingualNanoNQRetrieval,
+    MultilingualNanoQuoraRetrieval,
+    MultilingualNanoSCIDOCSRetrieval,
+    MultilingualNanoSciFactRetrieval,
+    MultilingualNanoTouche2020Retrieval,
+)
+from .nayanair_monobench_retrieval import (
+    NayanaIRMonoBenchGujaratiRetrieval,
+    NayanaIRMonoBenchKannadaRetrieval,
+    NayanaIRMonoBenchMalayalamRetrieval,
+    NayanaIRMonoBenchMarathiRetrieval,
+    NayanaIRMonoBenchOdiaRetrieval,
+    NayanaIRMonoBenchPunjabiRetrieval,
+    NayanaIRMonoBenchSanskritRetrieval,
+    NayanaIRMonoBenchTamilRetrieval,
+)
 from .neu_clir2022_retrieval import (
     NeuCLIR2022Retrieval,
     NeuCLIR2022RetrievalHardNegatives,
@@ -86,9 +122,19 @@ from .neu_clir2023_retrieval import (
     NeuCLIR2023Retrieval,
     NeuCLIR2023RetrievalHardNegatives,
 )
+from .news_retrieval import GlobalNewsRetrieval, PublicNewsRetrieval
+from .omnilingual_asr_retrieval import (
+    OmnilingualASRA2TRetrieval,
+    OmnilingualASRT2ARetrieval,
+)
 from .public_health_qa_retrieval import PublicHealthQARetrieval
 from .ru_sci_bench_retrieval import RuSciBenchCiteRetrieval, RuSciBenchCociteRetrieval
+from .spoken_wikipedia_retrieval import (
+    SpokenWikipediaA2TRetrieval,
+    SpokenWikipediaT2ARetrieval,
+)
 from .statcan_dialogue_dataset_retrieval import StatcanDialogueDatasetRetrieval
+from .vaani_speech_text_retrieval import VaaniA2TRetrieval, VaaniT2ARetrieval
 from .vdr_multilingual_retrieval import VDRMultilingualRetrieval
 from .vidore2_bench_retrieval import (
     Vidore2BioMedicalLecturesRetrieval,
@@ -120,18 +166,25 @@ from .vidore3_bench_retrieval import (
 )
 from .web_faq_retrieval import WebFAQRetrieval
 from .wikipedia_retrieval_multilingual import WikipediaRetrievalMultilingual
-from .wit_t2i_retrieval import WITT2IRetrieval
-from .x_flickr30k_co_t2i_retrieval import XFlickr30kCoT2IRetrieval
+from .wit_t2i_retrieval import WITI2TRetrieval, WITT2IRetrieval
+from .x_flickr30k_co_t2i_retrieval import (
+    XFlickr30kCoI2TRetrieval,
+    XFlickr30kCoT2IRetrieval,
+)
 from .x_market_retrieval import XMarket
 from .x_qu_ad_retrieval import XQuADRetrieval
-from .xm3600_t2i_retrieval import XM3600T2IRetrieval
+from .xm3600_t2i_retrieval import XM3600I2TRetrieval, XM3600T2IRetrieval
 from .xpqa_retrieval import XPQARetrieval
 
 __all__ = [
+    "AfriMCQAA2IRetrieval",
+    "AfriMCQAI2ARetrieval",
     "AudioCapsA2TRetrieval",
     "AudioCapsT2ARetrieval",
     "BelebeleRetrieval",
     "CUREv1Retrieval",
+    "ChinaOpenT2VRetrieval",
+    "ChinaOpenV2TRetrieval",
     "CommonVoiceMini17A2TRetrieval",
     "CommonVoiceMini17T2ARetrieval",
     "CommonVoiceMini21A2TRetrieval",
@@ -140,7 +193,12 @@ __all__ = [
     "CrossLingualSemanticDiscriminationWMT21",
     "EuroPIRQRetrieval",
     "FleursA2TRetrieval",
+    "FleursA2TRetrievalV2",
     "FleursT2ARetrieval",
+    "FleursT2ARetrievalV2",
+    "GLAMI1MI2TRetrieval",
+    "GLAMI1MT2IRetrieval",
+    "GlobalNewsRetrieval",
     "GoogleSVQA2TRetrieval",
     "GoogleSVQT2ARetrieval",
     "IndicQARetrieval",
@@ -196,18 +254,50 @@ __all__ = [
     "MIRACLVisionRetrieval",
     "MKQARetrieval",
     "MLQARetrieval",
+    "MMarcoRetrievalMultilingual",
     "MintakaRetrieval",
     "MrTidyRetrieval",
+    "MuPLeRRetrieval",
+    "Multi30kI2TRetrieval",
+    "Multi30kT2IRetrieval",
     "MultiLongDocRetrieval",
+    "MultilingualNanoArguAnaRetrieval",
+    "MultilingualNanoClimateFeverRetrieval",
+    "MultilingualNanoDBPediaRetrieval",
+    "MultilingualNanoFEVERRetrieval",
+    "MultilingualNanoFiQA2018Retrieval",
+    "MultilingualNanoHotpotQARetrieval",
+    "MultilingualNanoMSMARCORetrieval",
+    "MultilingualNanoNFCorpusRetrieval",
+    "MultilingualNanoNQRetrieval",
+    "MultilingualNanoQuoraRetrieval",
+    "MultilingualNanoSCIDOCSRetrieval",
+    "MultilingualNanoSciFactRetrieval",
+    "MultilingualNanoTouche2020Retrieval",
+    "NayanaIRMonoBenchGujaratiRetrieval",
+    "NayanaIRMonoBenchKannadaRetrieval",
+    "NayanaIRMonoBenchMalayalamRetrieval",
+    "NayanaIRMonoBenchMarathiRetrieval",
+    "NayanaIRMonoBenchOdiaRetrieval",
+    "NayanaIRMonoBenchPunjabiRetrieval",
+    "NayanaIRMonoBenchSanskritRetrieval",
+    "NayanaIRMonoBenchTamilRetrieval",
     "NeuCLIR2022Retrieval",
     "NeuCLIR2022RetrievalHardNegatives",
     "NeuCLIR2023Retrieval",
     "NeuCLIR2023RetrievalHardNegatives",
+    "OmnilingualASRA2TRetrieval",
+    "OmnilingualASRT2ARetrieval",
     "PublicHealthQARetrieval",
+    "PublicNewsRetrieval",
     "RuSciBenchCiteRetrieval",
     "RuSciBenchCociteRetrieval",
+    "SpokenWikipediaA2TRetrieval",
+    "SpokenWikipediaT2ARetrieval",
     "StatcanDialogueDatasetRetrieval",
     "VDRMultilingualRetrieval",
+    "VaaniA2TRetrieval",
+    "VaaniT2ARetrieval",
     "Vidore2BioMedicalLecturesRetrieval",
     "Vidore2ESGReportsHLRetrieval",
     "Vidore2ESGReportsRetrieval",
@@ -232,10 +322,13 @@ __all__ = [
     "Vidore3PhysicsRetrievalv2",
     "Vidore3TelecomRetrieval",
     "Vidore3TelecomRetrievalv2",
+    "WITI2TRetrieval",
     "WITT2IRetrieval",
     "WebFAQRetrieval",
     "WikipediaRetrievalMultilingual",
+    "XFlickr30kCoI2TRetrieval",
     "XFlickr30kCoT2IRetrieval",
+    "XM3600I2TRetrieval",
     "XM3600T2IRetrieval",
     "XMarket",
     "XPQARetrieval",

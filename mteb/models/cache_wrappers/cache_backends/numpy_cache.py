@@ -4,11 +4,11 @@ import json
 import logging
 import warnings
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
 
-from ._hash_utils import _hash_item
+from mteb._content_hashes import hash_item
 
 if TYPE_CHECKING:
     from mteb.types import Array
@@ -26,7 +26,7 @@ class NumpyCache:
         self.index_file = self.directory / "index.json"
         self.dimension_file = self.directory / "dimension"
         self.hash_to_index: dict[str, int] = {}
-        self.vectors: np.memmap | None = None
+        self.vectors: np.memmap[tuple[int, ...], np.dtype[np.floating]] | None = None
         self.vector_dim: int | None = None
         self.initial_vectors = initial_vectors
         logger.info(f"Initialized VectorCacheMap in directory: {self.directory}")
@@ -48,12 +48,12 @@ class NumpyCache:
                     "Vectors file not initialized. Call _initialize_vectors_file() first."
                 )
 
-            for item, vec in zip(items, vectors):
-                item_hash = _hash_item(item)
+            for item, vec in zip(items, vectors, strict=True):
+                item_hash = hash_item(item)
                 if item_hash in self.hash_to_index:
                     msg = f"Hash collision or duplicate item for hash {item_hash}. Overwriting existing vector."
                     logger.warning(msg)
-                    warnings.warn(msg)
+                    warnings.warn(msg, stacklevel=2)
                     index = self.hash_to_index[item_hash]
                 else:
                     index = len(self.hash_to_index)
@@ -84,13 +84,22 @@ class NumpyCache:
                 shape=(self.initial_vectors, self.vector_dim),
             )
         else:
-            self.vectors = np.memmap(
-                self.vectors_file,
-                dtype="float32",
-                mode="r+",
-                shape=(-1, self.vector_dim),
-            )
+            self.vectors = self._open_vectors_file(self.vector_dim)
         logger.info(f"Vectors file initialized with shape: {self.vectors.shape}")
+
+    def _open_vectors_file(
+        self, vector_dim: int
+    ) -> np.memmap[tuple[int, ...], np.dtype[np.floating]]:
+        # np.memmap does not infer a -1 dimension, so derive the row count from the file size
+        n_vectors = self.vectors_file.stat().st_size // (
+            np.dtype(np.float32).itemsize * vector_dim
+        )
+        return np.memmap(
+            self.vectors_file,
+            dtype="float32",
+            mode="r+",
+            shape=(n_vectors, vector_dim),
+        )
 
     def _double_vectors_file(self) -> None:
         if self.vectors is None or self.vector_dim is None:
@@ -111,7 +120,7 @@ class NumpyCache:
         self.vectors = new_vectors
 
     def _save_dimension(self) -> None:
-        with self.dimension_file.open("w") as f:
+        with self.dimension_file.open("w", encoding="utf-8") as f:
             f.write(str(self.vector_dim))
         logger.info(
             f"Saved vector dimension {self.vector_dim} to {self.dimension_file}"
@@ -119,7 +128,7 @@ class NumpyCache:
 
     def _load_dimension(self) -> None:
         if self.dimension_file.exists():
-            with self.dimension_file.open() as f:
+            with self.dimension_file.open(encoding="utf-8") as f:
                 self.vector_dim = int(f.read().strip())
             logger.info(
                 f"Loaded vector dimension {self.vector_dim} from {self.dimension_file}"
@@ -127,7 +136,7 @@ class NumpyCache:
         else:
             msg = "Dimension file not found. Vector dimension remains uninitialized."
             logger.warning(msg)
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
 
     def save(self) -> None:
         """Persist VectorCacheMap to disk."""
@@ -163,22 +172,17 @@ class NumpyCache:
                     }
 
                 if self.vector_dim is not None:
-                    self.vectors = np.memmap(
-                        self.vectors_file,
-                        dtype="float32",
-                        mode="r+",
-                        shape=(-1, self.vector_dim),
-                    )
+                    self.vectors = self._open_vectors_file(self.vector_dim)
                     logger.info(f"Loaded vectors file with shape: {self.vectors.shape}")
                 else:
                     msg = "Vector dimension not set. Unable to load vectors file."
                     logger.warning(msg)
-                    warnings.warn(msg)
+                    warnings.warn(msg, stacklevel=2)
                 logger.info(f"Loaded VectorCacheMap from {self.directory}")
             else:
                 msg = "No existing files found. Initialized empty VectorCacheMap."
                 logger.warning(msg)
-                warnings.warn(msg)
+                warnings.warn(msg, stacklevel=2)
         except Exception as e:
             logger.error(f"Error loading VectorCacheMap: {str(e)}")
             raise
@@ -189,20 +193,21 @@ class NumpyCache:
             return None
 
         try:
-            item_hash = _hash_item(item)
+            item_hash = hash_item(item)
             if item_hash not in self.hash_to_index:
                 logger.debug(f"Item hash not found in index: {item_hash}")
                 return None
             index = self.hash_to_index[item_hash]
-            return self.vectors[index]
+            vector = cast("np.typing.NDArray[np.floating]", self.vectors[index])
+            return vector
         except Exception as e:
             logger.error(f"Error retrieving vector for item: {str(e)}")
             raise
 
     def __contains__(self, item: dict[str, Any]) -> bool:
-        return _hash_item(item) in self.hash_to_index
+        return hash_item(item) in self.hash_to_index
 
-    def __del__(self):
+    def __del__(self) -> None:
         self.close()
 
     def close(self) -> None:

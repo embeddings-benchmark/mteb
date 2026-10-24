@@ -44,6 +44,6 @@ class FER2013ZeroShotClassification(AbsTaskZeroShotClassification):
     input_column_name: str = "jpg"
     label_column_name: str = "cls"
 
-    def get_candidate_labels(self) -> list[str]:
+    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
         labels = ["angry", "disgust", "fear", "happy", "neutral", "sad", "surprise"]
         return [f"a photo of a {name} looking face." for name in labels]

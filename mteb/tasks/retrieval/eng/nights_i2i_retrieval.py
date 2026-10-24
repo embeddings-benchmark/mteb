@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -37,3 +39,12 @@ class NIGHTSI2IRetrieval(AbsTaskRetrieval):
             "query": "Find a day-to-day image that looks similar to the provided image."
         },
     )
+
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        # fixes https://github.com/embeddings-benchmark/mteb/issues/4436
+        self.dataset["default"]["test"]["corpus"] = self.dataset["default"]["test"][
+            "corpus"
+        ].remove_columns("text")
+        self.dataset["default"]["test"]["queries"] = self.dataset["default"]["test"][
+            "queries"
+        ].remove_columns("text")

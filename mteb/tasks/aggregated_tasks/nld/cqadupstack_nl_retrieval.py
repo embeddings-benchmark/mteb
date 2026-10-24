@@ -43,7 +43,6 @@ class CQADupstackNLRetrieval(AbsTaskAggregate):
         category="t2t",
         modalities=["text"],
         eval_splits=["test"],
-        eval_langs=["nld-Latn"],
         date=("2015-12-01", "2015-12-01"),  # best guess: based on publication date
         domains=["Written", "Non-fiction"],
         task_subtypes=[],

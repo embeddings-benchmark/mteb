@@ -1,5 +1,5 @@
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 qodo_languages = [
     "python-Code",
@@ -28,7 +28,7 @@ qodo_languages = [
 
 
 Qodo_Embed_1_1_5B = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="Qodo/Qodo-Embed-1-1.5B",
     model_type=["dense"],
     languages=qodo_languages,
@@ -52,7 +52,7 @@ Qodo_Embed_1_1_5B = ModelMeta(
 )
 
 Qodo_Embed_1_7B = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="Qodo/Qodo-Embed-1-7B",
     model_type=["dense"],
     languages=qodo_languages,

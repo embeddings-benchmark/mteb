@@ -1,0 +1,66 @@
+{
+    "test": {
+        "num_samples": 2000,
+        "num_queries": 1000,
+        "num_documents": 1000,
+        "number_of_characters": 0,
+        "documents_text_statistics": null,
+        "documents_image_statistics": null,
+        "documents_audio_statistics": {
+            "total_duration_seconds": 2000.0,
+            "min_duration_seconds": 2.0,
+            "average_duration_seconds": 2.0,
+            "max_duration_seconds": 2.0,
+            "unique_audios": 1000,
+            "average_sampling_rate": 48000.0,
+            "sampling_rates": {
+                "48000": 1000
+            }
+        },
+        "documents_video_statistics": null,
+        "queries_text_statistics": null,
+        "queries_image_statistics": null,
+        "queries_audio_statistics": null,
+        "queries_video_statistics": {
+            "total_duration_seconds": 2017.8825333333332,
+            "total_frames": 60476,
+            "min_width": 638,
+            "average_width": 638.0,
+            "max_width": 638,
+            "min_height": 360,
+            "average_height": 360.0,
+            "max_height": 360,
+            "min_duration_seconds": 2.002,
+            "average_duration_seconds": 2.0178825333333332,
+            "max_duration_seconds": 2.0353666666666665,
+            "unique_videos": 1000,
+            "average_fps": 30.0,
+            "fps": {
+                "30": 1000
+            },
+            "min_resolution": [
+                638,
+                360
+            ],
+            "average_resolution": [
+                638.0,
+                360.0
+            ],
+            "max_resolution": [
+                638,
+                360
+            ],
+            "resolutions": {
+                "638x360": 1000
+            }
+        },
+        "relevant_docs_statistics": {
+            "num_relevant_docs": 98292,
+            "min_relevant_docs_per_query": 7,
+            "average_relevant_docs_per_query": 98.292,
+            "max_relevant_docs_per_query": 163,
+            "unique_relevant_docs": 1000
+        },
+        "top_ranked_statistics": null
+    }
+}

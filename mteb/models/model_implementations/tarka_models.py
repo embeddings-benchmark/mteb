@@ -1,6 +1,7 @@
+from mteb.models import SentenceTransformerEncoderWrapper
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
-from mteb.models.model_implementations.google_models import gemma_embedding_loader
 from mteb.models.model_meta import ModelMeta
+from mteb.types import OutputDType
 
 Tarka_Embedding_150M_V1_CITATION = """@misc{tarka_ai_research_2025,
 	author       = { Tarka AI Research },
@@ -319,7 +320,7 @@ training_data = {
 
 
 tarka_embedding_150m_v1 = ModelMeta(
-    loader=gemma_embedding_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="Tarka-AIR/Tarka-Embedding-150M-V1",
     model_type=["dense"],
     languages=MULTILINGUAL_EVALUATED_LANGUAGES,
@@ -340,6 +341,7 @@ tarka_embedding_150m_v1 = ModelMeta(
     similarity_fn_name="cosine",
     memory_usage_mb=576,
     citation=Tarka_Embedding_150M_V1_CITATION,
+    extra_requirements_groups=["embeddinggemma"],
 )
 
 tark_embedding_350_v1_kwargs = dict(
@@ -375,4 +377,5 @@ tarka_embedding_350m_v1 = ModelMeta(
     public_training_data=None,
     training_datasets=training_data,
     citation=Tarka_Embedding_350M_V1_CITATION,
+    output_dtypes=OutputDType.BF16,
 )

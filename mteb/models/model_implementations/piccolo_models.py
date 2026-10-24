@@ -1,10 +1,11 @@
 """Piccolo Chinese embedding models by SenseNova"""
 
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
 
 piccolo_base_zh = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sensenova/piccolo-base-zh",
     model_type=["dense"],
     languages=["zho-Hans"],
@@ -25,11 +26,12 @@ piccolo_base_zh = ModelMeta(
     adapted_from=None,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,  # They don't specify
+    training_datasets=None,  # They don't specify,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 piccolo_large_zh_v2 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sensenova/piccolo-large-zh-v2",
     model_type=["dense"],
     languages=["zho-Hans"],

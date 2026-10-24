@@ -36,7 +36,7 @@ def _model_name_and_revision(
     elif not model_meta.exists():
         return None
     else:
-        with model_meta.open("r") as f:
+        with model_meta.open("r", encoding="utf-8") as f:
             model_meta_json = json.load(f)
             model_name = model_meta_json["name"]
             revision = model_meta_json["revision"]
@@ -46,9 +46,9 @@ def _model_name_and_revision(
 
 @deprecated(
     "`load_results` is deprecated and will be removed in future versions. "
-    + "Please use the `ResultCache`'s `.load_results` method instead."
+    "Please use the `ResultCache`'s `.load_results` method instead."
 )
-def load_results(
+def load_results(  # noqa: PLR0914
     results_repo: str = "https://github.com/embeddings-benchmark/results",
     download_latest: bool = True,
     models: Iterable[ModelMeta] | Sequence[str] | None = None,
@@ -106,7 +106,7 @@ def load_results(
                 task_names[task_] = None
 
     model_results = []
-    for model_path in model_paths:
+    for model_path in model_paths:  # noqa: PLR1702
         model_revisions = model_path.glob("*")
 
         for revision_path in model_revisions:
@@ -120,12 +120,15 @@ def load_results(
             model_name = model_name.replace("__", "/")
             if models_to_keep is not None and model_name not in models_to_keep:
                 continue
-            elif models_to_keep is not None and models_to_keep[model_name] is not None:
-                if models_to_keep[model_name] != revision:
-                    continue
+            if (
+                models_to_keep is not None
+                and models_to_keep[model_name] is not None
+                and models_to_keep[model_name] != revision
+            ):
+                continue
 
             task_json_files = [
-                f for f in revision_path.glob("*.json") if "model_meta.json" != f.name
+                f for f in revision_path.glob("*.json") if f.name != "model_meta.json"
             ]
             _results = []
             for f in task_json_files:
@@ -146,7 +149,7 @@ def load_results(
                             task = task_names[r.task_name]
                         else:
                             task = None
-                        r = r.validate_and_filter_scores(task=task)
+                        r = r.validate_and_filter_scores(task=task)  # noqa: PLW2901
                         filtered_results.append(r)
                     except Exception as e:
                         logger.info(

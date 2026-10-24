@@ -1,9 +1,8 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
-import torch
 from datasets import Dataset
 from tqdm.auto import tqdm
 
@@ -13,6 +12,7 @@ from mteb._evaluators.evaluator import Evaluator
 if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import EncoderProtocol
+    from mteb.timing import TimingStack
     from mteb.types import Array, EncodeKwargs
 
 logger = logging.getLogger(__name__)
@@ -26,7 +26,8 @@ class BitextMiningEvaluator(Evaluator):
         hf_split: str,
         hf_subset: str,
         pair_columns: list[tuple[str, str]],
-        **kwargs,
+        timer: TimingStack,
+        **kwargs: Any,
     ) -> None:
         super().__init__(**kwargs)
         self.pairs = pair_columns
@@ -35,6 +36,7 @@ class BitextMiningEvaluator(Evaluator):
         self.hf_split = hf_split
         self.hf_subset = hf_subset
         self.task_metadata = task_metadata
+        self.timer = timer
 
     def __call__(
         self,
@@ -45,9 +47,7 @@ class BitextMiningEvaluator(Evaluator):
     ) -> dict[str, list[dict[str, float]]]:
         pair_elements = {p for pair in self.pairs for p in pair}
         if isinstance(self.sentences, Dataset):
-            subsets = [
-                col for col in self.sentences.features.keys() if col in pair_elements
-            ]
+            subsets = [col for col in self.sentences.features if col in pair_elements]
         else:
             # BUCC outputs a dict instead of a Dataset
             subsets = list(pair_elements)
@@ -59,24 +59,30 @@ class BitextMiningEvaluator(Evaluator):
                 num_proc=num_proc,
                 **encode_kwargs,
             )
-            embeddings[sub] = model.encode(
-                dataloader,
-                task_metadata=self.task_metadata,
-                # parallel datasets have lang pairs for subset
-                hf_subset=self.hf_subset if self.hf_subset != "parallel" else sub,
-                hf_split=self.hf_split,
-                **encode_kwargs,
-            )
+            with self.timer("Encoding", split=self.hf_split, subset=self.hf_subset):
+                embeddings[sub] = model.encode(
+                    dataloader,
+                    task_metadata=self.task_metadata,
+                    # parallel datasets have lang pairs for subset
+                    hf_subset=self.hf_subset if self.hf_subset != "parallel" else sub,
+                    hf_split=self.hf_split,
+                    **encode_kwargs,
+                )
 
-        logger.info("Finding nearest neighbors...")
         neighbours = {}
-        for i, (key1, key2) in enumerate(tqdm(self.pairs, desc="Matching sentences")):
-            neighbours[f"{key1}-{key2}"] = self._similarity_search(
-                embeddings[key1], embeddings[key2], model
-            )
+        with self.timer(
+            "Scoring",
+            split=self.hf_split,
+            subset=self.hf_subset,
+            log_message="Finding nearest neighbors...",
+        ):
+            for key1, key2 in tqdm(self.pairs, desc="Matching sentences"):
+                neighbours[f"{key1}-{key2}"] = self._similarity_search(
+                    embeddings[key1], embeddings[key2], model
+                )
         return neighbours
 
-    def _similarity_search(
+    def _similarity_search(  # noqa: PLR6301
         self,
         query_embeddings: Array,
         corpus_embeddings: Array,
@@ -100,6 +106,8 @@ class BitextMiningEvaluator(Evaluator):
             Returns a list with one entry for each query. Each entry is a list of dictionaries with the keys 'corpus_id' and 'score', sorted by
                 decreasing cosine similarity scores.
         """
+        import torch
+
         if len(query_embeddings.shape) == 1:
             query_embeddings = query_embeddings.reshape(1, *query_embeddings.shape)
         if len(corpus_embeddings.shape) == 1:
@@ -147,6 +155,7 @@ class BitextMiningEvaluator(Evaluator):
                     for sub_corpus_id, score in zip(
                         cos_scores_top_k_idx[query_itr],
                         cos_scores_top_k_values[query_itr],
+                        strict=True,
                     ):
                         corpus_id = corpus_start_idx + sub_corpus_id
                         query_id = query_start_idx + query_itr

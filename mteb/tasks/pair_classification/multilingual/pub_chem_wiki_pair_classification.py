@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.pair_classification import AbsTaskPairClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -60,7 +62,7 @@ class PubChemWikiPairClassification(AbsTaskPairClassification):
 """,
     )
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _dataset = {}
         for lang in self.hf_subsets:
             _dataset[lang] = {}

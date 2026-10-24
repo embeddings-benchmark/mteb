@@ -2,14 +2,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
-from transformers import WhisperModel, WhisperProcessor
 
-from mteb._create_dataloaders import AudioCollator
-from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import AudioCollator, seconds_to_samples
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -24,11 +22,18 @@ class WhisperAudioWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
+        # 30 s: chunk_length=30
+        # https://huggingface.co/openai/whisper-large-v3/blob/main/preprocessor_config.json
         max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
-        requires_audio_dependencies()
+        import torch
+        from transformers import WhisperModel, WhisperProcessor
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         self.model_name = model_name
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds
@@ -40,14 +45,16 @@ class WhisperAudioWrapper(AbsEncoder):
         self.processor = WhisperProcessor.from_pretrained(model_name, revision=revision)
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
 
-    def get_audio_embeddings(
+    def get_audio_embeddings(  # noqa: PLR0914
         self,
         inputs: DataLoader[AudioInput],
         hidden_layer: float = 1.0,
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        inputs.collate_fn = AudioCollator(self.sampling_rate)
+        import torch
+
+        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
 
         all_embeddings = []
 
@@ -63,9 +70,16 @@ class WhisperAudioWrapper(AbsEncoder):
                 return_tensors="pt",
                 padding="max_length",
                 truncation=True,
-                max_length=int(self.max_audio_length_seconds * self.sampling_rate),
+                max_length=seconds_to_samples(
+                    self.max_audio_length_seconds, self.sampling_rate
+                ),
                 return_attention_mask=True,
             ).to(self.device)
+            # Some Whisper checkpoints load as fp16;
+            # the processor always returns float32 mel features.
+            feature_inputs["input_features"] = feature_inputs["input_features"].to(
+                dtype=self.model.dtype
+            )
 
             with torch.no_grad():
                 outputs = self.model.encoder(
@@ -256,12 +270,13 @@ whisper_tiny = ModelMeta(
     name="openai/whisper-tiny",
     languages=whisper_langs,
     open_weights=True,
-    revision="main",
+    revision="169d4a4341b33bc18d8881c4b69c2e104e1cc0af",
     release_date="2022-09-27",
     max_tokens=float("inf"),
     n_parameters=39_000_000,
+    n_embedding_parameters=0,
     memory_usage_mb=144,
-    embed_dim=512,
+    embed_dim=384,
     license="mit",
     reference="https://huggingface.co/openai/whisper-tiny",
     similarity_fn_name="cosine",
@@ -269,7 +284,9 @@ whisper_tiny = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=set(
+        # 680k hours of internet audio (proprietary, not in MTEB)
+    ),
     modalities=["audio"],
     citation="""
 @misc{radford2022robustspeechrecognitionlargescale,
@@ -288,10 +305,11 @@ whisper_base = ModelMeta(
     name="openai/whisper-base",
     languages=whisper_langs,
     open_weights=True,
-    revision="main",
+    revision="e37978b90ca9030d5170a5c07aadb050351a65bb",
     release_date="2022-09-27",
     max_tokens=float("inf"),
     n_parameters=74_000_000,
+    n_embedding_parameters=0,
     memory_usage_mb=277,
     embed_dim=512,
     license="mit",
@@ -301,7 +319,9 @@ whisper_base = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=set(
+        # 680k hours of internet audio (proprietary, not in MTEB)
+    ),
     modalities=["audio"],
     citation="""
 @misc{radford2022robustspeechrecognitionlargescale,
@@ -320,10 +340,11 @@ whisper_small = ModelMeta(
     name="openai/whisper-small",
     languages=whisper_langs,
     open_weights=True,
-    revision="main",
+    revision="973afd24965f72e36ca33b3055d56a652f456b4d",
     release_date="2022-09-27",
     max_tokens=float("inf"),
     n_parameters=244_000_000,
+    n_embedding_parameters=0,
     memory_usage_mb=922,
     embed_dim=768,
     license="mit",
@@ -333,7 +354,9 @@ whisper_small = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=set(
+        # 680k hours of internet audio (proprietary, not in MTEB)
+    ),
     modalities=["audio"],
     citation="""
 @misc{radford2022robustspeechrecognitionlargescale,
@@ -352,10 +375,11 @@ whisper_medium = ModelMeta(
     name="openai/whisper-medium",
     languages=whisper_langs,
     open_weights=True,
-    revision="main",
+    revision="abdf7c39ab9d0397620ccaea8974cc764cd0953e",
     release_date="2022-09-27",
     max_tokens=float("inf"),
     n_parameters=769_000_000,
+    n_embedding_parameters=0,
     memory_usage_mb=2914,
     embed_dim=1024,
     license="mit",
@@ -365,7 +389,9 @@ whisper_medium = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=set(
+        # 680k hours of internet audio (proprietary, not in MTEB)
+    ),
     modalities=["audio"],
     citation="""
 @misc{radford2022robustspeechrecognitionlargescale,
@@ -384,10 +410,11 @@ whisper_large_v3 = ModelMeta(
     name="openai/whisper-large-v3",
     languages=whisper_langs,
     open_weights=True,
-    revision="main",
+    revision="06f233fe06e710322aca913c1bc4249a0d71fce1",
     release_date="2022-09-27",
     max_tokens=float("inf"),
     n_parameters=1_550_000_000,
+    n_embedding_parameters=0,
     memory_usage_mb=5887,
     embed_dim=1280,
     license="mit",
@@ -397,7 +424,9 @@ whisper_large_v3 = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=set(
+        # 680k hours of internet audio (proprietary, not in MTEB)
+    ),
     modalities=["audio"],
     citation="""
 @misc{radford2022robustspeechrecognitionlargescale,
@@ -409,4 +438,41 @@ whisper_large_v3 = ModelMeta(
       primaryClass={eess.AS},
       url={https://arxiv.org/abs/2212.04356},
 }""",
+    output_dtypes=OutputDType.FLOAT16,
+)
+
+whisper_large_v3_turbo = ModelMeta(
+    loader=WhisperAudioWrapper,
+    name="openai/whisper-large-v3-turbo",
+    languages=whisper_langs,
+    open_weights=True,
+    revision="41f01f3fe87f28c78e2fbf8b568835947dd65ed9",
+    release_date="2022-09-27",
+    max_tokens=float("inf"),
+    n_parameters=809_000_000,
+    n_embedding_parameters=0,
+    memory_usage_mb=3065,
+    embed_dim=1280,
+    license="mit",
+    reference="https://huggingface.co/openai/whisper-large-v3-turbo",
+    similarity_fn_name="cosine",
+    framework=["PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=set(
+        # same large-v3 data; decoder distilled/fine-tuned (proprietary, not in MTEB)
+    ),
+    modalities=["audio"],
+    citation="""
+@misc{radford2022robustspeechrecognitionlargescale,
+      title={Robust Speech Recognition via Large-Scale Weak Supervision},
+      author={Alec Radford and Jong Wook Kim and Tao Xu and Greg Brockman and Christine McLeavey and Ilya Sutskever},
+      year={2022},
+      eprint={2212.04356},
+      archivePrefix={arXiv},
+      primaryClass={eess.AS},
+      url={https://arxiv.org/abs/2212.04356},
+}""",
+    output_dtypes=OutputDType.FLOAT16,
 )

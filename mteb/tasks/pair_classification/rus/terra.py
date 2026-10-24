@@ -45,7 +45,7 @@ class TERRa(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="TERRa",
         description="Textual Entailment Recognition for Russian. This task requires to recognize, given two text fragments, "
-        + "whether the meaning of one text is entailed (can be inferred) from the other text.",
+        "whether the meaning of one text is entailed (can be inferred) from the other text.",
         prompt="Given a premise, retrieve a hypothesis that is entailed by the premise",
         **_terra_metadata,
     )
@@ -58,8 +58,8 @@ class TERRaV2(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="TERRa.V2",
         description="Textual Entailment Recognition for Russian. This task requires to recognize, given two text fragments, "
-        + "whether the meaning of one text is entailed (can be inferred) from the other text."
-        + " Version 2 uses different prompt types for the two inputs.",
+        "whether the meaning of one text is entailed (can be inferred) from the other text."
+        " Version 2 uses different prompt types for the two inputs.",
         adapted_from=["TERRa"],
         prompt={
             PromptType.query.value: "Given a premise, retrieve a hypothesis that is entailed by the premise"

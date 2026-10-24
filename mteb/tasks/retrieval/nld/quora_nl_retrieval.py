@@ -13,7 +13,7 @@ class QuoraNLRetrieval(AbsTaskRetrieval):
         },
         description=(
             "QuoraRetrieval is based on questions that are marked as duplicates on the Quora platform. Given a"
-            + " question, find other (duplicate) questions. QuoraRetrieval-NL is a Dutch translation."
+            " question, find other (duplicate) questions. QuoraRetrieval-NL is a Dutch translation."
         ),
         reference="https://huggingface.co/datasets/clips/beir-nl-quora",
         type="Retrieval",

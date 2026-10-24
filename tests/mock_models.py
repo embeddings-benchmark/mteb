@@ -2,64 +2,43 @@
 
 from __future__ import annotations
 
-from types import SimpleNamespace
 from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
 import torch
-from numpy import ndarray
-from sentence_transformers import CrossEncoder, SentenceTransformer
+from sentence_transformers import (
+    CrossEncoder,
+    SentenceTransformer,
+    SentenceTransformerModelCardData,
+)
 from torch import Tensor
 from torch.utils.data import DataLoader
 
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
-    from numpy.typing import NDArray
+    from sentence_transformers.base.modality_types import SingleInput
 
     from mteb.types import Array, BatchedInput
-
-empty_metadata_kwargs = dict(
-    loader=None,
-    languages=["eng-Latn"],
-    revision="1",
-    release_date=None,
-    modalities=["text", "image"],
-    n_parameters=None,
-    memory_usage_mb=None,
-    max_tokens=None,
-    embed_dim=None,
-    license=None,
-    open_weights=True,
-    public_training_code=None,
-    public_training_data=None,
-    framework=[],
-    reference=None,
-    similarity_fn_name=None,
-    use_instructions=False,
-    training_datasets=None,
-)
 
 
 class MockSentenceTransformer(SentenceTransformer):
     """Ensure that data types not supported by the encoder are converted to the supported data type."""
 
-    model_card_data = SimpleNamespace(
+    model_card_data = SentenceTransformerModelCardData(
         model_name="mock/MockSentenceTransformer",
-        base_model_revision="1.0.0",
     )
     prompts = {}
 
     def __init__(self):
         self._modules = {}
-        pass
+        self._similarity_fn_name = None
 
-    def encode(
+    def encode(  # noqa: PLR0913, PLR0917
         self,
-        sentences: list[str],
+        inputs: list[SingleInput] | SingleInput,
         prompt_name: str | None = None,
         prompt: str | None = None,
         batch_size: int = 32,
@@ -69,12 +48,17 @@ class MockSentenceTransformer(SentenceTransformer):
         precision: Literal["float32", "int8", "uint8", "binary", "ubinary"] = "float32",
         convert_to_numpy: bool = True,
         convert_to_tensor: bool = False,
-        device: str | None = None,
+        device: str | list[str | torch.device] | None = None,
         normalize_embeddings: bool = False,
+        truncate_dim: int | None = None,
+        pool: dict[Literal["input", "output", "processes"], Any] | None = None,
+        chunk_size: int | None = None,
         **kwargs: Any,
-    ) -> ndarray:
+    ) -> (
+        list[Tensor] | np.ndarray | Tensor | dict[str, Tensor] | list[dict[str, Tensor]]
+    ):
         rng_state = np.random.RandomState(42)
-        return rng_state.randn(len(sentences), 10)
+        return rng_state.randn(len(inputs), 10)
 
     @staticmethod
     def get_sentence_embedding_dimension() -> int:
@@ -83,19 +67,15 @@ class MockSentenceTransformer(SentenceTransformer):
     def max_seq_length(self) -> int:
         return 10
 
-    @property
-    def similarity_fn_name(self) -> Literal["cosine", "dot", "euclidean", "manhattan"]:
-        return "cosine"
-
 
 class MockSentenceTransformersbf16Encoder(MockSentenceTransformer):
-    mteb_model_meta = ModelMeta(
-        name="mock/MockSentenceTransformersbf16Encoder", **empty_metadata_kwargs
+    model_card_data = SentenceTransformerModelCardData(
+        model_name="mock/MockSentenceTransformersbf16Encoder",
     )
 
-    def encode(
+    def encode(  # noqa: PLR0913, PLR0917
         self,
-        sentences: str | list[str],
+        inputs: list[SingleInput] | SingleInput,
         prompt_name: str | None = None,
         prompt: str | None = None,
         batch_size: int = 32,
@@ -105,11 +85,16 @@ class MockSentenceTransformersbf16Encoder(MockSentenceTransformer):
         precision: Literal["float32", "int8", "uint8", "binary", "ubinary"] = "float32",
         convert_to_numpy: bool = True,
         convert_to_tensor: bool = False,
-        device: str | None = None,
+        device: str | list[str | torch.device] | None = None,
         normalize_embeddings: bool = False,
-        **kwargs,
-    ) -> list[Tensor] | NDArray[np.floating] | Tensor:
-        return torch.randn(len(sentences), 10, dtype=torch.bfloat16)
+        truncate_dim: int | None = None,
+        pool: dict[Literal["input", "output", "processes"], Any] | None = None,
+        chunk_size: int | None = None,
+        **kwargs: Any,
+    ) -> (
+        list[Tensor] | np.ndarray | Tensor | dict[str, Tensor] | list[dict[str, Tensor]]
+    ):
+        return torch.randn(len(inputs), 10, dtype=torch.bfloat16)
 
 
 class MockSentenceTransformerWrapper(SentenceTransformerEncoderWrapper):
@@ -118,7 +103,7 @@ class MockSentenceTransformerWrapper(SentenceTransformerEncoderWrapper):
         model: str | SentenceTransformer | CrossEncoder,
         revision: str | None = None,
         model_prompts: dict[str, str] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """Wrapper for SentenceTransformer models.
 

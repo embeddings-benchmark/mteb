@@ -3,14 +3,12 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
-from transformers import AutoProcessor, Qwen2AudioForConditionalGeneration
 
-from mteb._create_dataloaders import AudioCollator
-from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import AudioCollator, check_duration_cap
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -26,11 +24,20 @@ class Qwen2AudioWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
+        # 30 s: chunk_length=30
+        # https://huggingface.co/Qwen/Qwen2-Audio-7B/blob/main/preprocessor_config.json
         max_audio_length_seconds: float = 30.0,
         **kwargs: Any,
     ):
-        requires_audio_dependencies()
+        check_duration_cap(max_audio_length_seconds)
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
+        from transformers import AutoProcessor, Qwen2AudioForConditionalGeneration
+
         self.model_name = model_name
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds
@@ -43,7 +50,7 @@ class Qwen2AudioWrapper(AbsEncoder):
 
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
 
-    def encode(
+    def encode(  # noqa: PLR0914
         self,
         inputs: DataLoader[BatchedInput],
         *,
@@ -54,6 +61,8 @@ class Qwen2AudioWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         all_embeddings = []
 
         for batch in tqdm(inputs, disable=not show_progress_bar):
@@ -69,7 +78,7 @@ class Qwen2AudioWrapper(AbsEncoder):
                 if audio_row is not None:
                     array = AudioCollator.resample_audio(
                         {"audio": audio_row},
-                        self.sampling_rate,
+                        target_sampling_rate=self.sampling_rate,
                     )
                     cur_text += "<|audio_bos|><|AUDIO|><|audio_eos|>"
                     audio_arrays.append(array)
@@ -101,9 +110,9 @@ class Qwen2AudioWrapper(AbsEncoder):
                 hidden = outputs.hidden_states[-1]
                 mask = processor_inputs["attention_mask"]
 
-                # last non-pad index per item
-                last_idx = mask.sum(dim=1) - 1
-                last_idx = last_idx.clamp(min=0)
+                # last non-pad index per item; the tokenizer pads on the left, so
+                # this is not mask.sum() - 1
+                last_idx = mask.shape[1] - 1 - mask.flip(dims=[1]).argmax(dim=1)
 
                 # gather last-token embeddings
                 batch_indices = torch.arange(hidden.size(0), device=self.device)
@@ -111,7 +120,7 @@ class Qwen2AudioWrapper(AbsEncoder):
 
                 all_embeddings.append(embeddings.cpu().detach())
 
-        return torch.cat(all_embeddings, dim=0).numpy()
+        return torch.cat(all_embeddings, dim=0).float().numpy()
 
 
 qwen2_audio_meta = ModelMeta(
@@ -124,7 +133,7 @@ qwen2_audio_meta = ModelMeta(
     max_tokens=131_072,
     n_parameters=7_000_000_000,
     memory_usage_mb=None,
-    embed_dim=1280,
+    embed_dim=4096,
     license="mit",
     reference="https://huggingface.co/Qwen/Qwen2-Audio-7B",
     similarity_fn_name="cosine",
@@ -145,4 +154,5 @@ qwen2_audio_meta = ModelMeta(
       url={https://arxiv.org/abs/2407.10759},
 }
 """,
+    output_dtypes=OutputDType.BF16,
 )

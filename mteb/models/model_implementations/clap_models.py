@@ -3,14 +3,13 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
-from transformers import ClapModel, ClapProcessor
-from transformers.modeling_outputs import BaseModelOutputWithPooling
 
-from mteb._create_dataloaders import AudioCollator
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import AudioCollator, fixed_numpy_seed
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -25,9 +24,15 @@ class ClapZeroShotWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ):
+        import torch
+        from transformers import ClapModel, ClapProcessor
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         self.model_name = model_name
         self.device = device
         self.model = ClapModel.from_pretrained(model_name, revision=revision).to(
@@ -47,28 +52,54 @@ class ClapZeroShotWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
-        inputs.collate_fn = AudioCollator(self.sampling_rate)
+        import torch
+        from transformers.modeling_outputs import BaseModelOutputWithPooling
+
+        # rand_trunc picks a random crop of anything over nb_max_samples, so the
+        # same clip scores differently each run; cutting there keeps it on the
+        # deterministic repeatpad branch. fusion is the checkpoint's own
+        # long-audio path, so it is left whole.
+        fe = self.processor.feature_extractor
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate,
+            max_samples=(None if fe.truncation == "fusion" else fe.nb_max_samples),
+        )
 
         all_features = []
-
         for batch in tqdm(
             inputs,
             disable=not show_progress_bar,
         ):
-            audio_array = [audio["array"] for audio in batch["audio"]]
-            features = self.processor(
-                audio=audio_array,
-                sampling_rate=self.sampling_rate,
-                return_tensors="pt",
-                padding=True,
-            )
+            clips = []
+            for audio in batch["audio"]:
+                # laion_clap rounds every clip to 16-bit, in training and inference
+                # https://github.com/LAION-AI/CLAP/blob/1fd4c37df5ffbfcfbad5415c170bc66cf94c9994/src/laion_clap/hook.py#L176-L178
+                int16 = (np.clip(audio["array"], -1.0, 1.0) * 32767.0).astype(np.int16)
+                array = int16 / np.float32(32767.0)
+                # fusion picks random chunks of long clips; seeding each clip
+                # alone keeps its embedding independent of its batch-mates
+                # https://github.com/huggingface/transformers/blob/2df80c4f5863192f1d4cc698bd4f1e1d254e14ba/src/transformers/models/clap/feature_extraction_clap.py#L188-L190
+                with fixed_numpy_seed():
+                    clip = self.processor(
+                        audio=array,
+                        sampling_rate=self.sampling_rate,
+                        return_tensors="pt",
+                    )  # no padding=/truncation=: keeps the checkpoint's own setting
+                if fe.truncation == "fusion":
+                    # the extractor marks a random clip as long when none is
+                    # (a training trick); at inference only clips over the
+                    # window are fused, as in laion_clap
+                    # https://github.com/huggingface/transformers/blob/2df80c4f5863192f1d4cc698bd4f1e1d254e14ba/src/transformers/models/clap/feature_extraction_clap.py#L348-L350
+                    clip["is_longer"][:] = len(array) > fe.nb_max_samples
+                clips.append(clip)
+            features = {k: torch.cat([c[k] for c in clips]) for k in clips[0]}
             features = {k: v.to(self.device) for k, v in features.items()}
 
             with torch.no_grad():
                 audio_features = self.model.get_audio_features(**features)
                 if isinstance(audio_features, BaseModelOutputWithPooling):
                     audio_features = audio_features.pooler_output
-                audio_features = audio_features / audio_features.norm(
+                audio_features = audio_features / audio_features.norm(  # noqa: PLR6104
                     dim=-1, keepdim=True
                 )
                 all_features.append(audio_features.cpu().detach().numpy())
@@ -81,6 +112,8 @@ class ClapZeroShotWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        from transformers.modeling_outputs import BaseModelOutputWithPooling
+
         text_embeddings = []
         for batch in tqdm(
             inputs, disable=not show_progress_bar, desc="Processing text batches"
@@ -91,12 +124,16 @@ class ClapZeroShotWrapper(AbsEncoder):
                 return_tensors="pt",
                 padding=True,
                 truncation=True,
+                # laion_clap's text context length
+                # https://github.com/LAION-AI/CLAP/blob/1fd4c37df5ffbfcfbad5415c170bc66cf94c9994/src/laion_clap/hook.py#L64-L72
+                max_length=77,
             )
             inputs = {k: v.to(self.device) for k, v in inputs.items()}
 
             text_features = self.model.get_text_features(**inputs)
-            # Normalize embeddings
-            text_features = text_features / text_features.norm(dim=-1, keepdim=True)
+            if isinstance(text_features, BaseModelOutputWithPooling):
+                text_features = text_features.pooler_output
+            text_features = text_features / text_features.norm(dim=-1, keepdim=True)  # noqa: PLR6104
             text_embeddings.append(text_features.cpu().detach().numpy())
 
         return np.vstack(text_embeddings)
@@ -126,9 +163,9 @@ class ClapZeroShotWrapper(AbsEncoder):
                 )
             fused_embeddings = text_embeddings + audio_embeddings
             return fused_embeddings
-        elif text_embeddings is not None:
+        if text_embeddings is not None:
             return text_embeddings
-        elif audio_embeddings is not None:
+        if audio_embeddings is not None:
             return audio_embeddings
         raise ValueError
 
@@ -141,7 +178,8 @@ clap_htsat_fused = ModelMeta(
     revision="cca9e288ab447cee67d9ada1f85ddb46500f1401",
     release_date="2023-05-22",
     modalities=["audio", "text"],
-    n_parameters=153_507_530,  # Calculated using torch.numel(model.parameters())
+    n_parameters=153_507_530,
+    n_embedding_parameters=38603520,
     memory_usage_mb=586,  # Calculated using model.calculate_memory_usage_mb()
     max_tokens=float("inf"),
     embed_dim=512,  # The project_dim in config.json is 512
@@ -154,7 +192,7 @@ clap_htsat_fused = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets=set(
-        # "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
+        # LAION-Audio-630K (not in MTEB)
     ),
     citation="""
 @misc{wu2024largescalecontrastivelanguageaudiopretraining,
@@ -177,7 +215,8 @@ clap_htsat_unfused = ModelMeta(
     revision="8fa0f1c6d0433df6e97c127f64b2a1d6c0dcda8a",
     release_date="2023-05-22",
     modalities=["audio", "text"],
-    n_parameters=153_492_890,  # Calculated using torch.numel(model.parameters())
+    n_parameters=153_492_890,
+    n_embedding_parameters=38603520,
     memory_usage_mb=586,  # Calculated using model.calculate_memory_usage_mb()
     max_tokens=float("inf"),
     embed_dim=512,  # The project_dim in config.json is 512
@@ -190,7 +229,7 @@ clap_htsat_unfused = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets=set(
-        # "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
+        # LAION-Audio-630K (not in MTEB)
     ),
     citation="""
 @misc{wu2024largescalecontrastivelanguageaudiopretraining,
@@ -225,8 +264,8 @@ larger_clap_general = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets=set(
-        # "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
-    ),  # Additional finetuning over music dataset but not specified what the exact dataset is
+        # LAION-Audio-630K (not in MTEB)
+    ),
     citation="""
 @misc{wu2024largescalecontrastivelanguageaudiopretraining,
       title={Large-scale Contrastive Language-Audio Pretraining with Feature Fusion and Keyword-to-Caption Augmentation},
@@ -260,8 +299,8 @@ larger_clap_music = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets=set(
-        # "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
-    ),  # Additional finetuning over music dataset but not specified what the exact dataset is
+        # LAION-Audio-630K (not in MTEB)
+    ),
     citation="""
 @misc{wu2024largescalecontrastivelanguageaudiopretraining,
       title={Large-scale Contrastive Language-Audio Pretraining with Feature Fusion and Keyword-to-Caption Augmentation},
@@ -295,8 +334,8 @@ larger_clap_music_and_speech = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets=set(
-        # "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
-    ),  # Additional finetuning over music dataset but not specified what the exact dataset is
+        # LAION-Audio-630K (not in MTEB)
+    ),
     citation="""
 @misc{wu2024largescalecontrastivelanguageaudiopretraining,
       title={Large-scale Contrastive Language-Audio Pretraining with Feature Fusion and Keyword-to-Caption Augmentation},
@@ -308,4 +347,38 @@ larger_clap_music_and_speech = ModelMeta(
       url={https://arxiv.org/abs/2211.06687},
 }
 """,
+)
+
+
+clap_large_v2 = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    loader_kwargs={
+        "trust_remote_code": True,
+        # 300 s at 16 kHz: chunk_length=300
+        # https://huggingface.co/laion/voiceclap-large-v2/blob/main/preprocessor_config.json
+        "max_samples": 4_800_000,
+    },
+    name="laion/voiceclap-large-v2",
+    languages=["eng-Latn", "deu-Latn", "fra-Latn", "spa-Latn", "zho-Hans"],
+    revision="68ee637005607c8736e70bb5133270b60c1f8228",
+    release_date="2026-06-11",
+    modalities=["text", "audio"],
+    n_parameters=8_931_813_888,
+    n_embedding_parameters=544_997_376,
+    memory_usage_mb=17043,
+    max_tokens=32768,
+    embed_dim=3584,
+    license="cc-by-4.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["Sentence Transformers", "PyTorch"],
+    reference="https://huggingface.co/laion/voiceclap-large-v2",
+    similarity_fn_name="cosine",
+    use_instructions=False,
+    training_datasets=None,
+    adapted_from="LCO-Embedding/LCO-Embedding-Omni-7B",
+    # the checkpoint's Qwen2-VL processor needs torchvision and Pillow
+    extra_requirements_groups=["multimodal-sbert", "image"],
+    output_dtypes=OutputDType.BF16,
 )

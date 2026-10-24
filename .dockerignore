@@ -1,0 +1,26 @@
+.git
+.github
+.venv
+venv
+__pycache__
+*.py[cod]
+*.egg-info
+.pytest_cache
+.mypy_cache
+.ruff_cache
+.coverage
+htmlcov
+build
+dist
+node_modules
+
+# Local output / benchmark artefacts — large and never needed inside the image.
+results
+scripts/data
+*.parquet
+*.tmp
+
+# Editor / OS noise
+.idea
+.vscode
+.DS_Store

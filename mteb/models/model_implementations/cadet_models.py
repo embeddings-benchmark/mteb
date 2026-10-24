@@ -1,5 +1,5 @@
 from mteb.models.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 from .bge_models import bge_m3_training_data
 
@@ -27,7 +27,7 @@ cadet_training_data = {
 
 
 cadet_embed = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts={
             "query": "query: ",

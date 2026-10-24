@@ -3,23 +3,18 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
-import torch.nn.functional as F
-from packaging.version import Version
 from tqdm.auto import tqdm
-from transformers import AutoModel, AutoTokenizer
-from transformers import __version__ as transformers_version
 
-from mteb._requires_package import requires_package
-from mteb.models import CrossEncoderWrapper
+from mteb.models import CrossEncoderWrapper, SentenceTransformerEncoderWrapper
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     from collections.abc import Callable
 
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb import TaskMetadata
@@ -121,7 +116,7 @@ nvidia_training_datasets = {
 
 
 class _NVEmbedWrapper(InstructSentenceTransformerModel):
-    """Inherited, because nvembed requires `sbert==2`, but it doesn't have tokenizers kwargs"""
+    """Inherited, because nvembed requires `sbert==2`, but it doesn't have tokenizers kwargs."""
 
     def __init__(
         self,
@@ -139,23 +134,10 @@ class _NVEmbedWrapper(InstructSentenceTransformerModel):
     ):
         from sentence_transformers import __version__ as sbert_version
 
-        required_transformers_version = "4.42.4"
-        required_sbert_version = "2.7.0"
-
-        if Version(transformers_version) != Version(required_transformers_version):
-            raise RuntimeError(
-                f"transformers version {transformers_version} is not match with required "
-                f"install version {required_transformers_version} to run `nvidia/NV-Embed-v2`"
-            )
-
-        if Version(sbert_version) != Version(required_sbert_version):
-            raise RuntimeError(
-                f"sbert version {sbert_version} is not match with required "
-                f"install version {required_sbert_version} to run `nvidia/NV-Embed-v2`"
-            )
-
-        requires_package(
-            self, "flash_attn", model_name, "pip install 'mteb[flash_attention]'"
+        logger.warning(
+            f"{model_name} was previously required to run with sentence-transformers==2.7.0, "
+            f"but mteb requires sentence-transformers>=3.0.0, so it is now running on "
+            f"{sbert_version}. Results might not reproduce the previously reported scores."
         )
 
         from sentence_transformers import SentenceTransformer
@@ -216,6 +198,8 @@ NV_embed_v2 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     citation=NV_RETRIEVER_CITATION,
+    extra_requirements_groups=["flash_attention", "nvembed"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 NV_embed_v1 = ModelMeta(
@@ -248,6 +232,8 @@ NV_embed_v1 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     citation=NV_RETRIEVER_CITATION,
+    extra_requirements_groups=["flash_attention", "nvembed"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 llama_embed_nemotron_evaluated_languages = [
@@ -427,16 +413,8 @@ class LlamaEmbedNemotron(AbsEncoder):
         revision: str,
         device: str | None = None,
     ) -> None:
-        required_transformers_version = "4.51.0"
-        if Version(transformers_version) != Version(required_transformers_version):
-            raise ImportError(
-                f"{model_name} requires transformers library version {required_transformers_version}, but it was not found in your environment. "
-                + f"If you want to load {model_name} model, please run `pip install 'mteb[llama-embed-nemotron]'` to install the required package."
-            )
-
-        requires_package(
-            self, "flash_attn", model_name, "pip install 'mteb[flash_attention]'"
-        )
+        import torch
+        from transformers import AutoModel, AutoTokenizer
 
         self.model_name = model_name
         self.revision = revision
@@ -538,11 +516,11 @@ class LlamaEmbedNemotron(AbsEncoder):
             return ""
 
         # Override for STS and PairClassification tasks
-        if task_type in ["STS", "PairClassification"]:
+        if task_type in ["STS", "PairClassification"]:  # noqa: PLR6201
             return "Retrieve semantically similar text"
 
         # Override for BitextMining tasks
-        if task_type in ["BitextMining"]:
+        if task_type in ["BitextMining"]:  # noqa: PLR6201
             return "Retrieve parallel sentences"
 
         return instruction
@@ -573,6 +551,9 @@ class LlamaEmbedNemotron(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+        import torch.nn.functional as F
+
         all_embeddings = []
         for batch in tqdm(
             dataloader, desc="Extracting embeddings...", disable=not show_progress_bar
@@ -635,22 +616,146 @@ llama_embed_nemotron_8b = ModelMeta(
     framework=["PyTorch", "Sentence Transformers", "safetensors", "Transformers"],
     use_instructions=True,
     training_datasets=llama_embed_nemotron_training_datasets,
-    public_training_code="https://github.com/NVIDIA-NeMo/Automodel/tree/main/examples/biencoder/llama_embed_nemotron_8b",
+    public_training_code="https://github.com/NVIDIA-NeMo/Automodel/tree/main/examples/retrieval/bi_encoder/llama_embed_nemotron_8b",
     public_training_data="https://huggingface.co/datasets/nvidia/embed-nemotron-dataset-v1",
     contacts=["ybabakhin"],
     citation=LlamaEmbedNemotron_CITATION,
+    extra_requirements_groups=["flash_attention", "llama-embed-nemotron"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 
-def _nemotron_rerank_model(model: str, revision: str, **kwargs) -> CrossEncoderWrapper:
-    required_transformers_version = "4.47.1"
+nemotron_3_embed_supported_languages = [
+    "eng-Latn",
+    "ara-Arab",
+    "asm-Beng",
+    "ben-Beng",
+    "bul-Cyrl",
+    "zho-Hans",
+    "dan-Latn",
+    "nld-Latn",
+    "fin-Latn",
+    "fra-Latn",
+    "deu-Latn",
+    "hin-Deva",
+    "hin-Latn",
+    "ind-Latn",
+    "ita-Latn",
+    "jpn-Jpan",
+    "kor-Hang",
+    "msa-Latn",
+    "mar-Deva",
+    "nep-Deva",
+    "nor-Latn",
+    "fas-Arab",
+    "por-Latn",
+    "ron-Latn",
+    "rus-Cyrl",
+    "spa-Latn",
+    "swa-Latn",
+    "swe-Latn",
+    "tam-Taml",
+    "tel-Telu",
+    "tha-Thai",
+    "ukr-Cyrl",
+    "urd-Arab",
+    "vie-Latn",
+]
 
-    if Version(transformers_version) != Version(required_transformers_version):
-        raise RuntimeError(
-            f"transformers version {transformers_version} is not match with required "
-            f"install version {required_transformers_version} to run `nvidia/llama-nemotron-rerank-1b-v2`"
-        )
+nemotron_3_embed_training_datasets = {
+    "AppsRetrieval",
+    "BioASQ",
+    "CodeTransOceanContest",
+    "CodeTransOceanDL",
+    "CosQA",
+    "FEVER",
+    "FinePDFs",
+    "FinQARetrieval",
+    "HotpotQA",
+    "HoVer",
+    "MIRACLRetrieval",
+    "MLQARetrieval",
+    "Nemotron-CC-v2",
+    "NQ",
+    "PAQ",
+    "RedditClustering",
+    "SpartQA",
+    "SQuAD",
+    "StackOverflowQA",
+    "SyntheticText2SQL",
+    "TempReasonL1",
+    "TriviaQA",
+    "WikiSQLRetrieval",
+    "WinoGrande",
+}
 
+
+nemotron_3_embed_1b_bf16 = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    loader_kwargs=dict(processor_kwargs={"model_max_length": 4096}),
+    name="nvidia/Nemotron-3-Embed-1B-BF16",
+    revision="f880174635613cff04033875fc6a69296cb72006",
+    release_date="2026-07-16",
+    languages=nemotron_3_embed_supported_languages,
+    n_parameters=1_140_918_272,
+    n_active_parameters_override=None,
+    n_embedding_parameters=268_435_456,
+    memory_usage_mb=2176,
+    max_tokens=32768,
+    embed_dim=2048,
+    license="openmdw-1.1",
+    open_weights=True,
+    public_training_code="https://github.com/NVIDIA-NeMo/Automodel/tree/main/examples/retrieval/distillation",
+    public_training_data="https://huggingface.co/nvidia/Nemotron-3-Embed-1B-BF16#training-testing-and-evaluation-datasets",
+    framework=["Sentence Transformers", "PyTorch", "Transformers"],
+    reference="https://huggingface.co/nvidia/Nemotron-3-Embed-1B-BF16",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=False,
+    training_datasets=nemotron_3_embed_training_datasets,
+    adapted_from="mistralai/Ministral-3-3B-Instruct-2512",
+    superseded_by=None,
+    modalities=["text"],
+    model_type=["dense"],
+    contacts=["ybabakhin"],
+    output_dtypes=OutputDType.BF16,
+    extra_requirements_groups=["nemotron-3-embed"],
+)
+
+nemotron_3_embed_8b_bf16 = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    loader_kwargs=dict(processor_kwargs={"model_max_length": 4096}),
+    name="nvidia/Nemotron-3-Embed-8B-BF16",
+    revision="dd9d06b1852ef836d3dc2fbd2b71a34356912759",
+    release_date="2026-07-16",
+    languages=nemotron_3_embed_supported_languages,
+    n_parameters=7_952_683_008,
+    n_active_parameters_override=None,
+    n_embedding_parameters=536_870_912,
+    memory_usage_mb=15169,
+    max_tokens=32768,
+    embed_dim=4096,
+    license="openmdw-1.1",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data="https://huggingface.co/nvidia/Nemotron-3-Embed-8B-BF16#training-testing-and-evaluation-datasets",
+    framework=["Sentence Transformers", "PyTorch", "Transformers"],
+    reference="https://huggingface.co/nvidia/Nemotron-3-Embed-8B-BF16",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=False,
+    training_datasets=nemotron_3_embed_training_datasets,
+    adapted_from="mistralai/Ministral-3-8B-Instruct-2512",
+    superseded_by=None,
+    modalities=["text"],
+    model_type=["dense"],
+    contacts=["ybabakhin"],
+    output_dtypes=OutputDType.BF16,
+    extra_requirements_groups=["nemotron-3-embed"],
+)
+
+
+def _nemotron_rerank_model(
+    model: str, revision: str, **kwargs: Any
+) -> CrossEncoderWrapper:
     return CrossEncoderWrapper(
         model=model,
         revision=revision,
@@ -664,9 +769,10 @@ nemotron_rerank_1b_v2 = ModelMeta(
         trust_remote_code=True,
         query_prefix="question:",
         passage_prefix=" \n \n passage:",
-        model_kwargs={"torch_dtype": torch.float32},
+        model_kwargs={"torch_dtype": OutputDType.FLOAT32},
     ),
     name="nvidia/llama-nemotron-rerank-1b-v2",
+    extra_requirements_groups=["nemotron-rerank"],
     revision="78efcfdc23b53a753f6c73f2d78b18132a34ac4d",
     release_date="2025-10-16",
     languages=["eng-Latn"],
@@ -675,7 +781,7 @@ nemotron_rerank_1b_v2 = ModelMeta(
     memory_usage_mb=2357.0,
     max_tokens=4096,
     embed_dim=2048,
-    license="https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
+    license="openmdw-1.1",
     open_weights=True,
     public_training_code=None,
     public_training_data=None,

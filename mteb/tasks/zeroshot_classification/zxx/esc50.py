@@ -45,7 +45,7 @@ class ESC50ZeroshotClassification(AbsTaskZeroShotClassification):
     input_column_name: str = "audio"
     label_column_name: str = "target"
 
-    def get_candidate_labels(self) -> list[str]:
+    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
         """Return the text candidates for zeroshot classification"""
         return [
             "This is a sound of dog",

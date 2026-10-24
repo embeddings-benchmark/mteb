@@ -4,20 +4,26 @@ import logging
 import tempfile
 import warnings
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Literal, cast
+from typing import TYPE_CHECKING, Any, Literal, cast, overload
 
 import huggingface_hub
 import numpy as np
 import pandas as pd
-from pydantic import BaseModel, ConfigDict, Field
-from typing_extensions import overload
+from pydantic import BaseModel, ConfigDict
 
-from mteb.types import Modalities
+from mteb._hf_integration.eval_result_model import (
+    HFEvalResult,
+    HFEvalResultDataset,
+    HFEvalResults,
+    HFEvalResultSource,
+)
+from mteb.benchmarks import Benchmark
+from mteb.models.model_meta import ModelMeta
 
 from .task_result import TaskError, TaskResult
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterable
+    from collections.abc import Callable, Iterable, Sequence
 
     from mteb.abstasks.abstask import AbsTask
     from mteb.abstasks.task_metadata import (
@@ -27,6 +33,7 @@ if TYPE_CHECKING:
     from mteb.types import (
         ISOLanguage,
         ISOLanguageScript,
+        Modalities,
         Score,
         ScoresDict,
         SplitName,
@@ -40,8 +47,8 @@ def _aggregate_and_pivot(
     df: pd.DataFrame,
     columns: list[str],
     aggregation_level: Literal["subset", "split", "task", "language"],
-    format: Literal["wide", "long"],
-    aggregation_fn: Callable[[list[Score]], Any] | None,
+    output_format: Literal["wide", "long"],
+    aggregation_fn: Callable[[list[Score]], Any] | str | None,
 ) -> pd.DataFrame:
     if aggregation_level == "subset":
         index_columns = ["task_name", "split", "subset"]
@@ -50,7 +57,8 @@ def _aggregate_and_pivot(
         index_columns = ["task_name", "split"]
 
     elif aggregation_level == "task":
-        index_columns = ["task_name"]
+        extra = ["is_public"] if "is_public" in df.columns else []
+        index_columns = ["task_name"] + extra
 
     elif aggregation_level == "language":
         index_columns = ["language"]
@@ -59,22 +67,26 @@ def _aggregate_and_pivot(
         )  # each language in its own row before aggregation
 
     # perform aggregation
-    if aggregation_fn is None:
-        aggregation_fn = np.mean
+    # Pass "mean" string rather than np.mean to avoid a pandas FutureWarning:
+    aggregation_fn_pandas = "mean" if aggregation_fn is None else aggregation_fn
 
-    if format == "wide":
+    if output_format == "wide":
         return df.pivot_table(
             index=index_columns,
             columns=columns,
             values="score",
-            aggfunc=aggregation_fn,  # type: ignore[arg-type]
+            aggfunc=aggregation_fn_pandas,  # type: ignore[arg-type]
+            observed=True,
         ).reset_index()
-    elif format == "long":
+    if output_format == "long":
         return (
-            df.groupby(columns + index_columns)
-            .agg(score=("score", aggregation_fn))
+            df.groupby(columns + index_columns, observed=True)
+            .agg(score=("score", aggregation_fn_pandas))
             .reset_index()
         )
+    raise ValueError(
+        f"Unknown output_format {output_format!r}, expected 'wide' or 'long'."
+    )
 
 
 class ModelResult(BaseModel):
@@ -89,9 +101,6 @@ class ModelResult(BaseModel):
     model_name: str
     model_revision: str | None
     task_results: list[TaskResult]
-    default_modalities: list[Modalities] = Field(
-        default_factory=lambda: [cast("Modalities", "text")], alias="modalities"
-    )
     model_config = (
         ConfigDict(  # to free up the name model_* which is otherwise protected
             protected_namespaces=(),
@@ -99,6 +108,7 @@ class ModelResult(BaseModel):
     )
     exceptions: list[TaskError] | None = None
     experiment_name: str | None = None
+    model_meta: ModelMeta | None = None
 
     def __repr__(self) -> str:
         n_entries = len(self.task_results)
@@ -124,6 +134,7 @@ class ModelResult(BaseModel):
     def _filter_tasks(
         self,
         task_names: list[str] | None = None,
+        *,
         languages: list[str] | None = None,
         domains: list[TaskDomain] | None = None,
         task_types: list[TaskType] | None = None,
@@ -145,7 +156,7 @@ class ModelResult(BaseModel):
             if (task_types is not None) and (task_result.task_type not in task_types):
                 continue
             if modalities is not None:
-                task_modalities = getattr(task_result, "modalities", [])
+                task_modalities = task_result.modalities
                 if not any(modality in task_modalities for modality in modalities):
                     continue
             if (is_public is not None) and (task_result.is_public is not is_public):
@@ -156,6 +167,7 @@ class ModelResult(BaseModel):
             model_revision=self.model_revision,
             task_results=new_task_results,
             experiment_name=self.experiment_name,
+            model_meta=self.model_meta,
         )
 
     def select_tasks(self, tasks: Iterable[AbsTask]) -> ModelResult:
@@ -175,39 +187,43 @@ class ModelResult(BaseModel):
             model_revision=self.model_revision,
             task_results=new_task_results,
             experiment_name=self.experiment_name,
+            model_meta=self.model_meta,
         )
 
     @overload
     def _get_scores(
         self,
+        *,
         splits: list[SplitName] | None = None,
         languages: list[ISOLanguage | ISOLanguageScript] | None = None,
         scripts: list[ISOLanguageScript] | None = None,
         getter: Callable[[ScoresDict], Score] | None = None,
         aggregation: Callable[[list[Score]], Any] | None = None,
-        format: Literal["wide"] = "wide",
-    ) -> dict: ...
+        output_format: Literal["wide"] = "wide",
+    ) -> dict[str, float]: ...
 
     @overload
     def _get_scores(
         self,
+        *,
         splits: list[SplitName] | None = None,
         languages: list[ISOLanguage | ISOLanguageScript] | None = None,
         scripts: list[ISOLanguageScript] | None = None,
         getter: Callable[[ScoresDict], Score] | None = None,
         aggregation: Callable[[list[Score]], Any] | None = None,
-        format: Literal["long"] = "long",
-    ) -> list: ...
+        output_format: Literal["long"] = "long",
+    ) -> list[dict[str, str | float | None]]: ...
 
     def _get_scores(
         self,
+        *,
         splits: list[SplitName] | None = None,
         languages: list[ISOLanguage | ISOLanguageScript] | None = None,
         scripts: list[ISOLanguageScript] | None = None,
         getter: Callable[[ScoresDict], Score] | None = None,
         aggregation: Callable[[list[Score]], Any] | None = None,
-        format: Literal["wide", "long"] = "wide",
-    ) -> dict | list:
+        output_format: Literal["wide", "long"] = "wide",
+    ) -> dict[str, float] | list[dict[str, str | float | None]]:
         if (getter is not None) or (aggregation is not None) or (scripts is not None):
             use_fast = False
             getter = (
@@ -219,7 +235,7 @@ class ModelResult(BaseModel):
         aggregation = cast("Callable[[list[Score]], Any]", aggregation)
         getter = cast("Callable[[ScoresDict], Score]", getter)
 
-        if format == "wide":
+        if output_format == "wide":
             scores = {}
             for res in self.task_results:
                 try:
@@ -238,10 +254,11 @@ class ModelResult(BaseModel):
                         )
                 except Exception as e:
                     warnings.warn(
-                        f"Couldn't get scores for {res.task_name} due to {e}."
+                        f"Couldn't get scores for {res.task_name} due to {e}.",
+                        stacklevel=2,
                     )
             return scores
-        if format == "long":
+        if output_format == "long":
             entries = []
             for task_res in self.task_results:
                 try:
@@ -271,9 +288,13 @@ class ModelResult(BaseModel):
                     entries.append(entry)
                 except Exception as e:
                     warnings.warn(
-                        f"Couldn't get scores for {task_res.task_name} due to {e}."
+                        f"Couldn't get scores for {task_res.task_name} due to {e}.",
+                        stacklevel=2,
                     )
             return entries
+        raise ValueError(
+            f"Unknown output_format {output_format!r}, expected 'wide' or 'long'."
+        )
 
     def _get_score_for_table(self) -> list[dict[str, str | float | list[str]]]:
         scores_data = []
@@ -298,9 +319,9 @@ class ModelResult(BaseModel):
     def to_dataframe(
         self,
         aggregation_level: Literal["subset", "split", "task"] = "task",
-        aggregation_fn: Callable[[list[Score]], Any] | None = None,
+        aggregation_fn: Callable[[list[Score]], Any] | str | None = None,
         include_model_revision: bool = False,
-        format: Literal["wide", "long"] = "wide",
+        format: Literal["wide", "long"] = "wide",  # noqa: A002  # public API, renaming would break callers
     ) -> pd.DataFrame:
         """Get a DataFrame with the scores for all models and tasks.
 
@@ -336,7 +357,7 @@ class ModelResult(BaseModel):
         if not scores_data:
             msg = "No scores data available. Returning empty DataFrame."
             logger.warning(msg)
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
             return pd.DataFrame()
 
         # Create DataFrame
@@ -352,7 +373,7 @@ class ModelResult(BaseModel):
             df,
             columns=_columns,
             aggregation_level=aggregation_level,
-            format=format,
+            output_format=format,
             aggregation_fn=aggregation_fn,
         )
 
@@ -362,7 +383,7 @@ class ModelResult(BaseModel):
     def __iter__(self) -> Iterable[TaskResult]:  # type: ignore[override]
         return iter(self.task_results)
 
-    def __getitem__(self, index) -> TaskResult:
+    def __getitem__(self, index: int) -> TaskResult:
         return self.task_results[index]
 
     def __len__(self) -> int:
@@ -370,7 +391,7 @@ class ModelResult(BaseModel):
 
     @property
     def languages(self) -> list[str]:
-        """Get all languages in the model results.
+        """All languages in the model results.
 
         Returns:
             A list of languages in the model results.
@@ -382,7 +403,7 @@ class ModelResult(BaseModel):
 
     @property
     def domains(self) -> list[str]:
-        """Get all domains in the model results.
+        """All domains in the model results.
 
         Returns:
             A list of domains in the model results.
@@ -395,7 +416,7 @@ class ModelResult(BaseModel):
 
     @property
     def task_types(self) -> list[str]:
-        """Get all task types in the model results.
+        """All task types in the model results.
 
         Returns:
             A list of task types in the model results.
@@ -404,7 +425,7 @@ class ModelResult(BaseModel):
 
     @property
     def task_names(self) -> list[str]:
-        """Get all task names in the model results.
+        """All task names in the model results.
 
         Returns:
             A list of task names in the model results.
@@ -413,17 +434,16 @@ class ModelResult(BaseModel):
 
     @property
     def modalities(self) -> list[Modalities]:
-        """Get all modalities in the task results.
+        """All modalities in the task results.
 
         Returns:
             A list of modalities in the task results.
         """
         mods: list[Modalities] = []
         for task_res in self.task_results:
-            task_modalities = getattr(task_res, "modalities", [])
-            mods.extend(task_modalities)
+            mods.extend(task_res.modalities)
         if not mods:
-            mods = self.default_modalities
+            mods = ["text"]
         return list(set(mods))
 
     def to_disk(self, path: Path) -> None:
@@ -432,7 +452,7 @@ class ModelResult(BaseModel):
         Args:
             path: The path to the file to save.
         """
-        with path.open("w") as f:
+        with path.open("w", encoding="utf-8") as f:
             f.write(self.model_dump_json(indent=2))
 
     @classmethod
@@ -449,14 +469,55 @@ class ModelResult(BaseModel):
             return cls.model_validate_json(f.read())
 
     def push_model_results(
-        self, user: str | None = None, *, create_pr: bool = False
+        self,
+        user: str | None = None,
+        *,
+        benchmark: Benchmark | Sequence[Benchmark] | None = None,
+        create_pr: bool = False,
+        raise_error: bool = False,
     ) -> None:
         """Push the model results to the Hugging Face Hub.
 
         Args:
             user: The user or organization of results source.
+            benchmark: Whether to push the benchmark results.
             create_pr: Whether to create a pull request
+            raise_error: Whether to push results if model have missing scores.
         """
+        benchmark_results: None | list[HFEvalResult] = None
+        benchmarks: None | Sequence[Benchmark] = None
+        if benchmark is not None:
+            benchmark_results = []
+            benchmarks = [benchmark] if isinstance(benchmark, Benchmark) else benchmark
+            for cur_benchmark in benchmarks:
+                try:
+                    benchmark_score = cur_benchmark._get_model_score(self).get(
+                        "Mean(Task)"
+                    )
+                except ValueError:
+                    if raise_error:
+                        raise
+                    logger.warning(
+                        f"Model {self.model_name} have missing scores on {cur_benchmark.name}. Skipping it"
+                    )
+                    benchmark_score = None
+                benchmark_results.append(
+                    HFEvalResult(
+                        dataset=HFEvalResultDataset(
+                            id=cur_benchmark.benchmark_hf_repo,
+                            task_id=cur_benchmark.name,
+                            revision="1",
+                        ),
+                        value=benchmark_score,
+                        date=None,
+                        notes="Obtained using MTEB",
+                        source=HFEvalResultSource(
+                            url="https://github.com/embeddings-benchmark/mteb/",
+                            user=user,
+                            name="Obtained using MTEB",
+                        ),
+                    )
+                )
         with tempfile.TemporaryDirectory() as tmpdir:
             path = Path(tmpdir)
             for task_result in self.task_results:
@@ -465,6 +526,21 @@ class ModelResult(BaseModel):
                     "w", encoding="utf-8"
                 ) as f:
                     f.write(task_results.to_yaml())
+
+            if benchmark_results is not None and benchmarks is not None:
+                for cur_benchmark, benchmark_result in zip(
+                    benchmarks, benchmark_results, strict=True
+                ):
+                    if cur_benchmark.name is None:
+                        raise ValueError(
+                            f"Benchmark {cur_benchmark} doesn't have name."
+                        )
+                    with (path / f"{cur_benchmark.name}.yaml").open(
+                        "w", encoding="utf-8"
+                    ) as f:
+                        f.write(
+                            HFEvalResults.model_validate([benchmark_result]).to_yaml()
+                        )
 
             huggingface_hub.upload_folder(
                 repo_id=self.model_name,

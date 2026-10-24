@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-from enum import Enum
+from enum import StrEnum
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing_extensions import Self
+    from typing import Self
 
 
-class HelpfulStrEnum(str, Enum):
+class HelpfulStrEnum(StrEnum):
     """StrEnum that provides a method to create an instance from a string value, which allows for more user-friendly error messages."""
 
     @classmethod
@@ -17,4 +17,4 @@ class HelpfulStrEnum(str, Enum):
         except ValueError:
             raise ValueError(
                 f"'{value}' is not a valid {cls.__name__} value, must be one of {[e.value for e in cls]}"
-            )
+            ) from None

@@ -1,7 +1,16 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
+
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+
+if TYPE_CHECKING:
+    from datasets import Dataset
+
+    from mteb.types import RelevantDocumentsType
 
 _LANGS = {
     "french": ["fra-Latn"],
@@ -17,7 +26,11 @@ def _load_data(
     langs: list | None = None,
     revision: str | None = None,
     num_proc: int | None = None,
-):
+) -> tuple[
+    dict[str, Dataset] | dict[str, dict[str, Dataset]],
+    dict[str, Dataset] | dict[str, dict[str, Dataset]],
+    dict[str, RelevantDocumentsType] | dict[str, dict[str, RelevantDocumentsType]],
+]:
     if langs is None:
         corpus = {}
         queries = {}
@@ -36,7 +49,7 @@ def _load_data(
             num_proc=num_proc,
         )
         query_ds = query_ds.map(
-            lambda x: {
+            lambda x, split=split: {
                 "id": f"query-{split}-{x['query-id']}",
                 "text": x["query"],
                 "modality": "text",
@@ -53,7 +66,7 @@ def _load_data(
             num_proc=num_proc,
         )
         corpus_ds = corpus_ds.map(
-            lambda x: {
+            lambda x, split=split: {
                 "id": f"corpus-{split}-{x['corpus-id']}",
                 "modality": "image",
             },
@@ -82,7 +95,9 @@ def _load_data(
                 relevant_docs[split][qid][did] = int(row["score"])
         else:
             for lang in langs:
-                filtered_query_ds = query_ds.filter(lambda x: x["language"] == lang)
+                filtered_query_ds = query_ds.filter(
+                    lambda x, lang=lang: x["language"] == lang
+                )
                 queries[lang][split] = filtered_query_ds.select_columns(["id", "text"])
 
                 corpus[lang][split] = corpus_ds
@@ -131,7 +146,7 @@ class Vidore2ESGReportsRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
@@ -179,7 +194,7 @@ class Vidore2EconomicsReportsRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
@@ -227,7 +242,7 @@ class Vidore2BioMedicalLecturesRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
@@ -275,7 +290,7 @@ class Vidore2ESGReportsHLRetrieval(AbsTaskRetrieval):
         prompt={"query": "Find a screenshot that relevant to the user's question."},
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 

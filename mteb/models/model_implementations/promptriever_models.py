@@ -3,10 +3,9 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
-
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -23,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 class PromptrieverModel(RepLLaMAModel, AbsEncoder):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any):
         super().__init__(*args, **kwargs)
 
     def encode(
@@ -48,7 +47,7 @@ class PromptrieverModel(RepLLaMAModel, AbsEncoder):
 
 
 def _loader(
-    wrapper: type[PromptrieverModel], **kwargs
+    wrapper: type[PromptrieverModel], **kwargs: Any
 ) -> Callable[..., EncoderProtocol]:
     _kwargs = kwargs
 
@@ -77,7 +76,7 @@ promptriever_llama2 = ModelMeta(
         base_model_name_or_path="meta-llama/Llama-2-7b-hf",
         peft_model_name_or_path="samaya-ai/promptriever-llama2-7b-v1",
         device_map="auto",
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
         model_prompts=model_prompts,
     ),
     name="samaya-ai/promptriever-llama2-7b-v1",
@@ -102,6 +101,7 @@ promptriever_llama2 = ModelMeta(
     citation=PROMPTRIEVER_CITATION,
     public_training_code=None,
     public_training_data=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 promptriever_llama3 = ModelMeta(
@@ -110,7 +110,7 @@ promptriever_llama3 = ModelMeta(
         base_model_name_or_path="meta-llama/Meta-Llama-3.1-8B",
         peft_model_name_or_path="samaya-ai/promptriever-llama3.1-8b-v1",
         device_map="auto",
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
         model_prompts=model_prompts,
     ),
     name="samaya-ai/promptriever-llama3.1-8b-v1",
@@ -136,6 +136,7 @@ promptriever_llama3 = ModelMeta(
     citation=PROMPTRIEVER_CITATION,
     public_training_code=None,
     public_training_data=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 promptriever_llama3_instruct = ModelMeta(
@@ -144,7 +145,7 @@ promptriever_llama3_instruct = ModelMeta(
         base_model_name_or_path="meta-llama/Meta-Llama-3.1-8B-Instruct",
         peft_model_name_or_path="samaya-ai/promptriever-llama3.1-8b-instruct-v1",
         device_map="auto",
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
         model_prompts=model_prompts,
     ),
     name="samaya-ai/promptriever-llama3.1-8b-instruct-v1",
@@ -170,6 +171,7 @@ promptriever_llama3_instruct = ModelMeta(
     citation=PROMPTRIEVER_CITATION,
     public_training_code=None,
     public_training_data=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 promptriever_mistral_v1 = ModelMeta(
@@ -178,7 +180,7 @@ promptriever_mistral_v1 = ModelMeta(
         base_model_name_or_path="mistralai/Mistral-7B-v0.1",
         peft_model_name_or_path="samaya-ai/promptriever-mistral-v0.1-7b-v1",
         device_map="auto",
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
         model_prompts=model_prompts,
     ),
     name="samaya-ai/promptriever-mistral-v0.1-7b-v1",
@@ -204,4 +206,5 @@ promptriever_mistral_v1 = ModelMeta(
     citation=PROMPTRIEVER_CITATION,
     public_training_code=None,
     public_training_data=None,
+    output_dtypes=OutputDType.BF16,
 )

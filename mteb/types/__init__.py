@@ -6,6 +6,7 @@ from ._encoder_io import (
     CorpusDatasetType,
     EncodeKwargs,
     InstructionDatasetType,
+    OutputDType,
     PromptType,
     QueryDatasetType,
     RelevantDocumentsType,
@@ -22,7 +23,14 @@ from ._metadata import (
     ModelName,
     Revision,
 )
-from ._result import HFSubset, RetrievalEvaluationResult, Score, ScoresDict, SplitName
+from ._result import (
+    HFSubset,
+    RetrievalEvaluationResult,
+    Score,
+    ScoresDict,
+    SplitName,
+    SubmitResultsResponse,
+)
 from ._string_validators import StrDate, StrURL
 
 __all__ = [
@@ -41,6 +49,7 @@ __all__ = [
     "Licenses",
     "Modalities",
     "ModelName",
+    "OutputDType",
     "PromptType",
     "QueryDatasetType",
     "RelevantDocumentsType",
@@ -52,5 +61,6 @@ __all__ = [
     "SplitName",
     "StrDate",
     "StrURL",
+    "SubmitResultsResponse",
     "TopRankedDocumentsType",
 ]

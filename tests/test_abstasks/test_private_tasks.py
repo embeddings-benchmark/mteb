@@ -19,6 +19,18 @@ ACCEPTED_PRIVATE_TASKS = [
     "Vidore3NuclearRetrieval",
     "Vidore3TelecomRetrieval.v2",
     "Vidore3NuclearRetrieval.v2",
+    "Vidore3TelecomBM25sReranking.v2",
+    "Vidore3TelecomBGEm3Reranking.v2",
+    "Vidore3TelecomQwen3VLEmbedding2BReranking.v2",
+    "Vidore3TelecomNemotron35Embed8BReranking.v2",
+    "Vidore3NuclearBM25sReranking.v2",
+    "Vidore3NuclearBGEm3Reranking.v2",
+    "Vidore3NuclearQwen3VLEmbedding2BReranking.v2",
+    "Vidore3NuclearNemotron35Embed8BReranking.v2",
+    "GlobalNewsRetrieval",
+    "PublicNewsRetrieval",
+    "LexRetrieval.v1",
+    "ElasticKBRetrieval",
     # Add task names here that are allowed to be private
 ]
 

@@ -34,6 +34,7 @@ class NordicLangClassification(AbsTaskClassification):
         bibtex_citation=r"""
 @inproceedings{haas-derczynski-2021-discriminating,
   address = {Kiyv, Ukraine},
+  archiveprefix = {arXiv},
   author = {Haas, Ren{\'e}  and
 Derczynski, Leon},
   booktitle = {Proceedings of the Eighth Workshop on NLP for Similar Languages, Varieties and Dialects},
@@ -43,6 +44,7 @@ Ljube{\v{s}}i{\'c}, Nikola  and
 Tiedemann, J{\"o}rg  and
 Scherrer, Yves  and
 Jauhiainen, Tommi},
+  eprint = {2012.06431},
   month = apr,
   pages = {67--75},
   publisher = {Association for Computational Linguistics},

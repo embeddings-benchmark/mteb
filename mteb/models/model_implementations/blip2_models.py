@@ -2,10 +2,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -13,6 +11,7 @@ if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
 
 BLIP2_CITATION = """@inproceedings{li2023blip2,
@@ -23,10 +22,8 @@ BLIP2_CITATION = """@inproceedings{li2023blip2,
 }"""
 
 
-def blip2_loader(model_name, **kwargs):
-    requires_package(
-        blip2_loader, "salesforce-lavis", model_name, "pip install 'mteb[blip2]'"
-    )
+def blip2_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
+    import torch
     from lavis.models.blip2_models.blip2_image_text_matching import (
         Blip2ITM,
     )
@@ -36,9 +33,14 @@ def blip2_loader(model_name, **kwargs):
             self,
             model_name: str,
             revision: str,
-            device: str = "cuda" if torch.cuda.is_available() else "cpu",
+            device: str | None = None,
             **kwargs: Any,
         ):
+            import torch
+
+            if device is None:
+                device = "cuda" if torch.cuda.is_available() else "cpu"
+
             from transformers import Blip2Processor
 
             self.model_name = model_name
@@ -58,7 +60,7 @@ def blip2_loader(model_name, **kwargs):
             texts: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_text_embeddings = []
 
             with torch.no_grad():
@@ -82,7 +84,7 @@ def blip2_loader(model_name, **kwargs):
             images: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_image_embeddings = []
 
             with torch.no_grad():
@@ -106,7 +108,7 @@ def blip2_loader(model_name, **kwargs):
             inputs: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_multimodal_embeddings = []
 
             with torch.no_grad():
@@ -153,9 +155,9 @@ def blip2_loader(model_name, **kwargs):
                     )
                 fused_embeddings = text_embeddings + image_embeddings
                 return fused_embeddings
-            elif text_embeddings is not None:
+            if text_embeddings is not None:
                 return text_embeddings
-            elif image_embeddings is not None:
+            if image_embeddings is not None:
                 return image_embeddings
             raise ValueError
 
@@ -177,7 +179,7 @@ blip2_opt_2_7b = ModelMeta(
     release_date="2024-03-22",
     modalities=["image", "text"],
     n_parameters=3_740_000_000,
-    n_embedding_parameters=None,
+    n_embedding_parameters=128696320,
     memory_usage_mb=14285,
     max_tokens=None,
     embed_dim=768,
@@ -191,6 +193,7 @@ blip2_opt_2_7b = ModelMeta(
     use_instructions=False,
     training_datasets=blip2_training_datasets,
     citation=BLIP2_CITATION,
+    extra_requirements_groups=["blip2"],
 )
 
 blip2_opt_6_7b_coco = ModelMeta(
@@ -202,7 +205,7 @@ blip2_opt_6_7b_coco = ModelMeta(
     release_date="2024-03-31",
     modalities=["image", "text"],
     n_parameters=7_750_000_000,
-    n_embedding_parameters=None,
+    n_embedding_parameters=205914112,
     memory_usage_mb=29577,
     max_tokens=None,
     embed_dim=768,
@@ -216,4 +219,5 @@ blip2_opt_6_7b_coco = ModelMeta(
     use_instructions=False,
     training_datasets=blip2_training_datasets,
     citation=BLIP2_CITATION,
+    extra_requirements_groups=["blip2"],
 )

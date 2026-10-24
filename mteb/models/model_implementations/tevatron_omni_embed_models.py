@@ -1,0 +1,185 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
+
+from mteb.models.model_implementations.colpali_models import COLPALI_TRAINING_DATA
+from mteb.models.model_meta import (
+    ModelMeta,
+    ScoringFunction,
+)
+from mteb.models.sentence_transformer_wrapper import (
+    SentenceTransformerEncoderWrapper,
+)
+from mteb.types import OutputDType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+
+
+def _adapter_snapshot_with_base_revision(
+    model: str, revision: str | None, base_revision: str
+) -> str:
+    """Return a local view of a LoRA adapter whose adapter_config.json points to the base model at `base_revision`.
+
+    sentence-transformers does not pass `revision` on to the base model, so it would load from main.
+    """
+    import json
+    import tempfile
+    from pathlib import Path
+
+    from huggingface_hub import snapshot_download
+
+    snapshot = Path(snapshot_download(model, revision=revision))
+    adapter_config = json.loads((snapshot / "adapter_config.json").read_text())
+    adapter_config["base_model_name_or_path"] = snapshot_download(
+        adapter_config["base_model_name_or_path"], revision=base_revision
+    )
+    local = Path(tempfile.mkdtemp(prefix=f"mteb_{model.replace('/', '__')}_"))
+    for entry in snapshot.iterdir():
+        if entry.name != "adapter_config.json":
+            (local / entry.name).symlink_to(entry)
+    (local / "adapter_config.json").write_text(json.dumps(adapter_config, indent=2))
+    return str(local)
+
+
+class TevatronOmniEmbedWrapper(SentenceTransformerEncoderWrapper):
+    """Thin wrapper that configures video processing kwargs after loading."""
+
+    def __init__(
+        self,
+        model: str,
+        revision: str | None = None,
+        device: str | None = None,
+        # fps=2: qwen-omni-utils FPS=2.0
+        # https://github.com/QwenLM/Qwen2.5-Omni/blob/main/qwen-omni-utils/src/qwen_omni_utils/v2_5/vision_process.py
+        fps: float | None = 2.0,
+        # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
+        max_frames: int | None = 64,
+        num_frames: int | None = None,
+        # 300 s at 16 kHz: chunk_length=300
+        # https://huggingface.co/Tevatron/OmniEmbed-v0.1/blob/main/preprocessor_config.json
+        max_samples: int | None = 4_800_000,
+        base_revision: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        if base_revision is not None:
+            model = _adapter_snapshot_with_base_revision(model, revision, base_revision)
+            revision = None
+        super().__init__(
+            model,
+            revision=revision,
+            device=device,
+            fps=fps,
+            max_frames=max_frames,
+            num_frames=num_frames,
+            max_samples=max_samples,
+            **kwargs,
+        )
+        self.target_sampling_rate = self.model[
+            0
+        ].processor.feature_extractor.sampling_rate
+        self.model[0].processing_kwargs.update(
+            {
+                "video": {
+                    "min_pixels": 32 * 14 * 14,
+                    "max_pixels": 64
+                    * 28
+                    * 28,  # model card recommendation to save memory
+                    "do_sample_frames": False,
+                },
+                "text": {"truncation": True, "max_length": 512},
+            }
+        )
+        self.model.max_seq_length = 512
+
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        # the 512-token limit is for text; audio and video become tokens in the
+        # same sequence, so truncating there would cut them (~20 s of audio);
+        # 32768 is the tokenizer's model_max_length
+        text_only = not any(
+            m in inputs.dataset.features for m in ("image", "audio", "video")
+        )
+        self.model[0].processing_kwargs["text"] = (
+            {"truncation": True, "max_length": 512} if text_only else {}
+        )
+        self.model.max_seq_length = 512 if text_only else 32768
+        return super().encode(
+            inputs,
+            task_metadata=task_metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            prompt_type=prompt_type,
+            **kwargs,
+        )
+
+
+_OMNI_EMBED_CITATION = r"""
+@misc{zhuang2025tevatron,
+  archiveprefix = {arXiv},
+  author = {Xueguang Ma and Luyu Gao and Shengyao Zhuang and Jiaqi Samantha Zhan and Jamie Callan and Jimmy Lin},
+  eprint = {2505.02466},
+  title = {Tevatron 2.0: Unified Document Retrieval Toolkit across Scale, Language, and Modality},
+  url = {https://arxiv.org/abs/2505.02466},
+  year = {2025},
+}
+"""
+
+omni_embed_v01 = ModelMeta(
+    loader=TevatronOmniEmbedWrapper,
+    loader_kwargs={
+        "trust_remote_code": True,
+        "model_kwargs": {
+            "torch_dtype": "bfloat16",
+        },
+        # LoRA adapter; its adapter_config.json names Tevatron/Qwen2.5-Omni-7B-Thinker without a revision
+        "base_revision": "8876e9bc7e6af2ecbdfb14e0416e2c1105f0f7bb",
+    },
+    name="Tevatron/OmniEmbed-v0.1",
+    revision="fa8be315e74d07f563b07c0d053525de6dc7eda8",
+    release_date="2025-04-12",
+    languages=["eng-Latn"],
+    n_parameters=8_931_813_888,
+    n_embedding_parameters=544_997_376,
+    memory_usage_mb=17_036,
+    max_tokens=32768,
+    embed_dim=3584,
+    license="mit",
+    open_weights=True,
+    public_training_code="https://github.com/texttron/tevatron/tree/qwenomni",
+    public_training_data="https://huggingface.co/Tevatron/OmniEmbed-v0.1#training-data",
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/Tevatron/OmniEmbed-v0.1",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=True,
+    training_datasets={
+        "NQ",
+        "MSMARCO",
+        "FEVER",
+        "SCIDOCS",
+        "MSRVTTV2T",
+        "MSRVTTT2V",
+        "AudioCapsT2ARetrieval",
+        *COLPALI_TRAINING_DATA,
+        # "WikiSS-NQ",  # not in MTEB
+        # "PixMo-Docs",  # not in MTEB
+    },
+    adapted_from="Qwen/Qwen2.5-Omni-7B",
+    superseded_by=None,
+    modalities=["text", "image", "audio", "video"],
+    model_type=["dense"],
+    citation=_OMNI_EMBED_CITATION,
+    extra_requirements_groups=["multimodal-sbert", "peft"],
+    output_dtypes=OutputDType.BF16,
+)

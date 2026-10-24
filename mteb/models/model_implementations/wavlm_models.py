@@ -2,14 +2,15 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
-from transformers import Wav2Vec2FeatureExtractor, WavLMModel
 
-from mteb._create_dataloaders import AudioCollator
-from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import (
+    AudioCollator,
+    check_duration_cap,
+    single_clip_dataloader,
+)
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -24,11 +25,20 @@ class WavlmWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str | None = None,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_seconds: float = 30.0,
+        device: str | None = None,
+        # 240 s: an mteb memory cap, not a model limit. WavLM declares no length
+        # limit but has no SDPA, so attention memory grows quadratically; one
+        # 240 s clip takes ~62 GB on wavlm-large and 300 s runs out on 80 GB
+        max_audio_length_seconds: float = 240.0,
         **kwargs: Any,
     ):
-        requires_audio_dependencies()
+        check_duration_cap(max_audio_length_seconds)
+        import torch
+        from transformers import Wav2Vec2FeatureExtractor, WavLMModel
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         self.model_name = model_name
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds
@@ -37,26 +47,37 @@ class WavlmWrapper(AbsEncoder):
             self.device
         )
         self.model.eval()
+        # group-norm checkpoints (wavlm-base*) normalise over the padded input, so
+        # batching changes their embeddings (cosine 0.40 on real clips);
+        # wavlm-large uses layer norm and batches at cosine 0.9988
+        self.per_clip = self.model.config.feat_extract_norm != "layer"
 
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(
             self.model_name, revision=revision
         )
         self.sampling_rate = self.feature_extractor.sampling_rate
 
-    def get_audio_embeddings(
+    def get_audio_embeddings(  # noqa: PLR0914
         self,
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        inputs.collate_fn = AudioCollator(self.sampling_rate)
+        import torch
+
+        # the conv feature encoder needs at least 400 samples (25 ms at 16 kHz)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate, min_samples=400
+        )
 
         all_embeddings = []
 
-        for batch in tqdm(
-            inputs,
-            disable=not show_progress_bar,
-        ):
+        if self.per_clip:
+            inputs = single_clip_dataloader(
+                inputs,
+                "group-norm feature encoder: padding changes the embeddings",
+            )
+        for batch in tqdm(inputs, disable=not show_progress_bar):
             audio_arrays = [audio["array"] for audio in batch["audio"]]
 
             feature_inputs = self.feature_extractor(
@@ -73,10 +94,9 @@ class WavlmWrapper(AbsEncoder):
                 outputs = self.model(
                     feature_inputs.input_values,
                     attention_mask=feature_inputs.attention_mask,
-                    output_hidden_states=True,
                 )
 
-                last_hidden_state = outputs.hidden_states[-1]
+                last_hidden_state = outputs.last_hidden_state
 
                 # Apply attention-masked pooling to exclude padding tokens
                 batch_size, hidden_seq_len, hidden_size = last_hidden_state.shape
@@ -128,6 +148,7 @@ wavlm_base = ModelMeta(
     release_date="2022-07-19",
     max_tokens=float("inf"),
     n_parameters=94_700_000,
+    n_embedding_parameters=0,
     memory_usage_mb=361,
     embed_dim=768,
     license="mit",
@@ -164,6 +185,7 @@ wavlm_base_sd = ModelMeta(
     release_date="2022-07-19",
     max_tokens=float("inf"),
     n_parameters=94_700_000,
+    n_embedding_parameters=0,
     memory_usage_mb=361,
     embed_dim=768,
     license="mit",
@@ -200,6 +222,7 @@ wavlm_base_plus = ModelMeta(
     release_date="2022-07-19",
     max_tokens=float("inf"),
     n_parameters=94_700_000,
+    n_embedding_parameters=0,
     memory_usage_mb=361,
     embed_dim=768,
     license="mit",
@@ -211,8 +234,8 @@ wavlm_base_plus = ModelMeta(
     public_training_data=None,
     training_datasets={
         "Libri-Light",
-        "GigaSpeech",
-        "VoxPopuli",
+        "GigaSpeechA2TRetrieval",
+        "VoxPopuliLanguageID",
     },
     modalities=["audio"],
     citation="""
@@ -240,6 +263,7 @@ wavlm_base_plus_sv = ModelMeta(
     release_date="2022-07-19",
     max_tokens=float("inf"),
     n_parameters=94_700_000,
+    n_embedding_parameters=0,
     memory_usage_mb=361,
     embed_dim=768,
     license="mit",
@@ -251,8 +275,8 @@ wavlm_base_plus_sv = ModelMeta(
     public_training_data=None,
     training_datasets={
         "Libri-Light",
-        "GigaSpeech",
-        "VoxPopuli",
+        "GigaSpeechA2TRetrieval",
+        "VoxPopuliLanguageID",
         "VoxCeleb1",
     },
     modalities=["audio"],
@@ -281,6 +305,7 @@ wavlm_base_plus_sd = ModelMeta(
     release_date="2022-07-19",
     max_tokens=float("inf"),
     n_parameters=94_700_000,
+    n_embedding_parameters=0,
     memory_usage_mb=361,
     embed_dim=768,
     license="mit",
@@ -292,8 +317,8 @@ wavlm_base_plus_sd = ModelMeta(
     public_training_data=None,
     training_datasets={
         "Libri-Light",
-        "GigaSpeech",
-        "VoxPopuli",
+        "GigaSpeechA2TRetrieval",
+        "VoxPopuliLanguageID",
         "LibriMix",
     },
     modalities=["audio"],
@@ -322,6 +347,7 @@ wavlm_base_sv = ModelMeta(
     release_date="2022-07-19",
     max_tokens=float("inf"),
     n_parameters=94_700_000,
+    n_embedding_parameters=0,
     memory_usage_mb=361,
     embed_dim=768,
     license="mit",
@@ -358,6 +384,7 @@ wavlm_large = ModelMeta(
     release_date="2022-07-19",
     max_tokens=float("inf"),
     n_parameters=316_620_000,
+    n_embedding_parameters=0,
     memory_usage_mb=1208,
     embed_dim=1024,
     license="mit",
@@ -369,8 +396,8 @@ wavlm_large = ModelMeta(
     public_training_data=None,
     training_datasets={
         "Libri-Light",
-        "GigaSpeech",
-        "VoxPopuli",
+        "GigaSpeechA2TRetrieval",
+        "VoxPopuliLanguageID",
     },
     modalities=["audio"],
     citation="""

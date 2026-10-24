@@ -1,6 +1,5 @@
-from importlib.metadata import version
-
 from mteb import types
+from mteb._requires_package import _mteb_distribution
 from mteb.abstasks import AbsTask
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.cache import ResultCache
@@ -9,10 +8,12 @@ from mteb.evaluate import evaluate
 from mteb.filter_tasks import filter_tasks
 from mteb.get_tasks import get_task, get_tasks
 from mteb.load_results import load_results
+from mteb.mocks.mock_run import MockRunResults, mock_run
 from mteb.models import (
     CacheBackendProtocol,
     CrossEncoderProtocol,
     EncoderProtocol,
+    HybridSearch,
     IndexEncoderSearchProtocol,
     SearchProtocol,
     SentenceTransformerEncoderWrapper,
@@ -23,7 +24,7 @@ from mteb.results import BenchmarkResults, TaskResult
 from .benchmarks.benchmark import Benchmark
 from .benchmarks.get_benchmark import get_benchmark, get_benchmarks
 
-__version__ = version("mteb")  # fetch version from install metadata
+__version__ = _mteb_distribution().version  # fetch version from install metadata
 
 __all__ = [
     "MTEB",
@@ -33,7 +34,9 @@ __all__ = [
     "CacheBackendProtocol",
     "CrossEncoderProtocol",
     "EncoderProtocol",
+    "HybridSearch",
     "IndexEncoderSearchProtocol",
+    "MockRunResults",
     "ResultCache",
     "SearchProtocol",
     "SentenceTransformerEncoderWrapper",
@@ -49,5 +52,6 @@ __all__ = [
     "get_task",
     "get_tasks",
     "load_results",
+    "mock_run",
     "types",
 ]

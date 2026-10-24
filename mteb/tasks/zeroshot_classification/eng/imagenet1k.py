@@ -48,9 +48,9 @@ class Imagenet1kZeroShotClassification(AbsTaskZeroShotClassification):
     input_column_name: str = "jpg"
     label_column_name: str = "cls"
 
-    def get_candidate_labels(self) -> list[str]:
+    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
         path = Path(__file__).parent / "templates" / "Imagenet1k_labels.txt"
-        with path.open() as f:
+        with path.open(encoding="utf-8") as f:
             labels = f.readlines()
 
         return [f"a photo of {c}." for c in labels]

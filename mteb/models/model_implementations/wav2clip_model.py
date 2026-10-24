@@ -3,14 +3,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
-from transformers import CLIPModel, CLIPProcessor
 
-from mteb._create_dataloaders import AudioCollator
-from mteb._requires_package import requires_package
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import AudioCollator, seconds_to_samples
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -25,11 +22,18 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_s: float = 30.0,
+        device: str | None = None,
+        # uncapped: Wav2CLIP declares no input length. Set this to truncate; it
+        # was previously declared but never applied.
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
-        requires_package(self, "wav2clip", "pip install 'mteb[wav2clip]'")
+        import torch
+        from transformers import CLIPModel, CLIPProcessor
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         from wav2clip import embed_audio, get_model
 
         self.embed_audio = embed_audio
@@ -37,7 +41,7 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
         self.device = device
         self.audio_model = get_model().to(device)
         self.sampling_rate = 16_000
-        self.max_audio_length_s = max_audio_length_s
+        self.max_audio_length_seconds = max_audio_length_seconds
 
         # text side (CLIP) - we use the standard OpenAI CLIP model as mentioned in paper
         # Wav2Clip aligns audio embeddings to CLIP's embedding space using this specific model
@@ -57,7 +61,8 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> np.ndarray:
-        inputs.collate_fn = AudioCollator(self.sampling_rate)
+
+        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
 
         all_embeddings = []
 
@@ -66,23 +71,20 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
             inputs, desc="Processing audio batches", disable=not show_progress_bar
         ):
             audio_arrays = [audio["array"] for audio in batch["audio"]]
+            cap = seconds_to_samples(self.max_audio_length_seconds, self.sampling_rate)
+            if cap is not None:
+                audio_arrays = [w[..., :cap] for w in audio_arrays]
 
-            max_length = max(wav.shape[-1] for wav in audio_arrays)
-            padded_wavs = []
-            for wav in audio_arrays:
-                if wav.shape[-1] < max_length:
-                    # Pad with zeros
-                    pad_length = max_length - wav.shape[-1]
-                    padded_wav = torch.nn.functional.pad(wav, (0, pad_length))
-                else:
-                    padded_wav = wav
-                padded_wavs.append(padded_wav)
-
-            # Stack into batch array and convert to numpy for embed_audio
-            batch_tensor = torch.stack(padded_wavs).numpy()
-
-            # Process entire batch at once
-            batch_embeds = self.embed_audio(batch_tensor, self.audio_model)
+            # one clip per call: padding and wav2clip's batch-wide input
+            # normalisation would make embeddings depend on batch-mates
+            batch_embeds = np.concatenate(
+                [
+                    self.embed_audio(
+                        np.asarray(wav, dtype=np.float32)[None], self.audio_model
+                    )
+                    for wav in audio_arrays
+                ]
+            )
 
             # Normalize each embedding in the batch
             norms = np.linalg.norm(batch_embeds, axis=-1, keepdims=True)
@@ -100,6 +102,9 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+        from transformers.modeling_outputs import BaseModelOutputWithPooling
+
         text_embeddings = []
         for batch in tqdm(
             inputs, disable=not show_progress_bar, desc="Processing text batches"
@@ -112,7 +117,9 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
 
             with torch.no_grad():
                 text_features = self.clip.get_text_features(**features)
-                text_features = text_features / text_features.norm(dim=-1, keepdim=True)
+                if isinstance(text_features, BaseModelOutputWithPooling):
+                    text_features = text_features.pooler_output
+                text_features = text_features / text_features.norm(dim=-1, keepdim=True)  # noqa: PLR6104
             text_embeddings.append(text_features.cpu().detach().numpy())
 
         return np.vstack(text_embeddings)
@@ -142,9 +149,9 @@ class Wav2ClipZeroShotWrapper(AbsEncoder):
                 )
             fused_embeddings = text_embeddings + audio_embeddings
             return fused_embeddings
-        elif text_embeddings is not None:
+        if text_embeddings is not None:
             return text_embeddings
-        elif audio_embeddings is not None:
+        if audio_embeddings is not None:
             return audio_embeddings
         raise ValueError
 
@@ -169,9 +176,7 @@ wav2clip_zero = ModelMeta(
     public_training_code="https://github.com/descriptinc/lyrebird-wav2clip",
     public_training_data="https://github.com/descriptinc/lyrebird-wav2clip#data",
     training_datasets=set(
-        # "AudioSet": ["https://research.google.com/audioset/"],
-        # "FreeSound": ["https://freesound.org/"],
-        # "BBC Sound Effects": ["https://sound-effects.bbcrewind.co.uk/"],
+        # VGGSound (not in MTEB)
     ),
     citation="""
 @misc{wu2022wav2cliplearningrobustaudio,
@@ -183,4 +188,5 @@ wav2clip_zero = ModelMeta(
   primaryClass={cs.SD},
   url={https://arxiv.org/abs/2110.11499},
 }""",
+    extra_requirements_groups=["wav2clip"],
 )

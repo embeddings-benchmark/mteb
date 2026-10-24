@@ -3,15 +3,13 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import (
-    requires_image_dependencies,
-)
 from mteb.models.model_meta import ModelMeta
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
+    import torch
     from PIL import Image
     from torch.utils.data import DataLoader
 
@@ -28,12 +26,11 @@ class GraniteVisionEmbeddingWrapper:
         revision: str | None = None,
         device: str | None = None,
         attn_implementation: str | None = None,
-        **kwargs,
+        **kwargs: Any,
     ):
+        import torch
         from transformers import AutoModel, AutoProcessor
         from transformers.utils.import_utils import is_flash_attn_2_available
-
-        requires_image_dependencies()
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.model_name = model_name
@@ -57,16 +54,18 @@ class GraniteVisionEmbeddingWrapper:
             model_name, trust_remote_code=True, revision=revision
         )
 
-    def encode_input(self, inputs):
+    def encode_input(self, inputs: dict[str, Any]) -> torch.Tensor:
         return self.mdl(**inputs)
 
     def get_image_embeddings(
         self,
-        images,
+        images: DataLoader[BatchedInput],
         batch_size: int = 16,
         show_progress_bar: bool = True,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> Array:
+        import torch
+
         all_embeds = []
         with torch.no_grad():
             for batch in tqdm(
@@ -86,8 +85,10 @@ class GraniteVisionEmbeddingWrapper:
         self,
         texts: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> Array:
+        import torch
+
         all_embeds = []
 
         with torch.no_grad():
@@ -112,7 +113,7 @@ class GraniteVisionEmbeddingWrapper:
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
         batch_size: int = 32,
-        fusion_mode="sum",
+        fusion_mode: str = "sum",
         **kwargs: Any,
     ):
         raise NotImplementedError(
@@ -147,33 +148,29 @@ class GraniteVisionEmbeddingWrapper:
                 )
             fused_embeddings = text_embeddings + image_embeddings
             return fused_embeddings
-        elif text_embeddings is not None:
+        if text_embeddings is not None:
             return text_embeddings
-        elif image_embeddings is not None:
+        if image_embeddings is not None:
             return image_embeddings
         raise ValueError
 
-    def calculate_probs(self, text_embeddings, image_embeddings):
-        scores = self.similarity(text_embeddings, image_embeddings)
-        return (scores * 100).softmax(dim=-1)
-
-    def similarity(self, a, b):
+    def similarity(self, a: Array, b: Array) -> Array:
         return self.processor.score_multi_vector(a, b)
 
 
 granite_vision_embedding = ModelMeta(
     loader=GraniteVisionEmbeddingWrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float16,
+        torch_dtype=OutputDType.FLOAT16,
     ),
     name="ibm-granite/granite-vision-3.3-2b-embedding",
-    model_type=["dense"],
+    model_type=["late-interaction"],
     languages=["eng-Latn"],
     revision="cee615db64d89d1552a4ee39c50f25c0fc5c66ca",
     release_date="2025-06-11",
     modalities=["image", "text"],
     n_parameters=2_980_000_000,
-    n_embedding_parameters=None,
+    n_embedding_parameters=100671488,
     memory_usage_mb=11351,
     max_tokens=128000,
     embed_dim=128,
@@ -192,4 +189,5 @@ granite_vision_embedding = ModelMeta(
   journal={arXiv preprint arXiv:2502.09927},
   year={2025}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )

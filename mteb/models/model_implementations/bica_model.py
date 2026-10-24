@@ -1,9 +1,9 @@
-from mteb.models import ModelMeta, sentence_transformers_loader
+from mteb.models import ModelMeta, SentenceTransformerEncoderWrapper
 
 bica_base = ModelMeta(
     name="bisectgroup/BiCA-base",
     model_type=["dense"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     languages=["eng-Latn"],
     open_weights=True,
     revision="31237a836e5ae908c308a256573e5f0986498574",

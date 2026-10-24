@@ -1,14 +1,23 @@
 """Tests the TaskMetadata class"""
 
+from typing import get_args
+
 import pytest
 from pydantic import ValidationError
 
 import mteb
-from mteb.abstasks.task_metadata import TaskMetadata
-from tests.task_grid import (
+from mteb.abstasks.task_metadata import (
+    _TASKTYPE2SIMPLIFIEDTASKTYPE,
+    TaskMetadata,
+    TaskType,
+)
+from mteb.mocks import (
     MOCK_MAEB_TASK_GRID,
     MOCK_MIEB_TASK_GRID,
+    MOCK_MULTIMODAL_TASKS,
+    MOCK_MVEB_TASK_GRID,
     MOCK_TASK_TEST_GRID,
+    MockClassificationTask,
 )
 
 
@@ -16,8 +25,6 @@ def check_descriptive_stats(task):
     result_stat = task.calculate_descriptive_statistics()
     # remove descriptive task file
     task.metadata.descriptive_stat_path.unlink()
-    print(task.metadata.name)
-    print(result_stat)
     task_stat = task.expected_stats
 
     for key, value in result_stat.items():
@@ -30,9 +37,21 @@ def test_descriptive_statistics_mock_tasks(task):
     check_descriptive_stats(task)
 
 
+def test_descriptive_statistics_does_not_mutate_eval_splits():
+    task = MockClassificationTask()
+    eval_splits = list(task.metadata.eval_splits)
+
+    for _ in range(2):
+        task.calculate_descriptive_statistics(overwrite_results=True)
+        task.metadata.descriptive_stat_path.unlink()
+
+    assert task.metadata.eval_splits == eval_splits
+    assert task.eval_splits == eval_splits
+
+
 @pytest.mark.parametrize("task", MOCK_MIEB_TASK_GRID)
 def test_descriptive_statistics_mock_mieb_tasks(task):
-    pytest.importorskip("PIL", reason="Image dependencies are not installed")
+    pytest.importorskip("torchvision", reason="Image dependencies are not installed")
     check_descriptive_stats(task)
 
 
@@ -40,6 +59,41 @@ def test_descriptive_statistics_mock_mieb_tasks(task):
 def test_descriptive_statistics_mock_maeb_tasks(task):
     pytest.importorskip("torchaudio", reason="Audio dependencies are not installed")
     check_descriptive_stats(task)
+
+
+@pytest.mark.parametrize("task", MOCK_MVEB_TASK_GRID)
+def test_descriptive_statistics_mock_mveb_tasks(task):
+    pytest.importorskip(
+        "torchcodec", reason="Video dependencies torchcodec are not installed"
+    )
+    check_descriptive_stats(task)
+
+
+@pytest.mark.parametrize("task", MOCK_MULTIMODAL_TASKS)
+def test_descriptive_statistics_mock_mmeb_tasks(task):
+    pytest.importorskip(
+        "torchcodec", reason="Video dependencies torchcodec are not installed"
+    )
+    check_descriptive_stats(task)
+
+
+def test_all_task_types_have_a_simplified_task_type():
+    """Every `TaskType` must have an entry in `_TASKTYPE2SIMPLIFIEDTASKTYPE`, otherwise
+    `TaskMetadata.simplified_task_type` raises a `KeyError` for tasks of that type.
+    """
+
+    all_task_types = set(get_args(TaskType))
+    mapped_task_types = set(_TASKTYPE2SIMPLIFIEDTASKTYPE.keys())
+
+    missing = all_task_types - mapped_task_types
+    assert not missing, (
+        f"The following TaskType(s) are missing from _TASKTYPE2SIMPLIFIEDTASKTYPE: {sorted(missing)}"
+    )
+
+    extra = mapped_task_types - all_task_types
+    assert not extra, (
+        f"_TASKTYPE2SIMPLIFIEDTASKTYPE contains keys that aren't valid TaskType values: {sorted(extra)}"
+    )
 
 
 def test_given_dataset_config_then_it_is_valid():
@@ -71,7 +125,7 @@ def test_given_dataset_config_then_it_is_valid():
 
 
 def test_given_missing_dataset_path_then_it_throws():
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="dataset"):
         TaskMetadata(
             name="MyTask",
             description="testing",
@@ -94,7 +148,7 @@ def test_given_missing_dataset_path_then_it_throws():
 
 
 def test_given_missing_revision_path_then_it_throws():
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="dataset.revision"):
         TaskMetadata(
             name="MyTask",
             dataset={
@@ -119,7 +173,9 @@ def test_given_missing_revision_path_then_it_throws():
         )
 
 
-def test_given_none_revision_path_then_it_logs_warning(caplog):
+def test_given_none_revision_path_then_it_logs_warning(
+    caplog: pytest.LogCaptureFixture,
+):
     with pytest.raises(ValidationError):
         TaskMetadata(
             name="MyTask",
@@ -199,6 +255,31 @@ def test_filled_metadata_is_filled():
         ).is_filled()
         is True
     )
+
+
+def test_contributed_by_field():
+    my_task = TaskMetadata(
+        name="MyTask",
+        dataset={"path": "test/dataset", "revision": "1.0"},
+        description="A test dataset.",
+        reference=None,
+        type="Classification",
+        category="t2t",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="map_at_1000",
+        date=None,
+        domains=None,
+        license=None,
+        task_subtypes=None,
+        annotations_creators=None,
+        dialect=None,
+        sample_creation=None,
+        bibtex_citation="",
+        contributed_by="Acme Corp",
+    )
+    assert my_task.contributed_by == "Acme Corp"
 
 
 def test_task_hf_config():

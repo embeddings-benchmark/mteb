@@ -2,13 +2,13 @@ import pytest
 
 import mteb
 from mteb.abstasks import AbsTask
-from mteb.models import SearchEncoderWrapper
-from mteb.models.models_protocols import EncoderProtocol
-from tests.mock_tasks import (
+from mteb.mocks.mock_tasks import (
     MockBitextMiningTask,
     MockPairClassificationTask,
     MockRetrievalTask,
 )
+from mteb.models import SearchEncoderWrapper
+from mteb.models.models_protocols import EncoderProtocol
 
 
 @pytest.mark.parametrize(

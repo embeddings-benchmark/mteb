@@ -1,7 +1,7 @@
-from mteb.models import ModelMeta, sentence_transformers_loader
+from mteb.models import ModelMeta, SentenceTransformerEncoderWrapper
 
 kowshik24_bangla_embedding_model = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="Kowshik24/bangla-sentence-transformer-ft-matryoshka-paraphrase-multilingual-mpnet-base-v2",
     model_type=["dense"],
     languages=["ben-Beng"],  # Bengali using Bengali script

@@ -1,8 +1,8 @@
 from mteb.models.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 embedding_gemma_300m_scandi = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="emillykkejensen/EmbeddingGemma-Scandi-300m",
     model_type=["dense"],
     languages=["dan-Latn", "swe-Latn", "nor-Latn", "nob-Latn", "nno-Latn"],
@@ -36,7 +36,7 @@ embedding_gemma_300m_scandi = ModelMeta(
 
 
 qwen_scandi = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="emillykkejensen/Qwen3-Embedding-Scandi-0.6B",
     model_type=["dense"],
     languages=["dan-Latn", "swe-Latn", "nor-Latn", "nob-Latn", "nno-Latn"],
@@ -61,7 +61,7 @@ qwen_scandi = ModelMeta(
 
 
 mmbert_scandi = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="emillykkejensen/mmBERTscandi-base-embedding",
     model_type=["dense"],
     languages=["dan-Latn", "swe-Latn", "nor-Latn", "nob-Latn", "nno-Latn"],

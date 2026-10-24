@@ -16,7 +16,8 @@ Based on community feedback and research findings, this definition may change in
 
 ### What do the other columns mean?
 
-- **Number of Parameters**: This is the total number of parameters in the model including embedding parameters. A higher value means the model requires more CPU/GPU memory to run; thus, less is generally desirable.
+- **Total Parameters**: This is the total number of parameters in the model including embedding parameters. A higher value means the model requires more CPU/GPU memory to run; thus, less is generally desirable.
+- **Active Parameters**: This is the number of parameters actively used during inference (particularly relevant for MoE models). For dense models, this equals total parameters minus embedding parameters.
 - **Embedding Dimension**: This is the vector dimension of the embeddings that the model produces. When saving embeddings to disk, a higher dimension will require more space, thus less is usually desirable.
 - **Max tokens**: This refers to how many tokens (=word pieces) the model can process. Generally, a larger value is desirable.
 - **Zero-shot**: This indicates if the model is zero-shot on the benchmark. For more information on zero-shot see the info box above.
@@ -42,9 +43,6 @@ ACKNOWLEDGEMENT = """
 <div class="sponsor-image-about" style="display: flex; align-items: center; gap: 10px;">
     <a href="https://cloud.google.com/">
         <img src="https://img.icons8.com/?size=512&id=17949&format=png" width="60" height="55" style="padding: 10px;">
-    </a>
-    <a href="https://contextual.ai/">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQd4EDMoZLFRrIjVBrSXOQYGcmvUJ3kL4U2usvjuKPla-LoRTZtLzFnb_Cu5tXzRI7DNBo&usqp=CAU" width="60" height="55" style="padding: 10px;">
     </a>
     <a href="https://www.laude.org/">
         <img src="https://media.licdn.com/dms/image/v2/D4E0BAQEf_yGxYWCZPQ/company-logo_200_200/B4EZd7LecEHcAI-/0/1750118302768/laude_institute_logo?e=2147483647&v=beta&t=HqOMQxuGeHVjZsPIZ0vJXHpR3ZBH9OVo2aYK-f9ovio" width="60" height="55" style="padding: 10px;">

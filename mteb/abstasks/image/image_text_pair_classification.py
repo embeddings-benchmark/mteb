@@ -4,7 +4,6 @@ import logging
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Any, TypedDict
 
-import torch
 from datasets import concatenate_datasets
 
 from mteb._evaluators import ImageTextPairClassificationEvaluator
@@ -14,37 +13,19 @@ from mteb.abstasks._statistics_calculation import (
 )
 from mteb.abstasks.abstask import AbsTask
 from mteb.models.models_protocols import EncoderProtocol
-from mteb.types.statistics import (
-    SplitDescriptiveStatistics,
-)
+from mteb.types.statistics import ImageTextPairClassificationDescriptiveStatistics
 
 if TYPE_CHECKING:
     from pathlib import Path
 
+    import torch
     from datasets import Dataset
 
     from mteb.models.models_protocols import MTEBModels
-    from mteb.types import EncodeKwargs
-    from mteb.types.statistics import (
-        ImageStatistics,
-        TextStatistics,
-    )
+    from mteb.timing import TimingStack
+    from mteb.types import EncodeKwargs, Modalities
 
 logger = logging.getLogger(__name__)
-
-
-class ImageTextPairClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
-    """Descriptive statistics for ImageTextPairClassification
-
-    Attributes:
-        num_samples: number of samples in the dataset.
-        text_statistics: Statistics for text
-        image_statistics: Statistics for images
-    """
-
-    num_samples: int
-    text_statistics: TextStatistics
-    image_statistics: ImageStatistics
 
 
 class ImageTextPairClassificationMetrics(TypedDict):
@@ -79,9 +60,24 @@ class AbsTaskImageTextPairClassification(AbsTask):
     # it can be ["image_0", "image_1"]; ["text_0", "text_1"] for datasets like WinoGround
     images_column_names: str | Sequence[str] = "image"
     texts_column_names: str | Sequence[str] = "caption"
+    abstask_prompt = "Identify the caption that matches the given image."
+
+    def _get_content_columns(self) -> dict[str, Modalities]:
+        def _named(columns: str | Sequence[str]) -> list[str]:
+            return [columns] if isinstance(columns, str) else list(columns)
+
+        return {
+            **dict.fromkeys(_named(self.images_column_names), "image"),
+            **dict.fromkeys(_named(self.texts_column_names), "text"),
+        }
 
     def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        *,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
     ) -> ImageTextPairClassificationDescriptiveStatistics:
         if compute_overall:
             dataset = concatenate_datasets(
@@ -122,7 +118,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
         return ImageTextPairClassificationDescriptiveStatistics(
             num_samples=num_samples,
             text_statistics=calculate_text_statistics(texts),
-            image_statistics=calculate_image_statistics(images),
+            image_statistics=calculate_image_statistics(images, max_workers=num_proc),
         )
 
     def _evaluate_subset(
@@ -135,6 +131,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
         hf_subset: str,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> ImageTextPairClassificationMetrics:
         if not isinstance(model, EncoderProtocol):
@@ -166,11 +163,12 @@ class AbsTaskImageTextPairClassification(AbsTask):
             num_images_per_sample=num_images_per_sample,
             hf_split=hf_split,
             hf_subset=hf_subset,
+            timer=timer,
             **kwargs,
         )
         scores: list[torch.Tensor] = evaluator(
             model, encode_kwargs=encode_kwargs, num_proc=num_proc
-        )  # type: ignore[assignment]
+        )
         if prediction_folder:
             self._save_task_predictions(
                 [score.tolist() for score in scores],
@@ -186,12 +184,14 @@ class AbsTaskImageTextPairClassification(AbsTask):
             num_texts_per_sample,
         )
 
-    def _compute_metrics(
+    def _compute_metrics(  # noqa: PLR6301
         self,
         scores: list[torch.Tensor],
         num_images_per_sample: int,
         num_texts_per_sample: int,
     ) -> ImageTextPairClassificationMetrics:
+        import torch
+
         image_score = []
         text_score = []
         all_correct_scores = []
@@ -222,6 +222,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
         self,
         repo_name: str,
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> None:
         text_columns = (
             [self.texts_column_names]
@@ -238,4 +239,5 @@ class AbsTaskImageTextPairClassification(AbsTask):
             repo_name,
             [*text_columns, *image_columns],
             num_proc=num_proc,
+            **kwargs,
         )

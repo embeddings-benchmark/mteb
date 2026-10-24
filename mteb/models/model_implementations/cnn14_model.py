@@ -2,13 +2,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
-from mteb._create_dataloaders import AudioCollator
-from mteb._requires_package import requires_audio_dependencies, requires_package
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import AudioCollator, seconds_to_samples
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -22,38 +20,44 @@ class CNN14Wrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_s: float = 30.0,
+        revision: str | None = None,
+        device: str | None = None,
+        # no limit: no duration declared
+        # https://huggingface.co/speechbrain/cnn14-esc50/blob/main/hyperparams.yaml
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
-        requires_audio_dependencies()
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         self.model_name = model_name
         self.device = device
-        self.max_audio_length_s = max_audio_length_s
-
-        requires_package(
-            self,
-            "speechbrain",
-            "speechbrain/cnn14-esc50",
-            "pip install 'mteb[speechbrain]'",
-        )
+        self.max_audio_length_seconds = max_audio_length_seconds
 
         from speechbrain.inference.classifiers import AudioClassifier
+
+        try:
+            from speechbrain.utils.fetching import FetchConfig
+
+            fetch_kwargs: dict[str, Any] = {
+                "fetch_config": FetchConfig(revision=revision)
+            }
+        except ImportError:  # speechbrain < 1.0
+            fetch_kwargs = {"revision": revision}
 
         # Load the SpeechBrain model
         self.model = AudioClassifier.from_hparams(
             source=model_name,
             savedir="pretrained_models/cnn14-esc50",
             run_opts={"device": device},
+            **fetch_kwargs,
         )
 
-        # SpeechBrain uses a 16kHz sampling rate for audio
-        self.sampling_rate = 16_000
-
-    def _pad_audio_batch(self, batch: list[torch.Tensor]) -> torch.Tensor:
-        max_len = max(w.shape[0] for w in batch)
-        padded = [torch.nn.functional.pad(w, (0, max_len - w.shape[0])) for w in batch]
-        return torch.stack(padded)
+        # 44.1 kHz: sample_rate=44100
+        # https://huggingface.co/speechbrain/cnn14-esc50/blob/main/hyperparams.yaml
+        self.sampling_rate = 44_100
 
     def get_audio_embeddings(
         self,
@@ -61,7 +65,10 @@ class CNN14Wrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        inputs.collate_fn = AudioCollator(self.sampling_rate)
+        import torch
+        from speechbrain.processing.features import spectral_magnitude
+
+        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
 
         all_embeddings = []
 
@@ -76,29 +83,38 @@ class CNN14Wrapper(AbsEncoder):
                 array = array.squeeze()
 
                 # Apply audio truncation (configurable limit)
-                max_length = int(self.max_audio_length_s * self.sampling_rate)
-                if array.shape[-1] > max_length:
+                max_length = seconds_to_samples(
+                    self.max_audio_length_seconds, self.sampling_rate
+                )
+                if max_length is not None and array.shape[-1] > max_length:
                     array = array[..., :max_length]
 
                 audio_tensors.append(array)
 
-            with torch.no_grad():
-                # Convert batch to tensors and move to device
-                batch_tensor = self._pad_audio_batch(audio_tensors).to(self.device)
+            # one clip per forward: zero padding would enter Cnn14's global pooling
+            for wav in audio_tensors:
+                with torch.no_grad():
+                    # front end of AudioClassifier.classify_batch, which the
+                    # checkpoint ships for: compute_stft -> magnitude -> compute_fbank
+                    stft = self.model.mods.compute_stft(
+                        wav.unsqueeze(0).to(self.device)
+                    )
+                    feats = self.model.mods.compute_fbank(
+                        spectral_magnitude(
+                            stft, power=self.model.hparams.spec_mag_power
+                        )
+                    )
+                    # feats: [1, frames, n_mels]; Cnn14's five 2x2 poolings need
+                    # at least 32 frames (0.37 s), so only pad clips below that
+                    n_frames = feats.shape[1]
+                    if n_frames < 32:
+                        feats = torch.nn.functional.pad(feats, (0, 0, 0, 32 - n_frames))
+                    embeddings = self.model.mods.embedding_model(feats)
+                    # Apply mean pooling over time dimension if needed
+                    if embeddings.dim() > 2:
+                        embeddings = torch.mean(embeddings, dim=1)
 
-                feats = self.model.mods.compute_features(batch_tensor)
-                b, f, t = feats.shape
-                if f < 64 or t < 80:
-                    # zero-pad in the frequency or time dimension until it's at least [64, 80]
-                    pad_freq = max(0, 64 - f)
-                    pad_time = max(0, 80 - t)
-                    feats = torch.nn.functional.pad(feats, (0, pad_time, 0, pad_freq))
-                embeddings = self.model.mods.embedding_model(feats)
-                # Apply mean pooling over time dimension if needed
-                if embeddings.dim() > 2:
-                    embeddings = torch.mean(embeddings, dim=1)
-
-                all_embeddings.append(embeddings.cpu().detach())
+                    all_embeddings.append(embeddings.cpu().detach())
 
         return torch.cat(all_embeddings, dim=0).numpy()
 
@@ -126,6 +142,7 @@ cnn14_esc50 = ModelMeta(
     release_date="2022-11-26",
     max_tokens=None,
     n_parameters=80_753_615,
+    n_embedding_parameters=0,
     memory_usage_mb=308,
     embed_dim=2048,
     license="apache-2.0",
@@ -135,7 +152,10 @@ cnn14_esc50 = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/speechbrain/speechbrain",
     public_training_data=None,
-    training_datasets=None,  # ["ESC-50", "VGGSound"],
+    training_datasets={
+        "ESC50",
+        # "VGGSound",  # not in MTEB
+    },
     modalities=["audio"],
     citation="""
 @inproceedings{wang2022CRL,
@@ -145,4 +165,5 @@ cnn14_esc50 = ModelMeta(
     booktitle={Accepted to IEEE Signal Processing Letters}
 }
 """,
+    extra_requirements_groups=["speechbrain"],
 )

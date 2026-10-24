@@ -18,6 +18,9 @@
 | Task category | {{ category }}                              |
 | Domains       | {{ domains }}                               |
 | Reference     | {{ dataset_reference | default("", true) }} |
+{%- if contributed_by %}
+| Contributed by| {{ contributed_by }}                        |
+{%- endif %}
 
 Source datasets:
 {%- for dataset in source_datasets %}
@@ -33,10 +36,8 @@ You can evaluate an embedding model on this dataset using the following code:
 import mteb
 
 task = mteb.get_task("{{ dataset_task_name }}")
-evaluator = mteb.MTEB([task])
-
 model = mteb.get_model(YOUR_MODEL)
-evaluator.run(model)
+mteb.evaluate(model, task)
 ```
 
 <!-- Datasets want link to arxiv in readme to autolink dataset with paper -->

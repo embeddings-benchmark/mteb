@@ -1,4 +1,5 @@
 from collections import defaultdict
+from typing import Any
 
 import datasets
 from datasets import Audio, DatasetDict
@@ -71,7 +72,7 @@ class GoogleSVQA2TRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if getattr(self, "data_loaded", False):
             return
         self.corpus = defaultdict(DatasetDict)
@@ -80,7 +81,12 @@ class GoogleSVQA2TRetrieval(AbsTaskRetrieval):
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(self, id_col="utt_id", text_col="text", audio_col="waveform"):
+    def dataset_transform(
+        self,
+        id_col: str = "utt_id",
+        text_col: str = "text",
+        audio_col: str = "waveform",
+    ) -> None:
         """A2T: Query = audio, Corpus = text."""
         for split in self.metadata.eval_splits:
             full_dataset = datasets.load_dataset(
@@ -163,7 +169,7 @@ class GoogleSVQT2ARetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any):
         if getattr(self, "data_loaded", False):
             return
         self.corpus = defaultdict(DatasetDict)
@@ -172,7 +178,12 @@ class GoogleSVQT2ARetrieval(AbsTaskRetrieval):
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(self, id_col="utt_id", text_col="text", audio_col="waveform"):
+    def dataset_transform(
+        self,
+        id_col: str = "utt_id",
+        text_col: str = "text",
+        audio_col: str = "waveform",
+    ) -> None:
         """T2A: Query = text, Corpus = audio."""
         for split in self.metadata.eval_splits:
             full_dataset = datasets.load_dataset(

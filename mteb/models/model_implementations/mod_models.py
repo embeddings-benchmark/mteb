@@ -1,6 +1,6 @@
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 
 def instruction_template(
@@ -92,13 +92,6 @@ multilingual_langs = [
     "zho-Hans",
 ]
 
-MOD_CITATION = """@misc{mod-embedding-2025,
-  title={MoD-Embedding: A Fine-tuned Multilingual Text Embedding Model},
-  author={MoD Team},
-  year={2025},
-  url={https://huggingface.co/bflhc/MoD-Embedding}
-}"""
-
 training_data = {
     "T2Retrieval",
     "DuRetrieval",
@@ -187,6 +180,6 @@ MoD_Embedding = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=training_data,
-    citation=MOD_CITATION,
     adapted_from="Qwen/Qwen3-Embedding-4B",
+    output_dtypes=OutputDType.BF16,
 )

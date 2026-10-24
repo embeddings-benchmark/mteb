@@ -1,3 +1,4 @@
+from .fine_grain_ocr_clustering import FineGrainOCRITClustering
 from .humesib200_clustering_s2s import HUMESIB200ClusteringS2S
 from .indic_reviews_clustering_p2p import IndicReviewsClusteringP2P
 from .masakha_news_clustering_p2p import MasakhaNEWSClusteringP2P
@@ -9,6 +10,7 @@ from .vox_populi_gender_clustering import VoxPopuliGenderClustering
 from .wiki_clustering_p2p import WikiClusteringFastP2P, WikiClusteringP2P
 
 __all__ = [
+    "FineGrainOCRITClustering",
     "HUMESIB200ClusteringS2S",
     "IndicReviewsClusteringP2P",
     "MLSUMClusteringP2P",

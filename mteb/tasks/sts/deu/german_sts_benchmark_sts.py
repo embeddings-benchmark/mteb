@@ -13,7 +13,7 @@ class GermanSTSBenchmarkSTS(AbsTaskSTS):
             "revision": "75829b73cccb64bf86a9f098cbc780d37b786091",
         },
         description="Semantic Textual Similarity Benchmark (STSbenchmark) dataset translated into German. "
-        + "Translations were originally done by T-Systems on site services GmbH.",
+        "Translations were originally done by T-Systems on site services GmbH.",
         reference="https://github.com/t-systems-on-site-services-gmbh/german-STSbenchmark",
         type="STS",
         category="t2t",
@@ -28,12 +28,5 @@ class GermanSTSBenchmarkSTS(AbsTaskSTS):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="machine-translated",
-        bibtex_citation=r"""
-@inproceedings{huggingface:dataset:stsb_multi_mt,
-  author = {Philip May},
-  title = {Machine translated multilingual STS benchmark dataset.},
-  url = {https://github.com/PhilipMay/stsb-multi-mt},
-  year = {2021},
-}
-""",
+        bibtex_citation="",
     )

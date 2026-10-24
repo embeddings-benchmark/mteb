@@ -3,13 +3,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
 
-from mteb._create_dataloaders import AudioCollator
-from mteb._requires_package import requires_package
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import AudioCollator, seconds_to_samples
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -23,22 +21,35 @@ class MuQMuLanWrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str = "OpenMuQ/MuQ-MuLan-large",
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_s: float = 30.0,
+        revision: str | None = None,
+        device: str | None = None,
+        # uncapped: MuQ-MuLan splits anything over clip_secs=10 into clips itself
+        # and returns their average latent, so truncating would discard that
+        # https://github.com/tencent-ailab/MuQ/blob/main/src/muq/muq_mulan/muq_mulan.py
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
-        requires_package(self, "muq", "pip install 'mteb[muq]'")
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         from muq import MuQMuLan
 
         self.model_name = model_name
         self.device = device
         self.sampling_rate = 24000
-        self.max_audio_length_s = max_audio_length_s
-        # Apply audio truncation (30 seconds max)
-        self.max_length_samples = int(self.max_audio_length_s * self.sampling_rate)
+        self.max_audio_length_seconds = max_audio_length_seconds
+        self.max_length_samples = seconds_to_samples(
+            self.max_audio_length_seconds, self.sampling_rate
+        )
 
         # Load the model
-        self.model = MuQMuLan.from_pretrained(model_name).eval().to(self.device)
+        self.model = (
+            MuQMuLan.from_pretrained(model_name, revision=revision)
+            .eval()
+            .to(self.device)
+        )
         self.model.eval()
 
     def get_audio_embeddings(
@@ -47,7 +58,9 @@ class MuQMuLanWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        inputs.collate_fn = AudioCollator(self.sampling_rate)
+        import torch
+
+        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
 
         all_features = []
 
@@ -58,32 +71,21 @@ class MuQMuLanWrapper(AbsEncoder):
             audio_arrays = []
             audio_array = [audio["array"] for audio in batch["audio"]]
             for array in audio_array:
-                # Apply audio truncation (30 seconds max)
-                if array.shape[-1] > self.max_length_samples:
-                    array = array[..., : self.max_length_samples]
+                if (
+                    self.max_length_samples is not None
+                    and array.shape[-1] > self.max_length_samples
+                ):
+                    array = array[..., : self.max_length_samples]  # noqa: PLW2901
                 audio_arrays.append(array)
 
-            # Find max length and pad all tensors
-            max_length = max(arr.shape[-1] for arr in audio_arrays)
-            batch_tensor = torch.zeros(
-                len(audio_arrays), max_length, dtype=torch.float32
-            )
-
-            for idx, arr in enumerate(audio_arrays):
-                length = arr.shape[-1]
-                batch_tensor[idx, :length] = arr
-
-            batch_tensor = batch_tensor.to(self.device)
-
             with torch.no_grad():
-                # Process entire batch at once
-                audio_embeds = self.model(wavs=batch_tensor)
-                all_features.extend(
-                    [
-                        embed.cpu().detach().numpy().reshape(1, -1)
-                        for embed in audio_embeds
-                    ]
-                )
+                # one clip per forward: zero padding would be averaged in as silent 10 s clips
+                for arr in audio_arrays:
+                    wav = torch.from_numpy(np.ascontiguousarray(arr, dtype=np.float32))
+                    audio_embeds = self.model(wavs=wav.unsqueeze(0).to(self.device))
+                    all_features.append(
+                        audio_embeds.cpu().detach().numpy().reshape(1, -1)
+                    )
 
         return np.vstack(all_features)
 
@@ -94,6 +96,8 @@ class MuQMuLanWrapper(AbsEncoder):
         **kwargs: Any,
     ) -> np.ndarray:
         """Get text embeddings using MuQ-MuLan."""
+        import torch
+
         all_embeddings = []
 
         for batch in tqdm(
@@ -133,9 +137,9 @@ class MuQMuLanWrapper(AbsEncoder):
                 )
             fused_embeddings = text_embeddings + audio_embeddings
             return fused_embeddings
-        elif text_embeddings is not None:
+        if text_embeddings is not None:
             return text_embeddings
-        elif audio_embeddings is not None:
+        if audio_embeddings is not None:
             return audio_embeddings
         raise ValueError
 
@@ -145,8 +149,10 @@ class MuQMuLanWrapper(AbsEncoder):
         embeddings2: Array,
     ) -> Array:
         """Calculate similarity between audio and text embeddings."""
-        embeddings1 = torch.from_numpy(embeddings1).to(self.device)
-        embeddings2 = torch.from_numpy(embeddings2).to(self.device)
+        import torch
+
+        embeddings1 = torch.as_tensor(embeddings1).to(self.device)
+        embeddings2 = torch.as_tensor(embeddings2).to(self.device)
 
         with torch.no_grad():
             similarity = self.model.calc_similarity(embeddings1, embeddings2)
@@ -174,7 +180,9 @@ muq_mulan_large = ModelMeta(
     # https://github.com/tencent-ailab/MuQ/blob/28847ea50cd31ac4b8b6a7dacc051ad7d1c7606a/src/muq/muq_mulan/muq_mulan.py#L171
     similarity_fn_name="dot",
     use_instructions=False,
-    training_datasets=set(),
+    training_datasets=set(
+        # Million Song Dataset (not in MTEB)
+    ),
     citation="""
 @misc{zhu2025muqselfsupervisedmusicrepresentation,
   title={MuQ: Self-Supervised Music Representation Learning with Mel Residual Vector Quantization},
@@ -185,4 +193,6 @@ muq_mulan_large = ModelMeta(
   primaryClass={cs.SD},
   url={https://arxiv.org/abs/2501.01108},
 }""",
+    # the muq package fails on transformers 5 (EasyDict has no _attn_implementation)
+    extra_requirements_groups=["muq", "transformers-v4"],
 )

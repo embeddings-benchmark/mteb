@@ -13,7 +13,7 @@ from sklearn.metrics import auc
 from mteb.types import RetrievalEvaluationResult
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping
+    from collections.abc import Mapping, Sequence
 
     from numpy.typing import NDArray
 
@@ -21,19 +21,24 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+# Default abstention rates for the nAUC computation: 0.0, 0.1, ..., 0.9
+_DEFAULT_ABSTENTION_RATES = np.linspace(0, 1, 11)[:-1]
+
 
 def mrr(
     qrels: RelevantDocumentsType,
     results: Mapping[str, Mapping[str, float]],
-    k_values: list[int],
+    k_values: Sequence[int],
 ) -> dict[str, list[float]]:
     mrr_metrics = defaultdict(list)
 
     k_max, top_hits = max(k_values), {}
 
     for query_id, doc_scores in results.items():
+        # tie-break by doc id descending to match pytrec_eval; a score-only sort is
+        # stable, so tied docs kept dict insertion order and leaked into the rank (#5092)
         top_hits[query_id] = sorted(
-            doc_scores.items(), key=lambda item: item[1], reverse=True
+            doc_scores.items(), key=lambda item: (item[1], item[0]), reverse=True
         )[0:k_max]
 
     for query_id in top_hits:
@@ -53,16 +58,16 @@ def mrr(
 def recall_cap(
     qrels: RelevantDocumentsType,
     results: dict[str, dict[str, float]],
-    k_values: list[int],
+    k_values: Sequence[int],
 ) -> dict[str, list[float | None]]:
     capped_recall: dict[str, list[float | None]] = defaultdict(list)
 
     k_max = max(k_values)
 
     for query_id, doc_scores in results.items():
-        top_hits = sorted(doc_scores.items(), key=lambda item: item[1], reverse=True)[
-            0:k_max
-        ]
+        top_hits = sorted(
+            doc_scores.items(), key=lambda item: (item[1], item[0]), reverse=True
+        )[0:k_max]
         query_relevant_docs = [
             doc_id for doc_id in qrels[query_id] if qrels[query_id][doc_id] > 0
         ]
@@ -73,6 +78,7 @@ def recall_cap(
             denominator = min(len(query_relevant_docs), k)
             if denominator == 0:
                 capped_recall[f"R_cap_at_{k}"].append(None)
+                continue
             capped_recall[f"R_cap_at_{k}"].append(len(retrieved_docs) / denominator)
     return capped_recall
 
@@ -80,21 +86,21 @@ def recall_cap(
 def hole(
     qrels: RelevantDocumentsType,
     results: dict[str, dict[str, float]],
-    k_values: list[int],
+    k_values: Sequence[int],
 ) -> dict[str, list[float]]:
     hole = defaultdict(list)
 
     annotated_corpus = set()
     for _, docs in qrels.items():
-        for doc_id, score in docs.items():
+        for doc_id in docs:
             annotated_corpus.add(doc_id)
 
     k_max = max(k_values)
 
     for _, scores in results.items():
-        top_hits = sorted(scores.items(), key=lambda item: item[1], reverse=True)[
-            0:k_max
-        ]
+        top_hits = sorted(
+            scores.items(), key=lambda item: (item[1], item[0]), reverse=True
+        )[0:k_max]
         for k in k_values:
             hole_docs = [
                 row[0] for row in top_hits[0:k] if row[0] not in annotated_corpus
@@ -106,7 +112,7 @@ def hole(
 def top_k_accuracy(
     qrels: RelevantDocumentsType,
     results: dict[str, dict[str, float]],
-    k_values: list[int],
+    k_values: Sequence[int],
 ) -> dict[str, list[float]]:
     top_k_acc = defaultdict(list)
 
@@ -116,7 +122,7 @@ def top_k_accuracy(
         top_hits[query_id] = [
             item[0]
             for item in sorted(
-                doc_scores.items(), key=lambda item: item[1], reverse=True
+                doc_scores.items(), key=lambda item: (item[1], item[0]), reverse=True
             )[0:k_max]
         ]
 
@@ -136,23 +142,32 @@ def get_rank_from_dict(
     dict_of_results: dict[str, float], doc_id: str
 ) -> tuple[int, float]:
     tuple_of_id_score = dict_of_results.items()
-    sorted_by_score = sorted(tuple_of_id_score, key=lambda x: x[1], reverse=True)
-    for i, (id, score) in enumerate(sorted_by_score):
-        if id == doc_id:
+    # tie-break by doc id descending, matching the other rank computations in this module
+    # (#5092); a score-only sort is stable, so a tied doc's rank followed dict insertion
+    # order and leaked into p-MRR, which weights rank as 1/rank
+    sorted_by_score = sorted(
+        tuple_of_id_score, key=lambda x: (x[1], x[0]), reverse=True
+    )
+    for i, (cur_doc_id, score) in enumerate(sorted_by_score):
+        if cur_doc_id == doc_id:
             return i + 1, score
 
     return len(sorted_by_score) + 1, 0
 
 
-def calculate_pmrr(original_run, new_run, changed_qrels):
+def calculate_pmrr(
+    original_run: dict[str, dict[str, float]],
+    new_run: dict[str, dict[str, float]],
+    changed_qrels: dict[str, list[str]],
+) -> float:
     changes = []
-    for qid in changed_qrels.keys():
+    for qid, cur_changed_qrels in changed_qrels.items():
         if qid + "-og" not in original_run or qid + "-changed" not in new_run:
             logger.warning(f"Query {qid} not found in the runs for calculating p-MRR")
             continue
         original_qid_run = original_run[qid + "-og"]
         new_qid_run = new_run[qid + "-changed"]
-        for idx, changed_doc in enumerate(changed_qrels[qid]):
+        for changed_doc in cur_changed_qrels:
             original_rank, original_score = get_rank_from_dict(
                 original_qid_run, changed_doc
             )
@@ -173,7 +188,7 @@ def calculate_pmrr(original_run, new_run, changed_qrels):
 
     # we now have a DF of [qid, doc_id, change] to run our calculations with
     changes_df = pd.DataFrame(changes)
-    changes_df["p-MRR"] = changes_df.apply(lambda x: rank_score(x), axis=1)
+    changes_df["p-MRR"] = changes_df.apply(lambda x: rank_score(x), axis=1)  # noqa: PLW0108
     qid_wise = changes_df.groupby("qid").agg({"p-MRR": "mean"})
     return qid_wise["p-MRR"].mean()
 
@@ -182,7 +197,7 @@ def evaluate_p_mrr_change(
     qrels: RelevantDocumentsType,
     results: dict[str, dict[str, float]],
     changed_qrels: dict[str, list[str]],
-    k_values: list[int],
+    k_values: Sequence[int],
 ) -> dict[str, float | dict[str, float]]:
     """Computes the scores needed for FollowIR datasets.
 
@@ -233,15 +248,15 @@ def evaluate_p_mrr_change(
         ) = calculate_retrieval_scores(group, qrels_sep[name], k_values)
         # add these to the followir_scores with name prefix
         scores_dict = make_score_dict(
-            ndcg,
-            _map,
-            recall,
-            precision,
-            naucs,
-            avg_mrr,
-            naucs_mrr,
-            hit_rate,
-            {},
+            ndcg=ndcg,
+            _map=_map,
+            recall=recall,
+            precision=precision,
+            naucs=naucs,
+            mrr=avg_mrr,
+            naucs_mrr=naucs_mrr,
+            hit_rate=hit_rate,
+            task_scores={},
         )
         for key, value in scores_dict.items():
             followir_scores[name][key] = value  # type: ignore[index]
@@ -252,8 +267,7 @@ def evaluate_p_mrr_change(
 def rank_score(x: dict[str, float]) -> float:
     if x["og_rank"] >= x["new_rank"]:
         return ((1 / x["og_rank"]) / (1 / x["new_rank"])) - 1
-    else:
-        return 1 - ((1 / x["new_rank"]) / (1 / x["og_rank"]))
+    return 1 - ((1 / x["new_rank"]) / (1 / x["og_rank"]))
 
 
 def confidence_scores(sim_scores: list[float]) -> dict[str, float]:
@@ -268,6 +282,9 @@ def confidence_scores(sim_scores: list[float]) -> dict[str, float]:
             - `std`: Standard deviation of similarity scores
             - `diff1`: Difference between highest and second highest similarity scores
     """
+    if not sim_scores:
+        return {"max": 0.0, "std": 0.0, "diff1": 0.0}
+
     sim_scores_sorted = sorted(sim_scores)[::-1]
 
     cs_max = sim_scores_sorted[0]
@@ -285,7 +302,7 @@ def confidence_scores(sim_scores: list[float]) -> dict[str, float]:
 def nauc(
     conf_scores: NDArray[np.floating],
     metrics: NDArray[np.floating],
-    abstention_rates: NDArray[np.floating] = np.linspace(0, 1, 11)[:-1],
+    abstention_rates: NDArray[np.floating] = _DEFAULT_ABSTENTION_RATES,
 ) -> float:
     """Computes normalized Area Under the Curve (nAUC) on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997
 
@@ -307,7 +324,7 @@ def nauc(
     def abstention_curve(
         conf_scores: NDArray[np.floating],
         metrics: NDArray[np.floating],
-        abstention_rates: NDArray[np.floating] = np.linspace(0, 1, 11)[:-1],
+        abstention_rates: NDArray[np.floating] = _DEFAULT_ABSTENTION_RATES,
     ) -> NDArray[np.floating]:
         """Computes the raw abstention curve for a given set of evaluated instances and corresponding confidence scores
 
@@ -324,13 +341,24 @@ def nauc(
             conf_scores_argsort = np.argsort(conf_scores)
         else:
             conf_scores_argsort = np.argsort(conf_scores, stable=True)
+        if conf_scores.size == 0:
+            return np.full(len(abstention_rates), np.nan)
+        # A cutoff can land inside a group of equal confidence scores, and which member
+        # is retained then depends on the input order. Use each tied group's mean metric
+        # instead: the expected retained score under random tie-breaking (#5613).
+        sorted_conf = conf_scores[conf_scores_argsort]
+        sorted_metrics = metrics[conf_scores_argsort]
+        group_start = np.flatnonzero(np.r_[True, sorted_conf[1:] != sorted_conf[:-1]])
+        group_size = np.diff(np.r_[group_start, len(sorted_conf)])
+        group_mean = np.add.reduceat(sorted_metrics, group_start) / group_size
+        sorted_metrics = np.repeat(group_mean, group_size)
         abst_curve = np.zeros(len(abstention_rates))
 
         for i, rate in enumerate(abstention_rates):
             num_instances_abst = min(
                 round(rate * conf_scores_argsort.shape[0]), len(conf_scores) - 1
             )
-            abst_curve[i] = metrics[conf_scores_argsort[num_instances_abst:]].mean()
+            abst_curve[i] = sorted_metrics[num_instances_abst:].mean()
 
         return abst_curve
 
@@ -369,7 +397,7 @@ def paired_accuracy(
     """
     # group the queries by the query id
     query_keys = set()
-    for key in qrels.keys():
+    for key in qrels:
         query_keys.add(key.split("_")[0])
 
     paired_scores = []
@@ -400,7 +428,7 @@ def robustness_at_10(
         The robustness at 10 score
     """
     query_keys = defaultdict(list)
-    for key in qrels.keys():
+    for key in qrels:
         query_keys[key.split("_")[0]].append(key)
 
     robustness_scores = []
@@ -417,6 +445,7 @@ def robustness_at_10(
 
 
 def make_score_dict(
+    *,
     ndcg: dict[str, float],
     _map: dict[str, float],
     recall: dict[str, float],
@@ -456,7 +485,7 @@ def make_score_dict(
 
 
 def parse_metrics_from_scores(
-    scores: dict[str, dict[str, float]], k_values: list[int]
+    scores: dict[str, dict[str, float]], k_values: Sequence[int]
 ) -> tuple[
     dict[str, float],
     dict[str, float],
@@ -476,7 +505,7 @@ def parse_metrics_from_scores(
         defaultdict(list),
     )
 
-    for query_id in scores.keys():
+    for query_id in scores:
         for k in k_values:
             all_ndcgs[f"NDCG@{k}"].append(scores[query_id]["ndcg_cut_" + str(k)])
             all_aps[f"MAP@{k}"].append(scores[query_id]["map_cut_" + str(k)])
@@ -511,7 +540,7 @@ def parse_metrics_from_scores(
 def max_over_subqueries(
     qrels: RelevantDocumentsType,
     results: dict[str, dict[str, float]],
-    k_values: list[int],
+    k_values: Sequence[int],
 ) -> dict[str, float]:
     """Computes the max over subqueries scores when merging.
 
@@ -524,7 +553,7 @@ def max_over_subqueries(
         A dictionary with the scores, prefixed with "max_over_subqueries_"
     """
     query_keys = defaultdict(list)
-    for key in qrels.keys():
+    for key in qrels:
         query_keys["_".join(key.split("_")[:-1])].append(key)
 
     new_results = {}
@@ -546,17 +575,31 @@ def max_over_subqueries(
         calculate_retrieval_scores(new_results, new_qrels, k_values)
     )
     score_dict = make_score_dict(
-        ndcg, _map, recall, precision, naucs, mrr, naucs_mrr, hit_rate, {}
+        ndcg=ndcg,
+        _map=_map,
+        recall=recall,
+        precision=precision,
+        naucs=naucs,
+        mrr=mrr,
+        naucs_mrr=naucs_mrr,
+        hit_rate=hit_rate,
+        task_scores={},
     )
     return {"max_over_subqueries_" + k: v for k, v in score_dict.items()}
 
 
-def calculate_retrieval_scores(
+def calculate_retrieval_scores(  # noqa: PLR0914
     results: Mapping[str, Mapping[str, float]],
     qrels: RelevantDocumentsType,
-    k_values: list[int],
+    k_values: Sequence[int],
     skip_first_result: bool = False,
 ) -> RetrievalEvaluationResult:
+    if skip_first_result:
+        results = {
+            qid: dict(sorted(doc_scores.items(), key=lambda x: x[1], reverse=True)[1:])
+            for qid, doc_scores in results.items()
+        }
+
     map_string = "map_cut." + ",".join([str(k) for k in k_values])
     ndcg_string = "ndcg_cut." + ",".join([str(k) for k in k_values])
     recall_string = "recall." + ",".join([str(k) for k in k_values])
@@ -587,7 +630,7 @@ def calculate_retrieval_scores(
     )
     naucs_mrr = evaluate_abstention(results, mrr_scores)
 
-    avg_mrr = {k: sum(mrr_scores[k]) / len(mrr_scores[k]) for k in mrr_scores.keys()}
+    avg_mrr = {k: sum(mrr_scores[k]) / len(mrr_scores[k]) for k in mrr_scores}
     return RetrievalEvaluationResult(
         all_scores=scores,
         ndcg=ndcg,

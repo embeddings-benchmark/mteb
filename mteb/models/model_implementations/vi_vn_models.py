@@ -1,5 +1,5 @@
 from mteb.models.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 greennode_embedding_large_vn_v1_training_data = {
     "GreenNodeTableMarkdownRetrieval",
@@ -13,14 +13,14 @@ greennode_embedding_large_vn_v1 = ModelMeta(
     languages=[
         "vie-Latn",
     ],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     open_weights=True,
     n_parameters=567754752,
     n_embedding_parameters=256_002_048,
     memory_usage_mb=2167,
     embed_dim=1024,
     license="cc-by-4.0",
-    max_tokens=8194,
+    max_tokens=8192,
     reference="https://huggingface.co/GreenNode/GreenNode-Embedding-Large-VN-V1",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch", "safetensors"],
@@ -39,14 +39,14 @@ greennode_embedding_large_vn_mixed_v1 = ModelMeta(
     languages=[
         "vie-Latn",
     ],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     open_weights=True,
     n_parameters=567754752,
     n_embedding_parameters=256_002_048,
     memory_usage_mb=2167,
     embed_dim=1024,
     license="cc-by-4.0",
-    max_tokens=8194,
+    max_tokens=8192,
     reference="https://huggingface.co/GreenNode/GreenNode-Embedding-Large-VN-Mixed-V1",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch", "safetensors"],
@@ -65,7 +65,7 @@ greennode_embedding_kalm_mini_instruct_vn_v1 = ModelMeta(
     languages=[
         "vie-Latn",
     ],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     open_weights=True,
     n_parameters=494032768,
     n_embedding_parameters=136_134_656,
@@ -91,7 +91,7 @@ greennode_embedding_e5_large_vn_v1 = ModelMeta(
     languages=[
         "vie-Latn",
     ],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     open_weights=True,
     n_parameters=560_000_000,
     n_embedding_parameters=256_002_048,
@@ -117,14 +117,14 @@ aiteamvn_vietnamese_embeddings = ModelMeta(
     languages=[
         "vie-Latn",
     ],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     open_weights=True,
     n_parameters=567754752,
     n_embedding_parameters=256_002_048,
     memory_usage_mb=2166,
     embed_dim=1024,
     license="cc-by-4.0",
-    max_tokens=8194,
+    max_tokens=8192,
     reference="https://huggingface.co/AITeamVN/Vietnamese_Embedding",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch", "ONNX", "safetensors"],
@@ -133,12 +133,6 @@ aiteamvn_vietnamese_embeddings = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     adapted_from="BAAI/bge-m3",
-    citation="""@misc{Vietnamese_Embedding,
-  title={Vietnamese_Embedding: Embedding model in Vietnamese language.},
-  author={Nguyen Nho Trung, Nguyen Nhat Quang, Nguyen Van Huy},
-  year={2025},
-  publisher={Huggingface},
-}""",
 )
 
 
@@ -150,7 +144,7 @@ contextboxai_halong_embedding = ModelMeta(
     languages=[
         "vie-Latn",
     ],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     use_instructions=False,
     open_weights=True,
     n_parameters=278043648,
@@ -166,12 +160,6 @@ contextboxai_halong_embedding = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     adapted_from="intfloat/multilingual-e5-base",
-    citation="""@misc{HalongEmbedding,
-  title={HalongEmbedding: A Vietnamese Text Embedding},
-  author={Ngo Hieu},
-  year={2024},
-  publisher={Huggingface},
-}""",
 )
 
 sup_simcse_vietnamese_phobert_base_ = ModelMeta(
@@ -182,7 +170,7 @@ sup_simcse_vietnamese_phobert_base_ = ModelMeta(
     languages=[
         "vie-Latn",
     ],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     use_instructions=False,
     open_weights=True,
     n_parameters=134998272,
@@ -221,7 +209,7 @@ bkai_foundation_models_vietnamese_bi_encoder = ModelMeta(
     languages=[
         "vie-Latn",
     ],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     use_instructions=False,
     open_weights=True,
     n_parameters=134998272,

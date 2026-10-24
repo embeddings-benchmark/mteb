@@ -1,0 +1,116 @@
+{
+    "test": {
+        "num_samples": 1047,
+        "samples_in_train": null,
+        "text_statistics": null,
+        "image_statistics": null,
+        "audio_statistics": null,
+        "video_statistics": {
+            "total_duration_seconds": 50231.42041700006,
+            "total_frames": 1881954,
+            "min_width": 202,
+            "average_width": 605.1537726838586,
+            "max_width": 1280,
+            "min_height": 226,
+            "average_height": 388.93982808022923,
+            "max_height": 720,
+            "min_duration_seconds": 15.6,
+            "average_duration_seconds": 47.97652379847188,
+            "max_duration_seconds": 60.0,
+            "unique_videos": 568,
+            "average_fps": 35.54727793696275,
+            "fps": {
+                "60": 251,
+                "24": 116,
+                "30": 483,
+                "25": 192,
+                "15": 1,
+                "20": 1,
+                "29": 1,
+                "10": 2
+            },
+            "min_resolution": [
+                202,
+                360
+            ],
+            "average_resolution": [
+                605.1537726838586,
+                388.93982808022923
+            ],
+            "max_resolution": [
+                1280,
+                720
+            ],
+            "resolutions": {
+                "640x352": 11,
+                "640x360": 811,
+                "1280x720": 11,
+                "480x360": 29,
+                "540x360": 10,
+                "400x226": 3,
+                "360x640": 90,
+                "480x320": 2,
+                "640x640": 5,
+                "470x360": 1,
+                "568x320": 9,
+                "444x360": 1,
+                "450x360": 2,
+                "576x360": 3,
+                "436x360": 1,
+                "512x288": 2,
+                "492x360": 1,
+                "640x310": 1,
+                "400x290": 1,
+                "270x480": 6,
+                "202x360": 12,
+                "960x720": 1,
+                "640x316": 3,
+                "640x274": 3,
+                "360x638": 2,
+                "640x358": 6,
+                "362x640": 1,
+                "640x298": 3,
+                "640x356": 1,
+                "640x350": 3,
+                "636x360": 4,
+                "500x360": 2,
+                "640x272": 2,
+                "640x296": 1,
+                "320x240": 2,
+                "360x480": 1
+            }
+        },
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 8,
+            "labels": {
+                "4": {
+                    "count": 291
+                },
+                "1": {
+                    "count": 127
+                },
+                "7": {
+                    "count": 134
+                },
+                "2": {
+                    "count": 185
+                },
+                "6": {
+                    "count": 105
+                },
+                "3": {
+                    "count": 57
+                },
+                "0": {
+                    "count": 58
+                },
+                "5": {
+                    "count": 90
+                }
+            }
+        }
+    }
+}

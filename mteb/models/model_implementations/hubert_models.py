@@ -2,14 +2,15 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
-from transformers import HubertModel, Wav2Vec2FeatureExtractor
 
-from mteb._create_dataloaders import AudioCollator
-from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import (
+    AudioCollator,
+    seconds_to_samples,
+    single_clip_dataloader,
+)
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -24,11 +25,18 @@ class HubertWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_seconds: float = 30.0,
+        device: str | None = None,
+        # uncapped: conv positional embedding, no max_position_embeddings
+        # https://huggingface.co/facebook/hubert-base-ls960/blob/main/config.json
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
-        requires_audio_dependencies()
+        import torch
+        from transformers import HubertModel, Wav2Vec2FeatureExtractor
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         self.model_name = model_name
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds
@@ -39,21 +47,38 @@ class HubertWrapper(AbsEncoder):
             self.device
         )
         self.model.eval()
+        # group-norm feature encoders were trained without an attention mask and
+        # normalise over the padded input, so batching changes the embeddings
+        # (cosine down to 0.12 on real clips); layer-norm ones batch at cosine >= 0.9999
+        # https://huggingface.co/docs/transformers/model_doc/wav2vec2#transformers.Wav2Vec2FeatureExtractor
+        self.per_clip = self.model.config.feat_extract_norm != "layer"
         self.sampling_rate = self.feature_extractor.sampling_rate
 
-    def get_audio_embeddings(
+    def get_audio_embeddings(  # noqa: PLR0914
         self,
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        inputs.collate_fn = AudioCollator(self.sampling_rate)
+        import torch
+
+        max_samples = seconds_to_samples(
+            self.max_audio_length_seconds, self.sampling_rate
+        )
+        # the conv feature encoder needs at least 400 samples (25 ms at 16 kHz)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate,
+            max_samples=max_samples,
+            min_samples=400,
+        )
         all_embeddings = []
 
-        for batch in tqdm(
-            inputs,
-            disable=not show_progress_bar,
-        ):
+        if self.per_clip:
+            inputs = single_clip_dataloader(
+                inputs,
+                "group-norm feature encoder: padding changes the embeddings",
+            )
+        for batch in tqdm(inputs, disable=not show_progress_bar):
             audio_arrays = [audio["array"] for audio in batch["audio"]]
 
             feature_inputs = self.feature_extractor(
@@ -61,8 +86,6 @@ class HubertWrapper(AbsEncoder):
                 sampling_rate=self.sampling_rate,
                 return_tensors="pt",
                 padding="longest",
-                truncation=True,
-                max_length=int(self.max_audio_length_seconds * self.sampling_rate),
                 return_attention_mask=True,
             ).to(self.device)
 
@@ -126,6 +149,7 @@ hubert_base = ModelMeta(
     release_date="2021-06-14",  # Paper release date
     max_tokens=float("inf"),
     n_parameters=95_000_000,
+    n_embedding_parameters=0,
     memory_usage_mb=360,
     embed_dim=768,
     license="mit",
@@ -135,7 +159,9 @@ hubert_base = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/pytorch/fairseq/tree/master/examples/hubert",
     public_training_data="https://www.openslr.org/12",  # Link to LibriSpeech Dataset
-    training_datasets=set(),  # "LibriSpeech": ["train"]},
+    training_datasets=set(
+        # LibriSpeech (not in MTEB)
+    ),
     modalities=["audio"],
     citation="""
 @misc{hsu2021hubertselfsupervisedspeechrepresentation,
@@ -159,6 +185,7 @@ hubert_large_ft = ModelMeta(
     release_date="2021-06-14",  # Paper release date
     max_tokens=float("inf"),
     n_parameters=317_000_000,
+    n_embedding_parameters=0,
     memory_usage_mb=1203,
     embed_dim=1024,
     license="mit",
@@ -168,7 +195,9 @@ hubert_large_ft = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/pytorch/fairseq/tree/master/examples/hubert",
     public_training_data="https://www.openslr.org/12",  # Link to LibriSpeech Dataset
-    training_datasets=set(),  # "LibriSpeech": ["train"]},
+    training_datasets=set(
+        # LibriSpeech (not in MTEB)
+    ),
     modalities=["audio"],
     citation="""
 @misc{hsu2021hubertselfsupervisedspeechrepresentation,

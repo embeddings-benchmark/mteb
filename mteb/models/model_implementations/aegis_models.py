@@ -1,0 +1,59 @@
+from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
+
+from .bge_models import bge_m3_training_data, bgem3_languages
+
+elephant_embeddings_v1_text_small = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    name="llm-semantic-router/elephant-embeddings-v1-text-small",
+    model_type=["dense"],
+    languages=bgem3_languages,
+    open_weights=True,
+    revision="b91093e77c994fbafad18bf6d1c14f0a7624921e",
+    release_date="2025-04-16",
+    n_parameters=306_939_648,
+    n_embedding_parameters=196_608_000,
+    memory_usage_mb=585,
+    embed_dim=[768, 512, 256, 128, 64],
+    license="apache-2.0",
+    max_tokens=32768,
+    reference="https://huggingface.co/llm-semantic-router/elephant-embeddings-v1-text-small",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
+    use_instructions=False,
+    adapted_from="llm-semantic-router/mmbert-32k-yarn",
+    superseded_by=None,
+    training_datasets=bge_m3_training_data,
+    public_training_code=None,
+    public_training_data=None,
+    output_dtypes=OutputDType.BF16,
+)
+
+mmbert_embed_32k_2d_matryoshka = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    loader_kwargs={},
+    name="llm-semantic-router/mmbert-embed-32k-2d-matryoshka",
+    revision="c544097d7603b10c546560e8be5d7fe0965a7909",
+    release_date="2026-01-26",
+    languages=bgem3_languages,
+    n_parameters=306_939_648,
+    n_embedding_parameters=196_608_000,
+    memory_usage_mb=585,
+    max_tokens=32768,
+    embed_dim=[64, 128, 256, 512, 768],
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["Sentence Transformers", "ONNX", "safetensors"],
+    reference="https://huggingface.co/llm-semantic-router/mmbert-embed-32k-2d-matryoshka",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=False,
+    training_datasets=bge_m3_training_data,
+    adapted_from="llm-semantic-router/mmbert-32k-yarn",
+    superseded_by=None,
+    modalities=["text"],
+    model_type=["dense"],
+    output_dtypes=OutputDType.BF16,
+)

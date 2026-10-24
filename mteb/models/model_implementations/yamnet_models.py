@@ -1,21 +1,24 @@
 from __future__ import annotations
 
 import logging
+import math
 import warnings
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_audio_dependencies, requires_package
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import seconds_to_samples
+from mteb.models.model_implementations.vggish_models import _log_mel
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb import TaskMetadata
+    from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
     from mteb.types._encoder_io import AudioInput
 
@@ -23,36 +26,41 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def yamnet_loader(*args, **kwargs):
+def yamnet_loader(*args: Any, **kwargs: Any) -> EncoderProtocol:
     """Factory function to create a YAMNet model wrapper."""
-    requires_package(
-        yamnet_loader,
-        "torch_vggish_yamnet",
-        "google/yamnet",
-        "pip install 'mteb[torch-vggish-yamnet]'",
-    )
+    import torch
     from torch_vggish_yamnet import yamnet
-    from torch_vggish_yamnet.input_proc import WaveformToInput
 
     class YAMNetWrapper(AbsEncoder):
         def __init__(
             self,
-            device: str = "cuda" if torch.cuda.is_available() else "cpu",
-            max_audio_length_seconds: float = 30.0,
+            device: str | None = None,
+            # no limit: 0.96 s patches, hop 0.48, no max
+            # https://github.com/tensorflow/models/blob/master/research/audioset/yamnet/params.py
+            max_audio_length_seconds: float | None = None,
             **kwargs: Any,
         ):
-            requires_audio_dependencies()
+            import torch
+
+            if device is None:
+                device = "cuda" if torch.cuda.is_available() else "cpu"
+
             self.device = device
             self.max_audio_length_seconds = max_audio_length_seconds
             self.model = yamnet.yamnet(pretrained=True)
             self.model.eval().to(self.device)
 
-            self.converter = WaveformToInput()
             self.sampling_rate = 16000  # YAMNet requires 16kHz audio
             self.embed_dim = 1024  # YAMNet embedding dimension
-            self.min_samples = int(0.96 * self.sampling_rate)  # 15,360 samples
+            # official patching: 0.96 s patches with a 0.48 s hop, the waveform padded
+            # to one patch (0.975 s with the STFT window) plus a whole number of hops
+            # https://github.com/tensorflow/models/blob/master/research/audioset/yamnet/features.py
+            self.min_samples = 15_600
+            self.hop_samples = 7_680
 
-        def _resample_audio(self, audio, source_rate):
+        def _resample_audio(
+            self, audio: torch.Tensor, source_rate: int
+        ) -> torch.Tensor:
             """Resample audio to target sampling rate."""
             import torchaudio
 
@@ -63,7 +71,7 @@ def yamnet_loader(*args, **kwargs):
                 return resampler(audio)
             return audio
 
-        def _normalize_audio(self, audio):
+        def _normalize_audio(self, audio: Array) -> torch.Tensor:
             """Normalize and pad audio to minimum length."""
             if isinstance(audio, np.ndarray):
                 audio = torch.from_numpy(audio)
@@ -73,22 +81,26 @@ def yamnet_loader(*args, **kwargs):
                 audio = audio.mean(dim=0)
 
             # Apply audio truncation
-            max_length = int(self.max_audio_length_seconds * self.sampling_rate)
-            if audio.shape[-1] > max_length:
+            max_length = seconds_to_samples(
+                self.max_audio_length_seconds, self.sampling_rate
+            )
+            if max_length is not None and audio.shape[-1] > max_length:
                 audio = audio[..., :max_length]
 
             # Normalize to [-1.0, 1.0]
             if audio.numel() > 0 and audio.abs().max() > 1.0:
-                audio = audio / audio.abs().max()
+                audio = audio / audio.abs().max()  # noqa: PLR6104
 
-            # Pad to minimum length
-            if audio.shape[-1] < self.min_samples:
-                pad_amount = self.min_samples - audio.shape[-1]
-                audio = torch.nn.functional.pad(audio, (0, pad_amount))
+            # Pad to one patch plus a whole number of hops
+            num_hops = math.ceil(
+                max(audio.shape[-1] - self.min_samples, 0) / self.hop_samples
+            )
+            target = self.min_samples + num_hops * self.hop_samples
+            audio = torch.nn.functional.pad(audio, (0, target - audio.shape[-1]))
 
             return audio
 
-        def _prepare_input_tensor(self, audio_data):
+        def _prepare_input_tensor(self, audio_data: Array) -> torch.Tensor | None:
             """Convert audio to YAMNet input format and handle tensor dimensions."""
             if isinstance(audio_data, np.ndarray):
                 audio_data = torch.from_numpy(audio_data)
@@ -96,36 +108,23 @@ def yamnet_loader(*args, **kwargs):
             if audio_data.ndim == 1:
                 audio_data = audio_data.unsqueeze(0)
 
-            input_tensor = self.converter(audio_data.float(), self.sampling_rate).to(
-                self.device
-            )
+            # features.py computes the same log-mel as VGGish, with a 0.001 log offset
+            log_mel = _log_mel(audio_data.float().squeeze(0), log_offset=0.001)
+            patches = log_mel.unfold(0, 96, 48)
+            # [patches, mels, frames] -> [patches, 1, frames, mels]
+            input_tensor = patches.transpose(1, 2).unsqueeze(1).to(self.device)
 
             if input_tensor.numel() == 0:
                 return None
-
-            # Handle different tensor dimensions
-            if input_tensor.dim() == 4 and input_tensor.shape[0] == 2:
-                # [2, batch, height, width] -> [1, batch, height, width]
-                input_tensor = input_tensor.mean(dim=0, keepdim=True)
-            elif input_tensor.dim() == 3:
-                if input_tensor.shape[0] == 3:
-                    # [3, height, width] -> [1, 1, height, width]
-                    input_tensor = input_tensor.mean(dim=0, keepdim=True).unsqueeze(0)
-                else:
-                    # [batch, height, width] -> [batch, 1, height, width]
-                    input_tensor = input_tensor.unsqueeze(1)
-            elif input_tensor.dim() == 2:
-                # [height, width] -> [1, 1, height, width]
-                input_tensor = input_tensor.unsqueeze(0).unsqueeze(0)
 
             return input_tensor
 
         def get_audio_embeddings(
             self,
             inputs: DataLoader[AudioInput],
-            show_progress_bar=True,
-            **kwargs,
-        ):
+            show_progress_bar: bool = True,
+            **kwargs: Any,
+        ) -> Array:
             """Generate embeddings for audio inputs."""
             all_embeddings = []
 
@@ -142,7 +141,8 @@ def yamnet_loader(*args, **kwargs):
                     if sr is None:
                         warnings.warn(
                             f"No sampling_rate provided for an audio sample. "
-                            f"Assuming {self.sampling_rate} Hz (model default)."
+                            f"Assuming {self.sampling_rate} Hz (model default).",
+                            stacklevel=2,
                         )
                         sr = self.sampling_rate
 
@@ -201,6 +201,7 @@ yamnet = ModelMeta(
     release_date="2020-10-06",
     max_tokens=float("inf"),
     n_parameters=3_751_369,
+    n_embedding_parameters=0,
     memory_usage_mb=14,
     embed_dim=1024,
     license="apache-2.0",
@@ -211,7 +212,7 @@ yamnet = ModelMeta(
     public_training_code="https://github.com/tensorflow/models/tree/master/research/audioset/yamnet",
     public_training_data="https://research.google.com/audioset/",
     training_datasets={
-        "AudioSet",
+        "AudioSetMini",
     },
     modalities=["audio"],
     citation="""
@@ -224,4 +225,5 @@ yamnet = ModelMeta(
   organization={IEEE}
 }
 """,
+    extra_requirements_groups=["torch-vggish-yamnet"],
 )

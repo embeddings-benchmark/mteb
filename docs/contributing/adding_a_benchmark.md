@@ -18,8 +18,8 @@ Once you have selected the tasks, you can create a new benchmark as follows:
 import mteb
 
 custom_bench = Benchmark(
-    name="MTEB(custom, v1)", # set the name
-    tasks=mteb.get_tasks( # (1)!
+    name="MTEB(custom, v1)",  # set the name
+    tasks=mteb.get_tasks(  # (1)!
         tasks=["AmazonCounterfactualClassification", "AmazonPolarityClassification"],
         languages=["eng"],
     ),
@@ -55,8 +55,8 @@ Once the PR is approved the benchmark will be added into mteb and will be fetcha
 To submit a benchmark to the leaderboard, you need to:
 
 1. Have added the benchmark to MTEB as described in the previous section
-2. Evalaute a set of models on the benchmark and submit a PR with the results to the [results repository](https://github.com/embeddings-benchmark/results) with the results of the models on the benchmark.
-3. When your PR with benchmarks results is merged, you can add your benchmark to the most fitting section in [benchmark_selector.py](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/leaderboard/benchmark_selector.py) to be shown on the leaderboard. You can check that the leaderboard looks correctly by [running the leaderboard locally](../get_started/usage/leaderboard.md#running-the-leaderboard-locally).
+2. Evaluate a set of models on the benchmark and submit a PR with the results to the [results repository](https://github.com/embeddings-benchmark/results) with the results of the models on the benchmark.
+3. Check that the benchmark looks correct by [running the leaderboard locally](../get_started/usage/leaderboard.md#running-the-leaderboard-locally).
 4. When PRs are merged, your benchmark will be added to the leaderboard automatically after the next workflow trigger (every day at midnight Pacific Time (8 AM UTC)).
 
 

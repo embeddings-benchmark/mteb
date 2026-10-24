@@ -1,11 +1,8 @@
 import logging
+from typing import Any
 
-import torch
-
-from mteb._requires_package import (
-    requires_package,
-)
 from mteb.models.model_meta import ModelMeta
+from mteb.types import OutputDType
 
 from .colpali_models import (
     COLPALI_CITATION,
@@ -25,11 +22,9 @@ class ColSmolWrapper(ColPaliEngineWrapper):
         revision: str | None = None,
         device: str | None = None,
         attn_implementation: str | None = None,
-        **kwargs,
+        query_prefix: str = "Query: ",
+        **kwargs: Any,
     ):
-        requires_package(
-            self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
-        )
         from colpali_engine.models import ColIdefics3, ColIdefics3Processor
         from transformers.utils.import_utils import is_flash_attn_2_available
 
@@ -44,6 +39,7 @@ class ColSmolWrapper(ColPaliEngineWrapper):
             processor_class=ColIdefics3Processor,
             revision=revision,
             device=device,
+            query_prefix=query_prefix,
             **kwargs,
         )
 
@@ -51,7 +47,7 @@ class ColSmolWrapper(ColPaliEngineWrapper):
 colsmol_256m = ModelMeta(
     loader=ColSmolWrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float16,
+        torch_dtype=OutputDType.FLOAT16,
     ),
     name="vidore/colSmol-256M",
     model_type=["late-interaction"],
@@ -74,12 +70,14 @@ colsmol_256m = ModelMeta(
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
+    extra_requirements_groups=["colpali_engine"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 colsmol_500m = ModelMeta(
     loader=ColSmolWrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.float16, attn_implementation="flash_attention_2"
+        torch_dtype=OutputDType.FLOAT16, attn_implementation="flash_attention_2"
     ),
     name="vidore/colSmol-500M",
     model_type=["late-interaction"],
@@ -102,4 +100,6 @@ colsmol_500m = ModelMeta(
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
+    extra_requirements_groups=["colpali_engine"],
+    output_dtypes=OutputDType.FLOAT16,
 )

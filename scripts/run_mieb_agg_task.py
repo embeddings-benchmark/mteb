@@ -48,7 +48,7 @@ for model_name in [
     "QuanSun/EVA02-CLIP-L-14",
     "QuanSun/EVA02-CLIP-bigE-14",
     "QuanSun/EVA02-CLIP-bigE-14-plus",
-    "voyageai/voyage-multimodal-3",
+    "mongodb/voyage-multimodal-3",
 ]:
     model = mteb.get_model(model_name)
     tasks = mteb.get_tasks(

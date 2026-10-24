@@ -4,18 +4,11 @@ from mteb.models.model_implementations.sentence_transformers_models import (
     sent_trf_training_dataset,
 )
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
-
-TEXT2VEC_CITATION = """@software{text2vec,
-  author = {Xu Ming},
-  title = {text2vec: A Tool for Text to Vector},
-  year = {2022},
-  url = {https://github.com/shibing624/text2vec},
-}"""
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 # I couldn't find the large model on HF for some reason
 text2vec_base_chinese = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="shibing624/text2vec-base-chinese",
     languages=["zho-Hans"],
     open_weights=True,
@@ -41,11 +34,10 @@ text2vec_base_chinese = ModelMeta(
         # (Could have overlaps I'm not aware of)
     ),
     memory_usage_mb=390,
-    citation=TEXT2VEC_CITATION,
 )
 
 text2vec_base_chinese_paraphrase = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="shibing624/text2vec-base-chinese-paraphrase",
     languages=["zho-Hans"],
     open_weights=True,
@@ -71,7 +63,6 @@ text2vec_base_chinese_paraphrase = ModelMeta(
         # - shibing624/nli-zh-all/text2vec-base-chinese-paraphrase
         # (Could have overlaps I'm not aware of)
     ),
-    citation=TEXT2VEC_CITATION,
 )
 
 
@@ -95,7 +86,7 @@ text2vec_base_multilingual = ModelMeta(
     release_date="2023-06-22",
     # While it can be loaded with SBERT, it has one suspicious file according to huggingface
     # So probably best not to.
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=117653760,
     n_embedding_parameters=96_014_208,
     memory_usage_mb=449,
@@ -123,5 +114,4 @@ text2vec_base_multilingual = ModelMeta(
         # # (Could have overlaps I'm not aware of)
     )
     | sent_trf_training_dataset,
-    citation=TEXT2VEC_CITATION,
 )

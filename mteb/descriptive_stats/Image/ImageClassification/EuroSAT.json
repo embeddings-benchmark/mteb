@@ -1,7 +1,7 @@
 {
     "test": {
         "num_samples": 5400,
-        "number_texts_intersect_with_train": null,
+        "samples_in_train": null,
         "text_statistics": null,
         "image_statistics": {
             "min_image_width": 64,
@@ -53,7 +53,7 @@
     },
     "train": {
         "num_samples": 16200,
-        "number_texts_intersect_with_train": null,
+        "samples_in_train": null,
         "text_statistics": null,
         "image_statistics": {
             "min_image_width": 64,

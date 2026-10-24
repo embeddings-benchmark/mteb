@@ -1,3 +1,5 @@
+from typing import Any
+
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -183,7 +185,7 @@ class BelebeleRetrieval(AbsTaskRetrieval):
         },
         description=(
             "Belebele is a multiple-choice machine reading comprehension (MRC) dataset spanning 122 language variants "
-            + "(including 115 distinct languages and their scripts)"
+            "(including 115 distinct languages and their scripts)"
         ),
         type="Retrieval",
         category="t2t",
@@ -209,16 +211,24 @@ class BelebeleRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, **kwargs) -> None:
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
-
-        self.dataset = load_dataset(**self.metadata.dataset)
 
         self.queries = {lang_pair: {_EVAL_SPLIT: {}} for lang_pair in self.hf_subsets}
         self.corpus = {lang_pair: {_EVAL_SPLIT: {}} for lang_pair in self.hf_subsets}
         self.relevant_docs = {
             lang_pair: {_EVAL_SPLIT: {}} for lang_pair in self.hf_subsets
+        }
+
+        languages_to_load = {
+            language.replace("-", "_")
+            for lang_pair in self.hf_subsets
+            for language in self.metadata.eval_langs[lang_pair]
+        }
+        dataset = {
+            language: load_dataset(name=language, **self.metadata.dataset)[_EVAL_SPLIT]
+            for language in languages_to_load
         }
 
         for lang_pair in self.hf_subsets:
@@ -227,8 +237,8 @@ class BelebeleRetrieval(AbsTaskRetrieval):
                 languages[0].replace("-", "_"),
                 languages[1].replace("-", "_"),
             )
-            ds_corpus = self.dataset[lang_corpus]
-            ds_question = self.dataset[lang_question]
+            ds_corpus = dataset[lang_corpus]
+            ds_question = dataset[lang_question]
 
             question_ids = {}
             for row in ds_question:
@@ -246,7 +256,7 @@ class BelebeleRetrieval(AbsTaskRetrieval):
                         "title": "",
                         "text": row["flores_passage"],
                     }
-                    context_idx = context_idx + 1
+                    context_idx = context_idx + 1  # noqa: PLR6104
 
             for row in ds_question:
                 query = row["question"]

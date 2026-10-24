@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
@@ -12,9 +12,7 @@ from mteb.abstasks._statistics_calculation import (
 )
 from mteb.abstasks.abstask import AbsTask
 from mteb.models import EncoderProtocol
-from mteb.types.statistics import (
-    SplitDescriptiveStatistics,
-)
+from mteb.types.statistics import SummarizationDescriptiveStatistics
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -23,35 +21,10 @@ if TYPE_CHECKING:
 
     from mteb._evaluators.text.summarization_evaluator import SummarizationMetrics
     from mteb.models import MTEBModels
-    from mteb.types import EncodeKwargs
-    from mteb.types.statistics import (
-        ScoreStatistics,
-        TextStatistics,
-    )
+    from mteb.timing import TimingStack
+    from mteb.types import EncodeKwargs, Modalities
 
 logger = logging.getLogger(__name__)
-
-
-class SummarizationDescriptiveStatistics(SplitDescriptiveStatistics):
-    """Descriptive statistics for Summarization
-
-    Attributes:
-        num_samples: number of samples in the dataset.
-        number_of_characters: Total number of symbols in the dataset.
-
-        text_statistics: Statistics for the text
-        human_summaries_statistics: Statistics for human summaries
-        machine_summaries_statistics: Statistics for machine summaries
-        score_statistics: Statistics for the relevance scoresk
-    """
-
-    num_samples: int
-    number_of_characters: int
-
-    text_statistics: TextStatistics
-    human_summaries_statistics: TextStatistics
-    machine_summaries_statistics: TextStatistics
-    score_statistics: ScoreStatistics
 
 
 class AbsTaskSummarization(AbsTask):
@@ -85,6 +58,10 @@ class AbsTaskSummarization(AbsTask):
     machine_summaries_column_name: str = "machine_summaries"
     relevancy_column_name: str = "relevance"
 
+    def _get_content_columns(self) -> dict[str, Modalities]:
+        # only the source text: the summary columns hold a list per row and are aligned with the relevance scores
+        return {self.text_column_name: "text"}
+
     def _evaluate_subset(
         self,
         model: MTEBModels,
@@ -95,7 +72,8 @@ class AbsTaskSummarization(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
-        **kwargs,
+        timer: TimingStack,
+        **kwargs: Any,
     ) -> SummarizationMetrics:
         if not isinstance(model, EncoderProtocol):
             raise TypeError("Expected model to be an instance of EncoderProtocol")
@@ -114,6 +92,7 @@ class AbsTaskSummarization(AbsTask):
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
+            timer=timer,
             **kwargs,
         )
         scores = evaluator(model, encode_kwargs=encode_kwargs, num_proc=num_proc)
@@ -128,7 +107,12 @@ class AbsTaskSummarization(AbsTask):
         return evaluator._calculate_metrics(scores)
 
     def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        *,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
     ) -> SummarizationDescriptiveStatistics:
         if hf_subset:
             text = self.dataset[hf_subset][split][self.text_column_name]
@@ -145,7 +129,7 @@ class AbsTaskSummarization(AbsTask):
             machine_summaries = []
             relevance = []
 
-            for hf_subset in self.metadata.eval_langs:
+            for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
                 text.extend(self.dataset[hf_subset][split][self.text_column_name])
                 human_summaries.extend(
                     self.dataset[hf_subset][split][self.human_summaries_column_name]

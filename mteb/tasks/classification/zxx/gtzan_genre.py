@@ -6,7 +6,7 @@ class GTZANGenre(AbsTaskClassification):
     metadata = TaskMetadata(
         name="GTZANGenre",
         description="Music Genre Classification (10 classes)",
-        reference="https://huggingface.co/datasets/silky1708/GTZAN-Genre",
+        reference="https://ieeexplore.ieee.org/abstract/document/1021072",
         dataset={
             "path": "mteb/gtzan-genre",
             "revision": "53efa094d18619a4e2bf36123192ec7a01a7d1bf",

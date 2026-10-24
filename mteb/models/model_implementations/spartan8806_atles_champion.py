@@ -1,10 +1,10 @@
 """ATLES Champion Embedding Model for MTEB."""
 
 from mteb.models.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 spartan8806_atles_champion_embedding = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="spartan8806/atles-champion-embedding",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -25,11 +25,5 @@ spartan8806_atles_champion_embedding = ModelMeta(
     adapted_from="sentence-transformers/all-mpnet-base-v2",
     public_training_code=None,
     public_training_data=None,
-    citation="""@article{conner2025epistemic,
-  title={The Epistemic Barrier: How RLHF Makes AI Consciousness Empirically Undecidable},
-  author={Conner (spartan8806)},
-  journal={ATLES Research Papers},
-  year={2025},
-  note={Cross-model validation study (Phoenix, Grok, Gemini, Claude)}
-}""",
+    citation="",
 )

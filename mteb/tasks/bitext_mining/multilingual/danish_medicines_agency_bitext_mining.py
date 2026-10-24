@@ -24,15 +24,5 @@ class DanishMedicinesAgencyBitextMining(AbsTaskBitextMining):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@misc{elrc_danish_medicines_agency_2018,
-  author = {Rozis, Roberts},
-  institution = {European Union},
-  license = {Open Under-PSI},
-  note = {Dataset created within the European Language Resource Coordination (ELRC) project under the Connecting Europe Facility - Automated Translation (CEF.AT) actions SMART 2014/1074 and SMART 2015/1091.},
-  title = {Bilingual English-Danish Parallel Corpus from the Danish Medicines Agency},
-  url = {https://sprogteknologi.dk/dataset/bilingual-english-danish-parallel-corpus-from-the-danish-medicines-agency},
-  year = {2019},
-}
-""",
+        bibtex_citation="",
     )

@@ -1,0 +1,198 @@
+{
+    "test": {
+        "num_samples": 576,
+        "samples_in_train": 0,
+        "text_statistics": null,
+        "image_statistics": null,
+        "audio_statistics": {
+            "total_duration_seconds": 345600.0,
+            "min_duration_seconds": 600.0,
+            "average_duration_seconds": 600.0,
+            "max_duration_seconds": 600.0,
+            "unique_audios": 576,
+            "average_sampling_rate": 48000.0,
+            "sampling_rates": {
+                "48000": 576
+            }
+        },
+        "video_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 2,
+            "labels": {
+                "0": {
+                    "count": 288
+                },
+                "1": {
+                    "count": 288
+                }
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "fold0": {
+                "num_samples": 288,
+                "samples_in_train": 0,
+                "text_statistics": null,
+                "image_statistics": null,
+                "audio_statistics": {
+                    "total_duration_seconds": 172800.0,
+                    "min_duration_seconds": 600.0,
+                    "average_duration_seconds": 600.0,
+                    "max_duration_seconds": 600.0,
+                    "unique_audios": 288,
+                    "average_sampling_rate": 48000.0,
+                    "sampling_rates": {
+                        "48000": 288
+                    }
+                },
+                "video_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 2,
+                    "labels": {
+                        "0": {
+                            "count": 144
+                        },
+                        "1": {
+                            "count": 144
+                        }
+                    }
+                }
+            },
+            "fold1": {
+                "num_samples": 288,
+                "samples_in_train": 0,
+                "text_statistics": null,
+                "image_statistics": null,
+                "audio_statistics": {
+                    "total_duration_seconds": 172800.0,
+                    "min_duration_seconds": 600.0,
+                    "average_duration_seconds": 600.0,
+                    "max_duration_seconds": 600.0,
+                    "unique_audios": 288,
+                    "average_sampling_rate": 48000.0,
+                    "sampling_rates": {
+                        "48000": 288
+                    }
+                },
+                "video_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 2,
+                    "labels": {
+                        "1": {
+                            "count": 144
+                        },
+                        "0": {
+                            "count": 144
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 512,
+        "samples_in_train": null,
+        "text_statistics": null,
+        "image_statistics": null,
+        "audio_statistics": {
+            "total_duration_seconds": 307200.0,
+            "min_duration_seconds": 600.0,
+            "average_duration_seconds": 600.0,
+            "max_duration_seconds": 600.0,
+            "unique_audios": 512,
+            "average_sampling_rate": 48000.0,
+            "sampling_rates": {
+                "48000": 512
+            }
+        },
+        "video_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 2,
+            "labels": {
+                "1": {
+                    "count": 256
+                },
+                "0": {
+                    "count": 256
+                }
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "fold0": {
+                "num_samples": 256,
+                "samples_in_train": null,
+                "text_statistics": null,
+                "image_statistics": null,
+                "audio_statistics": {
+                    "total_duration_seconds": 153600.0,
+                    "min_duration_seconds": 600.0,
+                    "average_duration_seconds": 600.0,
+                    "max_duration_seconds": 600.0,
+                    "unique_audios": 256,
+                    "average_sampling_rate": 48000.0,
+                    "sampling_rates": {
+                        "48000": 256
+                    }
+                },
+                "video_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 2,
+                    "labels": {
+                        "1": {
+                            "count": 134
+                        },
+                        "0": {
+                            "count": 122
+                        }
+                    }
+                }
+            },
+            "fold1": {
+                "num_samples": 256,
+                "samples_in_train": null,
+                "text_statistics": null,
+                "image_statistics": null,
+                "audio_statistics": {
+                    "total_duration_seconds": 153600.0,
+                    "min_duration_seconds": 600.0,
+                    "average_duration_seconds": 600.0,
+                    "max_duration_seconds": 600.0,
+                    "unique_audios": 256,
+                    "average_sampling_rate": 48000.0,
+                    "sampling_rates": {
+                        "48000": 256
+                    }
+                },
+                "video_statistics": null,
+                "label_statistics": {
+                    "min_labels_per_text": 1,
+                    "average_label_per_text": 1.0,
+                    "max_labels_per_text": 1,
+                    "unique_labels": 2,
+                    "labels": {
+                        "0": {
+                            "count": 134
+                        },
+                        "1": {
+                            "count": 122
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

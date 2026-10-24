@@ -1,7 +1,7 @@
 {
     "test": {
         "num_samples": 252,
-        "number_texts_intersect_with_train": null,
+        "samples_in_train": null,
         "text_statistics": {
             "total_text_length": 48963,
             "min_text_length": 35,
@@ -42,7 +42,7 @@
     },
     "train": {
         "num_samples": 929,
-        "number_texts_intersect_with_train": null,
+        "samples_in_train": null,
         "text_statistics": {
             "total_text_length": 174673,
             "min_text_length": 33,

@@ -4,18 +4,17 @@ import json
 import logging
 import warnings
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
 
-from mteb._requires_package import requires_package
-
-from ._hash_utils import _hash_item
+from mteb._content_hashes import hash_item
+from mteb._requires_package import _is_package_available
 
 if TYPE_CHECKING:
     import faiss
 
-    from mteb.types import Array, BatchedInput
+    from mteb.types import Array
 
 logger = logging.getLogger(__name__)
 
@@ -24,12 +23,10 @@ class FaissCache:
     """FAISS-based vector cache that uses embeddings directly as lookup keys."""
 
     def __init__(self, directory: str | Path):
-        requires_package(
-            self,
-            "faiss",
-            "FAISS-based vector cache",
-            install_instruction="pip install mteb[faiss-cpu]",
-        )
+        if not _is_package_available("faiss"):
+            raise ImportError(
+                "FAISS is required for FaissCache. Please install with `pip install mteb[faiss-cpu]`."
+            )
 
         self.directory = Path(directory)
         self.directory.mkdir(parents=True, exist_ok=True)
@@ -57,12 +54,12 @@ class FaissCache:
 
         start_id = len(self.hash_to_index)
         vectors_to_add = []
-        for i, (item, vectors) in enumerate(zip(items, vectors)):
-            item_hash = _hash_item(item)
+        for i, (item, vector) in enumerate(zip(items, vectors, strict=True)):
+            item_hash = hash_item(item)
             if item_hash in self.hash_to_index:
                 continue
             self.hash_to_index[item_hash] = start_id + i
-            vectors_to_add.append(vectors)
+            vectors_to_add.append(vector)
         if len(vectors_to_add) > 0:
             vectors_array = np.vstack(vectors_to_add).astype(np.float32)
             self.index.add(vectors_array)
@@ -71,16 +68,19 @@ class FaissCache:
         """Retrieve vector from index by hash."""
         if self.index is None:
             return None
-        item_hash = _hash_item(item)
+        item_hash = hash_item(item)
         if item_hash not in self.hash_to_index:
             return None
         idx = self.hash_to_index[item_hash]
         try:
-            return self.index.reconstruct(idx)
+            reconstructed = cast(
+                "np.typing.NDArray[np.floating]", self.index.reconstruct(idx)
+            )
+            return reconstructed
         except Exception:
             msg = f"Vector id {idx} missing for hash {item_hash}"
             logger.warning(msg)
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
             return None
 
     def save(self) -> None:
@@ -89,7 +89,7 @@ class FaissCache:
 
         if self.index is not None:
             faiss.write_index(self.index, str(self.index_file))
-        with self.map_file.open("w") as f:
+        with self.map_file.open("w", encoding="utf-8") as f:
             json.dump(self.hash_to_index, f, indent=2)
         logger.info(f"Saved FAISS cache to {self.directory}")
 
@@ -98,11 +98,12 @@ class FaissCache:
         import faiss
 
         if self.map_file.exists():
-            with self.map_file.open() as f:
+            with self.map_file.open(encoding="utf-8") as f:
                 self.hash_to_index = json.load(f)
         if self.index_file.exists():
             try:
                 self.index = faiss.read_index(str(self.index_file))
+                self.vector_dim = self.index.d
                 logger.info(f"Loaded FAISS index with {self.index.ntotal} vectors")
             except Exception as e:
                 logger.error(f"Failed to load FAISS index: {e}")
@@ -115,8 +116,8 @@ class FaissCache:
         self.save()
         self.index = None
 
-    def __contains__(self, item: BatchedInput) -> bool:
-        return _hash_item(item) in self.hash_to_index
+    def __contains__(self, item: dict[str, Any]) -> bool:
+        return hash_item(item) in self.hash_to_index
 
-    def __del__(self):
+    def __del__(self) -> None:
         self.close()

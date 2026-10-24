@@ -5,9 +5,10 @@ import warnings
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any, Literal, cast, get_args, overload
 
-import mteb
+from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks.task_metadata import TaskType
 from mteb.similarity_functions import (
+    _upcast_low_precision,
     cos_sim,
     dot_score,
     max_sim,
@@ -39,6 +40,22 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
+class PromptSource(HelpfulStrEnum):
+    """Source of an instruction used by `AbsEncoder.get_instruction`.
+
+    Attributes:
+        CUSTOM_PROMPT: `prompts_dict[task_name]` defined in the model implementation.
+        DEFAULT_TASK_PROMPT: The `prompt` defined in the task metadata.
+        TASK_TYPE_PROMPT: `prompts_dict[task_type]` defined in the model implementation.
+        ENCODE_TYPE_PROMPT: `prompts_dict[prompt_type]` (e.g. `"query"`) defined in the model implementation.
+    """
+
+    CUSTOM_PROMPT = "custom_prompt"
+    DEFAULT_TASK_PROMPT = "default_task_prompt"
+    TASK_TYPE_PROMPT = "task_type_prompt"
+    ENCODE_TYPE_PROMPT = "encode_type_prompt"
+
+
 class AbsEncoder(ABC):
     """Base class to indicate that this is a wrapper for a model.
 
@@ -51,6 +68,8 @@ class AbsEncoder(ABC):
         instruction_template: A template for formatting instructions. Can be a string with '{instruction}' or
             a callable that takes the instruction and prompt type and returns a formatted instruction.
         prompts_dict: A dictionary of prompts to be used for encoding sentences, overrides model_prompts if provided.
+        prompt_priority: The order in which instruction sources are checked by `get_instruction`, the first
+            available one is used. See `PromptSource` for the available sources.
     """
 
     model: Any
@@ -58,6 +77,12 @@ class AbsEncoder(ABC):
     model_prompts: dict[str, str] | None = None
     instruction_template: str | Callable[[str, PromptType | None], str] | None = None
     prompts_dict: dict[str, str] | None = None
+    prompt_priority: Sequence[PromptSource] = (
+        PromptSource.CUSTOM_PROMPT,
+        PromptSource.TASK_TYPE_PROMPT,
+        PromptSource.ENCODE_TYPE_PROMPT,
+        PromptSource.DEFAULT_TASK_PROMPT,
+    )
 
     def get_prompt_name(
         self,
@@ -166,22 +191,23 @@ class AbsEncoder(ABC):
 
             if task_name not in task_types and task_name not in prompt_types:
                 try:
-                    mteb.get_task(task_name=task_name)
+                    from mteb.get_tasks import get_task
+
+                    get_task(task_name=task_name)
                 except KeyError:
                     msg = f"Task name {task_name} is not valid. {valid_keys_msg}"
                     logger.warning(msg)
-                    warnings.warn(msg)
+                    warnings.warn(msg, stacklevel=2)
                     invalid_task_messages.add(msg)
                     invalid_keys.add(task_key)
 
         if raise_for_invalid_keys and invalid_task_messages:
             raise KeyError(invalid_task_messages)
-        elif raise_for_invalid_keys:
+        if raise_for_invalid_keys:
             return task_to_prompt
-        else:
-            return {
-                k: v for k, v in task_to_prompt.items() if k not in invalid_keys
-            }, tuple(invalid_task_messages)
+        return {
+            k: v for k, v in task_to_prompt.items() if k not in invalid_keys
+        }, tuple(invalid_task_messages)
 
     def get_instruction(
         self,
@@ -193,7 +219,7 @@ class AbsEncoder(ABC):
         Args:
             task_metadata: The metadata of the task. Sentence-transformers uses this to
                 determine which prompt to use from a specified dictionary.
-                The order of priorities for prompt selection are:
+                The order of priorities for prompt selection is defined by `prompt_priority`, by default:
                     1. Specific task prompt
                     2. Specific task type prompt
                     3. Specific prompt type
@@ -204,28 +230,38 @@ class AbsEncoder(ABC):
             The instruction/prompt to be used for encoding sentences.
         """
         prompt = task_metadata.prompt
-        if self.prompts_dict and task_metadata.name in self.prompts_dict:
-            prompt = self.prompts_dict[task_metadata.name]
-        elif self.prompts_dict and task_metadata.type in self.prompts_dict:
-            prompt = self.prompts_dict[task_metadata.type]
-        elif (
-            self.prompts_dict and prompt_type and prompt_type.value in self.prompts_dict
-        ):
-            prompt = self.prompts_dict[prompt_type.value]
+        prompt_dict_keys: dict[PromptSource, str | None] = {
+            PromptSource.CUSTOM_PROMPT: task_metadata.name,
+            PromptSource.TASK_TYPE_PROMPT: task_metadata.type,
+            PromptSource.ENCODE_TYPE_PROMPT: prompt_type.value if prompt_type else None,
+        }
+        for source in self.prompt_priority:
+            if source == PromptSource.DEFAULT_TASK_PROMPT:
+                task_prompt = task_metadata.prompt
+                if isinstance(task_prompt, dict) and prompt_type:
+                    task_prompt = task_prompt.get(prompt_type.value)
+                if task_prompt:
+                    break
+                continue
+            key = prompt_dict_keys[source]
+            if self.prompts_dict and key and key in self.prompts_dict:
+                prompt = self.prompts_dict[key]
+                break
 
         if isinstance(prompt, dict) and prompt_type:
             if prompt.get(prompt_type.value):
                 return prompt[prompt_type.value]
             msg = f"Prompt type '{prompt_type}' not found in task metadata for task '{task_metadata.name}'."
             logger.warning(msg)
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
             return ""
 
         if prompt:
             return prompt
 
-        abstask = mteb.get_task(task_name=task_metadata.name)
-        return abstask.abstask_prompt
+        from mteb.abstasks.abstask import get_abstask_prompt
+
+        return get_abstask_prompt(task_metadata.name)
 
     def format_instruction(
         self, instruction: str, prompt_type: PromptType | None = None
@@ -263,7 +299,10 @@ class AbsEncoder(ABC):
             The instruction to be used for encoding sentences.
         """
         instruction = self.get_instruction(task_metadata, prompt_type)
-        if self.instruction_template and len(instruction) > 0:
+        # Always invoke callables. Issue https://github.com/embeddings-benchmark/mteb/issues/4683
+        if self.instruction_template and (
+            callable(self.instruction_template) or len(instruction) > 0
+        ):
             return self.format_instruction(instruction, prompt_type)
         return instruction
 
@@ -292,16 +331,19 @@ class AbsEncoder(ABC):
                 and hasattr(self.model, "similarity")
                 and callable(self.model.similarity)
             ):
-                arr = self.model.similarity(embeddings1, embeddings2)
+                arr = self.model.similarity(
+                    _upcast_low_precision(embeddings1),
+                    _upcast_low_precision(embeddings2),
+                )
                 # We assume that the model returns an Array-like object:
                 arr = cast("Array", arr)
                 return arr
             return cos_sim(embeddings1, embeddings2)
         if self.mteb_model_meta.similarity_fn_name is ScoringFunction.COSINE:
             return cos_sim(embeddings1, embeddings2)
-        elif self.mteb_model_meta.similarity_fn_name is ScoringFunction.DOT_PRODUCT:
+        if self.mteb_model_meta.similarity_fn_name is ScoringFunction.DOT_PRODUCT:
             return dot_score(embeddings1, embeddings2)
-        elif self.mteb_model_meta.similarity_fn_name is ScoringFunction.MAX_SIM:
+        if self.mteb_model_meta.similarity_fn_name is ScoringFunction.MAX_SIM:
             return max_sim(embeddings1, embeddings2)
         raise ValueError("Similarity function not specified.")
 
@@ -330,16 +372,19 @@ class AbsEncoder(ABC):
                 and hasattr(self.model, "similarity_pairwise")
                 and callable(self.model.similarity_pairwise)
             ):
-                arr = self.model.similarity_pairwise(embeddings1, embeddings2)
+                arr = self.model.similarity_pairwise(
+                    _upcast_low_precision(embeddings1),
+                    _upcast_low_precision(embeddings2),
+                )
                 # We assume that the model returns an Array-like object:
                 arr = cast("Array", arr)
                 return arr
             return pairwise_cos_sim(embeddings1, embeddings2)
         if self.mteb_model_meta.similarity_fn_name is ScoringFunction.COSINE:
             return pairwise_cos_sim(embeddings1, embeddings2)
-        elif self.mteb_model_meta.similarity_fn_name is ScoringFunction.DOT_PRODUCT:
+        if self.mteb_model_meta.similarity_fn_name is ScoringFunction.DOT_PRODUCT:
             return pairwise_dot_score(embeddings1, embeddings2)
-        elif self.mteb_model_meta.similarity_fn_name is ScoringFunction.MAX_SIM:
+        if self.mteb_model_meta.similarity_fn_name is ScoringFunction.MAX_SIM:
             return pairwise_max_sim(embeddings1, embeddings2)
         raise ValueError("Similarity function not specified.")
 
@@ -379,7 +424,7 @@ class AbsEncoder(ABC):
         )
 
 
-def get_prompt_name(
+def get_prompt_name(  # noqa: PLR0911
     model_prompts: dict[str, str] | None,
     task_metadata: TaskMetadata,
     prompt_type: PromptType | None,
@@ -422,7 +467,7 @@ def get_prompt_name(
     ):
         return f"{task_type}-{prompt_type_value}"
     if task_type and task_type in model_prompts:
-        return task_type
+        return cast("str", task_type)
     if prompt_type and prompt_type_value in model_prompts:
         return prompt_type_value
     logger.info(

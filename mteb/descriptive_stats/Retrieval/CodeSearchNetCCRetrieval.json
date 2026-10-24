@@ -53,7 +53,9 @@
                     "max_relevant_docs_per_query": 1,
                     "unique_relevant_docs": 14918
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 280652,
+                "num_queries": 14918
             },
             "javascript": {
                 "num_samples": 68492,
@@ -81,7 +83,9 @@
                     "max_relevant_docs_per_query": 1,
                     "unique_relevant_docs": 3291
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 65201,
+                "num_queries": 3291
             },
             "go": {
                 "num_samples": 190857,
@@ -109,7 +113,9 @@
                     "max_relevant_docs_per_query": 1,
                     "unique_relevant_docs": 8122
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 182735,
+                "num_queries": 8122
             },
             "ruby": {
                 "num_samples": 28849,
@@ -137,7 +143,9 @@
                     "max_relevant_docs_per_query": 1,
                     "unique_relevant_docs": 1261
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 27588,
+                "num_queries": 1261
             },
             "java": {
                 "num_samples": 192016,
@@ -165,7 +173,9 @@
                     "max_relevant_docs_per_query": 1,
                     "unique_relevant_docs": 10955
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 181061,
+                "num_queries": 10955
             },
             "php": {
                 "num_samples": 282251,
@@ -193,8 +203,12 @@
                     "max_relevant_docs_per_query": 1,
                     "unique_relevant_docs": 14014
                 },
-                "top_ranked_statistics": null
+                "top_ranked_statistics": null,
+                "num_documents": 268237,
+                "num_queries": 14014
             }
-        }
+        },
+        "num_documents": 1005474,
+        "num_queries": 52561
     }
 }

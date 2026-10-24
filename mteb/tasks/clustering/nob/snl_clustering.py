@@ -79,12 +79,15 @@ class SNLClustering(AbsTaskClusteringLegacy):
             documents.extend(ds_split["article"])
             labels.extend(_label)
 
-            assert len(documents) == len(labels)
+            if len(documents) != len(labels):
+                raise ValueError(f"Expected {len(documents)} labels, got {len(labels)}")
 
             rng = random.Random(42)  # local only seed
-            pairs = list(zip(documents, labels))
+            pairs = list(zip(documents, labels, strict=True))
             rng.shuffle(pairs)
-            documents, labels = (list(collection) for collection in zip(*pairs))
+            documents, labels = (
+                list(collection) for collection in zip(*pairs, strict=True)
+            )
 
             # reduce size of dataset to not have too large datasets in the clustering task
             documents_batched = list(batched(documents, 512))[:4]

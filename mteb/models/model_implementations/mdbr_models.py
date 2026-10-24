@@ -3,7 +3,7 @@ from mteb.models.model_implementations.mixedbread_ai_models import (
     mixedbread_training_data,
 )
 from mteb.models.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 LEAF_CITATION = """@misc{mdbr_leaf,
   title={LEAF: Knowledge Distillation of Text Embedding Models with Teacher-Aligned Representations},
@@ -27,7 +27,7 @@ LEAF_TRAINING_DATASETS = {
 }
 
 mdbr_leaf_ir = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -62,7 +62,7 @@ mdbr_leaf_ir = ModelMeta(
 )
 
 mdbr_leaf_mt = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),

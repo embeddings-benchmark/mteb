@@ -2,35 +2,76 @@ from __future__ import annotations
 
 import logging
 import warnings
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
-import torch
 from packaging.version import Version
+from tqdm.auto import tqdm
+from typing_extensions import deprecated
 
+from mteb._create_dataloaders import create_dataloader
 from mteb._log_once import LogOnce
 from mteb.models import ModelMeta
+from mteb.similarity_functions import (
+    _MAX_SIM_CHUNK_ELEMENTS,
+    _token_budget_chunks,
+    _upcast_low_precision,
+)
+from mteb.timing import TimingStack
 from mteb.types import PromptType
 
-from .abs_encoder import AbsEncoder
+from .abs_encoder import AbsEncoder, get_prompt_name
+from .model_meta import ScoringFunction
+from .search_wrappers import chunked_full_corpus_search, rerank_top_ranked_documents
 
 if TYPE_CHECKING:
-    from sentence_transformers import CrossEncoder, SentenceTransformer
+    from collections.abc import Callable, Iterator, Sequence
+
+    import torch
+    from sentence_transformers import (
+        CrossEncoder,
+        MultiVectorEncoder,
+        SentenceTransformer,
+    )
+    from sentence_transformers.sparse_encoder import SparseEncoder
     from torch.utils.data import DataLoader
     from typing_extensions import Unpack
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput, EncodeKwargs
+    from mteb.types import (
+        Array,
+        BatchedInput,
+        CorpusDatasetType,
+        EncodeKwargs,
+        Modalities,
+        QueryDatasetType,
+        RetrievalOutputType,
+        TopRankedDocumentsType,
+    )
 
 logger = logging.getLogger(__name__)
 
 SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION = "5.0.0"
+SENTENCE_TRANSFORMERS_MULTI_VECTOR_VERSION = "6.0.0"
+
+# Embedding values of documents moved to the device at once for MaxSim scoring
+# (about 2 GB in float16).
+_MAX_SIM_DOCUMENT_BLOCK_ELEMENTS = 1_000_000_000
 
 
+@deprecated(
+    "sentence_transformers_loader is deprecated, use SentenceTransformerEncoderWrapper directly instead."
+)
 def sentence_transformers_loader(
-    model_name: str, revision: str | None = None, device: str | None = None, **kwargs
+    model_name: str,
+    revision: str | None = None,
+    device: str | None = None,
+    **kwargs: Any,
 ) -> SentenceTransformerEncoderWrapper:
     """Loads a SentenceTransformer model and wraps it in a SentenceTransformerEncoderWrapper.
+
+    .. deprecated:: 2.11.0
+        Use :class:`SentenceTransformerEncoderWrapper` directly instead.
 
     Args:
         model_name: The name of the SentenceTransformer model to load.
@@ -43,18 +84,313 @@ def sentence_transformers_loader(
     )
 
 
+def _setup_modality_collator(
+    inputs: DataLoader[BatchedInput],
+    *,
+    fps: float | None,
+    max_frames: int | None,
+    num_frames: int | None,
+    target_sampling_rate: int | None,
+    max_samples: int | None,
+    min_frames: int = 1,
+) -> bool:
+    """Attach a VideoCollator/AudioCollator to ``inputs`` if needed.
+
+    Returns True when any modality feature (image/audio/video) is present on
+    the dataset so the caller can take the multimodal path.
+    """
+    features = inputs.dataset.features  # type: ignore[attr-defined]
+    has_video = "video" in features
+    has_audio = "audio" in features
+    if has_video:
+        from mteb.models.modality_collators import VideoCollator
+
+        inputs.collate_fn = VideoCollator(
+            target_sampling_rate=target_sampling_rate or 16000,
+            fps=fps,
+            max_frames=max_frames,
+            num_frames=num_frames,
+            max_samples=max_samples,
+            min_frames=min_frames,
+        )
+    elif has_audio:
+        from mteb.models.modality_collators import AudioCollator
+
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=target_sampling_rate or 16000,
+            max_samples=max_samples,
+        )
+    return has_video or has_audio or "image" in features
+
+
+def _batch_to_modality_dicts(
+    batch: dict[str, Any],
+    supported_modalities: list[Modalities],
+) -> list[dict[str, Any]]:
+    modality_batch = {k: v for k, v in batch.items() if k in supported_modalities}
+    LogOnce(logger).info(f"Model will encode modalities {list(modality_batch.keys())}")
+    return [
+        dict(zip(modality_batch, sample, strict=True))
+        for sample in zip(*modality_batch.values(), strict=True)
+    ]
+
+
+def _resolve_model_prompts(
+    model: SentenceTransformer, model_prompts: dict[str, str] | None
+) -> dict[str, str] | None:
+    """Merge `model_prompts` with `model`'s built-in prompts (explicit `model_prompts` wins) and validate the result."""
+    # SentenceTransformer types `prompts` as `dict[str, str | None]`; mteb only ever
+    # stores non-None values in it.
+    built_in_prompts = cast("dict[str, str] | None", getattr(model, "prompts", None))
+    if built_in_prompts and not model_prompts:
+        model_prompts = built_in_prompts
+    elif model_prompts and built_in_prompts:
+        msg = f"Model prompts specified, these will overwrite the default model prompts. Current prompts will be:\n {model_prompts}"
+        logger.warning(msg)
+        warnings.warn(msg, stacklevel=2)
+        # dict is invariant: SentenceTransformer declares dict[str, str | None]
+        model.prompts = cast("dict[str, str | None]", model_prompts)
+
+    resolved_prompts, invalid_prompts = AbsEncoder.validate_task_to_prompt_name(
+        model_prompts, raise_for_invalid_keys=False
+    )
+    if invalid_prompts:
+        invalid_prompts_str = "\n".join(invalid_prompts)
+        msg = f"Some prompts are not in the expected format and will be ignored. Problems:\n\n{invalid_prompts_str}"
+        logger.warning(msg)
+        warnings.warn(msg, stacklevel=2)
+    return resolved_prompts
+
+
+def _resolve_prompt(
+    model_prompts: dict[str, str] | None,
+    task_metadata: TaskMetadata,
+    prompt_type: PromptType | None,
+) -> str | None:
+    """Look up the prompt text for `task_metadata`/`prompt_type` in `model_prompts`, logging the outcome."""
+    prompt = None
+    prompt_name = None
+    if model_prompts is not None:
+        prompt_name = get_prompt_name(model_prompts, task_metadata, prompt_type)
+        prompt = model_prompts.get(prompt_name, None)  # type: ignore[arg-type]
+    if prompt_name:
+        prompt_log = f"Using {prompt_name=} for task={task_metadata.name} {prompt_type=} with {prompt=}"
+    else:
+        prompt_log = (
+            f"No model prompts found for task={task_metadata.name} {prompt_type=}"
+        )
+    LogOnce(logger).info(prompt_log)
+    return prompt
+
+
+def _select_encode_function(
+    model: SentenceTransformer | SparseEncoder | MultiVectorEncoder,
+    prompt_type: PromptType | None,
+    *,
+    has_query_encode: bool = True,
+) -> Callable[..., Any]:
+    """Pick `model.encode_query`/`model.encode_document`/`model.encode` based on `prompt_type`."""
+    if prompt_type and has_query_encode:
+        if prompt_type == PromptType.query:
+            return model.encode_query
+        if prompt_type == PromptType.document:
+            return model.encode_document
+        raise ValueError(f"Unknown prompt type: {prompt_type}")
+    return model.encode
+
+
+def _postprocess_dense_embeddings(embeddings: Array) -> Array:
+    """Move a batch's embeddings to CPU float32 if it's a torch tensor; otherwise pass through unchanged."""
+    import torch
+
+    if isinstance(embeddings, torch.Tensor):
+        embeddings = embeddings.cpu().detach().float()
+    return embeddings
+
+
+def _concatenate_sparse_batches(batches: list[torch.Tensor]) -> torch.Tensor:
+    """Concatenate per-batch sparse tensors along dim 0 (sparse tensors don't support `np.concatenate`)."""
+    import torch
+
+    return torch.cat(batches, dim=0)
+
+
+def _concatenate_ragged_batches(batches: list[list[Any]]) -> list[Any]:
+    """Flatten per-batch lists of variable-length (ragged) multi-vector embeddings into one list.
+
+    Multi-vector encoders return one tensor per input, each with its own number of token
+    embeddings, so batches can't be stacked with `np.concatenate` like fixed-size dense embeddings.
+    """
+    return [embedding for batch in batches for embedding in batch]
+
+
+def _max_sim_document_blocks(documents: Sequence[Array]) -> list[tuple[int, int]]:
+    """Split documents into contiguous `(start, end)` blocks to move to the device at once.
+
+    Each block holds at most `_MAX_SIM_DOCUMENT_BLOCK_ELEMENTS` embedding values, with a floor of one
+    document per block.
+    """
+    blocks: list[tuple[int, int]] = []
+    start = 0
+    elements = 0
+    for index, document in enumerate(documents):
+        document_elements = int(np.prod(document.shape))
+        if (
+            index > start
+            and elements + document_elements > _MAX_SIM_DOCUMENT_BLOCK_ELEMENTS
+        ):
+            blocks.append((start, index))
+            start = index
+            elements = 0
+        elements += document_elements
+    blocks.append((start, len(documents)))
+    return blocks
+
+
+def _as_vector_list(embeddings: Array) -> list[Any]:
+    """Return multi-vector embeddings as a list with one `(num_tokens, dim)` entry per input.
+
+    A single 2D tensor or array is one input, scored as a batch of one.
+    """
+    import torch
+
+    if isinstance(embeddings, (torch.Tensor, np.ndarray)) and embeddings.ndim == 2:
+        return [embeddings]
+    return list(embeddings)
+
+
+def _to_cpu_in_place(batch: list[Any]) -> list[Any]:
+    """Move token embeddings to the CPU one at a time, replacing them in `batch`.
+
+    Freeing each device tensor as soon as its CPU copy exists keeps both copies of the whole batch
+    from being alive at once.
+    """
+    import torch
+
+    for index, vector in enumerate(batch):
+        if isinstance(vector, torch.Tensor):
+            batch[index] = vector.cpu()
+    return batch
+
+
+def _is_sparse_compatible_task(task_metadata: TaskMetadata) -> bool:
+    """Whether this task's evaluator can work with sparse tensors, rather than needing dense ones.
+
+    True for retrieval tasks (just a similarity matrix), excluding reranking (indexes into a
+    corpus embeddings tensor, which sparse tensors don't support).
+    """
+    return (
+        task_metadata.simplified_task_type == "retrieval"
+        and "Reranking" not in task_metadata.type
+    )
+
+
+def _postprocess_sparse_embeddings(embeddings: Array) -> Array:
+    """Densify a batch's embeddings if it's a sparse torch tensor, then move to CPU float32."""
+    import torch
+
+    if isinstance(embeddings, torch.Tensor) and embeddings.is_sparse:
+        embeddings = embeddings.to_dense()
+    return _postprocess_dense_embeddings(embeddings)
+
+
+def _encode_batches(
+    inputs: DataLoader[BatchedInput],
+    *,
+    is_multimodal: bool,
+    encode_function: Callable[..., Any],
+    prompt: str | None,
+    modalities: list[Modalities],
+    postprocess_batch: Callable[[Any], Any] | None = None,
+    concatenate_batches: Callable[[list[Any]], Any] | None = None,
+    encode_text_per_batch: bool = False,
+    **kwargs: Unpack[EncodeKwargs],
+) -> Array:
+    """Encode `inputs` with `encode_function`, handling the multimodal vs text-only cases.
+
+    Multimodal inputs are encoded batch by batch as per-sample modality dicts and combined via
+    `concatenate_batches` (default `np.concatenate`); text-only inputs are collected up front and
+    encoded in one call. `postprocess_batch` (default identity) is applied to each batch's output.
+
+    With `encode_text_per_batch`, text-only inputs are instead encoded `batch_size` at a time,
+    longest first, and `postprocess_batch` is applied to each batch's output. This bounds what
+    `encode_function` holds at once (e.g. per-token embeddings kept on the device until the call
+    returns) while keeping inputs of similar length together. `postprocess_batch` must then return
+    one entry per input (a list), which are returned in the original order.
+    """
+    postprocess = postprocess_batch or (lambda embeddings: embeddings)
+    concatenate = concatenate_batches or (
+        lambda batches: np.concatenate(batches, axis=0)
+    )
+    show_progress_bar = kwargs.get("show_progress_bar", True)
+    batch_size = kwargs.get("batch_size", 32)
+    # Per-batch calls below show one outer progress bar instead of one bar per call
+    per_batch_kwargs = {**kwargs, "show_progress_bar": False}
+
+    if is_multimodal:
+        all_embeddings = []
+        for batch in tqdm(
+            inputs, desc="Building multimodal embeddings", disable=not show_progress_bar
+        ):
+            batched_input = _batch_to_modality_dicts(batch, modalities)
+            _embeddings = encode_function(
+                batched_input, prompt=prompt, **per_batch_kwargs
+            )
+            all_embeddings.append(postprocess(_embeddings))
+        embeddings = concatenate(all_embeddings)
+    elif not encode_text_per_batch:
+        sentences = [text for batch in inputs for text in batch["text"]]
+
+        embeddings = encode_function(sentences, prompt=prompt, **kwargs)
+
+        embeddings = postprocess(embeddings)
+    else:
+        sentences = [text for batch in inputs for text in batch["text"]]
+        # Longest first, like sentence-transformers sorts within a call, so that grouping
+        # doesn't add padding.
+        order = sorted(range(len(sentences)), key=lambda i: -len(sentences[i]))
+        batched_embeddings: list[Any] = []
+        for start in tqdm(
+            range(0, len(order), batch_size),
+            desc="Encoding",
+            disable=not show_progress_bar,
+        ):
+            batch = [sentences[i] for i in order[start : start + batch_size]]
+            batch_embeddings = encode_function(batch, prompt=prompt, **per_batch_kwargs)
+            batched_embeddings.extend(postprocess(batch_embeddings))
+        embeddings = [None] * len(sentences)
+        for position, index in enumerate(order):
+            embeddings[index] = batched_embeddings[position]
+
+    return cast("Array", embeddings)
+
+
 class SentenceTransformerEncoderWrapper(AbsEncoder):
-    """Multimodal wrapper for SentenceTransformer models."""
+    """Wrapper for SentenceTransformer models.
+
+    Supports both text-only and multimodal (text + image + audio + video)
+    inputs. When the input dataset exposes image/audio/video features, the
+    encode method attaches the matching collator and feeds the model per-sample
+    modality dicts; otherwise it falls back to the text-only fast path that
+    uses ``encode_query``/``encode_document`` where available.
+    """
 
     mteb_model_meta: ModelMeta
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         model: str | SentenceTransformer,
         revision: str | None = None,
         device: str | None = None,
         model_prompts: dict[str, str] | None = None,
-        **kwargs,
+        *,
+        embed_dim: int | None = None,
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = None,
+        target_sampling_rate: int | None = None,
+        max_samples: int | None = None,
+        **kwargs: Any,
     ) -> None:
         """Wrapper for SentenceTransformer models.
 
@@ -66,43 +402,36 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
                 First priority is given to the composed prompt of task name + prompt type (query or passage), then to the specific task prompt,
                 then to the composed prompt of task type + prompt type, then to the specific task type prompt,
                 and finally to the specific prompt type.
+            embed_dim: The embedding dimension of the model to use.
+            fps: Target frames per second for video sampling (multimodal inputs only).
+            max_frames: Safety cap on frames per video for FPS mode (multimodal inputs only).
+            num_frames: If set, use fixed-sample mode instead of FPS-based (multimodal inputs only).
+            target_sampling_rate: Sampling rate to resample audio to (multimodal inputs only). Defaults to 16000 when an audio/video collator is applied.
+            max_samples: Maximum number of audio samples to keep (multimodal inputs only).
             **kwargs: Additional arguments to pass to the SentenceTransformer model.
         """
         from sentence_transformers import SentenceTransformer
 
         if isinstance(model, str):
             self.model = SentenceTransformer(
-                model, revision=revision, device=device, **kwargs
+                model,
+                revision=revision,
+                device=device,
+                truncate_dim=embed_dim,
+                **kwargs,
             )
             self.mteb_model_meta = ModelMeta.create_empty(
                 overwrites=dict(
                     name=model,
                     revision=revision,
-                    loader=sentence_transformers_loader,
+                    loader=type(self),
                 )
             )
         else:
             self.model = model
             self.mteb_model_meta = ModelMeta.from_sentence_transformer_model(self.model)
 
-        built_in_prompts = getattr(self.model, "prompts", None)
-        if built_in_prompts and not model_prompts:
-            model_prompts = built_in_prompts
-        elif model_prompts and built_in_prompts:
-            msg = f"Model prompts specified, these will overwrite the default model prompts. Current prompts will be:\n {model_prompts}"
-            logger.warning(msg)
-            warnings.warn(msg)
-            self.model.prompts = model_prompts
-
-        self.model_prompts, invalid_prompts = self.validate_task_to_prompt_name(
-            model_prompts, raise_for_invalid_keys=False
-        )
-
-        if invalid_prompts:
-            invalid_prompts = "\n".join(invalid_prompts)
-            msg = f"Some prompts are not in the expected format and will be ignored. Problems:\n\n{invalid_prompts}"
-            logger.warning(msg)
-            warnings.warn(msg)
+        self.model_prompts = _resolve_model_prompts(self.model, model_prompts)
 
         if (
             self.model_prompts
@@ -114,12 +443,25 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         ):
             msg = f"SentenceTransformers that use prompts most often need to be configured with at least 'query' and 'document' prompts to ensure optimal performance. Received {self.model_prompts}"
             logger.warning(msg)
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
+
+        self.fps = fps
+        self.max_frames = max_frames
+        self.num_frames = num_frames
+        self.target_sampling_rate = target_sampling_rate
+        self.max_samples = max_samples
 
     def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
         """Compute the similarity between two collections of embeddings."""
         if hasattr(self.model, "similarity") and callable(self.model.similarity):
-            return self.model.similarity(embeddings1, embeddings2)
+            # sentence-transformers < 6 scores in the embedding dtype
+            return cast(
+                "Array",
+                self.model.similarity(
+                    _upcast_low_precision(embeddings1),
+                    _upcast_low_precision(embeddings2),
+                ),
+            )
         return super().similarity(embeddings1, embeddings2)
 
     def encode(
@@ -153,127 +495,179 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
         Returns:
             The encoded sentences.
         """
+        prompt = _resolve_prompt(self.model_prompts, task_metadata, prompt_type)
+
+        is_multimodal = _setup_modality_collator(
+            inputs,
+            fps=self.fps,
+            max_frames=self.max_frames,
+            num_frames=self.num_frames,
+            target_sampling_rate=self.target_sampling_rate,
+            max_samples=self.max_samples,
+        )
         from sentence_transformers import __version__ as st_version
 
         has_query_encode = (
             Version(st_version).release
             >= Version(SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION).release
         )
+        encode_function = _select_encode_function(
+            self.model, prompt_type, has_query_encode=has_query_encode
+        )
 
-        _inputs = [text for batch in inputs for text in batch["text"]]
-
-        prompt = None
-        prompt_name = None
-        if self.model_prompts is not None:
-            prompt_name = self.get_prompt_name(task_metadata, prompt_type)
-            prompt = self.model_prompts.get(prompt_name, None)  # type: ignore[arg-type]
-        if prompt_name:
-            prompt_log = f"Using {prompt_name=} for task={task_metadata.name} {prompt_type=} with {prompt=}"
-        else:
-            prompt_log = (
-                f"No model prompts found for task={task_metadata.name} {prompt_type=}"
-            )
-
-        LogOnce(logger).info(prompt_log)
-        logger.debug(f"Encoding {len(_inputs)} sentences.")
-
-        if prompt_type and has_query_encode:
-            if prompt_type == PromptType.query:
-                encode_function = self.model.encode_query
-            elif prompt_type == PromptType.document:
-                encode_function = self.model.encode_document
-            else:
-                raise ValueError(f"Unknown prompt type: {prompt_type}")
-        else:
-            encode_function = self.model.encode
-
-        embeddings = encode_function(
-            _inputs,
+        return _encode_batches(
+            inputs,
+            is_multimodal=is_multimodal,
+            encode_function=encode_function,
             prompt=prompt,
+            modalities=self.mteb_model_meta.modalities,
+            postprocess_batch=_postprocess_dense_embeddings,
             **kwargs,
         )
-        if isinstance(embeddings, torch.Tensor):
-            # ensure everything is on CPU and is float
-            embeddings = embeddings.cpu().detach().float()
-        return embeddings
 
 
 class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrapper):
-    """Wrapper for multimodal SentenceTransformer models."""
+    """Backwards-compatible alias for `SentenceTransformerEncoderWrapper`.
 
-    def encode(
+    The base wrapper now auto-detects multimodal inputs, so this subclass is
+    kept only to avoid breaking existing ``loader=...`` references.
+    """
+
+    @deprecated(
+        "This wrapper is deprecated. Use `SentenceTransformerMultimodalEncoderWrapper` for using processing multimodal inputs.",
+    )
+    def __init__(
         self,
-        inputs: DataLoader[BatchedInput],
-        *,
-        task_metadata: TaskMetadata,
-        hf_split: str,
-        hf_subset: str,
-        prompt_type: PromptType | None = None,
-        **kwargs: Unpack[EncodeKwargs],
-    ) -> Array:
-        """Encodes the given sentences using the encoder.
-
-        Args:
-            inputs: The sentences to encode.
-            task_metadata: The metadata of the task. Sentence-transformers uses this to
-                determine which prompt to use from a specified dictionary.
-            prompt_type: The name type of prompt. (query or passage)
-            hf_split: Split of current task
-            hf_subset: Subset of current task
-            **kwargs: Additional arguments to pass to the encoder.
-
-            The order of priorities for prompt selection are:
-                1. Composed prompt of task name + prompt type (query or passage)
-                2. Specific task prompt
-                3. Composed prompt of task type + prompt type (query or passage)
-                4. Specific task type prompt
-                5. Specific prompt type (query or passage)
+        *args: Any,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(*args, **kwargs)
 
 
-        Returns:
-            The encoded sentences.
-        """
-        prompt = None
-        prompt_name = None
-        if self.model_prompts is not None:
-            prompt_name = self.get_prompt_name(task_metadata, prompt_type)
-            prompt = self.model_prompts.get(prompt_name, None)  # type: ignore[arg-type]
-        if prompt_name:
-            logger.info(
-                f"Using {prompt_name=} for task={task_metadata.name} {prompt_type=} with {prompt=}"
+def _is_low_precision(weight: torch.Tensor) -> bool:
+    import torch
+
+    return torch.is_floating_point(weight) and torch.finfo(weight.dtype).bits < 32
+
+
+def _run_scoring_head_in_fp32(model: CrossEncoder) -> None:
+    """Compute the scores of a low-precision cross-encoder in float32.
+
+    sentence-transformers runs the scoring head in the backbone dtype, so bf16/fp16 logits
+    are already rounded before any later upcast and nearby scores tie.
+    """
+    import torch
+    import torch.nn.functional as F
+
+    # sentence-transformers < 4 keeps the transformers model on `.model` and has no `num_labels`
+    root = (
+        model if isinstance(model, torch.nn.Module) else getattr(model, "model", None)
+    )
+    if not isinstance(root, torch.nn.Module):
+        return
+
+    class FP32ScoringHead(torch.nn.Linear):
+        """Keep the scoring projection in FP32, including under caller autocast."""
+
+        def __init__(self, linear: torch.nn.Linear) -> None:
+            super().__init__(
+                linear.in_features,
+                linear.out_features,
+                bias=linear.bias is not None,
+                device=linear.weight.device,
+                dtype=torch.float32,
             )
-        else:
-            logger.info(
-                f"No model prompts found for task={task_metadata.name} {prompt_type=}"
-            )
+            self.load_state_dict(linear.state_dict())
+            self.train(linear.training)
 
-        all_embeddings = []
-        for batch in inputs:
-            batch_column = next(iter(batch.keys()))
-            batched_input: list[dict[str, Any]] = [
-                dict() for _ in range(len(batch[batch_column]))
-            ]
+        def forward(self, inputs: torch.Tensor) -> torch.Tensor:
+            # a later model.half() / .to(bf16) also casts this head, so upcast here too
+            with torch.autocast(device_type=inputs.device.type, enabled=False):
+                return F.linear(
+                    inputs.float(),
+                    self.weight.float(),
+                    None if self.bias is None else self.bias.float(),
+                )
 
-            # transform from {"text": [text1, text2], "image": [image1, image2]} to
-            # [{"text": text1, "image": image1}, {"text": text2, "image": image2}]
-            for key, values in batch.items():
-                for i, value in enumerate(values):
-                    batched_input[i][key] = value
+    def upcast(name: str) -> None:
+        head = root.get_submodule(name)
+        if not isinstance(head, torch.nn.Linear) or not _is_low_precision(head.weight):
+            return
+        logger.info(
+            f"Running the scoring head {name!r} in float32 to avoid tied scores."
+        )
+        parent_name, _, attribute = name.rpartition(".")
+        setattr(root.get_submodule(parent_name), attribute, FP32ScoringHead(head))
 
-            embeddings = self.model.encode(
-                batched_input,
-                prompt=prompt,
-                **kwargs,
-            )
-            if isinstance(embeddings, torch.Tensor):
-                # ensure everything is on CPU and is float
-                embeddings = embeddings.cpu().detach().float()
-            all_embeddings.append(embeddings)
-        return np.stack(all_embeddings)
+    modules = dict(root.named_modules())
+    # Dense writing the scores, as CrossEncoder.num_labels resolves it; its residual
+    # projection (registered after `linear`) also feeds the scores
+    dense = [
+        name
+        for name, module in modules.items()
+        if type(module).__name__ == "Dense"
+        and getattr(module, "module_output_name", None) == "scores"
+    ]
+    if dense:
+        for attribute in ("linear", "residual"):
+            if hasattr(modules[dense[-1]], attribute):
+                upcast(f"{dense[-1]}.{attribute}".lstrip("."))
+        return
+
+    # LogitScore reads two vocabulary logits, so only those columns are recomputed in fp32
+    # rather than the whole (vocabulary-sized) lm_head
+    logit_scores = [m for m in modules.values() if type(m).__name__ == "LogitScore"]
+    if logit_scores:
+        lm_head = getattr(model, "model", None)
+        lm_head = lm_head.get_output_embeddings() if lm_head is not None else None
+        if not isinstance(lm_head, torch.nn.Linear) or not _is_low_precision(
+            lm_head.weight
+        ):
+            return
+        token_ids = sorted(
+            {
+                token_id
+                for module in logit_scores
+                for token_id in (module.true_token_id, module.false_token_id)
+                if token_id is not None
+            }
+        )
+
+        def upcast_token_logits(
+            module: torch.nn.Linear,
+            args: tuple[torch.Tensor, ...],
+            output: torch.Tensor,
+        ) -> torch.Tensor:
+            with torch.autocast(device_type=output.device.type, enabled=False):
+                bias = None if module.bias is None else module.bias[token_ids].float()
+                rows = F.linear(args[0].float(), module.weight[token_ids].float(), bias)
+            output = output.float()
+            output[..., token_ids] = rows
+            return output
+
+        logger.info(
+            f"Computing the LogitScore logits {token_ids} in float32 to avoid tied scores."
+        )
+        lm_head.register_forward_hook(upcast_token_logits)
+        return
+
+    num_labels = getattr(model, "num_labels", None) or getattr(
+        getattr(root, "config", None), "num_labels", 1
+    )
+    heads = [
+        name
+        for name, module in modules.items()
+        if isinstance(module, torch.nn.Linear) and module.out_features == num_labels
+    ]
+    if heads:  # classification head of the transformers model, e.g. `classifier`
+        upcast(heads[-1])
 
 
 class CrossEncoderWrapper:
     """Wrapper for CrossEncoder models.
+
+    The scoring head of low-precision models runs in float32, so bf16/fp16 logits do not
+    collapse nearby scores into ties.
 
     Args:
         model: The CrossEncoder model to use. Can be a string (model name) or a CrossEncoder model.
@@ -284,14 +678,21 @@ class CrossEncoderWrapper:
         **kwargs: Additional arguments to pass to the CrossEncoder model.
     """
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         model: CrossEncoder | str,
         revision: str | None = None,
         device: str | None = None,
         query_prefix: str = "",
         passage_prefix: str = "",
-        **kwargs,
+        *,
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = None,
+        min_frames: int = 1,
+        target_sampling_rate: int | None = None,
+        max_samples: int | None = None,
+        **kwargs: Any,
     ) -> None:
         from sentence_transformers import CrossEncoder
 
@@ -307,8 +708,49 @@ class CrossEncoderWrapper:
                     loader=CrossEncoderWrapper,
                 )
             )
+        _run_scoring_head_in_fp32(self.model)
         self.query_prefix = query_prefix
         self.passage_prefix = passage_prefix
+        self.fps = fps
+        self.max_frames = max_frames
+        self.num_frames = num_frames
+        self.min_frames = min_frames
+        self.target_sampling_rate = target_sampling_rate
+        self.max_samples = max_samples
+
+    def _iter_inputs(
+        self,
+        loader: DataLoader[BatchedInput],
+        prefix: str,
+    ) -> Iterator[list[Any]]:
+        """Yield the items to feed to the cross-encoder, one dataloader batch at a time.
+
+        For text-only inputs these are prefix-prepended strings; for multimodal
+        inputs they are per-sample modality dicts. Yielding per batch keeps only
+        one batch of (possibly decoded image or video) inputs in memory.
+        """
+        is_multimodal = _setup_modality_collator(
+            loader,
+            fps=self.fps,
+            max_frames=self.max_frames,
+            num_frames=self.num_frames,
+            target_sampling_rate=self.target_sampling_rate,
+            max_samples=self.max_samples,
+            min_frames=self.min_frames,
+        )
+        for batch in loader:
+            if not is_multimodal:
+                yield [prefix + text for text in batch["text"]]
+                continue
+            items: list[dict[str, Any]] = []
+            for sample in _batch_to_modality_dicts(
+                batch,
+                self.mteb_model_meta.modalities,
+            ):
+                if prefix and "text" in sample:
+                    sample["text"] = prefix + sample["text"]
+                items.append(sample)
+            yield items
 
     def predict(
         self,
@@ -323,6 +765,9 @@ class CrossEncoderWrapper:
     ) -> Array:
         """Predicts relevance scores for pairs of inputs. Note that, unlike the encoder, the cross-encoder can compare across inputs.
 
+        The pairs are scored one dataloader batch at a time, so only a single batch of
+        inputs is held in memory (both dataloaders are expected to use the same batch size).
+
         Args:
             inputs1: First Dataloader of inputs to encode. For reranking tasks, these are queries (for text only tasks `QueryDatasetType`).
             inputs2: Second Dataloader of inputs to encode. For reranking, these are documents (for text only tasks `RetrievalOutputType`).
@@ -336,14 +781,554 @@ class CrossEncoderWrapper:
         Returns:
             The predicted relevance scores for each inputs pair.
         """
-        all_queries_with_instructions = [
-            self.query_prefix + text for batch in inputs1 for text in batch["text"]
+        show_progress_bar = kwargs.pop("show_progress_bar", True)
+        batches = zip(
+            self._iter_inputs(inputs1, self.query_prefix),
+            self._iter_inputs(inputs2, self.passage_prefix),
+            strict=True,
+        )
+        scores = [
+            np.asarray(
+                self.model.predict(
+                    list(zip(queries, documents, strict=True)),
+                    show_progress_bar=False,
+                    **kwargs,
+                )
+            )
+            for queries, documents in tqdm(
+                batches,
+                total=len(inputs1),
+                desc="Scoring pairs",
+                disable=not show_progress_bar,
+            )
         ]
-        all_corpus_with_instructions = [
-            self.passage_prefix + text for batch in inputs2 for text in batch["text"]
-        ]
+        return np.concatenate(scores) if scores else np.array([])
 
-        return self.model.predict(
-            list(zip(all_queries_with_instructions, all_corpus_with_instructions)),
+
+class SparseEncoderWrapper(AbsEncoder):
+    """Wrapper for sentence-transformers `SparseEncoder` models.
+
+    Supports both text-only and multimodal (text + image + audio + video) inputs, following the
+    same auto-detection pattern as `SentenceTransformerEncoderWrapper`: when the input dataset
+    exposes image/audio/video features, the encode method attaches the matching collator and feeds
+    the model per-sample modality dicts; otherwise it uses the text-only fast path.
+
+    Args:
+        model: The SparseEncoder model to use. Can be a string (model name) or a SparseEncoder model.
+        revision: The revision of the model to use.
+        device: The device used to load the model.
+        model_prompts: A dictionary mapping task names to prompt names. See
+            `SentenceTransformerEncoderWrapper` for the order of priority used to select a prompt.
+        fps: Target frames per second for video sampling (multimodal inputs only).
+        max_frames: Safety cap on frames per video for FPS mode (multimodal inputs only).
+        num_frames: If set, use fixed-sample mode instead of FPS-based (multimodal inputs only).
+        target_sampling_rate: Sampling rate to resample audio to (multimodal inputs only). Defaults to 16000 when an audio/video collator is applied.
+        max_samples: Maximum number of audio samples to keep (multimodal inputs only).
+        **kwargs: Additional arguments to pass to the SparseEncoder model.
+    """
+
+    mteb_model_meta: ModelMeta
+
+    def __init__(
+        self,
+        model: str | SparseEncoder,
+        revision: str | None = None,
+        *,
+        device: str | None = None,
+        model_prompts: dict[str, str] | None = None,
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = None,
+        target_sampling_rate: int | None = None,
+        max_samples: int | None = None,
+        **kwargs: Any,
+    ) -> None:
+        import sentence_transformers
+
+        if (
+            Version(sentence_transformers.__version__).release
+            < Version(SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION).release
+        ):
+            raise ImportError(
+                f"sentence-transformers version must be >= {SENTENCE_TRANSFORMERS_QUERY_ENCODE_VERSION} to load a SparseEncoder model."
+            )
+        from sentence_transformers.sparse_encoder import SparseEncoder
+
+        if isinstance(model, str):
+            self.model = SparseEncoder(
+                model, revision=revision, device=device, **kwargs
+            )
+            self.mteb_model_meta = ModelMeta.create_empty(
+                overwrites=dict(
+                    name=model,
+                    revision=revision,
+                    loader=type(self),
+                    model_type=["sparse"],
+                )
+            )
+        else:
+            self.model = model
+            self.mteb_model_meta = ModelMeta.from_sparse_encoder_model(self.model)
+
+        self.model_prompts = _resolve_model_prompts(self.model, model_prompts)
+
+        self.fps = fps
+        self.max_frames = max_frames
+        self.num_frames = num_frames
+        self.target_sampling_rate = target_sampling_rate
+        self.max_samples = max_samples
+
+    def similarity(
+        self,
+        embeddings1: Array,
+        embeddings2: Array,
+    ) -> Array:
+        """Compute similarity between sparse query_embeddings and corpus_embeddings.
+
+        Args:
+            embeddings1: Sparse COO tensor of shape (num_queries, dim).
+            embeddings2: Tensor of shape (num_corpus, dim).
+
+        Returns:
+            Similarity matrix of shape (num_queries, num_corpus).
+        """
+        return cast("Array", self.model.similarity(embeddings1, embeddings2))
+
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Unpack[EncodeKwargs],
+    ) -> Array:
+        """Encodes the given sentences using the sparse encoder.
+
+        Args:
+            inputs: The sentences (or, for multimodal models, image/audio/video samples) to encode.
+            task_metadata: The metadata of the task. Used to determine which prompt to use
+                from `model_prompts`.
+            hf_split: Split of current task.
+            hf_subset: Subset of current task.
+            prompt_type: The name type of prompt (query or document).
+            **kwargs: Additional arguments to pass to the encoder.
+
+        Returns:
+            The encoded inputs, as sparse tensors where the task supports it (see
+            `_is_sparse_compatible_task`), densified otherwise.
+        """
+        prompt = _resolve_prompt(self.model_prompts, task_metadata, prompt_type)
+
+        is_multimodal = _setup_modality_collator(
+            inputs,
+            fps=self.fps,
+            max_frames=self.max_frames,
+            num_frames=self.num_frames,
+            target_sampling_rate=self.target_sampling_rate,
+            max_samples=self.max_samples,
+        )
+        encode_function = _select_encode_function(self.model, prompt_type)
+
+        postprocess_batch = (
+            None
+            if _is_sparse_compatible_task(task_metadata)
+            else _postprocess_sparse_embeddings
+        )
+
+        return _encode_batches(
+            inputs,
+            is_multimodal=is_multimodal,
+            encode_function=encode_function,
+            prompt=prompt,
+            modalities=self.mteb_model_meta.modalities,
+            postprocess_batch=postprocess_batch,
+            concatenate_batches=_concatenate_sparse_batches,
+            **kwargs,
+        )
+
+
+class MultiVectorSearchEncoderWrapper:
+    """Mixin class to add MaxSim indexing and search to a MultiVectorEncoder-backed encoder."""
+
+    task_corpus: CorpusDatasetType | None = None
+    corpus_chunk_size: int = 50_000
+
+    def index(
+        self,
+        corpus: CorpusDatasetType,
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        encode_kwargs: EncodeKwargs,
+        num_proc: int | None,
+        **kwargs: Any,
+    ) -> None:
+        """Store the corpus; documents are encoded lazily, in chunks, during `search`.
+
+        Args:
+            corpus: Corpus dataset to index.
+            task_metadata: Metadata of the task.
+            hf_split: Split of current task, allows to know some additional information about current split.
+            hf_subset: Subset of current task. Similar to `hf_split` to get more information
+            encode_kwargs: Additional arguments to pass to the encoder during indexing.
+            num_proc: Number of processes to use for indexing.
+            **kwargs: Additional arguments. Currently unused.
+        """
+        self.task_corpus = corpus
+
+    def search(
+        self,
+        queries: QueryDatasetType,
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        top_k: int,
+        encode_kwargs: EncodeKwargs,
+        top_ranked: TopRankedDocumentsType | None = None,
+        num_proc: int | None,
+        timer: TimingStack | None = None,
+        **kwargs: Any,
+    ) -> RetrievalOutputType:
+        """Search the indexed corpus for the given queries, or rerank `top_ranked` candidates.
+
+        Args:
+            queries: Queries to find
+            task_metadata: Task metadata
+            hf_split: split of the dataset
+            hf_subset: subset of the dataset
+            top_ranked: Top-ranked documents for each query, mapping query IDs to a list of document IDs.
+                Passed only from Reranking tasks.
+            top_k: Number of top documents to return for each query.
+            encode_kwargs: Additional arguments to pass to the encoder during indexing.
+            num_proc: Number of processes to use for dataloading.
+            timer: Records the search phases: "Encoding queries", then "Searching corpus" for a
+                full corpus search, or "Encoding corpus" and "Computing similarity" when reranking.
+                A new stack is used when not given.
+            **kwargs: Additional arguments. Currently unused.
+
+        Returns:
+            Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.
+        """
+        if self.task_corpus is None:
+            raise ValueError("Corpus must be indexed before searching.")
+        timer = timer or TimingStack()
+
+        queries_dataloader = create_dataloader(
+            queries,
+            task_metadata=task_metadata,
+            prompt_type=PromptType.query,
+            batch_size=encode_kwargs.get("batch_size", 32),
+            num_proc=num_proc,
+        )
+        with timer("Encoding queries", split=hf_split, subset=hf_subset):
+            query_embeddings = self._encode(  # type: ignore[attr-defined]
+                queries_dataloader,
+                task_metadata=task_metadata,
+                hf_split=hf_split,
+                hf_subset=hf_subset,
+                prompt_type=PromptType.query,
+                **encode_kwargs,
+            )
+        query_idx_to_id = {i: row["id"] for i, row in enumerate(queries)}
+
+        if top_ranked is not None:
+            logger.info("Reranking pre-ranked documents with MaxSim...")
+            result_heaps = self._rerank_documents(
+                query_idx_to_id=query_idx_to_id,
+                query_embeddings=query_embeddings,
+                top_ranked=top_ranked,
+                top_k=top_k,
+                task_metadata=task_metadata,
+                hf_subset=hf_subset,
+                hf_split=hf_split,
+                encode_kwargs=encode_kwargs,
+                num_proc=num_proc,
+                timer=timer,
+            )
+        else:
+            logger.info("Performing full corpus search with MaxSim...")
+            result_heaps = self._full_corpus_search(
+                query_idx_to_id=query_idx_to_id,
+                query_embeddings=query_embeddings,
+                top_k=top_k,
+                task_metadata=task_metadata,
+                hf_subset=hf_subset,
+                hf_split=hf_split,
+                encode_kwargs=encode_kwargs,
+                num_proc=num_proc,
+                timer=timer,
+            )
+
+        # Free the corpus reference now that search is done
+        self.task_corpus = None
+
+        results: RetrievalOutputType = {qid: {} for qid in query_idx_to_id.values()}
+        for qid in result_heaps:
+            for score, corpus_id in result_heaps[qid]:
+                results[qid][corpus_id] = score
+        return results
+
+    def _full_corpus_search(
+        self,
+        *,
+        query_idx_to_id: dict[int, str],
+        query_embeddings: Array,
+        task_metadata: TaskMetadata,
+        hf_subset: str,
+        hf_split: str,
+        top_k: int,
+        encode_kwargs: EncodeKwargs,
+        num_proc: int | None,
+        timer: TimingStack,
+    ) -> dict[str, list[tuple[float, str]]]:
+        if self.task_corpus is None:
+            raise ValueError("Corpus must be indexed before searching.")
+
+        return chunked_full_corpus_search(
+            task_corpus=self.task_corpus,
+            corpus_chunk_size=self.corpus_chunk_size,
+            query_idx_to_id=query_idx_to_id,
+            query_embeddings=query_embeddings,
+            task_metadata=task_metadata,
+            hf_subset=hf_subset,
+            hf_split=hf_split,
+            top_k=top_k,
+            encode_kwargs=encode_kwargs,
+            encode_fn=self._encode,  # type: ignore[attr-defined]
+            similarity_fn=self.similarity,  # type: ignore[attr-defined]
+            num_proc=num_proc,
+            timer=timer,
+        )
+
+    def _rerank_documents(  # noqa: PLR0913
+        self,
+        *,
+        query_idx_to_id: dict[int, str],
+        query_embeddings: Array,
+        top_ranked: TopRankedDocumentsType,
+        top_k: int,
+        task_metadata: TaskMetadata,
+        hf_subset: str,
+        hf_split: str,
+        encode_kwargs: EncodeKwargs,
+        timer: TimingStack,
+        num_proc: int | None = None,
+    ) -> dict[str, list[tuple[float, str]]]:
+        """Rerank each query's pre-ranked candidates with MaxSim.
+
+        Returns:
+            A dictionary mapping query IDs to a list of tuples, each containing a score and a document ID.
+        """
+        if self.task_corpus is None:
+            raise ValueError("Corpus must be set before reranking.")
+
+        return rerank_top_ranked_documents(
+            task_corpus=self.task_corpus,
+            query_idx_to_id=query_idx_to_id,
+            query_embeddings=query_embeddings,
+            top_ranked=top_ranked,
+            top_k=top_k,
+            task_metadata=task_metadata,
+            hf_subset=hf_subset,
+            hf_split=hf_split,
+            encode_kwargs=encode_kwargs,
+            encode_fn=self._encode,  # type: ignore[attr-defined]
+            similarity_fn=self.similarity,  # type: ignore[attr-defined]
+            num_proc=num_proc,
+            timer=timer,
+        )
+
+
+class MultiVectorWrapper(MultiVectorSearchEncoderWrapper):
+    """Loads and encodes sentence-transformers' native `MultiVectorEncoder` models."""
+
+    mteb_model_meta: ModelMeta
+
+    def __init__(  # noqa: PLR0913
+        self,
+        model: str | MultiVectorEncoder,
+        revision: str | None = None,
+        device: str | None = None,
+        model_prompts: dict[str, str] | None = None,
+        corpus_chunk_size: int = 50_000,
+        *,
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = None,
+        target_sampling_rate: int | None = None,
+        max_samples: int | None = None,
+        **kwargs: Any,
+    ) -> None:
+        """Wrapper for MultiVectorEncoder models.
+
+        Args:
+            model: The MultiVectorEncoder model to use.
+            revision: The revision of the model to use.
+            device: The device used to load the model.
+            model_prompts: A dictionary mapping task names to prompt names.
+            corpus_chunk_size: Number of corpus documents to encode and score against the queries at
+                once, during a full-corpus search.
+            fps: Target frames per second for video sampling (multimodal inputs only).
+            max_frames: Safety cap on frames per video for FPS mode (multimodal inputs only).
+            num_frames: If set, use fixed-sample mode instead of FPS-based (multimodal inputs only).
+            target_sampling_rate: Sampling rate to resample audio to (multimodal inputs only). Defaults to 16000 when an audio/video collator is applied.
+            max_samples: Maximum number of audio samples to keep (multimodal inputs only).
+            **kwargs: Additional arguments to pass to the MultiVectorEncoder model.
+        """
+        import sentence_transformers
+
+        if (
+            Version(sentence_transformers.__version__).release
+            < Version(SENTENCE_TRANSFORMERS_MULTI_VECTOR_VERSION).release
+        ):
+            raise ImportError(
+                f"sentence-transformers version must be >= {SENTENCE_TRANSFORMERS_MULTI_VECTOR_VERSION} to load a MultiVectorEncoder model."
+            )
+        from sentence_transformers import MultiVectorEncoder
+
+        if isinstance(model, str):
+            self.model = MultiVectorEncoder(
+                model, revision=revision, device=device, **kwargs
+            )
+            self.mteb_model_meta = ModelMeta.create_empty(
+                overwrites=dict(
+                    name=model,
+                    revision=revision,
+                    loader=type(self),
+                    model_type=["late-interaction"],
+                    similarity_fn_name=ScoringFunction.MAX_SIM,
+                )
+            )
+        else:
+            self.model = model
+            self.mteb_model_meta = ModelMeta.from_multi_vector_encoder_model(self.model)
+
+        self.model_prompts = _resolve_model_prompts(self.model, model_prompts)  # type: ignore[arg-type]
+        self.corpus_chunk_size = corpus_chunk_size
+
+        self.fps = fps
+        self.max_frames = max_frames
+        self.num_frames = num_frames
+        self.target_sampling_rate = target_sampling_rate
+        self.max_samples = max_samples
+
+    def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
+        """Compute the MaxSim similarity between two collections of multi-vector embeddings.
+
+        Scoring runs on the model's device; the scores are returned on the documents' device.
+        """
+        # Token embeddings stay on the CPU after encoding, so documents are moved to the model's
+        # device in blocks, each block once, and scored against every query group. Queries are
+        # grouped by length as well, because sentence-transformers pads all of them to the longest
+        # and only chunks along the documents.
+        import torch
+
+        device = self.model.device
+        queries = [torch.as_tensor(q).to(device) for q in _as_vector_list(embeddings1)]
+        documents = _as_vector_list(embeddings2)
+        result_device = (
+            documents[0].device
+            if documents and isinstance(documents[0], torch.Tensor)
+            else torch.device("cpu")
+        )
+        scores = torch.empty(
+            len(queries), len(documents), dtype=torch.float32, device=result_device
+        )
+        if not queries or not documents:
+            return scores
+
+        query_widths = [len(q) for q in queries]
+        for doc_start, doc_end in _max_sim_document_blocks(documents):
+            block = [
+                torch.as_tensor(d).to(device, non_blocking=True)
+                for d in documents[doc_start:doc_end]
+            ]
+            # Padded query tokens per group, so that group * widest document fits the budget
+            query_token_budget = max(
+                1, _MAX_SIM_CHUNK_ELEMENTS // max(len(d) for d in block)
+            )
+            for query_indices in _token_budget_chunks(query_widths, query_token_budget):
+                block_scores = self.model.similarity(
+                    [queries[i] for i in query_indices], block, device=device
+                )
+                scores[
+                    torch.as_tensor(query_indices, device=result_device),
+                    doc_start:doc_end,
+                ] = block_scores.to(result_device, torch.float32)
+            del block
+        return scores
+
+    def similarity_pairwise(self, embeddings1: Array, embeddings2: Array) -> Array:
+        """Compute the pairwise MaxSim similarity between matched multi-vector embedding pairs.
+
+        Scoring runs on the model's device; the scores are returned on the documents' device.
+        """
+        return cast(
+            "Array",
+            self.model.similarity_pairwise(
+                embeddings1, embeddings2, device=self.model.device
+            ),
+        )
+
+    def _encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Unpack[EncodeKwargs],
+    ) -> Array:
+        """Encode the given inputs into per-token multi-vector embeddings.
+
+        Args:
+            inputs: The inputs to encode.
+            task_metadata: The metadata of the task
+            hf_split: Split of current task.
+            hf_subset: Subset of current task.
+            prompt_type: The name type of prompt (query or document).
+            **kwargs: Additional arguments to pass to the encoder.
+
+        Returns:
+            A list of per-input token embeddings, one variable-length `(num_tokens, embed_dim)` tensor per input.
+        """
+        precision = kwargs.pop("precision", None)
+        if precision not in {None, "float32"}:
+            msg = (
+                "MultiVectorWrapper does not support the 'precision' argument: token "
+                f"embeddings are always returned in full precision. Ignoring precision={precision!r}."
+            )
+            logger.warning(msg)
+            warnings.warn(msg, stacklevel=2)
+
+        prompt = _resolve_prompt(self.model_prompts, task_metadata, prompt_type)
+
+        is_multimodal = _setup_modality_collator(
+            inputs,
+            fps=self.fps,
+            max_frames=self.max_frames,
+            num_frames=self.num_frames,
+            target_sampling_rate=self.target_sampling_rate,
+            max_samples=self.max_samples,
+        )
+        encode_function = _select_encode_function(self.model, prompt_type)
+
+        return _encode_batches(
+            inputs,
+            is_multimodal=is_multimodal,
+            encode_function=encode_function,
+            prompt=prompt,
+            modalities=self.mteb_model_meta.modalities,
+            # Keep token embeddings on CPU; `similarity` moves them back to the device in blocks.
+            postprocess_batch=_to_cpu_in_place,
+            concatenate_batches=_concatenate_ragged_batches,
+            # `MultiVectorEncoder.encode` keeps all of a call's per-token embeddings on the device
+            # until it returns, so text is encoded and moved to CPU one batch at a time.
+            encode_text_per_batch=True,
             **kwargs,
         )

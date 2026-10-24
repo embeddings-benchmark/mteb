@@ -29,11 +29,33 @@ class LinceMTBitextMining(AbsTaskBitextMining):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{aguilar2020lince,
-  author = {Aguilar, Gustavo and Kar, Sudipta and Solorio, Thamar},
+@inproceedings{aguilar-etal-2020-lince,
+  address = {Marseille, France},
+  author = {Aguilar, Gustavo  and
+Kar, Sudipta  and
+Solorio, Thamar},
   booktitle = {Proceedings of the Twelfth Language Resources and Evaluation Conference},
+  editor = {Calzolari, Nicoletta  and
+B{\'e}chet, Fr{\'e}d{\'e}ric  and
+Blache, Philippe  and
+Choukri, Khalid  and
+Cieri, Christopher  and
+Declerck, Thierry  and
+Goggi, Sara  and
+Isahara, Hitoshi  and
+Maegaard, Bente  and
+Mariani, Joseph  and
+Mazo, H{\'e}l{\`e}ne  and
+Moreno, Asuncion  and
+Odijk, Jan  and
+Piperidis, Stelios},
+  isbn = {979-10-95546-34-4},
+  language = {eng},
+  month = may,
   pages = {1803--1813},
-  title = {LinCE: A Centralized Benchmark for Linguistic Code-switching Evaluation},
+  publisher = {European Language Resources Association},
+  title = {{L}in{CE}: A Centralized Benchmark for Linguistic Code-switching Evaluation},
+  url = {https://aclanthology.org/2020.lrec-1.223/},
   year = {2020},
 }
 """,

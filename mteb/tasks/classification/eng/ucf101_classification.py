@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -24,7 +26,7 @@ class UCF101Classification(AbsTaskClassification):
             "2012-01-01",
             "2012-12-01",
         ),  # Estimated range for the collection of reviews
-        domains=["Scene"],
+        domains=["Activity", "Sport", "Web"],
         task_subtypes=["Activity recognition"],
         license="not specified",
         annotations_creators="derived",
@@ -43,3 +45,102 @@ class UCF101Classification(AbsTaskClassification):
 }
 """,
     )
+
+
+class UCF101VideoAudioClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="UCF101VideoAudioClassification",
+        description=(
+            "Classifying video clips with audio into 51 human "
+            "action categories from the UCF101 dataset. "
+            "Used official split 1 restricted to a 51-class audio-bearing subset (~4,890 train / ~1,944 test)."
+        ),
+        reference="https://arxiv.org/abs/1212.0402",
+        dataset={
+            "path": "mteb/UCF101-51VA",
+            "revision": "866b006d84629d66d9927646db89bd43381925e7",
+        },
+        type="VideoClassification",
+        category="va2c",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2012-01-01", "2012-12-03"),
+        domains=["Activity", "Sport", "Web"],
+        task_subtypes=["Activity recognition"],
+        license="cc0-1.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        modalities=["video", "audio"],
+        sample_creation="found",
+        bibtex_citation=r"""
+@misc{soomro2012ucf101dataset101human,
+  archiveprefix = {arXiv},
+  author = {Khurram Soomro and Amir Roshan Zamir and Mubarak Shah},
+  eprint = {1212.0402},
+  primaryclass = {cs.CV},
+  title = {UCF101: A Dataset of 101 Human Actions Classes From Videos in The Wild},
+  url = {https://arxiv.org/abs/1212.0402},
+  year = {2012},
+}
+""",
+    )
+    max_fraction_of_documents_to_embed = None
+    input_column_name = ("video", "audio")
+    label_column_name: str = "label"
+
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        for split in self.metadata.eval_splits:
+            self.dataset[split] = self.dataset[split].select_columns(
+                ["video", "audio", "label"],
+            )
+
+
+class UCF101VideoClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="UCF101VideoClassification",
+        description=(
+            "Classifying video clips without audio into 51 human "
+            "action categories from the UCF101 dataset. "
+            "Used official split 1 restricted to a 51-class audio-bearing subset (~4,890 train / ~1,944 test)."
+        ),
+        reference="https://arxiv.org/abs/1212.0402",
+        dataset={
+            "path": "mteb/UCF101-51VA",
+            "revision": "866b006d84629d66d9927646db89bd43381925e7",
+        },
+        type="VideoClassification",
+        category="v2c",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2012-01-01", "2012-12-03"),
+        domains=["Activity", "Sport", "Web"],
+        task_subtypes=["Activity recognition"],
+        license="cc0-1.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        modalities=["video"],
+        sample_creation="found",
+        bibtex_citation=r"""
+@misc{soomro2012ucf101dataset101human,
+  archiveprefix = {arXiv},
+  author = {Khurram Soomro and Amir Roshan Zamir and Mubarak Shah},
+  eprint = {1212.0402},
+  primaryclass = {cs.CV},
+  title = {UCF101: A Dataset of 101 Human Actions Classes From Videos in The Wild},
+  url = {https://arxiv.org/abs/1212.0402},
+  year = {2012},
+}
+""",
+        is_beta=True,
+    )
+    max_fraction_of_documents_to_embed = None
+    input_column_name = "video"
+    label_column_name: str = "label"
+
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        for split in self.metadata.eval_splits:
+            self.dataset[split] = self.dataset[split].select_columns(
+                ["video", "label"],
+            )

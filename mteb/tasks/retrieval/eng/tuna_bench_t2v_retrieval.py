@@ -1,0 +1,101 @@
+from __future__ import annotations
+
+from typing import Any
+
+from datasets import load_dataset
+
+from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
+from mteb.abstasks.task_metadata import TaskMetadata
+
+
+class TUNABenchT2VRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="TUNABenchT2VRetrieval",
+        description=(
+            "Retrieve the video clip that matches a given fine-grained English caption "
+            "from the TUNA-Bench dataset of dense dynamic videos with detailed "
+            "temporal descriptions."
+            " Used the `TUNA-1K` config test split (~1,000 examples)."
+        ),
+        reference="https://arxiv.org/abs/2505.20124",
+        dataset={
+            "path": "mteb/TUNA-Bench_1K",
+            "revision": "0a2b6ec66a3f662f68ac0f0649020b3c37d8551c",
+        },
+        type="Any2AnyRetrieval",
+        category="t2v",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        date=("2025-01-01", "2025-12-31"),
+        domains=["Web"],
+        task_subtypes=["Caption Pairing"],
+        license="cc-by-4.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        modalities=["text", "video"],
+        sample_creation="found",
+        bibtex_citation=r"""
+@inproceedings{kong-etal-2025-tuna,
+  address = {Vienna, Austria},
+  author = {Kong, Fanheng  and
+Zhang, Jingyuan  and
+Zhang, Hongzhi  and
+Feng, Shi  and
+Wang, Daling  and
+Yu, Linhao  and
+Ji, Xingguang  and
+Tian, Yu  and
+W., Victoria  and
+Zhang, Fuzheng},
+  booktitle = {Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2025.acl-long.91},
+  editor = {Che, Wanxiang  and
+Nabende, Joyce  and
+Shutova, Ekaterina  and
+Pilehvar, Mohammad Taher},
+  isbn = {979-8-89176-251-0},
+  month = jul,
+  pages = {1810--1839},
+  publisher = {Association for Computational Linguistics},
+  title = {{TUNA}: Comprehensive Fine-grained Temporal Understanding Evaluation on Dense Dynamic Videos},
+  url = {https://aclanthology.org/2025.acl-long.91/},
+  year = {2025},
+}
+""",
+        prompt={
+            "query": "Find the video clip that matches the given caption.",
+        },
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        """Load the TUNA-Bench dataset for text-to-video retrieval.
+
+        TODO: Reupload dataset in standard format and remove this custom load_data.
+        """
+        if self.data_loaded:
+            return
+        self.dataset = {"default": {}}
+        dataset = load_dataset(
+            self.metadata.dataset["path"],
+            revision=self.metadata.dataset["revision"],
+            split=self.metadata.eval_splits[0],
+        )
+        dataset = dataset.add_column("id", [str(i) for i in range(len(dataset))])
+
+        query = dataset.select_columns(["id", "caption"]).rename_column(
+            "caption", "text"
+        )
+        corpus = dataset.select_columns(["id", "video"])
+        qrels = {}
+        for i in range(len(dataset)):
+            key = str(i)
+            if key not in qrels:
+                qrels[key] = {}
+            qrels[key][key] = 1
+        self.dataset["default"]["test"] = RetrievalSplitData(
+            queries=query, corpus=corpus, relevant_docs=qrels, top_ranked=None
+        )
+        self.data_loaded = True

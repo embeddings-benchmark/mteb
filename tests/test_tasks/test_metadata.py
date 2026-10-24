@@ -10,8 +10,11 @@ from mteb.get_tasks import get_tasks
 _HISTORIC_DATASETS = []
 
 
+# TODO https://github.com/embeddings-benchmark/mteb/issues/4378
 @pytest.mark.parametrize(
-    "task", get_tasks(exclude_superseded=False, exclude_aggregate=False)
+    "task",
+    get_tasks(exclude_superseded=False, exclude_aggregate=False, exclude_beta=False),
+    ids=lambda x: x.metadata.name,
 )
 def test_all_metadata_is_filled_and_valid(task: AbsTask):
     # --- test metadata is filled and valid ---
@@ -30,32 +33,30 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
         f"Dataset {task.metadata.name} should not trust remote code"
     )
 
+    # --- Check simplifiedtasktypes is valid ---
+    assert isinstance(task.metadata.simplified_task_type, str)
+
     # --- Test is descriptive stats are present for all datasets ---
     if task.is_aggregate:  # aggregate tasks do not have descriptive stats
+        assert set(task.metadata.hf_subsets_to_langscripts.keys()) == {"default"}, (
+            f"Aggregate task {task.metadata.name} has incorrect eval_langs, only a default subset is allowed"
+        )
         return
-
-    # TODO https://github.com/embeddings-benchmark/mteb/issues/3498
-    if task.metadata.name in (
-        "FleursA2TRetrieval",
-        "FleursT2ARetrieval",
-        "SoundDescsA2TRetrieval",
-        "SoundDescsT2ARetrieval",
-        "BirdSet",
-        "AudioSet",
-    ):
-        assert task.metadata.descriptive_stats is None
-        pytest.skip("Skipping audio tasks for now, see issue #3498")
 
     assert task.metadata.descriptive_stats is not None, (
         f"Dataset {task.metadata.name} should have descriptive stats. You can add metadata to your task by running `YourTask().calculate_descriptive_statistics()`"
     )
     assert task.metadata.n_samples is not None
 
-    if task.metadata.prompt is not None and isinstance(task.metadata.prompt, dict):
-        if not (
-            isinstance(task, AbsTaskRetrieval) or task.metadata.name in ["TERRa.V2"]
-        ):
-            # Retrieval tasks and TERRa.V2 have a dict prompt, but other tasks should not
-            raise ValueError(
-                f"Task {task.metadata.name} has a dict prompt, but it should be a string. Please check the metadata of the task."
-            )
+    # Retrieval tasks and TERRa.V2 have a dict prompt, but other tasks should not
+    if (
+        task.metadata.prompt is not None
+        and isinstance(task.metadata.prompt, dict)
+        and not (
+            isinstance(task, AbsTaskRetrieval) or task.metadata.name in ["TERRa.V2"]  # noqa: PLR6201
+        )
+    ):
+        # Retrieval tasks and TERRa.V2 have a dict prompt, but other tasks should not
+        raise ValueError(
+            f"Task {task.metadata.name} has a dict prompt, but it should be a string. Please check the metadata of the task."
+        )

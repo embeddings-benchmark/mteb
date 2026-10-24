@@ -1,17 +1,16 @@
-import torch
-
 from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
 
 from .bge_models import bge_training_data
 from .e5_models import E5_TRAINING_DATA
 from .sentence_transformers_models import sent_trf_training_dataset
 
 Haon_Chen__speed_embedding_7b_instruct = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="Haon-Chen/speed-embedding-7b-instruct",
     model_type=["dense"],
     revision="c167e9a8144b397622ce47b85d9edcdeecef3d3f",
@@ -39,6 +38,7 @@ Haon_Chen__speed_embedding_7b_instruct = ModelMeta(
     journal={arXiv preprint arXiv:2410.18634},
     year={2024}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 Gameselo__STS_multilingual_mpnet_base_v2 = ModelMeta(
     name="Gameselo/STS-multilingual-mpnet-base-v2",
@@ -46,7 +46,7 @@ Gameselo__STS_multilingual_mpnet_base_v2 = ModelMeta(
     revision="449f917af30f590fc31f9ffb226c94f21a2f47b8",
     release_date="2024-06-07",
     languages=[],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=278043648,
     n_embedding_parameters=192_001_536,
     memory_usage_mb=1061,
@@ -148,7 +148,7 @@ Hum_Works__lodestone_base_4096_v1 = ModelMeta(
     revision="9bbc2d0b57dd2198aea029404b0f976712a7d966",
     release_date="2023-08-25",
     languages=["eng-Latn"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=137368320,
     n_embedding_parameters=23445504,
     memory_usage_mb=None,
@@ -209,6 +209,7 @@ Hum_Works__lodestone_base_4096_v1 = ModelMeta(
     },
     adapted_from="hum-lodestone-v1",
     superseded_by=None,
+    output_dtypes=OutputDType.BF16,
 )
 Jaume__gemma_2b_embeddings = ModelMeta(
     name="Jaume/gemma-2b-embeddings",
@@ -216,7 +217,7 @@ Jaume__gemma_2b_embeddings = ModelMeta(
     revision="86431f65d7c3f66b2af096c61e614a2958f191f1",
     release_date="2024-06-29",
     languages=[],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=2506172416,
     n_embedding_parameters=524288000,
     memory_usage_mb=9560,
@@ -249,7 +250,7 @@ Lajavaness__bilingual_embedding_base = ModelMeta(
     revision="0bfc54bb2aa2666dd84715289c7ef58a95eb4d8d",
     release_date="2024-06-26",
     languages=None,
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
     ),
@@ -293,11 +294,14 @@ Lajavaness__bilingual_embedding_base = ModelMeta(
       bibsource = {dblp computer science bibliography, https://dblp.org}
     }
 
-@article{reimers2019sentence,
-   title={Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
-   author={Nils Reimers, Iryna Gurevych},
-   journal={https://arxiv.org/abs/1908.10084},
-   year={2019}
+@inproceedings{reimers-2019-sentence-bert,
+  author = {Reimers, Nils and Gurevych, Iryna},
+  booktitle = {Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing},
+  month = {11},
+  publisher = {Association for Computational Linguistics},
+  title = {Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
+  url = {https://arxiv.org/abs/1908.10084},
+  year = {2019},
 }
 
 @article{thakur2020augmented,
@@ -308,6 +312,7 @@ Lajavaness__bilingual_embedding_base = ModelMeta(
   year={2020}
 }
 """,
+    output_dtypes=OutputDType.FLOAT16,
 )
 Lajavaness__bilingual_embedding_large = ModelMeta(
     name="Lajavaness/bilingual-embedding-large",
@@ -315,7 +320,7 @@ Lajavaness__bilingual_embedding_large = ModelMeta(
     revision="e83179d7a66e8aed1b3015e98bb5ae234ed89598",
     release_date="2024-06-24",
     languages=["fra-Latn", "eng-Latn"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
     ),
@@ -359,11 +364,14 @@ Lajavaness__bilingual_embedding_large = ModelMeta(
       bibsource = {dblp computer science bibliography, https://dblp.org}
     }
 
-@article{reimers2019sentence,
-   title={Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
-   author={Nils Reimers, Iryna Gurevych},
-   journal={https://arxiv.org/abs/1908.10084},
-   year={2019}
+@inproceedings{reimers-2019-sentence-bert,
+  author = {Reimers, Nils and Gurevych, Iryna},
+  booktitle = {Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing},
+  month = {11},
+  publisher = {Association for Computational Linguistics},
+  title = {Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
+  url = {https://arxiv.org/abs/1908.10084},
+  year = {2019},
 }
 
 @article{thakur2020augmented,
@@ -374,6 +382,7 @@ Lajavaness__bilingual_embedding_large = ModelMeta(
   year={2020}
 }
 """,
+    output_dtypes=OutputDType.FLOAT16,
 )
 Lajavaness__bilingual_embedding_small = ModelMeta(
     name="Lajavaness/bilingual-embedding-small",
@@ -381,7 +390,7 @@ Lajavaness__bilingual_embedding_small = ModelMeta(
     revision="ed4a1dd814de0db81d4a4e287c296a03194463e3",
     release_date="2024-07-17",
     languages=["fra-Latn", "eng-Latn"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
     ),
@@ -425,11 +434,14 @@ Lajavaness__bilingual_embedding_small = ModelMeta(
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 
-@article{reimers2019sentence,
-   title={Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
-   author={Nils Reimers, Iryna Gurevych},
-   journal={https://arxiv.org/abs/1908.10084},
-   year={2019}
+@inproceedings{reimers-2019-sentence-bert,
+  author = {Reimers, Nils and Gurevych, Iryna},
+  booktitle = {Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing},
+  month = {11},
+  publisher = {Association for Computational Linguistics},
+  title = {Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
+  url = {https://arxiv.org/abs/1908.10084},
+  year = {2019},
 }
 
 @article{thakur2020augmented,
@@ -447,7 +459,7 @@ Mihaiii__Bulbasaur = ModelMeta(
     revision="6876f839e18ae36224049a41194a431953f08747",
     release_date="2024-04-27",
     languages=None,
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=17389824,
     n_embedding_parameters=11_720_448,
     memory_usage_mb=66,
@@ -472,7 +484,7 @@ Mihaiii__Ivysaur = ModelMeta(
     revision="65914d976f45beb4bda7485c39d88865b4ce6554",
     release_date="2024-04-27",
     languages=None,
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=22713216,
     n_embedding_parameters=11_720_448,
     memory_usage_mb=87,
@@ -497,7 +509,7 @@ Mihaiii__Squirtle = ModelMeta(
     revision="5b991da48a9286637a256d4a35aab87a1a57b78a",
     release_date="2024-04-30",
     languages=None,
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=15615360,
     n_embedding_parameters=11_720_448,
     memory_usage_mb=60,
@@ -522,7 +534,7 @@ Mihaiii__Venusaur = ModelMeta(
     revision="0dc817f0addbb7bab8feeeeaded538f9ffeb3419",
     release_date="2024-04-29",
     languages=None,
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=15615360,
     n_embedding_parameters=11_720_448,
     memory_usage_mb=60,
@@ -547,7 +559,7 @@ Mihaiii__Wartortle = ModelMeta(
     revision="14caca5253414d38a7d28b62d1b7c30ef3293a87",
     release_date="2024-04-30",
     languages=None,
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=17389824,
     n_embedding_parameters=11_720_448,
     memory_usage_mb=66,
@@ -572,7 +584,7 @@ Mihaiii__gte_micro = ModelMeta(
     revision="6fd2397cb9dfa7c901aedf9a2a44d3c888ccafdd",
     release_date="2024-04-21",
     languages=None,
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=17389824,
     n_embedding_parameters=11_720_448,
     memory_usage_mb=66,
@@ -596,7 +608,7 @@ Mihaiii__gte_micro_v4 = ModelMeta(
     revision="78e1a4b348f8524c3ab2e3e3475788f5adb8c98f",
     release_date="2024-04-22",
     languages=None,
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=19164288,
     n_embedding_parameters=11_720_448,
     memory_usage_mb=73,
@@ -620,7 +632,7 @@ OrdalieTech__Solon_embeddings_large_0_1 = ModelMeta(
     revision="9f6465f6ea2f6d10c6294bc15d84edf87d47cdef",
     release_date="2023-12-09",
     languages=["fra-Latn"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=559890432,
     n_embedding_parameters=256_002_048,
     memory_usage_mb=2136,
@@ -644,7 +656,7 @@ Omartificial_Intelligence_Space__Arabert_all_nli_triplet_Matryoshka = ModelMeta(
     revision="d0361a36f6fe69febfc8550d0918abab174f6f30",
     release_date="2024-06-16",
     languages=["ara-Arab"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=135193344,
     n_embedding_parameters=49_152_000,
     memory_usage_mb=516,
@@ -677,7 +689,7 @@ Omartificial_Intelligence_Space__Arabic_MiniLM_L12_v2_all_nli_triplet = ModelMet
     revision="6916465c43b984e955aa6dc72851474f0128f428",
     release_date="2024-06-25",
     languages=["ara-Arab"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=117653760,
     n_embedding_parameters=96_014_208,
     memory_usage_mb=449,
@@ -703,7 +715,7 @@ Omartificial_Intelligence_Space__Arabic_all_nli_triplet_Matryoshka = ModelMeta(
     revision="1ca467cc576bd76666a4d21b24ee43afa914dd10",
     release_date="2024-06-14",
     languages=["ara-Arab"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=278043648,
     n_embedding_parameters=192_001_536,
     memory_usage_mb=1061,
@@ -738,7 +750,7 @@ Omartificial_Intelligence_Space__Arabic_labse_Matryoshka = ModelMeta(
     revision="ee6d5e33c78ed582ade47fd452a74ea52aa5bfe2",
     release_date="2024-06-16",
     languages=["ara-Arab"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=470926848,
     n_embedding_parameters=384_885_504,
     memory_usage_mb=1796,
@@ -773,7 +785,7 @@ Omartificial_Intelligence_Space__Arabic_mpnet_base_all_nli_triplet = ModelMeta(
     revision="2628cb641e040f44328195fadcdfb58e6d5cffa7",
     release_date="2024-06-15",
     languages=["ara-Arab"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=109486464,
     n_embedding_parameters=23_444_736,
     memory_usage_mb=418,
@@ -808,7 +820,7 @@ Omartificial_Intelligence_Space__Marbert_all_nli_triplet_Matryoshka = ModelMeta(
     revision="ecf3274e164f057c4a3dd70691cae0265d87a9d0",
     release_date="2024-06-17",
     languages=["ara-Arab"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=162841344,
     n_embedding_parameters=76_800_000,
     memory_usage_mb=621,
@@ -841,7 +853,7 @@ consciousai__cai_lunaris_text_embeddings = ModelMeta(
     revision="8332c464d13505968ff7a6e2213f36fd8730b4c7",
     release_date="2023-06-22",
     languages=None,
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=335141888,
     n_embedding_parameters=31_254_528,
     memory_usage_mb=None,
@@ -865,7 +877,7 @@ consciousai__cai_stellaris_text_embeddings = ModelMeta(
     revision="c000ec4b29588daf0f4a0b2ad4e72ee807d8efc0",
     release_date="2023-06-23",
     languages=None,
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=None,
     n_embedding_parameters=None,
     memory_usage_mb=None,
@@ -898,7 +910,7 @@ manu__sentence_croissant_alpha_v0_2 = ModelMeta(
     revision="4610b8cea65d7dd59e0b04af50753933fe5b29b2",
     release_date="2024-03-15",
     languages=None,
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=1279887360,
     n_embedding_parameters=65_536_000,
     memory_usage_mb=2441,
@@ -915,6 +927,7 @@ manu__sentence_croissant_alpha_v0_2 = ModelMeta(
     training_datasets=SENTENCE_CROISSANT_TRAINING_DATA,
     adapted_from="croissantllm/CroissantCool",
     superseded_by="manu/sentence_croissant_alpha_v0.3",
+    output_dtypes=OutputDType.BF16,
 )
 manu__sentence_croissant_alpha_v0_3 = ModelMeta(
     name="manu/sentence_croissant_alpha_v0.3",
@@ -922,7 +935,7 @@ manu__sentence_croissant_alpha_v0_3 = ModelMeta(
     revision="4ac16754f3d81aba76cc32955dc9ee4122df96eb",
     release_date="2024-04-26",
     languages=None,
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=1279887360,
     n_embedding_parameters=65_536_000,
     memory_usage_mb=2441,
@@ -939,6 +952,7 @@ manu__sentence_croissant_alpha_v0_3 = ModelMeta(
     training_datasets=SENTENCE_CROISSANT_TRAINING_DATA,
     adapted_from="croissantllm/CroissantCool-v0.2",
     superseded_by="manu/sentence_croissant_alpha_v0.4",
+    output_dtypes=OutputDType.BF16,
 )
 manu__sentence_croissant_alpha_v0_4 = ModelMeta(
     name="manu/sentence_croissant_alpha_v0.4",
@@ -946,7 +960,7 @@ manu__sentence_croissant_alpha_v0_4 = ModelMeta(
     revision="0ce6372e6a3c21134dcf26dcde13cca869c767fc",
     release_date="2024-04-27",
     languages=["fra-Latn", "eng-Latn"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=1279887360,
     n_embedding_parameters=65_536_000,
     memory_usage_mb=2441,
@@ -964,6 +978,7 @@ manu__sentence_croissant_alpha_v0_4 = ModelMeta(
     # Not in MTEB: {"manu/embedding_data_v2_100k"},
     adapted_from="croissantllm/CroissantCool-v0.2",
     superseded_by=None,
+    output_dtypes=OutputDType.BF16,
 )
 thenlper__gte_base = ModelMeta(
     name="thenlper/gte-base",
@@ -971,7 +986,7 @@ thenlper__gte_base = ModelMeta(
     revision="c078288308d8dee004ab72c6191778064285ec0c",
     release_date="2023-07-27",
     languages=["eng-Latn"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=109482752,
     n_embedding_parameters=23_440_896,
     memory_usage_mb=209,
@@ -994,6 +1009,7 @@ thenlper__gte_base = ModelMeta(
   journal={arXiv preprint arXiv:2308.03281},
   year={2023}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 thenlper__gte_large = ModelMeta(
     name="thenlper/gte-large",
@@ -1001,7 +1017,7 @@ thenlper__gte_large = ModelMeta(
     revision="4bef63f39fcc5e2d6b0aae83089f307af4970164",
     release_date="2023-07-27",
     languages=["eng-Latn"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=335142400,
     n_embedding_parameters=31_254_528,
     memory_usage_mb=639,
@@ -1024,6 +1040,7 @@ thenlper__gte_large = ModelMeta(
   journal={arXiv preprint arXiv:2308.03281},
   year={2023}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 thenlper__gte_small = ModelMeta(
     name="thenlper/gte-small",
@@ -1031,7 +1048,7 @@ thenlper__gte_small = ModelMeta(
     revision="17e1f347d17fe144873b1201da91788898c639cd",
     release_date="2023-07-27",
     languages=["eng-Latn"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=33360512,
     n_embedding_parameters=11_720_448,
     memory_usage_mb=64,
@@ -1054,6 +1071,7 @@ thenlper__gte_small = ModelMeta(
   journal={arXiv preprint arXiv:2308.03281},
   year={2023}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 sdadas__mmlw_e5_base = ModelMeta(
     name="sdadas/mmlw-e5-base",
@@ -1061,7 +1079,7 @@ sdadas__mmlw_e5_base = ModelMeta(
     revision="f10628ed55b5ec400502aff439bd714a6da0af30",
     release_date="2023-11-17",
     languages=["pol-Latn"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=278043648,
     n_embedding_parameters=192_001_536,
     memory_usage_mb=1061,
@@ -1093,7 +1111,7 @@ dwzhu__e5_base_4k = ModelMeta(
     revision="1b5664b8cb2bccd8c309429b7bfe5864402e8fbc",
     release_date="2024-03-28",
     languages=["eng-Latn"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=112234752,
     n_embedding_parameters=23_440_896,
     memory_usage_mb=None,
@@ -1116,6 +1134,7 @@ dwzhu__e5_base_4k = ModelMeta(
   journal={arXiv preprint arXiv:2404.12096},
   year={2024}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 sdadas__mmlw_e5_large = ModelMeta(
     name="sdadas/mmlw-e5-large",
@@ -1123,7 +1142,7 @@ sdadas__mmlw_e5_large = ModelMeta(
     revision="5c143fb045ebed664fd85b43fc45155999eb110f",
     release_date="2023-11-17",
     languages=["pol-Latn"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=559890432,
     n_embedding_parameters=256_002_048,
     memory_usage_mb=2136,
@@ -1155,7 +1174,7 @@ sdadas__mmlw_e5_small = ModelMeta(
     revision="ff1298cb6d997f18b794d2f3d73cad2ba2ad739a",
     release_date="2023-11-17",
     languages=["pol-Latn"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=117653760,
     n_embedding_parameters=96_014_208,
     memory_usage_mb=449,
@@ -1184,10 +1203,10 @@ sdadas__mmlw_e5_small = ModelMeta(
 sdadas__mmlw_roberta_base = ModelMeta(
     name="sdadas/mmlw-roberta-base",
     model_type=["dense"],
-    revision="0ac7f23f6c96af601fa6a17852bd08d5136d6365",
+    revision="3afc79f75b26629881f9991571b0a444d5d22fa4",
     release_date="2023-11-17",
     languages=["pol-Latn"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=124442880,
     n_embedding_parameters=38_400_768,
     memory_usage_mb=475,
@@ -1216,10 +1235,10 @@ sdadas__mmlw_roberta_base = ModelMeta(
 sdadas__mmlw_roberta_large = ModelMeta(
     name="sdadas/mmlw-roberta-large",
     model_type=["dense"],
-    revision="b8058066a8de32d0737b3cd82d8b4f4108745af9",
+    revision="36ff7df7f0813041796f0ea49d974c07f086304e",
     release_date="2023-11-17",
     languages=["pol-Latn"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=434961408,
     n_embedding_parameters=131_073_024,
     memory_usage_mb=1659,
@@ -1306,7 +1325,7 @@ izhx__udever_bloom_1b1 = ModelMeta(
     revision="7bf1ee29878cb040b2708a691aa4b61f27eaa252",
     release_date="2023-10-24",
     languages=udever_languages,
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=1065314304,
     n_embedding_parameters=385_351_680,
     memory_usage_mb=None,
@@ -1336,7 +1355,7 @@ izhx__udever_bloom_3b = ModelMeta(
     revision="4edd8affe80ca89ba0f6b6ba4103fc7f25fc57b2",
     release_date="2023-10-24",
     languages=udever_languages,
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=3002557440,
     n_embedding_parameters=642_252_800,
     memory_usage_mb=None,
@@ -1366,7 +1385,7 @@ izhx__udever_bloom_560m = ModelMeta(
     revision="b2a723e355946ec5a5c5fbed3459766627ded2bb",
     release_date="2023-10-24",
     languages=udever_languages,
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=559214592,
     n_embedding_parameters=256_901_120,
     memory_usage_mb=None,
@@ -1396,7 +1415,7 @@ izhx__udever_bloom_7b1 = ModelMeta(
     revision="18e8d3e6dbd94868584877f2e72a105a17df22ef",
     release_date="2023-10-24",
     languages=udever_languages,
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=None,
     n_embedding_parameters=1_027_604_480,
     memory_usage_mb=None,
@@ -1426,7 +1445,7 @@ avsolatorio__gist_embedding_v0 = ModelMeta(
     revision="bf6b2e55e92f510a570ad4d7d2da2ec8cd22590c",
     release_date="2024-01-31",
     languages=["eng-Latn"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=109482240,
     n_embedding_parameters=23_440_896,
     memory_usage_mb=418,
@@ -1477,7 +1496,7 @@ avsolatorio__gist_all_minilm_l6_v2 = ModelMeta(
     revision="ea89dfad053bba14677bb784a4269898abbdce44",
     release_date="2024-02-03",
     languages=["eng-Latn"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=22713216,
     n_embedding_parameters=11_720_448,
     memory_usage_mb=87,
@@ -1528,7 +1547,7 @@ avsolatorio__gist_large_embedding_v0 = ModelMeta(
     revision="7831200e2f7819b994490c091cf3258a2b821f0c",
     release_date="2024-02-14",
     languages=["eng-Latn"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=335141888,
     n_embedding_parameters=31_254_528,
     memory_usage_mb=1278,
@@ -1579,7 +1598,7 @@ avsolatorio__gist_small_embedding_v0 = ModelMeta(
     revision="d6c4190f9e01b9994dc7cac99cf2f2b85cfb57bc",
     release_date="2024-02-03",
     languages=["eng-Latn"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=33360000,
     n_embedding_parameters=11_720_448,
     memory_usage_mb=127,
@@ -1630,7 +1649,7 @@ bigscience__sgpt_bloom_7b1_msmarco = ModelMeta(
     revision="dc579f3d2d5a0795eba2049e16c3e36c74007ad3",
     release_date="2022-08-26",
     languages=None,
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=7068205056,
     n_embedding_parameters=1_026_793_472,
     memory_usage_mb=None,
@@ -1660,7 +1679,7 @@ aari1995__german_semantic_sts_v2 = ModelMeta(
     revision="22912542b0ec7a7ef369837e28ffe6352a27afc9",
     release_date="2022-11-17",
     languages=["deu-Latn"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=335736320,
     n_embedding_parameters=31_848_448,
     memory_usage_mb=1281,
@@ -1685,7 +1704,7 @@ abhinand__medembed_small_v0_1 = ModelMeta(
     revision="40a5850d046cfdb56154e332b4d7099b63e8d50e",
     release_date="2024-10-20",
     languages=["eng-Latn"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=33360000,
     n_embedding_parameters=11_720_448,
     memory_usage_mb=127,
@@ -1711,12 +1730,6 @@ abhinand__medembed_small_v0_1 = ModelMeta(
     },
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
-    citation="""@software{balachandran2024medembed,
-  author = {Balachandran, Abhinand},
-  title = {MedEmbed: Medical-Focused Embedding Models},
-  year = {2024},
-  url = {https://github.com/abhinand5/MedEmbed}
-}""",
 )
 avsolatorio__noinstruct_small_embedding_v0 = ModelMeta(
     name="avsolatorio/NoInstruct-small-Embedding-v0",
@@ -1724,7 +1737,7 @@ avsolatorio__noinstruct_small_embedding_v0 = ModelMeta(
     revision="b38747000553d8268915c95a55fc87e707c9aadd",
     release_date="2024-05-01",
     languages=["eng-Latn"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=33360000,
     n_embedding_parameters=11720448,
     memory_usage_mb=127,
@@ -1748,7 +1761,7 @@ brahmairesearch__slx_v0_1 = ModelMeta(
     revision="688c83fd1a7f34b25575a2bc26cfd87c11b4ce71",
     release_date="2024-08-13",
     languages=["eng-Latn"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=22713216,
     n_embedding_parameters=11_720_448,
     memory_usage_mb=87,
@@ -1772,7 +1785,7 @@ deepfile__embedder_100p = ModelMeta(
     revision="aa02f08f11517977fbcdc94dc9dbf9a1ca152d9b",
     release_date="2023-07-24",
     languages=None,
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=278043648,
     n_embedding_parameters=192_001_536,
     memory_usage_mb=1061,
@@ -1796,7 +1809,7 @@ infgrad__stella_base_en_v2 = ModelMeta(
     revision="c9e80ff9892d80b39dc54e30a7873f91ea161034",
     release_date="2023-10-19",
     languages=["eng-Latn"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=109482240,
     n_embedding_parameters=23_440_896,
     memory_usage_mb=None,
@@ -1813,6 +1826,7 @@ infgrad__stella_base_en_v2 = ModelMeta(
     training_datasets=None,
     adapted_from=None,
     superseded_by=None,
+    output_dtypes=OutputDType.FLOAT16,
 )
 malenia1__ternary_weight_embedding = ModelMeta(
     name="malenia1/ternary-weight-embedding",
@@ -1820,7 +1834,7 @@ malenia1__ternary_weight_embedding = ModelMeta(
     revision="a1208fb7f646647bb62639fd2e1eb6cc2ef3738e",
     release_date="2024-10-23",
     languages=None,
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=98688000,
     n_embedding_parameters=None,
     memory_usage_mb=158,
@@ -1844,7 +1858,7 @@ omarelshehy__arabic_english_sts_matryoshka = ModelMeta(
     revision="763d116fbe8bf7883c64635c862feeaa3768bb64",
     release_date="2024-10-13",
     languages=["ara-Arab", "eng-Latn"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=559890432,
     n_embedding_parameters=256_002_048,
     memory_usage_mb=2136,
@@ -1872,11 +1886,11 @@ omarelshehy__arabic_english_sts_matryoshka = ModelMeta(
 }""",
 )
 openbmb__minicpm_embedding = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_kwargs={
             # "attn_implementation": "flash_attention_2",
-            "torch_dtype": torch.float16,
+            "torch_dtype": OutputDType.FLOAT16,
         },
         trust_remote_code=True,
         # https://huggingface.co/openbmb/MiniCPM-Embedding/blob/c0cb2de33fb366e17c30f9d53142ff11bc18e049/README.md?code=true#L405
@@ -1902,6 +1916,7 @@ openbmb__minicpm_embedding = ModelMeta(
     training_datasets=None,
     adapted_from=None,
     superseded_by=None,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 silma_ai__silma_embedding_matryoshka_v0_1 = ModelMeta(
@@ -1910,7 +1925,7 @@ silma_ai__silma_embedding_matryoshka_v0_1 = ModelMeta(
     revision="a520977a9542ebdb8a7206df6b7ff6977f1886ea",
     release_date="2024-10-12",
     languages=["ara-Arab", "eng-Latn"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=135193344,
     n_embedding_parameters=49_152_000,
     memory_usage_mb=516,
@@ -1927,13 +1942,7 @@ silma_ai__silma_embedding_matryoshka_v0_1 = ModelMeta(
     training_datasets=None,
     adapted_from="/workspace/v3-matryoshka_aubmindlab-bert-base-arabertv02-2024-10-12_13-55-06/checkpoint-26250",
     superseded_by=None,
-    citation="""@misc{silma2024embedding,
-  author = {Abu Bakr Soliman, Karim Ouda, SILMA AI},
-  title = {SILMA Embedding Matryoshka 0.1},
-  year = {2024},
-  publisher = {Hugging Face},
-  howpublished = {https://huggingface.co/silma-ai/silma-embeddding-matryoshka-0.1},
-}""",
+    citation=None,
 )
 
 sbert_chinese_general_v1 = ModelMeta(
@@ -1942,7 +1951,7 @@ sbert_chinese_general_v1 = ModelMeta(
     revision="bd27765956bcc2fcf682de0097819947ac10037e",
     release_date="2022-03-25",
     languages=["zho-Hans"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=102267648,
     n_embedding_parameters=16_226_304,
     memory_usage_mb=None,  # Not visible on repo
@@ -1971,7 +1980,7 @@ dmeta_embedding_zh_small = ModelMeta(
     revision="2050d3439a2f68999dd648c1697471acaac37a29",
     release_date="2024-03-25",
     languages=["zho-Hans"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=int(74.2 * 1e6),
     n_embedding_parameters=16_226_304,
     memory_usage_mb=283,
@@ -1995,7 +2004,7 @@ xiaobu_embedding = ModelMeta(
     revision="59c79d82eb5223cd9895f6eb8e825c7fa10e4e92",
     release_date="2024-01-09",
     languages=["zho-Hans"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=int(326 * 1e6),
     n_embedding_parameters=21_635_072,
     memory_usage_mb=1244,
@@ -2020,7 +2029,7 @@ xiaobu_embedding_v2 = ModelMeta(
     revision="1912f2e59a5c2ef802a471d735a38702a5c9485e",
     release_date="2024-06-30",
     languages=["zho-Hans"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=int(326 * 1e6),
     n_embedding_parameters=21_635_072,
     memory_usage_mb=1242,
@@ -2045,7 +2054,7 @@ yinka_embedding = ModelMeta(
     revision="59c79d82eb5223cd9895f6eb8e825c7fa10e4e92",
     release_date="2024-01-09",
     languages=["zho-Hans"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=int(326 * 1e6),
     n_embedding_parameters=21_635_072,
     memory_usage_mb=1244,
@@ -2069,7 +2078,7 @@ conan_embedding = ModelMeta(
     revision="bb9749a57d4f02fd71722386f8d0f5a9398d7eeb",
     release_date="2024-08-22",
     languages=["zho-Hans"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     n_parameters=int(326 * 1e6),
     n_embedding_parameters=21_635_072,
     memory_usage_mb=1242,
@@ -2080,7 +2089,7 @@ conan_embedding = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     framework=["PyTorch", "Sentence Transformers", "safetensors"],
-    reference="https://huggingface.co/Classical/Yinka",
+    reference="https://huggingface.co/TencentBAC/Conan-embedding-v1",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=None,
     # source: https://arxiv.org/pdf/2408.15710
@@ -2098,7 +2107,7 @@ conan_embedding = ModelMeta(
 )
 
 ember_v1 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="llmrails/ember-v1",
     model_type=["dense"],
     revision="5e5ce5904901f6ce1c353a95020f17f09e5d021d",
@@ -2119,9 +2128,33 @@ ember_v1 = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     superseded_by=None,
-    citation="""@misc{nur2024emberv1,
-      title={ember-v1: SOTA embedding model},
-      author={Enrike Nur and Anar Aliyev},
-      year={2023},
-}""",
+)
+amgix__static_retrieval_multilingual_69m_v1 = ModelMeta(
+    name="amgix/static-retrieval-multilingual-69m-v1",
+    model_type=["dense"],
+    revision="f777a93cd958b280b6c7fad5aaac3cd59d676822",
+    release_date="2026-08-16",
+    languages=None,
+    loader=SentenceTransformerEncoderWrapper,
+    n_parameters=69_095_424,
+    n_embedding_parameters=69_095_424,
+    memory_usage_mb=274,
+    max_tokens=None,
+    embed_dim=384,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch", "Sentence Transformers", "safetensors"],
+    reference="https://huggingface.co/amgix/static-retrieval-multilingual-69m-v1",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=None,
+    training_datasets={
+        "MSMARCO",  # mMARCO
+        "FiQA2018",  # FIQA
+        # Not in MTEB: GooAQ, S2ORC, Free-Law-Project/opinions-synthetic-query-512
+        # MIRACL languages: ar, bn, en, es, fa, fi, fr, hi, id, ja, ko, ru, sw, te, th, zh
+    },
+    adapted_from="ibm-granite/granite-embedding-97m-multilingual-r2",
+    superseded_by=None,
 )

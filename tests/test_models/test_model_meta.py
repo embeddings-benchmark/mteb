@@ -1,7 +1,12 @@
+import json
+import re
+from typing import Any
+
 import pytest
 
 import mteb
-from mteb.models.model_meta import ModelMeta
+from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 # Historic models with n_embedding_parameters=None. Do NOT add new models to this list.
 _MISSING_N_EMBEDDING_MODELS = [
@@ -18,47 +23,21 @@ _MISSING_N_EMBEDDING_MODELS = [
     "QuanSun/EVA02-CLIP-bigE-14",
     "QuanSun/EVA02-CLIP-bigE-14-plus",
     "Salesforce/SFR-Embedding-Code-2B_R",
-    "Salesforce/blip2-opt-2.7b",
-    "Salesforce/blip2-opt-6.7b-coco",
     "Snowflake/snowflake-arctic-embed-m-long",
     "TencentBAC/Conan-embedding-v2",
     "TomoroAI/tomoro-colqwen3-embed-4b",
     "TomoroAI/tomoro-colqwen3-embed-8b",
     "ai-sage/Giga-Embeddings-instruct",
-    "mteb/baseline-bb25",
-    "mteb/baseline-bm25s",
     "consciousAI/cai-stellaris-text-embeddings",
     "deepvk/USER2-base",
     "deepvk/USER2-small",
     "facebook/SONAR",
-    "facebook/dinov2-base",
-    "facebook/dinov2-giant",
-    "facebook/dinov2-large",
-    "facebook/dinov2-small",
-    "facebook/webssl-dino1b-full2b-224",
-    "facebook/webssl-dino2b-full2b-224",
-    "facebook/webssl-dino2b-heavy2b-224",
-    "facebook/webssl-dino2b-light2b-224",
-    "facebook/webssl-dino300m-full2b-224",
-    "facebook/webssl-dino3b-full2b-224",
-    "facebook/webssl-dino3b-heavy2b-224",
-    "facebook/webssl-dino3b-light2b-224",
-    "facebook/webssl-mae1b-full2b-224",
-    "facebook/webssl-mae300m-full2b-224",
-    "ibm-granite/granite-vision-3.3-2b-embedding",
-    "intfloat/mmE5-mllama-11b-instruct",
     "jinaai/jina-clip-v1",
     "jinaai/jina-reranker-v2-base-multilingual",
     "jxm/cde-small-v1",
     "jxm/cde-small-v2",
-    "kakaobrain/align-base",
     "laion/CLIP-ViT-B-16-DataComp.XL-s13B-b90K",
     "laion/CLIP-ViT-B-32-DataComp.XL-s13B-b90K",
-    "laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
-    "laion/CLIP-ViT-H-14-laion2B-s32B-b79K",
-    "laion/CLIP-ViT-L-14-DataComp.XL-s13B-b90K",
-    "laion/CLIP-ViT-L-14-laion2B-s32B-b82K",
-    "laion/CLIP-ViT-bigG-14-laion2B-39B-b160k",
     "laion/CLIP-ViT-g-14-laion2B-s34B-b88K",
     "malenia1/ternary-weight-embedding",
     "microsoft/LLM2CLIP-Openai-B-16",
@@ -73,9 +52,6 @@ _MISSING_N_EMBEDDING_MODELS = [
     "nomic-ai/nomic-embed-vision-v1.5",
     "nyu-visionx/moco-v3-vit-b",
     "nyu-visionx/moco-v3-vit-l",
-    "openai/clip-vit-base-patch16",
-    "openai/clip-vit-base-patch32",
-    "openai/clip-vit-large-patch14",
     "samaya-ai/promptriever-llama2-7b-v1",
     "samaya-ai/promptriever-llama3.1-8b-instruct-v1",
     "samaya-ai/promptriever-llama3.1-8b-v1",
@@ -86,90 +62,63 @@ _MISSING_N_EMBEDDING_MODELS = [
     "vidore/colpali-v1.3",
     "vidore/colqwen2-v1.0",
     "vidore/colqwen2.5-v0.2",
-    "voyageai/voyage-multimodal-3",
-    "facebook/webssl-dino5b-full2b-224",
-    "facebook/webssl-dino7b-full8b-224",
-    "facebook/webssl-dino7b-full8b-378",
-    "facebook/webssl-dino7b-full8b-518",
-    "facebook/webssl-mae700m-full2b-224",
+    "mongodb/voyage-multimodal-3",
     "OrlikB/KartonBERT-USE-base-v1",
     "OrlikB/st-polish-kartonberta-base-alpha-v1",
-    "OpenSearch-AI/Ops-Colqwen3-4B",
     "jinaai/jina-clip-v2",
-    "jinaai/jina-embeddings-v4",
     "baseline/Human",
-    "mteb/baseline-random-cross-encoder",
-    "mteb/baseline-random-encoder",
-    "nvidia/nemotron-colembed-vl-4b-v2",
-    "nvidia/nemotron-colembed-vl-8b-v2",
     "VAGOsolutions/SauerkrautLM-ColLFM2-450M-v0.1",
-    "VAGOsolutions/SauerkrautLM-ColMinistral3-3b-v0.1",
-    "VAGOsolutions/SauerkrautLM-ColQwen3-1.7b-Turbo-v0.1",
-    "VAGOsolutions/SauerkrautLM-ColQwen3-2b-v0.1",
-    "VAGOsolutions/SauerkrautLM-ColQwen3-4b-v0.1",
-    "VAGOsolutions/SauerkrautLM-ColQwen3-8b-v0.1",
     "MCINext/Hakim",
     "MCINext/Hakim-small",
     "MCINext/Hakim-unsup",
     # audio models
-    "google/vggish",
-    "LCO-Embedding/LCO-Embedding-Omni-3B",
-    "LCO-Embedding/LCO-Embedding-Omni-7B",
-    "facebook/wav2vec2-base",
-    "facebook/wav2vec2-base-960h",
-    "facebook/wav2vec2-large",
-    "facebook/wav2vec2-large-xlsr-53",
-    "facebook/wav2vec2-lv-60-espeak-cv-ft",
-    "facebook/wav2vec2-xls-r-1b",
-    "facebook/wav2vec2-xls-r-2b",
-    "facebook/wav2vec2-xls-r-2b-21-to-en",
-    "facebook/wav2vec2-xls-r-300m",
-    "vitouphy/wav2vec2-xls-r-300m-phoneme",
-    "laion/clap-htsat-fused",
-    "laion/clap-htsat-unfused",
     "laion/larger_clap_general",
     "laion/larger_clap_music",
     "laion/larger_clap_music_and_speech",
     "lyrebird/wav2clip",
     "microsoft/msclap-2022",
     "microsoft/msclap-2023",
-    "microsoft/unispeech-sat-base-100h-libri-ft",
-    "microsoft/wavlm-base",
-    "microsoft/wavlm-base-plus",
-    "microsoft/wavlm-base-plus-sd",
-    "microsoft/wavlm-base-plus-sv",
-    "microsoft/wavlm-base-sd",
-    "microsoft/wavlm-base-sv",
-    "microsoft/wavlm-large",
-    "facebook/seamless-m4t-v2-large",
     "Qwen/Qwen2-Audio-7B",
-    "facebook/hubert-base-ls960",
-    "facebook/hubert-large-ls960-ft",
-    "mteb/baseline-random-cross-encoder",
-    "mteb/baseline-random-encoder",
-    "facebook/encodec_24khz",
-    "speechbrain/m-ctc-t-large",
-    "MIT/ast-finetuned-audioset-10-10-0.4593",
-    "asapp/sew-d-base-plus-400k-ft-ls100h",
-    "asapp/sew-d-mid-400k-ft-ls100h",
-    "asapp/sew-d-tiny-100k-ft-ls100h",
-    "google/yamnet",
-    "openai/whisper-base",
-    "openai/whisper-large-v3",
-    "openai/whisper-medium",
-    "openai/whisper-small",
-    "openai/whisper-tiny",
-    "microsoft/speecht5_asr",
-    "microsoft/speecht5_multimodal",
-    "facebook/mms-1b-all",
-    "facebook/mms-1b-fl102",
-    "facebook/mms-1b-l1107",
-    "facebook/data2vec-audio-base-960h",
-    "facebook/data2vec-audio-large-960h",
     "OpenMuQ/MuQ-MuLan-large",
-    "speechbrain/cnn14-esc50",
+    "microsoft/speecht5_asr",
     "microsoft/speecht5_tts",
+    "microsoft/speecht5_multimodal",
 ]
+
+
+def test_model_meta_hashable():
+    """Test that ModelMeta is hashable and considers experiment_kwargs in hash/equality."""
+    model1 = ModelMeta.create_empty(
+        overwrites=dict(
+            name="test/test_model",
+            revision="test_rev",
+            embed_dim=384,
+            experiment_kwargs={"param1": "value1"},
+        )
+    )
+
+    model2 = ModelMeta.create_empty(
+        overwrites=dict(
+            name="test/test_model2",
+            revision="test_rev2",
+            embed_dim=512,
+            experiment_kwargs={"param1": "value2"},
+        )
+    )
+
+    model3 = ModelMeta.create_empty(
+        overwrites=dict(
+            name="test/test_model",
+            revision="test_rev",
+            embed_dim=384,
+            experiment_kwargs={"param1": "value1"},
+        )
+    )
+
+    assert hash(model1) == hash(model3)
+
+    assert len({model1, model2}) == 2
+    assert len({model1, model3}) == 1
 
 
 @pytest.mark.parametrize(
@@ -204,6 +153,7 @@ def test_model_similar_tasks(training_datasets):
     )
     expected = sorted(
         [
+            "MultilingualNanoTouche2020Retrieval",
             "NanoTouche2020Retrieval",
             "Touche2020",
             "Touche2020-Fa",
@@ -211,6 +161,7 @@ def test_model_similar_tasks(training_datasets):
             "Touche2020-NL",
             "Touche2020-VN",
             "Touche2020-PL",
+            "Touche2020Decontaminated",
             "Touche2020Retrieval.v3",
         ]
     )
@@ -223,8 +174,51 @@ def test_similar_tasks_superseded_by():
     assert "Banking77Classification.v2" in model_meta.get_training_datasets()
 
 
+def _openness_meta(**overwrites: Any) -> ModelMeta:
+    return ModelMeta.create_empty(
+        overwrites={"name": "test/openness", "revision": "test", **overwrites}
+    )
+
+
+@pytest.mark.parametrize("license_name", ["apache-2.0", "openmdw-1.1"])
+def test_openness_score_all_dimensions(license_name: str):
+    meta = _openness_meta(
+        open_weights=True,
+        license=license_name,
+        public_training_code="https://github.com/example/train",
+        public_training_data="https://huggingface.co/datasets/example",
+        citation="@article{example}",
+    )
+    assert meta.open_license is True
+    assert meta.openness_score == 6
+    assert all(meta.openness.values())
+
+
+def test_openness_score_none():
+    meta = _openness_meta(
+        open_weights=False,
+        license=None,
+        public_training_code=None,
+        public_training_data=None,
+        citation=None,
+    )
+    assert meta.open_license is False
+    # "model card" is always True, so a fully closed model still scores 1
+    assert meta.openness_score == 1
+    assert meta.openness["model card"] is True
+    assert not any(v for k, v in meta.openness.items() if k != "model card")
+
+
+def test_openness_non_open_license_not_counted():
+    meta = _openness_meta(open_weights=True, license="cc-by-nc-4.0")
+    assert meta.open_license is False
+    assert meta.openness["open weights"] is True
+    assert meta.openness["open license"] is False
+    assert meta.openness_score == 2
+
+
 def test_model_name_without_prefix():
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="Model name must be in the format"):
         ModelMeta(
             name="test_model",
             revision="test",
@@ -295,6 +289,45 @@ def test_check_training_datasets_can_be_derived(model_meta: ModelMeta):
     model_meta.get_training_datasets()
 
 
+_LOW_PRECISION_LOAD_DTYPES = {"float16", "bfloat16", "half"}
+# Loader kwargs ignored by the loader, so the declared output_dtypes follow the dtype actually used
+_LOAD_DTYPE_NOT_APPLIED = {
+    "jinaai/jina-reranker-v2-base-multilingual",  # JinaReranker loads with torch_dtype="auto"
+}
+
+
+def _find_load_dtype(kwargs: object) -> str | None:
+    if not isinstance(kwargs, dict):
+        return None
+    for key, value in kwargs.items():
+        if key in {"dtype", "torch_dtype", "fp_options"}:
+            return str(getattr(value, "value", value)).removeprefix("torch.")
+        if (found := _find_load_dtype(value)) is not None:
+            return found
+    return None
+
+
+@pytest.mark.parametrize("model_meta", mteb.get_model_metas())
+def test_low_precision_load_dtype_is_declared_in_output_dtypes(model_meta: ModelMeta):
+    # The results repository relies on output_dtypes to know which results were scored from
+    # low-precision embeddings: https://github.com/embeddings-benchmark/mteb/issues/5229
+    load_dtype = _find_load_dtype(model_meta.loader_kwargs)
+    if (
+        load_dtype not in _LOW_PRECISION_LOAD_DTYPES
+        or model_meta.name in _LOAD_DTYPE_NOT_APPLIED
+    ):
+        return
+    output_dtypes = model_meta.output_dtypes
+    if not isinstance(output_dtypes, list):
+        output_dtypes = [output_dtypes] if output_dtypes else []
+    declared = {getattr(dtype, "value", dtype) for dtype in output_dtypes}
+    expected = "float16" if load_dtype == "half" else load_dtype
+    assert expected in declared, (
+        f"{model_meta.name} is loaded in {load_dtype}, so output_dtypes should include "
+        f"OutputDType.{'BF16' if expected == 'bfloat16' else 'FLOAT16'}, got {model_meta.output_dtypes}"
+    )
+
+
 @pytest.mark.parametrize("model_type", ["dense", "cross-encoder", "late-interaction"])
 def test_get_model_metas_each_model_type(model_type):
     """Test filtering by each individual model type."""
@@ -302,6 +335,34 @@ def test_get_model_metas_each_model_type(model_type):
 
     for model in models:
         assert model_type in model.model_type
+
+
+def test_ensure_experiments_kwargs_passed():
+    """
+    Regression test to ensure that experiment kwargs are passed
+    https://github.com/embeddings-benchmark/mteb/issues/4307
+    """
+    experiment = {"array_framework": "pytorch"}
+    # should be passed when in all the following cases:
+    model1 = mteb.get_model("mteb/baseline-random-encoder", **experiment)  # type: ignore[call-arg]
+
+    meta = mteb.get_model_meta(
+        "mteb/baseline-random-encoder",
+        experiment_kwargs=experiment,
+    )
+    model2 = meta.load_model()
+
+    meta = mteb.get_model_meta(
+        "mteb/baseline-random-encoder",
+    )
+    model3 = meta.load_model(**experiment)  # type: ignore[call-arg]
+    assert model1.array_framework == "pytorch"  # type: ignore[attr-defined]
+    assert model2.array_framework == "pytorch"  # type: ignore[attr-defined]
+    assert model3.array_framework == "pytorch"  # type: ignore[attr-defined]
+
+    assert model1.mteb_model_meta.experiment_kwargs == experiment
+    assert model2.mteb_model_meta.experiment_kwargs == experiment
+    assert model3.mteb_model_meta.experiment_kwargs == experiment
 
 
 def test_loader_kwargs_persisted_in_metadata():
@@ -327,6 +388,28 @@ def test_get_model_kwargs_does_not_mutate_registry_meta():
     assert current_registry_meta.experiment_kwargs is None
 
 
+def test_get_model_with_only_empty_kwargs_is_not_an_experiment():
+    """`get_model(name, model_kwargs={})` shouldn't spin up a distinct experiment.
+
+    An explicit-but-empty override changes nothing about the run, so it
+    shouldn't generate a separate results folder from the base model.
+    """
+    model_name = "mteb/baseline-random-encoder"
+
+    model = mteb.get_model(model_name, model_kwargs={})
+    assert model.mteb_model_meta.experiment_kwargs is None
+    # The loader still receives it — only experiment identity is affected.
+    assert model.mteb_model_meta.loader_kwargs.get("model_kwargs") == {}
+
+
+def test_get_model_meaningless_kwarg_dropped_alongside_meaningful_one():
+    """A meaningless kwarg is dropped from the experiment identity; a real one stays."""
+    model_name = "mteb/baseline-random-encoder"
+
+    model = mteb.get_model(model_name, model_kwargs={}, not_existing_param=123)
+    assert model.mteb_model_meta.experiment_kwargs == {"not_existing_param": 123}
+
+
 def test_fill_missing_parameter():
     """Test that fill_missing parameter fetches missing metadata from HuggingFace Hub"""
     model_name = "sentence-transformers/all-MiniLM-L6-v2"
@@ -336,7 +419,20 @@ def test_fill_missing_parameter():
     assert meta_with_compute.memory_usage_mb is not None
 
 
-@pytest.mark.parametrize("model_meta", mteb.get_model_metas(open_weights=True))
+def test_raise_on_invalid_model_name():
+    """Test that an error is raised for invalid model names."""
+    with pytest.raises(KeyError):
+        mteb.get_model_metas(
+            ["mteb/baseline-bm25"]
+        )  # invalid (but plausible user input)
+    mdls = mteb.get_model_metas(["mteb/baseline-bm25s"])  # valid
+    assert len(mdls) == 1
+
+
+@pytest.mark.parametrize(
+    "model_meta",
+    [m for m in mteb.get_model_metas(open_weights=True) if "text" in m.modalities],
+)
 def test_n_embedding_parameters(model_meta: ModelMeta):
     """
     Test that tracks models with n_embedding_parameters=None.
@@ -356,7 +452,7 @@ def test_model_to_python():
     meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
     assert meta.to_python() == (
         """ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs={},
     name='sentence-transformers/all-MiniLM-L6-v2',
     revision='8b3219a92973c328a8e22fadcfa821b5dc75636a',
@@ -381,8 +477,10 @@ def test_model_to_python():
     superseded_by=None,
     modalities=['text'],
     model_type=['dense'],
-    citation=\'@inproceedings{reimers-2019-sentence-bert,\\n    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",\\n    author = "Reimers, Nils and Gurevych, Iryna",\\n    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",\\n    month = "11",\\n    year = "2019",\\n    publisher = "Association for Computational Linguistics",\\n    url = "http://arxiv.org/abs/1908.10084",\\n}\\n\',
+    citation='@inproceedings{reimers-2019-sentence-bert,\\n    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",\\n    author = "Reimers, Nils and Gurevych, Iryna",\\n    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",\\n    month = "11",\\n    year = "2019",\\n    publisher = "Association for Computational Linguistics",\\n    url = "http://arxiv.org/abs/1908.10084",\\n}\\n',
     contacts=None,
+    output_dtypes=None,
+    extra_requirements_groups=None,
 )"""
     )
 
@@ -395,7 +493,7 @@ def test_model_meta_local_path():
 
 def test_load_cross_encoder_via_get_model_meta():
     """Test loading cross-encoder via get_model_meta() with automatic detection."""
-    model_meta = mteb.get_model_meta("cross-encoder/ms-marco-TinyBERT-L-2-v2")
+    model_meta = mteb.get_model_meta("cross-encoder/ms-marco-TinyBERT-L2-v2")
 
     assert model_meta.model_type == ["cross-encoder"]
     assert model_meta.is_cross_encoder
@@ -408,7 +506,7 @@ def test_load_sentence_transformer_via_get_model_meta():
 
     assert model_meta.model_type == ["dense"]
     assert not model_meta.is_cross_encoder
-    assert model_meta.loader.__name__ == "sentence_transformers_loader"
+    assert model_meta.loader.__name__ == "SentenceTransformerEncoderWrapper"
 
 
 def test_load_model_with_experiments():
@@ -427,3 +525,216 @@ def test_load_model_with_experiments():
         model2.mteb_model_meta.experiment_name
         == model_from_meta2.mteb_model_meta.experiment_name
     )
+
+
+def test_get_model_metas_modalities_subset():
+    models = mteb.get_model_metas(modalities=["text"])
+
+    assert len(models) > 0
+    for model in models:
+        assert "text" in model.modalities
+
+
+def test_get_model_metas_modalities_exact():
+    models = mteb.get_model_metas(modalities=["text"], exclusive_modality_filter=True)
+
+    assert len(models) > 0
+    for model in models:
+        assert set(model.modalities) == {"text"}
+
+
+def test_get_model_metas_without_modality_filter_returns_more_models():
+    all_models = mteb.get_model_metas()
+    text_models = mteb.get_model_metas(modalities=["text"])
+
+    assert len(all_models) > len(text_models)
+
+
+def test_model_meta_dependencies_success():
+    model_meta = mteb.get_model_meta("mteb/baseline-random-encoder").model_copy(
+        update={
+            "required_dependencies": ["transformers", "sentence-transformers>1.0.0"],
+        }
+    )
+    model_meta._check_requirements()
+
+
+def test_model_meta_dependencies_not_existing_group():
+    model_meta = mteb.get_model_meta("mteb/baseline-random-encoder").model_copy(
+        update={
+            "extra_requirements_groups": ["test_group"],
+        }
+    )
+    with pytest.raises(
+        ValueError,
+        match=r"Unknown extras group\(s\) for mteb: \['test_group'\]. .*",
+    ):
+        model_meta._check_requirements()
+
+
+def test_model_meta_dependencies_not_installed_group():
+    model_meta = mteb.get_model_meta("google/vggish").model_copy(
+        update={
+            "extra_requirements_groups": ["torch-vggish-yamnet"],
+        }
+    )
+    with pytest.raises(
+        ImportError,
+        match=(
+            'Model google/vggish is missing required dependencies:( torchaudio; extra == "audio",)? '
+            + re.escape(
+                'torch-vggish-yamnet==0.2.1; extra == "torch-vggish-yamnet".\nYou can install it with `pip install mteb[torch-vggish-yamnet,audio]`.'
+            )
+        ),
+    ):
+        model_meta._check_requirements()
+
+
+def test_model_meta_auto_install_extras(monkeypatch: pytest.MonkeyPatch):
+    """When MTEB_AUTO_INSTALL_EXTRAS is set, missing deps trigger an install attempt."""
+    model_meta = mteb.get_model_meta("google/vggish").model_copy(
+        update={
+            "extra_requirements_groups": ["torch-vggish-yamnet"],
+        }
+    )
+    monkeypatch.setenv("MTEB_AUTO_INSTALL_EXTRAS", "1")
+
+    install_calls: list[tuple[str | None, list[str]]] = []
+
+    def fake_install(name, groups):
+        install_calls.append((name, list(groups)))
+
+    monkeypatch.setattr("mteb.models.model_meta._install_extras", fake_install)
+
+    # Install is a no-op in the test, so the deps remain missing and we still raise;
+    # the important assertion is that auto-install was attempted with the right groups.
+    with pytest.raises(ImportError):
+        model_meta._check_requirements()
+
+    assert len(install_calls) == 1
+    name, groups = install_calls[0]
+    assert name == "google/vggish"
+    assert "torch-vggish-yamnet" in groups
+
+
+def test_model_meta_no_auto_install_by_default(monkeypatch: pytest.MonkeyPatch):
+    """Without the env var, no install is attempted and the error is raised directly."""
+    model_meta = mteb.get_model_meta("google/vggish").model_copy(
+        update={
+            "extra_requirements_groups": ["torch-vggish-yamnet"],
+        }
+    )
+    monkeypatch.delenv("MTEB_AUTO_INSTALL_EXTRAS", raising=False)
+
+    def fail_install(name, groups):
+        raise AssertionError("install should not be attempted")
+
+    monkeypatch.setattr("mteb.models.model_meta._install_extras", fail_install)
+
+    with pytest.raises(ImportError):
+        model_meta._check_requirements()
+
+
+def test_model_validate_json_resolved():
+    """Test that model_validate_json_resolved correctly parses JSON and resolves string loader to callable."""
+    original_meta = mteb.get_model_meta("google/siglip-base-patch16-224")
+    original_loader = original_meta.loader
+    assert original_loader is not None
+
+    meta_dict = original_meta.to_dict()
+    assert isinstance(meta_dict["loader"], str)
+    assert meta_dict["loader"] == "SiglipModelWrapper"
+
+    json_data = json.dumps(meta_dict)
+    parsed_meta = ModelMeta.model_validate_json_resolved(json_data)
+    assert parsed_meta.loader == original_loader
+
+    meta_dict["loader"] = "NonExistentModelWrapper"
+    json_data_unknown = json.dumps(meta_dict)
+    parsed_unknown = ModelMeta.model_validate_json_resolved(json_data_unknown)
+    assert parsed_unknown.loader is None
+
+
+def test_get_model_metas_n_parameters_lower_bound():
+    """A lower-only range must filter; it used to be ignored without an upper bound."""
+    one_b = 1_000_000_000
+    lower_only = mteb.get_model_metas(n_parameters_range=(one_b, None))
+
+    assert lower_only
+    assert all(meta.n_parameters >= one_b for meta in lower_only)
+    # The same bound with a redundant upper bound already worked, so both must agree.
+    with_upper = mteb.get_model_metas(n_parameters_range=(one_b, 10**13))
+    assert {meta.name for meta in lower_only} == {meta.name for meta in with_upper}
+
+
+def test_get_model_metas_n_parameters_upper_bound_unchanged():
+    """Upper-only filtering, including how it drops an unknown n_parameters."""
+    upper = 10**8
+    upper_only = mteb.get_model_metas(n_parameters_range=(None, upper))
+
+    assert upper_only
+    assert all(meta.n_parameters is not None for meta in upper_only)
+    assert all(meta.n_parameters <= upper for meta in upper_only)
+
+
+def test_get_model_metas_n_parameters_no_bounds_keeps_everything():
+    """(None, None) is documented as "filter is ignored"."""
+    assert (
+        mteb.get_model_metas(n_parameters_range=(None, None)) == mteb.get_model_metas()
+    )
+
+
+@pytest.mark.parametrize("languages", [["eng"], ["eng-Latn"], ["eng", "fra-Latn"]])
+def test_get_model_metas_languages(languages: list[str]):
+    models = mteb.get_model_metas(languages=languages)
+
+    assert len(models) > 0
+    for model in models:
+        assert model.languages is not None
+        for lang in languages:
+            if "-" in lang:
+                assert lang in model.languages
+            else:
+                assert any(code.split("-")[0] == lang for code in model.languages)
+
+
+def test_get_model_metas_iso_code_matches_language_script():
+    iso_models = {m.name for m in mteb.get_model_metas(languages=["eng"])}
+    script_models = {m.name for m in mteb.get_model_metas(languages=["eng-Latn"])}
+
+    assert script_models <= iso_models
+
+
+def test_get_model_metas_invalid_language():
+    with pytest.raises(ValueError, match="Invalid language code"):
+        mteb.get_model_metas(languages=["english"])
+
+
+def test_max_sim_models_are_not_registered_as_dense():
+    """MaxSim scoring means multi-vector output, which `model_type=["dense"]` denies.
+
+    Anything keying off `model_type` (e.g. `Video2ImagesWrapper`, which mean-pools one
+    embedding per input) will mishandle a model that is mislabelled this way.
+    """
+    mislabelled = [
+        m.name
+        for m in mteb.get_model_metas()
+        if m.similarity_fn_name == ScoringFunction.MAX_SIM and "dense" in m.model_type
+    ]
+    assert not mislabelled
+
+
+def test_model_meta_dtypes_are_named_not_torch_objects() -> None:
+    """`ModelMeta` declares load dtypes by name, so metadata stays importable without torch.
+
+    `OutputDType` is a `str` enum, so it resolves through both `getattr(torch, ...)` (the path
+    transformers takes for a string dtype) and `OutputDType.get_dtype()`.
+    """
+    import torch
+
+    meta = mteb.get_model_meta("vidore/colpali-v1.1")
+    declared = meta.loader_kwargs["torch_dtype"]
+
+    assert isinstance(declared, OutputDType)
+    assert declared.get_dtype() is torch.float16
+    assert getattr(torch, declared) is torch.float16

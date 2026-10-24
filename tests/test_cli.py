@@ -1,9 +1,11 @@
 """tests for the MTEB CLI"""
 
+import os
 import subprocess
 import sys
 from argparse import Namespace
 from pathlib import Path
+from typing import Any
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -14,11 +16,13 @@ from mteb.cli.build_cli import (
     _available_tasks,
     _create_meta,
     _leaderboard,
+    _mock_run,
+    build_cli,
     run,
 )
 
 
-def test_available_tasks(capsys):
+def test_available_tasks(capsys: pytest.CaptureFixture[str]):
     args = Namespace(
         categories=None,
         task_types=None,
@@ -33,7 +37,7 @@ def test_available_tasks(capsys):
     )
 
 
-def test_available_benchmarks(capsys):
+def test_available_benchmarks(capsys: pytest.CaptureFixture[str]):
     args = Namespace(benchmarks=None)
     _available_benchmarks(args=args)
 
@@ -52,7 +56,9 @@ run_task_fixures = [
 ]
 
 
-@pytest.mark.parametrize("model_name,task_name,model_revision", run_task_fixures)
+@pytest.mark.parametrize(
+    ("model_name", "task_name", "model_revision"), run_task_fixures
+)
 def test_run_task(
     model_name: str,
     task_name: str,
@@ -77,6 +83,7 @@ def test_run_task(
         benchmarks=None,
         overwrite=False,
         save_predictions=None,
+        num_proc=None,
     )
 
     run(args)
@@ -92,7 +99,42 @@ def test_run_task(
     )
 
 
-def test_create_meta(tmp_path):
+@pytest.mark.parametrize(
+    ("argv", "expected"),
+    [
+        (
+            [],
+            {"models": None, "tasks": None, "create_pr": False, "message": None},
+        ),
+        (
+            ["-m", "org/model1", "org/model2", "-t", "ArguAna", "--create-pr"]
+            + ["--message", "Add ArguAna results"],
+            {
+                "models": ["org/model1", "org/model2"],
+                "tasks": ["ArguAna"],
+                "create_pr": True,
+                "message": "Add ArguAna results",
+            },
+        ),
+    ],
+)
+def test_submit_results_cli(argv: list[str], expected: dict[str, Any], tmp_path: Path):
+    args = build_cli().parse_args(
+        ["submit-results", "--output-folder", tmp_path.as_posix(), *argv]
+    )
+
+    with patch("mteb.cli.build_cli.ResultCache.submit_results") as mock_submit:
+        args.func(args)
+
+    mock_submit.assert_called_once_with(
+        expected["models"],
+        tasks=expected["tasks"],
+        create_pr=expected["create_pr"],
+        message=expected["message"],
+    )
+
+
+def test_create_meta(tmp_path: Path):
     """Test create_meta function directly as well as through the command line interface"""
     test_folder = Path(__file__).parent
     model_name = "sentence-transformers/all-MiniLM-L6-v2"
@@ -113,12 +155,12 @@ def test_create_meta(tmp_path):
 
     assert output_path.exists(), "Output file not created"
 
-    with output_path.open("r") as f:
+    with output_path.open("r", encoding="utf-8") as f:
         meta = f.read()
         meta = meta[meta.index("---") + 3 : meta.index("---", meta.index("---") + 3)]
         frontmatter = yaml.safe_load(meta)
 
-    with (output_folder / "model_card_gold.md").open("r") as f:
+    with (output_folder / "model_card_gold.md").open("r", encoding="utf-8") as f:
         gold = f.read()
         gold = gold[gold.index("---") + 3 : gold.index("---", gold.index("---") + 3)]
         frontmatter_gold = yaml.safe_load(gold)
@@ -133,18 +175,39 @@ def test_create_meta(tmp_path):
 
     # ensure that the command line interface works as well
     command = f"{sys.executable} -m mteb create-model-results --model-name {model_name} --results-folder {output_folder.as_posix()} --output-path {output_path.as_posix()} --overwrite"
-    result = subprocess.run(command, shell=True, capture_output=True, text=True)
+    result = subprocess.run(
+        command, check=False, shell=True, capture_output=True, text=True
+    )
     assert result.returncode == 0, "Command failed"
 
 
+def test_create_meta_uses_selected_benchmarks(tmp_path: Path):
+    """--benchmarks should only pass the named benchmarks to the model card"""
+    args = Namespace(
+        model_name="sentence-transformers/all-MiniLM-L6-v2",
+        results_folder=Path(__file__).parent / "create_meta",
+        output_path=tmp_path / "model_card.md",
+        overwrite=True,
+        from_existing=None,
+        tasks=None,
+        benchmarks=["MTEB(eng, v2)"],
+    )
+
+    with patch("mteb.cli.build_cli.generate_model_card") as mock_generate:
+        _create_meta(args)
+
+    benchmarks = mock_generate.call_args.kwargs["benchmarks"]
+    assert [b.name for b in benchmarks] == ["MTEB(eng, v2)"]
+
+
 @pytest.mark.parametrize(
-    "existing_readme_name, gold_readme_name",
+    ("existing_readme_name", "gold_readme_name"),
     [
         ("existing_readme.md", "model_card_gold_existing.md"),
         ("model_card_without_frontmatter.md", "model_card_gold_without_frontmatter.md"),
     ],
 )
-def test_create_meta_from_existing(
+def test_create_meta_from_existing(  # noqa: PLR0914
     existing_readme_name: str, gold_readme_name: str, tmp_path: Path
 ):
     """Test create_meta function directly as well as through the command line interface"""
@@ -171,7 +234,7 @@ def test_create_meta_from_existing(
     yaml_start_sep = "---"
     yaml_end_sep = "\n---\n"  # newline to avoid matching "---" in the content
 
-    with output_path.open("r") as f:
+    with output_path.open("r", encoding="utf-8") as f:
         meta = f.read()
         start_yaml = meta.index(yaml_start_sep) + len(yaml_start_sep)
         end_yaml = meta.index(yaml_end_sep, start_yaml)
@@ -179,7 +242,7 @@ def test_create_meta_from_existing(
         meta = meta[start_yaml:end_yaml]
         frontmatter = yaml.safe_load(meta)
 
-    with (output_folder / gold_readme_name).open("r") as f:
+    with (output_folder / gold_readme_name).open("r", encoding="utf-8") as f:
         gold = f.read()
         start_yaml = gold.index(yaml_start_sep) + len(yaml_start_sep)
         end_yaml = gold.index(yaml_end_sep, start_yaml)
@@ -197,14 +260,16 @@ def test_create_meta_from_existing(
     assert readme_output == gold_readme
     # ensure that the command line interface works as well
     command = f"{sys.executable} -m mteb create-model-results --model-name {model_name} --results-folder {output_folder.as_posix()} --output-path {output_path.as_posix()} --from-existing {existing_readme.as_posix()} --overwrite"
-    result = subprocess.run(command, shell=True, capture_output=True, text=True)
+    result = subprocess.run(
+        command, check=False, shell=True, capture_output=True, text=True
+    )
     assert result.returncode == 0, "Command failed"
 
 
 def test_leaderboard_help():
     """Test that leaderboard help command works."""
     command = [sys.executable, "-m", "mteb", "leaderboard", "--help"]
-    result = subprocess.run(command, capture_output=True, text=True)
+    result = subprocess.run(command, check=False, capture_output=True, text=True)
 
     assert result.returncode == 0, "Leaderboard help command failed"
     assert "--cache-path" in result.stdout, "--cache-path option not found in help"
@@ -217,7 +282,7 @@ def test_leaderboard_help():
 
 
 @pytest.mark.parametrize(
-    "cache_path_input,host,port,share,test_description",
+    ("cache_path_input", "host", "port", "share", "test_description"),
     [
         ("custom", "localhost", 8080, True, "custom cache path"),
         (None, "127.0.0.1", 7860, False, "default cache path"),
@@ -301,7 +366,28 @@ def test_leaderboard_cli_integration():
     """Test the full CLI command integration."""
     # Test that the command is recognized by the CLI
     command = [sys.executable, "-m", "mteb", "--help"]
-    result = subprocess.run(command, capture_output=True, text=True)
+    result = subprocess.run(command, check=False, capture_output=True, text=True)
 
     assert result.returncode == 0
     assert "leaderboard" in result.stdout, "Leaderboard command not found in main help"
+
+
+def test_mock_run_cli(tmp_path: Path):
+    """Test the mock-run subcommand."""
+
+    args = Namespace(
+        model="sentence-transformers/all-MiniLM-L6-v2",
+        model_revision="8b3219a92973c328a8e22fadcfa821b5dc75636a",
+        device=None,
+        verbosity=2,
+    )
+
+    orig_cwd = Path.cwd()
+    try:
+        os.chdir(tmp_path)
+        _mock_run(args)
+        assert (tmp_path / "mteb_mock_run_results.md").exists(), (
+            "mteb_mock_run_results.md not created in output folder"
+        )
+    finally:
+        os.chdir(orig_cwd)

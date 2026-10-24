@@ -1,6 +1,7 @@
 import argparse
 import json
 import logging
+import sys
 from pathlib import Path
 
 from huggingface_hub import scan_cache_dir
@@ -16,7 +17,7 @@ logger = logging.getLogger(__name__)
 def teardown_function(revision: str):
     """Teardown function to delete the model revision from the cache."""
     delete_strategy = scan_cache_dir().delete_revisions(revision)
-    print("Will free " + delete_strategy.expected_freed_size_str)
+    logger.info("Will free " + delete_strategy.expected_freed_size_str)
     delete_strategy.execute()
 
 
@@ -27,7 +28,7 @@ def get_model_below_n_param_threshold(model_name: str, threshold: float = 2e9) -
     if model_meta.n_parameters is not None:
         if model_meta.n_parameters >= threshold:
             return "Over threshold. Not tested."
-        elif "API" in model_meta.framework:
+        if "API" in model_meta.framework:
             try:
                 m = get_model(model_name)
                 if m is not None:
@@ -35,7 +36,7 @@ def get_model_below_n_param_threshold(model_name: str, threshold: float = 2e9) -
                     return "None"
             except Exception as e:
                 logger.warning(f"Failed to load model {model_name} with error {e}")
-                return e.__str__()
+                return str(e)
         try:
             m = get_model(model_name)
             if m is not None:
@@ -45,7 +46,8 @@ def get_model_below_n_param_threshold(model_name: str, threshold: float = 2e9) -
                 return "None"
         except Exception as e:
             logger.warning(f"Failed to load model {model_name} with error {e}")
-            return e.__str__()
+            return str(e)
+    return "n_parameters not specified. Not tested."
 
 
 def parse_args():
@@ -87,7 +89,7 @@ if __name__ == "__main__":
     # Load existing results if the file exists
     results = {}
     if output_file.exists():
-        with output_file.open("r") as f:
+        with output_file.open("r", encoding="utf-8") as f:
             results = json.load(f)
 
     if args.model_name:
@@ -96,13 +98,13 @@ if __name__ == "__main__":
         all_model_names = []
         model_name_file = Path(args.model_name_file)
         if model_name_file.exists():
-            with model_name_file.open() as f:
+            with model_name_file.open(encoding="utf-8") as f:
                 all_model_names = f.read().strip().split()
         else:
             logger.warning(
                 f"Model name file {args.model_name_file} does not exist. Exiting."
             )
-            exit(1)
+            sys.exit(1)
     else:
         omit_keys = []
         if args.run_missing:
@@ -119,5 +121,5 @@ if __name__ == "__main__":
         results = dict(sorted(results.items()))
 
         # Write the results to the file after each iteration
-        with output_file.open("w") as f:
+        with output_file.open("w", encoding="utf-8") as f:
             json.dump(results, f, indent=4)

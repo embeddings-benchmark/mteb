@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -38,18 +40,10 @@ class SouthAfricanLangClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@misc{south-african-language-identification,
-  author = {ExploreAI Academy, Joanne M},
-  publisher = {Kaggle},
-  title = {South African Language Identification},
-  url = {https://kaggle.com/competitions/south-african-language-identification},
-  year = {2022},
-}
-""",
+        bibtex_citation="",
     )
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.dataset = self.dataset.rename_columns(
             {" text": "text", "lang_id": "label"}
         )

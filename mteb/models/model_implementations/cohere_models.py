@@ -3,18 +3,22 @@ from __future__ import annotations
 import logging
 import time
 from functools import wraps
-from typing import TYPE_CHECKING, Any, Literal, get_args
+from typing import TYPE_CHECKING, Any, Literal, TypeVar, get_args
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
+
+T = TypeVar("T")
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    import cohere
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -143,6 +147,12 @@ EmbeddingType = Literal[
     "binary",
 ]
 
+OUTPUT_TYPES = [
+    OutputDType.INT8,
+    OutputDType.UINT8,
+    OutputDType.BINARY,
+]
+
 # Cohere API limits
 COHERE_MAX_BATCH_SIZE = 96  # Maximum number of texts per API call
 COHERE_MAX_TOKENS_PER_BATCH = 128_000  # Maximum total tokens per API call
@@ -152,7 +162,7 @@ def retry_with_rate_limit(
     max_retries: int = 5,
     max_rpm: int = 300,
     initial_delay: float = 1.0,
-):
+) -> Callable[[Callable[..., T]], Callable[..., T | None]]:
     """Combined retry and rate limiting decorator.
 
     This decorator handles both proactive rate limiting (spacing requests)
@@ -168,9 +178,9 @@ def retry_with_rate_limit(
     """
     previous_call_ts: float | None = None
 
-    def decorator(func):
+    def decorator(func: Callable[..., T]) -> Callable[..., T | None]:
         @wraps(func)
-        def wrapper(self, *args, **kwargs):
+        def wrapper(self: AbsEncoder, *args: Any, **kwargs: Any) -> T | None:
             import cohere
 
             nonlocal previous_call_ts
@@ -208,6 +218,7 @@ def retry_with_rate_limit(
                         f"Cohere API error (attempt {attempt + 1}/{max_retries}): {e}. Retrying in {delay}s..."
                     )
                     time.sleep(delay)
+            return None
 
         return wrapper
 
@@ -224,10 +235,8 @@ class CohereTextEmbeddingModel(AbsEncoder):
         model_prompts: dict[str, str] | None = None,
         embedding_type: EmbeddingType = "float",
         output_dimension: int | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
-        requires_package(self, "cohere", model_name, "pip install 'mteb[cohere]'")
-
         import cohere
 
         self.model_name = model_name.removeprefix("Cohere/Cohere-")
@@ -243,7 +252,7 @@ class CohereTextEmbeddingModel(AbsEncoder):
         self._client = cohere.Client()
 
     @retry_with_rate_limit(max_retries=5, max_rpm=300)
-    def _embed_func(self, **kwargs):
+    def _embed_func(self, **kwargs: Any) -> cohere.EmbedResponse:
         """Call Cohere embed API with retry and rate limiting."""
         return self._client.embed(**kwargs)
 
@@ -253,6 +262,8 @@ class CohereTextEmbeddingModel(AbsEncoder):
         cohere_task_type: str,
         show_progress_bar: bool = False,
     ) -> torch.Tensor:
+        import torch
+
         all_embeddings = []
         index = 0
 
@@ -335,7 +346,7 @@ class CohereTextEmbeddingModel(AbsEncoder):
                         unpacked.append(1.0 if bit_val else -1.0)
                 unpacked_embeddings.append(unpacked)
             embeddings_array = np.array(unpacked_embeddings, dtype=np.float32)
-        elif primary_embedding_type in ["int8", "uint8"]:
+        elif primary_embedding_type in ["int8", "uint8"]:  # noqa: PLR6201
             # Convert int8/uint8 embeddings to float32
             embeddings_array = embeddings_array.astype(np.float32)
 
@@ -404,6 +415,8 @@ cohere_mult_3 = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
 )
 
 cohere_eng_3 = ModelMeta(
@@ -430,6 +443,8 @@ cohere_eng_3 = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
 )
 
 cohere_mult_light_3 = ModelMeta(
@@ -456,6 +471,8 @@ cohere_mult_light_3 = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
 )
 
 cohere_eng_light_3 = ModelMeta(
@@ -482,4 +499,6 @@ cohere_eng_light_3 = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
 )

@@ -1,10 +1,10 @@
 import numpy as np
 
-from mteb.models.model_implementations.model2vec_models import Model2VecModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 potion_base_8m = ModelMeta(
-    loader=Model2VecModel,
+    loader=SentenceTransformerEncoderWrapper,
     name="rasgaard/m2v-dfm-large",
     model_type=["dense"],
     languages=["dan-Latn"],
@@ -26,10 +26,4 @@ potion_base_8m = ModelMeta(
     training_datasets=set(),  # distilled
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data="https://huggingface.co/datasets/HuggingFaceFW/fineweb-2",  # distilled on this
-    citation="""@article{minishlab2024model2vec,
-    author = {Tulkens, Stephan and {van Dongen}, Thomas},
-    title = {Model2Vec: Fast State-of-the-Art Static Embeddings},
-    year = {2024},
-    url = {https://github.com/MinishLab/model2vec}
-}""",
 )

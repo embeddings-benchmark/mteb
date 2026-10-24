@@ -1,3 +1,5 @@
+from typing import Any
+
 import numpy as np
 from datasets import DatasetDict, load_dataset
 
@@ -53,7 +55,7 @@ class ImageCoDe(AbsTaskImageTextPairClassification):
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
@@ -76,7 +78,9 @@ class ImageCoDe(AbsTaskImageTextPairClassification):
         corpus_ids = corpus["id"]
         corpus_id_to_idx = {cid: idx for idx, cid in enumerate(corpus_ids)}
 
-        def build_mappings(qrels):
+        def build_mappings(
+            qrels: dict[str, dict[str, int]],
+        ) -> tuple[dict[str, str], dict[str, list[str]]]:
             correct_answers = {}
             candidate_pools = {}
             for row in qrels:
@@ -91,7 +95,7 @@ class ImageCoDe(AbsTaskImageTextPairClassification):
 
         correct_answers, candidate_pools = build_mappings(qrels)
 
-        def process_example(example):
+        def process_example(example: dict[str, Any]) -> dict[str, Any]:
             qid = example["id"]
             correct_id = correct_answers[qid]
             candidates = candidate_pools[qid]
@@ -101,7 +105,9 @@ class ImageCoDe(AbsTaskImageTextPairClassification):
             correct_mask = np.array([cid == correct_id for cid in candidates])
             correct_idx = candidate_indices[np.argmax(correct_mask)]
             incorrect_indices = [
-                idx for idx, mask in zip(candidate_indices, ~correct_mask) if mask
+                idx
+                for idx, mask in zip(candidate_indices, ~correct_mask, strict=True)
+                if mask
             ]
             return {
                 "text": example["text"],

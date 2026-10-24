@@ -3,16 +3,12 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import (
-    requires_image_dependencies,
-    requires_package,
-)
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_implementations.colpali_models import COLPALI_TRAINING_DATA
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -29,14 +25,6 @@ NOMIC_LANGUAGES = [
     "ita-Latn",  # Italian
 ]
 
-CITATION = """
-@misc{nomicembedmultimodal2025,
-  title={Nomic Embed Multimodal: Interleaved Text, Image, and Screenshots for Visual Document Retrieval},
-  author={Nomic Team},
-  year={2025},
-  publisher={Nomic AI},
-  url={https://www.nomic.ai/news/nomic-embed-multimodal}
-}"""
 
 # https://huggingface.co/datasets/nomic-ai/colpali-queries-mined-20250321-by-source
 TRAINING_DATA = COLPALI_TRAINING_DATA | {"VDRMultilingualRetrieval"}
@@ -54,12 +42,9 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
         revision: str | None = None,
         device: str | None = None,
         base_revision: str | None = None,
-        **kwargs,
+        **kwargs: Any,
     ):
-        requires_image_dependencies()
-        requires_package(
-            self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
-        )
+        import torch
         from colpali_engine.models import BiQwen2_5, BiQwen2_5_Processor
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
@@ -100,18 +85,20 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
                 )
             fused_embeddings = text_embeddings + image_embeddings
             return fused_embeddings
-        elif text_embeddings is not None:
+        if text_embeddings is not None:
             return text_embeddings
-        elif image_embeddings is not None:
+        if image_embeddings is not None:
             return image_embeddings
         raise ValueError
 
     def get_image_embeddings(
         self,
-        images,
+        images: DataLoader[BatchedInput],
         batch_size: int = 32,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> Array:
+        import torch
+
         all_embeds = []
 
         with torch.no_grad():
@@ -128,10 +115,12 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
 
     def get_text_embeddings(
         self,
-        texts,
+        texts: DataLoader[BatchedInput],
         batch_size: int = 32,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> Array:
+        import torch
+
         all_embeds = []
         with torch.no_grad():
             for batch in tqdm(texts, desc="Encoding texts"):
@@ -146,15 +135,15 @@ class BiQwen2_5Wrapper(AbsEncoder):  # noqa: N801
         return padded
 
     def similarity(
-        self, a, b
-    ):  # Using the processing it goes from 0.57382 to 0.57297 on Vidore2ESGReportsHLRetrieval (without flash attention 2)
+        self, a: Array, b: Array
+    ) -> Array:  # Using the processing it goes from 0.57382 to 0.57297 on Vidore2ESGReportsHLRetrieval (without flash attention 2)
         return self.processor.score(a, b, device=self.device)
 
 
 nomic_embed_multimodal_3b = ModelMeta(
     loader=BiQwen2_5Wrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
         base_revision="66285546d2b821cf421d4f5eb2576359d3770cd3",
     ),
     name="nomic-ai/nomic-embed-multimodal-3b",
@@ -177,13 +166,14 @@ nomic_embed_multimodal_3b = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     training_datasets=TRAINING_DATA,
-    citation=CITATION,
+    extra_requirements_groups=["colpali_engine"],
+    output_dtypes=OutputDType.BF16,
 )
 
 nomic_embed_multimodal_7b = ModelMeta(
     loader=BiQwen2_5Wrapper,
     loader_kwargs=dict(
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
         base_revision="cc594898137f460bfe9f0759e9844b3ce807cfb5",
     ),
     name="nomic-ai/nomic-embed-multimodal-7b",
@@ -206,5 +196,6 @@ nomic_embed_multimodal_7b = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     training_datasets=TRAINING_DATA,
-    citation=CITATION,
+    extra_requirements_groups=["colpali_engine"],
+    output_dtypes=OutputDType.BF16,
 )

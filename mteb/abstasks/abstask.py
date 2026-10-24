@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import tempfile
+import time
 import warnings
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
@@ -13,12 +14,13 @@ from typing import TYPE_CHECKING, Any, Literal, cast
 import huggingface_hub
 import numpy as np
 import yaml
-from datasets import ClassLabel, Dataset, DatasetDict, load_dataset
+from datasets import ClassLabel, Dataset, DatasetDict, Value, load_dataset
 from sklearn.preprocessing import MultiLabelBinarizer
 from tqdm.auto import tqdm
 
 from mteb._hf_integration.eval_model import HFEvalMeta, HFEvalTaskConfig
 from mteb._hf_integration.hf_hub_utils import _get_file_on_hub
+from mteb._log_once import LogOnce
 from mteb._set_seed import _set_seed
 from mteb.languages import LanguageScripts
 from mteb.models import (
@@ -26,11 +28,11 @@ from mteb.models import (
     EncoderProtocol,
     SearchProtocol,
 )
+from mteb.timing import TimingStack
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping
-
-    from typing_extensions import Self
+    from collections.abc import Iterator, Mapping
+    from typing import Self
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import (
@@ -39,13 +41,15 @@ if TYPE_CHECKING:
     from mteb.types import EncodeKwargs, HFSubset, Modalities, ScoresDict
     from mteb.types.statistics import DescriptiveStatistics, SplitDescriptiveStatistics
 
+
 logger = logging.getLogger(__name__)
+log_once = LogOnce(logger)
 
 
 def _multilabel_subsampling(
     dataset_dict: DatasetDict,
     seed: int,
-    splits: list[str] = ["test"],
+    splits: Sequence[str] = ("test",),
     label: str = "label",
     n_samples: int = 2048,
 ) -> DatasetDict:
@@ -71,11 +75,32 @@ def _multilabel_subsampling(
         _, test_idx = _iterative_train_test_split(
             x_np, labels_np, test_size=n_samples / n_split, random_state=seed
         )
-        dataset_dict.update({split: Dataset.from_dict(dataset_dict[split][test_idx])})
+        dataset_dict.update({split: dataset_dict[split].select(test_idx)})
     return dataset_dict
 
 
-class AbsTask(ABC):
+def _pair_content_columns(
+    columns: tuple[str | Mapping[str, Modalities], str | Mapping[str, Modalities]],
+    modalities: list[Modalities],
+) -> dict[str, Modalities]:
+    """The content columns of a task comparing two inputs, mapped to the modality of each.
+
+    An input is either a single column, whose modality is then the task's only one, or already a mapping from
+    column to modality. A plain column name on a task with several modalities is ambiguous, so nothing is returned
+    in that case and the caller reports the task as not declaring its columns.
+    """
+    resolved: dict[str, Modalities] = {}
+    for column in columns:
+        if isinstance(column, str):
+            if len(modalities) != 1:
+                return {}
+            resolved[column] = modalities[0]
+        else:
+            resolved.update(column)
+    return resolved
+
+
+class AbsTask(ABC):  # noqa: PLR0904
     """The abstract class for the tasks. All tasks in `mteb` inherit from this class.
 
     Attributes:
@@ -114,14 +139,19 @@ class AbsTask(ABC):
         self.rng_state, self.np_rng = _set_seed(seed)
         self.hf_subsets = self.metadata.hf_subsets
 
+        if self.metadata.is_beta:
+            msg = f"The task '{self.metadata.name}' is currently in beta. This means that the dataset is still being tested and may be subject to changes. This means that the scores of this dataset is liable to change and should be used with caution."
+            logger.warning(msg)
+            warnings.warn(msg, stacklevel=2)
+
     def check_if_dataset_is_superseded(self) -> None:
         """Check if the dataset is superseded by a newer version."""
         if self.superseded_by:
-            msg = f"Dataset '{self.metadata.name}' is superseded by '{self.superseded_by}'. We recommend using the newer version of the dataset unless you are running a specific benchmark. See `get_task('{self.superseded_by}').metadata.description` to get a description of the task and changes."
+            msg = f"The task '{self.metadata.name}' is superseded by '{self.superseded_by}'. We recommend using the newer version of the task unless you are running a specific benchmark. See `get_task('{self.superseded_by}').metadata.description` to get a description of the task and changes."
             logger.warning(msg)
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
 
-    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:  # noqa: B027 -- optional hook, deliberately not abstract
         """A transform operations applied to the dataset after loading.
 
         This method is useful when the dataset from Huggingface is not in an `mteb` compatible format.
@@ -131,7 +161,6 @@ class AbsTask(ABC):
             num_proc: Number of processes to use for the transformation.
             kwargs: Additional keyword arguments passed to the load_dataset function. Keep for forward compatibility.
         """
-        pass
 
     def evaluate(
         self,
@@ -142,6 +171,7 @@ class AbsTask(ABC):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack | None = None,
         **kwargs: Any,
     ) -> Mapping[HFSubset, ScoresDict]:
         """Evaluates an MTEB compatible model on the task.
@@ -153,6 +183,7 @@ class AbsTask(ABC):
             encode_kwargs: Additional keyword arguments that are passed to the model's `encode` method.
             prediction_folder: Folder to save model predictions
             num_proc: Number of processes to use for loading the dataset or processing.
+            timer: A context manager that tracks the timing of evaluation phases.
             kwargs: Additional keyword arguments that are passed to the _evaluate_subset method.
 
         Returns:
@@ -162,6 +193,7 @@ class AbsTask(ABC):
             TypeError: If the model is a CrossEncoder and the task does not support CrossEncoders.
             TypeError: If the model is a SearchProtocol and the task does not support Search.
         """
+        timer = timer or TimingStack()
         if isinstance(model, CrossEncoderProtocol) and not self._support_cross_encoder:
             raise TypeError(
                 f"Model {model} is a CrossEncoder, but this task {self.metadata.name} does not support CrossEncoders. "
@@ -180,7 +212,15 @@ class AbsTask(ABC):
             )
 
         if not self.data_loaded:
-            self.load_data()
+            num_phases_before = len(timer.phases)
+            start_load = time.monotonic()
+            self.load_data(num_proc=num_proc, timer=timer)
+            # If load_data did not record its own timing phases, add a fallback "Data loading" phase
+            # using the outer timing measured around the load_data call.
+            if len(timer.phases) == num_phases_before:
+                timer.add_phase(
+                    "Data loading", start_load, time.monotonic(), split="", subset=""
+                )
 
         self.dataset = cast("dict[HFSubset, DatasetDict]", self.dataset)
 
@@ -209,6 +249,7 @@ class AbsTask(ABC):
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
                 num_proc=num_proc,
+                timer=timer,
                 **kwargs,
             )
             self._add_main_score(scores[hf_subset])
@@ -225,6 +266,7 @@ class AbsTask(ABC):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> ScoresDict:
         raise NotImplementedError(
@@ -256,14 +298,14 @@ class AbsTask(ABC):
             }
         }
         if predictions_path.exists():
-            with predictions_path.open("r") as predictions_file:
+            with predictions_path.open("r", encoding="utf-8") as predictions_file:
                 existing_results = json.load(predictions_file)
 
         if hf_subset not in existing_results:
             existing_results[hf_subset] = {}
 
         existing_results[hf_subset][hf_split] = predictions
-        with predictions_path.open("w") as predictions_file:
+        with predictions_path.open("w", encoding="utf-8") as predictions_file:
             json.dump(existing_results, predictions_file)
 
     def _predictions_path(
@@ -286,7 +328,7 @@ class AbsTask(ABC):
     def stratified_subsampling(
         dataset_dict: DatasetDict,
         seed: int,
-        splits: list[str] = ["test"],
+        splits: Sequence[str] = ("test",),
         label: str = "label",
         n_samples: int = 2048,
     ) -> DatasetDict:
@@ -304,15 +346,26 @@ class AbsTask(ABC):
         """
         # Can only do this if the label column is of ClassLabel.
         if not isinstance(dataset_dict[splits[0]].features[label], ClassLabel):
-            try:
-                dataset_dict = dataset_dict.class_encode_column(label)
-            except ValueError as e:
-                if isinstance(dataset_dict[splits[0]][label][0], Sequence):
-                    return _multilabel_subsampling(
-                        dataset_dict, seed, splits, label, n_samples
-                    )
-                else:
-                    raise e
+            first = dataset_dict[splits[0]][label][0]
+            if isinstance(first, Sequence) and not isinstance(first, str):
+                return _multilabel_subsampling(
+                    dataset_dict, seed, splits, label, n_samples
+                )
+            # Encode all splits with one label set. DatasetDict.class_encode_column
+            # encodes each split on its own, so a label missing from one split
+            # shifts the ids of the labels after it. Names are sorted as strings,
+            # like class_encode_column, so unaffected tasks keep the same ids.
+            names = sorted(
+                {
+                    str(x)
+                    for ds in dataset_dict.values()
+                    for x in ds[label]
+                    if x is not None
+                }
+            )
+            dataset_dict = dataset_dict.cast_column(label, Value("string")).cast_column(
+                label, ClassLabel(names=names)
+            )
 
         for split in splits:
             if n_samples >= len(dataset_dict[split]):
@@ -329,7 +382,13 @@ class AbsTask(ABC):
             )  # only take the specified test split.
         return dataset_dict
 
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+    def load_data(
+        self,
+        num_proc: int | None = None,
+        *,
+        timer: TimingStack | None = None,
+        **kwargs: Any,
+    ) -> None:
         """Loads dataset from HuggingFace hub
 
         This is the main loading function for Task. Do not overwrite this, instead we recommend using `dataset_transform`, which is called after the
@@ -337,25 +396,33 @@ class AbsTask(ABC):
 
         Args:
             num_proc: Number of processes to use for loading the dataset.
+            timer: A context manager that tracks the timing of evaluation phases.
             kwargs: Additional keyword arguments passed to the load_dataset function. Keep for forward compatibility.
         """
         if self.data_loaded:
             return
-        if self.metadata.is_multilingual:
-            if self.fast_loading:
-                self.fast_load()
+
+        timer = timer or TimingStack()
+        with timer(
+            "Data loading", log_message=f"Loading dataset {self.metadata.name}..."
+        ):
+            if self.metadata.is_multilingual:
+                if self.fast_loading:
+                    self.fast_load()
+                else:
+                    self.dataset = {}
+                    for hf_subset in self.hf_subsets:
+                        self.dataset[hf_subset] = load_dataset(
+                            name=hf_subset,
+                            **self.metadata.dataset,
+                            num_proc=num_proc,
+                        )
             else:
-                self.dataset = {}
-                for hf_subset in self.hf_subsets:
-                    self.dataset[hf_subset] = load_dataset(
-                        name=hf_subset,
-                        **self.metadata.dataset,
-                        num_proc=num_proc,
-                    )
-        else:
-            # some of monolingual datasets explicitly adding the split name to the dataset name
-            self.dataset = load_dataset(**self.metadata.dataset, num_proc=num_proc)
-        self.dataset_transform(num_proc=num_proc)
+                # some of monolingual datasets explicitly adding the split name to the dataset name
+                self.dataset = load_dataset(**self.metadata.dataset, num_proc=num_proc)
+
+        with timer("Dataset transform"):
+            self.dataset_transform(num_proc=num_proc)
         self.data_loaded = True
 
     def fast_load(self) -> None:
@@ -366,7 +433,7 @@ class AbsTask(ABC):
         """
         self.dataset = {}
         merged_dataset = load_dataset(**self.metadata.dataset)  # load "default" subset
-        for split in merged_dataset.keys():
+        for split in merged_dataset:
             df_split = merged_dataset[split].to_polars()
             df_grouped = dict(df_split.group_by(["lang"]))
             for lang in set(df_split["lang"].unique()) & set(self.hf_subsets):
@@ -385,18 +452,31 @@ class AbsTask(ABC):
         """Calculates descriptive statistics from the dataset.
 
         Args:
-            overwrite_results: Whether to overwrite existing results. If False and results already exist, the existing results will be loaded from cache.
-            num_proc: Number of processes to use for loading the dataset.
+            overwrite_results: Whether to recalculate and overwrite existing results.
+                If False and results already exist, the cached results will be loaded instead.
+                Use True to force recalculation.
+            num_proc: Number of processes to use for loading the dataset and for parallel hash computation
+                across image/audio/video modalities.
 
         Returns:
             A dictionary containing descriptive statistics for each split.
+
+        Examples:
+            >>> task = get_task("STS12")
+            >>> # Calculate desc. stats if not already calculated
+            >>> stats = task.calculate_descriptive_statistics()
+            >>> # Force recalculation
+            >>> stats = task.calculate_descriptive_statistics(overwrite_results=True)
         """
         from mteb.abstasks import AbsTaskClassification
 
         existing_stats = self.metadata.descriptive_stats
 
         if existing_stats is not None and not overwrite_results:
-            logger.info("Loading metadata descriptive statistics from cache.")
+            logger.info(
+                f"Loaded metadata descriptive statistics from cache for task '{self.metadata.name}'. "
+                "To recalculate statistics, use calculate_descriptive_statistics(overwrite_results=True)."
+            )
             return existing_stats
 
         if not self.data_loaded:
@@ -406,8 +486,11 @@ class AbsTask(ABC):
         hf_subset_stat: Literal["hf_subset_descriptive_stats"] = (
             "hf_subset_descriptive_stats"
         )
-        eval_splits = self.metadata.eval_splits
-        if isinstance(self, AbsTaskClassification):
+        eval_splits = list(self.metadata.eval_splits)
+        if (
+            isinstance(self, AbsTaskClassification)
+            and self.train_split not in eval_splits
+        ):
             eval_splits.append(self.train_split)
 
         pbar_split = tqdm(eval_splits, desc="Processing Splits...")
@@ -417,7 +500,7 @@ class AbsTask(ABC):
             if self.metadata.is_multilingual:
                 descriptive_stats[split] = (
                     self._calculate_descriptive_statistics_from_split(  # type: ignore[assignment]
-                        split, compute_overall=True
+                        split, compute_overall=True, num_proc=num_proc
                     )
                 )
                 descriptive_stats[split][hf_subset_stat] = {}
@@ -430,14 +513,19 @@ class AbsTask(ABC):
                     pbar_subsets.set_postfix_str(f"Huggingface subset: {hf_subset}")
                     logger.info(f"Processing metadata for subset {hf_subset}")
                     split_details = self._calculate_descriptive_statistics_from_split(
-                        split, hf_subset
+                        split, hf_subset=hf_subset, num_proc=num_proc
                     )
                     descriptive_stats[split][hf_subset_stat][hf_subset] = split_details
             else:
-                split_details = self._calculate_descriptive_statistics_from_split(split)
+                split_details = self._calculate_descriptive_statistics_from_split(
+                    split, num_proc=num_proc
+                )
                 descriptive_stats[split] = split_details  # type: ignore[assignment]
 
-        with self.metadata.descriptive_stat_path.open("w") as f:
+        stat_path = self.metadata.descriptive_stat_path
+        if not stat_path.parent.exists():
+            stat_path.parent.mkdir(parents=True, exist_ok=True)
+        with stat_path.open("w", encoding="utf-8") as f:
             json.dump(descriptive_stats, f, indent=4)
 
         return descriptive_stats
@@ -452,13 +540,18 @@ class AbsTask(ABC):
 
     @abstractmethod
     def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        *,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
     ) -> SplitDescriptiveStatistics:
         raise NotImplementedError
 
     @property
     def languages(self) -> list[str]:
-        """Returns the languages of the task."""
+        """The languages of the task."""
         if self.hf_subsets:
             eval_langs = self.metadata.hf_subsets_to_langscripts
             languages = []
@@ -516,15 +609,23 @@ class AbsTask(ABC):
                 continue
             if exclusive_language_filter is False:
                 for langscript in langs:
-                    if lang_scripts.contains_language(
-                        langscript
-                    ) or lang_scripts.contains_script(langscript):
+                    if lang_scripts.contains_language(langscript) and (
+                        not script
+                        or lang_scripts.contains_langscript_script(langscript)
+                    ):
                         subsets_to_keep.append(hf_subset)
                         break
 
-            if exclusive_language_filter is True and languages:
-                if lang_scripts.contains_languages(langs):
-                    subsets_to_keep.append(hf_subset)
+            if (
+                exclusive_language_filter is True
+                and languages
+                and lang_scripts.contains_languages(langs)
+                and (
+                    not script
+                    or all(lang_scripts.contains_langscript_script(ls) for ls in langs)
+                )
+            ):
+                subsets_to_keep.append(hf_subset)
 
         if len(subsets_to_keep) == 0:
             raise ValueError(
@@ -534,6 +635,16 @@ class AbsTask(ABC):
         self.hf_subsets = subsets_to_keep
         return self
 
+    def _get_content_columns(self) -> dict[str, Modalities]:  # noqa: PLR6301
+        """The dataset columns holding the task's content, mapped to the modality of that content.
+
+        This is what the filters in `mteb.data_cleaning` compare samples on. Subclasses point it at their own column
+        names, e.g. `{"text": "text"}` for a text classification task or `{"image": "image"}` for an image one. It
+        is empty when a task does not declare its columns, which makes those filters raise rather than silently do
+        nothing.
+        """
+        return {}
+
     def _add_main_score(self, scores: ScoresDict) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
 
@@ -542,6 +653,7 @@ class AbsTask(ABC):
         repo_name: str,
         fields: list[str] | dict[str, str],
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> None:
         if self.dataset is None:
             raise ValueError("Dataset not loaded")
@@ -570,6 +682,7 @@ class AbsTask(ABC):
                     config,
                     commit_message=f"Add {config} dataset",
                     num_proc=num_proc,
+                    **kwargs,
                 )
         else:
             sentences = {}
@@ -603,6 +716,7 @@ class AbsTask(ABC):
         num_proc: int | None = None,
         *,
         push_eval: bool = False,
+        **kwargs: Any,
     ) -> None:
         """Push the dataset to the HuggingFace Hub.
 
@@ -610,6 +724,8 @@ class AbsTask(ABC):
             repo_name: The name of the repository to push the dataset to.
             num_proc: Number of processes to use for loading the dataset.
             push_eval: Whether to also push the eval.yaml file to the Hub
+            kwargs: Additional keyword arguments passed to the [push_to_hub](https://huggingface.co/docs/datasets/main/en/package_reference/main_classes#datasets.DatasetDict.push_to_hub).
+                This can include things like `private=True` to make the dataset private.
 
         Examples:
             >>> import mteb
@@ -621,28 +737,26 @@ class AbsTask(ABC):
         if not self.data_loaded:
             self.load_data()
 
-        self._push_dataset_to_hub(repo_name, num_proc)
+        self._push_dataset_to_hub(repo_name, num_proc, **kwargs)
         # dataset repo not creating when pushing card
         self.metadata.push_dataset_card_to_hub(repo_name)
         if push_eval:
-            self.push_eval_to_hub(repo_name)
+            self.push_eval_to_hub()
 
     def push_eval_to_hub(
         self,
-        repo_name: str,
         *,
         create_pr: bool = False,
     ) -> None:
         """Push `eval.yaml` to the HuggingFace Hub
 
         Args:
-            repo_name: repository name
             create_pr: Whether to create the PR
         """
         eval_file_name = "eval.yaml"
 
         existing_eval_path = _get_file_on_hub(
-            repo_id=repo_name,
+            repo_id=self.metadata.dataset["name"],
             file_name=eval_file_name,
             repo_type="dataset",
         )
@@ -650,21 +764,21 @@ class AbsTask(ABC):
         # handle multiple tasks in one repo (e.g. MIRACLRetrievalHardNegatives, MIRACLRetrievalHardNegativesV2)
         existing_eval = None
         if existing_eval_path is not None:
-            with Path(existing_eval_path).open() as f:
+            with Path(existing_eval_path).open(encoding="utf-8") as f:
                 existing_eval_dict = yaml.safe_load(f)
             if existing_eval_dict is not None:
                 existing_eval = HFEvalMeta.model_validate(existing_eval_dict)
 
         task_config = self._create_task_hf_config(existing_eval)
 
-        with tempfile.NamedTemporaryFile(mode="w") as tmp_file:
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8") as tmp_file:
             tmp_file.write(task_config.to_yaml())
             tmp_file.flush()
 
             huggingface_hub.upload_file(
                 path_or_fileobj=tmp_file.name,
                 path_in_repo=eval_file_name,
-                repo_id=repo_name,
+                repo_id=self.metadata.dataset["name"],
                 repo_type="dataset",
                 commit_message="Add eval config",
                 create_pr=create_pr,
@@ -708,14 +822,14 @@ class AbsTask(ABC):
 
     @property
     def eval_splits(self) -> Sequence[str]:
-        """Returns the evaluation splits of the task."""
+        """The evaluation splits of the task."""
         if self._eval_splits:
             return self._eval_splits
         return self.metadata.eval_splits
 
     @property
     def modalities(self) -> list[Modalities]:
-        """Returns the modalities of the task."""
+        """The modalities of the task."""
         return self.metadata.modalities
 
     def __repr__(self) -> str:
@@ -738,6 +852,9 @@ class AbsTask(ABC):
         if self.data_loaded:
             self.dataset = None
             self.data_loaded = False
+            # a task whose data was filtered carries metadata of its own describing that data; unloading it
+            # leaves only the published data to reload, so restore the published metadata alongside
+            self.__dict__.pop("metadata", None)
             logger.info(f"Unloaded dataset {self.metadata.name} from memory.")
         else:
             msg = f"Dataset `{self.metadata.name}` is not loaded, cannot unload it."
@@ -747,3 +864,53 @@ class AbsTask(ABC):
     def superseded_by(self) -> str | None:
         """If the dataset is superseded by another dataset, return the name of the new dataset."""
         return self.metadata.superseded_by
+
+
+def get_abstask_prompt(task_name: str) -> str:
+    """Get the prompt defined by the abstask class (`AbsTask.abstask_prompt`) of a task.
+
+    The task is resolved from the imported task classes instead of the task registry, such that it
+    doesn't only work for tasks within mteb, but also for tasks outside of it, e.g. mock tasks or
+    user defined tasks.
+
+    Args:
+        task_name: The name of the task, e.g. "SciFact".
+
+    Returns:
+        The prompt defined by the abstask class of the task, or an empty string if its abstask class
+            doesn't define one.
+    """
+    if task_name not in _task_name_to_prompt:
+        prompt = ""
+        for task_cls in _iter_task_subclasses():
+            # `abstask_prompt` is defined on the abstask class, e.g. `AbsTaskRetrieval`, and is only
+            # annotated on `AbsTask`, so abstasks such as `AbsTaskAggregate` don't define one
+            if task_cls.metadata.name == task_name:
+                prompt = getattr(task_cls, "abstask_prompt", "")
+                if prompt:
+                    break
+        _task_name_to_prompt[task_name] = prompt
+
+    prompt = _task_name_to_prompt[task_name]
+    if not prompt:
+        log_once.warning(
+            f"No prompt found on the abstask class of task '{task_name}'. Using an empty prompt."
+        )
+    return prompt
+
+
+def _iter_task_subclasses() -> Iterator[type[AbsTask]]:
+    """Iterate over the imported subclasses of `AbsTask` that define a metadata."""
+    stack: list[Any] = [AbsTask]
+    seen: set[Any] = set()
+    while stack:
+        for subclass in stack.pop().__subclasses__():
+            if subclass in seen:
+                continue
+            seen.add(subclass)
+            stack.append(subclass)
+            if getattr(subclass, "metadata", None) is not None:
+                yield subclass
+
+
+_task_name_to_prompt: dict[str, str] = {}

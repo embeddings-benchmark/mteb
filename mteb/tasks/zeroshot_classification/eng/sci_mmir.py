@@ -60,7 +60,7 @@ class SciMMIR(AbsTaskZeroShotClassification):
                 }
             )
 
-    def get_candidate_labels(self) -> list[str]:
+    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
         return [
             "a figure of results",
             "a figure of an illustration",

@@ -4,39 +4,64 @@ import datetime
 import logging
 import warnings
 from pathlib import Path
-from time import time
-from typing import TYPE_CHECKING, cast
+from time import monotonic
+from typing import TYPE_CHECKING, TypeGuard, cast
 
 from datasets.exceptions import DatasetNotFoundError
 from tqdm.auto import tqdm
 
 from mteb._helpful_enum import HelpfulStrEnum
-from mteb.abstasks import AbsTaskRetrieval
+from mteb._requires_package import _requires_full_installation
+from mteb.abstasks import AbsTaskBitextMining, AbsTaskRetrieval
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.benchmarks.benchmark import Benchmark
 from mteb.cache import ResultCache
-from mteb.models.model_meta import ModelMeta
+from mteb.models.model_meta import ModelMeta, _merge_precision_into_experiment_kwargs
 from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
+    MultiVectorWrapper,
     SentenceTransformerEncoderWrapper,
+    SparseEncoderWrapper,
+)
+from mteb.models.video_wrappers.video2images_wrapper import (
+    _has_mixed_video_input,
+    is_video2images_meta,
+    video2images_hint,
 )
 from mteb.results import ModelResult, TaskResult
 from mteb.results.task_result import TaskError
+from mteb.timing import TimingStack
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
+    from typing import TypeAlias
 
-    from sentence_transformers import CrossEncoder, SentenceTransformer
+    from sentence_transformers import (
+        CrossEncoder,
+        MultiVectorEncoder,
+        SentenceTransformer,
+        SparseEncoder,
+    )
 
     from mteb.models.models_protocols import (
         MTEBModels,
     )
-    from mteb.types import EncodeKwargs, HFSubset, SplitName
+    from mteb.types import EncodeKwargs, HFSubset, ScoresDict, SplitName
     from mteb.types._metadata import ModelName, Revision
 
+    SentenceTransformerModels: TypeAlias = (
+        CrossEncoder | MultiVectorEncoder | SentenceTransformer | SparseEncoder
+    )
+
+
 logger = logging.getLogger(__name__)
+
+# Shared default cache. Constructed at import time, exactly as the previous
+# `cache: ResultCache | None = ResultCache()` default argument was -- `cache=None`
+# means "no cache", so a None sentinel cannot be used here.
+_DEFAULT_CACHE = ResultCache()
 
 
 class OverwriteStrategy(HelpfulStrEnum):
@@ -56,8 +81,49 @@ class OverwriteStrategy(HelpfulStrEnum):
     ONLY_CACHE = "only-cache"
 
 
+def _is_sentence_transformers_model(model: object) -> bool:
+    """Whether `model`'s class comes from the `sentence_transformers` package.
+
+    Used to decide whether a failed optional import (e.g. `SparseEncoder`, `MultiVectorEncoder`
+    not existing in the installed sentence-transformers version) should raise an actionable
+    `ImportError`, or silently return `False` so an unrelated custom `EncoderProtocol` model
+    (which just happens to reach this fallback check, e.g. a bare `ModelMeta`) isn't penalized
+    for sentence-transformers being outdated or partially unavailable.
+    """
+    return type(model).__module__.startswith("sentence_transformers")
+
+
+def _is_sparse_encoder(model: object) -> TypeGuard[SparseEncoder]:
+    try:
+        from sentence_transformers.sparse_encoder import SparseEncoder
+    except ImportError:
+        if _is_sentence_transformers_model(model):
+            raise ImportError(
+                "This looks like a sentence-transformers model, but 'SparseEncoder' isn't available "
+                "in your installed version. Please upgrade with `pip install -U sentence-transformers` "
+                "(>= 5.0.0) to use SparseEncoder models with mteb."
+            ) from None
+        return False
+    return isinstance(model, SparseEncoder)
+
+
+def _is_multi_vector_encoder(model: object) -> TypeGuard[MultiVectorEncoder]:
+    try:
+        from sentence_transformers import MultiVectorEncoder
+    except ImportError:
+        if _is_sentence_transformers_model(model):
+            raise ImportError(
+                "This looks like a sentence-transformers model, but 'MultiVectorEncoder' isn't "
+                "available in your installed version. Please upgrade with "
+                "`pip install -U sentence-transformers` (>= 6.0.0) to use MultiVectorEncoder models "
+                "with mteb."
+            ) from None
+        return False
+    return isinstance(model, MultiVectorEncoder)
+
+
 def _sanitize_model(
-    model: ModelMeta | MTEBModels | SentenceTransformer | CrossEncoder,
+    model: ModelMeta | MTEBModels | SentenceTransformerModels,
 ) -> tuple[MTEBModels | ModelMeta, ModelMeta, ModelName, Revision]:
     from sentence_transformers import CrossEncoder, SentenceTransformer
 
@@ -68,13 +134,25 @@ def _sanitize_model(
     elif isinstance(model, CrossEncoder):
         wrapped_model = CrossEncoderWrapper(model)
         meta = wrapped_model.mteb_model_meta
+    elif isinstance(model, ModelMeta):
+        wrapped_model = model
+        meta = model
     elif hasattr(model, "mteb_model_meta"):
-        meta = getattr(model, "mteb_model_meta")
-        if not isinstance(meta, ModelMeta):
-            meta = ModelMeta.create_empty()
+        model_meta = model.mteb_model_meta
+        meta = (
+            model_meta
+            if isinstance(model_meta, ModelMeta)
+            else ModelMeta.create_empty()
+        )
         wrapped_model = cast("MTEBModels | ModelMeta", model)
+    elif _is_sparse_encoder(model):
+        wrapped_model = SparseEncoderWrapper(model)
+        meta = wrapped_model.mteb_model_meta
+    elif _is_multi_vector_encoder(model):
+        wrapped_model = MultiVectorWrapper(model)
+        meta = wrapped_model.mteb_model_meta
     else:
-        meta = ModelMeta.create_empty() if not isinstance(model, ModelMeta) else model
+        meta = ModelMeta.create_empty()
         wrapped_model = meta
 
     model_name = cast("str", meta.name)
@@ -83,7 +161,35 @@ def _sanitize_model(
     return wrapped_model, meta, model_name, model_revision
 
 
-def _evaluate_task(
+def _apply_precision_to_meta(meta: ModelMeta, encode_kwargs: EncodeKwargs) -> ModelMeta:
+    """Fold a ``precision`` encode kwarg into the model metadata's ``experiment_kwargs``.
+
+    ``precision`` is forwarded to ``encode`` and changes the dtype of the produced
+    embeddings, so an evaluation that sets it must not share a cache namespace with the
+    default float run (or with a run using a different precision). Deriving
+    ``output_dtypes`` here -- before the cache lookup -- keeps the lookup and the
+    subsequent save consistent, instead of updating the metadata inside ``encode()``
+    after the lookup has already happened.
+    """
+    precision = encode_kwargs.get("precision")
+    if precision is None:
+        return meta
+
+    experiment_kwargs = _merge_precision_into_experiment_kwargs(
+        meta.experiment_kwargs, encode_kwargs
+    )
+    if experiment_kwargs.get("output_dtypes") == (meta.experiment_kwargs or {}).get(
+        "output_dtypes"
+    ):
+        return meta
+
+    logger.warning(
+        f"The 'precision' argument passed in encode_kwargs is setting output_dtypes to {experiment_kwargs['output_dtypes']}."
+    )
+    return meta.model_copy(update={"experiment_kwargs": experiment_kwargs}, deep=True)
+
+
+def _evaluate_task(  # noqa: PLR0913, PLR0914
     model: MTEBModels,
     task: AbsTask,
     *,
@@ -92,7 +198,11 @@ def _evaluate_task(
     encode_kwargs: EncodeKwargs,
     prediction_folder: Path | None,
     public_only: bool | None,
+    cache: ResultCache | None = None,
     num_proc: int | None = None,
+    timer: TimingStack | None = None,
+    existing_results: TaskResult | None = None,
+    model_meta: ModelMeta | None = None,
 ) -> TaskResult | TaskError:
     """The core logic to run a model on a given task. See `evaluate` for more details.
 
@@ -101,12 +211,12 @@ def _evaluate_task(
     """
     if co2_tracker is None or co2_tracker is True:
         try:
-            from codecarbon import EmissionsTracker  # type: ignore[import]
+            from codecarbon import EmissionsTracker  # type: ignore[import-not-found]
         except ImportError:
             if co2_tracker is True:
                 raise ImportError(
                     "Codecarbon is required when co2_tracker=True. Please install it using `pip install mteb[codecarbon]` to track CO₂ emissions."
-                )
+                ) from None
             co2_tracker = False
         else:
             co2_tracker = True
@@ -115,7 +225,7 @@ def _evaluate_task(
         with EmissionsTracker(
             save_to_file=False,
             save_to_api=False,
-            logging_logger=logger,  # type: ignore[arg-type]
+            logging_logger=logger,
             allow_multiple_runs=False,
         ) as tracker:
             result = _evaluate_task(
@@ -126,20 +236,52 @@ def _evaluate_task(
                 co2_tracker=False,
                 prediction_folder=prediction_folder,
                 public_only=public_only,
+                cache=cache,
                 num_proc=num_proc,
+                existing_results=existing_results,
+                model_meta=model_meta,
             )
         if isinstance(result, TaskResult):
-            result.kg_co2_emissions = tracker.final_emissions
+            existing_co2_val = (
+                existing_results.kg_co2_emissions
+                if (existing_results and existing_results.kg_co2_emissions is not None)
+                else 0.0
+            )
+            result.kg_co2_emissions = existing_co2_val + (
+                tracker.final_emissions or 0.0
+            )
         return result
 
-    task_results = {}
+    task_results: dict[SplitName, dict[HFSubset, ScoresDict]] = {}
+    evaluation_time: float = 0.0
+
+    if model_meta is None:
+        model_meta = model.mteb_model_meta
+
+    existing_co2 = existing_results.kg_co2_emissions if existing_results else None
+    if existing_results is not None:
+        for split, scores_list in existing_results.scores.items():
+            task_results[split] = {score["hf_subset"]: score for score in scores_list}
+        if existing_results.evaluation_time is not None:
+            evaluation_time = existing_results.evaluation_time
 
     task.check_if_dataset_is_superseded()
+    timer = timer or TimingStack()
 
     data_preloaded = task.data_loaded
     if not data_preloaded:
         try:
-            task.load_data(num_proc=num_proc)
+            num_phases_before = len(timer.phases)
+            start_load = monotonic()
+            task.load_data(num_proc=num_proc, timer=timer)
+            end_load = monotonic()
+            evaluation_time += end_load - start_load
+            # If load_data did not record its own timing phases, add a fallback "Data loading" phase
+            # using the outer timing measured around the load_data call.
+            if len(timer.phases) == num_phases_before:
+                timer.add_phase(
+                    "Data loading", start_load, end_load, split="", subset=""
+                )
         except DatasetNotFoundError as e:
             if not task.metadata.is_public and public_only is None:
                 msg = (
@@ -147,7 +289,7 @@ def _evaluate_task(
                     "Make sure you have access to the dataset and that you have set up the authentication correctly. To disable this warning set `public_only=False`"
                 )
                 logger.warning(msg)
-                warnings.warn(msg)
+                warnings.warn(msg, stacklevel=2)
                 return TaskError(
                     task_name=task.metadata.name,
                     exception=str(e),
@@ -155,37 +297,88 @@ def _evaluate_task(
             if public_only is False:
                 raise e
 
-    evaluation_time = 0.0
-
     for split, hf_subsets in splits.items():
-        tick = time()
-        task_results[split] = task.evaluate(
-            model,
-            split,
-            subsets_to_run=hf_subsets,
-            encode_kwargs=encode_kwargs,
-            prediction_folder=prediction_folder,
-            num_proc=num_proc,
-        )
-        tock = time()
+        tick = monotonic()
+        # BitextMining tasks evaluate all subsets together (e.g. for parallel subsets), so they
+        # are not run subset-by-subset. Other tasks are run subset-by-subset for intermediate caching.
+        if isinstance(task, AbsTaskBitextMining):
+            subsets_batches = [hf_subsets]
+        else:
+            subsets_batches = [[ss] for ss in hf_subsets]
+
+        if split not in task_results:
+            task_results[split] = {}
+
+        num_phases_before = len(timer.phases)
+        general_timer = TimingStack()
+        if timer._start_time is not None:
+            general_timer._start_time = timer._start_time
+
+        with general_timer(
+            "Evaluation",
+            split=split,
+        ):
+            for batch in subsets_batches:
+                res = task.evaluate(
+                    model,
+                    split,
+                    subsets_to_run=batch,
+                    encode_kwargs=encode_kwargs,
+                    prediction_folder=prediction_folder,
+                    num_proc=num_proc,
+                    timer=timer,
+                )
+                tock_ss = monotonic()
+                task_results[split].update(res)
+                # Save intermediate cache
+                if cache:
+                    new_result = TaskResult.from_task_results(
+                        task,
+                        task_results,
+                        evaluation_time=evaluation_time + (tock_ss - tick),
+                        kg_co2_emissions=existing_co2,
+                        date=datetime.datetime.now(tz=datetime.UTC),
+                        evaluation_phases=timer.phases if timer.phases else None,
+                    )
+                    cache.save_to_cache(new_result, model_meta)
+
+        duration = general_timer.phases[0]["end"] - general_timer.phases[0]["start"]
+
+        # If the task evaluation did not record internal phases, append the overall evaluation phase
+        if len(timer.phases) == num_phases_before:
+            if timer._start_time is None:
+                timer._start_time = general_timer._start_time
+            timer.phases.append(general_timer.phases[0])
 
         logger.debug(
-            f"Evaluation for {task.metadata.name} on {split} took {tock - tick:.2f} seconds"
+            f"Evaluation for {task.metadata.name} on {split} took {duration:.2f} seconds"
         )
-        evaluation_time += tock - tick
+
+        evaluation_time += duration
 
     result = TaskResult.from_task_results(
         task,
         task_results,
         evaluation_time=evaluation_time,
-        kg_co2_emissions=None,
-        date=datetime.datetime.now(tz=datetime.timezone.utc),
+        kg_co2_emissions=existing_co2,
+        date=datetime.datetime.now(tz=datetime.UTC),
+        evaluation_phases=timer.phases if timer.phases else None,
     )
 
     if not data_preloaded:  # only unload if we loaded the data
         task.unload_data()
 
     return result
+
+
+def _has_non_text_task(tasks: AbsTask | Benchmark | Iterable[AbsTask]) -> bool:
+    """Check whether any of the tasks uses a modality other than text."""
+    if isinstance(tasks, AbsTask):
+        tasks = [tasks]
+    return any(
+        any(modality != "text" for modality in task.metadata.modalities)
+        for task in tasks
+    )
 
 
 def _check_model_modalities(
@@ -208,14 +401,21 @@ def _check_model_modalities(
     if isinstance(tasks, AbsTask):
         check_tasks = [tasks]
     elif isinstance(tasks, Benchmark):
-        benchmark = cast("Benchmark", tasks)
+        benchmark = tasks
         check_tasks = benchmark.tasks
     else:
-        check_tasks = cast("Iterable[AbsTask]", tasks)
+        check_tasks = tasks
 
     warnings, errors = [], []
 
     for task in check_tasks:
+        if is_video2images_meta(model) and _has_mixed_video_input(task):
+            errors.append(
+                f"Model {model.name} only supports video-only inputs, but task "
+                f"{task.metadata.name} mixes video with other modalities in one input."
+            )
+            continue
+        video_hint = video2images_hint(model, task)
         # only retrieval tasks have different modalities for query and document and can be run with partial overlaps
         if isinstance(task, AbsTaskRetrieval):
             query_mods = set(task.metadata.get_modalities(PromptType.query))
@@ -230,7 +430,7 @@ def _check_model_modalities(
                 and query_mods.issubset(model_modalities)
             ):
                 continue
-            elif query_overlap and doc_overlap:
+            if query_overlap and doc_overlap:
                 warnings.append(
                     f"Model {model.name} supports {model.modalities}, partially overlapping "
                     f"with task {task.metadata.name} query={sorted(query_mods)}, document={sorted(doc_mods)}. "
@@ -240,17 +440,18 @@ def _check_model_modalities(
                 errors.append(
                     f"Model {model.name} supports {model.modalities}, but none overlap with "
                     f"task {task.metadata.name} query={sorted(query_mods)}, document={sorted(doc_mods)}."
+                    + video_hint
                 )
         else:
             task_mods = set(task.metadata.modalities)
 
             if task_mods.issubset(model_modalities):
                 continue
-            else:
-                errors.append(
-                    f"Model {model.name} supports {model.modalities}, but none overlap with "
-                    f"task {task.metadata.name} modalities={task.metadata.modalities}."
-                )
+            errors.append(
+                f"Model {model.name} supports {model.modalities}, but none overlap with "
+                f"task {task.metadata.name} modalities={task.metadata.modalities}."
+                + video_hint
+            )
 
     if errors:
         raise ValueError("\n".join(errors))
@@ -272,19 +473,96 @@ def _requires_merge(task: AbsTask, existing_results: TaskResult) -> bool:
     return False
 
 
-def evaluate(
-    model: ModelMeta | MTEBModels | SentenceTransformer | CrossEncoder,
+def _check_cache(
+    task: AbsTask,
+    meta: ModelMeta,
+    cache: ResultCache | None,
+    overwrite_strategy: OverwriteStrategy,
+) -> tuple[TaskResult | None, dict[str, list[str]]]:
+    """Load cached results, handle early skipping if up-to-date, or validate compatibility.
+
+    Args:
+        task: The task to evaluate.
+        meta: Metadata of the model being evaluated.
+        cache: The cache database or file system layer.
+        overwrite_strategy: The strategy to handle existing cache results.
+
+    Returns:
+        A tuple containing:
+            - The cached TaskResult if it is compatible and we want to resume/skip.
+              Returns None if we need to re-run from scratch.
+            - A dictionary mapping evaluation split names to a list of missing subset names.
+              Returns an empty dict if no splits or subsets are missing.
+    """
+    # Load results from the cache if the overwrite strategy allows it
+    existing_results: TaskResult | None = None
+    if cache and overwrite_strategy != OverwriteStrategy.ALWAYS:
+        existing_results = cache.load_task_result(task.metadata.name, meta)
+
+    dont_overwrite = overwrite_strategy in {
+        OverwriteStrategy.NEVER,
+        OverwriteStrategy.ONLY_CACHE,
+    }
+
+    # Check if the cached results are compatible/mergeable with the current task definition
+    is_mergeable = existing_results is not None and (
+        not _requires_merge(task, existing_results)
+        or existing_results.is_mergeable(task)
+    )
+
+    # Determine missing splits and subsets
+    if existing_results and (dont_overwrite or is_mergeable):
+        # Cache exists and is compatible, compute missing evaluations to potentially resume
+        missing_eval = existing_results.get_missing_evaluations(task)
+    else:
+        # Cache is missing, incompatible, or we are forcing an overwrite: re-run all splits/subsets
+        missing_eval = dict.fromkeys(task.eval_splits, task.hf_subsets)
+        existing_results = None
+
+    # Enforce dont_overwrite constraints (NEVER and ONLY_CACHE strategies)
+    if missing_eval and dont_overwrite:
+        if existing_results is None:
+            # Cache is completely missing (or incompatible)
+            # - For normal tasks, ONLY_CACHE strategy must raise ValueError since it cannot evaluate.
+            # - For AbsTaskAggregate, we don't raise here; it will fall back to evaluating subtasks recursively.
+            if (
+                not isinstance(task, AbsTaskAggregate)
+                and overwrite_strategy == OverwriteStrategy.ONLY_CACHE
+            ):
+                raise ValueError(
+                    f"overwrite_strategy is set to '{overwrite_strategy.value}' but no results found in cache for task {task.metadata.name}."
+                )
+        # Cache results file exists but some splits/subsets are missing
+        # - For normal tasks, raising ValueError prevents silent overwrite under NEVER or ONLY_CACHE.
+        # - For AbsTaskAggregate, NEVER must raise to prevent overwriting the existing incomplete result file,
+        #   but ONLY_CACHE skips raising here to allow merging cached subtask results.
+        elif (
+            not isinstance(task, AbsTaskAggregate)
+            or overwrite_strategy == OverwriteStrategy.NEVER
+        ):
+            raise ValueError(
+                f"overwrite_strategy is set to '{overwrite_strategy.value}' and the results file exists for task {task.metadata.name}. "
+                f"However there are the following missing splits (and subsets): {missing_eval}. To rerun these set overwrite_strategy to 'only-missing'."
+            )
+        existing_results = None
+
+    return existing_results, missing_eval
+
+
+def evaluate(  # noqa: PLR0913
+    model: ModelMeta | MTEBModels | SentenceTransformerModels,
     tasks: AbsTask | Iterable[AbsTask],
     *,
     co2_tracker: bool | None = None,
     raise_error: bool = True,
     encode_kwargs: EncodeKwargs | None = None,
-    cache: ResultCache | None = ResultCache(),
+    cache: ResultCache | None = _DEFAULT_CACHE,
     overwrite_strategy: str | OverwriteStrategy = "only-missing",
     prediction_folder: Path | str | None = None,
     show_progress_bar: bool = True,
     public_only: bool | None = None,
     num_proc: int | None = None,
+    timer: TimingStack | None = None,
 ) -> ModelResult:
     """This function runs a model on a given task and returns the results.
 
@@ -309,7 +587,8 @@ def evaluate(
         show_progress_bar: Whether to show a progress bar when running the evaluation. Default is True. Setting this to False will also set the
             `encode_kwargs['show_progress_bar']` to False if encode_kwargs is unspecified.
         public_only: Run only public tasks. If None, it will attempt to run the private task.
-        num_proc: Number of processes to use during data loading and transformation. Defaults to 1.
+        num_proc: Number of processes to use during data loading and transformation. Defaults to None (single process).
+        timer: A context manager that tracks the timing of evaluation phases.
 
     Returns:
         The results of the evaluation.
@@ -345,15 +624,84 @@ def evaluate(
             "No batch size defined in encode_kwargs. Setting `encode_kwargs['batch_size'] = 32`. Explicitly set the batch size to silence this message."
         )
 
-    model, meta, model_name, model_revision = _sanitize_model(model)
-    _check_model_modalities(meta, tasks)
+    if num_proc is None and _has_non_text_task(tasks):
+        logger.info(
+            "`num_proc` is not set, so data loading runs in a single process. Consider setting `num_proc` (e.g. `mteb.evaluate(..., num_proc=4)`) to speed up data loading. "
+            "Explicitly set `num_proc` to silence this message."
+        )
 
+    # encoding runs through torch dataloaders, so check before doing any work
+    _requires_full_installation("torch", "Evaluating a model")
+
+    model, meta, model_name, model_revision = _sanitize_model(model)
+    meta = _apply_precision_to_meta(meta, encode_kwargs)
+    _check_model_modalities(meta, tasks)
+    overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
+
+    return _evaluate_resolved(
+        model,
+        meta,
+        model_name,
+        model_revision,
+        tasks,
+        co2_tracker=co2_tracker,
+        raise_error=raise_error,
+        encode_kwargs=encode_kwargs,
+        cache=cache,
+        overwrite_strategy=overwrite_strategy,
+        prediction_folder=prediction_folder,
+        show_progress_bar=show_progress_bar,
+        public_only=public_only,
+        num_proc=num_proc,
+        timer=timer,
+    )
+
+
+def _evaluate_resolved(  # noqa: PLR0913
+    model: MTEBModels | ModelMeta,
+    meta: ModelMeta,
+    model_name: ModelName,
+    model_revision: Revision,
+    tasks: AbsTask | Iterable[AbsTask],
+    *,
+    co2_tracker: bool | None,
+    raise_error: bool,
+    encode_kwargs: EncodeKwargs,
+    cache: ResultCache | None,
+    overwrite_strategy: OverwriteStrategy,
+    prediction_folder: Path | None,
+    show_progress_bar: bool,
+    public_only: bool | None,
+    num_proc: int | None,
+    timer: TimingStack | None,
+) -> ModelResult:
+    """Recursive core of `evaluate`, run against an already-sanitized model/meta."""
     # AbsTaskAggregate is a special case where we have to run multiple tasks and combine the results
     if isinstance(tasks, AbsTaskAggregate):
-        aggregated_task = cast("AbsTaskAggregate", tasks)
-        results = evaluate(
+        existing_results, missing_eval = _check_cache(
+            tasks, meta, cache, overwrite_strategy
+        )
+
+        if (
+            existing_results
+            and not missing_eval
+            and overwrite_strategy != OverwriteStrategy.ALWAYS
+        ):
+            logger.info(
+                f"Results for {tasks.metadata.name} already exist in cache. Skipping evaluation and loading results."
+            )
+            return ModelResult(
+                model_name=model_name,
+                model_revision=model_revision,
+                task_results=[existing_results],
+            )
+
+        results = _evaluate_resolved(
             model,
-            aggregated_task.metadata.tasks,
+            meta,
+            model_name,
+            model_revision,
+            tasks.metadata.tasks,
             co2_tracker=co2_tracker,
             raise_error=raise_error,
             encode_kwargs=encode_kwargs,
@@ -363,21 +711,30 @@ def evaluate(
             show_progress_bar=show_progress_bar,
             public_only=public_only,
             num_proc=num_proc,
+            timer=timer,
         )
-        combined_results = aggregated_task.combine_task_results(results.task_results)
+        combined_results = tasks.combine_task_results(results.task_results)
+
+        if existing_results:
+            combined_results = existing_results.merge(combined_results)
+
         if cache:
-            cache.save_to_cache(combined_results, meta)
+            cache.save_to_cache(
+                combined_results,
+                meta,
+                encode_kwargs=encode_kwargs,
+            )
 
         return ModelResult(
             model_name=results.model_name,
             model_revision=results.model_revision,
             task_results=[combined_results],
+            exceptions=results.exceptions,
         )
 
     if isinstance(tasks, AbsTask):
         task = tasks
     else:
-        tasks = cast("Iterable[AbsTask]", tasks)
         evaluate_results = []
         exceptions = []
         tasks_tqdm = tqdm(
@@ -385,10 +742,13 @@ def evaluate(
             desc="Evaluating tasks",
             disable=not show_progress_bar,
         )
-        for i, task in enumerate(tasks_tqdm):
+        for task in tasks_tqdm:
             tasks_tqdm.set_description(f"Evaluating task {task.metadata.name}")
-            _res = evaluate(
+            _res = _evaluate_resolved(
                 model,
+                meta,
+                model_name,
+                model_revision,
                 task,
                 co2_tracker=co2_tracker,
                 raise_error=raise_error,
@@ -399,6 +759,7 @@ def evaluate(
                 show_progress_bar=False,
                 public_only=public_only,
                 num_proc=num_proc,
+                timer=timer,
             )
             evaluate_results.extend(_res.task_results)
             if _res.exceptions:
@@ -410,28 +771,7 @@ def evaluate(
             exceptions=exceptions,
         )
 
-    overwrite_strategy = OverwriteStrategy.from_str(overwrite_strategy)
-
-    existing_results: TaskResult | None = None
-    if cache and overwrite_strategy != OverwriteStrategy.ALWAYS:
-        cache_results = cache.load_task_result(task.metadata.name, meta)
-        if cache_results:
-            existing_results = cache_results
-
-    if (
-        existing_results
-        and overwrite_strategy
-        not in (OverwriteStrategy.ALWAYS, OverwriteStrategy.NEVER)
-        and (
-            not _requires_merge(task, existing_results)
-            or existing_results.is_mergeable(task)
-        )
-    ):
-        missing_eval = existing_results.get_missing_evaluations(task)
-    else:
-        missing_eval = dict.fromkeys(task.eval_splits, task.hf_subsets)
-        # Will be fully recomputed so we set it to None to avoid merging:
-        existing_results = None
+    existing_results, missing_eval = _check_cache(task, meta, cache, overwrite_strategy)
 
     if (
         existing_results
@@ -447,15 +787,6 @@ def evaluate(
             model_revision=model_revision,
             task_results=[existing_results],
         )
-    if missing_eval and overwrite_strategy in [
-        OverwriteStrategy.NEVER,
-        OverwriteStrategy.ONLY_CACHE,
-    ]:
-        raise ValueError(
-            f"overwrite_strategy is set to '{overwrite_strategy.value}' and the results file exists for task {task.metadata.name}. "
-            + f"However there are the following missing splits (and subsets): {missing_eval}. To rerun these set overwrite_strategy to 'only-missing'."
-        )
-
     if existing_results:
         logger.info(
             f"Found existing results for {task.metadata.name}, only running missing splits (subsets): {missing_eval}"
@@ -478,7 +809,10 @@ def evaluate(
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
                 public_only=public_only,
+                cache=cache,
                 num_proc=num_proc,
+                existing_results=existing_results,
+                model_meta=meta,
             )
         except Exception as e:
             logger.error(
@@ -490,11 +824,14 @@ def evaluate(
             model=model,
             splits=missing_eval,
             task=task,
-            co2_tracker=False,
+            co2_tracker=co2_tracker,
             encode_kwargs=encode_kwargs,
             prediction_folder=prediction_folder,
             public_only=public_only,
+            cache=cache,
             num_proc=num_proc,
+            existing_results=existing_results,
+            model_meta=meta,
         )
     logger.info(f"✓ Finished evaluation for {task.metadata.name}")
 
@@ -506,11 +843,12 @@ def evaluate(
             exceptions=[result],
         )
 
-    if existing_results:
-        result = result.merge(existing_results)
-
     if cache:
-        cache.save_to_cache(result, meta)
+        cache.save_to_cache(
+            result,
+            meta,
+            encode_kwargs=encode_kwargs,
+        )
 
     return ModelResult(
         model_name=model_name,

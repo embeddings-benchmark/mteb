@@ -2,17 +2,17 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Literal
 
-import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_image_dependencies
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
 
 VISTA_CITATION = """@article{zhou2024vista,
@@ -23,13 +23,15 @@ VISTA_CITATION = """@article{zhou2024vista,
 }"""
 
 
-def vista_loader(model_name, **kwargs):
+def vista_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
+    import torch
+
     try:  # a temporal fix for the dependency issues of vista models.
         from visual_bge.modeling import Visualized_BGE
     except ImportError:
         raise ImportError(
             "Please install `visual_bge`, refer to https://github.com/FlagOpen/FlagEmbedding/tree/master/research/visual_bge#install-flagembedding."
-        )
+        ) from None
 
     class VisualizedBGEWrapper(Visualized_BGE, AbsEncoder):
         """Setting up VISTA
@@ -62,17 +64,15 @@ def vista_loader(model_name, **kwargs):
         def __init__(
             self,
             model_name_bge: str | None = None,
-            model_weight=None,
+            model_weight: str | None = None,
             normlized: bool = True,
             sentence_pooling_method: str = "cls",
             negatives_cross_device: bool = False,
             temperature: float = 0.02,
-            from_pretrained=None,
+            from_pretrained: str | None = None,
             image_tokens_num: int | None = None,
             **kwargs: Any,
         ):
-            requires_image_dependencies()
-
             super().__init__(
                 model_name_bge=model_name_bge,
                 model_weight=model_weight,
@@ -150,7 +150,7 @@ def vista_loader(model_name, **kwargs):
             prompt_type: PromptType | None = None,
             input_type: Literal["document", "query"] | None = None,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_text_embeddings = []
             for batch in tqdm(
                 texts, disable=not show_progress_bar, desc="Text Encoding"
@@ -173,7 +173,7 @@ def vista_loader(model_name, **kwargs):
             prompt_type: PromptType | None = None,
             input_type: Literal["document", "query"] | None = None,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_image_embeddings = []
             with torch.no_grad():
                 for batch in tqdm(images):
@@ -222,14 +222,14 @@ def vista_loader(model_name, **kwargs):
                             .to(torch.float32)
                         )
                 return torch.cat(all_fused_embeddings, dim=0)
-            elif "text" in inputs.dataset.features:
+            if "text" in inputs.dataset.features:
                 return self.get_text_embeddings(
                     inputs,
                     task_metadata=task_metadata,
                     prompt_type=prompt_type,
                     **kwargs,
                 )
-            elif "image" in inputs.dataset.features:
+            if "image" in inputs.dataset.features:
                 return self.get_image_embeddings(
                     inputs,
                     task_metadata=task_metadata,

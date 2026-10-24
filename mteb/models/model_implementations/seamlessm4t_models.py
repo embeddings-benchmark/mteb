@@ -2,17 +2,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
-from transformers import AutoProcessor, SeamlessM4Tv2Model
 
-from mteb import TaskMetadata
-from mteb._create_dataloaders import AudioCollator
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.types import Array, BatchedInput, PromptType
-from mteb.types._encoder_io import AudioInput
+from mteb.models.modality_collators import AudioCollator
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -27,10 +21,18 @@ class SeamlessM4TWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_seconds: float = 5.0,
+        device: str | None = None,
+        # 60 s: MAX_INPUT_AUDIO_LENGTH in Meta's M4T v2 demo, not a model config
+        # https://github.com/facebookresearch/seamless_communication/blob/main/demo/m4tv2/app.py
+        max_audio_length_seconds: float = 60.0,
         **kwargs: Any,
     ):
+        import torch
+        from transformers import AutoProcessor, SeamlessM4Tv2Model
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         self.model_name = model_name
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds
@@ -46,24 +48,26 @@ class SeamlessM4TWrapper(AbsEncoder):
         self.speech_encoder = self.speech_encoder.to(device)
         self.max_samples = int(self.max_audio_length_seconds * self.sampling_rate)
 
-    def get_audio_embeddings(
+    def get_audio_embeddings(  # noqa: PLR0914
         self,
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        inputs.collate_fn = AudioCollator(self.sampling_rate, self.max_samples)
+        import torch
+
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate, max_samples=self.max_samples
+        )
         all_embeddings = []
 
-        for batch in tqdm(
-            inputs,
-            disable=not show_progress_bar,
-        ):
+        for batch in tqdm(inputs, disable=not show_progress_bar):
             audio_arrays = [audio["array"] for audio in batch["audio"]]
 
-            # Process the entire batch at once
-            features = self.processor(
-                audios=audio_arrays,
+            # call the feature extractor directly: the processor's audio keyword
+            # is `audios` before transformers 4.57 and `audio` from v5
+            features = self.processor.feature_extractor(
+                audio_arrays,
                 sampling_rate=self.sampling_rate,
                 return_tensors="pt",
                 padding=True,
@@ -157,6 +161,7 @@ seamless_m4t_v2_large = ModelMeta(
     release_date="2023-11-06",
     max_tokens=None,
     n_parameters=2_300_000_000,
+    n_embedding_parameters=262248448,
     memory_usage_mb=8809,
     embed_dim=1024,
     license="mit",
@@ -166,7 +171,10 @@ seamless_m4t_v2_large = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/facebookresearch/seamless_communication",
     public_training_data=None,
-    training_datasets=None,
+    training_datasets={
+        "FleursA2TRetrieval",
+        # CoVoST2, CVSS-C, NLLB-200 (not in MTEB)
+    },
     modalities=["audio"],
     citation="""
 @misc{communication2023seamlessmultilingualexpressivestreaming,
@@ -178,4 +186,5 @@ seamless_m4t_v2_large = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2312.05187},
 }""",
+    extra_requirements_groups=["seamless-m4t"],
 )

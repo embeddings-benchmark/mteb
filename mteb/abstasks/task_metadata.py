@@ -2,9 +2,16 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 from collections.abc import Sequence
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Literal, cast
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Literal,
+    Required,
+    cast,
+)
 
 from huggingface_hub import (
     DatasetCard,
@@ -18,9 +25,8 @@ from pydantic import (
     ConfigDict,
     field_validator,
 )
-from typing_extensions import Required, TypedDict  # noqa: TC002
+from typing_extensions import TypedDict
 
-import mteb
 from mteb.languages import check_language_code
 from mteb.types import (
     Languages,
@@ -74,8 +80,10 @@ TaskSubtype = Literal[
     "Scene recognition",
     "Caption Pairing",
     "Emotion recognition",
+    "Event Retrieval",
     "Textures recognition",
     "Activity recognition",
+    "Physical plausibility classification",
     "Tumor detection",
     "Duplicate Detection",
     "Rendered semantic textual similarity",
@@ -119,6 +127,7 @@ TaskSubtype = Literal[
     "Question Answering Retrieval",
     "Reading Comprehension",
     "Intent Classification",
+    "Cross-Modal Retrieval",
 ]
 """The subtypes of the task. E.g. includes "Sentiment/Hate speech", "Thematic Clustering". This list can be updated as needed."""
 
@@ -153,6 +162,14 @@ TaskDomain = Literal[
     "Spoken",
     "Music",
     "Bioacoustics",
+    "Sport",
+    # Video content domains
+    "Activity",  # human actions / activities (action recognition, activity QA)
+    "Instructional",  # procedural / how-to / cooking content
+    "Egocentric",  # first-person / wearable-camera video
+    "Nature",  # animals, wildlife, natural environments
+    "Animation",  # cartoon / animated / synthetic content
+    "Robotics",  # robot manipulation / embodied-agent content
 ]
 """
 The domains follow the categories used in the [Universal Dependencies project](https://universaldependencies.org), though
@@ -175,53 +192,46 @@ SampleCreationMethod = Literal[
 ]
 """How the text was created. It can be an important factor for understanding the quality of a dataset. E.g. used to filter out machine-translated datasets."""
 
-MIEB_TASK_TYPE = (
-    "Any2AnyMultiChoice",
+TaskType = Literal[
+    "BitextMining",
+    "Classification",
+    "MultilabelClassification",
+    "Clustering",
+    "PairClassification",
+    "Regression",
+    "Reranking",
+    "Retrieval",
+    "STS",
+    "Summarization",
+    "InstructionRetrieval",
+    "InstructionReranking",
+    # MIEB
+    "Any2AnyReranking",
     "Any2AnyRetrieval",
     "Any2AnyMultilingualRetrieval",
     "VisionCentricQA",
     "ImageClustering",
     "ImageClassification",
-    "ImageMultilabelClassification",
     "DocumentUnderstanding",
     "VisualSTS(eng)",
     "VisualSTS(multi)",
     "ZeroShotClassification",
     "Compositionality",
-)
-
-MAEB_TASK_TYPE = (
+    # MAEB
     "AudioClustering",
     "AudioMultilabelClassification",
     "AudioReranking",
     "AudioZeroshotClassification",
     "AudioClassification",
-    "AudioCrossFoldClassification",
     "AudioPairClassification",
-    "Any2AnyRetrieval",
-)
-
-
-_TASK_TYPE = (
-    (
-        "BitextMining",
-        "Classification",
-        "MultilabelClassification",
-        "Clustering",
-        "PairClassification",
-        "Regression",
-        "Reranking",
-        "Retrieval",
-        "STS",
-        "Summarization",
-        "InstructionRetrieval",
-        "InstructionReranking",
-    )
-    + MIEB_TASK_TYPE
-    + MAEB_TASK_TYPE
-)
-
-TaskType = Literal[_TASK_TYPE]  # type: ignore[valid-type]
+    # MVEB
+    "VideoClassification",
+    "VideoClustering",
+    "VideoMultilabelClassification",
+    "VideoPairClassification",
+    "VideoZeroshotClassification",
+    "VideoCentricQA",
+]
 """The type of the task. E.g. includes "Classification", "Retrieval" and "Clustering"."""
 
 
@@ -242,11 +252,37 @@ TaskCategory = Literal[
     "a2t",
     "t2a",
     "at2t",
+    "at2i",
     "at2a",
     "a2at",
     "t2at",
     "at2at",
+    "v2v",
+    "v2c",
     "v2t",
+    "t2v",
+    "vt2t",
+    "vt2v",
+    "v2vt",
+    "t2vt",
+    "vt2vt",
+    "va2c",
+    "va2t",
+    "t2va",
+    "vat2t",
+    "va2va",
+    "v2a",
+    "a2v",
+    "vt2a",
+    "it2a",
+    "at2v",
+    "a2i",
+    "i2a",
+    "i2v",
+    "i2va",
+    "it2v",
+    "v2i",
+    "it2c",
 ]
 """The category of the task.
 
@@ -266,12 +302,46 @@ TaskCategory = Literal[
 14. a2t: audio to text
 15. t2a: text to audio
 16. at2t: audio+text to text
-17. at2a: audio+text to audio
-18. a2at: audio to audio+text
-19. t2at: text to audio+text
-20. at2at: audio+text to audio+text
-21. v2t: video to text
+17. at2i: audio+text to image
+18. at2a: audio+text to audio
+19. a2at: audio to audio+text
+20. t2at: text to audio+text
+21. at2at: audio+text to audio+text
+22. v2v: video to video
+23. v2c: video to category
+24. v2t: video to text
+25. t2v: text to video
+26. vt2t: video+text to text
+27. vt2v: video+text to video
+28. v2vt: video to video+text
+29. t2vt: text to video+text
+30. vt2vt: video+text to video+text
+31. va2c: video+audio to category
+32. va2t: video+audio to text
+33. t2va: text to video+audio
+34. vat2t: video+audio+text to text
+35. va2va: video+audio to video+audio
+36. v2a: video to audio
+37. a2v: audio to video
+38. vt2a: video+text to audio
+39. it2a: image+text to audio
+40. at2v: audio+text to video
+41. a2i: audio to image
+42. i2a: image to audio
+43. i2v: image to video
+44. i2va: image to video+audio
+45. it2v: image+text to video
+46. v2i: video to image
+47. it2c: image+text to category
 """
+
+_MODALITY_CODES: dict[str, str] = {
+    "t": "text",
+    "i": "image",
+    "a": "audio",
+    "v": "video",
+    "c": "category",
+}
 
 AnnotatorType = Literal[
     "expert-annotated",
@@ -297,6 +367,53 @@ Attributes:
     query: The prompt used for the queries in the task.
     document: The prompt used for the passages in the task.
 """
+
+
+SimplifiedTaskType = Literal[
+    "retrieval",
+    "clustering",
+    "classification",
+    "semantic-similarity",
+    "pair-classification",
+]
+
+_TASKTYPE2SIMPLIFIEDTASKTYPE: dict[TaskType, SimplifiedTaskType] = {
+    "Any2AnyReranking": "retrieval",
+    "Any2AnyRetrieval": "retrieval",
+    "Any2AnyMultilingualRetrieval": "retrieval",
+    "VisionCentricQA": "retrieval",
+    "DocumentUnderstanding": "retrieval",
+    "AudioReranking": "retrieval",
+    "Reranking": "retrieval",
+    "Retrieval": "retrieval",
+    "InstructionRetrieval": "retrieval",
+    "InstructionReranking": "retrieval",
+    "Clustering": "clustering",
+    "ImageClustering": "clustering",
+    "AudioClustering": "clustering",
+    "AudioMultilabelClassification": "classification",
+    "AudioZeroshotClassification": "classification",
+    "AudioClassification": "classification",
+    "ImageClassification": "classification",
+    "ZeroShotClassification": "classification",
+    "MultilabelClassification": "classification",
+    "Classification": "classification",
+    "Regression": "classification",
+    "VisualSTS(eng)": "semantic-similarity",
+    "VisualSTS(multi)": "semantic-similarity",
+    "STS": "semantic-similarity",
+    "Summarization": "semantic-similarity",
+    "BitextMining": "semantic-similarity",
+    "Compositionality": "pair-classification",
+    "AudioPairClassification": "pair-classification",
+    "PairClassification": "pair-classification",
+    "VideoClassification": "classification",
+    "VideoClustering": "clustering",
+    "VideoMultilabelClassification": "classification",
+    "VideoPairClassification": "pair-classification",
+    "VideoZeroshotClassification": "classification",
+    "VideoCentricQA": "retrieval",
+}
 
 
 class MetadataDatasetDict(TypedDict, total=False):
@@ -346,11 +463,18 @@ class TaskMetadata(BaseModel):
         sample_creation: The method of text creation. Includes "found", "created", "machine-translated", "machine-translated and verified", and
             "machine-translated and localized".
         prompt: The prompt used for the task. Can be a string or a dictionary containing the query and passage prompts.
-        bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
+        bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available. As non-existing citations can
+            cause authors citing the work to be penalized, we recommend to use an empty string if no citation is available. Similarly, if no article
+            exist, we recommend to use an empty string instead of citing e.g. the dataset's website. It is allowed to cite multiple articles.
         adapted_from: Datasets adapted (translated, sampled from, etc.) from other datasets.
         is_public: Whether the dataset is publicly available. If False (closed/private), a HuggingFace token is required to run the datasets.
+        contributed_by: The name of the organization or individual who contributed the dataset. This is especially useful for private datasets
+            where it may be harder to gather information about the source.
         superseded_by: Denotes the task that this task is superseded by. Used to issue warning to users of outdated datasets, while maintaining
             reproducibility of existing benchmarks.
+        is_beta: Whether the dataset is in beta. This can be used to denote that the dataset is still being verified and may contain errors.
+            Users should be cautious when using beta datasets. We generally recommend against using beta datasets in published benchmarks, but they can be useful for internal testing and development. We
+            similarly discourage contributing beta datasets, unless there is a specific reason to do so.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -381,7 +505,9 @@ class TaskMetadata(BaseModel):
     bibtex_citation: str | None = None
     adapted_from: Sequence[str] | None = None
     is_public: bool = True
+    contributed_by: str | None = None
     superseded_by: str | None = None
+    is_beta: bool = False
 
     def _validate_metadata(self) -> None:
         self._eval_langs_are_valid(self.eval_langs)
@@ -399,7 +525,7 @@ class TaskMetadata(BaseModel):
                     )
         return prompt
 
-    def _eval_langs_are_valid(self, eval_langs: Languages) -> None:
+    def _eval_langs_are_valid(self, eval_langs: Languages) -> None:  # noqa: PLR6301
         """This method checks that the eval_langs are specified as a list of languages."""
         if isinstance(eval_langs, dict):
             for langs in eval_langs.values():
@@ -410,8 +536,29 @@ class TaskMetadata(BaseModel):
                 check_language_code(code)
 
     @property
+    def simplified_task_type(self) -> SimplifiedTaskType:
+        """A simplified task type compared to metadata.type. E.g. converts AudioClustering and ImageClustering to simply Clustering.
+
+        This performs a rought separation into the following categories:
+
+        - **retrieval**: Tasks that (generally) require asymmetric matching between a query and a corpus, where the
+            query and passage embeddings may occupy different regions of the embedding space.
+        - **clustering**: Tasks that require globally coherent embeddings, where the distance between all
+            items in the embedding space reflects their semantic grouping.
+        - **classification**: Tasks that require embeddings to be linearly separable by category in the
+            embedding space. Typically these task utilize classifier or regression probe fit on the embeddings.
+        - **semantic-similarity**: Tasks that require embeddings to preserve fine-grained similarity
+            between pairs of items, such that cosine similarity reflects human judgments.
+        - **pair-classification**: Tasks that require embeddings to capture the relationship between a pair
+            of items, such as entailment or paraphrase.
+
+        These categories are compatible with task separation such as that of Jina v3, though not not an exact match.
+        """
+        return _TASKTYPE2SIMPLIFIEDTASKTYPE[self.type]
+
+    @property
     def bcp47_codes(self) -> list[ISOLanguageScript]:
-        """Return the languages and script codes of the dataset formatting in accordance with the BCP-47 standard."""
+        """The languages and script codes of the dataset formatted in accordance with the BCP-47 standard."""
         if isinstance(self.eval_langs, dict):
             return sorted(
                 {lang for langs in self.eval_langs.values() for lang in langs}
@@ -420,10 +567,10 @@ class TaskMetadata(BaseModel):
 
     @property
     def languages(self) -> list[str]:
-        """Return the languages of the dataset as iso639-3 codes."""
+        """The languages of the dataset as iso639-3 codes."""
 
         def get_lang(lang: str) -> str:
-            return lang.split("-")[0]
+            return lang.split("-", maxsplit=1)[0]
 
         if isinstance(self.eval_langs, dict):
             return sorted(
@@ -433,7 +580,7 @@ class TaskMetadata(BaseModel):
 
     @property
     def scripts(self) -> set[str]:
-        """Return the scripts of the dataset as iso15924 codes."""
+        """The scripts of the dataset as iso15924 codes."""
 
         def get_script(lang: str) -> str:
             return lang.split("-")[1]
@@ -452,18 +599,18 @@ class TaskMetadata(BaseModel):
         """
         return all(
             getattr(self, field_name) is not None
-            for field_name in self.model_fields
-            if field_name not in ["prompt", "adapted_from", "superseded_by"]
+            for field_name in self.__class__.model_fields
+            if field_name
+            not in ["prompt", "adapted_from", "contributed_by", "superseded_by"]  # noqa: PLR6201
         )
 
     @property
     def hf_subsets_to_langscripts(self) -> dict[HFSubset, list[ISOLanguageScript]]:
-        """Return a dictionary mapping huggingface subsets to languages."""
+        """A dictionary mapping huggingface subsets to languages."""
         if isinstance(self.eval_langs, dict):
             return self.eval_langs
         return {"default": cast("list[str]", self.eval_langs)}
 
-    @property
     def intext_citation(self, include_cite: bool = True) -> str:
         """Create an in-text citation for the dataset."""
         cite = ""
@@ -479,28 +626,26 @@ class TaskMetadata(BaseModel):
 
     @property
     def descriptive_stats(self) -> dict[str, DescriptiveStatistics] | None:
-        """Return the descriptive statistics for the dataset."""
+        """The descriptive statistics for the dataset."""
         if self.descriptive_stat_path.exists():
-            with self.descriptive_stat_path.open("r") as f:
-                return json.load(f)
+            with self.descriptive_stat_path.open("r", encoding="utf-8") as f:
+                js = cast("dict[str, DescriptiveStatistics]", json.load(f))
+                return js
         return None
 
     @property
     def descriptive_stat_path(self) -> Path:
-        """Return the path to the descriptive statistics file."""
+        """The path to the descriptive statistics file."""
         descriptive_stat_base_dir = Path(__file__).parent.parent / "descriptive_stats"
-        if self.type in MIEB_TASK_TYPE:
-            descriptive_stat_base_dir = descriptive_stat_base_dir / "Image"
-        task_type_dir = descriptive_stat_base_dir / self.type
-        if not descriptive_stat_base_dir.exists():
-            descriptive_stat_base_dir.mkdir()
-        if not task_type_dir.exists():
-            task_type_dir.mkdir()
-        return task_type_dir / f"{self.name}.json"
+        # Image task types (and Any2Any types) keep their stats under an extra "Image/" folder
+        image_task_type_dir = descriptive_stat_base_dir / "Image" / str(self.type)
+        if image_task_type_dir.is_dir():
+            return image_task_type_dir / f"{self.name}.json"
+        return descriptive_stat_base_dir / str(self.type) / f"{self.name}.json"
 
     @property
     def n_samples(self) -> dict[str, int] | None:
-        """Returns the number of samples in the dataset"""
+        """The number of samples in the dataset."""
         stats = self.descriptive_stats
         if not stats:
             return None
@@ -509,12 +654,12 @@ class TaskMetadata(BaseModel):
         for subset, subset_value in stats.items():
             if subset == "hf_subset_descriptive_stats":
                 continue
-            n_samples[subset] = subset_value["num_samples"]
+            n_samples[subset] = subset_value["num_samples"]  # type: ignore[typeddict-item]
         return n_samples
 
     @property
     def hf_subsets(self) -> list[str]:
-        """Return the huggingface subsets."""
+        """The huggingface subsets."""
         return list(self.hf_subsets_to_langscripts.keys())
 
     @property
@@ -527,7 +672,7 @@ class TaskMetadata(BaseModel):
 
     @property
     def revision(self) -> str:
-        """Return the dataset revision."""
+        """The dataset revision."""
         return self.dataset["revision"]
 
     def get_modalities(self, prompt_type: PromptType | None = None) -> list[Modalities]:
@@ -588,9 +733,10 @@ class TaskMetadata(BaseModel):
             multilinguality = "translated"
 
         if self.adapted_from is not None:
+            from mteb.get_tasks import get_tasks
+
             source_datasets = [
-                task.metadata.dataset["path"]
-                for task in mteb.get_tasks(self.adapted_from)
+                task.metadata.dataset["path"] for task in get_tasks(self.adapted_from)
             ]
             source_datasets.append(self.dataset["path"])
         else:
@@ -601,12 +747,12 @@ class TaskMetadata(BaseModel):
         descriptive_stats = ""
         if self.descriptive_stats is not None:
             descriptive_stats_ = self.descriptive_stats
-            for split, split_stat in descriptive_stats_.items():
+            for split_stat in descriptive_stats_.values():
                 if len(split_stat.get("hf_subset_descriptive_stats", {})) > 10:
                     split_stat.pop("hf_subset_descriptive_stats", {})
             descriptive_stats = json.dumps(descriptive_stats_, indent=4)
 
-        dataset_card_data_params = existing_dataset_card_data.to_dict()
+        dataset_card_data_params = existing_dataset_card_data.to_dict()  # type: ignore[no-untyped-call]
         # override the existing values
         dataset_card_data_params.update(
             dict(
@@ -623,19 +769,60 @@ class TaskMetadata(BaseModel):
             )
         )
 
+        # Format category as "{type} ({description})" e.g. "Retrieval (text-to-text)"
+        if self.category is not None:
+            category_desc = self._category_description(self.category)
+            formatted_category = f"{self.type} ({category_desc})"
+        else:
+            formatted_category = str(self.type)
+
+        # Format reference with paper title from BibTeX when available
+        formatted_reference = self._format_reference()
+
         return (
             DatasetCardData(**dataset_card_data_params),
             # parameters for readme generation
             dict(
                 citation=self.bibtex_citation,
                 dataset_description=self.description,
-                dataset_reference=self.reference,
+                dataset_reference=formatted_reference,
                 descriptive_stats=descriptive_stats,
                 dataset_task_name=self.name,
-                category=self.category,
+                category=formatted_category,
                 domains=", ".join(self.domains) if self.domains else None,
+                contributed_by=self.contributed_by,
             ),
         )
+
+    @staticmethod
+    def _category_description(category: str) -> str:
+        """Convert category code like 'it2t' to 'image+text-to-text'."""
+        parts = category.split("2", 1)
+        if len(parts) != 2:
+            return category
+        query = "+".join(_MODALITY_CODES.get(c, c) for c in parts[0])
+        doc = "+".join(_MODALITY_CODES.get(c, c) for c in parts[1])
+        return f"{query}-to-{doc}"
+
+    @staticmethod
+    def _extract_bibtex_title(bibtex_citation: str) -> str | None:
+        """Extract the title from a BibTeX citation string."""
+        match = re.search(r"title\s*=\s*\{([^}]+)\}", bibtex_citation)
+        if match:
+            return match.group(1).strip()
+        return None
+
+    def _format_reference(self) -> str | None:
+        """Format the reference as a markdown link with the paper title from BibTeX."""
+        title = None
+        if self.bibtex_citation:
+            title = self._extract_bibtex_title(self.bibtex_citation)
+
+        if title and self.reference:
+            return f"[{title}]({self.reference})"
+        if self.reference:
+            return str(self.reference)
+        return None
 
     def generate_dataset_card(
         self,
@@ -656,10 +843,14 @@ class TaskMetadata(BaseModel):
         dataset_card_data, template_kwargs = self._create_dataset_card_data(
             existing_dataset_card_data
         )
-        dataset_card = DatasetCard.from_template(
-            card_data=dataset_card_data,
-            template_path=str(path),
-            **template_kwargs,
+        # HF hub, don't specify return type
+        dataset_card = cast(
+            "DatasetCard",
+            DatasetCard.from_template(
+                card_data=dataset_card_data,
+                template_path=str(path),
+                **template_kwargs,
+            ),
         )
         return dataset_card
 
@@ -695,7 +886,6 @@ class TaskMetadata(BaseModel):
             "Political classification": [],
             "Question answering": [
                 "multiple-choice-qa",
-                "question-answering",
             ],
             "Sentiment/Hate speech": [
                 "sentiment-analysis",
@@ -722,6 +912,7 @@ class TaskMetadata(BaseModel):
             "Emotion recognition": ["sentiment-scoring"],
             "Textures recognition": [],
             "Activity recognition": [],
+            "Physical plausibility classification": [],
             "Tumor detection": [],
             "Duplicate Detection": [],
             "Rendered semantic textual similarity": [
@@ -793,11 +984,11 @@ class TaskMetadata(BaseModel):
             "InstructionReranking": ["text-ranking"],
             # Image
             "Any2AnyMultiChoice": ["visual-question-answering"],
+            "Any2AnyReranking": ["visual-question-answering"],
             "Any2AnyMultilingualRetrieval": ["visual-document-retrieval"],
             "VisionCentricQA": ["visual-question-answering"],
             "ImageClustering": ["image-feature-extraction"],
             "ImageClassification": ["image-classification"],
-            "ImageMultilabelClassification": ["image-classification"],
             "DocumentUnderstanding": ["visual-document-retrieval"],
             "VisualSTS(eng)": ["other"],
             "VisualSTS(multi)": ["other"],
@@ -809,8 +1000,10 @@ class TaskMetadata(BaseModel):
             "AudioReranking": ["other"],
             "AudioZeroshotClassification": ["other"],
             "AudioClassification": ["audio-classification"],
-            "AudioCrossFoldClassification": ["audio-classification"],
             "AudioPairClassification": ["audio-classification"],
+            # video
+            "VideoCentricQA": ["visual-question-answering"],
+            "VideoZeroshotClassification": ["video-classification"],
         }
         if self.type == "ZeroShotClassification":
             if self.modalities == ["image"]:
@@ -826,16 +1019,37 @@ class TaskMetadata(BaseModel):
 
     def _hf_task_category(self) -> list[str]:
         dataset_type = []
-        if self.category in ["i2i", "it2i", "i2it", "it2it"]:
+        if self.category in ["i2i", "it2i", "i2it", "it2it"]:  # noqa: PLR6201
             dataset_type.append("image-to-image")
-        if self.category in ["i2t", "t2i", "it2t", "it2i", "t2it", "i2it", "it2it"]:
+        if self.category in {
+            "i2t",
+            "t2i",
+            "it2t",
+            "it2i",
+            "t2it",
+            "i2it",
+            "it2it",
+            "at2i",
+            "it2a",
+        }:
             dataset_type.extend(["image-to-text", "text-to-image"])
-        if self.category in ["it2t", "it2i", "t2it", "i2it", "it2it"]:
+        if self.category in ["it2t", "it2i", "t2it", "i2it", "it2it"]:  # noqa: PLR6201
             dataset_type.extend(["image-text-to-text"])
-        if self.category in ["a2a", "at2a", "a2at", "at2at"]:
+        if self.category in ["a2a", "at2a", "a2at", "at2at"]:  # noqa: PLR6201
             dataset_type.append("audio-to-audio")
-        if self.category in ["a2t", "t2a", "at2t", "t2at", "at2at", "a2at"]:
+        if self.category in {
+            "a2t",
+            "t2a",
+            "at2t",
+            "at2i",
+            "it2a",
+            "t2at",
+            "at2at",
+            "a2at",
+        }:
             dataset_type.extend(["text-to-audio"])
+        if self.category in {"i2v", "i2va"}:
+            dataset_type.append("image-to-video")
         return dataset_type
 
     def _hf_languages(self) -> list[str]:

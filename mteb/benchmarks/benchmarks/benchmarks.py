@@ -1,5 +1,8 @@
 from mteb.benchmarks.benchmark import (
     Benchmark,
+    BenchmarkAggregation,
+    CustomGroup,
+    CustomGrouping,
     HUMEBenchmark,
     MIEBBenchmark,
     VidoreBenchmark,
@@ -77,13 +80,7 @@ MTEB_EN = Benchmark(
             get_task("STS22.v2", eval_splits=["test"], hf_subsets=["en"]),
         ),
     ),
-    description="""The new English Massive Text Embedding Benchmark.
-This benchmark was created to account for the fact that many models have now been finetuned
-to tasks in the original MTEB, and contains tasks that are not as frequently used for model training.
-This way the new benchmark and leaderboard can give our users a more realistic expectation of models' generalization performance.
-
-The original MTEB leaderboard is available under the [MTEB(eng, v1)](http://mteb-leaderboard.hf.space/?benchmark_name=MTEB%28eng%2C+v1%29) tab.
-    """,
+    description="English text embedding quality across classification, clustering, retrieval, reranking, pair classification, and semantic similarity, prioritizing tasks not commonly used for fine-tuning to give a more realistic estimate of generalization performance. The original v1 leaderboard is available under [MTEB(eng, v1)](http://mteb-leaderboard.hf.space/?benchmark_name=MTEB%28eng%2C+v1%29).",
     citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "Muennighoff"],
 )
@@ -91,7 +88,7 @@ The original MTEB leaderboard is available under the [MTEB(eng, v1)](http://mteb
 MTEB_ENG_CLASSIC = Benchmark(
     name="MTEB(eng, v1)",
     aliases=["MTEB(eng, classic)", "MTEB"],
-    display_name="English Legacy",
+    display_name="English",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/gb.svg",
     tasks=MTEBTasks(
         get_tasks(
@@ -167,10 +164,7 @@ MTEB_ENG_CLASSIC = Benchmark(
             get_task("STS22", eval_splits=["test"], hf_subsets=["en"]),
         )
     ),
-    description="""The original English benchmark by Muennighoff et al., (2023).
-This page is an adaptation of the [old MTEB leaderboard](https://huggingface.co/spaces/mteb/leaderboard_legacy).
-We recommend that you use [MTEB(eng, v2)](http://mteb-leaderboard.hf.space/?benchmark_name=MTEB%28eng%2C+v2%29) instead, as it uses updated versions of the task, making it notably faster to run and resolving [a known bug](https://github.com/embeddings-benchmark/mteb/issues/1156) in existing tasks. This benchmark also removes datasets common for fine-tuning, such as MSMARCO, which makes model performance scores more comparable. However, generally, both benchmarks provide similar estimates.
-    """,
+    description="English text embedding quality across classification, clustering, retrieval, reranking, pair classification, and semantic similarity. We recommend using [MTEB(eng, v2)](http://mteb-leaderboard.hf.space/?benchmark_name=MTEB%28eng%2C+v2%29) instead, which resolves [a known scoring bug](https://github.com/embeddings-benchmark/mteb/issues/1156), uses updated task versions, and removes common fine-tuning datasets such as MSMARCO for more comparable scores.",
     citation=r"""
 @article{muennighoff2022mteb,
   author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Loïc and Reimers, Nils},
@@ -183,12 +177,13 @@ We recommend that you use [MTEB(eng, v2)](http://mteb-leaderboard.hf.space/?benc
 }
 """,
     contacts=["Muennighoff"],
+    superseded_by=["MTEB(eng, v2)"],
 )
 
 MTEB_MAIN_RU = Benchmark(
     name="MTEB(rus, v1)",
     aliases=["MTEB(rus)"],
-    display_name="Russian legacy",
+    display_name="Russian",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ru.svg",
     tasks=MTEBTasks(
         get_tasks(
@@ -230,7 +225,7 @@ MTEB_MAIN_RU = Benchmark(
             eval_splits=["test"],
         )
     ),
-    description="A Russian version of the Massive Text Embedding Benchmark with a number of novel Russian tasks in all task categories of the original MTEB.",
+    description="Russian text embedding quality across classification, clustering, reranking, pair classification, retrieval, and semantic similarity, including novel Russian-specific tasks in each category.",
     reference="https://aclanthology.org/2023.eacl-main.148/",
     citation=r"""
 @misc{snegirev2024russianfocusedembeddersexplorationrumteb,
@@ -244,6 +239,7 @@ MTEB_MAIN_RU = Benchmark(
 }
 """,
     contacts=["Samoed", "artemsnegirev", "Drozhzhinastya"],
+    superseded_by=["MTEB(rus, v1.1)"],
 )
 
 MTEB_MAIN_RU_v1_1 = Benchmark(
@@ -290,7 +286,7 @@ MTEB_MAIN_RU_v1_1 = Benchmark(
             eval_splits=["test"],
         )
     ),
-    description="A Russian version of the Massive Text Embedding Benchmark covering the task categories of classification, clustering, reranking, pair classification, retrieval, and semantic similarity. In v1.1, MIRACLRetrieval and RiaNewsRetrieval were replaced with their HardNegatives variants for improved time-optimization measurement. MIRACLRetrievalHardNegatives and RiaNewsRetrievalHardNegatives are used in their updated versions (v2), both of which include improved default prompts.",
+    description="Russian text embedding quality across classification, clustering, reranking, pair classification, retrieval, and semantic similarity. In v1.1, MIRACLRetrieval and RiaNewsRetrieval were replaced with their HardNegatives variants (v2), which include improved default prompts.",
     reference="https://aclanthology.org/2023.eacl-main.148/",
     citation=r"""
 @misc{snegirev2024russianfocusedembeddersexplorationrumteb,
@@ -305,7 +301,6 @@ MTEB_MAIN_RU_v1_1 = Benchmark(
 """,
     contacts=["Samoed", "artemsnegirev", "Drozhzhinastya"],
 )
-
 
 RU_SCI_BENCH = Benchmark(
     name="RuSciBench",
@@ -326,7 +321,7 @@ RU_SCI_BENCH = Benchmark(
             "RuSciBenchYearPublRegression",
         ],
     ),
-    description="RuSciBench is a benchmark designed for evaluating sentence encoders and language models on scientific texts in both Russian and English. The data is sourced from eLibrary (www.elibrary.ru), Russia's largest electronic library of scientific publications. This benchmark facilitates the evaluation and comparison of models on various research-related tasks.",
+    description="Scientific text embedding quality in Russian and English across bitext mining, classification, retrieval, and regression tasks, using data sourced from eLibrary, Russia's largest electronic library of scientific publications.",
     reference="https://link.springer.com/article/10.1134/S1064562424602191",
     citation=r"""
 @article{vatolin2024ruscibench,
@@ -356,7 +351,7 @@ MTEB_RETRIEVAL_WITH_INSTRUCTIONS = Benchmark(
             "Core17InstructionRetrieval",
         ]
     ),
-    description="Retrieval w/Instructions is the task of finding relevant documents for a query that has detailed instructions.",
+    description="Instruction-following retrieval quality, measuring how well models retrieve relevant documents when given detailed natural language instructions alongside queries.",
     reference="https://arxiv.org/abs/2403.15246",
     citation=r"""
 @misc{weller2024followir,
@@ -384,7 +379,7 @@ MTEB_RETRIEVAL_WITH_DOMAIN_INSTRUCTIONS = Benchmark(
             "IFIRScifact",
         ]
     ),
-    description="Benchmark for Evaluating Instruction-Following in Expert-Domain Information Retrieval",
+    description="Instruction-following retrieval quality in expert domains including healthcare, finance, and legal, where queries are paired with domain-specific natural language instructions.",
     reference="https://arxiv.org/abs/2503.04644",
     citation=r"""
 @inproceedings{song2025ifir,
@@ -415,7 +410,7 @@ MTEB_RETRIEVAL_LAW = Benchmark(
             "LegalQuAD",
         ]
     ),
-    description="A benchmark of retrieval tasks in the legal domain.",
+    description="Legal document retrieval across case documents, statutes, legal Q&A, and legal summarization in multiple languages.",
     reference=None,
     citation=None,
 )
@@ -441,7 +436,7 @@ MTEB_RETRIEVAL_MEDICAL = Benchmark(
             "CMedQAv2-reranking",
         ],
     ),
-    description="A curated set of MTEB tasks designed to evaluate systems in the context of medical information retrieval.",
+    description="Medical information retrieval across clinical, biomedical, and consumer health domains, spanning retrieval, reranking, and clustering tasks.",
     reference=None,
     citation=None,
 )
@@ -459,10 +454,7 @@ MTEB_MINERS_BITEXT_MINING = Benchmark(
             "Tatoeba",
         ]
     ),
-    description="""Bitext Mining texts from the MINERS benchmark, a benchmark designed to evaluate the
-    ability of multilingual LMs in semantic retrieval tasks,
-    including bitext mining and classification via retrieval-augmented contexts.
-    """,
+    description="Multilingual bitext mining quality across diverse language pairs, drawn from the MINERS benchmark for evaluating semantic retrieval in multilingual settings.",
     reference="https://arxiv.org/pdf/2406.07424",
     citation=r"""
 @article{winata2024miners,
@@ -517,7 +509,7 @@ SEB = Benchmark(
         ],
         languages=["dan", "swe", "nno", "nob"],
     ),
-    description="A curated selection of tasks coverering the Scandinavian languages; Danish, Swedish and Norwegian, including Bokmål and Nynorsk.",
+    description="Scandinavian text embedding quality covering Danish, Swedish, Norwegian Bokmål, and Nynorsk and spanning classification, clustering, retrieval as well as bitext  tasks across dialects or written forms.",
     reference="https://kennethenevoldsen.github.io/scandinavian-embedding-benchmark/",
     citation=r"""
 @article{enevoldsenScandinavianEmbeddingBenchmarks2024,
@@ -552,7 +544,7 @@ CoIR = Benchmark(
             "SyntheticText2SQL",
         ]
     ),
-    description="CoIR: A Comprehensive Benchmark for Code Information Retrieval Models",
+    description="Code information retrieval across diverse programming languages and coding tasks, including code search, question answering, and text-to-SQL retrieval.",
     reference="https://github.com/CoIR-team/coir",
     citation=r"""
 @misc{li2024coircomprehensivebenchmarkcode,
@@ -591,7 +583,7 @@ RAR_b = Benchmark(
             "RARbMath",
         ]
     ),
-    description="A benchmark to evaluate reasoning capabilities of retrievers.",
+    description="Reasoning capabilities of retrieval models, framing commonsense, temporal, and domain-specific reasoning tasks as retrieval problems.",
     reference="https://arxiv.org/abs/2404.06347",
     citation=r"""
 @article{xiao2024rar,
@@ -647,10 +639,10 @@ MTEB_FRA = Benchmark(
         )
         + (get_task("STS22", eval_splits=["test"], hf_subsets=["fr"]),)
     ),
-    description="MTEB-French, a French expansion of the original benchmark with high-quality native French datasets.",
+    description="French text embedding quality across classification, clustering, pair classification, reranking, retrieval, and semantic similarity, using high-quality native French datasets.",
     reference="https://arxiv.org/abs/2405.20468",
     citation=r"""
-@misc{ciancone2024mtebfrenchresourcesfrenchsentence,
+@misc{ciancone2024mteb,
   archiveprefix = {arXiv},
   author = {Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
   eprint = {2405.20468},
@@ -699,7 +691,7 @@ MTEB_DEU = Benchmark(
             "STS22",
         ],
     ),
-    description="A benchmark for text-embedding performance in German.",
+    description="German text embedding quality across classification, clustering, pair classification, reranking, retrieval, and semantic similarity.",
     reference="https://arxiv.org/html/2401.02709v1",
     citation=r"""
 @misc{wehrli2024germantextembeddingclustering,
@@ -717,12 +709,13 @@ MTEB_DEU = Benchmark(
 
 MTEB_KOR = Benchmark(
     name="MTEB(kor, v1)",
-    aliases=["MTEB(kor)"],
+    aliases=[],
     display_name="Korean",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/kr.svg",
     tasks=get_tasks(
         languages=["kor"],
-        tasks=[  # @KennethEnevoldsen: We could probably expand this to a more solid benchmark, but for now I have left it as is.
+        tasks=[
+            # @KennethEnevoldsen: We could probably expand this to a more solid benchmark, but for now I have left it as is.
             # Classification
             "KLUE-TC",
             # Reranking
@@ -735,7 +728,57 @@ MTEB_KOR = Benchmark(
             "KorSTS",
         ],
     ),
-    description="A benchmark and leaderboard for evaluation of text embedding in Korean.",
+    description="Korean text embedding quality across classification, reranking, retrieval, and semantic similarity.",
+    reference=None,
+    citation=None,
+    superseded_by=["MTEB(kor, v2)"],
+)
+
+MTEB_KOR_V2 = Benchmark(
+    name="MTEB(kor, v2)",
+    aliases=["MTEB(kor)"],
+    display_name="Korean",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/kr.svg",
+    tasks=get_tasks(
+        languages=["kor"],
+        tasks=[
+            # Classification
+            "KLUE-TC",
+            # Clustering
+            "SIB200ClusteringS2S",
+            "KlueMrcDomainClustering",
+            "KlueYnatMrcCategoryClustering",
+            # Pair Classification (NLI)
+            "KLUE-NLI",
+            "KorNLI",
+            "PawsXPairClassification",
+            # Reranking
+            "MIRACLReranking",
+            # Retrieval
+            "MIRACLRetrieval",
+            "Ko-StrategyQA",
+            "LawIRKo",
+            "SQuADKorV1Retrieval",
+            "AutoRAGRetrieval",
+            "PublicHealthQA",
+            "BelebeleRetrieval",
+            "MultiLongDocRetrieval",
+            "MrTidyRetrieval",
+            # STS
+            "KLUE-STS",
+            "KorSTS",
+            "STS17",
+        ],
+    ),
+    description=(
+        "Korean text embedding quality across classification, clustering, pair "
+        "classification (NLI), reranking, retrieval, and semantic similarity. "
+        "Expanded successor to MTEB(kor, v1): grows the suite from 6 to 20 tasks, "
+        "adding clustering (SIB200, KLUE-MRC domain/category), pair classification/NLI "
+        "(KLUE-NLI, KorNLI, PawsX), additional retrieval (LawIRKo, SQuAD-Ko, AutoRAG, "
+        "PublicHealthQA, Belebele, MultiLongDoc, MrTidy) and STS17, for broader and more "
+        "robust coverage of Korean embedding capabilities."
+    ),
     reference=None,
     citation=None,
 )
@@ -773,11 +816,7 @@ MTEB_POL = Benchmark(
         )
         + (get_task("STS22", eval_splits=["test"], hf_subsets=["pl"]),),
     ),
-    description="""Polish Massive Text Embedding Benchmark (PL-MTEB), a comprehensive benchmark for text embeddings in Polish. The PL-MTEB consists of 28 diverse NLP
-tasks from 5 task types. With tasks adapted based on previously used datasets by the Polish
-NLP community. In addition, a new PLSC (Polish Library of Science Corpus) dataset was created
-consisting of titles and abstracts of scientific publications in Polish, which was used as the basis for
-two novel clustering tasks.""",  # Rephrased from the abstract
+    description="Polish text embedding quality across classification, clustering, pair classification, retrieval, and semantic similarity, combining adapted community datasets with a novel Polish scientific literature corpus (PLSC).",
     reference="https://arxiv.org/abs/2405.10138",
     citation=r"""
 @article{poswiata2024plmteb,
@@ -788,6 +827,140 @@ two novel clustering tasks.""",  # Rephrased from the abstract
 }
 """,
     contacts=["rafalposwiata"],
+)
+
+MTEB_PT = Benchmark(
+    name="MTEB(por, v1)",
+    aliases=["MTEB(por)"],
+    display_name="Portuguese",
+    icon="https://raw.githubusercontent.com/lipis/flag-icons/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/br.svg",
+    tasks=MTEBTasks(
+        get_tasks(
+            languages=["por"],
+            tasks=[
+                # STS (3)
+                "Assin2STS",
+                "SICK-BR-STS",
+                "STSBenchmarkMultilingualSTS",
+                # Classification (3)
+                "MassiveIntentClassification",
+                "BrazilianToxicTweetsClassification",
+                "HateSpeechPortugueseClassification",
+                # Reranking (3)
+                "MultiLongDocReranking",
+                "WikipediaRerankingMultilingual",
+                "XGlueWPRReranking",
+                # Retrieval (1)
+                "MultiLongDocRetrieval",
+                "WikipediaRetrievalMultilingual",
+            ],
+        )
+        # Classification (2)
+        + (
+            get_task(
+                "MultiHateClassification", eval_splits=["test"], hf_subsets=["por"]
+            ),
+        )
+        + (
+            get_task(
+                "TweetSentimentClassification",
+                eval_splits=["test"],
+                hf_subsets=["portuguese"],
+            ),
+        )
+        # Retrieval (1)
+        + (get_task("WebFAQRetrieval", eval_splits=["test"], hf_subsets=["por"]),)
+    ),
+    description="Portuguese text embedding quality benchmark across semantic text similarity, classification, reranking and retrieval.",
+    reference=None,
+    citation=r"""
+@misc{okamura2026multilingualaveragesmtebptbenchmark,
+  archiveprefix = {arXiv},
+  author = {Lucas Hideki Takeuchi Okamura and Alexandre Alcoforado and Anna Helena Reali Costa},
+  eprint = {2607.04071},
+  primaryclass = {cs.CL},
+  title = {Beyond Multilingual Averages: MTEB-PT, a Benchmark for Portuguese Sentence Encoders},
+  url = {https://arxiv.org/abs/2607.04071},
+  year = {2026},
+}
+""",
+    contacts=["Lucas-Okamura"],
+)
+
+MTEB_SLK = Benchmark(
+    name="MTEB(slk, v1)",
+    aliases=["MTEB(slk)"],
+    display_name="Slovak",
+    icon="https://github.com/lipis/flag-icons/raw/59d15a43b2e643fc94e519904d148c616dec20e7/flags/4x3/sk.svg",
+    tasks=MTEBTasks(
+        get_tasks(
+            languages=["slk"],
+            tasks=[
+                # Retrieval
+                "BelebeleRetrieval",
+                "SlovakSumRetrieval",
+                "SMESumRetrieval",
+                "SKQuadRetrieval",
+                "WebFAQRetrieval",
+                # STS
+                "SlovakSTS",
+                "SlovakSumSTS",
+                # Pair Classification
+                "SlovakNLI",
+                "SlovakRTE",
+                "DemagogSKNLI",
+                # Classification
+                "SlovakHateSpeechClassification.v2",
+                "SlovakMovieReviewSentimentClassification.v2",
+                "SIB200Classification",
+                "MultilingualSentimentClassification",
+                "SlovakParlaSentClassification",
+                "MultiEupSlovakPartyClassification",
+                "MultiEupSlovakGenderClassification",
+                # Reranking
+                "SkQuadReranking",
+                "SlovakPharmacyDrMaxReranking",
+                "SlovakPharmacyMojaLekarenReranking",
+                # Clustering
+                "SIB200ClusteringS2S",
+                "PravdaSKTagClustering",
+                "PravdaSKURLClustering",
+                "SlovakSumURLClustering",
+                "SMESumCategoryClustering",
+                # BitextMining
+                "OpusSlovakEnglishBitextMining",
+                "Tatoeba",
+            ],
+        )
+        + (
+            get_task(
+                "FloresBitextMining",
+                hf_subsets=["eng_Latn-slk_Latn", "ces_Latn-slk_Latn"],
+            ),
+        )
+        + (
+            get_task(
+                "NTREXBitextMining",
+                hf_subsets=["eng_Latn-slk_Latn", "ces_Latn-slk_Latn"],
+            ),
+        )
+        + (get_task("WebFAQBitextMiningQuestions", hf_subsets=["eng-slk", "ces-slk"]),)
+        + (get_task("WebFAQBitextMiningQAs", hf_subsets=["eng-slk", "ces-slk"]),)
+    ),
+    description="""Slovak Massive Text Embedding Benchmark (SkMTEB), the first comprehensive benchmark for text embeddings in Slovak, a low-resource West Slavic language. SkMTEB consists of 31 tasks across 7 task types, with tasks adapted from both existing and novel resources.""",
+    reference="https://arxiv.org/abs/2606.13647",
+    citation=r"""
+@misc{suppa2026skmteb,
+  archiveprefix = {arXiv},
+  author = {Marek Šuppa and Andrej Ridzik and Daniel Hládek and Natália Kňažeková and Viktória Ondrejová},
+  eprint = {2606.13647},
+  primaryclass = {cs.CL},
+  title = {SkMTEB: Slovak Massive Text Embedding Benchmark and Model Adaptation},
+  url = {https://arxiv.org/abs/2606.13647},
+  year = {2026},
+}
+""",
+    contacts=["andrejridzik", "hladek", "mrshu"],
 )
 
 MTEB_SPA = Benchmark(
@@ -824,7 +997,7 @@ MTEB_SPA = Benchmark(
         )
         + (get_task("STS22", eval_splits=["test"], hf_subsets=["es"]),)
     ),
-    description="Spanish text embedding benchmark covering classification, clustering, pair classification, reranking, retrieval, and semantic textual similarity tasks. For a discussion on the benchmark construction see the [original submission](https://github.com/embeddings-benchmark/mteb/pull/4053).",
+    description="Spanish text embedding quality across classification, clustering, pair classification, reranking, retrieval, and semantic similarity. For discussion on benchmark construction, see the [original submission](https://github.com/embeddings-benchmark/mteb/pull/4053).",
     reference=None,
     citation=None,
     contacts=["Clemente-H"],
@@ -852,7 +1025,7 @@ MTEB_code = Benchmark(
             "SyntheticText2SQL",
         ],
     ),
-    description="A massive code embedding benchmark covering retrieval tasks in a miriad of popular programming languages.",
+    description="Code retrieval quality across a wide range of popular programming languages, covering code search, text-to-SQL, and code feedback tasks.",
     reference=None,
     citation=MMTEB_CITATION,
 )
@@ -1000,12 +1173,12 @@ MTEB_multilingual_v1 = Benchmark(
     tasks=MTEBTasks(
         mteb_multilingual_tasks + get_tasks(tasks=["SNLHierarchicalClusteringP2P"])
     ),
-    description="A large-scale multilingual expansion of MTEB, driven mainly by highly-curated community contributions covering 250+ languages. This benhcmark has been replaced by MTEB(Multilingual, v2) as one of the datasets (SNLHierarchicalClustering) included in v1 was removed from the Hugging Face Hub.",
+    description="Multilingual text embedding quality across 250+ languages spanning bitext mining, classification, clustering, retrieval, reranking, and semantic similarity. Superseded by MTEB(Multilingual, v2) after SNLHierarchicalClustering was removed from Hugging Face Hub.",
     reference="https://arxiv.org/abs/2502.13595",
     citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "isaac-chung"],
+    superseded_by=["MTEB(Multilingual, v2)"],
 )
-
 
 MTEB_multilingual_v2 = Benchmark(
     name="MTEB(Multilingual, v2)",
@@ -1035,16 +1208,17 @@ MTEB_multilingual_v2 = Benchmark(
     ],
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-globe.svg",
     tasks=mteb_multilingual_tasks,
-    description="A large-scale multilingual expansion of MTEB, driven mainly by highly-curated community contributions covering 250+ languages. ",
+    description="MMTEB measures multilingual text embedding quality across 250+ languages spanning classification, clustering, retrieval semantic similarity and more, driven by curated community contributions.",
     reference="https://arxiv.org/abs/2502.13595",
     citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "isaac-chung"],
+    benchmark_hf_repo="mteb/MMTEB-Multilingual-v2",
 )
 
 MTEB_JPN = Benchmark(
     name="MTEB(jpn, v1)",
     aliases=["MTEB(jpn)"],
-    display_name="Japanese Legacy",
+    display_name="Japanese",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/jp.svg",
     tasks=get_tasks(
         languages=["jpn"],
@@ -1073,11 +1247,10 @@ MTEB_JPN = Benchmark(
             "ESCIReranking",
         ],
     ),
-    description="JMTEB is a benchmark for evaluating Japanese text embedding models.",
+    description="Japanese text embedding quality across clustering, classification, semantic similarity, pair classification, retrieval, and reranking.",
     reference="https://github.com/sbintuitions/JMTEB",
     citation=None,
 )
-
 
 indic_languages = [
     "asm",
@@ -1154,12 +1327,178 @@ MTEB_INDIC = Benchmark(
         # STS
         (get_task("IndicCrosslingualSTS"),)
     ),
-    description="A regional geopolitical text embedding benchmark targeting embedding performance on Indic languages.",
+    description="Text embedding quality across Indic languages spanning bitext mining, classification, clustering, pair classification, retrieval, reranking, and semantic similarity.",
     reference=None,
     citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "isaac-chung"],
 )
 
+afri_languages = [
+    "aeb",
+    "afr",
+    "aka",
+    "amh",
+    "arb",
+    "arq",
+    "ary",
+    "arz",
+    "bam",
+    "bem",
+    "cjk",
+    "dik",
+    "dyu",
+    "eng",
+    "ewe",
+    "fon",
+    "fuv",
+    "gaz",
+    "hau",
+    "ibo",
+    "kab",
+    "kam",
+    "kbp",
+    "kea",
+    "kik",
+    "kin",
+    "kmb",
+    "knc",
+    "kon",
+    "lin",
+    "lua",
+    "lug",
+    "luo",
+    "mos",
+    "nbl",
+    "nqo",
+    "nso",
+    "nus",
+    "nya",
+    "pcm",
+    "plt",
+    "por",
+    "run",
+    "sag",
+    "sna",
+    "som",
+    "sot",
+    "ssw",
+    "swa",
+    "swh",
+    "taq",
+    "tir",
+    "tsn",
+    "tso",
+    "tum",
+    "twi",
+    "tzm",
+    "umb",
+    "ven",
+    "wol",
+    "xho",
+    "yor",
+    "zul",
+]
+
+afri_languages_lite = [
+    "amh",
+    "gaz",
+    "ibo",
+    "yor",
+    "hau",
+    "swh",
+    "kin",
+    "xho",
+    "zul",
+]
+
+MTEB_AFRICA = Benchmark(
+    name="MTEB(Africa, v1)",
+    aliases=["AfriMTEB"],
+    display_name="African",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-globe.svg",
+    tasks=get_tasks(
+        tasks=[
+            # Original tasks
+            "SIB200Classification",
+            "FloresBitextMining",
+            "SIB200ClusteringS2S",
+            "NTREXBitextMining",
+            "AfriXNLI",
+            "EmotionAnalysisPlus",
+            "AfriSentiClassification",
+            "MasakhaNEWSClassification",
+            "AfriHateClassification",
+            "KinNewsClassification",
+            "InjongoIntent",
+            "SIB200Classification.v2",
+            # Additional comprehensive tasks
+            # Retrieval tasks
+            "BelebeleRetrieval",
+            "MIRACLRetrievalHardNegatives",
+            "MrTidyRetrieval",
+            "XQuADRetrieval",
+            "XM3600T2IRetrieval",
+            # Additional classification tasks
+            "AfriSentiLangClassification",
+            "MassiveIntentClassification",
+            "MassiveScenarioClassification",
+            "MultilingualSentimentClassification",
+            "NaijaSenti",
+            "SouthAfricanLangClassification",
+            "SiswatiNewsClassification",
+            "SwahiliNewsClassification",
+            "TswanaNewsClassification",
+            "IsiZuluNewsClassification",
+            # Additional bitext mining tasks
+            "BibleNLPBitextMining",
+            "NollySentiBitextMining",
+            "Tatoeba",
+            # Additional clustering tasks
+            "MasakhaNEWSClusteringP2P",
+            "MasakhaNEWSClusteringS2S",
+            # Additional other tasks
+            "XNLI",
+            "MIRACLReranking",
+            "SemRel24STS",
+        ],
+        languages=afri_languages,
+        exclusive_language_filter=True,
+    ),
+    description="Text embedding quality across African languages spanning bitext mining, classification, clustering, pair classification, retrieval, reranking, and semantic similarity.",
+    reference="https://arxiv.org/abs/2510.23896",
+    citation=MMTEB_CITATION,
+    contacts=["Kosei1227"],
+)
+
+MTEB_AFRICA_LITE = Benchmark(
+    name="MTEB(Africa, v1, lite)",
+    aliases=["AfriMTEB-Lite"],
+    display_name="African Lite",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-globe.svg",
+    tasks=get_tasks(
+        tasks=[
+            "AfriHateClassification",
+            "AfriSentiClassification",
+            "MasakhaNEWSClassification",
+            "KinNewsClassification",
+            "AfriXNLI",
+            "EmotionAnalysisPlus",
+            "FloresBitextMining",
+            "InjongoIntent",
+            "NTREXBitextMining",
+            "SIB200Classification.v2",
+            "SIB200Classification",
+            "SIB200ClusteringS2S",
+            "BelebeleRetrieval",
+        ],
+        languages=afri_languages_lite,
+        exclusive_language_filter=True,
+    ),
+    description="Text embedding quality across 9 geographically diverse African languages, covering bitext mining, classification, clustering, pair classification, and retrieval. A computationally lighter subset of MTEB(Africa, v1) designed for faster evaluation.",
+    reference="https://arxiv.org/abs/2510.23896",
+    citation=MMTEB_CITATION,
+    contacts=["Kosei1227"],
+)
 
 eu_languages = [
     # official EU languages (56) - we could include the whole economic area e.g. Norway - additionally we could include minority languages (probably a good idea?)
@@ -1289,11 +1628,27 @@ MTEB_EU = Benchmark(
         languages=eu_languages,
         exclusive_language_filter=True,
     ),
-    description="A regional geopolitical text embedding benchmark targeting embedding performance on European languages.",
+    description="Text embedding quality across European languages spanning bitext mining, classification, clustering, pair classification, retrieval, reranking, and semantic similarity.",
     reference=None,
     citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "isaac-chung"],
 )
+
+_LONG_EMBED_LENGTHS = (256, 512, 1024, 2048, 4096, 8192, 16384, 32768)
+
+
+def _long_embed_length_group(n: int) -> CustomGroup:
+    split = f"test_{n}"
+    label = f"{n // 1024}K" if n >= 1024 else str(n)
+    return CustomGroup(
+        label=label,
+        tasks=[
+            get_task("LEMBNeedleRetrieval", eval_splits=[split]),
+            get_task("LEMBPasskeyRetrieval", eval_splits=[split]),
+        ],
+        description=f"Needle- and passkey-retrieval accuracy at a {n}-token context length.",
+    )
+
 
 LONG_EMBED = Benchmark(
     name="LongEmbed",
@@ -1308,10 +1663,7 @@ LONG_EMBED = Benchmark(
             "LEMBWikimQARetrieval",
         ],
     ),
-    description="""LongEmbed is a benchmark oriented at exploring models' performance on long-context retrieval.
-    The benchmark comprises two synthetic tasks and four carefully chosen real-world tasks,
-    featuring documents of varying length and dispersed target information.
-    """,  # Pieced together from paper abstract.
+    description="Long-context retrieval quality across synthetic and real-world tasks featuring documents of varying length with dispersed target information.",
     reference="https://arxiv.org/abs/2404.12096v2",
     citation=r"""
 @article{zhu2024longembed,
@@ -1321,19 +1673,130 @@ LONG_EMBED = Benchmark(
   year = {2024},
 }
 """,
+    aggregations=(
+        BenchmarkAggregation.MEAN_TASK,
+        BenchmarkAggregation.MEAN_TASK_TYPE,
+        BenchmarkAggregation.TASK_TYPES,
+        CustomGrouping(
+            name="Context Length",
+            groups=tuple(_long_embed_length_group(n) for n in _LONG_EMBED_LENGTHS),
+        ),
+    ),
+)
+
+LMEB = Benchmark(
+    name="LMEB",
+    display_name="Long-Horizon Memory",
+    tasks=get_tasks(
+        tasks=[
+            "EPBench",
+            "KnowMeBench",
+            "LoCoMo",
+            "LongMemEval",
+            "REALTALK",
+            "TMD",
+            "MemBench",
+            "ConvoMem",
+            "QASPER",
+            "NovelQA",
+            "PeerQA",
+            "CovidQA",
+            "ESGReports",
+            "LMEBMLDR",
+            "LooGLE",
+            "LMEB_SciFact",
+            "Gorilla",
+            "ToolBench",
+            "ReMe",
+            "ProceduralMemBench",
+            "MemGovern",
+            "DeepPlanning",
+        ]
+    ),
+    description="Long-horizon memory retrieval quality across episodic, dialogue, semantic, and procedural retrieval tasks, measuring how well embedding models retrieve evidence in long-term memory scenarios.",
+    reference="https://arxiv.org/abs/2603.12572",
+    citation=r"""
+@misc{zhao2026lmeb,
+  archiveprefix = {arXiv},
+  author = {Zhao, Xinping and Hu, Xinshuo and Xu, Jiaxin and Tang, Danyu and Zhang, Xin and Zhou, Mengjia and Zhong, Yan and Zhou, Yao and Shan, Zifei and Zhang, Meishan and Hu, Baotian and Zhang, Min},
+  eprint = {2603.12572},
+  primaryclass = {cs.CL},
+  title = {LMEB: Long-horizon Memory Embedding Benchmark},
+  url = {https://arxiv.org/abs/2603.12572},
+  year = {2026},
+}
+""",
+    aggregations=(
+        BenchmarkAggregation.MEAN_TASK,
+        CustomGrouping(
+            name="Memory Type",
+            groups=(
+                CustomGroup(
+                    label="Episodic",
+                    tasks=get_tasks(["EPBench", "KnowMeBench"]),
+                    description="Episodic memory retrieval aims to recall past events "
+                    "grounded in temporal cues, entities, contents, and spatial context.",
+                ),
+                CustomGroup(
+                    label="Dialogue",
+                    tasks=get_tasks(
+                        [
+                            "LoCoMo",
+                            "LongMemEval",
+                            "REALTALK",
+                            "TMD",
+                            "MemBench",
+                            "ConvoMem",
+                        ]
+                    ),
+                    description="Dialogue memory retrieval aims to maintain context "
+                    "across multi-turn interactions by recalling relevant dialogue "
+                    "history and user preference.",
+                ),
+                CustomGroup(
+                    label="Semantic",
+                    tasks=get_tasks(
+                        [
+                            "QASPER",
+                            "NovelQA",
+                            "PeerQA",
+                            "CovidQA",
+                            "ESGReports",
+                            "LMEBMLDR",
+                            "LooGLE",
+                            "LMEB_SciFact",
+                        ]
+                    ),
+                    description="Semantic memory retrieval focuses on recalling general "
+                    "knowledge and concepts that are largely independent of time or "
+                    "specific context.",
+                ),
+                CustomGroup(
+                    label="Procedural",
+                    tasks=get_tasks(
+                        [
+                            "Gorilla",
+                            "ToolBench",
+                            "ReMe",
+                            "ProceduralMemBench",
+                            "MemGovern",
+                            "DeepPlanning",
+                        ]
+                    ),
+                    description="Procedural memory retrieval focuses on recalling "
+                    "learned skills, action patterns, and structured procedures that "
+                    "guide task execution and multi-step reasoning.",
+                ),
+            ),
+        ),
+    ),
 )
 
 BRIGHT = Benchmark(
     name="BRIGHT",
     display_name="Reasoning Retrieval",
     tasks=get_tasks(tasks=["BrightRetrieval"], eval_splits=["standard"]),
-    description="""BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.
-    BRIGHT is the first text retrieval
-    benchmark that requires intensive reasoning to retrieve relevant documents with
-    a dataset consisting of 1,384 real-world queries spanning diverse domains, such as
-    economics, psychology, mathematics, and coding. These queries are drawn from
-    naturally occurring and carefully curated human data.
-    """,
+    description="Reasoning-intensive retrieval quality across real-world queries spanning diverse domains including economics, psychology, mathematics, and coding, drawn from naturally occurring and carefully curated human data.",
     reference="https://brightbenchmark.github.io/",
     citation=r"""
 @article{su2024bright,
@@ -1343,6 +1806,7 @@ BRIGHT = Benchmark(
   year = {2024},
 }
 """,
+    superseded_by=["BRIGHT(v1.1)"],
 )
 
 BRIGHT_LONG = Benchmark(
@@ -1355,15 +1819,7 @@ BRIGHT_LONG = Benchmark(
             ),
         )
     ),
-    description="""BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.
-BRIGHT is the first text retrieval
-benchmark that requires intensive reasoning to retrieve relevant documents with
-a dataset consisting of 1,384 real-world queries spanning diverse domains, such as
-economics, psychology, mathematics, and coding. These queries are drawn from
-naturally occurring and carefully curated human data.
-
-This is the long version of the benchmark, which only filter longer documents.
-    """,
+    description="Reasoning-intensive retrieval quality across real-world queries spanning diverse domains, filtered to longer documents to stress-test models on extended contexts.",
     reference="https://brightbenchmark.github.io/",
     citation=r"""
 @article{su2024bright,
@@ -1373,36 +1829,39 @@ This is the long version of the benchmark, which only filter longer documents.
   year = {2024},
 }
 """,
+    superseded_by=["BRIGHT(v1.1)"],
 )
+
+_BRIGHT_SHORT_TASKS = [
+    "BrightBiologyRetrieval",
+    "BrightEarthScienceRetrieval",
+    "BrightEconomicsRetrieval",
+    "BrightPsychologyRetrieval",
+    "BrightRoboticsRetrieval",
+    "BrightStackoverflowRetrieval",
+    "BrightSustainableLivingRetrieval",
+    "BrightPonyRetrieval",
+    "BrightLeetcodeRetrieval",
+    "BrightAopsRetrieval",
+    "BrightTheoremQATheoremsRetrieval",
+    "BrightTheoremQAQuestionsRetrieval",
+]
+_BRIGHT_LONG_TASKS = [
+    "BrightBiologyLongRetrieval",
+    "BrightEarthScienceLongRetrieval",
+    "BrightEconomicsLongRetrieval",
+    "BrightPsychologyLongRetrieval",
+    "BrightRoboticsLongRetrieval",
+    "BrightStackoverflowLongRetrieval",
+    "BrightSustainableLivingLongRetrieval",
+    "BrightPonyLongRetrieval",
+]
 
 BRIGHT_V1_1 = Benchmark(
     name="BRIGHT(v1.1)",
     display_name="Reasoning Retrieval",
-    tasks=get_tasks(
-        tasks=[
-            "BrightBiologyRetrieval",
-            "BrightEarthScienceRetrieval",
-            "BrightEconomicsRetrieval",
-            "BrightPsychologyRetrieval",
-            "BrightRoboticsRetrieval",
-            "BrightStackoverflowRetrieval",
-            "BrightSustainableLivingRetrieval",
-            "BrightPonyRetrieval",
-            "BrightLeetcodeRetrieval",
-            "BrightAopsRetrieval",
-            "BrightTheoremQATheoremsRetrieval",
-            "BrightTheoremQAQuestionsRetrieval",
-            "BrightBiologyLongRetrieval",
-            "BrightEarthScienceLongRetrieval",
-            "BrightEconomicsLongRetrieval",
-            "BrightPsychologyLongRetrieval",
-            "BrightRoboticsLongRetrieval",
-            "BrightStackoverflowLongRetrieval",
-            "BrightSustainableLivingLongRetrieval",
-            "BrightPonyLongRetrieval",
-        ],
-    ),
-    description="v1.1 refactors the BRIGHT into a different tasks and added prompt to individual tasks.",
+    tasks=get_tasks(tasks=[*_BRIGHT_SHORT_TASKS, *_BRIGHT_LONG_TASKS]),
+    description="Reasoning-intensive retrieval quality across real-world queries spanning diverse domains including economics, psychology, mathematics, and coding. v1.1 restructures tasks into separate datasets and adds per-task prompts.",
     reference="https://brightbenchmark.github.io/",
     citation=r"""
 @article{su2024bright,
@@ -1412,6 +1871,25 @@ BRIGHT_V1_1 = Benchmark(
   year = {2024},
 }
 """,
+    benchmark_hf_repo="mteb/BRIGHT",
+    aggregations=(
+        BenchmarkAggregation.MEAN_TASK,
+        CustomGrouping(
+            name="Document Length",
+            groups=(
+                CustomGroup(
+                    label="Short",
+                    tasks=get_tasks(_BRIGHT_SHORT_TASKS),
+                    description="Standard-length BRIGHT documents.",
+                ),
+                CustomGroup(
+                    label="Long",
+                    tasks=get_tasks(_BRIGHT_LONG_TASKS),
+                    description="Documents filtered to longer context lengths, stress-testing retrieval over extended documents.",
+                ),
+            ),
+        ),
+    ),
 )
 
 
@@ -1425,7 +1903,7 @@ CODE_RAG = Benchmark(
             "CodeRAGStackoverflowPosts",
         ],
     ),
-    description="A benchmark for evaluating code retrieval augmented generation, testing models' ability to retrieve relevant programming solutions, tutorials and documentation.",
+    description="Code retrieval quality for retrieval-augmented generation, covering programming solutions, online tutorials, library documentation, and Stack Overflow posts.",
     reference="https://arxiv.org/abs/2406.14497",
     citation=r"""
 @misc{wang2024coderagbenchretrievalaugmentcode,
@@ -1465,12 +1943,14 @@ BEIR = Benchmark(
         )
         + get_tasks(tasks=["MSMARCO"], languages=["eng"], eval_splits=["dev"])
     ),
-    description="BEIR is a heterogeneous benchmark containing diverse IR tasks. It also provides a common and easy framework for evaluation of your NLP-based retrieval models within the benchmark.",
+    description="Zero-shot retrieval quality across a heterogeneous set of IR tasks and domains, providing a common framework for comparing NLP-based retrieval models.",
     reference="https://arxiv.org/abs/2104.08663",
     citation=r"""
 @inproceedings{thakur2021beir,
+  archiveprefix = {arXiv},
   author = {Nandan Thakur and Nils Reimers and Andreas R{\"u}ckl{\'e} and Abhishek Srivastava and Iryna Gurevych},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)},
+  eprint = {2104.08663},
   title = {{BEIR}: A Heterogeneous Benchmark for Zero-shot Evaluation of Information Retrieval Models},
   url = {https://openreview.net/forum?id=wCu6T5xFjeJ},
   year = {2021},
@@ -1497,10 +1977,36 @@ NANOBEIR = Benchmark(
             "NanoTouche2020Retrieval",
         ],
     ),
-    description="A benchmark to evaluate with subsets of BEIR datasets to use less computational power",
+    description="Zero-shot retrieval quality using subsets of the BEIR datasets, designed for faster evaluation with reduced computational cost.",
     reference="https://huggingface.co/collections/zeta-alpha-ai/nanobeir-66e1a0af21dfd93e620cd9f6",
     citation=None,
 )
+
+NANOBEIR_EXTENDED = Benchmark(
+    name="NanoBEIR-multilingual",
+    display_name="Multilingual NanoBEIR",
+    tasks=get_tasks(
+        tasks=[
+            "MultilingualNanoArguAnaRetrieval",
+            "MultilingualNanoClimateFeverRetrieval",
+            "MultilingualNanoDBPediaRetrieval",
+            "MultilingualNanoFEVERRetrieval",
+            "MultilingualNanoFiQA2018Retrieval",
+            "MultilingualNanoHotpotQARetrieval",
+            "MultilingualNanoMSMARCORetrieval",
+            "MultilingualNanoNFCorpusRetrieval",
+            "MultilingualNanoNQRetrieval",
+            "MultilingualNanoQuoraRetrieval",
+            "MultilingualNanoSCIDOCSRetrieval",
+            "MultilingualNanoSciFactRetrieval",
+            "MultilingualNanoTouche2020Retrieval",
+        ],
+    ),
+    description="A translated benchmark targeting zero-shot retrieval quality using translated subsets of the BEIR datasets, designed for faster evaluation during training with reduced computational cost.",
+    reference="https://huggingface.co/datasets/LiquidAI/nanobeir-multilingual-extended",
+    citation=None,
+)
+
 
 C_MTEB = Benchmark(
     name="MTEB(cmn, v1)",
@@ -1537,33 +2043,27 @@ C_MTEB = Benchmark(
                 "Waimai",
                 "OnlineShopping",
                 "JDReview",
+                "MultilingualSentiment",
             ],
         )
         + get_tasks(
             tasks=[
-                "MultilingualSentiment",
                 "ATEC",
                 "BQ",
                 "STSB",
             ],
             eval_splits=["test"],
         )
-        + get_tasks(
-            tasks=[
-                "MultilingualSentiment",
-            ],
-            eval_splits=["validation"],
-        )
     ),
-    description="The Chinese Massive Text Embedding Benchmark (C-MTEB) is a comprehensive benchmark for Chinese text embeddings covering 6 tasks and 35 datasets.",
+    description="Chinese text embedding quality across retrieval, reranking, pair classification, clustering, classification, and semantic similarity.",
     reference="https://github.com/FlagOpen/FlagEmbedding/tree/master/research/C_MTEB",
     citation=r"""
-@misc{xiao2024cpackpackagedresourcesadvance,
+@misc{xiao2024cpackpackedresourcesgeneral,
   archiveprefix = {arXiv},
   author = {Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
   eprint = {2309.07597},
   primaryclass = {cs.CL},
-  title = {C-Pack: Packaged Resources To Advance General Chinese Embedding},
+  title = {C-Pack: Packed Resources For General Chinese Embeddings},
   url = {https://arxiv.org/abs/2309.07597},
   year = {2024},
 }
@@ -1573,7 +2073,7 @@ C_MTEB = Benchmark(
 FA_MTEB = Benchmark(
     name="MTEB(fas, v1)",
     aliases=["FaMTEB(fas, beta)"],
-    display_name="Farsi Legacy",
+    display_name="Persian",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ir.svg",
     tasks=get_tasks(
         languages=["fas"],
@@ -1647,7 +2147,7 @@ FA_MTEB = Benchmark(
             "SynPerChatbotRAGSumSRetrieval",
         ],
     ),
-    description="The Persian Massive Text Embedding Benchmark (FaMTEB) is a comprehensive benchmark for Persian text embeddings covering 7 tasks and 60+ datasets.",
+    description="Persian text embedding quality across classification, clustering, pair classification, reranking, retrieval, semantic similarity, and summarization retrieval.",
     reference="https://arxiv.org/abs/2502.11571",
     citation=r"""
 @article{zinvandi2025famteb,
@@ -1658,11 +2158,12 @@ FA_MTEB = Benchmark(
 }
 """,
     contacts=["mehran-sarmadi", "ERfun", "morteza20"],
+    superseded_by=["MTEB(fas, v2)"],
 )
 
 FA_MTEB_2 = Benchmark(
     name="MTEB(fas, v2)",
-    display_name="Farsi",
+    display_name="Persian",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ir.svg",
     tasks=get_tasks(
         languages=["fas"],
@@ -1728,7 +2229,7 @@ FA_MTEB_2 = Benchmark(
             "SynPerChatbotRAGSumSRetrieval",
         ],
     ),
-    description="The Persian Massive Text Embedding Benchmark (FaMTEB) is a comprehensive benchmark for Persian text embeddings covering 7 tasks and 50+ datasets. In version 2, we have optimized large datasets to make them more manageable and accessible, removed low-quality datasets, and added higher-quality data to improve the overall benchmark. For more details on the improvements, see the main PR comment: [main PR](https://github.com/embeddings-benchmark/mteb/pull/3157).",
+    description="Persian text embedding quality across classification, clustering, pair classification, reranking, retrieval, semantic similarity, and summarization retrieval. In v2, large datasets were optimized for accessibility, low-quality datasets were removed, and higher-quality data was added; see the [main PR](https://github.com/embeddings-benchmark/mteb/pull/3157) for details.",
     reference="https://arxiv.org/abs/2502.11571",
     citation=r"""
 @article{zinvandi2025famteb,
@@ -1777,7 +2278,7 @@ CHEMTEB = Benchmark(
             "ChemHotpotQARetrieval",
         ],
     ),
-    description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
+    description="Chemical domain text embedding quality across bitext mining, classification, clustering, pair classification, and retrieval.",
     reference="https://arxiv.org/abs/2412.00532",
     citation=r"""
 @article{kasmaee2024chemteb,
@@ -1826,7 +2327,7 @@ CHEMTEB_V1_1 = Benchmark(
             "ChemRxivRetrieval",
         ],
     ),
-    description="ChemTEB evaluates the performance of text embedding models on chemical domain data. This version adds the ChemRxivRetrieval task.",
+    description="Chemical domain text embedding quality across bitext mining, classification, clustering, pair classification, and retrieval. v1.1 adds the ChemRxivRetrieval task.",
     reference="https://arxiv.org/abs/2412.00532",
     citation=r"""
 @article{kasmaee2024chemteb,
@@ -1868,7 +2369,7 @@ BEIR_NL = Benchmark(
             "TRECCOVID-NL",
         ],
     ),
-    description="BEIR-NL is a Dutch adaptation of the publicly available BEIR benchmark, created through automated translation.",
+    description="Zero-shot retrieval quality in Dutch across the BEIR task suite, created through automated translation of the original English benchmark.",
     reference="https://arxiv.org/abs/2412.08329",
     contacts=["nikolay-banar"],
     citation=r"""
@@ -1943,7 +2444,7 @@ MTEB_NL = Benchmark(
             ],
         )
     ),
-    description="MTEB-NL",
+    description="Dutch text embedding quality across classification, clustering, pair classification, multilabel classification, reranking, retrieval, and semantic similarity.",
     reference="https://arxiv.org/abs/2509.12340",
     contacts=["nikolay-banar"],
     citation=r"""
@@ -1982,7 +2483,7 @@ MIEB_common_tasks = [
     "STL10",  # coarse
     "SUN397",  # fine
     "UCF101",  # fine
-    # ImageMultiLabelClassification
+    # MultiLabelClassification
     "VOC2007",  # coarse
     # Clustering
     "CIFAR10Clustering",
@@ -2093,6 +2594,69 @@ MIEB_common_tasks = [
     "WebQAT2TRetrieval",
 ]
 
+# Named so MIEB(Multilingual)'s CustomGrouping (below) can reuse it without
+# depending on MIEB_LITE's own definition order.
+_MIEB_LITE_TASKS = [
+    # Image Classification
+    "Country211",
+    "DTD",
+    "EuroSAT",
+    "GTSRB",
+    "OxfordPets",
+    "PatchCamelyon",
+    "RESISC45",
+    "SUN397",
+    # Clustering
+    "ImageNetDog15Clustering",
+    "TinyImageNetClustering",
+    # ZeroShotClassification
+    "CIFAR100ZeroShot",
+    "Country211ZeroShot",
+    "FER2013ZeroShot",
+    "FGVCAircraftZeroShot",
+    "Food101ZeroShot",
+    "OxfordPetsZeroShot",
+    "StanfordCarsZeroShot",
+    # Any2AnyMultipleChoice
+    "BLINKIT2IMultiChoice",
+    "CVBenchCount",
+    "CVBenchRelation",
+    "CVBenchDepth",
+    "CVBenchDistance",
+    # ImageTextPairClassification
+    "AROCocoOrder",
+    "AROFlickrOrder",
+    "AROVisualAttribution",
+    "AROVisualRelation",
+    "Winoground",
+    "ImageCoDe",
+    # VisualSTS
+    "STS13VisualSTS",
+    "STS15VisualSTS",
+    "VisualSTS17Multilingual",
+    "VisualSTS-b-Multilingual",
+    # Any2AnyRetrieval
+    "CIRRIT2IRetrieval",
+    "CUB200I2IRetrieval",
+    "Fashion200kI2TRetrieval",
+    "HatefulMemesI2TRetrieval",
+    "InfoSeekIT2TRetrieval",
+    "NIGHTSI2IRetrieval",
+    "OVENIT2TRetrieval",
+    "RP2kI2IRetrieval",
+    "VidoreDocVQARetrieval",
+    "VidoreInfoVQARetrieval",
+    "VidoreTabfquadRetrieval",
+    "VidoreTatdqaRetrieval",
+    "VidoreShiftProjectRetrieval",
+    "VidoreSyntheticDocQAAIRetrieval",
+    "VisualNewsI2TRetrieval",
+    "VQA2IT2TRetrieval",
+    "WebQAT2ITRetrieval",
+    "WITT2IRetrieval",
+    "XM3600T2IRetrieval",
+]
+
 MIEB_ENG = MIEBBenchmark(
     name="MIEB(eng)",
     display_name="Image-Text, English",
@@ -2104,19 +2668,16 @@ MIEB_ENG = MIEBBenchmark(
             "VisualSTS-b-Eng",
         ],
     ),
-    description="""MIEB(eng) is a comprehensive image embeddings benchmark, spanning 8 task types, covering 125 tasks.
-    In addition to image classification (zero shot and linear probing), clustering, retrieval, MIEB includes tasks in compositionality evaluation,
-    document understanding, visual STS, and CV-centric tasks.""",
+    description="English image embedding quality across image classification (zero-shot and linear probing), clustering, retrieval, compositionality evaluation, document understanding, visual STS, and CV-centric tasks.",
     reference="https://arxiv.org/abs/2504.10471",
     contacts=["gowitheflow-1998", "isaac-chung"],
     citation=r"""
-@article{xiao2025mieb,
-  author = {Chenghao Xiao and Isaac Chung and Imene Kerboua and Jamie Stirling and Xin Zhang and Márton Kardos and Roman Solomatin and Noura Al Moubayed and Kenneth Enevoldsen and Niklas Muennighoff},
-  doi = {10.48550/ARXIV.2504.10471},
-  journal = {arXiv preprint arXiv:2504.10471},
-  publisher = {arXiv},
+@inproceedings{xiao2025mieb,
+  author = {Xiao, Chenghao and Chung, Isaac and Kerboua, Imene and Stirling, Jamie and Zhang, Xin and Kardos, M\'arton and Solomatin, Roman and Al Moubayed, Noura and Enevoldsen, Kenneth and Muennighoff, Niklas},
+  booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
+  month = {October},
+  pages = {22187-22198},
   title = {MIEB: Massive Image Embedding Benchmark},
-  url = {https://arxiv.org/abs/2504.10471},
   year = {2025},
 }
 """,
@@ -2138,104 +2699,62 @@ MIEB_MULTILINGUAL = MIEBBenchmark(
             "VisualSTS-b-Multilingual",
         ],
     ),
-    description="""MIEB(Multilingual) is a comprehensive image embeddings benchmark, spanning 10 task types, covering 130 tasks and a total of 39 languages.
-    In addition to image classification (zero shot and linear probing), clustering, retrieval, MIEB includes tasks in compositionality evaluation,
-    document understanding, visual STS, and CV-centric tasks. This benchmark consists of MIEB(eng) + 3 multilingual retrieval
-    datasets + the multilingual parts of VisualSTS-b and VisualSTS-16.""",
+    description="Multilingual image embedding quality across 39 languages, spanning image classification (zero-shot and linear probing), clustering, retrieval, compositionality evaluation, document understanding, visual STS, and CV-centric tasks. Extends MIEB(eng) with multilingual retrieval datasets and the multilingual portions of VisualSTS-b and VisualSTS-16.",
     reference="https://arxiv.org/abs/2504.10471",
     contacts=["gowitheflow-1998", "isaac-chung"],
     citation=r"""
-@article{xiao2025mieb,
-  author = {Chenghao Xiao and Isaac Chung and Imene Kerboua and Jamie Stirling and Xin Zhang and Márton Kardos and Roman Solomatin and Noura Al Moubayed and Kenneth Enevoldsen and Niklas Muennighoff},
-  doi = {10.48550/ARXIV.2504.10471},
-  journal = {arXiv preprint arXiv:2504.10471},
-  publisher = {arXiv},
+@inproceedings{xiao2025mieb,
+  author = {Xiao, Chenghao and Chung, Isaac and Kerboua, Imene and Stirling, Jamie and Zhang, Xin and Kardos, M\'arton and Solomatin, Roman and Al Moubayed, Noura and Enevoldsen, Kenneth and Muennighoff, Niklas},
+  booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
+  month = {October},
+  pages = {22187-22198},
   title = {MIEB: Massive Image Embedding Benchmark},
-  url = {https://arxiv.org/abs/2504.10471},
   year = {2025},
 }
 """,
+    aggregations=(
+        BenchmarkAggregation.MEAN_TASK_TYPE,
+        BenchmarkAggregation.TASK_TYPES,
+        CustomGrouping(
+            name="MIEB(eng) Task Mean",
+            groups=(
+                CustomGroup(
+                    label="Task Mean",
+                    tasks=get_tasks(
+                        MIEB_common_tasks + ["VisualSTS17Eng", "VisualSTS-b-Eng"]
+                    ),
+                    description="Unweighted mean across MIEB(eng)'s task set (a strict subset of MIEB(Multilingual)'s) — not the same statistic as MIEB(eng)'s own Mean(TaskType).",
+                ),
+            ),
+        ),
+        CustomGrouping(
+            name="MIEB(lite) Task Mean",
+            groups=(
+                CustomGroup(
+                    label="Task Mean",
+                    tasks=get_tasks(_MIEB_LITE_TASKS),
+                    description="Unweighted mean across MIEB(lite)'s task set (a strict subset of MIEB(Multilingual)'s) — not the same statistic as MIEB(lite)'s own Mean(TaskType).",
+                ),
+            ),
+        ),
+    ),
 )
 
 MIEB_LITE = MIEBBenchmark(
     name="MIEB(lite)",
     display_name="Image-Text, Lite",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-map-landscape.svg",
-    tasks=get_tasks(
-        tasks=[
-            # Image Classification
-            "Country211",
-            "DTD",
-            "EuroSAT",
-            "GTSRB",
-            "OxfordPets",
-            "PatchCamelyon",
-            "RESISC45",
-            "SUN397",
-            # Clustering
-            "ImageNetDog15Clustering",
-            "TinyImageNetClustering",
-            # ZeroShotClassification
-            "CIFAR100ZeroShot",
-            "Country211ZeroShot",
-            "FER2013ZeroShot",
-            "FGVCAircraftZeroShot",
-            "Food101ZeroShot",
-            "OxfordPetsZeroShot",
-            "StanfordCarsZeroShot",
-            # Any2AnyMultipleChoice
-            "BLINKIT2IMultiChoice",
-            "CVBenchCount",
-            "CVBenchRelation",
-            "CVBenchDepth",
-            "CVBenchDistance",
-            # ImageTextPairClassification
-            "AROCocoOrder",
-            "AROFlickrOrder",
-            "AROVisualAttribution",
-            "AROVisualRelation",
-            "Winoground",
-            "ImageCoDe",
-            # VisualSTS
-            "STS13VisualSTS",
-            "STS15VisualSTS",
-            "VisualSTS17Multilingual",
-            "VisualSTS-b-Multilingual",
-            # Any2AnyRetrieval
-            "CIRRIT2IRetrieval",
-            "CUB200I2IRetrieval",
-            "Fashion200kI2TRetrieval",
-            "HatefulMemesI2TRetrieval",
-            "InfoSeekIT2TRetrieval",
-            "NIGHTSI2IRetrieval",
-            "OVENIT2TRetrieval",
-            "RP2kI2IRetrieval",
-            "VidoreDocVQARetrieval",
-            "VidoreInfoVQARetrieval",
-            "VidoreTabfquadRetrieval",
-            "VidoreTatdqaRetrieval",
-            "VidoreShiftProjectRetrieval",
-            "VidoreSyntheticDocQAAIRetrieval",
-            "VisualNewsI2TRetrieval",
-            "VQA2IT2TRetrieval",
-            "WebQAT2ITRetrieval",
-            "WITT2IRetrieval",
-            "XM3600T2IRetrieval",
-        ],
-    ),
-    description="""MIEB(lite) is a comprehensive image embeddings benchmark, spanning 10 task types, covering 51 tasks.
-    This is a lite version of MIEB(Multilingual), designed to be run at a fraction of the cost while maintaining
-    relative rank of models.""",
+    tasks=get_tasks(tasks=_MIEB_LITE_TASKS),
+    description="Multilingual image embedding quality across the same task types as MIEB(Multilingual), designed to be run at a fraction of the cost while maintaining relative model rankings.",
     reference="https://arxiv.org/abs/2504.10471",
     contacts=["gowitheflow-1998", "isaac-chung"],
     citation=r"""
-@article{xiao2025mieb,
-  author = {Chenghao Xiao and Isaac Chung and Imene Kerboua and Jamie Stirling and Xin Zhang and Márton Kardos and Roman Solomatin and Noura Al Moubayed and Kenneth Enevoldsen and Niklas Muennighoff},
-  doi = {10.48550/ARXIV.2504.10471},
-  journal = {arXiv preprint arXiv:2504.10471},
-  publisher = {arXiv},
+@inproceedings{xiao2025mieb,
+  author = {Xiao, Chenghao and Chung, Isaac and Kerboua, Imene and Stirling, Jamie and Zhang, Xin and Kardos, M\'arton and Solomatin, Roman and Al Moubayed, Noura and Enevoldsen, Kenneth and Muennighoff, Niklas},
+  booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
+  month = {October},
+  pages = {22187-22198},
   title = {MIEB: Massive Image Embedding Benchmark},
-  url = {https://arxiv.org/abs/2504.10471},
   year = {2025},
 }
 """,
@@ -2298,16 +2817,15 @@ MIEB_IMG = MIEBBenchmark(
             "STSBenchmarkMultilingualVisualSTS",
         ],
     ),
-    description="A image-only version of MIEB(Multilingual) that consists of 49 tasks.",
+    description="Image-only embedding quality across retrieval, classification, clustering, and visual STS, excluding tasks that require a text encoder.",
     reference="https://arxiv.org/abs/2504.10471",
     citation=r"""
-@article{xiao2025mieb,
-  author = {Chenghao Xiao and Isaac Chung and Imene Kerboua and Jamie Stirling and Xin Zhang and Márton Kardos and Roman Solomatin and Noura Al Moubayed and Kenneth Enevoldsen and Niklas Muennighoff},
-  doi = {10.48550/ARXIV.2504.10471},
-  journal = {arXiv preprint arXiv:2504.10471},
-  publisher = {arXiv},
+@inproceedings{xiao2025mieb,
+  author = {Xiao, Chenghao and Chung, Isaac and Kerboua, Imene and Stirling, Jamie and Zhang, Xin and Kardos, M\'arton and Solomatin, Roman and Al Moubayed, Noura and Enevoldsen, Kenneth and Muennighoff, Niklas},
+  booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
+  month = {October},
+  pages = {22187-22198},
   title = {MIEB: Massive Image Embedding Benchmark},
-  url = {https://arxiv.org/abs/2504.10471},
   year = {2025},
 }
 """,
@@ -2335,7 +2853,7 @@ BEIR_PL = Benchmark(
         ],
         eval_splits=["test"],
     ),
-    description="BEIR-PL is a benchmark for evaluating text embedding models on Polish language data.",
+    description="Zero-shot retrieval quality in Polish across the BEIR task suite, covering biomedical, financial, legal, and general knowledge domains.",
     reference="https://arxiv.org/abs/2305.19840",
     citation=r"""
 @misc{wojtasik2024beirplzeroshotinformation,
@@ -2350,7 +2868,6 @@ BEIR_PL = Benchmark(
 """,
 )
 
-
 BUILT_MTEB = Benchmark(
     name="BuiltBench(eng)",
     tasks=get_tasks(
@@ -2361,7 +2878,7 @@ BUILT_MTEB = Benchmark(
             "BuiltBenchReranking",
         ],
     ),
-    description='"Built-Bench" is an ongoing effort aimed at evaluating text embedding models in the context of built asset management, spanning over various disciplines such as architecture, engineering, construction, and operations management of the built environment.',
+    description="Text embedding quality in the built environment domain across clustering, retrieval, and reranking, spanning architecture, engineering, construction, and operations management.",
     reference="https://arxiv.org/abs/2411.12056",
     citation=r"""
 @article{shahinmoghadam2024benchmarking,
@@ -2401,19 +2918,9 @@ ENCODECHKA = Benchmark(
             languages=["rus-Cyrl"],
         ),
     ),
-    description="A benchmark for evaluating text embedding models on Russian data.",
+    description="Russian text embedding quality across paraphrase identification, sentiment analysis, toxicity classification, intent classification, natural language inference, and semantic similarity.",
     reference="https://github.com/avidale/encodechka",
-    citation=r"""
-@misc{dale_encodechka,
-  author = {Dale, David},
-  editor = {habr.com},
-  month = {June},
-  note = {[Online; posted 12-June-2022]},
-  title = {Russian rating of sentence encoders},
-  url = {https://habr.com/ru/articles/669674/},
-  year = {2022},
-}
-""",
+    citation=None,
 )
 
 VIDORE = Benchmark(
@@ -2432,7 +2939,7 @@ VIDORE = Benchmark(
             "VidoreSyntheticDocQAHealthcareIndustryRetrieval",
         ],
     ),
-    description="Retrieve associated pages according to questions.",
+    description="Visual document retrieval across diverse document types and domains, matching natural language queries to document page images.",
     reference="https://arxiv.org/abs/2407.01449",
     citation=r"""
 @article{faysse2024colpali,
@@ -2454,7 +2961,7 @@ VIDORE_V2 = Benchmark(
             "Vidore2ESGReportsHLRetrieval",
         ],
     ),
-    description="Retrieve associated pages according to questions.",
+    description="Visual document retrieval across ESG reports, economics reports, biomedical lectures, and related enterprise document types, matching natural language queries to document page images.",
     reference="https://arxiv.org/abs/2407.01449",
     citation=r"""
 @article{mace2025vidorev2,
@@ -2492,7 +2999,7 @@ VIDORE_V3 = VidoreBenchmark(
             "Vidore3NuclearRetrieval",
         ]
     ),
-    description="ViDoRe V3 sets a new industry gold standard for multi-modal, enterprise document visual retrieval evaluation. It addresses a critical challenge in production RAG systems: retrieving accurate information from complex, visually-rich documents. The benchmark includes both open and closed datasets: to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml).",
+    description="Visual document retrieval across multi-modal enterprise documents spanning finance, industrial, computer science, pharmaceutical, and other professional domains. Includes both open and closed datasets; to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml).",
     reference="https://arxiv.org/abs/2601.08620",
     citation=r"""
 @article{loison2026vidorev3comprehensiveevaluation,
@@ -2533,10 +3040,7 @@ VIDORE_V3_1 = VidoreBenchmark(
             "Vidore3NuclearRetrieval.v2",
         ]
     ),
-    description="ViDoRe v3.1 sets a new industry gold standard for multi-modal, enterprise document visual retrieval evaluation. "
-    + "It addresses a critical challenge in production RAG systems: retrieving accurate information from complex, visually-rich documents. "
-    + "The benchmark includes both open and closed datasets: to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml). "
-    + "The latest 3.1 version adds and markdown derived from OCR to allow easier evaluation of text-only baselines and joint image-text baselines.",
+    description="Visual document retrieval across multi-modal enterprise documents spanning finance, industrial, computer science, pharmaceutical, and other professional domains. Includes both open and closed datasets; to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml). v3.1 adds markdown derived from OCR to support text-only and joint image-text baselines.",
     reference="https://arxiv.org/abs/2601.08620",
     citation=r"""
 @article{loison2026vidorev3comprehensiveevaluation,
@@ -2551,7 +3055,120 @@ VIDORE_V3_1 = VidoreBenchmark(
 """,
 )
 
-VISUAL_DOCUMENT_RETRIEVAL = VidoreBenchmark(
+_VIDORE_V3_1_RERANKING_BM25S = [
+    "Vidore3ComputerScienceBM25sReranking.v2",
+    "Vidore3EnergyBM25sReranking.v2",
+    "Vidore3FinanceEnBM25sReranking.v2",
+    "Vidore3FinanceFrBM25sReranking.v2",
+    "Vidore3HrBM25sReranking.v2",
+    "Vidore3IndustrialBM25sReranking.v2",
+    "Vidore3PharmaceuticalsBM25sReranking.v2",
+    "Vidore3PhysicsBM25sReranking.v2",
+    "Vidore3TelecomBM25sReranking.v2",
+    "Vidore3NuclearBM25sReranking.v2",
+]
+_VIDORE_V3_1_RERANKING_BGEM3 = [
+    "Vidore3ComputerScienceBGEm3Reranking.v2",
+    "Vidore3EnergyBGEm3Reranking.v2",
+    "Vidore3FinanceEnBGEm3Reranking.v2",
+    "Vidore3FinanceFrBGEm3Reranking.v2",
+    "Vidore3HrBGEm3Reranking.v2",
+    "Vidore3IndustrialBGEm3Reranking.v2",
+    "Vidore3PharmaceuticalsBGEm3Reranking.v2",
+    "Vidore3PhysicsBGEm3Reranking.v2",
+    "Vidore3TelecomBGEm3Reranking.v2",
+    "Vidore3NuclearBGEm3Reranking.v2",
+]
+_VIDORE_V3_1_RERANKING_QWEN3_VL_EMBEDDING_2B = [
+    "Vidore3ComputerScienceQwen3VLEmbedding2BReranking.v2",
+    "Vidore3EnergyQwen3VLEmbedding2BReranking.v2",
+    "Vidore3FinanceEnQwen3VLEmbedding2BReranking.v2",
+    "Vidore3FinanceFrQwen3VLEmbedding2BReranking.v2",
+    "Vidore3HrQwen3VLEmbedding2BReranking.v2",
+    "Vidore3IndustrialQwen3VLEmbedding2BReranking.v2",
+    "Vidore3PharmaceuticalsQwen3VLEmbedding2BReranking.v2",
+    "Vidore3PhysicsQwen3VLEmbedding2BReranking.v2",
+    "Vidore3TelecomQwen3VLEmbedding2BReranking.v2",
+    "Vidore3NuclearQwen3VLEmbedding2BReranking.v2",
+]
+_VIDORE_V3_1_RERANKING_NEMOTRON_3_5_EMBED_8B = [
+    "Vidore3ComputerScienceNemotron35Embed8BReranking.v2",
+    "Vidore3EnergyNemotron35Embed8BReranking.v2",
+    "Vidore3FinanceEnNemotron35Embed8BReranking.v2",
+    "Vidore3FinanceFrNemotron35Embed8BReranking.v2",
+    "Vidore3HrNemotron35Embed8BReranking.v2",
+    "Vidore3IndustrialNemotron35Embed8BReranking.v2",
+    "Vidore3PharmaceuticalsNemotron35Embed8BReranking.v2",
+    "Vidore3PhysicsNemotron35Embed8BReranking.v2",
+    "Vidore3TelecomNemotron35Embed8BReranking.v2",
+    "Vidore3NuclearNemotron35Embed8BReranking.v2",
+]
+
+VIDORE_V3_1_RERANKING = VidoreBenchmark(
+    name="ViDoRe(v3.1, reranking)",
+    aliases=["ViDoRe(v3.1, reranking, beta)"],
+    display_name="ViDoRe v3.1 Reranking",
+    language_view=[
+        "deu-Latn",
+        "eng-Latn",
+        "fra-Latn",
+        "ita-Latn",
+        "por-Latn",
+        "spa-Latn",
+    ],
+    icon="https://cdn-uploads.huggingface.co/production/uploads/66e16a677c2eb2da5109fb5c/x99xqw__fl2UaPbiIdC_f.png",
+    tasks=get_tasks(
+        tasks=_VIDORE_V3_1_RERANKING_BM25S
+        + _VIDORE_V3_1_RERANKING_BGEM3
+        + _VIDORE_V3_1_RERANKING_QWEN3_VL_EMBEDDING_2B
+        + _VIDORE_V3_1_RERANKING_NEMOTRON_3_5_EMBED_8B
+    ),
+    description="Reranking of visual documents on the ViDoRe v3.1 domains. For each domain, the candidates are the top-50 pages retrieved by one of four first-stage retrievers; BM25, bge-m3, Qwen3-VL-Embedding-2B and Nemotron-3.5-Embed-8B, so rerankers are compared on candidate lists from various model types. Includes both open and closed datasets; to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml).",
+    reference="https://arxiv.org/abs/2601.08620",
+    citation=r"""
+@article{loison2026vidorev3comprehensiveevaluation,
+  archiveprefix = {arXiv},
+  author = {António Loison and Quentin Macé and Antoine Edy and Victor Xing and Tom Balough and Gabriel Moreira and Bo Liu and Manuel Faysse and Céline Hudelot and Gautier Viaud},
+  eprint = {2601.08620},
+  primaryclass = {cs.AI},
+  title = {ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios},
+  url = {https://arxiv.org/abs/2601.08620},
+  year = {2026},
+}
+""",
+    aggregations=(
+        BenchmarkAggregation.MEAN_TASK,
+        BenchmarkAggregation.PUBLIC_PRIVATE,
+        CustomGrouping(
+            name="First-stage retriever",
+            groups=(
+                CustomGroup(
+                    label="BM25s",
+                    tasks=get_tasks(tasks=_VIDORE_V3_1_RERANKING_BM25S),
+                    description="Mean over the domains when reranking the top-50 candidates retrieved by mteb/baseline-bm25s.",
+                ),
+                CustomGroup(
+                    label="BGE-M3",
+                    tasks=get_tasks(tasks=_VIDORE_V3_1_RERANKING_BGEM3),
+                    description="Mean over the domains when reranking the top-50 candidates retrieved by BAAI/bge-m3.",
+                ),
+                CustomGroup(
+                    label="Qwen3-VL-Embedding-2B",
+                    tasks=get_tasks(tasks=_VIDORE_V3_1_RERANKING_QWEN3_VL_EMBEDDING_2B),
+                    description="Mean over the domains when reranking the top-50 candidates retrieved by Qwen/Qwen3-VL-Embedding-2B.",
+                ),
+                CustomGroup(
+                    label="Nemotron-3.5-Embed-8B",
+                    tasks=get_tasks(tasks=_VIDORE_V3_1_RERANKING_NEMOTRON_3_5_EMBED_8B),
+                    description="Mean over the domains when reranking the top-50 candidates retrieved by nvidia/Nemotron-3.5-Embed-8B-BF16.",
+                ),
+            ),
+        ),
+    ),
+)
+
+
+VISUAL_DOCUMENT_RETRIEVAL = Benchmark(
     name="ViDoRe(v1&v2)",
     aliases=["VisualDocumentRetrieval"],
     display_name="ViDoRe (V1&V2)",
@@ -2575,7 +3192,7 @@ VISUAL_DOCUMENT_RETRIEVAL = VidoreBenchmark(
             "Vidore2ESGReportsHLRetrieval",
         ],
     ),
-    description="A benchmark for evaluating visual document retrieval, combining ViDoRe v1 and v2.",
+    description="Visual document retrieval across diverse document types and domains, combining the ViDoRe v1 and v2 task sets.",
     reference="https://arxiv.org/abs/2407.01449",
     citation=r"""
 @article{mace2025vidorev2,
@@ -2585,6 +3202,8 @@ VISUAL_DOCUMENT_RETRIEVAL = VidoreBenchmark(
   year = {2025},
 }
 """,
+    aggregations=(BenchmarkAggregation.MEAN_TASK,),
+    show_zero_shot=False,
 )
 
 R2MED = Benchmark(
@@ -2602,21 +3221,20 @@ R2MED = Benchmark(
             "R2MEDIIYiClinicalRetrieval",
         ]
     ),
-    description="""R2MED: First Reasoning-Driven Medical Retrieval Benchmark.
-    R2MED is a high-quality, high-resolution information retrieval (IR) dataset designed for medical scenarios.
-    It contains 876 queries with three retrieval tasks, five medical scenarios, and twelve body systems.
-    """,
+    description="Reasoning-driven medical retrieval quality across biology, bioinformatics, medical sciences, clinical, and treatment scenarios, requiring models to perform multi-step reasoning over medical literature.",
     reference="https://r2med.github.io/",
     citation=r"""
-@article{li2025r2med,
-  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
-  journal = {arXiv preprint arXiv:2505.14558},
+@misc{zhang2026r2medbenchmarkreasoningdrivenmedical,
+  archiveprefix = {arXiv},
+  author = {Xiangxu Zhang and Lei Li and Xiao Zhou and Zheng Liu},
+  eprint = {2505.14558},
+  primaryclass = {cs.IR},
   title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
-  year = {2025},
+  url = {https://arxiv.org/abs/2505.14558},
+  year = {2026},
 }
 """,
 )
-
 
 VN_MTEB = Benchmark(
     name="VN-MTEB (vie, v1)",
@@ -2684,7 +3302,7 @@ VN_MTEB = Benchmark(
             "STSBenchmark-VN",
         ],
     ),
-    description="A benchmark for text-embedding performance in Vietnamese.",
+    description="Vietnamese text embedding quality across retrieval, classification, pair classification, clustering, reranking, and semantic similarity.",
     reference="https://arxiv.org/abs/2507.21500",
     citation=r"""
 @misc{pham2025vnmtebvietnamesemassivetext,
@@ -2698,6 +3316,42 @@ VN_MTEB = Benchmark(
 }
 """,
     contacts=["BaoLocPham"],
+)
+
+MTEB_THA = Benchmark(
+    name="MTEB(tha, v1)",
+    aliases=["MTEB(tha)"],
+    display_name="Thai",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/th.svg",
+    tasks=get_tasks(
+        languages=["tha"],
+        tasks=[
+            # Classification (4) — native Thai or purpose-built; no machine-translated tasks
+            "MTOPDomainClassification",
+            "MTOPIntentClassification",
+            "SIB200Classification",
+            "WisesightSentimentClassification.v2",
+            # Clustering (1)
+            "SIB200ClusteringS2S",
+            # PairClassification (1)
+            "XNLI",
+            # Reranking (2)
+            "MIRACLReranking",
+            "MultiLongDocReranking",
+            # Retrieval (7) — human-judged or human-translated
+            "BelebeleRetrieval",
+            "MIRACLRetrievalHardNegatives.v2",
+            "MKQARetrieval",
+            "MrTidyRetrieval",
+            "MultiLongDocRetrieval",
+            "WebFAQRetrieval",
+            "XQuADRetrieval",
+        ],
+    ),
+    description="Thai text embedding quality across classification, clustering, pair classification, reranking, and retrieval. Tasks are native Thai or high-quality human translations; machine-translated and cross-lingual tasks are excluded.",
+    reference=None,
+    citation=None,
+    contacts=["anusoft"],
 )
 
 JINA_VDR = Benchmark(
@@ -2750,7 +3404,7 @@ JINA_VDR = Benchmark(
             "JinaVDRArxivQARetrieval",
         ],
     ),
-    description="Multilingual, domain-diverse and layout-rich document retrieval benchmark.",
+    description="Visual document retrieval across multilingual, domain-diverse, and layout-rich document types, spanning medical, legal, financial, technical, and other domains across multiple languages.",
     reference="https://arxiv.org/abs/2506.18902",
     citation=r"""@misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
   archiveprefix = {arXiv},
@@ -2762,7 +3416,6 @@ JINA_VDR = Benchmark(
   year = {2025},
 }""",
 )
-
 
 HUME = HUMEBenchmark(
     name="HUME(v1)",
@@ -2795,7 +3448,7 @@ HUME = HUMEBenchmark(
             "nob-Latn",
         ],
     ),
-    description="The HUME benchmark is designed to evaluate the performance of text embedding models and humans on a comparable set of tasks. This captures areas where models perform better than human annotators and the reverse. In the paper, we go further into the analysis and what conclusions can be drawn.",
+    description="Text embedding performance benchmarked against human annotator scores across classification, clustering, reranking, and semantic similarity tasks, capturing where models exceed or fall short of human-level judgment.",
     reference=None,
     citation=None,
     contacts=["AdnanElAssadi56", "KennethEnevoldsen", "isaac-chung", "Samoed"],
@@ -2843,16 +3496,20 @@ JMTEB_V2 = Benchmark(
             "MultiLongDocReranking",
         ],
     ),
-    description="JMTEB is a benchmark for evaluating Japanese text embedding models. In v2, we have extended the benchmark to 28 datasets, enabling more comprehensive evaluation compared with v1 (MTEB(jpn, v1)).",
+    description="Japanese text embedding quality across clustering, classification, semantic similarity, retrieval, and reranking. v2 extends the benchmark to 28 datasets for more comprehensive evaluation compared with MTEB(jpn, v1).",
     reference="https://github.com/sbintuitions/JMTEB",
     citation=r"""
-@article{li2025jmteb,
+@inproceedings{li-etal-2026-jmteb,
+  address = {Palma de Mallorca, Spain},
   author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan and Fukuchi, Akihiko and Shibata, Tomohide and Kawahara, Daisuke},
-  issue = {3},
-  journal = {Vol.2025-NL-265,No.3,1-15},
-  month = {sep},
-  title = {{JMTEB and JMTEB-lite: Japanese Massive Text Embedding Benchmark and Its Lightweight Version}},
-  year = {2025},
+  booktitle = {Proceedings of the Fifteenth Language Resources and Evaluation Conference},
+  doi = {10.63317/5ouzpv2f2f6k},
+  month = may,
+  pages = {7423--7434},
+  publisher = {ELRA Language Resource Association},
+  title = {{JMTEB} and {JMTEB}-lite: {J}apanese Massive Text Embedding Benchmark and Its Lightweight Version},
+  url = {https://aclanthology.org/2026.lrec-1.588/},
+  year = {2026},
 }
 """,
     contacts=["lsz05"],
@@ -2900,16 +3557,20 @@ JMTEB_LITE_V1 = Benchmark(
             "MultiLongDocReranking",
         ],
     ),
-    description="JMTEB-lite is a lightweight version of JMTEB. It makes agile evaluation possible by reaching an average of 5x faster evaluation comparing with JMTEB, as 6 heavy datasets in JMTEB are optimized with hard negative pooling strategy, making them much smaller. The result of JMTEB-lite is proved to be highly relevant with that of JMTEB, making it a faithful preview of JMTEB.",
+    description="Japanese text embedding quality across clustering, classification, semantic similarity, retrieval, and reranking, with heavy datasets optimized via hard negative pooling to enable faster evaluation while maintaining rankings consistent with JMTEB.",
     reference="https://huggingface.co/datasets/sbintuitions/JMTEB-lite",
     citation=r"""
-@article{li2025jmteb,
+@inproceedings{li-etal-2026-jmteb,
+  address = {Palma de Mallorca, Spain},
   author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan and Fukuchi, Akihiko and Shibata, Tomohide and Kawahara, Daisuke},
-  issue = {3},
-  journal = {Vol.2025-NL-265,No.3,1-15},
-  month = {sep},
-  title = {{JMTEB and JMTEB-lite: Japanese Massive Text Embedding Benchmark and Its Lightweight Version}},
-  year = {2025},
+  booktitle = {Proceedings of the Fifteenth Language Resources and Evaluation Conference},
+  doi = {10.63317/5ouzpv2f2f6k},
+  month = may,
+  pages = {7423--7434},
+  publisher = {ELRA Language Resource Association},
+  title = {{JMTEB} and {JMTEB}-lite: {J}apanese Massive Text Embedding Benchmark and Its Lightweight Version},
+  url = {https://aclanthology.org/2026.lrec-1.588/},
+  year = {2026},
 }
 """,
     contacts=["lsz05"],
@@ -2926,14 +3587,24 @@ KOVIDORE_V2 = Benchmark(
             "KoVidore2HrRetrieval",
         ]
     ),
-    description="KoViDoRe v2 sets a new industry gold standard for multi-modal, enterprise document visual retrieval evaluation. It addresses a critical challenge in production RAG systems: retrieving accurate information from complex, visually-rich documents.",
+    description="Korean visual document retrieval across enterprise document domains including cybersecurity, economics, energy, and HR.",
     reference="https://github.com/whybe-choi/kovidore-data-generator",
     citation=r"""
-@misc{choi2026kovidorev2,
-  author = {Yongbin Choi},
-  note = {A benchmark for evaluating Korean vision document retrieval with multi-page reasoning queries in practical domains},
-  title = {KoViDoRe v2: a comprehensive evaluation of vision document retrieval for enterprise use-cases},
-  url = {https://github.com/whybe-choi/kovidore-data-generator},
+@inproceedings{choi-etal-2026-kovidore,
+  address = {San Diego, USA},
+  author = {Choi, Yongbin  and
+Song, Yongwoo  and
+Sung, Mujeen},
+  booktitle = {Proceedings of the 2nd Workshop on Multimodal Augmented Generation via Multimodal Retrieval ({MAGM}a{R} 2026)},
+  doi = {10.18653/v1/2026.magmar-main.11},
+  editor = {Murray, Kenton  and
+Kriz, Reno},
+  isbn = {979-8-89176-425-5},
+  month = jul,
+  pages = {54--80},
+  publisher = {Association for Computational Linguistics},
+  title = {{K}o{V}i{D}o{R}e: A Benchmark for {K}orean Visual Document Retrieval},
+  url = {https://aclanthology.org/2026.magmar-main.11/},
   year = {2026},
 }
 """,
@@ -2955,7 +3626,7 @@ VISRAG_RETRIEVAL = Benchmark(
             ],
         )
     ),
-    description="Benchmark of six VisRAG image-text retrieval tasks.",
+    description="Visual retrieval augmented generation quality across document types including scientific papers, charts, infographics, plots, and multi-page documents.",
     reference="https://huggingface.co/collections/openbmb/visrag",
     citation=r"""
 @misc{yu2025visragvisionbasedretrievalaugmentedgeneration,
@@ -2970,332 +3641,316 @@ VISRAG_RETRIEVAL = Benchmark(
 """,
 )
 
-MAEB_PLUS = Benchmark(
-    name="MAEB+(beta)",
-    aliases=["MAEB+"],
-    display_name="MAEB+",
-    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
-    tasks=get_tasks(
-        tasks=[
-            # Classification (35)
-            "AmbientAcousticContext",
-            "AudioSet",
-            "AudioSetMini",
-            "BeijingOpera",
-            "BirdCLEF",
-            "BirdSet",
-            "CommonLanguageAgeDetection",
-            "CommonLanguageGenderDetection",
-            "CommonLanguageLanguageDetection",
-            "CREMA_D",
-            "ESC50",
-            "FSD2019Kaggle",
-            "FSD50K",
-            "FSDD",
-            "GTZANGenre",
-            "GunshotTriangulation",
-            "IEMOCAPEmotion",
-            "IEMOCAPGender",
-            "LibriCount",
-            "MInDS14",
-            "MridinghamStroke",
-            "MridinghamTonic",
-            "NSynth",
-            "SIBFLEURS",
-            "SpeechCommands",
-            "SpokeNEnglish",
-            "SpokenQAForIC",
-            "TUTAcousticScenes",
-            "UrbanSound8k",
-            "VocalSound",
-            "VoxCelebSA",
-            "VoxLingua107_Top10",
-            "VoxPopuliAccentID",
-            "VoxPopuliGenderID",
-            "VoxPopuliLanguageID",
-            # Clustering (10)
-            "AmbientAcousticContextClustering",
-            "CREMA_DClustering",
-            "ESC50Clustering",
-            "GTZANGenreClustering",
-            "MusicGenreClustering",
-            "VehicleSoundClustering",
-            "VoiceGenderClustering",
-            "VoxCelebClustering",
-            "VoxPopuliAccentClustering",
-            "VoxPopuliGenderClustering",
-            # PairClassification (5)
-            "CREMADPairClassification",
-            "ESC50PairClassification",
-            "NMSQAPairClassification",
-            "VocalSoundPairClassification",
-            "VoxPopuliAccentPairClassification",
-            # Reranking (5)
-            "ESC50AudioReranking",
-            "FSDnoisy18kAudioReranking",
-            "GTZANAudioReranking",
-            "UrbanSound8KAudioReranking",
-            "VocalSoundAudioReranking",
-            # Zeroshot Classification (5)
-            "ESC50_Zeroshot",
-            "RavdessZeroshot",
-            "SpeechCommandsZeroshotv0.01",
-            "SpeechCommandsZeroshotv0.02",
-            "UrbanSound8kZeroshot",
-            # Audio-to-Audio Retrieval (1)
-            "JamAltArtistA2ARetrieval",
-            # Audio-to-Text Retrieval (19)
-            "AudioCapsA2TRetrieval",
-            "AudioSetStrongA2TRetrieval",
-            "ClothoA2TRetrieval",
-            "CMUArcticA2TRetrieval",
-            "CommonVoiceMini17A2TRetrieval",
-            "CommonVoiceMini21A2TRetrieval",
-            "EmoVDBA2TRetrieval",
-            "FleursA2TRetrieval",
-            "GigaSpeechA2TRetrieval",
-            "GoogleSVQA2TRetrieval",
-            "HiFiTTSA2TRetrieval",
-            "JamAltLyricA2TRetrieval",
-            "JLCorpusA2TRetrieval",
-            "LibriTTSA2TRetrieval",
-            "MACSA2TRetrieval",
-            "MusicCapsA2TRetrieval",
-            "SoundDescsA2TRetrieval",
-            "UrbanSound8KA2TRetrieval",
-            # Text-to-Audio Retrieval (18)
-            "AudioCapsT2ARetrieval",
-            "AudioSetStrongT2ARetrieval",
-            "ClothoT2ARetrieval",
-            "CMUArcticT2ARetrieval",
-            "CommonVoiceMini17T2ARetrieval",
-            "CommonVoiceMini21T2ARetrieval",
-            "EmoVDBT2ARetrieval",
-            "FleursT2ARetrieval",
-            "GigaSpeechT2ARetrieval",
-            "GoogleSVQT2ARetrieval",
-            "HiFiTTST2ARetrieval",
-            "JamAltLyricT2ARetrieval",
-            "JLCorpusT2ARetrieval",
-            "LibriTTST2ARetrieval",
-            "MACST2ARetrieval",
-            "MusicCapsT2ARetrieval",
-            "SoundDescsT2ARetrieval",
-            "SpokenSQuADT2ARetrieval",
-            "UrbanSound8KT2ARetrieval",
-        ]
-    ),
-    description="""MAEB+ is the full Massive Audio Embedding Benchmark (v1), containing 98 tasks with audio modality across 6 task types: classification, clustering, pair classification, reranking, zero-shot classification, and retrieval. The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
-    reference=None,
-    citation="",
-    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
-)
+_MAEB_CITATION = """@misc{assadi2026maebmassiveaudioembedding,
+  archiveprefix = {arXiv},
+  author = {Adnan El Assadi and Isaac Chung and Chenghao Xiao and Roman Solomatin and Animesh Jha and Rahul Chand and Silky Singh and Kaitlyn Wang and Ali Sartaz Khan and Marc Moussa Nasser and Sufen Fong and Pengfei He and Alan Xiao and Ayush Sunil Munot and Aditya Shrivastava and Artem Gazizov and Niklas Muennighoff and Kenneth Enevoldsen},
+  eprint = {2602.16008},
+  primaryclass = {cs.SD},
+  title = {MAEB: Massive Audio Embedding Benchmark},
+  url = {https://arxiv.org/abs/2602.16008},
+  year = {2026},
+}"""
+
+
+# Named so MAEB(v1)'s "Benchmark Variant" CustomGrouping (below) can reuse
+# it without depending on MAEB_AUDIO's own definition.
+_MAEB_AUDIO_ONLY_TASKS = [
+    # Any2AnyRetrieval (1)
+    "JamAltArtistA2ARetrieval",
+    # AudioClassification (11)
+    "BeijingOpera",
+    "BirdCLEF",
+    "CREMA_D",
+    "CommonLanguageAgeDetection",
+    "GTZANGenre",
+    "IEMOCAPGender",
+    "MInDS14",
+    "MridinghamTonic",
+    "SIBFLEURS",
+    "VoxCelebSA",
+    "VoxPopuliLanguageID",
+    # AudioClustering (3)
+    "CREMA_DClustering",
+    "VehicleSoundClustering",
+    "VoxPopuliGenderClustering",
+    # AudioPairClassification (3)
+    "CREMADPairClassification",
+    "NMSQAPairClassification",
+    "VoxPopuliAccentPairClassification",
+    # AudioReranking (1)
+    "GTZANAudioReranking",
+]
 
 MAEB_AUDIO = Benchmark(
-    name="MAEB(beta, audio-only)",
-    aliases=["MAEB(audio-only)"],
+    name="MAEB(v1, audio-only)",
+    aliases=["MAEB(beta, audio-only)", "MAEB(audio-only)"],
     display_name="MAEB Audio-Only",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
-    tasks=get_tasks(
-        tasks=[
-            # Any2AnyRetrieval (1)
-            "JamAltArtistA2ARetrieval",
-            # AudioClassification (10)
-            "BeijingOpera",
-            "BirdCLEF",
-            "CREMA_D",
-            "CommonLanguageAgeDetection",
-            "GTZANGenre",
-            "IEMOCAPGender",
-            "MInDS14",
-            "MridinghamTonic",
-            "VoxCelebSA",
-            "VoxPopuliLanguageID",
-            # AudioClustering (3)
-            "CREMA_DClustering",
-            "VehicleSoundClustering",
-            "VoxPopuliGenderClustering",
-            # AudioMultilabelClassification (1)
-            "SIBFLEURS",
-            # AudioPairClassification (3)
-            "CREMADPairClassification",
-            "NMSQAPairClassification",
-            "VoxPopuliAccentPairClassification",
-            # AudioReranking (1)
-            "GTZANAudioReranking",
-        ]
-    ),
-    description="""MAEB(audio-only) is the audio-only subset of MAEB with 19 tasks spanning 6 task types: classification (10), clustering (3), multilabel classification (1), pair classification (3), reranking (1), and retrieval (1). The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
+    tasks=get_tasks(tasks=_MAEB_AUDIO_ONLY_TASKS),
+    description="Audio-only embedding quality across classification, clustering, pair classification, reranking, and retrieval tasks.",
     reference=None,
-    citation="",
-    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
-)
-
-MAEB_EXTENDED = Benchmark(
-    name="MAEB(beta, extended)",
-    aliases=["MAEB(extended)"],
-    display_name="Extended",
-    icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
-    tasks=get_tasks(
-        tasks=[
-            # === Audio-only tasks (53) ===
-            # AudioMultilabelClassification (4)
-            "FSD50K",
-            "SIBFLEURS",
-            "FSD2019Kaggle",
-            "AudioSetMini",
-            # AudioClassification (28)
-            "VoxPopuliAccentID",
-            "MInDS14",
-            "VoxPopuliGenderID",
-            "BeijingOpera",
-            "AmbientAcousticContext",
-            "CREMA_D",
-            "VoxCelebSA",
-            "TUTAcousticScenes",
-            "NSynth",
-            "VocalSound",
-            "VoxLingua107_Top10",
-            "ESC50",
-            "CommonLanguageAgeDetection",
-            "IEMOCAPEmotion",
-            "CommonLanguageLanguageDetection",
-            "CommonLanguageGenderDetection",
-            "IEMOCAPGender",
-            "SpokeNEnglish",
-            "FSDD",
-            "LibriCount",
-            "GTZANGenre",
-            "BirdCLEF",
-            "VoxPopuliLanguageID",
-            "MridinghamStroke",
-            "GunshotTriangulation",
-            "SpeechCommands",
-            "MridinghamTonic",
-            "BirdSet",
-            # AudioReranking (5)
-            "ESC50AudioReranking",
-            "UrbanSound8KAudioReranking",
-            "GTZANAudioReranking",
-            "FSDnoisy18kAudioReranking",
-            "VocalSoundAudioReranking",
-            # AudioClustering (10)
-            "VoiceGenderClustering",
-            "VoxPopuliAccentClustering",
-            "AmbientAcousticContextClustering",
-            "VoxCelebClustering",
-            "VoxPopuliGenderClustering",
-            "VehicleSoundClustering",
-            "MusicGenreClustering",
-            "ESC50Clustering",
-            "CREMA_DClustering",
-            "GTZANGenreClustering",
-            # AudioPairClassification (5)
-            "VoxPopuliAccentPairClassification",
-            "ESC50PairClassification",
-            "NMSQAPairClassification",
-            "VocalSoundPairClassification",
-            "CREMADPairClassification",
-            # Audio2AudioRetrieval (1)
-            "JamAltArtistA2ARetrieval",
-            # === Audio-text tasks (38) ===
-            # Any2AnyRetrieval - Audio to Text (13)
-            "AudioCapsA2TRetrieval",
-            "AudioSetStrongA2TRetrieval",
-            "CMUArcticA2TRetrieval",
-            "EmoVDBA2TRetrieval",
-            "GigaSpeechA2TRetrieval",
-            "HiFiTTSA2TRetrieval",
-            "JLCorpusA2TRetrieval",
-            "JamAltLyricA2TRetrieval",
-            "LibriTTSA2TRetrieval",
-            "MACSA2TRetrieval",
-            "MusicCapsA2TRetrieval",
-            "SpokenSQuADT2ARetrieval",
-            "UrbanSound8KA2TRetrieval",
-            # Any2AnyRetrieval - Text to Audio (12)
-            "AudioCapsT2ARetrieval",
-            "AudioSetStrongT2ARetrieval",
-            "CMUArcticT2ARetrieval",
-            "EmoVDBT2ARetrieval",
-            "GigaSpeechT2ARetrieval",
-            "HiFiTTST2ARetrieval",
-            "JLCorpusT2ARetrieval",
-            "JamAltLyricT2ARetrieval",
-            "LibriTTST2ARetrieval",
-            "MACST2ARetrieval",
-            "MusicCapsT2ARetrieval",
-            "UrbanSound8KT2ARetrieval",
-            # AudioZeroshotClassification (5)
-            "ESC50_Zeroshot",
-            "RavdessZeroshot",
-            "SpeechCommandsZeroshotv0.01",
-            "SpeechCommandsZeroshotv0.02",
-            "UrbanSound8kZeroshot",
-            # Audio captioning (2)
-            "ClothoA2TRetrieval",
-            "ClothoT2ARetrieval",
-            # Multilingual - Fleurs (2) - 102 languages
-            "FleursA2TRetrieval",
-            "FleursT2ARetrieval",
-            # Multilingual - CommonVoice 21 (2) - 82+ languages
-            "CommonVoiceMini21A2TRetrieval",
-            "CommonVoiceMini21T2ARetrieval",
-        ]
-    ),
-    description="""MAEB(extended) is an intermediate benchmark used during task selection, containing 89 tasks that combine audio-only and audio-text evaluation before filtering to MAEB. Audio-only (53 tasks): classification (28), multilabel classification (4), reranking (5), clustering (10), pair classification (5), audio-to-audio retrieval (1). Audio-text (36 tasks): audio-text retrieval (31), zero-shot classification (5). The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
-    reference=None,
-    citation="",
+    citation=_MAEB_CITATION,
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
 )
 MAEB = Benchmark(
-    name="MAEB(beta)",
-    aliases=["MAEB"],
+    name="MAEB(v1)",
+    aliases=["MAEB(beta)", "MAEB"],
     display_name="MAEB",
     icon="https://raw.githubusercontent.com/DennisSuitters/LibreICONS/master/svg/libre-gui-activity.svg",
+    tasks=MTEBTasks(
+        get_tasks(
+            tasks=[
+                # Any2AnyRetrieval (9)
+                "ClothoT2ARetrieval",
+                "CommonVoiceMini21T2ARetrieval",
+                "FleursT2ARetrieval",
+                "GigaSpeechT2ARetrieval",
+                "JamAltArtistA2ARetrieval",
+                "JamAltLyricA2TRetrieval",
+                "MACST2ARetrieval",
+                "SpokenSQuADT2ARetrieval",
+                "UrbanSound8KT2ARetrieval",
+                # AudioClassification (11)
+                "BeijingOpera",
+                "BirdCLEF",
+                "CREMA_D",
+                "CommonLanguageAgeDetection",
+                "GTZANGenre",
+                "IEMOCAPGender",
+                "MInDS14",
+                "MridinghamTonic",
+                "SIBFLEURS",
+                "VoxCelebSA",
+                "VoxPopuliLanguageID",
+                # AudioClustering (3)
+                "CREMA_DClustering",
+                "VehicleSoundClustering",
+                "VoxPopuliGenderClustering",
+                # AudioPairClassification (3)
+                "CREMADPairClassification",
+                "NMSQAPairClassification",
+                "VoxPopuliAccentPairClassification",
+                # AudioReranking (1)
+                "GTZANAudioReranking",
+                # AudioZeroshotClassification (2)
+                "RavdessZeroshot",
+                "SpeechCommandsZeroshotv0.02",
+            ]
+        )
+        + (
+            # AudioMultilabelClassification (1), curated only (noisy has uncurated labels)
+            get_task("FSD2019Kaggle", hf_subsets=["curated"]),
+        )
+    ),
+    description="Audio embedding quality across both audio-only and audio-text cross-modal tasks, spanning retrieval, classification, clustering, multilabel classification, pair classification, reranking, and zero-shot classification.",
+    reference=None,
+    citation=_MAEB_CITATION,
+    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
+    aggregations=(
+        BenchmarkAggregation.MEAN_TASK,
+        BenchmarkAggregation.MEAN_TASK_TYPE,
+        BenchmarkAggregation.TASK_TYPES,
+        CustomGrouping(
+            name="Benchmark Variant",
+            groups=(
+                CustomGroup(
+                    label="Audio-Only",
+                    tasks=get_tasks(_MAEB_AUDIO_ONLY_TASKS),
+                    description="This model's score restricted to audio only tasks. It is equivalent to MAEB(v1, audio-only).",
+                ),
+            ),
+        ),
+    ),
+)
+
+
+MVEB = Benchmark(
+    name="MVEB(v1)",
+    aliases=["MVEB(beta)", "MVEB"],
+    display_name="MVEB",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-video.svg",
     tasks=get_tasks(
         tasks=[
-            # Any2AnyRetrieval (9)
-            "ClothoT2ARetrieval",
-            "CommonVoiceMini21T2ARetrieval",
-            "FleursT2ARetrieval",
-            "GigaSpeechT2ARetrieval",
-            "JamAltArtistA2ARetrieval",
-            "JamAltLyricA2TRetrieval",
-            "MACST2ARetrieval",
-            "SpokenSQuADT2ARetrieval",
-            "UrbanSound8KT2ARetrieval",
-            # AudioClassification (10)
-            "BeijingOpera",
-            "BirdCLEF",
-            "CREMA_D",
-            "CommonLanguageAgeDetection",
-            "GTZANGenre",
-            "IEMOCAPGender",
-            "MInDS14",
-            "MridinghamTonic",
-            "VoxCelebSA",
-            "VoxPopuliLanguageID",
-            # AudioClustering (3)
-            "CREMA_DClustering",
-            "VehicleSoundClustering",
-            "VoxPopuliGenderClustering",
-            # AudioMultilabelClassification (2)
-            "FSD2019Kaggle",
-            "SIBFLEURS",
-            # AudioPairClassification (3)
-            "CREMADPairClassification",
-            "NMSQAPairClassification",
-            "VoxPopuliAccentPairClassification",
-            # AudioReranking (1)
-            "GTZANAudioReranking",
-            # AudioZeroshotClassification (2)
-            "RavdessZeroshot",
-            "SpeechCommandsZeroshotv0.02",
+            # Any2AnyRetrieval (10)
+            "AVMemeExamAT2VRetrieval",
+            "ActivityNetCaptionsT2VRetrieval",
+            "AudioCapsAVVA2TRetrieval",
+            "AudioCapsAVVT2ARetrieval",
+            "MSVDT2VRetrieval",
+            "VALOR32KT2VARetrieval",
+            "VATEXV2ARetrieval",
+            "VATEXVA2TRetrieval",
+            "VGGSoundAVA2VRetrieval",
+            "YouCook2T2VARetrieval",
+            # VideoCentricQA (1)
+            "EgoSchemaVideoCentricQA",
+            # VideoClassification (6)
+            "AVEDatasetClassification",
+            "AVMemeAudioVideoClassification",
+            "BreakfastClassification",
+            "Kinetics700VA",
+            "RAVDESSAVClassification",
+            "UCF101VideoAudioClassification",
+            # VideoClustering (2)
+            "MELDEmotionAudioVideoClustering",
+            "MusicAVQACLSAudioVideoClustering",
+            # VideoPairClassification (2)
+            "HumanAnimalCartoonVAPairClassification",
+            "MusicAVQAVAPairClassification",
+            # VideoZeroshotClassification (2)
+            "HMDB51ZeroShot",
+            "WorldSenseAudioVideoZeroShot",
         ]
     ),
-    description="""MAEB is a comprehensive audio benchmark with 30 tasks spanning both audio-only and audio-text cross-modal evaluation. Tasks span 7 task types: retrieval (9), classification (10), clustering (3), multilabel classification (2), pair classification (3), reranking (1), and zero-shot classification (2). The benchmark is currently in beta as the paper has been submitted for review and will be released in its final version after the review process.""",
+    description="Audio-visual video embedding quality across retrieval, classification, clustering, pair classification, zero-shot classification, and video-centric QA, with tasks selected to maximize coverage of audio-video joint modality inputs.",
     reference=None,
-    citation="",
+    citation=r"""
+@inproceedings{anonymous2026mveb,
+  author = {Adnan El Assadi and Roman Solomatin and Isaac Chung and Chenghao Xiao and Deep Shah and Shriya Sudhakar and Ayush Sunil Munot and M{\'a}rton Kardos and Niklas Muennighoff and Kenneth Enevoldsen},
+  booktitle = {The 2026 Conference on Empirical Methods in Natural Language Processing},
+  title = {{MVEB}: Massive Video Embedding Benchmark},
+  url = {https://openreview.net/forum?id=p5KyLtjRPo},
+  year = {2026},
+}
+""",
     contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
+)
+
+
+MVEB_TEXT_VIDEO = Benchmark(
+    name="MVEB(text, video, v1)",
+    aliases=["MVEB(text, video, beta)", "MVEB(text, video)"],
+    display_name="MVEB Video-Text",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-video.svg",
+    tasks=get_tasks(
+        tasks=[
+            # Any2AnyRetrieval (8)
+            "AVMemeExamT2VRetrieval",
+            "ActivityNetCaptionsT2VRetrieval",
+            "AudioCapsAVT2VRetrieval",
+            "DiDeMoV2TRetrieval",
+            "MSVDV2TRetrieval",
+            "Panda70MT2VRetrieval",
+            "VALOR32KT2VRetrieval",
+            "VATEXT2VRetrieval",
+            # VideoCentricQA (1)
+            "OmniVideoBenchVideoCentricQA",
+            # VideoClassification (4)
+            "AVMemeVideoClassification",
+            "BreakfastClassification",
+            "Kinetics700V",
+            "VGGSoundV",
+            # VideoClustering (1)
+            "RAVDESSVideoClustering",
+            # VideoPairClassification (1)
+            "HumanAnimalCartoonVPairClassification",
+            # VideoZeroshotClassification (4)
+            "Kinetics400ZeroShot",
+            "MELDVideoZeroShot",
+            "UCF101VideoZeroShotClassification",
+            "WorldSenseVideoZeroShot",
+        ]
+    ),
+    description="Text and video embedding quality across retrieval, classification, clustering, pair classification, zero-shot classification, and video-centric QA, for models without an audio encoder.",
+    reference=None,
+    citation=r"""
+@inproceedings{anonymous2026mveb,
+  author = {Adnan El Assadi and Roman Solomatin and Isaac Chung and Chenghao Xiao and Deep Shah and Shriya Sudhakar and Ayush Sunil Munot and M{\'a}rton Kardos and Niklas Muennighoff and Kenneth Enevoldsen},
+  booktitle = {The 2026 Conference on Empirical Methods in Natural Language Processing},
+  title = {{MVEB}: Massive Video Embedding Benchmark},
+  url = {https://openreview.net/forum?id=p5KyLtjRPo},
+  year = {2026},
+}
+""",
+    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
+)
+
+
+MVEB_VIDEO = Benchmark(
+    name="MVEB(video, v1)",
+    aliases=["MVEB(video, beta)", "MVEB(video)"],
+    display_name="MVEB Video-Only",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-video.svg",
+    tasks=get_tasks(
+        tasks=[
+            # VideoClassification (6)
+            "AVMemeVideoClassification",
+            "BreakfastClassification",
+            "HMDB51Classification",
+            "Kinetics600V",
+            "MELDVideoClassification",
+            "WorldSenseVideoClassification",
+            # VideoPairClassification (3)
+            "HumanAnimalCartoonVPairClassification",
+            "MusicAVQAVPairClassification",
+            "RAVDESSAVVPairClassification",
+        ]
+    ),
+    description="Video-only embedding quality across classification and pair classification, for encoders without a text component. Retrieval, QA, and zero-shot tasks are excluded as they require a text encoder.",
+    reference=None,
+    citation=r"""
+@inproceedings{anonymous2026mveb,
+  author = {Adnan El Assadi and Roman Solomatin and Isaac Chung and Chenghao Xiao and Deep Shah and Shriya Sudhakar and Ayush Sunil Munot and M{\'a}rton Kardos and Niklas Muennighoff and Kenneth Enevoldsen},
+  booktitle = {The 2026 Conference on Empirical Methods in Natural Language Processing},
+  title = {{MVEB}: Massive Video Embedding Benchmark},
+  url = {https://openreview.net/forum?id=p5KyLtjRPo},
+  year = {2026},
+}
+""",
+    contacts=["AdnanElAssadi56", "isaac-chung", "KennethEnevoldsen", "Samoed"],
+)
+
+CoREB = Benchmark(
+    name="CoREB(v1)",
+    aliases=["CoREB"],
+    display_name="CoREB",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-tech-electronics.svg",
+    tasks=get_tasks(
+        tasks=[
+            "CorebC2TRetrieval",
+            "CorebC2CRetrieval",
+            "CorebT2CRetrieval",
+            "CorebC2TReranking",
+            "CorebC2CReranking",
+            "CorebT2CReranking",
+        ],
+    ),
+    description="Code embedding and reranking quality across code-to-text, text-to-code, and code-to-code retrieval tasks, using counterfactually rewritten problems in five programming languages to limit training data contamination.",
+    reference="https://arxiv.org/abs/2605.04615",
+    citation=r"""
+@article{xue2026coreb,
+  author = {Xue, Siqiao and Liao, Zihan and Qin, Jin and Zhang, Ziyin and Mu, Yixiang and Zhou, Fan and Yu, Hang},
+  journal = {arXiv preprint arXiv:2605.04615},
+  title = {Beyond Retrieval: A Multitask Benchmark and Model for Code Search},
+  url = {https://arxiv.org/abs/2605.04615},
+  year = {2026},
+}
+""",
+    contacts=["Geralt-Targaryen"],
+)
+
+BRIGHT_PRO = Benchmark(
+    name="BRIGHT-Pro",
+    display_name="BRIGHT-Pro",
+    tasks=get_tasks(
+        tasks=[
+            "BrightProBiologyRetrieval",
+            "BrightProEarthScienceRetrieval",
+            "BrightProEconomicsRetrieval",
+            "BrightProPsychologyRetrieval",
+            "BrightProRoboticsRetrieval",
+            "BrightProStackoverflowRetrieval",
+            "BrightProSustainableLivingRetrieval",
+        ],
+    ),
+    description="""Reasoning-intensive retrieval quality on real-world StackExchange questions, scored against multi-aspect gold evidence. Each query is paired with a long-form reference answer whose cited passages collectively cover several reasoning aspects, so retrievers are measured on surfacing an aspect-diverse evidence set rather than a single relevant passage. Extends BRIGHT with these aspect annotations for agentic search settings.""",
+    reference="https://huggingface.co/datasets/yale-nlp/Bright-Pro",
+    citation=r"""
+@article{Zhao2026RethinkingRR,
+  author = {Yilun Zhao and Jinbiao Wei and Tingyu Song and Siyue Zhang and Chen Zhao and Arman Cohan},
+  journal = {arXiv preprint arXiv:2605.04018},
+  title = {Rethinking Reasoning-Intensive Retrieval: Evaluating and Advancing Retrievers in Agentic Search Systems},
+  year = {2026},
+}
+""",
 )

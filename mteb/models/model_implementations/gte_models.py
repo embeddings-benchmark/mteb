@@ -1,12 +1,10 @@
-import torch
-
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
-from mteb.types import PromptType
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType, PromptType
 
 
 def instruction_template(
@@ -33,8 +31,13 @@ gte_qwen2_7b_instruct = ModelMeta(
     loader_kwargs=dict(
         instruction_template=instruction_template,
         apply_instruction_to_passages=False,
-        model_kwargs={"dtype": torch.float16},
+        model_kwargs={"dtype": OutputDType.BF16},
+        # The remote modeling_qwen.py calls DynamicCache.get_usable_length(),
+        # removed in transformers>=4.56; encoding never needs the KV cache,
+        # and use_cache=False skips that code path.
+        config_kwargs={"use_cache": False},
         add_eos_token=True,
+        trust_remote_code=True,
     ),
     name="Alibaba-NLP/gte-Qwen2-7B-instruct",
     model_type=["dense"],
@@ -56,6 +59,7 @@ gte_qwen2_7b_instruct = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     max_tokens=32_768,
+    output_dtypes=OutputDType.BF16,
 )
 
 gte_qwen1_5_7b_instruct = ModelMeta(
@@ -63,7 +67,7 @@ gte_qwen1_5_7b_instruct = ModelMeta(
     loader_kwargs=dict(
         instruction_template=instruction_template,
         apply_instruction_to_passages=False,
-        model_kwargs={"dtype": torch.float16},
+        model_kwargs={"dtype": OutputDType.FLOAT16},
         add_eos_token=True,
     ),
     name="Alibaba-NLP/gte-Qwen1.5-7B-instruct",
@@ -91,6 +95,7 @@ gte_qwen1_5_7b_instruct = ModelMeta(
   journal={arXiv preprint arXiv:2308.03281},
   year={2023}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 gte_qwen2_1_5b_instruct = ModelMeta(
@@ -98,7 +103,7 @@ gte_qwen2_1_5b_instruct = ModelMeta(
     loader_kwargs=dict(
         instruction_template=instruction_template,
         apply_instruction_to_passages=False,
-        model_kwargs={"dtype": torch.float16},
+        model_kwargs={"dtype": OutputDType.FLOAT16},
         add_eos_token=True,
     ),
     name="Alibaba-NLP/gte-Qwen2-1.5B-instruct",
@@ -126,10 +131,11 @@ gte_qwen2_1_5b_instruct = ModelMeta(
   journal={arXiv preprint arXiv:2308.03281},
   year={2023}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 gte_small_zh = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="thenlper/gte-small-zh",
     model_type=["dense"],
     languages=["zho-Hans"],
@@ -155,10 +161,11 @@ gte_small_zh = ModelMeta(
   journal={arXiv preprint arXiv:2308.03281},
   year={2023}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 gte_base_zh = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="thenlper/gte-base-zh",
     model_type=["dense"],
     languages=["zho-Hans"],
@@ -184,10 +191,11 @@ gte_base_zh = ModelMeta(
   journal={arXiv preprint arXiv:2308.03281},
   year={2023}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 gte_large_zh = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="thenlper/gte-large-zh",
     model_type=["dense"],
     languages=["zho-Hans"],
@@ -213,6 +221,7 @@ gte_large_zh = ModelMeta(
   journal={arXiv preprint arXiv:2308.03281},
   year={2023}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 gte_multilingual_langs = [
@@ -317,7 +326,8 @@ gte_multi_training_data = {
 }
 
 gte_multilingual_base = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
+    loader_kwargs={"trust_remote_code": True},
     name="Alibaba-NLP/gte-multilingual-base",
     model_type=["dense"],
     languages=gte_multilingual_langs,
@@ -344,10 +354,11 @@ gte_multilingual_base = ModelMeta(
   pages={1393--1412},
   year={2024}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 gte_modernbert_base = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="Alibaba-NLP/gte-modernbert-base",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -387,11 +398,12 @@ gte_modernbert_base = ModelMeta(
   journal={arXiv preprint arXiv:2308.03281},
   year={2023}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 
 gte_base_en_v15 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="Alibaba-NLP/gte-base-en-v1.5",
     model_type=["dense"],
     languages=["eng-Latn"],

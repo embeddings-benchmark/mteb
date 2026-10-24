@@ -1,6 +1,6 @@
 from mteb.models import ModelMeta
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 REASONIR_CITATION = """@article{shao2025reasonir,
       title={ReasonIR: Training Retrievers for Reasoning Tasks},
@@ -95,6 +95,27 @@ _prompts_dict = {
     "BrightPonyLongRetrieval": {
         "query": "Given a Pony question, retrieve relevant documents that help answer the question"
     },
+    "BrightProBiologyRetrieval": {
+        "query": "Given a Biology post, retrieve relevant passages that help answer the post"
+    },
+    "BrightProEarthScienceRetrieval": {
+        "query": "Given an Earth Science post, retrieve relevant passages that help answer the post"
+    },
+    "BrightProEconomicsRetrieval": {
+        "query": "Given an Economics post, retrieve relevant passages that help answer the post"
+    },
+    "BrightProPsychologyRetrieval": {
+        "query": "Given a Psychology post, retrieve relevant passages that help answer the post"
+    },
+    "BrightProRoboticsRetrieval": {
+        "query": "Given a Robotics post, retrieve relevant passages that help answer the post"
+    },
+    "BrightProStackoverflowRetrieval": {
+        "query": "Given a Stack Overflow post, retrieve relevant passages that help answer the post"
+    },
+    "BrightProSustainableLivingRetrieval": {
+        "query": "Given a Sustainable Living post, retrieve relevant passages that help answer the post"
+    },
 }
 
 
@@ -125,4 +146,5 @@ ReasonIR_8B = ModelMeta(
     public_training_code="https://github.com/facebookresearch/ReasonIR/tree/main/training",
     public_training_data="https://huggingface.co/datasets/reasonir/reasonir-data",
     citation=REASONIR_CITATION,
+    output_dtypes=OutputDType.BF16,
 )

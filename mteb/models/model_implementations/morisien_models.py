@@ -1,0 +1,54 @@
+"""Text embedding models for Mauritian Creole (Kreol Morisien, mfe)."""
+
+from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+
+morisien_embed = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    name="Singaraj/morisien-embed",
+    model_type=["dense"],
+    languages=["mfe-Latn", "eng-Latn", "fra-Latn"],
+    open_weights=True,
+    revision="3187caaa709a8ea65a27342bddf87429e29d35f6",
+    release_date="2026-08-09",
+    n_parameters=278_043_648,
+    n_embedding_parameters=192_001_536,
+    memory_usage_mb=1061,
+    embed_dim=768,
+    license="mit",
+    max_tokens=512,
+    reference="https://huggingface.co/Singaraj/morisien-embed",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch", "ONNX", "safetensors"],
+    use_instructions=False,
+    superseded_by="Singaraj/morisien-embed-v1.5",
+    adapted_from="intfloat/multilingual-e5-base",
+    training_datasets={"MorisienMTBitextMining"},
+    public_training_code="https://github.com/LK-maker-007/morisien-embed",
+    public_training_data=None,
+)
+
+morisien_embed_v1_5 = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    name="Singaraj/morisien-embed-v1.5",
+    model_type=["dense"],
+    languages=["mfe-Latn", "eng-Latn", "fra-Latn"],
+    open_weights=True,
+    revision="bb697ae7ee7076d137b141a9b554b1686c6e6659",
+    release_date="2026-09-06",
+    n_parameters=471_517_440,
+    n_embedding_parameters=384_885_504,
+    memory_usage_mb=1799,
+    embed_dim=768,
+    license="mit",
+    max_tokens=256,
+    reference="https://huggingface.co/Singaraj/morisien-embed-v1.5",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
+    use_instructions=False,
+    superseded_by=None,
+    adapted_from="sentence-transformers/LaBSE",
+    training_datasets={"MorisienMTBitextMining"},
+    public_training_code="https://github.com/LK-maker-007/morisien-embed",
+    public_training_data=None,
+)

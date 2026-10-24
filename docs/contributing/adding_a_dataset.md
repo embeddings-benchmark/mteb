@@ -27,6 +27,7 @@ from datasets import load_dataset
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.classification import AbsTaskClassification
 
+
 class MyNewTask(AbsTaskClassification):
     # metadata contains information such as title, description, metrics etc.
     metadata = TaskMetadata(...)
@@ -36,16 +37,16 @@ class MyNewTask(AbsTaskClassification):
     input_column_name = "text"
 
     # This is the function that loads the dataset, this is typically untouched
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         self.dataset = load_dataset(
             **self.metadata.dataset,
         )
-        self.dataset_transform() # optional processing
+        self.dataset_transform()  # optional processing
         self.data_loaded = True
 
     # dataset transform, which allow you to process the dataset
     # including downsampling, filtering etc.
-    def dataset_transform(self, num_proc: int | None = None, **kwargs) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         # some processing
         ...
 ```
@@ -94,7 +95,7 @@ Once we have decided on task, we can implement them as follows:
                 "path": "mteb/poem_sentiment",
                 "revision": "9fdc57b89ccc09a8d9256f376112d626878e51a7",
             },
-            prompt="Classify poem verses as positive or negative"
+            prompt="Classify poem verses as positive or negative",
         )
 
         label_column_name = "label"
@@ -114,7 +115,7 @@ Once we have decided on task, we can implement them as follows:
     task = MyClassificationtask()
     task.load_data()
 
-    print(task.dataset["test"][0]) # check one of the samples:
+    print(task.dataset["test"][0])  # check one of the samples:
     # {'id': 1, 'text': 'shall yet be glad for him, and he shall bless', 'label': 1}
 
     # ensure that we can evaluate the model on the task
@@ -137,6 +138,7 @@ Once we have decided on task, we can implement them as follows:
     ```python
     import mteb
     from mteb.abstasks import AbsTaskClustering
+
 
     class MyClusteringTask(AbsTaskClustering):
         metadata = mteb.TaskMetadata(  # minimal metadata
@@ -226,6 +228,73 @@ Once we have decided on task, we can implement them as follows:
     ```
 
 
+=== "Multiple Choice Retrieval"
+
+    A multiple choice retrieval task is a retrieval task where each query is only compared against a fixed set of
+    candidate documents (the "choices") instead of the full corpus, and the goal is to pick the single correct one.
+    This is expressed by populating the `top_ranked` split, which maps each query to the list of candidate document
+    ids that should be ranked for it. Because there is exactly one correct choice per query, the main score is usually
+    `accuracy` rather than `ndcg_at_10`.
+
+    In practice the candidates are often already encoded in `relevant_docs` (with the correct choice(s) marked as
+    relevant and the distractors as non-relevant), so we can build the `top_ranked` split from it in
+    `dataset_transform`. Below we use the [BLINK](https://huggingface.co/datasets/mteb/blink-it2t-multi) dataset, where
+    the model must retrieve the correct text answer given an image and a question:
+
+    ```python
+    from collections import defaultdict
+
+    import mteb
+    from mteb.abstasks import AbsTaskRetrieval
+
+
+    class MyMultipleChoiceRetrievalTask(AbsTaskRetrieval):
+        metadata = mteb.TaskMetadata(  # minimal metadata
+            name="MyMultipleChoiceRetrievalTask",
+            description="Retrieve the correct text answer based on images and specific retrieval instructions.",
+            main_score="accuracy",  # accuracy since there is a single correct choice per query
+            eval_langs=["eng-Latn"],
+            eval_splits=["test"],
+            type="VisionCentricQA",  # a retrieval-style type; use "Retrieval" for a text-only task
+            category="it2t",
+            modalities=["text", "image"],
+            dataset={
+                "path": "mteb/blink-it2t-multi",
+                "revision": "772e1c8461c0dff10b32f52326d55a67f0d3ca94",
+            },
+        )
+
+        def dataset_transform(self, **kwargs) -> None:
+            # build the `top_ranked` (candidate) split from the relevant documents:
+            # every scored document for a query - both the correct choice and the
+            # distractors - becomes a candidate that gets ranked for that query.
+            for subset, split_data in self.dataset.items():
+                for split, dataset in split_data.items():
+                    top_ranked = defaultdict(list)
+                    for query_id, relevant in dataset["relevant_docs"].items():
+                        for corpus_id, score in relevant.items():
+                            top_ranked[query_id].append(corpus_id)
+                    dataset["top_ranked"] = top_ranked
+    ```
+
+    Once we have the task we can then test to make sure that everything works as intended:
+
+    ```python
+    # ensure that the dataset can be loaded and transformed properly
+    task = MyMultipleChoiceRetrievalTask()
+    task.load_data()
+
+    test_set = task.dataset["default"]["test"]  # default unless there are multiple subsets
+    query_id = next(iter(test_set["relevant_docs"]))
+    print(test_set["top_ranked"][query_id])  # the candidate documents ranked for this query
+    # ['<candidate_id_1>', '<candidate_id_2>', ...]
+
+    # ensure that we can evaluate a model on the task
+    mdl = mteb.get_model("mteb/baseline-random-encoder")
+    results = mteb.evaluate(mdl, task)
+    print(results[0].get_score())  # print the accuracy score of the random baseline
+    ```
+
 === "Multilingual Semantic Similarity"
 
     We kick up the notch here an do a multilingual example using a [Indic Cross-lingual semantic similarity corpus](https://huggingface.co/datasets/mteb/IndicCrosslingualSTS). We will use just three of the languages as an example, but we can easily add more. The subsets on huggingface we will
@@ -281,6 +350,62 @@ Once we have decided on task, we can implement them as follows:
     # 0.021194685839832323
     ```
 
+=== "Multimodal Pair Classification"
+
+    For multimodal PairClassification task, you need to specify columns types in `input1_column_name` & `input2_column_name` as a mapping `{column_name: modality}`, e.g.
+    ```python
+    input1_column_name = {"video_column_name": "video"}
+    input2_column_name = {"audio_column_name": "audio"}
+    ```
+    Full example:
+    ```python
+    from mteb.abstasks import AbsTaskPairClassification
+    from mteb.abstasks.task_metadata import TaskMetadata
+
+
+    class VideoConPairClassification(AbsTaskPairClassification):
+        metadata = TaskMetadata(
+            name="VideoConPairClassification",
+            description=(
+                "Pair classification on the VideoCon dataset: "
+                "determining whether a text caption correctly describes "
+                "a video or is a semantically-plausible contrast caption "
+                "(e.g. entity/action/attribute swaps, event order flips). "
+                "Tests video-language alignment robustness."
+            ),
+            reference="https://arxiv.org/abs/2311.10111",
+            dataset={
+                "path": "zachz/VideoCon-PC",
+                "revision": "b0cb7112a3edfccf8ae697602442a828712b056b",
+            },
+            type="VideoPairClassification",
+            category="v2t",
+            eval_splits=["test"],
+            eval_langs=["eng-Latn"],
+            main_score="max_ap",
+            date=("2023-11-01", "2023-11-30"),
+            domains=["Scene"],
+            task_subtypes=["Caption Pairing"],
+            license="mit",
+            annotations_creators="LM-generated and reviewed",
+            dialect=[],
+            modalities=["video", "text"],
+            sample_creation="LM-generated and verified",
+            is_beta=True,
+            bibtex_citation=r"""
+    @article{bansal2023videocon,
+      author = {Bansal, Hritik and Bitton, Yonatan and Szpektor, Idan and Chang, Kai-Wei and Grover, Aditya},
+      journal = {arXiv preprint arXiv:2311.10111},
+      title = {VideoCon: Robust Video-Language Alignment via Contrast Captions},
+      year = {2023},
+    }
+    """,
+        )
+
+        input1_column_name = {"video": "video"}
+        input2_column_name = {"text": "text"}
+        label_column_name: str = "label"
+    ```
 
 
 ??? example "Overwriting `load_data`"
@@ -332,6 +457,7 @@ Once we have decided on task, we can implement them as follows:
         from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
         from datasets import Dataset
 
+
         class MyRetrievalTask(AbsTaskRetrieval):
             metadata = mteb.TaskMetadata(  # minimal metadata
                 name="MyRetrievalTask",
@@ -347,7 +473,7 @@ Once we have decided on task, we can implement them as follows:
                 prompt="Given a question, retrieve the most relevant question from the corpus.",
             )
 
-            def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+            def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
                 # corpus should have `id` and (`text` + `title`)/`image`/`audio` or any combination of these columns
                 corpus = Dataset.from_dict(
                     {
@@ -385,12 +511,16 @@ Once we have decided on task, we can implement them as follows:
                     "query2": ["doc2", "doc1", "doc3"],
                 }
 
-                self.dataset["default"]["test"] = RetrievalSplitData(
-                    corpus=corpus,
-                    queries=queries,
-                    relevant_docs=qrels,
-                    top_ranked=top_ranked,  # only for reranking
-                )
+                self.dataset = {
+                    "default": {
+                        "test": RetrievalSplitData(
+                            corpus=corpus,
+                            queries=queries,
+                            relevant_docs=qrels,
+                            top_ranked=top_ranked,  # only for reranking
+                        )
+                    }
+                }
         ```
         which can then be run as follows:
         ```py
@@ -421,19 +551,27 @@ TaskMetadata(
         "revision": "9fdc57b89ccc09a8d9256f376112d626878e51a7",
     },
     type="Classification",
-    category="t2c", # text-2-class
+    category="t2c",  # text-2-class
     modalities=["text"],
     eval_splits=["validation", "test"],
     eval_langs=["eng-Latn"],
     main_score="accuracy",
-    date=("1700-01-01", "1900-01-01"), # a very rough guess of the date range of the poems, we do not have exact dates for all poems
+    date=(
+        "1700-01-01",
+        "1900-01-01",
+    ),  # a very rough guess of the date range of the poems, we do not have exact dates for all poems
     domains=["Written", "Fiction", "Poetry"],
-    task_subtypes=["Sentiment/Hate speech"], # if no subtypes match then just use []
+    task_subtypes=["Sentiment/Hate speech"],  # if no subtypes match then just use []
     license="cc-by-4.0",
     annotations_creators="human-annotated",
-    dialect=["eng-Latn-US", "en-Latn-GB"], # dialects is often unknown if so just use []
-    sample_creation="found", # the text was not created for the purpose of the dataset, but rather found and annotated
-    adapted_from=["PoemSentimentClassification"], # Previous version of the dataset, can be None
+    dialect=[
+        "eng-Latn-US",
+        "en-Latn-GB",
+    ],  # dialects is often unknown if so just use []
+    sample_creation="found",  # the text was not created for the purpose of the dataset, but rather found and annotated
+    adapted_from=[
+        "PoemSentimentClassification"
+    ],  # Previous version of the dataset, can be None
     bibtex_citation=r"""
 @misc{sheng2020investigating,
   archiveprefix = {arXiv},
@@ -457,8 +595,9 @@ You can then update class to utilize the new dataset on the hub and remove the `
 ```python
 import mteb
 
-class MyTask(...):
-    ...
+
+class MyTask(...): ...
+
 
 task = MyTask()
 repo_name = f"myorg/{task.metadata.name}"
@@ -476,7 +615,31 @@ Once you have your task you can create a pull request (PR) to the main repositor
 
 Before creating a pull request, it is important to calculate some descriptive statistics about the dataset. This is to ensure that the dataset is not too small, does not contain duplicates and that the documents are not too short. This is important to ensure that the dataset is of high quality and that it can be used to evaluate models in a meaningful way.
 
-To calculate the descriptive statistics, you can simply run [`task.calculate_descriptive_statistics()`][mteb.AbsTask.calculate_descriptive_statistics].
+To calculate the descriptive statistics, you can run [`task.calculate_descriptive_statistics()`][mteb.AbsTask.calculate_descriptive_statistics].
+By default, this method caches the results and loads them from cache on subsequent calls. To recalculate the statistics (overwriting the cached results), use the `overwrite_results=True`.
+
+If the statistics show that the dataset does contain duplicates, very short documents or other quality concerns, see [Cleaning task data](../get_started/advanced_usage/cleaning_task_data.md) for how to find and remove them.
+
+
+### Improving or cleaning a task
+
+If a dataset needs cleaning, everyone benefits from fixing it once rather than in each user's script. Submit the
+cleaned data as a **new version of the task** rather than as scores. A new version:
+
+- bumps the version suffix of the task name, so `MassiveIntentClassification` becomes `MassiveIntentClassification.v2`. The suffix replaces rather than accumulates, so a task already at `.v2` becomes `.v3`.
+- points `adapted_from` at the task it was derived from, and sets `superseded_by` on every older version so that users of those are warned towards the current one.
+- fills out its own `TaskMetadata` and descriptive statistics, following the sections above.
+
+A task cleaned locally carries a name recording what was done to it, such as
+`MassiveIntentClassification (remove_duplicates)`. That name is for your own runs; a contributed version takes a
+version id instead, so it can be evaluated and compared like any other task in `mteb`.
+
+Use [`push_dataset_to_hub`][mteb.AbsTask.push_dataset_to_hub] to upload the cleaned data.
+`scripts/data/clean_and_update_tasks.py` automates the version bump, including finding the highest existing
+version and setting `superseded_by` on the older classes.
+
+That way the fix keeps its own identity, and results on the old and the new version remain distinguishable.
+
 
 ### Submit a Pull Request
 
@@ -486,10 +649,11 @@ Once added, here is a checklist to ensure that everything works before you submi
 - [ ] I have outlined why this dataset is filling an existing gap in `mteb`
 - [ ] I have tested that the dataset runs with the `mteb` package.
 - [ ] I have run the following models on the task (adding the results to the pr). These can be run using the `mteb run -m {model_name} -t {task_name}` command.
-  - [ ] `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`
-  - [ ] `intfloat/multilingual-e5-small`
-- [ ] I have checked that the performance is neither trivial (both models gain close to perfect scores) nor random (both models gain close to random scores).
-- [ ] I have considered the size of the dataset and reduced it if it is too big (2048 examples is typically large enough for most tasks)
+  - [ ] `mteb/baseline-random encoder`
+  - [ ] `intfloat/multilingual-e5-small` or another small model
+- [ ] I have checked that the performance is neither trivial (close to perfect scores) nor random.
+- [ ] I have considered the size of the dataset and reduced it if it is too big (e.g. 2048 examples for binary classification)
+- [ ] I reproduced scores from the original paper (if applicable) and added them to the PR description for reference.
 ```
 
 An easy way to test it is using:
@@ -497,15 +661,16 @@ An easy way to test it is using:
 === "Python"
     ```python
     import mteb
+
     # sample model:
-    model = mteb.get_model("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+    model = mteb.get_model("mteb/baseline-random encoder")
     task = mteb.get_task("{name of your task}")
 
     results = mteb.evaluate(model, task)
     ```
 === "CLI"
     ```bash
-    mteb run -m sentence-transformers/paraphrase-multilingual-MiniLM -t {name of your task}
+    mteb run -m mteb/baseline-random encoder -t {name of your task}
     ```
 
 

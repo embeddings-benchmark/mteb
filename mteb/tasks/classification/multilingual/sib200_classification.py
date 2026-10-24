@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -225,22 +227,212 @@ class SIB200Classification(AbsTaskClassification):
         dialect=[],
         sample_creation="human-translated and localized",
         bibtex_citation=r"""
-@article{adelani2023sib,
-  author = {Adelani, David Ifeoluwa and Liu, Hannah and Shen, Xiaoyu and Vassilyev, Nikita and Alabi, Jesujoba O and Mao, Yanke and Gao, Haonan and Lee, Annie En-Shiun},
-  journal = {arXiv preprint arXiv:2309.07445},
-  title = {SIB-200: A simple, inclusive, and big evaluation dataset for topic classification in 200+ languages and dialects},
-  year = {2023},
+@inproceedings{adelani-etal-2024-sib,
+  address = {St. Julian{'}s, Malta},
+  author = {Adelani, David Ifeoluwa  and
+Liu, Hannah  and
+Shen, Xiaoyu  and
+Vassilyev, Nikita  and
+Alabi, Jesujoba O.  and
+Mao, Yanke  and
+Gao, Haonan  and
+Lee, En-Shiun Annie},
+  booktitle = {Proceedings of the 18th Conference of the European Chapter of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2024.eacl-long.14},
+  editor = {Graham, Yvette  and
+Purver, Matthew},
+  month = mar,
+  pages = {226--245},
+  publisher = {Association for Computational Linguistics},
+  title = {{SIB}-200: A Simple, Inclusive, and Big Evaluation Dataset for Topic Classification in 200+ Languages and Dialects},
+  url = {https://aclanthology.org/2024.eacl-long.14/},
+  year = {2024},
 }
 """,
+        superseded_by="SIB200Classification.v2",
     )
 
     def dataset_transform(
         self,
         num_proc: int | None = None,
     ):
-        for lang in self.dataset.keys():
+        for lang in self.dataset:
             self.dataset[lang] = self.dataset[lang].class_encode_column("category")
             self.dataset[lang] = self.dataset[lang].rename_columns(
                 {"category": "label"}
             )
             self.dataset[lang] = self.dataset[lang].remove_columns(["index_id"])
+
+
+_TOPICS = [
+    "travel",
+    "politics",
+    "science",
+    "sports",
+    "technology",
+    "health",
+    "nature",
+    "entertainment",
+    "geography",
+    "business",
+    "disasters",
+    "crime",
+    "education",
+    "religion",
+]
+_TOPIC2ID = {name: idx for idx, name in enumerate(_TOPICS)}
+
+
+class SIB200ClassificationV2(AbsTaskClassification):
+    """SIB-200 (14 topics) multilingual classification benchmark."""
+
+    metadata = TaskMetadata(
+        name="SIB200Classification.v2",
+        description=(
+            "SIB-200 is the largest publicly available topic classification "
+            "dataset based on Flores-200 covering 205 languages and dialects. "
+            "Version 2 includes 14 labels instead of 7 labels, making the task "
+            "more challenging while preserving the original multilingual setup."
+        ),
+        reference="https://arxiv.org/abs/2309.07445",
+        dataset={
+            "path": "mteb/sib200.v2",
+            "revision": "4d46813bbbb029383bbc385c0eb7a5a638686bdd",
+        },
+        type="Classification",
+        category="t2c",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=_LANGS,
+        main_score="accuracy",
+        date=("2023-09-14", "2024-01-27"),
+        domains=["News", "Written"],
+        task_subtypes=["Topic classification"],
+        license="cc-by-4.0",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        sample_creation="human-translated and localized",
+        superseded_by="SIB200Classification.v3",
+        bibtex_citation=r"""
+@inproceedings{adelani-etal-2024-sib,
+  address = {St. Julian{'}s, Malta},
+  author = {Adelani, David Ifeoluwa  and
+Liu, Hannah  and
+Shen, Xiaoyu  and
+Vassilyev, Nikita  and
+Alabi, Jesujoba O.  and
+Mao, Yanke  and
+Gao, Haonan  and
+Lee, En-Shiun Annie},
+  booktitle = {Proceedings of the 18th Conference of the European Chapter of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2024.eacl-long.14},
+  editor = {Graham, Yvette  and
+Purver, Matthew},
+  month = mar,
+  pages = {226--245},
+  publisher = {Association for Computational Linguistics},
+  title = {{SIB}-200: A Simple, Inclusive, and Big Evaluation Dataset for Topic Classification in 200+ Languages and Dialects},
+  url = {https://aclanthology.org/2024.eacl-long.14/},
+  year = {2024},
+}
+""",
+    )
+
+    def dataset_transform(self, **kwargs: Any) -> None:
+        """
+        Convert each split to the MTEB format:
+        * text: str
+        * label: int
+        """
+        for lang in self.dataset:
+            for split in self.dataset[lang]:
+                ds = self.dataset[lang][split]
+
+                cols = ds.column_names
+                text_col = next(
+                    c for c in ("text", "sentence", "utterance") if c in cols
+                )
+                lab_col = next(c for c in ("label", "labels", "category") if c in cols)
+
+                def to_mteb(
+                    example: dict[str, Any],
+                    lab_col: str = lab_col,
+                    text_col: str = text_col,
+                ) -> dict[str, Any]:
+                    raw_label = example[lab_col]
+                    if isinstance(raw_label, str):
+                        label = _TOPIC2ID[raw_label]
+                    else:
+                        label = int(raw_label)
+                    return {"text": example[text_col], "label": label}
+
+                self.dataset[lang][split] = ds.map(to_mteb, remove_columns=cols)
+
+
+# The 8 configurations below are present in the 14-label dataset but were
+# omitted from the previous MTEB task definition, which included 197 configs.
+_LANGS_V3 = {
+    **_LANGS,
+    "ace_Arab": ["ace-Arab"],
+    "arb_Arab": ["arb-Arab"],
+    "bjn_Arab": ["bjn-Arab"],
+    "kas_Arab": ["kas-Arab"],
+    "knc_Arab": ["knc-Arab"],
+    "min_Arab": ["min-Arab"],
+    "taq_Latn": ["taq-Latn"],
+    "zho_Hans": ["zho-Hans"],
+}
+
+
+class SIB200ClassificationV3(SIB200ClassificationV2):
+    """SIB-200 (14 topics) multilingual classification benchmark with all 205 language-script configurations."""
+
+    metadata = TaskMetadata(
+        name="SIB200Classification.v3",
+        description=(
+            "SIB-200 is a topic classification dataset based on Flores-200. "
+            "The previous MTEB task definition included 197 (language, script) "
+            "pairs; version 3 adds 8 new pairs present bringing the total to 205."
+        ),
+        reference="https://arxiv.org/abs/2309.07445",
+        dataset={
+            "path": "mteb/sib200.v3",
+            "revision": "4b3a328cb8d7f78de58780c2194c9a1443786795",
+        },
+        type="Classification",
+        category="t2c",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=_LANGS_V3,
+        main_score="accuracy",
+        date=("2023-09-14", "2024-01-27"),
+        domains=["News", "Written"],
+        task_subtypes=["Topic classification"],
+        license="cc-by-4.0",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        sample_creation="human-translated and localized",
+        bibtex_citation=r"""
+@inproceedings{adelani-etal-2024-sib,
+  address = {St. Julian{'}s, Malta},
+  author = {Adelani, David Ifeoluwa  and
+Liu, Hannah  and
+Shen, Xiaoyu  and
+Vassilyev, Nikita  and
+Alabi, Jesujoba O.  and
+Mao, Yanke  and
+Gao, Haonan  and
+Lee, En-Shiun Annie},
+  booktitle = {Proceedings of the 18th Conference of the European Chapter of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2024.eacl-long.14},
+  editor = {Graham, Yvette  and
+Purver, Matthew},
+  month = mar,
+  pages = {226--245},
+  publisher = {Association for Computational Linguistics},
+  title = {{SIB}-200: A Simple, Inclusive, and Big Evaluation Dataset for Topic Classification in 200+ Languages and Dialects},
+  url = {https://aclanthology.org/2024.eacl-long.14/},
+  year = {2024},
+}
+""",
+    )

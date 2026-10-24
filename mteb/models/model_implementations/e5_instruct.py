@@ -1,9 +1,8 @@
-import torch
-
 from mteb.models.instruct_wrapper import (
     InstructSentenceTransformerModel,
 )
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 from .e5_models import (
     E5_PAPER_RELEASE_DATE,
@@ -32,7 +31,7 @@ e5_instruct = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=E5_INSTRUCTION,
-        model_kwargs={"dtype": torch.float16},
+        model_kwargs={"dtype": OutputDType.FLOAT16},
         apply_instruction_to_passages=False,
     ),
     name="intfloat/multilingual-e5-large-instruct",
@@ -68,17 +67,58 @@ e5_instruct = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=ME5_TRAINING_DATA,
+    output_dtypes=OutputDType.FLOAT16,
 )
+
+
+me5_instruct_afri_large_instruct = ModelMeta(
+    loader=InstructSentenceTransformerModel,
+    loader_kwargs=dict(
+        instruction_template=E5_INSTRUCTION,
+        model_kwargs={"dtype": OutputDType.FLOAT16},
+    ),
+    name="McGill-NLP/AfriE5-Large-instruct",
+    languages=XLMR_LANGUAGES,
+    open_weights=True,
+    revision="0d7a51373bacc776c5f41696116c6c9100dcde72",
+    release_date=E5_PAPER_RELEASE_DATE,
+    framework=["GritLM", "PyTorch", "Sentence Transformers"],
+    similarity_fn_name="cosine",
+    use_instructions=True,
+    reference="https://huggingface.co/McGill-NLP/AfriE5-Large-instruct",
+    n_parameters=560_000_000,
+    n_embedding_parameters=256_002_048,
+    memory_usage_mb=1068,
+    embed_dim=1024,
+    license="mit",
+    max_tokens=514,
+    adapted_from="FacebookAI/xlm-roberta-large",
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=ME5_TRAINING_DATA,
+    output_dtypes=OutputDType.FLOAT16,
+)
+
 
 e5_mistral = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=E5_INSTRUCTION,
-        model_kwargs={"dtype": torch.float16},
+        model_kwargs={"dtype": OutputDType.FLOAT16},
         apply_instruction_to_passages=False,
+        # This model pools the last token, so its embedding is the hidden state of
+        # the trailing </s>. Its tokenizer_config.json sets add_eos_token, but its
+        # tokenizer.json post-processor only adds <s>; transformers <5 resolved that
+        # in favour of the config, transformers >=5 in favour of tokenizer.json, so
+        # the </s> silently disappeared and pooling started reading the last word.
+        # add_eos_token alone is not enough: it rebuilds the post-processor from
+        # add_bos_token, which defaults to False here, dropping the <s> instead.
+        add_eos_token=True,
+        tokenizer_kwargs={"add_bos_token": True},
     ),
     name="intfloat/e5-mistral-7b-instruct",
     model_type=["dense"],
+    output_dtypes="float16",
     languages=MISTRAL_LANGUAGES,
     open_weights=True,
     revision="07163b72af1488142a360786df853f237b1a3ca1",
@@ -124,7 +164,7 @@ zeta_alpha_ai__zeta_alpha_e5_mistral = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=E5_INSTRUCTION,
-        model_kwargs={"dtype": torch.bfloat16},
+        model_kwargs={"dtype": OutputDType.BF16},
         apply_instruction_to_passages=False,
     ),
     name="zeta-alpha-ai/Zeta-Alpha-E5-Mistral",
@@ -202,6 +242,7 @@ zeta_alpha_ai__zeta_alpha_e5_mistral = ModelMeta(
     | E5_MISTRAL_TRAINING_DATA,
     adapted_from="intfloat/e5-mistral-7b-instruct",
     superseded_by=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 E5_R_MISTRAL_7B_INSTRUCTION = "{instruction}\n"

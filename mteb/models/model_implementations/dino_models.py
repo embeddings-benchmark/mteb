@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Literal
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -24,9 +23,14 @@ class DINOModel(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ):
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         from transformers import AutoImageProcessor, AutoModel
 
         self.model_name = model_name
@@ -52,7 +56,9 @@ class DINOModel(AbsEncoder):
         show_progress_bar: bool = True,
         pooling: Literal["cls", "mean"] = "cls",
         **kwargs: Any,
-    ):
+    ) -> Array:
+        import torch
+
         all_image_embeddings = []
 
         with torch.no_grad():
@@ -95,9 +101,9 @@ class DINOModel(AbsEncoder):
 
         if text_embeddings is not None and image_embeddings is not None:
             raise ValueError("DINO models only support image encoding.")
-        elif text_embeddings is not None:
+        if text_embeddings is not None:
             return text_embeddings
-        elif image_embeddings is not None:
+        if image_embeddings is not None:
             return image_embeddings
         raise ValueError("No text or image data found.")
 
@@ -117,7 +123,7 @@ dinov2_small = ModelMeta(
     release_date="2023-07-18",
     modalities=["image"],
     n_parameters=22056576,
-    n_embedding_parameters=None,
+    n_embedding_parameters=0,
     memory_usage_mb=84,
     max_tokens=None,
     embed_dim=384,
@@ -149,7 +155,7 @@ dinov2_base = ModelMeta(
     release_date="2023-07-18",
     modalities=["image"],
     n_parameters=86580480,
-    n_embedding_parameters=None,
+    n_embedding_parameters=0,
     memory_usage_mb=330,
     max_tokens=None,
     embed_dim=768,
@@ -181,7 +187,7 @@ dinov2_large = ModelMeta(
     release_date="2023-07-18",
     modalities=["image"],
     n_parameters=304368640,
-    n_embedding_parameters=None,
+    n_embedding_parameters=0,
     memory_usage_mb=1161,
     max_tokens=None,
     embed_dim=1024,
@@ -213,7 +219,7 @@ dinov2_giant = ModelMeta(
     release_date="2023-07-18",
     modalities=["image"],
     n_parameters=1136480768,
-    n_embedding_parameters=None,
+    n_embedding_parameters=0,
     memory_usage_mb=4335,
     max_tokens=None,
     embed_dim=1536,
@@ -249,7 +255,7 @@ webssl_dino300m_full2b = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=303655168,
-    n_embedding_parameters=None,
+    n_embedding_parameters=0,
     memory_usage_mb=1158,
     max_tokens=None,
     embed_dim=1024,
@@ -281,7 +287,7 @@ webssl_dino1b_full2b = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=1134771200,
-    n_embedding_parameters=None,
+    n_embedding_parameters=0,
     memory_usage_mb=4329,
     max_tokens=None,
     embed_dim=1536,
@@ -313,7 +319,7 @@ webssl_dino2b_full2b = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=2084237568,
-    n_embedding_parameters=None,
+    n_embedding_parameters=0,
     memory_usage_mb=7951,
     max_tokens=None,
     embed_dim=2688,
@@ -345,7 +351,7 @@ webssl_dino3b_full2b = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=2948317184,
-    n_embedding_parameters=None,
+    n_embedding_parameters=0,
     memory_usage_mb=11247,
     max_tokens=None,
     embed_dim=3072,
@@ -377,7 +383,7 @@ webssl_dino5b_full2b = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=4938338816,
-    n_embedding_parameters=None,
+    n_embedding_parameters=0,
     memory_usage_mb=18838,
     max_tokens=None,
     embed_dim=3584,
@@ -409,7 +415,7 @@ webssl_dino7b_full8b_224 = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=6450170880,
-    n_embedding_parameters=None,
+    n_embedding_parameters=0,
     memory_usage_mb=24605,
     max_tokens=None,
     embed_dim=4096,
@@ -441,7 +447,7 @@ webssl_dino7b_full8b_378 = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=6452108288,
-    n_embedding_parameters=None,
+    n_embedding_parameters=0,
     memory_usage_mb=24613,
     max_tokens=None,
     embed_dim=4096,
@@ -473,7 +479,7 @@ webssl_dino7b_full8b_518 = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=6454729728,
-    n_embedding_parameters=None,
+    n_embedding_parameters=0,
     memory_usage_mb=24623,
     max_tokens=None,
     embed_dim=4096,
@@ -506,7 +512,7 @@ webssl_dino2b_light2b = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=2084237568,
-    n_embedding_parameters=None,
+    n_embedding_parameters=0,
     memory_usage_mb=7951,
     max_tokens=None,
     embed_dim=2688,
@@ -538,7 +544,7 @@ webssl_dino2b_heavy2b = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=2084237568,
-    n_embedding_parameters=None,
+    n_embedding_parameters=0,
     memory_usage_mb=7951,
     max_tokens=None,
     embed_dim=2688,
@@ -570,7 +576,7 @@ webssl_dino3b_light2b = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=2948317184,
-    n_embedding_parameters=None,
+    n_embedding_parameters=0,
     memory_usage_mb=11247,
     max_tokens=None,
     embed_dim=3072,
@@ -602,7 +608,7 @@ webssl_dino3b_heavy2b = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=2948317184,
-    n_embedding_parameters=None,
+    n_embedding_parameters=0,
     memory_usage_mb=11247,
     max_tokens=None,
     embed_dim=3072,
@@ -634,7 +640,7 @@ webssl_mae300m_full2b = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=304351232,
-    n_embedding_parameters=None,
+    n_embedding_parameters=0,
     memory_usage_mb=1161,
     max_tokens=None,
     embed_dim=1024,
@@ -666,7 +672,7 @@ webssl_mae700m_full2b = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=632404480,
-    n_embedding_parameters=None,
+    n_embedding_parameters=0,
     memory_usage_mb=2412,
     max_tokens=None,
     embed_dim=1280,
@@ -698,7 +704,7 @@ webssl_mae1b_full2b = ModelMeta(
     release_date="2025-04-24",
     modalities=["image"],
     n_parameters=1136925696,
-    n_embedding_parameters=None,
+    n_embedding_parameters=0,
     memory_usage_mb=4337,
     max_tokens=None,
     embed_dim=1536,
@@ -719,4 +725,168 @@ webssl_mae1b_full2b = ModelMeta(
   archivePrefix={arXiv},
   primaryClass={cs.CV}
 }""",
+)
+
+
+DINOV3_CITATION = """@misc{simeoni2025dinov3,
+      title={DINOv3},
+      author={Oriane Simeoni and Huy V. Vo and Maximilian Seitzer and Federico Baldassarre and Maxime Oquab and Cijo Jose and Vasil Khalidov and Marc Szafraniec and Seungeun Yi and Michael Ramamonjisoa and Francisco Massa and Daniel Haziza and Luca Wehrstedt and Jianyuan Wang and Timothee Darcet and Theo Moutakanni and Leonel Sentana and Claire Roberts and Andrea Vedaldi and Jamie Tolan and John Brandt and Camille Couprie and Julien Mairal and Herve Jegou and Patrick Labatut and Piotr Bojanowski},
+      year={2025},
+      eprint={2508.10104},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}"""
+
+dinov3_training_datasets = set(
+    # LVD-1689M
+)
+
+dinov3_vits16 = ModelMeta(
+    loader=DINOModel,
+    name="facebook/dinov3-vits16-pretrain-lvd1689m",
+    model_type=["dense"],
+    languages=["eng-Latn"],
+    revision="114c1379950215c8b35dfcd4e90a5c251dde0d32",
+    release_date="2025-08-05",
+    modalities=["image"],
+    n_parameters=21596544,
+    n_embedding_parameters=0,
+    memory_usage_mb=82,
+    max_tokens=None,
+    embed_dim=384,
+    license="https://ai.meta.com/resources/models-and-libraries/dinov3-license/",
+    open_weights=True,
+    public_training_code="https://github.com/facebookresearch/dinov3",
+    public_training_data=None,
+    framework=["PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/facebook/dinov3-vits16-pretrain-lvd1689m",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=False,
+    training_datasets=dinov3_training_datasets,
+    citation=DINOV3_CITATION,
+)
+
+dinov3_vits16plus = ModelMeta(
+    loader=DINOModel,
+    name="facebook/dinov3-vits16plus-pretrain-lvd1689m",
+    model_type=["dense"],
+    languages=["eng-Latn"],
+    revision="c93d816fc9e567563bc068f01475bec89cc634a6",
+    release_date="2025-08-06",
+    modalities=["image"],
+    n_parameters=28692864,
+    n_embedding_parameters=0,
+    memory_usage_mb=109,
+    max_tokens=None,
+    embed_dim=384,
+    license="https://ai.meta.com/resources/models-and-libraries/dinov3-license/",
+    open_weights=True,
+    public_training_code="https://github.com/facebookresearch/dinov3",
+    public_training_data=None,
+    framework=["PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/facebook/dinov3-vits16plus-pretrain-lvd1689m",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=False,
+    training_datasets=dinov3_training_datasets,
+    citation=DINOV3_CITATION,
+)
+
+dinov3_vitb16 = ModelMeta(
+    loader=DINOModel,
+    name="facebook/dinov3-vitb16-pretrain-lvd1689m",
+    model_type=["dense"],
+    languages=["eng-Latn"],
+    revision="5931719e67bbdb9737e363e781fb0c67687896bc",
+    release_date="2025-08-05",
+    modalities=["image"],
+    n_parameters=85660416,
+    n_embedding_parameters=0,
+    memory_usage_mb=327,
+    max_tokens=None,
+    embed_dim=768,
+    license="https://ai.meta.com/resources/models-and-libraries/dinov3-license/",
+    open_weights=True,
+    public_training_code="https://github.com/facebookresearch/dinov3",
+    public_training_data=None,
+    framework=["PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/facebook/dinov3-vitb16-pretrain-lvd1689m",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=False,
+    training_datasets=dinov3_training_datasets,
+    citation=DINOV3_CITATION,
+)
+
+dinov3_vitl16 = ModelMeta(
+    loader=DINOModel,
+    name="facebook/dinov3-vitl16-pretrain-lvd1689m",
+    model_type=["dense"],
+    languages=["eng-Latn"],
+    revision="ea8dc2863c51be0a264bab82070e3e8836b02d51",
+    release_date="2025-08-06",
+    modalities=["image"],
+    n_parameters=303129600,
+    n_embedding_parameters=0,
+    memory_usage_mb=1156,
+    max_tokens=None,
+    embed_dim=1024,
+    license="https://ai.meta.com/resources/models-and-libraries/dinov3-license/",
+    open_weights=True,
+    public_training_code="https://github.com/facebookresearch/dinov3",
+    public_training_data=None,
+    framework=["PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/facebook/dinov3-vitl16-pretrain-lvd1689m",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=False,
+    training_datasets=dinov3_training_datasets,
+    citation=DINOV3_CITATION,
+)
+
+dinov3_vith16plus = ModelMeta(
+    loader=DINOModel,
+    name="facebook/dinov3-vith16plus-pretrain-lvd1689m",
+    model_type=["dense"],
+    languages=["eng-Latn"],
+    revision="c807c9eeea853df70aec4069e6f56b28ddc82acc",
+    release_date="2025-08-06",
+    modalities=["image"],
+    n_parameters=840592640,
+    n_embedding_parameters=0,
+    memory_usage_mb=3207,
+    max_tokens=None,
+    embed_dim=1280,
+    license="https://ai.meta.com/resources/models-and-libraries/dinov3-license/",
+    open_weights=True,
+    public_training_code="https://github.com/facebookresearch/dinov3",
+    public_training_data=None,
+    framework=["PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/facebook/dinov3-vith16plus-pretrain-lvd1689m",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=False,
+    training_datasets=dinov3_training_datasets,
+    citation=DINOV3_CITATION,
+)
+
+dinov3_vit7b16 = ModelMeta(
+    loader=DINOModel,
+    name="facebook/dinov3-vit7b16-pretrain-lvd1689m",
+    model_type=["dense"],
+    languages=["eng-Latn"],
+    revision="b80367753773648a6793235ab9c65cdbb029506f",
+    release_date="2025-08-04",
+    modalities=["image"],
+    n_parameters=6716035072,
+    n_embedding_parameters=0,
+    memory_usage_mb=25620,
+    max_tokens=None,
+    embed_dim=4096,
+    license="https://ai.meta.com/resources/models-and-libraries/dinov3-license/",
+    open_weights=True,
+    public_training_code="https://github.com/facebookresearch/dinov3",
+    public_training_data=None,
+    framework=["PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/facebook/dinov3-vit7b16-pretrain-lvd1689m",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=False,
+    training_datasets=dinov3_training_datasets,
+    citation=DINOV3_CITATION,
 )

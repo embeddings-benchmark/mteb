@@ -1,5 +1,5 @@
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 b1ade_training_data = {
     # We are in the process of submitting a paper outlining our process of creating b1ade using model merging and knowledge distillation.
@@ -8,7 +8,7 @@ b1ade_training_data = {
 }
 
 b1ade_embed = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="w601sxs/b1ade-embed",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -35,13 +35,4 @@ b1ade_embed = ModelMeta(
     # BAAI/bge-large-en-v1.5
     # mixedbread-ai/mxbai-embed-large-v1
     # avsolatorio/GIST-large-Embedding-v0
-    citation="""
-    @misc{bigscience_workshop_2022,
-    author       = { {Shreyas Subramanian} },
-    title        = { {b1ade series of models} },
-    year         = 2024,
-    url          = { https://huggingface.co/w601sxs/b1ade-embed },
-    publisher    = { Hugging Face }
-}
-""",
 )

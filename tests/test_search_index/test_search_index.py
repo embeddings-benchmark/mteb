@@ -6,13 +6,13 @@ import pytest
 
 import mteb
 from mteb.abstasks import AbsTaskRetrieval
-from mteb.models import SearchEncoderWrapper
-from mteb.models.model_meta import ScoringFunction
-from mteb.models.search_encoder_index import FaissSearchIndex
-from tests.mock_tasks import (
+from mteb.mocks.mock_tasks import (
     MockRerankingTask,
     MockRetrievalTask,
 )
+from mteb.models import SearchEncoderWrapper
+from mteb.models.model_meta import ScoringFunction
+from mteb.models.search_encoder_index import FaissSearchIndex
 
 
 @pytest.mark.parametrize(
@@ -33,7 +33,7 @@ def test_retrieval_backends(
     pytest.importorskip("faiss", reason="faiss is not installed")
     model = mteb.get_model("mteb/baseline-random-encoder")
     model_meta = deepcopy(model.mteb_model_meta)
-    model_meta.similarity_fn_name = similarity
+    model_meta = model_meta.model_copy(update={"similarity_fn_name": similarity})
     model.mteb_model_meta = model_meta
 
     faiss_backend = SearchEncoderWrapper(model, index_backend=FaissSearchIndex(model))
@@ -59,16 +59,16 @@ def test_retrieval_backends(
         == faiss_results.task_results[0].get_score()
     )
 
-    with task._predictions_path(python_backend_predictions).open() as f:
+    with task._predictions_path(python_backend_predictions).open(encoding="utf-8") as f:
         full_python_predictions = json.load(f)
         python_predictions = full_python_predictions["default"]["test"]
 
-    with task._predictions_path(faiss_backend_predictions).open() as f:
+    with task._predictions_path(faiss_backend_predictions).open(encoding="utf-8") as f:
         full_faiss_predictions = json.load(f)
         faiss_predictions = full_faiss_predictions["default"]["test"]
 
     for python_pred_key, faiss_pred_key in zip(
-        sorted(python_predictions.keys()), sorted(faiss_predictions.keys())
+        sorted(python_predictions.keys()), sorted(faiss_predictions.keys()), strict=True
     ):
         assert python_pred_key == faiss_pred_key
         assert python_predictions[python_pred_key] == pytest.approx(

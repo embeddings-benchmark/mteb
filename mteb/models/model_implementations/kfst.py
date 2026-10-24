@@ -1,8 +1,8 @@
-from mteb.models import sentence_transformers_loader
+from mteb.models import SentenceTransformerEncoderWrapper
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 xlmr_scandi = ModelMeta(
-    loader=sentence_transformers_loader,  # type: ignore[arg-type]
+    loader=SentenceTransformerEncoderWrapper,  # type: ignore[arg-type]
     name="KFST/XLMRoberta-en-da-sv-nb",
     model_type=["dense"],
     languages=["swe-Latn", "nob-Latn", "nno-Latn", "dan-Latn", "eng-Latn"],

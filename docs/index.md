@@ -43,7 +43,7 @@ To see more check out the [installation guide](installation.md).
 
     # Select model
     model_name = "sentence-transformers/all-MiniLM-L6-v2"
-    model = mteb.get_model(model_name) # (1)!
+    model = mteb.get_model(model_name)  # (1)!
 
     # Select tasks
     tasks = mteb.get_tasks(tasks=["Banking77Classification"])
@@ -55,7 +55,7 @@ To see more check out the [installation guide](installation.md).
     1. If the model is not implemented in MTEB, it will be loaded with `SentenceTransformer(model_name)` or `CrossEncoder(model_name)` if applicable.
 
 
-    To see more check out the [usage documentation](./usage/get_started.md)
+    To see more check out the [usage documentation](./get_started/usage/get_started.md)
 
 === "Using the CLI"
 
@@ -67,7 +67,7 @@ To see more check out the [installation guide](installation.md).
         --output-folder results
     ```
 
-    To read more about what you can do with the command line interface check out its [documentation](./usage/cli.md)
+    To read more about what you can do with the command line interface check out its [documentation](./get_started/usage/cli.md)
 
 ---
 
@@ -103,7 +103,7 @@ If you use any of the specific benchmarks, we also recommend that you cite the p
 
 ```python
 benchmark = mteb.get_benchmark("MTEB(eng, v2)")
-benchmark.citation # get citation for a specific benchmark
+benchmark.citation  # get citation for a specific benchmark
 
 # you can also create a table of the task for the appendix using:
 benchmark.tasks.to_latex()

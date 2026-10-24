@@ -9,10 +9,7 @@ from io import BytesIO
 from typing import TYPE_CHECKING, Any
 
 import requests
-import torch
-from torch.utils.data import DataLoader
 
-from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_implementations.bge_models import bge_chinese_training_data
 from mteb.models.model_implementations.nvidia_models import nvidia_training_datasets
@@ -20,7 +17,11 @@ from mteb.models.model_meta import ModelMeta
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    import torch
     from PIL import Image
+    from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput
@@ -29,15 +30,17 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def pil_to_base64(image, format="jpeg"):
+def pil_to_base64(image: Image.Image, image_format: str = "jpeg") -> str:
     buffer = BytesIO()
-    image.save(buffer, format=format)
+    image.save(buffer, format=image_format)
     img_bytes = buffer.getvalue()
     encoded_bytes = base64.b64encode(img_bytes)
     return encoded_bytes.decode("utf-8")
 
 
-def multimodal_embedding(image_base64=None, text_content=None):
+def multimodal_embedding(
+    image_base64: str | None = None, text_content: str | None = None
+) -> dict[str, Any] | None:
     auth_token = os.getenv("VOLCES_AUTH_TOKEN")
     model_name = "doubao-embedding-vision-250615"
     api_url = "https://ark.cn-beijing.volces.com/api/v3/embeddings/multimodal"
@@ -90,7 +93,11 @@ def multimodal_embedding(image_base64=None, text_content=None):
     return None
 
 
-def multi_thread_encode(sentences, batch_size=1, max_workers=8):
+def multi_thread_encode(
+    sentences: list[str], batch_size: int = 1, max_workers: int = 8
+) -> torch.Tensor:
+    import torch
+
     batches = []
     for idx in range(0, len(sentences), batch_size):
         batches.append((idx // batch_size, sentences[idx : idx + batch_size]))
@@ -99,7 +106,9 @@ def multi_thread_encode(sentences, batch_size=1, max_workers=8):
     results = [None] * n_batches  # Pre-allocated result list
     all_embeddings = []  # Final ordered embeddings
 
-    def _process_batch(batch_idx, batch_sentences):
+    def _process_batch(
+        batch_idx: int, batch_sentences: list[str]
+    ) -> tuple[int, torch.Tensor]:
         sentence = batch_sentences[0]
 
         retries = 5
@@ -157,16 +166,10 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         max_tokens: int,
         tokenizer_name: str = "cl100k_base",
         embed_dim: int | None = None,
-        available_embed_dims: list[int | None] = [None],
-        **kwargs,
+        available_embed_dims: Sequence[int | None] = (None,),
+        **kwargs: Any,
     ) -> None:
         """Wrapper for Seed embedding API."""
-        requires_package(
-            self,
-            "volcenginesdkarkruntime",
-            "pip install mteb[ark]",
-            "tiktoken",
-        )
         import tiktoken
 
         self._model_name = model_name
@@ -195,6 +198,8 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         batch_size: int = 32,
     ) -> Array:
+        import torch
+
         trimmed_sentences = []
         for sentence in sentences:
             encoded_sentence = self._encoding.encode(sentence)
@@ -204,11 +209,13 @@ class Seed16EmbeddingWrapper(AbsEncoder):
             else:
                 trimmed_sentences.append(sentence)
 
-        assert (
-            self._embed_dim is None or self._embed_dim in self._available_embed_dims
-        ), (
-            f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
-        )
+        if (
+            self._embed_dim is not None
+            and self._embed_dim not in self._available_embed_dims
+        ):
+            raise ValueError(
+                f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
+            )
 
         if (
             prompt_type == PromptType("query") or prompt_type is None
@@ -233,13 +240,17 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         batch_size: int = 32,
         **kwargs: Any,
     ) -> Array:
+        import torch
         import torchvision.transforms.functional as F
+        from torch.utils.data import DataLoader
 
-        assert (
-            self._embed_dim is None or self._embed_dim in self._available_embed_dims
-        ), (
-            f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
-        )
+        if (
+            self._embed_dim is not None
+            and self._embed_dim not in self._available_embed_dims
+        ):
+            raise ValueError(
+                f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
+            )
 
         if (
             prompt_type == PromptType("query") or prompt_type is None
@@ -256,7 +267,7 @@ class Seed16EmbeddingWrapper(AbsEncoder):
             images_base64 = [pil_to_base64(image) for image in images]
         outputs = []
         for image in images_base64:
-            if instruction == "":
+            if instruction == "":  # noqa: PLC1901
                 resp = multimodal_embedding(image_base64=[image])
             else:
                 resp = multimodal_embedding(
@@ -276,16 +287,21 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         self,
         texts: list[str] | None = None,
         images: list[Image.Image] | DataLoader | None = None,
-        fusion_mode="sum",
+        fusion_mode: str = "sum",
         **kwargs: Any,
     ) -> Array:
-        assert (
-            self._embed_dim is None or self._embed_dim in self._available_embed_dims
-        ), (
-            f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
-        )
+        import torch
 
-        assert len(texts) == len(images)
+        if (
+            self._embed_dim is not None
+            and self._embed_dim not in self._available_embed_dims
+        ):
+            raise ValueError(
+                f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
+            )
+
+        if len(texts) != len(images):
+            raise ValueError(f"Expected {len(texts)} images, got {len(images)}")
         images_base64 = [pil_to_base64(image) for image in images]
 
         outputs = []
@@ -441,4 +457,6 @@ seed_embedding = ModelMeta(
     training_datasets=doubao_embedding_training_data,
     public_training_code=None,
     public_training_data=None,
+    modalities=["text", "image"],
+    extra_requirements_groups=["ark"],
 )

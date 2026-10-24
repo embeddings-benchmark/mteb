@@ -1,9 +1,23 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from mteb.models.model_implementations.pylate_models import MultiVectorModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
-    sentence_transformers_loader,
+    SentenceTransformerEncoderWrapper,
 )
+from mteb.types import OutputDType
+
+if TYPE_CHECKING:
+    import torch
+
+
+def _identity(logits: torch.Tensor) -> torch.Tensor:
+    """Keep the raw logit as the score, like ``torch.nn.Identity()`` but without importing torch."""
+    return logits
+
 
 mixedbread_training_data = {
     # from correspondence:
@@ -15,7 +29,7 @@ mixedbread_training_data = {
 }
 
 mxbai_embed_large_v1 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts={
             "query": "Represent this sentence for searching relevant passages: "
@@ -45,27 +59,50 @@ mxbai_embed_large_v1 = ModelMeta(
     ],
     use_instructions=True,
     citation="""
-    @online{emb2024mxbai,
-      title={Open Source Strikes Bread - New Fluffy Embeddings Model},
-      author={Sean Lee and Aamir Shakir and Darius Koenig and Julius Lipp},
-      year={2024},
-      url={https://www.mixedbread.ai/blog/mxbai-embed-large-v1},
-    }
-
-    @article{li2023angle,
+@article{li2023angle,
       title={AnglE-optimized Text Embeddings},
       author={Li, Xianming and Li, Jing},
       journal={arXiv preprint arXiv:2309.12871},
       year={2023}
     }
-    """,
+""",
     public_training_code=None,
     public_training_data=None,
     training_datasets=mixedbread_training_data,
+    output_dtypes=OutputDType.FLOAT16,
+)
+
+deepset_mxbai_embed_de_large_v1 = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    name="mixedbread-ai/deepset-mxbai-embed-de-large-v1",
+    model_type=["dense"],
+    languages=["deu-Latn", "eng-Latn"],
+    open_weights=True,
+    revision="cbbec43ebdf8b2d8304d3093781eee56a8cdfb69",
+    release_date="2024-07-12",  # initial commit of hf model.
+    n_parameters=487066624,
+    n_embedding_parameters=183178240,
+    memory_usage_mb=929,
+    max_tokens=514,
+    embed_dim=1024,
+    license="apache-2.0",
+    reference="https://huggingface.co/mixedbread-ai/deepset-mxbai-embed-de-large-v1",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=[
+        "Sentence Transformers",
+        "Transformers",
+        "ONNX",
+        "safetensors",
+    ],
+    use_instructions=None,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 mxbai_embed_2d_large_v1 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="mixedbread-ai/mxbai-embed-2d-large-v1",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -93,11 +130,12 @@ mxbai_embed_2d_large_v1 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 
 mxbai_embed_xsmall_v1 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="mixedbread-ai/mxbai-embed-xsmall-v1",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -119,12 +157,8 @@ mxbai_embed_xsmall_v1 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=mixedbread_training_data,
-    citation="""@online{xsmall2024mxbai,
-  title={Every Byte Matters: Introducing mxbai-embed-xsmall-v1},
-  author={Sean Lee and Julius Lipp and Rui Huang and Darius Koenig},
-  year={2024},
-  url={https://www.mixedbread.ai/blog/mxbai-embed-xsmall-v1},
-}""",
+    citation=None,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 mxbai_rerank_xsmall_v1 = ModelMeta(
@@ -157,13 +191,9 @@ mxbai_rerank_xsmall_v1 = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["cross-encoder"],
-    citation="""@online{rerank2024mxbai,
-  title={Boost Your Search With The Crispy Mixedbread Rerank Models},
-  author={Aamir Shakir and Darius Koenig and Julius Lipp and Sean Lee},
-  year={2024},
-  url={https://www.mixedbread.ai/blog/mxbai-rerank-v1},
-}""",
+    citation=None,
     contacts=None,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 mxbai_rerank_base_v1 = ModelMeta(
@@ -193,16 +223,12 @@ mxbai_rerank_base_v1 = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     adapted_from=None,
-    superseded_by=None,
+    superseded_by="mixedbread-ai/mxbai-rerank-base-v2",
     modalities=["text"],
     model_type=["cross-encoder"],
-    citation="""@online{rerank2024mxbai,
-  title={Boost Your Search With The Crispy Mixedbread Rerank Models},
-  author={Aamir Shakir and Darius Koenig and Julius Lipp and Sean Lee},
-  year={2024},
-  url={https://www.mixedbread.ai/blog/mxbai-rerank-v1},
-}""",
+    citation=None,
     contacts=None,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 mxbai_rerank_large_v1 = ModelMeta(
@@ -232,16 +258,209 @@ mxbai_rerank_large_v1 = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     adapted_from=None,
+    superseded_by="mixedbread-ai/mxbai-rerank-large-v2",
+    modalities=["text"],
+    model_type=["cross-encoder"],
+    citation=None,
+    contacts=None,
+    output_dtypes=OutputDType.FLOAT16,
+)
+
+# Languages from the model card (ISO 639-1) mapped to MTEB codes via
+# mteb.languages._hf_langs_to_iso_lang_scripts (the same path ModelMeta.from_hub uses).
+MXBAI_RERANK_V2_LANGUAGES = [
+    "afr-Latn",
+    "amh-Ethi",
+    "ara-Arab",
+    "asm-Beng",
+    "aze-Latn",
+    "bel-Cyrl",
+    "ben-Beng",
+    "bos-Latn",
+    "bre-Latn",
+    "bul-Cyrl",
+    "cat-Latn",
+    "ces-Latn",
+    "cym-Latn",
+    "dan-Latn",
+    "deu-Latn",
+    "ell-Grek",
+    "eng-Latn",
+    "epo-Latn",
+    "est-Latn",
+    "eus-Latn",
+    "fas-Arab",
+    "fin-Latn",
+    "fra-Latn",
+    "fry-Latn",
+    "ful-Latn",
+    "gla-Latn",
+    "gle-Latn",
+    "glg-Latn",
+    "grn-Latn",
+    "guj-Gujr",
+    "hat-Latn",
+    "hau-Latn",
+    "heb-Hebr",
+    "hin-Deva",
+    "hrv-Latn",
+    "hun-Latn",
+    "hye-Armn",
+    "ibo-Latn",
+    "ind-Latn",
+    "isl-Latn",
+    "ita-Latn",
+    "jav-Latn",
+    "jpn-Jpan",
+    "kan-Knda",
+    "kat-Geor",
+    "kaz-Cyrl",
+    "khm-Khmr",
+    "kir-Cyrl",
+    "kor-Hang",
+    "kur-Arab",
+    "lao-Laoo",
+    "lat-Latn",
+    "lav-Latn",
+    "lim-Latn",
+    "lin-Latn",
+    "lit-Latn",
+    "lug-Latn",
+    "mal-Mlym",
+    "mar-Deva",
+    "mkd-Cyrl",
+    "mon-Cyrl",
+    "msa-Latn",
+    "mya-Mymr",
+    "nep-Deva",
+    "nld-Latn",
+    "nor-Latn",
+    "ori-Orya",
+    "orm-Ethi",
+    "pan-Guru",
+    "pol-Latn",
+    "por-Latn",
+    "pus-Arab",
+    "roh-Latn",
+    "ron-Latn",
+    "rus-Cyrl",
+    "san-Deva",
+    "sin-Sinh",
+    "slk-Latn",
+    "slv-Latn",
+    "snd-Arab",
+    "som-Latn",
+    "spa-Latn",
+    "sqi-Latn",
+    "srd-Latn",
+    "srp-Cyrl",
+    "ssw-Latn",
+    "sun-Latn",
+    "swa-Latn",
+    "swe-Latn",
+    "tam-Taml",
+    "tel-Telu",
+    "tgl-Latn",
+    "tha-Thai",
+    "tsn-Latn",
+    "tur-Latn",
+    "uig-Arab",
+    "ukr-Cyrl",
+    "urd-Arab",
+    "uzb-Latn",
+    "vie-Latn",
+    "wol-Latn",
+    "xho-Latn",
+    "yid-Hebr",
+    "yor-Latn",
+    "zho-Hans",
+    "zul-Latn",
+]
+
+MXBAI_RERANK_V2_CITATION = """@inproceedings{li2026prorank,
+    title = "{ProRank}: Prompt Warmup via Reinforcement Learning for Small Language Models Reranking",
+    author = "LI, Xianming  and
+      Shakir, Aamir  and
+      Huang, Rui  and
+      Lipp, Julius  and
+      Clavi{\'e}, Benjamin  and
+      Li, Jing",
+    editor = "Liakata, Maria  and
+      Moreira, Viviane P.  and
+      Zhang, Jiajun  and
+      Jurgens, David",
+    booktitle = "Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2026",
+    month = jul,
+    year = "2026",
+    address = "San Diego, California, United States",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2026.findings-acl.51/",
+    pages = "1026--1037",
+    ISBN = "979-8-89176-395-1"
+}"""
+
+# We keep the raw logit as the relevance score (identity activation)
+# to match the reference implementation and the published benchmark numbers.
+mxbai_rerank_base_v2 = ModelMeta(
+    loader=CrossEncoderWrapper,
+    loader_kwargs=dict(activation_fn=_identity),
+    name="mixedbread-ai/mxbai-rerank-base-v2",
+    revision="3ea9d4dffa7d12a4f366be8e275c349de9fc9865",
+    release_date="2025-03-03",
+    languages=MXBAI_RERANK_V2_LANGUAGES,
+    n_parameters=494032768,
+    n_embedding_parameters=136134656,
+    memory_usage_mb=1885,
+    max_tokens=32768,
+    embed_dim=896,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch", "Sentence Transformers", "Transformers", "safetensors"],
+    reference="https://huggingface.co/mixedbread-ai/mxbai-rerank-base-v2",
+    similarity_fn_name=None,
+    use_instructions=False,
+    training_datasets=mixedbread_training_data,
+    adapted_from="Qwen/Qwen2.5-0.5B",
     superseded_by=None,
     modalities=["text"],
     model_type=["cross-encoder"],
-    citation="""@online{rerank2024mxbai,
-  title={Boost Your Search With The Crispy Mixedbread Rerank Models},
-  author={Aamir Shakir and Darius Koenig and Julius Lipp and Sean Lee},
-  year={2024},
-  url={https://www.mixedbread.ai/blog/mxbai-rerank-v1},
-}""",
+    extra_requirements_groups=["multimodal-sbert"],
+    citation=MXBAI_RERANK_V2_CITATION,
     contacts=None,
+    output_dtypes=OutputDType.BF16,
+)
+
+mxbai_rerank_large_v2 = ModelMeta(
+    loader=CrossEncoderWrapper,
+    loader_kwargs=dict(activation_fn=_identity),
+    name="mixedbread-ai/mxbai-rerank-large-v2",
+    revision="ca7e1ee484c37c0ddd8d178a9a5c33cec575c5e6",
+    release_date="2025-03-03",
+    languages=MXBAI_RERANK_V2_LANGUAGES,
+    n_parameters=1543714304,
+    n_embedding_parameters=233373696,
+    memory_usage_mb=5889,
+    max_tokens=32768,
+    embed_dim=1536,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch", "Sentence Transformers", "Transformers", "safetensors"],
+    reference="https://huggingface.co/mixedbread-ai/mxbai-rerank-large-v2",
+    similarity_fn_name=None,
+    use_instructions=False,
+    training_datasets=mixedbread_training_data,
+    adapted_from="Qwen/Qwen2.5-1.5B",
+    superseded_by=None,
+    modalities=["text"],
+    model_type=["cross-encoder"],
+    extra_requirements_groups=["multimodal-sbert"],
+    citation=MXBAI_RERANK_V2_CITATION,
+    contacts=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 mxbai_edge_colbert_v0_17m = ModelMeta(

@@ -1,16 +1,24 @@
+from __future__ import annotations
+
 from collections import defaultdict
+from typing import TYPE_CHECKING, Any
 
 import datasets
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
+if TYPE_CHECKING:
+    from datasets import Dataset
+
+    from mteb.types import RelevantDocumentsType
+
 
 def load_r2med_data(
     path: str,
     eval_splits: list,
     revision: str,
-):
+) -> tuple[dict[str, Dataset], dict[str, Dataset], dict[str, RelevantDocumentsType]]:
     eval_split = eval_splits[0]
     corpus = {eval_split: None}
     queries = {eval_split: None}
@@ -61,16 +69,19 @@ class R2MEDBiologyRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@article{li2025r2med,
-  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
-  journal = {arXiv preprint arXiv:2505.14558},
+@misc{zhang2026r2medbenchmarkreasoningdrivenmedical,
+  archiveprefix = {arXiv},
+  author = {Xiangxu Zhang and Lei Li and Xiao Zhou and Zheng Liu},
+  eprint = {2505.14558},
+  primaryclass = {cs.IR},
   title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
-  year = {2025},
+  url = {https://arxiv.org/abs/2505.14558},
+  year = {2026},
 }
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
@@ -105,16 +116,19 @@ class R2MEDBioinformaticsRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@article{li2025r2med,
-  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
-  journal = {arXiv preprint arXiv:2505.14558},
+@misc{zhang2026r2medbenchmarkreasoningdrivenmedical,
+  archiveprefix = {arXiv},
+  author = {Xiangxu Zhang and Lei Li and Xiao Zhou and Zheng Liu},
+  eprint = {2505.14558},
+  primaryclass = {cs.IR},
   title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
-  year = {2025},
+  url = {https://arxiv.org/abs/2505.14558},
+  year = {2026},
 }
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
@@ -149,16 +163,19 @@ class R2MEDMedicalSciencesRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@article{li2025r2med,
-  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
-  journal = {arXiv preprint arXiv:2505.14558},
+@misc{zhang2026r2medbenchmarkreasoningdrivenmedical,
+  archiveprefix = {arXiv},
+  author = {Xiangxu Zhang and Lei Li and Xiao Zhou and Zheng Liu},
+  eprint = {2505.14558},
+  primaryclass = {cs.IR},
   title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
-  year = {2025},
+  url = {https://arxiv.org/abs/2505.14558},
+  year = {2026},
 }
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
@@ -193,16 +210,19 @@ class R2MEDMedXpertQAExamRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@article{li2025r2med,
-  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
-  journal = {arXiv preprint arXiv:2505.14558},
+@misc{zhang2026r2medbenchmarkreasoningdrivenmedical,
+  archiveprefix = {arXiv},
+  author = {Xiangxu Zhang and Lei Li and Xiao Zhou and Zheng Liu},
+  eprint = {2505.14558},
+  primaryclass = {cs.IR},
   title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
-  year = {2025},
+  url = {https://arxiv.org/abs/2505.14558},
+  year = {2026},
 }
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
@@ -237,16 +257,19 @@ class R2MEDMedQADiagRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@article{li2025r2med,
-  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
-  journal = {arXiv preprint arXiv:2505.14558},
+@misc{zhang2026r2medbenchmarkreasoningdrivenmedical,
+  archiveprefix = {arXiv},
+  author = {Xiangxu Zhang and Lei Li and Xiao Zhou and Zheng Liu},
+  eprint = {2505.14558},
+  primaryclass = {cs.IR},
   title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
-  year = {2025},
+  url = {https://arxiv.org/abs/2505.14558},
+  year = {2026},
 }
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
@@ -281,16 +304,19 @@ class R2MEDPMCTreatmentRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@article{li2025r2med,
-  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
-  journal = {arXiv preprint arXiv:2505.14558},
+@misc{zhang2026r2medbenchmarkreasoningdrivenmedical,
+  archiveprefix = {arXiv},
+  author = {Xiangxu Zhang and Lei Li and Xiao Zhou and Zheng Liu},
+  eprint = {2505.14558},
+  primaryclass = {cs.IR},
   title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
-  year = {2025},
+  url = {https://arxiv.org/abs/2505.14558},
+  year = {2026},
 }
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
@@ -325,16 +351,19 @@ class R2MEDPMCClinicalRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@article{li2025r2med,
-  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
-  journal = {arXiv preprint arXiv:2505.14558},
+@misc{zhang2026r2medbenchmarkreasoningdrivenmedical,
+  archiveprefix = {arXiv},
+  author = {Xiangxu Zhang and Lei Li and Xiao Zhou and Zheng Liu},
+  eprint = {2505.14558},
+  primaryclass = {cs.IR},
   title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
-  year = {2025},
+  url = {https://arxiv.org/abs/2505.14558},
+  year = {2026},
 }
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
@@ -369,16 +398,19 @@ class R2MEDIIYiClinicalRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@article{li2025r2med,
-  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
-  journal = {arXiv preprint arXiv:2505.14558},
+@misc{zhang2026r2medbenchmarkreasoningdrivenmedical,
+  archiveprefix = {arXiv},
+  author = {Xiangxu Zhang and Lei Li and Xiao Zhou and Zheng Liu},
+  eprint = {2505.14558},
+  primaryclass = {cs.IR},
   title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
-  year = {2025},
+  url = {https://arxiv.org/abs/2505.14558},
+  year = {2026},
 }
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 

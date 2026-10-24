@@ -1,5 +1,5 @@
 from mteb.models.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 from .e5_instruct import E5_MISTRAL_TRAINING_DATA
 
@@ -42,7 +42,7 @@ LGAI_EMBEDDING_TRAINING_DATA = {
 }
 
 lgai_embedding_en = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="annamodels/LGAI-Embedding-Preview",
     model_type=["dense"],
     languages=[

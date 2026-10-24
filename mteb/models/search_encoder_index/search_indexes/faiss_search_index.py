@@ -2,18 +2,18 @@ from __future__ import annotations
 
 import logging
 import warnings
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 import numpy as np
-import torch
 
-from mteb._requires_package import requires_package
+from mteb._requires_package import _is_package_available
 from mteb.models.model_meta import ScoringFunction
 
 if TYPE_CHECKING:
     from collections.abc import Callable
 
     import faiss
+    from numpy.typing import NDArray
 
     from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, TopRankedDocumentsType
@@ -35,15 +35,14 @@ class FaissSearchIndex:
     _normalize: bool = False
 
     def __init__(self, model: EncoderProtocol) -> None:
-        requires_package(
-            self,
-            "faiss",
-            "FAISS-based search",
-            install_instruction="pip install mteb[faiss-cpu]",
-        )
+        if not _is_package_available("faiss"):
+            raise ImportError(
+                "FAISS is required for FaissSearchIndex. Please install with `pip install mteb[faiss-cpu]`."
+            )
 
         from faiss import IndexFlatIP, IndexFlatL2
 
+        self.index_type: type[faiss.Index]
         # https://github.com/facebookresearch/faiss/wiki/Faiss-indexes
         if model.mteb_model_meta.similarity_fn_name is ScoringFunction.DOT_PRODUCT:
             self.index_type = IndexFlatIP
@@ -55,7 +54,7 @@ class FaissSearchIndex:
         else:
             raise ValueError(
                 f"FAISS backend does not support similarity function {model.mteb_model_meta.similarity_fn_name}. "
-                f"Available: {ScoringFunction.DOT_PRODUCT}, {ScoringFunction.COSINE}."
+                f"Available: {ScoringFunction.DOT_PRODUCT}, {ScoringFunction.COSINE}, {ScoringFunction.EUCLIDEAN}."
             )
 
         self.idxs: list[str] = []
@@ -64,21 +63,22 @@ class FaissSearchIndex:
     def add_documents(self, embeddings: Array, idxs: list[str]) -> None:
         """Add all document embeddings and their IDs to FAISS index."""
         import faiss
+        import torch
 
         if isinstance(embeddings, torch.Tensor):
             embeddings = embeddings.detach().cpu().numpy()
 
-        embeddings = embeddings.astype(np.float32)
+        embeddings_f32 = cast("NDArray[np.float32]", embeddings.astype(np.float32))
         self.idxs.extend(idxs)
 
         if self._normalize:
-            faiss.normalize_L2(embeddings)
+            faiss.normalize_L2(embeddings_f32)
 
-        dim = embeddings.shape[1]
+        dim = embeddings_f32.shape[1]
         if self.index is None:
             self.index = self.index_type(dim)
 
-        self.index.add(embeddings)
+        self.index.add(embeddings_f32)
         logger.info(f"FAISS index built with {len(idxs)} vectors of dim {dim}.")
 
     def search(
@@ -91,6 +91,7 @@ class FaissSearchIndex:
     ) -> tuple[list[list[float]], list[list[int]]]:
         """Search using FAISS."""
         import faiss
+        import torch
 
         if self.index is None:
             raise ValueError("No index built. Call add_document() first.")
@@ -98,23 +99,26 @@ class FaissSearchIndex:
         if isinstance(embeddings, torch.Tensor):
             embeddings = embeddings.detach().cpu().numpy()
 
+        embeddings_f32 = cast("NDArray[np.float32]", embeddings.astype(np.float32))
+
         if self._normalize:
-            faiss.normalize_L2(embeddings)
+            faiss.normalize_L2(embeddings_f32)
 
         if top_ranked is not None:
             if query_idx_to_id is None:
                 raise ValueError("query_idx_to_id must be provided when reranking.")
 
             similarities, ids = self._reranking(
-                embeddings,
+                embeddings_f32,
                 top_k,
                 top_ranked=top_ranked,
                 query_idx_to_id=query_idx_to_id,
             )
         else:
-            similarities, ids = self.index.search(embeddings.astype(np.float32), top_k)
-            similarities = similarities.tolist()
-            ids = ids.tolist()
+            capped_top_k = min(top_k, self.index.ntotal)
+            sim_array, id_array = self.index.search(embeddings_f32, capped_top_k)
+            similarities = sim_array.tolist()
+            ids = id_array.tolist()
 
         if issubclass(self.index_type, faiss.IndexFlatL2):
             similarities = (-np.sqrt(np.maximum(similarities, 0))).tolist()
@@ -138,7 +142,7 @@ class FaissSearchIndex:
             if not ranked_ids:
                 msg = f"No top-ranked documents for query {query_id}"
                 logger.warning(msg)
-                warnings.warn(msg)
+                warnings.warn(msg, stacklevel=2)
                 scores_all.append([])
                 idxs_all.append([])
                 continue

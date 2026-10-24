@@ -24,14 +24,7 @@ class FalseFriendsDeEnPC(AbsTaskPairClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation=r"""
-@misc{Chibb_2022,
-  author = {Chibb, Aaron},
-  month = {Sep},
-  title = {{German-English False Friends in Multilingual Transformer Models: An Evaluation on Robustness and Word-to-Word Fine-Tuning}},
-  year = {2022},
-}
-""",
+        bibtex_citation="",
     )
 
     def dataset_transform(

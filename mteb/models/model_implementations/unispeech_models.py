@@ -2,14 +2,15 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
-from transformers import UniSpeechSatForCTC, Wav2Vec2FeatureExtractor
 
-from mteb._create_dataloaders import AudioCollator
-from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import (
+    AudioCollator,
+    seconds_to_samples,
+    single_clip_dataloader,
+)
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -24,11 +25,18 @@ class UniSpeechWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_seconds: float = 30.0,
+        device: str | None = None,
+        # uncapped: conv positional embedding, no max_position_embeddings
+        # https://huggingface.co/microsoft/unispeech-sat-base-100h-libri-ft/blob/main/config.json
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
-        requires_audio_dependencies()
+        import torch
+        from transformers import UniSpeechSatForCTC, Wav2Vec2FeatureExtractor
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         self.model_name = model_name
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds
@@ -43,18 +51,31 @@ class UniSpeechWrapper(AbsEncoder):
         self.model.eval()
         self.sampling_rate = self.feature_extractor.sampling_rate
 
-    def get_audio_embeddings(
+    def get_audio_embeddings(  # noqa: PLR0914
         self,
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        inputs.collate_fn = AudioCollator(self.sampling_rate)
+        import torch
+
+        max_samples = seconds_to_samples(
+            self.max_audio_length_seconds, self.sampling_rate
+        )
+        # the conv feature encoder needs at least 400 samples (25 ms at 16 kHz)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate,
+            max_samples=max_samples,
+            min_samples=400,
+        )
 
         all_embeddings = []
 
         for batch in tqdm(
-            inputs,
+            single_clip_dataloader(
+                inputs,
+                "group-norm feature encoder: padding changes the embeddings",
+            ),
             disable=not show_progress_bar,
         ):
             audio_arrays = [audio["array"] for audio in batch["audio"]]
@@ -64,8 +85,6 @@ class UniSpeechWrapper(AbsEncoder):
                 sampling_rate=self.sampling_rate,
                 return_tensors="pt",
                 padding="longest",
-                truncation=True,
-                max_length=int(self.max_audio_length_seconds * self.sampling_rate),
                 return_attention_mask=True,
             ).to(self.device)
 
@@ -130,6 +149,7 @@ unispeech_base = ModelMeta(
     release_date="2021-10-12",
     max_tokens=float("inf"),
     n_parameters=94_000_000,
+    n_embedding_parameters=24576,
     memory_usage_mb=359,
     embed_dim=768,
     license="apache-2.0",

@@ -63,7 +63,9 @@
                     "min_top_ranked_per_query": 2,
                     "average_top_ranked_per_query": 13.026889752016732,
                     "max_top_ranked_per_query": 74
-                }
+                },
+                "num_documents": 87202,
+                "num_queries": 6694
             },
             "es": {
                 "num_samples": 33785,
@@ -96,7 +98,9 @@
                     "min_top_ranked_per_query": 2,
                     "average_top_ranked_per_query": 17.252296056185845,
                     "max_top_ranked_per_query": 41
-                }
+                },
+                "num_documents": 31934,
+                "num_queries": 1851
             },
             "jp": {
                 "num_samples": 30946,
@@ -129,8 +133,12 @@
                     "min_top_ranked_per_query": 2,
                     "average_top_ranked_per_query": 15.727567567567567,
                     "max_top_ranked_per_query": 50
-                }
+                },
+                "num_documents": 29096,
+                "num_queries": 1850
             }
-        }
+        },
+        "num_documents": 148232,
+        "num_queries": 10395
     }
 }

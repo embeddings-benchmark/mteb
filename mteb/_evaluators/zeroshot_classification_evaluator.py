@@ -1,9 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
-
-from datasets import Dataset
+from typing import TYPE_CHECKING, Any
 
 from mteb._create_dataloaders import (
     _create_dataloader_from_texts,
@@ -14,11 +12,14 @@ from mteb.similarity_functions import similarity
 from .evaluator import Evaluator
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from datasets import Dataset
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import EncoderProtocol
-    from mteb.types import Array, EncodeKwargs
+    from mteb.timing import TimingStack
+    from mteb.types import Array, EncodeKwargs, Modalities
 
 logger = logging.getLogger(__name__)
 
@@ -27,12 +28,14 @@ class ZeroShotClassificationEvaluator(Evaluator):
     def __init__(
         self,
         dataset: Dataset,
-        input_column_name: str,
+        input_column_name: str | Sequence[Modalities],
         candidate_labels: list[str],
+        *,
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
-        **kwargs,
+        timer: TimingStack,
+        **kwargs: Any,
     ) -> None:
         super().__init__(**kwargs)
 
@@ -42,6 +45,7 @@ class ZeroShotClassificationEvaluator(Evaluator):
         self.task_metadata = task_metadata
         self.hf_split = hf_split
         self.hf_subset = hf_subset
+        self.timer = timer
 
     def __call__(
         self,
@@ -50,6 +54,22 @@ class ZeroShotClassificationEvaluator(Evaluator):
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
     ) -> Array:
+        with self.timer(
+            "Encoding labels",
+            split=self.hf_split,
+            subset=self.hf_subset,
+            log_message="Running zero-shot classification - Encoding labels...",
+        ):
+            text_label_embeddings = model.encode(
+                _create_dataloader_from_texts(
+                    self.candidate_labels, num_proc=num_proc, **encode_kwargs
+                ),
+                task_metadata=self.task_metadata,
+                hf_subset=self.hf_subset,
+                hf_split=self.hf_split,
+                **encode_kwargs,
+            )
+
         dataloader = create_dataloader(
             self.dataset,
             input_column=self.input_column_name,
@@ -58,35 +78,27 @@ class ZeroShotClassificationEvaluator(Evaluator):
             **encode_kwargs,
         )
 
-        logger.info("Running zero-shot classification - Encoding labels...")
-        text_label_embeddings = model.encode(
-            _create_dataloader_from_texts(self.candidate_labels, **encode_kwargs),
-            task_metadata=self.task_metadata,
-            hf_subset=self.hf_subset,
-            hf_split=self.hf_split,
-            **encode_kwargs,
-        )
-
-        dataloader = create_dataloader(
-            self.dataset,
-            input_column=self.input_column_name,
-            task_metadata=self.task_metadata,
-            **encode_kwargs,
-        )
-
-        logger.info("Running zero-shot classification - Encoding samples...")
-        input_embeddings = model.encode(
-            dataloader,
-            task_metadata=self.task_metadata,
-            hf_subset=self.hf_subset,
-            hf_split=self.hf_split,
-            **encode_kwargs,
-        )
-
-        logger.info("Running zero-shot classification - Evaluating accuracy...")
-
-        if self.task_metadata.modalities == ["image", "text"]:
-            probs = similarity(text_label_embeddings, input_embeddings)
-        else:
-            probs = model.similarity(input_embeddings, text_label_embeddings)
+        with self.timer(
+            "Encoding samples",
+            split=self.hf_split,
+            subset=self.hf_subset,
+            log_message="Running zero-shot classification - Encoding samples...",
+        ):
+            input_embeddings = model.encode(
+                dataloader,
+                task_metadata=self.task_metadata,
+                hf_subset=self.hf_subset,
+                hf_split=self.hf_split,
+                **encode_kwargs,
+            )
+        with self.timer(
+            "Scoring",
+            split=self.hf_split,
+            subset=self.hf_subset,
+            log_message="Running zero-shot classification - Evaluating accuracy...",
+        ):
+            if self.task_metadata.modalities == ["image", "text"]:
+                probs = similarity(text_label_embeddings, input_embeddings)
+            else:
+                probs = model.similarity(input_embeddings, text_label_embeddings)
         return probs

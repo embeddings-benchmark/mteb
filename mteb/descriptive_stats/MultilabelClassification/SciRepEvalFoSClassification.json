@@ -1,0 +1,184 @@
+{
+    "test": {
+        "num_samples": 2458,
+        "samples_in_train": 0,
+        "text_statistics": {
+            "total_text_length": 2150882,
+            "min_text_length": 15,
+            "average_text_length": 875.053702196908,
+            "max_text_length": 5881,
+            "unique_texts": 2458
+        },
+        "image_statistics": null,
+        "audio_statistics": null,
+        "video_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.1761594792514238,
+            "max_labels_per_text": 3,
+            "unique_labels": 23,
+            "labels": {
+                "Biology": {
+                    "count": 243
+                },
+                "Mathematics": {
+                    "count": 166
+                },
+                "Political science": {
+                    "count": 103
+                },
+                "Agricultural and Food sciences": {
+                    "count": 110
+                },
+                "Chemistry": {
+                    "count": 180
+                },
+                "Geology": {
+                    "count": 59
+                },
+                "Computer science": {
+                    "count": 162
+                },
+                "Environmental science": {
+                    "count": 240
+                },
+                "Education": {
+                    "count": 140
+                },
+                "Engineering": {
+                    "count": 150
+                },
+                "Physics": {
+                    "count": 321
+                },
+                "Medicine": {
+                    "count": 307
+                },
+                "Psychology": {
+                    "count": 126
+                },
+                "Materials science": {
+                    "count": 105
+                },
+                "History": {
+                    "count": 189
+                },
+                "Philosophy": {
+                    "count": 26
+                },
+                "Economics": {
+                    "count": 103
+                },
+                "Geography": {
+                    "count": 42
+                },
+                "Art": {
+                    "count": 17
+                },
+                "Law": {
+                    "count": 29
+                },
+                "Business": {
+                    "count": 36
+                },
+                "Linguistics": {
+                    "count": 8
+                },
+                "Sociology": {
+                    "count": 29
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 5734,
+        "samples_in_train": null,
+        "text_statistics": {
+            "total_text_length": 4991112,
+            "min_text_length": 13,
+            "average_text_length": 870.441576560865,
+            "max_text_length": 10098,
+            "unique_texts": 5734
+        },
+        "image_statistics": null,
+        "audio_statistics": null,
+        "video_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.1996860830136031,
+            "max_labels_per_text": 3,
+            "unique_labels": 23,
+            "labels": {
+                "Engineering": {
+                    "count": 358
+                },
+                "Physics": {
+                    "count": 765
+                },
+                "Environmental science": {
+                    "count": 561
+                },
+                "Chemistry": {
+                    "count": 437
+                },
+                "Economics": {
+                    "count": 223
+                },
+                "History": {
+                    "count": 434
+                },
+                "Geology": {
+                    "count": 140
+                },
+                "Medicine": {
+                    "count": 768
+                },
+                "Agricultural and Food sciences": {
+                    "count": 207
+                },
+                "Computer science": {
+                    "count": 422
+                },
+                "Business": {
+                    "count": 104
+                },
+                "Biology": {
+                    "count": 590
+                },
+                "Psychology": {
+                    "count": 285
+                },
+                "Mathematics": {
+                    "count": 364
+                },
+                "Education": {
+                    "count": 327
+                },
+                "Political science": {
+                    "count": 279
+                },
+                "Philosophy": {
+                    "count": 91
+                },
+                "Materials science": {
+                    "count": 228
+                },
+                "Geography": {
+                    "count": 107
+                },
+                "Sociology": {
+                    "count": 63
+                },
+                "Law": {
+                    "count": 62
+                },
+                "Art": {
+                    "count": 42
+                },
+                "Linguistics": {
+                    "count": 22
+                }
+            }
+        }
+    }
+}

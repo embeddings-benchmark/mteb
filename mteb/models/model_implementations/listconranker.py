@@ -2,9 +2,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
-
 from mteb.models.model_meta import ModelMeta
+from mteb.types import OutputDType
 
 from .rerankers_custom import RerankerWrapper
 
@@ -23,7 +22,8 @@ LISTCONRANKER_CITATION = """@article{liu2025listconranker,
 
 
 class ListConRanker(RerankerWrapper):
-    def __init__(self, model_name_or_path: str, **kwargs) -> None:
+    def __init__(self, model_name_or_path: str, **kwargs: Any) -> None:
+        import torch
         from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
         super().__init__(model_name_or_path, **kwargs)
@@ -42,7 +42,6 @@ class ListConRanker(RerankerWrapper):
         self.model = self.model.to(self.device)
         self.model.eval()
 
-    @torch.inference_mode()
     def predict(
         self,
         inputs1: DataLoader[BatchedInput],
@@ -53,51 +52,57 @@ class ListConRanker(RerankerWrapper):
         hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ):
-        queries = [text for batch in inputs1 for text in batch["query"]]
-        passages = [text for batch in inputs2 for text in batch["text"]["text"]]
+    ) -> list[float]:
+        import torch
 
-        assert len(queries) == len(passages)
+        with torch.inference_mode():
+            queries = [text for batch in inputs1 for text in batch["query"]]
+            passages = [text for batch in inputs2 for text in batch["text"]["text"]]
 
-        final_scores = []
-        query = queries[0]
-        tmp_passages = []
-        if kwargs.get("traditional_inference"):
-            for q, p in zip(queries, passages):
-                if query == q:
-                    tmp_passages.append(p)
-                else:
+            if len(queries) != len(passages):
+                raise ValueError("queries and passages must have the same length")
+
+            final_scores = []
+            query = queries[0]
+            tmp_passages = []
+            if kwargs.get("traditional_inference"):
+                for q, p in zip(queries, passages, strict=True):
+                    if query == q:
+                        tmp_passages.append(p)
+                    else:
+                        query_passages_tuples = [[query] + tmp_passages]
+                        scores = self.model.multi_passage(query_passages_tuples)
+                        final_scores += scores
+                        query = q
+                        tmp_passages = [p]
+                if len(tmp_passages) > 0:
                     query_passages_tuples = [[query] + tmp_passages]
                     scores = self.model.multi_passage(query_passages_tuples)
                     final_scores += scores
-                    query = q
-                    tmp_passages = [p]
-            if len(tmp_passages) > 0:
-                query_passages_tuples = [[query] + tmp_passages]
-                scores = self.model.multi_passage(query_passages_tuples)
-                final_scores += scores
-        else:
-            for q, p in zip(queries, passages):
-                if query == q:
-                    tmp_passages.append(p)
-                else:
+            else:
+                for q, p in zip(queries, passages, strict=True):
+                    if query == q:
+                        tmp_passages.append(p)
+                    else:
+                        query_passages = [query] + tmp_passages
+                        scores = self.model.multi_passage_in_iterative_inference(
+                            query_passages
+                        )
+                        final_scores += scores
+                        query = q
+                        tmp_passages = [p]
+                if len(tmp_passages) > 0:
                     query_passages = [query] + tmp_passages
                     scores = self.model.multi_passage_in_iterative_inference(
                         query_passages
                     )
                     final_scores += scores
-                    query = q
-                    tmp_passages = [p]
-            if len(tmp_passages) > 0:
-                query_passages = [query] + tmp_passages
-                scores = self.model.multi_passage_in_iterative_inference(query_passages)
-                final_scores += scores
 
-        assert len(final_scores) == len(queries), (
-            f"Expected {len(queries)} scores, got {len(final_scores)}"
-        )
-
-        return final_scores
+            if len(final_scores) != len(queries):
+                raise ValueError(
+                    f"Expected {len(queries)} scores, got {len(final_scores)}"
+                )
+            return final_scores
 
 
 listconranker_training_datasets = {
@@ -135,5 +140,7 @@ listconranker = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
+    modalities=["text"],
     citation=LISTCONRANKER_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )

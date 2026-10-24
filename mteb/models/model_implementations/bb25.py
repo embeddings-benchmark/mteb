@@ -1,15 +1,15 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
-from mteb._create_dataloaders import _create_text_queries_dataloader
-from mteb._requires_package import requires_package
 from mteb.models.model_meta import ModelMeta
 
 if TYPE_CHECKING:
+    from bm25s.tokenization import Tokenized
+
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models.models_protocols import SearchProtocol
     from mteb.types import (
@@ -53,8 +53,7 @@ def _composite_prior(
     return np.clip(prior, 0.1, 0.9)
 
 
-def bb25_loader(model_name, **kwargs) -> SearchProtocol:
-    requires_package(bb25_loader, "bm25s", model_name, "pip install mteb[bm25s]")
+def bb25_loader(model_name: str, **kwargs: Any) -> SearchProtocol:
     import bm25s
     import Stemmer
 
@@ -95,7 +94,7 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
             b: float = 0.75,
             alpha: float = 1.0,
             prior_weight: float = 0.0,
-            **kwargs,
+            **kwargs: Any,
         ):
             self.k1 = k1
             self.b = b
@@ -106,7 +105,7 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
                 Stemmer.Stemmer(stemmer_language) if stemmer_language else None
             )
 
-        def _encode(self, texts: list[str]):
+        def _encode(self, texts: list[str]) -> Tokenized:
             """Tokenize texts using bm25s. Not to be confused with EncoderProtocol.encode()."""
             return bm25s.tokenize(texts, stopwords=self.stopwords, stemmer=self.stemmer)
 
@@ -119,6 +118,7 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
             hf_subset: str,
             encode_kwargs: EncodeKwargs,
             num_proc: int | None = None,
+            **kwargs: Any,
         ) -> None:
             logger.info("Encoding Corpus...")
             corpus_texts = [
@@ -151,7 +151,7 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
 
             logger.info(f"Indexed {len(self.corpus_idx_to_id):,} documents")
 
-        def search(
+        def search(  # noqa: PLR0914
             self,
             queries: QueryDatasetType,
             *,
@@ -162,13 +162,15 @@ def bb25_loader(model_name, **kwargs) -> SearchProtocol:
             encode_kwargs: EncodeKwargs,
             top_ranked: TopRankedDocumentsType | None = None,
             num_proc: int | None = None,
+            **kwargs: Any,
         ) -> RetrievalOutputType:
             logger.info("Encoding Queries...")
             query_ids = list(queries["id"])
             results: RetrievalOutputType = {qid: {} for qid in query_ids}
-            queries_loader = _create_text_queries_dataloader(queries)
-            queries_texts = [text for batch in queries_loader for text in batch["text"]]
+            from mteb._create_dataloaders import _combine_queries_with_instruction_text
 
+            processed = _combine_queries_with_instruction_text(queries)
+            queries_texts = processed["text"]
             query_tokenized = self._encode(queries_texts)
 
             logger.info(f"Retrieving Results... {len(queries):,} queries")
@@ -281,8 +283,8 @@ bb25_model = ModelMeta(
     open_weights=True,
     revision="0_1_1",
     release_date="2026-02-06",
-    n_parameters=None,
-    n_embedding_parameters=None,
+    n_parameters=0,
+    n_embedding_parameters=0,
     memory_usage_mb=None,
     embed_dim=None,
     license=None,
@@ -308,4 +310,5 @@ bb25_model = ModelMeta(
   doi={10.5281/zenodo.18512411},
   url={https://doi.org/10.5281/zenodo.18512411},
 }""",
+    extra_requirements_groups=["bm25s"],
 )

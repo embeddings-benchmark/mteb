@@ -1,7 +1,11 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+import time
+from typing import TYPE_CHECKING, Any
+
+from mteb.models.search_wrappers import SearchCrossEncoderWrapper, SearchEncoderWrapper
+from mteb.models.sentence_transformer_wrapper import MultiVectorSearchEncoderWrapper
 
 from .evaluator import Evaluator
 from .retrieval_metrics import (
@@ -13,6 +17,7 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import SearchProtocol
+    from mteb.timing import TimingStack
     from mteb.types import (
         CorpusDatasetType,
         EncodeKwargs,
@@ -32,13 +37,15 @@ class RetrievalEvaluator(Evaluator):
         self,
         corpus: CorpusDatasetType,
         queries: QueryDatasetType,
+        *,
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
         top_k: int,
         top_ranked: TopRankedDocumentsType | None = None,
         qid: str | None = None,
-        **kwargs,
+        timer: TimingStack,
+        **kwargs: Any,
     ) -> None:
         super().__init__(**kwargs)
         self.corpus = corpus
@@ -50,6 +57,7 @@ class RetrievalEvaluator(Evaluator):
         self.hf_subset = hf_subset
         self.qid = qid
         self.top_k = top_k
+        self.timer = timer
 
     def __call__(  # type: ignore[override]
         self,
@@ -58,6 +66,7 @@ class RetrievalEvaluator(Evaluator):
         num_proc: int | None = None,
     ) -> RetrievalOutputType:
         logger.info("Running retrieval task - Indexing corpus...")
+        start_time = time.monotonic()
         search_model.index(
             corpus=self.corpus,
             task_metadata=self.task_metadata,
@@ -66,8 +75,23 @@ class RetrievalEvaluator(Evaluator):
             encode_kwargs=encode_kwargs,
             num_proc=num_proc,
         )
-        logger.info("Running retrieval task - Searching queries...")
-        return search_model.search(
+        end_time = time.monotonic()
+        encodes_corpus_during_search = isinstance(
+            search_model, (SearchCrossEncoderWrapper, MultiVectorSearchEncoderWrapper)
+        ) or (
+            isinstance(search_model, SearchEncoderWrapper)
+            and search_model.index_backend is None
+        )
+        if not encodes_corpus_during_search:
+            self.timer.add_phase(
+                "Encoding corpus",
+                start=start_time,
+                end=end_time,
+                split=self.hf_split,
+                subset=self.hf_subset,
+            )
+
+        search_kwargs: dict[str, Any] = dict(
             queries=self.queries,
             top_k=self.top_k,
             task_metadata=self.task_metadata,
@@ -78,7 +102,28 @@ class RetrievalEvaluator(Evaluator):
             num_proc=num_proc,
         )
 
-    def evaluate(
+        # These wrappers record finer-grained phases (queries, corpus, similarity) themselves
+        if isinstance(
+            search_model, (SearchEncoderWrapper, MultiVectorSearchEncoderWrapper)
+        ):
+            logger.info("Running retrieval task - Searching queries...")
+            return search_model.search(**search_kwargs, timer=self.timer)
+
+        search_phase_name = (
+            "Encoding queries and documents"
+            if encodes_corpus_during_search
+            else "Encoding queries"
+        )
+
+        with self.timer(
+            search_phase_name,
+            split=self.hf_split,
+            subset=self.hf_subset,
+            log_message="Running retrieval task - Searching queries...",
+        ):
+            return search_model.search(**search_kwargs)
+
+    def evaluate(  # noqa: PLR6301
         self,
         qrels: RelevantDocumentsType,
         results: dict[str, dict[str, float]],
@@ -94,7 +139,7 @@ class RetrievalEvaluator(Evaluator):
             for qid, rels in results.items():
                 for pid in list(rels):
                     if qid == pid:
-                        results[qid].pop(pid)
+                        rels.pop(pid)
         else:
             logger.debug(
                 "For evaluation, we DO NOT ignore identical query and document ids (default), please explicitly set ``ignore_identical_ids=True`` to ignore this."

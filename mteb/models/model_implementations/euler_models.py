@@ -1,8 +1,9 @@
 from mteb.models.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
 
 Euler_Legal_Embedding_V1 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="Mira190/Euler-Legal-Embedding-V1",
     model_type=["dense"],
     revision="df607ed9e25e569514a99c27cdaaab16e76b6dd4",
@@ -24,10 +25,5 @@ Euler_Legal_Embedding_V1 = ModelMeta(
     training_datasets=set(),  # final-data-new-anonymized-grok4-filtered
     adapted_from="Qwen/Qwen3-Embedding-8B",
     superseded_by=None,
-    citation="""@misc{euler2025legal,
-      title={Euler-Legal-Embedding: Advanced Legal Representation Learning},
-      author={LawRank Team},
-      year={2025},
-      publisher={Hugging Face}
-}""",
+    output_dtypes=OutputDType.BF16,
 )

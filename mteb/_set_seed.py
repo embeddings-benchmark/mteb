@@ -1,15 +1,12 @@
 """Utilities for setting seeds for reproducibility.
 
-Derived from `transformers.trainer_utils.set_seed`. It assumes torch is installed.
+Derived from `transformers.trainer_utils.set_seed`.
 """
 
-import logging
 import random
+import sys
 
 import numpy as np
-import torch
-
-logger = logging.getLogger(__name__)
 
 
 def _set_seed(seed: int) -> tuple[random.Random, np.random.Generator]:
@@ -22,6 +19,9 @@ def _set_seed(seed: int) -> tuple[random.Random, np.random.Generator]:
     set_seed(seed)
     ```
 
+    Torch and tensorflow are only seeded if they are already imported, as tasks are created (and seeded) when
+    `mteb` is imported. Evaluators seed again when they are created, after the model is loaded.
+
     Args:
         seed: The seed to set.
 
@@ -30,15 +30,17 @@ def _set_seed(seed: int) -> tuple[random.Random, np.random.Generator]:
     """
     random.seed(seed)
     np.random.seed(seed)  # noqa: NPY002
-    torch.manual_seed(seed)
-    torch.cuda.manual_seed_all(seed)
-    # ^^ safe to call this function even if cuda is not available
 
-    try:
+    if "torch" in sys.modules:
+        import torch
+
+        torch.manual_seed(seed)
+        torch.cuda.manual_seed_all(seed)
+        # ^^ safe to call this function even if cuda is not available
+
+    if "tensorflow" in sys.modules:
         import tensorflow as tf
 
         tf.random.set_seed(seed)
-    except ImportError:
-        pass  # not installed
 
     return random.Random(seed), np.random.default_rng(seed)

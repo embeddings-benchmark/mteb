@@ -4,8 +4,8 @@ import pytest
 
 import mteb
 from mteb import AbsTask
+from mteb.mocks.mock_tasks import MockRerankingTask
 from mteb.models.vllm_wrapper import VllmCrossEncoderWrapper, VllmEncoderWrapper
-from tests.mock_tasks import MockRerankingTask
 
 
 @pytest.mark.parametrize("model_name", ["cross-encoder/ms-marco-TinyBERT-L2-v2"])

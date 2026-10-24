@@ -5,10 +5,8 @@ import time
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
 from mteb.types import PromptType
@@ -17,6 +15,8 @@ from .bge_models import bge_chinese_training_data
 from .nvidia_models import nvidia_training_datasets
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from mteb.types import Array
 
 logger = logging.getLogger(__name__)
@@ -43,25 +43,12 @@ class SeedTextEmbeddingModel(AbsEncoder):
         max_tokens: int,
         tokenizer_name: str = "cl100k_base",
         embed_dim: int | None = None,
-        available_embed_dims: list[int | None] = [None],
-        **kwargs,
+        available_embed_dims: Sequence[int | None] = (None,),
+        **kwargs: Any,
     ) -> None:
         """Wrapper for Seed embedding API."""
-        requires_package(
-            self,
-            "volcenginesdkarkruntime",
-            "ByteDance Seed",
-            "pip install mteb[ark]",
-        )
-        from volcenginesdkarkruntime import Ark
-
-        requires_package(
-            self,
-            "tiktoken",
-            "ByteDance Seed",
-            "pip install mteb[ark]",
-        )
         import tiktoken
+        from volcenginesdkarkruntime import Ark
 
         self._client = Ark()
         self._model_name = model_name
@@ -81,18 +68,19 @@ class SeedTextEmbeddingModel(AbsEncoder):
 
     def _encode(
         self, inputs: list[str], task_name: str, prompt_type: PromptType | None = None
-    ):
-        assert (
-            self._embed_dim is None or self._embed_dim in self._available_embed_dims
-        ), (
-            f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
-        )
+    ) -> list[list[float]]:
+        import torch
+
+        if (
+            self._embed_dim is not None
+            and self._embed_dim not in self._available_embed_dims
+        ):
+            raise ValueError(
+                f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
+            )
 
         if prompt_type == PromptType("query") or prompt_type is None:
-            if task_name in TASK_NAME_TO_INSTRUCTION:
-                instruction = TASK_NAME_TO_INSTRUCTION[task_name]
-            else:
-                instruction = DEFAULT_INSTRUCTION
+            instruction = TASK_NAME_TO_INSTRUCTION.get(task_name, DEFAULT_INSTRUCTION)
             inputs = [instruction + i for i in inputs]
 
         response = self._client.embeddings.create(
@@ -139,9 +127,7 @@ class SeedTextEmbeddingModel(AbsEncoder):
 
         all_embeddings = []
 
-        for i, sublist in enumerate(
-            tqdm(sublists, leave=False, disable=not show_progress_bar)
-        ):
+        for sublist in tqdm(sublists, leave=False, disable=not show_progress_bar):
             while retries > 0:
                 try:
                     embedding = self._encode(sublist, task_name, prompt_type)
@@ -268,4 +254,5 @@ seed_embedding = ModelMeta(
     training_datasets=seed_1_5_training_data,
     public_training_code=None,
     public_training_data=None,
+    extra_requirements_groups=["ark"],
 )

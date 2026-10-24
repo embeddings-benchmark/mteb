@@ -2,7 +2,8 @@ from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
 
 inf_retriever_v1_training_data = {
     # eng_Latn
@@ -45,7 +46,7 @@ INF_RETRIEVER_CITATION = """@misc{infly-ai_2025,
 }"""
 
 inf_retriever_v1 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
     ),
@@ -70,10 +71,11 @@ inf_retriever_v1 = ModelMeta(
     public_training_data=None,
     training_datasets=inf_retriever_v1_training_data,
     citation=INF_RETRIEVER_CITATION,
+    output_dtypes=OutputDType.BF16,
 )
 
 inf_retriever_v1_1_5b = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
     ),
@@ -98,4 +100,5 @@ inf_retriever_v1_1_5b = ModelMeta(
     public_training_data=None,
     training_datasets=inf_retriever_v1_training_data,
     citation=INF_RETRIEVER_CITATION,
+    output_dtypes=OutputDType.BF16,
 )

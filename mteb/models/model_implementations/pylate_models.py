@@ -7,8 +7,6 @@ import tempfile
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-from mteb._create_dataloaders import create_dataloader
-from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder, get_prompt
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
@@ -51,6 +49,7 @@ class PylateSearchEncoder:
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
         num_proc: int | None,
+        **kwargs: Any,
     ) -> None:
         """Index the corpus for retrieval.
 
@@ -61,6 +60,7 @@ class PylateSearchEncoder:
             hf_subset: Subset of current task. Similar to `hf_split` to get more information
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
             num_proc: Number of processes to use for indexing.
+            **kwargs: Additional arguments. Currently unused.
         """
         self.task_corpus = corpus
 
@@ -87,10 +87,13 @@ class PylateSearchEncoder:
         encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
         num_proc: int | None,
+        **kwargs: Any,
     ) -> RetrievalOutputType:
+        from mteb._create_dataloaders import create_dataloader
+
         queries_dataloader = create_dataloader(
             queries,
-            task_metadata,
+            task_metadata=task_metadata,
             prompt_type=PromptType.query,
             batch_size=encode_kwargs.get("batch_size", 32),
             num_proc=num_proc,
@@ -169,9 +172,11 @@ class PylateSearchEncoder:
         doc_ids = [str(x) for x in self.task_corpus["id"]]
 
         # Encode entire corpus via dataloader batching
+        from mteb._create_dataloaders import create_dataloader
+
         documents_loader = create_dataloader(
             self.task_corpus,
-            task_metadata,
+            task_metadata=task_metadata,
             prompt_type=PromptType.document,
             batch_size=encode_kwargs.get("batch_size", 32),
             num_proc=num_proc,
@@ -228,12 +233,14 @@ class PylateSearchEncoder:
             raise ValueError("Corpus must be set before reranking.")
 
         result_heaps = {qid: [] for qid in query_idx_to_id.values()}
-        doc_id_to_idx = {doc["id"]: idx for idx, doc in enumerate(self.task_corpus)}
+        doc_id_to_idx = {doc: idx for idx, doc in enumerate(self.task_corpus["id"])}
+
+        from mteb._create_dataloaders import create_dataloader
 
         all_doc_embeddings = self._encode(
             create_dataloader(
                 self.task_corpus,
-                task_metadata,
+                task_metadata=task_metadata,
                 prompt_type=PromptType.document,
                 batch_size=encode_kwargs.get("batch_size", 32),
                 num_proc=num_proc,
@@ -295,10 +302,9 @@ class MultiVectorModel(PylateSearchEncoder):
         index_name: str | None = None,
         index_autodelete: bool = True,
         index_kwargs: dict[str, Any] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """Wrapper for MultiVector/ColBERT models (via PyLate)."""
-        requires_package(self, "pylate", model_name, "pip install mteb[pylate]")
         from pylate.models import ColBERT  # type: ignore[import]
 
         self.model_name = model_name
@@ -375,6 +381,7 @@ colbert_v2 = ModelMeta(
         "MSMARCO",
         "mMARCO-NL",
     },
+    extra_requirements_groups=["pylate"],
 )
 
 jina_colbert_v2 = ModelMeta(
@@ -458,6 +465,7 @@ jina_colbert_v2 = ModelMeta(
     pages = "159--166",
     abstract = "Multi-vector dense models, such as ColBERT, have proven highly effective in information retrieval. ColBERT`s late interaction scoring approximates the joint query-document attention seen in cross-encoders while maintaining inference efficiency closer to traditional dense retrieval models, thanks to its bi-encoder architecture and recent optimizations in indexing and search. In this paper, we introduce a novel architecture and a training framework to support long context window and multilingual retrieval. Leveraging Matryoshka Representation Loss, we further demonstrate that the reducing the embedding dimensionality from 128 to 64 has insignificant impact on the model`s retrieval performance and cut storage requirements by up to 50{\\%}. Our new model, Jina-ColBERT-v2, demonstrates strong performance across a range of English and multilingual retrieval tasks,"
 }""",
+    extra_requirements_groups=["pylate", "jina"],
 )
 
 
@@ -503,20 +511,84 @@ lightonai__gte_moderncolbert_v1 = ModelMeta(
         "TRECDL2020",
         "CornStack",
     },
-    citation="""@misc{GTE-ModernColBERT,
-    title={GTE-ModernColBERT},
-    author={Chaffin, Antoine},
-    url={https://huggingface.co/lightonai/GTE-ModernColBERT-v1},
-    year={2025}
-}""",
+    extra_requirements_groups=["pylate"],
 )
 
-late_on_code_citation = """@misc{LateOn-Code,
-  title  = {LateOn-Code: a Family of State-Of-The-Art Late Interaction Code Retrieval Models},
-  author = {Chaffin, Antoine},
-  url    = {https://huggingface.co/collections/lightonai/lateon-code},
-  year   = {2026}
-}"""
+perplexity__pplx_embed_v1_late_0_6b = ModelMeta(
+    loader=MultiVectorModel,
+    loader_kwargs=dict(
+        trust_remote_code=True,
+    ),
+    name="perplexity-ai/pplx-embed-v1-late-0.6b",
+    model_type=["late-interaction"],
+    languages=None,
+    open_weights=True,
+    revision="35e14f7c0f85720323342965e72f119dc1a937c0",
+    public_training_code=None,
+    public_training_data=None,
+    release_date="2026-03-13",
+    n_parameters=595778560,
+    n_embedding_parameters=155_311_104,
+    memory_usage_mb=2272,
+    max_tokens=512,
+    embed_dim=128,
+    license="mit",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    framework=["PyLate", "ColBERT", "Sentence Transformers", "safetensors"],
+    reference="https://huggingface.co/perplexity-ai/pplx-embed-v1-late-0.6b",
+    use_instructions=False,
+    adapted_from="perplexity-ai/pplx-embed-v1-0.6b",
+    superseded_by=None,
+    training_datasets=None,
+    extra_requirements_groups=["pylate"],
+)
+
+
+topk_io__iso_moderncolbert = ModelMeta(
+    loader=MultiVectorModel,
+    name="topk-io/Iso-ModernColBERT",
+    model_type=["late-interaction"],
+    languages=[
+        "eng-Latn",
+    ],
+    open_weights=True,
+    revision="a43b93e62b11ff205b7f935c1ce2207bfed2d283",
+    public_training_code=None,
+    public_training_data="https://huggingface.co/datasets/lightonai/ms-marco-en-bge-gemma",
+    release_date="2026-05-27",
+    n_parameters=149015808,
+    n_embedding_parameters=38684160,
+    memory_usage_mb=568,
+    max_tokens=8192,
+    embed_dim=128,
+    license="apache-2.0",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    framework=["PyLate", "ColBERT", "safetensors", "Sentence Transformers"],
+    reference="https://huggingface.co/topk-io/Iso-ModernColBERT",
+    use_instructions=False,
+    adapted_from="lightonai/GTE-ModernColBERT-v1",
+    superseded_by=None,
+    training_datasets={
+        "MSMARCO",
+    },
+    extra_requirements_groups=["pylate"],
+)
+
+# Code fine-tuning data from LateOn-Code (training splits)
+late_on_code_fine_tuning_data = {
+    "AppsRetrieval",
+    "SyntheticText2SQL",
+    "CosQA",
+    "CodeFeedbackMT",
+    "CodeFeedbackST",
+    "StackOverflowQA",
+    "CodeTransOceanContest",
+    "CodeTransOceanDL",
+    "CodeSearchNetRetrieval",
+    "CodeSearchNetCCRetrieval",
+    "COIRCodeSearchNetRetrieval",
+}
+
 
 lightonai__late_on_code_pretrain = ModelMeta(
     loader=MultiVectorModel,
@@ -565,7 +637,7 @@ lightonai__late_on_code_pretrain = ModelMeta(
         "TRECDL2020",
         "CornStack",
     },
-    citation=late_on_code_citation,
+    extra_requirements_groups=["pylate"],
 )
 
 
@@ -603,30 +675,9 @@ lightonai__late_on_code = ModelMeta(
         "MSMARCO",
         "mMARCO-NL",
         "CornStack",
-        "AppsRetrieval",
-        "SyntheticText2SQL",
-        "CosQA",
-        "CodeFeedbackMT",
-        "CodeFeedbackST",
-        "StackOverflowQA",
-        "CodeTransOceanContest",
-        "CodeTransOceanDL",
-        "CodeSearchNetRetrieval",
-        "CodeSearchNetCCRetrieval",
-        "COIRCodeSearchNetRetrieval",
-        "AppsRetrieval",
-        "SyntheticText2SQL",
-        "CosQA",
-        "CodeFeedbackMT",
-        "CodeFeedbackST",
-        "StackOverflowQA",
-        "CodeTransOceanContest",
-        "CodeTransOceanDL",
-        "CodeSearchNetRetrieval",
-        "CodeSearchNetCCRetrieval",
-        "COIRCodeSearchNetRetrieval",
-    },
-    citation=late_on_code_citation,
+    }
+    | late_on_code_fine_tuning_data,
+    extra_requirements_groups=["pylate"],
 )
 
 lightonai__late_on_code_edge_pretrain = ModelMeta(
@@ -668,7 +719,7 @@ lightonai__late_on_code_edge_pretrain = ModelMeta(
         "MultiLongDocRetrieval",
         "CornStack",
     },
-    citation=late_on_code_citation,
+    extra_requirements_groups=["pylate"],
 )
 
 
@@ -710,19 +761,9 @@ lightonai__late_on_code_edge = ModelMeta(
         "LoTTE",
         "MultiLongDocRetrieval",
         "CornStack",
-        "AppsRetrieval",
-        "SyntheticText2SQL",
-        "CosQA",
-        "CodeFeedbackMT",
-        "CodeFeedbackST",
-        "StackOverflowQA",
-        "CodeTransOceanContest",
-        "CodeTransOceanDL",
-        "CodeSearchNetRetrieval",
-        "CodeSearchNetCCRetrieval",
-        "COIRCodeSearchNetRetrieval",
-    },
-    citation=late_on_code_citation,
+    }
+    | late_on_code_fine_tuning_data,
+    extra_requirements_groups=["pylate"],
 )
 
 
@@ -748,13 +789,13 @@ nomic_embed_supervised_data = {
     "NanoHotpotQARetrieval",
 }
 colbert_zero_citation = """@misc{chaffin2026colbertzeropretrainpretraincolbert,
-  title         = {ColBERT-Zero: To Pre-train Or Not To Pre-train ColBERT models}, 
+  title         = {ColBERT-Zero: To Pre-train Or Not To Pre-train ColBERT models},
   author        = {Antoine Chaffin and Luca Arnaboldi and Amélie Chatelain and Florent Krzakala},
   year          = {2026},
   eprint        = {2602.16609},
   archivePrefix = {arXiv},
   primaryClass  = {cs.CL},
-  url           = {https://arxiv.org/abs/2602.16609}, 
+  url           = {https://arxiv.org/abs/2602.16609},
 }"""
 lightonai__colbert_zero_unsupervised = ModelMeta(
     loader=MultiVectorModel,
@@ -782,6 +823,7 @@ lightonai__colbert_zero_unsupervised = ModelMeta(
     superseded_by=None,
     training_datasets=nomic_embed_unsupervised_data,
     citation=colbert_zero_citation,
+    extra_requirements_groups=["pylate"],
 )
 
 
@@ -811,6 +853,7 @@ lightonai__colbert_zero_supervised = ModelMeta(
     superseded_by=None,
     training_datasets=nomic_embed_unsupervised_data | nomic_embed_supervised_data,
     citation=colbert_zero_citation,
+    extra_requirements_groups=["pylate"],
 )
 
 lightonai__colbert_zero = ModelMeta(
@@ -839,6 +882,7 @@ lightonai__colbert_zero = ModelMeta(
     superseded_by=None,
     training_datasets=nomic_embed_unsupervised_data | nomic_embed_supervised_data,
     citation=colbert_zero_citation,
+    extra_requirements_groups=["pylate"],
 )
 
 lightonai__reason_moderncolbert = ModelMeta(
@@ -883,10 +927,226 @@ lightonai__reason_moderncolbert = ModelMeta(
         "TRECDL2020",
         "CornStack",
     },
-    citation="""@misc{Reason-ModernColBERT,
-title={Reason-ModernColBERT},
-author={Chaffin, Antoine},
-url={https://huggingface.co/lightonai/Reason-ModernColBERT},
-year={2025}
-}""",
+    extra_requirements_groups=["pylate"],
+)
+
+denseon_lateon_unsupervised_data = {
+    "CQADupstackRetrieval",
+    "DBPedia",
+    "QuoraRetrieval",
+    "SCIDOCS",
+    "SciFact",
+}
+
+denseon_lateon_supervised_data = {
+    "FiQA2018",
+    "NQ",
+    "HotpotQA",
+    "MSMARCO",
+    "TRECDL2019",
+    "TRECDL2020",
+    "FEVER",
+    "ClimateFEVER",
+}
+
+denseon_lateon_citation = r"""@misc{sourty2026denseonlateonfullyopen,
+  title         = {DenseOn with the LateOn: Fully Open Dense and Late-Interaction Models for Multilingual, Long-Context, and Code Search},
+  author        = {Raphaël Sourty and Antoine Chaffin and Paulo Roberto Moura Junior and Amélie Chatelain},
+  year          = {2026},
+  eprint        = {2607.27178},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  url           = {https://arxiv.org/abs/2607.27178},
+}"""
+
+lightonai__lateon_unsupervised = ModelMeta(
+    loader=MultiVectorModel,
+    name="lightonai/LateOn-unsupervised",
+    model_type=["late-interaction"],
+    languages=[
+        "eng-Latn",
+    ],
+    open_weights=True,
+    revision="db4d2f0b4295e2169fee5c9b1415b6cc334b0585",
+    public_training_code="https://github.com/lightonai/mdenseon-mlateon/blob/main/scripts/pretrain/english_late_interaction.py",
+    public_training_data="https://huggingface.co/datasets/lightonai/embeddings-pre-training-curated",  # As detailed in the BP, the actual training data is proprietary Apache 2 compatible reproduction of this
+    release_date="2026-04-21",
+    n_parameters=149015808,
+    n_embedding_parameters=38684160,
+    memory_usage_mb=568,
+    max_tokens=8192,
+    embed_dim=128,
+    license="apache-2.0",
+    similarity_fn_name="MaxSim",
+    framework=["PyLate", "ColBERT", "safetensors", "Sentence Transformers"],
+    reference="https://huggingface.co/lightonai/LateOn",
+    use_instructions=False,
+    adapted_from="answerdotai/ModernBERT-base",
+    superseded_by=None,
+    training_datasets=denseon_lateon_unsupervised_data,
+    citation=denseon_lateon_citation,
+    extra_requirements_groups=["pylate"],
+)
+
+
+lightonai__lateon = ModelMeta(
+    loader=MultiVectorModel,
+    name="lightonai/LateOn",
+    model_type=["late-interaction"],
+    languages=[
+        "eng-Latn",
+    ],
+    open_weights=True,
+    revision="6bb4488a7a1f1769f7a69fa1ff0c74c6a7b98cbd",
+    public_training_code="https://github.com/lightonai/mdenseon-mlateon/blob/main/scripts/finetune/english_late_interaction.py",
+    public_training_data="https://huggingface.co/datasets/lightonai/embeddings-fine-tuning",  # As detailed in the BP, the actual training data is proprietary Apache 2 compatible reproduction of this
+    release_date="2026-04-21",
+    n_parameters=149015808,
+    n_embedding_parameters=38684160,
+    memory_usage_mb=568,
+    max_tokens=8192,
+    embed_dim=128,
+    license="apache-2.0",
+    similarity_fn_name="MaxSim",
+    framework=["PyLate", "ColBERT", "safetensors", "Sentence Transformers"],
+    reference="https://huggingface.co/lightonai/LateOn",
+    use_instructions=False,
+    adapted_from="ightonai/LateOn-unsupervised",
+    superseded_by=None,
+    training_datasets=denseon_lateon_unsupervised_data | denseon_lateon_supervised_data,
+    citation=denseon_lateon_citation,
+    extra_requirements_groups=["pylate"],
+)
+
+# The multilingual pre-training and fine-tuning corpora are translate-train
+# extensions of the English DenseOn/LateOn data, so the same overlaps apply and
+# the denseon_lateon_* sets are reused below
+mdenseon_mlateon_organic_data = {
+    # Organic multilingual and long-context data (training splits)
+    "MIRACLRetrieval",
+    "MIRACLRetrievalHardNegatives",
+    "MIRACLReranking",
+    "MultiLongDocRetrieval",
+}
+
+mdenseon_mlateon_code_data = late_on_code_fine_tuning_data | {
+    # Built from CommitPackFT and decontaminated against the evaluation set
+    "CodeEditSearchRetrieval",
+}
+
+# English plus the eight translate-train target languages
+mdenseon_mlateon_languages = [
+    "ara-Arab",
+    "deu-Latn",
+    "eng-Latn",
+    "fra-Latn",
+    "ita-Latn",
+    "nob-Latn",
+    "por-Latn",
+    "spa-Latn",
+    "swe-Latn",
+]
+
+# Code languages covered by the LateOn-Code fine-tuning data
+mdenseon_mlateon_code_languages = [
+    "python-Code",
+    "go-Code",
+    "java-Code",
+    "javascript-Code",
+    "ruby-Code",
+    "php-Code",
+]
+
+# The English and multilingual releases share the same paper
+mdenseon_mlateon_citation = denseon_lateon_citation
+
+
+lightonai__mlateon_unsupervised = ModelMeta(
+    loader=MultiVectorModel,
+    name="lightonai/mLateOn-unsupervised",
+    model_type=["late-interaction"],
+    languages=mdenseon_mlateon_languages,
+    open_weights=True,
+    revision="5fcf9b20cdff594f0849a3ef928f3d79dcb0990c",
+    public_training_code="https://github.com/lightonai/mdenseon-mlateon/blob/main/scripts/pretrain/multilingual_late_interaction.py",
+    public_training_data="https://huggingface.co/datasets/lightonai/multilingual-embeddings-pre-training-curated",  # As detailed in the BP, the actual training data is a proprietary Apache 2 compatible reproduction of this
+    release_date="2026-07-30",
+    n_parameters=306941184,
+    n_embedding_parameters=196609536,
+    memory_usage_mb=585,
+    max_tokens=8192,
+    embed_dim=128,
+    license="apache-2.0",
+    similarity_fn_name="MaxSim",
+    framework=["PyLate", "ColBERT", "safetensors", "Sentence Transformers"],
+    reference="https://huggingface.co/lightonai/mLateOn-unsupervised",
+    use_instructions=False,
+    adapted_from="jhu-clsp/mmBERT-base",
+    superseded_by=None,
+    training_datasets=denseon_lateon_unsupervised_data,
+    citation=mdenseon_mlateon_citation,
+    extra_requirements_groups=["pylate"],
+)
+
+
+lightonai__mlateon = ModelMeta(
+    loader=MultiVectorModel,
+    name="lightonai/mLateOn",
+    model_type=["late-interaction"],
+    languages=mdenseon_mlateon_languages + mdenseon_mlateon_code_languages,
+    open_weights=True,
+    revision="1a3f1d70415f80515ee4611ce3ba96ea7f5816ca",
+    public_training_code="https://github.com/lightonai/mdenseon-mlateon/blob/main/scripts/finetune/multilingual_late_interaction.py",
+    public_training_data="https://huggingface.co/datasets/lightonai/embeddings-fine-tuning-multilingual-unfiltered",  # Filtered per-language versions are linked in the collection: https://huggingface.co/collections/lightonai/mdenseon-and-mlateon
+    release_date="2026-07-30",
+    n_parameters=306941184,
+    n_embedding_parameters=196609536,
+    memory_usage_mb=1171,
+    max_tokens=8192,
+    embed_dim=128,
+    license="apache-2.0",
+    similarity_fn_name="MaxSim",
+    framework=["PyLate", "ColBERT", "safetensors", "Sentence Transformers"],
+    reference="https://huggingface.co/lightonai/mLateOn",
+    use_instructions=False,
+    adapted_from="lightonai/mLateOn-unsupervised",
+    superseded_by=None,
+    training_datasets=denseon_lateon_unsupervised_data
+    | denseon_lateon_supervised_data
+    | mdenseon_mlateon_organic_data
+    | mdenseon_mlateon_code_data,
+    citation=mdenseon_mlateon_citation,
+    extra_requirements_groups=["pylate"],
+)
+
+
+nlpai_lab__kure_v2 = ModelMeta(
+    loader=MultiVectorModel,
+    name="nlpai-lab/KURE-v2",
+    model_type=["late-interaction"],
+    languages=[
+        "kor-Hang",
+        "eng-Latn",
+    ],
+    open_weights=True,
+    revision="cce9f539de457da36300adbe6245d24f878ca270",
+    public_training_code=None,
+    # Fine-tuned on lightonai/embeddings-fine-tuning, plus a subsample of
+    # lightonai/embeddings-pre-training-curated.
+    public_training_data="https://huggingface.co/datasets/lightonai/embeddings-fine-tuning",
+    release_date="2026-08-17",
+    n_parameters=153550080,
+    n_embedding_parameters=38401536,
+    memory_usage_mb=586,
+    max_tokens=8192,
+    embed_dim=128,
+    license="apache-2.0",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    framework=["PyLate", "ColBERT", "safetensors", "Sentence Transformers"],
+    reference="https://huggingface.co/nlpai-lab/KURE-v2",
+    use_instructions=False,
+    adapted_from="skt/A.X-Encoder-base",
+    superseded_by=None,
+    training_datasets=denseon_lateon_unsupervised_data | denseon_lateon_supervised_data,
+    extra_requirements_groups=["pylate"],
 )

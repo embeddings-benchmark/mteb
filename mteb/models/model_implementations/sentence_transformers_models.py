@@ -3,10 +3,8 @@
 import numpy as np
 
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import (
-    SentenceTransformerEncoderWrapper,
-    sentence_transformers_loader,
-)
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
 
 paraphrase_langs = [
     "ara-Arab",
@@ -113,7 +111,7 @@ sent_trf_training_dataset = {
 }
 
 all_minilm_l6_v2 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/all-MiniLM-L6-v2",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -145,7 +143,7 @@ all_minilm_l6_v2 = ModelMeta(
 )
 
 all_minilm_l12_v2 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/all-MiniLM-L12-v2",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -177,12 +175,12 @@ all_minilm_l12_v2 = ModelMeta(
 )
 
 paraphrase_multilingual_minilm_l12_v2 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
     model_type=["dense"],
     languages=paraphrase_langs,
     open_weights=True,
-    revision="bf3bf13ab40c3157080a7ab344c831b9ad18b5eb",
+    revision="e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
     release_date="2019-11-01",  # release date of paper
     n_parameters=117653760,
     n_embedding_parameters=96_014_208,
@@ -209,7 +207,7 @@ paraphrase_multilingual_minilm_l12_v2 = ModelMeta(
 )
 
 paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
     model_type=["dense"],
     languages=paraphrase_langs,
@@ -252,7 +250,7 @@ paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
 )
 
 labse = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/LaBSE",
     model_type=["dense"],
     languages=paraphrase_langs,
@@ -291,7 +289,7 @@ labse = ModelMeta(
 )
 
 multi_qa_minilm_l6_cos_v1 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/multi-qa-MiniLM-L6-cos-v1",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -323,7 +321,7 @@ multi_qa_minilm_l6_cos_v1 = ModelMeta(
 )
 
 all_mpnet_base_v2 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/all-mpnet-base-v2",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -499,7 +497,7 @@ contriever = ModelMeta(
 )
 
 microllama_text_embedding = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="keeeeenw/MicroLlama-text-embedding",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -546,7 +544,7 @@ SENTENCE_T5_CITATION = """
 }
 """
 sentence_t5_base = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/sentence-t5-base",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -567,10 +565,11 @@ sentence_t5_base = ModelMeta(
     public_training_data=None,
     training_datasets={"SNLI", "Community QA"},
     citation=SENTENCE_T5_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 sentence_t5_large = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/sentence-t5-large",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -591,10 +590,11 @@ sentence_t5_large = ModelMeta(
     public_training_data=None,
     training_datasets={"SNLI", "Community QA"},
     citation=SENTENCE_T5_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 sentence_t5_xl = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/sentence-t5-xl",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -615,10 +615,11 @@ sentence_t5_xl = ModelMeta(
     public_training_data=None,
     training_datasets={"SNLI", "Community QA"},
     citation=SENTENCE_T5_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 sentence_t5_xxl = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/sentence-t5-xxl",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -639,6 +640,7 @@ sentence_t5_xxl = ModelMeta(
     public_training_data=None,
     training_datasets={"SNLI", "Community QA"},
     citation=SENTENCE_T5_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )
 GTR_CITATION = """
 @misc{ni2021largedualencodersgeneralizable,
@@ -652,7 +654,7 @@ GTR_CITATION = """
 }
 """
 gtr_t5_large = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/gtr-t5-large",
     model_type=["dense"],
     languages=["eng-Latn"],  # in format eng-Latn
@@ -685,10 +687,11 @@ gtr_t5_large = ModelMeta(
         "Community QA",
     },
     citation=GTR_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 gtr_t5_xl = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/gtr-t5-xl",
     model_type=["dense"],
     languages=["eng-Latn"],  # in format eng-Latn
@@ -721,9 +724,10 @@ gtr_t5_xl = ModelMeta(
         "Community QA",
     },
     citation=GTR_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )
 gtr_t5_xxl = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/gtr-t5-xxl",
     model_type=["dense"],
     languages=["eng-Latn"],  # in format eng-Latn
@@ -756,10 +760,11 @@ gtr_t5_xxl = ModelMeta(
         "Community QA",
     },
     citation=GTR_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 gtr_t5_base = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/gtr-t5-base",
     model_type=["dense"],
     languages=["eng-Latn"],  # in format eng-Latn
@@ -792,10 +797,11 @@ gtr_t5_base = ModelMeta(
         "Community QA",
     },
     citation=GTR_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 static_retrieval_mrl_en_v1 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/static-retrieval-mrl-en-v1",
     revision="f60985c706f192d45d218078e49e5a8b6f15283a",
     release_date="2024-10-24",
@@ -832,7 +838,7 @@ static_retrieval_mrl_en_v1 = ModelMeta(
 )
 
 multi_qa_mpnet_base_dot_v1 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="sentence-transformers/multi-qa-mpnet-base-dot-v1",
     revision="3af7c6da5b3e1bea796ef6c97fe237538cbe6e7f",
     release_date="2021-08-23",
@@ -858,4 +864,113 @@ multi_qa_mpnet_base_dot_v1 = ModelMeta(
     adapted_from="microsoft/mpnet-base",
     modalities=["text"],
     model_type=["dense"],
+)
+
+qwen_indic_v1 = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    name="LingoIITGN/qwen-indic-v1",
+    revision="df0f8b2c7565e6a630f50ae4e50a480f2fe9004d",
+    release_date="2026-07-03",
+    languages=[
+        "asm-Beng",
+        "ben-Beng",
+        "brx-Deva",
+        "doi-Deva",
+        "guj-Gujr",
+        "hin-Deva",
+        "kan-Knda",
+        "kas-Deva",
+        "mai-Deva",
+        "mal-Mlym",
+        "mar-Deva",
+        "mni-Beng",
+        "nep-Deva",
+        "ori-Orya",
+        "pan-Guru",
+        "san-Deva",
+        "sat-Olck",
+        "snd-Arab",
+        "tam-Taml",
+        "tel-Telu",
+        "urd-Arab",
+    ],
+    n_parameters=7567295488,
+    n_embedding_parameters=621219840,
+    memory_usage_mb=14433,
+    max_tokens=40960,
+    embed_dim=4096,
+    license="apache-2.0",
+    open_weights=True,
+    framework=["Sentence Transformers", "safetensors", "PyTorch"],
+    reference="https://huggingface.co/LingoIITGN/qwen-indic-v1",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=True,
+    training_datasets={
+        "Samanantar",
+        "IndicXNLI",
+        "MassiveIntentClassification",
+        "IndicGLUE",
+    },
+    adapted_from="Qwen/Qwen3-Embedding-8B",
+    superseded_by=None,
+    modalities=["text"],
+    model_type=["dense"],
+    public_training_code=None,
+    public_training_data=None,
+    output_dtypes=OutputDType.BF16,
+)
+
+FlowVec_v1 = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    name="LingoIITGN/FlowVec-v1",
+    revision="107bdaba31a8181383a0c9c52a3ed566ee5ef377",
+    release_date="2026-09-08",
+    languages=[
+        "asm-Beng",
+        "ben-Beng",
+        "brx-Deva",
+        "doi-Deva",
+        "guj-Gujr",
+        "hin-Deva",
+        "kan-Knda",
+        "kas-Deva",
+        "mai-Deva",
+        "mal-Mlym",
+        "mar-Deva",
+        "mni-Beng",
+        "nep-Deva",
+        "ori-Orya",
+        "pan-Guru",
+        "san-Deva",
+        "sat-Olck",
+        "snd-Arab",
+        "tam-Taml",
+        "tel-Telu",
+        "urd-Arab",
+    ],
+    n_parameters=7567295488,
+    n_embedding_parameters=621219840,
+    memory_usage_mb=14433,
+    max_tokens=40960,
+    embed_dim=4096,
+    license="apache-2.0",
+    open_weights=True,
+    framework=["Sentence Transformers", "safetensors", "PyTorch"],
+    reference="https://huggingface.co/LingoIITGN/FlowVec-v1",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=True,
+    training_datasets={
+        "Samanantar",
+        "IndicXNLI",
+        "MassiveIntentClassification",
+        "IndicGLUE",
+        "SIB200ClusteringS2S",
+        "XNLI",
+    },
+    adapted_from="Qwen/Qwen3-Embedding-8B",
+    superseded_by=None,
+    modalities=["text"],
+    model_type=["dense"],
+    public_training_code=None,
+    public_training_data=None,
 )

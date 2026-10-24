@@ -8,6 +8,7 @@
 # This workflow required the following secrets to be set:
 # - a GitHub personal access token with the `repo` scope called `RELEASE`
 # - and that you setup trusted publishing using PyPI as described here: https://blog.pypi.org/posts/2023-04-20-introducing-trusted-publishers/
+#   for both `mteb` and `mteb-core`, which are built into dist/ by `build_command` in pyproject.toml
 
 name: Release
 on:
@@ -24,25 +25,6 @@ jobs:
 
     if: ${{ github.ref == 'refs/heads/main' && github.event.workflow_run.conclusion == 'success'}}
     steps:
-      - name: Free disk space
-        run: |
-          sudo rm -rf \
-            "$AGENT_TOOLSDIRECTORY" \
-            /opt/ghc \
-            /opt/google/chrome \
-            /opt/microsoft/msedge \
-            /opt/microsoft/powershell \
-            /opt/pipx \
-            /usr/lib/mono \
-            /usr/local/julia* \
-            /usr/local/lib/android \
-            /usr/local/lib/node_modules \
-            /usr/local/share/chromium \
-            /usr/local/share/powershell \
-            /usr/local/share/powershell \
-            /usr/share/dotnet \
-            /usr/share/swift
-
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0

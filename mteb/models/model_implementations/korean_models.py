@@ -1,0 +1,454 @@
+"""Korean(-focused) embedding models, registered for MTEB(kor, v2).
+
+These community models had Korean retrieval/STS/clustering results but no ModelMeta
+in the registry, so they were invisible on the leaderboard. Metadata (revision,
+n_parameters, embed_dim, max_tokens, license, HF repo creation date, base model) was
+fetched from the Hugging Face Hub. Loaders mirror each model's base family
+(bge-m3 / multilingual-e5 / arctic-embed / plain sentence-transformers).
+"""
+
+from mteb.models.model_implementations.pylate_models import (
+    denseon_lateon_supervised_data,
+    denseon_lateon_unsupervised_data,
+)
+from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import (
+    CrossEncoderWrapper,
+    SentenceTransformerEncoderWrapper,
+    SparseEncoderWrapper,
+)
+from mteb.types import OutputDType, PromptType
+
+# E5-style query/passage prefixes (multilingual-e5 family)
+E5_PROMPTS = {
+    PromptType.query.value: "query: ",
+    PromptType.document.value: "passage: ",
+}
+# arctic-embed-v2 style: instruction prefix on the query only
+ARCTIC_QUERY_PROMPTS = {
+    PromptType.query.value: "query: ",
+    PromptType.document.value: "",
+}
+
+KOR_EN = ["kor-Hang", "eng-Latn"]
+
+# KURE-v3, KURE-Sparse and KURE-Reranker share the KURE-v2 fine-tuning data: the public data
+# is the same as for KURE-v2; the private Korean data contains the train splits of
+# Ko-StrategyQA, MIRACL, MultiLongDoc (per the authors,
+# https://github.com/embeddings-benchmark/mteb/pull/5574) and KorQuAD 1.0, the source of
+# SQuADKorV1Retrieval.
+kure_training_data = (
+    denseon_lateon_unsupervised_data
+    | denseon_lateon_supervised_data
+    | {
+        "Ko-StrategyQA",
+        "MIRACLRetrieval",
+        "MIRACLRetrievalHardNegatives",
+        "MIRACLReranking",
+        "MultiLongDocRetrieval",
+        "SQuADKorV1Retrieval",
+    }
+)
+
+# --------------------------------------------------------------------------- #
+# BAAI/bge-m3 Korean fine-tunes (dense, no query instruction, cosine)
+# --------------------------------------------------------------------------- #
+dragonkue_bge_m3_ko = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    name="dragonkue/BGE-m3-ko",
+    model_type=["dense"],
+    languages=KOR_EN,
+    open_weights=True,
+    revision="7074d66aa46562342193ca4feb3d89bf9dad71b4",
+    release_date="2024-09-17",
+    n_parameters=567_754_752,
+    embed_dim=1024,
+    license="apache-2.0",
+    max_tokens=8192,
+    memory_usage_mb=2166,
+    n_embedding_parameters=256_002_048,
+    reference="https://huggingface.co/dragonkue/BGE-m3-ko",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    adapted_from="BAAI/bge-m3",
+    public_training_code=None,
+    public_training_data=None,
+    # Confirmed by the model author: the Korean fine-tuning data contains no
+    # mteb datasets; empty set so the bge-m3 base data is still inherited via
+    # adapted_from.
+    training_datasets=set(),
+)
+
+kure_v1 = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    name="nlpai-lab/KURE-v1",
+    model_type=["dense"],
+    languages=KOR_EN,
+    open_weights=True,
+    revision="d14c8a9423946e268a0c9952fecf3a7aabd73bd9",
+    release_date="2024-12-18",
+    n_parameters=567_754_752,
+    embed_dim=1024,
+    license="mit",
+    max_tokens=8192,
+    memory_usage_mb=2166,
+    n_embedding_parameters=256_002_048,
+    reference="https://huggingface.co/nlpai-lab/KURE-v1",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    adapted_from="BAAI/bge-m3",
+    public_training_code=None,
+    public_training_data=None,
+    # Trained on ~2M Korean query-document-hard-negative pairs; the model card and
+    # the KURE GitHub repo do not name the source datasets, so unknown.
+    training_datasets=None,
+)
+
+upskyy_bge_m3_korean = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    name="upskyy/bge-m3-korean",
+    model_type=["dense"],
+    languages=KOR_EN,
+    open_weights=True,
+    revision="069ae0627320935e4b2879522edbb54650b59bf5",
+    release_date="2024-08-09",
+    n_parameters=567_754_752,
+    embed_dim=1024,
+    license=None,
+    max_tokens=8192,
+    memory_usage_mb=2166,
+    n_embedding_parameters=256_002_048,
+    reference="https://huggingface.co/upskyy/bge-m3-korean",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    adapted_from="BAAI/bge-m3",
+    public_training_code=None,
+    public_training_data=None,
+    # Model card: "korsts and kornli finetuning model from BAAI/bge-m3".
+    # KorNLI has no mteb task; base bge-m3 data is inherited via adapted_from.
+    training_datasets={"KorSTS"},
+)
+
+# --------------------------------------------------------------------------- #
+# intfloat/multilingual-e5 Korean fine-tunes (query:/passage: prefixes)
+# --------------------------------------------------------------------------- #
+dragonkue_e5_small_ko = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    loader_kwargs=dict(model_prompts=E5_PROMPTS),
+    name="dragonkue/multilingual-e5-small-ko",
+    model_type=["dense"],
+    languages=KOR_EN,
+    open_weights=True,
+    revision="bba4cb8e3299d445c04f62bf62e2b26461d03715",
+    release_date="2025-05-11",
+    n_parameters=117_653_760,
+    embed_dim=384,
+    license="apache-2.0",
+    max_tokens=512,
+    memory_usage_mb=449,
+    n_embedding_parameters=96_014_208,
+    reference="https://huggingface.co/dragonkue/multilingual-e5-small-ko",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    adapted_from="intfloat/multilingual-e5-small",
+    superseded_by="dragonkue/multilingual-e5-small-ko-v2",
+    public_training_code=None,
+    public_training_data=None,
+    # Fine-tuned on the same data as dragonkue/snowflake-arctic-embed-l-v2.0-ko
+    # (AI Hub Korean MRC corpora — none are mteb datasets); empty set so the
+    # multilingual-e5 base data is still inherited via adapted_from.
+    training_datasets=set(),
+)
+
+dragonkue_e5_small_ko_v2 = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    loader_kwargs=dict(model_prompts=E5_PROMPTS),
+    name="dragonkue/multilingual-e5-small-ko-v2",
+    model_type=["dense"],
+    languages=KOR_EN,
+    open_weights=True,
+    revision="fcfc26bf355882620c48df58be112275bd756f50",
+    release_date="2025-06-10",
+    n_parameters=117_653_760,
+    embed_dim=384,
+    license="apache-2.0",
+    max_tokens=512,
+    memory_usage_mb=449,
+    n_embedding_parameters=96_014_208,
+    reference="https://huggingface.co/dragonkue/multilingual-e5-small-ko-v2",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    adapted_from="intfloat/multilingual-e5-small",
+    public_training_code=None,
+    public_training_data=None,
+    # Successor to dragonkue/multilingual-e5-small-ko; same architecture, fine-tuned
+    # on Korean MRC corpora (none are mteb datasets); empty set so the multilingual-e5
+    # base data is still inherited via adapted_from.
+    training_datasets=set(),
+)
+
+dragonkue_koen_e5_tiny = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    loader_kwargs=dict(model_prompts=E5_PROMPTS),
+    name="exp-models/dragonkue-KoEn-E5-Tiny",
+    model_type=["dense"],
+    languages=KOR_EN,
+    open_weights=True,
+    revision="292c09c78c71a3f00ed56ee0d1ed9f0d39182fc9",
+    release_date="2025-05-13",
+    n_parameters=37_517_184,
+    embed_dim=384,
+    license="apache-2.0",
+    max_tokens=512,
+    memory_usage_mb=143,
+    n_embedding_parameters=15_877_632,
+    reference="https://huggingface.co/exp-models/dragonkue-KoEn-E5-Tiny",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    adapted_from="intfloat/multilingual-e5-small",
+    public_training_code=None,
+    public_training_data=None,
+    # Model card: fine-tuned on the same data as
+    # dragonkue/snowflake-arctic-embed-l-v2.0-ko (AI Hub Korean MRC corpora —
+    # none are mteb datasets).
+    training_datasets=set(),
+)
+
+koe5 = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    loader_kwargs=dict(model_prompts=E5_PROMPTS),
+    name="nlpai-lab/KoE5",
+    model_type=["dense"],
+    languages=KOR_EN,
+    open_weights=True,
+    revision="bc6d284c60fe5a973e74c1751b92594c9f581213",
+    release_date="2024-09-24",
+    n_parameters=559_890_432,
+    embed_dim=1024,
+    license="mit",
+    max_tokens=512,
+    memory_usage_mb=2136,
+    n_embedding_parameters=256_002_048,
+    reference="https://huggingface.co/nlpai-lab/KoE5",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    adapted_from="intfloat/multilingual-e5-large",
+    public_training_code=None,
+    public_training_data="https://huggingface.co/datasets/nlpai-lab/ko-triplet-v1.0",
+    # Trained on nlpai-lab/ko-triplet-v1.0 (~700k Korean triplets, open data);
+    # its dataset card does not document which source datasets it aggregates,
+    # so possible mteb-task overlap is unknown.
+    training_datasets=None,
+)
+
+# --------------------------------------------------------------------------- #
+# Snowflake arctic-embed-l-v2.0 Korean fine-tune
+# --------------------------------------------------------------------------- #
+dragonkue_arctic_l_v2_0_ko = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    loader_kwargs=dict(model_prompts=ARCTIC_QUERY_PROMPTS),
+    name="dragonkue/snowflake-arctic-embed-l-v2.0-ko",
+    model_type=["dense"],
+    languages=KOR_EN,
+    open_weights=True,
+    revision="55ec6e9358a56d56af759bc8372e970caf8c305f",
+    release_date="2025-03-07",
+    n_parameters=567_754_752,
+    embed_dim=1024,
+    license="apache-2.0",
+    max_tokens=8192,
+    memory_usage_mb=2166,
+    n_embedding_parameters=256_002_048,
+    reference="https://huggingface.co/dragonkue/snowflake-arctic-embed-l-v2.0-ko",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    adapted_from="Snowflake/snowflake-arctic-embed-l-v2.0",
+    public_training_code=None,
+    public_training_data=None,
+    # Model card: fine-tuned on AI Hub Korean MRC corpora (admin-document /
+    # news / book / numeric / finance-law MRC) — none are mteb datasets; empty
+    # set so the arctic-embed base data is still inherited via adapted_from.
+    training_datasets=set(),
+)
+
+# --------------------------------------------------------------------------- #
+# jhgan/ko-sroberta-multitask (KLUE RoBERTa-base SBERT, mean pooling, cosine)
+# --------------------------------------------------------------------------- #
+ko_sroberta_multitask = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    name="jhgan/ko-sroberta-multitask",
+    model_type=["dense"],
+    languages=["kor-Hang"],
+    open_weights=True,
+    revision="8fca7c9c98c26599be0e14b9916b11a756a26f19",
+    release_date="2022-03-02",
+    n_parameters=110_618_626,
+    embed_dim=768,
+    license=None,
+    max_tokens=512,
+    memory_usage_mb=422,
+    n_embedding_parameters=24_576_000,
+    reference="https://huggingface.co/jhgan/ko-sroberta-multitask",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    adapted_from="klue/roberta-base",
+    public_training_code=None,
+    public_training_data=None,
+    # Model card: multi-task trained on the KorSTS and KorNLI training sets
+    # (KorNLI has no mteb task).
+    training_datasets={"KorSTS"},
+)
+
+
+kure_reranker_nano = ModelMeta(
+    loader=CrossEncoderWrapper,
+    loader_kwargs=dict(max_length=8192),
+    name="nlpai-lab/KURE-Reranker-nano",
+    model_type=["cross-encoder"],
+    languages=KOR_EN,
+    open_weights=True,
+    revision="c32a78ae89fbfeaa4e77c9f2854bd8ba07501c7b",
+    release_date="2026-09-09",
+    n_parameters=149_323_009,
+    embed_dim=None,
+    license="apache-2.0",
+    max_tokens=8192,
+    memory_usage_mb=570,
+    n_embedding_parameters=38_400_000,
+    reference="https://huggingface.co/nlpai-lab/KURE-Reranker-nano",
+    similarity_fn_name=None,
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
+    use_instructions=False,
+    adapted_from="skt/A.X-Encoder-base",
+    public_training_code=None,
+    public_training_data="https://huggingface.co/datasets/lightonai/embeddings-fine-tuning",
+    training_datasets=kure_training_data,
+)
+
+kure_reranker_base = ModelMeta(
+    loader=CrossEncoderWrapper,
+    # Qwen3-1.7B scored as logit("yes") - logit("no") through the chat template
+    # shipped with the model, which also adds the default instruction.
+    loader_kwargs=dict(max_length=8192, model_kwargs=dict(dtype=OutputDType.BF16)),
+    name="nlpai-lab/KURE-Reranker-base",
+    model_type=["cross-encoder"],
+    languages=KOR_EN,
+    open_weights=True,
+    revision="0ca23195dc2c37177e7458330e2286e2f9fa04b3",
+    release_date="2026-09-23",
+    n_parameters=1_720_574_976,
+    embed_dim=None,
+    license="apache-2.0",
+    max_tokens=8192,
+    memory_usage_mb=3282,
+    n_embedding_parameters=311_164_928,
+    reference="https://huggingface.co/nlpai-lab/KURE-Reranker-base",
+    similarity_fn_name=None,
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
+    use_instructions=False,
+    adapted_from="Qwen/Qwen3-1.7B",
+    public_training_code=None,
+    public_training_data="https://huggingface.co/datasets/lightonai/embeddings-fine-tuning",
+    training_datasets=kure_training_data,
+    output_dtypes=OutputDType.BF16,
+)
+
+
+kure_v3 = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    # the "query: " / "passage: " prompts ship in the model's sentence-transformers config
+    loader_kwargs=dict(model_kwargs=dict(dtype=OutputDType.BF16)),
+    name="nlpai-lab/KURE-v3",
+    model_type=["dense"],
+    languages=KOR_EN,
+    open_weights=True,
+    revision="c74871cd57f3377c8b7c3ed9f4ac0fff22a898a3",
+    release_date="2026-10-20",
+    n_parameters=1_140_918_272,
+    n_embedding_parameters=268_435_456,
+    memory_usage_mb=2176,
+    max_tokens=8192,
+    embed_dim=2048,
+    license="apache-2.0",
+    reference="https://huggingface.co/nlpai-lab/KURE-v3",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
+    use_instructions=True,
+    adapted_from="nvidia/Nemotron-3-Embed-1B-BF16",
+    superseded_by=None,
+    public_training_code="https://github.com/nlpai-lab/KURE/tree/main/train/dense",
+    public_training_data="https://huggingface.co/datasets/lightonai/embeddings-fine-tuning",
+    training_datasets=kure_training_data,
+    output_dtypes=OutputDType.BF16,
+)
+
+kure_sparse_base = ModelMeta(
+    loader=SparseEncoderWrapper,
+    # MILCO dual-view encoder (custom code): 30,522 English pivot terms + 250,002 XLM-R tokens.
+    # The shipped module loads the weights in float32 whatever dtype is passed.
+    loader_kwargs=dict(trust_remote_code=True),
+    name="nlpai-lab/KURE-Sparse-base",
+    model_type=["sparse"],
+    languages=KOR_EN,
+    open_weights=True,
+    revision="b3e4c8b066c1ad1e77c36d9cd475cf38b10acd80",
+    release_date="2026-10-12",
+    n_parameters=592_637_046,
+    n_embedding_parameters=256_002_048,
+    memory_usage_mb=1130,
+    max_tokens=8192,
+    embed_dim=280_524,
+    license="apache-2.0",
+    reference="https://huggingface.co/nlpai-lab/KURE-Sparse-base",
+    similarity_fn_name=ScoringFunction.DOT_PRODUCT,
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
+    use_instructions=False,
+    adapted_from="omai-research/milco-650m",
+    superseded_by=None,
+    public_training_code="https://github.com/nlpai-lab/KURE/tree/main/train/sparse",
+    public_training_data="https://huggingface.co/datasets/lightonai/embeddings-fine-tuning",
+    training_datasets=kure_training_data,
+    extra_requirements_groups=["sparse-encoder"],
+)
+
+kure_sparse_nano = ModelMeta(
+    loader=SparseEncoderWrapper,
+    # the "[Q] " / "[D] " markers ship in the model's sentence-transformers config
+    loader_kwargs=dict(
+        trust_remote_code=True, model_kwargs=dict(dtype=OutputDType.BF16)
+    ),
+    name="nlpai-lab/KURE-Sparse-nano",
+    model_type=["sparse"],
+    languages=KOR_EN,
+    open_weights=True,
+    revision="4d68cc696984e3c342d959c659e94b48fbe16578",
+    release_date="2026-10-12",
+    n_parameters=149_373_778,
+    n_embedding_parameters=38_401_536,
+    memory_usage_mb=285,
+    max_tokens=8192,
+    embed_dim=36_282,
+    license="apache-2.0",
+    reference="https://huggingface.co/nlpai-lab/KURE-Sparse-nano",
+    similarity_fn_name=ScoringFunction.DOT_PRODUCT,
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
+    use_instructions=False,
+    adapted_from="nlpai-lab/KURE-v2-unsupervised",
+    superseded_by=None,
+    public_training_code="https://github.com/nlpai-lab/KURE/tree/main/train/sparse",
+    public_training_data="https://huggingface.co/datasets/lightonai/embeddings-fine-tuning",
+    # pre-finetuned (as KURE-v2-unsupervised) on weakly related pairs whose English part
+    # includes MS MARCO and Quora, both already in kure_training_data
+    training_datasets=kure_training_data,
+    output_dtypes=OutputDType.BF16,
+    extra_requirements_groups=["sparse-encoder"],
+)

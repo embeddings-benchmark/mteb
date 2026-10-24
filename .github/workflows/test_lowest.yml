@@ -1,0 +1,48 @@
+# This workflow will:
+# 1) install Python dependencies
+# 2) run make test
+
+name: Test lowest dependencies
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Cache Hugging Face
+        id: cache-hf
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/huggingface
+          key: ${{ runner.os }}-lowest-hf
+
+      - name: Install uv and set the Python version
+        uses: astral-sh/setup-uv@v8.2.0
+        with:
+          enable-cache: true
+          python-version: "3.11"
+
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          uv venv
+          # with uv sync conflict with flash-attn
+          # pyarrow is passed explicitly so it is also resolved to its lowest version;
+          # otherwise it is pulled in transitively at the latest version, which may require numpy>=2
+          uv pip install -e . --resolution lowest-direct --group test pyarrow
+
+      - name: Run tests
+        shell: bash
+        run: |
+          make test

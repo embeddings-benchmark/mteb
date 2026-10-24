@@ -1,16 +1,20 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any
-
-import torch
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from mteb.models.model_meta import ModelMeta
+from mteb.types import OutputDType
 
 from .rerankers_custom import RerankerWrapper
 
+T = TypeVar("T")
+
 if TYPE_CHECKING:
+    from collections.abc import Generator
+
     from torch.utils.data import DataLoader
+    from transformers import PreTrainedTokenizerBase
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
@@ -37,7 +41,7 @@ prediction_tokens = {
 }
 
 
-def chunks(lst, n):
+def chunks(lst: list[T], n: int) -> Generator[list[T], None, None]:
     for i in range(0, len(lst), n):
         yield lst[i : i + n]
 
@@ -48,9 +52,11 @@ class MonoT5Reranker(RerankerWrapper):
 
     def __init__(
         self,
-        model_name_or_path="castorini/monot5-base-msmarco-10k",
-        **kwargs,
+        model_name_or_path: str = "castorini/monot5-base-msmarco-10k",
+        **kwargs: Any,
     ):
+        import torch
+
         super().__init__(model_name_or_path, **kwargs)
         from transformers import (
             AutoModelForSeq2SeqLM,
@@ -78,8 +84,8 @@ class MonoT5Reranker(RerankerWrapper):
         self.token_false_id, self.token_true_id = self.get_prediction_tokens(
             model_name_or_path,
             self.tokenizer,
-            kwargs["token_false"] if "token_false" in kwargs else None,
-            kwargs["token_true"] if "token_true" in kwargs else None,
+            kwargs.get("token_false"),
+            kwargs.get("token_true"),
         )
         logger.info(f"Using max_length of {self.tokenizer.model_max_length}")
         logger.info(f"Using token_false_id of {self.token_false_id}")
@@ -91,26 +97,27 @@ class MonoT5Reranker(RerankerWrapper):
 
         self.model.eval()
 
-    def get_prediction_tokens(
-        self, model_name_or_path, tokenizer, token_false=None, token_true=None
-    ):
+    def get_prediction_tokens(  # noqa: PLR6301
+        self,
+        model_name_or_path: str,
+        tokenizer: PreTrainedTokenizerBase,
+        token_false: str | None = None,
+        token_true: str | None = None,
+    ) -> tuple[int, int]:
         if not (token_false and token_true):
             if model_name_or_path in prediction_tokens:
                 token_false, token_true = prediction_tokens[model_name_or_path]
                 token_false_id = tokenizer.get_vocab()[token_false]
                 token_true_id = tokenizer.get_vocab()[token_true]
                 return token_false_id, token_true_id
-            else:
-                raise Exception(
-                    f"We don't know the indexes for the non-relevant/relevant tokens for\
+            raise Exception(
+                f"We don't know the indexes for the non-relevant/relevant tokens for\
                         the checkpoint {model_name_or_path} and you did not provide any."
-                )
-        else:
-            token_false_id = tokenizer.get_vocab()[token_false]
-            token_true_id = tokenizer.get_vocab()[token_true]
-            return token_false_id, token_true_id
+            )
+        token_false_id = tokenizer.get_vocab()[token_false]
+        token_true_id = tokenizer.get_vocab()[token_true]
+        return token_false_id, token_true_id
 
-    @torch.inference_mode()
     def predict(
         self,
         inputs1: DataLoader[BatchedInput],
@@ -122,46 +129,56 @@ class MonoT5Reranker(RerankerWrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        queries = [text for batch in inputs1 for text in batch["query"]]
-        instructions = None
-        if "instruction" in inputs2.dataset.features:
-            instructions = [text for batch in inputs1 for text in batch["instruction"]]
-        passages = [text for batch in inputs2 for text in batch["text"]]
+        import torch
 
-        if instructions is not None and instructions[0] is not None:
-            queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
+        with torch.inference_mode():
+            queries = [text for batch in inputs1 for text in batch["query"]]
+            instructions = None
+            if "instruction" in inputs2.dataset.features:
+                instructions = [
+                    text for batch in inputs1 for text in batch["instruction"]
+                ]
+            passages = [text for batch in inputs2 for text in batch["text"]]
 
-        prompts = [
-            self.prompt_template.format(query=query, text=text)
-            for (query, text) in zip(queries, passages)
-        ]
+            if instructions is not None and instructions[0] is not None:
+                queries = [
+                    f"{q} {i}".strip()
+                    for i, q in zip(instructions, queries, strict=True)
+                ]
 
-        tokens = self.tokenizer(
-            prompts,
-            padding=True,
-            truncation=True,
-            return_tensors="pt",
-            max_length=self.max_length,
-            pad_to_multiple_of=(8 if self.torch_compile else None),
-        ).to(self.device)
-        output = self.model.generate(
-            **tokens,
-            max_new_tokens=1,
-            return_dict_in_generate=True,
-            output_scores=True,
-        )
-        batch_scores = output.scores[0]
-        batch_scores = batch_scores[:, [self.token_false_id, self.token_true_id]]
-        batch_scores = torch.nn.functional.log_softmax(batch_scores, dim=1)
-        return batch_scores[:, 1].exp().tolist()
+            prompts = [
+                self.prompt_template.format(query=query, text=text)
+                for (query, text) in zip(queries, passages, strict=True)
+            ]
+
+            tokens = self.tokenizer(
+                prompts,
+                padding=True,
+                truncation=True,
+                return_tensors="pt",
+                max_length=self.max_length,
+                pad_to_multiple_of=(8 if self.torch_compile else None),
+            ).to(self.device)
+            output = self.model.generate(
+                **tokens,
+                max_new_tokens=1,
+                return_dict_in_generate=True,
+                output_scores=True,
+            )
+            batch_scores = output.scores[0]
+            batch_scores = batch_scores[:, [self.token_false_id, self.token_true_id]]
+            # upcast the logits to float32 before the softmax
+            batch_scores = torch.nn.functional.log_softmax(batch_scores.float(), dim=1)
+            return batch_scores[:, 1].exp().tolist()
 
 
 class LlamaReranker(RerankerWrapper):
     name: str = "LLAMA-Based"
 
     def __init__(
-        self, model_name_or_path: str, is_classification: bool = False, **kwargs
+        self, model_name_or_path: str, is_classification: bool = False, **kwargs: Any
     ):
+        import torch
         from transformers import AutoModelForCausalLM, AutoTokenizer
 
         kwargs.pop("torch_compile", None)
@@ -214,7 +231,6 @@ Relevant: """
             self.model = torch.nn.DataParallel(self.model)
         self.model.eval()
 
-    @torch.inference_mode()
     def predict(
         self,
         inputs1: DataLoader[BatchedInput],
@@ -226,56 +242,70 @@ Relevant: """
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        queries = [text for batch in inputs1 for text in batch["query"]]
-        instructions = None
-        if "instruction" in inputs2.dataset.features:
-            instructions = [text for batch in inputs1 for text in batch["instruction"]]
-        passages = [text for batch in inputs2 for text in batch["text"]]
+        import torch
 
-        if instructions is not None and instructions[0] is not None:
-            # logger.info(f"Adding instructions to LLAMA queries")
-            queries = [
-                self.query_instruct_template.format(instruction=i, query=q).strip()
-                for i, q in zip(instructions, queries)
+        with torch.inference_mode():
+            queries = [text for batch in inputs1 for text in batch["query"]]
+            instructions = None
+            if "instruction" in inputs2.dataset.features:
+                instructions = [
+                    text for batch in inputs1 for text in batch["instruction"]
+                ]
+            passages = [text for batch in inputs2 for text in batch["text"]]
+
+            if instructions is not None and instructions[0] is not None:
+                # logger.info(f"Adding instructions to LLAMA queries")
+                queries = [
+                    self.query_instruct_template.format(instruction=i, query=q).strip()
+                    for i, q in zip(instructions, queries, strict=True)
+                ]
+
+            prompts = [
+                self.template.format(query=query, text=text)
+                for (query, text) in zip(queries, passages, strict=True)
             ]
+            if "{query}" in prompts[0]:
+                raise ValueError("Query not replaced")
+            if "{text}" in prompts[0]:
+                raise ValueError("Text not replaced")
+            if "{instruction}" in prompts[0]:
+                raise ValueError("Instruction not replaced")
 
-        prompts = [
-            self.template.format(query=query, text=text)
-            for (query, text) in zip(queries, passages)
-        ]
-        assert "{query}" not in prompts[0], "Query not replaced"
-        assert "{text}" not in prompts[0], "Text not replaced"
-        assert "{instruction}" not in prompts[0], "Instruction not replaced"
+            tokens = self.tokenizer(
+                prompts,
+                padding=True,
+                truncation=True,
+                return_tensors="pt",
+                max_length=self.max_length,
+                pad_to_multiple_of=None,
+            ).to(self.device)
+            if "token_type_ids" in tokens:
+                del tokens["token_type_ids"]
+            if not self.is_classification:
+                batch_scores = self.model(**tokens).logits[:, -1, :]
+                true_vector = batch_scores[:, self.token_true_id]
+                false_vector = batch_scores[:, self.token_false_id]
+                batch_scores = torch.stack([false_vector, true_vector], dim=1)
+                # upcast the logits to float32 before the softmax
+                batch_scores = torch.nn.functional.log_softmax(
+                    batch_scores.float(), dim=1
+                )
+                scores = batch_scores[:, 1].exp().tolist()
+            else:
+                batch_scores = self.model(**tokens).logits
+                # upcast the logits to float32 before the softmax
+                batch_scores = torch.nn.functional.log_softmax(
+                    batch_scores.float(), dim=1
+                )
+                scores = batch_scores[:, 1].exp().tolist()
 
-        tokens = self.tokenizer(
-            prompts,
-            padding=True,
-            truncation=True,
-            return_tensors="pt",
-            max_length=self.max_length,
-            pad_to_multiple_of=None,
-        ).to(self.device)
-        if "token_type_ids" in tokens:
-            del tokens["token_type_ids"]
-        if not self.is_classification:
-            batch_scores = self.model(**tokens).logits[:, -1, :]
-            true_vector = batch_scores[:, self.token_true_id]
-            false_vector = batch_scores[:, self.token_false_id]
-            batch_scores = torch.stack([false_vector, true_vector], dim=1)
-            batch_scores = torch.nn.functional.log_softmax(batch_scores, dim=1)
-            scores = batch_scores[:, 1].exp().tolist()
-        else:
-            batch_scores = self.model(**tokens).logits
-            batch_scores = torch.nn.functional.log_softmax(batch_scores, dim=1)
-            scores = batch_scores[:, 1].exp().tolist()
-
-        return scores
+            return scores
 
 
 class MistralReranker(LlamaReranker):
     name: str = "Mistral"
 
-    def __init__(self, model_name_or_path: str, **kwargs):
+    def __init__(self, model_name_or_path: str, **kwargs: Any):
         # use the base class for everything except template
         super().__init__(model_name_or_path, **kwargs)
         self.template = """<s>[INST] You are an expert Google searcher, whose job is to determine if the following document is relevant to the query (true/false).
@@ -290,7 +320,7 @@ Relevant (either "true" or "false"): [/INST]"""
 class FollowIRReranker(LlamaReranker):
     name: str = "FollowIR"
 
-    def __init__(self, model_name_or_path: str, **kwargs):
+    def __init__(self, model_name_or_path: str, **kwargs: Any):
         # use the base class for everything except template
         super().__init__(model_name_or_path, **kwargs)
         self.template = """<s> [INST] You are an expert Google searcher, whose job is to determine if the following document is relevant to the query (true/false). Answer using only one word, one of those two choices.
@@ -308,7 +338,7 @@ class FLANT5Reranker(MonoT5Reranker):
 Query: {query}
 Passage: {text}"""
 
-    def get_prediction_tokens(self, *args, **kwargs):
+    def get_prediction_tokens(self, *args: Any, **kwargs: Any) -> tuple[int, int]:
         yes_token_id, *_ = self.tokenizer.encode("yes")
         no_token_id, *_ = self.tokenizer.encode("no")
         return no_token_id, yes_token_id
@@ -346,6 +376,7 @@ monot5_small = ModelMeta(
       primaryClass={cs.IR},
       url={https://arxiv.org/abs/2206.02873},
     }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 monot5_base = ModelMeta(
@@ -380,6 +411,7 @@ monot5_base = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch", "Transformers"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 monot5_large = ModelMeta(
@@ -414,6 +446,7 @@ monot5_large = ModelMeta(
       primaryClass={cs.IR},
       url={https://arxiv.org/abs/2206.02873},
     }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 monot5_3b = ModelMeta(
@@ -449,6 +482,7 @@ monot5_3b = ModelMeta(
       primaryClass={cs.IR},
       url={https://arxiv.org/abs/2206.02873},
     }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 flant5_base = ModelMeta(
@@ -497,6 +531,7 @@ flant5_base = ModelMeta(
     use_instructions=None,
     framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/google/flan-t5-base",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 flant5_large = ModelMeta(
@@ -545,6 +580,7 @@ flant5_large = ModelMeta(
     use_instructions=None,
     framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/google/flan-t5-large",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 flant5_xl = ModelMeta(
@@ -592,6 +628,7 @@ flant5_xl = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch", "Transformers", "safetensors"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 flant5_xxl = ModelMeta(
@@ -639,6 +676,7 @@ flant5_xxl = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch", "Transformers", "safetensors"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 
@@ -674,6 +712,7 @@ llama2_7b = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2307.09288},
     }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 llama2_7b_chat = ModelMeta(
@@ -709,6 +748,7 @@ llama2_7b_chat = ModelMeta(
     training_datasets=None,
     framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/meta-llama/Llama-2-7b-chat-hf",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 mistral_7b = ModelMeta(
@@ -744,6 +784,7 @@ mistral_7b = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2310.06825},
     }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 followir_7b = ModelMeta(
@@ -782,6 +823,7 @@ followir_7b = ModelMeta(
       primaryClass={cs.IR}
     }
     """,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 
@@ -931,4 +973,5 @@ Rodrigo Frassetto Nogueira},
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch", "Transformers"],
+    output_dtypes=OutputDType.FLOAT16,
 )

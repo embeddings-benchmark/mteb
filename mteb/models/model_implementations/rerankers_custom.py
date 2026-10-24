@@ -3,11 +3,9 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
-
-from mteb._requires_package import requires_package
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
+from mteb.types import OutputDType
 
 from .bge_models import bge_m3_training_data
 
@@ -28,8 +26,10 @@ class RerankerWrapper:
         batch_size: int = 4,
         fp_options: bool | None = None,
         silent: bool = False,
-        **kwargs,
+        **kwargs: Any,
     ):
+        import torch
+
         self.model_name_or_path = model_name_or_path
         self.batch_size = batch_size
         self.fp_options = fp_options if fp_options is not None else torch.float32
@@ -52,10 +52,12 @@ class BGEReranker(RerankerWrapper):
 
     def __init__(
         self,
-        model_name_or_path="BAAI/bge-reranker-v2-m3",
-        torch_compile=False,
-        **kwargs,
+        model_name_or_path: str = "BAAI/bge-reranker-v2-m3",
+        torch_compile: bool = False,
+        **kwargs: Any,
     ):
+        import torch
+
         super().__init__(model_name_or_path, **kwargs)
         if not self.device:
             self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -63,17 +65,10 @@ class BGEReranker(RerankerWrapper):
         if self.fp_options:
             model_args["torch_dtype"] = self.fp_options
 
-        requires_package(
-            self,
-            "FlagEmbedding",
-            model_name_or_path,
-            "pip install 'mteb[flagembedding]'",
-        )
         from FlagEmbedding import FlagReranker
 
         self.model = FlagReranker(model_name_or_path, use_fp16=True)
 
-    @torch.inference_mode()
     def predict(
         self,
         inputs1: DataLoader[BatchedInput],
@@ -85,23 +80,36 @@ class BGEReranker(RerankerWrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        queries = [text for batch in inputs1 for text in batch["query"]]
-        instructions = None
-        if "instruction" in inputs2.dataset.features:
-            instructions = [text for batch in inputs1 for text in batch["instruction"]]
-        passages = [text for batch in inputs2 for text in batch["text"]]
+        import torch
 
-        if instructions is not None and instructions[0] is not None:
-            assert len(instructions) == len(queries)
-            queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
+        with torch.inference_mode():
+            queries = [text for batch in inputs1 for text in batch["query"]]
+            instructions = None
+            if "instruction" in inputs2.dataset.features:
+                instructions = [
+                    text for batch in inputs1 for text in batch["instruction"]
+                ]
+            passages = [text for batch in inputs2 for text in batch["text"]]
 
-        assert len(queries) == len(passages)
-        query_passage_tuples = list(zip(queries, passages))
-        scores = self.model.compute_score(query_passage_tuples, normalize=True)
-        assert len(scores) == len(queries), (
-            f"Expected {len(queries)} scores, got {len(scores)}"
-        )
-        return scores
+            if instructions is not None and instructions[0] is not None:
+                if len(instructions) != len(queries):
+                    raise ValueError(
+                        f"Expected {len(queries)} instructions, got {len(instructions)}"
+                    )
+                queries = [
+                    f"{q} {i}".strip()
+                    for i, q in zip(instructions, queries, strict=True)
+                ]
+
+            if len(queries) != len(passages):
+                raise ValueError(
+                    f"Expected {len(queries)} passages, got {len(passages)}"
+                )
+            query_passage_tuples = list(zip(queries, passages, strict=True))
+            scores = self.model.compute_score(query_passage_tuples, normalize=True)
+            if len(scores) != len(queries):
+                raise ValueError(f"Expected {len(queries)} scores, got {len(scores)}")
+            return scores
 
 
 class JinaReranker(RerankerWrapper):
@@ -109,10 +117,11 @@ class JinaReranker(RerankerWrapper):
 
     def __init__(
         self,
-        model_name_or_path="jinaai/jina-reranker-v2-base-multilingual",
-        torch_compile=False,
-        **kwargs,
+        model_name_or_path: str = "jinaai/jina-reranker-v2-base-multilingual",
+        torch_compile: bool = False,
+        **kwargs: Any,
     ):
+        import torch
         from sentence_transformers import CrossEncoder
 
         super().__init__(model_name_or_path, **kwargs)
@@ -128,7 +137,6 @@ class JinaReranker(RerankerWrapper):
             trust_remote_code=True,
         )
 
-    @torch.inference_mode()
     def predict(
         self,
         inputs1: DataLoader[BatchedInput],
@@ -140,22 +148,30 @@ class JinaReranker(RerankerWrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        queries = [text for batch in inputs1 for text in batch["query"]]
-        instructions = None
-        if "instruction" in inputs2.dataset.features:
-            instructions = [text for batch in inputs1 for text in batch["instruction"]]
-        passages = [text for batch in inputs2 for text in batch["text"]]
+        import torch
 
-        if instructions is not None and instructions[0] is not None:
-            queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
+        with torch.inference_mode():
+            queries = [text for batch in inputs1 for text in batch["query"]]
+            instructions = None
+            if "instruction" in inputs2.dataset.features:
+                instructions = [
+                    text for batch in inputs1 for text in batch["instruction"]
+                ]
+            passages = [text for batch in inputs2 for text in batch["text"]]
 
-        if self.first_print:
-            logger.info(f"Using {queries[0]}")
-            self.first_print = False
+            if instructions is not None and instructions[0] is not None:
+                queries = [
+                    f"{q} {i}".strip()
+                    for i, q in zip(instructions, queries, strict=True)
+                ]
 
-        sentence_pairs = list(zip(queries, passages))
-        scores = self.model.predict(sentence_pairs, convert_to_tensor=True)
-        return scores
+            if self.first_print:
+                logger.info(f"Using {queries[0]}")
+                self.first_print = False
+
+            sentence_pairs = list(zip(queries, passages, strict=True))
+            scores = self.model.predict(sentence_pairs, convert_to_tensor=True)
+            return scores
 
 
 # languages unclear: https://huggingface.co/jinaai/jina-reranker-v2-base-multilingual/discussions/28
@@ -188,6 +204,7 @@ jina_reranker_multilingual = ModelMeta(
         "ONNX",
         "safetensors",
     ],
+    output_dtypes=OutputDType.BF16,  # loaded with torch_dtype="auto"; fp_options is not applied
 )
 
 bge_reranker_v2_m3 = ModelMeta(
@@ -247,14 +264,14 @@ bge_reranker_v2_m3 = ModelMeta(
     training_datasets=bge_m3_training_data,
     framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
     citation="""
-    @misc{li2023making,
-      title={Making Large Language Models A Better Foundation For Dense Retrieval},
-      author={Chaofan Li and Zheng Liu and Shitao Xiao and Yingxia Shao},
-      year={2023},
-      eprint={2312.15503},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
-    }
+@misc{li2023making,
+  archiveprefix = {arXiv},
+  author = {Zheng Liu and Chaofan Li and Shitao Xiao and Yingxia Shao and Defu Lian},
+  eprint = {2312.15503},
+  title = {Llama2Vec: Unsupervised Adaptation of Large Language Models for Dense Retrieval},
+  url = {https://arxiv.org/abs/2312.15503},
+  year = {2023},
+}
     @misc{bge-m3,
       archiveprefix = {arXiv},
       author = {Jianlv Chen and Shitao Xiao and Peitian Zhang and Kun Luo and Defu Lian and Zheng Liu},
@@ -264,6 +281,8 @@ bge_reranker_v2_m3 = ModelMeta(
       year = {2024},
     }
     """,
+    extra_requirements_groups=["flagembedding"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 # SBERT MS MARCO CrossEncoders (Version 2 models). Same training/data/citation for all.

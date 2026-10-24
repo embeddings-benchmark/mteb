@@ -3,24 +3,18 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
-import torch.nn.functional as F
-from packaging.version import Version
-
-from mteb.models import sentence_transformers_loader
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput
 
 logger = logging.getLogger(__name__)
-
-MODERN_BERT_TRANSFORMERS_MIN_VERSION = "4.48.0"
 
 
 class NomicWrapper(SentenceTransformerEncoderWrapper):
@@ -34,17 +28,7 @@ class NomicWrapper(SentenceTransformerEncoderWrapper):
         model_prompts: dict[str, str] | None = None,
         **kwargs: Any,
     ):
-        import transformers
-
         self.model_name = model_name
-        if model_name == "nomic-ai/modernbert-embed-base" and (
-            Version(transformers.__version__).release
-            < Version(MODERN_BERT_TRANSFORMERS_MIN_VERSION).release
-        ):
-            raise RuntimeError(
-                f"Current transformers version is {transformers.__version__} is lower than the required version"
-                f" {MODERN_BERT_TRANSFORMERS_MIN_VERSION}"
-            )
         super().__init__(
             model_name, revision, device=device, model_prompts=model_prompts, **kwargs
         )
@@ -64,6 +48,9 @@ class NomicWrapper(SentenceTransformerEncoderWrapper):
         **kwargs: Any,
     ) -> Array:
         # default to search_document if input_type and prompt_name are not provided
+        import torch
+        import torch.nn.functional as F
+
         prompt_name = (
             self.get_prompt_name(task_metadata, prompt_type)
             or PromptType.document.value
@@ -72,7 +59,7 @@ class NomicWrapper(SentenceTransformerEncoderWrapper):
 
         # normalization not applied to classification
         # https://github.com/nomic-ai/contrastors/blob/5f7b461e5a13b5636692d1c9f1141b27232fe966/src/contrastors/eval/mteb_eval/eval_mteb.py#L172
-        normalize = task_metadata not in (
+        normalize = task_metadata not in (  # noqa: PLR6201
             "Classification",
             "MultilabelClassification",
             "PairClassification",
@@ -236,6 +223,7 @@ nomic_embed_v1_5 = ModelMeta(
     public_training_data=None,
     public_training_code="https://github.com/nomic-ai/contrastors/blob/5f7b461e5a13b5636692d1c9f1141b27232fe966/src/contrastors/configs/train/contrastive_finetune.yaml",
     training_datasets=nomic_training_data,
+    extra_requirements_groups=["nomic"],
 )
 
 nomic_embed_v1 = ModelMeta(
@@ -301,6 +289,7 @@ nomic_embed_v1_ablated = ModelMeta(
     public_training_code="https://github.com/nomic-ai/contrastors/blob/5f7b461e5a13b5636692d1c9f1141b27232fe966/src/contrastors/configs/train/contrastive_finetune.yaml",
     training_datasets=nomic_training_data,
     public_training_data=None,
+    extra_requirements_groups=["nomic"],
 )
 
 nomic_embed_v1_unsupervised = ModelMeta(
@@ -330,6 +319,7 @@ nomic_embed_v1_unsupervised = ModelMeta(
     public_training_code="https://github.com/nomic-ai/contrastors/blob/5f7b461e5a13b5636692d1c9f1141b27232fe966/src/contrastors/configs/train/contrastive_finetune.yaml",
     training_datasets=nomic_training_data,
     public_training_data=None,
+    extra_requirements_groups=["nomic"],
 )
 
 nomic_modern_bert_embed = ModelMeta(
@@ -339,6 +329,7 @@ nomic_modern_bert_embed = ModelMeta(
         model_prompts=model_prompts,
     ),
     name="nomic-ai/modernbert-embed-base",
+    extra_requirements_groups=["modernbert"],
     model_type=["dense"],
     languages=["eng-Latn"],
     open_weights=True,
@@ -500,6 +491,7 @@ nomic_embed_text_v2_moe = ModelMeta(
     public_training_code="https://github.com/nomic-ai/contrastors/blob/613ddfd37309e538cceadb05b1e6423e7b09f603/src/contrastors/configs/train/contrastive_finetune_moe.yaml",
     training_datasets=None,  # did not look into this further
     superseded_by=None,
+    extra_requirements_groups=["nomic"],
     citation="""@misc{nussbaum2025trainingsparsemixtureexperts,
       title={Training Sparse Mixture Of Experts Text Embedding Models},
       author={Zach Nussbaum and Brandon Duderstadt},
@@ -512,7 +504,7 @@ nomic_embed_text_v2_moe = ModelMeta(
 )
 
 nomic_embed_code = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs={
         "trust_remote_code": True,
         "model_prompts": model_prompts,

@@ -1,32 +1,35 @@
 """Test cases for the _load_from_cache and _rebuild_from_full_repository methods."""
 
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
 
-from mteb.cache import ResultCache
+from mteb.cache import LoadExperimentEnum, ResultCache
 from mteb.results import BenchmarkResults
+
+pytestmark = pytest.mark.core
 
 
 class TestLoadFromCache:
     """Test the _load_from_cache method."""
 
-    def test_rebuild_flag_forces_full_rebuild(self, tmp_path):
+    def test_rebuild_flag_forces_full_rebuild(self, tmp_path: Path):
         """Test rebuild=True bypasses cache and forces rebuild."""
         cache = ResultCache(cache_path=tmp_path)
         cache_filename = "test_cache.json"
         expected_path = tmp_path / "leaderboard" / cache_filename
         expected_path.parent.mkdir(parents=True, exist_ok=True)
-        expected_path.write_text('{"test": "should be ignored"}')
+        expected_path.write_text('{"test": "should be ignored"}', encoding="utf-8")
 
         with patch.object(cache, "_rebuild_from_full_repository") as mock_rebuild:
             mock_result = MagicMock(spec=BenchmarkResults)
             mock_rebuild.return_value = mock_result
             result = cache._load_from_cache(cache_filename, rebuild=True)
-            mock_rebuild.assert_called_once_with(expected_path)
+            mock_rebuild.assert_called_once_with(expected_path, save_to_disk=False)
             assert result == mock_result
 
-    def test_loading_strategies_in_order(self, tmp_path):
+    def test_loading_strategies_in_order(self, tmp_path: Path):
         """Test the 3-tier loading strategy: local -> download -> rebuild."""
         cache = ResultCache(cache_path=tmp_path)
         cache_filename = "test_cache.json"
@@ -35,7 +38,7 @@ class TestLoadFromCache:
         mock_result = MagicMock(spec=BenchmarkResults)
 
         # Test 1: Load from existing local cache
-        expected_path.write_text("{}")
+        expected_path.write_text("{}", encoding="utf-8")
         with patch("mteb.results.BenchmarkResults.from_disk") as mock_from_disk:
             mock_from_disk.return_value = mock_result
             result = cache._load_from_cache(cache_filename, rebuild=False)
@@ -62,16 +65,16 @@ class TestLoadFromCache:
             mock_dl.side_effect = Exception("Download failed")
             mock_rebuild.return_value = mock_result
             result = cache._load_from_cache(cache_filename, rebuild=False)
-            mock_rebuild.assert_called_once_with(expected_path)
+            mock_rebuild.assert_called_once_with(expected_path, save_to_disk=False)
             assert result == mock_result
 
-    def test_corrupt_cache_triggers_fallback(self, tmp_path):
+    def test_corrupt_cache_triggers_fallback(self, tmp_path: Path):
         """Test that corrupt cache files trigger next strategy."""
         cache = ResultCache(cache_path=tmp_path)
         cache_filename = "test_cache.json"
         expected_path = tmp_path / "leaderboard" / cache_filename
         expected_path.parent.mkdir(parents=True, exist_ok=True)
-        expected_path.write_text("invalid json {{{")
+        expected_path.write_text("invalid json {{{", encoding="utf-8")
 
         with (
             patch("mteb.results.BenchmarkResults.from_disk") as mock_from_disk,
@@ -83,22 +86,22 @@ class TestLoadFromCache:
             mock_result = MagicMock(spec=BenchmarkResults)
             mock_rebuild.return_value = mock_result
             result = cache._load_from_cache(cache_filename, rebuild=False)
-            mock_rebuild.assert_called_once_with(expected_path)
+            mock_rebuild.assert_called_once_with(expected_path, save_to_disk=False)
             assert result == mock_result
 
 
 class TestRebuildFromFullRepository:
     """Test the _rebuild_from_full_repository method."""
 
-    def test_full_rebuild_process(self, tmp_path):
-        """Test rebuild downloads repo, loads results, and saves cache."""
+    def test_full_rebuild_process(self, tmp_path: Path):
+        """Test rebuild downloads repo, loads results, and (opt-in) saves cache."""
         cache = ResultCache(cache_path=tmp_path)
         quick_cache_path = tmp_path / "cache.json"
 
         with (
             patch.object(cache, "download_from_remote") as mock_download,
             patch.object(cache, "load_results") as mock_load_results,
-            patch("mteb.get_model_metas") as mock_get_model_metas,
+            patch("mteb.cache.result_cache.get_model_metas") as mock_get_model_metas,
         ):
             # Mock model metas - None names should be filtered
             meta1 = MagicMock()
@@ -111,7 +114,9 @@ class TestRebuildFromFullRepository:
             mock_results = MagicMock(spec=BenchmarkResults)
             mock_load_results.return_value = mock_results
 
-            result = cache._rebuild_from_full_repository(quick_cache_path)
+            result = cache._rebuild_from_full_repository(
+                quick_cache_path, save_to_disk=True
+            )
 
             mock_download.assert_called_once()
             mock_load_results.assert_called_once_with(
@@ -119,11 +124,30 @@ class TestRebuildFromFullRepository:
                 only_main_score=True,
                 require_model_meta=False,
                 include_remote=True,
+                load_experiments=LoadExperimentEnum.MATCH_NAME,
             )
             mock_results.to_disk.assert_called_once_with(quick_cache_path)
             assert result == mock_results
 
-    def test_rebuild_error_propagation(self, tmp_path):
+    def test_full_rebuild_save_to_disk_defaults_false(self, tmp_path: Path):
+        """save_to_disk defaults to False: rebuilds in memory without persisting to quick_cache_path."""
+        cache = ResultCache(cache_path=tmp_path)
+        quick_cache_path = tmp_path / "cache.json"
+
+        with (
+            patch.object(cache, "download_from_remote"),
+            patch.object(cache, "load_results") as mock_load_results,
+            patch("mteb.cache.result_cache.get_model_metas", return_value=[]),
+        ):
+            mock_results = MagicMock(spec=BenchmarkResults)
+            mock_load_results.return_value = mock_results
+
+            result = cache._rebuild_from_full_repository(quick_cache_path)
+
+            mock_results.to_disk.assert_not_called()
+            assert result == mock_results
+
+    def test_rebuild_error_propagation(self, tmp_path: Path):
         """Test that errors during rebuild are properly propagated."""
         cache = ResultCache(cache_path=tmp_path)
         quick_cache_path = tmp_path / "cache.json"
@@ -138,7 +162,7 @@ class TestRebuildFromFullRepository:
         with (
             patch.object(cache, "download_from_remote"),
             patch.object(cache, "load_results") as mock_load_results,
-            patch("mteb.get_model_metas") as mock_get_model_metas,
+            patch("mteb.cache.result_cache.get_model_metas") as mock_get_model_metas,
         ):
             meta = MagicMock()
             meta.name = "model1"

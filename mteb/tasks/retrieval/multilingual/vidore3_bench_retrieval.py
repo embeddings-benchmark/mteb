@@ -46,6 +46,7 @@ class Vidore3FinanceEnRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         superseded_by="Vidore3FinanceEnRetrieval.v2",
     )
 
@@ -54,7 +55,7 @@ class Vidore3FinanceEnRetrievalv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3FinanceEnRetrieval.v2",
         description="Retrieve associated pages according to questions. This task, Finance - EN, is a corpus of reports from american banking companies, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        + "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3FinanceEnOCRRetrieval",
@@ -86,6 +87,7 @@ class Vidore3FinanceEnRetrievalv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         adapted_from=["Vidore3FinanceEnRetrieval"],
+        contributed_by="Illuin Technology",
     )
 
 
@@ -124,6 +126,7 @@ class Vidore3FinanceFrRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         superseded_by="Vidore3FinanceFrRetrieval.v2",
     )
 
@@ -132,7 +135,7 @@ class Vidore3FinanceFrRetrievalv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3FinanceFrRetrieval.v2",
         description="Retrieve associated pages according to questions. This task, Finance - FR, is a corpus of reports from french companies in the luxury domain, intended for long-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish."
-        + "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3FinanceFrOCRRetrieval",
@@ -164,6 +167,7 @@ class Vidore3FinanceFrRetrievalv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         adapted_from=["Vidore3FinanceFrRetrieval"],
     )
 
@@ -203,6 +207,7 @@ class Vidore3IndustrialRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         superseded_by="Vidore3IndustrialRetrieval.v2",
     )
 
@@ -211,7 +216,7 @@ class Vidore3IndustrialRetrievalv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3IndustrialRetrieval.v2",
         description="Retrieve associated pages according to questions. This dataset, Industrial reports, is a corpus of technical documents on military aircraft (fueling, mechanics...), intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        + "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3IndustrialOCRRetrieval",
@@ -243,6 +248,7 @@ class Vidore3IndustrialRetrievalv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         adapted_from=["Vidore3IndustrialRetrieval"],
     )
 
@@ -282,6 +288,7 @@ class Vidore3PharmaceuticalsRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         superseded_by="Vidore3PharmaceuticalsRetrieval.v2",
     )
 
@@ -290,7 +297,7 @@ class Vidore3PharmaceuticalsRetrievalv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3PharmaceuticalsRetrieval.v2",
         description="Retrieve associated pages according to questions. This dataset, Pharmaceutical, is a corpus of slides from the FDA, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        + "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3PharmaceuticalsOCRRetrieval",
@@ -322,6 +329,7 @@ class Vidore3PharmaceuticalsRetrievalv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         adapted_from=["Vidore3PharmaceuticalsRetrieval"],
     )
 
@@ -361,6 +369,7 @@ class Vidore3ComputerScienceRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         superseded_by="Vidore3ComputerScienceRetrieval.v2",
     )
 
@@ -369,7 +378,7 @@ class Vidore3ComputerScienceRetrievalv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3ComputerScienceRetrieval.v2",
         description="Retrieve associated pages according to questions. This dataset, Computer Science, is a corpus of textbooks from the openstacks website, intended for long-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        + "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3ComputerScienceOCRRetrieval",
@@ -401,6 +410,7 @@ class Vidore3ComputerScienceRetrievalv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         adapted_from=["Vidore3ComputerScienceRetrieval"],
     )
 
@@ -440,6 +450,7 @@ class Vidore3HrRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         superseded_by="Vidore3HrRetrieval.v2",
     )
 
@@ -448,7 +459,7 @@ class Vidore3HrRetrievalv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3HrRetrieval.v2",
         description="Retrieve associated pages according to questions. This dataset, HR, is a corpus of reports released by the european union, intended for complex-document understanding tasks. Original queries were created in english, then translated to french, german, italian, portuguese and spanish."
-        + "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3HrOCRRetrieval",
@@ -480,6 +491,7 @@ class Vidore3HrRetrievalv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         adapted_from=["Vidore3HrRetrieval"],
     )
 
@@ -519,6 +531,7 @@ class Vidore3EnergyRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         superseded_by="Vidore3EnergyRetrieval.v2",
     )
 
@@ -527,7 +540,7 @@ class Vidore3EnergyRetrievalv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3EnergyRetrieval.v2",
         description="Retrieve associated pages according to questions. This dataset, Energy Fr, is a corpus of reports on energy supply in europe, intended for complex-document understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish."
-        + "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3EnergyOCRRetrieval",
@@ -559,6 +572,7 @@ class Vidore3EnergyRetrievalv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         adapted_from=["Vidore3EnergyRetrieval"],
     )
 
@@ -598,6 +612,7 @@ class Vidore3PhysicsRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         superseded_by="Vidore3PhysicsRetrieval.v2",
     )
 
@@ -606,7 +621,7 @@ class Vidore3PhysicsRetrievalv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3PhysicsRetrieval.v2",
         description="Retrieve associated pages according to questions. This dataset, Physics, is a corpus of course slides on french bachelor level physics lectures, intended for complex visual understanding tasks. Original queries were created in french, then translated to english, german, italian, portuguese and spanish."
-        + "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb/Vidore3PhysicsOCRRetrieval",
@@ -638,6 +653,7 @@ class Vidore3PhysicsRetrievalv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=True,
+        contributed_by="Illuin Technology",
         adapted_from=["Vidore3PhysicsRetrieval"],
     )
 
@@ -677,6 +693,7 @@ class Vidore3NuclearRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=False,
+        contributed_by="Illuin Technology",
         superseded_by="Vidore3NuclearRetrieval.v2",
     )
 
@@ -716,6 +733,7 @@ class Vidore3TelecomRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=False,
+        contributed_by="Illuin Technology",
         superseded_by="Vidore3TelecomRetrieval.v2",
     )
 
@@ -724,7 +742,7 @@ class Vidore3TelecomRetrievalv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3TelecomRetrieval.v2",
         description="Retrieve associated pages according to questions."
-        + "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb-private/Vidore3TelecomOCRRetrieval",
@@ -756,6 +774,7 @@ class Vidore3TelecomRetrievalv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=False,
+        contributed_by="Illuin Technology",
         adapted_from=["Vidore3TelecomRetrieval"],
     )
 
@@ -764,7 +783,7 @@ class Vidore3NuclearRetrievalv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Vidore3NuclearRetrieval.v2",
         description="Retrieve associated pages according to questions."
-        + "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
+        "This version add the OCR'ed markdown to allow for comparison across image-text, image-only and text-only models.",
         reference="https://arxiv.org/abs/2601.08620",
         dataset={
             "path": "mteb-private/Vidore3NuclearOCRRetrieval",
@@ -796,5 +815,6 @@ class Vidore3NuclearRetrievalv2(AbsTaskRetrieval):
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
         is_public=False,
+        contributed_by="Illuin Technology",
         adapted_from=["Vidore3NuclearRetrieval"],
     )

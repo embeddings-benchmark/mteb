@@ -2,10 +2,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_image_dependencies, requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -13,6 +11,7 @@ if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
 
 MOCOV3_CITATION = """@Article{chen2021mocov3,
@@ -23,9 +22,9 @@ MOCOV3_CITATION = """@Article{chen2021mocov3,
 }"""
 
 
-def mocov3_loader(model_name, **kwargs):
-    requires_package(mocov3_loader, "timm", model_name, "pip install 'mteb[timm]'")
+def mocov3_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
     import timm
+    import torch
 
     class MOCOv3Model(AbsEncoder):
         """A wrapper class for MOCOv3 models that supports image encoding.
@@ -35,10 +34,13 @@ def mocov3_loader(model_name, **kwargs):
         def __init__(
             self,
             model_name: str = "nyu-visionx/moco-v3-vit-b",
-            device: str = "cuda" if torch.cuda.is_available() else "cpu",
+            device: str | None = None,
             **kwargs: Any,
         ):
-            requires_image_dependencies()
+            import torch
+
+            if device is None:
+                device = "cuda" if torch.cuda.is_available() else "cpu"
 
             self.model_name = model_name
             self.device = device
@@ -62,7 +64,7 @@ def mocov3_loader(model_name, **kwargs):
 
         @staticmethod
         def get_text_embeddings(
-            self,
+            self: object,  # noqa: PLW0211
             texts: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
@@ -74,7 +76,7 @@ def mocov3_loader(model_name, **kwargs):
             images: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_image_embeddings = []
 
             import torchvision.transforms.functional as F
@@ -144,6 +146,7 @@ mocov3_vit_base = ModelMeta(
     use_instructions=False,
     training_datasets=mocov3_training_datasets,
     citation=MOCOV3_CITATION,
+    extra_requirements_groups=["timm"],
 )
 
 mocov3_vit_large = ModelMeta(
@@ -169,4 +172,5 @@ mocov3_vit_large = ModelMeta(
     use_instructions=False,
     training_datasets=mocov3_training_datasets,
     citation=MOCOV3_CITATION,
+    extra_requirements_groups=["timm"],
 )

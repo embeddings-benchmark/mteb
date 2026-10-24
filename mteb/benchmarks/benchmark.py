@@ -1,18 +1,284 @@
 from __future__ import annotations
 
+import logging
+import tempfile
 from collections.abc import Iterator, Sequence
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Literal, cast
+from functools import lru_cache
+from pathlib import Path
+from typing import TYPE_CHECKING, ClassVar, Literal, cast
 
 import huggingface_hub
 import pandas as pd
+import polars as pl
+import yaml
+from huggingface_hub import DatasetCard, DatasetCardData
 
+from mteb._helpful_enum import HelpfulStrEnum
+from mteb._hf_integration.eval_model import HFEvalMeta, HFEvalTaskConfig
+from mteb._hf_integration.hf_hub_utils import _get_file_on_hub
 from mteb.abstasks.abstask import AbsTask
+from mteb.benchmarks._benchmark_metrics import (
+    _custom_group_means_from_map,
+    _is_whole_task_ref,
+)
 from mteb.types import StrURL
 
 if TYPE_CHECKING:
     from mteb.abstasks.aggregated_task import AbsTaskAggregate
-    from mteb.results import BenchmarkResults
+    from mteb.benchmarks._create_table import SummaryTable
+    from mteb.results import BenchmarkResults, ModelResult
+    from mteb.results.task_result import TaskResult
+
+logger = logging.getLogger(__name__)
+
+
+@dataclass(frozen=True, slots=True)
+class CustomGroup:
+    """One labeled bucket within a [CustomGrouping][mteb.benchmarks.benchmark.CustomGrouping] dimension.
+
+    Args:
+        label: Display label (e.g. ``"Episodic"``), unique within its
+            `CustomGrouping` and must not contain ``"::"``.
+        tasks: Initialized `AbsTask` instances (via `mteb.get_task(...)`/
+            `get_tasks(...)`), not bare names. A whole instance contributes
+            its whole-task score; one filtered by ``hf_subsets``/
+            ``eval_splits`` contributes the mean of just those cells, as one
+            data point. A task can appear whole in only one group per
+            dimension, but different groups may claim different scopes of it.
+        description: Optional prose, surfaced as the column tooltip.
+    """
+
+    label: str
+    tasks: Sequence[AbsTask]
+    description: str | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class CustomGrouping:
+    """A named custom dimension bucketing a benchmark's tasks into display groups.
+
+    Args:
+        name: Display name (e.g. ``"Memory Type"``), must not contain
+            ``"::"`` — namespaces every score key/column this dimension
+            produces (``f"{name}::{label}"``).
+        groups: The dimension's groups; labels must be unique within it. A
+            task can't be a whole-task member of more than one group, and
+            two groups can't claim the same (subset, split) cell of a task —
+            but they may each claim a *different* scope of it (e.g.
+            LongEmbed's per-length groups, each an ``eval_splits=[...]``
+            slice of the same two tasks).
+
+    Examples:
+        >>> CustomGrouping(
+        ...     name="Memory Type",
+        ...     groups=(
+        ...         CustomGroup(label="Episodic", tasks=get_tasks(["EPBench", "KnowMeBench"])),
+        ...         CustomGroup(label="Dialogue", tasks=get_tasks(["LoCoMo", "LongMemEval"])),
+        ...     ),
+        ... )
+    """
+
+    name: str
+    groups: Sequence[CustomGroup]
+    task_to_label: dict[str, str] = field(init=False, repr=False, compare=False)
+    has_scoped_refs: bool = field(init=False, repr=False, compare=False)
+
+    def __post_init__(self) -> None:
+        if "::" in self.name:
+            raise ValueError(
+                f"CustomGrouping.name must not contain '::': {self.name!r}"
+            )
+        seen_labels: set[str] = set()
+        seen_whole_tasks: set[str] = set()
+        seen_scope_pairs: dict[str, set[tuple[str, str]]] = {}
+        task_to_label: dict[str, str] = {}
+        has_scoped_refs = False
+        for g in self.groups:
+            if not g.label:
+                raise ValueError(f"group label must not be empty in {self.name!r}")
+            if not g.tasks:
+                raise ValueError(f"group {g.label!r} in {self.name!r} has no tasks")
+            if "::" in g.label:
+                raise ValueError(f"group label must not contain '::': {g.label!r}")
+            if g.label in seen_labels:
+                raise ValueError(f"duplicate group label {g.label!r} in {self.name!r}")
+            seen_labels.add(g.label)
+            for task_ref in g.tasks:
+                name = task_ref.metadata.name
+                if _is_whole_task_ref(task_ref):
+                    if name in seen_whole_tasks or name in seen_scope_pairs:
+                        raise ValueError(
+                            f"task {name!r} assigned to multiple groups in {self.name!r}"
+                        )
+                    seen_whole_tasks.add(name)
+                    task_to_label[name] = g.label
+                else:
+                    has_scoped_refs = True
+                    claimed = {
+                        (subset, split)
+                        for subset in task_ref.hf_subsets
+                        for split in task_ref.eval_splits
+                    }
+                    if name in seen_whole_tasks or claimed & seen_scope_pairs.get(
+                        name, set()
+                    ):
+                        raise ValueError(
+                            f"task {name!r} assigned to multiple groups in {self.name!r}"
+                        )
+                    seen_scope_pairs.setdefault(name, set()).update(claimed)
+        object.__setattr__(self, "task_to_label", task_to_label)
+        object.__setattr__(self, "has_scoped_refs", has_scoped_refs)
+
+
+class BenchmarkAggregation(HelpfulStrEnum):
+    """Aggregation columns a benchmark can surface in its leaderboard summary.
+
+    Inherits from ``str`` so the values serialise as plain strings in JSON
+    and round-trip cleanly through pydantic without a custom encoder.
+
+    Each value also knows how to compute its own Python-side scores via
+    [aggregate][mteb.benchmarks.benchmark.BenchmarkAggregation.aggregate] —
+    the same dispatch the leaderboard's polars summary builder follows
+    internally, so both paths stay in lockstep.
+    """
+
+    MEAN_TASK = "mean_task"
+    """Show the ``Mean (Task)`` aggregate column."""
+    MEAN_TASK_TYPE = "mean_task_type"
+    """Show the ``Mean (TaskType)`` aggregate column."""
+    TASK_TYPES = "task_types"
+    """Show one column per per-task-type mean."""
+    PUBLIC_PRIVATE = "public_private"
+    """Show ``Mean (Public)`` and ``Mean (Private)`` (split-aware benchmarks)."""
+    MEAN_SUBSET = "mean_subset"
+    """Show ``Mean (Subset)``: subset-weighted mean used by HUME-style benchmarks."""
+
+    @property
+    def summary_columns(self) -> tuple[str, ...]:
+        """Polars summary column names this aggregation produces (with spaces).
+
+        Returns `()` for
+        [TASK_TYPES][mteb.benchmarks.benchmark.BenchmarkAggregation.TASK_TYPES]
+        — per-type columns are dynamic (one per task type observed in the
+        benchmark) and are surfaced separately as `type_cols` on the summary.
+        """
+        return _AGGREGATION_SUMMARY_COLUMNS.get(self, ())
+
+    @property
+    def get_score_keys(self) -> tuple[str, ...]:
+        """[`Benchmark.get_score`][mteb.benchmarks.benchmark.Benchmark.get_score] dict keys this aggregation produces (no spaces).
+
+        Same as
+        [summary_columns][mteb.benchmarks.benchmark.BenchmarkAggregation.summary_columns]
+        with the space before the opening parenthesis removed — keeps the
+        get_score contract (`"Mean(Task)"`) in sync with the polars summary
+        column names (`"Mean (Task)"`). Returns `()` for
+        [TASK_TYPES][mteb.benchmarks.benchmark.BenchmarkAggregation.TASK_TYPES]
+        (dynamic per-type keys).
+        """
+        return tuple(c.replace(" (", "(") for c in self.summary_columns)
+
+    def aggregate(self, task_results: list[TaskResult]) -> dict[str, float | None]:
+        """Compute this aggregation's per-model scores in Python.
+
+        Mirrors the polars branch that
+        [_create_summary_table][mteb.benchmarks._create_table._create_summary_table]
+        would take for this enum value, so
+        [Benchmark.get_score][mteb.benchmarks.benchmark.Benchmark.get_score]
+        and the leaderboard summary stay numerically consistent on the same
+        data. Returned keys are the
+        [get_score_keys][mteb.benchmarks.benchmark.BenchmarkAggregation.get_score_keys]
+        for this aggregation.
+
+        Args:
+            task_results: All
+                [TaskResult][mteb.results.task_result.TaskResult] objects for
+                one model on the benchmark's task set.
+
+        Returns:
+            dict: Score keys → scalar (or `None` when any input score is
+                missing/NaN). Keys come from
+                [get_score_keys][mteb.benchmarks.benchmark.BenchmarkAggregation.get_score_keys]
+                — except
+                [TASK_TYPES][mteb.benchmarks.benchmark.BenchmarkAggregation.TASK_TYPES],
+                which emits one key per task type seen in `task_results`.
+        """
+        from mteb.benchmarks._benchmark_metrics import (
+            _compute_mean_public_private,
+            _compute_mean_subset,
+            _compute_mean_task,
+            _compute_mean_task_type,
+            _task_types_or_nulls,
+        )
+
+        match self:
+            case BenchmarkAggregation.MEAN_TASK:
+                return {self.get_score_keys[0]: _compute_mean_task(task_results)}
+            case BenchmarkAggregation.MEAN_TASK_TYPE:
+                return {self.get_score_keys[0]: _compute_mean_task_type(task_results)}
+            case BenchmarkAggregation.TASK_TYPES:
+                return _task_types_or_nulls(task_results)
+            case BenchmarkAggregation.PUBLIC_PRIVATE:
+                return _compute_mean_public_private(task_results)
+            case BenchmarkAggregation.MEAN_SUBSET:
+                return _compute_mean_subset(task_results)
+            case _:
+                # Surfaces immediately if a new ``BenchmarkAggregation`` member
+                # is added without a matching Python compute path here.
+                raise NotImplementedError(
+                    f"BenchmarkAggregation.{self.name} has no Python-side "
+                    f"compute registered in {type(self).__name__}.aggregate"
+                )
+
+
+# Single source of truth for which polars summary columns each aggregation
+# produces. The ``get_score_keys`` (no-space form) is derived from this.
+# Display order in the summary's ``mean_cols`` follows enum declaration
+# order: MEAN_TASK → MEAN_TASK_TYPE → PUBLIC_PRIVATE → MEAN_SUBSET.
+_AGGREGATION_SUMMARY_COLUMNS: dict[BenchmarkAggregation, tuple[str, ...]] = {
+    BenchmarkAggregation.MEAN_TASK: ("Mean (Task)",),
+    BenchmarkAggregation.MEAN_TASK_TYPE: ("Mean (TaskType)",),
+    BenchmarkAggregation.PUBLIC_PRIVATE: ("Mean (Public)", "Mean (Private)"),
+    BenchmarkAggregation.MEAN_SUBSET: ("Mean (Subset)",),
+}
+
+
+# Priority order for picking the summary's ``primary_metric_col`` — the
+# column the rank is built on top of. First aggregation in this tuple that's
+# present in ``aggregations`` wins. Aggregations not in this tuple
+# (``TASK_TYPES``) never serve as the primary.
+_PRIMARY_METRIC_PRIORITY: tuple[BenchmarkAggregation, ...] = (
+    BenchmarkAggregation.MEAN_TASK,
+    BenchmarkAggregation.MEAN_SUBSET,
+    BenchmarkAggregation.MEAN_TASK_TYPE,
+    BenchmarkAggregation.PUBLIC_PRIVATE,
+)
+
+
+@lru_cache
+def _get_benchmarks_on_leaderboard() -> set[str]:
+    from mteb.benchmarks._leaderboard_menu import (
+        HOME_BENCHMARK_ENTRIES,
+        MenuEntry,
+    )
+
+    entries = HOME_BENCHMARK_ENTRIES
+
+    def __extract_benchmarks(
+        entries: Sequence[Benchmark | MenuEntry],
+    ) -> list[Benchmark]:
+        benchmarks = []
+        for entry in entries:
+            if isinstance(entry, Benchmark):
+                benchmarks.append(entry)
+            else:
+                benchmarks.extend(__extract_benchmarks(entry.benchmarks))
+        return benchmarks
+
+    names = {benchmark.name for benchmark in __extract_benchmarks(entries)}
+
+    return names
 
 
 @dataclass
@@ -25,8 +291,17 @@ class Benchmark:
         tasks: The tasks within the benchmark.
         description: A description of the benchmark, should include its intended goal and potentially a description of its construction
         reference: A link reference, to a source containing additional information typically to a paper, leaderboard or github.
-        citation: A bibtex citation
+        citation: A BibTeX citation. As non-existing citations can cause authors citing the work to be
+            penalized, leave it out if the benchmark has no article to cite. It is allowed to cite multiple
+            articles.
         contacts: The people to contact in case of a problem in the benchmark, preferably a GitHub handle.
+        superseded_by: Benchmark name with newer version of benchmark
+        aggregations: Which aggregations to use on the leaderboard. Sequence of
+            `BenchmarkAggregation` flags mixed freely with
+            [CustomGrouping][mteb.benchmarks.benchmark.CustomGrouping]
+            instances — a `CustomGrouping`'s mere presence in this sequence
+            turns on its dynamic per-group columns, no separate field needed.
+        summary_sort_column: The column to sort benchmarks by on leaderboard
 
     Examples:
         >>> Benchmark(
@@ -46,10 +321,42 @@ class Benchmark:
     reference: StrURL | None = None
     citation: str | None = None
     contacts: list[str] | None = None
-    display_on_leaderboard: bool = True
     icon: str | None = None
     display_name: str | None = None
     language_view: list[str] | Literal["all"] = field(default_factory=list)
+    benchmark_hf_repo: str | None = None
+    superseded_by: Sequence[str] | None = None
+    aggregations: Sequence[BenchmarkAggregation | CustomGrouping] = (
+        BenchmarkAggregation.MEAN_TASK,
+        BenchmarkAggregation.MEAN_TASK_TYPE,
+        BenchmarkAggregation.TASK_TYPES,
+    )
+    show_zero_shot: bool = True
+    # Sort column(s) for the leaderboard summary. ``None`` keeps the default
+    # ``Rank (Borda)`` sort; a string or tuple of strings sorts by those
+    # columns descending and adds a 1-indexed ``summary_rank_column`` rank.
+    summary_sort_column: ClassVar[str | Sequence[str] | None] = None
+    # Name of the 1-indexed rank column added when ``summary_sort_column`` is
+    # set. ``None`` falls back to ``"Rank"`` (Borda stays as a trailing col).
+    summary_rank_column: ClassVar[str | None] = None
+
+    def __post_init__(self) -> None:
+        seen_names: set[str] = set()
+        for aggregation in self.aggregations:
+            if not isinstance(aggregation, CustomGrouping):
+                continue
+            if aggregation.name in seen_names:
+                raise ValueError(
+                    f"Duplicate CustomGrouping.name detected: {aggregation.name!r}. "
+                    "Custom grouping names must be unique within a benchmark."
+                )
+            seen_names.add(aggregation.name)
+
+    @property
+    def display_on_leaderboard(self) -> bool:
+        """Whether the benchmark should be displayed on the leaderboard."""
+        benchmarks_on_leaderboard = _get_benchmarks_on_leaderboard()
+        return self.name in benchmarks_on_leaderboard
 
     def __iter__(self) -> Iterator[AbsTask]:
         return iter(self.tasks)
@@ -60,59 +367,72 @@ class Benchmark:
     def __getitem__(self, index: int) -> AbsTask:
         return self.tasks[index]
 
-    def _create_summary_table(
-        self, benchmark_results: BenchmarkResults
-    ) -> pd.DataFrame:
-        """Create summary table. Called by the leaderboard app.
+    def _build_per_task_pivot(  # noqa: PLR6301
+        self, pl_df: pl.DataFrame
+    ) -> tuple[pl.DataFrame, list[str]] | None:
+        """Compute the standard (model × task) wide pivot once.
 
-        Returns:
-            A pandas DataFrame representing the summary results.
+        Callers building both summary and per-task tables from the same long
+        frame can pass the result to both via the ``pivot`` kwarg to halve
+        polars CPU on the pivot step. Subclasses whose summary builder needs
+        an is_public-aware pivot still benefit because their per-task table
+        builder reuses this one. ``None`` when the input frame is empty.
         """
-        from mteb.benchmarks._create_table import (
-            _create_summary_table_from_benchmark_results,
+        from mteb.benchmarks._create_table import _build_per_task_pivot
+
+        return _build_per_task_pivot(pl_df)
+
+    def _create_summary_table(self, pl_df: pl.DataFrame) -> SummaryTable:
+        """Create summary table from a long polars pre-agg frame.
+
+        Thin wrapper around
+        [_create_summary_table][mteb.benchmarks._create_table._create_summary_table]
+        that forwards
+        [aggregations][mteb.benchmarks.benchmark.Benchmark.aggregations],
+        [summary_sort_column][mteb.benchmarks.benchmark.Benchmark.summary_sort_column],
+        and
+        [summary_rank_column][mteb.benchmarks.benchmark.Benchmark.summary_rank_column].
+        Called by the leaderboard app.
+        """
+        from mteb.benchmarks._create_table import _create_summary_table
+
+        return _create_summary_table(
+            pl_df,
+            aggregations=self.aggregations,
+            sort_by=self.summary_sort_column,
+            rank_column_name=self.summary_rank_column,
         )
 
-        return _create_summary_table_from_benchmark_results(benchmark_results)
-
-    def _create_per_task_table(
-        self, benchmark_results: BenchmarkResults
-    ) -> pd.DataFrame:
-        """Create per-task table. Called by the leaderboard app.
-
-        Returns:
-            A pandas DataFrame representing the per-task results.
-        """
+    def _create_per_task_table(  # noqa: PLR6301
+        self,
+        pl_df: pl.DataFrame,
+        *,
+        pivot: tuple[pl.DataFrame, list[str]] | None = None,
+    ) -> pl.DataFrame:
+        """Create per-task table from a long polars pre-agg frame. Called by the leaderboard app."""
         from mteb.benchmarks._create_table import (
             _create_per_task_table_from_benchmark_results,
         )
 
-        return _create_per_task_table_from_benchmark_results(benchmark_results)
+        return _create_per_task_table_from_benchmark_results(pl_df, pivot=pivot)
 
-    def _create_per_language_table(
-        self, benchmark_results: BenchmarkResults
-    ) -> pd.DataFrame:
-        """Create per-language table. Called by the leaderboard app.
-
-        Returns:
-            A pandas DataFrame representing the per-language results.
-        """
+    def _create_per_language_table(self, pl_df: pl.DataFrame) -> pl.DataFrame:
+        """Create per-language table from a long polars pre-agg frame. Called by the leaderboard app."""
         from mteb.benchmarks._create_table import (
             _create_per_language_table_from_benchmark_results,
         )
 
         if self.language_view == "all" or len(self.language_view) > 0:
             return _create_per_language_table_from_benchmark_results(
-                benchmark_results, self.language_view
+                pl_df, self.language_view
             )
-        else:
-            no_results_frame = pd.DataFrame(
-                {
-                    "No results": [
-                        "The per-language table is not available for this benchmark."
-                    ]
-                }
-            )
-            return no_results_frame
+        return pl.DataFrame(
+            {
+                "No results": [
+                    "The per-language table is not available for this benchmark."
+                ]
+            }
+        )
 
     def push_collection_to_hub(
         self,
@@ -173,198 +493,331 @@ class Benchmark:
         desc = f"'{desc[:max_len]}..." if len(desc) > max_len else f"'{desc}'"
         return f"{self.__class__.__name__}(name='{self.name}', description={desc}, tasks=[...] (#{n_tasks}), ...)"
 
+    def _generate_benchmark_card(self) -> DatasetCard:
+        """Generate a README/dataset card for this benchmark."""
+        template_path = Path(__file__).parent / "benchmark_card_template.md"
 
-class RtebBenchmark(Benchmark):
-    """Wrapper for RTEB benchmark."""
-
-    def _create_summary_table(
-        self, benchmark_results: BenchmarkResults
-    ) -> pd.DataFrame:
-        from mteb.benchmarks._create_table import (
-            _create_summary_table_mean_public_private,
-        )
-
-        joint_table = _create_summary_table_mean_public_private(
-            benchmark_results, exclude_private_from_borda=True
-        )
-        # issue 3902: temporary remove the private column from RTEB summary table
-        if "Mean (Private)" in joint_table.columns:
-            joint_table = joint_table.drop(columns=["Mean (Private)"])
-        # For RTEB: all tasks are Retrieval type, so Retrieval column = Mean (Task)
-        # but due to 3902, if Private column existed, Mean (Task) was the mean of Public and Private so instead we drop Mean (Task) and rename Mean (Public) to Mean (Task)
-        joint_table = joint_table.rename(columns={"Retrieval": "Mean (Task)"})
-        if "Mean (Task)" in joint_table.columns:
-            joint_table = joint_table.drop(columns=["Mean (Task)"])
-        joint_table = joint_table.rename(columns={"Mean (Public)": "Mean (Task)"})
-
-        return joint_table
-
-
-class HUMEBenchmark(Benchmark):
-    """Wrapper for HUME benchmark."""
-
-    def _create_summary_table(
-        self, benchmark_results: BenchmarkResults
-    ) -> pd.DataFrame:
-        from mteb.benchmarks._create_table import _create_summary_table_mean_subset
-
-        return _create_summary_table_mean_subset(benchmark_results)
-
-
-class MIEBBenchmark(Benchmark):
-    """Wrapper for MIEB benchmark."""
-
-    def _create_summary_table(
-        self, benchmark_results: BenchmarkResults
-    ) -> pd.DataFrame:
-        from mteb.benchmarks._create_table import _create_summary_table_mean_task_type
-
-        return _create_summary_table_mean_task_type(
-            benchmark_results, mean_column_name="Mean (Task)"
-        )
-
-
-class VidoreBenchmark(Benchmark):
-    """Wrapper for Vidore3 benchmark."""
-
-    def _create_vidore_summary_table(
-        self, benchmark_results: BenchmarkResults
-    ) -> pd.DataFrame:
-        """Create summary table from BenchmarkResults.
-
-        Returns a DataFrame with one row per model containing summary statistics
-        and task type averages. Customized for Vidore benchmark.
-
-        Args:
-            benchmark_results: BenchmarkResults object containing model results
-
-        Returns:
-            DataFrame with model summaries, ready for styling in the leaderboard
-        """
-        import mteb
-        from mteb.benchmarks._create_table import (
-            _format_max_tokens,
-            _format_n_parameters,
-            _get_means_per_types,
-            _split_on_capital,
-        )
-        from mteb.get_tasks import get_task
-
-        data = benchmark_results.to_dataframe(format="long")
-
-        if data.empty:
-            no_results_frame = pd.DataFrame(
-                {"No results": ["You can try relaxing your criteria"]}
-            )
-            return no_results_frame
-        public_task_name = benchmark_results._filter_tasks(is_public=True).task_names
-        private_task_name = benchmark_results._filter_tasks(is_public=False).task_names
-        # Convert to DataFrame and pivot
-        per_task = data.pivot(index="model_name", columns="task_name", values="score")
-
-        # Remove models with no scores
-        to_remove = per_task.isna().all(axis="columns")
-        if to_remove.all():
-            no_results_frame = pd.DataFrame(
-                {"No results": ["You can try relaxing your criteria"]}
-            )
-            return no_results_frame
-
-        models_to_remove = list(per_task[to_remove].index)
-        per_task = per_task.drop(models_to_remove, axis=0)
-
-        # Calculate means by task type
-        mean_per_type = _get_means_per_types(per_task)
-        mean_per_type = mean_per_type.pivot(
-            index="model_name", columns="task_type", values="score"
-        )
-        mean_per_type.columns = [
-            _split_on_capital(column) for column in mean_per_type.columns
+        task_rows = [
+            {
+                "name": task.metadata.name,
+                "reference": task.metadata.reference,
+                "simplified_type": task.metadata.simplified_task_type,
+                "description": task.metadata.description or "",
+            }
+            for task in self.tasks
         ]
 
-        # Calculate overall means
-        public_mean = per_task[public_task_name].mean(skipna=False, axis=1)
-        private_mean = per_task[private_task_name].mean(skipna=False, axis=1)
-
-        # Build joint table
-        joint_table = mean_per_type.copy()
-        joint_table.insert(1, "mean(public)", public_mean)
-        joint_table.insert(2, "mean(private)", private_mean)
-        task_type = get_task(
-            per_task.columns[0]
-        ).metadata.type  # "DocumentUnderstanding"
-        joint_table = joint_table.sort_values(
-            [_split_on_capital(task_type), "mean(public)", "mean(private)"],
-            ascending=False,
-        )
-
-        joint_table = joint_table.reset_index()
-
-        # Add model metadata
-        model_metas = joint_table["model_name"].map(mteb.get_model_meta)
-        joint_table = joint_table[model_metas.notna()]
-        joint_table["model_link"] = model_metas.map(lambda m: m.reference)
-
-        # Insert model metadata columns
-        joint_table.insert(
-            1,
-            "Max Tokens",
-            model_metas.map(lambda m: _format_max_tokens(m.max_tokens)),
-        )
-        joint_table.insert(
-            1,
-            "Embedding Dimensions",
-            model_metas.map(lambda m: int(m.embed_dim) if m.embed_dim else None),
-        )
-        joint_table.insert(
-            1,
-            "Number of Parameters (B)",
-            model_metas.map(lambda m: _format_n_parameters(m.n_parameters)),
-        )
-        joint_table.insert(
-            1,
-            "Memory Usage (MB)",
-            model_metas.map(
-                lambda m: int(m.memory_usage_mb) if m.memory_usage_mb else None
+        return cast(
+            "DatasetCard",
+            DatasetCard.from_template(
+                card_data=DatasetCardData(tags=["mteb", "benchmark"]),
+                template_path=str(template_path),
+                benchmark_name=self.name,
+                benchmark_description=self.description,
+                tasks=task_rows,
+                citation=self.citation,
             ),
         )
 
-        # Clean up model names (remove HF organization)
-        joint_table["model_name"] = joint_table["model_name"].map(
-            lambda name: name.split("/")[-1]
+    def push_benchmark_card_to_hub(
+        self,
+        *,
+        create_pr: bool = False,
+    ) -> None:
+        """Push a README benchmark card to the HuggingFace Hub dataset repo."""
+        if self.benchmark_hf_repo is None:
+            raise ValueError(
+                "`benchmark_hf_repo` must be set to push a benchmark card to the hub."
+            )
+
+        if not huggingface_hub.repo_exists(self.benchmark_hf_repo, repo_type="dataset"):
+            huggingface_hub.create_repo(
+                self.benchmark_hf_repo,
+                repo_type="dataset",
+            )
+
+        card = self._generate_benchmark_card()
+        card.push_to_hub(
+            self.benchmark_hf_repo,
+            repo_type="dataset",
+            commit_message="Add benchmark card",
+            create_pr=create_pr,
         )
 
-        # Add markdown links to model names
-        name_w_link = (
-            "[" + joint_table["model_name"] + "](" + joint_table["model_link"] + ")"
+    def push_eval_to_hub(
+        self,
+        *,
+        create_pr: bool = False,
+    ) -> None:
+        """Push `eval.yaml` to the HuggingFace Hub
+
+        Args:
+            create_pr: Whether to create the PR
+        """
+        eval_file_name = "eval.yaml"
+
+        if self.benchmark_hf_repo is None:
+            raise ValueError(
+                "`benchmark_hf_repo` must be set to push eval config to the hub."
+            )
+
+        existing_eval_path = _get_file_on_hub(
+            repo_id=self.benchmark_hf_repo,
+            file_name=eval_file_name,
+            repo_type="dataset",
         )
-        joint_table["model_name"] = joint_table["model_name"].mask(
-            joint_table["model_link"].notna(), name_w_link
-        )
-        joint_table = joint_table.drop(columns=["model_link"])
 
-        # Rename columns
-        rename_dict = {
-            "model_name": "Model",
-            "mean(public)": "Mean (Public)",
-            "mean(private)": "Mean (Private)",
-        }
+        # handle multiple tasks in one repo (e.g. BRIGHT)
+        existing_eval = None
+        if existing_eval_path is not None:
+            with Path(existing_eval_path).open(encoding="utf-8") as f:
+                existing_eval_dict = yaml.safe_load(f)
+            if existing_eval_dict is not None:
+                existing_eval = HFEvalMeta.model_validate(existing_eval_dict)
 
-        joint_table = joint_table.rename(columns=rename_dict)
-
-        # Add Rank column
-        joint_table.insert(
-            0, "Rank (Mean Task)", [i + 1 for i in range(len(joint_table))]
+        benchmark_config = self._to_hf_eval_config()
+        benchmark_config = (
+            benchmark_config.merge(existing_eval) if existing_eval else benchmark_config
         )
 
-        return joint_table
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8") as tmp_file:
+            tmp_file.write(benchmark_config.to_yaml())
+            tmp_file.flush()
 
-    def _create_summary_table(
-        self, benchmark_results: BenchmarkResults
-    ) -> pd.DataFrame:
-        joint_table = self._create_vidore_summary_table(benchmark_results)
-        # For ViDoRe (V1, V2, V3): all tasks are Document Understanding type, so Document Understanding column = Mean (Task)
-        joint_table = joint_table.rename(
-            columns={"Document Understanding": "Mean (Task)"}
+            huggingface_hub.upload_file(
+                path_or_fileobj=tmp_file.name,
+                path_in_repo=eval_file_name,
+                repo_id=self.benchmark_hf_repo,
+                repo_type="dataset",
+                commit_message="Add eval config",
+                create_pr=create_pr,
+            )
+
+    def _to_hf_eval_config(self) -> HFEvalMeta:
+        return HFEvalMeta(
+            name=self.name,
+            description=self.description,
+            tasks=[
+                HFEvalTaskConfig(
+                    id=self.name,
+                    config=None,
+                    split=None,
+                )
+            ],
         )
-        return joint_table
+
+    def _get_model_score(
+        self,
+        model_result: ModelResult,
+    ) -> dict[str, float | None]:
+        """Compute aggregated scores for a single model.
+
+        Drives the per-aggregation compute via
+        [BenchmarkAggregation.aggregate][mteb.benchmarks.benchmark.BenchmarkAggregation.aggregate],
+        so the keys returned match what
+        [_create_summary_table][mteb.benchmarks.benchmark.Benchmark._create_summary_table]
+        would surface for the same `self.aggregations` set.
+
+        Args:
+            model_result: The model whose results to aggregate.
+
+        Returns:
+            dict: Score keys produced by `self.aggregations` mapped to their
+                values. Keys include `"Mean(Task)"`, `"Mean(TaskType)"`,
+                per-type means, `"Mean(Public)"`/`"Mean(Private)"`, and
+                `"Mean(Subset)"` depending on the aggregation set.
+
+        Raises:
+            ValueError: If the model is missing results for some benchmark tasks.
+        """
+        filtered = model_result.select_tasks(self.tasks).task_results
+        if len(filtered) < len(self.tasks):
+            raise ValueError(
+                "Some scores of benchmark are missing. Please, run model on full benchmark tasks"
+            )
+
+        by_name: dict[str, TaskResult] | None = None
+        scores: dict[str, float | None] = {}
+        for aggregation in self.aggregations:
+            if isinstance(aggregation, CustomGrouping):
+                if by_name is None:
+                    by_name = {tr.task.metadata.name: tr for tr in filtered}
+                scores.update(_custom_group_means_from_map(by_name, aggregation))
+            else:
+                scores.update(aggregation.aggregate(filtered))
+        return scores
+
+    def get_score(
+        self,
+        results: BenchmarkResults,
+        *,
+        raise_error: bool = False,
+    ) -> dict[str, dict[str, float | None]]:
+        """Get aggregated scores for all models in *results*.
+
+        The benchmark class controls how scores are aggregated — subclasses may
+        override this method to customise the returned metrics.
+
+        Args:
+            results: A `BenchmarkResults` object containing the model
+                results to score.
+            raise_error: Weather to raise an error on missing results.
+
+        Returns:
+            A dict mapping each model name to a dict whose keys are
+            determined by
+            [aggregations][mteb.benchmarks.benchmark.Benchmark.aggregations].
+            Possible keys include:
+
+            - `"Mean(Task)"`: mean score across all benchmark tasks (when
+                [MEAN_TASK][mteb.benchmarks.benchmark.BenchmarkAggregation.MEAN_TASK]
+                is enabled).
+            - `"Mean(TaskType)"`: mean of per-task-type means (when
+                [MEAN_TASK_TYPE][mteb.benchmarks.benchmark.BenchmarkAggregation.MEAN_TASK_TYPE]
+                is enabled).
+            - per-task-type means keyed by raw type name (e.g. `"Retrieval"`)
+                when
+                [TASK_TYPES][mteb.benchmarks.benchmark.BenchmarkAggregation.TASK_TYPES]
+                is enabled.
+            - `"Mean(Public)"` / `"Mean(Private)"` when
+                [PUBLIC_PRIVATE][mteb.benchmarks.benchmark.BenchmarkAggregation.PUBLIC_PRIVATE]
+                is enabled.
+            - `"Rank"`: Borda count rank (1 = best). Each model earns
+                `n - rank` points per task; points are summed and the model
+                with the highest total is ranked 1. Matches the leaderboard.
+                Always present.
+        """
+        from mteb.benchmarks._create_table import _get_borda_rank
+
+        bench_results = results.join_revisions()
+        scores: dict[str, dict[str, float | None]] = {}
+        per_task_rows: dict[str, dict[str, float | None]] = {}
+
+        for model_result in bench_results:
+            per_task_rows[model_result.model_name] = {}
+            filtered = model_result.select_tasks(self.tasks).task_results
+            try:
+                scores[model_result.model_name] = self._get_model_score(model_result)
+            except ValueError:
+                if raise_error:
+                    raise
+                logger.warning(
+                    "Some task results are missing. Filling results with None"
+                )
+                scores[model_result.model_name] = {
+                    t.metadata.name: None for t in self.tasks
+                }
+                continue
+
+            per_task_rows[model_result.model_name] = {
+                tr.task_name: tr.get_score() for tr in filtered
+            }
+
+        if per_task_rows:
+            per_task_df = pd.DataFrame.from_dict(per_task_rows, orient="index").reindex(
+                list(per_task_rows.keys())
+            )
+            if per_task_df.shape[1] > 0:
+                per_task_pl = pl.from_pandas(
+                    per_task_df.reset_index(names="model_name")
+                )
+                task_cols = list(per_task_df.columns)
+                borda_list = (
+                    per_task_pl.select(_get_borda_rank(task_cols)).to_series().to_list()
+                )
+                for name, rank in zip(per_task_df.index, borda_list, strict=True):
+                    scores[name]["Rank"] = int(rank)
+            else:
+                for model_scores in scores.values():
+                    model_scores["Rank"] = None
+        else:
+            for model_scores in scores.values():
+                model_scores["Rank"] = None
+
+        return scores
+
+
+@dataclass
+class RtebBenchmark(Benchmark):
+    """Wrapper for RTEB benchmark.
+
+    issue 3902: private RTEB tasks are temporarily hidden from the
+    leaderboard summary. The override filters `is_public=True` before
+    delegating to
+    [Benchmark._create_summary_table][mteb.benchmarks.benchmark.Benchmark._create_summary_table],
+    so `Mean (Task)` and `Rank (Borda)` are both computed from public tasks
+    only.
+    """
+
+    aggregations: Sequence[BenchmarkAggregation | CustomGrouping] = (
+        BenchmarkAggregation.MEAN_TASK,
+    )
+    # RTEB task names aren't tracked in model ``training_datasets`` lists,
+    # so the computed zero-shot percentage is 100 % for every row. Hide the
+    # column rather than render a misleading uniform value.
+    show_zero_shot: bool = False
+
+    def _create_summary_table(self, pl_df: pl.DataFrame) -> SummaryTable:
+        if "is_public" in pl_df.columns:
+            pl_df = pl_df.filter(pl.col("is_public"))
+        return super()._create_summary_table(pl_df)
+
+
+@dataclass
+class HUMEBenchmark(Benchmark):
+    """Wrapper for HUME benchmark.
+
+    Summary uses
+    [MEAN_SUBSET][mteb.benchmarks.benchmark.BenchmarkAggregation.MEAN_SUBSET]
+    so each task-language subset is weighted equally —
+    [Benchmark._create_summary_table][mteb.benchmarks.benchmark.Benchmark._create_summary_table]
+    routes to the subset-weighted builder.
+    """
+
+    aggregations: Sequence[BenchmarkAggregation | CustomGrouping] = (
+        BenchmarkAggregation.MEAN_SUBSET,
+        BenchmarkAggregation.TASK_TYPES,
+    )
+
+
+@dataclass
+class MIEBBenchmark(Benchmark):
+    """Wrapper for MIEB benchmark."""
+
+    aggregations: Sequence[BenchmarkAggregation | CustomGrouping] = (
+        BenchmarkAggregation.MEAN_TASK_TYPE,
+        BenchmarkAggregation.TASK_TYPES,
+    )
+    # Rank rows by the per-type mean column rather than Borda count. Honoured
+    # by ``Benchmark._create_summary_table`` (passed as ``sort_by``).
+    summary_sort_column: ClassVar[str] = "Mean (TaskType)"
+
+
+@dataclass
+class VidoreBenchmark(Benchmark):
+    """Wrapper for Vidore3 benchmark.
+
+    Summary shows `Mean (Task)`, `Mean (Public)`, `Mean (Private)` and
+    ranks 1-indexed by `Mean (Task)` (tie-broken by public then private
+    mean) —
+    [Benchmark._create_summary_table][mteb.benchmarks.benchmark.Benchmark._create_summary_table]
+    honours these via
+    [summary_sort_column][mteb.benchmarks.benchmark.Benchmark.summary_sort_column]
+    +
+    [summary_rank_column][mteb.benchmarks.benchmark.Benchmark.summary_rank_column].
+    """
+
+    aggregations: Sequence[BenchmarkAggregation | CustomGrouping] = (
+        BenchmarkAggregation.MEAN_TASK,
+        BenchmarkAggregation.PUBLIC_PRIVATE,
+    )
+    # ViDoRe task names aren't tracked in model ``training_datasets`` lists,
+    # so the computed zero-shot percentage is 100 % for every row. Hide the
+    # column rather than render a misleading uniform value.
+    show_zero_shot: bool = False
+    summary_sort_column: ClassVar[Sequence[str]] = (
+        "Mean (Task)",
+        "Mean (Public)",
+        "Mean (Private)",
+    )
+    summary_rank_column: ClassVar[str] = "Rank (Mean Task)"

@@ -8,6 +8,7 @@ from .est import *
 from .fas import *
 from .fra import *
 from .hun import *
+from .ita import *
 from .jpn import *
 from .kat import *
 from .kor import *

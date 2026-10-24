@@ -18,6 +18,7 @@ if TYPE_CHECKING:
     from datasets import Dataset, DatasetDict
 
     from mteb.models.models_protocols import MTEBModels
+    from mteb.timing import TimingStack
     from mteb.types import EncodeKwargs, HFSubset, ScoresDict
     from mteb.types.statistics import DescriptiveStatistics
 
@@ -61,18 +62,34 @@ class AbsTaskAggregate(AbsTask):
             if isinstance(self.metadata.eval_langs, dict)
             else [self.metadata.eval_langs]
         )
+
+        valid_task_results = [
+            tr for tr in task_results if tr.task_name in self.taskname_to_task
+        ]
+
+        provided_task_names = {tr.task_name for tr in valid_task_results}
+        missing_tasks = set(self.taskname_to_task.keys()) - provided_task_names
+        is_missing = len(missing_tasks) > 0
+        if is_missing:
+            logger.info(
+                f"Missing task results for required tasks: {missing_tasks}. Setting evaluation to None."
+            )
+
         for split in self.metadata.eval_splits:
             main_scores = []
-            for task_res in task_results:
-                for langs in eval_langs:
-                    main_scores.append(
-                        task_res._get_score_fast(
-                            languages=[lang.split("-")[0] for lang in langs],
-                            splits=self.metadata.eval_splits,
-                            subsets=subsets,
+            if not is_missing:
+                for task_res in valid_task_results:
+                    for langs in eval_langs:
+                        main_scores.append(
+                            task_res._get_score_fast(
+                                languages=[lang.split("-")[0] for lang in langs],
+                                splits=[split],
+                                subsets=subsets,
+                            )
                         )
-                    )
-            main_score = np.mean(main_scores)
+                main_score = np.mean(main_scores)
+            else:
+                main_score = None
             scores[split] = {
                 "default": {
                     self.metadata.main_score: main_score,
@@ -96,7 +113,7 @@ class AbsTaskAggregate(AbsTask):
         if len(eval_times) != len(task_results):
             logger.info(
                 f"Loaded results does not include runtime. Therefore evaluation of {self.metadata.name} "
-                + "can't be computed. Setting it to None."
+                "can't be computed. Setting it to None."
             )
             eval_time = np.nan
         else:
@@ -108,7 +125,7 @@ class AbsTaskAggregate(AbsTask):
         if len(kg_co2_emissions_) != len(task_results):
             logger.info(
                 f"Loaded results does not include co2-eq emissions. Therefore evaluation of {self.metadata.name} "
-                + "can't be computed. Setting it to None."
+                "can't be computed. Setting it to None."
             )
             kg_co2_emissions = np.nan
         else:
@@ -119,15 +136,16 @@ class AbsTaskAggregate(AbsTask):
             scores=self.task_results_to_scores(task_results),
             evaluation_time=eval_time,
             kg_co2_emissions=kg_co2_emissions,
-            date=datetime.datetime.now(tz=datetime.timezone.utc),
+            date=datetime.datetime.now(tz=datetime.UTC),
         )
         mteb_versions = {tr.mteb_version for tr in task_results}
         if len(mteb_versions) != 1:
             msg = f"All tasks of {self.metadata.name} is not run using the same version. different versions found are: {mteb_versions}"
             logger.warning(msg)
-            warnings.warn(msg)
-            task_res.mteb_version = None
-        task_res.mteb_version = task_results[0].mteb_version
+            warnings.warn(msg, stacklevel=2)
+        task_res.mteb_version = TaskResult._compute_top_level_mteb_version(
+            task_res.scores
+        )
         return task_res
 
     def evaluate(
@@ -150,7 +168,13 @@ class AbsTaskAggregate(AbsTask):
         self,
         model: MTEBModels,
         data_split: DatasetDict | Dataset,
+        *,
         encode_kwargs: EncodeKwargs,
+        hf_split: str,
+        hf_subset: str,
+        prediction_folder: Path | None = None,
+        num_proc: int | None = None,
+        timer: TimingStack,
         **kwargs: Any,
     ) -> ScoresDict:
         raise NotImplementedError(
@@ -158,7 +182,12 @@ class AbsTaskAggregate(AbsTask):
         )
 
     def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        *,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
     ) -> DescriptiveStatistics:
         raise NotImplementedError(
             "Aggregate tasks does not implement a _calculate_metrics_from_split. Instead use the individual tasks."

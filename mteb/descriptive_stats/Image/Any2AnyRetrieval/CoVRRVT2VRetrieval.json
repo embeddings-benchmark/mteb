@@ -1,0 +1,170 @@
+{
+    "test": {
+        "num_samples": 7059,
+        "num_queries": 2634,
+        "num_documents": 4425,
+        "number_of_characters": 1348388,
+        "documents_text_statistics": null,
+        "documents_image_statistics": null,
+        "documents_audio_statistics": null,
+        "documents_video_statistics": {
+            "total_duration_seconds": 52576.90672017247,
+            "total_frames": 1397947,
+            "min_width": 240,
+            "average_width": 515.1430508474576,
+            "max_width": 600,
+            "min_height": 240,
+            "average_height": 297.4567231638418,
+            "max_height": 336,
+            "min_duration_seconds": 0.6666666666666666,
+            "average_duration_seconds": 11.881786829417507,
+            "max_duration_seconds": 104.0039,
+            "unique_videos": 4425,
+            "average_fps": 22.144858757062146,
+            "fps": {
+                "12": 1655,
+                "30": 1431,
+                "50": 55,
+                "25": 812,
+                "24": 327,
+                "60": 59,
+                "11": 12,
+                "9": 2,
+                "10": 30,
+                "4": 1,
+                "6": 7,
+                "7": 5,
+                "8": 29
+            },
+            "min_resolution": [
+                240,
+                240
+            ],
+            "average_resolution": [
+                515.1430508474576,
+                297.4567231638418
+            ],
+            "max_resolution": [
+                596,
+                336
+            ],
+            "resolutions": {
+                "320x240": 384,
+                "432x240": 32,
+                "360x240": 132,
+                "427x240": 1010,
+                "596x336": 2403,
+                "600x316": 175,
+                "436x240": 5,
+                "592x336": 66,
+                "361x240": 8,
+                "293x240": 60,
+                "424x240": 66,
+                "446x336": 12,
+                "426x240": 21,
+                "504x336": 19,
+                "400x240": 5,
+                "417x240": 5,
+                "300x240": 2,
+                "483x240": 2,
+                "496x336": 4,
+                "600x322": 1,
+                "240x240": 2,
+                "420x240": 2,
+                "420x336": 4,
+                "458x336": 1,
+                "384x240": 2,
+                "429x240": 1,
+                "358x240": 1
+            }
+        },
+        "queries_text_statistics": {
+            "total_text_length": 1348388,
+            "min_text_length": 203,
+            "average_text_length": 511.916476841306,
+            "max_text_length": 902,
+            "unique_texts": 2634
+        },
+        "queries_image_statistics": null,
+        "queries_audio_statistics": null,
+        "queries_video_statistics": {
+            "total_duration_seconds": 28299.60347948147,
+            "total_frames": 730272,
+            "min_width": 240,
+            "average_width": 497.54365983295367,
+            "max_width": 600,
+            "min_height": 240,
+            "average_height": 289.0455580865604,
+            "max_height": 336,
+            "min_duration_seconds": 0.6666666666666666,
+            "average_duration_seconds": 10.7439648745184,
+            "max_duration_seconds": 88.42,
+            "unique_videos": 2621,
+            "average_fps": 20.675018982536066,
+            "fps": {
+                "25": 414,
+                "24": 167,
+                "30": 722,
+                "50": 32,
+                "60": 30,
+                "12": 1211,
+                "10": 22,
+                "11": 5,
+                "8": 21,
+                "7": 4,
+                "6": 4,
+                "9": 1,
+                "4": 1
+            },
+            "min_resolution": [
+                240,
+                240
+            ],
+            "average_resolution": [
+                497.54365983295367,
+                289.0455580865604
+            ],
+            "max_resolution": [
+                596,
+                336
+            ],
+            "resolutions": {
+                "596x336": 1222,
+                "600x316": 92,
+                "592x336": 29,
+                "504x336": 11,
+                "496x336": 2,
+                "600x322": 1,
+                "446x336": 6,
+                "420x336": 1,
+                "458x336": 1,
+                "427x240": 739,
+                "320x240": 271,
+                "424x240": 51,
+                "360x240": 93,
+                "436x240": 5,
+                "426x240": 16,
+                "432x240": 23,
+                "417x240": 5,
+                "293x240": 48,
+                "420x240": 2,
+                "384x240": 2,
+                "300x240": 1,
+                "429x240": 1,
+                "361x240": 4,
+                "400x240": 4,
+                "240x240": 2,
+                "483x240": 1,
+                "358x240": 1
+            }
+        },
+        "relevant_docs_statistics": {
+            "num_relevant_docs": 2634,
+            "min_relevant_docs_per_query": 1,
+            "average_relevant_docs_per_query": 1.0,
+            "max_relevant_docs_per_query": 1,
+            "unique_relevant_docs": 2634
+        },
+        "top_ranked_statistics": null
+    }
+}

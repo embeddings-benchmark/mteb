@@ -116,7 +116,7 @@ class SIBFLEURSMultilingualClassification(AbsTaskClassification):
             "path": "mteb/sib-fleurs-multilingual-mini",
             "revision": "186b61175fbd77059f769b6bf1110d449a2ff311",
         },
-        type="AudioMultilabelClassification",
+        type="AudioClassification",
         category="a2c",
         eval_splits=["train"],
         eval_langs=EVAL_LANGS_MAP,

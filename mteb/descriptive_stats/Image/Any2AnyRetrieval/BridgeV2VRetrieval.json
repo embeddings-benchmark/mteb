@@ -1,0 +1,88 @@
+{
+    "test": {
+        "num_samples": 3000,
+        "num_queries": 1500,
+        "num_documents": 1500,
+        "number_of_characters": 0,
+        "documents_text_statistics": null,
+        "documents_image_statistics": null,
+        "documents_audio_statistics": null,
+        "documents_video_statistics": {
+            "total_duration_seconds": 12189.000000000018,
+            "total_frames": 60945,
+            "min_width": 256,
+            "average_width": 256.0,
+            "max_width": 256,
+            "min_height": 256,
+            "average_height": 256.0,
+            "max_height": 256,
+            "min_duration_seconds": 3,
+            "average_duration_seconds": 8.126000000000012,
+            "max_duration_seconds": 17.4,
+            "unique_videos": 1500,
+            "average_fps": 5.0,
+            "fps": {
+                "5": 1500
+            },
+            "min_resolution": [
+                256,
+                256
+            ],
+            "average_resolution": [
+                256.0,
+                256.0
+            ],
+            "max_resolution": [
+                256,
+                256
+            ],
+            "resolutions": {
+                "256x256": 1500
+            }
+        },
+        "queries_text_statistics": null,
+        "queries_image_statistics": null,
+        "queries_audio_statistics": null,
+        "queries_video_statistics": {
+            "total_duration_seconds": 12189.000000000018,
+            "total_frames": 60945,
+            "min_width": 256,
+            "average_width": 256.0,
+            "max_width": 256,
+            "min_height": 256,
+            "average_height": 256.0,
+            "max_height": 256,
+            "min_duration_seconds": 3,
+            "average_duration_seconds": 8.126000000000012,
+            "max_duration_seconds": 17.4,
+            "unique_videos": 1500,
+            "average_fps": 5.0,
+            "fps": {
+                "5": 1500
+            },
+            "min_resolution": [
+                256,
+                256
+            ],
+            "average_resolution": [
+                256.0,
+                256.0
+            ],
+            "max_resolution": [
+                256,
+                256
+            ],
+            "resolutions": {
+                "256x256": 1500
+            }
+        },
+        "relevant_docs_statistics": {
+            "num_relevant_docs": 1500,
+            "min_relevant_docs_per_query": 1,
+            "average_relevant_docs_per_query": 1.0,
+            "max_relevant_docs_per_query": 1,
+            "unique_relevant_docs": 1500
+        },
+        "top_ranked_statistics": null
+    }
+}

@@ -1,5 +1,5 @@
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 CODESAGE_CITATION = """@inproceedings{
     zhang2024code,
@@ -20,7 +20,7 @@ codesage_languages = [
 ]
 
 codesage_large = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="codesage/codesage-large-v2",
     model_type=["dense"],
     languages=codesage_languages,
@@ -48,7 +48,7 @@ codesage_large = ModelMeta(
 )
 
 codesage_base = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="codesage/codesage-base-v2",
     model_type=["dense"],
     languages=codesage_languages,
@@ -76,7 +76,7 @@ codesage_base = ModelMeta(
 )
 
 codesage_small = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="codesage/codesage-small-v2",
     model_type=["dense"],
     languages=codesage_languages,

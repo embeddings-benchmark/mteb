@@ -6,7 +6,7 @@ icon: lucide/table
 # Loading and working with results
 
 To make the results more easily accessible, we have designed functionality for retrieving results from both online and the local cache.
-Generally you access this functionality using the `ResultCache` object.
+Generally you access this functionality using the `ResultCache` object. You can also submit results using this object for more on that see the [contributing section](../../contributing/submitting_results.md).
 
 For instance, if you are selecting the best model for semantic text similarity (STS) you could fetch the relevant tasks and create a dataframe of the results using the following code:
 
@@ -16,9 +16,11 @@ import mteb
 tasks = mteb.get_tasks(tasks=["STS12"])
 model_names = ["intfloat/multilingual-e5-large"]
 
-cache = mteb.ResultCache("~/.cache/mteb")
+cache = mteb.ResultCache("~/.cache/mteb")  # (1)!
 results = cache.load_results(models=model_names, tasks=tasks)
 ```
+
+1. The cache path can also be set via the `MTEB_CACHE` environment variable.
 
 From this you will get a `BenchmarkResults` object:
 ```python
@@ -43,7 +45,7 @@ You can download this using:
 import mteb
 
 cache = mteb.ResultCache()
-cache.download_from_remote() # download results from the remote repository
+cache.download_from_remote()  # download results from the remote repository
 ```
 
 From here, you can work with the cache as usual. For instance, if you are selecting the best model for your French and English retrieval task on legal documents, you could fetch the relevant tasks and create a dataframe of the results using the following code:
@@ -52,7 +54,9 @@ From here, you can work with the cache as usual. For instance, if you are select
 import mteb
 
 # select your tasks
-tasks = mteb.get_tasks(task_types=["Retrieval"], languages=["eng", "fra"], domains=["Legal"])
+tasks = mteb.get_tasks(
+    task_types=["Retrieval"], languages=["eng", "fra"], domains=["Legal"]
+)
 
 model_names = [
     "GritLM/GritLM-7B",
@@ -61,12 +65,12 @@ model_names = [
 
 
 cache = mteb.ResultCache()
-cache.download_from_remote() # download results from the remote repository. Might take a while the first time.
+cache.download_from_remote()  # download results from the remote repository. Might take a while the first time.
 
 results = cache.load_results(
     models=model_names,
     tasks=tasks,
-    include_remote=True, # default
+    include_remote=True,  # default
 )
 ```
 

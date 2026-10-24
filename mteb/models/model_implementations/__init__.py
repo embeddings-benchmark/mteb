@@ -4,7 +4,7 @@ from pathlib import Path
 from mteb.models.model_meta import ModelMeta
 
 
-def get_all_model_meta_objects():
+def get_all_model_meta_objects() -> dict[str, ModelMeta]:
     """Import all ModelMeta objects from all modules in the implementations package."""
     model_meta_objects = []
 
@@ -35,4 +35,6 @@ def get_all_model_meta_objects():
 
 
 # build a registry of all model meta objects
-MODEL_REGISTRY = {meta.name: meta for meta in get_all_model_meta_objects()}
+MODEL_REGISTRY: dict[str, ModelMeta] = {
+    meta.name: meta for meta in get_all_model_meta_objects()
+}

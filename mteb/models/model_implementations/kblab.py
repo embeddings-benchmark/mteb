@@ -1,8 +1,8 @@
-from mteb.models import sentence_transformers_loader
+from mteb.models import SentenceTransformerEncoderWrapper
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 sbert_swedish = ModelMeta(
-    loader=sentence_transformers_loader,  # type: ignore[arg-type]
+    loader=SentenceTransformerEncoderWrapper,  # type: ignore[arg-type]
     name="KBLab/sentence-bert-swedish-cased",
     model_type=["dense"],
     languages=["swe-Latn"],
@@ -29,10 +29,4 @@ sbert_swedish = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     adapted_from="sentence-transformers/all-mpnet-base-v2",
-    citation="""@misc{rekathati2021introducing,
-  author = {Rekathati, Faton},
-  title = {The KBLab Blog: Introducing a Swedish Sentence Transformer},
-  url = {https://kb-labb.github.io/posts/2021-08-23-a-swedish-sentence-transformer/},
-  year = {2021}
-}""",
 )

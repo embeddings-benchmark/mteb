@@ -3,17 +3,17 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_image_dependencies, requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
 
 LLM2CLIP_CITATION = """@misc{huang2024llm2clippowerfullanguagemodel,
@@ -33,22 +33,23 @@ MODEL2PROCESSOR = {
 }
 
 
-def llm2clip_loader(model_name, **kwargs):
-    from transformers import AutoConfig, AutoModel, AutoTokenizer, CLIPImageProcessor
-
-    requires_package(
-        llm2clip_loader, "llm2vec", model_name, "pip install 'mteb[llm2vec]'"
-    )
+def llm2clip_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
+    import torch
     from llm2vec import LLM2Vec
+    from transformers import AutoConfig, AutoModel, AutoTokenizer, CLIPImageProcessor
+    from transformers.modeling_outputs import BaseModelOutputWithPooling
 
     class LLM2CLIPAbsEncoder(AbsEncoder):
         def __init__(
             self,
             model_name: str,
-            device: str = "cuda" if torch.cuda.is_available() else "cpu",
+            device: str | None = None,
             **kwargs: Any,
         ):
-            requires_image_dependencies()
+            import torch
+
+            if device is None:
+                device = "cuda" if torch.cuda.is_available() else "cpu"
 
             if model_name not in MODEL2PROCESSOR:
                 raise Exception(
@@ -104,7 +105,7 @@ def llm2clip_loader(model_name, **kwargs):
             texts: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_text_embeddings = []
 
             with torch.no_grad(), torch.amp.autocast("cuda"):
@@ -115,6 +116,8 @@ def llm2clip_loader(model_name, **kwargs):
                         batch["text"], convert_to_tensor=True
                     ).to(self.device)
                     text_features = self.model.get_text_features(text_features)
+                    if isinstance(text_features, BaseModelOutputWithPooling):
+                        text_features = text_features.pooler_output
                     text_features /= text_features.norm(dim=-1, keepdim=True)
                     all_text_embeddings.append(text_features.cpu().to(torch.float32))
 
@@ -127,7 +130,7 @@ def llm2clip_loader(model_name, **kwargs):
             images: DataLoader[BatchedInput],
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
+        ) -> Array:
             all_image_embeddings = []
 
             with torch.no_grad(), torch.amp.autocast("cuda"):
@@ -139,6 +142,8 @@ def llm2clip_loader(model_name, **kwargs):
                         return_tensors="pt",
                     ).pixel_values.to(self.device)
                     image_features = self.model.get_image_features(input_pixels)
+                    if isinstance(image_features, BaseModelOutputWithPooling):
+                        image_features = image_features.pooler_output
                     image_features /= image_features.norm(dim=-1, keepdim=True)
                     all_image_embeddings.append(image_features.cpu().to(torch.float32))
 
@@ -169,9 +174,9 @@ def llm2clip_loader(model_name, **kwargs):
                     )
                 fused_embeddings = text_embeddings + image_embeddings
                 return fused_embeddings
-            elif text_embeddings is not None:
+            if text_embeddings is not None:
                 return text_embeddings
-            elif image_embeddings is not None:
+            if image_embeddings is not None:
                 return image_embeddings
             raise ValueError
 
@@ -208,6 +213,8 @@ llm2clip_openai_l_14_336 = ModelMeta(
     use_instructions=True,
     training_datasets=llm2clip_training_sets,
     citation=LLM2CLIP_CITATION,
+    extra_requirements_groups=["llm2vec"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 # NOTE: https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-224/discussions/1
@@ -234,6 +241,8 @@ llm2clip_openai_l_14_224 = ModelMeta(
     use_instructions=True,
     training_datasets=llm2clip_training_sets,
     citation=LLM2CLIP_CITATION,
+    extra_requirements_groups=["llm2vec"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 llm2clip_openai_b_16 = ModelMeta(
@@ -259,4 +268,6 @@ llm2clip_openai_b_16 = ModelMeta(
     use_instructions=True,
     training_datasets=llm2clip_training_sets,
     citation=LLM2CLIP_CITATION,
+    extra_requirements_groups=["llm2vec"],
+    output_dtypes=OutputDType.FLOAT16,
 )

@@ -48,16 +48,21 @@ class BenchmarkChangeEvent(BaseEvent):
 
     @classmethod
     def create(
-        cls, session_id: str, old_value: str | None, new_value: str, **kwargs
+        cls,
+        session_id: str,
+        old_value: str | None,
+        new_value: str,
+        properties: dict[str, Any] | None = None,
+        **kwargs: Any,
     ) -> BenchmarkChangeEvent:
         """Convenience creation method"""
+        merged = {"old_value": old_value, "new_value": new_value}
+        if properties:
+            merged.update(properties)
         return cls(
             session_id=session_id,
             benchmark=new_value,
-            properties={
-                "old_value": old_value,
-                "new_value": new_value,
-            },
+            properties=merged,
             **kwargs,
         )
 
@@ -79,23 +84,28 @@ class FilterChangeEvent(BaseEvent):
         cls,
         session_id: str,
         filter_name: str,
-        new_value: Any,
-        old_value: Any = None,
+        new_value: str | None,
+        *,
+        old_value: str | None = None,
         benchmark: str | None = None,
         filters: dict[str, Any] | None = None,
-        **kwargs,
+        properties: dict[str, Any] | None = None,
+        **kwargs: Any,
     ) -> FilterChangeEvent:
         """Convenience creation method"""
+        merged = {
+            "filter_name": filter_name,
+            "old_value": old_value,
+            "new_value": new_value,
+        }
+        if properties:
+            merged.update(properties)
         return cls(
             event_name=f"filter_change_{filter_name}",
             session_id=session_id,
             benchmark=benchmark,
             filters=filters,
-            properties={
-                "filter_name": filter_name,
-                "old_value": old_value,
-                "new_value": new_value,
-            },
+            properties=merged,
             **kwargs,
         )
 
@@ -118,16 +128,17 @@ class TableSwitchEvent(BaseEvent):
         old_table: str | None,
         new_table: str,
         benchmark: str | None = None,
-        **kwargs,
+        properties: dict[str, Any] | None = None,
+        **kwargs: Any,
     ) -> TableSwitchEvent:
         """Convenience creation method"""
+        merged = {"old_table": old_table, "new_table": new_table}
+        if properties:
+            merged.update(properties)
         return cls(
             session_id=session_id,
             benchmark=benchmark,
-            properties={
-                "old_table": old_table,
-                "new_table": new_table,
-            },
+            properties=merged,
             **kwargs,
         )
 
@@ -149,15 +160,17 @@ class TableDownloadEvent(BaseEvent):
         cls,
         session_id: str,
         benchmark: str | None = None,
-        format: str = "csv",
+        file_format: str = "csv",
         row_count: int | None = None,
-        **kwargs,
+        properties: dict[str, Any] | None = None,
+        **kwargs: Any,
     ) -> TableDownloadEvent:
         """Convenience creation method"""
-        props = {"format": format}
+        merged = {"format": file_format}
         if row_count is not None:
-            props["row_count"] = row_count
-
+            merged["row_count"] = row_count
+        if properties:
+            merged.update(properties)
         return cls(
-            session_id=session_id, benchmark=benchmark, properties=props, **kwargs
+            session_id=session_id, benchmark=benchmark, properties=merged, **kwargs
         )

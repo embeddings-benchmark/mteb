@@ -25,24 +25,14 @@ class ATEC(AbsTaskSTS):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{raghu-etal-2021-end,
-  address = {Online and Punta Cana, Dominican Republic},
-  author = {Raghu, Dinesh  and
-Agarwal, Shantanu  and
-Joshi, Sachindra  and
-{Mausam}},
-  booktitle = {Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing},
-  doi = {10.18653/v1/2021.emnlp-main.357},
-  editor = {Moens, Marie-Francine  and
-Huang, Xuanjing  and
-Specia, Lucia  and
-Yih, Scott Wen-tau},
-  month = nov,
-  pages = {4348--4366},
-  publisher = {Association for Computational Linguistics},
-  title = {End-to-End Learning of Flowchart Grounded Task-Oriented Dialogs},
-  url = {https://aclanthology.org/2021.emnlp-main.357},
-  year = {2021},
+@misc{xiao2024cpackpackedresourcesgeneral,
+  archiveprefix = {arXiv},
+  author = {Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
+  eprint = {2309.07597},
+  primaryclass = {cs.CL},
+  title = {C-Pack: Packed Resources For General Chinese Embeddings},
+  url = {https://arxiv.org/abs/2309.07597},
+  year = {2024},
 }
 """,
     )
@@ -74,12 +64,12 @@ class BQ(AbsTaskSTS):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{xiao2024cpackpackagedresourcesadvance,
+@misc{xiao2024cpackpackedresourcesgeneral,
   archiveprefix = {arXiv},
   author = {Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
   eprint = {2309.07597},
   primaryclass = {cs.CL},
-  title = {C-Pack: Packaged Resources To Advance General Chinese Embedding},
+  title = {C-Pack: Packed Resources For General Chinese Embeddings},
   url = {https://arxiv.org/abs/2309.07597},
   year = {2024},
 }
@@ -113,12 +103,12 @@ class LCQMC(AbsTaskSTS):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{xiao2024cpackpackagedresourcesadvance,
+@misc{xiao2024cpackpackedresourcesgeneral,
   archiveprefix = {arXiv},
   author = {Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
   eprint = {2309.07597},
   primaryclass = {cs.CL},
-  title = {C-Pack: Packaged Resources To Advance General Chinese Embedding},
+  title = {C-Pack: Packed Resources For General Chinese Embeddings},
   url = {https://arxiv.org/abs/2309.07597},
   year = {2024},
 }
@@ -152,12 +142,12 @@ class PAWSX(AbsTaskSTS):
         dialect=[],
         sample_creation="human-translated",
         bibtex_citation=r"""
-@misc{xiao2024cpackpackagedresourcesadvance,
+@misc{xiao2024cpackpackedresourcesgeneral,
   archiveprefix = {arXiv},
   author = {Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
   eprint = {2309.07597},
   primaryclass = {cs.CL},
-  title = {C-Pack: Packaged Resources To Advance General Chinese Embedding},
+  title = {C-Pack: Packed Resources For General Chinese Embeddings},
   url = {https://arxiv.org/abs/2309.07597},
   year = {2024},
 }
@@ -191,12 +181,12 @@ class STSB(AbsTaskSTS):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@misc{xiao2024cpackpackagedresourcesadvance,
+@misc{xiao2024cpackpackedresourcesgeneral,
   archiveprefix = {arXiv},
   author = {Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
   eprint = {2309.07597},
   primaryclass = {cs.CL},
-  title = {C-Pack: Packaged Resources To Advance General Chinese Embedding},
+  title = {C-Pack: Packed Resources For General Chinese Embeddings},
   url = {https://arxiv.org/abs/2309.07597},
   year = {2024},
 }
@@ -278,14 +268,7 @@ class QBQTC(AbsTaskSTS):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@misc{clue2020qbqtc,
-  author = {CLUE},
-  title = {QBQTC: Question Bank Question Title Corpus},
-  url = {https://github.com/CLUEbenchmark/QBQTC},
-  year = {2020},
-}
-""",
+        bibtex_citation="",
     )
 
     min_score = 0

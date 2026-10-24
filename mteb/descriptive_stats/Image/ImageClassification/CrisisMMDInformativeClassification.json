@@ -1,0 +1,74 @@
+{
+    "test": {
+        "num_samples": 1534,
+        "samples_in_train": 0,
+        "text_statistics": {
+            "total_text_length": 180890,
+            "min_text_length": 38,
+            "average_text_length": 117.92046936114733,
+            "max_text_length": 168,
+            "unique_texts": 1534
+        },
+        "image_statistics": {
+            "min_image_width": 54,
+            "average_image_width": 847.4915254237288,
+            "max_image_width": 1200,
+            "min_image_height": 19,
+            "average_image_height": 623.7066492829205,
+            "max_image_height": 1200,
+            "unique_images": 1531
+        },
+        "audio_statistics": null,
+        "video_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 2,
+            "labels": {
+                "1": {
+                    "count": 504
+                },
+                "0": {
+                    "count": 1030
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 9601,
+        "samples_in_train": null,
+        "text_statistics": {
+            "total_text_length": 1121284,
+            "min_text_length": 38,
+            "average_text_length": 116.78825122383085,
+            "max_text_length": 182,
+            "unique_texts": 8293
+        },
+        "image_statistics": {
+            "min_image_width": 54,
+            "average_image_width": 878.1663368399126,
+            "max_image_width": 1200,
+            "min_image_height": 16,
+            "average_image_height": 669.1176960733256,
+            "max_image_height": 1200,
+            "unique_images": 9516
+        },
+        "audio_statistics": null,
+        "video_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 2,
+            "labels": {
+                "0": {
+                    "count": 6345
+                },
+                "1": {
+                    "count": 3256
+                }
+            }
+        }
+    }
+}

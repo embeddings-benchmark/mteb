@@ -22,7 +22,7 @@ def deduplicate(dataset: Dataset, input_column: str) -> Dataset:
     unique_texts = set()
     indices_to_keep = []
     for i, text in enumerate(dataset[input_column]):
-        text = text.strip()
+        text = text.strip()  # noqa: PLW2901
         if text not in unique_texts:
             unique_texts.add(text)
             indices_to_keep.append(i)
@@ -63,8 +63,8 @@ def filter_unclear_label(
     normalized: dict[str, set[str | tuple[str, ...]]] = {}
     logger.debug("[filter_controversial] scanning dataset for label conflicts...")
 
-    for split, ds in dataset_dict.items():
-        for text, label in zip(ds[input_column], ds[label_column]):
+    for ds in dataset_dict.values():
+        for text, label in zip(ds[input_column], ds[label_column], strict=True):
             key = text.strip().lower()
             normalized.setdefault(key, set()).add(
                 label if isinstance(label, (str, int, float)) else tuple(label)  # type: ignore[arg-type]
@@ -99,7 +99,7 @@ def split_train_test(
     train_split: str,
     label_column: str,
 ) -> DatasetDict:
-    if train_split in ds and metadata.eval_splits == train_split:
+    if train_split in ds and metadata.eval_splits == [train_split]:
         before = len(ds[train_split])
         logger.info(
             f"[split_train_test] eval_splits == train_split; performing split on {before} examples"

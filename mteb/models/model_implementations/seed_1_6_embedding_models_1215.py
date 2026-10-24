@@ -10,11 +10,8 @@ from io import BytesIO
 from typing import TYPE_CHECKING, Any
 
 import requests
-import torch
-from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_implementations.bge_models import bge_chinese_training_data
 from mteb.models.model_implementations.nvidia_models import nvidia_training_datasets
@@ -22,6 +19,9 @@ from mteb.models.model_meta import ModelMeta
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
+    import torch
     from PIL import Image
     from torch.utils.data import DataLoader
 
@@ -54,31 +54,28 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         revision: str,
         tokenizer_name: str = "cl100k_base",
         embed_dim: int | None = None,
-        **kwargs,
+        **kwargs: Any,
     ) -> None:
         """Wrapper for Seed embedding API."""
-        requires_package(
-            self,
-            "volcenginesdkarkruntime",
-            "pip install mteb[ark]",
-            "tiktoken",
-        )
-
         self._model_name = model_name
         self._max_tokens = 32768
         self._embed_dim = embed_dim
         self._available_embed_dims = [2048, 1024]
 
-    def pil_to_base64(self, image, format="jpeg"):
+    def pil_to_base64(  # noqa: PLR6301
+        self, image: Image.Image | None, image_format: str = "jpeg"
+    ) -> str | None:
         if image is None:
             return None
         buffer = BytesIO()
-        image.save(buffer, format=format)
+        image.save(buffer, format=image_format)
         img_bytes = buffer.getvalue()
         encoded_bytes = base64.b64encode(img_bytes)
         return encoded_bytes.decode("utf-8")
 
-    def multimodal_embedding(self, instruction, image_base64, text_content):
+    def multimodal_embedding(
+        self, instruction: str, image_base64: str | None, text_content: str | None
+    ) -> dict[str, Any]:
         auth_token = os.getenv("VOLCES_AUTH_TOKEN")
         model_name = "doubao-embedding-vision-251215"
         api_url = "https://ark.cn-beijing.volces.com/api/v3/embeddings/multimodal"
@@ -147,14 +144,19 @@ class Seed16EmbeddingWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        assert (
-            self._embed_dim is None or self._embed_dim in self._available_embed_dims
-        ), (
-            f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
-        )
+        import torch
+
+        if (
+            self._embed_dim is not None
+            and self._embed_dim not in self._available_embed_dims
+        ):
+            raise ValueError(
+                f"Available embed_dims are {self._available_embed_dims}, found {self._embed_dim}"
+            )
 
         if images is not None and texts is not None:
-            assert len(texts) == len(images)
+            if len(texts) != len(images):
+                raise ValueError(f"Expected {len(texts)} images, got {len(images)}")
             batch_len = len(texts)
             images_base64 = [self.pil_to_base64(image) for image in images]
         elif images is None:
@@ -167,8 +169,13 @@ class Seed16EmbeddingWrapper(AbsEncoder):
             raise ValueError("images and texts cannot be None at the same time")
 
         def process_item(
-            i, prompt_type, task_name, texts, images_base64, multimodal_embedding
-        ):
+            i: int,
+            prompt_type: PromptType | None,
+            task_name: str,
+            texts: list[str] | None,
+            images_base64: list[str | None],
+            multimodal_embedding: Callable[..., dict[str, Any]],
+        ) -> torch.Tensor:
             if (
                 prompt_type == PromptType("query") or prompt_type is None
             ) and task_name in TASK_NAME_TO_INSTRUCTION:
@@ -178,22 +185,19 @@ class Seed16EmbeddingWrapper(AbsEncoder):
                     "Target_modality:Text.\n Instruction:" + instruction + "\n Query:"
                 )
                 input_text = texts[i]
+            elif texts[i] != "" and images_base64[i] is not None:  # noqa: PLC1901
+                instruction = (
+                    "Instruction: Compress the text and image into one word.\n Query:"
+                )
+                input_text = texts[i]
+            elif texts[i] != "":  # noqa: PLC1901
+                instruction = "Instruction: Compress the text into one word.\n Query:"
+                input_text = texts[i]
+            elif images_base64[i] is not None:
+                instruction = "Instruction: Compress the image into one word.\n Query:"
+                input_text = None
             else:
-                if texts[i] != "" and images_base64[i] is not None:
-                    instruction = "Instruction: Compress the text and image into one word.\n Query:"
-                    input_text = texts[i]
-                elif texts[i] != "":
-                    instruction = (
-                        "Instruction: Compress the text into one word.\n Query:"
-                    )
-                    input_text = texts[i]
-                elif images_base64[i] is not None:
-                    instruction = (
-                        "Instruction: Compress the image into one word.\n Query:"
-                    )
-                    input_text = None
-                else:
-                    raise ValueError("image and text are both None")
+                raise ValueError("image and text are both None")
 
             resp = multimodal_embedding(
                 instruction=instruction,
@@ -626,4 +630,5 @@ seed_embedding = ModelMeta(
     training_datasets=doubao_embedding_training_data,
     public_training_code=None,
     public_training_data=None,
+    extra_requirements_groups=["ark"],
 )

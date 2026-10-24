@@ -1,0 +1,62 @@
+{
+    "test": {
+        "num_samples": 1012,
+        "text_statistics": null,
+        "image_statistics": null,
+        "audio_statistics": null,
+        "video_statistics": {
+            "total_duration_seconds": 10902.3,
+            "total_frames": 654138,
+            "min_width": 512,
+            "average_width": 512.0,
+            "max_width": 512,
+            "min_height": 512,
+            "average_height": 512.0,
+            "max_height": 512,
+            "min_duration_seconds": 10.583333333333332,
+            "average_duration_seconds": 10.77302371541502,
+            "max_duration_seconds": 15.633333333333333,
+            "unique_videos": 1012,
+            "average_fps": 60.0,
+            "fps": {
+                "60": 1012
+            },
+            "min_resolution": [
+                512,
+                512
+            ],
+            "average_resolution": [
+                512.0,
+                512.0
+            ],
+            "max_resolution": [
+                512,
+                512
+            ],
+            "resolutions": {
+                "512x512": 1012
+            }
+        },
+        "label_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 2,
+            "labels": {
+                "1": {
+                    "count": 506
+                },
+                "0": {
+                    "count": 506
+                }
+            }
+        },
+        "candidates_labels_text_statistics": {
+            "total_text_length": 142,
+            "min_text_length": 70,
+            "average_text_length": 71.0,
+            "max_text_length": 72,
+            "unique_texts": 2
+        }
+    }
+}

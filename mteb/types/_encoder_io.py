@@ -1,18 +1,20 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from enum import Enum
-from typing import TYPE_CHECKING, TypedDict
+from typing import TYPE_CHECKING, TypeAlias, TypedDict, cast
 
 import numpy as np
-import torch
-from datasets import Dataset
 from numpy.typing import NDArray
 
+from mteb._helpful_enum import HelpfulStrEnum
+
 if TYPE_CHECKING:
+    from typing import NotRequired
+
     import numpy.typing as npt
+    import torch
+    from datasets import Dataset
     from PIL import Image
-    from typing_extensions import NotRequired
 
 
 class EncodeKwargs(TypedDict):
@@ -21,19 +23,27 @@ class EncodeKwargs(TypedDict):
     Attributes:
         batch_size: The batch size to use for encoding.
         show_progress_bar: Whether to show a progress bar during encoding.
+        precision: Quantization embeddings settings for sentence transformers
     """
 
     batch_size: NotRequired[int]
     show_progress_bar: NotRequired[bool]
+    precision: NotRequired[str]
 
 
 # --- Output types ---
-Array = NDArray[np.floating | np.integer | np.bool_] | torch.Tensor
-"""General array type, can be a numpy array (float, int, or bool) or a torch tensor."""
+if TYPE_CHECKING:
+    Array: TypeAlias = NDArray[np.floating | np.integer | np.bool_] | torch.Tensor
+    """General array type, can be a numpy array (float, int, or bool) or a torch tensor."""
+else:
+    # Importing torch here would make `import mteb` pull in the full torch stack, which
+    # results-only users do not need. `Array` is only ever used as an annotation (never
+    # introspected at runtime), so the runtime value can drop the `torch.Tensor` arm.
+    Array: TypeAlias = NDArray[np.floating | np.integer | np.bool_]
 
 
 # --- Input types ---
-class PromptType(str, Enum):
+class PromptType(HelpfulStrEnum):
     """The type of prompt used in the input for retrieval models. Used to differentiate between queries and documents.
 
     Attributes:
@@ -133,28 +143,14 @@ class AudioInput(TypedDict):
     audio: list[AudioInputItem]
 
 
-class VideoInputItem(TypedDict):
-    """A video item for the VideoInput.
-
-    Dataset based on `datasets.Video` will be converted to this format during encoding.
-
-    Attributes:
-        frames: The video frames as Tensor.
-        audio: The audio array as AudioInputItem.
-    """
-
-    frames: torch.Tensor
-    audio: AudioInputItem
-
-
 class VideoInput(TypedDict):
-    """The input to the encoder for videos.
+    """The input to the encoder for video frames. Audio is currently included in the AudioInput.
 
     Attributes:
-        video: The video to encode. VideoDecoder object.
+        video: The video frames as Tensor.
     """
 
-    video: VideoInputItem
+    video: torch.Tensor
 
 
 class MultimodalInput(  # type: ignore[misc]
@@ -162,10 +158,49 @@ class MultimodalInput(  # type: ignore[misc]
 ):
     """The input to the encoder for multimodal data."""
 
-    pass
+
+class OutputDType(HelpfulStrEnum):
+    """Named output/compression and model-loading dtype values, referred to by name rather than a `torch.dtype` object.
+
+    Used by the CompressionWrapper class and specified by models to indicate the dtypes of output embeddings they
+    support internally, and by `ModelMeta` entries to declare the dtype a model should be loaded in -- naming the
+    dtype keeps model metadata importable without torch. Most members share their name with a `torch.dtype`, but
+    some (`INT4`, `UINT4`, `BINARY`) are compression-only levels with no matching native torch dtype. Call
+    `get_dtype()` to resolve any member to the real `torch.dtype` used to hold its values.
+    """
+
+    FLOAT32 = "float32"
+    FLOAT16 = "float16"
+    BF16 = "bfloat16"
+    INT8 = "int8"
+    INT4 = "int4"
+    UINT8 = "uint8"
+    UINT4 = "uint4"
+    BINARY = "binary"
+    FLOAT8_E4M3FN = "float8_e4m3fn"
+    FLOAT8_E5M2 = "float8_e5m2"
+    FLOAT8_E8M0FNU = "float8_e8m0fnu"
+    FLOAT8_E4M3FNUZ = "float8_e4m3fnuz"
+    FLOAT8_E5M2FNUZ = "float8_e5m2fnuz"
+
+    def get_dtype(self) -> torch.dtype:
+        """Returns the PyTorch dtype that matches the enum.
+
+        Output types that are not natively supported by PyTorch like 4-bit integers require specific mapping to the
+        desired dtype.
+        """
+        import torch
+
+        if self == OutputDType.UINT4:
+            return torch.uint8
+        if self == OutputDType.INT4:
+            return torch.int8
+        if self == OutputDType.BINARY:
+            return torch.bool
+        return cast("torch.dtype", getattr(torch, self.value))
 
 
-BatchedInput = (
+BatchedInput: TypeAlias = (
     TextInput
     | CorpusInput
     | QueryInput
@@ -222,21 +257,23 @@ Each type is defined as a separate structured input with its own fields.
 TextBatchedInput = TextInput | CorpusInput | QueryInput
 """The input to the encoder for a batch of text data."""
 
-QueryDatasetType = Dataset
+QueryDatasetType: TypeAlias = "Dataset"
 """Retrieval query dataset, containing queries. Should have columns:
 1. `id`, `text`, `instruction` (optionally) for text queries
 2. `id`, `image` for image queries
 3. `id`, `audio` for audio queries
+4. `id`, `video` for video queries
 or a combination of these for multimodal queries.
  """
-CorpusDatasetType = Dataset
+CorpusDatasetType: TypeAlias = "Dataset"
 """Retrieval corpus dataset, containing documents. Should have columns:
  1. `id`, `title` (optionally), `body` for text corpus
  2. `id`, `image` for image corpus
  3. `id`, `audio` for audio corpus
+ 4. `id`, `video` for video corpus
  or a combination of these for multimodal corpus.
  """
-InstructionDatasetType = Dataset
+InstructionDatasetType: TypeAlias = "Dataset"
 """Retrieval instruction dataset, containing instructions. Should have columns `query-id`, `instruction`."""
 RelevantDocumentsType = Mapping[str, Mapping[str, int]]
 """Relevant documents for each query, mapping query IDs to a mapping of document IDs and their relevance

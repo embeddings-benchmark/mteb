@@ -43,7 +43,7 @@ class SpeechCommandsZeroshotClassificationV01(AbsTaskZeroShotClassification):
     input_column_name: str = "audio"
     label_column_name: str = "label"
 
-    def get_candidate_labels(self) -> list[str]:
+    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
         """Return the text candidates for zeroshot classification"""
         return [
             "Yes",
@@ -102,7 +102,7 @@ class SpeechCommandsZeroshotClassificationv02(AbsTaskZeroShotClassification):
     input_column_name: str = "audio"
     label_column_name: str = "label"
 
-    def get_candidate_labels(self) -> list[str]:
+    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
         """Return the text candidates for zeroshot classification"""
         return [
             "Yes",

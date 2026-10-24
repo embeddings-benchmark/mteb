@@ -1,9 +1,17 @@
-from enum import Enum
+from __future__ import annotations
+
+from enum import StrEnum
+from typing import TYPE_CHECKING, Any
 
 from datasets import DatasetDict, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+
+if TYPE_CHECKING:
+    from datasets import Dataset
+
+    from mteb.types import RelevantDocumentsType
 
 _LANGUAGES = {
     "en": ["eng-Latn", "eng-Latn"],
@@ -12,7 +20,7 @@ _LANGUAGES = {
 }
 
 
-class CUREv1Splits(str, Enum):
+class CUREv1Splits(StrEnum):
     all = "All"
     dentistry_and_oral_health = "Dentistry and Oral Health"
     dermatology = "Dermatology"
@@ -58,7 +66,7 @@ class CUREv1Retrieval(AbsTaskRetrieval):
         },
     )
 
-    def _load_corpus(self, split: str):
+    def _load_corpus(self, split: str) -> Dataset:
         ds = load_dataset(
             path=self.metadata.dataset["path"],
             revision=self.metadata.dataset["revision"],
@@ -75,7 +83,7 @@ class CUREv1Retrieval(AbsTaskRetrieval):
     def _load_qrels(
         self,
         split: str,
-    ):
+    ) -> RelevantDocumentsType:
         ds = load_dataset(
             path=self.metadata.dataset["path"],
             revision=self.metadata.dataset["revision"],
@@ -99,7 +107,7 @@ class CUREv1Retrieval(AbsTaskRetrieval):
         self,
         split: str,
         language: str,
-    ):
+    ) -> Dataset:
         ds = load_dataset(
             path=self.metadata.dataset["path"],
             revision=self.metadata.dataset["revision"],
@@ -111,7 +119,7 @@ class CUREv1Retrieval(AbsTaskRetrieval):
 
         return queries
 
-    def load_data(self, num_proc: int | None = None, **kwargs) -> None:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 

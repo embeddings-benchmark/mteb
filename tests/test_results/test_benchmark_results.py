@@ -4,13 +4,17 @@ import os
 from pathlib import Path
 
 import pandas as pd
+import polars as pl
 import pytest
+from packaging.version import Version
 
 import mteb
 from mteb import Benchmark
 from mteb.cache import ResultCache
 from mteb.cli.generate_model_card import generate_model_card
 from mteb.results import BenchmarkResults, ModelResult
+
+_POLARS_TOO_OLD = Version(pl.__version__) < Version("1.40.0")
 
 
 @pytest.fixture
@@ -26,6 +30,7 @@ def benchmark_results(cache_path: Path) -> BenchmarkResults:
     return mteb.load_results(download_latest=False, require_model_meta=False)
 
 
+@pytest.mark.core
 def test_indexing(benchmark_results: BenchmarkResults) -> None:
     model_res = benchmark_results.model_results[0]
     assert isinstance(model_res, ModelResult), (
@@ -33,6 +38,7 @@ def test_indexing(benchmark_results: BenchmarkResults) -> None:
     )
 
 
+@pytest.mark.core
 def test_select_models(benchmark_results: BenchmarkResults) -> None:
     model_name = "sentence-transformers/all-MiniLM-L6-v2"
     bench_res = benchmark_results.select_models([model_name])
@@ -61,6 +67,7 @@ def test_select_models(benchmark_results: BenchmarkResults) -> None:
     assert len(bench_res.model_results) == 1  # only one revision
 
 
+@pytest.mark.core
 def test_select_tasks(benchmark_results: BenchmarkResults) -> None:
     tasks = [mteb.get_task("STS12")]
     bench_res = benchmark_results.select_tasks(tasks=tasks)
@@ -70,6 +77,35 @@ def test_select_tasks(benchmark_results: BenchmarkResults) -> None:
     assert task_names[0] == "STS12"
 
 
+def test_select_tasks_preserves_model_meta(tmp_path: Path) -> None:
+    """`select_tasks` must not drop `model_meta` (and with it, experiment identity).
+
+    Regression test: `select_tasks`/`_filter_tasks` reconstructed a new
+    `ModelResult` via `model_construct` without passing `model_meta`
+    through, silently dropping any experiment row's `experiment_kwargs`.
+    """
+    from mteb.mocks.mock_tasks import MockRetrievalTask
+
+    model_name = "mteb/baseline-random-encoder"
+    task = MockRetrievalTask()
+    cache = mteb.ResultCache(tmp_path)
+
+    model = mteb.get_model(model_name, a="test")
+    mteb.evaluate(model, task, cache=cache)
+
+    from mteb.cache import LoadExperimentEnum
+
+    results = cache.load_results(load_experiments=LoadExperimentEnum.MATCH_NAME)
+    model_res = results.model_results[0]
+    assert model_res.model_meta is not None
+    assert model_res.model_meta.experiment_kwargs == {"a": "test"}
+
+    filtered = model_res.select_tasks([task])
+    assert filtered.model_meta is not None
+    assert filtered.model_meta.experiment_kwargs == {"a": "test"}
+
+
+@pytest.mark.core
 def test_join_revisions(benchmark_results: BenchmarkResults) -> None:
     model_name = "sentence-transformers/all-MiniLM-L6-v2"
     bench_res = benchmark_results.select_models([model_name])
@@ -85,6 +121,7 @@ def test_join_revisions(benchmark_results: BenchmarkResults) -> None:
     assert revision == mteb.get_model_meta(model_name).revision
 
 
+@pytest.mark.core
 def test_to_dataframe(
     benchmark_results: BenchmarkResults,
 ) -> None:
@@ -103,7 +140,9 @@ def test_to_dataframe(
 
     t2 = benchmark_results.to_dataframe(aggregation_level="split", format="long")
     assert all(
-        col in t2.columns for col in required_columns if col not in ["subset"]
+        col in t2.columns
+        for col in required_columns
+        if col not in ["subset"]  # noqa: PLR6201
     ), "Columns are missing"
     assert "subset" not in t2.columns, "Subset column should not be present"
     assert t1.shape[0] >= t2.shape[0], (
@@ -112,7 +151,9 @@ def test_to_dataframe(
 
     t3 = benchmark_results.to_dataframe(aggregation_level="task", format="long")
     assert all(
-        col in t3.columns for col in required_columns if col not in ["subset", "split"]
+        col in t3.columns
+        for col in required_columns
+        if col not in ["subset", "split"]  # noqa: PLR6201
     ), "Columns are missing"
     assert "subset" not in t3.columns, "Subset column should not be present"
     assert "split" not in t3.columns, "Split column should not be present"
@@ -143,27 +184,30 @@ def test_to_dataframe(
     )
 
 
+@pytest.mark.core
 def test_utility_properties(
     benchmark_results: BenchmarkResults,
 ) -> None:
     br = benchmark_results
-    assert isinstance(br.task_names, list) and isinstance(br.task_names[0], str)
-    assert (
-        isinstance(br.languages, list)
-        and isinstance(br.languages[0], str)
-        and "eng" in br.languages
-    )
-    assert isinstance(br.model_names, list) and isinstance(br.model_names[0], str)
-    assert (
-        isinstance(br.model_revisions, list)
-        and isinstance(br.model_revisions[0], dict)
-        and "model_name" in br.model_revisions[0]
-        and "revision" in br.model_revisions[0]
-    )
-    assert isinstance(br.task_types, list) and isinstance(br.task_types[0], str)
-    assert isinstance(br.domains, list) and isinstance(br.domains[0], str)
+    assert isinstance(br.task_names, list)
+    assert isinstance(br.task_names[0], str)
+    assert isinstance(br.languages, list)
+    assert isinstance(br.languages[0], str)
+    assert "eng" in br.languages
+    assert isinstance(br.model_names, list)
+    assert isinstance(br.model_names[0], str)
+    assert isinstance(br.model_revisions, list)
+    assert isinstance(br.model_revisions[0], dict)
+    assert "model_name" in br.model_revisions[0]
+    assert "revision" in br.model_revisions[0]
+    assert isinstance(br.task_types, list)
+    assert isinstance(br.task_types[0], str)
+    assert isinstance(br.domains, list)
+    assert isinstance(br.domains[0], str)
 
 
+@pytest.mark.core
+@pytest.mark.skipif(_POLARS_TOO_OLD, reason="requires polars >= 1.40.0")
 def test_benchmark_results(cache_path: Path) -> None:
     cache = ResultCache(cache_path)
     bench = Benchmark(
@@ -187,9 +231,62 @@ def test_benchmark_results(cache_path: Path) -> None:
     assert "Classification" in df.columns
     assert "Retrieval" in df.columns
     assert df.shape[0] == 2
-    assert df.at[0, "Mean (Task)"] == pytest.approx(0.616616)
+    assert df.loc[0, "Mean (Task)"] == pytest.approx(0.616616)
 
 
+@pytest.mark.core
+@pytest.mark.skipif(_POLARS_TOO_OLD, reason="requires polars >= 1.40.0")
+def test_benchmark_results_model_filters_keep_benchmark(cache_path: Path) -> None:
+    cache = ResultCache(cache_path)
+    bench = Benchmark(
+        name="MockBenchmark",
+        tasks=mteb.get_tasks(
+            [
+                "NanoSCIDOCSRetrieval",
+                "Banking77Classification",
+            ],
+        ),
+    )
+    results = cache.load_results(tasks=bench)
+    model_name = "sentence-transformers/all-MiniLM-L6-v2"
+
+    for filtered in [
+        results.select_models([model_name]),
+        results._filter_models(model_names=[model_name]),
+    ]:
+        assert filtered.benchmark is bench
+        df = filtered.get_benchmark_result()
+        assert df.shape[0] == 1
+        assert df.loc[0, "Mean (Task)"] == pytest.approx(0.616616)
+
+
+@pytest.mark.skipif(_POLARS_TOO_OLD, reason="requires polars >= 1.40.0")
+def test_join_revisions_keeps_benchmark(cache_path: Path) -> None:
+    cache = ResultCache(cache_path)
+    bench = Benchmark(
+        name="MockBenchmark",
+        tasks=mteb.get_tasks(
+            [
+                "NanoSCIDOCSRetrieval",
+                "Banking77Classification",
+            ],
+        ),
+    )
+    results = cache.load_results(tasks=bench)
+    model_name = "sentence-transformers/all-MiniLM-L6-v2"
+
+    joined = results.select_models([model_name]).join_revisions()
+    assert joined.benchmark is bench
+    df = joined.get_benchmark_result()
+    assert df.shape[0] == 1
+    assert df.loc[0, "Mean (Task)"] == pytest.approx(0.616616)
+
+    # the early return for results without any task results keeps it as well
+    empty = results.select_models(["no-such-model"]).join_revisions()
+    assert empty.benchmark is bench
+
+
+@pytest.mark.skipif(_POLARS_TOO_OLD, reason="requires polars >= 1.40.0")
 def test_generate_model_card_with_table_and_benchmarks(
     cache_path: Path, tmp_path: Path
 ) -> None:
@@ -223,11 +320,11 @@ def test_generate_model_card_with_table_and_benchmarks(
     assert output_path.exists(), "Model card file not created"
     assert output_path.stat().st_size > 0, "Model card file is empty"
 
-    with output_path.open("r") as f:
+    with output_path.open("r", encoding="utf-8") as f:
         output_content = f.read()
 
     assert golden_file.exists(), f"Golden file not found: {golden_file}"
-    with golden_file.open("r") as f:
+    with golden_file.open("r", encoding="utf-8") as f:
         golden_content = f.read()
 
     def extract_table(content: str) -> list[str]:
@@ -247,7 +344,7 @@ def test_generate_model_card_with_table_and_benchmarks(
                     # Normalize whitespace in table rows
                     normalized = "|".join(cell.strip() for cell in line.split("|"))
                     table_rows.append(normalized)
-                elif line.strip() == "":
+                elif not line.strip():
                     # Empty line might signal end of table
                     if table_rows:
                         break
@@ -287,7 +384,7 @@ def test_generate_model_card_with_table_and_benchmarks(
 
     # Compare each data row
     for i, (output_row, golden_row) in enumerate(
-        zip(output_data_rows, golden_data_rows)
+        zip(output_data_rows, golden_data_rows, strict=True)
     ):
         assert output_row == golden_row, (
             f"Row {i} doesn't match.\nExpected: {golden_row}\nGot: {output_row}"

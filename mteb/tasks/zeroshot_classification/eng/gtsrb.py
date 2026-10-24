@@ -29,7 +29,7 @@ class GTSRBZeroShotClassification(AbsTaskZeroShotClassification):
         license="not specified",
         annotations_creators="derived",
         dialect=[],
-        modalities=["image"],
+        modalities=["image", "text"],
         sample_creation="created",
         bibtex_citation=r"""
 @inproceedings{6033395,
@@ -49,9 +49,9 @@ class GTSRBZeroShotClassification(AbsTaskZeroShotClassification):
     input_column_name: str = "webp"
     label_column_name: str = "cls"
 
-    def get_candidate_labels(self) -> list[str]:
+    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
         path = Path(__file__).parent / "templates" / "GTSRB_labels.txt"
-        with path.open() as f:
+        with path.open(encoding="utf-8") as f:
             labels = f.readlines()
 
         return [f"a close up photo of a '{c}' traffic sign." for c in labels]

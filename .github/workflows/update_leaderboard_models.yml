@@ -1,0 +1,64 @@
+name: Update Leaderboard Model List
+
+on:
+  schedule:
+    # Weekly on Monday at 9 AM UTC
+    - cron: "0 9 * * 1"
+  push:
+    branches: [main]
+    paths:
+      - "mteb/models/**"
+  workflow_dispatch:
+
+concurrency:
+  group: update-leaderboard-models
+  cancel-in-progress: true
+
+jobs:
+  update-models:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout mteb
+        uses: actions/checkout@v6
+
+      - name: Install uv and set the Python version
+        uses: astral-sh/setup-uv@v8.2.0
+        with:
+          enable-cache: true
+          python-version: "3.11"
+
+
+      - name: Install mteb
+        run: uv sync --frozen
+
+      - name: Install hf CLI
+        run: |
+          curl -LsSf https://hf.co/cli/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Generate model list
+        run: uv run --no-sync python scripts/tools/generate_leaderboard_models.py > models.py
+
+      - name: Check if models.py changed in HF Space
+        id: diff
+        run: |
+          mkdir hf-snapshot
+          hf download mteb/leaderboard models.py --repo-type space --local-dir hf-snapshot
+          if diff -q models.py hf-snapshot/models.py > /dev/null; then
+            echo "No changes to models.py"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload updated models.py to leaderboard Space
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          HF_OIDC_RESOURCE: spaces/mteb/leaderboard
+        run: |
+          hf upload mteb/leaderboard models.py models.py \
+            --repo-type space \
+            --commit-message "Update model list"

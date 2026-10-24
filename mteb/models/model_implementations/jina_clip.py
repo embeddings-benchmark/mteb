@@ -2,13 +2,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_image_dependencies, requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_implementations.colpali_models import COLPALI_TRAINING_DATA
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -29,14 +28,15 @@ class JinaCLIPModel(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ):
-        from transformers import AutoModel
+        import torch
 
-        requires_image_dependencies()
-        for package in ["timm", "peft", "einops"]:
-            requires_package(self, package, model_name, "pip install mteb[jina-clip]")
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
+        from transformers import AutoModel
 
         self.model_name = model_name
         self.device = device
@@ -51,7 +51,9 @@ class JinaCLIPModel(AbsEncoder):
         convert_to_numpy: bool = False,
         convert_to_tensor: bool = True,
         **kwargs: Any,
-    ):
+    ) -> Array:
+        import torch
+
         all_text_embeddings = []
 
         with torch.no_grad():
@@ -76,7 +78,9 @@ class JinaCLIPModel(AbsEncoder):
         convert_to_tensor: bool = True,
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ):
+    ) -> Array:
+        import torch
+
         all_image_embeddings = []
 
         with torch.no_grad():
@@ -121,9 +125,9 @@ class JinaCLIPModel(AbsEncoder):
                 )
             fused_embeddings = text_embeddings + image_embeddings
             return fused_embeddings
-        elif text_embeddings is not None:
+        if text_embeddings is not None:
             return text_embeddings
-        elif image_embeddings is not None:
+        if image_embeddings is not None:
             return image_embeddings
         raise ValueError
 
@@ -161,6 +165,7 @@ jina_clip_v1 = ModelMeta(
     training_datasets=_JINA_CLIP_TRAIN_DATASETS_V1,
     citation=JINA_CLIP_CITATION,
     superseded_by="jinaai/jina-clip-v2",
+    extra_requirements_groups=["jina-clip"],
 )
 
 jina_clip_v2 = ModelMeta(
@@ -195,4 +200,6 @@ jina_clip_v2 = ModelMeta(
       url={https://arxiv.org/abs/2412.08802},
 }
 """,
+    extra_requirements_groups=["jina-clip"],
+    output_dtypes=OutputDType.BF16,
 )

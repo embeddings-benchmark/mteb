@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 model_entry = """
 ####  `{model_name}` {{ .model-copy }}
 
- **License:** {license} {learn_more}
+ **License:** {license} • **Openness:** {openness} {learn_more}
 
 | :lucide-cpu: Parameters | :lucide-layers: Emb. Dim | :lucide-ruler: Max Tokens | :lucide-database: Memory | :lucide-calendar: Released | :lucide-languages: Languages |
 |:-:|:-:|:-:|:-:|:-:|:-:|
@@ -29,12 +29,18 @@ h1_header = """
 icon: {icon}
 title: "{modalities} Model"
 ---
+<!-- Workaround until https://github.com/zensical/backlog/issues/120 is implemented. -->
+<style>
+.md-content__button {{
+    display: none;
+}}
+</style>
 
 # {modalities} Model
 
 <!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
-lucide/bot: {num_models} Models
+{num_models} Models
 
 {models_md}
 """
@@ -110,19 +116,31 @@ def modality_to_filename(modality: tuple[str, ...]) -> str:
     return f"{modality_to_string(modality).lower().replace('-', '_')}.md"
 
 
+def openness_badge(openness: dict[str, bool], score: int) -> str:
+    """Renders the openness score as `n/total`, with a hover tooltip listing each dimension."""
+    tooltip = "&#10;".join(
+        f"{'✅' if value else '❌'} {dimension.title()}"
+        for dimension, value in openness.items()
+    )
+    return f'<abbr title="{tooltip}">{score}/{len(openness)}</abbr>'
+
+
 def required_memory_string(mem_in_mb: int | None) -> str:
     if mem_in_mb is None:
         return "not specified"
     if mem_in_mb < 1024:
         return f"{mem_in_mb} MB"
-    else:
-        mem_in_gb = mem_in_mb / 1024
-        return f"{mem_in_gb:.1f} GB"
+    mem_in_gb = mem_in_mb / 1024
+    return f"{mem_in_gb:.1f} GB"
 
 
 def format_model_entry(meta: ModelMeta) -> str:
     revision = meta.revision or "not specified"
-    license = meta.license or "not specified"
+    raw_license = meta.license or "not specified"
+    if raw_license.startswith(("http://", "https://")):
+        license_str = f"[custom]({raw_license})"
+    else:
+        license_str = raw_license
     max_tokens = (
         human_readable_number(meta.max_tokens)
         if meta.max_tokens is not None
@@ -142,19 +160,21 @@ def format_model_entry(meta: ModelMeta) -> str:
         pretty_long_list(sorted(meta.languages)) if meta.languages else "not specified"
     )
     required_mem = required_memory_string(meta.memory_usage_mb)
+    openness = openness_badge(meta.openness, meta.openness_score)
 
     entry = model_entry.format(
         icon=modality_to_icon.get(meta.modalities[0], "lucide/layers"),
         model_name=meta.name,
         learn_more=learn_more,
         revision=revision,
-        license=license,
+        license=license_str,
         max_tokens=max_tokens,
         embed_dim=embed_dim,
         n_parameters=n_parameters,
         release_date=release_date,
         languages=languages,
         required_memory=required_mem,
+        openness=openness,
     )
 
     if meta.citation:
@@ -198,7 +218,7 @@ def main(folder: Path) -> None:
             )
             modalities_string = modality_to_string(model_modalities)
             doc_task = folder / modality_to_filename(model_modalities)
-            with doc_task.open("w") as f:
+            with doc_task.open("w", encoding="utf-8") as f:
                 icon = modality_to_icon.get(
                     modalities_string, modality_to_icon["Multimodal"]
                 )

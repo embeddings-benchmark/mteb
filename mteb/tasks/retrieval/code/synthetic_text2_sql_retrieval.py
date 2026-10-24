@@ -26,13 +26,5 @@ class SyntheticText2SQLRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@software{gretel-synthetic-text-to-sql-2024,
-  author = {Meyer, Yev and Emadi, Marjan and Nathawani, Dhruv and Ramaswamy, Lipika and Boyd, Kendrick and Van Segbroeck, Maarten and Grossman, Matthew and Mlocek, Piotr and Newberry, Drew},
-  month = {April},
-  title = {{Synthetic-Text-To-SQL}: A synthetic dataset for training language models to generate SQL queries from natural language prompts},
-  url = {https://huggingface.co/datasets/gretelai/synthetic-text-to-sql},
-  year = {2024},
-}
-""",
+        bibtex_citation="",
     )

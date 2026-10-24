@@ -26,4 +26,5 @@ class German1Retrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation="",
         is_public=False,
+        contributed_by="Voyage AI",
     )

@@ -8,6 +8,7 @@ from slugify import slugify_anchor
 
 import mteb
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
+from mteb.abstasks.task_metadata import _TASKTYPE2SIMPLIFIEDTASKTYPE  # noqa: PLC2701
 from mteb.get_tasks import MTEBTasks
 
 task_entry = """
@@ -28,32 +29,15 @@ aggregated_tasks_section = """
 {task_table}
 """
 
-task_type_section = """---
-title: "{task_type}"
----
+task_type_section = """
 
-<div class="nowrap-table" markdown>
-
-# {task_type}
+## {task_type}
 
 <!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
 
 - **Number of tasks:** {num_tasks}
 
 {tasks_md}
-"""
-
-task_index_section = """---
-title: "Available Tasks"
----
-
-# Available Tasks
-
-<!-- This document is auto-generated. Changes will be overwritten. Please change the generating script. -->
-
-Browse tasks by category:
-
-{task_types_md}
 """
 
 
@@ -105,18 +89,24 @@ def create_aggregate_table(task: AbsTaskAggregate) -> str:
     df = tasks.to_dataframe(["name", "type", "modalities", "languages"])
     df["name"] = df.apply(
         lambda row: (
-            f"[{row['name']}](./{row['type'].lower()}.md#{slugify_anchor(row['name'])})"
+            f"[{row['name']}](./{_TASKTYPE2SIMPLIFIEDTASKTYPE.get(row['type'], row['type'].lower())}.md#{slugify_anchor(row['name'])})"
         ),
         axis=1,
     )
-    df["modalities"] = df["modalities"].apply(lambda x: pretty_long_list(x))
-    df["languages"] = df["languages"].apply(lambda x: pretty_long_list(x))
+    df["modalities"] = df["modalities"].apply(lambda x: pretty_long_list(x))  # noqa: PLW0108
+    df["languages"] = df["languages"].apply(lambda x: pretty_long_list(x))  # noqa: PLW0108
     return df.to_markdown(index=False)
 
 
-def format_task_entry(task: mteb.AbsTask) -> str:
+def format_task_entry(task: mteb.AbsTask) -> str:  # noqa: PLR0914
     description = task.metadata.description
-    license = task.metadata.license or "not specified"
+    if task.metadata.contributed_by:
+        description += f" Contributed by {task.metadata.contributed_by}."
+    raw_license = task.metadata.license or "not specified"
+    if raw_license.startswith(("http://", "https://")):
+        license_str = f"[custom]({raw_license})"
+    else:
+        license_str = raw_license
     reference = task.metadata.reference
     dataset_name = task.metadata.dataset["path"]
     if not reference and not isinstance(task, AbsTaskAggregate):
@@ -145,10 +135,10 @@ def format_task_entry(task: mteb.AbsTask) -> str:
     if not isinstance(task, AbsTaskAggregate):
         dataset_line = (
             f"**Dataset:** [`{dataset_name}`](https://huggingface.co/datasets/{dataset_name}) "
-            f"• **License:** {license}{learn_more}"
+            f"• **License:** {license_str}{learn_more}"
         )
     else:
-        dataset_line = f"**License:** {license}{learn_more}"
+        dataset_line = f"**License:** {license_str}{learn_more}"
 
     entry = task_entry.format(
         task_name=task.metadata.name,
@@ -175,44 +165,83 @@ def format_task_entry(task: mteb.AbsTask) -> str:
     return entry
 
 
-def main(folder: Path) -> None:
-    folder.mkdir(exist_ok=True)
+def insert_content(input_path: Path, output_path: Path, content: str, tag: str) -> None:
+    """Insert content into a markdown file between tags.
+
+    If the file does not exist, it will be created with the content between the tags.
+    If the file exists, the content between the tags will be replaced with the new content.
+    """
+    start_tag = f"<!-- START-{tag} -->"
+    end_tag = f"<!-- END-{tag} -->"
+
+    if input_path.exists():
+        doc_content = input_path.read_text(encoding="utf-8")
+        if start_tag in doc_content and end_tag in doc_content:
+            before = doc_content.split(start_tag)[0]
+            after = doc_content.split(end_tag)[1]
+            new_content = before + start_tag + "\n" + content + "\n" + end_tag + after
+        else:
+            # If tags are not found, append them at the end
+            new_content = (
+                doc_content + "\n\n" + start_tag + "\n" + content + "\n" + end_tag
+            )
+    else:
+        # Create new file with content between tags
+        new_content = start_tag + "\n" + content + "\n" + end_tag
+
+    output_path.write_text(new_content, encoding="utf-8")
+
+
+def main(input_path: Path, output_path: Path) -> None:
+    output_path.mkdir(exist_ok=True)
 
     tasks = mteb.get_tasks(
         exclude_superseded=False,
         exclude_aggregate=False,
         exclude_private=False,
+        exclude_beta=False,
     )
-    task_types = sorted({task.metadata.type for task in tasks})
 
+    task_types = sorted({task.metadata.type for task in tasks})
     task_types2tasks = {task_type: [] for task_type in task_types}
     for task in tasks:
         task_types2tasks[task.metadata.type].append(task)
 
-    for task_type, tasks in task_types2tasks.items():
-        _task_entries = ""
-        for task in sorted(tasks, key=lambda t: t.metadata.name):
-            _task_entries += format_task_entry(task) + "\n"
-        md = task_type_section.format(
-            task_type=task_type,
-            num_tasks=len(tasks),
-            tasks_md=_task_entries.strip(),
+    assert set(task_types2tasks.keys()) <= set(_TASKTYPE2SIMPLIFIEDTASKTYPE.keys()), (
+        f"Task types in tasks do not match expected task types. Found: {set(task_types2tasks.keys())}, expected: {set(_TASKTYPE2SIMPLIFIEDTASKTYPE.keys())}, difference: {set(task_types2tasks.keys()).symmetric_difference(set(_TASKTYPE2SIMPLIFIEDTASKTYPE.keys()))}"
+    )
+
+    stask_types = {stt: [] for stt in _TASKTYPE2SIMPLIFIEDTASKTYPE.values()}
+    for tt, stt in _TASKTYPE2SIMPLIFIEDTASKTYPE.items():
+        stask_types[stt].append(tt)
+
+    for stt, task_types in stask_types.items():
+        # For each simplified task type, combine the markdown entries of the corresponding task types, each consisting of the tasks of that type.
+        mds = []
+
+        for tt in sorted(task_types):
+            tt_tasks = task_types2tasks.get(tt, [])
+            if not tt_tasks:
+                continue
+            _task_entries = ""
+            for task in sorted(tt_tasks, key=lambda t: t.metadata.name):
+                _task_entries += format_task_entry(task) + "\n"
+
+            md = task_type_section.format(
+                task_type=tt,
+                num_tasks=len(tt_tasks),
+                tasks_md=_task_entries.strip(),
+            )
+
+            mds.append(md)
+
+        doc_path = f"{stt}.md"
+        doc_content = "\n\n".join(mds)
+        insert_content(
+            input_path / doc_path, output_path / doc_path, doc_content, tag="TASKS"
         )
-        doc_task = folder / f"{task_type.lower()}.md"
-        md = (
-            """<style>
-.nowrap-table th {
-  white-space: nowrap;
-}
-</style>
-"""
-            + md
-        )
-        with doc_task.open("w") as f:
-            f.write(md)
 
 
 if __name__ == "__main__":
     root = Path(__file__).parent
-    tasks_path = root / "available_tasks"
-    main(tasks_path)
+    main(root / "task_templates", root / "available_tasks")

@@ -3,10 +3,8 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any, Literal
 
-import torch
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_image_dependencies, requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
@@ -16,6 +14,7 @@ if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput
 
 logger = logging.getLogger(__name__)
@@ -51,26 +50,14 @@ def _downsample_image(
         if width > 10000:
             logger.error("Processing extremely wide images.")
             return image.resize((10000, height), Resampling.LANCZOS)
-    else:
-        if height > 10000:
-            logger.error("Processing extremely high images.")
-            return image.resize((width, 10000), Resampling.LANCZOS)
+    elif height > 10000:
+        logger.error("Processing extremely high images.")
+        return image.resize((width, 10000), Resampling.LANCZOS)
     return image
 
 
-def voyage_v_loader(model_name, **kwargs):
-    requires_package(
-        voyage_v_loader,
-        "voyageai",
-        model_name,
-        "pip install 'mteb[voyage_v]'",
-    )
-    requires_package(
-        voyage_v_loader,
-        "tenacity",
-        model_name,
-        "pip install 'mteb[voyage_v]'",
-    )
+def voyage_v_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
+    import torch
     import voyageai
     from tenacity import retry, stop_after_attempt, wait_exponential
 
@@ -80,16 +67,19 @@ def voyage_v_loader(model_name, **kwargs):
             model_name: str,
             **kwargs: Any,
         ):
-            requires_image_dependencies()
-
-            self.model_name = model_name.split("/")[-1]
+            self.model_name = model_name.split("/")[-1]  # noqa: PLC0207
             self.vo = voyageai.Client()
 
         @retry(
             stop=stop_after_attempt(6),  # Stop after 6 attempts
             wait=wait_exponential(multiplier=1, max=60),  # Exponential backoff
         )
-        def _multimodal_embed(self, inputs, model, input_type):
+        def _multimodal_embed(
+            self,
+            inputs: list[list[str | Image.Image]],
+            model: str,
+            input_type: str | None,
+        ) -> Any:  # noqa: ANN401 -- voyageai response object; voyageai is untyped
             return self.vo.multimodal_embed(inputs, model=model, input_type=input_type)
 
         def get_text_embeddings(
@@ -99,7 +89,7 @@ def voyage_v_loader(model_name, **kwargs):
             prompt_type: PromptType | None = None,
             input_type: Literal["document", "query"] | None = None,
             **kwargs: Any,
-        ):
+        ) -> Array:
             if input_type is None and prompt_type is not None:
                 if prompt_type == PromptType.document:
                     input_type = "document"
@@ -128,7 +118,7 @@ def voyage_v_loader(model_name, **kwargs):
             prompt_type: PromptType | None = None,
             input_type: Literal["document", "query"] | None = None,
             **kwargs: Any,
-        ):
+        ) -> Array:
             if input_type is None and prompt_type is not None:
                 if prompt_type == PromptType.document:
                     input_type = "document"
@@ -179,7 +169,8 @@ def voyage_v_loader(model_name, **kwargs):
                     ]
                     batch_texts = batch["text"]
                     interleaved_inputs = [
-                        [text, image] for image, text in zip(batch_images, batch_texts)
+                        [text, image]
+                        for image, text in zip(batch_images, batch_texts, strict=True)
                     ]
                     embeddings = self._multimodal_embed(
                         interleaved_inputs,
@@ -189,7 +180,7 @@ def voyage_v_loader(model_name, **kwargs):
                     interleaved_embeddings.append(torch.tensor(embeddings))
                 interleaved_embeddings = torch.vstack(interleaved_embeddings)
                 return interleaved_embeddings
-            elif "text" in inputs.dataset.features:
+            if "text" in inputs.dataset.features:
                 text_embeddings = self.get_text_embeddings(
                     inputs, input_type=input_type
                 )
@@ -200,7 +191,7 @@ def voyage_v_loader(model_name, **kwargs):
 
             if text_embeddings is not None:
                 return text_embeddings
-            elif image_embeddings is not None:
+            if image_embeddings is not None:
                 return image_embeddings
             raise ValueError
 
@@ -209,7 +200,7 @@ def voyage_v_loader(model_name, **kwargs):
 
 voyage_v = ModelMeta(
     loader=voyage_v_loader,
-    name="voyageai/voyage-multimodal-3",
+    name="mongodb/voyage-multimodal-3",
     model_type=["dense"],
     languages=[],  # Unknown
     revision="1",
@@ -229,4 +220,5 @@ voyage_v = ModelMeta(
     reference="https://huggingface.co/voyageai/voyage-multimodal-3",
     use_instructions=None,
     training_datasets=set(),  # No overlap with MTEB according to Voyage, could overlap with MIEB, didn't ask
+    extra_requirements_groups=["voyage_v"],
 )

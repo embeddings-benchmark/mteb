@@ -1,0 +1,79 @@
+from __future__ import annotations
+
+from mteb.abstasks.classification import AbsTaskClassification
+from mteb.abstasks.task_metadata import TaskMetadata
+
+
+class AVEDatasetClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="AVEDatasetClassification",
+        description="Audio-Visual Event (AVE) classification dataset containing 28 event categories such as church bell, truck, dog barking, and other everyday sounds sourced from YouTube videos. The goal is to predict the sound event category from synchronized video and audio. Used the official train and test splits across 28 audio-visual event classes (~3,312 train / ~402 test).",
+        reference="https://openaccess.thecvf.com/content_ECCV_2018/papers/Yapeng_Tian_Audio-Visual_Event_Localization_ECCV_2018_paper.pdf",
+        dataset={
+            "path": "mteb/AVE-Dataset",
+            "revision": "f6eb93b4e89456277a242583b5565b801bc1981d",
+        },
+        type="VideoClassification",
+        category="va2c",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2018-01-01", "2018-09-01"),  # some time before conference
+        domains=["AudioScene", "Web"],
+        task_subtypes=["Environment Sound Classification"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        modalities=["video", "audio"],
+        sample_creation="found",
+        bibtex_citation=r"""
+@inproceedings{Tian_2018_ECCV,
+  author = {Tian, Yapeng and Shi, Jing and Li, Bochen and Duan, Zhiyao and Xu, Chenliang},
+  booktitle = {The European Conference on Computer Vision (ECCV)},
+  month = {September},
+  title = {Audio-Visual Event Localization in Unconstrained Videos},
+  year = {2018},
+}
+""",
+    )
+    input_column_name = ("video", "audio")
+    label_column_name: str = "label"
+    is_cross_validation: bool = False
+
+
+class AVEDatasetVideoClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="AVEDatasetVideoClassification",
+        description="Audio-Visual Event (AVE) classification dataset containing 28 event categories such as church bell, truck, dog barking, and other everyday sounds sourced from YouTube videos. The goal is to predict the sound event category from video only. Used the official train and test splits across 28 audio-visual event classes (~3,312 train / ~402 test).",
+        reference="https://openaccess.thecvf.com/content_ECCV_2018/papers/Yapeng_Tian_Audio-Visual_Event_Localization_ECCV_2018_paper.pdf",
+        dataset={
+            "path": "mteb/AVE-Dataset",
+            "revision": "f6eb93b4e89456277a242583b5565b801bc1981d",
+        },
+        type="VideoClassification",
+        category="v2c",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2018-01-01", "2018-09-01"),
+        domains=["AudioScene", "Web"],
+        task_subtypes=["Environment Sound Classification"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        modalities=["video"],
+        sample_creation="found",
+        bibtex_citation=r"""
+@inproceedings{Tian_2018_ECCV,
+  author = {Tian, Yapeng and Shi, Jing and Li, Bochen and Duan, Zhiyao and Xu, Chenliang},
+  booktitle = {The European Conference on Computer Vision (ECCV)},
+  month = {September},
+  title = {Audio-Visual Event Localization in Unconstrained Videos},
+  year = {2018},
+}
+""",
+        is_beta=True,
+    )
+    input_column_name = "video"
+    label_column_name: str = "label"
+    is_cross_validation: bool = False

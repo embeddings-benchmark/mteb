@@ -1,8 +1,8 @@
 from mteb.models.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 codemodernbert_crow_meta = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="Shuu12121/CodeSearch-ModernBERT-Crow-Plus",
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -30,4 +30,42 @@ codemodernbert_crow_meta = ModelMeta(
         # "Shuu12121/ruby-codesearch-filtered",
         # "Shuu12121/rust-codesearch-filtered",
     },
+)
+
+nightowl_code_embedding_meta = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    name="Shuu12121/NightOwl-CodeEmbedding",
+    model_type=["dense"],
+    modalities=["text"],
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="c7c8a57b9539297e192d5cf39b9aecf1fb376edd",
+    release_date="2026-06-08",
+    n_parameters=150_779_136,
+    n_embedding_parameters=38_682_624,
+    memory_usage_mb=575,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=1024,
+    reference="https://huggingface.co/Shuu12121/NightOwl-CodeEmbedding",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=True,
+    training_datasets={
+        "AppsRetrieval",
+        "COIRCodeSearchNetRetrieval",
+        "CodeFeedbackMT",
+        "CodeFeedbackST",
+        "CodeSearchNetCCRetrieval",
+        "CodeSearchNetRetrieval",
+        "CodeTransOceanContest",
+        "CodeTransOceanDL",
+        "CosQA",
+        "StackOverflowQA",
+        "SyntheticText2SQL",
+    },
+    adapted_from="Shuu12121/NightOwl",
+    contacts=["Shun0212"],
 )

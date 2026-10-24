@@ -2,7 +2,7 @@ from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import PromptType
 
 from .facebookai import XLMR_LANGUAGES
@@ -65,7 +65,7 @@ ME5_TRAINING_DATA = {
 } | E5_TRAINING_DATA
 
 e5_mult_small = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -93,7 +93,7 @@ e5_mult_small = ModelMeta(
 )
 
 e5_mult_base = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -121,7 +121,7 @@ e5_mult_base = ModelMeta(
 )
 
 e5_mult_large = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -149,7 +149,7 @@ e5_mult_large = ModelMeta(
 )
 
 e5_eng_small_v2 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -177,7 +177,7 @@ e5_eng_small_v2 = ModelMeta(
 )
 
 e5_eng_small = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -205,7 +205,7 @@ e5_eng_small = ModelMeta(
 )
 
 e5_eng_base_v2 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -234,7 +234,7 @@ e5_eng_base_v2 = ModelMeta(
 )
 
 e5_eng_large_v2 = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -263,7 +263,7 @@ e5_eng_large_v2 = ModelMeta(
 )
 
 e5_large = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -292,7 +292,7 @@ e5_large = ModelMeta(
 )
 
 e5_base = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),

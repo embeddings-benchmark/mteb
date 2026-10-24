@@ -25,6 +25,8 @@
             "max_relevant_docs_per_query": 1941,
             "unique_relevant_docs": 35480
         },
-        "top_ranked_statistics": null
+        "top_ranked_statistics": null,
+        "num_documents": 171332,
+        "num_queries": 50
     }
 }

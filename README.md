@@ -56,7 +56,9 @@ from sentence_transformers import SentenceTransformer
 
 # Select model
 model_name = "sentence-transformers/all-MiniLM-L6-v2"
-model = mteb.get_model(model_name) # if the model is not implemented in MTEB it will be eq. to SentenceTransformer(model_name)
+model = mteb.get_model(
+    model_name
+)  # if the model is not implemented in MTEB it will be eq. to SentenceTransformer(model_name)
 
 # Select tasks
 tasks = mteb.get_tasks(tasks=["Banking77Classification.v2"])
@@ -74,7 +76,8 @@ mteb run \
     --output-folder results
 ```
 
-For more on how to use the CLI check out the [related documentation](https://embeddings-benchmark.github.io/mteb/usage/cli/).
+For more on how to use the CLI check out the [related documentation](https://embeddings-benchmark.github.io/mteb/get_started/usage/cli/).
+
 
 ## Overview
 
@@ -83,7 +86,7 @@ For more on how to use the CLI check out the [related documentation](https://emb
 | 📈 [Leaderboard]               | The interactive leaderboard of the benchmark                                         |
 | **Get Started**.               |                                                                                      |
 | 🏃 [Get Started]               | Overview of how to use mteb                                                          |
-| 🤖 [Defining Models]           | How to use existing model and define custom ones                                     |
+| 🤖 [Defining Models]           | How to use existing models and define custom ones                                     |
 | 📋 [Selecting tasks]           | How to select tasks, benchmarks, splits etc.                                         |
 | 🏭 [Running Evaluation]        | How to run the evaluations, including cache management, speeding up evaluations etc. |
 | 📊 [Loading Results]           | How to load and work with existing model results                                     |
@@ -97,12 +100,12 @@ For more on how to use the CLI check out the [related documentation](https://emb
 | 👩‍💻 [Adding a benchmark]        | How to add a new benchmark to MTEB and to the leaderboard                            |
 | 🤝 [Contributing]              | How to contribute to MTEB and set it up for development                              |
 
-[Get Started]: https://embeddings-benchmark.github.io/mteb/usage/get_started/
-[Defining Models]: https://embeddings-benchmark.github.io/mteb/usage/defining_the_model/
-[Selecting tasks]: https://embeddings-benchmark.github.io/mteb/usage/selecting_tasks/
-[Running Evaluation]: https://embeddings-benchmark.github.io/mteb/usage/running_the_evaluation/
-[Loading Results]: https://embeddings-benchmark.github.io/mteb/usage/loading_results/
-[Tasks]: https://embeddings-benchmark.github.io/mteb/overview/available_tasks/any2anymultilingualretrieval/
+[Get Started]: https://embeddings-benchmark.github.io/mteb/
+[Defining Models]: https://embeddings-benchmark.github.io/mteb/get_started/usage/defining_the_model/
+[Selecting tasks]: https://embeddings-benchmark.github.io/mteb/get_started/usage/selecting_tasks/
+[Running Evaluation]: https://embeddings-benchmark.github.io/mteb/get_started/usage/running_the_evaluation/
+[Loading Results]: https://embeddings-benchmark.github.io/mteb/get_started/usage/loading_results/
+[Tasks]: https://embeddings-benchmark.github.io/mteb/overview/available_tasks/retrieval/
 [Benchmarks]: https://embeddings-benchmark.github.io/mteb/overview/available_benchmarks/
 [Models]: https://embeddings-benchmark.github.io/mteb/overview/available_models/text/
 [Contributing]: https://embeddings-benchmark.github.io/mteb/CONTRIBUTING/
@@ -125,7 +128,7 @@ MTEB was introduced in "[MTEB: Massive Text Embedding Benchmark](https://arxiv.o
   title = {MTEB: Massive Text Embedding Benchmark},
   publisher = {arXiv},
   journal={arXiv preprint arXiv:2210.07316},
-  year = {2022}
+  year = {2022},
   url = {https://arxiv.org/abs/2210.07316},
   doi = {10.48550/ARXIV.2210.07316},
 }
@@ -147,7 +150,7 @@ If you use any of the specific benchmarks, we also recommend that you cite the a
 
 ```py
 benchmark = mteb.get_benchmark("MTEB(eng, v2)")
-benchmark.citation # get citation for a specific benchmark
+benchmark.citation  # get citation for a specific benchmark
 
 # you can also create a table of the task for the appendix using:
 benchmark.tasks.to_latex()

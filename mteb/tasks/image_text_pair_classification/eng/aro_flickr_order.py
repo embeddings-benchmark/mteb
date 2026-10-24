@@ -17,7 +17,7 @@ class AROFlickrOrder(AbsTaskImageTextPairClassification):
     metadata = TaskMetadata(
         name="AROFlickrOrder",
         description="Compositionality Evaluation of images to their captions."
-        + "Each capation has four hard negatives created by order permutations.",
+        "Each capation has four hard negatives created by order permutations.",
         reference="https://openreview.net/forum?id=KRLUvxh8uaX",
         dataset={
             "path": "mteb/ARO-Flickr-Order",

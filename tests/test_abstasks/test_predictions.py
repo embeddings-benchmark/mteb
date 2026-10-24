@@ -2,12 +2,12 @@ import json
 from pathlib import Path
 
 import pytest
+from sklearn.metrics import v_measure_score
 
 import mteb
-from tests.mock_tasks import (
+from mteb.mocks.mock_tasks import (
     MockBitextMiningTask,
     MockClassificationTask,
-    MockClusteringTask,
     MockImageTextPairClassificationTask,
     MockPairClassificationTask,
     MockRegressionTask,
@@ -15,10 +15,11 @@ from tests.mock_tasks import (
     MockSTSTask,
     MockTextZeroShotClassificationTask,
 )
+from mteb.mocks.mock_tasks.clustering import MockClusteringTask
 
 
 @pytest.mark.parametrize(
-    "task, expected",
+    ("task", "expected"),
     [
         (
             MockBitextMiningTask(),
@@ -101,11 +102,11 @@ from tests.mock_tasks import (
                 ),
             },
         ),
-        (MockClusteringTask(), [[1, 2, 0]]),
+        (MockClusteringTask(), [[0, 1, 2]]),
         # TODO: #3441
         # Disabled due to being too flaky.
         # (
-        #     MockClusteringFastTask(seed=1),
+        #     LegacyMockClusteringFastTask(seed=1),
         #     {"Level 0": [[0, 0, 0, 0], [0, 0, 1, 0], [0, 1, 2, 1]]},
         # ),
         (
@@ -115,19 +116,28 @@ from tests.mock_tasks import (
         (
             MockImageTextPairClassificationTask(),
             [
-                [pytest.approx([0.8081411123275757])],
-                [pytest.approx([0.6950531601905823])],
+                [pytest.approx([0.7708745002746582])],
+                [pytest.approx([0.7533516883850098])],
             ],
         ),
     ],
 )
 def test_predictions(tmp_path: Path, task, expected):
     """Run evaluation for each mock task and check predictions."""
+    if "image" in task.metadata.modalities:
+        pytest.importorskip(
+            "torchvision", reason="torchvision is required for image tasks"
+        )
     model = mteb.get_model_meta("mteb/baseline-random-encoder")
     mteb.evaluate(model, task, prediction_folder=tmp_path, cache=None)
 
-    with task._predictions_path(tmp_path).open() as f:
+    with task._predictions_path(tmp_path).open(encoding="utf-8") as f:
         full_predictions = json.load(f)
 
     predictions = full_predictions["default"]["test"]
-    assert predictions == expected
+    if isinstance(task, MockClusteringTask):
+        # KMeans cluster-id assignment is not stable across sklearn versions;
+        # compare permutation-invariantly against the ground truth.
+        assert v_measure_score(expected[0], predictions[0]) == 1.0
+    else:
+        assert predictions == expected

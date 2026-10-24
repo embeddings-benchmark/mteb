@@ -11,36 +11,16 @@ from mteb._evaluators import BitextMiningEvaluator
 from mteb.abstasks._statistics_calculation import calculate_text_statistics
 from mteb.abstasks.abstask import AbsTask
 from mteb.models import EncoderProtocol
-from mteb.types.statistics import SplitDescriptiveStatistics
+from mteb.timing import TimingStack
+from mteb.types.statistics import BitextDescriptiveStatistics
 
 if TYPE_CHECKING:
     from pathlib import Path
 
     from mteb.models import MTEBModels
-    from mteb.types import EncodeKwargs, HFSubset, ScoresDict
-    from mteb.types.statistics import TextStatistics
+    from mteb.types import EncodeKwargs, HFSubset, Modalities, ScoresDict
 
 logger = logging.getLogger(__name__)
-
-
-class BitextDescriptiveStatistics(SplitDescriptiveStatistics):
-    """Descriptive statistics for Bitext
-
-    Attributes:
-        num_samples: number of samples in the dataset.
-        number_of_characters: Total number of symbols in the dataset.
-        unique_pairs: Number of duplicate pairs
-
-        sentence1_statistics: Statistics for sentence1
-        sentence2_statistics: Statistics for sentence2
-    """
-
-    num_samples: int
-    number_of_characters: int
-    unique_pairs: int
-
-    sentence1_statistics: TextStatistics
-    sentence2_statistics: TextStatistics
 
 
 class BitextMiningMetrics(TypedDict):
@@ -83,6 +63,7 @@ class AbsTaskBitextMining(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
+        timer: TimingStack | None = None,
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Added load for "parallel" datasets"""
@@ -98,7 +79,7 @@ class AbsTaskBitextMining(AbsTask):
         if subsets_to_run is not None:
             hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
 
-        encoder_model = cast("EncoderProtocol", model)
+        timer = timer or TimingStack()
 
         if self.dataset is None:
             raise ValueError("Dataset is not loaded.")
@@ -106,7 +87,7 @@ class AbsTaskBitextMining(AbsTask):
         scores: dict[str, BitextMiningMetrics] = {}
         if self.parallel_subsets:
             scores = self._evaluate_subset(  # type: ignore[assignment]
-                encoder_model,
+                model,
                 self.dataset[split],
                 parallel=True,
                 hf_split=split,
@@ -114,6 +95,7 @@ class AbsTaskBitextMining(AbsTask):
                 encode_kwargs=encode_kwargs,
                 prediction_folder=prediction_folder,
                 num_proc=num_proc,
+                timer=timer,
                 **kwargs,
             )
         else:
@@ -127,17 +109,26 @@ class AbsTaskBitextMining(AbsTask):
                 else:
                     data_split = self.dataset[hf_subset][split]
                 scores[hf_subset] = self._evaluate_subset(  # type: ignore[assignment]
-                    encoder_model,
+                    model,
                     data_split,
                     hf_split=split,
                     hf_subset=hf_subset,
                     encode_kwargs=encode_kwargs,
                     prediction_folder=prediction_folder,
                     num_proc=num_proc,
+                    timer=timer,
                     **kwargs,
                 )
 
         return cast("dict[HFSubset, ScoresDict]", scores)
+
+    def _get_content_columns(self) -> dict[str, Modalities]:
+        # for parallel subsets the columns are the languages of each pair, otherwise sentence1/sentence2
+        return {
+            column: "text"
+            for pair in self._get_pairs(self.parallel_subsets)
+            for column in pair
+        }
 
     def _get_pairs(self, parallel: bool) -> list[tuple[str, str]]:
         pairs = self._DEFAULT_PAIR
@@ -156,7 +147,8 @@ class AbsTaskBitextMining(AbsTask):
         prediction_folder: Path | None = None,
         parallel: bool = False,
         num_proc: int | None = None,
-        **kwargs,
+        timer: TimingStack,
+        **kwargs: Any,
     ) -> BitextMiningMetrics | dict[str, BitextMiningMetrics]:
         pairs = self._get_pairs(parallel)
 
@@ -166,11 +158,12 @@ class AbsTaskBitextMining(AbsTask):
             pair_columns=pairs,
             hf_split=hf_split,
             hf_subset=hf_subset,
+            timer=timer,
             **kwargs,
         )
         # NOTE: used only by BUCC
         gold = (
-            list(zip(range(len(data_split)), range(len(data_split))))
+            list(zip(range(len(data_split)), range(len(data_split)), strict=True))
             if "gold" not in data_split
             else data_split["gold"]
         )
@@ -199,7 +192,7 @@ class AbsTaskBitextMining(AbsTask):
         self._add_main_score(metrics)
         return metrics
 
-    def _compute_metrics(
+    def _compute_metrics(  # noqa: PLR6301
         self,
         nearest_neighbors: list[dict[str, float]],
         gold: list[tuple[int, int]],
@@ -224,7 +217,12 @@ class AbsTaskBitextMining(AbsTask):
         )
 
     def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        *,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
     ) -> BitextDescriptiveStatistics:
         pairs_cols = self._get_pairs(self.parallel_subsets)
         if hf_subset:
@@ -239,7 +237,7 @@ class AbsTaskBitextMining(AbsTask):
         elif compute_overall:
             sentence1, sentence2 = [], []
             if self.parallel_subsets:
-                for hf_subset in self.metadata.eval_langs:
+                for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
                     sent_1, sent_2 = hf_subset.split("-")
                     sentence1.extend(self.dataset[split][sent_1])
                     sentence2.extend(self.dataset[split][sent_2])
@@ -255,7 +253,10 @@ class AbsTaskBitextMining(AbsTask):
 
         text1_statistics = calculate_text_statistics(sentence1)
         text2_statistics = calculate_text_statistics(sentence2)
-        unique_pairs = len(set(zip(sentence1, sentence2)))
+        # Not strict: BUCC (superseded by BUCC.v2) filters `sentence1` down to the
+        # gold pairs while keeping the full `sentence2` corpus, so the two sides are
+        # deliberately ragged and the zip truncates to the shorter one.
+        unique_pairs = len(set(zip(sentence1, sentence2, strict=False)))
 
         return BitextDescriptiveStatistics(
             num_samples=len(sentence1),
@@ -272,6 +273,7 @@ class AbsTaskBitextMining(AbsTask):
         self,
         repo_name: str,
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> None:
         if self.dataset is None:
             raise ValueError("Dataset is not loaded.")
@@ -307,4 +309,4 @@ class AbsTaskBitextMining(AbsTask):
                     }
                 )
             sentences = DatasetDict(sentences)
-            sentences.push_to_hub(repo_name, num_proc=num_proc)
+            sentences.push_to_hub(repo_name, num_proc=num_proc, **kwargs)

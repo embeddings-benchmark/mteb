@@ -1,5 +1,5 @@
 from mteb.models.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 xyz_zh_datasets = {
     "BQ",
@@ -26,7 +26,7 @@ xyz_embedding = ModelMeta(
     name="fangxq/XYZ-embedding",
     model_type=["dense"],
     languages=["zho-Hans"],
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     open_weights=True,
     revision="4004120220b99baea764a1d3508427248ac3bccf",
     release_date="2024-09-13",

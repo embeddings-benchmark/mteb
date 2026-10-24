@@ -1,4 +1,6 @@
 from .cache_wrappers import CacheBackendProtocol, CachedEmbeddingWrapper
+from .compression_wrappers import CompressionWrapper
+from .hybrid_wrappers import HybridSearch
 from .model_meta import ModelMeta
 from .models_protocols import (
     CrossEncoderProtocol,
@@ -6,26 +8,49 @@ from .models_protocols import (
     MTEBModels,
     SearchProtocol,
 )
-from .search_encoder_index.search_backend_protocol import IndexEncoderSearchProtocol
-from .search_wrappers import SearchCrossEncoderWrapper, SearchEncoderWrapper
+from .openai_wrappers import (
+    OpenAIAPIEncodeWrapper,
+    OpenAIAPIRerankWrapper,
+    OpenAIAPITokenEmbedWrapper,
+)
+from .search_encoder_index.search_backend_protocol import (
+    IndexEncoderSearchProtocol,
+)
+from .search_wrappers import (
+    SearchCrossEncoderWrapper,
+    SearchEncoderWrapper,
+)
 from .sentence_transformer_wrapper import (
     CrossEncoderWrapper,
+    MultiVectorSearchEncoderWrapper,
+    MultiVectorWrapper,
     SentenceTransformerEncoderWrapper,
+    SparseEncoderWrapper,
     sentence_transformers_loader,
 )
+from .video_wrappers import Video2ImagesWrapper
 
 __all__ = [
     "CacheBackendProtocol",
     "CachedEmbeddingWrapper",
+    "CompressionWrapper",
     "CrossEncoderProtocol",
     "CrossEncoderWrapper",
     "EncoderProtocol",
+    "HybridSearch",
     "IndexEncoderSearchProtocol",
     "MTEBModels",
     "ModelMeta",
+    "MultiVectorSearchEncoderWrapper",
+    "MultiVectorWrapper",
+    "OpenAIAPIEncodeWrapper",
+    "OpenAIAPIRerankWrapper",
+    "OpenAIAPITokenEmbedWrapper",
     "SearchCrossEncoderWrapper",
     "SearchEncoderWrapper",
     "SearchProtocol",
     "SentenceTransformerEncoderWrapper",
+    "SparseEncoderWrapper",
+    "Video2ImagesWrapper",
     "sentence_transformers_loader",
 ]

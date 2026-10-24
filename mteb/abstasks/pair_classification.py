@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-import hashlib
 import logging
 from collections import defaultdict
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 from datasets import Dataset
@@ -11,19 +10,16 @@ from sklearn.metrics import average_precision_score
 
 from mteb._evaluators import PairClassificationEvaluator
 from mteb.abstasks._statistics_calculation import (
-    calculate_audio_statistics,
-    calculate_image_statistics,
     calculate_label_statistics,
-    calculate_text_statistics,
+    calculate_pair_modality_statistics,
 )
-from mteb.abstasks.abstask import AbsTask
+from mteb.abstasks.abstask import AbsTask, _pair_content_columns
 from mteb.models.model_meta import ScoringFunction
 from mteb.models.models_protocols import EncoderProtocol
-from mteb.types.statistics import (
-    SplitDescriptiveStatistics,
-)
+from mteb.types.statistics import PairClassificationDescriptiveStatistics
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping
     from pathlib import Path
 
     from numpy.typing import NDArray
@@ -32,47 +28,10 @@ if TYPE_CHECKING:
         PairClassificationDistances,
     )
     from mteb.models.models_protocols import MTEBModels
-    from mteb.types import EncodeKwargs, PromptType
-    from mteb.types.statistics import (
-        AudioStatistics,
-        ImageStatistics,
-        LabelStatistics,
-        TextStatistics,
-    )
+    from mteb.timing import TimingStack
+    from mteb.types import EncodeKwargs, Modalities, PromptType
 
 logger = logging.getLogger(__name__)
-
-
-class PairClassificationDescriptiveStatistics(SplitDescriptiveStatistics):
-    """Descriptive statistics for PairClassification
-
-    Attributes:
-        num_samples: number of samples in the dataset.
-        number_of_characters: Total number of symbols in the dataset.
-        unique_pairs: Number of unique pairs
-
-        text1_statistics: Statistics for sentence1
-        image1_statistics: Statistics for image1
-        audio1_statistics: Statistics for audio1
-
-        text2_statistics: Statistics for sentence2
-        image2_statistics: Statistics for image2
-        audio2_statistics: Statistics for audio2
-
-        labels_statistics: Statistics for labels
-    """
-
-    num_samples: int
-    number_of_characters: int | None
-    unique_pairs: int | None
-
-    text1_statistics: TextStatistics | None
-    image1_statistics: ImageStatistics | None
-    audio1_statistics: AudioStatistics | None
-    text2_statistics: TextStatistics | None
-    image2_statistics: ImageStatistics | None
-    audio2_statistics: AudioStatistics | None
-    labels_statistics: LabelStatistics
 
 
 class AbsTaskPairClassification(AbsTask):
@@ -92,11 +51,16 @@ class AbsTaskPairClassification(AbsTask):
     """
 
     abstask_prompt = "Retrieve text that are semantically similar to the given text."
-    input1_column_name: str = "sentence1"
-    input2_column_name: str = "sentence2"
+    input1_column_name: str | Mapping[str, Modalities] = "sentence1"
+    input2_column_name: str | Mapping[str, Modalities] = "sentence2"
     label_column_name: str = "labels"
     input1_prompt_type: PromptType | None = None
     input2_prompt_type: PromptType | None = None
+
+    def _get_content_columns(self) -> dict[str, Modalities]:
+        return _pair_content_columns(
+            (self.input1_column_name, self.input2_column_name), self.modalities
+        )
 
     def _evaluate_subset(
         self,
@@ -108,7 +72,8 @@ class AbsTaskPairClassification(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         num_proc: int | None = None,
-        **kwargs,
+        timer: TimingStack,
+        **kwargs: Any,
     ) -> dict[str, float]:
         if not isinstance(model, EncoderProtocol):
             raise TypeError("Expected model to be an instance of EncoderProtocol")
@@ -120,13 +85,14 @@ class AbsTaskPairClassification(AbsTask):
             )
         evaluator = PairClassificationEvaluator(
             data_split,
-            self.input1_column_name,
-            self.input2_column_name,
+            input1_column_name=self.input1_column_name,
+            input2_column_name=self.input2_column_name,
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
             input1_prompt_type=self.input1_prompt_type,
             input2_prompt_type=self.input2_prompt_type,
+            timer=timer,
             **kwargs,
         )
         similarity_scores = evaluator(
@@ -179,18 +145,23 @@ class AbsTaskPairClassification(AbsTask):
                 max_scores[metric_name].append(metric_value)
 
         for metric in max_scores:
-            if metric in ["f1", "ap", "precision", "recall", "accuracy"]:
+            if metric in ["f1", "ap", "precision", "recall", "accuracy"]:  # noqa: PLR6201
                 output_scores[f"max_{metric}"] = max(max_scores[metric])
         return output_scores
 
     def _calculate_descriptive_statistics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+        self,
+        split: str,
+        *,
+        hf_subset: str | None = None,
+        compute_overall: bool = False,
+        num_proc: int | None = None,
     ) -> PairClassificationDescriptiveStatistics:
         if hf_subset:
             dataset = self.dataset[hf_subset][split]
         elif compute_overall:
             dataset = defaultdict(list)
-            for hf_subset in self.metadata.eval_langs:
+            for hf_subset in self.metadata.eval_langs:  # noqa: PLR1704
                 cur_dataset = self.dataset[hf_subset][split]
                 # for compatibility with v1 version where datasets were stored in a single row
                 if isinstance(cur_dataset, list) or len(cur_dataset) == 1:
@@ -208,82 +179,65 @@ class AbsTaskPairClassification(AbsTask):
         if isinstance(dataset, list):
             dataset = dataset[0]
 
-        input1 = (
-            dataset[self.input1_column_name][0]
-            if len(dataset[self.input1_column_name]) == 1
-            else dataset[self.input1_column_name]
-        )
-        input2 = (
-            dataset[self.input2_column_name][0]
-            if len(dataset[self.input2_column_name]) == 1
-            else dataset[self.input2_column_name]
-        )
-        labels = (
-            dataset[self.label_column_name][0]
-            if len(dataset[self.label_column_name]) == 1
-            else dataset[self.label_column_name]
-        )
+        def _get_col_data(col: str) -> list[Any]:
+            raw: list[Any] = dataset[col]
+            return raw[0] if len(raw) == 1 else raw
 
-        text1_statistics = None
-        text2_statistics = None
-        image1_statistics = None
-        image2_statistics = None
+        labels = _get_col_data(self.label_column_name)
+        n = len(labels)
+
+        if (
+            isinstance(self.input1_column_name, str)
+            and len(self.metadata.modalities) == 1
+        ):
+            modality1 = self.metadata.modalities[0]
+            col_modalities1: Mapping[str, str] = {self.input1_column_name: modality1}
+        else:
+            col_modalities1 = self.input1_column_name  # type: ignore[assignment]
+
+        if (
+            isinstance(self.input2_column_name, str)
+            and len(self.metadata.modalities) == 1
+        ):
+            modality2 = self.metadata.modalities[0]
+            col_modalities2: Mapping[str, str] = {self.input2_column_name: modality2}
+        else:
+            col_modalities2 = self.input2_column_name  # type: ignore[assignment]
+
+        pair_stats = calculate_pair_modality_statistics(
+            col_modalities1,
+            col_modalities2,
+            _get_col_data,
+            n,
+            max_workers=num_proc,
+        )
         number_of_characters = None
-        audio1_statistics = None
-        audio2_statistics = None
-        unique_pairs = None
-        if self.metadata.modalities == ["text"]:
-            text1_statistics = calculate_text_statistics(input1)
-            text2_statistics = calculate_text_statistics(input2)
+
+        if (
+            pair_stats["text1_statistics"] is not None
+            and pair_stats["text2_statistics"] is not None
+        ):
             number_of_characters = (
-                text1_statistics["total_text_length"]
-                + text2_statistics["total_text_length"]
+                pair_stats["text1_statistics"]["total_text_length"]
+                + pair_stats["text2_statistics"]["total_text_length"]
             )
-            unique_pairs = len(set(zip(input1, input2)))
-
-        if self.metadata.modalities == ["image"]:
-            image1_statistics = calculate_image_statistics(input1)
-            image2_statistics = calculate_image_statistics(input2)
-
-            def _compute_image_hash(inputs: list) -> list[str]:
-                hashes = set()
-                for img in inputs:
-                    img_bytes = img.tobytes()
-                    img_hash = hashlib.md5(img_bytes).hexdigest()
-                    hashes.add(img_hash)
-                return list(hashes)
-
-            image_1_hashes = _compute_image_hash(input1)
-            image_2_hashes = _compute_image_hash(input2)
-            unique_pairs = len(set(zip(image_1_hashes, image_2_hashes)))
-
-        if self.metadata.modalities == ["audio"]:
-            audio1_statistics = calculate_audio_statistics(input1)
-            audio2_statistics = calculate_audio_statistics(input2)
-
-            def _compute_audio_hash(inputs: list) -> list[str]:
-                hashes = set()
-                for audio in inputs:
-                    array = audio["array"]
-                    audio_bytes = array.tobytes()
-                    audio_hash = hashlib.md5(audio_bytes).hexdigest()
-                    hashes.add(audio_hash)
-                return list(hashes)
-
-            audio_1_hashes = _compute_audio_hash(input1)
-            audio_2_hashes = _compute_audio_hash(input2)
-            unique_pairs = len(set(zip(audio_1_hashes, audio_2_hashes)))
+        elif pair_stats["text1_statistics"] is not None:
+            number_of_characters = pair_stats["text1_statistics"]["total_text_length"]
+        elif pair_stats["text2_statistics"] is not None:
+            number_of_characters = pair_stats["text2_statistics"]["total_text_length"]
 
         return PairClassificationDescriptiveStatistics(
-            num_samples=len(input1),
-            unique_pairs=unique_pairs,
+            num_samples=n,
+            unique_pairs=pair_stats["unique_pairs"],
             number_of_characters=number_of_characters,
-            text1_statistics=text1_statistics,
-            image1_statistics=image1_statistics,
-            audio1_statistics=audio1_statistics,
-            text2_statistics=text2_statistics,
-            image2_statistics=image2_statistics,
-            audio2_statistics=audio2_statistics,
+            text1_statistics=pair_stats["text1_statistics"],
+            image1_statistics=pair_stats["image1_statistics"],
+            audio1_statistics=pair_stats["audio1_statistics"],
+            video1_statistics=pair_stats["video1_statistics"],
+            text2_statistics=pair_stats["text2_statistics"],
+            image2_statistics=pair_stats["image2_statistics"],
+            audio2_statistics=pair_stats["audio2_statistics"],
+            video2_statistics=pair_stats["video2_statistics"],
             labels_statistics=calculate_label_statistics(labels),
         )
 
@@ -291,6 +245,7 @@ class AbsTaskPairClassification(AbsTask):
         self,
         repo_name: str,
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> None:
         # previously pair classification datasets were stored in a single row
         if self.dataset is None:
@@ -308,14 +263,19 @@ class AbsTaskPairClassification(AbsTask):
             for split in self.dataset:
                 if len(self.dataset[split]) == 1:
                     self.dataset[split] = self.dataset[split][0]
+        if isinstance(self.input1_column_name, str):
+            cols1 = [self.input1_column_name]
+        else:
+            cols1 = list(self.input1_column_name)
+        if isinstance(self.input2_column_name, str):
+            cols2 = [self.input2_column_name]
+        else:
+            cols2 = list(self.input2_column_name)
         self._upload_dataset_to_hub(
             repo_name,
-            [
-                self.input1_column_name,
-                self.input2_column_name,
-                self.label_column_name,
-            ],
+            [*cols1, *cols2, self.label_column_name],
             num_proc=num_proc,
+            **kwargs,
         )
 
     def _compute_metrics_values(
@@ -355,13 +315,13 @@ class AbsTaskPairClassification(AbsTask):
             ap=float(ap),
         )
 
-    def _find_best_acc_and_threshold(
+    def _find_best_acc_and_threshold(  # noqa: PLR6301
         self,
         scores: list[float],
         labels: NDArray[np.int64],
         high_score_more_similar: bool,
     ) -> tuple[float, float]:
-        rows = list(zip(scores, labels))
+        rows = list(zip(scores, labels, strict=True))
         rows = sorted(rows, key=lambda x: x[0], reverse=high_score_more_similar)
 
         max_acc = 0
@@ -376,36 +336,42 @@ class AbsTaskPairClassification(AbsTask):
             else:
                 remaining_negatives -= 1
 
+            # a threshold can't split tied scores, otherwise their row order leaks into the metric
+            if score == rows[i + 1][0]:
+                continue
+
             acc = (positive_so_far + remaining_negatives) / len(labels)
             if acc > max_acc:
                 max_acc = acc
                 best_threshold = (rows[i][0] + rows[i + 1][0]) / 2
         return max_acc, best_threshold
 
-    def _find_best_f1_and_threshold(
-        self, scores, labels: NDArray[np.int64], high_score_more_similar: bool
+    def _find_best_f1_and_threshold(  # noqa: PLR6301
+        self,
+        scores: list[float],
+        labels: NDArray[np.int64],
+        high_score_more_similar: bool,
     ) -> tuple[float, float, float, float]:
-        scores = np.asarray(scores)
-
-        rows = list(zip(scores, labels))
+        rows = list(zip(scores, labels, strict=True))
 
         rows = sorted(rows, key=lambda x: x[0], reverse=high_score_more_similar)
 
         best_f1 = best_precision = best_recall = 0.0
-        threshold = 0
-        nextract = 0
+        threshold = 0.0
         ncorrect = 0
         total_num_duplicates = sum(labels)
 
-        for i in range(len(rows) - 1):
-            score, label = rows[i]
-            nextract += 1
-
+        for i, (score, label) in enumerate(rows[:-1]):
             if label == 1:
                 ncorrect += 1
 
+            # a threshold can't split tied scores, otherwise their row order leaks into the metric
+            if score == rows[i + 1][0]:
+                continue
+
             if ncorrect > 0:
-                precision = ncorrect / nextract
+                # i is 0-based, so i + 1 is the number of rows extracted so far
+                precision = ncorrect / (i + 1)
                 recall = ncorrect / total_num_duplicates
                 f1 = 2 * precision * recall / (precision + recall)
                 if f1 > best_f1:

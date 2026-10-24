@@ -1,0 +1,68 @@
+{
+    "test": {
+        "num_samples": 213904,
+        "number_of_characters": 543884986,
+        "documents_text_statistics": {
+            "total_text_length": 543679661,
+            "min_text_length": 5,
+            "average_text_length": 2544.721090568687,
+            "max_text_length": 65062,
+            "unique_texts": 212791
+        },
+        "documents_image_statistics": null,
+        "documents_audio_statistics": null,
+        "documents_video_statistics": null,
+        "queries_text_statistics": {
+            "total_text_length": 205325,
+            "min_text_length": 480,
+            "average_text_length": 808.3661417322835,
+            "max_text_length": 2378,
+            "unique_texts": 254
+        },
+        "queries_image_statistics": null,
+        "queries_audio_statistics": null,
+        "queries_video_statistics": null,
+        "relevant_docs_statistics": {
+            "num_relevant_docs": 254,
+            "min_relevant_docs_per_query": 1,
+            "average_relevant_docs_per_query": 1.0,
+            "max_relevant_docs_per_query": 1,
+            "unique_relevant_docs": 254
+        },
+        "top_ranked_statistics": null,
+        "hf_subset_descriptive_stats": {
+            "congress": {
+                "num_samples": 213904,
+                "number_of_characters": 543884986,
+                "documents_text_statistics": {
+                    "total_text_length": 543679661,
+                    "min_text_length": 5,
+                    "average_text_length": 2544.721090568687,
+                    "max_text_length": 65062,
+                    "unique_texts": 212791
+                },
+                "documents_image_statistics": null,
+                "documents_audio_statistics": null,
+                "documents_video_statistics": null,
+                "queries_text_statistics": {
+                    "total_text_length": 205325,
+                    "min_text_length": 480,
+                    "average_text_length": 808.3661417322835,
+                    "max_text_length": 2378,
+                    "unique_texts": 254
+                },
+                "queries_image_statistics": null,
+                "queries_audio_statistics": null,
+                "queries_video_statistics": null,
+                "relevant_docs_statistics": {
+                    "num_relevant_docs": 254,
+                    "min_relevant_docs_per_query": 1,
+                    "average_relevant_docs_per_query": 1.0,
+                    "max_relevant_docs_per_query": 1,
+                    "unique_relevant_docs": 254
+                },
+                "top_ranked_statistics": null
+            }
+        }
+    }
+}

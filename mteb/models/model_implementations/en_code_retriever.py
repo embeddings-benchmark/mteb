@@ -1,8 +1,8 @@
-from mteb.models import ModelMeta, sentence_transformers_loader
+from mteb.models import ModelMeta, SentenceTransformerEncoderWrapper
 from mteb.types import PromptType
 
 english_code_retriever = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts={
             PromptType.query.value: "search_query: ",

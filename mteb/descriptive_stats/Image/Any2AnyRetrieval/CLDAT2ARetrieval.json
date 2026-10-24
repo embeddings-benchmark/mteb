@@ -1,0 +1,50 @@
+{
+    "test": {
+        "num_samples": 3045,
+        "num_queries": 2000,
+        "num_documents": 1045,
+        "number_of_characters": 360815,
+        "documents_text_statistics": null,
+        "documents_image_statistics": null,
+        "documents_audio_statistics": {
+            "total_duration_seconds": 23416.309931972788,
+            "min_duration_seconds": 15.003174603174603,
+            "average_duration_seconds": 22.407952088012237,
+            "max_duration_seconds": 30.0,
+            "unique_audios": 1045,
+            "average_sampling_rate": 44100.0,
+            "sampling_rates": {
+                "44100": 1045
+            }
+        },
+        "documents_video_statistics": null,
+        "queries_text_statistics": {
+            "total_text_length": 360815,
+            "min_text_length": 89,
+            "average_text_length": 180.4075,
+            "max_text_length": 314,
+            "unique_texts": 2000
+        },
+        "queries_image_statistics": null,
+        "queries_audio_statistics": {
+            "total_duration_seconds": 44953.12600907029,
+            "min_duration_seconds": 15.003174603174603,
+            "average_duration_seconds": 22.476563004535148,
+            "max_duration_seconds": 30.0,
+            "unique_audios": 971,
+            "average_sampling_rate": 44100.0,
+            "sampling_rates": {
+                "44100": 2000
+            }
+        },
+        "queries_video_statistics": null,
+        "relevant_docs_statistics": {
+            "num_relevant_docs": 2000,
+            "min_relevant_docs_per_query": 1,
+            "average_relevant_docs_per_query": 1.0,
+            "max_relevant_docs_per_query": 1,
+            "unique_relevant_docs": 899
+        },
+        "top_ranked_statistics": null
+    }
+}

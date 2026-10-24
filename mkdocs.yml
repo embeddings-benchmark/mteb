@@ -1,9 +1,11 @@
 site_name: Massive Text Embedding Benchmark
+site_url: https://docs.mteb.org/
 docs_dir: "docs/"
 repo_url: https://github.com/embeddings-benchmark/mteb
 watch: [mteb/, docs/]
 edit_uri: "blob/main/docs/"
 theme:
+  language: "en"
   favicon: images/logos/mteb_logo/dots-icon.png
   logo: images/logos/mteb_logo/dots-icon.png
   features:
@@ -16,6 +18,7 @@ theme:
     - search.highlight
     - content.action.edit
     - content.action.view
+    - content.action.copy
     - content.code.copy
     - content.code.annotate
     - content.code.annotation
@@ -81,13 +84,20 @@ nav:
         - Load Results: get_started/usage/loading_results.md
         - Command Line: get_started/usage/cli.md
         - Run the Leaderboard: get_started/usage/leaderboard.md
-      - Advanced Usage:
-        - Two stage reranking: get_started/advanced_usage/two_stage_reranking.md
+      - Examples:
+        - get_started/advanced_usage/bm25.md
         - Cache embeddings: get_started/advanced_usage/cache_embeddings.md
+        - Cleaning task data: get_started/advanced_usage/cleaning_task_data.md
+        - Hybrid Model: get_started/advanced_usage/hybrid_model.md
+        - Image models on video tasks: get_started/advanced_usage/image_models_on_video.md
         - Retrieval backend: get_started/advanced_usage/retrieval_backend.md
-        - vLLM Wrapper: get_started/advanced_usage/vllm_wrapper.md
+        - Two stage reranking: get_started/advanced_usage/two_stage_reranking.md
+        - vLLM: get_started/advanced_usage/vllm_wrapper.md
+        - OpenAI-Compatible APIs: get_started/advanced_usage/openai_api_wrappers.md
+
   - Contributing:
       - Adding a Model: contributing/adding_a_model.md
+      - Submit Results: contributing/submitting_results.md
       - Adding a Task: contributing/adding_a_dataset.md
       - Adding a Benchmark: contributing/adding_a_benchmark.md
       - CONTRIBUTING.md
@@ -97,40 +107,17 @@ nav:
         - Available Benchmarks: overview/available_benchmarks.md
       - Models:
         - Text: overview/available_models/text.md
+        - Multimodal: overview/available_models/multimodal.md
         - Image: overview/available_models/image.md
         - Image Text: overview/available_models/image_text.md
         - Audio: overview/available_models/audio.md
         - Audio Text: overview/available_models/audio_text.md
-        - Multimodal: overview/available_models/multimodal.md
       - Tasks:
         - overview/available_tasks/retrieval.md
-        - overview/available_tasks/audiopairclassification.md
-        - overview/available_tasks/summarization.md
-        - overview/available_tasks/documentunderstanding.md
-        - overview/available_tasks/compositionality.md
-        - overview/available_tasks/multilabelclassification.md
-        - overview/available_tasks/reranking.md
-        - overview/available_tasks/any2anymultilingualretrieval.md
-        - overview/available_tasks/pairclassification.md
-        - overview/available_tasks/bitextmining.md
-        - overview/available_tasks/audiomultilabelclassification.md
-        - overview/available_tasks/visualsts(eng).md
-        - overview/available_tasks/clustering.md
-        - overview/available_tasks/any2anyretrieval.md
-        - overview/available_tasks/regression.md
         - overview/available_tasks/classification.md
-        - overview/available_tasks/audiozeroshotclassification.md
-        - overview/available_tasks/visualsts(multi).md
-        - overview/available_tasks/visioncentricqa.md
-        - overview/available_tasks/sts.md
-        - overview/available_tasks/audioclassification.md
-        - overview/available_tasks/zeroshotclassification.md
-        - overview/available_tasks/imageclustering.md
-        - overview/available_tasks/audioclustering.md
-        - overview/available_tasks/instructionretrieval.md
-        - overview/available_tasks/audioreranking.md
-        - overview/available_tasks/instructionreranking.md
-        - overview/available_tasks/imageclassification.md
+        - overview/available_tasks/clustering.md
+        - overview/available_tasks/semantic-similarity.md
+        - overview/available_tasks/pair-classification.md
   - API:
       - Overview: api/index.md
       - Evaluation: api/evaluation.md
@@ -139,7 +126,9 @@ nav:
       - Model: api/model.md
       - Results: api/results.md
       - Additional Types: api/types.md
-  - Leaderboard: https://huggingface.co/spaces/mteb/leaderboard
+  - Blog:
+      - blog/index.md
+  - Leaderboard: https://leaderboard.mteb.org/
 
 copyright: This site made available under a Creative Commons Attribution 4.0 license
 
@@ -156,6 +145,21 @@ plugins:
             heading_level: 3
             show_source: true
             show_root_heading: true
+  - blog:
+      blog_dir: blog
+      blog_toc: true
+      post_dir: "{blog}/posts"
+      post_date_format: long
+      post_url_format: "{slug}"
+      post_excerpt: required
+  - social
+  - llmstxt:
+      full_output: llms-full.txt
+      sections:
+        Docs:
+          - "*.md"
+          - "**/*.md"
+
 
 extra_javascript:
   - javascripts/extra.js
@@ -166,3 +170,13 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/embeddings-benchmark/mteb
+      name: MTEB on GitHub
+    - icon: fontawesome/brands/bluesky
+      link: https://bsky.app/profile/mteb.org
+      name: MTEB on Bluesky
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/company/mteb/posts/
+      name: MTEB on LinkedIn
+
+validation:
+  invalid_links: false

@@ -252,7 +252,7 @@ class HakimModelWrapper(AbsEncoder):
         if not task_prompt:
             msg = f"Unknown dataset: {task_name}, no preprocessing applied."
             logger.warning(msg)
-            warnings.warn(msg)
+            warnings.warn(msg, stacklevel=2)
             return sample
 
         task_prompt = f"مسئله : {task_prompt}"
@@ -289,7 +289,7 @@ class HakimModelWrapper(AbsEncoder):
                     f"API request failed (attempt {attempt + 1}/{self.max_retries}): {e}"
                 )
                 if status_code and 400 <= status_code < 500 and status_code != 429:
-                    raise APIError(f"Client error: {e}", status_code)
+                    raise APIError(f"Client error: {e}", status_code) from e
                 time.sleep(self.retry_delay * (2**attempt))
 
         raise APIError(f"API request failed after {self.max_retries} attempts.")

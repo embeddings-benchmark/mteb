@@ -4,22 +4,21 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
-import torch.nn.functional as F
 from tqdm.auto import tqdm
 
-from mteb._requires_package import requires_package
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     from collections.abc import Callable
 
+    import torch
     from torch.utils.data import DataLoader
+    from transformers import BatchEncoding, PreTrainedTokenizerBase
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models.models_protocols import EncoderProtocol
@@ -37,14 +36,10 @@ class RepLLaMAModel(AbsEncoder):
         torch_dtype: torch.dtype,
         device_map: str,
         model_prompts: dict[str, str] | None = None,
-        **kwargs,
+        **kwargs: Any,
     ):
-        from transformers import AutoModel, AutoTokenizer
-
-        requires_package(
-            self, "peft", peft_model_name_or_path, "pip install 'mteb[peft]'"
-        )
         from peft import PeftModel
+        from transformers import AutoModel, AutoTokenizer
 
         self.base_model = AutoModel.from_pretrained(
             base_model_name_or_path,
@@ -63,7 +58,9 @@ class RepLLaMAModel(AbsEncoder):
         self.tokenizer.model_max_length = 512
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
 
-    def create_batch_dict(self, tokenizer, input_texts):
+    def create_batch_dict(
+        self, tokenizer: PreTrainedTokenizerBase, input_texts: list[str]
+    ) -> BatchEncoding:
         max_length = self.model.config.max_length
         batch_dict = tokenizer(
             input_texts,
@@ -85,8 +82,10 @@ class RepLLaMAModel(AbsEncoder):
             return_tensors="pt",
         )
 
-    def combine_query_and_instruction(self, query, instruction):
-        end_punct = "?" if query.strip()[-1] not in ["?", ".", "!"] else ""
+    def combine_query_and_instruction(  # noqa: PLR6301
+        self, query: str, instruction: str
+    ) -> str:
+        end_punct = "?" if query.strip()[-1] not in ["?", ".", "!"] else ""  # noqa: PLR6201
         return f"{query}{end_punct} {instruction}".strip()
 
     def encode(
@@ -99,6 +98,9 @@ class RepLLaMAModel(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        import torch
+        import torch.nn.functional as F
+
         batch_size = 16 if "batch_size" not in kwargs else kwargs.pop("batch_size")
         all_embeddings = []
         prompt_name = self.get_prompt_name(task_metadata, prompt_type)
@@ -121,23 +123,24 @@ class RepLLaMAModel(AbsEncoder):
                 key: value.to(self.model.device) for key, value in batch_dict.items()
             }
 
-            with torch.cuda.amp.autocast():
-                with torch.no_grad():
-                    outputs = self.model(**batch_dict)
-                    last_hidden_state = outputs.last_hidden_state
-                    sequence_lengths = batch_dict["attention_mask"].sum(dim=1) - 1
-                    batch_size = last_hidden_state.shape[0]
-                    reps = last_hidden_state[
-                        torch.arange(batch_size, device=last_hidden_state.device),
-                        sequence_lengths,
-                    ]
-                    embeddings = F.normalize(reps, p=2, dim=-1)
-                    all_embeddings.append(embeddings.cpu().detach().numpy())
+            with torch.cuda.amp.autocast(), torch.no_grad():
+                outputs = self.model(**batch_dict)
+                last_hidden_state = outputs.last_hidden_state
+                sequence_lengths = batch_dict["attention_mask"].sum(dim=1) - 1
+                batch_size = last_hidden_state.shape[0]
+                reps = last_hidden_state[
+                    torch.arange(batch_size, device=last_hidden_state.device),
+                    sequence_lengths,
+                ]
+                embeddings = F.normalize(reps, p=2, dim=-1)
+                all_embeddings.append(embeddings.cpu().detach().numpy())
 
         return np.concatenate(all_embeddings, axis=0)
 
 
-def _loader(wrapper: type[RepLLaMAModel], **kwargs) -> Callable[..., EncoderProtocol]:
+def _loader(
+    wrapper: type[RepLLaMAModel], **kwargs: Any
+) -> Callable[..., EncoderProtocol]:
     _kwargs = kwargs
 
     def loader_inner(**kwargs: Any) -> EncoderProtocol:
@@ -165,7 +168,7 @@ repllama_llama2_original = ModelMeta(
     loader_kwargs=dict(
         base_model_name_or_path="meta-llama/Llama-2-7b-hf",
         device_map="auto",
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
         model_prompts=model_prompts,
     ),
     name="castorini/repllama-v1-7b-lora-passage",
@@ -191,6 +194,8 @@ repllama_llama2_original = ModelMeta(
     citation=REPLLAMA_CITATION,
     public_training_code=None,
     public_training_data=None,
+    extra_requirements_groups=["peft"],
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -199,7 +204,7 @@ repllama_llama2_reproduced = ModelMeta(
     loader_kwargs=dict(
         base_model_name_or_path="meta-llama/Llama-2-7b-hf",
         device_map="auto",
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
         model_prompts=model_prompts,
     ),
     name="samaya-ai/RepLLaMA-reproduced",
@@ -222,4 +227,6 @@ repllama_llama2_reproduced = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
+    extra_requirements_groups=["peft"],
+    output_dtypes=OutputDType.BF16,
 )

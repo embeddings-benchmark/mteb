@@ -12,6 +12,15 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
 2. [Evaluate](../get_started/usage/get_started.md#evaluating-a-model) the desired model using `mteb` on the [benchmarks](../get_started/usage/selecting_tasks.md#selecting-a-benchmark)
 3. Push the results to the [results repository](https://github.com/embeddings-benchmark/results) via a PR. Once merged they will appear on the leaderboard after a day.
 
+!!! tip "Requesting an evaluation"
+
+    If you want a model to be evaluated but are not submitting the results yourself, open an [Evaluation Request](https://github.com/embeddings-benchmark/mteb/issues/new?template=eval_request.yaml) issue instead and fill out the required information.
+
+    Maintainers prioritize evaluation requests for private subsets or cases where community contributors cannot run the benchmark directly. We aim to run a private evaluation within 7 working days of the request. For public benchmarks, the fastest path is still to run the evaluation locally and submit the results PR.
+
+!!! info Submitting Evaluation Results
+
+    This section contains info on how to submit a model implementation. If you wish to submit a model results see [submit results](./submitting_results.md).
 
 ## Adding a model implementation
 
@@ -20,12 +29,13 @@ Typically, it only requires that you fill in metadata about the model and add it
 
 ??? example "Adding a ModelMeta object"
     ```python
-    from mteb.models import ModelMeta, sentence_transformers_loader
+    from mteb.models import ModelMeta, SentenceTransformerEncoderWrapper
+    from mteb.types import OutputDType
 
     my_model = ModelMeta(
         name="model_name",
-        loader=sentence_transformers_loader,
-        languages=["eng-Latn"], # follows ISO 639-3 and BCP-47
+        loader=SentenceTransformerEncoderWrapper,
+        languages=["eng-Latn"],  # follows ISO 639-3 and BCP-47
         open_weights=True,
         revision="5617a9f61b028005a4858fdac845db406aefb181",
         release_date="2025-01-01",
@@ -40,7 +50,11 @@ Typically, it only requires that you fill in metadata about the model and add it
         use_instructions=False,
         public_training_code="https://github.com/user-or-org/my-training-code",
         public_training_data="https://huggingface.co/datasets/user-or-org/full-dataset",
-        training_datasets={"MSMARCO"}, # if you trained on the MSMARCO training set
+        training_datasets={"MSMARCO"},  # if you trained on the MSMARCO training set
+        output_dtypes=[
+            OutputDType.INT8,
+            OutputDType.BINARY,
+        ],  # Alternative output types supported by the model
     )
     ```
 
@@ -95,12 +109,41 @@ However, you can also add these directly to the model configuration:
 
 ```python
 model = ModelMeta(
-    loader=sentence_transformers_loader
+    loader=SentenceTransformerEncoderWrapper,
     loader_kwargs=dict(
         model_prompts={
            "query": "query: ",
            "passage": "passage: ",
         },
+    ),
+    ...
+)
+```
+
+For instruction models that use `InstructSentenceTransformerModel` (or another wrapper built on `AbsEncoder.get_instruction`), instructions defined in `prompts_dict` are selected in the following order by default:
+
+1. Task name prompt from `prompts_dict` (`PromptSource.CUSTOM_PROMPT`)
+2. Task type prompt from `prompts_dict` (`PromptSource.TASK_TYPE_PROMPT`)
+3. Prompt type (`"query"` or `"document"`) prompt from `prompts_dict` (`PromptSource.ENCODE_TYPE_PROMPT`)
+4. Prompt defined in the task metadata (`PromptSource.DEFAULT_TASK_PROMPT`)
+
+This means that generic task type or prompt type prompts override the prompt defined in the task.
+If you want the prompt from the task metadata to take priority over the generic prompts of the model, change the order with `prompt_priority`:
+
+```python
+from mteb.models.abs_encoder import PromptSource
+
+model = ModelMeta(
+    loader=InstructSentenceTransformerModel,
+    loader_kwargs=dict(
+        instruction_template="Instruct: {instruction}\nQuery: ",
+        prompts_dict={"query": "Given a query, retrieve relevant passages"},
+        prompt_priority=[
+            PromptSource.CUSTOM_PROMPT,
+            PromptSource.DEFAULT_TASK_PROMPT,
+            PromptSource.TASK_TYPE_PROMPT,
+            PromptSource.ENCODE_TYPE_PROMPT,
+        ],
     ),
     ...
 )
@@ -115,9 +158,10 @@ If you need to use a custom implementation, you can specify the `loader` paramet
     from mteb.types import PromptType, Array
     import numpy as np
 
+
     class CustomModel:
         def __init__(self, model_name: str, revision: str, **kwargs):
-            pass # your initialization of model here
+            pass  # your initialization of model here
 
         def encode(
             self,
@@ -152,6 +196,100 @@ your_model = ModelMeta(
 ```
 
 
+### Loading dependencies only when needed
+
+`mteb` imports every model implementation to list models and read their metadata, for example in`mteb.get_model_metas()`, the leaderboard, or when loading results. To keep this fast, a model file should only load the packages it depends on (`torch`, `transformers`, `sentence_transformers` or any model-specific
+package) when the model is actually used, not when the file is imported.
+
+This means nothing that runs at import time may use them: top-level imports, decorators, default arguments, base classes and values inside `ModelMeta(...)`. The patterns below cover the common cases.
+
+=== "Imports"
+    Import packages inside the functions that use them. Imports needed only for type hints go under `TYPE_CHECKING`:
+
+    ```python
+    from __future__ import annotations
+
+    from typing import TYPE_CHECKING
+
+    if TYPE_CHECKING:
+        import torch  # only used in type hints
+
+
+    class MyModel(AbsEncoder):
+        def __init__(self, model_name: str, revision: str, **kwargs):
+            from transformers import AutoModel  # not at the top of the file
+
+            self.model = AutoModel.from_pretrained(model_name, revision=revision)
+
+        def encode(self, inputs, **kwargs) -> torch.Tensor: ...
+    ```
+
+    For optional packages, also add them as a requirement group, see [Adding model dependencies](#adding-model-dependencies).
+
+=== "No-grad / inference mode"
+    Use `torch.no_grad()` or `torch.inference_mode()` as a context manager instead of a decorator,
+    since a decorator runs when the file is imported:
+
+    ```python
+    def encode(self, inputs, **kwargs):
+        import torch
+
+        with torch.inference_mode():  # instead of @torch.inference_mode()
+            ...
+    ```
+
+=== "Device"
+    Default `device` to `None` and pick one inside the function, since a default argument runs when the file is imported. A device passed by the user is always used as is:
+
+    ```python
+    def __init__(self, model_name: str, revision: str, device: str | None = None, **kwargs):
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+    ```
+
+    To default to MPS on Apple Silicon, check for it explicitly:
+
+    ```python
+    if device is None:
+        if torch.cuda.is_available():
+            device = "cuda"
+        elif torch.backends.mps.is_available():
+            device = "mps"
+        else:
+            device = "cpu"
+    ```
+
+=== "Dtypes"
+    `ModelMeta` entries are created when the file is imported, so name dtypes with [`OutputDType`][mteb.types.OutputDType] instead of passing a `torch.dtype`:
+
+    ```python
+    model = ModelMeta(
+        loader=MyWrapper,
+        loader_kwargs=dict(torch_dtype=OutputDType.BF16),  # not torch.bfloat16
+        ...
+    )
+    ```
+
+    `OutputDType` is a string enum, so `transformers` accepts it directly, and `OutputDType.get_dtype()` returns the matching `torch.dtype`.
+
+=== "torch.nn.Module subclasses"
+    A class that subclasses `torch.nn.Module` needs torch when it is defined, so define it inside the
+    function that uses it:
+
+    ```python
+    class MyModel(AbsEncoder):
+        def __init__(self, model_name: str, revision: str, **kwargs):
+            import torch
+
+            class Pooler(torch.nn.Module):
+                def forward(self, hidden_states):
+                    return hidden_states.mean(dim=1)
+
+            self.pooler = Pooler()
+    ```
+
 ### Adding model dependencies
 If you are adding a model that requires additional dependencies, you can add them to the `pyproject.toml` file, under optional dependencies:
 
@@ -165,14 +303,59 @@ As it is an optional dependency, you can't use top-level dependencies, but will 
 
 ??? example "Adding optional dependencies"
     ```python
-    from mteb._requires_package import requires_package
 
     class VoyageAIModel:
         def __init__(self, model_name: str, revision: str, **kwargs) -> None:
-            requires_package(self, "voyageai", model_name, "pip install 'mteb[voyageai]'")
             import voyageai
             ...
+
+    # in the model meta specify the requirement group:
+    voyage_model = ModelMeta(
+        model_name = "...",
+        extra_requirements_groups=["voyageai"],
+        ...
+    )
     ```
+
+### Local Model Verification using mock tasks
+
+Before submitting your model implementation in a Pull Request, you must verify that the model integrates correctly with the benchmarking pipeline using the local verification helper `mock_run`. Mock tasks run locally, execute very quickly, and do not download large datasets.
+
+To run the local verification:
+
+=== "Python"
+    ```python
+    import mteb
+
+    # Load your new model
+    model = mteb.get_model("your_model_name")
+
+    # This will run the mock test tasks compatible with your model's modalities and protocols to verify your new model implementation
+    results = mteb.mock_run(model)
+
+    print(results.all_passed)  # whether the model passed every check
+    print(results.to_markdown())  # the same report the CLI writes to disk
+    ```
+
+    `results` maps each mock task name to its status:
+
+    | Value | Meaning |
+    | --- | --- |
+    | `TaskResult` | the task ran successfully |
+    | `TaskError` | the task failed, the `exception` attribute contains the reason (tasks failing due to a missing optional dependency are reported as skipped) |
+    | `None` | the task is not compatible with the model's modalities or protocols |
+
+    ```python
+    results["MockRetrievalTask"]  # the status of a single mock task
+    results.task_results  # the full {task name: status} mapping
+    ```
+
+=== "CLI"
+    ```bash
+    mteb mock-run -m your_model_name
+    ```
+
+    This prints a results summary table to the terminal and saves the markdown file `mteb_mock_run_results.md` in the directory you ran the command from. Please commit the resulting file with your PR.
 
 ### Submitting your model as a PR
 
@@ -185,4 +368,21 @@ When submitting you models as a PR, please copy and paste the following checklis
   - [ ] `mteb.get_model_meta(model_name, revision)`
 - [ ] I have tested the implementation works on a representative set of tasks.
 - [ ] The model is public, i.e., is available either as an API or the weights are publicly available to download
+- [ ] I reproduced results from the original paper (if applicable) on at least one benchmark, and I am including the results in the PR description.
+```
+
+
+### Matryoshka embeddings
+
+To add support for matryoshka embeddings you can specify `embed_dim` as a list of dimensions.
+
+```python
+import mteb
+from mteb.models import ModelMeta
+
+my_model = ModelMeta(
+    name="custom/my_model",
+    ...,
+    embed_dim=[128, 256, 512, 1024],
+)
 ```

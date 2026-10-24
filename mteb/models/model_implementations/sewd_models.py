@@ -1,15 +1,19 @@
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
-from transformers import SEWDForCTC, Wav2Vec2FeatureExtractor
 
-from mteb._create_dataloaders import AudioCollator
-from mteb._requires_package import requires_audio_dependencies
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import (
+    AudioCollator,
+    check_duration_cap,
+    single_clip_dataloader,
+)
+
+logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -24,14 +28,21 @@ class SewDWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_seconds: float = 30.0,
+        device: str | None = None,
+        # None: an mteb cap at the relative-position horizon read below; the
+        # encoder runs past it, so this is not a hard model limit
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
-        requires_audio_dependencies()
+        check_duration_cap(max_audio_length_seconds)
+        import torch
+        from transformers import SEWDForCTC, Wav2Vec2FeatureExtractor
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         self.model_name = model_name
         self.device = device
-        self.max_audio_length_seconds = max_audio_length_seconds
 
         # SewD uses the same feature extractor as Wav2Vec2
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(
@@ -43,17 +54,43 @@ class SewDWrapper(AbsEncoder):
         self.model.eval()
         self.sampling_rate = self.feature_extractor.sampling_rate
 
-    def get_audio_embeddings(
+        # samples: max_position_embeddings x conv_stride x squeeze_factor
+        # https://huggingface.co/asapp/sew-d-base-plus-400k-ft-ls100h/blob/main/config.json
+        config = self.model.config
+        stride = 1
+        for st in config.conv_stride:
+            stride *= st
+        self.max_samples = (
+            config.max_position_embeddings * stride * config.squeeze_factor
+        )
+        if max_audio_length_seconds is not None:
+            self.max_samples = int(max_audio_length_seconds * self.sampling_rate)
+        logger.info(
+            "%s: audio capped at %d samples (%.1f s)",
+            model_name,
+            self.max_samples,
+            self.max_samples / self.sampling_rate,
+        )
+
+    def get_audio_embeddings(  # noqa: PLR0914
         self,
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        inputs.collate_fn = AudioCollator(self.sampling_rate)
+        import torch
+
+        # the conv feature encoder plus squeeze_factor 2 needs at least 720 samples (45 ms at 16 kHz)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate, min_samples=720
+        )
         all_embeddings = []
 
         for batch in tqdm(
-            inputs,
+            single_clip_dataloader(
+                inputs,
+                "group-norm feature encoder: padding changes the embeddings",
+            ),
             disable=not show_progress_bar,
         ):
             audio_arrays = [audio["array"] for audio in batch["audio"]]
@@ -63,20 +100,19 @@ class SewDWrapper(AbsEncoder):
                 return_tensors="pt",
                 padding="longest",
                 truncation=True,
-                max_length=int(self.max_audio_length_seconds * self.sampling_rate),
+                max_length=self.max_samples,
                 return_attention_mask=True,
             ).to(self.device)
 
             with torch.no_grad():
-                # SewD model outputs
-                outputs = self.model(
+                # base model output, as read by the CTC head (hidden_states[-1] is half-rate)
+                outputs = self.model.sew_d(
                     feature_inputs.input_values,
                     attention_mask=feature_inputs.attention_mask,
-                    output_hidden_states=True,
                 )
 
                 # Get embeddings from last hidden state
-                last_hidden_state = outputs.hidden_states[-1]
+                last_hidden_state = outputs.last_hidden_state
 
                 # Apply attention-masked pooling to exclude padding tokens
                 batch_size, hidden_seq_len, hidden_size = last_hidden_state.shape
@@ -128,6 +164,7 @@ sewd_base = ModelMeta(
     release_date="2021-09-14",
     max_tokens=float("inf"),
     n_parameters=95_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=675,
     embed_dim=768,
     license="apache-2.0",
@@ -160,8 +197,9 @@ sewd_tiny = ModelMeta(
     release_date="2021-09-14",
     max_tokens=float("inf"),
     n_parameters=19_700_000,
+    n_embedding_parameters=None,
     memory_usage_mb=92,
-    embed_dim=256,
+    embed_dim=384,
     license="apache-2.0",
     reference="https://huggingface.co/asapp/sew-d-tiny-100k-ft-ls100h",
     similarity_fn_name="cosine",
@@ -192,8 +230,9 @@ sewd_mid = ModelMeta(
     release_date="2021-09-14",
     max_tokens=float("inf"),
     n_parameters=139_000_000,
+    n_embedding_parameters=None,
     memory_usage_mb=530,
-    embed_dim=768,
+    embed_dim=512,
     license="apache-2.0",
     reference="https://huggingface.co/asapp/sew-d-mid-400k-ft-ls100h",
     similarity_fn_name="cosine",

@@ -34,21 +34,26 @@ class HUMESIB200ClusteringS2S(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{adelani-etal-2023-sib,
-  address = {Toronto, Canada},
+@inproceedings{adelani-etal-2024-sib,
+  address = {St. Julian{'}s, Malta},
   author = {Adelani, David Ifeoluwa  and
-Hedderich, Michael A.  and
-Zhu, Dawei  and
-van den Berg, Esther  and
-Klakow, Dietrich},
-  booktitle = {Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
-  doi = {10.18653/v1/2023.acl-long.660},
-  month = jul,
-  pages = {11784--11801},
+Liu, Hannah  and
+Shen, Xiaoyu  and
+Vassilyev, Nikita  and
+Alabi, Jesujoba O.  and
+Mao, Yanke  and
+Gao, Haonan  and
+Lee, En-Shiun Annie},
+  booktitle = {Proceedings of the 18th Conference of the European Chapter of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2024.eacl-long.14},
+  editor = {Graham, Yvette  and
+Purver, Matthew},
+  month = mar,
+  pages = {226--245},
   publisher = {Association for Computational Linguistics},
-  title = {{SIB}-200: A Large-Scale News Classification Dataset for Over 200 Languages},
-  url = {https://aclanthology.org/2023.acl-long.660},
-  year = {2023},
+  title = {{SIB}-200: A Simple, Inclusive, and Big Evaluation Dataset for Topic Classification in 200+ Languages and Dialects},
+  url = {https://aclanthology.org/2024.eacl-long.14/},
+  year = {2024},
 }
 """,
         prompt="Identify the news category that articles belong to based on their content",
