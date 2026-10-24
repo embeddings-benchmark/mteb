@@ -11,6 +11,8 @@ from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
 from mteb.types import OutputDType
 
 if TYPE_CHECKING:
+    from collections.abc import Iterator
+
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -140,6 +142,21 @@ class Qwen3VLRerankerWrapper(CrossEncoderWrapper):
         if not prompt:
             return DEFAULT_INSTRUCTION
         return self._normalize_instruction(prompt)
+
+    def _iter_inputs(
+        self, loader: DataLoader[BatchedInput], prefix: str
+    ) -> Iterator[list[Any]]:
+        # the official script puts media before text (video, image, text), and
+        # sentence-transformers keeps the order of the input's keys
+        # https://huggingface.co/Qwen/Qwen3-VL-Reranker-2B/blob/main/scripts/qwen3_vl_reranker.py
+        order = ("video", "image", "text")
+        for items in super()._iter_inputs(loader, prefix):
+            yield [
+                {k: item[k] for k in sorted(item, key=order.index)}
+                if isinstance(item, dict)
+                else item
+                for item in items
+            ]
 
     def predict(
         self,
