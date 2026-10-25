@@ -754,8 +754,11 @@ class SearchCrossEncoderWrapper:
         # select() builds an indices-mapping view over the existing datasets
         # instead of materializing one copied (and, for images, decoded) row per
         # pair, which for image corpora multiplies memory by top_k x decode size.
+        # Queries are selected after preparation: preparing the repeated rows
+        # copies them, which overflows Arrow for video queries.
         queries_loader = create_dataloader(
-            queries.select(query_indices),
+            queries,
+            indices=query_indices,
             task_metadata=task_metadata,
             # PromptType.query, matching SearchEncoderWrapper: on mixed-modality
             # tasks the query rows carry the query modality, and a
