@@ -36,5 +36,5 @@ all_minilm_l6_v2_genbais = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     model_type=["dense"],
-    citation=GENBAIS_CITATION,
+    citation=None,
 )
