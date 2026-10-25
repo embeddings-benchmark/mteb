@@ -344,7 +344,6 @@ def create_dataloader(
     input_column: str | Sequence[str] | None = None,
     batch_size: int = 32,
     num_proc: int | None = None,
-    indices: Sequence[int] | None = None,
     **kwargs: Any,
 ) -> DataLoader[BatchedInput]:
     """Create a dataloader from a dataset.
@@ -360,8 +359,6 @@ def create_dataloader(
             If a Sequence, columns are assumed to already match modality names. If None, inferred from task metadata.
         batch_size: The batch size for the dataloader.
         num_proc: The number of processes to use for dataset processing.
-        indices: Rows to load, in order and possibly repeated. Selected after the
-            dataset is prepared, so each row is prepared once.
         **kwargs: Additional arguments to pass to the dataloader creation functions.
 
     Returns:
@@ -377,8 +374,6 @@ def create_dataloader(
         and task_metadata.modalities == ["text"]
         and _input_column is not None
     ):
-        if indices is not None:
-            dataset = dataset.select(indices)
         return _create_dataloader_from_texts(
             dataset[_input_column],
             batch_size=batch_size,
@@ -392,8 +387,6 @@ def create_dataloader(
         input_column=_input_column,
         num_proc=num_proc,
     )
-    if indices is not None:
-        prepared = prepared.select(indices)
 
     return DataLoader(
         prepared,
