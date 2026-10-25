@@ -1,7 +1,7 @@
-from datasets import Dataset
+from datasets import Dataset, Features, Value, Video
 
 import mteb
-from mteb.mocks.mock_tasks import MockRetrievalTask
+from mteb.mocks.mock_tasks import MockRetrievalTask, MockVideoRetrievalV2T
 from mteb.models import SearchCrossEncoderWrapper
 
 
@@ -67,3 +67,39 @@ def test_cross_encoder_search_passes_encode_kwargs_to_predict():
         top_ranked={"q1": ["doc1"]},
     )
     assert seen["batch_size"] == 3
+
+
+def test_cross_encoder_search_video_query_with_many_candidates():
+    """A video query repeated once per candidate must not be copied, otherwise Arrow overflows (> 2 GiB)."""
+    metadata = MockVideoRetrievalV2T.metadata.model_copy(update={"category": "vt2t"})
+    num_candidates = 520  # 520 x 4 MiB > 2 GiB
+    doc_ids = [f"doc{i}" for i in range(num_candidates)]
+    model = SearchCrossEncoderWrapper(mteb.get_model("mteb/baseline-no-reranking"))
+    model.index(
+        corpus=Dataset.from_dict({"id": doc_ids, "text": doc_ids}),
+        task_metadata=metadata,
+        hf_split="test",
+        hf_subset="default",
+        encode_kwargs={},
+    )
+    queries = Dataset.from_dict(
+        {
+            "id": ["q1"],
+            "text": ["what happens in the video?"],
+            "video": [{"bytes": b"0" * 4 * 2**20, "path": None}],
+        },
+        features=Features(
+            {"id": Value("string"), "text": Value("string"), "video": Video()}
+        ),
+    )
+
+    res = model.search(
+        queries=queries,
+        task_metadata=metadata,
+        hf_split="test",
+        hf_subset="default",
+        top_k=num_candidates,
+        encode_kwargs={},
+        top_ranked={"q1": doc_ids},
+    )
+    assert list(res["q1"]) == doc_ids
