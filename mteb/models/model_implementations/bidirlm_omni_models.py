@@ -98,10 +98,10 @@ class BidirLMOmniEncoder(AbsEncoder):
         # 64 is an mteb cap; the checkpoint's video config has max_frames=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
-        # 30 s: an mteb cap at chunk_length=30; the processor itself sets
-        # truncation=False, so upstream does not cut
+        # None: the processor sets truncation=False and the audio encoder runs in
+        # windows, so the full clip is used, as in the authors' wrapper (#4370)
         # https://huggingface.co/BidirLM/BidirLM-Omni-2.5B-Embedding/blob/main/processing_bidirlm_omni.py
-        max_samples: int | None = 30 * 16_000,
+        max_samples: int | None = None,
         **kwargs: Any,
     ) -> None:
         import torch
