@@ -17,6 +17,8 @@ papr_embed_code_prompts = {
     "StackOverflowQA": "Given a question about coding, retrieval code or passage that can solve user's question",
     "SyntheticText2SQL": "Given a user's question, retrieve SQL queries that are appropriate responses to the question",
     "SciFact": "Given a scientific claim, retrieve documents that support or refute the claim",
+    "CodeEditSearchRetrieval": "Given a piece of code, retrieval code that in the ",
+    "CodeSearchNetRetrieval": "Given a code snippet, retrieve the comment corresponding to that code.",
 }
 
 papr_embed_code_instruction_template = "Instruct: {instruction}\nQuery:"
@@ -46,7 +48,13 @@ _coir_train_4b = {
     "CosQA",
     "CodeTransOceanDL",
 }  # CodeFeedbackST and CodeTransOceanContest were not trained on
-papr_embed_code_4b_training_datasets = _base_training | _coir_train_4b | {"SciFact"}
+# Both sizes also trained on lightonai/CodeEditSearchTrain (commit message -> diff, derived from
+# bigcode/commitpackft and decontaminated against cassanof/CodeEditSearch), and on the CoIR CodeSearchNet
+# train split, which shares its source with CodeSearchNetRetrieval. Both evals are declared as seen.
+_code_near = {"CodeEditSearchRetrieval", "CodeSearchNetRetrieval"}
+papr_embed_code_4b_training_datasets = (
+    _base_training | _coir_train_4b | _code_near | {"SciFact"}
+)
 papr_embed_code_0b6_training_datasets = papr_embed_code_4b_training_datasets | {
     "CodeFeedbackST",
     "CodeTransOceanContest",
