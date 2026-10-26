@@ -1,8 +1,14 @@
 """Last-prompt embeddings from unchanged, pinned Qwen3.5 and NuExtract3 weights.
 
-These are text-only prompting recipes, not separately trained checkpoints.
-The submitted English v2 results were evaluated with vLLM; this implementation
-uses Transformers to extract the same post-final-normalization representation.
+Each embedding is the last hidden state of the final active prompt token,
+after the decoder's final RMSNorm: the state that predicts the first output
+token. No token averaging or L2 normalization is applied.
+
+The submitted English v2 results were generated with NuMind's extension:
+https://github.com/numindai/vLLM-Last-Hidden-State
+It exposes this prompt hidden state from vLLM's generation forward pass.
+This MTEB implementation uses Transformers directly for that representation.
+Weights are unchanged; this adapter constructs the complete prompts client-side.
 Historical serving precision/backend settings were not recorded.
 """
 
@@ -29,7 +35,6 @@ class Recipe(TypedDict):
     revision: str
     parameters: int
     prompt: str
-    chat_template_kwargs: dict[str, str | bool]
 
 
 RECIPES: dict[str, Recipe] = {
@@ -39,7 +44,6 @@ RECIPES: dict[str, Recipe] = {
         "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a",
         "parameters": 4659865088,
         "prompt": "{text}\n Summary above sentence in one word: ",
-        "chat_template_kwargs": {"enable_thinking": False},
     },
     "nuextract_revised": {
         "name": "numind/NuExtract3-revised-last-prompt",
@@ -47,14 +51,12 @@ RECIPES: dict[str, Recipe] = {
         "revision": "c99dc8f5641b866aa0192b6ea78f84bf9f3535f1",
         "parameters": 4539265536,
         "prompt": "{text}",
-        "chat_template_kwargs": {"mode": "embeddings", "enable_thinking": False},
     },
 }
 
 
-# The text-only, single-user-message rendering of the evaluated revised
-# NuExtract template. Its embeddings mode has no system message and ends with
-# an assistant JSON prefill. The Hub's default extraction template is different.
+# The client constructs NuExtract's complete document-identity prompt, including
+# the assistant JSON prefill, and passes its tokens directly to the model.
 NUEXTRACT_PREFIX = (
     "【task】structured\n"
     '【template_start】{"short description": "string"}【template_end】\n'
@@ -132,8 +134,8 @@ class LastPromptEncoder(AbsEncoder):
     def render_prompt(self, text: str) -> str:
         if not isinstance(text, str):
             raise TypeError("Only text inputs are supported")
-        # Both evaluated templates apply Jinja's trim to string message content.
-        # For Qwen the E5-V suffix is added BEFORE trimming the whole message.
+        # Preserve evaluated whitespace handling. For Qwen the E5-V suffix is
+        # added BEFORE trimming the whole message.
         if self.recipe_name == "qwen_e5v":
             content = self.recipe["prompt"].format(text=text).strip()
             return "<|im_start|>user\n" + content + ASSISTANT_PREFIX
