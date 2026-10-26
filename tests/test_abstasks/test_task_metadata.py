@@ -10,6 +10,7 @@ from mteb.abstasks.task_metadata import (
     _TASKTYPE2SIMPLIFIEDTASKTYPE,
     TaskMetadata,
     TaskType,
+    _is_unclear_license,
 )
 from mteb.mocks import (
     MOCK_MAEB_TASK_GRID,
@@ -309,6 +310,78 @@ tasks:
   split: test
 """
     )
+
+
+def _task_metadata(license_name: str | None) -> TaskMetadata:
+    return TaskMetadata(
+        name="MyTask",
+        dataset={"path": "test/dataset", "revision": "1.0"},
+        description="testing",
+        type="Classification",
+        category="t2t",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        license=license_name,
+    )
+
+
+@pytest.mark.parametrize(
+    "license_name",
+    [
+        None,
+        "",
+        "   ",
+        "not specified",
+        "Not Specified",
+        "not-specified",
+        "not_specified",
+        "unspecified",
+        "unknown",
+        "n/a",
+        "N/A",
+        "na",
+        "none",
+        "none found",
+        "no license",
+        "unlicensed",
+        "unclear",
+        "other",
+        "custom",
+        "missing",
+        "tbd",
+        "todo",
+    ],
+)
+def test_unclear_license_values(license_name: str | None):
+    assert _is_unclear_license(license_name)
+
+
+@pytest.mark.parametrize(
+    "license_name",
+    [
+        "mit",
+        "apache-2.0",
+        "cc-by-4.0",
+        "cc-by-nc-4.0",
+        "multiple",
+        "https://example.com/license",
+    ],
+)
+def test_clear_license_values(license_name: str):
+    assert not _is_unclear_license(license_name)
+
+
+def test_validate_metadata_rejects_not_specified():
+    with pytest.raises(ValueError, match="unclear license"):
+        _task_metadata("not specified")._validate_metadata()
+
+
+def test_validate_metadata_accepts_concrete_license():
+    _task_metadata("mit")._validate_metadata()
+    _task_metadata("multiple")._validate_metadata()
+    _task_metadata("https://example.com/license")._validate_metadata()
 
 
 def test_task_hf_config_from_existing():

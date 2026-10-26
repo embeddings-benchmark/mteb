@@ -435,6 +435,51 @@ class MetadataDatasetDict(TypedDict, total=False):
     trust_remote_code: bool
 
 
+# Placeholders that do not name a license. Compared after case folding, with
+# hyphens and underscores treated as spaces. "multiple" is not included: it
+# means the task combines several concrete licenses.
+_UNCLEAR_LICENSES = frozenset(
+    {
+        "custom",
+        "missing",
+        "n.a.",
+        "n/a",
+        "na",
+        "no license",
+        "none",
+        "none found",
+        "not specified",
+        "other",
+        "tbd",
+        "todo",
+        "unclear",
+        "unknown",
+        "unlicensed",
+        "unspecified",
+    }
+)
+
+
+def _is_unclear_license(license_name: str | None) -> bool:
+    """Return whether a license value fails to name a license.
+
+    ``None``, a blank string, and placeholders such as ``"not specified"`` are
+    unclear. An SPDX-style id, ``"multiple"``, or a URL is not.
+
+    Args:
+        license_name: License string from task metadata.
+
+    Returns:
+        True when the license is missing or is an unclear placeholder.
+    """
+    if license_name is None or not license_name.strip():
+        return True
+    normalized = " ".join(
+        license_name.casefold().replace("-", " ").replace("_", " ").split()
+    )
+    return normalized in _UNCLEAR_LICENSES
+
+
 class TaskMetadata(BaseModel):
     """Metadata for a task.
 
@@ -456,7 +501,7 @@ class TaskMetadata(BaseModel):
         domains: The domains of the data. This includes "Non-fiction", "Social", "Fiction", "News", "Academic", "Blog", "Encyclopaedic",
             "Government", "Legal", "Medical", "Poetry", "Religious", "Reviews", "Web", "Spoken", "Written". A dataset can belong to multiple domains.
         task_subtypes: The subtypes of the task. E.g. includes "Sentiment/Hate speech", "Thematic Clustering". Feel free to update the list as needed.
-        license: The license of the data specified as lowercase, e.g. "cc-by-nc-4.0". If the license is not specified, use "not specified". For custom licenses a URL is used.
+        license: The license of the data specified as lowercase, e.g. "cc-by-nc-4.0". New tasks need a concrete license. Use a URL for a custom license. "not specified" remains accepted so tasks already in the benchmark still load.
         annotations_creators: The type of the annotators. Includes "expert-annotated" (annotated by experts), "human-annotated" (annotated e.g. by
             mturkers), "derived" (derived from structure in the data).
         dialect: The dialect of the data, if applicable. Ideally specified as a BCP-47 language tag. Empty list if no dialects are present.
@@ -509,8 +554,30 @@ class TaskMetadata(BaseModel):
     superseded_by: str | None = None
     is_beta: bool = False
 
+    def has_unclear_license(self) -> bool:
+        """Return whether this task's license fails to name a license.
+
+        Placeholders such as ``"not specified"`` stay valid on the model so
+        tasks already in the benchmark still load. The task metadata tests
+        reject them on any task that is not already listed as an exception.
+
+        Returns:
+            True when the license is missing or is an unclear placeholder.
+        """
+        return _is_unclear_license(self.license)
+
+    def _validate_license(self) -> None:
+        """Raise when the license is missing or does not name a license."""
+        if self.has_unclear_license():
+            raise ValueError(
+                f"Task {self.name!r} has an unclear license ({self.license!r}). "
+                "New tasks need a concrete license, such as 'cc-by-4.0' or 'mit', "
+                "or a URL for a custom license."
+            )
+
     def _validate_metadata(self) -> None:
         self._eval_langs_are_valid(self.eval_langs)
+        self._validate_license()
 
     @field_validator("prompt")
     @classmethod
