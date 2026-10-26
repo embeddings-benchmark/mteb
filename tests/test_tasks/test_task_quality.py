@@ -923,6 +923,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "FER2013",  # documented to contain duplicate/near-duplicate images
         "FER2013ZeroShot",  # documented to contain duplicate/near-duplicate images
         "FORBI2IRetrieval",  # fingerprint corpus contains near-duplicate captures of the same print
+        "FORBI2IRetrieval.v2",  # same corpus as v1
         "FashionIQIT2IRetrieval",
         "GLAMI1MI2TRetrieval",
         "GLAMI1MT2IRetrieval",  # images recur across language subsets
@@ -1122,6 +1123,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
     ],
     "small_image": [
         "FORBI2IRetrieval",  # min 1x1px query image present
+        "FORBI2IRetrieval.v2",  # same queries as v1 minus the unanswerable duplicates
         "GLDv2I2IRetrieval",  # min 7x7px document image present
         "Imagenet1k",  # min 8x10px image present
     ],

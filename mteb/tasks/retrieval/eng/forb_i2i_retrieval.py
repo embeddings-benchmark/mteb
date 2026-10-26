@@ -1,3 +1,10 @@
+from __future__ import annotations
+
+from collections import defaultdict
+from typing import Any
+
+from datasets import Image
+
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -24,6 +31,7 @@ class FORBI2I(AbsTaskRetrieval):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
+        superseded_by="FORBI2IRetrieval.v2",
         bibtex_citation=r"""
 @misc{wu2023forbflatobjectretrieval,
   archiveprefix = {arXiv},
@@ -36,3 +44,34 @@ class FORBI2I(AbsTaskRetrieval):
 }
 """,
     )
+
+
+class FORBI2IV2(FORBI2I):
+    metadata = FORBI2I.metadata.model_copy(
+        update={
+            "name": "FORBI2IRetrieval.v2",
+            "description": FORBI2I.metadata.description
+            + " Version 2 drops queries whose image is identical to another query's image with a different answer: 3,074 queries share one 80x80 placeholder image (a failed download), so no model can answer them.",
+            "adapted_from": ["FORBI2IRetrieval"],
+            "superseded_by": None,
+        }
+    )
+
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        for subset in self.dataset:
+            for split in self.dataset[subset]:
+                data = self.dataset[subset][split]
+                queries, relevant_docs = data["queries"], data["relevant_docs"]
+                raw_images = queries.cast_column("image", Image(decode=False))["image"]
+                images = [image["bytes"] for image in raw_images]
+                answers: dict[bytes, set[frozenset[str]]] = defaultdict(set)
+                for query_id, image in zip(queries["id"], images, strict=True):
+                    answers[image].add(frozenset(relevant_docs[query_id]))
+                keep = [i for i, image in enumerate(images) if len(answers[image]) == 1]
+                data["queries"] = queries.select(keep)
+                kept_ids = set(data["queries"]["id"])
+                data["relevant_docs"] = {
+                    query_id: docs
+                    for query_id, docs in relevant_docs.items()
+                    if query_id in kept_ids
+                }
