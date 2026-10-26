@@ -435,51 +435,6 @@ class MetadataDatasetDict(TypedDict, total=False):
     trust_remote_code: bool
 
 
-# Placeholders that do not name a license. Compared after case folding, with
-# hyphens and underscores treated as spaces. "multiple" is not included: it
-# means the task combines several concrete licenses.
-_UNCLEAR_LICENSES = frozenset(
-    {
-        "custom",
-        "missing",
-        "n.a.",
-        "n/a",
-        "na",
-        "no license",
-        "none",
-        "none found",
-        "not specified",
-        "other",
-        "tbd",
-        "todo",
-        "unclear",
-        "unknown",
-        "unlicensed",
-        "unspecified",
-    }
-)
-
-
-def _is_unclear_license(license_name: str | None) -> bool:
-    """Return whether a license value fails to name a license.
-
-    ``None``, a blank string, and placeholders such as ``"not specified"`` are
-    unclear. An SPDX-style id, ``"multiple"``, or a URL is not.
-
-    Args:
-        license_name: License string from task metadata.
-
-    Returns:
-        True when the license is missing or is an unclear placeholder.
-    """
-    if license_name is None or not license_name.strip():
-        return True
-    normalized = " ".join(
-        license_name.casefold().replace("-", " ").replace("_", " ").split()
-    )
-    return normalized in _UNCLEAR_LICENSES
-
-
 class TaskMetadata(BaseModel):
     """Metadata for a task.
 
@@ -555,16 +510,18 @@ class TaskMetadata(BaseModel):
     is_beta: bool = False
 
     def has_unclear_license(self) -> bool:
-        """Return whether this task's license fails to name a license.
+        """Return whether this task is missing a concrete license.
 
-        Placeholders such as ``"not specified"`` stay valid on the model so
-        tasks already in the benchmark still load. The task metadata tests
-        reject them on any task that is not already listed as an exception.
+        ``None`` and ``"not specified"`` stay valid on the model so tasks
+        already in the benchmark still load. Other values are rejected by
+        pydantic unless they are in ``Licenses`` or a URL. The task metadata
+        tests reject a missing or unspecified license on any task that is not
+        already listed as an exception.
 
         Returns:
-            True when the license is missing or is an unclear placeholder.
+            True when the license is missing or ``"not specified"``.
         """
-        return _is_unclear_license(self.license)
+        return self.license is None or self.license == "not specified"
 
     def _validate_license(self) -> None:
         """Raise when the license is missing or does not name a license."""
