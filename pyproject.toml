@@ -58,7 +58,7 @@ Repository = "https://github.com/embeddings-benchmark/mteb"
 mteb = "mteb.cli:main"
 
 [project.optional-dependencies]
-last-prompt = ["httpx>=0.28.1,<1.0.0"]
+last-prompt = ["transformers>=5.19.0,<6.0.0"]
 image = [
     "pillow>=10.0.1",
     "torchvision>0.2.1",
@@ -289,7 +289,6 @@ include = ["mteb", "mteb.*"]
 namespaces = false
 
 [tool.setuptools.package-data]
-"mteb.models.model_implementations" = ["last_prompt_resources/*.json", "last_prompt_resources/*.jinja"]
 "mteb" = [
     "languages/*.json",  # for languages
     "descriptive_stats/*/*.json",  # for descriptive_stats image
@@ -578,6 +577,7 @@ conflicts = [
         { extra = "transformers-v4" },
         { extra = "internvideo2" }, # conflicting versions of transformers
         { extra = "transformers-v5" },
+        { extra = "last-prompt" }, # Qwen3.5 direct inference requires transformers>=5.19
         { extra = "cosmos-embed1" }, # remote code needs transformers<5
         { extra = "viclip" }, # remote code needs transformers<5
         { extra = "qwen-vl" },

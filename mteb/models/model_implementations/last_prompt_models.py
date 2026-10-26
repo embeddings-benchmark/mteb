@@ -1,15 +1,13 @@
-"""MTEB registration for the two evaluated text embedding recipes.
+"""Last-prompt embeddings from unchanged, pinned Qwen3.5 and NuExtract3 weights.
 
-Requires an independently configured vLLM-Last-Hidden-State server. Prompt
-preflight checks detect template drift; they cannot attest loaded weight bytes.
+These are text-only prompting recipes, not separately trained checkpoints.
+The submitted English v2 results were evaluated with vLLM; this implementation
+uses Transformers to extract the same post-final-normalization representation.
+Historical serving precision/backend settings were not recorded.
 """
 
 from __future__ import annotations
 
-import json
-import os
-from concurrent.futures import ThreadPoolExecutor
-from pathlib import Path
 from typing import TYPE_CHECKING, Any, TypedDict
 
 import numpy as np
@@ -18,7 +16,7 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta
 
 if TYPE_CHECKING:
-    import httpx
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -54,8 +52,26 @@ RECIPES: dict[str, Recipe] = {
 }
 
 
+# The text-only, single-user-message rendering of the evaluated revised
+# NuExtract template. Its embeddings mode has no system message and ends with
+# an assistant JSON prefill. The Hub's default extraction template is different.
+NUEXTRACT_PREFIX = (
+    "【task】structured\n"
+    '【template_start】{"short description": "string"}【template_end】\n'
+    "【instructions_start】Describe the stable identity of this document so it "
+    "can be matched to similar documents. Include its document type and purpose, "
+    "issuing organization or publication, main subject or research area, and "
+    "distinctive layout, headings, logos, or form fields. Emphasize "
+    "characteristics shared by documents from the same source, subject area, "
+    "or template. Ignore dates, amounts, identifiers, individual people, and "
+    "other values that vary between instances. Be concise and specific."
+    "【instructions_end】\n【document_start】\n"
+)
+ASSISTANT_PREFIX = "<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n"
+
+
 class LastPromptEncoder(AbsEncoder):
-    """Text-only adapter preserving the evaluated HTTP request and vector dtype."""
+    """One forward pass; select the last active prompt token, without L2 norm."""
 
     def __init__(
         self,
@@ -63,111 +79,72 @@ class LastPromptEncoder(AbsEncoder):
         revision: str,
         *,
         recipe: str,
-        base_url: str | None = None,
-        served_model: str | None = None,
-        concurrency: int = 8,
-        timeout: float = 120,
-        transport: httpx.BaseTransport | None = None,
+        device: str | None = None,
+        dtype: str | torch.dtype = "bfloat16",
+        cache_dir: str | None = None,
+        local_files_only: bool = False,
+        attn_implementation: str = "sdpa",
         **kwargs: Any,
     ) -> None:
-        import httpx
+        import torch
+        from transformers import AutoModel, AutoTokenizer
 
         self.recipe = RECIPES[recipe]
+        self.recipe_name = recipe
         if model_name != self.recipe["name"] or revision != self.recipe["revision"]:
             raise ValueError("Model name/revision does not match the registered recipe")
-        if concurrency < 1 or timeout <= 0:
-            raise ValueError("Concurrency and timeout must be positive")
-        # MTEB can forward a device; inference runs on the configured server.
-        kwargs.pop("device", None)
         if kwargs:
             raise ValueError(f"Unsupported recipe overrides: {sorted(kwargs)}")
-        base_url = (
-            base_url
-            or os.environ.get("LAST_PROMPT_BASE_URL", "http://localhost:8000/v1")
-        ).rstrip("/")
-        if not base_url.endswith("/v1"):
-            raise ValueError("base_url must end in /v1")
+        self.device = device or (
+            "cuda"
+            if torch.cuda.is_available()
+            else "mps"
+            if torch.backends.mps.is_available()
+            else "cpu"
+        )
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            self.recipe["checkpoint"],
+            revision=revision,
+            cache_dir=cache_dir,
+            local_files_only=local_files_only,
+            trust_remote_code=False,
+            padding_side="right",
+        )
+        if self.tokenizer.pad_token_id is None:
+            self.tokenizer.pad_token = self.tokenizer.eos_token
+        # AutoModel omits the language-model head: last_hidden_state is already
+        # post-final-RMSNorm. No generation or all-layer hidden-state storage.
         self.model = (
-            served_model
-            or os.environ.get("LAST_PROMPT_SERVED_MODEL")
-            or self.recipe["checkpoint"]
-        )
-        self.concurrency = concurrency
-        headers = {}
-        if key := os.environ.get("LAST_PROMPT_API_KEY"):
-            headers["Authorization"] = f"Bearer {key}"
-        self.http = httpx.Client(
-            base_url=base_url + "/",
-            headers=headers,
-            timeout=timeout,
-            trust_env=False,
-            transport=transport,
-        )
-        try:
-            models = self.http.get("models")
-            models.raise_for_status()
-            info = next(
-                (m for m in models.json()["data"] if m["id"] == self.model), None
+            AutoModel.from_pretrained(
+                self.recipe["checkpoint"],
+                revision=revision,
+                dtype=dtype,
+                cache_dir=cache_dir,
+                local_files_only=local_files_only,
+                trust_remote_code=False,
+                attn_implementation=attn_implementation,
             )
-            if info is None or info.get("root") != self.recipe["checkpoint"]:
-                raise ValueError("Server model ID/root does not match the checkpoint")
-            check = json.loads(
-                (
-                    Path(__file__).parent
-                    / "last_prompt_resources"
-                    / "prompt_checks.json"
-                ).read_text()
-            )[recipe]
-            payload = self.payload(check["text"])
-            tokenize = {
-                k: payload[k]
-                for k in [
-                    "model",
-                    "messages",
-                    "chat_template_kwargs",
-                    "add_generation_prompt",
-                ]
-            }
-            response = self.http.post(base_url[:-3] + "/tokenize", json=tokenize)
-            response.raise_for_status()
-            if response.json()["tokens"] != check["tokens"]:
-                raise ValueError(
-                    "Effective prompt tokens differ from the evaluated recipe"
-                )
-        except BaseException:
-            self.http.close()
-            raise
+            .to(self.device)
+            .eval()
+        )
+        self.max_length = self.model.config.text_config.max_position_embeddings
 
-    def payload(self, text: str) -> dict[str, Any]:
+    def render_prompt(self, text: str) -> str:
         if not isinstance(text, str):
             raise TypeError("Only text inputs are supported")
-        return {
-            "model": self.model,
-            "messages": [
-                {"role": "user", "content": self.recipe["prompt"].format(text=text)}
-            ],
-            "max_completion_tokens": 1,
-            "temperature": 0,
-            "n": 1,
-            "stream": False,
-            "chat_template_kwargs": dict(self.recipe["chat_template_kwargs"]),
-            "add_generation_prompt": True,
-            "kv_transfer_params": {"return_last_hidden_state": True},
-        }
-
-    def _one(self, text: str) -> np.ndarray:
-        response = self.http.post("chat/completions", json=self.payload(text))
-        response.raise_for_status()
-        vector = np.asarray(
-            response.json()["kv_transfer_params"]["last_hidden_state"], dtype=np.float32
+        # Both evaluated templates apply Jinja's trim to string message content.
+        # For Qwen the E5-V suffix is added BEFORE trimming the whole message.
+        if self.recipe_name == "qwen_e5v":
+            content = self.recipe["prompt"].format(text=text).strip()
+            return "<|im_start|>user\n" + content + ASSISTANT_PREFIX
+        return (
+            "<|im_start|>user\n"
+            + NUEXTRACT_PREFIX
+            + text.strip()
+            + "\n【document_end】"
+            + ASSISTANT_PREFIX
+            + '{\n  "short description": "'
         )
-        if (
-            vector.shape != (2560,)
-            or not np.isfinite(vector).all()
-            or not np.linalg.norm(vector)
-        ):
-            raise ValueError("Expected a finite, nonzero 2560-dimensional hidden state")
-        return vector
 
     def encode(
         self,
@@ -179,27 +156,54 @@ class LastPromptEncoder(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         batches = []
-        with ThreadPoolExecutor(max_workers=self.concurrency) as pool:
+        with torch.inference_mode():
             for batch in inputs:
                 if "text" not in batch or {"image", "audio", "video"}.intersection(
                     batch
                 ):
                     raise ValueError("This registration accepts text-only batches")
-                # Retrieval batches also carry title/body/query/instruction fields.
-                # MTEB already combines them into text; use that field unchanged,
-                # exactly as the frozen clients used for the benchmark runs did.
-                rows = list(pool.map(self._one, batch["text"]))
-                if rows:
-                    batches.append(np.stack(rows))
+                # MTEB already combines retrieval title/body/query into text.
+                prompts = [self.render_prompt(text) for text in batch["text"]]
+                if not prompts:
+                    continue
+                tokens = self.tokenizer(
+                    prompts,
+                    add_special_tokens=False,
+                    padding=True,
+                    truncation=False,
+                    return_tensors="pt",
+                ).to(self.device)
+                if tokens["input_ids"].shape[1] > self.max_length:
+                    raise ValueError("Prompt exceeds the checkpoint context window")
+                # Right padding leaves the active causal/recurrent prefix intact.
+                # Explicit positions keep each document independent of batch length.
+                positions = tokens["attention_mask"].long().cumsum(-1) - 1
+                positions.masked_fill_(tokens["attention_mask"] == 0, 0)
+                hidden = self.model(
+                    input_ids=tokens["input_ids"],
+                    attention_mask=tokens["attention_mask"],
+                    position_ids=positions,
+                    use_cache=False,
+                    return_dict=True,
+                ).last_hidden_state
+                last = tokens["attention_mask"].sum(dim=1) - 1
+                rows = hidden[torch.arange(len(prompts), device=hidden.device), last]
+                vectors = rows.float().cpu().numpy()
+                if (
+                    vectors.shape != (len(prompts), 2560)
+                    or not np.isfinite(vectors).all()
+                    or np.any(np.linalg.norm(vectors, axis=1) == 0)
+                ):
+                    raise ValueError("Expected finite, nonzero 2560-dimensional states")
+                batches.append(vectors)
         return (
             np.concatenate(batches)
             if batches
             else np.empty((0, 2560), dtype=np.float32)
         )
-
-    def close(self) -> None:
-        self.http.close()
 
 
 def make_meta(recipe: str) -> ModelMeta:
@@ -220,7 +224,7 @@ def make_meta(recipe: str) -> ModelMeta:
         public_training_code=None,
         public_training_data=None,
         extra_requirements_groups=["last-prompt"],
-        framework=["API"],
+        framework=["PyTorch", "Transformers", "safetensors"],
         similarity_fn_name="cosine",
         use_instructions=True,
         training_datasets=None,

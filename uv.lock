@@ -7330,7 +7330,7 @@ wheels = [
 
 [[package]]
 name = "mteb"
-version = "2.26.24"
+version = "2.26.14"
 source = { editable = "." }
 default-groups = ["docs", "lint", "test", "typing"]
 dependencies = [
@@ -7372,9 +7372,6 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
-last-prompt = [
-    { name = "httpx" },
-]
 api = [
     { name = "fastapi" },
     { name = "opentelemetry-exporter-otlp-proto-http" },
@@ -7877,7 +7874,6 @@ typing = [
 
 [package.metadata]
 requires-dist = [
-    { name = "httpx", marker = "extra == 'last-prompt'", specifier = ">=0.28.1,<1.0.0" },
     { name = "accelerate", marker = "extra == 'audio-flamingo-3'", specifier = ">=0.26.0" },
     { name = "accelerate", marker = "extra == 'fusion-embedding'", specifier = ">=0.26.0" },
     { name = "accelerate", marker = "extra == 'llama-nemotron-colembed-vl'" },
@@ -8081,7 +8077,7 @@ requires-dist = [
     { name = "xformers", marker = "extra == 'arctic-embed-m-v2'", specifier = ">=0.0.29" },
     { name = "xformers", marker = "extra == 'xformers'", specifier = ">=0.0.29" },
 ]
-provides-extras = ["last-prompt", "image", "audio", "codecarbon", "leaderboard", "api", "og", "video", "github", "peft", "flagembedding", "jina", "jina-clip", "jina-v4", "flash-attention", "internvideo2", "omniretriever", "colvec1-1", "topk-embed", "openai", "model2vec", "pylate", "colnanovdr", "pplx-embed-v2", "msclap", "bm25s", "boto3", "av", "gritlm", "xformers", "arctic-embed-m-v2", "blip2", "voyageai", "voyage-v", "cohere", "vertexai", "google-genai", "octen", "llm2vec", "timm", "radio", "open-clip-torch", "nomic", "ark", "colpali-engine", "evie", "dasheng", "colqwen3", "visrag-ret", "sauerkrautlm-colpali", "xet", "youtu", "llama-embed-nemotron", "llama-nemotron-colembed-vl", "nemotron-colembed-vl-v2", "nemotron-3-5-vl", "llama-nemotron-embed-vl-1b-v2", "nemotron-3-embed", "multimodal-sbert", "faiss-cpu", "eager-embed", "speechbrain", "muq", "wav2clip", "fusion-embedding", "torch-vggish-yamnet", "vllm", "moca", "transformers-v4", "transformers-v5", "e5-v", "nvembed", "nemotron-rerank", "modernbert", "sparse-encoder", "cosmos-embed1", "siglip", "tipsv2", "ps3", "qwen-vl", "wemm", "uembed", "videoprism", "qwen-omni-utils", "embeddinggemma", "languagebind", "gme", "imagebind", "speecht5", "seamless-m4t", "audio-flamingo-3", "bidirlm-omni", "viclip"]
+provides-extras = ["image", "audio", "codecarbon", "leaderboard", "api", "og", "video", "github", "peft", "flagembedding", "jina", "jina-clip", "jina-v4", "flash-attention", "internvideo2", "omniretriever", "colvec1-1", "topk-embed", "openai", "model2vec", "pylate", "colnanovdr", "pplx-embed-v2", "msclap", "bm25s", "boto3", "av", "gritlm", "xformers", "arctic-embed-m-v2", "blip2", "voyageai", "voyage-v", "cohere", "vertexai", "google-genai", "octen", "llm2vec", "timm", "radio", "open-clip-torch", "nomic", "ark", "colpali-engine", "evie", "dasheng", "colqwen3", "visrag-ret", "sauerkrautlm-colpali", "xet", "youtu", "llama-embed-nemotron", "llama-nemotron-colembed-vl", "nemotron-colembed-vl-v2", "nemotron-3-5-vl", "llama-nemotron-embed-vl-1b-v2", "nemotron-3-embed", "multimodal-sbert", "faiss-cpu", "eager-embed", "speechbrain", "muq", "wav2clip", "fusion-embedding", "torch-vggish-yamnet", "vllm", "moca", "transformers-v4", "transformers-v5", "e5-v", "nvembed", "nemotron-rerank", "modernbert", "sparse-encoder", "cosmos-embed1", "siglip", "tipsv2", "ps3", "qwen-vl", "wemm", "uembed", "videoprism", "qwen-omni-utils", "embeddinggemma", "languagebind", "gme", "imagebind", "speecht5", "seamless-m4t", "audio-flamingo-3", "bidirlm-omni", "viclip"]
 
 [package.metadata.requires-dev]
 dev = [
