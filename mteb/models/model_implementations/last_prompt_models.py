@@ -208,34 +208,57 @@ class LastPromptEncoder(AbsEncoder):
         )
 
 
-def make_meta(recipe: str) -> ModelMeta:
-    config = RECIPES[recipe]
-    return ModelMeta(
-        loader=LastPromptEncoder,
-        loader_kwargs={"recipe": recipe},
-        name=config["name"],
-        revision=config["revision"],
-        release_date=None,
-        languages=None,
-        n_parameters=config["parameters"],
-        memory_usage_mb=None,
-        max_tokens=None,
-        embed_dim=2560,
-        license="apache-2.0",
-        open_weights=True,
-        public_training_code=None,
-        public_training_data=None,
-        extra_requirements_groups=["last-prompt"],
-        framework=["PyTorch", "Transformers", "safetensors"],
-        similarity_fn_name="cosine",
-        use_instructions=True,
-        training_datasets=None,
-        modalities=["text"],
-        model_type=["dense"],
-        reference="https://huggingface.co/" + config["checkpoint"],
-        adapted_from=config["checkpoint"],
-    )
+qwen35_e5v_last_prompt = ModelMeta(
+    loader=LastPromptEncoder,
+    loader_kwargs={"recipe": "qwen_e5v"},
+    name="Qwen/Qwen3.5-4B-e5v-last-prompt",
+    revision="851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a",
+    release_date=None,
+    languages=None,
+    n_parameters=4659865088,
+    n_embedding_parameters=635699200,  # 248320 vocabulary entries * 2560 dimensions
+    memory_usage_mb=None,
+    max_tokens=262144,
+    embed_dim=2560,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    extra_requirements_groups=["last-prompt"],
+    framework=["PyTorch", "Transformers", "safetensors"],
+    similarity_fn_name="cosine",
+    use_instructions=True,
+    training_datasets=None,
+    modalities=["text"],
+    model_type=["dense"],
+    reference="https://huggingface.co/Qwen/Qwen3.5-4B",
+    adapted_from="Qwen/Qwen3.5-4B",
+)
 
 
-qwen35_e5v_last_prompt = make_meta("qwen_e5v")
-nuextract3_revised_last_prompt = make_meta("nuextract_revised")
+nuextract3_revised_last_prompt = ModelMeta(
+    loader=LastPromptEncoder,
+    loader_kwargs={"recipe": "nuextract_revised"},
+    name="numind/NuExtract3-revised-last-prompt",
+    revision="c99dc8f5641b866aa0192b6ea78f84bf9f3535f1",
+    release_date=None,
+    languages=None,
+    n_parameters=4539265536,
+    n_embedding_parameters=635699200,  # 248320 vocabulary entries * 2560 dimensions
+    memory_usage_mb=None,
+    max_tokens=262144,
+    embed_dim=2560,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    extra_requirements_groups=["last-prompt"],
+    framework=["PyTorch", "Transformers", "safetensors"],
+    similarity_fn_name="cosine",
+    use_instructions=True,
+    training_datasets=None,
+    modalities=["text"],
+    model_type=["dense"],
+    reference="https://huggingface.co/numind/NuExtract3",
+    adapted_from="numind/NuExtract3",
+)
