@@ -1,3 +1,5 @@
+import re
+import unicodedata
 from collections import defaultdict
 from typing import Any
 
@@ -232,11 +234,24 @@ class GoogleSVQT2ARetrieval(AbsTaskRetrieval):
                 self.relevant_docs[locale][split] = relevant_docs_
 
 
+# Arabic diacritics and tatweel, and hamza forms of alef
+_ARABIC_MARKS = re.compile("[\u0640\u064b-\u065f\u0670]")
+_ALEF_FORMS = str.maketrans("أإآٱ", "اااا")
+
+
+def _normalize(text: str) -> str:
+    """Fold transcription variants of the same sentence: case, punctuation, whitespace, Arabic diacritics and hamza."""
+    text = unicodedata.normalize("NFKC", text).casefold()
+    text = _ARABIC_MARKS.sub("", text).translate(_ALEF_FORMS)
+    text = "".join(" " if unicodedata.category(c).startswith("P") else c for c in text)
+    return " ".join(text.split())
+
+
 def _sentence_ids(utt_ids: list[str], texts: list[str]) -> list[str]:
-    """Sentence id of each recording: the first recording id with the same text."""
+    """Sentence id of each recording: the first recording id with the same normalized text."""
     first: dict[str, str] = {}
     return [
-        first.setdefault(text, utt_id)
+        first.setdefault(_normalize(text), utt_id)
         for utt_id, text in zip(utt_ids, texts, strict=True)
     ]
 
