@@ -34,7 +34,7 @@ class HunSum2AbstractiveRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{barta_news_2024,
+@inproceedings{barta2024news,
   address = {Torino, Italia},
   archiveprefix = {arXiv},
   author = {Barta, Botond and Lakatos, Dorina and Nagy, Attila and Nyist, Mil{\'a}n Konor and {\'A}cs, Judit},

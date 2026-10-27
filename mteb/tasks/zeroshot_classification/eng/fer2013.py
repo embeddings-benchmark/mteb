@@ -30,7 +30,7 @@ class FER2013ZeroShotClassification(AbsTaskZeroShotClassification):
         modalities=["image", "text"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{goodfellow_explaining_2015,
+@inproceedings{goodfellow2015explainingharnessingadversarialexamples,
   archiveprefix = {arXiv},
   author = {Ian J. Goodfellow and Jonathon Shlens and Christian Szegedy},
   booktitle = {3rd International Conference on Learning Representations, {ICLR} 2015},

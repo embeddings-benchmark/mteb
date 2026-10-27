@@ -25,7 +25,7 @@ class SDSGlovesClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{kasmaee_chemteb_2024,
+@inproceedings{kasmaee2024chemteb,
   archiveprefix = {arXiv},
   author = {Ali Shiraee Kasmaee and Mohammad Khodadad and Mohammad Arshi Saloot and Nick Sherck and Stephen Dokas and Hamidreza Mahyar and Soheila Samiee},
   booktitle = {ENLSP},
@@ -36,7 +36,7 @@ class SDSGlovesClassification(AbsTaskClassification):
   year = {2024},
 }
 
-@inproceedings{pereira_msds-opp_2020,
+@inproceedings{pereira2020msds,
   author = {Pereira, Eliseu},
   booktitle = {15th Doctoral Symposium},
   pages = {42},
@@ -71,7 +71,7 @@ class SDSGlovesClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{kasmaee_chemteb_2024,
+@inproceedings{kasmaee2024chemteb,
   archiveprefix = {arXiv},
   author = {Ali Shiraee Kasmaee and Mohammad Khodadad and Mohammad Arshi Saloot and Nick Sherck and Stephen Dokas and Hamidreza Mahyar and Soheila Samiee},
   booktitle = {ENLSP},
@@ -82,7 +82,7 @@ class SDSGlovesClassificationV2(AbsTaskClassification):
   year = {2024},
 }
 
-@inproceedings{pereira_msds-opp_2020,
+@inproceedings{pereira2020msds,
   author = {Pereira, Eliseu},
   booktitle = {15th Doctoral Symposium},
   pages = {42},

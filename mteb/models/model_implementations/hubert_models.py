@@ -65,8 +65,11 @@ class HubertWrapper(AbsEncoder):
         max_samples = seconds_to_samples(
             self.max_audio_length_seconds, self.sampling_rate
         )
+        # the conv feature encoder needs at least 400 samples (25 ms at 16 kHz)
         inputs.collate_fn = AudioCollator(
-            target_sampling_rate=self.sampling_rate, max_samples=max_samples
+            target_sampling_rate=self.sampling_rate,
+            max_samples=max_samples,
+            min_samples=400,
         )
         all_embeddings = []
 
@@ -161,7 +164,7 @@ hubert_base = ModelMeta(
     ),
     modalities=["audio"],
     citation="""
-@article{hsu_hubert_2021,
+@article{hsu2021hubertselfsupervisedspeechrepresentation,
   author = {Hsu, Wei-Ning and Bolte, Benjamin and Tsai, Yao-Hung Hubert and Lakhotia, Kushal and Salakhutdinov, Ruslan and Mohamed, Abdelrahman},
   doi = {10.1109/taslp.2021.3122291},
   issn = {2329-9304},
@@ -200,7 +203,7 @@ hubert_large_ft = ModelMeta(
     ),
     modalities=["audio"],
     citation="""
-@article{hsu_hubert_2021,
+@article{hsu2021hubertselfsupervisedspeechrepresentation,
   author = {Hsu, Wei-Ning and Bolte, Benjamin and Tsai, Yao-Hung Hubert and Lakhotia, Kushal and Salakhutdinov, Ruslan and Mohamed, Abdelrahman},
   doi = {10.1109/taslp.2021.3122291},
   issn = {2329-9304},

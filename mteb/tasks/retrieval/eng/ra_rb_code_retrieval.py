@@ -25,14 +25,14 @@ class RARbCode(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{husain_codesearchnet_2019,
+@article{husain2019codesearchnet,
   author = {Husain, Hamel and Wu, Ho-Hsiang and Gazit, Tiferet and Allamanis, Miltiadis and Brockschmidt, Marc},
   journal = {arXiv preprint arXiv:1909.09436},
   title = {{CodeSearchNet} challenge: Evaluating the state of semantic code search},
   year = {2019},
 }
 
-@inproceedings{muennighoff_octopack_2024,
+@inproceedings{muennighoff2023octopack,
   archiveprefix = {arXiv},
   author = {Niklas Muennighoff and Qian Liu and Armel Randy Zebaze and Qinkai Zheng and Binyuan Hui and Terry Yue Zhuo and Swayam Singh and Xiangru Tang and Leandro Von Werra and Shayne Longpre},
   booktitle = {The Twelfth International Conference on Learning Representations},
@@ -42,7 +42,7 @@ class RARbCode(AbsTaskRetrieval):
   year = {2024},
 }
 
-@article{xiao_rar-b_2024,
+@article{xiao2024rar,
   author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
   journal = {arXiv preprint arXiv:2404.06347},
   title = {RAR-b: Reasoning as Retrieval Benchmark},

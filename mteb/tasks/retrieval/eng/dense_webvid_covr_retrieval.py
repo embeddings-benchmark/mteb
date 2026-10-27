@@ -31,7 +31,7 @@ class DenseWebVidCoVRVT2VRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{thawakar_simple_2025,
+@inproceedings{thawakar2025simpleeditscomposedvideo,
   author = {Thawakar, Omkar and Demidov, Dmitry and Thawkar, Ritesh and Anwer, Rao Muhammad and Shah, Mubarak and Khan, Fahad Shahbaz and Khan, Salman},
   booktitle = {2025 IEEE/CVF International Conference on Computer Vision (ICCV)},
   doi = {10.1109/iccv51701.2025.01900},

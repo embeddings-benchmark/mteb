@@ -22,7 +22,7 @@ _terra_metadata = dict(
     dialect=[],
     sample_creation="found",
     bibtex_citation=r"""
-@inproceedings{shavrina_russiansuperglue_2020,
+@inproceedings{shavrina2020russiansuperglue,
   address = {Online},
   author = {Shavrina, Tatiana and Fenogenova, Alena and Anton, Emelyanov and Shevelev, Denis and Artemova, Ekaterina and Malykh, Valentin and Mikhailov, Vladislav and Tikhonova, Maria and Chertok, Andrey and Evlampiev, Andrey},
   booktitle = {Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing ({EMNLP})},

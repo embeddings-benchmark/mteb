@@ -243,7 +243,7 @@ mctct_large = ModelMeta(
     training_datasets={"CommonVoiceMini17A2TRetrieval", "VoxPopuliLanguageID"},
     modalities=["audio"],
     citation="""
-@inproceedings{lugosch_pseudo-labeling_2022,
+@inproceedings{lugosch2022pseudolabelingmassivelymultilingualspeech,
   author = {Lugosch, Loren and Likhomanenko, Tatiana and Synnaeve, Gabriel and Collobert, Ronan},
   booktitle = {ICASSP 2022 - 2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp43922.2022.9746832},

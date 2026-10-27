@@ -25,7 +25,7 @@ class CQADupstackWordpressRetrievalPL(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{wojtasik_beir-pl_2024,
+@inproceedings{wojtasik2024beirpl,
   address = {Torino, Italia},
   archiveprefix = {arXiv},
   author = {Wojtasik, Konrad and Wo{\l}owiec, Kacper and Shishkin, Vadim and Janz, Arkadiusz and Piasecki, Maciej},
@@ -67,7 +67,7 @@ class CQADupstackWebmastersRetrievalPL(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{wojtasik_beir-pl_2024,
+@inproceedings{wojtasik2024beirpl,
   address = {Torino, Italia},
   archiveprefix = {arXiv},
   author = {Wojtasik, Konrad and Wo{\l}owiec, Kacper and Shishkin, Vadim and Janz, Arkadiusz and Piasecki, Maciej},
@@ -109,7 +109,7 @@ class CQADupstackUnixRetrievalPL(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{wojtasik_beir-pl_2024,
+@inproceedings{wojtasik2024beirpl,
   address = {Torino, Italia},
   archiveprefix = {arXiv},
   author = {Wojtasik, Konrad and Wo{\l}owiec, Kacper and Shishkin, Vadim and Janz, Arkadiusz and Piasecki, Maciej},
@@ -151,7 +151,7 @@ class CQADupstackTexRetrievalPL(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{wojtasik_beir-pl_2024,
+@inproceedings{wojtasik2024beirpl,
   address = {Torino, Italia},
   archiveprefix = {arXiv},
   author = {Wojtasik, Konrad and Wo{\l}owiec, Kacper and Shishkin, Vadim and Janz, Arkadiusz and Piasecki, Maciej},
@@ -193,7 +193,7 @@ class CQADupstackStatsRetrievalPL(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{wojtasik_beir-pl_2024,
+@inproceedings{wojtasik2024beirpl,
   address = {Torino, Italia},
   archiveprefix = {arXiv},
   author = {Wojtasik, Konrad and Wo{\l}owiec, Kacper and Shishkin, Vadim and Janz, Arkadiusz and Piasecki, Maciej},
@@ -235,7 +235,7 @@ class CQADupstackProgrammersRetrievalPL(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{wojtasik_beir-pl_2024,
+@inproceedings{wojtasik2024beirpl,
   address = {Torino, Italia},
   archiveprefix = {arXiv},
   author = {Wojtasik, Konrad and Wo{\l}owiec, Kacper and Shishkin, Vadim and Janz, Arkadiusz and Piasecki, Maciej},
@@ -277,7 +277,7 @@ class CQADupstackPhysicsRetrievalPL(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{wojtasik_beir-pl_2024,
+@inproceedings{wojtasik2024beirpl,
   address = {Torino, Italia},
   archiveprefix = {arXiv},
   author = {Wojtasik, Konrad and Wo{\l}owiec, Kacper and Shishkin, Vadim and Janz, Arkadiusz and Piasecki, Maciej},
@@ -319,7 +319,7 @@ class CQADupstackMathematicaRetrievalPL(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{wojtasik_beir-pl_2024,
+@inproceedings{wojtasik2024beirpl,
   address = {Torino, Italia},
   archiveprefix = {arXiv},
   author = {Wojtasik, Konrad and Wo{\l}owiec, Kacper and Shishkin, Vadim and Janz, Arkadiusz and Piasecki, Maciej},
@@ -361,7 +361,7 @@ class CQADupstackGisRetrievalPL(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{wojtasik_beir-pl_2024,
+@inproceedings{wojtasik2024beirpl,
   address = {Torino, Italia},
   archiveprefix = {arXiv},
   author = {Wojtasik, Konrad and Wo{\l}owiec, Kacper and Shishkin, Vadim and Janz, Arkadiusz and Piasecki, Maciej},
@@ -403,7 +403,7 @@ class CQADupstackGamingRetrievalPL(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{wojtasik_beir-pl_2024,
+@inproceedings{wojtasik2024beirpl,
   address = {Torino, Italia},
   archiveprefix = {arXiv},
   author = {Wojtasik, Konrad and Wo{\l}owiec, Kacper and Shishkin, Vadim and Janz, Arkadiusz and Piasecki, Maciej},
@@ -445,7 +445,7 @@ class CQADupstackEnglishRetrievalPL(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{wojtasik_beir-pl_2024,
+@inproceedings{wojtasik2024beirpl,
   address = {Torino, Italia},
   archiveprefix = {arXiv},
   author = {Wojtasik, Konrad and Wo{\l}owiec, Kacper and Shishkin, Vadim and Janz, Arkadiusz and Piasecki, Maciej},
@@ -487,7 +487,7 @@ class CQADupstackAndroidRetrievalPL(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{wojtasik_beir-pl_2024,
+@inproceedings{wojtasik2024beirpl,
   address = {Torino, Italia},
   archiveprefix = {arXiv},
   author = {Wojtasik, Konrad and Wo{\l}owiec, Kacper and Shishkin, Vadim and Janz, Arkadiusz and Piasecki, Maciej},

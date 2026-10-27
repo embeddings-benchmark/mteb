@@ -25,7 +25,7 @@ class Ocnli(AbsTaskPairClassification):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{hu_ocnli_2020,
+@inproceedings{hu2020ocnli,
   address = {Online},
   author = {Hu, Hai and Richardson, Kyle and Xu, Liang and Li, Lu and K{\"u}bler, Sandra and Moss, Lawrence},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2020},
@@ -73,7 +73,7 @@ class Cmnli(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{xu_clue_2020,
+@inproceedings{xu-etal-2020-clue,
   address = {Barcelona, Spain (Online)},
   author = {Xu, Liang  and
 Hu, Hai  and

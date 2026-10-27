@@ -9,7 +9,7 @@ from mteb.benchmarks.benchmark import (
 )
 from mteb.get_tasks import MTEBTasks, get_task, get_tasks
 
-MMTEB_CITATION = r"""@article{enevoldsen_mmteb_2025,
+MMTEB_CITATION = r"""@article{enevoldsen2025mmtebmassivemultilingualtext,
   author = {Kenneth Enevoldsen and Isaac Chung and Imene Kerboua and Márton Kardos and Ashwin Mathur and David Stap and Jay Gala and Wissam Siblini and Dominik Krzemiński and Genta Indra Winata and Saba Sturua and Saiteja Utpala and Mathieu Ciancone and Marion Schaeffer and Gabriel Sequeira and Diganta Misra and Shreeya Dhakal and Jonathan Rystrøm and Roman Solomatin and Ömer Çağatan and Akash Kundu and Martin Bernstorff and Shitao Xiao and Akshita Sukhlecha and Bhavish Pahwa and Rafał Poświata and Kranthi Kiran GV and Shawon Ashraf and Daniel Auras and Björn Plüster and Jan Philipp Harries and Loïc Magne and Isabelle Mohr and Mariya Hendriksen and Dawei Zhu and Hippolyte Gisserot-Boukhlef and Tom Aarsen and Jan Kostkan and Konrad Wojtasik and Taemin Lee and Marek Šuppa and Crystina Zhang and Roberta Rocca and Mohammed Hamdy and Andrianos Michail and John Yang and Manuel Faysse and Aleksei Vatolin and Nandan Thakur and Manan Dey and Dipam Vasani and Pranjal Chitale and Simone Tedeschi and Nguyen Tai and Artem Snegirev and Michael Günther and Mengzhou Xia and Weijia Shi and Xing Han Lù and Jordan Clive and Gayatri Krishnakumar and Anna Maksimova and Silvan Wehrli and Maria Tikhonova and Henil Panchal and Aleksandr Abramov and Malte Ostendorff and Zheng Liu and Simon Clematide and Lester James Miranda and Alena Fenogenova and Guangyu Song and Ruqiya Bin Safi and Wen-Ding Li and Alessia Borghini and Federico Cassano and Hongjin Su and Jimmy Lin and Howard Yen and Lasse Hansen and Sara Hooker and Chenghao Xiao and Vaibhav Adlakha and Orion Weller and Siva Reddy and Niklas Muennighoff},
   doi = {10.48550/arXiv.2502.13595},
   journal = {arXiv preprint arXiv:2502.13595},
@@ -166,7 +166,7 @@ MTEB_ENG_CLASSIC = Benchmark(
     ),
     description="English text embedding quality across classification, clustering, retrieval, reranking, pair classification, and semantic similarity. We recommend using [MTEB(eng, v2)](http://mteb-leaderboard.hf.space/?benchmark_name=MTEB%28eng%2C+v2%29) instead, which resolves [a known scoring bug](https://github.com/embeddings-benchmark/mteb/issues/1156), uses updated task versions, and removes common fine-tuning datasets such as MSMARCO for more comparable scores.",
     citation=r"""
-@inproceedings{muennighoff_mteb_2022,
+@inproceedings{muennighoff2022mteb,
   address = {Dubrovnik, Croatia},
   author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Loic and Reimers, Nils},
   booktitle = {Proceedings of the 17th Conference of the {E}uropean Chapter of the {A}ssociation for {C}omputational {L}inguistics},
@@ -232,7 +232,7 @@ MTEB_MAIN_RU = Benchmark(
     description="Russian text embedding quality across classification, clustering, reranking, pair classification, retrieval, and semantic similarity, including novel Russian-specific tasks in each category.",
     reference="https://aclanthology.org/2023.eacl-main.148/",
     citation=r"""
-@inproceedings{snegirev_russian-focused_2025,
+@inproceedings{snegirev2024russianfocusedembeddersexplorationrumteb,
   address = {Albuquerque, New Mexico},
   author = {Snegirev, Artem and Tikhonova, Maria and Anna, Maksimova and Fenogenova, Alena and Abramov, Aleksandr},
   booktitle = {Proceedings of the 2025 Conference of the Nations of the {A}mericas Chapter of the {A}ssociation for {C}omputational {L}inguistics: Human Language Technologies (Volume 1: Long Papers)},
@@ -298,7 +298,7 @@ MTEB_MAIN_RU_v1_1 = Benchmark(
     description="Russian text embedding quality across classification, clustering, reranking, pair classification, retrieval, and semantic similarity. In v1.1, MIRACLRetrieval and RiaNewsRetrieval were replaced with their HardNegatives variants (v2), which include improved default prompts.",
     reference="https://aclanthology.org/2023.eacl-main.148/",
     citation=r"""
-@inproceedings{snegirev_russian-focused_2025,
+@inproceedings{snegirev2024russianfocusedembeddersexplorationrumteb,
   address = {Albuquerque, New Mexico},
   author = {Snegirev, Artem and Tikhonova, Maria and Anna, Maksimova and Fenogenova, Alena and Abramov, Aleksandr},
   booktitle = {Proceedings of the 2025 Conference of the Nations of the {A}mericas Chapter of the {A}ssociation for {C}omputational {L}inguistics: Human Language Technologies (Volume 1: Long Papers)},
@@ -338,7 +338,7 @@ RU_SCI_BENCH = Benchmark(
     description="Scientific text embedding quality in Russian and English across bitext mining, classification, retrieval, and regression tasks, using data sourced from eLibrary, Russia's largest electronic library of scientific publications.",
     reference="https://link.springer.com/article/10.1134/S1064562424602191",
     citation=r"""
-@article{vatolin_ruscibench_2024,
+@article{vatolin2024ruscibench,
   author = {Vatolin, A. and Gerasimenko, N. and Ianina, A. and Vorontsov, K.},
   doi = {10.1134/S1064562424602191},
   issn = {1531-8362},
@@ -368,7 +368,7 @@ MTEB_RETRIEVAL_WITH_INSTRUCTIONS = Benchmark(
     description="Instruction-following retrieval quality, measuring how well models retrieve relevant documents when given detailed natural language instructions alongside queries.",
     reference="https://aclanthology.org/2025.naacl-long.597/",
     citation=r"""
-@inproceedings{weller_followir_2025,
+@inproceedings{weller2024followir,
   address = {Albuquerque, New Mexico},
   author = {Weller, Orion and Chang, Benjamin and MacAvaney, Sean and Lo, Kyle and Cohan, Arman and Van Durme, Benjamin and Lawrie, Dawn and Soldaini, Luca},
   booktitle = {Proceedings of the 2025 Conference of the Nations of the {A}mericas Chapter of the {A}ssociation for {C}omputational {L}inguistics: Human Language Technologies (Volume 1: Long Papers)},
@@ -402,7 +402,7 @@ MTEB_RETRIEVAL_WITH_DOMAIN_INSTRUCTIONS = Benchmark(
     description="Instruction-following retrieval quality in expert domains including healthcare, finance, and legal, where queries are paired with domain-specific natural language instructions.",
     reference="https://arxiv.org/abs/2503.04644",
     citation=r"""
-@inproceedings{song_ifir_2025,
+@inproceedings{song2025ifir,
   author = {Song, Tingyu and Gan, Guo and Shang, Mingsheng and Zhao, Yilun},
   booktitle = {Proceedings of the 2025 Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers)},
   pages = {10186--10204},
@@ -477,7 +477,7 @@ MTEB_MINERS_BITEXT_MINING = Benchmark(
     description="Multilingual bitext mining quality across diverse language pairs, drawn from the MINERS benchmark for evaluating semantic retrieval in multilingual settings.",
     reference="https://aclanthology.org/2024.findings-emnlp.155/",
     citation=r"""
-@inproceedings{winata_miners_2024,
+@inproceedings{winata2024miners,
   address = {Miami, Florida, USA},
   author = {Winata, Genta Indra and Zhang, Ruochen and Adelani, David Ifeoluwa},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2024},
@@ -539,7 +539,7 @@ SEB = Benchmark(
     description="Scandinavian text embedding quality covering Danish, Swedish, Norwegian Bokmål, and Nynorsk and spanning classification, clustering, retrieval as well as bitext  tasks across dialects or written forms.",
     reference="https://kennethenevoldsen.github.io/scandinavian-embedding-benchmark/",
     citation=r"""
-@article{enevoldsen_scandinavian_2024,
+@article{enevoldsenScandinavianEmbeddingBenchmarks2024,
   author = {Enevoldsen, Kenneth and Kardos, Márton and Muennighoff, Niklas and Nielbo, Kristoffer},
   language = {en},
   month = feb,
@@ -574,7 +574,7 @@ CoIR = Benchmark(
     description="Code information retrieval across diverse programming languages and coding tasks, including code search, question answering, and text-to-SQL retrieval.",
     reference="https://github.com/CoIR-team/coir",
     citation=r"""
-@inproceedings{li_coir_2025,
+@inproceedings{li2024coircomprehensivebenchmarkcode,
   address = {Vienna, Austria},
   author = {Li, Xiangyang and Dong, Kuicai and Lee, Yi Quan and Xia, Wei and Zhang, Hao and Dai, Xinyi and Wang, Yasheng and Tang, Ruiming},
   booktitle = {Proceedings of the 63rd Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -618,7 +618,7 @@ RAR_b = Benchmark(
     description="Reasoning capabilities of retrieval models, framing commonsense, temporal, and domain-specific reasoning tasks as retrieval problems.",
     reference="https://arxiv.org/abs/2404.06347",
     citation=r"""
-@article{xiao_rar-b_2024,
+@article{xiao2024rar,
   author = {Xiao, Chenghao and Hudson, G Thomas and Al Moubayed, Noura},
   journal = {arXiv preprint arXiv:2404.06347},
   title = {RAR-b: Reasoning as Retrieval Benchmark},
@@ -674,7 +674,7 @@ MTEB_FRA = Benchmark(
     description="French text embedding quality across classification, clustering, pair classification, reranking, retrieval, and semantic similarity, using high-quality native French datasets.",
     reference="https://arxiv.org/abs/2405.20468",
     citation=r"""
-@misc{ciancone_mteb-french_2024,
+@misc{ciancone2024mteb,
   archiveprefix = {arXiv},
   author = {Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
   eprint = {2405.20468},
@@ -726,7 +726,7 @@ MTEB_DEU = Benchmark(
     description="German text embedding quality across classification, clustering, pair classification, reranking, retrieval, and semantic similarity.",
     reference="https://aclanthology.org/2023.konvens-main.20/",
     citation=r"""
-@inproceedings{wehrli_german_2023,
+@inproceedings{wehrli2024germantextembeddingclustering,
   address = {Ingolstadt, Germany},
   archiveprefix = {arXiv},
   author = {Wehrli, Silvan and Arnrich, Bert and Irrgang, Christopher},
@@ -856,7 +856,7 @@ MTEB_POL = Benchmark(
     description="Polish text embedding quality across classification, clustering, pair classification, retrieval, and semantic similarity, combining adapted community datasets with a novel Polish scientific literature corpus (PLSC).",
     reference="https://aclanthology.org/2026.findings-acl.1773/",
     citation=r"""
-@inproceedings{poswiata_pl-mteb_2026,
+@inproceedings{poswiata2024plmteb,
   address = {San Diego, California, United States},
   author = {Po{\'s}wiata, Rafa{\l} and Dadas, S{\l}awomir and Pere{\l}kiewicz, Micha{\l} Wiktor},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2026},
@@ -919,7 +919,7 @@ MTEB_PT = Benchmark(
     description="Portuguese text embedding quality benchmark across semantic text similarity, classification, reranking and retrieval.",
     reference=None,
     citation=r"""
-@inbook{okamura_multilingual_2026,
+@inbook{okamura2026multilingualaveragesmtebptbenchmark,
   author = {Okamura, Lucas Hideki Takeuchi and Alcoforado, Alexandre and Costa, Anna Helena Reali},
   booktitle = {Intelligent Systems},
   doi = {10.1007/978-3-032-39892-5_33},
@@ -999,7 +999,7 @@ MTEB_SLK = Benchmark(
     description="""Slovak Massive Text Embedding Benchmark (SkMTEB), the first comprehensive benchmark for text embeddings in Slovak, a low-resource West Slavic language. SkMTEB consists of 31 tasks across 7 task types, with tasks adapted from both existing and novel resources.""",
     reference="https://aclanthology.org/2026.acl-long.2114/",
     citation=r"""
-@inproceedings{suppa_skmteb_2026,
+@inproceedings{suppa2026skmteb,
   address = {San Diego, California, United States},
   author = {Suppa, Marek and Ridzik, Andrej and Hl{\'a}dek, Daniel and K{\v{n}}a{\v{z}}ekov{\'a}, Nat{\'a}lia and Ondrejov{\'a}, Vikt{\'o}ria},
   booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -1720,7 +1720,7 @@ LONG_EMBED = Benchmark(
     description="Long-context retrieval quality across synthetic and real-world tasks featuring documents of varying length with dispersed target information.",
     reference="https://aclanthology.org/2024.emnlp-main.47/",
     citation=r"""
-@inproceedings{zhu_longembed_2024,
+@inproceedings{zhu2024longembed,
   address = {Miami, Florida, USA},
   author = {Zhu, Dawei and Wang, Liang and Yang, Nan and Song, Yifan and Wu, Wenhao and Wei, Furu and Li, Sujian},
   booktitle = {Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing},
@@ -1777,7 +1777,7 @@ LMEB = Benchmark(
     description="Long-horizon memory retrieval quality across episodic, dialogue, semantic, and procedural retrieval tasks, measuring how well embedding models retrieve evidence in long-term memory scenarios.",
     reference="https://arxiv.org/abs/2603.12572",
     citation=r"""
-@misc{zhao_lmeb_2026,
+@misc{zhao2026lmeb,
   archiveprefix = {arXiv},
   author = {Zhao, Xinping and Hu, Xinshuo and Xu, Jiaxin and Tang, Danyu and Zhang, Xin and Zhou, Mengjia and Zhong, Yan and Zhou, Yao and Shan, Zifei and Zhang, Meishan and Hu, Baotian and Zhang, Min},
   eprint = {2603.12572},
@@ -1860,7 +1860,7 @@ BRIGHT = Benchmark(
     description="Reasoning-intensive retrieval quality across real-world queries spanning diverse domains including economics, psychology, mathematics, and coding, drawn from naturally occurring and carefully curated human data.",
     reference="https://brightbenchmark.github.io/",
     citation=r"""
-@inproceedings{su_bright_2025,
+@inproceedings{su2024bright,
   archiveprefix = {arXiv},
   author = {Hongjin SU and Howard Yen and Mengzhou Xia and Weijia Shi and Niklas Muennighoff and Han-yu Wang and Liu Haisu and Quan Shi and Zachary S Siegel and Michael Tang and Ruoxi Sun and Jinsung Yoon and Sercan O Arik and Danqi Chen and Tao Yu},
   booktitle = {The Thirteenth International Conference on Learning Representations},
@@ -1886,7 +1886,7 @@ BRIGHT_LONG = Benchmark(
     description="Reasoning-intensive retrieval quality across real-world queries spanning diverse domains, filtered to longer documents to stress-test models on extended contexts.",
     reference="https://brightbenchmark.github.io/",
     citation=r"""
-@inproceedings{su_bright_2025,
+@inproceedings{su2024bright,
   archiveprefix = {arXiv},
   author = {Hongjin SU and Howard Yen and Mengzhou Xia and Weijia Shi and Niklas Muennighoff and Han-yu Wang and Liu Haisu and Quan Shi and Zachary S Siegel and Michael Tang and Ruoxi Sun and Jinsung Yoon and Sercan O Arik and Danqi Chen and Tao Yu},
   booktitle = {The Thirteenth International Conference on Learning Representations},
@@ -1931,7 +1931,7 @@ BRIGHT_V1_1 = Benchmark(
     description="Reasoning-intensive retrieval quality across real-world queries spanning diverse domains including economics, psychology, mathematics, and coding. v1.1 restructures tasks into separate datasets and adds per-task prompts.",
     reference="https://brightbenchmark.github.io/",
     citation=r"""
-@inproceedings{su_bright_2025,
+@inproceedings{su2024bright,
   archiveprefix = {arXiv},
   author = {Hongjin SU and Howard Yen and Mengzhou Xia and Weijia Shi and Niklas Muennighoff and Han-yu Wang and Liu Haisu and Quan Shi and Zachary S Siegel and Michael Tang and Ruoxi Sun and Jinsung Yoon and Sercan O Arik and Danqi Chen and Tao Yu},
   booktitle = {The Thirteenth International Conference on Learning Representations},
@@ -1976,7 +1976,7 @@ CODE_RAG = Benchmark(
     description="Code retrieval quality for retrieval-augmented generation, covering programming solutions, online tutorials, library documentation, and Stack Overflow posts.",
     reference="https://aclanthology.org/2025.findings-naacl.176/",
     citation=r"""
-@inproceedings{wang_coderag-bench_2025,
+@inproceedings{wang2024coderagbenchretrievalaugmentcode,
   address = {Albuquerque, New Mexico},
   author = {Wang, Zora Zhiruo and Asai, Akari and Yu, Xinyan Velocity and Xu, Frank F. and Xie, Yiqing and Neubig, Graham and Fried, Daniel},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {NAACL} 2025},
@@ -2021,7 +2021,7 @@ BEIR = Benchmark(
     description="Zero-shot retrieval quality across a heterogeneous set of IR tasks and domains, providing a common framework for comparing NLP-based retrieval models.",
     reference="https://arxiv.org/abs/2104.08663",
     citation=r"""
-@inproceedings{thakur_beir_2021,
+@inproceedings{thakur2021beir,
   archiveprefix = {arXiv},
   author = {Nandan Thakur and Nils Reimers and Andreas R{\"u}ckl{\'e} and Abhishek Srivastava and Iryna Gurevych},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)},
@@ -2133,7 +2133,7 @@ C_MTEB = Benchmark(
     description="Chinese text embedding quality across retrieval, reranking, pair classification, clustering, classification, and semantic similarity.",
     reference="https://github.com/FlagOpen/FlagEmbedding/tree/master/research/C_MTEB",
     citation=r"""
-@inproceedings{xiao_c-pack_2024,
+@inproceedings{xiao2024cpackpackedresourcesgeneral,
   author = {Xiao, Shitao and Liu, Zheng and Zhang, Peitian and Muennighoff, Niklas and Lian, Defu and Nie, Jian-Yun},
   booktitle = {Proceedings of the 47th International ACM SIGIR Conference on Research and Development in Information Retrieval},
   collection = {SIGIR 2024},
@@ -2229,7 +2229,7 @@ FA_MTEB = Benchmark(
     description="Persian text embedding quality across classification, clustering, pair classification, reranking, retrieval, semantic similarity, and summarization retrieval.",
     reference="https://aclanthology.org/2025.findings-emnlp.614/",
     citation=r"""
-@inproceedings{zinvandi_famteb_2025,
+@inproceedings{zinvandi2025famteb,
   address = {Suzhou, China},
   author = {Zinvandi, Erfan and Alikhani, Morteza and Sarmadi, Mehran and Pourbahman, Zahra and Arvin, Sepehr and Kazemi, Reza and Amini, Arash},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2025},
@@ -2319,7 +2319,7 @@ FA_MTEB_2 = Benchmark(
     description="Persian text embedding quality across classification, clustering, pair classification, reranking, retrieval, semantic similarity, and summarization retrieval. In v2, large datasets were optimized for accessibility, low-quality datasets were removed, and higher-quality data was added; see the [main PR](https://github.com/embeddings-benchmark/mteb/pull/3157) for details.",
     reference="https://aclanthology.org/2025.findings-emnlp.614/",
     citation=r"""
-@inproceedings{zinvandi_famteb_2025,
+@inproceedings{zinvandi2025famteb,
   address = {Suzhou, China},
   author = {Zinvandi, Erfan and Alikhani, Morteza and Sarmadi, Mehran and Pourbahman, Zahra and Arvin, Sepehr and Kazemi, Reza and Amini, Arash},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2025},
@@ -2376,7 +2376,7 @@ CHEMTEB = Benchmark(
     description="Chemical domain text embedding quality across bitext mining, classification, clustering, pair classification, and retrieval.",
     reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
     citation=r"""
-@inproceedings{kasmaee_chemteb_2024,
+@inproceedings{kasmaee2024chemteb,
   archiveprefix = {arXiv},
   author = {Ali Shiraee Kasmaee and Mohammad Khodadad and Mohammad Arshi Saloot and Nick Sherck and Stephen Dokas and Hamidreza Mahyar and Soheila Samiee},
   booktitle = {ENLSP},
@@ -2429,7 +2429,7 @@ CHEMTEB_V1_1 = Benchmark(
     description="Chemical domain text embedding quality across bitext mining, classification, clustering, pair classification, and retrieval. v1.1 adds the ChemRxivRetrieval task.",
     reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
     citation=r"""
-@inproceedings{kasmaee_chemteb_2024,
+@inproceedings{kasmaee2024chemteb,
   archiveprefix = {arXiv},
   author = {Ali Shiraee Kasmaee and Mohammad Khodadad and Mohammad Arshi Saloot and Nick Sherck and Stephen Dokas and Hamidreza Mahyar and Soheila Samiee},
   booktitle = {ENLSP},
@@ -2440,7 +2440,7 @@ CHEMTEB_V1_1 = Benchmark(
   year = {2024},
 }
 
-@article{kasmaee_chembed_2025,
+@article{kasmaee2025chembed,
   author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Astaraki, Mahdi and Saloot, Mohammad Arshi and Sherck, Nicholas and Mahyar, Hamidreza and Samiee, Soheila},
   journal = {arXiv preprint arXiv:2508.01643},
   title = {Chembed: Enhancing chemical literature search through domain-specific text embeddings},
@@ -2476,7 +2476,7 @@ BEIR_NL = Benchmark(
     reference="https://aclanthology.org/2025.bucc-1.5/",
     contacts=["nikolay-banar"],
     citation=r"""
-@inproceedings{lotfi_beir-nl_2025,
+@inproceedings{banar2024beirnlzeroshotinformationretrieval,
   address = {Abu Dhabi, UAE},
   archiveprefix = {arXiv},
   author = {Lotfi, Ehsan and Banar, Nikolay and Daelemans, Walter},
@@ -2556,7 +2556,7 @@ MTEB_NL = Benchmark(
     reference="https://aclanthology.org/2026.findings-acl.1236/",
     contacts=["nikolay-banar"],
     citation=r"""
-@inproceedings{banar_mteb-nl_2026,
+@inproceedings{banar2025mtebnle5nlembeddingbenchmark,
   address = {San Diego, California, United States},
   author = {Banar, Nikolay and Lotfi, Ehsan and Van Nooten, Jens and Arhiliuc, Cristina and Kliocaite, Marija and Daelemans, Walter},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2026},
@@ -2785,7 +2785,7 @@ MIEB_ENG = MIEBBenchmark(
     reference="https://arxiv.org/abs/2504.10471",
     contacts=["gowitheflow-1998", "isaac-chung"],
     citation=r"""
-@inproceedings{xiao_mieb_2025,
+@inproceedings{xiao2025mieb,
   author = {Xiao, Chenghao and Chung, Isaac and Kerboua, Imene and Stirling, Jamie and Zhang, Xin and Kardos, M\'arton and Solomatin, Roman and Al Moubayed, Noura and Enevoldsen, Kenneth and Muennighoff, Niklas},
   booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
   month = {October},
@@ -2816,7 +2816,7 @@ MIEB_MULTILINGUAL = MIEBBenchmark(
     reference="https://arxiv.org/abs/2504.10471",
     contacts=["gowitheflow-1998", "isaac-chung"],
     citation=r"""
-@inproceedings{xiao_mieb_2025,
+@inproceedings{xiao2025mieb,
   author = {Xiao, Chenghao and Chung, Isaac and Kerboua, Imene and Stirling, Jamie and Zhang, Xin and Kardos, M\'arton and Solomatin, Roman and Al Moubayed, Noura and Enevoldsen, Kenneth and Muennighoff, Niklas},
   booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
   month = {October},
@@ -2862,7 +2862,7 @@ MIEB_LITE = MIEBBenchmark(
     reference="https://arxiv.org/abs/2504.10471",
     contacts=["gowitheflow-1998", "isaac-chung"],
     citation=r"""
-@inproceedings{xiao_mieb_2025,
+@inproceedings{xiao2025mieb,
   author = {Xiao, Chenghao and Chung, Isaac and Kerboua, Imene and Stirling, Jamie and Zhang, Xin and Kardos, M\'arton and Solomatin, Roman and Al Moubayed, Noura and Enevoldsen, Kenneth and Muennighoff, Niklas},
   booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
   month = {October},
@@ -2933,7 +2933,7 @@ MIEB_IMG = MIEBBenchmark(
     description="Image-only embedding quality across retrieval, classification, clustering, and visual STS, excluding tasks that require a text encoder.",
     reference="https://arxiv.org/abs/2504.10471",
     citation=r"""
-@inproceedings{xiao_mieb_2025,
+@inproceedings{xiao2025mieb,
   author = {Xiao, Chenghao and Chung, Isaac and Kerboua, Imene and Stirling, Jamie and Zhang, Xin and Kardos, M\'arton and Solomatin, Roman and Al Moubayed, Noura and Enevoldsen, Kenneth and Muennighoff, Niklas},
   booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
   month = {October},
@@ -2969,7 +2969,7 @@ BEIR_PL = Benchmark(
     description="Zero-shot retrieval quality in Polish across the BEIR task suite, covering biomedical, financial, legal, and general knowledge domains.",
     reference="https://arxiv.org/abs/2305.19840",
     citation=r"""
-@misc{wojtasik_beir-pl_2024,
+@misc{wojtasik2024beirplzeroshotinformation,
   archiveprefix = {arXiv},
   author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
   eprint = {2305.19840},
@@ -2994,7 +2994,7 @@ BUILT_MTEB = Benchmark(
     description="Text embedding quality in the built environment domain across clustering, retrieval, and reranking, spanning architecture, engineering, construction, and operations management.",
     reference="https://doi.org/10.1038/s41598-025-09052-5",
     citation=r"""
-@article{shahinmoghadam_benchmarking_2025,
+@article{shahinmoghadam2024benchmarking,
   author = {Shahinmoghadam, Mehrzad and Motamedi, Ali},
   doi = {10.1038/s41598-025-09052-5},
   issn = {2045-2322},
@@ -3062,7 +3062,7 @@ VIDORE = Benchmark(
     description="Visual document retrieval across diverse document types and domains, matching natural language queries to document page images.",
     reference="https://openreview.net/forum?id=ogjBpZ8uSi",
     citation=r"""
-@inproceedings{faysse_colpali_2025,
+@inproceedings{faysse2024colpali,
   archiveprefix = {arXiv},
   author = {Manuel Faysse and Hugues Sibille and Tony Wu and Bilel Omrani and Gautier Viaud and CELINE HUDELOT and Pierre Colombo},
   booktitle = {The Thirteenth International Conference on Learning Representations},
@@ -3087,7 +3087,7 @@ VIDORE_V2 = Benchmark(
     description="Visual document retrieval across ESG reports, economics reports, biomedical lectures, and related enterprise document types, matching natural language queries to document page images.",
     reference="https://openreview.net/forum?id=ogjBpZ8uSi",
     citation=r"""
-@article{mace_vidore_2025,
+@article{mace2025vidorev2,
   author = {Macé, Quentin and Loison António and Faysse, Manuel},
   journal = {arXiv preprint arXiv:2505.17166},
   title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
@@ -3125,7 +3125,7 @@ VIDORE_V3 = VidoreBenchmark(
     description="Visual document retrieval across multi-modal enterprise documents spanning finance, industrial, computer science, pharmaceutical, and other professional domains. Includes both open and closed datasets; to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml).",
     reference="https://aclanthology.org/2026.acl-long.755/",
     citation=r"""
-@inproceedings{loison_vidore_2026,
+@inproceedings{loison2026vidorev3comprehensiveevaluation,
   address = {San Diego, California, United States},
   author = {Loison, Ant{\'o}nio and Mac{\'e}, Quentin and Edy, Antoine and Xing, Victor and Balough, Tom and Moreira, Gabriel de Souza P. and Liu, Bo and Faysse, Manuel and Hudelot, Celine and Viaud, Gautier},
   booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -3171,7 +3171,7 @@ VIDORE_V3_1 = VidoreBenchmark(
     description="Visual document retrieval across multi-modal enterprise documents spanning finance, industrial, computer science, pharmaceutical, and other professional domains. Includes both open and closed datasets; to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml). v3.1 adds markdown derived from OCR to support text-only and joint image-text baselines.",
     reference="https://aclanthology.org/2026.acl-long.755/",
     citation=r"""
-@inproceedings{loison_vidore_2026,
+@inproceedings{loison2026vidorev3comprehensiveevaluation,
   address = {San Diego, California, United States},
   author = {Loison, Ant{\'o}nio and Mac{\'e}, Quentin and Edy, Antoine and Xing, Victor and Balough, Tom and Moreira, Gabriel de Souza P. and Liu, Bo and Faysse, Manuel and Hudelot, Celine and Viaud, Gautier},
   booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -3259,7 +3259,7 @@ VIDORE_V3_1_RERANKING = VidoreBenchmark(
     description="Reranking of visual documents on the ViDoRe v3.1 domains. For each domain, the candidates are the top-50 pages retrieved by one of four first-stage retrievers; BM25, bge-m3, Qwen3-VL-Embedding-2B and Nemotron-3.5-Embed-8B, so rerankers are compared on candidate lists from various model types. Includes both open and closed datasets; to submit results on private tasks, please [open an issue](https://github.com/embeddings-benchmark/mteb/issues?template=eval_request.yaml).",
     reference="https://aclanthology.org/2026.acl-long.755/",
     citation=r"""
-@inproceedings{loison_vidore_2026,
+@inproceedings{loison2026vidorev3comprehensiveevaluation,
   address = {San Diego, California, United States},
   author = {Loison, Ant{\'o}nio and Mac{\'e}, Quentin and Edy, Antoine and Xing, Victor and Balough, Tom and Moreira, Gabriel de Souza P. and Liu, Bo and Faysse, Manuel and Hudelot, Celine and Viaud, Gautier},
   booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -3333,7 +3333,7 @@ VISUAL_DOCUMENT_RETRIEVAL = Benchmark(
     description="Visual document retrieval across diverse document types and domains, combining the ViDoRe v1 and v2 task sets.",
     reference="https://openreview.net/forum?id=ogjBpZ8uSi",
     citation=r"""
-@article{mace_vidore_2025,
+@article{mace2025vidorev2,
   author = {Macé, Quentin and Loison António and Faysse, Manuel},
   journal = {arXiv preprint arXiv:2505.17166},
   title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
@@ -3362,7 +3362,7 @@ R2MED = Benchmark(
     description="Reasoning-driven medical retrieval quality across biology, bioinformatics, medical sciences, clinical, and treatment scenarios, requiring models to perform multi-step reasoning over medical literature.",
     reference="https://r2med.github.io/",
     citation=r"""
-@misc{zhang_r2med_2026,
+@misc{zhang2026r2medbenchmarkreasoningdrivenmedical,
   archiveprefix = {arXiv},
   author = {Xiangxu Zhang and Lei Li and Xiao Zhou and Zheng Liu},
   eprint = {2505.14558},
@@ -3443,7 +3443,7 @@ VN_MTEB = Benchmark(
     description="Vietnamese text embedding quality across retrieval, classification, pair classification, clustering, reranking, and semantic similarity.",
     reference="https://aclanthology.org/2026.findings-eacl.86/",
     citation=r"""
-@inproceedings{pham_vn-mteb_2026,
+@inproceedings{pham2025vnmtebvietnamesemassivetext,
   address = {Rabat, Morocco},
   author = {Pham, Loc and Luu, Tung and Vo, Thu and Nguyen, Minh and Hoang, Viet},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EACL} 2026},
@@ -3549,7 +3549,7 @@ JINA_VDR = Benchmark(
     ),
     description="Visual document retrieval across multilingual, domain-diverse, and layout-rich document types, spanning medical, legal, financial, technical, and other domains across multiple languages.",
     reference="https://aclanthology.org/2025.mrl-main.36/",
-    citation=r"""@inproceedings{gunther_jina-embeddings-v4_2025,
+    citation=r"""@inproceedings{günther2025jinaembeddingsv4universalembeddingsmultimodal,
   address = {Suzhuo, China},
   author = {G{\"u}nther, Michael and Sturua, Saba and Akram, Mohammad Kalim and Mohr, Isabelle and Ungureanu, Andrei and Wang, Bo and Eslami, Sedigheh and Martens, Scott and Werk, Maximilian and Wang, Nan and Xiao, Han},
   booktitle = {Proceedings of the 5th Workshop on Multilingual Representation Learning ({MRL} 2025)},
@@ -3647,7 +3647,7 @@ JMTEB_V2 = Benchmark(
     description="Japanese text embedding quality across clustering, classification, semantic similarity, retrieval, and reranking. v2 extends the benchmark to 28 datasets for more comprehensive evaluation compared with MTEB(jpn, v1).",
     reference="https://github.com/sbintuitions/JMTEB",
     citation=r"""
-@inproceedings{li_jmteb_2026,
+@inproceedings{li-etal-2026-jmteb,
   address = {Palma de Mallorca, Spain},
   author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan and Fukuchi, Akihiko and Shibata, Tomohide and Kawahara, Daisuke},
   booktitle = {Proceedings of the Fifteenth Language Resources and Evaluation Conference},
@@ -3708,7 +3708,7 @@ JMTEB_LITE_V1 = Benchmark(
     description="Japanese text embedding quality across clustering, classification, semantic similarity, retrieval, and reranking, with heavy datasets optimized via hard negative pooling to enable faster evaluation while maintaining rankings consistent with JMTEB.",
     reference="https://huggingface.co/datasets/sbintuitions/JMTEB-lite",
     citation=r"""
-@inproceedings{li_jmteb_2026,
+@inproceedings{li-etal-2026-jmteb,
   address = {Palma de Mallorca, Spain},
   author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan and Fukuchi, Akihiko and Shibata, Tomohide and Kawahara, Daisuke},
   booktitle = {Proceedings of the Fifteenth Language Resources and Evaluation Conference},
@@ -3738,7 +3738,7 @@ KOVIDORE_V2 = Benchmark(
     description="Korean visual document retrieval across enterprise document domains including cybersecurity, economics, energy, and HR.",
     reference="https://github.com/whybe-choi/kovidore-data-generator",
     citation=r"""
-@inproceedings{choi_kovidore_2026,
+@inproceedings{choi-etal-2026-kovidore,
   address = {San Diego, USA},
   author = {Choi, Yongbin  and
 Song, Yongwoo  and
@@ -3777,7 +3777,7 @@ VISRAG_RETRIEVAL = Benchmark(
     description="Visual retrieval augmented generation quality across document types including scientific papers, charts, infographics, plots, and multi-page documents.",
     reference="https://huggingface.co/collections/openbmb/visrag",
     citation=r"""
-@misc{yu_visrag_2025,
+@misc{yu2025visragvisionbasedretrievalaugmentedgeneration,
   archiveprefix = {arXiv},
   author = {Shi Yu and Chaoyue Tang and Bokai Xu and Junbo Cui and Junhao Ran and Yukun Yan and Zhenghao Liu and Shuo Wang and Xu Han and Zhiyuan Liu and Maosong Sun},
   eprint = {2410.10594},
@@ -3789,7 +3789,7 @@ VISRAG_RETRIEVAL = Benchmark(
 """,
 )
 
-_MAEB_CITATION = """@misc{assadi_maeb_2026,
+_MAEB_CITATION = """@misc{assadi2026maebmassiveaudioembedding,
   archiveprefix = {arXiv},
   author = {Adnan El Assadi and Isaac Chung and Chenghao Xiao and Roman Solomatin and Animesh Jha and Rahul Chand and Silky Singh and Kaitlyn Wang and Ali Sartaz Khan and Marc Moussa Nasser and Sufen Fong and Pengfei He and Alan Xiao and Ayush Sunil Munot and Aditya Shrivastava and Artem Gazizov and Niklas Muennighoff and Kenneth Enevoldsen},
   eprint = {2602.16008},
@@ -3953,7 +3953,7 @@ MVEB = Benchmark(
     description="Audio-visual video embedding quality across retrieval, classification, clustering, pair classification, zero-shot classification, and video-centric QA, with tasks selected to maximize coverage of audio-video joint modality inputs.",
     reference=None,
     citation=r"""
-@inproceedings{assadi_mveb_2026,
+@inproceedings{anonymous2026mveb,
   author = {Adnan El Assadi and Roman Solomatin and Isaac Chung and Chenghao Xiao and Deep Shah and Shriya Sudhakar and Ayush Sunil Munot and M{\'a}rton Kardos and Niklas Muennighoff and Kenneth Enevoldsen},
   booktitle = {The 2026 Conference on Empirical Methods in Natural Language Processing},
   title = {{MVEB}: Massive Video Embedding Benchmark},
@@ -4002,7 +4002,7 @@ MVEB_TEXT_VIDEO = Benchmark(
     description="Text and video embedding quality across retrieval, classification, clustering, pair classification, zero-shot classification, and video-centric QA, for models without an audio encoder.",
     reference=None,
     citation=r"""
-@inproceedings{assadi_mveb_2026,
+@inproceedings{anonymous2026mveb,
   author = {Adnan El Assadi and Roman Solomatin and Isaac Chung and Chenghao Xiao and Deep Shah and Shriya Sudhakar and Ayush Sunil Munot and M{\'a}rton Kardos and Niklas Muennighoff and Kenneth Enevoldsen},
   booktitle = {The 2026 Conference on Empirical Methods in Natural Language Processing},
   title = {{MVEB}: Massive Video Embedding Benchmark},
@@ -4037,7 +4037,7 @@ MVEB_VIDEO = Benchmark(
     description="Video-only embedding quality across classification and pair classification, for encoders without a text component. Retrieval, QA, and zero-shot tasks are excluded as they require a text encoder.",
     reference=None,
     citation=r"""
-@inproceedings{assadi_mveb_2026,
+@inproceedings{anonymous2026mveb,
   author = {Adnan El Assadi and Roman Solomatin and Isaac Chung and Chenghao Xiao and Deep Shah and Shriya Sudhakar and Ayush Sunil Munot and M{\'a}rton Kardos and Niklas Muennighoff and Kenneth Enevoldsen},
   booktitle = {The 2026 Conference on Empirical Methods in Natural Language Processing},
   title = {{MVEB}: Massive Video Embedding Benchmark},
@@ -4066,7 +4066,7 @@ CoREB = Benchmark(
     description="Code embedding and reranking quality across code-to-text, text-to-code, and code-to-code retrieval tasks, using counterfactually rewritten problems in five programming languages to limit training data contamination.",
     reference="https://arxiv.org/abs/2605.04615",
     citation=r"""
-@article{xue_retrieval_2026,
+@article{xue2026coreb,
   author = {Xue, Siqiao and Liao, Zihan and Qin, Jin and Zhang, Ziyin and Mu, Yixiang and Zhou, Fan and Yu, Hang},
   journal = {arXiv preprint arXiv:2605.04615},
   title = {Beyond Retrieval: A Multitask Benchmark and Model for Code Search},
@@ -4094,7 +4094,7 @@ BRIGHT_PRO = Benchmark(
     description="""Reasoning-intensive retrieval quality on real-world StackExchange questions, scored against multi-aspect gold evidence. Each query is paired with a long-form reference answer whose cited passages collectively cover several reasoning aspects, so retrievers are measured on surfacing an aspect-diverse evidence set rather than a single relevant passage. Extends BRIGHT with these aspect annotations for agentic search settings.""",
     reference="https://huggingface.co/datasets/yale-nlp/Bright-Pro",
     citation=r"""
-@inproceedings{zhao_rethinking_2026,
+@inproceedings{Zhao2026RethinkingRR,
   address = {San Diego, California, United States},
   author = {Zhao, Yilun and Wei, Jinbiao and Song, Tingyu and Zhang, Siyue and Zhao, Chen and Cohan, Arman},
   booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},

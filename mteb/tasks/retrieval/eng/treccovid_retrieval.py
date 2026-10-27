@@ -25,7 +25,7 @@ class TRECCOVID(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{roberts_searching_2021,
+@article{roberts2021searching,
   author = {Roberts, Kirk and Alam, Tasmeer and Bedrick, Steven and Demner-Fushman, Dina and Lo, Kyle and Soboroff, Ian and Voorhees, Ellen and Wang, Lucy Lu and Hersh, William R.},
   doi = {10.1016/j.jbi.2021.103865},
   issn = {1532-0464},

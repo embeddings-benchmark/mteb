@@ -35,7 +35,7 @@ class MovingFashionI2VRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{godi_movingfashion_2022,
+@inproceedings{godi2021movingfashion,
   author = {Godi, Marco and Joppi, Christian and Skenderi, Geri and Cristani, Marco},
   booktitle = {2022 IEEE/CVF Winter Conference on Applications of Computer Vision (WACV)},
   doi = {10.1109/wacv51458.2022.00059},
@@ -86,7 +86,7 @@ class MovingFashionV2IRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{godi_movingfashion_2022,
+@inproceedings{godi2021movingfashion,
   author = {Godi, Marco and Joppi, Christian and Skenderi, Geri and Cristani, Marco},
   booktitle = {2022 IEEE/CVF Winter Conference on Applications of Computer Vision (WACV)},
   doi = {10.1109/wacv51458.2022.00059},

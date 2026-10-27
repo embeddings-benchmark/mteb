@@ -150,8 +150,11 @@ class Wav2Vec2AudioWrapper(AbsEncoder):
         max_samples = seconds_to_samples(
             self.max_audio_length_seconds, self.sampling_rate
         )
+        # the conv feature encoder needs at least 400 samples (25 ms at 16 kHz)
         inputs.collate_fn = AudioCollator(
-            target_sampling_rate=self.sampling_rate, max_samples=max_samples
+            target_sampling_rate=self.sampling_rate,
+            max_samples=max_samples,
+            min_samples=400,
         )
 
         all_embeddings = []
@@ -301,7 +304,7 @@ wav2vec2_xlsr_300m = ModelMeta(
         # MLS, BABEL (not in MTEB)
     },
     citation="""
-@inproceedings{babu_xls-r_2022,
+@inproceedings{babu2021xlsrselfsupervisedcrosslingualspeech,
   author = {Babu, Arun and Wang, Changhan and Tjandra, Andros and Lakhotia, Kushal and Xu, Qiantong and Goyal, Naman and Singh, Kritika and von Platen, Patrick and Saraf, Yatharth and Pino, Juan and Baevski, Alexei and Conneau, Alexis and Auli, Michael},
   booktitle = {Interspeech 2022},
   collection = {interspeech_2022},
@@ -343,7 +346,7 @@ wav2vec2_xlsr_300m_phoneme = ModelMeta(
         # MLS, BABEL (not in MTEB)
     },
     citation="""
-@inproceedings{babu_xls-r_2022,
+@inproceedings{babu2021xlsrselfsupervisedcrosslingualspeech,
   author = {Babu, Arun and Wang, Changhan and Tjandra, Andros and Lakhotia, Kushal and Xu, Qiantong and Goyal, Naman and Singh, Kritika and von Platen, Patrick and Saraf, Yatharth and Pino, Juan and Baevski, Alexei and Conneau, Alexis and Auli, Michael},
   booktitle = {Interspeech 2022},
   collection = {interspeech_2022},
@@ -385,7 +388,7 @@ wav2vec2_xlsr_1b = ModelMeta(
         # MLS, BABEL (not in MTEB)
     },
     citation="""
-@inproceedings{babu_xls-r_2022,
+@inproceedings{babu2021xlsrselfsupervisedcrosslingualspeech,
   author = {Babu, Arun and Wang, Changhan and Tjandra, Andros and Lakhotia, Kushal and Xu, Qiantong and Goyal, Naman and Singh, Kritika and von Platen, Patrick and Saraf, Yatharth and Pino, Juan and Baevski, Alexei and Conneau, Alexis and Auli, Michael},
   booktitle = {Interspeech 2022},
   collection = {interspeech_2022},
@@ -427,7 +430,7 @@ wav2vec2_xlsr_2b = ModelMeta(
         # MLS, BABEL (not in MTEB)
     },
     citation="""
-@inproceedings{babu_xls-r_2022,
+@inproceedings{babu2021xlsrselfsupervisedcrosslingualspeech,
   author = {Babu, Arun and Wang, Changhan and Tjandra, Andros and Lakhotia, Kushal and Xu, Qiantong and Goyal, Naman and Singh, Kritika and von Platen, Patrick and Saraf, Yatharth and Pino, Juan and Baevski, Alexei and Conneau, Alexis and Auli, Michael},
   booktitle = {Interspeech 2022},
   collection = {interspeech_2022},
@@ -469,7 +472,7 @@ wav2vec2_xlsr_2b_translation = ModelMeta(
         # MLS, BABEL (not in MTEB)
     },
     citation="""
-@inproceedings{babu_xls-r_2022,
+@inproceedings{babu2021xlsrselfsupervisedcrosslingualspeech,
   author = {Babu, Arun and Wang, Changhan and Tjandra, Andros and Lakhotia, Kushal and Xu, Qiantong and Goyal, Naman and Singh, Kritika and von Platen, Patrick and Saraf, Yatharth and Pino, Juan and Baevski, Alexei and Conneau, Alexis and Auli, Michael},
   booktitle = {Interspeech 2022},
   collection = {interspeech_2022},
@@ -509,7 +512,7 @@ wav2vec2_base = ModelMeta(
     ),
     modalities=["audio"],
     citation="""
-@inproceedings{baevski_wav2vec_2020,
+@inproceedings{baevski2020wav2vec20frameworkselfsupervised,
   archiveprefix = {arXiv},
   author = {Alexei Baevski and Yuhao Zhou and Abdelrahman Mohamed and Michael Auli},
   booktitle = {NeurIPS},
@@ -545,7 +548,7 @@ wav2vec2_base_960h = ModelMeta(
     ),
     modalities=["audio"],
     citation="""
-@inproceedings{baevski_wav2vec_2020,
+@inproceedings{baevski2020wav2vec20frameworkselfsupervised,
   archiveprefix = {arXiv},
   author = {Alexei Baevski and Yuhao Zhou and Abdelrahman Mohamed and Michael Auli},
   booktitle = {NeurIPS},
@@ -581,7 +584,7 @@ wav2vec2_large = ModelMeta(
     ),
     modalities=["audio"],
     citation="""
-@inproceedings{baevski_wav2vec_2020,
+@inproceedings{baevski2020wav2vec20frameworkselfsupervised,
   archiveprefix = {arXiv},
   author = {Alexei Baevski and Yuhao Zhou and Abdelrahman Mohamed and Michael Auli},
   booktitle = {NeurIPS},
@@ -617,7 +620,7 @@ wav2vec2_large_xlsr_53 = ModelMeta(
     },
     modalities=["audio"],
     citation="""
-@inproceedings{conneau_unsupervised_2021,
+@inproceedings{conneau2020unsupervisedcrosslingualrepresentationlearning,
   author = {Conneau, Alexis and Baevski, Alexei and Collobert, Ronan and Mohamed, Abdelrahman and Auli, Michael},
   booktitle = {Interspeech 2021},
   collection = {interspeech_2021},
@@ -657,7 +660,7 @@ wav2vec2_lv_60_espeak_cv_ft = ModelMeta(
     },
     modalities=["audio"],
     citation="""
-@inproceedings{baevski_wav2vec_2020,
+@inproceedings{baevski2020wav2vec20frameworkselfsupervised,
   archiveprefix = {arXiv},
   author = {Alexei Baevski and Yuhao Zhou and Abdelrahman Mohamed and Michael Auli},
   booktitle = {NeurIPS},

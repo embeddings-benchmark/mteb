@@ -25,7 +25,7 @@ class DS1000Retrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{lai_ds-1000_2023,
+@inproceedings{lai2022ds,
   archiveprefix = {arXiv},
   author = {Yuhang Lai and Chengxi Li and Yiming Wang and Tianyi Zhang and Ruiqi Zhong and Luke Zettlemoyer and Wen-Tau Yih and Daniel Fried and Sida I. Wang and Tao Yu},
   booktitle = {ICML},

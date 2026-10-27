@@ -31,7 +31,7 @@ class ClothoA2TRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{drossos_clotho_2020,
+@inproceedings{drossos2019clothoaudiocaptioningdataset,
   author = {Drossos, Konstantinos and Lipping, Samuel and Virtanen, Tuomas},
   booktitle = {ICASSP 2020 - 2020 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp40776.2020.9052990},
@@ -101,7 +101,7 @@ class ClothoA2TRetrievalV2(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{drossos_clotho_2020,
+@inproceedings{drossos2019clothoaudiocaptioningdataset,
   author = {Drossos, Konstantinos and Lipping, Samuel and Virtanen, Tuomas},
   booktitle = {ICASSP 2020 - 2020 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp40776.2020.9052990},
@@ -140,7 +140,7 @@ class ClothoT2ARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{drossos_clotho_2020,
+@inproceedings{drossos2019clothoaudiocaptioningdataset,
   author = {Drossos, Konstantinos and Lipping, Samuel and Virtanen, Tuomas},
   booktitle = {ICASSP 2020 - 2020 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp40776.2020.9052990},
@@ -209,7 +209,7 @@ class ClothoT2ARetrievalV2(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{drossos_clotho_2020,
+@inproceedings{drossos2019clothoaudiocaptioningdataset,
   author = {Drossos, Konstantinos and Lipping, Samuel and Virtanen, Tuomas},
   booktitle = {ICASSP 2020 - 2020 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp40776.2020.9052990},

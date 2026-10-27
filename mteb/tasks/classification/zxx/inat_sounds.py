@@ -25,7 +25,7 @@ class INatSoundsClassification(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{chasmai_inaturalist_2024,
+@inproceedings{chasmai2025inatsounds,
   archiveprefix = {arXiv},
   author = {Mustafa Chasmai and Alexander Shepard and Subhransu Maji and Grant Van Horn},
   booktitle = {The Thirty-eight Conference on Neural Information Processing Systems Datasets and Benchmarks Track},

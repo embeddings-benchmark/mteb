@@ -33,7 +33,7 @@ class T2Retrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{xie_t2ranking_2023,
+@inproceedings{xie2023t2ranking,
   author = {Xie, Xiaohui and Dong, Qian and Wang, Bingning and Lv, Feiyang and Yao, Ting and Gan, Weinan and Wu, Zhijing and Li, Xiangsheng and Li, Haitao and Liu, Yiqun and Ma, Jin},
   booktitle = {Proceedings of the 46th International ACM SIGIR Conference on Research and Development in Information Retrieval},
   collection = {SIGIR ’23},
@@ -78,7 +78,7 @@ class MMarcoRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{xiao_c-pack_2024,
+@inproceedings{xiao2024cpackpackedresourcesgeneral,
   author = {Xiao, Shitao and Liu, Zheng and Zhang, Peitian and Muennighoff, Niklas and Lian, Defu and Nie, Jian-Yun},
   booktitle = {Proceedings of the 47th International ACM SIGIR Conference on Research and Development in Information Retrieval},
   collection = {SIGIR 2024},
@@ -122,7 +122,7 @@ class DuRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{qiu_dureader-retrieval_2022,
+@inproceedings{qiu2022dureaderretrievallargescalechinesebenchmark,
   address = {Abu Dhabi, United Arab Emirates},
   author = {Qiu, Yifu and Li, Hongyu and Qu, Yingqi and Chen, Ying and She, QiaoQiao and Liu, Jing and Wu, Hua and Wang, Haifeng},
   booktitle = {Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing},
@@ -165,7 +165,7 @@ class CovidRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{long_multi-cpr_2022,
+@misc{long2022multicprmultidomainchinese,
   archiveprefix = {arXiv},
   author = {Dingkun Long and Qiong Gao and Kuan Zou and Guangwei Xu and Pengjun Xie and Ruijie Guo and Jian Xu and Guanjun Jiang and Luxi Xing and Ping Yang},
   eprint = {2203.03367},
@@ -204,7 +204,7 @@ class CmedqaRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{qiu_dureader-retrieval_2022,
+@inproceedings{qiu2022dureaderretrievallargescalechinesebenchmark,
   address = {Abu Dhabi, United Arab Emirates},
   author = {Qiu, Yifu and Li, Hongyu and Qu, Yingqi and Chen, Ying and She, QiaoQiao and Liu, Jing and Wu, Hua and Wang, Haifeng},
   booktitle = {Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing},
@@ -250,7 +250,7 @@ class EcomRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{long_multi-cpr_2022,
+@misc{long2022multicprmultidomainchinese,
   archiveprefix = {arXiv},
   author = {Dingkun Long and Qiong Gao and Kuan Zou and Guangwei Xu and Pengjun Xie and Ruijie Guo and Jian Xu and Guanjun Jiang and Luxi Xing and Ping Yang},
   eprint = {2203.03367},
@@ -291,7 +291,7 @@ class MedicalRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{long_multi-cpr_2022,
+@misc{long2022multicprmultidomainchinese,
   archiveprefix = {arXiv},
   author = {Dingkun Long and Qiong Gao and Kuan Zou and Guangwei Xu and Pengjun Xie and Ruijie Guo and Jian Xu and Guanjun Jiang and Luxi Xing and Ping Yang},
   eprint = {2203.03367},
@@ -332,7 +332,7 @@ class VideoRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{long_multi-cpr_2022,
+@misc{long2022multicprmultidomainchinese,
   archiveprefix = {arXiv},
   author = {Dingkun Long and Qiong Gao and Kuan Zou and Guangwei Xu and Pengjun Xie and Ruijie Guo and Jian Xu and Guanjun Jiang and Luxi Xing and Ping Yang},
   eprint = {2203.03367},

@@ -32,7 +32,7 @@ class BirdSetMultilabelClassification(AbsTaskMultilabelClassification):
         modalities=["audio"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{rauch_birdset_2025,
+@inproceedings{rauch2024birdsetlargescaledatasetaudio,
   archiveprefix = {arXiv},
   author = {Lukas Rauch and Raphael Schwinger and Moritz Wirth and Ren{\'e} Heinrich and Denis Huseljic and Marek Herde and Jonas Lange and Stefan Kahl and Bernhard Sick and Sven Tomforde and Christoph Scholz},
   booktitle = {The Thirteenth International Conference on Learning Representations},

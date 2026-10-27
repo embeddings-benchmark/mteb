@@ -87,7 +87,7 @@ def load_bright_data(
 
 
 _BIBTEX_CITATION = r"""
-@inproceedings{su_bright_2025,
+@inproceedings{su2024bright,
   archiveprefix = {arXiv},
   author = {Hongjin SU and Howard Yen and Mengzhou Xia and Weijia Shi and Niklas Muennighoff and Han-yu Wang and Liu Haisu and Quan Shi and Zachary S Siegel and Michael Tang and Ruoxi Sun and Jinsung Yoon and Sercan O Arik and Danqi Chen and Tao Yu},
   booktitle = {The Thirteenth International Conference on Learning Representations},

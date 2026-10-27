@@ -46,7 +46,7 @@ class CodeEditSearchRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{muennighoff_octopack_2024,
+@inproceedings{muennighoff2023octopack,
   archiveprefix = {arXiv},
   author = {Niklas Muennighoff and Qian Liu and Armel Randy Zebaze and Qinkai Zheng and Binyuan Hui and Terry Yue Zhuo and Swayam Singh and Xiangru Tang and Leandro Von Werra and Shayne Longpre},
   booktitle = {The Twelfth International Conference on Learning Representations},

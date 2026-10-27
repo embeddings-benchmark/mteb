@@ -33,7 +33,7 @@ class PawsXPairClassification(AbsTaskPairClassification):
         dialect=[],
         sample_creation="human-translated",
         bibtex_citation=r"""
-@inproceedings{yang_paws-x_2019,
+@inproceedings{yang2019pawsx,
   author = {Yang, Yinfei and Zhang, Yuan and Tar, Chris and Baldridge, Jason},
   booktitle = {Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP)},
   doi = {10.18653/v1/d19-1382},

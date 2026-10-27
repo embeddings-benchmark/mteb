@@ -54,7 +54,7 @@ class MultiLongDocReranking(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{chen_m3-embedding_2024,
+@inproceedings{bge-m3,
   address = {Bangkok, Thailand},
   author = {Chen, Jianlyu and Xiao, Shitao and Zhang, Peitian and Luo, Kun and Lian, Defu and Liu, Zheng},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2024},

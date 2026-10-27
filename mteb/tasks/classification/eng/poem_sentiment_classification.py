@@ -25,7 +25,7 @@ class PoemSentimentClassification(AbsTaskClassification):
         dialect=["eng-Latn-US", "en-Latn-GB"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{sheng_investigating_2020,
+@inproceedings{sheng2020investigating,
   address = {Barcelona, Spain (Online)},
   archiveprefix = {arXiv},
   author = {Sheng, Emily and Uthus, David},
@@ -70,7 +70,7 @@ class PoemSentimentClassificationV2(AbsTaskClassification):
         dialect=["eng-Latn-US", "en-Latn-GB"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{sheng_investigating_2020,
+@inproceedings{sheng2020investigating,
   address = {Barcelona, Spain (Online)},
   archiveprefix = {arXiv},
   author = {Sheng, Emily and Uthus, David},

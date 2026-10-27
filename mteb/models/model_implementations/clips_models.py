@@ -8,7 +8,7 @@ from mteb.types import OutputDType
 from .e5_models import ME5_TRAINING_DATA, model_prompts
 
 E5_NL_CITATION = """
-@inproceedings{banar_mteb-nl_2026,
+@inproceedings{banar2025mtebnle5nlembeddingbenchmark,
   address = {San Diego, California, United States},
   author = {Banar, Nikolay and Lotfi, Ehsan and Van Nooten, Jens and Arhiliuc, Cristina and Kliocaite, Marija and Daelemans, Walter},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2026},

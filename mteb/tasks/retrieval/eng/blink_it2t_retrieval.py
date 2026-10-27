@@ -25,7 +25,7 @@ class BLINKIT2TRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@inbook{fu_blink_2024,
+@inbook{fu2024blink,
   author = {Fu, Xingyu and Hu, Yushi and Li, Bangzheng and Feng, Yu and Wang, Haoyu and Lin, Xudong and Roth, Dan and Smith, Noah A. and Ma, Wei-Chiu and Krishna, Ranjay},
   booktitle = {Computer Vision – ECCV 2024},
   doi = {10.1007/978-3-031-73337-6_9},

@@ -58,7 +58,7 @@ e5_instruct = ModelMeta(
     license="mit",
     max_tokens=514,
     adapted_from="FacebookAI/xlm-roberta-large",
-    citation="""@article{wang_multilingual_2024,
+    citation="""@article{wang2024multilingual,
       title={Multilingual E5 Text Embeddings: A Technical Report},
       author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Yang, Linjun and Majumder, Rangan and Wei, Furu},
       journal={arXiv preprint arXiv:2402.05672},
@@ -140,7 +140,7 @@ e5_mistral = ModelMeta(
     license="mit",
     max_tokens=32768,
     citation="""
-    @inproceedings{wang_improving_2024,
+    @inproceedings{wang2023improving,
   address = {Bangkok, Thailand},
   author = {Wang, Liang and Yang, Nan and Huang, Xiaolong and Yang, Linjun and Majumder, Rangan and Wei, Furu},
   booktitle = {Proceedings of the 62nd Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -154,7 +154,7 @@ e5_mistral = ModelMeta(
   year = {2024},
 }
 
-    @article{wang_text_2022,
+    @article{wang2022text,
       title={Text Embeddings by Weakly-Supervised Contrastive Pre-training},
       author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Jiao, Binxing and Yang, Linjun and Jiang, Daxin and Majumder, Rangan and Wei, Furu},
       journal={arXiv preprint arXiv:2212.03533},

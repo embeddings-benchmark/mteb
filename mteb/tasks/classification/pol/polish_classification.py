@@ -25,7 +25,7 @@ class CbdClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@proceedings{ogrodniczuk_proceedings_2019,
+@proceedings{ogr:kob:19:poleval,
   address = {Warsaw, Poland},
   editor = {Maciej Ogrodniczuk and Łukasz Kobyliński},
   isbn = {978-83-63159-28-3},
@@ -62,7 +62,7 @@ class CbdClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@proceedings{ogrodniczuk_proceedings_2019,
+@proceedings{ogr:kob:19:poleval,
   address = {Warsaw, Poland},
   editor = {Maciej Ogrodniczuk and Łukasz Kobyliński},
   isbn = {978-83-63159-28-3},
@@ -100,7 +100,7 @@ class PolEmo2InClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{kocon_multi-level_2019,
+@inproceedings{kocon-etal-2019-multi,
   address = {Hong Kong, China},
   author = {Koco{\'n}, Jan  and
 Mi{\l}kowski, Piotr  and
@@ -143,7 +143,7 @@ class PolEmo2InClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{kocon_multi-level_2019,
+@inproceedings{kocon-etal-2019-multi,
   address = {Hong Kong, China},
   author = {Koco{\'n}, Jan  and
 Mi{\l}kowski, Piotr  and
@@ -189,7 +189,7 @@ class PolEmo2OutClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{kocon_multi-level_2019,
+@inproceedings{kocon-etal-2019-multi,
   address = {Hong Kong, China},
   author = {Koco{\'n}, Jan  and
 Mi{\l}kowski, Piotr  and
@@ -233,7 +233,7 @@ class PolEmo2OutClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{kocon_multi-level_2019,
+@inproceedings{kocon-etal-2019-multi,
   address = {Hong Kong, China},
   author = {Koco{\'n}, Jan  and
 Mi{\l}kowski, Piotr  and
@@ -278,7 +278,7 @@ class AllegroReviewsClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{rybak_klej_2020,
+@inproceedings{rybak-etal-2020-klej,
   address = {Online},
   author = {Rybak, Piotr  and
 Mroczkowski, Robert  and
@@ -328,7 +328,7 @@ class AllegroReviewsClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{rybak_klej_2020,
+@inproceedings{rybak-etal-2020-klej,
   address = {Online},
   author = {Rybak, Piotr  and
 Mroczkowski, Robert  and
@@ -375,7 +375,7 @@ class PacClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{augustyniak_this_2022,
+@inproceedings{augustyniak2022waydesigningcompilinglepiszcze,
   archiveprefix = {arXiv},
   author = {Lukasz Augustyniak and Kamil Tagowski and Albert Sawczyn and Denis Janiak and Roman Bartusiak and Adrian Dominik Szymczak and Arkadiusz Janz and Piotr Szyma{\'n}ski and Marcin W{\k{a}}troba and Miko{\l}aj Morzy and Tomasz Jan Kajdanowicz and Maciej Piasecki},
   booktitle = {Thirty-sixth Conference on Neural Information Processing Systems Datasets and Benchmarks Track},
@@ -412,7 +412,7 @@ class PacClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{augustyniak_this_2022,
+@inproceedings{augustyniak2022waydesigningcompilinglepiszcze,
   archiveprefix = {arXiv},
   author = {Lukasz Augustyniak and Kamil Tagowski and Albert Sawczyn and Denis Janiak and Roman Bartusiak and Adrian Dominik Szymczak and Arkadiusz Janz and Piotr Szyma{\'n}ski and Marcin W{\k{a}}troba and Miko{\l}aj Morzy and Tomasz Jan Kajdanowicz and Maciej Piasecki},
   booktitle = {Thirty-sixth Conference on Neural Information Processing Systems Datasets and Benchmarks Track},

@@ -21,7 +21,7 @@ _VICLIP_MEAN = (0.485, 0.456, 0.406)
 _VICLIP_STD = (0.229, 0.224, 0.225)
 _VICLIP_SIZE = 224
 
-VICLIP_CITATION = """@inproceedings{wang_internvid_2024,
+VICLIP_CITATION = """@inproceedings{wang2023internvid,
   archiveprefix = {arXiv},
   author = {Yi Wang and Yinan He and Yizhuo Li and Kunchang Li and Jiashuo Yu and Xin Ma and Xinhao Li and Guo Chen and Xinyuan Chen and Yaohui Wang and Ping Luo and Ziwei Liu and Yali Wang and Limin Wang and Yu Qiao},
   booktitle = {The Twelfth International Conference on Learning Representations},

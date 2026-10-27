@@ -8,7 +8,11 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import check_duration_cap, single_clip_dataloader
+from mteb.models.modality_collators import (
+    AudioCollator,
+    check_duration_cap,
+    single_clip_dataloader,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -78,6 +82,10 @@ class SpeechT5Audio(AbsEncoder):
         import torchaudio
 
         all_embeddings = []
+        # the conv speech prenet needs at least 400 samples (25 ms at 16 kHz)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate, min_samples=400
+        )
 
         for batch in tqdm(
             single_clip_dataloader(
@@ -356,7 +364,7 @@ speecht5_asr = ModelMeta(
     ),
     modalities=["audio"],
     citation="""
-@inproceedings{ao_speecht5_2022,
+@inproceedings{ao2022speecht5unifiedmodalencoderdecoderpretraining,
   address = {Dublin, Ireland},
   author = {Ao, Junyi and Wang, Rui and Zhou, Long and Wang, Chengyi and Ren, Shuo and Wu, Yu and Liu, Shujie and Ko, Tom and Li, Qing and Zhang, Yu and Wei, Zhihua and Qian, Yao and Li, Jinyu and Wei, Furu},
   booktitle = {Proceedings of the 60th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -397,7 +405,7 @@ speecht5_tts = ModelMeta(
     ),
     modalities=["text"],
     citation="""
-@inproceedings{ao_speecht5_2022,
+@inproceedings{ao2022speecht5unifiedmodalencoderdecoderpretraining,
   address = {Dublin, Ireland},
   author = {Ao, Junyi and Wang, Rui and Zhou, Long and Wang, Chengyi and Ren, Shuo and Wu, Yu and Liu, Shujie and Ko, Tom and Li, Qing and Zhang, Yu and Wei, Zhihua and Qian, Yao and Li, Jinyu and Wei, Furu},
   booktitle = {Proceedings of the 60th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -438,7 +446,7 @@ speecht5_multimodal = ModelMeta(
     ),
     modalities=["audio", "text"],
     citation="""
-@inproceedings{ao_speecht5_2022,
+@inproceedings{ao2022speecht5unifiedmodalencoderdecoderpretraining,
   address = {Dublin, Ireland},
   author = {Ao, Junyi and Wang, Rui and Zhou, Long and Wang, Chengyi and Ren, Shuo and Wu, Yu and Liu, Shujie and Ko, Tom and Li, Qing and Zhang, Yu and Wei, Zhihua and Qian, Yao and Li, Jinyu and Wei, Furu},
   booktitle = {Proceedings of the 60th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},

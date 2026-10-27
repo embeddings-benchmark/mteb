@@ -25,7 +25,7 @@ class WikipediaChemFieldsClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{kasmaee_chemteb_2024,
+@inproceedings{kasmaee2024chemteb,
   archiveprefix = {arXiv},
   author = {Ali Shiraee Kasmaee and Mohammad Khodadad and Mohammad Arshi Saloot and Nick Sherck and Stephen Dokas and Hamidreza Mahyar and Soheila Samiee},
   booktitle = {ENLSP},
@@ -63,7 +63,7 @@ class WikipediaChemFieldsClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{kasmaee_chemteb_2024,
+@inproceedings{kasmaee2024chemteb,
   archiveprefix = {arXiv},
   author = {Ali Shiraee Kasmaee and Mohammad Khodadad and Mohammad Arshi Saloot and Nick Sherck and Stephen Dokas and Hamidreza Mahyar and Soheila Samiee},
   booktitle = {ENLSP},

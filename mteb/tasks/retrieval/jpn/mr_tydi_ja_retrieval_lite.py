@@ -30,7 +30,7 @@ class MrTyDiJaRetrievalLite(AbsTaskRetrieval):
         sample_creation="found",
         adapted_from=["MrTidyRetrieval"],
         bibtex_citation=r"""
-@inproceedings{li_jmteb_2026,
+@inproceedings{li-etal-2026-jmteb,
   address = {Palma de Mallorca, Spain},
   author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan and Fukuchi, Akihiko and Shibata, Tomohide and Kawahara, Daisuke},
   booktitle = {Proceedings of the Fifteenth Language Resources and Evaluation Conference},
@@ -43,7 +43,7 @@ class MrTyDiJaRetrievalLite(AbsTaskRetrieval):
   year = {2026},
 }
 
-@inproceedings{zhang_mr_2021,
+@inproceedings{mrtydi,
   address = {Punta Cana, Dominican Republic},
   author = {Zhang, Xinyu and Ma, Xueguang and Shi, Peng and Lin, Jimmy},
   booktitle = {Proceedings of the 1st Workshop on Multilingual Representation Learning},

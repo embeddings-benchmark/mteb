@@ -26,7 +26,7 @@ class KlueSTS(AbsTaskSTS):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{park_klue_2021,
+@inproceedings{park2021klue,
   archiveprefix = {arXiv},
   author = {Sungjoon Park and Jihyung Moon and Sungdong Kim and Won Ik Cho and Ji Yoon Han and Jangwon Park and Chisung Song and Junseong Kim and Youngsook Song and Taehwan Oh and Joohong Lee and Juhyun Oh and Sungwon Lyu and Younghoon Jeong and Inkwon Lee and Sangwoo Seo and Dongjun Lee and Hyunwoo Kim and Myeonghwa Lee and Seongbo Jang and Seungwon Do and Sunkyoung Kim and Kyungtae Lim and Jongwon Lee and Kyumin Park and Jamin Shin and Seonghyun Kim and Lucy Park and Alice Oh and Jung-Woo Ha and Kyunghyun Cho},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)},

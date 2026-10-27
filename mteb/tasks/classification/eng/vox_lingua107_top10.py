@@ -25,7 +25,7 @@ class VoxLingua107Top10(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="found",  # from youtube
         bibtex_citation=r"""
-@inproceedings{valk_voxlingua107_2021,
+@inproceedings{valk2020voxlingua107datasetspokenlanguage,
   author = {Valk, Jorgen and Alumae, Tanel},
   booktitle = {2021 IEEE Spoken Language Technology Workshop (SLT)},
   doi = {10.1109/slt48900.2021.9383459},

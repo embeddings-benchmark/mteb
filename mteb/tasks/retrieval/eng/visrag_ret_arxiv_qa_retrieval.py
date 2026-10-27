@@ -24,7 +24,7 @@ class VisRAGRetArxivQA(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{li_multimodal_2024,
+        bibtex_citation="""@inproceedings{li2024multimodalarxivdatasetimproving,
   address = {Bangkok, Thailand},
   author = {Li, Lei and Wang, Yuqi and Xu, Runxin and Wang, Peiyi and Feng, Xiachong and Kong, Lingpeng and Liu, Qi},
   booktitle = {Proceedings of the 62nd Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},

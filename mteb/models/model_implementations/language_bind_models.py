@@ -321,7 +321,10 @@ class LanguageBindAudioWrapper(_LanguageBindBase):
 
         with torch.inference_mode():
             all_embeddings = []
-            inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+            # the fbank needs at least one 25 ms window (400 samples at 16 kHz)
+            inputs.collate_fn = AudioCollator(
+                target_sampling_rate=self.sampling_rate, min_samples=400
+            )
 
             for batch in tqdm(
                 inputs,
@@ -574,7 +577,7 @@ class LanguageBindOmniWrapper(AbsEncoder):
 
 
 _LANGUAGE_BIND_CITATION = r"""
-@inproceedings{binzhu_languagebind_2024,
+@inproceedings{zhu2024languagebind,
   archiveprefix = {arXiv},
   author = {Bin Zhu and Bin Lin and Munan Ning and Yang Yan and Jiaxi Cui and WANG HongFa and Yatian Pang and Wenhao Jiang and Junwu Zhang and Zongwei Li and Cai Wan Zhang and Zhifeng Li and Wei Liu and Li Yuan},
   booktitle = {The Twelfth International Conference on Learning Representations},

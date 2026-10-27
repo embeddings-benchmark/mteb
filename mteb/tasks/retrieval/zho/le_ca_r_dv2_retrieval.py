@@ -25,7 +25,7 @@ class LeCaRDv2(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{li_lecardv2_2024,
+@inproceedings{li2023lecardv2,
   author = {Li, Haitao and Shao, Yunqiu and Wu, Yueyue and Ai, Qingyao and Ma, Yixiao and Liu, Yiqun},
   booktitle = {Proceedings of the 47th International ACM SIGIR Conference on Research and Development in Information Retrieval},
   collection = {SIGIR 2024},

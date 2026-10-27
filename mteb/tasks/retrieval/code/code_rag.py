@@ -29,7 +29,7 @@ common_args = {
     "dialect": [],
     "sample_creation": "found",
     "bibtex_citation": """
-    @inproceedings{wang_coderag-bench_2025,
+    @inproceedings{wang2024coderagbenchretrievalaugmentcode,
   address = {Albuquerque, New Mexico},
   author = {Wang, Zora Zhiruo and Asai, Akari and Yu, Xinyan Velocity and Xu, Frank F. and Xie, Yiqing and Neubig, Graham and Fried, Daniel},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {NAACL} 2025},

@@ -62,8 +62,11 @@ class UniSpeechWrapper(AbsEncoder):
         max_samples = seconds_to_samples(
             self.max_audio_length_seconds, self.sampling_rate
         )
+        # the conv feature encoder needs at least 400 samples (25 ms at 16 kHz)
         inputs.collate_fn = AudioCollator(
-            target_sampling_rate=self.sampling_rate, max_samples=max_samples
+            target_sampling_rate=self.sampling_rate,
+            max_samples=max_samples,
+            min_samples=400,
         )
 
         all_embeddings = []
@@ -159,7 +162,7 @@ unispeech_base = ModelMeta(
     training_datasets={"LibriSpeech"},
     modalities=["audio"],
     citation="""
-@inproceedings{chen_unispeech-sat_2022,
+@inproceedings{chen2021unispeechsatuniversalspeechrepresentation,
   author = {Chen, Sanyuan and Wu, Yu and Wang, Chengyi and Chen, Zhengyang and Chen, Zhuo and Liu, Shujie and Wu, Jian and Qian, Yao and Wei, Furu and Li, Jinyu and Yu, Xiangzhan},
   booktitle = {ICASSP 2022 - 2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp43922.2022.9747077},

@@ -80,7 +80,10 @@ class SewDWrapper(AbsEncoder):
     ) -> Array:
         import torch
 
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+        # the conv feature encoder plus squeeze_factor 2 needs at least 720 samples (45 ms at 16 kHz)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate, min_samples=720
+        )
         all_embeddings = []
 
         for batch in tqdm(
@@ -174,7 +177,7 @@ sewd_base = ModelMeta(
     training_datasets={"LibriSpeech"},
     modalities=["audio"],
     citation="""
-@inproceedings{wu_performance-efficiency_2022,
+@inproceedings{wu2021performanceefficiencytradeoffsunsupervisedpretraining,
   author = {Wu, Felix and Kim, Kwangyoun and Pan, Jing and Han, Kyu J. and Weinberger, Kilian Q. and Artzi, Yoav},
   booktitle = {ICASSP 2022 - 2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp43922.2022.9747432},
@@ -209,7 +212,7 @@ sewd_tiny = ModelMeta(
     training_datasets={"LibriSpeech"},
     modalities=["audio"],
     citation="""
-@inproceedings{wu_performance-efficiency_2022,
+@inproceedings{wu2021performanceefficiencytradeoffsunsupervisedpretraining,
   author = {Wu, Felix and Kim, Kwangyoun and Pan, Jing and Han, Kyu J. and Weinberger, Kilian Q. and Artzi, Yoav},
   booktitle = {ICASSP 2022 - 2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp43922.2022.9747432},
@@ -244,7 +247,7 @@ sewd_mid = ModelMeta(
     training_datasets={"LibriSpeech"},
     modalities=["audio"],
     citation="""
-@inproceedings{wu_performance-efficiency_2022,
+@inproceedings{wu2021performanceefficiencytradeoffsunsupervisedpretraining,
   author = {Wu, Felix and Kim, Kwangyoun and Pan, Jing and Han, Kyu J. and Weinberger, Kilian Q. and Artzi, Yoav},
   booktitle = {ICASSP 2022 - 2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp43922.2022.9747432},

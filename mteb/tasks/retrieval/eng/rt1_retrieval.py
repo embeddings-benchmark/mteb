@@ -4,7 +4,7 @@ from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _RT1_BIBTEX = r"""
-@inproceedings{brohan_rt-1_2023,
+@inproceedings{brohan2022rt1,
   author = {Brohan, Anthony and Brown, Noah and Carbajal, Justice and Chebotar, Yevgen and Dabis, Joseph and Finn, Chelsea and Gopalakrishnan, Keerthana and Hausman, Karol and Herzog, Alexander and Hsu, Jasmine and Ibarz, Julian and Ichter, Brian and Irpan, Alex and Jackson, Tomas and Jesmonth, Sally and Joshi, Nikhil and Julian, Ryan and Kalashnikov, Dmitry and Kuang, Yuheng and Leal, Isabel and Lee, Kuang-Huei and Levine, Sergey and Lu, Yao and Malla, Utsav and Manjunath, Deeksha and Mordatch, Igor and Nachum, Ofir and Parada, Carolina and Peralta, Jodilyn and Perez, Emily and Pertsch, Karl and Quiambao, Jornell and Rao, Kanishka and Ryoo, Michael and Salazar, Grecia and Sanketi, Pannag and Sayed, Kevin and Singh, Jaspiar and Sontakke, Sumedh and Stone, Austin and Tan, Clayton and Tran, Huong and Vanhoucke, Vincent and Vega, Steve and Vuong, Quan and Xia, Fei and Xiao, Ted and Xu, Peng and Xu, Sichun and Yu, Tianhe and Zitkovich, Brianna},
   booktitle = {Robotics: Science and Systems XIX},
   collection = {RSS2023},

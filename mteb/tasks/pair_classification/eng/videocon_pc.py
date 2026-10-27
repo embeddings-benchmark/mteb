@@ -34,7 +34,7 @@ class VideoConPairClassification(AbsTaskPairClassification):
         sample_creation="LM-generated and verified",
         is_beta=True,
         bibtex_citation=r"""
-@inproceedings{bansal_videocon_2024,
+@inproceedings{bansal2023videocon,
   author = {Bansal, Hritik and Bitton, Yonatan and Szpektor, Idan and Chang, Kai-Wei and Grover, Aditya},
   booktitle = {2024 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
   doi = {10.1109/cvpr52733.2024.01321},

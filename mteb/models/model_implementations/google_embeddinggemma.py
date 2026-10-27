@@ -479,6 +479,11 @@ class EmbeddingGemma2Wrapper(SentenceTransformerEncoderWrapper):
         use_image: bool = False,
         use_audio: bool = False,
         media_first: bool = False,
+        # video: 1 frame per second at 140 tokens per frame, the model card's defaults;
+        # 56 frames fit its 8192-token context
+        # https://huggingface.co/google/embeddinggemma-2
+        fps: float | None = 1.0,
+        max_frames: int | None = 56,
         **kwargs: Any,
     ) -> None:
         self.use_image, self.use_audio = use_image, use_audio
@@ -494,6 +499,8 @@ class EmbeddingGemma2Wrapper(SentenceTransformerEncoderWrapper):
             model_kwargs={"torch_dtype": "bfloat16"},
             config_kwargs=config_kwargs,
             target_sampling_rate=16000,
+            fps=fps,
+            max_frames=max_frames,
             **kwargs,
         )
         # Templates are written into the batch text in encode(). Disable both mteb's
@@ -601,6 +608,10 @@ class EmbeddingGemma2Wrapper(SentenceTransformerEncoderWrapper):
             def collate_fn(self, value: object) -> None:
                 pass
 
+        max_seq_length = self.model.max_seq_length
+        if "video" in inputs.dataset.features:
+            # one video is longer than the MIEB / MAEB lengths: use the full context
+            self.model.max_seq_length = 8192
         try:
             inputs.__class__ = _PreserveCollate
             return super().encode(
@@ -614,6 +625,7 @@ class EmbeddingGemma2Wrapper(SentenceTransformerEncoderWrapper):
         finally:
             inputs.__class__ = original_class
             inputs.collate_fn = base_collate
+            self.model.max_seq_length = max_seq_length
 
 
 embedding_gemma_2 = ModelMeta(

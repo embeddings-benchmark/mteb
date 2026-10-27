@@ -35,7 +35,7 @@ class BigPatentClustering(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{sharma_bigpatent_2019,
+@inproceedings{DBLP:journals/corr/abs-1906-03741,
   author = {Sharma, Eva and Li, Chen and Wang, Lu},
   booktitle = {Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics},
   doi = {10.18653/v1/p19-1212},
@@ -78,7 +78,7 @@ class BigPatentClusteringFast(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{sharma_bigpatent_2019,
+@inproceedings{DBLP:journals/corr/abs-1906-03741,
   author = {Sharma, Eva and Li, Chen and Wang, Lu},
   booktitle = {Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics},
   doi = {10.18653/v1/p19-1212},

@@ -184,7 +184,7 @@ muq_mulan_large = ModelMeta(
         # Million Song Dataset (not in MTEB)
     ),
     citation="""
-@article{zhu_muq_2025,
+@article{zhu2025muqselfsupervisedmusicrepresentation,
   author = {Zhu, Haina and Zhou, Yizhi and Chen, Hangting and Yu, Jianwei and Ma, Ziyang and Gu, Rongzhi and Luo, Yi and Tan, Wei and Chen, Xie},
   doi = {10.1109/taslpro.2025.3602320},
   issn = {2998-4173},

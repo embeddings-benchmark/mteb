@@ -126,7 +126,7 @@ class TevatronOmniEmbedWrapper(SentenceTransformerEncoderWrapper):
 
 
 _OMNI_EMBED_CITATION = r"""
-@inproceedings{ma_tevatron_2025,
+@inproceedings{zhuang2025tevatron,
   author = {Ma, Xueguang and Gao, Luyu and Zhuang, Shengyao and Zhan, Jiaqi Samantha and Callan, Jamie and Lin, Jimmy},
   booktitle = {Proceedings of the 48th International ACM SIGIR Conference on Research and Development in Information Retrieval},
   collection = {SIGIR ’25},

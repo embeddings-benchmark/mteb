@@ -38,7 +38,7 @@ class CLSClusteringFastS2S(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{li_csl_2022,
+@inproceedings{li2022csl,
   address = {Gyeongju, Republic of Korea},
   archiveprefix = {arXiv},
   author = {Li, Yudong and Zhang, Yuqing and Zhao, Zhe and Shen, Linlin and Liu, Weijie and Mao, Weiquan and Zhang, Hui},
@@ -106,7 +106,7 @@ class CLSClusteringFastP2P(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{li_csl_2022,
+@inproceedings{li2022csl,
   address = {Gyeongju, Republic of Korea},
   archiveprefix = {arXiv},
   author = {Li, Yudong and Zhang, Yuqing and Zhao, Zhe and Shen, Linlin and Liu, Weijie and Mao, Weiquan and Zhang, Hui},
@@ -149,7 +149,7 @@ class CLSClusteringS2S(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{li_csl_2022,
+@inproceedings{li2022csl,
   address = {Gyeongju, Republic of Korea},
   archiveprefix = {arXiv},
   author = {Li, Yudong and Zhang, Yuqing and Zhao, Zhe and Shen, Linlin and Liu, Weijie and Mao, Weiquan and Zhang, Hui},
@@ -192,7 +192,7 @@ class CLSClusteringP2P(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{li_csl_2022,
+@inproceedings{li2022csl,
   address = {Gyeongju, Republic of Korea},
   archiveprefix = {arXiv},
   author = {Li, Yudong and Zhang, Yuqing and Zhao, Zhe and Shen, Linlin and Liu, Weijie and Mao, Weiquan and Zhang, Hui},
@@ -341,7 +341,7 @@ class ThuNewsClusteringS2S(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{li_comparison_2006,
+@inproceedings{li2006comparison,
   author = {Li, Jingyang and Sun, Maosong and Zhang, Xian},
   booktitle = {proceedings of the 21st international conference on computational linguistics and 44th annual meeting of the association for computational linguistics},
   pages = {545--552},
@@ -377,7 +377,7 @@ class ThuNewsClusteringP2P(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{li_comparison_2006,
+@inproceedings{li2006comparison,
   author = {Li, Jingyang and Sun, Maosong and Zhang, Xian},
   booktitle = {proceedings of the 21st international conference on computational linguistics and 44th annual meeting of the association for computational linguistics},
   pages = {545--552},

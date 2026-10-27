@@ -196,7 +196,7 @@ class ColPaliWrapper(ColPaliEngineWrapper):
 
 
 COLPALI_CITATION = """
-@inproceedings{faysse_colpali_2025,
+@inproceedings{faysse2024colpali,
   archiveprefix = {arXiv},
   author = {Manuel Faysse and Hugues Sibille and Tony Wu and Bilel Omrani and Gautier Viaud and CELINE HUDELOT and Pierre Colombo},
   booktitle = {The Thirteenth International Conference on Learning Representations},

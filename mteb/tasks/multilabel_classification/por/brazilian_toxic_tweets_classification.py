@@ -27,7 +27,7 @@ class BrazilianToxicTweetsClassification(AbsTaskMultilabelClassification):
         dialect=["brazilian"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{leite_toxic_2020,
+@inproceedings{DBLP:journals/corr/abs-2010-04543,
   address = {Suzhou, China},
   author = {Leite, Jo{\~a}o Augusto and Silva, Diego and Bontcheva, Kalina and Scarton, Carolina},
   booktitle = {Proceedings of the 1st Conference of the {A}sia-Pacific Chapter of the {A}ssociation for {C}omputational {L}inguistics and the 10th International Joint Conference on Natural Language Processing},

@@ -37,7 +37,7 @@ class NSynthInstrumentFamilyClustering(AbsTaskClustering):
         sample_creation="created",
         adapted_from=["NSynth"],
         bibtex_citation=r"""
-@inproceedings{engel_neural_2017,
+@inproceedings{engel2017neuralaudiosynthesismusical,
   archiveprefix = {arXiv},
   author = {Jesse Engel and Cinjon Resnick and Adam Roberts and Sander Dieleman and Mohammad Norouzi and Douglas Eck and Karen Simonyan},
   booktitle = {ICML},

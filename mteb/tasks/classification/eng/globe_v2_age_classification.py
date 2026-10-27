@@ -25,7 +25,7 @@ class GlobeV2AgeClassification(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{wang_globe_2024,
+@inproceedings{wang2024globe,
   author = {Wang, Wenbin and Song, Yang and Jha, Sanjay},
   booktitle = {Interspeech 2024},
   collection = {interspeech_2024},

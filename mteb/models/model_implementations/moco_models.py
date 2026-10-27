@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
 
-MOCOV3_CITATION = """@inproceedings{chen_empirical_2021,
+MOCOV3_CITATION = """@inproceedings{chen2021mocov3,
   author = {Chen, Xinlei and Xie, Saining and He, Kaiming},
   booktitle = {2021 IEEE/CVF International Conference on Computer Vision (ICCV)},
   doi = {10.1109/iccv48922.2021.00950},

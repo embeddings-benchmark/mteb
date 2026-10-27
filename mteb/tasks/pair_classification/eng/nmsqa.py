@@ -25,7 +25,7 @@ class NMSQAPairClassification(AbsTaskPairClassification):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{lin_dual_2022,
+@inproceedings{lin2022dualdiscretespokenunit,
   author = {Lin, Guan-Ting and Chuang, Yung-Sung and Chung, Ho-Lam and Yang, Shu-wen and Chen, Hsuan-Jui and Dong, Shuyan Annie and Li, Shang-Wen and Mohamed, Abdelrahman and Lee, Hung-yi and Lee, Lin-shan},
   booktitle = {Interspeech 2022},
   collection = {interspeech_2022},

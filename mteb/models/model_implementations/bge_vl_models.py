@@ -6,7 +6,7 @@ from mteb.models.sentence_transformer_wrapper import (
 )
 from mteb.types import OutputDType
 
-MEGAPAIRS_CITATION = """@inproceedings{zhou_megapairs_2025,
+MEGAPAIRS_CITATION = """@inproceedings{zhou2024megapairs,
   address = {Vienna, Austria},
   author = {Zhou, Junjie and Xiong, Yongping and Liu, Zheng and Liu, Ze and Xiao, Shitao and Wang, Yueze and Zhao, Bo and Zhang, Chen Jason and Lian, Defu},
   booktitle = {Proceedings of the 63rd Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},

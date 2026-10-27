@@ -125,7 +125,7 @@ class CVBenchCount(AbsTaskRetrieval):
         modalities=["image", "text"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{tong_cambrian-1_2024,
+@inproceedings{tong2024cambrian,
   archiveprefix = {arXiv},
   author = {Peter Tong and Ellis Brown and Penghao Wu and Sanghyun Woo and Adithya Iyer and Sai Charitha Akula and Shusheng Yang and Jihan Yang and Manoj Middepogu and Ziteng Wang and Xichen Pan and Rob Fergus and Yann LeCun and Saining Xie},
   booktitle = {NeurIPS},
@@ -170,7 +170,7 @@ class CVBenchRelation(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{tong_cambrian-1_2024,
+@inproceedings{tong2024cambrian,
   archiveprefix = {arXiv},
   author = {Peter Tong and Ellis Brown and Penghao Wu and Sanghyun Woo and Adithya Iyer and Sai Charitha Akula and Shusheng Yang and Jihan Yang and Manoj Middepogu and Ziteng Wang and Xichen Pan and Rob Fergus and Yann LeCun and Saining Xie},
   booktitle = {NeurIPS},
@@ -215,7 +215,7 @@ class CVBenchDepth(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{tong_cambrian-1_2024,
+@inproceedings{tong2024cambrian,
   archiveprefix = {arXiv},
   author = {Peter Tong and Ellis Brown and Penghao Wu and Sanghyun Woo and Adithya Iyer and Sai Charitha Akula and Shusheng Yang and Jihan Yang and Manoj Middepogu and Ziteng Wang and Xichen Pan and Rob Fergus and Yann LeCun and Saining Xie},
   booktitle = {NeurIPS},
@@ -260,7 +260,7 @@ class CVBenchDistance(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{tong_cambrian-1_2024,
+@inproceedings{tong2024cambrian,
   archiveprefix = {arXiv},
   author = {Peter Tong and Ellis Brown and Penghao Wu and Sanghyun Woo and Adithya Iyer and Sai Charitha Akula and Shusheng Yang and Jihan Yang and Manoj Middepogu and Ziteng Wang and Xichen Pan and Rob Fergus and Yann LeCun and Saining Xie},
   booktitle = {NeurIPS},

@@ -188,7 +188,7 @@ mms_1b_all = ModelMeta(
     },
     modalities=["audio"],
     citation="""
-@article{pratap_scaling_2024,
+@article{pratap2023scalingspeechtechnology1000,
   archiveprefix = {arXiv},
   author = {Vineel Pratap and Andros Tjandra and Bowen Shi and Paden Tomasello and Arun Babu and Sayani Kundu and Ali Elkahky and Zhaoheng Ni and Apoorv Vyas and Maryam Fazel-Zarandi and Alexei Baevski and Yossi Adi and Xiaohui Zhang and Wei-Ning Hsu and Alexis Conneau and Michael Auli},
   eprint = {2305.13516},
@@ -225,7 +225,7 @@ mms_1b_fl102 = ModelMeta(
     },
     modalities=["audio"],
     citation="""
-@article{pratap_scaling_2024,
+@article{pratap2023scalingspeechtechnology1000,
   archiveprefix = {arXiv},
   author = {Vineel Pratap and Andros Tjandra and Bowen Shi and Paden Tomasello and Arun Babu and Sayani Kundu and Ali Elkahky and Zhaoheng Ni and Apoorv Vyas and Maryam Fazel-Zarandi and Alexei Baevski and Yossi Adi and Xiaohui Zhang and Wei-Ning Hsu and Alexis Conneau and Michael Auli},
   eprint = {2305.13516},
@@ -262,7 +262,7 @@ mms_1b_l1107 = ModelMeta(
     },
     modalities=["audio"],
     citation="""
-@article{pratap_scaling_2024,
+@article{pratap2023scalingspeechtechnology1000,
   archiveprefix = {arXiv},
   author = {Vineel Pratap and Andros Tjandra and Bowen Shi and Paden Tomasello and Arun Babu and Sayani Kundu and Ali Elkahky and Zhaoheng Ni and Apoorv Vyas and Maryam Fazel-Zarandi and Alexei Baevski and Yossi Adi and Xiaohui Zhang and Wei-Ning Hsu and Alexis Conneau and Michael Auli},
   eprint = {2305.13516},

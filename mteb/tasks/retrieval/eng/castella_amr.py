@@ -35,8 +35,59 @@ class CASTELLAAMRRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
+        superseded_by="CASTELLAAMRRetrieval.v2",
         bibtex_citation=r"""
 @inproceedings{munakata_castella_2026,
+  author = {Munakata, Hokuto and Imamura, Takehiro and Nishimura, Taichi and Komatsu, Tatsuya},
+  booktitle = {ICASSP 2026 - 2026 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  doi = {10.1109/icassp55912.2026.11464074},
+  month = {May},
+  pages = {15352–15356},
+  publisher = {IEEE},
+  title = {CASTELLA: Long Audio Dataset with Captions and Temporal Boundaries},
+  url = {https://doi.org/10.1109/icassp55912.2026.11464074},
+  year = {2026},
+}
+""",
+        prompt={"query": "Retrieve the recording that contains the described moment."},
+    )
+
+
+class CASTELLAAMRRetrievalV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="CASTELLAAMRRetrieval.v2",
+        description=(
+            "Retrieval on CASTELLA, the human-annotated long-audio benchmark used "
+            "as the DCASE 2026 Task 6 evaluation set: given a caption describing a "
+            "moment, retrieve the full recording (1 to 5 minutes) that contains it. "
+            "The corpus is the 566 complete recordings and there are 1,347 caption "
+            "queries, each with its source recording as the single relevant "
+            "document. Adapted from CASTELLA's audio moment localization task, "
+            "which regresses a continuous time interval, to whole-recording "
+            "retrieval for the mteb ranking format."
+            " Version 2 merges queries and documents with identical content, so a repeated query counts every matching item as relevant, and drops texts of 3 characters or less."
+        ),
+        reference="https://arxiv.org/abs/2511.15131",
+        dataset={
+            "path": "mteb/CASTELLA-AMR",
+            "revision": "9b3e12baa8b72cb9276f2ea1fbcb06c117fc8f1b",
+        },
+        type="Any2AnyRetrieval",
+        category="t2a",
+        modalities=["text", "audio"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        date=("2025-01-01", "2025-11-01"),
+        domains=["AudioScene"],
+        task_subtypes=["Environment Sound Retrieval"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        adapted_from=["CASTELLAAMRRetrieval"],
+        bibtex_citation=r"""
+@inproceedings{munakata2025castella,
   author = {Munakata, Hokuto and Imamura, Takehiro and Nishimura, Taichi and Komatsu, Tatsuya},
   booktitle = {ICASSP 2026 - 2026 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp55912.2026.11464074},

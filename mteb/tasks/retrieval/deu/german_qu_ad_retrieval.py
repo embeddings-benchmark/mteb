@@ -57,7 +57,7 @@ class GermanQuADRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{moller_germanquad_2021,
+@inproceedings{möller2021germanquad,
   address = {Punta Cana, Dominican Republic},
   author = {M{\"o}ller, Timo and Risch, Julian and Pietsch, Malte},
   booktitle = {Proceedings of the 3rd Workshop on Machine Reading for Question Answering},

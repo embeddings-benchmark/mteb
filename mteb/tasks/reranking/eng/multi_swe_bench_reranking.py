@@ -28,7 +28,7 @@ class MultiSWEbenchReranking(AbsTaskRetrieval):
             "query": "Given a github issue, identify the code that needs to be changed to fix the issue."
         },
         bibtex_citation=r"""
-@inproceedings{zan_multi-swe-bench_2026,
+@inproceedings{zan2025multiswebench,
   archiveprefix = {arXiv},
   author = {Daoguang Zan and Zhirong Huang and Wei Liu and Hanwu Chen and Shulin Xin and Linhao Zhang and Qi Liu and Aoyan Li and Lu Chen and Xiaojian Zhong and Siyao Liu and Yongsheng Xiao and Liangqiang Chen and Yuyu Zhang and Jing Su and Tianyu Liu and RUI LONG and Ming Ding and liang xiang},
   booktitle = {The Thirty-ninth Annual Conference on Neural Information Processing Systems Datasets and Benchmarks Track},

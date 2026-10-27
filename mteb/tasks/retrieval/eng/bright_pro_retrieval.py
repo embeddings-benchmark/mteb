@@ -4,7 +4,7 @@ from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _BIBTEX_CITATION = r"""
-@inproceedings{zhao_rethinking_2026,
+@inproceedings{Zhao2026RethinkingRR,
   address = {San Diego, California, United States},
   author = {Zhao, Yilun and Wei, Jinbiao and Song, Tingyu and Zhang, Siyue and Zhao, Chen and Cohan, Arman},
   booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},

@@ -181,7 +181,7 @@ class mFollowIRCrossLingual(AbsTaskRetrieval):  # noqa: N801
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inbook{weller_mfollowir_2025,
+@inbook{weller2024mfollowir,
   author = {Weller, Orion and Chang, Benjamin and Yang, Eugene and Yarmohammadi, Mahsa and Barham, Samuel and MacAvaney, Sean and Cohan, Arman and Soldaini, Luca and Van Durme, Benjamin and Lawrie, Dawn},
   booktitle = {Advances in Information Retrieval},
   doi = {10.1007/978-3-031-88711-6_19},
@@ -255,7 +255,7 @@ class mFollowIR(AbsTaskRetrieval):  # noqa: N801
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inbook{weller_mfollowir_2025,
+@inbook{weller2024mfollowir,
   author = {Weller, Orion and Chang, Benjamin and Yang, Eugene and Yarmohammadi, Mahsa and Barham, Samuel and MacAvaney, Sean and Cohan, Arman and Soldaini, Luca and Van Durme, Benjamin and Lawrie, Dawn},
   booktitle = {Advances in Information Retrieval},
   doi = {10.1007/978-3-031-88711-6_19},

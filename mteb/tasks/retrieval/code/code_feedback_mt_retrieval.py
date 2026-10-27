@@ -27,7 +27,7 @@ class CodeFeedbackMT(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{zheng_opencodeinterpreter_2024,
+@inproceedings{zheng2024opencodeinterpreterintegratingcodegeneration,
   address = {Bangkok, Thailand},
   author = {Zheng, Tianyu and Zhang, Ge and Shen, Tianhao and Liu, Xueling and Lin, Bill Yuchen and Fu, Jie and Chen, Wenhu and Yue, Xiang},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2024},

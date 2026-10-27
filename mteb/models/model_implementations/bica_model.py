@@ -22,7 +22,7 @@ bica_base = ModelMeta(
     public_training_data="https://huggingface.co/datasets/bisectgroup/hard-negatives-traversal",
     adapted_from="thenlper/gte-base",
     citation="""
-@article{sinha_bica_2026,
+@article{sinha2025bicaeffectivebiomedicaldense,
   author = {Sinha, Aarush and Kumar S, Pavan and Balaji, Roshan and Bhatt, Nirav Pravinbhai},
   doi = {10.1609/aaai.v40i39.40583},
   issn = {2159-5399},

@@ -17,7 +17,7 @@ RURI_V1_V2_PROMPTS = {
 }
 
 
-RURI_CITATION = r"""@article{tsukagoshi_ruri_2026,
+RURI_CITATION = r"""@article{Ruri,
   author = {Tsukagoshi, Hayato and Sasano, Ryohei},
   doi = {10.5715/jnlp.33.591},
   issn = {2185-8314},

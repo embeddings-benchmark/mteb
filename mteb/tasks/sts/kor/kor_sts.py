@@ -25,7 +25,7 @@ class KorSTS(AbsTaskSTS):
         dialect=[],
         sample_creation="machine-translated and localized",
         bibtex_citation=r"""
-@inproceedings{ham_kornli_2020,
+@inproceedings{ham2020kornli,
   address = {Online},
   author = {Ham, Jiyeon and Choe, Yo Joong and Park, Kyubyong and Choi, Ilji and Soh, Hyungjoon},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2020},

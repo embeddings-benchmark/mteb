@@ -30,7 +30,7 @@ class VisRAGRetSlideVQA(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{tanaka_slidevqa_2023,
+        bibtex_citation="""@article{tanaka2023slidevqadatasetdocumentvisual,
   author = {Tanaka, Ryota and Nishida, Kyosuke and Nishida, Kosuke and Hasegawa, Taku and Saito, Itsumi and Saito, Kuniko},
   doi = {10.1609/aaai.v37i11.26598},
   issn = {2159-5399},

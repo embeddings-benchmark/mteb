@@ -30,7 +30,7 @@ class VisRAGRetChartQA(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{masry_chartqa_2022,
+        bibtex_citation="""@inproceedings{masry2022chartqabenchmarkquestionanswering,
   address = {Dublin, Ireland},
   author = {Masry, Ahmed and Long, Do Xuan and Tan, Jia Qing and Joty, Shafiq and Hoque, Enamul},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2022},

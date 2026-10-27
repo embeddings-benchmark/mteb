@@ -12,7 +12,7 @@ _DATASET_PATH = "dukesun99/MomentSeeker-CVR"
 _DATASET_REVISION = "e87fc71839cd14dfd09aa83b378cd51074318b3c"
 _REFERENCE = "https://arxiv.org/abs/2502.12558"
 _BIBTEX = r"""
-@inproceedings{yuan_momentseeker_2025,
+@inproceedings{yuan2025momentseeker,
   author = {Yuan, Huaying and Ni, Jian and Liu, Zheng and Wang, Yueze and Zhou, Junjie and Liang, Zhengyang and Zhao, Bo and Cao, Zhao and Wen, Ji-Rong and Dou, Zhicheng},
   booktitle = {Advances in Neural Information Processing Systems 38},
   collection = {NeurIPS 2025},

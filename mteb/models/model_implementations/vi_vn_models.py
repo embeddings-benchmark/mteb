@@ -185,7 +185,7 @@ sup_simcse_vietnamese_phobert_base_ = ModelMeta(
     reference="https://huggingface.co/VoVanPhuc/sup-SimCSE-VietNamese-phobert-base",
     similarity_fn_name="cosine",
     training_datasets=None,
-    citation="""@inproceedings{gao_simcse_2021,
+    citation="""@inproceedings{gao2021simcse,
   address = {Online and Punta Cana, Dominican Republic},
   author = {Gao, Tianyu and Yao, Xingcheng and Chen, Danqi},
   booktitle = {Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing},
@@ -199,7 +199,7 @@ sup_simcse_vietnamese_phobert_base_ = ModelMeta(
   year = {2021},
 }
 
-@inproceedings{nguyen_phobert_2020,
+@inproceedings{phobert,
 title     = {{PhoBERT: Pre-trained language models for Vietnamese}},
 author    = {Dat Quoc Nguyen and Anh Tuan Nguyen},
 booktitle = {Findings of the Association for Computational Linguistics: EMNLP 2020},
@@ -232,7 +232,7 @@ bkai_foundation_models_vietnamese_bi_encoder = ModelMeta(
     similarity_fn_name="cosine",
     training_datasets=None,
     citation="""
-      @article{nguyenquangduc_comprehensive_2024,
+      @article{duc2024towards,
     title={Towards Comprehensive Vietnamese Retrieval-Augmented Generation and Large Language Models},
     author={Nguyen Quang Duc, Le Hai Son, Nguyen Duc Nhan, Nguyen Dich Nhat Minh, Le Thanh Huong, Dinh Viet Sang},
     journal={arXiv preprint arXiv:2403.01616},

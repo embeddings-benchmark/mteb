@@ -170,7 +170,7 @@ class VisRAGRetWrapper(AbsEncoder):
         raise ValueError("Inputs contain neither 'text' nor 'image' features.")
 
 
-VISRAG_CITATION = """@inproceedings{yu_visrag_2025,
+VISRAG_CITATION = """@inproceedings{yu2024visrag,
   archiveprefix = {arXiv},
   author = {Shi Yu and Chaoyue Tang and Bokai Xu and Junbo Cui and Junhao Ran and Yukun Yan and Zhenghao Liu and Shuo Wang and Xu Han and Zhiyuan Liu and Maosong Sun},
   booktitle = {The Thirteenth International Conference on Learning Representations},

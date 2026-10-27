@@ -31,7 +31,7 @@ class SwissJudgementClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{niklaus_empirical_2022,
+@inproceedings{niklaus2022empirical,
   address = {Online only},
   author = {Niklaus, Joel and St{\"u}rmer, Matthias and Chalkidis, Ilias},
   booktitle = {Proceedings of the 2nd Conference of the {A}sia-Pacific Chapter of the {A}ssociation for {C}omputational {L}inguistics and the 12th International Joint Conference on Natural Language Processing (Volume 1: Long Papers)},

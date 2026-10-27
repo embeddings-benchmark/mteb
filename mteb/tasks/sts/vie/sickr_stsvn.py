@@ -24,7 +24,7 @@ class SickrSTSVN(AbsTaskSTS):
         domains=["Web", "Written"],
         task_subtypes=["Textual Entailment"],
         bibtex_citation=r"""
-@inproceedings{pham_vn-mteb_2026,
+@inproceedings{pham2025vnmtebvietnamesemassivetext,
   address = {Rabat, Morocco},
   author = {Pham, Loc and Luu, Tung and Vo, Thu and Nguyen, Minh and Hoang, Viet},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EACL} 2026},

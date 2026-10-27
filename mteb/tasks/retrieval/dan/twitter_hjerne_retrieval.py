@@ -24,7 +24,7 @@ class TwitterHjerneRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{vejlgaardholm_danoliteracy_2025,
+@inproceedings{holm2025danoliteracygenerativelargelanguage,
   address = {Tallinn, Estonia},
   archiveprefix = {arXiv},
   author = {Vejlgaard Holm, S{\o}ren and Hansen, Lars Kai and Nielsen, Martin Carsten},

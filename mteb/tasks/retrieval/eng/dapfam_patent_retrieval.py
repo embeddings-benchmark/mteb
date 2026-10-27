@@ -7,7 +7,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 HF_REPO = "datalyes/DAPFAM_patent"
 REFERENCE = "https://arxiv.org/abs/2506.22141"
-BIBTEX = r"""@article{ayaou_dapfam_2026,
+BIBTEX = r"""@article{ayaou2025dapfamdomainawarefamilyleveldataset,
   author = {Ayaou, Iliass and Cavallucci, Denis and Chibane, Hicham},
   doi = {10.1016/j.array.2026.100720},
   issn = {2590-0056},

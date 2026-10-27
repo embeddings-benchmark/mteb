@@ -125,7 +125,7 @@ ast_audioset = ModelMeta(
     },
     modalities=["audio"],
     citation="""
-@inproceedings{gong_ast_2021,
+@inproceedings{gong2021astaudiospectrogramtransformer,
   author = {Gong, Yuan and Chung, Yu-An and Glass, James},
   booktitle = {Interspeech 2021},
   collection = {interspeech_2021},

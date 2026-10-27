@@ -79,7 +79,7 @@ class WebFAQRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{dinzinger_webfaq_2025,
+@inproceedings{dinzinger2025webfaq,
   author = {Dinzinger, Michael and Caspari, Laura and Ghosh Dastidar, Kanishka and Mitrović, Jelena and Granitzer, Michael},
   booktitle = {Proceedings of the 48th International ACM SIGIR Conference on Research and Development in Information Retrieval},
   collection = {SIGIR ’25},

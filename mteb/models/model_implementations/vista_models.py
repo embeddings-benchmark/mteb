@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
 
-VISTA_CITATION = """@inproceedings{zhou_vista_2024,
+VISTA_CITATION = """@inproceedings{zhou2024vista,
   address = {Bangkok, Thailand},
   author = {Zhou, Junjie and Liu, Zheng and Xiao, Shitao and Zhao, Bo and Xiong, Yongping},
   booktitle = {Proceedings of the 62nd Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},

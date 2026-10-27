@@ -65,7 +65,10 @@ class WavlmWrapper(AbsEncoder):
     ) -> Array:
         import torch
 
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+        # the conv feature encoder needs at least 400 samples (25 ms at 16 kHz)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate, min_samples=400
+        )
 
         all_embeddings = []
 

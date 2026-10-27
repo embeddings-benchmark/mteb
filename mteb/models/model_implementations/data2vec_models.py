@@ -61,8 +61,11 @@ class Data2VecAudioWrapper(AbsEncoder):
         max_samples = seconds_to_samples(
             self.max_audio_length_seconds, self.sampling_rate
         )
+        # the conv feature encoder needs at least 400 samples (25 ms at 16 kHz)
         inputs.collate_fn = AudioCollator(
-            target_sampling_rate=self.sampling_rate, max_samples=max_samples
+            target_sampling_rate=self.sampling_rate,
+            max_samples=max_samples,
+            min_samples=400,
         )
 
         all_embeddings = []
@@ -158,7 +161,7 @@ data2vec_audio_base = ModelMeta(
     ),
     modalities=["audio"],
     citation="""
-@inproceedings{baevski_data2vec_2022,
+@inproceedings{baevski2022data2vecgeneralframeworkselfsupervised,
   archiveprefix = {arXiv},
   author = {Alexei Baevski and Wei-Ning Hsu and Qiantong Xu and Arun Babu and Jiatao Gu and Michael Auli},
   booktitle = {ICML},
@@ -194,7 +197,7 @@ data2vec_audio_large = ModelMeta(
     ),
     modalities=["audio"],
     citation="""
-@inproceedings{baevski_data2vec_2022,
+@inproceedings{baevski2022data2vecgeneralframeworkselfsupervised,
   archiveprefix = {arXiv},
   author = {Alexei Baevski and Wei-Ning Hsu and Qiantong Xu and Arun Babu and Jiatao Gu and Michael Auli},
   booktitle = {ICML},

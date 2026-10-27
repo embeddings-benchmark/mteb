@@ -25,7 +25,7 @@ class TempReasonL3Context(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{tan_benchmarking_2023,
+@inproceedings{tan2023towards,
   address = {Toronto, Canada},
   author = {Tan, Qingyu and Ng, Hwee Tou and Bing, Lidong},
   booktitle = {Proceedings of the 61st Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -39,7 +39,7 @@ class TempReasonL3Context(AbsTaskRetrieval):
   year = {2023},
 }
 
-@article{xiao_rar-b_2024,
+@article{xiao2024rar,
   author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
   journal = {arXiv preprint arXiv:2404.06347},
   title = {RAR-b: Reasoning as Retrieval Benchmark},

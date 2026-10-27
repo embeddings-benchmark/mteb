@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-NV_RETRIEVER_CITATION = """@inproceedings{lee_nv-embed_2025,
+NV_RETRIEVER_CITATION = """@inproceedings{lee2025nvembedimprovedtechniquestraining,
   archiveprefix = {arXiv},
   author = {Chankyu Lee and Rajarshi Roy and Mengyao Xu and Jonathan Raiman and Mohammad Shoeybi and Bryan Catanzaro and Wei Ping},
   booktitle = {The Thirteenth International Conference on Learning Representations},
@@ -32,7 +32,7 @@ NV_RETRIEVER_CITATION = """@inproceedings{lee_nv-embed_2025,
   year = {2025},
 }"""
 
-LlamaEmbedNemotron_CITATION = """@misc{babakhin_llama-embed-nemotron-8b_2025,
+LlamaEmbedNemotron_CITATION = """@misc{babakhin2025llamaembednemotron8buniversaltextembedding,
       title={Llama-Embed-Nemotron-8B: A Universal Text Embedding Model for Multilingual and Cross-Lingual Tasks},
       author={Yauhen Babakhin and Radek Osmulski and Ronay Ak and Gabriel Moreira and Mengyao Xu and Benedikt Schifferer and Bo Liu and Even Oldridge},
       year={2025},

@@ -4,7 +4,7 @@ from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _BIBTEX = r"""
-@inproceedings{ma_unifying_2024,
+@inproceedings{ma2024unifying,
   address = {Miami, Florida, USA},
   author = {Ma, Xueguang and Lin, Sheng-Chieh and Li, Minghan and Chen, Wenhu and Lin, Jimmy},
   booktitle = {Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing},

@@ -28,7 +28,7 @@ class VoxCelebClustering(AbsTaskClustering):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{shon_slue_2022,
+@inproceedings{shon2022sluenewbenchmarktasks,
   author = {Shon, Suwon and Pasad, Ankita and Wu, Felix and Brusco, Pablo and Artzi, Yoav and Livescu, Karen and Han, Kyu J.},
   booktitle = {ICASSP 2022 - 2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp43922.2022.9746137},

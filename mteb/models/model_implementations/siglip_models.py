@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
 
-SIGLIP_CITATION = """@inproceedings{zhai_sigmoid_2023,
+SIGLIP_CITATION = """@inproceedings{zhai2023sigmoid,
   author = {Zhai, Xiaohua and Mustafa, Basil and Kolesnikov, Alexander and Beyer, Lucas},
   booktitle = {2023 IEEE/CVF International Conference on Computer Vision (ICCV)},
   doi = {10.1109/iccv51070.2023.01100},
@@ -432,7 +432,7 @@ siglip_large_patch16_384 = ModelMeta(
     ],
 )
 
-SIGLIP2_CITATION = """@misc{tschannen_siglip_2025,
+SIGLIP2_CITATION = """@misc{tschannen2025siglip2multilingualvisionlanguage,
       title={SigLIP 2: Multilingual Vision-Language Encoders with Improved Semantic Understanding, Localization, and Dense Features},
       author={Michael Tschannen and Alexey Gritsenko and Xiao Wang and Muhammad Ferjad Naeem and Ibrahim Alabdulmohsin and Nikhil Parthasarathy and Talfan Evans and Lucas Beyer and Ye Xia and Basil Mustafa and Olivier Henaff and Jeremiah Harmsen and Andreas Steiner and Xiaohua Zhai},
       year={2025},

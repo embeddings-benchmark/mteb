@@ -155,7 +155,7 @@ model_prompts = {
 }
 
 REPLLAMA_CITATION = """
-@inproceedings{ma_fine-tuning_2024,
+@inproceedings{rankllama,
   author = {Ma, Xueguang and Wang, Liang and Yang, Nan and Wei, Furu and Lin, Jimmy},
   booktitle = {Proceedings of the 47th International ACM SIGIR Conference on Research and Development in Information Retrieval},
   collection = {SIGIR 2024},

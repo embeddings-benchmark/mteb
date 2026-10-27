@@ -264,7 +264,7 @@ bge_reranker_v2_m3 = ModelMeta(
     training_datasets=bge_m3_training_data,
     framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
     citation="""
-@inproceedings{li_llama2vec_2024,
+@inproceedings{li2023making,
   address = {Bangkok, Thailand},
   author = {Li, Chaofan and Liu, Zheng and Xiao, Shitao and Shao, Yingxia and Lian, Defu},
   booktitle = {Proceedings of the 62nd Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -277,7 +277,7 @@ bge_reranker_v2_m3 = ModelMeta(
   url = {https://aclanthology.org/2024.acl-long.191/},
   year = {2024},
 }
-    @inproceedings{chen_m3-embedding_2024,
+    @inproceedings{bge-m3,
   address = {Bangkok, Thailand},
   author = {Chen, Jianlyu and Xiao, Shitao and Zhang, Peitian and Luo, Kun and Lian, Defu and Liu, Zheng},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2024},
@@ -316,7 +316,7 @@ _MS_MARCO_V2_COMMON = dict(
         "safetensors",
         "ONNX",
     ],
-    citation="""@inproceedings{reimers_sentence-bert_2019,
+    citation="""@inproceedings{reimers-2019-sentence-bert,
     title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
     author = "Reimers, Nils and Gurevych, Iryna",
     booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",

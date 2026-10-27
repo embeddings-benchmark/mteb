@@ -34,7 +34,7 @@ class OpusparcusPC(AbsTaskPairClassification):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{creutz_open_2018,
+@inproceedings{creutz2018open,
   author = {Creutz, Mathias},
   booktitle = {Proceedings of the Eleventh International Conference on Language Resources and Evaluation (LREC 2018)},
   collection = {LREC},

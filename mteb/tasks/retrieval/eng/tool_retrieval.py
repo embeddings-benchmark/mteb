@@ -69,7 +69,7 @@ class ToolRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{shi_retrieval_2025,
+@inproceedings{shi2025toolret,
   address = {Vienna, Austria},
   author = {Shi, Zhengliang and Wang, Yuhan and Yan, Lingyong and Ren, Pengjie and Wang, Shuaiqiang and Yin, Dawei and Ren, Zhaochun},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2025},
@@ -120,7 +120,7 @@ class ToolRetrievalInstruction(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{shi_retrieval_2025,
+@inproceedings{shi2025toolret,
   address = {Vienna, Austria},
   author = {Shi, Zhengliang and Wang, Yuhan and Yan, Lingyong and Ren, Pengjie and Wang, Shuaiqiang and Yin, Dawei and Ren, Zhaochun},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2025},

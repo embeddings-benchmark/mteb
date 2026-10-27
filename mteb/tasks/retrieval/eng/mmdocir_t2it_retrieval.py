@@ -38,7 +38,7 @@ class MMDocIRT2ITRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{dong_mmdocir_2025,
+@inproceedings{dong2025mmdocirbenchmarkingmultimodalretrieval,
   author = {Dong, Kuicai and Chang, Yujing and Goh Xin Deik, Derrick and Li, Dexun and Tang, Ruiming and Liu, Yong},
   booktitle = {Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing},
   doi = {10.18653/v1/2025.emnlp-main.1576},

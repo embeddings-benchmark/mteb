@@ -42,7 +42,7 @@ class KinNewsClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""@inproceedings{niyongabo_kinnews_2020,
+        bibtex_citation=r"""@inproceedings{niyongabo2020kinnews,
   address = {Barcelona, Spain (Online)},
   author = {Niyongabo, Rubungo Andre and Hong, Qu and Kreutzer, Julia and Huang, Li},
   booktitle = {Proceedings of the 28th International Conference on Computational Linguistics},

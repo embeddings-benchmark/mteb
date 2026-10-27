@@ -25,7 +25,7 @@ class LegalBenchConsumerContractsQA(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{hendrycks_cuad_2021,
+@inproceedings{hendrycks2021cuad,
   archiveprefix = {arXiv},
   author = {Dan Hendrycks and Collin Burns and Anya Chen and Spencer Ball},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
@@ -35,7 +35,7 @@ class LegalBenchConsumerContractsQA(AbsTaskRetrieval):
   year = {2021},
 }
 
-@inproceedings{koreeda_contractnli_2021,
+@inproceedings{koreeda2021contractnli,
   address = {Punta Cana, Dominican Republic},
   author = {Koreeda, Yuta and Manning, Christopher},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2021},

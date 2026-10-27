@@ -33,7 +33,7 @@ class Country211Classification(AbsTaskClassification):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{radford_learning_2021,
+@inproceedings{radford2021learning,
   archiveprefix = {arXiv},
   author = {Radford, Alec and Kim, Jong Wook and Hallacy, Chris and Ramesh, Aditya and Goh, Gabriel and Agarwal, Sandhini and Sastry, Girish and Askell, Amanda and Mishkin, Pamela and Clark, Jack and others},
   booktitle = {Proceedings of the 38th International Conference on Machine Learning},

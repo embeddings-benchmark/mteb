@@ -28,7 +28,7 @@ class SWEbenchMultilingualRR(AbsTaskRetrieval):
             "query": "Given a github issue, identify the code that needs to be changed to fix the issue."
         },
         bibtex_citation=r"""
-@inproceedings{yang_swe-smith_2026,
+@inproceedings{yang2025swesmith,
   archiveprefix = {arXiv},
   author = {John Yang and Kilian Lieret and Carlos E Jimenez and Alexander Wettig and Kabir Khandpur and Yanzhe Zhang and Binyuan Hui and Ofir Press and Ludwig Schmidt and Diyi Yang},
   booktitle = {The Thirty-ninth Annual Conference on Neural Information Processing Systems Datasets and Benchmarks Track},

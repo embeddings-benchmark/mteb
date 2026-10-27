@@ -27,7 +27,7 @@ class RomanianSentimentClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{dumitrescu_birth_2020,
+@inproceedings{dumitrescu2020birth,
   address = {Online},
   author = {Dumitrescu, Stefan and Avram, Andrei-Marius and Pyysalo, Sampo},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2020},
@@ -68,7 +68,7 @@ class RomanianSentimentClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{dumitrescu_birth_2020,
+@inproceedings{dumitrescu2020birth,
   address = {Online},
   author = {Dumitrescu, Stefan and Avram, Andrei-Marius and Pyysalo, Sampo},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2020},
