@@ -1,0 +1,86 @@
+{
+  "synthetic_only": true,
+  "all_equal": true,
+  "checks": [
+    {
+      "task": "AILACasedocs",
+      "prompt": "PromptType.query",
+      "max_abs_error": 0.0
+    },
+    {
+      "task": "AILACasedocs",
+      "prompt": "PromptType.document",
+      "max_abs_error": 0.0
+    },
+    {
+      "task": "AILAStatutes",
+      "prompt": "PromptType.query",
+      "max_abs_error": 0.0
+    },
+    {
+      "task": "AILAStatutes",
+      "prompt": "PromptType.document",
+      "max_abs_error": 0.0
+    },
+    {
+      "task": "LegalSummarization",
+      "prompt": "PromptType.query",
+      "max_abs_error": 0.0
+    },
+    {
+      "task": "LegalSummarization",
+      "prompt": "PromptType.document",
+      "max_abs_error": 0.0
+    },
+    {
+      "task": "GerDaLIRSmall",
+      "prompt": "PromptType.query",
+      "max_abs_error": 0.0
+    },
+    {
+      "task": "GerDaLIRSmall",
+      "prompt": "PromptType.document",
+      "max_abs_error": 0.0
+    },
+    {
+      "task": "LeCaRDv2",
+      "prompt": "PromptType.query",
+      "max_abs_error": 0.0
+    },
+    {
+      "task": "LeCaRDv2",
+      "prompt": "PromptType.document",
+      "max_abs_error": 0.0
+    },
+    {
+      "task": "LegalBenchConsumerContractsQA",
+      "prompt": "PromptType.query",
+      "max_abs_error": 0.0
+    },
+    {
+      "task": "LegalBenchConsumerContractsQA",
+      "prompt": "PromptType.document",
+      "max_abs_error": 0.0
+    },
+    {
+      "task": "LegalBenchCorporateLobbying",
+      "prompt": "PromptType.query",
+      "max_abs_error": 0.0
+    },
+    {
+      "task": "LegalBenchCorporateLobbying",
+      "prompt": "PromptType.document",
+      "max_abs_error": 0.0
+    },
+    {
+      "task": "LegalQuAD",
+      "prompt": "PromptType.query",
+      "max_abs_error": 0.0
+    },
+    {
+      "task": "LegalQuAD",
+      "prompt": "PromptType.document",
+      "max_abs_error": 0.0
+    }
+  ]
+}

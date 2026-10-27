@@ -1,7 +1,19 @@
 """Reproducible R70 task-routed embedding encoder (no test labels used)."""
+
 from __future__ import annotations
 
+from typing import TYPE_CHECKING, Any
+
+from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
+
+if TYPE_CHECKING:
+    import numpy as np
+    from torch.utils.data import DataLoader
+
+    from mteb.abstasks.task_metadata import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 PROMPTS = {
     "query": "Instruct: Given a web search query, retrieve relevant passages that answer the query\nQuery:",
@@ -16,34 +28,63 @@ PROMPTS = {
     "LegalSummarization-query": "Instruct: Given a query, retrieve relevant legal documents for summarization\nQuery:",
 }
 
+
 class NGALawEncoder(SentenceTransformerEncoderWrapper):
-    def __init__(self, model_name, revision=None, device=None, **kwargs):
+    def __init__(
+        self,
+        model_name: str,
+        revision: str | None = None,
+        device: str | None = None,
+        **kwargs: Any,
+    ) -> None:
         import numpy as np
         from huggingface_hub import hf_hub_download
 
         super().__init__(
-            model_name, revision=revision, device=device, model_prompts=PROMPTS,
-            model_kwargs={"torch_dtype": "bfloat16"}, **kwargs,
+            model_name,
+            revision=revision,
+            device=device,
+            model_prompts=PROMPTS,
+            model_kwargs={"torch_dtype": "bfloat16"},
+            **kwargs,
         )
         self.model.max_seq_length = 32768
         self.adapters = {}
         for name in ("gerda_query", "gerda_symmetric", "lecard_symmetric"):
-            path = hf_hub_download(model_name, f"adapters/{name}.npz", revision=revision)
+            path = hf_hub_download(
+                model_name, f"adapters/{name}.npz", revision=revision
+            )
             with np.load(path, allow_pickle=False) as weights:
-                self.adapters[name] = (weights["down"].astype(np.float32), weights["up"].astype(np.float32))
+                self.adapters[name] = (
+                    weights["down"].astype(np.float32),
+                    weights["up"].astype(np.float32),
+                )
 
-    def _adapt(self, values, name):
+    def _adapt(self, values: Array, name: str) -> np.ndarray:
         import numpy as np
 
         down, up = self.adapters[name]
         values = np.asarray(values, dtype=np.float32)
-        values = values + (values @ down) @ up
+        values = values + (values @ down) @ up  # noqa: PLR6104
         return values / np.linalg.norm(values, axis=1, keepdims=True).clip(min=1e-12)
 
-    def encode(self, inputs, *, task_metadata, hf_split, hf_subset, prompt_type=None, **kwargs):
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
         result = super().encode(
-            inputs, task_metadata=task_metadata, hf_split=hf_split, hf_subset=hf_subset,
-            prompt_type=prompt_type, **kwargs,
+            inputs,
+            task_metadata=task_metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            prompt_type=prompt_type,
+            **kwargs,
         )
         if task_metadata.name == "LeCaRDv2":
             return self._adapt(result, "lecard_symmetric")
@@ -53,9 +94,6 @@ class NGALawEncoder(SentenceTransformerEncoderWrapper):
             return self._adapt(result, "gerda_symmetric")
         return result
 
-
-from mteb.models.model_meta import ModelMeta
-from mteb.types import OutputDType
 
 nga_law_r70 = ModelMeta(
     name="NGA-KR/law-embed-0.6b-r70",
