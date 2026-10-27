@@ -39,8 +39,10 @@ jobs:
           uv venv
           # with uv sync conflict with flash-attn
           # pyarrow is passed explicitly so it is also resolved to its lowest version;
-          # otherwise it is pulled in transitively at the latest version, which may require numpy>=2
-          uv pip install -e . --resolution lowest-direct --group test pyarrow
+          # otherwise it is pulled in transitively at the latest version, which may require numpy>=2.
+          # pandas<3 keeps numpy at its lowest version, pandas 3.x requires numpy>=2.0.2
+          # which is incompatible with the oldest pyarrow
+          uv pip install -e . --resolution lowest-direct --group test pyarrow "pandas>=2.3.3,<3"
 
       - name: Run tests
         shell: bash
