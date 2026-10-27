@@ -7,6 +7,10 @@ mistake in these decisions would otherwise only show up as a wrong report.
 from __future__ import annotations
 
 import pytest
+
+# refaudit is in the optional `citations` dependency group
+pytest.importorskip("refaudit")
+
 from refaudit import Entry
 from refaudit.models import Found, NotFound, Record
 
