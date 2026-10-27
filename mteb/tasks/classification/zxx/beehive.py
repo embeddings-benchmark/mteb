@@ -1,3 +1,7 @@
+from typing import Any
+
+from datasets import load_dataset
+
 from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -44,3 +48,20 @@ class BeehiveStatesClassification(AbsTaskClassification):
 
     input_column_name = "audio"
     label_column_name = "label"
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        if self.data_loaded:
+            return
+        # each row is a ~55 MB recording, so the default writer batch of 1000 rows
+        # overflows Arrow's 2 GB limit while building the cache
+        self.dataset = {
+            hf_subset: load_dataset(
+                name=hf_subset,
+                **self.metadata.dataset,
+                num_proc=num_proc,
+                writer_batch_size=10,
+            )
+            for hf_subset in self.hf_subsets
+        }
+        self.dataset_transform(num_proc=num_proc)
+        self.data_loaded = True
