@@ -131,27 +131,18 @@ xlmr_base = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=set(),
-    citation="""@article{DBLP:journals/corr/abs-1911-02116,
-  author    = {Alexis Conneau and
-               Kartikay Khandelwal and
-               Naman Goyal and
-               Vishrav Chaudhary and
-               Guillaume Wenzek and
-               Francisco Guzm{\'{a}}n and
-               Edouard Grave and
-               Myle Ott and
-               Luke Zettlemoyer and
-               Veselin Stoyanov},
-  title     = {Unsupervised Cross-lingual Representation Learning at Scale},
-  journal   = {CoRR},
-  volume    = {abs/1911.02116},
-  year      = {2019},
-  url       = {http://arxiv.org/abs/1911.02116},
-  eprinttype = {arXiv},
-  eprint    = {1911.02116},
-  timestamp = {Mon, 11 Nov 2019 18:38:09 +0100},
-  biburl    = {https://dblp.org/rec/journals/corr/abs-1911-02116.bib},
-  bibsource = {dblp computer science bibliography, https://dblp.org}
+    citation="""@inproceedings{DBLP:journals/corr/abs-1911-02116,
+  address = {Online},
+  author = {Conneau, Alexis and Khandelwal, Kartikay and Goyal, Naman and Chaudhary, Vishrav and Wenzek, Guillaume and Guzm{\\'a}n, Francisco and Grave, Edouard and Ott, Myle and Zettlemoyer, Luke and Stoyanov, Veselin},
+  booktitle = {Proceedings of the 58th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics},
+  doi = {10.18653/v1/2020.acl-main.747},
+  editor = {Jurafsky, Dan and Chai, Joyce and Schluter, Natalie and Tetreault, Joel},
+  month = {jul},
+  pages = {8440--8451},
+  publisher = {Association for Computational Linguistics},
+  title = {Unsupervised Cross-lingual Representation Learning at Scale},
+  url = {https://aclanthology.org/2020.acl-main.747/},
+  year = {2020},
 }""",
 )
 
@@ -182,26 +173,17 @@ xlmr_large = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=set(),
-    citation="""@article{DBLP:journals/corr/abs-1911-02116,
-  author    = {Alexis Conneau and
-               Kartikay Khandelwal and
-               Naman Goyal and
-               Vishrav Chaudhary and
-               Guillaume Wenzek and
-               Francisco Guzm{\'{a}}n and
-               Edouard Grave and
-               Myle Ott and
-               Luke Zettlemoyer and
-               Veselin Stoyanov},
-  title     = {Unsupervised Cross-lingual Representation Learning at Scale},
-  journal   = {CoRR},
-  volume    = {abs/1911.02116},
-  year      = {2019},
-  url       = {http://arxiv.org/abs/1911.02116},
-  eprinttype = {arXiv},
-  eprint    = {1911.02116},
-  timestamp = {Mon, 11 Nov 2019 18:38:09 +0100},
-  biburl    = {https://dblp.org/rec/journals/corr/abs-1911-02116.bib},
-  bibsource = {dblp computer science bibliography, https://dblp.org}
+    citation="""@inproceedings{DBLP:journals/corr/abs-1911-02116,
+  address = {Online},
+  author = {Conneau, Alexis and Khandelwal, Kartikay and Goyal, Naman and Chaudhary, Vishrav and Wenzek, Guillaume and Guzm{\\'a}n, Francisco and Grave, Edouard and Ott, Myle and Zettlemoyer, Luke and Stoyanov, Veselin},
+  booktitle = {Proceedings of the 58th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics},
+  doi = {10.18653/v1/2020.acl-main.747},
+  editor = {Jurafsky, Dan and Chai, Joyce and Schluter, Natalie and Tetreault, Joel},
+  month = {jul},
+  pages = {8440--8451},
+  publisher = {Association for Computational Linguistics},
+  title = {Unsupervised Cross-lingual Representation Learning at Scale},
+  url = {https://aclanthology.org/2020.acl-main.747/},
+  year = {2020},
 }""",
 )

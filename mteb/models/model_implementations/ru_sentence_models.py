@@ -536,16 +536,17 @@ distilrubert_small_cased_conversational = ModelMeta(
     training_datasets=set(
         # OpenSubtitles[1], Dirty, Pikabu, and a Social Media segment of Taiga corpus
     ),
-    citation="""@misc{https://doi.org/10.48550/arxiv.2205.02340,
-      doi = {10.48550/ARXIV.2205.02340},
-      url = {https://arxiv.org/abs/2205.02340},
-      author = {Kolesnikova, Alina and Kuratov, Yuri and Konovalov, Vasily and Burtsev, Mikhail},
-      keywords = {Computation and Language (cs.CL), Machine Learning (cs.LG), FOS: Computer and information sciences, FOS: Computer and information sciences},
-      title = {Knowledge Distillation of Russian Language Models with Reduction of Vocabulary},
-      publisher = {arXiv},
-      year = {2022},
-      copyright = {arXiv.org perpetual, non-exclusive license}
-    }""",
+    citation="""@inproceedings{https://doi.org/10.48550/arxiv.2205.02340,
+  author = {Kolesnikova, Alina and Kuratov, Yuri and Konovalov, Vasily and Mikhail, Mikhail},
+  booktitle = {Computational Linguistics and Intellectual Technologies},
+  doi = {10.28995/2075-7182-2022-21-295-310},
+  month = {June},
+  pages = {295–310},
+  publisher = {RSUH},
+  title = {Knowledge Distillation of Russian Language Models with Reduction of Vocabulary},
+  url = {https://doi.org/10.28995/2075-7182-2022-21-295-310},
+  year = {2022},
+}""",
 )
 
 rubert_base_cased_sentence = ModelMeta(
@@ -744,15 +745,20 @@ rosberta_ru_en = ModelMeta(
     public_training_data=None,
     public_training_code=None,
     framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
-    citation="""@misc{snegirev2024russianfocusedembeddersexplorationrumteb,
-      title={The Russian-focused embedders' exploration: ruMTEB benchmark and Russian embedding model design},
-      author={Artem Snegirev and Maria Tikhonova and Anna Maksimova and Alena Fenogenova and Alexander Abramov},
-      year={2024},
-      eprint={2408.12503},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2408.12503},
-    }
+    citation="""@inproceedings{snegirev2024russianfocusedembeddersexplorationrumteb,
+  address = {Albuquerque, New Mexico},
+  author = {Snegirev, Artem and Tikhonova, Maria and Anna, Maksimova and Fenogenova, Alena and Abramov, Aleksandr},
+  booktitle = {Proceedings of the 2025 Conference of the Nations of the {A}mericas Chapter of the {A}ssociation for {C}omputational {L}inguistics: Human Language Technologies (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2025.naacl-long.12},
+  editor = {Chiruzzo, Luis and Ritter, Alan and Wang, Lu},
+  isbn = {979-8-89176-189-6},
+  month = {apr},
+  pages = {236--254},
+  publisher = {Association for Computational Linguistics},
+  title = {The {R}ussian-focused embedders' exploration: ru{MTEB} benchmark and {R}ussian embedding model design},
+  url = {https://aclanthology.org/2025.naacl-long.12/},
+  year = {2025},
+}
     """,
 )
 

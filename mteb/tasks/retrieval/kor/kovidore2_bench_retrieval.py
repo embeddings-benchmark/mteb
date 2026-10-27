@@ -1,5 +1,16 @@
+from typing import Any
+
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+
+
+def _keep_model_columns(task: AbsTaskRetrieval) -> None:
+    # the queries carry metadata such as `query_types`, a list of varying length,
+    # which the dataloader can't batch; keep what the model reads, as ViDoRe 2 does
+    for subset in task.dataset.values():
+        for split in subset.values():
+            split["queries"] = split["queries"].select_columns(["id", "text"])
+            split["corpus"] = split["corpus"].select_columns(["id", "image"])
 
 
 class KoVidore2CybersecurityRetrieval(AbsTaskRetrieval):
@@ -46,6 +57,9 @@ Kriz, Reno},
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
 
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _keep_model_columns(self)
+
 
 class KoVidore2EconomicRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -90,6 +104,9 @@ Kriz, Reno},
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
+
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _keep_model_columns(self)
 
 
 class KoVidore2EnergyRetrieval(AbsTaskRetrieval):
@@ -136,6 +153,9 @@ Kriz, Reno},
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
 
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _keep_model_columns(self)
+
 
 class KoVidore2HrRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -180,3 +200,6 @@ Kriz, Reno},
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
+
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _keep_model_columns(self)
