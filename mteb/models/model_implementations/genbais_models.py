@@ -1,7 +1,6 @@
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
-
 all_minilm_l6_v2_genbais = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
     name="lakinekaki/all-MiniLM-L6-v2-genbais",
