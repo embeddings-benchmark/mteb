@@ -5,27 +5,8 @@ from typing import Any
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
-# a corpus video that can't be decoded ("Invalid data found when processing input");
-# the one query it is relevant to has other relevant videos
-_BROKEN_VIDEO_IDS = {"20130923/Early_Start_20130923_0200_cc_segment/07.700k.mp4"}
-
-
-def _drop_broken_videos(task: AbsTaskRetrieval, num_proc: int | None) -> None:
-    for subset in task.dataset.values():
-        for split in subset.values():
-            split["corpus"] = split["corpus"].filter(
-                lambda video_id: video_id not in _BROKEN_VIDEO_IDS,
-                input_columns="id",
-                num_proc=num_proc,
-            )
-            split["relevant_docs"] = {
-                query_id: {
-                    doc_id: score
-                    for doc_id, score in docs.items()
-                    if doc_id not in _BROKEN_VIDEO_IDS
-                }
-                for query_id, docs in split["relevant_docs"].items()
-            }
+# corpus video that can't be decoded; the one query it is relevant to has other relevant videos
+_BROKEN_VIDEO_ID = "20130923/Early_Start_20130923_0200_cc_segment/07.700k.mp4"
 
 
 class StanfordI2VRetrieval(AbsTaskRetrieval):
@@ -83,7 +64,15 @@ class StanfordI2VRetrieval(AbsTaskRetrieval):
     )
 
     def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        _drop_broken_videos(self, num_proc)
+        for split in self.metadata.eval_splits:
+            data = self.dataset["default"][split]
+            data["corpus"] = data["corpus"].filter(
+                lambda video_id: video_id != _BROKEN_VIDEO_ID,
+                input_columns="id",
+                num_proc=num_proc,
+            )
+            for docs in data["relevant_docs"].values():
+                docs.pop(_BROKEN_VIDEO_ID, None)
 
 
 class StanfordI2VVisualRetrieval(AbsTaskRetrieval):
@@ -143,8 +132,15 @@ class StanfordI2VVisualRetrieval(AbsTaskRetrieval):
     )
 
     def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        _drop_broken_videos(self, num_proc)
         for split in self.metadata.eval_splits:
+            data = self.dataset["default"][split]
+            data["corpus"] = data["corpus"].filter(
+                lambda video_id: video_id != _BROKEN_VIDEO_ID,
+                input_columns="id",
+                num_proc=num_proc,
+            )
+            for docs in data["relevant_docs"].values():
+                docs.pop(_BROKEN_VIDEO_ID, None)
             corpus = self.dataset["default"][split]["corpus"]
             if "audio" in corpus.column_names:
                 self.dataset["default"][split]["corpus"] = corpus.remove_columns(
