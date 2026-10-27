@@ -337,7 +337,8 @@ class FramesCollator:
             return frame_indices(n_source, target)
 
         # Retry on the actual call: decrement source count when trailing
-        # frames fail to decode.
+        # frames fail to decode, either missing ("no more frames") or corrupt
+        # ("Invalid data found when processing input").
         n = video.metadata.num_frames
         if n is None:
             raise RuntimeError("video has no frame count metadata")
@@ -352,7 +353,9 @@ class FramesCollator:
                     )
                 return frames
             except RuntimeError as e:
-                if "no more frames" not in str(e):
+                if not any(
+                    msg in str(e) for msg in ("no more frames", "Invalid data found")
+                ):
                     raise
                 n -= 1
         raise RuntimeError("video has no decodable frames")
