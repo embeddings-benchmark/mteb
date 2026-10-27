@@ -49,7 +49,7 @@ jobs:
         python-version: '3.11'
 
     - name: Install dependencies
-      run: uv sync --group test --frozen
+      run: uv sync --group citations --frozen
 
     # Only the citations the PR adds or changes; the rest are re-checked on main.
     - name: Check citations
@@ -80,7 +80,7 @@ jobs:
         python-version: '3.11'
 
     - name: Install dependencies
-      run: uv sync --group test --frozen
+      run: uv sync --group citations --frozen
 
     - name: Check citations
       run: make citation-check
@@ -155,7 +155,7 @@ jobs:
         python-version: '3.11'
 
     - name: Install dependencies
-      run: uv sync --group test --frozen
+      run: uv sync --group citations --frozen
 
     # The script exits with 1 both when it finds published preprints and when it
     # crashes; only the first writes the report.
