@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any, cast
 
-import numpy as np
 from sklearn import cluster
 
 from mteb._create_dataloaders import create_dataloader
@@ -91,8 +90,7 @@ class ClusteringEvaluator(Evaluator):
                 compute_labels=True,
                 random_state=self.seed,
             )
-            # float32 k-means results depend on the BLAS kernel picked for the CPU
-            clustering_model.fit(np.asarray(embeddings, dtype=np.float64))
+            clustering_model.fit(embeddings)
         clustering_labels = clustering_model.labels_.tolist()
         predicted_labels = cast("list[int]", clustering_labels)
         return predicted_labels
