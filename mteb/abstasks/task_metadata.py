@@ -534,7 +534,6 @@ class TaskMetadata(BaseModel):
 
     def _validate_metadata(self) -> None:
         self._eval_langs_are_valid(self.eval_langs)
-        self._validate_license()
 
     @field_validator("prompt")
     @classmethod

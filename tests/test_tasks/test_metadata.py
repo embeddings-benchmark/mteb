@@ -34,13 +34,7 @@ def _assert_license_policy(task: AbsTask) -> None:
 def test_all_metadata_is_filled_and_valid(task: AbsTask):
     # --- test metadata is filled and valid ---
     if task.metadata.name not in _HISTORIC_DATASETS:
-        # Grandfathered tasks still need valid languages. Their license is an
-        # existing exception and is checked by the license policy below.
-        if task.metadata.name in TASKS_WITH_UNCLEAR_LICENSE:
-            task.metadata._eval_langs_are_valid(task.metadata.eval_langs)
-            _assert_license_policy(task)
-        else:
-            task.metadata._validate_metadata()
+        task.metadata._validate_metadata()
         assert task.metadata.is_filled(), (
             f"Metadata for {task.metadata.name} is not filled"
         )
@@ -48,6 +42,8 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
         assert not task.metadata.is_filled(), (
             f"Metadata for {task.metadata.name} is stated as not filled (historic), but it is filled, please remove the dataset from the historic list."
         )
+
+    _assert_license_policy(task)
 
     # --- Check that no dataset trusts remote code ---
     assert task.metadata.dataset.get("trust_remote_code", False) is False, (

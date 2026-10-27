@@ -327,6 +327,11 @@ def _task_metadata(license_name: str | None) -> TaskMetadata:
 
 
 @pytest.mark.parametrize("license_name", [None, "not specified"])
+def test_existing_unclear_license_keeps_metadata_valid(license_name: str | None):
+    _task_metadata(license_name)._validate_metadata()
+
+
+@pytest.mark.parametrize("license_name", [None, "not specified"])
 def test_unclear_license_is_rejected(license_name: str | None):
     with pytest.raises(ValueError, match="unclear license"):
         _task_metadata(license_name)._validate_license()
