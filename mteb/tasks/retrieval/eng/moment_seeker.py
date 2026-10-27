@@ -12,13 +12,16 @@ _DATASET_PATH = "dukesun99/MomentSeeker-CVR"
 _DATASET_REVISION = "e87fc71839cd14dfd09aa83b378cd51074318b3c"
 _REFERENCE = "https://arxiv.org/abs/2502.12558"
 _BIBTEX = r"""
-@misc{yuan2025momentseeker,
-  archiveprefix = {arXiv},
-  author = {Huaying Yuan and Jian Ni and Zheng Liu and Yueze Wang and Junjie Zhou and Zhengyang Liang and Bo Zhao and Zhao Cao and Zhicheng Dou and Ji-Rong Wen},
-  eprint = {2502.12558},
-  primaryclass = {cs.CV},
+@inproceedings{yuan2025momentseeker,
+  author = {Yuan, Huaying and Ni, Jian and Liu, Zheng and Wang, Yueze and Zhou, Junjie and Liang, Zhengyang and Zhao, Bo and Cao, Zhao and Wen, Ji-Rong and Dou, Zhicheng},
+  booktitle = {Advances in Neural Information Processing Systems 38},
+  collection = {NeurIPS 2025},
+  doi = {10.52202/085713-0934},
+  pages = {31491–31517},
+  publisher = {Neural Information Processing Systems Foundation, Inc. (NeurIPS)},
+  series = {NeurIPS 2025},
   title = {MomentSeeker: A Task-Oriented Benchmark For Long-Video Moment Retrieval},
-  url = {https://arxiv.org/abs/2502.12558},
+  url = {https://doi.org/10.52202/085713-0934},
   year = {2025},
 }
 """

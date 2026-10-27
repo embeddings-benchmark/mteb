@@ -6,7 +6,7 @@ class BuiltBenchClusteringS2S(AbsTaskClusteringLegacy):
     metadata = TaskMetadata(
         name="BuiltBenchClusteringS2S",
         description="Clustering of built asset names/titles based on categories identified within industry classification systems such as IFC, Uniclass, etc.",
-        reference="https://arxiv.org/abs/2411.12056",
+        reference="https://doi.org/10.1038/s41598-025-09052-5",
         dataset={
             "path": "mehrzad-shahin/BuiltBench-clustering-s2s",
             "revision": "1aaeb2ece89ea0a8c64e215c95c4cfaf7e891149",
@@ -27,9 +27,16 @@ class BuiltBenchClusteringS2S(AbsTaskClusteringLegacy):
         bibtex_citation=r"""
 @article{shahinmoghadam2024benchmarking,
   author = {Shahinmoghadam, Mehrzad and Motamedi, Ali},
-  journal = {arXiv preprint arXiv:2411.12056},
+  doi = {10.1038/s41598-025-09052-5},
+  issn = {2045-2322},
+  journal = {Scientific Reports},
+  month = {July},
+  number = {1},
+  publisher = {Springer Science and Business Media LLC},
   title = {Benchmarking pre-trained text embedding models in aligning built asset information},
-  year = {2024},
+  url = {https://doi.org/10.1038/s41598-025-09052-5},
+  volume = {15},
+  year = {2025},
 }
 """,
         prompt="Identify the category of the built asset entities based on the names or titles",

@@ -5,14 +5,19 @@ from mteb.models.model_implementations.mixedbread_ai_models import (
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
-LEAF_CITATION = """@misc{mdbr_leaf,
-  title={LEAF: Knowledge Distillation of Text Embedding Models with Teacher-Aligned Representations},
-  author={Robin Vujanic and Thomas Rueckstiess},
-  year={2025},
-  eprint={2509.12539},
-  archivePrefix={arXiv},
-  primaryClass={cs.IR},
-  url={https://arxiv.org/abs/2509.12539}
+LEAF_CITATION = """@inproceedings{mdbr_leaf,
+  address = {San Diego, California, United States},
+  author = {Vujanic, Robin and R{\\"u}ckstie{\\ss}, Thomas},
+  booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2026.acl-long.2008},
+  editor = {Liakata, Maria and Moreira, Viviane P. and Zhang, Jiajun and Jurgens, David},
+  isbn = {979-8-89176-390-6},
+  month = {jul},
+  pages = {43362--43383},
+  publisher = {Association for Computational Linguistics},
+  title = {{LEAF}: Knowledge Distillation of Text Embedding Models with Teacher-Aligned Representations},
+  url = {https://aclanthology.org/2026.acl-long.2008/},
+  year = {2026},
 }"""
 
 model_prompts = {"query": "Represent this sentence for searching relevant passages: "}

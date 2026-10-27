@@ -14,11 +14,16 @@ if TYPE_CHECKING:
     from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
 
-MOCOV3_CITATION = """@Article{chen2021mocov3,
-    author  = {Xinlei Chen* and Saining Xie* and Kaiming He},
-    title   = {An Empirical Study of Training Self-Supervised Vision Transformers},
-    journal = {arXiv preprint arXiv:2104.02057},
-    year    = {2021},
+MOCOV3_CITATION = """@inproceedings{chen2021mocov3,
+  author = {Chen, Xinlei and Xie, Saining and He, Kaiming},
+  booktitle = {2021 IEEE/CVF International Conference on Computer Vision (ICCV)},
+  doi = {10.1109/iccv48922.2021.00950},
+  month = {Oct},
+  pages = {9620–9629},
+  publisher = {IEEE},
+  title = {An Empirical Study of Training Self-Supervised Vision Transformers},
+  url = {https://doi.org/10.1109/iccv48922.2021.00950},
+  year = {2021},
 }"""
 
 
