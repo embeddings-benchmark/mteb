@@ -22,6 +22,7 @@ from mteb.models.model_implementations.colpali_models import (
     COLPALI_CITATION,
     COLPALI_TRAINING_DATA,
 )
+from mteb.models.model_implementations.pylate_models import MultiVectorModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import OutputDType
 
@@ -43,6 +44,28 @@ SUPPORTED_LANGUAGES = [
     "ita-Latn",  # Italian
     "por-Latn",  # Portuguese
 ]
+
+MOEDERN_COLBERT_LANGUAGES = [
+    "deu-Latn",
+    "eng-Latn",
+    "spa-Latn",
+    "nld-Latn",
+    "fra-Latn",
+    "ita-Latn",
+    "por-Latn",
+]
+
+SAUERKRAUTLM_MOEDERN_COLBERT_CITATION = """@misc{sauerkrautlm_moederncolbert_2026,
+  title={MoEdernBERT: Hash-Embedded Mixture-of-Experts Encoders for Tiny Multilingual Late-Interaction Retrieval},
+  author={David Golchinfar},
+  organization={VAGO Solutions},
+  url={https://huggingface.co/VAGOsolutions/SauerkrautLM-MoEdernColBERT-1.5M},
+  year={2026}
+}"""
+
+_MOEDERN_COLBERT_LOADER_KWARGS = dict(
+    trust_remote_code=True,
+)
 
 
 class SLMBaseWrapper(AbsEncoder):
@@ -424,4 +447,91 @@ slm_colministral3_3b = ModelMeta(
     citation=COLPALI_CITATION,
     extra_requirements_groups=["sauerkrautlm-colpali"],
     output_dtypes=OutputDType.BF16,
+)
+
+slm_moederncolbert_1_5m = ModelMeta(
+    loader=MultiVectorModel,
+    loader_kwargs=_MOEDERN_COLBERT_LOADER_KWARGS,
+    name="VAGOsolutions/SauerkrautLM-MoEdernColBERT-1.5M",
+    model_type=["late-interaction"],
+    languages=MOEDERN_COLBERT_LANGUAGES,
+    open_weights=True,
+    revision="9d360b8b88ae11bea5784bf9012ff509fdd5c2da",
+    public_training_code=None,
+    public_training_data=None,
+    release_date="2026-10-17",
+    n_parameters=1_468_064,
+    n_embedding_parameters=480_032,
+    n_active_parameters_override=880_000,
+    memory_usage_mb=6,
+    max_tokens=32768,
+    embed_dim=128,
+    license="apache-2.0",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    framework=["PyLate", "ColBERT", "safetensors", "Sentence Transformers"],
+    reference="https://huggingface.co/VAGOsolutions/SauerkrautLM-MoEdernColBERT-1.5M",
+    use_instructions=False,
+    adapted_from=None,
+    superseded_by=None,
+    training_datasets=None,
+    citation=SAUERKRAUTLM_MOEDERN_COLBERT_CITATION,
+    extra_requirements_groups=["pylate"],
+)
+
+slm_moederncolbert_27m = ModelMeta(
+    loader=MultiVectorModel,
+    loader_kwargs=_MOEDERN_COLBERT_LOADER_KWARGS,
+    name="VAGOsolutions/SauerkrautLM-MoEdernColBERT-27M",
+    model_type=["late-interaction"],
+    languages=MOEDERN_COLBERT_LANGUAGES,
+    open_weights=True,
+    revision="d2b7b1feaaac1bf87510ca9525208c3daeabcc5a",
+    public_training_code=None,
+    public_training_data=None,
+    release_date="2026-10-17",
+    n_parameters=27_042_080,
+    n_embedding_parameters=2_400_160,
+    n_active_parameters_override=12_300_000,
+    memory_usage_mb=103,
+    max_tokens=32768,
+    embed_dim=128,
+    license="apache-2.0",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    framework=["PyLate", "ColBERT", "safetensors", "Sentence Transformers"],
+    reference="https://huggingface.co/VAGOsolutions/SauerkrautLM-MoEdernColBERT-27M",
+    use_instructions=False,
+    adapted_from=None,
+    superseded_by=None,
+    training_datasets=None,
+    citation=SAUERKRAUTLM_MOEDERN_COLBERT_CITATION,
+    extra_requirements_groups=["pylate"],
+)
+
+slm_moederncolbert_115m = ModelMeta(
+    loader=MultiVectorModel,
+    loader_kwargs=_MOEDERN_COLBERT_LOADER_KWARGS,
+    name="VAGOsolutions/SauerkrautLM-MoEdernColBERT-115M",
+    model_type=["late-interaction"],
+    languages=MOEDERN_COLBERT_LANGUAGES,
+    open_weights=True,
+    revision="66380d2ade3b5027bba83bdcdba052d0bb86dcdb",
+    public_training_code=None,
+    public_training_data=None,
+    release_date="2026-10-17",
+    n_parameters=114_565_504,
+    n_embedding_parameters=5_760_384,
+    n_active_parameters_override=67_400_000,
+    memory_usage_mb=437,
+    max_tokens=32768,
+    embed_dim=128,
+    license="apache-2.0",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    framework=["PyLate", "ColBERT", "safetensors", "Sentence Transformers"],
+    reference="https://huggingface.co/VAGOsolutions/SauerkrautLM-MoEdernColBERT-115M",
+    use_instructions=False,
+    adapted_from=None,
+    superseded_by=None,
+    training_datasets=None,
+    citation=SAUERKRAUTLM_MOEDERN_COLBERT_CITATION,
+    extra_requirements_groups=["pylate"],
 )
