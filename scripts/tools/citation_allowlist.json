@@ -1,4 +1,5 @@
 {
+    "10.48550/arxiv.2210.11416": "Correct as cited (JMLR 2024, https://jmlr.org/papers/v25/23-0870.html), the arXiv preprint is from 2022",
     "Khine2017": "Correct as cited (ICCA 2017), Semantic Scholar lists the same three authors in a different order",
     "Kurihara_nlp2020": "Correct as cited (NLP2020, https://www.anlp.jp/proceedings/annual_meeting/2020/pdf_dir/P2-24.pdf), the Japanese annual meeting is not indexed",
     "Remus2019GermEval2T": "Correct as cited (GermEval 2019 Task 1, KONVENS, https://api.semanticscholar.org/CorpusID:208334484)",
@@ -15,6 +16,7 @@
     "babakov-etal-2021-detecting": "Correct as cited (BSNLP 2021, https://aclanthology.org/2021.bsnlp-1.4/), the workshop has no Crossref DOIs",
     "bact_2019_3457447": "Correct as cited (Zenodo, https://zenodo.org/records/3457447)",
     "bajaj2018msmarcohumangenerated": "Correct as cited (arXiv 1611.09268), the year is that of the cited revision, v1 is from 2016",
+    "banar2024beirnlzeroshotinformationretrieval": "Correct as cited (BUCC 2025, https://aclanthology.org/2025.bucc-1.5/), the arXiv preprint lists the same authors in a different order",
     "blinov2013research": "Correct as cited (Dialogue 2013, Computational Linguistics and Intellectual Technologies, https://dialogue-conf.org/media/1226/blinovpd.pdf)",
     "brunato2023discotex": "Correct as cited (EVALITA 2023), the campaign's proceedings are not indexed",
     "bugliarello2022iglue": "Correct as cited (ICML 2022, https://proceedings.mlr.press/v162/bugliarello22a.html), PMLR is not in Crossref",

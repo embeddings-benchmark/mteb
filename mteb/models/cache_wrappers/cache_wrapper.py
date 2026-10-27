@@ -137,7 +137,14 @@ class CachedEmbeddingWrapper:
                     **kwargs,
                 )
                 if isinstance(new_vectors, torch.Tensor):
-                    new_vectors = new_vectors.cpu().numpy()
+                    new_vectors = new_vectors.cpu()
+                    if new_vectors.is_floating_point() and new_vectors.dtype not in {
+                        torch.float16,
+                        torch.float32,
+                        torch.float64,
+                    }:
+                        new_vectors = new_vectors.float()
+                    new_vectors = new_vectors.numpy()
                 cache.add(uncached_items, new_vectors)
                 cache.save()
                 for vector, original_idx in zip(

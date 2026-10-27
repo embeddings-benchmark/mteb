@@ -90,11 +90,19 @@ class E5OmniWrapper(SentenceTransformerEncoderWrapper):
 
 
 _E5_OMNI_CITATION = r"""
-@article{chen2026e5omni,
-    title={e5-omni: Explicit Cross-modal Alignment for Omni-modal Embeddings},
-    author={Chen, Haonan and Gao, Sicheng and Radu, Timofte and Tetsuya, Sakai and Dou, Zhicheng},
-    journal={arXiv preprint arXiv:2601.03666},
-    year={2026}
+@inproceedings{chen2026e5omni,
+  address = {San Diego, California, United States},
+  author = {Chen, Haonan and Gao, Sicheng and Timofte, Radu and Sakai, Tetsuya and Dou, Zhicheng},
+  booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2026},
+  doi = {10.18653/v1/2026.findings-acl.970},
+  editor = {Liakata, Maria and Moreira, Viviane P. and Zhang, Jiajun and Jurgens, David},
+  isbn = {979-8-89176-395-1},
+  month = {jul},
+  pages = {19430--19443},
+  publisher = {Association for Computational Linguistics},
+  title = {e5-omni: Explicit Cross-modal Alignment for Omni-modal Embeddings},
+  url = {https://aclanthology.org/2026.findings-acl.970/},
+  year = {2026},
 }
 """
 

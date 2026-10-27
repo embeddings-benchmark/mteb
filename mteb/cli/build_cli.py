@@ -106,6 +106,7 @@ def run(args: argparse.Namespace) -> None:
         overwrite_strategy=overwrite_strategy,
         encode_kwargs=encode_kwargs,
         prediction_folder=prediction_folder,
+        num_proc=args.num_proc,
     )
 
 
@@ -252,6 +253,13 @@ def _add_run_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
         type=int,
         default=None,
         help="Batch size of the encode. Will be passed to the MTEB as `mteb.evaluate(model, task, encode_kwargs={'batch_size': value})`.",
+    )
+    parser.add_argument(
+        "--num-proc",
+        "--num_proc",  # for consistency with the other underscore aliases
+        type=int,
+        default=None,
+        help="Number of processes to use during data loading and transformation. Will be passed to the MTEB as `mteb.evaluate(model, task, num_proc=value)`.",
     )
     # for backward compatibility
     parser.add_argument(

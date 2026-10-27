@@ -13,15 +13,15 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
 
-BLIP_CITATION = """@misc{https://doi.org/10.48550/arxiv.2201.12086,
-    doi = {10.48550/ARXIV.2201.12086},
-    url = {https://arxiv.org/abs/2201.12086},
-    author = {Li, Junnan and Li, Dongxu and Xiong, Caiming and Hoi, Steven},
-    keywords = {Computer Vision and Pattern Recognition (cs.CV), FOS: Computer and information sciences, FOS: Computer and information sciences},
-    title = {BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation},
-    publisher = {arXiv},
-    year = {2022},
-    copyright = {Creative Commons Attribution 4.0 International}
+BLIP_CITATION = """@inproceedings{https://doi.org/10.48550/arxiv.2201.12086,
+  archiveprefix = {arXiv},
+  author = {Junnan Li and Dongxu Li and Caiming Xiong and Steven C. H. Hoi},
+  booktitle = {ICML},
+  eprint = {2201.12086},
+  pages = {12888-12900},
+  title = {BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation},
+  url = {https://proceedings.mlr.press/v162/li22n.html},
+  year = {2022},
 }"""
 
 

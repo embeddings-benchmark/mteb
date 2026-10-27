@@ -61,8 +61,11 @@ class Data2VecAudioWrapper(AbsEncoder):
         max_samples = seconds_to_samples(
             self.max_audio_length_seconds, self.sampling_rate
         )
+        # the conv feature encoder needs at least 400 samples (25 ms at 16 kHz)
         inputs.collate_fn = AudioCollator(
-            target_sampling_rate=self.sampling_rate, max_samples=max_samples
+            target_sampling_rate=self.sampling_rate,
+            max_samples=max_samples,
+            min_samples=400,
         )
 
         all_embeddings = []
@@ -158,14 +161,15 @@ data2vec_audio_base = ModelMeta(
     ),
     modalities=["audio"],
     citation="""
-@misc{baevski2022data2vecgeneralframeworkselfsupervised,
-    title={data2vec: A General Framework for Self-supervised Learning in Speech, Vision and Language},
-    author={Alexei Baevski and Wei-Ning Hsu and Qiantong Xu and Arun Babu and Jiatao Gu and Michael Auli},
-    year={2022},
-    eprint={2202.03555},
-    archivePrefix={arXiv},
-    primaryClass={cs.LG},
-    url={https://arxiv.org/abs/2202.03555},
+@inproceedings{baevski2022data2vecgeneralframeworkselfsupervised,
+  archiveprefix = {arXiv},
+  author = {Alexei Baevski and Wei-Ning Hsu and Qiantong Xu and Arun Babu and Jiatao Gu and Michael Auli},
+  booktitle = {ICML},
+  eprint = {2202.03555},
+  pages = {1298-1312},
+  title = {data2vec: A General Framework for Self-supervised Learning in Speech, Vision and Language},
+  url = {https://proceedings.mlr.press/v162/baevski22a.html},
+  year = {2022},
 }""",
 )
 
@@ -193,13 +197,14 @@ data2vec_audio_large = ModelMeta(
     ),
     modalities=["audio"],
     citation="""
-@misc{baevski2022data2vecgeneralframeworkselfsupervised,
-    title={data2vec: A General Framework for Self-supervised Learning in Speech, Vision and Language},
-    author={Alexei Baevski and Wei-Ning Hsu and Qiantong Xu and Arun Babu and Jiatao Gu and Michael Auli},
-    year={2022},
-    eprint={2202.03555},
-    archivePrefix={arXiv},
-    primaryClass={cs.LG},
-    url={https://arxiv.org/abs/2202.03555},
+@inproceedings{baevski2022data2vecgeneralframeworkselfsupervised,
+  archiveprefix = {arXiv},
+  author = {Alexei Baevski and Wei-Ning Hsu and Qiantong Xu and Arun Babu and Jiatao Gu and Michael Auli},
+  booktitle = {ICML},
+  eprint = {2202.03555},
+  pages = {1298-1312},
+  title = {data2vec: A General Framework for Self-supervised Learning in Speech, Vision and Language},
+  url = {https://proceedings.mlr.press/v162/baevski22a.html},
+  year = {2022},
 }""",
 )

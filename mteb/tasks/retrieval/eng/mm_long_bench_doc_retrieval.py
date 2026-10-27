@@ -75,7 +75,7 @@ class MMLongBenchDocRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MMLongBenchDocRetrieval",
         description="MMLongBench-Doc is a long-context, multimodal document understanding benchmark built from lengthy PDFs with rich layouts and content including text, tables, charts, and images. This retrieval adaptation asks models to retrieve pages from the source document for a question, assigning higher graded relevance to annotated evidence pages.",
-        reference="https://arxiv.org/abs/2407.01523",
+        reference="https://papers.nips.cc/paper_files/paper/2024/hash/ae0e43289bffea0c1fa34633fc608e92-Abstract-Datasets_and_Benchmarks_Track.html",
         dataset={
             "path": "VLM2Vec/MMLongBench-doc",
             "revision": "1c2ee8f611a6c552d4bd90daca3a92d7a55ff806",
@@ -94,13 +94,13 @@ class MMLongBenchDocRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="multiple",
         bibtex_citation=r"""
-@misc{ma2024mmlongbenchdocbenchmarkinglongcontextdocument,
+@inproceedings{ma2024mmlongbenchdocbenchmarkinglongcontextdocument,
   archiveprefix = {arXiv},
   author = {Yubo Ma and Yuhang Zang and Liangyu Chen and Meiqi Chen and Yizhu Jiao and Xinze Li and Xinyuan Lu and Ziyu Liu and Yan Ma and Xiaoyi Dong and Pan Zhang and Liangming Pan and Yu-Gang Jiang and Jiaqi Wang and Yixin Cao and Aixin Sun},
+  booktitle = {NeurIPS},
   eprint = {2407.01523},
-  primaryclass = {cs.CV},
-  title = {MMLongBench-Doc: Benchmarking Long-context Document Understanding with Visualizations},
-  url = {https://arxiv.org/abs/2407.01523},
+  title = {MMLONGBENCH-DOC: Benchmarking Long-context Document Understanding with Visualizations},
+  url = {http://papers.nips.cc/paper_files/paper/2024/hash/ae0e43289bffea0c1fa34633fc608e92-Abstract-Datasets_and_Benchmarks_Track.html},
   year = {2024},
 }
 """,

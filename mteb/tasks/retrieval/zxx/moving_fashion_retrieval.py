@@ -16,7 +16,7 @@ class MovingFashionI2VRetrieval(AbsTaskRetrieval):
             "The official archive omits one annotated test video, so the shop image "
             "whose only positive video is unavailable is excluded with that qrel."
         ),
-        reference="https://arxiv.org/abs/2110.02627",
+        reference="https://doi.org/10.1109/wacv51458.2022.00059",
         dataset={
             "path": "pranitchawla/MovingFashionI2VRetrieval",
             "revision": "29906095b736d5319f14ec1800640b40612b6e8d",
@@ -35,13 +35,15 @@ class MovingFashionI2VRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{godi2021movingfashion,
-  archiveprefix = {arXiv},
+@inproceedings{godi2021movingfashion,
   author = {Godi, Marco and Joppi, Christian and Skenderi, Geri and Cristani, Marco},
-  eprint = {2110.02627},
-  primaryclass = {cs.CV},
+  booktitle = {2022 IEEE/CVF Winter Conference on Applications of Computer Vision (WACV)},
+  doi = {10.1109/wacv51458.2022.00059},
+  month = {Jan},
+  publisher = {IEEE},
   title = {MovingFashion: a Benchmark for the Video-to-Shop Challenge},
-  year = {2021},
+  url = {https://doi.org/10.1109/wacv51458.2022.00059},
+  year = {2022},
 }
 """,
         prompt={
@@ -65,7 +67,7 @@ class MovingFashionV2IRetrieval(AbsTaskRetrieval):
             "test video; that unavailable query and qrel are excluded while its "
             "product image remains in the corpus as a distractor."
         ),
-        reference="https://arxiv.org/abs/2110.02627",
+        reference="https://doi.org/10.1109/wacv51458.2022.00059",
         dataset={
             "path": "pranitchawla/MovingFashion",
             "revision": "29c9813e2826ef2f4398455528881ab3e181311b",
@@ -84,13 +86,15 @@ class MovingFashionV2IRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{godi2021movingfashion,
-  archiveprefix = {arXiv},
+@inproceedings{godi2021movingfashion,
   author = {Godi, Marco and Joppi, Christian and Skenderi, Geri and Cristani, Marco},
-  eprint = {2110.02627},
-  primaryclass = {cs.CV},
+  booktitle = {2022 IEEE/CVF Winter Conference on Applications of Computer Vision (WACV)},
+  doi = {10.1109/wacv51458.2022.00059},
+  month = {Jan},
+  publisher = {IEEE},
   title = {MovingFashion: a Benchmark for the Video-to-Shop Challenge},
-  year = {2021},
+  url = {https://doi.org/10.1109/wacv51458.2022.00059},
+  year = {2022},
 }
 """,
         prompt={
