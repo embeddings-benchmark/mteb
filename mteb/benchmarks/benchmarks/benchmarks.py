@@ -2856,7 +2856,7 @@ BEIR_PL = Benchmark(
     description="Zero-shot retrieval quality in Polish across the BEIR task suite, covering biomedical, financial, legal, and general knowledge domains.",
     reference="https://arxiv.org/abs/2305.19840",
     citation=r"""
-@misc{wojtasik2024beirplzeroshotinformation,
+@misc{wojtasik2024beirpl,
   archiveprefix = {arXiv},
   author = {Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
   eprint = {2305.19840},
@@ -3629,7 +3629,7 @@ VISRAG_RETRIEVAL = Benchmark(
     description="Visual retrieval augmented generation quality across document types including scientific papers, charts, infographics, plots, and multi-page documents.",
     reference="https://huggingface.co/collections/openbmb/visrag",
     citation=r"""
-@misc{yu2025visragvisionbasedretrievalaugmentedgeneration,
+@misc{yu2024visrag,
   archiveprefix = {arXiv},
   author = {Shi Yu and Chaoyue Tang and Bokai Xu and Junbo Cui and Junhao Ran and Yukun Yan and Zhenghao Liu and Shuo Wang and Xu Han and Zhiyuan Liu and Maosong Sun},
   eprint = {2410.10594},
