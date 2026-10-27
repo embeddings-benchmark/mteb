@@ -1,11 +1,6 @@
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
-GENBAIS_CITATION = """@article{genbais2026,
-    title={GENbAIs: Bio-Inspired Adapters for Neural Networks},
-    url={https://genbais.com/static/genbais_paper.pdf},
-}
-"""
 
 all_minilm_l6_v2_genbais = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
