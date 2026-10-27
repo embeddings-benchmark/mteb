@@ -46,7 +46,7 @@ class FORBI2I(AbsTaskRetrieval):
     )
 
 
-class FORBI2IV2(FORBI2I):
+class FORBI2IV2(AbsTaskRetrieval):
     metadata = FORBI2I.metadata.model_copy(
         update={
             "name": "FORBI2IRetrieval.v2",
