@@ -126,7 +126,7 @@ class HatefulMemesT2IRetrieval(AbsTaskRetrieval):
         self.data_loaded = True
 
 
-class HatefulMemesT2IRetrievalV2(HatefulMemesT2IRetrieval):
+class HatefulMemesT2IRetrievalV2(AbsTaskRetrieval):
     metadata = HatefulMemesT2IRetrieval.metadata.model_copy(
         update={
             "name": "HatefulMemesT2IRetrieval.v2",
