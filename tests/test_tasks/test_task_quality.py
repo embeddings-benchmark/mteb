@@ -152,7 +152,9 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "HUMEToxicConversationsClassification",
         "HUMETweetSentimentExtractionClassification",
         "HatefulMemesI2TRetrieval",
+        "HatefulMemesI2TRetrieval.v2",
         "HatefulMemesT2IRetrieval",
+        "HatefulMemesT2IRetrieval.v2",
         "HeadlineClassification",
         "HebrewSentimentAnalysis",
         "HellaSwag",
@@ -446,6 +448,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "BrightProSustainableLivingRetrieval",
     ],
     "duplicate_text": [
+        "HatefulMemesT2IRetrieval.v2",  # memes that share a caption are separate queries with the same answer
         "AfriHateClassification",
         "AfriSentiClassification",
         "AllegroReviews",
