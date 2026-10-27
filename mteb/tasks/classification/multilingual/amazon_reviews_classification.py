@@ -32,7 +32,7 @@ class AmazonReviewsClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{keung2020multilingual,
+@inproceedings{keung_multilingual_2020,
   address = {Online},
   author = {Keung, Phillip and Lu, Yichao and Szarvas, Gy{\"o}rgy and Smith, Noah A.},
   booktitle = {Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing ({EMNLP})},

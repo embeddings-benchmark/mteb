@@ -94,7 +94,7 @@ class VidoreArxivQARetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{faysse2024colpali,
+@inproceedings{faysse_colpali_2025,
   archiveprefix = {arXiv},
   author = {Manuel Faysse and Hugues Sibille and Tony Wu and Bilel Omrani and Gautier Viaud and CELINE HUDELOT and Pierre Colombo},
   booktitle = {The Thirteenth International Conference on Learning Representations},
@@ -140,7 +140,7 @@ class VidoreDocVQARetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{faysse2024colpali,
+@inproceedings{faysse_colpali_2025,
   archiveprefix = {arXiv},
   author = {Manuel Faysse and Hugues Sibille and Tony Wu and Bilel Omrani and Gautier Viaud and CELINE HUDELOT and Pierre Colombo},
   booktitle = {The Thirteenth International Conference on Learning Representations},
@@ -186,7 +186,7 @@ class VidoreInfoVQARetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{faysse2024colpali,
+@inproceedings{faysse_colpali_2025,
   archiveprefix = {arXiv},
   author = {Manuel Faysse and Hugues Sibille and Tony Wu and Bilel Omrani and Gautier Viaud and CELINE HUDELOT and Pierre Colombo},
   booktitle = {The Thirteenth International Conference on Learning Representations},
@@ -232,7 +232,7 @@ class VidoreTabfquadRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{faysse2024colpali,
+@inproceedings{faysse_colpali_2025,
   archiveprefix = {arXiv},
   author = {Manuel Faysse and Hugues Sibille and Tony Wu and Bilel Omrani and Gautier Viaud and CELINE HUDELOT and Pierre Colombo},
   booktitle = {The Thirteenth International Conference on Learning Representations},
@@ -278,7 +278,7 @@ class VidoreTatdqaRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{faysse2024colpali,
+@inproceedings{faysse_colpali_2025,
   archiveprefix = {arXiv},
   author = {Manuel Faysse and Hugues Sibille and Tony Wu and Bilel Omrani and Gautier Viaud and CELINE HUDELOT and Pierre Colombo},
   booktitle = {The Thirteenth International Conference on Learning Representations},
@@ -324,7 +324,7 @@ class VidoreShiftProjectRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{faysse2024colpali,
+@inproceedings{faysse_colpali_2025,
   archiveprefix = {arXiv},
   author = {Manuel Faysse and Hugues Sibille and Tony Wu and Bilel Omrani and Gautier Viaud and CELINE HUDELOT and Pierre Colombo},
   booktitle = {The Thirteenth International Conference on Learning Representations},
@@ -370,7 +370,7 @@ class VidoreSyntheticDocQAAIRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{faysse2024colpali,
+@inproceedings{faysse_colpali_2025,
   archiveprefix = {arXiv},
   author = {Manuel Faysse and Hugues Sibille and Tony Wu and Bilel Omrani and Gautier Viaud and CELINE HUDELOT and Pierre Colombo},
   booktitle = {The Thirteenth International Conference on Learning Representations},
@@ -417,7 +417,7 @@ class VidoreSyntheticDocQAEnergyRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{faysse2024colpali,
+@inproceedings{faysse_colpali_2025,
   archiveprefix = {arXiv},
   author = {Manuel Faysse and Hugues Sibille and Tony Wu and Bilel Omrani and Gautier Viaud and CELINE HUDELOT and Pierre Colombo},
   booktitle = {The Thirteenth International Conference on Learning Representations},
@@ -464,7 +464,7 @@ class VidoreSyntheticDocQAGovernmentReportsRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{faysse2024colpali,
+@inproceedings{faysse_colpali_2025,
   archiveprefix = {arXiv},
   author = {Manuel Faysse and Hugues Sibille and Tony Wu and Bilel Omrani and Gautier Viaud and CELINE HUDELOT and Pierre Colombo},
   booktitle = {The Thirteenth International Conference on Learning Representations},
@@ -511,7 +511,7 @@ class VidoreSyntheticDocQAHealthcareIndustryRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{faysse2024colpali,
+@inproceedings{faysse_colpali_2025,
   archiveprefix = {arXiv},
   author = {Manuel Faysse and Hugues Sibille and Tony Wu and Bilel Omrani and Gautier Viaud and CELINE HUDELOT and Pierre Colombo},
   booktitle = {The Thirteenth International Conference on Learning Representations},

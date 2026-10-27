@@ -84,7 +84,7 @@ langs = [
     "zho-Hans",
 ]
 
-PERPLEXITY_CITATION = """@inproceedings{eslami2026diffusionpretraineddensecontextualembeddings,
+PERPLEXITY_CITATION = """@inproceedings{eslami_diffusion-pretrained_2026,
   address = {San Diego, California, USA},
   author = {Eslami, Sedigheh and Gaiduk, Maksim and Krimmel, Markus and Milliken, Louis Mark and Wang, Bo and Bykov, Denis},
   booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 6: Industry Track)},

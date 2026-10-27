@@ -26,7 +26,7 @@ _VIDEO_DOCUMENT_PROMPT = "Describe this video in detail."
 _IMAGE_SIZE = (1344, 1344)
 
 _UNIME_V2_CITATION = r"""
-@article{gu2025unimev2mllmasajudgeuniversalmultimodal,
+@article{gu_unime-v2_2026,
   author = {Gu, Tiancheng and Yang, Kaicheng and Zhang, Kaichen and An, Xiang and Feng, Ziyong and Zhang, Yueyi and Cai, Weidong and Deng, Jiankang and Bing, Lidong},
   doi = {10.1609/aaai.v40i26.39284},
   issn = {2159-5399},

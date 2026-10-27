@@ -25,7 +25,7 @@ class FreshStackRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{thakur2025freshstackbuildingrealisticbenchmarks,
+@inproceedings{thakur_freshstack_2026,
   archiveprefix = {arXiv},
   author = {Nandan Thakur and Jimmy Lin and Sam Havens and Michael Carbin and Omar Khattab and Andrew Drozdov},
   booktitle = {The Thirty-ninth Annual Conference on Neural Information Processing Systems Datasets and Benchmarks Track},

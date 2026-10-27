@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
 
-LLM2CLIP_CITATION = """@article{huang2024llm2clippowerfullanguagemodel,
+LLM2CLIP_CITATION = """@article{huang_llm2clip_2026,
   author = {Huang, Weiquan and Wu, Aoqi and Yang, Yifan and Luo, Xufang and Yang, Yuqing and Naseem, Usman and Wang, Chunyu and Dai, Qi and Dai, Xiyang and Chen, Dongdong and Luo, Chong and Qiu, Lili and Hu, Liang},
   doi = {10.1609/aaai.v40i7.37427},
   issn = {2159-5399},

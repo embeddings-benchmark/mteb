@@ -38,7 +38,7 @@ class TRECDL2019(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{bajaj2018msmarcohumangenerated,
+@misc{bajaj_ms_2018,
   archiveprefix = {arXiv},
   author = {Payal Bajaj and Daniel Campos and Nick Craswell and Li Deng and Jianfeng Gao and Xiaodong Liu and Rangan Majumder and Andrew McNamara and Bhaskar Mitra and Tri Nguyen and Mir Rosenberg and Xia Song and Alina Stoica and Saurabh Tiwary and Tong Wang},
   eprint = {1611.09268},
@@ -48,7 +48,7 @@ class TRECDL2019(AbsTaskRetrieval):
   year = {2018},
 }
 
-@inproceedings{craswell2020overview,
+@inproceedings{craswell_overview_2020,
   author = {Craswell, Nick and Mitra, Bhaskar and Yilmaz, Emine and Campos, Daniel and Voorhees, Ellen M},
   booktitle = {Proceedings of the 28th Text REtrieval Conference (TREC 2019)},
   organization = {NIST},
@@ -98,7 +98,7 @@ class TRECDL2020(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{bajaj2018msmarcohumangenerated,
+@misc{bajaj_ms_2018,
   archiveprefix = {arXiv},
   author = {Payal Bajaj and Daniel Campos and Nick Craswell and Li Deng and Jianfeng Gao and Xiaodong Liu and Rangan Majumder and Andrew McNamara and Bhaskar Mitra and Tri Nguyen and Mir Rosenberg and Xia Song and Alina Stoica and Saurabh Tiwary and Tong Wang},
   eprint = {1611.09268},
@@ -108,7 +108,7 @@ class TRECDL2020(AbsTaskRetrieval):
   year = {2018},
 }
 
-@inproceedings{craswell2021overviewtrec2020deep,
+@inproceedings{craswell_overview_2020a,
   archiveprefix = {arXiv},
   author = {Nick Craswell and Bhaskar Mitra and Emine Yilmaz and Daniel Campos},
   booktitle = {Proceedings of the Twenty-Ninth Text REtrieval Conference, {TREC} 2020},

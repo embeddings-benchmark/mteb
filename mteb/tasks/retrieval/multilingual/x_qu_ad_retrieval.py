@@ -40,7 +40,7 @@ class XQuADRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{Artetxe:etal:2019,
+@inproceedings{artetxe_cross-lingual_2020,
   address = {Online},
   author = {Artetxe, Mikel and Ruder, Sebastian and Yogatama, Dani},
   booktitle = {Proceedings of the 58th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics},
@@ -54,7 +54,7 @@ class XQuADRetrieval(AbsTaskRetrieval):
   year = {2020},
 }
 
-@inproceedings{dumitrescu2021liro,
+@inproceedings{dumitrescu_liro_2021,
   author = {Stefan Daniel Dumitrescu and Petru Rebeja and Beata Lorincz and Mihaela Gaman and Andrei Avram and Mihai Ilie and Andrei Pruteanu and Adriana Stan and Lorena Rosia and Cristina Iacobescu and Luciana Morogan and George Dima and Gabriel Marchidan and Traian Rebedea and Madalina Chitez and Dani Yogatama and Sebastian Ruder and Radu Tudor Ionescu and Razvan Pascanu and Viorica Patraucean},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
   title = {LiRo: Benchmark and leaderboard for Romanian language tasks},

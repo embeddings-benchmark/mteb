@@ -25,7 +25,7 @@ class ArmenianParaphrasePC(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{malajyan2020arpa,
+@inproceedings{malajyan_arpa_2020,
   author = {Malajyan, Arthur and Avetisyan, Karen and Ghukasyan, Tsolak},
   booktitle = {2020 Ivannikov Memorial Workshop (IVMEM)},
   doi = {10.1109/ivmem51402.2020.00012},

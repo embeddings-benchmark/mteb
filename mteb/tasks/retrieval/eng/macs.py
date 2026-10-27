@@ -26,7 +26,7 @@ class MACSA2TRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         superseded_by="MACSA2TRetrieval.v2",
         bibtex_citation=r"""
-@inproceedings{martinmorato2021groundtruthreliabilitymultiannotator,
+@inproceedings{martin-morato_what_2021,
   author = {Martin-Morato, Irene and Mesaros, Annamaria},
   booktitle = {2021 29th European Signal Processing Conference (EUSIPCO)},
   doi = {10.23919/eusipco54536.2021.9616087},
@@ -65,7 +65,7 @@ class MACST2ARetrieval(AbsTaskRetrieval):
         sample_creation="found",
         superseded_by="MACST2ARetrieval.v2",
         bibtex_citation=r"""
-@misc{martinmorato2021groundtruthreliabilitymultiannotator,
+@misc{martin-morato_what_2021,
   archiveprefix = {arXiv},
   author = {Irene Martin-Morato and Annamaria Mesaros},
   eprint = {2104.04214},
@@ -103,7 +103,7 @@ class MACSA2TRetrievalV2(AbsTaskRetrieval):
         sample_creation="found",
         adapted_from=["MACSA2TRetrieval"],
         bibtex_citation=r"""
-@misc{martinmorato2021groundtruthreliabilitymultiannotator,
+@misc{martin-morato_what_2021,
   archiveprefix = {arXiv},
   author = {Irene Martin-Morato and Annamaria Mesaros},
   eprint = {2104.04214},
@@ -141,7 +141,7 @@ class MACST2ARetrievalV2(AbsTaskRetrieval):
         sample_creation="found",
         adapted_from=["MACST2ARetrieval"],
         bibtex_citation=r"""
-@inproceedings{martinmorato2021groundtruthreliabilitymultiannotator,
+@inproceedings{martin-morato_what_2021,
   author = {Martin-Morato, Irene and Mesaros, Annamaria},
   booktitle = {2021 29th European Signal Processing Conference (EUSIPCO)},
   doi = {10.23919/eusipco54536.2021.9616087},

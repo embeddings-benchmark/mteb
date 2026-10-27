@@ -87,7 +87,7 @@ class CASTELLAAMRRetrievalV2(AbsTaskRetrieval):
         sample_creation="found",
         adapted_from=["CASTELLAAMRRetrieval"],
         bibtex_citation=r"""
-@inproceedings{munakata2025castella,
+@inproceedings{munakata_castella_2026,
   author = {Munakata, Hokuto and Imamura, Takehiro and Nishimura, Taichi and Komatsu, Tatsuya},
   booktitle = {ICASSP 2026 - 2026 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp55912.2026.11464074},

@@ -29,7 +29,7 @@ class TopiOCQARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{adlakha2022topiocqa,
+@article{adlakha_topiocqa_2022,
   author = {Adlakha, Vaibhav and Dhuliawala, Shehzaad and Suleman, Kaheer and de Vries, Harm and Reddy, Siva},
   doi = {10.1162/tacl_a_00471},
   issn = {2307-387X},
@@ -72,7 +72,7 @@ class TopiOCQARetrievalHardNegatives(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{adlakha2022topiocqa,
+@article{adlakha_topiocqa_2022,
   author = {Adlakha, Vaibhav and Dhuliawala, Shehzaad and Suleman, Kaheer and de Vries, Harm and Reddy, Siva},
   doi = {10.1162/tacl_a_00471},
   issn = {2307-387X},

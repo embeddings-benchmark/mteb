@@ -26,7 +26,7 @@ class ToxicConversationsVNClassification(AbsTaskClassification):
         domains=["Social", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         bibtex_citation=r"""
-@inproceedings{pham2025vnmtebvietnamesemassivetext,
+@inproceedings{pham_vn-mteb_2026,
   address = {Rabat, Morocco},
   author = {Pham, Loc and Luu, Tung and Vo, Thu and Nguyen, Minh and Hoang, Viet},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EACL} 2026},

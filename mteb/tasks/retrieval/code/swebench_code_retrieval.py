@@ -28,7 +28,7 @@ class SWEbenchCodeRetrieval(AbsTaskRetrieval):
             "query": "Given a GitHub issue, retrieve the source code files that need to be modified to resolve the issue."
         },
         bibtex_citation=r"""
-@inproceedings{jimenez2024swebenchlanguagemodelsresolve,
+@inproceedings{jimenez_swe-bench_2024,
   archiveprefix = {arXiv},
   author = {Carlos E Jimenez and John Yang and Alexander Wettig and Shunyu Yao and Kexin Pei and Ofir Press and Karthik R Narasimhan},
   booktitle = {The Twelfth International Conference on Learning Representations},

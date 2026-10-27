@@ -30,7 +30,7 @@ class LibriTTSA2TRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         superseded_by="LibriTTSA2TRetrieval.v2",
         bibtex_citation=r"""
-@inproceedings{zen2019librittscorpusderivedlibrispeech,
+@inproceedings{zen_libritts_2019,
   author = {Zen, Heiga and Dang, Viet and Clark, Rob and Zhang, Yu and Weiss, Ron J. and Jia, Ye and Chen, Zhifeng and Wu, Yonghui},
   booktitle = {Interspeech 2019},
   collection = {interspeech_2019},
@@ -77,7 +77,7 @@ class LibriTTST2ARetrieval(AbsTaskRetrieval):
         sample_creation="found",
         superseded_by="LibriTTST2ARetrieval.v2",
         bibtex_citation=r"""
-@misc{zen2019librittscorpusderivedlibrispeech,
+@misc{zen_libritts_2019,
   archiveprefix = {arXiv},
   author = {Heiga Zen and Viet Dang and Rob Clark and Yu Zhang and Ron J. Weiss and Ye Jia and Zhifeng Chen and Yonghui Wu},
   eprint = {1904.02882},
@@ -119,7 +119,7 @@ class LibriTTSA2TRetrievalV2(AbsTaskRetrieval):
         sample_creation="found",
         adapted_from=["LibriTTSA2TRetrieval"],
         bibtex_citation=r"""
-@misc{zen2019librittscorpusderivedlibrispeech,
+@misc{zen_libritts_2019,
   archiveprefix = {arXiv},
   author = {Heiga Zen and Viet Dang and Rob Clark and Yu Zhang and Ron J. Weiss and Ye Jia and Zhifeng Chen and Yonghui Wu},
   eprint = {1904.02882},
@@ -163,7 +163,7 @@ class LibriTTST2ARetrievalV2(AbsTaskRetrieval):
         sample_creation="found",
         adapted_from=["LibriTTST2ARetrieval"],
         bibtex_citation=r"""
-@inproceedings{zen2019librittscorpusderivedlibrispeech,
+@inproceedings{zen_libritts_2019,
   author = {Zen, Heiga and Dang, Viet and Clark, Rob and Zhang, Yu and Weiss, Ron J. and Jia, Ye and Chen, Zhifeng and Wu, Yonghui},
   booktitle = {Interspeech 2019},
   collection = {interspeech_2019},

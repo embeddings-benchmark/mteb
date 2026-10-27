@@ -31,7 +31,7 @@ class VisRAGRetPlotQA(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{methani2020plotqareasoningscientificplots,
+        bibtex_citation="""@inproceedings{methani_plotqa_2020,
   author = {Methani, Nitesh and Ganguly, Pritha and Khapra, Mitesh M. and Kumar, Pratyush},
   booktitle = {2020 IEEE Winter Conference on Applications of Computer Vision (WACV)},
   doi = {10.1109/wacv45572.2020.9093523},

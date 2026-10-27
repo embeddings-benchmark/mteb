@@ -26,7 +26,7 @@ class HiFiTTSA2TRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         superseded_by="HiFiTTSA2TRetrieval.v2",
         bibtex_citation=r"""
-@inproceedings{bakhturina2021hi,
+@inproceedings{bakhturina_hi-fi_2021,
   author = {Bakhturina, Evelina and Lavrukhin, Vitaly and Ginsburg, Boris and Zhang, Yang},
   booktitle = {Interspeech 2021},
   collection = {interspeech_2021},
@@ -67,7 +67,7 @@ class HiFiTTST2ARetrieval(AbsTaskRetrieval):
         sample_creation="found",
         superseded_by="HiFiTTST2ARetrieval.v2",
         bibtex_citation=r"""
-@article{bakhturina2021hi,
+@article{bakhturina_hi-fi_2021,
   author = {Bakhturina, Evelina and Lavrukhin, Vitaly and Ginsburg, Boris and Zhang, Yang},
   journal = {arXiv preprint arXiv:2104.01497},
   title = {{Hi-Fi Multi-Speaker English TTS Dataset}},
@@ -102,7 +102,7 @@ class HiFiTTSA2TRetrievalV2(AbsTaskRetrieval):
         sample_creation="found",
         adapted_from=["HiFiTTSA2TRetrieval"],
         bibtex_citation=r"""
-@article{bakhturina2021hi,
+@article{bakhturina_hi-fi_2021,
   author = {Bakhturina, Evelina and Lavrukhin, Vitaly and Ginsburg, Boris and Zhang, Yang},
   journal = {arXiv preprint arXiv:2104.01497},
   title = {{Hi-Fi Multi-Speaker English TTS Dataset}},
@@ -137,7 +137,7 @@ class HiFiTTST2ARetrievalV2(AbsTaskRetrieval):
         sample_creation="found",
         adapted_from=["HiFiTTST2ARetrieval"],
         bibtex_citation=r"""
-@inproceedings{bakhturina2021hi,
+@inproceedings{bakhturina_hi-fi_2021,
   author = {Bakhturina, Evelina and Lavrukhin, Vitaly and Ginsburg, Boris and Zhang, Yang},
   booktitle = {Interspeech 2021},
   collection = {interspeech_2021},
