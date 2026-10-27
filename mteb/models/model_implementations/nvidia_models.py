@@ -22,14 +22,14 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-NV_RETRIEVER_CITATION = """@misc{lee2025nvembedimprovedtechniquestraining,
-      title={NV-Embed: Improved Techniques for Training LLMs as Generalist Embedding Models},
-      author={Chankyu Lee and Rajarshi Roy and Mengyao Xu and Jonathan Raiman and Mohammad Shoeybi and Bryan Catanzaro and Wei Ping},
-      year={2025},
-      eprint={2405.17428},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2405.17428},
+NV_RETRIEVER_CITATION = """@inproceedings{lee2025nvembedimprovedtechniquestraining,
+  archiveprefix = {arXiv},
+  author = {Chankyu Lee and Rajarshi Roy and Mengyao Xu and Jonathan Raiman and Mohammad Shoeybi and Bryan Catanzaro and Wei Ping},
+  booktitle = {The Thirteenth International Conference on Learning Representations},
+  eprint = {2405.17428},
+  title = {{NV}-Embed: Improved Techniques for Training {LLM}s as Generalist Embedding Models},
+  url = {https://openreview.net/forum?id=lgsyLSsDRe},
+  year = {2025},
 }"""
 
 LlamaEmbedNemotron_CITATION = """@misc{babakhin2025llamaembednemotron8buniversaltextembedding,

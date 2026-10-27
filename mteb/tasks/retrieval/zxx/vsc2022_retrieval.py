@@ -18,7 +18,7 @@ class VSC2022Retrieval(AbsTaskRetrieval):
             "sources plus seeded distractors), re-encoded to 360p. Videos are "
             "Creative-Commons clips from YFCC100M."
         ),
-        reference="https://arxiv.org/abs/2306.09489",
+        reference="https://doi.org/10.1016/j.cviu.2024.103997",
         dataset={
             "path": "dukesun99/VSC2022",
             "revision": "ba6224b845a2181d3de4199aa4eeb8b5b874a1a3",
@@ -38,10 +38,17 @@ class VSC2022Retrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=r"""
 @article{pizzi2023vsc,
-  author = {Pizzi, Ed and Kordopatis-Zilos, Giorgos and Patel, Hiral and Postelnicu, Gheorghe and Ravindra, Sugosh and Gupta, Akshay and Papadopoulos, Symeon and Tolias, Giorgos and Douze, Matthijs},
-  journal = {arXiv preprint arXiv:2306.09489},
-  title = {The 2023 Video Similarity Dataset and Challenge},
-  year = {2023},
+  author = {Pizzi, Ed and Kordopatis-Zilos, Giorgos and Patel, Hiral and Postelnicu, Gheorghe and Nagavara Ravindra, Sugosh and Gupta, Akshay and Papadopoulos, Symeon and Tolias, Giorgos and Douze, Matthijs},
+  doi = {10.1016/j.cviu.2024.103997},
+  issn = {1077-3142},
+  journal = {Computer Vision and Image Understanding},
+  month = {June},
+  pages = {103997},
+  publisher = {Elsevier BV},
+  title = {The 2023 video similarity dataset and challenge},
+  url = {https://doi.org/10.1016/j.cviu.2024.103997},
+  volume = {243},
+  year = {2024},
 }
 """,
         prompt={"query": "Retrieve the video that this query is a copy of."},
