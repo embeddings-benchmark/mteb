@@ -4,7 +4,9 @@ import unicodedata
 from typing import TYPE_CHECKING, Any
 
 from mteb.models.model_implementations.qwen3_vl_embedding_models import (
+    IMAGE_FACTOR,
     QWEN3_VL_EMBEDDING_CITATION,
+    load_video_processor,
 )
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
@@ -19,6 +21,10 @@ if TYPE_CHECKING:
     from mteb.types import Array, BatchedInput, PromptType
 
 DEFAULT_INSTRUCTION = "Retrieve images or text relevant to the user's query."
+# total_pixels of a video in the official script: 4 frames of 1280 tokens, times
+# FRAME_FACTOR
+# https://huggingface.co/Qwen/Qwen3-VL-Reranker-2B/blob/main/scripts/qwen3_vl_reranker.py
+MAX_TOTAL_PIXELS = 4 * 2 * 1280 * IMAGE_FACTOR * IMAGE_FACTOR
 
 
 QWEN3_VL_LANGUAGES = [
@@ -95,6 +101,16 @@ class Qwen3VLRerankerWrapper(CrossEncoderWrapper):
         # VideoCollator already samples frames; without this the processor
         # resamples them again assuming 24 fps (64 frames -> 5, padded to 6)
         processor_kwargs.setdefault("do_sample_frames", False)
+        processor_kwargs.setdefault(
+            "video_processor",
+            load_video_processor(
+                model,
+                MAX_TOTAL_PIXELS,
+                revision=revision,
+                trust_remote_code=True,
+                do_sample_frames=False,
+            ),
+        )
         if min_pixels is not None:
             processor_kwargs.setdefault("min_pixels", min_pixels)
         if max_pixels is not None:

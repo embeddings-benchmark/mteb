@@ -34,11 +34,19 @@ mme5_mllama = ModelMeta(
     training_datasets=set(),  # synthetic training dataset
     adapted_from="meta-llama/Llama-3.2-11B-Vision",
     citation="""
-@article{chen2025mmE5,
-  title={mmE5: Improving Multimodal Multilingual Embeddings via High-quality Synthetic Data},
-  author={Chen, Haonan and Wang, Liang and Yang, Nan and Zhu, Yutao and Zhao, Ziliang and Wei, Furu and Dou, Zhicheng},
-  journal={arXiv preprint arXiv:2502.08468},
-  year={2025}
+@inproceedings{chen2025mmE5,
+  address = {Vienna, Austria},
+  author = {Chen, Haonan and Wang, Liang and Yang, Nan and Zhu, Yutao and Zhao, Ziliang and Wei, Furu and Dou, Zhicheng},
+  booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2025},
+  doi = {10.18653/v1/2025.findings-acl.433},
+  editor = {Che, Wanxiang and Nabende, Joyce and Shutova, Ekaterina and Pilehvar, Mohammad Taher},
+  isbn = {979-8-89176-256-5},
+  month = {jul},
+  pages = {8254--8275},
+  publisher = {Association for Computational Linguistics},
+  title = {mm{E}5: Improving Multimodal Multilingual Embeddings via High-quality Synthetic Data},
+  url = {https://aclanthology.org/2025.findings-acl.433/},
+  year = {2025},
 }
 """,
     output_dtypes=OutputDType.BF16,

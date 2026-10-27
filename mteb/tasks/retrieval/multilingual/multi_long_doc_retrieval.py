@@ -22,7 +22,7 @@ class MultiLongDocRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MultiLongDocRetrieval",
         description="Multi Long Doc Retrieval (MLDR) 'is curated by the multilingual articles from Wikipedia, Wudao and mC4 (see Table 7), and NarrativeQA (Kocˇisky ́ et al., 2018; Gu ̈nther et al., 2023), which is only for English.' (Chen et al., 2024). It is constructed by sampling lengthy articles from Wikipedia, Wudao and mC4 datasets and randomly choose paragraphs from them. Then we use GPT-3.5 to generate questions based on these paragraphs. The generated question and the sampled article constitute a new text pair to the dataset.",
-        reference="https://arxiv.org/abs/2402.03216",  # also: https://huggingface.co/datasets/Shitao/MLDR
+        reference="https://aclanthology.org/2024.findings-acl.137/",  # also: https://huggingface.co/datasets/Shitao/MLDR
         dataset={
             "path": "mteb/MultiLongDocRetrieval",
             "revision": "837028901907a7d419b4ab906f28e011ce1cc824",
@@ -50,12 +50,17 @@ class MultiLongDocRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{bge-m3,
-  archiveprefix = {arXiv},
-  author = {Jianlv Chen and Shitao Xiao and Peitian Zhang and Kun Luo and Defu Lian and Zheng Liu},
-  eprint = {2402.03216},
-  primaryclass = {cs.CL},
-  title = {BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation},
+@inproceedings{bge-m3,
+  address = {Bangkok, Thailand},
+  author = {Chen, Jianlyu and Xiao, Shitao and Zhang, Peitian and Luo, Kun and Lian, Defu and Liu, Zheng},
+  booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2024},
+  doi = {10.18653/v1/2024.findings-acl.137},
+  editor = {Ku, Lun-Wei and Martins, Andre and Srikumar, Vivek},
+  month = {aug},
+  pages = {2318--2335},
+  publisher = {Association for Computational Linguistics},
+  title = {{M}3-Embedding: Multi-Linguality, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation},
+  url = {https://aclanthology.org/2024.findings-acl.137/},
   year = {2024},
 }
 """,

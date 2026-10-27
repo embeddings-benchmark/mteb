@@ -70,12 +70,16 @@ class LegalBenchPC(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{guha2023legalbench,
-  archiveprefix = {arXiv},
-  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-  eprint = {2308.11462},
-  primaryclass = {cs.CL},
+@inproceedings{guha2023legalbench,
+  author = {Guha, Neel and Nyarko, Julian and Ho, Daniel and Ré, Christopher and Chilton, Adam and K, Aditya and Chohlas-Wood, Alex and Peters, Austin and Waldon, Brandon and Rockmore, Daniel and Zambrano, Diego and Talisman, Dmitry and Hoque, Enam and Surani, Faiz and Fagan, Frank and Sarfaty, Galit and Dickinson, Gregory and Porat, Haggai and Hegland, Jason and Wu, Jessica and Nudell, Joe and Niklaus, Joel and Nay, John and Choi, Jonathan and Tobia, Kevin and Hagan, Margaret and Ma, Megan and Livermore, Michael and Rasumov-Rahe, Nikon and Holzenberger, Nils and Kolt, Noam and Henderson, Peter and Rehaag, Sean and Goel, Sharad and Gao, Shang and Williams, Spencer and Gandhi, Sunny and Zur, Tom and Iyer, Varun and Li, Zehua},
+  booktitle = {Advances in Neural Information Processing Systems 36},
+  collection = {NeurIPS 2023},
+  doi = {10.52202/075280-1915},
+  pages = {44123–44279},
+  publisher = {Neural Information Processing Systems Foundation, Inc. (NeurIPS)},
+  series = {NeurIPS 2023},
   title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  url = {https://doi.org/10.52202/075280-1915},
   year = {2023},
 }
 
@@ -89,10 +93,14 @@ class LegalBenchPC(AbsTaskPairClassification):
   year = {2022},
 }
 
-@article{ravichander2019question,
+@inproceedings{ravichander2019question,
   author = {Ravichander, Abhilasha and Black, Alan W and Wilson, Shomir and Norton, Thomas and Sadeh, Norman},
-  journal = {arXiv preprint arXiv:1911.00841},
-  title = {Question answering for privacy policies: Combining computational and legal perspectives},
+  booktitle = {Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP)},
+  doi = {10.18653/v1/d19-1500},
+  pages = {4946–4957},
+  publisher = {Association for Computational Linguistics},
+  title = {Question Answering for Privacy Policies: Combining Computational and Legal Perspectives},
+  url = {https://doi.org/10.18653/v1/d19-1500},
   year = {2019},
 }
 

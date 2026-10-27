@@ -84,14 +84,19 @@ langs = [
     "zho-Hans",
 ]
 
-PERPLEXITY_CITATION = """@misc{eslami2026diffusionpretraineddensecontextualembeddings,
-      title={Diffusion-Pretrained Dense and Contextual Embeddings},
-      author={Sedigheh Eslami and Maksim Gaiduk and Markus Krimmel and Louis Milliken and Bo Wang and Denis Bykov},
-      year={2026},
-      eprint={2602.11151},
-      archivePrefix={arXiv},
-      primaryClass={cs.LG},
-      url={https://arxiv.org/abs/2602.11151},
+PERPLEXITY_CITATION = """@inproceedings{eslami2026diffusionpretraineddensecontextualembeddings,
+  address = {San Diego, California, USA},
+  author = {Eslami, Sedigheh and Gaiduk, Maksim and Krimmel, Markus and Milliken, Louis Mark and Wang, Bo and Bykov, Denis},
+  booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 6: Industry Track)},
+  doi = {10.18653/v1/2026.acl-industry.69},
+  editor = {Li, Yunyao and Rehm, Georg and Tu, Mei},
+  isbn = {979-8-89176-394-4},
+  month = {jul},
+  pages = {990--1004},
+  publisher = {Association for Computational Linguistics},
+  title = {Diffusion-Pretrained Dense and Contextual Embeddings},
+  url = {https://aclanthology.org/2026.acl-industry.69/},
+  year = {2026},
 }"""
 
 pplx_embed_v1_0_6b = ModelMeta(

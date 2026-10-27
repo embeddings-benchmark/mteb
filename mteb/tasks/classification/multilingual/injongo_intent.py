@@ -18,7 +18,7 @@ class InjongoIntent(AbsTaskClassification):
             "+ 1 779 English. From ‘INJONGO: A Multicultural Intent Detection and Slot-filling "
             "Dataset for 16 African Languages’ (Yu et al., 2025)."
         ),
-        reference="https://arxiv.org/abs/2502.09814",
+        reference="https://aclanthology.org/2025.acl-long.464/",
         dataset={
             "path": "mteb/InjongoIntent",
             # exact commit that matches the paper; bump when the HF repo updates
@@ -55,10 +55,18 @@ class InjongoIntent(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation=r"""@article{yu2025injongo,
-  author = {Yu, Hao and Alabi, Jesujoba O. and Bukula, Andiswa and et al.},
-  journal = {arXiv preprint arXiv:2502.09814},
-  title = {INJONGO: A Multicultural Intent Detection and Slot-filling Dataset for 16 African Languages},
+        bibtex_citation=r"""@inproceedings{yu2025injongo,
+  address = {Vienna, Austria},
+  author = {Yu, Hao and Alabi, Jesujoba Oluwadara and Bukula, Andiswa and Zhuang, Jian Yun and Lee, En-Shiun Annie and Guge, Tadesse Kebede and Azime, Israel Abebe and Buzaaba, Happy and Sibanda, Blessing Kudzaishe and Kalipe, Godson Koffi and Mukiibi, Jonathan and Kabongo Kabenamualu, Salomon and Setaka, Mmasibidi and Ndolela, Lolwethu and Odu, Nkiruka and Mabuya, Rooweither and Muhammad, Shamsuddeen Hassan and Osei, Salomey and Samb, Sokhar and Klakow, Dietrich and Adelani, David Ifeoluwa},
+  booktitle = {Proceedings of the 63rd Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2025.acl-long.464},
+  editor = {Che, Wanxiang and Nabende, Joyce and Shutova, Ekaterina and Pilehvar, Mohammad Taher},
+  isbn = {979-8-89176-251-0},
+  month = {jul},
+  pages = {9429--9452},
+  publisher = {Association for Computational Linguistics},
+  title = {{INJONGO}: A Multicultural Intent Detection and Slot-filling Dataset for 16 {A}frican Languages},
+  url = {https://aclanthology.org/2025.acl-long.464/},
   year = {2025},
 }
 """,

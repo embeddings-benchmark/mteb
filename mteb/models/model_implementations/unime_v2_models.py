@@ -26,14 +26,19 @@ _VIDEO_DOCUMENT_PROMPT = "Describe this video in detail."
 _IMAGE_SIZE = (1344, 1344)
 
 _UNIME_V2_CITATION = r"""
-@misc{gu2025unimev2mllmasajudgeuniversalmultimodal,
-  title={UniME-V2: MLLM-as-a-Judge for Universal Multimodal Embedding Learning},
-  author={Tiancheng Gu and Kaicheng Yang and Kaichen Zhang and Xiang An and Ziyong Feng and Yueyi Zhang and Weidong Cai and Jiankang Deng and Lidong Bing},
-  year={2025},
-  eprint={2510.13515},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV},
-  url={https://arxiv.org/abs/2510.13515},
+@article{gu2025unimev2mllmasajudgeuniversalmultimodal,
+  author = {Gu, Tiancheng and Yang, Kaicheng and Zhang, Kaichen and An, Xiang and Feng, Ziyong and Zhang, Yueyi and Cai, Weidong and Deng, Jiankang and Bing, Lidong},
+  doi = {10.1609/aaai.v40i26.39284},
+  issn = {2159-5399},
+  journal = {Proceedings of the AAAI Conference on Artificial Intelligence},
+  month = {Mar},
+  number = {26},
+  pages = {21378–21386},
+  publisher = {Association for the Advancement of Artificial Intelligence (AAAI)},
+  title = {UniME-V2: MLLM-as-a-Judge for Universal Multimodal Embedding Learning},
+  url = {https://doi.org/10.1609/aaai.v40i26.39284},
+  volume = {40},
+  year = {2026},
 }
 """
 

@@ -23,11 +23,14 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-VLM2VEC_CITATION = """@article{jiang2024vlm2vec,
-  title={VLM2Vec: Training Vision-Language Models for Massive Multimodal Embedding Tasks},
-  author={Jiang, Ziyan and Meng, Rui and Yang, Xinyi and Yavuz, Semih and Zhou, Yingbo and Chen, Wenhu},
-  journal={arXiv preprint arXiv:2410.05160},
-  year={2024}
+VLM2VEC_CITATION = """@inproceedings{jiang2024vlm2vec,
+  archiveprefix = {arXiv},
+  author = {Ziyan Jiang and Rui Meng and Xinyi Yang and Semih Yavuz and Yingbo Zhou and Wenhu Chen},
+  booktitle = {The Thirteenth International Conference on Learning Representations},
+  eprint = {2410.05160},
+  title = {{VLM}2Vec: Training Vision-Language Models for Massive Multimodal Embedding Tasks},
+  url = {https://openreview.net/forum?id=TE0KOzWYAF},
+  year = {2025},
 }"""
 
 
@@ -645,14 +648,16 @@ vlm2vec2 = ModelMeta(
     modalities=["text", "image", "video"],
     model_type=["dense"],
     citation="""
-@misc{meng2025vlm2vecv2advancingmultimodalembedding,
-    title={VLM2Vec-V2: Advancing Multimodal Embedding for Videos, Images, and Visual Documents},
-    author={Rui Meng and Ziyan Jiang and Ye Liu and Mingyi Su and Xinyi Yang and Yuepeng Fu and Can Qin and Zeyuan Chen and Ran Xu and Caiming Xiong and Yingbo Zhou and Wenhu Chen and Semih Yavuz},
-    year={2025},
-    eprint={2507.04590},
-    archivePrefix={arXiv},
-    primaryClass={cs.CV},
-    url={https://arxiv.org/abs/2507.04590},
+@article{meng2025vlm2vecv2advancingmultimodalembedding,
+  archiveprefix = {arXiv},
+  author = {Rui Meng and Ziyan Jiang and Ye Liu and Mingyi Su and Xinyi Yang and Yuepeng Fu and Can Qin and Raghuveer Thirukovalluru and Xuan Zhang and Zeyuan Chen and Ran Xu and Caiming Xiong and Yingbo Zhou and Wenhu Chen and Semih Yavuz},
+  eprint = {2507.04590},
+  issn = {2835-8856},
+  journal = {Transactions on Machine Learning Research},
+  note = {},
+  title = {{VLM}2Vec-V2: Advancing Multimodal Embedding for Videos, Images, and Visual Documents},
+  url = {https://openreview.net/forum?id=TpU38jbKIJ},
+  year = {2026},
 }""",
     contacts=None,
     output_dtypes=OutputDType.BF16,
