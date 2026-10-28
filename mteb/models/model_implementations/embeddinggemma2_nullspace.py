@@ -1,6 +1,6 @@
-"""MTEB model implementation: google/embeddinggemma-2 + frozen null-space audio head (Gladia).
+"""MTEB model implementation: google/embeddinggemma-2 + frozen null-space audio head.
 
-Drop-in for `mteb/models/model_implementations/` (file name: gladia_embeddinggemma2_nullspace.py).
+Drop-in for `mteb/models/model_implementations/` (file name: embeddinggemma2_nullspace.py).
 
 What it does
 ------------
@@ -309,7 +309,7 @@ class EmbeddingGemma2NullSpaceWrapper(EmbeddingGemma2Wrapper):
         return out.numpy().astype(np.float32, copy=False)
 
 
-gladia_embeddinggemma_2_nullspace_audio = ModelMeta(
+embeddinggemma_2_nullspace_audio = ModelMeta(
     loader=EmbeddingGemma2NullSpaceWrapper,  # type: ignore[call-arg]
     loader_kwargs={"gamma": 1.0, "head_revision": HEAD_REVISION},
     name="BrunoHays/embeddinggemma-2-nullspace-audio",
