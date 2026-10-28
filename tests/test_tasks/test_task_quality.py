@@ -596,6 +596,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MintakaRetrieval",
         "Moroco",
         "MrTidyRetrieval",
+        "Multi3IRRetrieval",  # mixed corpus of text-only and image-only documents: unique counts are per modality, the denominator is all documents
         "MultiSWEbenchRR",
         "MultilingualNanoDBPediaRetrieval",
         "MultilingualNanoNFCorpusRetrieval",
@@ -938,6 +939,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MomentSeekerTI2VRetrieval",
         "Multi30kI2TRetrieval",  # same 1k images are shared across the four language subsets by design
         "Multi30kT2IRetrieval",  # same 1k images are shared across the four language subsets by design
+        "Multi3IRRetrieval",  # mixed corpus of text-only and image-only documents: unique counts are per modality, the denominator is all documents
         "OVENIT2ITRetrieval",
         "PatchCamelyon",  # adjacent, overlapping WSI patches are inherent to the source data
         "PatchCamelyonZeroShot",  # adjacent, overlapping WSI patches are inherent to the source data
