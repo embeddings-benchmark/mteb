@@ -158,7 +158,10 @@ def _batch_to_embeddings(
             ]
         if "image" in batch:
             image_embeddings = [
+                # None: a row without an image in a mixed text/image corpus
                 _key_to_vector(hash_item({"image": img}), embedding_dim)
+                if img is not None
+                else None
                 for img in batch["image"]
             ]
         if "audio" in batch:
@@ -190,7 +193,7 @@ def _batch_to_embeddings(
                 audio_embeddings,
                 video_embeddings,
             ]:
-                if i < len(embeddings_list):
+                if i < len(embeddings_list) and embeddings_list[i] is not None:
                     combined_embedding += embeddings_list[i]
                     count += 1
             if count > 0:
@@ -285,6 +288,8 @@ def _batch_to_multi_vector_embeddings(
                 _key_to_multi_vector(
                     hash_item({"image": img}), num_tokens, embedding_dim
                 )
+                if img is not None
+                else None
                 for img in batch["image"]
             ]
         if "audio" in batch:
@@ -317,7 +322,7 @@ def _batch_to_multi_vector_embeddings(
                 audio_embeddings,
                 video_embeddings,
             ]:
-                if i < len(embeddings_list):
+                if i < len(embeddings_list) and embeddings_list[i] is not None:
                     combined_embedding += embeddings_list[i]
                     count += 1
             if count > 0:
