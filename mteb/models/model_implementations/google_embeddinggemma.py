@@ -476,8 +476,8 @@ class EmbeddingGemma2Wrapper(SentenceTransformerEncoderWrapper):
         model_name: str = "google/embeddinggemma-2",
         revision: str | None = None,
         *,
-        use_image: bool = False,
-        use_audio: bool = False,
+        use_image: bool = True,
+        use_audio: bool = True,
         media_first: bool = False,
         # video: 1 frame per second at 140 tokens per frame, the model card's defaults;
         # 56 frames fit its 8192-token context
@@ -509,7 +509,9 @@ class EmbeddingGemma2Wrapper(SentenceTransformerEncoderWrapper):
         self.model_prompts = {}
         self.model.prompts = {}
         self.model.default_prompt_name = None
-        # One sequence length per tower configuration, the same for every task.
+        # Text-only inputs keep the model's own length, whatever towers are loaded.
+        self._text_max_seq_length = self.model.max_seq_length
+        # One sequence length per tower configuration for non-text inputs, the same for every task.
         if use_audio:
             self.model.max_seq_length = 1024
         elif use_image:
@@ -609,9 +611,13 @@ class EmbeddingGemma2Wrapper(SentenceTransformerEncoderWrapper):
                 pass
 
         max_seq_length = self.model.max_seq_length
-        if "video" in inputs.dataset.features:
+        features = inputs.dataset.features
+        if "video" in features:
             # one video is longer than the MIEB / MAEB lengths: use the full context
             self.model.max_seq_length = 8192
+        elif not {"image", "audio"} & set(features):
+            # text only: the shorter MIEB / MAEB lengths would truncate text
+            self.model.max_seq_length = self._text_max_seq_length
         try:
             inputs.__class__ = _PreserveCollate
             return super().encode(
