@@ -22,11 +22,19 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-MOCA_CITATION = """@article{chen2025moca,
-  title={MoCa: Modality-aware Continual Pre-training Makes Better Bidirectional Multimodal Embeddings},
-  author={Chen, Haonan and Liu, Hong and Luo, Yuping and Wang, Liang and Yang, Nan and Wei, Furu and Dou, Zhicheng},
-  journal={arXiv preprint arXiv:2506.23115},
-  year={2025}
+MOCA_CITATION = """@inproceedings{chen2025moca,
+  address = {San Diego, California, United States},
+  author = {Chen, Haonan and Liu, Hong and Luo, Yuping and Wang, Liang and Yang, Nan and Wei, Furu and Dou, Zhicheng},
+  booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2026.acl-long.34},
+  editor = {Liakata, Maria and Moreira, Viviane P. and Zhang, Jiajun and Jurgens, David},
+  isbn = {979-8-89176-390-6},
+  month = {jul},
+  pages = {810--823},
+  publisher = {Association for Computational Linguistics},
+  title = {{M}o{C}a: Modality-aware Continual Pre-training Makes Better Bidirectional Multimodal Embeddings},
+  url = {https://aclanthology.org/2026.acl-long.34/},
+  year = {2026},
 }"""
 
 # Qwen2.5-VL image placeholder, as used by MoCa's collator

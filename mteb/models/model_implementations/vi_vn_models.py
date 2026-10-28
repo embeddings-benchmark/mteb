@@ -185,11 +185,18 @@ sup_simcse_vietnamese_phobert_base_ = ModelMeta(
     reference="https://huggingface.co/VoVanPhuc/sup-SimCSE-VietNamese-phobert-base",
     similarity_fn_name="cosine",
     training_datasets=None,
-    citation="""@article{gao2021simcse,
-   title={{SimCSE}: Simple Contrastive Learning of Sentence Embeddings},
-   author={Gao, Tianyu and Yao, Xingcheng and Chen, Danqi},
-   journal={arXiv preprint arXiv:2104.08821},
-   year={2021}
+    citation="""@inproceedings{gao2021simcse,
+  address = {Online and Punta Cana, Dominican Republic},
+  author = {Gao, Tianyu and Yao, Xingcheng and Chen, Danqi},
+  booktitle = {Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing},
+  doi = {10.18653/v1/2021.emnlp-main.552},
+  editor = {Moens, Marie-Francine and Huang, Xuanjing and Specia, Lucia and Yih, Scott Wen-tau},
+  month = {nov},
+  pages = {6894--6910},
+  publisher = {Association for Computational Linguistics},
+  title = {{S}im{CSE}: Simple Contrastive Learning of Sentence Embeddings},
+  url = {https://aclanthology.org/2021.emnlp-main.552/},
+  year = {2021},
 }
 
 @inproceedings{phobert,

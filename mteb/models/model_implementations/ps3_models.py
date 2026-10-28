@@ -14,11 +14,16 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, EncodeKwargs, PromptType
 
-PS3_CITATION = """@article{shi2025scaling,
-  title={Scaling Vision Pre-Training to 4K Resolution},
-  author={Shi, Baifeng and Li, Boyi and Cai, Han and Lu, Yao and Liu, Sifei and Pavone, Marco and Kautz, Jan and Han, Song and Darrell, Trevor and Molchanov, Pavlo and Yin, Hongxu},
-  journal={arXiv preprint arXiv:2503.19903},
-  year={2025}
+PS3_CITATION = """@inproceedings{shi2025scaling,
+  author = {Shi, Baifeng and Li, Boyi and Cai, Han and Lu, Yao and Liu, Sifei and Pavone, Marco and Kautz, Jan and Han, Song and Darrell, Trevor and Molchanov, Pavlo and Yin, Hongxu},
+  booktitle = {2025 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  doi = {10.1109/cvpr52734.2025.00900},
+  month = {June},
+  pages = {9631–9640},
+  publisher = {IEEE},
+  title = {Scaling Vision Pre-Training to 4K Resolution},
+  url = {https://doi.org/10.1109/cvpr52734.2025.00900},
+  year = {2025},
 }"""
 
 # PS3 is pre-trained on 75M high-resolution images (38M natural images from DataComp and

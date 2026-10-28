@@ -16,7 +16,7 @@ class HunSum2AbstractiveRetrieval(AbsTaskRetrieval):
         description=(
             "HunSum-2-abstractive is a Hungarian dataset containing news articles along with lead, titles and metadata."
         ),
-        reference="https://arxiv.org/abs/2404.03555",
+        reference="https://aclanthology.org/2024.lrec-main.662/",
         type="Retrieval",
         category="t2t",
         modalities=["text"],
@@ -34,12 +34,18 @@ class HunSum2AbstractiveRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{barta2024news,
+@inproceedings{barta2024news,
+  address = {Torino, Italia},
   archiveprefix = {arXiv},
-  author = {Botond Barta and Dorina Lakatos and Attila Nagy and Milán Konor Nyist and Judit Ács},
+  author = {Barta, Botond and Lakatos, Dorina and Nagy, Attila and Nyist, Mil{\'a}n Konor and {\'A}cs, Judit},
+  booktitle = {Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation ({LREC}-{COLING} 2024)},
+  editor = {Calzolari, Nicoletta and Kan, Min-Yen and Hoste, Veronique and Lenci, Alessandro and Sakti, Sakriani and Xue, Nianwen},
   eprint = {2404.03555},
-  primaryclass = {cs.CL},
-  title = {From News to Summaries: Building a Hungarian Corpus for Extractive and Abstractive Summarization},
+  month = {may},
+  pages = {7503--7509},
+  publisher = {ELRA and ICCL},
+  title = {From News to Summaries: Building a {H}ungarian Corpus for Extractive and Abstractive Summarization},
+  url = {https://aclanthology.org/2024.lrec-main.662/},
   year = {2024},
 }
 """,

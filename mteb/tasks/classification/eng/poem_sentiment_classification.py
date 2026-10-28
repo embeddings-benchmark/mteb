@@ -6,7 +6,7 @@ class PoemSentimentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PoemSentimentClassification",
         description="Poem Sentiment is a sentiment dataset of poem verses from Project Gutenberg.",
-        reference="https://arxiv.org/abs/2011.02686",
+        reference="https://aclanthology.org/2020.gebnlp-1.9/",
         dataset={
             "path": "mteb/PoemSentimentClassification",
             "revision": "84af4753ebb04ca836fb54ce89a339839b03b748",
@@ -25,12 +25,18 @@ class PoemSentimentClassification(AbsTaskClassification):
         dialect=["eng-Latn-US", "en-Latn-GB"],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{sheng2020investigating,
+@inproceedings{sheng2020investigating,
+  address = {Barcelona, Spain (Online)},
   archiveprefix = {arXiv},
-  author = {Emily Sheng and David Uthus},
+  author = {Sheng, Emily and Uthus, David},
+  booktitle = {Proceedings of the Second Workshop on Gender Bias in Natural Language Processing},
+  editor = {Costa-juss{\`a}, Marta R. and Hardmeier, Christian and Radford, Will and Webster, Kellie},
   eprint = {2011.02686},
-  primaryclass = {cs.CL},
+  month = {dec},
+  pages = {93--106},
+  publisher = {Association for Computational Linguistics},
   title = {Investigating Societal Biases in a Poetry Composition System},
+  url = {https://aclanthology.org/2020.gebnlp-1.9/},
   year = {2020},
 }
 """,
@@ -42,7 +48,7 @@ class PoemSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PoemSentimentClassification.v2",
         description="Poem Sentiment consists of poem verses from Project Gutenberg annotated for sentiment using the labels negative (0), positive (1), no_impact (2) and mixed (3). This version was corrected as a part of [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900) to fix common issues on the original dataset, including removing duplicates, and train-test leakage.",
-        reference="https://arxiv.org/abs/2011.02686",
+        reference="https://aclanthology.org/2020.gebnlp-1.9/",
         dataset={
             "path": "mteb/poem_sentiment",
             "revision": "9fdc57b89ccc09a8d9256f376112d626878e51a7",
@@ -64,12 +70,18 @@ class PoemSentimentClassificationV2(AbsTaskClassification):
         dialect=["eng-Latn-US", "en-Latn-GB"],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{sheng2020investigating,
+@inproceedings{sheng2020investigating,
+  address = {Barcelona, Spain (Online)},
   archiveprefix = {arXiv},
-  author = {Emily Sheng and David Uthus},
+  author = {Sheng, Emily and Uthus, David},
+  booktitle = {Proceedings of the Second Workshop on Gender Bias in Natural Language Processing},
+  editor = {Costa-juss{\`a}, Marta R. and Hardmeier, Christian and Radford, Will and Webster, Kellie},
   eprint = {2011.02686},
-  primaryclass = {cs.CL},
+  month = {dec},
+  pages = {93--106},
+  publisher = {Association for Computational Linguistics},
   title = {Investigating Societal Biases in a Poetry Composition System},
+  url = {https://aclanthology.org/2020.gebnlp-1.9/},
   year = {2020},
 }
 """,

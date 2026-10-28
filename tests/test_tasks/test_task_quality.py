@@ -152,7 +152,9 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "HUMEToxicConversationsClassification",
         "HUMETweetSentimentExtractionClassification",
         "HatefulMemesI2TRetrieval",
+        "HatefulMemesI2TRetrieval.v2",
         "HatefulMemesT2IRetrieval",
+        "HatefulMemesT2IRetrieval.v2",
         "HeadlineClassification",
         "HebrewSentimentAnalysis",
         "HellaSwag",
@@ -448,6 +450,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
     "duplicate_text": [
         "GoogleSVQA2TRetrieval.v2",  # unique within a locale; the same sentences recur across locale subsets
         "GoogleSVQT2ARetrieval.v2",  # unique within a locale; the same sentences recur across locale subsets
+        "HatefulMemesT2IRetrieval.v2",  # memes that share a caption are separate queries with the same answer
         "AfriHateClassification",
         "AfriSentiClassification",
         "AllegroReviews",

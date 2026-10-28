@@ -87,11 +87,14 @@ def load_bright_data(
 
 
 _BIBTEX_CITATION = r"""
-@article{su2024bright,
-  author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},
-  journal = {arXiv preprint arXiv:2407.12883},
-  title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},
-  year = {2024},
+@inproceedings{su2024bright,
+  archiveprefix = {arXiv},
+  author = {Hongjin SU and Howard Yen and Mengzhou Xia and Weijia Shi and Niklas Muennighoff and Han-yu Wang and Liu Haisu and Quan Shi and Zachary S Siegel and Michael Tang and Ruoxi Sun and Jinsung Yoon and Sercan O Arik and Danqi Chen and Tao Yu},
+  booktitle = {The Thirteenth International Conference on Learning Representations},
+  eprint = {2407.12883},
+  title = {{BRIGHT}: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval},
+  url = {https://openreview.net/forum?id=ykuc5q381b},
+  year = {2025},
 }
 """
 
