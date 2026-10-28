@@ -1,15 +1,15 @@
 {
     "test": {
-        "num_samples": 214565,
+        "num_samples": 214497,
         "num_queries": 171434,
-        "num_documents": 43131,
-        "number_of_characters": 1671216,
+        "num_documents": 43063,
+        "number_of_characters": 1669174,
         "documents_text_statistics": {
-            "total_text_length": 1671216,
+            "total_text_length": 1669174,
             "min_text_length": 5,
-            "average_text_length": 38.74744383390137,
+            "average_text_length": 38.76121031976407,
             "max_text_length": 143,
-            "unique_texts": 25547
+            "unique_texts": 25529
         },
         "documents_image_statistics": null,
         "documents_audio_statistics": null,
@@ -33,7 +33,7 @@
             "min_relevant_docs_per_query": 1,
             "average_relevant_docs_per_query": 1.0,
             "max_relevant_docs_per_query": 1,
-            "unique_relevant_docs": 43131,
+            "unique_relevant_docs": 43063,
             "num_missing_query_ids": 0,
             "num_missing_corpus_ids": 0,
             "queries_with_all_gold_black_or_white": 0
@@ -41,16 +41,16 @@
         "top_ranked_statistics": null,
         "hf_subset_descriptive_stats": {
             "ar_eg": {
-                "num_samples": 17253,
+                "num_samples": 17241,
                 "num_queries": 13811,
-                "num_documents": 3442,
-                "number_of_characters": 111410,
+                "num_documents": 3430,
+                "number_of_characters": 111070,
                 "documents_text_statistics": {
-                    "total_text_length": 111410,
+                    "total_text_length": 111070,
                     "min_text_length": 8,
-                    "average_text_length": 32.3678094131319,
+                    "average_text_length": 32.38192419825073,
                     "max_text_length": 104,
-                    "unique_texts": 3442
+                    "unique_texts": 3430
                 },
                 "documents_image_statistics": null,
                 "documents_audio_statistics": null,
@@ -74,7 +74,7 @@
                     "min_relevant_docs_per_query": 1,
                     "average_relevant_docs_per_query": 1.0,
                     "max_relevant_docs_per_query": 1,
-                    "unique_relevant_docs": 3442,
+                    "unique_relevant_docs": 3430,
                     "num_missing_query_ids": 0,
                     "num_missing_corpus_ids": 0,
                     "queries_with_all_gold_black_or_white": 0
@@ -82,16 +82,16 @@
                 "top_ranked_statistics": null
             },
             "ar_x_gulf": {
-                "num_samples": 16894,
+                "num_samples": 16882,
                 "num_queries": 13452,
-                "num_documents": 3442,
-                "number_of_characters": 111410,
+                "num_documents": 3430,
+                "number_of_characters": 111071,
                 "documents_text_statistics": {
-                    "total_text_length": 111410,
+                    "total_text_length": 111071,
                     "min_text_length": 8,
-                    "average_text_length": 32.3678094131319,
+                    "average_text_length": 32.382215743440234,
                     "max_text_length": 104,
-                    "unique_texts": 3442
+                    "unique_texts": 3430
                 },
                 "documents_image_statistics": null,
                 "documents_audio_statistics": null,
@@ -115,7 +115,7 @@
                     "min_relevant_docs_per_query": 1,
                     "average_relevant_docs_per_query": 1.0,
                     "max_relevant_docs_per_query": 1,
-                    "unique_relevant_docs": 3442,
+                    "unique_relevant_docs": 3430,
                     "num_missing_query_ids": 0,
                     "num_missing_corpus_ids": 0,
                     "queries_with_all_gold_black_or_white": 0
@@ -123,16 +123,16 @@
                 "top_ranked_statistics": null
             },
             "ar_x_levant": {
-                "num_samples": 16042,
+                "num_samples": 16030,
                 "num_queries": 12600,
-                "num_documents": 3442,
-                "number_of_characters": 111410,
+                "num_documents": 3430,
+                "number_of_characters": 111062,
                 "documents_text_statistics": {
-                    "total_text_length": 111410,
+                    "total_text_length": 111062,
                     "min_text_length": 8,
-                    "average_text_length": 32.3678094131319,
+                    "average_text_length": 32.3795918367347,
                     "max_text_length": 104,
-                    "unique_texts": 3442
+                    "unique_texts": 3430
                 },
                 "documents_image_statistics": null,
                 "documents_audio_statistics": null,
@@ -156,7 +156,7 @@
                     "min_relevant_docs_per_query": 1,
                     "average_relevant_docs_per_query": 1.0,
                     "max_relevant_docs_per_query": 1,
-                    "unique_relevant_docs": 3442,
+                    "unique_relevant_docs": 3430,
                     "num_missing_query_ids": 0,
                     "num_missing_corpus_ids": 0,
                     "queries_with_all_gold_black_or_white": 0
@@ -164,16 +164,16 @@
                 "top_ranked_statistics": null
             },
             "ar_x_maghrebi": {
-                "num_samples": 16032,
+                "num_samples": 16020,
                 "num_queries": 12590,
-                "num_documents": 3442,
-                "number_of_characters": 111410,
+                "num_documents": 3430,
+                "number_of_characters": 111072,
                 "documents_text_statistics": {
-                    "total_text_length": 111410,
+                    "total_text_length": 111072,
                     "min_text_length": 8,
-                    "average_text_length": 32.3678094131319,
+                    "average_text_length": 32.38250728862974,
                     "max_text_length": 104,
-                    "unique_texts": 3442
+                    "unique_texts": 3430
                 },
                 "documents_image_statistics": null,
                 "documents_audio_statistics": null,
@@ -197,7 +197,7 @@
                     "min_relevant_docs_per_query": 1,
                     "average_relevant_docs_per_query": 1.0,
                     "max_relevant_docs_per_query": 1,
-                    "unique_relevant_docs": 3442,
+                    "unique_relevant_docs": 3430,
                     "num_missing_query_ids": 0,
                     "num_missing_corpus_ids": 0,
                     "queries_with_all_gold_black_or_white": 0
@@ -492,16 +492,16 @@
                 "top_ranked_statistics": null
             },
             "fi_fi": {
-                "num_samples": 13450,
+                "num_samples": 13448,
                 "num_queries": 10365,
-                "num_documents": 3085,
-                "number_of_characters": 120256,
+                "num_documents": 3083,
+                "number_of_characters": 120176,
                 "documents_text_statistics": {
-                    "total_text_length": 120256,
+                    "total_text_length": 120176,
                     "min_text_length": 13,
-                    "average_text_length": 38.98087520259319,
+                    "average_text_length": 38.98021407719754,
                     "max_text_length": 97,
-                    "unique_texts": 3085
+                    "unique_texts": 3083
                 },
                 "documents_image_statistics": null,
                 "documents_audio_statistics": null,
@@ -525,7 +525,7 @@
                     "min_relevant_docs_per_query": 1,
                     "average_relevant_docs_per_query": 1.0,
                     "max_relevant_docs_per_query": 1,
-                    "unique_relevant_docs": 3085,
+                    "unique_relevant_docs": 3083,
                     "num_missing_query_ids": 0,
                     "num_missing_corpus_ids": 0,
                     "queries_with_all_gold_black_or_white": 0
@@ -533,14 +533,14 @@
                 "top_ranked_statistics": null
             },
             "gu_in": {
-                "num_samples": 4498,
+                "num_samples": 4497,
                 "num_queries": 3689,
-                "num_documents": 809,
-                "number_of_characters": 37221,
+                "num_documents": 808,
+                "number_of_characters": 37192,
                 "documents_text_statistics": {
-                    "total_text_length": 37221,
+                    "total_text_length": 37192,
                     "min_text_length": 21,
-                    "average_text_length": 46.00865265760198,
+                    "average_text_length": 46.02970297029703,
                     "max_text_length": 114,
                     "unique_texts": 808
                 },
@@ -566,7 +566,7 @@
                     "min_relevant_docs_per_query": 1,
                     "average_relevant_docs_per_query": 1.0,
                     "max_relevant_docs_per_query": 1,
-                    "unique_relevant_docs": 809,
+                    "unique_relevant_docs": 808,
                     "num_missing_query_ids": 0,
                     "num_missing_corpus_ids": 0,
                     "queries_with_all_gold_black_or_white": 0
@@ -574,16 +574,16 @@
                 "top_ranked_statistics": null
             },
             "hi_in": {
-                "num_samples": 4620,
+                "num_samples": 4618,
                 "num_queries": 3805,
-                "num_documents": 815,
-                "number_of_characters": 38577,
+                "num_documents": 813,
+                "number_of_characters": 38501,
                 "documents_text_statistics": {
-                    "total_text_length": 38577,
+                    "total_text_length": 38501,
                     "min_text_length": 19,
-                    "average_text_length": 47.33374233128834,
+                    "average_text_length": 47.35670356703567,
                     "max_text_length": 121,
-                    "unique_texts": 815
+                    "unique_texts": 813
                 },
                 "documents_image_statistics": null,
                 "documents_audio_statistics": null,
@@ -607,7 +607,7 @@
                     "min_relevant_docs_per_query": 1,
                     "average_relevant_docs_per_query": 1.0,
                     "max_relevant_docs_per_query": 1,
-                    "unique_relevant_docs": 815,
+                    "unique_relevant_docs": 813,
                     "num_missing_query_ids": 0,
                     "num_missing_corpus_ids": 0,
                     "queries_with_all_gold_black_or_white": 0
@@ -615,16 +615,16 @@
                 "top_ranked_statistics": null
             },
             "id_id": {
-                "num_samples": 7420,
+                "num_samples": 7419,
                 "num_queries": 5726,
-                "num_documents": 1694,
-                "number_of_characters": 66220,
+                "num_documents": 1693,
+                "number_of_characters": 66191,
                 "documents_text_statistics": {
-                    "total_text_length": 66220,
+                    "total_text_length": 66191,
                     "min_text_length": 14,
-                    "average_text_length": 39.09090909090909,
+                    "average_text_length": 39.09686946249262,
                     "max_text_length": 93,
-                    "unique_texts": 1694
+                    "unique_texts": 1693
                 },
                 "documents_image_statistics": null,
                 "documents_audio_statistics": null,
@@ -648,7 +648,7 @@
                     "min_relevant_docs_per_query": 1,
                     "average_relevant_docs_per_query": 1.0,
                     "max_relevant_docs_per_query": 1,
-                    "unique_relevant_docs": 1694,
+                    "unique_relevant_docs": 1693,
                     "num_missing_query_ids": 0,
                     "num_missing_corpus_ids": 0,
                     "queries_with_all_gold_black_or_white": 0
@@ -820,16 +820,16 @@
                 "top_ranked_statistics": null
             },
             "mr_in": {
-                "num_samples": 4525,
+                "num_samples": 4522,
                 "num_queries": 3699,
-                "num_documents": 826,
-                "number_of_characters": 39327,
+                "num_documents": 823,
+                "number_of_characters": 39222,
                 "documents_text_statistics": {
-                    "total_text_length": 39327,
+                    "total_text_length": 39222,
                     "min_text_length": 20,
-                    "average_text_length": 47.61138014527845,
+                    "average_text_length": 47.65735115431349,
                     "max_text_length": 120,
-                    "unique_texts": 825
+                    "unique_texts": 823
                 },
                 "documents_image_statistics": null,
                 "documents_audio_statistics": null,
@@ -853,7 +853,7 @@
                     "min_relevant_docs_per_query": 1,
                     "average_relevant_docs_per_query": 1.0,
                     "max_relevant_docs_per_query": 1,
-                    "unique_relevant_docs": 826,
+                    "unique_relevant_docs": 823,
                     "num_missing_query_ids": 0,
                     "num_missing_corpus_ids": 0,
                     "queries_with_all_gold_black_or_white": 0
@@ -861,16 +861,16 @@
                 "top_ranked_statistics": null
             },
             "ru_ru": {
-                "num_samples": 14880,
+                "num_samples": 14879,
                 "num_queries": 11912,
-                "num_documents": 2968,
-                "number_of_characters": 140122,
+                "num_documents": 2967,
+                "number_of_characters": 140100,
                 "documents_text_statistics": {
-                    "total_text_length": 140122,
+                    "total_text_length": 140100,
                     "min_text_length": 14,
-                    "average_text_length": 47.210916442048514,
+                    "average_text_length": 47.21941354903943,
                     "max_text_length": 138,
-                    "unique_texts": 2968
+                    "unique_texts": 2967
                 },
                 "documents_image_statistics": null,
                 "documents_audio_statistics": null,
@@ -894,7 +894,7 @@
                     "min_relevant_docs_per_query": 1,
                     "average_relevant_docs_per_query": 1.0,
                     "max_relevant_docs_per_query": 1,
-                    "unique_relevant_docs": 2968,
+                    "unique_relevant_docs": 2967,
                     "num_missing_query_ids": 0,
                     "num_missing_corpus_ids": 0,
                     "queries_with_all_gold_black_or_white": 0
@@ -902,16 +902,16 @@
                 "top_ranked_statistics": null
             },
             "sw": {
-                "num_samples": 7320,
+                "num_samples": 7313,
                 "num_queries": 5878,
-                "num_documents": 1442,
-                "number_of_characters": 58739,
+                "num_documents": 1435,
+                "number_of_characters": 58488,
                 "documents_text_statistics": {
-                    "total_text_length": 58739,
+                    "total_text_length": 58488,
                     "min_text_length": 12,
-                    "average_text_length": 40.73439667128987,
+                    "average_text_length": 40.7581881533101,
                     "max_text_length": 98,
-                    "unique_texts": 1442
+                    "unique_texts": 1435
                 },
                 "documents_image_statistics": null,
                 "documents_audio_statistics": null,
@@ -935,7 +935,7 @@
                     "min_relevant_docs_per_query": 1,
                     "average_relevant_docs_per_query": 1.0,
                     "max_relevant_docs_per_query": 1,
-                    "unique_relevant_docs": 1442,
+                    "unique_relevant_docs": 1435,
                     "num_missing_query_ids": 0,
                     "num_missing_corpus_ids": 0,
                     "queries_with_all_gold_black_or_white": 0
@@ -943,16 +943,16 @@
                 "top_ranked_statistics": null
             },
             "ta_in": {
-                "num_samples": 4130,
+                "num_samples": 4129,
                 "num_queries": 3308,
-                "num_documents": 822,
-                "number_of_characters": 41912,
+                "num_documents": 821,
+                "number_of_characters": 41905,
                 "documents_text_statistics": {
-                    "total_text_length": 41912,
+                    "total_text_length": 41905,
                     "min_text_length": 6,
-                    "average_text_length": 50.98783454987834,
+                    "average_text_length": 51.041412911084045,
                     "max_text_length": 142,
-                    "unique_texts": 822
+                    "unique_texts": 821
                 },
                 "documents_image_statistics": null,
                 "documents_audio_statistics": null,
@@ -976,7 +976,7 @@
                     "min_relevant_docs_per_query": 1,
                     "average_relevant_docs_per_query": 1.0,
                     "max_relevant_docs_per_query": 1,
-                    "unique_relevant_docs": 822,
+                    "unique_relevant_docs": 821,
                     "num_missing_query_ids": 0,
                     "num_missing_corpus_ids": 0,
                     "queries_with_all_gold_black_or_white": 0
@@ -984,16 +984,16 @@
                 "top_ranked_statistics": null
             },
             "te_in": {
-                "num_samples": 13006,
+                "num_samples": 13004,
                 "num_queries": 10410,
-                "num_documents": 2596,
-                "number_of_characters": 104781,
+                "num_documents": 2594,
+                "number_of_characters": 104703,
                 "documents_text_statistics": {
-                    "total_text_length": 104781,
+                    "total_text_length": 104703,
                     "min_text_length": 13,
-                    "average_text_length": 40.362480739599384,
+                    "average_text_length": 40.36353122590594,
                     "max_text_length": 119,
-                    "unique_texts": 2596
+                    "unique_texts": 2594
                 },
                 "documents_image_statistics": null,
                 "documents_audio_statistics": null,
@@ -1017,7 +1017,7 @@
                     "min_relevant_docs_per_query": 1,
                     "average_relevant_docs_per_query": 1.0,
                     "max_relevant_docs_per_query": 1,
-                    "unique_relevant_docs": 2596,
+                    "unique_relevant_docs": 2594,
                     "num_missing_query_ids": 0,
                     "num_missing_corpus_ids": 0,
                     "queries_with_all_gold_black_or_white": 0
