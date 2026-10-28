@@ -1123,7 +1123,6 @@ KNOWN_ISSUES: dict[str, list[str]] = {
     ],
     "small_image": [
         "FORBI2IRetrieval",  # min 1x1px query image present
-        "FORBI2IRetrieval.v2",  # same queries as v1 minus the unanswerable duplicates
         "GLDv2I2IRetrieval",  # min 7x7px document image present
         "Imagenet1k",  # min 8x10px image present
     ],
