@@ -3,10 +3,14 @@
 from __future__ import annotations
 
 import functools
+import io
 import json
 import logging
-from typing import TYPE_CHECKING, cast
-from urllib.parse import quote, unquote
+import tempfile
+import zipfile
+from pathlib import Path
+from typing import cast
+from urllib.parse import quote
 
 import polars as pl
 from datasets import load_dataset
@@ -17,9 +21,6 @@ from mteb.api._errors import FRAME_LOAD_ERRORS
 from mteb.api.settings import get_settings
 from mteb.cache.result_cache import ResultCache
 from mteb.results.benchmark_results import BenchmarkResults
-
-if TYPE_CHECKING:
-    from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +34,8 @@ def get_cache() -> ResultCache:
 # Bump when the on-disk parquet schema changes so old caches are rebuilt.
 # v3: model_meta's model_type/embed_dim/output_dtypes folded into the
 # `experiments` struct column (no more separate `model_meta` column).
-_CACHE_SCHEMA_VERSION = 3
+# v4: publish all API frames together in one atomic ZIP snapshot.
+_CACHE_SCHEMA_VERSION = 4
 
 _UNIFIED_SCHEMA = {
     "model_name": pl.Utf8,
@@ -92,15 +94,16 @@ def _load_default_from_hub(repo_id: str) -> pl.DataFrame | None:
         return None
 
 
-_UNIFIED_FILE = "_unified.parquet"
+_UNIFIED_FILE = "unified.parquet"
 _MANIFEST_FILE = "manifest.json"
+_SNAPSHOT_FILE = "api-cache-v4.zip"
 
 
 def _disk_cache_dir() -> Path:
     """Disk-cache dir under the shared :class:`ResultCache` root.
 
-    Files: ``manifest.json`` + ``_unified.parquet`` + one ``<urlsafe>.parquet``
-    per benchmark with rows.
+    The API owns ``api-cache-v4.zip``. Other files in this shared directory,
+    including legacy API shards and Gradio's parquet, are left untouched.
     """
     return get_cache().cache_path / "leaderboard"
 
@@ -119,6 +122,14 @@ def _hf_dataset_sha(repo_id: str) -> str | None:
         return None
 
 
+def _unique_json_object(pairs: list[tuple[str, object]]) -> dict[str, object]:
+    """Reject duplicate manifest keys instead of silently choosing one."""
+    result = dict(pairs)
+    if len(result) != len(pairs):
+        raise ValueError("Duplicate disk-cache manifest key")
+    return result
+
+
 def _read_disk_cache(  # noqa: PLR0911
     repo_id: str, current_sha: str | None
 ) -> tuple[dict[str, pl.DataFrame], pl.DataFrame] | None:
@@ -126,42 +137,65 @@ def _read_disk_cache(  # noqa: PLR0911
 
     Trusts the cache when ``current_sha is None`` so offline restarts boot fast.
     """
-    cache_dir = _disk_cache_dir()
-    manifest_path = cache_dir / _MANIFEST_FILE
-    if not manifest_path.exists():
-        return None
     try:
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
-        logger.warning("disk cache manifest unreadable (%s); rebuilding", exc)
+        # One handle pins one complete generation, even if its path is replaced.
+        with zipfile.ZipFile(_disk_cache_dir() / _SNAPSHOT_FILE) as archive:
+            names = archive.namelist()
+            if len(names) != len(set(names)):
+                return None
+            if any(
+                info.compress_type != zipfile.ZIP_STORED or info.flag_bits & 1
+                for info in archive.infolist()
+            ):
+                return None
+            manifest = json.loads(
+                archive.read(_MANIFEST_FILE), object_pairs_hook=_unique_json_object
+            )
+            if not isinstance(manifest, dict):
+                return None
+            if manifest.get("repo_id") != repo_id:
+                return None
+            if (
+                type(manifest.get("schema_version")) is not int
+                or manifest["schema_version"] != _CACHE_SCHEMA_VERSION
+            ):
+                return None
+            if "sha" not in manifest or (
+                manifest["sha"] is not None and not isinstance(manifest["sha"], str)
+            ):
+                return None
+            if current_sha is not None and manifest["sha"] != current_sha:
+                return None
+            entries = manifest.get("benchmarks")
+            if not isinstance(entries, dict) or any(
+                not isinstance(name, str)
+                or not isinstance(entry, str)
+                or entry != f"benchmarks/{quote(name, safe='')}.parquet"
+                for name, entry in entries.items()
+            ):
+                return None
+            if set(names) != {_MANIFEST_FILE, _UNIFIED_FILE, *entries.values()}:
+                return None
+            # Reading the complete entry also verifies its ZIP CRC before Polars.
+            unified = pl.read_parquet(io.BytesIO(archive.read(_UNIFIED_FILE)))
+            loaded = {
+                name: pl.read_parquet(io.BytesIO(archive.read(entry)))
+                for name, entry in entries.items()
+            }
+        return loaded, unified
+    except FileNotFoundError:
         return None
-    if manifest.get("repo_id") != repo_id:
-        logger.info("disk cache repo_id mismatch; rebuilding")
-        return None
-    if manifest.get("schema_version") != _CACHE_SCHEMA_VERSION:
-        logger.info("disk cache schema version mismatch; rebuilding")
-        return None
-    if current_sha is not None and manifest.get("sha") != current_sha:
-        logger.info("disk cache SHA mismatch (HF dataset updated); rebuilding")
-        return None
-    unified_path = cache_dir / _UNIFIED_FILE
-    if not unified_path.exists():
-        logger.warning("disk cache unified frame missing; rebuilding")
-        return None
-
-    try:
-        unified = pl.read_parquet(unified_path)
-        loaded: dict[str, pl.DataFrame] = {}
-        for parquet_path in cache_dir.glob("*.parquet"):
-            if parquet_path.name == _UNIFIED_FILE:
-                continue
-            bench_name = unquote(parquet_path.stem)
-            loaded[bench_name] = pl.read_parquet(parquet_path)
-    except (OSError, pl.exceptions.PolarsError) as exc:
+    except (
+        OSError,
+        ValueError,
+        EOFError,
+        KeyError,
+        NotImplementedError,
+        zipfile.BadZipFile,
+        pl.exceptions.PolarsError,
+    ) as exc:
         logger.warning("disk cache read failed (%s); rebuilding", exc)
         return None
-
-    return loaded, unified
 
 
 def _write_disk_cache(
@@ -172,49 +206,51 @@ def _write_disk_cache(
 ) -> None:
     """Persist split + unified frames so the next restart skips the cold work.
 
-    Each shard is written via ``.tmp`` + ``os.replace`` so readers and abrupt
-    exits never see a torn state.
+    All frames are closed in one unique temporary ZIP before publishing it with
+    one atomic replacement. Failed writes leave the previous snapshot readable.
     """
     cache_dir = _disk_cache_dir()
+    tmp_path: Path | None = None
     try:
         cache_dir.mkdir(parents=True, exist_ok=True)
-
-        # Skip placeholder empty frames (cheap to recreate on read).
-        new_shards: list[tuple[Path, pl.DataFrame]] = [
-            (cache_dir / _UNIFIED_FILE, unified)
-        ]
-        for bench_name, df in loaded.items():
-            if df.height == 0:
-                continue
-            safe_name = quote(bench_name, safe="")
-            new_shards.append((cache_dir / f"{safe_name}.parquet", df))
-
-        for final_path, df in new_shards:
-            tmp_path = final_path.with_name(final_path.name + ".tmp")
-            df.write_parquet(tmp_path)
-            tmp_path.replace(final_path)
-
-        manifest_path = cache_dir / _MANIFEST_FILE
-        manifest_tmp = manifest_path.with_name(manifest_path.name + ".tmp")
-        manifest_tmp.write_text(
-            json.dumps(
-                {
-                    "repo_id": repo_id,
-                    "sha": sha,
-                    "schema_version": _CACHE_SCHEMA_VERSION,
-                }
-            ),
-            encoding="utf-8",
-        )
-        manifest_tmp.replace(manifest_path)
-
-        keep = {p.name for p, _ in new_shards}
-        for p in cache_dir.glob("*.parquet"):
-            if p.name not in keep:
-                p.unlink(missing_ok=True)
-    except OSError as exc:
+        entries = {
+            name: f"benchmarks/{quote(name, safe='')}.parquet"
+            for name, frame in loaded.items()
+            if not frame.is_empty()
+        }
+        with tempfile.NamedTemporaryFile(
+            dir=cache_dir, prefix=".api-cache-", suffix=".tmp", delete=False
+        ) as temporary:
+            tmp_path = Path(temporary.name)
+            with zipfile.ZipFile(
+                temporary, "w", compression=zipfile.ZIP_STORED, allowZip64=True
+            ) as archive:
+                archive.writestr(
+                    _MANIFEST_FILE,
+                    json.dumps(
+                        {
+                            "repo_id": repo_id,
+                            "sha": sha,
+                            "schema_version": _CACHE_SCHEMA_VERSION,
+                            "benchmarks": entries,
+                        }
+                    ),
+                )
+                with archive.open(_UNIFIED_FILE, "w", force_zip64=True) as entry:
+                    unified.write_parquet(entry)
+                for name, filename in entries.items():
+                    with archive.open(filename, "w", force_zip64=True) as entry:
+                        loaded[name].write_parquet(entry)
+        tmp_path.replace(cache_dir / _SNAPSHOT_FILE)
+    except (OSError, pl.exceptions.PolarsError, zipfile.BadZipFile) as exc:
         # Failing to write is non-fatal — the in-memory result is still valid.
         logger.warning("disk cache write failed: %s", exc)
+    finally:
+        if tmp_path is not None:
+            try:
+                tmp_path.unlink(missing_ok=True)
+            except OSError as exc:
+                logger.warning("disk cache temporary-file cleanup failed: %s", exc)
 
 
 @functools.cache
