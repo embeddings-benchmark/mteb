@@ -15,6 +15,8 @@ import polars as pl
 import pytest
 from polars.testing import assert_frame_equal
 
+pytest.importorskip("fastapi")
+
 from mteb.api import frames
 from mteb.api.settings import Settings
 
