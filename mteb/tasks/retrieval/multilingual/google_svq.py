@@ -1,4 +1,3 @@
-import re
 import unicodedata
 from collections import defaultdict
 from typing import Any
@@ -235,16 +234,44 @@ class GoogleSVQT2ARetrieval(AbsTaskRetrieval):
 
 
 # Arabic diacritics and tatweel, and hamza forms of alef
-_ARABIC_MARKS = re.compile("[\u0640\u064b-\u065f\u0670]")
-_ALEF_FORMS = str.maketrans("أإآٱ", "اااا")
+# Arabic letter variants that are written interchangeably (hamza/alef forms, alef maksura, ta marbuta, keheh, tatweel)
+_ARABIC_MAP = str.maketrans(
+    {
+        "أ": "ا",
+        "إ": "ا",
+        "آ": "ا",
+        "ٱ": "ا",
+        "ى": "ي",
+        "ی": "ي",
+        "ة": "ه",
+        "ک": "ك",
+        "ـ": "",
+    }
+)
 
 
 def _normalize(text: str) -> str:
-    """Fold transcription variants of the same sentence: case, punctuation, whitespace, Arabic diacritics and hamza."""
+    """Fold transcription variants of the same sentence.
+
+    Drops case, punctuation, symbols and extra whitespace, and folds Arabic letter variants,
+    Arabic diacritics and accents on Latin letters. Indic vowel signs are kept, since they
+    are combining marks that change the word.
+    """
     text = unicodedata.normalize("NFKC", text).casefold()
-    text = _ARABIC_MARKS.sub("", text).translate(_ALEF_FORMS)
-    text = "".join(" " if unicodedata.category(c).startswith("P") else c for c in text)
-    return " ".join(text.split())
+    text = "".join(
+        c for c in text if not unicodedata.category(c).startswith(("P", "S"))
+    )
+    out = []
+    for ch in text.translate(_ARABIC_MAP):
+        if unicodedata.name(ch, "").startswith("LATIN"):
+            out.extend(
+                d
+                for d in unicodedata.normalize("NFD", ch)
+                if not unicodedata.combining(d)
+            )
+        elif not (unicodedata.combining(ch) and "ARABIC" in unicodedata.name(ch, "")):
+            out.append(ch)
+    return " ".join("".join(out).split())
 
 
 def _sentence_ids(utt_ids: list[str], texts: list[str]) -> list[str]:
