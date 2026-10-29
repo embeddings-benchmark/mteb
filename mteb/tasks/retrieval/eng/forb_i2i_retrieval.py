@@ -3,7 +3,6 @@ from __future__ import annotations
 import io
 from typing import Any
 
-import PIL.Image
 from datasets import Image
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
@@ -54,6 +53,8 @@ _PLACEHOLDER_MAX_SIDE = 130
 
 
 def _is_placeholder(image: dict[str, Any]) -> bool:
+    import PIL.Image
+
     return max(PIL.Image.open(io.BytesIO(image["bytes"])).size) <= _PLACEHOLDER_MAX_SIDE
 
 
