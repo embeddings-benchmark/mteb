@@ -179,7 +179,6 @@ class PlscClusteringS2S(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         superseded_by="PlscClusteringS2S.v2",
     )
 
@@ -207,7 +206,6 @@ class PlscClusteringS2SFast(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         adapted_from=["PlscClusteringS2S"],
     )
 
@@ -264,7 +262,6 @@ class PlscClusteringP2P(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         superseded_by="PlscClusteringP2P.v2",
     )
 
@@ -292,6 +289,5 @@ class PlscClusteringP2PFast(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         adapted_from=["PlscClusteringP2P"],
     )

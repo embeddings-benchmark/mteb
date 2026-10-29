@@ -32,7 +32,6 @@ class MedrxivClusteringS2SFast(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="",
         prompt="Identify the main category of Medrxiv papers based on the titles",
         adapted_from=["MedrxivClusteringS2S"],
     )
@@ -74,7 +73,6 @@ class MedrxivClusteringS2S(AbsTaskClusteringLegacy):
         annotations_creators="derived",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="",
         prompt="Identify the main category of Medrxiv papers based on the titles",
         superseded_by="MedrxivClusteringS2S.v2",
     )

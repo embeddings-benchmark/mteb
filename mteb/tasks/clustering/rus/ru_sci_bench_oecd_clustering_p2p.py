@@ -28,7 +28,6 @@ class RuSciBenchOECDClusteringP2P(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         prompt="Identify the category of scientific papers based on the titles and abstracts",
     )
 

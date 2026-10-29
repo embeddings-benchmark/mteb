@@ -29,7 +29,6 @@ class GreekCivicsQA(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
