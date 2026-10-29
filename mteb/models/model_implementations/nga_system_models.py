@@ -111,3 +111,41 @@ ja_embed_sts = ModelMeta(
     modalities=["text"],
     model_type=["dense"],
 )
+
+ko_embed_midm = ModelMeta(
+    name="NGA-KR/ko-embed-midm",
+    loader=SentenceTransformerEncoderWrapper,
+    loader_kwargs=dict(
+        model_prompts={
+            "query": "Instruct: Given a question, retrieve passages that answer the question\nQuery: "
+        }
+    ),
+    revision="6372c063f30e4705d4863ffb8ca4b23cd0176388",
+    release_date="2026-10-27",
+    languages=["kor-Hang", "eng-Latn"],
+    open_weights=True,
+    n_parameters=2305517312,
+    n_embedding_parameters=235454464,
+    memory_usage_mb=8795,
+    embed_dim=1792,
+    max_tokens=512,
+    license="mit",
+    reference="https://huggingface.co/NGA-KR/ko-embed-midm",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets={
+        "GooAQ",
+        "HotpotQA",
+        "MSMARCO",
+        "MultiNLI",
+        "NQ",
+        "SNLI",
+        "STSBenchmark",
+    },
+    adapted_from="K-intelligence/Midm-2.0-Mini-Instruct",
+    modalities=["text"],
+    model_type=["dense"],
+)

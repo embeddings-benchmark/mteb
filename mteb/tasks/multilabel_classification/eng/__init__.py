@@ -2,7 +2,10 @@ from .audio_set import (
     AudioSetMiniMultilingualClassification,
     AudioSetMultilingualClassification,
 )
-from .fsd50_hf import FSD50HFMultilingualClassification
+from .fsd50_hf import (
+    FSD50HFMultilingualClassification,
+    FSD50HFMultilingualClassificationV2,
+)
 from .fsd2019_kaggle import (
     FSD2019KaggleMultilingualClassification,
     FSD2019KaggleMultilingualClassificationV2,
@@ -17,6 +20,7 @@ __all__ = [
     "AudioSetMiniMultilingualClassification",
     "AudioSetMultilingualClassification",
     "FSD50HFMultilingualClassification",
+    "FSD50HFMultilingualClassificationV2",
     "FSD2019KaggleMultilingualClassification",
     "FSD2019KaggleMultilingualClassificationV2",
     "SciRepEvalFoSClassification",
