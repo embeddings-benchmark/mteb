@@ -456,7 +456,7 @@ class TaskMetadata(BaseModel):
         domains: The domains of the data. This includes "Non-fiction", "Social", "Fiction", "News", "Academic", "Blog", "Encyclopaedic",
             "Government", "Legal", "Medical", "Poetry", "Religious", "Reviews", "Web", "Spoken", "Written". A dataset can belong to multiple domains.
         task_subtypes: The subtypes of the task. E.g. includes "Sentiment/Hate speech", "Thematic Clustering". Feel free to update the list as needed.
-        license: The license of the data specified as lowercase, e.g. "cc-by-nc-4.0". If the license is not specified, use "not specified". For custom licenses a URL is used.
+        license: The license of the data specified as lowercase, e.g. "cc-by-nc-4.0". New tasks need a concrete license. Use a URL for a custom license. "not specified" remains accepted so tasks already in the benchmark still load.
         annotations_creators: The type of the annotators. Includes "expert-annotated" (annotated by experts), "human-annotated" (annotated e.g. by
             mturkers), "derived" (derived from structure in the data).
         dialect: The dialect of the data, if applicable. Ideally specified as a BCP-47 language tag. Empty list if no dialects are present.
@@ -508,6 +508,29 @@ class TaskMetadata(BaseModel):
     contributed_by: str | None = None
     superseded_by: str | None = None
     is_beta: bool = False
+
+    def has_unclear_license(self) -> bool:
+        """Return whether this task is missing a concrete license.
+
+        ``None`` and ``"not specified"`` stay valid on the model so tasks
+        already in the benchmark still load. Other values are rejected by
+        pydantic unless they are in ``Licenses`` or a URL. The task metadata
+        tests reject a missing or unspecified license on any task that is not
+        already listed as an exception.
+
+        Returns:
+            True when the license is missing or ``"not specified"``.
+        """
+        return self.license is None or self.license == "not specified"
+
+    def _validate_license(self) -> None:
+        """Raise when the license is missing or does not name a license."""
+        if self.has_unclear_license():
+            raise ValueError(
+                f"Task {self.name!r} has an unclear license ({self.license!r}). "
+                "New tasks need a concrete license, such as 'cc-by-4.0' or 'mit', "
+                "or a URL for a custom license."
+            )
 
     def _validate_metadata(self) -> None:
         self._eval_langs_are_valid(self.eval_langs)

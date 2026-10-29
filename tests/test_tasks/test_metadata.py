@@ -4,10 +4,25 @@ import pytest
 
 from mteb.abstasks import AbsTask, AbsTaskRetrieval
 from mteb.get_tasks import get_tasks
+from tests.test_tasks._tasks_with_unclear_license import (
+    TASKS_WITH_UNCLEAR_LICENSE,
+)
 
 # Historic datasets without filled metadata. Do NOT add new datasets to this list.
 # Tasks should be removed from this list once their metadata is filled.
 _HISTORIC_DATASETS = []
+
+
+def _assert_license_policy(task: AbsTask) -> None:
+    """Known tasks may keep an unclear license. New tasks may not."""
+    name = task.metadata.name
+    if name in TASKS_WITH_UNCLEAR_LICENSE:
+        assert task.metadata.has_unclear_license(), (
+            f"Task {name} is listed as having an unclear license, but its license "
+            f"is {task.metadata.license!r}. Remove it from tests/test_tasks/_tasks_with_unclear_license.py."
+        )
+        return
+    task.metadata._validate_license()
 
 
 # TODO https://github.com/embeddings-benchmark/mteb/issues/4378
@@ -27,6 +42,8 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
         assert not task.metadata.is_filled(), (
             f"Metadata for {task.metadata.name} is stated as not filled (historic), but it is filled, please remove the dataset from the historic list."
         )
+
+    _assert_license_policy(task)
 
     # --- Check that no dataset trusts remote code ---
     assert task.metadata.dataset.get("trust_remote_code", False) is False, (
@@ -60,3 +77,24 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
         raise ValueError(
             f"Task {task.metadata.name} has a dict prompt, but it should be a string. Please check the metadata of the task."
         )
+
+
+def test_unclear_licenses_limited_to_existing_tasks():
+    """New tasks need a concrete license. Tasks already in the list may keep one."""
+    tasks = get_tasks(
+        exclude_superseded=False,
+        exclude_aggregate=False,
+        exclude_beta=False,
+        exclude_private=False,
+    )
+    names = set()
+    for task in tasks:
+        names.add(task.metadata.name)
+        _assert_license_policy(task)
+
+    missing = sorted(TASKS_WITH_UNCLEAR_LICENSE - names)
+    assert not missing, (
+        "These tasks are on the unclear license list but are not in the benchmark. "
+        "Remove them from tests/test_tasks/_tasks_with_unclear_license.py: "
+        + ", ".join(missing)
+    )

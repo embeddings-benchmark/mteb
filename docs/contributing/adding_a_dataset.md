@@ -537,6 +537,8 @@ To run a task locally you do not necessarily need to fill out all the fields in 
 
 If you are making a PR, feel free to leave fields and `None` if you are unsure about how to fill. You can always ask about it during the PR.
 
+A new task still needs a concrete license. Use an SPDX-style id such as `cc-by-4.0` or `mit`, or a URL when the license is a custom text. Unclear values such as `not specified` are not accepted.
+
 Here is an example of how to fill out the `TaskMetadata` for the poem sentiment classification dataset, we implemented above and which is also
 available within `mteb` as `PoemSentimentClassification.v2`, for more details about the fields see the [TaskMetadata documentation](../api/task.md#metadata).
 
@@ -647,6 +649,7 @@ Once added, here is a checklist to ensure that everything works before you submi
 
 ```markdown
 - [ ] I have outlined why this dataset is filling an existing gap in `mteb`
+- [ ] I have set a concrete license. Unclear values such as "not specified" are not accepted for new tasks.
 - [ ] I have tested that the dataset runs with the `mteb` package.
 - [ ] I have run the following models on the task (adding the results to the pr). These can be run using the `mteb run -m {model_name} -t {task_name}` command.
   - [ ] `mteb/baseline-random encoder`
