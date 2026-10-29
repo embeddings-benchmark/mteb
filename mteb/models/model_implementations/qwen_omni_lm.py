@@ -152,6 +152,10 @@ class QwenOmniWrapper(AbsEncoder):
                 inputs = single_clip_dataloader(
                     inputs, "batched embeddings change with their batch-mates"
                 )
+            elif has_video:
+                inputs = single_clip_dataloader(
+                    inputs, "the processor takes one frame rate per call"
+                )
 
             all_embeddings: list[torch.Tensor] = []
 
@@ -166,6 +170,20 @@ class QwenOmniWrapper(AbsEncoder):
                 ]
 
                 videos = batch.get("video")
+                # one video per batch: the rate its frames were sampled at, as
+                # qwen-omni-utils computes it (sampled / source frames * source
+                # fps); the processor would otherwise assume 2 fps (Qwen2.5-Omni)
+                # or 1 fps (Qwen3-Omni)
+                # https://github.com/QwenLM/Qwen2.5-Omni/blob/main/qwen-omni-utils/src/qwen_omni_utils/v2_5/vision_process.py
+                fps = None
+                if videos:
+                    timing = batch["video_metadata"][0]
+                    if timing and timing["fps"]:
+                        fps = (
+                            len(timing["frames_indices"])
+                            / timing["total_num_frames"]
+                            * timing["fps"]
+                        )
                 images = batch.get("image")
                 audios = batch.get("audio")
                 if audios:
@@ -184,6 +202,7 @@ class QwenOmniWrapper(AbsEncoder):
                     videos_kwargs={
                         "do_sample_frames": False,
                         "use_audio_in_video": False,
+                        "fps": fps,
                     },
                     audio_kwargs={"max_length": self.max_samples},
                 ).to(self.device, dtype=torch.bfloat16)
