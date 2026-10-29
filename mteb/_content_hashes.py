@@ -45,15 +45,20 @@ def hash_image(image: Image.Image) -> str:
 
 
 def hash_audio(audio: AudioInputItem) -> str:
-    """Content hash for a single audio clip (raw samples + sampling rate).
+    """Hash raw samples together with the metadata needed to interpret them.
 
-    The sampling rate is mixed into the hash because it changes how the raw
-    samples are interpreted (duration/pitch); identical sample bytes at a
-    different declared sampling rate are a different clip.
+    The sampling rate, shape (channels/length) and dtype all change how the
+    raw sample bytes are interpreted; identical bytes under different metadata
+    are a different clip.
     """
     array = audio["array"]
     sampling_rate = audio["sampling_rate"]
-    return _sha256_digest(array.tobytes() + str(sampling_rate).encode())
+    metadata = (list(array.shape), array.dtype.str, sampling_rate)
+    header = json.dumps(metadata, separators=(",", ":"), default=str).encode()
+    digest = hashlib.sha256(header)
+    digest.update(b"\0")
+    digest.update(array.tobytes())
+    return digest.hexdigest()
 
 
 def hash_video(video: VideoDecoder) -> str:
