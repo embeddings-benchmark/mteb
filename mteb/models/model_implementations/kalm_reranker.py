@@ -24,7 +24,7 @@ DEFAULT_SYSTEM_INSTRUCTION = (
 
 
 class KaLMRerankerWrapper:
-    """Wrapper for KaLM-Reranker-V1 models.
+    """Wrapper for KaLM-Reranker-V1 and KaLM-Reranker-V1-R2 models.
 
     Reference implementation https://huggingface.co/KaLM-Embedding/KaLM-Reranker-V1-Nano/blob/main/kalm_reranker.py
 
@@ -66,7 +66,9 @@ class KaLMRerankerWrapper:
         self.instruction = instruction
         self.system_instruction = system_instruction
 
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            model_name_or_path, revision=revision
+        )
         if self.tokenizer.pad_token_id is None:
             if self.tokenizer.eos_token_id is None:
                 raise ValueError(
@@ -477,9 +479,9 @@ multilingual_langs = [
     "zho-Hans",
 ]
 
-KALM_RERANKER_V1_CITATION = """@misc{zhao2026kalmrerankerv1,
-      title={KaLM-Reranker-V1: Fast but Not Late Interaction for Compressed Document Reranking},
-      author={Xinping Zhao and Jiaxin Xu and Ziqi Dai and Xin Zhang and Shouzheng Huang and Danyu Tang and Xinshuo Hu and Meishan Zhang and Baotian Hu and Min Zhang},
+KALM_RERANKER_V1_CITATION = """@misc{zhao2026lycheererankerfastlateinteraction,
+      title={Lychee-Reranker: Fast but Not Late Interaction for Compressed Document Reranking},
+      author={Xinping Zhao and Jiaxin Xu and Ziqi Dai and Xin Zhang and Huiyao Chen and Shouzheng Huang and Xianhao Xiong and Danyu Tang and Xinshuo Hu and Guohong Fu and Meishan Zhang and Baotian Hu},
       year={2026},
       eprint={2606.22807},
       archivePrefix={arXiv},
@@ -499,7 +501,7 @@ kalm_reranker_v1_nano = ModelMeta(
     languages=multilingual_langs,
     n_parameters=786029296,
     n_embedding_parameters=167772160,
-    memory_usage_mb=2998.0,
+    memory_usage_mb=1499,
     max_tokens=131072,
     embed_dim=640,
     license="apache-2.0",
@@ -532,7 +534,7 @@ kalm_reranker_v1_small = ModelMeta(
     languages=multilingual_langs,
     n_parameters=2115977456,
     n_embedding_parameters=301989888,
-    memory_usage_mb=8072.0,
+    memory_usage_mb=4036,
     max_tokens=131072,
     embed_dim=1152,
     license="apache-2.0",
@@ -564,7 +566,7 @@ kalm_reranker_v1_large = ModelMeta(
     languages=multilingual_langs,
     n_parameters=7508928880,
     n_embedding_parameters=671088640,
-    memory_usage_mb=28644.0,
+    memory_usage_mb=14322,
     max_tokens=131072,
     embed_dim=2560,
     license="apache-2.0",
@@ -576,6 +578,166 @@ kalm_reranker_v1_large = ModelMeta(
     similarity_fn_name=None,
     use_instructions=True,
     training_datasets=kalm_reranker_v1_training_data,
+    adapted_from="google/t5gemma-2-4b-4b",
+    superseded_by=None,
+    modalities=["text"],
+    model_type=["cross-encoder"],
+    citation=KALM_RERANKER_V1_CITATION,
+    contacts=None,
+    output_dtypes=OutputDType.BF16,
+)
+
+
+# R2 training sources, using MTEB task names where available for zero-shot checks.
+kalm_reranker_v1_r2_training_data = {
+    "AdvertiseGen",
+    "ArguAna",
+    "CHEF",
+    "CMRC 2018",
+    "CMedQAv2-reranking",
+    "CQADupstackRetrieval",
+    "CodeFeedback",
+    "DBPedia",
+    "DRCD",
+    "DuRetrieval",
+    "Expertqa",
+    "FEVER",
+    "FiQA2018",
+    "GooAQ",
+    "HotpotQA",
+    "LCSTS",
+    "MEDI2BGE",
+    "MIRACLRetrieval",
+    "MLDR",
+    "MSMARCO",
+    "MSMARCOv2",
+    "MrTidyRetrieval",
+    "Multi-CPR",
+    "NFCorpus",
+    "NQ",
+    "OpenOrca",
+    "PAQ",
+    "PubMedQA",
+    "QuoraRetrieval",
+    "RefGPT",
+    "SciFact",
+    "SearchQA",
+    "T2Retrieval",
+    "T2Reranking",
+    "THUCNews",
+    "TRECCOVID",
+    "UMETRIP-QA",
+    "WebCPM",
+    "arxiv_qa",
+    "aya_dataset",
+    "cCOVID-News",
+    "ccnews",
+    "csl",
+    "dureader-checklist",
+    "esci",
+    "law-gpt",
+    "lawzhidao",
+    "lima-chinese",
+    "mmarco-chinese",
+    "rag-dataset-12000",
+    "retrieval_data_llm_infgrad",
+    "squad_v2",
+    "triviaqa",
+    "webgpt_comparisons",
+    "webqa",
+    "yahoo-answers",
+}
+
+
+kalm_reranker_v1_nano_r2 = ModelMeta(
+    loader=KaLMRerankerWrapper,
+    loader_kwargs=dict(
+        dtype=OutputDType.BF16,
+    ),
+    name="KaLM-Embedding/KaLM-Reranker-V1-Nano-R2",
+    revision="32b242bb7fd7ad6fd404154c09560d249ffe017f",
+    release_date="2026-09-08",
+    languages=multilingual_langs,
+    n_parameters=786029296,
+    n_embedding_parameters=167772160,
+    memory_usage_mb=1499,
+    max_tokens=131072,
+    embed_dim=640,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code="https://github.com/HITsz-TMG/Lychee-Reranker",
+    public_training_data="https://huggingface.co/datasets/KaLM-Embedding/KaLM-reranker-training-data",
+    framework=["PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/KaLM-Embedding/KaLM-Reranker-V1-Nano-R2",
+    similarity_fn_name=None,
+    use_instructions=True,
+    training_datasets=kalm_reranker_v1_r2_training_data,
+    adapted_from="google/t5gemma-2-270m-270m",
+    superseded_by=None,
+    modalities=["text"],
+    model_type=["cross-encoder"],
+    citation=KALM_RERANKER_V1_CITATION,
+    contacts=None,
+    output_dtypes=OutputDType.BF16,
+)
+
+
+kalm_reranker_v1_small_r2 = ModelMeta(
+    loader=KaLMRerankerWrapper,
+    loader_kwargs=dict(
+        dtype=OutputDType.BF16,
+    ),
+    name="KaLM-Embedding/KaLM-Reranker-V1-Small-R2",
+    revision="68b74f09ff2ab5df9b9a9a48c812a81aaff8815e",
+    release_date="2026-09-08",
+    languages=multilingual_langs,
+    n_parameters=2115977456,
+    n_embedding_parameters=301989888,
+    memory_usage_mb=4036,
+    max_tokens=131072,
+    embed_dim=1152,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code="https://github.com/HITsz-TMG/Lychee-Reranker",
+    public_training_data="https://huggingface.co/datasets/KaLM-Embedding/KaLM-reranker-training-data",
+    framework=["PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/KaLM-Embedding/KaLM-Reranker-V1-Small-R2",
+    similarity_fn_name=None,
+    use_instructions=True,
+    training_datasets=kalm_reranker_v1_r2_training_data,
+    adapted_from="google/t5gemma-2-1b-1b",
+    superseded_by=None,
+    modalities=["text"],
+    model_type=["cross-encoder"],
+    citation=KALM_RERANKER_V1_CITATION,
+    contacts=None,
+    output_dtypes=OutputDType.BF16,
+)
+
+
+kalm_reranker_v1_large_r2 = ModelMeta(
+    loader=KaLMRerankerWrapper,
+    loader_kwargs=dict(
+        dtype=OutputDType.BF16,
+    ),
+    name="KaLM-Embedding/KaLM-Reranker-V1-Large-R2",
+    revision="a862dd8581d4cb1b686b5c595c08be405129656c",
+    release_date="2026-09-08",
+    languages=multilingual_langs,
+    n_parameters=7508928880,
+    n_embedding_parameters=671088640,
+    memory_usage_mb=14322,
+    max_tokens=131072,
+    embed_dim=2560,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code="https://github.com/HITsz-TMG/Lychee-Reranker",
+    public_training_data="https://huggingface.co/datasets/KaLM-Embedding/KaLM-reranker-training-data",
+    framework=["PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/KaLM-Embedding/KaLM-Reranker-V1-Large-R2",
+    similarity_fn_name=None,
+    use_instructions=True,
+    training_datasets=kalm_reranker_v1_r2_training_data,
     adapted_from="google/t5gemma-2-4b-4b",
     superseded_by=None,
     modalities=["text"],
