@@ -589,8 +589,8 @@ class AbsTask(ABC):  # noqa: PLR0904
         Args:
             languages: list of languages to filter the task by can be either a 3-letter language code (e.g. "eng") or also include the script
                 (e.g. "eng-Latn")
-            script: A list of scripts to filter the task by. Will be ignored if language code specified the script. If None, all scripts are included.
-                If the language code does not specify the script the intersection of the language and script will be used.
+            script: A list of scripts to filter the task by. Cannot be combined with a language code that includes a script (e.g. "eng-Latn").
+                If None, all scripts are included, otherwise the intersection of the language and script will be used.
             hf_subsets: A list of huggingface subsets to filter on. This is useful if a dataset have multiple subsets containing the desired language,
                 but you only want to test on one. An example is STS22 which e.g. have both "en" and "de-en" which both contains English.
             exclusive_language_filter: Some datasets contains more than one language e.g. for STS22 the subset "de-en" contain eng and deu. If
@@ -600,6 +600,7 @@ class AbsTask(ABC):  # noqa: PLR0904
         Returns:
             The filtered task
         """
+        LanguageScripts.check_filters(languages, script)
         lang_scripts = LanguageScripts.from_languages_and_scripts(languages, script)
 
         subsets_to_keep = []
