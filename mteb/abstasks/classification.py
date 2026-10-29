@@ -503,6 +503,11 @@ class AbsTaskClassification(AbsTask):
         label_counter: dict[str, int] = defaultdict(int)
         sampled_idxs = []
         labels = dataset[self.label_column_name]
+        # Indexing a `datasets.Column` rebuilds a one-column table per row (~0.1 ms), so a
+        # 20k-row split spends minutes in this loop - on image/audio classification tasks
+        # that is the dominant cost of the whole evaluation. Read the column out once.
+        if not isinstance(labels, list):
+            labels = list(labels)
 
         for i in idxs:
             label = labels[i]
