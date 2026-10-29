@@ -11,6 +11,7 @@ import logging
 from collections import OrderedDict
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Generic, TypeVar
+from weakref import WeakValueDictionary
 
 from mteb.api.aggregators import (
     build_benchmark_per_language,
@@ -45,7 +46,10 @@ class CacheLayer(Generic[_K, _V]):
 
     name: str
     store: OrderedDict[_K, _V]
-    locks: dict[_K, asyncio.Lock] = field(default_factory=dict)
+    # Holders and waiters retain locks; idle locks must not retain request keys.
+    locks: WeakValueDictionary[_K, asyncio.Lock] = field(
+        default_factory=WeakValueDictionary
+    )
     max_size: int | None = None
 
 
@@ -71,7 +75,7 @@ _per_language_bytes: CacheLayer[str, Serialized] = CacheLayer(
 )
 
 
-def _lock_for(locks: dict[_K, asyncio.Lock], key: _K) -> asyncio.Lock:
+def _lock_for(locks: WeakValueDictionary[_K, asyncio.Lock], key: _K) -> asyncio.Lock:
     # ``get`` first so the hit path skips a throwaway Lock alloc.
     lock = locks.get(key)
     if lock is None:
@@ -104,8 +108,8 @@ async def _cache_or_build(
         value = await build()
         store[key] = value
         if layer.max_size is not None and len(store) > layer.max_size:
-            evicted, _ = store.popitem(last=False)
-            locks.pop(evicted, None)
+            # Eviction must not detach locks still used by queued requests.
+            store.popitem(last=False)
         return value
 
 
