@@ -413,13 +413,19 @@ from .r2_med_retrieval import (
 )
 from .r_oxford_i2i_retrieval import (
     ROxfordEasyI2IRetrieval,
+    ROxfordEasyI2IRetrievalV2,
     ROxfordHardI2IRetrieval,
+    ROxfordHardI2IRetrievalV2,
     ROxfordMediumI2IRetrieval,
+    ROxfordMediumI2IRetrievalV2,
 )
 from .r_paris_i2i_retrieval import (
     RParisEasyI2IRetrieval,
+    RParisEasyI2IRetrievalV2,
     RParisHardI2IRetrieval,
+    RParisHardI2IRetrievalV2,
     RParisMediumI2IRetrieval,
+    RParisMediumI2IRetrievalV2,
 )
 from .ra_rb_code_retrieval import RARbCode
 from .ra_rb_math_retrieval import RARbMath
@@ -929,12 +935,18 @@ __all__ = [
     "RARbMath",
     "RAVENEAI2TRetrieval",
     "ROxfordEasyI2IRetrieval",
+    "ROxfordEasyI2IRetrievalV2",
     "ROxfordHardI2IRetrieval",
+    "ROxfordHardI2IRetrievalV2",
     "ROxfordMediumI2IRetrieval",
+    "ROxfordMediumI2IRetrievalV2",
     "RP2kI2IRetrieval",
     "RParisEasyI2IRetrieval",
+    "RParisEasyI2IRetrievalV2",
     "RParisHardI2IRetrieval",
+    "RParisHardI2IRetrievalV2",
     "RParisMediumI2IRetrieval",
+    "RParisMediumI2IRetrievalV2",
     "RT1T2VRetrieval",
     "RT1V2TRetrieval",
     "ReMe",

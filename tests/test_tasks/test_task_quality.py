@@ -942,8 +942,11 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "PatchCamelyon",  # adjacent, overlapping WSI patches are inherent to the source data
         "PatchCamelyonZeroShot",  # adjacent, overlapping WSI patches are inherent to the source data
         "RParisEasyI2IRetrieval",
+        "RParisEasyI2IRetrieval.v2",  # same corpus as v1
         "RParisHardI2IRetrieval",
+        "RParisHardI2IRetrieval.v2",  # same corpus as v1
         "RParisMediumI2IRetrieval",
+        "RParisMediumI2IRetrieval.v2",  # same corpus as v1
         "ReMuQIT2TRetrieval",
         "RealMMRAGFinSlidesRetrieval",
         "SOPI2IRetrieval",
