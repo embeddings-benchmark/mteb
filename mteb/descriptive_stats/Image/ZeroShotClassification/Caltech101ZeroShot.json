@@ -1,337 +1,42 @@
 {
     "test": {
-        "num_samples": 6084,
-        "number_of_characters": null,
-        "text_statistics": null,
-        "image_statistics": {
+        "num_samples": 6186,
+        "num_queries": 6084,
+        "num_documents": 102,
+        "number_of_characters": 2232,
+        "documents_text_statistics": {
+            "total_text_length": 2232,
+            "min_text_length": 17,
+            "average_text_length": 21.88235294117647,
+            "max_text_length": 31,
+            "unique_texts": 102
+        },
+        "documents_image_statistics": null,
+        "documents_audio_statistics": null,
+        "documents_video_statistics": null,
+        "queries_text_statistics": null,
+        "queries_image_statistics": {
             "min_image_width": 114,
             "average_image_width": 311.586620644313,
             "max_image_width": 3481,
             "min_image_height": 92,
             "average_image_height": 241.3760683760684,
             "max_image_height": 3999,
-            "unique_images": 6084
+            "unique_images": 6084,
+            "black_or_white_images": 0
         },
-        "label_statistics": {
-            "min_labels_per_text": 1,
-            "average_label_per_text": 1.0,
-            "max_labels_per_text": 1,
-            "unique_labels": 102,
-            "labels": {
-                "43": {
-                    "count": 4
-                },
-                "46": {
-                    "count": 70
-                },
-                "47": {
-                    "count": 12
-                },
-                "3": {
-                    "count": 12
-                },
-                "13": {
-                    "count": 61
-                },
-                "55": {
-                    "count": 31
-                },
-                "90": {
-                    "count": 5
-                },
-                "96": {
-                    "count": 7
-                },
-                "20": {
-                    "count": 77
-                },
-                "31": {
-                    "count": 38
-                },
-                "23": {
-                    "count": 43
-                },
-                "70": {
-                    "count": 17
-                },
-                "29": {
-                    "count": 22
-                },
-                "34": {
-                    "count": 23
-                },
-                "51": {
-                    "count": 1
-                },
-                "74": {
-                    "count": 4
-                },
-                "28": {
-                    "count": 37
-                },
-                "27": {
-                    "count": 27
-                },
-                "1": {
-                    "count": 770
-                },
-                "52": {
-                    "count": 34
-                },
-                "21": {
-                    "count": 17
-                },
-                "45": {
-                    "count": 69
-                },
-                "93": {
-                    "count": 56
-                },
-                "11": {
-                    "count": 13
-                },
-                "98": {
-                    "count": 4
-                },
-                "72": {
-                    "count": 15
-                },
-                "30": {
-                    "count": 35
-                },
-                "85": {
-                    "count": 34
-                },
-                "100": {
-                    "count": 9
-                },
-                "82": {
-                    "count": 54
-                },
-                "41": {
-                    "count": 15
-                },
-                "67": {
-                    "count": 25
-                },
-                "0": {
-                    "count": 25
-                },
-                "22": {
-                    "count": 39
-                },
-                "75": {
-                    "count": 27
-                },
-                "14": {
-                    "count": 20
-                },
-                "5": {
-                    "count": 17
-                },
-                "80": {
-                    "count": 33
-                },
-                "18": {
-                    "count": 29
-                },
-                "71": {
-                    "count": 8
-                },
-                "76": {
-                    "count": 52
-                },
-                "59": {
-                    "count": 11
-                },
-                "63": {
-                    "count": 57
-                },
-                "60": {
-                    "count": 36
-                },
-                "86": {
-                    "count": 15
-                },
-                "25": {
-                    "count": 20
-                },
-                "19": {
-                    "count": 32
-                },
-                "49": {
-                    "count": 58
-                },
-                "65": {
-                    "count": 46
-                },
-                "87": {
-                    "count": 56
-                },
-                "17": {
-                    "count": 17
-                },
-                "54": {
-                    "count": 84
-                },
-                "62": {
-                    "count": 10
-                },
-                "97": {
-                    "count": 29
-                },
-                "6": {
-                    "count": 24
-                },
-                "101": {
-                    "count": 30
-                },
-                "26": {
-                    "count": 21
-                },
-                "79": {
-                    "count": 10
-                },
-                "7": {
-                    "count": 16
-                },
-                "61": {
-                    "count": 13
-                },
-                "9": {
-                    "count": 98
-                },
-                "57": {
-                    "count": 170
-                },
-                "16": {
-                    "count": 93
-                },
-                "50": {
-                    "count": 50
-                },
-                "32": {
-                    "count": 45
-                },
-                "53": {
-                    "count": 56
-                },
-                "88": {
-                    "count": 29
-                },
-                "39": {
-                    "count": 37
-                },
-                "84": {
-                    "count": 5
-                },
-                "94": {
-                    "count": 45
-                },
-                "77": {
-                    "count": 29
-                },
-                "69": {
-                    "count": 9
-                },
-                "95": {
-                    "count": 209
-                },
-                "10": {
-                    "count": 68
-                },
-                "44": {
-                    "count": 21
-                },
-                "81": {
-                    "count": 9
-                },
-                "78": {
-                    "count": 19
-                },
-                "15": {
-                    "count": 13
-                },
-                "8": {
-                    "count": 3
-                },
-                "2": {
-                    "count": 12
-                },
-                "68": {
-                    "count": 5
-                },
-                "12": {
-                    "count": 55
-                },
-                "56": {
-                    "count": 51
-                },
-                "99": {
-                    "count": 26
-                },
-                "48": {
-                    "count": 24
-                },
-                "73": {
-                    "count": 23
-                },
-                "35": {
-                    "count": 34
-                },
-                "89": {
-                    "count": 34
-                },
-                "66": {
-                    "count": 768
-                },
-                "83": {
-                    "count": 27
-                },
-                "40": {
-                    "count": 37
-                },
-                "4": {
-                    "count": 437
-                },
-                "36": {
-                    "count": 55
-                },
-                "42": {
-                    "count": 4
-                },
-                "24": {
-                    "count": 40
-                },
-                "38": {
-                    "count": 405
-                },
-                "37": {
-                    "count": 405
-                },
-                "91": {
-                    "count": 55
-                },
-                "58": {
-                    "count": 48
-                },
-                "33": {
-                    "count": 34
-                },
-                "92": {
-                    "count": 19
-                },
-                "64": {
-                    "count": 2
-                }
-            }
+        "queries_audio_statistics": null,
+        "queries_video_statistics": null,
+        "relevant_docs_statistics": {
+            "num_relevant_docs": 6084,
+            "min_relevant_docs_per_query": 1,
+            "average_relevant_docs_per_query": 1.0,
+            "max_relevant_docs_per_query": 1,
+            "unique_relevant_docs": 102,
+            "num_missing_query_ids": 0,
+            "num_missing_corpus_ids": 0,
+            "queries_with_all_gold_black_or_white": 0
         },
-        "candidates_labels_text_statistics": {
-            "total_text_length": 2232,
-            "min_text_length": 17,
-            "average_text_length": 21.88235294117647,
-            "max_text_length": 31,
-            "unique_texts": 102
-        }
+        "top_ranked_statistics": null
     }
 }

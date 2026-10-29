@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 import pytrec_eval
 from packaging.version import Version
+from sklearn import metrics as sk_metrics
 from sklearn.metrics import auc
 
 from mteb.types import RetrievalEvaluationResult
@@ -193,7 +194,7 @@ def calculate_pmrr(
     return qid_wise["p-MRR"].mean()
 
 
-def evaluate_p_mrr_change(
+def evaluate_p_mrr_change(  # noqa: PLR0914
     qrels: RelevantDocumentsType,
     results: dict[str, dict[str, float]],
     changed_qrels: dict[str, list[str]],
@@ -245,6 +246,7 @@ def evaluate_p_mrr_change(
             avg_mrr,
             naucs_mrr,
             hit_rate,
+            classification,
         ) = calculate_retrieval_scores(group, qrels_sep[name], k_values)
         # add these to the followir_scores with name prefix
         scores_dict = make_score_dict(
@@ -257,6 +259,7 @@ def evaluate_p_mrr_change(
             naucs_mrr=naucs_mrr,
             hit_rate=hit_rate,
             task_scores={},
+            classification=classification,
         )
         for key, value in scores_dict.items():
             followir_scores[name][key] = value  # type: ignore[index]
@@ -444,7 +447,7 @@ def robustness_at_10(
     return sum(robustness_scores) / len(robustness_scores)
 
 
-def make_score_dict(
+def make_score_dict(  # noqa: PLR0913
     *,
     ndcg: dict[str, float],
     _map: dict[str, float],
@@ -455,6 +458,7 @@ def make_score_dict(
     naucs_mrr: dict[str, float],
     hit_rate: dict[str, float],
     task_scores: dict[str, float],
+    classification: dict[str, float],
     previous_results_model_meta: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     return {
@@ -475,6 +479,7 @@ def make_score_dict(
             for k, v in naucs_mrr.items()
         },
         **{f"hit_rate_at_{k.split('@')[1]}": v for k, v in hit_rate.items()},
+        **classification,
         **task_scores,
         **(
             {"previous_results_model_meta": previous_results_model_meta}
@@ -571,9 +576,18 @@ def max_over_subqueries(
         new_qrels[query_id_base] = qrels[query_id_full]  # all the same
 
     # now we have the new results, we can compute the scores
-    _, ndcg, _map, recall, precision, naucs, mrr, naucs_mrr, hit_rate = (
-        calculate_retrieval_scores(new_results, new_qrels, k_values)
-    )
+    (
+        _,
+        ndcg,
+        _map,
+        recall,
+        precision,
+        naucs,
+        mrr,
+        naucs_mrr,
+        hit_rate,
+        classification,
+    ) = calculate_retrieval_scores(new_results, new_qrels, k_values)
     score_dict = make_score_dict(
         ndcg=ndcg,
         _map=_map,
@@ -584,6 +598,7 @@ def max_over_subqueries(
         naucs_mrr=naucs_mrr,
         hit_rate=hit_rate,
         task_scores={},
+        classification=classification,
     )
     return {"max_over_subqueries_" + k: v for k, v in score_dict.items()}
 
@@ -641,6 +656,7 @@ def calculate_retrieval_scores(  # noqa: PLR0914
         mrr=avg_mrr,
         naucs_mrr=naucs_mrr,
         hit_rate=hit_rate,
+        classification=classification_scores(qrels, results),
     )
 
 
@@ -671,3 +687,70 @@ def evaluate_abstention(
             naucs[f"nAUC_{metric_name}_{fct}"] = nauc(conf_scores, scores)
 
     return naucs
+
+
+def classification_scores(
+    qrels: RelevantDocumentsType,
+    results: Mapping[str, Mapping[str, float]],
+) -> dict[str, float]:
+    """Classification metrics treating the top-ranked document of each query as its predicted class.
+
+    The class of a query is its relevant document. If the top-ranked document is relevant, the query counts as
+    predicted correctly (so queries with several relevant documents are supported), otherwise the first relevant
+    document is the true class. Queries without results are always wrong.
+
+    Args:
+        qrels: Relevant documents of each query.
+        results: Scores of the retrieved documents of each query.
+
+    Returns:
+        `f1`, `precision`, `recall` (macro and weighted) and, if there are exactly two classes, `ap`.
+    """
+    true_labels: list[str] = []
+    predictions: list[str] = []
+    for query_id, relevant in qrels.items():
+        relevant_ids = [doc_id for doc_id, score in relevant.items() if score > 0]
+        if not relevant_ids:
+            continue
+        retrieved = results.get(query_id, {})
+        top = max(retrieved, key=retrieved.__getitem__) if retrieved else None
+        true_labels.append(top if top in relevant_ids else relevant_ids[0])
+        predictions.append(top if top is not None else "")
+
+    scores: dict[str, float] = {
+        "f1": sk_metrics.f1_score(
+            true_labels, predictions, average="macro", zero_division=0
+        ),
+        "f1_weighted": sk_metrics.f1_score(
+            true_labels, predictions, average="weighted", zero_division=0
+        ),
+        "precision": sk_metrics.precision_score(
+            true_labels, predictions, average="macro", zero_division=0
+        ),
+        "precision_weighted": sk_metrics.precision_score(
+            true_labels, predictions, average="weighted", zero_division=0
+        ),
+        "recall": sk_metrics.recall_score(
+            true_labels, predictions, average="macro", zero_division=0
+        ),
+        "recall_weighted": sk_metrics.recall_score(
+            true_labels, predictions, average="weighted", zero_division=0
+        ),
+    }
+
+    classes = sorted(set(true_labels))
+    if len(classes) == 2:
+        positive_class = classes[1]
+        positive_scores = [
+            results.get(query_id, {}).get(positive_class, 0.0)
+            for query_id, relevant in qrels.items()
+            if any(score > 0 for score in relevant.values())
+        ]
+        binary_labels = [label == positive_class for label in true_labels]
+        scores["ap"] = sk_metrics.average_precision_score(
+            binary_labels, positive_scores, average="macro"
+        )
+        scores["ap_weighted"] = sk_metrics.average_precision_score(
+            binary_labels, positive_scores, average="weighted"
+        )
+    return scores

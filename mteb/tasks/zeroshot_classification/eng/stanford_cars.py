@@ -1,17 +1,15 @@
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import (
-    AbsTaskZeroShotClassification,
-)
 
 
-class StanfordCarsZeroShotClassification(AbsTaskZeroShotClassification):
+class StanfordCarsZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="StanfordCarsZeroShot",
         description="Classifying car images from 96 makes.",
         reference="https://pure.mpg.de/rest/items/item_2029263/component/file_2029262/content",
         dataset={
-            "path": "mteb/StanfordCars",
-            "revision": "09ffe9bc7864d3f1e851529e5c4b7e05601a04fb",
+            "path": "mteb/StanfordCarsZeroShot",
+            "revision": "afe3f16c884bdd27c050811c612cf171c0d8aa0e",
         },
         type="ZeroShotClassification",
         category="i2t",
@@ -38,9 +36,3 @@ class StanfordCarsZeroShotClassification(AbsTaskZeroShotClassification):
 }
 """,
     )
-
-    def get_candidate_labels(self) -> list[str]:
-        return [
-            f"a photo of a {name}."
-            for name in self.dataset["test"].features[self.label_column_name].names
-        ]

@@ -493,6 +493,7 @@ class SearchEncoderWrapper:
                     hf_split=hf_split,
                     top_k=top_k,
                     encode_kwargs=encode_kwargs,
+                    num_proc=num_proc,
                     timer=timer,
                 )
             else:
@@ -539,6 +540,7 @@ class SearchEncoderWrapper:
         top_k: int,
         encode_kwargs: EncodeKwargs,
         timer: TimingStack,
+        num_proc: int | None = None,
     ) -> dict[str, list[tuple[float, str]]]:
 
         logger.info("Encoding Corpus in batches (this might take a while)...")
@@ -558,6 +560,7 @@ class SearchEncoderWrapper:
             encode_fn=self.model.encode,
             similarity_fn=self.model.similarity,
             search_k_offset=1,
+            num_proc=num_proc,
             timer=timer,
         )
 
