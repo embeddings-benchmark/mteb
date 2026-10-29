@@ -27,7 +27,7 @@ class ArguAna(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{wachsmuth2018retrieval,
+@inproceedings{wachsmuth_retrieval_2018,
   author = {Wachsmuth, Henning and Syed, Shahbaz and Stein, Benno},
   booktitle = {ACL},
   title = {Retrieval of the Best Counterargument without Prior Topic Knowledge},

@@ -162,7 +162,7 @@ unispeech_base = ModelMeta(
     training_datasets={"LibriSpeech"},
     modalities=["audio"],
     citation="""
-@inproceedings{chen2021unispeechsatuniversalspeechrepresentation,
+@inproceedings{chen_unispeech-sat_2022,
   author = {Chen, Sanyuan and Wu, Yu and Wang, Chengyi and Chen, Zhengyang and Chen, Zhuo and Liu, Shujie and Wu, Jian and Qian, Yao and Wei, Furu and Li, Jinyu and Yu, Xiangzhan},
   booktitle = {ICASSP 2022 - 2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp43922.2022.9747077},

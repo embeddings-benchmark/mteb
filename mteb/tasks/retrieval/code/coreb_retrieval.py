@@ -6,7 +6,7 @@ _EVAL_SPLIT = "test"
 coreb_description = "CoREB is a contamination-limited, graded-relevance benchmark for evaluating code embedding and reranking models across three retrieval tasks (code2text, text2code, code2code), built from counterfactually rewritten LiveCodeBench problems in five programming languages."
 
 coreb_bibtex = r"""
-@article{xue2026coreb,
+@article{xue_retrieval_2026,
   author = {Xue, Siqiao and Liao, Zihan and Qin, Jin and Zhang, Ziyin and Mu, Yixiang and Zhou, Fan and Yu, Hang},
   journal = {arXiv preprint arXiv:2605.04615},
   title = {Beyond Retrieval: A Multitask Benchmark and Model for Code Search},

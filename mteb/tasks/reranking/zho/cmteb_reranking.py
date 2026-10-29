@@ -26,7 +26,7 @@ class T2Reranking(AbsTaskRetrieval):
         sample_creation="found",
         prompt="Given a Chinese search query, retrieve web passages that answer the question",
         bibtex_citation=r"""
-@inproceedings{xie2023t2ranking,
+@inproceedings{xie_t2ranking_2023,
   author = {Xie, Xiaohui and Dong, Qian and Wang, Bingning and Lv, Feiyang and Yao, Ting and Gan, Weinan and Wu, Zhijing and Li, Xiangsheng and Li, Haitao and Liu, Yiqun and Ma, Jin},
   booktitle = {Proceedings of the 46th International ACM SIGIR Conference on Research and Development in Information Retrieval},
   collection = {SIGIR ’23},
@@ -67,7 +67,7 @@ class MMarcoReranking(AbsTaskRetrieval):
         sample_creation="machine-translated",
         prompt="Given a Chinese search query, retrieve web passages that answer the question",
         bibtex_citation=r"""
-@article{DBLP:journals/corr/abs-2108-13897,
+@article{bonifacio_mmarco_2021,
   author = {Luiz Bonifacio and
 Israel Campiotti and
 Roberto de Alencar Lotufo and
@@ -111,7 +111,7 @@ class CMedQAv1(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{zhang2017chinese,
+@article{zhang_chinese_2017,
   author = {Zhang, Sheng and Zhang, Xin and Wang, Hui and Cheng, Jiajun and Li, Pei and Ding, Zhaoyun},
   journal = {Applied Sciences},
   number = {8},
@@ -149,7 +149,7 @@ class CMedQAv2(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{8548603,
+@article{zhang_multi-scale_2018,
   author = {S. Zhang and X. Zhang and H. Wang and L. Guo and S. Liu},
   doi = {10.1109/ACCESS.2018.2883637},
   issn = {2169-3536},

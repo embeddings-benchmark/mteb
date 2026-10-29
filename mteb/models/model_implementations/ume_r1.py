@@ -254,7 +254,7 @@ class UMER1Wrapper(AbsEncoder):
         return torch.nn.functional.normalize(embeddings, p=2, dim=-1)
 
 
-_UME_R1_CITATION = """@article{lan2025ume,
+_UME_R1_CITATION = """@article{lan_ume-r1_2025,
   title={UME-R1: Exploring Reasoning-Driven Generative Multimodal Embeddings},
   author={Lan, Zhibin and Niu, Liqiang and Meng, Fandong and Zhou, Jie and Su, Jinsong},
   journal={arXiv preprint arXiv:2511.00405},

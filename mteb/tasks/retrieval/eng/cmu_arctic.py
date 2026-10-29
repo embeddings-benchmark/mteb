@@ -31,7 +31,7 @@ class CMUArcticA2TRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         superseded_by="CMUArcticA2TRetrieval.v2",
         bibtex_citation=r"""
-@techreport{kominek2003cmu,
+@techreport{kominek_cmu_2003,
   author = {Kominek, John and Black, Alan W.},
   institution = {Language Technologies Institute, School of Computer Science,
 Carnegie Mellon University},
@@ -75,7 +75,7 @@ class CMUArcticT2ARetrieval(AbsTaskRetrieval):
         sample_creation="found",
         superseded_by="CMUArcticT2ARetrieval.v2",
         bibtex_citation=r"""
-@techreport{kominek2003cmu,
+@techreport{kominek_cmu_2003,
   author = {Kominek, John and Black, Alan W.},
   institution = {Language Technologies Institute, School of Computer Science,
 Carnegie Mellon University},
@@ -118,7 +118,7 @@ class CMUArcticA2TRetrievalV2(AbsTaskRetrieval):
         sample_creation="found",
         adapted_from=["CMUArcticA2TRetrieval"],
         bibtex_citation=r"""
-@techreport{kominek2003cmu,
+@techreport{kominek_cmu_2003,
   author = {Kominek, John and Black, Alan W.},
   institution = {Language Technologies Institute, School of Computer Science,
 Carnegie Mellon University},
@@ -163,7 +163,7 @@ class CMUArcticT2ARetrievalV2(AbsTaskRetrieval):
         sample_creation="found",
         adapted_from=["CMUArcticT2ARetrieval"],
         bibtex_citation=r"""
-@techreport{kominek2003cmu,
+@techreport{kominek_cmu_2003,
   author = {Kominek, John and Black, Alan W.},
   institution = {Language Technologies Institute, School of Computer Science,
 Carnegie Mellon University},

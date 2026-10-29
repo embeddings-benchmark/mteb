@@ -25,7 +25,7 @@ class STS16VisualSTS(AbsTaskSTS):
         dialect=[],
         sample_creation="rendered",
         bibtex_citation=r"""
-@article{xiao2024pixel,
+@article{xiao_pixel_2024,
   author = {Xiao, Chenghao and Huang, Zhuoxu and Chen, Danlu and Hudson, G Thomas and Li, Yizhi and Duan, Haoran and Lin, Chenghua and Fu, Jie and Han, Jungong and Moubayed, Noura Al},
   journal = {arXiv preprint arXiv:2402.08183},
   title = {Pixel Sentence Representation Learning},

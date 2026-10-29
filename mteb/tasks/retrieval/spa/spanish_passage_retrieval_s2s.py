@@ -25,7 +25,7 @@ class SpanishPassageRetrievalS2S(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{10.1007/978-3-030-15719-7_19,
+@inproceedings{kamateri_test_2019,
   address = {Cham},
   author = {Kamateri, Eleni
 and Tsikrika, Theodora

@@ -27,7 +27,7 @@ class FilipinoHateSpeechClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{cabasag2019hate,
+@article{cabasag_hate_2019,
   author = {Cabasag, Neil Vicente and Chan, Vicente Raphael and Lim, Sean Christian and Gonzales, Mark Edward and Cheng, Charibeth},
   journal = {Philippine Computing Journal, XIV No},
   title = {Hate speech in philippine election-related tweets: Automatic detection and classification using natural language processing},
@@ -62,7 +62,7 @@ class FilipinoHateSpeechClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{cabasag2019hate,
+@article{cabasag_hate_2019,
   author = {Cabasag, Neil Vicente and Chan, Vicente Raphael and Lim, Sean Christian and Gonzales, Mark Edward and Cheng, Charibeth},
   journal = {Philippine Computing Journal, XIV No},
   title = {Hate speech in philippine election-related tweets: Automatic detection and classification using natural language processing},

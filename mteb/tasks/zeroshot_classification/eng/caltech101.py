@@ -30,7 +30,7 @@ class Caltech101ZeroShotClassification(AbsTaskZeroShotClassification):
         modalities=["text", "image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{1384978,
+@inproceedings{fei-fei_learning_2004,
   author = {Li Fei-Fei and Fergus, R. and Perona, P.},
   booktitle = {2004 Conference on Computer Vision and Pattern Recognition Workshop},
   doi = {10.1109/CVPR.2004.383},

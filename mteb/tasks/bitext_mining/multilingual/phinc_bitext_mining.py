@@ -29,7 +29,7 @@ class PhincBitextMining(AbsTaskBitextMining):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{srivastava2020phinc,
+@inproceedings{srivastava_phinc_2020,
   author = {Srivastava, Vivek and Singh, Mayank},
   booktitle = {Proceedings of the Sixth Workshop on Noisy User-generated Text (W-NUT 2020)},
   pages = {41--49},

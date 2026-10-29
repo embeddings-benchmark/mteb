@@ -28,7 +28,7 @@ class UkrTweetToxicityBinaryClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{dementieva-etal-2024-toxicity,
+@inproceedings{dementieva_toxicity_2024,
   address = {Mexico City, Mexico},
   author = {Dementieva, Daryna  and
 Khylenko, Valeriia  and

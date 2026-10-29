@@ -27,7 +27,7 @@ COMMON_METADATA = {
     "dialect": [],
     "modalities": ["text", "image"],
     "sample_creation": "multiple",
-    "bibtex_citation": r"""@misc{kolavi2025m3druniversalmultilingualmultimodal,
+    "bibtex_citation": r"""@misc{kolavi_m3dr_2025,
   archiveprefix = {arXiv},
   author = {Adithya S Kolavi and Vyoman Jain},
   eprint = {2512.03514},

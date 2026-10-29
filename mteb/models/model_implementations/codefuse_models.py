@@ -3,7 +3,7 @@ from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ScoringFunction
 from mteb.types import OutputDType, PromptType
 
-F2LLM_CITATION = """@article{2025F2LLM,
+F2LLM_CITATION = """@article{zhang_f2llm_2025,
     title={F2LLM Technical Report: Matching SOTA Embedding Performance with 6 Million Open-Source Data},
     author={Ziyin Zhang and Zihan Liao and Hang Yu and Peng Di and Rui Wang},
     journal={CoRR},
@@ -16,7 +16,7 @@ F2LLM_CITATION = """@article{2025F2LLM,
 }"""
 
 F2LLMV2_CITATION = """
-@misc{f2llm-v2,
+@misc{zhang_f2llm-v2_2026,
     title={F2LLM-v2: Inclusive, Performant, and Efficient Embeddings for a Multilingual World},
     author={Ziyin Zhang and Zihan Liao and Hang Yu and Peng Di and Rui Wang},
     year={2026},
@@ -27,7 +27,7 @@ F2LLMV2_CITATION = """
 }"""
 
 C2LLM_CITATION = """
-@misc{qin2025c2llmtechnicalreportnew,
+@misc{qin_c2llm_2025,
     title={C2LLM Technical Report: A New Frontier in Code Retrieval via Adaptive Cross-Attention Pooling},
     author={Jin Qin and Zihan Liao and Ziyin Zhang and Hang Yu and Peng Di and Rui Wang},
     year={2025},

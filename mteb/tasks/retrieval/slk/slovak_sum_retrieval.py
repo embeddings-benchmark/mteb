@@ -29,7 +29,7 @@ class SlovakSumRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{ondrejova-suppa-2024-slovaksum,
+@inproceedings{ondrejova_slovaksum_2024,
   address = {Torino, Italia},
   author = {Ondrejová, Viktória and Šuppa, Marek},
   booktitle = {Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation (LREC-COLING 2024)},

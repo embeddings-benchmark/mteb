@@ -484,7 +484,7 @@ def bm25_loader(model_name: str, **kwargs: Any) -> SearchProtocol:
     return BM25Search(**kwargs)
 
 
-_BM25_CITATION = """@misc{bm25s,
+_BM25_CITATION = """@misc{lu_bm25s_2024,
       title={BM25S: Orders of magnitude faster lexical search via eager sparse scoring},
       author={Xing Han Lù},
       year={2024},

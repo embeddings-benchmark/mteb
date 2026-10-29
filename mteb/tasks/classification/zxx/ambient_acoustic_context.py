@@ -25,7 +25,7 @@ class AmbientAcousticContextClassification(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{10.1145/3379503.3403535,
+@inproceedings{park_augmenting_2020,
   address = {New York, NY, USA},
   articleno = {33},
   author = {Park, Chunjong and Min, Chulhong and Bhattacharya, Sourav and Kawsar, Fahim},

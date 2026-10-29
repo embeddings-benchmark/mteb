@@ -174,7 +174,7 @@ BEKKO_COMMON_KWARGS = {
     "adapted_from": "jhu-clsp/mmBERT-small",
     "modalities": ["text"],
     "model_type": ["dense"],
-    "citation": """@misc{tateno2026bekko,
+    "citation": """@misc{tateno_bekko_2026,
   title={Bekko Embedding: Parameter-Efficient Multilingual Retrieval with Ultra-Compact Encoders},
   author={Yuichi Tateno},
   year={2026},

@@ -25,7 +25,7 @@ class GovReportRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{huang-etal-2021-efficient,
+@inproceedings{huang_efficient_2021,
   address = {Online},
   author = {Huang, Luyang  and
 Cao, Shuyang  and

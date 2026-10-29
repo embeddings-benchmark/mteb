@@ -11,7 +11,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 _DATASET_PATH = "mteb/MSR-VTT"
 _DATASET_REVISION = "4661603cee25c1fd370e5478a2953203cf37155b"
 _BIBTEX = r"""
-@inproceedings{xu2016msrvtt,
+@inproceedings{xu_msr-vtt_2016,
   author = {Xu, Jun and Mei, Tao and Yao, Ting and Rui, Yong},
   booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
   title = {Msr-vtt: A large video description dataset for bridging video and language},

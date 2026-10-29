@@ -40,7 +40,7 @@ _common_metadata = dict(
     dialect=[],
     sample_creation="created",
     bibtex_citation=r"""
-@article{10.1162/tacl_a_00595,
+@article{zhang_miracl_2023,
   author = {Zhang, Xinyu and Thakur, Nandan and Ogundepo, Odunayo and Kamalloo, Ehsan and Alfonso-Hermelo, David and Li, Xiaoguang and Liu, Qun and Rezagholizadeh, Mehdi and Lin, Jimmy},
   doi = {10.1162/tacl_a_00595},
   eprint = {https://direct.mit.edu/tacl/article-pdf/doi/10.1162/tacl\_a\_00595/2157340/tacl\_a\_00595.pdf},

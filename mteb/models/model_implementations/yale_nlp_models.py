@@ -23,7 +23,7 @@ def instruction_template(
     return f"Instruct: {instruction}\nQuery:"
 
 
-RTRIEVER_CITATION = """@inproceedings{zhao-etal-2026-rethinking,
+RTRIEVER_CITATION = """@inproceedings{zhao_rethinking_2026,
     title = "Rethinking Reasoning-Intensive Retrieval: Evaluating and Advancing Retrievers in Agentic Search Systems",
     author = "Zhao, Yilun  and
       Wei, Jinbiao  and

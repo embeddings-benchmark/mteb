@@ -32,7 +32,7 @@ class JaCWIRReranking(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{li-etal-2026-jmteb,
+@inproceedings{li_jmteb_2026,
   address = {Palma de Mallorca, Spain},
   author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan and Fukuchi, Akihiko and Shibata, Tomohide and Kawahara, Daisuke},
   booktitle = {Proceedings of the Fifteenth Language Resources and Evaluation Conference},

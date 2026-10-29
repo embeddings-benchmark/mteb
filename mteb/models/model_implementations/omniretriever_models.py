@@ -380,7 +380,7 @@ class OmniRetrieverWrapper(AbsEncoder):
 
 
 _OMNIRETRIEVER_CITATION = r"""
-@article{liu2026omniretriever,
+@article{liu_omniretriever_2026,
   title={OmniRetriever: Any-to-Any Audio-Video-Text Retrieval via Fusion-as-Teacher Distillation},
   author={Liu, Yunze},
   journal={arXiv preprint arXiv:2605.26641},

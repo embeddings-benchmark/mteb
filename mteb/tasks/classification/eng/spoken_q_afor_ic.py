@@ -27,7 +27,7 @@ class SpokenQAForIC(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="multiple",
         bibtex_citation=r"""
-@inproceedings{shon2023sluephase2benchmarksuite,
+@inproceedings{shon_slue_2023,
   address = {Toronto, Canada},
   author = {Shon, Suwon and Arora, Siddhant and Lin, Chyi-Jiunn and Pasad, Ankita and Wu, Felix and Sharma, Roshan and Wu, Wei-Lun and Lee, Hung-yi and Livescu, Karen and Watanabe, Shinji},
   booktitle = {Proceedings of the 61st Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},

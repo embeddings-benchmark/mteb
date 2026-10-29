@@ -10,14 +10,14 @@ _DATASET_PATH = "pranitchawla/crisismmd-mteb"
 _DATE = ("2017-05-31", "2017-11-19")
 
 _CITATION = r"""
-@inproceedings{crisismmd2018icwsm,
+@inproceedings{alam_crisismmd_2018,
   author = {Firoj Alam and Ferda Ofli and Muhammad Imran},
   booktitle = {Proceedings of the 12th International AAAI Conference on Web and Social Media},
   title = {{CrisisMMD}: Multimodal Twitter Datasets from Natural Disasters},
   year = {2018},
 }
 
-@inproceedings{ofli2020analysis,
+@inproceedings{ofli_analysis_2020,
   author = {Ferda Ofli and Firoj Alam and Muhammad Imran},
   booktitle = {17th International Conference on Information Systems for Crisis Response and Management},
   title = {Analysis of Social Media Data using Multimodal Deep Learning for Disaster Response},

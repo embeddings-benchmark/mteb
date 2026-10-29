@@ -27,7 +27,7 @@ class VisualNewsI2TRetrieval(AbsTaskRetrieval):
         modalities=["image", "text"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{liu2021visual,
+@inproceedings{liu_visual_2021,
   author = {Liu, Fuxiao and Wang, Yinghan and Wang, Tianlu and Ordonez, Vicente},
   booktitle = {Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing},
   pages = {6761--6771},

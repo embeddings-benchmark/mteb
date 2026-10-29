@@ -24,7 +24,7 @@ class ChemRxivRetrieval(AbsTaskRetrieval):
         annotations_creators="LM-generated and reviewed",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{kasmaee2025chembed,
+        bibtex_citation="""@article{kasmaee_chembed_2025,
   author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Astaraki, Mahdi and Saloot, Mohammad Arshi and Sherck, Nicholas and Mahyar, Hamidreza and Samiee, Soheila},
   journal = {arXiv preprint arXiv:2508.01643},
   title = {Chembed: Enhancing chemical literature search through domain-specific text embeddings},

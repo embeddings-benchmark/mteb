@@ -228,7 +228,7 @@ qwen25_omni_7b = ModelMeta(
     ],
     model_type=["dense"],
     citation="""
-@misc{xu2025qwen25omnitechnicalreport,
+@misc{xu_qwen2_2025,
     title={Qwen2.5-Omni Technical Report},
     author={Jin Xu and Zhifang Guo and Jinzheng He and Hangrui Hu and Ting He and Shuai Bai and Keqin Chen and Jialin Wang and Yang Fan and Kai Dang and Bin Zhang and Xiong Wang and Yunfei Chu and Junyang Lin},
     year={2025},
@@ -270,7 +270,7 @@ qwen25_omni_3b = ModelMeta(
     ],
     model_type=["dense"],
     citation="""
-@misc{xu2025qwen25omnitechnicalreport,
+@misc{xu_qwen2_2025,
     title={Qwen2.5-Omni Technical Report},
     author={Jin Xu and Zhifang Guo and Jinzheng He and Hangrui Hu and Ting He and Shuai Bai and Keqin Chen and Jialin Wang and Yang Fan and Kai Dang and Bin Zhang and Xiong Wang and Yunfei Chu and Junyang Lin},
     year={2025},
@@ -316,7 +316,7 @@ qwen3_omni_30b_a3b_instruct = ModelMeta(
     ],
     model_type=["dense"],
     citation="""
-@misc{xu2025qwen3omnitechnicalreport,
+@misc{xu_qwen3-omni_2025,
     title={Qwen3-Omni Technical Report},
     author={Jin Xu and Zhifang Guo and Hangrui Hu and Yunfei Chu and Xiong Wang and Jinzheng He and Yuxuan Wang and Xian Shi and Ting He and Xinfa Zhu and Yuanjun Lv and Yongqi Wang and Dake Guo and He Wang and Linhan Ma and Pei Zhang and Xinyu Zhang and Hongkun Hao and Zishan Guo and Baosong Yang and Bin Zhang and Ziyang Ma and Xipin Wei and Shuai Bai and Keqin Chen and Xuejing Liu and Peng Wang and Mingkun Yang and Dayiheng Liu and Xingzhang Ren and Bo Zheng and Rui Men and Fan Zhou and Bowen Yu and Jianxin Yang and Le Yu and Jingren Zhou and Junyang Lin},
     year={2025},
@@ -361,7 +361,7 @@ qwen3_omni_30b_a3b_thinking = ModelMeta(
     ],
     model_type=["dense"],
     citation="""
-@misc{xu2025qwen3omnitechnicalreport,
+@misc{xu_qwen3-omni_2025,
     title={Qwen3-Omni Technical Report},
     author={Jin Xu and Zhifang Guo and Hangrui Hu and Yunfei Chu and Xiong Wang and Jinzheng He and Yuxuan Wang and Xian Shi and Ting He and Xinfa Zhu and Yuanjun Lv and Yongqi Wang and Dake Guo and He Wang and Linhan Ma and Pei Zhang and Xinyu Zhang and Hongkun Hao and Zishan Guo and Baosong Yang and Bin Zhang and Ziyang Ma and Xipin Wei and Shuai Bai and Keqin Chen and Xuejing Liu and Peng Wang and Mingkun Yang and Dayiheng Liu and Xingzhang Ren and Bo Zheng and Rui Men and Fan Zhou and Bowen Yu and Jianxin Yang and Le Yu and Jingren Zhou and Junyang Lin},
     year={2025},
@@ -406,7 +406,7 @@ qwen3_omni_30b_a3b_captioner = ModelMeta(
     ],
     model_type=["dense"],
     citation="""
-@misc{xu2025qwen3omnitechnicalreport,
+@misc{xu_qwen3-omni_2025,
     title={Qwen3-Omni Technical Report},
     author={Jin Xu and Zhifang Guo and Hangrui Hu and Yunfei Chu and Xiong Wang and Jinzheng He and Yuxuan Wang and Xian Shi and Ting He and Xinfa Zhu and Yuanjun Lv and Yongqi Wang and Dake Guo and He Wang and Linhan Ma and Pei Zhang and Xinyu Zhang and Hongkun Hao and Zishan Guo and Baosong Yang and Bin Zhang and Ziyang Ma and Xipin Wei and Shuai Bai and Keqin Chen and Xuejing Liu and Peng Wang and Mingkun Yang and Dayiheng Liu and Xingzhang Ren and Bo Zheng and Rui Men and Fan Zhou and Bowen Yu and Jianxin Yang and Le Yu and Jingren Zhou and Junyang Lin},
     year={2025},

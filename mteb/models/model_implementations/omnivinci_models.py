@@ -245,7 +245,7 @@ class OmniVinciWrapper(AbsEncoder):
 
 
 _OMNIVINCI_CITATION = r"""
-@article{ye2025omnivinci,
+@article{ye_omnivinci_2025,
     title={OmniVinci: Enhancing Architecture and Data for Omni-Modal Understanding LLM},
     author={Ye, Hanrong and Yang, Chao-Han Huck and Goel, Arushi and Huang, Wei and Zhu, Ligeng and Su, Yuanhang and Lin, Sean and Cheng, An-Chieh and Wan, Zhen and Tian, Jinchuan and others},
     journal={arXiv preprint arXiv:2510.15870},

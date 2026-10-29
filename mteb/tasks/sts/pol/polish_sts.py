@@ -25,7 +25,7 @@ class SickrPLSTS(AbsTaskSTS):
         dialect=[],
         sample_creation="human-translated and localized",
         bibtex_citation=r"""
-@inproceedings{dadas-etal-2020-evaluation,
+@inproceedings{dadas_evaluation_2020,
   address = {Marseille, France},
   archiveprefix = {arXiv},
   author = {Dadas, Slawomir  and
@@ -86,7 +86,7 @@ class CdscrSTS(AbsTaskSTS):
         dialect=[],
         sample_creation="human-translated and localized",
         bibtex_citation=r"""
-@inproceedings{wroblewska-krasnowska-kieras-2017-polish,
+@inproceedings{wroblewska_polish_2017,
   address = {Vancouver, Canada},
   author = {Wr{\'o}blewska, Alina  and
 Krasnowska-Kiera{\'s}, Katarzyna},

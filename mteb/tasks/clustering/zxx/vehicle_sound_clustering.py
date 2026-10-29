@@ -25,7 +25,7 @@ class VehicleSoundClustering(AbsTaskClustering):
         modalities=["audio"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{bazilinskyy2018auditory,
+@inproceedings{bazilinskyy_auditory_2018,
   author = {Bazilinskyy, Pavlo and van der Aa, Arne and Schoustra, Michael and Spruit, John and Staats, Laurens and van der Vlist, Klaas Jan and de Winter, Joost},
   booktitle = {12th International Symposium on Tools and Methods of Competitive Engineering (TMCE 2018)},
   pages = {417--422},

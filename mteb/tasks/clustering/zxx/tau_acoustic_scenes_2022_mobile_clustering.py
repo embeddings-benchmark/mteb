@@ -27,7 +27,7 @@ class TAUAcousticScenes2022MobileClustering(AbsTaskClustering):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{heittola2020acoustic,
+@inproceedings{heittola_acoustic_2020,
   author = {Heittola, Toni and Mesaros, Annamaria and Virtanen, Tuomas},
   booktitle = {Proceedings of the Detection and Classification of Acoustic Scenes and Events 2020 Workshop (DCASE2020)},
   pages = {56--60},
@@ -36,7 +36,7 @@ class TAUAcousticScenes2022MobileClustering(AbsTaskClustering):
   year = {2020},
 }
 
-@dataset{heittola_2022_6337421,
+@dataset{heittola_tau_2022,
   author = {Toni Heittola and Annamaria Mesaros and Tuomas Virtanen},
   publisher = {Zenodo},
   title = {TAU Urban Acoustic Scenes 2022 Mobile, Development Dataset},

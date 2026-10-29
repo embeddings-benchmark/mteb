@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 _REFERENCE = "https://arxiv.org/abs/2108.00688"
 _BIBTEX = r"""
-@article{Heidler_2023,
+@article{heidler_self-supervised_2023,
   author = {Heidler, Konrad and Mou, Lichao and Hu, Di and Jin, Pu and Li, Guangyao and Gan, Chuang and Wen, Ji-Rong and Zhu, Xiao Xiang},
   doi = {10.1016/j.jag.2022.103130},
   issn = {1569-8432},

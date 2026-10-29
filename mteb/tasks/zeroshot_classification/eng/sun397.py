@@ -30,7 +30,7 @@ class SUN397ZeroShotClassification(AbsTaskZeroShotClassification):
         modalities=["image", "text"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{5539970,
+@inproceedings{xiao_sun_2010,
   author = {Xiao, Jianxiong and Hays, James and Ehinger, Krista A. and Oliva, Aude and Torralba, Antonio},
   booktitle = {2010 IEEE Computer Society Conference on Computer Vision and Pattern Recognition},
   doi = {10.1109/CVPR.2010.5539970},

@@ -33,7 +33,7 @@ class WorldQAVideoCentricQA(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@article{zhang2024worldqa,
+@article{zhang_worldqa_2024,
   author = {Zhang, Yuanhan and Zhang, Kaichen and Li, Bo and Pu, Fanyi and Setiadharma, Christopher Arif and Yang, Jingkang and Liu, Ziwei},
   journal = {arXiv preprint arXiv:2405.03272},
   title = {WorldQA: Multimodal World Knowledge in Videos through Long-Chain Reasoning},
@@ -106,7 +106,7 @@ class WorldQAVideoAudioCentricQA(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@article{zhang2024worldqa,
+@article{zhang_worldqa_2024,
   author = {Zhang, Yuanhan and Zhang, Kaichen and Li, Bo and Pu, Fanyi and Setiadharma, Christopher Arif and Yang, Jingkang and Liu, Ziwei},
   journal = {arXiv preprint arXiv:2405.03272},
   title = {WorldQA: Multimodal World Knowledge in Videos through Long-Chain Reasoning},

@@ -324,7 +324,7 @@ jasper_en_v1 = ModelMeta(
     public_training_code="https://github.com/NovaSearch-Team/RAG-Retrieval/blob/c40f4638b705eb77d88305d2056901ed550f9f4b/rag_retrieval/train/embedding/README.md",
     public_training_data="https://huggingface.co/datasets/infgrad/jasper_text_distill_dataset",
     citation="""
-@misc{zhang2025jasperstelladistillationsota,
+@misc{zhang_jasper_2025,
       title={Jasper and Stella: distillation of SOTA embedding models},
       author={Dun Zhang and Jiacheng Li and Ziyang Zeng and Fulong Wang},
       year={2025},
@@ -366,7 +366,7 @@ Jasper_Token_Compression_600M = ModelMeta(
     | E5_MISTRAL_TRAINING_DATA
     | qzhou_training_data,
     citation="""
-@misc{zhang2025jaspertokencompression600mtechnicalreport,
+@misc{zhang_jasper-token-compression-600m_2025,
       title={Jasper-Token-Compression-600M Technical Report},
       author={Dun Zhang and Ziyang Zeng and Yudong Zhou and Shuyang Lu},
       year={2025},

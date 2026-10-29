@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-CITATION = """@article{jian2025rzenembed,
+CITATION = """@article{jian_rzenembed_2025,
   title={RzenEmbed: Towards Comprehensive Multimodal Retrieval},
   author={Jian, Weijian and Zhang, Yajun and Liang, Dawei and Xie, Chunyu and He, Yixiao and Leng, Dawei and Yin, Yuhui},
   journal={arXiv preprint arXiv:2510.27350},

@@ -35,7 +35,7 @@ class ScalaClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{nielsen-2023-scandeval,
+@inproceedings{nielsen_scandeval_2023,
   address = {T{\'o}rshavn, Faroe Islands},
   author = {Nielsen, Dan},
   booktitle = {Proceedings of the 24th Nordic Conference on Computational Linguistics (NoDaLiDa)},

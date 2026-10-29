@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from mteb.types import Array, PromptType
 logger = logging.getLogger(__name__)
 
-HAKIM_CITATION = """@article{sarmadi2025hakim,
+HAKIM_CITATION = """@article{sarmadi_hakim_2025,
       title={Hakim: Farsi Text Embedding Model},
       author={Sarmadi, Mehran and Alikhani, Morteza and Zinvandi, Erfan and Pourbahman, Zahra},
       journal={arXiv preprint arXiv:2505.08435},

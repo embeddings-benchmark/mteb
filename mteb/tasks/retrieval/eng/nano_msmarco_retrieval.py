@@ -25,7 +25,7 @@ class NanoMSMARCORetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{bajaj2018msmarcohumangenerated,
+@misc{bajaj_ms_2018,
   archiveprefix = {arXiv},
   author = {Payal Bajaj and Daniel Campos and Nick Craswell and Li Deng and Jianfeng Gao and Xiaodong Liu and Rangan Majumder and Andrew McNamara and Bhaskar Mitra and Tri Nguyen and Mir Rosenberg and Xia Song and Alina Stoica and Saurabh Tiwary and Tong Wang},
   eprint = {1611.09268},

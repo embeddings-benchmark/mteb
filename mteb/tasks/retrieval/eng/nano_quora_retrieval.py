@@ -27,7 +27,7 @@ class NanoQuoraRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{quora-question-pairs,
+@misc{datacanary_quora_2017,
   author = {DataCanary, hilfialkaff, Lili Jiang, Meg Risdal, Nikhil Dandekar, tomtung},
   publisher = {Kaggle},
   title = {Quora Question Pairs},

@@ -34,14 +34,14 @@ _DATASET_REVISION = "8f0d56ee81cb60167d956f2eff75f1a719e4787b"
 _REFERENCE = "https://github.com/embeddings-benchmark/mteb/issues/5358"
 
 _BIBTEX = r"""
-@inproceedings{havard2017speechcoco,
+@inproceedings{havard_speech-coco_2017,
   author = {Havard, William and Besacier, Laurent and Rosec, Olivier},
   booktitle = {Proceedings of the GLU 2017 International Workshop on Grounding Language Understanding},
   title = {SPEECH-COCO: 600k Visually Grounded Spoken Captions Aligned to MSCOCO Data Set},
   year = {2017},
 }
 
-@inproceedings{hsu-etal-2021-text,
+@inproceedings{hsu_text-free_2021,
   author = {Hsu, Wei-Ning and Harwath, David and Miller, Tyler and Song, Christopher and Glass, James},
   booktitle = {Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing (Volume 1: Long Papers)},
   doi = {10.18653/v1/2021.acl-long.411},
@@ -50,7 +50,7 @@ _BIBTEX = r"""
   year = {2021},
 }
 
-@inproceedings{lin2014microsoft,
+@inproceedings{lin_microsoft_2014,
   author = {Lin, Tsung-Yi and Maire, Michael and Belongie, Serge and Hays, James and Perona, Pietro and Ramanan, Deva and Doll{\'a}r, Piotr and Zitnick, C Lawrence},
   booktitle = {Computer Vision--ECCV 2014},
   title = {Microsoft coco: Common objects in context},

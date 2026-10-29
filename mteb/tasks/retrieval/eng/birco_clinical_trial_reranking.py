@@ -29,7 +29,7 @@ class BIRCOClinicalTrialReranking(AbsTaskRetrieval):
         sample_creation="found",
         prompt="Given a patient case report, retrieve the clinical trial description that best matches the patient's eligibility criteria.",
         bibtex_citation=r"""
-@misc{wang2024bircobenchmarkinformationretrieval,
+@misc{wang_birco_2024,
   archiveprefix = {arXiv},
   author = {Xiaoyue Wang and Jianyou Wang and Weili Cao and Kaicheng Wang and Ramamohan Paturi and Leon Bergen},
   eprint = {2402.14151},

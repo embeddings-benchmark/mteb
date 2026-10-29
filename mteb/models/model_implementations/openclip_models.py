@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
 
-OPENCLIP_CITATION = """@inproceedings{cherti2023reproducible,
+OPENCLIP_CITATION = """@inproceedings{cherti_reproducible_2023,
     title={Reproducible scaling laws for contrastive language-image learning},
     author={Cherti, Mehdi and Beaumont, Romain and Wightman, Ross and Wortsman, Mitchell and Ilharco, Gabriel and Gordon, Cade and Schuhmann, Christoph and Schmidt, Ludwig and Jitsev, Jenia},
     booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},

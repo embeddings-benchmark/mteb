@@ -143,7 +143,7 @@ class TatoebaBitextMining(AbsTaskBitextMining):
         dialect=[],  # No specific dialect mentioned
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{tiedemann-2020-tatoeba,
+@inproceedings{tiedemann_tatoeba_2020,
   address = {Online},
   author = {Tiedemann, J{\"o}rg},
   booktitle = {Proceedings of the Fifth Conference on Machine Translation},

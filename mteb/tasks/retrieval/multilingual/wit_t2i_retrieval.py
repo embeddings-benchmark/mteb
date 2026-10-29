@@ -169,7 +169,7 @@ class WITT2IRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{bugliarello2022iglue,
+@inproceedings{bugliarello_iglue_2022,
   author = {Bugliarello, Emanuele and Liu, Fangyu and Pfeiffer, Jonas and Reddy, Siva and Elliott, Desmond and Ponti, Edoardo Maria and Vuli{\'c}, Ivan},
   booktitle = {International Conference on Machine Learning},
   organization = {PMLR},
@@ -218,7 +218,7 @@ class WITI2TRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         adapted_from=["WITT2IRetrieval"],
         bibtex_citation=r"""
-@inproceedings{bugliarello2022iglue,
+@inproceedings{bugliarello_iglue_2022,
   author = {Bugliarello, Emanuele and Liu, Fangyu and Pfeiffer, Jonas and Reddy, Siva and Elliott, Desmond and Ponti, Edoardo Maria and Vuli{\'c}, Ivan},
   booktitle = {International Conference on Machine Learning},
   organization = {PMLR},

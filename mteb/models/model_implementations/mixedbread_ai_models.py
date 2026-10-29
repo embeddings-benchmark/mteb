@@ -59,7 +59,7 @@ mxbai_embed_large_v1 = ModelMeta(
     ],
     use_instructions=True,
     citation="""
-@article{li2023angle,
+@article{li_angle-optimized_2023,
       title={AnglE-optimized Text Embeddings},
       author={Li, Xianming and Li, Jing},
       journal={arXiv preprint arXiv:2309.12871},
@@ -377,7 +377,7 @@ MXBAI_RERANK_V2_LANGUAGES = [
     "zul-Latn",
 ]
 
-MXBAI_RERANK_V2_CITATION = """@inproceedings{li2026prorank,
+MXBAI_RERANK_V2_CITATION = """@inproceedings{li_prorank_2026,
     title = "{ProRank}: Prompt Warmup via Reinforcement Learning for Small Language Models Reranking",
     author = "LI, Xianming  and
       Shakir, Aamir  and
@@ -497,7 +497,7 @@ mxbai_edge_colbert_v0_17m = ModelMeta(
         # "PubMedQA",
         # "TriviaQA",
     },
-    citation="""@misc{takehi2025fantasticsmallretrieverstrain,
+    citation="""@misc{takehi_fantastic_2025,
       title={Fantastic (small) Retrievers and How to Train Them: mxbai-edge-colbert-v0 Tech Report},
       author={Rikiya Takehi and Benjamin Clavié and Sean Lee and Aamir Shakir},
       year={2025},
@@ -543,7 +543,7 @@ mxbai_edge_colbert_v0_32m = ModelMeta(
         # "PubMedQA",
         # "TriviaQA",
     },
-    citation="""@misc{takehi2025fantasticsmallretrieverstrain,
+    citation="""@misc{takehi_fantastic_2025,
       title={Fantastic (small) Retrievers and How to Train Them: mxbai-edge-colbert-v0 Tech Report},
       author={Rikiya Takehi and Benjamin Clavié and Sean Lee and Aamir Shakir},
       year={2025},

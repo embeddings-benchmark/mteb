@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-COLNANOVDR_CITATION = """@article{nanovdr2026,
+COLNANOVDR_CITATION = """@article{liu_nanovdr_2026,
   title={NanoVDR: Distilling a 2B Vision-Language Retriever into a 70M Text-Only Encoder for Visual Document Retrieval},
   author={Liu, Zhuchenyang and Zhang, Yao and Xiao, Yu},
   journal={arXiv preprint arXiv:2603.12824},

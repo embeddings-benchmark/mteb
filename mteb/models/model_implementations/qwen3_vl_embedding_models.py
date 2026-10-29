@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import PromptType
 
-QWEN3_VL_EMBEDDING_CITATION = """@article{qwen3vlembedding,
+QWEN3_VL_EMBEDDING_CITATION = """@article{li_qwen3-vl-embedding_2026,
   title={Qwen3-VL-Embedding and Qwen3-VL-Reranker: A Unified Framework for State-of-the-Art Multimodal Retrieval and Ranking},
   author={Li, Mingxin and Zhang, Yanzhao and Long, Dingkun and Chen Keqin and Song, Sibo and Bai, Shuai and Yang, Zhibo and Xie, Pengjun and Yang, An and Liu, Dayiheng and Zhou, Jingren and Lin, Junyang},
   journal={arXiv preprint arXiv:2601.04720},

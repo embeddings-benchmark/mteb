@@ -37,7 +37,7 @@ class EightTagsClustering(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{dadas-etal-2020-evaluation,
+@inproceedings{dadas_evaluation_2020,
   address = {Marseille, France},
   archiveprefix = {arXiv},
   author = {Dadas, Slawomir  and
@@ -100,7 +100,7 @@ class EightTagsClusteringFast(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{dadas-etal-2020-evaluation,
+@inproceedings{dadas_evaluation_2020,
   address = {Marseille, France},
   archiveprefix = {arXiv},
   author = {Dadas, Slawomir  and

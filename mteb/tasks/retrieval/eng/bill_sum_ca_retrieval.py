@@ -25,7 +25,7 @@ class BillSumCARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{Eidelman_2019,
+@inproceedings{eidelman_billsum_2019,
   author = {Eidelman, Vladimir},
   booktitle = {Proceedings of the 2nd Workshop on New Frontiers in Summarization},
   doi = {10.18653/v1/d19-5406},

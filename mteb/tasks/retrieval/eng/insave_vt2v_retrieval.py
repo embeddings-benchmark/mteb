@@ -43,7 +43,7 @@ class InsAVE80KVT2VRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="multiple",
         bibtex_citation=r"""
-@article{zheng2026instructav2av,
+@article{zheng_instructav2av_2026,
   author = {Zheng, Haojie and Yang, Yixin and Yang, Siqi and Weng, Shuchen and Shi, Boxin},
   journal = {arXiv preprint arXiv:2605.18467},
   title = {InstructAV2AV: Instruction-Guided Audio-Video Joint Editing},

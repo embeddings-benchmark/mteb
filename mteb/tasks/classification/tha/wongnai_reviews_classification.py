@@ -25,7 +25,7 @@ class WongnaiReviewsClassification(AbsTaskClassification):
         annotations_creators="derived",
         sample_creation="found",
         bibtex_citation=r"""
-@software{charin_polpanumas_2020_3852912,
+@software{polpanumas_pythainlpclassification-benchmarks_2020,
   author = {Charin Polpanumas and
 Phasathorn Suwansri},
   doi = {10.5281/zenodo.3852912},

@@ -32,7 +32,7 @@ class VieQuADRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{nguyen-etal-2020-vietnamese,
+@inproceedings{nguyen_vietnamese_2020,
   address = {Barcelona, Spain (Online)},
   author = {Nguyen, Kiet  and
 Nguyen, Vu  and

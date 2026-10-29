@@ -164,7 +164,7 @@ hubert_base = ModelMeta(
     ),
     modalities=["audio"],
     citation="""
-@article{hsu2021hubertselfsupervisedspeechrepresentation,
+@article{hsu_hubert_2021,
   author = {Hsu, Wei-Ning and Bolte, Benjamin and Tsai, Yao-Hung Hubert and Lakhotia, Kushal and Salakhutdinov, Ruslan and Mohamed, Abdelrahman},
   doi = {10.1109/taslp.2021.3122291},
   issn = {2329-9304},
@@ -203,7 +203,7 @@ hubert_large_ft = ModelMeta(
     ),
     modalities=["audio"],
     citation="""
-@article{hsu2021hubertselfsupervisedspeechrepresentation,
+@article{hsu_hubert_2021,
   author = {Hsu, Wei-Ning and Bolte, Benjamin and Tsai, Yao-Hung Hubert and Lakhotia, Kushal and Salakhutdinov, Ruslan and Mohamed, Abdelrahman},
   doi = {10.1109/taslp.2021.3122291},
   issn = {2329-9304},

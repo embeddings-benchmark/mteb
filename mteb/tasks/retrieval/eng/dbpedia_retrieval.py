@@ -16,7 +16,7 @@ _dbpedia_metadata = dict(
     dialect=[],
     sample_creation="found",
     bibtex_citation=r"""
-@inproceedings{Hasibi:2017:DVT,
+@inproceedings{hasibi_dbpedia-entity_2017,
   author = {Hasibi, Faegheh and Nikolaev, Fedor and Xiong, Chenyan and Balog, Krisztian and Bratsberg, Svein Erik and Kotov, Alexander and Callan, Jamie},
   booktitle = {Proceedings of the 40th International ACM SIGIR Conference on Research and Development in Information Retrieval},
   doi = {10.1145/3077136.3080751},

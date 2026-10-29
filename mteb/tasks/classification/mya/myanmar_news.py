@@ -25,7 +25,7 @@ class MyanmarNews(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{Khine2017,
+@inproceedings{khine_automatic_2017,
   author = {A. H. Khine and K. T. Nwet and K. M. Soe},
   booktitle = {15th Proceedings of International Conference on Computer Applications},
   month = {February},
@@ -61,7 +61,7 @@ class MyanmarNewsV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{Khine2017,
+@inproceedings{khine_automatic_2017,
   author = {A. H. Khine and K. T. Nwet and K. M. Soe},
   booktitle = {15th Proceedings of International Conference on Computer Applications},
   month = {February},

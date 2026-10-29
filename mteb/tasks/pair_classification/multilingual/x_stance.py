@@ -29,7 +29,7 @@ class XStance(AbsTaskPairClassification):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{vamvas2020xstance,
+@inproceedings{vamvas_x-stance_2020,
   address = {Zurich, Switzerland},
   author = {Vamvas, Jannis and Sennrich, Rico},
   booktitle = {Proceedings of the 5th Swiss Text Analytics Conference (SwissText)  16th Conference on Natural Language Processing (KONVENS)},

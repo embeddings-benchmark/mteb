@@ -39,7 +39,7 @@ class FSDnoisy18kAudioReranking(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{fonseca2019fsdnoisy18k,
+@inproceedings{fonseca_learning_2019,
   author = {Fonseca, Eduardo and Plakal, Manoj and Ellis, Daniel P. W. and Font, Frederic and Favory, Xavier and Serra, Xavier},
   booktitle = {ICASSP 2019 - 2019 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   organization = {IEEE},

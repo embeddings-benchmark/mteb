@@ -23,7 +23,7 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-VLM2VEC_CITATION = """@inproceedings{jiang2024vlm2vec,
+VLM2VEC_CITATION = """@inproceedings{jiang_vlm2vec_2025,
   archiveprefix = {arXiv},
   author = {Ziyan Jiang and Rui Meng and Xinyi Yang and Semih Yavuz and Yingbo Zhou and Wenhu Chen},
   booktitle = {The Thirteenth International Conference on Learning Representations},
@@ -648,7 +648,7 @@ vlm2vec2 = ModelMeta(
     modalities=["text", "image", "video"],
     model_type=["dense"],
     citation="""
-@article{meng2025vlm2vecv2advancingmultimodalembedding,
+@article{meng_vlm2vec-v2_2026,
   archiveprefix = {arXiv},
   author = {Rui Meng and Ziyan Jiang and Ye Liu and Mingyi Su and Xinyi Yang and Yuepeng Fu and Can Qin and Raghuveer Thirukovalluru and Xuan Zhang and Zeyuan Chen and Ran Xu and Caiming Xiong and Yingbo Zhou and Wenhu Chen and Semih Yavuz},
   eprint = {2507.04590},

@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from collections.abc import Mapping
 
 BIBTEX = r"""
-@article{10.1371/journal.pone.0196391,
+@article{livingstone_ryerson_2018,
   author = {Livingstone, Steven R. AND Russo, Frank A.},
   doi = {10.1371/journal.pone.0196391},
   journal = {PLOS ONE},

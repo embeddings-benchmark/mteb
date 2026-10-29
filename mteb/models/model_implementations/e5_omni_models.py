@@ -90,7 +90,7 @@ class E5OmniWrapper(SentenceTransformerEncoderWrapper):
 
 
 _E5_OMNI_CITATION = r"""
-@inproceedings{chen2026e5omni,
+@inproceedings{chen_e5-omni_2026,
   address = {San Diego, California, United States},
   author = {Chen, Haonan and Gao, Sicheng and Timofte, Radu and Sakai, Tetsuya and Dou, Zhicheng},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2026},

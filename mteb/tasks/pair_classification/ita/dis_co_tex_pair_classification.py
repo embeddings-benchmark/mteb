@@ -25,7 +25,7 @@ class DisCoTexPairClassification(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{brunato2023discotex,
+@inproceedings{brunato_discotex_2023,
   author = {Brunato, Dominique and Colla, Davide and Dell’Orletta, Felice and Dini, Irene and Radicioni, Daniele Paolo and Ravelli, Andrea Amelio},
   booktitle = {Proceedings of the Eighth Evaluation Campaign of Natural Language Processing and Speech Tools for Italian. Final Workshop (EVALITA 2023)},
   pages = {318--325},

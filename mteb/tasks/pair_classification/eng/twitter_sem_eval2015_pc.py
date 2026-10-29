@@ -25,7 +25,7 @@ class TwitterSemEval2015PC(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{xu-etal-2015-semeval,
+@inproceedings{xu_semeval-2015_2015,
   address = {Denver, Colorado},
   author = {Xu, Wei  and
 Callison-Burch, Chris  and

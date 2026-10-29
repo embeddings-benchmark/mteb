@@ -16,7 +16,7 @@ _LANGUAGES = {
 }
 
 _CHINAOPEN_BIBTEX = r"""
-@inproceedings{chen2023chinaopen,
+@inproceedings{chen_chinaopen_2023,
   author = {Chen, Aozhu and Wang, Ziyuan and Dong, Chengbo and Tian, Kaibin and Zhao, Ruixiang and Liang, Xun and Kang, Zhanhui and Li, Xirong},
   booktitle = {Proceedings of the 31st ACM International Conference on Multimedia},
   doi = {10.1145/3581783.3612156},

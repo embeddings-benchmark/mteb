@@ -675,7 +675,7 @@ class UEmbedEncoder(AbsEncoder):
         return (first * second).sum(dim=-1)
 
 
-UEMBED_CITATION = """@misc{uembed2026,
+UEMBED_CITATION = """@misc{song_uembed_2026,
   title={UEmbed: Unified Sparse and Dense Multimodal Embeddings},
   author={Tingyu Song and Mingxin Li and Yanzhao Zhang and Dingkun Long and Pengjun Xie and Zhijie Nie and Yilun Zhao and Shu Wu},
   year={2026},

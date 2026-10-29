@@ -26,7 +26,7 @@ class EmoVDBA2TRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         superseded_by="EmoVDBA2TRetrieval.v2",
         bibtex_citation=r"""
-@misc{adigwe2018emotional,
+@misc{adigwe_emotional_2018,
   archiveprefix = {arXiv},
   author = {Adaeze Adigwe and Noé Tits and Kevin El Haddad and Sarah Ostadabbas and Thierry Dutoit},
   eprint = {1806.09514},
@@ -65,7 +65,7 @@ class EmoVDBT2ARetrieval(AbsTaskRetrieval):
         sample_creation="found",
         superseded_by="EmoVDBT2ARetrieval.v2",
         bibtex_citation=r"""
-@misc{adigwe2018emotional,
+@misc{adigwe_emotional_2018,
   archiveprefix = {arXiv},
   author = {Adaeze Adigwe and Noé Tits and Kevin El Haddad and Sarah Ostadabbas and Thierry Dutoit},
   eprint = {1806.09514},
@@ -103,7 +103,7 @@ class EmoVDBA2TRetrievalV2(AbsTaskRetrieval):
         sample_creation="found",
         adapted_from=["EmoVDBA2TRetrieval"],
         bibtex_citation=r"""
-@misc{adigwe2018emotional,
+@misc{adigwe_emotional_2018,
   archiveprefix = {arXiv},
   author = {Adaeze Adigwe and Noé Tits and Kevin El Haddad and Sarah Ostadabbas and Thierry Dutoit},
   eprint = {1806.09514},
@@ -143,7 +143,7 @@ class EmoVDBT2ARetrievalV2(AbsTaskRetrieval):
         sample_creation="found",
         adapted_from=["EmoVDBT2ARetrieval"],
         bibtex_citation=r"""
-@misc{adigwe2018emotional,
+@misc{adigwe_emotional_2018,
   archiveprefix = {arXiv},
   author = {Adaeze Adigwe and Noé Tits and Kevin El Haddad and Sarah Ostadabbas and Thierry Dutoit},
   eprint = {1806.09514},

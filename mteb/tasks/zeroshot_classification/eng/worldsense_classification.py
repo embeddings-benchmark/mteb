@@ -4,7 +4,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.zeroshot_classification import AbsTaskZeroShotClassification
 
 CITATION = r"""
-@inproceedings{hong2025worldsense,
+@inproceedings{hong_worldsense_2025,
   author = {Hong, Jack and Yan, Shilin and Cai, Jiayin and Jiang, Xiaolong and Hu, Yao and Xie, Weidi},
   journal = {arXiv preprint arXiv:2502.04326},
   title = {Worldsense: Evaluating real-world omnimodal understanding for multimodal llms},

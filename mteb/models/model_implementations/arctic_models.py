@@ -4,7 +4,7 @@ from mteb.models.model_meta import (
 )
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
-ARCTIC_V1_CITATION = """@article{merrick2024embedding,
+ARCTIC_V1_CITATION = """@article{merrick_embedding_2024,
       title={Embedding And Clustering Your Data Can Improve Contrastive Pretraining},
       author={Merrick, Luke},
       journal={arXiv preprint arXiv:2407.18887},
@@ -14,7 +14,7 @@ ARCTIC_V1_CITATION = """@article{merrick2024embedding,
       url={https://arxiv.org/abs/2407.18887}
 }"""
 
-ARCTIC_V2_CITATION = """@article{yu2024arctic,
+ARCTIC_V2_CITATION = """@article{yu_arctic-embed_2024,
       title={Arctic-Embed 2.0: Multilingual Retrieval Without Compromise},
       author={Yu, Puxuan and Merrick, Luke and Nuti, Gaurav and Campos, Daniel},
       journal={arXiv preprint arXiv:2412.04506},

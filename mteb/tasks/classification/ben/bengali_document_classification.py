@@ -27,7 +27,7 @@ class BengaliDocumentClassification(AbsTaskClassification):
         annotations_creators="derived",
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{akash-etal-2023-shironaam,
+@inproceedings{akash_shironaam_2023,
   address = {Dubrovnik, Croatia},
   author = {Akash, Abu Ubaida  and
 Nayeem, Mir Tafseer  and
@@ -77,7 +77,7 @@ class BengaliDocumentClassificationV2(AbsTaskClassification):
         annotations_creators="derived",
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{akash-etal-2023-shironaam,
+@inproceedings{akash_shironaam_2023,
   address = {Dubrovnik, Croatia},
   author = {Akash, Abu Ubaida  and
 Nayeem, Mir Tafseer  and

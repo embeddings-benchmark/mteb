@@ -25,7 +25,7 @@ class TenKGnadClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{Schabus2017,
+@inproceedings{schabus_one_2017,
   address = {Tokyo, Japan},
   author = {Dietmar Schabus and Marcin Skowron and Martin Trapp},
   booktitle = {Proceedings of the 40th International ACM SIGIR Conference on Research and Development in Information Retrieval (SIGIR)},
@@ -63,7 +63,7 @@ class TenKGnadClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{Schabus2017,
+@inproceedings{schabus_one_2017,
   address = {Tokyo, Japan},
   author = {Dietmar Schabus and Marcin Skowron and Martin Trapp},
   booktitle = {Proceedings of the 40th International ACM SIGIR Conference on Research and Development in Information Retrieval (SIGIR)},

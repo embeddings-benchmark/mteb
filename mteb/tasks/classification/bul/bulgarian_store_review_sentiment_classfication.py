@@ -25,7 +25,7 @@ class BulgarianStoreReviewSentimentClassfication(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@data{DVN/TXIK9P_2018,
+@data{georgieva-trifonova_dataset_2018,
   author = {Georgieva-Trifonova, Tsvetanka and Stefanova, Milena and Kalchev, Stefan},
   doi = {10.7910/DVN/TXIK9P},
   publisher = {Harvard Dataverse},

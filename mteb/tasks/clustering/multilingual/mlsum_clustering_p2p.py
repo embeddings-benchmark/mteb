@@ -43,7 +43,7 @@ class MLSUMClusteringP2P(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{scialom2020mlsum,
+@inproceedings{scialom_mlsum_2020,
   address = {Online},
   author = {Scialom, Thomas and Dray, Paul-Alexis and Lamprier, Sylvain and Piwowarski, Benjamin and Staiano, Jacopo},
   booktitle = {Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing ({EMNLP})},
@@ -125,7 +125,7 @@ class MLSUMClusteringP2PFast(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{scialom2020mlsum,
+@inproceedings{scialom_mlsum_2020,
   address = {Online},
   author = {Scialom, Thomas and Dray, Paul-Alexis and Lamprier, Sylvain and Piwowarski, Benjamin and Staiano, Jacopo},
   booktitle = {Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing ({EMNLP})},

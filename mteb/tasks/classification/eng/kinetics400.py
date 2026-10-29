@@ -4,7 +4,7 @@ from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 CITATION = r"""
-@misc{kay2017kineticshumanactionvideo,
+@misc{kay_kinetics_2017,
       title={The Kinetics Human Action Video Dataset},
       author={Will Kay and Joao Carreira and Karen Simonyan and Brian Zhang and Chloe Hillier and Sudheendra Vijayanarasimhan and Fabio Viola and Tim Green and Trevor Back and Paul Natsev and Mustafa Suleyman and Andrew Zisserman},
       year={2017},

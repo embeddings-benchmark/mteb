@@ -8,7 +8,7 @@ from mteb.abstasks.clustering import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 CITATION = r"""
-@article{shani2025tokens,
+@article{shani_tokens_2025,
   author = {Shani, Chen and Soffer, Liron and Jurafsky, Dan and LeCun, Yann and Shwartz-Ziv, Ravid},
   journal = {arXiv preprint arXiv:2505.17117},
   title = {From Tokens to Thoughts: How LLMs and Humans Trade Compression for Meaning},

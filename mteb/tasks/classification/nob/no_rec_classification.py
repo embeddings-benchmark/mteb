@@ -26,7 +26,7 @@ class NoRecClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{velldal-etal-2018-norec,
+@inproceedings{velldal_norec_2018,
   address = {Miyazaki, Japan},
   author = {Velldal, Erik  and
 {\\O}vrelid, Lilja  and
@@ -85,7 +85,7 @@ class NoRecClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{velldal-etal-2018-norec,
+@inproceedings{velldal_norec_2018,
   address = {Miyazaki, Japan},
   author = {Velldal, Erik  and
 {\\O}vrelid, Lilja  and

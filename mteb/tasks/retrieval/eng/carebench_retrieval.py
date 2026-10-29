@@ -11,7 +11,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 _DATASET_PATH = "myang333/CaReBench"
 _DATASET_REVISION = "2871160f7089bc22d1f9c16f1af43e11a80efb91"
 _BIBTEX = r"""
-@article{xu2025carebench,
+@article{xu_carebench_2025,
   author = {Xu, Yifan and Li, Xinhao and Yang, Yichun and Meng, Desen and Huang, Rui and Wang, Limin},
   journal = {arXiv preprint arXiv:2501.00513},
   title = {CaReBench: A Fine-grained Benchmark for Video Captioning and Retrieval},

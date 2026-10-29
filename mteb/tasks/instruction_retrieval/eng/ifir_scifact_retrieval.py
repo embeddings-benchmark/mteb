@@ -25,7 +25,7 @@ class IFIRScifact(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{song2025ifir,
+@inproceedings{song_ifir_2025,
   author = {Song, Tingyu and Gan, Guo and Shang, Mingsheng and Zhao, Yilun},
   booktitle = {Proceedings of the 2025 Conference of the Nations of the Americas Chapter of the Association for Computational Linguistics: Human Language Technologies (Volume 1: Long Papers)},
   pages = {10186--10204},

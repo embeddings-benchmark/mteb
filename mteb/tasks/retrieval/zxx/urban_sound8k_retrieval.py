@@ -26,7 +26,7 @@ class UrbanSound8KA2TRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         superseded_by="UrbanSound8kZeroshot",
         bibtex_citation=r"""
-@inproceedings{Salamon:UrbanSound:ACMMM:14,
+@inproceedings{salamon_dataset_2014,
   author = {Salamon, Justin and Jacoby, Christopher and Bello, Juan Pablo},
   booktitle = {Proceedings of the 22nd ACM international conference on Multimedia},
   organization = {ACM},
@@ -62,7 +62,7 @@ class UrbanSound8KT2ARetrieval(AbsTaskRetrieval):
         sample_creation="found",
         superseded_by="UrbanSound8kZeroshot",
         bibtex_citation=r"""
-@inproceedings{Salamon:UrbanSound:ACMMM:14,
+@inproceedings{salamon_dataset_2014,
   author = {Salamon, Justin and Jacoby, Christopher and Bello, Juan Pablo},
   booktitle = {Proceedings of the 22nd ACM international conference on Multimedia},
   organization = {ACM},

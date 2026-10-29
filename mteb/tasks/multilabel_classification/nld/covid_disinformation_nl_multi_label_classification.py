@@ -30,7 +30,7 @@ class CovidDisinformationNLMultiLabelClassification(AbsTaskMultilabelClassificat
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{alam-etal-2021-fighting-covid,
+@inproceedings{alam_fighting_2021,
   address = {Punta Cana, Dominican Republic},
   author = {Alam, Firoj  and
 Shaar, Shaden  and

@@ -25,7 +25,7 @@ class YueOpenriceReviewClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{xiang2019sentiment,
+@inproceedings{xiang_sentiment_2019,
   author = {Xiang, Rong and Jiao, Ying and Lu, Qin},
   booktitle = {Proceedings of the 8th KDD Workshop on Issues of Sentiment Discovery and Opinion Mining (WISDOM)},
   organization = {KDD WISDOM},
@@ -71,7 +71,7 @@ class YueOpenriceReviewClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{xiang2019sentiment,
+@inproceedings{xiang_sentiment_2019,
   author = {Xiang, Rong and Jiao, Ying and Lu, Qin},
   booktitle = {Proceedings of the 8th KDD Workshop on Issues of Sentiment Discovery and Opinion Mining (WISDOM)},
   organization = {KDD WISDOM},

@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 
 
 _BIBTEX = r"""
-@inproceedings{herzig-etal-2021-open,
+@inproceedings{herzig_open_2021,
   address = {Online},
   author = {Herzig, Jonathan and M{\"u}ller, Thomas and Krichene, Syrine and Eisenschlos, Julian Martin},
   booktitle = {Proceedings of the 2021 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies},

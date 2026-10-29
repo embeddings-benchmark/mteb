@@ -26,7 +26,7 @@ class SwednClustering(AbsTaskClusteringLegacy):
         task_subtypes=["Thematic clustering"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{monsen2021method,
+@inproceedings{monsen_method_2021,
   author = {Monsen, Julius and J{\"o}nsson, Arne},
   booktitle = {Proceedings of CLARIN Annual Conference},
   title = {A method for building non-english corpora for abstractive text summarization},
@@ -63,7 +63,7 @@ class SwednClusteringP2P(AbsTaskClustering):
         task_subtypes=["Thematic clustering"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{monsen2021method,
+@inproceedings{monsen_method_2021,
   author = {Monsen, Julius and J{\"o}nsson, Arne},
   booktitle = {Proceedings of CLARIN Annual Conference},
   title = {A method for building non-english corpora for abstractive text summarization},
@@ -100,7 +100,7 @@ class SwednClusteringFastS2S(AbsTaskClustering):
         task_subtypes=["Thematic clustering"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{monsen2021method,
+@inproceedings{monsen_method_2021,
   author = {Monsen, Julius and J{\"o}nsson, Arne},
   booktitle = {Proceedings of CLARIN Annual Conference},
   title = {A method for building non-english corpora for abstractive text summarization},

@@ -30,7 +30,7 @@ class EstQA(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@mastersthesis{mastersthesis,
+@mastersthesis{kaver_extractive_2021,
   author = {Anu Käver},
   school = {Tallinn University of Technology (TalTech)},
   title = {Extractive Question Answering for Estonian Language},

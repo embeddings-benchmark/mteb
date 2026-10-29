@@ -25,7 +25,7 @@ class SpokenSQuADT2ARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{lee2018spoken,
+@article{lee_spoken_2018,
   author = {Lee, Chia-Hsuan and Wu, Szu-Lin and Liu, Chi-Liang and Lee, Hung-yi},
   journal = {Proc. Interspeech 2018},
   pages = {3459--3463},

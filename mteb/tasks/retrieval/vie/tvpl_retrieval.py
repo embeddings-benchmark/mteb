@@ -27,7 +27,7 @@ class TVPLRetrieval(AbsTaskRetrieval):
         task_subtypes=["Question answering"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{10.1145/3732938,
+@article{le_optimizing_2025,
   address = {New York, NY, USA},
   author = {Le, Huong and Luu, Ngoc and Nguyen, Thanh and Dao, Tuan and Dinh, Sang},
   doi = {10.1145/3732938},

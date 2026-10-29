@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 _REFERENCE = "https://arxiv.org/abs/2005.08449"
 _BIBTEX = r"""
-@inproceedings{hu2020cross,
+@inproceedings{hu_cross-task_2020,
   author = {Hu, Di and Li, Xuhong and Mou, Lichao and Jin, Pu and Chen, Dong and Jing, Liping and Zhu, Xiaoxiang and Dou, Dejing},
   booktitle = {European Conference on Computer Vision},
   organization = {Springer},

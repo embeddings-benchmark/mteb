@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
 
-E5_V_CITATION = """@article{jiang2024e5v,
+E5_V_CITATION = """@article{jiang_e5-v_2024,
       title={E5-V: Universal Embeddings with Multimodal Large Language Models},
       author={Jiang, Ting and Song, Minghui and Zhang, Zihan and Huang, Haizhen and Deng, Weiwei and Sun, Feng and Zhang, Qi and Wang, Deqing and Zhuang, Fuzhen},
       journal={arXiv preprint arXiv:2407.12580},

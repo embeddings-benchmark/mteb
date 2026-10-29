@@ -11,7 +11,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 _DATASET_PATH = "mteb/VGGSound_AV_RETRIEVAL"
 _DATASET_REVISION = "5bfb8eb997282004d1c3b322fd081b03e2011344"
 _BIBTEX = r"""
-@inproceedings{chen2020vggsound,
+@inproceedings{chen_vggsound_2020,
   author = {Chen, Honglie and Xie, Weidi and Vedaldi, Andrea and Zisserman, Andrew},
   booktitle = {ICASSP 2020-2020 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   organization = {IEEE},

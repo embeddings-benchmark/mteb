@@ -33,7 +33,7 @@ class VOC2007Classification(AbsTaskMultilabelClassification):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@article{Everingham10,
+@article{everingham_pascal_2010,
   author = {Everingham, M. and Van~Gool, L. and Williams, C. K. I. and Winn, J. and Zisserman, A.},
   journal = {International Journal of Computer Vision},
   month = jun,
@@ -84,7 +84,7 @@ class VOC2007ClassificationV2(AbsTaskMultilabelClassification):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@article{Everingham10,
+@article{everingham_pascal_2010,
   author = {Everingham, M. and Van~Gool, L. and Williams, C. K. I. and Winn, J. and Zisserman, A.},
   journal = {International Journal of Computer Vision},
   month = jun,

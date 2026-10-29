@@ -4,7 +4,7 @@ from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _MANISKILL_BIBTEX = r"""
-@article{tao2025maniskill3,
+@article{tao_maniskill3_2025,
   author = {Stone Tao and Fanbo Xiang and Arth Shukla and Yuzhe Qin and Xander Hinrichsen and Xiaodi Yuan and Chen Bao and Xinsong Lin and Yulin Liu and Tse-kai Chan and others},
   journal = {Robotics: Science and Systems},
   title = {ManiSkill3: GPU Parallelized Robotics Simulation and Rendering for Generalizable Embodied AI},

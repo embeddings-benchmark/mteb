@@ -33,7 +33,7 @@ class BirdCLEFSpeciesClustering(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{canas2025overview,
+@inproceedings{canas_overview_2025,
   author = {Ca{\~n}as, Juan Sebasti{\'a}n and Kahl, Stefan and Denton, Tom and Toro-G{\'o}mez, Maria Paula and Rodriguez-Buritica, Susana and Benavides-Lopez, Jose Luis and Ulloa, Juan Sebasti{\'a}n and Caycedo-Rosales, Paula and Klinck, Holger and Go{\"e}au, Herv{\'e} and others},
   booktitle = {Conference and Labs of the Evaluation Forum (CLEF 2025)},
   number = {4038},

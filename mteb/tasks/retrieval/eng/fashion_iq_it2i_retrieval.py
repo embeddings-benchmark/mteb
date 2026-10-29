@@ -25,7 +25,7 @@ class FashionIQIT2IRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{wu2021fashion,
+@inproceedings{wu_fashion_2021,
   author = {Wu, Hui and Gao, Yupeng and Guo, Xiaoxiao and Al-Halah, Ziad and Rennie, Steven and Grauman, Kristen and Feris, Rogerio},
   booktitle = {Proceedings of the IEEE/CVF Conference on computer vision and pattern recognition},
   pages = {11307--11317},

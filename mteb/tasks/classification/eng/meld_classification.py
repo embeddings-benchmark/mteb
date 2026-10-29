@@ -30,7 +30,7 @@ class MELDAudioVideoClassification(AbsTaskClassification):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@inproceedings{poria2019meld,
+@inproceedings{poria_meld_2019,
   author = {Poria, Soujanya and Hazarika, Devamanyu and Majumder, Navonil and Naik, Gautam and Cambria, Erik and Mihalcea, Rada},
   booktitle = {Proceedings of the 57th annual meeting of the association for computational linguistics},
   pages = {527--536},
@@ -77,7 +77,7 @@ class MELDVideoClassification(AbsTaskClassification):
         modalities=["video"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{poria2019meld,
+@inproceedings{poria_meld_2019,
   author = {Poria, Soujanya and Hazarika, Devamanyu and Majumder, Navonil and Naik, Gautam and Cambria, Erik and Mihalcea, Rada},
   booktitle = {Proceedings of the 57th annual meeting of the association for computational linguistics},
   pages = {527--536},

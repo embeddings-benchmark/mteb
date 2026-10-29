@@ -216,7 +216,7 @@ yamnet = ModelMeta(
     },
     modalities=["audio"],
     citation="""
-@inproceedings{audioset,
+@inproceedings{gemmeke_audio_2017,
   title={Audio set: An ontology and human-labeled dataset for audio events},
   author={Gemmeke, Jort F and Ellis, Daniel PW and Freedman, Dylan and Jansen, Aren and Lawrence, Wade and Moore, R Channing and Plakal, Manoj and Ritter, Marvin},
   booktitle={2017 IEEE international conference on acoustics, speech and signal processing (ICASSP)},

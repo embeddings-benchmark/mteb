@@ -33,7 +33,7 @@ class NExTQAVideoCentricQA(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@inproceedings{xiao2021next,
+@inproceedings{xiao_next-qa_2021,
   author = {Xiao, Junbin and Shang, Xindi and Yao, Angela and Chua, Tat-Seng},
   booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
   pages = {9777-9786},

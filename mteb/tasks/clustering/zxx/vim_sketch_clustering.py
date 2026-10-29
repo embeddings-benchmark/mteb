@@ -34,7 +34,7 @@ class VimSketchImitationClustering(AbsTaskClustering):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{cartwright2015vocalsketch,
+@inproceedings{cartwright_vocalsketch_2015,
   author = {Cartwright, Mark and Pardo, Bryan},
   booktitle = {Proceedings of the 33rd Annual ACM Conference on Human Factors in Computing Systems},
   pages = {43--46},
@@ -42,7 +42,7 @@ class VimSketchImitationClustering(AbsTaskClustering):
   year = {2015},
 }
 
-@inproceedings{kim2018vocal,
+@inproceedings{kim_vocal_2018,
   author = {Kim, Bongjun and Ghei, Madhav and Pardo, Bryan and Duan, Zhiyao},
   booktitle = {Proceedings of the Detection and Classification of Acoustic Scenes and Events 2018 Workshop (DCASE2018)},
   pages = {148--152},

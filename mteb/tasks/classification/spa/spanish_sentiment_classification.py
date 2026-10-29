@@ -25,7 +25,7 @@ class SpanishSentimentClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{mollanorozy-etal-2023-cross,
+@inproceedings{mollanorozy_cross-lingual_2023,
   address = {Dubrovnik, Croatia},
   author = {Mollanorozy, Sepideh  and
 Tanti, Marc  and
@@ -76,7 +76,7 @@ class SpanishSentimentClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{mollanorozy-etal-2023-cross,
+@inproceedings{mollanorozy_cross-lingual_2023,
   address = {Dubrovnik, Croatia},
   author = {Mollanorozy, Sepideh  and
 Tanti, Marc  and

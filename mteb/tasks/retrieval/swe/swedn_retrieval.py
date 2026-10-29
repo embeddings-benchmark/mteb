@@ -25,7 +25,7 @@ class SwednRetrieval(AbsTaskRetrieval):
         task_subtypes=["Article retrieval"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{monsen2021method,
+@inproceedings{monsen_method_2021,
   author = {Monsen, Julius and J{\"o}nsson, Arne},
   booktitle = {Proceedings of CLARIN Annual Conference},
   title = {A method for building non-english corpora for abstractive text summarization},

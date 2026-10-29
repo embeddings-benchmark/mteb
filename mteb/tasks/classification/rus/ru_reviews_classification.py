@@ -25,7 +25,7 @@ class RuReviewsClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{Smetanin-SA-2019,
+@inproceedings{smetanin_sentiment_2019,
   author = {Sergey Smetanin and Michail Komarov},
   booktitle = {2019 IEEE 21st Conference on Business Informatics (CBI)},
   doi = {10.1109/CBI.2019.00062},
@@ -74,7 +74,7 @@ class RuReviewsClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{Smetanin-SA-2019,
+@inproceedings{smetanin_sentiment_2019,
   author = {Sergey Smetanin and Michail Komarov},
   booktitle = {2019 IEEE 21st Conference on Business Informatics (CBI)},
   doi = {10.1109/CBI.2019.00062},

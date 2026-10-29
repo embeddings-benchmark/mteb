@@ -15,7 +15,7 @@ _DATASET_PATH = "Cerru02/LombardGrid-Retrieval"
 _DATASET_REVISION = "a21a537577170e6912c3b6ab0d593e1312562c03"
 
 _BIBTEX = r"""
-@article{alghamdi2018corpus,
+@article{alghamdi_corpus_2018,
   author = {Alghamdi, Najwa and Maddock, Steve and Marxer, Ricard and Barker, Jon and Brown, Guy J.},
   doi = {10.1121/1.5042758},
   journal = {The Journal of the Acoustical Society of America},

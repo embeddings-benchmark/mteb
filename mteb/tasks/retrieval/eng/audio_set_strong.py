@@ -29,7 +29,7 @@ class AudioSetStrongA2TRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         superseded_by="AudioSetStrongA2TRetrieval.v2",
         bibtex_citation=r"""
-@inproceedings{hershey2021benefittemporallystronglabelsaudio,
+@inproceedings{hershey_benefit_2021,
   author = {Hershey, Shawn and Ellis, Daniel P W and Fonseca, Eduardo and Jansen, Aren and Liu, Caroline and Channing Moore, R and Plakal, Manoj},
   booktitle = {ICASSP 2021 - 2021 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp39728.2021.9414579},
@@ -73,7 +73,7 @@ class AudioSetStrongT2ARetrieval(AbsTaskRetrieval):
         sample_creation="found",
         superseded_by="AudioSetStrongT2ARetrieval.v2",
         bibtex_citation=r"""
-@misc{hershey2021benefittemporallystronglabelsaudio,
+@misc{hershey_benefit_2021,
   archiveprefix = {arXiv},
   author = {Shawn Hershey and Daniel P W Ellis and Eduardo Fonseca and Aren Jansen and Caroline Liu and R Channing Moore and Manoj Plakal},
   eprint = {2105.07031},
@@ -114,7 +114,7 @@ class AudioSetStrongA2TRetrievalV2(AbsTaskRetrieval):
         sample_creation="found",
         adapted_from=["AudioSetStrongA2TRetrieval"],
         bibtex_citation=r"""
-@misc{hershey2021benefittemporallystronglabelsaudio,
+@misc{hershey_benefit_2021,
   archiveprefix = {arXiv},
   author = {Shawn Hershey and Daniel P W Ellis and Eduardo Fonseca and Aren Jansen and Caroline Liu and R Channing Moore and Manoj Plakal},
   eprint = {2105.07031},
@@ -157,7 +157,7 @@ class AudioSetStrongT2ARetrievalV2(AbsTaskRetrieval):
         sample_creation="found",
         adapted_from=["AudioSetStrongT2ARetrieval"],
         bibtex_citation=r"""
-@inproceedings{hershey2021benefittemporallystronglabelsaudio,
+@inproceedings{hershey_benefit_2021,
   author = {Hershey, Shawn and Ellis, Daniel P W and Fonseca, Eduardo and Jansen, Aren and Liu, Caroline and Channing Moore, R and Plakal, Manoj},
   booktitle = {ICASSP 2021 - 2021 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp39728.2021.9414579},
