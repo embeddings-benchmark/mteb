@@ -1,3 +1,4 @@
+import unicodedata
 from collections import defaultdict
 from typing import Any
 
@@ -57,6 +58,7 @@ class GoogleSVQA2TRetrieval(AbsTaskRetrieval):
         date=("2024-01-01", "2024-12-31"),
         domains=["Spoken"],
         task_subtypes=["Speech Transcription Retrieval"],
+        superseded_by="GoogleSVQA2TRetrieval.v2",
         license="cc-by-4.0",
         annotations_creators="human-annotated",
         dialect=[],
@@ -154,6 +156,7 @@ class GoogleSVQT2ARetrieval(AbsTaskRetrieval):
         date=("2024-01-01", "2024-12-31"),
         domains=["Spoken"],
         task_subtypes=["Speech Retrieval"],
+        superseded_by="GoogleSVQT2ARetrieval.v2",
         license="cc-by-4.0",
         annotations_creators="human-annotated",
         dialect=[],
@@ -228,3 +231,121 @@ class GoogleSVQT2ARetrieval(AbsTaskRetrieval):
                 self.corpus[locale][split] = corpus_ds
                 self.queries[locale][split] = queries_ds
                 self.relevant_docs[locale][split] = relevant_docs_
+
+
+# Arabic diacritics and tatweel, and hamza forms of alef
+# Arabic letter variants that are written interchangeably (hamza/alef forms, alef maksura, ta marbuta, keheh, tatweel)
+_ARABIC_MAP = str.maketrans(
+    {
+        "أ": "ا",
+        "إ": "ا",
+        "آ": "ا",
+        "ٱ": "ا",
+        "ى": "ي",
+        "ی": "ي",
+        "ة": "ه",
+        "ک": "ك",
+        "ـ": "",
+    }
+)
+
+
+def _normalize(text: str) -> str:
+    """Fold transcription variants of the same sentence.
+
+    Drops case, punctuation, symbols and extra whitespace, and folds Arabic letter variants,
+    Arabic diacritics and accents on Latin letters. Indic vowel signs are kept, since they
+    are combining marks that change the word.
+    """
+    text = unicodedata.normalize("NFKC", text).casefold()
+    text = "".join(
+        c for c in text if not unicodedata.category(c).startswith(("P", "S"))
+    )
+    out = []
+    for ch in text.translate(_ARABIC_MAP):
+        if unicodedata.name(ch, "").startswith("LATIN"):
+            out.extend(
+                d
+                for d in unicodedata.normalize("NFD", ch)
+                if not unicodedata.combining(d)
+            )
+        elif not (unicodedata.combining(ch) and "ARABIC" in unicodedata.name(ch, "")):
+            out.append(ch)
+    return " ".join("".join(out).split())
+
+
+def _sentence_ids(utt_ids: list[str], texts: list[str]) -> list[str]:
+    """Sentence id of each recording: the first recording id with the same normalized text."""
+    first: dict[str, str] = {}
+    return [
+        first.setdefault(_normalize(text), utt_id)
+        for utt_id, text in zip(utt_ids, texts, strict=True)
+    ]
+
+
+class GoogleSVQA2TRetrievalV2(AbsTaskRetrieval):
+    metadata = GoogleSVQA2TRetrieval.metadata.model_copy(
+        update={
+            "name": "GoogleSVQA2TRetrieval.v2",
+            "description": GoogleSVQA2TRetrieval.metadata.description
+            + " Version 2 keeps one text per unique sentence: each sentence is recorded several times, and v1 listed every recording's identical transcription as a separate document.",
+            "adapted_from": ["GoogleSVQA2TRetrieval"],
+            "superseded_by": None,
+        }
+    )
+
+    def load_data(self, **kwargs: Any) -> None:
+        if getattr(self, "data_loaded", False):
+            return
+        # same rows as v1, then one entry per unique sentence
+        v1 = GoogleSVQA2TRetrieval()
+        v1.load_data()
+        self.corpus, self.queries = v1.corpus, v1.queries
+        self.relevant_docs = v1.relevant_docs
+        for locale, splits in self.corpus.items():
+            for split, corpus_ds in splits.items():
+                utt_ids, texts = corpus_ds["id"], corpus_ds["text"]
+                sentence_ids = _sentence_ids(utt_ids, texts)
+                unique = dict(zip(sentence_ids, texts, strict=True))
+                self.corpus[locale][split] = datasets.Dataset.from_dict(
+                    {"id": list(unique), "text": list(unique.values())}
+                )
+                self.relevant_docs[locale][split] = {
+                    utt_id: {sentence_id: 1}
+                    for utt_id, sentence_id in zip(utt_ids, sentence_ids, strict=True)
+                }
+        self.data_loaded = True
+
+
+class GoogleSVQT2ARetrievalV2(AbsTaskRetrieval):
+    metadata = GoogleSVQT2ARetrieval.metadata.model_copy(
+        update={
+            "name": "GoogleSVQT2ARetrieval.v2",
+            "description": GoogleSVQT2ARetrieval.metadata.description
+            + " Version 2 has one query per unique sentence with all its recordings as correct answers: each sentence is recorded several times, and v1 asked the same text once per recording with only that recording correct.",
+            "adapted_from": ["GoogleSVQT2ARetrieval"],
+            "superseded_by": None,
+        }
+    )
+
+    def load_data(self, **kwargs: Any) -> None:
+        if getattr(self, "data_loaded", False):
+            return
+        # same rows as v1, then one entry per unique sentence
+        v1 = GoogleSVQT2ARetrieval()
+        v1.load_data()
+        self.corpus, self.queries = v1.corpus, v1.queries
+        self.relevant_docs = v1.relevant_docs
+        for locale, splits in self.queries.items():
+            for split, queries_ds in splits.items():
+                utt_ids, texts = queries_ds["id"], queries_ds["text"]
+                sentence_ids = _sentence_ids(utt_ids, texts)
+                unique = dict(zip(sentence_ids, texts, strict=True))
+                self.queries[locale][split] = datasets.Dataset.from_dict(
+                    {"id": list(unique), "text": list(unique.values())}
+                )
+                relevant: dict[str, dict[str, int]] = defaultdict(dict)
+                for utt_id, sentence_id in zip(utt_ids, sentence_ids, strict=True):
+                    relevant[sentence_id][utt_id] = 1
+                self.relevant_docs[locale][split] = dict(relevant)
+        self.data_loaded = True
