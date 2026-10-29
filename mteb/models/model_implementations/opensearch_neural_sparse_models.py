@@ -159,3 +159,77 @@ opensearch_neural_sparse_encoding_doc_v1 = ModelMeta(
     },
     loader=SparseEncoderWrapper,
 )
+
+
+opensearch_neural_sparse_encoding_v2_distill = ModelMeta(
+    name="opensearch-project/opensearch-neural-sparse-encoding-v2-distill",
+    extra_requirements_groups=["sparse-encoder"],
+    model_type=["sparse"],
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="269e6638b2c4f648996691f6d751495285d8f330",
+    release_date="2024-07-17",
+    n_parameters=66985530,
+    n_embedding_parameters=23_440_896,
+    memory_usage_mb=256,
+    embed_dim=30522,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/opensearch-project/opensearch-neural-sparse-encoding-v2-distill",
+    similarity_fn_name="dot",
+    framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
+    public_training_code="https://github.com/zhichao-aws/opensearch-sparse-model-tuning-sample",
+    public_training_data=True,
+    use_instructions=False,
+    training_datasets=v2_training_data,
+    loader=SparseEncoderWrapper,
+)
+
+
+# Asymmetric "inference-free" model: queries go through a static IDF lookup
+# (`SparseStaticEmbedding`), documents through the MLM encoder + SPLADE pooling.
+# The Router in the Hub checkpoint picks the route from `encode_query`/`encode_document`.
+opensearch_neural_sparse_encoding_multilingual_v1 = ModelMeta(
+    name="opensearch-project/opensearch-neural-sparse-encoding-multilingual-v1",
+    extra_requirements_groups=["sparse-encoder"],
+    model_type=["sparse"],
+    languages=[
+        "eng-Latn",
+        "zho-Hans",
+        "fra-Latn",
+        "ben-Beng",
+        "tel-Telu",
+        "spa-Latn",
+        "ind-Latn",
+        "hin-Deva",
+        "rus-Cyrl",
+        "ara-Arab",
+        "fas-Arab",
+        "jpn-Jpan",
+        "fin-Latn",
+        "swa-Latn",
+        "kor-Hang",
+    ],
+    open_weights=True,
+    revision="1e0f096c2b51c234f1d20725c793e1b5b6d556db",
+    release_date="2025-02-21",
+    n_parameters=167569710,
+    n_embedding_parameters=81_315_072,
+    memory_usage_mb=639,
+    embed_dim=105879,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/opensearch-project/opensearch-neural-sparse-encoding-multilingual-v1",
+    similarity_fn_name="dot",
+    framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
+    public_training_code="https://github.com/zhichao-aws/opensearch-sparse-model-tuning-sample",
+    public_training_data=None,
+    use_instructions=False,
+    # model card lists miracl/miracl as training data
+    training_datasets={
+        "MIRACLRetrieval",
+        "MIRACLRetrievalHardNegatives",
+        "MIRACLReranking",
+    },
+    loader=SparseEncoderWrapper,
+)

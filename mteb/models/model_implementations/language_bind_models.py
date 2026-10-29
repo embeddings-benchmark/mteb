@@ -7,7 +7,12 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator, VideoCollator
+from mteb.models.modality_collators import (
+    AudioCollator,
+    VideoCollator,
+    fixed_numpy_seed,
+)
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -20,6 +25,8 @@ if TYPE_CHECKING:
 
 
 # LanguageBind expects audio sampled at 16 kHz (its audio mel-spectrogram pipeline).
+# 16 kHz: vision_config.audio_sample_rate
+# https://huggingface.co/LanguageBind/LanguageBind_Audio_FT/blob/main/config.json
 _LANGUAGE_BIND_AUDIO_SR = 16000
 
 _LANGUAGEBIND_SHIM_APPLIED: list[bool] = []
@@ -98,7 +105,9 @@ class _LanguageBindBase(AbsEncoder):
                 texts = list(batch["text"])
                 tokens = self._tokenize(texts)
 
-                with torch.autocast(str(self.device), dtype=torch.bfloat16):
+                with torch.autocast(
+                    torch.device(self.device).type, dtype=torch.bfloat16
+                ):
                     text_outputs = self.model.text_model(
                         input_ids=tokens["input_ids"],
                         attention_mask=tokens.get("attention_mask"),
@@ -125,6 +134,8 @@ class LanguageBindVideoWrapper(_LanguageBindBase):
         revision: str | None = None,
         fps: float | None = None,
         max_frames: int | None = None,
+        # 8 frames: num_frames=8
+        # https://huggingface.co/LanguageBind/LanguageBind_Video_FT/blob/main/config.json
         num_frames: int | None = 8,
         max_samples: int | None = None,
         **kwargs: Any,
@@ -157,6 +168,18 @@ class LanguageBindVideoWrapper(_LanguageBindBase):
             model_name, revision=revision
         )
         self.processor = LanguageBindVideoProcessor(self.model.config, self.tokenizer)
+        # the upstream video transform flips each clip left-right at random, even
+        # at inference, so the same video embedded differently on every call
+        # https://github.com/PKU-YuanGroup/LanguageBind/blob/main/languagebind/video/processing_video.py
+        from torchvision.transforms import Compose
+
+        self.processor.transform = Compose(
+            [
+                t
+                for t in self.processor.transform.transforms
+                if "RandomHorizontalFlip" not in type(t).__name__
+            ]
+        )
 
     def _transform_video_frames(self, frames: torch.Tensor) -> torch.Tensor:
         """Apply LanguageBind's video transform to pre-decoded frames.
@@ -201,7 +224,9 @@ class LanguageBindVideoWrapper(_LanguageBindBase):
                     [self._transform_video_frames(frames) for frames in frames_list]
                 ).to(self.device)
 
-                with torch.autocast(str(self.device), dtype=torch.bfloat16):
+                with torch.autocast(
+                    torch.device(self.device).type, dtype=torch.bfloat16
+                ):
                     vision_outputs = self.model.vision_model(pixel_values=processed)
                     video_embeds = self.model.visual_projection(vision_outputs[1])
                     video_embeds /= video_embeds.norm(dim=-1, keepdim=True)
@@ -296,7 +321,10 @@ class LanguageBindAudioWrapper(_LanguageBindBase):
 
         with torch.inference_mode():
             all_embeddings = []
-            inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+            # the fbank needs at least one 25 ms window (400 samples at 16 kHz)
+            inputs.collate_fn = AudioCollator(
+                target_sampling_rate=self.sampling_rate, min_samples=400
+            )
 
             for batch in tqdm(
                 inputs,
@@ -304,11 +332,17 @@ class LanguageBindAudioWrapper(_LanguageBindBase):
                 desc="Processing audio batches",
             ):
                 audio_arrays = [audio["array"] for audio in batch["audio"]]
-                processed = torch.stack(
-                    [self._transform_audio(a) for a in audio_arrays]
-                ).to(self.device)
+                processed = []
+                for a in audio_arrays:
+                    # the audio processor picks random chunks of long clips
+                    # https://github.com/PKU-YuanGroup/LanguageBind/blob/5be0c7821fe7fbed821ca806110767fcf79edb3c/languagebind/audio/processing_audio.py#L70-L72
+                    with fixed_numpy_seed():
+                        processed.append(self._transform_audio(a))
+                processed = torch.stack(processed).to(self.device)
 
-                with torch.autocast(str(self.device), dtype=torch.bfloat16):
+                with torch.autocast(
+                    torch.device(self.device).type, dtype=torch.bfloat16
+                ):
                     audio_outputs = self.model.vision_model(pixel_values=processed)
                     audio_embeds = self.model.visual_projection(audio_outputs[1])
                     audio_embeds /= audio_embeds.norm(dim=-1, keepdim=True)
@@ -404,7 +438,9 @@ class LanguageBindImageWrapper(_LanguageBindBase):
                     [self.processor.transform(img) for img in images]
                 ).to(self.device)
 
-                with torch.autocast(str(self.device), dtype=torch.bfloat16):
+                with torch.autocast(
+                    torch.device(self.device).type, dtype=torch.bfloat16
+                ):
                     vision_outputs = self.model.vision_model(pixel_values=processed)
                     image_embeds = self.model.visual_projection(vision_outputs[1])
                     image_embeds /= image_embeds.norm(dim=-1, keepdim=True)
@@ -449,9 +485,11 @@ class LanguageBindOmniWrapper(AbsEncoder):
 
     Wraps :class:`LanguageBindVideoWrapper`, :class:`LanguageBindAudioWrapper`,
     and :class:`LanguageBindImageWrapper`, dispatching each input to the
-    sub-model for its modality. Text is encoded via the shared OpenCLIP text
-    tower. For inputs spanning multiple modalities the per-modality embeddings
-    are summed, producing a single embedding for text / image / audio / video.
+    sub-model for its modality. Text is encoded with the audio model's own text
+    tower when audio is the task's only other modality, and with the tower
+    shared by video and image otherwise. For inputs spanning multiple modalities
+    the per-modality embeddings are summed, producing a single embedding for
+    text / image / audio / video.
     """
 
     def __init__(
@@ -473,7 +511,8 @@ class LanguageBindOmniWrapper(AbsEncoder):
             device = "cuda" if torch.cuda.is_available() else "cpu"
 
         self.video_model = LanguageBindVideoWrapper(
-            "LanguageBind/LanguageBind_Video_FT",
+            language_bind_video_ft.name,
+            revision=language_bind_video_ft.revision,
             device=device,
             fps=fps,
             max_frames=max_frames,
@@ -481,11 +520,13 @@ class LanguageBindOmniWrapper(AbsEncoder):
             max_samples=max_samples,
         )
         self.audio_model = LanguageBindAudioWrapper(
-            "LanguageBind/LanguageBind_Audio_FT",
+            language_bind_audio_ft.name,
+            revision=language_bind_audio_ft.revision,
             device=device,
         )
         self.image_model = LanguageBindImageWrapper(
-            "LanguageBind/LanguageBind_Image",
+            language_bind_image.name,
+            revision=language_bind_image.revision,
             device=device,
         )
 
@@ -507,7 +548,13 @@ class LanguageBindOmniWrapper(AbsEncoder):
 
         embeddings = None
         if has_text:
-            text_emb = self.video_model.get_text_embeddings(
+            modalities = set(task_metadata.modalities)
+            text_model = (
+                self.audio_model
+                if "audio" in modalities and not modalities & {"video", "image"}
+                else self.video_model
+            )
+            text_emb = text_model.get_text_embeddings(
                 inputs, prompt_type=prompt_type, **kwargs
             )
             embeddings = text_emb if embeddings is None else embeddings + text_emb
@@ -530,14 +577,14 @@ class LanguageBindOmniWrapper(AbsEncoder):
 
 
 _LANGUAGE_BIND_CITATION = r"""
-@misc{zhu2024languagebind,
-    title={LanguageBind: Extending Video-Language Pretraining to N-modality by Language-based Semantic Alignment},
-    author={Bin Zhu and Bin Lin and Munan Ning and Yang Yan and Jiaxi Cui and Wang HongFa and Yatian Pang and Wenhao Jiang and Junwu Zhang and Zongwei Li and Cai Wan Zhang and Zhifeng Li and Wei Liu and Li Yuan},
-    year={2024},
-    eprint={2310.01852},
-    archivePrefix={arXiv},
-    primaryClass={cs.CV},
-    url={https://arxiv.org/abs/2310.01852},
+@inproceedings{zhu2024languagebind,
+  archiveprefix = {arXiv},
+  author = {Bin Zhu and Bin Lin and Munan Ning and Yang Yan and Jiaxi Cui and WANG HongFa and Yatian Pang and Wenhao Jiang and Junwu Zhang and Zongwei Li and Cai Wan Zhang and Zhifeng Li and Wei Liu and Li Yuan},
+  booktitle = {The Twelfth International Conference on Learning Representations},
+  eprint = {2310.01852},
+  title = {LanguageBind: Extending Video-Language Pretraining to N-modality by Language-based Semantic Alignment},
+  url = {https://openreview.net/forum?id=QmZKc7UZCy},
+  year = {2024},
 }
 """
 
@@ -570,6 +617,7 @@ language_bind_video_ft = ModelMeta(
     modalities=["video", "text"],
     loader_kwargs=dict(num_frames=8),
     **_LANGUAGE_BIND_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
 
 language_bind_audio_ft = ModelMeta(
@@ -582,6 +630,7 @@ language_bind_audio_ft = ModelMeta(
     modalities=["audio", "text"],
     loader_kwargs=dict(),
     **_LANGUAGE_BIND_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
 
 language_bind_image = ModelMeta(
@@ -594,6 +643,7 @@ language_bind_image = ModelMeta(
     modalities=["image", "text"],
     loader_kwargs=dict(),
     **_LANGUAGE_BIND_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
 
 language_bind_omni = ModelMeta(

@@ -5,6 +5,8 @@ import pytest
 import mteb
 from mteb.benchmarks.benchmark import CustomGrouping
 
+pytestmark = pytest.mark.core
+
 logging.basicConfig(level=logging.INFO)
 
 

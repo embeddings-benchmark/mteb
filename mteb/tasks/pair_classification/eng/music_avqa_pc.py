@@ -48,7 +48,6 @@ class MusicAVQAVPairClassification(AbsTaskPairClassification):
         modalities=["video"],
         sample_creation="found",
         bibtex_citation=BIBTEX,
-        is_beta=True,
     )
 
     input1_column_name: str = "video1"
@@ -79,7 +78,6 @@ class MusicAVQAVAPairClassification(AbsTaskPairClassification):
         modalities=["video", "audio"],
         sample_creation="found",
         bibtex_citation=BIBTEX,
-        is_beta=True,
     )
 
     input1_column_name: ClassVar[Mapping[str, str]] = {

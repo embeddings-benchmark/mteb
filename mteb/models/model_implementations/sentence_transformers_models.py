@@ -4,6 +4,7 @@ import numpy as np
 
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
 
 paraphrase_langs = [
     "ara-Arab",
@@ -275,15 +276,19 @@ labse = ModelMeta(
     ),
     # scraped and mined webdata including CC, wiki, see section 3.1 https://aclanthology.org/2022.acl-long.62.pdf
     public_training_code="https://www.kaggle.com/models/google/labse/tensorFlow2/labse/2?tfhub-redirect=true",
-    citation="""@misc{feng2022languageagnosticbertsentenceembedding,
-      title={Language-agnostic BERT Sentence Embedding},
-      author={Fangxiaoyu Feng and Yinfei Yang and Daniel Cer and Naveen Arivazhagan and Wei Wang},
-      year={2022},
-      eprint={2007.01852},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2007.01852},
-    }""",
+    citation="""@inproceedings{feng2022languageagnosticbertsentenceembedding,
+  address = {Dublin, Ireland},
+  author = {Feng, Fangxiaoyu and Yang, Yinfei and Cer, Daniel and Arivazhagan, Naveen and Wang, Wei},
+  booktitle = {Proceedings of the 60th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2022.acl-long.62},
+  editor = {Muresan, Smaranda and Nakov, Preslav and Villavicencio, Aline},
+  month = {may},
+  pages = {878--891},
+  publisher = {Association for Computational Linguistics},
+  title = {Language-agnostic {BERT} Sentence Embedding},
+  url = {https://aclanthology.org/2022.acl-long.62/},
+  year = {2022},
+}""",
     public_training_data=None,
 )
 
@@ -483,13 +488,17 @@ contriever = ModelMeta(
     framework=["Sentence Transformers", "PyTorch", "Transformers"],
     use_instructions=False,
     citation="""
-    @misc{izacard2021contriever,
-      title={Unsupervised Dense Information Retrieval with Contrastive Learning},
-      author={Gautier Izacard and Mathilde Caron and Lucas Hosseini and Sebastian Riedel and Piotr Bojanowski and Armand Joulin and Edouard Grave},
-      year={2021},
-      url = {https://arxiv.org/abs/2112.09118},
-      doi = {10.48550/ARXIV.2112.09118},
-    }""",
+    @article{izacard2021contriever,
+  archiveprefix = {arXiv},
+  author = {Gautier Izacard and Mathilde Caron and Lucas Hosseini and Sebastian Riedel and Piotr Bojanowski and Armand Joulin and Edouard Grave},
+  eprint = {2112.09118},
+  issn = {2835-8856},
+  journal = {Transactions on Machine Learning Research},
+  note = {},
+  title = {Unsupervised Dense Information Retrieval with Contrastive Learning},
+  url = {https://openreview.net/forum?id=jKN1pXi7b0},
+  year = {2022},
+}""",
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
@@ -532,14 +541,18 @@ microllama_text_embedding = ModelMeta(
 )
 
 SENTENCE_T5_CITATION = """
-@misc{ni2021sentencet5scalablesentenceencoders,
-      title={Sentence-T5: Scalable Sentence Encoders from Pre-trained Text-to-Text Models},
-      author={Jianmo Ni and Gustavo Hernández Ábrego and Noah Constant and Ji Ma and Keith B. Hall and Daniel Cer and Yinfei Yang},
-      year={2021},
-      eprint={2108.08877},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2108.08877},
+@inproceedings{ni2021sentencet5scalablesentenceencoders,
+  address = {Dublin, Ireland},
+  author = {Ni, Jianmo and Hernandez Abrego, Gustavo and Constant, Noah and Ma, Ji and Hall, Keith and Cer, Daniel and Yang, Yinfei},
+  booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2022},
+  doi = {10.18653/v1/2022.findings-acl.146},
+  editor = {Muresan, Smaranda and Nakov, Preslav and Villavicencio, Aline},
+  month = {may},
+  pages = {1864--1874},
+  publisher = {Association for Computational Linguistics},
+  title = {{S}entence-{T}5: Scalable Sentence Encoders from Pre-trained Text-to-Text Models},
+  url = {https://aclanthology.org/2022.findings-acl.146/},
+  year = {2022},
 }
 """
 sentence_t5_base = ModelMeta(
@@ -564,6 +577,7 @@ sentence_t5_base = ModelMeta(
     public_training_data=None,
     training_datasets={"SNLI", "Community QA"},
     citation=SENTENCE_T5_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 sentence_t5_large = ModelMeta(
@@ -588,6 +602,7 @@ sentence_t5_large = ModelMeta(
     public_training_data=None,
     training_datasets={"SNLI", "Community QA"},
     citation=SENTENCE_T5_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 sentence_t5_xl = ModelMeta(
@@ -612,6 +627,7 @@ sentence_t5_xl = ModelMeta(
     public_training_data=None,
     training_datasets={"SNLI", "Community QA"},
     citation=SENTENCE_T5_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 sentence_t5_xxl = ModelMeta(
@@ -636,16 +652,21 @@ sentence_t5_xxl = ModelMeta(
     public_training_data=None,
     training_datasets={"SNLI", "Community QA"},
     citation=SENTENCE_T5_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )
 GTR_CITATION = """
-@misc{ni2021largedualencodersgeneralizable,
-      title={Large Dual Encoders Are Generalizable Retrievers},
-      author={Jianmo Ni and Chen Qu and Jing Lu and Zhuyun Dai and Gustavo Hernández Ábrego and Ji Ma and Vincent Y. Zhao and Yi Luan and Keith B. Hall and Ming-Wei Chang and Yinfei Yang},
-      year={2021},
-      eprint={2112.07899},
-      archivePrefix={arXiv},
-      primaryClass={cs.IR},
-      url={https://arxiv.org/abs/2112.07899},
+@inproceedings{ni2021largedualencodersgeneralizable,
+  address = {Abu Dhabi, United Arab Emirates},
+  author = {Ni, Jianmo and Qu, Chen and Lu, Jing and Dai, Zhuyun and Hernandez Abrego, Gustavo and Ma, Ji and Zhao, Vincent and Luan, Yi and Hall, Keith and Chang, Ming-Wei and Yang, Yinfei},
+  booktitle = {Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing},
+  doi = {10.18653/v1/2022.emnlp-main.669},
+  editor = {Goldberg, Yoav and Kozareva, Zornitsa and Zhang, Yue},
+  month = {dec},
+  pages = {9844--9855},
+  publisher = {Association for Computational Linguistics},
+  title = {Large Dual Encoders Are Generalizable Retrievers},
+  url = {https://aclanthology.org/2022.emnlp-main.669/},
+  year = {2022},
 }
 """
 gtr_t5_large = ModelMeta(
@@ -682,6 +703,7 @@ gtr_t5_large = ModelMeta(
         "Community QA",
     },
     citation=GTR_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 gtr_t5_xl = ModelMeta(
@@ -718,6 +740,7 @@ gtr_t5_xl = ModelMeta(
         "Community QA",
     },
     citation=GTR_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )
 gtr_t5_xxl = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
@@ -753,6 +776,7 @@ gtr_t5_xxl = ModelMeta(
         "Community QA",
     },
     citation=GTR_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 gtr_t5_base = ModelMeta(
@@ -789,6 +813,7 @@ gtr_t5_base = ModelMeta(
         "Community QA",
     },
     citation=GTR_CITATION,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 static_retrieval_mrl_en_v1 = ModelMeta(
@@ -908,6 +933,7 @@ qwen_indic_v1 = ModelMeta(
     model_type=["dense"],
     public_training_code=None,
     public_training_data=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 FlowVec_v1 = ModelMeta(

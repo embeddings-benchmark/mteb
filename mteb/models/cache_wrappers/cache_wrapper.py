@@ -5,7 +5,6 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-from datasets import Dataset
 
 from mteb._create_dataloaders import create_dataloader
 from mteb.models.cache_wrappers.cache_backends.numpy_cache import NumpyCache
@@ -17,6 +16,7 @@ from mteb.models.model_meta import (
 _EXPERIMENTS_FOLDER_NAME = "experiments"
 
 if TYPE_CHECKING:
+    from datasets import Dataset
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 
 
 class CachedEmbeddingWrapper:
-    """Wraps an encoder and caches embeddings for text and images.
+    """Wraps an encoder and caches embeddings for text, images, audio, and video.
 
     Examples:
         >>> import mteb
@@ -120,8 +120,7 @@ class CachedEmbeddingWrapper:
             newly_encoded: dict[int, Array] = {}
             if uncached_items:
                 logger.info(f"Encoding {len(uncached_items)} new items")
-                # Build a simple DataLoader with only uncached items
-                dataset = Dataset.from_list(uncached_items)
+                dataset = all_items.select(uncached_indices)
                 dl = create_dataloader(
                     dataset,
                     task_metadata=task_metadata,
@@ -138,7 +137,14 @@ class CachedEmbeddingWrapper:
                     **kwargs,
                 )
                 if isinstance(new_vectors, torch.Tensor):
-                    new_vectors = new_vectors.cpu().numpy()
+                    new_vectors = new_vectors.cpu()
+                    if new_vectors.is_floating_point() and new_vectors.dtype not in {
+                        torch.float16,
+                        torch.float32,
+                        torch.float64,
+                    }:
+                        new_vectors = new_vectors.float()
+                    new_vectors = new_vectors.numpy()
                 cache.add(uncached_items, new_vectors)
                 cache.save()
                 for vector, original_idx in zip(

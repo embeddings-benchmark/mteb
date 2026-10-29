@@ -7,7 +7,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import AudioCollator, check_duration_cap
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -86,9 +86,12 @@ class MCTCTWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
-        max_audio_length_seconds: float = 30.0,
+        # None: an mteb cap at the relative-position horizon read below; the
+        # encoder runs past it, so this is not a hard model limit
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
+        check_duration_cap(max_audio_length_seconds)
         import torch
 
         if device is None:
@@ -108,6 +111,24 @@ class MCTCTWrapper(AbsEncoder):
             model_name, revision=revision
         )
         self.sampling_rate = self.feature_extractor.sampling_rate  # 16000 Hz
+
+        # filterbank frames: max_position_embeddings x conv_stride
+        # https://huggingface.co/speechbrain/m-ctc-t-large/blob/main/config.json
+        config = self.model.config
+        stride = 1
+        for st in config.conv_stride:
+            stride *= st
+        self.max_feature_frames = config.max_position_embeddings * stride
+        if max_audio_length_seconds is not None:
+            self.max_feature_frames = int(
+                max_audio_length_seconds * 1000 / self.feature_extractor.hop_length
+            )
+        logger.info(
+            "%s: audio capped at %d filterbank frames (%.1f s)",
+            model_name,
+            self.max_feature_frames,
+            self.max_feature_frames * self.feature_extractor.hop_length / 1000,
+        )
 
     def get_audio_embeddings(  # noqa: PLR0914
         self,
@@ -133,7 +154,7 @@ class MCTCTWrapper(AbsEncoder):
                 return_tensors="pt",
                 padding=True,
                 truncation=True,
-                max_length=int(self.max_audio_length_seconds * self.sampling_rate),
+                max_length=self.max_feature_frames,
             ).to(self.device)
 
             with torch.no_grad():
@@ -222,14 +243,16 @@ mctct_large = ModelMeta(
     training_datasets={"CommonVoiceMini17A2TRetrieval", "VoxPopuliLanguageID"},
     modalities=["audio"],
     citation="""
-@misc{lugosch2022pseudolabelingmassivelymultilingualspeech,
-      title={Pseudo-Labeling for Massively Multilingual Speech Recognition},
-      author={Loren Lugosch and Tatiana Likhomanenko and Gabriel Synnaeve and Ronan Collobert},
-      year={2022},
-      eprint={2111.00161},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2111.00161},
+@inproceedings{lugosch2022pseudolabelingmassivelymultilingualspeech,
+  author = {Lugosch, Loren and Likhomanenko, Tatiana and Synnaeve, Gabriel and Collobert, Ronan},
+  booktitle = {ICASSP 2022 - 2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  doi = {10.1109/icassp43922.2022.9746832},
+  month = {May},
+  pages = {7687–7691},
+  publisher = {IEEE},
+  title = {Pseudo-Labeling for Massively Multilingual Speech Recognition},
+  url = {https://doi.org/10.1109/icassp43922.2022.9746832},
+  year = {2022},
 }""",
     extra_requirements_groups=["transformers-v4"],
 )

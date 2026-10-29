@@ -4,6 +4,7 @@ import logging
 from typing import TYPE_CHECKING, Any, TypeVar
 
 from mteb.models.model_meta import ModelMeta
+from mteb.types import OutputDType
 
 from .rerankers_custom import RerankerWrapper
 
@@ -375,6 +376,7 @@ monot5_small = ModelMeta(
       primaryClass={cs.IR},
       url={https://arxiv.org/abs/2206.02873},
     }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 monot5_base = ModelMeta(
@@ -409,6 +411,7 @@ monot5_base = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch", "Transformers"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 monot5_large = ModelMeta(
@@ -443,6 +446,7 @@ monot5_large = ModelMeta(
       primaryClass={cs.IR},
       url={https://arxiv.org/abs/2206.02873},
     }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 monot5_3b = ModelMeta(
@@ -478,6 +482,7 @@ monot5_3b = ModelMeta(
       primaryClass={cs.IR},
       url={https://arxiv.org/abs/2206.02873},
     }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 flant5_base = ModelMeta(
@@ -491,16 +496,17 @@ flant5_base = ModelMeta(
     open_weights=True,
     revision="7bcac572ce56db69c1ea7c8af255c5d7c9672fc2",
     release_date="2022-10-21",
-    citation="""@misc{10.48550/arxiv.2210.11416,
-      doi = {10.48550/ARXIV.2210.11416},
-      url = {https://arxiv.org/abs/2210.11416},
-      author = {Chung, Hyung Won and Hou, Le and Longpre, Shayne and Zoph, Barret and Tay, Yi and Fedus, William and Li, Eric and Wang, Xuezhi and Dehghani, Mostafa and Brahma, Siddhartha and Webson, Albert and Gu, Shixiang Shane and Dai, Zhuyun and Suzgun, Mirac and Chen, Xinyun and Chowdhery, Aakanksha and Narang, Sharan and Mishra, Gaurav and Yu, Adams and Zhao, Vincent and Huang, Yanping and Dai, Andrew and Yu, Hongkun and Petrov, Slav and Chi, Ed H. and Dean, Jeff and Devlin, Jacob and Roberts, Adam and Zhou, Denny and Le, Quoc V. and Wei, Jason},
-      keywords = {Machine Learning (cs.LG), Computation and Language (cs.CL), FOS: Computer and information sciences, FOS: Computer and information sciences},
-      title = {Scaling Instruction-Finetuned Language Models},
-      publisher = {arXiv},
-      year = {2022},
-      copyright = {Creative Commons Attribution 4.0 International}
-    }
+    citation="""@article{10.48550/arxiv.2210.11416,
+  archiveprefix = {arXiv},
+  author = {Hyung Won Chung and Le Hou and Shayne Longpre and Barret Zoph and Yi Tay and William Fedus and Yunxuan Li and Xuezhi Wang and Mostafa Dehghani and Siddhartha Brahma and Albert Webson and Shixiang Shane Gu and Zhuyun Dai and Mirac Suzgun and Xinyun Chen and Aakanksha Chowdhery and Alex Castro-Ros and Marie Pellat and Kevin Robinson and Dasha Valter and Sharan Narang and Gaurav Mishra and Adams Yu and Vincent Y. Zhao and Yanping Huang and Andrew M. Dai and Hongkun Yu and Slav Petrov and Ed H. Chi and Jeff Dean and Jacob Devlin and Adam Roberts and Denny Zhou and Quoc V. Le and Jason Wei},
+  eprint = {2210.11416},
+  journal = {J. Mach. Learn. Res.},
+  pages = {70:1-70:53},
+  title = {Scaling Instruction-Finetuned Language Models},
+  url = {https://jmlr.org/papers/v25/23-0870.html},
+  volume = {25},
+  year = {2024},
+}
     """,
     training_datasets=set(
         # "svakulenk0/qrecc": ["train"],
@@ -526,6 +532,7 @@ flant5_base = ModelMeta(
     use_instructions=None,
     framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/google/flan-t5-base",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 flant5_large = ModelMeta(
@@ -539,16 +546,17 @@ flant5_large = ModelMeta(
     open_weights=True,
     revision="0613663d0d48ea86ba8cb3d7a44f0f65dc596a2a",
     release_date="2022-10-21",
-    citation="""@misc{10.48550/arxiv.2210.11416,
-      doi = {10.48550/ARXIV.2210.11416},
-      url = {https://arxiv.org/abs/2210.11416},
-      author = {Chung, Hyung Won and Hou, Le and Longpre, Shayne and Zoph, Barret and Tay, Yi and Fedus, William and Li, Eric and Wang, Xuezhi and Dehghani, Mostafa and Brahma, Siddhartha and Webson, Albert and Gu, Shixiang Shane and Dai, Zhuyun and Suzgun, Mirac and Chen, Xinyun and Chowdhery, Aakanksha and Narang, Sharan and Mishra, Gaurav and Yu, Adams and Zhao, Vincent and Huang, Yanping and Dai, Andrew and Yu, Hongkun and Petrov, Slav and Chi, Ed H. and Dean, Jeff and Devlin, Jacob and Roberts, Adam and Zhou, Denny and Le, Quoc V. and Wei, Jason},
-      keywords = {Machine Learning (cs.LG), Computation and Language (cs.CL), FOS: Computer and information sciences, FOS: Computer and information sciences},
-      title = {Scaling Instruction-Finetuned Language Models},
-      publisher = {arXiv},
-      year = {2022},
-      copyright = {Creative Commons Attribution 4.0 International}
-    }
+    citation="""@article{10.48550/arxiv.2210.11416,
+  archiveprefix = {arXiv},
+  author = {Hyung Won Chung and Le Hou and Shayne Longpre and Barret Zoph and Yi Tay and William Fedus and Yunxuan Li and Xuezhi Wang and Mostafa Dehghani and Siddhartha Brahma and Albert Webson and Shixiang Shane Gu and Zhuyun Dai and Mirac Suzgun and Xinyun Chen and Aakanksha Chowdhery and Alex Castro-Ros and Marie Pellat and Kevin Robinson and Dasha Valter and Sharan Narang and Gaurav Mishra and Adams Yu and Vincent Y. Zhao and Yanping Huang and Andrew M. Dai and Hongkun Yu and Slav Petrov and Ed H. Chi and Jeff Dean and Jacob Devlin and Adam Roberts and Denny Zhou and Quoc V. Le and Jason Wei},
+  eprint = {2210.11416},
+  journal = {J. Mach. Learn. Res.},
+  pages = {70:1-70:53},
+  title = {Scaling Instruction-Finetuned Language Models},
+  url = {https://jmlr.org/papers/v25/23-0870.html},
+  volume = {25},
+  year = {2024},
+}
     """,
     training_datasets=set(
         # "svakulenk0/qrecc": ["train"],
@@ -574,6 +582,7 @@ flant5_large = ModelMeta(
     use_instructions=None,
     framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/google/flan-t5-large",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 flant5_xl = ModelMeta(
@@ -587,16 +596,17 @@ flant5_xl = ModelMeta(
     open_weights=True,
     revision="7d6315df2c2fb742f0f5b556879d730926ca9001",
     release_date="2022-10-21",
-    citation="""@misc{10.48550/arxiv.2210.11416,
-      doi = {10.48550/ARXIV.2210.11416},
-      url = {https://arxiv.org/abs/2210.11416},
-      author = {Chung, Hyung Won and Hou, Le and Longpre, Shayne and Zoph, Barret and Tay, Yi and Fedus, William and Li, Eric and Wang, Xuezhi and Dehghani, Mostafa and Brahma, Siddhartha and Webson, Albert and Gu, Shixiang Shane and Dai, Zhuyun and Suzgun, Mirac and Chen, Xinyun and Chowdhery, Aakanksha and Narang, Sharan and Mishra, Gaurav and Yu, Adams and Zhao, Vincent and Huang, Yanping and Dai, Andrew and Yu, Hongkun and Petrov, Slav and Chi, Ed H. and Dean, Jeff and Devlin, Jacob and Roberts, Adam and Zhou, Denny and Le, Quoc V. and Wei, Jason},
-      keywords = {Machine Learning (cs.LG), Computation and Language (cs.CL), FOS: Computer and information sciences, FOS: Computer and information sciences},
-      title = {Scaling Instruction-Finetuned Language Models},
-      publisher = {arXiv},
-      year = {2022},
-      copyright = {Creative Commons Attribution 4.0 International}
-    }
+    citation="""@article{10.48550/arxiv.2210.11416,
+  archiveprefix = {arXiv},
+  author = {Hyung Won Chung and Le Hou and Shayne Longpre and Barret Zoph and Yi Tay and William Fedus and Yunxuan Li and Xuezhi Wang and Mostafa Dehghani and Siddhartha Brahma and Albert Webson and Shixiang Shane Gu and Zhuyun Dai and Mirac Suzgun and Xinyun Chen and Aakanksha Chowdhery and Alex Castro-Ros and Marie Pellat and Kevin Robinson and Dasha Valter and Sharan Narang and Gaurav Mishra and Adams Yu and Vincent Y. Zhao and Yanping Huang and Andrew M. Dai and Hongkun Yu and Slav Petrov and Ed H. Chi and Jeff Dean and Jacob Devlin and Adam Roberts and Denny Zhou and Quoc V. Le and Jason Wei},
+  eprint = {2210.11416},
+  journal = {J. Mach. Learn. Res.},
+  pages = {70:1-70:53},
+  title = {Scaling Instruction-Finetuned Language Models},
+  url = {https://jmlr.org/papers/v25/23-0870.html},
+  volume = {25},
+  year = {2024},
+}
     """,
     training_datasets=set(
         # "svakulenk0/qrecc": ["train"],
@@ -621,6 +631,7 @@ flant5_xl = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch", "Transformers", "safetensors"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 flant5_xxl = ModelMeta(
@@ -634,16 +645,17 @@ flant5_xxl = ModelMeta(
     open_weights=True,
     revision="ae7c9136adc7555eeccc78cdd960dfd60fb346ce",
     release_date="2022-10-21",
-    citation="""@misc{10.48550/arxiv.2210.11416,
-      doi = {10.48550/ARXIV.2210.11416},
-      url = {https://arxiv.org/abs/2210.11416},
-      author = {Chung, Hyung Won and Hou, Le and Longpre, Shayne and Zoph, Barret and Tay, Yi and Fedus, William and Li, Eric and Wang, Xuezhi and Dehghani, Mostafa and Brahma, Siddhartha and Webson, Albert and Gu, Shixiang Shane and Dai, Zhuyun and Suzgun, Mirac and Chen, Xinyun and Chowdhery, Aakanksha and Narang, Sharan and Mishra, Gaurav and Yu, Adams and Zhao, Vincent and Huang, Yanping and Dai, Andrew and Yu, Hongkun and Petrov, Slav and Chi, Ed H. and Dean, Jeff and Devlin, Jacob and Roberts, Adam and Zhou, Denny and Le, Quoc V. and Wei, Jason},
-      keywords = {Machine Learning (cs.LG), Computation and Language (cs.CL), FOS: Computer and information sciences, FOS: Computer and information sciences},
-      title = {Scaling Instruction-Finetuned Language Models},
-      publisher = {arXiv},
-      year = {2022},
-      copyright = {Creative Commons Attribution 4.0 International}
-    }
+    citation="""@article{10.48550/arxiv.2210.11416,
+  archiveprefix = {arXiv},
+  author = {Hyung Won Chung and Le Hou and Shayne Longpre and Barret Zoph and Yi Tay and William Fedus and Yunxuan Li and Xuezhi Wang and Mostafa Dehghani and Siddhartha Brahma and Albert Webson and Shixiang Shane Gu and Zhuyun Dai and Mirac Suzgun and Xinyun Chen and Aakanksha Chowdhery and Alex Castro-Ros and Marie Pellat and Kevin Robinson and Dasha Valter and Sharan Narang and Gaurav Mishra and Adams Yu and Vincent Y. Zhao and Yanping Huang and Andrew M. Dai and Hongkun Yu and Slav Petrov and Ed H. Chi and Jeff Dean and Jacob Devlin and Adam Roberts and Denny Zhou and Quoc V. Le and Jason Wei},
+  eprint = {2210.11416},
+  journal = {J. Mach. Learn. Res.},
+  pages = {70:1-70:53},
+  title = {Scaling Instruction-Finetuned Language Models},
+  url = {https://jmlr.org/papers/v25/23-0870.html},
+  volume = {25},
+  year = {2024},
+}
     """,
     training_datasets=set(
         # "svakulenk0/qrecc": ["train"],
@@ -668,6 +680,7 @@ flant5_xxl = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch", "Transformers", "safetensors"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 
@@ -703,6 +716,7 @@ llama2_7b = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2307.09288},
     }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 llama2_7b_chat = ModelMeta(
@@ -738,6 +752,7 @@ llama2_7b_chat = ModelMeta(
     training_datasets=None,
     framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/meta-llama/Llama-2-7b-chat-hf",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 mistral_7b = ModelMeta(
@@ -773,6 +788,7 @@ mistral_7b = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2310.06825},
     }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 followir_7b = ModelMeta(
@@ -802,15 +818,22 @@ followir_7b = ModelMeta(
     framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/jhu-clsp/FollowIR-7B",
     citation="""
-    @misc{weller2024followir,
-      title={FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions},
-      author={Orion Weller and Benjamin Chang and Sean MacAvaney and Kyle Lo and Arman Cohan and Benjamin Van Durme and Dawn Lawrie and Luca Soldaini},
-      year={2024},
-      eprint={2403.15246},
-      archivePrefix={arXiv},
-      primaryClass={cs.IR}
-    }
+    @inproceedings{weller2024followir,
+  address = {Albuquerque, New Mexico},
+  author = {Weller, Orion and Chang, Benjamin and MacAvaney, Sean and Lo, Kyle and Cohan, Arman and Van Durme, Benjamin and Lawrie, Dawn and Soldaini, Luca},
+  booktitle = {Proceedings of the 2025 Conference of the Nations of the {A}mericas Chapter of the {A}ssociation for {C}omputational {L}inguistics: Human Language Technologies (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2025.naacl-long.597},
+  editor = {Chiruzzo, Luis and Ritter, Alan and Wang, Lu},
+  isbn = {979-8-89176-189-6},
+  month = {apr},
+  pages = {11926--11942},
+  publisher = {Association for Computational Linguistics},
+  title = {{F}ollow{IR}: Evaluating and Teaching Information Retrieval Models to Follow Instructions},
+  url = {https://aclanthology.org/2025.naacl-long.597/},
+  year = {2025},
+}
     """,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 
@@ -960,4 +983,5 @@ Rodrigo Frassetto Nogueira},
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch", "Transformers"],
+    output_dtypes=OutputDType.FLOAT16,
 )

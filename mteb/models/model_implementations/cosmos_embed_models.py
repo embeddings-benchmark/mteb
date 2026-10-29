@@ -7,6 +7,7 @@ from tqdm.auto import tqdm
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -40,12 +41,14 @@ class CosmosEmbed1Model(AbsEncoder):
         self.device = torch.device(device)
         dtype = torch.bfloat16 if self.device.type == "cuda" else torch.float32
         self.dtype = dtype
+        # the 336p/448p checkpoints resize their 224p position embedding in fp32
+        # at load, which then clashes with the bf16 layers; cast it back
         self.model = AutoModel.from_pretrained(
             model_name,
             revision=revision,
             trust_remote_code=True,
             torch_dtype=dtype,
-        ).to(self.device)
+        ).to(self.device, dtype=dtype)
         self.model.eval()
         self.processor = AutoProcessor.from_pretrained(
             model_name,
@@ -203,6 +206,8 @@ _COSMOS_COMMON = dict(
         "Kinetics700VAZeroShot",
     },
     citation=None,
+    # 8 frames: num_video_frames=8
+    # https://huggingface.co/nvidia/Cosmos-Embed1-224p/blob/main/config.json
     loader_kwargs=dict(num_frames=8),
     extra_requirements_groups=["cosmos-embed1"],
 )
@@ -216,6 +221,7 @@ cosmos_embed1_224p = ModelMeta(
     embed_dim=256,
     reference="https://huggingface.co/nvidia/Cosmos-Embed1-224p",
     **_COSMOS_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
 
 cosmos_embed1_336p = ModelMeta(
@@ -227,6 +233,7 @@ cosmos_embed1_336p = ModelMeta(
     embed_dim=768,
     reference="https://huggingface.co/nvidia/Cosmos-Embed1-336p",
     **_COSMOS_COMMON,
+    output_dtypes=OutputDType.BF16,
 )
 
 cosmos_embed1_448p = ModelMeta(
@@ -238,4 +245,5 @@ cosmos_embed1_448p = ModelMeta(
     embed_dim=768,
     reference="https://huggingface.co/nvidia/Cosmos-Embed1-448p",
     **_COSMOS_COMMON,
+    output_dtypes=OutputDType.BF16,
 )

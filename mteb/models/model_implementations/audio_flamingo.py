@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Any
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import AudioCollator, seconds_to_samples
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import OutputDType
 
@@ -26,7 +26,9 @@ class AudioFlamingoWrapper(AbsEncoder):
         model_name: str,
         revision: str | None = None,
         device: str | None = None,
-        max_audio_length_seconds: float = 30.0,
+        # 600 s: "Max Audio Length: 10 Minutes"
+        # https://huggingface.co/nvidia/audio-flamingo-3-hf
+        max_audio_length_seconds: float = 600.0,
         torch_dtype: OutputDType | torch.dtype = OutputDType.BF16,
         device_map: str | dict | None = None,
         **kwargs: Any,
@@ -82,6 +84,7 @@ class AudioFlamingoWrapper(AbsEncoder):
 
         all_embeddings = []
 
+        cap = seconds_to_samples(self.max_audio_length_seconds, self.sampling_rate)
         for batch_data in tqdm(inputs, disable=not show_progress_bar):
             audio_list = batch_data.get("audio", [])
             text_list = batch_data.get("text", [])
@@ -100,6 +103,7 @@ class AudioFlamingoWrapper(AbsEncoder):
                     array = AudioCollator.resample_audio(
                         {"audio": audio_row},
                         target_sampling_rate=self.sampling_rate,
+                        max_samples=cap,
                     )
                     content.append({"type": "audio", "audio": array})
 
@@ -119,9 +123,11 @@ class AudioFlamingoWrapper(AbsEncoder):
                     dtype=torch.bfloat16,
                 ),
             ):
+                # logits_to_keep=1 skips computing vocab logits we don't use
                 outputs = self.model(
                     **processor_inputs,
                     output_hidden_states=True,
+                    logits_to_keep=1,
                 )
 
                 hidden = outputs.hidden_states[-1]
@@ -163,13 +169,16 @@ audio_flamingo_meta = ModelMeta(
     training_datasets=None,
     modalities=["audio", "text"],
     citation="""
-@misc{audioflamingo2024,
+@inproceedings{audioflamingo2024,
   archiveprefix = {arXiv},
-  author = {Arushi Goel and Sreyan Ghosh and Jaehyeon Kim and Sonal Kumar and Zhifeng Kong and Sang-gil Lee and Chao-Han Huck Yang and Ramani Duraiswami and Dinesh Manocha and Rafael Valle and Bryan Catanzaro},
+  author = {Sreyan Ghosh and Arushi Goel and Jaehyeon Kim and Sonal Kumar and Zhifeng Kong and Sang-gil Lee and Chao-Han Huck Yang and Ramani Duraiswami and Dinesh Manocha and Rafael Valle and Bryan Catanzaro},
+  booktitle = {The Thirty-ninth Annual Conference on Neural Information Processing Systems},
   eprint = {2507.08128},
   title = {Audio Flamingo 3: Advancing Audio Intelligence with Fully Open Large Audio Language Models},
-  url = {https://arxiv.org/abs/2507.08128},
+  url = {https://openreview.net/forum?id=FjByDpDVIO},
   year = {2025},
 }
 """,
+    extra_requirements_groups=["audio-flamingo-3"],
+    output_dtypes=OutputDType.BF16,
 )

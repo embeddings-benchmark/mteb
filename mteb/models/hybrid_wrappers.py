@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
 from tqdm.auto import tqdm
@@ -145,6 +145,7 @@ class HybridSearch:
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> None:
         """Index the corpus dataset using all sub-models."""
         logger.info("Indexing corpus using sub-models...")
@@ -169,8 +170,12 @@ class HybridSearch:
         encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> RetrievalOutputType:
-        """Search the queries using all sub-models and fuse the results."""
+        """Search the queries using all sub-models and fuse the results.
+
+        Equal fused scores are ordered by descending document ID before selecting top-k.
+        """
         if self.sub_model_top_k is None:
             sub_top_k = max(top_k, 100)
         else:
@@ -203,7 +208,7 @@ class HybridSearch:
             fused_query_scores = self.fuse(query_scores_list)
 
             sorted_fused = sorted(
-                fused_query_scores.items(), key=lambda x: x[1], reverse=True
+                fused_query_scores.items(), key=lambda x: (x[1], x[0]), reverse=True
             )
             fused_results[qid] = dict(sorted_fused[:top_k])
 
@@ -251,10 +256,13 @@ def fuse_rrf(
     weights: Sequence[float],
     rrf_k: int = 60,
 ) -> Mapping[str, float]:
-    """Fuse the query scores using Reciprocal Rank Fusion."""
+    """Fuse the query scores using Reciprocal Rank Fusion.
+
+    Equal scores are ranked by descending document ID, matching retrieval evaluation.
+    """
     fused: dict[str, float] = {}
     for scores, weight in zip(query_scores_list, weights, strict=True):
-        sorted_docs = sorted(scores.keys(), key=lambda d: scores[d], reverse=True)
+        sorted_docs = sorted(scores.keys(), key=lambda d: (scores[d], d), reverse=True)
         for rank_idx, doc_id in enumerate(sorted_docs):
             rank = rank_idx + 1
             fused[doc_id] = fused.get(doc_id, 0.0) + weight * (1.0 / (rrf_k + rank))

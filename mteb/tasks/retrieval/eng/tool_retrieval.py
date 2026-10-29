@@ -50,7 +50,7 @@ class ToolRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="ToolRetrieval",
         description="Tool Retrieval Benchmark for Large Language Models (ToolRet), evaluating retrieval models on identifying appropriate tools for LLMs across code, customized, and web domains.",
-        reference="https://arxiv.org/abs/2503.01763",
+        reference="https://aclanthology.org/2025.findings-acl.1258/",
         dataset={
             "path": "mteb/ToolRetrieval",
             "revision": "76d45e560059754e289ea202462865a585679619",
@@ -69,10 +69,18 @@ class ToolRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{shi2025toolret,
+@inproceedings{shi2025toolret,
+  address = {Vienna, Austria},
   author = {Shi, Zhengliang and Wang, Yuhan and Yan, Lingyong and Ren, Pengjie and Wang, Shuaiqiang and Yin, Dawei and Ren, Zhaochun},
-  journal = {arXiv preprint arXiv:2503.01763},
-  title = {Retrieval Models Aren't Tool-Savvy: Benchmarking Tool Retrieval for Large Language Models},
+  booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2025},
+  doi = {10.18653/v1/2025.findings-acl.1258},
+  editor = {Che, Wanxiang and Nabende, Joyce and Shutova, Ekaterina and Pilehvar, Mohammad Taher},
+  isbn = {979-8-89176-256-5},
+  month = {jul},
+  pages = {24497--24524},
+  publisher = {Association for Computational Linguistics},
+  title = {Retrieval Models Aren{'}t Tool-Savvy: Benchmarking Tool Retrieval for Large Language Models},
+  url = {https://aclanthology.org/2025.findings-acl.1258/},
   year = {2025},
 }
 """,
@@ -93,7 +101,7 @@ class ToolRetrievalInstruction(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="ToolRetrievalInstruction",
         description="ToolRet in the `w/ inst.` setting, where each query is paired with a task instruction describing what kind of tool is required. Corresponds to Table 5 of the paper; see ToolRetrieval for the `w/o inst.` setting.",
-        reference="https://arxiv.org/abs/2503.01763",
+        reference="https://aclanthology.org/2025.findings-acl.1258/",
         dataset={
             "path": "mteb/ToolRetrieval",
             "revision": "76d45e560059754e289ea202462865a585679619",
@@ -112,10 +120,18 @@ class ToolRetrievalInstruction(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{shi2025toolret,
+@inproceedings{shi2025toolret,
+  address = {Vienna, Austria},
   author = {Shi, Zhengliang and Wang, Yuhan and Yan, Lingyong and Ren, Pengjie and Wang, Shuaiqiang and Yin, Dawei and Ren, Zhaochun},
-  journal = {arXiv preprint arXiv:2503.01763},
-  title = {Retrieval Models Aren't Tool-Savvy: Benchmarking Tool Retrieval for Large Language Models},
+  booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2025},
+  doi = {10.18653/v1/2025.findings-acl.1258},
+  editor = {Che, Wanxiang and Nabende, Joyce and Shutova, Ekaterina and Pilehvar, Mohammad Taher},
+  isbn = {979-8-89176-256-5},
+  month = {jul},
+  pages = {24497--24524},
+  publisher = {Association for Computational Linguistics},
+  title = {Retrieval Models Aren{'}t Tool-Savvy: Benchmarking Tool Retrieval for Large Language Models},
+  url = {https://aclanthology.org/2025.findings-acl.1258/},
   year = {2025},
 }
 """,

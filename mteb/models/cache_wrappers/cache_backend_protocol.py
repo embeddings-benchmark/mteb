@@ -10,12 +10,12 @@ if TYPE_CHECKING:
 
 @runtime_checkable
 class CacheBackendProtocol(Protocol):
-    """Protocol for a vector cache map (used to store text/image embeddings).
+    """Protocol for a vector cache map (used to store embeddings for any modality).
 
     Implementations may back the cache with different storage backends.
 
-    The cache maps an input item (text or image) to its vector embedding,
-    identified by a deterministic hash.
+    The cache maps an input item (text, image, audio, or video) to its vector
+    embedding, identified by a deterministic content hash.
     """
 
     def __init__(self, directory: Path | None = None, **kwargs: Any) -> None:
@@ -30,7 +30,7 @@ class CacheBackendProtocol(Protocol):
         """Add a vector to the cache.
 
         Args:
-            item: Input item containing 'text' or 'image'.
+            item: Input item containing 'text', 'image', 'audio', or 'video'.
             vectors: Embedding vector of shape (dim,) or (1, dim).
         """
 

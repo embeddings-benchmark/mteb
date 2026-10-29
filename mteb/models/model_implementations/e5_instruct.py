@@ -67,6 +67,7 @@ e5_instruct = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=ME5_TRAINING_DATA,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 
@@ -95,6 +96,7 @@ me5_instruct_afri_large_instruct = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=ME5_TRAINING_DATA,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 
@@ -138,12 +140,19 @@ e5_mistral = ModelMeta(
     license="mit",
     max_tokens=32768,
     citation="""
-    @article{wang2023improving,
-      title={Improving Text Embeddings with Large Language Models},
-      author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Yang, Linjun and Majumder, Rangan and Wei, Furu},
-      journal={arXiv preprint arXiv:2401.00368},
-      year={2023}
-    }
+    @inproceedings{wang2023improving,
+  address = {Bangkok, Thailand},
+  author = {Wang, Liang and Yang, Nan and Huang, Xiaolong and Yang, Linjun and Majumder, Rangan and Wei, Furu},
+  booktitle = {Proceedings of the 62nd Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2024.acl-long.642},
+  editor = {Ku, Lun-Wei and Martins, Andre and Srikumar, Vivek},
+  month = {aug},
+  pages = {11897--11916},
+  publisher = {Association for Computational Linguistics},
+  title = {Improving Text Embeddings with Large Language Models},
+  url = {https://aclanthology.org/2024.acl-long.642/},
+  year = {2024},
+}
 
     @article{wang2022text,
       title={Text Embeddings by Weakly-Supervised Contrastive Pre-training},
@@ -240,6 +249,7 @@ zeta_alpha_ai__zeta_alpha_e5_mistral = ModelMeta(
     | E5_MISTRAL_TRAINING_DATA,
     adapted_from="intfloat/e5-mistral-7b-instruct",
     superseded_by=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 E5_R_MISTRAL_7B_INSTRUCTION = "{instruction}\n"

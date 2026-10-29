@@ -8,7 +8,7 @@ class CodeFeedbackMT(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CodeFeedbackMT",
         description="The dataset is a collection of user queries and assistant responses. The task is to retrieve the most relevant response for a given query.",
-        reference="https://arxiv.org/abs/2402.14658",
+        reference="https://aclanthology.org/2024.findings-acl.762/",
         dataset={
             "path": "CoIR-Retrieval/codefeedback-mt",
             "revision": "b0f12fa0c0dd67f59c95a5c33d02aeeb4c398c5f",
@@ -27,13 +27,17 @@ class CodeFeedbackMT(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{zheng2024opencodeinterpreterintegratingcodegeneration,
-  archiveprefix = {arXiv},
-  author = {Tianyu Zheng and Ge Zhang and Tianhao Shen and Xueling Liu and Bill Yuchen Lin and Jie Fu and Wenhu Chen and Xiang Yue},
-  eprint = {2402.14658},
-  primaryclass = {cs.SE},
-  title = {OpenCodeInterpreter: Integrating Code Generation with Execution and Refinement},
-  url = {https://arxiv.org/abs/2402.14658},
+@inproceedings{zheng2024opencodeinterpreterintegratingcodegeneration,
+  address = {Bangkok, Thailand},
+  author = {Zheng, Tianyu and Zhang, Ge and Shen, Tianhao and Liu, Xueling and Lin, Bill Yuchen and Fu, Jie and Chen, Wenhu and Yue, Xiang},
+  booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2024},
+  doi = {10.18653/v1/2024.findings-acl.762},
+  editor = {Ku, Lun-Wei and Martins, Andre and Srikumar, Vivek},
+  month = {aug},
+  pages = {12834--12859},
+  publisher = {Association for Computational Linguistics},
+  title = {{O}pen{C}ode{I}nterpreter: Integrating Code Generation with Execution and Refinement},
+  url = {https://aclanthology.org/2024.findings-acl.762/},
   year = {2024},
 }
 """,

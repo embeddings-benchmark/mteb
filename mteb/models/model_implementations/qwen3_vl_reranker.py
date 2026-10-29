@@ -4,18 +4,27 @@ import unicodedata
 from typing import TYPE_CHECKING, Any
 
 from mteb.models.model_implementations.qwen3_vl_embedding_models import (
+    IMAGE_FACTOR,
     QWEN3_VL_EMBEDDING_CITATION,
+    load_video_processor,
 )
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
+    from collections.abc import Iterator
+
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
 
 DEFAULT_INSTRUCTION = "Retrieve images or text relevant to the user's query."
+# total_pixels of a video in the official script: 4 frames of 1280 tokens, times
+# FRAME_FACTOR
+# https://huggingface.co/Qwen/Qwen3-VL-Reranker-2B/blob/main/scripts/qwen3_vl_reranker.py
+MAX_TOTAL_PIXELS = 4 * 2 * 1280 * IMAGE_FACTOR * IMAGE_FACTOR
 
 
 QWEN3_VL_LANGUAGES = [
@@ -75,7 +84,10 @@ class Qwen3VLRerankerWrapper(CrossEncoderWrapper):
         device: str | None = None,
         min_pixels: int | None = None,
         max_pixels: int | None = None,
-        fps: float | None = 2.0,
+        # fps=1, 64 frames: FPS=1 and MAX_FRAMES=64 in the official script (the
+        # generic Qwen3-VL video processor default is fps=2)
+        # https://huggingface.co/Qwen/Qwen3-VL-Reranker-2B/blob/main/scripts/qwen3_vl_reranker.py
+        fps: float | None = 1.0,
         max_frames: int | None = 64,
         num_frames: int | None = None,
         use_instructions: bool = True,
@@ -86,12 +98,24 @@ class Qwen3VLRerankerWrapper(CrossEncoderWrapper):
         # scores away from the reference implementation, so it is opt-in only
         # (useful if you need to bound memory on a small GPU).
         processor_kwargs = dict(kwargs.pop("processor_kwargs", {}) or {})
+        # VideoCollator already samples frames; without this the processor
+        # resamples them again assuming 24 fps (64 frames -> 5, padded to 6)
+        processor_kwargs.setdefault("do_sample_frames", False)
+        processor_kwargs.setdefault(
+            "video_processor",
+            load_video_processor(
+                model,
+                MAX_TOTAL_PIXELS,
+                revision=revision,
+                trust_remote_code=True,
+                do_sample_frames=False,
+            ),
+        )
         if min_pixels is not None:
             processor_kwargs.setdefault("min_pixels", min_pixels)
         if max_pixels is not None:
             processor_kwargs.setdefault("max_pixels", max_pixels)
-        if processor_kwargs:
-            kwargs["processor_kwargs"] = processor_kwargs
+        kwargs["processor_kwargs"] = processor_kwargs
 
         super().__init__(
             model,
@@ -100,6 +124,9 @@ class Qwen3VLRerankerWrapper(CrossEncoderWrapper):
             fps=fps,
             max_frames=max_frames,
             num_frames=num_frames,
+            # at least 4 frames: FPS_MIN_FRAMES of qwen-vl-utils, which the official
+            # script samples with; the processor fails on a single frame
+            min_frames=4,
             **kwargs,
         )
         self.use_instructions = use_instructions
@@ -131,6 +158,21 @@ class Qwen3VLRerankerWrapper(CrossEncoderWrapper):
         if not prompt:
             return DEFAULT_INSTRUCTION
         return self._normalize_instruction(prompt)
+
+    def _iter_inputs(
+        self, loader: DataLoader[BatchedInput], prefix: str
+    ) -> Iterator[list[Any]]:
+        # the official script puts media before text (video, image, text), and
+        # sentence-transformers keeps the order of the input's keys
+        # https://huggingface.co/Qwen/Qwen3-VL-Reranker-2B/blob/main/scripts/qwen3_vl_reranker.py
+        order = ("video", "image", "text")
+        for items in super()._iter_inputs(loader, prefix):
+            yield [
+                {k: item[k] for k in sorted(item, key=order.index)}
+                if isinstance(item, dict)
+                else item
+                for item in items
+            ]
 
     def predict(
         self,
@@ -182,6 +224,7 @@ qwen3_vl_reranker_2b = ModelMeta(
     training_datasets=None,
     citation=QWEN3_VL_EMBEDDING_CITATION,
     extra_requirements_groups=["multimodal-sbert"],
+    output_dtypes=OutputDType.BF16,
 )
 
 qwen3_vl_reranker_8b = ModelMeta(
@@ -190,7 +233,9 @@ qwen3_vl_reranker_8b = ModelMeta(
     model_type=["cross-encoder"],
     languages=QWEN3_VL_LANGUAGES,
     open_weights=True,
-    revision="b212dc8c91a8164aef1ea2de9c1a867611e75c04",
+    # main (b212dc8c) has a broken modules.json, so it fails to load; this is the
+    # commit from https://huggingface.co/Qwen/Qwen3-VL-Reranker-8B/discussions/11 that fixes it
+    revision="407993db318a67dbb333bbeb8b1521fb703a3bb1",
     release_date="2026-01-07",
     modalities=["image", "text", "video"],
     n_parameters=8_767_123_696,
@@ -208,4 +253,5 @@ qwen3_vl_reranker_8b = ModelMeta(
     training_datasets=None,
     citation=QWEN3_VL_EMBEDDING_CITATION,
     extra_requirements_groups=["multimodal-sbert"],
+    output_dtypes=OutputDType.BF16,
 )

@@ -25,10 +25,17 @@ class SIQA(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{sap2019socialiqa,
-  author = {Sap, Maarten and Rashkin, Hannah and Chen, Derek and LeBras, Ronan and Choi, Yejin},
-  journal = {arXiv preprint arXiv:1904.09728},
-  title = {Socialiqa: Commonsense reasoning about social interactions},
+@inproceedings{sap2019socialiqa,
+  address = {Hong Kong, China},
+  author = {Sap, Maarten and Rashkin, Hannah and Chen, Derek and Le Bras, Ronan and Choi, Yejin},
+  booktitle = {Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing ({EMNLP}-{IJCNLP})},
+  doi = {10.18653/v1/D19-1454},
+  editor = {Inui, Kentaro and Jiang, Jing and Ng, Vincent and Wan, Xiaojun},
+  month = {nov},
+  pages = {4463--4473},
+  publisher = {Association for Computational Linguistics},
+  title = {Social {IQ}a: Commonsense Reasoning about Social Interactions},
+  url = {https://aclanthology.org/D19-1454/},
   year = {2019},
 }
 
