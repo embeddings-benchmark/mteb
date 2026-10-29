@@ -12,6 +12,7 @@ from mteb._requires_package import _is_package_available
 from mteb.types import PromptType
 
 from .abs_encoder import AbsEncoder, PromptSource
+from .sentence_transformer_wrapper import _capture_scoring_device, _score_on_device
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Sequence
@@ -237,6 +238,8 @@ class InstructSentenceTransformerModel(AbsEncoder):
             truncate_dim=embed_dim,
             **kwargs,
         )
+        # Captured now: a multi-process pool later moves the model to the CPU
+        self._scoring_device = _capture_scoring_device(self.model)
         if max_seq_length:
             # https://github.com/huggingface/sentence-transformers/issues/3575
             self.model.max_seq_length = max_seq_length
@@ -250,6 +253,10 @@ class InstructSentenceTransformerModel(AbsEncoder):
         self.min_frames = min_frames
         self.target_sampling_rate = target_sampling_rate
         self.max_samples = max_samples
+
+    def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
+        """Compute the similarity between two collections of embeddings on the model's device."""
+        return _score_on_device(self, embeddings1, embeddings2)
 
     def encode(
         self,
@@ -283,6 +290,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
         Returns:
             The encoded input in a numpy array or torch tensor of the shape (Number of sentences) x (Embedding dimension).
         """
+        self._show_progress_bar = kwargs.get("show_progress_bar", True)
         instruction: str | None = self.get_task_instruction(task_metadata, prompt_type)
 
         # to passage prompts won't be applied to passages
