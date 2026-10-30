@@ -246,3 +246,44 @@ def test_get_tasks_warning_with_beta_tasks():
     """Test that get_tasks gives a warning when beta tasks are included"""
     with pytest.warns(UserWarning, match="is currently in beta"):
         get_tasks(exclude_beta=False)
+
+
+def test_get_tasks_skips_task_without_matching_subsets():
+    """A task with the language in one subset and the script in another has no subset
+    matching both. As with `tasks=`, it is skipped instead of failing the whole call.
+    """
+    tasks = get_tasks(languages=["eng", "rus"], script=["Cyrl"])
+
+    names = {task.metadata.name for task in tasks}
+    assert "MultiEURLEXMultilabelClassification.v2" not in names
+    assert "GeoreviewClassification.v2" in names
+
+
+def test_get_tasks_exclusive_language_filter_without_tasks():
+    tasks = get_tasks(
+        languages=["eng"], task_types=["STS"], exclusive_language_filter=True
+    )
+
+    sts22 = next(task for task in tasks if task.metadata.name == "STS22.v2")
+    assert sts22.hf_subsets == ["en"]
+
+
+@pytest.mark.parametrize(
+    "filters",
+    [
+        {"languages": ["eng"], "exclusive_language_filter": True},
+        {"languages": ["eng", "rus"], "script": ["Cyrl"]},
+    ],
+)
+def test_get_tasks_filters_subsets_with_and_without_tasks(filters):
+    """Filtering subsets must not depend on whether `tasks=` is given."""
+    without_tasks = get_tasks(
+        task_types=["STS", "Classification", "MultilabelClassification"], **filters
+    )
+    with_tasks = get_tasks(
+        tasks=[task.metadata.name for task in without_tasks], **filters
+    )
+
+    assert {t.metadata.name: t.hf_subsets for t in without_tasks} == {
+        t.metadata.name: t.hf_subsets for t in with_tasks
+    }

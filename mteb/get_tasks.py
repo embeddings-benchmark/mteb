@@ -315,12 +315,22 @@ def get_tasks(  # noqa: PLR0913, PLR0917
         exclude_private=exclude_private,
         exclude_beta=exclude_beta,
     )
-    return MTEBTasks(
-        [
-            cls().filter_languages(languages, script).filter_eval_splits(eval_splits)
-            for cls in tasks_
-        ]
-    )
+    filtered_tasks = []
+    for cls in tasks_:
+        try:
+            filtered = cls().filter_languages(
+                languages,
+                script,
+                # only meaningful together with `languages`
+                exclusive_language_filter=exclusive_language_filter and bool(languages),
+            )
+        except ValueError:
+            log_once.warning(
+                f"Skipping task '{cls.metadata.name}': no subsets match the language filter {languages}."
+            )
+            continue
+        filtered_tasks.append(filtered.filter_eval_splits(eval_splits))
+    return MTEBTasks(filtered_tasks)
 
 
 _TASK_RENAMES = {"PersianTextTone": "SynPerTextToneClassification"}
