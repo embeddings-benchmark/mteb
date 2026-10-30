@@ -31,7 +31,7 @@ class Multi3IRRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="hc_at_10",
-        date=("2008-08-01", "2025-12-31"),
+        date=("2008-08-01", "2026-08-29"),
         domains=["Web", "Social", "Academic", "Programming"],
         task_subtypes=["Question answering", "Cross-Modal Retrieval"],
         license="cc-by-sa-4.0",
