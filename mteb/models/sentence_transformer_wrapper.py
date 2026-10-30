@@ -129,8 +129,13 @@ def _batch_to_modality_dicts(
 ) -> list[dict[str, Any]]:
     modality_batch = {k: v for k, v in batch.items() if k in supported_modalities}
     LogOnce(logger).info(f"Model will encode modalities {list(modality_batch.keys())}")
+    # mixed corpora: drop a sample's missing modalities (None, or empty text beside another modality)
     return [
-        dict(zip(modality_batch, sample, strict=True))
+        {
+            k: v
+            for k, v in zip(modality_batch, sample, strict=True)
+            if v is not None and not (k == "text" and not v and len(sample) > 1)
+        }
         for sample in zip(*modality_batch.values(), strict=True)
     ]
 
@@ -294,6 +299,24 @@ def _postprocess_sparse_embeddings(embeddings: Array) -> Array:
     return _postprocess_dense_embeddings(embeddings)
 
 
+def _encode_by_modality_group(
+    samples: list[dict[str, Any]], encode: Callable[[list[dict[str, Any]]], Array]
+) -> Array:
+    """Encode `samples` in one call, or one call per modality set when a batch mixes them (e.g. text-only and image-only documents), since models like CLIP encode one modality per call."""
+    groups: dict[tuple[str, ...], list[int]] = {}
+    for i, sample in enumerate(samples):
+        groups.setdefault(tuple(sorted(sample)), []).append(i)
+    if len(groups) == 1:
+        return encode(samples)
+    embeddings = None
+    for idx in groups.values():
+        part = np.asarray(encode([samples[i] for i in idx]))
+        if embeddings is None:
+            embeddings = np.empty((len(samples), *part.shape[1:]), dtype=part.dtype)
+        embeddings[idx] = part
+    return embeddings
+
+
 def _encode_batches(
     inputs: DataLoader[BatchedInput],
     *,
@@ -333,10 +356,14 @@ def _encode_batches(
             inputs, desc="Building multimodal embeddings", disable=not show_progress_bar
         ):
             batched_input = _batch_to_modality_dicts(batch, modalities)
-            _embeddings = encode_function(
-                batched_input, prompt=prompt, **per_batch_kwargs
+            all_embeddings.append(
+                _encode_by_modality_group(
+                    batched_input,
+                    lambda samples: postprocess(
+                        encode_function(samples, prompt=prompt, **per_batch_kwargs)
+                    ),
+                )
             )
-            all_embeddings.append(postprocess(_embeddings))
         embeddings = concatenate(all_embeddings)
     elif not encode_text_per_batch:
         sentences = [text for batch in inputs for text in batch["text"]]
