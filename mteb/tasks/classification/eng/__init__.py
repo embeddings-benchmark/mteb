@@ -324,7 +324,9 @@ from .wikipedia_theoretical_applied_classification import (
 )
 from .worldsense_classification import (
     WorldSenseAudioVideoClassification,
+    WorldSenseAudioVideoClassificationV2,
     WorldSenseVideoClassification,
+    WorldSenseVideoClassificationV2,
 )
 from .yahoo_answers_topics_classification import (
     YahooAnswersTopicsClassification,
@@ -588,7 +590,9 @@ __all__ = [
     "WikipediaTheoreticalAppliedClassification",
     "WikipediaTheoreticalAppliedClassificationV2",
     "WorldSenseAudioVideoClassification",
+    "WorldSenseAudioVideoClassificationV2",
     "WorldSenseVideoClassification",
+    "WorldSenseVideoClassificationV2",
     "YahooAnswersTopicsClassification",
     "YahooAnswersTopicsClassificationV2",
     "YelpReviewFullClassification",
