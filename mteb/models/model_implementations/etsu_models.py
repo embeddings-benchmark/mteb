@@ -100,9 +100,7 @@ class EtsuEncoder(AbsEncoder):
                     max_length=self.max_length,
                     return_tensors="pt",
                 ).to(self.device)
-                output = self.model(
-                    **encoded, use_cache=False, return_dict=True
-                )
+                output = self.model(**encoded, use_cache=False, return_dict=True)
                 attention_mask = encoded["attention_mask"]
                 left_padding = attention_mask[:, -1].sum() == attention_mask.shape[0]
                 if left_padding:
