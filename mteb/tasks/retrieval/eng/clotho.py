@@ -31,14 +31,16 @@ class ClothoA2TRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{drossos2019clothoaudiocaptioningdataset,
-  archiveprefix = {arXiv},
-  author = {Konstantinos Drossos and Samuel Lipping and Tuomas Virtanen},
-  eprint = {1910.09387},
-  primaryclass = {cs.SD},
-  title = {Clotho: An Audio Captioning Dataset},
-  url = {https://arxiv.org/abs/1910.09387},
-  year = {2019},
+@inproceedings{drossos2019clothoaudiocaptioningdataset,
+  author = {Drossos, Konstantinos and Lipping, Samuel and Virtanen, Tuomas},
+  booktitle = {ICASSP 2020 - 2020 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  doi = {10.1109/icassp40776.2020.9052990},
+  month = {May},
+  pages = {736–740},
+  publisher = {IEEE},
+  title = {Clotho: an Audio Captioning Dataset},
+  url = {https://doi.org/10.1109/icassp40776.2020.9052990},
+  year = {2020},
 }
 """,
         superseded_by="ClothoA2TRetrieval.v2",
@@ -76,14 +78,14 @@ class ClothoA2TRetrievalV2(AbsTaskRetrieval):
         name="ClothoA2TRetrieval.v2",
         description=(
             "An audio captioning dataset containing audio clips and their "
-            "corresponding captions. Version 2 removes empty-string "
-            "documents. For more information see "
-            "[#5062](https://github.com/embeddings-benchmark/mteb/pull/5062)."
+            "corresponding captions. Version 2 uses the five official captions "
+            "of each clip; v1 split captions on periods, which glued some "
+            "captions together and left empty documents."
         ),
         reference="https://github.com/audio-captioning/clotho-dataset",
         dataset={
-            "path": "lxercode/clotho_a2t_v2",
-            "revision": "fb4fbd5c1e612be4894a478bd45500eb0bcd689f",
+            "path": "mteb/clotho_a2t_v2",
+            "revision": "85402011c08213e8dec27b1acf86eacf0a13250f",
         },
         type="Any2AnyRetrieval",
         category="a2t",
@@ -99,14 +101,16 @@ class ClothoA2TRetrievalV2(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{drossos2019clothoaudiocaptioningdataset,
-  archiveprefix = {arXiv},
-  author = {Konstantinos Drossos and Samuel Lipping and Tuomas Virtanen},
-  eprint = {1910.09387},
-  primaryclass = {cs.SD},
-  title = {Clotho: An Audio Captioning Dataset},
-  url = {https://arxiv.org/abs/1910.09387},
-  year = {2019},
+@inproceedings{drossos2019clothoaudiocaptioningdataset,
+  author = {Drossos, Konstantinos and Lipping, Samuel and Virtanen, Tuomas},
+  booktitle = {ICASSP 2020 - 2020 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  doi = {10.1109/icassp40776.2020.9052990},
+  month = {May},
+  pages = {736–740},
+  publisher = {IEEE},
+  title = {Clotho: an Audio Captioning Dataset},
+  url = {https://doi.org/10.1109/icassp40776.2020.9052990},
+  year = {2020},
 }
 """,
         adapted_from=["ClothoA2TRetrieval"],
@@ -136,14 +140,16 @@ class ClothoT2ARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{drossos2019clothoaudiocaptioningdataset,
-  archiveprefix = {arXiv},
-  author = {Konstantinos Drossos and Samuel Lipping and Tuomas Virtanen},
-  eprint = {1910.09387},
-  primaryclass = {cs.SD},
-  title = {Clotho: An Audio Captioning Dataset},
-  url = {https://arxiv.org/abs/1910.09387},
-  year = {2019},
+@inproceedings{drossos2019clothoaudiocaptioningdataset,
+  author = {Drossos, Konstantinos and Lipping, Samuel and Virtanen, Tuomas},
+  booktitle = {ICASSP 2020 - 2020 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  doi = {10.1109/icassp40776.2020.9052990},
+  month = {May},
+  pages = {736–740},
+  publisher = {IEEE},
+  title = {Clotho: an Audio Captioning Dataset},
+  url = {https://doi.org/10.1109/icassp40776.2020.9052990},
+  year = {2020},
 }
 """,
         superseded_by="ClothoT2ARetrieval.v2",
@@ -182,12 +188,13 @@ class ClothoT2ARetrievalV2(AbsTaskRetrieval):
         description=(
             "An audio captioning dataset containing audio clips from the "
             "Freesound platform and their corresponding captions. Version 2 "
-            "removes empty-string queries. For more information see [#5062](https://github.com/embeddings-benchmark/mteb/pull/5062)"
+            "uses the five official captions of each clip; v1 split captions "
+            "on periods, which glued some captions together and left empty queries."
         ),
         reference="https://github.com/audio-captioning/clotho-dataset",
         dataset={
-            "path": "lxercode/clotho_t2a_v2",
-            "revision": "13cf5105f96e1844ee3b0b84cfba9103a7ebe6a2",
+            "path": "mteb/clotho_t2a_v2",
+            "revision": "b2cd4afaed3837d95fdcded92822171940b21fe3",
         },
         type="Any2AnyRetrieval",
         category="t2a",
@@ -203,14 +210,16 @@ class ClothoT2ARetrievalV2(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{drossos2019clothoaudiocaptioningdataset,
-  archiveprefix = {arXiv},
-  author = {Konstantinos Drossos and Samuel Lipping and Tuomas Virtanen},
-  eprint = {1910.09387},
-  primaryclass = {cs.SD},
-  title = {Clotho: An Audio Captioning Dataset},
-  url = {https://arxiv.org/abs/1910.09387},
-  year = {2019},
+@inproceedings{drossos2019clothoaudiocaptioningdataset,
+  author = {Drossos, Konstantinos and Lipping, Samuel and Virtanen, Tuomas},
+  booktitle = {ICASSP 2020 - 2020 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  doi = {10.1109/icassp40776.2020.9052990},
+  month = {May},
+  pages = {736–740},
+  publisher = {IEEE},
+  title = {Clotho: an Audio Captioning Dataset},
+  url = {https://doi.org/10.1109/icassp40776.2020.9052990},
+  year = {2020},
 }
 """,
         adapted_from=["ClothoT2ARetrieval"],

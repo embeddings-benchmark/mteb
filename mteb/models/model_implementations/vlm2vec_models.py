@@ -23,11 +23,14 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-VLM2VEC_CITATION = """@article{jiang2024vlm2vec,
-  title={VLM2Vec: Training Vision-Language Models for Massive Multimodal Embedding Tasks},
-  author={Jiang, Ziyan and Meng, Rui and Yang, Xinyi and Yavuz, Semih and Zhou, Yingbo and Chen, Wenhu},
-  journal={arXiv preprint arXiv:2410.05160},
-  year={2024}
+VLM2VEC_CITATION = """@inproceedings{jiang2024vlm2vec,
+  archiveprefix = {arXiv},
+  author = {Ziyan Jiang and Rui Meng and Xinyi Yang and Semih Yavuz and Yingbo Zhou and Wenhu Chen},
+  booktitle = {The Thirteenth International Conference on Learning Representations},
+  eprint = {2410.05160},
+  title = {{VLM}2Vec: Training Vision-Language Models for Massive Multimodal Embedding Tasks},
+  url = {https://openreview.net/forum?id=TE0KOzWYAF},
+  year = {2025},
 }"""
 
 
@@ -286,6 +289,16 @@ class VLM2VecWrapper(AbsEncoder):
 _VLM2VEC2_VIDEO_TOKEN = "<|video_pad|>"  # noqa: S105
 _VLM2VEC2_IMAGE_TOKEN = "<|image_pad|>"  # noqa: S105
 
+# MMEB-V2's instruction for the video side of video classification
+# https://github.com/TIGER-AI-Lab/VLM2Vec/blob/d00b5dcdeaa099f9ddb221ea081128d609c22acb/src/data/eval_dataset/video_classification_utils.py
+_VLM2VEC2_VIDEO_CLS_INSTRUCTIONS: dict[str, str] = {
+    "Kinetics700VZeroShot": "Recognize the category of the video content.",
+    "SomethingSomethingV2Classification": "What actions or object interactions are being performed by the person in the video?",
+    "UCF101VideoZeroShotClassification": "What activities or sports are being performed by the person in the video?",
+    "HMDB51ZeroShot": "What actions or objects interactions are the person in the video doing?",
+    "BreakfastZeroShot": "Recognize the breakfast type that the person is cooking in the video.",
+}
+
 _VLM2VEC2_TASK_PROMPTS: dict[str, dict[str, str]] = {
     # --- Video retrieval ---
     "DiDeMoT2VRetrieval": {
@@ -495,6 +508,10 @@ class VLM2VEC2Wrapper(AbsEncoder):
             task_prompts = _VLM2VEC2_TASK_PROMPTS.get(task_metadata.name, {})
             prompt_key = "query" if prompt_type == PromptType.query else "document"
             instruction = task_prompts.get(prompt_key, "")
+            if has_video and task_metadata.name in _VLM2VEC2_VIDEO_CLS_INSTRUCTIONS:
+                # classification passes no prompt_type; the video side gets the
+                # dataset instruction, the labels none
+                instruction = _VLM2VEC2_VIDEO_CLS_INSTRUCTIONS[task_metadata.name]
 
             prefix_tokens: list[str] = []
             if has_image:
@@ -631,14 +648,16 @@ vlm2vec2 = ModelMeta(
     modalities=["text", "image", "video"],
     model_type=["dense"],
     citation="""
-@misc{meng2025vlm2vecv2advancingmultimodalembedding,
-    title={VLM2Vec-V2: Advancing Multimodal Embedding for Videos, Images, and Visual Documents},
-    author={Rui Meng and Ziyan Jiang and Ye Liu and Mingyi Su and Xinyi Yang and Yuepeng Fu and Can Qin and Zeyuan Chen and Ran Xu and Caiming Xiong and Yingbo Zhou and Wenhu Chen and Semih Yavuz},
-    year={2025},
-    eprint={2507.04590},
-    archivePrefix={arXiv},
-    primaryClass={cs.CV},
-    url={https://arxiv.org/abs/2507.04590},
+@article{meng2025vlm2vecv2advancingmultimodalembedding,
+  archiveprefix = {arXiv},
+  author = {Rui Meng and Ziyan Jiang and Ye Liu and Mingyi Su and Xinyi Yang and Yuepeng Fu and Can Qin and Raghuveer Thirukovalluru and Xuan Zhang and Zeyuan Chen and Ran Xu and Caiming Xiong and Yingbo Zhou and Wenhu Chen and Semih Yavuz},
+  eprint = {2507.04590},
+  issn = {2835-8856},
+  journal = {Transactions on Machine Learning Research},
+  note = {},
+  title = {{VLM}2Vec-V2: Advancing Multimodal Embedding for Videos, Images, and Visual Documents},
+  url = {https://openreview.net/forum?id=TpU38jbKIJ},
+  year = {2026},
 }""",
     contacts=None,
     output_dtypes=OutputDType.BF16,

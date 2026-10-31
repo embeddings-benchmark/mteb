@@ -195,14 +195,16 @@ clap_htsat_fused = ModelMeta(
         # LAION-Audio-630K (not in MTEB)
     ),
     citation="""
-@misc{wu2024largescalecontrastivelanguageaudiopretraining,
-      title={Large-scale Contrastive Language-Audio Pretraining with Feature Fusion and Keyword-to-Caption Augmentation},
-      author={Yusong Wu and Ke Chen and Tianyu Zhang and Yuchen Hui and Marianna Nezhurina and Taylor Berg-Kirkpatrick and Shlomo Dubnov},
-      year={2024},
-      eprint={2211.06687},
-      archivePrefix={arXiv},
-      primaryClass={cs.SD},
-      url={https://arxiv.org/abs/2211.06687},
+@inproceedings{wu2024largescalecontrastivelanguageaudiopretraining,
+  author = {Wu, Yusong and Chen, Ke and Zhang, Tianyu and Hui, Yuchen and Berg-Kirkpatrick, Taylor and Dubnov, Shlomo},
+  booktitle = {ICASSP 2023 - 2023 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  doi = {10.1109/icassp49357.2023.10095969},
+  month = {June},
+  pages = {1–5},
+  publisher = {IEEE},
+  title = {Large-Scale Contrastive Language-Audio Pretraining with Feature Fusion and Keyword-to-Caption Augmentation},
+  url = {https://doi.org/10.1109/icassp49357.2023.10095969},
+  year = {2023},
 }
 """,
 )
@@ -232,14 +234,16 @@ clap_htsat_unfused = ModelMeta(
         # LAION-Audio-630K (not in MTEB)
     ),
     citation="""
-@misc{wu2024largescalecontrastivelanguageaudiopretraining,
-      title={Large-scale Contrastive Language-Audio Pretraining with Feature Fusion and Keyword-to-Caption Augmentation},
-      author={Yusong Wu and Ke Chen and Tianyu Zhang and Yuchen Hui and Marianna Nezhurina and Taylor Berg-Kirkpatrick and Shlomo Dubnov},
-      year={2024},
-      eprint={2211.06687},
-      archivePrefix={arXiv},
-      primaryClass={cs.SD},
-      url={https://arxiv.org/abs/2211.06687},
+@inproceedings{wu2024largescalecontrastivelanguageaudiopretraining,
+  author = {Wu, Yusong and Chen, Ke and Zhang, Tianyu and Hui, Yuchen and Berg-Kirkpatrick, Taylor and Dubnov, Shlomo},
+  booktitle = {ICASSP 2023 - 2023 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  doi = {10.1109/icassp49357.2023.10095969},
+  month = {June},
+  pages = {1–5},
+  publisher = {IEEE},
+  title = {Large-Scale Contrastive Language-Audio Pretraining with Feature Fusion and Keyword-to-Caption Augmentation},
+  url = {https://doi.org/10.1109/icassp49357.2023.10095969},
+  year = {2023},
 }
 """,
 )
@@ -267,14 +271,16 @@ larger_clap_general = ModelMeta(
         # LAION-Audio-630K (not in MTEB)
     ),
     citation="""
-@misc{wu2024largescalecontrastivelanguageaudiopretraining,
-      title={Large-scale Contrastive Language-Audio Pretraining with Feature Fusion and Keyword-to-Caption Augmentation},
-      author={Yusong Wu and Ke Chen and Tianyu Zhang and Yuchen Hui and Marianna Nezhurina and Taylor Berg-Kirkpatrick and Shlomo Dubnov},
-      year={2024},
-      eprint={2211.06687},
-      archivePrefix={arXiv},
-      primaryClass={cs.SD},
-      url={https://arxiv.org/abs/2211.06687},
+@inproceedings{wu2024largescalecontrastivelanguageaudiopretraining,
+  author = {Wu, Yusong and Chen, Ke and Zhang, Tianyu and Hui, Yuchen and Berg-Kirkpatrick, Taylor and Dubnov, Shlomo},
+  booktitle = {ICASSP 2023 - 2023 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  doi = {10.1109/icassp49357.2023.10095969},
+  month = {June},
+  pages = {1–5},
+  publisher = {IEEE},
+  title = {Large-Scale Contrastive Language-Audio Pretraining with Feature Fusion and Keyword-to-Caption Augmentation},
+  url = {https://doi.org/10.1109/icassp49357.2023.10095969},
+  year = {2023},
 }
 """,
 )
@@ -302,14 +308,16 @@ larger_clap_music = ModelMeta(
         # LAION-Audio-630K (not in MTEB)
     ),
     citation="""
-@misc{wu2024largescalecontrastivelanguageaudiopretraining,
-      title={Large-scale Contrastive Language-Audio Pretraining with Feature Fusion and Keyword-to-Caption Augmentation},
-      author={Yusong Wu and Ke Chen and Tianyu Zhang and Yuchen Hui and Marianna Nezhurina and Taylor Berg-Kirkpatrick and Shlomo Dubnov},
-      year={2024},
-      eprint={2211.06687},
-      archivePrefix={arXiv},
-      primaryClass={cs.SD},
-      url={https://arxiv.org/abs/2211.06687},
+@inproceedings{wu2024largescalecontrastivelanguageaudiopretraining,
+  author = {Wu, Yusong and Chen, Ke and Zhang, Tianyu and Hui, Yuchen and Berg-Kirkpatrick, Taylor and Dubnov, Shlomo},
+  booktitle = {ICASSP 2023 - 2023 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  doi = {10.1109/icassp49357.2023.10095969},
+  month = {June},
+  pages = {1–5},
+  publisher = {IEEE},
+  title = {Large-Scale Contrastive Language-Audio Pretraining with Feature Fusion and Keyword-to-Caption Augmentation},
+  url = {https://doi.org/10.1109/icassp49357.2023.10095969},
+  year = {2023},
 }
 """,
 )
@@ -337,14 +345,16 @@ larger_clap_music_and_speech = ModelMeta(
         # LAION-Audio-630K (not in MTEB)
     ),
     citation="""
-@misc{wu2024largescalecontrastivelanguageaudiopretraining,
-      title={Large-scale Contrastive Language-Audio Pretraining with Feature Fusion and Keyword-to-Caption Augmentation},
-      author={Yusong Wu and Ke Chen and Tianyu Zhang and Yuchen Hui and Marianna Nezhurina and Taylor Berg-Kirkpatrick and Shlomo Dubnov},
-      year={2024},
-      eprint={2211.06687},
-      archivePrefix={arXiv},
-      primaryClass={cs.SD},
-      url={https://arxiv.org/abs/2211.06687},
+@inproceedings{wu2024largescalecontrastivelanguageaudiopretraining,
+  author = {Wu, Yusong and Chen, Ke and Zhang, Tianyu and Hui, Yuchen and Berg-Kirkpatrick, Taylor and Dubnov, Shlomo},
+  booktitle = {ICASSP 2023 - 2023 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  doi = {10.1109/icassp49357.2023.10095969},
+  month = {June},
+  pages = {1–5},
+  publisher = {IEEE},
+  title = {Large-Scale Contrastive Language-Audio Pretraining with Feature Fusion and Keyword-to-Caption Augmentation},
+  url = {https://doi.org/10.1109/icassp49357.2023.10095969},
+  year = {2023},
 }
 """,
 )

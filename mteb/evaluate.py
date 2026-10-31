@@ -24,6 +24,11 @@ from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
     SparseEncoderWrapper,
 )
+from mteb.models.video_wrappers.video2images_wrapper import (
+    _has_mixed_video_input,
+    is_video2images_meta,
+    video2images_hint,
+)
 from mteb.results import ModelResult, TaskResult
 from mteb.results.task_result import TaskError
 from mteb.timing import TimingStack
@@ -366,6 +371,16 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
     return result
 
 
+def _has_non_text_task(tasks: AbsTask | Benchmark | Iterable[AbsTask]) -> bool:
+    """Check whether any of the tasks uses a modality other than text."""
+    if isinstance(tasks, AbsTask):
+        tasks = [tasks]
+    return any(
+        any(modality != "text" for modality in task.metadata.modalities)
+        for task in tasks
+    )
+
+
 def _check_model_modalities(
     model: ModelMeta,
     tasks: AbsTask | Iterable[AbsTask],
@@ -394,6 +409,13 @@ def _check_model_modalities(
     warnings, errors = [], []
 
     for task in check_tasks:
+        if is_video2images_meta(model) and _has_mixed_video_input(task):
+            errors.append(
+                f"Model {model.name} only supports video-only inputs, but task "
+                f"{task.metadata.name} mixes video with other modalities in one input."
+            )
+            continue
+        video_hint = video2images_hint(model, task)
         # only retrieval tasks have different modalities for query and document and can be run with partial overlaps
         if isinstance(task, AbsTaskRetrieval):
             query_mods = set(task.metadata.get_modalities(PromptType.query))
@@ -418,6 +440,7 @@ def _check_model_modalities(
                 errors.append(
                     f"Model {model.name} supports {model.modalities}, but none overlap with "
                     f"task {task.metadata.name} query={sorted(query_mods)}, document={sorted(doc_mods)}."
+                    + video_hint
                 )
         else:
             task_mods = set(task.metadata.modalities)
@@ -427,6 +450,7 @@ def _check_model_modalities(
             errors.append(
                 f"Model {model.name} supports {model.modalities}, but none overlap with "
                 f"task {task.metadata.name} modalities={task.metadata.modalities}."
+                + video_hint
             )
 
     if errors:
@@ -563,7 +587,7 @@ def evaluate(  # noqa: PLR0913
         show_progress_bar: Whether to show a progress bar when running the evaluation. Default is True. Setting this to False will also set the
             `encode_kwargs['show_progress_bar']` to False if encode_kwargs is unspecified.
         public_only: Run only public tasks. If None, it will attempt to run the private task.
-        num_proc: Number of processes to use during data loading and transformation. Defaults to 1.
+        num_proc: Number of processes to use during data loading and transformation. Defaults to None (single process).
         timer: A context manager that tracks the timing of evaluation phases.
 
     Returns:
@@ -598,6 +622,12 @@ def evaluate(  # noqa: PLR0913
         encode_kwargs["batch_size"] = 32
         logger.info(
             "No batch size defined in encode_kwargs. Setting `encode_kwargs['batch_size'] = 32`. Explicitly set the batch size to silence this message."
+        )
+
+    if num_proc is None and _has_non_text_task(tasks):
+        logger.info(
+            "`num_proc` is not set, so data loading runs in a single process. Consider setting `num_proc` (e.g. `mteb.evaluate(..., num_proc=4)`) to speed up data loading. "
+            "Explicitly set `num_proc` to silence this message."
         )
 
     # encoding runs through torch dataloaders, so check before doing any work

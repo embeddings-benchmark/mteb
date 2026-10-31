@@ -103,6 +103,7 @@ class FaissCache:
         if self.index_file.exists():
             try:
                 self.index = faiss.read_index(str(self.index_file))
+                self.vector_dim = self.index.d
                 logger.info(f"Loaded FAISS index with {self.index.ntotal} vectors")
             except Exception as e:
                 logger.error(f"Failed to load FAISS index: {e}")

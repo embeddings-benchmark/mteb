@@ -11,10 +11,10 @@ from typing_extensions import deprecated
 from mteb._requires_package import _is_package_available
 from mteb.types import PromptType
 
-from .abs_encoder import AbsEncoder
+from .abs_encoder import AbsEncoder, PromptSource
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from collections.abc import Callable, Sequence
 
     from torch.utils.data import DataLoader
     from typing_extensions import Unpack
@@ -159,6 +159,7 @@ class InstructSentenceTransformerModel(AbsEncoder):
         padding_side: str | None = None,
         add_eos_token: bool = False,
         prompts_dict: dict[str, str] | None = None,
+        prompt_priority: Sequence[PromptSource | str] | None = None,
         include_prompt: bool = True,
         embed_dim: int | None = None,
         fps: float | None = None,
@@ -184,6 +185,10 @@ class InstructSentenceTransformerModel(AbsEncoder):
             add_eos_token: Whether to add the eos token to each input example.
             prompts_dict: Dictionary of task names to prompt names. If task name is missing in the dict or prompts dict is None, prompt from task metadata or
                 AbsTask.abstask_prompt will be used.
+            prompt_priority: Order in which instruction sources (`PromptSource`) are checked. If None, the default
+                order of `AbsEncoder.prompt_priority` is used. Putting `PromptSource.DEFAULT_TASK_PROMPT` before
+                `PromptSource.TASK_TYPE_PROMPT` and `PromptSource.ENCODE_TYPE_PROMPT` prefers the prompt from the task
+                metadata over generic prompts in `prompts_dict`.
             include_prompt: Whether to include the prompt tokens in the pooling.
             embed_dim: The embedding dimension of the model to use.
             fps: Target frames per second for video sampling (multimodal inputs only).
@@ -207,6 +212,10 @@ class InstructSentenceTransformerModel(AbsEncoder):
             logger.warning(
                 "No instruction template provided. Instructions will be used as-is."
             )
+        if prompt_priority is not None:
+            self.prompt_priority = [
+                PromptSource.from_str(source) for source in prompt_priority
+            ]
 
         self.instruction_template = instruction_template
         tokenizer_params: dict[str, Any] = {}

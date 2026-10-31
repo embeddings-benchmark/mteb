@@ -74,17 +74,7 @@ class LCOEmbedding(AbsEncoder):
 
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
 
-    @staticmethod
-    def _prompt_suffix(batch: BatchedInput) -> str:
-        """Return the prompt suffix based on the primary modality in the batch."""
-        for modality in ("audio", "video", "image"):
-            if batch.get(modality):
-                return f"\nSummarize the above {modality} in one word:"
-        return "\nSummarize the above text in one word:"
-
-    def _build_messages(
-        self, batch: BatchedInput, suffix: str
-    ) -> list[list[dict[str, Any]]]:
+    def _build_messages(self, batch: BatchedInput) -> list[list[dict[str, Any]]]:
         """Build chat messages for each item in the batch."""
         texts = batch.get("text", [])
         images = batch.get("image", [])
@@ -108,7 +98,18 @@ class LCOEmbedding(AbsEncoder):
                 if len(ids) > 300:
                     text = self.processor.tokenizer.decode(ids[:300])
                 content.append({"type": "text", "text": text})
-            content.append({"type": "text", "text": suffix})
+            # per item, image > video > audio > text, as in the authors' template
+            # https://huggingface.co/LCO-Embedding/LCO-Embedding-Omni-3B/blob/main/additional_chat_templates/sentence_transformers.jinja
+            types = {c["type"] for c in content}
+            modality = next(
+                (m for m in ("image", "video", "audio") if m in types), "text"
+            )
+            content.append(
+                {
+                    "type": "text",
+                    "text": f"\nSummarize the above {modality} in one word:",
+                }
+            )
             messages.append([{"role": "user", "content": content}])
         return messages
 
@@ -144,8 +145,7 @@ class LCOEmbedding(AbsEncoder):
             all_embeddings: list[torch.Tensor] = []
 
             for batch in tqdm(inputs, desc="Encoding"):
-                suffix = self._prompt_suffix(batch)
-                messages = self._build_messages(batch, suffix)
+                messages = self._build_messages(batch)
 
                 texts = [
                     self.processor.apply_chat_template(
@@ -211,14 +211,14 @@ lco_3b = ModelMeta(
     ),
     modalities=["audio", "image", "text", "video"],
     citation="""
-@misc{xiao2025scalinglanguagecentricomnimodalrepresentation,
-  title={Scaling Language-Centric Omnimodal Representation Learning},
-  author={Chenghao Xiao and Hou Pong Chan and Hao Zhang and Weiwen Xu and Mahani Aljunied and Yu Rong},
-  year={2025},
-  eprint={2510.11693},
-  archivePrefix={arXiv},
-  primaryClass={cs.CL},
-  url={https://arxiv.org/abs/2510.11693},
+@inproceedings{xiao2025scalinglanguagecentricomnimodalrepresentation,
+  archiveprefix = {arXiv},
+  author = {Chenghao Xiao and Hou Pong Chan and Hao Zhang and Weiwen Xu and Mahani Aljunied and Yu Rong},
+  booktitle = {The Thirty-ninth Annual Conference on Neural Information Processing Systems},
+  eprint = {2510.11693},
+  title = {Scaling Language-centric Omnimodal Representation Learning},
+  url = {https://openreview.net/forum?id=eA3Aum0rpA},
+  year = {2025},
 }""",
     output_dtypes=OutputDType.BF16,
 )
@@ -247,14 +247,14 @@ lco_3b_2605 = ModelMeta(
     ),
     modalities=["audio", "image", "text", "video"],
     citation="""
-@misc{xiao2025scalinglanguagecentricomnimodalrepresentation,
-  title={Scaling Language-Centric Omnimodal Representation Learning},
-  author={Chenghao Xiao and Hou Pong Chan and Hao Zhang and Weiwen Xu and Mahani Aljunied and Yu Rong},
-  year={2025},
-  eprint={2510.11693},
-  archivePrefix={arXiv},
-  primaryClass={cs.CL},
-  url={https://arxiv.org/abs/2510.11693},
+@inproceedings{xiao2025scalinglanguagecentricomnimodalrepresentation,
+  archiveprefix = {arXiv},
+  author = {Chenghao Xiao and Hou Pong Chan and Hao Zhang and Weiwen Xu and Mahani Aljunied and Yu Rong},
+  booktitle = {The Thirty-ninth Annual Conference on Neural Information Processing Systems},
+  eprint = {2510.11693},
+  title = {Scaling Language-centric Omnimodal Representation Learning},
+  url = {https://openreview.net/forum?id=eA3Aum0rpA},
+  year = {2025},
 }""",
     output_dtypes=OutputDType.BF16,
 )
@@ -283,14 +283,14 @@ lco_7b = ModelMeta(
     ),
     modalities=["audio", "image", "text", "video"],
     citation="""
-@misc{xiao2025scalinglanguagecentricomnimodalrepresentation,
-  title={Scaling Language-Centric Omnimodal Representation Learning},
-  author={Chenghao Xiao and Hou Pong Chan and Hao Zhang and Weiwen Xu and Mahani Aljunied and Yu Rong},
-  year={2025},
-  eprint={2510.11693},
-  archivePrefix={arXiv},
-  primaryClass={cs.CL},
-  url={https://arxiv.org/abs/2510.11693},
+@inproceedings{xiao2025scalinglanguagecentricomnimodalrepresentation,
+  archiveprefix = {arXiv},
+  author = {Chenghao Xiao and Hou Pong Chan and Hao Zhang and Weiwen Xu and Mahani Aljunied and Yu Rong},
+  booktitle = {The Thirty-ninth Annual Conference on Neural Information Processing Systems},
+  eprint = {2510.11693},
+  title = {Scaling Language-centric Omnimodal Representation Learning},
+  url = {https://openreview.net/forum?id=eA3Aum0rpA},
+  year = {2025},
 }""",
     output_dtypes=OutputDType.BF16,
 )

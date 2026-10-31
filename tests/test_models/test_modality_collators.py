@@ -103,3 +103,16 @@ def test_video_collator_orders_modalities() -> None:
     }
     batch = VideoCollator(target_sampling_rate=16_000, num_frames=2)([row])
     assert list(batch) == ["id", "text", "video", "audio"]
+
+
+def test_video_collator_skips_missing_modalities() -> None:
+    """Mixed-modality datasets can have None for a row's audio or video."""
+    pytest.importorskip("torchaudio")
+    rows = [
+        {"video": _StubDecoder(4, seconds=1.0), "audio": None},
+        {"video": None, "audio": {"array": [0.0] * 10, "sampling_rate": 16_000}},
+    ]
+    batch = VideoCollator(target_sampling_rate=16_000, num_frames=2)(rows)
+    assert batch["video"][0] == [0, 3]
+    assert batch["audio"][0] is None
+    assert batch["video"][1] is None

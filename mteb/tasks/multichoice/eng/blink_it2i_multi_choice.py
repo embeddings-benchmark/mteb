@@ -9,7 +9,7 @@ class BLINKIT2IMultiChoice(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BLINKIT2IMultiChoice",
         description="Retrieve images based on images and specific retrieval instructions.",
-        reference="https://arxiv.org/abs/2404.12390",
+        reference="https://doi.org/10.1007/978-3-031-73337-6_9",
         dataset={
             "path": "mteb/blink-it2i-multi",
             "revision": "0418ecbea812ab97bda7eabe2c34065fdb81810f",
@@ -28,10 +28,17 @@ class BLINKIT2IMultiChoice(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{fu2024blink,
-  author = {Fu, Xingyu and Hu, Yushi and Li, Bangzheng and Feng, Yu and Wang, Haoyu and Lin, Xudong and Roth, Dan and Smith, Noah A and Ma, Wei-Chiu and Krishna, Ranjay},
-  journal = {arXiv preprint arXiv:2404.12390},
-  title = {Blink: Multimodal large language models can see but not perceive},
+@inbook{fu2024blink,
+  author = {Fu, Xingyu and Hu, Yushi and Li, Bangzheng and Feng, Yu and Wang, Haoyu and Lin, Xudong and Roth, Dan and Smith, Noah A. and Ma, Wei-Chiu and Krishna, Ranjay},
+  booktitle = {Computer Vision – ECCV 2024},
+  doi = {10.1007/978-3-031-73337-6_9},
+  isbn = {9783031733376},
+  issn = {1611-3349},
+  month = {Oct},
+  pages = {148–166},
+  publisher = {Springer Nature Switzerland},
+  title = {BLINK: Multimodal Large Language Models Can See but Not Perceive},
+  url = {https://doi.org/10.1007/978-3-031-73337-6_9},
   year = {2024},
 }
 """,

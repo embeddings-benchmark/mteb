@@ -170,14 +170,14 @@ class VisRAGRetWrapper(AbsEncoder):
         raise ValueError("Inputs contain neither 'text' nor 'image' features.")
 
 
-VISRAG_CITATION = """@misc{yu2024visrag,
-  title         = {VisRAG: Vision-based Retrieval-augmented Generation on Multi-modality Documents},
-  author        = {Shi Yu and Chaoyue Tang and Bokai Xu and Junbo Cui and Junhao Ran and Yukun Yan and Zhenghao Liu and Shuo Wang and Xu Han and Zhiyuan Liu and Maosong Sun},
-  year          = {2024},
-  eprint        = {2410.10594},
-  archivePrefix = {arXiv},
-  primaryClass  = {cs.IR},
-  url           = {https://arxiv.org/abs/2410.10594}
+VISRAG_CITATION = """@inproceedings{yu2024visrag,
+  archiveprefix = {arXiv},
+  author = {Shi Yu and Chaoyue Tang and Bokai Xu and Junbo Cui and Junhao Ran and Yukun Yan and Zhenghao Liu and Shuo Wang and Xu Han and Zhiyuan Liu and Maosong Sun},
+  booktitle = {The Thirteenth International Conference on Learning Representations},
+  eprint = {2410.10594},
+  title = {Vis{RAG}: Vision-based Retrieval-augmented Generation on Multi-modality Documents},
+  url = {https://openreview.net/forum?id=zG459X3Xge},
+  year = {2025},
 }"""
 
 VISRAG_RET_TRAINING_DATASETS = {

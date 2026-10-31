@@ -1006,11 +1006,15 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         config = model.config
         if inner_model is None or config is None:
             raise ValueError("CrossEncoder must be loaded before generating ModelMeta")
+        # transformers>=5.20 no longer stores `_commit_hash` on the config
+        revision = getattr(config, "_commit_hash", None)
+        if revision is None and hasattr(model, "model_card_data"):
+            revision = model.model_card_data.base_model_revision
         return cls.create_empty(
             overwrites=dict(
                 loader=CrossEncoderWrapper,
                 name=inner_model.name_or_path,
-                revision=config._commit_hash,
+                revision=revision,
                 framework=["Sentence Transformers", "PyTorch"],
                 model_type=["cross-encoder"],
                 n_embedding_parameters=cls._get_n_embedding_parameters_from_sentence_transformers(

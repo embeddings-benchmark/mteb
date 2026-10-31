@@ -8,7 +8,7 @@ class RomanianSentimentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="RomanianSentimentClassification",
         description="An Romanian dataset for sentiment classification.",
-        reference="https://arxiv.org/abs/2009.08712",
+        reference="https://aclanthology.org/2020.findings-emnlp.387/",
         dataset={
             "path": "mteb/RomanianSentimentClassification",
             "revision": "0f8df3d483924afb9130020e9f36ef09558fc9a1",
@@ -27,10 +27,17 @@ class RomanianSentimentClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{dumitrescu2020birth,
-  author = {Dumitrescu, Stefan Daniel and Avram, Andrei-Marius and Pyysalo, Sampo},
-  journal = {arXiv preprint arXiv:2009.08712},
-  title = {The birth of Romanian BERT},
+@inproceedings{dumitrescu2020birth,
+  address = {Online},
+  author = {Dumitrescu, Stefan and Avram, Andrei-Marius and Pyysalo, Sampo},
+  booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2020},
+  doi = {10.18653/v1/2020.findings-emnlp.387},
+  editor = {Cohn, Trevor and He, Yulan and Liu, Yang},
+  month = {nov},
+  pages = {4324--4328},
+  publisher = {Association for Computational Linguistics},
+  title = {The birth of {R}omanian {BERT}},
+  url = {https://aclanthology.org/2020.findings-emnlp.387/},
   year = {2020},
 }
 """,
@@ -42,7 +49,7 @@ class RomanianSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="RomanianSentimentClassification.v2",
         description="An Romanian dataset for sentiment classification. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
-        reference="https://arxiv.org/abs/2009.08712",
+        reference="https://aclanthology.org/2020.findings-emnlp.387/",
         dataset={
             "path": "mteb/romanian_sentiment",
             "revision": "bf545b83db13cf73ed402749b21a7777e0afdc6a",
@@ -61,10 +68,17 @@ class RomanianSentimentClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{dumitrescu2020birth,
-  author = {Dumitrescu, Stefan Daniel and Avram, Andrei-Marius and Pyysalo, Sampo},
-  journal = {arXiv preprint arXiv:2009.08712},
-  title = {The birth of Romanian BERT},
+@inproceedings{dumitrescu2020birth,
+  address = {Online},
+  author = {Dumitrescu, Stefan and Avram, Andrei-Marius and Pyysalo, Sampo},
+  booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2020},
+  doi = {10.18653/v1/2020.findings-emnlp.387},
+  editor = {Cohn, Trevor and He, Yulan and Liu, Yang},
+  month = {nov},
+  pages = {4324--4328},
+  publisher = {Association for Computational Linguistics},
+  title = {The birth of {R}omanian {BERT}},
+  url = {https://aclanthology.org/2020.findings-emnlp.387/},
   year = {2020},
 }
 """,

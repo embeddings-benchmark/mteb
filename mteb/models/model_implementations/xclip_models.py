@@ -144,11 +144,17 @@ class XCLIPModel(AbsEncoder):
 
 
 XCLIP_CITATION = """
-@article{ni2022expanding,
-  title={Expanding Language-Image Pretrained Models for General Video Recognition},
-  author={Ni, Bolin and Peng, Houwen and Chen, Minghao and Zhang, Songyang and Meng, Gaofeng and Fu, Jianlong and Xiang, Shiming and Ling, Haibin},
-  journal={arXiv preprint arXiv:2208.02816},
-  year={2022}
+@inbook{ni2022expanding,
+  author = {Ni, Bolin and Peng, Houwen and Chen, Minghao and Zhang, Songyang and Meng, Gaofeng and Fu, Jianlong and Xiang, Shiming and Ling, Haibin},
+  booktitle = {Computer Vision – ECCV 2022},
+  doi = {10.1007/978-3-031-19772-7_1},
+  isbn = {9783031197727},
+  issn = {1611-3349},
+  pages = {1–18},
+  publisher = {Springer Nature Switzerland},
+  title = {Expanding Language-Image Pretrained Models for General Video Recognition},
+  url = {https://doi.org/10.1007/978-3-031-19772-7_1},
+  year = {2022},
 }"""
 
 _XCLIP_COMMON = dict(

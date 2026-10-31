@@ -48,7 +48,7 @@ class AuroLAOmniWrapper(SentenceTransformerEncoderWrapper):
         self.target_sampling_rate = self.model[
             0
         ].processor.feature_extractor.sampling_rate
-        # processor_kwargs max_pixels only reaches images; videos need it per call
+        # the card caps video only; images keep the checkpoint's own limit
         self.model[0].processing_kwargs.update(
             {
                 "video": {
@@ -62,7 +62,7 @@ class AuroLAOmniWrapper(SentenceTransformerEncoderWrapper):
 
 _AUROLA_CITATION = r"""
 @misc{xu2026scalingaudiotextretrievalmultimodal,
-    title={Scaling Audio-Text Retrieval with Multimodal Large Language Models},
+    title={Re-purposing Multimodal Large Language Models for Audio-Text Retrieval},
     author={Jilan Xu and Carl Thom{\'e} and Danijela Horak and Weidi Xie and Andrew Zisserman},
     year={2026},
     eprint={2602.18010},
@@ -78,9 +78,6 @@ aurola_omni_7b = ModelMeta(
         "trust_remote_code": True,
         "model_kwargs": {
             "torch_dtype": "bfloat16",
-        },
-        "processor_kwargs": {
-            "max_pixels": 64 * 28 * 28,
         },
     },
     name="Jazzcharles/AuroLA-Omni-7B",
@@ -106,7 +103,7 @@ aurola_omni_7b = ModelMeta(
     modalities=["text", "image", "audio", "video"],
     model_type=["dense"],
     citation=_AUROLA_CITATION,
-    extra_requirements_groups=["qwen-vl"],
+    extra_requirements_groups=["multimodal-sbert"],
     output_dtypes=OutputDType.BF16,
 )
 
@@ -116,9 +113,6 @@ aurola_omni_3b = ModelMeta(
         "trust_remote_code": True,
         "model_kwargs": {
             "torch_dtype": "bfloat16",
-        },
-        "processor_kwargs": {
-            "max_pixels": 64 * 28 * 28,
         },
     },
     name="Jazzcharles/AuroLA-Omni-3B",
@@ -144,6 +138,6 @@ aurola_omni_3b = ModelMeta(
     modalities=["text", "image", "audio", "video"],
     model_type=["dense"],
     citation=_AUROLA_CITATION,
-    extra_requirements_groups=["qwen-vl"],
+    extra_requirements_groups=["multimodal-sbert"],
     output_dtypes=OutputDType.BF16,
 )

@@ -83,6 +83,7 @@ def test_run_task(
         benchmarks=None,
         overwrite=False,
         save_predictions=None,
+        num_proc=None,
     )
 
     run(args)
