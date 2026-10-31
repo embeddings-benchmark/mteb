@@ -558,10 +558,26 @@ class AbsTaskRetrieval(AbsTask):
 
         # Build corpus col_inputs — text needs special mapping from the corpus dict format.
         corpus_col_inputs: dict[Modalities, list[Any]] = {}
+        image_doc_ids = corpus_id_list
         if "text" in corpus_modalities:
             corpus_col_inputs["text"] = _retrieval_texts(corpus, PromptType.document)
         if "image" in corpus_modalities:
             corpus_col_inputs["image"] = corpus["image"]
+            # mixed corpora (text-only and image-only documents): describe each modality over the documents that have it
+            if "text" in corpus_col_inputs and any(
+                i is None for i in corpus_col_inputs["image"]
+            ):
+                corpus_col_inputs["text"] = [t for t in corpus_col_inputs["text"] if t]
+                image_doc_ids = [
+                    d
+                    for d, i in zip(
+                        corpus_id_list, corpus_col_inputs["image"], strict=True
+                    )
+                    if i is not None
+                ]
+                corpus_col_inputs["image"] = [
+                    i for i in corpus_col_inputs["image"] if i is not None
+                ]
         if "audio" in corpus_modalities:
             corpus_col_inputs["audio"] = corpus["audio"]
         if "video" in corpus_modalities:
@@ -589,7 +605,7 @@ class AbsTaskRetrieval(AbsTask):
             {
                 doc_id
                 for doc_id, is_black_or_white in zip(
-                    corpus_id_list, black_or_white_image_flags, strict=True
+                    image_doc_ids, black_or_white_image_flags, strict=True
                 )
                 if is_black_or_white
             }

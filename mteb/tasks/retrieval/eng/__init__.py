@@ -359,6 +359,7 @@ from .msr_vtt import (
 )
 from .msvd_t2v_retrieval import MSVDT2VRetrieval
 from .msvd_v2t_retrieval import MSVDV2TRetrieval
+from .multi3ir_retrieval import Multi3IRRetrieval
 from .nano_argu_ana_retrieval import NanoArguAnaRetrieval
 from .nano_climate_fever_retrieval import NanoClimateFeverRetrieval
 from .nano_db_pedia_retrieval import NanoDBPediaRetrieval
@@ -876,6 +877,7 @@ __all__ = [
     "MemotionT2IRetrieval",
     "MomentSeekerTI2VRetrieval",
     "MomentSeekerTV2VRetrieval",
+    "Multi3IRRetrieval",
     "NFCorpus",
     "NFCorpusDecontaminated",
     "NIGHTSI2IRetrieval",

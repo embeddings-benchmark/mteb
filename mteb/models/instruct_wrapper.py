@@ -329,8 +329,14 @@ class InstructSentenceTransformerModel(AbsEncoder):
             all_embeddings = []
             for batch in tqdm(inputs, desc="Building multimodal embeddings"):
                 modality_batch = {k: v for k, v in batch.items() if k in _modality_keys}
+                # mixed corpora: drop a sample's missing modalities (None, or empty text beside another modality)
                 batched_input = [
-                    dict(zip(modality_batch, sample, strict=True))
+                    {
+                        k: v
+                        for k, v in zip(modality_batch, sample, strict=True)
+                        if v is not None
+                        and not (k == "text" and not v and len(sample) > 1)
+                    }
                     for sample in zip(*modality_batch.values(), strict=True)
                 ]
 
