@@ -308,12 +308,14 @@ def _encode_by_modality_group(
         groups.setdefault(tuple(sorted(sample)), []).append(i)
     if len(groups) == 1:
         return encode(samples)
-    embeddings = None
-    for idx in groups.values():
-        part = np.asarray(encode([samples[i] for i in idx]))
-        if embeddings is None:
-            embeddings = np.empty((len(samples), *part.shape[1:]), dtype=part.dtype)
-        embeddings[idx] = part
+    parts = {
+        tuple(idx): np.asarray(encode([samples[i] for i in idx]))
+        for idx in groups.values()
+    }
+    first = next(iter(parts.values()))
+    embeddings = np.empty((len(samples), *first.shape[1:]), dtype=first.dtype)
+    for idx, part in parts.items():
+        embeddings[list(idx)] = part
     return embeddings
 
 
