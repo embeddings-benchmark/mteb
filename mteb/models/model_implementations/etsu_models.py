@@ -55,7 +55,8 @@ class EtsuEncoder(AbsEncoder):
         self.max_length = max_length
         self.batch_size = batch_size
 
-    def _format(self, texts: list[str], is_query: bool) -> list[str]:
+    @staticmethod
+    def _format(texts: list[str], is_query: bool) -> list[str]:
         if not is_query:
             return texts
         return [f"Instruct: {INSTRUCTION}\nQuery: {t}" for t in texts]
@@ -70,6 +71,7 @@ class EtsuEncoder(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        """Encode texts into L2-normalized embeddings."""
         import torch
         import torch.nn.functional as F
 
