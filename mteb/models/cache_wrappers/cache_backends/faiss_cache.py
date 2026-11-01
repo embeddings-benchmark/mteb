@@ -53,7 +53,7 @@ class FaissCache:
             self.index = faiss.IndexFlatL2(self.vector_dim)
 
         start_id = len(self.hash_to_index)
-        vectors_to_add = []
+        vectors_to_add: list[Array] = []
         for item, vector in zip(items, vectors, strict=True):
             item_hash = hash_item(item)
             if item_hash in self.hash_to_index:
