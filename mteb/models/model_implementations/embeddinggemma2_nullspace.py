@@ -6,8 +6,9 @@ What it does
 ------------
 * Text, image and video inputs: identical code path to `EmbeddingGemma2Wrapper` (the base class
   `encode` is called unchanged, no hook is active, no extra tensor operation happens).
-* Audio inputs: the base embedding v (768d) is computed exactly as in `EmbeddingGemma2Wrapper`, while a
-  forward hook on `audio_tower` records the frozen-PCA intermediates of every clip:
+* Audio inputs: null-space injection runs inside `SentenceTransformer.forward` (after the
+  built-in ``Normalize`` module, before `_inference` restores dataset order). The audio tower
+  records pooled Conformer features for the same mini-batch rows:
       L2_ms   = masked mean+std of Conformer layer 2 (2048d, unit-normalised)
       L6_mean = masked mean of Conformer layer 6     (1024d, unit-normalised)
   Then, with the frozen inductive ext_soft_whiten PCA states (fit on external corpora only):
@@ -21,9 +22,8 @@ Only the frozen tensors in `nullspace_audio_head.safetensors` are needed at infe
 
 from __future__ import annotations
 
-import contextlib
-import itertools
 import math
+import types
 from typing import TYPE_CHECKING, Any
 
 from mteb.models.model_implementations.google_embeddinggemma import (
@@ -38,10 +38,6 @@ if TYPE_CHECKING:
     from pathlib import Path
 
     import torch
-    from torch.utils.data import DataLoader
-
-    from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput, PromptType
 
 BASE_MODEL_ID = "google/embeddinggemma-2"
 BASE_REVISION = "914f7f89142e33e77833254d9c9b90c3cef7303b"
@@ -103,22 +99,6 @@ def masked_mean_std_pool(
     diff = torch.where(m3, x - mu, zeros)
     sigma = torch.sqrt((diff**2).sum(dim=1) / n + eps)
     return F.normalize(torch.cat([mu.squeeze(1), sigma], dim=-1), p=2, dim=-1)
-
-
-@contextlib.contextmanager
-def _clip_order_preserved(st_model: Any):  # noqa: ANN401
-    """Make SentenceTransformer's length-sort the identity, so hook captures line up with dataset order."""
-    counter = itertools.count()
-    st_model._input_length = lambda sample: -next(counter)
-    try:
-        yield
-    finally:
-        st_model.__dict__.pop("_input_length", None)
-
-
-def _has_audio_column(inputs: Any) -> bool:  # noqa: ANN401
-    cols = getattr(getattr(inputs, "dataset", None), "column_names", None) or []
-    return "audio" in cols
 
 
 def _load_head(path: str | Path) -> dict[str, torch.Tensor]:
@@ -187,21 +167,43 @@ class EmbeddingGemma2NullSpaceWrapper(EmbeddingGemma2Wrapper):
                 revision=head_revision,
             )
         self._head = _load_head(head_path)
-        self._captures: list[dict[str, torch.Tensor]] = []
-        self._recording = False
+        self._nullspace_active = False
+        self._forward_pool: dict[str, torch.Tensor] | None = None
+        self._install_nullspace_forward_hooks()
 
+    def _install_nullspace_forward_hooks(self) -> None:
+        wrapper = self
         tower = self.model[0].auto_model.audio_tower
         tower.config.tie_last_hidden_states = False
-        orig_forward = tower.forward
+        orig_tower_forward = tower.forward
 
-        def forward_with_hidden(*args: Any, **kw: Any) -> Any:  # noqa: ANN401
+        def tower_forward_with_pool(*args: Any, **kw: Any) -> Any:  # noqa: ANN401
             kw["output_hidden_states"] = True
-            out = orig_forward(*args, **kw)
-            if self._recording:
-                self._captures.append(self._pool_clips(out))
+            out = orig_tower_forward(*args, **kw)
+            if wrapper._nullspace_active:
+                wrapper._forward_pool = wrapper._pool_clips(out)
             return out
 
-        tower.forward = forward_with_hidden
+        tower.forward = tower_forward_with_pool
+
+        orig_model_forward = self.model.forward
+
+        def model_forward_with_inject(
+            _st_model: Any,  # noqa: ANN401
+            features: dict[str, Any],
+            **kwargs: Any,
+        ) -> dict[str, Any]:
+            wrapper._nullspace_active = True
+            wrapper._forward_pool = None
+            try:
+                out = orig_model_forward(features, **kwargs)
+                wrapper._inject_nullspace_into_features(out)
+                return out
+            finally:
+                wrapper._nullspace_active = False
+                wrapper._forward_pool = None
+
+        self.model.forward = types.MethodType(model_forward_with_inject, self.model)
 
     @staticmethod
     def _pool_clips(out: Any) -> dict[str, torch.Tensor]:  # noqa: ANN401
@@ -261,52 +263,19 @@ class EmbeddingGemma2NullSpaceWrapper(EmbeddingGemma2Wrapper):
                 dim=-1,
             )
 
-    def encode(
-        self,
-        inputs: DataLoader[BatchedInput],
-        *,
-        task_metadata: TaskMetadata,
-        hf_split: str,
-        hf_subset: str,
-        prompt_type: PromptType | None = None,
-        **kwargs: Any,
-    ) -> Array:
-        import numpy as np
+    def _inject_nullspace_into_features(self, out: dict[str, Any]) -> None:
         import torch
+        from sentence_transformers.util.tensor import _tensor_to_numpy  # noqa: PLC2701
 
-        base_kwargs = dict(
-            task_metadata=task_metadata,
-            hf_split=hf_split,
-            hf_subset=hf_subset,
-            prompt_type=prompt_type,
-        )
-        if not _has_audio_column(inputs):
-            return super().encode(inputs, **base_kwargs, **kwargs)
-
-        n_rows = len(inputs.dataset)  # type: ignore[arg-type]
-        self._captures = []
-        self._recording = True
-        try:
-            with _clip_order_preserved(self.model):
-                emb = super().encode(inputs, **base_kwargs, **kwargs)
-        finally:
-            self._recording = False
-            caps, self._captures = self._captures, []
-
-        if len(emb) != n_rows:
-            raise RuntimeError(f"encoded {len(emb)} rows for {n_rows} inputs")
-        if not caps:
-            raise RuntimeError("audio column present but audio_tower never ran")
-        l2 = torch.cat([c["L2_ms"] for c in caps], dim=0)
-        l6 = torch.cat([c["L6_mean"] for c in caps], dim=0)
-        if l2.shape[0] != n_rows:
-            raise RuntimeError(
-                f"captured {l2.shape[0]} audio clips for {n_rows} rows; mixed-modality call?"
-            )
-
-        v = torch.as_tensor(np.asarray(emb, dtype=np.float32))
-        out = self.inject(v, self.null_space_z(l2, l6))
-        return out.numpy().astype(np.float32, copy=False)
+        pool = self._forward_pool
+        if pool is None:
+            return
+        se = out.get("sentence_embedding")
+        if se is None:
+            raise RuntimeError("forward returned no sentence_embedding for audio batch")
+        v = torch.from_numpy(_tensor_to_numpy(se))
+        z = self.null_space_z(pool["L2_ms"], pool["L6_mean"])
+        out["sentence_embedding"] = self.inject(v, z).to(device=se.device)
 
 
 embeddinggemma_2_nullspace_audio = ModelMeta(
