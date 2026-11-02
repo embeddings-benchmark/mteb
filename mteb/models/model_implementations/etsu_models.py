@@ -6,7 +6,7 @@ from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderW
 etsu_embedding_08b_memory = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
     name="Rebine/Etsu-Embedding-0.8B-Memory",
-    revision="deaac7b1d4e62c12ecff3d3dbb2caa79b966c10b",
+    revision="afce3b6d2bce44ce4543196d3233f90a2a8e2149",
     release_date="2026-10-03",
     languages=["cmn-Hans", "eng-Latn"],
     n_parameters=752_393_024,
