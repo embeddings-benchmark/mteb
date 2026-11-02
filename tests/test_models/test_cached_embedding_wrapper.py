@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import shutil
+import warnings
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import pytest
+import torch
 from datasets import Dataset
 from torch.utils.data import DataLoader
 
@@ -67,6 +69,54 @@ class DummyModel(RandomEncoderBaseline):
             return embeddings
         prompt_offset = 1.0 if prompt_type is PromptType.query else 2.0
         return embeddings + prompt_offset
+
+
+@pytest.mark.parametrize(
+    ("dtype_name", "expected_dtype"),
+    [
+        ("bfloat16", "float32"),
+        ("float8_e4m3fn", "float32"),
+        ("float8_e5m2", "float32"),
+        ("float16", "float16"),
+        ("float32", "float32"),
+        ("float64", "float64"),
+        ("int8", "int8"),
+        ("uint8", "uint8"),
+    ],
+)
+def test_tensor_cache_roundtrip(tmp_path, dtype_name, expected_dtype):
+    dtype = getattr(torch, dtype_name, None)
+    if dtype is None:
+        pytest.skip(f"{dtype_name} is not available in this PyTorch version")
+
+    dl = DataLoader(Dataset.from_dict({"text": ["a", "b", "c"]}), batch_size=2)
+    kwargs = {
+        "task_metadata": MockRetrievalTask().metadata,
+        "hf_split": "test",
+        "hf_subset": "default",
+    }
+    model = DummyModel(
+        "test_model", revision=None, array_framework="torch", dtype=dtype
+    )
+    reference = DummyModel(
+        "test_model", revision=None, array_framework="torch", dtype=dtype
+    )
+    expected = reference.encode(dl, **kwargs).to(getattr(torch, expected_dtype)).numpy()
+    wrapper = CachedEmbeddingWrapper(model, tmp_path)
+
+    fresh = wrapper.encode(dl, **kwargs)
+    assert fresh.dtype == np.dtype(expected_dtype)
+    np.testing.assert_array_equal(fresh, expected)
+    assert model.call_count == 1
+
+    np.testing.assert_array_equal(wrapper.encode(dl, **kwargs), expected)
+    assert model.call_count == 1
+
+    wrapper.close()
+    restored = CachedEmbeddingWrapper(model, tmp_path)
+    np.testing.assert_array_equal(restored.encode(dl, **kwargs), expected)
+    assert model.call_count == 1
+    restored.close()
 
 
 class TestCachedEmbeddingWrapper:
@@ -392,6 +442,45 @@ def test_cache_reload_and_grow(
     try:
         assert len(cache.hash_to_index) == len(items)
         for item, vector in zip(items, vectors, strict=True):
+            np.testing.assert_array_equal(cache.get_vector(item), vector)
+    finally:
+        cache.close()
+
+
+@pytest.mark.parametrize("cache_backend", [NumpyCache, FaissCache])
+def test_cache_duplicate_items_in_batch(
+    tmp_path: Path, cache_backend: type[CacheBackendProtocol]
+):
+    """Duplicate items in one batch must not shift the vectors of later items.
+
+    Regression test for https://github.com/embeddings-benchmark/mteb/issues/5812
+    """
+    if cache_backend is FaissCache:
+        pytest.importorskip("faiss")
+
+    unique_items = [{"text": "a"}, {"text": "b"}, {"text": "c"}]
+    unique_vectors = np.eye(3, dtype=np.float32)
+    items = [unique_items[0], *unique_items]
+    vectors = np.vstack([unique_vectors[0], unique_vectors])
+
+    cache = cache_backend(tmp_path)
+    cache.load()
+    with warnings.catch_warnings():
+        # NumpyCache warns when it overwrites a duplicate item
+        warnings.simplefilter("ignore")
+        cache.add(items, vectors)
+    try:
+        assert len(cache.hash_to_index) == len(unique_items)
+        for item, vector in zip(unique_items, unique_vectors, strict=True):
+            np.testing.assert_array_equal(cache.get_vector(item), vector)
+        cache.save()
+    finally:
+        cache.close()
+
+    cache = cache_backend(tmp_path)
+    cache.load()
+    try:
+        for item, vector in zip(unique_items, unique_vectors, strict=True):
             np.testing.assert_array_equal(cache.get_vector(item), vector)
     finally:
         cache.close()

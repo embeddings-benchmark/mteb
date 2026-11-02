@@ -2,11 +2,19 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 from .bge_models import bge_full_data
 
-LENS_CITATION = """@article{lei2025lens,
-  title={Enhancing Lexicon-Based Text Embeddings with Large Language Models},
-  author={Lei, Yibin and Shen, Tao and Cao, Yu and Yates, Andrew},
-  journal={arXiv preprint arXiv:2501.09749},
-  year={2025}
+LENS_CITATION = """@inproceedings{lei2025lens,
+  address = {Vienna, Austria},
+  author = {Lei, Yibin and Shen, Tao and Cao, Yu and Yates, Andrew},
+  booktitle = {Proceedings of the 63rd Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2025.acl-long.930},
+  editor = {Che, Wanxiang and Nabende, Joyce and Shutova, Ekaterina and Pilehvar, Mohammad Taher},
+  isbn = {979-8-89176-251-0},
+  month = {jul},
+  pages = {18986--19001},
+  publisher = {Association for Computational Linguistics},
+  title = {Enhancing Lexicon-Based Text Embeddings with Large Language Models},
+  url = {https://aclanthology.org/2025.acl-long.930/},
+  year = {2025},
 }"""
 
 lens_d4000 = ModelMeta(

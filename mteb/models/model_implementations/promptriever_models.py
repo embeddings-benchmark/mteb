@@ -58,14 +58,14 @@ def _loader(
 
 
 PROMPTRIEVER_CITATION = """
-@article{weller2024promptriever,
-      title={Promptriever: Instruction-Trained Retrievers Can Be Prompted Like Language Models},
-      author={Orion Weller and Benjamin Van Durme and Dawn Lawrie and Ashwin Paranjape and Yuhao Zhang and Jack Hessel},
-      year={2024},
-      eprint={2409.11136},
-      archivePrefix={arXiv},
-      primaryClass={cs.IR},
-      url={https://arxiv.org/abs/2409.11136},
+@inproceedings{weller2024promptriever,
+  archiveprefix = {arXiv},
+  author = {Orion Weller and Benjamin Van Durme and Dawn Lawrie and Ashwin Paranjape and Yuhao Zhang and Jack Hessel},
+  booktitle = {The Thirteenth International Conference on Learning Representations},
+  eprint = {2409.11136},
+  title = {Promptriever: Instruction-Trained Retrievers Can Be Prompted Like Language Models},
+  url = {https://openreview.net/forum?id=odvSjn416y},
+  year = {2025},
 }
 """
 

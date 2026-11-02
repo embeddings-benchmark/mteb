@@ -196,13 +196,14 @@ class ColPaliWrapper(ColPaliEngineWrapper):
 
 
 COLPALI_CITATION = """
-@misc{faysse2024colpali,
-  title={ColPali: Efficient Document Retrieval with Vision Language Models},
-  author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Omrani, Bilel and Viaud, Gautier and Hudelot, C\'eline and Colombo, Pierre},
-  year={2024},
-  eprint={2407.01449},
-  archivePrefix={arXiv},
-  primaryClass={cs.IR}
+@inproceedings{faysse2024colpali,
+  archiveprefix = {arXiv},
+  author = {Manuel Faysse and Hugues Sibille and Tony Wu and Bilel Omrani and Gautier Viaud and CELINE HUDELOT and Pierre Colombo},
+  booktitle = {The Thirteenth International Conference on Learning Representations},
+  eprint = {2407.01449},
+  title = {ColPali: Efficient Document Retrieval with Vision Language Models},
+  url = {https://openreview.net/forum?id=ogjBpZ8uSi},
+  year = {2025},
 }"""
 
 COLPALI_TRAINING_DATA = {

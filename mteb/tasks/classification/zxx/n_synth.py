@@ -25,13 +25,14 @@ class NSynth(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="created",
         bibtex_citation=r"""
-@misc{engel2017neuralaudiosynthesismusical,
+@inproceedings{engel2017neuralaudiosynthesismusical,
   archiveprefix = {arXiv},
-  author = {Jesse Engel and Cinjon Resnick and Adam Roberts and Sander Dieleman and Douglas Eck and Karen Simonyan and Mohammad Norouzi},
+  author = {Jesse Engel and Cinjon Resnick and Adam Roberts and Sander Dieleman and Mohammad Norouzi and Douglas Eck and Karen Simonyan},
+  booktitle = {ICML},
   eprint = {1704.01279},
-  primaryclass = {cs.LG},
+  pages = {1068-1077},
   title = {Neural Audio Synthesis of Musical Notes with WaveNet Autoencoders},
-  url = {https://arxiv.org/abs/1704.01279},
+  url = {http://proceedings.mlr.press/v70/engel17a.html},
   year = {2017},
 }
 """,

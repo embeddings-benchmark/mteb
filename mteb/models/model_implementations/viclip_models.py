@@ -21,12 +21,14 @@ _VICLIP_MEAN = (0.485, 0.456, 0.406)
 _VICLIP_STD = (0.229, 0.224, 0.225)
 _VICLIP_SIZE = 224
 
-VICLIP_CITATION = """@article{wang2023internvid,
-  title={InternVid: A Large-scale Video-Text Dataset for Multimodal Understanding and Generation},
-  author={Wang, Yi and He, Yinan and Li, Yizhuo and Li, Kunchang and Yu, Jiashuo and Ma, Xin and
-          Li, Xinhao and Chen, Guo and Chen, Xinyuan and Wang, Yaohui and others},
-  journal={arXiv preprint arXiv:2307.06942},
-  year={2023}
+VICLIP_CITATION = """@inproceedings{wang2023internvid,
+  archiveprefix = {arXiv},
+  author = {Yi Wang and Yinan He and Yizhuo Li and Kunchang Li and Jiashuo Yu and Xin Ma and Xinhao Li and Guo Chen and Xinyuan Chen and Yaohui Wang and Ping Luo and Ziwei Liu and Yali Wang and Limin Wang and Yu Qiao},
+  booktitle = {The Twelfth International Conference on Learning Representations},
+  eprint = {2307.06942},
+  title = {InternVid: A Large-scale Video-Text Dataset for Multimodal Understanding and Generation},
+  url = {https://openreview.net/forum?id=MLBdiWu4Fw},
+  year = {2024},
 }"""
 
 
