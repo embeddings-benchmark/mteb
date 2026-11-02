@@ -5,6 +5,7 @@ import warnings
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Any, Literal, cast, get_args, overload
 
+from mteb._helpful_enum import HelpfulStrEnum
 from mteb.abstasks.task_metadata import TaskType
 from mteb.similarity_functions import (
     _upcast_low_precision,
@@ -39,6 +40,22 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
+class PromptSource(HelpfulStrEnum):
+    """Source of an instruction used by `AbsEncoder.get_instruction`.
+
+    Attributes:
+        CUSTOM_PROMPT: `prompts_dict[task_name]` defined in the model implementation.
+        DEFAULT_TASK_PROMPT: The `prompt` defined in the task metadata.
+        TASK_TYPE_PROMPT: `prompts_dict[task_type]` defined in the model implementation.
+        ENCODE_TYPE_PROMPT: `prompts_dict[prompt_type]` (e.g. `"query"`) defined in the model implementation.
+    """
+
+    CUSTOM_PROMPT = "custom_prompt"
+    DEFAULT_TASK_PROMPT = "default_task_prompt"
+    TASK_TYPE_PROMPT = "task_type_prompt"
+    ENCODE_TYPE_PROMPT = "encode_type_prompt"
+
+
 class AbsEncoder(ABC):
     """Base class to indicate that this is a wrapper for a model.
 
@@ -51,6 +68,8 @@ class AbsEncoder(ABC):
         instruction_template: A template for formatting instructions. Can be a string with '{instruction}' or
             a callable that takes the instruction and prompt type and returns a formatted instruction.
         prompts_dict: A dictionary of prompts to be used for encoding sentences, overrides model_prompts if provided.
+        prompt_priority: The order in which instruction sources are checked by `get_instruction`, the first
+            available one is used. See `PromptSource` for the available sources.
     """
 
     model: Any
@@ -58,6 +77,12 @@ class AbsEncoder(ABC):
     model_prompts: dict[str, str] | None = None
     instruction_template: str | Callable[[str, PromptType | None], str] | None = None
     prompts_dict: dict[str, str] | None = None
+    prompt_priority: Sequence[PromptSource] = (
+        PromptSource.CUSTOM_PROMPT,
+        PromptSource.TASK_TYPE_PROMPT,
+        PromptSource.ENCODE_TYPE_PROMPT,
+        PromptSource.DEFAULT_TASK_PROMPT,
+    )
 
     def get_prompt_name(
         self,
@@ -194,7 +219,7 @@ class AbsEncoder(ABC):
         Args:
             task_metadata: The metadata of the task. Sentence-transformers uses this to
                 determine which prompt to use from a specified dictionary.
-                The order of priorities for prompt selection are:
+                The order of priorities for prompt selection is defined by `prompt_priority`, by default:
                     1. Specific task prompt
                     2. Specific task type prompt
                     3. Specific prompt type
@@ -205,14 +230,23 @@ class AbsEncoder(ABC):
             The instruction/prompt to be used for encoding sentences.
         """
         prompt = task_metadata.prompt
-        if self.prompts_dict and task_metadata.name in self.prompts_dict:
-            prompt = self.prompts_dict[task_metadata.name]
-        elif self.prompts_dict and task_metadata.type in self.prompts_dict:
-            prompt = self.prompts_dict[task_metadata.type]
-        elif (
-            self.prompts_dict and prompt_type and prompt_type.value in self.prompts_dict
-        ):
-            prompt = self.prompts_dict[prompt_type.value]
+        prompt_dict_keys: dict[PromptSource, str | None] = {
+            PromptSource.CUSTOM_PROMPT: task_metadata.name,
+            PromptSource.TASK_TYPE_PROMPT: task_metadata.type,
+            PromptSource.ENCODE_TYPE_PROMPT: prompt_type.value if prompt_type else None,
+        }
+        for source in self.prompt_priority:
+            if source == PromptSource.DEFAULT_TASK_PROMPT:
+                task_prompt = task_metadata.prompt
+                if isinstance(task_prompt, dict) and prompt_type:
+                    task_prompt = task_prompt.get(prompt_type.value)
+                if task_prompt:
+                    break
+                continue
+            key = prompt_dict_keys[source]
+            if self.prompts_dict and key and key in self.prompts_dict:
+                prompt = self.prompts_dict[key]
+                break
 
         if isinstance(prompt, dict) and prompt_type:
             if prompt.get(prompt_type.value):

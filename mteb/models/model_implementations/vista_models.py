@@ -15,11 +15,18 @@ if TYPE_CHECKING:
     from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
 
-VISTA_CITATION = """@article{zhou2024vista,
-  title={VISTA: Visualized Text Embedding For Universal Multi-Modal Retrieval},
-  author={Zhou, Junjie and Liu, Zheng and Xiao, Shitao and Zhao, Bo and Xiong, Yongping},
-  journal={arXiv preprint arXiv:2406.04292},
-  year={2024}
+VISTA_CITATION = """@inproceedings{zhou2024vista,
+  address = {Bangkok, Thailand},
+  author = {Zhou, Junjie and Liu, Zheng and Xiao, Shitao and Zhao, Bo and Xiong, Yongping},
+  booktitle = {Proceedings of the 62nd Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2024.acl-long.175},
+  editor = {Ku, Lun-Wei and Martins, Andre and Srikumar, Vivek},
+  month = {aug},
+  pages = {3185--3200},
+  publisher = {Association for Computational Linguistics},
+  title = {{VISTA}: Visualized Text Embedding For Universal Multi-Modal Retrieval},
+  url = {https://aclanthology.org/2024.acl-long.175/},
+  year = {2024},
 }"""
 
 

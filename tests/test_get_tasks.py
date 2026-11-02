@@ -133,7 +133,31 @@ def _parse_bibtex_entries(bibtex_str: str) -> list[tuple[str, str]]:
 
 
 def _normalize_title_for_comparison(title: str) -> str:
+    # braces only protect capitalisation, e.g. {BEIR}-{NL}
+    title = title.replace("{", "").replace("}", "")
     return " ".join(title.lower().strip().split())
+
+
+# different papers whose titles are close enough to look like duplicates
+_DISTINCT_SIMILAR_TITLES = {
+    _normalize_title_for_comparison(title)
+    for title in (
+        "BEIR-NL: Zero-shot Information Retrieval Benchmark for the Dutch Language",
+        "BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language",
+        "Introduction to the CoNLL-2002 Shared Task: Language-Independent Named Entity Recognition",
+        "Introduction to the CoNLL-2003 Shared Task: Language-Independent Named Entity Recognition",
+        "Overview of the TREC 2019 deep learning track",
+        "Overview of the TREC 2020 deep learning track",
+        "Overview of the TREC 2022 NeuCLIR track",
+        "Overview of the TREC 2023 NeuCLIR Track",
+        "MoD-Embedding: A Fine-tuned Multilingual Text Embedding Model",
+        "Octen-Embedding-8B: A Fine-tuned Multilingual Text Embedding Model",
+        "Qwen2.5-Omni Technical Report",
+        "Qwen3-Omni Technical Report",
+        "Granite Embedding Models",
+        "Granite Embedding R2 Models",
+    )
+}
 
 
 def _get_duplicate_citations() -> list[tuple[str, str, str, str, str, str]]:
@@ -183,22 +207,7 @@ def _get_duplicate_citations() -> list[tuple[str, str, str, str, str, str]]:
 
     all_titles = set(by_title.keys())
     for title, items in by_title.items():
-        if items[0][2] in (  # noqa: PLR6201
-            "BEIR-NL: Zero-shot Information Retrieval Benchmark for the Dutch Language",
-            "BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language",
-            "Introduction to the CoNLL-2002 Shared Task: Language-Independent Named Entity Recognition",
-            "Introduction to the CoNLL-2003 Shared Task: Language-Independent Named Entity Recognition",
-            "Overview of the TREC 2019 deep learning track",
-            "Overview of the TREC 2020 deep learning track",
-            "Overview of the TREC 2022 NeuCLIR track",
-            "Overview of the TREC 2023 NeuCLIR Track",
-            "MoD-Embedding: A Fine-tuned Multilingual Text Embedding Model",
-            "Octen-Embedding-8B: A Fine-tuned Multilingual Text Embedding Model",
-            "Qwen2.5-Omni Technical Report",
-            "Qwen3-Omni Technical Report",
-            "Granite Embedding Models",
-            "Granite Embedding R2 Models",
-        ):
+        if title in _DISTINCT_SIMILAR_TITLES:
             continue
         use_titles = all_titles - {title}
         close_matches = difflib.get_close_matches(title, use_titles, n=2, cutoff=0.9)

@@ -13,7 +13,7 @@ class RuNLUIntentClassification(AbsTaskClassification):
             "Contains natural language data for human-robot interaction in home domain which we collected and"
             " annotated for evaluating NLU Services/platforms."
         ),
-        reference="https://arxiv.org/abs/1903.05566",
+        reference="https://doi.org/10.1007/978-981-15-9323-9_15",
         type="Classification",
         category="t2t",
         modalities=["text"],
@@ -36,14 +36,17 @@ class RuNLUIntentClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{liu2019benchmarkingnaturallanguageunderstanding,
-  archiveprefix = {arXiv},
-  author = {Xingkun Liu and Arash Eshghi and Pawel Swietojanski and Verena Rieser},
-  eprint = {1903.05566},
-  primaryclass = {cs.CL},
-  title = {Benchmarking Natural Language Understanding Services for building Conversational Agents},
-  url = {https://arxiv.org/abs/1903.05566},
-  year = {2019},
+@inbook{liu2019benchmarkingnaturallanguageunderstanding,
+  author = {Liu, Xingkun and Eshghi, Arash and Swietojanski, Pawel and Rieser, Verena},
+  booktitle = {Increasing Naturalness and Flexibility in Spoken Dialogue Interaction},
+  doi = {10.1007/978-981-15-9323-9_15},
+  isbn = {9789811593239},
+  issn = {1876-1119},
+  pages = {165–183},
+  publisher = {Springer Singapore},
+  title = {Benchmarking Natural Language Understanding Services for Building Conversational Agents},
+  url = {https://doi.org/10.1007/978-981-15-9323-9_15},
+  year = {2021},
 }
 """,
     )

@@ -13,7 +13,7 @@ class KorNLI(AbsTaskPairClassification):
         description="Korean Natural Language Inference dataset (XNLI subset), where the "
         "Korean-translated XNLI dev/test sets are used to determine textual entailment "
         "between a premise and a hypothesis sentence. Part of KorNLI/KorSTS.",
-        reference="https://arxiv.org/abs/2004.03289",
+        reference="https://aclanthology.org/2020.findings-emnlp.39/",
         type="PairClassification",
         category="t2t",
         modalities=["text"],
@@ -28,10 +28,17 @@ class KorNLI(AbsTaskPairClassification):
         dialect=[],
         sample_creation="machine-translated and verified",
         bibtex_citation=r"""
-@article{ham2020kornli,
+@inproceedings{ham2020kornli,
+  address = {Online},
   author = {Ham, Jiyeon and Choe, Yo Joong and Park, Kyubyong and Choi, Ilji and Soh, Hyungjoon},
-  journal = {arXiv preprint arXiv:2004.03289},
-  title = {KorNLI and KorSTS: New Benchmark Datasets for Korean Natural Language Understanding},
+  booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2020},
+  doi = {10.18653/v1/2020.findings-emnlp.39},
+  editor = {Cohn, Trevor and He, Yulan and Liu, Yang},
+  month = {nov},
+  pages = {422--430},
+  publisher = {Association for Computational Linguistics},
+  title = {{K}or{NLI} and {K}or{STS}: New Benchmark Datasets for {K}orean Natural Language Understanding},
+  url = {https://aclanthology.org/2020.findings-emnlp.39/},
   year = {2020},
 }
 """,

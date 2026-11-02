@@ -169,12 +169,13 @@ audio_flamingo_meta = ModelMeta(
     training_datasets=None,
     modalities=["audio", "text"],
     citation="""
-@misc{audioflamingo2024,
+@inproceedings{audioflamingo2024,
   archiveprefix = {arXiv},
-  author = {Arushi Goel and Sreyan Ghosh and Jaehyeon Kim and Sonal Kumar and Zhifeng Kong and Sang-gil Lee and Chao-Han Huck Yang and Ramani Duraiswami and Dinesh Manocha and Rafael Valle and Bryan Catanzaro},
+  author = {Sreyan Ghosh and Arushi Goel and Jaehyeon Kim and Sonal Kumar and Zhifeng Kong and Sang-gil Lee and Chao-Han Huck Yang and Ramani Duraiswami and Dinesh Manocha and Rafael Valle and Bryan Catanzaro},
+  booktitle = {The Thirty-ninth Annual Conference on Neural Information Processing Systems},
   eprint = {2507.08128},
   title = {Audio Flamingo 3: Advancing Audio Intelligence with Fully Open Large Audio Language Models},
-  url = {https://arxiv.org/abs/2507.08128},
+  url = {https://openreview.net/forum?id=FjByDpDVIO},
   year = {2025},
 }
 """,

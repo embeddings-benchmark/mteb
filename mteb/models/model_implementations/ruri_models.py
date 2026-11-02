@@ -17,14 +17,18 @@ RURI_V1_V2_PROMPTS = {
 }
 
 
-RURI_CITATION = r"""@misc{Ruri,
-  title={{Ruri: Japanese General Text Embeddings}},
-  author={Hayato Tsukagoshi and Ryohei Sasano},
-  year={2024},
-  eprint={2409.07737},
-  archivePrefix={arXiv},
-  primaryClass={cs.CL},
-  url={https://arxiv.org/abs/2409.07737},
+RURI_CITATION = r"""@article{Ruri,
+  author = {Tsukagoshi, Hayato and Sasano, Ryohei},
+  doi = {10.5715/jnlp.33.591},
+  issn = {2185-8314},
+  journal = {Journal of Natural Language Processing},
+  number = {2},
+  pages = {591–629},
+  publisher = {Association for Natural Language Processing},
+  title = {Ruri: Japanese General Text Embeddings},
+  url = {https://doi.org/10.5715/jnlp.33.591},
+  volume = {33},
+  year = {2026},
 }"""
 
 cl_nagoya_ruri_v3_30m = ModelMeta(

@@ -126,12 +126,17 @@ class TevatronOmniEmbedWrapper(SentenceTransformerEncoderWrapper):
 
 
 _OMNI_EMBED_CITATION = r"""
-@misc{zhuang2025tevatron,
-  archiveprefix = {arXiv},
-  author = {Xueguang Ma and Luyu Gao and Shengyao Zhuang and Jiaqi Samantha Zhan and Jamie Callan and Jimmy Lin},
-  eprint = {2505.02466},
+@inproceedings{zhuang2025tevatron,
+  author = {Ma, Xueguang and Gao, Luyu and Zhuang, Shengyao and Zhan, Jiaqi Samantha and Callan, Jamie and Lin, Jimmy},
+  booktitle = {Proceedings of the 48th International ACM SIGIR Conference on Research and Development in Information Retrieval},
+  collection = {SIGIR ’25},
+  doi = {10.1145/3726302.3730135},
+  month = {July},
+  pages = {4061–4065},
+  publisher = {ACM},
+  series = {SIGIR ’25},
   title = {Tevatron 2.0: Unified Document Retrieval Toolkit across Scale, Language, and Modality},
-  url = {https://arxiv.org/abs/2505.02466},
+  url = {https://doi.org/10.1145/3726302.3730135},
   year = {2025},
 }
 """

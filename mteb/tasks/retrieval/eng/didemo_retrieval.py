@@ -9,6 +9,7 @@ from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _DATASET_PATH = "mteb/DiDeMo"
+_DATASET_REVISION_V2 = "a47066169360d555b7a33132d7195843dc71997f"
 _DATASET_REVISION = "746689f644b66022540a9a39136e842bee164e6b"
 _BIBTEX = r"""
 @inproceedings{hendricks2017localizing,
@@ -77,6 +78,7 @@ class DiDeMoV2TRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
+        superseded_by="DiDeMoV2TRetrieval.v2",
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the caption that describes the following video."},
     )
@@ -109,6 +111,7 @@ class DiDeMoT2VRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
+        superseded_by="DiDeMoT2VRetrieval.v2",
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the video clip that matches the given caption."},
         is_beta=True,
@@ -142,6 +145,7 @@ class DiDeMoVA2TRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
+        superseded_by="DiDeMoVA2TRetrieval.v2",
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the caption that describes the following video."},
         is_beta=True,
@@ -175,6 +179,7 @@ class DiDeMoT2VARetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
+        superseded_by="DiDeMoT2VARetrieval.v2",
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the video clip that matches the given caption."},
         is_beta=True,
@@ -192,7 +197,7 @@ class DiDeMoV2ARetrieval(AbsTaskRetrieval):
             "DiDeMo dataset. Tests cross-modal alignment between video frames and audio."
             " Used the test split (~999 examples)."
         ),
-        reference="https://arxiv.org/abs/1708.01355",
+        reference="https://arxiv.org/abs/1708.01641",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
         type="Any2AnyRetrieval",
         category="v2a",
@@ -207,6 +212,7 @@ class DiDeMoV2ARetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
+        superseded_by="DiDeMoV2ARetrieval.v2",
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the audio that corresponds to the following video."},
         is_beta=True,
@@ -224,7 +230,7 @@ class DiDeMoA2VRetrieval(AbsTaskRetrieval):
             "DiDeMo dataset. Tests cross-modal alignment between audio and video frames."
             " Used the test split (~999 examples)."
         ),
-        reference="https://arxiv.org/abs/1708.01355",
+        reference="https://arxiv.org/abs/1708.01641",
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
         type="Any2AnyRetrieval",
         category="a2v",
@@ -239,6 +245,7 @@ class DiDeMoA2VRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
+        superseded_by="DiDeMoA2VRetrieval.v2",
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the video that corresponds to the following audio."},
         is_beta=True,
@@ -272,6 +279,7 @@ class DiDeMoVT2ARetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
+        superseded_by="DiDeMoVT2ARetrieval.v2",
         bibtex_citation=_BIBTEX,
         prompt={
             "query": "Find the audio that corresponds to the following video and its description."
@@ -307,6 +315,280 @@ class DiDeMoAT2VRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
+        superseded_by="DiDeMoAT2VRetrieval.v2",
+        bibtex_citation=_BIBTEX,
+        prompt={
+            "query": "Find the video that corresponds to the following audio and its description."
+        },
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _load_didemo(self, query_columns=["audio", "caption"], corpus_columns=["video"])
+
+
+class DiDeMoV2TRetrievalV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="DiDeMoV2TRetrieval.v2",
+        description=(
+            "Retrieve the English caption that describes a given video clip (video "
+            "only) from the DiDeMo dataset of Flickr videos with temporally grounded "
+            "sentence descriptions."
+            " Version 2 cuts each video to the first 30 s, which the descriptions cover, and drops clips with missing or silent audio and videos uploaded twice."
+        ),
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
+        type="Any2AnyRetrieval",
+        category="v2t",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        reference="https://arxiv.org/abs/1708.01641",
+        modalities=["video", "text"],
+        date=("2017-01-01", "2017-12-31"),
+        domains=["Web"],
+        task_subtypes=[],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        adapted_from=["DiDeMoV2TRetrieval"],
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Find the caption that describes the following video."},
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _load_didemo(self, query_columns=["video"], corpus_columns=["caption"])
+
+
+class DiDeMoT2VRetrievalV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="DiDeMoT2VRetrieval.v2",
+        description=(
+            "Retrieve the video clip (video only) that matches a given English "
+            "caption from the DiDeMo dataset of Flickr videos with temporally "
+            "grounded sentence descriptions."
+            " Version 2 cuts each video to the first 30 s, which the descriptions cover, and drops clips with missing or silent audio and videos uploaded twice."
+        ),
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
+        type="Any2AnyRetrieval",
+        category="t2v",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        reference="https://arxiv.org/abs/1708.01641",
+        modalities=["text", "video"],
+        date=("2017-01-01", "2017-12-31"),
+        domains=["Web"],
+        task_subtypes=[],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        adapted_from=["DiDeMoT2VRetrieval"],
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Find the video clip that matches the given caption."},
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _load_didemo(self, query_columns=["caption"], corpus_columns=["video"])
+
+
+class DiDeMoVA2TRetrievalV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="DiDeMoVA2TRetrieval.v2",
+        description=(
+            "Retrieve the English caption that describes a given video clip "
+            "from the DiDeMo dataset of Flickr videos with temporally grounded "
+            "sentence descriptions."
+            " Version 2 cuts each video to the first 30 s, which the descriptions cover, and drops clips with missing or silent audio and videos uploaded twice."
+        ),
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
+        type="Any2AnyRetrieval",
+        category="va2t",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        reference="https://arxiv.org/abs/1708.01641",
+        modalities=["audio", "video", "text"],
+        date=("2017-01-01", "2017-12-31"),
+        domains=["Web"],
+        task_subtypes=[],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        adapted_from=["DiDeMoVA2TRetrieval"],
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Find the caption that describes the following video."},
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _load_didemo(self, query_columns=["video", "audio"], corpus_columns=["caption"])
+
+
+class DiDeMoT2VARetrievalV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="DiDeMoT2VARetrieval.v2",
+        description=(
+            "Retrieve the video clip that matches a given English caption "
+            "from the DiDeMo dataset of Flickr videos with temporally grounded "
+            "sentence descriptions."
+            " Version 2 cuts each video to the first 30 s, which the descriptions cover, and drops clips with missing or silent audio and videos uploaded twice."
+        ),
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
+        type="Any2AnyRetrieval",
+        category="t2va",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        reference="https://arxiv.org/abs/1708.01641",
+        modalities=["text", "audio", "video"],
+        date=("2017-01-01", "2017-12-31"),
+        domains=["Web"],
+        task_subtypes=[],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        adapted_from=["DiDeMoT2VARetrieval"],
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Find the video clip that matches the given caption."},
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _load_didemo(self, query_columns=["caption"], corpus_columns=["video", "audio"])
+
+
+class DiDeMoV2ARetrievalV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="DiDeMoV2ARetrieval.v2",
+        description=(
+            "Retrieve the audio track that matches a given video clip from the "
+            "DiDeMo dataset. Tests cross-modal alignment between video frames and audio."
+            " Version 2 cuts each video to the first 30 s, which the descriptions cover, and drops clips with missing or silent audio and videos uploaded twice."
+        ),
+        reference="https://arxiv.org/abs/1708.01641",
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
+        type="Any2AnyRetrieval",
+        category="v2a",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        modalities=["video", "audio"],
+        date=("2017-01-01", "2017-12-31"),
+        domains=["Web"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        adapted_from=["DiDeMoV2ARetrieval"],
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Find the audio that corresponds to the following video."},
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _load_didemo(self, query_columns=["video"], corpus_columns=["audio"])
+
+
+class DiDeMoA2VRetrievalV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="DiDeMoA2VRetrieval.v2",
+        description=(
+            "Retrieve the video clip that matches a given audio track from the "
+            "DiDeMo dataset. Tests cross-modal alignment between audio and video frames."
+            " Version 2 cuts each video to the first 30 s, which the descriptions cover, and drops clips with missing or silent audio and videos uploaded twice."
+        ),
+        reference="https://arxiv.org/abs/1708.01641",
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
+        type="Any2AnyRetrieval",
+        category="a2v",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        modalities=["audio", "video"],
+        date=("2017-01-01", "2017-12-31"),
+        domains=["Web"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        adapted_from=["DiDeMoA2VRetrieval"],
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Find the video that corresponds to the following audio."},
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _load_didemo(self, query_columns=["audio"], corpus_columns=["video"])
+
+
+class DiDeMoVT2ARetrievalV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="DiDeMoVT2ARetrieval.v2",
+        description=(
+            "Retrieve the audio track that matches a given video clip and its caption "
+            "from the DiDeMo dataset of Flickr videos with temporally grounded "
+            "sentence descriptions."
+            " Version 2 cuts each video to the first 30 s, which the descriptions cover, and drops clips with missing or silent audio and videos uploaded twice."
+        ),
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
+        type="Any2AnyRetrieval",
+        category="vt2a",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        reference="https://arxiv.org/abs/1708.01641",
+        modalities=["video", "text", "audio"],
+        date=("2017-01-01", "2017-12-31"),
+        domains=["Web"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        adapted_from=["DiDeMoVT2ARetrieval"],
+        bibtex_citation=_BIBTEX,
+        prompt={
+            "query": "Find the audio that corresponds to the following video and its description."
+        },
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _load_didemo(self, query_columns=["video", "caption"], corpus_columns=["audio"])
+
+
+class DiDeMoAT2VRetrievalV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="DiDeMoAT2VRetrieval.v2",
+        description=(
+            "Retrieve the video clip that matches a given audio track and its caption "
+            "from the DiDeMo dataset of Flickr videos with temporally grounded "
+            "sentence descriptions."
+            " Version 2 cuts each video to the first 30 s, which the descriptions cover, and drops clips with missing or silent audio and videos uploaded twice."
+        ),
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
+        type="Any2AnyRetrieval",
+        category="at2v",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        reference="https://arxiv.org/abs/1708.01641",
+        modalities=["audio", "text", "video"],
+        date=("2017-01-01", "2017-12-31"),
+        domains=["Web"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        adapted_from=["DiDeMoAT2VRetrieval"],
         bibtex_citation=_BIBTEX,
         prompt={
             "query": "Find the video that corresponds to the following audio and its description."

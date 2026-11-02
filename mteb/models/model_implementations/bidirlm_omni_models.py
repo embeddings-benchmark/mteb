@@ -5,7 +5,11 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator, VideoCollator
+from mteb.models.modality_collators import (
+    AudioCollator,
+    VideoCollator,
+    single_clip_dataloader,
+)
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
@@ -94,10 +98,10 @@ class BidirLMOmniEncoder(AbsEncoder):
         # 64 is an mteb cap; the checkpoint's video config has max_frames=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
-        # 30 s: an mteb cap at chunk_length=30; the processor itself sets
-        # truncation=False, so upstream does not cut
+        # None: the processor sets truncation=False and the audio encoder runs in
+        # windows, so the full clip is used, as in the authors' wrapper (#4370)
         # https://huggingface.co/BidirLM/BidirLM-Omni-2.5B-Embedding/blob/main/processing_bidirlm_omni.py
-        max_samples: int | None = 30 * 16_000,
+        max_samples: int | None = None,
         **kwargs: Any,
     ) -> None:
         import torch
@@ -131,6 +135,7 @@ class BidirLMOmniEncoder(AbsEncoder):
             **kwargs,
         )
         self.model.eval()
+        self.temporal_patch_size = video_processor.temporal_patch_size
         self.max_text_length = max_text_length
         self.fps = fps
         self.max_frames = max_frames
@@ -214,6 +219,10 @@ class BidirLMOmniEncoder(AbsEncoder):
                 target_sampling_rate=self.sampling_rate,
                 max_samples=self.max_samples,
             )
+        if has_audio:
+            inputs = single_clip_dataloader(
+                inputs, "batched audio embeddings change with their batch-mates"
+            )
         instruction = self._get_instruction(task_metadata, prompt_type)
 
         # Truncate only when the schema is pure text; for multimodal schemas
@@ -234,6 +243,14 @@ class BidirLMOmniEncoder(AbsEncoder):
                     for key in modality_keys
                     if key in batch and batch[key][i] is not None
                 }
+                if "video" in row and len(row["video"]) < self.temporal_patch_size:
+                    # the Qwen3-VL video processor needs temporal_patch_size frames; repeat
+                    # the last one, as it already does for an odd frame count
+                    # https://github.com/huggingface/transformers/blob/v5.19.0/src/transformers/models/qwen3_vl/video_processing_qwen3_vl.py#L236-L238
+                    pad = self.temporal_patch_size - len(row["video"])
+                    row["video"] = torch.cat(
+                        [row["video"], row["video"][-1:].repeat(pad, 1, 1, 1)]
+                    )
                 batch_inputs.append(row)
 
             embeddings = self.model.encode(
