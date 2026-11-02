@@ -11240,6 +11240,16 @@
                 "similarity": 1.0,
                 "note": ""
             }
+        },
+        "morand2026micemeetyoureranking||2610.31932|mice to meet you: from re-ranking only to end-to-end retrieval|2026": {
+            "stored_at": 1793496194.7410905,
+            "value": {
+                "verdict": "OK",
+                "found_title": "MICE to Meet You: From Re-ranking Only to End-to-End Retrieval",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
         }
     }
 }
