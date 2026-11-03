@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 import tempfile
 from typing import TYPE_CHECKING, Any
 
@@ -37,6 +38,8 @@ class EBindWrapper(AbsEncoder):
         device: str | None = None,
         fps: float | None = None,
         max_frames: int | None = None,
+        # 8 frames: NUM_FRAMES_TO_SAMPLE_FROM_VIDEO=8
+        # https://github.com/encord-team/ebind/blob/main/src/ebind/consts.py
         num_frames: int | None = 8,
         **kwargs: Any,
     ) -> None:
@@ -73,8 +76,8 @@ class EBindWrapper(AbsEncoder):
         for item in audio_items:
             array = np.asarray(item["array"])
             sr = item["sampling_rate"]
-            # pad clips shorter than the mel-spectrogram window
-            min_samples = max(int(sr * 0.5), 1)
+            # pad only below one 25 ms fbank window; the processor pads longer clips itself
+            min_samples = math.ceil(sr * 0.025)
             if array.shape[0] < min_samples:
                 array = np.pad(array, (0, min_samples - array.shape[0]))
             with tempfile.NamedTemporaryFile(suffix=".wav", delete=True) as tmp:
@@ -196,7 +199,7 @@ _EBIND_CITATION = r"""
 _EBIND_COMMON = dict(
     languages=["eng-Latn"],
     release_date="2025-11-19",
-    max_tokens=512,
+    max_tokens=32,  # PE-Core-L14-336 text context_length
     n_embedding_parameters=50_593_792,  # PE text encoder: 49408 vocab * 1024 hidden
     license="cc-by-nc-sa-4.0",
     open_weights=True,
@@ -206,7 +209,9 @@ _EBIND_COMMON = dict(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     citation=_EBIND_CITATION,
-    extra_requirements_groups=["ebind"],
+    # ebind is installed from git and not on PyPI, so it cannot be an mteb extra:
+    # pip install "ebind @ git+https://github.com/encord-team/ebind@7909701e9372353ca678b9515f9f61cf87c83c71"
+    extra_requirements_groups=["audio", "video"],
 )
 
 _EBIND_AV_TRAINING = {

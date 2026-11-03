@@ -46,7 +46,6 @@ class MusicAVQACLSAudioVideoClustering(AbsTaskClustering):
         modalities=["video", "audio"],
         sample_creation="found",
         bibtex_citation=BIBTEX,
-        is_beta=True,
     )
     max_fraction_of_documents_to_embed = None
     input_column_name = ("video", "audio")

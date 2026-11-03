@@ -4,15 +4,24 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 INTERNVIDEO2_CITATION = """
-@article{wang2024internvideo2,
-  title={InternVideo2: Scaling Video Foundation Models for Multimodal Video Understanding},
-  author={Wang, Yi and Li, Kunchang and Li, Xinhao and Yu, Jiashuo and He, Yinan and Chen, Guo and Pei, Baoqi and Zheng, Rongkun and Xu, Jilan and Wang, Zun and others},
-  journal={arXiv preprint arXiv:2403.15377},
-  year={2024}
+@inbook{wang2024internvideo2,
+  author = {Wang, Yi and Li, Kunchang and Li, Xinhao and Yu, Jiashuo and He, Yinan and Chen, Guo and Pei, Baoqi and Zheng, Rongkun and Wang, Zun and Shi, Yansong and Jiang, Tianxiang and Li, Songze and Xu, Jilan and Zhang, Hongjie and Huang, Yifei and Qiao, Yu and Wang, Yali and Wang, Limin},
+  booktitle = {Computer Vision – ECCV 2024},
+  doi = {10.1007/978-3-031-73013-9_23},
+  isbn = {9783031730139},
+  issn = {1611-3349},
+  month = {Nov},
+  pages = {396–416},
+  publisher = {Springer Nature Switzerland},
+  title = {InternVideo2: Scaling Foundation Models for Multimodal Video Understanding},
+  url = {https://doi.org/10.1007/978-3-031-73013-9_23},
+  year = {2024},
 }"""
 
 internvideo2_clip_1b_224p_f8 = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
+    # 8 frames: encoded in the checkpoint name
+    # https://github.com/OpenGVLab/InternVideo
     loader_kwargs=dict(num_frames=8, trust_remote_code=True),
     name="OpenGVLab/InternVideo2-CLIP-1B-224p-f8",  # discussions/3
     revision="2e08ec173489fc13a6e4ca2d9807927b73c653a3",

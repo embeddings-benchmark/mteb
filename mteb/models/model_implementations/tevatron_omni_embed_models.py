@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from mteb.models.model_implementations.colpali_models import COLPALI_TRAINING_DATA
 from mteb.models.model_meta import (
@@ -10,6 +10,39 @@ from mteb.models.model_meta import (
 from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
 )
+from mteb.types import OutputDType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
+
+
+def _adapter_snapshot_with_base_revision(
+    model: str, revision: str | None, base_revision: str
+) -> str:
+    """Return a local view of a LoRA adapter whose adapter_config.json points to the base model at `base_revision`.
+
+    sentence-transformers does not pass `revision` on to the base model, so it would load from main.
+    """
+    import json
+    import tempfile
+    from pathlib import Path
+
+    from huggingface_hub import snapshot_download
+
+    snapshot = Path(snapshot_download(model, revision=revision))
+    adapter_config = json.loads((snapshot / "adapter_config.json").read_text())
+    adapter_config["base_model_name_or_path"] = snapshot_download(
+        adapter_config["base_model_name_or_path"], revision=base_revision
+    )
+    local = Path(tempfile.mkdtemp(prefix=f"mteb_{model.replace('/', '__')}_"))
+    for entry in snapshot.iterdir():
+        if entry.name != "adapter_config.json":
+            (local / entry.name).symlink_to(entry)
+    (local / "adapter_config.json").write_text(json.dumps(adapter_config, indent=2))
+    return str(local)
 
 
 class TevatronOmniEmbedWrapper(SentenceTransformerEncoderWrapper):
@@ -20,11 +53,21 @@ class TevatronOmniEmbedWrapper(SentenceTransformerEncoderWrapper):
         model: str,
         revision: str | None = None,
         device: str | None = None,
+        # fps=2: qwen-omni-utils FPS=2.0
+        # https://github.com/QwenLM/Qwen2.5-Omni/blob/main/qwen-omni-utils/src/qwen_omni_utils/v2_5/vision_process.py
         fps: float | None = 2.0,
+        # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
+        # 300 s at 16 kHz: chunk_length=300
+        # https://huggingface.co/Tevatron/OmniEmbed-v0.1/blob/main/preprocessor_config.json
+        max_samples: int | None = 4_800_000,
+        base_revision: str | None = None,
         **kwargs: Any,
     ) -> None:
+        if base_revision is not None:
+            model = _adapter_snapshot_with_base_revision(model, revision, base_revision)
+            revision = None
         super().__init__(
             model,
             revision=revision,
@@ -32,6 +75,7 @@ class TevatronOmniEmbedWrapper(SentenceTransformerEncoderWrapper):
             fps=fps,
             max_frames=max_frames,
             num_frames=num_frames,
+            max_samples=max_samples,
             **kwargs,
         )
         self.target_sampling_rate = self.model[
@@ -51,14 +95,48 @@ class TevatronOmniEmbedWrapper(SentenceTransformerEncoderWrapper):
         )
         self.model.max_seq_length = 512
 
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        # the 512-token limit is for text; audio and video become tokens in the
+        # same sequence, so truncating there would cut them (~20 s of audio);
+        # 32768 is the tokenizer's model_max_length
+        text_only = not any(
+            m in inputs.dataset.features for m in ("image", "audio", "video")
+        )
+        self.model[0].processing_kwargs["text"] = (
+            {"truncation": True, "max_length": 512} if text_only else {}
+        )
+        self.model.max_seq_length = 512 if text_only else 32768
+        return super().encode(
+            inputs,
+            task_metadata=task_metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            prompt_type=prompt_type,
+            **kwargs,
+        )
+
 
 _OMNI_EMBED_CITATION = r"""
-@misc{zhuang2025tevatron,
-  archiveprefix = {arXiv},
-  author = {Xueguang Ma and Luyu Gao and Shengyao Zhuang and Jiaqi Samantha Zhan and Jamie Callan and Jimmy Lin},
-  eprint = {2505.02466},
+@inproceedings{zhuang2025tevatron,
+  author = {Ma, Xueguang and Gao, Luyu and Zhuang, Shengyao and Zhan, Jiaqi Samantha and Callan, Jamie and Lin, Jimmy},
+  booktitle = {Proceedings of the 48th International ACM SIGIR Conference on Research and Development in Information Retrieval},
+  collection = {SIGIR ’25},
+  doi = {10.1145/3726302.3730135},
+  month = {July},
+  pages = {4061–4065},
+  publisher = {ACM},
+  series = {SIGIR ’25},
   title = {Tevatron 2.0: Unified Document Retrieval Toolkit across Scale, Language, and Modality},
-  url = {https://arxiv.org/abs/2505.02466},
+  url = {https://doi.org/10.1145/3726302.3730135},
   year = {2025},
 }
 """
@@ -70,6 +148,8 @@ omni_embed_v01 = ModelMeta(
         "model_kwargs": {
             "torch_dtype": "bfloat16",
         },
+        # LoRA adapter; its adapter_config.json names Tevatron/Qwen2.5-Omni-7B-Thinker without a revision
+        "base_revision": "8876e9bc7e6af2ecbdfb14e0416e2c1105f0f7bb",
     },
     name="Tevatron/OmniEmbed-v0.1",
     revision="fa8be315e74d07f563b07c0d053525de6dc7eda8",
@@ -106,4 +186,5 @@ omni_embed_v01 = ModelMeta(
     model_type=["dense"],
     citation=_OMNI_EMBED_CITATION,
     extra_requirements_groups=["multimodal-sbert", "peft"],
+    output_dtypes=OutputDType.BF16,
 )

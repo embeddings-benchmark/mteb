@@ -39,7 +39,6 @@ class Kinetics700VAClassification(AbsTaskClassification):
         modalities=["video", "audio"],
         sample_creation="found",
         bibtex_citation=CITATION,
-        is_beta=True,
     )
 
     input_column_name = ("video", "audio")
@@ -75,7 +74,6 @@ class Kinetics700VClassification(AbsTaskClassification):
         modalities=["video"],
         sample_creation="found",
         bibtex_citation=CITATION,
-        is_beta=True,
     )
 
     input_column_name = "video"

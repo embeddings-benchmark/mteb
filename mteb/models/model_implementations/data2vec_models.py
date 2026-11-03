@@ -6,7 +6,11 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import (
+    AudioCollator,
+    seconds_to_samples,
+    single_clip_dataloader,
+)
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -22,7 +26,9 @@ class Data2VecAudioWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
-        max_audio_length_seconds: float = 30.0,
+        # uncapped: conv positional embedding, no max_position_embeddings
+        # https://huggingface.co/facebook/data2vec-audio-base-960h/blob/main/config.json
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
         import torch
@@ -52,12 +58,23 @@ class Data2VecAudioWrapper(AbsEncoder):
     ) -> Array:
         import torch
 
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+        max_samples = seconds_to_samples(
+            self.max_audio_length_seconds, self.sampling_rate
+        )
+        # the conv feature encoder needs at least 400 samples (25 ms at 16 kHz)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate,
+            max_samples=max_samples,
+            min_samples=400,
+        )
 
         all_embeddings = []
 
         for batch in tqdm(
-            inputs,
+            single_clip_dataloader(
+                inputs,
+                "padding leaks into data2vec's convolutional positional embedding, so batched clips change each other's embeddings",
+            ),
             disable=not show_progress_bar,
         ):
             audio_arrays = [audio["array"] for audio in batch["audio"]]
@@ -66,8 +83,6 @@ class Data2VecAudioWrapper(AbsEncoder):
                 sampling_rate=self.sampling_rate,
                 return_tensors="pt",
                 padding="longest",
-                truncation=True,
-                max_length=int(self.max_audio_length_seconds * self.sampling_rate),
                 return_attention_mask=True,
             ).to(self.device)
 
@@ -146,14 +161,15 @@ data2vec_audio_base = ModelMeta(
     ),
     modalities=["audio"],
     citation="""
-@misc{baevski2022data2vecgeneralframeworkselfsupervised,
-    title={data2vec: A General Framework for Self-supervised Learning in Speech, Vision and Language},
-    author={Alexei Baevski and Wei-Ning Hsu and Qiantong Xu and Arun Babu and Jiatao Gu and Michael Auli},
-    year={2022},
-    eprint={2202.03555},
-    archivePrefix={arXiv},
-    primaryClass={cs.LG},
-    url={https://arxiv.org/abs/2202.03555},
+@inproceedings{baevski2022data2vecgeneralframeworkselfsupervised,
+  archiveprefix = {arXiv},
+  author = {Alexei Baevski and Wei-Ning Hsu and Qiantong Xu and Arun Babu and Jiatao Gu and Michael Auli},
+  booktitle = {ICML},
+  eprint = {2202.03555},
+  pages = {1298-1312},
+  title = {data2vec: A General Framework for Self-supervised Learning in Speech, Vision and Language},
+  url = {https://proceedings.mlr.press/v162/baevski22a.html},
+  year = {2022},
 }""",
 )
 
@@ -181,13 +197,14 @@ data2vec_audio_large = ModelMeta(
     ),
     modalities=["audio"],
     citation="""
-@misc{baevski2022data2vecgeneralframeworkselfsupervised,
-    title={data2vec: A General Framework for Self-supervised Learning in Speech, Vision and Language},
-    author={Alexei Baevski and Wei-Ning Hsu and Qiantong Xu and Arun Babu and Jiatao Gu and Michael Auli},
-    year={2022},
-    eprint={2202.03555},
-    archivePrefix={arXiv},
-    primaryClass={cs.LG},
-    url={https://arxiv.org/abs/2202.03555},
+@inproceedings{baevski2022data2vecgeneralframeworkselfsupervised,
+  archiveprefix = {arXiv},
+  author = {Alexei Baevski and Wei-Ning Hsu and Qiantong Xu and Arun Babu and Jiatao Gu and Michael Auli},
+  booktitle = {ICML},
+  eprint = {2202.03555},
+  pages = {1298-1312},
+  title = {data2vec: A General Framework for Self-supervised Learning in Speech, Vision and Language},
+  url = {https://proceedings.mlr.press/v162/baevski22a.html},
+  year = {2022},
 }""",
 )

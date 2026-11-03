@@ -26,6 +26,7 @@ from mteb._reversible_workflow.git_actions import (
 )
 from mteb._reversible_workflow.git_utils import (
     check_detached_head,
+    check_pr_requirements,
     check_uncommitted_changes,
     get_current_branch,
     handle_pr_creation_with_cleanup,
@@ -101,6 +102,14 @@ class CopyResultsAction:
 
     def do(self) -> None:
         """Copy listed json result files and optional model_meta.json to remote paths."""
+        try:
+            self._copy()
+        except Exception:
+            # the workflow only undoes completed steps, so revert the files copied before the failure here
+            self.undo()
+            raise
+
+    def _copy(self) -> None:
         for model_meta, result_files in self.unsubmitted.items():
             if model_meta.name is None or model_meta.revision is None:
                 logger.warning(
@@ -108,13 +117,7 @@ class CopyResultsAction:
                 )
                 continue
 
-            model_name_path = model_meta.model_name_as_path()
-            revision = model_meta.revision
-            dest_dir = self.remote_path / model_name_path / revision
-            if model_meta.experiment_name:
-                dest_dir = (
-                    dest_dir / _EXPERIMENTS_FOLDER_NAME / model_meta.experiment_name
-                )
+            dest_dir = _remote_model_dir(self.remote_path, model_meta)
             dest_dir.mkdir(parents=True, exist_ok=True)
 
             for result_file in result_files:
@@ -1191,30 +1194,42 @@ class ResultCache:
     def _get_unsubmitted_results(
         self,
         models: list[ModelMeta],
+        tasks: Sequence[str] | Iterable[AbsTask] | None = None,
     ) -> dict[ModelMeta, list[Path]]:
-        """Find unsubmitted results.
+        """Find local results with scores that the results repository does not have yet.
 
         Args:
             models: List of ModelMeta objects.
+            tasks: Tasks to restrict the results to. If None, results for all tasks are returned.
 
         Returns:
-            Dict mapping ModelMeta to list of unsubmitted result file paths.
+            Dict mapping ModelMeta to list of unsubmitted result file paths. Models without unsubmitted results are left out.
         """
-        return {
-            model: self.get_cache_paths(
-                models=[model],
-                require_model_meta=False,
-                include_remote=False,
-                load_experiments=LoadExperimentEnum.MATCH_KWARGS,
-            )
-            for model in models
-        }
+        unsubmitted = {}
+        for model in models:
+            remote_dir = _remote_model_dir(self.remote_results_path, model)
+            result_files = [
+                path
+                for path in self.get_cache_paths(
+                    models=[model],
+                    tasks=tasks,
+                    require_model_meta=False,
+                    include_remote=False,
+                    load_experiments=LoadExperimentEnum.MATCH_KWARGS,
+                )
+                if _has_unsubmitted_scores(path, remote_dir / path.name)
+            ]
+            if result_files:
+                unsubmitted[model] = result_files
+        return unsubmitted
 
     def submit_results(
         self,
         models: Sequence[str] | Sequence[ModelMeta] | str | ModelMeta | None = None,
         *,
+        tasks: Sequence[str] | Iterable[AbsTask] | None = None,
         create_pr: bool = False,
+        message: str | None = None,
     ) -> SubmitResultsResponse:
         """Create a commit of the results to the official MTEB results repository (https://github.com/embeddings-benchmark/results).
 
@@ -1222,15 +1237,20 @@ class ResultCache:
         submitting the diff from the local result to the repository. Requires PyGithub
         to be installed if `create_pr=True`.
 
+        Only results with scores that the repository does not have yet are submitted. Results computed on a different
+        dataset revision than the results in the repository are skipped with a warning, as they cannot be merged.
+
         Args:
             models: Model(s) whose results should be submitted. Can either a list of string or ModelMeta objects.
                 If None it will get all models from local cache.
+            tasks: Tasks whose results should be submitted. If None, results for all tasks of the models are submitted.
             create_pr: If True, create a PR directly to the remote. If False, prints
                   instructions for manual submission.
+            message: Title of the commit and PR. If None, a title listing the submitted models is used.
 
         Returns:
             Dictionary containing submission metadata:
-                - status: "ready_for_submission" or "pr_created"
+                - status: "ready_for_submission", "pr_created" or "no_changes"
                 - models_submitted: list of (model_name, revision) tuples
                 - result_count: number of result files submitted
                 - pr_url: URL to created PR (only if create_pr=True)
@@ -1239,7 +1259,7 @@ class ResultCache:
 
         Raises:
             ValueError: If no models found or invalid input.
-            RuntimeError: If git operations fail.
+            RuntimeError: If git operations fail, or if create_pr=True and no GitHub token is found.
             ImportError: If create_pr=True and PyGithub is not installed.
             GithubException: If GitHub API operations fail.
 
@@ -1258,13 +1278,17 @@ class ResultCache:
             >>> submission = cache.submit_results(model_meta, create_pr=True)
             >>> print(f"PR created: {submission['pr_url']}")
         """
+        if create_pr:
+            # fail before downloading the results repository and committing, if a PR cannot be created
+            check_pr_requirements()
+
         # Always create a new branch to keep the original branch clean
         branch_name = f"mteb-results-{int(datetime.now(UTC).timestamp())}"
         normalized_models = self._normalize_models(models)
 
         try:
             self.download_from_remote()
-            unsubmitted = self._get_unsubmitted_results(normalized_models)
+            unsubmitted = self._get_unsubmitted_results(normalized_models, tasks)
 
             if not unsubmitted:
                 logger.warning("No unsubmitted results found.")
@@ -1294,8 +1318,10 @@ class ResultCache:
             CopyResultsAction(unsubmitted, self.remote_results_path),
         ]
 
+        # only the models with unsubmitted results are submitted
+        normalized_models = list(unsubmitted)
         commit_message, result_count = _build_commit_message(
-            normalized_models, unsubmitted
+            normalized_models, unsubmitted, message
         )
 
         actions.append(CommitAction(remote_path, commit_message))
@@ -1325,6 +1351,8 @@ class ResultCache:
             branch_name=branch_name,
             models=normalized_models,
             result_count=result_count,
+            pr_title=message
+            or f"MTEB Evaluation Results: {_format_model_names(normalized_models)}",
             pr_body=pr_body,
         )
 
@@ -1579,22 +1607,76 @@ def _build_manual_submission_message(
 def _build_commit_message(
     normalized_models: list[ModelMeta],
     unsubmitted: dict[ModelMeta, list[Path]],
+    message: str | None = None,
 ) -> tuple[str, int]:
     """Build the commit message for submitted results.
 
     Args:
         normalized_models: Models being submitted.
         unsubmitted: Result files grouped by model.
+        message: Title of the commit. If None, a title listing the models is used.
 
     Returns:
         Tuple containing the formatted commit message and result count.
     """
     model_str = ", ".join(model.name for model in normalized_models if model.name)
     result_count = sum(len(files) for files in unsubmitted.values())
+    title = (
+        message
+        or f"Add MTEB evaluation results for {_format_model_names(normalized_models)}"
+    )
     commit_message = (
-        f"Add MTEB evaluation results for {model_str}\n\n"
+        f"{title}\n\n"
         f"Models: {model_str}\n"
         f"Total results: {result_count}\n"
         f"Submitted by MTEB ResultCache"
     )
     return commit_message, result_count
+
+
+def _format_model_names(models: list[ModelMeta], max_names: int = 2) -> str:
+    """Join the model names, e.g. "model1, model2 (+1 more)", so that titles stay short."""
+    names = [model.name for model in models if model.name]
+    if len(names) <= max_names:
+        return ", ".join(names)
+    return f"{', '.join(names[:max_names])} (+{len(names) - max_names} more)"
+
+
+def _remote_model_dir(remote_results_path: Path, model_meta: ModelMeta) -> Path:
+    """The folder containing the results of a model in the results repository."""
+    model_dir = (
+        remote_results_path
+        / model_meta.model_name_as_path()
+        / cast("str", model_meta.revision)
+    )
+    if model_meta.experiment_name:
+        model_dir = model_dir / _EXPERIMENTS_FOLDER_NAME / model_meta.experiment_name
+    return model_dir
+
+
+def _has_unsubmitted_scores(result_file: Path, remote_file: Path) -> bool:
+    """Whether the result file has scores (split and subset) that the results repository does not have yet.
+
+    Results computed on a different dataset revision than the results in the repository cannot be merged, so they are
+    skipped with a warning.
+    """
+    if not remote_file.exists():
+        return True
+    local_result = TaskResult.from_disk(result_file)
+    remote_result = TaskResult.from_disk(remote_file)
+    if not remote_result.is_mergeable(local_result):
+        logger.warning(
+            f"Skipping {result_file}: it was computed on dataset revision {local_result.dataset_revision}, but the "
+            f"results repository has results for revision {remote_result.dataset_revision}. Rerun the task to submit it."
+        )
+        return False
+    remote_scores = {
+        (split, score["hf_subset"])
+        for split, scores in remote_result.scores.items()
+        for score in scores
+    }
+    return any(
+        (split, score["hf_subset"]) not in remote_scores
+        for split, scores in local_result.scores.items()
+        for score in scores
+    )

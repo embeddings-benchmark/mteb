@@ -15,7 +15,9 @@ from mteb.models import ModelMeta
 from mteb.similarity_functions import (
     _MAX_SIM_CHUNK_ELEMENTS,
     _token_budget_chunks,
+    _upcast_low_precision,
 )
+from mteb.timing import TimingStack
 from mteb.types import PromptType
 
 from .abs_encoder import AbsEncoder, get_prompt_name
@@ -23,7 +25,7 @@ from .model_meta import ScoringFunction
 from .search_wrappers import chunked_full_corpus_search, rerank_top_ranked_documents
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Sequence
+    from collections.abc import Callable, Iterator, Sequence
 
     import torch
     from sentence_transformers import (
@@ -90,6 +92,7 @@ def _setup_modality_collator(
     num_frames: int | None,
     target_sampling_rate: int | None,
     max_samples: int | None,
+    min_frames: int = 1,
 ) -> bool:
     """Attach a VideoCollator/AudioCollator to ``inputs`` if needed.
 
@@ -108,6 +111,7 @@ def _setup_modality_collator(
             max_frames=max_frames,
             num_frames=num_frames,
             max_samples=max_samples,
+            min_frames=min_frames,
         )
     elif has_audio:
         from mteb.models.modality_collators import AudioCollator
@@ -450,7 +454,14 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
     def similarity(self, embeddings1: Array, embeddings2: Array) -> Array:
         """Compute the similarity between two collections of embeddings."""
         if hasattr(self.model, "similarity") and callable(self.model.similarity):
-            return cast("Array", self.model.similarity(embeddings1, embeddings2))
+            # sentence-transformers < 6 scores in the embedding dtype
+            return cast(
+                "Array",
+                self.model.similarity(
+                    _upcast_low_precision(embeddings1),
+                    _upcast_low_precision(embeddings2),
+                ),
+            )
         return super().similarity(embeddings1, embeddings2)
 
     def encode(
@@ -533,8 +544,130 @@ class SentenceTransformerMultimodalEncoderWrapper(SentenceTransformerEncoderWrap
         super().__init__(*args, **kwargs)
 
 
+def _is_low_precision(weight: torch.Tensor) -> bool:
+    import torch
+
+    return torch.is_floating_point(weight) and torch.finfo(weight.dtype).bits < 32
+
+
+def _run_scoring_head_in_fp32(model: CrossEncoder) -> None:
+    """Compute the scores of a low-precision cross-encoder in float32.
+
+    sentence-transformers runs the scoring head in the backbone dtype, so bf16/fp16 logits
+    are already rounded before any later upcast and nearby scores tie.
+    """
+    import torch
+    import torch.nn.functional as F
+
+    # sentence-transformers < 4 keeps the transformers model on `.model` and has no `num_labels`
+    root = (
+        model if isinstance(model, torch.nn.Module) else getattr(model, "model", None)
+    )
+    if not isinstance(root, torch.nn.Module):
+        return
+
+    class FP32ScoringHead(torch.nn.Linear):
+        """Keep the scoring projection in FP32, including under caller autocast."""
+
+        def __init__(self, linear: torch.nn.Linear) -> None:
+            super().__init__(
+                linear.in_features,
+                linear.out_features,
+                bias=linear.bias is not None,
+                device=linear.weight.device,
+                dtype=torch.float32,
+            )
+            self.load_state_dict(linear.state_dict())
+            self.train(linear.training)
+
+        def forward(self, inputs: torch.Tensor) -> torch.Tensor:
+            # a later model.half() / .to(bf16) also casts this head, so upcast here too
+            with torch.autocast(device_type=inputs.device.type, enabled=False):
+                return F.linear(
+                    inputs.float(),
+                    self.weight.float(),
+                    None if self.bias is None else self.bias.float(),
+                )
+
+    def upcast(name: str) -> None:
+        head = root.get_submodule(name)
+        if not isinstance(head, torch.nn.Linear) or not _is_low_precision(head.weight):
+            return
+        logger.info(
+            f"Running the scoring head {name!r} in float32 to avoid tied scores."
+        )
+        parent_name, _, attribute = name.rpartition(".")
+        setattr(root.get_submodule(parent_name), attribute, FP32ScoringHead(head))
+
+    modules = dict(root.named_modules())
+    # Dense writing the scores, as CrossEncoder.num_labels resolves it; its residual
+    # projection (registered after `linear`) also feeds the scores
+    dense = [
+        name
+        for name, module in modules.items()
+        if type(module).__name__ == "Dense"
+        and getattr(module, "module_output_name", None) == "scores"
+    ]
+    if dense:
+        for attribute in ("linear", "residual"):
+            if hasattr(modules[dense[-1]], attribute):
+                upcast(f"{dense[-1]}.{attribute}".lstrip("."))
+        return
+
+    # LogitScore reads two vocabulary logits, so only those columns are recomputed in fp32
+    # rather than the whole (vocabulary-sized) lm_head
+    logit_scores = [m for m in modules.values() if type(m).__name__ == "LogitScore"]
+    if logit_scores:
+        lm_head = getattr(model, "model", None)
+        lm_head = lm_head.get_output_embeddings() if lm_head is not None else None
+        if not isinstance(lm_head, torch.nn.Linear) or not _is_low_precision(
+            lm_head.weight
+        ):
+            return
+        token_ids = sorted(
+            {
+                token_id
+                for module in logit_scores
+                for token_id in (module.true_token_id, module.false_token_id)
+                if token_id is not None
+            }
+        )
+
+        def upcast_token_logits(
+            module: torch.nn.Linear,
+            args: tuple[torch.Tensor, ...],
+            output: torch.Tensor,
+        ) -> torch.Tensor:
+            with torch.autocast(device_type=output.device.type, enabled=False):
+                bias = None if module.bias is None else module.bias[token_ids].float()
+                rows = F.linear(args[0].float(), module.weight[token_ids].float(), bias)
+            output = output.float()
+            output[..., token_ids] = rows
+            return output
+
+        logger.info(
+            f"Computing the LogitScore logits {token_ids} in float32 to avoid tied scores."
+        )
+        lm_head.register_forward_hook(upcast_token_logits)
+        return
+
+    num_labels = getattr(model, "num_labels", None) or getattr(
+        getattr(root, "config", None), "num_labels", 1
+    )
+    heads = [
+        name
+        for name, module in modules.items()
+        if isinstance(module, torch.nn.Linear) and module.out_features == num_labels
+    ]
+    if heads:  # classification head of the transformers model, e.g. `classifier`
+        upcast(heads[-1])
+
+
 class CrossEncoderWrapper:
     """Wrapper for CrossEncoder models.
+
+    The scoring head of low-precision models runs in float32, so bf16/fp16 logits do not
+    collapse nearby scores into ties.
 
     Args:
         model: The CrossEncoder model to use. Can be a string (model name) or a CrossEncoder model.
@@ -556,6 +689,7 @@ class CrossEncoderWrapper:
         fps: float | None = None,
         max_frames: int | None = None,
         num_frames: int | None = None,
+        min_frames: int = 1,
         target_sampling_rate: int | None = None,
         max_samples: int | None = None,
         **kwargs: Any,
@@ -574,23 +708,26 @@ class CrossEncoderWrapper:
                     loader=CrossEncoderWrapper,
                 )
             )
+        _run_scoring_head_in_fp32(self.model)
         self.query_prefix = query_prefix
         self.passage_prefix = passage_prefix
         self.fps = fps
         self.max_frames = max_frames
         self.num_frames = num_frames
+        self.min_frames = min_frames
         self.target_sampling_rate = target_sampling_rate
         self.max_samples = max_samples
 
-    def _collect_inputs(
+    def _iter_inputs(
         self,
         loader: DataLoader[BatchedInput],
         prefix: str,
-    ) -> list[Any]:
-        """Return a list of items to feed to the cross-encoder.
+    ) -> Iterator[list[Any]]:
+        """Yield the items to feed to the cross-encoder, one dataloader batch at a time.
 
-        For text-only inputs this is a list of prefix-prepended strings; for
-        multimodal inputs it is a list of per-sample modality dicts.
+        For text-only inputs these are prefix-prepended strings; for multimodal
+        inputs they are per-sample modality dicts. Yielding per batch keeps only
+        one batch of (possibly decoded image or video) inputs in memory.
         """
         is_multimodal = _setup_modality_collator(
             loader,
@@ -599,12 +736,13 @@ class CrossEncoderWrapper:
             num_frames=self.num_frames,
             target_sampling_rate=self.target_sampling_rate,
             max_samples=self.max_samples,
+            min_frames=self.min_frames,
         )
-        if not is_multimodal:
-            return [prefix + text for batch in loader for text in batch["text"]]
-
-        items: list[dict[str, Any]] = []
-        for batch in tqdm(loader, desc="Collecting multimodal inputs"):
+        for batch in loader:
+            if not is_multimodal:
+                yield [prefix + text for text in batch["text"]]
+                continue
+            items: list[dict[str, Any]] = []
             for sample in _batch_to_modality_dicts(
                 batch,
                 self.mteb_model_meta.modalities,
@@ -612,7 +750,7 @@ class CrossEncoderWrapper:
                 if prefix and "text" in sample:
                     sample["text"] = prefix + sample["text"]
                 items.append(sample)
-        return items
+            yield items
 
     def predict(
         self,
@@ -627,6 +765,9 @@ class CrossEncoderWrapper:
     ) -> Array:
         """Predicts relevance scores for pairs of inputs. Note that, unlike the encoder, the cross-encoder can compare across inputs.
 
+        The pairs are scored one dataloader batch at a time, so only a single batch of
+        inputs is held in memory (both dataloaders are expected to use the same batch size).
+
         Args:
             inputs1: First Dataloader of inputs to encode. For reranking tasks, these are queries (for text only tasks `QueryDatasetType`).
             inputs2: Second Dataloader of inputs to encode. For reranking, these are documents (for text only tasks `RetrievalOutputType`).
@@ -640,16 +781,28 @@ class CrossEncoderWrapper:
         Returns:
             The predicted relevance scores for each inputs pair.
         """
-        queries = self._collect_inputs(inputs1, self.query_prefix)
-        corpus = self._collect_inputs(inputs2, self.passage_prefix)
-
-        return cast(
-            "Array",
-            self.model.predict(
-                list(zip(queries, corpus, strict=True)),
-                **kwargs,
-            ),
+        show_progress_bar = kwargs.pop("show_progress_bar", True)
+        batches = zip(
+            self._iter_inputs(inputs1, self.query_prefix),
+            self._iter_inputs(inputs2, self.passage_prefix),
+            strict=True,
         )
+        scores = [
+            np.asarray(
+                self.model.predict(
+                    list(zip(queries, documents, strict=True)),
+                    show_progress_bar=False,
+                    **kwargs,
+                )
+            )
+            for queries, documents in tqdm(
+                batches,
+                total=len(inputs1),
+                desc="Scoring pairs",
+                disable=not show_progress_bar,
+            )
+        ]
+        return np.concatenate(scores) if scores else np.array([])
 
 
 class SparseEncoderWrapper(AbsEncoder):
@@ -811,6 +964,7 @@ class MultiVectorSearchEncoderWrapper:
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
         num_proc: int | None,
+        **kwargs: Any,
     ) -> None:
         """Store the corpus; documents are encoded lazily, in chunks, during `search`.
 
@@ -821,6 +975,7 @@ class MultiVectorSearchEncoderWrapper:
             hf_subset: Subset of current task. Similar to `hf_split` to get more information
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
             num_proc: Number of processes to use for indexing.
+            **kwargs: Additional arguments. Currently unused.
         """
         self.task_corpus = corpus
 
@@ -835,6 +990,8 @@ class MultiVectorSearchEncoderWrapper:
         encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
         num_proc: int | None,
+        timer: TimingStack | None = None,
+        **kwargs: Any,
     ) -> RetrievalOutputType:
         """Search the indexed corpus for the given queries, or rerank `top_ranked` candidates.
 
@@ -848,12 +1005,17 @@ class MultiVectorSearchEncoderWrapper:
             top_k: Number of top documents to return for each query.
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
             num_proc: Number of processes to use for dataloading.
+            timer: Records the search phases: "Encoding queries", then "Searching corpus" for a
+                full corpus search, or "Encoding corpus" and "Computing similarity" when reranking.
+                A new stack is used when not given.
+            **kwargs: Additional arguments. Currently unused.
 
         Returns:
             Dictionary with query IDs as keys with dict as values, where each value is a mapping of document IDs to their relevance scores.
         """
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
+        timer = timer or TimingStack()
 
         queries_dataloader = create_dataloader(
             queries,
@@ -862,14 +1024,15 @@ class MultiVectorSearchEncoderWrapper:
             batch_size=encode_kwargs.get("batch_size", 32),
             num_proc=num_proc,
         )
-        query_embeddings = self._encode(  # type: ignore[attr-defined]
-            queries_dataloader,
-            task_metadata=task_metadata,
-            hf_split=hf_split,
-            hf_subset=hf_subset,
-            prompt_type=PromptType.query,
-            **encode_kwargs,
-        )
+        with timer("Encoding queries", split=hf_split, subset=hf_subset):
+            query_embeddings = self._encode(  # type: ignore[attr-defined]
+                queries_dataloader,
+                task_metadata=task_metadata,
+                hf_split=hf_split,
+                hf_subset=hf_subset,
+                prompt_type=PromptType.query,
+                **encode_kwargs,
+            )
         query_idx_to_id = {i: row["id"] for i, row in enumerate(queries)}
 
         if top_ranked is not None:
@@ -884,6 +1047,7 @@ class MultiVectorSearchEncoderWrapper:
                 hf_split=hf_split,
                 encode_kwargs=encode_kwargs,
                 num_proc=num_proc,
+                timer=timer,
             )
         else:
             logger.info("Performing full corpus search with MaxSim...")
@@ -896,6 +1060,7 @@ class MultiVectorSearchEncoderWrapper:
                 hf_split=hf_split,
                 encode_kwargs=encode_kwargs,
                 num_proc=num_proc,
+                timer=timer,
             )
 
         # Free the corpus reference now that search is done
@@ -918,6 +1083,7 @@ class MultiVectorSearchEncoderWrapper:
         top_k: int,
         encode_kwargs: EncodeKwargs,
         num_proc: int | None,
+        timer: TimingStack,
     ) -> dict[str, list[tuple[float, str]]]:
         if self.task_corpus is None:
             raise ValueError("Corpus must be indexed before searching.")
@@ -935,9 +1101,10 @@ class MultiVectorSearchEncoderWrapper:
             encode_fn=self._encode,  # type: ignore[attr-defined]
             similarity_fn=self.similarity,  # type: ignore[attr-defined]
             num_proc=num_proc,
+            timer=timer,
         )
 
-    def _rerank_documents(
+    def _rerank_documents(  # noqa: PLR0913
         self,
         *,
         query_idx_to_id: dict[int, str],
@@ -948,6 +1115,7 @@ class MultiVectorSearchEncoderWrapper:
         hf_subset: str,
         hf_split: str,
         encode_kwargs: EncodeKwargs,
+        timer: TimingStack,
         num_proc: int | None = None,
     ) -> dict[str, list[tuple[float, str]]]:
         """Rerank each query's pre-ranked candidates with MaxSim.
@@ -971,6 +1139,7 @@ class MultiVectorSearchEncoderWrapper:
             encode_fn=self._encode,  # type: ignore[attr-defined]
             similarity_fn=self.similarity,  # type: ignore[attr-defined]
             num_proc=num_proc,
+            timer=timer,
         )
 
 

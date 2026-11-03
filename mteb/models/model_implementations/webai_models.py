@@ -321,7 +321,7 @@ colvec1_4b = ModelMeta(
     adapted_from="Qwen/Qwen3.5-4B",
     superseded_by=None,
     contacts=["psam-ai"],
-    output_dtypes=OutputDType.FLOAT16,
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -352,7 +352,7 @@ colvec1_9b = ModelMeta(
     adapted_from="Qwen/Qwen3.5-9B",
     superseded_by=None,
     contacts=["psam-ai"],
-    output_dtypes=OutputDType.FLOAT16,
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -397,7 +397,7 @@ colvec1_1_4b = ModelMeta(
     adapted_from="Qwen/Qwen3.5-4B",
     superseded_by=None,
     contacts=["zhanlunchang-webai"],
-    output_dtypes=None,
+    output_dtypes=OutputDType.BF16,
     extra_requirements_groups=["colvec1_1"],
 )
 
@@ -443,6 +443,6 @@ colvec1_1_8b = ModelMeta(
     adapted_from="Qwen/Qwen3.5-9B",
     superseded_by=None,
     contacts=["zhanlunchang-webai"],
-    output_dtypes=None,
+    output_dtypes=OutputDType.BF16,
     extra_requirements_groups=["colvec1_1"],
 )

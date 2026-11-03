@@ -33,6 +33,7 @@ Each filter takes a task and returns a cleaned copy, leaving the task you passed
 - [`remove_duplicates`][mteb.data_cleaning.remove_duplicates] removes [repeated samples](#removing-duplicates).
 - [`remove_by_text_length`][mteb.data_cleaning.remove_by_text_length] removes [texts that are empty, too short or too long](#removing-samples-by-size).
 - [`remove_by_image_size`][mteb.data_cleaning.remove_by_image_size], [`remove_by_audio_duration`][mteb.data_cleaning.remove_by_audio_duration] and [`remove_by_video_duration`][mteb.data_cleaning.remove_by_video_duration] do the same for [images, audio and video](#images-audio-and-video).
+- [`remove_train_leakage`][mteb.data_cleaning.remove_train_leakage] removes [evaluation samples that are also in train](#removing-train-leakage).
 
 Filters can be chained, e.g. `remove_by_text_length(remove_duplicates(task), min_length=1)`.
 
@@ -78,6 +79,13 @@ cleaned = remove_duplicates(
     task, normalization=lambda text: unicodedata.normalize("NFC", text.strip())
 )
 # finds 98 duplicates in the Vietnamese train split that the default comparison misses
+```
+
+Duplicates are removed within each split, so a sample in both the train and the test split is kept in both. Name the splits a sample may not repeat in `reference_splits` to remove it across splits as well, leaving those splits as they are:
+
+```python
+# drop the test and validation samples that the train split already holds
+cleaned = remove_duplicates(task, reference_splits=["train"])
 ```
 
 Only text is normalized; images, audio and video are compared by an exact hash of their content, so the filter works on any task but does not match a re-encoded or rescaled copy of a sample. Retrieval tasks keep their relevance judgements valid: a judgement pointing at a removed duplicate moves to the copy that was kept. Their documents and queries are compared as the model reads them, so a document's title is part of its text, and two queries that differ only in their instruction are not duplicates.
@@ -144,6 +152,21 @@ An image counts as small by its shorter side, so `min_size=32` asks for 32 pixel
 ### How samples are measured
 
 A sample is removed when any of its values is too small, e.g. either sentence of a pair. Each filter only measures its own modality, so `remove_by_text_length` keeps the images of a task whatever their size. In a retrieval task a document is measured on its title and text together, and a query together with its instruction, as that is what the model reads. A document or query that combines modalities, such as a page image with its extracted text, is left alone, as one may carry what the other lacks. The relevance judgements of a removed document are dropped with it, and a query left without any relevant document is dropped as well, as it can no longer be scored.
+
+## Removing train leakage
+
+An evaluation sample that also sits in the train split may be one the model was trained on. [`remove_train_leakage`][mteb.data_cleaning.remove_train_leakage] drops those, leaving the train split as it is:
+
+```python
+from mteb.data_cleaning import remove_train_leakage
+
+cleaned = remove_train_leakage(task)
+
+print({split: len(data) for split, data in cleaned.dataset["en"].items()})
+# {'train': 11514, 'test': 2953, 'validation': 2022}, from 11514 / 2974 / 2033
+```
+
+A sample leaks when all of its content columns match a train sample's, whatever their labels, as the same text under another label leaks just as much. The `samples_in_train` of a task's [descriptive statistics](#spotting-the-issue) counts how much leaks, so you can see it before downloading the data.
 
 ## Cleaning produces a new task
 

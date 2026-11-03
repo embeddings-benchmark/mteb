@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from mteb.models.model_meta import (
     ModelMeta,
@@ -9,6 +9,13 @@ from mteb.models.model_meta import (
 from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
 )
+from mteb.types import OutputDType
+
+if TYPE_CHECKING:
+    from torch.utils.data import DataLoader
+
+    from mteb import TaskMetadata
+    from mteb.types import Array, BatchedInput, PromptType
 
 
 class E5OmniWrapper(SentenceTransformerEncoderWrapper):
@@ -19,9 +26,15 @@ class E5OmniWrapper(SentenceTransformerEncoderWrapper):
         model: str,
         revision: str | None = None,
         device: str | None = None,
+        # fps=2: qwen-omni-utils FPS=2.0
+        # https://github.com/QwenLM/Qwen2.5-Omni/blob/main/qwen-omni-utils/src/qwen_omni_utils/v2_5/vision_process.py
         fps: float | None = 2.0,
+        # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
+        # 300 s at 16 kHz: chunk_length=300
+        # https://huggingface.co/Haon-Chen/e5-omni-3B/blob/main/preprocessor_config.json
+        max_samples: int | None = 4_800_000,
         **kwargs: Any,
     ) -> None:
         super().__init__(
@@ -31,6 +44,7 @@ class E5OmniWrapper(SentenceTransformerEncoderWrapper):
             fps=fps,
             max_frames=max_frames,
             num_frames=num_frames,
+            max_samples=max_samples,
             **kwargs,
         )
         self.target_sampling_rate = self.model[
@@ -47,13 +61,48 @@ class E5OmniWrapper(SentenceTransformerEncoderWrapper):
             }
         )
 
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        # the 512-token limit is for text; audio and video become tokens in the
+        # same sequence, so truncating there would cut them (~20 s of audio)
+        text_only = not any(
+            m in inputs.dataset.features for m in ("image", "audio", "video")
+        )
+        self.model[0].processing_kwargs["text"] = (
+            {"truncation": True, "max_length": 512} if text_only else {}
+        )
+        return super().encode(
+            inputs,
+            task_metadata=task_metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            prompt_type=prompt_type,
+            **kwargs,
+        )
+
 
 _E5_OMNI_CITATION = r"""
-@article{chen2026e5omni,
-    title={e5-omni: Explicit Cross-modal Alignment for Omni-modal Embeddings},
-    author={Chen, Haonan and Gao, Sicheng and Radu, Timofte and Tetsuya, Sakai and Dou, Zhicheng},
-    journal={arXiv preprint arXiv:2601.03666},
-    year={2026}
+@inproceedings{chen2026e5omni,
+  address = {San Diego, California, United States},
+  author = {Chen, Haonan and Gao, Sicheng and Timofte, Radu and Sakai, Tetsuya and Dou, Zhicheng},
+  booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2026},
+  doi = {10.18653/v1/2026.findings-acl.970},
+  editor = {Liakata, Maria and Moreira, Viviane P. and Zhang, Jiajun and Jurgens, David},
+  isbn = {979-8-89176-395-1},
+  month = {jul},
+  pages = {19430--19443},
+  publisher = {Association for Computational Linguistics},
+  title = {e5-omni: Explicit Cross-modal Alignment for Omni-modal Embeddings},
+  url = {https://aclanthology.org/2026.findings-acl.970/},
+  year = {2026},
 }
 """
 
@@ -94,6 +143,7 @@ e5_omni_3b = ModelMeta(
     model_type=["dense"],
     citation=_E5_OMNI_CITATION,
     extra_requirements_groups=["multimodal-sbert"],
+    output_dtypes=OutputDType.BF16,
 )
 
 e5_omni_7b = ModelMeta(
@@ -133,4 +183,5 @@ e5_omni_7b = ModelMeta(
     model_type=["dense"],
     citation=_E5_OMNI_CITATION,
     extra_requirements_groups=["multimodal-sbert"],
+    output_dtypes=OutputDType.BF16,
 )

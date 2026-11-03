@@ -3,18 +3,24 @@ from mteb.models.model_meta import (
     ScoringFunction,
 )
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
 
 from .e5_models import ME5_TRAINING_DATA, model_prompts
 
 E5_NL_CITATION = """
-@misc{banar2025mtebnle5nlembeddingbenchmark,
-  archiveprefix = {arXiv},
-  author = {Nikolay Banar and Ehsan Lotfi and Jens Van Nooten and Cristina Arhiliuc and Marija Kliocaite and Walter Daelemans},
-  eprint = {2509.12340},
-  primaryclass = {cs.CL},
-  title = {MTEB-NL and E5-NL: Embedding Benchmark and Models for Dutch},
-  url = {https://arxiv.org/abs/2509.12340},
-  year = {2025},
+@inproceedings{banar2025mtebnle5nlembeddingbenchmark,
+  address = {San Diego, California, United States},
+  author = {Banar, Nikolay and Lotfi, Ehsan and Van Nooten, Jens and Arhiliuc, Cristina and Kliocaite, Marija and Daelemans, Walter},
+  booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2026},
+  doi = {10.18653/v1/2026.findings-acl.1236},
+  editor = {Liakata, Maria and Moreira, Viviane P. and Zhang, Jiajun and Jurgens, David},
+  isbn = {979-8-89176-395-1},
+  month = {jul},
+  pages = {24684--24709},
+  publisher = {Association for Computational Linguistics},
+  title = {{MTEB}-{NL} and {E}5-{NL}: Embedding Benchmark and Models for {D}utch},
+  url = {https://aclanthology.org/2026.findings-acl.1236/},
+  year = {2026},
 }
 """
 
@@ -44,6 +50,7 @@ e5_nl_small = ModelMeta(
     training_datasets=ME5_TRAINING_DATA,  # mMARCO-NL, HotpotQA-NL, FEVER-NL, and LLM generated data
     adapted_from="intfloat/multilingual-e5-small",
     citation=E5_NL_CITATION,
+    output_dtypes=OutputDType.BF16,
 )
 
 e5_nl_base = ModelMeta(
@@ -72,6 +79,7 @@ e5_nl_base = ModelMeta(
     adapted_from="intfloat/multilingual-e5-base",
     training_datasets=ME5_TRAINING_DATA,  # mMARCO-NL, HotpotQA-NL, FEVER-NL, and LLM generated data
     citation=E5_NL_CITATION,
+    output_dtypes=OutputDType.BF16,
 )
 
 e5_nl_large = ModelMeta(

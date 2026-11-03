@@ -4,6 +4,7 @@ import logging
 import subprocess
 from typing import TYPE_CHECKING
 
+from mteb._requires_package import _is_package_available
 from mteb.types import SubmitResultsResponse
 
 if TYPE_CHECKING:
@@ -196,6 +197,23 @@ def get_github_token() -> str:
     )
 
 
+def check_pr_requirements() -> str:
+    """Check that a PR can be created, i.e. that PyGithub is installed and a GitHub token is available.
+
+    Returns:
+        GitHub token string
+
+    Raises:
+        ImportError: If PyGithub is not installed.
+        RuntimeError: If no GitHub token is found.
+    """
+    if not _is_package_available("github"):
+        raise ImportError(
+            "PyGithub is not installed. Please install it using `pip install 'mteb[github]'`"
+        )
+    return get_github_token()
+
+
 def handle_pr_creation_with_cleanup(
     *,
     remote_repo_path: Path,
@@ -203,6 +221,7 @@ def handle_pr_creation_with_cleanup(
     branch_name: str | None,
     models: list[ModelMeta],
     result_count: int,
+    pr_title: str,
     pr_body: str,
 ) -> SubmitResultsResponse:
     """Create a pull request and clean up branch state on success or failure.
@@ -213,6 +232,7 @@ def handle_pr_creation_with_cleanup(
         result_count: Total number of results.
         branch_name: Name of the branch to create.
         original_branch: Original branch name for restoration.
+        pr_title: The title of the pull request.
         pr_body: The body text for the pull request.
 
     Returns:
@@ -227,6 +247,7 @@ def handle_pr_creation_with_cleanup(
             models=models,
             result_count=result_count,
             branch_name=branch_name,
+            pr_title=pr_title,
             pr_body=pr_body,
         )
         # After successful PR, restore to original branch
@@ -261,6 +282,7 @@ def create_pull_request(
     models: list[ModelMeta],
     result_count: int,
     branch_name: str | None,
+    pr_title: str,
     pr_body: str,
 ) -> SubmitResultsResponse:
     """Create a pull request on GitHub using PyGithub and gh CLI.
@@ -270,28 +292,25 @@ def create_pull_request(
         models: List of ModelMeta objects.
         result_count: Total number of results.
         branch_name: Name of the branch to create.
+        pr_title: The title of the pull request.
         pr_body: The body text for the pull request.
 
     Returns:
         Dictionary with PR information.
 
     Raises:
+        ImportError: If PyGithub is not installed.
         RuntimeError: If authentication fails.
         GithubException: If GitHub API call fails.
     """
-    try:
-        from github import (
-            Auth,
-            Github,
-            GithubException,
-        )
-    except ImportError:
-        raise ImportError(
-            "PyGithub is not installed. Please install it using `pip install 'mteb[github]'`"
-        ) from None
+    token = check_pr_requirements()
+    from github import (
+        Auth,
+        Github,
+        GithubException,
+    )
 
     logger.info("Creating PR using PyGithub")
-    token = get_github_token()
 
     try:
         auth = Auth.Token(token)
@@ -378,7 +397,7 @@ def create_pull_request(
 
         logger.info("Creating pull request...")
         pr = upstream.create_pull(
-            title=f"MTEB Evaluation Results: {model_str}",
+            title=pr_title,
             body=pr_body,
             head=f"{user.login}:{branch_name}",
             base="main",

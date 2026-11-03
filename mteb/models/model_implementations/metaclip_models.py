@@ -16,12 +16,13 @@ if TYPE_CHECKING:
     from mteb.types import Array, BatchedInput, PromptType
 
 
-METACLIP2_CITATION = """@misc{xu2025metaclip2,
+METACLIP2_CITATION = """@inproceedings{xu2025metaclip2,
   archiveprefix = {arXiv},
-  author = {Yung-Sung Chuang and Yang Li and Dong Wang and Ching-Feng Yeh and Kehan Lyu and Ramya Raghavendra and James Glass and Lifei Huang and Jason Weston and Luke Zettlemoyer and Xinlei Chen and Zhuang Liu and Saining Xie and Wen-tau Yih and Shang-Wen Li and Hu Xu},
+  author = {Yung-Sung Chuang and Yang Li and Dong Wang and Ching-Feng Yeh and Kehan Lyu and Ramya Raghavendra and James R. Glass and LIFEI HUANG and Jason E Weston and Luke Zettlemoyer and Xinlei Chen and Zhuang Liu and Saining Xie and Wen-tau Yih and Shang-Wen Li and Hu Xu},
+  booktitle = {The Thirty-ninth Annual Conference on Neural Information Processing Systems},
   eprint = {2507.22062},
-  title = {Meta CLIP 2: A Worldwide Scaling Recipe},
-  url = {https://arxiv.org/abs/2507.22062},
+  title = {Meta {CLIP} 2: A Worldwide Scaling Recipe},
+  url = {https://openreview.net/forum?id=aYRNINhNGV},
   year = {2025},
 }"""
 

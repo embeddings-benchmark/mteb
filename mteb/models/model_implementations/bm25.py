@@ -389,6 +389,7 @@ class BM25Search:
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> None:
         import bm25s
 
@@ -433,6 +434,7 @@ class BM25Search:
         encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
         num_proc: int | None = None,
+        **kwargs: Any,
     ) -> RetrievalOutputType:
         if self._tokenizer is None:
             raise ValueError("Tokenizer not initialized. Call `index` first.")

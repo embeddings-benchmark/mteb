@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 from .e5_instruct import E5_MISTRAL_TRAINING_DATA
 
@@ -66,6 +67,7 @@ gritlm7b = ModelMeta(
     public_training_code="https://github.com/ContextualAI/gritlm",
     public_training_data=None,
     citation=GRITLM_CITATION,
+    output_dtypes=OutputDType.BF16,
 )
 
 gritlm8x7b = ModelMeta(
@@ -98,4 +100,5 @@ gritlm8x7b = ModelMeta(
     # section 3.1 "We finetune our final models from Mistral 7B [68] and Mixtral 8x7B [69] using adaptations of E5 [160] and the Tülu 2 data
     public_training_code="https://github.com/ContextualAI/gritlm",
     public_training_data=None,
+    output_dtypes=OutputDType.BF16,
 )

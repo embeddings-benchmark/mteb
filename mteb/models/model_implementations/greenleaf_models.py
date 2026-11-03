@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
 
 greenleaf_law_embed_tiny = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
@@ -69,4 +70,5 @@ greenleaf_law_embed_tiny = ModelMeta(
     public_training_code=None,
     public_training_data="https://huggingface.co/datasets/judicialmind/legal-training-dataset",
     training_datasets=None,
+    output_dtypes=OutputDType.BF16,
 )

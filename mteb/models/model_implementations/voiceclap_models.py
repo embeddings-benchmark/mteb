@@ -7,9 +7,10 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import AudioCollator, seconds_to_samples
 from mteb.models.model_meta import ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -32,6 +33,10 @@ class VoiceCLAPSmallWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
+        # 30 s: chunk_length=30 (n_ctx=1500 positions); this wrapper serves
+        # voiceclap-small, large loads through SentenceTransformerEncoderWrapper
+        # https://huggingface.co/VoiceNet/voiceclap-small/blob/main/preprocessor_config.json
+        max_audio_length_seconds: float | None = 30.0,
         **kwargs: Any,
     ):
         import torch
@@ -51,8 +56,10 @@ class VoiceCLAPSmallWrapper(AbsEncoder):
             .eval()
         )
         self.tokenizer = AutoTokenizer.from_pretrained(model_name, revision=revision)
-        # VoiceCLAP-Small expects 16 kHz mono waveforms.
+        # 16 kHz: sampling_rate=16000
+        # https://huggingface.co/VoiceNet/voiceclap-small/blob/main/preprocessor_config.json
         self.sampling_rate = 16000
+        self.max_audio_length_seconds = max_audio_length_seconds
 
     def get_text_embeddings(
         self,
@@ -88,7 +95,14 @@ class VoiceCLAPSmallWrapper(AbsEncoder):
     ) -> np.ndarray:
         import torch
 
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+        # the audio encoder needs at least 480 samples (30 ms at 16 kHz)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate,
+            max_samples=seconds_to_samples(
+                self.max_audio_length_seconds, self.sampling_rate
+            ),
+            min_samples=480,
+        )
 
         all_features = []
         for batch in tqdm(inputs, disable=not show_progress_bar):
@@ -132,17 +146,19 @@ class VoiceCLAPSmallWrapper(AbsEncoder):
         raise ValueError
 
 
+# VoiceNet/voiceclap-large can't be loaded (no pooling config, PEFT-wrapped weights);
+# laion/voiceclap-large is the authors' fixed copy of the same weights.
 voiceclap_large = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
     loader_kwargs={"trust_remote_code": True},
-    name="VoiceNet/voiceclap-large",
+    name="laion/voiceclap-large",
     languages=["eng-Latn"],
-    revision="361141a44121a924b4ecc3c165c65c28c5b7df26",
+    revision="6254dbba9d172288a0d0de1bf453196dedb66483",
     release_date="2026-05-06",
     modalities=["text", "audio"],
-    n_parameters=8_999_313_920,
+    n_parameters=8_931_813_888,
     n_embedding_parameters=544_997_376,
-    memory_usage_mb=34330,
+    memory_usage_mb=17036,
     max_tokens=32768,
     embed_dim=3584,
     license="cc-by-4.0",
@@ -150,12 +166,13 @@ voiceclap_large = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     framework=["Sentence Transformers", "PyTorch"],
-    reference="https://huggingface.co/VoiceNet/voiceclap-large",
+    reference="https://huggingface.co/laion/voiceclap-large",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=None,
     adapted_from="LCO-Embedding/LCO-Embedding-Omni-7B",
     extra_requirements_groups=["multimodal-sbert"],
+    output_dtypes=OutputDType.BF16,
 )
 
 voiceclap_small = ModelMeta(

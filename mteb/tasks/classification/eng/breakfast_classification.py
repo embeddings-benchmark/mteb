@@ -29,7 +29,6 @@ class BreakfastClassification(AbsTaskClassification):
         dialect=[],
         modalities=["video"],
         sample_creation="found",
-        is_beta=True,
         bibtex_citation=r"""
 @inproceedings{kuehne2014language,
   author = {Kuehne, Hilde and Arslan, Ali and Serre, Thomas},

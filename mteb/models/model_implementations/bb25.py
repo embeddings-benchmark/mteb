@@ -118,6 +118,7 @@ def bb25_loader(model_name: str, **kwargs: Any) -> SearchProtocol:
             hf_subset: str,
             encode_kwargs: EncodeKwargs,
             num_proc: int | None = None,
+            **kwargs: Any,
         ) -> None:
             logger.info("Encoding Corpus...")
             corpus_texts = [
@@ -161,6 +162,7 @@ def bb25_loader(model_name: str, **kwargs: Any) -> SearchProtocol:
             encode_kwargs: EncodeKwargs,
             top_ranked: TopRankedDocumentsType | None = None,
             num_proc: int | None = None,
+            **kwargs: Any,
         ) -> RetrievalOutputType:
             logger.info("Encoding Queries...")
             query_ids = list(queries["id"])

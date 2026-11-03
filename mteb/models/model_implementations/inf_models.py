@@ -3,6 +3,7 @@ from mteb.models.model_meta import (
     ScoringFunction,
 )
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
 
 inf_retriever_v1_training_data = {
     # eng_Latn
@@ -70,6 +71,7 @@ inf_retriever_v1 = ModelMeta(
     public_training_data=None,
     training_datasets=inf_retriever_v1_training_data,
     citation=INF_RETRIEVER_CITATION,
+    output_dtypes=OutputDType.BF16,
 )
 
 inf_retriever_v1_1_5b = ModelMeta(
@@ -98,4 +100,5 @@ inf_retriever_v1_1_5b = ModelMeta(
     public_training_data=None,
     training_datasets=inf_retriever_v1_training_data,
     citation=INF_RETRIEVER_CITATION,
+    output_dtypes=OutputDType.BF16,
 )

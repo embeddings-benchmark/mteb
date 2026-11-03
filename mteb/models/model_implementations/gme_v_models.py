@@ -10,7 +10,7 @@ from tqdm.autonotebook import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     import torch
@@ -386,6 +386,7 @@ gme_qwen2vl_2b = ModelMeta(
     training_datasets=training_data,
     citation=GME_CITATION,
     extra_requirements_groups=["gme"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 gme_qwen2vl_7b = ModelMeta(
@@ -412,4 +413,5 @@ gme_qwen2vl_7b = ModelMeta(
     training_datasets=training_data,
     citation=GME_CITATION,
     extra_requirements_groups=["gme"],
+    output_dtypes=OutputDType.FLOAT16,
 )

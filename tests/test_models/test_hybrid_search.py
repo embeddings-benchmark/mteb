@@ -7,6 +7,7 @@ from datasets import Dataset
 import mteb
 from mteb import HybridSearch
 from mteb.mocks.mock_tasks import MockRetrievalTask
+from mteb.models.hybrid_wrappers import fuse_rrf
 
 
 def test_hybrid_search_init_and_meta():
@@ -90,6 +91,14 @@ def test_rrf_fusion_logic():
 
     assert pytest.approx(fused["doc1"]) == expected_doc1
     assert pytest.approx(fused["doc2"]) == expected_doc2
+
+
+def test_rrf_ties_are_independent_of_insertion_order():
+    scores = {"doc_a": 1.0, "doc_z": 1.0}
+    expected = {"doc_z": 1 / 61, "doc_a": 1 / 62}
+
+    assert fuse_rrf([scores], [1.0]) == pytest.approx(expected)
+    assert fuse_rrf([dict(reversed(scores.items()))], [1.0]) == pytest.approx(expected)
 
 
 def test_relative_score_fusion_logic():

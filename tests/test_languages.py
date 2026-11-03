@@ -9,6 +9,8 @@ from mteb.languages.iso_mappings import (
     _hf_langs_to_iso_lang_scripts,
 )
 
+pytestmark = pytest.mark.core
+
 
 @dataclass
 class LangScriptTestCase:

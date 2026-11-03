@@ -38,7 +38,9 @@ jobs:
         run: |
           uv venv
           # with uv sync conflict with flash-attn
-          uv pip install -e . --resolution lowest-direct --group test
+          # pyarrow is passed explicitly so it is also resolved to its lowest version;
+          # otherwise it is pulled in transitively at the latest version, which may require numpy>=2
+          uv pip install -e . --resolution lowest-direct --group test pyarrow
 
       - name: Run tests
         shell: bash

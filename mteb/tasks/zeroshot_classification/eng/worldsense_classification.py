@@ -36,7 +36,6 @@ class WorldSenseAudioVideoZeroShotClassification(AbsTaskZeroShotClassification):
         modalities=["video", "audio", "text"],
         sample_creation="found",
         bibtex_citation=CITATION,
-        is_beta=True,
     )
 
     input_column_name = ("video", "audio")
@@ -69,7 +68,6 @@ class WorldSenseVideoZeroShotClassification(AbsTaskZeroShotClassification):
         modalities=["video", "text"],
         sample_creation="found",
         bibtex_citation=CITATION,
-        is_beta=True,
     )
 
     input_column_name = "video"

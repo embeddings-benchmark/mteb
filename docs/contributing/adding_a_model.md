@@ -120,6 +120,35 @@ model = ModelMeta(
 )
 ```
 
+For instruction models that use `InstructSentenceTransformerModel` (or another wrapper built on `AbsEncoder.get_instruction`), instructions defined in `prompts_dict` are selected in the following order by default:
+
+1. Task name prompt from `prompts_dict` (`PromptSource.CUSTOM_PROMPT`)
+2. Task type prompt from `prompts_dict` (`PromptSource.TASK_TYPE_PROMPT`)
+3. Prompt type (`"query"` or `"document"`) prompt from `prompts_dict` (`PromptSource.ENCODE_TYPE_PROMPT`)
+4. Prompt defined in the task metadata (`PromptSource.DEFAULT_TASK_PROMPT`)
+
+This means that generic task type or prompt type prompts override the prompt defined in the task.
+If you want the prompt from the task metadata to take priority over the generic prompts of the model, change the order with `prompt_priority`:
+
+```python
+from mteb.models.abs_encoder import PromptSource
+
+model = ModelMeta(
+    loader=InstructSentenceTransformerModel,
+    loader_kwargs=dict(
+        instruction_template="Instruct: {instruction}\nQuery: ",
+        prompts_dict={"query": "Given a query, retrieve relevant passages"},
+        prompt_priority=[
+            PromptSource.CUSTOM_PROMPT,
+            PromptSource.DEFAULT_TASK_PROMPT,
+            PromptSource.TASK_TYPE_PROMPT,
+            PromptSource.ENCODE_TYPE_PROMPT,
+        ],
+    ),
+    ...
+)
+```
+
 ### Using a custom Implementation
 
 If you need to use a custom implementation, you can specify the `loader` parameter in the [`ModelMeta`][mteb.models.model_meta.ModelMeta] class. It should implement one of the following protocols: [Encoder][mteb.models.EncoderProtocol], [CrossEncoder][mteb.models.CrossEncoderProtocol], or [Search][mteb.models.SearchProtocol].

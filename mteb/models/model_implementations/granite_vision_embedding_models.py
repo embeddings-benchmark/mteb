@@ -164,7 +164,7 @@ granite_vision_embedding = ModelMeta(
         torch_dtype=OutputDType.FLOAT16,
     ),
     name="ibm-granite/granite-vision-3.3-2b-embedding",
-    model_type=["dense"],
+    model_type=["late-interaction"],
     languages=["eng-Latn"],
     revision="cee615db64d89d1552a4ee39c50f25c0fc5c66ca",
     release_date="2025-06-11",
@@ -189,4 +189,5 @@ granite_vision_embedding = ModelMeta(
   journal={arXiv preprint arXiv:2502.09927},
   year={2025}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )

@@ -1,12 +1,19 @@
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING, Any
 
 from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import (
+    AudioCollator,
+    check_duration_cap,
+    single_clip_dataloader,
+)
+
+logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -22,9 +29,12 @@ class SewDWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
-        max_audio_length_seconds: float = 30.0,
+        # None: an mteb cap at the relative-position horizon read below; the
+        # encoder runs past it, so this is not a hard model limit
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
+        check_duration_cap(max_audio_length_seconds)
         import torch
         from transformers import SEWDForCTC, Wav2Vec2FeatureExtractor
 
@@ -33,7 +43,6 @@ class SewDWrapper(AbsEncoder):
 
         self.model_name = model_name
         self.device = device
-        self.max_audio_length_seconds = max_audio_length_seconds
 
         # SewD uses the same feature extractor as Wav2Vec2
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(
@@ -45,6 +54,24 @@ class SewDWrapper(AbsEncoder):
         self.model.eval()
         self.sampling_rate = self.feature_extractor.sampling_rate
 
+        # samples: max_position_embeddings x conv_stride x squeeze_factor
+        # https://huggingface.co/asapp/sew-d-base-plus-400k-ft-ls100h/blob/main/config.json
+        config = self.model.config
+        stride = 1
+        for st in config.conv_stride:
+            stride *= st
+        self.max_samples = (
+            config.max_position_embeddings * stride * config.squeeze_factor
+        )
+        if max_audio_length_seconds is not None:
+            self.max_samples = int(max_audio_length_seconds * self.sampling_rate)
+        logger.info(
+            "%s: audio capped at %d samples (%.1f s)",
+            model_name,
+            self.max_samples,
+            self.max_samples / self.sampling_rate,
+        )
+
     def get_audio_embeddings(  # noqa: PLR0914
         self,
         inputs: DataLoader[AudioInput],
@@ -53,11 +80,17 @@ class SewDWrapper(AbsEncoder):
     ) -> Array:
         import torch
 
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+        # the conv feature encoder plus squeeze_factor 2 needs at least 720 samples (45 ms at 16 kHz)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate, min_samples=720
+        )
         all_embeddings = []
 
         for batch in tqdm(
-            inputs,
+            single_clip_dataloader(
+                inputs,
+                "group-norm feature encoder: padding changes the embeddings",
+            ),
             disable=not show_progress_bar,
         ):
             audio_arrays = [audio["array"] for audio in batch["audio"]]
@@ -67,20 +100,19 @@ class SewDWrapper(AbsEncoder):
                 return_tensors="pt",
                 padding="longest",
                 truncation=True,
-                max_length=int(self.max_audio_length_seconds * self.sampling_rate),
+                max_length=self.max_samples,
                 return_attention_mask=True,
             ).to(self.device)
 
             with torch.no_grad():
-                # SewD model outputs
-                outputs = self.model(
+                # base model output, as read by the CTC head (hidden_states[-1] is half-rate)
+                outputs = self.model.sew_d(
                     feature_inputs.input_values,
                     attention_mask=feature_inputs.attention_mask,
-                    output_hidden_states=True,
                 )
 
                 # Get embeddings from last hidden state
-                last_hidden_state = outputs.hidden_states[-1]
+                last_hidden_state = outputs.last_hidden_state
 
                 # Apply attention-masked pooling to exclude padding tokens
                 batch_size, hidden_seq_len, hidden_size = last_hidden_state.shape
@@ -145,14 +177,16 @@ sewd_base = ModelMeta(
     training_datasets={"LibriSpeech"},
     modalities=["audio"],
     citation="""
-@misc{wu2021performanceefficiencytradeoffsunsupervisedpretraining,
-      title={Performance-Efficiency Trade-offs in Unsupervised Pre-training for Speech Recognition},
-      author={Felix Wu and Kwangyoun Kim and Jing Pan and Kyu Han and Kilian Q. Weinberger and Yoav Artzi},
-      year={2021},
-      eprint={2109.06870},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2109.06870},
+@inproceedings{wu2021performanceefficiencytradeoffsunsupervisedpretraining,
+  author = {Wu, Felix and Kim, Kwangyoun and Pan, Jing and Han, Kyu J. and Weinberger, Kilian Q. and Artzi, Yoav},
+  booktitle = {ICASSP 2022 - 2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  doi = {10.1109/icassp43922.2022.9747432},
+  month = {May},
+  pages = {7667–7671},
+  publisher = {IEEE},
+  title = {Performance-Efficiency Trade-Offs in Unsupervised Pre-Training for Speech Recognition},
+  url = {https://doi.org/10.1109/icassp43922.2022.9747432},
+  year = {2022},
 }""",
 )
 
@@ -167,7 +201,7 @@ sewd_tiny = ModelMeta(
     n_parameters=19_700_000,
     n_embedding_parameters=None,
     memory_usage_mb=92,
-    embed_dim=256,
+    embed_dim=384,
     license="apache-2.0",
     reference="https://huggingface.co/asapp/sew-d-tiny-100k-ft-ls100h",
     similarity_fn_name="cosine",
@@ -178,14 +212,16 @@ sewd_tiny = ModelMeta(
     training_datasets={"LibriSpeech"},
     modalities=["audio"],
     citation="""
-@misc{wu2021performanceefficiencytradeoffsunsupervisedpretraining,
-      title={Performance-Efficiency Trade-offs in Unsupervised Pre-training for Speech Recognition},
-      author={Felix Wu and Kwangyoun Kim and Jing Pan and Kyu Han and Kilian Q. Weinberger and Yoav Artzi},
-      year={2021},
-      eprint={2109.06870},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2109.06870},
+@inproceedings{wu2021performanceefficiencytradeoffsunsupervisedpretraining,
+  author = {Wu, Felix and Kim, Kwangyoun and Pan, Jing and Han, Kyu J. and Weinberger, Kilian Q. and Artzi, Yoav},
+  booktitle = {ICASSP 2022 - 2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  doi = {10.1109/icassp43922.2022.9747432},
+  month = {May},
+  pages = {7667–7671},
+  publisher = {IEEE},
+  title = {Performance-Efficiency Trade-Offs in Unsupervised Pre-Training for Speech Recognition},
+  url = {https://doi.org/10.1109/icassp43922.2022.9747432},
+  year = {2022},
 }""",
 )
 
@@ -200,7 +236,7 @@ sewd_mid = ModelMeta(
     n_parameters=139_000_000,
     n_embedding_parameters=None,
     memory_usage_mb=530,
-    embed_dim=768,
+    embed_dim=512,
     license="apache-2.0",
     reference="https://huggingface.co/asapp/sew-d-mid-400k-ft-ls100h",
     similarity_fn_name="cosine",
@@ -211,13 +247,15 @@ sewd_mid = ModelMeta(
     training_datasets={"LibriSpeech"},
     modalities=["audio"],
     citation="""
-@misc{wu2021performanceefficiencytradeoffsunsupervisedpretraining,
-      title={Performance-Efficiency Trade-offs in Unsupervised Pre-training for Speech Recognition},
-      author={Felix Wu and Kwangyoun Kim and Jing Pan and Kyu Han and Kilian Q. Weinberger and Yoav Artzi},
-      year={2021},
-      eprint={2109.06870},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2109.06870},
+@inproceedings{wu2021performanceefficiencytradeoffsunsupervisedpretraining,
+  author = {Wu, Felix and Kim, Kwangyoun and Pan, Jing and Han, Kyu J. and Weinberger, Kilian Q. and Artzi, Yoav},
+  booktitle = {ICASSP 2022 - 2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  doi = {10.1109/icassp43922.2022.9747432},
+  month = {May},
+  pages = {7667–7671},
+  publisher = {IEEE},
+  title = {Performance-Efficiency Trade-Offs in Unsupervised Pre-Training for Speech Recognition},
+  url = {https://doi.org/10.1109/icassp43922.2022.9747432},
+  year = {2022},
 }""",
 )

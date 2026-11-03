@@ -30,7 +30,12 @@ class VJepaV2Wrapper(AbsEncoder):
         **kwargs: Any,
     ) -> None:
         import torch
-        from transformers import AutoModel, AutoVideoProcessor
+        from transformers import (
+            AutoConfig,
+            AutoModel,
+            AutoVideoProcessor,
+            VJEPA2ForVideoClassification,
+        )
 
         self.device = device or (
             "cuda"
@@ -48,7 +53,18 @@ class VJepaV2Wrapper(AbsEncoder):
         self.max_frames = max_frames
         self.num_frames = num_frames
 
-        self.model = AutoModel.from_pretrained(model_name, revision=revision)
+        # classifier checkpoints (SSv2, Diving48) keep the frozen pretrained backbone and
+        # add a trained attentive pooler, so embed with it instead of mean pooling
+        config = AutoConfig.from_pretrained(model_name, revision=revision)
+        self.pooler = None
+        if "VJEPA2ForVideoClassification" in (config.architectures or []):
+            classifier = VJEPA2ForVideoClassification.from_pretrained(
+                model_name, revision=revision
+            )
+            self.model = classifier.vjepa2
+            self.pooler = classifier.pooler.eval().to(self.device)
+        else:
+            self.model = AutoModel.from_pretrained(model_name, revision=revision)
         self.model.eval()
         self.model.to(self.device)
 
@@ -89,8 +105,12 @@ class VJepaV2Wrapper(AbsEncoder):
                     return_tensors="pt",
                 ).to(self.device)
 
-                outputs = self.model(**processed_videos)
-                pooled = outputs.last_hidden_state.mean(dim=1)
+                # The predictor is only used for pretraining; it does not change the encoder output.
+                outputs = self.model(**processed_videos, skip_predictor=True)
+                if self.pooler is not None:
+                    pooled = self.pooler(outputs.last_hidden_state)
+                else:
+                    pooled = outputs.last_hidden_state.mean(dim=1)
                 embeddings.append(pooled.cpu())
             return torch.cat(embeddings, dim=0).numpy()
 
@@ -126,6 +146,8 @@ _VJEPA2_PRETRAIN = {
 
 vjepa2_vitl_fpc64_256 = ModelMeta(
     loader=VJepaV2Wrapper,
+    # frames_per_clip per checkpoint, 64/32/16
+    # https://huggingface.co/facebook/vjepa2-vitl-fpc64-256/blob/main/config.json
     loader_kwargs=dict(num_frames=64),
     name="facebook/vjepa2-vitl-fpc64-256",
     revision="b3c1679b7c34d3255ef3547f27c7b226aefab26f",

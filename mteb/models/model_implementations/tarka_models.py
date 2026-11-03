@@ -1,6 +1,7 @@
 from mteb.models import SentenceTransformerEncoderWrapper
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
+from mteb.types import OutputDType
 
 Tarka_Embedding_150M_V1_CITATION = """@misc{tarka_ai_research_2025,
 	author       = { Tarka AI Research },
@@ -376,4 +377,5 @@ tarka_embedding_350m_v1 = ModelMeta(
     public_training_data=None,
     training_datasets=training_data,
     citation=Tarka_Embedding_350M_V1_CITATION,
+    output_dtypes=OutputDType.BF16,
 )

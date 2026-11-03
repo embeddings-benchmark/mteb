@@ -4,10 +4,18 @@ from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _BIBTEX_CITATION = r"""
-@article{Zhao2026RethinkingRR,
-  author = {Yilun Zhao and Jinbiao Wei and Tingyu Song and Siyue Zhang and Chen Zhao and Arman Cohan},
-  journal = {arXiv preprint arXiv:2605.04018},
+@inproceedings{Zhao2026RethinkingRR,
+  address = {San Diego, California, United States},
+  author = {Zhao, Yilun and Wei, Jinbiao and Song, Tingyu and Zhang, Siyue and Zhao, Chen and Cohan, Arman},
+  booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2026.acl-long.1705},
+  editor = {Liakata, Maria and Moreira, Viviane P. and Zhang, Jiajun and Jurgens, David},
+  isbn = {979-8-89176-390-6},
+  month = {jul},
+  pages = {36776--36806},
+  publisher = {Association for Computational Linguistics},
   title = {Rethinking Reasoning-Intensive Retrieval: Evaluating and Advancing Retrievers in Agentic Search Systems},
+  url = {https://aclanthology.org/2026.acl-long.1705/},
   year = {2026},
 }
 """

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 GIGA_task_prompts = {
     "TERRa": "Given a premise, retrieve a hypothesis that is entailed by the premise",
@@ -463,6 +464,7 @@ giga_embeddings_480m = ModelMeta(
     model_type=["dense"],
     citation=None,
     contacts=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 giga_embeddings_3b = ModelMeta(
@@ -497,6 +499,7 @@ giga_embeddings_3b = ModelMeta(
     model_type=["dense"],
     citation=None,
     contacts=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 giga_embeddings_10b_a1_8b = ModelMeta(
@@ -532,4 +535,5 @@ giga_embeddings_10b_a1_8b = ModelMeta(
     model_type=["dense"],
     citation=None,
     contacts=None,
+    output_dtypes=OutputDType.BF16,
 )

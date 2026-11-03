@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
+from mteb.types import OutputDType
 
 prism_reranker_citation = """
 @misc{zhang2026prismreranker,
@@ -49,6 +50,7 @@ prism_qwen35_reranker_0_8b = ModelMeta(
     memory_usage_mb=1435,
     reference="https://huggingface.co/infgrad/Prism-Qwen3.5-Reranker-0.8B",
     adapted_from="Qwen3.5-Reranker-0.8B",
+    output_dtypes=OutputDType.BF16,
 )
 
 prism_qwen35_reranker_2b = ModelMeta(
@@ -61,6 +63,7 @@ prism_qwen35_reranker_2b = ModelMeta(
     memory_usage_mb=3589,
     reference="https://huggingface.co/infgrad/Prism-Qwen3.5-Reranker-2B",
     adapted_from="Qwen/Qwen3.5",
+    output_dtypes=OutputDType.BF16,
 )
 
 prism_qwen35_reranker_4b = ModelMeta(
@@ -73,6 +76,7 @@ prism_qwen35_reranker_4b = ModelMeta(
     memory_usage_mb=8022,
     reference="https://huggingface.co/infgrad/Prism-Qwen3.5-Reranker-4B",
     adapted_from="Qwen/Qwen3.5",
+    output_dtypes=OutputDType.BF16,
 )
 
 prism_qwen35_reranker_9b = ModelMeta(
@@ -85,4 +89,5 @@ prism_qwen35_reranker_9b = ModelMeta(
     memory_usage_mb=17078,
     reference="https://huggingface.co/infgrad/Prism-Qwen3.5-Reranker-9B",
     adapted_from="Qwen/Qwen3.5",
+    output_dtypes=OutputDType.BF16,
 )

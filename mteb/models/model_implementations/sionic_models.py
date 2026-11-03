@@ -2,6 +2,7 @@
 
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
 
 comsat_embed_ja_8b_preview = ModelMeta(
     # Plain sentence-transformers load: the instruct query prompt
@@ -32,6 +33,7 @@ comsat_embed_ja_8b_preview = ModelMeta(
     # model's (Qwen/Qwen3-Embedding-8B) training data be inherited via
     # adapted_from.
     training_datasets=set(),
+    output_dtypes=OutputDType.BF16,
 )
 
 comsat_embed_ja_03b_preview = ModelMeta(
@@ -91,4 +93,5 @@ comsat_embed_ko_8b_preview = ModelMeta(
     # model's (Qwen/Qwen3-Embedding-8B) training data be inherited via
     # adapted_from.
     training_datasets=set(),
+    output_dtypes=OutputDType.BF16,
 )

@@ -269,7 +269,6 @@ class VGGSoundAVA2VRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the video that corresponds to the following audio."},
-        is_beta=True,
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:

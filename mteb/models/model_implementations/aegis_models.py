@@ -1,5 +1,6 @@
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
 
 from .bge_models import bge_m3_training_data, bgem3_languages
 
@@ -26,6 +27,7 @@ elephant_embeddings_v1_text_small = ModelMeta(
     training_datasets=bge_m3_training_data,
     public_training_code=None,
     public_training_data=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 mmbert_embed_32k_2d_matryoshka = ModelMeta(
@@ -53,4 +55,5 @@ mmbert_embed_32k_2d_matryoshka = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
+    output_dtypes=OutputDType.BF16,
 )

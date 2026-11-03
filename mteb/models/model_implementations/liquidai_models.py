@@ -3,6 +3,7 @@ from __future__ import annotations
 from mteb.models.model_implementations.pylate_models import MultiVectorModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
 
 LFM2_CITATION = """@article{liquidai2025lfm2,
   title={LFM2 Technical Report},
@@ -54,6 +55,7 @@ lfm2_5_embedding_350m = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 lfm2_5_colbert_350m = ModelMeta(

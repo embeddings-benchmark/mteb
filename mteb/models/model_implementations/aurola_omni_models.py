@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+from typing import Any
+
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
 )
+from mteb.types import OutputDType
 
 AUROLA_TRAINING_DATASETS = {
     "AudioCapsA2TRetrieval",
@@ -12,9 +15,54 @@ AUROLA_TRAINING_DATASETS = {
     "ClothoT2ARetrieval",
 }
 
+
+class AuroLAOmniWrapper(SentenceTransformerEncoderWrapper):
+    """Sets AuroLA's video and audio limits, which the generic wrapper leaves open."""
+
+    def __init__(
+        self,
+        model: str,
+        revision: str | None = None,
+        device: str | None = None,
+        # fps=1 and max_pixels=64*28*28: the model card's video example
+        # https://huggingface.co/Jazzcharles/AuroLA-Omni-3B/blob/main/README.md
+        fps: float | None = 1.0,
+        # 64 is an mteb cap; the checkpoint's video config allows max_frames=768
+        max_frames: int | None = 64,
+        num_frames: int | None = None,
+        # 300 s at 16 kHz: chunk_length=300
+        # https://huggingface.co/Jazzcharles/AuroLA-Omni-3B/blob/main/preprocessor_config.json
+        max_samples: int | None = 4_800_000,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(
+            model,
+            revision=revision,
+            device=device,
+            fps=fps,
+            max_frames=max_frames,
+            num_frames=num_frames,
+            max_samples=max_samples,
+            **kwargs,
+        )
+        self.target_sampling_rate = self.model[
+            0
+        ].processor.feature_extractor.sampling_rate
+        # the card caps video only; images keep the checkpoint's own limit
+        self.model[0].processing_kwargs.update(
+            {
+                "video": {
+                    "max_pixels": 64 * 28 * 28,
+                    "do_sample_frames": False,
+                    "fps": 1.0,
+                }
+            }
+        )
+
+
 _AUROLA_CITATION = r"""
 @misc{xu2026scalingaudiotextretrievalmultimodal,
-    title={Scaling Audio-Text Retrieval with Multimodal Large Language Models},
+    title={Re-purposing Multimodal Large Language Models for Audio-Text Retrieval},
     author={Jilan Xu and Carl Thom{\'e} and Danijela Horak and Weidi Xie and Andrew Zisserman},
     year={2026},
     eprint={2602.18010},
@@ -25,14 +73,11 @@ _AUROLA_CITATION = r"""
 """
 
 aurola_omni_7b = ModelMeta(
-    loader=SentenceTransformerEncoderWrapper,
+    loader=AuroLAOmniWrapper,
     loader_kwargs={
         "trust_remote_code": True,
         "model_kwargs": {
             "torch_dtype": "bfloat16",
-        },
-        "processor_kwargs": {
-            "max_pixels": 64 * 28 * 28,
         },
     },
     name="Jazzcharles/AuroLA-Omni-7B",
@@ -58,18 +103,16 @@ aurola_omni_7b = ModelMeta(
     modalities=["text", "image", "audio", "video"],
     model_type=["dense"],
     citation=_AUROLA_CITATION,
-    extra_requirements_groups=["qwen-vl"],
+    extra_requirements_groups=["multimodal-sbert"],
+    output_dtypes=OutputDType.BF16,
 )
 
 aurola_omni_3b = ModelMeta(
-    loader=SentenceTransformerEncoderWrapper,
+    loader=AuroLAOmniWrapper,
     loader_kwargs={
         "trust_remote_code": True,
         "model_kwargs": {
             "torch_dtype": "bfloat16",
-        },
-        "processor_kwargs": {
-            "max_pixels": 64 * 28 * 28,
         },
     },
     name="Jazzcharles/AuroLA-Omni-3B",
@@ -95,5 +138,6 @@ aurola_omni_3b = ModelMeta(
     modalities=["text", "image", "audio", "video"],
     model_type=["dense"],
     citation=_AUROLA_CITATION,
-    extra_requirements_groups=["qwen-vl"],
+    extra_requirements_groups=["multimodal-sbert"],
+    output_dtypes=OutputDType.BF16,
 )

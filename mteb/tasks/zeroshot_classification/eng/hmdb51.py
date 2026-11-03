@@ -39,7 +39,6 @@ class HMDB51ZeroShotClassification(AbsTaskZeroShotClassification):
   year = {2011},
 }
 """,
-        is_beta=True,
     )
 
     input_column_name: str = "video"

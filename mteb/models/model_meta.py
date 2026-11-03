@@ -41,7 +41,13 @@ from mteb._hf_integration.hf_hub_utils import (
     _get_repo_commits,
     _repo_exists,
 )
-from mteb._requires_package import _mteb_distribution
+from mteb._requires_package import (
+    _extras_requirement,
+    _full_installation_message,
+    _install_command,
+    _mteb_distribution,
+    _requires_full_installation,
+)
 from mteb.languages import check_language_code
 from mteb.languages.iso_mappings import _hf_langs_to_iso_lang_scripts
 from mteb.models.models_protocols import MTEBModels
@@ -75,6 +81,9 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+# only in a full `mteb` installation, not in `mteb-core`
+_FULL_INSTALL_DEPENDENCIES = {"torch", "transformers", "sentence_transformers"}
+
 
 def _auto_install_extras_enabled() -> bool:
     """Whether mteb should try to install missing optional dependencies automatically.
@@ -95,7 +104,7 @@ def _install_extras(model_name: str | None, groups: Sequence[str]) -> None:
     Uses ``uv pip install`` when ``uv`` is on the PATH (faster), otherwise falls back
     to ``python -m pip install``.
     """
-    target = f"mteb[{','.join(groups)}]"
+    target = _extras_requirement(groups)
     if shutil.which("uv") is not None:
         command = ["uv", "pip", "install", target]
     else:
@@ -228,7 +237,8 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         modalities: A list of strings representing the modalities the model supports. Default is ["text"].
         contacts: The people to contact in case of a problem in the model, preferably a GitHub handle.
         experiment_kwargs: A dictionary of parameters used in the experiment that are not covered by other fields. This is used to create experiment names for ablation studies and similar experiments.
-        output_dtypes: Output embedding data types (e.g. int8, binary, float) natively supported by the model. If None, it is assumed that the model only returns float embeddings.
+        output_dtypes: Output embedding data types (e.g. int8, binary, float) natively supported by the model. If None, it is assumed that the model only returns float32 embeddings.
+            Models loaded in lower precision should declare it here (e.g. `OutputDType.BF16` when loading with `torch_dtype=OutputDType.BF16`).
         extra_requirements_groups: Name of group of extra requirements (mteb extras) needed to run the model, e.g. `["flagembedding"]`.
             When a required group is missing, loading the model raises with install instructions. Set the environment variable
             `MTEB_AUTO_INSTALL_EXTRAS=1` to let mteb install the missing extras automatically (using `uv` if available, otherwise `pip`).
@@ -533,11 +543,21 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
 
         updates["loader_kwargs"] = _kwargs
         _self = _self.model_copy(update=updates)
-        model: MTEBModels = loader(
-            name,
-            revision=revision,
-            **_kwargs,
-        )
+        try:
+            model: MTEBModels = loader(
+                name,
+                revision=revision,
+                **_kwargs,
+            )
+        except ModuleNotFoundError as e:
+            # `mteb-core` can use tasks and results, but loading models needs a full installation
+            if e.name is None or e.name.split(".")[0] not in _FULL_INSTALL_DEPENDENCIES:
+                raise
+            # not a precondition like the other call sites: which packages a model needs depends on
+            # the model
+            raise ModuleNotFoundError(
+                _full_installation_message(f"Loading {name}"), name=e.name
+            ) from e
         model.mteb_model_meta = _self  # type: ignore[misc]
         return model
 
@@ -557,7 +577,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             raise ImportError(
                 f"Model {self.name} is missing required dependencies: "
                 + ", ".join(missing_dependencies)
-                + f".\nYou can install it with `pip install mteb[{','.join(groups)}]`."
+                + f".\nYou can install it with `{_install_command(groups)}`."
                 + "\nAlternatively, set the environment variable "
                 "`MTEB_AUTO_INSTALL_EXTRAS=1` to let mteb install them automatically."
             )
@@ -572,6 +592,8 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 groups.append("image")
             if "audio" in self.modalities and "audio" not in groups:
                 groups.append("audio")
+            if "video" in self.modalities and "video" not in groups:
+                groups.append("video")
 
         return groups
 
@@ -984,11 +1006,15 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         config = model.config
         if inner_model is None or config is None:
             raise ValueError("CrossEncoder must be loaded before generating ModelMeta")
+        # transformers>=5.20 no longer stores `_commit_hash` on the config
+        revision = getattr(config, "_commit_hash", None)
+        if revision is None and hasattr(model, "model_card_data"):
+            revision = model.model_card_data.base_model_revision
         return cls.create_empty(
             overwrites=dict(
                 loader=CrossEncoderWrapper,
                 name=inner_model.name_or_path,
-                revision=config._commit_hash,
+                revision=revision,
                 framework=["Sentence Transformers", "PyTorch"],
                 model_type=["cross-encoder"],
                 n_embedding_parameters=cls._get_n_embedding_parameters_from_sentence_transformers(
@@ -1098,6 +1124,9 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         # imported here rather than at module scope so that `mteb.models.model_meta` stays
         # importable without transformers; kept outside the `try` so a missing dependency
         # surfaces as an ImportError instead of a "can't get model configuration" warning.
+        _requires_full_installation(
+            "transformers", "Reading a model configuration from the Hub"
+        )
         from transformers import AutoConfig
 
         try:

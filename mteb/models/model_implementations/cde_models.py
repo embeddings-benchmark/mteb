@@ -30,14 +30,14 @@ if TYPE_CHECKING:
     from mteb.types import Array, BatchedInput
 logger = logging.getLogger(__name__)
 
-CDE_CITATION = """@misc{morris2024contextualdocumentembeddings,
-    title={Contextual Document Embeddings},
-    author={John X. Morris and Alexander M. Rush},
-    year={2024},
-    eprint={2410.02525},
-    archivePrefix={arXiv},
-    primaryClass={cs.CL},
-    url={https://arxiv.org/abs/2410.02525},
+CDE_CITATION = """@inproceedings{morris2024contextualdocumentembeddings,
+  archiveprefix = {arXiv},
+  author = {John Xavier Morris and Alexander M Rush},
+  booktitle = {The Thirteenth International Conference on Learning Representations},
+  eprint = {2410.02525},
+  title = {Contextual Document Embeddings},
+  url = {https://openreview.net/forum?id=Wqsk3FbD6D},
+  year = {2025},
 }"""
 
 

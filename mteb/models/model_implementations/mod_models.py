@@ -1,6 +1,6 @@
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 
 def instruction_template(
@@ -181,4 +181,5 @@ MoD_Embedding = ModelMeta(
     public_training_data=None,
     training_datasets=training_data,
     adapted_from="Qwen/Qwen3-Embedding-4B",
+    output_dtypes=OutputDType.BF16,
 )

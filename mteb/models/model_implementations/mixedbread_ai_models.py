@@ -8,6 +8,7 @@ from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
 )
+from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -68,6 +69,7 @@ mxbai_embed_large_v1 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=mixedbread_training_data,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 deepset_mxbai_embed_de_large_v1 = ModelMeta(
@@ -96,6 +98,7 @@ deepset_mxbai_embed_de_large_v1 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 mxbai_embed_2d_large_v1 = ModelMeta(
@@ -127,6 +130,7 @@ mxbai_embed_2d_large_v1 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 
@@ -154,6 +158,7 @@ mxbai_embed_xsmall_v1 = ModelMeta(
     public_training_data=None,
     training_datasets=mixedbread_training_data,
     citation=None,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 mxbai_rerank_xsmall_v1 = ModelMeta(
@@ -188,6 +193,7 @@ mxbai_rerank_xsmall_v1 = ModelMeta(
     model_type=["cross-encoder"],
     citation=None,
     contacts=None,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 mxbai_rerank_base_v1 = ModelMeta(
@@ -222,6 +228,7 @@ mxbai_rerank_base_v1 = ModelMeta(
     model_type=["cross-encoder"],
     citation=None,
     contacts=None,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 mxbai_rerank_large_v1 = ModelMeta(
@@ -256,6 +263,7 @@ mxbai_rerank_large_v1 = ModelMeta(
     model_type=["cross-encoder"],
     citation=None,
     contacts=None,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 # Languages from the model card (ISO 639-1) mapped to MTEB codes via
@@ -421,6 +429,7 @@ mxbai_rerank_base_v2 = ModelMeta(
     extra_requirements_groups=["multimodal-sbert"],
     citation=MXBAI_RERANK_V2_CITATION,
     contacts=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 mxbai_rerank_large_v2 = ModelMeta(
@@ -451,6 +460,7 @@ mxbai_rerank_large_v2 = ModelMeta(
     extra_requirements_groups=["multimodal-sbert"],
     citation=MXBAI_RERANK_V2_CITATION,
     contacts=None,
+    output_dtypes=OutputDType.BF16,
 )
 
 mxbai_edge_colbert_v0_17m = ModelMeta(

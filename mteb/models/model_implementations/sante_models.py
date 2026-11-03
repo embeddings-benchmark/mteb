@@ -59,4 +59,5 @@ sante_embed = ModelMeta(
     training_datasets={"NFCorpus", "SciFact"},
     public_training_code=None,
     public_training_data=None,
+    output_dtypes=OutputDType.FLOAT16,
 )

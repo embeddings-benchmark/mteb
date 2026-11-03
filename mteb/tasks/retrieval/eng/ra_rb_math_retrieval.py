@@ -46,11 +46,14 @@ class RARbMath(AbsTaskRetrieval):
   year = {2024},
 }
 
-@article{yu2023metamath,
-  author = {Yu, Longhui and Jiang, Weisen and Shi, Han and Yu, Jincheng and Liu, Zhengying and Zhang, Yu and Kwok, James T and Li, Zhenguo and Weller, Adrian and Liu, Weiyang},
-  journal = {arXiv preprint arXiv:2309.12284},
-  title = {Metamath: Bootstrap your own mathematical questions for large language models},
-  year = {2023},
+@inproceedings{yu2023metamath,
+  archiveprefix = {arXiv},
+  author = {Longhui Yu and Weisen Jiang and Han Shi and Jincheng YU and Zhengying Liu and Yu Zhang and James Kwok and Zhenguo Li and Adrian Weller and Weiyang Liu},
+  booktitle = {The Twelfth International Conference on Learning Representations},
+  eprint = {2309.12284},
+  title = {MetaMath: Bootstrap Your Own Mathematical Questions for Large Language Models},
+  url = {https://openreview.net/forum?id=N8N0hgNDRt},
+  year = {2024},
 }
 """,
         prompt={"query": "Retrieve the answer for the following math problem."},

@@ -54,6 +54,27 @@ def _convert_to_tensor(a: Array, dtype: torch.dtype | None = None) -> torch.Tens
     return a
 
 
+def _upcast_low_precision(a: Array) -> Array:
+    """Upcast sub-float32 float embeddings to float32 and return any other input unchanged.
+
+    Used before handing embeddings to a model's own `similarity` (e.g. sentence-transformers < 6),
+    which scores in the input dtype and so collapses nearby scores into ties.
+    """
+    import numpy as np
+    import torch
+
+    if isinstance(a, torch.Tensor):
+        if torch.is_floating_point(a) and torch.finfo(a.dtype).bits < 32:
+            return a.to(torch.float32)
+    elif (
+        isinstance(a, np.ndarray)
+        and np.issubdtype(a.dtype, np.floating)
+        and a.dtype.itemsize < 4
+    ):
+        return a.astype(np.float32)
+    return a
+
+
 def _select_device(a: torch.Tensor, b: torch.Tensor) -> torch.device:
     """Pick the device to score `a` against `b` on.
 

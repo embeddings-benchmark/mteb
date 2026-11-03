@@ -6,7 +6,11 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import (
+    AudioCollator,
+    seconds_to_samples,
+    single_clip_dataloader,
+)
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -22,7 +26,9 @@ class UniSpeechWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
-        max_audio_length_seconds: float = 30.0,
+        # uncapped: conv positional embedding, no max_position_embeddings
+        # https://huggingface.co/microsoft/unispeech-sat-base-100h-libri-ft/blob/main/config.json
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
         import torch
@@ -53,12 +59,23 @@ class UniSpeechWrapper(AbsEncoder):
     ) -> Array:
         import torch
 
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+        max_samples = seconds_to_samples(
+            self.max_audio_length_seconds, self.sampling_rate
+        )
+        # the conv feature encoder needs at least 400 samples (25 ms at 16 kHz)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate,
+            max_samples=max_samples,
+            min_samples=400,
+        )
 
         all_embeddings = []
 
         for batch in tqdm(
-            inputs,
+            single_clip_dataloader(
+                inputs,
+                "group-norm feature encoder: padding changes the embeddings",
+            ),
             disable=not show_progress_bar,
         ):
             audio_arrays = [audio["array"] for audio in batch["audio"]]
@@ -68,8 +85,6 @@ class UniSpeechWrapper(AbsEncoder):
                 sampling_rate=self.sampling_rate,
                 return_tensors="pt",
                 padding="longest",
-                truncation=True,
-                max_length=int(self.max_audio_length_seconds * self.sampling_rate),
                 return_attention_mask=True,
             ).to(self.device)
 
@@ -147,13 +162,15 @@ unispeech_base = ModelMeta(
     training_datasets={"LibriSpeech"},
     modalities=["audio"],
     citation="""
-@misc{chen2021unispeechsatuniversalspeechrepresentation,
-      title={UniSpeech-SAT: Universal Speech Representation Learning with Speaker Aware Pre-Training},
-      author={Sanyuan Chen and Yu Wu and Chengyi Wang and Zhengyang Chen and Zhuo Chen and Shujie Liu and Jian Wu and Yao Qian and Furu Wei and Jinyu Li and Xiangzhan Yu},
-      year={2021},
-      eprint={2110.05752},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2110.05752},
+@inproceedings{chen2021unispeechsatuniversalspeechrepresentation,
+  author = {Chen, Sanyuan and Wu, Yu and Wang, Chengyi and Chen, Zhengyang and Chen, Zhuo and Liu, Shujie and Wu, Jian and Qian, Yao and Wei, Furu and Li, Jinyu and Yu, Xiangzhan},
+  booktitle = {ICASSP 2022 - 2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  doi = {10.1109/icassp43922.2022.9747077},
+  month = {May},
+  pages = {6152–6156},
+  publisher = {IEEE},
+  title = {Unispeech-Sat: Universal Speech Representation Learning With Speaker Aware Pre-Training},
+  url = {https://doi.org/10.1109/icassp43922.2022.9747077},
+  year = {2022},
 }""",
 )

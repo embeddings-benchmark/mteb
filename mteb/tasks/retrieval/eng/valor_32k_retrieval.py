@@ -12,14 +12,14 @@ _DATASET_PATH = "mteb/VALOR-32K"
 _DATASET_REVISION = "003f74e0b5031c81bc0f3416f5d3de1153e21e16"
 _BIBTEX = r"""
 @article{liu2024valor,
-  title={Valor: Vision-audio-language omni-perception pretraining model and dataset},
-  author={Liu, Jing and Chen, Sihan and He, Xingjian and Guo, Longteng and Zhu, Xinxin and Wang, Weining and Tang, Jinhui},
-  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence},
-  volume={47},
-  number={2},
-  pages={708--724},
-  year={2024},
-  publisher={IEEE}
+  title = {Valor: Vision-audio-language omni-perception pretraining model and dataset},
+  author = {Liu, Jing and Chen, Sihan and He, Xingjian and Guo, Longteng and Zhu, Xinxin and Wang, Weining and Tang, Jinhui},
+  journal = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  volume = {47},
+  number = {2},
+  pages = {708--724},
+  year = {2024},
+  publisher = {IEEE},
 }
 """
 
@@ -114,7 +114,6 @@ class VALOR32KT2VRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the video clip that matches the given description."},
-        is_beta=True,
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
@@ -180,7 +179,6 @@ class VALOR32KT2VARetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the video clip that matches the given description."},
-        is_beta=True,
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:

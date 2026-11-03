@@ -28,14 +28,14 @@ class MultiSWEbenchReranking(AbsTaskRetrieval):
             "query": "Given a github issue, identify the code that needs to be changed to fix the issue."
         },
         bibtex_citation=r"""
-@misc{zan2025multiswebench,
+@inproceedings{zan2025multiswebench,
   archiveprefix = {arXiv},
-  author = {Daoguang Zan and Zhirong Huang and Wei Liu and Hanwu Chen and Linhao Zhang and Shulin Xin and Lu Chen and Qi Liu and Xiaojian Zhong and Aoyan Li and Siyao Liu and Yongsheng Xiao and Liangqiang Chen and Yuyu Zhang and Jing Su and Tianyu Liu and Rui Long and Kai Shen and Liang Xiang},
+  author = {Daoguang Zan and Zhirong Huang and Wei Liu and Hanwu Chen and Shulin Xin and Linhao Zhang and Qi Liu and Aoyan Li and Lu Chen and Xiaojian Zhong and Siyao Liu and Yongsheng Xiao and Liangqiang Chen and Yuyu Zhang and Jing Su and Tianyu Liu and RUI LONG and Ming Ding and liang xiang},
+  booktitle = {The Thirty-ninth Annual Conference on Neural Information Processing Systems Datasets and Benchmarks Track},
   eprint = {2504.02605},
-  primaryclass = {cs.SE},
-  title = {Multi-SWE-bench: A Multilingual Benchmark for Issue Resolving},
-  url = {https://arxiv.org/abs/2504.02605},
-  year = {2025},
+  title = {Multi-{SWE}-bench: A Multilingual Benchmark for Issue Resolving},
+  url = {https://openreview.net/forum?id=MhBZzkz4h9},
+  year = {2026},
 }
 """,
     )

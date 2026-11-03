@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Any
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -889,6 +889,7 @@ HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v2 = ModelMeta(
     adapted_from="HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v1.5",
     superseded_by=None,
     citation=KALM_EMBEDDING_CITATION,
+    output_dtypes=OutputDType.BF16,
 )
 
 KaLM_Embedding_KaLM_embedding_multilingual_mini_instruct_v2_5 = ModelMeta(
@@ -987,4 +988,5 @@ KaLM_Embedding_gemma_3_12b_2511 = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2501.01028},
 }""",
+    output_dtypes=OutputDType.BF16,
 )

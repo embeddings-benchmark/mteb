@@ -1,5 +1,6 @@
 from mteb.models import ModelMeta, sentence_transformers_loader
 from mteb.models.model_meta import ScoringFunction
+from mteb.types import OutputDType
 
 nemotron_3_embed_8b_legal = ModelMeta(
     loader=sentence_transformers_loader,
@@ -28,4 +29,5 @@ nemotron_3_embed_8b_legal = ModelMeta(
     model_type=["dense"],
     citation=None,
     contacts=None,
+    output_dtypes=OutputDType.BF16,
 )

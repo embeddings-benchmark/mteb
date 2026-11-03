@@ -18,7 +18,7 @@ from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     import torch
-    from sentence_transformers import CrossEncoder
+    from sentence_transformers import CrossEncoder, SentenceTransformer
     from torch.utils.data import DataLoader
     from typing_extensions import Unpack
 
@@ -876,6 +876,34 @@ def _video_frames_to_channels_last(
 
 
 class JinaV5OmniWrapper(SentenceTransformerEncoderWrapper):
+    def __init__(
+        self,
+        model: str | SentenceTransformer,
+        revision: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        if isinstance(model, str):
+            from transformers import AutoVideoProcessor
+
+            # custom_st's _align_eval_processor only sets the video size when it is
+            # a dict; on transformers 5 it is a SizeDict, so pass a video processor
+            # with the eval sizes (processor-level size kwargs are overridden by
+            # the image min/max pixels custom_st passes)
+            # https://huggingface.co/jinaai/jina-embeddings-v5-omni-small/blob/dfdcc361ec47c69a5afcd81e4bd148abb9d0568e/custom_st.py#L301-L319
+            video_processor = AutoVideoProcessor.from_pretrained(
+                model,
+                revision=revision,
+                trust_remote_code=True,
+                size={
+                    "longest_edge": 12_845_056,  # EVAL_VIDEO_MAX_PIXELS
+                    "shortest_edge": 262_144,  # EVAL_IMAGE_MIN_PIXELS
+                },
+            )
+            kwargs["processor_kwargs"] = kwargs.get("processor_kwargs", {}) | {
+                "video_processor": video_processor
+            }
+        super().__init__(model, revision=revision, **kwargs)
+
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -1023,6 +1051,7 @@ jina_embeddings_v5_text_small = ModelMeta(
       url={https://arxiv.org/abs/2602.15547},
 }""",
     extra_requirements_groups=["peft"],
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -1086,9 +1115,14 @@ jina_embeddings_v5_omni_small = ModelMeta(
     loader=JinaV5OmniWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
-        fps=2.0,
-        max_frames=64,
+        # 32 frames, evenly spaced over the clip: the model's inference default
+        # (EVAL_VIDEO_NUM_FRAMES=32 in its sentence-transformers code)
+        # https://huggingface.co/jinaai/jina-embeddings-v5-omni-small/blob/main/custom_st.py#L39
+        fps=None,
+        num_frames=32,
         target_sampling_rate=16000,
+        # 30 s: audio_config.max_source_positions=1500 frames at 50 Hz
+        # https://huggingface.co/jinaai/jina-embeddings-v5-omni-small/blob/main/config.json
         max_samples=30 * 16000,
         model_prompts=_OMNI_MODEL_PROMPTS,
     ),
@@ -1128,6 +1162,7 @@ jina_embeddings_v5_omni_small = ModelMeta(
       url={https://arxiv.org/abs/2602.15547},
 }""",
     extra_requirements_groups=["peft"],
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -1135,9 +1170,14 @@ jina_embeddings_v5_omni_nano = ModelMeta(
     loader=JinaV5OmniWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
-        fps=2.0,
-        max_frames=64,
+        # 32 frames, evenly spaced over the clip: the model's inference default
+        # (EVAL_VIDEO_NUM_FRAMES=32 in its sentence-transformers code)
+        # https://huggingface.co/jinaai/jina-embeddings-v5-omni-nano/blob/main/custom_st.py#L39
+        fps=None,
+        num_frames=32,
         target_sampling_rate=16000,
+        # 30 s: audio_config.max_source_positions=1500 frames at 50 Hz
+        # https://huggingface.co/jinaai/jina-embeddings-v5-omni-nano/blob/main/config.json
         max_samples=30 * 16000,
         model_prompts=_OMNI_MODEL_PROMPTS,
     ),
@@ -1177,6 +1217,7 @@ jina_embeddings_v5_omni_nano = ModelMeta(
       url={https://arxiv.org/abs/2602.15547},
 }""",
     extra_requirements_groups=["peft"],
+    output_dtypes=OutputDType.BF16,
 )
 
 jina_reranker_v3 = ModelMeta(
@@ -1215,6 +1256,7 @@ jina_reranker_v3 = ModelMeta(
       url={https://arxiv.org/abs/2509.25085},}
 """,
     superseded_by="jinaai/jina-reranker-v3.5",
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -1253,6 +1295,7 @@ jina_reranker_v3_5 = ModelMeta(
       primaryClass={cs.IR},
       url={https://arxiv.org/abs/2607.18152},
 }""",
+    output_dtypes=OutputDType.BF16,
 )
 
 jina_embeddings_v4 = Jinav4ModelMeta(
@@ -1288,16 +1331,22 @@ jina_embeddings_v4 = Jinav4ModelMeta(
     public_training_data=None,
     training_datasets=JinaV4_TRAINING_DATA,
     adapted_from="Qwen/Qwen2.5-VL-3B-Instruct",
-    citation="""@misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
-      title={jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
-      author={Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Sedigheh Eslami and Scott Martens and Bo Wang and Nan Wang and Han Xiao},
-      year={2025},
-      eprint={2506.18902},
-      archivePrefix={arXiv},
-      primaryClass={cs.AI},
-      url={https://arxiv.org/abs/2506.18902},
+    citation="""@inproceedings{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+  address = {Suzhuo, China},
+  author = {G{\\"u}nther, Michael and Sturua, Saba and Akram, Mohammad Kalim and Mohr, Isabelle and Ungureanu, Andrei and Wang, Bo and Eslami, Sedigheh and Martens, Scott and Werk, Maximilian and Wang, Nan and Xiao, Han},
+  booktitle = {Proceedings of the 5th Workshop on Multilingual Representation Learning ({MRL} 2025)},
+  doi = {10.18653/v1/2025.mrl-main.36},
+  editor = {Adelani, David Ifeoluwa and Arnett, Catherine and Ataman, Duygu and Chang, Tyler A. and Gonen, Hila and Raja, Rahul and Schmidt, Fabian and Stap, David and Wang, Jiayi},
+  isbn = {979-8-89176-345-6},
+  month = {nov},
+  pages = {531--550},
+  publisher = {Association for Computational Linguistics},
+  title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+  url = {https://aclanthology.org/2025.mrl-main.36/},
+  year = {2025},
 }""",
     extra_requirements_groups=["jina-v4"],
+    output_dtypes=OutputDType.BF16,
 )
 
 jina_embeddings_v3 = ModelMeta(

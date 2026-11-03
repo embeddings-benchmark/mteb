@@ -337,6 +337,13 @@ class ColQwen3Wrapper(AbsEncoder):
         return self.processor.score_multi_vector(a, b, device=self.device)
 
 
+# colpali-engine's ColQwen2_5OmniProcessor.process_videos system prompt
+_COLQWEN_OMNI_SYSTEM_PROMPT = (
+    "You are Qwen, a virtual human developed by the Qwen Team, Alibaba Group, capable "
+    "of perceiving auditory and visual inputs, as well as generating text and speech."
+)
+
+
 class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
     """Wrapper for ColQwen-Omni: late interaction over text, image, audio and video."""
 
@@ -345,13 +352,21 @@ class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
         model_name: str = "vidore/colqwen-omni-v0.1",
         revision: str | None = None,
         device: str | None = None,
+        # fps=1: the checkpoint's video config ("fps": 1, do_sample_frames)
+        # https://huggingface.co/vidore/colqwen-omni-v0.1/blob/61e78ef2f9c826cac588a01e44df51672ce957bd/video_preprocessor_config.json#L17
+        fps: float | None = 1.0,
+        # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
-        max_audio_length: int | None = None,
+        # 300 s at 16 kHz: Qwen2.5-Omni chunk_length=300; this is max_samples,
+        # so it is in samples, not seconds
+        # https://huggingface.co/Qwen/Qwen2.5-Omni-7B/blob/main/preprocessor_config.json
+        max_audio_length: int | None = 4_800_000,
         **kwargs: Any,
     ):
         from colpali_engine.models import ColQwen2_5Omni, ColQwen2_5OmniProcessor
 
+        self.fps = fps
         self.max_frames = max_frames
         self.num_frames = num_frames
         self.max_audio_length = max_audio_length
@@ -385,7 +400,7 @@ class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
         if "video" in features:
             inputs.collate_fn = VideoCollator(
                 target_sampling_rate=self.sampling_rate,
-                fps=None,
+                fps=self.fps,
                 max_frames=self.max_frames,
                 num_frames=self.num_frames,
                 max_samples=self.max_audio_length,
@@ -452,11 +467,43 @@ class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
 
         return self._encode_batches(audios, "audio", _process, "Encoding audio")
 
+    def similarity(self, a: Array, b: Array) -> Array:
+        # a video document has thousands of vectors; colpali's default scoring
+        # batch of 128 documents needs ~70 GiB on DiDeMo
+        return self.processor.score(a, b, device=self.device, batch_size=16)
+
     def get_video_embeddings(
         self, videos: DataLoader[BatchedInput], batch_size: int = 32, **kwargs: Any
     ) -> Array:
         def _process(clip: torch.Tensor) -> Mapping[str, torch.Tensor]:
-            return self.processor.process_videos([clip])
+            # colpali's process_videos, plus the checkpoint's video size: the
+            # Qwen2.5-Omni processor defaults (up to 602112 px per frame) would
+            # override its 200704 px, and long clips then run out of memory
+            # https://huggingface.co/vidore/colqwen-omni-v0.1/blob/61e78ef2f9c826cac588a01e44df51672ce957bd/video_preprocessor_config.json
+            conversation = [
+                {
+                    "role": "system",
+                    "content": [{"type": "text", "text": _COLQWEN_OMNI_SYSTEM_PROMPT}],
+                },
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "video", "path": clip},
+                        {"type": "text", "text": "Describe the content."},
+                    ],
+                },
+            ]
+            return self.processor.apply_chat_template(
+                [conversation],
+                load_audio_from_video=False,
+                add_generation_prompt=True,
+                tokenize=True,
+                return_dict=True,
+                return_tensors="pt",
+                padding=True,
+                use_audio_in_video=False,
+                videos_kwargs={"size": dict(self.processor.video_processor.size)},
+            )
 
         return self._encode_batches(videos, "video", _process, "Encoding video")
 
@@ -488,6 +535,7 @@ colqwen2 = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
     extra_requirements_groups=["colpali_engine"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 colqwen2_5 = ModelMeta(
@@ -517,6 +565,7 @@ colqwen2_5 = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
     extra_requirements_groups=["colpali_engine"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 TOMORO_TRAINING_DATA = {
@@ -553,6 +602,7 @@ colqwen3_8b = ModelMeta(
     use_instructions=True,
     training_datasets=TOMORO_TRAINING_DATA,
     extra_requirements_groups=["colqwen3"],
+    output_dtypes=OutputDType.BF16,
 )
 
 colqwen3_4b = ModelMeta(
@@ -578,6 +628,7 @@ colqwen3_4b = ModelMeta(
     use_instructions=True,
     training_datasets=TOMORO_TRAINING_DATA,
     extra_requirements_groups=["colqwen3"],
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -616,6 +667,7 @@ colnomic_3b = ModelMeta(
     use_instructions=True,
     training_datasets=COLNOMIC_TRAINING_DATA,
     extra_requirements_groups=["colpali_engine"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 colnomic_7b = ModelMeta(
@@ -643,6 +695,7 @@ colnomic_7b = ModelMeta(
     use_instructions=True,
     training_datasets=COLNOMIC_TRAINING_DATA,
     extra_requirements_groups=["colpali_engine"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 
@@ -682,6 +735,7 @@ evoqwen25_vl_retriever_3b_v1 = ModelMeta(
     use_instructions=True,
     training_datasets=EVOQWEN_TRAINING_DATA,
     extra_requirements_groups=["colpali_engine"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 evoqwen25_vl_retriever_7b_v1 = ModelMeta(
@@ -710,6 +764,7 @@ evoqwen25_vl_retriever_7b_v1 = ModelMeta(
     use_instructions=True,
     training_datasets=EVOQWEN_TRAINING_DATA,
     extra_requirements_groups=["colpali_engine"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 
@@ -755,6 +810,7 @@ colqwen3_5_v3 = ModelMeta(
     use_instructions=False,
     training_datasets=COLQWEN35_V3_TRAINING_DATA,
     extra_requirements_groups=["colpali_engine"],
+    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -807,6 +863,7 @@ colturk_vdr_4b = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
     extra_requirements_groups=["colpali_engine"],
     adapted_from="Qwen/Qwen3-VL-4B-Instruct",
+    output_dtypes=OutputDType.BF16,
 )
 
 VULTRON_PRIME_8B_TRAINING_DATA = {
@@ -855,6 +912,7 @@ vultron_prime_qwen35_8b = ModelMeta(
     use_instructions=False,
     training_datasets=VULTRON_PRIME_8B_TRAINING_DATA,
     extra_requirements_groups=["colpali_engine"],
+    output_dtypes=OutputDType.BF16,
 )
 
 vultron_flash_qwen35_0_8b = ModelMeta(
@@ -883,6 +941,7 @@ vultron_flash_qwen35_0_8b = ModelMeta(
     use_instructions=False,
     training_datasets=VULTRON_PRIME_8B_TRAINING_DATA,  # 0.8B sibling, same training pool as the 8B Prime
     extra_requirements_groups=["colpali_engine"],
+    output_dtypes=OutputDType.BF16,
 )
 
 vultron_core_qwen35_4b = ModelMeta(
@@ -911,11 +970,16 @@ vultron_core_qwen35_4b = ModelMeta(
     use_instructions=False,
     training_datasets=VULTRON_PRIME_8B_TRAINING_DATA,  # 4B sibling, same training pool as Prime/Flash
     extra_requirements_groups=["colpali_engine"],
+    output_dtypes=OutputDType.BF16,
 )
 
 colqwen_omni = ModelMeta(
     loader=ColQwen2_5OmniWrapper,
-    loader_kwargs=dict(torch_dtype=OutputDType.BF16),
+    loader_kwargs=dict(
+        torch_dtype=OutputDType.BF16,
+        # LoRA adapter; its adapter_config.json names vidore/colqwen2.5omni-base without a revision
+        base_revision="59289e054b63a1164c0f26c33f3550f3cde7399b",
+    ),
     name="vidore/colqwen-omni-v0.1",
     model_type=["late-interaction"],
     languages=["eng-Latn"],
@@ -938,4 +1002,5 @@ colqwen_omni = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
     extra_requirements_groups=["colpali_engine"],
+    output_dtypes=OutputDType.BF16,
 )

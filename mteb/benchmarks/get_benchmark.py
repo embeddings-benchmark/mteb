@@ -1,31 +1,23 @@
+from __future__ import annotations
+
 import difflib
 import logging
 from functools import lru_cache
+from typing import TYPE_CHECKING
 
-from .benchmark import Benchmark
+from .benchmarks import BENCHMARK_REGISTRY
+
+if TYPE_CHECKING:
+    from .benchmark import Benchmark
 
 logger = logging.getLogger(__name__)
 
 
 @lru_cache
-def _build_registry() -> dict[str, Benchmark]:
-    import mteb.benchmarks.benchmarks as benchmark_module
-
-    benchmark_registry = {
-        inst.name: inst
-        for _, inst in benchmark_module.__dict__.items()
-        if isinstance(inst, Benchmark)
-    }
-    return benchmark_registry
-
-
-@lru_cache
 def _build_aliases_registry() -> dict[str, Benchmark]:
-    import mteb.benchmarks.benchmarks as benchmark_module
-
     aliases: dict[str, Benchmark] = {}
-    for _, inst in benchmark_module.__dict__.items():
-        if isinstance(inst, Benchmark) and inst.aliases is not None:
+    for inst in BENCHMARK_REGISTRY.values():
+        if inst.aliases is not None:
             for alias in inst.aliases:
                 aliases[alias] = inst
     return aliases
@@ -42,7 +34,7 @@ def get_benchmark(
     Returns:
         The Benchmark instance corresponding to the given name.
     """
-    benchmark_registry = _build_registry()
+    benchmark_registry = BENCHMARK_REGISTRY
     aliases_registry = _build_aliases_registry()
 
     if benchmark_name in aliases_registry:
@@ -73,7 +65,7 @@ def get_benchmarks(
     Returns:
         A list of Benchmark instances.
     """
-    benchmark_registry = _build_registry()
+    benchmark_registry = BENCHMARK_REGISTRY
 
     if names is None:
         names = list(benchmark_registry.keys())

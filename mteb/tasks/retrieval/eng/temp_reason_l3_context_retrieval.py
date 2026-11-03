@@ -25,10 +25,17 @@ class TempReasonL3Context(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{tan2023towards,
+@inproceedings{tan2023towards,
+  address = {Toronto, Canada},
   author = {Tan, Qingyu and Ng, Hwee Tou and Bing, Lidong},
-  journal = {arXiv preprint arXiv:2306.08952},
-  title = {Towards benchmarking and improving the temporal reasoning capability of large language models},
+  booktitle = {Proceedings of the 61st Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2023.acl-long.828},
+  editor = {Rogers, Anna and Boyd-Graber, Jordan and Okazaki, Naoaki},
+  month = {jul},
+  pages = {14820--14835},
+  publisher = {Association for Computational Linguistics},
+  title = {Towards Benchmarking and Improving the Temporal Reasoning Capability of Large Language Models},
+  url = {https://aclanthology.org/2023.acl-long.828/},
   year = {2023},
 }
 

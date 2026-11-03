@@ -19,6 +19,8 @@ from mteb.benchmarks.benchmark import (
 )
 from tests.conftest import _skip_if_datasets_too_old
 
+pytestmark = pytest.mark.core
+
 MODELS_SCORES = {
     "Mean(Task)": {
         "mteb/baseline-random-encoder": 0.005604,

@@ -11,7 +11,7 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator
+from mteb.models.modality_collators import AudioCollator, seconds_to_samples
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -27,8 +27,11 @@ class MSClapWrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str = "microsoft/msclap-2023",
+        revision: str | None = None,
         device: str | None = None,
-        max_audio_length_s: float = 30.0,
+        # None: msclap's own duration; longer input hits its random-window branch
+        # https://github.com/microsoft/CLAP/blob/main/msclap/configs/config_2023.yml
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
         import torch
@@ -36,27 +39,33 @@ class MSClapWrapper(AbsEncoder):
         if device is None:
             device = "cuda" if torch.cuda.is_available() else "cpu"
 
+        from huggingface_hub import hf_hub_download
         from msclap import CLAP
 
         self.model_name = model_name
         self.device = device
-        self.sampling_rate = 48000
-        self.max_audio_length_s = max_audio_length_s
 
-        if "2022" in self.model_name:
-            self.version = "2022"
-            self.text_length = 100
-        elif "2023" in self.model_name:
-            self.version = "2023"
-            self.text_length = 77
-        else:
-            self.version = "2023"
-            self.text_length = 77
+        self.version = "2022" if "2022" in self.model_name else "2023"
 
         self.use_cuda = device == "cuda"
-        self.model = CLAP(version=self.version, use_cuda=self.use_cuda)
+        # msclap downloads its weights from microsoft/msclap at main; fetch them
+        # at the pinned revision instead.
+        model_fp = hf_hub_download(
+            CLAP.model_repo, CLAP.model_name[self.version], revision=revision
+        )
+        self.model = CLAP(
+            model_fp=model_fp, version=self.version, use_cuda=self.use_cuda
+        )
         self.model.clap = self.model.clap.to(self.device)
         self.tokenizer = self.model.tokenizer
+        # 44100 for 2022 and 2023: msclap's own config
+        # https://github.com/microsoft/CLAP/blob/main/msclap/configs/config_2023.yml
+        self.sampling_rate = int(self.model.args.sampling_rate)
+        self.max_audio_length_seconds = (
+            float(self.model.args.duration)
+            if max_audio_length_seconds is None
+            else max_audio_length_seconds
+        )
 
     def get_audio_embeddings(
         self,
@@ -67,7 +76,12 @@ class MSClapWrapper(AbsEncoder):
         import soundfile as sf
         import torch
 
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate,
+            max_samples=seconds_to_samples(
+                self.max_audio_length_seconds, self.sampling_rate
+            ),
+        )
 
         all_embeddings = []
         for batch in tqdm(
@@ -84,8 +98,10 @@ class MSClapWrapper(AbsEncoder):
                         suffix=".wav", delete=False
                     ) as temp_file:
                         temp_files.append(temp_file.name)
-                    # write after closing the handle so soundfile owns the file
-                    sf.write(temp_file.name, array, self.sampling_rate)
+                    # write after closing the handle so soundfile owns the file;
+                    # float, because resampled audio is off the 16-bit grid and
+                    # 2023 is sensitive to that quantisation
+                    sf.write(temp_file.name, array, self.sampling_rate, subtype="FLOAT")
 
                 with torch.no_grad():
                     # Use the official msclap API that expects file paths
@@ -120,13 +136,22 @@ class MSClapWrapper(AbsEncoder):
             inputs, disable=not show_progress_bar, desc="Processing text batches"
         ):
             texts = batch["text"]
+            # msclap appends this for the GPT-2 text encoder (2023), which pools
+            # on it; BERT (2022) gets no suffix
+            # https://github.com/microsoft/CLAP/blob/main/msclap/CLAPWrapper.py
+            if "gpt" in self.model.args.text_model:
+                texts = [text + " <|endoftext|>" for text in texts]
 
+            # msclap pads to text_len but does not truncate, so long captions keep
+            # their end-of-text token; cut only at the encoder's position limit.
+            # Padding length does not matter: pads are id 0 and the GPT-2 encoder
+            # pools at the last non-zero id (BERT, 2022, uses CLS).
             features = self.tokenizer(
                 texts,
                 return_tensors="pt",
-                padding="max_length",
+                padding="longest",
                 truncation=True,
-                max_length=self.text_length,
+                max_length=self.tokenizer.model_max_length,
             )
             features = {k: v.to(self.device) for k, v in features.items()}
 
@@ -174,7 +199,7 @@ ms_clap_2022 = ModelMeta(
     loader=MSClapWrapper,
     name="microsoft/msclap-2022",
     languages=["eng-Latn"],
-    revision="no_revision",
+    revision="c47d441165daa21986ead0850660917636a81775",  # microsoft/msclap
     release_date="2022-12-01",
     modalities=["audio", "text"],
     n_parameters=196_000_000,
@@ -216,7 +241,7 @@ ms_clap_2023 = ModelMeta(
     loader=MSClapWrapper,
     name="microsoft/msclap-2023",
     languages=["eng-Latn"],
-    revision="no_revision",
+    revision="c47d441165daa21986ead0850660917636a81775",  # microsoft/msclap
     release_date="2023-09-01",
     modalities=["audio", "text"],
     n_parameters=160_000_000,
@@ -237,14 +262,16 @@ ms_clap_2023 = ModelMeta(
         "AudioCapsA2TRetrieval",
     },
     citation="""
-@misc{CLAP2023,
-      title={Natural Language Supervision for General-Purpose Audio Representations},
-      author={Benjamin Elizalde and Soham Deshmukh and Huaming Wang},
-      year={2023},
-      eprint={2309.05767},
-      archivePrefix={arXiv},
-      primaryClass={cs.SD},
-      url={https://arxiv.org/abs/2309.05767}
+@inproceedings{CLAP2023,
+  author = {Elizalde, Benjamin and Deshmukh, Soham and Wang, Huaming},
+  booktitle = {ICASSP 2024 - 2024 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  doi = {10.1109/icassp48485.2024.10448504},
+  month = {Apr},
+  pages = {336–340},
+  publisher = {IEEE},
+  title = {Natural Language Supervision For General-Purpose Audio Representations},
+  url = {https://doi.org/10.1109/icassp48485.2024.10448504},
+  year = {2024},
 }
 """,
     extra_requirements_groups=["msclap"],
