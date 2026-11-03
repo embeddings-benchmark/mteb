@@ -35,7 +35,6 @@ def test_bm25_reranking_keeps_candidates_outside_corpus_top_k(model_name):
     corpus = Dataset.from_dict(
         {
             "id": [f"d{i}" for i in range(len(texts))],
-            "title": [""] * len(texts),
             "text": texts,
         }
     )
@@ -56,3 +55,6 @@ def test_bm25_reranking_keeps_candidates_outside_corpus_top_k(model_name):
 
     assert set(results["q1"]) == {"d3", "d4"}
     assert results["q1"]["d3"] > results["q1"]["d4"]
+
+    # An empty candidate mapping still requests reranking, not full retrieval.
+    assert model.search(queries, top_k=2, top_ranked={}, **kwargs) == {"q1": {}}

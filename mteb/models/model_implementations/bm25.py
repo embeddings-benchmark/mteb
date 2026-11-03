@@ -99,7 +99,7 @@ def _retrieve_bm25s(
     query scores only its own candidates. Taking the full-corpus top-k first and then
     filtering it would drop every candidate that falls outside that top-k.
     """
-    if not top_ranked:
+    if top_ranked is None:
         return retriever.retrieve(query_tokens, k=min(top_k, len(corpus_idx_to_id)))
 
     corpus_id_to_idx = {doc_id: idx for idx, doc_id in corpus_idx_to_id.items()}
