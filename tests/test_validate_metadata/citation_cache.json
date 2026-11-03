@@ -11250,6 +11250,206 @@
                 "similarity": 1.0,
                 "note": ""
             }
+        },
+        "hendrycks2021measuring||2105.09938|measuring coding challenge competence with {apps}|2021": {
+            "stored_at": 1793702932.3142111,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Measuring Coding Challenge Competence With APPS",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "47761|10.1162/tacl_a_00276||natural questions: a benchmark for question answering research|2019": {
+            "stored_at": 1793702932.563089,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Natural Questions: A Benchmark for Question Answering                     Research",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "khazatsky2024droid||2403.12945|{droid}: a large-scale in-the-wild robot manipulation dataset|2024": {
+            "stored_at": 1793702935.402199,
+            "value": {
+                "verdict": "OK",
+                "found_title": "DROID: A Large-Scale In-The-Wild Robot Manipulation Dataset",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "ardila2019common||1912.06670|common voice: a massively-multilingual speech corpus|2020": {
+            "stored_at": 1793702938.336034,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Common Voice: A Massively-Multilingual Speech Corpus",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "yu2024visrag||2410.10594|visrag: vision-based retrieval-augmented generation on multi-modality documents|2025": {
+            "stored_at": 1793702941.525194,
+            "value": {
+                "verdict": "OK",
+                "found_title": "VisRAG: Vision-based Retrieval-augmented Generation on Multi-modality Documents",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "li2026ravenea||2505.14462|{ravenea}: a benchmark for multimodal retrieval-augmented visual culture understanding|2026": {
+            "stored_at": 1793702944.421039,
+            "value": {
+                "verdict": "OK",
+                "found_title": "RAVENEA: A Benchmark for Multimodal Retrieval-Augmented Visual Culture Understanding",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "walke2023bridgedata||2308.12952|bridgedata v2: a dataset for robot learning at scale|2023": {
+            "stored_at": 1793702947.4499042,
+            "value": {
+                "verdict": "OK",
+                "found_title": "BridgeData V2: A Dataset for Robot Learning at Scale",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "vera2026embeddinggemma2unifiedefficient||2610.37364|embeddinggemma 2: unified and efficient multimodal representations|2026": {
+            "stored_at": 1793702950.219583,
+            "value": {
+                "verdict": "OK",
+                "found_title": "EmbeddingGemma 2: Unified and Efficient Multimodal Representations",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "formal2021spladev2||2109.10086|splade v2: sparse lexical and expansion model for information retrieval|2021": {
+            "stored_at": 1793702953.3171148,
+            "value": {
+                "verdict": "OK",
+                "found_title": "SPLADE v2: Sparse Lexical and Expansion Model for Information Retrieval",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "lassance2024spladev3||2403.06789|splade-v3: new baselines for splade|2024": {
+            "stored_at": 1793702956.328326,
+            "value": {
+                "verdict": "OK",
+                "found_title": "SPLADE-v3: New baselines for SPLADE",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "zhao2026lycheererankerfastlateinteraction||2606.22807|lychee-reranker: fast but not late interaction for compressed document reranking|2026": {
+            "stored_at": 1793702959.353045,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Lychee-Reranker: Fast but Not Late Interaction for Compressed Document Reranking",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "zhang2024code||2402.01935|{code} {representation} {learning} {at} {scale}|2024": {
+            "stored_at": 1793702968.433943,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Code Representation Learning At Scale",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "krimmel2026pplxembedv2latetechnicalreport||2610.29523|pplx-embed-v2-late technical report|2026": {
+            "stored_at": 1793702971.325417,
+            "value": {
+                "verdict": "OK",
+                "found_title": "pplx-embed-v2-late Technical Report",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "goel2025audioflamingo3||2507.08128|audio flamingo 3: advancing audio intelligence with fully open large audio language models|2025": {
+            "stored_at": 1793702974.35953,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Audio Flamingo 3: Advancing Audio Intelligence with Fully Open Large Audio Language Models",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "zhao2024videoprism||2402.13217|{videoprism}: a foundational visual encoder for video understanding|2024": {
+            "stored_at": 1793702977.978362,
+            "value": {
+                "verdict": "OK",
+                "found_title": "VideoPrism: A Foundational Visual Encoder for Video Understanding",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "hendrycks2021math||2103.03874|measuring mathematical problem solving with the math dataset|2021": {
+            "stored_at": 1793703005.1309729,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Measuring Mathematical Problem Solving With the MATH Dataset",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "ardila-etal-2020-common||1912.06670|common voice: a massively-multilingual speech corpus|2020": {
+            "stored_at": 1793704610.818259,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Common Voice: A Massively-Multilingual Speech Corpus",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "kwiatkowski-etal-2019-natural|10.1162/tacl_a_00276||natural questions: a benchmark for question answering research|2019": {
+            "stored_at": 1793704611.585207,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Natural Questions: A Benchmark for Question Answering                     Research",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "hendrycks2021math||2103.03874|measuring mathematical problem solving with the {math} dataset|2021": {
+            "stored_at": 1793704613.775779,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Measuring Mathematical Problem Solving With the MATH Dataset",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "walke2024bridgedatav2datasetrobot||2308.12952|bridgedata v2: a dataset for robot learning at scale|2024": {
+            "stored_at": 1793704616.7266471,
+            "value": {
+                "verdict": "OK",
+                "found_title": "BridgeData V2: A Dataset for Robot Learning at Scale",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
         }
     }
 }

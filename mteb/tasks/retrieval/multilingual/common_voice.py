@@ -183,6 +183,49 @@ _EVAL_LANGS_CV21 = {
 }
 
 
+COMMON_VOICE_CITATION = r"""
+@inproceedings{ardila-etal-2020-common,
+  archiveprefix = {arXiv},
+  eprint = {1912.06670},
+  title = {Common Voice: A Massively-Multilingual Speech Corpus},
+  author = {Ardila, Rosana  and
+      Branson, Megan  and
+      Davis, Kelly  and
+      Kohler, Michael  and
+      Meyer, Josh  and
+      Henretty, Michael  and
+      Morais, Reuben  and
+      Saunders, Lindsay  and
+      Tyers, Francis  and
+      Weber, Gregor},
+  editor = {Calzolari, Nicoletta  and
+      B{\'e}chet, Fr{\'e}d{\'e}ric  and
+      Blache, Philippe  and
+      Choukri, Khalid  and
+      Cieri, Christopher  and
+      Declerck, Thierry  and
+      Goggi, Sara  and
+      Isahara, Hitoshi  and
+      Maegaard, Bente  and
+      Mariani, Joseph  and
+      Mazo, H{\'e}l{\`e}ne  and
+      Moreno, Asuncion  and
+      Odijk, Jan  and
+      Piperidis, Stelios},
+  booktitle = {Proceedings of the Twelfth Language Resources and Evaluation Conference},
+  month = may,
+  year = {2020},
+  address = {Marseille, France},
+  publisher = {European Language Resources Association},
+  url = {https://aclanthology.org/2020.lrec-1.520/},
+  pages = {4218--4222},
+  language = {eng},
+  ISBN = {979-10-95546-34-4},
+  abstract = {The Common Voice corpus is a massively-multilingual collection of transcribed speech intended for speech technology research and development. Common Voice is designed for Automatic Speech Recognition purposes but can be useful in other domains (e.g. language identification). To achieve scale and sustainability, the Common Voice project employs crowdsourcing for both data collection and data validation. The most recent release includes 29 languages, and as of November 2019 there are a total of 38 languages collecting data. Over 50,000 individuals have participated so far, resulting in 2,500 hours of collected audio. To our knowledge this is the largest audio corpus in the public domain for speech recognition, both in terms of number of hours and number of languages. As an example use case for Common Voice, we present speech recognition experiments using Mozilla{'}s DeepSpeech Speech-to-Text toolkit. By applying transfer learning from a source English model, we find an average Character Error Rate improvement of 5.99 {\ensuremath{\pm}} 5.48 for twelve target languages (German, French, Italian, Turkish, Catalan, Slovenian, Welsh, Irish, Breton, Tatar, Chuvash, and Kabyle). For most of these languages, these are the first ever published results on end-to-end Automatic Speech Recognition.},
+}
+"""
+
+
 class CommonVoiceMini17A2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CommonVoiceMini17A2TRetrieval",
@@ -205,14 +248,7 @@ class CommonVoiceMini17A2TRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{ardila2019common,
-  author = {Ardila, Rosana and Branson, Megan and Davis, Kelly and Henretty, Michael and Kohler, Michael and Meyer, Josh and Morais, Reuben and Saunders, Lindsay and Tyers, Francis M and Weber, Gregor},
-  booktitle = {Proceedings of the 12th Language Resources and Evaluation Conference},
-  pages = {4218--4222},
-  title = {Common voice: A massively-multilingual speech corpus},
-  year = {2020},
-}
-""",
+        bibtex_citation=COMMON_VOICE_CITATION,
     )
 
     def load_data(self, **kwargs: Any):
@@ -287,14 +323,7 @@ class CommonVoiceMini17T2ARetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{ardila2019common,
-  author = {Ardila, Rosana and Branson, Megan and Davis, Kelly and Henretty, Michael and Kohler, Michael and Meyer, Josh and Morais, Reuben and Saunders, Lindsay and Tyers, Francis M and Weber, Gregor},
-  booktitle = {Proceedings of the 12th Language Resources and Evaluation Conference},
-  pages = {4218--4222},
-  title = {Common voice: A massively-multilingual speech corpus},
-  year = {2020},
-}
-""",
+        bibtex_citation=COMMON_VOICE_CITATION,
     )
 
     def load_data(self, **kwargs: Any):
@@ -366,14 +395,7 @@ class CommonVoiceMini21A2TRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{ardila2019common,
-  author = {Ardila, Rosana and Branson, Megan and Davis, Kelly and Henretty, Michael and Kohler, Michael and Meyer, Josh and Morais, Reuben and Saunders, Lindsay and Tyers, Francis M and Weber, Gregor},
-  booktitle = {Proceedings of the 12th Language Resources and Evaluation Conference},
-  pages = {4218--4222},
-  title = {Common voice: A massively-multilingual speech corpus},
-  year = {2020},
-}
-""",
+        bibtex_citation=COMMON_VOICE_CITATION,
     )
 
     def load_data(self, **kwargs: Any):
@@ -448,14 +470,7 @@ class CommonVoiceMini21T2ARetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{ardila2019common,
-  author = {Ardila, Rosana and Branson, Megan and Davis, Kelly and Henretty, Michael and Kohler, Michael and Meyer, Josh and Morais, Reuben and Saunders, Lindsay and Tyers, Francis M and Weber, Gregor},
-  booktitle = {Proceedings of the 12th Language Resources and Evaluation Conference},
-  pages = {4218--4222},
-  title = {Common voice: A massively-multilingual speech corpus},
-  year = {2020},
-}
-""",
+        bibtex_citation=COMMON_VOICE_CITATION,
     )
 
     def load_data(self, **kwargs: Any):
