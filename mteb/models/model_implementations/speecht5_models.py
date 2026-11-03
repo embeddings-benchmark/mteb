@@ -8,7 +8,11 @@ from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import check_duration_cap, single_clip_dataloader
+from mteb.models.modality_collators import (
+    AudioCollator,
+    check_duration_cap,
+    single_clip_dataloader,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -78,6 +82,10 @@ class SpeechT5Audio(AbsEncoder):
         import torchaudio
 
         all_embeddings = []
+        # the conv speech prenet needs at least 400 samples (25 ms at 16 kHz)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate, min_samples=400
+        )
 
         for batch in tqdm(
             single_clip_dataloader(
@@ -356,14 +364,18 @@ speecht5_asr = ModelMeta(
     ),
     modalities=["audio"],
     citation="""
-@misc{ao2022speecht5unifiedmodalencoderdecoderpretraining,
-      title={SpeechT5: Unified-Modal Encoder-Decoder Pre-Training for Spoken Language Processing},
-      author={Junyi Ao and Rui Wang and Long Zhou and Chengyi Wang and Shuo Ren and Yu Wu and Shujie Liu and Tom Ko and Qing Li and Yu Zhang and Zhihua Wei and Yao Qian and Jinyu Li and Furu Wei},
-      year={2022},
-      eprint={2110.07205},
-      archivePrefix={arXiv},
-      primaryClass={eess.AS},
-      url={https://arxiv.org/abs/2110.07205},
+@inproceedings{ao2022speecht5unifiedmodalencoderdecoderpretraining,
+  address = {Dublin, Ireland},
+  author = {Ao, Junyi and Wang, Rui and Zhou, Long and Wang, Chengyi and Ren, Shuo and Wu, Yu and Liu, Shujie and Ko, Tom and Li, Qing and Zhang, Yu and Wei, Zhihua and Qian, Yao and Li, Jinyu and Wei, Furu},
+  booktitle = {Proceedings of the 60th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2022.acl-long.393},
+  editor = {Muresan, Smaranda and Nakov, Preslav and Villavicencio, Aline},
+  month = {may},
+  pages = {5723--5738},
+  publisher = {Association for Computational Linguistics},
+  title = {{S}peech{T}5: Unified-Modal Encoder-Decoder Pre-Training for Spoken Language Processing},
+  url = {https://aclanthology.org/2022.acl-long.393/},
+  year = {2022},
 }""",
     extra_requirements_groups=["speecht5"],
 )
@@ -393,14 +405,18 @@ speecht5_tts = ModelMeta(
     ),
     modalities=["text"],
     citation="""
-@misc{ao2022speecht5unifiedmodalencoderdecoderpretraining,
-      title={SpeechT5: Unified-Modal Encoder-Decoder Pre-Training for Spoken Language Processing},
-      author={Junyi Ao and Rui Wang and Long Zhou and Chengyi Wang and Shuo Ren and Yu Wu and Shujie Liu and Tom Ko and Qing Li and Yu Zhang and Zhihua Wei and Yao Qian and Jinyu Li and Furu Wei},
-      year={2022},
-      eprint={2110.07205},
-      archivePrefix={arXiv},
-      primaryClass={eess.AS},
-      url={https://arxiv.org/abs/2110.07205},
+@inproceedings{ao2022speecht5unifiedmodalencoderdecoderpretraining,
+  address = {Dublin, Ireland},
+  author = {Ao, Junyi and Wang, Rui and Zhou, Long and Wang, Chengyi and Ren, Shuo and Wu, Yu and Liu, Shujie and Ko, Tom and Li, Qing and Zhang, Yu and Wei, Zhihua and Qian, Yao and Li, Jinyu and Wei, Furu},
+  booktitle = {Proceedings of the 60th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2022.acl-long.393},
+  editor = {Muresan, Smaranda and Nakov, Preslav and Villavicencio, Aline},
+  month = {may},
+  pages = {5723--5738},
+  publisher = {Association for Computational Linguistics},
+  title = {{S}peech{T}5: Unified-Modal Encoder-Decoder Pre-Training for Spoken Language Processing},
+  url = {https://aclanthology.org/2022.acl-long.393/},
+  year = {2022},
 }""",
     extra_requirements_groups=["speecht5"],
 )
@@ -430,14 +446,18 @@ speecht5_multimodal = ModelMeta(
     ),
     modalities=["audio", "text"],
     citation="""
-@misc{ao2022speecht5unifiedmodalencoderdecoderpretraining,
-      title={SpeechT5: Unified-Modal Encoder-Decoder Pre-Training for Spoken Language Processing},
-      author={Junyi Ao and Rui Wang and Long Zhou and Chengyi Wang and Shuo Ren and Yu Wu and Shujie Liu and Tom Ko and Qing Li and Yu Zhang and Zhihua Wei and Yao Qian and Jinyu Li and Furu Wei},
-      year={2022},
-      eprint={2110.07205},
-      archivePrefix={arXiv},
-      primaryClass={eess.AS},
-      url={https://arxiv.org/abs/2110.07205},
+@inproceedings{ao2022speecht5unifiedmodalencoderdecoderpretraining,
+  address = {Dublin, Ireland},
+  author = {Ao, Junyi and Wang, Rui and Zhou, Long and Wang, Chengyi and Ren, Shuo and Wu, Yu and Liu, Shujie and Ko, Tom and Li, Qing and Zhang, Yu and Wei, Zhihua and Qian, Yao and Li, Jinyu and Wei, Furu},
+  booktitle = {Proceedings of the 60th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2022.acl-long.393},
+  editor = {Muresan, Smaranda and Nakov, Preslav and Villavicencio, Aline},
+  month = {may},
+  pages = {5723--5738},
+  publisher = {Association for Computational Linguistics},
+  title = {{S}peech{T}5: Unified-Modal Encoder-Decoder Pre-Training for Spoken Language Processing},
+  url = {https://aclanthology.org/2022.acl-long.393/},
+  year = {2022},
 }""",
     extra_requirements_groups=["speecht5"],
 )

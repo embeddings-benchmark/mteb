@@ -6,7 +6,7 @@ class T2Reranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="T2Reranking",
         description="T2Ranking: A large-scale Chinese Benchmark for Passage Ranking",
-        reference="https://arxiv.org/abs/2304.03679",
+        reference="https://doi.org/10.1145/3539618.3591874",
         dataset={
             "path": "mteb/T2Reranking",
             "revision": "a34fe6bc0dff185af1228e49a0f6fb1de1565627",
@@ -26,12 +26,17 @@ class T2Reranking(AbsTaskRetrieval):
         sample_creation="found",
         prompt="Given a Chinese search query, retrieve web passages that answer the question",
         bibtex_citation=r"""
-@misc{xie2023t2ranking,
-  archiveprefix = {arXiv},
-  author = {Xiaohui Xie and Qian Dong and Bingning Wang and Feiyang Lv and Ting Yao and Weinan Gan and Zhijing Wu and Xiangsheng Li and Haitao Li and Yiqun Liu and Jin Ma},
-  eprint = {2304.03679},
-  primaryclass = {cs.IR},
-  title = {T2Ranking: A large-scale Chinese Benchmark for Passage Ranking},
+@inproceedings{xie2023t2ranking,
+  author = {Xie, Xiaohui and Dong, Qian and Wang, Bingning and Lv, Feiyang and Yao, Ting and Gan, Weinan and Wu, Zhijing and Li, Xiangsheng and Li, Haitao and Liu, Yiqun and Ma, Jin},
+  booktitle = {Proceedings of the 46th International ACM SIGIR Conference on Research and Development in Information Retrieval},
+  collection = {SIGIR ’23},
+  doi = {10.1145/3539618.3591874},
+  month = {July},
+  pages = {2681–2690},
+  publisher = {ACM},
+  series = {SIGIR ’23},
+  title = {T2Ranking: A Large-scale Chinese Benchmark for Passage Ranking},
+  url = {https://doi.org/10.1145/3539618.3591874},
   year = {2023},
 }
 """,

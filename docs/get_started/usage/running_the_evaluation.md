@@ -182,6 +182,19 @@ mteb.evaluate(model, task)
 ```
 
 
+### Speeding up Data Loading
+
+By default, datasets are loaded and transformed in a single process. On larger machines, you can use more processes by setting `num_proc`:
+
+=== "Python"
+    ```python
+    results = mteb.evaluate(model, tasks, num_proc=8)
+    ```
+=== "CLI"
+    ```bash
+    mteb run -t NanoArguAnaRetrieval       -m sentence-transformers/static-similarity-mrl-multilingual-v1       --num-proc 8
+    ```
+
 ### Speeding Download
 
 The simplest way to speed up downloads is by using Huggingface's [`xet`](https://huggingface.co/blog/xet-on-the-hub). You can use this simply using:

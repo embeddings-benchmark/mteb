@@ -8,6 +8,9 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import OutputDType
 
 if TYPE_CHECKING:
+    import torch
+    from transformers import BaseVideoProcessor, BatchFeature
+
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import PromptType
 
@@ -23,6 +26,87 @@ IMAGE_FACTOR = IMAGE_BASE_FACTOR * 2
 MIN_PIXELS = 4 * IMAGE_FACTOR * IMAGE_FACTOR
 MAX_PIXELS = 1800 * IMAGE_FACTOR * IMAGE_FACTOR
 DEFAULT_INSTRUCTION = "Represent the user's input."
+# total_pixels of a video in the official script: 10 frames of 768 tokens
+# https://huggingface.co/Qwen/Qwen3-VL-Embedding-2B/blob/main/scripts/qwen3_vl_embedding.py
+MAX_TOTAL_PIXELS = 10 * 768 * IMAGE_FACTOR * IMAGE_FACTOR
+
+
+def resize_video(video: torch.Tensor, total_pixels: int) -> torch.Tensor:
+    """Resize sampled frames as qwen-vl-utils' fetch_video does for a frame list.
+
+    Each frame is first fitted to the patch grid (fetch_image), then the clip to the budget.
+    https://github.com/QwenLM/Qwen3-VL/blob/96588727e44c78b25ba03ea03b8e12f7e64fd0da/qwen-vl-utils/src/qwen_vl_utils/vision_process.py#L403-L475
+    """
+    import torch
+    from qwen_vl_utils.vision_process import (
+        FRAME_FACTOR,
+        IMAGE_MAX_TOKEN_NUM,
+        IMAGE_MIN_TOKEN_NUM,
+        VIDEO_MAX_TOKEN_NUM,
+        VIDEO_MIN_TOKEN_NUM,
+        ceil_by_factor,
+        smart_resize,
+    )
+    from torchvision.transforms import InterpolationMode
+    from torchvision.transforms.functional import resize
+
+    nframes = ceil_by_factor(len(video), FRAME_FACTOR)
+    if nframes > len(video):
+        video = torch.cat([video, video[-1:].expand(nframes - len(video), -1, -1, -1)])
+    height, width = smart_resize(
+        video.shape[2],
+        video.shape[3],
+        factor=IMAGE_FACTOR,
+        min_pixels=IMAGE_MIN_TOKEN_NUM * IMAGE_FACTOR * IMAGE_FACTOR,
+        max_pixels=IMAGE_MAX_TOKEN_NUM * IMAGE_FACTOR * IMAGE_FACTOR,
+    )
+    video = resize(
+        video.cpu(),
+        [height, width],
+        interpolation=InterpolationMode.BICUBIC,
+        antialias=True,
+    )
+    min_pixels = VIDEO_MIN_TOKEN_NUM * IMAGE_FACTOR * IMAGE_FACTOR
+    max_pixels = max(
+        min(
+            VIDEO_MAX_TOKEN_NUM * IMAGE_FACTOR * IMAGE_FACTOR,
+            total_pixels / nframes * FRAME_FACTOR,
+        ),
+        int(min_pixels * 1.05),
+    )
+    height, width = smart_resize(
+        height,
+        width,
+        factor=IMAGE_FACTOR,
+        min_pixels=min_pixels,
+        max_pixels=max_pixels,
+    )
+    return resize(
+        video.float(),
+        [height, width],
+        interpolation=InterpolationMode.BICUBIC,
+        antialias=True,
+    )
+
+
+def load_video_processor(
+    model_name: str, total_pixels: int, **kwargs: Any
+) -> BaseVideoProcessor:
+    """Qwen3-VL video processor that sizes frames with `resize_video`.
+
+    The processor's own resize spends one pixel budget on the whole clip, with no
+    per-frame cap and no upscaling of small frames, unlike the official scripts.
+    """
+    from transformers import Qwen3VLVideoProcessor
+
+    class VideoProcessor(Qwen3VLVideoProcessor):
+        def _preprocess(
+            self, videos: list[torch.Tensor], **kwargs: Any
+        ) -> BatchFeature:
+            videos = [resize_video(video, total_pixels) for video in videos]
+            return super()._preprocess(videos, **(kwargs | {"do_resize": False}))
+
+    return VideoProcessor.from_pretrained(model_name, **kwargs)
 
 
 class Qwen3VLEmbeddingWrapper(InstructSentenceTransformerModel):
@@ -41,7 +125,7 @@ class Qwen3VLEmbeddingWrapper(InstructSentenceTransformerModel):
         num_frames: int | None = None,
         **kwargs: Any,
     ) -> None:
-        from transformers import AutoImageProcessor, AutoVideoProcessor
+        from transformers import AutoImageProcessor
 
         processor_kwargs = kwargs.get("processor_kwargs", {})
 
@@ -54,13 +138,12 @@ class Qwen3VLEmbeddingWrapper(InstructSentenceTransformerModel):
             **kwargs,
         )
         # VideoCollator already samples frames; skip inner sampling.
-        video_processor = AutoVideoProcessor.from_pretrained(
+        video_processor = load_video_processor(
             model_name,
+            MAX_TOTAL_PIXELS,
             revision=revision,
             trust_remote_code=True,
             do_sample_frames=False,
-            min_pixels=min_pixels,
-            max_pixels=max_pixels,
             **kwargs,
         )
         processor_kwargs |= {

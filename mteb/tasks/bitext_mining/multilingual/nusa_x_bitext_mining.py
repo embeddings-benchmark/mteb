@@ -47,12 +47,17 @@ class NusaXBitextMining(AbsTaskBitextMining):
   year = {2023},
 }
 
-@misc{winata2024miners,
-  archiveprefix = {arXiv},
-  author = {Genta Indra Winata and Ruochen Zhang and David Ifeoluwa Adelani},
-  eprint = {2406.07424},
-  primaryclass = {cs.CL},
-  title = {MINERS: Multilingual Language Models as Semantic Retrievers},
+@inproceedings{winata2024miners,
+  address = {Miami, Florida, USA},
+  author = {Winata, Genta Indra and Zhang, Ruochen and Adelani, David Ifeoluwa},
+  booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2024},
+  doi = {10.18653/v1/2024.findings-emnlp.155},
+  editor = {Al-Onaizan, Yaser and Bansal, Mohit and Chen, Yun-Nung},
+  month = {nov},
+  pages = {2742--2766},
+  publisher = {Association for Computational Linguistics},
+  title = {{MINERS}: Multilingual Language Models as Semantic Retrievers},
+  url = {https://aclanthology.org/2024.findings-emnlp.155/},
   year = {2024},
 }
 """,

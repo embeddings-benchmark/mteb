@@ -16,14 +16,19 @@ if TYPE_CHECKING:
     from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
 
-LLM2CLIP_CITATION = """@misc{huang2024llm2clippowerfullanguagemodel,
-  title={LLM2CLIP: Powerful Language Model Unlock Richer Visual Representation},
-  author={Weiquan Huang and Aoqi Wu and Yifan Yang and Xufang Luo and Yuqing Yang and Liang Hu and Qi Dai and Xiyang Dai and Dongdong Chen and Chong Luo and Lili Qiu},
-  year={2024},
-  eprint={2411.04997},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV},
-  url={https://arxiv.org/abs/2411.04997}
+LLM2CLIP_CITATION = """@article{huang2024llm2clippowerfullanguagemodel,
+  author = {Huang, Weiquan and Wu, Aoqi and Yang, Yifan and Luo, Xufang and Yang, Yuqing and Naseem, Usman and Wang, Chunyu and Dai, Qi and Dai, Xiyang and Chen, Dongdong and Luo, Chong and Qiu, Lili and Hu, Liang},
+  doi = {10.1609/aaai.v40i7.37427},
+  issn = {2159-5399},
+  journal = {Proceedings of the AAAI Conference on Artificial Intelligence},
+  month = {Mar},
+  number = {7},
+  pages = {5131–5139},
+  publisher = {Association for the Advancement of Artificial Intelligence (AAAI)},
+  title = {LLM2CLIP: Powerful Language Model Unlocks Richer Cross-Modality Representation},
+  url = {https://doi.org/10.1609/aaai.v40i7.37427},
+  volume = {40},
+  year = {2026},
 }"""
 
 MODEL2PROCESSOR = {

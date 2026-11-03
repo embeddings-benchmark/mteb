@@ -47,17 +47,14 @@ class SemRel24STS(AbsTaskSTS):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@misc{ousidhoum2024semrel2024,
-  archiveprefix = {arXiv},
-  author = {Nedjma Ousidhoum and Shamsuddeen Hassan Muhammad and Mohamed Abdalla and Idris Abdulmumin and Ibrahim Said Ahmad and
-Sanchit Ahuja and Alham Fikri Aji and Vladimir Araujo and Abinew Ali Ayele and Pavan Baswani and Meriem Beloucif and
-Chris Biemann and Sofia Bourhim and Christine De Kock and Genet Shanko Dekebo and
-Oumaima Hourrane and Gopichand Kanumolu and Lokesh Madasu and Samuel Rutunda and Manish Shrivastava and
-Thamar Solorio and Nirmal Surange and Hailegnaw Getaneh Tilaye and Krishnapriya Vishnubhotla and Genta Winata and
-Seid Muhie Yimam and Saif M. Mohammad},
-  eprint = {2402.08638},
-  primaryclass = {cs.CL},
-  title = {SemRel2024: A Collection of Semantic Textual Relatedness Datasets for 14 Languages},
+@inproceedings{ousidhoum2024semrel2024,
+  author = {Ousidhoum, Nedjma and Muhammad, Shamsuddeen and Abdalla, Mohamed and Abdulmumin, Idris and Ahmad, Ibrahim and Ahuja, Sanchit and Aji, Alham and Araujo, Vladimir and Ayele, Abinew and Baswani, Pavan and Beloucif, Meriem and Biemann, Chris and Bourhim, Sofia and Kock, Christine and Dekebo, Genet and Hourrane, Oumaima and Kanumolu, Gopichand and Madasu, Lokesh and Rutunda, Samuel and Shrivastava, Manish and Solorio, Thamar and Surange, Nirmal and Tilaye, Hailegnaw and Vishnubhotla, Krishnapriya and Winata, Genta and Yimam, Seid and Mohammad, Saif},
+  booktitle = {Findings of the Association for Computational Linguistics ACL 2024},
+  doi = {10.18653/v1/2024.findings-acl.147},
+  pages = {2512–2530},
+  publisher = {Association for Computational Linguistics},
+  title = {SemRel2024: A Collection of Semantic Textual Relatedness Datasets for 13 Languages},
+  url = {https://doi.org/10.18653/v1/2024.findings-acl.147},
   year = {2024},
 }
 """,

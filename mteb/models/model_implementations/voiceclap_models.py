@@ -95,11 +95,13 @@ class VoiceCLAPSmallWrapper(AbsEncoder):
     ) -> np.ndarray:
         import torch
 
+        # the audio encoder needs at least 480 samples (30 ms at 16 kHz)
         inputs.collate_fn = AudioCollator(
             target_sampling_rate=self.sampling_rate,
             max_samples=seconds_to_samples(
                 self.max_audio_length_seconds, self.sampling_rate
             ),
+            min_samples=480,
         )
 
         all_features = []

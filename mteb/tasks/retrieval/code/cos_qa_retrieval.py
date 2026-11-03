@@ -8,7 +8,7 @@ class CosQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CosQA",
         description="The dataset is a collection of natural language queries and their corresponding code snippets. The task is to retrieve the most relevant code snippet for a given query.",
-        reference="https://arxiv.org/abs/2105.13239",
+        reference="https://aclanthology.org/2021.acl-long.442/",
         dataset={
             "path": "CoIR-Retrieval/cosqa",
             "revision": "bc5efb7e9d437246ce393ed19d772e08e4a79535",
@@ -27,13 +27,17 @@ class CosQARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{huang2021cosqa20000webqueries,
-  archiveprefix = {arXiv},
-  author = {Junjie Huang and Duyu Tang and Linjun Shou and Ming Gong and Ke Xu and Daxin Jiang and Ming Zhou and Nan Duan},
-  eprint = {2105.13239},
-  primaryclass = {cs.CL},
-  title = {CoSQA: 20,000+ Web Queries for Code Search and Question Answering},
-  url = {https://arxiv.org/abs/2105.13239},
+@inproceedings{huang2021cosqa20000webqueries,
+  address = {Online},
+  author = {Huang, Junjie and Tang, Duyu and Shou, Linjun and Gong, Ming and Xu, Ke and Jiang, Daxin and Zhou, Ming and Duan, Nan},
+  booktitle = {Proceedings of the 59th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics and the 11th International Joint Conference on Natural Language Processing (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2021.acl-long.442},
+  editor = {Zong, Chengqing and Xia, Fei and Li, Wenjie and Navigli, Roberto},
+  month = {aug},
+  pages = {5690--5700},
+  publisher = {Association for Computational Linguistics},
+  title = {{C}o{SQA}: 20,000+ Web Queries for Code Search and Question Answering},
+  url = {https://aclanthology.org/2021.acl-long.442/},
   year = {2021},
 }
 """,
