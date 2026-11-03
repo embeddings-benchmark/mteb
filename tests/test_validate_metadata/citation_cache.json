@@ -11450,6 +11450,26 @@
                 "similarity": 1.0,
                 "note": ""
             }
+        },
+        "communication2023seamlessmultilingualexpressivestreaming|10.48550/arXiv.2312.05187|2312.05187|seamless: multilingual expressive and streaming speech translation|2023": {
+            "stored_at": 1793741128.462432,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Seamless: Multilingual Expressive and Streaming Speech Translation",
+                "source": "datacite:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "shanbhogue2026geminiembedding2native|10.48550/arXiv.2605.27295|2605.27295|gemini embedding 2: a native multimodal embedding model from gemini|2026": {
+            "stored_at": 1793741130.5634859,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Gemini Embedding 2: A Native Multimodal Embedding Model from Gemini",
+                "source": "datacite:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
         }
     }
 }
