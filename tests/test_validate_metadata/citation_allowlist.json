@@ -68,8 +68,6 @@
     "priban-steinberger-2022-czech": "Correct as cited (LREC 2022, https://aclanthology.org/2022.lrec-1.148/), mismatch due to parsing of the latex accents in Priban",
     "quora-question-pairs": "Correct as cited (Kaggle's own citation, https://kaggle.com/competitions/quora-question-pairs), the authors are Kaggle handles",
     "riegoenhancement": " Correct as cited (United International Journal for Research & Technology, https://uijrt.com/articles/v4/i8/UIJRTV4I80009.pdf), the journal is not in Crossref",
-    "runelab2026kenning": "Correct as cited (Hugging Face model card, https://huggingface.co/runelab-ai/kenning-turkish-legal-v1), model cards are not in the article indexes",
-    "runelab_vor_lateembed_tr_v1_2026": "Correct as cited (Hugging Face model card, https://huggingface.co/runelab-ai/Vor-LateEmbed-TR-0.6B-v1), model cards are not in the article indexes",
     "sakaguchi2021winogrande": "Correct as cited (CACM 2021, https://doi.org/10.1145/3474381), Crossref holds the record under the short title 'WinoGrande'",
     "schmidt-etal-2022-sentiment": "Correct as cited (KONVENS 2022, https://aclanthology.org/2022.konvens-1.9/)",
     "shinoda2026biovita": "Correct as cited (CVPR 2026)",
