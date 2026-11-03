@@ -737,7 +737,6 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "Vidore3IndustrialNemotron35Embed8BReranking.v2",
         "Vidore3PharmaceuticalsNemotron35Embed8BReranking.v2",
         "Vidore3PhysicsNemotron35Embed8BReranking.v2",
-        "VisLingAText",  # 171 duplicate analogy rows, and 19 A:B::C triples with two valid answers (e.g. Tulsa:Oklahoma::Glendale -> Arizona/California)
         "VizWizIT2TRetrieval",
         "VoyageMMarcoReranking",
         "WebFAQRetrieval",
@@ -986,6 +985,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "Vidore3IndustrialNemotron35Embed8BReranking.v2",
         "Vidore3PharmaceuticalsNemotron35Embed8BReranking.v2",
         "Vidore3PhysicsNemotron35Embed8BReranking.v2",
+        "VisLingAImage",  # related concepts share Wikimedia Commons images, e.g. implement/implements and Athens/Greece
         "WebQAT2ITRetrieval",
         "WebVidCoVRIT2VRetrieval",
         "WITI2TRetrieval",  # images can recur across WIT records and languages
@@ -1150,7 +1150,6 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "AROVisualRelation",  # correct + distractor relation captions per example
         "ImageCoDe",  # multiple candidate images per example
         "SugarCrepe",  # correct + hard-negative captions per example
-        "VisLingAImage",  # each concept (document) is the mean embedding of 4-11 images (746 documents -> 6,717 unique images)
         "Winoground",  # exactly 2 texts and 2 images per example (400 samples -> 800 of each)
         # Genuine stats-generation inconsistency: unique_texts exceeds the
         # corpus/query count by a large, non-integer-multiple factor, not

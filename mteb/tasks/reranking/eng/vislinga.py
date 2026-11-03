@@ -1,36 +1,13 @@
 from __future__ import annotations
 
-import logging
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 import numpy as np
 from datasets import Dataset, load_dataset
 
-from mteb._create_dataloaders import create_dataloader
-from mteb.abstasks._statistics_calculation import (
-    calculate_relevant_docs_statistics,
-    calculate_single_input_modality_statistics,
-    calculate_top_ranked_statistics,
-)
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.models import EncoderProtocol
-from mteb.types import PromptType
-from mteb.types.statistics import RetrievalDescriptiveStatistics
-
-if TYPE_CHECKING:
-    from pathlib import Path
-
-    import torch
-    from torch.utils.data import DataLoader
-
-    from mteb.models import MTEBModels
-    from mteb.models.model_meta import ModelMeta
-    from mteb.timing import TimingStack
-    from mteb.types import Array, BatchedInput, EncodeKwargs, ScoresDict
-
-logger = logging.getLogger(__name__)
 
 _ANALOGY_COLUMNS = ("word1", "word2", "word3", "word4")
 
@@ -44,7 +21,7 @@ _VISLINGA_METADATA: dict[str, Any] = {
     "type": "Reranking",
     "eval_splits": ["test"],
     "eval_langs": ["eng-Latn"],
-    "main_score": "hit_rate_at_10",
+    "main_score": "analogy_hit_rate_at_10",
     "date": ("2013-01-16", "2026-10-14"),
     "domains": ["Encyclopaedic"],
     "task_subtypes": [],
@@ -64,11 +41,12 @@ _VISLINGA_METADATA: dict[str, Any] = {
 
 
 class _VisLingAReranking(AbsTaskRetrieval):
-    """Analogies A:B::C:D as reranking: each analogy is a query, the concepts are the corpus and D is the relevant
-    document. The candidates of a query are all concepts except A, B and C.
+    """Analogies A:B::C:D over concepts, each represented by one or more inputs (words or images).
 
-    A concept is represented by one or more inputs, whose embeddings are mean-pooled and L2-normalised. The query
-    embedding is B - A + C (L2-normalised) and candidates are scored by cosine similarity.
+    Queries and corpus are both the concept inputs, so the standard retrieval evaluation scores every input against
+    every input. `task_specific_scores` rebuilds the input x input cosine similarity matrix from the results, pools it
+    into concept similarities and ranks the answer D of each analogy among all concepts except A, B and C by
+    M[B, X] - M[A, X] + M[C, X], i.e. by cosine similarity to B - A + C.
     """
 
     abstask_prompt = "Represent the concept."
@@ -77,6 +55,14 @@ class _VisLingAReranking(AbsTaskRetrieval):
         self, analogies: Dataset, split: str, num_proc: int | None
     ) -> Dataset:
         """The inputs representing each concept, with a `concept` column and one column named after the modality."""
+        raise NotImplementedError
+
+    def _input_ids(self, concept_inputs: Dataset) -> list[str]:
+        raise NotImplementedError
+
+    def _relevant_docs(
+        self, ids: list[str], concepts: list[str], by_concept: dict[str, list[str]]
+    ) -> dict[str, dict[str, int]]:
         raise NotImplementedError
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
@@ -88,100 +74,39 @@ class _VisLingAReranking(AbsTaskRetrieval):
             revision=self.metadata.dataset["revision"],
             num_proc=num_proc,
         )
-        self.concept_inputs: dict[str, Dataset] = {}
-        self.query_terms: dict[str, dict[str, tuple[str, str, str]]] = {}
+        self.input_concepts: dict[str, list[str]] = {}
+        self.input_ids: dict[str, list[str]] = {}
+        self.analogies: dict[str, tuple[list[str], ...]] = {}
         self.dataset = {"default": {}}
+        modality = self.metadata.modalities[0]
         for split in self.metadata.eval_splits:
             concept_inputs = self._load_concept_inputs(
                 analogies[split], split, num_proc
             )
-            self.concept_inputs[split] = concept_inputs
-            names = sorted(set(concept_inputs["concept"]))
-
-            a, b, c, d = (analogies[split][column] for column in _ANALOGY_COLUMNS)
-            missing = (set(a) | set(b) | set(c) | set(d)) - set(names)
+            concepts = list(concept_inputs["concept"])
+            a, b, c, d = (list(analogies[split][column]) for column in _ANALOGY_COLUMNS)
+            missing = (set(a) | set(b) | set(c) | set(d)) - set(concepts)
             if missing:
                 raise ValueError(
                     f"Analogies use concepts without inputs: {sorted(missing)[:10]}"
                 )
-            query_ids = [f"q{i}" for i in range(len(a))]
+            ids = self._input_ids(concept_inputs)
+            inputs = concept_inputs.select_columns([modality]).add_column("id", ids)
+            by_concept: dict[str, list[str]] = {}
+            for input_id, concept in zip(ids, concepts, strict=True):
+                by_concept.setdefault(concept, []).append(input_id)
             self.dataset["default"][split] = RetrievalSplitData(
-                queries=Dataset.from_dict(
-                    {
-                        "id": query_ids,
-                        "text": [
-                            f"{x}:{y}::{z}" for x, y, z in zip(a, b, c, strict=True)
-                        ],
-                    }
-                ),
-                corpus=Dataset.from_dict({"id": names, "text": names}),
-                relevant_docs={
-                    qid: {answer: 1} for qid, answer in zip(query_ids, d, strict=True)
-                },
-                top_ranked={
-                    qid: _candidates(names, excluded={x, y, z})
-                    for qid, x, y, z in zip(query_ids, a, b, c, strict=True)
-                },
+                queries=inputs,
+                corpus=inputs,
+                relevant_docs=self._relevant_docs(ids, concepts, by_concept),
+                top_ranked=None,
             )
-            self.query_terms[split] = {
-                qid: (x, y, z) for qid, x, y, z in zip(query_ids, a, b, c, strict=True)
-            }
+            self.input_concepts[split] = concepts
+            self.input_ids[split] = ids
+            self.analogies[split] = (a, b, c, d)
         self.data_loaded = True
 
-    def _evaluate_subset(  # type: ignore[override]
-        self,
-        model: MTEBModels,
-        data_split: RetrievalSplitData,
-        *,
-        encode_kwargs: EncodeKwargs,
-        hf_split: str,
-        hf_subset: str,
-        prediction_folder: Path | None = None,
-        num_proc: int | None = None,
-        timer: TimingStack,
-        **kwargs: Any,
-    ) -> ScoresDict:
-        if not isinstance(model, EncoderProtocol):
-            raise TypeError("Expected model to be an instance of EncoderProtocol")
-
-        concept_inputs = self.concept_inputs[hf_split]
-        with timer(
-            "Encoding concepts",
-            split=hf_split,
-            subset=hf_subset,
-            log_message="Running VisLingA - Encoding concepts...",
-        ):
-            embeddings = model.encode(
-                create_dataloader(
-                    concept_inputs.select_columns(self.metadata.modalities[0]),
-                    task_metadata=self.metadata,
-                    num_proc=num_proc,
-                    **encode_kwargs,
-                ),
-                task_metadata=self.metadata,
-                hf_split=hf_split,
-                hf_subset=hf_subset,
-                **encode_kwargs,
-            )
-        concept_index = {name: i for i, name in enumerate(data_split["corpus"]["id"])}
-        concepts = _mean_pool(
-            np.asarray(embeddings, dtype=np.float32),
-            np.array([concept_index[name] for name in concept_inputs["concept"]]),
-            len(concept_index),
-        )
-        return super()._evaluate_subset(
-            _AnalogyEncoder(model, concepts, concept_index, self.query_terms[hf_split]),
-            data_split,
-            encode_kwargs=encode_kwargs,
-            hf_split=hf_split,
-            hf_subset=hf_subset,
-            prediction_folder=prediction_folder,
-            num_proc=num_proc,
-            timer=timer,
-            **kwargs,
-        )
-
-    def task_specific_scores(  # noqa: PLR6301
+    def task_specific_scores(
         self,
         scores: dict[str, dict[str, float]],
         qrels: dict[str, dict[str, int]],
@@ -189,99 +114,83 @@ class _VisLingAReranking(AbsTaskRetrieval):
         hf_split: str,
         hf_subset: str,
     ) -> dict[str, float]:
-        """Mean and median rank of each query's answer, with exact ties broken by descending document id."""
-        ranks = [
-            _rank(results[qid], answer)
-            for qid, docs in qrels.items()
-            for answer in docs
-        ]
+        similarities = _similarity_matrix(results, self.input_ids[hf_split])
+        concept_similarities, names = _pool_similarities(
+            similarities, self.input_concepts[hf_split]
+        )
+        ranks = _analogy_ranks(concept_similarities, names, self.analogies[hf_split])
         return {
-            "avg_rank": float(np.mean(ranks)),
-            "median_rank": float(np.median(ranks)),
+            "analogy_hit_rate_at_1": float(np.mean(ranks == 1)),
+            "analogy_hit_rate_at_10": float(np.mean(ranks <= 10)),
+            "analogy_avg_rank": float(np.mean(ranks)),
+            "analogy_median_rank": float(np.median(ranks)),
         }
 
 
-class _AnalogyEncoder:
-    """Exposes an encoder's concept embeddings to the standard retrieval pipeline.
+def _similarity_matrix(
+    results: dict[str, dict[str, float]], ids: list[str]
+) -> np.ndarray:
+    """Input x input similarities from the retrieval results.
 
-    Calculate documents' (concepts) mean-pooled concept embedding, query (analogies A:B::C:?) B - A + C, and
-    L2-normalise so we use cosine similarity.
+    Pairs missing from the results are filled from the transposed pair, and the diagonal (dropped by
+    ignore_identical_ids) with 1, as the similarity is cosine.
     """
-
-    def __init__(
-        self,
-        model: EncoderProtocol,
-        concepts: np.ndarray,
-        concept_index: dict[str, int],
-        query_terms: dict[str, tuple[str, str, str]],
-    ) -> None:
-        self.model = model
-        self.concepts = concepts
-        self.concept_index = concept_index
-        self.query_terms = query_terms
-
-    @property
-    def mteb_model_meta(self) -> ModelMeta:
-        return self.model.mteb_model_meta
-
-    def encode(
-        self,
-        inputs: DataLoader[BatchedInput],
-        *,
-        task_metadata: TaskMetadata,
-        hf_split: str,
-        hf_subset: str,
-        prompt_type: PromptType | None = None,
-        **kwargs: Any,
-    ) -> np.ndarray:
-        ids = [input_id for batch in inputs for input_id in batch["id"]]
-        if prompt_type != PromptType.query:
-            return self.concepts[[self.concept_index[input_id] for input_id in ids]]
-        a, b, c = (
-            self.concepts[
-                [self.concept_index[self.query_terms[input_id][i]] for input_id in ids]
-            ]
-            for i in range(3)
+    index = {input_id: i for i, input_id in enumerate(ids)}
+    n = len(ids)
+    similarities = np.full((n, n), np.nan, dtype=np.float64)
+    for qid, doc_scores in results.items():
+        cols = np.fromiter(
+            (index[doc_id] for doc_id in doc_scores),
+            dtype=np.int64,
+            count=len(doc_scores),
         )
-        targets = b - a + c
-        normalized: np.ndarray = targets / np.linalg.norm(
-            targets, axis=1, keepdims=True
+        similarities[index[qid], cols] = np.fromiter(
+            doc_scores.values(), dtype=np.float64, count=len(doc_scores)
         )
-        return normalized
-
-    def similarity(self, embeddings1: Array, embeddings2: Array) -> torch.Tensor:  # noqa: PLR6301
-        import torch
-
-        return torch.as_tensor(embeddings1) @ torch.as_tensor(embeddings2).T
-
-    def similarity_pairwise(  # noqa: PLR6301
-        self, embeddings1: Array, embeddings2: Array
-    ) -> torch.Tensor:
-        import torch
-
-        return (torch.as_tensor(embeddings1) * torch.as_tensor(embeddings2)).sum(dim=1)
-
-
-def _candidates(names: list[str], excluded: set[str]) -> list[str]:
-    return [name for name in names if name not in excluded]
+    diagonal = np.arange(n)
+    similarities[diagonal, diagonal] = np.nan_to_num(
+        similarities[diagonal, diagonal], nan=1.0
+    )
+    missing = np.isnan(similarities)
+    if missing.any():
+        similarities[missing] = similarities.T[missing]
+    if np.isnan(similarities).any():
+        raise ValueError(
+            f"{int(np.isnan(similarities).sum())} input pairs are missing from the results"
+        )
+    return similarities
 
 
-def _rank(doc_scores: dict[str, float], answer: str) -> int:
-    """1 + the number of candidates ranked above the answer, breaking exact ties by descending document id."""
-    answer_score = doc_scores[answer]
-    ids = np.array(list(doc_scores))
-    values = np.fromiter(doc_scores.values(), dtype=float, count=len(doc_scores))
-    above = (values > answer_score) | ((values == answer_score) & (ids > answer))
-    return 1 + int(above.sum())
+def _pool_similarities(
+    similarities: np.ndarray, concepts: list[str]
+) -> tuple[np.ndarray, list[str]]:
+    """Cosine similarity of concept embeddings, each the mean of its L2-normalised input embeddings."""
+    names = sorted(set(concepts))
+    index = {name: i for i, name in enumerate(names)}
+    groups = np.array([index[concept] for concept in concepts])
+    membership = np.zeros((len(names), len(concepts)), dtype=np.float64)
+    membership[groups, np.arange(len(concepts))] = 1.0
+    membership /= membership.sum(axis=1, keepdims=True)
+    pooled = membership @ similarities @ membership.T
+    norms = np.sqrt(np.diag(pooled))
+    return pooled / np.outer(norms, norms), names
 
 
-def _mean_pool(embeddings: np.ndarray, groups: np.ndarray, n_groups: int) -> np.ndarray:
-    """Average the embeddings of each group, then L2-normalise the averages."""
-    sums = np.zeros((n_groups, embeddings.shape[1]), dtype=embeddings.dtype)
-    np.add.at(sums, groups, embeddings)
-    means = sums / np.bincount(groups, minlength=n_groups)[:, None]
-    normalized: np.ndarray = means / np.linalg.norm(means, axis=1, keepdims=True)
-    return normalized
+def _analogy_ranks(
+    concept_similarities: np.ndarray, names: list[str], analogies: tuple[list[str], ...]
+) -> np.ndarray:
+    """Rank of D among all concepts except A, B and C by M[B, X] - M[A, X] + M[C, X]."""
+    index = {name: i for i, name in enumerate(names)}
+    a, b, c, d = (np.array([index[w] for w in column]) for column in analogies)
+    scores = concept_similarities[b] - concept_similarities[a] + concept_similarities[c]
+    rows = np.arange(len(d))
+    for excluded in (a, b, c):
+        scores[rows, excluded] = -np.inf
+    answer = scores[rows, d][:, None]
+    name_array = np.array(names)
+    tied_above = (scores == answer) & (name_array[None, :] > name_array[d][:, None])
+    ranks: np.ndarray = 1 + (scores > answer).sum(axis=1) + tied_above.sum(axis=1)
+    return ranks
 
 
 class VisLingAText(_VisLingAReranking):
@@ -305,15 +214,28 @@ class VisLingAText(_VisLingAReranking):
         )
         return Dataset.from_dict({"concept": names, "text": names})
 
+    def _input_ids(self, concept_inputs: Dataset) -> list[str]:  # noqa: PLR6301
+        return list(concept_inputs["concept"])
+
+    def _relevant_docs(  # noqa: PLR6301
+        self, ids: list[str], concepts: list[str], by_concept: dict[str, list[str]]
+    ) -> dict[str, dict[str, int]]:
+        return {input_id: {input_id: 1} for input_id in ids}
+
 
 class VisLingAImage(_VisLingAReranking):
+    ignore_identical_ids = True
+    # top_k = max(k_values) must cover all 7,365 inputs so that the results hold every pair
+    k_values = (1, 3, 5, 10, 20, 100, 1000, 10000)
+
     metadata = TaskMetadata(
         name="VisLingAImage",
         description=(
             "Visual analogies (A is to B as C is to D) over 746 concepts from the analogy dataset of Mikolov et al. "
-            "(2013), e.g. capitals, currencies and grammatical forms. Each concept is represented by the mean "
-            "embedding of several Wikimedia Commons images of that concept, and all concepts except A, B and C are "
-            "reranked by cosine similarity to B - A + C."
+            "(2013), e.g. capitals, currencies and grammatical forms. Each concept is represented by the mean of the "
+            "L2-normalised embeddings of several Wikimedia Commons images of that concept, and all concepts except A, "
+            "B and C are reranked by cosine similarity to B - A + C. Unlike the paper, which averages the raw image "
+            "embeddings, images are normalised before averaging; empirically, this barely changes hit@10."
         ),
         category="i2i",
         modalities=["image"],
@@ -331,37 +253,13 @@ class VisLingAImage(_VisLingAReranking):
             num_proc=num_proc,
         ).select_columns(["concept", "image"])
 
-    def _calculate_descriptive_statistics_from_split(
-        self,
-        split: str,
-        *,
-        hf_subset: str | None = None,
-        compute_overall: bool = False,
-        num_proc: int | None = None,
-    ) -> RetrievalDescriptiveStatistics:
-        # The documents are concepts whose embedding is the mean over several images, so describe the images.
-        split_data = self.dataset["default"][split]
-        queries, corpus = split_data["queries"], split_data["corpus"]
-        image_statistics = calculate_single_input_modality_statistics(
-            {"image": self.concept_inputs[split]["image"]}, max_workers=num_proc
-        )["image_statistics"]
-        return RetrievalDescriptiveStatistics(
-            num_samples=len(corpus) + len(queries),
-            num_queries=len(queries),
-            num_documents=len(corpus),
-            number_of_characters=0,
-            documents_text_statistics=None,
-            documents_image_statistics=image_statistics,
-            documents_audio_statistics=None,
-            documents_video_statistics=None,
-            queries_text_statistics=None,
-            queries_image_statistics=None,
-            queries_audio_statistics=None,
-            queries_video_statistics=None,
-            relevant_docs_statistics=calculate_relevant_docs_statistics(
-                split_data["relevant_docs"], set(queries["id"]), set(corpus["id"])
-            ),
-            top_ranked_statistics=calculate_top_ranked_statistics(
-                split_data["top_ranked"], len(queries)
-            ),
-        )
+    def _input_ids(self, concept_inputs: Dataset) -> list[str]:  # noqa: PLR6301
+        return [f"img{i}" for i in range(len(concept_inputs))]
+
+    def _relevant_docs(  # noqa: PLR6301
+        self, ids: list[str], concepts: list[str], by_concept: dict[str, list[str]]
+    ) -> dict[str, dict[str, int]]:
+        return {
+            input_id: {other: 1 for other in by_concept[concept] if other != input_id}
+            for input_id, concept in zip(ids, concepts, strict=True)
+        }
