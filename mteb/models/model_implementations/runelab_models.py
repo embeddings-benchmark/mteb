@@ -63,13 +63,5 @@ kenning_turkish_legal_v1 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     extra_requirements_groups=["embeddinggemma"],
-    citation="""
-@misc{runelab2026kenning,
-  title        = {Kenning: A Turkish Legal Retrieval Fine-Tune of EmbeddingGemma 2},
-  author       = {{RuneLab}},
-  year         = {2026},
-  url          = {https://runelab.ai/en/models/kenning-turkish-legal},
-  howpublished = {\\url{https://huggingface.co/runelab-ai/kenning-turkish-legal-v1}}
-}
-""",
+    citation=None,
 )
