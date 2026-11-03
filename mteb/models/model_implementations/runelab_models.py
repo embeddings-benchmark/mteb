@@ -33,15 +33,7 @@ vor_lateembed_tr_0_6b_v1 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     extra_requirements_groups=["pplx-embed-v2", "image"],
-    citation="""
-@misc{runelab_vor_lateembed_tr_v1_2026,
-  title        = {V{\\"o}r-LateEmbed-TR v1: a Turkish late-interaction retriever},
-  author       = {{RuneLab.ai}},
-  year         = {2026},
-  howpublished = {Hugging Face model card},
-  url          = {https://huggingface.co/runelab-ai/Vor-LateEmbed-TR-0.6B-v1}
-}
-""",
+    citation=None,
 )
 
 kenning_turkish_legal_v1 = ModelMeta(
