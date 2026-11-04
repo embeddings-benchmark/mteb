@@ -25,6 +25,7 @@ from mteb.api.schemas import (
     CustomGroupSchema,
     LeaderModelSchema,
     LeaderRowSchema,
+    ModelBadgeSchema,
     ModelScoreRowSchema,
     ModelScoresSchema,
     SummaryRowSchema,
@@ -629,6 +630,30 @@ def _summary_row_index(
         cached = {r.model.name: r for r in summary.rows}
         _summary_row_indices[bench_name] = cached
     return cached
+
+
+async def build_model_badge(
+    name: str, benchmark: str, data_date: str, cache_seconds: int
+) -> ModelBadgeSchema | None:
+    """Badge for model ``name`` on ``benchmark``; ``None`` if the model has no row there.
+
+    The message reads ``#rank / total · score · date``, where score is ``Mean (Task)``
+    (falling back to ``Mean (TaskType)``) on the leaderboard's 0-100 scale.
+    """
+    from mteb.api.cache import get_summary
+
+    summary = await get_summary(benchmark)
+    row = _summary_row_index(benchmark, summary).get(name)
+    if row is None:
+        return None
+    parts = [f"#{row.rank} / {len(summary.rows)}"]
+    score = row.mean_task if row.mean_task is not None else row.mean_task_type
+    if score is not None:
+        parts.append(f"{score * 100:.2f}")
+    parts.append(data_date)
+    return ModelBadgeSchema(
+        label=benchmark, message=" · ".join(parts), cache_seconds=cache_seconds
+    )
 
 
 async def build_model_scores(name: str) -> ModelScoresSchema:

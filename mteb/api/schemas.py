@@ -467,6 +467,20 @@ class ModelScoresSchema(_CamelModel):
     rows: list[ModelScoreRowSchema]
 
 
+class ModelBadgeSchema(_CamelModel):
+    """Response from `/models/{name}/badge`, in the shields.io endpoint-badge format.
+
+    See https://shields.io/badges/endpoint-badge for the field contract.
+    """
+
+    schema_version: Literal[1] = 1
+    label: str
+    message: str
+    color: str = "2563eb"
+    label_color: str = "1d1f26"
+    cache_seconds: int
+
+
 class MenuEntrySchema(_CamelModel):
     """Recursive menu entry; children are ``MenuEntrySchema`` or ``BenchmarkSchema``."""
 
