@@ -60,7 +60,6 @@ class CUREv1Retrieval(AbsTaskRetrieval):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="",
         prompt={
             "query": "Given a question by a medical professional, retrieve relevant passages that best answer the question",
         },

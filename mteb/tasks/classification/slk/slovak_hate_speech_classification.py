@@ -24,7 +24,6 @@ class SlovakHateSpeechClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         superseded_by="SlovakHateSpeechClassification.v2",
     )
 
@@ -51,6 +50,5 @@ class SlovakHateSpeechClassificationV2(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         adapted_from=["SlovakHateSpeechClassification"],
     )

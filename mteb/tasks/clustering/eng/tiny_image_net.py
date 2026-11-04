@@ -27,7 +27,6 @@ class TinyImageNet(AbsTaskClusteringLegacy):
         dialect=[],
         modalities=["image"],
         sample_creation="found",
-        bibtex_citation="""""",
     )
     input_column_name = "image"
     label_column_name = "label"

@@ -26,7 +26,6 @@ class SwedishPatentCPCSubclassClassification(AbsTaskMultilabelClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
     )
 
     def dataset_transform(

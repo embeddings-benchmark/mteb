@@ -31,5 +31,4 @@ class EuroPIRQRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         is_public=True,
-        bibtex_citation="",
     )

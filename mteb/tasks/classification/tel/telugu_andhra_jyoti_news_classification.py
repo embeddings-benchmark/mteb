@@ -24,7 +24,6 @@ class TeluguAndhraJyotiNewsClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         superseded_by="TeluguAndhraJyotiNewsClassification.v2",
     )
 
@@ -58,7 +57,6 @@ class TeluguAndhraJyotiNewsClassificationV2(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         adapted_from=["TeluguAndhraJyotiNewsClassification"],
     )
 
