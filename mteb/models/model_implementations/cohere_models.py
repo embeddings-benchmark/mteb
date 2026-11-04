@@ -374,7 +374,9 @@ class CohereTextEmbeddingModel(AbsEncoder):
             if "show_progress_bar" not in kwargs
             else kwargs.pop("show_progress_bar")
         )
-        inputs = [text for batch in inputs for text in batch["text"]]
+        # The API rejects a request whose texts are all empty; " " gets the same
+        # embedding as "" when mixed with non-empty texts, so this is lossless.
+        inputs = [text or " " for batch in inputs for text in batch["text"]]
 
         return self._embed(
             inputs,
@@ -498,6 +500,63 @@ cohere_eng_light_3 = ModelMeta(
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,  # assumed
+    training_datasets=None,
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
+)
+
+
+cohere_embed_v5_pro = ModelMeta(
+    loader=CohereTextEmbeddingModel,
+    loader_kwargs=dict(
+        model_prompts=model_prompts,
+    ),
+    name="Cohere/Cohere-embed-v5.0-pro",
+    model_type=["dense"],
+    languages=supported_languages,
+    open_weights=False,
+    revision="1",
+    release_date=None,
+    n_parameters=None,
+    n_embedding_parameters=None,
+    memory_usage_mb=None,
+    max_tokens=8192,
+    embed_dim=2048,
+    reference="https://docs.cohere.com/docs/cohere-embed",
+    license=None,
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["API"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
+)
+
+cohere_embed_v5_fast = ModelMeta(
+    loader=CohereTextEmbeddingModel,
+    loader_kwargs=dict(
+        model_prompts=model_prompts,
+    ),
+    name="Cohere/Cohere-embed-v5.0-fast",
+    model_type=["dense"],
+    languages=supported_languages,
+    open_weights=False,
+    revision="1",
+    release_date=None,
+    n_parameters=None,
+    n_embedding_parameters=None,
+    memory_usage_mb=None,
+    max_tokens=8192,
+    embed_dim=2048,
+    reference="https://docs.cohere.com/docs/cohere-embed",
+    license=None,
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["API"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
     output_dtypes=OUTPUT_TYPES,
     extra_requirements_groups=["cohere"],
