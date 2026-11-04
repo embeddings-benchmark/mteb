@@ -374,9 +374,7 @@ class CohereTextEmbeddingModel(AbsEncoder):
             if "show_progress_bar" not in kwargs
             else kwargs.pop("show_progress_bar")
         )
-        # The API rejects a request whose texts are all empty; " " gets the same
-        # embedding as "" when mixed with non-empty texts, so this is lossless.
-        inputs = [text or " " for batch in inputs for text in batch["text"]]
+        inputs = [text for batch in inputs for text in batch["text"]]
 
         return self._embed(
             inputs,
