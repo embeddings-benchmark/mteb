@@ -57,6 +57,8 @@ def bb25_loader(model_name: str, **kwargs: Any) -> SearchProtocol:
     import bm25s
     import Stemmer
 
+    from mteb.models.model_implementations.bm25 import _retrieve_bm25s
+
     class BB25Search:
         """Bayesian BM25 search using bm25s as the BM25 backend.
 
@@ -175,9 +177,13 @@ def bb25_loader(model_name: str, **kwargs: Any) -> SearchProtocol:
 
             logger.info(f"Retrieving Results... {len(queries):,} queries")
 
-            queries_results, queries_scores = self.retriever.retrieve(
+            queries_results, queries_scores = _retrieve_bm25s(
+                self.retriever,
                 query_tokenized,
-                k=min(top_k, len(self.corpus_idx_to_id)),
+                query_ids,
+                self.corpus_idx_to_id,
+                top_k,
+                top_ranked,
             )
 
             use_prior = self.prior_weight > 0
@@ -187,10 +193,6 @@ def bb25_loader(model_name: str, **kwargs: Any) -> SearchProtocol:
             for qi, qid in enumerate(query_ids):
                 doc_indices = queries_results[qi]
                 bm25_scores = queries_scores[qi].astype(np.float64)
-
-                query_documents = (
-                    top_ranked[qid] if top_ranked and qid in top_ranked else None
-                )
 
                 doc_id_to_score: dict[str, float] = {}
 
@@ -259,14 +261,12 @@ def bb25_loader(model_name: str, **kwargs: Any) -> SearchProtocol:
 
                     for ci in range(len(cand_doc_indices)):
                         doc_id = self.corpus_idx_to_id[cand_doc_indices[ci]]
-                        if query_documents is None or doc_id in query_documents:
-                            doc_id_to_score[doc_id] = float(posterior[ci])
+                        doc_id_to_score[doc_id] = float(posterior[ci])
 
                 # Include zero-score documents with score 0.0
                 for vi in np.where(~positive_mask)[0]:
                     doc_id = self.corpus_idx_to_id[doc_indices[vi]]
-                    if query_documents is None or doc_id in query_documents:
-                        doc_id_to_score[doc_id] = 0.0
+                    doc_id_to_score[doc_id] = 0.0
 
                 results[qid] = doc_id_to_score
 
@@ -281,7 +281,7 @@ bb25_model = ModelMeta(
     model_type=["sparse"],
     languages=None,
     open_weights=True,
-    revision="0_1_1",
+    revision="0_2_0",
     release_date="2026-02-06",
     n_parameters=0,
     n_embedding_parameters=0,

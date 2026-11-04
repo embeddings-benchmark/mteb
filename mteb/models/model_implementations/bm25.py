@@ -4,11 +4,14 @@ import logging
 import unicodedata
 from typing import TYPE_CHECKING, Any, Literal
 
+import numpy as np
+
 from mteb.models.model_meta import ModelMeta
 
 if TYPE_CHECKING:
     from collections.abc import Callable
 
+    import bm25s
     from bm25s.tokenization import Tokenized
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -80,6 +83,49 @@ _ISO3_TO_LANG: dict[str, tuple[str | None, str | None, str | None]] = {
     "tur": (None, "turkish", None),
     "yid": (None, "yiddish", None),
 }
+
+
+def _retrieve_bm25s(
+    retriever: bm25s.BM25,
+    query_tokens: Tokenized,
+    query_ids: list[str],
+    corpus_idx_to_id: dict[int, str],
+    top_k: int,
+    top_ranked: TopRankedDocumentsType | None,
+) -> tuple[list[np.ndarray], list[np.ndarray]]:
+    """Return the top-k corpus indices and BM25 scores for each query.
+
+    Without `top_ranked` this is a plain bm25s full-corpus retrieval. With it, each
+    query scores only its own candidates. Taking the full-corpus top-k first and then
+    filtering it would drop every candidate that falls outside that top-k.
+    """
+    if top_ranked is None:
+        return retriever.retrieve(query_tokens, k=min(top_k, len(corpus_idx_to_id)))
+
+    corpus_id_to_idx = {doc_id: idx for idx, doc_id in corpus_idx_to_id.items()}
+    id_to_token = {idx: token for token, idx in query_tokens.vocab.items()}
+    all_indices, all_scores = [], []
+    for qid, token_ids in zip(query_ids, query_tokens.ids, strict=True):
+        if qid not in top_ranked:
+            logger.warning(f"No pre-ranked documents found for query {qid}")
+        candidates = np.array(
+            [
+                corpus_id_to_idx[doc_id]
+                for doc_id in dict.fromkeys(top_ranked.get(qid, []))
+            ],
+            dtype=np.int64,
+        )
+        tokens = [id_to_token[token_id] for token_id in token_ids]
+        doc_scores = (
+            retriever.get_scores(tokens)
+            if tokens
+            else np.zeros(len(corpus_idx_to_id), dtype=np.float32)
+        )
+        candidate_scores = doc_scores[candidates]
+        order = np.argsort(-candidate_scores, kind="stable")[:top_k]
+        all_indices.append(candidates[order])
+        all_scores.append(candidate_scores[order])
+    return all_indices, all_scores
 
 
 # Public-constant stopword lookup for bm25s keys (avoids importing the private helper).
@@ -452,30 +498,23 @@ class BM25Search:
 
         logger.info(f"Retrieving Results... {len(queries):,} queries")
 
-        queries_results, queries_scores = self.retriever.retrieve(
+        queries_results, queries_scores = _retrieve_bm25s(
+            self.retriever,
             query_token_strs,
-            k=min(top_k, len(self.corpus_idx_to_id)),
+            query_ids,
+            self.corpus_idx_to_id,
+            top_k,
+            top_ranked,
         )
 
         # Iterate over queries
         for qi, qid in enumerate(query_ids):
-            query_results = queries_results[qi]
-            scores = queries_scores[qi]
-            doc_id_to_score = {}
-            query_documents = (
-                top_ranked[qid] if top_ranked and qid in top_ranked else None
-            )
-
-            # Iterate over results
-            for doc_idx, score in zip(query_results, scores, strict=True):
-                doc_id = self.corpus_idx_to_id[doc_idx]
-
-                # handle reranking with a filtered set of documents
-                if query_documents is not None and doc_id not in query_documents:
-                    continue
-                doc_id_to_score[doc_id] = float(score)
-
-            results[qid] = doc_id_to_score
+            results[qid] = {
+                self.corpus_idx_to_id[doc_idx]: float(score)
+                for doc_idx, score in zip(
+                    queries_results[qi], queries_scores[qi], strict=True
+                )
+            }
 
         return results
 
@@ -598,7 +637,7 @@ bm25_s = ModelMeta(
     model_type=["sparse"],
     languages=bm25_s_languages,
     open_weights=True,
-    revision="0_3_0",
+    revision="0_4_0",
     release_date="2026-05-06",
     n_parameters=0,
     n_embedding_parameters=0,
@@ -624,7 +663,7 @@ bm25_s_subword = ModelMeta(
     model_type=["sparse"],
     languages=qwen_languages,
     open_weights=True,
-    revision="0_1_0",
+    revision="0_2_0",
     release_date="2026-05-06",
     n_parameters=0,
     n_embedding_parameters=0,
