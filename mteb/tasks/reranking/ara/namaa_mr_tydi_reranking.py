@@ -24,6 +24,7 @@ class NamaaMrTydiReranking(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
+        adapted_from=["MrTidyRetrieval"],
         bibtex_citation=r"""
 @inproceedings{muennighoff2022mteb,
   address = {Dubrovnik, Croatia},
