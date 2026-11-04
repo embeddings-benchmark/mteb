@@ -1,5 +1,6 @@
 {
     "10.48550/arxiv.2210.11416": "Correct as cited (JMLR 2024, https://jmlr.org/papers/v25/23-0870.html), the arXiv preprint is from 2022",
+    "11234/1-3105": "Correct as cited (Universal Dependencies 2.5, LINDAT/CLARIAH-CZ, 2019, http://hdl.handle.net/11234/1-3105); the dataset has a Handle identifier rather than a DOI and title search does not reliably find this release",
     "Khine2017": "Correct as cited (ICCA 2017), Semantic Scholar lists the same three authors in a different order",
     "Kurihara_nlp2020": "Correct as cited (NLP2020, https://www.anlp.jp/proceedings/annual_meeting/2020/pdf_dir/P2-24.pdf), the Japanese annual meeting is not indexed",
     "Remus2019GermEval2T": "Correct as cited (GermEval 2019 Task 1, KONVENS, https://api.semanticscholar.org/CorpusID:208334484)",
@@ -38,6 +39,7 @@
     "flansmose-mikkelsen-etal-2022-ddisco": "Correct as cited (LREC 2022, https://aclanthology.org/2022.lrec-1.260/)",
     "gala2023indictrans": "Correct as cited (TMLR 2023, https://openreview.net/forum?id=vfT4YuzAYA), TMLR is not in Crossref",
     "habernal-etal-2013-sentiment": "Correct as cited (WASSA 2013, https://aclanthology.org/W13-1609/), ACL workshops have no Crossref DOIs",
+    "homburg2005benchmark": "Correct as cited (ISMIR 2005, pp. 528-531, https://ismir2005.ismir.net/proceedings/2117.pdf); the proceedings have no DOI and title search does not reliably find the paper",
     "hoogeveen2015": "Correct as cited (https://dl.acm.org/doi/10.1145/2838931.2838934), couldn't see that the title was incorrect",
     "huynh2026omniret": "Correct as cited (https://openaccess.thecvf.com/content/CVPR2026/html/Huynh_Efficient_and_High-Fidelity_Omni_Modality_Retrieval_CVPR_2026_paper.html). Wasn't found, but is correct.",
     "infly-ai_2025": "Correct as cited (Hugging Face's own citation, https://doi.org/10.57967/hf/4262)",
