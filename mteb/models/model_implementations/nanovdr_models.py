@@ -17,11 +17,15 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-NANOVDR_CITATION = """@article{nanovdr2026,
-  title={NanoVDR: Distilling a 2B Vision-Language Retriever into a 70M Text-Only Encoder for Visual Document Retrieval},
-  author={Liu, Zhuchenyang and Zhang, Yao and Xiao, Yu},
-  journal={arXiv preprint arXiv:2603.12824},
-  year={2026}
+NANOVDR_CITATION = """@inproceedings{nanovdr2026,
+  author = {Liu, Zhuchenyang and Zhang, Yao and Xiao, Yu},
+  booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
+  doi = {10.18653/2026.emnlp-main.71},
+  pages = {1631–1648},
+  publisher = {Association for Computational Linguistics},
+  title = {NanoVDR: Distilling a 2B Vision-Language Retriever into a 70M Text-Only Encoder for Visual Document Retrieval},
+  url = {https://doi.org/10.18653/2026.emnlp-main.71},
+  year = {2026},
 }"""
 
 QUERY_INSTRUCTION = "Find a document image that matches the given query."
