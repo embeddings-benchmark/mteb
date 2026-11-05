@@ -311,4 +311,5 @@ bb25_model = ModelMeta(
   url={https://doi.org/10.5281/zenodo.18512411},
 }""",
     extra_requirements_groups=["bm25s"],
+    output_dtypes=None,
 )
