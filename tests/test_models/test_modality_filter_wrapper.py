@@ -26,7 +26,8 @@ from mteb.types import PromptType
 def _meta(**updates: Any):
     return ModelMeta.create_empty(
         overwrites={
-            "name": "test/modality-selection",
+            # Synthetic baselines do not need optional vision-model dependencies.
+            "name": "mteb/baseline-modality-selection",
             "revision": "test-revision",
             "modalities": ["text", "image"],
             "similarity_fn_name": ScoringFunction.DOT_PRODUCT,
@@ -543,7 +544,9 @@ def test_get_model_applies_modality_selection_after_loading(
     monkeypatch.setattr(
         module, "get_model_meta", lambda *args, **kwargs: _meta(loader=loader)
     )
-    model = mteb.get_model("test/modality-selection", corpus_modalities=["image"])
+    model = mteb.get_model(
+        "mteb/baseline-modality-selection", corpus_modalities=["image"]
+    )
     _run_search(model, multimodal_inputs)
     assert isinstance(model, ModalityFilterWrapper)
     assert loader_calls == [{}]
