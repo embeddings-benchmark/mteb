@@ -336,3 +336,16 @@ def test_get_tasks_exclusive_language_filter_without_tasks_regression_5768():
 
     sts22 = next(t for t in tasks if t.metadata.name == "STS22.v2")
     assert sts22.hf_subsets == ["en"]
+
+
+def test_get_tasks_exclusive_language_filter_without_languages_warns():
+    """Raised in https://github.com/embeddings-benchmark/mteb/pull/5826
+
+    `exclusive_language_filter` needs `languages`; without them it is ignored with a warning
+    instead of removing every task.
+    """
+    with pytest.warns(UserWarning, match="exclusive_language_filter"):
+        tasks = get_tasks(exclusive_language_filter=True)
+
+    assert tasks
+    assert [t.metadata.name for t in tasks] == [t.metadata.name for t in get_tasks()]

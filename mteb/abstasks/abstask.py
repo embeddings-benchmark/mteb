@@ -560,18 +560,7 @@ class AbsTask(ABC):  # noqa: PLR0904
     @property
     def languages(self) -> list[ISOLanguage]:
         """The languages of the task."""
-        if self.hf_subsets:
-            eval_langs = self.metadata.hf_subsets_to_langscripts
-            languages = []
-
-            for lang in self.hf_subsets:
-                for langscript in eval_langs[lang]:
-                    iso_lang, script = langscript.split("-")
-                    languages.append(iso_lang)
-
-            return sorted(set(languages))
-
-        return self.metadata.languages
+        return sorted({code.split("-")[0] for code in self.bcp47_codes})
 
     @property
     def bcp47_codes(self) -> list[ISOLanguageScript]:
@@ -623,6 +612,14 @@ class AbsTask(ABC):  # noqa: PLR0904
         Returns:
             The filtered task
         """
+        if exclusive_language_filter and not languages:
+            warnings.warn(
+                "`exclusive_language_filter` has no effect without `languages` and will be ignored.",
+                UserWarning,
+                stacklevel=2,
+            )
+            exclusive_language_filter = False
+
         lang_scripts = LanguageScripts.from_languages_and_scripts(languages, script)
 
         subsets_to_keep = []
@@ -641,7 +638,6 @@ class AbsTask(ABC):  # noqa: PLR0904
 
             if (
                 exclusive_language_filter is True
-                and languages
                 and all(lang_scripts.contains_langscript(ls) for ls in langs)
                 and (
                     not script
