@@ -222,6 +222,7 @@ test = [
     "av>=17.0.0",
 ]
 citations = [
+    "bibtexparser>=2.0.0,<3.0.0", # used for scripts/tools/check_preprints.py
     "refaudit>=0.4.9", # used for scripts/tools/check_citations.py and scripts/tools/check_preprints.py
 ]
 docs = [

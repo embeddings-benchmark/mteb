@@ -7778,6 +7778,7 @@ youtu = [
 
 [package.dev-dependencies]
 citations = [
+    { name = "bibtexparser" },
     { name = "refaudit" },
 ]
 dev = [
@@ -8082,7 +8083,10 @@ requires-dist = [
 provides-extras = ["image", "audio", "codecarbon", "leaderboard", "api", "og", "video", "github", "peft", "flagembedding", "jina", "jina-clip", "jina-v4", "flash-attention", "internvideo2", "omniretriever", "colvec1-1", "topk-embed", "openai", "model2vec", "pylate", "colnanovdr", "pplx-embed-v2", "msclap", "bm25s", "boto3", "av", "gritlm", "xformers", "arctic-embed-m-v2", "blip2", "voyageai", "voyage-v", "cohere", "vertexai", "google-genai", "octen", "llm2vec", "timm", "radio", "open-clip-torch", "nomic", "ark", "colpali-engine", "evie", "dasheng", "colqwen3", "visrag-ret", "sauerkrautlm-colpali", "xet", "youtu", "llama-embed-nemotron", "llama-nemotron-colembed-vl", "nemotron-colembed-vl-v2", "nemotron-3-5-vl", "llama-nemotron-embed-vl-1b-v2", "nemotron-3-embed", "multimodal-sbert", "faiss-cpu", "eager-embed", "speechbrain", "muq", "wav2clip", "fusion-embedding", "torch-vggish-yamnet", "vllm", "moca", "transformers-v4", "transformers-v5", "e5-v", "nvembed", "nemotron-rerank", "modernbert", "sparse-encoder", "cosmos-embed1", "siglip", "tipsv2", "ps3", "qwen-vl", "wemm", "uembed", "videoprism", "qwen-omni-utils", "embeddinggemma", "languagebind", "gme", "imagebind", "speecht5", "seamless-m4t", "audio-flamingo-3", "bidirlm-omni", "viclip"]
 
 [package.metadata.requires-dev]
-citations = [{ name = "refaudit", specifier = ">=0.4.9" }]
+citations = [
+    { name = "bibtexparser", specifier = ">=2.0.0,<3.0.0" },
+    { name = "refaudit", specifier = ">=0.4.9" },
+]
 dev = [
     { name = "av", specifier = ">=17.0.0" },
     { name = "bibtexparser", specifier = ">=2.0.0,<3.0.0" },

@@ -135,12 +135,13 @@ jobs:
 
   preprint-check:
     # Not on PRs: like the citation lookups, it depends on external services.
-    # Forks would otherwise open issues on their own repository.
+    # Forks would otherwise open pull requests from their own repository.
     if: github.repository == 'embeddings-benchmark/mteb' && (
         github.event_name == 'schedule' ||
         github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    # the citation check below is rate-limited like the PR job
+    timeout-minutes: 60
     permissions:
       contents: read
     outputs:
@@ -160,53 +161,83 @@ jobs:
 
     # The script exits with 1 both when it finds published preprints and when it
     # crashes; only the first writes the report.
-    - name: Check whether cited preprints have been published
+    - name: Cite the published versions of preprints
       id: check
       env:
         SEMANTIC_SCHOLAR_API_KEY: ${{ secrets.SEMANTIC_SCHOLAR_API_KEY }}
       run: |
-        if ! make preprint-check PREPRINT_CHECK_ARGS="--report preprints.md"; then
+        if ! make preprint-check PREPRINT_CHECK_ARGS="--update --report preprints.md"; then
           test -s preprints.md
           cat preprints.md >> "$GITHUB_STEP_SUMMARY"
-          echo "found=true" >> "$GITHUB_OUTPUT"
+          if ! git diff --quiet -- mteb; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          fi
         fi
 
-    - name: Upload the report
+    # The updated citations must pass the checks a contributor's would. The cache
+    # it writes is left out: the scheduled job above commits the cache to main too,
+    # and the pull request's own check looks up the few changed citations again.
+    - name: Format and check the updated citations
+      if: steps.check.outputs.found == 'true'
+      run: |
+        make format-citations
+        make citation-check CITATION_CHECK_ARGS=--only-new
+        git diff --binary -- mteb > preprints.patch
+
+    - name: Upload the update
       if: steps.check.outputs.found == 'true'
       uses: actions/upload-artifact@v7
       with:
         name: preprints
-        path: preprints.md
+        path: |
+          preprints.md
+          preprints.patch
         retention-days: 1
 
-  # A separate job, so the token that can open issues never shares a runner with
-  # the dependencies the check installs and runs.
-  report-preprints:
+  # A separate job, so the push token never shares a runner with the dependencies
+  # the check installs and runs. It pushes with the `RELEASE` token, as pull
+  # requests opened with GITHUB_TOKEN do not run CI.
+  open-preprints-pr:
     needs: preprint-check
     if: needs.preprint-check.outputs.found == 'true'
     runs-on: ubuntu-latest
     permissions:
-      issues: write
+      contents: read
     steps:
-    - name: Download the report
+    - name: Checkout repository
+      uses: actions/checkout@v6
+      with:
+        token: ${{ secrets.RELEASE }}
+
+    - name: Download the update
       uses: actions/download-artifact@v8
       with:
         name: preprints
+        path: ${{ runner.temp }}/preprints
 
-    - name: Open or update the issue
+    - name: Open or update the pull request
       env:
-        GH_TOKEN: ${{ github.token }}
+        GH_TOKEN: ${{ secrets.RELEASE }}
         GH_REPO: ${{ github.repository }}
+        UPDATE: ${{ runner.temp }}/preprints
       run: |
         set -euo pipefail
-        title="Cited preprints that have since been published"
+        branch="chore/cite-published-preprints"
+        title="fix: cite the published versions of preprints"
         run_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-        printf '\nFound by %s.\n' "$run_url" >> preprints.md
+        printf '\nOpened by %s.\n' "$run_url" >> "$UPDATE/preprints.md"
 
-        number=$(gh issue list --state open --search "\"$title\" in:title" \
-          --json number,title --jq ".[] | select(.title == \"$title\") | .number" | head -n 1)
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git switch -c "$branch"
+        git apply --index "$UPDATE/preprints.patch"
+        git commit -m "$title"
+        # one open pull request at a time; a new run replaces its contents
+        git push --force origin "$branch"
+
+        number=$(gh pr list --head "$branch" --state open --json number --jq '.[0].number // empty')
         if [[ -n "$number" ]]; then
-          gh issue edit "$number" --body-file preprints.md
+          gh pr edit "$number" --title "$title" --body-file "$UPDATE/preprints.md"
         else
-          gh issue create --title "$title" --body-file preprints.md
+          gh pr create --base main --head "$branch" --title "$title" --body-file "$UPDATE/preprints.md"
         fi
