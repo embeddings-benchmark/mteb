@@ -15,6 +15,7 @@ from mteb.abstasks import (
     AbsTask,
 )
 from mteb.filter_tasks import filter_tasks
+from mteb.languages import LanguageScripts
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Sequence
@@ -277,6 +278,9 @@ def get_tasks(  # noqa: PLR0913, PLR0917
         >>> get_tasks(languages=["eng"], tasks=["WikipediaRetrievalMultilingual"], eval_splits=["test"])
         >>> get_tasks(tasks=["STS22"], languages=["eng"], exclusive_language_filter=True) # don't include multilingual subsets containing English
     """
+    # validate up front so the error is not swallowed as a skipped task below
+    LanguageScripts.from_languages_and_scripts(languages, script)
+
     if tasks:
         if domains or task_types or categories:
             logger.warning(
@@ -297,7 +301,7 @@ def get_tasks(  # noqa: PLR0913, PLR0917
                 )
             except ValueError:
                 log_once.warning(
-                    f"Skipping task '{task}': no subsets match the language filter {languages}."
+                    f"Skipping task '{task}': no subsets match the filters (languages={languages}, script={script}, exclusive_language_filter={exclusive_language_filter})."
                 )
         return MTEBTasks(_tasks)
 
@@ -315,12 +319,21 @@ def get_tasks(  # noqa: PLR0913, PLR0917
         exclude_private=exclude_private,
         exclude_beta=exclude_beta,
     )
-    return MTEBTasks(
-        [
-            cls().filter_languages(languages, script).filter_eval_splits(eval_splits)
-            for cls in tasks_
-        ]
-    )
+    _tasks = []
+    for cls in tasks_:
+        try:
+            filtered = cls().filter_languages(
+                languages,
+                script,
+                exclusive_language_filter=exclusive_language_filter,
+            )
+        except ValueError:
+            log_once.warning(
+                f"Skipping task '{cls.metadata.name}': no subsets match the filters (languages={languages}, script={script}, exclusive_language_filter={exclusive_language_filter})."
+            )
+            continue
+        _tasks.append(filtered.filter_eval_splits(eval_splits))
+    return MTEBTasks(_tasks)
 
 
 _TASK_RENAMES = {"PersianTextTone": "SynPerTextToneClassification"}
