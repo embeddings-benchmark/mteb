@@ -85,16 +85,17 @@ jobs:
     - name: Check citations
       run: make citation-check
 
-    # Keep what the run looked up so later runs start from the refreshed cache.
+    # Keep completed lookups even when another citation fails, so the next run
+    # does not repeat all expired lookups. UNVERIFIED results are not cached.
     - name: Check whether the citation cache changed
       id: cache
-      if: success() && github.ref == 'refs/heads/main'
+      if: ${{ !cancelled() && github.ref == 'refs/heads/main' }}
       run: |
         git diff --quiet -- scripts/tools/citation_cache.json ||
           echo "changed=true" >> "$GITHUB_OUTPUT"
 
     - name: Upload the citation cache
-      if: steps.cache.outputs.changed == 'true'
+      if: ${{ !cancelled() && steps.cache.outputs.changed == 'true' }}
       uses: actions/upload-artifact@v7
       with:
         name: citation-cache
@@ -106,7 +107,7 @@ jobs:
   # `RELEASE` token (see release.yml): GITHUB_TOKEN cannot bypass the required checks.
   commit-citation-cache:
     needs: citation-check-main
-    if: needs.citation-check-main.outputs.cache-changed == 'true'
+    if: ${{ !cancelled() && needs.citation-check-main.outputs.cache-changed == 'true' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read

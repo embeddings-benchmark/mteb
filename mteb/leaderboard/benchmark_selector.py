@@ -5,12 +5,12 @@ from typing import TYPE_CHECKING, Any
 import gradio as gr
 
 from mteb import Benchmark
-from mteb.benchmarks.benchmarks import MTEB_multilingual_v2
+from mteb.benchmarks.get_benchmark import get_benchmark
 
 if TYPE_CHECKING:
     from mteb.benchmarks._leaderboard_menu import MenuEntry
 
-DEFAULT_BENCHMARK_NAME = MTEB_multilingual_v2.name
+DEFAULT_BENCHMARK_NAME = get_benchmark("MTEB(Multilingual, v2)").name
 
 
 def _create_button(

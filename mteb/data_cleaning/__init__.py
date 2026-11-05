@@ -21,6 +21,7 @@ from ._content_size import (
     remove_by_video_duration,
 )
 from ._duplicates import remove_duplicates
+from ._labels import remove_conflicting_labels, remove_unlabeled
 from ._leakage import remove_train_leakage
 
 __all__ = [
@@ -28,6 +29,8 @@ __all__ = [
     "remove_by_image_size",
     "remove_by_text_length",
     "remove_by_video_duration",
+    "remove_conflicting_labels",
     "remove_duplicates",
     "remove_train_leakage",
+    "remove_unlabeled",
 ]
