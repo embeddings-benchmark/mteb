@@ -274,8 +274,7 @@ def _registered_model_experiment_kwargs(model_name: str) -> dict[str, str] | Non
 
     The served model can differ from the registered implementation (e.g. in
     prompts, precision or truncation), so its results are saved as an experiment
-    next to the model's results instead of as the model's own results, and are
-    not submitted by `mteb submit-results`.
+    of the model instead of as the model's own results.
     """
     from mteb.models.model_implementations import MODEL_REGISTRY
 
@@ -283,7 +282,7 @@ def _registered_model_experiment_kwargs(model_name: str) -> dict[str, str] | Non
         return None
     logger.warning(
         f"'{model_name}' is a registered MTEB model. Results obtained through an API endpoint can differ from the "
-        "registered implementation, so they are saved as an experiment and should not be submitted as the model's results."
+        "registered implementation, so they are saved as an experiment of the model rather than as the model's own results."
     )
     return {"served_via": "openai_api"}
 
@@ -300,9 +299,9 @@ class OpenAIBaseWrapper:
             to each request.
         model_name: Name of the model to use
         api_key: Optional API key for authentication
-        timeout: Request timeout in seconds (default: 300)
-        max_retries: Maximum number of retries for failed requests (default: 3)
-        verify_ssl: Whether to verify SSL certificates (default: True)
+        timeout: Request timeout in seconds
+        max_retries: Maximum number of retries for failed requests
+        verify_ssl: Whether to verify SSL certificates
         modalities: Modalities supported by the served model; pass a subset
             (e.g. `["text"]`) if the served model is text-only, so
             `mteb.evaluate`'s model/task modality check reflects that.
@@ -523,10 +522,10 @@ class OpenAIAPIEncodeWrapper(OpenAIBaseWrapper, AbsEncoder):
         use_instructions: Whether to use instructions from the prompt_dict
         instruction_template: A template or callable to format instructions
         apply_instruction_to_documents: Whether to apply instructions to
-            documents (passages). Default True.
-        timeout: Request timeout in seconds (default: 300)
-        max_retries: Maximum number of retries for failed requests (default: 3)
-        verify_ssl: Whether to verify SSL certificates (default: True)
+            documents (passages).
+        timeout: Request timeout in seconds
+        max_retries: Maximum number of retries for failed requests
+        verify_ssl: Whether to verify SSL certificates
         max_length: Maximum sequence length for truncation. If None,
             auto-detected from model metadata.
         modalities: Modalities supported by the served model. Defaults to
@@ -534,7 +533,7 @@ class OpenAIAPIEncodeWrapper(OpenAIBaseWrapper, AbsEncoder):
             `["text"]`) if the served model is text-only.
         use_chat_template: Whether to send text-only batches through the
             Chat Embeddings API (`messages`) like image/audio/video batches.
-            If None (default), this is done only for tasks with non-text
+            If None, this is done only for tasks with non-text
             modalities (see class docstring).
         fps: Target frames per second for video downsampling (see
             `VideoCollator`).
@@ -782,8 +781,8 @@ class OpenAIAPIEncodeWrapper(OpenAIBaseWrapper, AbsEncoder):
             hf_split: Split of current task
             hf_subset: Subset of current task
             prompt_type: The type of prompt (query or passage)
-            batch_size: Batch size for processing (default: 32)
-            show_progress_bar: Whether to show progress bar (default: True)
+            batch_size: Batch size for processing
+            show_progress_bar: Whether to show progress bar
             **kwargs: Additional arguments (precision, etc.)
 
         Returns:
@@ -876,9 +875,9 @@ class OpenAIAPIRerankWrapper(OpenAIBaseWrapper):
         endpoint_url: URL of the OpenAI-compatible server
         model_name: Name of the reranking model to use
         api_key: Optional API key for authentication
-        timeout: Request timeout in seconds (default: 300)
-        max_retries: Maximum number of retries for failed requests (default: 3)
-        verify_ssl: Whether to verify SSL certificates (default: True)
+        timeout: Request timeout in seconds
+        max_retries: Maximum number of retries for failed requests
+        verify_ssl: Whether to verify SSL certificates
         modalities: Modalities supported by the served model. Defaults to
             `["text", "image", "video"]` (no audio; see above); pass a
             subset (e.g. `["text"]`) if the served model is text-only.
@@ -1002,8 +1001,8 @@ class OpenAIAPIRerankWrapper(OpenAIBaseWrapper):
             hf_split: Split of current task
             hf_subset: Subset of current task
             prompt_type: The type of prompt
-            batch_size: Batch size for processing (default: 32)
-            show_progress_bar: Whether to show progress bar (default: True)
+            batch_size: Batch size for processing
+            show_progress_bar: Whether to show progress bar
             top_k: Optional number of top results to return per query
             **kwargs: Additional arguments
 
@@ -1131,15 +1130,15 @@ class OpenAIAPITokenEmbedWrapper(OpenAIBaseWrapper):
         model_name: Name of the model to use
         api_key: Optional API key for authentication
         prompt_dict: A dictionary mapping task names to prompt strings
-        timeout: Request timeout in seconds (default: 300)
-        max_retries: Maximum number of retries for failed requests (default: 3)
-        verify_ssl: Whether to verify SSL certificates (default: True)
+        timeout: Request timeout in seconds
+        max_retries: Maximum number of retries for failed requests
+        verify_ssl: Whether to verify SSL certificates
         modalities: Modalities supported by the served model. Defaults to
             `["text", "image", "audio", "video"]`; pass a subset (e.g.
             `["text"]`) if the served model is text-only.
         use_chat_template: Whether to send text-only items through the Chat
-            Pooling API (`messages`) like image/audio/video items. Default
-            True. Set False for text-only pooling models that don't define a
+            Pooling API (`messages`) like image/audio/video items. Set
+            False for text-only pooling models that don't define a
             chat template (e.g. `BAAI/bge-m3`), so text is instead batched
             via the plain `input` field.
         fps: Target frames per second for video downsampling (see
@@ -1275,10 +1274,10 @@ class OpenAIAPITokenEmbedWrapper(OpenAIBaseWrapper):
             hf_subset: Subset of current task
             prompt_type: The type of prompt (query or document)
             batch_size: Batch size used for batching pure-text requests when
-                `use_chat_template=False` (default: 32). Image/audio/video
+                `use_chat_template=False`. Image/audio/video
                 items, and all items when `use_chat_template=True`, are
                 always sent one request at a time (see class docstring).
-            show_progress_bar: Whether to show progress bar (default: True)
+            show_progress_bar: Whether to show progress bar
             **kwargs: Additional arguments (unused)
 
         Returns:

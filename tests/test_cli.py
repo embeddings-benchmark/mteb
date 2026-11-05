@@ -86,7 +86,7 @@ def test_run_task(
         overwrite=False,
         save_predictions=None,
         num_proc=None,
-        endpoint_url=None,
+        openai_compatible_endpoint=None,
     )
 
     run(args)
@@ -103,8 +103,9 @@ def test_run_task(
 
 
 def test_run_endpoint(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
-    """`--endpoint-url` evaluates the served model through OpenAIAPIEncodeWrapper."""
-    monkeypatch.setenv("MY_API_KEY", "secret")
+    """`--openai-compatible-endpoint` evaluates the served model through OpenAIAPIEncodeWrapper."""
+    # `--api-key` takes precedence over the environment variable
+    monkeypatch.setenv("OPENAI_API_KEY", "env-secret")
     args = build_cli().parse_args(
         [
             "run",
@@ -116,10 +117,10 @@ def test_run_endpoint(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
             "BornholmBitextMining",
             "--output-folder",
             tmp_path.as_posix(),
-            "--endpoint-url",
+            "--openai-compatible-endpoint",
             "http://localhost:8000/",
-            "--api-key-env",
-            "MY_API_KEY",
+            "--api-key",
+            "secret",
             "--timeout",
             "10",
             "--max-retries",
@@ -153,7 +154,9 @@ def test_run_endpoint(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
 
 
 def test_run_endpoint_requires_model():
-    args = build_cli().parse_args(["run", "--endpoint-url", "http://localhost:8000"])
+    args = build_cli().parse_args(
+        ["run", "--openai-compatible-endpoint", "http://localhost:8000"]
+    )
 
     with pytest.raises(ValueError, match="--model"):
         _load_endpoint_model(args)

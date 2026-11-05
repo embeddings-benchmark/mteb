@@ -18,11 +18,8 @@ This is useful for:
 - Avoiding repeated model loading overhead
 - Using hosted embedding and reranking APIs
 
-!!! note "CLI support"
-    Embedding models can also be evaluated from the command line with `mteb run --endpoint-url ...`, see [Command Line](../usage/cli.md#running-models-served-by-an-openai-compatible-api). Reranking and token-level models are only supported through the Python API shown below.
-
 !!! note "Registered models"
-    If `model_name` is a model registered in MTEB, the results are saved as an experiment (`served_via_openai_api`) next to the model's results, since the served model can differ from the registered implementation. Such results are not submitted by `mteb submit-results`.
+    If `model_name` is a model registered in MTEB, the results are saved as an experiment (`served_via_openai_api`) of that model rather than as the model's own results, since the served model is not MTEB's reference implementation.
 
 ## Usage
 
@@ -58,6 +55,19 @@ This is useful for:
     )
     print(results)
     ```
+
+=== "Embedding models (CLI)"
+    ```bash
+    # Connect to a vLLM server
+    mteb run -m BAAI/bge-small-en-v1.5 -t STS12 \
+             --openai-compatible-endpoint http://localhost:8000
+
+    # Or use OpenAI's API (the API key is read from OPENAI_API_KEY)
+    mteb run -m text-embedding-3-small -t STS12 \
+             --openai-compatible-endpoint https://api.openai.com/v1
+    ```
+
+    See [Command Line](../usage/cli.md#running-models-served-by-an-openai-compatible-api) for more. Reranking and token-level models are only supported through the Python API.
 
 === "Reranking models (OpenAIAPIRerankWrapper)"
     ```python

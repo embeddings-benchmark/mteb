@@ -64,7 +64,7 @@ def run(args: argparse.Namespace) -> None:
     logger.info("Running with parameters: %s", args)
 
     model: EncoderProtocol | CrossEncoderProtocol | SearchProtocol
-    if args.endpoint_url is not None:
+    if args.openai_compatible_endpoint is not None:
         model = _load_endpoint_model(args)
     else:
         if args.device is None:
@@ -124,17 +124,17 @@ def _load_endpoint_model(args: argparse.Namespace) -> EncoderProtocol:
     """Create a wrapper for a model served by an OpenAI-compatible `/v1/embeddings` endpoint."""
     if args.model is None:
         raise ValueError(
-            "`--model` must be set to the name of the model served at `--endpoint-url`."
+            "`--model` must be set to the name of the model served at `--openai-compatible-endpoint`."
         )
 
-    api_key = os.environ.get(args.api_key_env)
+    api_key = args.api_key or os.environ.get("OPENAI_API_KEY")
     if api_key is None:
         logger.info(
-            f"Environment variable {args.api_key_env} is not set, sending requests without an API key."
+            "Neither `--api-key` nor OPENAI_API_KEY is set, sending requests without an API key."
         )
 
     model = OpenAIAPIEncodeWrapper(
-        endpoint_url=args.endpoint_url,
+        endpoint_url=args.openai_compatible_endpoint,
         model_name=args.model,
         api_key=api_key,
         timeout=args.timeout,
@@ -240,16 +240,17 @@ def _add_endpoint_args(parser: argparse.ArgumentParser) -> None:
         "`--model` must be the name of the served model. For reranking or token-level models, use the Python API.",
     )
     group.add_argument(
-        "--endpoint-url",
+        "--openai-compatible-endpoint",
         type=str,
         default=None,
-        help="URL of the OpenAI-compatible server, e.g. `http://localhost:8000`. If set, the model is evaluated through this endpoint.",
+        help="URL of the OpenAI-compatible server, e.g. `http://localhost:8000`. If set, the model is evaluated through this endpoint "
+        "instead of MTEB's implementation of the model.",
     )
     group.add_argument(
-        "--api-key-env",
+        "--api-key",
         type=str,
-        default="OPENAI_API_KEY",
-        help="Name of the environment variable holding the API key. If the variable is not set, requests are sent without an API key.",
+        default=None,
+        help="API key for the endpoint. If not set, it is read from the OPENAI_API_KEY environment variable.",
     )
     group.add_argument(
         "--timeout",
@@ -292,7 +293,8 @@ def _add_run_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
         "-m",
         "--model",
         type=str,
-        help="Model to use. Will prioritize model implementation in MTEB's model registry, but default to loading the model using sentence-transformers.",
+        help="Model to use. Will prioritize model implementation in MTEB's model registry, but default to loading the model using sentence-transformers. "
+        "With `--openai-compatible-endpoint`, the name of the served model.",
     )
 
     _add_task_selection_args(parser)
