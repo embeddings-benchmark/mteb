@@ -60,6 +60,47 @@ length, valid frameworks, license, and degree of openness.
 :::mteb.models.Video2ImagesWrapper
 
 
+## Modality Filter Wrapper
+
+Use `ModalityFilterWrapper` to evaluate the same retrieval or reranking task with
+selected query or corpus inputs. Each explicit selection is saved as a separate
+experiment in the result cache.
+
+```python
+import mteb
+from mteb.models import ModalityFilterWrapper
+
+model = mteb.get_model("nvidia/Nemotron-3.5-Embed-1B-BF16")
+task = mteb.get_task("Vidore3HrRetrieval.v2", hf_subsets=["english"])
+for modalities in (["text"], ["image"], ["text", "image"]):
+    selected = ModalityFilterWrapper(model, corpus_modalities=modalities)
+    mteb.evaluate(selected, task)
+```
+
+`query_modalities` selects query inputs independently. Omit a side to retain its
+existing behavior; explicit selections must be nonempty and available on that
+side. An image-only corpus still receives text queries in this example. The
+wrapper filters supplied content; it does not run OCR or force a model to use
+all retained modalities.
+
+The wrapper supports custom `SearchProtocol` implementations that honor the
+supplied datasets, plus encoders and cross-encoders adapted through MTEB's search
+wrappers. It exposes only `SearchProtocol`. Built-in embedding caches inside the
+wrapped search use the modality configuration for cache identity, including when
+search delegates to worker threads with the effective task metadata. Nested
+modality wrappers, an embedding cache outside the search-only wrapper, and
+`SearchEncoderWrapper` with an append-only index backend are unsupported.
+External/private indexes and caches remain the search implementation's
+responsibility. Use separate model instances for concurrent evaluations.
+
+The normalized selection is recorded in `ModelMeta.experiment_kwargs`, preserving
+other experiment settings and the base model's supported modalities. Loading the
+saved model metadata recreates the wrapper. The same options can be passed to
+`mteb.get_model(..., corpus_modalities=["image"])`.
+
+:::mteb.models.ModalityFilterWrapper
+
+
 ## Search Index Backends
 
 :::mteb.models.search_encoder_index.search_backend_protocol.IndexEncoderSearchProtocol
