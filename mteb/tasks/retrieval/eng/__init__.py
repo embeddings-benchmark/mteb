@@ -225,7 +225,7 @@ from .flickr_audio_image_retrieval import (
     FlickrAudioToImageRetrieval,
     FlickrImageToAudioRetrieval,
 )
-from .forb_i2i_retrieval import FORBI2I
+from .forb_i2i_retrieval import FORBI2I, FORBI2IV2
 from .giga_speech import (
     GigaSpeechA2TRetrieval,
     GigaSpeechA2TRetrievalV2,
@@ -562,6 +562,7 @@ __all__ = [
     "CUB200I2I",
     "FEVER",
     "FORBI2I",
+    "FORBI2IV2",
     "LMEBMLDR",
     "MSMARCO",
     "MSRVTTA2V",
