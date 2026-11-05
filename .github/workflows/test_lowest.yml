@@ -44,5 +44,10 @@ jobs:
 
       - name: Run tests
         shell: bash
+        env:
+          # NumPy 1.23 bundles OpenBLAS kernels whose float32 rounding differs
+          # across runner CPUs, changing the fixed-seed KMeans reference scores.
+          # Use one AVX kernel consistently on these x86-64 Ubuntu runners.
+          OPENBLAS_CORETYPE: Sandybridge
         run: |
           make test
