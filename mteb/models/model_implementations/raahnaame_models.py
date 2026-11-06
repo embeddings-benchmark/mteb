@@ -49,13 +49,13 @@ RAAHNAAME_TRAINING_DATA = {
     "PersianWebDocumentRetrieval",
 } | set(GECKO_TRAINING_DATA)
 
-raahnaame_300m = ModelMeta(
+raahnaame_koochik_v1 = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
-    name="Reza2kn/RaahNaame-300m",
+    name="Reza2kn/RaahNaame-Koochik-v1",
     model_type=["dense"],
     languages=["fas-Arab", "eng-Latn"],
     open_weights=True,
-    revision="bf3cb6a8c372c681f669f173ca559251fb4e7a2e",
+    revision="868899ac87d2091e611adf0f543d30887f18c8e8",
     release_date="2026-11-06",
     n_parameters=307_581_696,
     n_embedding_parameters=201_326_592,
@@ -63,7 +63,7 @@ raahnaame_300m = ModelMeta(
     embed_dim=768,
     max_tokens=512,
     license="gemma",
-    reference="https://huggingface.co/Reza2kn/RaahNaame-300m",
+    reference="https://huggingface.co/Reza2kn/RaahNaame-Koochik-v1",
     framework=["Sentence Transformers", "PyTorch", "safetensors"],
     use_instructions=True,
     public_training_code=None,
@@ -75,6 +75,6 @@ raahnaame_300m = ModelMeta(
   title  = {RaahNaame: Distilling a 14B embedding model and Gemini into EmbeddingGemma for Persian},
   author = {Reza Sayar},
   year   = {2026},
-  url    = {https://huggingface.co/Reza2kn/RaahNaame-300m}
+  url    = {https://huggingface.co/Reza2kn/RaahNaame-Koochik-v1}
 }""",
 )
