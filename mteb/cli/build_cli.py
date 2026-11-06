@@ -5,7 +5,7 @@ import logging
 import os
 import warnings
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 from rich.console import Console
 from rich.logging import RichHandler
@@ -17,10 +17,16 @@ from mteb.cli._display_tasks import _display_benchmarks, _display_tasks
 from mteb.cli.generate_model_card import generate_model_card
 from mteb.evaluate import OverwriteStrategy
 from mteb.mocks.mock_run import mock_run
+from mteb.models import OpenAIAPIEncodeWrapper
 
 if TYPE_CHECKING:
     from mteb.abstasks.abstask import AbsTask
     from mteb.mocks.mock_run import MockRunResults
+    from mteb.models.models_protocols import (
+        CrossEncoderProtocol,
+        EncoderProtocol,
+        SearchProtocol,
+    )
     from mteb.types import EncodeKwargs
 
 logger = logging.getLogger(__name__)
@@ -57,12 +63,16 @@ def run(args: argparse.Namespace) -> None:
 
     logger.info("Running with parameters: %s", args)
 
-    if args.device is None:
-        device = "cuda" if torch.cuda.is_available() else "cpu"
+    model: EncoderProtocol | CrossEncoderProtocol | SearchProtocol
+    if args.openai_compatible_endpoint is not None:
+        model = _load_endpoint_model(args)
     else:
-        device = args.device
+        if args.device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+        else:
+            device = args.device
 
-    model = mteb.get_model(args.model, args.model_revision, device=device)
+        model = mteb.get_model(args.model, args.model_revision, device=device)
 
     if args.benchmarks:
         benchmarks = mteb.get_benchmarks(names=args.benchmarks)
@@ -108,6 +118,37 @@ def run(args: argparse.Namespace) -> None:
         prediction_folder=prediction_folder,
         num_proc=args.num_proc,
     )
+
+
+def _load_endpoint_model(args: argparse.Namespace) -> EncoderProtocol:
+    """Create a wrapper for a model served by an OpenAI-compatible `/v1/embeddings` endpoint."""
+    if args.model is None:
+        raise ValueError(
+            "`--model` must be set to the name of the model served at `--openai-compatible-endpoint`."
+        )
+
+    api_key = args.api_key or os.environ.get("OPENAI_API_KEY")
+    if api_key is None:
+        logger.info(
+            "Neither `--api-key` nor OPENAI_API_KEY is set, sending requests without an API key."
+        )
+
+    model = OpenAIAPIEncodeWrapper(
+        endpoint_url=args.openai_compatible_endpoint,
+        model_name=args.model,
+        api_key=api_key,
+        timeout=args.timeout,
+        max_retries=args.max_retries,
+        verify_ssl=args.verify_ssl,
+        max_length=args.max_length,
+        use_chat_template=args.chat_template,
+    )
+    if args.model_revision is not None and model.mteb_model_meta is not None:
+        model.mteb_model_meta = model.mteb_model_meta.model_copy(
+            update={"revision": args.model_revision}
+        )
+    # `mteb_model_meta` is typed as optional on the wrapper, but is always set
+    return cast("EncoderProtocol", model)
 
 
 def _available_benchmarks(args: argparse.Namespace) -> None:
@@ -191,6 +232,60 @@ def _add_available_benchmarks_parser(
     parser.set_defaults(func=_available_benchmarks)
 
 
+def _add_endpoint_args(parser: argparse.ArgumentParser) -> None:
+    """Adds arguments for evaluating a model served by an OpenAI-compatible API (e.g. vLLM or OpenAI)."""
+    group = parser.add_argument_group(
+        "OpenAI-compatible endpoint",
+        "Evaluate a model served by an OpenAI-compatible `/v1/embeddings` endpoint (e.g. vLLM or OpenAI) instead of loading it locally. "
+        "`--model` must be the name of the served model. For reranking or token-level models, use the Python API.",
+    )
+    group.add_argument(
+        "--openai-compatible-endpoint",
+        type=str,
+        default=None,
+        help="URL of the OpenAI-compatible server, e.g. `http://localhost:8000`. If set, the model is evaluated through this endpoint "
+        "instead of MTEB's implementation of the model.",
+    )
+    group.add_argument(
+        "--api-key",
+        type=str,
+        default=None,
+        help="API key for the endpoint. If not set, it is read from the OPENAI_API_KEY environment variable.",
+    )
+    group.add_argument(
+        "--timeout",
+        type=int,
+        default=300,
+        help="Request timeout in seconds.",
+    )
+    group.add_argument(
+        "--max-retries",
+        type=int,
+        default=3,
+        help="Maximum number of attempts for a failed request.",
+    )
+    group.add_argument(
+        "--no-verify-ssl",
+        dest="verify_ssl",
+        action="store_false",
+        default=True,
+        help="Disable SSL certificate verification.",
+    )
+    group.add_argument(
+        "--max-length",
+        type=int,
+        default=None,
+        help="Maximum number of tokens per input. If not set, it is read from the server's model metadata when available.",
+    )
+    group.add_argument(
+        "--chat-template",
+        action=argparse.BooleanOptionalAction,
+        default=None,
+        help="Whether to send text inputs through vLLM's chat embeddings API (`messages`). "
+        "If not set, this is only done for tasks with image, audio or video inputs.",
+    )
+
+
 def _add_run_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
     parser = subparsers.add_parser("run", help="Run a model on a set of tasks")
 
@@ -198,7 +293,8 @@ def _add_run_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
         "-m",
         "--model",
         type=str,
-        help="Model to use. Will prioritize model implementation in MTEB's model registry, but default to loading the model using sentence-transformers.",
+        help="Model to use. Will prioritize model implementation in MTEB's model registry, but default to loading the model using sentence-transformers. "
+        "With `--openai-compatible-endpoint`, the name of the served model.",
     )
 
     _add_task_selection_args(parser)
@@ -290,6 +386,7 @@ def _add_run_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
         default=None,
         help="Folder to save the model predictions in. If None, predictions will not be saved.",
     )
+    _add_endpoint_args(parser)
 
     parser.set_defaults(func=run)
 
