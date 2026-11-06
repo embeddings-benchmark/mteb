@@ -22,7 +22,7 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_implementations.qwen3_vl_embedding_models import resize_video
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import OutputDType, PromptType
+from mteb.types import PromptType
 
 if TYPE_CHECKING:
     import torch
@@ -723,7 +723,6 @@ uembed_2b = ModelMeta(
     embed_dim=2048,
     reference="https://huggingface.co/Alibaba-NLP/UEmbed-2B",
     **_COMMON_METADATA,
-    output_dtypes=OutputDType.BF16,
 )
 
 uembed_4b = ModelMeta(
@@ -735,7 +734,6 @@ uembed_4b = ModelMeta(
     embed_dim=2560,
     reference="https://huggingface.co/Alibaba-NLP/UEmbed-4B",
     **_COMMON_METADATA,
-    output_dtypes=OutputDType.BF16,
 )
 
 uembed_9b = ModelMeta(
@@ -747,5 +745,4 @@ uembed_9b = ModelMeta(
     embed_dim=4096,
     reference="https://huggingface.co/Alibaba-NLP/UEmbed-9B",
     **_COMMON_METADATA,
-    output_dtypes=OutputDType.BF16,
 )

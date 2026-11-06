@@ -1,4 +1,5 @@
-from datasets import Dataset, Features, Value, Video
+import pytest
+from datasets import Dataset, Features, Value
 
 import mteb
 from mteb.mocks.mock_tasks import MockRetrievalTask, MockVideoRetrievalV2T
@@ -71,6 +72,9 @@ def test_cross_encoder_search_passes_encode_kwargs_to_predict():
 
 def test_cross_encoder_search_video_query_with_many_candidates():
     """A video query repeated once per candidate must not be copied, otherwise Arrow overflows (> 2 GiB)."""
+    video = pytest.importorskip(
+        "datasets.features.video", reason="installed datasets has no Video feature"
+    )
     metadata = MockVideoRetrievalV2T.metadata.model_copy(update={"category": "vt2t"})
     num_candidates = 520  # 520 x 4 MiB > 2 GiB
     doc_ids = [f"doc{i}" for i in range(num_candidates)]
@@ -89,7 +93,7 @@ def test_cross_encoder_search_video_query_with_many_candidates():
             "video": [{"bytes": b"0" * 4 * 2**20, "path": None}],
         },
         features=Features(
-            {"id": Value("string"), "text": Value("string"), "video": Video()}
+            {"id": Value("string"), "text": Value("string"), "video": video.Video()}
         ),
     )
 

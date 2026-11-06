@@ -161,7 +161,6 @@ llm2vec_llama3_8b_supervised = ModelMeta(
     public_training_data=None,
     citation=LLM2VEC_CITATION,
     extra_requirements_groups=["llm2vec"],
-    output_dtypes=OutputDType.BF16,
 )
 
 llm2vec_llama3_8b_unsupervised = ModelMeta(
@@ -193,7 +192,6 @@ llm2vec_llama3_8b_unsupervised = ModelMeta(
     training_datasets=set(),
     public_training_data=None,
     extra_requirements_groups=["llm2vec"],
-    output_dtypes=OutputDType.BF16,
 )
 
 llm2vec_mistral7b_supervised = ModelMeta(
@@ -225,7 +223,6 @@ llm2vec_mistral7b_supervised = ModelMeta(
     training_datasets=llm2vec_supervised_training_data,
     public_training_data=None,
     extra_requirements_groups=["llm2vec"],
-    output_dtypes=OutputDType.BF16,
 )
 
 llm2vec_mistral7b_unsupervised = ModelMeta(
@@ -257,7 +254,6 @@ llm2vec_mistral7b_unsupervised = ModelMeta(
     training_datasets=set(),
     public_training_data=None,
     extra_requirements_groups=["llm2vec"],
-    output_dtypes=OutputDType.BF16,
 )
 
 llm2vec_llama2_7b_supervised = ModelMeta(
@@ -289,7 +285,6 @@ llm2vec_llama2_7b_supervised = ModelMeta(
     training_datasets=llm2vec_supervised_training_data,
     public_training_data=None,
     extra_requirements_groups=["llm2vec"],
-    output_dtypes=OutputDType.BF16,
 )
 
 llm2vec_llama2_7b_unsupervised = ModelMeta(
@@ -321,7 +316,6 @@ llm2vec_llama2_7b_unsupervised = ModelMeta(
     public_training_data=None,
     citation=LLM2VEC_CITATION,
     extra_requirements_groups=["llm2vec"],
-    output_dtypes=OutputDType.BF16,
 )
 
 llm2vec_sheared_llama_supervised = ModelMeta(
@@ -353,7 +347,6 @@ llm2vec_sheared_llama_supervised = ModelMeta(
     training_datasets=llm2vec_supervised_training_data,
     public_training_data=None,
     extra_requirements_groups=["llm2vec"],
-    output_dtypes=OutputDType.BF16,
 )
 
 llm2vec_sheared_llama_unsupervised = ModelMeta(
@@ -385,5 +378,4 @@ llm2vec_sheared_llama_unsupervised = ModelMeta(
     training_datasets=set(),
     public_training_data=None,
     extra_requirements_groups=["llm2vec"],
-    output_dtypes=OutputDType.BF16,
 )

@@ -32,11 +32,14 @@ class RARbMath(AbsTaskRetrieval):
   year = {2021},
 }
 
-@article{hendrycks2021measuring,
-  author = {Hendrycks, Dan and Burns, Collin and Kadavath, Saurav and Arora, Akul and Basart, Steven and Tang, Eric and Song, Dawn and Steinhardt, Jacob},
-  journal = {arXiv preprint arXiv:2103.03874},
-  title = {Measuring mathematical problem solving with the math dataset},
+@inproceedings{hendrycks2021math,
+  archiveprefix = {arXiv},
+  eprint = {2103.03874},
+  title = {Measuring Mathematical Problem Solving With the {MATH} Dataset},
+  author = {Dan Hendrycks and Collin Burns and Saurav Kadavath and Akul Arora and Steven Basart and Eric Tang and Dawn Song and Jacob Steinhardt},
+  booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)},
   year = {2021},
+  url = {https://openreview.net/forum?id=7Bywt2mQsCe},
 }
 
 @article{xiao2024rar,
@@ -46,11 +49,14 @@ class RARbMath(AbsTaskRetrieval):
   year = {2024},
 }
 
-@article{yu2023metamath,
-  author = {Yu, Longhui and Jiang, Weisen and Shi, Han and Yu, Jincheng and Liu, Zhengying and Zhang, Yu and Kwok, James T and Li, Zhenguo and Weller, Adrian and Liu, Weiyang},
-  journal = {arXiv preprint arXiv:2309.12284},
-  title = {Metamath: Bootstrap your own mathematical questions for large language models},
-  year = {2023},
+@inproceedings{yu2023metamath,
+  archiveprefix = {arXiv},
+  author = {Longhui Yu and Weisen Jiang and Han Shi and Jincheng YU and Zhengying Liu and Yu Zhang and James Kwok and Zhenguo Li and Adrian Weller and Weiyang Liu},
+  booktitle = {The Twelfth International Conference on Learning Representations},
+  eprint = {2309.12284},
+  title = {MetaMath: Bootstrap Your Own Mathematical Questions for Large Language Models},
+  url = {https://openreview.net/forum?id=N8N0hgNDRt},
+  year = {2024},
 }
 """,
         prompt={"query": "Retrieve the answer for the following math problem."},

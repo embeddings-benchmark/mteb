@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.26.24"
+version = "2.27.1"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -723,6 +723,11 @@ extend-exclude = [
     "mteb/tasks/classification/jpn/wrime_classification.py",
     "mteb/tasks/reranking/eng/sci_docs_reranking.py",
 ]
+
+# Preserve publication metadata even when pre-commit passes these files explicitly.
+[tool.typos.type.citations]
+extend-glob = ["citation_allowlist.json", "citation_cache.json"]
+check-file = false
 
 [tool.typos.type.py]
 extend-ignore-re = [

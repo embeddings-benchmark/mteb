@@ -27,19 +27,17 @@ class BrazilianToxicTweetsClassification(AbsTaskMultilabelClassification):
         dialect=["brazilian"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{DBLP:journals/corr/abs-2010-04543,
-  author = {Joao Augusto Leite and
-Diego F. Silva and
-Kalina Bontcheva and
-Carolina Scarton},
-  eprint = {2010.04543},
-  eprinttype = {arXiv},
-  journal = {CoRR},
-  timestamp = {Tue, 15 Dec 2020 16:10:16 +0100},
-  title = {Toxic Language Detection in Social Media for Brazilian Portuguese:
-New Dataset and Multilingual Analysis},
-  url = {https://arxiv.org/abs/2010.04543},
-  volume = {abs/2010.04543},
+@inproceedings{DBLP:journals/corr/abs-2010-04543,
+  address = {Suzhou, China},
+  author = {Leite, Jo{\~a}o Augusto and Silva, Diego and Bontcheva, Kalina and Scarton, Carolina},
+  booktitle = {Proceedings of the 1st Conference of the {A}sia-Pacific Chapter of the {A}ssociation for {C}omputational {L}inguistics and the 10th International Joint Conference on Natural Language Processing},
+  doi = {10.18653/v1/2020.aacl-main.91},
+  editor = {Wong, Kam-Fai and Knight, Kevin and Wu, Hua},
+  month = {dec},
+  pages = {914--924},
+  publisher = {Association for Computational Linguistics},
+  title = {Toxic Language Detection in Social Media for {B}razilian {P}ortuguese: New Dataset and Multilingual Analysis},
+  url = {https://aclanthology.org/2020.aacl-main.91/},
   year = {2020},
 }
 """,

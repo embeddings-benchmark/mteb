@@ -32,11 +32,14 @@ class RARbCode(AbsTaskRetrieval):
   year = {2019},
 }
 
-@article{muennighoff2023octopack,
-  author = {Muennighoff, Niklas and Liu, Qian and Zebaze, Armel and Zheng, Qinkai and Hui, Binyuan and Zhuo, Terry Yue and Singh, Swayam and Tang, Xiangru and Von Werra, Leandro and Longpre, Shayne},
-  journal = {arXiv preprint arXiv:2308.07124},
-  title = {Octopack: Instruction tuning code large language models},
-  year = {2023},
+@inproceedings{muennighoff2023octopack,
+  archiveprefix = {arXiv},
+  author = {Niklas Muennighoff and Qian Liu and Armel Randy Zebaze and Qinkai Zheng and Binyuan Hui and Terry Yue Zhuo and Swayam Singh and Xiangru Tang and Leandro Von Werra and Shayne Longpre},
+  booktitle = {The Twelfth International Conference on Learning Representations},
+  eprint = {2308.07124},
+  title = {OctoPack: Instruction Tuning Code Large Language Models},
+  url = {https://openreview.net/forum?id=mw1PWNSWZP},
+  year = {2024},
 }
 
 @article{xiao2024rar,

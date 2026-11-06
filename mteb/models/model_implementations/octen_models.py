@@ -214,7 +214,6 @@ Octen_Embedding_0B6 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=training_data,
-    output_dtypes=OutputDType.BF16,
     adapted_from="Qwen/Qwen3-Embedding-0.6B",
 )
 
@@ -245,7 +244,6 @@ Octen_Embedding_4B = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=training_data,
-    output_dtypes=OutputDType.BF16,
     adapted_from="Qwen/Qwen3-Embedding-4B",
 )
 
@@ -276,7 +274,6 @@ Octen_Embedding_8B = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=training_data,
-    output_dtypes=OutputDType.BF16,
     adapted_from="Qwen/Qwen3-Embedding-8B",
 )
 

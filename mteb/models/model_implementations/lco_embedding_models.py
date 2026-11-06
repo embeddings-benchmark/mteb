@@ -8,7 +8,6 @@ from tqdm.auto import tqdm
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator, VideoCollator
-from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -211,16 +210,15 @@ lco_3b = ModelMeta(
     ),
     modalities=["audio", "image", "text", "video"],
     citation="""
-@misc{xiao2025scalinglanguagecentricomnimodalrepresentation,
-  title={Scaling Language-Centric Omnimodal Representation Learning},
-  author={Chenghao Xiao and Hou Pong Chan and Hao Zhang and Weiwen Xu and Mahani Aljunied and Yu Rong},
-  year={2025},
-  eprint={2510.11693},
-  archivePrefix={arXiv},
-  primaryClass={cs.CL},
-  url={https://arxiv.org/abs/2510.11693},
+@inproceedings{xiao2025scalinglanguagecentricomnimodalrepresentation,
+  archiveprefix = {arXiv},
+  author = {Chenghao Xiao and Hou Pong Chan and Hao Zhang and Weiwen Xu and Mahani Aljunied and Yu Rong},
+  booktitle = {The Thirty-ninth Annual Conference on Neural Information Processing Systems},
+  eprint = {2510.11693},
+  title = {Scaling Language-centric Omnimodal Representation Learning},
+  url = {https://openreview.net/forum?id=eA3Aum0rpA},
+  year = {2025},
 }""",
-    output_dtypes=OutputDType.BF16,
 )
 
 lco_3b_2605 = ModelMeta(
@@ -247,16 +245,15 @@ lco_3b_2605 = ModelMeta(
     ),
     modalities=["audio", "image", "text", "video"],
     citation="""
-@misc{xiao2025scalinglanguagecentricomnimodalrepresentation,
-  title={Scaling Language-Centric Omnimodal Representation Learning},
-  author={Chenghao Xiao and Hou Pong Chan and Hao Zhang and Weiwen Xu and Mahani Aljunied and Yu Rong},
-  year={2025},
-  eprint={2510.11693},
-  archivePrefix={arXiv},
-  primaryClass={cs.CL},
-  url={https://arxiv.org/abs/2510.11693},
+@inproceedings{xiao2025scalinglanguagecentricomnimodalrepresentation,
+  archiveprefix = {arXiv},
+  author = {Chenghao Xiao and Hou Pong Chan and Hao Zhang and Weiwen Xu and Mahani Aljunied and Yu Rong},
+  booktitle = {The Thirty-ninth Annual Conference on Neural Information Processing Systems},
+  eprint = {2510.11693},
+  title = {Scaling Language-centric Omnimodal Representation Learning},
+  url = {https://openreview.net/forum?id=eA3Aum0rpA},
+  year = {2025},
 }""",
-    output_dtypes=OutputDType.BF16,
 )
 
 lco_7b = ModelMeta(
@@ -283,14 +280,13 @@ lco_7b = ModelMeta(
     ),
     modalities=["audio", "image", "text", "video"],
     citation="""
-@misc{xiao2025scalinglanguagecentricomnimodalrepresentation,
-  title={Scaling Language-Centric Omnimodal Representation Learning},
-  author={Chenghao Xiao and Hou Pong Chan and Hao Zhang and Weiwen Xu and Mahani Aljunied and Yu Rong},
-  year={2025},
-  eprint={2510.11693},
-  archivePrefix={arXiv},
-  primaryClass={cs.CL},
-  url={https://arxiv.org/abs/2510.11693},
+@inproceedings{xiao2025scalinglanguagecentricomnimodalrepresentation,
+  archiveprefix = {arXiv},
+  author = {Chenghao Xiao and Hou Pong Chan and Hao Zhang and Weiwen Xu and Mahani Aljunied and Yu Rong},
+  booktitle = {The Thirty-ninth Annual Conference on Neural Information Processing Systems},
+  eprint = {2510.11693},
+  title = {Scaling Language-centric Omnimodal Representation Learning},
+  url = {https://openreview.net/forum?id=eA3Aum0rpA},
+  year = {2025},
 }""",
-    output_dtypes=OutputDType.BF16,
 )

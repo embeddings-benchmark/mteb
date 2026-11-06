@@ -237,8 +237,14 @@ from .gl_dv2_i2t_retrieval import GLDv2I2TRetrieval
 from .gov_report_retrieval import GovReportRetrieval
 from .greatest_hits_retrieval import GreatestHitsA2VRetrieval, GreatestHitsV2ARetrieval
 from .hagrid_retrieval import HagridRetrieval
-from .hateful_memes_i2t_retrieval import HatefulMemesI2TRetrieval
-from .hateful_memes_t2i_retrieval import HatefulMemesT2IRetrieval
+from .hateful_memes_i2t_retrieval import (
+    HatefulMemesI2TRetrieval,
+    HatefulMemesI2TRetrievalV2,
+)
+from .hateful_memes_t2i_retrieval import (
+    HatefulMemesT2IRetrieval,
+    HatefulMemesT2IRetrievalV2,
+)
 from .hc3_finance_retrieval import HC3FinanceRetrieval
 from .hella_swag_retrieval import HellaSwag
 from .hi_fi_tts import (
@@ -790,7 +796,9 @@ __all__ = [
     "HC3FinanceRetrieval",
     "HagridRetrieval",
     "HatefulMemesI2TRetrieval",
+    "HatefulMemesI2TRetrievalV2",
     "HatefulMemesT2IRetrieval",
+    "HatefulMemesT2IRetrievalV2",
     "HellaSwag",
     "HiFiTTSA2TRetrieval",
     "HiFiTTSA2TRetrievalV2",
