@@ -89,6 +89,10 @@ stella_en_1_5b = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         model_kwargs={"dtype": "auto"},
+        # The remote modeling_qwen.py calls DynamicCache.get_usable_length(),
+        # removed in transformers 4.54; encoding never needs the KV cache,
+        # and use_cache=False skips that code path.
+        config_kwargs={"use_cache": False},
         trust_remote_code=True,
         apply_instruction_to_passages=False,
     ),
