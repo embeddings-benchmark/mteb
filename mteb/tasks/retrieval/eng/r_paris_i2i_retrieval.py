@@ -16,6 +16,7 @@ class RParisEasyI2IRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="map_at_5",
+        superseded_by="RParisEasyI2IRetrieval.v2",
         date=("2009-01-01", "2010-04-01"),
         domains=["Web"],
         task_subtypes=["Object recognition"],
@@ -51,6 +52,7 @@ class RParisMediumI2IRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="map_at_5",
+        superseded_by="RParisMediumI2IRetrieval.v2",
         date=("2009-01-01", "2010-04-01"),
         domains=["Web"],
         task_subtypes=["Object recognition"],
@@ -86,6 +88,7 @@ class RParisHardI2IRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="map_at_5",
+        superseded_by="RParisHardI2IRetrieval.v2",
         date=("2009-01-01", "2010-04-01"),
         domains=["Web"],
         task_subtypes=["Object recognition"],
@@ -105,3 +108,39 @@ class RParisHardI2IRetrieval(AbsTaskRetrieval):
 """,
     )
     skip_first_result = False
+
+
+class RParisEasyI2IRetrievalV2(AbsTaskRetrieval):
+    metadata = RParisEasyI2IRetrieval.metadata.model_copy(
+        update={
+            "name": "RParisEasyI2IRetrieval.v2",
+            "description": "Retrieve photos of landmarks in Paris, France. Version 2 uses map_at_1000 as the main score: map_at_5 divides by all correct images, so with dozens to hundreds of correct images per query even a perfect ranking scores low.",
+            "main_score": "map_at_1000",
+            "adapted_from": ["RParisEasyI2IRetrieval"],
+            "superseded_by": None,
+        }
+    )
+
+
+class RParisMediumI2IRetrievalV2(AbsTaskRetrieval):
+    metadata = RParisMediumI2IRetrieval.metadata.model_copy(
+        update={
+            "name": "RParisMediumI2IRetrieval.v2",
+            "description": "Retrieve photos of landmarks in Paris, France. Version 2 uses map_at_1000 as the main score: map_at_5 divides by all correct images, so with dozens to hundreds of correct images per query even a perfect ranking scores low.",
+            "main_score": "map_at_1000",
+            "adapted_from": ["RParisMediumI2IRetrieval"],
+            "superseded_by": None,
+        }
+    )
+
+
+class RParisHardI2IRetrievalV2(AbsTaskRetrieval):
+    metadata = RParisHardI2IRetrieval.metadata.model_copy(
+        update={
+            "name": "RParisHardI2IRetrieval.v2",
+            "description": "Retrieve photos of landmarks in Paris, France. Version 2 uses map_at_1000 as the main score: map_at_5 divides by all correct images, so with dozens to hundreds of correct images per query even a perfect ranking scores low.",
+            "main_score": "map_at_1000",
+            "adapted_from": ["RParisHardI2IRetrieval"],
+            "superseded_by": None,
+        }
+    )
