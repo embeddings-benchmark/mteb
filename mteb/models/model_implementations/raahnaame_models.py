@@ -1,6 +1,6 @@
-from mteb.models.model_implementations.google_models import GECKO_TRAINING_DATA
+from mteb.models.model_implementations.google_gemini import GECKO_TRAINING_DATA
 from mteb.models.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 # Train splits (evaluation splits excluded) of these MTEB tasks were used for distillation.
 RAAHNAAME_TRAINING_DATA = {
@@ -50,7 +50,7 @@ RAAHNAAME_TRAINING_DATA = {
 } | set(GECKO_TRAINING_DATA)
 
 raahnaame_300m = ModelMeta(
-    loader=sentence_transformers_loader,
+    loader=SentenceTransformerEncoderWrapper,
     name="Reza2kn/RaahNaame-300m",
     model_type=["dense"],
     languages=["fas-Arab", "eng-Latn"],
