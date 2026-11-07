@@ -389,3 +389,47 @@ def test_generate_model_card_with_table_and_benchmarks(
         assert output_row == golden_row, (
             f"Row {i} doesn't match.\nExpected: {golden_row}\nGot: {output_row}"
         )
+
+
+@pytest.mark.skipif(_POLARS_TOO_OLD, reason="needs polars >= 1.40")
+@pytest.mark.parametrize("cache_format", ["tagged", "untagged", "missing_benchmark"])
+def test_split_frame_preserves_subset_weighting(
+    monkeypatch: pytest.MonkeyPatch, cache_format: str
+) -> None:
+    multilingual = Benchmark(
+        name="mock_multilingual",
+        tasks=[mteb.get_task("STS22.v2", hf_subsets=["en", "zh"])],
+    )
+    english = Benchmark(
+        name="mock_english",
+        tasks=[mteb.get_task("STS22.v2", hf_subsets=["en"])],
+    )
+    monkeypatch.setattr(mteb, "get_benchmarks", lambda: [multilingual, english])
+    frame = pl.DataFrame(
+        {
+            "model_name": ["sentence-transformers/all-MiniLM-L6-v2"] * 2,
+            "task_name": ["STS22.v2"] * 2,
+            "split": ["test"] * 2,
+            "subset": ["en", "zh"],
+            "score": [0.8, 0.6],
+        }
+    )
+    if cache_format != "untagged":
+        frames = {multilingual.name: frame}
+        if cache_format == "tagged":
+            frames[english.name] = frame.filter(pl.col("subset") == "en")
+        frame = BenchmarkResults._combine_leaderboard_frames(frames)
+
+    parts = BenchmarkResults.split_leaderboard_frame(frame)
+
+    multilingual_part = parts[multilingual.name]
+    assert multilingual_part["subset"].sort().to_list() == ["en", "zh"]
+    multilingual_mean = (
+        multilingual._create_summary_table(multilingual_part).df["Mean (Task)"].item()
+    )
+    assert multilingual_mean == pytest.approx(0.7)  # (0.8 + 0.6) / 2
+
+    english_part = parts[english.name]
+    assert english_part["subset"].sort().to_list() == ["en"]
+    english_mean = english._create_summary_table(english_part).df["Mean (Task)"].item()
+    assert english_mean == pytest.approx(0.8)
