@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -10,31 +10,25 @@ if TYPE_CHECKING:
     from mteb.models.models_protocols import EncoderProtocol
 
 MODEL_NAME = "steffen-negabo/ngnn-general-encoder-v1"
+# Canonical evaluation identity: the original public GitHub source commit.
 MODEL_REVISION = "d6969c26400944d4f5200ebddfdc04a083fd7b75"
 OUTPUT_DIM = 512
 HF_REPO_ID = "steffen-negabo/ngnn-general-encoder-v1"
+# Later HF distribution of the same weights. See verification/revision_alias.json
+# in the public reference repository below.
 HF_ARTIFACT_REVISION = "bab7d30011438e52f22be540067c73ca37f462eb"
 
 
 def load_ngnn_model(
-    model_name: str = MODEL_NAME,
-    revision: str | None = MODEL_REVISION,
+    model_name: str,
+    revision: str,
     *,
     base_model: str = "text-embedding-3-large",
     base_url: str = "https://api.openai.com/v1",
     provider_batch_size: int = 100,
     device: str | None = None,
-    **kwargs: Any,
 ) -> EncoderProtocol:
-    """Load the fixed model through the reviewed ``ngnn-encoder`` package."""
-    if "api_key" in kwargs:
-        raise ValueError("Use OPENAI_API_KEY; MTEB serializes model keyword arguments")
-    if kwargs:
-        raise ValueError("Unsupported NGNN model keyword arguments")
-    if model_name != MODEL_NAME:
-        raise ValueError("Unsupported NGNN model name")
-    if revision not in {None, MODEL_REVISION}:
-        raise ValueError("Unsupported NGNN model revision")
+    """Load the fixed encoder; MTEB supplies and validates its registry identity."""
     if device not in {None, "cpu"}:
         raise ValueError("This NGNN revision uses CPU inference")
     if (
@@ -52,7 +46,6 @@ def load_ngnn_model(
         client=OpenAI(base_url=base_url, max_retries=2),
         provider_batch_size=provider_batch_size,
     )
-    model.mteb_model_meta = ngnn_general_encoder.model_copy(deep=True)
     return model
 
 
