@@ -183,11 +183,11 @@ def _borda_rank_from_long(
     pl_df: pl.DataFrame,
     *,
     partition_col: str = "task_name",
-    model_col: str = "model_name",
+    keys: Sequence[str] = ("model_name",),
     score_col: str = "score",
     n_models: int | None = None,
 ) -> pl.DataFrame:
-    """Long-form Borda rank — returns ``(model_name, "Rank (Borda)")``.
+    """Long-form Borda rank — returns ``(*keys, "Rank (Borda)")``.
 
     Replaces the wide-form ``_get_borda_rank`` for callers with the long
     results frame. For a 100-task benchmark, the wide form builds a 100-node
@@ -206,12 +206,17 @@ def _borda_rank_from_long(
     per-language path where a model's entire language list explodes to
     null scores). When ``None``, defaults to ``pl_df``'s distinct model
     count, which matches when no models are all-null.
+
+    ``keys`` identify the ranked entity. Pass ``("model_name", _EXPERIMENT_ID_COL)``
+    to rank experiment variants of one model separately instead of averaging
+    them together.
     """
+    keys = list(keys)
     if n_models is None:
-        n_models = pl_df.get_column(model_col).n_unique()
+        n_models = pl_df.select(keys).n_unique()
     return (
         pl_df.lazy()
-        .group_by([model_col, partition_col])
+        .group_by([*keys, partition_col])
         .agg(pl.col(score_col).mean())
         .with_columns(
             pl.col(score_col)
@@ -219,7 +224,7 @@ def _borda_rank_from_long(
             .over(partition_col)
             .alias("_r")
         )
-        .group_by(model_col)
+        .group_by(keys)
         .agg((n_models - pl.col("_r")).sum().alias("_b"))
         .with_columns(
             pl.col("_b")
@@ -227,9 +232,28 @@ def _borda_rank_from_long(
             .cast(pl.Int64)
             .alias("Rank (Borda)")
         )
-        .select(model_col, "Rank (Borda)")
+        .select(*keys, "Rank (Borda)")
         .collect()
     )
+
+
+def _borda_rank_from_pivot(
+    per_task: pl.DataFrame, task_cols: list[str]
+) -> pl.DataFrame:
+    """Borda rank over the per-task pivot, so it ranks the scores the tables show.
+
+    Ranking the raw long frame instead would score a partially evaluated task
+    (nulled in the pivot by :func:`_null_incomplete_scores`) as if it were
+    complete, so a model could rank on results its row shows as missing.
+    """
+    keys = ["model_name", _EXPERIMENT_ID_COL]
+    per_task_long = per_task.unpivot(
+        on=task_cols,
+        index=keys,
+        variable_name="task_name",
+        value_name="score",
+    )
+    return _borda_rank_from_long(per_task_long, keys=keys, n_models=per_task.height)
 
 
 def _split_on_capital(s: str) -> str:
@@ -1021,12 +1045,17 @@ def _create_summary_table(  # noqa: PLR0914
             (pl.col("task_name") + "::" + pl.col("subset")).alias("_ts")
         )
         borda_df = _borda_rank_from_long(
-            keyed, partition_col="_ts", n_models=per_task.height
+            keyed,
+            partition_col="_ts",
+            n_models=per_task.height,
+            keys=["model_name", _EXPERIMENT_ID_COL],
         )
     else:
-        borda_df = _borda_rank_from_long(pl_df, n_models=per_task.height)
+        borda_df = _borda_rank_from_pivot(per_task, task_cols)
 
-    joint_table = joint_table.join(borda_df, on="model_name", how="left")
+    joint_table = joint_table.join(
+        borda_df, on=["model_name", _EXPERIMENT_ID_COL], how="left"
+    )
 
     drop_cols: list[str] = []
     for agg in BenchmarkAggregation:
@@ -1075,12 +1104,12 @@ def _create_per_task_table_from_benchmark_results(
         return _no_results_frame()
     per_task, task_cols = pivot
 
-    borda_df = _borda_rank_from_long(pl_df, n_models=per_task.height)
+    borda_df = _borda_rank_from_pivot(per_task, task_cols)
     select_cols = ["Model"]
     if _EXPERIMENT_ID_COL in per_task.columns:
         select_cols.append(_EXPERIMENT_ID_COL)
     return (
-        per_task.join(borda_df, on="model_name", how="left")
+        per_task.join(borda_df, on=["model_name", _EXPERIMENT_ID_COL], how="left")
         .sort("Rank (Borda)")
         .rename({"model_name": "Model"})
         .select([*select_cols, *task_cols])
