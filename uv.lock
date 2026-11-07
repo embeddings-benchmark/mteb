@@ -7970,7 +7970,7 @@ requires-dist = [
     { name = "rich", specifier = ">=13.0.0" },
     { name = "salesforce-lavis", marker = "extra == 'blip2'", specifier = ">=1.0.2" },
     { name = "sauerkrautlm-colpali", marker = "python_full_version < '3.14' and extra == 'sauerkrautlm-colpali'", specifier = ">=0.1.0" },
-    { name = "scikit-learn", specifier = ">=1.4.0" },
+    { name = "scikit-learn", specifier = ">=1.9.0" },
     { name = "scipy", specifier = ">=1.14.0" },
     { name = "sentence-transformers", specifier = ">=3.0.0" },
     { name = "sentence-transformers", marker = "extra == 'colnanovdr'", specifier = ">=6.0.0" },
