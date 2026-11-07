@@ -41,9 +41,22 @@ general_args = {
 class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
     expected_stats = {
         "test": {
-            "num_samples": 2,
-            "text_statistics": None,
-            "image_statistics": {
+            "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
+            "number_of_characters": 52,
+            "documents_text_statistics": {
+                "total_text_length": 52,
+                "min_text_length": 23,
+                "average_text_length": 26.0,
+                "max_text_length": 29,
+                "unique_texts": 2,
+            },
+            "documents_image_statistics": None,
+            "documents_audio_statistics": None,
+            "documents_video_statistics": None,
+            "queries_text_statistics": None,
+            "queries_image_statistics": {
                 "min_image_width": 100,
                 "average_image_width": 100.0,
                 "max_image_width": 100,
@@ -53,22 +66,19 @@ class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
                 "unique_images": 2,
                 "black_or_white_images": 0,
             },
-            "audio_statistics": None,
-            "video_statistics": None,
-            "label_statistics": {
-                "min_labels_per_text": 1,
-                "average_label_per_text": 1.0,
-                "max_labels_per_text": 1,
-                "unique_labels": 2,
-                "labels": {"0": {"count": 1}, "1": {"count": 1}},
+            "queries_audio_statistics": None,
+            "queries_video_statistics": None,
+            "relevant_docs_statistics": {
+                "num_relevant_docs": 2,
+                "min_relevant_docs_per_query": 1,
+                "average_relevant_docs_per_query": 1.0,
+                "max_relevant_docs_per_query": 1,
+                "unique_relevant_docs": 2,
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
+                "queries_with_all_gold_black_or_white": 0,
             },
-            "candidates_labels_text_statistics": {
-                "total_text_length": 52,
-                "min_text_length": 23,
-                "average_text_length": 26.0,
-                "max_text_length": 29,
-                "unique_texts": 2,
-            },
+            "top_ranked_statistics": None,
         }
     }
 
@@ -95,7 +105,7 @@ class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
                 ),
             }
         )
-        self.data_loaded = True
+        super().load_data()
 
     def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
         return ["This is a test sentence", "This is another test sentence"]
@@ -104,34 +114,41 @@ class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
 class MockTextZeroShotClassificationTask(AbsTaskZeroShotClassification):
     expected_stats = {
         "test": {
-            "num_samples": 2,
-            "text_statistics": {
+            "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
+            "number_of_characters": 104,
+            "documents_text_statistics": {
                 "total_text_length": 52,
                 "min_text_length": 23,
                 "average_text_length": 26.0,
                 "max_text_length": 29,
                 "unique_texts": 2,
             },
-            "image_statistics": None,
-            "audio_statistics": None,
-            "video_statistics": None,
-            "label_statistics": {
-                "min_labels_per_text": 1,
-                "average_label_per_text": 1.0,
-                "max_labels_per_text": 1,
-                "unique_labels": 2,
-                "labels": {
-                    "This is a test sentence": {"count": 1},
-                    "This is another test sentence": {"count": 1},
-                },
-            },
-            "candidates_labels_text_statistics": {
+            "documents_image_statistics": None,
+            "documents_audio_statistics": None,
+            "documents_video_statistics": None,
+            "queries_text_statistics": {
                 "total_text_length": 52,
                 "min_text_length": 23,
                 "average_text_length": 26.0,
                 "max_text_length": 29,
                 "unique_texts": 2,
             },
+            "queries_image_statistics": None,
+            "queries_audio_statistics": None,
+            "queries_video_statistics": None,
+            "relevant_docs_statistics": {
+                "num_relevant_docs": 2,
+                "min_relevant_docs_per_query": 1,
+                "average_relevant_docs_per_query": 1.0,
+                "max_relevant_docs_per_query": 1,
+                "unique_relevant_docs": 2,
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
+                "queries_with_all_gold_black_or_white": 0,
+            },
+            "top_ranked_statistics": None,
         }
     }
 
@@ -161,7 +178,7 @@ class MockTextZeroShotClassificationTask(AbsTaskZeroShotClassification):
                 ),
             }
         )
-        self.data_loaded = True
+        super().load_data()
 
     def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
         return ["This is a test sentence", "This is another test sentence"]
@@ -173,10 +190,23 @@ class MockAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
 
     expected_stats = {
         "test": {
-            "num_samples": 2,
-            "text_statistics": None,
-            "image_statistics": None,
-            "audio_statistics": {
+            "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
+            "number_of_characters": 40,
+            "documents_text_statistics": {
+                "total_text_length": 40,
+                "min_text_length": 20,
+                "average_text_length": 20.0,
+                "max_text_length": 20,
+                "unique_texts": 2,
+            },
+            "documents_image_statistics": None,
+            "documents_audio_statistics": None,
+            "documents_video_statistics": None,
+            "queries_text_statistics": None,
+            "queries_image_statistics": None,
+            "queries_audio_statistics": {
                 "total_duration_seconds": 2.0,
                 "min_duration_seconds": 1.0,
                 "average_duration_seconds": 1.0,
@@ -185,21 +215,18 @@ class MockAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
                 "average_sampling_rate": 16000.0,
                 "sampling_rates": {16000: 2},
             },
-            "video_statistics": None,
-            "label_statistics": {
-                "min_labels_per_text": 1,
-                "average_label_per_text": 1.0,
-                "max_labels_per_text": 1,
-                "unique_labels": 2,
-                "labels": {"0": {"count": 1}, "1": {"count": 1}},
+            "queries_video_statistics": None,
+            "relevant_docs_statistics": {
+                "num_relevant_docs": 2,
+                "min_relevant_docs_per_query": 1,
+                "average_relevant_docs_per_query": 1.0,
+                "max_relevant_docs_per_query": 1,
+                "unique_relevant_docs": 2,
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
+                "queries_with_all_gold_black_or_white": 0,
             },
-            "candidates_labels_text_statistics": {
-                "total_text_length": 40,
-                "min_text_length": 20,
-                "average_text_length": 20.0,
-                "max_text_length": 20,
-                "unique_texts": 2,
-            },
+            "top_ranked_statistics": None,
         }
     }
 
@@ -226,7 +253,7 @@ class MockAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
             }
         )
         self.dataset = self.dataset.cast_column("audio", Audio())
-        self.data_loaded = True
+        super().load_data()
 
     def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
         """Return the text candidates for zeroshot classification"""
@@ -239,11 +266,24 @@ class MockVideoZeroshotClassificationTask(AbsTaskZeroShotClassification):
 
     expected_stats = {
         "test": {
-            "num_samples": 2,
-            "text_statistics": None,
-            "image_statistics": None,
-            "audio_statistics": None,
-            "video_statistics": {
+            "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
+            "number_of_characters": 40,
+            "documents_text_statistics": {
+                "total_text_length": 40,
+                "min_text_length": 20,
+                "average_text_length": 20.0,
+                "max_text_length": 20,
+                "unique_texts": 2,
+            },
+            "documents_image_statistics": None,
+            "documents_audio_statistics": None,
+            "documents_video_statistics": None,
+            "queries_text_statistics": None,
+            "queries_image_statistics": None,
+            "queries_audio_statistics": None,
+            "queries_video_statistics": {
                 "total_duration_seconds": 2.0,
                 "total_frames": 48,
                 "min_width": 64,
@@ -263,20 +303,17 @@ class MockVideoZeroshotClassificationTask(AbsTaskZeroShotClassification):
                 "max_resolution": (64, 64),
                 "resolutions": {"64x64": 2},
             },
-            "label_statistics": {
-                "min_labels_per_text": 1,
-                "average_label_per_text": 1.0,
-                "max_labels_per_text": 1,
-                "unique_labels": 2,
-                "labels": {"0": {"count": 1}, "1": {"count": 1}},
+            "relevant_docs_statistics": {
+                "num_relevant_docs": 2,
+                "min_relevant_docs_per_query": 1,
+                "average_relevant_docs_per_query": 1.0,
+                "max_relevant_docs_per_query": 1,
+                "unique_relevant_docs": 2,
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
+                "queries_with_all_gold_black_or_white": 0,
             },
-            "candidates_labels_text_statistics": {
-                "total_text_length": 40,
-                "min_text_length": 20,
-                "average_text_length": 20.0,
-                "max_text_length": 20,
-                "unique_texts": 2,
-            },
+            "top_ranked_statistics": None,
         }
     }
 
@@ -306,7 +343,7 @@ class MockVideoZeroshotClassificationTask(AbsTaskZeroShotClassification):
             }
         )
         self.dataset = self.dataset.cast_column("video", Video())
-        self.data_loaded = True
+        super().load_data()
 
     def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
         return ["This is video type 0", "This is video type 1"]
@@ -318,10 +355,23 @@ class MockVideoAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
 
     expected_stats = {
         "test": {
-            "num_samples": 2,
-            "text_statistics": None,
-            "image_statistics": None,
-            "audio_statistics": {
+            "num_samples": 4,
+            "num_queries": 2,
+            "num_documents": 2,
+            "number_of_characters": 52,
+            "documents_text_statistics": {
+                "total_text_length": 52,
+                "min_text_length": 26,
+                "average_text_length": 26.0,
+                "max_text_length": 26,
+                "unique_texts": 2,
+            },
+            "documents_image_statistics": None,
+            "documents_audio_statistics": None,
+            "documents_video_statistics": None,
+            "queries_text_statistics": None,
+            "queries_image_statistics": None,
+            "queries_audio_statistics": {
                 "total_duration_seconds": 2.0,
                 "min_duration_seconds": 1.0,
                 "average_duration_seconds": 1.0,
@@ -330,7 +380,7 @@ class MockVideoAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
                 "average_sampling_rate": 16000.0,
                 "sampling_rates": {16000: 2},
             },
-            "video_statistics": {
+            "queries_video_statistics": {
                 "total_duration_seconds": 2.0,
                 "total_frames": 48,
                 "min_width": 64,
@@ -350,20 +400,17 @@ class MockVideoAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
                 "max_resolution": (64, 64),
                 "resolutions": {"64x64": 2},
             },
-            "label_statistics": {
-                "min_labels_per_text": 1,
-                "average_label_per_text": 1.0,
-                "max_labels_per_text": 1,
-                "unique_labels": 2,
-                "labels": {"0": {"count": 1}, "1": {"count": 1}},
+            "relevant_docs_statistics": {
+                "num_relevant_docs": 2,
+                "min_relevant_docs_per_query": 1,
+                "average_relevant_docs_per_query": 1.0,
+                "max_relevant_docs_per_query": 1,
+                "unique_relevant_docs": 2,
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
+                "queries_with_all_gold_black_or_white": 0,
             },
-            "candidates_labels_text_statistics": {
-                "total_text_length": 52,
-                "min_text_length": 26,
-                "average_text_length": 26.0,
-                "max_text_length": 26,
-                "unique_texts": 2,
-            },
+            "top_ranked_statistics": None,
         }
     }
 
@@ -397,7 +444,7 @@ class MockVideoAudioZeroshotClassificationTask(AbsTaskZeroShotClassification):
         )
         self.dataset = self.dataset.cast_column("video", Video())
         self.dataset = self.dataset.cast_column("audio", Audio())
-        self.data_loaded = True
+        super().load_data()
 
     def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
         return ["This is video audio type 0", "This is video audio type 1"]

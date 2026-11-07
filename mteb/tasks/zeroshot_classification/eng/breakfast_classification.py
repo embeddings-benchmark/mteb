@@ -1,17 +1,15 @@
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import (
-    AbsTaskZeroShotClassification,
-)
 
 
-class BreakfastZeroShotClassification(AbsTaskZeroShotClassification):
+class BreakfastZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BreakfastZeroShot",
         description="The Breakfast Actions dataset contains 433 videos of 10 breakfast-related activities (e.g. making coffee, preparing cereal, frying eggs) recorded in 18 different kitchens. The task is to classify each video into the correct activity. Used only camera-01 clips, capped at 50 per class across 10 meal classes (~433 test).",
         reference="https://ieeexplore.ieee.org/document/6909500",
         dataset={
-            "path": "mteb/Breakfast",
-            "revision": "59a874899eb241993794a3454c37829727c3b559",
+            "path": "mteb/BreakfastZeroShot",
+            "revision": "942566b24f1f09a286a1c9adf2daaec9c0200580",
         },
         type="VideoZeroshotClassification",
         category="v2t",
@@ -40,11 +38,3 @@ class BreakfastZeroShotClassification(AbsTaskZeroShotClassification):
 }
 """,
     )
-
-    input_column_name = "video"
-
-    def get_candidate_labels(self) -> list[str]:
-        return [
-            f"a video of {name}"
-            for name in self.dataset["test"].features[self.label_column_name].names
-        ]

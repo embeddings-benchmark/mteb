@@ -1,17 +1,15 @@
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import (
-    AbsTaskZeroShotClassification,
-)
 
 
-class DTDZeroShotClassification(AbsTaskZeroShotClassification):
+class DTDZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="DTDZeroShot",
         description="Describable Textures Dataset in 47 categories.",
         reference="https://www.robots.ox.ac.uk/~vgg/data/dtd/",
         dataset={
-            "path": "mteb/dtd",
-            "revision": "96726183040de9e64a590d08eaac8de940dfcbdf",
+            "path": "mteb/DTDZeroShot",
+            "revision": "aaf3e0deb5f3797cdf5a1b5446b352bfa8497dd3",
         },
         type="ZeroShotClassification",
         category="i2t",
@@ -38,9 +36,3 @@ class DTDZeroShotClassification(AbsTaskZeroShotClassification):
 }
 """,
     )
-
-    def get_candidate_labels(self) -> list[str]:
-        return [
-            f"a photo of {name} texture."
-            for name in self.dataset["test"].features[self.label_column_name].names
-        ]

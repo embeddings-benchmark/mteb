@@ -64,12 +64,14 @@ def hash_video(video: VideoDecoder) -> str:
     import torch
 
     meta = video.metadata
+    total_frames = meta.num_frames
+    if not total_frames:
+        raise ValueError(f"num_frames is {total_frames}")
+
     # Some containers over-count num_frames by one; the final claimed
-    # frame often fails to decode.
-    num_frames = meta.num_frames - 1 if meta.num_frames else meta.num_frames
+    # frame often fails to decode. A single-frame video keeps its only frame.
+    num_frames = total_frames - 1 if total_frames > 1 else total_frames
     avg_fps = meta.average_fps
-    if not num_frames:
-        raise ValueError(f"num_frames is {num_frames}")
 
     if avg_fps is not None and avg_fps > 0:
         step = max(1, round(avg_fps))

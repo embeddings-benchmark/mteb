@@ -1,17 +1,15 @@
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import (
-    AbsTaskZeroShotClassification,
-)
 
 
-class EuroSATZeroShotClassification(AbsTaskZeroShotClassification):
+class EuroSATZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="EuroSATZeroShot",
         description="Classifying satellite images.",
         reference="https://ieeexplore.ieee.org/document/8736785",
         dataset={
-            "path": "mteb/eurosat-rgb",
-            "revision": "da02b77448e750b3b034e0b5da008167b9706571",
+            "path": "mteb/EuroSATZeroShot",
+            "revision": "6e3fd480215a99b1f5565275b34640b43a1dc392",
         },
         type="ZeroShotClassification",
         category="i2t",
@@ -43,18 +41,3 @@ class EuroSATZeroShotClassification(AbsTaskZeroShotClassification):
 }
 """,
     )
-
-    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
-        labels = [
-            "annual crop land",
-            "forest land",
-            "brushland or shrubland",
-            "highway or road",
-            "industrial land",
-            "pasture land",
-            "permanent crop land",
-            "residential land",
-            "river",
-            "sea or lake",
-        ]
-        return [f"a centered satellite photo of {name}." for name in labels]

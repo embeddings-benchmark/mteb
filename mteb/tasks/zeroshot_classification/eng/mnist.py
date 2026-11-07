@@ -1,17 +1,15 @@
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import (
-    AbsTaskZeroShotClassification,
-)
 
 
-class MNISTZeroShotClassification(AbsTaskZeroShotClassification):
+class MNISTZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MNISTZeroShot",
         description="Classifying handwritten digits.",
         reference="https://en.wikipedia.org/wiki/MNIST_database",
         dataset={
-            "path": "mteb/mnist",
-            "revision": "cf6afcbae72cc3bb1fc07a9480fe0d8e0b615fcd",
+            "path": "mteb/MNISTZeroShot",
+            "revision": "626ff684f46fd8fe0a6646c387f2d23455d9cea7",
         },
         type="ZeroShotClassification",
         category="i2t",
@@ -42,9 +40,3 @@ class MNISTZeroShotClassification(AbsTaskZeroShotClassification):
 }
 """,
     )
-
-    def get_candidate_labels(self) -> list[str]:
-        return [
-            f"a photo of the number: '{name}'."
-            for name in self.dataset["test"].features[self.label_column_name].names
-        ]

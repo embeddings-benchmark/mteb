@@ -1,17 +1,15 @@
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import (
-    AbsTaskZeroShotClassification,
-)
 
 
-class RenderedSST2(AbsTaskZeroShotClassification):
+class RenderedSST2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="RenderedSST2",
         description="RenderedSST2.",
         reference="https://huggingface.co/datasets/clip-benchmark/wds_renderedsst2",
         dataset={
-            "path": "mteb/wds_renderedsst2",
-            "revision": "c10537bc389e9741a27f7b14767bd42f2b77476b",
+            "path": "mteb/RenderedSST2",
+            "revision": "ea885506086327e7bb57ca654ecbf58ee47088c5",
         },
         type="ZeroShotClassification",
         category="i2t",
@@ -28,10 +26,3 @@ class RenderedSST2(AbsTaskZeroShotClassification):
         sample_creation="created",
         bibtex_citation="""""",
     )
-
-    # Override default column names in the subclass
-    input_column_name: str = "png"
-    label_column_name: str = "cls"
-
-    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
-        return ["a negative review of a movie", "a positive review of a movie"]

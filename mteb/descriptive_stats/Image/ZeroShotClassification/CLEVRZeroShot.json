@@ -1,49 +1,42 @@
 {
     "test": {
-        "num_samples": 15000,
-        "number_of_characters": null,
-        "text_statistics": null,
-        "image_statistics": {
+        "num_samples": 15006,
+        "num_queries": 15000,
+        "num_documents": 6,
+        "number_of_characters": 87,
+        "documents_text_statistics": {
+            "total_text_length": 87,
+            "min_text_length": 7,
+            "average_text_length": 14.5,
+            "max_text_length": 20,
+            "unique_texts": 6
+        },
+        "documents_image_statistics": null,
+        "documents_audio_statistics": null,
+        "documents_video_statistics": null,
+        "queries_text_statistics": null,
+        "queries_image_statistics": {
             "min_image_width": 480,
             "average_image_width": 480.0,
             "max_image_width": 480,
             "min_image_height": 320,
             "average_image_height": 320.0,
             "max_image_height": 320,
-            "unique_images": 15000
+            "unique_images": 15000,
+            "black_or_white_images": 0
         },
-        "label_statistics": {
-            "min_labels_per_text": 1,
-            "average_label_per_text": 1.0,
-            "max_labels_per_text": 1,
-            "unique_labels": 6,
-            "labels": {
-                "2": {
-                    "count": 3381
-                },
-                "3": {
-                    "count": 2370
-                },
-                "5": {
-                    "count": 1220
-                },
-                "1": {
-                    "count": 3676
-                },
-                "4": {
-                    "count": 1357
-                },
-                "0": {
-                    "count": 2996
-                }
-            }
+        "queries_audio_statistics": null,
+        "queries_video_statistics": null,
+        "relevant_docs_statistics": {
+            "num_relevant_docs": 15000,
+            "min_relevant_docs_per_query": 1,
+            "average_relevant_docs_per_query": 1.0,
+            "max_relevant_docs_per_query": 1,
+            "unique_relevant_docs": 6,
+            "num_missing_query_ids": 0,
+            "num_missing_corpus_ids": 0,
+            "queries_with_all_gold_black_or_white": 0
         },
-        "candidates_labels_text_statistics": {
-            "total_text_length": 88,
-            "min_text_length": 8,
-            "average_text_length": 14.666666666666666,
-            "max_text_length": 20,
-            "unique_texts": 6
-        }
+        "top_ranked_statistics": null
     }
 }
