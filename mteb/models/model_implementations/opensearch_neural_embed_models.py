@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import torch
-
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
 from mteb.types import PromptType
@@ -108,7 +106,7 @@ opensearch_neural_embed_v1 = ModelMeta(
         apply_instruction_to_passages=True,
         prompts_dict=opensearch_task_prompts,
         max_seq_length=8192,
-        model_kwargs={"torch_dtype": torch.bfloat16},
+        model_kwargs={"torch_dtype": "bfloat16"},
     ),
     name="opensearch-project/opensearch-neural-embed-v1",
     model_type=["dense"],
