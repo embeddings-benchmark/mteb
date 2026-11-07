@@ -71,10 +71,5 @@ raahnaame_koochik_v1 = ModelMeta(
     training_datasets=RAAHNAAME_TRAINING_DATA,
     similarity_fn_name="cosine",
     adapted_from="google/embeddinggemma-300m",
-    citation="""@misc{raahnaame2026,
-  title  = {RaahNaame: Distilling a 14B embedding model and Gemini into EmbeddingGemma for Persian},
-  author = {Reza Sayar},
-  year   = {2026},
-  url    = {https://huggingface.co/Reza2kn/RaahNaame-Koochik-v1}
-}""",
+    citation=None,
 )
