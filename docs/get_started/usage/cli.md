@@ -9,7 +9,7 @@ This described the is the command line interface for `mteb`.
 
 `mteb` is a toolkit for evaluating the quality of embedding models on various benchmarks. It supports the following commands:
 
-- [`mteb run`](#running-models-on-tasks): Runs a model on a set of tasks
+- [`mteb evaluate`](#evaluating-models-on-tasks) (alias: `mteb run`): Runs evaluation of a model on a set of tasks
 - [`mteb available_tasks`](#listing-available-tasks): Lists the available tasks within MTEB
 - [`mteb available_benchmarks`](#listing-available-benchmarks): Lists the available benchmarks
 - [`mteb submit-results`](#submitting-results): Submits results to the results repository
@@ -23,12 +23,12 @@ In the following we outline some sample use cases, but if you want to learn more
 mteb {command} --help
 ```
 
-## Running Models on Tasks
+## Evaluating Models on Tasks
 
-To run a model on a set of tasks, use the `mteb run` command. For example:
+To evaluate a model on a set of tasks, use the `mteb evaluate` command (or its alias `mteb run`). For example:
 
 ```bash
-mteb run -m sentence-transformers/average_word_embeddings_komninos \
+mteb evaluate -m sentence-transformers/average_word_embeddings_komninos \
          -t Banking77Classification EmotionClassification \
          --output-folder mteb_output
 ```

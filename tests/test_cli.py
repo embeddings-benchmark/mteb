@@ -99,6 +99,33 @@ def test_run_task(
     )
 
 
+@pytest.mark.parametrize("subcommand", ["evaluate", "run"])
+def test_evaluate_cli(subcommand: str):
+    """Test that `evaluate` and its `run` alias parse identically and bind to the runner function."""
+    argv = [
+        subcommand,
+        "-m",
+        "sentence-transformers/all-MiniLM-L6-v2",
+        "-t",
+        "ArguAna",
+        "--batch-size",
+        "16",
+        "--num-proc",
+        "4",
+        "--overwrite-strategy",
+        "always",
+    ]
+    parser = build_cli()
+    args = parser.parse_args(argv)
+
+    assert args.model == "sentence-transformers/all-MiniLM-L6-v2"
+    assert args.tasks == ["ArguAna"]
+    assert args.batch_size == 16
+    assert args.num_proc == 4
+    assert args.overwrite_strategy == "always"
+    assert args.func == run
+
+
 @pytest.mark.parametrize(
     ("argv", "expected"),
     [
