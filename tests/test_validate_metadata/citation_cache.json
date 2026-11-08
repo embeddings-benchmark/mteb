@@ -11500,6 +11500,46 @@
                 "similarity": 1.0,
                 "note": ""
             }
+        },
+        "zhang2025swebenchlive||2505.23419|{swe}-bench goes live!|2025": {
+            "stored_at": 1794137632.0203476,
+            "value": {
+                "verdict": "OK",
+                "found_title": "SWE-bench Goes Live!",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "wang2025swebenchplusplus||2512.17419|{swe-bench++}: a framework for the scalable generation of software engineering benchmarks from open-source repositories|2025": {
+            "stored_at": 1794137634.9105413,
+            "value": {
+                "verdict": "OK",
+                "found_title": "SWE-Bench++: A Framework for the Scalable Generation of Software Engineering Benchmarks from Open-Source Repositories",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "rashid2025swepolybench||2504.08703|{swe-polybench}: a multi-language benchmark for repository level evaluation of coding agents|2025": {
+            "stored_at": 1794137638.036003,
+            "value": {
+                "verdict": "OK",
+                "found_title": "SWE-PolyBench: A multi-language benchmark for repository level evaluation of coding agents",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "xu2025swingarena||2505.23932|{swingarena}: competitive programming arena for long-context {github} issue solving|2025": {
+            "stored_at": 1794137640.9093904,
+            "value": {
+                "verdict": "OK",
+                "found_title": "SwingArena: Competitive Programming Arena for Long-context GitHub Issue Solving",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
         }
     }
 }
