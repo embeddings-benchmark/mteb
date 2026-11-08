@@ -300,17 +300,18 @@ class GoogleSVQA2TRetrievalV2(AbsTaskRetrieval):
         # same rows as v1, then one entry per unique sentence
         v1 = GoogleSVQA2TRetrieval()
         v1.load_data()
-        self.corpus, self.queries = v1.corpus, v1.queries
-        self.relevant_docs = v1.relevant_docs
-        for locale, splits in self.corpus.items():
-            for split, corpus_ds in splits.items():
+        v1.convert_v1_dataset_format_to_v2(num_proc=None)
+        self.dataset = v1.dataset
+        for splits in self.dataset.values():
+            for split_data in splits.values():
+                corpus_ds = split_data["corpus"]
                 utt_ids, texts = corpus_ds["id"], corpus_ds["text"]
                 sentence_ids = _sentence_ids(utt_ids, texts)
                 unique = dict(zip(sentence_ids, texts, strict=True))
-                self.corpus[locale][split] = datasets.Dataset.from_dict(
+                split_data["corpus"] = datasets.Dataset.from_dict(
                     {"id": list(unique), "text": list(unique.values())}
                 )
-                self.relevant_docs[locale][split] = {
+                split_data["relevant_docs"] = {
                     utt_id: {sentence_id: 1}
                     for utt_id, sentence_id in zip(utt_ids, sentence_ids, strict=True)
                 }
@@ -334,18 +335,19 @@ class GoogleSVQT2ARetrievalV2(AbsTaskRetrieval):
         # same rows as v1, then one entry per unique sentence
         v1 = GoogleSVQT2ARetrieval()
         v1.load_data()
-        self.corpus, self.queries = v1.corpus, v1.queries
-        self.relevant_docs = v1.relevant_docs
-        for locale, splits in self.queries.items():
-            for split, queries_ds in splits.items():
+        v1.convert_v1_dataset_format_to_v2(num_proc=None)
+        self.dataset = v1.dataset
+        for splits in self.dataset.values():
+            for split_data in splits.values():
+                queries_ds = split_data["queries"]
                 utt_ids, texts = queries_ds["id"], queries_ds["text"]
                 sentence_ids = _sentence_ids(utt_ids, texts)
                 unique = dict(zip(sentence_ids, texts, strict=True))
-                self.queries[locale][split] = datasets.Dataset.from_dict(
+                split_data["queries"] = datasets.Dataset.from_dict(
                     {"id": list(unique), "text": list(unique.values())}
                 )
                 relevant: dict[str, dict[str, int]] = defaultdict(dict)
                 for utt_id, sentence_id in zip(utt_ids, sentence_ids, strict=True):
                     relevant[sentence_id][utt_id] = 1
-                self.relevant_docs[locale][split] = dict(relevant)
+                split_data["relevant_docs"] = dict(relevant)
         self.data_loaded = True
