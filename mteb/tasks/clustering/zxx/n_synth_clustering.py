@@ -17,7 +17,7 @@ class NSynthInstrumentFamilyClustering(AbsTaskClustering):
             "predicts instrument source (acoustic, electronic or synthetic) rather "
             "than instrument family."
         ),
-        reference="https://arxiv.org/abs/1704.01279",
+        reference="https://proceedings.mlr.press/v70/engel17a.html",
         dataset={
             "path": "mteb/nsynth-mini",
             "revision": "e32dfe9b65e121e64229a821fe1ff177e8962635",
@@ -37,13 +37,14 @@ class NSynthInstrumentFamilyClustering(AbsTaskClustering):
         sample_creation="created",
         adapted_from=["NSynth"],
         bibtex_citation=r"""
-@misc{engel2017neuralaudiosynthesismusical,
+@inproceedings{engel2017neuralaudiosynthesismusical,
   archiveprefix = {arXiv},
-  author = {Jesse Engel and Cinjon Resnick and Adam Roberts and Sander Dieleman and Douglas Eck and Karen Simonyan and Mohammad Norouzi},
+  author = {Jesse Engel and Cinjon Resnick and Adam Roberts and Sander Dieleman and Mohammad Norouzi and Douglas Eck and Karen Simonyan},
+  booktitle = {ICML},
   eprint = {1704.01279},
-  primaryclass = {cs.LG},
+  pages = {1068-1077},
   title = {Neural Audio Synthesis of Musical Notes with WaveNet Autoencoders},
-  url = {https://arxiv.org/abs/1704.01279},
+  url = {http://proceedings.mlr.press/v70/engel17a.html},
   year = {2017},
 }
 """,

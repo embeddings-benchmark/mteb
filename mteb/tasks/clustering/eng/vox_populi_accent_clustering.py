@@ -1,3 +1,5 @@
+from typing import Any
+
 from mteb.abstasks import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -52,10 +54,16 @@ Dupoux, Emmanuel},
     max_fraction_of_documents_to_embed = None
     input_column_name: str = "audio"
 
-    def dataset_transform(self) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         """Filter out samples with empty audio arrays."""
+
+        def has_audio(example: dict[str, Any]) -> bool:
+            try:
+                return len(example["audio"]["array"]) > 0
+            except RuntimeError:  # torchcodec can't decode an empty clip
+                return False
+
         for split in self.dataset:
             self.dataset[split] = self.dataset[split].filter(
-                lambda x: len(x["audio"]["array"]) > 0,
-                desc="Filtering empty audio samples",
+                has_audio, desc="Filtering empty audio samples", num_proc=num_proc
             )

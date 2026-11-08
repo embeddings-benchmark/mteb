@@ -25,13 +25,13 @@ class FORBI2I(AbsTaskRetrieval):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@misc{wu2023forbflatobjectretrieval,
+@inproceedings{wu2023forbflatobjectretrieval,
   archiveprefix = {arXiv},
-  author = {Pengxiang Wu and Siman Wang and Kevin Dela Rosa and Derek Hao Hu},
+  author = {Pengxiang Wu and Siman Wang and Kevin S Dela Rosa and Derek Hao Hu},
+  booktitle = {Thirty-seventh Conference on Neural Information Processing Systems Datasets and Benchmarks Track},
   eprint = {2309.16249},
-  primaryclass = {cs.CV},
-  title = {FORB: A Flat Object Retrieval Benchmark for Universal Image Embedding},
-  url = {https://arxiv.org/abs/2309.16249},
+  title = {{FORB}: A Flat Object Retrieval Benchmark for Universal Image Embedding},
+  url = {https://openreview.net/forum?id=c3kuX7ltzr},
   year = {2023},
 }
 """,

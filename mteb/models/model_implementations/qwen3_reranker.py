@@ -211,7 +211,6 @@ qwen3_reranker_0_6b = ModelMeta(
     model_type=["cross-encoder"],
     citation=QWEN3_CITATION,
     contacts=None,
-    output_dtypes=OutputDType.BF16,
 )
 
 qwen3_reranker_4b = ModelMeta(
@@ -243,7 +242,6 @@ qwen3_reranker_4b = ModelMeta(
     model_type=["cross-encoder"],
     citation=QWEN3_CITATION,
     contacts=None,
-    output_dtypes=OutputDType.BF16,
 )
 
 qwen3_reranker_8b = ModelMeta(
@@ -275,5 +273,4 @@ qwen3_reranker_8b = ModelMeta(
     model_type=["cross-encoder"],
     citation=QWEN3_CITATION,
     contacts=None,
-    output_dtypes=OutputDType.BF16,
 )

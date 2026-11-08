@@ -4,11 +4,14 @@ from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _BRIDGE_BIBTEX = r"""
-@inproceedings{walke2023bridgedata,
-  author = {Homer Walke and Kevin Black and Abraham Lee and Moo Jin Kim and Max Du and Chongyi Zheng and Tony Zhao and Philippe Hansen-Estruch and Quan Vuong and Andre He and Vivek Myers and Kuan Fang and Chelsea Finn and Sergey Levine},
-  booktitle = {Conference on Robot Learning (CoRL)},
+@misc{walke2024bridgedatav2datasetrobot,
   title = {BridgeData V2: A Dataset for Robot Learning at Scale},
-  year = {2023},
+  author = {Homer Walke and Kevin Black and Abraham Lee and Moo Jin Kim and Max Du and Chongyi Zheng and Tony Zhao and Philippe Hansen-Estruch and Quan Vuong and Andre He and Vivek Myers and Kuan Fang and Chelsea Finn and Sergey Levine},
+  year = {2024},
+  eprint = {2308.12952},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.RO},
+  url = {https://arxiv.org/abs/2308.12952},
 }
 """
 

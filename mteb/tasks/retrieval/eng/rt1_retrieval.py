@@ -4,11 +4,17 @@ from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _RT1_BIBTEX = r"""
-@article{brohan2022rt1,
-  author = {Anthony Brohan and Noah Brown and Justice Carbajal and Yevgen Chebotar and Joseph Dabis and Chelsea Finn and Keerthana Gopalakrishnan and Karol Hausman and Alex Herzog and Jasmine Hsu and others},
-  journal = {arXiv preprint arXiv:2212.06817},
+@inproceedings{brohan2022rt1,
+  author = {Brohan, Anthony and Brown, Noah and Carbajal, Justice and Chebotar, Yevgen and Dabis, Joseph and Finn, Chelsea and Gopalakrishnan, Keerthana and Hausman, Karol and Herzog, Alexander and Hsu, Jasmine and Ibarz, Julian and Ichter, Brian and Irpan, Alex and Jackson, Tomas and Jesmonth, Sally and Joshi, Nikhil and Julian, Ryan and Kalashnikov, Dmitry and Kuang, Yuheng and Leal, Isabel and Lee, Kuang-Huei and Levine, Sergey and Lu, Yao and Malla, Utsav and Manjunath, Deeksha and Mordatch, Igor and Nachum, Ofir and Parada, Carolina and Peralta, Jodilyn and Perez, Emily and Pertsch, Karl and Quiambao, Jornell and Rao, Kanishka and Ryoo, Michael and Salazar, Grecia and Sanketi, Pannag and Sayed, Kevin and Singh, Jaspiar and Sontakke, Sumedh and Stone, Austin and Tan, Clayton and Tran, Huong and Vanhoucke, Vincent and Vega, Steve and Vuong, Quan and Xia, Fei and Xiao, Ted and Xu, Peng and Xu, Sichun and Yu, Tianhe and Zitkovich, Brianna},
+  booktitle = {Robotics: Science and Systems XIX},
+  collection = {RSS2023},
+  doi = {10.15607/rss.2023.xix.025},
+  month = {July},
+  publisher = {Robotics: Science and Systems Foundation},
+  series = {RSS2023},
   title = {RT-1: Robotics Transformer for Real-World Control at Scale},
-  year = {2022},
+  url = {https://doi.org/10.15607/rss.2023.xix.025},
+  year = {2023},
 }
 """
 

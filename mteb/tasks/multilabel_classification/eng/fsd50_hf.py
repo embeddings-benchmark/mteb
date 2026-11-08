@@ -1,3 +1,5 @@
+from typing import Any
+
 from sklearn.linear_model import LogisticRegression
 from sklearn.multioutput import MultiOutputClassifier
 
@@ -30,6 +32,7 @@ class FSD50HFMultilingualClassification(AbsTaskMultilabelClassification):
         dialect=[],
         modalities=["audio"],
         sample_creation="found",
+        superseded_by="FSD50K.v2",
         bibtex_citation=r"""
 @article{9645159,
   author = {Fonseca, Eduardo and Favory, Xavier and Pons, Jordi and Font, Frederic and Serra, Xavier},
@@ -49,3 +52,27 @@ class FSD50HFMultilingualClassification(AbsTaskMultilabelClassification):
     input_column_name: str = "audio"
     label_column_name: str = "labels"
     samples_per_label: int = 8
+
+
+class FSD50HFMultilingualClassificationV2(AbsTaskMultilabelClassification):
+    metadata = FSD50HFMultilingualClassification.metadata.model_copy(
+        update={
+            "name": "FSD50K.v2",
+            "description": FSD50HFMultilingualClassification.metadata.description
+            + ". Version 2 splits the comma-separated labels of each clip into a list; v1 passed the string as is, so its characters were used as the labels.",
+            "adapted_from": ["FSD50K"],
+            "superseded_by": None,
+        }
+    )
+
+    evaluator_model = MultiOutputClassifier(estimator=LogisticRegression())
+    input_column_name: str = "audio"
+    label_column_name: str = "labels"
+    samples_per_label: int = 8
+
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        self.dataset = self.dataset.map(
+            lambda labels: {"labels": labels.split(",")},
+            input_columns="labels",
+            num_proc=num_proc,
+        )

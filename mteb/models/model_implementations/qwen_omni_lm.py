@@ -11,7 +11,6 @@ from mteb.models.modality_collators import (
     single_clip_dataloader,
 )
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -256,7 +255,6 @@ qwen25_omni_7b = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2503.20215},
 }""",
-    output_dtypes=OutputDType.BF16,
 )
 
 qwen25_omni_3b = ModelMeta(
@@ -298,7 +296,6 @@ qwen25_omni_3b = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2503.20215},
 }""",
-    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -344,7 +341,6 @@ qwen3_omni_30b_a3b_instruct = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2509.17765},
 }""",
-    output_dtypes=OutputDType.BF16,
 )
 
 qwen3_omni_30b_a3b_thinking = ModelMeta(
@@ -389,7 +385,6 @@ qwen3_omni_30b_a3b_thinking = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2509.17765},
 }""",
-    output_dtypes=OutputDType.BF16,
 )
 
 qwen3_omni_30b_a3b_captioner = ModelMeta(
@@ -434,5 +429,4 @@ qwen3_omni_30b_a3b_captioner = ModelMeta(
     primaryClass={cs.CL},
     url={https://arxiv.org/abs/2509.17765},
 }""",
-    output_dtypes=OutputDType.BF16,
 )

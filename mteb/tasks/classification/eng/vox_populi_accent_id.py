@@ -55,20 +55,23 @@ Dupoux, Emmanuel},
 
     is_cross_validation: bool = True
 
-    def dataset_transform(self, **kwargs: Any) -> None:
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         import numpy as np
         from datasets import DatasetDict
 
         test_ds = self.dataset["test"]
 
         def is_valid_audio(example: dict[str, Any]) -> bool:
-            audio_arr = example.get("audio", {}).get("array", None)
+            try:
+                audio_arr = example["audio"]["array"]
+            except RuntimeError:  # torchcodec can't decode an empty clip
+                return False
             # require at least 500 samples (so that Kaldi fbank(window_size=400) won't fail)
             if (audio_arr is None) or (len(audio_arr) < 500):
                 return False
             return not (np.isnan(audio_arr).any() or np.isinf(audio_arr).any())
 
-        filtered_test = test_ds.filter(is_valid_audio)
+        filtered_test = test_ds.filter(is_valid_audio, num_proc=num_proc)
 
         # Create a new DatasetDict that has both "train" and "test" = filtered_test
         self.dataset = DatasetDict(

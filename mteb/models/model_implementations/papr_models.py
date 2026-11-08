@@ -3,7 +3,6 @@ from __future__ import annotations
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_implementations.qwen3_models import multilingual_langs
 from mteb.models.model_meta import ModelMeta
-from mteb.types import OutputDType
 
 # Per-task instructions (task_prompts.json in each model repo, identical for both sizes).
 papr_embed_code_prompts = {
@@ -18,6 +17,8 @@ papr_embed_code_prompts = {
     "StackOverflowQA": "Given a question about coding, retrieval code or passage that can solve user's question",
     "SyntheticText2SQL": "Given a user's question, retrieve SQL queries that are appropriate responses to the question",
     "SciFact": "Given a scientific claim, retrieve documents that support or refute the claim",
+    "CodeEditSearchRetrieval": "Given a piece of code, retrieval code that in the ",
+    "CodeSearchNetRetrieval": "Given a code snippet, retrieve the comment corresponding to that code.",
 }
 
 papr_embed_code_instruction_template = "Instruct: {instruction}\nQuery:"
@@ -47,7 +48,13 @@ _coir_train_4b = {
     "CosQA",
     "CodeTransOceanDL",
 }  # CodeFeedbackST and CodeTransOceanContest were not trained on
-papr_embed_code_4b_training_datasets = _base_training | _coir_train_4b | {"SciFact"}
+# Both sizes also trained on lightonai/CodeEditSearchTrain (commit message -> diff, derived from
+# bigcode/commitpackft and decontaminated against cassanof/CodeEditSearch), and on the CoIR CodeSearchNet
+# train split, which shares its source with CodeSearchNetRetrieval. Both evals are declared as seen.
+_code_near = {"CodeEditSearchRetrieval", "CodeSearchNetRetrieval"}
+papr_embed_code_4b_training_datasets = (
+    _base_training | _coir_train_4b | _code_near | {"SciFact"}
+)
 papr_embed_code_0b6_training_datasets = papr_embed_code_4b_training_datasets | {
     "CodeFeedbackST",
     "CodeTransOceanContest",
@@ -59,20 +66,21 @@ _common = dict(
         instruction_template=papr_embed_code_instruction_template,
         apply_instruction_to_passages=False,  # queries carry the instruction, documents are bare
         prompts_dict=papr_embed_code_prompts,
-        max_seq_length=8192,
+        # Both checkpoints support 32k positions (0.6B: 32768, 4B: 40960); long-document tasks such as
+        # SWEbenchCodeRetrieval need it (21% of its documents exceed 8k tokens).
+        max_seq_length=32768,
     ),
     model_type=["dense"],
     languages=multilingual_langs,
     open_weights=True,
     release_date="2026-10-22",
-    max_tokens=8192,
+    max_tokens=32768,
     license="apache-2.0",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
-    output_dtypes=OutputDType.BF16,
 )
 
 papr_embed_code_1_4b = ModelMeta(

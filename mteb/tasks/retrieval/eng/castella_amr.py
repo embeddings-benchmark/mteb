@@ -17,7 +17,7 @@ class CASTELLAAMRRetrieval(AbsTaskRetrieval):
             "which regresses a continuous time interval, to whole-recording "
             "retrieval for the mteb ranking format."
         ),
-        reference="https://arxiv.org/abs/2511.15131",
+        reference="https://doi.org/10.1109/icassp55912.2026.11464074",
         dataset={
             "path": "dukesun99/CASTELLA-AMR",
             "revision": "083b2816174890f60f36fa9f145cfe79c2f94d0a",
@@ -85,14 +85,16 @@ class CASTELLAAMRRetrievalV2(AbsTaskRetrieval):
         sample_creation="found",
         adapted_from=["CASTELLAAMRRetrieval"],
         bibtex_citation=r"""
-@misc{munakata2025castella,
-  archiveprefix = {arXiv},
-  author = {Hokuto Munakata and Takehiro Imamura and Taichi Nishimura and Tatsuya Komatsu},
-  eprint = {2511.15131},
-  primaryclass = {eess.AS},
+@inproceedings{munakata2025castella,
+  author = {Munakata, Hokuto and Imamura, Takehiro and Nishimura, Taichi and Komatsu, Tatsuya},
+  booktitle = {ICASSP 2026 - 2026 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  doi = {10.1109/icassp55912.2026.11464074},
+  month = {May},
+  pages = {15352–15356},
+  publisher = {IEEE},
   title = {CASTELLA: Long Audio Dataset with Captions and Temporal Boundaries},
-  url = {https://arxiv.org/abs/2511.15131},
-  year = {2025},
+  url = {https://doi.org/10.1109/icassp55912.2026.11464074},
+  year = {2026},
 }
 """,
         prompt={"query": "Retrieve the recording that contains the described moment."},
