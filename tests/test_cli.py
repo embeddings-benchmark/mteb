@@ -414,3 +414,23 @@ def test_mock_run_cli(tmp_path: Path):
         )
     finally:
         os.chdir(orig_cwd)
+
+
+def test_cli_without_a_command_exits(capsys: pytest.CaptureFixture[str]):
+    """`mteb` with no subcommand should exit with usage, not AttributeError."""
+    with pytest.raises(SystemExit) as exc:
+        build_cli().parse_args([])
+
+    assert exc.value.code == 2
+    captured = capsys.readouterr()
+    assert "the following arguments are required: command" in captured.err
+    for subcommand in (
+        "run",
+        "available-tasks",
+        "available-benchmarks",
+        "create-model-results",
+        "submit-results",
+        "leaderboard",
+        "mock-run",
+    ):
+        assert subcommand in captured.err

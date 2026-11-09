@@ -678,8 +678,13 @@ def build_cli() -> argparse.ArgumentParser:
     )
 
     subparsers = parser.add_subparsers(
-        title="subcommands", description="valid subcommands", help="additional help"
+        title="subcommands",
+        description="valid subcommands",
+        help="additional help",
+        dest="command",
     )
+    # Without this, `mteb` with no subcommand parses and then crashes on args.func.
+    subparsers.required = True
 
     _add_run_parser(subparsers)
     _add_available_tasks_parser(subparsers)
