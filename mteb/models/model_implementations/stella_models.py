@@ -123,6 +123,7 @@ stella_en_1_5b = ModelMeta(
     public_training_code="https://github.com/NovaSearch-Team/RAG-Retrieval/blob/c40f4638b705eb77d88305d2056901ed550f9f4b/rag_retrieval/train/embedding/README.md",
     public_training_data=None,
     citation=STELLA_CITATION,
+    extra_requirements_groups=["transformers-v4"],
 )
 
 stella_large_zh_v3_1792d = ModelMeta(
