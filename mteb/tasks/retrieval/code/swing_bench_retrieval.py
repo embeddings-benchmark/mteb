@@ -9,7 +9,7 @@ class SwingBenchRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/SwingBench/SwingBench",
         dataset={
             "path": "mteb/SwingBenchRetrieval",
-            "revision": "aa3b989015893ff484f5cd9b07d373caad012626",
+            "revision": "184a7b56751c3469154595198b6a8efeb615f231",
         },
         type="Retrieval",
         category="t2t",

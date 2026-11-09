@@ -9,7 +9,7 @@ class SWEBenchLiveRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/SWE-bench-Live/SWE-bench-Live",
         dataset={
             "path": "mteb/SWEBenchLiveRetrieval",
-            "revision": "997acee32ff17a196f19f65291473d470505108d",
+            "revision": "07906be7a15b8b738a39cb8a54e2aa7022ba866b",
         },
         type="Retrieval",
         category="t2t",

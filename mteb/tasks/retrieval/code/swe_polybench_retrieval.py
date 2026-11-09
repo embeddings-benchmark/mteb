@@ -9,7 +9,7 @@ class SWEPolyBenchRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/AmazonScience/SWE-PolyBench",
         dataset={
             "path": "mteb/SWEPolyBenchRetrieval",
-            "revision": "29ed9159c51390419d1719f27f6d1df431869d9b",
+            "revision": "8df29658f9486935e26c7672ed880762b533b66a",
         },
         type="Retrieval",
         category="t2t",

@@ -9,7 +9,7 @@ class SWEBenchPlusPlusRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/TuringEnterprises/SWE-Bench-plus-plus",
         dataset={
             "path": "mteb/SWEBenchPlusPlusRetrieval",
-            "revision": "8da82b6d23ec80d2536185cf1e04c6d45881c8e7",
+            "revision": "19a7fc0d722dad5db0c704c0a060e8e345e6c093",
         },
         type="Retrieval",
         category="t2t",
