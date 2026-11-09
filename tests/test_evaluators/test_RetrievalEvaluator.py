@@ -1,12 +1,16 @@
 import logging
+from pathlib import Path
 from typing import Any
 
 import pytest
 import torch
 from datasets import Dataset
 
+import mteb
 from mteb._evaluators import RetrievalEvaluator
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.cache import ResultCache
+from mteb.mocks.mock_tasks import MockRetrievalTask
 from mteb.mocks.mock_tasks.retrieval import general_args
 from mteb.models.search_wrappers import SearchEncoderWrapper
 from mteb.models.sentence_transformer_wrapper import MultiVectorSearchEncoderWrapper
@@ -371,25 +375,20 @@ def test_reused_wrapper_records_to_each_tasks_timer():
     ]
 
 
-def test_ignore_identical_ids_searches_one_extra_document(monkeypatch, tmp_path):
-    import mteb
-    import mteb.abstasks.retrieval as retrieval_module
-    from mteb.cache import ResultCache
-    from mteb.mocks.mock_tasks import MockRetrievalTask
-
+def test_ignore_identical_ids_searches_one_extra_document(tmp_path: Path):
     searched_top_k = []
 
-    class RecordingEvaluator(RetrievalEvaluator):
-        def __init__(self, *args: Any, top_k: int, **kwargs: Any) -> None:
+    class RecordingSearchWrapper(SearchEncoderWrapper):
+        def search(self, *args: Any, top_k: int, **kwargs: Any):
             searched_top_k.append(top_k)
-            super().__init__(*args, top_k=top_k, **kwargs)
+            return super().search(*args, top_k=top_k, **kwargs)
 
-    monkeypatch.setattr(retrieval_module, "RetrievalEvaluator", RecordingEvaluator)
+    model = RecordingSearchWrapper(mteb.get_model("mteb/baseline-random-encoder"))
     task = MockRetrievalTask()
     task.ignore_identical_ids = True
 
     mteb.evaluate(
-        mteb.get_model("mteb/baseline-random-encoder"),
+        model,
         task,
         overwrite_strategy="always",
         cache=ResultCache(tmp_path),
