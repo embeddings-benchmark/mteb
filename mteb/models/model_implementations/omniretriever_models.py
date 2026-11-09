@@ -379,11 +379,15 @@ class OmniRetrieverWrapper(AbsEncoder):
 
 
 _OMNIRETRIEVER_CITATION = r"""
-@article{liu2026omniretriever,
-  title={OmniRetriever: Any-to-Any Audio-Video-Text Retrieval via Fusion-as-Teacher Distillation},
-  author={Liu, Yunze},
-  journal={arXiv preprint arXiv:2605.26641},
-  year={2026}
+@inproceedings{liu2026omniretriever,
+  author = {Liu, Yunze and Wu, Chi-Hao and Zhou, Enmin and Shen, Junxiao},
+  booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
+  doi = {10.18653/2026.emnlp-main.541},
+  pages = {12455–12472},
+  publisher = {Association for Computational Linguistics},
+  title = {OmniRetriever: Any-to-Any Audio-Video-Text Retrieval via Fusion-as-Teacher Distillation},
+  url = {https://doi.org/10.18653/2026.emnlp-main.541},
+  year = {2026},
 }
 """
 
