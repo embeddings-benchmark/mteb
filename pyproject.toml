@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "2.27.1"
+version = "2.27.4"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -219,8 +219,11 @@ test = [
     "GitPython>=3.0.0",
     "tabulate>=0.9.0",
     "bibtexparser>=2.0.0,<3.0.0", # used for tests/test_citation_formatting.py
-    "refaudit>=0.4.9", # used for tests/test_validate_metadata/check_citations.py
     "av>=17.0.0",
+]
+citations = [
+    "bibtexparser>=2.0.0,<3.0.0", # used for scripts/tools/check_preprints.py
+    "refaudit>=0.4.9", # used for scripts/tools/check_citations.py and scripts/tools/check_preprints.py
 ]
 docs = [
     "zensical==0.0.68",
@@ -258,6 +261,7 @@ dev = [
     {include-group = "test"},
     {include-group = "typing"},
     {include-group = "docs"},
+    {include-group = "citations"},
 ]
 
 
@@ -412,8 +416,6 @@ preview = true
     "PLW0603",
     "ASYNC240",
 ]
-# a script rather than a test: it reports what it checked on stdout
-"tests/test_validate_metadata/check_citations.py" = ["T201"]
 "docs/*" = [
     "D",
     "DOC",
@@ -541,7 +543,7 @@ markers = [
 
 [tool.uv]
 required-version = ">=0.10.0"
-default-groups = ["test", "docs", "typing", "lint"]
+default-groups = ["test", "docs", "typing", "lint", "citations"]
 override-dependencies = [
     "salesforce-lavis", # salesforce-lavis is not valid with sentence transformers >=3.0.0
 ]

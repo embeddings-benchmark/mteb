@@ -89,6 +89,10 @@ stella_en_1_5b = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         model_kwargs={"dtype": "auto"},
+        # The remote modeling_qwen.py calls DynamicCache.get_usable_length(),
+        # removed in transformers 4.54; encoding never needs the KV cache,
+        # and use_cache=False skips that code path.
+        config_kwargs={"use_cache": False},
         trust_remote_code=True,
         apply_instruction_to_passages=False,
     ),
@@ -119,6 +123,7 @@ stella_en_1_5b = ModelMeta(
     public_training_code="https://github.com/NovaSearch-Team/RAG-Retrieval/blob/c40f4638b705eb77d88305d2056901ed550f9f4b/rag_retrieval/train/embedding/README.md",
     public_training_data=None,
     citation=STELLA_CITATION,
+    extra_requirements_groups=["transformers-v4"],
 )
 
 stella_large_zh_v3_1792d = ModelMeta(

@@ -14,11 +14,13 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
     from typing_extensions import Unpack
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, EncodeKwargs
+    from mteb.types._encoder_io import VideoMetadata
 
 
 from .bidirlm_models import (
@@ -181,6 +183,27 @@ class BidirLMOmniEncoder(AbsEncoder):
 
         return None
 
+    def _video_input(
+        self, frames: torch.Tensor, metadata: VideoMetadata
+    ) -> dict[str, Any]:
+        """Frames and their timing in sentence-transformers' video format.
+
+        Without the timing the processor assumes 24 fps for the timestamps it writes
+        into the prompt.
+        https://huggingface.co/BidirLM/BidirLM-Omni-2.5B-Embedding/blob/4d8a7d34095ef8c4ab760744015825b809756dfe/processing_bidirlm_omni.py#L230-L238
+        """
+        import torch
+
+        if len(frames) < self.temporal_patch_size:
+            # the Qwen3-VL video processor needs temporal_patch_size frames; repeat
+            # the last one, as it already does for an odd frame count
+            # https://github.com/huggingface/transformers/blob/v5.19.0/src/transformers/models/qwen3_vl/video_processing_qwen3_vl.py#L236-L238
+            pad = self.temporal_patch_size - len(frames)
+            frames = torch.cat([frames, frames[-1:].repeat(pad, 1, 1, 1)])
+            indices = list(metadata["frames_indices"])
+            metadata = {**metadata, "frames_indices": indices + indices[-1:] * pad}
+        return {"array": frames, "video_metadata": metadata}
+
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -243,13 +266,9 @@ class BidirLMOmniEncoder(AbsEncoder):
                     for key in modality_keys
                     if key in batch and batch[key][i] is not None
                 }
-                if "video" in row and len(row["video"]) < self.temporal_patch_size:
-                    # the Qwen3-VL video processor needs temporal_patch_size frames; repeat
-                    # the last one, as it already does for an odd frame count
-                    # https://github.com/huggingface/transformers/blob/v5.19.0/src/transformers/models/qwen3_vl/video_processing_qwen3_vl.py#L236-L238
-                    pad = self.temporal_patch_size - len(row["video"])
-                    row["video"] = torch.cat(
-                        [row["video"], row["video"][-1:].repeat(pad, 1, 1, 1)]
+                if "video" in row:
+                    row["video"] = self._video_input(
+                        row["video"], batch["video_metadata"][i]
                     )
                 batch_inputs.append(row)
 

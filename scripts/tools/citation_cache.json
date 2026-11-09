@@ -11322,7 +11322,7 @@
             }
         },
         "vera2026embeddinggemma2unifiedefficient||2610.37364|embeddinggemma 2: unified and efficient multimodal representations|2026": {
-            "stored_at": 1793702950.219583,
+            "stored_at": 1793898173.329603,
             "value": {
                 "verdict": "OK",
                 "found_title": "EmbeddingGemma 2: Unified and Efficient Multimodal Representations",
@@ -11332,17 +11332,17 @@
             }
         },
         "formal2021spladev2||2109.10086|splade v2: sparse lexical and expansion model for information retrieval|2021": {
-            "stored_at": 1793702953.3171148,
+            "stored_at": 1793898488.8250399,
             "value": {
                 "verdict": "OK",
                 "found_title": "SPLADE v2: Sparse Lexical and Expansion Model for Information Retrieval",
-                "source": "arxiv:id",
+                "source": "openalex",
                 "similarity": 1.0,
                 "note": ""
             }
         },
         "lassance2024spladev3||2403.06789|splade-v3: new baselines for splade|2024": {
-            "stored_at": 1793702956.328326,
+            "stored_at": 1793898548.8302279,
             "value": {
                 "verdict": "OK",
                 "found_title": "SPLADE-v3: New baselines for SPLADE",
@@ -11352,7 +11352,7 @@
             }
         },
         "zhao2026lycheererankerfastlateinteraction||2606.22807|lychee-reranker: fast but not late interaction for compressed document reranking|2026": {
-            "stored_at": 1793702959.353045,
+            "stored_at": 1793898568.7254038,
             "value": {
                 "verdict": "OK",
                 "found_title": "Lychee-Reranker: Fast but Not Late Interaction for Compressed Document Reranking",
@@ -11372,7 +11372,7 @@
             }
         },
         "krimmel2026pplxembedv2latetechnicalreport||2610.29523|pplx-embed-v2-late technical report|2026": {
-            "stored_at": 1793702971.325417,
+            "stored_at": 1793898525.826261,
             "value": {
                 "verdict": "OK",
                 "found_title": "pplx-embed-v2-late Technical Report",
@@ -11497,6 +11497,96 @@
                 "verdict": "OK",
                 "found_title": "X-Stance: A Multilingual Multi-Target Dataset for Stance Detection",
                 "source": "datacite:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "zhang2026speecheditbench|10.18653/2026.emnlp-main.1151||speecheditbench: a bilingual multi-attribute benchmark for instruction-guided speech editing|2026": {
+            "stored_at": 1793898172.7169468,
+            "value": {
+                "verdict": "OK",
+                "found_title": "SpeechEditBench: A Bilingual Multi-Attribute Benchmark for Instruction-Guided Speech Editing",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "zhang2026r2medbenchmarkreasoningdrivenmedical|10.18653/2026.emnlp-main.2138||r2med: a benchmark for reasoning-driven medical retrieval|2026": {
+            "stored_at": 1793898172.73361,
+            "value": {
+                "verdict": "OK",
+                "found_title": "R2MED: A Benchmark for Reasoning-Driven Medical Retrieval",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "nacar2025gate|10.18653/2026.findings-emnlp.1952||gate: general arabic text embedding for enhanced semantic textual similarity with matryoshka representation learning and hybrid loss training|2026": {
+            "stored_at": 1793898173.187249,
+            "value": {
+                "verdict": "OK",
+                "found_title": "GATE: General Arabic Text Embedding for Enhanced Semantic Textual Similarity with Matryoshka Representation Learning and Hybrid Loss Training",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "liu2026omniretriever|10.18653/2026.emnlp-main.541||omniretriever: any-to-any audio-video-text retrieval via fusion-as-teacher distillation|2026": {
+            "stored_at": 1793898173.676157,
+            "value": {
+                "verdict": "OK",
+                "found_title": "OmniRetriever: Any-to-Any Audio-Video-Text Retrieval via Fusion-as-Teacher Distillation",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "uembed2026|10.18653/2026.emnlp-main.1419||uembed: unified sparse and dense multimodal embeddings|2026": {
+            "stored_at": 1793898174.179671,
+            "value": {
+                "verdict": "OK",
+                "found_title": "UEmbed: Unified Sparse and Dense Multimodal Embeddings",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "cho2026vsplade|10.1145/3799682.3840581||inference-free multimodal learned sparse retrieval for production-scale visual document search|2026": {
+            "stored_at": 1793898174.687996,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Inference-Free Multimodal Learned Sparse Retrieval for Production-Scale Visual Document Search",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "g\u00fcnther2023jina|10.18653/v1/2023.nlposs-1.2||{j}ina embeddings: a novel set of high-performance sentence embedding models|2023": {
+            "stored_at": 1793898175.1542761,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Jina Embeddings: A Novel Set of High-Performance Sentence Embedding Models",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "nanovdr2026|10.18653/2026.emnlp-main.71||nanovdr: distilling a 2b vision-language retriever into a 70m text-only encoder for visual document retrieval|2026": {
+            "stored_at": 1793898175.68352,
+            "value": {
+                "verdict": "OK",
+                "found_title": "NanoVDR: Distilling a 2B Vision-Language Retriever into a 70M Text-Only Encoder for Visual Document Retrieval",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "zhong2026queritrerankertrainingcompactmultilingual|10.18653/2026.emnlp-industry.97||querit-reranker: training compact multilingual rerankers via efficient label-free distribution adaptation|2026": {
+            "stored_at": 1793898176.196714,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Querit-Reranker: Training Compact Multilingual Rerankers via Efficient Label-Free Distribution Adaptation",
+                "source": "crossref:doi",
                 "similarity": 1.0,
                 "note": ""
             }
