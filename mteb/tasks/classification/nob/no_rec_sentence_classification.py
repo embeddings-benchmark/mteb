@@ -33,12 +33,14 @@ class NoRecSentenceClassification(AbsTaskClassification):
         bibtex_citation=r"""
 @inproceedings{kutuzov-etal-2021-large,
   address = {Reykjavik, Iceland (Online)},
+  archiveprefix = {arXiv},
   author = {Kutuzov, Andrey  and
 Barnes, Jeremy  and
 Velldal, Erik  and
 {\O}vrelid, Lilja  and
 Oepen, Stephan},
   booktitle = {Proceedings of the 23rd Nordic Conference on Computational Linguistics (NoDaLiDa)},
+  eprint = {2104.06546},
   title = {Large-Scale Contextualised Language Modelling for {N}orwegian},
   url = {https://aclanthology.org/2021.nodalida-main.4},
   year = {2021},
@@ -46,11 +48,13 @@ Oepen, Stephan},
 
 @inproceedings{ovrelid-etal-2020-fine,
   address = {Marseille, France},
+  archiveprefix = {arXiv},
   author = {{\O}vrelid, Lilja  and
 M{\ae}hlum, Petter  and
 Barnes, Jeremy  and
 Velldal, Erik},
   booktitle = {Proceedings of the Twelfth Language Resources and Evaluation Conference},
+  eprint = {1911.12722},
   title = {A Fine-grained Sentiment Dataset for {N}orwegian},
   url = {https://aclanthology.org/2020.lrec-1.618},
   year = {2020},
