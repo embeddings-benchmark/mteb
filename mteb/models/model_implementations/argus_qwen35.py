@@ -6,7 +6,6 @@ from mteb.models.model_implementations.ops_colqwen3_models import (
     OpsColQwen3Wrapper,
 )
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -118,7 +117,6 @@ argus_colqwen35_4b_bf16 = ModelMeta(
     training_datasets=ARGUS_TRAINING_DATA,
     model_type=["late-interaction"],
     adapted_from="DataScience-UIBK/Argus-Colqwen3.5-4b-v0",
-    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -148,7 +146,6 @@ argus_colqwen35_2b = ModelMeta(
     use_instructions=True,
     training_datasets=ARGUS_TRAINING_DATA,
     model_type=["late-interaction"],
-    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -179,7 +176,6 @@ argus_colqwen35_2b_bf16 = ModelMeta(
     training_datasets=ARGUS_TRAINING_DATA,
     model_type=["late-interaction"],
     adapted_from="DataScience-UIBK/Argus-Colqwen3.5-2b-v0",
-    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -209,7 +205,6 @@ argus_colqwen35_9b = ModelMeta(
     use_instructions=True,
     training_datasets=ARGUS_TRAINING_DATA,
     model_type=["late-interaction"],
-    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -240,5 +235,4 @@ argus_colqwen35_9b_bf16 = ModelMeta(
     training_datasets=ARGUS_TRAINING_DATA,
     model_type=["late-interaction"],
     adapted_from="DataScience-UIBK/Argus-Colqwen3.5-9b-v0",
-    output_dtypes=OutputDType.BF16,
 )

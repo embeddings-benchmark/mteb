@@ -30,6 +30,9 @@ class XStance(AbsTaskPairClassification):
         sample_creation="created",
         bibtex_citation=r"""
 @inproceedings{vamvas2020xstance,
+  archiveprefix = {arXiv},
+  doi = {10.48550/arXiv.2003.08385},
+  eprint = {2003.08385},
   address = {Zurich, Switzerland},
   author = {Vamvas, Jannis and Sennrich, Rico},
   booktitle = {Proceedings of the 5th Swiss Text Analytics Conference (SwissText)  16th Conference on Natural Language Processing (KONVENS)},

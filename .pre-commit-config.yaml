@@ -25,8 +25,6 @@ repos:
     hooks:
     - id: typos
       args: ["--diff"]
-      # Preserve publication metadata and citation identifiers verbatim.
-      exclude: ^tests/test_validate_metadata/citation_(allowlist|cache)\.json$
 
   - repo: local
     hooks:

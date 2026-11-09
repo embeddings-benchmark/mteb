@@ -33,3 +33,28 @@ arabic_triplet_matryoshka = ModelMeta(
     year={2025}
 }""",
 )
+
+arabic_retrieval_v1 = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    name="omarelshehy/Arabic-Retrieval-v1.0",
+    model_type=["dense"],
+    languages=["ara-Arab"],
+    open_weights=True,
+    revision="899f6e1b765915a72d5e4ace6bb2b221715550d8",
+    release_date="2024-12-03",
+    n_parameters=135_194_880,
+    n_embedding_parameters=49_153_536,
+    memory_usage_mb=516,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/omarelshehy/Arabic-Retrieval-v1.0",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    adapted_from="aubmindlab/bert-base-arabertv02",
+    training_datasets=None,  # the model card does not say what it was trained on
+    citation=None,
+)
