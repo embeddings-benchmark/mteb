@@ -388,6 +388,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "Vidore3FinanceFrRetrieval.v2",
         "Vidore3HrRetrieval.v2",
         "Vidore3IndustrialRetrieval.v2",
+        "VisLingAText",  # concepts are single words from the Mikolov et al. (2013) analogies, e.g. "go" and "he"
         # Vidore3*Reranking.v2: some pages have no extracted text (as Vidore3*Retrieval.v2)
         "Vidore3ComputerScienceBGEm3Reranking.v2",
         "Vidore3ComputerScienceBM25sReranking.v2",
@@ -984,6 +985,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "Vidore3IndustrialNemotron35Embed8BReranking.v2",
         "Vidore3PharmaceuticalsNemotron35Embed8BReranking.v2",
         "Vidore3PhysicsNemotron35Embed8BReranking.v2",
+        "VisLingAImage",  # related concepts share Wikimedia Commons images, e.g. implement/implements and Athens/Greece
         "WebQAT2ITRetrieval",
         "WebVidCoVRIT2VRetrieval",
         "WITI2TRetrieval",  # images can recur across WIT records and languages
@@ -1127,6 +1129,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "FORBI2IRetrieval",  # min 1x1px query image present
         "GLDv2I2IRetrieval",  # min 7x7px document image present
         "Imagenet1k",  # min 8x10px image present
+        "VisLingAImage",  # min 3x2px image present
     ],
     "zero_relevant_docs": [
         "BrightRetrieval",
