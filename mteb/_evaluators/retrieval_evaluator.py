@@ -135,9 +135,7 @@ class RetrievalEvaluator(Evaluator):
             logger.debug(
                 "For evaluation, ``ignore_identical_ids=True`` is set to True, the evaluator will ignore identical query and document ids."
             )
-            # Remove identical ids from results dict, then trim each query back to
-            # the largest cutoff. The search retrieves one extra document for this,
-            # so a query that matched itself still keeps `max(k_values)` results.
+            # Remove `identical ids` and trim the extra search result to max(k_values).
             max_k = max(k_values)
             for qid, rels in results.items():
                 rels.pop(qid, None)
