@@ -317,6 +317,10 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "STS22",
         "STSB",
         "STSBenchmarkMultilingualSTS",
+        # full repository snapshots include genuinely tiny files (empty __init__.py, py.typed, "{}" JSON fixtures)
+        "SWEBenchLiveRetrieval",
+        "SWEBenchPlusPlusRetrieval",
+        "SWEPolyBenchRetrieval",
         "SWEbenchCodeRetrieval",
         "SentimentDKSF",
         "SinhalaNewsClassification",
@@ -332,6 +336,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SwedishPatentCPCSubclassClassification",
         "SwedishSentimentClassification",
         "SwednClusteringS2S",
+        "SwingBenchRetrieval",  # repository snapshot with tiny files, as SWEBench*Retrieval above
         "SynPerChatbotRAGTopicsRetrieval",
         "SynPerChatbotTopicsRetrieval",
         "SynPerQARetrieval",
@@ -649,7 +654,11 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SDSEyeProtectionClassification",
         "SDSGlovesClassification",
         "SIQA",
+        # each example keeps its own full repository snapshot, so files shared across snapshots repeat
+        "SWEBenchLiveRetrieval",
+        "SWEBenchPlusPlusRetrieval",
         "SWEPolyBenchRR",
+        "SWEPolyBenchRetrieval",
         "SWEbenchCodeRetrieval",
         "SWEbenchLiteRR",
         "SWEbenchMultilingualRR",
@@ -679,6 +688,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SwedishSentimentClassification",
         "SwednClusteringS2S",
         "SwednRetrieval",
+        "SwingBenchRetrieval",  # per-example repository snapshots, as SWEBench*Retrieval above
         "SwissJudgementClassification",
         "SyntecReranking",
         "SyntheticText2SQL",

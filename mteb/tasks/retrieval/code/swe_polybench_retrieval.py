@@ -34,12 +34,12 @@ class SWEPolyBenchRetrieval(AbsTaskRetrieval):
             "query": "Given a GitHub issue, retrieve the repository files that need to be modified to resolve the issue."
         },
         bibtex_citation=r"""
-@misc{rashid2025swepolybench,
+@misc{rashid2025swepolybenchmultilanguagebenchmarkrepository,
   archiveprefix = {arXiv},
   author = {Muhammad Shihab Rashid and Christian Bock and Yuan Zhuang and Alexander Buchholz and Tim Esler and Simon Valentin and Luca Franceschi and Martin Wistuba and Prabhu Teja Sivaprasad and Woo Jung Kim and Anoop Deoras and Giovanni Zappella and Laurent Callot},
   eprint = {2504.08703},
   primaryclass = {cs.SE},
-  title = {{SWE-PolyBench}: A multi-language benchmark for repository level evaluation of coding agents},
+  title = {SWE-PolyBench: A multi-language benchmark for repository level evaluation of coding agents},
   url = {https://arxiv.org/abs/2504.08703},
   year = {2025},
 }
