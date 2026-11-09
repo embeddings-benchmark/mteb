@@ -44,9 +44,11 @@ class PromptSource(HelpfulStrEnum):
     """Source of an instruction used by `AbsEncoder.get_instruction`.
 
     Attributes:
-        CUSTOM_PROMPT: `prompts_dict[task_name]` defined in the model implementation.
+        CUSTOM_PROMPT: `prompts_dict` entry for this task. `{task_name}-{prompt_type}` is
+            checked before `task_name`.
         DEFAULT_TASK_PROMPT: The `prompt` defined in the task metadata.
-        TASK_TYPE_PROMPT: `prompts_dict[task_type]` defined in the model implementation.
+        TASK_TYPE_PROMPT: `prompts_dict` entry for this task type. `{task_type}-{prompt_type}`
+            is checked before `task_type`.
         ENCODE_TYPE_PROMPT: `prompts_dict[prompt_type]` (e.g. `"query"`) defined in the model implementation.
     """
 
@@ -220,8 +222,8 @@ class AbsEncoder(ABC):
             task_metadata: The metadata of the task. Sentence-transformers uses this to
                 determine which prompt to use from a specified dictionary.
                 The order of priorities for prompt selection is defined by `prompt_priority`, by default:
-                    1. Specific task prompt
-                    2. Specific task type prompt
+                    1. Specific task prompt (`{task}-{prompt_type}`, then the task name)
+                    2. Specific task type prompt (`{task_type}-{prompt_type}`, then the task type)
                     3. Specific prompt type
                     4. Default prompt from the task definition
             prompt_type: The name type of prompt.
@@ -244,9 +246,23 @@ class AbsEncoder(ABC):
                     break
                 continue
             key = prompt_dict_keys[source]
-            if self.prompts_dict and key and key in self.prompts_dict:
-                prompt = self.prompts_dict[key]
-                break
+            if not self.prompts_dict or not key:
+                continue
+            # `{name}-{prompt_type}` is the more specific form of the same source,
+            # matching `get_prompt_name` (e.g. "ArguAna-query" before "ArguAna").
+            candidates = [key]
+            if prompt_type is not None and source in {
+                PromptSource.CUSTOM_PROMPT,
+                PromptSource.TASK_TYPE_PROMPT,
+            }:
+                candidates.insert(0, f"{key}-{prompt_type.value}")
+            for candidate in candidates:
+                if candidate in self.prompts_dict:
+                    prompt = self.prompts_dict[candidate]
+                    break
+            else:
+                continue
+            break
 
         if isinstance(prompt, dict) and prompt_type:
             if prompt.get(prompt_type.value):

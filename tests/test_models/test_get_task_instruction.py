@@ -68,6 +68,12 @@ TASK_FIRST = (
     PromptSource.TASK_TYPE_PROMPT,
     PromptSource.ENCODE_TYPE_PROMPT,
 )
+TASK_PROMPT_BEFORE_MODEL = (
+    PromptSource.DEFAULT_TASK_PROMPT,
+    PromptSource.CUSTOM_PROMPT,
+    PromptSource.TASK_TYPE_PROMPT,
+    PromptSource.ENCODE_TYPE_PROMPT,
+)
 
 
 @pytest.mark.parametrize(
@@ -91,6 +97,43 @@ TASK_FIRST = (
         ({"MockRetrievalTask": "custom"}, TASK_FIRST, PromptType.query, "custom"),
         # task first: falls back to model prompts when the task has no prompt for the prompt type
         ({"document": "document"}, TASK_FIRST, PromptType.document, "document"),
+        # "{task}-{prompt_type}" is the task prompt, checked before the bare task name
+        (
+            {"MockRetrievalTask-query": "specific query"},
+            None,
+            PromptType.query,
+            "specific query",
+        ),
+        (
+            {
+                "MockRetrievalTask-query": "specific query",
+                "MockRetrievalTask": "bare task",
+            },
+            None,
+            PromptType.query,
+            "specific query",
+        ),
+        # the query key must not be reused for documents
+        (
+            {"MockRetrievalTask-document": "specific document"},
+            None,
+            PromptType.document,
+            "specific document",
+        ),
+        # "{task_type}-{prompt_type}" beats the bare task type
+        (
+            {"Retrieval-query": "typed query", "Retrieval": "generic type"},
+            None,
+            PromptType.query,
+            "typed query",
+        ),
+        # prompt_priority still prefers the task metadata prompt when it comes first
+        (
+            {"MockRetrievalTask-query": "specific query"},
+            TASK_PROMPT_BEFORE_MODEL,
+            PromptType.query,
+            QUERY_INSTR,
+        ),
     ],
 )
 def test_get_instruction_prompt_priority(
