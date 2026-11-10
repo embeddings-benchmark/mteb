@@ -25,14 +25,14 @@ class RARbMath(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{cobbe2021training,
+@article{cobbe_training_2021,
   author = {Cobbe, Karl and Kosaraju, Vineet and Bavarian, Mohammad and Chen, Mark and Jun, Heewoo and Kaiser, Lukasz and Plappert, Matthias and Tworek, Jerry and Hilton, Jacob and Nakano, Reiichiro and others},
   journal = {arXiv preprint arXiv:2110.14168},
   title = {Training verifiers to solve math word problems},
   year = {2021},
 }
 
-@inproceedings{hendrycks2021math,
+@inproceedings{hendrycks_measuring_2021a,
   archiveprefix = {arXiv},
   eprint = {2103.03874},
   title = {Measuring Mathematical Problem Solving With the {MATH} Dataset},
@@ -42,14 +42,14 @@ class RARbMath(AbsTaskRetrieval):
   url = {https://openreview.net/forum?id=7Bywt2mQsCe},
 }
 
-@article{xiao2024rar,
+@article{xiao_rar-b_2024,
   author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
   journal = {arXiv preprint arXiv:2404.06347},
   title = {RAR-b: Reasoning as Retrieval Benchmark},
   year = {2024},
 }
 
-@inproceedings{yu2023metamath,
+@inproceedings{yu_metamath_2024,
   archiveprefix = {arXiv},
   author = {Longhui Yu and Weisen Jiang and Han Shi and Jincheng YU and Zhengying Liu and Yu Zhang and James Kwok and Zhenguo Li and Adrian Weller and Weiyang Liu},
   booktitle = {The Twelfth International Conference on Learning Representations},

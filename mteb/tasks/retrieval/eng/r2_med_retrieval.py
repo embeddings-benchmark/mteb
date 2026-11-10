@@ -69,7 +69,7 @@ class R2MEDBiologyRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@inproceedings{zhang2026r2medbenchmarkreasoningdrivenmedical,
+@inproceedings{zhang_r2med_2026,
   author = {Zhang, Xiangxu and Li, Lei and Liu, Zheng and Zhou, Xiao},
   booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
   doi = {10.18653/2026.emnlp-main.2138},
@@ -117,7 +117,7 @@ class R2MEDBioinformaticsRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@inproceedings{zhang2026r2medbenchmarkreasoningdrivenmedical,
+@inproceedings{zhang_r2med_2026,
   author = {Zhang, Xiangxu and Li, Lei and Liu, Zheng and Zhou, Xiao},
   booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
   doi = {10.18653/2026.emnlp-main.2138},
@@ -165,7 +165,7 @@ class R2MEDMedicalSciencesRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@inproceedings{zhang2026r2medbenchmarkreasoningdrivenmedical,
+@inproceedings{zhang_r2med_2026,
   author = {Zhang, Xiangxu and Li, Lei and Liu, Zheng and Zhou, Xiao},
   booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
   doi = {10.18653/2026.emnlp-main.2138},
@@ -213,7 +213,7 @@ class R2MEDMedXpertQAExamRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@inproceedings{zhang2026r2medbenchmarkreasoningdrivenmedical,
+@inproceedings{zhang_r2med_2026,
   author = {Zhang, Xiangxu and Li, Lei and Liu, Zheng and Zhou, Xiao},
   booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
   doi = {10.18653/2026.emnlp-main.2138},
@@ -261,7 +261,7 @@ class R2MEDMedQADiagRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@inproceedings{zhang2026r2medbenchmarkreasoningdrivenmedical,
+@inproceedings{zhang_r2med_2026,
   author = {Zhang, Xiangxu and Li, Lei and Liu, Zheng and Zhou, Xiao},
   booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
   doi = {10.18653/2026.emnlp-main.2138},
@@ -309,7 +309,7 @@ class R2MEDPMCTreatmentRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@inproceedings{zhang2026r2medbenchmarkreasoningdrivenmedical,
+@inproceedings{zhang_r2med_2026,
   author = {Zhang, Xiangxu and Li, Lei and Liu, Zheng and Zhou, Xiao},
   booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
   doi = {10.18653/2026.emnlp-main.2138},
@@ -357,7 +357,7 @@ class R2MEDPMCClinicalRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@inproceedings{zhang2026r2medbenchmarkreasoningdrivenmedical,
+@inproceedings{zhang_r2med_2026,
   author = {Zhang, Xiangxu and Li, Lei and Liu, Zheng and Zhou, Xiao},
   booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
   doi = {10.18653/2026.emnlp-main.2138},
@@ -405,7 +405,7 @@ class R2MEDIIYiClinicalRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@inproceedings{zhang2026r2medbenchmarkreasoningdrivenmedical,
+@inproceedings{zhang_r2med_2026,
   author = {Zhang, Xiangxu and Li, Lei and Liu, Zheng and Zhou, Xiao},
   booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
   doi = {10.18653/2026.emnlp-main.2138},

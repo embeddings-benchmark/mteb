@@ -675,7 +675,7 @@ class UEmbedEncoder(AbsEncoder):
         return (first * second).sum(dim=-1)
 
 
-UEMBED_CITATION = """@inproceedings{uembed2026,
+UEMBED_CITATION = """@inproceedings{song_uembed_2026,
   author = {Song, Tingyu and Li, Mingxin and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Nie, Zhijie and Zhao, Yilun and Wu, Shu},
   booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
   doi = {10.18653/2026.emnlp-main.1419},

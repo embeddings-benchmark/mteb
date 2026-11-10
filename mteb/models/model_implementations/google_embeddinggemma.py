@@ -658,7 +658,7 @@ embedding_gemma_2 = ModelMeta(
     memory_usage_mb=1034,
     modalities=["text", "image", "audio", "video"],
     citation="""
-@misc{vera2026embeddinggemma2unifiedefficient,
+@misc{vera_embeddinggemma_2026,
       title={EmbeddingGemma 2: Unified and Efficient Multimodal Representations},
       author={Henrique Schechter Vera and Sahil Dua and Jovan Andonov and Sara Smoot and Sebastian Russo and Ivan Llanos and Max Matveev and Jae Hyeon Yoo and Kat Black and Shih-Cheng Huang and Josiah Aklilu and Maarten Grootendorst and Omar Sanseviero and Chandramouli Amarnath and Ian Ballantyne and Zhe Li and Daniel Salz and Ibrahim Alabdulmohsin and Ilya Philippov and Kristen Quan and Glenn Cameron and Edouard Yvinec and Luciano Martins and Doug Reid and Sindhu Raghuram Panyam and Weiyi Wang and Hengxuan Ying and Madhuri Shanbhogue and Tanmaya Dabral and Shanfeng Zhang and Juyeong Ji and Renjie Wu and Joe Zou and Xu Chen and Yunan Zhang and Yu-Hui Chen and Matthew Soulanille and Vinod Mamillapalli and Yi-Chun Kuo and Wai Hon Law and Matt Kreileder and Alice Zheng and Suril Shah and Mogan Shieh and Pooja Consul and Alberto Montes and Andreas Hess and Andres Sevilla and Babak Samari and Brendan McCloskey and Brian Potetz and Daniel Cer and Georgios Kathareios and Gustavo Hernández Ábrego and Hesen Zhang and Ji Ma and Jiaxing Wu and Keegan Mosley and Paul Suganthan and Rui Meng and Shen Gao and Shengcao Cao and Yi-Ting Chen and Yichang Chen and Zhongli Ding and Kendra Byrne and Cormac Brick and Olivier Lacombe and Qin Yin and Tris Warkentin and Armand Joulin and Tom Duerig and Mojtaba Seyedhosseini},
       year={2026},

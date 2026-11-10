@@ -27,7 +27,7 @@ class AppsRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{hendrycks2021measuring,
+@inproceedings{hendrycks_measuring_2021,
   archiveprefix = {arXiv},
   eprint = {2105.09938},
   title = {Measuring Coding Challenge Competence With {APPS}},

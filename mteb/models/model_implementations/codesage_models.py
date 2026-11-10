@@ -2,7 +2,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 CODESAGE_CITATION = """
-@inproceedings{zhang2024code,
+@inproceedings{zhang_code_2024,
   archiveprefix = {arXiv},
   eprint = {2402.01935},
   title = {{CODE} {REPRESENTATION} {LEARNING} {AT} {SCALE}},

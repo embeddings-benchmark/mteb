@@ -479,7 +479,7 @@ multilingual_langs = [
     "zho-Hans",
 ]
 
-KALM_RERANKER_V1_CITATION = """@misc{zhao2026lycheererankerfastlateinteraction,
+KALM_RERANKER_V1_CITATION = """@misc{zhao_lychee-reranker_2026,
       title={Lychee-Reranker: Fast but Not Late Interaction for Compressed Document Reranking},
       author={Xinping Zhao and Jiaxin Xu and Ziqi Dai and Xin Zhang and Huiyao Chen and Shouzheng Huang and Xianhao Xiong and Danyu Tang and Xinshuo Hu and Guohong Fu and Meishan Zhang and Baotian Hu},
       year={2026},

@@ -169,7 +169,7 @@ audio_flamingo_meta = ModelMeta(
     training_datasets=None,
     modalities=["audio", "text"],
     citation="""
-@inproceedings{goel2025audioflamingo3,
+@inproceedings{goel_audio_2025,
   archiveprefix = {arXiv},
   author = {Arushi Goel and Sreyan Ghosh and Jaehyeon Kim and Sonal Kumar and Zhifeng Kong and Sang-gil Lee and Chao-Han Huck Yang and Ramani Duraiswami and Dinesh Manocha and Rafael Valle and Bryan Catanzaro},
   booktitle = {The Thirty-ninth Annual Conference on Neural Information Processing Systems},

@@ -379,7 +379,7 @@ class OmniRetrieverWrapper(AbsEncoder):
 
 
 _OMNIRETRIEVER_CITATION = r"""
-@inproceedings{liu2026omniretriever,
+@inproceedings{liu_omniretriever_2026,
   author = {Liu, Yunze and Wu, Chi-Hao and Zhou, Enmin and Shen, Junxiao},
   booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
   doi = {10.18653/2026.emnlp-main.541},

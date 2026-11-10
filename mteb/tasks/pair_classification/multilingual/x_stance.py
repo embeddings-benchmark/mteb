@@ -29,7 +29,7 @@ class XStance(AbsTaskPairClassification):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{vamvas2020xstance,
+@inproceedings{vamvas_x-stance_2020,
   archiveprefix = {arXiv},
   doi = {10.48550/arXiv.2003.08385},
   eprint = {2003.08385},

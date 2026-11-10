@@ -2,7 +2,7 @@ from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 NQ_CITATION = r"""
-@article{kwiatkowski-etal-2019-natural,
+@article{kwiatkowski_natural_2019,
   title = {Natural Questions: A Benchmark for Question Answering Research},
   author = {Kwiatkowski, Tom  and
       Palomaki, Jennimaria  and

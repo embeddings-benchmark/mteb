@@ -170,7 +170,7 @@ pplx_embed_v1_4b = ModelMeta(
 )
 
 _PPLX_LATE_V2_CITATION = """
-@misc{krimmel2026pplxembedv2latetechnicalreport,
+@misc{krimmel_pplx-embed-v2-late_2026,
       title={pplx-embed-v2-late Technical Report},
       author={Markus Krimmel and Louis Milliken and Ekaterina Glazkova and Maximilian Schall and Antoine Chaffin and Sedigheh Eslami and Jonas Golde and Denis Bykov and Claire Beamer and Jeremy Yang and Bo Wang},
       year={2026},

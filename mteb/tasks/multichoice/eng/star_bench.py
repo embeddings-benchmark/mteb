@@ -9,7 +9,7 @@ from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _BIBTEX = r"""
-@misc{wu2024star,
+@misc{wu_star_2024,
   archiveprefix = {arXiv},
   doi = {10.48550/arXiv.2405.09711},
   eprint = {2405.09711},

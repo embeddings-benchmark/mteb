@@ -40,7 +40,7 @@ class MultilingualNanoArguAnaRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{wachsmuth2018retrieval,
+@inproceedings{wachsmuth_retrieval_2018,
   author = {Wachsmuth, Henning and Syed, Shahbaz and Stein, Benno},
   booktitle = {ACL},
   title = {Retrieval of the Best Counterargument without Prior Topic Knowledge},
@@ -75,7 +75,7 @@ class MultilingualNanoClimateFeverRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@misc{diggelmann2021climatefever,
+@misc{diggelmann_climate-fever_2021,
   archiveprefix = {arXiv},
   author = {Thomas Diggelmann and Jordan Boyd-Graber and Jannis Bulian and Massimiliano Ciaramita and Markus Leippold},
   eprint = {2012.00614},
@@ -114,7 +114,7 @@ class MultilingualNanoDBPediaRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@article{lehmann2015dbpedia,
+@article{lehmann_dbpedia_2015,
   author = {Lehmann, Jens and et al.},
   journal = {Semantic Web},
   title = {DBpedia: A large-scale, multilingual knowledge base extracted from Wikipedia},
@@ -151,7 +151,7 @@ class MultilingualNanoFEVERRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{thorne-etal-2018-fever,
+@inproceedings{thorne_fever_2018,
   address = {New Orleans, Louisiana},
   author = {Thorne, James  and Vlachos, Andreas  and Christodoulopoulos, Christos  and Mittal, Arpit},
   booktitle = {Proceedings of the 2018 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long Papers)},
@@ -195,7 +195,7 @@ class MultilingualNanoFiQA2018Retrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{thakur2021beir,
+@inproceedings{thakur_beir_2021,
   archiveprefix = {arXiv},
   author = {Nandan Thakur and Nils Reimers and Andreas R{"u}ckl'e and Abhishek Srivastava and Iryna Gurevych},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)},
@@ -235,7 +235,7 @@ class MultilingualNanoHotpotQARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{yang-etal-2018-hotpotqa,
+@inproceedings{yang_hotpotqa_2018,
   address = {Brussels, Belgium},
   author = {Yang, Zhilin  and
 Qi, Peng  and
@@ -288,7 +288,7 @@ class MultilingualNanoMSMARCORetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@misc{bajaj2018msmarcohumangenerated,
+@misc{bajaj_ms_2018,
   archiveprefix = {arXiv},
   author = {Payal Bajaj and Daniel Campos and Nick Craswell and Li Deng and Jianfeng Gao and Xiaodong Liu and Rangan Majumder and Andrew McNamara and Bhaskar Mitra and Tri Nguyen and Mir Rosenberg and Xia Song and Alina Stoica and Saurabh Tiwary and Tong Wang},
   eprint = {1611.09268},
@@ -328,7 +328,7 @@ class MultilingualNanoNFCorpusRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{boteva2016,
+@inproceedings{boteva_full-text_2016,
   author = {Boteva, Vera and Gholipour, Demian and Sokolov, Artem and Riezler, Stefan},
   city = {Padova},
   country = {Italy},
@@ -399,7 +399,7 @@ class MultilingualNanoQuoraRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@misc{quora-question-pairs,
+@misc{datacanary_quora_2017,
   author = {DataCanary, hilfialkaff, Lili Jiang, Meg Risdal, Nikhil Dandekar, tomtung},
   publisher = {Kaggle},
   title = {Quora Question Pairs},
@@ -437,7 +437,7 @@ class MultilingualNanoSCIDOCSRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{specter2020cohan,
+@inproceedings{cohan_specter_2020,
   author = {Arman Cohan and Sergey Feldman and Iz Beltagy and Doug Downey and Daniel S. Weld},
   booktitle = {ACL},
   title = {SPECTER: Document-level Representation Learning using Citation-informed Transformers},
@@ -474,7 +474,7 @@ class MultilingualNanoSciFactRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{specter2020cohan,
+@inproceedings{cohan_specter_2020,
   author = {Arman Cohan and Sergey Feldman and Iz Beltagy and Doug Downey and Daniel S. Weld},
   booktitle = {ACL},
   title = {SPECTER: Document-level Representation Learning using Citation-informed Transformers},
@@ -511,7 +511,7 @@ class MultilingualNanoTouche2020Retrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@dataset{potthast_2022_6862281,
+@dataset{potthast_touche20-argument-retrieval-for-controversial-_2022,
   author = {Potthast, Martin and
 Gienapp, Lukas and
 Wachsmuth, Henning and

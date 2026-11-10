@@ -184,7 +184,7 @@ _EVAL_LANGS_CV21 = {
 
 
 COMMON_VOICE_CITATION = r"""
-@inproceedings{ardila-etal-2020-common,
+@inproceedings{ardila_common_2020,
   archiveprefix = {arXiv},
   eprint = {1912.06670},
   title = {Common Voice: A Massively-Multilingual Speech Corpus},
