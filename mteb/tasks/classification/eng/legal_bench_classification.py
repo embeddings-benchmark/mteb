@@ -5139,13 +5139,13 @@ class SCDBPAccountabilityLegalBenchClassification(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @article{chilton_limitations_2017,
-  author = {Chilton, Adam S and Sarfaty, Galit A},
-  journal = {Stan. J. Int'l L.},
-  pages = {1},
-  publisher = {HeinOnline},
+  author = {Chilton, Adam and Sarfaty, Galit},
   title = {The limitations of supply chain disclosure regimes},
+  journal = {Stanford Journal of International Law},
   volume = {53},
+  pages = {1},
   year = {2017},
+  url = {https://ssrn.com/abstract=2801331},
 }
 
 @inproceedings{guha_legalbench_2023,
@@ -5188,13 +5188,13 @@ class SCDBPAuditsLegalBenchClassification(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @article{chilton_limitations_2017,
-  author = {Chilton, Adam S and Sarfaty, Galit A},
-  journal = {Stan. J. Int'l L.},
-  pages = {1},
-  publisher = {HeinOnline},
+  author = {Chilton, Adam and Sarfaty, Galit},
   title = {The limitations of supply chain disclosure regimes},
+  journal = {Stanford Journal of International Law},
   volume = {53},
+  pages = {1},
   year = {2017},
+  url = {https://ssrn.com/abstract=2801331},
 }
 
 @inproceedings{guha_legalbench_2023,
@@ -5237,13 +5237,13 @@ class SCDBPCertificationLegalBenchClassification(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @article{chilton_limitations_2017,
-  author = {Chilton, Adam S and Sarfaty, Galit A},
-  journal = {Stan. J. Int'l L.},
-  pages = {1},
-  publisher = {HeinOnline},
+  author = {Chilton, Adam and Sarfaty, Galit},
   title = {The limitations of supply chain disclosure regimes},
+  journal = {Stanford Journal of International Law},
   volume = {53},
+  pages = {1},
   year = {2017},
+  url = {https://ssrn.com/abstract=2801331},
 }
 
 @inproceedings{guha_legalbench_2023,
@@ -5286,13 +5286,13 @@ class SCDBPTrainingLegalBenchClassification(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @article{chilton_limitations_2017,
-  author = {Chilton, Adam S and Sarfaty, Galit A},
-  journal = {Stan. J. Int'l L.},
-  pages = {1},
-  publisher = {HeinOnline},
+  author = {Chilton, Adam and Sarfaty, Galit},
   title = {The limitations of supply chain disclosure regimes},
+  journal = {Stanford Journal of International Law},
   volume = {53},
+  pages = {1},
   year = {2017},
+  url = {https://ssrn.com/abstract=2801331},
 }
 
 @inproceedings{guha_legalbench_2023,
@@ -5335,13 +5335,13 @@ class SCDBPVerificationLegalBenchClassification(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @article{chilton_limitations_2017,
-  author = {Chilton, Adam S and Sarfaty, Galit A},
-  journal = {Stan. J. Int'l L.},
-  pages = {1},
-  publisher = {HeinOnline},
+  author = {Chilton, Adam and Sarfaty, Galit},
   title = {The limitations of supply chain disclosure regimes},
+  journal = {Stanford Journal of International Law},
   volume = {53},
+  pages = {1},
   year = {2017},
+  url = {https://ssrn.com/abstract=2801331},
 }
 
 @inproceedings{guha_legalbench_2023,
@@ -5384,13 +5384,13 @@ class SCDDAccountabilityLegalBenchClassification(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @article{chilton_limitations_2017,
-  author = {Chilton, Adam S and Sarfaty, Galit A},
-  journal = {Stan. J. Int'l L.},
-  pages = {1},
-  publisher = {HeinOnline},
+  author = {Chilton, Adam and Sarfaty, Galit},
   title = {The limitations of supply chain disclosure regimes},
+  journal = {Stanford Journal of International Law},
   volume = {53},
+  pages = {1},
   year = {2017},
+  url = {https://ssrn.com/abstract=2801331},
 }
 
 @inproceedings{guha_legalbench_2023,
@@ -5433,13 +5433,13 @@ class SCDDAuditsLegalBenchClassification(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @article{chilton_limitations_2017,
-  author = {Chilton, Adam S and Sarfaty, Galit A},
-  journal = {Stan. J. Int'l L.},
-  pages = {1},
-  publisher = {HeinOnline},
+  author = {Chilton, Adam and Sarfaty, Galit},
   title = {The limitations of supply chain disclosure regimes},
+  journal = {Stanford Journal of International Law},
   volume = {53},
+  pages = {1},
   year = {2017},
+  url = {https://ssrn.com/abstract=2801331},
 }
 
 @inproceedings{guha_legalbench_2023,
@@ -5482,13 +5482,13 @@ class SCDDCertificationLegalBenchClassification(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @article{chilton_limitations_2017,
-  author = {Chilton, Adam S and Sarfaty, Galit A},
-  journal = {Stan. J. Int'l L.},
-  pages = {1},
-  publisher = {HeinOnline},
+  author = {Chilton, Adam and Sarfaty, Galit},
   title = {The limitations of supply chain disclosure regimes},
+  journal = {Stanford Journal of International Law},
   volume = {53},
+  pages = {1},
   year = {2017},
+  url = {https://ssrn.com/abstract=2801331},
 }
 
 @inproceedings{guha_legalbench_2023,
@@ -5531,13 +5531,13 @@ class SCDDTrainingLegalBenchClassification(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @article{chilton_limitations_2017,
-  author = {Chilton, Adam S and Sarfaty, Galit A},
-  journal = {Stan. J. Int'l L.},
-  pages = {1},
-  publisher = {HeinOnline},
+  author = {Chilton, Adam and Sarfaty, Galit},
   title = {The limitations of supply chain disclosure regimes},
+  journal = {Stanford Journal of International Law},
   volume = {53},
+  pages = {1},
   year = {2017},
+  url = {https://ssrn.com/abstract=2801331},
 }
 
 @inproceedings{guha_legalbench_2023,
@@ -5580,13 +5580,13 @@ class SCDDVerificationLegalBenchClassification(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @article{chilton_limitations_2017,
-  author = {Chilton, Adam S and Sarfaty, Galit A},
-  journal = {Stan. J. Int'l L.},
-  pages = {1},
-  publisher = {HeinOnline},
+  author = {Chilton, Adam and Sarfaty, Galit},
   title = {The limitations of supply chain disclosure regimes},
+  journal = {Stanford Journal of International Law},
   volume = {53},
+  pages = {1},
   year = {2017},
+  url = {https://ssrn.com/abstract=2801331},
 }
 
 @inproceedings{guha_legalbench_2023,

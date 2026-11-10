@@ -18,10 +18,14 @@ _CITATION = r"""
 }
 
 @inproceedings{ofli_analysis_2020,
-  author = {Ferda Ofli and Firoj Alam and Muhammad Imran},
-  booktitle = {17th International Conference on Information Systems for Crisis Response and Management},
-  title = {Analysis of Social Media Data using Multimodal Deep Learning for Disaster Response},
+  author = {Ofli, Ferda and Alam, Firoj and Imran, Muhammad},
+  title = {Analysis of social media data using multimodal deep learning for disaster response},
+  booktitle = {Proceedings of the 17th International Conference on Information Systems for Crisis Response and Management ({ISCRAM} 2020)},
+  editor = {Hughes, Amanda Lee and McNeill, Fiona and Zobel, Christopher W.},
+  publisher = {Information Systems for Crisis Response and Management},
+  pages = {802--811},
   year = {2020},
+  address = {Spain},
 }
 """
 

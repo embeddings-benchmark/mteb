@@ -251,6 +251,16 @@
                 "note": ""
             }
         },
+        "araujo_large-scale_2016||1604.07939|large-scale query-by-image video retrieval using bloom filters|2016": {
+            "stored_at": 1794306868.729463,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Large-Scale Query-by-Image Video Retrieval Using Bloom Filters",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
         "araujo_large-scale_2016||1604.07939|{large-scale query-by-image video retrieval using bloom filters}|2016": {
             "stored_at": 1794305274.6507258,
             "value": {
@@ -259,6 +269,16 @@
                 "source": "arxiv:id",
                 "similarity": 1.0,
                 "note": ""
+            }
+        },
+        "araujo_stanford_2015|10.1145/2713168.2713197||stanford i2v: a news video dataset for query-by-image experiments|2015": {
+            "stored_at": 1794307403.810691,
+            "value": {
+                "verdict": "TITLE_MISMATCH",
+                "found_title": "Stanford I2V",
+                "source": "crossref:doi",
+                "similarity": 0.3157894736842105,
+                "note": "identifier resolves to a different title"
             }
         },
         "araujo_stanford_2015|||stanford i2v: a news video dataset for query-by-image experiments|2015": {
@@ -772,7 +792,7 @@
             }
         },
         "bugliarello_iglue_2022|||iglue: a benchmark for transfer learning across modalities, tasks, and languages|2022": {
-            "stored_at": 1794305199.314442,
+            "stored_at": 1794307679.810443,
             "value": {
                 "verdict": "NOT_FOUND",
                 "found_title": "Chatting with Your Peers across Modalities: Effects of Performing Increasingly Complex Written Computer-Mediated Tasks on Oral L2 Development",
@@ -861,14 +881,14 @@
                 "note": ""
             }
         },
-        "cartwright_vocalsketch_2015|||vocalsketch: vocally imitating audio concepts|2015": {
-            "stored_at": 1794304557.836939,
+        "cartwright_vocalsketch_2015|10.1145/2702123.2702387||vocalsketch: vocally imitating audio concepts|2015": {
+            "stored_at": 1794308067.6027179,
             "value": {
-                "verdict": "NOT_FOUND",
+                "verdict": "TITLE_MISMATCH",
                 "found_title": "VocalSketch",
-                "source": "crossref:title",
+                "source": "crossref:doi",
                 "similarity": 0.4,
-                "note": "no close title match found"
+                "note": "identifier resolves to a different title"
             }
         },
         "casanueva_efficient_2020|10.18653/v1/2020.nlp4convai-1.5||efficient intent detection with dual sentence encoders|2020": {
@@ -4011,6 +4031,16 @@
                 "note": "no close title match found"
             }
         },
+        "lotfi_bilingual_2025|||bilingual {bsard}: extending statutory article retrieval to {d}utch|2025": {
+            "stored_at": 1794309408.678032,
+            "value": {
+                "verdict": "NOT_FOUND",
+                "found_title": "Bilingual Statutory Interpretation, Shared Meaning and Customs Tariff Law",
+                "source": "crossref:title",
+                "similarity": 0.40298507462686567,
+                "note": "no close title match found"
+            }
+        },
         "louis_statutory_2022|10.18653/v1/2022.acl-long.468||a statutory article retrieval dataset in french|2022": {
             "stored_at": 1794305128.857088,
             "value": {
@@ -4427,6 +4457,16 @@
                 "verdict": "OK",
                 "found_title": "GermanQuAD and GermanDPR: Improving Non-English Question Answering and Passage Retrieval",
                 "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "monsenjulius_swedn_2024|10.23695/36V9-9017||swedn 1.0|2024": {
+            "stored_at": 1794309772.022217,
+            "value": {
+                "verdict": "OK",
+                "found_title": "SweDN 1.0",
+                "source": "datacite:doi",
                 "similarity": 1.0,
                 "note": ""
             }
@@ -5499,6 +5539,16 @@
                 "source": "crossref:doi",
                 "similarity": 1.0,
                 "note": ""
+            }
+        },
+        "sakaguchi_winogrande_2021|10.1145/3474381||winogrande: an adversarial winograd schema challenge at scale|2021": {
+            "stored_at": 1794310180.56462,
+            "value": {
+                "verdict": "TITLE_MISMATCH",
+                "found_title": "WinoGrande",
+                "source": "crossref:doi",
+                "similarity": 0.2857142857142857,
+                "note": "identifier resolves to a different title"
             }
         },
         "sakaguchi_winogrande_2021|||winogrande: an adversarial winograd schema challenge at scale|2021": {
@@ -6999,6 +7049,16 @@
                 "source": "crossref:title",
                 "similarity": 0.8846153846153846,
                 "note": "bib=weller vs van den elsen"
+            }
+        },
+        "weller_nevir_2024|10.18653/v1/2024.eacl-long.139||{n}ev{ir}: negation in neural information retrieval|2024": {
+            "stored_at": 1794306455.238719,
+            "value": {
+                "verdict": "OK",
+                "found_title": "NevIR: Negation in Neural Information Retrieval",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
             }
         },
         "weller_promptriever_2025||2409.11136|promptriever: instruction-trained retrievers can be prompted like language models|2025": {

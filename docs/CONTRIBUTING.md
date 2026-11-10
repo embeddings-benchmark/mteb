@@ -60,7 +60,7 @@ This command is equivalent to the one run during CI. It will use mypy to check f
 
 ## Pull Requests
 
-When opening a pull request, please keep the description concise and focused on what reviewers need to know: what changed, why, and any relevant context (e.g. linked issues, benchmark numbers, breaking changes). Long descriptions are usually a sign that the PR should be split up or the summary trimmed down. 
+When opening a pull request, please keep the description concise and focused on what reviewers need to know: what changed, why, and any relevant context (e.g. linked issues, benchmark numbers, breaking changes). Long descriptions are usually a sign that the PR should be split up or the summary trimmed down.
 
 To avoid straining our reviewers, PR descriptions are limited to 2,000 characters. PRs exceeding this limit will be automatically marked, and authors will be prompted to reduce the length. In a few cases, there might be justification for long posts, such as results tables. Reviewers might close long PRs without providing a reason.
 

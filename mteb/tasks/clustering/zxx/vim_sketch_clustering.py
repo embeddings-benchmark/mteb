@@ -36,10 +36,19 @@ class VimSketchImitationClustering(AbsTaskClustering):
         bibtex_citation=r"""
 @inproceedings{cartwright_vocalsketch_2015,
   author = {Cartwright, Mark and Pardo, Bryan},
-  booktitle = {Proceedings of the 33rd Annual ACM Conference on Human Factors in Computing Systems},
-  pages = {43--46},
   title = {VocalSketch: Vocally Imitating Audio Concepts},
   year = {2015},
+  isbn = {9781450331456},
+  publisher = {Association for Computing Machinery},
+  address = {New York, NY, USA},
+  url = {https://doi.org/10.1145/2702123.2702387},
+  doi = {10.1145/2702123.2702387},
+  booktitle = {Proceedings of the 33rd Annual ACM Conference on Human Factors in Computing Systems},
+  pages = {43–46},
+  numpages = {4},
+  keywords = {vocal imitation, user interaction, data set, audio software},
+  location = {Seoul, Republic of Korea},
+  series = {CHI '15},
 }
 
 @inproceedings{kim_vocal_2018,

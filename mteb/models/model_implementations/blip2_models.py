@@ -15,10 +15,15 @@ if TYPE_CHECKING:
     from mteb.types import Array, BatchedInput, PromptType
 
 BLIP2_CITATION = """@inproceedings{li_blip-2_2023,
-    title={{BLIP-2:} Bootstrapping Language-Image Pre-training with Frozen Image Encoders and Large Language Models},
-    author={Junnan Li and Dongxu Li and Silvio Savarese and Steven Hoi},
-    year={2023},
-    booktitle={ICML},
+    author = {Li, Junnan and Li, Dongxu and Savarese, Silvio and Hoi, Steven},
+    title = {BLIP-2: bootstrapping language-image pre-training with frozen image encoders and large language models},
+    year = {2023},
+    publisher = {JMLR.org},
+    booktitle = {Proceedings of the 40th International Conference on Machine Learning},
+    articleno = {814},
+    numpages = {13},
+    location = {Honolulu, Hawaii, USA},
+    series = {ICML'23}
 }"""
 
 

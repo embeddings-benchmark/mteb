@@ -26,12 +26,22 @@ class NevIR(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{weller_nevir_2023,
-  author = {{Orion Weller and Dawn J Lawrie and Benjamin Van Durme}},
-  booktitle = {{Conference of the European Chapter of the Association for Computational Linguistics}},
-  title = {{NevIR: Negation in Neural Information Retrieval}},
-  url = {{https://api.semanticscholar.org/CorpusID:258676146}},
-  year = {{2023}},
+@inproceedings{weller_nevir_2024,
+  title = {{N}ev{IR}: Negation in Neural Information Retrieval},
+  author = {Weller, Orion  and
+      Lawrie, Dawn  and
+      Van Durme, Benjamin},
+  editor = {Graham, Yvette  and
+      Purver, Matthew},
+  booktitle = {Proceedings of the 18th Conference of the {E}uropean Chapter of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
+  month = mar,
+  year = {2024},
+  address = {St. Julian{'}s, Malta},
+  publisher = {Association for Computational Linguistics},
+  url = {https://aclanthology.org/2024.eacl-long.139/},
+  doi = {10.18653/v1/2024.eacl-long.139},
+  pages = {2274--2287},
+  abstract = {Negation is a common everyday phenomena and has been a consistent area of weakness for language models (LMs). Although the Information Retrieval (IR) community has adopted LMs as the backbone of modern IR architectures, there has been little to no research in understanding how negation impacts neural IR. We therefore construct a straightforward benchmark on this theme: asking IR models to rank two documents that differ only by negation. We show that the results vary widely according to the type of IR architecture: cross-encoders perform best, followed by late-interaction models, and in last place are bi-encoder and sparse neural architectures. We find that most current information retrieval models do not consider negation, performing similarly or worse than randomly ranking. We show that although the obvious approach of continued fine-tuning on a dataset of contrastive documents containing negations increases performance (as does model size), there is still a large gap between machine and human performance.},
 }
 """,
     )

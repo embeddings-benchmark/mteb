@@ -30,11 +30,11 @@ class CIFAR10ZeroShotClassification(AbsTaskZeroShotClassification):
         modalities=["text", "image"],
         sample_creation="created",
         bibtex_citation=r"""
-@techreport{krizhevsky_learning_2009,
+@inproceedings{krizhevsky_learning_2009,
+  title = {Learning Multiple Layers of Features from Tiny Images},
   author = {Alex Krizhevsky},
-  institution = {},
-  title = {Learning multiple layers of features from tiny images},
   year = {2009},
+  url = {https://api.semanticscholar.org/CorpusID:18268744},
 }
 """,
     )

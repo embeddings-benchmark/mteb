@@ -30,12 +30,23 @@ class BBSARDNLRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{lotfi_bilingual_2025,
-  author = {Lotfi, Ehsan and Banar, Nikolay and Yuzbashyan, Nerses and Daelemans, Walter},
-  journal = {COLING 2025},
-  pages = {10},
-  title = {Bilingual BSARD: Extending Statutory Article Retrieval to Dutch},
+@inproceedings{lotfi_bilingual_2025,
+  title = {Bilingual {BSARD}: Extending Statutory Article Retrieval to {D}utch},
+  author = {Lotfi, Ehsan  and
+      Banar, Nikolay  and
+      Yuzbashyan, Nerses  and
+      Daelemans, Walter},
+  editor = {Gokhan, Tuba  and
+      Wang, Kexin  and
+      Gurevych, Iryna  and
+      Briscoe, Ted},
+  booktitle = {Proceedings of the 1st Regulatory {NLP} Workshop ({R}eg{NLP} 2025)},
+  month = jan,
   year = {2025},
+  address = {Abu Dhabi, UAE},
+  publisher = {Association for Computational Linguistics},
+  url = {https://aclanthology.org/2025.regnlp-1.3/},
+  pages = {10--21},
 }
 """,
         prompt={
