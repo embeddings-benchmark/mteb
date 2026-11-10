@@ -7331,7 +7331,7 @@ wheels = [
 
 [[package]]
 name = "mteb"
-version = "2.27.4"
+version = "2.27.7"
 source = { editable = "." }
 default-groups = ["citations", "docs", "lint", "test", "typing"]
 dependencies = [
