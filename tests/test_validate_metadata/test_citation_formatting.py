@@ -13,6 +13,10 @@ from mteb.benchmarks.benchmark import Benchmark
 
 pytestmark = pytest.mark.core
 
+_CITATION_KEY_FORMAT_EXCEPTIONS = {
+    "Kurihara_nlp2020",
+}
+
 
 def format_bibtex(bibtex_str: str) -> str | None:
     library = bibtexparser.parse_string(bibtex_str)
@@ -82,6 +86,26 @@ def _get_citations() -> list[tuple[str, str | None]]:
         for benchmark in mteb.get_benchmarks()
     )
     return citations
+
+
+def test_citation_keys_have_correct_format():
+    """Keys contain an author, title word, year, and optional letter suffix."""
+    pattern = re.compile(r"[a-z0-9-]+_[a-z0-9-]+_\d{4}[a-z]*")
+    violations = []
+    for source, citation in _get_citations():
+        if not citation or not citation.strip():
+            continue
+        library = bibtexparser.parse_string(citation)
+        assert not library.failed_blocks, f"Invalid BibTeX in {source}"
+        for entry in library.entries:
+            if entry.key in _CITATION_KEY_FORMAT_EXCEPTIONS:
+                continue
+            if not pattern.fullmatch(entry.key):
+                violations.append(f"{entry.key!r}: {source}")
+    assert not violations, (
+        "Citation keys must match ^[a-z0-9-]+_[a-z0-9-]+_\\d{4}[a-z]*$:\n"
+        + "\n".join(violations)
+    )
 
 
 def test_citations_have_no_abstract():
