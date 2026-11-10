@@ -1,6 +1,11 @@
+import importlib
+from pathlib import Path
+
+from mteb.benchmarks.benchmark import Benchmark
 from mteb.benchmarks.benchmarks.benchmarks import (
     BEIR,
     BEIR_NL,
+    BEIR_PL,
     BRIGHT,
     BRIGHT_LONG,
     BRIGHT_PRO,
@@ -26,6 +31,8 @@ from mteb.benchmarks.benchmarks.benchmarks import (
     MIEB_IMG,
     MIEB_LITE,
     MIEB_MULTILINGUAL,
+    MTEB_AFRICA,
+    MTEB_AFRICA_LITE,
     MTEB_DEU,
     MTEB_EN,
     MTEB_ENG_CLASSIC,
@@ -42,6 +49,7 @@ from mteb.benchmarks.benchmarks.benchmarks import (
     MTEB_PT,
     MTEB_RETRIEVAL_LAW,
     MTEB_RETRIEVAL_MEDICAL,
+    MTEB_RETRIEVAL_WITH_DOMAIN_INSTRUCTIONS,
     MTEB_RETRIEVAL_WITH_INSTRUCTIONS,
     MTEB_SLK,
     MTEB_SPA,
@@ -59,6 +67,7 @@ from mteb.benchmarks.benchmarks.benchmarks import (
     VIDORE_V3,
     VIDORE_V3_1,
     VIDORE_V3_1_RERANKING,
+    VISRAG_RETRIEVAL,
     VISUAL_DOCUMENT_RETRIEVAL,
     VN_MTEB,
     CoIR,
@@ -84,6 +93,7 @@ from mteb.benchmarks.benchmarks.rteb_benchmarks import (
 __all__ = [
     "BEIR",
     "BEIR_NL",
+    "BEIR_PL",
     "BRIGHT",
     "BRIGHT_LONG",
     "BRIGHT_PRO",
@@ -110,6 +120,8 @@ __all__ = [
     "MIEB_IMG",
     "MIEB_LITE",
     "MIEB_MULTILINGUAL",
+    "MTEB_AFRICA",
+    "MTEB_AFRICA_LITE",
     "MTEB_DEU",
     "MTEB_EN",
     "MTEB_ENG_CLASSIC",
@@ -126,6 +138,7 @@ __all__ = [
     "MTEB_PT",
     "MTEB_RETRIEVAL_LAW",
     "MTEB_RETRIEVAL_MEDICAL",
+    "MTEB_RETRIEVAL_WITH_DOMAIN_INSTRUCTIONS",
     "MTEB_RETRIEVAL_WITH_INSTRUCTIONS",
     "MTEB_SLK",
     "MTEB_SPA",
@@ -152,6 +165,7 @@ __all__ = [
     "VIDORE_V3",
     "VIDORE_V3_1",
     "VIDORE_V3_1_RERANKING",
+    "VISRAG_RETRIEVAL",
     "VISUAL_DOCUMENT_RETRIEVAL",
     "VN_MTEB",
     "CoIR",
@@ -162,3 +176,30 @@ __all__ = [
     "MTEB_multilingual_v2",
     "RAR_b",
 ]
+
+
+def get_all_benchmark_objects() -> list[Benchmark]:
+    """Import all Benchmark objects from all modules in the benchmarks package."""
+    benchmark_objects = []
+
+    package_dir = Path(__file__).parent
+
+    for file_path in sorted(package_dir.glob("*.py")):
+        if file_path.name == "__init__.py":
+            continue
+
+        module = importlib.import_module(f".{file_path.stem}", package=__name__)
+
+        for attr_name in dir(module):
+            attr = getattr(module, attr_name)
+
+            if isinstance(attr, Benchmark):
+                benchmark_objects.append(attr)
+
+    return benchmark_objects
+
+
+# build a registry of all benchmark objects
+BENCHMARK_REGISTRY: dict[str, Benchmark] = {
+    benchmark.name: benchmark for benchmark in get_all_benchmark_objects()
+}

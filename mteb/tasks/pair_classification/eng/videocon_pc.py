@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import ClassVar
+
 from mteb.abstasks import AbsTaskPairClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -48,6 +50,6 @@ class VideoConPairClassification(AbsTaskPairClassification):
 """,
     )
 
-    input1_column_name = ({"video": "video"},)
-    input2_column_name = ({"text": "text"},)
+    input1_column_name: ClassVar[dict[str, str]] = {"video": "video"}
+    input2_column_name: ClassVar[dict[str, str]] = {"text": "text"}
     label_column_name: str = "label"

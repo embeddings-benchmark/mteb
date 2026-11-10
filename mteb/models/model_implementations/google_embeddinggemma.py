@@ -53,7 +53,6 @@ EMBEDDING_GEMMA_CITATION = """
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2509.20354},
 }"""
-EMBEDDING_GEMMA_2_PLACEHOLDER_CITATION = EMBEDDING_GEMMA_CITATION
 
 
 embedding_gemma_300m = ModelMeta(
@@ -476,8 +475,8 @@ class EmbeddingGemma2Wrapper(SentenceTransformerEncoderWrapper):
         model_name: str = "google/embeddinggemma-2",
         revision: str | None = None,
         *,
-        use_image: bool = False,
-        use_audio: bool = False,
+        use_image: bool = True,
+        use_audio: bool = True,
         media_first: bool = False,
         # video: 1 frame per second at 140 tokens per frame, the model card's defaults;
         # 56 frames fit its 8192-token context
@@ -509,7 +508,9 @@ class EmbeddingGemma2Wrapper(SentenceTransformerEncoderWrapper):
         self.model_prompts = {}
         self.model.prompts = {}
         self.model.default_prompt_name = None
-        # One sequence length per tower configuration, the same for every task.
+        # Text-only inputs keep the model's own length, whatever towers are loaded.
+        self._text_max_seq_length = self.model.max_seq_length
+        # One sequence length per tower configuration for non-text inputs, the same for every task.
         if use_audio:
             self.model.max_seq_length = 1024
         elif use_image:
@@ -609,9 +610,13 @@ class EmbeddingGemma2Wrapper(SentenceTransformerEncoderWrapper):
                 pass
 
         max_seq_length = self.model.max_seq_length
-        if "video" in inputs.dataset.features:
+        features = inputs.dataset.features
+        if "video" in features:
             # one video is longer than the MIEB / MAEB lengths: use the full context
             self.model.max_seq_length = 8192
+        elif not {"image", "audio"} & set(features):
+            # text only: the shorter MIEB / MAEB lengths would truncate text
+            self.model.max_seq_length = self._text_max_seq_length
         try:
             inputs.__class__ = _PreserveCollate
             return super().encode(
@@ -652,6 +657,16 @@ embedding_gemma_2 = ModelMeta(
     similarity_fn_name="cosine",
     memory_usage_mb=1034,
     modalities=["text", "image", "audio", "video"],
-    citation=EMBEDDING_GEMMA_CITATION,
+    citation="""
+@misc{vera2026embeddinggemma2unifiedefficient,
+      title={EmbeddingGemma 2: Unified and Efficient Multimodal Representations},
+      author={Henrique Schechter Vera and Sahil Dua and Jovan Andonov and Sara Smoot and Sebastian Russo and Ivan Llanos and Max Matveev and Jae Hyeon Yoo and Kat Black and Shih-Cheng Huang and Josiah Aklilu and Maarten Grootendorst and Omar Sanseviero and Chandramouli Amarnath and Ian Ballantyne and Zhe Li and Daniel Salz and Ibrahim Alabdulmohsin and Ilya Philippov and Kristen Quan and Glenn Cameron and Edouard Yvinec and Luciano Martins and Doug Reid and Sindhu Raghuram Panyam and Weiyi Wang and Hengxuan Ying and Madhuri Shanbhogue and Tanmaya Dabral and Shanfeng Zhang and Juyeong Ji and Renjie Wu and Joe Zou and Xu Chen and Yunan Zhang and Yu-Hui Chen and Matthew Soulanille and Vinod Mamillapalli and Yi-Chun Kuo and Wai Hon Law and Matt Kreileder and Alice Zheng and Suril Shah and Mogan Shieh and Pooja Consul and Alberto Montes and Andreas Hess and Andres Sevilla and Babak Samari and Brendan McCloskey and Brian Potetz and Daniel Cer and Georgios Kathareios and Gustavo Hernández Ábrego and Hesen Zhang and Ji Ma and Jiaxing Wu and Keegan Mosley and Paul Suganthan and Rui Meng and Shen Gao and Shengcao Cao and Yi-Ting Chen and Yichang Chen and Zhongli Ding and Kendra Byrne and Cormac Brick and Olivier Lacombe and Qin Yin and Tris Warkentin and Armand Joulin and Tom Duerig and Mojtaba Seyedhosseini},
+      year={2026},
+      eprint={2610.37364},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2610.37364},
+}
+""",
     extra_requirements_groups=["embeddinggemma"],
 )

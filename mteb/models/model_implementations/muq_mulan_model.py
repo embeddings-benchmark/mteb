@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from functools import partial
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
@@ -51,6 +52,10 @@ class MuQMuLanWrapper(AbsEncoder):
             .to(self.device)
         )
         self.model.eval()
+        # MuQ calls its tokenizer without truncation, but the text encoder only has
+        # 512 positions, so longer texts would crash
+        text_model = self.model.mulan_module.text
+        text_model._tokenizer = partial(text_model.tokenizer, truncation=True)
 
     def get_audio_embeddings(
         self,

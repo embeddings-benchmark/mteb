@@ -66,13 +66,15 @@ _common = dict(
         instruction_template=papr_embed_code_instruction_template,
         apply_instruction_to_passages=False,  # queries carry the instruction, documents are bare
         prompts_dict=papr_embed_code_prompts,
-        max_seq_length=8192,
+        # Both checkpoints support 32k positions (0.6B: 32768, 4B: 40960); long-document tasks such as
+        # SWEbenchCodeRetrieval need it (21% of its documents exceed 8k tokens).
+        max_seq_length=32768,
     ),
     model_type=["dense"],
     languages=multilingual_langs,
     open_weights=True,
     release_date="2026-10-22",
-    max_tokens=8192,
+    max_tokens=32768,
     license="apache-2.0",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],

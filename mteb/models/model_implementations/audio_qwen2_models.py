@@ -8,7 +8,6 @@ from tqdm.auto import tqdm
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator, check_duration_cap
-from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -154,5 +153,4 @@ qwen2_audio_meta = ModelMeta(
       url={https://arxiv.org/abs/2407.10759},
 }
 """,
-    output_dtypes=OutputDType.BF16,
 )

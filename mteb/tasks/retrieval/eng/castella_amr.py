@@ -37,7 +37,7 @@ class CASTELLAAMRRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         superseded_by="CASTELLAAMRRetrieval.v2",
         bibtex_citation=r"""
-@inproceedings{munakata_castella_2026,
+@inproceedings{munakata2025castella,
   author = {Munakata, Hokuto and Imamura, Takehiro and Nishimura, Taichi and Komatsu, Tatsuya},
   booktitle = {ICASSP 2026 - 2026 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp55912.2026.11464074},
@@ -67,7 +67,7 @@ class CASTELLAAMRRetrievalV2(AbsTaskRetrieval):
             "retrieval for the mteb ranking format."
             " Version 2 merges queries and documents with identical content, so a repeated query counts every matching item as relevant, and drops texts of 3 characters or less."
         ),
-        reference="https://arxiv.org/abs/2511.15131",
+        reference="https://doi.org/10.1109/icassp55912.2026.11464074",
         dataset={
             "path": "mteb/CASTELLA-AMR",
             "revision": "9b3e12baa8b72cb9276f2ea1fbcb06c117fc8f1b",
@@ -87,7 +87,7 @@ class CASTELLAAMRRetrievalV2(AbsTaskRetrieval):
         sample_creation="found",
         adapted_from=["CASTELLAAMRRetrieval"],
         bibtex_citation=r"""
-@inproceedings{munakata_castella_2026,
+@inproceedings{munakata2025castella,
   author = {Munakata, Hokuto and Imamura, Takehiro and Nishimura, Taichi and Komatsu, Tatsuya},
   booktitle = {ICASSP 2026 - 2026 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp55912.2026.11464074},

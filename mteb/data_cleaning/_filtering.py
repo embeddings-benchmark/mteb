@@ -11,6 +11,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import logging
+import math
 import re
 from collections.abc import (
     Callable,
@@ -89,6 +90,7 @@ class _CleaningFilter:
             also appears in. `keep_fn` then takes their row keys as its second argument, and they are left alone.
         pools_subsets: Whether the reference splits of every subset are pooled, rather than each subset being
             compared against its own.
+        label_column: A column whose label `keep_fn` needs alongside the content, appended to each row.
     """
 
     name: str
@@ -98,6 +100,7 @@ class _CleaningFilter:
     compares_rows: bool = True
     reference_splits: tuple[str, ...] = ()
     pools_subsets: bool = False
+    label_column: str | None = None
 
 
 _SUPPORTED_MODALITIES: frozenset[str] = frozenset(MODALITY_HASH_FNS)
@@ -107,6 +110,19 @@ _SUPPORTED_MODALITIES: frozenset[str] = frozenset(MODALITY_HASH_FNS)
 def _normalize(value: object, normalization: Normalization) -> str:
     """Apply `normalization` to a value read from a column, treating a missing text as an empty one."""
     return normalization(value) if isinstance(value, str) else ""
+
+
+def _label_text(value: object) -> str:
+    """A label as the text a filter compares it by, empty when the sample carries none.
+
+    A list of labels is read as a set, so that the same labels in another order are the same annotation. A `NaN`,
+    which is how a numeric column holds a missing value, counts as no label rather than as one reading "nan".
+    """
+    if value is None or (isinstance(value, float) and math.isnan(value)):
+        return ""
+    if isinstance(value, list | tuple):
+        return repr(sorted({_label_text(label) for label in value})) if value else ""
+    return str(value).strip()
 
 
 def _row_key(row: tuple[str, ...]) -> bytes:
@@ -132,12 +148,13 @@ def _content_readers(
     normalization: Normalization,
     hash_non_text: bool,
     num_proc: int | None,
+    label_column: str | None = None,
 ) -> list[Callable[[], Iterable[Any]]]:
     """One reader per compared column, each returning that column's content when called.
 
     Hashing images, audio or video is expensive, so it happens once here and the result is reused every time the
     rows are read. Text, and non-text content that is not hashed, stays lazy, so a large corpus is never held in
-    memory at once.
+    memory at once. A `label_column` is read last, as the text of each label rather than as content.
     """
     readers: list[Callable[[], Iterable[Any]]] = []
     for column, modality in col_modalities.items():
@@ -152,6 +169,13 @@ def _content_readers(
             readers.append(lambda hashes=hashes: hashes)  # type: ignore[misc]
         else:
             readers.append(lambda column=column: dataset[column])  # type: ignore[misc]
+
+    if label_column is not None:
+
+        def _read_labels(column: str = label_column) -> Iterable[str]:
+            return (_label_text(value) for value in dataset[column])
+
+        readers.append(_read_labels)
     return readers
 
 
@@ -214,6 +238,7 @@ def _filter_within_row(
     columns: Sequence[str],
     keep_fn: KeepRowsFn,
     normalization: Normalization,
+    label_column: str | None,
 ) -> dict[str, Any]:
     """Apply `keep_fn` inside a single row of a grouped dataset.
 
@@ -228,7 +253,12 @@ def _filter_within_row(
         )
     n_values = lengths.pop()
     keep = keep_fn(
-        tuple(_normalize(example[column][i], normalization) for column in columns)
+        tuple(
+            _label_text(example[column][i])
+            if column == label_column
+            else _normalize(example[column][i], normalization)
+            for column in columns
+        )
         for i in range(n_values)
     )
     return {
@@ -304,6 +334,8 @@ def _apply_row_filter(
         ValueError: If a compared column is missing from the dataset, or if a grouped column is not text.
     """
     columns = list(col_modalities)
+    if cleaning_filter.label_column is not None:
+        columns.append(cleaning_filter.label_column)
     missing = [column for column in columns if column not in dataset.column_names]
     if missing:
         raise ValueError(
@@ -312,8 +344,9 @@ def _apply_row_filter(
     if len(dataset) == 0:
         return dataset, 0
 
-    grouped = _is_grouped(dataset, columns)
-    before = _count_values(dataset, columns[0], grouped)
+    content_columns = list(col_modalities)
+    grouped = _is_grouped(dataset, content_columns)
+    before = _count_values(dataset, content_columns[0], grouped)
 
     if grouped:
         non_text = sorted(
@@ -329,6 +362,7 @@ def _apply_row_filter(
                 "columns": columns,
                 "keep_fn": cleaning_filter.keep_fn,
                 "normalization": normalization,
+                "label_column": cleaning_filter.label_column,
             },
             num_proc=num_proc,
         )
@@ -339,13 +373,14 @@ def _apply_row_filter(
             normalization=normalization,
             hash_non_text=cleaning_filter.compares_rows,
             num_proc=num_proc,
+            label_column=cleaning_filter.label_column,
         )
         rows = _iter_row_content(
-            readers, columns=columns, symmetric_sides=symmetric_sides
+            readers, columns=content_columns, symmetric_sides=symmetric_sides
         )
         filtered = dataset.select(cleaning_filter.keep_fn(rows))
 
-    return filtered, before - _count_values(filtered, columns[0], grouped)
+    return filtered, before - _count_values(filtered, content_columns[0], grouped)
 
 
 _APPLIED_FILTERS = re.compile(r"^(?P<base>.*?) \((?P<filters>[^()]*)\)$")

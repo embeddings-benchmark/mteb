@@ -25,28 +25,31 @@ class RARbMath(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{cobbe_training_2021,
+@article{cobbe2021training,
   author = {Cobbe, Karl and Kosaraju, Vineet and Bavarian, Mohammad and Chen, Mark and Jun, Heewoo and Kaiser, Lukasz and Plappert, Matthias and Tworek, Jerry and Hilton, Jacob and Nakano, Reiichiro and others},
   journal = {arXiv preprint arXiv:2110.14168},
   title = {Training verifiers to solve math word problems},
   year = {2021},
 }
 
-@article{hendrycks_measuring_2021a,
-  author = {Hendrycks, Dan and Burns, Collin and Kadavath, Saurav and Arora, Akul and Basart, Steven and Tang, Eric and Song, Dawn and Steinhardt, Jacob},
-  journal = {arXiv preprint arXiv:2103.03874},
-  title = {Measuring mathematical problem solving with the math dataset},
+@inproceedings{hendrycks2021math,
+  archiveprefix = {arXiv},
+  eprint = {2103.03874},
+  title = {Measuring Mathematical Problem Solving With the {MATH} Dataset},
+  author = {Dan Hendrycks and Collin Burns and Saurav Kadavath and Akul Arora and Steven Basart and Eric Tang and Dawn Song and Jacob Steinhardt},
+  booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)},
   year = {2021},
+  url = {https://openreview.net/forum?id=7Bywt2mQsCe},
 }
 
-@article{xiao_rar-b_2024,
+@article{xiao2024rar,
   author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
   journal = {arXiv preprint arXiv:2404.06347},
   title = {RAR-b: Reasoning as Retrieval Benchmark},
   year = {2024},
 }
 
-@inproceedings{yu_metamath_2024,
+@inproceedings{yu2023metamath,
   archiveprefix = {arXiv},
   author = {Longhui Yu and Weisen Jiang and Han Shi and Jincheng YU and Zhengying Liu and Yu Zhang and James Kwok and Zhenguo Li and Adrian Weller and Weiyang Liu},
   booktitle = {The Twelfth International Conference on Learning Representations},

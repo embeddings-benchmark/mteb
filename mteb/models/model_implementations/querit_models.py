@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING, Any
 from tqdm.auto import tqdm
 
 from mteb.models.model_meta import ModelMeta
-from mteb.types import OutputDType
 
 from .rerankers_custom import RerankerWrapper
 
@@ -230,14 +229,15 @@ querit_reranker_training_data = {
     "T2Reranking",  # https://huggingface.co/datasets/THUIR/T2Ranking & The corpus and queries that overlap with mteb/T2Reranking have been removed.
 }
 
-QUERIT_CITATION = """@misc{zhong_querit-reranker_2026,
-      title={Querit-Reranker: Training Compact Multilingual Rerankers via Efficient Label-Free Distribution Adaptation},
-      author={Yunfei Zhong and Jun Yang and Wei Huang and Yinqiong Cai and Haosheng Qian and Yixing Fan and Ruqing Zhang and Lixin Su and Daiting Shi and Jiafeng Guo},
-      year={2026},
-      eprint={2606.19037},
-      archivePrefix={arXiv},
-      primaryClass={cs.IR},
-      url={https://arxiv.org/abs/2606.19037},
+QUERIT_CITATION = """@inproceedings{zhong2026queritrerankertrainingcompactmultilingual,
+  author = {Zhong, Yunfei and Yang, Jun and Huang, Wei and Cai, Yinqiong and Qian, Haosheng and Fan, Yixing and Zhang, Ruqing and Su, Lixin and Shi, Daiting and Guo, Jiafeng},
+  booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing: Industry Track},
+  doi = {10.18653/2026.emnlp-industry.97},
+  pages = {1648–1662},
+  publisher = {Association for Computational Linguistics},
+  title = {Querit-Reranker: Training Compact Multilingual Rerankers via Efficient Label-Free Distribution Adaptation},
+  url = {https://doi.org/10.18653/2026.emnlp-industry.97},
+  year = {2026},
 }"""
 
 Querit_Reranker_A0_4B = ModelMeta(
@@ -266,7 +266,6 @@ Querit_Reranker_A0_4B = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     citation=QUERIT_CITATION,
-    output_dtypes=OutputDType.BF16,
 )
 
 Querit_Reranker_4B = ModelMeta(
@@ -295,5 +294,4 @@ Querit_Reranker_4B = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     citation=QUERIT_CITATION,
-    output_dtypes=OutputDType.BF16,
 )
