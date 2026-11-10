@@ -7,6 +7,7 @@ Key format (Better BibTeX formula):
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import unicodedata
 from collections import defaultdict
@@ -299,12 +300,12 @@ def main() -> None:
     # Reserve repository citation keys, excluding test fixtures and snapshots.
     repo_root = Path(__file__).resolve().parents[2]
     registry_files = set(files)
-    for directory, subdirs, filenames in repo_root.walk():
+    for directory, subdirs, filenames in os.walk(repo_root):
         subdirs[:] = [
             name for name in subdirs if not name.startswith(".") and name != "tests"
         ]
         registry_files.update(
-            directory / name
+            Path(directory) / name
             for name in filenames
             if Path(name).suffix in {".py", ".bib", ".md"}
         )
