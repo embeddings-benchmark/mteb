@@ -28,6 +28,7 @@ from mteb.similarity_functions import (
     pairwise_euclidean_sim,
     pairwise_max_sim,
 )
+from tests.mock_models import MockSentenceTransformer
 
 LOW_PRECISION_DTYPES = [torch.float16, torch.bfloat16]
 
@@ -347,6 +348,27 @@ def test_st_wrapper_similarity_upcasts_before_delegating(dtype, as_numpy):
     wrapper.similarity(a, b)
 
     assert wrapper.model.dtypes == [torch.float32, torch.float32]
+
+
+@pytest.mark.parametrize(
+    ("similarity_fn_name", "expected"),
+    [("euclidean", [-5.0, 0.0]), ("manhattan", [-7.0, 0.0])],
+)
+@pytest.mark.parametrize("dtype", [torch.float32, torch.float16])
+def test_st_wrapper_similarity_pairwise_uses_model_similarity_fn(
+    similarity_fn_name, expected, dtype
+):
+    """A sentence-transformers model scored with e.g. euclidean must work for pairwise tasks (STS, pair classification)."""
+    st_model = MockSentenceTransformer()
+    st_model.similarity_fn_name = similarity_fn_name
+    wrapper = SentenceTransformerEncoderWrapper(st_model)
+    a = torch.tensor([[0.0, 0.0], [1.0, 1.0]], dtype=dtype)
+    b = torch.tensor([[3.0, 4.0], [1.0, 1.0]], dtype=dtype)
+
+    scores = torch.as_tensor(wrapper.similarity_pairwise(a, b))
+
+    assert scores.dtype == torch.float32
+    torch.testing.assert_close(scores, torch.tensor(expected))
 
 
 class _DelegatingEncoder(AbsEncoder):

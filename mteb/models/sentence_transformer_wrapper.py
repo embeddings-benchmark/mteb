@@ -464,6 +464,21 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
             )
         return super().similarity(embeddings1, embeddings2)
 
+    def similarity_pairwise(self, embeddings1: Array, embeddings2: Array) -> Array:
+        """Compute the similarity between each pair of embeddings."""
+        if hasattr(self.model, "similarity_pairwise") and callable(
+            self.model.similarity_pairwise
+        ):
+            # sentence-transformers < 6 scores in the embedding dtype
+            return cast(
+                "Array",
+                self.model.similarity_pairwise(
+                    _upcast_low_precision(embeddings1),
+                    _upcast_low_precision(embeddings2),
+                ),
+            )
+        return super().similarity_pairwise(embeddings1, embeddings2)
+
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
