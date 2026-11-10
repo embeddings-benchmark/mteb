@@ -1,7 +1,8 @@
 """Contains test cases for the mteb.languages submodule"""
 
+from dataclasses import dataclass
+
 import pytest
-from attr import dataclass
 
 from mteb.languages import LanguageScripts
 from mteb.languages.iso_mappings import (
