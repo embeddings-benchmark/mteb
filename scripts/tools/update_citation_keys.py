@@ -2,12 +2,6 @@
 
 Key format (Better BibTeX formula):
     auth.transliterate.clean.lower + "_" + veryshorttitle.transliterate.clean.lower + "_" + year
-
-Only the key in the `@type{key,` header is changed; the rest of the source is left as is.
-Dry run by default, pass `--write` to modify files.
-
-Usage:
-    python scripts/update_citation_keys.py [--write] [paths ...]
 """
 
 from __future__ import annotations
@@ -163,7 +157,7 @@ NAME_PARTICLES = {
     "bin",
     "al",
 }
-TITLE_SPLIT = re.compile(r"[.:!?]")
+TITLE_SPLIT = re.compile(r"\. |[:!?]")
 
 
 def latex_to_text(s: str) -> str:
@@ -178,7 +172,7 @@ def transliterate(s: str) -> str:
 
 def clean(s: str) -> str:
     """Keep only characters that are safe in a citation key."""
-    return re.sub(r"[^A-Za-z0-9\-]", "", s)
+    return re.sub(r"[^A-Za-z0-9\-]", "", s).strip("-")
 
 
 def first_author_family(authors: str) -> str:
@@ -244,11 +238,47 @@ def find_entries(text: str):
 
 
 def parse_fields(entry_text: str) -> dict[str, str] | None:
-    # the python source may contain escaped quotes/backslashes; undo the common ones
     lib = bibtexparser.parse_string(entry_text)
     if not lib.entries or lib.failed_blocks:
         return None
     return {k.lower(): f.value for k, f in lib.entries[0].fields_dict.items()}
+
+
+def allocate_keys(
+    proposed: dict[tuple[str, str], str], existing: dict[str, set[str]]
+) -> dict[tuple[str, str], str]:
+    """Preserve established keys and allocate unused suffixes for new papers."""
+    occupied = set(existing)
+    established: dict[tuple[str, str], str] = {}
+    for base in sorted(set(proposed.values())):
+        pattern = re.compile(re.escape(base) + r"[a-z]*")
+        for key in sorted(existing, key=lambda key: (len(key), key)):
+            if not pattern.fullmatch(key):
+                continue
+            titles = existing[key]
+            if not titles:
+                continue
+            if len(titles) != 1:
+                raise ValueError(f"Existing citation key {key!r} has different titles")
+            established.setdefault((base, next(iter(titles))), key)
+
+    mapping = {}
+    for (old, title), base in sorted(proposed.items()):
+        # Keep an existing spelling/suffix even when another alias exists.
+        if re.fullmatch(re.escape(base) + r"[a-z]*", old):
+            mapping[(old, title)] = old
+            continue
+        paper = (base, title)
+        if paper not in established:
+            i = 0
+            candidate = base
+            while candidate in occupied:
+                i += 1
+                candidate = f"{base}{_letters(i)}"
+            established[paper] = candidate
+            occupied.add(candidate)
+        mapping[(old, title)] = established[paper]
+    return mapping
 
 
 def main() -> None:
@@ -258,12 +288,26 @@ def main() -> None:
     args = parser.parse_args()
 
     files = sorted(
-        f
-        for p in args.paths
-        for f in ([p] if p.is_file() else p.rglob("*"))
-        if f.suffix in {".py", ".bib", ".md"} and f.is_file()
+        {
+            f.resolve()
+            for p in args.paths
+            for f in ([p] if p.is_file() else p.rglob("*"))
+            if f.suffix in {".py", ".bib", ".md"} and f.is_file()
+        }
     )
 
+    # Reserve repository citation keys, excluding test fixtures and snapshots.
+    repo_root = Path(__file__).resolve().parents[2]
+    registry_files = set(files)
+    for directory, subdirs, filenames in repo_root.walk():
+        subdirs[:] = [
+            name for name in subdirs if not name.startswith(".") and name != "tests"
+        ]
+        registry_files.update(
+            directory / name
+            for name in filenames
+            if Path(name).suffix in {".py", ".bib", ".md"}
+        )
     # pass 1: (old key, title) -> proposed key
     proposed: dict[tuple[str, str], str] = {}
     skipped: dict[str, str] = {}
@@ -280,16 +324,20 @@ def main() -> None:
             else:
                 proposed[ident] = new
 
-    # Same generated key + same title is the same paper (merge); same key with
-    # a different title is a different paper, so add a/b/... postfix like Better BibTeX.
-    by_new = defaultdict(set)
-    for (_old, title), new in proposed.items():
-        by_new[new].add(title)
-    mapping: dict[tuple[str, str], str] = {}
-    for (old, title), new in proposed.items():
-        titles = sorted(by_new[new])
-        i = titles.index(title)
-        mapping[(old, title)] = new if i == 0 else f"{new}{_letters(i)}"
+    existing: dict[str, set[str]] = defaultdict(set)
+    bases = set(proposed.values())
+    for f in sorted(registry_files):
+        for old, _, entry in find_entries(f.read_text(encoding="utf-8")):
+            base = re.sub(r"[a-z]+$", "", old)
+            fields = (
+                parse_fields(entry)
+                if (base in bases or old in bases) and r"\n" not in entry
+                else None
+            )
+            titles = existing[old]
+            if fields and fields.get("title"):
+                titles.add(_norm_title(fields))
+    mapping = allocate_keys(proposed, existing)
 
     # pass 2: rewrite (right to left so spans stay valid)
     changed_files = 0

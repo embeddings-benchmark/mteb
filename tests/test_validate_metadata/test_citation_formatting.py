@@ -67,8 +67,7 @@ def test_benchmark_bibtex(benchmark: Benchmark):
     )
 
 
-def test_same_citation_id_has_identical_contents():
-    """A shared BibTeX ID must have the same entry type and fields everywhere."""
+def _get_citations() -> list[tuple[str, str | None]]:
     citations = [
         (f"task:{task.metadata.name}", task.metadata.bibtex_citation)
         for task in mteb.get_tasks(
@@ -82,10 +81,31 @@ def test_same_citation_id_has_identical_contents():
         (f"benchmark:{benchmark.name}", benchmark.citation)
         for benchmark in mteb.get_benchmarks()
     )
+    return citations
+
+
+def test_citations_have_no_abstract():
+    """Citation entries should not embed paper abstracts."""
+    violations = []
+    for source, citation in _get_citations():
+        if not citation or not citation.strip():
+            continue
+        library = bibtexparser.parse_string(citation)
+        assert not library.failed_blocks, f"Invalid BibTeX in {source}"
+        for entry in library.entries:
+            if any(name.lower() == "abstract" for name in entry.fields_dict):
+                violations.append(f"{entry.key!r}: {source}")
+    assert not violations, "Remove abstract fields from citations:\n" + "\n".join(
+        violations
+    )
+
+
+def test_same_citation_id_has_identical_contents():
+    """A shared BibTeX ID must have the same entry type and fields everywhere."""
 
     seen: dict[str, tuple[str, tuple[str, dict[str, str]]]] = {}
     conflicts = []
-    for source, citation in citations:
+    for source, citation in _get_citations():
         if not citation or not citation.strip():
             continue
         library = bibtexparser.parse_string(citation)
