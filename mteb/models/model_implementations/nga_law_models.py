@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import OutputDType
 
 if TYPE_CHECKING:
@@ -29,11 +29,13 @@ PROMPTS = {
 }
 
 
-class NGALawEncoder(SentenceTransformerEncoderWrapper):
+class NGALawEncoder(InstructSentenceTransformerModel):
+    model_prompts = PROMPTS
+
     def __init__(
         self,
         model_name: str,
-        revision: str | None = None,
+        revision: str,
         device: str | None = None,
         **kwargs: Any,
     ) -> None:
@@ -44,7 +46,7 @@ class NGALawEncoder(SentenceTransformerEncoderWrapper):
             model_name,
             revision=revision,
             device=device,
-            model_prompts=PROMPTS,
+            instruction_template="{instruction}",
             model_kwargs={"torch_dtype": "bfloat16"},
             **kwargs,
         )
@@ -59,6 +61,13 @@ class NGALawEncoder(SentenceTransformerEncoderWrapper):
                     weights["down"].astype(np.float32),
                     weights["up"].astype(np.float32),
                 )
+
+    def get_task_instruction(
+        self, task_metadata: TaskMetadata, prompt_type: PromptType | None
+    ) -> str:
+        # Preserve the published task-specific prompts, including the space for documents.
+        prompt_name = self.get_prompt_name(task_metadata, prompt_type)
+        return PROMPTS[prompt_name] if prompt_name is not None else ""
 
     def _adapt(self, values: Array, name: str) -> np.ndarray:
         import numpy as np
@@ -78,6 +87,8 @@ class NGALawEncoder(SentenceTransformerEncoderWrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         result = super().encode(
             inputs,
             task_metadata=task_metadata,
@@ -86,6 +97,8 @@ class NGALawEncoder(SentenceTransformerEncoderWrapper):
             prompt_type=prompt_type,
             **kwargs,
         )
+        if isinstance(result, torch.Tensor):
+            result = result.cpu().detach().float()
         if task_metadata.name == "LeCaRDv2":
             return self._adapt(result, "lecard_symmetric")
         if task_metadata.name == "GerDaLIRSmall":
