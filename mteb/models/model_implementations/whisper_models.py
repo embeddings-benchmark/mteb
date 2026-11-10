@@ -289,7 +289,7 @@ whisper_tiny = ModelMeta(
     ),
     modalities=["audio"],
     citation="""
-@inproceedings{radford2022robustspeechrecognitionlargescale,
+@inproceedings{radford_robust_2023,
   archiveprefix = {arXiv},
   author = {Alec Radford and Jong Wook Kim and Tao Xu and Greg Brockman and Christine McLeavey and Ilya Sutskever},
   booktitle = {Proceedings of the 40th International Conference on Machine Learning},
@@ -329,7 +329,7 @@ whisper_base = ModelMeta(
     ),
     modalities=["audio"],
     citation="""
-@inproceedings{radford2022robustspeechrecognitionlargescale,
+@inproceedings{radford_robust_2023,
   archiveprefix = {arXiv},
   author = {Alec Radford and Jong Wook Kim and Tao Xu and Greg Brockman and Christine McLeavey and Ilya Sutskever},
   booktitle = {Proceedings of the 40th International Conference on Machine Learning},
@@ -369,7 +369,7 @@ whisper_small = ModelMeta(
     ),
     modalities=["audio"],
     citation="""
-@inproceedings{radford2022robustspeechrecognitionlargescale,
+@inproceedings{radford_robust_2023,
   archiveprefix = {arXiv},
   author = {Alec Radford and Jong Wook Kim and Tao Xu and Greg Brockman and Christine McLeavey and Ilya Sutskever},
   booktitle = {Proceedings of the 40th International Conference on Machine Learning},
@@ -409,7 +409,7 @@ whisper_medium = ModelMeta(
     ),
     modalities=["audio"],
     citation="""
-@inproceedings{radford2022robustspeechrecognitionlargescale,
+@inproceedings{radford_robust_2023,
   archiveprefix = {arXiv},
   author = {Alec Radford and Jong Wook Kim and Tao Xu and Greg Brockman and Christine McLeavey and Ilya Sutskever},
   booktitle = {Proceedings of the 40th International Conference on Machine Learning},
@@ -449,7 +449,7 @@ whisper_large_v3 = ModelMeta(
     ),
     modalities=["audio"],
     citation="""
-@inproceedings{radford2022robustspeechrecognitionlargescale,
+@inproceedings{radford_robust_2023,
   archiveprefix = {arXiv},
   author = {Alec Radford and Jong Wook Kim and Tao Xu and Greg Brockman and Christine McLeavey and Ilya Sutskever},
   booktitle = {Proceedings of the 40th International Conference on Machine Learning},
@@ -490,7 +490,7 @@ whisper_large_v3_turbo = ModelMeta(
     ),
     modalities=["audio"],
     citation="""
-@inproceedings{radford2022robustspeechrecognitionlargescale,
+@inproceedings{radford_robust_2023,
   archiveprefix = {arXiv},
   author = {Alec Radford and Jong Wook Kim and Tao Xu and Greg Brockman and Christine McLeavey and Ilya Sutskever},
   booktitle = {Proceedings of the 40th International Conference on Machine Learning},

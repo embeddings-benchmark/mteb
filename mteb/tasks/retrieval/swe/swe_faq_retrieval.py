@@ -25,7 +25,7 @@ class SweFaqRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{berdivcevskis2023superlim,
+@inproceedings{berdicevskis_superlim_2023,
   author = {Berdi{\v{c}}evskis, Aleksandrs and Bouma, Gerlof and Kurtz, Robin and Morger, Felix and {\"O}hman, Joey and Adesam, Yvonne and Borin, Lars and Dann{\'e}lls, Dana and Forsberg, Markus and Isbister, Tim and others},
   booktitle = {Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing},
   pages = {8137--8153},

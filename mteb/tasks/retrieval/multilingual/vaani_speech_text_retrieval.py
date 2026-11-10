@@ -64,7 +64,7 @@ _VAANI_ST_LANGS = {
 }
 
 _BIBTEX = r"""
-@misc{pulikodan2026vaani,
+@misc{pulikodan_vaani_2026,
   archiveprefix = {arXiv},
   author = {Pulikodan, Sujith and Singh, Abhayjeet and Basu, Agneedh and Desai, Nihar and J, Pavan Kumar and Bhat, Pranav D and Dharmaraju, Raghu and Gupta, Ritika and Udupa, Sathvik and Kumar, Saurabh and Sharma, Sumit and Sanka, Visruth and Tewari, Dinesh and Dhand, Harsh and Kamat, Amrita and Singh, Sukhwinder and Vashishth, Shikhar and Talukdar, Partha and Acharya, Raj and Ghosh, Prasanta Kumar},
   eprint = {2603.28714},

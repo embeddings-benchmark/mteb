@@ -28,7 +28,7 @@ class HUMETweetSentimentExtractionClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{tweet-sentiment-extraction,
+@misc{maggie_tweet_2020,
   author = {Maggie, Phil Culliton, Wei Chen},
   publisher = {Kaggle},
   title = {Tweet Sentiment Extraction},

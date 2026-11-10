@@ -16,7 +16,7 @@ _climate_fever_metadata = dict(
     dialect=[],
     sample_creation="found",
     bibtex_citation=r"""
-@misc{diggelmann2021climatefever,
+@misc{diggelmann_climate-fever_2021,
   archiveprefix = {arXiv},
   author = {Thomas Diggelmann and Jordan Boyd-Graber and Jannis Bulian and Massimiliano Ciaramita and Markus Leippold},
   eprint = {2012.00614},

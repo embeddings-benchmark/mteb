@@ -27,7 +27,7 @@ class VieStudentFeedbackClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{8573337,
+@inproceedings{nguyen_uit-vsfc_2018,
   author = {Nguyen, Kiet Van and Nguyen, Vu Duc and Nguyen, Phu X. V. and Truong, Tham T. H. and Nguyen, Ngan Luu-Thuy},
   booktitle = {2018 10th International Conference on Knowledge and Systems Engineering (KSE)},
   doi = {10.1109/KSE.2018.8573337},
@@ -65,7 +65,7 @@ class VieStudentFeedbackClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{8573337,
+@inproceedings{nguyen_uit-vsfc_2018,
   author = {Nguyen, Kiet Van and Nguyen, Vu Duc and Nguyen, Phu X. V. and Truong, Tham T. H. and Nguyen, Ngan Luu-Thuy},
   booktitle = {2018 10th International Conference on Knowledge and Systems Engineering (KSE)},
   doi = {10.1109/KSE.2018.8573337},

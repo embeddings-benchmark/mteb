@@ -27,7 +27,7 @@ class ClusTrecCovid(AbsTaskClustering):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{katz-etal-2024-knowledge,
+@inproceedings{katz_knowledge_2024,
   address = {Miami, Florida, USA},
   author = {Katz, Uri  and
 Levy, Mosh  and

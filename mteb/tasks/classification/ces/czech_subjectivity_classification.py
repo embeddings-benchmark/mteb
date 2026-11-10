@@ -25,7 +25,7 @@ class CzechSubjectivityClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{priban-steinberger-2022-czech,
+@inproceedings{priban_czech_2022,
   address = {Marseille, France},
   author = {P{\v{r}}ib{\'a}{\v{n}}, Pavel  and
 Steinberger, Josef},

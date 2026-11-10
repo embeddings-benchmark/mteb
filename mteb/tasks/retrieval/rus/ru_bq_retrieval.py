@@ -27,7 +27,7 @@ class RuBQRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{RuBQ2021,
+@inproceedings{rybin_rubq_2021,
   author = {Ivan Rybin and Vladislav Korablinov and Pavel Efimov and Pavel Braslavski},
   booktitle = {ESWC},
   pages = {532--547},

@@ -25,7 +25,7 @@ class SpokeNEnglishClassification(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{groh2024spoken100crosslingualbenchmarkingdataset,
+@misc{groh_spoken-100_2024,
   archiveprefix = {arXiv},
   author = {René Groh and Nina Goes and Andreas M. Kist},
   eprint = {2403.09753},

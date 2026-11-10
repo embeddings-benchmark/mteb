@@ -30,7 +30,7 @@ class HebrewSentimentAnalysis(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{amram-etal-2018-representations,
+@inproceedings{amram_representations_2018,
   address = {Santa Fe, New Mexico, USA},
   author = {Amram, Adam and Ben David, Anat and Tsarfaty, Reut},
   booktitle = {Proceedings of the 27th International Conference on Computational Linguistics},
@@ -76,7 +76,7 @@ class HebrewSentimentAnalysisV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{amram-etal-2018-representations,
+@inproceedings{amram_representations_2018,
   address = {Santa Fe, New Mexico, USA},
   author = {Amram, Adam and Ben David, Anat and Tsarfaty, Reut},
   booktitle = {Proceedings of the 27th International Conference on Computational Linguistics},
@@ -124,7 +124,7 @@ class HebrewSentimentAnalysisV3(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{amram-etal-2018-representations,
+@inproceedings{amram_representations_2018,
   address = {Santa Fe, New Mexico, USA},
   author = {Amram, Adam and Ben David, Anat and Tsarfaty, Reut},
   booktitle = {Proceedings of the 27th International Conference on Computational Linguistics},

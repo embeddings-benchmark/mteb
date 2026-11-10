@@ -30,7 +30,7 @@ class CoVRRVT2VRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@misc{thawakar2026covrrreasonawarecomposedvideoretrieval,
+@misc{thawakar_covr-r_2026,
   archiveprefix = {arXiv},
   author = {Omkar Thawakar and Dmitry Demidov and Vaishnav Potlapalli and Sai Prasanna Teja Reddy Bogireddy and Viswanatha Reddy Gajjala and Alaa Mostafa Lasheen and Rao Muhammad Anwer and Fahad Khan},
   eprint = {2603.20190},

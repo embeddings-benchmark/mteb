@@ -25,7 +25,7 @@ class TweetSarcasmClassification(AbsTaskClassification):
         dialect=["ara-arab-EG", "ara-arab-LB", "ara-arab-MA", "ara-arab-SA"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{abu-farha-magdy-2020-arabic,
+@inproceedings{abufarha_arabic_2020,
   address = {Marseille, France},
   author = {Abu Farha, Ibrahim  and
 Magdy, Walid},
@@ -81,7 +81,7 @@ class TweetSarcasmClassificationV2(AbsTaskClassification):
         dialect=["ara-arab-EG", "ara-arab-LB", "ara-arab-MA", "ara-arab-SA"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{abu-farha-magdy-2020-arabic,
+@inproceedings{abufarha_arabic_2020,
   address = {Marseille, France},
   author = {Abu Farha, Ibrahim  and
 Magdy, Walid},

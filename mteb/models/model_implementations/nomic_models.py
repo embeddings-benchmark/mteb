@@ -179,7 +179,7 @@ model_prompts = {
 }
 
 NOMIC_CITATION = """
-@article{nussbaum2024nomic,
+@article{nussbaum_nomic_2025,
   archiveprefix = {arXiv},
   author = {Zach Nussbaum and John Xavier Morris and Andriy Mulyar and Brandon Duderstadt},
   eprint = {2402.01613},
@@ -354,7 +354,7 @@ nomic_modern_bert_embed = ModelMeta(
     superseded_by=None,
     training_datasets=nomic_training_data,
     public_training_data=None,
-    citation="""@article{nussbaum2024nomic,
+    citation="""@article{nussbaum_nomic_2025,
   archiveprefix = {arXiv},
   author = {Zach Nussbaum and John Xavier Morris and Andriy Mulyar and Brandon Duderstadt},
   eprint = {2402.01613},
@@ -498,7 +498,7 @@ nomic_embed_text_v2_moe = ModelMeta(
     training_datasets=None,  # did not look into this further
     superseded_by=None,
     extra_requirements_groups=["nomic"],
-    citation="""@misc{nussbaum2025trainingsparsemixtureexperts,
+    citation="""@misc{nussbaum_training_2025,
       title={Training Sparse Mixture Of Experts Text Embedding Models},
       author={Zach Nussbaum and Brandon Duderstadt},
       year={2025},
@@ -537,7 +537,7 @@ nomic_embed_code = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation="""@inproceedings{suresh2025cornstackhighqualitycontrastivedata,
+    citation="""@inproceedings{suresh_cornstack_2025,
   archiveprefix = {arXiv},
   author = {Tarun Suresh and Revanth Gangi Reddy and Yifei Xu and Zach Nussbaum and Andriy Mulyar and Brandon Duderstadt and Heng Ji},
   booktitle = {The Thirteenth International Conference on Learning Representations},

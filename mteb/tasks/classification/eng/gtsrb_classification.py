@@ -33,7 +33,7 @@ class GTSRBClassification(AbsTaskClassification):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{6033395,
+@inproceedings{stallkamp_german_2011,
   author = {Stallkamp, Johannes and Schlipsing, Marc and Salmen, Jan and Igel, Christian},
   booktitle = {The 2011 International Joint Conference on Neural Networks},
   doi = {10.1109/IJCNN.2011.6033395},

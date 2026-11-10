@@ -43,7 +43,7 @@ class MuPLeRRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         is_public=True,
         bibtex_citation=r"""
-@article{steinberger2014overview,
+@article{steinberger_overview_2014,
   author = {Steinberger, Ralf and Ebrahim, Mohamed and Poulis, Alexandros and {Carrasco-Benitez}, Manuel and Schl{\"u}ter, Patrick and Przybyszewski, Marek and Gilbro, Signe},
   doi = {10.1007/s10579-014-9277-0},
   issn = {1574-0218},

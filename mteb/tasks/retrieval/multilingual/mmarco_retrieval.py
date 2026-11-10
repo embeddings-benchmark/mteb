@@ -41,7 +41,7 @@ class MMarcoRetrievalMultilingual(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@article{DBLP:journals/corr/abs-2108-13897,
+@article{bonifacio_mmarco_2021,
   author = {Luiz Bonifacio and
 Israel Campiotti and
 Roberto de Alencar Lotufo and

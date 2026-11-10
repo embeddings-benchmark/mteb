@@ -27,7 +27,7 @@ class STSES(AbsTaskSTS):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{agirre2014semeval,
+@inproceedings{agirre_semeval-2014_2014,
   author = {Agirre, Eneko and Banea, Carmen and Cardie, Claire and Cer, Daniel M and Diab, Mona T and Gonzalez-Agirre, Aitor and Guo, Weiwei and Mihalcea, Rada and Rigau, German and Wiebe, Janyce},
   booktitle = {SemEval@ COLING},
   pages = {81--91},
@@ -35,7 +35,7 @@ class STSES(AbsTaskSTS):
   year = {2014},
 }
 
-@inproceedings{agirre2015semeval,
+@inproceedings{agirre_semeval-2015_2015,
   author = {Agirre, Eneko and Banea, Carmen and Cardie, Claire and Cer, Daniel and Diab, Mona and Gonzalez-Agirre, Aitor and Guo, Weiwei and Lopez-Gazpio, Inigo and Maritxalar, Montse and Mihalcea, Rada and others},
   booktitle = {Proceedings of the 9th international workshop on semantic evaluation (SemEval 2015)},
   pages = {252--263},

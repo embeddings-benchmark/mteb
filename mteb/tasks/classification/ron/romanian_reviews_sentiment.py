@@ -25,7 +25,7 @@ class RomanianReviewsSentiment(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{tache2101clustering,
+@article{tache_clustering_2021,
   author = {Anca Maria Tache and Mihaela Gaman and Radu Tudor Ionescu},
   journal = {ArXiv},
   title = {Clustering Word Embeddings with Self-Organizing Maps. Application on LaRoSeDa -- A Large Romanian Sentiment Data Set},
@@ -59,7 +59,7 @@ class RomanianReviewsSentimentV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{tache2101clustering,
+@article{tache_clustering_2021,
   author = {Anca Maria Tache and Mihaela Gaman and Radu Tudor Ionescu},
   journal = {ArXiv},
   title = {Clustering Word Embeddings with Self-Organizing Maps. Application on LaRoSeDa -- A Large Romanian Sentiment Data Set},

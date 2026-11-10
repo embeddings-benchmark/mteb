@@ -54,7 +54,7 @@ class JuriFindITRetrieval(AbsTaskRetrieval):
             "query": "Given a legal question in Italian, retrieve the statutory articles that answer it."
         },
         bibtex_citation=r"""
-@inproceedings{noce-etal-2026-jurifindit,
+@inproceedings{noce_jurifindit_2026,
   address = {Rabat, Morocco},
   author = {Noce, Niko Dalla and Colla, Davide and Doust, Sina Farhang and De Mattei, Lorenzo and Bacciu, Davide},
   booktitle = {Findings of the Association for Computational Linguistics: EACL 2026},

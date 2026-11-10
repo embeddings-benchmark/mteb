@@ -25,7 +25,7 @@ class SyntecReranking(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{ciancone2024mteb,
+@misc{ciancone_mteb-french_2024,
   archiveprefix = {arXiv},
   author = {Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
   eprint = {2405.20468},

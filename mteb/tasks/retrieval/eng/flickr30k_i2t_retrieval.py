@@ -25,7 +25,7 @@ class Flickr30kI2TRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{Young2014FromID,
+@article{young_image_2014,
   author = {Peter Young and Alice Lai and Micah Hodosh and J. Hockenmaier},
   journal = {Transactions of the Association for Computational Linguistics},
   pages = {67-78},

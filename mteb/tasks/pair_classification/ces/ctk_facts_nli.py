@@ -25,7 +25,7 @@ class CTKFactsNLI(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{ullrich2023csfever,
+@article{ullrich_csfever_2023,
   author = {Ullrich, Herbert and Drchal, Jan and R{\\`y}par, Martin and Vincourov{\\'a}, Hana and Moravec, V{\\'a}clav},
   journal = {Language Resources and Evaluation},
   number = {4},

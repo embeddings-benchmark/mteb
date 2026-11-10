@@ -32,7 +32,7 @@ class StanfordCarsClassification(AbsTaskClassification):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{Krause2013CollectingAL,
+@inproceedings{krause_collecting_2013,
   author = {Jonathan Krause and Jia Deng and Michael Stark and Li Fei-Fei},
   title = {Collecting a Large-scale Dataset of Fine-grained Cars},
   url = {https://api.semanticscholar.org/CorpusID:16632981},

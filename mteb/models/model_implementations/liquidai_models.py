@@ -4,11 +4,14 @@ from mteb.models.model_implementations.pylate_models import MultiVectorModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
-LFM2_CITATION = """@article{liquidai2025lfm2,
-  title={LFM2 Technical Report},
-  author={Liquid AI},
-  journal={arXiv preprint arXiv:2511.23404},
-  year={2025}
+LFM2_CITATION = """@misc{amini_lfm2_2025,
+      title={LFM2 Technical Report},
+      author={Alexander Amini and Anna Banaszak and Harold Benoit and Arthur Böök and Tarek Dakhran and Song Duong and Alfred Eng and Fernando Fernandes and Marc Härkönen and Anne Harrington and Ramin Hasani and Saniya Karwa and Yuri Khrustalev and Maxime Labonne and Mathias Lechner and Valentine Lechner and Simon Lee and Zetian Li and Noel Loo and Jacob Marks and Edoardo Mosca and Samuel J. Paech and Paul Pak and Rom N. Parnichkun and Alex Quach and Ryan Rogers and Daniela Rus and Nayan Saxena and Bettina Schlager and Tim Seyde and Jimmy T. H. Smith and Aditya Tadimeti and Neehal Tumma},
+      year={2025},
+      eprint={2511.23404},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2511.23404},
 }"""
 
 lfm2_5_embedding_350m = ModelMeta(

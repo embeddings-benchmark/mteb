@@ -25,7 +25,7 @@ class DKHateClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{sigurbergsson-derczynski-2020-offensive,
+@inproceedings{sigurbergsson_offensive_2020,
   address = {Marseille, France},
   archiveprefix = {arXiv},
   author = {Sigurbergsson, Gudbjartur Ingi  and
@@ -97,7 +97,7 @@ class DKHateClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{sigurbergsson-derczynski-2020-offensive,
+@inproceedings{sigurbergsson_offensive_2020,
   address = {Marseille, France},
   archiveprefix = {arXiv},
   author = {Sigurbergsson, Gudbjartur Ingi  and

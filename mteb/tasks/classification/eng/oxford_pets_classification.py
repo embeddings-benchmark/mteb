@@ -32,7 +32,7 @@ class OxfordPetsClassification(AbsTaskClassification):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{6248092,
+@inproceedings{parkhi_cats_2012,
   author = {Parkhi, Omkar M and Vedaldi, Andrea and Zisserman, Andrew and Jawahar, C. V.},
   booktitle = {2012 IEEE Conference on Computer Vision and Pattern Recognition},
   doi = {10.1109/CVPR.2012.6248092},

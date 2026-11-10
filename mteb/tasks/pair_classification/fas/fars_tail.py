@@ -25,7 +25,7 @@ class FarsTail(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{amirkhani2023farstail,
+@article{amirkhani_farstail_2023,
   author = {Amirkhani, Hossein and AzariJafari, Mohammad and Faridan-Jahromi, Soroush and Kouhkan, Zeinab and Pourjafari, Zohreh and Amirak, Azadeh},
   doi = {10.1007/s00500-023-08959-3},
   journal = {Soft Computing},

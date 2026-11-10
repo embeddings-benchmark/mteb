@@ -25,7 +25,7 @@ class SpartQA(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{mirzaee2021spartqa,
+@inproceedings{mirzaee_spartqa_2021,
   address = {Online},
   author = {Mirzaee, Roshanak and Rajaby Faghihi, Hossein and Ning, Qiang and Kordjamshidi, Parisa},
   booktitle = {Proceedings of the 2021 Conference of the {N}orth {A}merican Chapter of the {A}ssociation for {C}omputational {L}inguistics: Human Language Technologies},
@@ -39,10 +39,13 @@ class SpartQA(AbsTaskRetrieval):
   year = {2021},
 }
 
-@article{xiao2024rar,
-  author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
-  journal = {arXiv preprint arXiv:2404.06347},
+@misc{xiao_rar-b_2024,
+  archiveprefix = {arXiv},
+  author = {Chenghao Xiao and G Thomas Hudson and Noura Al Moubayed},
+  eprint = {2404.06347},
+  primaryclass = {cs.CL},
   title = {RAR-b: Reasoning as Retrieval Benchmark},
+  url = {https://arxiv.org/abs/2404.06347},
   year = {2024},
 }
 """,

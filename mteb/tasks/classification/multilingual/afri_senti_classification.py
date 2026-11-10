@@ -54,10 +54,46 @@ class AfriSentiClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{Muhammad2023AfriSentiAT,
-  author = {Shamsuddeen Hassan Muhammad and Idris Abdulmumin and Abinew Ali Ayele and Nedjma Ousidhoum and David Ifeoluwa Adelani and Seid Muhie Yimam and Ibrahim Sa'id Ahmad and Meriem Beloucif and Saif Mohammad and Sebastian Ruder and Oumaima Hourrane and Pavel Brazdil and Felermino D'ario M'ario Ant'onio Ali and Davis Davis and Salomey Osei and Bello Shehu Bello and Falalu Ibrahim and Tajuddeen Gwadabe and Samuel Rutunda and Tadesse Belay and Wendimu Baye Messelle and Hailu Beshada Balcha and Sisay Adugna Chala and Hagos Tesfahun Gebremichael and Bernard Opoku and Steven Arthur},
-  title = {AfriSenti: A Twitter Sentiment Analysis Benchmark for African Languages},
+@inproceedings{muhammad_afrisenti_2023,
+  title = {{A}fri{S}enti: A {T}witter Sentiment Analysis Benchmark for {A}frican Languages},
+  author = {Muhammad, Shamsuddeen Hassan  and
+      Abdulmumin, Idris  and
+      Ayele, Abinew Ali  and
+      Ousidhoum, Nedjma  and
+      Adelani, David Ifeoluwa  and
+      Yimam, Seid Muhie  and
+      Ahmad, Ibrahim Sa'id  and
+      Beloucif, Meriem  and
+      Mohammad, Saif M.  and
+      Ruder, Sebastian  and
+      Hourrane, Oumaima  and
+      Brazdil, Pavel  and
+      Jorge, Alipio  and
+      Ali, Felermino D{\'a}rio M{\'a}rio Ant{\'o}nio  and
+      David, Davis  and
+      Osei, Salomey  and
+      Shehu Bello, Bello  and
+      Ibrahim, Falalu  and
+      Gwadabe, Tajuddeen  and
+      Rutunda, Samuel  and
+      Belay, Tadesse  and
+      Messelle, Wendimu Baye  and
+      Balcha, Hailu Beshada  and
+      Chala, Sisay Adugna  and
+      Gebremichael, Hagos Tesfahun  and
+      Opoku, Bernard  and
+      Arthur, Stephen},
+  editor = {Bouamor, Houda  and
+      Pino, Juan  and
+      Bali, Kalika},
+  booktitle = {Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing},
+  month = dec,
   year = {2023},
+  address = {Singapore},
+  publisher = {Association for Computational Linguistics},
+  url = {https://aclanthology.org/2023.emnlp-main.862/},
+  doi = {10.18653/v1/2023.emnlp-main.862},
+  pages = {13968--13981},
 }
 """,
     )

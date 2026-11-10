@@ -28,7 +28,7 @@ class STS13STS(AbsTaskSTS):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{agirre-etal-2013-sem,
+@inproceedings{agirre_sem_2013,
   address = {Atlanta, Georgia, USA},
   author = {Agirre, Eneko  and
 Cer, Daniel  and

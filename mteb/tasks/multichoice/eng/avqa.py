@@ -33,7 +33,7 @@ class AVQAVideoCentricQA(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@inproceedings{yang2022avqa,
+@inproceedings{yang_avqa_2022,
   author = {Yang, Pinci and Wang, Xin and Duan, Xuguang and Chen, Hong and Hou, Runze and Jin, Cong and Zhu, Wenwu},
   booktitle = {Proceedings of the 30th ACM International Conference on Multimedia},
   title = {AVQA: A Dataset for Audio-Visual Question Answering on Videos},
@@ -106,7 +106,7 @@ class AVQAVideoAudioCentricQA(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@inproceedings{yang2022avqa,
+@inproceedings{yang_avqa_2022,
   author = {Yang, Pinci and Wang, Xin and Duan, Xuguang and Chen, Hong and Hou, Runze and Jin, Cong and Zhu, Wenwu},
   booktitle = {Proceedings of the 30th ACM International Conference on Multimedia},
   title = {AVQA: A Dataset for Audio-Visual Question Answering on Videos},

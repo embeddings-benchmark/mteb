@@ -27,7 +27,7 @@ class Fashion200kI2TRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{han2017automatic,
+@inproceedings{han_automatic_2017,
   author = {Han, Xintong and Wu, Zuxuan and Huang, Phoenix X and Zhang, Xiao and Zhu, Menglong and Li, Yuan and Zhao, Yang and Davis, Larry S},
   booktitle = {Proceedings of the IEEE international conference on computer vision},
   pages = {1463--1471},

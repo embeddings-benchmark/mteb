@@ -103,7 +103,7 @@ class HatefulMemesI2TRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         superseded_by="HatefulMemesI2TRetrieval.v2",
         bibtex_citation=r"""
-@article{kiela2020hateful,
+@article{kiela_hateful_2020,
   author = {Kiela, Douwe and Firooz, Hamed and Mohan, Aravind and Goswami, Vedanuj and Singh, Amanpreet and Ringshia, Pratik and Testuggine, Davide},
   journal = {Advances in neural information processing systems},
   pages = {2611--2624},

@@ -25,7 +25,7 @@ class FORBI2I(AbsTaskRetrieval):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{wu2023forbflatobjectretrieval,
+@inproceedings{wu_forb_2023,
   archiveprefix = {arXiv},
   author = {Pengxiang Wu and Siman Wang and Kevin S Dela Rosa and Derek Hao Hu},
   booktitle = {Thirty-seventh Conference on Neural Information Processing Systems Datasets and Benchmarks Track},

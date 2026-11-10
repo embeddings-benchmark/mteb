@@ -27,13 +27,26 @@ class MSCOCOT2IRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{lin2014microsoft,
-  author = {Lin, Tsung-Yi and Maire, Michael and Belongie, Serge and Hays, James and Perona, Pietro and Ramanan, Deva and Doll{\'a}r, Piotr and Zitnick, C Lawrence},
-  booktitle = {Computer Vision--ECCV 2014: 13th European Conference, Zurich, Switzerland, September 6-12, 2014, Proceedings, Part V 13},
-  organization = {Springer},
-  pages = {740--755},
-  title = {Microsoft coco: Common objects in context},
+@inproceedings{lin_microsoft_2014,
+  author = {Lin, Tsung-Yi
+    and Maire, Michael
+    and Belongie, Serge
+    and Hays, James
+    and Perona, Pietro
+    and Ramanan, Deva
+    and Doll{\'a}r, Piotr
+    and Zitnick, C. Lawrence},
+  editor = {Fleet, David
+    and Pajdla, Tomas
+    and Schiele, Bernt
+    and Tuytelaars, Tinne},
+  title = {Microsoft COCO: Common Objects in Context},
+  booktitle = {Computer Vision -- ECCV 2014},
   year = {2014},
+  publisher = {Springer International Publishing},
+  address = {Cham},
+  pages = {740--755},
+  isbn = {978-3-319-10602-1},
 }
 """,
         prompt={"query": "Identify the image showcasing the described everyday scene."},

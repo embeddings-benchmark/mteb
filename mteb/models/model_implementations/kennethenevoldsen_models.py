@@ -25,7 +25,7 @@ dfm_enc_large = ModelMeta(
     adapted_from="chcaa/dfm-encoder-large-v1",
     training_datasets=set(),  # just contrastive pre-training
     public_training_code="https://huggingface.co/KennethEnevoldsen/dfm-sentence-encoder-large#hyperparameters",
-    citation="""@article{enevoldsenScandinavianEmbeddingBenchmarks2024,
+    citation="""@article{enevoldsen_scandinavian_2024,
     title = {The {Scandinavian} {Embedding} {Benchmarks}: {Comprehensive} {Assessment} of {Multilingual} and {Monolingual} {Text} {Embedding}},
     shorttitle = {The {Scandinavian} {Embedding} {Benchmarks}},
     url = {https://openreview.net/forum?id=pJl_i7HIA72},
@@ -61,7 +61,7 @@ dfm_enc_med = ModelMeta(
     adapted_from=None,
     public_training_code=None,
     training_datasets=set(),  # just contrastive pre-training
-    citation="""@article{enevoldsenScandinavianEmbeddingBenchmarks2024,
+    citation="""@article{enevoldsen_scandinavian_2024,
     title = {The {Scandinavian} {Embedding} {Benchmarks}: {Comprehensive} {Assessment} of {Multilingual} and {Monolingual} {Text} {Embedding}},
     shorttitle = {The {Scandinavian} {Embedding} {Benchmarks}},
     url = {https://openreview.net/forum?id=pJl_i7HIA72},

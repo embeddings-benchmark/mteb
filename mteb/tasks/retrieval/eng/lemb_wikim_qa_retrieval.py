@@ -32,7 +32,7 @@ class LEMBWikimQARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{ho2020constructing,
+@inproceedings{ho_constructing_2020,
   author = {Ho, Xanh and Nguyen, Anh-Khoa Duong and Sugawara, Saku and Aizawa, Akiko},
   booktitle = {Proceedings of the 28th International Conference on Computational Linguistics},
   pages = {6609--6625},

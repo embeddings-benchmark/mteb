@@ -6,7 +6,7 @@ from mteb.abstasks import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
 
 BIBTEX = r"""
-@inproceedings{Tian_2018_ECCV,
+@inproceedings{tian_audio-visual_2018,
   author = {Tian, Yapeng and Shi, Jing and Li, Bochen and Duan, Zhiyao and Xu, Chenliang},
   booktitle = {The European Conference on Computer Vision (ECCV)},
   month = {September},

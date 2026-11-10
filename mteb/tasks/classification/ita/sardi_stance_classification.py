@@ -25,7 +25,7 @@ class SardiStanceClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{cignarella2020sardistance,
+@inproceedings{cignarella_sardistance_2020,
   author = {Cignarella, Alessandra Teresa and Lai, Mirko and Bosco, Cristina and Patti, Viviana and Rosso, Paolo and others},
   booktitle = {CEUR WORKSHOP PROCEEDINGS},
   organization = {Ceur},

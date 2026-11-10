@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from collections.abc import Sequence
 
 _CITATION = """
-@misc{weller2025theoreticallimit,
+@misc{weller_theoretical_2025,
   archiveprefix = {arXiv},
   author = {Orion Weller and Michael Boratko and Iftekhar Naim and Jinhyuk Lee},
   eprint = {2508.21038},

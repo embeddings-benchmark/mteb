@@ -28,7 +28,7 @@ class AlloProfClusteringS2S(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{lef23,
+@misc{lefebvre-brossard_alloprof_2023,
   author = {Lefebvre-Brossard, Antoine and Gazaille, Stephane and Desmarais, Michel C.},
   copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International},
   doi = {10.48550/ARXIV.2302.07738},
@@ -71,7 +71,7 @@ class AlloProfClusteringS2SFast(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{lef23,
+@misc{lefebvre-brossard_alloprof_2023,
   author = {Lefebvre-Brossard, Antoine and Gazaille, Stephane and Desmarais, Michel C.},
   copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International},
   doi = {10.48550/ARXIV.2302.07738},

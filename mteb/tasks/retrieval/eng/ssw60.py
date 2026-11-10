@@ -10,13 +10,13 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 _REFERENCE = "https://github.com/visipedia/ssw60"
 _BIBTEX = r"""
-@inproceedings{van2022exploring,
+@inproceedings{vanhorn_exploring_2022,
   author = {Van Horn, Grant and Qian, Rui and Wilber, Kimberly and Adam, Hartwig and Mac Aodha, Oisin and Belongie, Serge},
   title = {Exploring Fine-Grained Audiovisual Categorization with the SSW60 Dataset},
-  booktitle={European Conference on Computer Vision},
-  pages={271--289},
-  year={2022},
-  organization={Springer}
+  booktitle = {European Conference on Computer Vision},
+  pages = {271--289},
+  year = {2022},
+  organization = {Springer},
 }
 """
 

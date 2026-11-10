@@ -26,7 +26,7 @@ class AutoRAGRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@misc{kim2024autoragautomatedframeworkoptimization,
+@misc{kim_autorag_2024,
   archiveprefix = {arXiv},
   author = {Dongkyu Kim and Byoungwook Kim and Donggeon Han and Matouš Eibich},
   eprint = {2410.20878},

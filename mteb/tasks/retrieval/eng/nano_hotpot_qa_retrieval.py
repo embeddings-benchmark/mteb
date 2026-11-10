@@ -27,7 +27,7 @@ class NanoHotpotQARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{yang-etal-2018-hotpotqa,
+@inproceedings{yang_hotpotqa_2018,
   address = {Brussels, Belgium},
   author = {Yang, Zhilin  and
 Qi, Peng  and

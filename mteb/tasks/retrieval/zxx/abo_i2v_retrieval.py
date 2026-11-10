@@ -39,7 +39,7 @@ class ABOI2VRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@article{collins2022abo,
+@article{collins_abo_2022,
   author = {Collins, Jasmine and Goel, Shubham and Deng, Kenan and Luthra, Achleshwar and Xu, Leon and Gundogdu, Erhan and Zhang, Xi and Yago Vicente, Tomas F and Dideriksen, Thomas and Arora, Himanshu and Guillaumin, Matthieu and Malik, Jitendra},
   journal = {CVPR},
   title = {ABO: Dataset and Benchmarks for Real-World 3D Object Understanding},

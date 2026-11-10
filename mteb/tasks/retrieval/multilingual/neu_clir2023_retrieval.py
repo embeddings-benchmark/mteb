@@ -31,7 +31,7 @@ class NeuCLIR2023Retrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{lawrie2024overview,
+@inproceedings{lawrie_overview_2023,
   archiveprefix = {arXiv},
   author = {Dawn Lawrie and Sean MacAvaney and James Mayfield and Paul McNamee and Douglas W. Oard and Luca Soldaini and Eugene Yang},
   booktitle = {Proceedings of the Thirty-Second Text REtrieval Conference, {TREC} 2023},
@@ -69,7 +69,7 @@ class NeuCLIR2023RetrievalHardNegatives(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{lawrie2024overview,
+@inproceedings{lawrie_overview_2023,
   archiveprefix = {arXiv},
   author = {Dawn Lawrie and Sean MacAvaney and James Mayfield and Paul McNamee and Douglas W. Oard and Luca Soldaini and Eugene Yang},
   booktitle = {Proceedings of the Thirty-Second Text REtrieval Conference, {TREC} 2023},

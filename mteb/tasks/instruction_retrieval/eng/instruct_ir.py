@@ -26,7 +26,7 @@ class InstructIR(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@article{oh2024instructir,
+@article{oh_instructir_2024,
   archiveprefix = {{arXiv}},
   author = {{Hanseok Oh and Hyunji Lee and Seonghyeon Ye and Haebin Shin and Hansol Jang and Changwook Jun and Minjoon Seo}},
   eprint = {{2402.14334}},

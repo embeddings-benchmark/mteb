@@ -31,7 +31,7 @@ class SomethingSomethingV2Classification(AbsTaskClassification):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@inproceedings{goyal2017something,
+@inproceedings{goyal_something_2017,
   author = {Goyal, Raghav and Ebrahimi Kahou, Samira and Michalski, Vincent and Materzy{\'n}ska, Joanna and Westphal, Susanne and Kim, Heuna and Haenel, Valentin and Fruend, Ingo and Yianilos, Peter and Mueller-Freitag, Moritz and Hoppe, Florian and Thurau, Christian and Bax, Ingo and Memisevic, Roland},
   booktitle = {2017 IEEE International Conference on Computer Vision (ICCV)},
   doi = {10.1109/ICCV.2017.622},

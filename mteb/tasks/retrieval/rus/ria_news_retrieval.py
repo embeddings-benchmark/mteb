@@ -17,7 +17,7 @@ _ria_news_metadata = dict(
     dialect=[],
     sample_creation="found",
     bibtex_citation=r"""
-@inproceedings{gavrilov2018self,
+@inproceedings{gavrilov_self-attentive_2019,
   author = {Gavrilov, Daniil and  Kalaidin, Pavel and  Malykh, Valentin},
   booktitle = {Proceedings of the 41st European Conference on Information Retrieval},
   title = {Self-Attentive Model for Headline Generation},

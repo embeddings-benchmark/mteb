@@ -2,7 +2,7 @@ from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 LP_MUSIC_CAPS_CITATION = r"""
-@inproceedings{doh2023lpmusiccaps,
+@inproceedings{doh_lp-musiccaps_2023,
   author = {SeungHeon Doh and Keunwoo Choi and Jongpil Lee and Juhan Nam},
   booktitle = {Proceedings of the 24th International Society for Music Information Retrieval Conference (ISMIR)},
   eprint = {2307.16372},

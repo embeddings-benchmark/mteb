@@ -25,13 +25,22 @@ class RUParaPhraserSTS(AbsTaskSTS):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{gudkov-etal-2020-automatically,
+@inproceedings{gudkov_automatically_2020,
   address = {Online},
   author = {Gudkov, Vadim  and
 Mitrofanova, Olga  and
 Filippskikh, Elizaveta},
   booktitle = {Proceedings of the Fourth Workshop on Neural Generation and Translation},
   doi = {10.18653/v1/2020.ngt-1.6},
+  editor = {Birch, Alexandra  and
+Finch, Andrew  and
+Hayashi, Hiroaki  and
+Heafield, Kenneth  and
+Junczys-Dowmunt, Marcin  and
+Konstas, Ioannis  and
+Li, Xian  and
+Neubig, Graham  and
+Oda, Yusuke},
   month = jul,
   pages = {54--59},
   publisher = {Association for Computational Linguistics},
@@ -40,7 +49,7 @@ Filippskikh, Elizaveta},
   year = {2020},
 }
 
-@inproceedings{pivovarova2017paraphraser,
+@inproceedings{pivovarova_paraphraser_2017,
   author = {Pivovarova, Lidia and Pronoza, Ekaterina and Yagunova, Elena and Pronoza, Anton},
   booktitle = {Conference on artificial intelligence and natural language},
   organization = {Springer},

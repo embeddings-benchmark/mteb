@@ -33,7 +33,7 @@ class ScandiSentClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{isbister-etal-2021-stop,
+@inproceedings{isbister_should_2021,
   address = {Reykjavik, Iceland (Online)},
   author = {Isbister, Tim  and
 Carlsson, Fredrik  and

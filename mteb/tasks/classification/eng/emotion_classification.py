@@ -28,7 +28,7 @@ class EmotionClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{saravia-etal-2018-carer,
+@inproceedings{saravia_carer_2018,
   address = {Brussels, Belgium},
   author = {Saravia, Elvis  and
 Liu, Hsien-Chi Toby  and
@@ -82,7 +82,7 @@ class EmotionClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{saravia-etal-2018-carer,
+@inproceedings{saravia_carer_2018,
   address = {Brussels, Belgium},
   author = {Saravia, Elvis  and
 Liu, Hsien-Chi Toby  and

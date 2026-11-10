@@ -136,7 +136,7 @@ class Vidore2ESGReportsRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{mace2025vidorev2,
+@article{mace_vidore_2025,
   author = {Macé, Quentin and Loison António and Faysse, Manuel},
   journal = {arXiv preprint arXiv:2505.17166},
   title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
@@ -184,7 +184,7 @@ class Vidore2EconomicsReportsRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{mace2025vidorev2,
+@article{mace_vidore_2025,
   author = {Macé, Quentin and Loison António and Faysse, Manuel},
   journal = {arXiv preprint arXiv:2505.17166},
   title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
@@ -232,7 +232,7 @@ class Vidore2BioMedicalLecturesRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{mace2025vidorev2,
+@article{mace_vidore_2025,
   author = {Macé, Quentin and Loison António and Faysse, Manuel},
   journal = {arXiv preprint arXiv:2505.17166},
   title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
@@ -280,7 +280,7 @@ class Vidore2ESGReportsHLRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{mace2025vidorev2,
+@article{mace_vidore_2025,
   author = {Macé, Quentin and Loison António and Faysse, Manuel},
   journal = {arXiv preprint arXiv:2505.17166},
   title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},

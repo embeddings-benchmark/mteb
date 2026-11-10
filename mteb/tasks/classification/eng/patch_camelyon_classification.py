@@ -33,7 +33,7 @@ class PatchCamelyonClassification(AbsTaskClassification):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{10.1007/978-3-030-00934-2_24,
+@inproceedings{veeling_rotation_2018,
   address = {Cham},
   author = {Veeling, Bastiaan S.
 and Linmans, Jasper

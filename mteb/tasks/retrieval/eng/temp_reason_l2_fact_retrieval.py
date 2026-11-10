@@ -25,7 +25,7 @@ class TempReasonL2Fact(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{tan2023towards,
+@inproceedings{tan_benchmarking_2023,
   address = {Toronto, Canada},
   author = {Tan, Qingyu and Ng, Hwee Tou and Bing, Lidong},
   booktitle = {Proceedings of the 61st Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
@@ -39,10 +39,13 @@ class TempReasonL2Fact(AbsTaskRetrieval):
   year = {2023},
 }
 
-@article{xiao2024rar,
-  author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
-  journal = {arXiv preprint arXiv:2404.06347},
+@misc{xiao_rar-b_2024,
+  archiveprefix = {arXiv},
+  author = {Chenghao Xiao and G Thomas Hudson and Noura Al Moubayed},
+  eprint = {2404.06347},
+  primaryclass = {cs.CL},
   title = {RAR-b: Reasoning as Retrieval Benchmark},
+  url = {https://arxiv.org/abs/2404.06347},
   year = {2024},
 }
 """,

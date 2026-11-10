@@ -47,7 +47,7 @@ class SemRel24STS(AbsTaskSTS):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{ousidhoum2024semrel2024,
+@inproceedings{ousidhoum_semrel2024_2024,
   author = {Ousidhoum, Nedjma and Muhammad, Shamsuddeen and Abdalla, Mohamed and Abdulmumin, Idris and Ahmad, Ibrahim and Ahuja, Sanchit and Aji, Alham and Araujo, Vladimir and Ayele, Abinew and Baswani, Pavan and Beloucif, Meriem and Biemann, Chris and Bourhim, Sofia and Kock, Christine and Dekebo, Genet and Hourrane, Oumaima and Kanumolu, Gopichand and Madasu, Lokesh and Rutunda, Samuel and Shrivastava, Manish and Solorio, Thamar and Surange, Nirmal and Tilaye, Hailegnaw and Vishnubhotla, Krishnapriya and Winata, Genta and Yimam, Seid and Mohammad, Saif},
   booktitle = {Findings of the Association for Computational Linguistics ACL 2024},
   doi = {10.18653/v1/2024.findings-acl.147},

@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from collections.abc import Mapping
 
 BIBTEX = r"""
-@inproceedings{li2022learning,
+@inproceedings{li_learning_2022,
   author = {Li, Guangyao and Wei, Yake and Tian, Yapeng and Xu, Chenliang and Wen, Ji-Rong and Hu, Di},
   booktitle = {Proceedings of the IEEE/CVF conference on computer vision and pattern recognition},
   pages = {19108--19118},

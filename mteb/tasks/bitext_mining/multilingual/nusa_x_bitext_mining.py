@@ -39,7 +39,7 @@ class NusaXBitextMining(AbsTaskBitextMining):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{winata2023nusax,
+@inproceedings{winata_nusax_2023,
   author = {Winata, Genta Indra and Aji, Alham Fikri and Cahyawijaya, Samuel and Mahendra, Rahmad and Koto, Fajri and Romadhony, Ade and Kurniawan, Kemal and Moeljadi, David and Prasojo, Radityo Eko and Fung, Pascale and others},
   booktitle = {Proceedings of the 17th Conference of the European Chapter of the Association for Computational Linguistics},
   pages = {815--834},
@@ -47,7 +47,7 @@ class NusaXBitextMining(AbsTaskBitextMining):
   year = {2023},
 }
 
-@inproceedings{winata2024miners,
+@inproceedings{winata_miners_2024,
   address = {Miami, Florida, USA},
   author = {Winata, Genta Indra and Zhang, Ruochen and Adelani, David Ifeoluwa},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2024},

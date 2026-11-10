@@ -28,7 +28,7 @@ class SlovakParlaSentClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{mochtak-etal-2024-parlasent,
+@inproceedings{mochtak_parlasent_2024,
   address = {Torino, Italia},
   author = {Mochtak, Michal  and
 Rupnik, Peter  and

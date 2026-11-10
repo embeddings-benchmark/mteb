@@ -27,7 +27,7 @@ class VieMedEVBitextMining(AbsTaskBitextMining):
         dialect=[],
         sample_creation="human-translated and localized",
         bibtex_citation=r"""
-@inproceedings{medev,
+@inproceedings{vo_improving_2024,
   author = {Nhu Vo and Dat Quoc Nguyen and Dung D. Le and Massimo Piccardi and Wray Buntine},
   booktitle = {Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation (LREC-COLING)},
   title = {{Improving Vietnamese-English Medical Machine Translation}},

@@ -25,12 +25,18 @@ class VehicleSoundClustering(AbsTaskClustering):
         modalities=["audio"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{bazilinskyy2018auditory,
-  author = {Bazilinskyy, Pavlo and van der Aa, Arne and Schoustra, Michael and Spruit, John and Staats, Laurens and van der Vlist, Klaas Jan and de Winter, Joost},
-  booktitle = {12th International Symposium on Tools and Methods of Competitive Engineering (TMCE 2018)},
-  pages = {417--422},
+@inproceedings{bazilinskyy_auditory_2018,
   title = {An auditory dataset of passing vehicles recorded with a smartphone},
+  keywords = {traffic, microphone, smartphone, sound analysis, sound processing},
+  author = {Pavlo Bazilinskyy and \{van der Aa\}, Arne and Michael Schoustra and John Spruit and Laurens Staats and \{van der Vlist\}, \{Klaas Jan\} and \{de Winter\}, Joost},
   year = {2018},
+  language = {English},
+  isbn = {978-94-6186-910-4},
+  pages = {417--422},
+  editor = {Imre Horv{\'a}th and Su{\'a}rez, \{Jos{\'e} Pablo\}},
+  booktitle = {Proceedings of the 12th International Symposium on Tools and Methods of Competitive Engineering (TMCE 2018)},
+  publisher = {Delft University of Technology},
+  address = {Netherlands},
 }
 """,
     )

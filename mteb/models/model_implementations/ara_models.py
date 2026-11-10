@@ -26,7 +26,7 @@ arabic_triplet_matryoshka = ModelMeta(
         #  "akhooli/arabic-triplets-1m-curated-sims-len"
     ),
     citation="""
-    @inproceedings{nacar2025gate,
+    @inproceedings{nacar_gate_2026,
   author = {Nacar, Omer and Koubaa, Anis and Sibaee, Serry and Alhabashi, Yasser and Ammar, Adel and Boulila, Wadii},
   booktitle = {Findings of the Association for Computational Linguistics: EMNLP 2026},
   doi = {10.18653/2026.findings-emnlp.1952},

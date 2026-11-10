@@ -25,7 +25,7 @@ class HotelReviewSentimentClassification(AbsTaskClassification):
         dialect=["ara-arab-EG", "ara-arab-JO", "ara-arab-LB", "ara-arab-SA"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{elnagar2018hotel,
+@article{elnagar_hotel_2018,
   author = {Elnagar, Ashraf and Khalifa, Yasmin S and Einea, Anas},
   journal = {Intelligent natural language processing: Trends and applications},
   pages = {35--52},
@@ -61,7 +61,7 @@ class HotelReviewSentimentClassificationV2(AbsTaskClassification):
         dialect=["ara-arab-EG", "ara-arab-JO", "ara-arab-LB", "ara-arab-SA"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{elnagar2018hotel,
+@article{elnagar_hotel_2018,
   author = {Elnagar, Ashraf and Khalifa, Yasmin S and Einea, Anas},
   journal = {Intelligent natural language processing: Trends and applications},
   pages = {35--52},

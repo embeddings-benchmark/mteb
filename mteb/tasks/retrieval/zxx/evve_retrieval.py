@@ -101,7 +101,7 @@ class EVVERetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{revaud2013event,
+@inproceedings{revaud_event_2013,
   author = {Revaud, Jerome and Douze, Matthijs and Schmid, Cordelia and Jegou, Herve},
   booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition},
   pages = {2459--2466},

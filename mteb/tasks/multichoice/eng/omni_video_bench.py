@@ -32,7 +32,7 @@ class OmniVideoBenchVideoCentricQA(AbsTaskRetrieval):
         modalities=["video", "text"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{li2025omnivideobench,
+@article{li_omnivideobench_2025,
   author = {Li, Caorui and Chen, Yu and Ji, Yiyan and Xu, Jin and Cui, Zhenyu and Li, Shihao and Zhang, Yuanxing and Wang, Wentao and Song, Zhenghao and Zhang, Dingling and others},
   journal = {arXiv preprint arXiv:2510.10689},
   title = {OmniVideoBench: Towards Audio-Visual Understanding Evaluation for Omni MLLMs},
@@ -105,7 +105,7 @@ class OmniVideoBenchVideoAudioCentricQA(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@article{li2025omnivideobench,
+@article{li_omnivideobench_2025,
   author = {Li, Caorui and Chen, Yu and Ji, Yiyan and Xu, Jin and Cui, Zhenyu and Li, Shihao and Zhang, Yuanxing and Wang, Wentao and Song, Zhenghao and Zhang, Dingling and others},
   journal = {arXiv preprint arXiv:2510.10689},
   title = {OmniVideoBench: Towards Audio-Visual Understanding Evaluation for Omni MLLMs},

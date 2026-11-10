@@ -1,7 +1,7 @@
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SparseEncoderWrapper
 
-SPLADE_V2_CITATION = """@misc{formal2021spladev2,
+SPLADE_V2_CITATION = """@misc{formal_splade_2021,
   title={SPLADE v2: Sparse Lexical and Expansion Model for Information Retrieval},
   author={Thibault Formal and Carlos Lassance and Benjamin Piwowarski and Stéphane Clinchant},
   year={2021},
@@ -11,7 +11,7 @@ SPLADE_V2_CITATION = """@misc{formal2021spladev2,
   url={https://arxiv.org/abs/2109.10086},
 }"""
 
-SPLADE_V3_CITATION = """@misc{lassance2024spladev3,
+SPLADE_V3_CITATION = """@misc{lassance_splade-v3_2024,
   title={SPLADE-v3: New baselines for SPLADE},
   author={Carlos Lassance and Hervé Déjean and Thibault Formal and Stéphane Clinchant},
   year={2024},

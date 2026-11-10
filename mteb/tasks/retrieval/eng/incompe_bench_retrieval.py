@@ -96,7 +96,7 @@ class IncompeBenchStrictRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@misc{clavie2026incompebench,
+@misc{clavie_incompebench_2026,
   archiveprefix = {arXiv},
   author = {Benjamin Clavi\'e and Atoof Shakir and Jonah Turner and Sean Lee and Aamir Shakir and Makoto P. Kato},
   eprint = {2602.11941},
@@ -152,7 +152,7 @@ class IncompeBenchLenientRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@misc{clavie2026incompebench,
+@misc{clavie_incompebench_2026,
   archiveprefix = {arXiv},
   author = {Benjamin Clavi\'e and Atoof Shakir and Jonah Turner and Sean Lee and Aamir Shakir and Makoto P. Kato},
   eprint = {2602.11941},

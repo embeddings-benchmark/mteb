@@ -33,7 +33,7 @@ class PerceptionTestVideoCentricQA(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@inproceedings{patraucean2024perception,
+@inproceedings{patraucean_perception_2024,
   author = {Patraucean, Viorica and Smaira, Lucas and Gupta, Ankush and Recasens, Adria and Markeeva, Larisa and Banarse, Dylan and Koppula, Skanda and Malinowski, Mateusz and Yang, Yi and Doersch, Carl and others},
   booktitle = {Advances in Neural Information Processing Systems},
   title = {Perception Test: A Diagnostic Benchmark for Multimodal Video Models},
@@ -106,7 +106,7 @@ class PerceptionTestVideoAudioCentricQA(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@inproceedings{patraucean2024perception,
+@inproceedings{patraucean_perception_2024,
   author = {Patraucean, Viorica and Smaira, Lucas and Gupta, Ankush and Recasens, Adria and Markeeva, Larisa and Banarse, Dylan and Koppula, Skanda and Malinowski, Mateusz and Yang, Yi and Doersch, Carl and others},
   booktitle = {Advances in Neural Information Processing Systems},
   title = {Perception Test: A Diagnostic Benchmark for Multimodal Video Models},

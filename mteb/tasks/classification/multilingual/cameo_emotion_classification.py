@@ -6,7 +6,7 @@ from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _BIBTEX = r"""
-@inproceedings{christop2025cameo,
+@inproceedings{christop_cameo_2026,
   author = {Christop, Iwona and Czajka, Maciej},
   booktitle = {ICASSP 2026 - 2026 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp55912.2026.11461331},

@@ -27,7 +27,7 @@ class VocalSoundClassification(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{Gong_2022,
+@inproceedings{gong_vocalsound_2022,
   author = {Gong, Yuan and Yu, Jin and Glass, James},
   booktitle = {ICASSP 2022 - 2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp43922.2022.9746828},

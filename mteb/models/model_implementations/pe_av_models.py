@@ -378,7 +378,7 @@ class PEAudioVisualWrapper(AbsEncoder):
 # --- Model Metadata ---
 
 _PE_AV_CITATION = r"""
-@misc{vyas2025pushingfrontieraudiovisualperception,
+@misc{vyas_pushing_2025,
       title={Pushing the Frontier of Audiovisual Perception with Large-Scale Multimodal Correspondence Learning},
       author={Apoorv Vyas and Heng-Jui Chang and Cheng-Fu Yang and Po-Yao Huang and Luya Gao and Julius Richter and Sanyuan Chen and Matt Le and Piotr Dollár and Christoph Feichtenhofer and Ann Lee and Wei-Ning Hsu},
       year={2025},

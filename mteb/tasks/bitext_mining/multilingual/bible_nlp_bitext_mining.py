@@ -881,7 +881,7 @@ class BibleNLPBitextMining(AbsTaskBitextMining):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@article{akerman2023ebible,
+@article{akerman_ebible_2023,
   author = {Akerman, Vesa and Baines, David and Daspit, Damien and Hermjakob, Ulf and Jang, Taeho and Leong, Colin and Martin, Michael and Mathew, Joel and Robie, Jonathan and Schwarting, Marcus},
   journal = {arXiv preprint arXiv:2304.09919},
   title = {The eBible Corpus: Data and Model Benchmarks for Bible Translation for Low-Resource Languages},

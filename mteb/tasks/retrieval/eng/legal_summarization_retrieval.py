@@ -25,7 +25,7 @@ class LegalSummarization(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{manor-li-2019-plain,
+@inproceedings{manor_plain_2019,
   address = {Minneapolis, Minnesota},
   author = {Manor, Laura  and
 Li, Junyi Jessy},

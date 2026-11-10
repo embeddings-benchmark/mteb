@@ -25,7 +25,7 @@ class TweetTopicSingleClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{antypas-etal-2022-twitter,
+@inproceedings{antypas_twitter_2022,
   address = {Gyeongju, Republic of Korea},
   archiveprefix = {arXiv},
   author = {Antypas, Dimosthenis  and
@@ -97,7 +97,7 @@ class TweetTopicSingleClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{antypas-etal-2022-twitter,
+@inproceedings{antypas_twitter_2022,
   address = {Gyeongju, Republic of Korea},
   archiveprefix = {arXiv},
   author = {Antypas, Dimosthenis  and

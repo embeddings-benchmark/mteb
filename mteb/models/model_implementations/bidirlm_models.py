@@ -94,7 +94,7 @@ BIDIRLM_LANGUAGES = [
     "zul-Latn",
 ]
 
-BIDIRLM_CITATION = """@misc{boizard2026bidirlmtextomnimodalbidirectional,
+BIDIRLM_CITATION = """@misc{boizard_bidirlm_2026,
       title={BidirLM: From Text to Omnimodal Bidirectional Encoders by Adapting and Composing Causal LLMs},
       author={Nicolas Boizard and Théo Deschamps-Berger and Hippolyte Gisserot-Boukhlef and Céline Hudelot and Pierre Colombo},
       year={2026},

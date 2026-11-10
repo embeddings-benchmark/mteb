@@ -25,7 +25,7 @@ class MusicCapsA2TRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{agostinelli2023musiclmgeneratingmusictext,
+@misc{agostinelli_musiclm_2023,
   archiveprefix = {arXiv},
   author = {Andrea Agostinelli and Timo I. Denk and Zalán Borsos and Jesse Engel and Mauro Verzetti and Antoine Caillon and Qingqing Huang and Aren Jansen and Adam Roberts and Marco Tagliasacchi and Matt Sharifi and Neil Zeghidour and Christian Frank},
   eprint = {2301.11325},
@@ -61,7 +61,7 @@ class MusicCapsT2ARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{agostinelli2023musiclmgeneratingmusictext,
+@misc{agostinelli_musiclm_2023,
   archiveprefix = {arXiv},
   author = {Andrea Agostinelli and Timo I. Denk and Zalán Borsos and Jesse Engel and Mauro Verzetti and Antoine Caillon and Qingqing Huang and Aren Jansen and Adam Roberts and Marco Tagliasacchi and Matt Sharifi and Neil Zeghidour and Christian Frank},
   eprint = {2301.11325},

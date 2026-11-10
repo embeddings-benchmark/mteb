@@ -29,7 +29,7 @@ class SummEvalFrSummarization(AbsTaskSummarization):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@article{fabbri2020summeval,
+@article{fabbri_summeval_2021,
   author = {Fabbri, Alexander R. and Kryściński, Wojciech and McCann, Bryan and Xiong, Caiming and Socher, Richard and Radev, Dragomir},
   doi = {10.1162/tacl_a_00373},
   issn = {2307-387X},
@@ -72,7 +72,7 @@ class SummEvalFrSummarizationv2(AbsTaskSummarization):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@article{fabbri2020summeval,
+@article{fabbri_summeval_2021,
   author = {Fabbri, Alexander R. and Kryściński, Wojciech and McCann, Bryan and Xiong, Caiming and Socher, Richard and Radev, Dragomir},
   doi = {10.1162/tacl_a_00373},
   issn = {2307-387X},

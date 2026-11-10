@@ -31,7 +31,7 @@ class LASSA2TRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         superseded_by="LASSA2TRetrieval.v2",
         bibtex_citation=r"""
-@inproceedings{liu2022separate,
+@inproceedings{liu_separate_2022,
   author = {Liu, Xubo and Liu, Haohe and Kong, Qiuqiang and Mei, Xinhao and Zhao, Jinzheng and Huang, Qiushi and Plumbley, Mark D and Wang, Wenwu},
   booktitle = {INTERSPEEH},
   title = {Separate What You Describe: Language-Queried Audio Source Separation},
@@ -72,7 +72,7 @@ class LASST2ARetrieval(AbsTaskRetrieval):
         sample_creation="found",
         superseded_by="LASST2ARetrieval.v2",
         bibtex_citation=r"""
-@inproceedings{liu2022separate,
+@inproceedings{liu_separate_2022,
   author = {Liu, Xubo and Liu, Haohe and Kong, Qiuqiang and Mei, Xinhao and Zhao, Jinzheng and Huang, Qiushi and Plumbley, Mark D and Wang, Wenwu},
   booktitle = {INTERSPEEH},
   title = {Separate What You Describe: Language-Queried Audio Source Separation},
@@ -112,7 +112,7 @@ class LASSA2TRetrievalV2(AbsTaskRetrieval):
         sample_creation="found",
         adapted_from=["LASSA2TRetrieval"],
         bibtex_citation=r"""
-@inproceedings{liu2022separate,
+@inproceedings{liu_separate_2022,
   author = {Liu, Xubo and Liu, Haohe and Kong, Qiuqiang and Mei, Xinhao and Zhao, Jinzheng and Huang, Qiushi and Plumbley, Mark D and Wang, Wenwu},
   booktitle = {INTERSPEEH},
   title = {Separate What You Describe: Language-Queried Audio Source Separation},
@@ -154,7 +154,7 @@ class LASST2ARetrievalV2(AbsTaskRetrieval):
         sample_creation="found",
         adapted_from=["LASST2ARetrieval"],
         bibtex_citation=r"""
-@inproceedings{liu2022separate,
+@inproceedings{liu_separate_2022,
   author = {Liu, Xubo and Liu, Haohe and Kong, Qiuqiang and Mei, Xinhao and Zhao, Jinzheng and Huang, Qiushi and Plumbley, Mark D and Wang, Wenwu},
   booktitle = {INTERSPEEH},
   title = {Separate What You Describe: Language-Queried Audio Source Separation},

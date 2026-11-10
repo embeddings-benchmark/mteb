@@ -25,7 +25,7 @@ class JSICK(AbsTaskSTS):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{yanaka2022compositional,
+@article{yanaka_compositional_2022,
   author = {Yanaka, Hitomi and Mineshima, Koji},
   journal = {Transactions of the Association for Computational Linguistics},
   pages = {1266--1284},

@@ -32,7 +32,7 @@ class Food101Classification(AbsTaskClassification):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{bossard14,
+@inproceedings{bossard_food-101_2014,
   author = {Bossard, Lukas and Guillaumin, Matthieu and Van Gool, Luc},
   booktitle = {European Conference on Computer Vision},
   title = {Food-101 -- Mining Discriminative Components with Random Forests},

@@ -4,7 +4,7 @@ from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import CrossEncoderWrapper
 
 mice_p_citation = """
-@misc{morand2026micemeetyoureranking,
+@misc{morand_mice_2026,
   title={MICE to Meet You: From Re-ranking Only to End-to-End Retrieval},
   author={Victor Morand and Yuxuan Zong and Mathias Vast and Josiane Mothe and Benjamin Piwowarski},
   year={2026},

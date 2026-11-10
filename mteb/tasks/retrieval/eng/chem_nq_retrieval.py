@@ -27,7 +27,7 @@ class ChemNQRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=NQ_CITATION
         + r"""
-@inproceedings{kasmaee2024chemteb,
+@inproceedings{kasmaee_chemteb_2024,
   archiveprefix = {arXiv},
   author = {Ali Shiraee Kasmaee and Mohammad Khodadad and Mohammad Arshi Saloot and Nick Sherck and Stephen Dokas and Hamidreza Mahyar and Soheila Samiee},
   booktitle = {ENLSP},

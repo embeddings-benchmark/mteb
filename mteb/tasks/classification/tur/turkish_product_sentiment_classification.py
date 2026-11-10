@@ -25,7 +25,7 @@ class TurkishProductSentimentClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{Demirtas2013CrosslingualPD,
+@inproceedings{demirtas_cross-lingual_2013,
   author = {Erkin Demirtas and Mykola Pechenizkiy},
   booktitle = {wisdom},
   title = {Cross-lingual polarity detection with machine translation},
@@ -60,7 +60,7 @@ class TurkishProductSentimentClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{Demirtas2013CrosslingualPD,
+@inproceedings{demirtas_cross-lingual_2013,
   author = {Erkin Demirtas and Mykola Pechenizkiy},
   booktitle = {wisdom},
   title = {Cross-lingual polarity detection with machine translation},

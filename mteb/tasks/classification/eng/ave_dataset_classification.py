@@ -27,7 +27,7 @@ class AVEDatasetClassification(AbsTaskClassification):
         modalities=["video", "audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{Tian_2018_ECCV,
+@inproceedings{tian_audio-visual_2018,
   author = {Tian, Yapeng and Shi, Jing and Li, Bochen and Duan, Zhiyao and Xu, Chenliang},
   booktitle = {The European Conference on Computer Vision (ECCV)},
   month = {September},
@@ -64,7 +64,7 @@ class AVEDatasetVideoClassification(AbsTaskClassification):
         modalities=["video"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{Tian_2018_ECCV,
+@inproceedings{tian_audio-visual_2018,
   author = {Tian, Yapeng and Shi, Jing and Li, Bochen and Duan, Zhiyao and Xu, Chenliang},
   booktitle = {The European Conference on Computer Vision (ECCV)},
   month = {September},

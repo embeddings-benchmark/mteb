@@ -25,7 +25,7 @@ class HUMERobust04InstructionReranking(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{voorhees2005trec,
+@inproceedings{voorhees_trec_2005,
   author = {Voorhees, Ellen M},
   booktitle = {TREC},
   title = {TREC 2004 Robust Retrieval Track Overview},

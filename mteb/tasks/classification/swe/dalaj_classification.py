@@ -28,7 +28,7 @@ class DalajClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{2105.06681,
+@inproceedings{volodina_dalaj_2021,
   address = {Online},
   archiveprefix = {arXiv},
   author = {Volodina, Elena and Mohammed, Yousuf Ali and Klezl, Julia},
@@ -74,7 +74,7 @@ class DalajClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{2105.06681,
+@inproceedings{volodina_dalaj_2021,
   address = {Online},
   archiveprefix = {arXiv},
   author = {Volodina, Elena and Mohammed, Yousuf Ali and Klezl, Julia},

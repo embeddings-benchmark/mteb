@@ -25,7 +25,7 @@ class SanskritShlokasClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{arora-2020-inltk,
+@inproceedings{arora_inltk_2020,
   address = {Online},
   author = {Arora, Gaurav},
   booktitle = {Proceedings of Second Workshop for NLP Open Source Software (NLP-OSS)},

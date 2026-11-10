@@ -30,7 +30,7 @@ class MMVUVideoCentricQA(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@inproceedings{zhao2025mmvu,
+@inproceedings{zhao_mmvu_2025,
   author = {Zhao, Yilun and Zhang, Haowei and Xie, Lujing and Hu, Tongyan and Gan, Guo and Long, Yitao and Hu, Zhiyuan and Chen, Weiyuan and Li, Chuhan and Xu, Zhijian and others},
   booktitle = {Proceedings of the Computer Vision and Pattern Recognition Conference},
   pages = {8475--8489},

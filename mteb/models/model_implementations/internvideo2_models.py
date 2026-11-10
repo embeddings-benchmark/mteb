@@ -4,7 +4,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 INTERNVIDEO2_CITATION = """
-@inbook{wang2024internvideo2,
+@inbook{wang_internvideo2_2024,
   author = {Wang, Yi and Li, Kunchang and Li, Xinhao and Yu, Jiashuo and He, Yinan and Chen, Guo and Pei, Baoqi and Zheng, Rongkun and Wang, Zun and Shi, Yansong and Jiang, Tianxiang and Li, Songze and Xu, Jilan and Zhang, Hongjie and Huang, Yifei and Qiao, Yu and Wang, Yali and Wang, Limin},
   booktitle = {Computer Vision – ECCV 2024},
   doi = {10.1007/978-3-031-73013-9_23},

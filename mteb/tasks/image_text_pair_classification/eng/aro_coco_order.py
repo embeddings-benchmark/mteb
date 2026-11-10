@@ -40,7 +40,7 @@ class AROCocoOrder(AbsTaskImageTextPairClassification):
         modalities=["text", "image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{yuksekgonul2023and,
+@inproceedings{yuksekgonul_when_2023,
   author = {Yuksekgonul, Mert and Bianchi, Federico and Kalluri, Pratyusha and Jurafsky, Dan and Zou, James},
   booktitle = {The Eleventh International Conference on Learning Representations},
   title = {When and why vision-language models behave like bags-of-words, and what to do about it?},

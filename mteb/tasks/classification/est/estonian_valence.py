@@ -28,7 +28,7 @@ class EstonianValenceClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         sample_creation="found",
         bibtex_citation=r"""
-@article{Pajupuu2023,
+@article{pajupuu_estonian_2023,
   author = {Hille Pajupuu and Jaan Pajupuu and Rene Altrov and Kairi Tamuri},
   doi = {10.6084/m9.figshare.24517054.v1},
   month = {11},
@@ -69,7 +69,7 @@ class EstonianValenceClassificationV2(AbsTaskClassification):
         annotations_creators="human-annotated",
         sample_creation="found",
         bibtex_citation=r"""
-@article{Pajupuu2023,
+@article{pajupuu_estonian_2023,
   author = {Hille Pajupuu and Jaan Pajupuu and Rene Altrov and Kairi Tamuri},
   doi = {10.6084/m9.figshare.24517054.v1},
   month = {11},

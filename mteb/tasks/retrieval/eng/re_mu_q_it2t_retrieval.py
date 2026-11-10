@@ -25,7 +25,7 @@ class ReMuQIT2TRetrieval(AbsTaskRetrieval):
         modalities=["image", "text"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{luo-etal-2023-end,
+@inproceedings{luo_end-to-end_2023,
   address = {Toronto, Canada},
   author = {Luo, Man  and
 Fang, Zhiyuan  and

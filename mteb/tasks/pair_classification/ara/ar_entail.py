@@ -28,7 +28,7 @@ class ArEntail(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{obeidat2024arentail,
+@article{obeidat_arentail_2024,
   author = {Obeidat, Rasha and Al-Harahsheh, Yara and Al-Ayyoub, Mahmoud and Gharaibeh, Maram},
   journal = {Language Resources and Evaluation},
   pages = {1--27},

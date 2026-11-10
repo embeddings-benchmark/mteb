@@ -113,7 +113,7 @@ class IndicGenBenchFloresBitextMining(AbsTaskBitextMining):
         dialect=[],
         sample_creation="human-translated and localized",
         bibtex_citation=r"""
-@inproceedings{singh2024indicgenbench,
+@inproceedings{singh_indicgenbench_2024,
   address = {Bangkok, Thailand},
   author = {Singh, Harman and Gupta, Nitish and Bharadwaj, Shikhar and Tewari, Dinesh and Talukdar, Partha},
   booktitle = {Proceedings of the 62nd Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},

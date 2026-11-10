@@ -452,11 +452,13 @@ class BioVITAWrapper(AbsEncoder):
 
 
 BIOVITA_CITATION = """
-@inproceedings{shinoda2026biovita,
-  title     = {BioVITA: Biological Dataset, Model, and Benchmark for Visual-Textual-Acoustic Alignment},
-  author    = {Risa Shinoda and Kaede Shiohara and Nakamasa Inoue and Kuniaki Saito and Hiroaki Santo and Fumio Okura},
-  booktitle = {CVPR},
-  year      = {2026}
+@article{shinoda_biovita_2026,
+  author = {Shinoda, Risa and Shiohara, Kaede and Inoue, Nakamasa and Saito, Kuniaki and Santo, Hiroaki and Okura, Fumio},
+  title = {BioVITA: Biological Dataset, Model, and Benchmark for Visual-Textual-Acoustic Alignment},
+  journal = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  month = {June},
+  year = {2026},
+  pages = {29336-29346},
 }
 """
 

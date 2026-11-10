@@ -27,7 +27,7 @@ class SentiRuEval2016Classification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{loukachevitch2016sentirueval,
+@inproceedings{loukachevitch_sentirueval-2016_2016,
   author = {Loukachevitch, NV and Rubtsova, Yu V},
   booktitle = {Computational Linguistics and Intellectual Technologies},
   pages = {416--426},
@@ -62,7 +62,7 @@ class SentiRuEval2016ClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{loukachevitch2016sentirueval,
+@inproceedings{loukachevitch_sentirueval-2016_2016,
   author = {Loukachevitch, NV and Rubtsova, Yu V},
   booktitle = {Computational Linguistics and Intellectual Technologies},
   pages = {416--426},

@@ -25,7 +25,7 @@ class FinToxicityClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{eskelinen-etal-2023-toxicity,
+@inproceedings{eskelinen_toxicity_2023,
   address = {T{\'o}rshavn, Faroe Islands},
   author = {Eskelinen, Anni  and
 Silvala, Laura  and
@@ -82,7 +82,7 @@ class FinToxicityClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{eskelinen-etal-2023-toxicity,
+@inproceedings{eskelinen_toxicity_2023,
   address = {T{\'o}rshavn, Faroe Islands},
   author = {Eskelinen, Anni  and
 Silvala, Laura  and

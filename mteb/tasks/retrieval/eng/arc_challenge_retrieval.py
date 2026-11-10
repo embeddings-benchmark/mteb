@@ -25,17 +25,20 @@ class ARCChallenge(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{clark2018think,
+@article{clark_think_2018,
   author = {Clark, Peter and Cowhey, Isaac and Etzioni, Oren and Khot, Tushar and Sabharwal, Ashish and Schoenick, Carissa and Tafjord, Oyvind},
   journal = {arXiv preprint arXiv:1803.05457},
   title = {Think you have solved question answering? try arc, the ai2 reasoning challenge},
   year = {2018},
 }
 
-@article{xiao2024rar,
-  author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
-  journal = {arXiv preprint arXiv:2404.06347},
+@misc{xiao_rar-b_2024,
+  archiveprefix = {arXiv},
+  author = {Chenghao Xiao and G Thomas Hudson and Noura Al Moubayed},
+  eprint = {2404.06347},
+  primaryclass = {cs.CL},
   title = {RAR-b: Reasoning as Retrieval Benchmark},
+  url = {https://arxiv.org/abs/2404.06347},
   year = {2024},
 }
 """,

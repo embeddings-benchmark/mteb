@@ -27,7 +27,7 @@ class FeedbackQARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{li-etal-2022-using,
+@inproceedings{li_using_2022,
   address = {Dublin, Ireland},
   author = {Li, Zichao  and
 Sharma, Prakhar  and

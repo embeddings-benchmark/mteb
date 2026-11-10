@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, EncodeKwargs, PromptType
 
-PS3_CITATION = """@inproceedings{shi2025scaling,
+PS3_CITATION = """@inproceedings{shi_scaling_2025,
   author = {Shi, Baifeng and Li, Boyi and Cai, Han and Lu, Yao and Liu, Sifei and Pavone, Marco and Kautz, Jan and Han, Song and Darrell, Trevor and Molchanov, Pavlo and Yin, Hongxu},
   booktitle = {2025 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
   doi = {10.1109/cvpr52734.2025.00900},

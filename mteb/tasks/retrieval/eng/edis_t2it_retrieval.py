@@ -25,7 +25,7 @@ class EDIST2ITRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{liu2023edis,
+@inproceedings{liu_edis_2023,
   author = {Liu, Siqi and Feng, Weixi and Fu, Tsu-Jui and Chen, Wenhu and Wang, William},
   booktitle = {Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing},
   pages = {4877--4894},

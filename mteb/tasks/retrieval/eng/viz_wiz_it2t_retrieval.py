@@ -25,7 +25,7 @@ class VizWizIT2TRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{gurari2018vizwiz,
+@inproceedings{gurari_vizwiz_2018,
   author = {Gurari, Danna and Li, Qing and Stangl, Abigale J and Guo, Anhong and Lin, Chi and Grauman, Kristen and Luo, Jiebo and Bigham, Jeffrey P},
   booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
   pages = {3608--3617},

@@ -28,7 +28,7 @@ class AmazonPolarityClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{McAuley2013HiddenFA,
+@article{mcauley_hidden_2013,
   author = {Julian McAuley and Jure Leskovec},
   journal = {Proceedings of the 7th ACM conference on Recommender systems},
   title = {Hidden factors and hidden topics: understanding rating dimensions with review text},
@@ -67,7 +67,7 @@ class AmazonPolarityClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{McAuley2013HiddenFA,
+@article{mcauley_hidden_2013,
   author = {Julian McAuley and Jure Leskovec},
   journal = {Proceedings of the 7th ACM conference on Recommender systems},
   title = {Hidden factors and hidden topics: understanding rating dimensions with review text},

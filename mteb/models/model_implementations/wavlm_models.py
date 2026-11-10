@@ -161,7 +161,7 @@ wavlm_base = ModelMeta(
     training_datasets={"Librispeech"},
     modalities=["audio"],
     citation="""
-@article{Chen_2022,
+@article{chen_wavlm_2022,
    title={WavLM: Large-Scale Self-Supervised Pre-Training for Full Stack Speech Processing},
    volume={16},
    ISSN={1941-0484},
@@ -198,7 +198,7 @@ wavlm_base_sd = ModelMeta(
     training_datasets={"Librispeech", "LibriMix"},
     modalities=["audio"],
     citation="""
-@article{Chen_2022,
+@article{chen_wavlm_2022,
    title={WavLM: Large-Scale Self-Supervised Pre-Training for Full Stack Speech Processing},
    volume={16},
    ISSN={1941-0484},
@@ -239,7 +239,7 @@ wavlm_base_plus = ModelMeta(
     },
     modalities=["audio"],
     citation="""
-@article{Chen_2022,
+@article{chen_wavlm_2022,
    title={WavLM: Large-Scale Self-Supervised Pre-Training for Full Stack Speech Processing},
    volume={16},
    ISSN={1941-0484},
@@ -281,7 +281,7 @@ wavlm_base_plus_sv = ModelMeta(
     },
     modalities=["audio"],
     citation="""
-@article{Chen_2022,
+@article{chen_wavlm_2022,
    title={WavLM: Large-Scale Self-Supervised Pre-Training for Full Stack Speech Processing},
    volume={16},
    ISSN={1941-0484},
@@ -323,7 +323,7 @@ wavlm_base_plus_sd = ModelMeta(
     },
     modalities=["audio"],
     citation="""
-@article{Chen_2022,
+@article{chen_wavlm_2022,
    title={WavLM: Large-Scale Self-Supervised Pre-Training for Full Stack Speech Processing},
    volume={16},
    ISSN={1941-0484},
@@ -360,7 +360,7 @@ wavlm_base_sv = ModelMeta(
     training_datasets={"Librispeech", "VoxCeleb1"},
     modalities=["audio"],
     citation="""
-@article{Chen_2022,
+@article{chen_wavlm_2022,
    title={WavLM: Large-Scale Self-Supervised Pre-Training for Full Stack Speech Processing},
    volume={16},
    ISSN={1941-0484},
@@ -401,7 +401,7 @@ wavlm_large = ModelMeta(
     },
     modalities=["audio"],
     citation="""
-@article{Chen_2022,
+@article{chen_wavlm_2022,
    title={WavLM: Large-Scale Self-Supervised Pre-Training for Full Stack Speech Processing},
    volume={16},
    ISSN={1941-0484},

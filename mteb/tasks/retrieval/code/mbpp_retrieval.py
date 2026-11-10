@@ -27,7 +27,7 @@ class MBPPRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{austin2021program,
+@article{austin_program_2021,
   author = {Austin, Jacob and Odena, Augustus and Nye, Maxwell and Bosma, Maarten and Michalewski, Henryk and Dohan, David and Jiang, Ellen and Cai, Carrie and Terry, Michael and Le, Quoc and others},
   journal = {arXiv preprint arXiv:2108.07732},
   title = {Program Synthesis with Large Language Models},

@@ -34,7 +34,7 @@ class HUMESIB200ClusteringS2S(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{adelani-etal-2024-sib,
+@inproceedings{adelani_sib-200_2024,
   address = {St. Julian{'}s, Malta},
   author = {Adelani, David Ifeoluwa  and
 Liu, Hannah  and

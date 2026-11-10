@@ -25,7 +25,7 @@ class FinQARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{chen2021finqa,
+@article{chen_finqa_2021,
   author = {Chen, Zhiyu and Chen, Wenhu and Smiley, Charese and Shah, Sameena and Borova, Iana and Langdon, Dylan and Moussa, Reema and Beane, Matt and Huang, Ting-Hao and Routledge, Bryan and Wang, William Yang},
   journal = {Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing},
   title = {FinQA: A Dataset of Numerical Reasoning over Financial Data},

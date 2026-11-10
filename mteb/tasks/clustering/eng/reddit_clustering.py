@@ -33,7 +33,7 @@ class RedditFastClusteringS2S(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{geigle:2021:arxiv,
+@article{geigle_tweac_2021,
   archiveprefix = {arXiv},
   author = {Gregor Geigle and
 Nils Reimers and
@@ -96,7 +96,7 @@ class RedditClustering(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{geigle:2021:arxiv,
+@article{geigle_tweac_2021,
   archiveprefix = {arXiv},
   author = {Gregor Geigle and
 Nils Reimers and

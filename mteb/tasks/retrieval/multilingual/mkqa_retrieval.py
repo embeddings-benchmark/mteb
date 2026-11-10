@@ -54,7 +54,7 @@ class MKQARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{mkqa,
+@misc{longpre_mkqa_2020,
   author = {Shayne Longpre and Yi Lu and Joachim Daiber},
   title = {MKQA: A Linguistically Diverse Benchmark for Multilingual Open Domain Question Answering},
   url = {https://arxiv.org/pdf/2007.15207.pdf},

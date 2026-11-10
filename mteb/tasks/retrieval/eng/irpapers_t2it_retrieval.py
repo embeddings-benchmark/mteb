@@ -27,7 +27,7 @@ class IRPapersT2ITRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{shorten2026,
+@misc{shorten_irpapers_2026,
   archiveprefix = {arXiv},
   author = {Connor Shorten and Augustas Skaburskas and Daniel M. Jones and Charles Pierse and Roberto Esposito and John Trengrove and Etienne Dilocker and Bob van Luijt},
   eprint = {2602.17687},

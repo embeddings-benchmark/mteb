@@ -29,7 +29,7 @@ class FQuADRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{dhoffschmidt-etal-2020-fquad,
+@inproceedings{dhoffschmidt_fquad_2020,
   address = {Online},
   author = {d{'}Hoffschmidt, Martin  and
 Belblidia, Wacim  and

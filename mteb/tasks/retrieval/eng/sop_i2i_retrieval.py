@@ -25,7 +25,7 @@ class SOPI2IRetrieval(AbsTaskRetrieval):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{oh2016deep,
+@inproceedings{ohsong_deep_2016,
   author = {Oh Song, Hyun and Xiang, Yu and Jegelka, Stefanie and Savarese, Silvio},
   booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
   pages = {4004--4012},

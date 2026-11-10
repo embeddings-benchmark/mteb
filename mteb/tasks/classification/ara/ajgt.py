@@ -25,7 +25,7 @@ class AJGT(AbsTaskClassification):
         dialect=["ara-arab-MSA", "ara-arab-JO"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{alomari2017arabic,
+@inproceedings{alomari_arabic_2017,
   author = {Alomari, Khaled Mohammad and ElSherif, Hatem M and Shaalan, Khaled},
   booktitle = {International Conference on Industrial, Engineering and Other Applications of Applied Intelligent Systems},
   organization = {Springer},
@@ -61,7 +61,7 @@ class AJGTV2(AbsTaskClassification):
         dialect=["ara-arab-MSA", "ara-arab-JO"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{alomari2017arabic,
+@inproceedings{alomari_arabic_2017,
   author = {Alomari, Khaled Mohammad and ElSherif, Hatem M and Shaalan, Khaled},
   booktitle = {International Conference on Industrial, Engineering and Other Applications of Applied Intelligent Systems},
   organization = {Springer},

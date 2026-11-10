@@ -30,18 +30,21 @@ class MIRACLJaRetrievalLite(AbsTaskRetrieval):
         sample_creation="created",
         adapted_from=["MIRACLRetrieval"],
         bibtex_citation=r"""
-@article{10.1162/tacl_a_00595,
-  author = {Zhang, Xinyu and Thakur, Nandan and Ogundepo, Odunayo and Kamalloo, Ehsan and Alfonso-Hermelo, David
-and Li, Xiaoguang and Liu, Qun and Rezagholizadeh, Mehdi and Lin, Jimmy},
+@article{zhang_miracl_2023,
+  author = {Zhang, Xinyu and Thakur, Nandan and Ogundepo, Odunayo and Kamalloo, Ehsan and Alfonso-Hermelo, David and Li, Xiaoguang and Liu, Qun and Rezagholizadeh, Mehdi and Lin, Jimmy},
   doi = {10.1162/tacl_a_00595},
+  eprint = {https://direct.mit.edu/tacl/article-pdf/doi/10.1162/tacl\_a\_00595/2157340/tacl\_a\_00595.pdf},
+  issn = {2307-387X},
   journal = {Transactions of the Association for Computational Linguistics},
+  month = {09},
   pages = {1114-1131},
   title = {{MIRACL: A Multilingual Retrieval Dataset Covering 18 Diverse Languages}},
+  url = {https://doi.org/10.1162/tacl\_a\_00595},
   volume = {11},
   year = {2023},
 }
 
-@inproceedings{li-etal-2026-jmteb,
+@inproceedings{li_jmteb_2026,
   address = {Palma de Mallorca, Spain},
   author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan and Fukuchi, Akihiko and Shibata, Tomohide and Kawahara, Daisuke},
   booktitle = {Proceedings of the Fifteenth Language Resources and Evaluation Conference},

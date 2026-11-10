@@ -38,7 +38,7 @@ class ESC50AudioReranking(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{piczak2015dataset,
+@inproceedings{piczak_esc_2015,
   author = {Piczak, Karol J.},
   booktitle = {Proceedings of the 23rd {Annual ACM Conference} on {Multimedia}},
   date = {2015-10-13},

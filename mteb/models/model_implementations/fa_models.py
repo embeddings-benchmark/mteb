@@ -30,7 +30,7 @@ parsbert = ModelMeta(
         # Other data crawled from websites like bigbangpage.com, chetor.com, eligasht.com/blog, digikala.com/mag, and ted.com/talks.
     ),
     citation="""
-    @article{ParsBERT,
+    @article{mehrdadfarahani_parsbert_2020,
     title={ParsBERT: Transformer-based Model for Persian Language Understanding},
     author={Mehrdad Farahani, Mohammad Gharachorloo, Marzieh Farahani, Mohammad Manthouri},
     journal={ArXiv},
@@ -167,14 +167,14 @@ tooka_sbert = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
-    citation="""@inproceedings{reimers-2019-sentence-bert,
-    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
-    author = "Reimers, Nils and Gurevych, Iryna",
-    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
-    month = "11",
-    year = "2019",
-    publisher = "Association for Computational Linguistics",
-    url = "https://arxiv.org/abs/1908.10084",
+    citation="""@misc{reimers_sentence-bert_2019,
+  archiveprefix = {arXiv},
+  author = {Nils Reimers and Iryna Gurevych},
+  eprint = {1908.10084},
+  primaryclass = {cs.CL},
+  title = {Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
+  url = {https://arxiv.org/abs/1908.10084},
+  year = {2019},
 }""",
 )
 
@@ -202,7 +202,7 @@ fa_bert = ModelMeta(
         # It's just a base model
         # https://huggingface.co/datasets/sbunlp/hmblogs-v3
     ),
-    citation="""@inproceedings{masumi-etal-2025-fabert,
+    citation="""@inproceedings{masumi_fabert_2025,
     title = "{F}a{BERT}: Pre-training {BERT} on {P}ersian Blogs",
     author = "Masumi, Mostafa  and
       Majd, Seyed Soroush  and
@@ -248,14 +248,14 @@ tooka_sbert_v2_small = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
-    citation="""@inproceedings{reimers-2019-sentence-bert,
-    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
-    author = "Reimers, Nils and Gurevych, Iryna",
-    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
-    month = "11",
-    year = "2019",
-    publisher = "Association for Computational Linguistics",
-    url = "https://arxiv.org/abs/1908.10084",
+    citation="""@misc{reimers_sentence-bert_2019,
+  archiveprefix = {arXiv},
+  author = {Nils Reimers and Iryna Gurevych},
+  eprint = {1908.10084},
+  primaryclass = {cs.CL},
+  title = {Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
+  url = {https://arxiv.org/abs/1908.10084},
+  year = {2019},
 }""",
 )
 
@@ -280,14 +280,14 @@ tooka_sbert_v2_large = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
-    citation="""@inproceedings{reimers-2019-sentence-bert,
-    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
-    author = "Reimers, Nils and Gurevych, Iryna",
-    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
-    month = "11",
-    year = "2019",
-    publisher = "Association for Computational Linguistics",
-    url = "https://arxiv.org/abs/1908.10084",
+    citation="""@misc{reimers_sentence-bert_2019,
+  archiveprefix = {arXiv},
+  author = {Nils Reimers and Iryna Gurevych},
+  eprint = {1908.10084},
+  primaryclass = {cs.CL},
+  title = {Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
+  url = {https://arxiv.org/abs/1908.10084},
+  year = {2019},
 }""",
 )
 

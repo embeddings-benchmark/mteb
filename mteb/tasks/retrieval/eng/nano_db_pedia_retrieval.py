@@ -25,7 +25,7 @@ class NanoDBPediaRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{lehmann2015dbpedia,
+@article{lehmann_dbpedia_2015,
   author = {Lehmann, Jens and et al.},
   journal = {Semantic Web},
   title = {DBpedia: A large-scale, multilingual knowledge base extracted from Wikipedia},

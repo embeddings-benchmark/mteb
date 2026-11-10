@@ -227,7 +227,7 @@ class SIB200Classification(AbsTaskClassification):
         dialect=[],
         sample_creation="human-translated and localized",
         bibtex_citation=r"""
-@inproceedings{adelani-etal-2024-sib,
+@inproceedings{adelani_sib-200_2024,
   address = {St. Julian{'}s, Malta},
   author = {Adelani, David Ifeoluwa  and
 Liu, Hannah  and
@@ -314,7 +314,7 @@ class SIB200ClassificationV2(AbsTaskClassification):
         sample_creation="human-translated and localized",
         superseded_by="SIB200Classification.v3",
         bibtex_citation=r"""
-@inproceedings{adelani-etal-2024-sib,
+@inproceedings{adelani_sib-200_2024,
   address = {St. Julian{'}s, Malta},
   author = {Adelani, David Ifeoluwa  and
 Liu, Hannah  and
@@ -413,7 +413,7 @@ class SIB200ClassificationV3(SIB200ClassificationV2):
         dialect=[],
         sample_creation="human-translated and localized",
         bibtex_citation=r"""
-@inproceedings{adelani-etal-2024-sib,
+@inproceedings{adelani_sib-200_2024,
   address = {St. Julian{'}s, Malta},
   author = {Adelani, David Ifeoluwa  and
 Liu, Hannah  and

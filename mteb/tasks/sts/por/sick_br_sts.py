@@ -27,7 +27,7 @@ class SickBrSTS(AbsTaskSTS):
         dialect=[],
         sample_creation="human-translated and localized",
         bibtex_citation=r"""
-@inproceedings{real18,
+@inproceedings{real_sick-br_2018,
   author = {Real, Livy
 and Rodrigues, Ana
 and Vieira e Silva, Andressa
@@ -36,7 +36,7 @@ and Thalenberg, Bruna
 and Guide, Bruno
 and Silva, Cindy
 and de Oliveira Lima, Guilherme
-and Camara, Igor C. S.
+and C{\^a}mara, Igor C. S.
 and Stanojevi{\'{c}}, Milo{\v{s}}
 and Souza, Rodrigo
 and de Paiva, Valeria},

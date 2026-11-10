@@ -25,7 +25,7 @@ class SickFrSTS(AbsTaskSTS):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{marelli-etal-2014-sick,
+@inproceedings{marelli_sick_2014,
   address = {Reykjavik, Iceland},
   author = {Marelli, Marco  and
 Menini, Stefano  and
@@ -34,6 +34,15 @@ Bentivogli, Luisa  and
 Bernardi, Raffaella  and
 Zamparelli, Roberto},
   booktitle = {Proceedings of the Ninth International Conference on Language Resources and Evaluation ({LREC}'14)},
+  editor = {Calzolari, Nicoletta  and
+Choukri, Khalid  and
+Declerck, Thierry  and
+Loftsson, Hrafn  and
+Maegaard, Bente  and
+Mariani, Joseph  and
+Moreno, Asuncion  and
+Odijk, Jan  and
+Piperidis, Stelios},
   month = may,
   pages = {216--223},
   publisher = {European Language Resources Association (ELRA)},

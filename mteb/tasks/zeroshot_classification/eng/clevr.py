@@ -27,7 +27,7 @@ class CLEVR(AbsTaskZeroShotClassification):
         modalities=["text", "image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{Johnson_2017_CVPR,
+@inproceedings{johnson_clevr_2017,
   author = {Johnson, Justin and Hariharan, Bharath and van der Maaten, Laurens and Fei-Fei, Li and Lawrence Zitnick, C. and Girshick, Ross},
   booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
   month = {July},
@@ -76,7 +76,7 @@ class CLEVRCount(AbsTaskZeroShotClassification):
         modalities=["text", "image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{Johnson_2017_CVPR,
+@inproceedings{johnson_clevr_2017,
   author = {Johnson, Justin and Hariharan, Bharath and van der Maaten, Laurens and Fei-Fei, Li and Lawrence Zitnick, C. and Girshick, Ross},
   booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
   month = {July},

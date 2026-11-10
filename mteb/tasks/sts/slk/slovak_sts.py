@@ -32,7 +32,7 @@ class SlovakSTS(AbsTaskSTS):
         dialect=[],
         sample_creation="machine-translated and verified",
         bibtex_citation=r"""
-@inproceedings{suppa-etal-2025-sklep,
+@inproceedings{suppa_sklep_2025,
   address = {Vienna, Austria},
   author = {Suppa, Marek  and
 Ridzik, Andrej  and

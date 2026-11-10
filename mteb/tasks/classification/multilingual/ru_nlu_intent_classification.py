@@ -36,7 +36,7 @@ class RuNLUIntentClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inbook{liu2019benchmarkingnaturallanguageunderstanding,
+@inbook{liu_benchmarking_2021,
   author = {Liu, Xingkun and Eshghi, Arash and Swietojanski, Pawel and Rieser, Verena},
   booktitle = {Increasing Naturalness and Flexibility in Spoken Dialogue Interaction},
   doi = {10.1007/978-981-15-9323-9_15},

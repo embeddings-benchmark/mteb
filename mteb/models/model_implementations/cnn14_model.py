@@ -158,7 +158,7 @@ cnn14_esc50 = ModelMeta(
     },
     modalities=["audio"],
     citation="""
-@inproceedings{wang2022CRL,
+@inproceedings{zhepeiwang_learning_2022,
     title={Learning Representations for New Sound Classes With Continual Self-Supervised Learning},
     author={Zhepei Wang, Cem Subakan, Xilin Jiang, Junkai Wu, Efthymios Tzinis, Mirco Ravanelli, Paris Smaragdis},
     year={2022},

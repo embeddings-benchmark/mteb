@@ -25,7 +25,7 @@ class RP2kI2IRetrieval(AbsTaskRetrieval):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@article{peng2020rp2k,
+@article{peng_rp2k_2020,
   author = {Peng, Jingtian and Xiao, Chang and Li, Yifan},
   journal = {arXiv preprint arXiv:2006.12634},
   title = {RP2K: A large-scale retail product dataset for fine-grained image classification},

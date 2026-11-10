@@ -33,7 +33,7 @@ class Diving48ClassificationV1(AbsTaskClassification):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@inproceedings{Li_2018_ECCV,
+@inproceedings{li_resound_2018,
   author = {Li, Yingwei and Li, Yi and Vasconcelos, Nuno},
   booktitle = {Proceedings of the European Conference on Computer Vision (ECCV)},
   month = {September},
@@ -82,7 +82,7 @@ class Diving48ClassificationV2(AbsTaskClassification):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@inproceedings{Li_2018_ECCV,
+@inproceedings{li_resound_2018,
   author = {Li, Yingwei and Li, Yi and Vasconcelos, Nuno},
   booktitle = {Proceedings of the European Conference on Computer Vision (ECCV)},
   month = {September},

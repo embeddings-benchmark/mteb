@@ -26,7 +26,7 @@ class DutchGovernmentBiasClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{de2025detecting,
+@inproceedings{deswart_detecting_2025,
   author = {de Swart, Milena and Den Hengst, Floris and Chen, Jieying},
   booktitle = {Proceedings of the ACM on Web Conference 2025},
   pages = {5034--5044},

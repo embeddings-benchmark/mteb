@@ -29,7 +29,7 @@ model_prompts = {
     "BrightSustainableLivingLongRetrieval-query": "Represent this sustainable_living post for searching relevant documents: ",
     "BrightPonyLongRetrieval-query": "Represent this Pony question for searching relevant documents: ",
 }
-BGE_15_CITATION = """@inproceedings{xiao2024cpackpackedresourcesgeneral,
+BGE_15_CITATION = """@inproceedings{xiao_c-pack_2024,
   author = {Xiao, Shitao and Liu, Zheng and Zhang, Peitian and Muennighoff, Niklas and Lian, Defu and Nie, Jian-Yun},
   booktitle = {Proceedings of the 47th International ACM SIGIR Conference on Research and Development in Information Retrieval},
   collection = {SIGIR 2024},
@@ -717,7 +717,7 @@ bge_m3 = ModelMeta(
     public_training_code=None,
     public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
     training_datasets=bge_m3_training_data,
-    citation="""@inproceedings{bge-m3,
+    citation="""@inproceedings{chen_m3-embedding_2024,
   address = {Bangkok, Thailand},
   author = {Chen, Jianlyu and Xiao, Shitao and Zhang, Peitian and Luo, Kun and Lian, Defu and Liu, Zheng},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2024},
@@ -824,7 +824,7 @@ bge_multilingual_gemma2 = ModelMeta(
     }
     | bge_full_data
     | bge_m3_training_data,
-    citation="""@inproceedings{bge-m3,
+    citation="""@inproceedings{chen_m3-embedding_2024,
   address = {Bangkok, Thailand},
   author = {Chen, Jianlyu and Xiao, Shitao and Zhang, Peitian and Luo, Kun and Lian, Defu and Liu, Zheng},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2024},
@@ -839,7 +839,7 @@ bge_multilingual_gemma2 = ModelMeta(
 }
 
 
-@inproceedings{xiao2024cpackpackedresourcesgeneral,
+@inproceedings{xiao_c-pack_2024,
   author = {Xiao, Shitao and Liu, Zheng and Zhang, Peitian and Muennighoff, Niklas and Lian, Defu and Nie, Jian-Yun},
   booktitle = {Proceedings of the 47th International ACM SIGIR Conference on Research and Development in Information Retrieval},
   collection = {SIGIR 2024},
@@ -879,7 +879,7 @@ bge_en_icl = ModelMeta(
     training_datasets=E5_MISTRAL_TRAINING_DATA | bge_full_data,
     adapted_from="intfloat/e5-mistral-7b-instruct",
     citation="""
-    @misc{li2024makingtextembeddersfewshot,
+    @misc{li_making_2024,
       title={Making Text Embedders Few-Shot Learners},
       author={Chaofan Li and MingHao Qin and Shitao Xiao and Jianlyu Chen and Kun Luo and Yingxia Shao and Defu Lian and Zheng Liu},
       year={2024},
@@ -912,7 +912,7 @@ bge_m3_unsupervised = ModelMeta(
     public_training_code="https://github.com/FlagOpen/FlagEmbedding",
     public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
     training_datasets=bge_m3_training_data,
-    citation="""@inproceedings{bge-m3,
+    citation="""@inproceedings{chen_m3-embedding_2024,
   address = {Bangkok, Thailand},
   author = {Chen, Jianlyu and Xiao, Shitao and Zhang, Peitian and Luo, Kun and Lian, Defu and Liu, Zheng},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2024},

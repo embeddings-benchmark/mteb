@@ -31,7 +31,7 @@ class ClothoMomentRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""@inproceedings{munakata2025language,
+        bibtex_citation=r"""@inproceedings{munakata_language-based_2025,
   author = {Munakata, Hokuto and Nishimura, Taichi and Nakada, Shota and Komatsu, Tatsuya},
   booktitle = {ICASSP 2025-2025 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   organization = {IEEE},

@@ -33,8 +33,8 @@ class AVMemeExamVideoCentricQA(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@article{jiang2026avmeme,
-  author = {Jiang, Xilin and Wang, Qiaolin and Wu, Junkai and others},
+@inproceedings{jiang_avmeme_2026,
+  author = {Jiang, Xilin and Wang, Qiaolin and Wu, Junkai and He, Xiaomin and Xu, Zhongweiyang and Ma, Yinghao and Piao, Minshuo and Yang, Kaiyi and Zheng, Xiuwen and Shimizu, Riki and others},
   journal = {arXiv preprint arXiv:2601.17645},
   title = {AVMeme Exam: A Multimodal Multilingual Multicultural Benchmark for LLMs' Contextual and Cultural Knowledge and Thinking},
   year = {2026},
@@ -106,8 +106,8 @@ class AVMemeExamVideoAudioCentricQA(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@article{jiang2026avmeme,
-  author = {Jiang, Xilin and Wang, Qiaolin and Wu, Junkai and others},
+@inproceedings{jiang_avmeme_2026,
+  author = {Jiang, Xilin and Wang, Qiaolin and Wu, Junkai and He, Xiaomin and Xu, Zhongweiyang and Ma, Yinghao and Piao, Minshuo and Yang, Kaiyi and Zheng, Xiuwen and Shimizu, Riki and others},
   journal = {arXiv preprint arXiv:2601.17645},
   title = {AVMeme Exam: A Multimodal Multilingual Multicultural Benchmark for LLMs' Contextual and Cultural Knowledge and Thinking},
   year = {2026},

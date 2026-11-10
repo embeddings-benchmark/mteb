@@ -441,7 +441,7 @@ jina_colbert_v2 = ModelMeta(
         "DuRetrieval",
         "MIRACL",
     },
-    citation="""@inproceedings{xiao-etal-2024-jina,
+    citation="""@inproceedings{jha_jina-colbert-v2_2024,
     title = "{J}ina-{C}ol{BERT}-v2: A General-Purpose Multilingual Late Interaction Retriever",
     author = {Jha, Rohan  and
       Wang, Bo  and
@@ -463,7 +463,6 @@ jina_colbert_v2 = ModelMeta(
     url = "https://aclanthology.org/2024.mrl-1.11/",
     doi = "10.18653/v1/2024.mrl-1.11",
     pages = "159--166",
-    abstract = "Multi-vector dense models, such as ColBERT, have proven highly effective in information retrieval. ColBERT`s late interaction scoring approximates the joint query-document attention seen in cross-encoders while maintaining inference efficiency closer to traditional dense retrieval models, thanks to its bi-encoder architecture and recent optimizations in indexing and search. In this paper, we introduce a novel architecture and a training framework to support long context window and multilingual retrieval. Leveraging Matryoshka Representation Loss, we further demonstrate that the reducing the embedding dimensionality from 128 to 64 has insignificant impact on the model`s retrieval performance and cut storage requirements by up to 50{\\%}. Our new model, Jina-ColBERT-v2, demonstrates strong performance across a range of English and multilingual retrieval tasks,"
 }""",
     extra_requirements_groups=["pylate", "jina"],
 )
@@ -788,7 +787,7 @@ nomic_embed_supervised_data = {
     "HotpotQAHardNegatives.v2",
     "NanoHotpotQARetrieval",
 }
-colbert_zero_citation = """@misc{chaffin2026colbertzeropretrainpretraincolbert,
+colbert_zero_citation = """@misc{chaffin_colbert-zero_2026,
   title         = {ColBERT-Zero: To Pre-train Or Not To Pre-train ColBERT models},
   author        = {Antoine Chaffin and Luca Arnaboldi and Amélie Chatelain and Florent Krzakala},
   year          = {2026},
@@ -949,7 +948,7 @@ denseon_lateon_supervised_data = {
     "ClimateFEVER",
 }
 
-denseon_lateon_citation = r"""@misc{sourty2026denseonlateonfullyopen,
+denseon_lateon_citation = r"""@misc{sourty_denseon_2026,
   title         = {DenseOn with the LateOn: Fully Open Dense and Late-Interaction Models for Multilingual, Long-Context, and Code Search},
   author        = {Raphaël Sourty and Antoine Chaffin and Paulo Roberto Moura Junior and Amélie Chatelain},
   year          = {2026},

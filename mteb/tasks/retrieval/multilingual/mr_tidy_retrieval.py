@@ -111,7 +111,7 @@ class MrTidyRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{mrtydi,
+@inproceedings{zhang_mr_2021,
   address = {Punta Cana, Dominican Republic},
   author = {Zhang, Xinyu and Ma, Xueguang and Shi, Peng and Lin, Jimmy},
   booktitle = {Proceedings of the 1st Workshop on Multilingual Representation Learning},

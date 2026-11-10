@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
 
-BLIP_CITATION = """@inproceedings{https://doi.org/10.48550/arxiv.2201.12086,
+BLIP_CITATION = """@inproceedings{li_blip_2022,
   archiveprefix = {arXiv},
   author = {Junnan Li and Dongxu Li and Caiming Xiong and Steven C. H. Hoi},
   booktitle = {ICML},

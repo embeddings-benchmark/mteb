@@ -347,7 +347,7 @@ boom_4b_instructions = {
 # How the template actually renders each one at inference time:
 #   instruction_template(boom_4b_instructions["Banking77Classification"], PromptType.query)
 #   -> "Instruct: Given a online banking query, find the corresponding intents.\nQuery:"
-BOOM_CITATION = """@article{zhang2026bagging,
+BOOM_CITATION = """@article{zhang_bagging-based_2026,
   title={Bagging-Based Model Merging for Robust General Text Embeddings},
   author={Zhang, Hengran and Bi, Keping and Guo, Jiafeng and Zhang, Jiaming and Yang, Wenbo and Shi, Daiting and Cheng, Xueqi},
   journal={arXiv preprint arXiv:2602.05787},

@@ -47,6 +47,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from refaudit import Cache, Checker, Verdict, default_resolvers, parse_string
+from tqdm.auto import tqdm
 
 import mteb
 
@@ -98,6 +99,7 @@ def flush(cache: Cache) -> None:
     if not CACHE_PATH.exists():
         return
     data = json.loads(CACHE_PATH.read_text(encoding="utf-8"))
+    data["entries"] = dict(sorted(data["entries"].items()))
     tmp = CACHE_PATH.with_suffix(".json.tmp")
     tmp.write_text(json.dumps(data, indent=4) + "\n", encoding="utf-8", newline="\n")
     tmp.replace(CACHE_PATH)
@@ -140,11 +142,14 @@ def main() -> int:
     )
 
     results = []
-    for result in checker.check_all(to_check, workers=args.workers):
+    for result in tqdm(
+        checker.check_all(to_check, workers=args.workers),
+        total=len(to_check),
+        desc="Checking citations",
+    ):
         results.append(result)
         if len(results) % FLUSH_EVERY == 0:
             flush(cache)
-            print(f"  {len(results)}/{len(to_check)}", flush=True)
     flush(cache)
 
     print(

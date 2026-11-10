@@ -25,7 +25,7 @@ class SDSKoPubVDRT2ITRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created",
         bibtex_citation=r"""
-@misc{lee2025sdskopubvdrbenchmark,
+@misc{lee_sds_2025,
   archiveprefix = {arXiv},
   author = {Jaehoon Lee and Sohyun Kim and Wanggeun Park and Geon Lee and Seungkyung Kim and Minyoung Lee},
   eprint = {2511.04910},

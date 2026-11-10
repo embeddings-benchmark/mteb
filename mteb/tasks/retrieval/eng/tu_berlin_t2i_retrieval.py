@@ -25,7 +25,7 @@ class TUBerlinT2IRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{eitz2012humans,
+@article{eitz_how_2012,
   author = {Eitz, Mathias and Hays, James and Alexa, Marc},
   journal = {ACM Transactions on graphics (TOG)},
   number = {4},

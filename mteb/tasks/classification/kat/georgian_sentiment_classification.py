@@ -25,7 +25,7 @@ class GeorgianSentimentClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{stefanovitch-etal-2022-resources,
+@inproceedings{stefanovitch_resources_2022,
   address = {Marseille, France},
   author = {Stefanovitch, Nicolas  and
 Piskorski, Jakub  and

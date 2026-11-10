@@ -29,7 +29,7 @@ class SMESumCategoryClustering(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{suppa-adamec-2020-summarization,
+@inproceedings{suppa_summarization_2020,
   address = {Marseille, France},
   author = {Suppa, Marek and Adamec, Jergus},
   booktitle = {Proceedings of the Twelfth Language Resources and Evaluation Conference},

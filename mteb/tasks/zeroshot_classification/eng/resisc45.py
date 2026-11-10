@@ -30,7 +30,7 @@ class RESISC45ZeroShotClassification(AbsTaskZeroShotClassification):
         modalities=["image", "text"],
         sample_creation="created",
         bibtex_citation=r"""
-@article{7891544,
+@article{cheng_remote_2017,
   author = {Cheng, Gong and Han, Junwei and Lu, Xiaoqiang},
   doi = {10.1109/JPROC.2017.2675998},
   journal = {Proceedings of the IEEE},

@@ -11,7 +11,7 @@ _LANGUAGES = {
 }
 
 _BIBTEX = r"""
-@inproceedings{barrault2018findings,
+@inproceedings{barrault_findings_2018,
   address = {Belgium, Brussels},
   author = {Barrault, Lo{\"i}c and Bougares, Fethi and Specia, Lucia and Lala, Chiraag and Elliott, Desmond and Frank, Stella},
   booktitle = {Proceedings of the Third Conference on Machine Translation: Shared Task Papers},
@@ -21,7 +21,7 @@ _BIBTEX = r"""
   year = {2018},
 }
 
-@inproceedings{elliott-etal-2017-findings,
+@inproceedings{elliott_findings_2017,
   address = {Copenhagen, Denmark},
   author = {Elliott, Desmond and Frank, Stella and Barrault, Lo{\"i}c and Bougares, Fethi and Specia, Lucia},
   booktitle = {Proceedings of the Second Conference on Machine Translation},
@@ -34,7 +34,7 @@ _BIBTEX = r"""
   year = {2017},
 }
 
-@inproceedings{elliott2016multi30k,
+@inproceedings{elliott_multi30k_2016,
   address = {Berlin, Germany},
   author = {Elliott, Desmond and Frank, Stella and Sima'an, Khalil and Specia, Lucia},
   booktitle = {Proceedings of the 5th Workshop on Vision and Language},

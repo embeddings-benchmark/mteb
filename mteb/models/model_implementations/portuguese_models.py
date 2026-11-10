@@ -4,7 +4,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 PT_MATRYOSHKA_EMBEDDING_CITATION = """
-@inbook{okamura2026multilingualaveragesmtebptbenchmark,
+@inbook{okamura_multilingual_2026,
   author = {Okamura, Lucas Hideki Takeuchi and Alcoforado, Alexandre and Costa, Anna Helena Reali},
   booktitle = {Intelligent Systems},
   doi = {10.1007/978-3-032-39892-5_33},
@@ -20,7 +20,7 @@ PT_MATRYOSHKA_EMBEDDING_CITATION = """
 """
 
 SERAFIM_CITATION = """
-@InProceedings{epia2024serafim,
+@InProceedings{gomes_open_2024,
     title={Open Sentence Embeddings for Portuguese with the Serafim PT* encoders family},
     author={Luís Gomes and António Branco and João Silva and João Rodrigues and Rodrigo Santos},
     editor={Manuel Filipe Santos and José Machado and Paulo Novais and Paulo Cortez and Pedro Miguel Moreira},

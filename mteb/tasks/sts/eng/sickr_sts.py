@@ -25,7 +25,7 @@ class SickrSTS(AbsTaskSTS):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{marelli-etal-2014-sick,
+@inproceedings{marelli_sick_2014,
   address = {Reykjavik, Iceland},
   author = {Marelli, Marco  and
 Menini, Stefano  and

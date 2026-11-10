@@ -179,7 +179,7 @@ wav2clip_zero = ModelMeta(
         # VGGSound (not in MTEB)
     ),
     citation="""
-@inproceedings{wu2022wav2cliplearningrobustaudio,
+@inproceedings{wu_wav2clip_2022,
   author = {Wu, Ho-Hsiang and Seetharaman, Prem and Kumar, Kundan and Bello, Juan Pablo},
   booktitle = {ICASSP 2022 - 2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp43922.2022.9747669},

@@ -25,7 +25,7 @@ class TswanaNewsClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{marivate2023puoberta,
+@inproceedings{marivate_puoberta_2023,
   author = {Vukosi Marivate and Moseli Mots'Oehli and Valencia Wagner and Richard Lastrucci and Isheanesu Dzingirai},
   booktitle = {SACAIR 2023 (To Appear)},
   dataset_url = {https://github.com/dsfsi/PuoBERTa},
@@ -63,7 +63,7 @@ class TswanaNewsClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{marivate2023puoberta,
+@inproceedings{marivate_puoberta_2023,
   author = {Vukosi Marivate and Moseli Mots'Oehli and Valencia Wagner and Richard Lastrucci and Isheanesu Dzingirai},
   booktitle = {SACAIR 2023 (To Appear)},
   dataset_url = {https://github.com/dsfsi/PuoBERTa},

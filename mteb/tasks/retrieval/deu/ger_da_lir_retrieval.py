@@ -25,7 +25,7 @@ class GerDaLIR(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{wrzalik-krechel-2021-gerdalir,
+@inproceedings{wrzalik_gerdalir_2021,
   address = {Punta Cana, Dominican Republic},
   author = {Wrzalik, Marco  and
 Krechel, Dirk},

@@ -25,7 +25,7 @@ class WisesightSentimentClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         sample_creation="found",
         bibtex_citation=r"""
-@software{bact_2019_3457447,
+@software{suriyawongkul_pythainlpwisesight-sentiment_2019,
   author = {Suriyawongkul, Arthit and
 Chuangsuwanich, Ekapol and
 Chormai, Pattarawat and
@@ -66,7 +66,7 @@ class WisesightSentimentClassificationV2(AbsTaskClassification):
         annotations_creators="expert-annotated",
         sample_creation="found",
         bibtex_citation=r"""
-@software{bact_2019_3457447,
+@software{suriyawongkul_pythainlpwisesight-sentiment_2019,
   author = {Suriyawongkul, Arthit and
 Chuangsuwanich, Ekapol and
 Chormai, Pattarawat and

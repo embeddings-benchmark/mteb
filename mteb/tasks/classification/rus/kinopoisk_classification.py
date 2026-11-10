@@ -25,7 +25,7 @@ class KinopoiskClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{blinov2013research,
+@article{blinov_research_2013,
   author = {Blinov, PD and Klekovkina, Maria and Kotelnikov, Eugeny and Pestov, Oleg},
   journal = {Computational Linguistics and Intellectual Technologies},
   number = {12},

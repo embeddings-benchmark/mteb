@@ -267,7 +267,7 @@ class NTREXBitextMining(AbsTaskBitextMining):
         dialect=[],
         sample_creation="human-translated and localized",
         bibtex_citation=r"""
-@inproceedings{federmann-etal-2022-ntrex,
+@inproceedings{federmann_ntrex-128_2022,
   address = {Online},
   author = {Federmann, Christian and Kocmi, Tom and Xin, Ying},
   booktitle = {Proceedings of the First Workshop on Scaling Up Multilingual Evaluation},

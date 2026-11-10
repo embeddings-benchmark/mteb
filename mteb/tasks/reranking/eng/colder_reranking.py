@@ -67,7 +67,7 @@ class ColDeRReranking(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{fayyaz-etal-2025-collapse,
+@inproceedings{fayyaz_collapse_2025,
   address = {Vienna, Austria},
   author = {Fayyaz, Mohsen  and
 Modarressi, Ali  and

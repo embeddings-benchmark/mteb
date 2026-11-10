@@ -269,7 +269,7 @@ class VideoPrismClipWrapper(AbsEncoder):
 
 
 _VIDEOPRISM_CITATION = """
-@inproceedings{zhao2024videoprism,
+@inproceedings{zhao_videoprism_2024,
   archiveprefix = {arXiv},
   eprint = {2402.13217},
   title = {{VideoPrism}: A Foundational Visual Encoder for Video Understanding},

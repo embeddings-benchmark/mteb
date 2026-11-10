@@ -38,7 +38,7 @@ class NusaXSentiClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{winata2023nusax,
+@inproceedings{winata_nusax_2023,
   author = {Winata, Genta Indra and Aji, Alham Fikri and Cahyawijaya, Samuel and Mahendra, Rahmad and Koto, Fajri and Romadhony, Ade and Kurniawan, Kemal and Moeljadi, David and Prasojo, Radityo Eko and Fung, Pascale and others},
   booktitle = {Proceedings of the 17th Conference of the European Chapter of the Association for Computational Linguistics},
   pages = {815--834},

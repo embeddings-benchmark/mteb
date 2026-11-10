@@ -129,7 +129,7 @@ bekko_static_embedding_v1 = ModelMeta(
         "WikipediaRerankingMultilingual",
         "WikiCitiesClustering",
     },
-    citation="""@misc{tateno2026bekko,
+    citation="""@misc{tateno_bekko_2026,
   title={Bekko Embedding: Parameter-Efficient Multilingual Retrieval with Ultra-Compact Encoders},
   author={Yuichi Tateno},
   year={2026},

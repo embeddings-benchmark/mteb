@@ -4,7 +4,7 @@ from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 CITATION = r"""
-@article{smaira2020short,
+@article{smaira_short_2020,
   author = {Smaira, Lucas and Carreira, Joao and Noland, Eric and Clancy, Ellen and Wu, Amy and Zisserman, Andrew},
   journal = {arXiv preprint arXiv:2010.10864},
   title = {A Short Note on the Kinetics-700-2020 Human Action Dataset},

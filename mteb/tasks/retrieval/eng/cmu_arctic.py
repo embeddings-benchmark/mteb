@@ -2,7 +2,7 @@ from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 CMU_ARCTIC_CITATION = r"""
-@techreport{kominek2003cmu,
+@techreport{kominek_cmu_2003,
   author = {Kominek, John and Black, Alan W.},
   institution = {Language Technologies Institute, School of Computer Science,
 Carnegie Mellon University},

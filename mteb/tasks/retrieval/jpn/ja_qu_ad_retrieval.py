@@ -25,7 +25,7 @@ class JaQuADRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{so2022jaquad,
+@misc{so_jaquad_2022,
   archiveprefix = {arXiv},
   author = {ByungHoon So and Kyuhong Byun and Kyungwon Kang and Seongjin Cho},
   eprint = {2202.01764},

@@ -102,6 +102,10 @@ serve-api:
 	@echo "Set PRELOAD=1 to warm every benchmark summary on startup."
 	uv run --no-sync --extra api uvicorn mteb.api.app:app --host $(or $(HOST),127.0.0.1) --port $(or $(PORT),8000)
 
+.PHONY: format-citation-keys
+format-citation-keys:
+	uv run --no-sync python scripts/tools/update_citation_keys.py --write
+
 format-citations:
 	@echo "--- 🧹 Formatting citations ---"
 	uv run --no-sync python scripts/tools/format_citations.py benchmarks

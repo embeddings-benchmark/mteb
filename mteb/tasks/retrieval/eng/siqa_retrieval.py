@@ -25,7 +25,7 @@ class SIQA(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{sap2019socialiqa,
+@inproceedings{sap_social_2019,
   address = {Hong Kong, China},
   author = {Sap, Maarten and Rashkin, Hannah and Chen, Derek and Le Bras, Ronan and Choi, Yejin},
   booktitle = {Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing ({EMNLP}-{IJCNLP})},
@@ -39,10 +39,13 @@ class SIQA(AbsTaskRetrieval):
   year = {2019},
 }
 
-@article{xiao2024rar,
-  author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
-  journal = {arXiv preprint arXiv:2404.06347},
+@misc{xiao_rar-b_2024,
+  archiveprefix = {arXiv},
+  author = {Chenghao Xiao and G Thomas Hudson and Noura Al Moubayed},
+  eprint = {2404.06347},
+  primaryclass = {cs.CL},
   title = {RAR-b: Reasoning as Retrieval Benchmark},
+  url = {https://arxiv.org/abs/2404.06347},
   year = {2024},
 }
 """,

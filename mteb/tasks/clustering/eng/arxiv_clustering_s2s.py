@@ -25,7 +25,7 @@ class ArxivClusteringS2S(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{arxiv_org_submitters_2024,
+@misc{submitters_arxiv_2024,
   author = {arXiv.org submitters},
   doi = {10.34740/KAGGLE/DSV/7548853},
   publisher = {Kaggle},

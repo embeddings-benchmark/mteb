@@ -35,7 +35,7 @@ class VimSketchA2ARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@dataset{bongjun_kim_2019_2596911,
+@dataset{kim_vimsketch_2019,
   author = {Bongjun Kim and
 Mark Cartwright and
 Fatemeh Pishdadian and

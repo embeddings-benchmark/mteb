@@ -20,6 +20,23 @@ class KeywordLiteralFinder(ast.NodeVisitor):
         self.target_keyword_arg = target_keyword_arg
         self.locations: list[tuple[int, int, int, int]] = []
         self.keyword_found_anywhere = False
+        self.string_constants: dict[str, ast.Constant] = {}
+
+    def visit_Module(self, node: ast.Module):
+        for statement in node.body:
+            if isinstance(statement, ast.Assign):
+                targets = statement.targets
+                value = statement.value
+            elif isinstance(statement, ast.AnnAssign):
+                targets = [statement.target]
+                value = statement.value
+            else:
+                continue
+            if isinstance(value, ast.Constant) and isinstance(value.value, str):
+                for target in targets:
+                    if isinstance(target, ast.Name):
+                        self.string_constants[target.id] = value
+        self.generic_visit(node)
 
     def visit_Call(self, node: ast.Call):
         func_name = ""
@@ -36,21 +53,19 @@ class KeywordLiteralFinder(ast.NodeVisitor):
             if keyword.arg != self.target_keyword_arg:
                 continue
             self.keyword_found_anywhere = True
-            if not isinstance(keyword.value, ast.Constant) or not isinstance(
-                keyword.value.value, str
-            ):
+            value = keyword.value
+            if isinstance(value, ast.Name):
+                value = self.string_constants.get(value.id)
+            if not isinstance(value, ast.Constant) or not isinstance(value.value, str):
                 continue
 
-            if (
-                keyword.value.end_lineno is not None
-                and keyword.value.end_col_offset is not None
-            ):
+            if value.end_lineno is not None and value.end_col_offset is not None:
                 self.locations.append(
                     (
-                        keyword.value.lineno,
-                        keyword.value.col_offset,
-                        keyword.value.end_lineno,
-                        keyword.value.end_col_offset,
+                        value.lineno,
+                        value.col_offset,
+                        value.end_lineno,
+                        value.end_col_offset,
                     )
                 )
             else:
@@ -135,6 +150,7 @@ def process_file(
 
         finder = KeywordLiteralFinder(target_function_name, target_keyword_arg)
         finder.visit(tree)
+        finder.locations = list(dict.fromkeys(finder.locations))
 
         if not finder.keyword_found_anywhere:
             return False, False, 0, True, False

@@ -25,7 +25,7 @@ class ExpressoReadEmotionClassification(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{nguyen2023expresso,
+@inproceedings{nguyen_expresso_2023,
   author = {Nguyen, Tu Anh and Hsu, Wei-Ning and d'Avirro, Antony and Shi, Bowen and Gat, Itai and Fazel-Zarani, Maryam and Remez, Tal and Copet, Jade and Synnaeve, Gabriel and Hassid, Michael and others},
   booktitle = {INTERSPEECH 2023-24th Annual Conference of the International Speech Communication Association},
   pages = {4823--4827},
@@ -62,7 +62,7 @@ class ExpressoConvEmotionClassification(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{nguyen2023expresso,
+@inproceedings{nguyen_expresso_2023,
   author = {Nguyen, Tu Anh and Hsu, Wei-Ning and d'Avirro, Antony and Shi, Bowen and Gat, Itai and Fazel-Zarani, Maryam and Remez, Tal and Copet, Jade and Synnaeve, Gabriel and Hassid, Michael and others},
   booktitle = {INTERSPEECH 2023-24th Annual Conference of the International Speech Communication Association},
   pages = {4823--4827},

@@ -13,7 +13,7 @@ from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _BIBTEX = r"""
-@inproceedings{yang-etal-2024-language-bias,
+@inproceedings{yang_language_2024,
   author = {Yang, Jinrui and Jiang, Fan and Baldwin, Timothy},
   booktitle = {Proceedings of the Fourth Workshop on Multilingual Representation Learning (MRL 2024)},
   doi = {10.18653/v1/2024.mrl-1.23},

@@ -28,7 +28,7 @@ class OpenTenderClusteringP2P(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{banar2025mtebnle5nlembeddingbenchmark,
+@inproceedings{banar_mteb-nl_2026,
   address = {San Diego, California, United States},
   author = {Banar, Nikolay and Lotfi, Ehsan and Van Nooten, Jens and Arhiliuc, Cristina and Kliocaite, Marija and Daelemans, Walter},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2026},

@@ -30,7 +30,7 @@ class Kinetics400ZeroShotClassification(AbsTaskZeroShotClassification):
         modalities=["video", "text"],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{kay2017kineticshumanactionvideo,
+@misc{kay_kinetics_2017,
   archiveprefix = {arXiv},
   author = {Will Kay and Joao Carreira and Karen Simonyan and Brian Zhang and Chloe Hillier and Sudheendra Vijayanarasimhan and Fabio Viola and Tim Green and Trevor Back and Paul Natsev and Mustafa Suleyman and Andrew Zisserman},
   eprint = {1705.06950},
@@ -77,7 +77,7 @@ class Kinetics400VAZeroShotClassification(AbsTaskZeroShotClassification):
         modalities=["video", "audio", "text"],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{kay2017kineticshumanactionvideo,
+@misc{kay_kinetics_2017,
   archiveprefix = {arXiv},
   author = {Will Kay and Joao Carreira and Karen Simonyan and Brian Zhang and Chloe Hillier and Sudheendra Vijayanarasimhan and Fabio Viola and Tim Green and Trevor Back and Paul Natsev and Mustafa Suleyman and Andrew Zisserman},
   eprint = {1705.06950},

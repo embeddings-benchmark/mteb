@@ -35,7 +35,7 @@ class Covers80A2ARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{ellis2007covers80,
+@misc{ellis_covers80_2007,
   author = {Daniel P. W. Ellis and Brian Whitman},
   title = {The "Covers80" cover song data set},
   url = {https://labrosa.ee.columbia.edu/projects/coversongs/covers80/},

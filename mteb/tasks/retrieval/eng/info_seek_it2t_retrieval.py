@@ -25,7 +25,7 @@ class InfoSeekIT2TRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{chen2023can,
+@inproceedings{chen_can_2023,
   author = {Chen, Yang and Hu, Hexiang and Luan, Yi and Sun, Haitian and Changpinyo, Soravit and Ritter, Alan and Chang, Ming-Wei},
   booktitle = {Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing},
   pages = {14948--14968},

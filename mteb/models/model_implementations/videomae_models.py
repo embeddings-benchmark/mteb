@@ -200,7 +200,7 @@ class VideoMAEWrapper(AbsEncoder):
 
 
 _VIDEOMAE_CITATION = """
-@inproceedings{tong2022videomae,
+@inproceedings{tong_videomae_2022,
   title={VideoMAE: Masked Autoencoders are Data-Efficient Learners for Self-Supervised Video Pre-Training},
   author={Tong, Zhan and Song, Yibing and Wang, Jue and Wang, Limin},
   booktitle={Advances in Neural Information Processing Systems},

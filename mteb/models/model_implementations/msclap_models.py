@@ -225,7 +225,7 @@ ms_clap_2022 = ModelMeta(
         # FreeMusic (not in MTEB)
     },
     citation="""
-@inproceedings{CLAP2022,
+@inproceedings{elizalde_clap_2023,
   title={Clap learning audio concepts from natural language supervision},
   author={Elizalde, Benjamin and Deshmukh, Soham and Al Ismail, Mahmoud and Wang, Huaming},
   booktitle={ICASSP 2023-2023 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
@@ -262,7 +262,7 @@ ms_clap_2023 = ModelMeta(
         "AudioCapsA2TRetrieval",
     },
     citation="""
-@inproceedings{CLAP2023,
+@inproceedings{elizalde_natural_2024,
   author = {Elizalde, Benjamin and Deshmukh, Soham and Wang, Huaming},
   booktitle = {ICASSP 2024 - 2024 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/icassp48485.2024.10448504},

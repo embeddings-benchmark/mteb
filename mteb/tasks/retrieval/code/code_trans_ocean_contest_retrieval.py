@@ -27,7 +27,7 @@ class CodeTransOceanContestRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{yan2023codetransoceancomprehensivemultilingualbenchmark,
+@inproceedings{yan_codetransocean_2023,
   address = {Singapore},
   author = {Yan, Weixiang and Tian, Yuchen and Li, Yunzhe and Chen, Qian and Wang, Wen},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2023},

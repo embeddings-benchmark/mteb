@@ -33,7 +33,7 @@ class FER2013Classification(AbsTaskClassification):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{goodfellow2015explainingharnessingadversarialexamples,
+@inproceedings{goodfellow_explaining_2015,
   archiveprefix = {arXiv},
   author = {Ian J. Goodfellow and Jonathon Shlens and Christian Szegedy},
   booktitle = {3rd International Conference on Learning Representations, {ICLR} 2015},

@@ -29,7 +29,7 @@ class TurkishConstitutionalCourtViolation(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{mumcuoglu2021natural,
+@article{mumcuoglu_natural_2021,
   author = {Mumcuoglu, Emre and Ozturk, Ceyhun E. and Ozaktas, Haldun M. and Koc, Aykut},
   journal = {Information Processing and Management},
   number = {5},

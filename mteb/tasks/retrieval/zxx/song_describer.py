@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 _REFERENCE = "https://arxiv.org/abs/2311.10057"
 _BIBTEX = r"""
-@inproceedings{manco2023song,
+@inproceedings{manco_song_2023,
   author = {Manco, Ilaria and Weck, Benno and Doh, Seungheon and Won, Minz and Zhang, Yixiao and Bogdanov, Dmitry and Wu, Yusong and Chen, Ke and Tovstogan, Philip and Benetos, Emmanouil and Quinton, Elio and Fazekas, Gy{\"o}rgy and Nam, Juhan},
   booktitle = {Machine Learning for Audio Workshop at NeurIPS 2023},
   title = {The Song Describer Dataset: a Corpus of Audio Captions for Music-and-Language Evaluation},

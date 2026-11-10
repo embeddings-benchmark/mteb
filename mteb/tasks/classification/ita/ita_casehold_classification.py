@@ -25,7 +25,7 @@ class ItaCaseholdClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{10.1145/3594536.3595177,
+@inproceedings{licari_legal_2023,
   address = {New York, NY, USA},
   author = {Licari, Daniele and Bushipaka, Praveen and Marino, Gabriele and Comand\'{e}, Giovanni and Cucinotta, Tommaso},
   booktitle = {Proceedings of the Nineteenth International Conference on Artificial Intelligence and Law},

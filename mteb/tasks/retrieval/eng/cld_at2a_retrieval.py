@@ -35,7 +35,7 @@ class CLDAT2ARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{deshmukh2025adiff,
+@inproceedings{deshmukh_adiff_2025,
   author = {Deshmukh, Soham and Han, Shuo and Singh, Rita and Raj, Bhiksha},
   booktitle = {The Thirteenth International Conference on Learning Representations (ICLR)},
   title = {ADIFF: Explaining audio difference using natural language},
@@ -79,7 +79,7 @@ class CLDA2TRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{deshmukh2025adiff,
+@inproceedings{deshmukh_adiff_2025,
   author = {Deshmukh, Soham and Han, Shuo and Singh, Rita and Raj, Bhiksha},
   booktitle = {The Thirteenth International Conference on Learning Representations (ICLR)},
   title = {ADIFF: Explaining audio difference using natural language},

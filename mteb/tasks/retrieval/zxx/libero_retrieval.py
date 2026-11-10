@@ -4,7 +4,7 @@ from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _LIBERO_BIBTEX = r"""
-@inproceedings{liu2023libero,
+@inproceedings{liu_libero_2023,
   author = {Liu, Bo and Zhu, Yifeng and Gao, Chongkai and Feng, Yihao and Liu, Qiang and Zhu, Yuke and Stone, Peter},
   booktitle = {Thirty-seventh Conference on Neural Information Processing Systems Datasets and Benchmarks Track},
   title = {{LIBERO}: Benchmarking Knowledge Transfer for Lifelong Robot Learning},

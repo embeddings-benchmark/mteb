@@ -47,7 +47,7 @@ class IndicXnliPairClassification(AbsTaskPairClassification):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{aggarwal_gupta_kunch_22,
+@inproceedings{aggarwal_indicxnli_2022,
   address = {Abu Dhabi, United Arab Emirates},
   author = {Aggarwal, Divyanshu and Gupta, Vivek and Kunchukuttan, Anoop},
   booktitle = {Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing},

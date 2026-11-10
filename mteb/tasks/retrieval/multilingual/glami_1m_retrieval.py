@@ -45,7 +45,7 @@ class GLAMI1MT2IRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@inproceedings{Kosar_2022_BMVC,
+@inproceedings{kosar_glami-1m_2022,
   author = {Vaclav Kosar and Antonín Hoskovec and Milan Šulc and Radek Bartyzal},
   booktitle = {33rd British Machine Vision Conference 2022, BMVC 2022, London, UK, November 21-24, 2022},
   publisher = {BMVA Press},

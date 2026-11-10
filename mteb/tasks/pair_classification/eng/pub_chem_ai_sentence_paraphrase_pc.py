@@ -25,7 +25,7 @@ class PubChemAISentenceParaphrasePC(AbsTaskPairClassification):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{kasmaee2024chemteb,
+@inproceedings{kasmaee_chemteb_2024,
   archiveprefix = {arXiv},
   author = {Ali Shiraee Kasmaee and Mohammad Khodadad and Mohammad Arshi Saloot and Nick Sherck and Stephen Dokas and Hamidreza Mahyar and Soheila Samiee},
   booktitle = {ENLSP},
@@ -36,7 +36,7 @@ class PubChemAISentenceParaphrasePC(AbsTaskPairClassification):
   year = {2024},
 }
 
-@article{kim2023pubchem,
+@article{kim_pubchem_2023,
   author = {Kim, Sunghwan and Chen, Jie and Cheng, Tiejun and Gindulyte, Asta and He, Jia and He, Siqian and Li, Qingliang and Shoemaker, Benjamin A and Thiessen, Paul A and Yu, Bo and others},
   journal = {Nucleic acids research},
   number = {D1},

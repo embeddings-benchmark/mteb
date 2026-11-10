@@ -25,7 +25,7 @@ class GunshotTriangulation(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{raponi2021soundgunsdigitalforensics,
+@article{raponi_sound_2022,
   author = {Raponi, Simone and Oligeri, Gabriele and Ali, Isra Mohamed},
   doi = {10.1007/s11042-022-12612-w},
   issn = {1573-7721},

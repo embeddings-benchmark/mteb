@@ -25,7 +25,7 @@ class WikiSQLRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{zhong2017seq2sql,
+@article{zhong_seq2sql_2017,
   archiveprefix = {arXiv},
   author = {Zhong, Victor and Xiong, Caiming and Socher, Richard},
   eprint = {1709.00103},

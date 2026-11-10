@@ -25,7 +25,7 @@ class STS15STS(AbsTaskSTS):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{bicici-2015-rtm,
+@inproceedings{bicici_rtm-dcu_2015,
   address = {Denver, Colorado},
   author = {Bi{\c{c}}ici, Ergun},
   booktitle = {Proceedings of the 9th International Workshop on Semantic Evaluation ({S}em{E}val 2015)},

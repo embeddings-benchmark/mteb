@@ -30,7 +30,7 @@ class UCF101ZeroShotClassification(AbsTaskZeroShotClassification):
         modalities=["image", "text"],
         sample_creation="created",
         bibtex_citation=r"""
-@misc{soomro2012ucf101dataset101human,
+@misc{soomro_ucf101_2012,
   archiveprefix = {arXiv},
   author = {Khurram Soomro and Amir Roshan Zamir and Mubarak Shah},
   eprint = {1212.0402},
@@ -76,7 +76,7 @@ class UCF101VideoAudioZeroShotClassification(AbsTaskZeroShotClassification):
         modalities=["video", "audio", "text"],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{soomro2012ucf101dataset101human,
+@misc{soomro_ucf101_2012,
   archiveprefix = {arXiv},
   author = {Khurram Soomro and Amir Roshan Zamir and Mubarak Shah},
   eprint = {1212.0402},
@@ -132,7 +132,7 @@ class UCF101VideoZeroShotClassification(AbsTaskZeroShotClassification):
         modalities=["video", "text"],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{soomro2012ucf101dataset101human,
+@misc{soomro_ucf101_2012,
   archiveprefix = {arXiv},
   author = {Khurram Soomro and Amir Roshan Zamir and Mubarak Shah},
   eprint = {1212.0402},

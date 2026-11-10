@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 _REFERENCE = "https://arxiv.org/abs/2605.17509"
 _BIBTEX = r"""
-@article{imoto2026audio,
+@article{imoto_audio-image_2026,
   author = {Imoto, Keisuke and Kojima, Yamato and Tsuchiya, Takao},
   journal = {arXiv preprint arXiv:2605.17509},
   title = {Audio-Image Cross-Modal Retrieval with Onomatopoeic Images},

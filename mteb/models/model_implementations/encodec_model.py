@@ -167,7 +167,7 @@ encodec_24khz = ModelMeta(
     },
     modalities=["audio"],
     citation="""
-@article{défossez2022highfidelityneuralaudio,
+@article{efossez_high_2023,
   archiveprefix = {arXiv},
   author = {Alexandre D{\\'e}fossez and Jade Copet and Gabriel Synnaeve and Yossi Adi},
   eprint = {2210.13438},

@@ -116,7 +116,7 @@ class VJepaV2Wrapper(AbsEncoder):
 
 
 _JEPA_CITATION = """
-@misc{assran2025vjepa2selfsupervisedvideo,
+@misc{assran_v-jepa_2025,
     title={V-JEPA 2: Self-Supervised Video Models Enable Understanding, Prediction and Planning},
     author={Mido Assran and Adrien Bardes and David Fan and Quentin Garrido and Russell Howes and Mojtaba and Komeili and Matthew Muckley and Ammar Rizvi and Claire Roberts and Koustuv Sinha and Artem Zholus and Sergio Arnaud and Abha Gejji and Ada Martin and Francois Robert Hogan and Daniel Dugas and Piotr Bojanowski and Vasil Khalidov and Patrick Labatut and Francisco Massa and Marc Szafraniec and Kapil Krishnakumar and Yong Li and Xiaodong Ma and Sarath Chandar and Franziska Meier and Yann LeCun and Michael Rabbat and Nicolas Ballas},
     year={2025},

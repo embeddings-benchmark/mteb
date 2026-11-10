@@ -25,7 +25,7 @@ class DutchBookReviewSentimentClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{vanderburgh2019meritsuniversallanguagemodel,
+@misc{vanderburgh_merits_2019,
   archiveprefix = {arXiv},
   author = {Benjamin van der Burgh and Suzan Verberne},
   eprint = {1910.00896},
@@ -62,7 +62,7 @@ class DutchBookReviewSentimentClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{vanderburgh2019meritsuniversallanguagemodel,
+@misc{vanderburgh_merits_2019,
   archiveprefix = {arXiv},
   author = {Benjamin van der Burgh and Suzan Verberne},
   eprint = {1910.00896},

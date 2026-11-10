@@ -25,7 +25,7 @@ def instruction_template(
 
 # Fetched verbatim from https://arxiv.org/bibtex/2508.07995 (v5); the copy in
 # the model card predates the revision and lists an older author set.
-DIVER_CITATION = """@misc{sun2026divermultistageapproachreasoningintensive,
+DIVER_CITATION = """@misc{sun_diver_2026,
       title={DIVER: A Multi-Stage Approach for Reasoning-intensive Information Retrieval},
       author={Duolin Sun and Meixiu Long and Dan Yang and Junjie Wang and Yecheng Luo and Yue Shen and Jian Wang and Hualei Zhou and Chunxiao Guo and Peng Wei and Jiahai Wang and Jinjie Gu},
       year={2026},

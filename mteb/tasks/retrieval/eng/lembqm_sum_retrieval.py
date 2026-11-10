@@ -32,7 +32,7 @@ class LEMBQMSumRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{zhong-etal-2021-qmsum,
+@inproceedings{zhong_qmsum_2021,
   address = {Online},
   author = {Zhong, Ming  and
 Yin, Da  and

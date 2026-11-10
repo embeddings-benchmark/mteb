@@ -25,7 +25,7 @@ class OVENIT2TRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{hu2023open,
+@inproceedings{hu_open-domain_2023,
   author = {Hu, Hexiang and Luan, Yi and Chen, Yang and Khandelwal, Urvashi and Joshi, Mandar and Lee, Kenton and Toutanova, Kristina and Chang, Ming-Wei},
   booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision},
   pages = {12065--12075},

@@ -2,7 +2,7 @@ from mteb.abstasks.sts import AbsTaskSTS
 from mteb.abstasks.task_metadata import TaskMetadata
 
 STS12_CITATION = r"""
-@inproceedings{agirre-etal-2012-semeval,
+@inproceedings{agirre_semeval-2012_2012,
   title = {{S}em{E}val-2012 Task 6: A Pilot on Semantic Textual Similarity},
   author = {Agirre, Eneko  and
       Cer, Daniel  and

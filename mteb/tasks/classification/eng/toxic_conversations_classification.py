@@ -28,7 +28,7 @@ class ToxicConversationsClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{jigsaw-unintended-bias-in-toxicity-classification,
+@misc{cjadams_jigsaw_2019,
   author = {cjadams and Daniel Borkan and inversion and Jeffrey Sorensen and Lucas Dixon and Lucy Vasserman and nithum},
   publisher = {Kaggle},
   title = {Jigsaw Unintended Bias in Toxicity Classification},
@@ -77,7 +77,7 @@ class ToxicConversationsClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{jigsaw-unintended-bias-in-toxicity-classification,
+@misc{cjadams_jigsaw_2019,
   author = {cjadams and Daniel Borkan and inversion and Jeffrey Sorensen and Lucas Dixon and Lucy Vasserman and nithum},
   publisher = {Kaggle},
   title = {Jigsaw Unintended Bias in Toxicity Classification},

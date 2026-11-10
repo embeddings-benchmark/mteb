@@ -26,7 +26,7 @@ class VoiceGenderClustering(AbsTaskClustering):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{Chung18b,
+@inproceedings{chung_voxceleb2_2018,
   author = {Joon Son Chung and Arsha Nagrani and Andrew Zisserman},
   booktitle = {Proceedings of Interspeech},
   title = {VoxCeleb2: Deep Speaker Recognition},

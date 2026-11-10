@@ -174,7 +174,7 @@ qwen3_reranker_training_data = {
     # + synthetic data
 }
 
-QWEN3_CITATION = """@article{qwen3embedding,
+QWEN3_CITATION = """@article{zhang_qwen3_2025,
   title={Qwen3 Embedding: Advancing Text Embedding and Reranking Through Foundation Models},
   author={Zhang, Yanzhao and Li, Mingxin and Long, Dingkun and Zhang, Xin and Lin, Huan and Yang, Baosong and Xie, Pengjun and Yang, An and Liu, Dayiheng and Lin, Junyang and Huang, Fei and Zhou, Jingren},
   journal={arXiv preprint arXiv:2506.05176},

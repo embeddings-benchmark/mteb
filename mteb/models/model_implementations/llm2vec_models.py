@@ -120,7 +120,7 @@ def _loader(
 
 
 LLM2VEC_CITATION = """
-@misc{behnamghader2024llm2veclargelanguagemodels,
+@misc{behnamghader_llm2vec_2024,
       title={LLM2Vec: Large Language Models Are Secretly Powerful Text Encoders},
       author={Parishad BehnamGhader and Vaibhav Adlakha and Marius Mosbach and Dzmitry Bahdanau and Nicolas Chapados and Siva Reddy},
       year={2024},

@@ -25,7 +25,7 @@ class ZacLegalTextRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{10.1007/978-981-95-1746-6_17,
+@inproceedings{pham_gn-trvn_2026,
   address = {Singapore},
   author = {Pham, Bao Loc
 and Hoang, Quoc Viet

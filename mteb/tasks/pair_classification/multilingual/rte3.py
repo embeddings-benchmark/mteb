@@ -32,7 +32,7 @@ class RTE3(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{giampiccolo-etal-2007-third,
+@inproceedings{giampiccolo_third_2007,
   address = {Prague},
   author = {Giampiccolo, Danilo  and
 Magnini, Bernardo  and

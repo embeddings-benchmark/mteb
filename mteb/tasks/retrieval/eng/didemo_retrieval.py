@@ -12,7 +12,7 @@ _DATASET_PATH = "mteb/DiDeMo"
 _DATASET_REVISION_V2 = "a47066169360d555b7a33132d7195843dc71997f"
 _DATASET_REVISION = "746689f644b66022540a9a39136e842bee164e6b"
 _BIBTEX = r"""
-@inproceedings{hendricks2017localizing,
+@inproceedings{hendricks_localizing_2017,
   author = {Hendricks, Lisa Anne and Wang, Oliver and Shechtman, Eli and Sivic, Josef and Darrell, Trevor and Russell, Bryan},
   booktitle = {Proceedings of the IEEE International Conference on Computer Vision (ICCV)},
   title = {Localizing Moments in Video with Natural Language},

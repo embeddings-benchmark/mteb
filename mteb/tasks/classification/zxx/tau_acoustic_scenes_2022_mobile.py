@@ -27,7 +27,7 @@ class TAUAcousticScenes2022Mobile(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@dataset{heittola_2022_6337421,
+@dataset{heittola_tau_2022,
   author = {Heittola, Toni and
 Mesaros, Annamaria and
 Virtanen, Tuomas},

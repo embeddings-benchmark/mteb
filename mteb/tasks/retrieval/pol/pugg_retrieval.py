@@ -25,7 +25,7 @@ class PUGGRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="multiple",
         bibtex_citation=r"""
-@inproceedings{sawczyn-etal-2024-developing,
+@inproceedings{sawczyn_developing_2024,
   address = {Bangkok, Thailand},
   author = {Sawczyn, Albert  and
 Viarenich, Katsiaryna  and

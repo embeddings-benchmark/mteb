@@ -30,7 +30,7 @@ class EDIRIT2IRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=r"""
-@inproceedings{song-etal-2026-rethinking-composed,
+@inproceedings{song_rethinking_2026,
   author = {Song, Tingyu and Zhang, Yanzhao and Li, Mingxin and Guo, Zhuoning and Long, Dingkun and Xie, Pengjun and Zhang, Siyue and Zhao, Yilun and Wu, Shu},
   booktitle = {Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
   pages = {46224--46242},

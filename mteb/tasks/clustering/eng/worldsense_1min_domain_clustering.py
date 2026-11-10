@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from datasets import Dataset
 
 BIBTEX = r"""
-@misc{hong2025worldsense,
+@misc{hong_worldsense_2025,
   archiveprefix = {arXiv},
   author = {Jack Hong and Shilin Yan and Jiayin Cai and Xiaolong Jiang and Yao Hu and Weidi Xie},
   eprint = {2502.04326},

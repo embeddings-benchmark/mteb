@@ -25,7 +25,7 @@ class NanoSciFactRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{specter2020cohan,
+@inproceedings{cohan_specter_2020,
   author = {Arman Cohan and Sergey Feldman and Iz Beltagy and Doug Downey and Daniel S. Weld},
   booktitle = {ACL},
   title = {SPECTER: Document-level Representation Learning using Citation-informed Transformers},

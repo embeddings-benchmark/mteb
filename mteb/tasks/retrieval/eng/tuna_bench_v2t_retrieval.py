@@ -37,7 +37,7 @@ class TUNABenchV2TRetrieval(AbsTaskRetrieval):
         modalities=["video", "text"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{kong-etal-2025-tuna,
+@inproceedings{kong_tuna_2025,
   address = {Vienna, Austria},
   author = {Kong, Fanheng  and
 Zhang, Jingyuan  and

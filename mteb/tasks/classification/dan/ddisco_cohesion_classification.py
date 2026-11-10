@@ -25,7 +25,7 @@ class DdiscoCohesionClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{flansmose-mikkelsen-etal-2022-ddisco,
+@inproceedings{flansmosemikkelsen_ddisco_2022,
   address = {Marseille, France},
   author = {Flansmose Mikkelsen, Linea  and
 Kinch, Oliver  and
@@ -88,7 +88,7 @@ class DdiscoCohesionClassificationV2(AbsTaskClassification):
         annotations_creators="expert-annotated",
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{flansmose-mikkelsen-etal-2022-ddisco,
+@inproceedings{flansmosemikkelsen_ddisco_2022,
   address = {Marseille, France},
   author = {Flansmose Mikkelsen, Linea  and
 Kinch, Oliver  and

@@ -36,7 +36,7 @@ class AudioSetMultilingualClassification(AbsTaskMultilabelClassification):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{audioset,
+@inproceedings{gemmeke_audio_2017,
   author = {Gemmeke, Jort F and Ellis, Daniel PW and Freedman, Dylan and Jansen, Aren and Lawrence, Wade and Moore, R Channing and Plakal, Manoj and Ritter, Marvin},
   booktitle = {2017 IEEE international conference on acoustics, speech and signal processing (ICASSP)},
   organization = {IEEE},
@@ -85,7 +85,7 @@ class AudioSetMiniMultilingualClassification(AbsTaskMultilabelClassification):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{audioset,
+@inproceedings{gemmeke_audio_2017,
   author = {Gemmeke, Jort F and Ellis, Daniel PW and Freedman, Dylan and Jansen, Aren and Lawrence, Wade and Moore, R Channing and Plakal, Manoj and Ritter, Marvin},
   booktitle = {2017 IEEE international conference on acoustics, speech and signal processing (ICASSP)},
   organization = {IEEE},

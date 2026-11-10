@@ -33,7 +33,7 @@ class StatcanDialogueDatasetRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{lu-etal-2023-statcan,
+@inproceedings{lu_statcan_2023,
   address = {Dubrovnik, Croatia},
   author = {Lu, Xing Han  and
 Reddy, Siva  and

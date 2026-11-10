@@ -25,7 +25,7 @@ class Quail(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{rogers2020getting,
+@inproceedings{rogers_getting_2020,
   author = {Rogers, Anna and Kovaleva, Olga and Downey, Matthew and Rumshisky, Anna},
   booktitle = {Proceedings of the AAAI conference on artificial intelligence},
   number = {05},
@@ -35,10 +35,13 @@ class Quail(AbsTaskRetrieval):
   year = {2020},
 }
 
-@article{xiao2024rar,
-  author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
-  journal = {arXiv preprint arXiv:2404.06347},
+@misc{xiao_rar-b_2024,
+  archiveprefix = {arXiv},
+  author = {Chenghao Xiao and G Thomas Hudson and Noura Al Moubayed},
+  eprint = {2404.06347},
+  primaryclass = {cs.CL},
   title = {RAR-b: Reasoning as Retrieval Benchmark},
+  url = {https://arxiv.org/abs/2404.06347},
   year = {2024},
 }
 """,

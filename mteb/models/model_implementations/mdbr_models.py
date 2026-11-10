@@ -5,7 +5,7 @@ from mteb.models.model_implementations.mixedbread_ai_models import (
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
-LEAF_CITATION = """@inproceedings{mdbr_leaf,
+LEAF_CITATION = """@inproceedings{vujanic_leaf_2026,
   address = {San Diego, California, United States},
   author = {Vujanic, Robin and R{\\"u}ckstie{\\ss}, Thomas},
   booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},

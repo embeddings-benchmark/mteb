@@ -33,10 +33,13 @@ class WorldSense1MinVideoCentricQA(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@article{hong2025worldsense,
-  author = {Hong, Jack and Yan, Shilin and Cai, Jiayin and Jiang, Xiaolong and Hu, Yao and Xie, Weidi},
-  journal = {arXiv preprint arXiv:2502.04326},
+@misc{hong_worldsense_2025,
+  archiveprefix = {arXiv},
+  author = {Jack Hong and Shilin Yan and Jiayin Cai and Xiaolong Jiang and Yao Hu and Weidi Xie},
+  eprint = {2502.04326},
+  primaryclass = {cs.CV},
   title = {WorldSense: Evaluating Real-world Omnimodal Understanding for Multimodal LLMs},
+  url = {https://arxiv.org/abs/2502.04326},
   year = {2025},
 }
 """,
@@ -106,10 +109,13 @@ class WorldSense1MinVideoAudioCentricQA(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@article{hong2025worldsense,
-  author = {Hong, Jack and Yan, Shilin and Cai, Jiayin and Jiang, Xiaolong and Hu, Yao and Xie, Weidi},
-  journal = {arXiv preprint arXiv:2502.04326},
+@misc{hong_worldsense_2025,
+  archiveprefix = {arXiv},
+  author = {Jack Hong and Shilin Yan and Jiayin Cai and Xiaolong Jiang and Yao Hu and Weidi Xie},
+  eprint = {2502.04326},
+  primaryclass = {cs.CV},
   title = {WorldSense: Evaluating Real-world Omnimodal Understanding for Multimodal LLMs},
+  url = {https://arxiv.org/abs/2502.04326},
   year = {2025},
 }
 """,

@@ -32,11 +32,11 @@ class CIFAR10Classification(AbsTaskClassification):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@techreport{Krizhevsky09learningmultiple,
+@inproceedings{krizhevsky_learning_2009,
+  title = {Learning Multiple Layers of Features from Tiny Images},
   author = {Alex Krizhevsky},
-  institution = {},
-  title = {Learning multiple layers of features from tiny images},
   year = {2009},
+  url = {https://api.semanticscholar.org/CorpusID:18268744},
 }
 """,
     )
@@ -73,11 +73,11 @@ class CIFAR100Classification(AbsTaskClassification):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@techreport{Krizhevsky09learningmultiple,
+@inproceedings{krizhevsky_learning_2009,
+  title = {Learning Multiple Layers of Features from Tiny Images},
   author = {Alex Krizhevsky},
-  institution = {},
-  title = {Learning multiple layers of features from tiny images},
   year = {2009},
+  url = {https://api.semanticscholar.org/CorpusID:18268744},
 }
 """,
     )

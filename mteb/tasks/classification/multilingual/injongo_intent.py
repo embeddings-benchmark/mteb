@@ -55,7 +55,7 @@ class InjongoIntent(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation=r"""@inproceedings{yu2025injongo,
+        bibtex_citation=r"""@inproceedings{yu_injongo_2025,
   address = {Vienna, Austria},
   author = {Yu, Hao and Alabi, Jesujoba Oluwadara and Bukula, Andiswa and Zhuang, Jian Yun and Lee, En-Shiun Annie and Guge, Tadesse Kebede and Azime, Israel Abebe and Buzaaba, Happy and Sibanda, Blessing Kudzaishe and Kalipe, Godson Koffi and Mukiibi, Jonathan and Kabongo Kabenamualu, Salomon and Setaka, Mmasibidi and Ndolela, Lolwethu and Odu, Nkiruka and Mabuya, Rooweither and Muhammad, Shamsuddeen Hassan and Osei, Salomey and Samb, Sokhar and Klakow, Dietrich and Adelani, David Ifeoluwa},
   booktitle = {Proceedings of the 63rd Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},

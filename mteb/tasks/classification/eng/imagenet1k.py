@@ -33,7 +33,7 @@ class Imagenet1kClassification(AbsTaskClassification):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{deng2009imagenet,
+@inproceedings{deng_imagenet_2009,
   author = {Deng, Jia and Dong, Wei and Socher, Richard and Li, Li-Jia and Kai Li and Li Fei-Fei},
   booktitle = {2009 IEEE Conference on Computer Vision and Pattern Recognition},
   doi = {10.1109/CVPR.2009.5206848},

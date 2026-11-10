@@ -210,7 +210,7 @@ lco_3b = ModelMeta(
     ),
     modalities=["audio", "image", "text", "video"],
     citation="""
-@inproceedings{xiao2025scalinglanguagecentricomnimodalrepresentation,
+@inproceedings{xiao_scaling_2025,
   archiveprefix = {arXiv},
   author = {Chenghao Xiao and Hou Pong Chan and Hao Zhang and Weiwen Xu and Mahani Aljunied and Yu Rong},
   booktitle = {The Thirty-ninth Annual Conference on Neural Information Processing Systems},
@@ -245,7 +245,7 @@ lco_3b_2605 = ModelMeta(
     ),
     modalities=["audio", "image", "text", "video"],
     citation="""
-@inproceedings{xiao2025scalinglanguagecentricomnimodalrepresentation,
+@inproceedings{xiao_scaling_2025,
   archiveprefix = {arXiv},
   author = {Chenghao Xiao and Hou Pong Chan and Hao Zhang and Weiwen Xu and Mahani Aljunied and Yu Rong},
   booktitle = {The Thirty-ninth Annual Conference on Neural Information Processing Systems},
@@ -280,7 +280,7 @@ lco_7b = ModelMeta(
     ),
     modalities=["audio", "image", "text", "video"],
     citation="""
-@inproceedings{xiao2025scalinglanguagecentricomnimodalrepresentation,
+@inproceedings{xiao_scaling_2025,
   archiveprefix = {arXiv},
   author = {Chenghao Xiao and Hou Pong Chan and Hao Zhang and Weiwen Xu and Mahani Aljunied and Yu Rong},
   booktitle = {The Thirty-ninth Annual Conference on Neural Information Processing Systems},

@@ -25,22 +25,21 @@ class Touche2020(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@dataset{potthast_2022_6862281,
+@dataset{potthast_touche20-argument-retrieval-for-controversial-questions_2020,
   author = {Potthast, Martin and
-Gienapp, Lukas and
-Wachsmuth, Henning and
-Hagen, Matthias and
-Fröbe, Maik and
-Bondarenko, Alexander and
-Ajjour, Yamen and
-Stein, Benno},
-  doi = {10.5281/zenodo.6862281},
-  month = jul,
+                  Gienapp, Lukas and
+                  Wachsmuth, Henning and
+                  Hagen, Matthias and
+                  Fröbe, Maik and
+                  Bondarenko, Alexander and
+                  Ajjour, Yamen and
+                  Stein, Benno},
+  title = {Touché20-Argument-Retrieval-for-Controversial-Questions},
+  month = sep,
+  year = {2020},
   publisher = {Zenodo},
-  title = {{Touché20-Argument-Retrieval-for-Controversial-
-Questions}},
+  doi = {10.5281/zenodo.6862281},
   url = {https://doi.org/10.5281/zenodo.6862281},
-  year = {2022},
 }
 """,
         prompt={
@@ -74,7 +73,7 @@ class Touche2020v3Retrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{Thakur_etal_SIGIR2024,
+@inproceedings{thakur_systematic_2024,
   address_ = {Washington, D.C.},
   author = {Nandan Thakur and Luiz Bonifacio and Maik {Fr\"{o}be} and Alexander Bondarenko and Ehsan Kamalloo and Martin Potthast and Matthias Hagen and Jimmy Lin},
   booktitle = {Proceedings of the 47th International ACM SIGIR Conference on Research and Development in Information Retrieval},

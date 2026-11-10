@@ -11,7 +11,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 _DATASET_PATH = "mteb/Shot2Story20K_test"
 _DATASET_REVISION = "1957723c0ad97993f3807df271e2660b869c3ea2"
 _BIBTEX = r"""
-@article{han2023shot2story,
+@article{han_shot2story_2023,
   author = {Han, Mingfei and Zhang, Linjie and Du, Yali and Luo, Junbin and Wang, Xiaodan},
   title = {Shot2Story: A New Benchmark for Comprehensive Understanding of Multi-shot Videos},
   journal = {arXiv preprint arXiv:2312.10300},

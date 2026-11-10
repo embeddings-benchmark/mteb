@@ -1,6 +1,6 @@
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
-SONAR_CITATION = """@misc{Duquenne:2023:sonar_arxiv,
+SONAR_CITATION = """@misc{duquenne_sonar_2023,
   author = {Paul-Ambroise Duquenne and Holger Schwenk and Benoit Sagot},
   title = {{SONAR:} Sentence-Level Multimodal and Language-Agnostic Representations},
   publisher = {arXiv},

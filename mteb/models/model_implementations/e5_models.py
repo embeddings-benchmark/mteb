@@ -11,7 +11,7 @@ E5_PAPER_RELEASE_DATE = "2024-02-08"
 
 
 MULTILINGUAL_E5_CITATION = """
-@article{wang2024multilingual,
+@article{wang_multilingual_2024,
   title={Multilingual E5 Text Embeddings: A Technical Report},
   author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Yang, Linjun and Majumder, Rangan and Wei, Furu},
   journal={arXiv preprint arXiv:2402.05672},
@@ -20,7 +20,7 @@ MULTILINGUAL_E5_CITATION = """
 """
 
 E5_CITATION = """
-@article{wang2022text,
+@article{wang_text_2022,
   title={Text Embeddings by Weakly-Supervised Contrastive Pre-training},
   author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Jiao, Binxing and Yang, Linjun and Jiang, Daxin and Majumder, Rangan and Wei, Furu},
   journal={arXiv preprint arXiv:2212.03533},

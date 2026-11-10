@@ -25,7 +25,7 @@ class IndoNLI(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{mahendra-etal-2021-indonli,
+@inproceedings{mahendra_indonli_2021,
   address = {Online and Punta Cana, Dominican Republic},
   author = {Mahendra, Rahmad and Aji, Alham Fikri and Louvan, Samuel and Rahman, Fahrurrozi and Vania, Clara},
   booktitle = {Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing},

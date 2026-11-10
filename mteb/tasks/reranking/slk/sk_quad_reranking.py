@@ -30,7 +30,7 @@ class SkQuadReranking(AbsTaskRetrieval):
         domains=["Encyclopaedic"],
         task_subtypes=["Article retrieval"],
         bibtex_citation=r"""
-@article{hladek2023slovak,
+@article{hladek_slovak_2023,
   author = {Hl{\'a}dek, Daniel and Sta{\v{s}}, J{\'a}n and Juh{\'a}r, Jozef and Koct{\'u}r, Tom{\'a}{\v{s}}},
   journal = {IEEE Access},
   pages = {32869--32881},

@@ -37,12 +37,12 @@ class EightTagsClustering(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{dadas-etal-2020-evaluation,
+@inproceedings{dadas_evaluation_2020,
   address = {Marseille, France},
   archiveprefix = {arXiv},
   author = {Dadas, Slawomir  and
-Pere{\\l}kiewicz, Micha{\\l}  and
-Po{\\'s}wiata, Rafa{\\l}},
+Pere{\l}kiewicz, Micha{\l}  and
+Po{\'s}wiata, Rafa{\l}},
   booktitle = {Proceedings of the Twelfth Language Resources and Evaluation Conference},
   editor = {Calzolari, Nicoletta  and
 B{\'e}chet, Fr{\'e}d{\'e}ric  and
@@ -54,7 +54,7 @@ Goggi, Sara  and
 Isahara, Hitoshi  and
 Maegaard, Bente  and
 Mariani, Joseph  and
-Mazo, H{\\'e}l{\\`e}ne  and
+Mazo, H{\'e}l{\`e}ne  and
 Moreno, Asuncion  and
 Odijk, Jan  and
 Piperidis, Stelios},
@@ -100,15 +100,15 @@ class EightTagsClusteringFast(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{dadas-etal-2020-evaluation,
+@inproceedings{dadas_evaluation_2020,
   address = {Marseille, France},
   archiveprefix = {arXiv},
   author = {Dadas, Slawomir  and
-Pere{\\l}kiewicz, Micha{\\l}  and
-Po{\\'s}wiata, Rafa{\\l}},
+Pere{\l}kiewicz, Micha{\l}  and
+Po{\'s}wiata, Rafa{\l}},
   booktitle = {Proceedings of the Twelfth Language Resources and Evaluation Conference},
   editor = {Calzolari, Nicoletta  and
-B{\\'e}chet, Fr{\\'e}d{\\'e}ric  and
+B{\'e}chet, Fr{\'e}d{\'e}ric  and
 Blache, Philippe  and
 Choukri, Khalid  and
 Cieri, Christopher  and
@@ -117,7 +117,7 @@ Goggi, Sara  and
 Isahara, Hitoshi  and
 Maegaard, Bente  and
 Mariani, Joseph  and
-Mazo, H{\\'e}l{\\`e}ne  and
+Mazo, H{\'e}l{\`e}ne  and
 Moreno, Asuncion  and
 Odijk, Jan  and
 Piperidis, Stelios},

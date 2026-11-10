@@ -229,7 +229,7 @@ querit_reranker_training_data = {
     "T2Reranking",  # https://huggingface.co/datasets/THUIR/T2Ranking & The corpus and queries that overlap with mteb/T2Reranking have been removed.
 }
 
-QUERIT_CITATION = """@inproceedings{zhong2026queritrerankertrainingcompactmultilingual,
+QUERIT_CITATION = """@inproceedings{zhong_querit-reranker_2026,
   author = {Zhong, Yunfei and Yang, Jun and Huang, Wei and Cai, Yinqiong and Qian, Haosheng and Fan, Yixing and Zhang, Ruqing and Su, Lixin and Shi, Daiting and Guo, Jiafeng},
   booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing: Industry Track},
   doi = {10.18653/2026.emnlp-industry.97},

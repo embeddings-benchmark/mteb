@@ -27,7 +27,7 @@ class RAVDESSAVClassification(AbsTaskClassification):
         modalities=["video", "audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{10.1371/journal.pone.0196391,
+@article{livingstone_ryerson_2018,
   author = {Livingstone, Steven R. AND Russo, Frank A.},
   doi = {10.1371/journal.pone.0196391},
   journal = {PLOS ONE},
@@ -71,7 +71,7 @@ class RAVDESSVClassification(AbsTaskClassification):
         modalities=["video"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{10.1371/journal.pone.0196391,
+@article{livingstone_ryerson_2018,
   author = {Livingstone, Steven R. AND Russo, Frank A.},
   doi = {10.1371/journal.pone.0196391},
   journal = {PLOS ONE},

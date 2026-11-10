@@ -25,13 +25,14 @@ class FilipinoShopeeReviewsClassification(AbsTaskClassification):
         date=("2022-05-13", "2023-05-13"),
         main_score="accuracy",
         bibtex_citation=r"""
-@article{riegoenhancement,
+@article{riego_enhancement_2023,
   author = {Riego, Neil Christian R. and Villarba, Danny Bell and Sison, Ariel Antwaun Rolando C. and Pineda, Fernandez C. and Lagunzad, Herminiño C.},
   issue = {08},
   journal = {United International Journal for Research & Technology},
   pages = {72--82},
   title = {Enhancement to Low-Resource Text Classification via Sequential Transfer Learning},
   volume = {04},
+  year = {2023},
 }
 """,
     )

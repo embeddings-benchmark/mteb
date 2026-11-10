@@ -24,7 +24,7 @@ class Touche2020VN(AbsTaskRetrieval):
         domains=["Academic"],
         task_subtypes=["Question answering"],
         bibtex_citation=r"""
-@inproceedings{pham2025vnmtebvietnamesemassivetext,
+@inproceedings{pham_vn-mteb_2026,
   address = {Rabat, Morocco},
   author = {Pham, Loc and Luu, Tung and Vo, Thu and Nguyen, Minh and Hoang, Viet},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EACL} 2026},

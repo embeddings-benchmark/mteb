@@ -28,7 +28,7 @@ class CodeSearchNetRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{husain2019codesearchnet,
+@article{husain_codesearchnet_2019,
   author = {Husain, Hamel and Wu, Ho-Hsiang and Gazit, Tiferet and Allamanis, Miltiadis and Brockschmidt, Marc},
   journal = {arXiv preprint arXiv:1909.09436},
   title = {{CodeSearchNet} challenge: Evaluating the state of semantic code search},

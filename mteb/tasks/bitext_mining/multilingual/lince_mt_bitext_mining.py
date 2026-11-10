@@ -29,7 +29,7 @@ class LinceMTBitextMining(AbsTaskBitextMining):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{aguilar-etal-2020-lince,
+@inproceedings{aguilar_lince_2020,
   address = {Marseille, France},
   author = {Aguilar, Gustavo  and
 Kar, Sudipta  and

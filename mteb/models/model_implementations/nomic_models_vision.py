@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
 
-NOMIC_EMBED_VISION_CITATION = """@article{nussbaum2024nomicembedvision,
+NOMIC_EMBED_VISION_CITATION = """@article{nussbaum_nomic_2024,
       title={Nomic Embed Vision: Expanding the Latent Space},
       author={Nussbaum, Zach and Duderstadt, Brandon and Mulyar, Andriy},
       journal={arXiv preprint arXiv:2406.18587},

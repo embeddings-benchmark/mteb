@@ -33,7 +33,7 @@ class VoxPopuliLanguageID(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{wang-etal-2021-voxpopuli,
+@inproceedings{wang_voxpopuli_2021,
   address = {Online},
   author = {Wang, Changhan  and
 Riviere, Morgane  and
@@ -46,11 +46,15 @@ Pino, Juan  and
 Dupoux, Emmanuel},
   booktitle = {Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing (Volume 1: Long Papers)},
   doi = {10.18653/v1/2021.acl-long.80},
+  editor = {Zong, Chengqing  and
+Xia, Fei  and
+Li, Wenjie  and
+Navigli, Roberto},
   month = aug,
   pages = {993--1003},
   publisher = {Association for Computational Linguistics},
   title = {{V}ox{P}opuli: A Large-Scale Multilingual Speech Corpus for Representation Learning, Semi-Supervised Learning and Interpretation},
-  url = {https://aclanthology.org/2021.acl-long.80},
+  url = {https://aclanthology.org/2021.acl-long.80/},
   year = {2021},
 }
 """,

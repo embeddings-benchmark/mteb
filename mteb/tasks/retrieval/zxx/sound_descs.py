@@ -25,7 +25,7 @@ class SoundDescsA2TRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{Koepke2022,
+@inproceedings{koepke_audio_2022,
   author = {Koepke, A.S. and Oncescu, A.-M. and Henriques, J. and Akata, Z. and Albanie, S.},
   booktitle = {IEEE Transactions on Multimedia},
   title = {Audio Retrieval with Natural Language Queries: A Benchmark Study},
@@ -58,7 +58,7 @@ class SoundDescsT2ARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{Koepke2022,
+@inproceedings{koepke_audio_2022,
   author = {Koepke, A.S. and Oncescu, A.-M. and Henriques, J. and Akata, Z. and Albanie, S.},
   booktitle = {IEEE Transactions on Multimedia},
   title = {Audio Retrieval with Natural Language Queries: A Benchmark Study},

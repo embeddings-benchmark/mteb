@@ -27,7 +27,7 @@ class MalteseNewsClassification(AbsTaskMultilabelClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{maltese-news-datasets,
+@inproceedings{chaudhary_topic_2024,
   author = {Chaudhary, Amit Kumar  and
 Micallef, Kurt  and
 Borg, Claudia},

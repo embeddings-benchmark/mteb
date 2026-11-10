@@ -27,7 +27,7 @@ class BSARDRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{louis2022statutory,
+@inproceedings{louis_statutory_2022,
   address = {Dublin, Ireland},
   author = {Louis, Antoine and Spanakis, Gerasimos},
   booktitle = {Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics},
@@ -69,7 +69,7 @@ class BSARDRetrievalv2(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{louis2022statutory,
+@inproceedings{louis_statutory_2022,
   address = {Dublin, Ireland},
   author = {Louis, Antoine and Spanakis, Gerasimos},
   booktitle = {Proceedings of the 60th Annual Meeting of the Association for Computational Linguistics},

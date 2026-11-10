@@ -25,7 +25,7 @@ class CzechProductReviewSentimentClassification(AbsTaskClassification):
         annotations_creators="derived",
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{habernal-etal-2013-sentiment,
+@inproceedings{habernal_sentiment_2013,
   address = {Atlanta, Georgia},
   author = {Habernal, Ivan  and
 Pt{\'a}{\v{c}}ek, Tom{\'a}{\v{s}}  and
@@ -70,7 +70,7 @@ class CzechProductReviewSentimentClassificationV2(AbsTaskClassification):
         annotations_creators="derived",
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{habernal-etal-2013-sentiment,
+@inproceedings{habernal_sentiment_2013,
   address = {Atlanta, Georgia},
   author = {Habernal, Ivan  and
 Pt{\'a}{\v{c}}ek, Tom{\'a}{\v{s}}  and

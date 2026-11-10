@@ -32,7 +32,7 @@ class EuroSATClassification(AbsTaskClassification):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@article{8736785,
+@article{helber_eurosat_2019,
   author = {Helber, Patrick and Bischke, Benjamin and Dengel, Andreas and Borth, Damian},
   doi = {10.1109/JSTARS.2019.2918242},
   journal = {IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing},

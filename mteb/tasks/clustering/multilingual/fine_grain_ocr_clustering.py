@@ -35,7 +35,7 @@ class FineGrainOCRITClustering(AbsTaskClustering):
         modalities=["image", "text"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{pettersson2024,
+@article{pettersson_multimodal_2024,
   author = {Pettersson, Tobias and Riveiro, Maria and L{\"o}fstr{\"o}m, Tuwe},
   doi = {10.1007/s00138-024-01549-9},
   journal = {Machine Vision and Applications},

@@ -25,7 +25,7 @@ class CSTRVCTKAccentID(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{Yamagishi2019CSTRVC,
+@inproceedings{yamagishi_cstr_2019,
   author = {Junichi Yamagishi and Christophe Veaux and Kirsten MacDonald},
   title = {CSTR VCTK Corpus: English Multi-speaker Corpus for CSTR Voice Cloning Toolkit (version 0.92)},
   url = {https://api.semanticscholar.org/CorpusID:213060286},

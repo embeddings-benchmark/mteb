@@ -27,7 +27,7 @@ class IEMOCAPEmotionClassification(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="created",
         bibtex_citation=r"""
-@article{busso2008iemocap,
+@article{busso_iemocap_2008,
   author = {Busso, Carlos and Bulut, Murtaza and Lee, Chi-Chun and Kazemzadeh, Abe and Mower, Emily and Kim, Samuel and Chang, Jeannette N and Lee, Sungbok and Narayanan, Shrikanth S},
   journal = {Language resources and evaluation},
   number = {4},

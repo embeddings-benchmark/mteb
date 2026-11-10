@@ -10,18 +10,22 @@ _DATASET_PATH = "pranitchawla/crisismmd-mteb"
 _DATE = ("2017-05-31", "2017-11-19")
 
 _CITATION = r"""
-@inproceedings{crisismmd2018icwsm,
+@inproceedings{alam_crisismmd_2018,
   author = {Firoj Alam and Ferda Ofli and Muhammad Imran},
   booktitle = {Proceedings of the 12th International AAAI Conference on Web and Social Media},
   title = {{CrisisMMD}: Multimodal Twitter Datasets from Natural Disasters},
   year = {2018},
 }
 
-@inproceedings{ofli2020analysis,
-  author = {Ferda Ofli and Firoj Alam and Muhammad Imran},
-  booktitle = {17th International Conference on Information Systems for Crisis Response and Management},
-  title = {Analysis of Social Media Data using Multimodal Deep Learning for Disaster Response},
+@inproceedings{ofli_analysis_2020,
+  author = {Ofli, Ferda and Alam, Firoj and Imran, Muhammad},
+  title = {Analysis of social media data using multimodal deep learning for disaster response},
+  booktitle = {Proceedings of the 17th International Conference on Information Systems for Crisis Response and Management ({ISCRAM} 2020)},
+  editor = {Hughes, Amanda Lee and McNeill, Fiona and Zobel, Christopher W.},
+  publisher = {Information Systems for Crisis Response and Management},
+  pages = {802--811},
   year = {2020},
+  address = {Spain},
 }
 """
 

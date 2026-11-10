@@ -30,7 +30,7 @@ class OxfordPetsZeroShotClassification(AbsTaskZeroShotClassification):
         modalities=["text", "image"],
         sample_creation="created",
         bibtex_citation=r"""
-@misc{maji2013finegrainedvisualclassificationaircraft,
+@misc{maji_fine-grained_2013,
   archiveprefix = {arXiv},
   author = {Subhransu Maji and Esa Rahtu and Juho Kannala and Matthew Blaschko and Andrea Vedaldi},
   eprint = {1306.5151},

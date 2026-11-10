@@ -25,7 +25,7 @@ class HateSpeechPortugueseClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{fortuna-etal-2019-hierarchically,
+@inproceedings{fortuna_hierarchically-labeled_2019,
   address = {Florence, Italy},
   author = {Fortuna, Paula  and
 Rocha da Silva, Jo{\~a}o  and

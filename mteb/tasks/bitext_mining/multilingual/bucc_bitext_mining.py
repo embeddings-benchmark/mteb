@@ -39,7 +39,7 @@ class BUCCBitextMining(AbsTaskBitextMining):
         dialect=[],
         sample_creation="human-translated",
         bibtex_citation=r"""
-@inproceedings{zweigenbaum-etal-2017-overview,
+@inproceedings{zweigenbaum_overview_2017,
   address = {Vancouver, Canada},
   author = {Zweigenbaum, Pierre  and
 Sharoff, Serge  and

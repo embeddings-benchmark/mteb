@@ -31,7 +31,7 @@ class FaithDialRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{dziri2022faithdial,
+@article{dziri_faithdial_2022,
   author = {Dziri, Nouha and Kamalloo, Ehsan and Milton, Sivan and Zaiane, Osmar and Yu, Mo and Ponti, Edoardo M and Reddy, Siva},
   doi = {10.1162/tacl_a_00529},
   journal = {Transactions of the Association for Computational Linguistics},

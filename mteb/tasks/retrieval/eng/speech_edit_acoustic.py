@@ -31,7 +31,7 @@ class SpeechEditAcousticRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{zhang2026speecheditbench,
+@inproceedings{zhang_speecheditbench_2026,
   author = {Zhang, Hanlin and Tan, Daxin and Tao, Dehua and Chen, Xiao and Tan, Haochen and Song, Linqi},
   booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
   doi = {10.18653/2026.emnlp-main.1151},

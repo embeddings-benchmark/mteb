@@ -25,7 +25,7 @@ class SQuADKorV1Retrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{rajpurkar-etal-2016-squad,
+@inproceedings{rajpurkar_squad_2016,
   address = {Austin, Texas},
   author = {Rajpurkar, Pranav  and
 Zhang, Jian  and

@@ -25,7 +25,7 @@ class FinanceBenchRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{islam2023financebench,
+@article{islam_financebench_2023,
   author = {Islam, Pranab and Kannappan, Anand and Kiela, Douwe and Fergus, Rob and Ott, Myle and Wang, Sam and Garimella, Aparna and Garcia, Nino},
   journal = {arXiv preprint arXiv:2311.11944},
   title = {FinanceBench: A New Benchmark for Financial Question Answering},

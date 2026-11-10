@@ -80,7 +80,7 @@ class MassiveIntentClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="human-translated and localized",  # with the exception of the English data
         bibtex_citation=r"""
-@inproceedings{fitzgerald2022massive,
+@inproceedings{fitzgerald_massive_2023,
   address = {Toronto, Canada},
   author = {FitzGerald, Jack and Hench, Christopher and Peris, Charith and Mackie, Scott and Rottmann, Kay and Sanchez, Ana and Nash, Aaron and Urbach, Liam and Kakarala, Vishesh and Singh, Richa and Ranganath, Swetha and Crist, Laurie and Britan, Misha and Leeuwis, Wouter and Tur, Gokhan and Natarajan, Prem},
   booktitle = {Proceedings of the 61st Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},

@@ -25,7 +25,7 @@ class CIRRIT2IRetrieval(AbsTaskRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{liu2021image,
+@inproceedings{liu_image_2021,
   author = {Liu, Zheyuan and Rodriguez-Opazo, Cristian and Teney, Damien and Gould, Stephen},
   booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision},
   pages = {2125--2134},

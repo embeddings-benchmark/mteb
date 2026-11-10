@@ -32,7 +32,7 @@ class EgoSchemaVideoCentricQA(AbsTaskRetrieval):
         modalities=["video", "text"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{mangalam2023egoschema,
+@article{mangalam_egoschema_2023,
   author = {Mangalam, Karttikeya and Akshulakov, Raiymbek and Malik, Jitendra},
   journal = {Advances in Neural Information Processing Systems},
   title = {EgoSchema: A Diagnostic Benchmark for Very Long-form Video Language Understanding},

@@ -42,7 +42,7 @@ class XNLI(AbsTaskPairClassification):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{conneau2018xnli,
+@inproceedings{conneau_xnli_2018,
   author = {Conneau, Alexis
 and Rinott, Ruty
 and Lample, Guillaume
@@ -133,7 +133,7 @@ class XNLIV2(AbsTaskPairClassification):
         dialect=[],
         sample_creation="machine-translated and verified",
         bibtex_citation=r"""
-@inproceedings{upadhyay2023xnli,
+@inproceedings{upadhyay_xnli_2023,
   author = {Upadhyay, Ankit Kumar and Upadhya, Harsit Kumar},
   booktitle = {2023 IEEE 8th International Conference for Convergence in Technology (I2CT)},
   organization = {IEEE},

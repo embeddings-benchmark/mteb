@@ -25,7 +25,7 @@ class NorwegianCourtsBitextMining(AbsTaskBitextMining):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{opus4,
+@inproceedings{tiedemann_opus-mt_2020,
   author = {Tiedemann, J{\"o}rg and Thottingal, Santhosh},
   booktitle = {Proceedings of the 22nd Annual Conference of the European Association for Machine Translation (EAMT)},
   title = {OPUS-MT — Building open translation services for the World},

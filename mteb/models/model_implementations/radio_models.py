@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from mteb.types import Array, BatchedInput, PromptType
 
 
-RADIO_CITATION = """@InProceedings{Ranzinger_2024_CVPR,
+RADIO_CITATION = """@InProceedings{ranzinger_am-radio_2024,
     author    = {Ranzinger, Mike and Heinrich, Greg and Kautz, Jan and Molchanov, Pavlo},
     title     = {AM-RADIO: Agglomerative Vision Foundation Model Reduce All Domains Into One},
     booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},

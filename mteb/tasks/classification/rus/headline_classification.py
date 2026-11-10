@@ -25,7 +25,7 @@ class HeadlineClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{gudkov-etal-2020-automatically,
+@inproceedings{gudkov_automatically_2020,
   address = {Online},
   author = {Gudkov, Vadim  and
 Mitrofanova, Olga  and
@@ -85,7 +85,7 @@ class HeadlineClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{gudkov-etal-2020-automatically,
+@inproceedings{gudkov_automatically_2020,
   address = {Online},
   author = {Gudkov, Vadim  and
 Mitrofanova, Olga  and

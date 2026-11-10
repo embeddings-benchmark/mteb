@@ -25,7 +25,7 @@ class BeijingOpera(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{6853981,
+@inproceedings{tian_study_2014,
   author = {Tian, Mi and Srinivasamurthy, Ajay and Sandler, Mark and Serra, Xavier},
   booktitle = {2014 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   doi = {10.1109/ICASSP.2014.6853981},

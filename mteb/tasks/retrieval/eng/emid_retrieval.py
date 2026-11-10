@@ -5,7 +5,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 _REFERENCE = "https://doi.org/10.1145/3607541.3616821"
 _BIBTEX = r"""
-@inproceedings{zou2023emid,
+@inproceedings{zou_emid_2023,
   author = {Zou, Jialing and Mei, Jiahao and Ye, Guangze and Huai, Tianyu and Shen, Qiwei and Dong, Daoguo},
   booktitle = {Proceedings of the 1st International Workshop on Multimedia Content Generation and Evaluation: New Methods and Practice},
   doi = {10.1145/3607541.3616821},

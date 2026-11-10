@@ -37,7 +37,7 @@ class SHS100KA2ARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{xu2018key,
+@inproceedings{xu_key-invariant_2018,
   author = {Xu, Xiaoshuo and Chen, Xiaoou and Yang, Deshun},
   booktitle = {2018 IEEE International Conference on Multimedia and Expo (ICME)},
   organization = {IEEE},

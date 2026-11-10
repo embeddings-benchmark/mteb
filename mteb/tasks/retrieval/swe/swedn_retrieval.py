@@ -25,11 +25,15 @@ class SwednRetrieval(AbsTaskRetrieval):
         task_subtypes=["Article retrieval"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{monsen2021method,
-  author = {Monsen, Julius and J{\"o}nsson, Arne},
-  booktitle = {Proceedings of CLARIN Annual Conference},
-  title = {A method for building non-english corpora for abstractive text summarization},
-  year = {2021},
+@misc{monsenjulius_swedn_2024,
+  doi = {10.23695/36V9-9017},
+  url = {https://sprakbanken.se/resurser/swedn},
+  author = {{Monsen, Julius} and {Jönsson, Arne}},
+  keywords = {Language Technology (Computational Linguistics), Swedish},
+  language = {sv},
+  title = {SweDN 1.0},
+  publisher = {Språkbanken},
+  year = {2024},
 }
 """,
         prompt={

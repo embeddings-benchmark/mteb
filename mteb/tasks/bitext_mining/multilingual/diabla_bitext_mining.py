@@ -28,7 +28,7 @@ class DiaBLaBitextMining(AbsTaskBitextMining):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@article{bawden2021diabla,
+@article{bawden_diabla_2021,
   author = {Bawden, Rachel and Bilinski, Eric and Lavergne, Thomas and Rosset, Sophie},
   journal = {Language Resources and Evaluation},
   number = {3},

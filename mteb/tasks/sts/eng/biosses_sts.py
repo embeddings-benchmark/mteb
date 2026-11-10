@@ -25,7 +25,7 @@ class BiossesSTS(AbsTaskSTS):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{10.1093/bioinformatics/btx238,
+@article{sogancoglu_biosses_2017,
   author = {Soğancıoğlu, Gizem and Öztürk, Hakime and Özgür, Arzucan},
   doi = {10.1093/bioinformatics/btx238},
   eprint = {https://academic.oup.com/bioinformatics/article-pdf/33/14/i49/50315066/bioinformatics\_33\_14\_i49.pdf},

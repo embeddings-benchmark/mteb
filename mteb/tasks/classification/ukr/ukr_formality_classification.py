@@ -25,7 +25,7 @@ class UkrFormalityClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{rao-tetreault-2018-dear,
+@inproceedings{rao_dear_2018,
   author = {Rao, Sudha  and
 Tetreault, Joel},
   booktitle = {Proceedings of the 2018 Conference of the North {A}merican Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long Papers)},
@@ -73,7 +73,7 @@ class UkrFormalityClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{rao-tetreault-2018-dear,
+@inproceedings{rao_dear_2018,
   author = {Rao, Sudha  and
 Tetreault, Joel},
   booktitle = {Proceedings of the 2018 Conference of the North {A}merican Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long Papers)},

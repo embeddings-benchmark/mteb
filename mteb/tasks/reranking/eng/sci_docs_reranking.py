@@ -26,7 +26,7 @@ class SciDocsReranking(AbsTaskRetrieval):
         sample_creation="found",
         prompt="Given a title of a scientific paper, retrieve the titles of other relevant papers",
         bibtex_citation=r"""
-@inproceedings{specter2020cohan,
+@inproceedings{cohan_specter_2020,
   author = {Arman Cohan and Sergey Feldman and Iz Beltagy and Doug Downey and Daniel S. Weld},
   booktitle = {ACL},
   title = {SPECTER: Document-level Representation Learning using Citation-informed Transformers},

@@ -28,7 +28,7 @@ class DanFeverRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{norregaard-derczynski-2021-danfever,
+@inproceedings{norregaard_danfever_2021,
   address = {Reykjavik, Iceland (Online)},
   author = {N{\o}rregaard, Jeppe  and
 Derczynski, Leon},
@@ -130,7 +130,7 @@ class DanFever(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{norregaard-derczynski-2021-danfever,
+@inproceedings{norregaard_danfever_2021,
   address = {Reykjavik, Iceland (Online)},
   author = {N{\o}rregaard, Jeppe  and
 Derczynski, Leon},

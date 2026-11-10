@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from mteb.types import RelevantDocumentsType
 
 _BIBTEX = r"""
-@inproceedings{figma2026,
+@inproceedings{anand_figma_2026,
   author = {Anand, Nishit and Seth, Ashish and Ghosh, Sreyan and Manocha, Dinesh and Duraiswami, Ramani},
   booktitle = {Proceedings of the 64th Annual Meeting of the Association for Computational Linguistics},
   title = {FIGMA: Towards FIne-Grained Music retrievAl},

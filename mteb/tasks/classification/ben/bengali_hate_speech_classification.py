@@ -25,7 +25,7 @@ class BengaliHateSpeechClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{karim2020BengaliNLP,
+@inproceedings{karim_classification_2020,
   author = {Karim, Md. Rezaul and Chakravarti, Bharathi Raja and P. McCrae, John and Cochez, Michael},
   booktitle = {7th IEEE International Conference on Data Science and Advanced Analytics (IEEE DSAA,2020)},
   publisher = {IEEE},
@@ -68,7 +68,7 @@ class BengaliHateSpeechClassificationV2(AbsTaskClassification):
         annotations_creators="expert-annotated",
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{karim2020BengaliNLP,
+@inproceedings{karim_classification_2020,
   author = {Karim, Md. Rezaul and Chakravarti, Bharathi Raja and P. McCrae, John and Cochez, Michael},
   booktitle = {7th IEEE International Conference on Data Science and Advanced Analytics (IEEE DSAA,2020)},
   publisher = {IEEE},

@@ -25,7 +25,7 @@ class QuoraPLRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{wojtasik2024beirpl,
+@inproceedings{wojtasik_beir-pl_2024,
   address = {Torino, Italia},
   archiveprefix = {arXiv},
   author = {Wojtasik, Konrad and Wo{\l}owiec, Kacper and Shishkin, Vadim and Janz, Arkadiusz and Piasecki, Maciej},
@@ -67,7 +67,7 @@ class QuoraPLRetrievalHardNegatives(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@inproceedings{wojtasik2024beirpl,
+@inproceedings{wojtasik_beir-pl_2024,
   address = {Torino, Italia},
   archiveprefix = {arXiv},
   author = {Wojtasik, Konrad and Wo{\l}owiec, Kacper and Shishkin, Vadim and Janz, Arkadiusz and Piasecki, Maciej},

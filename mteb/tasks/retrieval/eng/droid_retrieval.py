@@ -40,7 +40,7 @@ class DROIDIT2VRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
-@inproceedings{khazatsky2024droid,
+@inproceedings{khazatsky_droid_2024,
   archiveprefix = {arXiv},
   eprint = {2403.12945},
   author = {Alexander Khazatsky and Karl Pertsch and Suraj Nair and Ashwin Balakrishna and Sudeep Dasari and Siddharth Karamcheti and Soroush Nasiriany and Mohan Kumar Srirama and Lawrence Yunliang Chen and Kirsty Ellis and others},

@@ -228,7 +228,7 @@ vggish = ModelMeta(
     },
     modalities=["audio"],
     citation="""
-@inproceedings{hershey2017cnn,
+@inproceedings{hershey_cnn_2017,
     author = {Hershey, Shawn and Chaudhuri, Sourish and Ellis, Daniel P. W. and Gemmeke, Jort F. and Jansen, Aren and Moore, R. Channing and Plakal, Manoj and Platt, Devin and Saurous, Rif A. and Seybold, Bryan and Slaney, Malcolm and Weiss, Ron J. and Wilson, Kevin},
     title = {CNN architectures for large-scale audio classification},
     year = {2017},

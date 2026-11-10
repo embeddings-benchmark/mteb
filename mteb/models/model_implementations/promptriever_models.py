@@ -58,7 +58,7 @@ def _loader(
 
 
 PROMPTRIEVER_CITATION = """
-@inproceedings{weller2024promptriever,
+@inproceedings{weller_promptriever_2025,
   archiveprefix = {arXiv},
   author = {Orion Weller and Benjamin Van Durme and Dawn Lawrie and Ashwin Paranjape and Yuhao Zhang and Jack Hessel},
   booktitle = {The Thirteenth International Conference on Learning Representations},

@@ -25,7 +25,7 @@ class BengaliSentimentAnalysis(AbsTaskClassification):
         annotations_creators="human-annotated",
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{sazzed2020cross,
+@inproceedings{sazzed_cross-lingual_2020,
   author = {Sazzed, Salim},
   booktitle = {Proceedings of the Sixth Workshop on Noisy User-generated Text (W-NUT 2020)},
   pages = {50--60},
@@ -68,7 +68,7 @@ class BengaliSentimentAnalysisV2(AbsTaskClassification):
         annotations_creators="human-annotated",
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{sazzed2020cross,
+@inproceedings{sazzed_cross-lingual_2020,
   author = {Sazzed, Salim},
   booktitle = {Proceedings of the Sixth Workshop on Noisy User-generated Text (W-NUT 2020)},
   pages = {50--60},

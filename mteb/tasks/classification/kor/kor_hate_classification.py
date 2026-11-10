@@ -25,7 +25,7 @@ class KorHateClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{moon2020beep,
+@inproceedings{moon_beep_2020,
   address = {Online},
   author = {Moon, Jihyung and Cho, Won Ik and Lee, Junbum},
   booktitle = {Proceedings of the Eighth International Workshop on Natural Language Processing for Social Media},
@@ -66,7 +66,7 @@ class KorHateClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{moon2020beep,
+@inproceedings{moon_beep_2020,
   address = {Online},
   author = {Moon, Jihyung and Cho, Won Ik and Lee, Junbum},
   booktitle = {Proceedings of the Eighth International Workshop on Natural Language Processing for Social Media},

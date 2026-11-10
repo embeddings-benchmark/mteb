@@ -12,7 +12,7 @@ _DATASET_PATH = "mteb/VATEX_test_1k"
 _DATASET_REVISION_V2 = "b7ec075d006c825f6ec497318d93ce225880a07e"
 _DATASET_REVISION = "0d2e86e6d36927f4676ee6127c4e38e3867ce0ce"
 _BIBTEX = r"""
-@inproceedings{wang2019vatex,
+@inproceedings{wang_vatex_2019,
   author = {Wang, Xin and Wu, Jiawei and Chen, Junkun and Li, Lei and Wang, Yuan-Fang and Wang, William Yang},
   booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
   title = {VATEX: A Large-Scale, High-Quality Multilingual Dataset for Video-and-Language Research},

@@ -37,7 +37,7 @@ class VSC2022Retrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{pizzi2023vsc,
+@article{pizzi_2023_2024,
   author = {Pizzi, Ed and Kordopatis-Zilos, Giorgos and Patel, Hiral and Postelnicu, Gheorghe and Nagavara Ravindra, Sugosh and Gupta, Akshay and Papadopoulos, Symeon and Tolias, Giorgos and Douze, Matthijs},
   doi = {10.1016/j.cviu.2024.103997},
   issn = {1077-3142},

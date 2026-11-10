@@ -25,7 +25,7 @@ class CREMADPairClassification(AbsTaskPairClassification):
         modalities=["audio"],
         sample_creation="created",
         bibtex_citation=r"""
-@article{Cao2014-ih,
+@article{cao_crema-d_2014,
   author = {Cao, Houwei and Cooper, David G and Keutmann, Michael K and Gur,
 Ruben C and Nenkova, Ani and Verma, Ragini},
   copyright = {https://ieeexplore.ieee.org/Xplorehelp/downloads/license-information/IEEE.html},

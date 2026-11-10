@@ -50,7 +50,7 @@ class LanguageClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{conneau2018xnli,
+@inproceedings{conneau_xnli_2018,
   author = {Conneau, Alexis
 and Rinott, Ruty
 and Lample, Guillaume

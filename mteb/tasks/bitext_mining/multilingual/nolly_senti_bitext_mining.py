@@ -32,7 +32,7 @@ class NollySentiBitextMining(AbsTaskBitextMining):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{shode2023nollysenti,
+@inproceedings{shode_nollysenti_2023,
   author = {Shode, Iyanuoluwa and Adelani, David Ifeoluwa and Peng, Jing and Feldman, Anna},
   booktitle = {Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 2: Short Papers)},
   pages = {986--998},

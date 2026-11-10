@@ -27,7 +27,7 @@ class CommonLanguageGenderDetection(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@dataset{ganesh_sinisetty_2021_5036977,
+@dataset{sinisetty_commonlanguage_2021,
   author = {Ganesh Sinisetty and
 Pavlo Ruban and
 Oleksandr Dymov and

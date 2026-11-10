@@ -25,7 +25,7 @@ class STS16STS(AbsTaskSTS):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{nakov-etal-2016-semeval,
+@inproceedings{nakov_semeval-2016_2016,
   address = {San Diego, California},
   author = {Nakov, Preslav  and
 Ritter, Alan  and

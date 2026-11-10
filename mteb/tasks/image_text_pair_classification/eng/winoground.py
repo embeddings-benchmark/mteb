@@ -33,7 +33,7 @@ class Winoground(AbsTaskImageTextPairClassification):
         modalities=["text", "image"],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{thrush2022winogroundprobingvisionlanguage,
+@inproceedings{thrush_winoground_2022,
   author = {Thrush, Tristan and Jiang, Ryan and Bartolo, Max and Singh, Amanpreet and Williams, Adina and Kiela, Douwe and Ross, Candace},
   booktitle = {2022 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
   doi = {10.1109/cvpr52688.2022.00517},

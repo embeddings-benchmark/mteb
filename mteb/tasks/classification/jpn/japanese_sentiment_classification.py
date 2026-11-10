@@ -31,7 +31,7 @@ class JapaneseSentimentClassification(AbsTaskClassification):
         sample_creation="found",
         adapted_from=["MultilingualSentimentClassification"],
         bibtex_citation=r"""
-@inproceedings{mollanorozy-etal-2023-cross,
+@inproceedings{mollanorozy_cross-lingual_2023,
   address = {Dubrovnik, Croatia},
   author = {Mollanorozy, Sepideh  and
 Tanti, Marc  and
@@ -42,6 +42,7 @@ Nissim, Malvina},
 Goswami, Koustava  and
 Murado{\\u{g}}lu, Saliha  and
 Sorokin, Alexey  and
+Kumar, Ritesh  and
 Shcherbakov, Andreas  and
 Ponti, Edoardo M.  and
 Cotterell, Ryan  and

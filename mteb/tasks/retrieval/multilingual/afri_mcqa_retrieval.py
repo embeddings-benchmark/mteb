@@ -32,7 +32,7 @@ _LANGUAGES = {
 }
 
 _BIBTEX = r"""
-@inproceedings{tonja2026afrimcqa,
+@inproceedings{tonja_afri-mcqa_2026,
   author = {Tonja, Atnafu Lambebo and Anand, Srija and Villa-Cueva, Emilio and Azime, Israel Abebe and Alabi, Jesujoba Oluwadara and Mohamed, Muhidin A. and Yadeta, Debela Desalegn and Abadi, Negasi Haile and Oppong, Abigail and Obiefuna, Nnaemeka Casmir and Abdulmumin, Idris and Etori, Naome A},
   title = {{Afri-MCQA}: Multimodal Cultural Question Answering for {African} Languages},
   year = {2026},

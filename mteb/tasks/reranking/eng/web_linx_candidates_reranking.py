@@ -32,7 +32,7 @@ class WebLINXCandidatesReranking(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{lù2024weblinx,
+@inproceedings{lu_weblinx_2024,
   archiveprefix = {arXiv},
   author = {Xing Han Lu and Zden{\v{e}}k Kasner and Siva Reddy},
   booktitle = {Proceedings of the 41st International Conference on Machine Learning},

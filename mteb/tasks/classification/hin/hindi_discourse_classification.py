@@ -25,7 +25,7 @@ class HindiDiscourseClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{dhanwal-etal-2020-annotated,
+@inproceedings{dhanwal_annotated_2020,
   address = {Marseille, France},
   author = {Dhanwal, Swapnil  and
 Dutta, Hritwik  and
@@ -75,7 +75,7 @@ class HindiDiscourseClassificationV2(AbsTaskClassification):
         annotations_creators="expert-annotated",
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{dhanwal-etal-2020-annotated,
+@inproceedings{dhanwal_annotated_2020,
   address = {Marseille, France},
   author = {Dhanwal, Swapnil  and
 Dutta, Hritwik  and

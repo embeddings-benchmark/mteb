@@ -25,12 +25,12 @@ class SickrPLSTS(AbsTaskSTS):
         dialect=[],
         sample_creation="human-translated and localized",
         bibtex_citation=r"""
-@inproceedings{dadas-etal-2020-evaluation,
+@inproceedings{dadas_evaluation_2020,
   address = {Marseille, France},
   archiveprefix = {arXiv},
   author = {Dadas, Slawomir  and
-Perelkiewicz, Michal  and
-Poswiata, Rafal},
+Pere{\l}kiewicz, Micha{\l}  and
+Po{\'s}wiata, Rafa{\l}},
   booktitle = {Proceedings of the Twelfth Language Resources and Evaluation Conference},
   editor = {Calzolari, Nicoletta  and
 B{\'e}chet, Fr{\'e}d{\'e}ric  and
@@ -42,7 +42,7 @@ Goggi, Sara  and
 Isahara, Hitoshi  and
 Maegaard, Bente  and
 Mariani, Joseph  and
-Mazo, Helene  and
+Mazo, H{\'e}l{\`e}ne  and
 Moreno, Asuncion  and
 Odijk, Jan  and
 Piperidis, Stelios},
@@ -86,7 +86,7 @@ class CdscrSTS(AbsTaskSTS):
         dialect=[],
         sample_creation="human-translated and localized",
         bibtex_citation=r"""
-@inproceedings{wroblewska-krasnowska-kieras-2017-polish,
+@inproceedings{wroblewska_polish_2017,
   address = {Vancouver, Canada},
   author = {Wr{\'o}blewska, Alina  and
 Krasnowska-Kiera{\'s}, Katarzyna},

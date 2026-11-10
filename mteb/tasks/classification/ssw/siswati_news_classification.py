@@ -25,7 +25,7 @@ class SiswatiNewsClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{Madodonga_Marivate_Adendorff_2023,
+@article{madodonga_izindaba-tindzaba_2023,
   author = {Madodonga, Andani and Marivate, Vukosi and Adendorff, Matthew},
   doi = {10.55492/dhasa.v4i01.4449},
   month = {Jan.},
@@ -62,7 +62,7 @@ class SiswatiNewsClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{Madodonga_Marivate_Adendorff_2023,
+@article{madodonga_izindaba-tindzaba_2023,
   author = {Madodonga, Andani and Marivate, Vukosi and Adendorff, Matthew},
   doi = {10.55492/dhasa.v4i01.4449},
   month = {Jan.},

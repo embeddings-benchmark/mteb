@@ -29,7 +29,7 @@ class XLWICNLPairClassification(AbsTaskPairClassification):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{raganato2020xl,
+@inproceedings{raganato_xl-wic_2020,
   author = {Raganato, A and Pasini, T and Camacho-Collados, J and Pilehvar, M and others},
   booktitle = {Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing (EMNLP)},
   organization = {Association for Computational Linguistics (ACL)},

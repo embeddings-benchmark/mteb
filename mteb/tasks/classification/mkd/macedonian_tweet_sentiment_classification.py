@@ -25,7 +25,7 @@ class MacedonianTweetSentimentClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{jovanoski-etal-2015-sentiment,
+@inproceedings{jovanoski_sentiment_2015,
   address = {Hissar, Bulgaria},
   author = {Jovanoski, Dame  and
 Pachovski, Veno  and
@@ -69,7 +69,7 @@ class MacedonianTweetSentimentClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{jovanoski-etal-2015-sentiment,
+@inproceedings{jovanoski_sentiment_2015,
   address = {Hissar, Bulgaria},
   author = {Jovanoski, Dame  and
 Pachovski, Veno  and

@@ -33,7 +33,7 @@ class HMDB51Clustering(AbsTaskClustering):
         modalities=["video"],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{kuehne2011hmdb,
+@inproceedings{kuehne_hmdb_2011,
   author = {Kuehne, Hildegard and Jhuang, Hueihan and Garrote, Est{\'\i}baliz and Poggio, Tomaso and Serre, Thomas},
   booktitle = {2011 International Conference on Computer Vision},
   organization = {IEEE},

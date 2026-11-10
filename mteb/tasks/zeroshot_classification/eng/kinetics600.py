@@ -4,7 +4,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.zeroshot_classification import AbsTaskZeroShotClassification
 
 CITATION = r"""
-@article{carreira2018short,
+@article{carreira_short_2018,
   author = {Carreira, Joao and Noland, Eric and Banki-Horvath, Andras and Hillier, Chloe and Zisserman, Andrew},
   journal = {arXiv preprint arXiv:1808.01340},
   title = {A Short Note about Kinetics-600},

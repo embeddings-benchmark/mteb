@@ -29,7 +29,7 @@ class HagridRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{hagrid,
+@article{kamalloo_hagrid_2023,
   author = {Ehsan Kamalloo and Aref Jafari and Xinyu Zhang and Nandan Thakur and Jimmy Lin},
   journal = {arXiv:2307.16883},
   title = {{HAGRID}: A Human-LLM Collaborative Dataset for Generative Information-Seeking with Attribution},

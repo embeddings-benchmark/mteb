@@ -18,11 +18,14 @@ def instruction_template(
 
 
 GTE_CITATION = """
-@article{li2023towards,
-  title={Towards general text embeddings with multi-stage contrastive learning},
-  author={Li, Zehan and Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan},
-  journal={arXiv preprint arXiv:2308.03281},
-  year={2023}
+@misc{li_general_2023,
+  title={Towards General Text Embeddings with Multi-stage Contrastive Learning},
+  author={Zehan Li and Xin Zhang and Yanzhao Zhang and Dingkun Long and Pengjun Xie and Meishan Zhang},
+  year={2023},
+  eprint={2308.03281},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL},
+  url={https://arxiv.org/abs/2308.03281},
 }
 """
 
@@ -88,11 +91,14 @@ gte_qwen1_5_7b_instruct = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
-    citation="""@article{li2023towards,
-  title={Towards general text embeddings with multi-stage contrastive learning},
-  author={Li, Zehan and Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan},
-  journal={arXiv preprint arXiv:2308.03281},
-  year={2023}
+    citation="""@misc{li_general_2023,
+  title={Towards General Text Embeddings with Multi-stage Contrastive Learning},
+  author={Zehan Li and Xin Zhang and Yanzhao Zhang and Dingkun Long and Pengjun Xie and Meishan Zhang},
+  year={2023},
+  eprint={2308.03281},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL},
+  url={https://arxiv.org/abs/2308.03281},
 }""",
     output_dtypes=OutputDType.FLOAT16,
 )
@@ -124,11 +130,14 @@ gte_qwen2_1_5b_instruct = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
-    citation="""@article{li2023towards,
-  title={Towards general text embeddings with multi-stage contrastive learning},
-  author={Li, Zehan and Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan},
-  journal={arXiv preprint arXiv:2308.03281},
-  year={2023}
+    citation="""@misc{li_general_2023,
+  title={Towards General Text Embeddings with Multi-stage Contrastive Learning},
+  author={Zehan Li and Xin Zhang and Yanzhao Zhang and Dingkun Long and Pengjun Xie and Meishan Zhang},
+  year={2023},
+  eprint={2308.03281},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL},
+  url={https://arxiv.org/abs/2308.03281},
 }""",
     output_dtypes=OutputDType.FLOAT16,
 )
@@ -154,11 +163,14 @@ gte_small_zh = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,  # Not disclosed
-    citation="""@article{li2023towards,
-  title={Towards general text embeddings with multi-stage contrastive learning},
-  author={Li, Zehan and Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan},
-  journal={arXiv preprint arXiv:2308.03281},
-  year={2023}
+    citation="""@misc{li_general_2023,
+  title={Towards General Text Embeddings with Multi-stage Contrastive Learning},
+  author={Zehan Li and Xin Zhang and Yanzhao Zhang and Dingkun Long and Pengjun Xie and Meishan Zhang},
+  year={2023},
+  eprint={2308.03281},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL},
+  url={https://arxiv.org/abs/2308.03281},
 }""",
     output_dtypes=OutputDType.FLOAT16,
 )
@@ -184,11 +196,14 @@ gte_base_zh = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,  # Not disclosed
-    citation="""@article{li2023towards,
-  title={Towards general text embeddings with multi-stage contrastive learning},
-  author={Li, Zehan and Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan},
-  journal={arXiv preprint arXiv:2308.03281},
-  year={2023}
+    citation="""@misc{li_general_2023,
+  title={Towards General Text Embeddings with Multi-stage Contrastive Learning},
+  author={Zehan Li and Xin Zhang and Yanzhao Zhang and Dingkun Long and Pengjun Xie and Meishan Zhang},
+  year={2023},
+  eprint={2308.03281},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL},
+  url={https://arxiv.org/abs/2308.03281},
 }""",
     output_dtypes=OutputDType.FLOAT16,
 )
@@ -214,11 +229,14 @@ gte_large_zh = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,  # Not disclosed
-    citation="""@article{li2023towards,
-  title={Towards general text embeddings with multi-stage contrastive learning},
-  author={Li, Zehan and Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan},
-  journal={arXiv preprint arXiv:2308.03281},
-  year={2023}
+    citation="""@misc{li_general_2023,
+  title={Towards General Text Embeddings with Multi-stage Contrastive Learning},
+  author={Zehan Li and Xin Zhang and Yanzhao Zhang and Dingkun Long and Pengjun Xie and Meishan Zhang},
+  year={2023},
+  eprint={2308.03281},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL},
+  url={https://arxiv.org/abs/2308.03281},
 }""",
     output_dtypes=OutputDType.FLOAT16,
 )
@@ -346,7 +364,7 @@ gte_multilingual_base = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # couldn't find
     training_datasets=gte_multi_training_data,
-    citation="""@inproceedings{zhang2024mgte,
+    citation="""@inproceedings{zhang_mgte_2024,
   address = {Miami, Florida, US},
   author = {Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Wen and Dai, Ziqi and Tang, Jialong and Lin, Huan and Yang, Baosong and Xie, Pengjun and Huang, Fei and Zhang, Meishan and Li, Wenjie and Zhang, Min},
   booktitle = {Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing: Industry Track},
@@ -389,7 +407,7 @@ gte_modernbert_base = ModelMeta(
     public_training_code=None,  # couldn't find
     public_training_data=None,
     training_datasets=gte_multi_training_data,  # English part of gte_multi_training_data,
-    citation="""@inproceedings{zhang2024mgte,
+    citation="""@inproceedings{zhang_mgte_2024,
   address = {Miami, Florida, US},
   author = {Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Wen and Dai, Ziqi and Tang, Jialong and Lin, Huan and Yang, Baosong and Xie, Pengjun and Huang, Fei and Zhang, Meishan and Li, Wenjie and Zhang, Min},
   booktitle = {Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing: Industry Track},
@@ -403,11 +421,14 @@ gte_modernbert_base = ModelMeta(
   year = {2024},
 }
 
-@article{li2023towards,
-  title={Towards general text embeddings with multi-stage contrastive learning},
-  author={Li, Zehan and Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan},
-  journal={arXiv preprint arXiv:2308.03281},
-  year={2023}
+@misc{li_general_2023,
+  title={Towards General Text Embeddings with Multi-stage Contrastive Learning},
+  author={Zehan Li and Xin Zhang and Yanzhao Zhang and Dingkun Long and Pengjun Xie and Meishan Zhang},
+  year={2023},
+  eprint={2308.03281},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL},
+  url={https://arxiv.org/abs/2308.03281},
 }""",
     output_dtypes=OutputDType.FLOAT16,
 )
@@ -442,7 +463,7 @@ gte_base_en_v15 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
-    citation="""@inproceedings{zhang2024mgte,
+    citation="""@inproceedings{zhang_mgte_2024,
   address = {Miami, Florida, US},
   author = {Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Wen and Dai, Ziqi and Tang, Jialong and Lin, Huan and Yang, Baosong and Xie, Pengjun and Huang, Fei and Zhang, Meishan and Li, Wenjie and Zhang, Min},
   booktitle = {Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing: Industry Track},
@@ -455,7 +476,7 @@ gte_base_en_v15 = ModelMeta(
   url = {https://aclanthology.org/2024.emnlp-industry.103/},
   year = {2024},
 }
-@misc{li2023towards,
+@misc{li_general_2023,
   title={Towards General Text Embeddings with Multi-stage Contrastive Learning},
   author={Zehan Li and Xin Zhang and Yanzhao Zhang and Dingkun Long and Pengjun Xie and Meishan Zhang},
   year={2023},

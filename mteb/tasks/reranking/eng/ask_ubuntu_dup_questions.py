@@ -26,7 +26,7 @@ class AskUbuntuDupQuestions(AbsTaskRetrieval):
         sample_creation="found",
         prompt="Retrieve duplicate questions from AskUbuntu forum",
         bibtex_citation=r"""
-@inproceedings{wang-2021-TSDAE,
+@inproceedings{wang_tsdae_2021,
   address = {Punta Cana, Dominican Republic},
   author = {Wang, Kexin and Reimers, Nils and Gurevych, Iryna},
   booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2021},

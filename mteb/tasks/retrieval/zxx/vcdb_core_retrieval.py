@@ -38,7 +38,7 @@ class VCDBCoreRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{jiang2014vcdb,
+@inproceedings{jiang_vcdb_2014,
   author = {Jiang, Yu-Gang and Jiang, Yudong and Wang, Jiajun},
   booktitle = {Computer Vision -- ECCV 2014},
   pages = {357--371},
@@ -92,7 +92,7 @@ class VCDBCoreAudioVideoRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{jiang2014vcdb,
+@inproceedings{jiang_vcdb_2014,
   author = {Jiang, Yu-Gang and Jiang, Yudong and Wang, Jiajun},
   booktitle = {Computer Vision -- ECCV 2014},
   pages = {357--371},

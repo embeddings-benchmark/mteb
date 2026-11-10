@@ -28,7 +28,7 @@ class RuSciBenchCitedCountRegression(AbsTaskRegression):
         annotations_creators="derived",
         dialect=[],
         bibtex_citation=r"""
-@article{vatolin2024ruscibench,
+@article{vatolin_ruscibench_2024,
   author = {Vatolin, A. and Gerasimenko, N. and Ianina, A. and Vorontsov, K.},
   doi = {10.1134/S1064562424602191},
   issn = {1531-8362},
@@ -72,7 +72,7 @@ class RuSciBenchYearPublRegression(AbsTaskRegression):
         annotations_creators="derived",
         dialect=[],
         bibtex_citation=r"""
-@article{vatolin2024ruscibench,
+@article{vatolin_ruscibench_2024,
   author = {Vatolin, A. and Gerasimenko, N. and Ianina, A. and Vorontsov, K.},
   doi = {10.1134/S1064562424602191},
   issn = {1531-8362},

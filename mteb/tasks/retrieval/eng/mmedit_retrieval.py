@@ -36,7 +36,7 @@ class MMEditAT2ARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@article{tao2025mmedit,
+@article{tao_mmedit_2025,
   author = {Tao, Ye and Xu, Xuenan and Wu, Wen and Wang, Shuai and Wu, Mengyue and Zhang, Chao},
   journal = {arXiv preprint arXiv:2512.20339},
   title = {MMEDIT: A Unified Framework for Multi-Type Audio Editing via Audio Language Model},

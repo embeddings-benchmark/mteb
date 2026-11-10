@@ -202,7 +202,7 @@ class BelebeleRetrieval(AbsTaskRetrieval):
         annotations_creators="expert-annotated",
         dialect=[],
         bibtex_citation=r"""
-@inproceedings{bandarkar2023belebele,
+@inproceedings{bandarkar_belebele_2024,
   address = {Bangkok, Thailand},
   author = {Bandarkar, Lucas and Liang, Davis and Muller, Benjamin and Artetxe, Mikel and Shukla, Satya Narayan and Husa, Donald and Goyal, Naman and Krishnan, Abhinandan and Zettlemoyer, Luke and Khabsa, Madian},
   booktitle = {Proceedings of the 62nd Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
