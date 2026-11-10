@@ -444,6 +444,81 @@ potion_code_16m_v2 = ModelMeta(
     ),
 )
 
+# Distilled from bge-base-en-v1.5, then trained on LightOn's data. The hard-negative data
+# (lightonai/embeddings-fine-tuning-filtered-en) contains FiQA, NQ, HotpotQA, MS MARCO, FEVER, SQuAD v2,
+# TriviaQA, MIRACL and MLDR. From the contrastive pairs (lightonai/embeddings-pre-training-curated),
+# only sources that are MTEB datasets themselves are listed, as for nomic_training_data.
+_BLINK_TRAINING_DATASETS = bge_training_data | {
+    "FEVER",
+    "FEVERHardNegatives",
+    "NanoFEVERRetrieval",
+    "FiQA2018",
+    "NanoFiQA2018Retrieval",
+    "HotpotQA",
+    "HotpotQAHardNegatives",
+    "NanoHotpotQARetrieval",
+    "MSMARCO",
+    "MSMARCOHardNegatives",
+    "NanoMSMARCORetrieval",
+    "NQ",
+    "NQHardNegatives",
+    "NanoNQRetrieval",
+    "MIRACLRetrieval",
+    "MultiLongDocRetrieval",
+    # amazon_reviews, amazon_qa
+    "AmazonCounterfactualClassification",
+    "AmazonPolarityClassification",
+    "AmazonReviewsClassification",
+    # stackexchange
+    "StackExchangeClustering",
+    "StackExchangeClusteringP2P",
+    "StackExchangeClustering.v2",
+    "StackExchangeClusteringP2P.v2",
+    # reddit
+    "RedditClustering",
+    "RedditClusteringP2P",
+    "RedditClustering.v2",
+    "RedditClusteringP2P.v2",
+    # quora
+    "QuoraRetrieval",
+    "NanoQuoraRetrieval",
+    # beir_dbpedia
+    "DBPedia",
+    "DBPediaHardNegatives",
+    "NanoDBPediaRetrieval",
+    # yahoo
+    "YahooAnswersTopicsClassification",
+}
+
+blink_8m = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    name="minishlab/blink-8M",
+    model_type=["dense"],
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="593ed556e9a417e80b3b251a28ba8f412bed026e",
+    release_date="2026-11-12",
+    n_parameters=7680000,
+    n_embedding_parameters=7680000,
+    memory_usage_mb=29,
+    max_tokens=np.inf,
+    embed_dim=256,
+    license="mit",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["NumPy", "Sentence Transformers", "safetensors"],
+    reference="https://huggingface.co/minishlab/blink-8M",
+    use_instructions=False,
+    adapted_from="BAAI/bge-base-en-v1.5",
+    superseded_by=None,
+    training_datasets=_BLINK_TRAINING_DATASETS,
+    public_training_code="https://github.com/MinishLab/blink",
+    public_training_data=(
+        "https://huggingface.co/datasets/minishlab/tokenlearn-c4-en-bge-base-en-v1.5; "
+        "https://huggingface.co/datasets/lightonai/embeddings-pre-training-curated; "
+        "https://huggingface.co/datasets/lightonai/embeddings-fine-tuning-filtered-en"
+    ),
+)
+
 pubmed_bert_100k = ModelMeta(
     loader=Model2VecModel,
     name="NeuML/pubmedbert-base-embeddings-100K",
