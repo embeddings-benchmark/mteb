@@ -42,6 +42,7 @@ Nissim, Malvina},
 Goswami, Koustava  and
 Murado{\\u{g}}lu, Saliha  and
 Sorokin, Alexey  and
+Kumar, Ritesh  and
 Shcherbakov, Andreas  and
 Ponti, Edoardo M.  and
 Cotterell, Ryan  and

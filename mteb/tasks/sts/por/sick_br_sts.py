@@ -36,7 +36,7 @@ and Thalenberg, Bruna
 and Guide, Bruno
 and Silva, Cindy
 and de Oliveira Lima, Guilherme
-and Camara, Igor C. S.
+and C{\^a}mara, Igor C. S.
 and Stanojevi{\'{c}}, Milo{\v{s}}
 and Souza, Rodrigo
 and de Paiva, Valeria},

@@ -246,7 +246,7 @@ qwen25_omni_7b = ModelMeta(
     ],
     model_type=["dense"],
     citation="""
-@misc{xu_qwen2_2025,
+@misc{xu_qwen25-omni_2025,
     title={Qwen2.5-Omni Technical Report},
     author={Jin Xu and Zhifang Guo and Jinzheng He and Hangrui Hu and Ting He and Shuai Bai and Keqin Chen and Jialin Wang and Yang Fan and Kai Dang and Bin Zhang and Xiong Wang and Yunfei Chu and Junyang Lin},
     year={2025},
@@ -287,7 +287,7 @@ qwen25_omni_3b = ModelMeta(
     ],
     model_type=["dense"],
     citation="""
-@misc{xu_qwen2_2025,
+@misc{xu_qwen25-omni_2025,
     title={Qwen2.5-Omni Technical Report},
     author={Jin Xu and Zhifang Guo and Jinzheng He and Hangrui Hu and Ting He and Shuai Bai and Keqin Chen and Jialin Wang and Yang Fan and Kai Dang and Bin Zhang and Xiong Wang and Yunfei Chu and Junyang Lin},
     year={2025},

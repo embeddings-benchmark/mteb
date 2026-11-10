@@ -62,14 +62,14 @@ paraphrase_langs = [
     "zho-Hant",
 ]
 
-SBERT_CITATION = """@inproceedings{reimers_sentence-bert_2019,
-    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
-    author = "Reimers, Nils and Gurevych, Iryna",
-    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
-    month = "11",
-    year = "2019",
-    publisher = "Association for Computational Linguistics",
-    url = "http://arxiv.org/abs/1908.10084",
+SBERT_CITATION = """@misc{reimers_sentence-bert_2019,
+  archiveprefix = {arXiv},
+  author = {Nils Reimers and Iryna Gurevych},
+  eprint = {1908.10084},
+  primaryclass = {cs.CL},
+  title = {Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
+  url = {https://arxiv.org/abs/1908.10084},
+  year = {2019},
 }
 """
 
@@ -458,14 +458,14 @@ static_similarity_mrl_multilingual_v1 = ModelMeta(
     training_datasets=static_multi_datasets,
     public_training_code="https://huggingface.co/blog/static-embeddings",
     public_training_data="https://huggingface.co/collections/sentence-transformers/embedding-model-datasets-6644d7a3673a511914aa7552",
-    citation="""@inproceedings{reimers_sentence-bert_2019,
-    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
-    author = "Reimers, Nils and Gurevych, Iryna",
-    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
-    month = "11",
-    year = "2019",
-    publisher = "Association for Computational Linguistics",
-    url = "https://arxiv.org/abs/1908.10084",
+    citation="""@misc{reimers_sentence-bert_2019,
+  archiveprefix = {arXiv},
+  author = {Nils Reimers and Iryna Gurevych},
+  eprint = {1908.10084},
+  primaryclass = {cs.CL},
+  title = {Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
+  url = {https://arxiv.org/abs/1908.10084},
+  year = {2019},
 }""",
 )
 

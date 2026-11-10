@@ -36,8 +36,8 @@ class SNLHierarchicalClusteringP2P(AbsTaskClustering):
         sample_creation="found",
         bibtex_citation=r"""
 @mastersthesis{navjord_extractive_2023,
-  author = {Navjord, J{\\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
-  school = {Norwegian University of Life Sciences, {\\AA}s},
+  author = {Navjord, J{\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
+  school = {Norwegian University of Life Sciences, {\AA}s},
   title = {Beyond extractive: advancing abstractive automatic text summarization in Norwegian with transformers},
   year = {2023},
 }
@@ -74,8 +74,8 @@ class SNLHierarchicalClusteringS2S(AbsTaskClustering):
         sample_creation="found",
         bibtex_citation=r"""
 @mastersthesis{navjord_extractive_2023,
-  author = {Navjord, J{\\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
-  school = {Norwegian University of Life Sciences, {\\AA}s},
+  author = {Navjord, J{\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
+  school = {Norwegian University of Life Sciences, {\AA}s},
   title = {Beyond extractive: advancing abstractive automatic text summarization in Norwegian with transformers},
   year = {2023},
 }

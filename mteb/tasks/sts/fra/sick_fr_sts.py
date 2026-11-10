@@ -34,6 +34,15 @@ Bentivogli, Luisa  and
 Bernardi, Raffaella  and
 Zamparelli, Roberto},
   booktitle = {Proceedings of the Ninth International Conference on Language Resources and Evaluation ({LREC}'14)},
+  editor = {Calzolari, Nicoletta  and
+Choukri, Khalid  and
+Declerck, Thierry  and
+Loftsson, Hrafn  and
+Maegaard, Bente  and
+Mariani, Joseph  and
+Moreno, Asuncion  and
+Odijk, Jan  and
+Piperidis, Stelios},
   month = may,
   pages = {216--223},
   publisher = {European Language Resources Association (ELRA)},

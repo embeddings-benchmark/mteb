@@ -45,7 +45,7 @@ class STS17Crosslingual(AbsTaskSTS):
   author = {Cer, Daniel  and
 Diab, Mona  and
 Agirre, Eneko  and
-Lopez-Gazpio, I{\\~n}igo  and
+Lopez-Gazpio, I{\~n}igo  and
 Specia, Lucia},
   booktitle = {Proceedings of the 11th International Workshop on Semantic Evaluation ({S}em{E}val-2017)},
   doi = {10.18653/v1/S17-2001},

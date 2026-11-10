@@ -32,6 +32,15 @@ Mitrofanova, Olga  and
 Filippskikh, Elizaveta},
   booktitle = {Proceedings of the Fourth Workshop on Neural Generation and Translation},
   doi = {10.18653/v1/2020.ngt-1.6},
+  editor = {Birch, Alexandra  and
+Finch, Andrew  and
+Hayashi, Hiroaki  and
+Heafield, Kenneth  and
+Junczys-Dowmunt, Marcin  and
+Konstas, Ioannis  and
+Li, Xian  and
+Neubig, Graham  and
+Oda, Yusuke},
   month = jul,
   pages = {54--59},
   publisher = {Association for Computational Linguistics},

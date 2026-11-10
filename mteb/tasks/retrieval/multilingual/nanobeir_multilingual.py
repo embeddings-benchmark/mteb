@@ -153,10 +153,15 @@ class MultilingualNanoFEVERRetrieval(AbsTaskRetrieval):
         bibtex_citation=r"""
 @inproceedings{thorne_fever_2018,
   address = {New Orleans, Louisiana},
-  author = {Thorne, James  and Vlachos, Andreas  and Christodoulopoulos, Christos  and Mittal, Arpit},
-  booktitle = {Proceedings of the 2018 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long Papers)},
+  author = {Thorne, James  and
+Vlachos, Andreas  and
+Christodoulopoulos, Christos  and
+Mittal, Arpit},
+  booktitle = {Proceedings of the 2018 Conference of the North {A}merican Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long Papers)},
   doi = {10.18653/v1/N18-1074},
-  editor = {Walker, Marilyn  and Ji, Heng  and Stent, Amanda},
+  editor = {Walker, Marilyn  and
+Ji, Heng  and
+Stent, Amanda},
   month = jun,
   pages = {809--819},
   publisher = {Association for Computational Linguistics},
@@ -197,7 +202,7 @@ class MultilingualNanoFiQA2018Retrieval(AbsTaskRetrieval):
         bibtex_citation=r"""
 @inproceedings{thakur_beir_2021,
   archiveprefix = {arXiv},
-  author = {Nandan Thakur and Nils Reimers and Andreas R{"u}ckl'e and Abhishek Srivastava and Iryna Gurevych},
+  author = {Nandan Thakur and Nils Reimers and Andreas R{\"u}ckl{\'e} and Abhishek Srivastava and Iryna Gurevych},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)},
   eprint = {2104.08663},
   title = {{BEIR}: A Heterogeneous Benchmark for Zero-shot Evaluation of Information Retrieval Models},

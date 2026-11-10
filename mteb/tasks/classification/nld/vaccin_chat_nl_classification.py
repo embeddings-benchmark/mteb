@@ -25,16 +25,36 @@ class VaccinChatNLClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{buhmann_domain-_2022,
-  address = {Gyeongju, Republic of Korea},
-  author = {Buhmann, Jeska and De Bruyn, Maxime and Lotfi, Ehsan and Daelemans, Walter},
+@inproceedings{buhmann_domain_2022,
+  title = {Domain- and Task-Adaptation for {V}accin{C}hat{NL}, a {D}utch {COVID}-19 {FAQ} Answering Corpus and Classification Model},
+  author = {Buhmann, Jeska  and De Bruyn, Maxime  and Lotfi, Ehsan  and Daelemans, Walter},
+  editor = {Calzolari, Nicoletta  and
+      Huang, Chu-Ren  and
+      Kim, Hansaem  and
+      Pustejovsky, James  and
+      Wanner, Leo  and
+      Choi, Key-Sun  and
+      Ryu, Pum-Mo  and
+      Chen, Hsin-Hsi  and
+      Donatelli, Lucia  and
+      Ji, Heng  and
+      Kurohashi, Sadao  and
+      Paggio, Patrizia  and
+      Xue, Nianwen  and
+      Kim, Seokhwan  and
+      Hahm, Younggyun  and
+      He, Zhong  and
+      Lee, Tony Kyungil  and
+      Santus, Enrico  and
+      Bond, Francis  and
+      Na, Seung-Hoon},
   booktitle = {Proceedings of the 29th International Conference on Computational Linguistics},
   month = oct,
-  pages = {3539--3549},
-  publisher = {International Committee on Computational Linguistics},
-  title = {Domain- and Task-Adaptation for {V}accin{C}hat{NL}, a {D}utch {COVID}-19 {FAQ} Answering Corpus and Classification Model},
-  url = {https://aclanthology.org/2022.coling-1.312},
   year = {2022},
+  address = {Gyeongju, Republic of Korea},
+  publisher = {International Committee on Computational Linguistics},
+  url = {https://aclanthology.org/2022.coling-1.312/},
+  pages = {3539--3549},
 }
 """,
         prompt="Gegeven een gebruikersuiting als query, bepaal de gebruikersintenties",

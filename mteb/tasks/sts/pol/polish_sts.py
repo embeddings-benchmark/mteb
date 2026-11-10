@@ -29,8 +29,8 @@ class SickrPLSTS(AbsTaskSTS):
   address = {Marseille, France},
   archiveprefix = {arXiv},
   author = {Dadas, Slawomir  and
-Perelkiewicz, Michal  and
-Poswiata, Rafal},
+Pere{\l}kiewicz, Micha{\l}  and
+Po{\'s}wiata, Rafa{\l}},
   booktitle = {Proceedings of the Twelfth Language Resources and Evaluation Conference},
   editor = {Calzolari, Nicoletta  and
 B{\'e}chet, Fr{\'e}d{\'e}ric  and
@@ -42,7 +42,7 @@ Goggi, Sara  and
 Isahara, Hitoshi  and
 Maegaard, Bente  and
 Mariani, Joseph  and
-Mazo, Helene  and
+Mazo, H{\'e}l{\`e}ne  and
 Moreno, Asuncion  and
 Odijk, Jan  and
 Piperidis, Stelios},

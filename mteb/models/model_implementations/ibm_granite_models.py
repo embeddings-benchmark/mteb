@@ -4,26 +4,33 @@ from mteb.models.model_meta import (
 )
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
-GRANITE_EMBEDDING_CITATION = """@article{awasthy_granite_2025,
-  title={Granite Embedding Models},
-  author={Awasthy, Parul and Trivedi, Aashka and Li, Yulong and Bornea, Mihaela and Cox, David and Daniels, Abraham and Franz, Martin and Goodhart, Gabe and Iyer, Bhavani and Kumar, Vishwajeet and Lastras, Luis and McCarley, Scott and Murthy, Rudra and P, Vignesh and Rosenthal, Sara and Roukos, Salim and Sen, Jaydeep and Sharma, Sukriti and Sil, Avirup and Soule, Kate and Sultan, Arafat and Florian, Radu},
-  journal={arXiv preprint arXiv:2502.20204},
-  year={2025}
+GRANITE_EMBEDDING_CITATION = """@misc{awasthy_granite_2025,
+      title={Granite Embedding Models},
+      author={Parul Awasthy and Aashka Trivedi and Yulong Li and Mihaela Bornea and David Cox and Abraham Daniels and Martin Franz and Gabe Goodhart and Bhavani Iyer and Vishwajeet Kumar and Luis Lastras and Scott McCarley and Rudra Murthy and Vignesh P and Sara Rosenthal and Salim Roukos and Jaydeep Sen and Sukriti Sharma and Avirup Sil and Kate Soule and Arafat Sultan and Radu Florian},
+      year={2025},
+      eprint={2502.20204},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2502.20204},
 }"""
 
-GRANITE_EMBEDDING_R2_CITATION = """@article{awasthy_granite_2025a,
+GRANITE_EMBEDDING_R2_CITATION = """@misc{awasthy_granite_2025a,
       title={Granite Embedding R2 Models},
       author={Parul Awasthy and Aashka Trivedi and Yulong Li and Meet Doshi and Riyaz Bhat and Vignesh P and Vishwajeet Kumar and Yushu Yang and Bhavani Iyer and Abraham Daniels and Rudra Murthy and Ken Barker and Martin Franz and Madison Lee and Todd Ward and Salim Roukos and David Cox and Luis Lastras and Jaydeep Sen and Radu Florian},
       year={2025},
-      journal={arXiv preprint arXiv:2508.21085},
+      eprint={2508.21085},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
       url={https://arxiv.org/abs/2508.21085},
 }"""
 
-GRANITE_EMBEDDING_MULTILINGUAL_R2_CITATION = """@article{awasthy_granite_2026,
+GRANITE_EMBEDDING_MULTILINGUAL_R2_CITATION = """@misc{awasthy_granite_2026,
       title={Granite Embedding Multilingual R2 Models},
       author={Parul Awasthy and Aashka Trivedi and Yushu Yang and Ken Barker and Yulong Li and Bhavani Iyer and Martin Franz and Juergen Bross and Meet Doshi and Vignesh P and Vishwajeet Kumar and Todd Ward and Abraham Daniels and Madison Lee and Luis Lastras and Jaydeep Sen and Radu Florian},
       year={2026},
-      journal={arXiv preprint arXiv:2605.13521}
+      eprint={2605.13521},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
       url={https://arxiv.org/abs/2605.13521},
 }"""
 

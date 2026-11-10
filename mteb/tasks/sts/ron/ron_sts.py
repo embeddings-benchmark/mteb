@@ -26,9 +26,10 @@ class RonSTS(AbsTaskSTS):
         sample_creation="machine-translated and verified",
         bibtex_citation=r"""
 @inproceedings{dumitrescu_liro_2021,
-  author = {Dumitrescu, Stefan Daniel and Rebeja, Petru and Lorincz, Beata and Gaman, Mihaela and Avram, Andrei and Ilie, Mihai and Pruteanu, Andrei and Stan, Adriana and Rosia, Lorena and Iacobescu, Cristina and others},
+  author = {Stefan Daniel Dumitrescu and Petru Rebeja and Beata Lorincz and Mihaela Gaman and Andrei Avram and Mihai Ilie and Andrei Pruteanu and Adriana Stan and Lorena Rosia and Cristina Iacobescu and Luciana Morogan and George Dima and Gabriel Marchidan and Traian Rebedea and Madalina Chitez and Dani Yogatama and Sebastian Ruder and Radu Tudor Ionescu and Razvan Pascanu and Viorica Patraucean},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
   title = {LiRo: Benchmark and leaderboard for Romanian language tasks},
+  url = {https://openreview.net/forum?id=JH61CD7afTv},
   year = {2021},
 }
 """,

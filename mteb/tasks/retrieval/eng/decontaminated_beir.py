@@ -4,14 +4,18 @@ from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _DECONTAMINATED_BEIR_CITATION = r"""
-@misc{sourty_denseon_2026a,
-  author = {Sourty, Raphael and Chaffin, Antoine and Weller, Orion and Moura Junior, Paulo Roberto and Chatelain, Amelie},
-  howpublished = {\url{https://huggingface.co/blog/lightonai/denseon-lateon}},
-  title = {DenseOn with the LateOn: Open State-of-the-Art Single and Multi-Vector Models},
-  year = {2026},
+@misc{sourty_denseon_2026,
+  title         = {DenseOn with the LateOn: Fully Open Dense and Late-Interaction Models for Multilingual, Long-Context, and Code Search},
+  author        = {Raphaël Sourty and Antoine Chaffin and Paulo Roberto Moura Junior and Amélie Chatelain},
+  year          = {2026},
+  eprint        = {2607.27178},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CL},
+  url           = {https://arxiv.org/abs/2607.27178},
 }
 
 @inproceedings{thakur_beir_2021,
+  archiveprefix = {arXiv},
   author = {Nandan Thakur and Nils Reimers and Andreas R{\"u}ckl{\'e} and Abhishek Srivastava and Iryna Gurevych},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)},
   eprint = {2104.08663},
