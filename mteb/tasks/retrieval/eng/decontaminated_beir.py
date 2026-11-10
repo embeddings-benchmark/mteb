@@ -5,13 +5,13 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 _DECONTAMINATED_BEIR_CITATION = r"""
 @misc{sourty_denseon_2026,
-  title         = {DenseOn with the LateOn: Fully Open Dense and Late-Interaction Models for Multilingual, Long-Context, and Code Search},
-  author        = {Raphaël Sourty and Antoine Chaffin and Paulo Roberto Moura Junior and Amélie Chatelain},
-  year          = {2026},
-  eprint        = {2607.27178},
+  title = {DenseOn with the LateOn: Fully Open Dense and Late-Interaction Models for Multilingual, Long-Context, and Code Search},
+  author = {Raphaël Sourty and Antoine Chaffin and Paulo Roberto Moura Junior and Amélie Chatelain},
+  year = {2026},
+  eprint = {2607.27178},
   archivePrefix = {arXiv},
-  primaryClass  = {cs.CL},
-  url           = {https://arxiv.org/abs/2607.27178},
+  primaryClass = {cs.CL},
+  url = {https://arxiv.org/abs/2607.27178},
 }
 
 @inproceedings{thakur_beir_2021,

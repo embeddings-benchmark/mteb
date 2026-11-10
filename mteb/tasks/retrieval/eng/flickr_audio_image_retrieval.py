@@ -9,12 +9,12 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 CITATION = r"""
 @inproceedings{harwath_deep_2015,
-  title={Deep multimodal semantic embeddings for speech and images},
-  author={Harwath, David and Glass, James},
-  booktitle={2015 IEEE workshop on automatic speech recognition and understanding (ASRU)},
-  pages={237--244},
-  year={2015},
-  organization={IEEE}
+  title = {Deep multimodal semantic embeddings for speech and images},
+  author = {Harwath, David and Glass, James},
+  booktitle = {2015 IEEE workshop on automatic speech recognition and understanding (ASRU)},
+  pages = {237--244},
+  year = {2015},
+  organization = {IEEE},
 }
 """
 
