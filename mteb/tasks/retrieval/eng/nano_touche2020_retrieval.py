@@ -25,24 +25,22 @@ class NanoTouche2020Retrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@dataset{potthast_touche20-argument-retrieval-for-controversial-_2022,
+@dataset{potthast_touche20-argument-retrieval-for-controversial-questions_2020,
   author = {Potthast, Martin and
-Gienapp, Lukas and
-Wachsmuth, Henning and
-Hagen, Matthias and
-Fröbe, Maik and
-Bondarenko, Alexander and
-Ajjour, Yamen and
-Stein, Benno},
-  doi = {10.5281/zenodo.6862281},
-  month = jul,
+                  Gienapp, Lukas and
+                  Wachsmuth, Henning and
+                  Hagen, Matthias and
+                  Fröbe, Maik and
+                  Bondarenko, Alexander and
+                  Ajjour, Yamen and
+                  Stein, Benno},
+  title = {Touché20-Argument-Retrieval-for-Controversial-Questions},
+  month = sep,
+  year = {2020},
   publisher = {Zenodo},
-  title = {{Touché20-Argument-Retrieval-for-Controversial-
-Questions}},
+  doi = {10.5281/zenodo.6862281},
   url = {https://doi.org/10.5281/zenodo.6862281},
-  year = {2022},
-}
-""",
+}""",
         prompt={
             "query": "Given a question, retrieve detailed and persuasive arguments that answer the question"
         },
