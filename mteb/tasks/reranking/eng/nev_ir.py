@@ -41,7 +41,6 @@ class NevIR(AbsTaskRetrieval):
   url = {https://aclanthology.org/2024.eacl-long.139/},
   doi = {10.18653/v1/2024.eacl-long.139},
   pages = {2274--2287},
-  abstract = {Negation is a common everyday phenomena and has been a consistent area of weakness for language models (LMs). Although the Information Retrieval (IR) community has adopted LMs as the backbone of modern IR architectures, there has been little to no research in understanding how negation impacts neural IR. We therefore construct a straightforward benchmark on this theme: asking IR models to rank two documents that differ only by negation. We show that the results vary widely according to the type of IR architecture: cross-encoders perform best, followed by late-interaction models, and in last place are bi-encoder and sparse neural architectures. We find that most current information retrieval models do not consider negation, performing similarly or worse than randomly ranking. We show that although the obvious approach of continued fine-tuning on a dataset of contrastive documents containing negations increases performance (as does model size), there is still a large gap between machine and human performance.},
 }
 """,
     )
