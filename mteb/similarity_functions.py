@@ -597,24 +597,9 @@ def manhattan_sim(a: Array, b: Array) -> Array:
     a = _convert_to_tensor(a)
     b = _convert_to_tensor(b)
 
-    def core_fn(
-        a_: torch.Tensor, b_: torch.Tensor, device: torch.device
-    ) -> torch.Tensor:
-        # cdist(p=1) can materialize a (rows, len(b), dim) intermediate (e.g. on MPS), so
-        # chunk the rows of `a` only; retrieval already chunks the corpus (`b`) upstream.
-        # The budget deliberately reuses _MAX_SIM_CHUNK_ELEMENTS.
-        b_ = b_.to(device)
-        chunk_rows = max(
-            1, _MAX_SIM_CHUNK_ELEMENTS // max(1, b_.shape[0] * b_.shape[-1])
-        )
-        return torch.cat(
-            [
-                -torch.cdist(a_[start : start + chunk_rows].to(device), b_, p=1.0)
-                for start in range(0, max(a_.shape[0], 1), chunk_rows)
-            ]
-        )
-
-    return _compute_on_best_device(core_fn, a, b)
+    return _compute_on_best_device(
+        lambda a_, b_, device: -torch.cdist(a_.to(device), b_.to(device), p=1.0), a, b
+    )
 
 
 def pairwise_manhattan_sim(a: Array, b: Array) -> Array:
