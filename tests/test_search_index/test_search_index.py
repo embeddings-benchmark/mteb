@@ -105,3 +105,26 @@ def test_faiss_euclidean_reranking_candidate_lengths(
     assert indices == [[1, 2, 0], [0] if second_candidates else []]
     assert scores[0] == pytest.approx([0, -np.sqrt(5), -5])
     assert scores[1] == pytest.approx([-1] if second_candidates else [])
+
+
+def test_faiss_reranking_missing_query_in_top_ranked() -> None:
+    """Queries missing from top_ranked should not raise KeyError."""
+    pytest.importorskip("faiss", reason="faiss is not installed")
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    backend = FaissSearchIndex(model)
+    backend.add_documents(
+        np.array([[1, 0], [3, 1]], dtype=np.float32),
+        ["d1", "d2"],
+    )
+
+    scores, indices = backend.search(
+        np.array([[1, 0], [2, 1]], dtype=np.float32),
+        top_k=5,
+        similarity_fn=model.similarity,
+        top_ranked={"q1": ["d1"]},  # q2 is absent
+        query_idx_to_id={0: "q1", 1: "q2"},
+    )
+
+    assert indices == [[0], []]
+    assert len(scores[0]) == 1
+    assert scores[1] == []
