@@ -166,7 +166,7 @@ def select_similarity(
     Args:
         embedding1: The first set of embeddings.
         embedding2: The second set of embeddings.
-        similarity_fn: The similarity function to use (COSINE, DOT_PRODUCT, EUCLIDEAN).
+        similarity_fn: The similarity function to use (COSINE, DOT_PRODUCT, MAX_SIM, EUCLIDEAN, MANHATTAN).
 
     Returns:
         Array: The computed similarity scores.
@@ -175,8 +175,12 @@ def select_similarity(
         return cos_sim(embedding1, embedding2)
     if similarity_fn is ScoringFunction.DOT_PRODUCT:
         return dot_score(embedding1, embedding2)
+    if similarity_fn is ScoringFunction.MAX_SIM:
+        return max_sim(embedding1, embedding2)
     if similarity_fn is ScoringFunction.EUCLIDEAN:
         return euclidean_sim(embedding1, embedding2)
+    if similarity_fn is ScoringFunction.MANHATTAN:
+        return manhattan_sim(embedding1, embedding2)
     raise ValueError(f"Unsupported similarity function: {similarity_fn}")
 
 
@@ -190,7 +194,7 @@ def select_pairwise_similarity(
     Args:
         embedding1: The first set of embeddings.
         embedding2: The second set of embeddings.
-        similarity_fn: The similarity function to use (COSINE, DOT_PRODUCT, EUCLIDEAN).
+        similarity_fn: The similarity function to use (COSINE, DOT_PRODUCT, MAX_SIM, EUCLIDEAN, MANHATTAN).
 
     Returns:
         Array: The computed pairwise similarity scores.
@@ -199,8 +203,12 @@ def select_pairwise_similarity(
         return pairwise_cos_sim(embedding1, embedding2)
     if similarity_fn is ScoringFunction.DOT_PRODUCT:
         return pairwise_dot_score(embedding1, embedding2)
+    if similarity_fn is ScoringFunction.MAX_SIM:
+        return pairwise_max_sim(embedding1, embedding2)
     if similarity_fn is ScoringFunction.EUCLIDEAN:
         return pairwise_euclidean_sim(embedding1, embedding2)
+    if similarity_fn is ScoringFunction.MANHATTAN:
+        return pairwise_manhattan_sim(embedding1, embedding2)
     raise ValueError(f"Unsupported similarity function: {similarity_fn}")
 
 
@@ -572,6 +580,59 @@ def pairwise_euclidean_sim(a: Array, b: Array) -> Array:
     b = _convert_to_tensor(b)
 
     return -torch.sqrt(torch.sum((a - b) ** 2, dim=-1))
+
+
+def manhattan_sim(a: Array, b: Array) -> Array:
+    """Computes the manhattan similarity (i.e., negative distance) between two tensors.
+
+    Args:
+        a: The first tensor.
+        b: The second tensor.
+
+    Returns:
+        Tensor: Matrix with res[i][j] = -manhattan_distance(a[i], b[j])
+    """
+    import torch
+
+    a = _convert_to_tensor(a)
+    b = _convert_to_tensor(b)
+
+    def core_fn(
+        a_: torch.Tensor, b_: torch.Tensor, device: torch.device
+    ) -> torch.Tensor:
+        # cdist(p=1) can materialize a (rows, len(b), dim) intermediate (e.g. on MPS), so
+        # chunk the rows of `a` only; retrieval already chunks the corpus (`b`) upstream.
+        # The budget deliberately reuses _MAX_SIM_CHUNK_ELEMENTS.
+        b_ = b_.to(device)
+        chunk_rows = max(
+            1, _MAX_SIM_CHUNK_ELEMENTS // max(1, b_.shape[0] * b_.shape[-1])
+        )
+        return torch.cat(
+            [
+                -torch.cdist(a_[start : start + chunk_rows].to(device), b_, p=1.0)
+                for start in range(0, max(a_.shape[0], 1), chunk_rows)
+            ]
+        )
+
+    return _compute_on_best_device(core_fn, a, b)
+
+
+def pairwise_manhattan_sim(a: Array, b: Array) -> Array:
+    """Computes the manhattan similarity (i.e., negative distance) between pairs of tensors.
+
+    Args:
+        a: The first tensor.
+        b: The second tensor.
+
+    Returns:
+        Vector with res[i] = -manhattan_distance(a[i], b[i])
+    """
+    import torch
+
+    a = _convert_to_tensor(a)
+    b = _convert_to_tensor(b)
+
+    return -torch.sum(torch.abs(a - b), dim=-1)
 
 
 def similarity(text_embeddings: Array, input_embeddings: Array) -> Array:

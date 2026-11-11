@@ -7,14 +7,16 @@ collapse distinct scores into spurious ties.
 
 from __future__ import annotations
 
-from types import ModuleType
+from types import ModuleType, SimpleNamespace
 
 import numpy as np
 import pytest
 import torch
 from packaging.version import Version
 
+from mteb import similarity_functions
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.model_meta import ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.similarity_functions import (
     _max_sim_ragged_core,
@@ -22,10 +24,12 @@ from mteb.similarity_functions import (
     cos_sim,
     dot_score,
     euclidean_sim,
+    manhattan_sim,
     max_sim,
     pairwise_cos_sim,
     pairwise_dot_score,
     pairwise_euclidean_sim,
+    pairwise_manhattan_sim,
     pairwise_max_sim,
 )
 from tests.mock_models import MockSentenceTransformer
@@ -255,6 +259,31 @@ def test_euclidean_sim_values():
     torch.testing.assert_close(pairwise_euclidean_sim(A, B), torch.tensor([-2.0, -2.0]))
 
 
+def test_manhattan_sim_chunks_within_element_budget(monkeypatch):
+    """torch.cdist(p=1) can materialize (rows, documents, dim) on MPS, so the rows must be chunked."""
+    budget = 1_000
+    monkeypatch.setattr(similarity_functions, "_MAX_SIM_CHUNK_ELEMENTS", budget)
+    cdist = torch.cdist
+    compared_elements = []
+
+    def recording_cdist(
+        x1: torch.Tensor, x2: torch.Tensor, p: float = 2.0
+    ) -> torch.Tensor:
+        compared_elements.append(x1.shape[0] * x2.shape[0] * x1.shape[-1])
+        return cdist(x1, x2, p=p)
+
+    monkeypatch.setattr(torch, "cdist", recording_cdist)
+    torch.manual_seed(0)
+    a = torch.randn(30, 8)
+    b = torch.randn(40, 8)
+
+    scores = manhattan_sim(a, b)
+
+    torch.testing.assert_close(scores, -(a[:, None] - b[None]).abs().sum(-1))
+    assert len(compared_elements) > 1
+    assert max(compared_elements) <= budget
+
+
 def test_max_sim_values():
     # query tokens (1, 0) and (0, 1); document tokens (2, 0), (0, 3), (-1, -1)
     query = torch.tensor([[1.0, 0.0], [0.0, 1.0]])
@@ -272,6 +301,7 @@ def test_max_sim_values():
         (cos_sim, lambda util: util.cos_sim),
         (dot_score, lambda util: util.dot_score),
         (euclidean_sim, lambda util: util.euclidean_sim),
+        (manhattan_sim, lambda util: util.manhattan_sim),
     ],
 )
 def test_similarity_matches_sentence_transformers(
@@ -296,6 +326,7 @@ def test_similarity_matches_sentence_transformers(
         (pairwise_cos_sim, lambda util: util.pairwise_cos_sim),
         (pairwise_dot_score, lambda util: util.pairwise_dot_score),
         (pairwise_euclidean_sim, lambda util: util.pairwise_euclidean_sim),
+        (pairwise_manhattan_sim, lambda util: util.pairwise_manhattan_sim),
     ],
 )
 def test_pairwise_similarity_matches_sentence_transformers(
@@ -388,3 +419,30 @@ def test_abs_encoder_delegated_similarity_upcasts(method, dtype):
     getattr(encoder, method)(a, a)
 
     assert encoder.model.dtypes == [torch.float32, torch.float32]
+
+
+@pytest.mark.parametrize(
+    ("similarity_fn_name", "expected_matrix", "expected_pairwise"),
+    [
+        (
+            ScoringFunction.EUCLIDEAN,
+            [[-5.0, -(2.0**0.5)], [-(13.0**0.5), 0.0]],
+            [-5.0, 0.0],
+        ),
+        (ScoringFunction.MANHATTAN, [[-7.0, -2.0], [-5.0, 0.0]], [-7.0, 0.0]),
+    ],
+)
+def test_abs_encoder_distance_similarity_fn(
+    similarity_fn_name, expected_matrix, expected_pairwise
+):
+    """A non-sentence-transformers encoder whose ModelMeta declares a distance scores with its negative."""
+    encoder = object.__new__(_DelegatingEncoder)
+    encoder.mteb_model_meta = SimpleNamespace(similarity_fn_name=similarity_fn_name)
+    a = torch.tensor([[0.0, 0.0], [1.0, 1.0]])
+    b = torch.tensor([[3.0, 4.0], [1.0, 1.0]])
+
+    matrix = torch.as_tensor(encoder.similarity(a, b))
+    pairwise = torch.as_tensor(encoder.similarity_pairwise(a, b))
+
+    torch.testing.assert_close(matrix, torch.tensor(expected_matrix))
+    torch.testing.assert_close(pairwise, torch.tensor(expected_pairwise))

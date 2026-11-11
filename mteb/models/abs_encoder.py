@@ -10,17 +10,13 @@ from mteb.abstasks.task_metadata import TaskType
 from mteb.similarity_functions import (
     _upcast_low_precision,
     cos_sim,
-    dot_score,
-    max_sim,
     pairwise_cos_sim,
-    pairwise_dot_score,
-    pairwise_max_sim,
+    select_pairwise_similarity,
+    select_similarity,
 )
 from mteb.types import (
     PromptType,
 )
-
-from .model_meta import ScoringFunction
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Sequence
@@ -339,13 +335,9 @@ class AbsEncoder(ABC):
                 arr = cast("Array", arr)
                 return arr
             return cos_sim(embeddings1, embeddings2)
-        if self.mteb_model_meta.similarity_fn_name is ScoringFunction.COSINE:
-            return cos_sim(embeddings1, embeddings2)
-        if self.mteb_model_meta.similarity_fn_name is ScoringFunction.DOT_PRODUCT:
-            return dot_score(embeddings1, embeddings2)
-        if self.mteb_model_meta.similarity_fn_name is ScoringFunction.MAX_SIM:
-            return max_sim(embeddings1, embeddings2)
-        raise ValueError("Similarity function not specified.")
+        return select_similarity(
+            embeddings1, embeddings2, self.mteb_model_meta.similarity_fn_name
+        )
 
     def similarity_pairwise(
         self,
@@ -380,13 +372,9 @@ class AbsEncoder(ABC):
                 arr = cast("Array", arr)
                 return arr
             return pairwise_cos_sim(embeddings1, embeddings2)
-        if self.mteb_model_meta.similarity_fn_name is ScoringFunction.COSINE:
-            return pairwise_cos_sim(embeddings1, embeddings2)
-        if self.mteb_model_meta.similarity_fn_name is ScoringFunction.DOT_PRODUCT:
-            return pairwise_dot_score(embeddings1, embeddings2)
-        if self.mteb_model_meta.similarity_fn_name is ScoringFunction.MAX_SIM:
-            return pairwise_max_sim(embeddings1, embeddings2)
-        raise ValueError("Similarity function not specified.")
+        return select_pairwise_similarity(
+            embeddings1, embeddings2, self.mteb_model_meta.similarity_fn_name
+        )
 
     @abstractmethod
     def encode(
