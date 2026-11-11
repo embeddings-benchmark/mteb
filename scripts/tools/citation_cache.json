@@ -9242,7 +9242,7 @@
             }
         },
         "anonymous2026mveb|||{mveb}: massive video embedding benchmark|2026": {
-            "stored_at": 1791822710.890191,
+            "stored_at": 1794419900.0287385,
             "value": {
                 "verdict": "OK",
                 "found_title": "MVEB: Massive Video Embedding Benchmark",
