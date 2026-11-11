@@ -26,7 +26,6 @@ class SlovakSumSTS(AbsTaskSTS):
         annotations_creators="LM-generated and reviewed",
         dialect=[],
         sample_creation="LM-generated and verified",
-        bibtex_citation=r"""""",
     )
 
     min_score = 0

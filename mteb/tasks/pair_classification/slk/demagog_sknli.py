@@ -34,7 +34,6 @@ class DemagogSKNLI(AbsTaskPairClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         prompt="Given a fact-checker's analysis (evidence), determine if it supports or refutes the political claim",
     )
 

@@ -26,7 +26,6 @@ class RenderedSST2(AbsTaskZeroShotClassification):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="created",
-        bibtex_citation="""""",
     )
 
     # Override default column names in the subclass

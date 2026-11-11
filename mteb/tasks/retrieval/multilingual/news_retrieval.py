@@ -34,7 +34,6 @@ class GlobalNewsRetrieval(AbsTaskRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         is_public=False,
         contributed_by="Jina by Elastic",
     )
@@ -64,7 +63,6 @@ class PublicNewsRetrieval(AbsTaskRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         is_public=False,
         contributed_by="Jina by Elastic",
     )

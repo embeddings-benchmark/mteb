@@ -23,6 +23,5 @@ class GermanGovServiceRetrieval(AbsTaskRetrieval):
         license="mit",
         annotations_creators="derived",
         dialect=[],
-        bibtex_citation="",
         sample_creation="found",
     )

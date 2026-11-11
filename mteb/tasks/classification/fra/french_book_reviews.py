@@ -24,8 +24,6 @@ class FrenchBookReviews(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        """,
         superseded_by="FrenchBookReviews.v2",
     )
 
@@ -61,8 +59,6 @@ class FrenchBookReviewsV2(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        """,
         adapted_from=["FrenchBookReviews"],
     )
 
