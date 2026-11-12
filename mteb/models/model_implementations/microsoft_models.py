@@ -189,7 +189,7 @@ class MicrosoftEmbedding1Wrapper(AbsEncoder):
             self._delegation_key_expiry = expiry
 
         # Temporary blobs are deleted after inference, even if uploading or inference fails.
-        name = f"tmp/mteb-microsoft-embedding-1-large/{uuid4().hex}.png"
+        name = f"tmp/mteb-microsoft-embedding-1-large/{uuid4().hex}.jpg"
         sas = generate_blob_sas(
             account_name=account,
             container_name=container,
@@ -203,10 +203,12 @@ class MicrosoftEmbedding1Wrapper(AbsEncoder):
         blob = self._blob_service.get_blob_client(container=container, blob=name)
         try:
             with BytesIO() as buffer:
-                _resize_image(image).convert("RGB").save(buffer, format="PNG")
+                _resize_image(image).convert("RGB").save(
+                    buffer, format="JPEG", quality=95, subsampling=0, optimize=True
+                )
                 blob.upload_blob(
                     buffer.getvalue(),
-                    content_settings=ContentSettings(content_type="image/png"),
+                    content_settings=ContentSettings(content_type="image/jpeg"),
                 )
             yield {"kind": "image", "url": blob.url, "sasToken": sas}
         finally:
