@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Literal
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -24,9 +23,14 @@ class DINOModel(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ):
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         from transformers import AutoImageProcessor, AutoModel
 
         self.model_name = model_name
@@ -53,6 +57,8 @@ class DINOModel(AbsEncoder):
         pooling: Literal["cls", "mean"] = "cls",
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         all_image_embeddings = []
 
         with torch.no_grad():
@@ -130,13 +136,16 @@ dinov2_small = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=dinov2_training_datasets,
-    citation="""@misc{oquab2023dinov2,
-      title={DINOv2: Learning Robust Visual Features without Supervision},
-      author={Maxime Oquab and Timothée Darcet and Théo Moutakanni and Huy Vo and Marc Szafraniec and Vasil Khalidov and Pierre Fernandez and Daniel Haziza and Francisco Massa and Alaaeldin El-Nouby and Mahmoud Assran and Nicolas Ballas and Wojciech Galuba and Russell Howes and Po-Yao Huang and Shang-Wen Li and Ishan Misra and Michael Rabbat and Vasu Sharma and Gabriel Synnaeve and Hu Xu and Hervé Jegou and Julien Mairal and Patrick Labatut and Armand Joulin and Piotr Bojanowski},
-      year={2023},
-      eprint={2304.07193},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
+    citation="""@article{oquab2023dinov2,
+  archiveprefix = {arXiv},
+  author = {Maxime Oquab and Timoth{\\'e}e Darcet and Th{\\'e}o Moutakanni and Huy V. Vo and Marc Szafraniec and Vasil Khalidov and Pierre Fernandez and Daniel HAZIZA and Francisco Massa and Alaaeldin El-Nouby and Mido Assran and Nicolas Ballas and Wojciech Galuba and Russell Howes and Po-Yao Huang and Shang-Wen Li and Ishan Misra and Michael Rabbat and Vasu Sharma and Gabriel Synnaeve and Hu Xu and Herve Jegou and Julien Mairal and Patrick Labatut and Armand Joulin and Piotr Bojanowski},
+  eprint = {2304.07193},
+  issn = {2835-8856},
+  journal = {Transactions on Machine Learning Research},
+  note = {Featured Certification},
+  title = {{DINO}v2: Learning Robust Visual Features without Supervision},
+  url = {https://openreview.net/forum?id=a68SUt6zFt},
+  year = {2024},
 }""",
 )
 
@@ -162,13 +171,16 @@ dinov2_base = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=dinov2_training_datasets,
-    citation="""@misc{oquab2023dinov2,
-      title={DINOv2: Learning Robust Visual Features without Supervision},
-      author={Maxime Oquab and Timothée Darcet and Théo Moutakanni and Huy Vo and Marc Szafraniec and Vasil Khalidov and Pierre Fernandez and Daniel Haziza and Francisco Massa and Alaaeldin El-Nouby and Mahmoud Assran and Nicolas Ballas and Wojciech Galuba and Russell Howes and Po-Yao Huang and Shang-Wen Li and Ishan Misra and Michael Rabbat and Vasu Sharma and Gabriel Synnaeve and Hu Xu and Hervé Jegou and Julien Mairal and Patrick Labatut and Armand Joulin and Piotr Bojanowski},
-      year={2023},
-      eprint={2304.07193},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
+    citation="""@article{oquab2023dinov2,
+  archiveprefix = {arXiv},
+  author = {Maxime Oquab and Timoth{\\'e}e Darcet and Th{\\'e}o Moutakanni and Huy V. Vo and Marc Szafraniec and Vasil Khalidov and Pierre Fernandez and Daniel HAZIZA and Francisco Massa and Alaaeldin El-Nouby and Mido Assran and Nicolas Ballas and Wojciech Galuba and Russell Howes and Po-Yao Huang and Shang-Wen Li and Ishan Misra and Michael Rabbat and Vasu Sharma and Gabriel Synnaeve and Hu Xu and Herve Jegou and Julien Mairal and Patrick Labatut and Armand Joulin and Piotr Bojanowski},
+  eprint = {2304.07193},
+  issn = {2835-8856},
+  journal = {Transactions on Machine Learning Research},
+  note = {Featured Certification},
+  title = {{DINO}v2: Learning Robust Visual Features without Supervision},
+  url = {https://openreview.net/forum?id=a68SUt6zFt},
+  year = {2024},
 }""",
 )
 
@@ -194,13 +206,16 @@ dinov2_large = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=dinov2_training_datasets,
-    citation="""@misc{oquab2023dinov2,
-      title={DINOv2: Learning Robust Visual Features without Supervision},
-      author={Maxime Oquab and Timothée Darcet and Théo Moutakanni and Huy Vo and Marc Szafraniec and Vasil Khalidov and Pierre Fernandez and Daniel Haziza and Francisco Massa and Alaaeldin El-Nouby and Mahmoud Assran and Nicolas Ballas and Wojciech Galuba and Russell Howes and Po-Yao Huang and Shang-Wen Li and Ishan Misra and Michael Rabbat and Vasu Sharma and Gabriel Synnaeve and Hu Xu and Hervé Jegou and Julien Mairal and Patrick Labatut and Armand Joulin and Piotr Bojanowski},
-      year={2023},
-      eprint={2304.07193},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
+    citation="""@article{oquab2023dinov2,
+  archiveprefix = {arXiv},
+  author = {Maxime Oquab and Timoth{\\'e}e Darcet and Th{\\'e}o Moutakanni and Huy V. Vo and Marc Szafraniec and Vasil Khalidov and Pierre Fernandez and Daniel HAZIZA and Francisco Massa and Alaaeldin El-Nouby and Mido Assran and Nicolas Ballas and Wojciech Galuba and Russell Howes and Po-Yao Huang and Shang-Wen Li and Ishan Misra and Michael Rabbat and Vasu Sharma and Gabriel Synnaeve and Hu Xu and Herve Jegou and Julien Mairal and Patrick Labatut and Armand Joulin and Piotr Bojanowski},
+  eprint = {2304.07193},
+  issn = {2835-8856},
+  journal = {Transactions on Machine Learning Research},
+  note = {Featured Certification},
+  title = {{DINO}v2: Learning Robust Visual Features without Supervision},
+  url = {https://openreview.net/forum?id=a68SUt6zFt},
+  year = {2024},
 }""",
 )
 
@@ -226,13 +241,16 @@ dinov2_giant = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=dinov2_training_datasets,
-    citation="""@misc{oquab2023dinov2,
-      title={DINOv2: Learning Robust Visual Features without Supervision},
-      author={Maxime Oquab and Timothée Darcet and Théo Moutakanni and Huy Vo and Marc Szafraniec and Vasil Khalidov and Pierre Fernandez and Daniel Haziza and Francisco Massa and Alaaeldin El-Nouby and Mahmoud Assran and Nicolas Ballas and Wojciech Galuba and Russell Howes and Po-Yao Huang and Shang-Wen Li and Ishan Misra and Michael Rabbat and Vasu Sharma and Gabriel Synnaeve and Hu Xu and Hervé Jegou and Julien Mairal and Patrick Labatut and Armand Joulin and Piotr Bojanowski},
-      year={2023},
-      eprint={2304.07193},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
+    citation="""@article{oquab2023dinov2,
+  archiveprefix = {arXiv},
+  author = {Maxime Oquab and Timoth{\\'e}e Darcet and Th{\\'e}o Moutakanni and Huy V. Vo and Marc Szafraniec and Vasil Khalidov and Pierre Fernandez and Daniel HAZIZA and Francisco Massa and Alaaeldin El-Nouby and Mido Assran and Nicolas Ballas and Wojciech Galuba and Russell Howes and Po-Yao Huang and Shang-Wen Li and Ishan Misra and Michael Rabbat and Vasu Sharma and Gabriel Synnaeve and Hu Xu and Herve Jegou and Julien Mairal and Patrick Labatut and Armand Joulin and Piotr Bojanowski},
+  eprint = {2304.07193},
+  issn = {2835-8856},
+  journal = {Transactions on Machine Learning Research},
+  note = {Featured Certification},
+  title = {{DINO}v2: Learning Robust Visual Features without Supervision},
+  url = {https://openreview.net/forum?id=a68SUt6zFt},
+  year = {2024},
 }""",
 )
 
@@ -262,13 +280,16 @@ webssl_dino300m_full2b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
-    citation="""@article{fan2025scaling,
-  title={Scaling Language-Free Visual Representation Learning},
-  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
-  year={2025},
-  eprint={2504.01017},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV}
+    citation="""@inproceedings{fan2025scaling,
+  author = {Fan, David and Tong, Shengbang and Zhu, Jiachen and Sinha, Koustuv and Liu, Zhuang and Chen, Xinlei and Rabbat, Michael and Ballas, Nicolas and LeCun, Yann and Bar, Amir and Xie, Saining},
+  booktitle = {2025 IEEE/CVF International Conference on Computer Vision (ICCV)},
+  doi = {10.1109/iccv51701.2025.00042},
+  month = {Oct},
+  pages = {1–13},
+  publisher = {IEEE},
+  title = {Scaling Language-Free Visual Representation Learning},
+  url = {https://doi.org/10.1109/iccv51701.2025.00042},
+  year = {2025},
 }""",
 )
 
@@ -294,13 +315,16 @@ webssl_dino1b_full2b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
-    citation="""@article{fan2025scaling,
-  title={Scaling Language-Free Visual Representation Learning},
-  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
-  year={2025},
-  eprint={2504.01017},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV}
+    citation="""@inproceedings{fan2025scaling,
+  author = {Fan, David and Tong, Shengbang and Zhu, Jiachen and Sinha, Koustuv and Liu, Zhuang and Chen, Xinlei and Rabbat, Michael and Ballas, Nicolas and LeCun, Yann and Bar, Amir and Xie, Saining},
+  booktitle = {2025 IEEE/CVF International Conference on Computer Vision (ICCV)},
+  doi = {10.1109/iccv51701.2025.00042},
+  month = {Oct},
+  pages = {1–13},
+  publisher = {IEEE},
+  title = {Scaling Language-Free Visual Representation Learning},
+  url = {https://doi.org/10.1109/iccv51701.2025.00042},
+  year = {2025},
 }""",
 )
 
@@ -326,13 +350,16 @@ webssl_dino2b_full2b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
-    citation="""@article{fan2025scaling,
-  title={Scaling Language-Free Visual Representation Learning},
-  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
-  year={2025},
-  eprint={2504.01017},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV}
+    citation="""@inproceedings{fan2025scaling,
+  author = {Fan, David and Tong, Shengbang and Zhu, Jiachen and Sinha, Koustuv and Liu, Zhuang and Chen, Xinlei and Rabbat, Michael and Ballas, Nicolas and LeCun, Yann and Bar, Amir and Xie, Saining},
+  booktitle = {2025 IEEE/CVF International Conference on Computer Vision (ICCV)},
+  doi = {10.1109/iccv51701.2025.00042},
+  month = {Oct},
+  pages = {1–13},
+  publisher = {IEEE},
+  title = {Scaling Language-Free Visual Representation Learning},
+  url = {https://doi.org/10.1109/iccv51701.2025.00042},
+  year = {2025},
 }""",
 )
 
@@ -358,13 +385,16 @@ webssl_dino3b_full2b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
-    citation="""@article{fan2025scaling,
-  title={Scaling Language-Free Visual Representation Learning},
-  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
-  year={2025},
-  eprint={2504.01017},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV}
+    citation="""@inproceedings{fan2025scaling,
+  author = {Fan, David and Tong, Shengbang and Zhu, Jiachen and Sinha, Koustuv and Liu, Zhuang and Chen, Xinlei and Rabbat, Michael and Ballas, Nicolas and LeCun, Yann and Bar, Amir and Xie, Saining},
+  booktitle = {2025 IEEE/CVF International Conference on Computer Vision (ICCV)},
+  doi = {10.1109/iccv51701.2025.00042},
+  month = {Oct},
+  pages = {1–13},
+  publisher = {IEEE},
+  title = {Scaling Language-Free Visual Representation Learning},
+  url = {https://doi.org/10.1109/iccv51701.2025.00042},
+  year = {2025},
 }""",
 )
 
@@ -390,13 +420,16 @@ webssl_dino5b_full2b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
-    citation="""@article{fan2025scaling,
-  title={Scaling Language-Free Visual Representation Learning},
-  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
-  year={2025},
-  eprint={2504.01017},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV}
+    citation="""@inproceedings{fan2025scaling,
+  author = {Fan, David and Tong, Shengbang and Zhu, Jiachen and Sinha, Koustuv and Liu, Zhuang and Chen, Xinlei and Rabbat, Michael and Ballas, Nicolas and LeCun, Yann and Bar, Amir and Xie, Saining},
+  booktitle = {2025 IEEE/CVF International Conference on Computer Vision (ICCV)},
+  doi = {10.1109/iccv51701.2025.00042},
+  month = {Oct},
+  pages = {1–13},
+  publisher = {IEEE},
+  title = {Scaling Language-Free Visual Representation Learning},
+  url = {https://doi.org/10.1109/iccv51701.2025.00042},
+  year = {2025},
 }""",
 )
 
@@ -422,13 +455,16 @@ webssl_dino7b_full8b_224 = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
-    citation="""@article{fan2025scaling,
-  title={Scaling Language-Free Visual Representation Learning},
-  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
-  year={2025},
-  eprint={2504.01017},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV}
+    citation="""@inproceedings{fan2025scaling,
+  author = {Fan, David and Tong, Shengbang and Zhu, Jiachen and Sinha, Koustuv and Liu, Zhuang and Chen, Xinlei and Rabbat, Michael and Ballas, Nicolas and LeCun, Yann and Bar, Amir and Xie, Saining},
+  booktitle = {2025 IEEE/CVF International Conference on Computer Vision (ICCV)},
+  doi = {10.1109/iccv51701.2025.00042},
+  month = {Oct},
+  pages = {1–13},
+  publisher = {IEEE},
+  title = {Scaling Language-Free Visual Representation Learning},
+  url = {https://doi.org/10.1109/iccv51701.2025.00042},
+  year = {2025},
 }""",
 )
 
@@ -454,13 +490,16 @@ webssl_dino7b_full8b_378 = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
-    citation="""@article{fan2025scaling,
-  title={Scaling Language-Free Visual Representation Learning},
-  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
-  year={2025},
-  eprint={2504.01017},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV}
+    citation="""@inproceedings{fan2025scaling,
+  author = {Fan, David and Tong, Shengbang and Zhu, Jiachen and Sinha, Koustuv and Liu, Zhuang and Chen, Xinlei and Rabbat, Michael and Ballas, Nicolas and LeCun, Yann and Bar, Amir and Xie, Saining},
+  booktitle = {2025 IEEE/CVF International Conference on Computer Vision (ICCV)},
+  doi = {10.1109/iccv51701.2025.00042},
+  month = {Oct},
+  pages = {1–13},
+  publisher = {IEEE},
+  title = {Scaling Language-Free Visual Representation Learning},
+  url = {https://doi.org/10.1109/iccv51701.2025.00042},
+  year = {2025},
 }""",
 )
 
@@ -486,13 +525,16 @@ webssl_dino7b_full8b_518 = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
-    citation="""@article{fan2025scaling,
-  title={Scaling Language-Free Visual Representation Learning},
-  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
-  year={2025},
-  eprint={2504.01017},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV}
+    citation="""@inproceedings{fan2025scaling,
+  author = {Fan, David and Tong, Shengbang and Zhu, Jiachen and Sinha, Koustuv and Liu, Zhuang and Chen, Xinlei and Rabbat, Michael and Ballas, Nicolas and LeCun, Yann and Bar, Amir and Xie, Saining},
+  booktitle = {2025 IEEE/CVF International Conference on Computer Vision (ICCV)},
+  doi = {10.1109/iccv51701.2025.00042},
+  month = {Oct},
+  pages = {1–13},
+  publisher = {IEEE},
+  title = {Scaling Language-Free Visual Representation Learning},
+  url = {https://doi.org/10.1109/iccv51701.2025.00042},
+  year = {2025},
 }""",
 )
 
@@ -519,13 +561,16 @@ webssl_dino2b_light2b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
-    citation="""@article{fan2025scaling,
-  title={Scaling Language-Free Visual Representation Learning},
-  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
-  year={2025},
-  eprint={2504.01017},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV}
+    citation="""@inproceedings{fan2025scaling,
+  author = {Fan, David and Tong, Shengbang and Zhu, Jiachen and Sinha, Koustuv and Liu, Zhuang and Chen, Xinlei and Rabbat, Michael and Ballas, Nicolas and LeCun, Yann and Bar, Amir and Xie, Saining},
+  booktitle = {2025 IEEE/CVF International Conference on Computer Vision (ICCV)},
+  doi = {10.1109/iccv51701.2025.00042},
+  month = {Oct},
+  pages = {1–13},
+  publisher = {IEEE},
+  title = {Scaling Language-Free Visual Representation Learning},
+  url = {https://doi.org/10.1109/iccv51701.2025.00042},
+  year = {2025},
 }""",
 )
 
@@ -551,13 +596,16 @@ webssl_dino2b_heavy2b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
-    citation="""@article{fan2025scaling,
-  title={Scaling Language-Free Visual Representation Learning},
-  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
-  year={2025},
-  eprint={2504.01017},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV}
+    citation="""@inproceedings{fan2025scaling,
+  author = {Fan, David and Tong, Shengbang and Zhu, Jiachen and Sinha, Koustuv and Liu, Zhuang and Chen, Xinlei and Rabbat, Michael and Ballas, Nicolas and LeCun, Yann and Bar, Amir and Xie, Saining},
+  booktitle = {2025 IEEE/CVF International Conference on Computer Vision (ICCV)},
+  doi = {10.1109/iccv51701.2025.00042},
+  month = {Oct},
+  pages = {1–13},
+  publisher = {IEEE},
+  title = {Scaling Language-Free Visual Representation Learning},
+  url = {https://doi.org/10.1109/iccv51701.2025.00042},
+  year = {2025},
 }""",
 )
 
@@ -583,13 +631,16 @@ webssl_dino3b_light2b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
-    citation="""@article{fan2025scaling,
-  title={Scaling Language-Free Visual Representation Learning},
-  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
-  year={2025},
-  eprint={2504.01017},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV}
+    citation="""@inproceedings{fan2025scaling,
+  author = {Fan, David and Tong, Shengbang and Zhu, Jiachen and Sinha, Koustuv and Liu, Zhuang and Chen, Xinlei and Rabbat, Michael and Ballas, Nicolas and LeCun, Yann and Bar, Amir and Xie, Saining},
+  booktitle = {2025 IEEE/CVF International Conference on Computer Vision (ICCV)},
+  doi = {10.1109/iccv51701.2025.00042},
+  month = {Oct},
+  pages = {1–13},
+  publisher = {IEEE},
+  title = {Scaling Language-Free Visual Representation Learning},
+  url = {https://doi.org/10.1109/iccv51701.2025.00042},
+  year = {2025},
 }""",
 )
 
@@ -615,13 +666,16 @@ webssl_dino3b_heavy2b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
-    citation="""@article{fan2025scaling,
-  title={Scaling Language-Free Visual Representation Learning},
-  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
-  year={2025},
-  eprint={2504.01017},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV}
+    citation="""@inproceedings{fan2025scaling,
+  author = {Fan, David and Tong, Shengbang and Zhu, Jiachen and Sinha, Koustuv and Liu, Zhuang and Chen, Xinlei and Rabbat, Michael and Ballas, Nicolas and LeCun, Yann and Bar, Amir and Xie, Saining},
+  booktitle = {2025 IEEE/CVF International Conference on Computer Vision (ICCV)},
+  doi = {10.1109/iccv51701.2025.00042},
+  month = {Oct},
+  pages = {1–13},
+  publisher = {IEEE},
+  title = {Scaling Language-Free Visual Representation Learning},
+  url = {https://doi.org/10.1109/iccv51701.2025.00042},
+  year = {2025},
 }""",
 )
 
@@ -647,13 +701,16 @@ webssl_mae300m_full2b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
-    citation="""@article{fan2025scaling,
-  title={Scaling Language-Free Visual Representation Learning},
-  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
-  year={2025},
-  eprint={2504.01017},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV}
+    citation="""@inproceedings{fan2025scaling,
+  author = {Fan, David and Tong, Shengbang and Zhu, Jiachen and Sinha, Koustuv and Liu, Zhuang and Chen, Xinlei and Rabbat, Michael and Ballas, Nicolas and LeCun, Yann and Bar, Amir and Xie, Saining},
+  booktitle = {2025 IEEE/CVF International Conference on Computer Vision (ICCV)},
+  doi = {10.1109/iccv51701.2025.00042},
+  month = {Oct},
+  pages = {1–13},
+  publisher = {IEEE},
+  title = {Scaling Language-Free Visual Representation Learning},
+  url = {https://doi.org/10.1109/iccv51701.2025.00042},
+  year = {2025},
 }""",
 )
 
@@ -679,13 +736,16 @@ webssl_mae700m_full2b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
-    citation="""@article{fan2025scaling,
-  title={Scaling Language-Free Visual Representation Learning},
-  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
-  year={2025},
-  eprint={2504.01017},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV}
+    citation="""@inproceedings{fan2025scaling,
+  author = {Fan, David and Tong, Shengbang and Zhu, Jiachen and Sinha, Koustuv and Liu, Zhuang and Chen, Xinlei and Rabbat, Michael and Ballas, Nicolas and LeCun, Yann and Bar, Amir and Xie, Saining},
+  booktitle = {2025 IEEE/CVF International Conference on Computer Vision (ICCV)},
+  doi = {10.1109/iccv51701.2025.00042},
+  month = {Oct},
+  pages = {1–13},
+  publisher = {IEEE},
+  title = {Scaling Language-Free Visual Representation Learning},
+  url = {https://doi.org/10.1109/iccv51701.2025.00042},
+  year = {2025},
 }""",
 )
 
@@ -711,13 +771,16 @@ webssl_mae1b_full2b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=False,
     training_datasets=webssl_dino_training_datasets,
-    citation="""@article{fan2025scaling,
-  title={Scaling Language-Free Visual Representation Learning},
-  author={David Fan and Shengbang Tong and Jiachen Zhu and Koustuv Sinha and Zhuang Liu and Xinlei Chen and Michael Rabbat and Nicolas Ballas and Yann LeCun and Amir Bar and Saining Xie},
-  year={2025},
-  eprint={2504.01017},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV}
+    citation="""@inproceedings{fan2025scaling,
+  author = {Fan, David and Tong, Shengbang and Zhu, Jiachen and Sinha, Koustuv and Liu, Zhuang and Chen, Xinlei and Rabbat, Michael and Ballas, Nicolas and LeCun, Yann and Bar, Amir and Xie, Saining},
+  booktitle = {2025 IEEE/CVF International Conference on Computer Vision (ICCV)},
+  doi = {10.1109/iccv51701.2025.00042},
+  month = {Oct},
+  pages = {1–13},
+  publisher = {IEEE},
+  title = {Scaling Language-Free Visual Representation Learning},
+  url = {https://doi.org/10.1109/iccv51701.2025.00042},
+  year = {2025},
 }""",
 )
 

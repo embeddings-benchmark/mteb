@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Literal
 
-import torch
-from torch.nn.functional import normalize
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -16,11 +14,16 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, EncodeKwargs, PromptType
 
-PS3_CITATION = """@article{shi2025scaling,
-  title={Scaling Vision Pre-Training to 4K Resolution},
-  author={Shi, Baifeng and Li, Boyi and Cai, Han and Lu, Yao and Liu, Sifei and Pavone, Marco and Kautz, Jan and Han, Song and Darrell, Trevor and Molchanov, Pavlo and Yin, Hongxu},
-  journal={arXiv preprint arXiv:2503.19903},
-  year={2025}
+PS3_CITATION = """@inproceedings{shi2025scaling,
+  author = {Shi, Baifeng and Li, Boyi and Cai, Han and Lu, Yao and Liu, Sifei and Pavone, Marco and Kautz, Jan and Han, Song and Darrell, Trevor and Molchanov, Pavlo and Yin, Hongxu},
+  booktitle = {2025 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  doi = {10.1109/cvpr52734.2025.00900},
+  month = {June},
+  pages = {9631–9640},
+  publisher = {IEEE},
+  title = {Scaling Vision Pre-Training to 4K Resolution},
+  url = {https://doi.org/10.1109/cvpr52734.2025.00900},
+  year = {2025},
 }"""
 
 # PS3 is pre-trained on 75M high-resolution images (38M natural images from DataComp and
@@ -64,11 +67,16 @@ class PS3Model(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         pooling: Literal["global", "high_res"] = "global",
         model_dtype: str = "float32",
         **kwargs: Any,
     ):
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         from ps3 import PS3ImageProcessor, PS3TextModel, PS3Tokenizer, PS3VisionModel
 
         if pooling not in {"global", "high_res"}:
@@ -104,6 +112,9 @@ class PS3Model(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+        from torch.nn.functional import normalize
+
         all_text_embeddings = []
         with torch.no_grad():
             for batch in tqdm(
@@ -120,6 +131,9 @@ class PS3Model(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+        from torch.nn.functional import normalize
+
         all_image_embeddings = []
         with torch.no_grad():
             for batch in tqdm(

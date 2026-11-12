@@ -1,6 +1,6 @@
 install:
 	@echo "--- 🚀 Installing project dependencies ---"
-	uv sync --extra image --group dev
+	uv sync --frozen --extra image --group dev
 
 install-for-tests:
 	@echo "--- 🚀 Installing project dependencies for test ---"
@@ -22,6 +22,19 @@ lint-check:
 test:
 	@echo "--- 🧪 Running tests ---"
 	uv run --no-sync --group test pytest -n auto -m "not (test_datasets or leaderboard_stability or test_reference_models)"
+
+install-core:
+	@echo "--- 🚀 Installing mteb-core, the minimal install without torch ---"
+	@echo "This rewrites pyproject.toml, so only run it in a throwaway checkout"
+	uv venv
+	uv pip install packaging
+	uv run --no-sync python scripts/build_core_package.py --edit-pyproject
+	uv pip install ".[api,leaderboard]" --group test
+
+test-core:
+	@echo "--- 🧪 Running the tests that must pass without torch ---"
+	uv run --no-sync python -c "import importlib.util; assert importlib.util.find_spec('torch') is None, 'torch must not be installed'"
+	uv run --no-sync pytest -n auto -m core
 
 
 test-with-coverage:
@@ -50,11 +63,14 @@ serve-docs:
 	uv run --no-sync --group docs zensical serve
 
 
+install-for-model-load-test:
+	@echo "--- 🚀 Installing project dependencies for model load test ---"
+	uv sync --extra pylate --group dev --frozen
+
 model-load-test:
 	@echo "--- 🚀 Running model load test ---"
-	uv sync --extra pylate --group dev
-	uv run --no-sync python scripts/extract_model_names.py $(BASE_BRANCH) --return_one_model_name_per_file
-	uv run --no-sync python tests/test_models/model_loading.py --model_name_file scripts/model_names.txt
+	uv run --no-sync python scripts/tools/extract_model_names.py $(BASE_BRANCH) --return_one_model_name_per_file
+	uv run --no-sync python tests/test_models/model_loading.py --model_name_file scripts/tools/model_names.txt
 
 
 dataset-load-test:
@@ -63,7 +79,15 @@ dataset-load-test:
 
 dataset-load-test-pr:
 	@echo "--- 🚀 Running dataset load test for PR ---"
-	eval "$$(uv run --no-sync python -m scripts.extract_datasets $(BASE_BRANCH))" && uv run --no-sync --group test pytest -m test_datasets
+	eval "$$(uv run --no-sync python -m scripts.tools.extract_datasets $(BASE_BRANCH))" && uv run --no-sync --group test pytest -m test_datasets
+
+citation-check:
+	@echo "--- 🔍 Checking that the cited works exist ---"
+	uv run --no-sync --group citations python -m scripts.tools.check_citations $(CITATION_CHECK_ARGS)
+
+preprint-check:
+	@echo "--- 🔍 Checking whether cited preprints have been published ---"
+	uv run --no-sync --group citations python -m scripts.tools.check_preprints $(PREPRINT_CHECK_ARGS)
 
 reference-model-test:
 	@echo "--- Running reference model coverage test ---"
@@ -80,8 +104,8 @@ serve-api:
 
 format-citations:
 	@echo "--- 🧹 Formatting citations ---"
-	uv run --no-sync python scripts/format_citations.py benchmarks
-	uv run --no-sync python scripts/format_citations.py tasks
+	uv run --no-sync python scripts/tools/format_citations.py benchmarks
+	uv run --no-sync python scripts/tools/format_citations.py tasks
 
 
 .PHONY: check

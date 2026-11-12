@@ -30,10 +30,13 @@ class CoVRRVT2VRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@inproceedings{thawakar2026covrr,
-  author = {Thawakar, Omkar and Demidov, Dmitry and Potlapalli, Vaishnav and Bogireddy, Sai Prasanna Teja Reddy and Gajjala, Viswanatha Reddy and Lasheen, Alaa Mostafa and Anwer, Rao Muhammad and Khan, Fahad Shahbaz},
-  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) Findings},
-  title = {CoVR-R: Reason-Aware Composed Video Retrieval},
+@misc{thawakar2026covrrreasonawarecomposedvideoretrieval,
+  archiveprefix = {arXiv},
+  author = {Omkar Thawakar and Dmitry Demidov and Vaishnav Potlapalli and Sai Prasanna Teja Reddy Bogireddy and Viswanatha Reddy Gajjala and Alaa Mostafa Lasheen and Rao Muhammad Anwer and Fahad Khan},
+  eprint = {2603.20190},
+  primaryclass = {cs.CV},
+  title = {CoVR-R:Reason-Aware Composed Video Retrieval},
+  url = {https://arxiv.org/abs/2603.20190},
   year = {2026},
 }
 """,

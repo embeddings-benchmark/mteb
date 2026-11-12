@@ -25,18 +25,42 @@ class TweetTopicSingleClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{dimosthenis-etal-2022-twitter,
+@inproceedings{antypas-etal-2022-twitter,
   address = {Gyeongju, Republic of Korea},
+  archiveprefix = {arXiv},
   author = {Antypas, Dimosthenis  and
 Ushio, Asahi  and
 Camacho-Collados, Jose  and
-Neves, Leonardo  and
 Silva, Vitor  and
+Neves, Leonardo  and
 Barbieri, Francesco},
   booktitle = {Proceedings of the 29th International Conference on Computational Linguistics},
+  editor = {Calzolari, Nicoletta  and
+Huang, Chu-Ren  and
+Kim, Hansaem  and
+Pustejovsky, James  and
+Wanner, Leo  and
+Choi, Key-Sun  and
+Ryu, Pum-Mo  and
+Chen, Hsin-Hsi  and
+Donatelli, Lucia  and
+Ji, Heng  and
+Kurohashi, Sadao  and
+Paggio, Patrizia  and
+Xue, Nianwen  and
+Kim, Seokhwan  and
+Hahm, Younggyun  and
+He, Zhong  and
+Lee, Tony Kyungil  and
+Santus, Enrico  and
+Bond, Francis  and
+Na, Seung-Hoon},
+  eprint = {2209.09824},
   month = oct,
+  pages = {3386--3400},
   publisher = {International Committee on Computational Linguistics},
-  title = {{T}witter {T}opic {C}lassification},
+  title = {{T}witter Topic Classification},
+  url = {https://aclanthology.org/2022.coling-1.299/},
   year = {2022},
 }
 """,
@@ -73,18 +97,42 @@ class TweetTopicSingleClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{dimosthenis-etal-2022-twitter,
+@inproceedings{antypas-etal-2022-twitter,
   address = {Gyeongju, Republic of Korea},
+  archiveprefix = {arXiv},
   author = {Antypas, Dimosthenis  and
 Ushio, Asahi  and
 Camacho-Collados, Jose  and
-Neves, Leonardo  and
 Silva, Vitor  and
+Neves, Leonardo  and
 Barbieri, Francesco},
   booktitle = {Proceedings of the 29th International Conference on Computational Linguistics},
+  editor = {Calzolari, Nicoletta  and
+Huang, Chu-Ren  and
+Kim, Hansaem  and
+Pustejovsky, James  and
+Wanner, Leo  and
+Choi, Key-Sun  and
+Ryu, Pum-Mo  and
+Chen, Hsin-Hsi  and
+Donatelli, Lucia  and
+Ji, Heng  and
+Kurohashi, Sadao  and
+Paggio, Patrizia  and
+Xue, Nianwen  and
+Kim, Seokhwan  and
+Hahm, Younggyun  and
+He, Zhong  and
+Lee, Tony Kyungil  and
+Santus, Enrico  and
+Bond, Francis  and
+Na, Seung-Hoon},
+  eprint = {2209.09824},
   month = oct,
+  pages = {3386--3400},
   publisher = {International Committee on Computational Linguistics},
-  title = {{T}witter {T}opic {C}lassification},
+  title = {{T}witter Topic Classification},
+  url = {https://aclanthology.org/2022.coling-1.299/},
   year = {2022},
 }
 """,

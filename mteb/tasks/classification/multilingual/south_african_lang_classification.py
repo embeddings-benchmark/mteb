@@ -40,15 +40,7 @@ class SouthAfricanLangClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@misc{south-african-language-identification,
-  author = {ExploreAI Academy, Joanne M},
-  publisher = {Kaggle},
-  title = {South African Language Identification},
-  url = {https://kaggle.com/competitions/south-african-language-identification},
-  year = {2022},
-}
-""",
+        bibtex_citation="",
     )
 
     def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:

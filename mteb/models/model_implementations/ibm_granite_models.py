@@ -402,7 +402,6 @@ granite_311m_multilingual_r2 = ModelMeta(
     model_type=["dense"],
     citation=GRANITE_EMBEDDING_MULTILINGUAL_R2_CITATION,
     contacts=["aashka-trivedi", "pawasthy", "hansolosan"],
-    output_dtypes=None,
     extra_requirements_groups=None,
 )
 
@@ -440,6 +439,5 @@ granite_97m_multilingual_r2 = ModelMeta(
     model_type=["dense"],
     citation=GRANITE_EMBEDDING_MULTILINGUAL_R2_CITATION,
     contacts=["aashka-trivedi", "pawasthy", "hansolosan"],
-    output_dtypes=None,
     extra_requirements_groups=None,
 )

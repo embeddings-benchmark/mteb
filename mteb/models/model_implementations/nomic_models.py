@@ -3,14 +3,12 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
-import torch.nn.functional as F
-
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -50,6 +48,9 @@ class NomicWrapper(SentenceTransformerEncoderWrapper):
         **kwargs: Any,
     ) -> Array:
         # default to search_document if input_type and prompt_name are not provided
+        import torch
+        import torch.nn.functional as F
+
         prompt_name = (
             self.get_prompt_name(task_metadata, prompt_type)
             or PromptType.document.value
@@ -178,13 +179,16 @@ model_prompts = {
 }
 
 NOMIC_CITATION = """
-@misc{nussbaum2024nomic,
-      title={Nomic Embed: Training a Reproducible Long Context Text Embedder},
-      author={Zach Nussbaum and John X. Morris and Brandon Duderstadt and Andriy Mulyar},
-      year={2024},
-      eprint={2402.01613},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+@article{nussbaum2024nomic,
+  archiveprefix = {arXiv},
+  author = {Zach Nussbaum and John Xavier Morris and Andriy Mulyar and Brandon Duderstadt},
+  eprint = {2402.01613},
+  issn = {2835-8856},
+  journal = {Transactions on Machine Learning Research},
+  note = {Reproducibility Certification},
+  title = {Nomic Embed: Training a Reproducible Long Context Text Embedder},
+  url = {https://openreview.net/forum?id=IPmzyQSiQE},
+  year = {2025},
 }
 """
 
@@ -350,13 +354,16 @@ nomic_modern_bert_embed = ModelMeta(
     superseded_by=None,
     training_datasets=nomic_training_data,
     public_training_data=None,
-    citation="""@misc{nussbaum2024nomic,
-      title={Nomic Embed: Training a Reproducible Long Context Text Embedder},
-      author={Zach Nussbaum and John X. Morris and Brandon Duderstadt and Andriy Mulyar},
-      year={2024},
-      eprint={2402.01613},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+    citation="""@article{nussbaum2024nomic,
+  archiveprefix = {arXiv},
+  author = {Zach Nussbaum and John Xavier Morris and Andriy Mulyar and Brandon Duderstadt},
+  eprint = {2402.01613},
+  issn = {2835-8856},
+  journal = {Transactions on Machine Learning Research},
+  note = {Reproducibility Certification},
+  title = {Nomic Embed: Training a Reproducible Long Context Text Embedder},
+  url = {https://openreview.net/forum?id=IPmzyQSiQE},
+  year = {2025},
 }""",
 )
 
@@ -530,13 +537,13 @@ nomic_embed_code = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation="""@misc{suresh2025cornstackhighqualitycontrastivedata,
-      title={CoRNStack: High-Quality Contrastive Data for Better Code Retrieval and Reranking},
-      author={Tarun Suresh and Revanth Gangi Reddy and Yifei Xu and Zach Nussbaum and Andriy Mulyar and Brandon Duderstadt and Heng Ji},
-      year={2025},
-      eprint={2412.01007},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2412.01007},
+    citation="""@inproceedings{suresh2025cornstackhighqualitycontrastivedata,
+  archiveprefix = {arXiv},
+  author = {Tarun Suresh and Revanth Gangi Reddy and Yifei Xu and Zach Nussbaum and Andriy Mulyar and Brandon Duderstadt and Heng Ji},
+  booktitle = {The Thirteenth International Conference on Learning Representations},
+  eprint = {2412.01007},
+  title = {Co{RNS}tack: High-Quality Contrastive Data for Better Code Retrieval and Reranking},
+  url = {https://openreview.net/forum?id=iyJOUELYir},
+  year = {2025},
 }""",
 )

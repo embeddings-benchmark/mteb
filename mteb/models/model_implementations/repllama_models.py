@@ -4,8 +4,6 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
-import torch.nn.functional as F
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -13,11 +11,12 @@ from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
     from collections.abc import Callable
 
+    import torch
     from torch.utils.data import DataLoader
     from transformers import BatchEncoding, PreTrainedTokenizerBase
 
@@ -99,6 +98,9 @@ class RepLLaMAModel(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        import torch
+        import torch.nn.functional as F
+
         batch_size = 16 if "batch_size" not in kwargs else kwargs.pop("batch_size")
         all_embeddings = []
         prompt_name = self.get_prompt_name(task_metadata, prompt_type)
@@ -153,11 +155,18 @@ model_prompts = {
 }
 
 REPLLAMA_CITATION = """
-@article{rankllama,
-      title={Fine-Tuning LLaMA for Multi-Stage Text Retrieval},
-      author={Xueguang Ma and Liang Wang and Nan Yang and Furu Wei and Jimmy Lin},
-      year={2023},
-      journal={arXiv:2310.08319},
+@inproceedings{rankllama,
+  author = {Ma, Xueguang and Wang, Liang and Yang, Nan and Wei, Furu and Lin, Jimmy},
+  booktitle = {Proceedings of the 47th International ACM SIGIR Conference on Research and Development in Information Retrieval},
+  collection = {SIGIR 2024},
+  doi = {10.1145/3626772.3657951},
+  month = {July},
+  pages = {2421–2425},
+  publisher = {ACM},
+  series = {SIGIR 2024},
+  title = {Fine-Tuning LLaMA for Multi-Stage Text Retrieval},
+  url = {https://doi.org/10.1145/3626772.3657951},
+  year = {2024},
 }
 """
 
@@ -166,7 +175,7 @@ repllama_llama2_original = ModelMeta(
     loader_kwargs=dict(
         base_model_name_or_path="meta-llama/Llama-2-7b-hf",
         device_map="auto",
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
         model_prompts=model_prompts,
     ),
     name="castorini/repllama-v1-7b-lora-passage",
@@ -201,7 +210,7 @@ repllama_llama2_reproduced = ModelMeta(
     loader_kwargs=dict(
         base_model_name_or_path="meta-llama/Llama-2-7b-hf",
         device_map="auto",
-        torch_dtype=torch.bfloat16,
+        torch_dtype=OutputDType.BF16,
         model_prompts=model_prompts,
     ),
     name="samaya-ai/RepLLaMA-reproduced",

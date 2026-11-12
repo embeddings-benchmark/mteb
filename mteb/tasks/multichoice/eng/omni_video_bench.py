@@ -31,7 +31,6 @@ class OmniVideoBenchVideoCentricQA(AbsTaskRetrieval):
         dialect=[],
         modalities=["video", "text"],
         sample_creation="found",
-        is_beta=True,
         bibtex_citation=r"""
 @article{li2025omnivideobench,
   author = {Li, Caorui and Chen, Yu and Ji, Yiyan and Xu, Jin and Cui, Zhenyu and Li, Shihao and Zhang, Yuanxing and Wang, Wentao and Song, Zhenghao and Zhang, Dingling and others},

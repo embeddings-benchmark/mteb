@@ -6,7 +6,6 @@ from functools import wraps
 from typing import TYPE_CHECKING, Any, Literal, TypeVar, get_args
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -19,6 +18,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
     import cohere
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -148,6 +148,7 @@ EmbeddingType = Literal[
 ]
 
 OUTPUT_TYPES = [
+    OutputDType.FLOAT32,  # default; the quantized types are opt-in via the API
     OutputDType.INT8,
     OutputDType.UINT8,
     OutputDType.BINARY,
@@ -262,6 +263,8 @@ class CohereTextEmbeddingModel(AbsEncoder):
         cohere_task_type: str,
         show_progress_bar: bool = False,
     ) -> torch.Tensor:
+        import torch
+
         all_embeddings = []
         index = 0
 
@@ -496,6 +499,63 @@ cohere_eng_light_3 = ModelMeta(
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,  # assumed
+    training_datasets=None,
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
+)
+
+
+cohere_embed_v5_pro = ModelMeta(
+    loader=CohereTextEmbeddingModel,
+    loader_kwargs=dict(
+        model_prompts=model_prompts,
+    ),
+    name="Cohere/Cohere-embed-v5.0-pro",
+    model_type=["dense"],
+    languages=supported_languages,
+    open_weights=False,
+    revision="1",
+    release_date=None,
+    n_parameters=None,
+    n_embedding_parameters=None,
+    memory_usage_mb=None,
+    max_tokens=8192,
+    embed_dim=2048,
+    reference="https://docs.cohere.com/docs/cohere-embed",
+    license=None,
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["API"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
+)
+
+cohere_embed_v5_fast = ModelMeta(
+    loader=CohereTextEmbeddingModel,
+    loader_kwargs=dict(
+        model_prompts=model_prompts,
+    ),
+    name="Cohere/Cohere-embed-v5.0-fast",
+    model_type=["dense"],
+    languages=supported_languages,
+    open_weights=False,
+    revision="1",
+    release_date=None,
+    n_parameters=None,
+    n_embedding_parameters=None,
+    memory_usage_mb=None,
+    max_tokens=8192,
+    embed_dim=2048,
+    reference="https://docs.cohere.com/docs/cohere-embed",
+    license=None,
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["API"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
     output_dtypes=OUTPUT_TYPES,
     extra_requirements_groups=["cohere"],

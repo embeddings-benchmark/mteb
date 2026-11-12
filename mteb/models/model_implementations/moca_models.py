@@ -4,8 +4,6 @@ import logging
 import types
 from typing import TYPE_CHECKING, Any
 
-import torch
-import transformers
 from tqdm.auto import tqdm
 
 from mteb._requires_package import suggest_package
@@ -13,6 +11,7 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
     from PIL import Image
     from torch.utils.data import DataLoader
     from typing_extensions import Unpack
@@ -22,11 +21,19 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-MOCA_CITATION = """@article{chen2025moca,
-  title={MoCa: Modality-aware Continual Pre-training Makes Better Bidirectional Multimodal Embeddings},
-  author={Chen, Haonan and Liu, Hong and Luo, Yuping and Wang, Liang and Yang, Nan and Wei, Furu and Dou, Zhicheng},
-  journal={arXiv preprint arXiv:2506.23115},
-  year={2025}
+MOCA_CITATION = """@inproceedings{chen2025moca,
+  address = {San Diego, California, United States},
+  author = {Chen, Haonan and Liu, Hong and Luo, Yuping and Wang, Liang and Yang, Nan and Wei, Furu and Dou, Zhicheng},
+  booktitle = {Proceedings of the 64th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2026.acl-long.34},
+  editor = {Liakata, Maria and Moreira, Viviane P. and Zhang, Jiajun and Jurgens, David},
+  isbn = {979-8-89176-390-6},
+  month = {jul},
+  pages = {810--823},
+  publisher = {Association for Computational Linguistics},
+  title = {{M}o{C}a: Modality-aware Continual Pre-training Makes Better Bidirectional Multimodal Embeddings},
+  url = {https://aclanthology.org/2026.acl-long.34/},
+  year = {2026},
 }"""
 
 # Qwen2.5-VL image placeholder, as used by MoCa's collator
@@ -60,6 +67,8 @@ def _bidirectional_causal_mask(
     instead build an explicit lower-triangular mask, so they need this patch to stay
     bidirectional.
     """
+    import torch
+
     if attention_mask is None:
         return None
     dtype = input_tensor.dtype
@@ -91,6 +100,8 @@ class MoCaWrapper(AbsEncoder):
         attn_implementation: str | None = None,
         **kwargs: Any,
     ) -> None:
+        import torch
+        import transformers
         from transformers import AutoProcessor, Qwen2_5_VLModel
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
@@ -178,23 +189,27 @@ class MoCaWrapper(AbsEncoder):
         counts = mask.sum(dim=1).clamp(min=1e-9)
         return summed / counts
 
-    @torch.inference_mode()
     def _embed(self, texts: list[str], images: list[Any] | None = None) -> torch.Tensor:
         """Encode one batch of (optionally interleaved) inputs into unit-norm vectors."""
-        processed = self.processor(
-            text=texts,
-            images=images or None,
-            padding=True,
-            # truncating a sequence that contains image placeholders would
-            # desynchronise the image tokens from the vision features
-            truncation=images is None,
-            max_length=None if images else self.max_length,
-            return_tensors="pt",
-        )
-        processed = {k: v.to(self.device) for k, v in processed.items()}
-        outputs = self.model(**processed, use_cache=False, return_dict=True)
-        reps = self._mean_pool(outputs.last_hidden_state, processed["attention_mask"])
-        return torch.nn.functional.normalize(reps, p=2, dim=-1)
+        import torch
+
+        with torch.inference_mode():
+            processed = self.processor(
+                text=texts,
+                images=images or None,
+                padding=True,
+                # truncating a sequence that contains image placeholders would
+                # desynchronise the image tokens from the vision features
+                truncation=images is None,
+                max_length=None if images else self.max_length,
+                return_tensors="pt",
+            )
+            processed = {k: v.to(self.device) for k, v in processed.items()}
+            outputs = self.model(**processed, use_cache=False, return_dict=True)
+            reps = self._mean_pool(
+                outputs.last_hidden_state, processed["attention_mask"]
+            )
+            return torch.nn.functional.normalize(reps, p=2, dim=-1)
 
     def encode(
         self,
@@ -206,6 +221,8 @@ class MoCaWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
+        import torch
+
         features = inputs.dataset.features
         has_text = "text" in features
         has_image = "image" in features

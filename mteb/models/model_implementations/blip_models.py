@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
-from torch.nn.functional import normalize
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -15,15 +13,15 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
 
-BLIP_CITATION = """@misc{https://doi.org/10.48550/arxiv.2201.12086,
-    doi = {10.48550/ARXIV.2201.12086},
-    url = {https://arxiv.org/abs/2201.12086},
-    author = {Li, Junnan and Li, Dongxu and Xiong, Caiming and Hoi, Steven},
-    keywords = {Computer Vision and Pattern Recognition (cs.CV), FOS: Computer and information sciences, FOS: Computer and information sciences},
-    title = {BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation},
-    publisher = {arXiv},
-    year = {2022},
-    copyright = {Creative Commons Attribution 4.0 International}
+BLIP_CITATION = """@inproceedings{https://doi.org/10.48550/arxiv.2201.12086,
+  archiveprefix = {arXiv},
+  author = {Junnan Li and Dongxu Li and Caiming Xiong and Steven C. H. Hoi},
+  booktitle = {ICML},
+  eprint = {2201.12086},
+  pages = {12888-12900},
+  title = {BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation},
+  url = {https://proceedings.mlr.press/v162/li22n.html},
+  year = {2022},
 }"""
 
 
@@ -32,9 +30,14 @@ class BLIPModel(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ):
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         from transformers import BlipForImageTextRetrieval, BlipProcessor
 
         self.model_name = model_name
@@ -50,6 +53,9 @@ class BLIPModel(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+        from torch.nn.functional import normalize
+
         all_text_embeddings = []
 
         with torch.no_grad():
@@ -80,6 +86,9 @@ class BLIPModel(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+        from torch.nn.functional import normalize
+
         all_image_embeddings = []
 
         with torch.no_grad():

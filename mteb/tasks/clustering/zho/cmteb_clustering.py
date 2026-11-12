@@ -19,7 +19,7 @@ class CLSClusteringFastS2S(AbsTaskClustering):
     metadata = TaskMetadata(
         name="CLSClusteringS2S.v2",
         description="Clustering of titles from CLS dataset. Clustering of 13 sets on the main category.",
-        reference="https://arxiv.org/abs/2209.05034",
+        reference="https://aclanthology.org/2022.coling-1.344/",
         dataset={
             "path": "C-MTEB/CLSClusteringS2S",
             "revision": "e458b3f5414b62b7f9f83499ac1f5497ae2e869f",
@@ -38,12 +38,18 @@ class CLSClusteringFastS2S(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{li2022csl,
+@inproceedings{li2022csl,
+  address = {Gyeongju, Republic of Korea},
   archiveprefix = {arXiv},
-  author = {Yudong Li and Yuqing Zhang and Zhe Zhao and Linlin Shen and Weijie Liu and Weiquan Mao and Hui Zhang},
+  author = {Li, Yudong and Zhang, Yuqing and Zhao, Zhe and Shen, Linlin and Liu, Weijie and Mao, Weiquan and Zhang, Hui},
+  booktitle = {Proceedings of the 29th International Conference on Computational Linguistics},
+  editor = {Calzolari, Nicoletta and Huang, Chu-Ren and Kim, Hansaem and Pustejovsky, James and Wanner, Leo and Choi, Key-Sun and Ryu, Pum-Mo and Chen, Hsin-Hsi and Donatelli, Lucia and Ji, Heng and Kurohashi, Sadao and Paggio, Patrizia and Xue, Nianwen and Kim, Seokhwan and Hahm, Younggyun and He, Zhong and Lee, Tony Kyungil and Santus, Enrico and Bond, Francis and Na, Seung-Hoon},
   eprint = {2209.05034},
-  primaryclass = {cs.CL},
-  title = {CSL: A Large-scale Chinese Scientific Literature Dataset},
+  month = {oct},
+  pages = {3917--3923},
+  publisher = {International Committee on Computational Linguistics},
+  title = {{CSL}: A Large-scale {C}hinese Scientific Literature Dataset},
+  url = {https://aclanthology.org/2022.coling-1.344/},
   year = {2022},
 }
 """,
@@ -81,7 +87,7 @@ class CLSClusteringFastP2P(AbsTaskClustering):
     metadata = TaskMetadata(
         name="CLSClusteringP2P.v2",
         description="Clustering of titles + abstract from CLS dataset. Clustering of 13 sets on the main category.",
-        reference="https://arxiv.org/abs/2209.05034",
+        reference="https://aclanthology.org/2022.coling-1.344/",
         dataset={
             "path": "mteb/CLSClusteringP2P.v2",
             "revision": "4b012f4818da8625de8e2e90526db1570e7ed2c7",
@@ -100,12 +106,18 @@ class CLSClusteringFastP2P(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{li2022csl,
+@inproceedings{li2022csl,
+  address = {Gyeongju, Republic of Korea},
   archiveprefix = {arXiv},
-  author = {Yudong Li and Yuqing Zhang and Zhe Zhao and Linlin Shen and Weijie Liu and Weiquan Mao and Hui Zhang},
+  author = {Li, Yudong and Zhang, Yuqing and Zhao, Zhe and Shen, Linlin and Liu, Weijie and Mao, Weiquan and Zhang, Hui},
+  booktitle = {Proceedings of the 29th International Conference on Computational Linguistics},
+  editor = {Calzolari, Nicoletta and Huang, Chu-Ren and Kim, Hansaem and Pustejovsky, James and Wanner, Leo and Choi, Key-Sun and Ryu, Pum-Mo and Chen, Hsin-Hsi and Donatelli, Lucia and Ji, Heng and Kurohashi, Sadao and Paggio, Patrizia and Xue, Nianwen and Kim, Seokhwan and Hahm, Younggyun and He, Zhong and Lee, Tony Kyungil and Santus, Enrico and Bond, Francis and Na, Seung-Hoon},
   eprint = {2209.05034},
-  primaryclass = {cs.CL},
-  title = {CSL: A Large-scale Chinese Scientific Literature Dataset},
+  month = {oct},
+  pages = {3917--3923},
+  publisher = {International Committee on Computational Linguistics},
+  title = {{CSL}: A Large-scale {C}hinese Scientific Literature Dataset},
+  url = {https://aclanthology.org/2022.coling-1.344/},
   year = {2022},
 }
 """,
@@ -118,7 +130,7 @@ class CLSClusteringS2S(AbsTaskClusteringLegacy):
     metadata = TaskMetadata(
         name="CLSClusteringS2S",
         description="Clustering of titles from CLS dataset. Clustering of 13 sets on the main category.",
-        reference="https://arxiv.org/abs/2209.05034",
+        reference="https://aclanthology.org/2022.coling-1.344/",
         dataset={
             "path": "C-MTEB/CLSClusteringS2S",
             "revision": "e458b3f5414b62b7f9f83499ac1f5497ae2e869f",
@@ -137,10 +149,18 @@ class CLSClusteringS2S(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{li2022csl,
+@inproceedings{li2022csl,
+  address = {Gyeongju, Republic of Korea},
+  archiveprefix = {arXiv},
   author = {Li, Yudong and Zhang, Yuqing and Zhao, Zhe and Shen, Linlin and Liu, Weijie and Mao, Weiquan and Zhang, Hui},
-  journal = {arXiv preprint arXiv:2209.05034},
-  title = {CSL: A large-scale Chinese scientific literature dataset},
+  booktitle = {Proceedings of the 29th International Conference on Computational Linguistics},
+  editor = {Calzolari, Nicoletta and Huang, Chu-Ren and Kim, Hansaem and Pustejovsky, James and Wanner, Leo and Choi, Key-Sun and Ryu, Pum-Mo and Chen, Hsin-Hsi and Donatelli, Lucia and Ji, Heng and Kurohashi, Sadao and Paggio, Patrizia and Xue, Nianwen and Kim, Seokhwan and Hahm, Younggyun and He, Zhong and Lee, Tony Kyungil and Santus, Enrico and Bond, Francis and Na, Seung-Hoon},
+  eprint = {2209.05034},
+  month = {oct},
+  pages = {3917--3923},
+  publisher = {International Committee on Computational Linguistics},
+  title = {{CSL}: A Large-scale {C}hinese Scientific Literature Dataset},
+  url = {https://aclanthology.org/2022.coling-1.344/},
   year = {2022},
 }
 """,
@@ -153,7 +173,7 @@ class CLSClusteringP2P(AbsTaskClusteringLegacy):
     metadata = TaskMetadata(
         name="CLSClusteringP2P",
         description="Clustering of titles + abstract from CLS dataset. Clustering of 13 sets on the main category.",
-        reference="https://arxiv.org/abs/2209.05034",
+        reference="https://aclanthology.org/2022.coling-1.344/",
         dataset={
             "path": "C-MTEB/CLSClusteringP2P",
             "revision": "4b6227591c6c1a73bc76b1055f3b7f3588e72476",
@@ -172,10 +192,18 @@ class CLSClusteringP2P(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{li2022csl,
+@inproceedings{li2022csl,
+  address = {Gyeongju, Republic of Korea},
+  archiveprefix = {arXiv},
   author = {Li, Yudong and Zhang, Yuqing and Zhao, Zhe and Shen, Linlin and Liu, Weijie and Mao, Weiquan and Zhang, Hui},
-  journal = {arXiv preprint arXiv:2209.05034},
-  title = {CSL: A large-scale Chinese scientific literature dataset},
+  booktitle = {Proceedings of the 29th International Conference on Computational Linguistics},
+  editor = {Calzolari, Nicoletta and Huang, Chu-Ren and Kim, Hansaem and Pustejovsky, James and Wanner, Leo and Choi, Key-Sun and Ryu, Pum-Mo and Chen, Hsin-Hsi and Donatelli, Lucia and Ji, Heng and Kurohashi, Sadao and Paggio, Patrizia and Xue, Nianwen and Kim, Seokhwan and Hahm, Younggyun and He, Zhong and Lee, Tony Kyungil and Santus, Enrico and Bond, Francis and Na, Seung-Hoon},
+  eprint = {2209.05034},
+  month = {oct},
+  pages = {3917--3923},
+  publisher = {International Committee on Computational Linguistics},
+  title = {{CSL}: A Large-scale {C}hinese Scientific Literature Dataset},
+  url = {https://aclanthology.org/2022.coling-1.344/},
   year = {2022},
 }
 """,
@@ -209,16 +237,7 @@ class ThuNewsClusteringFastS2S(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@software{sun2016thuctc,
-  author = {Sun, M. and Li, J. and Guo, Z. and Yu, Z. and Zheng, Y. and Si, X. and Liu, Z.},
-  note = {THU Chinese Text Classification Toolkit},
-  publisher = {THU Natural Language Processing Lab},
-  title = {THUCTC: An Efficient Chinese Text Classifier},
-  url = {https://github.com/thunlp/THUCTC},
-  year = {2016},
-}
-""",
+        bibtex_citation="",
         prompt="Identify the topic or theme of the given news articles based on the titles",
         adapted_from=["ThuNewsClusteringS2S"],
     )
@@ -271,16 +290,7 @@ class ThuNewsClusteringFastP2P(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@software{sun2016thuctc,
-  author = {Sun, M. and Li, J. and Guo, Z. and Yu, Z. and Zheng, Y. and Si, X. and Liu, Z.},
-  note = {THU Chinese Text Classification Toolkit},
-  publisher = {THU Natural Language Processing Lab},
-  title = {THUCTC: An Efficient Chinese Text Classifier},
-  url = {https://github.com/thunlp/THUCTC},
-  year = {2016},
-}
-""",
+        bibtex_citation="",
         prompt="Identify the topic or theme of the given news articles based on the titles and contents",
         adapted_from=["ThuNewsClusteringP2P"],
     )
@@ -331,13 +341,6 @@ class ThuNewsClusteringS2S(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{eisner2007proceedings,
-  author = {Eisner, Jason},
-  booktitle = {Proceedings of the 2007 Joint Conference on Empirical Methods in Natural Language Processing and Computational Natural Language Learning (EMNLP-CoNLL)},
-  title = {Proceedings of the 2007 joint conference on empirical methods in natural language processing and computational natural language learning (EMNLP-CoNLL)},
-  year = {2007},
-}
-
 @inproceedings{li2006comparison,
   author = {Li, Jingyang and Sun, Maosong and Zhang, Xian},
   booktitle = {proceedings of the 21st international conference on computational linguistics and 44th annual meeting of the association for computational linguistics},
@@ -374,13 +377,6 @@ class ThuNewsClusteringP2P(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@inproceedings{eisner2007proceedings,
-  author = {Eisner, Jason},
-  booktitle = {Proceedings of the 2007 Joint Conference on Empirical Methods in Natural Language Processing and Computational Natural Language Learning (EMNLP-CoNLL)},
-  title = {Proceedings of the 2007 joint conference on empirical methods in natural language processing and computational natural language learning (EMNLP-CoNLL)},
-  year = {2007},
-}
-
 @inproceedings{li2006comparison,
   author = {Li, Jingyang and Sun, Maosong and Zhang, Xian},
   booktitle = {proceedings of the 21st international conference on computational linguistics and 44th annual meeting of the association for computational linguistics},

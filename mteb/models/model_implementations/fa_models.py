@@ -290,3 +290,27 @@ tooka_sbert_v2_large = ModelMeta(
     url = "https://arxiv.org/abs/1908.10084",
 }""",
 )
+
+noql = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    name="shekar-ai/Noql",
+    model_type=["dense"],
+    languages=["fas-Arab"],
+    open_weights=True,
+    revision="fcdec3f8c64107a4a552b1877156d561fa1b6eb9",
+    release_date="2026-09-22",
+    n_parameters=11_940_096,
+    n_embedding_parameters=4_096_512,
+    memory_usage_mb=46,
+    embed_dim=[768, 512, 256, 128, 64],
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/shekar-ai/Noql",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data="https://huggingface.co/datasets/shekar-ai/Shiraz",
+    training_datasets=set(),
+    adapted_from="shekar-ai/albert-base-v2-persian-zwnj-naab-mlm",
+)

@@ -4,13 +4,17 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
 PT_MATRYOSHKA_EMBEDDING_CITATION = """
-@misc{okamura2026multilingualaveragesmtebptbenchmark,
-  archiveprefix = {arXiv},
-  author = {Lucas Hideki Takeuchi Okamura and Alexandre Alcoforado and Anna Helena Reali Costa},
-  eprint = {2607.04071},
-  primaryclass = {cs.CL},
+@inbook{okamura2026multilingualaveragesmtebptbenchmark,
+  author = {Okamura, Lucas Hideki Takeuchi and Alcoforado, Alexandre and Costa, Anna Helena Reali},
+  booktitle = {Intelligent Systems},
+  doi = {10.1007/978-3-032-39892-5_33},
+  isbn = {9783032398925},
+  issn = {1611-3349},
+  month = {Oct},
+  pages = {501–516},
+  publisher = {Springer Nature Switzerland},
   title = {Beyond Multilingual Averages: MTEB-PT, a Benchmark for Portuguese Sentence Encoders},
-  url = {https://arxiv.org/abs/2607.04071},
+  url = {https://doi.org/10.1007/978-3-032-39892-5_33},
   year = {2026},
 }
 """
@@ -74,7 +78,6 @@ e5_large_matryoshka_sts_pt = ModelMeta(
     model_type=["dense"],
     citation=PT_MATRYOSHKA_EMBEDDING_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=None,
 )
 
@@ -106,7 +109,6 @@ BERTimbau_large_matryoshka_sts_pt = ModelMeta(
     model_type=["dense"],
     citation=PT_MATRYOSHKA_EMBEDDING_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=None,
 )
 
@@ -138,7 +140,6 @@ ModBERTBr_matryoshka_sts_pt = ModelMeta(
     model_type=["dense"],
     citation=PT_MATRYOSHKA_EMBEDDING_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=None,
 )
 
@@ -170,7 +171,6 @@ Legal_BERTimbau_sts_large_ma_v3 = ModelMeta(
     model_type=["dense"],
     citation=None,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=None,
 )
 
@@ -202,7 +202,6 @@ serafim_100m_portuguese_pt_sentence_encoder = ModelMeta(
     model_type=["dense"],
     citation=SERAFIM_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=None,
 )
 
@@ -234,7 +233,6 @@ serafim_335m_portuguese_pt_sentence_encoder = ModelMeta(
     model_type=["dense"],
     citation=SERAFIM_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=None,
 )
 
@@ -266,7 +264,6 @@ serafim_335m_portuguese_pt_sentence_encoder_ir = ModelMeta(
     model_type=["dense"],
     citation=SERAFIM_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=None,
 )
 
@@ -298,7 +295,6 @@ serafim_100m_portuguese_pt_sentence_encoder_ir = ModelMeta(
     model_type=["dense"],
     citation=SERAFIM_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=None,
 )
 
@@ -330,7 +326,6 @@ serafim_900m_portuguese_pt_sentence_encoder_ir = ModelMeta(
     model_type=["dense"],
     citation=SERAFIM_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=None,
 )
 
@@ -362,6 +357,5 @@ serafim_900m_portuguese_pt_sentence_encoder = ModelMeta(
     model_type=["dense"],
     citation=SERAFIM_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=None,
 )

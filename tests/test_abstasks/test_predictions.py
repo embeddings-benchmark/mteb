@@ -116,8 +116,8 @@ from mteb.mocks.mock_tasks.clustering import MockClusteringTask
         (
             MockImageTextPairClassificationTask(),
             [
-                [pytest.approx([0.8081411123275757])],
-                [pytest.approx([0.6950531601905823])],
+                [pytest.approx([0.7708745002746582])],
+                [pytest.approx([0.7533516883850098])],
             ],
         ),
     ],
@@ -131,7 +131,7 @@ def test_predictions(tmp_path: Path, task, expected):
     model = mteb.get_model_meta("mteb/baseline-random-encoder")
     mteb.evaluate(model, task, prediction_folder=tmp_path, cache=None)
 
-    with task._predictions_path(tmp_path).open() as f:
+    with task._predictions_path(tmp_path).open(encoding="utf-8") as f:
         full_predictions = json.load(f)
 
     predictions = full_predictions["default"]["test"]

@@ -4,8 +4,6 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
-from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -13,6 +11,9 @@ from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
+    from torch.utils.data import DataLoader
+
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
 
@@ -42,15 +43,16 @@ class OmniRetrieverWrapper(AbsEncoder):
     projected by ``classify_linear`` to 3584 dims, then L2-normalised here (the
     model does not normalise internally).
 
-    All preprocessing constants below come from the official training launcher
-    (``training/train.sh``) and data pipeline (``training/qwenvl/data/data_qwen.py``)
-    in https://github.com/yunzeliu/Omni-Retriever, which define the released
-    model's behaviour.
+    Prompt layout follows the official training pipeline
+    (``training/qwenvl/data/data_qwen.py``); audio and frame sampling follow the
+    official evaluation pipeline (``src/omniretriever/data/media.py``) in
+    https://github.com/yunzeliu/Omni-Retriever.
     """
 
     AUDIO_SAMPLING_RATE = 16_000
-    MIN_AUDIO_SEC = 1
-    MAX_AUDIO_SEC = 300
+    # 8 s, centre-cropped or zero-padded: DEFAULT_AUDIO_DURATION_SEC=8
+    # https://github.com/yunzeliu/Omni-Retriever/blob/main/src/omniretriever/models/loader.py
+    AUDIO_SEC = 8
     POSITION_ID_PER_SECONDS = 25
     EMBED_DIM = 3584
 
@@ -62,11 +64,14 @@ class OmniRetrieverWrapper(AbsEncoder):
         base_model_name_or_path: str = WAVE_BASE_MODEL,
         base_model_revision: str = WAVE_BASE_REVISION,
         device: str | None = None,
+        # 8 frames: DEFAULT_VIDEO_FRAMES=8
+        # https://github.com/yunzeliu/Omni-Retriever/blob/main/src/omniretriever/models/loader.py
         num_frames: int = 8,
         pixels: int = 50_176,
         video_batch_size: int = 1,
         **kwargs: Any,
     ) -> None:
+        import torch
         from peft import PeftModel
         from transformers import AutoModel
 
@@ -108,11 +113,9 @@ class OmniRetrieverWrapper(AbsEncoder):
             image_processor.size["shortest_edge"] = pixels
 
         self.video_batch_size = video_batch_size
-        self.max_audio_samples = self.MAX_AUDIO_SEC * self.AUDIO_SAMPLING_RATE
         self.collator = VideoCollator(
             target_sampling_rate=self.AUDIO_SAMPLING_RATE,
             num_frames=num_frames,
-            max_samples=self.max_audio_samples,
         )
 
     @staticmethod
@@ -187,16 +190,18 @@ class OmniRetrieverWrapper(AbsEncoder):
         self, audios: list[Any]
     ) -> tuple[dict[str, torch.Tensor], list[torch.Tensor], list[int]]:
         """Build Whisper features, raw BEATs waveforms and placeholder counts."""
+        import torch
+
         if not audios:
             return {}, [], []
 
-        minimum = self.MIN_AUDIO_SEC * self.AUDIO_SAMPLING_RATE
+        target = self.AUDIO_SEC * self.AUDIO_SAMPLING_RATE
         waveforms = []
         for audio in audios:
             waveform = np.asarray(audio["array"], dtype=np.float32)
-            if waveform.shape[-1] < minimum:
-                waveform = np.pad(waveform, (0, minimum - waveform.shape[-1]))
-            waveforms.append(waveform)
+            start = max(0, (waveform.shape[-1] - target) // 2)
+            waveform = waveform[start : start + target]
+            waveforms.append(np.pad(waveform, (0, target - waveform.shape[-1])))
         raw_wavs = [torch.from_numpy(w) for w in waveforms]
         features = self.processor.feature_extractor(
             waveforms,
@@ -219,6 +224,8 @@ class OmniRetrieverWrapper(AbsEncoder):
         self, videos: list[Any], durations: list[float | None]
     ) -> tuple[dict[str, Any], list[float]]:
         """Build video pixel inputs and the per-grid second offsets."""
+        import torch
+
         if not videos:
             return {}, []
 
@@ -291,6 +298,8 @@ class OmniRetrieverWrapper(AbsEncoder):
         return texts, videos, audios, batch.get("video_duration") or []
 
     def _encode_batch(self, batch: BatchedInput) -> torch.Tensor:
+        import torch
+
         texts, videos, audios, durations = self._unpack(batch)
         # data_qwen.py folds audio into the video stream when both are present.
         use_audio_in_video = bool(videos) and bool(audios)
@@ -324,6 +333,8 @@ class OmniRetrieverWrapper(AbsEncoder):
 
     def _to_device(self, inputs: dict[str, Any]) -> dict[str, Any]:
         """Move every tensor in ``inputs`` to the model's device, leaving the rest."""
+        import torch
+
         return {
             key: value.to(self.device) if isinstance(value, torch.Tensor) else value
             for key, value in inputs.items()
@@ -335,7 +346,6 @@ class OmniRetrieverWrapper(AbsEncoder):
                 row["video_duration"] = row["video"].metadata.end_stream_seconds
         return self.collator(inputs)
 
-    @torch.inference_mode()
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -346,30 +356,38 @@ class OmniRetrieverWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        features = inputs.dataset.features
-        if "video" in features:
-            inputs = DataLoader(
-                inputs.dataset,
-                batch_size=self.video_batch_size,
-                collate_fn=self._collate,
-                num_workers=inputs.num_workers,
-                shuffle=False,
-            )
-        elif "audio" in features:
-            inputs.collate_fn = self._collate
+        import torch
+        from torch.utils.data import DataLoader
 
-        all_embeddings: list[torch.Tensor] = []
-        for batch in tqdm(inputs, desc="Encoding"):
-            all_embeddings.append(self._encode_batch(batch).cpu())
-        return torch.cat(all_embeddings, dim=0).float()
+        with torch.inference_mode():
+            features = inputs.dataset.features
+            if "video" in features:
+                inputs = DataLoader(
+                    inputs.dataset,
+                    batch_size=self.video_batch_size,
+                    collate_fn=self._collate,
+                    num_workers=inputs.num_workers,
+                    shuffle=False,
+                )
+            elif "audio" in features:
+                inputs.collate_fn = self._collate
+
+            all_embeddings: list[torch.Tensor] = []
+            for batch in tqdm(inputs, desc="Encoding"):
+                all_embeddings.append(self._encode_batch(batch).cpu())
+            return torch.cat(all_embeddings, dim=0).float()
 
 
 _OMNIRETRIEVER_CITATION = r"""
-@article{liu2026omniretriever,
-  title={OmniRetriever: Any-to-Any Audio-Video-Text Retrieval via Fusion-as-Teacher Distillation},
-  author={Liu, Yunze},
-  journal={arXiv preprint arXiv:2605.26641},
-  year={2026}
+@inproceedings{liu2026omniretriever,
+  author = {Liu, Yunze and Wu, Chi-Hao and Zhou, Enmin and Shen, Junxiao},
+  booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
+  doi = {10.18653/2026.emnlp-main.541},
+  pages = {12455–12472},
+  publisher = {Association for Computational Linguistics},
+  title = {OmniRetriever: Any-to-Any Audio-Video-Text Retrieval via Fusion-as-Teacher Distillation},
+  url = {https://doi.org/10.18653/2026.emnlp-main.541},
+  year = {2026},
 }
 """
 

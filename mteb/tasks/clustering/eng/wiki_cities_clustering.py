@@ -24,11 +24,5 @@ class WikiCitiesClustering(AbsTaskClusteringLegacy):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@online{wikidump2024,
-  author = {Wikimedia Foundation},
-  title = {Wikimedia Downloads},
-  url = {https://dumps.wikimedia.org},
-}
-""",
+        bibtex_citation="",
     )

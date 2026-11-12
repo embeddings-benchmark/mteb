@@ -133,12 +133,6 @@ aiteamvn_vietnamese_embeddings = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     adapted_from="BAAI/bge-m3",
-    citation="""@misc{Vietnamese_Embedding,
-  title={Vietnamese_Embedding: Embedding model in Vietnamese language.},
-  author={Nguyen Nho Trung, Nguyen Nhat Quang, Nguyen Van Huy},
-  year={2025},
-  publisher={Huggingface},
-}""",
 )
 
 
@@ -166,12 +160,6 @@ contextboxai_halong_embedding = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     adapted_from="intfloat/multilingual-e5-base",
-    citation="""@misc{HalongEmbedding,
-  title={HalongEmbedding: A Vietnamese Text Embedding},
-  author={Ngo Hieu},
-  year={2024},
-  publisher={Huggingface},
-}""",
 )
 
 sup_simcse_vietnamese_phobert_base_ = ModelMeta(
@@ -197,11 +185,18 @@ sup_simcse_vietnamese_phobert_base_ = ModelMeta(
     reference="https://huggingface.co/VoVanPhuc/sup-SimCSE-VietNamese-phobert-base",
     similarity_fn_name="cosine",
     training_datasets=None,
-    citation="""@article{gao2021simcse,
-   title={{SimCSE}: Simple Contrastive Learning of Sentence Embeddings},
-   author={Gao, Tianyu and Yao, Xingcheng and Chen, Danqi},
-   journal={arXiv preprint arXiv:2104.08821},
-   year={2021}
+    citation="""@inproceedings{gao2021simcse,
+  address = {Online and Punta Cana, Dominican Republic},
+  author = {Gao, Tianyu and Yao, Xingcheng and Chen, Danqi},
+  booktitle = {Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing},
+  doi = {10.18653/v1/2021.emnlp-main.552},
+  editor = {Moens, Marie-Francine and Huang, Xuanjing and Specia, Lucia and Yih, Scott Wen-tau},
+  month = {nov},
+  pages = {6894--6910},
+  publisher = {Association for Computational Linguistics},
+  title = {{S}im{CSE}: Simple Contrastive Learning of Sentence Embeddings},
+  url = {https://aclanthology.org/2021.emnlp-main.552/},
+  year = {2021},
 }
 
 @inproceedings{phobert,

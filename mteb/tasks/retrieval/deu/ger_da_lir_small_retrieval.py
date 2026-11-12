@@ -30,6 +30,7 @@ class GerDaLIRSmall(AbsTaskRetrieval):
   author = {Wrzalik, Marco  and
 Krechel, Dirk},
   booktitle = {Proceedings of the Natural Legal Language Processing Workshop 2021},
+  doi = {10.18653/v1/2021.nllp-1.13},
   month = nov,
   pages = {123--128},
   publisher = {Association for Computational Linguistics},

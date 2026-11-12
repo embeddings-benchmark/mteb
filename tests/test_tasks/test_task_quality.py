@@ -46,6 +46,10 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "BSARDRetrieval.v2",
         "BengaliDocumentClassification",
         "BibleNLPBitextMining",
+        "BioVITAA2TReranking",  # genus-level text is the bare genus name, which can be 3 characters
+        "BioVITAI2TReranking",
+        "BioVITAT2AReranking",
+        "BioVITAT2IReranking",
         "BlurbsClusteringS2S",
         "BlurbsClusteringS2S.v2",
         "BornholmBitextMining",
@@ -117,7 +121,6 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "ESCIReranking",
         "EcomRetrieval",
         "EmitClassification",
-        "EmotionAnalysisPlus",
         "FEVER",
         "FEVER-NL",
         "FEVER-VN",
@@ -127,6 +130,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "FalseFriendsGermanEnglish",
         "FiQA-PL",
         "FiQA2018",
+        "FiQADecontaminated",
         "FiQA2018-Fa",
         "FiQA2018-NL",
         "FilipinoHateSpeechClassification",
@@ -148,7 +152,9 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "HUMEToxicConversationsClassification",
         "HUMETweetSentimentExtractionClassification",
         "HatefulMemesI2TRetrieval",
+        "HatefulMemesI2TRetrieval.v2",
         "HatefulMemesT2IRetrieval",
+        "HatefulMemesT2IRetrieval.v2",
         "HeadlineClassification",
         "HebrewSentimentAnalysis",
         "HellaSwag",
@@ -230,6 +236,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MyanmarNews.v2",
         "NExTQAVideoCentricQA",
         "NFCorpus",
+        "NFCorpusDecontaminated",
         "NFCorpus-Fa",
         "NFCorpus-NL",
         "NFCorpus-NL.v2",
@@ -286,6 +293,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "Quora-PL",
         "Quora-PLHardNegatives",
         "QuoraRetrieval",
+        "QuoraRetrievalDecontaminated",
         "QuoraRetrieval-Fa",
         "QuoraRetrieval-Fa.v2",
         "QuoraRetrievalHardNegatives",
@@ -309,6 +317,10 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "STS22",
         "STSB",
         "STSBenchmarkMultilingualSTS",
+        # full repository snapshots include genuinely tiny files (empty __init__.py, py.typed, "{}" JSON fixtures)
+        "SWEBenchLiveRetrieval",
+        "SWEBenchPlusPlusRetrieval",
+        "SWEPolyBenchRetrieval",
         "SWEbenchCodeRetrieval",
         "SentimentDKSF",
         "SinhalaNewsClassification",
@@ -324,6 +336,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SwedishPatentCPCSubclassClassification",
         "SwedishSentimentClassification",
         "SwednClusteringS2S",
+        "SwingBenchRetrieval",  # repository snapshot with tiny files, as SWEBench*Retrieval above
         "SynPerChatbotRAGTopicsRetrieval",
         "SynPerChatbotTopicsRetrieval",
         "SynPerQARetrieval",
@@ -332,6 +345,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "TNews",
         "TNews.v2",
         "TRECCOVID",
+        "TrecCOVIDDecontaminated",
         "TRECCOVID-Fa",
         "TRECCOVID-NL",
         "TRECCOVID-PL",
@@ -347,7 +361,9 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "TempReasonL3Fact",
         "TempReasonL3Pure",
         "ThuNewsClusteringS2S",
+        "ToolRetrieval",
         "Touche2020",
+        "Touche2020Decontaminated",
         "Touche2020-Fa",
         "Touche2020-Fa.v2",
         "Touche2020-NL",
@@ -377,6 +393,31 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "Vidore3FinanceFrRetrieval.v2",
         "Vidore3HrRetrieval.v2",
         "Vidore3IndustrialRetrieval.v2",
+        # Vidore3*Reranking.v2: some pages have no extracted text (as Vidore3*Retrieval.v2)
+        "Vidore3ComputerScienceBGEm3Reranking.v2",
+        "Vidore3ComputerScienceBM25sReranking.v2",
+        "Vidore3ComputerScienceQwen3VLEmbedding2BReranking.v2",
+        "Vidore3EnergyBGEm3Reranking.v2",
+        "Vidore3EnergyBM25sReranking.v2",
+        "Vidore3EnergyQwen3VLEmbedding2BReranking.v2",
+        "Vidore3FinanceEnBGEm3Reranking.v2",
+        "Vidore3FinanceEnBM25sReranking.v2",
+        "Vidore3FinanceEnQwen3VLEmbedding2BReranking.v2",
+        "Vidore3FinanceFrBGEm3Reranking.v2",
+        "Vidore3FinanceFrBM25sReranking.v2",
+        "Vidore3FinanceFrQwen3VLEmbedding2BReranking.v2",
+        "Vidore3HrBGEm3Reranking.v2",
+        "Vidore3HrBM25sReranking.v2",
+        "Vidore3HrQwen3VLEmbedding2BReranking.v2",
+        "Vidore3IndustrialBGEm3Reranking.v2",
+        "Vidore3IndustrialBM25sReranking.v2",
+        "Vidore3IndustrialQwen3VLEmbedding2BReranking.v2",
+        "Vidore3ComputerScienceNemotron35Embed8BReranking.v2",
+        "Vidore3EnergyNemotron35Embed8BReranking.v2",
+        "Vidore3FinanceEnNemotron35Embed8BReranking.v2",
+        "Vidore3FinanceFrNemotron35Embed8BReranking.v2",
+        "Vidore3HrNemotron35Embed8BReranking.v2",
+        "Vidore3IndustrialNemotron35Embed8BReranking.v2",
         "VisualNewsI2TRetrieval",
         "VisualNewsT2IRetrieval",
         "VizWizIT2TRetrieval",
@@ -412,6 +453,9 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "BrightProSustainableLivingRetrieval",
     ],
     "duplicate_text": [
+        "GoogleSVQA2TRetrieval.v2",  # unique within a locale; the same sentences recur across locale subsets
+        "GoogleSVQT2ARetrieval.v2",  # unique within a locale; the same sentences recur across locale subsets
+        "HatefulMemesT2IRetrieval.v2",  # memes that share a caption are separate queries with the same answer
         "AfriHateClassification",
         "AfriSentiClassification",
         "AllegroReviews",
@@ -419,6 +463,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "AmazonCounterfactualClassification",
         "AmazonReviewsClassification",
         "ArguAna",
+        "ArguAnaDecontaminated",
         "ArguAna-NL",
         "ArguAna-NL.v2",
         "ArguAna-PL",
@@ -439,6 +484,10 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "BengaliHateSpeechClassification",
         "BengaliSentimentAnalysis",
         "BeytooteClustering",
+        "BioVITAA2TReranking",  # genus-level text repeats across the species of a genus; the official candidate groups require one entry per species row
+        "BioVITAI2TReranking",
+        "BioVITAT2AReranking",
+        "BioVITAT2IReranking",
         "BiorxivClusteringP2P",
         "BiorxivClusteringS2S",
         "BlurbsClusteringP2P",
@@ -459,6 +508,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "CodeSearchNetCCRetrieval",
         "CodeSearchNetRetrieval",
         "CodeTransOceanDL",
+        "ColDeRReranking",  # controlled document pairs intentionally reuse text
         "Core17InstructionRetrieval",
         "CosQA",
         "CrisisMMDHumanitarianClassification",  # one tweet can pair with several separately annotated images
@@ -477,7 +527,6 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "EmitClassification",
         "EmoVDBA2TRetrieval",
         "EmoVDBT2ARetrieval",
-        "EmotionAnalysisPlus",
         "EncyclopediaVQAIT2ITRetrieval",
         "EuroPIRQRetrieval",
         "FEVER",
@@ -564,10 +613,12 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MultilingualSentiment",
         "MultilingualSentimentClassification",
         "NFCorpus",
+        "NFCorpusDecontaminated",
         "NFCorpus-Fa",
         "NFCorpus-NL",
         "NFCorpus-NL.v2",
         "NFCorpus-PL",
+        "NQTablesRetrieval",  # repeated source question text is retained under its original IDs
         "NaijaSenti",
         "NanoFEVER-VN",
         "NanoNFCorpusRetrieval",
@@ -605,7 +656,11 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SDSEyeProtectionClassification",
         "SDSGlovesClassification",
         "SIQA",
+        # each example keeps its own full repository snapshot, so files shared across snapshots repeat
+        "SWEBenchLiveRetrieval",
+        "SWEBenchPlusPlusRetrieval",
         "SWEPolyBenchRR",
+        "SWEPolyBenchRetrieval",
         "SWEbenchCodeRetrieval",
         "SWEbenchLiteRR",
         "SWEbenchMultilingualRR",
@@ -635,6 +690,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SwedishSentimentClassification",
         "SwednClusteringS2S",
         "SwednRetrieval",
+        "SwingBenchRetrieval",  # per-example repository snapshots, as SWEBench*Retrieval above
         "SwissJudgementClassification",
         "SyntecReranking",
         "SyntheticText2SQL",
@@ -645,6 +701,8 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "TamilNewsClassification",
         "TenKGnadClusteringP2P",
         "TenKGnadClusteringS2S",
+        "ToolRetrieval",
+        "ToolRetrievalInstruction",
         "Touche2020-VN",
         "ToxicChatClassification",
         "TurkicClassification",
@@ -657,6 +715,39 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "UrbanSound8KT2ARetrieval",
         "VABBRetrieval",
         "VQA2IT2TRetrieval",
+        # Vidore3*Reranking.v2: corpus is shared across the 6 language subsets, and some pages have no extracted text
+        "Vidore3ComputerScienceBGEm3Reranking.v2",
+        "Vidore3ComputerScienceBM25sReranking.v2",
+        "Vidore3ComputerScienceQwen3VLEmbedding2BReranking.v2",
+        "Vidore3EnergyBGEm3Reranking.v2",
+        "Vidore3EnergyBM25sReranking.v2",
+        "Vidore3EnergyQwen3VLEmbedding2BReranking.v2",
+        "Vidore3FinanceEnBGEm3Reranking.v2",
+        "Vidore3FinanceEnBM25sReranking.v2",
+        "Vidore3FinanceEnQwen3VLEmbedding2BReranking.v2",
+        "Vidore3FinanceFrBGEm3Reranking.v2",
+        "Vidore3FinanceFrBM25sReranking.v2",
+        "Vidore3FinanceFrQwen3VLEmbedding2BReranking.v2",
+        "Vidore3HrBGEm3Reranking.v2",
+        "Vidore3HrBM25sReranking.v2",
+        "Vidore3HrQwen3VLEmbedding2BReranking.v2",
+        "Vidore3IndustrialBGEm3Reranking.v2",
+        "Vidore3IndustrialBM25sReranking.v2",
+        "Vidore3IndustrialQwen3VLEmbedding2BReranking.v2",
+        "Vidore3PharmaceuticalsBGEm3Reranking.v2",
+        "Vidore3PharmaceuticalsBM25sReranking.v2",
+        "Vidore3PharmaceuticalsQwen3VLEmbedding2BReranking.v2",
+        "Vidore3PhysicsBGEm3Reranking.v2",
+        "Vidore3PhysicsBM25sReranking.v2",
+        "Vidore3PhysicsQwen3VLEmbedding2BReranking.v2",
+        "Vidore3ComputerScienceNemotron35Embed8BReranking.v2",
+        "Vidore3EnergyNemotron35Embed8BReranking.v2",
+        "Vidore3FinanceEnNemotron35Embed8BReranking.v2",
+        "Vidore3FinanceFrNemotron35Embed8BReranking.v2",
+        "Vidore3HrNemotron35Embed8BReranking.v2",
+        "Vidore3IndustrialNemotron35Embed8BReranking.v2",
+        "Vidore3PharmaceuticalsNemotron35Embed8BReranking.v2",
+        "Vidore3PhysicsNemotron35Embed8BReranking.v2",
         "VizWizIT2TRetrieval",
         "VoyageMMarcoReranking",
         "WebFAQRetrieval",
@@ -667,6 +758,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "WikiClusteringP2P.v2",
         "WikiSQLRetrieval",
         "WITI2TRetrieval",  # distinct WIT records can share the same caption
+        "WITT2IRetrieval",  # same WIT records, text on the query side
         "XM3600I2TRetrieval",  # captions are intentionally preserved verbatim
         "XM3600T2IRetrieval",
         "XMarket",
@@ -721,7 +813,6 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "DutchGovernmentBiasClassification",
         "DutchNewsArticlesClassification",
         "EmitClassification",
-        "EmotionAnalysisPlus",
         "EmotionClassification",
         "EmotionVNClassification",
         "EstonianValenceClassification",
@@ -819,6 +910,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "TweetSentimentExtractionVNClassification",
         "UkrFormalityClassification",
         "VABBMultiLabelClassification",
+        "VABBMultiLabelClassification.v2",
         "VaccinChatNLClassification",
         "WRIMEClassification",
         "Waimai",
@@ -835,6 +927,10 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "AROFlickrOrder",
         "AROVisualAttribution",
         "AROVisualRelation",
+        "BioVITAA2IReranking",  # the species and genus subsets share one image index, so the cross-subset aggregate counts each image twice
+        "BioVITAI2AReranking",
+        "BioVITAI2TReranking",
+        "BioVITAT2IReranking",
         "CIRRIT2IRetrieval",
         "EDIRIT2IRetrieval",
         "EDIST2ITRetrieval",
@@ -842,6 +938,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "FER2013",  # documented to contain duplicate/near-duplicate images
         "FER2013ZeroShot",  # documented to contain duplicate/near-duplicate images
         "FORBI2IRetrieval",  # fingerprint corpus contains near-duplicate captures of the same print
+        "FORBI2IRetrieval.v2",  # same corpus as v1
         "FashionIQIT2IRetrieval",
         "GLAMI1MI2TRetrieval",
         "GLAMI1MT2IRetrieval",  # images recur across language subsets
@@ -867,9 +964,43 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SoundingEarthI2ARetrieval",
         "SugarCrepe",
         "VQA2IT2TRetrieval",
+        # Vidore3*Reranking.v2: corpus is shared across the 6 language subsets
+        "Vidore3ComputerScienceBGEm3Reranking.v2",
+        "Vidore3ComputerScienceBM25sReranking.v2",
+        "Vidore3ComputerScienceQwen3VLEmbedding2BReranking.v2",
+        "Vidore3EnergyBGEm3Reranking.v2",
+        "Vidore3EnergyBM25sReranking.v2",
+        "Vidore3EnergyQwen3VLEmbedding2BReranking.v2",
+        "Vidore3FinanceEnBGEm3Reranking.v2",
+        "Vidore3FinanceEnBM25sReranking.v2",
+        "Vidore3FinanceEnQwen3VLEmbedding2BReranking.v2",
+        "Vidore3FinanceFrBGEm3Reranking.v2",
+        "Vidore3FinanceFrBM25sReranking.v2",
+        "Vidore3FinanceFrQwen3VLEmbedding2BReranking.v2",
+        "Vidore3HrBGEm3Reranking.v2",
+        "Vidore3HrBM25sReranking.v2",
+        "Vidore3HrQwen3VLEmbedding2BReranking.v2",
+        "Vidore3IndustrialBGEm3Reranking.v2",
+        "Vidore3IndustrialBM25sReranking.v2",
+        "Vidore3IndustrialQwen3VLEmbedding2BReranking.v2",
+        "Vidore3PharmaceuticalsBGEm3Reranking.v2",
+        "Vidore3PharmaceuticalsBM25sReranking.v2",
+        "Vidore3PharmaceuticalsQwen3VLEmbedding2BReranking.v2",
+        "Vidore3PhysicsBGEm3Reranking.v2",
+        "Vidore3PhysicsBM25sReranking.v2",
+        "Vidore3PhysicsQwen3VLEmbedding2BReranking.v2",
+        "Vidore3ComputerScienceNemotron35Embed8BReranking.v2",
+        "Vidore3EnergyNemotron35Embed8BReranking.v2",
+        "Vidore3FinanceEnNemotron35Embed8BReranking.v2",
+        "Vidore3FinanceFrNemotron35Embed8BReranking.v2",
+        "Vidore3HrNemotron35Embed8BReranking.v2",
+        "Vidore3IndustrialNemotron35Embed8BReranking.v2",
+        "Vidore3PharmaceuticalsNemotron35Embed8BReranking.v2",
+        "Vidore3PhysicsNemotron35Embed8BReranking.v2",
         "WebQAT2ITRetrieval",
         "WebVidCoVRIT2VRetrieval",
         "WITI2TRetrieval",  # images can recur across WIT records and languages
+        "WITT2IRetrieval",  # same WIT records, images on the document side
         "XFlickr30kCoI2TRetrieval",  # the same image corpus is reused across languages
         "XFlickr30kCoT2IRetrieval",
         "XM3600I2TRetrieval",  # the same image corpus is reused across languages
@@ -892,6 +1023,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "RUParaPhraserSTS",
         "SICK-R-VN",
         "SICKFr",
+        "StakeholderGrounding",  # statements recur across arrangements
         "STS12",
         "STS14",
         "STS22",
@@ -905,9 +1037,14 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "ACMComposedAudioRetrieval",  # composed audio retrieval naturally reuses source audios with different query instructions
         "AmbientAcousticContext",
         "AmbientAcousticContextClustering",
+        "BioVITAA2IReranking",  # the species and genus subsets share one audio index, so the cross-subset aggregate counts each clip twice
+        "BioVITAA2TReranking",
+        "BioVITAI2AReranking",
+        "BioVITAT2AReranking",
         "ClothoMomentRetrieval",  # same audio with different instruction
         "CLDAT2ARetrieval",
         "FSD2019Kaggle",
+        "FSD2019Kaggle.v2",
         "GTZANGenre",  # repeated short clips sampled from the same tracks
         "GTZANGenreClustering",  # repeated short clips sampled from the same tracks
         "Kinetics400VA",  # multiple clips can share the same soundtrack/source video
@@ -933,6 +1070,8 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "XModBenchVT2AReranking",
     ],
     "duplicate_video": [
+        "ChinaOpenT2VRetrieval",  # same 1,092 videos evaluated once per language subset (zho-Hans/eng-Latn)
+        "ChinaOpenV2TRetrieval",  # same 1,092 videos evaluated once per language subset (zho-Hans/eng-Latn)
         "DenseWebVidCoVRVT2VRetrieval",  # multiple rows have same video with different instruction
         "InsAVE80KVT2VRetrieval",  # reverse couples re-release the same clip under two names
         "MMVUVideoCentricQA",
@@ -950,9 +1089,46 @@ KNOWN_ISSUES: dict[str, list[str]] = {
     ],
     "missing_qrel_corpus_ids": [
         "ArguAna",  # 5 missing qrel document IDs
+        "ArguAnaDecontaminated",  # 5 missing qrel document IDs (inherited from ArguAna)
         "InfoSeekIT2TRetrieval",  # qrels/corpus pool mismatch
+        "NQTablesRetrieval",  # one original test qrel points to a table absent from the corpus
         "OVENIT2ITRetrieval",  # qrels/corpus pool mismatch
         "OVENIT2TRetrieval",  # qrels/corpus pool mismatch
+    ],
+    "missing_qrel_query_ids": [
+        # Vidore3*Reranking.v2: qrels of each language subset also contain the queries of the other languages (as Vidore3*Retrieval.v2)
+        "Vidore3ComputerScienceBGEm3Reranking.v2",
+        "Vidore3ComputerScienceBM25sReranking.v2",
+        "Vidore3ComputerScienceQwen3VLEmbedding2BReranking.v2",
+        "Vidore3EnergyBGEm3Reranking.v2",
+        "Vidore3EnergyBM25sReranking.v2",
+        "Vidore3EnergyQwen3VLEmbedding2BReranking.v2",
+        "Vidore3FinanceEnBGEm3Reranking.v2",
+        "Vidore3FinanceEnBM25sReranking.v2",
+        "Vidore3FinanceEnQwen3VLEmbedding2BReranking.v2",
+        "Vidore3FinanceFrBGEm3Reranking.v2",
+        "Vidore3FinanceFrBM25sReranking.v2",
+        "Vidore3FinanceFrQwen3VLEmbedding2BReranking.v2",
+        "Vidore3HrBGEm3Reranking.v2",
+        "Vidore3HrBM25sReranking.v2",
+        "Vidore3HrQwen3VLEmbedding2BReranking.v2",
+        "Vidore3IndustrialBGEm3Reranking.v2",
+        "Vidore3IndustrialBM25sReranking.v2",
+        "Vidore3IndustrialQwen3VLEmbedding2BReranking.v2",
+        "Vidore3PharmaceuticalsBGEm3Reranking.v2",
+        "Vidore3PharmaceuticalsBM25sReranking.v2",
+        "Vidore3PharmaceuticalsQwen3VLEmbedding2BReranking.v2",
+        "Vidore3PhysicsBGEm3Reranking.v2",
+        "Vidore3PhysicsBM25sReranking.v2",
+        "Vidore3PhysicsQwen3VLEmbedding2BReranking.v2",
+        "Vidore3ComputerScienceNemotron35Embed8BReranking.v2",
+        "Vidore3EnergyNemotron35Embed8BReranking.v2",
+        "Vidore3FinanceEnNemotron35Embed8BReranking.v2",
+        "Vidore3FinanceFrNemotron35Embed8BReranking.v2",
+        "Vidore3HrNemotron35Embed8BReranking.v2",
+        "Vidore3IndustrialNemotron35Embed8BReranking.v2",
+        "Vidore3PharmaceuticalsNemotron35Embed8BReranking.v2",
+        "Vidore3PhysicsNemotron35Embed8BReranking.v2",
     ],
     "relevant_docs_exceed_corpus": [
         "MSMARCO-FaHardNegatives",
@@ -967,6 +1143,8 @@ KNOWN_ISSUES: dict[str, list[str]] = {
     ],
     "zero_relevant_docs": [
         "BrightRetrieval",
+        "SciDocsDecontaminated",  # retain 71 source queries with only zero-score judgments to reproduce the published evaluation
+        "NeuCLIR2023Retrieval",  # 4 queries (2 fas, 1 rus, 1 zho) only have score-0 judgments in the original qrels
         "TwitterHjerneRetrieval",
     ],
     "impossible_unique_count": [
@@ -1024,7 +1202,16 @@ _DURATION_OUTLIER_RATIO = 50
 _DIMENSION_OUTLIER_RATIO = 20
 
 # Outlier checks are reported as warnings, not failures
-_WARNING_CHECK_KINDS = {"long_text", "long_audio", "long_video", "large_video_frame"}
+_WARNING_CHECK_KINDS = {
+    "long_text",
+    "long_audio",
+    "long_video",
+    "large_video_frame",
+    # Diagnostic heuristics: a black/white image can be valid content, so these
+    # flag samples for manual review rather than fail the task.
+    "black_or_white_image",
+    "black_or_white_gold_documents",
+}
 
 assert not (set(KNOWN_ISSUES) & _WARNING_CHECK_KINDS), (
     "A warning-kind check must not appear in KNOWN_ISSUES (it can never fail "
@@ -1137,6 +1324,16 @@ def _image_field_quality(
     name: str, split: str, field: str, stats: ImageStatistics
 ) -> tuple[int, list[tuple[str, str]]]:
     errors: list[tuple[str, str]] = []
+
+    black_or_white_images = stats.get("black_or_white_images")
+    if black_or_white_images:
+        errors.append(
+            (
+                f"black_or_white_image:{field}",
+                f"{name} ({split}) contains pure black/white images in {field} ({black_or_white_images=}), worth checking whether they are placeholders.",
+            )
+        )
+
     min_image_width = stats["min_image_width"]
     min_image_height = stats["min_image_height"]
     if not (min_image_width > _MIN_IMAGE_DIMENSION) or not (
@@ -1370,6 +1567,17 @@ def _relevant_docs_integrity_quality(
             )
         )
 
+    queries_with_all_gold_black_or_white = relevant_docs_stats.get(
+        "queries_with_all_gold_black_or_white"
+    )
+    if queries_with_all_gold_black_or_white:
+        errors.append(
+            (
+                "black_or_white_gold_documents",
+                f"{name} ({split}) has queries whose every relevant document is a pure black/white image ({queries_with_all_gold_black_or_white=}), a stronger signal than stray blank images; review these queries first.",
+            )
+        )
+
     num_documents = split_stats.get("num_documents")
     unique_relevant_docs = relevant_docs_stats.get("unique_relevant_docs")
     num_missing_corpus_ids = relevant_docs_stats.get("num_missing_corpus_ids")
@@ -1550,3 +1758,33 @@ def test_dataset_quality() -> None:
 
     if errors:
         raise AssertionError("\n".join([str(e) for e in errors]))
+
+
+def test_black_or_white_checks_are_warnings() -> None:
+    image_stats = cast(
+        "ImageStatistics",
+        {
+            "min_image_width": 64,
+            "min_image_height": 64,
+            "unique_images": 1,
+            "black_or_white_images": 1,
+        },
+    )
+    _, image_checks = _image_field_quality(
+        "task", "test", "documents_image_statistics", image_stats
+    )
+    split_stats = cast(
+        "SplitDescriptiveStatistics",
+        {
+            "relevant_docs_statistics": {
+                "num_missing_query_ids": 0,
+                "num_missing_corpus_ids": 0,
+                "queries_with_all_gold_black_or_white": 1,
+            }
+        },
+    )
+    qrel_checks = _relevant_docs_integrity_quality("task", "test", split_stats)
+
+    kinds = {check_id.split(":", 1)[0] for check_id, _ in image_checks + qrel_checks}
+    assert kinds == {"black_or_white_image", "black_or_white_gold_documents"}
+    assert kinds <= _WARNING_CHECK_KINDS

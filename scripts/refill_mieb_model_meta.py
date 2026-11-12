@@ -23,7 +23,7 @@ for m in model_names:
     if "EVA" in m:
         models.append(f"QuanSun/{m}")
     elif "voyage" in m:
-        models.append(f"voyageai/{m}")
+        models.append(f"mongodb/{m}")
     else:
         models.append(m.replace("__", "/"))
 

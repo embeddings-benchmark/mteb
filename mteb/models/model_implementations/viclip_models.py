@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -10,22 +9,26 @@ from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
 
-# https://github.com/OpenGVLab/InternVideo/blob/main/InternVideo2/multi_modality/data/process_video.py#L17-L18
-_VICLIP_MEAN = (0.48145466, 0.4578275, 0.40821073)
-_VICLIP_STD = (0.26862954, 0.26130258, 0.27577711)
+# ImageNet statistics, as in the official ViCLIP demo
+# https://github.com/OpenGVLab/InternVideo/blob/main/Data/InternVid/viclip/__init__.py#L35-L38
+_VICLIP_MEAN = (0.485, 0.456, 0.406)
+_VICLIP_STD = (0.229, 0.224, 0.225)
 _VICLIP_SIZE = 224
 
-VICLIP_CITATION = """@article{wang2023internvid,
-  title={InternVid: A Large-scale Video-Text Dataset for Multimodal Understanding and Generation},
-  author={Wang, Yi and He, Yinan and Li, Yizhuo and Li, Kunchang and Yu, Jiashuo and Ma, Xin and
-          Li, Xinhao and Chen, Guo and Chen, Xinyuan and Wang, Yaohui and others},
-  journal={arXiv preprint arXiv:2307.06942},
-  year={2023}
+VICLIP_CITATION = """@inproceedings{wang2023internvid,
+  archiveprefix = {arXiv},
+  author = {Yi Wang and Yinan He and Yizhuo Li and Kunchang Li and Jiashuo Yu and Xin Ma and Xinhao Li and Guo Chen and Xinyuan Chen and Yaohui Wang and Ping Luo and Ziwei Liu and Yali Wang and Limin Wang and Yu Qiao},
+  booktitle = {The Twelfth International Conference on Learning Representations},
+  eprint = {2307.06942},
+  title = {InternVid: A Large-scale Video-Text Dataset for Multimodal Understanding and Generation},
+  url = {https://openreview.net/forum?id=MLBdiWu4Fw},
+  year = {2024},
 }"""
 
 
@@ -41,17 +44,31 @@ class ViCLIPWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         num_frames: int = 8,
         **kwargs: Any,
     ):
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
+        from huggingface_hub import hf_hub_download
         from transformers import AutoModel
 
         self.model_name = model_name
         self.device = device
         self.num_frames = num_frames
+        # the checkpoint's config points tokenizer_path at "./bpe_simple_vocab_16e6.txt.gz",
+        # relative to the launch directory, so pass the downloaded file instead
+        bpe_path = hf_hub_download(
+            model_name, "bpe_simple_vocab_16e6.txt.gz", revision=revision
+        )
         self.model = AutoModel.from_pretrained(
-            model_name, revision=revision, trust_remote_code=True
+            model_name,
+            revision=revision,
+            trust_remote_code=True,
+            tokenizer_path=bpe_path,
         ).to(self.device)
         self.model.eval()
         self.tokenizer = self.model.tokenizer
@@ -59,6 +76,7 @@ class ViCLIPWrapper(AbsEncoder):
     @staticmethod
     def _preprocess_frames(frames: torch.Tensor) -> torch.Tensor:
         """Normalize (T, C, H, W) frame tensor to ViCLIP input format."""
+        import torch
         import torch.nn.functional as F
 
         if frames.dtype == torch.uint8 or frames.max() > 1.0:
@@ -78,50 +96,58 @@ class ViCLIPWrapper(AbsEncoder):
         std = torch.tensor(_VICLIP_STD, device=frames.device).view(1, 3, 1, 1)
         return (frames - mean) / std
 
-    @torch.no_grad()
     def get_text_embeddings(
         self,
         texts: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        all_embeddings = []
+        import torch
 
-        for batch in tqdm(texts, disable=not show_progress_bar, desc="Text Encoding"):
-            text_list = batch["text"]
-            # get_text_features may process one string at a time (caching dict API)
-            # so we call per-string and stack to handle both list and single-string APIs
-            batch_feats = []
-            for text in text_list:
-                feat = self.model.get_text_features(text, self.tokenizer)
-                if feat.dim() == 1:
-                    feat = feat.unsqueeze(0)
-                batch_feats.append(feat)
-            features = torch.cat(batch_feats, dim=0)
-            all_embeddings.append(features.cpu())
+        with torch.no_grad():
+            all_embeddings = []
 
-        return torch.cat(all_embeddings, dim=0)
+            for batch in tqdm(
+                texts, disable=not show_progress_bar, desc="Text Encoding"
+            ):
+                text_list = batch["text"]
+                # get_text_features may process one string at a time (caching dict API)
+                # so we call per-string and stack to handle both list and single-string APIs
+                batch_feats = []
+                for text in text_list:
+                    feat = self.model.get_text_features(text, self.tokenizer)
+                    if feat.dim() == 1:
+                        feat = feat.unsqueeze(0)
+                    batch_feats.append(feat)
+                features = torch.cat(batch_feats, dim=0)
+                all_embeddings.append(features.cpu())
 
-    @torch.no_grad()
+            return torch.cat(all_embeddings, dim=0)
+
     def get_video_embeddings(
         self,
         videos: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        all_embeddings = []
+        import torch
 
-        for batch in tqdm(videos, disable=not show_progress_bar, desc="Video Encoding"):
-            processed = [
-                self._preprocess_frames(v) if isinstance(v, torch.Tensor) else v
-                for v in batch["video"]
-            ]
-            # Stack to (B, T, C, H, W) and move to device
-            video_tensor = torch.stack(processed, dim=0).to(self.device)
-            features = self.model.get_vid_features(video_tensor)
-            all_embeddings.append(features.cpu())
+        with torch.no_grad():
+            all_embeddings = []
 
-        return torch.cat(all_embeddings, dim=0)
+            for batch in tqdm(
+                videos, disable=not show_progress_bar, desc="Video Encoding"
+            ):
+                processed = [
+                    self._preprocess_frames(v) if isinstance(v, torch.Tensor) else v
+                    for v in batch["video"]
+                ]
+                # Stack to (B, T, C, H, W) and move to device
+                video_tensor = torch.stack(processed, dim=0).to(self.device)
+                features = self.model.get_vid_features(video_tensor)
+                all_embeddings.append(features.cpu())
+
+            return torch.cat(all_embeddings, dim=0)
 
     def encode(
         self,
@@ -164,6 +190,8 @@ class ViCLIPWrapper(AbsEncoder):
 
 _VICLIP_COMMON = dict(
     loader=ViCLIPWrapper,
+    # 8 frames: video_input_num_frames = 8 in ViCLIP's source
+    # https://github.com/OpenGVLab/InternVideo/blob/main/Data/InternVid/viclip/viclip.py
     loader_kwargs=dict(num_frames=8),
     model_type=["dense"],
     languages=["eng-Latn"],
@@ -186,10 +214,10 @@ viclip_large_patch14 = ModelMeta(
     n_parameters=427_616_513,
     n_embedding_parameters=2_162_688,
     memory_usage_mb=1632,
-    max_tokens=77,
+    max_tokens=32,  # ViCLIP.max_txt_l (text positional embedding has 32 rows)
     embed_dim=768,
     reference="https://huggingface.co/OpenGVLab/ViCLIP-L-14-hf",
-    extra_requirements_groups=["image", "video"],
+    extra_requirements_groups=["image", "video", "viclip"],
     **_VICLIP_COMMON,
 )
 
@@ -199,9 +227,9 @@ viclip_base_patch16 = ModelMeta(
     n_parameters=149_620_993,
     n_embedding_parameters=1_048_576,
     memory_usage_mb=571,
-    max_tokens=77,
+    max_tokens=32,  # ViCLIP.max_txt_l (text positional embedding has 32 rows)
     embed_dim=512,
     reference="https://huggingface.co/OpenGVLab/ViCLIP-B-16-hf",
-    extra_requirements_groups=["image", "video"],
+    extra_requirements_groups=["image", "video", "viclip"],
     **_VICLIP_COMMON,
 )

@@ -4,7 +4,6 @@ from itertools import islice
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -43,6 +42,7 @@ class NoInstructModel(AbsEncoder):
         model_prompts: dict[str, str] | None = None,
         **kwargs: Any,
     ):
+        import torch
         from transformers import AutoModel, AutoTokenizer
 
         self.model_name = model_name
@@ -66,6 +66,8 @@ class NoInstructModel(AbsEncoder):
         batch_size: int = 32,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         sentences = [text for batch in inputs for text in batch["text"]]
         embeddings = []
         for batch in batched(sentences, batch_size):

@@ -9,11 +9,13 @@ from numpy.typing import NDArray
 from mteb._helpful_enum import HelpfulStrEnum
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+    from typing import NotRequired
+
     import numpy.typing as npt
     import torch
     from datasets import Dataset
     from PIL import Image
-    from typing_extensions import NotRequired
 
 
 class EncodeKwargs(TypedDict):
@@ -142,14 +144,34 @@ class AudioInput(TypedDict):
     audio: list[AudioInputItem]
 
 
+class VideoMetadata(TypedDict):
+    """Timing of a video's sampled frames, in the format of transformers' ``VideoMetadata``.
+
+    https://github.com/huggingface/transformers/blob/9fb4b5a9458a83a0bb9d8ddb6d4443a7bd146a62/src/transformers/video_utils.py#L80
+
+    Attributes:
+        fps: Frame rate of the source video.
+        total_num_frames: Number of frames in the source video.
+        duration: Duration of the source video in seconds.
+        frames_indices: Indices of the sampled frames in the source video.
+    """
+
+    fps: float | None
+    total_num_frames: int
+    duration: float | None
+    frames_indices: Sequence[int]
+
+
 class VideoInput(TypedDict):
     """The input to the encoder for video frames. Audio is currently included in the AudioInput.
 
     Attributes:
         video: The video frames as Tensor.
+        video_metadata: The timing of the sampled frames.
     """
 
     video: torch.Tensor
+    video_metadata: VideoMetadata
 
 
 class MultimodalInput(  # type: ignore[misc]
@@ -159,12 +181,16 @@ class MultimodalInput(  # type: ignore[misc]
 
 
 class OutputDType(HelpfulStrEnum):
-    """Enum for valid compression levels.
+    """Named output/compression and model-loading dtype values, referred to by name rather than a `torch.dtype` object.
 
     Used by the CompressionWrapper class and specified by models to indicate the dtypes of output embeddings they
-    support internally.
+    support internally, and by `ModelMeta` entries to declare the dtype a model should be loaded in -- naming the
+    dtype keeps model metadata importable without torch. Most members share their name with a `torch.dtype`, but
+    some (`INT4`, `UINT4`, `BINARY`) are compression-only levels with no matching native torch dtype. Call
+    `get_dtype()` to resolve any member to the real `torch.dtype` used to hold its values.
     """
 
+    FLOAT32 = "float32"
     FLOAT16 = "float16"
     BF16 = "bfloat16"
     INT8 = "int8"

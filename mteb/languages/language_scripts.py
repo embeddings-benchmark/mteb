@@ -1,14 +1,13 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
 from mteb.languages.check_language_code import check_language_code
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Sequence
-
-    from typing_extensions import Self
+    from typing import Self
 
 
 @dataclass
@@ -27,6 +26,8 @@ class LanguageScripts:
     language_scripts: set[str]
     scripts: set[str]
     languages: set[str]
+    # languages given without a script; only these match every script of the language
+    _bare_languages: set[str] = field(default_factory=set, repr=False)
 
     @classmethod
     def from_languages_and_scripts(
@@ -42,11 +43,20 @@ class LanguageScripts:
 
         Returns:
             A LanguageScripts object representing the provided languages and scripts.
+
+        Raises:
+            ValueError: If a language code includes a script and `scripts` is also given.
         """
         lang_script_codes = set()
-        script_codes: set[str] = set(scripts) if (scripts is not None) else set()
+        bare_languages: set[str] = set()
+        script_codes: set[str] = set()
         # normalize to 3 letter language codes
         normalized_langs = set()
+
+        if scripts is not None:
+            for script in scripts:
+                check_language_code(script)
+                script_codes.add(script)
 
         if languages is not None:
             for lang in languages:
@@ -60,11 +70,19 @@ class LanguageScripts:
                 else:
                     check_language_code(lang)
                     normalized_langs.add(lang)
+                    bare_languages.add(lang)
+
+            if scripts and lang_script_codes:
+                raise ValueError(
+                    f"The language codes {sorted(lang_script_codes)} already include a script and cannot be combined "
+                    f"with the script filter {list(scripts)}. Remove the script from the language codes or drop the script filter."
+                )
 
         return cls(
             language_scripts=lang_script_codes,
             scripts=script_codes,
             languages=normalized_langs,
+            _bare_languages=bare_languages,
         )
 
     def contains_language(self, language: str) -> bool:
@@ -91,6 +109,27 @@ class LanguageScripts:
 
         return _lang in self.languages
 
+    def contains_langscript(self, langscript: str) -> bool:
+        """Whether the set contains a specific language-script combination.
+
+        Unlike `contains_language`, a language given with a script (e.g. "zho-Hant") only matches that script,
+        while a language given without a script (e.g. "zho") matches all of its scripts.
+
+        Args:
+            langscript: The code to check for. Can be in the form "eng-Latn" or "eng".
+
+        Returns:
+            True if the language and script combination is contained in the set, False otherwise.
+        """
+        if "-" not in langscript:
+            return self.contains_language(langscript)
+        if not self.language_scripts and not self.languages:
+            return True
+        return (
+            langscript in self.language_scripts
+            or langscript.split("-", maxsplit=1)[0] in self._bare_languages
+        )
+
     def contains_languages(self, languages: Iterable[str]) -> bool:
         """Whether is containing all the languages
 
@@ -112,6 +151,17 @@ class LanguageScripts:
             True if the script is contained in the set, False otherwise.
         """
         return script in self.scripts
+
+    def contains_langscript_script(self, langscript: str) -> bool:
+        """Whether the set contains the script of a language-script code.
+
+        Args:
+            langscript: A code in the form "eng-Latn". Only the script part is checked.
+
+        Returns:
+            True if the script of the code is contained in the set, False otherwise.
+        """
+        return self.contains_script(langscript.rsplit("-", maxsplit=1)[-1])
 
     def contains_scripts(self, scripts: Iterable[str]) -> bool:
         """Whether is containing all the scripts

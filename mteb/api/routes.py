@@ -544,7 +544,7 @@ def _filtered_task_schemas(
     task_classes = filter_tasks(  # type: ignore[misc]
         TASK_LIST,  # type: ignore[arg-type]
         languages=list(languages) if languages else None,
-        task_types=list(types) if types else None,
+        task_types=list(types) if types else None,  # type: ignore[arg-type]
         domains=list(domains) if domains else None,  # type: ignore[arg-type]
         modalities=list(modalities) if modalities else None,  # type: ignore[arg-type]
         categories=list(categories) if categories else None,  # type: ignore[arg-type]

@@ -23,19 +23,6 @@ class GermanGovServiceRetrieval(AbsTaskRetrieval):
         license="mit",
         annotations_creators="derived",
         dialect=[],
-        bibtex_citation=r"""
-@software{lhm-dienstleistungen-qa,
-  author = {Schröder, Leon Marius and
-Gutknecht, Clemens and
-Alkiddeh, Oubada and
-Susanne Weiß,
-Lukas, Leon},
-  month = nov,
-  publisher = {it@M},
-  title = {LHM-Dienstleistungen-QA - german public domain question-answering dataset},
-  url = {https://huggingface.co/datasets/it-at-m/LHM-Dienstleistungen-QA},
-  year = {2022},
-}
-""",
+        bibtex_citation="",
         sample_creation="found",
     )

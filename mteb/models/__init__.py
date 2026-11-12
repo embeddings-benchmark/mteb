@@ -16,13 +16,19 @@ from .openai_wrappers import (
 from .search_encoder_index.search_backend_protocol import (
     IndexEncoderSearchProtocol,
 )
-from .search_wrappers import SearchCrossEncoderWrapper, SearchEncoderWrapper
+from .search_wrappers import (
+    SearchCrossEncoderWrapper,
+    SearchEncoderWrapper,
+)
 from .sentence_transformer_wrapper import (
     CrossEncoderWrapper,
+    MultiVectorSearchEncoderWrapper,
+    MultiVectorWrapper,
     SentenceTransformerEncoderWrapper,
     SparseEncoderWrapper,
     sentence_transformers_loader,
 )
+from .video_wrappers import Video2ImagesWrapper
 
 __all__ = [
     "CacheBackendProtocol",
@@ -35,6 +41,8 @@ __all__ = [
     "IndexEncoderSearchProtocol",
     "MTEBModels",
     "ModelMeta",
+    "MultiVectorSearchEncoderWrapper",
+    "MultiVectorWrapper",
     "OpenAIAPIEncodeWrapper",
     "OpenAIAPIRerankWrapper",
     "OpenAIAPITokenEmbedWrapper",
@@ -43,5 +51,6 @@ __all__ = [
     "SearchProtocol",
     "SentenceTransformerEncoderWrapper",
     "SparseEncoderWrapper",
+    "Video2ImagesWrapper",
     "sentence_transformers_loader",
 ]

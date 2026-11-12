@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING, Any, Literal, cast
 import huggingface_hub
 import numpy as np
 import yaml
-from datasets import ClassLabel, Dataset, DatasetDict, load_dataset
+from datasets import ClassLabel, Dataset, DatasetDict, Value, load_dataset
 from sklearn.preprocessing import MultiLabelBinarizer
 from tqdm.auto import tqdm
 
@@ -32,14 +32,21 @@ from mteb.timing import TimingStack
 
 if TYPE_CHECKING:
     from collections.abc import Iterator, Mapping
-
-    from typing_extensions import Self
+    from typing import Self
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models import (
         MTEBModels,
     )
-    from mteb.types import EncodeKwargs, HFSubset, Modalities, ScoresDict
+    from mteb.types import (
+        EncodeKwargs,
+        HFSubset,
+        ISOLanguage,
+        ISOLanguageScript,
+        ISOScript,
+        Modalities,
+        ScoresDict,
+    )
     from mteb.types.statistics import DescriptiveStatistics, SplitDescriptiveStatistics
 
 
@@ -76,8 +83,29 @@ def _multilabel_subsampling(
         _, test_idx = _iterative_train_test_split(
             x_np, labels_np, test_size=n_samples / n_split, random_state=seed
         )
-        dataset_dict.update({split: Dataset.from_dict(dataset_dict[split][test_idx])})
+        dataset_dict.update({split: dataset_dict[split].select(test_idx)})
     return dataset_dict
+
+
+def _pair_content_columns(
+    columns: tuple[str | Mapping[str, Modalities], str | Mapping[str, Modalities]],
+    modalities: list[Modalities],
+) -> dict[str, Modalities]:
+    """The content columns of a task comparing two inputs, mapped to the modality of each.
+
+    An input is either a single column, whose modality is then the task's only one, or already a mapping from
+    column to modality. A plain column name on a task with several modalities is ambiguous, so nothing is returned
+    in that case and the caller reports the task as not declaring its columns.
+    """
+    resolved: dict[str, Modalities] = {}
+    for column in columns:
+        if isinstance(column, str):
+            if len(modalities) != 1:
+                return {}
+            resolved[column] = modalities[0]
+        else:
+            resolved.update(column)
+    return resolved
 
 
 class AbsTask(ABC):  # noqa: PLR0904
@@ -278,14 +306,14 @@ class AbsTask(ABC):  # noqa: PLR0904
             }
         }
         if predictions_path.exists():
-            with predictions_path.open("r") as predictions_file:
+            with predictions_path.open("r", encoding="utf-8") as predictions_file:
                 existing_results = json.load(predictions_file)
 
         if hf_subset not in existing_results:
             existing_results[hf_subset] = {}
 
         existing_results[hf_subset][hf_split] = predictions
-        with predictions_path.open("w") as predictions_file:
+        with predictions_path.open("w", encoding="utf-8") as predictions_file:
             json.dump(existing_results, predictions_file)
 
     def _predictions_path(
@@ -326,14 +354,26 @@ class AbsTask(ABC):  # noqa: PLR0904
         """
         # Can only do this if the label column is of ClassLabel.
         if not isinstance(dataset_dict[splits[0]].features[label], ClassLabel):
-            try:
-                dataset_dict = dataset_dict.class_encode_column(label)
-            except ValueError as e:
-                if isinstance(dataset_dict[splits[0]][label][0], Sequence):
-                    return _multilabel_subsampling(
-                        dataset_dict, seed, splits, label, n_samples
-                    )
-                raise e
+            first = dataset_dict[splits[0]][label][0]
+            if isinstance(first, Sequence) and not isinstance(first, str):
+                return _multilabel_subsampling(
+                    dataset_dict, seed, splits, label, n_samples
+                )
+            # Encode all splits with one label set. DatasetDict.class_encode_column
+            # encodes each split on its own, so a label missing from one split
+            # shifts the ids of the labels after it. Names are sorted as strings,
+            # like class_encode_column, so unaffected tasks keep the same ids.
+            names = sorted(
+                {
+                    str(x)
+                    for ds in dataset_dict.values()
+                    for x in ds[label]
+                    if x is not None
+                }
+            )
+            dataset_dict = dataset_dict.cast_column(label, Value("string")).cast_column(
+                label, ClassLabel(names=names)
+            )
 
         for split in splits:
             if n_samples >= len(dataset_dict[split]):
@@ -454,8 +494,11 @@ class AbsTask(ABC):  # noqa: PLR0904
         hf_subset_stat: Literal["hf_subset_descriptive_stats"] = (
             "hf_subset_descriptive_stats"
         )
-        eval_splits = self.metadata.eval_splits
-        if isinstance(self, AbsTaskClassification):
+        eval_splits = list(self.metadata.eval_splits)
+        if (
+            isinstance(self, AbsTaskClassification)
+            and self.train_split not in eval_splits
+        ):
             eval_splits.append(self.train_split)
 
         pbar_split = tqdm(eval_splits, desc="Processing Splits...")
@@ -490,7 +533,7 @@ class AbsTask(ABC):  # noqa: PLR0904
         stat_path = self.metadata.descriptive_stat_path
         if not stat_path.parent.exists():
             stat_path.parent.mkdir(parents=True, exist_ok=True)
-        with stat_path.open("w") as f:
+        with stat_path.open("w", encoding="utf-8") as f:
             json.dump(descriptive_stats, f, indent=4)
 
         return descriptive_stats
@@ -515,20 +558,24 @@ class AbsTask(ABC):  # noqa: PLR0904
         raise NotImplementedError
 
     @property
-    def languages(self) -> list[str]:
+    def languages(self) -> list[ISOLanguage]:
         """The languages of the task."""
+        return sorted({code.split("-")[0] for code in self.bcp47_codes})
+
+    @property
+    def bcp47_codes(self) -> list[ISOLanguageScript]:
+        """The language scripts of the task."""
         if self.hf_subsets:
             eval_langs = self.metadata.hf_subsets_to_langscripts
             languages = []
 
             for lang in self.hf_subsets:
                 for langscript in eval_langs[lang]:
-                    iso_lang, script = langscript.split("-")
-                    languages.append(iso_lang)
+                    languages.append(langscript)
 
             return sorted(set(languages))
 
-        return self.metadata.languages
+        return self.metadata.bcp47_codes
 
     def filter_eval_splits(self, eval_splits: Sequence[str] | None) -> Self:
         """Filter the evaluation splits of the task.
@@ -544,8 +591,8 @@ class AbsTask(ABC):  # noqa: PLR0904
 
     def filter_languages(
         self,
-        languages: Sequence[str] | None,
-        script: Sequence[str] | None = None,
+        languages: Sequence[ISOLanguage | ISOLanguageScript] | None,
+        script: Sequence[ISOScript] | None = None,
         hf_subsets: Sequence[HFSubset] | None = None,
         exclusive_language_filter: bool = False,
     ) -> Self:
@@ -554,8 +601,8 @@ class AbsTask(ABC):  # noqa: PLR0904
         Args:
             languages: list of languages to filter the task by can be either a 3-letter language code (e.g. "eng") or also include the script
                 (e.g. "eng-Latn")
-            script: A list of scripts to filter the task by. Will be ignored if language code specified the script. If None, all scripts are included.
-                If the language code does not specify the script the intersection of the language and script will be used.
+            script: A list of scripts to filter the task by. Cannot be combined with a language code that includes a script (e.g. "eng-Latn").
+                If None, all scripts are included, otherwise the intersection of the language and script will be used.
             hf_subsets: A list of huggingface subsets to filter on. This is useful if a dataset have multiple subsets containing the desired language,
                 but you only want to test on one. An example is STS22 which e.g. have both "en" and "de-en" which both contains English.
             exclusive_language_filter: Some datasets contains more than one language e.g. for STS22 the subset "de-en" contain eng and deu. If
@@ -565,6 +612,14 @@ class AbsTask(ABC):  # noqa: PLR0904
         Returns:
             The filtered task
         """
+        if exclusive_language_filter and not languages:
+            warnings.warn(
+                "`exclusive_language_filter` has no effect without `languages` and will be ignored.",
+                UserWarning,
+                stacklevel=2,
+            )
+            exclusive_language_filter = False
+
         lang_scripts = LanguageScripts.from_languages_and_scripts(languages, script)
 
         subsets_to_keep = []
@@ -574,16 +629,20 @@ class AbsTask(ABC):  # noqa: PLR0904
                 continue
             if exclusive_language_filter is False:
                 for langscript in langs:
-                    if lang_scripts.contains_language(
-                        langscript
-                    ) or lang_scripts.contains_script(langscript):
+                    if lang_scripts.contains_langscript(langscript) and (
+                        not script
+                        or lang_scripts.contains_langscript_script(langscript)
+                    ):
                         subsets_to_keep.append(hf_subset)
                         break
 
             if (
                 exclusive_language_filter is True
-                and languages
-                and lang_scripts.contains_languages(langs)
+                and all(lang_scripts.contains_langscript(ls) for ls in langs)
+                and (
+                    not script
+                    or all(lang_scripts.contains_langscript_script(ls) for ls in langs)
+                )
             ):
                 subsets_to_keep.append(hf_subset)
 
@@ -594,6 +653,16 @@ class AbsTask(ABC):  # noqa: PLR0904
 
         self.hf_subsets = subsets_to_keep
         return self
+
+    def _get_content_columns(self) -> dict[str, Modalities]:  # noqa: PLR6301
+        """The dataset columns holding the task's content, mapped to the modality of that content.
+
+        This is what the filters in `mteb.data_cleaning` compare samples on. Subclasses point it at their own column
+        names, e.g. `{"text": "text"}` for a text classification task or `{"image": "image"}` for an image one. It
+        is empty when a task does not declare its columns, which makes those filters raise rather than silently do
+        nothing.
+        """
+        return {}
 
     def _add_main_score(self, scores: ScoresDict) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
@@ -714,14 +783,14 @@ class AbsTask(ABC):  # noqa: PLR0904
         # handle multiple tasks in one repo (e.g. MIRACLRetrievalHardNegatives, MIRACLRetrievalHardNegativesV2)
         existing_eval = None
         if existing_eval_path is not None:
-            with Path(existing_eval_path).open() as f:  # noqa: PLW1514
+            with Path(existing_eval_path).open(encoding="utf-8") as f:
                 existing_eval_dict = yaml.safe_load(f)
             if existing_eval_dict is not None:
                 existing_eval = HFEvalMeta.model_validate(existing_eval_dict)
 
         task_config = self._create_task_hf_config(existing_eval)
 
-        with tempfile.NamedTemporaryFile(mode="w") as tmp_file:  # noqa: PLW1514
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8") as tmp_file:
             tmp_file.write(task_config.to_yaml())
             tmp_file.flush()
 
@@ -802,6 +871,9 @@ class AbsTask(ABC):  # noqa: PLR0904
         if self.data_loaded:
             self.dataset = None
             self.data_loaded = False
+            # a task whose data was filtered carries metadata of its own describing that data; unloading it
+            # leaves only the published data to reload, so restore the published metadata alongside
+            self.__dict__.pop("metadata", None)
             logger.info(f"Unloaded dataset {self.metadata.name} from memory.")
         else:
             msg = f"Dataset `{self.metadata.name}` is not loaded, cannot unload it."

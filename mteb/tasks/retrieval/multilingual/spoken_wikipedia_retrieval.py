@@ -19,14 +19,6 @@ _LANGUAGES = {
     "fra": ["fra-Latn"],
 }
 
-_BIBTEX = r"""
-@misc{spokenwikipedia,
-  author = {{Wikimedia Commons contributors}},
-  howpublished = {\url{https://commons.wikimedia.org/wiki/Category:Spoken_Wikipedia}},
-  title = {Spoken {Wikipedia}},
-  year = {2026},
-}
-"""
 
 _DESCRIPTION = (
     "Volunteer readings of Wikipedia articles paired with the article lead, in Dutch, "
@@ -60,7 +52,7 @@ _COMMON = {
     "annotations_creators": "derived",
     "dialect": [],
     "sample_creation": "found",
-    "bibtex_citation": _BIBTEX,
+    "bibtex_citation": "",
     "is_beta": True,
 }
 

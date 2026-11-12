@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+import math
 import tempfile
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -11,6 +11,7 @@ from mteb.models.modality_collators import AudioCollator, VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb import TaskMetadata
@@ -37,9 +38,12 @@ class EBindWrapper(AbsEncoder):
         device: str | None = None,
         fps: float | None = None,
         max_frames: int | None = None,
+        # 8 frames: NUM_FRAMES_TO_SAMPLE_FROM_VIDEO=8
+        # https://github.com/encord-team/ebind/blob/main/src/ebind/consts.py
         num_frames: int | None = 8,
         **kwargs: Any,
     ) -> None:
+        import torch
         from ebind import EBindModel, EBindProcessor
 
         self.device = device or (
@@ -66,13 +70,14 @@ class EBindWrapper(AbsEncoder):
         """Process a batch of audio items via temp WAV files (IBAudioProcessor requires paths)."""
         import numpy as np
         import soundfile as sf
+        import torch
 
         audio_tensors = []
         for item in audio_items:
             array = np.asarray(item["array"])
             sr = item["sampling_rate"]
-            # pad clips shorter than the mel-spectrogram window
-            min_samples = max(int(sr * 0.5), 1)
+            # pad only below one 25 ms fbank window; the processor pads longer clips itself
+            min_samples = math.ceil(sr * 0.025)
             if array.shape[0] < min_samples:
                 array = np.pad(array, (0, min_samples - array.shape[0]))
             with tempfile.NamedTemporaryFile(suffix=".wav", delete=True) as tmp:
@@ -96,50 +101,52 @@ class EBindWrapper(AbsEncoder):
         processed = processed.float() / 255.0
         return normalize(processed, mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
 
-    @torch.inference_mode()
     def _encode_batch(self, batch: BatchedInput) -> torch.Tensor:
         """Encode all modalities together in a single forward pass.
 
         When multiple modalities are present (e.g. video+audio from the same
         clip), embeddings are fused by element-wise addition and renormalised.
         """
-        forward_kwargs: dict[str, torch.Tensor] = {}
+        import torch
 
-        if batch.get("text"):
-            processed = self.processor({"text": batch["text"]}, return_tensors="pt")
-            forward_kwargs["text"] = processed["text"]
+        with torch.inference_mode():
+            forward_kwargs: dict[str, torch.Tensor] = {}
 
-        if batch.get("image"):
-            forward_kwargs["image"] = torch.stack(
-                [self._image_transform(img) for img in batch["image"]]
-            ).to(self.device)
+            if batch.get("text"):
+                processed = self.processor({"text": batch["text"]}, return_tensors="pt")
+                forward_kwargs["text"] = processed["text"]
 
-        if batch.get("video"):
-            video_tensors = [self._process_video(v) for v in batch["video"]]
-            if len({v.shape[0] for v in video_tensors}) != 1:
+            if batch.get("image"):
+                forward_kwargs["image"] = torch.stack(
+                    [self._image_transform(img) for img in batch["image"]]
+                ).to(self.device)
+
+            if batch.get("video"):
+                video_tensors = [self._process_video(v) for v in batch["video"]]
+                if len({v.shape[0] for v in video_tensors}) != 1:
+                    raise ValueError(
+                        "Variable frame counts in batch — cannot stack videos with "
+                        "different numbers of frames. Use batch_size=1 or fixed "
+                        "num_frames (default 8) instead of fps."
+                    )
+                forward_kwargs["video"] = torch.stack(video_tensors).to(self.device)
+
+            if batch.get("audio"):
+                forward_kwargs["audio"] = self._process_audio_batch(batch["audio"])
+
+            if not forward_kwargs:
                 raise ValueError(
-                    "Variable frame counts in batch — cannot stack videos with "
-                    "different numbers of frames. Use batch_size=1 or fixed "
-                    "num_frames (default 8) instead of fps."
+                    f"No supported modality found in batch: {list(batch.keys())}"
                 )
-            forward_kwargs["video"] = torch.stack(video_tensors).to(self.device)
 
-        if batch.get("audio"):
-            forward_kwargs["audio"] = self._process_audio_batch(batch["audio"])
+            outputs = self.model.forward(**forward_kwargs)
 
-        if not forward_kwargs:
-            raise ValueError(
-                f"No supported modality found in batch: {list(batch.keys())}"
-            )
+            # Fuse by addition when multiple modalities are present
+            embeddings = None
+            for emb in outputs.values():
+                embeddings = emb if embeddings is None else embeddings + emb
 
-        outputs = self.model.forward(**forward_kwargs)
-
-        # Fuse by addition when multiple modalities are present
-        embeddings = None
-        for emb in outputs.values():
-            embeddings = emb if embeddings is None else embeddings + emb
-
-        return torch.nn.functional.normalize(embeddings, p=2, dim=-1)
+            return torch.nn.functional.normalize(embeddings, p=2, dim=-1)
 
     def encode(
         self,
@@ -151,6 +158,8 @@ class EBindWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         features = inputs.dataset.features
         has_video = "video" in features
         has_audio = "audio" in features
@@ -190,7 +199,7 @@ _EBIND_CITATION = r"""
 _EBIND_COMMON = dict(
     languages=["eng-Latn"],
     release_date="2025-11-19",
-    max_tokens=512,
+    max_tokens=32,  # PE-Core-L14-336 text context_length
     n_embedding_parameters=50_593_792,  # PE text encoder: 49408 vocab * 1024 hidden
     license="cc-by-nc-sa-4.0",
     open_weights=True,
@@ -200,7 +209,9 @@ _EBIND_COMMON = dict(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     citation=_EBIND_CITATION,
-    extra_requirements_groups=["ebind"],
+    # ebind is installed from git and not on PyPI, so it cannot be an mteb extra:
+    # pip install "ebind @ git+https://github.com/encord-team/ebind@7909701e9372353ca678b9515f9f61cf87c83c71"
+    extra_requirements_groups=["audio", "video"],
 )
 
 _EBIND_AV_TRAINING = {

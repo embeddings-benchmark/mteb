@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
@@ -12,6 +11,7 @@ from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
     from typing_extensions import Unpack
 
@@ -25,6 +25,7 @@ def _load_checkpoint_tensors(
     model_name: str, revision: str | None
 ) -> dict[str, torch.Tensor]:
     """Read raw checkpoint tensors. The file is already in the local HF cache."""
+    import torch
     from huggingface_hub import hf_hub_download
     from huggingface_hub.errors import EntryNotFoundError
 
@@ -44,7 +45,8 @@ class VideoMAEWrapper(AbsEncoder):
 
     VideoMAE has no CLS token and trains with ``use_mean_pooling=True``, so
     ``VideoMAEForVideoClassification`` averages ``last_hidden_state`` over the
-    token axis before its head. We pool the same way.
+    token axis and applies ``fc_norm`` before its head. We pool the same way;
+    pre-training checkpoints have no ``fc_norm`` and use the plain mean.
 
     Uses ``AutoVideoProcessor``, which requires transformers v5. v5 refactored
     VideoMAE attention to standard Linear layers and ships no mapping for the
@@ -62,7 +64,13 @@ class VideoMAEWrapper(AbsEncoder):
         num_frames: int | None = None,
         **kwargs: Any,
     ) -> None:
-        from transformers import AutoModel, AutoVideoProcessor
+        import torch
+        from transformers import (
+            AutoConfig,
+            AutoModel,
+            AutoVideoProcessor,
+            VideoMAEForVideoClassification,
+        )
 
         self.model_name = model_name
         self.revision = revision
@@ -78,15 +86,27 @@ class VideoMAEWrapper(AbsEncoder):
         self.processor = AutoVideoProcessor.from_pretrained(
             model_name, revision=revision
         )
-        self.model = AutoModel.from_pretrained(model_name, revision=revision)
+        # fine-tuned checkpoints use fc_norm(mean(tokens)), as forward_features in
+        # https://github.com/MCG-NJU/VideoMAE/blob/main/modeling_finetune.py
+        config = AutoConfig.from_pretrained(model_name, revision=revision)
+        self.fc_norm = None
+        if config.use_mean_pooling and "VideoMAEForVideoClassification" in (
+            config.architectures or []
+        ):
+            classifier = VideoMAEForVideoClassification.from_pretrained(
+                model_name, revision=revision
+            )
+            self.model = classifier.videomae
+            self.fc_norm = classifier.fc_norm.eval().to(self.device)
+        else:
+            self.model = AutoModel.from_pretrained(model_name, revision=revision)
         self.model.eval()
         self._restore_qkv_bias()
 
         self.model.to(self.device)
 
-        # VideoMAE bakes the clip length into its temporal position embeddings
-        # and transformers does not interpolate it, so the config is the source
-        # of truth rather than a per-ModelMeta constant.
+        # num_frames read from the checkpoint (videomae-base declares 16)
+        # https://huggingface.co/MCG-NJU/videomae-base/blob/main/config.json
         self.num_frames = (
             num_frames if num_frames is not None else self.model.config.num_frames
         )
@@ -104,6 +124,8 @@ class VideoMAEWrapper(AbsEncoder):
         uses standard Linears with their own biases and no key mapping, so they
         arrive zeroed. Skipped on v4, and on any version that loads them.
         """
+        import torch
+
         first = self.model.encoder.layer[0].attention.attention
         if hasattr(first, "q_bias") or first.query.bias is None:
             return
@@ -136,7 +158,6 @@ class VideoMAEWrapper(AbsEncoder):
             )
         logger.info("Restored q_bias/v_bias for %d VideoMAE layers", restored)
 
-    @torch.inference_mode()
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -148,29 +169,34 @@ class VideoMAEWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
-        inputs.collate_fn = FramesCollator(num_frames=self.num_frames)
+        import torch
 
-        embeddings = []
-        for batch in tqdm(inputs, desc="Encoding", disable=not show_progress_bar):
-            videos = batch["video"]
-            padded = [
-                torch.cat(
-                    [v, v[-1:].expand(self.num_frames - v.shape[0], *v.shape[1:])],
-                    dim=0,
-                )
-                if v.shape[0] < self.num_frames
-                else v[: self.num_frames]
-                for v in videos
-            ]
-            # Explicit list-of-videos-of-frames in HWC. A list of 4D tensors trips
-            # `make_batched` on the v4 slow processor, which treats the whole batch
-            # as a single video and then fails inside PIL.
-            processed = self.processor(padded, return_tensors="pt").to(self.device)
+        with torch.inference_mode():
+            inputs.collate_fn = FramesCollator(num_frames=self.num_frames)
 
-            outputs = self.model(**processed)
-            pooled = outputs.last_hidden_state.mean(dim=1)
-            embeddings.append(pooled.cpu())
-        return torch.cat(embeddings, dim=0).numpy()
+            embeddings = []
+            for batch in tqdm(inputs, desc="Encoding", disable=not show_progress_bar):
+                videos = batch["video"]
+                padded = [
+                    torch.cat(
+                        [v, v[-1:].expand(self.num_frames - v.shape[0], *v.shape[1:])],
+                        dim=0,
+                    )
+                    if v.shape[0] < self.num_frames
+                    else v[: self.num_frames]
+                    for v in videos
+                ]
+                # Explicit list-of-videos-of-frames in HWC. A list of 4D tensors trips
+                # `make_batched` on the v4 slow processor, which treats the whole batch
+                # as a single video and then fails inside PIL.
+                processed = self.processor(padded, return_tensors="pt").to(self.device)
+
+                outputs = self.model(**processed)
+                pooled = outputs.last_hidden_state.mean(dim=1)
+                if self.fc_norm is not None:
+                    pooled = self.fc_norm(pooled)
+                embeddings.append(pooled.cpu())
+            return torch.cat(embeddings, dim=0).numpy()
 
 
 _VIDEOMAE_CITATION = """
@@ -216,7 +242,6 @@ videomae_base = ModelMeta(
     model_type=["dense"],
     citation=_VIDEOMAE_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=["transformers-v5"],
 )
 
@@ -246,7 +271,6 @@ videomae_large = ModelMeta(
     model_type=["dense"],
     citation=_VIDEOMAE_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=["transformers-v5"],
 )
 
@@ -276,6 +300,5 @@ videomae_base_finetuned_kinetics = ModelMeta(
     model_type=["dense"],
     citation=_VIDEOMAE_CITATION,
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=["transformers-v5"],
 )

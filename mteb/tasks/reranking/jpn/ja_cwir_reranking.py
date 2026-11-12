@@ -32,10 +32,17 @@ class JaCWIRReranking(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{yuichi-tateno-2024-jacwir,
-  author = {Yuichi Tateno},
-  title = {JaCWIR: Japanese Casual Web IR - 日本語情報検索評価のための小規模でカジュアルなWebタイトルと概要のデータセット},
-  url = {https://huggingface.co/datasets/hotchpotch/JaCWIR},
+@inproceedings{li-etal-2026-jmteb,
+  address = {Palma de Mallorca, Spain},
+  author = {Li, Shengzhe and Ohagi, Masaya and Ri, Ryokan and Fukuchi, Akihiko and Shibata, Tomohide and Kawahara, Daisuke},
+  booktitle = {Proceedings of the Fifteenth Language Resources and Evaluation Conference},
+  doi = {10.63317/5ouzpv2f2f6k},
+  month = may,
+  pages = {7423--7434},
+  publisher = {ELRA Language Resource Association},
+  title = {{JMTEB} and {JMTEB}-lite: {J}apanese Massive Text Embedding Benchmark and Its Lightweight Version},
+  url = {https://aclanthology.org/2026.lrec-1.588/},
+  year = {2026},
 }
 """,
     )

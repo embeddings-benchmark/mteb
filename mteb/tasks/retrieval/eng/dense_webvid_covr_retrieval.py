@@ -12,7 +12,7 @@ class DenseWebVidCoVRVT2VRetrieval(AbsTaskRetrieval):
             "where the query consists of a reference video and an editing instruction. "
             "The corpus consists of candidate videos."
         ),
-        reference="https://arxiv.org/abs/2508.14039",
+        reference="https://doi.org/10.1109/iccv51701.2025.01900",
         dataset={
             "path": "nik1995/Dense-WebVid-CoVR",
             "revision": "988f558c4497429f98b2b16789863aba403449d7",
@@ -31,10 +31,15 @@ class DenseWebVidCoVRVT2VRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@article{thawakar2025bse,
-  author = {Thawakar, Omkar and others},
-  journal = {arXiv preprint arXiv:2508.14039},
-  title = {BSE-CoVR: Broadening Semantic Edit Support for Compositional Video Retrieval},
+@inproceedings{thawakar2025simpleeditscomposedvideo,
+  author = {Thawakar, Omkar and Demidov, Dmitry and Thawkar, Ritesh and Anwer, Rao Muhammad and Shah, Mubarak and Khan, Fahad Shahbaz and Khan, Salman},
+  booktitle = {2025 IEEE/CVF International Conference on Computer Vision (ICCV)},
+  doi = {10.1109/iccv51701.2025.01900},
+  month = {Oct},
+  pages = {20435–20444},
+  publisher = {IEEE},
+  title = {Beyond Simple Edits: Composed Video Retrieval with Dense Modifications},
+  url = {https://doi.org/10.1109/iccv51701.2025.01900},
   year = {2025},
 }
 """,

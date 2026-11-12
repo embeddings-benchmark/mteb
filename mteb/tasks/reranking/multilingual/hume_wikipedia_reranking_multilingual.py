@@ -30,14 +30,7 @@ class HUMEWikipediaRerankingMultilingual(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@misc{wikipedia_reranking_2023,
-  author = {Ellamind},
-  title = {Wikipedia 2023-11 Reranking Multilingual Dataset},
-  url = {https://github.com/ellamind/wikipedia-2023-11-reranking-multilingual},
-  year = {2023},
-}
-""",
+        bibtex_citation="",
         prompt="Given a query, rerank the Wikipedia passages by their relevance to the query",
         adapted_from=["WikipediaRerankingMultilingual"],
     )

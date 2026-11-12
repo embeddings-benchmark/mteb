@@ -3,9 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 from tqdm.auto import tqdm
-from transformers import AutoModel
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
@@ -45,16 +43,25 @@ class FusionEmbeddingWrapper(AbsEncoder):
     """
 
     sampling_rate = 16_000
-    max_text_tokens = 254
-    video_num_frames = 64  # the base's reference max_frames; sampled uniformly
+    # fps=1 up to 64 frames: _V_DEFAULT_FPS=1.0, _V_DEFAULT_MAX_FRAMES=64, the
+    # reference's sampling for video files
+    # https://huggingface.co/EximiusLabs/fusion-embedding-1-2b-preview/blob/main/inference.py
+    video_fps = 1.0
+    video_num_frames = 64
 
     def __init__(
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ) -> None:
+        import torch
+        from transformers import AutoModel
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         self.model_name = model_name
         self.device = device
         self.model = AutoModel.from_pretrained(
@@ -70,6 +77,8 @@ class FusionEmbeddingWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         embeddings = []
 
         for batch in tqdm(inputs, disable=not show_progress_bar):
@@ -98,6 +107,8 @@ class FusionEmbeddingWrapper(AbsEncoder):
         # The video path is the frozen base model's own encode path, exposed by
         # the remote code. VideoCollator supplies decoded [T, C, H, W] uint8
         # frame tensors (torchcodec), which embed_video consumes directly.
+        import torch
+
         embeddings = []
 
         for batch in tqdm(inputs, disable=not show_progress_bar, desc="Video Encoding"):
@@ -122,6 +133,8 @@ class FusionEmbeddingWrapper(AbsEncoder):
         # The image path is the frozen base model's own encode path (audio-side
         # components never touch it), exposed by the remote code as a single-image
         # method; images are embedded one at a time (as in other merged wrappers).
+        import torch
+
         embeddings = []
 
         for batch in tqdm(inputs, disable=not show_progress_bar, desc="Image Encoding"):
@@ -140,13 +153,15 @@ class FusionEmbeddingWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         embeddings = []
 
         for batch in tqdm(inputs, disable=not show_progress_bar):
             with torch.no_grad():
-                batch_embeddings = self.model.embed_text_batch(
-                    batch["text"], max_tokens=self.max_text_tokens
-                )
+                # the remote code defaults to the checkpoint's max_text_tokens=512
+                # https://huggingface.co/EximiusLabs/fusion-embedding-1-2b-preview/blob/main/config.json
+                batch_embeddings = self.model.embed_text_batch(batch["text"])
 
             embeddings.append(batch_embeddings.float().cpu().numpy())
 
@@ -176,7 +191,8 @@ class FusionEmbeddingWrapper(AbsEncoder):
             if modality in {"audio", "video"} and "video" in present:
                 inputs.collate_fn = VideoCollator(
                     target_sampling_rate=self.sampling_rate,
-                    num_frames=self.video_num_frames,
+                    fps=self.video_fps,
+                    max_frames=self.video_num_frames,
                 )
             elif modality == "audio":
                 inputs.collate_fn = AudioCollator(
@@ -218,8 +234,8 @@ fusion_embedding_1_2b_preview = ModelMeta(
     n_parameters=2_800_000_000,
     n_embedding_parameters=311_164_928,
     memory_usage_mb=10681,
-    max_tokens=254,
-    embed_dim=[2048, 1536, 1024, 512, 256, 128, 64],
+    max_tokens=512,
+    embed_dim=1024,
     license="cc-by-nc-4.0",
     reference="https://huggingface.co/EximiusLabs/fusion-embedding-1-2b-preview",
     similarity_fn_name="cosine",
@@ -281,8 +297,8 @@ fusion_embedding_2_2b_preview = ModelMeta(
     # calculate_memory_usage_mb() basis: FP32 x n_parameters; the +44.2M
     # generation-2 adapters sit inside the 2.8B rounding
     memory_usage_mb=10681,
-    max_tokens=254,
-    embed_dim=[2048, 1536, 1024, 512, 256, 128, 64],
+    max_tokens=512,
+    embed_dim=1024,
     license="cc-by-nc-4.0",
     reference="https://huggingface.co/EximiusLabs/fusion-embedding-2-2b-preview",
     similarity_fn_name="cosine",

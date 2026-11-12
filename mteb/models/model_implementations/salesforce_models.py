@@ -6,6 +6,7 @@ from mteb.models.instruct_wrapper import (
     InstructSentenceTransformerModel,
 )
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.types import OutputDType
 
 from .e5_instruct import E5_MISTRAL_TRAINING_DATA
 
@@ -66,13 +67,6 @@ SFR_Embedding_2_R = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=SFR_TRAINING_DATA,
-    citation="""@misc{SFR-embedding-2,
-      title={SFR-Embedding-2: Advanced Text Embedding with Multi-stage Training},
-      author={Rui Meng*, Ye Liu*, Shafiq Rayhan Joty, Caiming Xiong, Yingbo Zhou, Semih Yavuz},
-      year={2024},
-      url={https://huggingface.co/Salesforce/SFR-Embedding-2_R}
-    }
-    """,
 )
 
 SFR_Embedding_Code_2B_R = ModelMeta(
@@ -141,13 +135,5 @@ SFR_Embedding_Mistral = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=SFR_TRAINING_DATA,
-    citation="""
-    @misc{SFRAIResearch2024,
-  title={SFR-Embedding-Mistral:Enhance Text Retrieval with Transfer Learning},
-  author={Rui Meng, Ye Liu, Shafiq Rayhan Joty, Caiming Xiong, Yingbo Zhou, Semih Yavuz},
-  howpublished={Salesforce AI Research Blog},
-  year={2024},
-  url={https://www.salesforce.com/blog/sfr-embedding/}
-}
-""",
+    output_dtypes=OutputDType.FLOAT16,
 )

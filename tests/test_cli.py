@@ -5,6 +5,7 @@ import subprocess
 import sys
 from argparse import Namespace
 from pathlib import Path
+from typing import Any
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -16,6 +17,7 @@ from mteb.cli.build_cli import (
     _create_meta,
     _leaderboard,
     _mock_run,
+    build_cli,
     run,
 )
 
@@ -81,6 +83,7 @@ def test_run_task(
         benchmarks=None,
         overwrite=False,
         save_predictions=None,
+        num_proc=None,
     )
 
     run(args)
@@ -93,6 +96,41 @@ def test_run_task(
     )
     assert f"{task_name}.json" in [f.name for f in list(results_path.glob("*.json"))], (
         f"{task_name} not found in output folder"
+    )
+
+
+@pytest.mark.parametrize(
+    ("argv", "expected"),
+    [
+        (
+            [],
+            {"models": None, "tasks": None, "create_pr": False, "message": None},
+        ),
+        (
+            ["-m", "org/model1", "org/model2", "-t", "ArguAna", "--create-pr"]
+            + ["--message", "Add ArguAna results"],
+            {
+                "models": ["org/model1", "org/model2"],
+                "tasks": ["ArguAna"],
+                "create_pr": True,
+                "message": "Add ArguAna results",
+            },
+        ),
+    ],
+)
+def test_submit_results_cli(argv: list[str], expected: dict[str, Any], tmp_path: Path):
+    args = build_cli().parse_args(
+        ["submit-results", "--output-folder", tmp_path.as_posix(), *argv]
+    )
+
+    with patch("mteb.cli.build_cli.ResultCache.submit_results") as mock_submit:
+        args.func(args)
+
+    mock_submit.assert_called_once_with(
+        expected["models"],
+        tasks=expected["tasks"],
+        create_pr=expected["create_pr"],
+        message=expected["message"],
     )
 
 
@@ -117,12 +155,12 @@ def test_create_meta(tmp_path: Path):
 
     assert output_path.exists(), "Output file not created"
 
-    with output_path.open("r") as f:
+    with output_path.open("r", encoding="utf-8") as f:
         meta = f.read()
         meta = meta[meta.index("---") + 3 : meta.index("---", meta.index("---") + 3)]
         frontmatter = yaml.safe_load(meta)
 
-    with (output_folder / "model_card_gold.md").open("r") as f:
+    with (output_folder / "model_card_gold.md").open("r", encoding="utf-8") as f:
         gold = f.read()
         gold = gold[gold.index("---") + 3 : gold.index("---", gold.index("---") + 3)]
         frontmatter_gold = yaml.safe_load(gold)
@@ -141,6 +179,25 @@ def test_create_meta(tmp_path: Path):
         command, check=False, shell=True, capture_output=True, text=True
     )
     assert result.returncode == 0, "Command failed"
+
+
+def test_create_meta_uses_selected_benchmarks(tmp_path: Path):
+    """--benchmarks should only pass the named benchmarks to the model card"""
+    args = Namespace(
+        model_name="sentence-transformers/all-MiniLM-L6-v2",
+        results_folder=Path(__file__).parent / "create_meta",
+        output_path=tmp_path / "model_card.md",
+        overwrite=True,
+        from_existing=None,
+        tasks=None,
+        benchmarks=["MTEB(eng, v2)"],
+    )
+
+    with patch("mteb.cli.build_cli.generate_model_card") as mock_generate:
+        _create_meta(args)
+
+    benchmarks = mock_generate.call_args.kwargs["benchmarks"]
+    assert [b.name for b in benchmarks] == ["MTEB(eng, v2)"]
 
 
 @pytest.mark.parametrize(
@@ -177,7 +234,7 @@ def test_create_meta_from_existing(  # noqa: PLR0914
     yaml_start_sep = "---"
     yaml_end_sep = "\n---\n"  # newline to avoid matching "---" in the content
 
-    with output_path.open("r") as f:
+    with output_path.open("r", encoding="utf-8") as f:
         meta = f.read()
         start_yaml = meta.index(yaml_start_sep) + len(yaml_start_sep)
         end_yaml = meta.index(yaml_end_sep, start_yaml)
@@ -185,7 +242,7 @@ def test_create_meta_from_existing(  # noqa: PLR0914
         meta = meta[start_yaml:end_yaml]
         frontmatter = yaml.safe_load(meta)
 
-    with (output_folder / gold_readme_name).open("r") as f:
+    with (output_folder / gold_readme_name).open("r", encoding="utf-8") as f:
         gold = f.read()
         start_yaml = gold.index(yaml_start_sep) + len(yaml_start_sep)
         end_yaml = gold.index(yaml_end_sep, start_yaml)
@@ -315,6 +372,29 @@ def test_leaderboard_cli_integration():
     assert "leaderboard" in result.stdout, "Leaderboard command not found in main help"
 
 
+@pytest.mark.parametrize(
+    ("raw", "expected"),
+    [
+        ("cpu", "cpu"),
+        ("cuda", "cuda"),
+        ("cuda:1", "cuda:1"),
+        ("0", "cuda:0"),
+        ("1", "cuda:1"),
+    ],
+)
+def test_run_device_is_a_string(raw: str, expected: str):
+    """``mteb run --device`` must accept the same device strings as model loaders.
+
+    The flag used to be ``type=int``, so ``--device cpu`` was rejected and
+    ``--device 0`` was passed through as an int. Loaders such as Ops-MM then
+    crash on ``device.startswith("cuda")``.
+    """
+    args = build_cli().parse_args(["run", "-m", "dummy", "--device", raw])
+
+    assert args.device == expected
+    assert isinstance(args.device, str)
+
+
 def test_mock_run_cli(tmp_path: Path):
     """Test the mock-run subcommand."""
 
@@ -334,3 +414,23 @@ def test_mock_run_cli(tmp_path: Path):
         )
     finally:
         os.chdir(orig_cwd)
+
+
+def test_cli_without_a_command_exits(capsys: pytest.CaptureFixture[str]):
+    """`mteb` with no subcommand should exit with usage, not AttributeError."""
+    with pytest.raises(SystemExit) as exc:
+        build_cli().parse_args([])
+
+    assert exc.value.code == 2
+    captured = capsys.readouterr()
+    assert "the following arguments are required: command" in captured.err
+    for subcommand in (
+        "run",
+        "available-tasks",
+        "available-benchmarks",
+        "create-model-results",
+        "submit-results",
+        "leaderboard",
+        "mock-run",
+    ):
+        assert subcommand in captured.err

@@ -69,11 +69,15 @@ class R2MEDBiologyRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@article{li2025r2med,
-  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
-  journal = {arXiv preprint arXiv:2505.14558},
+@inproceedings{zhang2026r2medbenchmarkreasoningdrivenmedical,
+  author = {Zhang, Xiangxu and Li, Lei and Liu, Zheng and Zhou, Xiao},
+  booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
+  doi = {10.18653/2026.emnlp-main.2138},
+  pages = {48600–48637},
+  publisher = {Association for Computational Linguistics},
   title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
-  year = {2025},
+  url = {https://doi.org/10.18653/2026.emnlp-main.2138},
+  year = {2026},
 }
 """,
     )
@@ -113,11 +117,15 @@ class R2MEDBioinformaticsRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@article{li2025r2med,
-  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
-  journal = {arXiv preprint arXiv:2505.14558},
+@inproceedings{zhang2026r2medbenchmarkreasoningdrivenmedical,
+  author = {Zhang, Xiangxu and Li, Lei and Liu, Zheng and Zhou, Xiao},
+  booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
+  doi = {10.18653/2026.emnlp-main.2138},
+  pages = {48600–48637},
+  publisher = {Association for Computational Linguistics},
   title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
-  year = {2025},
+  url = {https://doi.org/10.18653/2026.emnlp-main.2138},
+  year = {2026},
 }
 """,
     )
@@ -157,11 +165,15 @@ class R2MEDMedicalSciencesRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@article{li2025r2med,
-  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
-  journal = {arXiv preprint arXiv:2505.14558},
+@inproceedings{zhang2026r2medbenchmarkreasoningdrivenmedical,
+  author = {Zhang, Xiangxu and Li, Lei and Liu, Zheng and Zhou, Xiao},
+  booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
+  doi = {10.18653/2026.emnlp-main.2138},
+  pages = {48600–48637},
+  publisher = {Association for Computational Linguistics},
   title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
-  year = {2025},
+  url = {https://doi.org/10.18653/2026.emnlp-main.2138},
+  year = {2026},
 }
 """,
     )
@@ -201,11 +213,15 @@ class R2MEDMedXpertQAExamRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@article{li2025r2med,
-  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
-  journal = {arXiv preprint arXiv:2505.14558},
+@inproceedings{zhang2026r2medbenchmarkreasoningdrivenmedical,
+  author = {Zhang, Xiangxu and Li, Lei and Liu, Zheng and Zhou, Xiao},
+  booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
+  doi = {10.18653/2026.emnlp-main.2138},
+  pages = {48600–48637},
+  publisher = {Association for Computational Linguistics},
   title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
-  year = {2025},
+  url = {https://doi.org/10.18653/2026.emnlp-main.2138},
+  year = {2026},
 }
 """,
     )
@@ -245,11 +261,15 @@ class R2MEDMedQADiagRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@article{li2025r2med,
-  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
-  journal = {arXiv preprint arXiv:2505.14558},
+@inproceedings{zhang2026r2medbenchmarkreasoningdrivenmedical,
+  author = {Zhang, Xiangxu and Li, Lei and Liu, Zheng and Zhou, Xiao},
+  booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
+  doi = {10.18653/2026.emnlp-main.2138},
+  pages = {48600–48637},
+  publisher = {Association for Computational Linguistics},
   title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
-  year = {2025},
+  url = {https://doi.org/10.18653/2026.emnlp-main.2138},
+  year = {2026},
 }
 """,
     )
@@ -289,11 +309,15 @@ class R2MEDPMCTreatmentRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@article{li2025r2med,
-  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
-  journal = {arXiv preprint arXiv:2505.14558},
+@inproceedings{zhang2026r2medbenchmarkreasoningdrivenmedical,
+  author = {Zhang, Xiangxu and Li, Lei and Liu, Zheng and Zhou, Xiao},
+  booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
+  doi = {10.18653/2026.emnlp-main.2138},
+  pages = {48600–48637},
+  publisher = {Association for Computational Linguistics},
   title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
-  year = {2025},
+  url = {https://doi.org/10.18653/2026.emnlp-main.2138},
+  year = {2026},
 }
 """,
     )
@@ -333,11 +357,15 @@ class R2MEDPMCClinicalRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@article{li2025r2med,
-  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
-  journal = {arXiv preprint arXiv:2505.14558},
+@inproceedings{zhang2026r2medbenchmarkreasoningdrivenmedical,
+  author = {Zhang, Xiangxu and Li, Lei and Liu, Zheng and Zhou, Xiao},
+  booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
+  doi = {10.18653/2026.emnlp-main.2138},
+  pages = {48600–48637},
+  publisher = {Association for Computational Linguistics},
   title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
-  year = {2025},
+  url = {https://doi.org/10.18653/2026.emnlp-main.2138},
+  year = {2026},
 }
 """,
     )
@@ -377,11 +405,15 @@ class R2MEDIIYiClinicalRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation=r"""
-@article{li2025r2med,
-  author = {Li, Lei and Zhou, Xiao and Liu, Zheng},
-  journal = {arXiv preprint arXiv:2505.14558},
+@inproceedings{zhang2026r2medbenchmarkreasoningdrivenmedical,
+  author = {Zhang, Xiangxu and Li, Lei and Liu, Zheng and Zhou, Xiao},
+  booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
+  doi = {10.18653/2026.emnlp-main.2138},
+  pages = {48600–48637},
+  publisher = {Association for Computational Linguistics},
   title = {R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
-  year = {2025},
+  url = {https://doi.org/10.18653/2026.emnlp-main.2138},
+  year = {2026},
 }
 """,
     )

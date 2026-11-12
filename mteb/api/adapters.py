@@ -84,6 +84,23 @@ def model_meta_to_schema(
     return cached.model_copy(update={"zero_shot_pct": int(zero_shot_pct)})
 
 
+_RUN_OVERRIDE_FIELDS = ("model_type", "embed_dim", "output_dtypes")
+
+
+def run_model_meta_to_schema(
+    base_meta: ModelMeta,
+    run_meta: dict[str, Any],
+    *,
+    zero_shot_pct: int | None = None,
+) -> ModelMetaSchema:
+    """`ModelMetaSchema` for `base_meta`, with one run's own model_type/embed_dim/output_dtypes patched in."""
+    overrides = {
+        k: run_meta[k] for k in _RUN_OVERRIDE_FIELDS if run_meta.get(k) is not None
+    }
+    meta = base_meta.model_copy(update=overrides) if overrides else base_meta
+    return ModelMetaSchema.from_model_meta(meta, zero_shot_pct=zero_shot_pct)
+
+
 def menus_to_schemas(entries: Sequence[MenuEntry]) -> list[MenuEntrySchema]:
     """Convert mteb menu entries into API schemas."""
     return [MenuEntrySchema.from_menu_entry(e) for e in entries]

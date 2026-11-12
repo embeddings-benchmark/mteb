@@ -6,12 +6,16 @@ from mteb.abstasks.classification import AbsTaskClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _BIBTEX = r"""
-@misc{christop2025cameo,
+@inproceedings{christop2025cameo,
   author = {Christop, Iwona and Czajka, Maciej},
-  eprint = {2505.11051},
-  archiveprefix = {arXiv},
-  title = {{CAMEO}: Collection of Multilingual Emotional Speech Corpora},
-  year = {2025},
+  booktitle = {ICASSP 2026 - 2026 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  doi = {10.1109/icassp55912.2026.11461331},
+  month = {May},
+  pages = {19457–19461},
+  publisher = {IEEE},
+  title = {CAMEO: Collection of Multilingual Emotional Speech Corpora},
+  url = {https://doi.org/10.1109/icassp55912.2026.11461331},
+  year = {2026},
 }
 """
 
@@ -37,7 +41,7 @@ class CAMEOEmotionClassification(AbsTaskClassification):
             "already evaluates both separately. Construction script: "
             "scripts/data/cameo_emotion/create_data.py."
         ),
-        reference="https://arxiv.org/abs/2505.11051",
+        reference="https://doi.org/10.1109/icassp55912.2026.11461331",
         dataset={
             "path": "vnahata/CAMEO-emotion-classification",
             "revision": "a8abf264b656456c255e2435ef5103f6a04525e0",

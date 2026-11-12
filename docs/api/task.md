@@ -15,11 +15,13 @@ A task is an implementation of a dataset for evaluation. It could, for instance,
 
 ## Utilities
 
-:::mteb.get_tasks
+:::mteb.get_tasks.get_tasks
 
 :::mteb.get_task
 
-:::mteb.filter_tasks
+:::mteb.filter_tasks.filter_tasks
+
+:::mteb.get_tasks.MTEBTasks
 
 ## Metadata
 
@@ -50,6 +52,7 @@ All tasks in `mteb` inherits from the following abstract class.
 
 
 :::mteb.AbsTask
+
 
 ## Multimodal Tasks
 
@@ -88,3 +91,9 @@ Tasks that support any modality (text, image, etc.) inherit from the following a
 ## Image Tasks
 
 :::mteb.abstasks.image.image_text_pair_classification.AbsTaskImageTextPairClassification
+
+## Cleaning Task Data
+
+Filters that remove low-quality samples from a task before it is evaluated. See [Cleaning task data](../get_started/advanced_usage/cleaning_task_data.md) for more details on how to use them.
+
+:::mteb.data_cleaning

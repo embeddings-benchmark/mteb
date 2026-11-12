@@ -1,5 +1,16 @@
+from typing import Any
+
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+
+
+def _keep_model_columns(task: AbsTaskRetrieval) -> None:
+    # the queries carry metadata such as `query_types`, a list of varying length,
+    # which the dataloader can't batch; keep what the model reads, as ViDoRe 2 does
+    for subset in task.dataset.values():
+        for split in subset.values():
+            split["queries"] = split["queries"].select_columns(["id", "text"])
+            split["corpus"] = split["corpus"].select_columns(["id", "image"])
 
 
 class KoVidore2CybersecurityRetrieval(AbsTaskRetrieval):
@@ -24,17 +35,30 @@ class KoVidore2CybersecurityRetrieval(AbsTaskRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="created",
-        bibtex_citation="""
-@misc{choi2026kovidorev2,
-  author = {Yongbin Choi},
-  note = {A benchmark for evaluating Korean vision document retrieval with multi-page reasoning queries in practical domains},
-  title = {KoViDoRe v2: a comprehensive evaluation of vision document retrieval for enterprise use-cases},
-  url = {https://github.com/whybe-choi/kovidore-data-generator},
+        bibtex_citation=r"""
+@inproceedings{choi-etal-2026-kovidore,
+  address = {San Diego, USA},
+  author = {Choi, Yongbin  and
+Song, Yongwoo  and
+Sung, Mujeen},
+  booktitle = {Proceedings of the 2nd Workshop on Multimodal Augmented Generation via Multimodal Retrieval ({MAGM}a{R} 2026)},
+  doi = {10.18653/v1/2026.magmar-main.11},
+  editor = {Murray, Kenton  and
+Kriz, Reno},
+  isbn = {979-8-89176-425-5},
+  month = jul,
+  pages = {54--80},
+  publisher = {Association for Computational Linguistics},
+  title = {{K}o{V}i{D}o{R}e: A Benchmark for {K}orean Visual Document Retrieval},
+  url = {https://aclanthology.org/2026.magmar-main.11/},
   year = {2026},
 }
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
+
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _keep_model_columns(self)
 
 
 class KoVidore2EconomicRetrieval(AbsTaskRetrieval):
@@ -59,17 +83,30 @@ class KoVidore2EconomicRetrieval(AbsTaskRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="created",
-        bibtex_citation="""
-@misc{choi2026kovidorev2,
-  author = {Yongbin Choi},
-  note = {A benchmark for evaluating Korean vision document retrieval with multi-page reasoning queries in practical domains},
-  title = {KoViDoRe v2: a comprehensive evaluation of vision document retrieval for enterprise use-cases},
-  url = {https://github.com/whybe-choi/kovidore-data-generator},
+        bibtex_citation=r"""
+@inproceedings{choi-etal-2026-kovidore,
+  address = {San Diego, USA},
+  author = {Choi, Yongbin  and
+Song, Yongwoo  and
+Sung, Mujeen},
+  booktitle = {Proceedings of the 2nd Workshop on Multimodal Augmented Generation via Multimodal Retrieval ({MAGM}a{R} 2026)},
+  doi = {10.18653/v1/2026.magmar-main.11},
+  editor = {Murray, Kenton  and
+Kriz, Reno},
+  isbn = {979-8-89176-425-5},
+  month = jul,
+  pages = {54--80},
+  publisher = {Association for Computational Linguistics},
+  title = {{K}o{V}i{D}o{R}e: A Benchmark for {K}orean Visual Document Retrieval},
+  url = {https://aclanthology.org/2026.magmar-main.11/},
   year = {2026},
 }
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
+
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _keep_model_columns(self)
 
 
 class KoVidore2EnergyRetrieval(AbsTaskRetrieval):
@@ -94,17 +131,30 @@ class KoVidore2EnergyRetrieval(AbsTaskRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="created",
-        bibtex_citation="""
-@misc{choi2026kovidorev2,
-  author = {Yongbin Choi},
-  note = {A benchmark for evaluating Korean vision document retrieval with multi-page reasoning queries in practical domains},
-  title = {KoViDoRe v2: a comprehensive evaluation of vision document retrieval for enterprise use-cases},
-  url = {https://github.com/whybe-choi/kovidore-data-generator},
+        bibtex_citation=r"""
+@inproceedings{choi-etal-2026-kovidore,
+  address = {San Diego, USA},
+  author = {Choi, Yongbin  and
+Song, Yongwoo  and
+Sung, Mujeen},
+  booktitle = {Proceedings of the 2nd Workshop on Multimodal Augmented Generation via Multimodal Retrieval ({MAGM}a{R} 2026)},
+  doi = {10.18653/v1/2026.magmar-main.11},
+  editor = {Murray, Kenton  and
+Kriz, Reno},
+  isbn = {979-8-89176-425-5},
+  month = jul,
+  pages = {54--80},
+  publisher = {Association for Computational Linguistics},
+  title = {{K}o{V}i{D}o{R}e: A Benchmark for {K}orean Visual Document Retrieval},
+  url = {https://aclanthology.org/2026.magmar-main.11/},
   year = {2026},
 }
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
+
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _keep_model_columns(self)
 
 
 class KoVidore2HrRetrieval(AbsTaskRetrieval):
@@ -129,14 +179,27 @@ class KoVidore2HrRetrieval(AbsTaskRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="created",
-        bibtex_citation="""
-@misc{choi2026kovidorev2,
-  author = {Yongbin Choi},
-  note = {A benchmark for evaluating Korean vision document retrieval with multi-page reasoning queries in practical domains},
-  title = {KoViDoRe v2: a comprehensive evaluation of vision document retrieval for enterprise use-cases},
-  url = {https://github.com/whybe-choi/kovidore-data-generator},
+        bibtex_citation=r"""
+@inproceedings{choi-etal-2026-kovidore,
+  address = {San Diego, USA},
+  author = {Choi, Yongbin  and
+Song, Yongwoo  and
+Sung, Mujeen},
+  booktitle = {Proceedings of the 2nd Workshop on Multimodal Augmented Generation via Multimodal Retrieval ({MAGM}a{R} 2026)},
+  doi = {10.18653/v1/2026.magmar-main.11},
+  editor = {Murray, Kenton  and
+Kriz, Reno},
+  isbn = {979-8-89176-425-5},
+  month = jul,
+  pages = {54--80},
+  publisher = {Association for Computational Linguistics},
+  title = {{K}o{V}i{D}o{R}e: A Benchmark for {K}orean Visual Document Retrieval},
+  url = {https://aclanthology.org/2026.magmar-main.11/},
   year = {2026},
 }
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's question."},
     )
+
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _keep_model_columns(self)

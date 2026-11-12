@@ -6,7 +6,7 @@ class PubChemWikiParagraphsPC(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="PubChemWikiParagraphsPC",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
-        reference="https://arxiv.org/abs/2412.00532",
+        reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
         dataset={
             "path": "BASF-AI/PubChemWikiParagraphsPC",
             "revision": "7fb14716e4106b72f51a16e682e5cd2d67e9bd70",
@@ -25,10 +25,14 @@ class PubChemWikiParagraphsPC(AbsTaskPairClassification):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@article{kasmaee2024chemteb,
-  author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
-  journal = {arXiv preprint arXiv:2412.00532},
-  title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
+@inproceedings{kasmaee2024chemteb,
+  archiveprefix = {arXiv},
+  author = {Ali Shiraee Kasmaee and Mohammad Khodadad and Mohammad Arshi Saloot and Nick Sherck and Stephen Dokas and Hamidreza Mahyar and Soheila Samiee},
+  booktitle = {ENLSP},
+  eprint = {2412.00532},
+  pages = {512-531},
+  title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance & Efficiency on a Specific Domain},
+  url = {https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html},
   year = {2024},
 }
 

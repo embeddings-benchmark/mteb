@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.model_meta import ModelMeta
@@ -11,6 +10,7 @@ from mteb.models.model_meta import ModelMeta
 from .rerankers_custom import RerankerWrapper
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -30,6 +30,8 @@ class QueritWrapper(RerankerWrapper):
         model_name: str,
         **kwargs: Any,
     ) -> None:
+        import torch
+
         super().__init__(model_name, **kwargs)
         from transformers import AutoModel, AutoTokenizer
 
@@ -70,6 +72,8 @@ class QueritWrapper(RerankerWrapper):
         - Generate custom attention mask based on block types
         """
         # Construct input texts
+        import torch
+
         enc = self.tokenizer(
             pairs,
             add_special_tokens=False,
@@ -104,7 +108,6 @@ class QueritWrapper(RerankerWrapper):
 
         return {"input_ids": input_ids, "attention_mask": attention_mask}
 
-    @torch.inference_mode()
     def predict(
         self,
         inputs1: DataLoader[BatchedInput],
@@ -121,47 +124,52 @@ class QueritWrapper(RerankerWrapper):
         Supports both single-process and multi-process/multi-GPU modes.
         """
         # Flatten all pairs from mteb.mteb DataLoaders
-        queries = [text for batch in inputs1 for text in batch["text"]]
-        passages = [text for batch in inputs2 for text in batch["text"]]
+        import torch
 
-        instructions = None
-        if "instruction" in inputs2.dataset.features:
-            instructions = [text for batch in inputs1 for text in batch["instruction"]]
+        with torch.inference_mode():
+            queries = [text for batch in inputs1 for text in batch["text"]]
+            passages = [text for batch in inputs2 for text in batch["text"]]
 
-        num_pairs = len(queries)
-        if num_pairs == 0:
-            return []
-        final_scores: list[float] = []
-
-        batch_size = kwargs.get("batch_size", self.batch_size)
-        with tqdm(total=num_pairs, desc="Scoring", ncols=100) as pbar:
-            for start in range(0, num_pairs, batch_size):
-                end = min(start + batch_size, num_pairs)
-                batch_q = queries[start:end]
-                batch_d = passages[start:end]
-
-                batch_instructions = (
-                    instructions[start:end]
-                    if instructions is not None
-                    else [None] * len(batch_q)
-                )
-                pairs = [
-                    self.format_instruction(instr, query, doc)
-                    for instr, query, doc in zip(
-                        batch_instructions, batch_q, batch_d, strict=True
-                    )
+            instructions = None
+            if "instruction" in inputs2.dataset.features:
+                instructions = [
+                    text for batch in inputs1 for text in batch["instruction"]
                 ]
-                enc = self.process_inputs(pairs)
-                out = self.model(**enc)
-                scores = out["score"].squeeze(-1).detach().float().cpu().tolist()
 
-                if not isinstance(scores, list):
-                    scores = [scores]
+            num_pairs = len(queries)
+            if num_pairs == 0:
+                return []
+            final_scores: list[float] = []
 
-                final_scores.extend(scores)
-                pbar.update(len(scores))
+            batch_size = kwargs.get("batch_size", self.batch_size)
+            with tqdm(total=num_pairs, desc="Scoring", ncols=100) as pbar:
+                for start in range(0, num_pairs, batch_size):
+                    end = min(start + batch_size, num_pairs)
+                    batch_q = queries[start:end]
+                    batch_d = passages[start:end]
 
-        return final_scores
+                    batch_instructions = (
+                        instructions[start:end]
+                        if instructions is not None
+                        else [None] * len(batch_q)
+                    )
+                    pairs = [
+                        self.format_instruction(instr, query, doc)
+                        for instr, query, doc in zip(
+                            batch_instructions, batch_q, batch_d, strict=True
+                        )
+                    ]
+                    enc = self.process_inputs(pairs)
+                    out = self.model(**enc)
+                    scores = out["score"].squeeze(-1).detach().float().cpu().tolist()
+
+                    if not isinstance(scores, list):
+                        scores = [scores]
+
+                    final_scores.extend(scores)
+                    pbar.update(len(scores))
+
+            return final_scores
 
     @staticmethod
     def format_instruction(instruction: str | None, query: str, doc: str) -> str:
@@ -185,6 +193,8 @@ class QueritWrapper(RerankerWrapper):
         Returns:
             [1, seq_len, seq_len] boolean attention mask (True = allowed to attend)
         """
+        import torch
+
         pos = torch.tensor(block_types, dtype=torch.long)
         n = pos.shape[0]
         if n == 0:
@@ -219,14 +229,15 @@ querit_reranker_training_data = {
     "T2Reranking",  # https://huggingface.co/datasets/THUIR/T2Ranking & The corpus and queries that overlap with mteb/T2Reranking have been removed.
 }
 
-QUERIT_CITATION = """@misc{zhong2026queritrerankertrainingcompactmultilingual,
-      title={Querit-Reranker: Training Compact Multilingual Rerankers via Efficient Label-Free Distribution Adaptation},
-      author={Yunfei Zhong and Jun Yang and Wei Huang and Yinqiong Cai and Haosheng Qian and Yixing Fan and Ruqing Zhang and Lixin Su and Daiting Shi and Jiafeng Guo},
-      year={2026},
-      eprint={2606.19037},
-      archivePrefix={arXiv},
-      primaryClass={cs.IR},
-      url={https://arxiv.org/abs/2606.19037},
+QUERIT_CITATION = """@inproceedings{zhong2026queritrerankertrainingcompactmultilingual,
+  author = {Zhong, Yunfei and Yang, Jun and Huang, Wei and Cai, Yinqiong and Qian, Haosheng and Fan, Yixing and Zhang, Ruqing and Su, Lixin and Shi, Daiting and Guo, Jiafeng},
+  booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing: Industry Track},
+  doi = {10.18653/2026.emnlp-industry.97},
+  pages = {1648–1662},
+  publisher = {Association for Computational Linguistics},
+  title = {Querit-Reranker: Training Compact Multilingual Rerankers via Efficient Label-Free Distribution Adaptation},
+  url = {https://doi.org/10.18653/2026.emnlp-industry.97},
+  year = {2026},
 }"""
 
 Querit_Reranker_A0_4B = ModelMeta(
@@ -238,7 +249,7 @@ Querit_Reranker_A0_4B = ModelMeta(
     model_type=["cross-encoder"],
     languages=["eng-Latn"],
     open_weights=True,
-    revision="5e8f6532a690fb8a3312d24ca0741aded9bbb4ad",
+    revision="cd502a5e87bed13dba6e2b804fd865ca540b7d60",
     release_date="2026-05-14",
     n_parameters=4919636992,
     n_embedding_parameters=131907584,

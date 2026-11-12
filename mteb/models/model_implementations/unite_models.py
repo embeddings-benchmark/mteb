@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.autonotebook import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -11,6 +10,7 @@ from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
     from PIL import Image
     from torch.utils.data import DataLoader
     from transformers import PretrainedConfig, PreTrainedModel
@@ -36,6 +36,7 @@ UNITE_CITATION = """@article{kong2025modality,
 def _build_unite_model(
     model_name: str, revision: str | None, **kwargs: Any
 ) -> PreTrainedModel:
+    import torch
     from transformers import Qwen2VLForConditionalGeneration
 
     class UniteQwen2VL(Qwen2VLForConditionalGeneration):
@@ -130,11 +131,15 @@ class UniteWrapper(AbsEncoder):
         max_image_tokens: int = 1280,
         fps: float | None = None,
         max_frames: int | None = None,
+        # 32 fixed frames: an mteb pick among UNITE's eval counts (48 for
+        # retrieval, 32 for CaReBench, 16 for CoVR)
+        # https://github.com/friedrichor/UNITE/blob/main/eval/task_config.py
         num_frames: int | None = 32,
         target_sampling_rate: int = 16000,
         video_max_pixels: int = 360 * 420,
         **kwargs: Any,
     ) -> None:
+        import torch
         from transformers import AutoProcessor
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
@@ -164,6 +169,10 @@ class UniteWrapper(AbsEncoder):
         if vp is not None:
             size = dict(getattr(vp, "size", None) or {})
             size["longest_edge"] = video_max_pixels
+            # qwen_vl_utils' VIDEO_MIN_PIXELS, which the reference uses (it sets
+            # no video min_pixels)
+            # https://github.com/friedrichor/UNITE/blob/main/inference/inference_demo.py
+            size["shortest_edge"] = 128 * 28 * 28
             vp.size = size
 
     @staticmethod
@@ -205,6 +214,8 @@ class UniteWrapper(AbsEncoder):
         images: list[Image.Image] | None = None,
         videos: torch.Tensor | None = None,
     ) -> torch.Tensor:
+        import torch
+
         n = len(texts or images or videos)
         prompts = [
             self._build_prompt(
@@ -235,6 +246,8 @@ class UniteWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         if "video" in inputs.dataset.features:
             inputs.collate_fn = VideoCollator(
                 target_sampling_rate=self.target_sampling_rate,

@@ -13,7 +13,7 @@ from collections.abc import Callable, Mapping, Sequence
 from dataclasses import field
 from enum import Enum
 from functools import partial
-from importlib.metadata import PackageNotFoundError, distribution, requires
+from importlib.metadata import PackageNotFoundError
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, cast
 
@@ -41,6 +41,13 @@ from mteb._hf_integration.hf_hub_utils import (
     _get_repo_commits,
     _repo_exists,
 )
+from mteb._requires_package import (
+    _extras_requirement,
+    _full_installation_message,
+    _install_command,
+    _mteb_distribution,
+    _requires_full_installation,
+)
 from mteb.languages import check_language_code
 from mteb.languages.iso_mappings import _hf_langs_to_iso_lang_scripts
 from mteb.models.models_protocols import MTEBModels
@@ -55,15 +62,16 @@ from mteb.types import (
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
+    from typing import Self
 
     from sentence_transformers import (
         CrossEncoder,
         CrossEncoderModelCardData,
+        MultiVectorEncoder,
         SentenceTransformer,
         SentenceTransformerModelCardData,
+        SparseEncoder,
     )
-    from sentence_transformers.sparse_encoder import SparseEncoder
-    from typing_extensions import Self
 
     from mteb.abstasks import AbsTask
     from mteb.benchmarks.benchmark import Benchmark
@@ -72,6 +80,9 @@ if TYPE_CHECKING:
 
 
 logger = logging.getLogger(__name__)
+
+# only in a full `mteb` installation, not in `mteb-core`
+_FULL_INSTALL_DEPENDENCIES = {"torch", "transformers", "sentence_transformers"}
 
 
 def _auto_install_extras_enabled() -> bool:
@@ -93,7 +104,7 @@ def _install_extras(model_name: str | None, groups: Sequence[str]) -> None:
     Uses ``uv pip install`` when ``uv`` is on the PATH (faster), otherwise falls back
     to ``python -m pip install``.
     """
-    target = f"mteb[{','.join(groups)}]"
+    target = _extras_requirement(groups)
     if shutil.which("uv") is not None:
         command = ["uv", "pip", "install", target]
     else:
@@ -160,6 +171,7 @@ OPEN_LICENSES: frozenset[str] = frozenset(
         "cc-by-sa-4.0",
         "odc-by",
         "cdla-sharing-1.0",
+        "openmdw-1.1",
     }
 )
 
@@ -213,7 +225,9 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             in the Latin script.
         use_instructions: Whether the model uses instructions E.g. for prompt-based models. This also includes models that require a specific format for
             input, such as "query: {document}" or "passage: {document}".
-        citation: The citation for the model. This is a bibtex string.
+        citation: The citation for the model, as a BibTeX string. As non-existing citations can cause
+            authors citing the work to be penalized, leave it out if the model has no article to cite,
+            rather than citing e.g. its model card. It is allowed to cite multiple articles.
         training_datasets: A dictionary of datasets that the model was trained on. Names should be names as their appear in `mteb` for example
             {"ArguAna"} if the model is trained on the ArguAna test set. This field is used to determine if a model generalizes zero-shot to
             a benchmark as well as mark dataset contaminations.
@@ -223,7 +237,10 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         modalities: A list of strings representing the modalities the model supports. Default is ["text"].
         contacts: The people to contact in case of a problem in the model, preferably a GitHub handle.
         experiment_kwargs: A dictionary of parameters used in the experiment that are not covered by other fields. This is used to create experiment names for ablation studies and similar experiments.
-        output_dtypes: Output embedding data types (e.g. int8, binary, float) natively supported by the model. If None, it is assumed that the model only returns float embeddings.
+        output_dtypes: Data type(s) of the embeddings the model returns (e.g. float32, bfloat16, or int8/binary for models
+            that natively return quantized embeddings). Defaults to float32. This describes the returned embeddings, not the
+            precision the model computes in: a model loaded in bf16 that returns float32 embeddings is float32. None for models
+            that return no embeddings, such as cross-encoders (the default for them) and search-only models like BM25.
         extra_requirements_groups: Name of group of extra requirements (mteb extras) needed to run the model, e.g. `["flagembedding"]`.
             When a required group is missing, loading the model raises with install instructions. Set the environment variable
             `MTEB_AUTO_INSTALL_EXTRAS=1` to let mteb install the missing extras automatically (using `uv` if available, otherwise `pip`).
@@ -260,7 +277,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
     citation: str | None = None
     contacts: list[str] | None = None
     experiment_kwargs: Mapping[str, Any] | None = None
-    output_dtypes: OutputDType | list[OutputDType] | None = None
+    output_dtypes: OutputDType | list[OutputDType] | None = OutputDType.FLOAT32
     extra_requirements_groups: Sequence[str] | None = None
 
     def __setattr__(self, name: str, value: Any) -> None:  # noqa: ANN401 -- dunder contract
@@ -272,6 +289,21 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             stacklevel=2,
         )
         super().__setattr__(name, value)
+
+    @model_validator(mode="before")
+    @classmethod
+    def _cross_encoders_return_no_embeddings(cls, data: Any) -> Any:  # noqa: ANN401 -- pydantic mode='before' receives raw input
+        """Default output_dtypes to None for cross-encoders, which return scores rather than embeddings."""
+        if (
+            isinstance(data, dict)
+            and "output_dtypes" not in data
+            and (
+                "cross-encoder" in (data.get("model_type") or [])
+                or data.get("is_cross_encoder")
+            )
+        ):
+            data["output_dtypes"] = None
+        return data
 
     @model_validator(mode="before")
     @classmethod
@@ -514,22 +546,35 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             updates["embed_dim"] = embed_dim
             kwargs["embed_dim"] = embed_dim
 
-        merged_exp_kwargs = {**base_exp_kwargs, **kwargs} if kwargs else base_exp_kwargs
-        updates["experiment_kwargs"] = merged_exp_kwargs or None
+        merged_kwargs = {**base_exp_kwargs, **kwargs} if kwargs else base_exp_kwargs
+        meaningful_exp_kwargs = {
+            k: v for k, v in merged_kwargs.items() if _has_meaningful_value(v)
+        }
+        updates["experiment_kwargs"] = meaningful_exp_kwargs or None
 
         # Allow overwrites
         _kwargs = _self.loader_kwargs.copy()
-        _kwargs.update(merged_exp_kwargs)
+        _kwargs.update(merged_kwargs)
         if device is not None:
             _kwargs["device"] = device
 
         updates["loader_kwargs"] = _kwargs
         _self = _self.model_copy(update=updates)
-        model: MTEBModels = loader(
-            name,
-            revision=revision,
-            **_kwargs,
-        )
+        try:
+            model: MTEBModels = loader(
+                name,
+                revision=revision,
+                **_kwargs,
+            )
+        except ModuleNotFoundError as e:
+            # `mteb-core` can use tasks and results, but loading models needs a full installation
+            if e.name is None or e.name.split(".")[0] not in _FULL_INSTALL_DEPENDENCIES:
+                raise
+            # not a precondition like the other call sites: which packages a model needs depends on
+            # the model
+            raise ModuleNotFoundError(
+                _full_installation_message(f"Loading {name}"), name=e.name
+            ) from e
         model.mteb_model_meta = _self  # type: ignore[misc]
         return model
 
@@ -549,7 +594,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             raise ImportError(
                 f"Model {self.name} is missing required dependencies: "
                 + ", ".join(missing_dependencies)
-                + f".\nYou can install it with `pip install mteb[{','.join(groups)}]`."
+                + f".\nYou can install it with `{_install_command(groups)}`."
                 + "\nAlternatively, set the environment variable "
                 "`MTEB_AUTO_INSTALL_EXTRAS=1` to let mteb install them automatically."
             )
@@ -564,6 +609,8 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 groups.append("image")
             if "audio" in self.modalities and "audio" not in groups:
                 groups.append("audio")
+            if "video" in self.modalities and "video" not in groups:
+                groups.append("video")
 
         return groups
 
@@ -571,7 +618,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
     def _validate_extras_groups(groups: Sequence[str]) -> None:
         """Raise if any group is not a valid mteb extra."""
         available_extras = set(
-            distribution("mteb").metadata.get_all("Provides-Extra") or []
+            _mteb_distribution().metadata.get_all("Provides-Extra") or []
         )
 
         def _norm(s: str) -> str:
@@ -590,7 +637,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         """Return the requirement strings of the given groups that are not satisfied."""
         missing_dependencies = []
 
-        mteb_requires = requires("mteb")
+        mteb_requires = _mteb_distribution().requires
         if mteb_requires is None:
             raise RuntimeError(
                 "Could not retrieve mteb package requirements. Make sure mteb is installed properly."
@@ -754,18 +801,25 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         - SentenceTransformer  → SentenceTransformerEncoderWrapper
         - CrossEncoder         → CrossEncoderWrapper
         - SparseEncoder        → SparseEncoderWrapper
+        - MultiVectorEncoder   → MultiVectorWrapper
         """
         from mteb.models import (
             CrossEncoderWrapper,
+            MultiVectorWrapper,
             SentenceTransformerEncoderWrapper,
             SparseEncoderWrapper,
         )
 
         st_model_type = config_sbert.get("model_type") if config_sbert else None
+        # "ColBERT" is the legacy PyLate v3 spelling; sentence-transformers' MultiVectorEncoder
+        # itself normalizes it the same way when reading config_sentence_transformers.json.
+        if st_model_type == "ColBERT":
+            st_model_type = "MultiVectorEncoder"
         if st_model_type not in {
             "SentenceTransformer",
             "CrossEncoder",
             "SparseEncoder",
+            "MultiVectorEncoder",
         }:
             if cls._modules_indicate_sparse_encoder(modules_config):
                 st_model_type = "SparseEncoder"
@@ -785,6 +839,8 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             return CrossEncoderWrapper, "cross-encoder", modalities
         if st_model_type == "SparseEncoder":
             return SparseEncoderWrapper, "sparse", modalities
+        if st_model_type == "MultiVectorEncoder":
+            return MultiVectorWrapper, "late-interaction", modalities
         if st_model_type == "SentenceTransformer":
             return SentenceTransformerEncoderWrapper, "dense", modalities
         raise ValueError("Unsupported model type")
@@ -967,11 +1023,15 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         config = model.config
         if inner_model is None or config is None:
             raise ValueError("CrossEncoder must be loaded before generating ModelMeta")
+        # transformers>=5.20 no longer stores `_commit_hash` on the config
+        revision = getattr(config, "_commit_hash", None)
+        if revision is None and hasattr(model, "model_card_data"):
+            revision = model.model_card_data.base_model_revision
         return cls.create_empty(
             overwrites=dict(
                 loader=CrossEncoderWrapper,
                 name=inner_model.name_or_path,
-                revision=config._commit_hash,
+                revision=revision,
                 framework=["Sentence Transformers", "PyTorch"],
                 model_type=["cross-encoder"],
                 n_embedding_parameters=cls._get_n_embedding_parameters_from_sentence_transformers(
@@ -1005,6 +1065,32 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 else None,
                 framework=["Sentence Transformers", "PyTorch"],
                 model_type=["sparse"],
+                adapted_from=_get_source_model(model.model_card_data)  # type: ignore[arg-type]
+                if hasattr(model, "model_card_data")
+                else None,
+            )
+        )
+
+    @classmethod
+    def _from_multi_vector_encoder_model(cls, model: MultiVectorEncoder) -> Self:
+        """Generates a ModelMeta from only a MultiVectorEncoder model, without fetching any additional metadata from HuggingFace Hub."""
+        from mteb.models import MultiVectorWrapper
+
+        name: str | None = (
+            model.model_card_data.model_name
+            if model.model_card_data.model_name
+            else model.model_card_data.base_model
+        )
+        return cls.create_empty(
+            overwrites=dict(
+                name=name,
+                revision=model.model_card_data.base_model_revision,
+                loader=MultiVectorWrapper,
+                max_tokens=model.get_max_seq_length(),
+                embed_dim=model.get_embedding_dimension(),
+                similarity_fn_name=ScoringFunction.MAX_SIM,
+                framework=["Sentence Transformers", "PyTorch"],
+                model_type=["late-interaction"],
                 adapted_from=_get_source_model(model.model_card_data)  # type: ignore[arg-type]
                 if hasattr(model, "model_card_data")
                 else None,
@@ -1055,6 +1141,9 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         # imported here rather than at module scope so that `mteb.models.model_meta` stays
         # importable without transformers; kept outside the `try` so a missing dependency
         # surfaces as an ImportError instead of a "can't get model configuration" warning.
+        _requires_full_installation(
+            "transformers", "Reading a model configuration from the Hub"
+        )
         from transformers import AutoConfig
 
         try:
@@ -1094,12 +1183,15 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         config_sbert = _get_json_from_hub(
             model_name, "config_sentence_transformers.json", "model", revision=revision
         )
-        similarity_fn_name = (
-            ScoringFunction.from_str(config_sbert["similarity_fn_name"])
-            if config_sbert is not None
+        similarity_fn_name = ScoringFunction.COSINE
+        if (
+            config_sbert is not None
             and config_sbert.get("similarity_fn_name") is not None
-            else ScoringFunction.COSINE
-        )
+        ):
+            sbert_similarity_fn_name = config_sbert["similarity_fn_name"]
+            if sbert_similarity_fn_name in {"maxsim", "meanmaxsim"}:
+                sbert_similarity_fn_name = ScoringFunction.MAX_SIM.value
+            similarity_fn_name = ScoringFunction.from_str(sbert_similarity_fn_name)
 
         return cls.create_empty(
             overwrites=dict(
@@ -1289,6 +1381,38 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             if meta.name is None:
                 logger.warning(
                     "Model name is not set in metadata extracted from SparseEncoder model. Cannot fetch additional metadata from HuggingFace Hub."
+                )
+            else:
+                name = meta.name
+                meta_hub = cls._from_hub(name, revision)
+                # prioritize metadata from the model card but fill missing fields from the hub
+                meta = meta_hub.merge(meta)
+
+        return meta
+
+    @classmethod
+    def from_multi_vector_encoder_model(
+        cls,
+        model: MultiVectorEncoder,
+        revision: str | None = None,
+        fetch_from_hf: bool = False,
+    ) -> Self:
+        """Generates a ModelMeta from a MultiVectorEncoder model.
+
+        Args:
+            model: MultiVectorEncoder model.
+            revision: Revision of the model.
+            fetch_from_hf: Whether to fetch additional metadata from HuggingFace Hub based on the model name. If False, only metadata that can be
+                extracted from the MultiVectorEncoder model will be used.
+
+        Returns:
+            The generated ModelMeta.
+        """
+        meta = cls._from_multi_vector_encoder_model(model)
+        if fetch_from_hf:
+            if meta.name is None:
+                logger.warning(
+                    "Model name is not set in metadata extracted from MultiVectorEncoder model. Cannot fetch additional metadata from HuggingFace Hub."
                 )
             else:
                 name = meta.name
@@ -1844,6 +1968,34 @@ def _collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
             similar.update(_collect_similar_tasks(parent, visited))
 
     return similar
+
+
+def _merge_precision_into_experiment_kwargs(
+    experiment_kwargs: Mapping[str, Any] | None,
+    encode_kwargs: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Fold a ``precision`` encode kwarg into ``experiment_kwargs["output_dtypes"]``.
+
+    ``precision`` is forwarded to ``encode`` and changes the dtype of the produced
+    embeddings, so it must be folded into the same experiment namespace.
+    """
+    merged = dict(experiment_kwargs) if experiment_kwargs else {}
+    precision = encode_kwargs.get("precision")
+    if precision is not None:
+        merged["output_dtypes"] = OutputDType.from_str(precision).value
+    return merged
+
+
+def _has_meaningful_value(value: Any) -> bool:  # noqa: ANN401
+    """``False`` for ``None`` or an empty collection (dict/list/tuple/set/str).
+
+    Filters out no-op values like ``model_kwargs={}`` while keeping meaningful.
+    """
+    if value is None:
+        return False
+    if isinstance(value, (dict, list, tuple, set, str)):
+        return len(value) > 0
+    return True
 
 
 def _serialize_experiment_kwargs_to_name(

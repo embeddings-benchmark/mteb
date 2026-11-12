@@ -29,6 +29,7 @@ class KorHateSpeechMLClassification(AbsTaskMultilabelClassification):
         bibtex_citation=r"""
 @inproceedings{lee-etal-2022-k,
   address = {Gyeongju, Republic of Korea},
+  archiveprefix = {arXiv},
   author = {Lee, Jean  and
 Lim, Taejun  and
 Lee, Heejun  and
@@ -37,6 +38,7 @@ Kim, Yangsok  and
 Yoon, Heegeun  and
 Han, Soyeon Caren},
   booktitle = {Proceedings of the 29th International Conference on Computational Linguistics},
+  eprint = {2208.10684},
   month = oct,
   pages = {3530--3538},
   publisher = {International Committee on Computational Linguistics},

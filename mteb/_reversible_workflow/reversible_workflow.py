@@ -27,7 +27,7 @@ class WorkflowFailureError(RuntimeError):
         """
         self.step_name = step_name
         self.original_exception = original_exception
-        message = f"Workflow failed at {step_name}. Rollback failed during undo of steps. Manual cleanup required."
+        message = f"Workflow failed at {step_name}: {original_exception}. Completed steps were rolled back."
         super().__init__(message)
 
 

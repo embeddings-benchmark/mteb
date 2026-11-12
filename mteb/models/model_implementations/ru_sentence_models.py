@@ -1,14 +1,12 @@
 """Sentence models for evaluation on the Russian part of MTEB"""
 
-import torch
-
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 from .bge_models import bge_m3_training_data
 from .nomic_models import (
@@ -365,14 +363,6 @@ user_base_ru = ModelMeta(
     framework=["Sentence Transformers", "PyTorch", "safetensors"],
     adapted_from="https://huggingface.co/deepvk/deberta-v1-base",
     use_instructions=True,
-    citation="""@misc{deepvk2024user,
-        title={USER: Universal Sentence Encoder for Russian},
-        author={Malashenko, Boris and  Zemerov, Anton and Spirin, Egor},
-        url={https://huggingface.co/datasets/deepvk/USER-base},
-        publisher={Hugging Face}
-        year={2024},
-    }
-    """,
     training_datasets={
         "BibleNLPBitextMining",
         # https://github.com/unicamp-dl/mMARCO
@@ -451,13 +441,6 @@ user_bge_m3 = ModelMeta(
     },
     public_training_code=None,
     public_training_data=None,
-    citation="""@misc{deepvk2024user,
-    title={USER: Universal Sentence Encoder for Russian},
-    author={Malashenko, Boris and  Zemerov, Anton and Spirin, Egor},
-    url={https://huggingface.co/datasets/deepvk/USER-base},
-    publisher={Hugging Face},
-    year={2024},
-}""",
 )
 
 deberta_v1_ru = ModelMeta(
@@ -553,16 +536,17 @@ distilrubert_small_cased_conversational = ModelMeta(
     training_datasets=set(
         # OpenSubtitles[1], Dirty, Pikabu, and a Social Media segment of Taiga corpus
     ),
-    citation="""@misc{https://doi.org/10.48550/arxiv.2205.02340,
-      doi = {10.48550/ARXIV.2205.02340},
-      url = {https://arxiv.org/abs/2205.02340},
-      author = {Kolesnikova, Alina and Kuratov, Yuri and Konovalov, Vasily and Burtsev, Mikhail},
-      keywords = {Computation and Language (cs.CL), Machine Learning (cs.LG), FOS: Computer and information sciences, FOS: Computer and information sciences},
-      title = {Knowledge Distillation of Russian Language Models with Reduction of Vocabulary},
-      publisher = {arXiv},
-      year = {2022},
-      copyright = {arXiv.org perpetual, non-exclusive license}
-    }""",
+    citation="""@inproceedings{https://doi.org/10.48550/arxiv.2205.02340,
+  author = {Kolesnikova, Alina and Kuratov, Yuri and Konovalov, Vasily and Mikhail, Mikhail},
+  booktitle = {Computational Linguistics and Intellectual Technologies},
+  doi = {10.28995/2075-7182-2022-21-295-310},
+  month = {June},
+  pages = {295–310},
+  publisher = {RSUH},
+  title = {Knowledge Distillation of Russian Language Models with Reduction of Vocabulary},
+  url = {https://doi.org/10.28995/2075-7182-2022-21-295-310},
+  year = {2022},
+}""",
 )
 
 rubert_base_cased_sentence = ModelMeta(
@@ -761,15 +745,20 @@ rosberta_ru_en = ModelMeta(
     public_training_data=None,
     public_training_code=None,
     framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
-    citation="""@misc{snegirev2024russianfocusedembeddersexplorationrumteb,
-      title={The Russian-focused embedders' exploration: ruMTEB benchmark and Russian embedding model design},
-      author={Artem Snegirev and Maria Tikhonova and Anna Maksimova and Alena Fenogenova and Alexander Abramov},
-      year={2024},
-      eprint={2408.12503},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2408.12503},
-    }
+    citation="""@inproceedings{snegirev2024russianfocusedembeddersexplorationrumteb,
+  address = {Albuquerque, New Mexico},
+  author = {Snegirev, Artem and Tikhonova, Maria and Anna, Maksimova and Fenogenova, Alena and Abramov, Aleksandr},
+  booktitle = {Proceedings of the 2025 Conference of the Nations of the {A}mericas Chapter of the {A}ssociation for {C}omputational {L}inguistics: Human Language Technologies (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2025.naacl-long.12},
+  editor = {Chiruzzo, Luis and Ritter, Alan and Wang, Lu},
+  isbn = {979-8-89176-189-6},
+  month = {apr},
+  pages = {236--254},
+  publisher = {Association for Computational Linguistics},
+  title = {The {R}ussian-focused embedders' exploration: ru{MTEB} benchmark and {R}ussian embedding model design},
+  url = {https://aclanthology.org/2025.naacl-long.12/},
+  year = {2025},
+}
     """,
 )
 
@@ -924,7 +913,7 @@ giga_embeddings = ModelMeta(
         apply_instruction_to_passages=True,
         prompts_dict=GIGA_task_prompts,
         model_kwargs={
-            "torch_dtype": torch.bfloat16,
+            "torch_dtype": OutputDType.BF16,
         },
     ),
     name="ai-sage/Giga-Embeddings-instruct",
@@ -1054,13 +1043,6 @@ user2_small = ModelMeta(
     public_training_data=None,
     public_training_code="https://github.com/BlessedTatonka/some_code/tree/2899f27d51efdf4217fc6453799ff197e9792f1e",
     framework=["Sentence Transformers", "PyTorch", "safetensors"],
-    citation="""@misc{deepvk2025user,
-    title={USER2},
-    author={Malashenko, Boris and Spirin, Egor and Sokolov Andrey},
-    url={https://huggingface.co/deepvk/USER2-small},
-    publisher={Hugging Face},
-    year={2025},
-}""",
 )
 
 user2_base = ModelMeta(
@@ -1088,13 +1070,6 @@ user2_base = ModelMeta(
     public_training_data=None,
     public_training_code="https://github.com/BlessedTatonka/some_code/tree/2899f27d51efdf4217fc6453799ff197e9792f1e",
     framework=["Sentence Transformers", "PyTorch", "safetensors"],
-    citation="""@misc{deepvk2025user,
-    title={USER2},
-    author={Malashenko, Boris and Spirin, Egor and Sokolov Andrey},
-    url={https://huggingface.co/deepvk/USER2-base},
-    publisher={Hugging Face},
-    year={2025},
-}""",
 )
 
 

@@ -3,7 +3,7 @@
 Defines common fields and behaviors for all events
 """
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -22,7 +22,7 @@ class BaseEvent(BaseModel):
 
     event_name: str = Field(..., description="Event name")
     timestamp: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc),
+        default_factory=lambda: datetime.now(UTC),
         description="Event occurrence time (UTC)",
     )
     session_id: str = Field(..., description="Session ID")

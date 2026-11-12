@@ -3,8 +3,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
-
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
@@ -40,6 +38,8 @@ class KALMWrapper(InstructSentenceTransformerModel):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         _inputs = [text for batch in inputs for text in batch["text"]]
 
         instruction = self.get_task_instruction(task_metadata, prompt_type)

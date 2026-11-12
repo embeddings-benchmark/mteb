@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models import ModelMeta
@@ -10,6 +9,7 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb import TaskMetadata
@@ -45,6 +45,7 @@ class DashengAudioWrapper(AbsEncoder):
         device: str | None = None,
         **kwargs: Any,
     ) -> None:
+        import torch
         from transformers import AutoFeatureExtractor, AutoModel
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
@@ -75,7 +76,14 @@ class DashengAudioWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+        import torch
+
+        # no max_samples: Dasheng splits longer input into ~10 s chunks itself
+        # (target_length=1008 frames)
+        # the patch embedding needs at least 480 samples (30 ms at 16 kHz)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate, min_samples=480
+        )
 
         all_embeddings = []
         with torch.no_grad():
@@ -104,11 +112,21 @@ class DashengAudioWrapper(AbsEncoder):
                         return_tensors="pt",
                     )
                     features = {k: v.to(self.device) for k, v in features.items()}
-                    outputs = self.model(**features)
-                    # See class docstring: mean-pooled hidden states, not `logits`.
-                    embeddings = (
-                        outputs.hidden_states.mean(dim=1).cpu().to(torch.float32)
+                    # Run each 10 s chunk (1008 frames) separately and join them, as
+                    # Dasheng's own package does: the model's internal split mixes
+                    # the chunks of batched clips and zero-pads the last one. Frames
+                    # that don't fill a 4-frame patch are dropped, as its patching does
+                    values = features["input_values"]
+                    values = values[..., : values.shape[-1] // 4 * 4]
+                    hidden_states = torch.cat(
+                        [
+                            self.model(input_values=chunk).hidden_states
+                            for chunk in values.split(1008, dim=-1)
+                        ],
+                        dim=1,
                     )
+                    # See class docstring: mean-pooled hidden states, not `logits`.
+                    embeddings = hidden_states.mean(dim=1).cpu().to(torch.float32)
                     for position, idx in enumerate(indices):
                         ordered[idx] = embeddings[position]
 

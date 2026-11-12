@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
@@ -11,6 +10,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    import torch
     from PIL import Image
     from torch.utils.data import DataLoader
     from typing_extensions import Unpack
@@ -21,16 +21,24 @@ if TYPE_CHECKING:
 _IMAGE_DOCUMENT_PROMPT = "Find an image caption describing the given image."
 _QUERY_DEFAULT_PROMPT = "Represent the given input for retrieval."
 _VIDEO_DOCUMENT_PROMPT = "Describe this video in detail."
+# the official evaluation runs with --image_resolution high: every image is resized to 1344x1344
+# https://github.com/GaryGuTC/UniME-v2/blob/main/Embedding/shells/testing_embedding/test_UniMEv2_llavaOV_8B.sh
+_IMAGE_SIZE = (1344, 1344)
 
 _UNIME_V2_CITATION = r"""
-@misc{gu2025unimev2mllmasajudgeuniversalmultimodal,
-  title={UniME-V2: MLLM-as-a-Judge for Universal Multimodal Embedding Learning},
-  author={Tiancheng Gu and Kaicheng Yang and Kaichen Zhang and Xiang An and Ziyong Feng and Yueyi Zhang and Weidong Cai and Jiankang Deng and Lidong Bing},
-  year={2025},
-  eprint={2510.13515},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV},
-  url={https://arxiv.org/abs/2510.13515},
+@article{gu2025unimev2mllmasajudgeuniversalmultimodal,
+  author = {Gu, Tiancheng and Yang, Kaicheng and Zhang, Kaichen and An, Xiang and Feng, Ziyong and Zhang, Yueyi and Cai, Weidong and Deng, Jiankang and Bing, Lidong},
+  doi = {10.1609/aaai.v40i26.39284},
+  issn = {2159-5399},
+  journal = {Proceedings of the AAAI Conference on Artificial Intelligence},
+  month = {Mar},
+  number = {26},
+  pages = {21378–21386},
+  publisher = {Association for the Advancement of Artificial Intelligence (AAAI)},
+  title = {UniME-V2: MLLM-as-a-Judge for Universal Multimodal Embedding Learning},
+  url = {https://doi.org/10.1609/aaai.v40i26.39284},
+  volume = {40},
+  year = {2026},
 }
 """
 
@@ -63,13 +71,16 @@ class UniMEV2Wrapper(AbsEncoder):
         model_name: str,
         revision: str | None = None,
         device: str | None = None,
+        # fps=2 is an mteb default; this is a LLaVA-OneVision model
         fps: float | None = 2.0,
+        # 64 is an mteb cap; the checkpoint declares no frame count
         max_frames: int | None = 64,
         num_frames: int | None = None,
         attn_implementation: str = "sdpa",
         use_task_instructions: bool = True,
         **kwargs: Any,
     ) -> None:
+        import torch
         from transformers import AutoProcessor, LlavaOnevisionForConditionalGeneration
 
         self.device = device or (
@@ -106,6 +117,8 @@ class UniMEV2Wrapper(AbsEncoder):
     def _pooling(
         last_hidden_state: torch.Tensor, attention_mask: torch.Tensor
     ) -> torch.Tensor:
+        import torch
+
         left_padding = attention_mask[:, -1].sum() == attention_mask.shape[0]
         batch_size = last_hidden_state.shape[0]
         if left_padding:
@@ -128,7 +141,7 @@ class UniMEV2Wrapper(AbsEncoder):
     ) -> list[dict[str, Any]]:
         content: list[dict[str, Any]] = []
         if image is not None:
-            content.append({"type": "image", "image": image})
+            content.append({"type": "image", "image": image.resize(_IMAGE_SIZE)})
         if video is not None:
             content.append({"type": "video", "video": video})
 
@@ -166,7 +179,6 @@ class UniMEV2Wrapper(AbsEncoder):
             return prompt.strip() if isinstance(prompt, str) else _QUERY_DEFAULT_PROMPT
         return ""
 
-    @torch.inference_mode()
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -177,55 +189,60 @@ class UniMEV2Wrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
-        features = inputs.dataset.features
-        has_text = "text" in features
-        has_image = "image" in features
-        has_video = "video" in features
+        import torch
 
-        if has_video:
-            inputs.collate_fn = FramesCollator(
-                fps=self.fps,
-                max_frames=self.max_frames,
-                num_frames=self.num_frames,
-            )
+        with torch.inference_mode():
+            features = inputs.dataset.features
+            has_text = "text" in features
+            has_image = "image" in features
+            has_video = "video" in features
 
-        instruction = self._get_instruction(task_metadata, prompt_type)
-        show_progress_bar = kwargs.get("show_progress_bar", True)
-        all_embeddings: list[torch.Tensor] = []
-
-        for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding"):
-            batch_size = len(next(iter(batch.values())))
-            conversations = [
-                self._build_conversation(
-                    text=batch["text"][i] if has_text else None,
-                    image=batch["image"][i] if has_image else None,
-                    video=batch["video"][i] if has_video else None,
-                    instruction=instruction,
+            if has_video:
+                inputs.collate_fn = FramesCollator(
+                    fps=self.fps,
+                    max_frames=self.max_frames,
+                    num_frames=self.num_frames,
                 )
-                for i in range(batch_size)
-            ]
-            for conversation_batch in self._conversation_batches(
-                conversations, has_video=has_video
-            ):
-                model_inputs = self.processor.apply_chat_template(
-                    conversation_batch,
-                    add_generation_prompt=True,
-                    tokenize=True,
-                    return_dict=True,
-                    return_tensors="pt",
-                    processor_kwargs={"padding": True},
-                ).to(self.device)
-                output = self.model(
-                    **model_inputs,
-                    output_hidden_states=True,
-                    return_dict=True,
-                )
-                embeddings = self._pooling(
-                    output.hidden_states[-1], model_inputs["attention_mask"]
-                )
-                all_embeddings.append(embeddings.cpu().to(torch.float32))
 
-        return torch.cat(all_embeddings, dim=0)
+            instruction = self._get_instruction(task_metadata, prompt_type)
+            show_progress_bar = kwargs.get("show_progress_bar", True)
+            all_embeddings: list[torch.Tensor] = []
+
+            for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding"):
+                batch_size = len(next(iter(batch.values())))
+                conversations = [
+                    self._build_conversation(
+                        text=batch["text"][i] if has_text else None,
+                        image=batch["image"][i] if has_image else None,
+                        video=batch["video"][i] if has_video else None,
+                        instruction=instruction,
+                    )
+                    for i in range(batch_size)
+                ]
+                for conversation_batch in self._conversation_batches(
+                    conversations, has_video=has_video
+                ):
+                    model_inputs = self.processor.apply_chat_template(
+                        conversation_batch,
+                        add_generation_prompt=True,
+                        tokenize=True,
+                        return_dict=True,
+                        return_tensors="pt",
+                        processor_kwargs={"padding": True},
+                    ).to(self.device)
+                    # logits_to_keep=1 skips computing vocab logits we don't use
+                    output = self.model(
+                        **model_inputs,
+                        output_hidden_states=True,
+                        return_dict=True,
+                        logits_to_keep=1,
+                    )
+                    embeddings = self._pooling(
+                        output.hidden_states[-1], model_inputs["attention_mask"]
+                    )
+                    all_embeddings.append(embeddings.cpu().to(torch.float32))
+
+            return torch.cat(all_embeddings, dim=0)
 
 
 unime_v2_llava_onevision_8b = ModelMeta(

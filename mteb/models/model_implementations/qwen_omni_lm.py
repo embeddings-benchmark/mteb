@@ -2,17 +2,18 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
-from transformers import (
-    AutoProcessor,
-)
 
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator, VideoCollator
+from mteb.models.modality_collators import (
+    AudioCollator,
+    VideoCollator,
+    single_clip_dataloader,
+)
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -27,12 +28,20 @@ class QwenOmniWrapper(AbsEncoder):
         model_name: str,
         revision: str,
         device: str | None = None,
+        # 300 s: chunk_length=300
+        # https://huggingface.co/Qwen/Qwen2.5-Omni-7B/blob/main/preprocessor_config.json
         max_audio_length_seconds: int = 300,
+        # fps=2: qwen-omni-utils FPS=2.0
+        # https://github.com/QwenLM/Qwen2.5-Omni/blob/main/qwen-omni-utils/src/qwen_omni_utils/v2_5/vision_process.py
         fps: float | None = 2.0,
+        # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
         **kwargs: Any,
     ) -> None:
+        import torch
+        from transformers import AutoProcessor
+
         self.device = device or (
             "cuda"
             if torch.cuda.is_available()
@@ -53,12 +62,20 @@ class QwenOmniWrapper(AbsEncoder):
             from transformers import Qwen3OmniMoeThinkerForConditionalGeneration
 
             model_class = Qwen3OmniMoeThinkerForConditionalGeneration
+        # Qwen3-Omni (mixture of experts) changes with its batch-mates (batched vs
+        # single cosine 0.96 on real clips); Qwen2.5-Omni stays within 0.999
+        self.per_clip = model_class.__name__.startswith("Qwen3OmniMoe")
 
         self.model = model_class.from_pretrained(
             model_name, revision=revision, torch_dtype=torch.bfloat16, **kwargs
         )
         self.model.eval()
         self.model.to(self.device)
+        # only hidden states are used; the Omni thinker forward has no logits_to_keep,
+        # so run the LM head on the last position only
+        self.model.get_output_embeddings().register_forward_pre_hook(
+            lambda _module, args: (args[0][:, -1:, :],)
+        )
 
         self.processor = AutoProcessor.from_pretrained(model_name, revision=revision)
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
@@ -101,7 +118,6 @@ class QwenOmniWrapper(AbsEncoder):
             )
         return messages
 
-    @torch.no_grad()
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -112,65 +128,92 @@ class QwenOmniWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        has_video = "video" in inputs.dataset.features
-        has_audio = "audio" in inputs.dataset.features
-        if has_video:
-            inputs.collate_fn = VideoCollator(
-                target_sampling_rate=self.sampling_rate,
-                fps=self.fps,
-                max_frames=self.max_frames,
-                num_frames=self.num_frames,
-                max_samples=self.max_samples,
-            )
-        elif has_audio:
-            inputs.collate_fn = AudioCollator(
-                target_sampling_rate=self.sampling_rate,
-                max_samples=self.max_samples,
-            )
+        import torch
 
-        all_embeddings: list[torch.Tensor] = []
-
-        for batch in tqdm(inputs, desc="Encoding"):
-            messages = self._build_messages(batch)
-
-            texts = [
-                self.processor.apply_chat_template(
-                    msg, tokenize=False, add_generation_prompt=False
+        with torch.no_grad():
+            has_video = "video" in inputs.dataset.features
+            has_audio = "audio" in inputs.dataset.features
+            if has_video:
+                inputs.collate_fn = VideoCollator(
+                    target_sampling_rate=self.sampling_rate,
+                    fps=self.fps,
+                    max_frames=self.max_frames,
+                    num_frames=self.num_frames,
+                    max_samples=self.max_samples,
                 )
-                for msg in messages
-            ]
+            elif has_audio:
+                inputs.collate_fn = AudioCollator(
+                    target_sampling_rate=self.sampling_rate,
+                    max_samples=self.max_samples,
+                )
 
-            videos = batch.get("video")
-            images = batch.get("image")
-            audios = batch.get("audio")
-            if audios:
-                audios = [
-                    a["array"] if isinstance(a, dict) and "array" in a else a
-                    for a in audios
+            if self.per_clip and (has_audio or has_video):
+                inputs = single_clip_dataloader(
+                    inputs, "batched embeddings change with their batch-mates"
+                )
+            elif has_video:
+                inputs = single_clip_dataloader(
+                    inputs, "the processor takes one frame rate per call"
+                )
+
+            all_embeddings: list[torch.Tensor] = []
+
+            for batch in tqdm(inputs, desc="Encoding"):
+                messages = self._build_messages(batch)
+
+                texts = [
+                    self.processor.apply_chat_template(
+                        msg, tokenize=False, add_generation_prompt=False
+                    )
+                    for msg in messages
                 ]
 
-            model_inputs = self.processor(
-                text=texts,
-                audio=audios or None,
-                images=images or None,
-                videos=videos or None,
-                padding=True,
-                return_tensors="pt",
-                videos_kwargs={
-                    "do_sample_frames": False,
-                    "use_audio_in_video": False,
-                },
-                audio_kwargs={"max_length": self.max_samples},
-            ).to(self.device, dtype=torch.bfloat16)
+                videos = batch.get("video")
+                # one video per batch: the rate its frames were sampled at, as
+                # qwen-omni-utils computes it (sampled / source frames * source
+                # fps); the processor would otherwise assume 2 fps (Qwen2.5-Omni)
+                # or 1 fps (Qwen3-Omni)
+                # https://github.com/QwenLM/Qwen2.5-Omni/blob/main/qwen-omni-utils/src/qwen_omni_utils/v2_5/vision_process.py
+                fps = None
+                if videos:
+                    timing = batch["video_metadata"][0]
+                    if timing and timing["fps"]:
+                        fps = (
+                            len(timing["frames_indices"])
+                            / timing["total_num_frames"]
+                            * timing["fps"]
+                        )
+                images = batch.get("image")
+                audios = batch.get("audio")
+                if audios:
+                    audios = [
+                        a["array"] if isinstance(a, dict) and "array" in a else a
+                        for a in audios
+                    ]
 
-            outputs = self.model(
-                **model_inputs, output_hidden_states=True, return_dict=True
-            )
-            embeddings = outputs.hidden_states[-1][:, -1]
-            embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=-1)
-            all_embeddings.append(embeddings.cpu())
+                model_inputs = self.processor(
+                    text=texts,
+                    audio=audios or None,
+                    images=images or None,
+                    videos=videos or None,
+                    padding=True,
+                    return_tensors="pt",
+                    videos_kwargs={
+                        "do_sample_frames": False,
+                        "use_audio_in_video": False,
+                        "fps": fps,
+                    },
+                    audio_kwargs={"max_length": self.max_samples},
+                ).to(self.device, dtype=torch.bfloat16)
 
-        return torch.cat(all_embeddings, dim=0).float()
+                outputs = self.model(
+                    **model_inputs, output_hidden_states=True, return_dict=True
+                )
+                embeddings = outputs.hidden_states[-1][:, -1]
+                embeddings = torch.nn.functional.normalize(embeddings, p=2, dim=-1)
+                all_embeddings.append(embeddings.cpu())
+
+            return torch.cat(all_embeddings, dim=0).float()
 
 
 qwen25_omni_7b = ModelMeta(
@@ -259,12 +302,15 @@ qwen25_omni_3b = ModelMeta(
 qwen3_omni_30b_a3b_instruct = ModelMeta(
     loader=QwenOmniWrapper,
     name="Qwen/Qwen3-Omni-30B-A3B-Instruct",
+    # 32 frames so the thinker fits one 80 GB GPU (Qwen lists 69 GB for 15 s of video)
+    # https://huggingface.co/Qwen/Qwen3-Omni-30B-A3B-Instruct#minimum-gpu-memory-requirements
+    loader_kwargs=dict(max_frames=32),
     revision="26291f793822fb6be9555850f06dfe95f2d7e695",
     release_date="2025-09-20",
     languages=["eng-Latn"],
     n_parameters=35259818545,
     memory_usage_mb=67253.0,
-    max_tokens=151_643,
+    max_tokens=65_536,  # thinker text_config.max_position_embeddings
     embed_dim=2048,
     n_embedding_parameters=155_713_536,
     license="apache-2.0",
@@ -300,12 +346,15 @@ qwen3_omni_30b_a3b_instruct = ModelMeta(
 qwen3_omni_30b_a3b_thinking = ModelMeta(
     loader=QwenOmniWrapper,
     name="Qwen/Qwen3-Omni-30B-A3B-Thinking",
+    # 32 frames so the thinker fits one 80 GB GPU (Qwen lists 69 GB for 15 s of video)
+    # https://huggingface.co/Qwen/Qwen3-Omni-30B-A3B-Instruct#minimum-gpu-memory-requirements
+    loader_kwargs=dict(max_frames=32),
     revision="2f443cfc4c54b14a815c0e2bb9a9d6cbcd9a748b",
     release_date="2025-09-15",
     languages=["eng-Latn"],
     n_parameters=31719205488,
     memory_usage_mb=60500.0,
-    max_tokens=151_643,
+    max_tokens=65_536,  # thinker text_config.max_position_embeddings
     embed_dim=2048,
     n_embedding_parameters=155_713_536,
     license="apache-2.0",
@@ -341,12 +390,15 @@ qwen3_omni_30b_a3b_thinking = ModelMeta(
 qwen3_omni_30b_a3b_captioner = ModelMeta(
     loader=QwenOmniWrapper,
     name="Qwen/Qwen3-Omni-30B-A3B-Captioner",
+    # 32 frames so the thinker fits one 80 GB GPU (Qwen lists 69 GB for 15 s of video)
+    # https://huggingface.co/Qwen/Qwen3-Omni-30B-A3B-Instruct#minimum-gpu-memory-requirements
+    loader_kwargs=dict(max_frames=32),
     revision="a2bd106cbf527db5676e79662674da22b0545ec0",
     release_date="2025-09-15",
     languages=["eng-Latn"],
     n_parameters=31719205488,
     memory_usage_mb=60500.0,
-    max_tokens=151_643,
+    max_tokens=65_536,  # thinker text_config.max_position_embeddings
     embed_dim=2048,
     n_embedding_parameters=155_713_536,
     license="apache-2.0",

@@ -21,15 +21,6 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-MODEL2VEC_CITATION = """@software{minishlab2024model2vec,
-  author       = {Stephan Tulkens and {van Dongen}, Thomas},
-  title        = {Model2Vec: Fast State-of-the-Art Static Embeddings},
-  year         = {2024},
-  publisher    = {Zenodo},
-  doi          = {10.5281/zenodo.17270888},
-  url          = {https://github.com/MinishLab/model2vec},
-  license      = {MIT}
-}"""
 
 _POTION_MULTILINGUAL_128M_LANGUAGES = [
     "afr-Latn",
@@ -196,7 +187,6 @@ m2v_base_glove_subword = ModelMeta(
     training_datasets=bge_training_data,  # distilled
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
-    citation=MODEL2VEC_CITATION,
 )
 
 
@@ -223,7 +213,6 @@ m2v_base_glove = ModelMeta(
     training_datasets=bge_training_data,  # distilled
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
-    citation=MODEL2VEC_CITATION,
 )
 
 m2v_base_output = ModelMeta(
@@ -249,7 +238,6 @@ m2v_base_output = ModelMeta(
     training_datasets=bge_training_data,  # distilled
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
-    citation=MODEL2VEC_CITATION,
 )
 
 m2v_multilingual_output = ModelMeta(
@@ -275,7 +263,6 @@ m2v_multilingual_output = ModelMeta(
     training_datasets=None,
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
-    citation=MODEL2VEC_CITATION,
 )
 
 potion_base_2m = ModelMeta(
@@ -300,8 +287,7 @@ potion_base_2m = ModelMeta(
     superseded_by=None,
     training_datasets=bge_training_data,  # distilled
     public_training_code="https://github.com/MinishLab/model2vec",
-    public_training_data=None,
-    citation=MODEL2VEC_CITATION,
+    public_training_data="https://huggingface.co/datasets/minishlab/tokenlearn-c4-en-bge-base-en-v1.5",
 )
 
 potion_base_4m = ModelMeta(
@@ -326,8 +312,7 @@ potion_base_4m = ModelMeta(
     superseded_by=None,
     training_datasets=bge_training_data,  # distilled
     public_training_code="https://github.com/MinishLab/model2vec",
-    public_training_data=None,
-    citation=MODEL2VEC_CITATION,
+    public_training_data="https://huggingface.co/datasets/minishlab/tokenlearn-c4-en-bge-base-en-v1.5",
 )
 
 potion_base_8m = ModelMeta(
@@ -352,8 +337,7 @@ potion_base_8m = ModelMeta(
     superseded_by=None,
     training_datasets=bge_training_data,  # distilled
     public_training_code="https://github.com/MinishLab/model2vec",
-    public_training_data=None,
-    citation=MODEL2VEC_CITATION,
+    public_training_data="https://huggingface.co/datasets/minishlab/tokenlearn-c4-en-bge-base-en-v1.5",
 )
 
 potion_base_32m = ModelMeta(
@@ -378,8 +362,7 @@ potion_base_32m = ModelMeta(
     superseded_by=None,
     training_datasets=bge_training_data,  # distilled
     public_training_code="https://github.com/MinishLab/model2vec",
-    public_training_data=None,
-    citation=MODEL2VEC_CITATION,
+    public_training_data="https://huggingface.co/datasets/minishlab/tokenlearn-c4-en-bge-base-en-v1.5",
 )
 
 potion_retrieval_32m = ModelMeta(
@@ -405,7 +388,6 @@ potion_retrieval_32m = ModelMeta(
     training_datasets=bge_training_data,  # adapted from a distilled base model
     public_training_code="https://github.com/MinishLab/model2vec",
     public_training_data=None,
-    citation=MODEL2VEC_CITATION,
 )
 
 potion_multilingual_128m = ModelMeta(
@@ -430,8 +412,7 @@ potion_multilingual_128m = ModelMeta(
     superseded_by=None,
     training_datasets=bge_training_data,  # distilled
     public_training_code="https://github.com/MinishLab/model2vec",
-    public_training_data=None,
-    citation=MODEL2VEC_CITATION,
+    public_training_data="https://huggingface.co/datasets/minishlab/tokenlearn-c4-multilingual-bge-m3",
 )
 
 potion_code_16m_v2 = ModelMeta(
@@ -461,7 +442,6 @@ potion_code_16m_v2 = ModelMeta(
         "https://huggingface.co/datasets/minishlab/tokenlearn-cornstack-docs-coderankembed-v2; "
         "https://huggingface.co/datasets/minishlab/tokenlearn-cornstack-queries-coderankembed-v2"
     ),
-    citation=MODEL2VEC_CITATION,
 )
 
 pubmed_bert_100k = ModelMeta(

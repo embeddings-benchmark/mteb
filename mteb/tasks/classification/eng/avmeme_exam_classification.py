@@ -51,7 +51,6 @@ class AVMemeAudioVideoClassification(AbsTaskClassification):
   year = {2026},
 }
 """,
-        is_beta=True,
     )
     input_column_name = ("video", "audio")
     label_column_name: str = "category"
@@ -106,7 +105,6 @@ class AVMemeVideoClassification(AbsTaskClassification):
   year = {2026},
 }
 """,
-        is_beta=True,
     )
     input_column_name = "video"
     label_column_name: str = "category"

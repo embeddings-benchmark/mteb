@@ -2,9 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
-from transformers import AutoProcessor, SeamlessM4Tv2Model
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
@@ -23,10 +21,18 @@ class SeamlessM4TWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_seconds: float = 5.0,
+        device: str | None = None,
+        # 60 s: MAX_INPUT_AUDIO_LENGTH in Meta's M4T v2 demo, not a model config
+        # https://github.com/facebookresearch/seamless_communication/blob/main/demo/m4tv2/app.py
+        max_audio_length_seconds: float = 60.0,
         **kwargs: Any,
     ):
+        import torch
+        from transformers import AutoProcessor, SeamlessM4Tv2Model
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         self.model_name = model_name
         self.device = device
         self.max_audio_length_seconds = max_audio_length_seconds
@@ -48,18 +54,20 @@ class SeamlessM4TWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        inputs.collate_fn = AudioCollator(self.sampling_rate, self.max_samples)
+        import torch
+
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate, max_samples=self.max_samples
+        )
         all_embeddings = []
 
-        for batch in tqdm(
-            inputs,
-            disable=not show_progress_bar,
-        ):
+        for batch in tqdm(inputs, disable=not show_progress_bar):
             audio_arrays = [audio["array"] for audio in batch["audio"]]
 
-            # Process the entire batch at once
-            features = self.processor(
-                audios=audio_arrays,
+            # call the feature extractor directly: the processor's audio keyword
+            # is `audios` before transformers 4.57 and `audio` from v5
+            features = self.processor.feature_extractor(
+                audio_arrays,
                 sampling_rate=self.sampling_rate,
                 return_tensors="pt",
                 padding=True,
@@ -170,12 +178,15 @@ seamless_m4t_v2_large = ModelMeta(
     modalities=["audio"],
     citation="""
 @misc{communication2023seamlessmultilingualexpressivestreaming,
-      title={Seamless: Multilingual Expressive and Streaming Speech Translation},
-      author={Seamless Communication and Loïc Barrault and Yu-An Chung and Mariano Coria Meglioli and David Dale and Ning Dong and Mark Duppenthaler and Paul-Ambroise Duquenne and Brian Ellis and Hady Elsahar and Justin Haaheim and John Hoffman and Min-Jae Hwang and Hirofumi Inaguma and Christopher Klaiber and Ilia Kulikov and Pengwei Li and Daniel Licht and Jean Maillard and Ruslan Mavlyutov and Alice Rakotoarison and Kaushik Ram Sadagopan and Abinesh Ramakrishnan and Tuan Tran and Guillaume Wenzek and Yilin Yang and Ethan Ye and Ivan Evtimov and Pierre Fernandez and Cynthia Gao and Prangthip Hansanti and Elahe Kalbassi and Amanda Kallet and Artyom Kozhevnikov and Gabriel Mejia Gonzalez and Robin San Roman and Christophe Touret and Corinne Wong and Carleigh Wood and Bokai Yu and Pierre Andrews and Can Balioglu and Peng-Jen Chen and Marta R. Costa-jussà and Maha Elbayad and Hongyu Gong and Francisco Guzmán and Kevin Heffernan and Somya Jain and Justine Kao and Ann Lee and Xutai Ma and Alex Mourachko and Benjamin Peloquin and Juan Pino and Sravya Popuri and Christophe Ropers and Safiyyah Saleem and Holger Schwenk and Anna Sun and Paden Tomasello and Changhan Wang and Jeff Wang and Skyler Wang and Mary Williamson},
-      year={2023},
-      eprint={2312.05187},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2312.05187},
-}""",
+  doi = {10.48550/arXiv.2312.05187},
+  title = {Seamless: Multilingual Expressive and Streaming Speech Translation},
+  author = {Seamless Communication and Loïc Barrault and Yu-An Chung and Mariano Coria Meglioli and David Dale and Ning Dong and Mark Duppenthaler and Paul-Ambroise Duquenne and Brian Ellis and Hady Elsahar and Justin Haaheim and John Hoffman and Min-Jae Hwang and Hirofumi Inaguma and Christopher Klaiber and Ilia Kulikov and Pengwei Li and Daniel Licht and Jean Maillard and Ruslan Mavlyutov and Alice Rakotoarison and Kaushik Ram Sadagopan and Abinesh Ramakrishnan and Tuan Tran and Guillaume Wenzek and Yilin Yang and Ethan Ye and Ivan Evtimov and Pierre Fernandez and Cynthia Gao and Prangthip Hansanti and Elahe Kalbassi and Amanda Kallet and Artyom Kozhevnikov and Gabriel Mejia Gonzalez and Robin San Roman and Christophe Touret and Corinne Wong and Carleigh Wood and Bokai Yu and Pierre Andrews and Can Balioglu and Peng-Jen Chen and Marta R. Costa-jussà and Maha Elbayad and Hongyu Gong and Francisco Guzmán and Kevin Heffernan and Somya Jain and Justine Kao and Ann Lee and Xutai Ma and Alex Mourachko and Benjamin Peloquin and Juan Pino and Sravya Popuri and Christophe Ropers and Safiyyah Saleem and Holger Schwenk and Anna Sun and Paden Tomasello and Changhan Wang and Jeff Wang and Skyler Wang and Mary Williamson},
+  year = {2023},
+  eprint = {2312.05187},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.CL},
+  url = {https://arxiv.org/abs/2312.05187},
+}
+""",
+    extra_requirements_groups=["seamless-m4t"],
 )

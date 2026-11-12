@@ -16,6 +16,7 @@ from sklearn.metrics import (
 )
 from sklearn.model_selection import KFold
 
+from mteb._content_hashes import compute_modality_hashes
 from mteb._create_dataloaders import create_dataloader
 from mteb._evaluators.sklearn_evaluator import SklearnEvaluator
 from mteb.models import EncoderProtocol
@@ -23,7 +24,6 @@ from mteb.timing import TimingStack
 from mteb.types.statistics import ClassificationDescriptiveStatistics
 
 from ._statistics_calculation import (
-    _compute_modality_hashes,
     _count_samples_in_train,
     calculate_label_statistics,
     calculate_single_input_modality_statistics,
@@ -119,6 +119,12 @@ class AbsTaskClassification(AbsTask):
     abstask_prompt = "Classify user passages."
     is_cross_validation: bool = False
     n_splits = 5
+
+    def _get_content_columns(self) -> dict[str, Modalities]:
+        # a multimodal task names each of its input columns after the modality it holds
+        if isinstance(self.input_column_name, str):
+            return {self.input_column_name: self.modalities[0]}
+        return {column: column for column in self.input_column_name}
 
     def evaluate(
         self,
@@ -563,9 +569,9 @@ class AbsTaskClassification(AbsTask):
 
         # Compute hashes once; reuse for both statistics (uniqueness counts) and
         # train/test intersection — avoids decoding expensive media (e.g. video frames) twice.
-        test_hashes = _compute_modality_hashes(col_inputs)
+        test_hashes = compute_modality_hashes(col_inputs)
         train_hashes = (
-            _compute_modality_hashes(train_inputs) if train_inputs is not None else None
+            compute_modality_hashes(train_inputs) if train_inputs is not None else None
         )
         return col_inputs, label, test_hashes, train_hashes
 

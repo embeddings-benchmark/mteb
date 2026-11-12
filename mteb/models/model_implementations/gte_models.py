@@ -1,12 +1,10 @@
-import torch
-
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 
 def instruction_template(
@@ -33,7 +31,7 @@ gte_qwen2_7b_instruct = ModelMeta(
     loader_kwargs=dict(
         instruction_template=instruction_template,
         apply_instruction_to_passages=False,
-        model_kwargs={"dtype": torch.bfloat16},
+        model_kwargs={"dtype": OutputDType.BF16},
         # The remote modeling_qwen.py calls DynamicCache.get_usable_length(),
         # removed in transformers>=4.56; encoding never needs the KV cache,
         # and use_cache=False skips that code path.
@@ -68,7 +66,7 @@ gte_qwen1_5_7b_instruct = ModelMeta(
     loader_kwargs=dict(
         instruction_template=instruction_template,
         apply_instruction_to_passages=False,
-        model_kwargs={"dtype": torch.float16},
+        model_kwargs={"dtype": OutputDType.FLOAT16},
         add_eos_token=True,
     ),
     name="Alibaba-NLP/gte-Qwen1.5-7B-instruct",
@@ -96,6 +94,7 @@ gte_qwen1_5_7b_instruct = ModelMeta(
   journal={arXiv preprint arXiv:2308.03281},
   year={2023}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 gte_qwen2_1_5b_instruct = ModelMeta(
@@ -103,7 +102,7 @@ gte_qwen2_1_5b_instruct = ModelMeta(
     loader_kwargs=dict(
         instruction_template=instruction_template,
         apply_instruction_to_passages=False,
-        model_kwargs={"dtype": torch.float16},
+        model_kwargs={"dtype": OutputDType.FLOAT16},
         add_eos_token=True,
     ),
     name="Alibaba-NLP/gte-Qwen2-1.5B-instruct",
@@ -131,6 +130,7 @@ gte_qwen2_1_5b_instruct = ModelMeta(
   journal={arXiv preprint arXiv:2308.03281},
   year={2023}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 gte_small_zh = ModelMeta(
@@ -160,6 +160,7 @@ gte_small_zh = ModelMeta(
   journal={arXiv preprint arXiv:2308.03281},
   year={2023}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 gte_base_zh = ModelMeta(
@@ -189,6 +190,7 @@ gte_base_zh = ModelMeta(
   journal={arXiv preprint arXiv:2308.03281},
   year={2023}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 gte_large_zh = ModelMeta(
@@ -218,6 +220,7 @@ gte_large_zh = ModelMeta(
   journal={arXiv preprint arXiv:2308.03281},
   year={2023}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 gte_multilingual_langs = [
@@ -344,12 +347,19 @@ gte_multilingual_base = ModelMeta(
     public_training_data=None,  # couldn't find
     training_datasets=gte_multi_training_data,
     citation="""@inproceedings{zhang2024mgte,
-  title={mGTE: Generalized Long-Context Text Representation and Reranking Models for Multilingual Text Retrieval},
-  author={Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Wen and Dai, Ziqi and Tang, Jialong and Lin, Huan and Yang, Baosong and Xie, Pengjun and Huang, Fei and others},
-  booktitle={Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing: Industry Track},
-  pages={1393--1412},
-  year={2024}
+  address = {Miami, Florida, US},
+  author = {Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Wen and Dai, Ziqi and Tang, Jialong and Lin, Huan and Yang, Baosong and Xie, Pengjun and Huang, Fei and Zhang, Meishan and Li, Wenjie and Zhang, Min},
+  booktitle = {Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing: Industry Track},
+  doi = {10.18653/v1/2024.emnlp-industry.103},
+  editor = {Dernoncourt, Franck and Preo{\\c{t}}iuc-Pietro, Daniel and Shimorina, Anastasia},
+  month = {nov},
+  pages = {1393--1412},
+  publisher = {Association for Computational Linguistics},
+  title = {{mGTE}: Generalized Long-Context Text Representation and Reranking Models for Multilingual Text Retrieval},
+  url = {https://aclanthology.org/2024.emnlp-industry.103/},
+  year = {2024},
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 gte_modernbert_base = ModelMeta(
@@ -380,11 +390,17 @@ gte_modernbert_base = ModelMeta(
     public_training_data=None,
     training_datasets=gte_multi_training_data,  # English part of gte_multi_training_data,
     citation="""@inproceedings{zhang2024mgte,
-  title={mGTE: Generalized Long-Context Text Representation and Reranking Models for Multilingual Text Retrieval},
-  author={Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Wen and Dai, Ziqi and Tang, Jialong and Lin, Huan and Yang, Baosong and Xie, Pengjun and Huang, Fei and others},
-  booktitle={Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing: Industry Track},
-  pages={1393--1412},
-  year={2024}
+  address = {Miami, Florida, US},
+  author = {Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Wen and Dai, Ziqi and Tang, Jialong and Lin, Huan and Yang, Baosong and Xie, Pengjun and Huang, Fei and Zhang, Meishan and Li, Wenjie and Zhang, Min},
+  booktitle = {Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing: Industry Track},
+  doi = {10.18653/v1/2024.emnlp-industry.103},
+  editor = {Dernoncourt, Franck and Preo{\\c{t}}iuc-Pietro, Daniel and Shimorina, Anastasia},
+  month = {nov},
+  pages = {1393--1412},
+  publisher = {Association for Computational Linguistics},
+  title = {{mGTE}: Generalized Long-Context Text Representation and Reranking Models for Multilingual Text Retrieval},
+  url = {https://aclanthology.org/2024.emnlp-industry.103/},
+  year = {2024},
 }
 
 @article{li2023towards,
@@ -393,6 +409,7 @@ gte_modernbert_base = ModelMeta(
   journal={arXiv preprint arXiv:2308.03281},
   year={2023}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 
@@ -425,14 +442,18 @@ gte_base_en_v15 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
-    citation="""@misc{zhang2024mgte,
-  title={mGTE: Generalized Long-Context Text Representation and Reranking Models for Multilingual Text Retrieval},
-  author={Xin Zhang and Yanzhao Zhang and Dingkun Long and Wen Xie and Ziqi Dai and Jialong Tang and Huan Lin and Baosong Yang and Pengjun Xie and Fei Huang and Meishan Zhang and Wenjie Li and Min Zhang},
-  year={2024},
-  eprint={2407.19669},
-  archivePrefix={arXiv},
-  primaryClass={cs.CL},
-  url={https://arxiv.org/abs/2407.19669},
+    citation="""@inproceedings{zhang2024mgte,
+  address = {Miami, Florida, US},
+  author = {Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Wen and Dai, Ziqi and Tang, Jialong and Lin, Huan and Yang, Baosong and Xie, Pengjun and Huang, Fei and Zhang, Meishan and Li, Wenjie and Zhang, Min},
+  booktitle = {Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing: Industry Track},
+  doi = {10.18653/v1/2024.emnlp-industry.103},
+  editor = {Dernoncourt, Franck and Preo{\\c{t}}iuc-Pietro, Daniel and Shimorina, Anastasia},
+  month = {nov},
+  pages = {1393--1412},
+  publisher = {Association for Computational Linguistics},
+  title = {{mGTE}: Generalized Long-Context Text Representation and Reranking Models for Multilingual Text Retrieval},
+  url = {https://aclanthology.org/2024.emnlp-industry.103/},
+  year = {2024},
 }
 @misc{li2023towards,
   title={Towards General Text Embeddings with Multi-stage Contrastive Learning},

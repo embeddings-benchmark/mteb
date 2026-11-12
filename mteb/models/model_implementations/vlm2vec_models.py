@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb._requires_package import (
@@ -15,6 +14,7 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
     from typing_extensions import Unpack
 
@@ -23,11 +23,14 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-VLM2VEC_CITATION = """@article{jiang2024vlm2vec,
-  title={VLM2Vec: Training Vision-Language Models for Massive Multimodal Embedding Tasks},
-  author={Jiang, Ziyan and Meng, Rui and Yang, Xinyi and Yavuz, Semih and Zhou, Yingbo and Chen, Wenhu},
-  journal={arXiv preprint arXiv:2410.05160},
-  year={2024}
+VLM2VEC_CITATION = """@inproceedings{jiang2024vlm2vec,
+  archiveprefix = {arXiv},
+  author = {Ziyan Jiang and Rui Meng and Xinyi Yang and Semih Yavuz and Yingbo Zhou and Wenhu Chen},
+  booktitle = {The Thirteenth International Conference on Learning Representations},
+  eprint = {2410.05160},
+  title = {{VLM}2Vec: Training Vision-Language Models for Massive Multimodal Embedding Tasks},
+  url = {https://openreview.net/forum?id=TE0KOzWYAF},
+  year = {2025},
 }"""
 
 
@@ -37,9 +40,14 @@ class VLM2VecWrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str = "TIGER-Lab/VLM2Vec-LoRA",
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ):
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         if suggest_package(
             self,
             "flash_attn",
@@ -103,6 +111,8 @@ class VLM2VecWrapper(AbsEncoder):
     def _pooling(
         self, last_hidden_state: torch.Tensor, attention_mask: torch.Tensor
     ) -> torch.Tensor:
+        import torch
+
         if self.pooling == "last":
             sequence_lengths = attention_mask.sum(dim=1) - 1
             batch_size = last_hidden_state.shape[0]
@@ -123,6 +133,8 @@ class VLM2VecWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         text = "<|image_1|> Represent the given image."
         all_image_embeddings = []
 
@@ -172,6 +184,8 @@ class VLM2VecWrapper(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         all_text_embeddings = []
 
         with torch.no_grad():
@@ -217,6 +231,8 @@ class VLM2VecWrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
+        import torch
+
         if "text" in inputs.dataset.features and "image" in inputs.dataset.features:
             all_fused_embeddings = []
 
@@ -272,6 +288,16 @@ class VLM2VecWrapper(AbsEncoder):
 
 _VLM2VEC2_VIDEO_TOKEN = "<|video_pad|>"  # noqa: S105
 _VLM2VEC2_IMAGE_TOKEN = "<|image_pad|>"  # noqa: S105
+
+# MMEB-V2's instruction for the video side of video classification
+# https://github.com/TIGER-AI-Lab/VLM2Vec/blob/d00b5dcdeaa099f9ddb221ea081128d609c22acb/src/data/eval_dataset/video_classification_utils.py
+_VLM2VEC2_VIDEO_CLS_INSTRUCTIONS: dict[str, str] = {
+    "Kinetics700VZeroShot": "Recognize the category of the video content.",
+    "SomethingSomethingV2Classification": "What actions or object interactions are being performed by the person in the video?",
+    "UCF101VideoZeroShotClassification": "What activities or sports are being performed by the person in the video?",
+    "HMDB51ZeroShot": "What actions or objects interactions are the person in the video doing?",
+    "BreakfastZeroShot": "Recognize the breakfast type that the person is cooking in the video.",
+}
 
 _VLM2VEC2_TASK_PROMPTS: dict[str, dict[str, str]] = {
     # --- Video retrieval ---
@@ -397,11 +423,15 @@ class VLM2VEC2Wrapper(AbsEncoder):
         revision: str | None = None,
         *,
         device: str | None = None,
-        fps: float | None = 2.0,
-        max_frames: int | None = 64,
-        num_frames: int | None = None,
+        # 8 frames, evenly spaced: num_frames=8 on every video task in the
+        # official eval config
+        # https://github.com/TIGER-AI-Lab/VLM2Vec/blob/main/experiments/public/eval/video.yaml
+        fps: float | None = None,
+        max_frames: int | None = None,
+        num_frames: int | None = 8,
         **kwargs: Any,
     ) -> None:
+        import torch
         from peft import PeftModel
         from transformers import AutoProcessor, Qwen2VLForConditionalGeneration
 
@@ -420,8 +450,7 @@ class VLM2VEC2Wrapper(AbsEncoder):
         base_model_name = "Qwen/Qwen2-VL-2B-Instruct"
         self.processor = AutoProcessor.from_pretrained(model, revision=revision)
         self.processor.padding_side = "left"
-        if hasattr(self.processor, "image_processor"):
-            self.processor.image_processor.max_pixels = 360 * 420
+        # images keep the checkpoint's max_pixels=1003520, as in the official eval
 
         torch_dtype = kwargs.pop("torch_dtype", torch.bfloat16)
         base_model = Qwen2VLForConditionalGeneration.from_pretrained(
@@ -436,6 +465,8 @@ class VLM2VEC2Wrapper(AbsEncoder):
     def _pooling(
         last_hidden_state: torch.Tensor, attention_mask: torch.Tensor
     ) -> torch.Tensor:
+        import torch
+
         left_padding = attention_mask[:, -1].sum() == attention_mask.shape[0]
         batch_size = last_hidden_state.shape[0]
         if left_padding:
@@ -447,7 +478,6 @@ class VLM2VEC2Wrapper(AbsEncoder):
             ]
         return torch.nn.functional.normalize(reps, p=2, dim=-1)
 
-    @torch.inference_mode()
     def encode(  # noqa: PLR0914
         self,
         inputs: DataLoader[BatchedInput],
@@ -458,70 +488,77 @@ class VLM2VEC2Wrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
-        features = inputs.dataset.features
-        has_text = "text" in features
-        has_image = "image" in features
-        has_video = "video" in features
+        import torch
 
-        if has_video:
-            inputs.collate_fn = FramesCollator(
-                num_frames=self.num_frames,
-                fps=self.fps,
-                max_frames=self.max_frames,
-            )
+        with torch.inference_mode():
+            features = inputs.dataset.features
+            has_text = "text" in features
+            has_image = "image" in features
+            has_video = "video" in features
 
-        show_progress_bar = kwargs.get("show_progress_bar", True)
-
-        task_prompts = _VLM2VEC2_TASK_PROMPTS.get(task_metadata.name, {})
-        prompt_key = "query" if prompt_type == PromptType.query else "document"
-        instruction = task_prompts.get(prompt_key, "")
-
-        prefix_tokens: list[str] = []
-        if has_image:
-            prefix_tokens.append(_VLM2VEC2_IMAGE_TOKEN)
-        if has_video:
-            prefix_tokens.append(_VLM2VEC2_VIDEO_TOKEN)
-        prefix = " ".join(prefix_tokens)
-
-        all_embeddings: list[torch.Tensor] = []
-
-        for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding"):
-            batch_size = len(next(iter(batch.values())))
-
-            prompts: list[str] = []
-            batch_images: list | None = [] if has_image else None
-            batch_videos: list | None = [] if has_video else None
-
-            for i in range(batch_size):
-                text = batch["text"][i] if has_text else None
-                prompt = (
-                    f"{prefix} {instruction} {text}".strip()
-                    if text
-                    else f"{prefix} {instruction}".strip()
+            if has_video:
+                inputs.collate_fn = FramesCollator(
+                    num_frames=self.num_frames,
+                    fps=self.fps,
+                    max_frames=self.max_frames,
                 )
-                prompts.append(prompt)
-                if has_image:
-                    batch_images.append(batch["image"][i])
-                if has_video:
-                    batch_videos.append(batch["video"][i])
 
-            proc_inputs = self.processor(
-                text=prompts,
-                images=batch_images,
-                videos=batch_videos,
-                padding=True,
-                return_tensors="pt",
-            )
-            proc_inputs = {k: v.to(self.device) for k, v in proc_inputs.items()}
+            show_progress_bar = kwargs.get("show_progress_bar", True)
 
-            output = self.model(
-                **proc_inputs, return_dict=True, output_hidden_states=True
-            )
-            hidden_states = output.hidden_states[-1]
-            embs = self._pooling(hidden_states, proc_inputs["attention_mask"])
-            all_embeddings.append(embs.cpu().to(torch.float32))
+            task_prompts = _VLM2VEC2_TASK_PROMPTS.get(task_metadata.name, {})
+            prompt_key = "query" if prompt_type == PromptType.query else "document"
+            instruction = task_prompts.get(prompt_key, "")
+            if has_video and task_metadata.name in _VLM2VEC2_VIDEO_CLS_INSTRUCTIONS:
+                # classification passes no prompt_type; the video side gets the
+                # dataset instruction, the labels none
+                instruction = _VLM2VEC2_VIDEO_CLS_INSTRUCTIONS[task_metadata.name]
 
-        return torch.cat(all_embeddings, dim=0)
+            prefix_tokens: list[str] = []
+            if has_image:
+                prefix_tokens.append(_VLM2VEC2_IMAGE_TOKEN)
+            if has_video:
+                prefix_tokens.append(_VLM2VEC2_VIDEO_TOKEN)
+            prefix = " ".join(prefix_tokens)
+
+            all_embeddings: list[torch.Tensor] = []
+
+            for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding"):
+                batch_size = len(next(iter(batch.values())))
+
+                prompts: list[str] = []
+                batch_images: list | None = [] if has_image else None
+                batch_videos: list | None = [] if has_video else None
+
+                for i in range(batch_size):
+                    text = batch["text"][i] if has_text else None
+                    prompt = (
+                        f"{prefix} {instruction} {text}".strip()
+                        if text
+                        else f"{prefix} {instruction}".strip()
+                    )
+                    prompts.append(prompt)
+                    if has_image:
+                        batch_images.append(batch["image"][i])
+                    if has_video:
+                        batch_videos.append(batch["video"][i])
+
+                proc_inputs = self.processor(
+                    text=prompts,
+                    images=batch_images,
+                    videos=batch_videos,
+                    padding=True,
+                    return_tensors="pt",
+                )
+                proc_inputs = {k: v.to(self.device) for k, v in proc_inputs.items()}
+
+                output = self.model(
+                    **proc_inputs, return_dict=True, output_hidden_states=True
+                )
+                hidden_states = output.hidden_states[-1]
+                embs = self._pooling(hidden_states, proc_inputs["attention_mask"])
+                all_embeddings.append(embs.cpu().to(torch.float32))
+
+            return torch.cat(all_embeddings, dim=0)
 
 
 vlm2vec_training_datasets = set(
@@ -609,16 +646,17 @@ vlm2vec2 = ModelMeta(
     modalities=["text", "image", "video"],
     model_type=["dense"],
     citation="""
-@misc{meng2025vlm2vecv2advancingmultimodalembedding,
-    title={VLM2Vec-V2: Advancing Multimodal Embedding for Videos, Images, and Visual Documents},
-    author={Rui Meng and Ziyan Jiang and Ye Liu and Mingyi Su and Xinyi Yang and Yuepeng Fu and Can Qin and Zeyuan Chen and Ran Xu and Caiming Xiong and Yingbo Zhou and Wenhu Chen and Semih Yavuz},
-    year={2025},
-    eprint={2507.04590},
-    archivePrefix={arXiv},
-    primaryClass={cs.CV},
-    url={https://arxiv.org/abs/2507.04590},
+@article{meng2025vlm2vecv2advancingmultimodalembedding,
+  archiveprefix = {arXiv},
+  author = {Rui Meng and Ziyan Jiang and Ye Liu and Mingyi Su and Xinyi Yang and Yuepeng Fu and Can Qin and Raghuveer Thirukovalluru and Xuan Zhang and Zeyuan Chen and Ran Xu and Caiming Xiong and Yingbo Zhou and Wenhu Chen and Semih Yavuz},
+  eprint = {2507.04590},
+  issn = {2835-8856},
+  journal = {Transactions on Machine Learning Research},
+  note = {},
+  title = {{VLM}2Vec-V2: Advancing Multimodal Embedding for Videos, Images, and Visual Documents},
+  url = {https://openreview.net/forum?id=TpU38jbKIJ},
+  year = {2026},
 }""",
     contacts=None,
-    output_dtypes=None,
     extra_requirements_groups=["peft", "transformers-v4"],
 )

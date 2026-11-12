@@ -1,13 +1,16 @@
 """Contains test cases for the mteb.languages submodule"""
 
+from dataclasses import dataclass
+
 import pytest
-from attr import dataclass
 
 from mteb.languages import LanguageScripts
 from mteb.languages.iso_mappings import (
     _hf_lang_to_iso_lang_script,
     _hf_langs_to_iso_lang_scripts,
 )
+
+pytestmark = pytest.mark.core
 
 
 @dataclass
@@ -147,3 +150,35 @@ def test_hf_langs_deduplication():
 def test_hf_langs_sorted_output():
     result = _hf_langs_to_iso_lang_scripts(["zh", "en", "ar"])
     assert result == ["ara-Arab", "eng-Latn", "zho-Hans"]
+
+
+@pytest.mark.parametrize(
+    ("languages", "contains", "not_contains"),
+    [
+        (["zho-Hant"], ["zho-Hant", "zho"], ["zho-Hans"]),
+        (
+            ["eng-Latn", "fra"],
+            ["eng-Latn", "fra", "fra-Latn", "fra-Cyrl"],
+            ["eng-Cyrl"],
+        ),
+        (["fra"], ["fra", "fra-Latn"], ["eng", "eng-Latn"]),
+    ],
+)
+def test_contains_langscript(languages, contains, not_contains):
+    langscripts = LanguageScripts.from_languages_and_scripts(languages)
+
+    for code in contains:
+        assert langscripts.contains_langscript(code)
+    for code in not_contains:
+        assert not langscripts.contains_langscript(code)
+
+
+def test_contains_language_ignores_script_of_filter():
+    langscripts = LanguageScripts.from_languages_and_scripts(["zho-Hant"])
+
+    assert langscripts.contains_language("zho-Hans")
+
+
+def test_language_with_script_cannot_be_combined_with_script():
+    with pytest.raises(ValueError, match="script"):
+        LanguageScripts.from_languages_and_scripts(["zho-Hant"], ["Hant"])

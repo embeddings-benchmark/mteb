@@ -61,7 +61,9 @@ class ZeroShotClassificationEvaluator(Evaluator):
             log_message="Running zero-shot classification - Encoding labels...",
         ):
             text_label_embeddings = model.encode(
-                _create_dataloader_from_texts(self.candidate_labels, **encode_kwargs),
+                _create_dataloader_from_texts(
+                    self.candidate_labels, num_proc=num_proc, **encode_kwargs
+                ),
                 task_metadata=self.task_metadata,
                 hf_subset=self.hf_subset,
                 hf_split=self.hf_split,
@@ -72,6 +74,7 @@ class ZeroShotClassificationEvaluator(Evaluator):
             self.dataset,
             input_column=self.input_column_name,
             task_metadata=self.task_metadata,
+            num_proc=num_proc,
             **encode_kwargs,
         )
 

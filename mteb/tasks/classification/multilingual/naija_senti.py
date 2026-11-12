@@ -45,6 +45,7 @@ Aremu, Anuoluwapo  and
 Jorge, Al{\'\i}pio  and
 Brazdil, Pavel},
   booktitle = {Proceedings of the Thirteenth Language Resources and Evaluation Conference},
+  doi = {10.63317/2anx3vqhsxdm},
   month = jun,
   pages = {590--602},
   publisher = {European Language Resources Association},

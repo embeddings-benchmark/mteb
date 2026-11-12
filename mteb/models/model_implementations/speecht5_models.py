@@ -1,18 +1,20 @@
 from __future__ import annotations
 
+import logging
 import warnings
 from typing import TYPE_CHECKING, Any
 
-import torch
 from tqdm.auto import tqdm
-from transformers import (
-    SpeechT5ForSpeechToText,
-    SpeechT5ForTextToSpeech,
-    SpeechT5Processor,
-)
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.modality_collators import (
+    AudioCollator,
+    check_duration_cap,
+    single_clip_dataloader,
+)
+
+logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -27,12 +29,20 @@ class SpeechT5Audio(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_s: float = 30.0,
+        device: str | None = None,
+        # None: an mteb cap at max_speech_positions read below, the size of the
+        # sinusoidal position table, which extends itself; not a hard model limit
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
+        check_duration_cap(max_audio_length_seconds)
+        import torch
+        from transformers import SpeechT5ForSpeechToText, SpeechT5Processor
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         self.device = device
-        self.max_audio_length_s = max_audio_length_s
 
         self.asr_processor = SpeechT5Processor.from_pretrained(
             "microsoft/speecht5_asr",
@@ -46,18 +56,42 @@ class SpeechT5Audio(AbsEncoder):
 
         self.sampling_rate = self.asr_processor.feature_extractor.sampling_rate
 
+        # samples: max_speech_positions x conv_stride
+        # https://huggingface.co/microsoft/speecht5_asr/blob/main/config.json
+        config = self.asr_model.config
+        stride = 1
+        for st in config.conv_stride:
+            stride *= st
+        self.max_samples = config.max_speech_positions * stride
+        if max_audio_length_seconds is not None:
+            self.max_samples = int(max_audio_length_seconds * self.sampling_rate)
+        logger.info(
+            "%s: audio capped at %d samples (%.1f s)",
+            model_name,
+            self.max_samples,
+            self.max_samples / self.sampling_rate,
+        )
+
     def get_audio_embeddings(  # noqa: PLR0914
         self,
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
         import torchaudio
 
         all_embeddings = []
+        # the conv speech prenet needs at least 400 samples (25 ms at 16 kHz)
+        inputs.collate_fn = AudioCollator(
+            target_sampling_rate=self.sampling_rate, min_samples=400
+        )
 
         for batch in tqdm(
-            inputs,
+            single_clip_dataloader(
+                inputs,
+                "group-norm feature encoder: padding changes the embeddings",
+            ),
             disable=not show_progress_bar,
         ):
             batch_arrays = []
@@ -90,7 +124,7 @@ class SpeechT5Audio(AbsEncoder):
                 return_tensors="pt",
                 padding="longest",
                 truncation=True,
-                max_length=int(self.max_audio_length_s * self.sampling_rate),
+                max_length=self.max_samples,
                 return_attention_mask=True,
             ).to(self.device)
 
@@ -147,9 +181,15 @@ class SpeechT5Text(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ):
+        import torch
+        from transformers import SpeechT5ForTextToSpeech, SpeechT5Processor
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         self.device = device
         self.tts_processor = SpeechT5Processor.from_pretrained(
             "microsoft/speecht5_tts",
@@ -168,6 +208,8 @@ class SpeechT5Text(AbsEncoder):
         **kwargs: Any,
     ) -> Array:
         """Get text embeddings using the text encoder."""
+        import torch
+
         all_embeddings = []
 
         for batch in tqdm(
@@ -223,18 +265,26 @@ class SpeechT2Multimodal(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        max_audio_length_s: float = 30.0,
+        device: str | None = None,
+        # None: an mteb cap at max_speech_positions read below, the size of the
+        # sinusoidal position table, which extends itself; not a hard model limit
+        max_audio_length_seconds: float | None = None,
         **kwargs: Any,
     ):
         # Revision is combined as "asr_revision-tts_revision"
+
+        import torch
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         asr_revision, tts_revision = revision.split("-")
 
         self.asr_encoder = SpeechT5Audio(
             model_name=model_name,
             revision=asr_revision,
             device=device,
-            max_audio_length_s=max_audio_length_s,
+            max_audio_length_seconds=max_audio_length_seconds,
             **kwargs,
         )
         self.tts_encoder = SpeechT5Text(
@@ -314,15 +364,20 @@ speecht5_asr = ModelMeta(
     ),
     modalities=["audio"],
     citation="""
-@misc{ao2022speecht5unifiedmodalencoderdecoderpretraining,
-      title={SpeechT5: Unified-Modal Encoder-Decoder Pre-Training for Spoken Language Processing},
-      author={Junyi Ao and Rui Wang and Long Zhou and Chengyi Wang and Shuo Ren and Yu Wu and Shujie Liu and Tom Ko and Qing Li and Yu Zhang and Zhihua Wei and Yao Qian and Jinyu Li and Furu Wei},
-      year={2022},
-      eprint={2110.07205},
-      archivePrefix={arXiv},
-      primaryClass={eess.AS},
-      url={https://arxiv.org/abs/2110.07205},
+@inproceedings{ao2022speecht5unifiedmodalencoderdecoderpretraining,
+  address = {Dublin, Ireland},
+  author = {Ao, Junyi and Wang, Rui and Zhou, Long and Wang, Chengyi and Ren, Shuo and Wu, Yu and Liu, Shujie and Ko, Tom and Li, Qing and Zhang, Yu and Wei, Zhihua and Qian, Yao and Li, Jinyu and Wei, Furu},
+  booktitle = {Proceedings of the 60th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2022.acl-long.393},
+  editor = {Muresan, Smaranda and Nakov, Preslav and Villavicencio, Aline},
+  month = {may},
+  pages = {5723--5738},
+  publisher = {Association for Computational Linguistics},
+  title = {{S}peech{T}5: Unified-Modal Encoder-Decoder Pre-Training for Spoken Language Processing},
+  url = {https://aclanthology.org/2022.acl-long.393/},
+  year = {2022},
 }""",
+    extra_requirements_groups=["speecht5"],
 )
 
 # TTS model - Optimized for Text-to-Speech tasks
@@ -350,15 +405,20 @@ speecht5_tts = ModelMeta(
     ),
     modalities=["text"],
     citation="""
-@misc{ao2022speecht5unifiedmodalencoderdecoderpretraining,
-      title={SpeechT5: Unified-Modal Encoder-Decoder Pre-Training for Spoken Language Processing},
-      author={Junyi Ao and Rui Wang and Long Zhou and Chengyi Wang and Shuo Ren and Yu Wu and Shujie Liu and Tom Ko and Qing Li and Yu Zhang and Zhihua Wei and Yao Qian and Jinyu Li and Furu Wei},
-      year={2022},
-      eprint={2110.07205},
-      archivePrefix={arXiv},
-      primaryClass={eess.AS},
-      url={https://arxiv.org/abs/2110.07205},
+@inproceedings{ao2022speecht5unifiedmodalencoderdecoderpretraining,
+  address = {Dublin, Ireland},
+  author = {Ao, Junyi and Wang, Rui and Zhou, Long and Wang, Chengyi and Ren, Shuo and Wu, Yu and Liu, Shujie and Ko, Tom and Li, Qing and Zhang, Yu and Wei, Zhihua and Qian, Yao and Li, Jinyu and Wei, Furu},
+  booktitle = {Proceedings of the 60th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2022.acl-long.393},
+  editor = {Muresan, Smaranda and Nakov, Preslav and Villavicencio, Aline},
+  month = {may},
+  pages = {5723--5738},
+  publisher = {Association for Computational Linguistics},
+  title = {{S}peech{T}5: Unified-Modal Encoder-Decoder Pre-Training for Spoken Language Processing},
+  url = {https://aclanthology.org/2022.acl-long.393/},
+  year = {2022},
 }""",
+    extra_requirements_groups=["speecht5"],
 )
 
 # This model meta is for a multimodal model that combined from asr and tts.
@@ -386,13 +446,18 @@ speecht5_multimodal = ModelMeta(
     ),
     modalities=["audio", "text"],
     citation="""
-@misc{ao2022speecht5unifiedmodalencoderdecoderpretraining,
-      title={SpeechT5: Unified-Modal Encoder-Decoder Pre-Training for Spoken Language Processing},
-      author={Junyi Ao and Rui Wang and Long Zhou and Chengyi Wang and Shuo Ren and Yu Wu and Shujie Liu and Tom Ko and Qing Li and Yu Zhang and Zhihua Wei and Yao Qian and Jinyu Li and Furu Wei},
-      year={2022},
-      eprint={2110.07205},
-      archivePrefix={arXiv},
-      primaryClass={eess.AS},
-      url={https://arxiv.org/abs/2110.07205},
+@inproceedings{ao2022speecht5unifiedmodalencoderdecoderpretraining,
+  address = {Dublin, Ireland},
+  author = {Ao, Junyi and Wang, Rui and Zhou, Long and Wang, Chengyi and Ren, Shuo and Wu, Yu and Liu, Shujie and Ko, Tom and Li, Qing and Zhang, Yu and Wei, Zhihua and Qian, Yao and Li, Jinyu and Wei, Furu},
+  booktitle = {Proceedings of the 60th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2022.acl-long.393},
+  editor = {Muresan, Smaranda and Nakov, Preslav and Villavicencio, Aline},
+  month = {may},
+  pages = {5723--5738},
+  publisher = {Association for Computational Linguistics},
+  title = {{S}peech{T}5: Unified-Modal Encoder-Decoder Pre-Training for Spoken Language Processing},
+  url = {https://aclanthology.org/2022.acl-long.393/},
+  year = {2022},
 }""",
+    extra_requirements_groups=["speecht5"],
 )

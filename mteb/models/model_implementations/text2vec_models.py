@@ -6,13 +6,6 @@ from mteb.models.model_implementations.sentence_transformers_models import (
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
-TEXT2VEC_CITATION = """@software{text2vec,
-  author = {Xu Ming},
-  title = {text2vec: A Tool for Text to Vector},
-  year = {2022},
-  url = {https://github.com/shibing624/text2vec},
-}"""
-
 # I couldn't find the large model on HF for some reason
 text2vec_base_chinese = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
@@ -41,7 +34,6 @@ text2vec_base_chinese = ModelMeta(
         # (Could have overlaps I'm not aware of)
     ),
     memory_usage_mb=390,
-    citation=TEXT2VEC_CITATION,
 )
 
 text2vec_base_chinese_paraphrase = ModelMeta(
@@ -71,7 +63,6 @@ text2vec_base_chinese_paraphrase = ModelMeta(
         # - shibing624/nli-zh-all/text2vec-base-chinese-paraphrase
         # (Could have overlaps I'm not aware of)
     ),
-    citation=TEXT2VEC_CITATION,
 )
 
 
@@ -123,5 +114,4 @@ text2vec_base_multilingual = ModelMeta(
         # # (Could have overlaps I'm not aware of)
     )
     | sent_trf_training_dataset,
-    citation=TEXT2VEC_CITATION,
 )

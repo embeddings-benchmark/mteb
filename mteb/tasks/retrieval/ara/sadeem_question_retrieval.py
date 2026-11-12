@@ -31,12 +31,7 @@ class SadeemQuestionRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@inproceedings{sadeem-2024-ar-retrieval-questions,
-  author = {abubakr.soliman@sadeem.app},
-  title = {SadeemQuestionRetrieval: A New Benchmark for Arabic questions-based Articles Searching.},
-}
-""",
+        bibtex_citation="",
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:

@@ -25,17 +25,18 @@ class SinhalaNewsClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{deSilva2015,
-  author = {Nisansa de Silva},
-  journal = {Year of Publication},
-  title = {Sinhala Text Classification: Observations from the Perspective of a Resource Poor Language},
+@article{de2015sinhala,
+  author = {de Silva, Nisansa},
+  journal = {ResearchGate},
+  title = {Sinhala text classification: observations from the perspective of a resource poor language},
   year = {2015},
 }
 
-@article{dhananjaya2022,
-  author = {Dhananjaya et al.},
-  journal = {Year of Publication},
-  title = {BERTifying Sinhala - A Comprehensive Analysis of Pre-trained Language Models for Sinhala Text Classification},
+@inproceedings{dhananjaya2022bertifying,
+  author = {Dhananjaya, Vinura and Demotte, Piyumal and Ranathunga, Surangika and Jayasena, Sanath},
+  booktitle = {Proceedings of the thirteenth language resources and evaluation conference},
+  pages = {7377--7385},
+  title = {BERTifying Sinhala-a comprehensive analysis of pre-trained language models for Sinhala text classification},
   year = {2022},
 }
 """,
@@ -66,17 +67,18 @@ class SinhalaNewsClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{deSilva2015,
-  author = {Nisansa de Silva},
-  journal = {Year of Publication},
-  title = {Sinhala Text Classification: Observations from the Perspective of a Resource Poor Language},
+@article{de2015sinhala,
+  author = {de Silva, Nisansa},
+  journal = {ResearchGate},
+  title = {Sinhala text classification: observations from the perspective of a resource poor language},
   year = {2015},
 }
 
-@article{dhananjaya2022,
-  author = {Dhananjaya et al.},
-  journal = {Year of Publication},
-  title = {BERTifying Sinhala - A Comprehensive Analysis of Pre-trained Language Models for Sinhala Text Classification},
+@inproceedings{dhananjaya2022bertifying,
+  author = {Dhananjaya, Vinura and Demotte, Piyumal and Ranathunga, Surangika and Jayasena, Sanath},
+  booktitle = {Proceedings of the thirteenth language resources and evaluation conference},
+  pages = {7377--7385},
+  title = {BERTifying Sinhala-a comprehensive analysis of pre-trained language models for Sinhala text classification},
   year = {2022},
 }
 """,

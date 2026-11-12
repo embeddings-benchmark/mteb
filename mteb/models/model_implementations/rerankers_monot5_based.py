@@ -3,8 +3,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any, TypeVar
 
-import torch
-
 from mteb.models.model_meta import ModelMeta
 
 from .rerankers_custom import RerankerWrapper
@@ -56,6 +54,8 @@ class MonoT5Reranker(RerankerWrapper):
         model_name_or_path: str = "castorini/monot5-base-msmarco-10k",
         **kwargs: Any,
     ):
+        import torch
+
         super().__init__(model_name_or_path, **kwargs)
         from transformers import (
             AutoModelForSeq2SeqLM,
@@ -117,7 +117,6 @@ class MonoT5Reranker(RerankerWrapper):
         token_true_id = tokenizer.get_vocab()[token_true]
         return token_false_id, token_true_id
 
-    @torch.inference_mode()
     def predict(
         self,
         inputs1: DataLoader[BatchedInput],
@@ -129,41 +128,47 @@ class MonoT5Reranker(RerankerWrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        queries = [text for batch in inputs1 for text in batch["query"]]
-        instructions = None
-        if "instruction" in inputs2.dataset.features:
-            instructions = [text for batch in inputs1 for text in batch["instruction"]]
-        passages = [text for batch in inputs2 for text in batch["text"]]
+        import torch
 
-        if instructions is not None and instructions[0] is not None:
-            queries = [
-                f"{q} {i}".strip() for i, q in zip(instructions, queries, strict=True)
+        with torch.inference_mode():
+            queries = [text for batch in inputs1 for text in batch["query"]]
+            instructions = None
+            if "instruction" in inputs2.dataset.features:
+                instructions = [
+                    text for batch in inputs1 for text in batch["instruction"]
+                ]
+            passages = [text for batch in inputs2 for text in batch["text"]]
+
+            if instructions is not None and instructions[0] is not None:
+                queries = [
+                    f"{q} {i}".strip()
+                    for i, q in zip(instructions, queries, strict=True)
+                ]
+
+            prompts = [
+                self.prompt_template.format(query=query, text=text)
+                for (query, text) in zip(queries, passages, strict=True)
             ]
 
-        prompts = [
-            self.prompt_template.format(query=query, text=text)
-            for (query, text) in zip(queries, passages, strict=True)
-        ]
-
-        tokens = self.tokenizer(
-            prompts,
-            padding=True,
-            truncation=True,
-            return_tensors="pt",
-            max_length=self.max_length,
-            pad_to_multiple_of=(8 if self.torch_compile else None),
-        ).to(self.device)
-        output = self.model.generate(
-            **tokens,
-            max_new_tokens=1,
-            return_dict_in_generate=True,
-            output_scores=True,
-        )
-        batch_scores = output.scores[0]
-        batch_scores = batch_scores[:, [self.token_false_id, self.token_true_id]]
-        # upcast the logits to float32 before the softmax
-        batch_scores = torch.nn.functional.log_softmax(batch_scores.float(), dim=1)
-        return batch_scores[:, 1].exp().tolist()
+            tokens = self.tokenizer(
+                prompts,
+                padding=True,
+                truncation=True,
+                return_tensors="pt",
+                max_length=self.max_length,
+                pad_to_multiple_of=(8 if self.torch_compile else None),
+            ).to(self.device)
+            output = self.model.generate(
+                **tokens,
+                max_new_tokens=1,
+                return_dict_in_generate=True,
+                output_scores=True,
+            )
+            batch_scores = output.scores[0]
+            batch_scores = batch_scores[:, [self.token_false_id, self.token_true_id]]
+            # upcast the logits to float32 before the softmax
+            batch_scores = torch.nn.functional.log_softmax(batch_scores.float(), dim=1)
+            return batch_scores[:, 1].exp().tolist()
 
 
 class LlamaReranker(RerankerWrapper):
@@ -172,6 +177,7 @@ class LlamaReranker(RerankerWrapper):
     def __init__(
         self, model_name_or_path: str, is_classification: bool = False, **kwargs: Any
     ):
+        import torch
         from transformers import AutoModelForCausalLM, AutoTokenizer
 
         kwargs.pop("torch_compile", None)
@@ -224,7 +230,6 @@ Relevant: """
             self.model = torch.nn.DataParallel(self.model)
         self.model.eval()
 
-    @torch.inference_mode()
     def predict(
         self,
         inputs1: DataLoader[BatchedInput],
@@ -236,55 +241,64 @@ Relevant: """
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        queries = [text for batch in inputs1 for text in batch["query"]]
-        instructions = None
-        if "instruction" in inputs2.dataset.features:
-            instructions = [text for batch in inputs1 for text in batch["instruction"]]
-        passages = [text for batch in inputs2 for text in batch["text"]]
+        import torch
 
-        if instructions is not None and instructions[0] is not None:
-            # logger.info(f"Adding instructions to LLAMA queries")
-            queries = [
-                self.query_instruct_template.format(instruction=i, query=q).strip()
-                for i, q in zip(instructions, queries, strict=True)
+        with torch.inference_mode():
+            queries = [text for batch in inputs1 for text in batch["query"]]
+            instructions = None
+            if "instruction" in inputs2.dataset.features:
+                instructions = [
+                    text for batch in inputs1 for text in batch["instruction"]
+                ]
+            passages = [text for batch in inputs2 for text in batch["text"]]
+
+            if instructions is not None and instructions[0] is not None:
+                # logger.info(f"Adding instructions to LLAMA queries")
+                queries = [
+                    self.query_instruct_template.format(instruction=i, query=q).strip()
+                    for i, q in zip(instructions, queries, strict=True)
+                ]
+
+            prompts = [
+                self.template.format(query=query, text=text)
+                for (query, text) in zip(queries, passages, strict=True)
             ]
+            if "{query}" in prompts[0]:
+                raise ValueError("Query not replaced")
+            if "{text}" in prompts[0]:
+                raise ValueError("Text not replaced")
+            if "{instruction}" in prompts[0]:
+                raise ValueError("Instruction not replaced")
 
-        prompts = [
-            self.template.format(query=query, text=text)
-            for (query, text) in zip(queries, passages, strict=True)
-        ]
-        if "{query}" in prompts[0]:
-            raise ValueError("Query not replaced")
-        if "{text}" in prompts[0]:
-            raise ValueError("Text not replaced")
-        if "{instruction}" in prompts[0]:
-            raise ValueError("Instruction not replaced")
+            tokens = self.tokenizer(
+                prompts,
+                padding=True,
+                truncation=True,
+                return_tensors="pt",
+                max_length=self.max_length,
+                pad_to_multiple_of=None,
+            ).to(self.device)
+            if "token_type_ids" in tokens:
+                del tokens["token_type_ids"]
+            if not self.is_classification:
+                batch_scores = self.model(**tokens).logits[:, -1, :]
+                true_vector = batch_scores[:, self.token_true_id]
+                false_vector = batch_scores[:, self.token_false_id]
+                batch_scores = torch.stack([false_vector, true_vector], dim=1)
+                # upcast the logits to float32 before the softmax
+                batch_scores = torch.nn.functional.log_softmax(
+                    batch_scores.float(), dim=1
+                )
+                scores = batch_scores[:, 1].exp().tolist()
+            else:
+                batch_scores = self.model(**tokens).logits
+                # upcast the logits to float32 before the softmax
+                batch_scores = torch.nn.functional.log_softmax(
+                    batch_scores.float(), dim=1
+                )
+                scores = batch_scores[:, 1].exp().tolist()
 
-        tokens = self.tokenizer(
-            prompts,
-            padding=True,
-            truncation=True,
-            return_tensors="pt",
-            max_length=self.max_length,
-            pad_to_multiple_of=None,
-        ).to(self.device)
-        if "token_type_ids" in tokens:
-            del tokens["token_type_ids"]
-        if not self.is_classification:
-            batch_scores = self.model(**tokens).logits[:, -1, :]
-            true_vector = batch_scores[:, self.token_true_id]
-            false_vector = batch_scores[:, self.token_false_id]
-            batch_scores = torch.stack([false_vector, true_vector], dim=1)
-            # upcast the logits to float32 before the softmax
-            batch_scores = torch.nn.functional.log_softmax(batch_scores.float(), dim=1)
-            scores = batch_scores[:, 1].exp().tolist()
-        else:
-            batch_scores = self.model(**tokens).logits
-            # upcast the logits to float32 before the softmax
-            batch_scores = torch.nn.functional.log_softmax(batch_scores.float(), dim=1)
-            scores = batch_scores[:, 1].exp().tolist()
-
-        return scores
+            return scores
 
 
 class MistralReranker(LlamaReranker):
@@ -477,16 +491,17 @@ flant5_base = ModelMeta(
     open_weights=True,
     revision="7bcac572ce56db69c1ea7c8af255c5d7c9672fc2",
     release_date="2022-10-21",
-    citation="""@misc{10.48550/arxiv.2210.11416,
-      doi = {10.48550/ARXIV.2210.11416},
-      url = {https://arxiv.org/abs/2210.11416},
-      author = {Chung, Hyung Won and Hou, Le and Longpre, Shayne and Zoph, Barret and Tay, Yi and Fedus, William and Li, Eric and Wang, Xuezhi and Dehghani, Mostafa and Brahma, Siddhartha and Webson, Albert and Gu, Shixiang Shane and Dai, Zhuyun and Suzgun, Mirac and Chen, Xinyun and Chowdhery, Aakanksha and Narang, Sharan and Mishra, Gaurav and Yu, Adams and Zhao, Vincent and Huang, Yanping and Dai, Andrew and Yu, Hongkun and Petrov, Slav and Chi, Ed H. and Dean, Jeff and Devlin, Jacob and Roberts, Adam and Zhou, Denny and Le, Quoc V. and Wei, Jason},
-      keywords = {Machine Learning (cs.LG), Computation and Language (cs.CL), FOS: Computer and information sciences, FOS: Computer and information sciences},
-      title = {Scaling Instruction-Finetuned Language Models},
-      publisher = {arXiv},
-      year = {2022},
-      copyright = {Creative Commons Attribution 4.0 International}
-    }
+    citation="""@article{10.48550/arxiv.2210.11416,
+  archiveprefix = {arXiv},
+  author = {Hyung Won Chung and Le Hou and Shayne Longpre and Barret Zoph and Yi Tay and William Fedus and Yunxuan Li and Xuezhi Wang and Mostafa Dehghani and Siddhartha Brahma and Albert Webson and Shixiang Shane Gu and Zhuyun Dai and Mirac Suzgun and Xinyun Chen and Aakanksha Chowdhery and Alex Castro-Ros and Marie Pellat and Kevin Robinson and Dasha Valter and Sharan Narang and Gaurav Mishra and Adams Yu and Vincent Y. Zhao and Yanping Huang and Andrew M. Dai and Hongkun Yu and Slav Petrov and Ed H. Chi and Jeff Dean and Jacob Devlin and Adam Roberts and Denny Zhou and Quoc V. Le and Jason Wei},
+  eprint = {2210.11416},
+  journal = {J. Mach. Learn. Res.},
+  pages = {70:1-70:53},
+  title = {Scaling Instruction-Finetuned Language Models},
+  url = {https://jmlr.org/papers/v25/23-0870.html},
+  volume = {25},
+  year = {2024},
+}
     """,
     training_datasets=set(
         # "svakulenk0/qrecc": ["train"],
@@ -525,16 +540,17 @@ flant5_large = ModelMeta(
     open_weights=True,
     revision="0613663d0d48ea86ba8cb3d7a44f0f65dc596a2a",
     release_date="2022-10-21",
-    citation="""@misc{10.48550/arxiv.2210.11416,
-      doi = {10.48550/ARXIV.2210.11416},
-      url = {https://arxiv.org/abs/2210.11416},
-      author = {Chung, Hyung Won and Hou, Le and Longpre, Shayne and Zoph, Barret and Tay, Yi and Fedus, William and Li, Eric and Wang, Xuezhi and Dehghani, Mostafa and Brahma, Siddhartha and Webson, Albert and Gu, Shixiang Shane and Dai, Zhuyun and Suzgun, Mirac and Chen, Xinyun and Chowdhery, Aakanksha and Narang, Sharan and Mishra, Gaurav and Yu, Adams and Zhao, Vincent and Huang, Yanping and Dai, Andrew and Yu, Hongkun and Petrov, Slav and Chi, Ed H. and Dean, Jeff and Devlin, Jacob and Roberts, Adam and Zhou, Denny and Le, Quoc V. and Wei, Jason},
-      keywords = {Machine Learning (cs.LG), Computation and Language (cs.CL), FOS: Computer and information sciences, FOS: Computer and information sciences},
-      title = {Scaling Instruction-Finetuned Language Models},
-      publisher = {arXiv},
-      year = {2022},
-      copyright = {Creative Commons Attribution 4.0 International}
-    }
+    citation="""@article{10.48550/arxiv.2210.11416,
+  archiveprefix = {arXiv},
+  author = {Hyung Won Chung and Le Hou and Shayne Longpre and Barret Zoph and Yi Tay and William Fedus and Yunxuan Li and Xuezhi Wang and Mostafa Dehghani and Siddhartha Brahma and Albert Webson and Shixiang Shane Gu and Zhuyun Dai and Mirac Suzgun and Xinyun Chen and Aakanksha Chowdhery and Alex Castro-Ros and Marie Pellat and Kevin Robinson and Dasha Valter and Sharan Narang and Gaurav Mishra and Adams Yu and Vincent Y. Zhao and Yanping Huang and Andrew M. Dai and Hongkun Yu and Slav Petrov and Ed H. Chi and Jeff Dean and Jacob Devlin and Adam Roberts and Denny Zhou and Quoc V. Le and Jason Wei},
+  eprint = {2210.11416},
+  journal = {J. Mach. Learn. Res.},
+  pages = {70:1-70:53},
+  title = {Scaling Instruction-Finetuned Language Models},
+  url = {https://jmlr.org/papers/v25/23-0870.html},
+  volume = {25},
+  year = {2024},
+}
     """,
     training_datasets=set(
         # "svakulenk0/qrecc": ["train"],
@@ -573,16 +589,17 @@ flant5_xl = ModelMeta(
     open_weights=True,
     revision="7d6315df2c2fb742f0f5b556879d730926ca9001",
     release_date="2022-10-21",
-    citation="""@misc{10.48550/arxiv.2210.11416,
-      doi = {10.48550/ARXIV.2210.11416},
-      url = {https://arxiv.org/abs/2210.11416},
-      author = {Chung, Hyung Won and Hou, Le and Longpre, Shayne and Zoph, Barret and Tay, Yi and Fedus, William and Li, Eric and Wang, Xuezhi and Dehghani, Mostafa and Brahma, Siddhartha and Webson, Albert and Gu, Shixiang Shane and Dai, Zhuyun and Suzgun, Mirac and Chen, Xinyun and Chowdhery, Aakanksha and Narang, Sharan and Mishra, Gaurav and Yu, Adams and Zhao, Vincent and Huang, Yanping and Dai, Andrew and Yu, Hongkun and Petrov, Slav and Chi, Ed H. and Dean, Jeff and Devlin, Jacob and Roberts, Adam and Zhou, Denny and Le, Quoc V. and Wei, Jason},
-      keywords = {Machine Learning (cs.LG), Computation and Language (cs.CL), FOS: Computer and information sciences, FOS: Computer and information sciences},
-      title = {Scaling Instruction-Finetuned Language Models},
-      publisher = {arXiv},
-      year = {2022},
-      copyright = {Creative Commons Attribution 4.0 International}
-    }
+    citation="""@article{10.48550/arxiv.2210.11416,
+  archiveprefix = {arXiv},
+  author = {Hyung Won Chung and Le Hou and Shayne Longpre and Barret Zoph and Yi Tay and William Fedus and Yunxuan Li and Xuezhi Wang and Mostafa Dehghani and Siddhartha Brahma and Albert Webson and Shixiang Shane Gu and Zhuyun Dai and Mirac Suzgun and Xinyun Chen and Aakanksha Chowdhery and Alex Castro-Ros and Marie Pellat and Kevin Robinson and Dasha Valter and Sharan Narang and Gaurav Mishra and Adams Yu and Vincent Y. Zhao and Yanping Huang and Andrew M. Dai and Hongkun Yu and Slav Petrov and Ed H. Chi and Jeff Dean and Jacob Devlin and Adam Roberts and Denny Zhou and Quoc V. Le and Jason Wei},
+  eprint = {2210.11416},
+  journal = {J. Mach. Learn. Res.},
+  pages = {70:1-70:53},
+  title = {Scaling Instruction-Finetuned Language Models},
+  url = {https://jmlr.org/papers/v25/23-0870.html},
+  volume = {25},
+  year = {2024},
+}
     """,
     training_datasets=set(
         # "svakulenk0/qrecc": ["train"],
@@ -620,16 +637,17 @@ flant5_xxl = ModelMeta(
     open_weights=True,
     revision="ae7c9136adc7555eeccc78cdd960dfd60fb346ce",
     release_date="2022-10-21",
-    citation="""@misc{10.48550/arxiv.2210.11416,
-      doi = {10.48550/ARXIV.2210.11416},
-      url = {https://arxiv.org/abs/2210.11416},
-      author = {Chung, Hyung Won and Hou, Le and Longpre, Shayne and Zoph, Barret and Tay, Yi and Fedus, William and Li, Eric and Wang, Xuezhi and Dehghani, Mostafa and Brahma, Siddhartha and Webson, Albert and Gu, Shixiang Shane and Dai, Zhuyun and Suzgun, Mirac and Chen, Xinyun and Chowdhery, Aakanksha and Narang, Sharan and Mishra, Gaurav and Yu, Adams and Zhao, Vincent and Huang, Yanping and Dai, Andrew and Yu, Hongkun and Petrov, Slav and Chi, Ed H. and Dean, Jeff and Devlin, Jacob and Roberts, Adam and Zhou, Denny and Le, Quoc V. and Wei, Jason},
-      keywords = {Machine Learning (cs.LG), Computation and Language (cs.CL), FOS: Computer and information sciences, FOS: Computer and information sciences},
-      title = {Scaling Instruction-Finetuned Language Models},
-      publisher = {arXiv},
-      year = {2022},
-      copyright = {Creative Commons Attribution 4.0 International}
-    }
+    citation="""@article{10.48550/arxiv.2210.11416,
+  archiveprefix = {arXiv},
+  author = {Hyung Won Chung and Le Hou and Shayne Longpre and Barret Zoph and Yi Tay and William Fedus and Yunxuan Li and Xuezhi Wang and Mostafa Dehghani and Siddhartha Brahma and Albert Webson and Shixiang Shane Gu and Zhuyun Dai and Mirac Suzgun and Xinyun Chen and Aakanksha Chowdhery and Alex Castro-Ros and Marie Pellat and Kevin Robinson and Dasha Valter and Sharan Narang and Gaurav Mishra and Adams Yu and Vincent Y. Zhao and Yanping Huang and Andrew M. Dai and Hongkun Yu and Slav Petrov and Ed H. Chi and Jeff Dean and Jacob Devlin and Adam Roberts and Denny Zhou and Quoc V. Le and Jason Wei},
+  eprint = {2210.11416},
+  journal = {J. Mach. Learn. Res.},
+  pages = {70:1-70:53},
+  title = {Scaling Instruction-Finetuned Language Models},
+  url = {https://jmlr.org/papers/v25/23-0870.html},
+  volume = {25},
+  year = {2024},
+}
     """,
     training_datasets=set(
         # "svakulenk0/qrecc": ["train"],
@@ -788,14 +806,20 @@ followir_7b = ModelMeta(
     framework=["PyTorch", "Transformers", "safetensors"],
     reference="https://huggingface.co/jhu-clsp/FollowIR-7B",
     citation="""
-    @misc{weller2024followir,
-      title={FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions},
-      author={Orion Weller and Benjamin Chang and Sean MacAvaney and Kyle Lo and Arman Cohan and Benjamin Van Durme and Dawn Lawrie and Luca Soldaini},
-      year={2024},
-      eprint={2403.15246},
-      archivePrefix={arXiv},
-      primaryClass={cs.IR}
-    }
+    @inproceedings{weller2024followir,
+  address = {Albuquerque, New Mexico},
+  author = {Weller, Orion and Chang, Benjamin and MacAvaney, Sean and Lo, Kyle and Cohan, Arman and Van Durme, Benjamin and Lawrie, Dawn and Soldaini, Luca},
+  booktitle = {Proceedings of the 2025 Conference of the Nations of the {A}mericas Chapter of the {A}ssociation for {C}omputational {L}inguistics: Human Language Technologies (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2025.naacl-long.597},
+  editor = {Chiruzzo, Luis and Ritter, Alan and Wang, Lu},
+  isbn = {979-8-89176-189-6},
+  month = {apr},
+  pages = {11926--11942},
+  publisher = {Association for Computational Linguistics},
+  title = {{F}ollow{IR}: Evaluating and Teaching Information Retrieval Models to Follow Instructions},
+  url = {https://aclanthology.org/2025.naacl-long.597/},
+  year = {2025},
+}
     """,
 )
 

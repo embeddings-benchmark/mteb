@@ -3,10 +3,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
-import torch.nn.functional as F
 from tqdm.auto import tqdm
-from transformers import AutoModel, AutoTokenizer
 
 from mteb.models import CrossEncoderWrapper, SentenceTransformerEncoderWrapper
 from mteb.models.abs_encoder import AbsEncoder
@@ -17,6 +14,7 @@ from mteb.types import OutputDType, PromptType
 if TYPE_CHECKING:
     from collections.abc import Callable
 
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb import TaskMetadata
@@ -24,14 +22,14 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-NV_RETRIEVER_CITATION = """@misc{lee2025nvembedimprovedtechniquestraining,
-      title={NV-Embed: Improved Techniques for Training LLMs as Generalist Embedding Models},
-      author={Chankyu Lee and Rajarshi Roy and Mengyao Xu and Jonathan Raiman and Mohammad Shoeybi and Bryan Catanzaro and Wei Ping},
-      year={2025},
-      eprint={2405.17428},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2405.17428},
+NV_RETRIEVER_CITATION = """@inproceedings{lee2025nvembedimprovedtechniquestraining,
+  archiveprefix = {arXiv},
+  author = {Chankyu Lee and Rajarshi Roy and Mengyao Xu and Jonathan Raiman and Mohammad Shoeybi and Bryan Catanzaro and Wei Ping},
+  booktitle = {The Thirteenth International Conference on Learning Representations},
+  eprint = {2405.17428},
+  title = {{NV}-Embed: Improved Techniques for Training {LLM}s as Generalist Embedding Models},
+  url = {https://openreview.net/forum?id=lgsyLSsDRe},
+  year = {2025},
 }"""
 
 LlamaEmbedNemotron_CITATION = """@misc{babakhin2025llamaembednemotron8buniversaltextembedding,
@@ -201,6 +199,7 @@ NV_embed_v2 = ModelMeta(
     public_training_data=None,
     citation=NV_RETRIEVER_CITATION,
     extra_requirements_groups=["flash_attention", "nvembed"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 NV_embed_v1 = ModelMeta(
@@ -234,6 +233,7 @@ NV_embed_v1 = ModelMeta(
     public_training_data=None,
     citation=NV_RETRIEVER_CITATION,
     extra_requirements_groups=["flash_attention", "nvembed"],
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 llama_embed_nemotron_evaluated_languages = [
@@ -413,6 +413,9 @@ class LlamaEmbedNemotron(AbsEncoder):
         revision: str,
         device: str | None = None,
     ) -> None:
+        import torch
+        from transformers import AutoModel, AutoTokenizer
+
         self.model_name = model_name
         self.revision = revision
         self.max_seq_length = 4096
@@ -548,6 +551,9 @@ class LlamaEmbedNemotron(AbsEncoder):
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
+        import torch
+        import torch.nn.functional as F
+
         all_embeddings = []
         for batch in tqdm(
             dataloader, desc="Extracting embeddings...", disable=not show_progress_bar
@@ -696,10 +702,10 @@ nemotron_3_embed_1b_bf16 = ModelMeta(
     memory_usage_mb=2176,
     max_tokens=32768,
     embed_dim=2048,
-    license="https://huggingface.co/nvidia/Nemotron-3-Embed-1B-BF16/blob/main/LICENSE",
+    license="openmdw-1.1",
     open_weights=True,
     public_training_code="https://github.com/NVIDIA-NeMo/Automodel/tree/main/examples/retrieval/distillation",
-    public_training_data=None,
+    public_training_data="https://huggingface.co/nvidia/Nemotron-3-Embed-1B-BF16#training-testing-and-evaluation-datasets",
     framework=["Sentence Transformers", "PyTorch", "Transformers"],
     reference="https://huggingface.co/nvidia/Nemotron-3-Embed-1B-BF16",
     similarity_fn_name=ScoringFunction.COSINE,
@@ -709,9 +715,7 @@ nemotron_3_embed_1b_bf16 = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation=None,
     contacts=["ybabakhin"],
-    output_dtypes=OutputDType.BF16,
     extra_requirements_groups=["nemotron-3-embed"],
 )
 
@@ -728,10 +732,10 @@ nemotron_3_embed_8b_bf16 = ModelMeta(
     memory_usage_mb=15169,
     max_tokens=32768,
     embed_dim=4096,
-    license="https://huggingface.co/nvidia/Nemotron-3-Embed-8B-BF16/blob/main/LICENSE",
+    license="openmdw-1.1",
     open_weights=True,
     public_training_code=None,
-    public_training_data=None,
+    public_training_data="https://huggingface.co/nvidia/Nemotron-3-Embed-8B-BF16#training-testing-and-evaluation-datasets",
     framework=["Sentence Transformers", "PyTorch", "Transformers"],
     reference="https://huggingface.co/nvidia/Nemotron-3-Embed-8B-BF16",
     similarity_fn_name=ScoringFunction.COSINE,
@@ -741,9 +745,7 @@ nemotron_3_embed_8b_bf16 = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation=None,
     contacts=["ybabakhin"],
-    output_dtypes=OutputDType.BF16,
     extra_requirements_groups=["nemotron-3-embed"],
 )
 
@@ -764,7 +766,7 @@ nemotron_rerank_1b_v2 = ModelMeta(
         trust_remote_code=True,
         query_prefix="question:",
         passage_prefix=" \n \n passage:",
-        model_kwargs={"torch_dtype": torch.float32},
+        model_kwargs={"torch_dtype": OutputDType.FLOAT32},
     ),
     name="nvidia/llama-nemotron-rerank-1b-v2",
     extra_requirements_groups=["nemotron-rerank"],
@@ -776,7 +778,7 @@ nemotron_rerank_1b_v2 = ModelMeta(
     memory_usage_mb=2357.0,
     max_tokens=4096,
     embed_dim=2048,
-    license="https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
+    license="openmdw-1.1",
     open_weights=True,
     public_training_code=None,
     public_training_data=None,

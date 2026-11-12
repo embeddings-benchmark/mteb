@@ -89,7 +89,7 @@ if __name__ == "__main__":
     # Load existing results if the file exists
     results = {}
     if output_file.exists():
-        with output_file.open("r") as f:
+        with output_file.open("r", encoding="utf-8") as f:
             results = json.load(f)
 
     if args.model_name:
@@ -98,7 +98,7 @@ if __name__ == "__main__":
         all_model_names = []
         model_name_file = Path(args.model_name_file)
         if model_name_file.exists():
-            with model_name_file.open() as f:  # noqa: PLW1514
+            with model_name_file.open(encoding="utf-8") as f:
                 all_model_names = f.read().strip().split()
         else:
             logger.warning(
@@ -121,5 +121,5 @@ if __name__ == "__main__":
         results = dict(sorted(results.items()))
 
         # Write the results to the file after each iteration
-        with output_file.open("w") as f:
+        with output_file.open("w", encoding="utf-8") as f:
             json.dump(results, f, indent=4)

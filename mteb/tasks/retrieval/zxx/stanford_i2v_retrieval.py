@@ -5,6 +5,9 @@ from typing import Any
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
+# corpus video that can't be decoded; the one query it is relevant to has other relevant videos
+_BROKEN_VIDEO_ID = "20130923/Early_Start_20130923_0200_cc_segment/07.700k.mp4"
+
 
 class StanfordI2VRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -37,18 +40,19 @@ class StanfordI2VRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
+@inproceedings{araujo2015stanford,
+  author = {Araujo, Andr{\'e} and Chaves, Jason and Chen, David and Angst, Roland and Girod, Bernd},
+  booktitle = {Proceedings of the 6th ACM Multimedia Systems Conference},
+  pages = {237--242},
+  title = {Stanford I2V: a news video dataset for query-by-image experiments},
+  year = {2015},
+}
+
 @article{AraujoArxiv2016,
   author = {Araujo, A. and Chaves, J. and Lakshman, H. and Angst, R. and Girod, B.},
   journal = {arXiv preprint arXiv:1604.07939},
   title = {{Large-Scale Query-by-Image Video Retrieval Using Bloom Filters}},
   year = {2016},
-}
-
-@inproceedings{AraujoMMSYS2015,
-  author = {Araujo, A. and Chaves, J. and Chen, D. and Angst, R. and Girod, B.},
-  booktitle = {Proc. ACM Multimedia Systems},
-  title = {{Stanford I2V: A News Video Dataset for Query-by-Image Experiments}},
-  year = {2015},
 }
 """,
         prompt={
@@ -58,6 +62,17 @@ class StanfordI2VRetrieval(AbsTaskRetrieval):
             )
         },
     )
+
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        for split in self.metadata.eval_splits:
+            data = self.dataset["default"][split]
+            data["corpus"] = data["corpus"].filter(
+                lambda video_id: video_id != _BROKEN_VIDEO_ID,
+                input_columns="id",
+                num_proc=num_proc,
+            )
+            for docs in data["relevant_docs"].values():
+                docs.pop(_BROKEN_VIDEO_ID, None)
 
 
 class StanfordI2VVisualRetrieval(AbsTaskRetrieval):
@@ -93,18 +108,19 @@ class StanfordI2VVisualRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         is_beta=True,
         bibtex_citation=r"""
+@inproceedings{araujo2015stanford,
+  author = {Araujo, Andr{\'e} and Chaves, Jason and Chen, David and Angst, Roland and Girod, Bernd},
+  booktitle = {Proceedings of the 6th ACM Multimedia Systems Conference},
+  pages = {237--242},
+  title = {Stanford I2V: a news video dataset for query-by-image experiments},
+  year = {2015},
+}
+
 @article{AraujoArxiv2016,
   author = {Araujo, A. and Chaves, J. and Lakshman, H. and Angst, R. and Girod, B.},
   journal = {arXiv preprint arXiv:1604.07939},
   title = {{Large-Scale Query-by-Image Video Retrieval Using Bloom Filters}},
   year = {2016},
-}
-
-@inproceedings{AraujoMMSYS2015,
-  author = {Araujo, A. and Chaves, J. and Chen, D. and Angst, R. and Girod, B.},
-  booktitle = {Proc. ACM Multimedia Systems},
-  title = {{Stanford I2V: A News Video Dataset for Query-by-Image Experiments}},
-  year = {2015},
 }
 """,
         prompt={
@@ -117,6 +133,14 @@ class StanfordI2VVisualRetrieval(AbsTaskRetrieval):
 
     def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         for split in self.metadata.eval_splits:
+            data = self.dataset["default"][split]
+            data["corpus"] = data["corpus"].filter(
+                lambda video_id: video_id != _BROKEN_VIDEO_ID,
+                input_columns="id",
+                num_proc=num_proc,
+            )
+            for docs in data["relevant_docs"].values():
+                docs.pop(_BROKEN_VIDEO_ID, None)
             corpus = self.dataset["default"][split]["corpus"]
             if "audio" in corpus.column_names:
                 self.dataset["default"][split]["corpus"] = corpus.remove_columns(

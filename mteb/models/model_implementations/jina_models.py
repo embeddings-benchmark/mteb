@@ -6,7 +6,6 @@ from collections import defaultdict
 from typing import TYPE_CHECKING, Any, ClassVar, Literal
 
 import numpy as np
-import torch
 
 from mteb.languages import PROGRAMMING_LANGS
 from mteb.models.abs_encoder import AbsEncoder
@@ -15,10 +14,11 @@ from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
 )
-from mteb.types import PromptType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
-    from sentence_transformers import CrossEncoder
+    import torch
+    from sentence_transformers import CrossEncoder, SentenceTransformer
     from torch.utils.data import DataLoader
     from typing_extensions import Unpack
 
@@ -350,6 +350,8 @@ class JinaWrapper(SentenceTransformerEncoderWrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         prompt_name = self.get_prompt_name(task_metadata, prompt_type)
         if prompt_name:
             logger.info(
@@ -411,13 +413,18 @@ class JinaV4Wrapper(AbsEncoder):
         revision: str | None = None,
         device: str | None = None,
         device_map: str | None = None,
-        torch_dtype: torch.dtype = torch.bfloat16,
+        torch_dtype: OutputDType | torch.dtype = OutputDType.BF16,
         attn_implementation: str = "sdpa",
         trust_remote_code: bool = True,
         model_prompts: dict[str, str] | None = None,
         vector_type: Literal[SUPPORTED_VECTOR_TYPES] = "single_vector",
         **kwargs: Any,
     ) -> None:
+        import torch
+
+        if isinstance(torch_dtype, OutputDType):
+            torch_dtype = torch_dtype.get_dtype()
+
         device = device_map or device
 
         self.device = device or (
@@ -496,6 +503,8 @@ class JinaV4Wrapper(AbsEncoder):
         **kwargs: Any,
     ) -> Array:
 
+        import torch
+
         text_embeddings = None
         image_embeddings = None
         if "text" in inputs.dataset.features:
@@ -564,6 +573,8 @@ class JinaV4Wrapper(AbsEncoder):
         return_numpy: bool = False,
         **kwargs: Any,
     ) -> Array:
+        import torch
+
         prompt_name = self.get_prompt_name(task_metadata, prompt_type)
         if prompt_name:
             logger.info(
@@ -622,6 +633,8 @@ class JinaV4Wrapper(AbsEncoder):
         embeddings: Any,  # noqa: ANN401
     ) -> torch.Tensor | list[Any] | Any:  # noqa: ANN401
         """Convert numpy arrays to torch tensors if needed."""
+        import torch
+
         if isinstance(embeddings, np.ndarray):
             return torch.from_numpy(embeddings)
         if isinstance(embeddings, list):
@@ -659,6 +672,8 @@ class JinaV4Wrapper(AbsEncoder):
         ps: torch.Tensor | list[torch.Tensor],
     ) -> torch.Tensor:
         """Compute the dot product score for the given single-vector query and passage embeddings."""
+        import torch
+
         device = self.model.device
 
         if len(qs) == 0:
@@ -687,6 +702,8 @@ class JinaV4Wrapper(AbsEncoder):
         batch_size: int = 16,
     ) -> torch.Tensor:
         """Compute the MaxSim score (ColBERT-like) for the given multi-vector query and passage embeddings."""
+        import torch
+
         device = self.model.device
 
         if len(qs) == 0:
@@ -846,6 +863,8 @@ def _video_frames_to_channels_last(
     """torchcodec frame batches are (T, C, H, W) uint8; the model's remote code
     detects video only for channels-last (T, H, W, 3|4) arrays and would
     otherwise stringify the tensor and embed it as text."""
+    import torch
+
     if (
         isinstance(video, torch.Tensor)
         and video.ndim == 4
@@ -857,6 +876,34 @@ def _video_frames_to_channels_last(
 
 
 class JinaV5OmniWrapper(SentenceTransformerEncoderWrapper):
+    def __init__(
+        self,
+        model: str | SentenceTransformer,
+        revision: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        if isinstance(model, str):
+            from transformers import AutoVideoProcessor
+
+            # custom_st's _align_eval_processor only sets the video size when it is
+            # a dict; on transformers 5 it is a SizeDict, so pass a video processor
+            # with the eval sizes (processor-level size kwargs are overridden by
+            # the image min/max pixels custom_st passes)
+            # https://huggingface.co/jinaai/jina-embeddings-v5-omni-small/blob/dfdcc361ec47c69a5afcd81e4bd148abb9d0568e/custom_st.py#L301-L319
+            video_processor = AutoVideoProcessor.from_pretrained(
+                model,
+                revision=revision,
+                trust_remote_code=True,
+                size={
+                    "longest_edge": 12_845_056,  # EVAL_VIDEO_MAX_PIXELS
+                    "shortest_edge": 262_144,  # EVAL_IMAGE_MIN_PIXELS
+                },
+            )
+            kwargs["processor_kwargs"] = kwargs.get("processor_kwargs", {}) | {
+                "video_processor": video_processor
+            }
+        super().__init__(model, revision=revision, **kwargs)
+
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -867,6 +914,8 @@ class JinaV5OmniWrapper(SentenceTransformerEncoderWrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Unpack[EncodeKwargs],
     ) -> Array:
+        import torch
+
         has_video = "video" in inputs.dataset.features
         has_audio = "audio" in inputs.dataset.features
         if has_video:
@@ -1065,9 +1114,14 @@ jina_embeddings_v5_omni_small = ModelMeta(
     loader=JinaV5OmniWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
-        fps=2.0,
-        max_frames=64,
+        # 32 frames, evenly spaced over the clip: the model's inference default
+        # (EVAL_VIDEO_NUM_FRAMES=32 in its sentence-transformers code)
+        # https://huggingface.co/jinaai/jina-embeddings-v5-omni-small/blob/main/custom_st.py#L39
+        fps=None,
+        num_frames=32,
         target_sampling_rate=16000,
+        # 30 s: audio_config.max_source_positions=1500 frames at 50 Hz
+        # https://huggingface.co/jinaai/jina-embeddings-v5-omni-small/blob/main/config.json
         max_samples=30 * 16000,
         model_prompts=_OMNI_MODEL_PROMPTS,
     ),
@@ -1114,9 +1168,14 @@ jina_embeddings_v5_omni_nano = ModelMeta(
     loader=JinaV5OmniWrapper,
     loader_kwargs=dict(
         trust_remote_code=True,
-        fps=2.0,
-        max_frames=64,
+        # 32 frames, evenly spaced over the clip: the model's inference default
+        # (EVAL_VIDEO_NUM_FRAMES=32 in its sentence-transformers code)
+        # https://huggingface.co/jinaai/jina-embeddings-v5-omni-nano/blob/main/custom_st.py#L39
+        fps=None,
+        num_frames=32,
         target_sampling_rate=16000,
+        # 30 s: audio_config.max_source_positions=1500 frames at 50 Hz
+        # https://huggingface.co/jinaai/jina-embeddings-v5-omni-nano/blob/main/config.json
         max_samples=30 * 16000,
         model_prompts=_OMNI_MODEL_PROMPTS,
     ),
@@ -1267,14 +1326,19 @@ jina_embeddings_v4 = Jinav4ModelMeta(
     public_training_data=None,
     training_datasets=JinaV4_TRAINING_DATA,
     adapted_from="Qwen/Qwen2.5-VL-3B-Instruct",
-    citation="""@misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
-      title={jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
-      author={Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Sedigheh Eslami and Scott Martens and Bo Wang and Nan Wang and Han Xiao},
-      year={2025},
-      eprint={2506.18902},
-      archivePrefix={arXiv},
-      primaryClass={cs.AI},
-      url={https://arxiv.org/abs/2506.18902},
+    citation="""@inproceedings{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+  address = {Suzhuo, China},
+  author = {G{\\"u}nther, Michael and Sturua, Saba and Akram, Mohammad Kalim and Mohr, Isabelle and Ungureanu, Andrei and Wang, Bo and Eslami, Sedigheh and Martens, Scott and Werk, Maximilian and Wang, Nan and Xiao, Han},
+  booktitle = {Proceedings of the 5th Workshop on Multilingual Representation Learning ({MRL} 2025)},
+  doi = {10.18653/v1/2025.mrl-main.36},
+  editor = {Adelani, David Ifeoluwa and Arnett, Catherine and Ataman, Duygu and Chang, Tyler A. and Gonen, Hila and Raja, Rahul and Schmidt, Fabian and Stap, David and Wang, Jiayi},
+  isbn = {979-8-89176-345-6},
+  month = {nov},
+  pages = {531--550},
+  publisher = {Association for Computational Linguistics},
+  title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+  url = {https://aclanthology.org/2025.mrl-main.36/},
+  year = {2025},
 }""",
     extra_requirements_groups=["jina-v4"],
 )
@@ -1531,13 +1595,18 @@ jina_embedding_b_en_v1 = ModelMeta(
     },
     public_training_code=None,
     public_training_data=None,
-    citation="""@misc{günther2023jina,
-      title={Jina Embeddings: A Novel Set of High-Performance Sentence Embedding Models},
-      author={Michael Günther and Louis Milliken and Jonathan Geuter and Georgios Mastrapas and Bo Wang and Han Xiao},
-      year={2023},
-      eprint={2307.11224},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+    citation="""@inproceedings{günther2023jina,
+  address = {Singapore},
+  author = {G{\\"u}nther, Michael and Milliken, Louis and Geuter, Jonathan and Mastrapas, Georgios and Wang, Bo and Xiao, Han},
+  booktitle = {Proceedings of the 3rd Workshop for Natural Language Processing Open Source Software ({NLP}-{OSS} 2023)},
+  doi = {10.18653/v1/2023.nlposs-1.2},
+  editor = {Tan, Liling and Milajevs, Dmitrijs and Chauhan, Geeticka and Gwinnup, Jeremy and Rippeth, Elijah},
+  month = {dec},
+  pages = {8--18},
+  publisher = {Association for Computational Linguistics},
+  title = {{J}ina Embeddings: A Novel Set of High-Performance Sentence Embedding Models},
+  url = {https://aclanthology.org/2023.nlposs-1.2/},
+  year = {2023},
 }""",
 )
 
@@ -1589,12 +1658,17 @@ jina_embedding_s_en_v1 = ModelMeta(
     },
     public_training_code=None,
     public_training_data=None,
-    citation="""@misc{günther2023jina,
-      title={Jina Embeddings: A Novel Set of High-Performance Sentence Embedding Models},
-      author={Michael Günther and Louis Milliken and Jonathan Geuter and Georgios Mastrapas and Bo Wang and Han Xiao},
-      year={2023},
-      eprint={2307.11224},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+    citation="""@inproceedings{günther2023jina,
+  address = {Singapore},
+  author = {G{\\"u}nther, Michael and Milliken, Louis and Geuter, Jonathan and Mastrapas, Georgios and Wang, Bo and Xiao, Han},
+  booktitle = {Proceedings of the 3rd Workshop for Natural Language Processing Open Source Software ({NLP}-{OSS} 2023)},
+  doi = {10.18653/v1/2023.nlposs-1.2},
+  editor = {Tan, Liling and Milajevs, Dmitrijs and Chauhan, Geeticka and Gwinnup, Jeremy and Rippeth, Elijah},
+  month = {dec},
+  pages = {8--18},
+  publisher = {Association for Computational Linguistics},
+  title = {{J}ina Embeddings: A Novel Set of High-Performance Sentence Embedding Models},
+  url = {https://aclanthology.org/2023.nlposs-1.2/},
+  year = {2023},
 }""",
 )

@@ -31,13 +31,5 @@ class EuroPIRQRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         is_public=True,
-        bibtex_citation=r"""
-@misc{eherra_2025_europirq,
-  author = { {Elias Herranen} },
-  publisher = { Hugging Face },
-  title = { EuroPIRQ: European Parallel Information Retrieval Queries },
-  url = { https://huggingface.co/datasets/eherra/EuroPIRQ-retrieval },
-  year = {2025},
-}
-""",
+        bibtex_citation="",
     )

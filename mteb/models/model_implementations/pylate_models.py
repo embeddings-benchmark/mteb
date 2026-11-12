@@ -49,6 +49,7 @@ class PylateSearchEncoder:
         hf_subset: str,
         encode_kwargs: EncodeKwargs,
         num_proc: int | None,
+        **kwargs: Any,
     ) -> None:
         """Index the corpus for retrieval.
 
@@ -59,6 +60,7 @@ class PylateSearchEncoder:
             hf_subset: Subset of current task. Similar to `hf_split` to get more information
             encode_kwargs: Additional arguments to pass to the encoder during indexing.
             num_proc: Number of processes to use for indexing.
+            **kwargs: Additional arguments. Currently unused.
         """
         self.task_corpus = corpus
 
@@ -85,6 +87,7 @@ class PylateSearchEncoder:
         encode_kwargs: EncodeKwargs,
         top_ranked: TopRankedDocumentsType | None = None,
         num_proc: int | None,
+        **kwargs: Any,
     ) -> RetrievalOutputType:
         from mteb._create_dataloaders import create_dataloader
 
@@ -508,12 +511,6 @@ lightonai__gte_moderncolbert_v1 = ModelMeta(
         "TRECDL2020",
         "CornStack",
     },
-    citation="""@misc{GTE-ModernColBERT,
-    title={GTE-ModernColBERT},
-    author={Chaffin, Antoine},
-    url={https://huggingface.co/lightonai/GTE-ModernColBERT-v1},
-    year={2025}
-}""",
     extra_requirements_groups=["pylate"],
 )
 
@@ -574,12 +571,6 @@ topk_io__iso_moderncolbert = ModelMeta(
     training_datasets={
         "MSMARCO",
     },
-    citation="""@misc{Iso-ModernColBERT,
-    title={Iso-ModernColBERT},
-    author={TopK},
-    url={https://huggingface.co/topk-io/Iso-ModernColBERT},
-    year={2026}
-}""",
     extra_requirements_groups=["pylate"],
 )
 
@@ -598,12 +589,6 @@ late_on_code_fine_tuning_data = {
     "COIRCodeSearchNetRetrieval",
 }
 
-late_on_code_citation = """@misc{LateOn-Code,
-  title  = {LateOn-Code: a Family of State-Of-The-Art Late Interaction Code Retrieval Models},
-  author = {Chaffin, Antoine},
-  url    = {https://huggingface.co/collections/lightonai/lateon-code},
-  year   = {2026}
-}"""
 
 lightonai__late_on_code_pretrain = ModelMeta(
     loader=MultiVectorModel,
@@ -652,7 +637,6 @@ lightonai__late_on_code_pretrain = ModelMeta(
         "TRECDL2020",
         "CornStack",
     },
-    citation=late_on_code_citation,
     extra_requirements_groups=["pylate"],
 )
 
@@ -693,7 +677,6 @@ lightonai__late_on_code = ModelMeta(
         "CornStack",
     }
     | late_on_code_fine_tuning_data,
-    citation=late_on_code_citation,
     extra_requirements_groups=["pylate"],
 )
 
@@ -736,7 +719,6 @@ lightonai__late_on_code_edge_pretrain = ModelMeta(
         "MultiLongDocRetrieval",
         "CornStack",
     },
-    citation=late_on_code_citation,
     extra_requirements_groups=["pylate"],
 )
 
@@ -781,7 +763,6 @@ lightonai__late_on_code_edge = ModelMeta(
         "CornStack",
     }
     | late_on_code_fine_tuning_data,
-    citation=late_on_code_citation,
     extra_requirements_groups=["pylate"],
 )
 
@@ -946,12 +927,6 @@ lightonai__reason_moderncolbert = ModelMeta(
         "TRECDL2020",
         "CornStack",
     },
-    citation="""@misc{Reason-ModernColBERT,
-title={Reason-ModernColBERT},
-author={Chaffin, Antoine},
-url={https://huggingface.co/lightonai/Reason-ModernColBERT},
-year={2025}
-}""",
     extra_requirements_groups=["pylate"],
 )
 

@@ -112,7 +112,7 @@ def main(path: Path) -> None:
 
     content = header
     new_content = content + benchmark_entries.strip()
-    with path.open("w") as f:  # noqa: PLW1514
+    with path.open("w", encoding="utf-8") as f:
         f.write(new_content)
 
 

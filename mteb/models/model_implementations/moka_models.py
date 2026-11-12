@@ -3,12 +3,6 @@
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 
-M3E_CITATION = """@software{MokaMassiveMixedEmbedding,
-  author = {Wang Yuxin and Sun Qingxuan and He Sicheng},
-  title = {M3E: Moka Massive Mixed Embedding Model},
-  year = {2023}
-}"""
-
 sent_trf_training_dataset = {
     # derived from datasheets
     "MSMARCO",
@@ -112,7 +106,6 @@ m3e_base = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # Not published
     training_datasets=m3e_dataset,
-    citation=M3E_CITATION,
 )
 
 m3e_small = ModelMeta(
@@ -139,7 +132,6 @@ m3e_small = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # Not published
     training_datasets=m3e_dataset,
-    citation=M3E_CITATION,
 )
 
 m3e_large = ModelMeta(
@@ -166,5 +158,4 @@ m3e_large = ModelMeta(
     public_training_code=None,
     public_training_data=None,  # Not published
     training_datasets=m3e_dataset,
-    citation=M3E_CITATION,
 )

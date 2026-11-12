@@ -1,10 +1,9 @@
-import torch
-
 from mteb.models.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.types import OutputDType
 
 from .bge_models import bge_training_data
 from .e5_models import E5_TRAINING_DATA
@@ -33,12 +32,21 @@ Haon_Chen__speed_embedding_7b_instruct = ModelMeta(
     training_datasets=None,
     adapted_from="mistralai/Mistral-7B-v0.1",
     superseded_by=None,
-    citation="""@article{chen2024little,
-    title={Little Giants: Synthesizing High-Quality Embedding Data at Scale},
-    author={Chen, Haonan and Wang, Liang and Yang, Nan and Zhu, Yutao and Zhao, Ziliang and Wei, Furu and Dou, Zhicheng},
-    journal={arXiv preprint arXiv:2410.18634},
-    year={2024}
+    citation="""@inproceedings{chen2024little,
+  address = {Albuquerque, New Mexico},
+  author = {Chen, Haonan and Wang, Liang and Yang, Nan and Zhu, Yutao and Zhao, Ziliang and Wei, Furu and Dou, Zhicheng},
+  booktitle = {Proceedings of the 2025 Conference of the Nations of the {A}mericas Chapter of the {A}ssociation for {C}omputational {L}inguistics: Human Language Technologies (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2025.naacl-long.64},
+  editor = {Chiruzzo, Luis and Ritter, Alan and Wang, Lu},
+  isbn = {979-8-89176-189-6},
+  month = {apr},
+  pages = {1392--1411},
+  publisher = {Association for Computational Linguistics},
+  title = {Little Giants: Synthesizing High-Quality Embedding Data at Scale},
+  url = {https://aclanthology.org/2025.naacl-long.64/},
+  year = {2025},
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 Gameselo__STS_multilingual_mpnet_base_v2 = ModelMeta(
     name="Gameselo/STS-multilingual-mpnet-base-v2",
@@ -270,34 +278,28 @@ Lajavaness__bilingual_embedding_base = ModelMeta(
     adapted_from="dangvantuan/bilingual_impl",
     superseded_by=None,
     citation="""
-    @article{DBLP:journals/corr/abs-1911-02116,
-      author    = {Alexis Conneau and
-                   Kartikay Khandelwal and
-                   Naman Goyal and
-                   Vishrav Chaudhary and
-                   Guillaume Wenzek and
-                   Francisco Guzm{\'{a}}n and
-                   Edouard Grave and
-                   Myle Ott and
-                   Luke Zettlemoyer and
-                   Veselin Stoyanov},
-      title     = {Unsupervised Cross-lingual Representation Learning at Scale},
-      journal   = {CoRR},
-      volume    = {abs/1911.02116},
-      year      = {2019},
-      url       = {http://arxiv.org/abs/1911.02116},
-      eprinttype = {arXiv},
-      eprint    = {1911.02116},
-      timestamp = {Mon, 11 Nov 2019 18:38:09 +0100},
-      biburl    = {https://dblp.org/rec/journals/corr/abs-1911-02116.bib},
-      bibsource = {dblp computer science bibliography, https://dblp.org}
-    }
+    @inproceedings{DBLP:journals/corr/abs-1911-02116,
+  address = {Online},
+  author = {Conneau, Alexis and Khandelwal, Kartikay and Goyal, Naman and Chaudhary, Vishrav and Wenzek, Guillaume and Guzm{\\'a}n, Francisco and Grave, Edouard and Ott, Myle and Zettlemoyer, Luke and Stoyanov, Veselin},
+  booktitle = {Proceedings of the 58th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics},
+  doi = {10.18653/v1/2020.acl-main.747},
+  editor = {Jurafsky, Dan and Chai, Joyce and Schluter, Natalie and Tetreault, Joel},
+  month = {jul},
+  pages = {8440--8451},
+  publisher = {Association for Computational Linguistics},
+  title = {Unsupervised Cross-lingual Representation Learning at Scale},
+  url = {https://aclanthology.org/2020.acl-main.747/},
+  year = {2020},
+}
 
-@article{reimers2019sentence,
-   title={Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
-   author={Nils Reimers, Iryna Gurevych},
-   journal={https://arxiv.org/abs/1908.10084},
-   year={2019}
+@inproceedings{reimers-2019-sentence-bert,
+  author = {Reimers, Nils and Gurevych, Iryna},
+  booktitle = {Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing},
+  month = {11},
+  publisher = {Association for Computational Linguistics},
+  title = {Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
+  url = {https://arxiv.org/abs/1908.10084},
+  year = {2019},
 }
 
 @article{thakur2020augmented,
@@ -308,6 +310,7 @@ Lajavaness__bilingual_embedding_base = ModelMeta(
   year={2020}
 }
 """,
+    output_dtypes=OutputDType.FLOAT16,
 )
 Lajavaness__bilingual_embedding_large = ModelMeta(
     name="Lajavaness/bilingual-embedding-large",
@@ -336,34 +339,28 @@ Lajavaness__bilingual_embedding_large = ModelMeta(
     adapted_from="dangvantuan/bilingual_impl",
     superseded_by=None,
     citation="""
-    @article{DBLP:journals/corr/abs-1911-02116,
-      author    = {Alexis Conneau and
-                   Kartikay Khandelwal and
-                   Naman Goyal and
-                   Vishrav Chaudhary and
-                   Guillaume Wenzek and
-                   Francisco Guzm{\'{a}}n and
-                   Edouard Grave and
-                   Myle Ott and
-                   Luke Zettlemoyer and
-                   Veselin Stoyanov},
-      title     = {Unsupervised Cross-lingual Representation Learning at Scale},
-      journal   = {CoRR},
-      volume    = {abs/1911.02116},
-      year      = {2019},
-      url       = {http://arxiv.org/abs/1911.02116},
-      eprinttype = {arXiv},
-      eprint    = {1911.02116},
-      timestamp = {Mon, 11 Nov 2019 18:38:09 +0100},
-      biburl    = {https://dblp.org/rec/journals/corr/abs-1911-02116.bib},
-      bibsource = {dblp computer science bibliography, https://dblp.org}
-    }
+    @inproceedings{DBLP:journals/corr/abs-1911-02116,
+  address = {Online},
+  author = {Conneau, Alexis and Khandelwal, Kartikay and Goyal, Naman and Chaudhary, Vishrav and Wenzek, Guillaume and Guzm{\\'a}n, Francisco and Grave, Edouard and Ott, Myle and Zettlemoyer, Luke and Stoyanov, Veselin},
+  booktitle = {Proceedings of the 58th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics},
+  doi = {10.18653/v1/2020.acl-main.747},
+  editor = {Jurafsky, Dan and Chai, Joyce and Schluter, Natalie and Tetreault, Joel},
+  month = {jul},
+  pages = {8440--8451},
+  publisher = {Association for Computational Linguistics},
+  title = {Unsupervised Cross-lingual Representation Learning at Scale},
+  url = {https://aclanthology.org/2020.acl-main.747/},
+  year = {2020},
+}
 
-@article{reimers2019sentence,
-   title={Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
-   author={Nils Reimers, Iryna Gurevych},
-   journal={https://arxiv.org/abs/1908.10084},
-   year={2019}
+@inproceedings{reimers-2019-sentence-bert,
+  author = {Reimers, Nils and Gurevych, Iryna},
+  booktitle = {Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing},
+  month = {11},
+  publisher = {Association for Computational Linguistics},
+  title = {Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
+  url = {https://arxiv.org/abs/1908.10084},
+  year = {2019},
 }
 
 @article{thakur2020augmented,
@@ -374,6 +371,7 @@ Lajavaness__bilingual_embedding_large = ModelMeta(
   year={2020}
 }
 """,
+    output_dtypes=OutputDType.FLOAT16,
 )
 Lajavaness__bilingual_embedding_small = ModelMeta(
     name="Lajavaness/bilingual-embedding-small",
@@ -402,34 +400,28 @@ Lajavaness__bilingual_embedding_small = ModelMeta(
     adapted_from="dangvantuan/bilingual_impl",
     superseded_by=None,
     citation="""
-@article{DBLP:journals/corr/abs-1911-02116,
-  author    = {Alexis Conneau and
-               Kartikay Khandelwal and
-               Naman Goyal and
-               Vishrav Chaudhary and
-               Guillaume Wenzek and
-               Francisco Guzm{\'{a}}n and
-               Edouard Grave and
-               Myle Ott and
-               Luke Zettlemoyer and
-               Veselin Stoyanov},
-  title     = {Unsupervised Cross-lingual Representation Learning at Scale},
-  journal   = {CoRR},
-  volume    = {abs/1911.02116},
-  year      = {2019},
-  url       = {http://arxiv.org/abs/1911.02116},
-  eprinttype = {arXiv},
-  eprint    = {1911.02116},
-  timestamp = {Mon, 11 Nov 2019 18:38:09 +0100},
-  biburl    = {https://dblp.org/rec/journals/corr/abs-1911-02116.bib},
-  bibsource = {dblp computer science bibliography, https://dblp.org}
+@inproceedings{DBLP:journals/corr/abs-1911-02116,
+  address = {Online},
+  author = {Conneau, Alexis and Khandelwal, Kartikay and Goyal, Naman and Chaudhary, Vishrav and Wenzek, Guillaume and Guzm{\\'a}n, Francisco and Grave, Edouard and Ott, Myle and Zettlemoyer, Luke and Stoyanov, Veselin},
+  booktitle = {Proceedings of the 58th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics},
+  doi = {10.18653/v1/2020.acl-main.747},
+  editor = {Jurafsky, Dan and Chai, Joyce and Schluter, Natalie and Tetreault, Joel},
+  month = {jul},
+  pages = {8440--8451},
+  publisher = {Association for Computational Linguistics},
+  title = {Unsupervised Cross-lingual Representation Learning at Scale},
+  url = {https://aclanthology.org/2020.acl-main.747/},
+  year = {2020},
 }
 
-@article{reimers2019sentence,
-   title={Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
-   author={Nils Reimers, Iryna Gurevych},
-   journal={https://arxiv.org/abs/1908.10084},
-   year={2019}
+@inproceedings{reimers-2019-sentence-bert,
+  author = {Reimers, Nils and Gurevych, Iryna},
+  booktitle = {Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing},
+  month = {11},
+  publisher = {Association for Computational Linguistics},
+  title = {Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks},
+  url = {https://arxiv.org/abs/1908.10084},
+  year = {2019},
 }
 
 @article{thakur2020augmented,
@@ -994,6 +986,7 @@ thenlper__gte_base = ModelMeta(
   journal={arXiv preprint arXiv:2308.03281},
   year={2023}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 thenlper__gte_large = ModelMeta(
     name="thenlper/gte-large",
@@ -1024,6 +1017,7 @@ thenlper__gte_large = ModelMeta(
   journal={arXiv preprint arXiv:2308.03281},
   year={2023}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 thenlper__gte_small = ModelMeta(
     name="thenlper/gte-small",
@@ -1054,6 +1048,7 @@ thenlper__gte_small = ModelMeta(
   journal={arXiv preprint arXiv:2308.03281},
   year={2023}
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 sdadas__mmlw_e5_base = ModelMeta(
     name="sdadas/mmlw-e5-base",
@@ -1078,13 +1073,19 @@ sdadas__mmlw_e5_base = ModelMeta(
     training_datasets=E5_TRAINING_DATA,
     adapted_from="intfloat/multilingual-e5-base",
     superseded_by=None,
-    citation="""@article{dadas2024pirb,
-  title={{PIRB}: A Comprehensive Benchmark of Polish Dense and Hybrid Text Retrieval Methods},
-  author={Sławomir Dadas and Michał Perełkiewicz and Rafał Poświata},
-  year={2024},
-  eprint={2402.13350},
-  archivePrefix={arXiv},
-  primaryClass={cs.CL}
+    citation="""@inproceedings{dadas2024pirb,
+  address = {Torino, Italia},
+  archiveprefix = {arXiv},
+  author = {Dadas, Slawomir and Pere{\\l}kiewicz, Micha{\\l} and Po{\\'s}wiata, Rafa{\\l}},
+  booktitle = {Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation ({LREC}-{COLING} 2024)},
+  editor = {Calzolari, Nicoletta and Kan, Min-Yen and Hoste, Veronique and Lenci, Alessandro and Sakti, Sakriani and Xue, Nianwen},
+  eprint = {2402.13350},
+  month = {may},
+  pages = {12761--12774},
+  publisher = {ELRA and ICCL},
+  title = {{PIRB}: A Comprehensive Benchmark of {P}olish Dense and Hybrid Text Retrieval Methods},
+  url = {https://aclanthology.org/2024.lrec-main.1117/},
+  year = {2024},
 }""",
 )
 dwzhu__e5_base_4k = ModelMeta(
@@ -1110,12 +1111,20 @@ dwzhu__e5_base_4k = ModelMeta(
     training_datasets=E5_TRAINING_DATA,
     adapted_from="intfloat/e5-base-v2",
     superseded_by=None,
-    citation="""@article{zhu2024longembed,
-  title={LongEmbed: Extending Embedding Models for Long Context Retrieval},
-  author={Zhu, Dawei and Wang, Liang and Yang, Nan and Song, Yifan and Wu, Wenhao and Wei, Furu and Li, Sujian},
-  journal={arXiv preprint arXiv:2404.12096},
-  year={2024}
+    citation="""@inproceedings{zhu2024longembed,
+  address = {Miami, Florida, USA},
+  author = {Zhu, Dawei and Wang, Liang and Yang, Nan and Song, Yifan and Wu, Wenhao and Wei, Furu and Li, Sujian},
+  booktitle = {Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing},
+  doi = {10.18653/v1/2024.emnlp-main.47},
+  editor = {Al-Onaizan, Yaser and Bansal, Mohit and Chen, Yun-Nung},
+  month = {nov},
+  pages = {802--816},
+  publisher = {Association for Computational Linguistics},
+  title = {{L}ong{E}mbed: Extending Embedding Models for Long Context Retrieval},
+  url = {https://aclanthology.org/2024.emnlp-main.47/},
+  year = {2024},
 }""",
+    output_dtypes=OutputDType.FLOAT16,
 )
 sdadas__mmlw_e5_large = ModelMeta(
     name="sdadas/mmlw-e5-large",
@@ -1140,13 +1149,19 @@ sdadas__mmlw_e5_large = ModelMeta(
     training_datasets=E5_TRAINING_DATA,
     adapted_from="intfloat/multilingual-e5-large",
     superseded_by=None,
-    citation="""@article{dadas2024pirb,
-  title={{PIRB}: A Comprehensive Benchmark of Polish Dense and Hybrid Text Retrieval Methods},
-  author={Sławomir Dadas and Michał Perełkiewicz and Rafał Poświata},
-  year={2024},
-  eprint={2402.13350},
-  archivePrefix={arXiv},
-  primaryClass={cs.CL}
+    citation="""@inproceedings{dadas2024pirb,
+  address = {Torino, Italia},
+  archiveprefix = {arXiv},
+  author = {Dadas, Slawomir and Pere{\\l}kiewicz, Micha{\\l} and Po{\\'s}wiata, Rafa{\\l}},
+  booktitle = {Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation ({LREC}-{COLING} 2024)},
+  editor = {Calzolari, Nicoletta and Kan, Min-Yen and Hoste, Veronique and Lenci, Alessandro and Sakti, Sakriani and Xue, Nianwen},
+  eprint = {2402.13350},
+  month = {may},
+  pages = {12761--12774},
+  publisher = {ELRA and ICCL},
+  title = {{PIRB}: A Comprehensive Benchmark of {P}olish Dense and Hybrid Text Retrieval Methods},
+  url = {https://aclanthology.org/2024.lrec-main.1117/},
+  year = {2024},
 }""",
 )
 sdadas__mmlw_e5_small = ModelMeta(
@@ -1172,13 +1187,19 @@ sdadas__mmlw_e5_small = ModelMeta(
     training_datasets=E5_TRAINING_DATA,
     adapted_from="intfloat/multilingual-e5-small",
     superseded_by=None,
-    citation="""@article{dadas2024pirb,
-  title={{PIRB}: A Comprehensive Benchmark of Polish Dense and Hybrid Text Retrieval Methods},
-  author={Sławomir Dadas and Michał Perełkiewicz and Rafał Poświata},
-  year={2024},
-  eprint={2402.13350},
-  archivePrefix={arXiv},
-  primaryClass={cs.CL}
+    citation="""@inproceedings{dadas2024pirb,
+  address = {Torino, Italia},
+  archiveprefix = {arXiv},
+  author = {Dadas, Slawomir and Pere{\\l}kiewicz, Micha{\\l} and Po{\\'s}wiata, Rafa{\\l}},
+  booktitle = {Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation ({LREC}-{COLING} 2024)},
+  editor = {Calzolari, Nicoletta and Kan, Min-Yen and Hoste, Veronique and Lenci, Alessandro and Sakti, Sakriani and Xue, Nianwen},
+  eprint = {2402.13350},
+  month = {may},
+  pages = {12761--12774},
+  publisher = {ELRA and ICCL},
+  title = {{PIRB}: A Comprehensive Benchmark of {P}olish Dense and Hybrid Text Retrieval Methods},
+  url = {https://aclanthology.org/2024.lrec-main.1117/},
+  year = {2024},
 }""",
 )
 sdadas__mmlw_roberta_base = ModelMeta(
@@ -1204,13 +1225,19 @@ sdadas__mmlw_roberta_base = ModelMeta(
     training_datasets={"MSMARCO"},
     adapted_from="sdadas/polish-roberta-base-v2",
     superseded_by=None,
-    citation="""@article{dadas2024pirb,
-  title={{PIRB}: A Comprehensive Benchmark of Polish Dense and Hybrid Text Retrieval Methods},
-  author={Sławomir Dadas and Michał Perełkiewicz and Rafał Poświata},
-  year={2024},
-  eprint={2402.13350},
-  archivePrefix={arXiv},
-  primaryClass={cs.CL}
+    citation="""@inproceedings{dadas2024pirb,
+  address = {Torino, Italia},
+  archiveprefix = {arXiv},
+  author = {Dadas, Slawomir and Pere{\\l}kiewicz, Micha{\\l} and Po{\\'s}wiata, Rafa{\\l}},
+  booktitle = {Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation ({LREC}-{COLING} 2024)},
+  editor = {Calzolari, Nicoletta and Kan, Min-Yen and Hoste, Veronique and Lenci, Alessandro and Sakti, Sakriani and Xue, Nianwen},
+  eprint = {2402.13350},
+  month = {may},
+  pages = {12761--12774},
+  publisher = {ELRA and ICCL},
+  title = {{PIRB}: A Comprehensive Benchmark of {P}olish Dense and Hybrid Text Retrieval Methods},
+  url = {https://aclanthology.org/2024.lrec-main.1117/},
+  year = {2024},
 }""",
 )
 sdadas__mmlw_roberta_large = ModelMeta(
@@ -1236,13 +1263,19 @@ sdadas__mmlw_roberta_large = ModelMeta(
     training_datasets={"MSMARCO"},
     adapted_from="sdadas/polish-roberta-large-v2",
     superseded_by=None,
-    citation="""@article{dadas2024pirb,
-  title={{PIRB}: A Comprehensive Benchmark of Polish Dense and Hybrid Text Retrieval Methods},
-  author={Sławomir Dadas and Michał Perełkiewicz and Rafał Poświata},
-  year={2024},
-  eprint={2402.13350},
-  archivePrefix={arXiv},
-  primaryClass={cs.CL}
+    citation="""@inproceedings{dadas2024pirb,
+  address = {Torino, Italia},
+  archiveprefix = {arXiv},
+  author = {Dadas, Slawomir and Pere{\\l}kiewicz, Micha{\\l} and Po{\\'s}wiata, Rafa{\\l}},
+  booktitle = {Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation ({LREC}-{COLING} 2024)},
+  editor = {Calzolari, Nicoletta and Kan, Min-Yen and Hoste, Veronique and Lenci, Alessandro and Sakti, Sakriani and Xue, Nianwen},
+  eprint = {2402.13350},
+  month = {may},
+  pages = {12761--12774},
+  publisher = {ELRA and ICCL},
+  title = {{PIRB}: A Comprehensive Benchmark of {P}olish Dense and Hybrid Text Retrieval Methods},
+  url = {https://aclanthology.org/2024.lrec-main.1117/},
+  year = {2024},
 }""",
 )
 
@@ -1323,11 +1356,19 @@ izhx__udever_bloom_1b1 = ModelMeta(
     training_datasets=udever_dataset,
     adapted_from="bigscience/bloom-1b1",
     superseded_by=None,
-    citation="""@article{zhang2023language,
-  title={Language Models are Universal Embedders},
-  author={Zhang, Xin and Li, Zehan and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan and Zhang, Min},
-  journal={arXiv preprint arXiv:2310.08232},
-  year={2023}
+    citation="""@inproceedings{zhang2023language,
+  address = {Vienna, Austria},
+  author = {Zhang, Xin and Li, Zehan and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan and Zhang, Min},
+  booktitle = {Proceedings of the 1st Joint Workshop on Large Language Models and Structure Modeling ({XLLM} 2025)},
+  doi = {10.18653/v1/2025.xllm-1.21},
+  editor = {Fei, Hao and Tu, Kewei and Zhang, Yuhui and Hu, Xiang and Han, Wenjuan and Jia, Zixia and Zheng, Zilong and Cao, Yixin and Zhang, Meishan and Lu, Wei and Siddharth, N. and {\\O}vrelid, Lilja and Xue, Nianwen and Zhang, Yue},
+  isbn = {979-8-89176-286-2},
+  month = {aug},
+  pages = {252--265},
+  publisher = {Association for Computational Linguistics},
+  title = {Language Models are Universal Embedders},
+  url = {https://aclanthology.org/2025.xllm-1.21/},
+  year = {2025},
 }""",
 )
 izhx__udever_bloom_3b = ModelMeta(
@@ -1353,11 +1394,19 @@ izhx__udever_bloom_3b = ModelMeta(
     training_datasets=udever_dataset,
     adapted_from="bigscience/bloom-3b",
     superseded_by=None,
-    citation="""@article{zhang2023language,
-  title={Language Models are Universal Embedders},
-  author={Zhang, Xin and Li, Zehan and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan and Zhang, Min},
-  journal={arXiv preprint arXiv:2310.08232},
-  year={2023}
+    citation="""@inproceedings{zhang2023language,
+  address = {Vienna, Austria},
+  author = {Zhang, Xin and Li, Zehan and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan and Zhang, Min},
+  booktitle = {Proceedings of the 1st Joint Workshop on Large Language Models and Structure Modeling ({XLLM} 2025)},
+  doi = {10.18653/v1/2025.xllm-1.21},
+  editor = {Fei, Hao and Tu, Kewei and Zhang, Yuhui and Hu, Xiang and Han, Wenjuan and Jia, Zixia and Zheng, Zilong and Cao, Yixin and Zhang, Meishan and Lu, Wei and Siddharth, N. and {\\O}vrelid, Lilja and Xue, Nianwen and Zhang, Yue},
+  isbn = {979-8-89176-286-2},
+  month = {aug},
+  pages = {252--265},
+  publisher = {Association for Computational Linguistics},
+  title = {Language Models are Universal Embedders},
+  url = {https://aclanthology.org/2025.xllm-1.21/},
+  year = {2025},
 }""",
 )
 izhx__udever_bloom_560m = ModelMeta(
@@ -1383,11 +1432,19 @@ izhx__udever_bloom_560m = ModelMeta(
     training_datasets=udever_dataset,
     adapted_from="bigscience/bloom-560m",
     superseded_by=None,
-    citation="""@article{zhang2023language,
-  title={Language Models are Universal Embedders},
-  author={Zhang, Xin and Li, Zehan and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan and Zhang, Min},
-  journal={arXiv preprint arXiv:2310.08232},
-  year={2023}
+    citation="""@inproceedings{zhang2023language,
+  address = {Vienna, Austria},
+  author = {Zhang, Xin and Li, Zehan and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan and Zhang, Min},
+  booktitle = {Proceedings of the 1st Joint Workshop on Large Language Models and Structure Modeling ({XLLM} 2025)},
+  doi = {10.18653/v1/2025.xllm-1.21},
+  editor = {Fei, Hao and Tu, Kewei and Zhang, Yuhui and Hu, Xiang and Han, Wenjuan and Jia, Zixia and Zheng, Zilong and Cao, Yixin and Zhang, Meishan and Lu, Wei and Siddharth, N. and {\\O}vrelid, Lilja and Xue, Nianwen and Zhang, Yue},
+  isbn = {979-8-89176-286-2},
+  month = {aug},
+  pages = {252--265},
+  publisher = {Association for Computational Linguistics},
+  title = {Language Models are Universal Embedders},
+  url = {https://aclanthology.org/2025.xllm-1.21/},
+  year = {2025},
 }""",
 )
 izhx__udever_bloom_7b1 = ModelMeta(
@@ -1413,11 +1470,19 @@ izhx__udever_bloom_7b1 = ModelMeta(
     training_datasets=udever_dataset,
     adapted_from="bigscience/bloom-7b1",
     superseded_by=None,
-    citation="""@article{zhang2023language,
-  title={Language Models are Universal Embedders},
-  author={Zhang, Xin and Li, Zehan and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan and Zhang, Min},
-  journal={arXiv preprint arXiv:2310.08232},
-  year={2023}
+    citation="""@inproceedings{zhang2023language,
+  address = {Vienna, Austria},
+  author = {Zhang, Xin and Li, Zehan and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan and Zhang, Min},
+  booktitle = {Proceedings of the 1st Joint Workshop on Large Language Models and Structure Modeling ({XLLM} 2025)},
+  doi = {10.18653/v1/2025.xllm-1.21},
+  editor = {Fei, Hao and Tu, Kewei and Zhang, Yuhui and Hu, Xiang and Han, Wenjuan and Jia, Zixia and Zheng, Zilong and Cao, Yixin and Zhang, Meishan and Lu, Wei and Siddharth, N. and {\\O}vrelid, Lilja and Xue, Nianwen and Zhang, Yue},
+  isbn = {979-8-89176-286-2},
+  month = {aug},
+  pages = {252--265},
+  publisher = {Association for Computational Linguistics},
+  title = {Language Models are Universal Embedders},
+  url = {https://aclanthology.org/2025.xllm-1.21/},
+  year = {2025},
 }""",
 )
 avsolatorio__gist_embedding_v0 = ModelMeta(
@@ -1711,12 +1776,6 @@ abhinand__medembed_small_v0_1 = ModelMeta(
     },
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
-    citation="""@software{balachandran2024medembed,
-  author = {Balachandran, Abhinand},
-  title = {MedEmbed: Medical-Focused Embedding Models},
-  year = {2024},
-  url = {https://github.com/abhinand5/MedEmbed}
-}""",
 )
 avsolatorio__noinstruct_small_embedding_v0 = ModelMeta(
     name="avsolatorio/NoInstruct-small-Embedding-v0",
@@ -1813,6 +1872,7 @@ infgrad__stella_base_en_v2 = ModelMeta(
     training_datasets=None,
     adapted_from=None,
     superseded_by=None,
+    output_dtypes=OutputDType.FLOAT16,
 )
 malenia1__ternary_weight_embedding = ModelMeta(
     name="malenia1/ternary-weight-embedding",
@@ -1876,7 +1936,7 @@ openbmb__minicpm_embedding = ModelMeta(
     loader_kwargs=dict(
         model_kwargs={
             # "attn_implementation": "flash_attention_2",
-            "torch_dtype": torch.float16,
+            "torch_dtype": OutputDType.FLOAT16,
         },
         trust_remote_code=True,
         # https://huggingface.co/openbmb/MiniCPM-Embedding/blob/c0cb2de33fb366e17c30f9d53142ff11bc18e049/README.md?code=true#L405
@@ -1902,6 +1962,7 @@ openbmb__minicpm_embedding = ModelMeta(
     training_datasets=None,
     adapted_from=None,
     superseded_by=None,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 silma_ai__silma_embedding_matryoshka_v0_1 = ModelMeta(
@@ -1927,13 +1988,7 @@ silma_ai__silma_embedding_matryoshka_v0_1 = ModelMeta(
     training_datasets=None,
     adapted_from="/workspace/v3-matryoshka_aubmindlab-bert-base-arabertv02-2024-10-12_13-55-06/checkpoint-26250",
     superseded_by=None,
-    citation="""@misc{silma2024embedding,
-  author = {Abu Bakr Soliman, Karim Ouda, SILMA AI},
-  title = {SILMA Embedding Matryoshka 0.1},
-  year = {2024},
-  publisher = {Hugging Face},
-  howpublished = {https://huggingface.co/silma-ai/silma-embeddding-matryoshka-0.1},
-}""",
+    citation=None,
 )
 
 sbert_chinese_general_v1 = ModelMeta(
@@ -2119,11 +2174,6 @@ ember_v1 = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     superseded_by=None,
-    citation="""@misc{nur2024emberv1,
-      title={ember-v1: SOTA embedding model},
-      author={Enrike Nur and Anar Aliyev},
-      year={2023},
-}""",
 )
 amgix__static_retrieval_multilingual_69m_v1 = ModelMeta(
     name="amgix/static-retrieval-multilingual-69m-v1",

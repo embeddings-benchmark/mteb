@@ -7,7 +7,7 @@ import sys
 import traceback
 import warnings
 from copy import deepcopy
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from itertools import chain
 from pathlib import Path
 from time import time
@@ -554,10 +554,8 @@ class MTEB:
                 logger.error(
                     f"Please check all the error logs at: {self.err_logs_path}"
                 )
-                with self.err_logs_path.open("a") as f_out:
-                    f_out.write(
-                        f"{datetime.now(timezone.utc)} >>> {task.metadata.name}\n"
-                    )
+                with self.err_logs_path.open("a", encoding="utf-8") as f_out:
+                    f_out.write(f"{datetime.now(UTC)} >>> {task.metadata.name}\n")
                     f_out.write(traceback.format_exc())
                     f_out.write("\n\n")
 
@@ -616,7 +614,7 @@ class MTEB:
     def _save_model_metadata(model_meta: ModelMeta, output_folder: Path) -> None:
         save_path = output_folder / "model_meta.json"
 
-        with save_path.open("w") as f:
+        with save_path.open("w", encoding="utf-8") as f:
             json.dump(model_meta.to_dict(), f, default=str)
 
     def _get_last_evaluated_splits(self) -> dict[str, list[str]]:

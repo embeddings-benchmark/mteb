@@ -29,9 +29,10 @@ class DanishPoliticalCommentsClassification(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @techreport{SAMsentiment,
-  author = {Mads Guldborg Kjeldgaard Kongsbak and Steffan Eybye Christensen and Lucas Høyberg Puvis~de~Chavannes and Peter Due Jensen},
+  author = {Kongsbak, Mads Guldborg Kjeldgaard and Christensen, Steffan Eybye and Puvis de Chavannes, Lucas Høyberg and Jensen, Peter Due},
   institution = {IT University of Copenhagen},
   title = {Sentiment Analysis Multitool, SAM},
+  url = {https://github.com/lucaspuvis/SAM/blob/master/Thesis.pdf},
   year = {2019},
 }
 """,
@@ -69,9 +70,10 @@ class DanishPoliticalCommentsClassificationV2(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @techreport{SAMsentiment,
-  author = {Mads Guldborg Kjeldgaard Kongsbak and Steffan Eybye Christensen and Lucas Høyberg Puvis~de~Chavannes and Peter Due Jensen},
+  author = {Kongsbak, Mads Guldborg Kjeldgaard and Christensen, Steffan Eybye and Puvis de Chavannes, Lucas Høyberg and Jensen, Peter Due},
   institution = {IT University of Copenhagen},
   title = {Sentiment Analysis Multitool, SAM},
+  url = {https://github.com/lucaspuvis/SAM/blob/master/Thesis.pdf},
   year = {2019},
 }
 """,

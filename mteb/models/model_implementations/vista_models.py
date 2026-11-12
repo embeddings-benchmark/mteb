@@ -2,28 +2,37 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Literal
 
-import torch
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
 
-VISTA_CITATION = """@article{zhou2024vista,
-  title={VISTA: Visualized Text Embedding For Universal Multi-Modal Retrieval},
-  author={Zhou, Junjie and Liu, Zheng and Xiao, Shitao and Zhao, Bo and Xiong, Yongping},
-  journal={arXiv preprint arXiv:2406.04292},
-  year={2024}
+VISTA_CITATION = """@inproceedings{zhou2024vista,
+  address = {Bangkok, Thailand},
+  author = {Zhou, Junjie and Liu, Zheng and Xiao, Shitao and Zhao, Bo and Xiong, Yongping},
+  booktitle = {Proceedings of the 62nd Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2024.acl-long.175},
+  editor = {Ku, Lun-Wei and Martins, Andre and Srikumar, Vivek},
+  month = {aug},
+  pages = {3185--3200},
+  publisher = {Association for Computational Linguistics},
+  title = {{VISTA}: Visualized Text Embedding For Universal Multi-Modal Retrieval},
+  url = {https://aclanthology.org/2024.acl-long.175/},
+  year = {2024},
 }"""
 
 
 def vista_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
+    import torch
+
     try:  # a temporal fix for the dependency issues of vista models.
         from visual_bge.modeling import Visualized_BGE
     except ImportError:

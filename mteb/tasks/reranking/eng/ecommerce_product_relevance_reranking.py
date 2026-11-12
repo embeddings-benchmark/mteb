@@ -34,15 +34,5 @@ class ERESSReranking(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",  # Real-world queries
         prompt="Rerank products by relevance to the e-commerce query",
-        bibtex_citation=r"""
-@article{Bajaj2026RexRerankers,
-  author = {Bajaj, Rahul and Garg, Anuj and Nupur, Jaya},
-  journal = {Hugging Face Blog (Community Article)},
-  month = jan,
-  title = {{RexRerankers}: {SOTA} Rankers for Product Discovery and {AI} Assistants},
-  url = {https://huggingface.co/blog/thebajajra/rexrerankers},
-  urldate = {2026-01-24},
-  year = {2026},
-}
-""",
+        bibtex_citation=r"""""",
     )

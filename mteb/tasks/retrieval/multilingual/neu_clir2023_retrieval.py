@@ -14,8 +14,8 @@ class NeuCLIR2023Retrieval(AbsTaskRetrieval):
         description="The task involves identifying and retrieving the documents that are relevant to the queries.",
         reference="https://neuclir.github.io/",
         dataset={
-            "path": "mteb/NeuCLIR2022Retrieval",
-            "revision": "95cad8671c1c31908766a689755c307f4770411f",
+            "path": "mteb/NeuCLIR2023Retrieval",
+            "revision": "d14b466dd438f8d5bb4739721c644eb69618d432",
         },
         type="Retrieval",
         category="t2t",
@@ -31,13 +31,16 @@ class NeuCLIR2023Retrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{lawrie2024overview,
+@inproceedings{lawrie2024overview,
   archiveprefix = {arXiv},
   author = {Dawn Lawrie and Sean MacAvaney and James Mayfield and Paul McNamee and Douglas W. Oard and Luca Soldaini and Eugene Yang},
+  booktitle = {Proceedings of the Thirty-Second Text REtrieval Conference, {TREC} 2023},
   eprint = {2404.08071},
   primaryclass = {cs.IR},
+  publisher = {National Institute of Standards and Technology (NIST)},
   title = {Overview of the TREC 2023 NeuCLIR Track},
-  year = {2024},
+  url = {https://trec.nist.gov/pubs/trec32/papers/Overview_neuclir.pdf},
+  year = {2023},
 }
 """,
     )
@@ -66,13 +69,16 @@ class NeuCLIR2023RetrievalHardNegatives(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{lawrie2024overview,
+@inproceedings{lawrie2024overview,
   archiveprefix = {arXiv},
   author = {Dawn Lawrie and Sean MacAvaney and James Mayfield and Paul McNamee and Douglas W. Oard and Luca Soldaini and Eugene Yang},
+  booktitle = {Proceedings of the Thirty-Second Text REtrieval Conference, {TREC} 2023},
   eprint = {2404.08071},
   primaryclass = {cs.IR},
+  publisher = {National Institute of Standards and Technology (NIST)},
   title = {Overview of the TREC 2023 NeuCLIR Track},
-  year = {2024},
+  url = {https://trec.nist.gov/pubs/trec32/papers/Overview_neuclir.pdf},
+  year = {2023},
 }
 """,
         adapted_from=["NeuCLIR2022Retrieval"],

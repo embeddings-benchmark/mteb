@@ -3,9 +3,8 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import torch
+import numpy as np
 from tqdm.auto import tqdm
-from transformers import ASTFeatureExtractor, ASTModel
 
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
@@ -26,9 +25,15 @@ class ASTWrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs: Any,
     ):
+        import torch
+        from transformers import ASTFeatureExtractor, ASTModel
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         self.model_name = model_name
         self.device = device
 
@@ -39,45 +44,46 @@ class ASTWrapper(AbsEncoder):
         self.model.eval()
         self.sampling_rate = self.feature_extractor.sampling_rate
 
-    @torch.no_grad()
     def get_audio_embeddings(
         self,
         inputs: DataLoader[AudioInput],
         show_progress_bar: bool = True,
         **kwargs: Any,
     ) -> Array:
-        inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
-        all_embeddings = []
+        import torch
 
-        for batch in tqdm(
-            inputs,
-            disable=not show_progress_bar,
-        ):
-            audio_arrays = []
-            for a in batch["audio"]:
-                array = a["array"]
-                # Ensure minimum length for AST feature extractor (window size is 400)
-                min_samples = 401  # Just above the window size
-                if len(array) < min_samples:
-                    padding = torch.zeros(min_samples - len(array))
-                    array = torch.cat([array, padding])
+        with torch.no_grad():
+            inputs.collate_fn = AudioCollator(target_sampling_rate=self.sampling_rate)
+            all_embeddings = []
 
-                audio_arrays.append(array.numpy())
+            for batch in tqdm(
+                inputs,
+                disable=not show_progress_bar,
+            ):
+                # the extractor always emits max_length=1024 frames (10.24 s)
+                # https://huggingface.co/MIT/ast-finetuned-audioset-10-10-0.4593/blob/main/preprocessor_config.json
+                # pad up to the 400-sample FFT window so short clips do not crash
+                audio_arrays = []
+                for a in batch["audio"]:
+                    array = np.asarray(a["array"])
+                    pad = max(0, 401 - array.shape[-1])
+                    # pad only the time axis, also for (channels, T) input
+                    audio_arrays.append(
+                        np.pad(array, [(0, 0)] * (array.ndim - 1) + [(0, pad)])
+                    )
 
-            features = self.feature_extractor(
-                audio_arrays,
-                sampling_rate=self.sampling_rate,
-                return_tensors="pt",
-                truncation=True,
-                padding=True,
-            ).to(self.device)
+                features = self.feature_extractor(
+                    audio_arrays,
+                    sampling_rate=self.sampling_rate,
+                    return_tensors="pt",
+                ).to(self.device)
 
-            outputs = self.model(**features)
+                outputs = self.model(**features)
 
-            # AST's pooled output is the [CLS] token embedding
-            embeddings = outputs.pooler_output
-            all_embeddings.append(embeddings.cpu().detach())
-        return torch.cat(all_embeddings, dim=0).numpy()
+                # AST's pooled output is the [CLS] token embedding
+                embeddings = outputs.pooler_output
+                all_embeddings.append(embeddings.cpu().detach())
+            return torch.cat(all_embeddings, dim=0).numpy()
 
     def encode(
         self,
@@ -119,13 +125,17 @@ ast_audioset = ModelMeta(
     },
     modalities=["audio"],
     citation="""
-@misc{gong2021astaudiospectrogramtransformer,
-      title={AST: Audio Spectrogram Transformer},
-      author={Yuan Gong and Yu-An Chung and James Glass},
-      year={2021},
-      eprint={2104.01778},
-      archivePrefix={arXiv},
-      primaryClass={cs.SD},
-      url={https://arxiv.org/abs/2104.01778},
+@inproceedings{gong2021astaudiospectrogramtransformer,
+  author = {Gong, Yuan and Chung, Yu-An and Glass, James},
+  booktitle = {Interspeech 2021},
+  collection = {interspeech_2021},
+  doi = {10.21437/interspeech.2021-698},
+  month = {Aug},
+  pages = {571–575},
+  publisher = {ISCA},
+  series = {interspeech_2021},
+  title = {AST: Audio Spectrogram Transformer},
+  url = {https://doi.org/10.21437/interspeech.2021-698},
+  year = {2021},
 }""",
 )

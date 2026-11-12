@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import functools
 import gzip
 import io
 import json
@@ -10,7 +11,7 @@ import subprocess
 import warnings
 from collections import defaultdict
 from collections.abc import Mapping, Sequence
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from importlib.metadata import version
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, cast
@@ -25,6 +26,7 @@ from mteb._reversible_workflow.git_actions import (
 )
 from mteb._reversible_workflow.git_utils import (
     check_detached_head,
+    check_pr_requirements,
     check_uncommitted_changes,
     get_current_branch,
     handle_pr_creation_with_cleanup,
@@ -37,6 +39,7 @@ from mteb.benchmarks.benchmark import Benchmark
 from mteb.benchmarks.get_benchmark import get_benchmark
 from mteb.models import ModelMeta
 from mteb.models.get_model_meta import get_model_metas
+from mteb.models.model_implementations import MODEL_REGISTRY
 from mteb.models.model_meta import _serialize_experiment_kwargs_to_name
 from mteb.results import BenchmarkResults, ModelResult, TaskResult
 from mteb.results.task_result import (
@@ -99,6 +102,14 @@ class CopyResultsAction:
 
     def do(self) -> None:
         """Copy listed json result files and optional model_meta.json to remote paths."""
+        try:
+            self._copy()
+        except Exception:
+            # the workflow only undoes completed steps, so revert the files copied before the failure here
+            self.undo()
+            raise
+
+    def _copy(self) -> None:
         for model_meta, result_files in self.unsubmitted.items():
             if model_meta.name is None or model_meta.revision is None:
                 logger.warning(
@@ -106,13 +117,7 @@ class CopyResultsAction:
                 )
                 continue
 
-            model_name_path = model_meta.model_name_as_path()
-            revision = model_meta.revision
-            dest_dir = self.remote_path / model_name_path / revision
-            if model_meta.experiment_name:
-                dest_dir = (
-                    dest_dir / _EXPERIMENTS_FOLDER_NAME / model_meta.experiment_name
-                )
+            dest_dir = _remote_model_dir(self.remote_path, model_meta)
             dest_dir.mkdir(parents=True, exist_ok=True)
 
             for result_file in result_files:
@@ -405,7 +410,7 @@ class ResultCache:
         model_meta_path = result_path.parent / "model_meta.json"
         if isinstance(model_name, ModelMeta):
             meta = model_name
-            with model_meta_path.open("w") as f:
+            with model_meta_path.open("w", encoding="utf-8") as f:
                 json.dump(meta.to_dict(), f, default=str, indent=4)
 
         version_dict = _get_package_versions()
@@ -710,6 +715,8 @@ class ResultCache:
         self,
         cache_filename: str = "__cached_results.json",
         rebuild: bool = False,
+        *,
+        save_rebuilt_to_disk: bool = False,
     ) -> BenchmarkResults:
         """Load benchmark results using the best available strategy.
 
@@ -718,13 +725,16 @@ class ResultCache:
                 {cache_path}/leaderboard/{cache_filename}.
             rebuild: If True, force a full rebuild from the results repository, bypassing any
                      pre-computed JSON cache.
+            save_rebuilt_to_disk: Whether a full rebuild (strategy 3, or
+                forced via ``rebuild=True``) persists its result to
+                ``cache_path`` in ``__cached_results.json``
 
         Strategy:
             1. If rebuild=False and local cache exists at cache_path → load and return
             2. If rebuild=False, try downloading pre-computed cache from 'cached-data' branch
                → save to cache_path and return
             3. Fallback (or if rebuild=True): clone the full results repository, build from
-               individual model files, call results.to_disk(cache_path), and return.
+               individual model files, optionally call results.to_disk(cache_path), and return.
 
         Returns:
             BenchmarkResults ready for leaderboard display
@@ -736,7 +746,9 @@ class ResultCache:
             logger.info(
                 "Rebuild requested, forcing full repository clone and rebuild..."
             )
-            return self._rebuild_from_full_repository(cache_path)
+            return self._rebuild_from_full_repository(
+                cache_path, save_to_disk=save_rebuilt_to_disk
+            )
 
         # Strategy 1: Try loading from existing local quick cache
         if cache_path.exists():
@@ -763,19 +775,32 @@ class ResultCache:
 
         # Strategy 3: Fallback to full repository clone
         logger.info("Falling back to full repository clone and rebuild...")
-        return self._rebuild_from_full_repository(cache_path)
+        return self._rebuild_from_full_repository(
+            cache_path,
+            save_to_disk=save_rebuilt_to_disk,
+        )
 
-    def _rebuild_from_full_repository(self, quick_cache_path: Path) -> BenchmarkResults:
+    def _rebuild_from_full_repository(
+        self,
+        quick_cache_path: Path,
+        *,
+        save_to_disk: bool = False,
+    ) -> BenchmarkResults:
         """Clone/pull the full results repository and build BenchmarkResults from individual files.
 
         This method performs a full rebuild by:
         1. Downloading or updating the full results repository
         2. Loading results from all individual model files
-        3. Saving the aggregated results to the quick cache path
+        3. Saving the aggregated results to the quick cache path (optional)
         4. Returning the BenchmarkResults object
 
         Args:
             quick_cache_path: Path where the rebuilt cache should be saved
+                when ``save_to_disk`` is ``True``.
+            save_to_disk: Whether to persist the rebuilt results to
+                ``quick_cache_path``. Defaults to ``False`` — most callers
+                only need the in-memory result; pass ``True`` to also
+                refresh the on-disk quick cache for future runs.
 
         Returns:
             BenchmarkResults built from the full repository
@@ -794,11 +819,12 @@ class ResultCache:
             only_main_score=True,
             require_model_meta=False,
             include_remote=True,
+            load_experiments=LoadExperimentEnum.MATCH_NAME,
         )
 
-        # Save to disk for future use
-        logger.info(f"Saving rebuilt cache to {quick_cache_path}")
-        all_results.to_disk(quick_cache_path)
+        if save_to_disk:
+            logger.info(f"Saving rebuilt cache to {quick_cache_path}")
+            all_results.to_disk(quick_cache_path)
 
         return all_results
 
@@ -941,43 +967,46 @@ class ResultCache:
         return list(set(tasks))
 
     @staticmethod
+    @functools.lru_cache(maxsize=4096)
     def _get_model_name_and_revision_from_path(
         revision_path: Path,
-    ) -> tuple[ModelName, Revision, str | None]:
-        """Get model name, revision and experiment name from the given path.
+    ) -> tuple[ModelName, Revision, str | None, ModelMeta | None] | None:
+        """Get model name, revision, experiment name, and ModelMeta from ``revision_path``.
 
-        Args:
-            revision_path: The path to the revision folder, which should contain a model_meta.json file. If the file is not found, it will attempt to extract the model name and revision from the path.
+        Cached per ``revision_path`` (lru_cache) since every task result
+        file in a folder shares the same ``model_meta.json``, and the
+        caller invokes this once per task file.
 
         Returns:
-            A tuple containing the model name, revision and experiment name (if available).
-
+            ``(model_name, revision, experiment_name, model_meta)``, or
+            ``None`` for an experiment folder missing its own
+            model_meta.json (its kwargs-derived name isn't reliable enough
+            to guess identity from). A plain revision folder without
+            model_meta.json still resolves via its path
+            (``results/<model>/<revision>/`` is unambiguous), falling back
+            to the static ``MODEL_REGISTRY`` entry for ``model_meta``.
         """
-        model_meta = revision_path / "model_meta.json"
-        model_path = revision_path.parent
-
-        if not model_meta.exists():
-            logger.debug(
-                f"model_meta.json not found in {revision_path}, extracting model_name and revision from the path"
-            )
+        model_meta_path = revision_path / "model_meta.json"
+        if not model_meta_path.exists():
             if _EXPERIMENTS_FOLDER_NAME in revision_path.parts:
-                logger.debug(
-                    f"Path {revision_path} contains an experiment folder, extracting model_name and revision accordingly"
+                logger.warning(
+                    f"No model_meta.json in experiment folder {revision_path} "
+                    "— skipping every result file under it."
                 )
-                experiment_name = revision_path.name
-                revision = revision_path.parent.parent.name
-                model_name = revision_path.parent.parent.parent.name.replace("__", "/")
-                return model_name, revision, experiment_name
-            model_name = model_path.name.replace("__", "/")
+                return None
+            model_name = revision_path.parent.name.replace("__", "/")
             revision = revision_path.name
-            return model_name, revision, None
-        with model_meta.open("r") as f:
-            model_meta_json = json.load(f)
+            return model_name, revision, None, MODEL_REGISTRY.get(model_name)
+
+        with model_meta_path.open("r", encoding="utf-8") as f:
+            raw = f.read()
+        model_meta_json = json.loads(raw)
         model_name = model_meta_json["name"]
         revision = model_meta_json["revision"]
         experiment_kwargs = model_meta_json.get("experiment_kwargs", None)
-        experiment_name_ = _serialize_experiment_kwargs_to_name(experiment_kwargs)
-        return model_name, revision, experiment_name_
+        experiment_name = _serialize_experiment_kwargs_to_name(experiment_kwargs)
+        meta = ModelMeta.model_construct(**model_meta_json)
+        return model_name, revision, experiment_name, meta
 
     @staticmethod
     def _filter_paths_by_model_and_revision(
@@ -1084,7 +1113,7 @@ class ResultCache:
             return None
 
         try:
-            with meta_file.open("r") as f:
+            with meta_file.open("r", encoding="utf-8") as f:
                 meta_dict = f.read()
             return ModelMeta.model_validate_json_resolved(meta_dict)
         except Exception as e:
@@ -1165,30 +1194,42 @@ class ResultCache:
     def _get_unsubmitted_results(
         self,
         models: list[ModelMeta],
+        tasks: Sequence[str] | Iterable[AbsTask] | None = None,
     ) -> dict[ModelMeta, list[Path]]:
-        """Find unsubmitted results.
+        """Find local results with scores that the results repository does not have yet.
 
         Args:
             models: List of ModelMeta objects.
+            tasks: Tasks to restrict the results to. If None, results for all tasks are returned.
 
         Returns:
-            Dict mapping ModelMeta to list of unsubmitted result file paths.
+            Dict mapping ModelMeta to list of unsubmitted result file paths. Models without unsubmitted results are left out.
         """
-        return {
-            model: self.get_cache_paths(
-                models=[model],
-                require_model_meta=False,
-                include_remote=False,
-                load_experiments=LoadExperimentEnum.MATCH_KWARGS,
-            )
-            for model in models
-        }
+        unsubmitted = {}
+        for model in models:
+            remote_dir = _remote_model_dir(self.remote_results_path, model)
+            result_files = [
+                path
+                for path in self.get_cache_paths(
+                    models=[model],
+                    tasks=tasks,
+                    require_model_meta=False,
+                    include_remote=False,
+                    load_experiments=LoadExperimentEnum.MATCH_KWARGS,
+                )
+                if _has_unsubmitted_scores(path, remote_dir / path.name)
+            ]
+            if result_files:
+                unsubmitted[model] = result_files
+        return unsubmitted
 
     def submit_results(
         self,
         models: Sequence[str] | Sequence[ModelMeta] | str | ModelMeta | None = None,
         *,
+        tasks: Sequence[str] | Iterable[AbsTask] | None = None,
         create_pr: bool = False,
+        message: str | None = None,
     ) -> SubmitResultsResponse:
         """Create a commit of the results to the official MTEB results repository (https://github.com/embeddings-benchmark/results).
 
@@ -1196,15 +1237,20 @@ class ResultCache:
         submitting the diff from the local result to the repository. Requires PyGithub
         to be installed if `create_pr=True`.
 
+        Only results with scores that the repository does not have yet are submitted. Results computed on a different
+        dataset revision than the results in the repository are skipped with a warning, as they cannot be merged.
+
         Args:
             models: Model(s) whose results should be submitted. Can either a list of string or ModelMeta objects.
                 If None it will get all models from local cache.
+            tasks: Tasks whose results should be submitted. If None, results for all tasks of the models are submitted.
             create_pr: If True, create a PR directly to the remote. If False, prints
                   instructions for manual submission.
+            message: Title of the commit and PR. If None, a title listing the submitted models is used.
 
         Returns:
             Dictionary containing submission metadata:
-                - status: "ready_for_submission" or "pr_created"
+                - status: "ready_for_submission", "pr_created" or "no_changes"
                 - models_submitted: list of (model_name, revision) tuples
                 - result_count: number of result files submitted
                 - pr_url: URL to created PR (only if create_pr=True)
@@ -1213,7 +1259,7 @@ class ResultCache:
 
         Raises:
             ValueError: If no models found or invalid input.
-            RuntimeError: If git operations fail.
+            RuntimeError: If git operations fail, or if create_pr=True and no GitHub token is found.
             ImportError: If create_pr=True and PyGithub is not installed.
             GithubException: If GitHub API operations fail.
 
@@ -1232,13 +1278,17 @@ class ResultCache:
             >>> submission = cache.submit_results(model_meta, create_pr=True)
             >>> print(f"PR created: {submission['pr_url']}")
         """
+        if create_pr:
+            # fail before downloading the results repository and committing, if a PR cannot be created
+            check_pr_requirements()
+
         # Always create a new branch to keep the original branch clean
-        branch_name = f"mteb-results-{int(datetime.now(timezone.utc).timestamp())}"
+        branch_name = f"mteb-results-{int(datetime.now(UTC).timestamp())}"
         normalized_models = self._normalize_models(models)
 
         try:
             self.download_from_remote()
-            unsubmitted = self._get_unsubmitted_results(normalized_models)
+            unsubmitted = self._get_unsubmitted_results(normalized_models, tasks)
 
             if not unsubmitted:
                 logger.warning("No unsubmitted results found.")
@@ -1268,8 +1318,10 @@ class ResultCache:
             CopyResultsAction(unsubmitted, self.remote_results_path),
         ]
 
+        # only the models with unsubmitted results are submitted
+        normalized_models = list(unsubmitted)
         commit_message, result_count = _build_commit_message(
-            normalized_models, unsubmitted
+            normalized_models, unsubmitted, message
         )
 
         actions.append(CommitAction(remote_path, commit_message))
@@ -1299,10 +1351,12 @@ class ResultCache:
             branch_name=branch_name,
             models=normalized_models,
             result_count=result_count,
+            pr_title=message
+            or f"MTEB Evaluation Results: {_format_model_names(normalized_models)}",
             pr_body=pr_body,
         )
 
-    def load_results(
+    def load_results(  # noqa: PLR0914
         self,
         models: Sequence[str] | Iterable[ModelMeta] | None = None,
         tasks: Sequence[str]
@@ -1402,17 +1456,20 @@ class ResultCache:
                 _serialize_experiment_kwargs_to_name(params)
                 for params in experiment_kwargs
             }
+        model_metas: dict[tuple[ModelName, Revision, str | None], ModelMeta | None] = {}
         for path in paths:
             task_result = TaskResult.from_disk(path)
 
             if only_main_score:
                 task_result = task_result.only_main_score()
-            model_name, revision, experiment_name = (
-                self._get_model_name_and_revision_from_path(path.parent)
-            )
+
+            identity = self._get_model_name_and_revision_from_path(path.parent)
+            if identity is None:
+                continue
+            model_name, revision, experiment_name, model_meta = identity
 
             if validate_and_filter:
-                task_instance = task_names[task_result.task_name]
+                task_instance = task_names.get(task_result.task_name)
                 try:
                     task_result = task_result.validate_and_filter_scores(
                         task=task_instance
@@ -1437,7 +1494,9 @@ class ResultCache:
             ):
                 continue
 
-            models_results[(model_name, revision, experiment_name)].append(task_result)
+            key = (model_name, revision, experiment_name)
+            models_results[key].append(task_result)
+            model_metas.setdefault(key, model_meta)
 
         # create BenchmarkResults object
         models_results_object = [
@@ -1446,6 +1505,7 @@ class ResultCache:
                 model_revision=revision,
                 task_results=task_results,
                 experiment_name=experiment_name,
+                model_meta=model_metas.get((model_name, revision, experiment_name)),
             )
             for (
                 model_name,
@@ -1547,22 +1607,76 @@ def _build_manual_submission_message(
 def _build_commit_message(
     normalized_models: list[ModelMeta],
     unsubmitted: dict[ModelMeta, list[Path]],
+    message: str | None = None,
 ) -> tuple[str, int]:
     """Build the commit message for submitted results.
 
     Args:
         normalized_models: Models being submitted.
         unsubmitted: Result files grouped by model.
+        message: Title of the commit. If None, a title listing the models is used.
 
     Returns:
         Tuple containing the formatted commit message and result count.
     """
     model_str = ", ".join(model.name for model in normalized_models if model.name)
     result_count = sum(len(files) for files in unsubmitted.values())
+    title = (
+        message
+        or f"Add MTEB evaluation results for {_format_model_names(normalized_models)}"
+    )
     commit_message = (
-        f"Add MTEB evaluation results for {model_str}\n\n"
+        f"{title}\n\n"
         f"Models: {model_str}\n"
         f"Total results: {result_count}\n"
         f"Submitted by MTEB ResultCache"
     )
     return commit_message, result_count
+
+
+def _format_model_names(models: list[ModelMeta], max_names: int = 2) -> str:
+    """Join the model names, e.g. "model1, model2 (+1 more)", so that titles stay short."""
+    names = [model.name for model in models if model.name]
+    if len(names) <= max_names:
+        return ", ".join(names)
+    return f"{', '.join(names[:max_names])} (+{len(names) - max_names} more)"
+
+
+def _remote_model_dir(remote_results_path: Path, model_meta: ModelMeta) -> Path:
+    """The folder containing the results of a model in the results repository."""
+    model_dir = (
+        remote_results_path
+        / model_meta.model_name_as_path()
+        / cast("str", model_meta.revision)
+    )
+    if model_meta.experiment_name:
+        model_dir = model_dir / _EXPERIMENTS_FOLDER_NAME / model_meta.experiment_name
+    return model_dir
+
+
+def _has_unsubmitted_scores(result_file: Path, remote_file: Path) -> bool:
+    """Whether the result file has scores (split and subset) that the results repository does not have yet.
+
+    Results computed on a different dataset revision than the results in the repository cannot be merged, so they are
+    skipped with a warning.
+    """
+    if not remote_file.exists():
+        return True
+    local_result = TaskResult.from_disk(result_file)
+    remote_result = TaskResult.from_disk(remote_file)
+    if not remote_result.is_mergeable(local_result):
+        logger.warning(
+            f"Skipping {result_file}: it was computed on dataset revision {local_result.dataset_revision}, but the "
+            f"results repository has results for revision {remote_result.dataset_revision}. Rerun the task to submit it."
+        )
+        return False
+    remote_scores = {
+        (split, score["hf_subset"])
+        for split, scores in remote_result.scores.items()
+        for score in scores
+    }
+    return any(
+        (split, score["hf_subset"]) not in remote_scores
+        for split, scores in local_result.scores.items()
+        for score in scores
+    )

@@ -1,5 +1,6 @@
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.tasks.retrieval.eng.nq_retrieval import NQ_CITATION
 
 _EVAL_LANGS = {
     "ar": ["ara-Arab"],
@@ -195,8 +196,10 @@ class MultilingualNanoFiQA2018Retrieval(AbsTaskRetrieval):
         sample_creation="machine-translated",
         bibtex_citation=r"""
 @inproceedings{thakur2021beir,
+  archiveprefix = {arXiv},
   author = {Nandan Thakur and Nils Reimers and Andreas R{"u}ckl'e and Abhishek Srivastava and Iryna Gurevych},
   booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)},
+  eprint = {2104.08663},
   title = {{BEIR}: A Heterogeneous Benchmark for Zero-shot Evaluation of Information Retrieval Models},
   url = {https://openreview.net/forum?id=wCu6T5xFjeJ},
   year = {2021},
@@ -285,18 +288,14 @@ class MultilingualNanoMSMARCORetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated",
         bibtex_citation=r"""
-@article{DBLP:journals/corr/NguyenRSGTMD16,
+@misc{bajaj2018msmarcohumangenerated,
   archiveprefix = {arXiv},
-  author = {Tri Nguyen and Mir Rosenberg and Xia Song and Jianfeng Gao and Saurabh Tiwary and Rangan Majumder and Li Deng},
-  bibsource = {dblp computer science bibliography, https://dblp.org},
-  biburl = {https://dblp.org/rec/journals/corr/NguyenRSGTMD16.bib},
+  author = {Payal Bajaj and Daniel Campos and Nick Craswell and Li Deng and Jianfeng Gao and Xiaodong Liu and Rangan Majumder and Andrew McNamara and Bhaskar Mitra and Tri Nguyen and Mir Rosenberg and Xia Song and Alina Stoica and Saurabh Tiwary and Tong Wang},
   eprint = {1611.09268},
-  journal = {CoRR},
-  timestamp = {Mon, 13 Aug 2018 16:49:03 +0200},
-  title = {{MS} {MARCO:} {A} Human Generated MAchine Reading COmprehension Dataset},
-  url = {http://arxiv.org/abs/1611.09268},
-  volume = {abs/1611.09268},
-  year = {2016},
+  primaryclass = {cs.CL},
+  title = {MS MARCO: A Human Generated MAchine Reading COmprehension Dataset},
+  url = {https://arxiv.org/abs/1611.09268},
+  year = {2018},
 }
 """,
         prompt={
@@ -369,14 +368,7 @@ class MultilingualNanoNQRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="machine-translated",
-        bibtex_citation=r"""
-@article{47761,
-  author = {Tom Kwiatkowski and Jennimaria Palomaki and Olivia Redfield and Michael Collins and Ankur Parikh and Chris Alberti and Danielle Epstein and Illia Polosukhin and Matthew Kelcey and Jacob Devlin and Kenton Lee and Kristina N. Toutanova and Llion Jones and Ming-Wei Chang and Andrew Dai and Jakob Uszkoreit and Quoc Le and Slav Petrov},
-  journal = {Transactions of the Association of Computational Linguistics},
-  title = {Natural Questions: a Benchmark for Question Answering Research},
-  year = {2019},
-}
-""",
+        bibtex_citation=NQ_CITATION,
         prompt={
             "query": "Given a question, retrieve Wikipedia passages that answer the question"
         },

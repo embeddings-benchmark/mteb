@@ -3,20 +3,25 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
-from sentence_transformers import SentenceTransformer
 
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator, VideoCollator
+from mteb.models.modality_collators import (
+    AudioCollator,
+    VideoCollator,
+    single_clip_dataloader,
+)
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
     from typing_extensions import Unpack
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, EncodeKwargs
+    from mteb.types._encoder_io import VideoMetadata
+
 
 from .bidirlm_models import (
     BIDIRLM_CITATION,
@@ -86,15 +91,27 @@ class BidirLMOmniEncoder(AbsEncoder):
         self,
         model_name: str,
         revision: str | None = None,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         trust_remote_code: bool = True,
         max_text_length: int = 1024,
+        # fps=2: the checkpoint's own video config
+        # https://huggingface.co/BidirLM/BidirLM-Omni-2.5B-Embedding/blob/main/video_preprocessor_config.json
         fps: float | None = 2.0,
+        # 64 is an mteb cap; the checkpoint's video config has max_frames=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
-        max_samples: int | None = 30 * 16_000,
+        # None: the processor sets truncation=False and the audio encoder runs in
+        # windows, so the full clip is used, as in the authors' wrapper (#4370)
+        # https://huggingface.co/BidirLM/BidirLM-Omni-2.5B-Embedding/blob/main/processing_bidirlm_omni.py
+        max_samples: int | None = None,
         **kwargs: Any,
     ) -> None:
+        import torch
+        from sentence_transformers import SentenceTransformer
+
+        if device is None:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
+
         from transformers import AutoVideoProcessor
 
         processor_kwargs = kwargs.get("processor_kwargs", {})
@@ -120,6 +137,7 @@ class BidirLMOmniEncoder(AbsEncoder):
             **kwargs,
         )
         self.model.eval()
+        self.temporal_patch_size = video_processor.temporal_patch_size
         self.max_text_length = max_text_length
         self.fps = fps
         self.max_frames = max_frames
@@ -165,6 +183,27 @@ class BidirLMOmniEncoder(AbsEncoder):
 
         return None
 
+    def _video_input(
+        self, frames: torch.Tensor, metadata: VideoMetadata
+    ) -> dict[str, Any]:
+        """Frames and their timing in sentence-transformers' video format.
+
+        Without the timing the processor assumes 24 fps for the timestamps it writes
+        into the prompt.
+        https://huggingface.co/BidirLM/BidirLM-Omni-2.5B-Embedding/blob/4d8a7d34095ef8c4ab760744015825b809756dfe/processing_bidirlm_omni.py#L230-L238
+        """
+        import torch
+
+        if len(frames) < self.temporal_patch_size:
+            # the Qwen3-VL video processor needs temporal_patch_size frames; repeat
+            # the last one, as it already does for an odd frame count
+            # https://github.com/huggingface/transformers/blob/v5.19.0/src/transformers/models/qwen3_vl/video_processing_qwen3_vl.py#L236-L238
+            pad = self.temporal_patch_size - len(frames)
+            frames = torch.cat([frames, frames[-1:].repeat(pad, 1, 1, 1)])
+            indices = list(metadata["frames_indices"])
+            metadata = {**metadata, "frames_indices": indices + indices[-1:] * pad}
+        return {"array": frames, "video_metadata": metadata}
+
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -180,6 +219,8 @@ class BidirLMOmniEncoder(AbsEncoder):
         Builds conversation messages from whichever modalities are present and
         delegates to SentenceTransformer.encode() via the native 'message' modality.
         """
+        import torch
+
         ds_features = inputs.dataset.features
         has_text = "text" in ds_features
         has_image = "image" in ds_features
@@ -193,11 +234,17 @@ class BidirLMOmniEncoder(AbsEncoder):
                 max_frames=self.max_frames,
                 num_frames=self.num_frames,
                 max_samples=self.max_samples,
+                # min_frames=4: the checkpoint's own video config
+                min_frames=4,
             )
         elif has_audio:
             inputs.collate_fn = AudioCollator(
                 target_sampling_rate=self.sampling_rate,
                 max_samples=self.max_samples,
+            )
+        if has_audio:
+            inputs = single_clip_dataloader(
+                inputs, "batched audio embeddings change with their batch-mates"
             )
         instruction = self._get_instruction(task_metadata, prompt_type)
 
@@ -219,6 +266,10 @@ class BidirLMOmniEncoder(AbsEncoder):
                     for key in modality_keys
                     if key in batch and batch[key][i] is not None
                 }
+                if "video" in row:
+                    row["video"] = self._video_input(
+                        row["video"], batch["video_metadata"][i]
+                    )
                 batch_inputs.append(row)
 
             embeddings = self.model.encode(
@@ -259,4 +310,5 @@ bidirlm_omni_2_5b = ModelMeta(
     public_training_data="https://huggingface.co/datasets/BidirLM/BidirLM-Omni-Contrastive",
     training_datasets=BIDIRLM_OMNI_TRAINING_DATASETS,
     citation=BIDIRLM_CITATION,
+    extra_requirements_groups=["bidirlm-omni"],
 )

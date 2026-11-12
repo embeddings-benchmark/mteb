@@ -4,11 +4,13 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
-import torch
 
 import mteb
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
+from mteb.models.sentence_transformer_wrapper import (
+    SentenceTransformerEncoderWrapper,
+    _resolve_prompt,
+)
 from mteb.types import PromptType
 
 from .bge_models import bge_full_data
@@ -16,6 +18,7 @@ from .bge_models import bge_full_data
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
+    import torch
     from torch.utils.data import DataLoader
 
     from mteb.abstasks import (
@@ -27,14 +30,14 @@ if TYPE_CHECKING:
     from mteb.types import Array, BatchedInput
 logger = logging.getLogger(__name__)
 
-CDE_CITATION = """@misc{morris2024contextualdocumentembeddings,
-    title={Contextual Document Embeddings},
-    author={John X. Morris and Alexander M. Rush},
-    year={2024},
-    eprint={2410.02525},
-    archivePrefix={arXiv},
-    primaryClass={cs.CL},
-    url={https://arxiv.org/abs/2410.02525},
+CDE_CITATION = """@inproceedings{morris2024contextualdocumentembeddings,
+  archiveprefix = {arXiv},
+  author = {John Xavier Morris and Alexander M Rush},
+  booktitle = {The Thirteenth International Conference on Learning Representations},
+  eprint = {2410.02525},
+  title = {Contextual Document Embeddings},
+  url = {https://openreview.net/forum?id=Wqsk3FbD6D},
+  year = {2025},
 }"""
 
 
@@ -95,15 +98,9 @@ class CDEWrapper(SentenceTransformerEncoderWrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        prompt = self.get_prompt(task_metadata, prompt_type)
-        if prompt:
-            logger.info(
-                f"Using prompt=`{prompt}` for task={task_metadata.name} prompt_type={prompt_type}"
-            )
-        else:
-            logger.info(
-                f"No model prompts found for task={task_metadata.name} prompt_type={prompt_type}"
-            )
+        import torch
+
+        prompt = _resolve_prompt(self.model_prompts, task_metadata, prompt_type)
         sentences = [text for batch in inputs for text in batch["text"]]
         self._load_task_sample(
             sentences,

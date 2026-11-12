@@ -32,12 +32,15 @@ class MNISTClassification(AbsTaskClassification):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@article{lecun2010mnist,
-  author = {LeCun, Yann and Cortes, Corinna and Burges, CJ},
-  journal = {ATT Labs [Online]. Available: http://yann.lecun.com/exdb/mnist},
-  title = {MNIST handwritten digit database},
-  volume = {2},
-  year = {2010},
+@article{lecun1998gradient,
+  author = {LeCun, Yann and Bottou, L{\'e}on and Bengio, Yoshua and Haffner, Patrick},
+  journal = {Proceedings of the IEEE},
+  number = {11},
+  pages = {2278--2324},
+  publisher = {Ieee},
+  title = {Gradient-based learning applied to document recognition},
+  volume = {86},
+  year = {1998},
 }
 """,
     )

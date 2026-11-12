@@ -304,6 +304,7 @@ arctic_embed_m_v1_5 = ModelMeta(
 arctic_embed_m_v2_0 = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
     loader_kwargs={"trust_remote_code": True},
+    extra_requirements_groups=["arctic-embed-m-v2"],
     name="Snowflake/snowflake-arctic-embed-m-v2.0",
     model_type=["dense"],
     revision="f2a7d59d80dfda5b1d14f096f3ce88bb6bf9ebdc",

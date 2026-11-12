@@ -58,7 +58,7 @@ and Fichtinger, Gabor},
 
     def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
         path = Path(__file__).parent / "templates" / "PatchCamelyon_labels.txt"
-        with path.open() as f:
+        with path.open(encoding="utf-8") as f:
             labels = f.readlines()
 
         return [f"histopathology image of {c}" for c in labels]

@@ -1,4 +1,6 @@
-import torch
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from mteb.models.model_implementations.pylate_models import MultiVectorModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
@@ -6,6 +8,16 @@ from mteb.models.sentence_transformer_wrapper import (
     CrossEncoderWrapper,
     SentenceTransformerEncoderWrapper,
 )
+from mteb.types import OutputDType
+
+if TYPE_CHECKING:
+    import torch
+
+
+def _identity(logits: torch.Tensor) -> torch.Tensor:
+    """Keep the raw logit as the score, like ``torch.nn.Identity()`` but without importing torch."""
+    return logits
+
 
 mixedbread_training_data = {
     # from correspondence:
@@ -47,23 +59,17 @@ mxbai_embed_large_v1 = ModelMeta(
     ],
     use_instructions=True,
     citation="""
-    @online{emb2024mxbai,
-      title={Open Source Strikes Bread - New Fluffy Embeddings Model},
-      author={Sean Lee and Aamir Shakir and Darius Koenig and Julius Lipp},
-      year={2024},
-      url={https://www.mixedbread.ai/blog/mxbai-embed-large-v1},
-    }
-
-    @article{li2023angle,
+@article{li2023angle,
       title={AnglE-optimized Text Embeddings},
       author={Li, Xianming and Li, Jing},
       journal={arXiv preprint arXiv:2309.12871},
       year={2023}
     }
-    """,
+""",
     public_training_code=None,
     public_training_data=None,
     training_datasets=mixedbread_training_data,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 deepset_mxbai_embed_de_large_v1 = ModelMeta(
@@ -92,6 +98,7 @@ deepset_mxbai_embed_de_large_v1 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 mxbai_embed_2d_large_v1 = ModelMeta(
@@ -123,6 +130,7 @@ mxbai_embed_2d_large_v1 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 
@@ -149,12 +157,8 @@ mxbai_embed_xsmall_v1 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=mixedbread_training_data,
-    citation="""@online{xsmall2024mxbai,
-  title={Every Byte Matters: Introducing mxbai-embed-xsmall-v1},
-  author={Sean Lee and Julius Lipp and Rui Huang and Darius Koenig},
-  year={2024},
-  url={https://www.mixedbread.ai/blog/mxbai-embed-xsmall-v1},
-}""",
+    citation=None,
+    output_dtypes=OutputDType.FLOAT16,
 )
 
 mxbai_rerank_xsmall_v1 = ModelMeta(
@@ -187,12 +191,7 @@ mxbai_rerank_xsmall_v1 = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["cross-encoder"],
-    citation="""@online{rerank2024mxbai,
-  title={Boost Your Search With The Crispy Mixedbread Rerank Models},
-  author={Aamir Shakir and Darius Koenig and Julius Lipp and Sean Lee},
-  year={2024},
-  url={https://www.mixedbread.ai/blog/mxbai-rerank-v1},
-}""",
+    citation=None,
     contacts=None,
 )
 
@@ -226,12 +225,7 @@ mxbai_rerank_base_v1 = ModelMeta(
     superseded_by="mixedbread-ai/mxbai-rerank-base-v2",
     modalities=["text"],
     model_type=["cross-encoder"],
-    citation="""@online{rerank2024mxbai,
-  title={Boost Your Search With The Crispy Mixedbread Rerank Models},
-  author={Aamir Shakir and Darius Koenig and Julius Lipp and Sean Lee},
-  year={2024},
-  url={https://www.mixedbread.ai/blog/mxbai-rerank-v1},
-}""",
+    citation=None,
     contacts=None,
 )
 
@@ -265,12 +259,7 @@ mxbai_rerank_large_v1 = ModelMeta(
     superseded_by="mixedbread-ai/mxbai-rerank-large-v2",
     modalities=["text"],
     model_type=["cross-encoder"],
-    citation="""@online{rerank2024mxbai,
-  title={Boost Your Search With The Crispy Mixedbread Rerank Models},
-  author={Aamir Shakir and Darius Koenig and Julius Lipp and Sean Lee},
-  year={2024},
-  url={https://www.mixedbread.ai/blog/mxbai-rerank-v1},
-}""",
+    citation=None,
     contacts=None,
 )
 
@@ -411,7 +400,7 @@ MXBAI_RERANK_V2_CITATION = """@inproceedings{li2026prorank,
 # to match the reference implementation and the published benchmark numbers.
 mxbai_rerank_base_v2 = ModelMeta(
     loader=CrossEncoderWrapper,
-    loader_kwargs=dict(activation_fn=torch.nn.Identity()),
+    loader_kwargs=dict(activation_fn=_identity),
     name="mixedbread-ai/mxbai-rerank-base-v2",
     revision="3ea9d4dffa7d12a4f366be8e275c349de9fc9865",
     release_date="2025-03-03",
@@ -441,7 +430,7 @@ mxbai_rerank_base_v2 = ModelMeta(
 
 mxbai_rerank_large_v2 = ModelMeta(
     loader=CrossEncoderWrapper,
-    loader_kwargs=dict(activation_fn=torch.nn.Identity()),
+    loader_kwargs=dict(activation_fn=_identity),
     name="mixedbread-ai/mxbai-rerank-large-v2",
     revision="ca7e1ee484c37c0ddd8d178a9a5c33cec575c5e6",
     release_date="2025-03-03",
