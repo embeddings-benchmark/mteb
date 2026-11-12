@@ -1,10 +1,18 @@
 """Implementation of Sentence Transformers model validated in MTEB."""
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import numpy as np
 
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import OutputDType
+
+if TYPE_CHECKING:
+    from mteb.types import PromptType
 
 paraphrase_langs = [
     "ara-Arab",
@@ -983,6 +991,131 @@ FlowVec_v1 = ModelMeta(
         "XNLI",
     },
     adapted_from="Qwen/Qwen3-Embedding-8B",
+    superseded_by=None,
+    modalities=["text"],
+    model_type=["dense"],
+    public_training_code=None,
+    public_training_data=None,
+)
+
+FLOWVEC_V2_NO_INSTRUCTION = "<no instruction>"
+
+FLOWVEC_V2_PROMPTS = {
+    "BelebeleRetrieval": {
+        "query": "Given a web search query, retrieve relevant passages that answer the query",
+        "document": "<no instruction>",
+        "default": "<no instruction>",
+    },
+    "BengaliSentimentAnalysis": "Classify the sentiment or emotional tone of the given text",
+    "GujaratiNewsClassification": "Classify the given text into its category",
+    "HindiDiscourseClassification": "Classify the discourse mode of this Hindi sentence: argumentative, descriptive, dialogue, informative or narrative",
+    "IN22ConvBitextMining": "Retrieve parallel sentences.",
+    "IN22GenBitextMining": "Retrieve parallel sentences.",
+    "IndicCrosslingualSTS": "Retrieve sentences with the same meaning in another language.",
+    "MTOPIntentClassification": "Identify the intent expressed in the given utterance",
+    "MalayalamNewsClassification": "Classify this Malayalam news text into one of: business, sports, entertainment",
+    "MultiHateClassification": "Classify the sentiment or emotional tone of the given text",
+    "NepaliNewsClassification": "Represent this text for classification by its label",
+    "PunjabiNewsClassification": "Represent this text for classification by its label",
+    "SIB200ClusteringS2S": "Classify the topic of this sentence into one of: science/technology, travel, politics, sports, health, entertainment, geography",
+    "SanskritShlokasClassification": "Identify the author of this Sanskrit verse (for example Chanakya or Vidura) or whether it is a Sanskrit slogan",
+    "SentimentAnalysisHindi": "Classify the sentiment or emotional tone of the given text",
+    "TweetSentimentClassification": "Classify the sentiment of this tweet as positive, negative or neutral",
+    "UrduRomanSentimentClassification": "Classify the sentiment of this Roman Urdu text as positive, negative or neutral",
+    "WikipediaRerankingMultilingual": "<no instruction>",
+    "XNLI": "Given a premise, retrieve a hypothesis that is entailed by it",
+    "XQuADRetrieval": {
+        "query": "Given a web search query, retrieve relevant passages that answer the query",
+        "document": "<no instruction>",
+        "default": "<no instruction>",
+    },
+    "Any2AnyRetrieval": "<no instruction>",
+    "BitextMining": "Retrieve semantically similar text.",
+    "Classification": "Represent this text for classification by its label",
+    "Clustering": "Classify the topic of this sentence into one of: science/technology, travel, politics, sports, health, entertainment, geography",
+    "InstructionReranking": "<no instruction>",
+    "InstructionRetrieval": "<no instruction>",
+    "MultilabelClassification": "<no instruction>",
+    "PairClassification": "Given a premise, retrieve a hypothesis that is entailed by it",
+    "Regression": "<no instruction>",
+    "Reranking": {
+        "query": "Given a web search query, retrieve relevant passages that answer the query",
+        "document": "<no instruction>",
+        "default": "<no instruction>",
+    },
+    "Retrieval": {
+        "query": "Given a web search query, retrieve relevant passages that answer the query",
+        "document": "<no instruction>",
+        "default": "<no instruction>",
+    },
+    "STS": "Retrieve semantically similar text.",
+    "Summarization": "<no instruction>",
+}
+
+
+def flowvec_instruction_template(
+    instruction: str | dict[str, str], prompt_type: PromptType | None = None
+) -> str:
+    if isinstance(instruction, dict):  # symmetric tasks receive the whole entry
+        instruction = instruction["default"]
+    if instruction == FLOWVEC_V2_NO_INSTRUCTION:
+        return ""
+    return f"Instruct: {instruction}\nQuery: "
+
+
+FlowVec_v2 = ModelMeta(
+    loader=InstructSentenceTransformerModel,
+    loader_kwargs=dict(
+        instruction_template=flowvec_instruction_template,
+        apply_instruction_to_passages=False,
+        prompts_dict=FLOWVEC_V2_PROMPTS,
+    ),
+    name="LingoIITGN/FlowVec-v2",
+    revision="4f21e229d0c926a3904f3dd62bd6e377138feda6",
+    release_date="2026-11-11",
+    languages=[
+        "asm-Beng",
+        "ben-Beng",
+        "brx-Deva",
+        "doi-Deva",
+        "guj-Gujr",
+        "hin-Deva",
+        "kan-Knda",
+        "kas-Deva",
+        "mai-Deva",
+        "mal-Mlym",
+        "mar-Deva",
+        "mni-Beng",
+        "nep-Deva",
+        "ori-Orya",
+        "pan-Guru",
+        "san-Deva",
+        "sat-Olck",
+        "snd-Arab",
+        "tam-Taml",
+        "tel-Telu",
+        "urd-Arab",
+    ],
+    n_parameters=7567295488,
+    n_embedding_parameters=621219840,
+    memory_usage_mb=14433,
+    max_tokens=40960,
+    embed_dim=4096,
+    license="apache-2.0",
+    open_weights=True,
+    framework=["Sentence Transformers", "safetensors", "PyTorch"],
+    reference="https://huggingface.co/LingoIITGN/FlowVec-v2",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=True,
+    training_datasets={
+        "Samanantar",
+        "IndicXNLI",
+        "MassiveIntentClassification",
+        "IndicGLUE",
+        "SIB200ClusteringS2S",
+        "XNLI",
+    },
+    adapted_from="LingoIITGN/FlowVec-v1",
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
