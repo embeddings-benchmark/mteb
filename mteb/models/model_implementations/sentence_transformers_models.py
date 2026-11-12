@@ -1,16 +1,16 @@
 """Implementation of Sentence Transformers model validated in MTEB."""
 
 from __future__ import annotations
- 
+
 from typing import TYPE_CHECKING
- 
+
 import numpy as np
- 
+
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import OutputDType
- 
+
 if TYPE_CHECKING:
     from mteb.types import PromptType
 
@@ -999,7 +999,7 @@ FlowVec_v1 = ModelMeta(
 )
 
 FLOWVEC_V2_NO_INSTRUCTION = "<no instruction>"
- 
+
 FLOWVEC_V2_PROMPTS = {
     "BelebeleRetrieval": {
         "query": "Given a web search query, retrieve relevant passages that answer the query",
@@ -1051,8 +1051,8 @@ FLOWVEC_V2_PROMPTS = {
     "STS": "Retrieve semantically similar text.",
     "Summarization": "<no instruction>",
 }
- 
- 
+
+
 def flowvec_instruction_template(
     instruction: str | dict[str, str], prompt_type: PromptType | None = None
 ) -> str:
@@ -1061,8 +1061,8 @@ def flowvec_instruction_template(
     if instruction == FLOWVEC_V2_NO_INSTRUCTION:
         return ""
     return f"Instruct: {instruction}\nQuery: "
- 
- 
+
+
 FlowVec_v2 = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
