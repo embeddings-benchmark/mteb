@@ -24,7 +24,7 @@ if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput
+    from mteb.types import BatchedInput
 
 
 logger = logging.getLogger(__name__)
@@ -75,7 +75,7 @@ class MicrosoftEmbedding1Wrapper(AbsEncoder):
         self,
         model_name: str,
         revision: str,
-        embed_dim: int = 256,
+        embed_dim: int = 1024,
         **kwargs: Any,
     ) -> None:
         from azure.data.ai import InferenceClient
@@ -224,11 +224,8 @@ class MicrosoftEmbedding1Wrapper(AbsEncoder):
         prompt_type: PromptType | None = None,
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ) -> Array:
-        import torch
-        from torch.nn.utils.rnn import pad_sequence
-
-        embeddings = []
+    ) -> list[np.ndarray]:
+        embeddings: list[np.ndarray] = []
         for batch in tqdm(
             inputs, disable=not show_progress_bar, desc="Encoding"
         ):
@@ -257,11 +254,7 @@ class MicrosoftEmbedding1Wrapper(AbsEncoder):
             else:
                 raise ValueError("API expects a text or image batch.")
 
-        if not embeddings:
-            return np.empty((0, 0, self.embed_dim), dtype=np.float16)
-        return pad_sequence(
-            [torch.from_numpy(embedding) for embedding in embeddings], batch_first=True
-        ).numpy()
+        return embeddings
 
     def close(self) -> None:
         self._client.close()
@@ -272,7 +265,6 @@ class MicrosoftEmbedding1Wrapper(AbsEncoder):
 
 microsoft_embedding_1_large = ModelMeta(
     loader=MicrosoftEmbedding1Wrapper,
-    loader_kwargs={"embed_dim": 256},
     name="Microsoft/microsoft-embedding-1-large",
     revision="1",
     release_date=None,
