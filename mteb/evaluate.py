@@ -765,8 +765,8 @@ def _evaluate_resolved(  # noqa: PLR0913
             if _res.exceptions:
                 exceptions.extend(_res.exceptions)
         return ModelResult(
-            model_name=_res.model_name,
-            model_revision=_res.model_revision,
+            model_name=model_name,
+            model_revision=model_revision,
             task_results=evaluate_results,
             exceptions=exceptions,
         )
