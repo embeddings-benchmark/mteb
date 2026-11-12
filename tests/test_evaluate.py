@@ -75,6 +75,15 @@ def test_evaluate_w_multiple_tasks(model: EncoderProtocol, tasks: list[AbsTask])
     assert len(results) == len(tasks), "should return exactly one result per task"
 
 
+def test_evaluate_w_no_tasks():
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    results = mteb.evaluate(model, [], cache=None)
+
+    assert results.task_results == []
+    assert results.model_name == model.mteb_model_meta.name
+    assert results.model_revision == model.mteb_model_meta.revision
+
+
 @pytest.mark.parametrize(
     ("model", "task", "expected_score"),
     [mock_classification],
