@@ -1067,7 +1067,7 @@ FlowVec_v2 = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=flowvec_instruction_template,
-        apply_instruction_to_passages=True,
+        apply_instruction_to_passages=False,
         prompts_dict=FLOWVEC_V2_PROMPTS,
     ),
     name="LingoIITGN/FlowVec-v2",
@@ -1122,4 +1122,3 @@ FlowVec_v2 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
 )
-
