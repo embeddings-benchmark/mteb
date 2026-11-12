@@ -693,7 +693,7 @@ def _evaluate_resolved(  # noqa: PLR0913
             return ModelResult(
                 model_name=model_name,
                 model_revision=model_revision,
-                task_results=[existing_results],
+                task_results=[existing_results.validate_and_filter_scores(tasks)],
             )
 
         results = _evaluate_resolved(
@@ -724,6 +724,10 @@ def _evaluate_resolved(  # noqa: PLR0913
                 meta,
                 encode_kwargs=encode_kwargs,
             )
+
+        if existing_results:
+            # the cache may hold more splits/subsets than the task asks for
+            combined_results = combined_results.validate_and_filter_scores(tasks)
 
         return ModelResult(
             model_name=results.model_name,
@@ -785,7 +789,7 @@ def _evaluate_resolved(  # noqa: PLR0913
         return ModelResult(
             model_name=model_name,
             model_revision=model_revision,
-            task_results=[existing_results],
+            task_results=[existing_results.validate_and_filter_scores(task)],
         )
     if existing_results:
         logger.info(
@@ -849,6 +853,10 @@ def _evaluate_resolved(  # noqa: PLR0913
             meta,
             encode_kwargs=encode_kwargs,
         )
+
+    if existing_results:
+        # the cache may hold more splits/subsets than the task asks for
+        result = result.validate_and_filter_scores(task)
 
     return ModelResult(
         model_name=model_name,
