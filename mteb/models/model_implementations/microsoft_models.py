@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import datetime as dt
 import logging
+import math
 import os
+from contextlib import ExitStack, contextmanager
 from io import BytesIO
 from typing import TYPE_CHECKING, Any
 from uuid import uuid4
@@ -15,7 +17,8 @@ from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
-    from azure.core.credentials import TokenCredential
+    from collections.abc import Generator
+
     from azure.storage.blob import BlobServiceClient, UserDelegationKey
     from PIL import Image
     from torch.utils.data import DataLoader
@@ -26,50 +29,78 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+# Limits enforced by the Microsoft Embedding 1 API
+IMAGE_MAX_PIXELS = 50_000_000
+MAX_IMAGE_BATCH_SIZE = 8
+MAX_TEXT_BATCH_SIZE = 1
+
+
+def _resize_image(image: Image.Image) -> Image.Image:
+    from PIL import Image
+
+    max_pixels = IMAGE_MAX_PIXELS
+    width, height = image.size
+    if width * height <= max_pixels:
+        return image
+
+    scale = math.sqrt(max_pixels / (width * height))
+    size = (
+        max(1, min(max_pixels, int(width * scale))),
+        max(1, min(max_pixels, int(height * scale))),
+    )
+    return image.resize(size, Image.Resampling.LANCZOS)
+
 
 class MicrosoftEmbedding1Wrapper(AbsEncoder):
-    """Azure Data AI multi-vector embeddings with inline results and MaxSim scoring.
+    """Multi-vector embeddings with inline results and MaxSim scoring.
 
-    Set AZURE_DATA_AI_ENDPOINT or pass endpoint when loading the model.
-    AZURE_DATA_AI_SCOPE optionally overrides the production token scope.
-    Token vectors default to 256 dimensions; pass embed_dim=1024 for the full run.
-    Images are temporarily uploaded under tmp/mteb-microsoft-embedding-1-large/
-    in AZURE_DATA_AI_STAGING_CONTAINER in AZURE_DATA_AI_STAGING_ACCOUNT,
-    accessed with a user delegation SAS, then deleted.
-    The caller needs Embedding User on the inference account and Storage Blob
-    Data Contributor on the staging account to upload, sign, and delete images.
+    Suggested pre-flight checks:
+    - Set AZURE_DATA_AI_ENDPOINT -> This is the main endpoint for inference client.
+    - (Optional) Set AZURE_DATA_AI_SCOPE to override the production token scope.
+    - (Image inputs) Set AZURE_DATA_AI_STAGING_ACCOUNT and
+      AZURE_DATA_AI_STAGING_CONTAINER, and grant the caller Storage Blob Data
+      Contributor on the staging account.
+    
+    Notes:
+    - Images are temporarily uploaded under tmp/mteb-microsoft-embedding-1-large/
+      in AZURE_DATA_AI_STAGING_CONTAINER in AZURE_DATA_AI_STAGING_ACCOUNT,
+      accessed with a user delegation SAS, then deleted.
+      The caller needs Embedding User on the inference account and Storage Blob
+      Data Contributor on the staging account to upload, sign, and delete images.
+    - The API supports both dense and multi-vector embeddings, but this wrapper 
+      explicitly uses only multi-vector embeddings.
     """
 
     def __init__(
         self,
         model_name: str,
         revision: str,
-        endpoint: str | None = None,
-        scope: str | None = None,
-        credential: TokenCredential | None = None,
         embed_dim: int = 256,
         **kwargs: Any,
     ) -> None:
         from azure.data.ai import InferenceClient
         from azure.identity import DefaultAzureCredential
 
-        if embed_dim not in {256, 1024}:
+        if {"endpoint", "scope", "credential", "credentials"}.intersection(kwargs):
             raise ValueError(
-                "Microsoft embedding multi-vector embed_dim must be 256 or 1024."
+                "Configure AZURE_DATA_AI_ENDPOINT, AZURE_DATA_AI_SCOPE, and "
+                "DefaultAzureCredential outside model arguments to keep connection "
+                "and authentication settings out of experiment metadata."
+            )
+        if embed_dim not in {128, 256, 512, 1024}:
+            raise ValueError(
+                "multi-vector embed_dim must be one of 128, 256, 512, or 1024."
             )
         self.embed_dim = embed_dim
-        endpoint = endpoint or os.environ.get("AZURE_DATA_AI_ENDPOINT")
+        endpoint = os.environ.get("AZURE_DATA_AI_ENDPOINT")
         if not endpoint:
-            raise ValueError(
-                "Set AZURE_DATA_AI_ENDPOINT or pass endpoint to the model."
-            )
-        scope = scope or os.environ.get(
+            raise ValueError("Set AZURE_DATA_AI_ENDPOINT to load the model.")
+        scope = os.environ.get(
             "AZURE_DATA_AI_SCOPE", "https://dbinference.azure.com/.default"
         )
         self.model_name = model_name.rsplit("/", 1)[-1]
         self.revision = revision
-        self._credential = credential or DefaultAzureCredential()
-        self._owns_credential = credential is None
+        self._credential = DefaultAzureCredential()
         self._client = InferenceClient(
             endpoint=endpoint,
             credential=self._credential,
@@ -79,36 +110,52 @@ class MicrosoftEmbedding1Wrapper(AbsEncoder):
         self._delegation_key: UserDelegationKey | None = None
         self._delegation_key_expiry: dt.datetime | None = None
 
-    def _embed(self, item: dict[str, str]) -> np.ndarray:
+    def _embed(self, inputs: list[dict[str, str]]) -> list[np.ndarray]:
+        if not inputs:
+            return []
+        max_batch_size = (
+            MAX_IMAGE_BATCH_SIZE
+            if any(item["kind"] == "image" for item in inputs)
+            else MAX_TEXT_BATCH_SIZE
+        )
+        if len(inputs) > max_batch_size:
+            raise ValueError(
+                f"API accepts at most {max_batch_size} inputs per request."
+            )
         result = self._client.get_embeddings(
-            inputs=[item],
+            inputs=inputs,
             model=self.model_name,
             model_version=self.revision,
             vector_kind="multi",
             dimensions=self.embed_dim,
             encoding_format="float",
-            output_data_kind="float32",
+            output_data_kind="float16",
             delivery="inline",
         )
         if result.model_version != self.revision:
             raise ValueError(
-                f"Expected Microsoft embedding version {self.revision}, got {result.model_version}."
+                f"Model version mismatch: expected {self.revision}, API returned {result.model_version}."
             )
-        if len(result.data) != 1:
+        if len(result.data) != len(inputs):
             raise ValueError("Expected one inline embedding per input.")
-        item = result.data[0]
-        embedding = np.asarray(item.multi_embedding, dtype=np.float32)
-        if (
-            embedding.ndim != 2
-            or embedding.shape[0] == 0
-            or embedding.shape[1] != self.embed_dim
-            or tuple(item.shape) != embedding.shape
-            or not np.isfinite(embedding).all()
-        ):
-            raise ValueError(f"Unexpected embedding shape: {embedding.shape}.")
-        return embedding
+        embeddings = []
+        for index, item in enumerate(sorted(result.data, key=lambda item: item.index)):
+            if item.index != index:
+                raise ValueError("Expected one inline embedding per input index.")
+            embedding = np.asarray(item.multi_embedding, dtype=np.float16)
+            if (
+                embedding.ndim != 2
+                or embedding.shape[0] == 0
+                or embedding.shape[1] != self.embed_dim
+                or tuple(item.shape) != embedding.shape
+                or not np.isfinite(embedding).all()
+            ):
+                raise ValueError(f"Unexpected embedding shape: {embedding.shape}.")
+            embeddings.append(embedding)
+        return embeddings
 
-    def _embed_image(self, image: Image.Image) -> np.ndarray:
+    @contextmanager
+    def _stage_image(self, image: Image.Image) -> Generator[dict[str, str], None, None]:
         from azure.core.exceptions import AzureError
         from azure.storage.blob import (
             BlobSasPermissions,
@@ -129,6 +176,7 @@ class MicrosoftEmbedding1Wrapper(AbsEncoder):
                 f"https://{account}.blob.core.windows.net", credential=self._credential
             )
 
+        # Reuse a delegation key until it is within 20 minutes of expiry.
         now = dt.datetime.now(dt.UTC)
         if (
             self._delegation_key_expiry is None
@@ -140,6 +188,7 @@ class MicrosoftEmbedding1Wrapper(AbsEncoder):
             )
             self._delegation_key_expiry = expiry
 
+        # Temporary blobs are deleted after inference, even if uploading or inference fails.
         name = f"tmp/mteb-microsoft-embedding-1-large/{uuid4().hex}.png"
         sas = generate_blob_sas(
             account_name=account,
@@ -152,14 +201,14 @@ class MicrosoftEmbedding1Wrapper(AbsEncoder):
             expiry=now + dt.timedelta(minutes=15),
         )
         blob = self._blob_service.get_blob_client(container=container, blob=name)
-        with BytesIO() as buffer:
-            image.convert("RGB").save(buffer, format="PNG")
-            blob.upload_blob(
-                buffer.getvalue(),
-                content_settings=ContentSettings(content_type="image/png"),
-            )
         try:
-            return self._embed({"kind": "image", "url": blob.url, "sasToken": sas})
+            with BytesIO() as buffer:
+                _resize_image(image).convert("RGB").save(buffer, format="PNG")
+                blob.upload_blob(
+                    buffer.getvalue(),
+                    content_settings=ContentSettings(content_type="image/png"),
+                )
+            yield {"kind": "image", "url": blob.url, "sasToken": sas}
         finally:
             try:
                 blob.delete_blob()
@@ -184,25 +233,35 @@ class MicrosoftEmbedding1Wrapper(AbsEncoder):
 
         embeddings = []
         for batch in tqdm(
-            inputs, disable=not show_progress_bar, desc="Microsoft Embedding Encoding"
+            inputs, disable=not show_progress_bar, desc="Encoding"
         ):
             if "image" in batch and "text" in batch:
                 raise ValueError(
-                    "Microsoft embeddings expect separate text and image inputs."
+                    "API expects separate text and image inputs."
                 )
             if "image" in batch:
-                embeddings.extend(self._embed_image(image) for image in batch["image"])
+                for start in range(0, len(batch["image"]), MAX_IMAGE_BATCH_SIZE):
+                    with ExitStack() as stack:
+                        image_inputs = [
+                            stack.enter_context(self._stage_image(image))
+                            for image in batch["image"][
+                                start : start + MAX_IMAGE_BATCH_SIZE
+                            ]
+                        ]
+                        embeddings.extend(self._embed(image_inputs))
             elif "text" in batch:
                 kind = "query" if prompt_type == PromptType.query else "text"
-                embeddings.extend(
-                    self._embed({"kind": kind, "content": text})
-                    for text in batch["text"]
-                )
+                for start in range(0, len(batch["text"]), MAX_TEXT_BATCH_SIZE):
+                    text_inputs = [
+                        {"kind": kind, "content": text}
+                        for text in batch["text"][start : start + MAX_TEXT_BATCH_SIZE]
+                    ]
+                    embeddings.extend(self._embed(text_inputs))
             else:
-                raise ValueError("Microsoft embeddings expect a text or image batch.")
+                raise ValueError("API expects a text or image batch.")
 
         if not embeddings:
-            return np.empty((0, 0, self.embed_dim), dtype=np.float32)
+            return np.empty((0, 0, self.embed_dim), dtype=np.float16)
         return pad_sequence(
             [torch.from_numpy(embedding) for embedding in embeddings], batch_first=True
         ).numpy()
@@ -211,8 +270,7 @@ class MicrosoftEmbedding1Wrapper(AbsEncoder):
         self._client.close()
         if self._blob_service is not None:
             self._blob_service.close()
-        if self._owns_credential:
-            self._credential.close()
+        self._credential.close()
 
 
 microsoft_embedding_1_large = ModelMeta(
@@ -226,7 +284,7 @@ microsoft_embedding_1_large = ModelMeta(
     n_embedding_parameters=None,
     memory_usage_mb=None,
     max_tokens=None,
-    embed_dim=[256, 1024],
+    embed_dim=[128, 256, 512, 1024],
     license=None,
     open_weights=False,
     public_training_code=None,
