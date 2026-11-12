@@ -117,6 +117,7 @@ class MicrosoftEmbedding1Wrapper(AbsEncoder):
             generate_blob_sas,
         )
 
+        # Current gateway does not support inline image inputs, so upload the image to blob storage.
         account = os.environ.get("AZURE_DATA_AI_STAGING_ACCOUNT")
         container = os.environ.get("AZURE_DATA_AI_STAGING_CONTAINER")
         if not account or not container:
