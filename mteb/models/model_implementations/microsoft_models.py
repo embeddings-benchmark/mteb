@@ -125,17 +125,12 @@ class MicrosoftEmbedding1Wrapper(AbsEncoder):
         result = self._client.get_embeddings(
             inputs=inputs,
             model=self.model_name,
-            model_version=self.revision,
             vector_kind="multi",
             dimensions=self.embed_dim,
             encoding_format="float",
             output_data_kind="float16",
             delivery="inline",
         )
-        if result.model_version != self.revision:
-            raise ValueError(
-                f"Model version mismatch: expected {self.revision}, API returned {result.model_version}."
-            )
         if len(result.data) != len(inputs):
             raise ValueError("Expected one inline embedding per input.")
         embeddings = []
