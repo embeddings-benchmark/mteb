@@ -1,17 +1,15 @@
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import (
-    AbsTaskZeroShotClassification,
-)
 
 
-class HMDB51ZeroShotClassification(AbsTaskZeroShotClassification):
+class HMDB51ZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="HMDB51ZeroShot",
         description="HMDB51 is a large video database for human motion recognition with 51 action categories from digitized movies and online sources. Used official split 1 across 51 action classes (~3,570 train / ~1,530 test).",
         reference="https://serre-lab.clps.brown.edu/resource/hmdb-a-large-human-motion-database/",
         dataset={
-            "path": "mteb/HMDB51",
-            "revision": "7f9af5438a855e9348fb23ecb5ec740a9c21daf3",
+            "path": "mteb/HMDB51ZeroShot",
+            "revision": "5eb189854d674b9791514bc839d015050b92ff89",
         },
         type="VideoZeroshotClassification",
         category="v2t",
@@ -40,11 +38,3 @@ class HMDB51ZeroShotClassification(AbsTaskZeroShotClassification):
 }
 """,
     )
-
-    input_column_name: str = "video"
-
-    def get_candidate_labels(self) -> list[str]:
-        return [
-            f"a video of {name.replace('_', ' ')}"
-            for name in self.dataset["test"].features[self.label_column_name].names
-        ]

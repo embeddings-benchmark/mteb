@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-from typing import Any
-
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import AbsTaskZeroShotClassification
 
 CITATION = r"""
 @inproceedings{poria2019meld,
@@ -16,14 +14,14 @@ CITATION = r"""
 """
 
 
-class MELDAudioVideoZeroShotClassification(AbsTaskZeroShotClassification):
+class MELDAudioVideoZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MELDAudioVideoZeroShot",
         description="MELD (Multimodal EmotionLines Dataset) is a multimodal emotion recognition dataset containing over 13,000 utterances from the Friends TV series, labeled with 7 emotion categories: Anger, Disgust, Sadness, Joy, Neutral, Surprise, and Fear Sampled the test split (~2,610 examples).",
         reference="https://aclanthology.org/P19-1050.pdf",
         dataset={
-            "path": "mteb/MELD",
-            "revision": "6c0bf58845b1acccefc450b131c304378c1e38d5",
+            "path": "mteb/MELDAudioVideoZeroShot",
+            "revision": "d1ed5639cc3262d1be68558ef41eda48b51dd943",
         },
         type="VideoZeroshotClassification",
         category="va2t",
@@ -41,30 +39,16 @@ class MELDAudioVideoZeroShotClassification(AbsTaskZeroShotClassification):
         is_beta=True,
         bibtex_citation=CITATION,
     )
-    input_column_name = ("video", "audio")
-    label_column_name: str = "emotion"
-
-    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            seed=self.seed,
-            splits=["test"],
-            label=self.label_column_name,
-            n_samples=2048,
-        )
-
-    def get_candidate_labels(self) -> list[str]:
-        return self.dataset["test"].features[self.label_column_name].names
 
 
-class MELDVideoZeroShotClassification(AbsTaskZeroShotClassification):
+class MELDVideoZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MELDVideoZeroShot",
         description="MELD (Multimodal EmotionLines Dataset) is a multimodal emotion recognition dataset containing over 13,000 utterances from the Friends TV series, labeled with 7 emotion categories: Anger, Disgust, Sadness, Joy, Neutral, Surprise, and Fear Sampled the test split (~2,610 examples).",
         reference="https://aclanthology.org/P19-1050.pdf",
         dataset={
-            "path": "mteb/MELD",
-            "revision": "6c0bf58845b1acccefc450b131c304378c1e38d5",
+            "path": "mteb/MELDVideoZeroShot",
+            "revision": "29ad15781b8758a051b6fa02e18bbe44012dce64",
         },
         type="VideoZeroshotClassification",
         category="v2t",
@@ -81,17 +65,3 @@ class MELDVideoZeroShotClassification(AbsTaskZeroShotClassification):
         sample_creation="found",
         bibtex_citation=CITATION,
     )
-    input_column_name = "video"
-    label_column_name: str = "emotion"
-
-    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            seed=self.seed,
-            splits=["test"],
-            label=self.label_column_name,
-            n_samples=2048,
-        )
-
-    def get_candidate_labels(self) -> list[str]:
-        return self.dataset["test"].features[self.label_column_name].names

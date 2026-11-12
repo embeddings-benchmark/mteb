@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import AbsTaskZeroShotClassification
 
 CITATION = r"""
 @inproceedings{jiang2026avmeme,
@@ -13,14 +13,14 @@ CITATION = r"""
 """
 
 
-class AVMemeAudioVideoZeroShotClassification(AbsTaskZeroShotClassification):
+class AVMemeAudioVideoZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="AVMemeAudioVideoZeroShot",
         description="AVMeme Exam is a multimodal, multilingual, and multicultural benchmark of over 1,000 iconic Internet audio-visual memes spanning speech, songs, music, and sound effects. Each meme is paired with a Q&A assessing levels of understanding from surface content to context, emotion, usage, and world knowledge. This zero-shot classification task predicts the sound category of each meme clip.",
         reference="https://arxiv.org/pdf/2601.17645",
         dataset={
-            "path": "mteb/AVMeme-Exam",
-            "revision": "7070d1979d9a4943dd49b2e72858eb1e54f6bd5b",
+            "path": "mteb/AVMemeAudioVideoZeroShot",
+            "revision": "b5e76b9f1a358521e6d99eb9c34ed58fb4da9c12",
         },
         type="VideoZeroshotClassification",
         category="va2t",
@@ -55,24 +55,16 @@ class AVMemeAudioVideoZeroShotClassification(AbsTaskZeroShotClassification):
         bibtex_citation=CITATION,
         is_beta=True,
     )
-    input_column_name = ("video", "audio")
-    label_column_name: str = "emotion"
-
-    def get_candidate_labels(self) -> list[str]:
-        return [
-            f"a video of {name}"
-            for name in self.dataset["test"].features[self.label_column_name].names
-        ]
 
 
-class AVMemeVideoZeroShotClassification(AbsTaskZeroShotClassification):
+class AVMemeVideoZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="AVMemeVideoZeroShot",
         description="AVMeme Exam is a multimodal, multilingual, and multicultural benchmark of over 1,000 iconic Internet audio-visual memes spanning speech, songs, music, and sound effects. Each meme is paired with a Q&A assessing levels of understanding from surface content to context, emotion, usage, and world knowledge. This zero-shot classification task predicts the sound category of each meme clip.",
         reference="https://arxiv.org/pdf/2601.17645",
         dataset={
-            "path": "mteb/AVMeme-Exam",
-            "revision": "7070d1979d9a4943dd49b2e72858eb1e54f6bd5b",
+            "path": "mteb/AVMemeVideoZeroShot",
+            "revision": "7c4c98c10779d155126fee259acfd85dbd11318a",
         },
         type="VideoZeroshotClassification",
         category="v2t",
@@ -107,11 +99,3 @@ class AVMemeVideoZeroShotClassification(AbsTaskZeroShotClassification):
         bibtex_citation=CITATION,
         is_beta=True,
     )
-    input_column_name = "video"
-    label_column_name: str = "emotion"
-
-    def get_candidate_labels(self) -> list[str]:
-        return [
-            f"a video of {name}"
-            for name in self.dataset["test"].features[self.label_column_name].names
-        ]

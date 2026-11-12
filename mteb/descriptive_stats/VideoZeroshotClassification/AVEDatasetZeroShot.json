@@ -1,12 +1,25 @@
 {
     "test": {
-        "num_samples": 402,
-        "text_statistics": null,
-        "image_statistics": null,
-        "audio_statistics": {
-            "total_duration_seconds": 4025.644374999997,
+        "num_samples": 430,
+        "num_queries": 402,
+        "num_documents": 28,
+        "number_of_characters": 623,
+        "documents_text_statistics": {
+            "total_text_length": 623,
+            "min_text_length": 14,
+            "average_text_length": 22.25,
+            "max_text_length": 40,
+            "unique_texts": 28
+        },
+        "documents_image_statistics": null,
+        "documents_audio_statistics": null,
+        "documents_video_statistics": null,
+        "queries_text_statistics": null,
+        "queries_image_statistics": null,
+        "queries_audio_statistics": {
+            "total_duration_seconds": 4025.644375,
             "min_duration_seconds": 9.9845625,
-            "average_duration_seconds": 10.01404073383084,
+            "average_duration_seconds": 10.014040733830845,
             "max_duration_seconds": 10.05425,
             "unique_audios": 402,
             "average_sampling_rate": 16000.0,
@@ -14,8 +27,8 @@
                 "16000": 402
             }
         },
-        "video_statistics": {
-            "total_duration_seconds": 4026.542646000018,
+        "queries_video_statistics": {
+            "total_duration_seconds": 4026.542636818503,
             "total_frames": 115005,
             "min_width": 192,
             "average_width": 769.9601990049752,
@@ -23,9 +36,9 @@
             "min_height": 144,
             "average_height": 484.2587064676617,
             "max_height": 720,
-            "min_duration_seconds": 10.0,
-            "average_duration_seconds": 10.016275238806015,
-            "max_duration_seconds": 10.061281,
+            "min_duration_seconds": 10,
+            "average_duration_seconds": 10.016275215966425,
+            "max_duration_seconds": 10.061281337047355,
             "unique_videos": 402,
             "average_fps": 28.579601990049753,
             "fps": {
@@ -99,104 +112,16 @@
                 "400x226": 1
             }
         },
-        "label_statistics": {
-            "min_labels_per_text": 1,
-            "average_label_per_text": 1.0,
-            "max_labels_per_text": 1,
-            "unique_labels": 28,
-            "labels": {
-                "8": {
-                    "count": 18
-                },
-                "17": {
-                    "count": 17
-                },
-                "4": {
-                    "count": 17
-                },
-                "11": {
-                    "count": 18
-                },
-                "20": {
-                    "count": 18
-                },
-                "10": {
-                    "count": 17
-                },
-                "15": {
-                    "count": 17
-                },
-                "27": {
-                    "count": 18
-                },
-                "12": {
-                    "count": 17
-                },
-                "26": {
-                    "count": 16
-                },
-                "13": {
-                    "count": 18
-                },
-                "25": {
-                    "count": 13
-                },
-                "22": {
-                    "count": 10
-                },
-                "19": {
-                    "count": 9
-                },
-                "1": {
-                    "count": 18
-                },
-                "24": {
-                    "count": 17
-                },
-                "9": {
-                    "count": 16
-                },
-                "3": {
-                    "count": 18
-                },
-                "14": {
-                    "count": 10
-                },
-                "2": {
-                    "count": 8
-                },
-                "5": {
-                    "count": 6
-                },
-                "7": {
-                    "count": 16
-                },
-                "6": {
-                    "count": 6
-                },
-                "16": {
-                    "count": 6
-                },
-                "23": {
-                    "count": 18
-                },
-                "21": {
-                    "count": 10
-                },
-                "0": {
-                    "count": 15
-                },
-                "18": {
-                    "count": 15
-                }
-            }
+        "relevant_docs_statistics": {
+            "num_relevant_docs": 402,
+            "min_relevant_docs_per_query": 1,
+            "average_relevant_docs_per_query": 1.0,
+            "max_relevant_docs_per_query": 1,
+            "unique_relevant_docs": 28,
+            "num_missing_query_ids": 0,
+            "num_missing_corpus_ids": 0,
+            "queries_with_all_gold_black_or_white": 0
         },
-        "candidates_labels_text_statistics": {
-            "total_text_length": 623,
-            "min_text_length": 14,
-            "average_text_length": 22.25,
-            "max_text_length": 40,
-            "unique_texts": 28
-        }
+        "top_ranked_statistics": null
     }
 }

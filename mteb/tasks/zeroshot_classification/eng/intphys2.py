@@ -1,8 +1,8 @@
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import AbsTaskZeroShotClassification
 
 
-class IntPhys2VideoZeroShot(AbsTaskZeroShotClassification):
+class IntPhys2VideoZeroShot(AbsTaskRetrieval):
     _DATASET_PATH = "mteb/IntPhys2VideoZeroShot"
     _DATASET_REVISION = "503c0a2f8e624472ff3e44cdc6065ec68c9df2ed"
     _LABEL_NAMES = (
@@ -17,7 +17,10 @@ class IntPhys2VideoZeroShot(AbsTaskZeroShotClassification):
             "permanence, immutability, continuity, and solidity conditions."
         ),
         reference="https://arxiv.org/abs/2506.09849",
-        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
+        dataset={
+            "path": "mteb/IntPhys2VideoZeroShot-retrieval",
+            "revision": "ffab298f50228ca6998ed1ff0d6021df1365aee2",
+        },
         type="VideoZeroshotClassification",
         category="v2t",
         eval_splits=["test"],
@@ -45,9 +48,3 @@ class IntPhys2VideoZeroShot(AbsTaskZeroShotClassification):
 """,
         is_beta=True,
     )
-
-    input_column_name = "video"
-    label_column_name = "label"
-
-    def get_candidate_labels(self) -> list[str]:
-        return [f"a video where {label}" for label in self._LABEL_NAMES]

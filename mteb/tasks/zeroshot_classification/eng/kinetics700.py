@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import AbsTaskZeroShotClassification
 
 CITATION = r"""
 @article{smaira2020short,
@@ -13,14 +13,14 @@ CITATION = r"""
 """
 
 
-class Kinetics700VAZeroShotClassification(AbsTaskZeroShotClassification):
+class Kinetics700VAZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Kinetics700VAZeroShot",
         description="Kinetics-700-2020 is a large-scale action recognition dataset containing 700 human action classes from YouTube videos. Each clip is approximately 10 seconds long. This variant uses both video and audio modalities. Sampled the official test split, capped at ~16 per class across 700 classes (~11,190 examples).",
         reference="https://arxiv.org/abs/2010.10864",
         dataset={
-            "path": "mteb/kinetics-700-2020",
-            "revision": "e9f50aa09759e014b8afc16cc27ec536d4c0747f",
+            "path": "mteb/Kinetics700VAZeroShot",
+            "revision": "5bf815d041d9dfecddb5787646288d24fa930d7f",
         },
         type="VideoZeroshotClassification",
         category="va2t",
@@ -42,24 +42,15 @@ class Kinetics700VAZeroShotClassification(AbsTaskZeroShotClassification):
         is_beta=True,
     )
 
-    input_column_name = ("video", "audio")
-    label_column_name: str = "label"
 
-    def get_candidate_labels(self) -> list[str]:
-        return [
-            f"a video of {name}"
-            for name in self.dataset["test"].features[self.label_column_name].names
-        ]
-
-
-class Kinetics700VZeroShotClassification(AbsTaskZeroShotClassification):
+class Kinetics700VZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Kinetics700VZeroShot",
         description="Kinetics-700-2020 is a large-scale action recognition dataset containing 700 human action classes from YouTube videos. Each clip is approximately 10 seconds long. This variant uses video only. Sampled the official test split, capped at ~16 per class across 700 classes (~11,190 examples).",
         reference="https://arxiv.org/abs/2010.10864",
         dataset={
-            "path": "mteb/kinetics-700-2020",
-            "revision": "e9f50aa09759e014b8afc16cc27ec536d4c0747f",
+            "path": "mteb/Kinetics700VZeroShot",
+            "revision": "a7e4e0e7dac93b72e9948230ac19c9cd9593e1f6",
         },
         type="VideoZeroshotClassification",
         category="v2t",
@@ -80,12 +71,3 @@ class Kinetics700VZeroShotClassification(AbsTaskZeroShotClassification):
         bibtex_citation=CITATION,
         is_beta=True,
     )
-
-    input_column_name = "video"
-    label_column_name: str = "label"
-
-    def get_candidate_labels(self) -> list[str]:
-        return [
-            f"a video of {name}"
-            for name in self.dataset["test"].features[self.label_column_name].names
-        ]
