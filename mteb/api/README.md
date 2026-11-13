@@ -32,6 +32,11 @@ Data routes are mounted under `/v1/`; infra routes (`/health`, `/metrics`,
 | GET    | `/v1/benchmarks/{name}/scores`       | Full summary with rows, per-task scores, per-task-type means. (Legacy alias: `/summary`.) |
 | GET    | `/v1/tasks/{name}/descriptive_statistics` | Per-split descriptive statistics for the task (raw JSON, structure varies by task type).  |
 
+Each summary row also carries `btScore`, `btScoreLow`, `btScoreHigh`: a Bradley-Terry rating
+(centered on 1000) from per-task head-to-head wins, with a 95% bootstrap interval
+over tasks. A task a model wasn't evaluated on counts as a loss, so partial coverage
+never inflates it (see `mteb/api/bradley_terry.py`).
+
 JSON keys are emitted in `camelCase` to match the frontend types in
 `leaderboardv2/src/lib/types.ts`.
 
