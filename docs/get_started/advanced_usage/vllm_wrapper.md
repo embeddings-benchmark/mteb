@@ -106,7 +106,7 @@ By default, vLLM uses Flash Attention, which only supports `float16` and `bfloat
 We provide a standalone benchmark script `scripts/bench_vllm/dtype.py` to quantify inference performance across different precisions.
 
 <figure markdown="span">
-    ![](../images/visualizations/half_precision_inference.png)
+    ![](../../images/visualizations/half_precision_inference.png)
     <figcaption>Throughput with float16 is roughly 4× that of float32.<br>
     ST: Sentence Transformers backend; vLLM: vLLM backend.<br>
     X-axis: Throughput (requests/s); Y-axis: Latency (ms per step, log scale).<br>
@@ -136,7 +136,7 @@ By default, Sentence Transformers (ST) pad all inputs in a batch to the length o
 We provide a standalone benchmark script `scripts/bench_vllm/unpadding.py` to quantify inference performance using unpadding.
 
 <figure markdown="span">
-    ![](../images/visualizations/unpadding.png)
+    ![](../../images/visualizations/unpadding.png)
     <figcaption>X-axis: Throughput (requests/s);<br>
     ST: Sentence Transformers; vLLM: vLLM.<br>
     Y-axis: Latency (ms per step, log scale).<br>
@@ -157,7 +157,7 @@ For these small models, preprocessing bottlenecks are often encountered.
 We provide a standalone benchmark script `scripts/bench_vllm/renderer_num_workers.py` to quantify inference performance using renderer_num_workers.
 
 <figure markdown="span">
-    ![](../images/visualizations/renderer_workers.png)
+    ![](../../images/visualizations/renderer_workers.png)
     <figcaption>X‑axis: Prompt length (words, log₂ scale).<br>
     Y‑axis: Time for 100 embeddings (seconds, log₁₀ scale).<br>
     Each curve corresponds to a different number of renderer workers (1, 2, 4, 8).<br>
