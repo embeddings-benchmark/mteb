@@ -40,6 +40,10 @@ length, valid frameworks, license, and degree of openness.
 :::mteb.models.MTEBModels
 
 
+## Hybrid Search
+
+:::mteb.HybridSearch
+
 ## Cache Wrappers
 
 :::mteb.models.CachedEmbeddingWrapper

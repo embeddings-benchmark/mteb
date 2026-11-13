@@ -26,3 +26,13 @@ This metadata includes a short description of the benchmark's intention, the ref
 ## The Benchmark Object
 
 :::mteb.Benchmark
+
+:::mteb.benchmarks.benchmark.Benchmark.aggregations
+
+## Aggregations and Custom Groups
+
+:::mteb.benchmarks.benchmark.BenchmarkAggregation
+
+:::mteb.benchmarks.benchmark.CustomGroup
+
+:::mteb.benchmarks.benchmark.CustomGrouping
