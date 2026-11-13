@@ -511,7 +511,7 @@ mteb.evaluate(audio_model, audio_task)
 ```
 
 To run audio tasks you will need to have the audio extension installed, you can do this using `pip install mteb[audio]`. For more information on
-installation check out the extended installation guide in the documentation [here](installation.mdudio-tasks).
+installation check out the extended installation guide in the documentation [here](installation.md#audio-tasks).
 
 ### Added event logging support
 Added event logging support. This change introduces a new `event_logger` module for tracking key user interactions within MTEB’s leaderboard UI and backend.
@@ -704,7 +704,7 @@ Not only does this allow more efficient loading using the torch dataloader, but 
 batch_input: BatchedInput = {
     "text": list[str],
     "images": list[PIL.Image],
-    "audio": list[list[audio]],  # upcoming
+    "audio": list[list[audio]],
     # + optional fields such as document title
 }
 ```
@@ -712,7 +712,7 @@ batch_input: BatchedInput = {
 Where `text` is a batch of texts and `list[images]` is a batch for that texts. This e.g. allows markdown documents with multiple figures like so:
 
 ```markdown
-> As you see in the following figure [figure 1](image_1) there is a correlation between A and B.
+> As you see in the following figure `[figure 1](image_1)` there is a correlation between A and B.
 ```
 
 !!! Note

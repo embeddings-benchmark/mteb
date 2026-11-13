@@ -32,6 +32,17 @@ jobs:
       - name: Build docs
         run: make build-docs
 
+      - name: Check local documentation links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          lycheeVersion: v0.24.2
+          args: >-
+            --offline --no-progress
+            --root-dir '${{ github.workspace }}/site'
+            --index-files index.html
+            'docs/**/*.md'
+            'site/**/*.html'
+
       - name: Upload docs artifact
         if: github.event_name == 'push'
         uses: actions/upload-pages-artifact@v5

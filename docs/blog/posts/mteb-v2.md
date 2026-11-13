@@ -101,14 +101,14 @@ Not only does this allow more efficient loading using the torch dataloader, but 
 batch_input: BatchedInput = {
     "text": list[str],
     "images": list[PIL.Image],
-    "audio": list[list[audio]],  # upcoming
+    "audio": list[list[audio]],
     # + optional fields such as document title
 }
 ```
 
 Where `text` is a batch of texts and `list[images]` is a batch for that texts. This e.g. allows markdown documents with multiple figures like so:
 
-> As you see in the following figure [figure 1](image_1) there is a correlation between A and B.
+> As you see in the following figure `[figure 1](image_1)` there is a correlation between A and B.
 
 <details>
 <summary>More examples of inputs</summary>
