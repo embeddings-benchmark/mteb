@@ -424,8 +424,6 @@ class LanguageBindImageWrapper(_LanguageBindBase):
         """Get image-only embeddings."""
         import torch
 
-        from mteb._create_dataloaders import _transform_image_to_rgb
-
         with torch.inference_mode():
             all_embeddings = []
 
@@ -436,10 +434,7 @@ class LanguageBindImageWrapper(_LanguageBindBase):
             ):
                 images = list(batch["image"])
                 processed = torch.stack(
-                    [
-                        self.processor.transform(_transform_image_to_rgb(img))
-                        for img in images
-                    ]
+                    [self.processor.transform(img) for img in images]
                 ).to(self.device)
 
                 with torch.autocast(
