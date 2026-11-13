@@ -511,7 +511,7 @@ mteb.evaluate(audio_model, audio_task)
 ```
 
 To run audio tasks you will need to have the audio extension installed, you can do this using `pip install mteb[audio]`. For more information on
-installation check out the extended installation guide in the documentation [here](installation.mdudio-tasks).
+installation check out the extended installation guide in the documentation [here](installation.md#audio-tasks).
 
 ### Added event logging support
 Added event logging support. This change introduces a new `event_logger` module for tracking key user interactions within MTEB’s leaderboard UI and backend.
