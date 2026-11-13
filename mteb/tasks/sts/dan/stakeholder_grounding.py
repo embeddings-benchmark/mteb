@@ -140,15 +140,15 @@ class StakeholderGrounding(AbsTaskSTS):
         reference="https://arxiv.org/abs/2605.27168",
         dataset={
             "path": "ryzzlestrizzle/stakeholder-grounding",
-            "revision": "836f23984a2761a3a518c6c2582736779935f457",
+            "revision": "d77e2dc619e5b3ab41af89a032b819930f398409",
         },
         type="STS",
         category="t2t",
         modalities=["text"],
         eval_splits=["test"],
-        eval_langs={"rai": ["dan-Latn"]},
+        eval_langs={"rai": ["dan-Latn"], "welfare": ["dan-Latn"]},
         main_score="alpha_auc",
-        date=("2025-06-03", "2025-06-03"),  # TODO: survey and workshop collection dates
+        date=("2025-06-03", "2025-06-03"),
         domains=["Government", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
