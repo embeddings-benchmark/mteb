@@ -558,9 +558,15 @@ class JinaV4Wrapper(AbsEncoder):
             and embeddings
             and isinstance(embeddings[0], torch.Tensor)
         ):
-            # Multi-vector embeddings have one vector per token or image patch.
-            # Their sequence lengths vary by input, so they must remain ragged.
-            embeddings = [e.cpu().detach().float() for e in embeddings]
+            if self.vector_type == "multi_vector":
+                # Multi-vector embeddings have one vector per token or image patch.
+                # Their sequence lengths vary by input, so they must remain ragged.
+                embeddings = [e.cpu().detach().float() for e in embeddings]
+            else:
+                # Single-vector embeddings all have the same size.
+                embeddings = (
+                    torch.stack(list(embeddings)).cpu().detach().float().numpy()
+                )
         return embeddings
 
     def get_text_embeddings(
@@ -693,7 +699,7 @@ class JinaV4Wrapper(AbsEncoder):
         scores = (
             torch.einsum("bd,cd->bc", qs_stacked, ps_stacked).to(torch.float32).cpu()
         )
-        return scores.squeeze(0) if scores.shape[0] == 1 else scores
+        return scores
 
     def score_multi_vector(
         self,
