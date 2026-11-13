@@ -1,12 +1,16 @@
 import logging
+from pathlib import Path
 from typing import Any
 
 import pytest
 import torch
 from datasets import Dataset
 
+import mteb
 from mteb._evaluators import RetrievalEvaluator
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.cache import ResultCache
+from mteb.mocks.mock_tasks import MockRetrievalTask
 from mteb.mocks.mock_tasks.retrieval import general_args
 from mteb.models.search_wrappers import SearchEncoderWrapper
 from mteb.models.sentence_transformer_wrapper import MultiVectorSearchEncoderWrapper
@@ -111,6 +115,31 @@ class TestRetrievalEvaluator:
         assert _map == expected_metrics["map"]
         assert recall == expected_metrics["recall"]
         assert precision == expected_metrics["precision"]
+
+    @pytest.mark.parametrize(
+        ("results", "expected_docs"),
+        [
+            # The query matched itself: dropping it leaves the other max(k) docs.
+            ({"q": {"q": 1.0, "a": 0.9, "b": 0.8, "c": 0.7}}, {"a", "b", "c"}),
+            # No self-match in the extra document: trim the lowest score.
+            ({"q": {"a": 0.9, "b": 0.8, "c": 0.7, "d": 0.6}}, {"a", "b", "c"}),
+            # Ties at the cutoff break on document id, as in trec_eval.
+            ({"q": {"q": 1.0, "a": 0.9, "b": 0.5, "c": 0.5}}, {"a", "c"}),
+        ],
+    )
+    def test_ignore_identical_ids_keeps_max_k_results(self, results, expected_docs):
+        k_values = [1, len(expected_docs)]
+        self.evaluator.evaluate(
+            {"q": {"a": 1}}, results, k_values, ignore_identical_ids=True
+        )
+
+        assert set(results["q"]) == expected_docs
+
+    def test_results_untouched_without_ignore_identical_ids(self):
+        results = {"q": {"q": 1.0, "a": 0.9, "b": 0.8, "c": 0.7}}
+        self.evaluator.evaluate({"q": {"a": 1}}, results, [1, 3])
+
+        assert set(results["q"]) == {"q", "a", "b", "c"}
 
     @pytest.mark.parametrize(
         ("ignore_identical_ids", "expected_naucs"),
@@ -344,3 +373,26 @@ def test_reused_wrapper_records_to_each_tasks_timer():
         "Encoding queries",
         "Searching corpus",
     ]
+
+
+def test_ignore_identical_ids_searches_one_extra_document(tmp_path: Path):
+    searched_top_k = []
+
+    class RecordingSearchWrapper(SearchEncoderWrapper):
+        def search(self, *args: Any, top_k: int, **kwargs: Any):
+            searched_top_k.append(top_k)
+            return super().search(*args, top_k=top_k, **kwargs)
+
+    model = RecordingSearchWrapper(mteb.get_model("mteb/baseline-random-encoder"))
+    task = MockRetrievalTask()
+    task.ignore_identical_ids = True
+
+    mteb.evaluate(
+        model,
+        task,
+        overwrite_strategy="always",
+        cache=ResultCache(tmp_path),
+    )
+
+    assert searched_top_k
+    assert all(top_k == max(task.k_values) + 1 for top_k in searched_top_k)

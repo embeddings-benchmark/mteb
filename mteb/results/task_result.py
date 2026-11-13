@@ -43,6 +43,7 @@ if TYPE_CHECKING:
         HFSubset,
         ISOLanguage,
         ISOLanguageScript,
+        ISOScript,
         Modalities,
         Score,
     )
@@ -273,7 +274,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             raise ValueError(f"Scores are not json serializable: {e}") from e
 
     @property
-    def languages(self) -> list[str]:
+    def languages(self) -> list[ISOLanguage]:
         """The languages present in the scores."""
         langs = []
         for split_res in self.scores.values():
@@ -550,7 +551,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         self,
         splits: list[SplitName] | None = None,
         languages: list[ISOLanguage | ISOLanguageScript] | None = None,
-        scripts: list[ISOLanguageScript] | None = None,
+        scripts: list[ISOScript] | None = None,
         getter: Callable[[ScoresDict], Score] = lambda scores: scores["main_score"],
         aggregation: Callable[[list[Score]], float] = np.mean,
     ) -> float:
@@ -579,7 +580,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             for scores in self.scores[split]:
                 eval_langs = scores["languages"]
                 for lang in eval_langs:
-                    if lang_scripts.contains_language(lang) and (
+                    if lang_scripts.contains_langscript(lang) and (
                         not scripts or lang_scripts.contains_langscript_script(lang)
                     ):
                         values.append(getter(scores))
@@ -634,7 +635,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                     n_val += 1
                     continue
                 for lang in langs:
-                    if lang_scripts.contains_language(lang):
+                    if lang_scripts.contains_langscript(lang):
                         val_sum += main_score
                         n_val += 1
                         logger.info(f"{val_sum=}, {n_val=}")

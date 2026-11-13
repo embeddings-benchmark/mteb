@@ -38,7 +38,15 @@ if TYPE_CHECKING:
     from mteb.models import (
         MTEBModels,
     )
-    from mteb.types import EncodeKwargs, HFSubset, Modalities, ScoresDict
+    from mteb.types import (
+        EncodeKwargs,
+        HFSubset,
+        ISOLanguage,
+        ISOLanguageScript,
+        ISOScript,
+        Modalities,
+        ScoresDict,
+    )
     from mteb.types.statistics import DescriptiveStatistics, SplitDescriptiveStatistics
 
 
@@ -550,20 +558,24 @@ class AbsTask(ABC):  # noqa: PLR0904
         raise NotImplementedError
 
     @property
-    def languages(self) -> list[str]:
+    def languages(self) -> list[ISOLanguage]:
         """The languages of the task."""
+        return sorted({code.split("-")[0] for code in self.bcp47_codes})
+
+    @property
+    def bcp47_codes(self) -> list[ISOLanguageScript]:
+        """The language scripts of the task."""
         if self.hf_subsets:
             eval_langs = self.metadata.hf_subsets_to_langscripts
             languages = []
 
             for lang in self.hf_subsets:
                 for langscript in eval_langs[lang]:
-                    iso_lang, script = langscript.split("-")
-                    languages.append(iso_lang)
+                    languages.append(langscript)
 
             return sorted(set(languages))
 
-        return self.metadata.languages
+        return self.metadata.bcp47_codes
 
     def filter_eval_splits(self, eval_splits: Sequence[str] | None) -> Self:
         """Filter the evaluation splits of the task.
@@ -579,8 +591,8 @@ class AbsTask(ABC):  # noqa: PLR0904
 
     def filter_languages(
         self,
-        languages: Sequence[str] | None,
-        script: Sequence[str] | None = None,
+        languages: Sequence[ISOLanguage | ISOLanguageScript] | None,
+        script: Sequence[ISOScript] | None = None,
         hf_subsets: Sequence[HFSubset] | None = None,
         exclusive_language_filter: bool = False,
     ) -> Self:
@@ -589,8 +601,8 @@ class AbsTask(ABC):  # noqa: PLR0904
         Args:
             languages: list of languages to filter the task by can be either a 3-letter language code (e.g. "eng") or also include the script
                 (e.g. "eng-Latn")
-            script: A list of scripts to filter the task by. Will be ignored if language code specified the script. If None, all scripts are included.
-                If the language code does not specify the script the intersection of the language and script will be used.
+            script: A list of scripts to filter the task by. Cannot be combined with a language code that includes a script (e.g. "eng-Latn").
+                If None, all scripts are included, otherwise the intersection of the language and script will be used.
             hf_subsets: A list of huggingface subsets to filter on. This is useful if a dataset have multiple subsets containing the desired language,
                 but you only want to test on one. An example is STS22 which e.g. have both "en" and "de-en" which both contains English.
             exclusive_language_filter: Some datasets contains more than one language e.g. for STS22 the subset "de-en" contain eng and deu. If
@@ -600,6 +612,14 @@ class AbsTask(ABC):  # noqa: PLR0904
         Returns:
             The filtered task
         """
+        if exclusive_language_filter and not languages:
+            warnings.warn(
+                "`exclusive_language_filter` has no effect without `languages` and will be ignored.",
+                UserWarning,
+                stacklevel=2,
+            )
+            exclusive_language_filter = False
+
         lang_scripts = LanguageScripts.from_languages_and_scripts(languages, script)
 
         subsets_to_keep = []
@@ -609,7 +629,7 @@ class AbsTask(ABC):  # noqa: PLR0904
                 continue
             if exclusive_language_filter is False:
                 for langscript in langs:
-                    if lang_scripts.contains_language(langscript) and (
+                    if lang_scripts.contains_langscript(langscript) and (
                         not script
                         or lang_scripts.contains_langscript_script(langscript)
                     ):
@@ -618,8 +638,7 @@ class AbsTask(ABC):  # noqa: PLR0904
 
             if (
                 exclusive_language_filter is True
-                and languages
-                and lang_scripts.contains_languages(langs)
+                and all(lang_scripts.contains_langscript(ls) for ls in langs)
                 and (
                     not script
                     or all(lang_scripts.contains_langscript_script(ls) for ls in langs)

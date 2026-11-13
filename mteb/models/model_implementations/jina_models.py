@@ -1051,7 +1051,6 @@ jina_embeddings_v5_text_small = ModelMeta(
       url={https://arxiv.org/abs/2602.15547},
 }""",
     extra_requirements_groups=["peft"],
-    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -1162,7 +1161,6 @@ jina_embeddings_v5_omni_small = ModelMeta(
       url={https://arxiv.org/abs/2602.15547},
 }""",
     extra_requirements_groups=["peft"],
-    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -1217,7 +1215,6 @@ jina_embeddings_v5_omni_nano = ModelMeta(
       url={https://arxiv.org/abs/2602.15547},
 }""",
     extra_requirements_groups=["peft"],
-    output_dtypes=OutputDType.BF16,
 )
 
 jina_reranker_v3 = ModelMeta(
@@ -1256,7 +1253,6 @@ jina_reranker_v3 = ModelMeta(
       url={https://arxiv.org/abs/2509.25085},}
 """,
     superseded_by="jinaai/jina-reranker-v3.5",
-    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -1295,7 +1291,6 @@ jina_reranker_v3_5 = ModelMeta(
       primaryClass={cs.IR},
       url={https://arxiv.org/abs/2607.18152},
 }""",
-    output_dtypes=OutputDType.BF16,
 )
 
 jina_embeddings_v4 = Jinav4ModelMeta(
@@ -1346,7 +1341,6 @@ jina_embeddings_v4 = Jinav4ModelMeta(
   year = {2025},
 }""",
     extra_requirements_groups=["jina-v4"],
-    output_dtypes=OutputDType.BF16,
 )
 
 jina_embeddings_v3 = ModelMeta(
@@ -1601,13 +1595,18 @@ jina_embedding_b_en_v1 = ModelMeta(
     },
     public_training_code=None,
     public_training_data=None,
-    citation="""@misc{günther2023jina,
-      title={Jina Embeddings: A Novel Set of High-Performance Sentence Embedding Models},
-      author={Michael Günther and Louis Milliken and Jonathan Geuter and Georgios Mastrapas and Bo Wang and Han Xiao},
-      year={2023},
-      eprint={2307.11224},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+    citation="""@inproceedings{günther2023jina,
+  address = {Singapore},
+  author = {G{\\"u}nther, Michael and Milliken, Louis and Geuter, Jonathan and Mastrapas, Georgios and Wang, Bo and Xiao, Han},
+  booktitle = {Proceedings of the 3rd Workshop for Natural Language Processing Open Source Software ({NLP}-{OSS} 2023)},
+  doi = {10.18653/v1/2023.nlposs-1.2},
+  editor = {Tan, Liling and Milajevs, Dmitrijs and Chauhan, Geeticka and Gwinnup, Jeremy and Rippeth, Elijah},
+  month = {dec},
+  pages = {8--18},
+  publisher = {Association for Computational Linguistics},
+  title = {{J}ina Embeddings: A Novel Set of High-Performance Sentence Embedding Models},
+  url = {https://aclanthology.org/2023.nlposs-1.2/},
+  year = {2023},
 }""",
 )
 
@@ -1659,12 +1658,17 @@ jina_embedding_s_en_v1 = ModelMeta(
     },
     public_training_code=None,
     public_training_data=None,
-    citation="""@misc{günther2023jina,
-      title={Jina Embeddings: A Novel Set of High-Performance Sentence Embedding Models},
-      author={Michael Günther and Louis Milliken and Jonathan Geuter and Georgios Mastrapas and Bo Wang and Han Xiao},
-      year={2023},
-      eprint={2307.11224},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+    citation="""@inproceedings{günther2023jina,
+  address = {Singapore},
+  author = {G{\\"u}nther, Michael and Milliken, Louis and Geuter, Jonathan and Mastrapas, Georgios and Wang, Bo and Xiao, Han},
+  booktitle = {Proceedings of the 3rd Workshop for Natural Language Processing Open Source Software ({NLP}-{OSS} 2023)},
+  doi = {10.18653/v1/2023.nlposs-1.2},
+  editor = {Tan, Liling and Milajevs, Dmitrijs and Chauhan, Geeticka and Gwinnup, Jeremy and Rippeth, Elijah},
+  month = {dec},
+  pages = {8--18},
+  publisher = {Association for Computational Linguistics},
+  title = {{J}ina Embeddings: A Novel Set of High-Performance Sentence Embedding Models},
+  url = {https://aclanthology.org/2023.nlposs-1.2/},
+  year = {2023},
 }""",
 )

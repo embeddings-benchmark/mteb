@@ -1,5 +1,6 @@
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.tasks.retrieval.eng.nq_retrieval import NQ_CITATION
 
 
 class ChemNQRetrieval(AbsTaskRetrieval):
@@ -24,17 +25,8 @@ class ChemNQRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@article{47761,
-  author = {Tom Kwiatkowski and Jennimaria Palomaki and Olivia Redfield and Michael Collins and Ankur Parikh
-and Chris Alberti and Danielle Epstein and Illia Polosukhin and Matthew Kelcey and Jacob Devlin and Kenton Lee
-and Kristina N. Toutanova and Llion Jones and Ming-Wei Chang and Andrew Dai and Jakob Uszkoreit and Quoc Le
-and Slav Petrov},
-  journal = {Transactions of the Association of Computational Linguistics},
-  title = {Natural Questions: a Benchmark for Question Answering Research},
-  year = {2019},
-}
-
+        bibtex_citation=NQ_CITATION
+        + r"""
 @inproceedings{kasmaee2024chemteb,
   archiveprefix = {arXiv},
   author = {Ali Shiraee Kasmaee and Mohammad Khodadad and Mohammad Arshi Saloot and Nick Sherck and Stephen Dokas and Hamidreza Mahyar and Soheila Samiee},

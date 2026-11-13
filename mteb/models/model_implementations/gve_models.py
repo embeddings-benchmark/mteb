@@ -7,7 +7,7 @@ from tqdm.auto import tqdm
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import OutputDType, PromptType
+from mteb.types import PromptType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -154,11 +154,20 @@ class GVEWrapper(AbsEncoder):
 
                 image_inputs = [img.convert("RGB") for img in images if img is not None]
                 video_inputs = [vid for vid in videos if vid is not None]
+                # real frame timing: without video_metadata Qwen2.5-VL assumes
+                # 24 fps for its temporal positions (second_per_grid_ts)
+                # https://github.com/huggingface/transformers/blob/v5.19.0/src/transformers/video_utils.py#L109-L113
+                # the model card passes qwen-vl-utils' video_kwargs (fps)
+                # https://huggingface.co/Alibaba-NLP/GVE-3B/blob/2c2962d4bb1503b478b8a0d975d7b9fdcefbd3f3/README.md?code=true#L112-L121
+                video_metadata = [
+                    m for m in batch.get("video_metadata", []) if m is not None
+                ]
                 processed = self.processor(
                     text=prompts,
                     images=image_inputs or None,
                     videos=video_inputs or None,
-                    videos_kwargs=self.videos_kwargs,
+                    videos_kwargs=self.videos_kwargs
+                    | ({"video_metadata": video_metadata} if video_inputs else {}),
                     padding=True,
                     truncation=True,
                     max_length=self.max_length,
@@ -209,7 +218,6 @@ gve_3b = ModelMeta(
     training_datasets=gve_training_datasets,
     adapted_from="Qwen/Qwen2.5-VL-3B-Instruct",
     citation=GVE_CITATION,
-    output_dtypes=OutputDType.BF16,
 )
 
 gve_7b = ModelMeta(
@@ -236,5 +244,4 @@ gve_7b = ModelMeta(
     training_datasets=gve_training_datasets,
     adapted_from="Qwen/Qwen2.5-VL-7B-Instruct",
     citation=GVE_CITATION,
-    output_dtypes=OutputDType.BF16,
 )
