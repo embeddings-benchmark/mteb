@@ -136,7 +136,12 @@ def _pairs_to_arrangements(
 class StakeholderGrounding(AbsTaskSTS):
     metadata = TaskMetadata(
         name="StakeholderGrounding",
-        description="Danish technology practitioners' statements on challenges with Responsible AI, spatially arranged by domain experts (Spatial Arrangement Method) so that canvas proximity reflects perceived similarity. Each sample is a pair of statements from one expert arrangement of 20 statements, scored by their normalized proximity on the canvas. Models are scored by triplet-based Krippendorff's alpha AUC against each expert layout.",
+        description=(
+            "Danish technology practitioners' statements on challenges with Responsible AI (`rai`) and local politicians' statements on the future of welfare (`welfare`),"
+            " spatially arranged by domain experts (Spatial Arrangement Method) so that canvas proximity reflects perceived similarity."
+            " Each sample is a pair of statements from one expert arrangement of 20 statements, scored by their normalized proximity on the canvas."
+            " Models are scored by triplet-based Krippendorff's alpha AUC against each expert layout."
+        ),
         reference="https://arxiv.org/abs/2605.27168",
         dataset={
             "path": "ryzzlestrizzle/stakeholder-grounding",
