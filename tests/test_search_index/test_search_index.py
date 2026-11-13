@@ -77,6 +77,33 @@ def test_retrieval_backends(
         )
 
 
+@pytest.mark.parametrize(
+    "similarity",
+    [ScoringFunction.DOT_PRODUCT, ScoringFunction.COSINE, ScoringFunction.EUCLIDEAN],
+)
+@pytest.mark.parametrize("num_queries", [0, 2])
+def test_faiss_search_empty_corpus(
+    similarity: ScoringFunction, num_queries: int
+) -> None:
+    """An indexed empty corpus has no matches for any query."""
+    pytest.importorskip("faiss", reason="faiss is not installed")
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    model.mteb_model_meta = model.mteb_model_meta.model_copy(
+        update={"similarity_fn_name": similarity}
+    )
+    backend = FaissSearchIndex(model)
+    backend.add_documents(np.empty((0, 2), dtype=np.float32), [])
+
+    scores, indices = backend.search(
+        np.ones((num_queries, 2), dtype=np.float32),
+        top_k=5,
+        similarity_fn=model.similarity,
+    )
+
+    assert scores == [[] for _ in range(num_queries)]
+    assert indices == [[] for _ in range(num_queries)]
+
+
 @pytest.mark.parametrize("second_candidates", [["d2"], []], ids=["unequal", "empty"])
 def test_faiss_euclidean_reranking_candidate_lengths(
     second_candidates: list[str],

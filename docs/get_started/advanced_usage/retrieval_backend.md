@@ -32,3 +32,7 @@ model = SearchEncoderWrapper(model, index_backend=index_backend)
 ```
 
 For example running `minishlab/potion-base-2M` on `SWEbenchVerifiedRR` took 694 seconds instead of 769.
+
+After adding an empty embedding array of shape `(0, dim)`, full-corpus search returns
+empty score and index lists for each query. Searching before adding any embeddings
+still raises `ValueError`.
