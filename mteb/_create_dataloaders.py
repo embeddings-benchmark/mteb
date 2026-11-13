@@ -259,8 +259,11 @@ def _custom_collate_fn(batch: list[dict[str, Any]]) -> BatchedInput:
 
     collated = {}
     for key in batch[0]:
-        if key in (  # noqa: PLR6201
-            "image",  # images can be with different sizes
+        if key == "image":
+            # images can be with different sizes; HF `Image` columns skip the RGB
+            # conversion in `_prepare_image_dataset`, so do it here per batch
+            collated[key] = [_transform_image_to_rgb(item[key]) for item in batch]
+        elif key in (  # noqa: PLR6201
             "conversation",  # conversations are lists of varying lengths
             "audio",  # audio can have different lengths
             "video",  # video can have different lengths
