@@ -1,7 +1,3 @@
-from typing import Any
-
-import datasets
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -12,8 +8,8 @@ class FQuADRetrieval(AbsTaskRetrieval):
         description="This dataset has been built from the French SQuad dataset.",
         reference="https://huggingface.co/datasets/manu/fquad2_test",
         dataset={
-            "path": "manu/fquad2_test",
-            "revision": "5384ce827bbc2156d46e6fcba83d75f8e6e1b4a6",
+            "path": "mteb/FQuADRetrieval",
+            "revision": "cba2a9a9bd2183a387baa99555811d65d2abbf8e",
         },
         type="Retrieval",
         category="t2t",
@@ -50,42 +46,3 @@ Liu, Yang},
 }
 """,
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-        dataset_raw = datasets.load_dataset(
-            **self.metadata.dataset,
-        )
-
-        # set valid_hasAns and test_hasAns as the validation and test splits (only queries with answers)
-        dataset_raw["validation"] = dataset_raw["valid_hasAns"]
-        del dataset_raw["valid_hasAns"]
-
-        dataset_raw["test"] = dataset_raw["test_hasAns"]
-        del dataset_raw["test_hasAns"]
-
-        # rename  context column to text
-        dataset_raw = dataset_raw.rename_column("context", "text")
-
-        self.queries = {
-            eval_split: {
-                str(i): q["question"] for i, q in enumerate(dataset_raw[eval_split])
-            }
-            for eval_split in self.metadata.eval_splits
-        }
-
-        self.corpus = {
-            eval_split: {str(row["title"]): row for row in dataset_raw[eval_split]}
-            for eval_split in self.metadata.eval_splits
-        }
-
-        self.relevant_docs = {
-            eval_split: {
-                str(i): {str(q["title"]): 1}
-                for i, q in enumerate(dataset_raw[eval_split])
-            }
-            for eval_split in self.metadata.eval_splits
-        }
-
-        self.data_loaded = True

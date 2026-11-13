@@ -6652,7 +6652,7 @@ wheels = [
 
 [[package]]
 name = "mteb"
-version = "2.27.12"
+version = "2.27.13"
 source = { editable = "." }
 default-groups = ["citations", "docs", "lint", "test", "typing"]
 dependencies = [
@@ -7248,7 +7248,7 @@ requires-dist = [
     { name = "opentelemetry-sdk", marker = "extra == 'api'", specifier = ">=1.27" },
     { name = "peft", marker = "extra == 'internvideo2'", specifier = ">=0.13.0" },
     { name = "peft", marker = "extra == 'jina-clip'", specifier = ">=0.15.2" },
-    { name = "peft", marker = "extra == 'jina-v4'", specifier = ">=0.15.2" },
+    { name = "peft", marker = "extra == 'jina-v4'", specifier = ">=0.15.2,<0.21.0" },
     { name = "peft", marker = "extra == 'omniretriever'", specifier = ">=0.11.0" },
     { name = "peft", marker = "extra == 'peft'", specifier = ">=0.11.0" },
     { name = "pillow", marker = "extra == 'fusion-embedding'", specifier = ">=10.0.1" },
