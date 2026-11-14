@@ -23,6 +23,7 @@ from huggingface_hub import (
 from pydantic import (
     BaseModel,
     ConfigDict,
+    PrivateAttr,
     field_validator,
 )
 from typing_extensions import TypedDict
@@ -478,6 +479,12 @@ class TaskMetadata(BaseModel):
     """
 
     model_config = ConfigDict(extra="forbid")
+
+    # Run-local input selection follows effective metadata through custom search
+    # workers and embedding caches. It is not part of the registered task schema.
+    _modality_filter_configuration: dict[str, list[Modalities]] | None = PrivateAttr(
+        default=None
+    )
 
     dataset: MetadataDatasetDict
 

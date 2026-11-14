@@ -59,9 +59,9 @@ class CachedEmbeddingWrapper:
         """
         self._model = model
         self.cache_path = Path(cache_path)
-        self.cache_path.mkdir(parents=True, exist_ok=True)
         if not hasattr(model, "encode"):
             raise ValueError("Model must have an 'encode' method.")
+        self.cache_path.mkdir(parents=True, exist_ok=True)
         self.cache_backend = cache_backend
         self.cache_dict: dict[
             tuple[str, PromptType | None, str | None], CacheBackendProtocol
@@ -102,7 +102,9 @@ class CachedEmbeddingWrapper:
 
         task_name = task_metadata.name
         try:
-            cache = self._get_or_create_cache(task_name, prompt_type, kwargs)
+            cache = self._get_or_create_cache(
+                task_name, prompt_type, kwargs, task_metadata=task_metadata
+            )
 
             uncached_items: list[dict[str, Any]] = []
             uncached_indices: list[int] = []
@@ -166,7 +168,9 @@ class CachedEmbeddingWrapper:
             logger.error(f"Error in cached encoding: {str(e)}")
             raise
 
-    def _experiment_name(self, encode_kwargs: dict[str, Any]) -> str | None:
+    def _experiment_name(
+        self, encode_kwargs: dict[str, Any], task_metadata: TaskMetadata | None = None
+    ) -> str | None:
         """Serialize the settings that change the produced embeddings into a directory name.
 
         This mirrors the experiment namespacing used by the result cache so that, e.g.,
@@ -180,6 +184,8 @@ class CachedEmbeddingWrapper:
             meta.experiment_kwargs if meta is not None else None, encode_kwargs
         )
 
+        if task_metadata is not None:
+            experiment_kwargs.update(task_metadata._modality_filter_configuration or {})
         return _serialize_experiment_kwargs_to_name(experiment_kwargs or None)
 
     def _get_or_create_cache(
@@ -187,19 +193,22 @@ class CachedEmbeddingWrapper:
         task_name: str,
         prompt_type: PromptType | None,
         encode_kwargs: dict[str, Any] | None = None,
+        *,
+        task_metadata: TaskMetadata | None = None,
     ) -> CacheBackendProtocol:
         """Get or create cache for a specific task, prompt type and experiment.
 
         Args:
             task_name: Name of the task
             prompt_type: Prompt role used to encode the inputs
+            task_metadata: Effective task description carrying run-local input selection.
             encode_kwargs: Keyword arguments forwarded to the wrapped model's ``encode``.
                 Settings that change the embeddings (e.g. ``precision``) namespace the cache.
 
         Returns:
             Cache backend instance for the task
         """
-        experiment_name = self._experiment_name(encode_kwargs or {})
+        experiment_name = self._experiment_name(encode_kwargs or {}, task_metadata)
         cache_key = (task_name, prompt_type, experiment_name)
         if cache_key not in self.cache_dict:
             cache_path = self.cache_path / task_name
@@ -217,7 +226,7 @@ class CachedEmbeddingWrapper:
 
     def close(self) -> None:
         """Unload cache from memory."""
-        for task in list(self.cache_dict.keys()):
+        for task in list(getattr(self, "cache_dict", {})):
             self.cache_dict[task].close()
 
     def similarity(

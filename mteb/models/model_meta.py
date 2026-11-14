@@ -547,6 +547,24 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             kwargs["embed_dim"] = embed_dim
 
         merged_kwargs = {**base_exp_kwargs, **kwargs} if kwargs else base_exp_kwargs
+        # These options configure the evaluation adapter, not the model loader.
+        from mteb.models.modality_filter_wrapper import (
+            ModalityFilterWrapper,
+            _normalize_modalities,
+        )
+
+        modality_kwargs = {
+            key: _normalize_modalities(merged_kwargs.pop(key), key)
+            for key in ("query_modalities", "corpus_modalities")
+            if key in merged_kwargs
+        }
+        for key, selected in modality_kwargs.items():
+            if selected and _self.modalities:
+                missing = set(selected) - set(_self.modalities)
+                if missing:
+                    raise ValueError(
+                        f"{key} requests unsupported model modalities: {sorted(missing)}."
+                    )
         meaningful_exp_kwargs = {
             k: v for k, v in merged_kwargs.items() if _has_meaningful_value(v)
         }
@@ -555,6 +573,8 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         # Allow overwrites
         _kwargs = _self.loader_kwargs.copy()
         _kwargs.update(merged_kwargs)
+        for key in ("query_modalities", "corpus_modalities"):
+            _kwargs.pop(key, None)
         if device is not None:
             _kwargs["device"] = device
 
@@ -576,6 +596,8 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
                 _full_installation_message(f"Loading {name}"), name=e.name
             ) from e
         model.mteb_model_meta = _self  # type: ignore[misc]
+        if any(value is not None for value in modality_kwargs.values()):
+            return ModalityFilterWrapper(model, **modality_kwargs)
         return model
 
     def _check_requirements(self) -> None:
