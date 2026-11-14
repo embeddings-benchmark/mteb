@@ -20,6 +20,7 @@ class ROxfordEasyI2IRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="map_at_5",
+        superseded_by="ROxfordEasyI2IRetrieval.v2",
         date=("2009-01-01", "2010-04-01"),
         domains=["Web"],
         task_subtypes=["Object recognition"],
@@ -55,6 +56,7 @@ class ROxfordMediumI2IRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="map_at_5",
+        superseded_by="ROxfordMediumI2IRetrieval.v2",
         date=("2009-01-01", "2010-04-01"),
         domains=["Web"],
         task_subtypes=["Object recognition"],
@@ -90,6 +92,7 @@ class ROxfordHardI2IRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="map_at_5",
+        superseded_by="ROxfordHardI2IRetrieval.v2",
         date=("2009-01-01", "2010-04-01"),
         domains=["Web"],
         task_subtypes=["Object recognition"],
@@ -109,3 +112,39 @@ class ROxfordHardI2IRetrieval(AbsTaskRetrieval):
 """,
     )
     skip_first_result = False
+
+
+class ROxfordEasyI2IRetrievalV2(AbsTaskRetrieval):
+    metadata = ROxfordEasyI2IRetrieval.metadata.model_copy(
+        update={
+            "name": "ROxfordEasyI2IRetrieval.v2",
+            "description": "Retrieve photos of landmarks in Oxford, UK. Version 2 uses map_at_1000 as the main score: map_at_5 divides by all correct images, so with dozens to hundreds of correct images per query even a perfect ranking scores low.",
+            "main_score": "map_at_1000",
+            "adapted_from": ["ROxfordEasyI2IRetrieval"],
+            "superseded_by": None,
+        }
+    )
+
+
+class ROxfordMediumI2IRetrievalV2(AbsTaskRetrieval):
+    metadata = ROxfordMediumI2IRetrieval.metadata.model_copy(
+        update={
+            "name": "ROxfordMediumI2IRetrieval.v2",
+            "description": "Retrieve photos of landmarks in Oxford, UK. Version 2 uses map_at_1000 as the main score: map_at_5 divides by all correct images, so with dozens to hundreds of correct images per query even a perfect ranking scores low.",
+            "main_score": "map_at_1000",
+            "adapted_from": ["ROxfordMediumI2IRetrieval"],
+            "superseded_by": None,
+        }
+    )
+
+
+class ROxfordHardI2IRetrievalV2(AbsTaskRetrieval):
+    metadata = ROxfordHardI2IRetrieval.metadata.model_copy(
+        update={
+            "name": "ROxfordHardI2IRetrieval.v2",
+            "description": "Retrieve photos of landmarks in Oxford, UK. Version 2 uses map_at_1000 as the main score: map_at_5 divides by all correct images, so with dozens to hundreds of correct images per query even a perfect ranking scores low.",
+            "main_score": "map_at_1000",
+            "adapted_from": ["ROxfordHardI2IRetrieval"],
+            "superseded_by": None,
+        }
+    )
