@@ -50,6 +50,8 @@ length, valid frameworks, license, and degree of openness.
 
 :::mteb.models.cache_wrappers.cache_backends.FaissCache
 
+:::mteb.models.cache_wrappers.cache_backends.USearchCache
+
 
 ## Compression Wrapper
 
