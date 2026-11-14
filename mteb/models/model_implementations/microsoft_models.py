@@ -60,14 +60,14 @@ class MicrosoftEmbedding1Wrapper(AbsEncoder):
     - (Image inputs) Set AZURE_DATA_AI_STAGING_ACCOUNT and
       AZURE_DATA_AI_STAGING_CONTAINER, and grant the caller Storage Blob Data
       Contributor on the staging account.
-    
+
     Notes:
     - Images are temporarily uploaded under tmp/mteb-microsoft-embedding-1-large/
       in AZURE_DATA_AI_STAGING_CONTAINER in AZURE_DATA_AI_STAGING_ACCOUNT,
       accessed with a user delegation SAS, then deleted.
       The caller needs Embedding User on the inference account and Storage Blob
       Data Contributor on the staging account to upload, sign, and delete images.
-    - The API supports both dense and multi-vector embeddings, but this wrapper 
+    - The API supports both dense and multi-vector embeddings, but this wrapper
       explicitly uses only multi-vector embeddings.
     """
 
@@ -226,13 +226,9 @@ class MicrosoftEmbedding1Wrapper(AbsEncoder):
         **kwargs: Any,
     ) -> list[np.ndarray]:
         embeddings: list[np.ndarray] = []
-        for batch in tqdm(
-            inputs, disable=not show_progress_bar, desc="Encoding"
-        ):
+        for batch in tqdm(inputs, disable=not show_progress_bar, desc="Encoding"):
             if "image" in batch and "text" in batch:
-                raise ValueError(
-                    "API expects separate text and image inputs."
-                )
+                raise ValueError("API expects separate text and image inputs.")
             if "image" in batch:
                 for start in range(0, len(batch["image"]), MAX_IMAGE_BATCH_SIZE):
                     with ExitStack() as stack:
@@ -291,4 +287,5 @@ microsoft_embedding_1_large = ModelMeta(
     modalities=["image", "text"],
     model_type=["late-interaction"],
     extra_requirements_groups=["microsoft"],
+    reference="https://learn.microsoft.com/en-us/azure/cosmos-db/gen-ai/microsoft-embedding-1"
 )
