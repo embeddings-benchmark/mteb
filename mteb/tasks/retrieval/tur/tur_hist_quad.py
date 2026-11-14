@@ -1,7 +1,3 @@
-from typing import Any
-
-import datasets
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -10,8 +6,8 @@ class TurHistQuadRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="TurHistQuadRetrieval",
         dataset={
-            "path": "asparius/TurHistQuAD",
-            "revision": "2a2b8ddecf1189f530676244d0751e1d0a569e03",
+            "path": "mteb/TurHistQuadRetrieval",
+            "revision": "b6e74379b7486da28ce81c3d459cd7bbd87d4987",
         },
         description="Question Answering dataset on Ottoman History in Turkish",
         reference="https://github.com/okanvk/Turkish-Reading-Comprehension-Question-Answering-Dataset",
@@ -42,55 +38,3 @@ class TurHistQuadRetrieval(AbsTaskRetrieval):
 }
 """,
     )
-
-    def load_data(self, **kwargs: Any) -> None:
-        """And transform to a retrieval dataset, which have the following attributes
-
-        self.corpus = dict[doc_id, dict[str, str]] #id => dict with document data like title and text
-        self.queries = dict[query_id, str] #id => query
-        self.relevant_docs = dict[query_id, dict[[doc_id, score]]
-        """
-        if self.data_loaded:
-            return
-
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)
-
-        self.corpus = {}
-        self.relevant_docs = {}
-        self.queries = {}
-        text2id = {}
-
-        for split in self.metadata.eval_splits:
-            ds: datasets.Dataset = self.dataset[split]
-            ds = ds.shuffle(seed=42)
-            max_samples = min(1024, len(ds))
-            ds = ds.select(
-                range(max_samples)
-            )  # limit the dataset size to make sure the task does not take too long to run
-            self.queries[split] = {}
-            self.relevant_docs[split] = {}
-            self.corpus[split] = {}
-
-            question = ds["question"]
-            context = ds["context"]
-            answer = [a["text"] for a in ds["answers"]]
-
-            n = 0
-            for q, cont, ans in zip(question, context, answer, strict=True):
-                self.queries[split][str(n)] = q
-                q_n = n
-                n += 1
-                if cont not in text2id:
-                    text2id[cont] = n
-                    self.corpus[split][str(n)] = {"title": "", "text": cont}
-                    n += 1
-                if ans not in text2id:
-                    text2id[ans] = n
-                    self.corpus[split][str(n)] = {"title": "", "text": ans}
-                    n += 1
-
-                self.relevant_docs[split][str(q_n)] = {
-                    str(text2id[ans]): 1,
-                    str(text2id[cont]): 1,
-                }  # only two correct matches
-            self.data_loaded = True
