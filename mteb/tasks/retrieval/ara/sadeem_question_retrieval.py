@@ -1,7 +1,3 @@
-from typing import Any
-
-import datasets
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -12,9 +8,8 @@ class SadeemQuestionRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SadeemQuestionRetrieval",
         dataset={
-            "path": "sadeem-ai/sadeem-ar-eval-retrieval-questions",
-            "revision": "3cb0752b182e5d5d740df547748b06663c8e0bd9",
-            "name": "test",
+            "path": "mteb/SadeemQuestionRetrieval",
+            "revision": "abe42d6129c3ab7d67df3c4a3325b8a57ab88f79",
         },
         reference="https://huggingface.co/datasets/sadeem-ai/sadeem-ar-eval-retrieval-questions",
         description="SadeemQuestion: A Benchmark Data Set for Community Question-Retrieval Research",
@@ -33,22 +28,3 @@ class SadeemQuestionRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation="",
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        query_list = datasets.load_dataset(**self.metadata.dataset)["queries"]
-        queries = {row["query-id"]: row["text"] for row in query_list}
-
-        corpus_list = datasets.load_dataset(**self.metadata.dataset)["corpus"]
-        corpus = {row["corpus-id"]: {"text": row["text"]} for row in corpus_list}
-
-        qrels_list = datasets.load_dataset(**self.metadata.dataset)["qrels"]
-        qrels = {row["query-id"]: {row["corpus-id"]: 1} for row in qrels_list}
-
-        self.corpus = {self._EVAL_SPLIT: corpus}
-        self.queries = {self._EVAL_SPLIT: queries}
-        self.relevant_docs = {self._EVAL_SPLIT: qrels}
-
-        self.data_loaded = True
