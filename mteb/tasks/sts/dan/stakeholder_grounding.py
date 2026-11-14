@@ -136,19 +136,24 @@ def _pairs_to_arrangements(
 class StakeholderGrounding(AbsTaskSTS):
     metadata = TaskMetadata(
         name="StakeholderGrounding",
-        description="Danish technology practitioners' statements on challenges with Responsible AI, spatially arranged by domain experts (Spatial Arrangement Method) so that canvas proximity reflects perceived similarity. Each sample is a pair of statements from one expert arrangement of 20 statements, scored by their normalized proximity on the canvas. Models are scored by triplet-based Krippendorff's alpha AUC against each expert layout.",
+        description=(
+            "Danish technology practitioners' statements on challenges with Responsible AI (`rai`) and local politicians' statements on the future of welfare (`welfare`),"
+            " spatially arranged by domain experts (Spatial Arrangement Method) so that canvas proximity reflects perceived similarity."
+            " Each sample is a pair of statements from one expert arrangement of 20 statements, scored by their normalized proximity on the canvas."
+            " Models are scored by triplet-based Krippendorff's alpha AUC against each expert layout."
+        ),
         reference="https://arxiv.org/abs/2605.27168",
         dataset={
             "path": "ryzzlestrizzle/stakeholder-grounding",
-            "revision": "836f23984a2761a3a518c6c2582736779935f457",
+            "revision": "d77e2dc619e5b3ab41af89a032b819930f398409",
         },
         type="STS",
         category="t2t",
         modalities=["text"],
         eval_splits=["test"],
-        eval_langs={"rai": ["dan-Latn"]},
+        eval_langs={"rai": ["dan-Latn"], "welfare": ["dan-Latn"]},
         main_score="alpha_auc",
-        date=("2025-06-03", "2025-06-03"),  # TODO: survey and workshop collection dates
+        date=("2025-06-03", "2025-06-03"),
         domains=["Government", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
