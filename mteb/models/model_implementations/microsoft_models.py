@@ -281,4 +281,5 @@ microsoft_embedding_1_large = ModelMeta(
     modalities=["image", "text"],
     model_type=["late-interaction"],
     extra_requirements_groups=["microsoft"],
+    reference="https://learn.microsoft.com/en-us/azure/cosmos-db/gen-ai/microsoft-embedding-1"
 )
