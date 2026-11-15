@@ -18,3 +18,4 @@ from .spa import *
 from .ukr import *
 from .vie import *
 from .zho import *
+from .lug import *
