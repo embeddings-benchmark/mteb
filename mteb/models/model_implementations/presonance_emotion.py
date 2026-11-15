@@ -53,7 +53,7 @@ class PresonanceEmotionEncoder:
                 CHECKPOINT_REPO, revision=CHECKPOINT_REVISION
             )
         self.root = Path(checkpoint_dir)
-        self.device = device
+        self.device = device or "cuda"
         self.config = json.loads((self.root / "config.json").read_text())
         assert [m["name"] for m in self.config["models"]] == [
             "clipL336_e6",
@@ -110,7 +110,11 @@ class PresonanceEmotionEncoder:
 
     @property
     def mteb_model_meta(self):
-        return presonance_emoset_image
+        return getattr(self, "_model_meta", presonance_emoset_image)
+
+    @mteb_model_meta.setter
+    def mteb_model_meta(self, value):
+        self._model_meta = value
 
 
 def _load_encoder(model_name, revision, **kwargs):
@@ -119,6 +123,7 @@ def _load_encoder(model_name, revision, **kwargs):
 
 presonance_emoset_image = ModelMeta(
     loader=_load_encoder,
+    extra_requirements_groups=["timm"],
     name=CHECKPOINT_REPO,
     revision=CHECKPOINT_REVISION,
     release_date="2026-11-14",
