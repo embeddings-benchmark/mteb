@@ -177,6 +177,3 @@ extra:
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/company/mteb/posts/
       name: MTEB on LinkedIn
-
-validation:
-  invalid_links: false

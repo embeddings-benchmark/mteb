@@ -182,8 +182,7 @@ class BenchmarkAggregation(HelpfulStrEnum):
     def aggregate(self, task_results: list[TaskResult]) -> dict[str, float | None]:
         """Compute this aggregation's per-model scores in Python.
 
-        Mirrors the polars branch that
-        [_create_summary_table][mteb.benchmarks._create_table._create_summary_table]
+        Mirrors the polars branch that _create_summary_table
         would take for this enum value, so
         [Benchmark.get_score][mteb.benchmarks.benchmark.Benchmark.get_score]
         and the leaderboard summary stay numerically consistent on the same
@@ -283,6 +282,8 @@ def _get_benchmarks_on_leaderboard() -> set[str]:
 
 @dataclass
 class Benchmark:
+    # Docstring convention: dataclass constructor fields go under Args;
+    # ClassVars go under Attributes because they are not constructor parameters.
     """A benchmark object intended to run a certain benchmark within MTEB.
 
     Args:
@@ -301,7 +302,9 @@ class Benchmark:
             [CustomGrouping][mteb.benchmarks.benchmark.CustomGrouping]
             instances — a `CustomGrouping`'s mere presence in this sequence
             turns on its dynamic per-group columns, no separate field needed.
-        summary_sort_column: The column to sort benchmarks by on leaderboard
+
+    Attributes:
+        summary_sort_column: The column or columns to sort benchmarks by on the leaderboard.
 
     Examples:
         >>> Benchmark(
@@ -383,17 +386,6 @@ class Benchmark:
         return _build_per_task_pivot(pl_df)
 
     def _create_summary_table(self, pl_df: pl.DataFrame) -> SummaryTable:
-        """Create summary table from a long polars pre-agg frame.
-
-        Thin wrapper around
-        [_create_summary_table][mteb.benchmarks._create_table._create_summary_table]
-        that forwards
-        [aggregations][mteb.benchmarks.benchmark.Benchmark.aggregations],
-        [summary_sort_column][mteb.benchmarks.benchmark.Benchmark.summary_sort_column],
-        and
-        [summary_rank_column][mteb.benchmarks.benchmark.Benchmark.summary_rank_column].
-        Called by the leaderboard app.
-        """
         from mteb.benchmarks._create_table import _create_summary_table
 
         return _create_summary_table(
