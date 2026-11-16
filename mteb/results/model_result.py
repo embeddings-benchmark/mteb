@@ -42,6 +42,9 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+# Same placeholder the result cache uses for models without a revision.
+_NO_REVISION = "no_revision_available"
+
 
 def _aggregate_and_pivot(
     df: pd.DataFrame,
@@ -65,6 +68,10 @@ def _aggregate_and_pivot(
         df = df.explode("language").reset_index(
             drop=True
         )  # each language in its own row before aggregation
+
+    if "model_revision" in df.columns:
+        # pandas' groupby/pivot_table silently drop rows with a None key.
+        df = df.assign(model_revision=df["model_revision"].fillna(_NO_REVISION))
 
     # perform aggregation
     # Pass "mean" string rather than np.mean to avoid a pandas FutureWarning:

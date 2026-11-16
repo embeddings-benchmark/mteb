@@ -12,7 +12,7 @@ import mteb
 from mteb import Benchmark
 from mteb.cache import ResultCache
 from mteb.cli.generate_model_card import generate_model_card
-from mteb.results import BenchmarkResults, ModelResult
+from mteb.results import BenchmarkResults, ModelResult, TaskResult
 
 _POLARS_TOO_OLD = Version(pl.__version__) < Version("1.40.0")
 
@@ -119,6 +119,72 @@ def test_join_revisions(benchmark_results: BenchmarkResults) -> None:
     assert len(bench_res.model_revisions) == 1
     revision = bench_res.model_revisions[0]["revision"]
     assert revision == mteb.get_model_meta(model_name).revision
+
+
+def _results_with_missing_revision() -> BenchmarkResults:
+    """Two models: one without a revision (e.g. a custom encoder), one with."""
+
+    def model_result(name: str, revision: str | None, score: float) -> ModelResult:
+        task_result = TaskResult(
+            dataset_revision="1.0",
+            task_name="Banking77Classification",
+            mteb_version="1.0.0",
+            evaluation_time=1,
+            scores={
+                "test": [
+                    {
+                        "main_score": score,
+                        "hf_subset": "default",
+                        "languages": ["eng-Latn"],
+                    }
+                ]
+            },
+        )
+        return ModelResult(
+            model_name=name, model_revision=revision, task_results=[task_result]
+        )
+
+    return BenchmarkResults(
+        model_results=[
+            model_result("org/local-model", None, 0.5),
+            model_result("org/other-model", "abc", 0.7),
+        ]
+    )
+
+
+@pytest.mark.core
+def test_join_revisions_keeps_models_without_revision() -> None:
+    joined = _results_with_missing_revision().join_revisions()
+
+    assert sorted((r["model_name"], r["revision"]) for r in joined.model_revisions) == [
+        ("org/local-model", None),
+        ("org/other-model", "abc"),
+    ]
+
+
+@pytest.mark.core
+@pytest.mark.parametrize("include_model_revision", [False, True])
+def test_to_dataframe_keeps_none_revision(include_model_revision: bool) -> None:
+    df = _results_with_missing_revision().to_dataframe(
+        include_model_revision=include_model_revision
+    )
+
+    if include_model_revision:
+        assert ("org/local-model", "no_revision_available") in df.columns
+    else:
+        assert "org/local-model" in df.columns
+    assert df.shape[0] == 1
+    scores = df.drop(columns=["task_name", "is_public"]).iloc[0].tolist()
+    assert sorted(scores) == pytest.approx([0.5, 0.7])
+
+
+@pytest.mark.core
+def test_to_dataframe_long_keeps_none_revision() -> None:
+    df = _results_with_missing_revision().to_dataframe(
+        include_model_revision=True, format="long"
+    )
+
+    assert sorted(df["model_name"]) == ["org/local-model", "org/other-model"]
 
 
 @pytest.mark.core
