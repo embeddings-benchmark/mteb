@@ -51,6 +51,7 @@ if TYPE_CHECKING:
         RelevantDocumentsType,
         RetrievalOutputType,
         ScoresDict,
+        TopRankedDocumentsType,
     )
 
     from .retrieval_dataset_loaders import (
@@ -61,11 +62,16 @@ logger = logging.getLogger(__name__)
 
 
 def _filter_queries_without_positives(
-    relevant_docs: RelevantDocumentsType, queries: QueryDatasetType
+    relevant_docs: RelevantDocumentsType,
+    queries: QueryDatasetType,
+    top_ranked: TopRankedDocumentsType | None = None,
 ) -> tuple[RelevantDocumentsType, QueryDatasetType]:
+    """Keep queries with judgments and, for reranking, nonempty candidates."""
     _relevant_docs = {}
     for idx in relevant_docs:
         if len(relevant_docs[idx]) == 0:  # no relevant docs
+            continue
+        if top_ranked is not None and not top_ranked.get(idx):
             continue
         _relevant_docs[idx] = relevant_docs[idx]
 
@@ -361,7 +367,9 @@ class AbsTaskRetrieval(AbsTask):
         # ensure queries format (see #3030)
         data_split["relevant_docs"], data_split["queries"] = (
             _filter_queries_without_positives(
-                data_split["relevant_docs"], data_split["queries"]
+                data_split["relevant_docs"],
+                data_split["queries"],
+                data_split["top_ranked"],
             )
         )
         retriever = RetrievalEvaluator(

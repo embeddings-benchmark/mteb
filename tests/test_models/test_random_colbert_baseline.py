@@ -11,7 +11,7 @@ from mteb.mocks.mock_tasks import MockRerankingTask
 def test_random_colbert_reranking_query_without_candidates(
     tmp_path: Path, candidates: str
 ) -> None:
-    """A query without reranking candidates gets empty results instead of an error."""
+    """Queries without reranking candidates are excluded before evaluation."""
     task = MockRerankingTask()
     task.load_data()
     top_ranked = task.dataset["default"]["test"]["top_ranked"]
@@ -26,6 +26,7 @@ def test_random_colbert_reranking_query_without_candidates(
     with task._predictions_path(tmp_path).open(encoding="utf-8") as f:
         predictions = json.load(f)["default"]["test"]
 
-    assert set(predictions) == {"q1", "q2"}
+    assert set(predictions) == {"q1"}
     assert set(predictions["q1"]) == {"d1", "d2"}
-    assert predictions["q2"] == {}
+    assert set(task.dataset["default"]["test"]["queries"]["id"]) == {"q1"}
+    assert set(task.dataset["default"]["test"]["relevant_docs"]) == {"q1"}
