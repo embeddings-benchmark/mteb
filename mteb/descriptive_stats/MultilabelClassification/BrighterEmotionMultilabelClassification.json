@@ -1,0 +1,88 @@
+{
+    "test": {
+        "num_samples": 4452,
+        "samples_in_train": 1,
+        "text_statistics": {
+            "total_text_length": 494142,
+            "min_text_length": 10,
+            "average_text_length": 110.99326145552561,
+            "max_text_length": 1219,
+            "unique_texts": 2226
+        },
+        "image_statistics": null,
+        "audio_statistics": null,
+        "video_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 0,
+            "average_label_per_text": 0.8823000898472596,
+            "max_labels_per_text": 3,
+            "unique_labels": 7,
+            "labels": {
+                "anger": {
+                    "count": 1398
+                },
+                "joy": {
+                    "count": 1110
+                },
+                "None": {
+                    "count": 1232
+                },
+                "fear": {
+                    "count": 278
+                },
+                "surprise": {
+                    "count": 314
+                },
+                "sadness": {
+                    "count": 686
+                },
+                "disgust": {
+                    "count": 142
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 2226,
+        "samples_in_train": null,
+        "text_statistics": {
+            "total_text_length": 252839,
+            "min_text_length": 11,
+            "average_text_length": 113.58445642407906,
+            "max_text_length": 2665,
+            "unique_texts": 2226
+        },
+        "image_statistics": null,
+        "audio_statistics": null,
+        "video_statistics": null,
+        "label_statistics": {
+            "min_labels_per_text": 0,
+            "average_label_per_text": 0.8796046720575023,
+            "max_labels_per_text": 4,
+            "unique_labels": 7,
+            "labels": {
+                "None": {
+                    "count": 632
+                },
+                "anger": {
+                    "count": 718
+                },
+                "disgust": {
+                    "count": 75
+                },
+                "joy": {
+                    "count": 581
+                },
+                "sadness": {
+                    "count": 322
+                },
+                "surprise": {
+                    "count": 153
+                },
+                "fear": {
+                    "count": 109
+                }
+            }
+        }
+    }
+}

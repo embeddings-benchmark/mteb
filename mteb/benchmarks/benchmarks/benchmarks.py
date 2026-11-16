@@ -936,6 +936,69 @@ MTEB_PT = Benchmark(
     contacts=["Lucas-Okamura"],
 )
 
+MTEB_BR = Benchmark(
+    name="MTEB-BR (por, v1)",
+    aliases=["MTEB-BR"],
+    display_name="Brazilian Portuguese",
+    icon="https://raw.githubusercontent.com/lipis/flag-icons/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/br.svg",
+    tasks=MTEBTasks(
+        get_tasks(
+            languages=["por"],
+            tasks=[
+                # Classification (3)
+                "HateBR",
+                "ToxSynPT",
+                "FactckBrClassification",
+                # Multilabel classification (1)
+                "BrighterEmotionMultilabelClassification",
+                # Pair classification (2)
+                "AssinRTE",
+                "InferBR",
+                # STS (2)
+                "AssinSTS",
+                "Assin2STS",
+                # Clustering (5)
+                "WikipediaPTCategoriesClusteringP2P",
+                "MedPTClustering",
+                "JurisTCUClusteringP2P",
+                "SciELOClusteringP2P",
+                "StackoverflowPtClustering",
+                # Retrieval (6)
+                "Quati",
+                "JurisTCU",
+                "BRTaxQAR",
+                "FaQuADIR",
+                "MedPTRetrieval",
+                "FaqBacenRetrieval",
+                # Reranking (2)
+                "QuatiReranking",
+                "JurisTCUReranking",
+            ],
+        )
+    ),
+    description=(
+        "Brazilian Portuguese text embedding benchmark built exclusively from data "
+        "created or found in Portuguese (no machine translation). It spans "
+        "classification, multilabel classification, pair classification, semantic "
+        "textual similarity, clustering, retrieval and reranking, across legal, "
+        "medical, financial, tax, scientific, encyclopedic, programming and social "
+        "media domains."
+    ),
+    reference="https://arxiv.org/abs/2607.04581",
+    citation=r"""
+@misc{stekel2026mtebbr,
+  archiveprefix = {arXiv},
+  author = {Stekel, Tardelli Ronan Coelho},
+  eprint = {2607.04581},
+  primaryclass = {cs.CL},
+  title = {{MTEB-BR}: A Text Embedding Benchmark for {B}razilian {P}ortuguese},
+  url = {https://arxiv.org/abs/2607.04581},
+  year = {2026},
+}
+""",
+    contacts=["tardellirs"],
+)
+
 MTEB_SLK = Benchmark(
     name="MTEB(slk, v1)",
     aliases=["MTEB(slk)"],

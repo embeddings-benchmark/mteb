@@ -4,6 +4,7 @@ from .eng import *
 from .fra import *
 from .jpn import *
 from .multilingual import *
+from .por import *
 from .rus import *
 from .slk import *
 from .vie import *

@@ -1,0 +1,47 @@
+{
+    "test": {
+        "num_samples": 4000,
+        "text_statistics": {
+            "total_text_length": 4305415,
+            "min_text_length": 123,
+            "average_text_length": 1076.35375,
+            "max_text_length": 4923,
+            "unique_texts": 3971
+        },
+        "image_statistics": null,
+        "audio_statistics": null,
+        "video_statistics": null,
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 8,
+            "labels": {
+                "Agricultural Sciences": {
+                    "count": 500
+                },
+                "Biological/Life Sciences": {
+                    "count": 500
+                },
+                "Engineering & Technology": {
+                    "count": 500
+                },
+                "Health Sciences": {
+                    "count": 500
+                },
+                "Humanities & Arts": {
+                    "count": 500
+                },
+                "Mathematics & Computer Science": {
+                    "count": 500
+                },
+                "Physical Sciences & Chemistry": {
+                    "count": 500
+                },
+                "Social Sciences": {
+                    "count": 500
+                }
+            }
+        }
+    }
+}

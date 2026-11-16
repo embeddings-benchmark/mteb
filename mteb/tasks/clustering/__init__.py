@@ -8,6 +8,7 @@ from .multilingual import *
 from .nld import *
 from .nob import *
 from .pol import *
+from .por import *
 from .rom import *
 from .rus import *
 from .slk import *

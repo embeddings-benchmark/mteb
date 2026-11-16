@@ -1,0 +1,68 @@
+{
+    "train": {
+        "num_samples": 2873,
+        "text_statistics": {
+            "total_text_length": 1116072,
+            "min_text_length": 80,
+            "average_text_length": 388.4691959624086,
+            "max_text_length": 500,
+            "unique_texts": 2855
+        },
+        "image_statistics": null,
+        "audio_statistics": null,
+        "video_statistics": null,
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 15,
+            "labels": {
+                "Hist\u00f3ria": {
+                    "count": 189
+                },
+                "Geografia": {
+                    "count": 197
+                },
+                "Pol\u00edtica": {
+                    "count": 199
+                },
+                "Esporte": {
+                    "count": 195
+                },
+                "M\u00fasica": {
+                    "count": 194
+                },
+                "Cinema": {
+                    "count": 198
+                },
+                "Literatura": {
+                    "count": 197
+                },
+                "Religi\u00e3o": {
+                    "count": 197
+                },
+                "Ci\u00eancia": {
+                    "count": 197
+                },
+                "Tecnologia": {
+                    "count": 192
+                },
+                "Animais": {
+                    "count": 189
+                },
+                "Plantas": {
+                    "count": 137
+                },
+                "Medicina": {
+                    "count": 194
+                },
+                "Filosofia": {
+                    "count": 200
+                },
+                "Astronomia": {
+                    "count": 198
+                }
+            }
+        }
+    }
+}
