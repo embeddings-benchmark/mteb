@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
@@ -18,6 +19,8 @@ from mteb.similarity_functions import (
     select_similarity,
 )
 from mteb.types import PromptType
+
+logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     import torch
@@ -751,7 +754,13 @@ class RandomColBERTBaseline:
 
         results: RetrievalOutputType = {qid: {} for qid in query_ids}
         for i, qid in enumerate(query_ids):
-            candidate_ids = top_ranked[qid] if top_ranked is not None else corpus_ids
+            if top_ranked is None:
+                candidate_ids = corpus_ids
+            else:
+                candidate_ids = top_ranked.get(qid, [])
+                if not candidate_ids:
+                    logger.warning(f"No pre-ranked documents found for query {qid}")
+                    continue
             candidate_idxs = torch.tensor(
                 [corpus_id_to_idx[cid] for cid in candidate_ids]
             )
