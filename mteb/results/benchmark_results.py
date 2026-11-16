@@ -342,7 +342,9 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         ):
             model_result = ModelResult.model_construct(
                 model_name=model,  # type: ignore[arg-type]
-                model_revision=None if pd.isna(model_revision) else model_revision,  # type: ignore[arg-type]
+                model_revision=model_revision
+                if isinstance(model_revision, str)
+                else None,
                 task_results=list(group["task_result"]),
                 experiment_name=group_experiment_name or None,  # type: ignore[arg-type]
                 model_meta=group["model_meta"].iloc[0],
