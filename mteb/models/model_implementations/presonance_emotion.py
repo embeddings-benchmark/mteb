@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
+
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 
@@ -15,10 +16,11 @@ if TYPE_CHECKING:
     from collections.abc import Sequence
 
     import torch
-    from mteb.types import BatchedInput
     from numpy.typing import ArrayLike
     from PIL import Image
     from torch.utils.data import DataLoader
+
+    from mteb.types import BatchedInput
 
 
 def unit(features: ArrayLike) -> np.ndarray:
@@ -143,7 +145,7 @@ class PresonanceEmotionEncoder(AbsEncoder):
 presonance_emoset_image = ModelMeta(
     loader=PresonanceEmotionEncoder,
     extra_requirements_groups=["timm"],
-    name=CHECKPOINT_REPO,
+    name="saa938/presonance-emoset-ensemble",
     revision=CHECKPOINT_REVISION,
     release_date="2026-11-14",
     languages=["eng-Latn"],
