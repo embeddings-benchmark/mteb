@@ -33,26 +33,6 @@ class LugandaSTS(AbsTaskSTS):
         adapted_from=["STSBenchmark"],
         contributed_by="Caleb Matovu",
         is_public=True,
-        bibtex_citation=r"""
-@inproceedings{cer2017semeval,
-  title     = {SemEval-2017 Task 1: Semantic Textual Similarity Multilingual and Crosslingual Focused Evaluation},
-  author    = {Cer, Daniel and Diab, Mona and Agirre, Eneko and Lopez-Gazpio, Inigo and Specia, Lucia},
-  booktitle = {Proceedings of the 11th International Workshop on Semantic Evaluation (SemEval-2017)},
-  year      = {2017},
-  pages     = {1--14},
-  publisher = {Association for Computational Linguistics},
-  doi       = {10.18653/v1/S17-2001}
-}
-
-@misc{caleb_matovu_2026,
-	author       = { Caleb Matovu },
-	title        = { Luganda STS Benchmark },
-	year         = 2026,
-	url          = { https://huggingface.co/datasets/sagepond/sts },
-	doi          = { 10.57967/hf/11651 },
-	publisher    = { Hugging Face }
-}
-""",
     )
 
     column_names = ("sentence1", "sentence2")
