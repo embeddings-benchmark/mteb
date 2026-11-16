@@ -53,19 +53,15 @@ CHECKPOINT_REVISION = "1c9fd34ff2b79daed84239237fa941fed17652d1"
 class PresonanceEmotionEncoder(AbsEncoder):
     def __init__(
         self,
-        model_name: str = CHECKPOINT_REPO,
-        revision: str = CHECKPOINT_REVISION,
+        model_name: str,
+        revision: str,
         *,
         device: str | None = "cuda",
-        checkpoint_dir: str | Path | None = None,
         **kwargs: Any,
     ) -> None:
-        if checkpoint_dir is None:
-            from huggingface_hub import snapshot_download
+        from huggingface_hub import snapshot_download
 
-            checkpoint_dir = snapshot_download(
-                CHECKPOINT_REPO, revision=CHECKPOINT_REVISION
-            )
+        checkpoint_dir = snapshot_download(model_name, revision=revision)
         self.root = Path(checkpoint_dir)
         self.device = device or "cuda"
         self.config = json.loads((self.root / "config.json").read_text())
@@ -76,6 +72,27 @@ class PresonanceEmotionEncoder(AbsEncoder):
             "siglip2giant384_e6",
         ]:
             raise ValueError("Checkpoint configuration has an unexpected model order.")
+
+        import timm
+        from safetensors.torch import load_file
+        from timm.data import create_transform
+
+        self.models = []
+        for spec in self.config["models"]:
+            path = self.root / spec["file"]
+            with path.open("rb") as f:
+                actual_sha256 = hashlib.file_digest(f, "sha256").hexdigest()
+            if actual_sha256 != spec["sha256"]:
+                raise ValueError(f"Checkpoint SHA256 mismatch: {spec['file']}")
+            model = timm.create_model(
+                spec["architecture"], pretrained=False, num_classes=8
+            )
+            model.load_state_dict(
+                {k: v.float() for k, v in load_file(str(path)).items()}, strict=True
+            )
+            model.eval().requires_grad_(False)
+            tf = create_transform(is_training=False, **spec["preprocessing"])
+            self.models.append((model, tf))
 
     def predict_features(
         self, images: Sequence[Image.Image], batch_size: int = 64
@@ -89,38 +106,25 @@ class PresonanceEmotionEncoder(AbsEncoder):
         if not self.device.startswith("cuda"):
             raise ValueError("This encoder requires CUDA for BF16 image inference.")
 
-        import timm
         import torch
-        from safetensors.torch import load_file
-        from timm.data import create_transform
 
         # The published run used 64. Other positive batch sizes are configurable;
         # no bitwise parity across CUDA batch sizes is implied.
         torch.backends.cuda.matmul.allow_tf32 = True
         blocks = []
-        for spec in self.config["models"]:
-            path = self.root / spec["file"]
-            with path.open("rb") as f:
-                actual_sha256 = hashlib.file_digest(f, "sha256").hexdigest()
-            if actual_sha256 != spec["sha256"]:
-                raise ValueError(f"Checkpoint SHA256 mismatch: {spec['file']}")
-            model = timm.create_model(
-                spec["architecture"], pretrained=False, num_classes=8
-            )
-            model.load_state_dict(
-                {k: v.float() for k, v in load_file(str(path)).items()}, strict=True
-            )
-            model.eval().requires_grad_(False).to(self.device)
-            tf = create_transform(is_training=False, **spec["preprocessing"])
-            rows = []
-            for at in range(0, len(images), batch_size):
-                batch = torch.stack(
-                    [tf(im.convert("RGB")) for im in images[at : at + batch_size]]
-                ).to(self.device)
-                rows.append(feature_batch(model, batch))
-            blocks.append(np.concatenate(rows))
-            del model
-            torch.cuda.empty_cache()
+        for model, tf in self.models:
+            try:
+                model.to(self.device)
+                rows = []
+                for at in range(0, len(images), batch_size):
+                    batch = torch.stack(
+                        [tf(im.convert("RGB")) for im in images[at : at + batch_size]]
+                    ).to(self.device)
+                    rows.append(feature_batch(model, batch))
+                blocks.append(np.concatenate(rows))
+            finally:
+                model.to("cpu")
+                torch.cuda.empty_cache()
         return combine(blocks)
 
     def encode(
@@ -136,22 +140,16 @@ class PresonanceEmotionEncoder(AbsEncoder):
         return self.predict_features(images, batch_size=batch_size)
 
 
-def _load_encoder(
-    model_name: str, revision: str, **kwargs: Any
-) -> PresonanceEmotionEncoder:
-    return PresonanceEmotionEncoder(model_name, revision, **kwargs)
-
-
 presonance_emoset_image = ModelMeta(
-    loader=_load_encoder,
+    loader=PresonanceEmotionEncoder,
     extra_requirements_groups=["timm"],
     name=CHECKPOINT_REPO,
     revision=CHECKPOINT_REVISION,
     release_date="2026-11-14",
     languages=["eng-Latn"],
-    n_parameters=None,
-    memory_usage_mb=None,
-    max_tokens=None,
+    n_parameters=2_086_952_416,
+    memory_usage_mb=7961,
+    max_tokens=None,  # Image-only encoder; no text-token limit.
     embed_dim=4608,
     license="apache-2.0",
     open_weights=True,
