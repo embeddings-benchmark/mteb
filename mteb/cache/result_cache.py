@@ -387,6 +387,7 @@ class ResultCache:
         model_revision: str | None = None,
         *,
         encode_kwargs: Mapping[str, Any] | None = None,
+        evaluated_splits: Mapping[str, Sequence[str]] | None = None,
     ) -> None:
         """Save the task results to the local cache directory in the location {model_name}/{model_revision}/{task_name}.json.
 
@@ -398,6 +399,9 @@ class ResultCache:
             model_name: The name of the model as a valid directory name or a ModelMeta object.
             model_revision: The revision of the model. Must be specified if model_name is a string.
             encode_kwargs: The keyword arguments passed to the model's encode method during evaluation.
+            evaluated_splits: A mapping from each split to the subsets evaluated in this run. Only these are
+                recorded in run_settings.jsonl, so subsets loaded from the cache keep their original settings.
+                If None, all splits and subsets in the task result are recorded.
         """
         result_path = self.get_task_result_path(
             model_name=model_name,
@@ -417,6 +421,13 @@ class ResultCache:
 
         run_settings_list: list[dict[str, Any]] = []
         for split, split_scores in task_result.scores.items():
+            subsets = {
+                score_entry.get("hf_subset", "default") for score_entry in split_scores
+            }
+            if evaluated_splits is not None:
+                subsets &= set(evaluated_splits.get(split, []))
+            if not subsets:
+                continue
             run_settings = {
                 "task": task_result.task_name,
                 "splits": [split],
@@ -424,12 +435,7 @@ class ResultCache:
                 "encode_kwargs": json.loads(json.dumps(encode_kwargs, default=str))
                 if encode_kwargs is not None
                 else {},
-                "subsets": sorted(
-                    {
-                        score_entry.get("hf_subset", "default")
-                        for score_entry in split_scores
-                    }
-                ),
+                "subsets": sorted(subsets),
             }
             run_settings_list.append(run_settings)
 
