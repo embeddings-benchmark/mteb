@@ -852,7 +852,7 @@ colqwen3_5_v4 = ModelMeta(
     adapted_from="Qwen/Qwen3.5-4B",
     contacts=["athrael-soju"],
     output_dtypes=OutputDType.BF16,
-    extra_requirements_groups=["image"],
+    extra_requirements_groups=["pplx-embed-v2", "image"],
 )
 
 
