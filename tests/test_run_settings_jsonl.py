@@ -3,8 +3,14 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 import mteb
+from mteb.abstasks import AbsTask
 from mteb.cache import ResultCache
+from mteb.mocks.mock_tasks.bitext_mining import (
+    MockMultilingualParallelBitextMiningTask,
+)
 from mteb.mocks.mock_tasks.classification import MockMultilingualClassificationTask
 from mteb.results import TaskResult
 
@@ -149,42 +155,50 @@ def test_save_to_cache_serializes_non_json_serializable_encode_kwargs(tmp_path: 
     assert isinstance(entries[0]["encode_kwargs"]["custom"], str)
 
 
-def test_resume_only_missing_keeps_previous_run_settings(tmp_path: Path):
+@pytest.mark.parametrize(
+    ("task_cls", "expected_batch_sizes"),
+    [
+        (MockMultilingualClassificationTask, (8, 16)),
+        (MockMultilingualParallelBitextMiningTask, (16, 16)),
+    ],
+    ids=["cached-subset", "recomputed-subset"],
+)
+def test_resume_records_settings_for_evaluated_subsets(
+    tmp_path: Path, task_cls: type[AbsTask], expected_batch_sizes: tuple[int, int]
+):
     model = mteb.get_model("mteb/baseline-random-encoder")
     cache = ResultCache(cache_path=tmp_path)
-    first_run_task = MockMultilingualClassificationTask().filter_languages(["eng"])
-    mteb.evaluate(model, first_run_task, cache=cache, encode_kwargs={"batch_size": 8})
-    mteb.evaluate(
-        model,
-        MockMultilingualClassificationTask(),
-        cache=cache,
-        encode_kwargs={"batch_size": 16},
+    task = task_cls()
+    first_run_task = task_cls().filter_languages(
+        languages=None, hf_subsets=task.hf_subsets[:1]
     )
+    mteb.evaluate(model, first_run_task, cache=cache, encode_kwargs={"batch_size": 8})
+    mteb.evaluate(model, task, cache=cache, encode_kwargs={"batch_size": 16})
 
     (run_settings_path,) = tmp_path.rglob("run_settings.jsonl")
-    entries = {
-        tuple(entry["subsets"]): entry["encode_kwargs"]["batch_size"]
+    batch_sizes = {
+        subset: entry["encode_kwargs"]["batch_size"]
         for entry in _read_jsonl(run_settings_path)
+        for subset in entry["subsets"]
     }
-    assert entries == {("eng",): 8, ("fra",): 16}
+    assert batch_sizes == dict(zip(task.hf_subsets, expected_batch_sizes, strict=True))
 
 
 def test_save_to_cache_records_only_evaluated_splits(tmp_path: Path):
     cache = ResultCache(cache_path=tmp_path)
+    score = {"main_score": 0.5}
     cache.save_to_cache(
         TaskResult.from_task_results(
-            task=mteb.get_task("MassiveIntentClassification"),
-            scores={"test": {"en": {"main_score": 0.5}, "de": {"main_score": 0.5}}},
-            evaluation_time=100,
+            task=MockMultilingualClassificationTask(),
+            scores={"test": {"eng": score, "fra": score}, "validation": {"eng": score}},
+            evaluation_time=0,
         ),
         "model",
         model_revision="rev1",
-        encode_kwargs={"batch_size": 16},
-        evaluated_splits={"test": ["de"], "validation": ["en"]},
+        evaluated_splits={"test": ["fra"]},
     )
 
     run_settings_path = tmp_path / "results" / "model" / "rev1" / "run_settings.jsonl"
-    entries = _read_jsonl(run_settings_path)
-
-    assert len(entries) == 1
-    assert entries[0]["subsets"] == ["de"]
+    (entry,) = _read_jsonl(run_settings_path)
+    assert entry["splits"] == ["test"]
+    assert entry["subsets"] == ["fra"]
