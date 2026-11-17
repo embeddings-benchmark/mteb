@@ -311,6 +311,37 @@ tasks:
     )
 
 
+def _task_metadata(license_name: str | None) -> TaskMetadata:
+    return TaskMetadata(
+        name="MyTask",
+        dataset={"path": "test/dataset", "revision": "1.0"},
+        description="testing",
+        type="Classification",
+        category="t2t",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        license=license_name,
+    )
+
+
+@pytest.mark.parametrize("license_name", [None, "not specified"])
+def test_existing_unclear_license_keeps_metadata_valid(license_name: str | None):
+    _task_metadata(license_name)._validate_metadata()
+
+
+@pytest.mark.parametrize("license_name", [None, "not specified"])
+def test_unclear_license_is_rejected(license_name: str | None):
+    with pytest.raises(ValueError, match="unclear license"):
+        _task_metadata(license_name)._validate_license()
+
+
+def test_license_outside_allowed_values_rejected_by_pydantic():
+    with pytest.raises(ValidationError):
+        _task_metadata("unknown")
+
+
 def test_task_hf_config_from_existing():
     task1 = mteb.get_task("MIRACLRetrievalHardNegatives")
     task2 = mteb.get_task("MIRACLRetrievalHardNegatives.v2")
