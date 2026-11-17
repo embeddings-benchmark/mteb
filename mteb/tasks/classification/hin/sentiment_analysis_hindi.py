@@ -24,7 +24,6 @@ class SentimentAnalysisHindi(AbsTaskClassification):
         license="cc-by-nc-sa-4.0",
         annotations_creators="derived",
         sample_creation="found",
-        bibtex_citation="",
         superseded_by="SentimentAnalysisHindi.v2",
     )
 
@@ -51,6 +50,5 @@ class SentimentAnalysisHindiV2(AbsTaskClassification):
         license="cc-by-nc-sa-4.0",
         annotations_creators="derived",
         sample_creation="found",
-        bibtex_citation="",
         adapted_from=["SentimentAnalysisHindi"],
     )

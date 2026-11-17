@@ -39,8 +39,6 @@ class TurkicClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        """,
     )
 
     def transform_data(self, dataset: Dataset, lang: str | None) -> Dataset:

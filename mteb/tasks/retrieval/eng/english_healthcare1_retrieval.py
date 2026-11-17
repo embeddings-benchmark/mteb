@@ -24,7 +24,6 @@ class EnglishHealthcare1Retrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         is_public=False,
         contributed_by="Voyage AI",
     )

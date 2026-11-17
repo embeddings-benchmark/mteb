@@ -28,7 +28,6 @@ class BiorxivClusteringS2SFast(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="",
         prompt="Identify the main category of Biorxiv papers based on the titles",
         adapted_from=["BiorxivClusteringS2S"],
     )
@@ -63,7 +62,6 @@ class BiorxivClusteringS2S(AbsTaskClusteringLegacy):
         annotations_creators="derived",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="",
         prompt="Identify the main category of Biorxiv papers based on the titles",
         superseded_by="BiorxivClusteringS2S.v2",
     )

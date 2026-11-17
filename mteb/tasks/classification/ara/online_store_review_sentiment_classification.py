@@ -24,7 +24,6 @@ class OnlineStoreReviewSentimentClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=["ara-Arab-SA"],
         sample_creation="found",
-        bibtex_citation="",
         superseded_by="OnlineStoreReviewSentimentClassification.v2",
     )
 
@@ -59,5 +58,4 @@ class OnlineStoreReviewSentimentClassificationV2(AbsTaskClassification):
         annotations_creators="derived",
         dialect=["ara-Arab-SA"],
         sample_creation="found",
-        bibtex_citation="",
     )

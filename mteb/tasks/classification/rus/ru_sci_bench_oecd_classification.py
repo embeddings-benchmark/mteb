@@ -26,7 +26,6 @@ class RuSciBenchOECDClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         prompt="Classify the category of scientific papers based on the titles and abstracts",
         superseded_by="RuSciBenchOECDClassification.v2",
     )

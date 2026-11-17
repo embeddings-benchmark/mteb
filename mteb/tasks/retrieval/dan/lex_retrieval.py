@@ -30,7 +30,6 @@ class LexRetrievalv1(AbsTaskRetrieval):
             "Conversational retrieval",
         ],
         sample_creation="found",  # queries are synthetically generated based on existing user queries of the existing chatbot, but the documents are found, not generated
-        bibtex_citation="",  # probably an upcoming paper
         adapted_from=None,
         is_public=False,
         contributed_by="Aarhus University & Lex.dk",

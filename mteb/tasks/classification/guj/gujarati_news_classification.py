@@ -24,7 +24,6 @@ class GujaratiNewsClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",  # none found
         superseded_by="GujaratiNewsClassification.v2",
     )
 
@@ -51,6 +50,5 @@ class GujaratiNewsClassificationV2(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",  # none found,
         adapted_from=["GujaratiNewsClassification"],
     )

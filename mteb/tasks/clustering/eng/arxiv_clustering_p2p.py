@@ -74,7 +74,7 @@ class ArxivClusteringP2PFast(AbsTaskClusteringLegacy):
   url = {https://www.kaggle.com/dsv/7548853},
   year = {2024},
 }
-""",  # None found
+""",
         prompt="Identify the main and secondary category of Arxiv papers based on the titles and abstracts",
         adapted_from=["ArxivClusteringP2P"],
         superseded_by="ArXivHierarchicalClusteringP2P",

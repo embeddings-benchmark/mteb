@@ -31,7 +31,6 @@ class RomaTalesBitextMining(AbsTaskBitextMining):
         annotations_creators="expert-annotated",
         dialect=["Lovari"],
         sample_creation="created",
-        bibtex_citation="",
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:

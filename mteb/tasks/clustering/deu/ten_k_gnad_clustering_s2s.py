@@ -30,7 +30,6 @@ class TenKGnadClusteringS2S(AbsTaskClusteringLegacy):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",  # none found
         superseded_by="TenKGnadClusteringS2S.v2",
     )
 
@@ -63,7 +62,6 @@ class TenKGnadClusteringS2SFast(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",  # none found
         adapted_from=["TenKGnadClusteringS2S"],
     )
 

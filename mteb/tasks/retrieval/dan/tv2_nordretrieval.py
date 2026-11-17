@@ -27,7 +27,6 @@ class TV2Nordretrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         prompt={
             "query": "Given a summary of a Danish news article retrieve the corresponding news article"
         },

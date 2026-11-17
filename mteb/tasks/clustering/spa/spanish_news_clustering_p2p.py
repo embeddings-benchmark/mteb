@@ -24,5 +24,4 @@ class SpanishNewsClusteringP2P(AbsTaskClusteringLegacy):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
     )
