@@ -7,6 +7,7 @@ from mteb._create_dataloaders import (
     _create_dataloader_from_texts,
     create_dataloader,
 )
+from mteb.models.model_meta import ScoringFunction
 from mteb.similarity_functions import similarity
 
 from .evaluator import Evaluator
@@ -97,12 +98,13 @@ class ZeroShotClassificationEvaluator(Evaluator):
             subset=self.hf_subset,
             log_message="Running zero-shot classification - Evaluating accuracy...",
         ):
-            meta = getattr(model, "mteb_model_meta", None)
-            multi_vector = meta is not None and meta.similarity_fn_name == "MaxSim"
+            multi_vector = (
+                model.mteb_model_meta.similarity_fn_name == ScoringFunction.MAX_SIM
+            )
             if self.task_metadata.modalities == ["image", "text"] and not multi_vector:
                 probs = similarity(text_label_embeddings, input_embeddings)
-            else:  # multi-vector embeddings can only be compared with the model's own (late-interaction) score
+            else:
                 probs = model.similarity(input_embeddings, text_label_embeddings)
-            if hasattr(probs, "cpu"):
+            if hasattr(probs, "cpu"):  # scored with numpy, which has no bfloat16
                 probs = probs.float().cpu()
         return probs

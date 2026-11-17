@@ -81,8 +81,7 @@ class _MultiVectorEncoder:
 
 
 def test_zeroshot_image_text_uses_the_models_similarity_for_multi_vector_models():
-    """Image-text zero-shot used cosine similarity for every model, which fails on multi-vector
-    embeddings; MaxSim models must be scored with their own `similarity`."""
+    """MaxSim models are scored with their own similarity, not cosine."""
     task = MockZeroShotClassificationTask()
     task.load_data()
     evaluator = ZeroShotClassificationEvaluator(
