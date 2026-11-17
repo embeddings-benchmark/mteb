@@ -5,6 +5,7 @@ from pathlib import Path
 
 import mteb
 from mteb.cache import ResultCache
+from mteb.mocks.mock_tasks.classification import MockMultilingualClassificationTask
 from mteb.results import TaskResult
 
 
@@ -146,3 +147,44 @@ def test_save_to_cache_serializes_non_json_serializable_encode_kwargs(tmp_path: 
 
     assert len(entries) == 1
     assert isinstance(entries[0]["encode_kwargs"]["custom"], str)
+
+
+def test_resume_only_missing_keeps_previous_run_settings(tmp_path: Path):
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    cache = ResultCache(cache_path=tmp_path)
+    first_run_task = MockMultilingualClassificationTask().filter_languages(["eng"])
+    mteb.evaluate(model, first_run_task, cache=cache, encode_kwargs={"batch_size": 8})
+    mteb.evaluate(
+        model,
+        MockMultilingualClassificationTask(),
+        cache=cache,
+        encode_kwargs={"batch_size": 16},
+    )
+
+    (run_settings_path,) = tmp_path.rglob("run_settings.jsonl")
+    entries = {
+        tuple(entry["subsets"]): entry["encode_kwargs"]["batch_size"]
+        for entry in _read_jsonl(run_settings_path)
+    }
+    assert entries == {("eng",): 8, ("fra",): 16}
+
+
+def test_save_to_cache_records_only_evaluated_splits(tmp_path: Path):
+    cache = ResultCache(cache_path=tmp_path)
+    cache.save_to_cache(
+        TaskResult.from_task_results(
+            task=mteb.get_task("MassiveIntentClassification"),
+            scores={"test": {"en": {"main_score": 0.5}, "de": {"main_score": 0.5}}},
+            evaluation_time=100,
+        ),
+        "model",
+        model_revision="rev1",
+        encode_kwargs={"batch_size": 16},
+        evaluated_splits={"test": ["de"], "validation": ["en"]},
+    )
+
+    run_settings_path = tmp_path / "results" / "model" / "rev1" / "run_settings.jsonl"
+    entries = _read_jsonl(run_settings_path)
+
+    assert len(entries) == 1
+    assert entries[0]["subsets"] == ["de"]
