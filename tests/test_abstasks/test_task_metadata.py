@@ -282,6 +282,47 @@ def test_contributed_by_field():
     assert my_task.contributed_by == "Acme Corp"
 
 
+@pytest.mark.parametrize(
+    ("bibtex_citation", "expected_title"),
+    [
+        pytest.param(
+            "@inproceedings{doe2024,\n"
+            "  author = {Doe, Jane},\n"
+            "  booktitle = {Proceedings of the Conference},\n"
+            "  title = {A Paper Title},\n"
+            "}",
+            "A Paper Title",
+            id="booktitle-before-title",
+        ),
+        pytest.param(
+            "@inproceedings{agirre2012,\n"
+            "  title = {{S}em{E}val-2012 Task 6: A Pilot on Semantic Textual Similarity},\n"
+            "  booktitle = {Proceedings of {S}em{E}val 2012},\n"
+            "}",
+            "SemEval-2012 Task 6: A Pilot on Semantic Textual Similarity",
+            id="nested-braces",
+        ),
+        pytest.param(
+            "@article{doe2024,\n  title = {A Title Split\n    over Two Lines},\n}",
+            "A Title Split over Two Lines",
+            id="multi-line-title",
+        ),
+        pytest.param(
+            "@article{doe2024,\n  Title = {A Capitalized Field Name},\n}",
+            "A Capitalized Field Name",
+            id="capitalized-field-name",
+        ),
+        pytest.param(
+            "@misc{doe2024,\n  booktitle = {Proceedings of the Conference},\n}",
+            None,
+            id="no-title",
+        ),
+    ],
+)
+def test_extract_bibtex_title(bibtex_citation, expected_title):
+    assert TaskMetadata._extract_bibtex_title(bibtex_citation) == expected_title
+
+
 def test_task_hf_config():
     task = mteb.get_task("ArguAna")
     config = task._create_task_hf_config()

@@ -806,10 +806,24 @@ class TaskMetadata(BaseModel):
 
     @staticmethod
     def _extract_bibtex_title(bibtex_citation: str) -> str | None:
-        """Extract the title from a BibTeX citation string."""
-        match = re.search(r"title\s*=\s*\{([^}]+)\}", bibtex_citation)
-        if match:
-            return match.group(1).strip()
+        """Extract the title from a BibTeX citation string.
+
+        Only the `title` field matches, not fields such as `booktitle`. Inner braces,
+        as in `{S}em{E}val`, are removed and whitespace is collapsed.
+        """
+        match = re.search(r"\btitle\s*=\s*\{", bibtex_citation, flags=re.IGNORECASE)
+        if match is None:
+            return None
+        start = match.end()
+        depth = 1  # count nested braces to find the one that closes the title
+        for i, char in enumerate(bibtex_citation[start:], start):
+            if char == "{":
+                depth += 1
+            elif char == "}":
+                depth -= 1
+                if depth == 0:
+                    title = bibtex_citation[start:i].replace("{", "").replace("}", "")
+                    return " ".join(title.split()) or None
         return None
 
     def _format_reference(self) -> str | None:
