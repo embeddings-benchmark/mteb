@@ -47,18 +47,19 @@ from typing import TYPE_CHECKING
 import bibtexparser
 import requests
 from bibtexparser.model import Field
-from refaudit import Entry, default_resolvers, parse_string
+from refaudit import Found, default_resolvers
 from refaudit.http import HttpError, TransportError
-from refaudit.models import Found
-from refaudit.normalize import (
+
+from scripts.tools.check_citations import CONTACT_EMAIL, citations
+from scripts.tools.citation_utils import (
+    Entry,
     clean_arxiv_id,
     clean_doi,
     first_surname,
+    parse_string,
     similarity,
     surnames_match,
 )
-
-from scripts.tools.check_citations import CONTACT_EMAIL, citations
 from scripts.tools.format_citations import format_bibtex
 
 if TYPE_CHECKING:
