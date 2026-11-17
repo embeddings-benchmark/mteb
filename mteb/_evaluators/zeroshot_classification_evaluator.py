@@ -97,8 +97,12 @@ class ZeroShotClassificationEvaluator(Evaluator):
             subset=self.hf_subset,
             log_message="Running zero-shot classification - Evaluating accuracy...",
         ):
-            if self.task_metadata.modalities == ["image", "text"]:
+            meta = getattr(model, "mteb_model_meta", None)
+            multi_vector = meta is not None and meta.similarity_fn_name == "MaxSim"
+            if self.task_metadata.modalities == ["image", "text"] and not multi_vector:
                 probs = similarity(text_label_embeddings, input_embeddings)
-            else:
+            else:  # multi-vector embeddings can only be compared with the model's own (late-interaction) score
                 probs = model.similarity(input_embeddings, text_label_embeddings)
+            if hasattr(probs, "cpu"):
+                probs = probs.float().cpu()
         return probs
