@@ -204,6 +204,7 @@ from .english_finance2_retrieval import EnglishFinance2Retrieval
 from .english_finance3_retrieval import EnglishFinance3Retrieval
 from .english_finance4_retrieval import EnglishFinance4Retrieval
 from .english_healthcare1_retrieval import EnglishHealthcare1Retrieval
+from .enterprise_rag_bench_retrieval import EnterpriseRAGBenchRetrieval
 from .faith_dial_retrieval import FaithDialRetrieval
 from .fashion200k_i2t_retrieval import Fashion200kI2TRetrieval
 from .fashion200k_t2i_retrieval import Fashion200kT2IRetrieval
@@ -764,6 +765,7 @@ __all__ = [
     "EnglishFinance3Retrieval",
     "EnglishFinance4Retrieval",
     "EnglishHealthcare1Retrieval",
+    "EnterpriseRAGBenchRetrieval",
     "FEVERHardNegatives",
     "FEVERHardNegativesV2",
     "FGMCapsA2TRetrieval",
