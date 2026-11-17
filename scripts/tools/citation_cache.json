@@ -9252,7 +9252,7 @@
             }
         },
         "park2026ultrabertlimitbertpretraining||2610.15028|ultrabert: beyond the limit of bert pre-training|2026": {
-            "stored_at": 1791972171.641547,
+            "stored_at": 1794564884.2415473,
             "value": {
                 "verdict": "OK",
                 "found_title": "UltraBERT: Beyond the Limit of BERT Pre-Training",
@@ -9262,7 +9262,7 @@
             }
         },
         "rystrom2026grounding||2605.27168|grounding text embeddings in stakeholder associations|2026": {
-            "stored_at": 1791990116.460855,
+            "stored_at": 1794645627.7280428,
             "value": {
                 "verdict": "OK",
                 "found_title": "Grounding Text Embeddings in Stakeholder Associations",
