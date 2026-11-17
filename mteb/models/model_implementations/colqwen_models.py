@@ -8,6 +8,7 @@ from tqdm.auto import tqdm
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator, VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import MultiVectorWrapper
 from mteb.types import OutputDType
 
 if TYPE_CHECKING:
@@ -791,7 +792,7 @@ colqwen3_5_v3 = ModelMeta(
     n_embedding_parameters=635_699_200,
     memory_usage_mb=8660,
     max_tokens=262144,
-    embed_dim=128,
+    embed_dim=320,
     license="apache-2.0",
     open_weights=True,
     public_training_code=None,
@@ -802,6 +803,56 @@ colqwen3_5_v3 = ModelMeta(
     use_instructions=False,
     training_datasets=COLQWEN35_V3_TRAINING_DATA,
     extra_requirements_groups=["colpali_engine"],
+)
+
+
+COLQWEN35_V4_TRAINING_DATA = {
+    *COLPALI_TRAINING_DATA,
+    # from https://huggingface.co/datasets/openbmb/VisRAG-Ret-Train-Synthetic-data
+    "VisRAG-Ret-Train-Synthetic-data",
+    # from https://huggingface.co/datasets/openbmb/VisRAG-Ret-Train-In-domain-data
+    "VisRAG-Ret-Train-In-domain-data",
+    "VisRAGRetArxivQA",
+    "VisRAGRetChartQA",
+    "VisRAGRetInfoVQA",
+    "VisRAGRetMPDocVQA",
+    "VisRAGRetPlotQA",
+    "VisRAGRetSlideVQA",
+    # from https://huggingface.co/datasets/llamaindex/vdr-multilingual-train
+    "VDRMultilingualRetrieval",
+    # from https://huggingface.co/datasets/Tevatron/docmatix-ir
+    "docmatix-ir",
+    # from https://huggingface.co/datasets/Tevatron/wiki-ss-nq
+    "wiki-ss-nq",
+    "NQ",
+}
+
+colqwen3_5_v4 = ModelMeta(
+    loader=MultiVectorWrapper,
+    name="athrael-soju/ColQwen3.5-4.5B-v4",
+    model_type=["late-interaction"],
+    languages=["eng-Latn", "fra-Latn", "deu-Latn", "spa-Latn", "ita-Latn", "por-Latn"],
+    revision="63c66dcf1ed8a42cd71b5b30047d07c596085263",
+    release_date="2026-11-17",
+    modalities=["image", "text"],
+    n_parameters=4_544_510_464,
+    n_embedding_parameters=635_699_200,
+    memory_usage_mb=8668,
+    max_tokens=262144,
+    embed_dim=[64, 128, 256, 512, 1024, 2048],
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
+    reference="https://huggingface.co/athrael-soju/ColQwen3.5-4.5B-v4",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    use_instructions=False,
+    training_datasets=COLQWEN35_V4_TRAINING_DATA,
+    adapted_from="Qwen/Qwen3.5-4B",
+    contacts=["athrael-soju"],
+    output_dtypes=OutputDType.BF16,
+    extra_requirements_groups=["pplx-embed-v2", "image"],
 )
 
 
