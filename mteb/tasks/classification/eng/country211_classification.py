@@ -14,7 +14,7 @@ class Country211Classification(AbsTaskClassification):
         reference="https://huggingface.co/datasets/clip-benchmark/wds_country211",
         dataset={
             "path": "mteb/wds_country211",
-            "revision": "c3875324cab4803fa6d3afcd5947a97c84fad4c6",
+            "revision": "7dc012300ad9f7d745776689e602d895070e732e",
         },
         type="ImageClassification",
         category="i2c",

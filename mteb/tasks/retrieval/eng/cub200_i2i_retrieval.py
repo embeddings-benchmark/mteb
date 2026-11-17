@@ -9,7 +9,7 @@ class CUB200I2I(AbsTaskRetrieval):
         reference="https://www.florian-schroff.de/publications/CUB-200.pdf",
         dataset={
             "path": "mteb/cub200_retrieval",
-            "revision": "ad08c1307b15a226bf1b64e62656a17f1f85f7ec",
+            "revision": "92cfa36e12d2675fde159279db326c9eaa2240aa",
         },
         type="Any2AnyRetrieval",
         category="i2i",
