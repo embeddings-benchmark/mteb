@@ -990,6 +990,7 @@ class TaskMetadata(BaseModel):
             "MultilabelClassification": ["text-classification"],
             "Clustering": ["text-classification"],
             "PairClassification": ["text-classification"],
+            "Regression": ["text-classification"],
             "Reranking": ["text-ranking"],
             "Retrieval": ["text-retrieval"],
             "STS": ["sentence-similarity"],
@@ -1017,6 +1018,10 @@ class TaskMetadata(BaseModel):
             "AudioPairClassification": ["audio-classification"],
             # video
             "VideoCentricQA": ["visual-question-answering"],
+            "VideoClassification": ["video-classification"],
+            "VideoMultilabelClassification": ["video-classification"],
+            "VideoClustering": ["video-classification"],
+            "VideoPairClassification": ["video-classification"],
             "VideoZeroshotClassification": ["video-classification"],
         }
         if self.type == "ZeroShotClassification":
