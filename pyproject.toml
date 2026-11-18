@@ -687,6 +687,7 @@ extend-ignore-words-re = [
     "Beng",  # Bengali script
     # dataset names
     "Matix",  # Docmatix (HF dataset)
+    "ABOV",  # ABOV2IRetrieval (ABO + V2I)
 
 ]
 extend-ignore-re = [
