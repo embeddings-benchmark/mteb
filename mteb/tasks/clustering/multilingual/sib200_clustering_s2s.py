@@ -280,7 +280,8 @@ class SIB200ClusteringFastV2(SIB200ClusteringFast):
     """SIB-200 clustering on the 14-topic `mteb/sib200.v3` data, which also contains the 8 language configs
     (among them `arb_Arab`, Modern Standard Arabic) that the first task definition left out."""
 
-    max_document_to_embed = 1434
+    # largest test split (arb_Arab and most configs); configs with fewer test sentences are embedded whole
+    max_document_to_embed = 1225
 
     metadata = TaskMetadata(
         name="SIB200ClusteringS2S.v2",
@@ -316,13 +317,7 @@ class SIB200ClusteringFastV2(SIB200ClusteringFast):
         self,
         num_proc: int | None = None,
     ):
-        ds = {}
         for lang in self.hf_subsets:
-            labels = []
-            sentences = []
-            for split in ["train", "validation", "test"]:
-                labels.extend(self.dataset[lang][split]["label"])
-                sentences.extend(self.dataset[lang][split]["text"])
-            split_ds = Dataset.from_dict({"labels": labels, "sentences": sentences})
-            ds[lang] = DatasetDict({"test": split_ds})
-        self.dataset = DatasetDict(ds)
+            self.dataset[lang] = self.dataset[lang].rename_columns(
+                {"label": "labels", "text": "sentences"}
+            )
