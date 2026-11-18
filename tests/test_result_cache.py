@@ -148,38 +148,42 @@ def test_load_result_specific_model():
     assert model in model_names, "Model should be in the results"
 
 
-def test_load_results_accepts_generator_models():
+@pytest.mark.parametrize("as_iterator", [False, True], ids=["list", "iterator"])
+def test_load_results_empty_models_and_tasks(as_iterator):
     cache = ResultCache(cache_path=test_cache_path)
-    model_meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
+    all_results = cache.load_results(require_model_meta=False)
+    assert all_results.model_results
 
-    from_list = cache.load_results(models=[model_meta], require_model_meta=False)
-    from_generator = cache.load_results(
-        models=(m for m in [model_meta]), require_model_meta=False
-    )
-
-    assert len(from_list.model_results) > 0
-    assert len(from_generator.model_results) == len(from_list.model_results)
-
-
-def test_get_cache_paths_iterator_keeps_first_model():
-    cache = ResultCache(cache_path=test_cache_path)
-    metas = [
-        mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2"),
-        mteb.get_model_meta("mteb/baseline-random-encoder"),
+    # Empty models preserve the existing behavior of loading every model.
+    empty_models = iter([]) if as_iterator else []
+    results = cache.load_results(models=empty_models, require_model_meta=False)
+    assert [r.model_dump_json(exclude={"model_meta"}) for r in results] == [
+        r.model_dump_json(exclude={"model_meta"}) for r in all_results
     ]
 
-    from_list = cache.get_cache_paths(models=metas, require_model_meta=False)
-    from_iterator = cache.get_cache_paths(models=iter(metas), require_model_meta=False)
+    empty_tasks = iter([]) if as_iterator else []
+    assert not cache.load_results(
+        tasks=empty_tasks, require_model_meta=False
+    ).model_results
 
-    assert len(from_list) > 0
-    assert sorted(from_iterator) == sorted(from_list)
 
-
-def test_load_results_empty_models_and_tasks_do_not_raise():
+@pytest.mark.parametrize("as_iterator", [False, True], ids=["list", "iterator"])
+def test_load_results_with_task_objects(as_iterator):
     cache = ResultCache(cache_path=test_cache_path)
+    task_names = ["Banking77Classification", "BelebeleRetrieval"]
+    tasks = [mteb.get_task(name) for name in task_names]
+    expected = cache.load_results(tasks=task_names, require_model_meta=False)
+    results = cache.load_results(
+        tasks=iter(tasks) if as_iterator else tasks,
+        require_model_meta=False,
+    )
 
-    cache.load_results(models=[], require_model_meta=False)
-    cache.load_results(tasks=[], require_model_meta=False)
+    assert {
+        task.task_name for result in results for task in result.task_results
+    } == set(task_names)
+    assert [r.model_dump_json(exclude={"model_meta"}) for r in results] == [
+        r.model_dump_json(exclude={"model_meta"}) for r in expected
+    ]
 
 
 def test_filter_with_modelmeta():
