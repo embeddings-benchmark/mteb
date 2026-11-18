@@ -19,7 +19,6 @@ from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
-from mteb._requires_package import requires_package
 from mteb.models.model_meta import ModelMeta
 
 if TYPE_CHECKING:
@@ -63,7 +62,6 @@ class ChopperWrapper:
         device: str | None = None,
         **kwargs: Any,
     ) -> None:
-        requires_package(self, "chopper_rag", model_name, "pip install chopper-rag")
         from chopper_rag import Chopper
 
         self.model = Chopper.from_pretrained(
@@ -113,6 +111,7 @@ class ChopperWrapper:
 
 
 chopper_031b = ModelMeta(
+    extra_requirements_groups=["chopper"],
     loader=ChopperWrapper,
     loader_kwargs={"variant": "base", "window_chars": 900},
     name="wiiiktor/chopper-0.31B",
