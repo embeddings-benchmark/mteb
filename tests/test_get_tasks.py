@@ -10,7 +10,7 @@ from mteb import get_task, get_tasks
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.task_metadata import TaskType
 from mteb.filter_tasks import filter_tasks
-from mteb.get_tasks import MTEBTasks
+from mteb.get_tasks import _TASK_RENAMES, MTEBTasks
 from mteb.types import Modalities
 
 pytestmark = pytest.mark.core
@@ -35,6 +35,18 @@ def test_get_task(
             assert split in eval_splits
     else:
         assert task.eval_splits == task.metadata.eval_splits
+
+
+@pytest.mark.parametrize(("old_name", "new_name"), list(_TASK_RENAMES.items()))
+def test_get_task_with_renamed_task_name(old_name: str, new_name: str) -> None:
+    """An old task name warns and returns the task under its new name."""
+    with pytest.warns(UserWarning, match="has been renamed"):
+        task = get_task(old_name)
+    assert task.metadata.name == new_name
+
+    with pytest.warns(UserWarning, match="has been renamed"):
+        tasks = get_tasks(tasks=[old_name])
+    assert [t.metadata.name for t in tasks] == [new_name]
 
 
 def test_get_tasks_filtering():
