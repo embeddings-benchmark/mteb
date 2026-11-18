@@ -340,7 +340,12 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
                         date=datetime.datetime.now(tz=datetime.UTC),
                         evaluation_phases=timer.phases if timer.phases else None,
                     )
-                    cache.save_to_cache(new_result, model_meta)
+                    cache.save_to_cache(
+                        new_result,
+                        model_meta,
+                        encode_kwargs=encode_kwargs,
+                        evaluated_splits={split: list(res)},
+                    )
 
         duration = general_timer.phases[0]["end"] - general_timer.phases[0]["start"]
 
@@ -848,10 +853,12 @@ def _evaluate_resolved(  # noqa: PLR0913
         )
 
     if cache:
+        # Intermediate saves already recorded settings for every evaluated subset.
         cache.save_to_cache(
             result,
             meta,
             encode_kwargs=encode_kwargs,
+            evaluated_splits={},
         )
 
     if existing_results:

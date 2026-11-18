@@ -65,7 +65,11 @@ class PEAudioVisualWrapper(AbsEncoder):
         if device is None:
             device = "cuda" if torch.cuda.is_available() else "cpu"
 
-        from transformers import PeAudioVideoModel, PeAudioVideoProcessor
+        from transformers import (
+            PeAudioVideoConfig,
+            PeAudioVideoModel,
+            PeAudioVideoProcessor,
+        )
 
         self.model_name = model_name
         self.device = device
@@ -73,8 +77,12 @@ class PEAudioVisualWrapper(AbsEncoder):
         self.max_frames = max_frames
         self.num_frames = num_frames
         self.max_samples = max_samples
+        config = PeAudioVideoConfig.from_pretrained(model_name, revision=revision)
+        # Recent transformers leave num_labels at its default of 2 instead of the checkpoint's num_classes
+        vision_config = config.audio_video_config.video_config.vision_config
+        vision_config.num_labels = vision_config.num_classes
         self.model = PeAudioVideoModel.from_pretrained(
-            model_name, revision=revision
+            model_name, revision=revision, config=config
         ).to(self.device)
         self.model.eval()
         # Meta's code pools the CLS token before ModernBERT's final norm

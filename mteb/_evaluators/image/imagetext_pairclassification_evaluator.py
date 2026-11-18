@@ -161,6 +161,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
 
         _image_dl = DataLoader(
             _build_image_dataset(images),
+            batch_size=encode_kwargs.get("batch_size", 32),
             collate_fn=_image_collate_fn,
             num_workers=num_proc if num_proc is not None and num_proc > 1 else 0,
         )

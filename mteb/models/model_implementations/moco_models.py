@@ -59,7 +59,7 @@ def mocov3_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
                 pretrained_cfg_overlay={"hf_hub_id": model_name},
             )
 
-            self.model = model.eval()
+            self.model = model.eval().to(device)
 
             # get model specific transforms (normalization, resize)
             data_config = timm.data.resolve_model_data_config(self.model)
@@ -84,22 +84,17 @@ def mocov3_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
         ) -> Array:
             all_image_embeddings = []
 
-            import torchvision.transforms.functional as F
-
             with torch.no_grad():
                 for batch in tqdm(
                     images, disable=not show_progress_bar, desc="Image Encoding"
                 ):
-                    inputs = torch.vstack(
-                        [
-                            self.processor(F.to_pil_image(b.to("cpu"))).unsqueeze(0)
-                            for b in batch["image"]
-                        ]
-                    )
+                    inputs = torch.stack(
+                        [self.processor(image) for image in batch["image"]]
+                    ).to(self.device)
                     output = self.model(
                         inputs
                     )  # output is (batch_size, num_features) shaped tensor
-                    all_image_embeddings.append(output)
+                    all_image_embeddings.append(output.cpu())
             all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
             return all_image_embeddings
 

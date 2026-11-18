@@ -3,8 +3,15 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 import mteb
+from mteb.abstasks import AbsTask
 from mteb.cache import ResultCache
+from mteb.mocks.mock_tasks.bitext_mining import (
+    MockMultilingualParallelBitextMiningTask,
+)
+from mteb.mocks.mock_tasks.classification import MockMultilingualClassificationTask
 from mteb.results import TaskResult
 
 
@@ -146,3 +153,52 @@ def test_save_to_cache_serializes_non_json_serializable_encode_kwargs(tmp_path: 
 
     assert len(entries) == 1
     assert isinstance(entries[0]["encode_kwargs"]["custom"], str)
+
+
+@pytest.mark.parametrize(
+    ("task_cls", "expected_batch_sizes"),
+    [
+        (MockMultilingualClassificationTask, (8, 16)),
+        (MockMultilingualParallelBitextMiningTask, (8, 16)),
+    ],
+    ids=["classification", "parallel-bitext"],
+)
+def test_resume_records_settings_for_evaluated_subsets(
+    tmp_path: Path, task_cls: type[AbsTask], expected_batch_sizes: tuple[int, int]
+):
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    cache = ResultCache(cache_path=tmp_path)
+    task = task_cls()
+    first_run_task = task_cls().filter_languages(
+        languages=None, hf_subsets=task.hf_subsets[:1]
+    )
+    mteb.evaluate(model, first_run_task, cache=cache, encode_kwargs={"batch_size": 8})
+    mteb.evaluate(model, task, cache=cache, encode_kwargs={"batch_size": 16})
+
+    (run_settings_path,) = tmp_path.rglob("run_settings.jsonl")
+    batch_sizes = {
+        subset: entry["encode_kwargs"]["batch_size"]
+        for entry in _read_jsonl(run_settings_path)
+        for subset in entry["subsets"]
+    }
+    assert batch_sizes == dict(zip(task.hf_subsets, expected_batch_sizes, strict=True))
+
+
+def test_save_to_cache_records_only_evaluated_splits(tmp_path: Path):
+    cache = ResultCache(cache_path=tmp_path)
+    score = {"main_score": 0.5}
+    cache.save_to_cache(
+        TaskResult.from_task_results(
+            task=MockMultilingualClassificationTask(),
+            scores={"test": {"eng": score, "fra": score}, "validation": {"eng": score}},
+            evaluation_time=0,
+        ),
+        "model",
+        model_revision="rev1",
+        evaluated_splits={"test": ["fra"]},
+    )
+
+    run_settings_path = tmp_path / "results" / "model" / "rev1" / "run_settings.jsonl"
+    (entry,) = _read_jsonl(run_settings_path)
+    assert entry["splits"] == ["test"]
+    assert entry["subsets"] == ["fra"]
