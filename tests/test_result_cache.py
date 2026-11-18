@@ -148,6 +148,40 @@ def test_load_result_specific_model():
     assert model in model_names, "Model should be in the results"
 
 
+def test_load_results_accepts_generator_models():
+    cache = ResultCache(cache_path=test_cache_path)
+    model_meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
+
+    from_list = cache.load_results(models=[model_meta], require_model_meta=False)
+    from_generator = cache.load_results(
+        models=(m for m in [model_meta]), require_model_meta=False
+    )
+
+    assert len(from_list.model_results) > 0
+    assert len(from_generator.model_results) == len(from_list.model_results)
+
+
+def test_get_cache_paths_iterator_keeps_first_model():
+    cache = ResultCache(cache_path=test_cache_path)
+    metas = [
+        mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2"),
+        mteb.get_model_meta("mteb/baseline-random-encoder"),
+    ]
+
+    from_list = cache.get_cache_paths(models=metas, require_model_meta=False)
+    from_iterator = cache.get_cache_paths(models=iter(metas), require_model_meta=False)
+
+    assert len(from_list) > 0
+    assert sorted(from_iterator) == sorted(from_list)
+
+
+def test_load_results_empty_models_and_tasks_do_not_raise():
+    cache = ResultCache(cache_path=test_cache_path)
+
+    cache.load_results(models=[], require_model_meta=False)
+    cache.load_results(tasks=[], require_model_meta=False)
+
+
 def test_filter_with_modelmeta():
     cache = ResultCache(cache_path=test_cache_path)
 
