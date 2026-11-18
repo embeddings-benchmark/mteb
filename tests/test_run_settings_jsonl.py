@@ -159,9 +159,9 @@ def test_save_to_cache_serializes_non_json_serializable_encode_kwargs(tmp_path: 
     ("task_cls", "expected_batch_sizes"),
     [
         (MockMultilingualClassificationTask, (8, 16)),
-        (MockMultilingualParallelBitextMiningTask, (16, 16)),
+        (MockMultilingualParallelBitextMiningTask, (8, 16)),
     ],
-    ids=["cached-subset", "recomputed-subset"],
+    ids=["classification", "parallel-bitext"],
 )
 def test_resume_records_settings_for_evaluated_subsets(
     tmp_path: Path, task_cls: type[AbsTask], expected_batch_sizes: tuple[int, int]

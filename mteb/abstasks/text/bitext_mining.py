@@ -90,6 +90,7 @@ class AbsTaskBitextMining(AbsTask):
                 model,
                 self.dataset[split],
                 parallel=True,
+                # Use only requested pairs so cache resumes do not recompute cached subsets
                 parallel_hf_subsets=hf_subsets,
                 hf_split=split,
                 hf_subset="parallel",
