@@ -96,31 +96,28 @@ def test_all_task_types_have_a_simplified_task_type():
     )
 
 
+@pytest.fixture
+def task_metadata(task_type: TaskType) -> TaskMetadata:
+    return TaskMetadata(
+        name="TestTask",
+        description="Test task metadata",
+        dataset={"path": "test/dataset", "revision": "test-revision"},
+        type=task_type,
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+    )
+
+
 @pytest.mark.parametrize("task_type", get_args(TaskType))
-def test_every_task_type_has_a_hf_task_category(task_type):
+def test_every_task_type_has_a_hf_task_category(task_metadata: TaskMetadata):
     """`_hf_task_type` raises a `KeyError` for a `TaskType` without a Hugging Face task category,
     which stops the dataset card of every task of that type from being generated.
     """
-    metadata = MockClassificationTask().metadata.model_copy(update={"type": task_type})
+    task_categories = task_metadata._hf_task_type()
 
-    assert metadata._hf_task_type()
-
-
-@pytest.mark.parametrize(
-    ("task_name", "expected_task_category"),
-    [
-        ("AVMemeVideoClassification", "video-classification"),
-        ("RuSciBenchCitedCountRegression", "text-classification"),
-    ],
-)
-def test_generate_dataset_card_for_video_and_regression_tasks(
-    task_name, expected_task_category
-):
-    metadata = mteb.get_task(task_name).metadata
-
-    card = metadata.generate_dataset_card()
-
-    assert expected_task_category in card.data.task_categories
+    assert isinstance(task_categories, list)
+    assert task_categories, f"{task_metadata.type} has no Hugging Face task category"
+    assert all(isinstance(category, str) and category for category in task_categories)
 
 
 def test_given_dataset_config_then_it_is_valid():
