@@ -327,6 +327,13 @@ def _encode_batches(
     # Per-batch calls below show one outer progress bar instead of one bar per call
     per_batch_kwargs = {**kwargs, "show_progress_bar": False}
 
+    def as_text(texts: list[str]) -> list[str] | list[dict[str, str]]:
+        # A multimodal model guesses the modality of a bare string, e.g. a YouTube link
+        # becomes a video, so mark the texts as text.
+        if set(modalities) == {"text"}:
+            return texts
+        return [{"text": text} for text in texts]
+
     if is_multimodal:
         all_embeddings = []
         for batch in tqdm(
@@ -341,7 +348,7 @@ def _encode_batches(
     elif not encode_text_per_batch:
         sentences = [text for batch in inputs for text in batch["text"]]
 
-        embeddings = encode_function(sentences, prompt=prompt, **kwargs)
+        embeddings = encode_function(as_text(sentences), prompt=prompt, **kwargs)
 
         embeddings = postprocess(embeddings)
     else:
@@ -356,7 +363,9 @@ def _encode_batches(
             disable=not show_progress_bar,
         ):
             batch = [sentences[i] for i in order[start : start + batch_size]]
-            batch_embeddings = encode_function(batch, prompt=prompt, **per_batch_kwargs)
+            batch_embeddings = encode_function(
+                as_text(batch), prompt=prompt, **per_batch_kwargs
+            )
             batched_embeddings.extend(postprocess(batch_embeddings))
         embeddings = [None] * len(sentences)
         for position, index in enumerate(order):
