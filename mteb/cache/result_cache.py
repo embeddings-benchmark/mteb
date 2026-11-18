@@ -906,6 +906,15 @@ class ResultCache:
         results_path = self.cache_path / "results"
         remote_path = self.remote_results_path
 
+        # materialize once so generators/iterators are not consumed by inspection
+        model_list = (
+            cast("list[str] | list[ModelMeta]", list(models))
+            if models is not None
+            else None
+        )
+        if tasks is not None and not isinstance(tasks, Benchmark):
+            tasks = cast("list[str] | list[AbsTask]", list(tasks))
+
         cache_paths = _get_paths(results_path, load_experiments)
 
         if include_remote:
@@ -913,7 +922,7 @@ class ResultCache:
 
         cache_paths = self._filter_paths_by_model_and_revision(
             cache_paths,
-            models=models,
+            models=model_list,
             load_experiments=load_experiments,
         )
         cache_paths = self._filter_paths_by_task(cache_paths, tasks=tasks)
@@ -1412,8 +1421,17 @@ class ResultCache:
         if isinstance(tasks, str):
             tasks = get_benchmark(tasks)
 
+        # materialize once so generators/iterators are not consumed by inspection
+        model_list = (
+            cast("list[str] | list[ModelMeta]", list(models))
+            if models is not None
+            else None
+        )
+        if tasks is not None and not isinstance(tasks, Benchmark):
+            tasks = cast("list[str] | list[AbsTask]", list(tasks))
+
         benchmarks: Sequence[Benchmark] | Benchmark | None = None
-        if isinstance(tasks, Sequence) and isinstance(tasks[0], Benchmark):
+        if isinstance(tasks, Sequence) and tasks and isinstance(tasks[0], Benchmark):
             benchmarks = tasks  # type: ignore[assignment]
             tasks = [sub for task in tasks for sub in cast("Benchmark", task).tasks]
 
@@ -1433,13 +1451,13 @@ class ResultCache:
                 stacklevel=2,
             )
 
-        models_as_model_meta = models is not None and isinstance(
-            next(iter(models)), ModelMeta
+        models_as_model_meta = model_list is not None and isinstance(
+            next(iter(model_list), None), ModelMeta
         )
 
         paths = self.get_cache_paths(
-            models=models,
-            tasks=tasks,  # type: ignore[arg-type]
+            models=model_list,
+            tasks=tasks,
             require_model_meta=require_model_meta,
             include_remote=include_remote,
             load_experiments=load_experiments,
@@ -1452,7 +1470,7 @@ class ResultCache:
                 if isinstance(task, AbsTask):
                     task_names[task.metadata.name] = task
                 else:
-                    task_names[cast("str", task)] = None
+                    task_names[task] = None
 
         experiment_names = set()
         if isinstance(experiment_kwargs, Mapping):
