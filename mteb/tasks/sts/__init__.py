@@ -7,6 +7,7 @@ from .fin import *
 from .fra import *
 from .jpn import *
 from .kor import *
+from .lug import *
 from .multilingual import *
 from .nld import *
 from .pol import *
@@ -18,4 +19,3 @@ from .spa import *
 from .ukr import *
 from .vie import *
 from .zho import *
-from .lug import *
