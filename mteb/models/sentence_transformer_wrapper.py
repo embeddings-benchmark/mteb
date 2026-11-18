@@ -348,7 +348,8 @@ def _encode_batches(
     if not encode_text_per_batch:
         embeddings = postprocess(encode_function(text_inputs, prompt=prompt, **kwargs))
     else:
-        # Sort the original strings, since dict lengths don't reflect text lengths.
+        # Match sentence-transformers' longest-first ordering to minimize padding,
+        # using text lengths rather than the lengths of the modality dicts.
         order = sorted(range(len(sentences)), key=lambda i: -len(sentences[i]))
         batched_embeddings: list[Any] = []
         for start in tqdm(
