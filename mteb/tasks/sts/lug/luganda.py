@@ -1,11 +1,9 @@
-import mteb
-from mteb.abstasks import AbsTaskSTS
-
+from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.sts import AbsTaskSTS
 
 class LugandaSTS(AbsTaskSTS):
     """Semantic textual similarity evaluation for Luganda sentence pairs."""
-
-    metadata = mteb.TaskMetadata(
+    metadata = TaskMetadata(
         name="LugandaSTS",
         description=(
             "Luganda Semantic Textual Similarity benchmark adapted from the "
