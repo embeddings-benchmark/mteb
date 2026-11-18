@@ -51,3 +51,5 @@ class MedPTClustering(AbsTaskClustering):
 
     input_column_name = "sentences"
     label_column_name = "label"
+    # the datasets are small (<= ~5k documents): embed all of them instead of the default 4% sample
+    max_fraction_of_documents_to_embed = None
