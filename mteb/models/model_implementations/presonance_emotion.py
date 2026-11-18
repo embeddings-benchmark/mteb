@@ -153,7 +153,9 @@ presonance_emoset_image = ModelMeta(
     memory_usage_mb=7961,
     max_tokens=None,  # Image-only encoder; no text-token limit.
     embed_dim=4608,
-    license="https://huggingface.co/saa938/presonance-emoset-ensemble#license-clarification-code-and-adapted-weights",
+    # Not Apache-2.0: the EmoSet-adapted weights and code are released for
+    # non-commercial research use only (custom terms in the model repo's LICENSE).
+    license="https://huggingface.co/saa938/presonance-emoset-ensemble/blob/main/LICENSE",
     open_weights=True,
     public_training_code=None,
     public_training_data=None,
