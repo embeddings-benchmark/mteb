@@ -327,13 +327,6 @@ def _encode_batches(
     # Per-batch calls below show one outer progress bar instead of one bar per call
     per_batch_kwargs = {**kwargs, "show_progress_bar": False}
 
-    def as_text(texts: list[str]) -> list[str] | list[dict[str, str]]:
-        # A multimodal model guesses the modality of a bare string, e.g. a YouTube link
-        # becomes a video, so mark the texts as text.
-        if set(modalities) == {"text"}:
-            return texts
-        return [{"text": text} for text in texts]
-
     if is_multimodal:
         all_embeddings = []
         for batch in tqdm(
@@ -344,17 +337,18 @@ def _encode_batches(
                 batched_input, prompt=prompt, **per_batch_kwargs
             )
             all_embeddings.append(postprocess(_embeddings))
-        embeddings = concatenate(all_embeddings)
-    elif not encode_text_per_batch:
-        sentences = [text for batch in inputs for text in batch["text"]]
+        return cast("Array", concatenate(all_embeddings))
 
-        embeddings = encode_function(as_text(sentences), prompt=prompt, **kwargs)
+    sentences = [text for batch in inputs for text in batch["text"]]
+    # Explicit text inputs prevent multimodal models from treating media URLs as media.
+    text_inputs: list[str] | list[dict[str, str]] = sentences
+    if set(modalities) != {"text"}:
+        text_inputs = [{"text": text} for text in sentences]
 
-        embeddings = postprocess(embeddings)
+    if not encode_text_per_batch:
+        embeddings = postprocess(encode_function(text_inputs, prompt=prompt, **kwargs))
     else:
-        sentences = [text for batch in inputs for text in batch["text"]]
-        # Longest first, like sentence-transformers sorts within a call, so that grouping
-        # doesn't add padding.
+        # Sort the original strings, since dict lengths don't reflect text lengths.
         order = sorted(range(len(sentences)), key=lambda i: -len(sentences[i]))
         batched_embeddings: list[Any] = []
         for start in tqdm(
@@ -362,10 +356,8 @@ def _encode_batches(
             desc="Encoding",
             disable=not show_progress_bar,
         ):
-            batch = [sentences[i] for i in order[start : start + batch_size]]
-            batch_embeddings = encode_function(
-                as_text(batch), prompt=prompt, **per_batch_kwargs
-            )
+            batch = [text_inputs[i] for i in order[start : start + batch_size]]
+            batch_embeddings = encode_function(batch, prompt=prompt, **per_batch_kwargs)
             batched_embeddings.extend(postprocess(batch_embeddings))
         embeddings = [None] * len(sentences)
         for position, index in enumerate(order):
