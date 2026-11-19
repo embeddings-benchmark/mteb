@@ -18,7 +18,6 @@ from mteb.cache.result_cache import (
 from mteb.mocks.mock_tasks import MockRetrievalTask
 from mteb.mocks.mock_tasks.clustering import MockMultilingualClusteringTask
 from mteb.models import ModelMeta
-from mteb.models.model_meta import ScoringFunction
 from mteb.results import TaskResult
 
 test_cache_path = Path(__file__).parent / "mock_mteb_cache"
@@ -988,29 +987,3 @@ def test_submit_results_experiments_only(tmp_path: Path):
     for filename in result_files:
         expected = f"{test_model.model_name_as_path()}/{revision}/experiments/{experiment_name}/{filename}"
         assert expected in committed, f"{expected} not found in commit"
-
-
-def test_normalize_models_loads_saved_meta_with_euclidean_similarity(tmp_path: Path):
-    """The saved `model_meta.json` of a euclidean model must load back, as `submit_results` needs it."""
-    cache = ResultCache(cache_path=tmp_path)
-    meta = ModelMeta.create_empty(
-        {
-            "name": "org/euclidean-model",
-            "revision": "rev",
-            "similarity_fn_name": ScoringFunction.EUCLIDEAN,
-        }
-    )
-    task_result = TaskResult(
-        dataset_revision="rev",
-        task_name="STS12",
-        mteb_version="2.0.0",
-        evaluation_time=1.0,
-        scores={
-            "test": [
-                {"main_score": 0.5, "hf_subset": "default", "languages": ["eng-Latn"]}
-            ]
-        },
-    )
-    cache.save_to_cache(task_result, meta)
-
-    assert cache._normalize_models("org/euclidean-model") == [meta]

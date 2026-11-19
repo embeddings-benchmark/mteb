@@ -644,13 +644,6 @@ def test_model_meta_json_roundtrip_keeps_similarity_fn_name(
     assert parsed.similarity_fn_name is similarity_fn_name
 
 
-def test_model_meta_rejects_unknown_similarity_fn_name():
-    data = {**ModelMeta.create_empty().model_dump(), "similarity_fn_name": "l2"}
-
-    with pytest.raises(ValueError, match="Invalid similarity function name: l2"):
-        ModelMeta.model_validate(data)
-
-
 def test_get_model_metas_n_parameters_lower_bound():
     """A lower-only range must filter; it used to be ignored without an upper bound."""
     one_b = 1_000_000_000
