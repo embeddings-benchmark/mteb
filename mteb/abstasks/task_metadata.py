@@ -733,11 +733,18 @@ class TaskMetadata(BaseModel):
             multilinguality = "translated"
 
         if self.adapted_from is not None:
-            from mteb.get_tasks import get_tasks
+            from mteb.get_tasks import get_task
 
-            source_datasets = [
-                task.metadata.dataset["path"] for task in get_tasks(self.adapted_from)
-            ]
+            source_datasets = []
+            for name in self.adapted_from:
+                try:
+                    source_datasets.append(get_task(name).metadata.dataset["path"])
+                except KeyError:
+                    # `adapted_from` may name a dataset that is not a registered task
+                    logger.warning(
+                        f"'{name}' in adapted_from of '{self.name}' is not a registered task, "
+                        "leaving it out of the dataset card's source datasets."
+                    )
             source_datasets.append(self.dataset["path"])
         else:
             source_datasets = None if not self.dataset else [self.dataset["path"]]

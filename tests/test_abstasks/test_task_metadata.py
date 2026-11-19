@@ -387,3 +387,21 @@ def test_task_hf_config_from_existing():
 
     assert any(t.id == "MIRACLRetrievalHardNegatives" for t in config2.tasks)
     assert any(t.id == "MIRACLRetrievalHardNegatives.v2" for t in config2.tasks)
+
+
+def test_dataset_card_skips_adapted_from_names_that_are_not_tasks(caplog):
+    quora = mteb.get_task("QuoraRetrieval").metadata
+    metadata = mteb.get_task("ArguAna").metadata.model_copy(
+        update={"adapted_from": ["QuoraRetrieval", "NotARegisteredTask"]}
+    )
+
+    with caplog.at_level("WARNING", logger="mteb.abstasks.task_metadata"):
+        card_data, _ = metadata._create_dataset_card_data()
+
+    assert card_data.source_datasets == [
+        quora.dataset["path"],
+        metadata.dataset["path"],
+    ]
+    assert "NotARegisteredTask" in caplog.text
+    # the whole card can be generated, not just its metadata block
+    assert metadata.generate_dataset_card() is not None
