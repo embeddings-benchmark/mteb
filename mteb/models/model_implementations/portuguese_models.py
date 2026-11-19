@@ -34,6 +34,61 @@ SERAFIM_CITATION = """
 }
 """
 
+BERTIMBAU_CITATION = r"""
+@inproceedings{souza2020bertimbau,
+  author = {F{\'a}bio Souza and Rodrigo Nogueira and Roberto Lotufo},
+  booktitle = {9th Brazilian Conference on Intelligent Systems, {BRACIS}},
+  title = {{BERT}imbau: pretrained {BERT} models for {B}razilian {P}ortuguese},
+  year = {2020},
+}
+"""
+
+ALBERTINA_CITATION = r"""
+@misc{rodrigues2023albertina,
+  archiveprefix = {arXiv},
+  author = {Jo{\~a}o Rodrigues and Lu{\'i}s Gomes and Jo{\~a}o Silva and Ant{\'o}nio Branco and Rodrigo Santos and Henrique Lopes Cardoso and Tom{\'a}s Os{\'o}rio},
+  eprint = {2305.06721},
+  primaryclass = {cs.CL},
+  title = {Advancing Neural Encoding of Portuguese with Transformer Albertina PT-*},
+  year = {2023},
+}
+"""
+
+ULYSSES_LEGAL_BERT_CITATION = r"""
+@inproceedings{silva2021evaluating,
+  author = {N{\'a}dia Silva and Mar{\'i}lia Silva and Fab{\'i}ola Pereira and Jo{\~a}o Tarrega and Jo{\~a}o Beinotti and M{\'a}rcio Fonseca and Francisco Andrade and Andr{\'e} Carvalho},
+  booktitle = {Anais da X Brazilian Conference on Intelligent Systems},
+  publisher = {SBC},
+  title = {Evaluating Topic Models in Portuguese Political Comments About Bills from Brazil's Chamber of Deputies},
+  url = {https://sol.sbc.org.br/index.php/bracis/article/view/19061},
+  year = {2021},
+}
+"""
+
+STJIRIS_CITATION = r"""
+@inproceedings{melo2023semantic,
+  author = {Melo, Rui and Santos, Pedro A. and Dias, Jo{\~a}o},
+  booktitle = {Progress in Artificial Intelligence},
+  pages = {142--154},
+  publisher = {Springer Nature Switzerland},
+  title = {A Semantic Search System for the Supremo Tribunal de Justi{\c{c}}a},
+  year = {2023},
+}
+"""
+
+JUA_CITATION = r"""
+@misc{pereira2026domainadaptive,
+  archiveprefix = {arXiv},
+  author = {Jayr Pereira and Roberto Lotufo and Luiz Bonifacio},
+  eprint = {2605.04005},
+  primaryclass = {cs.IR},
+  title = {Domain-Adaptive Dense Retrieval for Brazilian Legal Search},
+  url = {https://arxiv.org/abs/2605.04005},
+  year = {2026},
+}
+"""
+
+
 PT_MATRYOSHKA_EMBEDDING_TRAINING_DATA = {
     "STSBenchmarkMultilingualSTS",  # pt subset
     "Assin2STS",
@@ -169,7 +224,7 @@ Legal_BERTimbau_sts_large_ma_v3 = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation=None,
+    citation=BERTIMBAU_CITATION,
     contacts=None,
     extra_requirements_groups=None,
 )
@@ -386,7 +441,7 @@ bertimbau_base = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation=None,
+    citation=BERTIMBAU_CITATION,
     contacts=None,
     extra_requirements_groups=None,
 )
@@ -417,7 +472,7 @@ bertimbau_large = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation=None,
+    citation=BERTIMBAU_CITATION,
     contacts=None,
     extra_requirements_groups=None,
 )
@@ -448,7 +503,7 @@ albertina_900m_ptbr = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation=None,
+    citation=ALBERTINA_CITATION,
     contacts=None,
     extra_requirements_groups=None,
 )
@@ -479,7 +534,7 @@ ulysses_legal_bert_pt_br = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation=None,
+    citation=ULYSSES_LEGAL_BERT_CITATION,
     contacts=None,
     extra_requirements_groups=None,
 )
@@ -510,7 +565,7 @@ legal_bertimbau_sts_large = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation=None,
+    citation=BERTIMBAU_CITATION,
     contacts=None,
     extra_requirements_groups=None,
 )
@@ -541,7 +596,7 @@ stjiris_legal_mlm_mkd_nli_sts_v1 = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation=None,
+    citation=STJIRIS_CITATION,
     contacts=None,
     extra_requirements_groups=None,
 )
@@ -572,7 +627,7 @@ stjiris_legal_mlm_sts_v1_0 = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation=None,
+    citation=STJIRIS_CITATION,
     contacts=None,
     extra_requirements_groups=None,
 )
@@ -608,37 +663,6 @@ medlink_bi_encoder = ModelMeta(
     extra_requirements_groups=None,
 )
 
-jua_qwen3_0b6_v2 = ModelMeta(
-    loader=SentenceTransformerEncoderWrapper,
-    loader_kwargs={},
-    name="ufca-llms/Qwen3-Embedding-0.6B-jua-V2",
-    revision="fb8d835cf1d598f9726c1326295aa64d9fe30dff",
-    release_date="2026-02-13",
-    languages=["por-Latn"],
-    n_parameters=595_776_512,
-    n_active_parameters_override=None,
-    n_embedding_parameters=155_309_056,
-    memory_usage_mb=1136,
-    max_tokens=32768,
-    embed_dim=1024,
-    license=None,
-    open_weights=True,
-    public_training_code=None,
-    public_training_data=None,
-    framework=["Sentence Transformers", "PyTorch", "safetensors"],
-    reference="https://huggingface.co/ufca-llms/Qwen3-Embedding-0.6B-jua-V2",
-    similarity_fn_name=ScoringFunction.COSINE,
-    use_instructions=True,
-    training_datasets=None,
-    adapted_from="Qwen/Qwen3-Embedding-0.6B",
-    superseded_by=None,
-    modalities=["text"],
-    model_type=["dense"],
-    citation=None,
-    contacts=None,
-    extra_requirements_groups=None,
-)
-
 jua_4b_legal_only = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
     loader_kwargs={},
@@ -665,7 +689,7 @@ jua_4b_legal_only = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation=None,
+    citation=JUA_CITATION,
     contacts=None,
     extra_requirements_groups=None,
 )
@@ -696,7 +720,7 @@ jua_4b_mixed = ModelMeta(
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
-    citation=None,
+    citation=JUA_CITATION,
     contacts=None,
     extra_requirements_groups=None,
 )
