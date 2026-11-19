@@ -1184,10 +1184,9 @@ class ResultCache:
                 local_models = self.get_models(
                     require_model_meta=False, include_remote=False
                 )
+                model_dir_name = model.replace("/", "__").replace(" ", "_")
                 matching = [
-                    (name, rev)
-                    for name, rev in local_models
-                    if name == model.replace("/", "__")
+                    (name, rev) for name, rev in local_models if name == model_dir_name
                 ]
                 if not matching:
                     raise ValueError(
