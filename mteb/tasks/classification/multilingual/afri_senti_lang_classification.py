@@ -18,7 +18,8 @@ class AfriSentiLangClassification(AbsTaskClassification):
         eval_langs=[
             "amh-Ethi",  # Amharic (Ethiopic script)
             "arq-Arab",
-            "ary-Arab",  # Moroccan Arabic, Standard Arabic (Arabic script)
+            "ary-Arab",  # Moroccan Arabic, Arabic script
+            "ary-Latn",  # Moroccan Arabic, Arabizi
             "hau-Latn",  # Hausa (Latin script), additional script if written in Ajami (Arabic script)
             "ibo-Latn",  # Igbo (Latin script)
             "kin-Latn",  # Kinyarwanda (Latin script)

@@ -36,7 +36,7 @@ class AfriHateClassification(AbsTaskClassification):
             "ibo": ["ibo-Latn"],  # Igbo
             "kin": ["kin-Latn"],  # Kinyarwanda
             "hau": ["hau-Latn"],  # Hausa
-            "ary": ["ary-Arab"],  # Moroccan Arabic
+            "ary": ["ary-Arab", "ary-Latn"],  # Moroccan Arabic, also Arabizi
             "pcm": ["pcm-Latn"],  # Nigerian Pidgin
             "orm": ["gaz-Latn"],  # Oromo
             "som": ["som-Latn"],  # Somali

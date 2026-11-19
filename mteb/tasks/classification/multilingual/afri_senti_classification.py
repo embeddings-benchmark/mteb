@@ -32,7 +32,7 @@ class AfriSentiClassification(AbsTaskClassification):
         eval_langs={
             "amh": ["amh-Ethi"],  # Amharic (Ethiopic script)
             "arq": ["arq-Arab"],
-            "ary": ["ary-Arab"],  # Moroccan Arabic, Standard Arabic (Arabic script)
+            "ary": ["ary-Arab", "ary-Latn"],  # Moroccan Arabic, also Arabizi
             "hau": [
                 "hau-Latn"
             ],  # Hausa (Latin script), additional script if written in Ajami (Arabic script)
