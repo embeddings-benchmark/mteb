@@ -55,7 +55,7 @@ class HateBR(AbsTaskClassification):
     )
 
     # Real HateBR CSV columns (verified 2026-05-23 preflight):
-    # id, comentario, anotator1, anotator2, anotator3, label_final, links_post, account_post
+    # id, comentario, annotator1, annotator2, annotator3, label_final, links_post, account_post
     # `label_final` is the canonical binary label (0/1, balanced 3500/3500).
     input_column_name = "comentario"
     label_column_name = "label_final"

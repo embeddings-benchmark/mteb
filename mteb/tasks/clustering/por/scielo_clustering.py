@@ -53,7 +53,7 @@ class SciELOClusteringP2P(AbsTaskClustering):
 @misc{scielo_abstracts,
   author = {{SciELO}},
   howpublished = {HuggingFace dataset \texttt{eduagarcia/scielo\_abstracts}, derived from the SciELO open-access scientific library},
-  title = {{SciELO} Abstracts: a corpus of open-access Brazilian scientific abstracts},
+  title = {scielo\_abstracts (Hugging Face dataset)},
   url = {https://huggingface.co/datasets/eduagarcia/scielo_abstracts},
 }
 """,

@@ -46,7 +46,7 @@ class FaqBacenRetrieval(AbsTaskRetrieval):
 @misc{faq_bacen,
   author = {{Ita\'u Unibanco}},
   howpublished = {HuggingFace dataset \texttt{Itau-Unibanco/FAQ\_BACEN}, sourced from the Banco Central do Brasil FAQ},
-  title = {{FAQ-BACEN}: a question-answering dataset from the {B}razilian {C}entral {B}ank public FAQ},
+  title = {{FAQ\_BACEN} (Hugging Face dataset)},
   url = {https://huggingface.co/datasets/Itau-Unibanco/FAQ_BACEN},
 }
 """,

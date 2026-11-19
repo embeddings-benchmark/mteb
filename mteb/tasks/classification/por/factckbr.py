@@ -38,8 +38,8 @@ class FactckBrClassification(AbsTaskClassification):
         bibtex_citation=r"""
 @inproceedings{moreno2019factckbr,
   title = {{FACTCK.BR}: a new dataset to study fake news},
-  author = {Moreno, Jo{\~a}o and Bressan, Giovanni},
-  booktitle = {Proceedings of the 25th Brazillian Symposium on Multimedia and the Web (WebMedia)},
+  author = {Moreno, Jo{\~a}o and Bressan, Gra{\c{c}}a},
+  booktitle = {Proceedings of the 25th Brazilian Symposium on Multimedia and the Web (WebMedia)},
   year = {2019},
   doi = {10.1145/3323503.3361698},
   url = {https://doi.org/10.1145/3323503.3361698},
