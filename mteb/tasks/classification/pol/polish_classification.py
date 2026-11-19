@@ -72,7 +72,7 @@ class CbdClassificationV2(AbsTaskClassification):
   year = {2019},
 }
 """,
-        adapted_from=["CbdClassification"],
+        adapted_from=["CBD"],
     )
 
 
@@ -158,7 +158,7 @@ Za{\'s}ko-Zieli{\'n}ska, Monika},
   year = {2019},
 }
 """,
-        adapted_from=["PolEmo2InClassification"],
+        adapted_from=["PolEmo2.0-IN"],
     )
 
 
@@ -248,7 +248,7 @@ Za{\'s}ko-Zieli{\'n}ska, Monika},
   year = {2019},
 }
 """,
-        adapted_from=["PolEmo2OutClassification"],
+        adapted_from=["PolEmo2.0-OUT"],
     )
 
 
@@ -348,7 +348,7 @@ Tetreault, Joel},
   year = {2020},
 }
 """,
-        adapted_from=["AllegroReviewsClassification"],
+        adapted_from=["AllegroReviews"],
     )
 
 
@@ -422,5 +422,5 @@ class PacClassificationV2(AbsTaskClassification):
   year = {2022},
 }
 """,
-        adapted_from=["PacClassification"],
+        adapted_from=["PAC"],
     )

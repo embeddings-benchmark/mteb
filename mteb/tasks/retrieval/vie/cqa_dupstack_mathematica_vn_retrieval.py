@@ -39,5 +39,5 @@ class CQADupstackMathematicaVN(AbsTaskRetrieval):
   year = {2026},
 }
 """,
-        adapted_from=["CQADupstackMathematica"],
+        adapted_from=["CQADupstackMathematicaRetrieval"],
     )

@@ -84,5 +84,5 @@ Tonelli, Sara},
   year = {2021},
 }
 """,
-        adapted_from=["ItalianLinguisticAcceptabilityClassification"],
+        adapted_from=["Itacola"],
     )
