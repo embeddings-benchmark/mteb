@@ -342,7 +342,19 @@ from .mm_long_bench_doc_retrieval import MMLongBenchDocRetrieval
 from .mmdocir_t2i_retrieval import MMDocIRT2IRetrieval
 from .mmdocir_t2it_retrieval import MMDocIRT2ITRetrieval
 from .mmedit_retrieval import MMEditAT2ARetrieval
-from .moment_seeker import MomentSeekerTI2VRetrieval, MomentSeekerTV2VRetrieval
+from .moment_seeker import (
+    MomentSeekerT2VEventLevelFullVideoRetrieval,
+    MomentSeekerT2VGlobalLevelFullVideoRetrieval,
+    MomentSeekerT2VObjectLevelFullVideoRetrieval,
+    MomentSeekerTI2VEventLevelFullVideoRetrieval,
+    MomentSeekerTI2VGlobalLevelFullVideoRetrieval,
+    MomentSeekerTI2VObjectLevelFullVideoRetrieval,
+    MomentSeekerTI2VRetrieval,
+    MomentSeekerTV2VEventLevelFullVideoRetrieval,
+    MomentSeekerTV2VGlobalLevelFullVideoRetrieval,
+    MomentSeekerTV2VObjectLevelFullVideoRetrieval,
+    MomentSeekerTV2VRetrieval,
+)
 from .mscoco_i2t_retrieval import MSCOCOI2TRetrieval
 from .mscoco_t2i_retrieval import MSCOCOT2IRetrieval
 from .msmarc_ov2_retrieval import MSMARCOv2
@@ -875,7 +887,16 @@ __all__ = [
     "MemGovern",
     "MemotionI2TRetrieval",
     "MemotionT2IRetrieval",
+    "MomentSeekerT2VEventLevelFullVideoRetrieval",
+    "MomentSeekerT2VGlobalLevelFullVideoRetrieval",
+    "MomentSeekerT2VObjectLevelFullVideoRetrieval",
+    "MomentSeekerTI2VEventLevelFullVideoRetrieval",
+    "MomentSeekerTI2VGlobalLevelFullVideoRetrieval",
+    "MomentSeekerTI2VObjectLevelFullVideoRetrieval",
     "MomentSeekerTI2VRetrieval",
+    "MomentSeekerTV2VEventLevelFullVideoRetrieval",
+    "MomentSeekerTV2VGlobalLevelFullVideoRetrieval",
+    "MomentSeekerTV2VObjectLevelFullVideoRetrieval",
     "MomentSeekerTV2VRetrieval",
     "NFCorpus",
     "NFCorpusDecontaminated",
