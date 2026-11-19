@@ -37,8 +37,11 @@ SERAFIM_CITATION = """
 BERTIMBAU_CITATION = r"""
 @inproceedings{souza2020bertimbau,
   author = {F{\'a}bio Souza and Rodrigo Nogueira and Roberto Lotufo},
-  booktitle = {9th Brazilian Conference on Intelligent Systems, {BRACIS}},
-  title = {{BERT}imbau: pretrained {BERT} models for {B}razilian {P}ortuguese},
+  booktitle = {Intelligent Systems, {BRACIS} 2020},
+  doi = {10.1007/978-3-030-61377-8_28},
+  pages = {403--417},
+  publisher = {Springer},
+  title = {{BERT}imbau: Pretrained {BERT} Models for {B}razilian {P}ortuguese},
   year = {2020},
 }
 """
@@ -69,6 +72,7 @@ STJIRIS_CITATION = r"""
 @inproceedings{melo2023semantic,
   author = {Melo, Rui and Santos, Pedro A. and Dias, Jo{\~a}o},
   booktitle = {Progress in Artificial Intelligence},
+  doi = {10.1007/978-3-031-49011-8_12},
   pages = {142--154},
   publisher = {Springer Nature Switzerland},
   title = {A Semantic Search System for the Supremo Tribunal de Justi{\c{c}}a},
