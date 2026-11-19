@@ -338,7 +338,7 @@ def _sum_of_token_maxima(
     if document_lengths is not None:
         positions = torch.arange(scores.size(-1), device=scores.device)
         is_padding = positions[None, :] >= document_lengths.to(scores.device)[:, None]
-        scores = scores.masked_fill(is_padding[None, :, None, :], float("-inf"))
+        scores.masked_fill_(is_padding[None, :, None, :], float("-inf"))
     return scores.max(axis=-1).values.sum(axis=-1)  # type: ignore[call-overload,no-any-return]
 
 
@@ -370,12 +370,14 @@ def _max_sim_ragged_core(
         )
         for indices in _token_budget_chunks([len(t) for t in a], max_chunk_tokens)
     ]
-    for doc_indices in _token_budget_chunks([len(t) for t in b], max_chunk_tokens):
+    document_widths = [len(t) for t in b]
+    all_document_lengths = torch.tensor(document_widths, device=device)
+    for doc_indices in _token_budget_chunks(document_widths, max_chunk_tokens):
         doc_index = torch.as_tensor(doc_indices, device=device)
         documents = pad_sequence(
             [b[i].to(device) for i in doc_indices], batch_first=True
         )
-        document_lengths = torch.tensor([len(b[i]) for i in doc_indices])
+        document_lengths = all_document_lengths[doc_index]
         for query_index, queries in query_chunks:
             scores = torch.einsum("ash,bth->abst", queries, documents)
             maxima = _sum_of_token_maxima(scores, document_lengths)
