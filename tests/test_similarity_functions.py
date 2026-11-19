@@ -135,20 +135,29 @@ def test_max_sim_ragged_matches_padded():
     torch.testing.assert_close(padded, expected)
 
 
-def test_max_sim_ragged_grouped_matches_padded():
-    """Scoring in length groups agrees with padding, also when split over several groups."""
+def _unpadded_max_sim(
+    queries: list[torch.Tensor], documents: list[torch.Tensor]
+) -> torch.Tensor:
+    """MaxSim of every query-document pair, scored one pair at a time so nothing is padded."""
+    return torch.stack(
+        [
+            torch.stack([(q @ d.T).max(-1).values.sum() for d in documents])
+            for q in queries
+        ]
+    )
+
+
+def test_max_sim_ragged_grouped_matches_unpadded():
+    """Scoring in length groups agrees with scoring each pair unpadded, also over several groups."""
     torch.manual_seed(0)
     queries = _ragged([2, 3, 2, 60, 3, 2])
     documents = _ragged([5, 8, 4, 30, 6])
-    padded = max_sim(
-        torch.nn.utils.rnn.pad_sequence(queries, batch_first=True),
-        torch.nn.utils.rnn.pad_sequence(documents, batch_first=True),
-    )
+    expected = _unpadded_max_sim(queries, documents)
     for max_chunk_tokens in (64, 10_000):
         scores = _max_sim_ragged_core(
             queries, documents, torch.device("cpu"), max_chunk_tokens=max_chunk_tokens
         )
-        torch.testing.assert_close(scores, padded)
+        torch.testing.assert_close(scores, expected)
 
 
 def test_token_budget_chunks_respect_budget():
@@ -171,6 +180,37 @@ def test_max_sim_ragged_accepts_tensor_and_list():
     expected = max_sim(list(queries), documents)
     assert scores.shape == (3, 3)
     torch.testing.assert_close(scores, expected)
+
+
+def test_max_sim_ragged_ignores_padded_document_tokens():
+    # every real similarity is negative, so a zero-padded document token would win the max
+    queries = [torch.ones(3, 4)]
+    documents = [-torch.ones(2, 4), -torch.ones(6, 4)]
+
+    torch.testing.assert_close(
+        max_sim(queries, documents), torch.tensor([[-12.0, -12.0]])
+    )
+
+
+@pytest.mark.parametrize(
+    ("query_widths", "document_widths"),
+    [
+        # little padding overhead: the lists are zero-padded together
+        pytest.param([4, 5, 4, 5], [6, 7, 8, 7, 6], id="padded"),
+        # a long query among short ones: the lists are scored in length groups
+        pytest.param([3, 5, 2, 40], [7, 4, 9, 6, 5], id="grouped"),
+    ],
+)
+def test_max_sim_ragged_matches_unpadded_with_negative_similarities(
+    query_widths: list[int], document_widths: list[int]
+):
+    torch.manual_seed(0)
+    queries = _ragged(query_widths)
+    documents = _ragged(document_widths)
+
+    torch.testing.assert_close(
+        max_sim(queries, documents), _unpadded_max_sim(queries, documents)
+    )
 
 
 @pytest.fixture
