@@ -440,7 +440,7 @@ bertimbau_base = ModelMeta(
     reference="https://huggingface.co/neuralmind/bert-base-portuguese-cased",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets=None,
+    training_datasets=set(),  # MLM pre-training on brWaC (not in MTEB)
     adapted_from=None,
     superseded_by=None,
     modalities=["text"],
@@ -471,7 +471,7 @@ bertimbau_large = ModelMeta(
     reference="https://huggingface.co/neuralmind/bert-large-portuguese-cased",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets=None,
+    training_datasets=set(),  # MLM pre-training on brWaC (not in MTEB)
     adapted_from=None,
     superseded_by=None,
     modalities=["text"],
@@ -502,7 +502,7 @@ albertina_900m_ptbr = ModelMeta(
     reference="https://huggingface.co/PORTULAN/albertina-900m-portuguese-ptbr-encoder",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets=None,
+    training_datasets=set(),  # MLM pre-training on Portuguese web corpora (not in MTEB)
     adapted_from=None,
     superseded_by=None,
     modalities=["text"],
@@ -533,7 +533,7 @@ ulysses_legal_bert_pt_br = ModelMeta(
     reference="https://huggingface.co/ulysses-camara/legal-bert-pt-br",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets=None,
+    training_datasets=set(),  # MLM on Chamber of Deputies bills and public comments (not in MTEB)
     adapted_from="neuralmind/bert-base-portuguese-cased",
     superseded_by=None,
     modalities=["text"],
@@ -564,7 +564,11 @@ legal_bertimbau_sts_large = ModelMeta(
     reference="https://huggingface.co/rufimelo/Legal-BERTimbau-sts-large",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets=None,
+    training_datasets={
+        "Assin2STS",
+        # not in MTEB yet: assin (AssinSTS, added in #5936)
+        # not in MTEB: rufimelo/PortugueseLegalSentences-v0 (MLM)
+    },
     adapted_from="neuralmind/bert-large-portuguese-cased",
     superseded_by=None,
     modalities=["text"],
@@ -595,7 +599,12 @@ stjiris_legal_mlm_mkd_nli_sts_v1 = ModelMeta(
     reference="https://huggingface.co/stjiris/bert-large-portuguese-cased-legal-mlm-mkd-nli-sts-v1",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets=None,
+    training_datasets={
+        "STSBenchmarkMultilingualSTS",  # pt subset (stsb_multi_mt)
+        "Assin2STS",
+        # not in MTEB yet: assin (AssinSTS, added in #5936)
+        # not in MTEB: stjiris/portuguese-legal-sentences-v0 (MLM), TED2020 (distillation), NLI data, stjiris/IRIS_sts
+    },
     adapted_from="neuralmind/bert-large-portuguese-cased",
     superseded_by=None,
     modalities=["text"],
@@ -626,7 +635,12 @@ stjiris_legal_mlm_sts_v1_0 = ModelMeta(
     reference="https://huggingface.co/stjiris/bert-large-portuguese-cased-legal-mlm-sts-v1.0",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets=None,
+    training_datasets={
+        "STSBenchmarkMultilingualSTS",  # pt subset (stsb_multi_mt)
+        "Assin2STS",
+        # not in MTEB yet: assin (AssinSTS, added in #5936)
+        # not in MTEB: stjiris/portuguese-legal-sentences-v1.0 (MLM)
+    },
     adapted_from="neuralmind/bert-large-portuguese-cased",
     superseded_by=None,
     modalities=["text"],
@@ -657,8 +671,8 @@ medlink_bi_encoder = ModelMeta(
     reference="https://huggingface.co/lfcc/medlink-bi-encoder",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
-    training_datasets=None,
-    adapted_from=None,
+    training_datasets=set(),  # Portuguese medical abstract pairs (not in MTEB)
+    adapted_from="neuralmind/bert-base-portuguese-cased",
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],
@@ -688,7 +702,7 @@ jua_4b_legal_only = ModelMeta(
     reference="https://huggingface.co/ufca-llms/jua-4B-legal-only",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
-    training_datasets=None,
+    training_datasets=set(),  # ufca-llms/jua legal pairs (not in MTEB); base model data via adapted_from
     adapted_from="Qwen/Qwen3-Embedding-4B",
     superseded_by=None,
     modalities=["text"],
@@ -719,7 +733,7 @@ jua_4b_mixed = ModelMeta(
     reference="https://huggingface.co/ufca-llms/jua-4B-mixed",
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
-    training_datasets=None,
+    training_datasets=set(),  # ufca-llms/jua legal pairs, SQuAD-pt_BR (not in MTEB); base model data via adapted_from
     adapted_from="Qwen/Qwen3-Embedding-4B",
     superseded_by=None,
     modalities=["text"],
