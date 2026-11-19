@@ -606,6 +606,27 @@ class Benchmark:
             ],
         )
 
+    def _score_keys(self) -> list[str]:
+        """The keys of the dict [get_score][mteb.benchmarks.benchmark.Benchmark.get_score] returns for a model.
+
+        Matches the keys that `_get_model_score` produces for a model with all results, so a model with missing
+        results can be filled with `None` under the same keys.
+
+        Returns:
+            The score keys of every aggregation of the benchmark, without the rank.
+        """
+        keys: list[str] = []
+        for aggregation in self.aggregations:
+            if isinstance(aggregation, CustomGrouping):
+                keys.extend(
+                    f"{aggregation.name}::{group.label}" for group in aggregation.groups
+                )
+            elif aggregation is BenchmarkAggregation.TASK_TYPES:
+                keys.extend(dict.fromkeys(task.metadata.type for task in self.tasks))
+            else:
+                keys.extend(aggregation.get_score_keys)
+        return keys
+
     def _get_model_score(
         self,
         model_result: ModelResult,
@@ -704,9 +725,7 @@ class Benchmark:
                 logger.warning(
                     "Some task results are missing. Filling results with None"
                 )
-                scores[model_result.model_name] = {
-                    t.metadata.name: None for t in self.tasks
-                }
+                scores[model_result.model_name] = dict.fromkeys(self._score_keys())
                 continue
 
             per_task_rows[model_result.model_name] = {
