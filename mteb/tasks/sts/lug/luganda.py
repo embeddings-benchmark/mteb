@@ -36,7 +36,7 @@ class LugandaSTS(AbsTaskSTS):
         contributed_by="Caleb Matovu",
         is_public=True,
         bibtex_citation=r"""
-       @inproceedings{cer-etal-2017-semeval,
+@inproceedings{cer-etal-2017-semeval,
   address = {Vancouver, Canada},
   author = {Cer, Daniel  and
 Diab, Mona  and
@@ -58,7 +58,7 @@ Jurgens, David},
   url = {https://aclanthology.org/S17-2001},
   year = {2017},
 }
-        """,
+""",
     )
 
     column_names = ("sentence1", "sentence2")
