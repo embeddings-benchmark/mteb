@@ -30,7 +30,7 @@ class LugandaSTS(AbsTaskSTS):
         license="not specified",
         annotations_creators="derived",
         dialect=[],
-        date=("22-08-2026", "14-11-2026"),
+        date=("2026-08-22", "2026-11-14"),
         sample_creation="human-translated and localized",
         adapted_from=["STSBenchmark"],
         contributed_by="Caleb Matovu",
