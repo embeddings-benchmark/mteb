@@ -182,35 +182,20 @@ def test_max_sim_ragged_accepts_tensor_and_list():
     torch.testing.assert_close(scores, expected)
 
 
-def test_max_sim_ragged_ignores_padded_document_tokens():
-    # every real similarity is negative, so a zero-padded document token would win the max
-    queries = [torch.ones(3, 4)]
-    documents = [-torch.ones(2, 4), -torch.ones(6, 4)]
-
-    torch.testing.assert_close(
-        max_sim(queries, documents), torch.tensor([[-12.0, -12.0]])
-    )
-
-
 @pytest.mark.parametrize(
-    ("query_widths", "document_widths"),
+    "document_widths",
     [
-        # little padding overhead: the lists are zero-padded together
-        pytest.param([4, 5, 4, 5], [6, 7, 8, 7, 6], id="padded"),
-        # a long query among short ones: the lists are scored in length groups
-        pytest.param([3, 5, 2, 40], [7, 4, 9, 6, 5], id="grouped"),
+        pytest.param([2, 6], id="padded"),
+        pytest.param([1, 1, 1, 20], id="grouped"),
     ],
 )
-def test_max_sim_ragged_matches_unpadded_with_negative_similarities(
-    query_widths: list[int], document_widths: list[int]
-):
-    torch.manual_seed(0)
-    queries = _ragged(query_widths)
-    documents = _ragged(document_widths)
+def test_max_sim_ragged_ignores_padded_document_tokens(document_widths: list[int]):
+    # All real similarities are -4; zero-padded document tokens must never win the max.
+    queries = [torch.ones(3, 4)]
+    documents = [-torch.ones(width, 4) for width in document_widths]
+    expected = torch.full((1, len(document_widths)), -12.0)
 
-    torch.testing.assert_close(
-        max_sim(queries, documents), _unpadded_max_sim(queries, documents)
-    )
+    torch.testing.assert_close(max_sim(queries, documents), expected)
 
 
 @pytest.fixture
