@@ -466,7 +466,7 @@ class TaskMetadata(BaseModel):
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available. As non-existing citations can
             cause authors citing the work to be penalized, we recommend to use an empty string if no citation is available. Similarly, if no article
             exist, we recommend to use an empty string instead of citing e.g. the dataset's website. It is allowed to cite multiple articles.
-        adapted_from: Datasets adapted (translated, sampled from, etc.) from other datasets.
+        adapted_from: Registered MTEB task names this task is adapted (translated, sampled, etc.) from.
         is_public: Whether the dataset is publicly available. If False (closed/private), a HuggingFace token is required to run the datasets.
         contributed_by: The name of the organization or individual who contributed the dataset. This is especially useful for private datasets
             where it may be harder to gather information about the source.
@@ -733,18 +733,11 @@ class TaskMetadata(BaseModel):
             multilinguality = "translated"
 
         if self.adapted_from is not None:
-            from mteb.get_tasks import get_task
+            from mteb.get_tasks import get_tasks
 
-            source_datasets = []
-            for name in self.adapted_from:
-                try:
-                    source_datasets.append(get_task(name).metadata.dataset["path"])
-                except KeyError:
-                    # `adapted_from` may name a dataset that is not a registered task
-                    logger.warning(
-                        f"'{name}' in adapted_from of '{self.name}' is not a registered task, "
-                        "leaving it out of the dataset card's source datasets."
-                    )
+            source_datasets = [
+                task.metadata.dataset["path"] for task in get_tasks(self.adapted_from)
+            ]
             source_datasets.append(self.dataset["path"])
         else:
             source_datasets = None if not self.dataset else [self.dataset["path"]]

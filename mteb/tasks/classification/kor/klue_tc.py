@@ -94,7 +94,7 @@ class KlueTCV2(AbsTaskClassification):
   year = {2021},
 }
 """,
-        adapted_from=["KlueTC"],
+        adapted_from=["KLUE-TC"],
     )
 
     def dataset_transform(
