@@ -38,10 +38,10 @@ Construction
 5. Images: the Open Images S3 copy is rotated upright using the metadata ``Rotation``
    column (the S3 files are not pre-rotated) and downscaled to a 1024 px long side
    if larger (4 of ~2.1k candidates). Other images keep their original bytes.
-6. Two datasets with the same media are written:
-     a2i: queries = narrations (audio),  corpus = images
-     i2a: queries = images,              corpus = narrations (audio)
-   The image rows carry their Flickr attribution (author, license, landing URL).
+6. One dataset is written, with queries = narrations (audio) and corpus = images.
+   LocalizedNarrativesI2ARetrieval loads the same repo and swaps the roles in
+   ``dataset_transform``. The image rows carry their Flickr attribution (author,
+   license, landing URL).
 
 Usage:
   python scripts/data/localized_narratives_retrieval/create_data.py --work work/ln
@@ -451,7 +451,6 @@ def main():
     ap.add_argument("--n-images", type=int, default=2000)
     ap.add_argument("--workers", type=int, default=16)
     ap.add_argument("--a2i-repo", default="mteb/LocalizedNarrativesA2I")
-    ap.add_argument("--i2a-repo", default="mteb/LocalizedNarrativesI2A")
     ap.add_argument("--stats-only", action="store_true", help="stop after selection")
     ap.add_argument("--push", action="store_true")
     ap.add_argument("--private", action="store_true")
@@ -500,13 +499,6 @@ def main():
                     task="LocalizedNarrativesA2IRetrieval", n=n,
                     q_desc=AUDIO_DESC, c_desc=IMAGE_DESC),
         out, args.a2i_repo, args.push, args.private,
-    )  # fmt: skip
-    write_and_push(
-        "i2a", images, audio, qrels([(c, q) for q, c in pairs]),
-        CARD.format(pretty="Localized Narratives I2A", direction="Image to spoken narration",
-                    task="LocalizedNarrativesI2ARetrieval", n=n,
-                    q_desc=IMAGE_DESC, c_desc=AUDIO_DESC),
-        out, args.i2a_repo, args.push, args.private,
     )  # fmt: skip
 
 

@@ -1,3 +1,6 @@
+from collections import defaultdict
+from typing import Any
+
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -59,8 +62,8 @@ class LocalizedNarrativesI2ARetrieval(AbsTaskRetrieval):
         "to retrieve the narration recorded for each image.",
         reference=_REFERENCE,
         dataset={
-            "path": "mteb/LocalizedNarrativesI2A",
-            "revision": "74390f059837a7aa1df96697a6b009eabb4d6b51",
+            "path": "mteb/LocalizedNarrativesA2I",
+            "revision": "896f4a9ebe753dd01e76bf0c5d2748f3767346a1",
         },
         type="Any2AnyRetrieval",
         category="i2a",
@@ -79,3 +82,17 @@ class LocalizedNarrativesI2ARetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the spoken narration that describes this image."},
     )
+
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        """Reuse the A2I data with the roles swapped: images become queries, narrations the corpus."""
+        for subset in self.dataset.values():
+            for split_data in subset.values():
+                split_data["queries"], split_data["corpus"] = (
+                    split_data["corpus"],
+                    split_data["queries"],
+                )
+                relevant_docs: dict[str, dict[str, int]] = defaultdict(dict)
+                for query_id, docs in split_data["relevant_docs"].items():
+                    for doc_id, score in docs.items():
+                        relevant_docs[doc_id][query_id] = score
+                split_data["relevant_docs"] = dict(relevant_docs)
