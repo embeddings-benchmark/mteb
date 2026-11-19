@@ -626,6 +626,31 @@ def test_model_validate_json_resolved():
     assert parsed_unknown.loader is None
 
 
+@pytest.mark.parametrize("similarity_fn_name", list(ScoringFunction))
+def test_model_meta_json_roundtrip_keeps_similarity_fn_name(
+    similarity_fn_name: ScoringFunction,
+):
+    """The saved `model_meta.json` of a model must load back for every similarity function."""
+    meta = ModelMeta.create_empty(
+        {
+            "name": "org/model",
+            "revision": "rev",
+            "similarity_fn_name": similarity_fn_name,
+        }
+    )
+
+    parsed = ModelMeta.model_validate_json_resolved(json.dumps(meta.to_dict()))
+
+    assert parsed.similarity_fn_name is similarity_fn_name
+
+
+def test_model_meta_rejects_unknown_similarity_fn_name():
+    data = {**ModelMeta.create_empty().model_dump(), "similarity_fn_name": "l2"}
+
+    with pytest.raises(ValueError, match="Invalid similarity function name: l2"):
+        ModelMeta.model_validate(data)
+
+
 def test_get_model_metas_n_parameters_lower_bound():
     """A lower-only range must filter; it used to be ignored without an upper bound."""
     one_b = 1_000_000_000
