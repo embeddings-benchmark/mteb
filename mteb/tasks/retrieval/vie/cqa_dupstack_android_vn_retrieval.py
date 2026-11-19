@@ -39,5 +39,5 @@ class CQADupstackAndroidVN(AbsTaskRetrieval):
   year = {2026},
 }
 """,
-        adapted_from=["CQADupstackAndroid"],
+        adapted_from=["CQADupstackAndroidRetrieval"],
     )

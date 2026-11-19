@@ -116,5 +116,5 @@ Piperidis, Stelios},
   year = {2022},
 }
 """,
-        adapted_from=["DdiscoCohesionClassification"],
+        adapted_from=["Ddisco"],
     )

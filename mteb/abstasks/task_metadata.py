@@ -466,7 +466,7 @@ class TaskMetadata(BaseModel):
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available. As non-existing citations can
             cause authors citing the work to be penalized, we recommend to use an empty string if no citation is available. Similarly, if no article
             exist, we recommend to use an empty string instead of citing e.g. the dataset's website. It is allowed to cite multiple articles.
-        adapted_from: Datasets adapted (translated, sampled from, etc.) from other datasets.
+        adapted_from: Registered MTEB task names this task is adapted (translated, sampled, etc.) from.
         is_public: Whether the dataset is publicly available. If False (closed/private), a HuggingFace token is required to run the datasets.
         contributed_by: The name of the organization or individual who contributed the dataset. This is especially useful for private datasets
             where it may be harder to gather information about the source.

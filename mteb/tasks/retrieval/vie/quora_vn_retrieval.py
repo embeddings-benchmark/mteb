@@ -39,5 +39,5 @@ class QuoraVN(AbsTaskRetrieval):
   year = {2026},
 }
 """,
-        adapted_from=["Quora"],
+        adapted_from=["QuoraRetrieval"],
     )

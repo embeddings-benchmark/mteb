@@ -39,5 +39,5 @@ class CQADupstackPhysicsVN(AbsTaskRetrieval):
   year = {2026},
 }
 """,
-        adapted_from=["CQADupstackPhysics"],
+        adapted_from=["CQADupstackPhysicsRetrieval"],
     )

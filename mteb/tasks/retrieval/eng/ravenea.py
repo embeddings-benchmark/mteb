@@ -110,7 +110,7 @@ class RAVENEAI2TRetrieval(AbsTaskRetrieval):
             "Each test image is used to rerank ten Wikipedia articles selected "
             "by BM25 and judged by human annotators for cultural relevance on "
             "a seven-point scale from -3 to 3. The task uses the paper's "
-            "official test split and candidate sets."
+            "official test split and candidate sets. Images are sourced from CVQA and CCUB."
         ),
         reference="https://arxiv.org/abs/2505.14462",
         dataset={
@@ -130,7 +130,6 @@ class RAVENEAI2TRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="multiple",
-        adapted_from=["CVQA", "CCUB"],
         is_beta=True,
         bibtex_citation=r"""
 @inproceedings{li2026ravenea,
