@@ -30,7 +30,7 @@ class AssinRTE(AbsTaskPairClassification):
         task_subtypes=["Textual Entailment"],
         license="cc-by-4.0",
         annotations_creators="expert-annotated",
-        dialect=["brazilian"],
+        dialect=["pt-BR"],
         sample_creation="created",
         bibtex_citation=r"""
 @inproceedings{fonseca-etal-2016-assin,

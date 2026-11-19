@@ -34,7 +34,7 @@ class JurisTCUClusteringP2P(AbsTaskClustering):
         task_subtypes=["Thematic clustering"],
         license="cc-by-4.0",
         annotations_creators="expert-annotated",
-        dialect=["brazilian"],
+        dialect=["pt-BR"],
         sample_creation="found",
         adapted_from=["JurisTCU"],
         bibtex_citation=r"""

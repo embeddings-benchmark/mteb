@@ -33,7 +33,7 @@ class FactckBrClassification(AbsTaskClassification):
         task_subtypes=["Claim verification"],
         license="apache-2.0",
         annotations_creators="expert-annotated",
-        dialect=["brazilian"],
+        dialect=["pt-BR"],
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{moreno2019factckbr,

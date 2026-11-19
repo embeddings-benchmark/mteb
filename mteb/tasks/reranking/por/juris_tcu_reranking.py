@@ -31,7 +31,7 @@ class JurisTCUReranking(AbsTaskRetrieval):
         task_subtypes=["Question answering"],
         license="cc-by-4.0",
         annotations_creators="expert-annotated",
-        dialect=["brazilian"],
+        dialect=["pt-BR"],
         sample_creation="created",
         adapted_from=["JurisTCU"],
         bibtex_citation=r"""

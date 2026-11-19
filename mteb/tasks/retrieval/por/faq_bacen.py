@@ -30,7 +30,7 @@ class FaqBacenRetrieval(AbsTaskRetrieval):
         task_subtypes=["Question answering"],
         license="apache-2.0",
         annotations_creators="derived",
-        dialect=["brazilian"],
+        dialect=["pt-BR"],
         sample_creation="found",
         bibtex_citation=r"""
 @misc{stekel2026mtebbr,

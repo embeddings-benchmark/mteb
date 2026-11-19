@@ -30,7 +30,7 @@ class ToxSynPT(AbsTaskClassification):
         task_subtypes=["Sentiment/Hate speech"],
         license="cc-by-4.0",
         annotations_creators="LM-generated",
-        dialect=["brazilian"],
+        dialect=["pt-BR"],
         sample_creation="LM-generated and verified",
         bibtex_citation=r"""
 @inproceedings{brito-etal-2026-toxsyn,

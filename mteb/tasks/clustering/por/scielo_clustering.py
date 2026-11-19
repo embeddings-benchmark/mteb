@@ -36,7 +36,7 @@ class SciELOClusteringP2P(AbsTaskClustering):
         task_subtypes=["Thematic clustering"],
         license="cc-by-4.0",
         annotations_creators="derived",
-        dialect=["brazilian"],
+        dialect=["pt-BR"],
         sample_creation="found",
         adapted_from=None,
         bibtex_citation=r"""

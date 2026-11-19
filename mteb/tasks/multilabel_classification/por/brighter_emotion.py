@@ -29,7 +29,7 @@ class BrighterEmotionMultilabelClassification(AbsTaskMultilabelClassification):
         task_subtypes=["Emotion classification"],
         license="cc-by-4.0",
         annotations_creators="human-annotated",
-        dialect=["brazilian"],
+        dialect=["pt-BR"],
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{muhammad-etal-2025-brighter,

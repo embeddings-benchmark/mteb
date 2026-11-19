@@ -31,7 +31,7 @@ class InferBR(AbsTaskPairClassification):
         task_subtypes=["Textual Entailment"],
         license="mit",
         annotations_creators="expert-annotated",
-        dialect=["brazilian"],
+        dialect=["pt-BR"],
         sample_creation="created",
         bibtex_citation=r"""
 @inproceedings{bencke-etal-2024-inferbr,

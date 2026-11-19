@@ -33,7 +33,7 @@ class StackoverflowPtClustering(AbsTaskClustering):
         task_subtypes=["Thematic clustering"],
         license="cc-by-sa-4.0",
         annotations_creators="derived",
-        dialect=["brazilian"],
+        dialect=["pt-BR"],
         sample_creation="found",
         bibtex_citation=r"""
 @misc{stekel2026mtebbr,

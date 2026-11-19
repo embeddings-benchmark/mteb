@@ -31,7 +31,7 @@ class Quati(AbsTaskRetrieval):
         task_subtypes=["Question answering"],
         license="cc-by-4.0",
         annotations_creators="expert-annotated",
-        dialect=["brazilian"],
+        dialect=["pt-BR"],
         sample_creation="created",
         bibtex_citation=r"""
 @inproceedings{bueno-etal-2024-quati,

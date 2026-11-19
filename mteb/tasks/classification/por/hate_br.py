@@ -33,7 +33,7 @@ class HateBR(AbsTaskClassification):
         task_subtypes=["Sentiment/Hate speech"],
         license="apache-2.0",
         annotations_creators="expert-annotated",
-        dialect=["brazilian"],
+        dialect=["pt-BR"],
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{vargas-etal-2022-hatebr,

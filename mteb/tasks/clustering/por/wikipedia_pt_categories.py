@@ -35,7 +35,7 @@ class WikipediaPTCategoriesClusteringP2P(AbsTaskClustering):
         task_subtypes=["Topic classification"],
         license="cc-by-sa-3.0",
         annotations_creators="derived",
-        dialect=["brazilian"],
+        dialect=["pt-BR"],
         sample_creation="found",
         bibtex_citation=r"""
 @misc{stekel2026mtebbr,
