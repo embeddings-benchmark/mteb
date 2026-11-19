@@ -60,7 +60,7 @@ def _corpus_to_dict(
 ) -> dict[str, str]:
     text = (
         (row["title"] + " " + row["text"]).strip()
-        if "title" in row and len(row["title"]) > 0
+        if "title" in row and row["title"] is not None and len(row["title"]) > 0
         else row["text"].strip()
     )
     new_row = {
@@ -69,8 +69,8 @@ def _corpus_to_dict(
         "body": row["text"],
     }
     # dataloaders can't handle None
-    if "title" in row and row["title"] is not None and len(row["title"]) > 0:
-        new_row["title"] = row["title"]
+    if "title" in row:
+        new_row["title"] = row["title"] or ""
     return new_row
 
 
