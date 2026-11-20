@@ -987,3 +987,47 @@ def test_submit_results_experiments_only(tmp_path: Path):
     for filename in result_files:
         expected = f"{test_model.model_name_as_path()}/{revision}/experiments/{experiment_name}/{filename}"
         assert expected in committed, f"{expected} not found in commit"
+
+
+def _save_sts_result(cache: ResultCache, model_meta: ModelMeta) -> None:
+    task_result = TaskResult(
+        dataset_revision="rev",
+        task_name="STS12",
+        mteb_version="2.0.0",
+        evaluation_time=1.0,
+        scores={
+            "test": [
+                {"main_score": 0.5, "hf_subset": "default", "languages": ["eng-Latn"]}
+            ]
+        },
+    )
+    cache.save_to_cache(task_result, model_meta)
+
+
+def test_normalize_models_finds_model_whose_name_has_spaces(tmp_path: Path):
+    """A model name with spaces is saved in a folder with underscores, and must still be found by its name."""
+    cache = ResultCache(cache_path=tmp_path)
+    meta = ModelMeta.create_empty(
+        {"name": "org/model (embed_dim=512)", "revision": "rev"}
+    )
+    _save_sts_result(cache, meta)
+
+    assert cache._normalize_models("org/model (embed_dim=512)") == [meta]
+
+
+def test_submit_results_by_name_of_model_with_spaces(tmp_path: Path):
+    cache_path, remote_path = _setup_fake_remote(tmp_path)
+    cache = ResultCache(cache_path=cache_path)
+    meta = ModelMeta.create_empty(
+        {"name": "org/model (embed_dim=512)", "revision": "rev"}
+    )
+    _save_sts_result(cache, meta)
+
+    with patch.object(cache, "download_from_remote", return_value=None):
+        result = cache.submit_results(
+            models=["org/model (embed_dim=512)"], create_pr=False
+        )
+
+    assert result["status"] == "ready_for_submission"
+    assert result["result_count"] == 1
+    assert "org__model_(embed_dim=512)/rev/STS12.json" in _committed_files(remote_path)
