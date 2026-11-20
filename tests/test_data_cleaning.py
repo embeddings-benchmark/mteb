@@ -914,6 +914,25 @@ def test_remove_by_text_length_measures_a_document_as_its_title_and_text() -> No
     assert data["relevant_docs"] == {"q1": {"d1": 1}}
 
 
+def test_remove_by_text_length_drops_a_query_left_with_zero_judgements() -> None:
+    task = MockRetrievalTask()
+    task.load_data()
+    subset, split = _retrieval_split(task)
+    task.dataset[subset][split] = {
+        "corpus": Dataset.from_dict({"id": ["d1", "d2"], "text": ["a long body", ""]}),
+        "queries": Dataset.from_dict({"id": ["q1", "q2"], "text": ["q one", "q two"]}),
+        "relevant_docs": {"q1": {"d1": 1, "d2": 0}, "q2": {"d1": 0, "d2": 1}},
+        "top_ranked": None,
+    }
+
+    cleaned = remove_by_text_length(task, min_length=1)
+
+    data = cleaned.dataset[subset][split]
+    # q2 only keeps d1, which it judges as not relevant, so no model could score on it
+    assert data["queries"]["id"] == ["q1"]
+    assert data["relevant_docs"] == {"q1": {"d1": 1}}
+
+
 def test_remove_by_text_length_leaves_the_non_text_side_of_a_retrieval_task() -> None:
     task = MockAny2AnyRetrievalI2TTask()
     _load_or_skip(task)
