@@ -59,8 +59,8 @@ def _load_momentseeker(task: AbsTaskRetrieval, direction: str) -> None:
     task.data_loaded = True
 
 
-_FULL_DATASET_PATH = "dukesun99/MomentSeeker-Full"
-_FULL_DATASET_REVISION = "e1be36f6a27a0da618704860cb50517634c01f3a"
+_FULL_DATASET_PATH = "mteb/MomentSeeker"
+_FULL_DATASET_REVISION = "0db42133671d39236813d76c4323d3f230f2bc6a"
 _FULL_DESCRIPTION = (
     "MomentSeeker full-video retrieval. The corpus is the 271 complete source videos "
     "(1,200 s on average, re-encoded to 360p with audio), and a video is relevant to "
@@ -71,14 +71,16 @@ _FULL_DESCRIPTION = (
 
 
 def _load_full(task: AbsTaskRetrieval, subset: str) -> None:
-    """Load the shared full-video corpus plus one direction-level subset."""
+    """Load the full-video corpus plus one direction-level subset (queries are shared with the reranking tasks)."""
     if task.data_loaded:
         return
     path = task.metadata.dataset["path"]
     revision = task.metadata.dataset["revision"]
-    corpus = load_dataset(path, "corpus", split="test", revision=revision)
+    corpus = load_dataset(path, "full-corpus", split="test", revision=revision)
     queries = load_dataset(path, f"{subset}-queries", split="test", revision=revision)
-    qrels_ds = load_dataset(path, f"{subset}-qrels", split="test", revision=revision)
+    qrels_ds = load_dataset(
+        path, f"{subset}-full-qrels", split="test", revision=revision
+    )
     qrels: dict[str, dict[str, int]] = {}
     for row in qrels_ds:
         qrels.setdefault(row["query-id"], {})[row["corpus-id"]] = int(row["score"])

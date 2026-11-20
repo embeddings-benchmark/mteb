@@ -8,8 +8,8 @@ from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
-_DATASET_PATH = "mteb/MomentSeekerChunked"
-_DATASET_REVISION = "f1195925fd67ef2d676e42ffa098c4a8ec8508e9"
+_DATASET_PATH = "mteb/MomentSeeker"
+_DATASET_REVISION = "0db42133671d39236813d76c4323d3f230f2bc6a"
 _REFERENCE = "https://arxiv.org/abs/2502.12558"
 _BIBTEX = r"""
 @inproceedings{yuan2025momentseeker,

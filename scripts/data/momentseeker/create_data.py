@@ -1,4 +1,4 @@
-"""Build the chunked (paper-protocol) MomentSeeker moment-retrieval dataset.
+"""Build the MomentSeeker dataset for MTEB (chunked paper protocol and full videos).
 
 MomentSeeker (Yuan et al., NeurIPS 2025, arXiv:2502.12558) is a long-video moment
 retrieval benchmark. Its retrieval protocol (paper Sec. 4.1 and App. 6.1.1) is:
@@ -9,7 +9,8 @@ retrieval benchmark. Its retrieval protocol (paper Sec. 4.1 and App. 6.1.1) is:
   * score with mAP@5 (main metric) and R@1, reported per moment level
     (global / event / object, Sec. 3.3) and overall.
 
-This script reproduces that protocol as an MTEB reranking dataset:
+This script reproduces that protocol as an MTEB reranking dataset, and stores the
+full-video variant in the same repo so both share one copy of the queries:
 
   corpus                      10 s chunks of the 271 source videos, ``_id`` =
                               ``<video>_<chunk index:03d>``, chunk k covers
@@ -19,8 +20,14 @@ This script reproduces that protocol as an MTEB reranking dataset:
                               reference image for ti2v or reference clip for tv2v).
   <dir>-<level>-top_ranked    per query, every chunk of its own video, in time order.
   <dir>-<level>-qrels         chunks with IoU >= 0.3 against any answer interval, score 1.
+  full-corpus                 the 271 full videos, copied unchanged from
+                              ``dukesun99/MomentSeeker-Full`` (``corpus``).
+  <dir>-<level>-full-qrels    video-level qrels, copied unchanged from
+                              ``dukesun99/MomentSeeker-Full`` (``<dir>-<level>-qrels``).
 
-with <dir> in {t2v, ti2v, tv2v} and <level> in {global, event, object}.
+with <dir> in {t2v, ti2v, tv2v} and <level> in {global, event, object}. The
+``MomentSeeker*Reranking`` tasks read the chunk configs and the
+``MomentSeeker*FullVideoRetrieval`` tasks read ``full-corpus`` and ``*-full-qrels``.
 
 Queries with no answerable chunk
 --------------------------------
@@ -40,8 +47,8 @@ Sources
                the script checks that every query's text and video match the JSON.
 
 Usage:
-  python scripts/data/momentseeker_chunked/create_data.py --work work/ms
-  python scripts/data/momentseeker_chunked/create_data.py --work work/ms --push
+  python scripts/data/momentseeker/create_data.py --work work/ms
+  python scripts/data/momentseeker/create_data.py --work work/ms --push
 """
 
 from __future__ import annotations
@@ -263,24 +270,28 @@ CARD = """---
 license: cc-by-nc-sa-4.0
 language:
 - en
-pretty_name: MomentSeeker (10 s chunks, paper protocol)
+pretty_name: MomentSeeker
 ---
 
-# MomentSeeker, chunked (paper protocol)
+# MomentSeeker
 
 Long-video moment retrieval from [MomentSeeker](https://arxiv.org/abs/2502.12558)
-(NeurIPS 2025), packaged for [MTEB](https://github.com/embeddings-benchmark/mteb) as a
-reranking task that follows the paper's retrieval protocol. Each long video is cut
-into fixed 10 s chunks, and a query ranks the chunks of its own video
-(`<subset>-top_ranked`). A chunk is relevant if its temporal IoU with an annotated
-answer moment is at least 0.3. Queries with no such chunk keep a single score-0 qrel,
-so they count as misses, as in the paper.
+(NeurIPS 2025), packaged for [MTEB](https://github.com/embeddings-benchmark/mteb) in
+two versions that share the same queries.
 
-Subsets: `{{t2v,ti2v,tv2v}}-{{global,event,object}}`, each with `-queries`,
-`-top_ranked` and `-qrels` configs. All subsets share the `corpus` config ({n_chunks}
-chunks from {n_videos} videos).
+Subsets: `{{t2v,ti2v,tv2v}}-{{global,event,object}}`, each with a `-queries` config.
 
-Built by `scripts/data/momentseeker_chunked/create_data.py` in MTEB from
+**Chunked (paper protocol), `MomentSeeker*Reranking`.** Each long video is cut into
+fixed 10 s chunks (`corpus`, {n_chunks} chunks from {n_videos} videos), and a query ranks
+the chunks of its own video (`<subset>-top_ranked`). A chunk is relevant if its temporal
+IoU with an annotated answer moment is at least 0.3 (`<subset>-qrels`). Queries with no
+such chunk keep a single score-0 qrel, so they count as misses, as in the paper.
+
+**Full video, `MomentSeeker*FullVideoRetrieval`.** The corpus is the {n_videos} complete
+videos (`full-corpus`), and the relevant document is the video that contains the answer
+moment (`<subset>-full-qrels`).
+
+Built by `scripts/data/momentseeker/create_data.py` in MTEB from
 `avery00/MomentSeeker` annotations (revision `{ann_rev}`) and the 360p videos and
 query media of `dukesun99/MomentSeeker-Full` (revision `{full_rev}`).
 
@@ -331,7 +342,10 @@ def package(full, chunks, tables, out: Path):
         .cast_column("video", Video())
     )
     _write(corpus, out, "corpus", embed=True, shards=CORPUS_SHARDS)
-    configs = ["corpus"]
+    configs = ["corpus", "full-corpus"]
+    full_corpus = out / "full-corpus"
+    shutil.rmtree(full_corpus, ignore_errors=True)
+    shutil.copytree(full / "corpus", full_corpus)
     for name, (qrels, top) in tables.items():
         src = next((full / f"{name}-queries").glob("*.parquet"))
         (out / f"{name}-queries").mkdir(parents=True, exist_ok=True)
@@ -356,7 +370,14 @@ def package(full, chunks, tables, out: Path):
             out,
             f"{name}-top_ranked",
         )
-        configs += [f"{name}-queries", f"{name}-qrels", f"{name}-top_ranked"]
+        shutil.rmtree(out / f"{name}-full-qrels", ignore_errors=True)
+        shutil.copytree(full / f"{name}-qrels", out / f"{name}-full-qrels")
+        configs += [
+            f"{name}-queries",
+            f"{name}-qrels",
+            f"{name}-top_ranked",
+            f"{name}-full-qrels",
+        ]
     yaml = "configs:\n" + "".join(
         f"- config_name: {c}\n  data_files:\n  - split: {SPLIT}\n    path: {c}/{SPLIT}-*\n"
         for c in configs
@@ -374,9 +395,9 @@ def package(full, chunks, tables, out: Path):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--work", default="work/momentseeker_chunked")
+    ap.add_argument("--work", default="work/momentseeker")
     ap.add_argument("--workers", type=int, default=6)
-    ap.add_argument("--repo-id", default="mteb/MomentSeekerChunked")
+    ap.add_argument("--repo-id", default="mteb/MomentSeeker")
     ap.add_argument("--push", action="store_true")
     args = ap.parse_args()
 
