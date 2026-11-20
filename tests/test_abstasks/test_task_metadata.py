@@ -347,6 +347,31 @@ def test_extract_bibtex_title(bibtex_citation, expected_title):
     assert TaskMetadata._extract_bibtex_title(bibtex_citation) == expected_title
 
 
+@pytest.mark.parametrize("include_cite", [True, False])
+@pytest.mark.parametrize(
+    "bibtex_citation",
+    [
+        pytest.param(None, id="none"),
+        pytest.param("", id="empty"),
+        pytest.param(" ", id="single-space"),
+        pytest.param("\n        ", id="newline-and-indent"),
+    ],
+)
+def test_intext_citation_without_citation_is_empty(bibtex_citation, include_cite):
+    metadata = MockClassificationTask().metadata.model_copy(
+        update={"bibtex_citation": bibtex_citation}
+    )
+    assert not metadata.intext_citation(include_cite=include_cite)
+
+
+def test_intext_citation_with_citation():
+    metadata = MockClassificationTask().metadata.model_copy(
+        update={"bibtex_citation": "@article{doe2024,\n  title = {A Paper Title},\n}"}
+    )
+    assert metadata.intext_citation() == "\\cite{doe2024}"
+    assert metadata.intext_citation(include_cite=False) == "doe2024"
+
+
 def test_task_hf_config():
     task = mteb.get_task("ArguAna")
     config = task._create_task_hf_config()

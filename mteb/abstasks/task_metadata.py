@@ -614,7 +614,7 @@ class TaskMetadata(BaseModel):
     def intext_citation(self, include_cite: bool = True) -> str:
         """Create an in-text citation for the dataset."""
         cite = ""
-        if self.bibtex_citation:
+        if self.bibtex_citation and self.bibtex_citation.strip():
             cite = f"{self.bibtex_citation.split(',')[0].split('{')[1]}"
         if include_cite and cite:
             # check for whitespace in the citation
