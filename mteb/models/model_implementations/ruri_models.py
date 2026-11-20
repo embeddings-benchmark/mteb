@@ -1,6 +1,5 @@
 from mteb.models.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
-from mteb.types import OutputDType
 
 RURI_V3_PROMPTS = {
     "Retrieval-query": "検索クエリ: ",
@@ -273,7 +272,6 @@ cl_nagoya_ruri_small_v1 = ModelMeta(
     public_training_data="https://huggingface.co/datasets/cl-nagoya/ruri-dataset-ft",
     citation=RURI_CITATION,
     contacts=["hpprc"],
-    output_dtypes=OutputDType.BF16,
 )
 
 cl_nagoya_ruri_base_v1 = ModelMeta(
@@ -304,7 +302,6 @@ cl_nagoya_ruri_base_v1 = ModelMeta(
     public_training_data="https://huggingface.co/datasets/cl-nagoya/ruri-dataset-ft",
     citation=RURI_CITATION,
     contacts=["hpprc"],
-    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -336,5 +333,4 @@ cl_nagoya_ruri_large_v1 = ModelMeta(
     public_training_data="https://huggingface.co/datasets/cl-nagoya/ruri-dataset-ft",
     citation=RURI_CITATION,
     contacts=["hpprc"],
-    output_dtypes=OutputDType.BF16,
 )

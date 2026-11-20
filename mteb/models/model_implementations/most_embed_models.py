@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
-from mteb.types import OutputDType
 
 most_embed_de = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
@@ -36,6 +35,5 @@ most_embed_de = ModelMeta(
     model_type=["dense"],
     citation=None,
     contacts=None,
-    output_dtypes=OutputDType.BF16,
     extra_requirements_groups=["nemotron-3-embed"],
 )

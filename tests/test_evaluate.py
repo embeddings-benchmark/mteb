@@ -1,5 +1,6 @@
 import json
 import logging
+import shutil
 from copy import copy
 from pathlib import Path
 from typing import Any
@@ -73,6 +74,15 @@ def test_evaluate(model: EncoderProtocol, task: AbsTask, expected_score: float):
 def test_evaluate_w_multiple_tasks(model: EncoderProtocol, tasks: list[AbsTask]):
     results = mteb.evaluate(model, tasks, cache=None, co2_tracker=False)
     assert len(results) == len(tasks), "should return exactly one result per task"
+
+
+def test_evaluate_w_no_tasks():
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    results = mteb.evaluate(model, [], cache=None)
+
+    assert results.task_results == []
+    assert results.model_name == model.mteb_model_meta.name
+    assert results.model_revision == model.mteb_model_meta.revision
 
 
 @pytest.mark.parametrize(
@@ -247,6 +257,80 @@ def test_evaluate_w_missing_subset(
     assert updated.get_score() == expected_score, (
         "main score should match the expected value"
     )
+
+
+def test_evaluate_cached_results_filtered_to_task(tmp_path: Path):
+    model = MockSentenceTransformer()
+    cache = ResultCache(tmp_path)
+    full_task = MockMultilingualRetrievalTask()
+    mteb.evaluate(model, full_task, cache=cache, co2_tracker=False)
+
+    task = MockMultilingualRetrievalTask().filter_eval_splits(["test"])
+    task.hf_subsets = full_task.hf_subsets[:1]
+    result = mteb.evaluate(model, task, cache=cache, co2_tracker=False)[0]
+
+    assert set(result.eval_splits) == {"test"}
+    assert set(result.hf_subsets) == set(task.hf_subsets)
+
+
+def test_evaluate_merged_results_filtered_to_task(tmp_path: Path):
+    model = MockSentenceTransformer()
+    cache = ResultCache(tmp_path)
+    mteb.evaluate(
+        model,
+        MockMultilingualRetrievalTask().filter_eval_splits(["val"]),
+        cache=cache,
+        co2_tracker=False,
+    )
+
+    task = MockMultilingualRetrievalTask().filter_eval_splits(["test"])
+    result = mteb.evaluate(model, task, cache=cache, co2_tracker=False)[0]
+
+    assert set(result.eval_splits) == {"test"}
+    # the cache still holds both splits, so the full task loads without rerunning
+    full_task = MockMultilingualRetrievalTask().filter_eval_splits(["val", "test"])
+    cached = mteb.evaluate(
+        model,
+        full_task,
+        cache=cache,
+        overwrite_strategy="only-cache",
+        co2_tracker=False,
+    )
+    assert set(cached[0].eval_splits) == {"val", "test"}
+
+
+def test_evaluate_aggregate_ignores_extra_cached_subtask_subsets(tmp_path: Path):
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    task = MockAggregatedTask()
+    cache = ResultCache(tmp_path / "cache")
+    mteb.evaluate(model, task.metadata.tasks, cache=cache, co2_tracker=False)
+    shutil.copytree(tmp_path / "cache", tmp_path / "clean")
+    expected = mteb.evaluate(
+        model,
+        task,
+        cache=ResultCache(tmp_path / "clean"),
+        overwrite_strategy="only-cache",
+        co2_tracker=False,
+    )[0].get_score()
+
+    # a subtask's cache file holds a subset the aggregate does not use
+    subtask = task.metadata.tasks[0]
+    path = cache.get_task_result_path(
+        subtask.metadata.name,
+        model.mteb_model_meta.model_name_as_path(),
+        model.mteb_model_meta.revision,
+    )
+    cached = json.loads(path.read_text())
+    split = task.eval_splits[0]
+    extra = {**cached["scores"][split][0], "hf_subset": "extra", "main_score": 0.0}
+    cached["scores"][split].append(extra)
+    path.write_text(json.dumps(cached))
+
+    result = mteb.evaluate(
+        model, task, cache=cache, overwrite_strategy="only-cache", co2_tracker=False
+    )[0]
+
+    assert result.get_score() == pytest.approx(expected)
 
 
 @pytest.mark.parametrize(

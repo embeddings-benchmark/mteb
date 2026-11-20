@@ -24,9 +24,9 @@ v2_training_data = {
 v3_training_data = v2_training_data | {
     "HotpotQA",
     "FEVER",
-    "FIQA",
-    "NFCORPUS",
-    "SCIFACT",
+    "FiQA2018",
+    "NFCorpus",
+    "SciFact",
     # not in MTEB. see https://huggingface.co/datasets/sentence-transformers/embedding-training-data
     # "NQ-train_pairs",
     # "quora_duplicates",
@@ -232,4 +232,39 @@ opensearch_neural_sparse_encoding_multilingual_v1 = ModelMeta(
         "MIRACLReranking",
     },
     loader=SparseEncoderWrapper,
+)
+
+asym_v1_training_data = v3_training_data | {
+    "ArguAna",
+    "NQ",
+    "QuoraRetrieval",
+    "SCIDOCS",
+    "TRECCOVID",
+}
+
+opensearch_neural_sparse_encoding_asym_v1 = ModelMeta(
+    name="opensearch-project/opensearch-neural-sparse-encoding-asym-v1",
+    extra_requirements_groups=["sparse-encoder"],
+    model_type=["sparse"],
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="ec21bfc8b59da4c8296e7cb6dfac5e3ca78c226b",
+    release_date="2026-11-06",
+    n_parameters=178798964,
+    n_embedding_parameters=39068160,
+    memory_usage_mb=715,
+    embed_dim=30522,
+    license="apache-2.0",
+    max_tokens=8192,
+    reference="https://huggingface.co/opensearch-project/opensearch-neural-sparse-encoding-asym-v1",
+    similarity_fn_name="dot",
+    framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
+    public_training_code=None,
+    public_training_data=None,
+    use_instructions=False,
+    training_datasets=asym_v1_training_data,
+    loader=SparseEncoderWrapper,
+    loader_kwargs=dict(
+        trust_remote_code=True,
+    ),
 )

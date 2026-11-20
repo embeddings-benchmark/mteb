@@ -3,7 +3,7 @@
 import pytest
 
 from mteb.abstasks import AbsTask, AbsTaskRetrieval
-from mteb.get_tasks import get_tasks
+from mteb.get_tasks import _TASKS_REGISTRY, get_tasks
 
 # Historic datasets without filled metadata. Do NOT add new datasets to this list.
 # Tasks should be removed from this list once their metadata is filled.
@@ -35,6 +35,12 @@ def test_all_metadata_is_filled_and_valid(task: AbsTask):
 
     # --- Check simplifiedtasktypes is valid ---
     assert isinstance(task.metadata.simplified_task_type, str)
+
+    # --- Check adapted_from references registered MTEB tasks ---
+    for source_name in task.metadata.adapted_from or []:
+        assert source_name in _TASKS_REGISTRY, (
+            f"{task.metadata.name}.adapted_from references unknown MTEB task {source_name!r}"
+        )
 
     # --- Test is descriptive stats are present for all datasets ---
     if task.is_aggregate:  # aggregate tasks do not have descriptive stats

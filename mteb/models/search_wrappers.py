@@ -470,10 +470,13 @@ class SearchEncoderWrapper:
                     )
                 result_heaps = {qid: [] for qid in query_idx_to_id.values()}
                 for query_itr in range(len(query_embeddings)):
+                    qid = query_idx_to_id[query_itr]
+                    if qid not in top_ranked:
+                        continue
                     result_heaps = self._rerank_sort_results(
                         result_heaps=result_heaps,
-                        query_id=query_idx_to_id[query_itr],
-                        ranked_ids=top_ranked[query_idx_to_id[query_itr]],
+                        query_id=qid,
+                        ranked_ids=top_ranked[qid],
                         scores_top_k_idx=torch.tensor(
                             [cos_scores_top_k_idx[query_itr]]
                         ),

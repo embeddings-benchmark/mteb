@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
-from mteb.types import OutputDType
 
 from .colultravbert_models import COLULTRAVBERT_TRAINING_DATA
 
@@ -31,6 +30,5 @@ biultravbert = ModelMeta(
     training_datasets=COLULTRAVBERT_TRAINING_DATA,
     adapted_from="athrael-soju/UltraVBERT",
     contacts=["athrael-soju"],
-    output_dtypes=OutputDType.BF16,
     extra_requirements_groups=["image"],
 )

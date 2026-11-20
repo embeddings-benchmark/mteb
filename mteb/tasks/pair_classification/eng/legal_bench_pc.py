@@ -84,6 +84,7 @@ class LegalBenchPC(AbsTaskPairClassification):
 }
 
 @article{kolt2022predicting,
+  doi = {10.15779/Z382B8VC90},
   author = {Kolt, Noam},
   journal = {Berkeley Tech. LJ},
   pages = {71},

@@ -337,17 +337,19 @@ def _encode_batches(
                 batched_input, prompt=prompt, **per_batch_kwargs
             )
             all_embeddings.append(postprocess(_embeddings))
-        embeddings = concatenate(all_embeddings)
-    elif not encode_text_per_batch:
-        sentences = [text for batch in inputs for text in batch["text"]]
+        return cast("Array", concatenate(all_embeddings))
 
-        embeddings = encode_function(sentences, prompt=prompt, **kwargs)
+    sentences = [text for batch in inputs for text in batch["text"]]
+    # Explicit text inputs prevent multimodal models from treating media URLs as media.
+    text_inputs: list[str] | list[dict[str, str]] = sentences
+    if set(modalities) != {"text"}:
+        text_inputs = [{"text": text} for text in sentences]
 
-        embeddings = postprocess(embeddings)
+    if not encode_text_per_batch:
+        embeddings = postprocess(encode_function(text_inputs, prompt=prompt, **kwargs))
     else:
-        sentences = [text for batch in inputs for text in batch["text"]]
-        # Longest first, like sentence-transformers sorts within a call, so that grouping
-        # doesn't add padding.
+        # Match sentence-transformers' longest-first ordering to minimize padding,
+        # using text lengths rather than the lengths of the modality dicts.
         order = sorted(range(len(sentences)), key=lambda i: -len(sentences[i]))
         batched_embeddings: list[Any] = []
         for start in tqdm(
@@ -355,7 +357,7 @@ def _encode_batches(
             desc="Encoding",
             disable=not show_progress_bar,
         ):
-            batch = [sentences[i] for i in order[start : start + batch_size]]
+            batch = [text_inputs[i] for i in order[start : start + batch_size]]
             batch_embeddings = encode_function(batch, prompt=prompt, **per_batch_kwargs)
             batched_embeddings.extend(postprocess(batch_embeddings))
         embeddings = [None] * len(sentences)
@@ -463,6 +465,21 @@ class SentenceTransformerEncoderWrapper(AbsEncoder):
                 ),
             )
         return super().similarity(embeddings1, embeddings2)
+
+    def similarity_pairwise(self, embeddings1: Array, embeddings2: Array) -> Array:
+        """Compute the similarity between each pair of embeddings."""
+        if hasattr(self.model, "similarity_pairwise") and callable(
+            self.model.similarity_pairwise
+        ):
+            # sentence-transformers < 6 scores in the embedding dtype
+            return cast(
+                "Array",
+                self.model.similarity_pairwise(
+                    _upcast_low_precision(embeddings1),
+                    _upcast_low_precision(embeddings2),
+                ),
+            )
+        return super().similarity_pairwise(embeddings1, embeddings2)
 
     def encode(
         self,

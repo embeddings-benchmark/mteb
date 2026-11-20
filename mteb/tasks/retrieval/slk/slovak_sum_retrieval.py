@@ -1,7 +1,3 @@
-from typing import Any
-
-import datasets
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -12,8 +8,8 @@ class SlovakSumRetrieval(AbsTaskRetrieval):
         description="SlovakSum, a Slovak news summarization dataset consisting of over 200 thousand news articles with titles and short abstracts obtained from multiple Slovak newspapers. Originally intended as a summarization task, but since no human annotations were provided here reformulated to a retrieval task.",
         reference="https://huggingface.co/datasets/NaiveNeuron/slovaksum",
         dataset={
-            "path": "NaiveNeuron/slovaksum",
-            "revision": "85d6b32f2762313714618171b9d1a65eb7408835",
+            "path": "mteb/SlovakSumRetrieval",
+            "revision": "bc98bfcde92b79fd183f98c6ed3b7ebd87a74eed",
         },
         type="Retrieval",
         category="t2t",
@@ -43,28 +39,3 @@ class SlovakSumRetrieval(AbsTaskRetrieval):
 }
 """,
     )
-
-    def load_data(self, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-        self.corpus, self.queries, self.relevant_docs = {}, {}, {}
-        dataset_path = self.metadata.dataset["path"]
-        n_sample = 600
-
-        for split in self.metadata.eval_splits:
-            split_ds = datasets.load_dataset(
-                dataset_path, split=f"{split}[:{n_sample}]"
-            )
-            # Transforming news summary into retrieval task
-            queries = {f"q{e + 1}": x["sum"] for e, x in enumerate(split_ds)}
-            corpus = {
-                f"d{e + 1}": {"title": x["title"], "text": x["text"]}
-                for e, x in enumerate(split_ds)
-            }
-            qrels = {f"q{i + 1}": {f"d{i + 1}": 1} for i in range(split_ds.shape[0])}
-            self.corpus[split], self.queries[split], self.relevant_docs[split] = (
-                corpus,
-                queries,
-                qrels,
-            )
-        self.data_loaded = True

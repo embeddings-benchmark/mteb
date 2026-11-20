@@ -70,5 +70,5 @@ class SentiRuEval2016ClassificationV2(AbsTaskClassification):
   year = {2016},
 }
 """,
-        adapted_from=["SentiRuEval2016Classification"],
+        adapted_from=["SentiRuEval2016"],
     )

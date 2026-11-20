@@ -59,7 +59,6 @@ gte_qwen2_7b_instruct = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     max_tokens=32_768,
-    output_dtypes=OutputDType.BF16,
 )
 
 gte_qwen1_5_7b_instruct = ModelMeta(

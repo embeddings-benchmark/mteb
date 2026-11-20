@@ -5,6 +5,9 @@ from typing import Any
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
+# corpus video that can't be decoded; the one query it is relevant to has other relevant videos
+_BROKEN_VIDEO_ID = "20130923/Early_Start_20130923_0200_cc_segment/07.700k.mp4"
+
 
 class StanfordI2VRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -59,6 +62,17 @@ class StanfordI2VRetrieval(AbsTaskRetrieval):
             )
         },
     )
+
+    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        for split in self.metadata.eval_splits:
+            data = self.dataset["default"][split]
+            data["corpus"] = data["corpus"].filter(
+                lambda video_id: video_id != _BROKEN_VIDEO_ID,
+                input_columns="id",
+                num_proc=num_proc,
+            )
+            for docs in data["relevant_docs"].values():
+                docs.pop(_BROKEN_VIDEO_ID, None)
 
 
 class StanfordI2VVisualRetrieval(AbsTaskRetrieval):
@@ -119,6 +133,14 @@ class StanfordI2VVisualRetrieval(AbsTaskRetrieval):
 
     def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
         for split in self.metadata.eval_splits:
+            data = self.dataset["default"][split]
+            data["corpus"] = data["corpus"].filter(
+                lambda video_id: video_id != _BROKEN_VIDEO_ID,
+                input_columns="id",
+                num_proc=num_proc,
+            )
+            for docs in data["relevant_docs"].values():
+                docs.pop(_BROKEN_VIDEO_ID, None)
             corpus = self.dataset["default"][split]["corpus"]
             if "audio" in corpus.column_names:
                 self.dataset["default"][split]["corpus"] = corpus.remove_columns(

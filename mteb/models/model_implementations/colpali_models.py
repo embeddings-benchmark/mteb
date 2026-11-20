@@ -241,7 +241,6 @@ colpali_v1_1 = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
     extra_requirements_groups=_REQUIREMENT_GROUPS,
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 colpali_v1_2 = ModelMeta(
@@ -271,7 +270,6 @@ colpali_v1_2 = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
     extra_requirements_groups=_REQUIREMENT_GROUPS,
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 colpali_v1_3 = ModelMeta(
@@ -301,5 +299,4 @@ colpali_v1_3 = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
     extra_requirements_groups=_REQUIREMENT_GROUPS,
-    output_dtypes=OutputDType.FLOAT16,
 )

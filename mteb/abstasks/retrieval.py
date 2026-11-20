@@ -371,7 +371,9 @@ class AbsTaskRetrieval(AbsTask):
             hf_split=hf_split,
             hf_subset=hf_subset,
             top_ranked=data_split["top_ranked"],
-            top_k=self._top_k,
+            # Search one extra document when the query's own document is dropped
+            # at evaluation, so each query still has `top_k` results after that.
+            top_k=self._top_k + 1 if self.ignore_identical_ids else self._top_k,
             timer=timer,
             **kwargs,
         )

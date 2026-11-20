@@ -317,6 +317,10 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "STS22",
         "STSB",
         "STSBenchmarkMultilingualSTS",
+        # full repository snapshots include genuinely tiny files (empty __init__.py, py.typed, "{}" JSON fixtures)
+        "SWEBenchLiveRetrieval",
+        "SWEBenchPlusPlusRetrieval",
+        "SWEPolyBenchRetrieval",
         "SWEbenchCodeRetrieval",
         "SentimentDKSF",
         "SinhalaNewsClassification",
@@ -332,6 +336,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SwedishPatentCPCSubclassClassification",
         "SwedishSentimentClassification",
         "SwednClusteringS2S",
+        "SwingBenchRetrieval",  # repository snapshot with tiny files, as SWEBench*Retrieval above
         "SynPerChatbotRAGTopicsRetrieval",
         "SynPerChatbotTopicsRetrieval",
         "SynPerQARetrieval",
@@ -448,6 +453,8 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "BrightProSustainableLivingRetrieval",
     ],
     "duplicate_text": [
+        "GoogleSVQA2TRetrieval.v2",  # unique within a locale; the same sentences recur across locale subsets
+        "GoogleSVQT2ARetrieval.v2",  # unique within a locale; the same sentences recur across locale subsets
         "HatefulMemesT2IRetrieval.v2",  # memes that share a caption are separate queries with the same answer
         "AfriHateClassification",
         "AfriSentiClassification",
@@ -649,7 +656,11 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SDSEyeProtectionClassification",
         "SDSGlovesClassification",
         "SIQA",
+        # each example keeps its own full repository snapshot, so files shared across snapshots repeat
+        "SWEBenchLiveRetrieval",
+        "SWEBenchPlusPlusRetrieval",
         "SWEPolyBenchRR",
+        "SWEPolyBenchRetrieval",
         "SWEbenchCodeRetrieval",
         "SWEbenchLiteRR",
         "SWEbenchMultilingualRR",
@@ -679,6 +690,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SwedishSentimentClassification",
         "SwednClusteringS2S",
         "SwednRetrieval",
+        "SwingBenchRetrieval",  # per-example repository snapshots, as SWEBench*Retrieval above
         "SwissJudgementClassification",
         "SyntecReranking",
         "SyntheticText2SQL",
@@ -926,6 +938,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "FER2013",  # documented to contain duplicate/near-duplicate images
         "FER2013ZeroShot",  # documented to contain duplicate/near-duplicate images
         "FORBI2IRetrieval",  # fingerprint corpus contains near-duplicate captures of the same print
+        "FORBI2IRetrieval.v2",  # same corpus as v1
         "FashionIQIT2IRetrieval",
         "GLAMI1MI2TRetrieval",
         "GLAMI1MT2IRetrieval",  # images recur across language subsets

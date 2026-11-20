@@ -32,11 +32,14 @@ class RARbMath(AbsTaskRetrieval):
   year = {2021},
 }
 
-@article{hendrycks2021measuring,
-  author = {Hendrycks, Dan and Burns, Collin and Kadavath, Saurav and Arora, Akul and Basart, Steven and Tang, Eric and Song, Dawn and Steinhardt, Jacob},
-  journal = {arXiv preprint arXiv:2103.03874},
-  title = {Measuring mathematical problem solving with the math dataset},
+@inproceedings{hendrycks2021math,
+  archiveprefix = {arXiv},
+  eprint = {2103.03874},
+  title = {Measuring Mathematical Problem Solving With the {MATH} Dataset},
+  author = {Dan Hendrycks and Collin Burns and Saurav Kadavath and Akul Arora and Steven Basart and Eric Tang and Dawn Song and Jacob Steinhardt},
+  booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)},
   year = {2021},
+  url = {https://openreview.net/forum?id=7Bywt2mQsCe},
 }
 
 @article{xiao2024rar,

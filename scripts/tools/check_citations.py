@@ -12,7 +12,7 @@ DBLP and OpenAlex.
 
 Run it with `make citation-check`, or directly:
 
-    python tests/test_validate_metadata/check_citations.py [--recheck-days 3650] [--only-new]
+    python -m scripts.tools.check_citations [--recheck-days 3650] [--only-new]
 
 Results are cached in `citation_cache.json`, which is checked into the repository:
 an entry checked less than `--recheck-days` days ago is not looked up again, so a
@@ -44,10 +44,14 @@ import os
 import sys
 from collections import Counter
 from pathlib import Path
+from typing import TYPE_CHECKING
 
-from refaudit import Cache, Checker, Entry, Verdict, default_resolvers, parse_string
+from refaudit import Cache, Checker, Verdict, default_resolvers, parse_string
 
 import mteb
+
+if TYPE_CHECKING:
+    from refaudit import Entry
 
 CACHE_PATH = Path(__file__).parent / "citation_cache.json"
 ALLOWLIST_PATH = Path(__file__).parent / "citation_allowlist.json"

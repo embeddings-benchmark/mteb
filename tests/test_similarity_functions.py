@@ -15,6 +15,7 @@ import torch
 from packaging.version import Version
 
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.similarity_functions import (
     _max_sim_ragged_core,
@@ -22,12 +23,15 @@ from mteb.similarity_functions import (
     cos_sim,
     dot_score,
     euclidean_sim,
+    manhattan_sim,
     max_sim,
     pairwise_cos_sim,
     pairwise_dot_score,
     pairwise_euclidean_sim,
+    pairwise_manhattan_sim,
     pairwise_max_sim,
 )
+from tests.mock_models import MockSentenceTransformer
 
 LOW_PRECISION_DTYPES = [torch.float16, torch.bfloat16]
 
@@ -131,20 +135,29 @@ def test_max_sim_ragged_matches_padded():
     torch.testing.assert_close(padded, expected)
 
 
-def test_max_sim_ragged_grouped_matches_padded():
-    """Scoring in length groups agrees with padding, also when split over several groups."""
+def _unpadded_max_sim(
+    queries: list[torch.Tensor], documents: list[torch.Tensor]
+) -> torch.Tensor:
+    """MaxSim of every query-document pair, scored one pair at a time so nothing is padded."""
+    return torch.stack(
+        [
+            torch.stack([(q @ d.T).max(-1).values.sum() for d in documents])
+            for q in queries
+        ]
+    )
+
+
+def test_max_sim_ragged_grouped_matches_unpadded():
+    """Scoring in length groups agrees with scoring each pair unpadded, also over several groups."""
     torch.manual_seed(0)
     queries = _ragged([2, 3, 2, 60, 3, 2])
     documents = _ragged([5, 8, 4, 30, 6])
-    padded = max_sim(
-        torch.nn.utils.rnn.pad_sequence(queries, batch_first=True),
-        torch.nn.utils.rnn.pad_sequence(documents, batch_first=True),
-    )
+    expected = _unpadded_max_sim(queries, documents)
     for max_chunk_tokens in (64, 10_000):
         scores = _max_sim_ragged_core(
             queries, documents, torch.device("cpu"), max_chunk_tokens=max_chunk_tokens
         )
-        torch.testing.assert_close(scores, padded)
+        torch.testing.assert_close(scores, expected)
 
 
 def test_token_budget_chunks_respect_budget():
@@ -167,6 +180,22 @@ def test_max_sim_ragged_accepts_tensor_and_list():
     expected = max_sim(list(queries), documents)
     assert scores.shape == (3, 3)
     torch.testing.assert_close(scores, expected)
+
+
+@pytest.mark.parametrize(
+    "document_widths",
+    [
+        pytest.param([2, 6], id="padded"),
+        pytest.param([1, 1, 1, 20], id="grouped"),
+    ],
+)
+def test_max_sim_ragged_ignores_padded_document_tokens(document_widths: list[int]):
+    # All real similarities are -4; zero-padded document tokens must never win the max.
+    queries = [torch.ones(3, 4)]
+    documents = [-torch.ones(width, 4) for width in document_widths]
+    expected = torch.full((1, len(document_widths)), -12.0)
+
+    torch.testing.assert_close(max_sim(queries, documents), expected)
 
 
 @pytest.fixture
@@ -231,27 +260,49 @@ def test_pairwise_max_sim_matches_sentence_transformers(st_util: ModuleType):
     )
 
 
-# Small hand-checkable inputs: a = [[1, 0], [0, 2]], b = [[3, 0], [0, 4]]
-A = [[1.0, 0.0], [0.0, 2.0]]
-B = [[3.0, 0.0], [0.0, 4.0]]
+@pytest.mark.parametrize(
+    ("similarity_fn", "pairwise_similarity_fn", "expected", "pairwise_expected"),
+    [
+        pytest.param(
+            cos_sim,
+            pairwise_cos_sim,
+            [[1.0, 0.0], [0.0, 1.0]],
+            [1.0, 1.0],
+            id="cosine",
+        ),
+        pytest.param(
+            dot_score,
+            pairwise_dot_score,
+            [[3.0, 0.0], [0.0, 8.0]],
+            [3.0, 8.0],
+            id="dot",
+        ),
+        pytest.param(
+            euclidean_sim,
+            pairwise_euclidean_sim,
+            [[-2.0, -(17.0**0.5)], [-(13.0**0.5), -2.0]],
+            [-2.0, -2.0],
+            id="euclidean",
+        ),
+        pytest.param(
+            manhattan_sim,
+            pairwise_manhattan_sim,
+            [[-2.0, -5.0], [-5.0, -2.0]],
+            [-2.0, -2.0],
+            id="manhattan",
+        ),
+    ],
+)
+def test_similarity_values(
+    similarity_fn, pairwise_similarity_fn, expected, pairwise_expected
+):
+    a = [[1.0, 0.0], [0.0, 2.0]]
+    b = [[3.0, 0.0], [0.0, 4.0]]
 
-
-def test_cos_sim_values():
-    expected = torch.tensor([[1.0, 0.0], [0.0, 1.0]])
-    torch.testing.assert_close(cos_sim(A, B), expected)
-    torch.testing.assert_close(pairwise_cos_sim(A, B), torch.ones(2))
-
-
-def test_dot_score_values():
-    torch.testing.assert_close(dot_score(A, B), torch.tensor([[3.0, 0.0], [0.0, 8.0]]))
-    torch.testing.assert_close(pairwise_dot_score(A, B), torch.tensor([3.0, 8.0]))
-
-
-def test_euclidean_sim_values():
-    # negative distances, e.g. -|(1, 0) - (0, 4)| = -sqrt(17)
-    expected = -torch.tensor([[2.0, 17.0**0.5], [13.0**0.5, 2.0]])
-    torch.testing.assert_close(euclidean_sim(A, B), expected)
-    torch.testing.assert_close(pairwise_euclidean_sim(A, B), torch.tensor([-2.0, -2.0]))
+    torch.testing.assert_close(similarity_fn(a, b), torch.tensor(expected))
+    torch.testing.assert_close(
+        pairwise_similarity_fn(a, b), torch.tensor(pairwise_expected)
+    )
 
 
 def test_max_sim_values():
@@ -271,6 +322,7 @@ def test_max_sim_values():
         (cos_sim, lambda util: util.cos_sim),
         (dot_score, lambda util: util.dot_score),
         (euclidean_sim, lambda util: util.euclidean_sim),
+        (manhattan_sim, lambda util: util.manhattan_sim),
     ],
 )
 def test_similarity_matches_sentence_transformers(
@@ -295,6 +347,7 @@ def test_similarity_matches_sentence_transformers(
         (pairwise_cos_sim, lambda util: util.pairwise_cos_sim),
         (pairwise_dot_score, lambda util: util.pairwise_dot_score),
         (pairwise_euclidean_sim, lambda util: util.pairwise_euclidean_sim),
+        (pairwise_manhattan_sim, lambda util: util.pairwise_manhattan_sim),
     ],
 )
 def test_pairwise_similarity_matches_sentence_transformers(
@@ -349,20 +402,79 @@ def test_st_wrapper_similarity_upcasts_before_delegating(dtype, as_numpy):
     assert wrapper.model.dtypes == [torch.float32, torch.float32]
 
 
+@pytest.mark.parametrize(
+    ("similarity_fn_name", "expected"),
+    [("euclidean", [-5.0, 0.0]), ("manhattan", [-7.0, 0.0])],
+)
+@pytest.mark.parametrize("dtype", [torch.float32, torch.float16])
+def test_st_wrapper_similarity_pairwise_uses_model_similarity_fn(
+    similarity_fn_name, expected, dtype
+):
+    """A sentence-transformers model scored with e.g. euclidean must work for pairwise tasks (STS, pair classification)."""
+    st_model = MockSentenceTransformer()
+    st_model.similarity_fn_name = similarity_fn_name
+    wrapper = SentenceTransformerEncoderWrapper(st_model)
+    a = torch.tensor([[0.0, 0.0], [1.0, 1.0]], dtype=dtype)
+    b = torch.tensor([[3.0, 4.0], [1.0, 1.0]], dtype=dtype)
+
+    scores = torch.as_tensor(wrapper.similarity_pairwise(a, b))
+
+    assert scores.dtype == torch.float32
+    torch.testing.assert_close(scores, torch.tensor(expected))
+
+
 class _DelegatingEncoder(AbsEncoder):
+    def __init__(self, similarity_fn_name: ScoringFunction | None = None):
+        self.mteb_model_meta = ModelMeta.create_empty(
+            overwrites={"similarity_fn_name": similarity_fn_name}
+        )
+
     def encode(self, *args: object, **kwargs: object) -> None:
         raise NotImplementedError
 
 
-@pytest.mark.parametrize("method", ["similarity", "similarity_pairwise"])
 @pytest.mark.parametrize("dtype", LOW_PRECISION_DTYPES)
-def test_abs_encoder_delegated_similarity_upcasts(method, dtype):
+def test_abs_encoder_delegated_similarity_upcasts(dtype):
     """Without a `similarity_fn_name`, AbsEncoder delegates to the model and must upcast first."""
-    encoder = object.__new__(_DelegatingEncoder)
-    encoder.mteb_model_meta = None
+    encoder = _DelegatingEncoder()
     encoder.model = _DtypeRecordingModel()
     a = torch.randn(4, 8).to(dtype)
 
-    getattr(encoder, method)(a, a)
-
+    AbsEncoder.similarity(encoder, a, a)
     assert encoder.model.dtypes == [torch.float32, torch.float32]
+
+    encoder.model.dtypes.clear()
+    AbsEncoder.similarity_pairwise(encoder, a, a)
+    assert encoder.model.dtypes == [torch.float32, torch.float32]
+
+
+@pytest.mark.parametrize(
+    ("similarity_fn_name", "expected_matrix", "expected_pairwise"),
+    [
+        (
+            ScoringFunction.COSINE,
+            [[0.0, 0.0], [7.0 / (5.0 * 2.0**0.5), 1.0]],
+            [0.0, 1.0],
+        ),
+        (ScoringFunction.DOT_PRODUCT, [[0.0, 0.0], [7.0, 2.0]], [0.0, 2.0]),
+        (
+            ScoringFunction.EUCLIDEAN,
+            [[-5.0, -(2.0**0.5)], [-(13.0**0.5), 0.0]],
+            [-5.0, 0.0],
+        ),
+        (ScoringFunction.MANHATTAN, [[-7.0, -2.0], [-5.0, 0.0]], [-7.0, 0.0]),
+    ],
+)
+def test_abs_encoder_distance_similarity_fn(
+    similarity_fn_name, expected_matrix, expected_pairwise
+):
+    """AbsEncoder uses the scoring function declared in its model metadata."""
+    encoder = _DelegatingEncoder(similarity_fn_name)
+    a = torch.tensor([[0.0, 0.0], [1.0, 1.0]])
+    b = torch.tensor([[3.0, 4.0], [1.0, 1.0]])
+
+    matrix = torch.as_tensor(encoder.similarity(a, b))
+    pairwise = torch.as_tensor(encoder.similarity_pairwise(a, b))
+
+    torch.testing.assert_close(matrix, torch.tensor(expected_matrix))
+    torch.testing.assert_close(pairwise, torch.tensor(expected_pairwise))

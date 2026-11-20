@@ -135,11 +135,16 @@ class RetrievalEvaluator(Evaluator):
             logger.debug(
                 "For evaluation, ``ignore_identical_ids=True`` is set to True, the evaluator will ignore identical query and document ids."
             )
-            # Remove identical ids from results dict
+            # Remove `identical ids` and trim the extra search result to max(k_values).
+            max_k = max(k_values)
             for qid, rels in results.items():
-                for pid in list(rels):
-                    if qid == pid:
-                        rels.pop(pid)
+                rels.pop(qid, None)
+                if len(rels) > max_k:
+                    # Same tie-break as trec_eval: score, then document id, descending.
+                    kept = sorted(
+                        rels.items(), key=lambda x: (x[1], x[0]), reverse=True
+                    )
+                    results[qid] = dict(kept[:max_k])
         else:
             logger.debug(
                 "For evaluation, we DO NOT ignore identical query and document ids (default), please explicitly set ``ignore_identical_ids=True`` to ignore this."

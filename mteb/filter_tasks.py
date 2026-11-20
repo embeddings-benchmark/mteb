@@ -104,7 +104,7 @@ def filter_tasks(  # noqa: PLR0913
     """
     langs_to_keep = None
     if languages:
-        langs_to_keep = LanguageScripts.from_languages_and_scripts(languages)
+        langs_to_keep = LanguageScripts.from_languages_and_scripts(languages, script)
 
     script_to_keep = None
     if script:
@@ -136,8 +136,11 @@ def filter_tasks(  # noqa: PLR0913
         # For metadata and superseded_by, we can access them directly
         metadata = t.metadata
 
+        # language and script must match on the same code, as in `AbsTask.filter_languages`
         if langs_to_keep and not any(
-            langs_to_keep.contains_language(code) for code in metadata.bcp47_codes
+            langs_to_keep.contains_langscript(code)
+            and (not script or langs_to_keep.contains_langscript_script(code))
+            for code in metadata.bcp47_codes
         ):
             continue
         if script_to_keep and not script_to_keep.intersection(metadata.scripts):

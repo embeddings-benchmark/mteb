@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from mteb.models import ModelMeta, SentenceTransformerEncoderWrapper
 from mteb.models.model_meta import ScoringFunction
-from mteb.types import OutputDType
 
 ko_embed_v0 = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
@@ -30,7 +29,6 @@ ko_embed_v0 = ModelMeta(
     adapted_from="skt/A.X-Encoder-base",
     modalities=["text"],
     model_type=["dense"],
-    output_dtypes=OutputDType.BF16,
 )
 
 ko_embed_cls = ModelMeta(

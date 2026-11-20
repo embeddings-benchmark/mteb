@@ -12,7 +12,6 @@ from mteb.models.modality_collators import (
     VideoCollator,
     fixed_numpy_seed,
 )
-from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -617,7 +616,6 @@ language_bind_video_ft = ModelMeta(
     modalities=["video", "text"],
     loader_kwargs=dict(num_frames=8),
     **_LANGUAGE_BIND_COMMON,
-    output_dtypes=OutputDType.BF16,
 )
 
 language_bind_audio_ft = ModelMeta(
@@ -630,7 +628,6 @@ language_bind_audio_ft = ModelMeta(
     modalities=["audio", "text"],
     loader_kwargs=dict(),
     **_LANGUAGE_BIND_COMMON,
-    output_dtypes=OutputDType.BF16,
 )
 
 language_bind_image = ModelMeta(
@@ -643,7 +640,6 @@ language_bind_image = ModelMeta(
     modalities=["image", "text"],
     loader_kwargs=dict(),
     **_LANGUAGE_BIND_COMMON,
-    output_dtypes=OutputDType.BF16,
 )
 
 language_bind_omni = ModelMeta(

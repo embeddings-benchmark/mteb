@@ -46,7 +46,7 @@ class CQADupstackAndroidNLRetrieval(AbsTaskRetrieval):
   year = {2025},
 }
 """,
-        adapted_from=["CQADupstackAndroid"],
+        adapted_from=["CQADupstackAndroidRetrieval"],
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:

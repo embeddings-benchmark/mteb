@@ -85,7 +85,7 @@ class SummEvalFrSummarizationv2(AbsTaskSummarization):
   year = {2021},
 }
 """,
-        adapted_from=["SummEvalFrSummarization"],
+        adapted_from=["SummEvalFr"],
     )
 
     min_score = 0

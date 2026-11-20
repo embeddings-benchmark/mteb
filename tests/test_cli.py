@@ -372,6 +372,29 @@ def test_leaderboard_cli_integration():
     assert "leaderboard" in result.stdout, "Leaderboard command not found in main help"
 
 
+@pytest.mark.parametrize(
+    ("raw", "expected"),
+    [
+        ("cpu", "cpu"),
+        ("cuda", "cuda"),
+        ("cuda:1", "cuda:1"),
+        ("0", "cuda:0"),
+        ("1", "cuda:1"),
+    ],
+)
+def test_run_device_is_a_string(raw: str, expected: str):
+    """``mteb run --device`` must accept the same device strings as model loaders.
+
+    The flag used to be ``type=int``, so ``--device cpu`` was rejected and
+    ``--device 0`` was passed through as an int. Loaders such as Ops-MM then
+    crash on ``device.startswith("cuda")``.
+    """
+    args = build_cli().parse_args(["run", "-m", "dummy", "--device", raw])
+
+    assert args.device == expected
+    assert isinstance(args.device, str)
+
+
 def test_mock_run_cli(tmp_path: Path):
     """Test the mock-run subcommand."""
 
@@ -391,3 +414,23 @@ def test_mock_run_cli(tmp_path: Path):
         )
     finally:
         os.chdir(orig_cwd)
+
+
+def test_cli_without_a_command_exits(capsys: pytest.CaptureFixture[str]):
+    """`mteb` with no subcommand should exit with usage, not AttributeError."""
+    with pytest.raises(SystemExit) as exc:
+        build_cli().parse_args([])
+
+    assert exc.value.code == 2
+    captured = capsys.readouterr()
+    assert "the following arguments are required: command" in captured.err
+    for subcommand in (
+        "run",
+        "available-tasks",
+        "available-benchmarks",
+        "create-model-results",
+        "submit-results",
+        "leaderboard",
+        "mock-run",
+    ):
+        assert subcommand in captured.err

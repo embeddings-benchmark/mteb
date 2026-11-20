@@ -166,7 +166,7 @@ def select_similarity(
     Args:
         embedding1: The first set of embeddings.
         embedding2: The second set of embeddings.
-        similarity_fn: The similarity function to use (COSINE, DOT_PRODUCT, EUCLIDEAN).
+        similarity_fn: The similarity function to use (COSINE, DOT_PRODUCT, MAX_SIM, EUCLIDEAN, MANHATTAN).
 
     Returns:
         Array: The computed similarity scores.
@@ -175,8 +175,12 @@ def select_similarity(
         return cos_sim(embedding1, embedding2)
     if similarity_fn is ScoringFunction.DOT_PRODUCT:
         return dot_score(embedding1, embedding2)
+    if similarity_fn is ScoringFunction.MAX_SIM:
+        return max_sim(embedding1, embedding2)
     if similarity_fn is ScoringFunction.EUCLIDEAN:
         return euclidean_sim(embedding1, embedding2)
+    if similarity_fn is ScoringFunction.MANHATTAN:
+        return manhattan_sim(embedding1, embedding2)
     raise ValueError(f"Unsupported similarity function: {similarity_fn}")
 
 
@@ -190,7 +194,7 @@ def select_pairwise_similarity(
     Args:
         embedding1: The first set of embeddings.
         embedding2: The second set of embeddings.
-        similarity_fn: The similarity function to use (COSINE, DOT_PRODUCT, EUCLIDEAN).
+        similarity_fn: The similarity function to use (COSINE, DOT_PRODUCT, MAX_SIM, EUCLIDEAN, MANHATTAN).
 
     Returns:
         Array: The computed pairwise similarity scores.
@@ -199,8 +203,12 @@ def select_pairwise_similarity(
         return pairwise_cos_sim(embedding1, embedding2)
     if similarity_fn is ScoringFunction.DOT_PRODUCT:
         return pairwise_dot_score(embedding1, embedding2)
+    if similarity_fn is ScoringFunction.MAX_SIM:
+        return pairwise_max_sim(embedding1, embedding2)
     if similarity_fn is ScoringFunction.EUCLIDEAN:
         return pairwise_euclidean_sim(embedding1, embedding2)
+    if similarity_fn is ScoringFunction.MANHATTAN:
+        return pairwise_manhattan_sim(embedding1, embedding2)
     raise ValueError(f"Unsupported similarity function: {similarity_fn}")
 
 
@@ -316,6 +324,24 @@ def _token_budget_chunks(
     return chunks
 
 
+def _sum_of_token_maxima(
+    scores: torch.Tensor, document_lengths: torch.Tensor | None
+) -> torch.Tensor:
+    """Reduce `(queries, documents, query_tokens, document_tokens)` token scores to MaxSim scores.
+
+    Zero-padded document tokens score 0 against every query token, which beats a real token with a
+    negative similarity, so positions at or beyond `document_lengths` are left out of the maximum.
+    `document_lengths` is `None` when the documents are not padded.
+    """
+    import torch
+
+    if document_lengths is not None:
+        positions = torch.arange(scores.size(-1), device=scores.device)
+        is_padding = positions[None, :] >= document_lengths.to(scores.device)[:, None]
+        scores.masked_fill_(is_padding[None, :, None, :], float("-inf"))
+    return scores.max(axis=-1).values.sum(axis=-1)  # type: ignore[call-overload,no-any-return]
+
+
 def _max_sim_ragged_core(
     a: list[torch.Tensor],
     b: list[torch.Tensor],
@@ -344,14 +370,17 @@ def _max_sim_ragged_core(
         )
         for indices in _token_budget_chunks([len(t) for t in a], max_chunk_tokens)
     ]
-    for doc_indices in _token_budget_chunks([len(t) for t in b], max_chunk_tokens):
+    document_widths = [len(t) for t in b]
+    all_document_lengths = torch.tensor(document_widths, device=device)
+    for doc_indices in _token_budget_chunks(document_widths, max_chunk_tokens):
         doc_index = torch.as_tensor(doc_indices, device=device)
         documents = pad_sequence(
             [b[i].to(device) for i in doc_indices], batch_first=True
         )
+        document_lengths = all_document_lengths[doc_index]
         for query_index, queries in query_chunks:
             scores = torch.einsum("ash,bth->abst", queries, documents)
-            maxima = scores.max(axis=-1).values.sum(axis=-1)  # type: ignore[call-overload]
+            maxima = _sum_of_token_maxima(scores, document_lengths)
             out[query_index[:, None], doc_index[None, :]] = maxima
     return out
 
@@ -368,7 +397,8 @@ def max_sim(
     Either input may also be a list of `(num_tokens, token_dim)` tensors with varying `num_tokens`.
     These are zero-padded, and if that would compare more than `_MAX_SIM_PADDING_OVERHEAD` times the
     real token pairs (e.g. one long query among short ones), they are padded per group of similar
-    length instead. Both give the same scores.
+    length instead. Both give the same scores, and padded document tokens never count towards the
+    maximum. Document tensors that you pad yourself are scored as given, padding included.
 
     `a` is scored in `batch_size`-sized chunks and `b` in chunks sized so that the
     `(a_chunk, b_chunk, num_tokens_a, num_tokens_b)` intermediate from each `einsum` call
@@ -387,6 +417,7 @@ def max_sim(
     """
     import torch
 
+    b_lengths: torch.Tensor | None = None
     if _is_ragged(a) or _is_ragged(b):
         a_tokens = _as_token_tensors(a)
         b_tokens = _as_token_tensors(b)
@@ -401,6 +432,7 @@ def max_sim(
 
         a = pad_sequence(a_tokens, batch_first=True)
         b = pad_sequence(b_tokens, batch_first=True)
+        b_lengths = torch.tensor(b_widths)
 
     a = _convert_to_tensor(cast("Array", a))
     b = _convert_to_tensor(cast("Array", b))
@@ -440,7 +472,12 @@ def max_sim(
                 out[
                     a_start : a_start + a_chunk.size(0),
                     b_start : b_start + b_chunk.size(0),
-                ] = scores.max(axis=-1).values.sum(axis=-1)  # type: ignore[call-overload]
+                ] = _sum_of_token_maxima(
+                    scores,
+                    None
+                    if b_lengths is None
+                    else b_lengths[b_start : b_start + b_chunk.size(0)],
+                )
         return out
 
     return _compute_on_best_device(_max_sim_core, a, b)
@@ -572,6 +609,44 @@ def pairwise_euclidean_sim(a: Array, b: Array) -> Array:
     b = _convert_to_tensor(b)
 
     return -torch.sqrt(torch.sum((a - b) ** 2, dim=-1))
+
+
+def manhattan_sim(a: Array, b: Array) -> Array:
+    """Computes the manhattan similarity (i.e., negative distance) between two tensors.
+
+    Args:
+        a: The first tensor.
+        b: The second tensor.
+
+    Returns:
+        Tensor: Matrix with res[i][j] = -manhattan_distance(a[i], b[j])
+    """
+    import torch
+
+    a = _convert_to_tensor(a)
+    b = _convert_to_tensor(b)
+
+    return _compute_on_best_device(
+        lambda a_, b_, device: -torch.cdist(a_.to(device), b_.to(device), p=1.0), a, b
+    )
+
+
+def pairwise_manhattan_sim(a: Array, b: Array) -> Array:
+    """Computes the manhattan similarity (i.e., negative distance) between pairs of tensors.
+
+    Args:
+        a: The first tensor.
+        b: The second tensor.
+
+    Returns:
+        Vector with res[i] = -manhattan_distance(a[i], b[i])
+    """
+    import torch
+
+    a = _convert_to_tensor(a)
+    b = _convert_to_tensor(b)
+
+    return -torch.sum(torch.abs(a - b), dim=-1)
 
 
 def similarity(text_embeddings: Array, input_embeddings: Array) -> Array:
