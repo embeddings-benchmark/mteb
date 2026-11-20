@@ -100,6 +100,54 @@ def test_benchmark_get_score_missing_tasks(mock_mteb_cache: ResultCache):
         assert scores[model_name]["Mean(TaskType)"] is None
 
 
+def test_benchmark_get_score_task_without_results_keeps_score_keys(
+    mock_mteb_cache: ResultCache,
+):
+    """A model with no result at all for a benchmark task gets None under the aggregation keys, not under task names."""
+    task_without_results = "STS13"
+    assert task_without_results not in mock_mteb_cache.get_task_names()
+    mock_benchmark = _make_benchmark(extra_tasks=[task_without_results])
+    mock_results = mock_mteb_cache.load_results()
+
+    scores = mock_benchmark.get_score(mock_results)
+
+    task_names = {task.metadata.name for task in mock_benchmark.tasks}
+    for model_name in MODELS_SCORES["Mean(Task)"]:
+        model_scores = scores[model_name]
+        assert set(model_scores) == {
+            "Mean(Task)",
+            "Mean(TaskType)",
+            "Retrieval",
+            "Classification",
+            "STS",
+            "Rank",
+        }
+        assert not set(model_scores) & task_names
+        assert model_scores["Mean(Task)"] is None
+        assert model_scores["Mean(TaskType)"] is None
+        assert model_scores["Retrieval"] is None
+
+
+def test_benchmark_get_score_task_without_results_keeps_custom_group_keys(
+    mock_mteb_cache: ResultCache,
+):
+    """The keys of a model with missing results include the per-group keys of a custom grouping."""
+    dim_a, _ = _make_custom_groupings()
+    mock_benchmark = Benchmark(
+        name="mock_custom_group_missing",
+        tasks=_make_benchmark(extra_tasks=["STS13"]).tasks,
+        aggregations=(BenchmarkAggregation.MEAN_TASK, dim_a),
+    )
+
+    scores = mock_benchmark.get_score(mock_mteb_cache.load_results())
+
+    for model_name in MODELS_SCORES["Mean(Task)"]:
+        model_scores = scores[model_name]
+        assert set(model_scores) == {"Mean(Task)", "DimA::G1", "DimA::Other", "Rank"}
+        assert model_scores["DimA::G1"] is None
+        assert model_scores["DimA::Other"] is None
+
+
 def test_compute_mean_task(mock_mteb_cache: ResultCache):
     """_compute_mean_task returns the correct scalar mean."""
     mock_model_name = "mteb/baseline-random-encoder"
