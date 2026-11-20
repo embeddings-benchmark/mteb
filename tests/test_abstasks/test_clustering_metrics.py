@@ -67,3 +67,14 @@ def test_end_to_end_result_dict_contains_both_metrics():
     assert isinstance(scores["ami"], float)
     assert isinstance(scores["v_measures"], dict)
     assert isinstance(scores["ami_scores"], dict)
+
+
+def test_evaluating_twice_gives_the_same_scores():
+    # documents and bootstrap samples are drawn per subset, so nothing carries over
+    # from one evaluation of the same task object to the next
+    task = LegacyMockClusteringFastTask()
+    first, second = (
+        mteb.evaluate(MockSentenceTransformer(), task, cache=None, co2_tracker=False)[0]
+        for _ in range(2)
+    )
+    assert first.scores == second.scores
