@@ -305,10 +305,8 @@ def get_tasks(  # noqa: PLR0913, PLR0917
                         exclusive_language_filter=exclusive_language_filter,
                     )
                 )
-            except ValueError:
-                log_once.warning(
-                    f"Skipping task '{task}': no subsets match the filters (languages={languages}, script={script}, exclusive_language_filter={exclusive_language_filter})."
-                )
+            except ValueError as e:
+                log_once.warning(f"Skipping task '{task}': {e}")
         return MTEBTasks(_tasks)
 
     tasks_: Sequence[type[AbsTask]] = filter_tasks(
@@ -333,12 +331,9 @@ def get_tasks(  # noqa: PLR0913, PLR0917
                 script,
                 exclusive_language_filter=exclusive_language_filter,
             )
-        except ValueError:
-            log_once.warning(
-                f"Skipping task '{cls.metadata.name}': no subsets match the filters (languages={languages}, script={script}, exclusive_language_filter={exclusive_language_filter})."
-            )
-            continue
-        _tasks.append(filtered.filter_eval_splits(eval_splits))
+            _tasks.append(filtered.filter_eval_splits(eval_splits))
+        except ValueError as e:
+            log_once.warning(f"Skipping task '{cls.metadata.name}': {e}")
     return MTEBTasks(_tasks)
 
 

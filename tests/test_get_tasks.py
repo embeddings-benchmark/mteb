@@ -37,6 +37,33 @@ def test_get_task(
         assert task.eval_splits == task.metadata.eval_splits
 
 
+def test_get_task_eval_splits_keeps_only_task_splits():
+    """Splits that are not evaluation splits of the task are dropped, instead of being evaluated
+    and failing with a KeyError when the split is looked up in the dataset.
+    """
+    task = get_task(
+        "PoemSentimentClassification.v2", eval_splits=["validation", "train"]
+    )
+    assert task.eval_splits == ["validation"]
+
+    with pytest.raises(ValueError, match="evaluation splits"):
+        get_task("NFCorpus", eval_splits=["dev"])
+
+
+def test_get_tasks_eval_splits_skips_tasks_without_the_split():
+    """Tasks without any of the requested splits are skipped, like tasks without the requested languages."""
+    tasks = get_tasks(languages=["eng"], task_types=["Retrieval"], eval_splits=["dev"])
+
+    names = {t.metadata.name for t in tasks}
+    assert "MSMARCO" in names
+    assert "NFCorpus" not in names
+    for task in tasks:
+        assert task.eval_splits == ["dev"]
+
+    with_tasks = get_tasks(tasks=["MSMARCO", "NFCorpus"], eval_splits=["dev"])
+    assert [t.metadata.name for t in with_tasks] == ["MSMARCO"]
+
+
 @pytest.mark.parametrize(("old_name", "new_name"), list(_TASK_RENAMES.items()))
 def test_get_task_with_renamed_task_name(old_name: str, new_name: str) -> None:
     """An old task name warns and returns the task under its new name."""
