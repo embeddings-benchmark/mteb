@@ -955,6 +955,34 @@ vultron_prime_qwen35_8b = ModelMeta(
     extra_requirements_groups=["colpali_engine"],
 )
 
+vultron_prime_qwen35_8b_v2 = ModelMeta(
+    loader=MultiVectorWrapper,
+    name="vultr/VultronRetrieverPrime-Qwen3.5-8B-v2",
+    model_type=["late-interaction"],
+    languages=["eng-Latn", "fra-Latn", "deu-Latn", "spa-Latn", "ita-Latn", "por-Latn"],
+    revision="0dbad6137ccfcd9f34bb6999671aef6d9335070a",
+    release_date="2026-11-19",
+    modalities=["image", "text"],
+    n_parameters=8_409_476_336,
+    n_embedding_parameters=1_017_118_720,  # vocab 248320 x hidden 4096 (token embedding matrix)
+    memory_usage_mb=16040,
+    max_tokens=262144,
+    embed_dim=4096,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
+    reference="https://huggingface.co/vultr/VultronRetrieverPrime-Qwen3.5-8B-v2",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    use_instructions=False,
+    training_datasets=COLQWEN35_V4_TRAINING_DATA,
+    adapted_from="Qwen/Qwen3.5-9B",
+    contacts=["athrael-soju"],
+    output_dtypes=OutputDType.BF16,
+    extra_requirements_groups=["pplx-embed-v2", "image"],
+)
+
 vultron_flash_qwen35_0_8b = ModelMeta(
     loader=ColQwen3_5Wrapper,
     loader_kwargs=dict(
