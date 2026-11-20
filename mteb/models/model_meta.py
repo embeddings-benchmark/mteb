@@ -401,14 +401,10 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         """
         if type(value) is ScoringFunction or value is None:
             return value
-        mapping = {
-            "cosine": ScoringFunction.COSINE,
-            "dot": ScoringFunction.DOT_PRODUCT,
-            "MaxSim": ScoringFunction.MAX_SIM,
-        }
-        if value in mapping:
-            return mapping[value]
-        raise ValueError(f"Invalid similarity function name: {value}")
+        try:
+            return ScoringFunction(value)
+        except ValueError:
+            raise ValueError(f"Invalid similarity function name: {value}") from None
 
     def to_dict(self) -> dict[str, Any]:
         """Returns a dictionary representation of the model metadata."""

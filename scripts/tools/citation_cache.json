@@ -11182,7 +11182,7 @@
             }
         },
         "shahinmoghadam2024benchmarking|10.1038/s41598-025-09052-5||benchmarking pre-trained text embedding models in aligning built asset information|2025": {
-            "stored_at": 1792560677.789432,
+            "stored_at": 1795170007.9948587,
             "value": {
                 "verdict": "OK",
                 "found_title": "Benchmarking pre-trained text embedding models in aligning built asset information",
@@ -11192,7 +11192,7 @@
             }
         },
         "sap2019socialiqa|10.18653/v1/D19-1454||social {iq}a: commonsense reasoning about social interactions|2019": {
-            "stored_at": 1792560677.8042638,
+            "stored_at": 1795170007.9485097,
             "value": {
                 "verdict": "OK",
                 "found_title": "Social IQa: Commonsense Reasoning about Social Interactions",
@@ -11202,7 +11202,7 @@
             }
         },
         "okamura2026multilingualaveragesmtebptbenchmark|10.1007/978-3-032-39892-5_33||beyond multilingual averages: mteb-pt, a benchmark for portuguese sentence encoders|2026": {
-            "stored_at": 1792560678.29282,
+            "stored_at": 1795170008.812203,
             "value": {
                 "verdict": "OK",
                 "found_title": "Beyond Multilingual Averages: MTEB-PT, a\u00a0Benchmark for\u00a0Portuguese Sentence Encoders",
@@ -11212,7 +11212,7 @@
             }
         },
         "zhou2024megapairs|10.18653/v1/2025.acl-long.935||{m}ega{p}airs: massive data synthesis for universal multimodal retrieval|2025": {
-            "stored_at": 1792560678.798101,
+            "stored_at": 1795170008.3445845,
             "value": {
                 "verdict": "OK",
                 "found_title": "MegaPairs: Massive Data Synthesis for Universal Multimodal Retrieval",
@@ -11222,7 +11222,7 @@
             }
         },
         "Ruri|10.5715/jnlp.33.591||ruri: japanese general text embeddings|2026": {
-            "stored_at": 1792560679.30663,
+            "stored_at": 1795170009.8314915,
             "value": {
                 "verdict": "OK",
                 "found_title": "Ruri: Japanese General Text Embeddings",
@@ -11232,7 +11232,7 @@
             }
         },
         "yu2025injongo|10.18653/v1/2025.acl-long.464||{injongo}: a multicultural intent detection and slot-filling dataset for 16 {a}frican languages|2025": {
-            "stored_at": 1792560679.815606,
+            "stored_at": 1795170009.327049,
             "value": {
                 "verdict": "OK",
                 "found_title": "INJONGO: A Multicultural Intent Detection and Slot-filling Dataset for 16 African Languages",
@@ -11626,6 +11626,56 @@
             "value": {
                 "verdict": "OK",
                 "found_title": "SwingArena: Competitive Programming Arena for Long-context GitHub Issue Solving",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "souza2020bertimbau|10.1007/978-3-030-61377-8_28||{bert}imbau: pretrained {bert} models for {b}razilian {p}ortuguese|2020": {
+            "stored_at": 1795102012.3273203,
+            "value": {
+                "verdict": "OK",
+                "found_title": "BERTimbau: Pretrained BERT Models for Brazilian Portuguese",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "rodrigues2023albertina||2305.06721|advancing neural encoding of portuguese with transformer albertina pt-*|2023": {
+            "stored_at": 1795102012.3281176,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Advancing Neural Encoding of Portuguese with Transformer Albertina PT-*",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "melo2023semantic|10.1007/978-3-031-49011-8_12||a semantic search system for the supremo tribunal de justi{\\c{c}}a|2023": {
+            "stored_at": 1795102012.4486659,
+            "value": {
+                "verdict": "OK",
+                "found_title": "A Semantic Search System for the Supremo Tribunal de Justi\u00e7a",
+                "source": "crossref:doi",
+                "similarity": 0.9917355371900827,
+                "note": ""
+            }
+        },
+        "silva2021evaluating|||evaluating topic models in portuguese political comments about bills from brazil's chamber of deputies|2021": {
+            "stored_at": 1795102013.9202018,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Evaluating Topic Models in Portuguese Political Comments About Bills from Brazil\u2019s Chamber of Deputies",
+                "source": "openalex",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "pereira2026domainadaptive||2605.04005|domain-adaptive dense retrieval for brazilian legal search|2026": {
+            "stored_at": 1795102015.3406003,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Domain-Adaptive Dense Retrieval for Brazilian Legal Search",
                 "source": "arxiv:id",
                 "similarity": 1.0,
                 "note": ""
