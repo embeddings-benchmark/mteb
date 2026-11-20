@@ -201,12 +201,13 @@ class MTEBTasks(tuple[AbsTask]):
         Returns:
             string with a LaTeX table.
         """
+        df = self.to_dataframe(properties)
         if include_citation_in_name and "name" in properties:
-            df = self.to_dataframe(tuple(properties) + ("intext_citation",))
-            df["name"] = df["name"] + " " + df["intext_citation"]
-            df = df.drop(columns=["intext_citation"])
-        else:
-            df = self.to_dataframe(properties)
+            # `intext_citation` is a method, so it is called for each task instead of read as a property
+            citations = pd.Series(
+                [task.metadata.intext_citation() for task in self], index=df.index
+            )
+            df["name"] = df["name"] + " " + citations
 
         if limit_n_entries and df.shape[0]:  # ensure that there are entries
             for col in df.columns:
@@ -222,7 +223,12 @@ class MTEBTasks(tuple[AbsTask]):
                     df[col] = _col
 
         if group_indices:
-            df = df.set_index(group_indices)
+            keys = (
+                [group_indices]
+                if isinstance(group_indices, str)
+                else list(group_indices)
+            )
+            df = df.set_index(keys)
 
         return df.to_latex()
 

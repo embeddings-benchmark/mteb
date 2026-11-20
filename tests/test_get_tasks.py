@@ -87,6 +87,29 @@ def test_mteb_mteb_tasks(
     assert len(tasks.to_markdown().split("\n")) - 3 == n_langs
 
 
+@pytest.mark.parametrize("include_citation_in_name", [True, False])
+def test_mteb_tasks_to_latex(include_citation_in_name: bool):
+    tasks = mteb.get_tasks(tasks=["STS12", "Banking77Classification"])
+
+    latex = tasks.to_latex(include_citation_in_name=include_citation_in_name)
+
+    assert "\\begin{tabular}" in latex
+    for task in tasks:
+        assert task.metadata.name in latex
+        # the in-text citation is added to the name of the task
+        assert (task.metadata.intext_citation() in latex) is include_citation_in_name
+
+
+@pytest.mark.parametrize("group_indices", ["name", ["type", "name"], None])
+def test_mteb_tasks_to_latex_group_indices(group_indices: str | list[str] | None):
+    tasks = mteb.get_tasks(tasks=["STS12", "Banking77Classification"])
+
+    latex = tasks.to_latex(group_indices=group_indices, include_citation_in_name=False)
+
+    for task in tasks:
+        assert task.metadata.name in latex
+
+
 @pytest.mark.parametrize("modalities", [["text"], ["image"], ["text", "image"]])
 def test_get_tasks_with_exclusive_modality_filter(modalities):
     """Test exclusive_modality_filter with actual tasks (if available)"""
