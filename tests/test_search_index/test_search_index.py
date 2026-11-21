@@ -105,3 +105,23 @@ def test_faiss_euclidean_reranking_candidate_lengths(
     assert indices == [[1, 2, 0], [0] if second_candidates else []]
     assert scores[0] == pytest.approx([0, -np.sqrt(5), -5])
     assert scores[1] == pytest.approx([-1] if second_candidates else [])
+
+
+def test_faiss_reranking_missing_query_in_top_ranked(tmp_path: Path) -> None:
+    """Evaluation preserves empty results for queries without reranking candidates."""
+    pytest.importorskip("faiss", reason="faiss is not installed")
+    task = MockRerankingTask()
+    task.load_data()
+    del task.dataset["default"]["test"]["top_ranked"]["q2"]
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    wrapper = SearchEncoderWrapper(model, index_backend=FaissSearchIndex(model))
+
+    with pytest.warns(UserWarning, match="No top-ranked documents for query q2"):
+        mteb.evaluate(wrapper, task, prediction_folder=tmp_path, cache=None)
+
+    with task._predictions_path(tmp_path).open(encoding="utf-8") as f:
+        predictions = json.load(f)["default"]["test"]
+
+    assert set(predictions) == {"q1", "q2"}
+    assert set(predictions["q1"]) == {"d1", "d2"}
+    assert predictions["q2"] == {}

@@ -1,7 +1,3 @@
-from typing import Any
-
-from datasets import DatasetDict, load_dataset
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -12,8 +8,8 @@ class GeorgianFAQRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="GeorgianFAQRetrieval",
         dataset={
-            "path": "jupyterjazz/georgian-faq",
-            "revision": "2436d9bda047a80959b034a572fdda4d00c80d2e",
+            "path": "mteb/GeorgianFAQRetrieval",
+            "revision": "edf45abca6fe559f1417a03d5fe44775013f7142",
         },
         description=(
             "Frequently asked questions (FAQs) and answers mined from Georgian websites via Common Crawl."
@@ -34,44 +30,3 @@ class GeorgianFAQRetrieval(AbsTaskRetrieval):
         dialect=[],
         bibtex_citation="",
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        queries = {_EVAL_SPLIT: {}}
-        corpus = {_EVAL_SPLIT: {}}
-        relevant_docs = {_EVAL_SPLIT: {}}
-
-        data = load_dataset(
-            self.metadata.dataset["path"],
-            split=_EVAL_SPLIT,
-            revision=self.metadata.dataset["revision"],
-        )
-
-        question_ids = {}
-        answer_ids = {}
-
-        for row in data:
-            question = row["question"]
-            answer = row["answer"]
-            if question not in question_ids:
-                question_ids[question] = len(question_ids)
-            if answer not in answer_ids:
-                answer_ids[answer] = len(answer_ids)
-
-        for row in data:
-            question = row["question"]
-            answer = row["answer"]
-            query_id = f"Q{question_ids[question]}"
-            queries[_EVAL_SPLIT][query_id] = question
-            doc_id = f"D{answer_ids[answer]}"
-            corpus[_EVAL_SPLIT][doc_id] = {"text": answer}
-            if query_id not in relevant_docs[_EVAL_SPLIT]:
-                relevant_docs[_EVAL_SPLIT][query_id] = {}
-            relevant_docs[_EVAL_SPLIT][query_id][doc_id] = 1
-
-        self.corpus = DatasetDict(corpus)
-        self.queries = DatasetDict(queries)
-        self.relevant_docs = DatasetDict(relevant_docs)
-        self.data_loaded = True

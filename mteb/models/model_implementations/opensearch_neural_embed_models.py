@@ -99,6 +99,49 @@ opensearch_task_prompts = {
     "TwitterURLCorpus": "Instruct: Retrieve tweets that are semantically similar to the given tweet\nQuery:",
 }
 
+# Unsupervised embedding distillation, no relevance labels.
+opensearch_neural_embed_v1_training_data = {
+    # Classification
+    "AmazonCounterfactualClassification",
+    "Banking77Classification",
+    "ImdbClassification",
+    "MTOPDomainClassification",
+    "MassiveIntentClassification",
+    "MassiveScenarioClassification",
+    "ToxicConversationsClassification",
+    "TweetSentimentExtractionClassification",
+    # Clustering
+    "ArXivHierarchicalClusteringP2P",
+    "ArXivHierarchicalClusteringS2S",
+    "BiorxivClusteringP2P.v2",
+    "BiorxivClusteringS2S.v2",
+    "MedrxivClusteringP2P.v2",
+    "MedrxivClusteringS2S.v2",
+    "StackExchangeClustering.v2",
+    "StackExchangeClusteringP2P.v2",
+    "TwentyNewsgroupsClustering.v2",
+    # Reranking and STS
+    "AskUbuntuDupQuestions",
+    "MindSmallReranking",
+    "STS12",
+    "STSBenchmark",
+    # Retrieval
+    "CQADupstackRetrieval",
+    "CQADupstackEnglishRetrieval",
+    "CQADupstackGisRetrieval",
+    "CQADupstackMathematicaRetrieval",
+    "CQADupstackPhysicsRetrieval",
+    "CQADupstackProgrammersRetrieval",
+    "CQADupstackStatsRetrieval",
+    "CQADupstackTexRetrieval",
+    "CQADupstackWebmastersRetrieval",
+    "CQADupstackWordpressRetrieval",
+    "FEVER",
+    "HotpotQA",
+    "NQ",
+    "QuoraRetrieval",
+}
+
 opensearch_neural_embed_v1 = ModelMeta(
     loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
@@ -126,7 +169,7 @@ opensearch_neural_embed_v1 = ModelMeta(
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=opensearch_neural_embed_v1_training_data,
     adapted_from="Qwen/Qwen3-Embedding-0.6B",
     superseded_by=None,
 )

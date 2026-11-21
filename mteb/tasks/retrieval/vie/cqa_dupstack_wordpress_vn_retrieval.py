@@ -39,5 +39,5 @@ class CQADupstackWordpressVN(AbsTaskRetrieval):
   year = {2026},
 }
 """,
-        adapted_from=["CQADupstackWordpress"],
+        adapted_from=["CQADupstackWordpressRetrieval"],
     )

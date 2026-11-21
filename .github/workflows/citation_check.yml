@@ -5,7 +5,9 @@ on:
       - "mteb/tasks/**.py"
       - "mteb/benchmarks/**.py"
       - "mteb/models/**.py"
-      - "tests/test_validate_metadata/**"
+      - "scripts/tools/check_citations.py"
+      - "scripts/tools/citation_allowlist.json"
+      - "scripts/tools/citation_cache.json"
       - ".github/workflows/citation_check.yml"
   push:
     branches: [main]
@@ -13,10 +15,14 @@ on:
       - "mteb/tasks/**.py"
       - "mteb/benchmarks/**.py"
       - "mteb/models/**.py"
-      - "tests/test_validate_metadata/**"
+      - "scripts/tools/check_citations.py"
+      - "scripts/tools/citation_allowlist.json"
+      - "scripts/tools/citation_cache.json"
       - ".github/workflows/citation_check.yml"
   schedule:
-    - cron: "0 4 1 * *"  # monthly, citations are only re-checked every 30 days
+    # monthly: citations are only re-checked every 30 days, and cited preprints are
+    # checked for a published version
+    - cron: "0 4 1 * *"
   workflow_dispatch:
 
 concurrency:
@@ -43,7 +49,7 @@ jobs:
         python-version: '3.11'
 
     - name: Install dependencies
-      run: uv sync --group test --frozen
+      run: uv sync --group citations --frozen
 
     # Only the citations the PR adds or changes; the rest are re-checked on main.
     - name: Check citations
@@ -74,7 +80,7 @@ jobs:
         python-version: '3.11'
 
     - name: Install dependencies
-      run: uv sync --group test --frozen
+      run: uv sync --group citations --frozen
 
     - name: Check citations
       run: make citation-check
@@ -85,7 +91,7 @@ jobs:
       id: cache
       if: ${{ !cancelled() && github.ref == 'refs/heads/main' }}
       run: |
-        git diff --quiet -- tests/test_validate_metadata/citation_cache.json ||
+        git diff --quiet -- scripts/tools/citation_cache.json ||
           echo "changed=true" >> "$GITHUB_OUTPUT"
 
     - name: Upload the citation cache
@@ -93,7 +99,7 @@ jobs:
       uses: actions/upload-artifact@v7
       with:
         name: citation-cache
-        path: tests/test_validate_metadata/citation_cache.json
+        path: scripts/tools/citation_cache.json
         retention-days: 1
 
   # A separate job, so the push token never shares a runner with the dependencies
@@ -115,14 +121,123 @@ jobs:
       uses: actions/download-artifact@v8
       with:
         name: citation-cache
-        path: tests/test_validate_metadata
+        path: scripts/tools
 
     - name: Commit the citation cache
       run: |
         git config user.name "github-actions[bot]"
-        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git add tests/test_validate_metadata/citation_cache.json
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add scripts/tools/citation_cache.json
         git commit -m "chore: update the citation cache [skip ci]"
         # main may have moved while the lookups ran
         git pull --rebase origin main
         git push origin HEAD:main
+
+  preprint-check:
+    # Not on PRs: like the citation lookups, it depends on external services.
+    # Forks would otherwise open pull requests from their own repository.
+    if: github.repository == 'embeddings-benchmark/mteb' && (
+        github.event_name == 'schedule' ||
+        github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    # the citation check below is rate-limited like the PR job
+    timeout-minutes: 60
+    permissions:
+      contents: read
+    outputs:
+      found: ${{ steps.check.outputs.found }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v6
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v8.2.0
+      with:
+        enable-cache: true
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: uv sync --group citations --frozen
+
+    # The script exits with 1 both when it finds published preprints and when it
+    # crashes; only the first writes the report.
+    - name: Cite the published versions of preprints
+      id: check
+      env:
+        SEMANTIC_SCHOLAR_API_KEY: ${{ secrets.SEMANTIC_SCHOLAR_API_KEY }}
+      run: |
+        if ! make preprint-check PREPRINT_CHECK_ARGS="--update --report preprints.md"; then
+          test -s preprints.md
+          cat preprints.md >> "$GITHUB_STEP_SUMMARY"
+          if ! git diff --quiet -- mteb; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          fi
+        fi
+
+    # The updated citations must pass the checks a contributor's would. The cache
+    # it writes is left out: the scheduled job above commits the cache to main too,
+    # and the pull request's own check looks up the few changed citations again.
+    - name: Format and check the updated citations
+      if: steps.check.outputs.found == 'true'
+      run: |
+        make format-citations
+        make citation-check CITATION_CHECK_ARGS=--only-new
+        git diff --binary -- mteb > preprints.patch
+
+    - name: Upload the update
+      if: steps.check.outputs.found == 'true'
+      uses: actions/upload-artifact@v7
+      with:
+        name: preprints
+        path: |
+          preprints.md
+          preprints.patch
+        retention-days: 1
+
+  # A separate job, so the push token never shares a runner with the dependencies
+  # the check installs and runs. It pushes with the `RELEASE` token, as pull
+  # requests opened with GITHUB_TOKEN do not run CI.
+  open-preprints-pr:
+    needs: preprint-check
+    if: needs.preprint-check.outputs.found == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v6
+      with:
+        token: ${{ secrets.RELEASE }}
+
+    - name: Download the update
+      uses: actions/download-artifact@v8
+      with:
+        name: preprints
+        path: ${{ runner.temp }}/preprints
+
+    - name: Open or update the pull request
+      env:
+        GH_TOKEN: ${{ secrets.RELEASE }}
+        GH_REPO: ${{ github.repository }}
+        UPDATE: ${{ runner.temp }}/preprints
+      run: |
+        set -euo pipefail
+        branch="chore/cite-published-preprints"
+        title="fix: cite the published versions of preprints"
+        run_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+        printf '\nOpened by %s.\n' "$run_url" >> "$UPDATE/preprints.md"
+
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git switch -c "$branch"
+        git apply --index "$UPDATE/preprints.patch"
+        git commit -m "$title"
+        # one open pull request at a time; a new run replaces its contents
+        git push --force origin "$branch"
+
+        number=$(gh pr list --head "$branch" --state open --json number --jq '.[0].number // empty')
+        if [[ -n "$number" ]]; then
+          gh pr edit "$number" --title "$title" --body-file "$UPDATE/preprints.md"
+        else
+          gh pr create --base main --head "$branch" --title "$title" --body-file "$UPDATE/preprints.md"
+        fi

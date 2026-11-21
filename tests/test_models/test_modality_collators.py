@@ -10,6 +10,7 @@ from mteb.models.modality_collators import (
     AudioCollator,
     FramesCollator,
     VideoCollator,
+    sampled_frame_rate,
     seconds_to_samples,
     single_clip_dataloader,
 )
@@ -20,7 +21,9 @@ class _StubDecoder:
 
     def __init__(self, num_frames: int, seconds: float) -> None:
         self.metadata = SimpleNamespace(
-            num_frames=num_frames, end_stream_seconds=seconds
+            num_frames=num_frames,
+            end_stream_seconds=seconds,
+            average_fps=num_frames / seconds,
         )
 
     def get_frames_at(self, indices: list[int]) -> SimpleNamespace:
@@ -41,22 +44,22 @@ def test_resample_video_fixed_frames(
     n_source: int, num_frames: int, expected: list[int]
 ) -> None:
     video = _StubDecoder(n_source, seconds=10.0)
-    assert FramesCollator.resample_video(video, num_frames=num_frames) == expected
+    assert FramesCollator.resample_video(video, num_frames=num_frames)[0] == expected
 
 
 def test_resample_video_fps_spans_clip_and_respects_cap() -> None:
     video = _StubDecoder(300, seconds=10.0)
-    frames = FramesCollator.resample_video(video, fps=2.0)
+    frames = FramesCollator.resample_video(video, fps=2.0)[0]
     assert len(frames) == 20
     assert frames[0] == 0
     assert frames[-1] == 299
-    capped = FramesCollator.resample_video(video, fps=2.0, max_frames=8)
+    capped = FramesCollator.resample_video(video, fps=2.0, max_frames=8)[0]
     assert capped == [0, 43, 85, 128, 171, 214, 256, 299]
 
 
 def test_resample_video_without_sampling_keeps_all_frames() -> None:
     video = _StubDecoder(12, seconds=1.0)
-    assert FramesCollator.resample_video(video) == list(range(12))
+    assert FramesCollator.resample_video(video)[0] == list(range(12))
 
 
 def test_seconds_to_samples() -> None:
@@ -86,9 +89,9 @@ def test_audio_collator_rejects_non_positive_cap() -> None:
 def test_resample_video_fps_min_frames() -> None:
     video = _StubDecoder(30, seconds=1.2)
     # default: one frame per second, as before
-    assert FramesCollator.resample_video(video, fps=1.0) == [0]
+    assert FramesCollator.resample_video(video, fps=1.0)[0] == [0]
     # opt-in floor for processors that need more frames (Qwen3-VL)
-    frames = FramesCollator.resample_video(video, fps=1.0, min_frames=4)
+    frames = FramesCollator.resample_video(video, fps=1.0, min_frames=4)[0]
     assert frames == [0, 10, 19, 29]
 
 
@@ -102,7 +105,26 @@ def test_video_collator_orders_modalities() -> None:
         "text": "caption",
     }
     batch = VideoCollator(target_sampling_rate=16_000, num_frames=2)([row])
-    assert list(batch) == ["id", "text", "video", "audio"]
+    assert list(batch) == ["id", "text", "video", "video_metadata", "audio"]
+
+
+def test_frames_collator_returns_video_timing() -> None:
+    """Each video comes with its sampled frames' real timing."""
+    collator = FramesCollator(fps=1.0, max_frames=4)
+    batch = collator([{"video": _StubDecoder(300, seconds=10.0)}])
+    assert batch["video"][0] == [0, 100, 199, 299]
+    assert batch["video_metadata"][0] == {
+        "fps": 30.0,
+        "total_num_frames": 300,
+        "duration": 10.0,
+        "frames_indices": [0, 100, 199, 299],
+    }
+
+
+def test_sampled_frame_rate_spans_the_source_clip() -> None:
+    """A file of sampled frames written at this rate lasts as long as the source."""
+    rate = sampled_frame_rate({"fps": 30.0, "frames_indices": [0, 100, 199, 299]})
+    assert rate == pytest.approx(3 / (299 / 30), rel=1e-3)
 
 
 def test_video_collator_skips_missing_modalities() -> None:
@@ -116,3 +138,4 @@ def test_video_collator_skips_missing_modalities() -> None:
     assert batch["video"][0] == [0, 3]
     assert batch["audio"][0] is None
     assert batch["video"][1] is None
+    assert batch["video_metadata"][1] is None

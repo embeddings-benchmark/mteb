@@ -96,6 +96,30 @@ def test_all_task_types_have_a_simplified_task_type():
     )
 
 
+@pytest.fixture
+def task_metadata(task_type: TaskType) -> TaskMetadata:
+    return TaskMetadata(
+        name="TestTask",
+        description="Test task metadata",
+        dataset={"path": "test/dataset", "revision": "test-revision"},
+        type=task_type,
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+    )
+
+
+@pytest.mark.parametrize("task_type", get_args(TaskType))
+def test_every_task_type_has_a_hf_task_category(task_metadata: TaskMetadata):
+    """`_hf_task_type` raises a `KeyError` for a `TaskType` without a Hugging Face task category,
+    which stops the dataset card of every task of that type from being generated.
+    """
+    task_categories = task_metadata._hf_task_type()
+
+    assert isinstance(task_categories, list)
+    assert task_categories, f"{task_metadata.type} has no Hugging Face task category"
+    assert all(isinstance(category, str) and category for category in task_categories)
+
+
 def test_given_dataset_config_then_it_is_valid():
     my_task = TaskMetadata(
         name="MyTask",
@@ -280,6 +304,72 @@ def test_contributed_by_field():
         contributed_by="Acme Corp",
     )
     assert my_task.contributed_by == "Acme Corp"
+
+
+@pytest.mark.parametrize(
+    ("bibtex_citation", "expected_title"),
+    [
+        pytest.param(
+            "@inproceedings{doe2024,\n"
+            "  author = {Doe, Jane},\n"
+            "  booktitle = {Proceedings of the Conference},\n"
+            "  title = {A Paper Title},\n"
+            "}",
+            "A Paper Title",
+            id="booktitle-before-title",
+        ),
+        pytest.param(
+            "@inproceedings{agirre2012,\n"
+            "  title = {{S}em{E}val-2012 Task 6: A Pilot on Semantic Textual Similarity},\n"
+            "  booktitle = {Proceedings of {S}em{E}val 2012},\n"
+            "}",
+            "SemEval-2012 Task 6: A Pilot on Semantic Textual Similarity",
+            id="nested-braces",
+        ),
+        pytest.param(
+            "@article{doe2024,\n  title = {A Title Split\n    over Two Lines},\n}",
+            "A Title Split over Two Lines",
+            id="multi-line-title",
+        ),
+        pytest.param(
+            "@article{doe2024,\n  Title = {A Capitalized Field Name},\n}",
+            "A Capitalized Field Name",
+            id="capitalized-field-name",
+        ),
+        pytest.param(
+            "@misc{doe2024,\n  booktitle = {Proceedings of the Conference},\n}",
+            None,
+            id="no-title",
+        ),
+    ],
+)
+def test_extract_bibtex_title(bibtex_citation, expected_title):
+    assert TaskMetadata._extract_bibtex_title(bibtex_citation) == expected_title
+
+
+@pytest.mark.parametrize("include_cite", [True, False])
+@pytest.mark.parametrize(
+    "bibtex_citation",
+    [
+        pytest.param(None, id="none"),
+        pytest.param("", id="empty"),
+        pytest.param(" ", id="single-space"),
+        pytest.param("\n        ", id="newline-and-indent"),
+    ],
+)
+def test_intext_citation_without_citation_is_empty(bibtex_citation, include_cite):
+    metadata = MockClassificationTask().metadata.model_copy(
+        update={"bibtex_citation": bibtex_citation}
+    )
+    assert not metadata.intext_citation(include_cite=include_cite)
+
+
+def test_intext_citation_with_citation():
+    metadata = MockClassificationTask().metadata.model_copy(
+        update={"bibtex_citation": "@article{doe2024,\n  title = {A Paper Title},\n}"}
+    )
+    assert metadata.intext_citation() == "\\cite{doe2024}"
+    assert metadata.intext_citation(include_cite=False) == "doe2024"
 
 
 def test_task_hf_config():

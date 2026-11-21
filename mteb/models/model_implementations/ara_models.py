@@ -26,11 +26,15 @@ arabic_triplet_matryoshka = ModelMeta(
         #  "akhooli/arabic-triplets-1m-curated-sims-len"
     ),
     citation="""
-    @article{nacar2025gate,
-    title={GATE: General Arabic Text Embedding for Enhanced Semantic Textual Similarity with Matryoshka Representation Learning and Hybrid Loss Training},
-    author={Nacar, Omer and Koubaa, Anis and Sibaee, Serry and Al-Habashi, Yasser and Ammar, Adel and Boulila, Wadii},
-    journal={arXiv preprint arXiv:2505.24581},
-    year={2025}
+    @inproceedings{nacar2025gate,
+  author = {Nacar, Omer and Koubaa, Anis and Sibaee, Serry and Alhabashi, Yasser and Ammar, Adel and Boulila, Wadii},
+  booktitle = {Findings of the Association for Computational Linguistics: EMNLP 2026},
+  doi = {10.18653/2026.findings-emnlp.1952},
+  pages = {41623–41634},
+  publisher = {Association for Computational Linguistics},
+  title = {GATE: General Arabic Text Embedding for Enhanced Semantic Textual Similarity with Matryoshka Representation Learning and Hybrid Loss Training},
+  url = {https://doi.org/10.18653/2026.findings-emnlp.1952},
+  year = {2026},
 }""",
 )
 

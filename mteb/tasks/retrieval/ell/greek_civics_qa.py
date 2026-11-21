@@ -1,8 +1,3 @@
-from hashlib import sha256
-from typing import Any
-
-import datasets
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -10,11 +5,11 @@ from mteb.abstasks.task_metadata import TaskMetadata
 class GreekCivicsQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="GreekCivicsQA",
-        description="This dataset was provided by AlloProf, an organisation in Quebec, Canada offering resources and a help forum curated by a large number of teachers to students on all subjects taught from in primary and secondary school",
-        reference="https://huggingface.co/datasets/antoinelb7/alloprof",
+        description="GreekCivicsQA is a set of 407 question and answer pairs related to Greek high school civics courses (Κοινωνική και Πολιτική Αγωγή), mined from Greek secondary education textbooks.",
+        reference="https://huggingface.co/datasets/ilsp/greek_civics_qa",
         dataset={
-            "path": "ilsp/greek_civics_qa",
-            "revision": "a04523a3c83153be07a8945bb1fb351cbbcef90b",
+            "path": "mteb/GreekCivicsQA",
+            "revision": "61a2878c953e6a2bba9e073def24052739508aa1",
         },
         type="Retrieval",
         category="t2t",
@@ -31,44 +26,3 @@ class GreekCivicsQA(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation="",
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-        # fetch both subsets of the dataset
-        eval_split = self.metadata.eval_splits[0]
-        data_raw = datasets.load_dataset(**self.metadata.dataset)[eval_split]
-
-        queries = {eval_split: {}}
-        corpus = {eval_split: {}}
-        relevant_docs = {eval_split: {}}
-
-        question_ids = {
-            question: str(question_id)
-            for question_id, question in zip(
-                data_raw["id"], data_raw["question"], strict=True
-            )
-        }
-
-        context_ids = {
-            answer: sha256(answer.encode("utf-8")).hexdigest()
-            for answer in set(data_raw["answer"])
-        }
-
-        for row in data_raw:
-            question = row["question"]
-            context = row["answer"]
-            query_id = question_ids[question]
-            queries[eval_split][query_id] = question
-
-            doc_id = context_ids[context]
-            corpus[eval_split][doc_id] = {"text": context}
-            if query_id not in relevant_docs[eval_split]:
-                relevant_docs[eval_split][query_id] = {}
-            relevant_docs[eval_split][query_id][doc_id] = 1
-
-        self.corpus = datasets.DatasetDict(corpus)
-        self.queries = datasets.DatasetDict(queries)
-        self.relevant_docs = datasets.DatasetDict(relevant_docs)
-
-        self.data_loaded = True

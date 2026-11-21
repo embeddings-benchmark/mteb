@@ -148,6 +148,44 @@ def test_load_result_specific_model():
     assert model in model_names, "Model should be in the results"
 
 
+@pytest.mark.parametrize("as_iterator", [False, True], ids=["list", "iterator"])
+def test_load_results_empty_models_and_tasks(as_iterator):
+    cache = ResultCache(cache_path=test_cache_path)
+    all_results = cache.load_results(require_model_meta=False)
+    assert all_results.model_results
+
+    # Empty models preserve the existing behavior of loading every model.
+    empty_models = iter([]) if as_iterator else []
+    results = cache.load_results(models=empty_models, require_model_meta=False)
+    assert [r.model_dump_json(exclude={"model_meta"}) for r in results] == [
+        r.model_dump_json(exclude={"model_meta"}) for r in all_results
+    ]
+
+    empty_tasks = iter([]) if as_iterator else []
+    assert not cache.load_results(
+        tasks=empty_tasks, require_model_meta=False
+    ).model_results
+
+
+@pytest.mark.parametrize("as_iterator", [False, True], ids=["list", "iterator"])
+def test_load_results_with_task_objects(as_iterator):
+    cache = ResultCache(cache_path=test_cache_path)
+    task_names = ["Banking77Classification", "BelebeleRetrieval"]
+    tasks = [mteb.get_task(name) for name in task_names]
+    expected = cache.load_results(tasks=task_names, require_model_meta=False)
+    results = cache.load_results(
+        tasks=iter(tasks) if as_iterator else tasks,
+        require_model_meta=False,
+    )
+
+    assert {
+        task.task_name for result in results for task in result.task_results
+    } == set(task_names)
+    assert [r.model_dump_json(exclude={"model_meta"}) for r in results] == [
+        r.model_dump_json(exclude={"model_meta"}) for r in expected
+    ]
+
+
 def test_filter_with_modelmeta():
     cache = ResultCache(cache_path=test_cache_path)
 
@@ -949,3 +987,47 @@ def test_submit_results_experiments_only(tmp_path: Path):
     for filename in result_files:
         expected = f"{test_model.model_name_as_path()}/{revision}/experiments/{experiment_name}/{filename}"
         assert expected in committed, f"{expected} not found in commit"
+
+
+def _save_sts_result(cache: ResultCache, model_meta: ModelMeta) -> None:
+    task_result = TaskResult(
+        dataset_revision="rev",
+        task_name="STS12",
+        mteb_version="2.0.0",
+        evaluation_time=1.0,
+        scores={
+            "test": [
+                {"main_score": 0.5, "hf_subset": "default", "languages": ["eng-Latn"]}
+            ]
+        },
+    )
+    cache.save_to_cache(task_result, model_meta)
+
+
+def test_normalize_models_finds_model_whose_name_has_spaces(tmp_path: Path):
+    """A model name with spaces is saved in a folder with underscores, and must still be found by its name."""
+    cache = ResultCache(cache_path=tmp_path)
+    meta = ModelMeta.create_empty(
+        {"name": "org/model (embed_dim=512)", "revision": "rev"}
+    )
+    _save_sts_result(cache, meta)
+
+    assert cache._normalize_models("org/model (embed_dim=512)") == [meta]
+
+
+def test_submit_results_by_name_of_model_with_spaces(tmp_path: Path):
+    cache_path, remote_path = _setup_fake_remote(tmp_path)
+    cache = ResultCache(cache_path=cache_path)
+    meta = ModelMeta.create_empty(
+        {"name": "org/model (embed_dim=512)", "revision": "rev"}
+    )
+    _save_sts_result(cache, meta)
+
+    with patch.object(cache, "download_from_remote", return_value=None):
+        result = cache.submit_results(
+            models=["org/model (embed_dim=512)"], create_pr=False
+        )
+
+    assert result["status"] == "ready_for_submission"
+    assert result["result_count"] == 1
+    assert "org__model_(embed_dim=512)/rev/STS12.json" in _committed_files(remote_path)

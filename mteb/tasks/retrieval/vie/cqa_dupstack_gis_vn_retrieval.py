@@ -39,5 +39,5 @@ class CQADupstackGisVN(AbsTaskRetrieval):
   year = {2026},
 }
 """,
-        adapted_from=["CQADupstackGis"],
+        adapted_from=["CQADupstackGisRetrieval"],
     )

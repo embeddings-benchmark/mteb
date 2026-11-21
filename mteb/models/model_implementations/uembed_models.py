@@ -675,14 +675,15 @@ class UEmbedEncoder(AbsEncoder):
         return (first * second).sum(dim=-1)
 
 
-UEMBED_CITATION = """@misc{uembed2026,
-  title={UEmbed: Unified Sparse and Dense Multimodal Embeddings},
-  author={Tingyu Song and Mingxin Li and Yanzhao Zhang and Dingkun Long and Pengjun Xie and Zhijie Nie and Yilun Zhao and Shu Wu},
-  year={2026},
-  eprint={2608.02583},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV},
-  url={https://arxiv.org/abs/2608.02583},
+UEMBED_CITATION = """@inproceedings{uembed2026,
+  author = {Song, Tingyu and Li, Mingxin and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Nie, Zhijie and Zhao, Yilun and Wu, Shu},
+  booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
+  doi = {10.18653/2026.emnlp-main.1419},
+  pages = {32396–32414},
+  publisher = {Association for Computational Linguistics},
+  title = {UEmbed: Unified Sparse and Dense Multimodal Embeddings},
+  url = {https://doi.org/10.18653/2026.emnlp-main.1419},
+  year = {2026},
 }"""
 
 UEMBED_TRAINING_DATASETS = {

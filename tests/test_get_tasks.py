@@ -10,7 +10,7 @@ from mteb import get_task, get_tasks
 from mteb.abstasks.abstask import AbsTask
 from mteb.abstasks.task_metadata import TaskType
 from mteb.filter_tasks import filter_tasks
-from mteb.get_tasks import MTEBTasks
+from mteb.get_tasks import _TASK_RENAMES, MTEBTasks
 from mteb.types import Modalities
 
 pytestmark = pytest.mark.core
@@ -35,6 +35,45 @@ def test_get_task(
             assert split in eval_splits
     else:
         assert task.eval_splits == task.metadata.eval_splits
+
+
+def test_get_task_eval_splits_keeps_only_task_splits():
+    """Splits that are not evaluation splits of the task are dropped, instead of being evaluated
+    and failing with a KeyError when the split is looked up in the dataset.
+    """
+    task = get_task(
+        "PoemSentimentClassification.v2", eval_splits=["validation", "train"]
+    )
+    assert task.eval_splits == ["validation"]
+
+    with pytest.raises(ValueError, match="evaluation splits"):
+        get_task("NFCorpus", eval_splits=["dev"])
+
+
+def test_get_tasks_eval_splits_skips_tasks_without_the_split():
+    """Tasks without any of the requested splits are skipped, like tasks without the requested languages."""
+    tasks = get_tasks(languages=["eng"], task_types=["Retrieval"], eval_splits=["dev"])
+
+    names = {t.metadata.name for t in tasks}
+    assert "MSMARCO" in names
+    assert "NFCorpus" not in names
+    for task in tasks:
+        assert task.eval_splits == ["dev"]
+
+    with_tasks = get_tasks(tasks=["MSMARCO", "NFCorpus"], eval_splits=["dev"])
+    assert [t.metadata.name for t in with_tasks] == ["MSMARCO"]
+
+
+@pytest.mark.parametrize(("old_name", "new_name"), list(_TASK_RENAMES.items()))
+def test_get_task_with_renamed_task_name(old_name: str, new_name: str) -> None:
+    """An old task name warns and returns the task under its new name."""
+    with pytest.warns(UserWarning, match="has been renamed"):
+        task = get_task(old_name)
+    assert task.metadata.name == new_name
+
+    with pytest.warns(UserWarning, match="has been renamed"):
+        tasks = get_tasks(tasks=[old_name])
+    assert [t.metadata.name for t in tasks] == [new_name]
 
 
 def test_get_tasks_filtering():
@@ -73,6 +112,29 @@ def test_mteb_mteb_tasks(
     # check for header of a table
     n_langs = len(tasks)
     assert len(tasks.to_markdown().split("\n")) - 3 == n_langs
+
+
+@pytest.mark.parametrize("include_citation_in_name", [True, False])
+def test_mteb_tasks_to_latex(include_citation_in_name: bool):
+    tasks = mteb.get_tasks(tasks=["STS12", "Banking77Classification"])
+
+    latex = tasks.to_latex(include_citation_in_name=include_citation_in_name)
+
+    assert "\\begin{tabular}" in latex
+    for task in tasks:
+        assert task.metadata.name in latex
+        # the in-text citation is added to the name of the task
+        assert (task.metadata.intext_citation() in latex) is include_citation_in_name
+
+
+@pytest.mark.parametrize("group_indices", ["name", ["type", "name"], None])
+def test_mteb_tasks_to_latex_group_indices(group_indices: str | list[str] | None):
+    tasks = mteb.get_tasks(tasks=["STS12", "Banking77Classification"])
+
+    latex = tasks.to_latex(group_indices=group_indices, include_citation_in_name=False)
+
+    for task in tasks:
+        assert task.metadata.name in latex
 
 
 @pytest.mark.parametrize("modalities", [["text"], ["image"], ["text", "image"]])

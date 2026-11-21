@@ -9242,7 +9242,7 @@
             }
         },
         "anonymous2026mveb|||{mveb}: massive video embedding benchmark|2026": {
-            "stored_at": 1791822710.890191,
+            "stored_at": 1794419900.0287385,
             "value": {
                 "verdict": "OK",
                 "found_title": "MVEB: Massive Video Embedding Benchmark",
@@ -9252,7 +9252,7 @@
             }
         },
         "park2026ultrabertlimitbertpretraining||2610.15028|ultrabert: beyond the limit of bert pre-training|2026": {
-            "stored_at": 1791972171.641547,
+            "stored_at": 1794564884.2415473,
             "value": {
                 "verdict": "OK",
                 "found_title": "UltraBERT: Beyond the Limit of BERT Pre-Training",
@@ -9262,7 +9262,7 @@
             }
         },
         "rystrom2026grounding||2605.27168|grounding text embeddings in stakeholder associations|2026": {
-            "stored_at": 1791990116.460855,
+            "stored_at": 1794645627.7280428,
             "value": {
                 "verdict": "OK",
                 "found_title": "Grounding Text Embeddings in Stakeholder Associations",
@@ -9272,7 +9272,7 @@
             }
         },
         "xu2026scalingaudiotextretrievalmultimodal||2602.18010|re-purposing multimodal large language models for audio-text retrieval|2026": {
-            "stored_at": 1792317723.290644,
+            "stored_at": 1794946657.1415715,
             "value": {
                 "verdict": "OK",
                 "found_title": "Re-purposing Multimodal Large Language Models for Audio-Text Retrieval",
@@ -9282,7 +9282,7 @@
             }
         },
         "wojtasik2024beirpl||2305.19840|{beir}-{pl}: zero shot information retrieval benchmark for the {p}olish language|2024": {
-            "stored_at": 1792481930.753197,
+            "stored_at": 1795087285.445082,
             "value": {
                 "verdict": "OK",
                 "found_title": "BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language",
@@ -9292,7 +9292,7 @@
             }
         },
         "singh2024indicgenbench|10.18653/v1/2024.acl-long.595||{i}ndic{g}en{b}ench: a multilingual benchmark to evaluate generation capabilities of {llm}s on {i}ndic languages|2024": {
-            "stored_at": 1792481930.880039,
+            "stored_at": 1795087285.3542147,
             "value": {
                 "verdict": "OK",
                 "found_title": "IndicGenBench: A Multilingual Benchmark to Evaluate Generation Capabilities of LLMs on Indic Languages",
@@ -9302,7 +9302,7 @@
             }
         },
         "winata2024miners|10.18653/v1/2024.findings-emnlp.155||{miners}: multilingual language models as semantic retrievers|2024": {
-            "stored_at": 1792481931.575197,
+            "stored_at": 1795087290.8765535,
             "value": {
                 "verdict": "OK",
                 "found_title": "MINERS: Multilingual Language Models as Semantic Retrievers",
@@ -9312,7 +9312,7 @@
             }
         },
         "dinzinger2025webfaq|10.1145/3726302.3731934||webfaq: a multilingual collection of natural q&amp;a datasets for dense retrieval|2025": {
-            "stored_at": 1792481931.7128162,
+            "stored_at": 1795087288.0734243,
             "value": {
                 "verdict": "OK",
                 "found_title": "WebFAQ: A Multilingual Collection of Natural Q&amp;A Datasets for Dense Retrieval",
@@ -9322,7 +9322,7 @@
             }
         },
         "\u0161tef\u00e1nik2023resources|10.18653/v1/2023.bsnlp-1.12||resources and few-shot learners for in-context learning in {s}lavic languages|2023": {
-            "stored_at": 1792481932.395162,
+            "stored_at": 1795087286.2999322,
             "value": {
                 "verdict": "OK",
                 "found_title": "Resources and Few-shot Learners for In-context Learning in Slavic Languages",
@@ -9332,7 +9332,7 @@
             }
         },
         "guha2023legalbench|10.52202/075280-1915||legalbench: a collaboratively built benchmark for measuring legal reasoning in large language models|2023": {
-            "stored_at": 1792481932.590867,
+            "stored_at": 1795087287.182508,
             "value": {
                 "verdict": "OK",
                 "found_title": "LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models",
@@ -9342,7 +9342,7 @@
             }
         },
         "koreeda2021contractnli|10.18653/v1/2021.findings-emnlp.164||{c}ontract{nli}: a dataset for document-level natural language inference for contracts|2021": {
-            "stored_at": 1792481933.302481,
+            "stored_at": 1795087289.0877445,
             "value": {
                 "verdict": "OK",
                 "found_title": "ContractNLI: A Dataset for Document-level Natural Language Inference for Contracts",
@@ -9352,7 +9352,7 @@
             }
         },
         "hendrycks2021cuad||2103.06268|{cuad}: an expert-annotated {nlp} dataset for legal contract review|2021": {
-            "stored_at": 1792481933.579186,
+            "stored_at": 1795087288.4375777,
             "value": {
                 "verdict": "OK",
                 "found_title": "CUAD: An Expert-Annotated NLP Dataset for Legal Contract Review",
@@ -9362,7 +9362,7 @@
             }
         },
         "ljube\u0161i\u01072019frenk|10.1007/978-3-030-27947-9_9||the frenk datasets of socially unacceptable discourse in slovene and english|2019": {
-            "stored_at": 1792481934.0665321,
+            "stored_at": 1795087289.9260564,
             "value": {
                 "verdict": "OK",
                 "found_title": "The FRENK Datasets of Socially Unacceptable Discourse in Slovene and English",
@@ -9372,7 +9372,7 @@
             }
         },
         "wang2024globe|10.21437/interspeech.2024-70||globe: a high-quality english corpus with global accents for zero-shot speaker adaptive text-to-speech|2024": {
-            "stored_at": 1792481934.286688,
+            "stored_at": 1795087296.2760587,
             "value": {
                 "verdict": "OK",
                 "found_title": "GLOBE: A High-quality English Corpus with Global Accents for Zero-shot Speaker Adaptive Text-to-Speech",
@@ -9382,7 +9382,7 @@
             }
         },
         "wang2023maud|10.18653/v1/2023.emnlp-main.1019||{maud}: an expert-annotated legal {nlp} dataset for merger agreement understanding|2023": {
-            "stored_at": 1792481934.9130502,
+            "stored_at": 1795087292.0687342,
             "value": {
                 "verdict": "OK",
                 "found_title": "MAUD: An Expert-Annotated Legal NLP Dataset for Merger Agreement Understanding",
@@ -9392,7 +9392,7 @@
             }
         },
         "DBLP:journals/corr/abs-1906-03741|10.18653/v1/p19-1212||bigpatent: a large-scale dataset for abstractive and coherent summarization|2019": {
-            "stored_at": 1792481935.1578062,
+            "stored_at": 1795087294.5808465,
             "value": {
                 "verdict": "OK",
                 "found_title": "BIGPATENT: A Large-Scale Dataset for Abstractive and Coherent Summarization",
@@ -9402,7 +9402,7 @@
             }
         },
         "shon2023sluephase2benchmarksuite|10.18653/v1/2023.acl-long.496||{slue} {p}hase-2: a benchmark suite of diverse spoken language understanding tasks|2023": {
-            "stored_at": 1792481935.771196,
+            "stored_at": 1795087292.8949156,
             "value": {
                 "verdict": "OK",
                 "found_title": "SLUE Phase-2: A Benchmark Suite of Diverse Spoken Language Understanding Tasks",
@@ -9412,7 +9412,7 @@
             }
         },
         "lin2023toxicchat|10.18653/v1/2023.findings-emnlp.311||{t}oxic{c}hat: unveiling hidden challenges of toxicity detection in real-world user-{ai} conversation|2023": {
-            "stored_at": 1792481935.979867,
+            "stored_at": 1795087293.6579416,
             "value": {
                 "verdict": "OK",
                 "found_title": "ToxicChat: Unveiling Hidden Challenges of Toxicity Detection in Real-World User-AI Conversation",
@@ -9422,7 +9422,7 @@
             }
         },
         "shon2022sluenewbenchmarktasks|10.1109/icassp43922.2022.9746137||slue: new benchmark tasks for spoken language understanding evaluation on natural speech|2022": {
-            "stored_at": 1792481936.526268,
+            "stored_at": 1795087305.3269293,
             "value": {
                 "verdict": "OK",
                 "found_title": "SLUE: New Benchmark Tasks For Spoken Language Understanding Evaluation on Natural Speech",
@@ -9432,7 +9432,7 @@
             }
         },
         "kasmaee2024chemteb||2412.00532|chemteb: chemical text embedding benchmark, an overview of embedding models performance & efficiency on a specific domain|2024": {
-            "stored_at": 1792481936.541688,
+            "stored_at": 1795087291.462133,
             "value": {
                 "verdict": "OK",
                 "found_title": "ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance & Efficiency on a Specific Domain",
@@ -9442,7 +9442,7 @@
             }
         },
         "valk2020voxlingua107datasetspokenlanguage|10.1109/slt48900.2021.9383459||voxlingua107: a dataset for spoken language recognition|2021": {
-            "stored_at": 1792481937.034935,
+            "stored_at": 1795087297.17493,
             "value": {
                 "verdict": "OK",
                 "found_title": "VOXLINGUA107: A Dataset for Spoken Language Recognition",
@@ -9452,7 +9452,7 @@
             }
         },
         "moon2020beep|10.18653/v1/2020.socialnlp-1.4||{beep}! {k}orean corpus of online news comments for toxic speech detection|2020": {
-            "stored_at": 1792481937.5731971,
+            "stored_at": 1795087295.3100324,
             "value": {
                 "verdict": "OK",
                 "found_title": "BEEP! Korean Corpus of Online News Comments for Toxic Speech Detection",
@@ -9462,7 +9462,7 @@
             }
         },
         "keung2020multilingual|10.18653/v1/2020.emnlp-main.369||the multilingual {a}mazon reviews corpus|2020": {
-            "stored_at": 1792481938.030831,
+            "stored_at": 1795087299.8727186,
             "value": {
                 "verdict": "OK",
                 "found_title": "The Multilingual Amazon Reviews Corpus",
@@ -9472,7 +9472,7 @@
             }
         },
         "christop2025cameo|10.1109/icassp55912.2026.11461331||cameo: collection of multilingual emotional speech corpora|2026": {
-            "stored_at": 1792481938.5022411,
+            "stored_at": 1795087298.0754764,
             "value": {
                 "verdict": "OK",
                 "found_title": "CAMEO: Collection of Multilingual Emotional Speech Corpora",
@@ -9482,7 +9482,7 @@
             }
         },
         "niyongabo2020kinnews|10.18653/v1/2020.coling-main.480||{kinnews} and {kirnews}: benchmarking cross-lingual text classification for {k}inyarwanda and {k}irundi|2020": {
-            "stored_at": 1792481939.0263839,
+            "stored_at": 1795087301.7327228,
             "value": {
                 "verdict": "OK",
                 "found_title": "KINNEWS and KIRNEWS: Benchmarking Cross-Lingual Text Classification for Kinyarwanda and Kirundi",
@@ -9492,7 +9492,7 @@
             }
         },
         "park2021klue||2105.09680|{klue}: korean language understanding evaluation|2021": {
-            "stored_at": 1792481939.515237,
+            "stored_at": 1795087294.8251789,
             "value": {
                 "verdict": "OK",
                 "found_title": "KLUE: Korean Language Understanding Evaluation",
@@ -9502,7 +9502,7 @@
             }
         },
         "DBLP:journals/corr/abs-2104-08524|10.18653/v1/2021.emnlp-main.591||multilingual and cross-lingual intent detection from spoken data|2021": {
-            "stored_at": 1792481939.539297,
+            "stored_at": 1795087298.971215,
             "value": {
                 "verdict": "OK",
                 "found_title": "Multilingual and Cross-Lingual Intent Detection from Spoken Data",
@@ -9512,7 +9512,7 @@
             }
         },
         "adelani2023masakhanews|10.18653/v1/2023.ijcnlp-main.10||{m}asakha{news}: news topic classification for {a}frican languages|2023": {
-            "stored_at": 1792481940.065248,
+            "stored_at": 1795087300.7998052,
             "value": {
                 "verdict": "OK",
                 "found_title": "MasakhaNEWS: News Topic Classification for African languages",
@@ -9522,7 +9522,7 @@
             }
         },
         "fitzgerald2022massive|10.18653/v1/2023.acl-long.235||{massive}: a 1{m}-example multilingual natural language understanding dataset with 51 typologically-diverse languages|2023": {
-            "stored_at": 1792481940.542591,
+            "stored_at": 1795087306.2939267,
             "value": {
                 "verdict": "OK",
                 "found_title": "MASSIVE: A 1M-Example Multilingual Natural Language Understanding Dataset with 51 Typologically-Diverse Languages",
@@ -9532,7 +9532,7 @@
             }
         },
         "liu2019benchmarkingnaturallanguageunderstanding|10.1007/978-981-15-9323-9_15||benchmarking natural language understanding services for building conversational agents|2021": {
-            "stored_at": 1792481940.9996219,
+            "stored_at": 1795087302.5877573,
             "value": {
                 "verdict": "OK",
                 "found_title": "Benchmarking Natural Language Understanding Services for Building Conversational Agents",
@@ -9542,7 +9542,7 @@
             }
         },
         "banar2025mtebnle5nlembeddingbenchmark|10.18653/v1/2026.findings-acl.1236||{mteb}-{nl} and {e}5-{nl}: embedding benchmark and models for {d}utch|2026": {
-            "stored_at": 1792481941.5225751,
+            "stored_at": 1795087304.408457,
             "value": {
                 "verdict": "OK",
                 "found_title": "MTEB-NL and E5-NL: Embedding Benchmark and Models for Dutch",
@@ -9552,7 +9552,7 @@
             }
         },
         "niklaus2022empirical|10.18653/v1/2022.aacl-main.3||an empirical study on cross-{x} transfer for legal judgment prediction|2022": {
-            "stored_at": 1792481942.071274,
+            "stored_at": 1795087303.523167,
             "value": {
                 "verdict": "OK",
                 "found_title": "An Empirical Study on Cross-X Transfer for Legal Judgment Prediction",
@@ -9562,7 +9562,7 @@
             }
         },
         "dumitrescu2020birth|10.18653/v1/2020.findings-emnlp.387||the birth of {r}omanian {bert}|2020": {
-            "stored_at": 1792481942.599753,
+            "stored_at": 1795087307.1319485,
             "value": {
                 "verdict": "OK",
                 "found_title": "The birth of Romanian BERT",
@@ -9572,7 +9572,7 @@
             }
         },
         "augustyniak2022waydesigningcompilinglepiszcze||2211.13112|this is the way: designing and compiling {lepiszcze}, a comprehensive {nlp} benchmark for polish|2022": {
-            "stored_at": 1792481943.102319,
+            "stored_at": 1795087303.7495499,
             "value": {
                 "verdict": "OK",
                 "found_title": "This is the way: designing and compiling LEPISZCZE, a comprehensive NLP benchmark for Polish",
@@ -9582,7 +9582,7 @@
             }
         },
         "pham2025vnmtebvietnamesemassivetext|10.18653/v1/2026.findings-eacl.86||{vn}-{mteb}: {v}ietnamese massive text embedding benchmark|2026": {
-            "stored_at": 1792481943.354335,
+            "stored_at": 1795087309.8784451,
             "value": {
                 "verdict": "OK",
                 "found_title": "VN-MTEB: Vietnamese Massive Text Embedding Benchmark",
@@ -9592,7 +9592,7 @@
             }
         },
         "xiao2024cpackpackedresourcesgeneral|10.1145/3626772.3657878||c-pack: packed resources for general chinese embeddings|2024": {
-            "stored_at": 1792481943.818795,
+            "stored_at": 1795087308.0421815,
             "value": {
                 "verdict": "OK",
                 "found_title": "C-Pack: Packed Resources For General Chinese Embeddings",
@@ -9602,7 +9602,7 @@
             }
         },
         "raponi2021soundgunsdigitalforensics|10.1007/s11042-022-12612-w||sound of guns: digital forensics of gun audio samples meets artificial intelligence|2022": {
-            "stored_at": 1792481944.102704,
+            "stored_at": 1795087309.034394,
             "value": {
                 "verdict": "OK",
                 "found_title": "Sound of guns: digital forensics of gun audio samples meets artificial intelligence",
@@ -9612,7 +9612,7 @@
             }
         },
         "scialom2020mlsum|10.18653/v1/2020.emnlp-main.647||{mlsum}: the multilingual summarization corpus|2020": {
-            "stored_at": 1792481944.807698,
+            "stored_at": 1795087313.5850508,
             "value": {
                 "verdict": "OK",
                 "found_title": "MLSUM: The Multilingual Summarization Corpus",
@@ -9632,7 +9632,7 @@
             }
         },
         "krojer2022image|10.18653/v1/2022.acl-long.241||image retrieval from contextual descriptions|2022": {
-            "stored_at": 1792481946.235363,
+            "stored_at": 1795087310.776457,
             "value": {
                 "verdict": "OK",
                 "found_title": "Image Retrieval from Contextual Descriptions",
@@ -9642,7 +9642,7 @@
             }
         },
         "thrush2022winogroundprobingvisionlanguage|10.1109/cvpr52688.2022.00517||winoground: probing vision and language models for visio-linguistic compositionality|2022": {
-            "stored_at": 1792481946.954983,
+            "stored_at": 1795087314.408219,
             "value": {
                 "verdict": "OK",
                 "found_title": "Winoground: Probing Vision and Language Models for Visio-Linguistic Compositionality",
@@ -9652,7 +9652,7 @@
             }
         },
         "weller2024followir|10.18653/v1/2025.naacl-long.597||{f}ollow{ir}: evaluating and teaching information retrieval models to follow instructions|2025": {
-            "stored_at": 1792481947.807752,
+            "stored_at": 1795087311.692302,
             "value": {
                 "verdict": "OK",
                 "found_title": "FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions",
@@ -9662,7 +9662,7 @@
             }
         },
         "2105.06681||2105.06681|{d}a{laj} {--} a dataset for linguistic acceptability judgments for {s}wedish|2021": {
-            "stored_at": 1792481948.567522,
+            "stored_at": 1795087306.7434113,
             "value": {
                 "verdict": "OK",
                 "found_title": "DaLAJ - a dataset for linguistic acceptability judgments for Swedish: Format, baseline, sharing",
@@ -9672,7 +9672,7 @@
             }
         },
         "weller2024mfollowir|10.1007/978-3-031-88711-6_19||mfollowir: a multilingual benchmark for instruction following in retrieval|2025": {
-            "stored_at": 1792481948.590542,
+            "stored_at": 1795087312.5983095,
             "value": {
                 "verdict": "OK",
                 "found_title": "mFollowIR: A\u00a0Multilingual Benchmark for\u00a0Instruction Following in\u00a0Retrieval",
@@ -9682,7 +9682,7 @@
             }
         },
         "nguyen2025avspeakerbench|10.1109/cvprf71909.2026.00222||see, hear, and understand: benchmarking audiovisual human speech understanding in multimodal large language models|2026": {
-            "stored_at": 1792481949.312785,
+            "stored_at": 1795087318.0404708,
             "value": {
                 "verdict": "OK",
                 "found_title": "See, Hear, and Understand: Benchmarking Audiovisual Human Speech Understanding in Multimodal Large Language Models",
@@ -9692,7 +9692,7 @@
             }
         },
         "fu2024blink|10.1007/978-3-031-73337-6_9||blink: multimodal large language models can see but not perceive|2024": {
-            "stored_at": 1792481949.315825,
+            "stored_at": 1795087316.2402225,
             "value": {
                 "verdict": "OK",
                 "found_title": "BLINK: Multimodal Large Language Models Can See but\u00a0Not Perceive",
@@ -9702,7 +9702,7 @@
             }
         },
         "fu2024video|10.1109/cvpr52734.2025.02245||video-mme: the first-ever comprehensive evaluation benchmark of multi-modal llms in video analysis|2025": {
-            "stored_at": 1792481950.019478,
+            "stored_at": 1795087315.3392317,
             "value": {
                 "verdict": "OK",
                 "found_title": "Video-MME: The First-Ever Comprehensive Evaluation Benchmark of Multi-modal LLMs in Video Analysis",
@@ -9712,7 +9712,7 @@
             }
         },
         "DBLP:journals/corr/abs-2010-04543|10.18653/v1/2020.aacl-main.91||toxic language detection in social media for {b}razilian {p}ortuguese: new dataset and multilingual analysis|2020": {
-            "stored_at": 1792481950.286718,
+            "stored_at": 1795087318.9537623,
             "value": {
                 "verdict": "OK",
                 "found_title": "Toxic Language Detection in Social Media for Brazilian Portuguese: New Dataset and Multilingual Analysis",
@@ -9722,7 +9722,7 @@
             }
         },
         "ravichander2019question|10.18653/v1/d19-1500||question answering for privacy policies: combining computational and legal perspectives|2019": {
-            "stored_at": 1792481951.023425,
+            "stored_at": 1795087320.7753327,
             "value": {
                 "verdict": "OK",
                 "found_title": "Question Answering for Privacy Policies: Combining Computational and Legal Perspectives",
@@ -9732,7 +9732,7 @@
             }
         },
         "li2022csl||2209.05034|{csl}: a large-scale {c}hinese scientific literature dataset|2022": {
-            "stored_at": 1792481951.543812,
+            "stored_at": 1795087309.767161,
             "value": {
                 "verdict": "OK",
                 "found_title": "CSL: A Large-scale Chinese Scientific Literature Dataset",
@@ -9742,7 +9742,7 @@
             }
         },
         "lin2022dualdiscretespokenunit|10.21437/interspeech.2022-612||dual: discrete spoken unit adaptive learning for textless spoken question answering|2022": {
-            "stored_at": 1792481951.721261,
+            "stored_at": 1795087317.1466675,
             "value": {
                 "verdict": "OK",
                 "found_title": "DUAL: Discrete Spoken Unit Adaptive Learning for Textless Spoken Question Answering",
@@ -9752,7 +9752,7 @@
             }
         },
         "bansal2023videocon|10.1109/cvpr52733.2024.01321||videocon: robust video-language alignment via contrast captions|2024": {
-            "stored_at": 1792481952.282423,
+            "stored_at": 1795087325.3183765,
             "value": {
                 "verdict": "OK",
                 "found_title": "VideoCon: Robust Video-Language Alignment via Contrast Captions",
@@ -9762,7 +9762,7 @@
             }
         },
         "khashabi2021parsinlusuitelanguageunderstanding|10.1162/tacl_a_00419||<scp>parsinlu</scp>: a suite of language understanding challenges for persian|2021": {
-            "stored_at": 1792481952.446816,
+            "stored_at": 1795087319.853194,
             "value": {
                 "verdict": "OK",
                 "found_title": "<scp>ParsiNLU</scp>: A Suite of Language Understanding Challenges for Persian",
@@ -9772,7 +9772,7 @@
             }
         },
         "malajyan2020arpa|10.1109/ivmem51402.2020.00012||arpa: armenian paraphrase detection corpus and models|2020": {
-            "stored_at": 1792481953.027025,
+            "stored_at": 1795087331.685675,
             "value": {
                 "verdict": "OK",
                 "found_title": "ARPA: Armenian Paraphrase Detection Corpus and Models",
@@ -9782,7 +9782,7 @@
             }
         },
         "ham2020kornli|10.18653/v1/2020.findings-emnlp.39||{k}or{nli} and {k}or{sts}: new benchmark datasets for {k}orean natural language understanding|2020": {
-            "stored_at": 1792481953.316606,
+            "stored_at": 1795087321.7032404,
             "value": {
                 "verdict": "OK",
                 "found_title": "KorNLI and KorSTS: New Benchmark Datasets for Korean Natural Language Understanding",
@@ -9792,7 +9792,7 @@
             }
         },
         "aggarwal_gupta_kunch_22|10.18653/v1/2022.emnlp-main.755||{i}ndic{xnli}: evaluating multilingual inference for {i}ndian languages|2022": {
-            "stored_at": 1792481953.773012,
+            "stored_at": 1795087324.3967175,
             "value": {
                 "verdict": "OK",
                 "found_title": "IndicXNLI: Evaluating Multilingual Inference for Indian Languages",
@@ -9802,7 +9802,7 @@
             }
         },
         "creutz2018open|10.63317/4kki5rwb9a2a||open subtitles paraphrase corpus for six languages|2018": {
-            "stored_at": 1792481954.3492029,
+            "stored_at": 1795087322.5847645,
             "value": {
                 "verdict": "OK",
                 "found_title": "Open Subtitles Paraphrase Corpus for Six Languages",
@@ -9812,7 +9812,7 @@
             }
         },
         "chasmai2025inatsounds||2506.00343|the inaturalist sounds dataset|2024": {
-            "stored_at": 1792481954.6160572,
+            "stored_at": 1795087312.7558863,
             "value": {
                 "verdict": "OK",
                 "found_title": "The iNaturalist Sounds Dataset",
@@ -9822,7 +9822,7 @@
             }
         },
         "yang2019pawsx|10.18653/v1/d19-1382||paws-x: a cross-lingual adversarial dataset for paraphrase identification|2019": {
-            "stored_at": 1792481954.8227148,
+            "stored_at": 1795087323.5371253,
             "value": {
                 "verdict": "OK",
                 "found_title": "PAWS-X: A Cross-lingual Adversarial Dataset for Paraphrase Identification",
@@ -9832,7 +9832,7 @@
             }
         },
         "dadas2022training|10.1109/smc53654.2022.9945218||training effective neural sentence encoders from automatically mined paraphrases|2022": {
-            "stored_at": 1792481955.298753,
+            "stored_at": 1795087326.4622214,
             "value": {
                 "verdict": "OK",
                 "found_title": "Training Effective Neural Sentence Encoders from Automatically Mined Paraphrases",
@@ -9852,7 +9852,7 @@
             }
         },
         "muennighoff2022mteb|10.18653/v1/2023.eacl-main.148||{mteb}: massive text embedding benchmark|2023": {
-            "stored_at": 1792481956.2616608,
+            "stored_at": 1795087328.9480927,
             "value": {
                 "verdict": "OK",
                 "found_title": "MTEB: Massive Text Embedding Benchmark",
@@ -9862,7 +9862,7 @@
             }
         },
         "wang-2021-TSDAE|10.18653/v1/2021.findings-emnlp.59||{tsdae}: using transformer-based sequential denoising auto-encoderfor unsupervised sentence embedding learning|2021": {
-            "stored_at": 1792481956.774994,
+            "stored_at": 1795087330.76932,
             "value": {
                 "verdict": "OK",
                 "found_title": "TSDAE: Using Transformer-based Sequential Denoising Auto-Encoderfor Unsupervised Sentence Embedding Learning",
@@ -9872,7 +9872,7 @@
             }
         },
         "chen2025locagentgraphguidedllmagents|10.18653/v1/2025.acl-long.426||{l}oc{a}gent: graph-guided {llm} agents for code localization|2025": {
-            "stored_at": 1792481957.2899158,
+            "stored_at": 1795087329.8502612,
             "value": {
                 "verdict": "OK",
                 "found_title": "LocAgent: Graph-Guided LLM Agents for Code Localization",
@@ -9882,7 +9882,7 @@
             }
         },
         "zan2025multiswebench||2504.02605|multi-{swe}-bench: a multilingual benchmark for issue resolving|2026": {
-            "stored_at": 1792481957.573565,
+            "stored_at": 1795087329.271171,
             "value": {
                 "verdict": "OK",
                 "found_title": "Multi-SWE-bench: A Multilingual Benchmark for Issue Resolving",
@@ -9902,7 +9902,7 @@
             }
         },
         "l\u00f92024weblinx||2402.05930|web{linx}: real-world website navigation with multi-turn dialogue|2024": {
-            "stored_at": 1792481960.5946932,
+            "stored_at": 1795087338.193532,
             "value": {
                 "verdict": "OK",
                 "found_title": "WebLINX: Real-World Website Navigation with Multi-Turn Dialogue",
@@ -9912,7 +9912,7 @@
             }
         },
         "bge-m3|10.18653/v1/2024.findings-acl.137||{m}3-embedding: multi-linguality, multi-functionality, multi-granularity text embeddings through self-knowledge distillation|2024": {
-            "stored_at": 1792481961.305366,
+            "stored_at": 1795087339.8903074,
             "value": {
                 "verdict": "OK",
                 "found_title": "M3-Embedding: Multi-Linguality, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation",
@@ -9922,7 +9922,7 @@
             }
         },
         "loison2026vidorev3comprehensiveevaluation|10.18653/v1/2026.acl-long.755||{v}i{d}o{r}e {v}3: a comprehensive evaluation of retrieval augmented generation in complex real-world scenarios|2026": {
-            "stored_at": 1792481962.1356668,
+            "stored_at": 1795087332.6511343,
             "value": {
                 "verdict": "OK",
                 "found_title": "ViDoRe V3: A Comprehensive Evaluation of Retrieval Augmented Generation in Complex Real-World Scenarios",
@@ -9932,7 +9932,7 @@
             }
         },
         "lewis2019mlqa|10.18653/v1/2020.acl-main.653||{mlqa}: evaluating cross-lingual extractive question answering|2020": {
-            "stored_at": 1792481962.846755,
+            "stored_at": 1795087333.4893942,
             "value": {
                 "verdict": "OK",
                 "found_title": "MLQA: Evaluating Cross-lingual Extractive Question Answering",
@@ -9942,7 +9942,7 @@
             }
         },
         "xie2023t2ranking|10.1145/3539618.3591874||t2ranking: a large-scale chinese benchmark for passage ranking|2023": {
-            "stored_at": 1792481963.5723488,
+            "stored_at": 1795087334.3979402,
             "value": {
                 "verdict": "OK",
                 "found_title": "T2Ranking: A Large-scale Chinese Benchmark for Passage Ranking",
@@ -9952,7 +9952,7 @@
             }
         },
         "yang2025swesmith||2504.21798|{swe}-smith: scaling data for software engineering agents|2026": {
-            "stored_at": 1792481963.615765,
+            "stored_at": 1795087341.1895278,
             "value": {
                 "verdict": "OK",
                 "found_title": "SWE-smith: Scaling Data for Software Engineering Agents",
@@ -9962,7 +9962,7 @@
             }
         },
         "zheng2024opencodeinterpreterintegratingcodegeneration|10.18653/v1/2024.findings-acl.762||{o}pen{c}ode{i}nterpreter: integrating code generation with execution and refinement|2024": {
-            "stored_at": 1792481964.305834,
+            "stored_at": 1795087335.324041,
             "value": {
                 "verdict": "OK",
                 "found_title": "OpenCodeInterpreter: Integrating Code Generation with Execution and Refinement",
@@ -9972,7 +9972,7 @@
             }
         },
         "li2024coircomprehensivebenchmarkcode|10.18653/v1/2025.acl-long.1072||{c}o{ir}: a comprehensive benchmark for code information retrieval models|2025": {
-            "stored_at": 1792481964.367315,
+            "stored_at": 1795087336.2341125,
             "value": {
                 "verdict": "OK",
                 "found_title": "CoIR: A Comprehensive Benchmark for Code Information Retrieval Models",
@@ -9982,7 +9982,7 @@
             }
         },
         "wang2024coderagbenchretrievalaugmentcode|10.18653/v1/2025.findings-naacl.176||{c}ode{rag}-bench: can retrieval augment code generation?|2025": {
-            "stored_at": 1792481965.037473,
+            "stored_at": 1795087337.1622512,
             "value": {
                 "verdict": "OK",
                 "found_title": "CodeRAG-Bench: Can Retrieval Augment Code Generation?",
@@ -9992,7 +9992,7 @@
             }
         },
         "yan2023codetransoceancomprehensivemultilingualbenchmark|10.18653/v1/2023.findings-emnlp.337||{c}ode{t}rans{o}cean: a comprehensive multilingual benchmark for code translation|2023": {
-            "stored_at": 1792481965.2939782,
+            "stored_at": 1795087338.0504565,
             "value": {
                 "verdict": "OK",
                 "found_title": "CodeTransOcean: A Comprehensive Multilingual Benchmark for Code Translation",
@@ -10002,7 +10002,7 @@
             }
         },
         "huang2021cosqa20000webqueries|10.18653/v1/2021.acl-long.442||{c}o{sqa}: 20,000+ web queries for code search and question answering|2021": {
-            "stored_at": 1792481965.824939,
+            "stored_at": 1795087338.952411,
             "value": {
                 "verdict": "OK",
                 "found_title": "CoSQA: 20,000+ Web Queries for Code Search and Question Answering",
@@ -10012,7 +10012,7 @@
             }
         },
         "thakur2025freshstackbuildingrealisticbenchmarks||2504.13128|freshstack: building realistic benchmarks for evaluating retrieval on technical documents|2026": {
-            "stored_at": 1792481966.612535,
+            "stored_at": 1795087344.1971624,
             "value": {
                 "verdict": "OK",
                 "found_title": "FreshStack: Building Realistic Benchmarks for Evaluating Retrieval on Technical Documents",
@@ -10022,7 +10022,7 @@
             }
         },
         "m\u00f6ller2021germanquad|10.18653/v1/2021.mrqa-1.4||{g}erman{q}u{ad} and {g}erman{dpr}: improving non-{e}nglish question answering and passage retrieval|2021": {
-            "stored_at": 1792481967.3655198,
+            "stored_at": 1795087340.8075233,
             "value": {
                 "verdict": "OK",
                 "found_title": "GermanQuAD and GermanDPR: Improving Non-English Question Answering and Passage Retrieval",
@@ -10032,7 +10032,7 @@
             }
         },
         "rauch2024birdsetlargescaledatasetaudio||2403.10380|birdset: a large-scale dataset for audio classification in avian bioacoustics|2025": {
-            "stored_at": 1792481969.605375,
+            "stored_at": 1795087315.7512555,
             "value": {
                 "verdict": "OK",
                 "found_title": "BirdSet: A Large-Scale Dataset for Audio Classification in Avian Bioacoustics",
@@ -10042,7 +10042,7 @@
             }
         },
         "roberts2021searching|10.1016/j.jbi.2021.103865||searching for scientific evidence in a pandemic: an overview of trec-covid|2021": {
-            "stored_at": 1792481970.39117,
+            "stored_at": 1795087341.6893995,
             "value": {
                 "verdict": "OK",
                 "found_title": "Searching for scientific evidence in a pandemic: An overview of TREC-COVID",
@@ -10052,7 +10052,7 @@
             }
         },
         "wu2023forbflatobjectretrieval||2309.16249|{forb}: a flat object retrieval benchmark for universal image embedding|2023": {
-            "stored_at": 1792481972.742411,
+            "stored_at": 1795087350.247874,
             "value": {
                 "verdict": "OK",
                 "found_title": "FORB: A Flat Object Retrieval Benchmark for Universal Image Embedding",
@@ -10062,7 +10062,7 @@
             }
         },
         "craswell2021overviewtrec2020deep||2102.07662|overview of the trec 2020 deep learning track|2020": {
-            "stored_at": 1792481975.628286,
+            "stored_at": 1795087347.1780953,
             "value": {
                 "verdict": "OK",
                 "found_title": "Overview of the TREC 2020 deep learning track",
@@ -10072,7 +10072,7 @@
             }
         },
         "hershey2021benefittemporallystronglabelsaudio|10.1109/icassp39728.2021.9414579||the benefit of temporally-strong labels in audio event classification|2021": {
-            "stored_at": 1792481976.35894,
+            "stored_at": 1795087347.3256845,
             "value": {
                 "verdict": "OK",
                 "found_title": "The Benefit of Temporally-Strong Labels in Audio Event Classification",
@@ -10082,7 +10082,7 @@
             }
         },
         "su2024bright||2407.12883|{bright}: a realistic and challenging benchmark for reasoning-intensive retrieval|2025": {
-            "stored_at": 1792481978.626703,
+            "stored_at": 1795087353.1735454,
             "value": {
                 "verdict": "OK",
                 "found_title": "BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval",
@@ -10092,7 +10092,7 @@
             }
         },
         "Zhao2026RethinkingRR|10.18653/v1/2026.acl-long.1705||rethinking reasoning-intensive retrieval: evaluating and advancing retrievers in agentic search systems|2026": {
-            "stored_at": 1792481979.322488,
+            "stored_at": 1795087350.3890038,
             "value": {
                 "verdict": "OK",
                 "found_title": "Rethinking Reasoning-Intensive Retrieval: Evaluating and Advancing Retrievers in Agentic Search Systems",
@@ -10102,7 +10102,7 @@
             }
         },
         "munakata2025castella|10.1109/icassp55912.2026.11464074||castella: long audio dataset with captions and temporal boundaries|2026": {
-            "stored_at": 1792481980.0076349,
+            "stored_at": 1795087350.529089,
             "value": {
                 "verdict": "OK",
                 "found_title": "CASTELLA: Long Audio Dataset with Captions and Temporal Boundaries",
@@ -10112,7 +10112,7 @@
             }
         },
         "drossos2019clothoaudiocaptioningdataset|10.1109/icassp40776.2020.9052990||clotho: an audio captioning dataset|2020": {
-            "stored_at": 1792481980.749682,
+            "stored_at": 1795087351.2555883,
             "value": {
                 "verdict": "OK",
                 "found_title": "Clotho: an Audio Captioning Dataset",
@@ -10122,7 +10122,7 @@
             }
         },
         "ayaou2025dapfamdomainawarefamilyleveldataset|10.1016/j.array.2026.100720||dapfam: a domain-aware family-level dataset to benchmark cross domain patent retrieval|2026": {
-            "stored_at": 1792481981.473074,
+            "stored_at": 1795087352.180347,
             "value": {
                 "verdict": "OK",
                 "found_title": "DAPFAM: A Domain-Aware Family-level Dataset to benchmark cross domain patent retrieval",
@@ -10132,7 +10132,7 @@
             }
         },
         "jimenez2024swebenchlanguagemodelsresolve||2310.06770|{swe}-bench: can language models resolve real-world github issues?|2024": {
-            "stored_at": 1792481981.50115,
+            "stored_at": 1795087332.0138412,
             "value": {
                 "verdict": "OK",
                 "found_title": "SWE-bench: Can Language Models Resolve Real-World GitHub Issues?",
@@ -10142,7 +10142,7 @@
             }
         },
         "thawakar2025simpleeditscomposedvideo|10.1109/iccv51701.2025.01900||beyond simple edits: composed video retrieval with dense modifications|2025": {
-            "stored_at": 1792481982.225478,
+            "stored_at": 1795087353.08898,
             "value": {
                 "verdict": "OK",
                 "found_title": "Beyond Simple Edits: Composed Video Retrieval with Dense Modifications",
@@ -10152,7 +10152,7 @@
             }
         },
         "zellers2019hellaswag|10.18653/v1/p19-1472||hellaswag: can a machine really finish your sentence?|2019": {
-            "stored_at": 1792481982.247516,
+            "stored_at": 1795087355.8084495,
             "value": {
                 "verdict": "OK",
                 "found_title": "HellaSwag: Can a Machine Really Finish Your Sentence?",
@@ -10162,7 +10162,7 @@
             }
         },
         "bakhturina2021hi|10.21437/interspeech.2021-1599||hi-fi multi-speaker english tts dataset|2021": {
-            "stored_at": 1792481982.941656,
+            "stored_at": 1795087354.0268312,
             "value": {
                 "verdict": "OK",
                 "found_title": "Hi-Fi Multi-Speaker English TTS Dataset",
@@ -10172,7 +10172,7 @@
             }
         },
         "zhu2024longembed|10.18653/v1/2024.emnlp-main.47||{l}ong{e}mbed: extending embedding models for long context retrieval|2024": {
-            "stored_at": 1792481983.1891441,
+            "stored_at": 1795087354.911049,
             "value": {
                 "verdict": "OK",
                 "found_title": "LongEmbed: Extending Embedding Models for Long Context Retrieval",
@@ -10182,7 +10182,7 @@
             }
         },
         "holzenberger2021factoring|10.18653/v1/2021.acl-long.213||factoring statutory reasoning as language understanding challenges|2021": {
-            "stored_at": 1792481983.716158,
+            "stored_at": 1795087356.7251704,
             "value": {
                 "verdict": "OK",
                 "found_title": "Factoring Statutory Reasoning as Language Understanding Challenges",
@@ -10192,7 +10192,7 @@
             }
         },
         "zen2019librittscorpusderivedlibrispeech|10.21437/interspeech.2019-2441||libritts: a corpus derived from librispeech for text-to-speech|2019": {
-            "stored_at": 1792481984.168134,
+            "stored_at": 1795087364.903239,
             "value": {
                 "verdict": "OK",
                 "found_title": "LibriTTS: A Corpus Derived from LibriSpeech for Text-to-Speech",
@@ -10202,7 +10202,7 @@
             }
         },
         "lai2022ds||2211.11501|ds-1000: a natural and reliable benchmark for data science code generation|2023": {
-            "stored_at": 1792481984.62782,
+            "stored_at": 1795087356.3156037,
             "value": {
                 "verdict": "OK",
                 "found_title": "DS-1000: A Natural and Reliable Benchmark for Data Science Code Generation",
@@ -10212,7 +10212,7 @@
             }
         },
         "martinmorato2021groundtruthreliabilitymultiannotator|10.23919/eusipco54536.2021.9616087||what is the ground truth? reliability of multi-annotator data for audio tagging|2021": {
-            "stored_at": 1792481984.701013,
+            "stored_at": 1795087357.632914,
             "value": {
                 "verdict": "OK",
                 "found_title": "What is the ground truth? Reliability of multi-annotator data for audio tagging",
@@ -10222,7 +10222,7 @@
             }
         },
         "dong2025mmdocirbenchmarkingmultimodalretrieval|10.18653/v1/2025.emnlp-main.1576||mmdocir: benchmarking multimodal retrieval for long documents|2025": {
-            "stored_at": 1792481985.29873,
+            "stored_at": 1795087366.719323,
             "value": {
                 "verdict": "OK",
                 "found_title": "MMDocIR: Benchmarking Multimodal Retrieval for Long Documents",
@@ -10232,7 +10232,7 @@
             }
         },
         "ma2024unifying|10.18653/v1/2024.emnlp-main.373||unifying multimodal retrieval via document screenshot embedding|2024": {
-            "stored_at": 1792481985.7915342,
+            "stored_at": 1795087359.465858,
             "value": {
                 "verdict": "OK",
                 "found_title": "Unifying Multimodal Retrieval via Document Screenshot Embedding",
@@ -10242,7 +10242,7 @@
             }
         },
         "yuan2025momentseeker|10.52202/085713-0934||momentseeker: a task-oriented benchmark for long-video moment retrieval|2025": {
-            "stored_at": 1792481986.244462,
+            "stored_at": 1795087358.5519805,
             "value": {
                 "verdict": "OK",
                 "found_title": "MomentSeeker: A Task-Oriented Benchmark For Long-Video Moment Retrieval",
@@ -10252,7 +10252,7 @@
             }
         },
         "brohan2022rt1|10.15607/rss.2023.xix.025||rt-1: robotics transformer for real-world control at scale|2023": {
-            "stored_at": 1792481986.72436,
+            "stored_at": 1795087360.389567,
             "value": {
                 "verdict": "OK",
                 "found_title": "RT-1: Robotics Transformer for Real-World Control at Scale",
@@ -10262,7 +10262,7 @@
             }
         },
         "wu2024scimmirbenchmarkingscientificmultimodal|10.18653/v1/2024.findings-acl.746||{s}ci{mmir}: benchmarking scientific multi-modal information retrieval|2024": {
-            "stored_at": 1792481987.2442298,
+            "stored_at": 1795087361.2631974,
             "value": {
                 "verdict": "OK",
                 "found_title": "SciMMIR: Benchmarking Scientific Multi-modal Information Retrieval",
@@ -10272,7 +10272,7 @@
             }
         },
         "yu2023metamath||2309.12284|metamath: bootstrap your own mathematical questions for large language models|2024": {
-            "stored_at": 1792481987.676864,
+            "stored_at": 1795087362.1643083,
             "value": {
                 "verdict": "OK",
                 "found_title": "MetaMath: Bootstrap Your Own Mathematical Questions for Large Language Models",
@@ -10282,7 +10282,7 @@
             }
         },
         "mirzaee2021spartqa|10.18653/v1/2021.naacl-main.364||{spartqa}: a textual question answering benchmark for spatial reasoning|2021": {
-            "stored_at": 1792481987.689497,
+            "stored_at": 1795087362.1828036,
             "value": {
                 "verdict": "OK",
                 "found_title": "SPARTQA: A Textual Question Answering Benchmark for Spatial Reasoning",
@@ -10292,7 +10292,7 @@
             }
         },
         "tan2023towards|10.18653/v1/2023.acl-long.828||towards benchmarking and improving the temporal reasoning capability of large language models|2023": {
-            "stored_at": 1792481988.2496698,
+            "stored_at": 1795087363.0768733,
             "value": {
                 "verdict": "OK",
                 "found_title": "Towards Benchmarking and Improving the Temporal Reasoning Capability of Large Language Models",
@@ -10302,7 +10302,7 @@
             }
         },
         "adlakha2022topiocqa|10.1162/tacl_a_00471||topiocqa: open-domain conversational question answering with topic switching|2022": {
-            "stored_at": 1792481988.706798,
+            "stored_at": 1795087363.9937136,
             "value": {
                 "verdict": "OK",
                 "found_title": "TopiOCQA: Open-domain Conversational Question Answering with Topic Switching",
@@ -10312,7 +10312,7 @@
             }
         },
         "shi2025toolret|10.18653/v1/2025.findings-acl.1258||retrieval models aren{'}t tool-savvy: benchmarking tool retrieval for large language models|2025": {
-            "stored_at": 1792481989.2131,
+            "stored_at": 1795087365.8103397,
             "value": {
                 "verdict": "OK",
                 "found_title": "Retrieval Models Aren\u2019t Tool-Savvy: Benchmarking Tool Retrieval for Large Language Models",
@@ -10322,7 +10322,7 @@
             }
         },
         "li2024multimodalarxivdatasetimproving|10.18653/v1/2024.acl-long.775||multimodal {a}r{x}iv: a dataset for improving scientific comprehension of large vision-language models|2024": {
-            "stored_at": 1792481989.712033,
+            "stored_at": 1795087371.2641087,
             "value": {
                 "verdict": "OK",
                 "found_title": "Multimodal ArXiv: A Dataset for Improving Scientific Comprehension of Large Vision-Language Models",
@@ -10332,7 +10332,7 @@
             }
         },
         "masry2022chartqabenchmarkquestionanswering|10.18653/v1/2022.findings-acl.177||{c}hart{qa}: a benchmark for question answering about charts with visual and logical reasoning|2022": {
-            "stored_at": 1792481990.222923,
+            "stored_at": 1795087370.3555784,
             "value": {
                 "verdict": "OK",
                 "found_title": "ChartQA: A Benchmark for Question Answering about Charts with Visual and Logical Reasoning",
@@ -10342,7 +10342,7 @@
             }
         },
         "mathew2021infographicvqa|10.1109/wacv51458.2022.00264||infographicvqa|2022": {
-            "stored_at": 1792481990.694381,
+            "stored_at": 1795087367.6628048,
             "value": {
                 "verdict": "OK",
                 "found_title": "InfographicVQA",
@@ -10352,7 +10352,7 @@
             }
         },
         "bhagavatula2019abductive||1908.05739|abductive commonsense reasoning|2020": {
-            "stored_at": 1792481990.7361019,
+            "stored_at": 1795087359.1449172,
             "value": {
                 "verdict": "OK",
                 "found_title": "Abductive Commonsense Reasoning",
@@ -10362,7 +10362,7 @@
             }
         },
         "tito2023hierarchicalmultimodaltransformersmultipage|10.1016/j.patcog.2023.109834||hierarchical multimodal transformers for multipage docvqa|2023": {
-            "stored_at": 1792481991.1823192,
+            "stored_at": 1795087375.8175414,
             "value": {
                 "verdict": "OK",
                 "found_title": "Hierarchical multimodal transformers for Multipage DocVQA",
@@ -10372,7 +10372,7 @@
             }
         },
         "methani2020plotqareasoningscientificplots|10.1109/wacv45572.2020.9093523||plotqa: reasoning over scientific plots|2020": {
-            "stored_at": 1792481991.6938722,
+            "stored_at": 1795087368.54799,
             "value": {
                 "verdict": "OK",
                 "found_title": "PlotQA: Reasoning over Scientific Plots",
@@ -10382,7 +10382,7 @@
             }
         },
         "zinvandi2025famteb|10.18653/v1/2025.findings-emnlp.614||{f}a{mteb}: massive text embedding benchmark in {p}ersian language|2025": {
-            "stored_at": 1792481992.2631118,
+            "stored_at": 1795087378.540389,
             "value": {
                 "verdict": "OK",
                 "found_title": "FaMTEB: Massive Text Embedding Benchmark in Persian Language",
@@ -10392,7 +10392,7 @@
             }
         },
         "tanaka2023slidevqadatasetdocumentvisual|10.1609/aaai.v37i11.26598||slidevqa: a dataset for document visual question answering on multiple images|2023": {
-            "stored_at": 1792481992.7541928,
+            "stored_at": 1795087369.455983,
             "value": {
                 "verdict": "OK",
                 "found_title": "SlideVQA: A Dataset for Document Visual Question Answering on Multiple Images",
@@ -10402,7 +10402,7 @@
             }
         },
         "mrtydi|10.18653/v1/2021.mrl-1.12||mr. {t}y{d}i: a multi-lingual benchmark for dense retrieval|2021": {
-            "stored_at": 1792481993.1875231,
+            "stored_at": 1795087372.1801689,
             "value": {
                 "verdict": "OK",
                 "found_title": "Mr. TyDi: A Multi-lingual Benchmark for Dense Retrieval",
@@ -10412,7 +10412,7 @@
             }
         },
         "faysse2024colpali||2407.01449|colpali: efficient document retrieval with vision language models|2025": {
-            "stored_at": 1792481993.655294,
+            "stored_at": 1795087365.2024481,
             "value": {
                 "verdict": "OK",
                 "found_title": "ColPali: Efficient Document Retrieval with Vision Language Models",
@@ -10422,7 +10422,7 @@
             }
         },
         "bandarkar2023belebele|10.18653/v1/2024.acl-long.44||the belebele benchmark: a parallel reading comprehension dataset in 122 language variants|2024": {
-            "stored_at": 1792481993.758992,
+            "stored_at": 1795087373.9993718,
             "value": {
                 "verdict": "OK",
                 "found_title": "The Belebele Benchmark: a Parallel Reading Comprehension Dataset in 122 Language Variants",
@@ -10432,7 +10432,7 @@
             }
         },
         "g\u00fcnther2025jinaembeddingsv4universalembeddingsmultimodal|10.18653/v1/2025.mrl-main.36||jina-embeddings-v4: universal embeddings for multimodal multilingual retrieval|2025": {
-            "stored_at": 1792481994.1905448,
+            "stored_at": 1795087373.092037,
             "value": {
                 "verdict": "OK",
                 "found_title": "jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval",
@@ -10442,7 +10442,7 @@
             }
         },
         "Artetxe:etal:2019|10.18653/v1/2020.acl-main.421||on the cross-lingual transferability of monolingual representations|2020": {
-            "stored_at": 1792481994.975529,
+            "stored_at": 1795087374.917163,
             "value": {
                 "verdict": "OK",
                 "found_title": "On the Cross-lingual Transferability of Monolingual Representations",
@@ -10452,7 +10452,7 @@
             }
         },
         "qiu2022dureaderretrievallargescalechinesebenchmark|10.18653/v1/2022.emnlp-main.357||{d}u{r}eader-retrieval: a large-scale {c}hinese benchmark for passage retrieval from web search engine|2022": {
-            "stored_at": 1792481995.7307441,
+            "stored_at": 1795087376.7084956,
             "value": {
                 "verdict": "OK",
                 "found_title": "DuReader-Retrieval: A Large-scale Chinese Benchmark for Passage Retrieval from Web Search Engine",
@@ -10462,7 +10462,7 @@
             }
         },
         "li2023lecardv2|10.1145/3626772.3657887||lecardv2: a large-scale chinese legal case retrieval dataset|2024": {
-            "stored_at": 1792481996.466122,
+            "stored_at": 1795087379.4800677,
             "value": {
                 "verdict": "OK",
                 "found_title": "LeCaRDv2: A Large-Scale Chinese Legal Case Retrieval Dataset",
@@ -10472,7 +10472,7 @@
             }
         },
         "barta2024news||2404.03555|from news to summaries: building a {h}ungarian corpus for extractive and abstractive summarization|2024": {
-            "stored_at": 1792481996.63801,
+            "stored_at": 1795087370.527025,
             "value": {
                 "verdict": "OK",
                 "found_title": "From News to Summaries: Building a Hungarian Corpus for Extractive and Abstractive Summarization",
@@ -10482,7 +10482,7 @@
             }
         },
         "godi2021movingfashion|10.1109/wacv51458.2022.00059||movingfashion: a benchmark for the video-to-shop challenge|2022": {
-            "stored_at": 1792481997.1906781,
+            "stored_at": 1795087390.362086,
             "value": {
                 "verdict": "OK",
                 "found_title": "MovingFashion: a Benchmark for the Video-to-Shop Challenge",
@@ -10492,7 +10492,7 @@
             }
         },
         "pizzi2023vsc|10.1016/j.cviu.2024.103997||the 2023 video similarity dataset and challenge|2024": {
-            "stored_at": 1792481997.440463,
+            "stored_at": 1795087377.6340342,
             "value": {
                 "verdict": "OK",
                 "found_title": "The 2023 video similarity dataset and challenge",
@@ -10502,7 +10502,7 @@
             }
         },
         "ousidhoum2024semrel2024|10.18653/v1/2024.findings-acl.147||semrel2024: a collection of semantic textual relatedness datasets for 13 languages|2024": {
-            "stored_at": 1792481997.922786,
+            "stored_at": 1795087381.2792957,
             "value": {
                 "verdict": "OK",
                 "found_title": "SemRel2024: A Collection of Semantic Textual Relatedness Datasets for 13 Languages",
@@ -10512,7 +10512,7 @@
             }
         },
         "fabbri2020summeval|10.1162/tacl_a_00373||summeval: re-evaluating summarization evaluation|2021": {
-            "stored_at": 1792481998.2006552,
+            "stored_at": 1795087380.381085,
             "value": {
                 "verdict": "OK",
                 "found_title": "SummEval: Re-evaluating Summarization Evaluation",
@@ -10522,7 +10522,7 @@
             }
         },
         "snegirev2024russianfocusedembeddersexplorationrumteb|10.18653/v1/2025.naacl-long.12||the {r}ussian-focused embedders' exploration: ru{mteb} benchmark and {r}ussian embedding model design|2025": {
-            "stored_at": 1792481998.966013,
+            "stored_at": 1795087383.9936614,
             "value": {
                 "verdict": "OK",
                 "found_title": "The Russian-focused embedders\u2019 exploration: ruMTEB benchmark and Russian embedding model design",
@@ -10532,7 +10532,7 @@
             }
         },
         "wehrli2024germantextembeddingclustering||2401.02709|{g}erman text embedding clustering benchmark|2023": {
-            "stored_at": 1792481999.655352,
+            "stored_at": 1795087379.7147071,
             "value": {
                 "verdict": "OK",
                 "found_title": "German Text Embedding Clustering Benchmark",
@@ -10542,7 +10542,7 @@
             }
         },
         "poswiata2024plmteb|10.18653/v1/2026.findings-acl.1773||{pl}-{mteb}: {p}olish massive text embedding benchmark|2026": {
-            "stored_at": 1792481999.732784,
+            "stored_at": 1795087382.2468402,
             "value": {
                 "verdict": "OK",
                 "found_title": "PL-MTEB: Polish Massive Text Embedding Benchmark",
@@ -10552,7 +10552,7 @@
             }
         },
         "suppa2026skmteb|10.18653/v1/2026.acl-long.2114||{s}k{mteb}: {s}lovak massive text embedding benchmark and model adaptation|2026": {
-            "stored_at": 1792482000.379311,
+            "stored_at": 1795087386.7230263,
             "value": {
                 "verdict": "OK",
                 "found_title": "SkMTEB: Slovak Massive Text Embedding Benchmark and Model Adaptation",
@@ -10562,7 +10562,7 @@
             }
         },
         "wang2023internvid||2307.06942|internvid: a large-scale video-text dataset for multimodal understanding and generation|2024": {
-            "stored_at": 1792482002.70465,
+            "stored_at": 1795087400.1087906,
             "value": {
                 "verdict": "OK",
                 "found_title": "InternVid: A Large-scale Video-Text Dataset for Multimodal Understanding and Generation",
@@ -10572,7 +10572,7 @@
             }
         },
         "huang2024llm2clippowerfullanguagemodel|10.1609/aaai.v40i7.37427||llm2clip: powerful language model unlocks richer cross-modality representation|2026": {
-            "stored_at": 1792482003.403689,
+            "stored_at": 1795087389.4540482,
             "value": {
                 "verdict": "OK",
                 "found_title": "LLM2CLIP: Powerful Language Model Unlocks Richer Cross-Modality Representation",
@@ -10582,7 +10582,7 @@
             }
         },
         "DBLP:journals/corr/abs-1911-02116|10.18653/v1/2020.acl-main.747||unsupervised cross-lingual representation learning at scale|2020": {
-            "stored_at": 1792482004.2002308,
+            "stored_at": 1795087387.6384645,
             "value": {
                 "verdict": "OK",
                 "found_title": "Unsupervised Cross-lingual Representation Learning at Scale",
@@ -10592,7 +10592,7 @@
             }
         },
         "lawrie2023overview||2304.12367|overview of the trec 2022 neuclir track|2022": {
-            "stored_at": 1792482005.809084,
+            "stored_at": 1795087373.5303948,
             "value": {
                 "verdict": "OK",
                 "found_title": "Overview of the TREC 2022 NeuCLIR Track",
@@ -10602,7 +10602,7 @@
             }
         },
         "chen2025moca|10.18653/v1/2026.acl-long.34||{m}o{c}a: modality-aware continual pre-training makes better bidirectional multimodal embeddings|2026": {
-            "stored_at": 1792482007.288172,
+            "stored_at": 1795087403.9975824,
             "value": {
                 "verdict": "OK",
                 "found_title": "MoCa: Modality-aware Continual Pre-training Makes Better Bidirectional Multimodal Embeddings",
@@ -10612,7 +10612,7 @@
             }
         },
         "rankllama|10.1145/3626772.3657951||fine-tuning llama for multi-stage text retrieval|2024": {
-            "stored_at": 1792482008.100991,
+            "stored_at": 1795087424.054737,
             "value": {
                 "verdict": "OK",
                 "found_title": "Fine-Tuning LLaMA for Multi-Stage Text Retrieval",
@@ -10622,7 +10622,7 @@
             }
         },
         "suresh2025cornstackhighqualitycontrastivedata||2412.01007|co{rns}tack: high-quality contrastive data for better code retrieval and reranking|2025": {
-            "stored_at": 1792482008.951481,
+            "stored_at": 1795087402.9886777,
             "value": {
                 "verdict": "OK",
                 "found_title": "CoRNStack: High-Quality Contrastive Data for Better Code Retrieval and Reranking",
@@ -10632,7 +10632,7 @@
             }
         },
         "lawrie2024overview||2404.08071|overview of the trec 2023 neuclir track|2023": {
-            "stored_at": 1792482011.7076511,
+            "stored_at": 1795087376.6380718,
             "value": {
                 "verdict": "OK",
                 "found_title": "Overview of the TREC 2023 NeuCLIR Track",
@@ -10642,7 +10642,7 @@
             }
         },
         "lei2025lens|10.18653/v1/2025.acl-long.930||enhancing lexicon-based text embeddings with large language models|2025": {
-            "stored_at": 1792482012.4859688,
+            "stored_at": 1795087421.449601,
             "value": {
                 "verdict": "OK",
                 "found_title": "Enhancing Lexicon-Based Text Embeddings with Large Language Models",
@@ -10652,7 +10652,7 @@
             }
         },
         "xu2025metaclip2||2507.22062|meta {clip} 2: a worldwide scaling recipe|2025": {
-            "stored_at": 1792482014.775276,
+            "stored_at": 1795087424.1798012,
             "value": {
                 "verdict": "OK",
                 "found_title": "Meta CLIP 2: A Worldwide Scaling Recipe",
@@ -10662,7 +10662,7 @@
             }
         },
         "fan2025scaling|10.1109/iccv51701.2025.00042||scaling language-free visual representation learning|2025": {
-            "stored_at": 1792482015.5728462,
+            "stored_at": 1795087412.235799,
             "value": {
                 "verdict": "OK",
                 "found_title": "Scaling Language-Free Visual Representation Learning",
@@ -10672,7 +10672,7 @@
             }
         },
         "chen2024little|10.18653/v1/2025.naacl-long.64||little giants: synthesizing high-quality embedding data at scale|2025": {
-            "stored_at": 1792482016.2931468,
+            "stored_at": 1795087383.1210635,
             "value": {
                 "verdict": "OK",
                 "found_title": "Little Giants: Synthesizing High-Quality Embedding Data at Scale",
@@ -10682,7 +10682,7 @@
             }
         },
         "zhang2023language|10.18653/v1/2025.xllm-1.21||language models are universal embedders|2025": {
-            "stored_at": 1792482017.1452649,
+            "stored_at": 1795087384.911576,
             "value": {
                 "verdict": "OK",
                 "found_title": "Language Models are Universal Embedders",
@@ -10692,7 +10692,7 @@
             }
         },
         "weller2024promptriever||2409.11136|promptriever: instruction-trained retrievers can be prompted like language models|2025": {
-            "stored_at": 1792482017.736683,
+            "stored_at": 1795087406.0814638,
             "value": {
                 "verdict": "OK",
                 "found_title": "Promptriever: Instruction-Trained Retrievers Can Be Prompted Like Language Models",
@@ -10702,7 +10702,7 @@
             }
         },
         "conneau2020unsupervisedcrosslingualrepresentationlearning|10.21437/interspeech.2021-329||unsupervised cross-lingual representation learning for speech recognition|2021": {
-            "stored_at": 1792482018.449352,
+            "stored_at": 1795087422.207683,
             "value": {
                 "verdict": "OK",
                 "found_title": "Unsupervised Cross-Lingual Representation Learning for Speech Recognition",
@@ -10712,7 +10712,7 @@
             }
         },
         "babu2021xlsrselfsupervisedcrosslingualspeech|10.21437/interspeech.2022-143||xls-r: self-supervised cross-lingual speech representation learning at scale|2022": {
-            "stored_at": 1792482019.191456,
+            "stored_at": 1795087423.1137516,
             "value": {
                 "verdict": "OK",
                 "found_title": "XLS-R: Self-supervised Cross-lingual Speech Representation Learning at Scale",
@@ -10722,7 +10722,7 @@
             }
         },
         "zhang2024mgte|10.18653/v1/2024.emnlp-industry.103||{mgte}: generalized long-context text representation and reranking models for multilingual text retrieval|2024": {
-            "stored_at": 1792482019.912826,
+            "stored_at": 1795087399.4569652,
             "value": {
                 "verdict": "OK",
                 "found_title": "mGTE: Generalized Long-Context Text Representation and Reranking Models for Multilingual Text Retrieval",
@@ -10732,7 +10732,7 @@
             }
         },
         "dadas2024pirb||2402.13350|{pirb}: a comprehensive benchmark of {p}olish dense and hybrid text retrieval methods|2024": {
-            "stored_at": 1792482020.7189991,
+            "stored_at": 1795087385.2193396,
             "value": {
                 "verdict": "OK",
                 "found_title": "PIRB: A Comprehensive Benchmark of Polish Dense and Hybrid Text Retrieval Methods",
@@ -10742,7 +10742,7 @@
             }
         },
         "gu2025unimev2mllmasajudgeuniversalmultimodal|10.1609/aaai.v40i26.39284||unime-v2: mllm-as-a-judge for universal multimodal embedding learning|2026": {
-            "stored_at": 1792482021.500399,
+            "stored_at": 1795087418.129262,
             "value": {
                 "verdict": "OK",
                 "found_title": "UniME-V2: MLLM-as-a-Judge for Universal Multimodal Embedding Learning",
@@ -10752,7 +10752,7 @@
             }
         },
         "wu2022wav2cliplearningrobustaudio|10.1109/icassp43922.2022.9747669||wav2clip: learning robust audio representations from clip|2022": {
-            "stored_at": 1792482022.265311,
+            "stored_at": 1795087397.6359231,
             "value": {
                 "verdict": "OK",
                 "found_title": "Wav2CLIP: Learning Robust Audio Representations from Clip",
@@ -10762,7 +10762,7 @@
             }
         },
         "CLAP2023|10.1109/icassp48485.2024.10448504||natural language supervision for general-purpose audio representations|2024": {
-            "stored_at": 1792482023.029753,
+            "stored_at": 1795087429.4824722,
             "value": {
                 "verdict": "OK",
                 "found_title": "Natural Language Supervision For General-Purpose Audio Representations",
@@ -10772,7 +10772,7 @@
             }
         },
         "oquab2023dinov2||2304.07193|{dino}v2: learning robust visual features without supervision|2024": {
-            "stored_at": 1792482023.71029,
+            "stored_at": 1795087415.0827847,
             "value": {
                 "verdict": "OK",
                 "found_title": "DINOv2: Learning Robust Visual Features without Supervision",
@@ -10782,7 +10782,7 @@
             }
         },
         "chen2021unispeechsatuniversalspeechrepresentation|10.1109/icassp43922.2022.9747077||unispeech-sat: universal speech representation learning with speaker aware pre-training|2022": {
-            "stored_at": 1792482023.768487,
+            "stored_at": 1795087388.5805414,
             "value": {
                 "verdict": "OK",
                 "found_title": "Unispeech-Sat: Universal Speech Representation Learning With Speaker Aware Pre-Training",
@@ -10792,7 +10792,7 @@
             }
         },
         "mdbr_leaf|10.18653/v1/2026.acl-long.2008||{leaf}: knowledge distillation of text embedding models with teacher-aligned representations|2026": {
-            "stored_at": 1792482024.4152498,
+            "stored_at": 1795087424.9332943,
             "value": {
                 "verdict": "OK",
                 "found_title": "LEAF: Knowledge Distillation of Text Embedding Models with Teacher-Aligned Representations",
@@ -10802,7 +10802,7 @@
             }
         },
         "zhuang2025tevatron|10.1145/3726302.3730135||tevatron 2.0: unified document retrieval toolkit across scale, language, and modality|2025": {
-            "stored_at": 1792482025.140057,
+            "stored_at": 1795087426.753987,
             "value": {
                 "verdict": "OK",
                 "found_title": "Tevatron 2.0: Unified Document Retrieval Toolkit across Scale, Language, and Modality",
@@ -10812,7 +10812,7 @@
             }
         },
         "morris2024contextualdocumentembeddings||2410.02525|contextual document embeddings|2025": {
-            "stored_at": 1792482026.767919,
+            "stored_at": 1795087395.4202316,
             "value": {
                 "verdict": "OK",
                 "found_title": "Contextual Document Embeddings",
@@ -10822,7 +10822,7 @@
             }
         },
         "sinha2025bicaeffectivebiomedicaldense|10.1609/aaai.v40i39.40583||bica: effective biomedical dense retrieval with citation-aware hard negatives|2026": {
-            "stored_at": 1792482027.535435,
+            "stored_at": 1795087410.225091,
             "value": {
                 "verdict": "OK",
                 "found_title": "BiCA: Effective Biomedical Dense Retrieval with Citation-Aware Hard Negatives",
@@ -10832,7 +10832,7 @@
             }
         },
         "hsu2021hubertselfsupervisedspeechrepresentation|10.1109/taslp.2021.3122291||hubert: self-supervised speech representation learning by masked prediction of hidden units|2021": {
-            "stored_at": 1792482028.265198,
+            "stored_at": 1795087395.824892,
             "value": {
                 "verdict": "OK",
                 "found_title": "HuBERT: Self-Supervised Speech Representation Learning by Masked Prediction of Hidden Units",
@@ -10842,7 +10842,7 @@
             }
         },
         "zhou2024vista|10.18653/v1/2024.acl-long.175||{vista}: visualized text embedding for universal multi-modal retrieval|2024": {
-            "stored_at": 1792482028.962105,
+            "stored_at": 1795087415.206604,
             "value": {
                 "verdict": "OK",
                 "found_title": "VISTA: Visualized Text Embedding For Universal Multi-Modal Retrieval",
@@ -10862,7 +10862,7 @@
             }
         },
         "shi2025scaling|10.1109/cvpr52734.2025.00900||scaling vision pre-training to 4k resolution|2025": {
-            "stored_at": 1792482030.448941,
+            "stored_at": 1795087396.7700806,
             "value": {
                 "verdict": "OK",
                 "found_title": "Scaling Vision Pre-Training to 4K Resolution",
@@ -10872,7 +10872,7 @@
             }
         },
         "zhai2023sigmoid|10.1109/iccv51070.2023.01100||sigmoid loss for language image pre-training|2023": {
-            "stored_at": 1792482031.195122,
+            "stored_at": 1795087421.333587,
             "value": {
                 "verdict": "OK",
                 "found_title": "Sigmoid Loss for Language Image Pre-Training",
@@ -10882,7 +10882,7 @@
             }
         },
         "nussbaum2024nomic||2402.01613|nomic embed: training a reproducible long context text embedder|2025": {
-            "stored_at": 1792482032.750371,
+            "stored_at": 1795087430.1737454,
             "value": {
                 "verdict": "OK",
                 "found_title": "Nomic Embed: Training a Reproducible Long Context Text Embedder",
@@ -10892,7 +10892,7 @@
             }
         },
         "ni2021largedualencodersgeneralizable|10.18653/v1/2022.emnlp-main.669||large dual encoders are generalizable retrievers|2022": {
-            "stored_at": 1792482033.4883,
+            "stored_at": 1795087394.9133933,
             "value": {
                 "verdict": "OK",
                 "found_title": "Large Dual Encoders Are Generalizable Retrievers",
@@ -10902,7 +10902,7 @@
             }
         },
         "ni2021sentencet5scalablesentenceencoders|10.18653/v1/2022.findings-acl.146||{s}entence-{t}5: scalable sentence encoders from pre-trained text-to-text models|2022": {
-            "stored_at": 1792482034.207934,
+            "stored_at": 1795087394.020565,
             "value": {
                 "verdict": "OK",
                 "found_title": "Sentence-T5: Scalable Sentence Encoders from Pre-trained Text-to-Text Models",
@@ -10912,7 +10912,7 @@
             }
         },
         "d\u00e9fossez2022highfidelityneuralaudio||2210.13438|high fidelity neural audio compression|2023": {
-            "stored_at": 1792482035.6188412,
+            "stored_at": 1795087421.1887777,
             "value": {
                 "verdict": "OK",
                 "found_title": "High Fidelity Neural Audio Compression",
@@ -10922,7 +10922,7 @@
             }
         },
         "https://doi.org/10.48550/arxiv.2205.02340|10.28995/2075-7182-2022-21-295-310||knowledge distillation of russian language models with reduction of vocabulary|2022": {
-            "stored_at": 1792482036.341332,
+            "stored_at": 1795087409.4540482,
             "value": {
                 "verdict": "OK",
                 "found_title": "Knowledge Distillation of Russian Language Models with Reduction of Vocabulary",
@@ -10942,7 +10942,7 @@
             }
         },
         "lugosch2022pseudolabelingmassivelymultilingualspeech|10.1109/icassp43922.2022.9746832||pseudo-labeling for massively multilingual speech recognition|2022": {
-            "stored_at": 1792482039.4364538,
+            "stored_at": 1795087406.1811633,
             "value": {
                 "verdict": "OK",
                 "found_title": "Pseudo-Labeling for Massively Multilingual Speech Recognition",
@@ -10952,7 +10952,7 @@
             }
         },
         "gong2021astaudiospectrogramtransformer|10.21437/interspeech.2021-698||ast: audio spectrogram transformer|2021": {
-            "stored_at": 1792482040.129411,
+            "stored_at": 1795087403.0815973,
             "value": {
                 "verdict": "OK",
                 "found_title": "AST: Audio Spectrogram Transformer",
@@ -10962,7 +10962,7 @@
             }
         },
         "ni2022expanding|10.1007/978-3-031-19772-7_1||expanding language-image pretrained models for general video recognition|2022": {
-            "stored_at": 1792482040.842763,
+            "stored_at": 1795087425.8647344,
             "value": {
                 "verdict": "OK",
                 "found_title": "Expanding Language-Image Pretrained Models for\u00a0General Video Recognition",
@@ -10972,7 +10972,7 @@
             }
         },
         "chen2026e5omni|10.18653/v1/2026.findings-acl.970||e5-omni: explicit cross-modal alignment for omni-modal embeddings|2026": {
-            "stored_at": 1792482041.594312,
+            "stored_at": 1795087385.8227863,
             "value": {
                 "verdict": "OK",
                 "found_title": "e5-omni: Explicit Cross-modal Alignment for Omni-modal Embeddings",
@@ -10982,7 +10982,7 @@
             }
         },
         "lee2025nvembedimprovedtechniquestraining||2405.17428|{nv}-embed: improved techniques for training {llm}s as generalist embedding models|2025": {
-            "stored_at": 1792482041.7239838,
+            "stored_at": 1795087412.110667,
             "value": {
                 "verdict": "OK",
                 "found_title": "NV-Embed: Improved Techniques for Training LLMs as Generalist Embedding Models",
@@ -10992,7 +10992,7 @@
             }
         },
         "chen2021mocov3|10.1109/iccv48922.2021.00950||an empirical study of training self-supervised vision transformers|2021": {
-            "stored_at": 1792482042.3752031,
+            "stored_at": 1795087391.2702377,
             "value": {
                 "verdict": "OK",
                 "found_title": "An Empirical Study of Training Self-Supervised Vision Transformers",
@@ -11002,7 +11002,7 @@
             }
         },
         "wu2021performanceefficiencytradeoffsunsupervisedpretraining|10.1109/icassp43922.2022.9747432||performance-efficiency trade-offs in unsupervised pre-training for speech recognition|2022": {
-            "stored_at": 1792482042.407386,
+            "stored_at": 1795087401.283487,
             "value": {
                 "verdict": "OK",
                 "found_title": "Performance-Efficiency Trade-Offs in Unsupervised Pre-Training for Speech Recognition",
@@ -11012,7 +11012,7 @@
             }
         },
         "wang2023improving|10.18653/v1/2024.acl-long.642||improving text embeddings with large language models|2024": {
-            "stored_at": 1792482043.0799959,
+            "stored_at": 1795087428.5620086,
             "value": {
                 "verdict": "OK",
                 "found_title": "Improving Text Embeddings with Large Language Models",
@@ -11022,7 +11022,7 @@
             }
         },
         "eslami2026diffusionpretraineddensecontextualembeddings|10.18653/v1/2026.acl-industry.69||diffusion-pretrained dense and contextual embeddings|2026": {
-            "stored_at": 1792482043.341596,
+            "stored_at": 1795087402.2175329,
             "value": {
                 "verdict": "OK",
                 "found_title": "Diffusion-Pretrained Dense and Contextual Embeddings",
@@ -11032,7 +11032,7 @@
             }
         },
         "wang2024internvideo2|10.1007/978-3-031-73013-9_23||internvideo2: scaling foundation models for multimodal video understanding|2024": {
-            "stored_at": 1792482043.847927,
+            "stored_at": 1795087393.0759318,
             "value": {
                 "verdict": "OK",
                 "found_title": "InternVideo2: Scaling Foundation Models for\u00a0Multimodal Video Understanding",
@@ -11042,7 +11042,7 @@
             }
         },
         "gao2021simcse|10.18653/v1/2021.emnlp-main.552||{s}im{cse}: simple contrastive learning of sentence embeddings|2021": {
-            "stored_at": 1792482044.3466072,
+            "stored_at": 1795087427.6584835,
             "value": {
                 "verdict": "OK",
                 "found_title": "SimCSE: Simple Contrastive Learning of Sentence Embeddings",
@@ -11052,7 +11052,7 @@
             }
         },
         "radford2022robustspeechrecognitionlargescale||2212.04356|robust speech recognition via large-scale weak supervision|2023": {
-            "stored_at": 1792482044.63627,
+            "stored_at": 1795087418.0189939,
             "value": {
                 "verdict": "OK",
                 "found_title": "Robust Speech Recognition via Large-Scale Weak Supervision",
@@ -11062,7 +11062,7 @@
             }
         },
         "ao2022speecht5unifiedmodalencoderdecoderpretraining|10.18653/v1/2022.acl-long.393||{s}peech{t}5: unified-modal encoder-decoder pre-training for spoken language processing|2022": {
-            "stored_at": 1792482045.101255,
+            "stored_at": 1795087400.3871398,
             "value": {
                 "verdict": "OK",
                 "found_title": "SpeechT5: Unified-Modal Encoder-Decoder Pre-Training for Spoken Language Processing",
@@ -11072,7 +11072,7 @@
             }
         },
         "jiang2024vlm2vec||2410.05160|{vlm}2vec: training vision-language models for massive multimodal embedding tasks|2025": {
-            "stored_at": 1792482047.758673,
+            "stored_at": 1795087389.8981817,
             "value": {
                 "verdict": "OK",
                 "found_title": "VLM2Vec: Training Vision-Language Models for Massive Multimodal Embedding Tasks",
@@ -11082,7 +11082,7 @@
             }
         },
         "pratap2023scalingspeechtechnology1000||2305.13516|scaling speech technology to 1, 000+ languages|2024": {
-            "stored_at": 1792482050.752689,
+            "stored_at": 1795087409.164034,
             "value": {
                 "verdict": "OK",
                 "found_title": "Scaling Speech Technology to 1,000+ Languages",
@@ -11092,7 +11092,7 @@
             }
         },
         "zhu2025muqselfsupervisedmusicrepresentation|10.1109/taslpro.2025.3602320||muq: self-supervised music representation learning with mel residual vector quantization|2025": {
-            "stored_at": 1792482051.604686,
+            "stored_at": 1795087409.3381326,
             "value": {
                 "verdict": "OK",
                 "found_title": "MuQ: Self-Supervised Music Representation Learning With Mel Residual Vector Quantization",
@@ -11102,7 +11102,7 @@
             }
         },
         "chen2025mmE5|10.18653/v1/2025.findings-acl.433||mm{e}5: improving multimodal multilingual embeddings via high-quality synthetic data|2025": {
-            "stored_at": 1792482052.3486989,
+            "stored_at": 1795087392.1786816,
             "value": {
                 "verdict": "OK",
                 "found_title": "mmE5: Improving Multimodal Multilingual Embeddings via High-quality Synthetic Data",
@@ -11112,7 +11112,7 @@
             }
         },
         "https://doi.org/10.48550/arxiv.2201.12086||2201.12086|blip: bootstrapping language-image pre-training for unified vision-language understanding and generation|2022": {
-            "stored_at": 1792482053.799349,
+            "stored_at": 1795087427.0079823,
             "value": {
                 "verdict": "OK",
                 "found_title": "BLIP: Bootstrapping Language-Image Pre-training for Unified Vision-Language Understanding and Generation",
@@ -11122,7 +11122,7 @@
             }
         },
         "meng2025vlm2vecv2advancingmultimodalembedding||2507.04590|{vlm}2vec-v2: advancing multimodal embedding for videos, images, and visual documents|2026": {
-            "stored_at": 1792482056.8192902,
+            "stored_at": 1795087397.095645,
             "value": {
                 "verdict": "OK",
                 "found_title": "VLM2Vec-V2: Advancing Multimodal Embedding for Videos, Images, and Visual Documents",
@@ -11132,7 +11132,7 @@
             }
         },
         "izacard2021contriever||2112.09118|unsupervised dense information retrieval with contrastive learning|2022": {
-            "stored_at": 1792482059.796043,
+            "stored_at": 1795087391.1167586,
             "value": {
                 "verdict": "OK",
                 "found_title": "Unsupervised Dense Information Retrieval with Contrastive Learning",
@@ -11142,7 +11142,7 @@
             }
         },
         "shavrina2020russiansuperglue|10.18653/v1/2020.emnlp-main.381||{r}ussian{superglue}: a {r}ussian language understanding evaluation benchmark|2020": {
-            "stored_at": 1792483914.900575,
+            "stored_at": 1795087328.053804,
             "value": {
                 "verdict": "OK",
                 "found_title": "RussianSuperGLUE: A Russian Language Understanding Evaluation Benchmark",
@@ -11152,7 +11152,7 @@
             }
         },
         "hu2020ocnli|10.18653/v1/2020.findings-emnlp.314||{ocnli}: {o}riginal {c}hinese {n}atural {language} {i}nference|2020": {
-            "stored_at": 1792483914.9431849,
+            "stored_at": 1795087327.1501968,
             "value": {
                 "verdict": "OK",
                 "found_title": "OCNLI: Original Chinese Natural Language Inference",
@@ -11162,7 +11162,7 @@
             }
         },
         "li2023making|10.18653/v1/2024.acl-long.191||{l}lama2{v}ec: unsupervised adaptation of large language models for dense retrieval|2024": {
-            "stored_at": 1792483927.3496041,
+            "stored_at": 1795087398.5456476,
             "value": {
                 "verdict": "OK",
                 "found_title": "Llama2Vec: Unsupervised Adaptation of Large Language Models for Dense Retrieval",
@@ -11172,7 +11172,7 @@
             }
         },
         "muennighoff2023octopack||2308.07124|octopack: instruction tuning code large language models|2024": {
-            "stored_at": 1792488873.092022,
+            "stored_at": 1795087335.1368537,
             "value": {
                 "verdict": "OK",
                 "found_title": "OctoPack: Instruction Tuning Code Large Language Models",
@@ -11182,7 +11182,7 @@
             }
         },
         "shahinmoghadam2024benchmarking|10.1038/s41598-025-09052-5||benchmarking pre-trained text embedding models in aligning built asset information|2025": {
-            "stored_at": 1792560677.789432,
+            "stored_at": 1795170007.9948587,
             "value": {
                 "verdict": "OK",
                 "found_title": "Benchmarking pre-trained text embedding models in aligning built asset information",
@@ -11192,7 +11192,7 @@
             }
         },
         "sap2019socialiqa|10.18653/v1/D19-1454||social {iq}a: commonsense reasoning about social interactions|2019": {
-            "stored_at": 1792560677.8042638,
+            "stored_at": 1795170007.9485097,
             "value": {
                 "verdict": "OK",
                 "found_title": "Social IQa: Commonsense Reasoning about Social Interactions",
@@ -11202,7 +11202,7 @@
             }
         },
         "okamura2026multilingualaveragesmtebptbenchmark|10.1007/978-3-032-39892-5_33||beyond multilingual averages: mteb-pt, a benchmark for portuguese sentence encoders|2026": {
-            "stored_at": 1792560678.29282,
+            "stored_at": 1795170008.812203,
             "value": {
                 "verdict": "OK",
                 "found_title": "Beyond Multilingual Averages: MTEB-PT, a\u00a0Benchmark for\u00a0Portuguese Sentence Encoders",
@@ -11212,7 +11212,7 @@
             }
         },
         "zhou2024megapairs|10.18653/v1/2025.acl-long.935||{m}ega{p}airs: massive data synthesis for universal multimodal retrieval|2025": {
-            "stored_at": 1792560678.798101,
+            "stored_at": 1795170008.3445845,
             "value": {
                 "verdict": "OK",
                 "found_title": "MegaPairs: Massive Data Synthesis for Universal Multimodal Retrieval",
@@ -11222,7 +11222,7 @@
             }
         },
         "Ruri|10.5715/jnlp.33.591||ruri: japanese general text embeddings|2026": {
-            "stored_at": 1792560679.30663,
+            "stored_at": 1795170009.8314915,
             "value": {
                 "verdict": "OK",
                 "found_title": "Ruri: Japanese General Text Embeddings",
@@ -11232,7 +11232,7 @@
             }
         },
         "yu2025injongo|10.18653/v1/2025.acl-long.464||{injongo}: a multicultural intent detection and slot-filling dataset for 16 {a}frican languages|2025": {
-            "stored_at": 1792560679.815606,
+            "stored_at": 1795170009.327049,
             "value": {
                 "verdict": "OK",
                 "found_title": "INJONGO: A Multicultural Intent Detection and Slot-filling Dataset for 16 African Languages",
@@ -11322,7 +11322,7 @@
             }
         },
         "vera2026embeddinggemma2unifiedefficient||2610.37364|embeddinggemma 2: unified and efficient multimodal representations|2026": {
-            "stored_at": 1793702950.219583,
+            "stored_at": 1793898173.329603,
             "value": {
                 "verdict": "OK",
                 "found_title": "EmbeddingGemma 2: Unified and Efficient Multimodal Representations",
@@ -11332,17 +11332,17 @@
             }
         },
         "formal2021spladev2||2109.10086|splade v2: sparse lexical and expansion model for information retrieval|2021": {
-            "stored_at": 1793702953.3171148,
+            "stored_at": 1793898488.8250399,
             "value": {
                 "verdict": "OK",
                 "found_title": "SPLADE v2: Sparse Lexical and Expansion Model for Information Retrieval",
-                "source": "arxiv:id",
+                "source": "openalex",
                 "similarity": 1.0,
                 "note": ""
             }
         },
         "lassance2024spladev3||2403.06789|splade-v3: new baselines for splade|2024": {
-            "stored_at": 1793702956.328326,
+            "stored_at": 1793898548.8302279,
             "value": {
                 "verdict": "OK",
                 "found_title": "SPLADE-v3: New baselines for SPLADE",
@@ -11352,7 +11352,7 @@
             }
         },
         "zhao2026lycheererankerfastlateinteraction||2606.22807|lychee-reranker: fast but not late interaction for compressed document reranking|2026": {
-            "stored_at": 1793702959.353045,
+            "stored_at": 1793898568.7254038,
             "value": {
                 "verdict": "OK",
                 "found_title": "Lychee-Reranker: Fast but Not Late Interaction for Compressed Document Reranking",
@@ -11372,7 +11372,7 @@
             }
         },
         "krimmel2026pplxembedv2latetechnicalreport||2610.29523|pplx-embed-v2-late technical report|2026": {
-            "stored_at": 1793702971.325417,
+            "stored_at": 1793898525.826261,
             "value": {
                 "verdict": "OK",
                 "found_title": "pplx-embed-v2-late Technical Report",
@@ -11497,6 +11497,186 @@
                 "verdict": "OK",
                 "found_title": "X-Stance: A Multilingual Multi-Target Dataset for Stance Detection",
                 "source": "datacite:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "zhang2026speecheditbench|10.18653/2026.emnlp-main.1151||speecheditbench: a bilingual multi-attribute benchmark for instruction-guided speech editing|2026": {
+            "stored_at": 1793898172.7169468,
+            "value": {
+                "verdict": "OK",
+                "found_title": "SpeechEditBench: A Bilingual Multi-Attribute Benchmark for Instruction-Guided Speech Editing",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "zhang2026r2medbenchmarkreasoningdrivenmedical|10.18653/2026.emnlp-main.2138||r2med: a benchmark for reasoning-driven medical retrieval|2026": {
+            "stored_at": 1793898172.73361,
+            "value": {
+                "verdict": "OK",
+                "found_title": "R2MED: A Benchmark for Reasoning-Driven Medical Retrieval",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "nacar2025gate|10.18653/2026.findings-emnlp.1952||gate: general arabic text embedding for enhanced semantic textual similarity with matryoshka representation learning and hybrid loss training|2026": {
+            "stored_at": 1793898173.187249,
+            "value": {
+                "verdict": "OK",
+                "found_title": "GATE: General Arabic Text Embedding for Enhanced Semantic Textual Similarity with Matryoshka Representation Learning and Hybrid Loss Training",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "liu2026omniretriever|10.18653/2026.emnlp-main.541||omniretriever: any-to-any audio-video-text retrieval via fusion-as-teacher distillation|2026": {
+            "stored_at": 1793898173.676157,
+            "value": {
+                "verdict": "OK",
+                "found_title": "OmniRetriever: Any-to-Any Audio-Video-Text Retrieval via Fusion-as-Teacher Distillation",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "uembed2026|10.18653/2026.emnlp-main.1419||uembed: unified sparse and dense multimodal embeddings|2026": {
+            "stored_at": 1793898174.179671,
+            "value": {
+                "verdict": "OK",
+                "found_title": "UEmbed: Unified Sparse and Dense Multimodal Embeddings",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "cho2026vsplade|10.1145/3799682.3840581||inference-free multimodal learned sparse retrieval for production-scale visual document search|2026": {
+            "stored_at": 1793898174.687996,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Inference-Free Multimodal Learned Sparse Retrieval for Production-Scale Visual Document Search",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "g\u00fcnther2023jina|10.18653/v1/2023.nlposs-1.2||{j}ina embeddings: a novel set of high-performance sentence embedding models|2023": {
+            "stored_at": 1793898175.1542761,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Jina Embeddings: A Novel Set of High-Performance Sentence Embedding Models",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "nanovdr2026|10.18653/2026.emnlp-main.71||nanovdr: distilling a 2b vision-language retriever into a 70m text-only encoder for visual document retrieval|2026": {
+            "stored_at": 1793898175.68352,
+            "value": {
+                "verdict": "OK",
+                "found_title": "NanoVDR: Distilling a 2B Vision-Language Retriever into a 70M Text-Only Encoder for Visual Document Retrieval",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "zhong2026queritrerankertrainingcompactmultilingual|10.18653/2026.emnlp-industry.97||querit-reranker: training compact multilingual rerankers via efficient label-free distribution adaptation|2026": {
+            "stored_at": 1793898176.196714,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Querit-Reranker: Training Compact Multilingual Rerankers via Efficient Label-Free Distribution Adaptation",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "zhang2025swebenchlive||2505.23419|{swe}-bench goes live!|2025": {
+            "stored_at": 1794137632.0203476,
+            "value": {
+                "verdict": "OK",
+                "found_title": "SWE-bench Goes Live!",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "wang2025swebenchplusplus||2512.17419|{swe-bench++}: a framework for the scalable generation of software engineering benchmarks from open-source repositories|2025": {
+            "stored_at": 1794137634.9105413,
+            "value": {
+                "verdict": "OK",
+                "found_title": "SWE-Bench++: A Framework for the Scalable Generation of Software Engineering Benchmarks from Open-Source Repositories",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "rashid2025swepolybench||2504.08703|{swe-polybench}: a multi-language benchmark for repository level evaluation of coding agents|2025": {
+            "stored_at": 1794137638.036003,
+            "value": {
+                "verdict": "OK",
+                "found_title": "SWE-PolyBench: A multi-language benchmark for repository level evaluation of coding agents",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "xu2025swingarena||2505.23932|{swingarena}: competitive programming arena for long-context {github} issue solving|2025": {
+            "stored_at": 1794137640.9093904,
+            "value": {
+                "verdict": "OK",
+                "found_title": "SwingArena: Competitive Programming Arena for Long-context GitHub Issue Solving",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "souza2020bertimbau|10.1007/978-3-030-61377-8_28||{bert}imbau: pretrained {bert} models for {b}razilian {p}ortuguese|2020": {
+            "stored_at": 1795102012.3273203,
+            "value": {
+                "verdict": "OK",
+                "found_title": "BERTimbau: Pretrained BERT Models for Brazilian Portuguese",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "rodrigues2023albertina||2305.06721|advancing neural encoding of portuguese with transformer albertina pt-*|2023": {
+            "stored_at": 1795102012.3281176,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Advancing Neural Encoding of Portuguese with Transformer Albertina PT-*",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "melo2023semantic|10.1007/978-3-031-49011-8_12||a semantic search system for the supremo tribunal de justi{\\c{c}}a|2023": {
+            "stored_at": 1795102012.4486659,
+            "value": {
+                "verdict": "OK",
+                "found_title": "A Semantic Search System for the Supremo Tribunal de Justi\u00e7a",
+                "source": "crossref:doi",
+                "similarity": 0.9917355371900827,
+                "note": ""
+            }
+        },
+        "silva2021evaluating|||evaluating topic models in portuguese political comments about bills from brazil's chamber of deputies|2021": {
+            "stored_at": 1795102013.9202018,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Evaluating Topic Models in Portuguese Political Comments About Bills from Brazil\u2019s Chamber of Deputies",
+                "source": "openalex",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "pereira2026domainadaptive||2605.04005|domain-adaptive dense retrieval for brazilian legal search|2026": {
+            "stored_at": 1795102015.3406003,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Domain-Adaptive Dense Retrieval for Brazilian Legal Search",
+                "source": "arxiv:id",
                 "similarity": 1.0,
                 "note": ""
             }

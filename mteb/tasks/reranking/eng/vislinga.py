@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 from datasets import Dataset, load_dataset
@@ -8,6 +8,17 @@ from datasets import Dataset, load_dataset
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.models.model_meta import ScoringFunction
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+    from pathlib import Path
+
+    from mteb.models import MTEBModels
+    from mteb.timing import TimingStack
+    from mteb.types import EncodeKwargs, HFSubset, ScoresDict
+
+_SUPPORTED_SIMILARITIES = (ScoringFunction.COSINE, ScoringFunction.DOT_PRODUCT, None)
 
 _ANALOGY_COLUMNS = ("word1", "word2", "word3", "word4")
 
@@ -44,12 +55,15 @@ class _VisLingAReranking(AbsTaskRetrieval):
     """Analogies A:B::C:D over concepts, each represented by one or more inputs (words or images).
 
     Queries and corpus are both the concept inputs, so the standard retrieval evaluation scores every input against
-    every input. `task_specific_scores` rebuilds the input x input cosine similarity matrix from the results, pools it
-    into concept similarities and ranks the answer D of each analogy among all concepts except A, B and C by
-    M[B, X] - M[A, X] + M[C, X], i.e. by cosine similarity to B - A + C.
+    every input. `task_specific_scores` rebuilds the input x input similarity matrix from the results, pools it into
+    concept cosine similarities and ranks the answer D of each analogy among all concepts except A, B and C by
+    M[B, X] - M[A, X] + M[C, X], i.e. by cosine similarity to B - A + C. This requires an inner-product similarity
+    (cosine or dot product), so models with other scoring functions (e.g. late interaction) are unsupported for now.
     """
 
     abstask_prompt = "Represent the concept."
+    _support_cross_encoder = False
+    _support_search = False
 
     def _load_concept_inputs(
         self, analogies: Dataset, split: str, num_proc: int | None
@@ -58,11 +72,6 @@ class _VisLingAReranking(AbsTaskRetrieval):
         raise NotImplementedError
 
     def _input_ids(self, concept_inputs: Dataset) -> list[str]:
-        raise NotImplementedError
-
-    def _relevant_docs(
-        self, ids: list[str], concepts: list[str], by_concept: dict[str, list[str]]
-    ) -> dict[str, dict[str, int]]:
         raise NotImplementedError
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
@@ -98,13 +107,45 @@ class _VisLingAReranking(AbsTaskRetrieval):
             self.dataset["default"][split] = RetrievalSplitData(
                 queries=inputs,
                 corpus=inputs,
-                relevant_docs=self._relevant_docs(ids, concepts, by_concept),
+                relevant_docs={
+                    input_id: dict.fromkeys(by_concept[concept], 1)
+                    for input_id, concept in zip(ids, concepts, strict=True)
+                },
                 top_ranked=None,
             )
             self.input_concepts[split] = concepts
             self.input_ids[split] = ids
             self.analogies[split] = (a, b, c, d)
         self.data_loaded = True
+
+    def evaluate(
+        self,
+        model: MTEBModels,
+        split: str = "test",
+        subsets_to_run: list[HFSubset] | None = None,
+        *,
+        encode_kwargs: EncodeKwargs,
+        prediction_folder: Path | None = None,
+        num_proc: int | None = None,
+        timer: TimingStack | None = None,
+        **kwargs: Any,
+    ) -> Mapping[HFSubset, ScoresDict]:
+        similarity = model.mteb_model_meta.similarity_fn_name
+        if similarity not in _SUPPORTED_SIMILARITIES:
+            raise ValueError(
+                f"{self.metadata.name} pools concept similarities from pairwise input similarities, which requires a "
+                f"cosine or dot-product similarity, but {model.mteb_model_meta.name} uses {similarity}."
+            )
+        return super().evaluate(
+            model,
+            split,
+            subsets_to_run,
+            encode_kwargs=encode_kwargs,
+            prediction_folder=prediction_folder,
+            num_proc=num_proc,
+            timer=timer,
+            **kwargs,
+        )
 
     def task_specific_scores(
         self,
@@ -130,11 +171,7 @@ class _VisLingAReranking(AbsTaskRetrieval):
 def _similarity_matrix(
     results: dict[str, dict[str, float]], ids: list[str]
 ) -> np.ndarray:
-    """Input x input similarities from the retrieval results.
-
-    Pairs missing from the results are filled from the transposed pair, and the diagonal (dropped by
-    ignore_identical_ids) with 1, as the similarity is cosine.
-    """
+    """Input x input similarities from the retrieval results, which must contain every pair."""
     index = {input_id: i for i, input_id in enumerate(ids)}
     n = len(ids)
     similarities = np.full((n, n), np.nan, dtype=np.float64)
@@ -147,13 +184,6 @@ def _similarity_matrix(
         similarities[index[qid], cols] = np.fromiter(
             doc_scores.values(), dtype=np.float64, count=len(doc_scores)
         )
-    diagonal = np.arange(n)
-    similarities[diagonal, diagonal] = np.nan_to_num(
-        similarities[diagonal, diagonal], nan=1.0
-    )
-    missing = np.isnan(similarities)
-    if missing.any():
-        similarities[missing] = similarities.T[missing]
     if np.isnan(similarities).any():
         raise ValueError(
             f"{int(np.isnan(similarities).sum())} input pairs are missing from the results"
@@ -164,7 +194,12 @@ def _similarity_matrix(
 def _pool_similarities(
     similarities: np.ndarray, concepts: list[str]
 ) -> tuple[np.ndarray, list[str]]:
-    """Cosine similarity of concept embeddings, each the mean of its L2-normalised input embeddings."""
+    """Cosine similarity of concept embeddings, each the mean of its input embeddings.
+
+    For an inner-product similarity S, M[A, X] = mean_{i in A, j in X} S[i, j] / (|mean A| |mean X|), with
+    |mean A|^2 = mean_{i, i' in A} S[i, i']. The mean is over the L2-normalised embeddings for cosine models and over
+    the raw embeddings for dot-product models.
+    """
     names = sorted(set(concepts))
     index = {name: i for i, name in enumerate(names)}
     groups = np.array([index[concept] for concept in concepts])
@@ -217,14 +252,8 @@ class VisLingAText(_VisLingAReranking):
     def _input_ids(self, concept_inputs: Dataset) -> list[str]:  # noqa: PLR6301
         return list(concept_inputs["concept"])
 
-    def _relevant_docs(  # noqa: PLR6301
-        self, ids: list[str], concepts: list[str], by_concept: dict[str, list[str]]
-    ) -> dict[str, dict[str, int]]:
-        return {input_id: {input_id: 1} for input_id in ids}
-
 
 class VisLingAImage(_VisLingAReranking):
-    ignore_identical_ids = True
     # top_k = max(k_values) must cover all 7,365 inputs so that the results hold every pair
     k_values = (1, 3, 5, 10, 20, 100, 1000, 10000)
 
@@ -234,8 +263,7 @@ class VisLingAImage(_VisLingAReranking):
             "Visual analogies (A is to B as C is to D) over 746 concepts from the analogy dataset of Mikolov et al. "
             "(2013), e.g. capitals, currencies and grammatical forms. Each concept is represented by the mean of the "
             "L2-normalised embeddings of several Wikimedia Commons images of that concept, and all concepts except A, "
-            "B and C are reranked by cosine similarity to B - A + C. Unlike the paper, which averages the raw image "
-            "embeddings, images are normalised before averaging; empirically, this barely changes hit@10."
+            "B and C are reranked by cosine similarity to B - A + C."
         ),
         category="i2i",
         modalities=["image"],
@@ -255,11 +283,3 @@ class VisLingAImage(_VisLingAReranking):
 
     def _input_ids(self, concept_inputs: Dataset) -> list[str]:  # noqa: PLR6301
         return [f"img{i}" for i in range(len(concept_inputs))]
-
-    def _relevant_docs(  # noqa: PLR6301
-        self, ids: list[str], concepts: list[str], by_concept: dict[str, list[str]]
-    ) -> dict[str, dict[str, int]]:
-        return {
-            input_id: {other: 1 for other in by_concept[concept] if other != input_id}
-            for input_id, concept in zip(ids, concepts, strict=True)
-        }

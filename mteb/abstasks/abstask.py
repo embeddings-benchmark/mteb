@@ -581,12 +581,28 @@ class AbsTask(ABC):  # noqa: PLR0904
         """Filter the evaluation splits of the task.
 
         Args:
-            eval_splits: A list of evaluation splits to keep. If None, all splits are kept.
+            eval_splits: A list of evaluation splits to keep. Splits that are not evaluation splits of the task are
+                ignored. If None, all splits are kept.
 
         Returns:
             The filtered task
+
+        Raises:
+            ValueError: If none of the splits are evaluation splits of the task.
         """
-        self._eval_splits = eval_splits
+        if not eval_splits:
+            self._eval_splits = None
+            return self
+
+        splits_to_keep = [
+            split for split in eval_splits if split in self.metadata.eval_splits
+        ]
+        if not splits_to_keep:
+            raise ValueError(
+                f"None of the splits {list(eval_splits)} are evaluation splits of {self.metadata.name} "
+                f"({list(self.metadata.eval_splits)})."
+            )
+        self._eval_splits = splits_to_keep
         return self
 
     def filter_languages(

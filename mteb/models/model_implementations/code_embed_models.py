@@ -57,6 +57,10 @@ code_embed_v2 = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/divakantpandey/code-embed",
     public_training_data="https://huggingface.co/datasets/code-search-net/code_search_net",
-    training_datasets={"CodeSearchNetRetrieval"},
+    training_datasets={
+        "CodeSearchNetRetrieval",
+        "COIRCodeSearchNetRetrieval",
+        "CodeSearchNetCCRetrieval",
+    },
     contacts=["divakantpandey"],
 )
