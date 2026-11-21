@@ -39,4 +39,50 @@ class ImageCoDeT2IRetrieval(AbsTaskRetrieval):
   year = {2022},
 }
 """,
+        superseded_by="ImageCoDeT2IRetrieval.v2",
+    )
+
+
+class ImageCoDeT2IRetrievalV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="ImageCoDeT2IRetrieval.v2",
+        description=(
+            "Retrieve a specific video frame based on a precise caption."
+            " Version 2 rebuilds the images from the source release in their original frame order;"
+            " in version 1 the image IDs did not follow that order, so captions pointed to the wrong image."
+        ),
+        reference="https://aclanthology.org/2022.acl-long.241.pdf",
+        dataset={
+            "path": "mteb/imagecode",
+            "revision": "55f8bae423bdcba7de14017e3f3f66130ea19d87",
+        },
+        type="Any2AnyRetrieval",
+        category="t2i",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="hit_rate_at_3",
+        date=("2022-05-22", "2022-05-27"),  # conference dates
+        domains=["Web", "Written"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-sa-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="found",
+        bibtex_citation=r"""
+@inproceedings{krojer2022image,
+  address = {Dublin, Ireland},
+  author = {Krojer, Benno and Adlakha, Vaibhav and Vineet, Vibhav and Goyal, Yash and Ponti, Edoardo and Reddy, Siva},
+  booktitle = {Proceedings of the 60th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2022.acl-long.241},
+  editor = {Muresan, Smaranda and Nakov, Preslav and Villavicencio, Aline},
+  month = {may},
+  pages = {3426--3440},
+  publisher = {Association for Computational Linguistics},
+  title = {Image Retrieval from Contextual Descriptions},
+  url = {https://aclanthology.org/2022.acl-long.241/},
+  year = {2022},
+}
+""",
+        adapted_from=["ImageCoDeT2IRetrieval"],
     )

@@ -9,6 +9,76 @@ from mteb.abstasks.image.image_text_pair_classification import (
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
+def _load_imagecode(task: AbsTaskImageTextPairClassification) -> None:
+    if task.data_loaded:
+        return
+
+    corpus = load_dataset(
+        task.metadata.dataset["path"],
+        "corpus",
+        revision=task.metadata.dataset["revision"],
+    )["corpus"]
+    query = load_dataset(
+        task.metadata.dataset["path"],
+        "query",
+        revision=task.metadata.dataset["revision"],
+    )["test"]
+    qrels = load_dataset(
+        task.metadata.dataset["path"],
+        "qrels",
+        revision=task.metadata.dataset["revision"],
+    )["test"]
+
+    corpus_ids = corpus["id"]
+    corpus_id_to_idx = {cid: idx for idx, cid in enumerate(corpus_ids)}
+
+    def build_mappings(
+        qrels: dict[str, dict[str, int]],
+    ) -> tuple[dict[str, str], dict[str, list[str]]]:
+        correct_answers = {}
+        candidate_pools = {}
+        for row in qrels:
+            qid = row["query-id"]
+            cid = row["corpus-id"]
+            if qid not in candidate_pools:
+                candidate_pools[qid] = []
+            candidate_pools[qid].append(cid)
+            if row["score"] == 1:
+                correct_answers[qid] = cid
+        return correct_answers, candidate_pools
+
+    correct_answers, candidate_pools = build_mappings(qrels)
+
+    def process_example(example: dict[str, Any]) -> dict[str, Any]:
+        qid = example["id"]
+        correct_id = correct_answers[qid]
+        candidates = candidate_pools[qid]
+
+        candidate_indices = [corpus_id_to_idx[cid] for cid in candidates]
+
+        correct_mask = np.array([cid == correct_id for cid in candidates])
+        correct_idx = candidate_indices[np.argmax(correct_mask)]
+        incorrect_indices = [
+            idx
+            for idx, mask in zip(candidate_indices, ~correct_mask, strict=True)
+            if mask
+        ]
+        return {
+            "text": example["text"],
+            "correct_image": corpus[correct_idx]["image"],
+            **{
+                f"false_image_{i + 1}": corpus[idx]["image"]
+                for i, idx in enumerate(incorrect_indices[:9])
+            },
+        }
+
+    dataset = query.map(process_example, num_proc=4, remove_columns=query.column_names)
+
+    task.dataset = DatasetDict({"test": dataset})
+    task.dataset_transform()
+    task.data_loaded = True
+
+
 class ImageCoDe(AbsTaskImageTextPairClassification):
     texts_column_names = ("text",)
     images_column_names = (
@@ -60,75 +130,70 @@ class ImageCoDe(AbsTaskImageTextPairClassification):
   year = {2022},
 }
 """,
+        superseded_by="ImageCoDe.v2",
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
+        _load_imagecode(self)
 
-        corpus = load_dataset(
-            self.metadata.dataset["path"],
-            "corpus",
-            revision=self.metadata.dataset["revision"],
-        )["corpus"]
-        query = load_dataset(
-            self.metadata.dataset["path"],
-            "query",
-            revision=self.metadata.dataset["revision"],
-        )["test"]
-        qrels = load_dataset(
-            self.metadata.dataset["path"],
-            "qrels",
-            revision=self.metadata.dataset["revision"],
-        )["test"]
 
-        corpus_ids = corpus["id"]
-        corpus_id_to_idx = {cid: idx for idx, cid in enumerate(corpus_ids)}
+class ImageCoDeV2(AbsTaskImageTextPairClassification):
+    texts_column_names = ("text",)
+    images_column_names = (
+        "correct_image",
+        "false_image_1",
+        "false_image_2",
+        "false_image_3",
+        "false_image_4",
+        "false_image_5",
+        "false_image_6",
+        "false_image_7",
+        "false_image_8",
+        "false_image_9",
+    )
 
-        def build_mappings(
-            qrels: dict[str, dict[str, int]],
-        ) -> tuple[dict[str, str], dict[str, list[str]]]:
-            correct_answers = {}
-            candidate_pools = {}
-            for row in qrels:
-                qid = row["query-id"]
-                cid = row["corpus-id"]
-                if qid not in candidate_pools:
-                    candidate_pools[qid] = []
-                candidate_pools[qid].append(cid)
-                if row["score"] == 1:
-                    correct_answers[qid] = cid
-            return correct_answers, candidate_pools
+    metadata = TaskMetadata(
+        name="ImageCoDe.v2",
+        description=(
+            "Identify the correct image from a set of similar images based on a precise caption."
+            " Version 2 rebuilds the images from the source release in their original frame order;"
+            " in version 1 the image IDs did not follow that order, so captions pointed to the wrong image."
+        ),
+        reference="https://aclanthology.org/2022.acl-long.241.pdf",
+        dataset={
+            "path": "mteb/imagecode-multi",
+            "revision": "b343a10c1d029b71f0a281a7027588268bc59ace",
+        },
+        type="Compositionality",
+        category="it2i",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="image_acc",
+        date=("2022-05-22", "2022-05-27"),  # conference dates
+        domains=["Web", "Written"],
+        task_subtypes=["Image Text Retrieval"],
+        license="cc-by-sa-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="found",
+        bibtex_citation=r"""
+@inproceedings{krojer2022image,
+  address = {Dublin, Ireland},
+  author = {Krojer, Benno and Adlakha, Vaibhav and Vineet, Vibhav and Goyal, Yash and Ponti, Edoardo and Reddy, Siva},
+  booktitle = {Proceedings of the 60th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2022.acl-long.241},
+  editor = {Muresan, Smaranda and Nakov, Preslav and Villavicencio, Aline},
+  month = {may},
+  pages = {3426--3440},
+  publisher = {Association for Computational Linguistics},
+  title = {Image Retrieval from Contextual Descriptions},
+  url = {https://aclanthology.org/2022.acl-long.241/},
+  year = {2022},
+}
+""",
+        adapted_from=["ImageCoDe"],
+    )
 
-        correct_answers, candidate_pools = build_mappings(qrels)
-
-        def process_example(example: dict[str, Any]) -> dict[str, Any]:
-            qid = example["id"]
-            correct_id = correct_answers[qid]
-            candidates = candidate_pools[qid]
-
-            candidate_indices = [corpus_id_to_idx[cid] for cid in candidates]
-
-            correct_mask = np.array([cid == correct_id for cid in candidates])
-            correct_idx = candidate_indices[np.argmax(correct_mask)]
-            incorrect_indices = [
-                idx
-                for idx, mask in zip(candidate_indices, ~correct_mask, strict=True)
-                if mask
-            ]
-            return {
-                "text": example["text"],
-                "correct_image": corpus[correct_idx]["image"],
-                **{
-                    f"false_image_{i + 1}": corpus[idx]["image"]
-                    for i, idx in enumerate(incorrect_indices[:9])
-                },
-            }
-
-        dataset = query.map(
-            process_example, num_proc=4, remove_columns=query.column_names
-        )
-
-        self.dataset = DatasetDict({"test": dataset})
-        self.dataset_transform()
-        self.data_loaded = True
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _load_imagecode(self)
