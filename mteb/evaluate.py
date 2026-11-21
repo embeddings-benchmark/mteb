@@ -801,15 +801,15 @@ def _evaluate_resolved(  # noqa: PLR0913
             f"Found existing results for {task.metadata.name}, only running missing splits (subsets): {missing_eval}"
         )
 
-    if isinstance(model, ModelMeta):
-        logger.info(
-            f"Loading model {model_name} with revision {model_revision} from ModelMeta."
-        )
-        model = model.load_model()
-        logger.info("✓ Model loaded")
-
     if raise_error is False:
         try:
+            if isinstance(model, ModelMeta):
+                logger.info(
+                    f"Loading model {model_name} with revision {model_revision} from ModelMeta."
+                )
+                model = model.load_model()
+                logger.info("✓ Model loaded")
+
             result = _evaluate_task(
                 model=model,
                 splits=missing_eval,
@@ -829,6 +829,13 @@ def _evaluate_resolved(  # noqa: PLR0913
             )
             result = TaskError(task_name=task.metadata.name, exception=str(e))
     else:
+        if isinstance(model, ModelMeta):
+            logger.info(
+                f"Loading model {model_name} with revision {model_revision} from ModelMeta."
+            )
+            model = model.load_model()
+            logger.info("✓ Model loaded")
+
         result = _evaluate_task(
             model=model,
             splits=missing_eval,
