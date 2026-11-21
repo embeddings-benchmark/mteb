@@ -1,5 +1,3 @@
-from typing import Any
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -10,8 +8,8 @@ class MBPPRetrieval(AbsTaskRetrieval):
         description="A code retrieval task based on 378 Python programming problems from MBPP (Mostly Basic Python Programming). Each query is a natural language description of a programming task (e.g., 'Write a function to find the shared elements from the given two lists'), and the corpus contains Python code implementations. The task is to retrieve the correct code snippet that solves the described problem. Queries are problem descriptions while the corpus contains Python function implementations with proper syntax and logic.",
         reference="https://huggingface.co/datasets/embedding-benchmark/MBPP",
         dataset={
-            "path": "embedding-benchmark/MBPP",
-            "revision": "586a1fd6a0c63fdeda3b49c0293559a81c79cdec",
+            "path": "mteb/MBPPRetrieval",
+            "revision": "2c7c0ff055f2e546880d8dab7d689413348683b6",
         },
         type="Retrieval",
         category="t2t",
@@ -35,53 +33,3 @@ class MBPPRetrieval(AbsTaskRetrieval):
 }
 """,
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        from datasets import load_dataset
-
-        # Load the three configurations
-        corpus_ds = load_dataset(
-            self.metadata.dataset["path"],
-            "corpus",
-            revision=self.metadata.dataset["revision"],
-        )["corpus"]
-        queries_ds = load_dataset(
-            self.metadata.dataset["path"],
-            "queries",
-            revision=self.metadata.dataset["revision"],
-        )["queries"]
-        qrels_ds = load_dataset(
-            self.metadata.dataset["path"],
-            "default",
-            revision=self.metadata.dataset["revision"],
-        )["test"]
-
-        # Initialize data structures with 'test' split
-        corpus = {}
-        queries = {}
-        relevant_docs = {}
-
-        # Process corpus
-        for item in corpus_ds:
-            corpus[item["id"]] = {"title": "", "text": item["text"]}
-
-        # Process queries
-        for item in queries_ds:
-            queries[item["id"]] = item["text"]
-
-        # Process qrels (relevant documents)
-        for item in qrels_ds:
-            query_id = item["query-id"]
-            if query_id not in relevant_docs:
-                relevant_docs[query_id] = {}
-            relevant_docs[query_id][item["corpus-id"]] = int(item["score"])
-
-        # Organize data by splits as expected by MTEB
-        self.corpus = {"test": corpus}
-        self.queries = {"test": queries}
-        self.relevant_docs = {"test": relevant_docs}
-
-        self.data_loaded = True

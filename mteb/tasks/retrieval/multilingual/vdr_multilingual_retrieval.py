@@ -1,15 +1,7 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
-
-import datasets
-from datasets import Dataset, DatasetDict
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-
-if TYPE_CHECKING:
-    from mteb.types import RelevantDocumentsType
 
 _LANGS = {
     "en": ["eng-Latn"],
@@ -21,93 +13,14 @@ _LANGS = {
 _EVAL_SPLIT = "train"  # It is test split only, but given name as train on HF
 
 
-def _load_vdr_multilingual_data(
-    path: str,
-    langs: list,
-    split: str,
-    revision: str | None = None,
-) -> tuple[
-    dict[str, DatasetDict], dict[str, DatasetDict], dict[str, RelevantDocumentsType]
-]:
-    """Load data from the VDR Multilingual dataset."""
-    corpus_dict = {}
-    queries_dict = {}
-    relevant_docs_dict = {}
-
-    for lang_code in langs:
-        dataset = datasets.load_dataset(
-            path=path,
-            name=lang_code,
-            split=split,
-            revision=revision,
-        )
-
-        corpus_records = []
-        queries_records = []
-        relevant_dict = {}
-
-        for record in dataset:
-            doc_id = f"doc-{record['id']}"
-            query_id = f"query-{record['id']}"
-            has_query = record.get("query") is not None
-
-            corpus_records.append(
-                {
-                    "id": doc_id,
-                    "image": record.get("image"),
-                    "modality": "image",
-                }
-            )
-
-            if has_query:
-                queries_records.append(
-                    {
-                        "id": query_id,
-                        "text": record.get("query", ""),
-                        "modality": "text",
-                    }
-                )
-
-                if query_id not in relevant_dict:
-                    relevant_dict[query_id] = {}
-                relevant_dict[query_id][doc_id] = 1
-
-        if lang_code not in corpus_dict:
-            corpus_dict[lang_code] = {}
-        if lang_code not in queries_dict:
-            queries_dict[lang_code] = {}
-        if lang_code not in relevant_docs_dict:
-            relevant_docs_dict[lang_code] = {}
-
-        corpus_dict[lang_code][split] = Dataset.from_list(corpus_records)
-        queries_dict[lang_code][split] = Dataset.from_list(queries_records)
-        relevant_docs_dict[lang_code][split] = relevant_dict
-
-    corpus_dataset_dict = {}
-    queries_dataset_dict = {}
-    relevant_docs_dataset_dict = {}
-
-    for lang_code in langs:
-        if (
-            lang_code in corpus_dict
-            and lang_code in queries_dict
-            and lang_code in relevant_docs_dict
-        ):
-            corpus_dataset_dict[lang_code] = DatasetDict(corpus_dict[lang_code])
-            queries_dataset_dict[lang_code] = DatasetDict(queries_dict[lang_code])
-            relevant_docs_dataset_dict[lang_code] = relevant_docs_dict[lang_code]
-
-    return corpus_dataset_dict, queries_dataset_dict, relevant_docs_dataset_dict
-
-
 class VDRMultilingualRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VDRMultilingualRetrieval",
         description="Multilingual Visual Document retrieval Dataset covering 5 languages: Italian, Spanish, English, French and German",
         reference="https://huggingface.co/datasets/llamaindex/vdr-multilingual-test",
         dataset={
-            "path": "llamaindex/vdr-multilingual-test",
-            "revision": "9e26ae152f5950ab1a5ff1c58edade3acc894793",
+            "path": "mteb/VDRMultilingualRetrieval",
+            "revision": "37d80c61d6187902b4d823a2f2fb0f18de6b2492",
         },
         type="Retrieval",
         category="t2i",
@@ -127,16 +40,3 @@ class VDRMultilingualRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation="",
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = _load_vdr_multilingual_data(
-            path=self.metadata.dataset["path"],
-            langs=self.hf_subsets,
-            split=_EVAL_SPLIT,
-            revision=self.metadata.dataset["revision"],
-        )
-
-        self.data_loaded = True

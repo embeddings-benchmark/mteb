@@ -1,16 +1,7 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
-
-from datasets import load_dataset
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-
-if TYPE_CHECKING:
-    from datasets import Dataset
-
-    from mteb.types import RelevantDocumentsType
 
 _BIBTEX = r"""
 @inproceedings{figma2026,
@@ -21,42 +12,6 @@ _BIBTEX = r"""
   year = {2026},
 }
 """
-
-
-def _load_data(
-    path: str,
-    splits: list[str],
-    revision: str | None = None,
-    num_proc: int | None = None,
-    *,
-    audio_to_text: bool = False,
-) -> tuple[dict[str, Dataset], dict[str, Dataset], dict[str, RelevantDocumentsType]]:
-    corpus = {}
-    queries = {}
-    relevant_docs = {}
-
-    for split in splits:
-        dataset = load_dataset(
-            path,
-            split=split,
-            revision=revision,
-            num_proc=num_proc,
-        )
-        text_dataset = dataset.select_columns(["id", "caption"]).rename_column(
-            "caption", "text"
-        )
-        audio_dataset = dataset.select_columns(["id", "audio"])
-
-        if audio_to_text:
-            queries[split] = audio_dataset
-            corpus[split] = text_dataset
-        else:
-            queries[split] = text_dataset
-            corpus[split] = audio_dataset
-
-        relevant_docs[split] = {id_: {id_: 1} for id_ in dataset["id"]}
-
-    return corpus, queries, relevant_docs
 
 
 class FGMCapsT2ARetrieval(AbsTaskRetrieval):
@@ -71,8 +26,8 @@ class FGMCapsT2ARetrieval(AbsTaskRetrieval):
         ),
         reference="https://arxiv.org/abs/2606.06615",
         dataset={
-            "path": "nishitanand/FGMCaps-benchmark",
-            "revision": "a2f3b8bccc85b7e63563a0976b155e48e7be5278",
+            "path": "mteb/FGMCapsT2ARetrieval",
+            "revision": "5502a16f85f7897d2d197c4402a5ff75f22c7e17",
         },
         type="Any2AnyRetrieval",
         category="t2a",
@@ -91,18 +46,6 @@ class FGMCapsT2ARetrieval(AbsTaskRetrieval):
         prompt={"query": "Retrieve the music clip described by this caption."},
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-            num_proc=num_proc,
-        )
-        self.data_loaded = True
-
 
 class FGMCapsA2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -116,8 +59,8 @@ class FGMCapsA2TRetrieval(AbsTaskRetrieval):
         ),
         reference="https://arxiv.org/abs/2606.06615",
         dataset={
-            "path": "nishitanand/FGMCaps-benchmark",
-            "revision": "a2f3b8bccc85b7e63563a0976b155e48e7be5278",
+            "path": "mteb/FGMCapsA2TRetrieval",
+            "revision": "410bd3382b71088d28e62e9a95b2d21ecf5761f6",
         },
         type="Any2AnyRetrieval",
         category="a2t",
@@ -135,16 +78,3 @@ class FGMCapsA2TRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX,
         prompt={"query": "Retrieve the caption that describes this music clip."},
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-            num_proc=num_proc,
-            audio_to_text=True,
-        )
-        self.data_loaded = True

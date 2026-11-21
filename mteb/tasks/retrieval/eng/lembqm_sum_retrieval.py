@@ -1,7 +1,3 @@
-from typing import Any
-
-import datasets
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -12,9 +8,8 @@ class LEMBQMSumRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="LEMBQMSumRetrieval",
         dataset={
-            "path": "dwzhu/LongEmbed",
-            "revision": "6e346642246bfb4928c560ee08640dc84d074e8c",
-            "name": "qmsum",
+            "path": "mteb/LEMBQMSumRetrieval",
+            "revision": "e40544d73a518df7f1efd876aced9eae22459a8c",
         },
         reference="https://huggingface.co/datasets/dwzhu/LongEmbed",
         description=("qmsum subset of dwzhu/LongEmbed dataset."),
@@ -65,28 +60,3 @@ Zhou, Yichao},
 }
 """,
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        query_list = datasets.load_dataset(**self.metadata.dataset)[
-            "queries"
-        ]  # dict_keys(['qid', 'text'])
-        queries = {row["qid"]: row["text"] for row in query_list}
-
-        corpus_list = datasets.load_dataset(**self.metadata.dataset)[
-            "corpus"
-        ]  # dict_keys(['doc_id', 'text'])
-        corpus = {row["doc_id"]: {"text": row["text"]} for row in corpus_list}
-
-        qrels_list = datasets.load_dataset(**self.metadata.dataset)[
-            "qrels"
-        ]  # dict_keys(['qid', 'doc_id'])
-        qrels = {row["qid"]: {row["doc_id"]: 1} for row in qrels_list}
-
-        self.corpus = {self._EVAL_SPLIT: corpus}
-        self.queries = {self._EVAL_SPLIT: queries}
-        self.relevant_docs = {self._EVAL_SPLIT: qrels}
-
-        self.data_loaded = True

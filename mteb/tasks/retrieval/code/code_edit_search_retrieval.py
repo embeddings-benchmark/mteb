@@ -1,7 +1,3 @@
-from typing import Any
-
-import datasets
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -29,8 +25,8 @@ class CodeEditSearchRetrieval(AbsTaskRetrieval):
         description="The dataset is a collection of unified diffs of code changes, paired with a short instruction that describes the change. The dataset is derived from the CommitPackFT dataset.",
         reference="https://huggingface.co/datasets/cassanof/CodeEditSearch/viewer",
         dataset={
-            "path": "cassanof/CodeEditSearch",
-            "revision": "4e51c66e0939303f6928472f13ad0848b2a3f4c0",
+            "path": "mteb/CodeEditSearchRetrieval",
+            "revision": "73c19e2fb77b6edc43b7354c817fb9417d9732fe",
         },
         type="Retrieval",
         category="t2t",
@@ -57,42 +53,3 @@ class CodeEditSearchRetrieval(AbsTaskRetrieval):
 }
 """,
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        lang_subs = {lang: [] for lang in _LANGS}
-        for lang in _LANGS:
-            data = datasets.load_dataset(
-                split=self._EVAL_SPLIT,
-                data_dir=lang,
-                **self.metadata.dataset,
-            )
-            for row in data:
-                lang_subs[lang].append(row)
-
-        self.queries = {}
-        self.corpus = {}
-        self.relevant_docs = {}
-
-        for lang, sub in lang_subs.items():
-            sub = sub[:1000]  # noqa: PLW2901
-
-            self.queries[lang] = {
-                self._EVAL_SPLIT: {
-                    str(i): row["instruction"] for i, row in enumerate(sub)
-                }
-            }
-            self.corpus[lang] = {
-                self._EVAL_SPLIT: {
-                    str(row["commit"]): {"text": row["diff"]} for row in sub
-                }
-            }
-            self.relevant_docs[lang] = {
-                self._EVAL_SPLIT: {
-                    str(i): {row["commit"]: 1} for i, row in enumerate(sub)
-                }
-            }
-
-        self.data_loaded = True

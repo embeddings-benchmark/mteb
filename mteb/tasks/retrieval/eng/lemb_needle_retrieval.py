@@ -1,7 +1,3 @@
-from typing import Any
-
-import datasets
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -10,9 +6,8 @@ class LEMBNeedleRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="LEMBNeedleRetrieval",
         dataset={
-            "path": "dwzhu/LongEmbed",
-            "revision": "6e346642246bfb4928c560ee08640dc84d074e8c",
-            "name": "needle",
+            "path": "mteb/LEMBNeedleRetrieval",
+            "revision": "b0d07f9826762a012e57fa266b5b44485bbfbe97",
         },
         reference="https://huggingface.co/datasets/dwzhu/LongEmbed",
         description=("needle subset of dwzhu/LongEmbed dataset."),
@@ -54,49 +49,3 @@ class LEMBNeedleRetrieval(AbsTaskRetrieval):
 }
 """,
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus = {}
-        self.queries = {}
-        self.relevant_docs = {}
-
-        for split in self.metadata.eval_splits:
-            context_length = int(split.split("_")[1])
-            query_list = datasets.load_dataset(**self.metadata.dataset)[
-                "queries"
-            ]  # dict_keys(['qid', 'text'])
-            query_list = query_list.filter(
-                lambda x, context_length=context_length: (
-                    x["context_length"] == context_length
-                )
-            )
-            queries = {row["qid"]: row["text"] for row in query_list}
-
-            corpus_list = datasets.load_dataset(**self.metadata.dataset)[
-                "corpus"
-            ]  # dict_keys(['doc_id', 'text'])
-            corpus_list = corpus_list.filter(
-                lambda x, context_length=context_length: (
-                    x["context_length"] == context_length
-                )
-            )
-            corpus = {row["doc_id"]: {"text": row["text"]} for row in corpus_list}
-
-            qrels_list = datasets.load_dataset(**self.metadata.dataset)[
-                "qrels"
-            ]  # dict_keys(['qid', 'doc_id'])
-            qrels_list = qrels_list.filter(
-                lambda x, context_length=context_length: (
-                    x["context_length"] == context_length
-                )
-            )
-            qrels = {row["qid"]: {row["doc_id"]: 1} for row in qrels_list}
-
-            self.corpus[split] = corpus
-            self.queries[split] = queries
-            self.relevant_docs[split] = qrels
-
-        self.data_loaded = True
