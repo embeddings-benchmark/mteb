@@ -85,6 +85,10 @@ citation-check:
 	@echo "--- 🔍 Checking that the cited works exist ---"
 	uv run --no-sync --group citations python -m scripts.tools.check_citations $(CITATION_CHECK_ARGS)
 
+citation-utils-parity:
+	@echo "--- 🔍 Comparing citation helpers with refaudit ---"
+	uv run --no-sync --group citations python -m scripts.tools.citation_utils_parity
+
 preprint-check:
 	@echo "--- 🔍 Checking whether cited preprints have been published ---"
 	uv run --no-sync --group citations python -m scripts.tools.check_preprints $(PREPRINT_CHECK_ARGS)
