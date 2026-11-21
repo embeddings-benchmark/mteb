@@ -1467,6 +1467,7 @@ afri_languages_lite = [
 
 MTEB_AFRICA = Benchmark(
     name="MTEB(Africa, v1)",
+    superseded_by=["MTEB(Africa, v2)"],
     aliases=["AfriMTEB"],
     display_name="African",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-globe.svg",
@@ -1526,6 +1527,7 @@ MTEB_AFRICA = Benchmark(
 
 MTEB_AFRICA_LITE = Benchmark(
     name="MTEB(Africa, v1, lite)",
+    superseded_by=["MTEB(Africa, v2, lite)"],
     aliases=["AfriMTEB-Lite"],
     display_name="African Lite",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-globe.svg",
@@ -1549,6 +1551,92 @@ MTEB_AFRICA_LITE = Benchmark(
         exclusive_language_filter=True,
     ),
     description="Text embedding quality across 9 geographically diverse African languages, covering bitext mining, classification, clustering, pair classification, and retrieval. A computationally lighter subset of MTEB(Africa, v1) designed for faster evaluation.",
+    reference="https://arxiv.org/abs/2510.23896",
+    citation=MMTEB_CITATION,
+    contacts=["Kosei1227"],
+)
+
+MTEB_AFRICA_V2 = Benchmark(
+    name="MTEB(Africa, v2)",
+    display_name="African",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-globe.svg",
+    tasks=get_tasks(
+        tasks=[
+            # Original tasks
+            "SIB200Classification",
+            "FloresBitextMining",
+            "SIB200ClusteringS2S",
+            "NTREXBitextMining",
+            "AfriXNLI",
+            "EmotionAnalysisPlus",
+            "AfriSentiClassification",
+            "MasakhaNEWSClassification",
+            "AfriHateClassification",
+            "KinNewsClassification",
+            "InjongoIntent",
+            "SIB200Classification.v3",
+            # Additional comprehensive tasks
+            # Retrieval tasks
+            "BelebeleRetrieval",
+            "MIRACLRetrievalHardNegatives",
+            "XQuADRetrieval",
+            "XM3600T2IRetrieval",
+            # Additional classification tasks
+            "AfriSentiLangClassification",
+            "MassiveIntentClassification",
+            "MassiveScenarioClassification",
+            "MultilingualSentimentClassification",
+            "NaijaSenti",
+            "SouthAfricanLangClassification",
+            "SiswatiNewsClassification",
+            "SwahiliNewsClassification",
+            "TswanaNewsClassification",
+            "IsiZuluNewsClassification",
+            # Additional bitext mining tasks
+            "BibleNLPBitextMining",
+            "NollySentiBitextMining",
+            "Tatoeba",
+            # Additional clustering tasks
+            "MasakhaNEWSClusteringP2P",
+            "MasakhaNEWSClusteringS2S",
+            # Additional other tasks
+            "XNLI",
+            "MIRACLReranking",
+            "SemRel24STS",
+        ],
+        languages=afri_languages,
+        exclusive_language_filter=True,
+    ),
+    description="Text embedding quality across African languages spanning bitext mining, classification, clustering, pair classification, retrieval, reranking, and semantic similarity. Compared to v1, SIB200Classification.v2 is replaced by SIB200Classification.v3 and MrTidyRetrieval is removed.",
+    reference="https://arxiv.org/abs/2510.23896",
+    citation=MMTEB_CITATION,
+    contacts=["Kosei1227"],
+)
+
+MTEB_AFRICA_V2_LITE = Benchmark(
+    name="MTEB(Africa, v2, lite)",
+    display_name="African Lite",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-globe.svg",
+    tasks=get_tasks(
+        tasks=[
+            "AfriHateClassification",
+            "AfriSentiClassification",
+            "MasakhaNEWSClassification",
+            "KinNewsClassification",
+            "AfriXNLI",
+            "EmotionAnalysisPlus",
+            "FloresBitextMining",
+            "InjongoIntent",
+            "NTREXBitextMining",
+            "SIB200Classification.v3",
+            "SIB200Classification",
+            "SIB200ClusteringS2S",
+            "BelebeleRetrieval",
+        ],
+        languages=afri_languages_lite,
+        exclusive_language_filter=True,
+    ),
+    description="Text embedding quality across 9 geographically diverse African languages, covering bitext mining, classification, clustering, pair classification, and retrieval. A computationally lighter subset of MTEB(Africa, v2) designed for faster evaluation. Compared to v1, SIB200Classification.v2 is replaced by SIB200Classification.v3.",
     reference="https://arxiv.org/abs/2510.23896",
     citation=MMTEB_CITATION,
     contacts=["Kosei1227"],

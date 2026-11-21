@@ -87,6 +87,7 @@ GP_BENCHMARK_ENTRIES = [
                     [
                         "MTEB(Europe, v1)",
                         "MTEB(Indic, v1)",
+                        "MTEB(Africa, v2)",
                         "MTEB(Scandinavian, v1)",
                         "MTEB(cmn, v1)",
                         "MTEB(deu, v1)",
@@ -200,6 +201,7 @@ HOME_BENCHMARK_ENTRIES = [
             [
                 "MTEB(cmn, v1)",
                 "MTEB(Indic, v1)",
+                "MTEB(Africa, v2)",
                 "MTEB(deu, v1)",
                 "MTEB(fra, v1)",
                 "MTEB(Europe, v1)",
