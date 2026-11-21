@@ -710,11 +710,24 @@ class Benchmark:
         """
         from mteb.benchmarks._create_table import _get_borda_rank
 
-        bench_results = results.join_revisions()
+        # `join_revisions` returns one `ModelResult` per revision, so a model whose
+        # task results were kept from several revisions comes back in parts.
+        model_results: dict[tuple[str, str | None], ModelResult] = {}
+        for part in results.join_revisions():
+            key = (part.model_name, part.experiment_name)
+            previous = model_results.get(key)
+            model_results[key] = (
+                part
+                if previous is None
+                else previous.model_copy(
+                    update={"task_results": previous.task_results + part.task_results}
+                )
+            )
+
         scores: dict[str, dict[str, float | None]] = {}
         per_task_rows: dict[str, dict[str, float | None]] = {}
 
-        for model_result in bench_results:
+        for model_result in model_results.values():
             per_task_rows[model_result.model_name] = {}
             filtered = model_result.select_tasks(self.tasks).task_results
             try:

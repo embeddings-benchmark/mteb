@@ -17,6 +17,7 @@ from mteb.benchmarks.benchmark import (
     CustomGroup,
     CustomGrouping,
 )
+from mteb.results import BenchmarkResults, ModelResult
 from tests.conftest import _skip_if_datasets_too_old
 
 pytestmark = pytest.mark.core
@@ -126,6 +127,38 @@ def test_benchmark_get_score_task_without_results_keeps_score_keys(
         assert model_scores["Mean(Task)"] is None
         assert model_scores["Mean(TaskType)"] is None
         assert model_scores["Retrieval"] is None
+
+
+def test_benchmark_get_score_results_kept_from_two_revisions(
+    mock_mteb_cache: ResultCache,
+):
+    """A model whose task results are kept from two revisions is scored on all of them."""
+    mock_benchmark = _make_benchmark()
+    model_name = "sentence-transformers/all-MiniLM-L6-v2"
+    mock_results = mock_mteb_cache.load_results().select_models([model_name])
+    (model_result,) = mock_results.join_revisions().select_tasks(mock_benchmark.tasks)
+    task_results = model_result.task_results
+    results = BenchmarkResults(
+        model_results=[
+            ModelResult(
+                model_name=model_name,
+                model_revision="first",
+                task_results=task_results[:1],
+            ),
+            ModelResult(
+                model_name=model_name,
+                model_revision="second",
+                task_results=task_results[1:],
+            ),
+        ]
+    )
+
+    scores = mock_benchmark.get_score(results)
+
+    assert scores[model_name]["Mean(Task)"] == pytest.approx(
+        MODELS_SCORES["Mean(Task)"][model_name]
+    )
+    assert scores[model_name]["Rank"] == 1
 
 
 def test_benchmark_get_score_task_without_results_keeps_custom_group_keys(
