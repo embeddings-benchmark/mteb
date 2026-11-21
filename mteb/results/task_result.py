@@ -51,6 +51,9 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 log_once = LogOnce(logger)
 
+# Older versions stored this string for results without an mteb version
+_NO_VERSION_PLACEHOLDER = "mteb version not available"
+
 
 class Criteria(HelpfulStrEnum):
     """Enum for criteria to check when merging TaskResult objects."""
@@ -235,6 +238,11 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             evaluation_phases=evaluation_phases,
         )
 
+    @field_validator("mteb_version", mode="before")
+    @classmethod
+    def _drop_version_placeholder(cls, v: Any) -> Any:  # noqa: ANN401 -- pydantic mode='before' receives raw input
+        return None if v == _NO_VERSION_PLACEHOLDER else v
+
     @field_validator("scores")
     @classmethod
     def _validate_scores(
@@ -244,6 +252,8 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             for hf_subset_score in hf_subset_scores:
                 if not isinstance(hf_subset_score, dict):
                     raise ValueError("Scores should be a dictionary")
+                if hf_subset_score.get("mteb_version") == _NO_VERSION_PLACEHOLDER:
+                    hf_subset_score["mteb_version"] = None
                 cls._validate_scores_dict(hf_subset_score)
         return v
 
@@ -465,7 +475,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             "dataset_revision", "dataset revision not available"
         )
         task_name = scores.pop("mteb_dataset_name")
-        mteb_version = scores.pop("mteb_version", "mteb version not available")
+        mteb_version = scores.pop("mteb_version", None)
 
         # calculate evaluation time across all splits (move to top level)
         evaluation_time = 0
@@ -501,6 +511,8 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         main_score = task.metadata.main_score
         for split_score in scores.values():
             for hf_subset_scores in split_score.values():
+                # keep the file's own version instead of the running one
+                hf_subset_scores.setdefault("mteb_version", mteb_version)
                 for name, prev_name in [
                     (ScoringFunction.COSINE.value, "cos_sim"),
                     (ScoringFunction.MANHATTAN.value, "manhattan"),

@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 from typing import Any
 
@@ -302,6 +303,83 @@ def test_merge_without_per_subset_version():
 def test_mteb_results_from_historic(path: Path):
     mteb_result = TaskResult.from_disk(path, load_historic_data=True)
     assert isinstance(mteb_result, TaskResult)
+    subset_versions = {
+        s.get("mteb_version") for split in mteb_result.scores.values() for s in split
+    }
+    assert subset_versions == {mteb_result.mteb_version}
+
+
+def test_historic_load_without_version_is_none(tmp_path: Path):
+    """A pre-1.11 result without mteb_version loads with None, not the running version."""
+    path = tmp_path / "NFCorpus.json"
+    path.write_text(
+        json.dumps(
+            {
+                "mteb_dataset_name": "NFCorpus",
+                "dataset_revision": "1.0",
+                "test": {"ndcg_at_10": 0.3, "evaluation_time": 2.0},
+            }
+        ),
+        encoding="utf-8",
+    )
+    loaded = TaskResult.from_disk(path, load_historic_data=True)
+    assert loaded.mteb_version is None
+    subset_versions = {
+        s.get("mteb_version") for split in loaded.scores.values() for s in split
+    }
+    assert subset_versions == {None}
+
+
+def test_from_disk_placeholder_version_merges(tmp_path: Path):
+    """A result saved with the "mteb version not available" placeholder loads as None and merges.
+
+    Regression test for https://github.com/embeddings-benchmark/mteb/issues/1899.
+    """
+    placeholder = "mteb version not available"
+    path = tmp_path / "result.json"
+    path.write_text(
+        json.dumps(
+            {
+                "dataset_revision": "1.0",
+                "task_name": "dummy_task",
+                "mteb_version": placeholder,
+                "evaluation_time": 50,
+                "scores": {
+                    "train": [
+                        {
+                            "main_score": 0.5,
+                            "hf_subset": "en-de",
+                            "languages": ["eng-Latn", "deu-Latn"],
+                            "mteb_version": placeholder,
+                        }
+                    ]
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    loaded = TaskResult.from_disk(path)
+    assert loaded.mteb_version is None
+    assert loaded.scores["train"][0]["mteb_version"] is None
+
+    new = TaskResult(
+        dataset_revision="1.0",
+        task_name="dummy_task",
+        mteb_version="2.20.1",
+        scores={
+            "train": [
+                {
+                    "main_score": 0.6,
+                    "hf_subset": "en-fr",
+                    "languages": ["eng-Latn", "fra-Latn"],
+                    "mteb_version": "2.20.1",
+                },
+            ]
+        },
+        evaluation_time=60,
+    )
+    merged = loaded.merge(new)
+    assert merged.mteb_version == "2.20.1"
 
 
 def test_from_disk_with_multiversion_range(tmp_path: Path):
