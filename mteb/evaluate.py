@@ -720,19 +720,21 @@ def _evaluate_resolved(  # noqa: PLR0913
         )
         combined_results = tasks.combine_task_results(results.task_results)
 
-        if existing_results:
-            combined_results = existing_results.merge(combined_results)
+        # without all subtasks there is no score, so don't save it as a finished result
+        if not results.exceptions:
+            if existing_results:
+                combined_results = existing_results.merge(combined_results)
 
-        if cache:
-            cache.save_to_cache(
-                combined_results,
-                meta,
-                encode_kwargs=encode_kwargs,
-            )
+            if cache:
+                cache.save_to_cache(
+                    combined_results,
+                    meta,
+                    encode_kwargs=encode_kwargs,
+                )
 
-        if existing_results:
-            # the cache may hold more splits/subsets than the task asks for
-            combined_results = combined_results.validate_and_filter_scores(tasks)
+            if existing_results:
+                # the cache may hold more splits/subsets than the task asks for
+                combined_results = combined_results.validate_and_filter_scores(tasks)
 
         return ModelResult(
             model_name=results.model_name,

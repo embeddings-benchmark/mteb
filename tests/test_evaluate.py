@@ -4,6 +4,7 @@ import shutil
 from copy import copy
 from pathlib import Path
 from typing import Any
+from unittest.mock import Mock
 
 import pytest
 from datasets.exceptions import DatasetNotFoundError
@@ -378,6 +379,90 @@ def test_evaluate_aggregated_task():
     model = mteb.get_model("mteb/baseline-random-encoder")
     task = MockAggregatedTask()
     mteb.evaluate(model, task, cache=None)
+
+
+def _aggregate_result_path(model, task: MockAggregatedTask, cache: ResultCache) -> Path:
+    return cache.get_task_result_path(
+        task.metadata.name,
+        model.mteb_model_meta.model_name_as_path(),
+        model.mteb_model_meta.revision,
+    )
+
+
+def _evaluate_with_failed_subtask(
+    model,
+    task: MockAggregatedTask,
+    cache: ResultCache,
+    monkeypatch: pytest.MonkeyPatch,
+    overwrite_strategy: str = "only-missing",
+):
+    with monkeypatch.context() as patch:
+        patch.setattr(
+            type(task.metadata.tasks[0]),
+            "evaluate",
+            Mock(side_effect=RuntimeError("subtask failed")),
+        )
+        return mteb.evaluate(
+            model,
+            task,
+            cache=cache,
+            raise_error=False,
+            overwrite_strategy=overwrite_strategy,
+            co2_tracker=False,
+        )
+
+
+def test_evaluate_aggregate_does_not_cache_failed_subtask(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    """Without all subtasks the aggregate has no score, so a rerun has to compute it instead of loading None."""
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    task = MockAggregatedTask()
+    cache = ResultCache(tmp_path)
+
+    failed = _evaluate_with_failed_subtask(model, task, cache, monkeypatch)
+    assert failed.exceptions
+    assert not _aggregate_result_path(model, task, cache).exists()
+
+    result = mteb.evaluate(model, task, cache=cache, co2_tracker=False)
+    assert not result.exceptions
+    assert result[0].scores[task.eval_splits[0]][0]["main_score"] is not None
+
+
+def test_evaluate_aggregate_failed_subtask_keeps_cached_score(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    """A failed rerun must not replace a finished aggregate result with None."""
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    task = MockAggregatedTask()
+    cache = ResultCache(tmp_path)
+    mteb.evaluate(model, task, cache=cache, co2_tracker=False)
+    path = _aggregate_result_path(model, task, cache)
+    expected = path.read_text()
+
+    _evaluate_with_failed_subtask(
+        model, task, cache, monkeypatch, overwrite_strategy="always"
+    )
+
+    assert path.read_text() == expected
+
+
+def test_evaluate_aggregate_recomputes_cached_none_score(tmp_path: Path):
+    """Result files already saved with a None score are treated as missing."""
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    task = MockAggregatedTask()
+    cache = ResultCache(tmp_path)
+    expected = mteb.evaluate(model, task, cache=cache, co2_tracker=False)[0].get_score()
+
+    path = _aggregate_result_path(model, task, cache)
+    cached = json.loads(path.read_text())
+    scores = cached["scores"][task.eval_splits[0]][0]
+    scores["main_score"] = None
+    scores[task.metadata.main_score] = None
+    path.write_text(json.dumps(cached))
+
+    result = mteb.evaluate(model, task, cache=cache, co2_tracker=False)
+    assert result[0].get_score() == expected
 
 
 def test_evaluate_aggregated_task_with_cache(tmp_path: Path):

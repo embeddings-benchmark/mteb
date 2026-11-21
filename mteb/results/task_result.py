@@ -976,7 +976,11 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             if splits not in self.scores:  # split it fully missing
                 missing_splits[splits] = task.hf_subsets
             if splits in self.scores:
-                hf_subsets = {score["hf_subset"] for score in self.scores[splits]}
+                hf_subsets = {
+                    score["hf_subset"]
+                    for score in self.scores[splits]
+                    if score.get("main_score") is not None
+                }
                 missing_subsets = list(set(task.hf_subsets) - hf_subsets)
                 if missing_subsets:
                     missing_splits[splits] = missing_subsets
