@@ -192,16 +192,25 @@ def _filter_retrieval_split(  # noqa: PLR0914
     )
 
     relevant_docs: dict[str, dict[str, int]] = {}
+    had_positive: set[str] = set()
     for query_id, docs in split_data["relevant_docs"].items():
         query_id = query_replacements.get(query_id, query_id)  # noqa: PLW2901
         if query_id not in kept_query_ids:
             continue
         scores = relevant_docs.setdefault(query_id, {})
+        if any(score > 0 for score in docs.values()):
+            had_positive.add(query_id)
         for doc_id, score in docs.items():
             doc_id = doc_replacements.get(doc_id, doc_id)  # noqa: PLW2901
             if doc_id in kept_doc_ids:
                 scores[doc_id] = max(scores.get(doc_id, score), score)
 
+    # a judgement of 0 marks a document as not relevant, so a query that only keeps those lost its positives
+    relevant_docs = {
+        query_id: scores
+        for query_id, scores in relevant_docs.items()
+        if query_id not in had_positive or any(score > 0 for score in scores.values())
+    }
     relevant_docs, queries = _filter_queries_without_positives(  # type: ignore[assignment]
         relevant_docs, queries
     )
