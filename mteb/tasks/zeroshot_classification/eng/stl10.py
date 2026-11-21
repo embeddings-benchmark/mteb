@@ -1,17 +1,15 @@
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import (
-    AbsTaskZeroShotClassification,
-)
 
 
-class STL10ZeroShotClassification(AbsTaskZeroShotClassification):
+class STL10ZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="STL10ZeroShot",
         description="Classifying 96x96 images from 10 classes.",
         reference="https://cs.stanford.edu/~acoates/stl10/",
         dataset={
-            "path": "mteb/stl10",
-            "revision": "2da456fe65204f88c2cb5e5ff17f85f442ef3eaa",
+            "path": "mteb/STL10ZeroShot",
+            "revision": "251213b2da899bc89551df1f8d9bc9e37889dd81",
         },
         type="ZeroShotClassification",
         category="i2t",
@@ -47,9 +45,3 @@ class STL10ZeroShotClassification(AbsTaskZeroShotClassification):
 }
 """,
     )
-
-    def get_candidate_labels(self) -> list[str]:
-        return [
-            f"a photo of a {name}."
-            for name in self.dataset["test"].features[self.label_column_name].names
-        ]

@@ -1,17 +1,15 @@
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import (
-    AbsTaskZeroShotClassification,
-)
 
 
-class SUN397ZeroShotClassification(AbsTaskZeroShotClassification):
+class SUN397ZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SUN397ZeroShot",
         description="Large scale scene recognition in 397 categories.",
         reference="https://ieeexplore.ieee.org/abstract/document/5539970",
         dataset={
-            "path": "mteb/sun397",
-            "revision": "c684cff33166060e2ae05525a5c4abdf5e6d7bce",
+            "path": "mteb/SUN397ZeroShot",
+            "revision": "18ee263f28a8948ea982ed282deec401dc544b73",
         },
         type="ZeroShotClassification",
         category="i2t",
@@ -42,14 +40,3 @@ class SUN397ZeroShotClassification(AbsTaskZeroShotClassification):
 }
 """,
     )
-
-    def get_candidate_labels(self) -> list[str]:
-        """Convert labels as such:
-        - /b/boat_deck -> boat deck
-        - /c/church/outdoor -> church outdoor
-        """
-        labels = []
-        for name in self.dataset["test"].features[self.label_column_name].names:
-            name = " ".join(name.split("/")[2:]).replace("_", " ")  # noqa: PLW2901
-            labels.append(f"a photo of a {name}.")
-        return labels

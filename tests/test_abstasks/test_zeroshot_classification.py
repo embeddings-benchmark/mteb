@@ -50,3 +50,25 @@ def test_zeroshot_classification_scores_with_string_labels():
     assert scores["recall_weighted"] == 1.0
     assert scores["ap"] == 1.0
     assert scores["ap_weighted"] == 1.0
+
+
+def test_zeroshot_classification_is_converted_to_retrieval_format():
+    task = MockTextZeroShotClassificationTask()
+    task.load_data()
+
+    split = task.dataset["default"]["test"]
+    assert list(split["corpus"]["text"]) == task.get_candidate_labels()
+    assert list(split["queries"]["id"]) == ["0", "1"]
+    assert split["relevant_docs"] == {"0": {"0": 1}, "1": {"1": 1}}
+    assert split["top_ranked"] is None
+
+
+def test_zeroshot_classification_reports_retrieval_scores():
+    model = mteb.get_model_meta("mteb/baseline-random-encoder")
+    results = mteb.evaluate(
+        model, MockTextZeroShotClassificationTask(), cache=None, co2_tracker=False
+    )
+
+    scores = results[0].scores["test"][0]
+    assert scores["accuracy"] == scores["hit_rate_at_1"] == scores["main_score"]
+    assert "ndcg_at_1" in scores

@@ -1,5 +1,4 @@
-from typing import Any
-
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 from mteb.abstasks.zeroshot_classification import AbsTaskZeroShotClassification
 
@@ -49,7 +48,7 @@ class UCF101ZeroShotClassification(AbsTaskZeroShotClassification):
         ]
 
 
-class UCF101VideoAudioZeroShotClassification(AbsTaskZeroShotClassification):
+class UCF101VideoAudioZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="UCF101VideoAudioZeroShotClassification",
         description=(
@@ -59,8 +58,8 @@ class UCF101VideoAudioZeroShotClassification(AbsTaskZeroShotClassification):
         ),
         reference="https://arxiv.org/abs/1212.0402",
         dataset={
-            "path": "mteb/UCF101-51VA",
-            "revision": "866b006d84629d66d9927646db89bd43381925e7",
+            "path": "mteb/UCF101VideoAudioZeroShotClassification",
+            "revision": "8f8c3417f6053179cf8d825c2f3ab293abf149fc",
         },
         type="VideoZeroshotClassification",
         category="va2t",
@@ -89,23 +88,9 @@ class UCF101VideoAudioZeroShotClassification(AbsTaskZeroShotClassification):
         is_beta=True,
     )
     max_fraction_of_documents_to_embed = None
-    input_column_name = ("video", "audio")
-    label_column_name: str = "label"
-
-    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        for split in self.metadata.eval_splits:
-            self.dataset[split] = self.dataset[split].select_columns(
-                ["video", "audio", "label"],
-            )
-
-    def get_candidate_labels(self) -> list[str]:
-        return [
-            f"a video of {name}"
-            for name in self.dataset["test"].features[self.label_column_name].names
-        ]
 
 
-class UCF101VideoZeroShotClassification(AbsTaskZeroShotClassification):
+class UCF101VideoZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="UCF101VideoZeroShotClassification",
         description=(
@@ -115,11 +100,11 @@ class UCF101VideoZeroShotClassification(AbsTaskZeroShotClassification):
         ),
         reference="https://arxiv.org/abs/1212.0402",
         dataset={
-            "path": "mteb/UCF101-51VA",
-            "revision": "866b006d84629d66d9927646db89bd43381925e7",
+            "path": "mteb/UCF101VideoZeroShotClassification",
+            "revision": "14a895f31b4d04f306c161b5ac127f386664d17c",
         },
         type="VideoZeroshotClassification",
-        category="va2t",
+        category="v2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -144,17 +129,3 @@ class UCF101VideoZeroShotClassification(AbsTaskZeroShotClassification):
 """,
     )
     max_fraction_of_documents_to_embed = None
-    input_column_name = "video"
-    label_column_name: str = "label"
-
-    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        for split in self.metadata.eval_splits:
-            self.dataset[split] = self.dataset[split].select_columns(
-                ["video", "label"],
-            )
-
-    def get_candidate_labels(self) -> list[str]:
-        return [
-            f"a video of {name}"
-            for name in self.dataset["test"].features[self.label_column_name].names
-        ]

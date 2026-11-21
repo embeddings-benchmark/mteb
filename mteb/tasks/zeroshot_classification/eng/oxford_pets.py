@@ -1,17 +1,15 @@
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import (
-    AbsTaskZeroShotClassification,
-)
 
 
-class OxfordPetsZeroShotClassification(AbsTaskZeroShotClassification):
+class OxfordPetsZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="OxfordPetsZeroShot",
         description="Classifying animal images.",
         reference="https://arxiv.org/abs/1306.5151",
         dataset={
-            "path": "mteb/OxfordPets",
-            "revision": "557b480fae8d69247be74d9503b378a09425096f",
+            "path": "mteb/OxfordPetsZeroShot",
+            "revision": "ad0f86f308c342b4284ffcd96f0e5255990f8b75",
         },
         type="ZeroShotClassification",
         category="i2t",
@@ -41,9 +39,3 @@ class OxfordPetsZeroShotClassification(AbsTaskZeroShotClassification):
 }
 """,
     )
-
-    def get_candidate_labels(self) -> list[str]:
-        return [
-            f"a photo of a {name}, a type of pet."
-            for name in self.dataset["test"].features[self.label_column_name].names
-        ]

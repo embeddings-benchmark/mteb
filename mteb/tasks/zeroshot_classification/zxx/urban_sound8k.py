@@ -1,17 +1,15 @@
-from typing import Any
-
-from mteb.abstasks import AbsTaskZeroShotClassification
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class UrbanSound8kZeroshotClassification(AbsTaskZeroShotClassification):
+class UrbanSound8kZeroshotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="UrbanSound8kZeroshot",
         description="Environmental Sound Classification Dataset.",
         reference="https://huggingface.co/datasets/danavery/urbansound8K",
         dataset={
-            "path": "mteb/urbansound8K",
-            "revision": "5b3867ddd7583a24871acdf6eb5494696ddd4cbc",
+            "path": "mteb/UrbanSound8kZeroshot",
+            "revision": "eecb4c1b201d82814db24f2327b703c1fc22b560",
         },
         type="AudioZeroshotClassification",
         category="a2t",
@@ -37,26 +35,3 @@ class UrbanSound8kZeroshotClassification(AbsTaskZeroShotClassification):
 }
 """,
     )
-
-    input_column_name: str = "audio"
-    label_column_name: str = "classID"
-
-    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
-        """Return the text candidates for zeroshot classification"""
-        return [
-            "This is a sound of air conditioner",
-            "This is a sound of car horn",
-            "This is a sound of children playing",
-            "This is a sound of dog bark",
-            "This is a sound of drilling",
-            "This is a sound of engine idling",
-            "This is a sound of gun shot",
-            "This is a sound of jackhammer",
-            "This is a sound of siren",
-            "This is a sound of street music",
-        ]
-
-    def dataset_transform(self, **kwargs: Any):
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"], label=self.label_column_name
-        )

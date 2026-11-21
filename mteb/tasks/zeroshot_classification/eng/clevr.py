@@ -1,17 +1,15 @@
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import (
-    AbsTaskZeroShotClassification,
-)
 
 
-class CLEVR(AbsTaskZeroShotClassification):
+class CLEVR(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CLEVRZeroShot",
         description="CLEVR closest object distance identification task.",
         reference="https://openaccess.thecvf.com/content_cvpr_2017/html/Johnson_CLEVR_A_Diagnostic_CVPR_2017_paper.html",
         dataset={
-            "path": "mteb/wds_vtab-clevr_closest_object_distance",
-            "revision": "d2777bb7428d8d74d951b57de0bc2ca5408c4fd4",
+            "path": "mteb/CLEVRZeroShot",
+            "revision": "7a8fadc65644f6e245fd779cb55e41986081b608",
         },
         type="ZeroShotClassification",
         category="i2t",
@@ -37,30 +35,15 @@ class CLEVR(AbsTaskZeroShotClassification):
 """,
     )
 
-    input_column_name: str = "webp"
-    label_column_name: str = "cls"
 
-    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
-        labels = [
-            "very nearby",
-            "nearby",
-            "near",
-            "",  # missing this class name in the original dataset: https://huggingface.co/datasets/clip-benchmark/wds_vtab-clevr_closest_object_distance/blob/main/classnames.txt
-            "distant",
-            "very distant",
-        ]
-
-        return [f"{c} shapes." for c in labels]
-
-
-class CLEVRCount(AbsTaskZeroShotClassification):
+class CLEVRCount(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CLEVRCountZeroShot",
         description="CLEVR count objects task.",
         reference="https://openaccess.thecvf.com/content_cvpr_2017/html/Johnson_CLEVR_A_Diagnostic_CVPR_2017_paper.html",
         dataset={
-            "path": "mteb/wds_vtab-clevr_count_all",
-            "revision": "2e31935f1deb7d22306d3bcb02b76c7cd87a10b3",
+            "path": "mteb/CLEVRCountZeroShot",
+            "revision": "04ddfa8dc86ecec1fba9541193cce29e2d176011",
         },
         type="ZeroShotClassification",
         category="i2t",
@@ -85,19 +68,3 @@ class CLEVRCount(AbsTaskZeroShotClassification):
 }
 """,
     )
-
-    input_column_name: str = "webp"
-    label_column_name: str = "cls"
-
-    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
-        labels = [
-            "three",
-            "four",
-            "five",
-            "six",
-            "seven",
-            "eight",
-            "nine",
-            "ten",
-        ]
-        return [f"a picture of {c} objects" for c in labels]

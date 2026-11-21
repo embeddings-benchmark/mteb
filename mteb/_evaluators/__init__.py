@@ -12,7 +12,6 @@ from .text.summarization_evaluator import (
     DeprecatedSummarizationEvaluator,
     SummarizationEvaluator,
 )
-from .zeroshot_classification_evaluator import ZeroShotClassificationEvaluator
 
 __all__ = [
     "AnySTSEvaluator",
@@ -25,5 +24,4 @@ __all__ = [
     "RetrievalEvaluator",
     "SklearnEvaluator",
     "SummarizationEvaluator",
-    "ZeroShotClassificationEvaluator",
 ]

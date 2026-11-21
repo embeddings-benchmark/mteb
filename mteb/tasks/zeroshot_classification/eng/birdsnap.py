@@ -1,17 +1,15 @@
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import (
-    AbsTaskZeroShotClassification,
-)
 
 
-class BirdsnapZeroShotClassification(AbsTaskZeroShotClassification):
+class BirdsnapZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BirdsnapZeroShot",
         description="Classifying bird images from 500 species. ",
         reference="https://openaccess.thecvf.com/content_cvpr_2014/html/Berg_Birdsnap_Large-scale_Fine-grained_2014_CVPR_paper.html",
         dataset={
-            "path": "mteb/birdsnap",
-            "revision": "fd23015508be94f0b5b59d61630e4ea2536509e4",
+            "path": "mteb/BirdsnapZeroShot",
+            "revision": "05dc46ce92b0d12cc0f8e314e701233718691d90",
         },
         type="ZeroShotClassification",
         category="i2t",
@@ -39,12 +37,3 @@ class BirdsnapZeroShotClassification(AbsTaskZeroShotClassification):
 }
 """,
     )
-
-    # Override default column name in the subclass
-    label_column_name: str = "common"
-
-    def get_candidate_labels(self) -> list[str]:
-        return [
-            f"a photo of a {name}, a type of bird."
-            for name in self.dataset["test"].features[self.label_column_name].names
-        ]

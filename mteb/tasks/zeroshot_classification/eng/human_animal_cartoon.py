@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import AbsTaskZeroShotClassification
 
 CITATION = r"""
 @inproceedings{dong2023simmmdg,
@@ -12,18 +12,8 @@ CITATION = r"""
 }
 """
 
-LABEL_PROMPTS = {
-    "drinking": "a video of drinking",
-    "eating": "a video of eating",
-    "opening door": "a video of opening a door",
-    "running": "a video of running",
-    "sleeping": "a video of sleeping",
-    "swimming": "a video of swimming",
-    "watching tv": "a video of watching TV",
-}
 
-
-class HumanAnimalCartoonZeroShotClassification(AbsTaskZeroShotClassification):
+class HumanAnimalCartoonZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="HumanAnimalCartoonZeroShot",
         description=(
@@ -35,8 +25,8 @@ class HumanAnimalCartoonZeroShotClassification(AbsTaskZeroShotClassification):
         ),
         reference="https://arxiv.org/abs/2310.19795",
         dataset={
-            "path": "mteb/Human-Animal-Cartoon",
-            "revision": "d38566c4bb055c7325314d3e46610792c2799c4b",
+            "path": "mteb/HumanAnimalCartoonZeroShot",
+            "revision": "689d291cacea3ec66ab397ba7a5d82cc910cc779",
         },
         type="VideoZeroshotClassification",
         category="v2t",
@@ -55,17 +45,8 @@ class HumanAnimalCartoonZeroShotClassification(AbsTaskZeroShotClassification):
         is_beta=True,
     )
 
-    input_column_name: str = "video"
-    label_column_name: str = "action"
 
-    def get_candidate_labels(self) -> list[str]:
-        return [
-            LABEL_PROMPTS.get(name, f"a video of {name}")
-            for name in self.dataset["test"].features[self.label_column_name].names
-        ]
-
-
-class HumanAnimalCartoonVAZeroShotClassification(AbsTaskZeroShotClassification):
+class HumanAnimalCartoonVAZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="HumanAnimalCartoonVAZeroShot",
         description=(
@@ -77,8 +58,8 @@ class HumanAnimalCartoonVAZeroShotClassification(AbsTaskZeroShotClassification):
         ),
         reference="https://arxiv.org/abs/2310.19795",
         dataset={
-            "path": "mteb/Human-Animal-Cartoon",
-            "revision": "d38566c4bb055c7325314d3e46610792c2799c4b",
+            "path": "mteb/HumanAnimalCartoonVAZeroShot",
+            "revision": "c700d9c84128c480bc596bc775c7ff0dce7f6654",
         },
         type="VideoZeroshotClassification",
         category="va2t",
@@ -96,12 +77,3 @@ class HumanAnimalCartoonVAZeroShotClassification(AbsTaskZeroShotClassification):
         bibtex_citation=CITATION,
         is_beta=True,
     )
-
-    input_column_name = ("video", "audio")
-    label_column_name: str = "action"
-
-    def get_candidate_labels(self) -> list[str]:
-        return [
-            LABEL_PROMPTS.get(name, f"a video of {name}")
-            for name in self.dataset["test"].features[self.label_column_name].names
-        ]

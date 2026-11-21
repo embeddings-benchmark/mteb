@@ -1,17 +1,15 @@
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import (
-    AbsTaskZeroShotClassification,
-)
 
 
-class Caltech101ZeroShotClassification(AbsTaskZeroShotClassification):
+class Caltech101ZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Caltech101ZeroShot",
         description="Classifying images of 101 widely varied objects.",
         reference="https://ieeexplore.ieee.org/document/1384978",
         dataset={
-            "path": "mteb/Caltech101",
-            "revision": "011e51e5fb01f0c820824734edb7a539ab8e6650",
+            "path": "mteb/Caltech101ZeroShot",
+            "revision": "276222f6ddaddefeeb17f49fb059136df9aa9057",
         },
         type="ZeroShotClassification",
         category="i2t",
@@ -43,9 +41,3 @@ class Caltech101ZeroShotClassification(AbsTaskZeroShotClassification):
 }
 """,
     )
-
-    def get_candidate_labels(self) -> list[str]:
-        return [
-            f"a photo of a {name}."
-            for name in self.dataset["test"].features[self.label_column_name].names
-        ]

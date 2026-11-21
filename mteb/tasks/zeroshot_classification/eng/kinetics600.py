@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import AbsTaskZeroShotClassification
 
 CITATION = r"""
 @article{carreira2018short,
@@ -13,14 +13,14 @@ CITATION = r"""
 """
 
 
-class Kinetics600VAZeroShotClassification(AbsTaskZeroShotClassification):
+class Kinetics600VAZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Kinetics600VAZeroShot",
         description="Kinetics-600 is a large-scale action recognition dataset containing 600 human action classes from YouTube videos. Each clip is approximately 10 seconds long. This variant uses both video and audio modalities. Sampled the official test split, capped at ~16 per class across 600 classes (~9,576 examples).",
         reference="https://arxiv.org/abs/1808.01340",
         dataset={
-            "path": "mteb/kinetics-600",
-            "revision": "a7be893c873e39341a96753e99bfd7b7025aaaf9",
+            "path": "mteb/Kinetics600VAZeroShot",
+            "revision": "f48f629978bb4dff56b1373169aae00c4c1a3a2b",
         },
         type="VideoZeroshotClassification",
         category="va2t",
@@ -42,24 +42,15 @@ class Kinetics600VAZeroShotClassification(AbsTaskZeroShotClassification):
         is_beta=True,
     )
 
-    input_column_name = ("video", "audio")
-    label_column_name: str = "label"
 
-    def get_candidate_labels(self) -> list[str]:
-        return [
-            f"a video of {name}"
-            for name in self.dataset["test"].features[self.label_column_name].names
-        ]
-
-
-class Kinetics600VZeroShotClassification(AbsTaskZeroShotClassification):
+class Kinetics600VZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Kinetics600VZeroShot",
         description="Kinetics-600 is a large-scale action recognition dataset containing 600 human action classes from YouTube videos. Each clip is approximately 10 seconds long. This variant uses video only. Sampled the official test split, capped at ~16 per class across 600 classes (~9,576 examples).",
         reference="https://arxiv.org/abs/1808.01340",
         dataset={
-            "path": "mteb/kinetics-600",
-            "revision": "a7be893c873e39341a96753e99bfd7b7025aaaf9",
+            "path": "mteb/Kinetics600VZeroShot",
+            "revision": "fd4e4adfc646cbfc6c1c86459076968314413909",
         },
         type="VideoZeroshotClassification",
         category="v2t",
@@ -80,12 +71,3 @@ class Kinetics600VZeroShotClassification(AbsTaskZeroShotClassification):
         bibtex_citation=CITATION,
         is_beta=True,
     )
-
-    input_column_name = "video"
-    label_column_name: str = "label"
-
-    def get_candidate_labels(self) -> list[str]:
-        return [
-            f"a video of {name}"
-            for name in self.dataset["test"].features[self.label_column_name].names
-        ]

@@ -1,19 +1,15 @@
-from pathlib import Path
-
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import (
-    AbsTaskZeroShotClassification,
-)
 
 
-class GTSRBZeroShotClassification(AbsTaskZeroShotClassification):
+class GTSRBZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="GTSRBZeroShot",
         description="The German Traffic Sign Recognition Benchmark (GTSRB) is a multi-class classification dataset for traffic signs. It consists of dataset of more than 50,000 traffic sign images. The dataset comprises 43 classes with unbalanced class frequencies.",
         reference="https://benchmark.ini.rub.de/",
         dataset={
-            "path": "mteb/wds_gtsrb",
-            "revision": "a8f4bb6c8b6f76f4bdc548a7f2979057e546ab44",
+            "path": "mteb/GTSRBZeroShot",
+            "revision": "0ac34f3215677b9e9ae8325f3ec63b072bf6304b",
         },
         type="ZeroShotClassification",
         category="i2t",
@@ -45,13 +41,3 @@ class GTSRBZeroShotClassification(AbsTaskZeroShotClassification):
 }
 """,
     )
-
-    input_column_name: str = "webp"
-    label_column_name: str = "cls"
-
-    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
-        path = Path(__file__).parent / "templates" / "GTSRB_labels.txt"
-        with path.open(encoding="utf-8") as f:
-            labels = f.readlines()
-
-        return [f"a close up photo of a '{c}' traffic sign." for c in labels]

@@ -422,6 +422,7 @@ class AbsTaskRetrieval(AbsTask):
                 mrr,
                 naucs_mrr,
                 hit_rate,
+                classification,
             ) = retriever.evaluate(
                 data_split["relevant_docs"],
                 results,
@@ -448,6 +449,7 @@ class AbsTaskRetrieval(AbsTask):
             naucs_mrr=naucs_mrr,
             hit_rate=hit_rate,
             task_scores=task_specific_scores,
+            classification=classification,
             previous_results_model_meta=self._previous_results_model_meta,
         )
 

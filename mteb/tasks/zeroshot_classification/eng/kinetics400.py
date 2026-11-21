@@ -1,17 +1,15 @@
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-from mteb.abstasks.zeroshot_classification import (
-    AbsTaskZeroShotClassification,
-)
 
 
-class Kinetics400ZeroShotClassification(AbsTaskZeroShotClassification):
+class Kinetics400ZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Kinetics400ZeroShot",
         description="Kinetics-400 is a large-scale action recognition dataset containing 400 human action classes from YouTube videos. Each clip is approximately 10 seconds long. Sampled 25 random shard files from each official path list, capped at 10 per class across 400 classes (~3,970 train / ~4,000 test).",
         reference="https://arxiv.org/abs/1705.06950",
         dataset={
-            "path": "mteb/kinetics-400",
-            "revision": "e5b93b6eae80b8c9e9c88a381baae84d29b34fd2",
+            "path": "mteb/Kinetics400ZeroShot",
+            "revision": "b6f11180b28e64339cdafc400523d0c25022acc1",
         },
         type="VideoZeroshotClassification",
         category="v2t",
@@ -42,23 +40,15 @@ class Kinetics400ZeroShotClassification(AbsTaskZeroShotClassification):
 """,
     )
 
-    input_column_name = "video"
 
-    def get_candidate_labels(self) -> list[str]:
-        return [
-            f"a video of {name}"
-            for name in self.dataset["test"].features[self.label_column_name].names
-        ]
-
-
-class Kinetics400VAZeroShotClassification(AbsTaskZeroShotClassification):
+class Kinetics400VAZeroShotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Kinetics400VAZeroShot",
         description="Kinetics-400 is a large-scale action recognition dataset containing 400 human action classes from YouTube videos. Each clip is approximately 10 seconds long. This variant uses both video and audio modalities. Sampled 25 random shard files from each official path list, capped at 10 per class across 400 classes (~3,970 train / ~4,000 test).",
         reference="https://arxiv.org/abs/1705.06950",
         dataset={
-            "path": "mteb/kinetics-400",
-            "revision": "e5b93b6eae80b8c9e9c88a381baae84d29b34fd2",
+            "path": "mteb/Kinetics400VAZeroShot",
+            "revision": "de9024bb4ffb7334aca534c108bffdfab41cd871",
         },
         type="VideoZeroshotClassification",
         category="va2t",
@@ -89,11 +79,3 @@ class Kinetics400VAZeroShotClassification(AbsTaskZeroShotClassification):
 """,
         is_beta=True,
     )
-
-    input_column_name = ("video", "audio")
-
-    def get_candidate_labels(self) -> list[str]:
-        return [
-            f"a video of {name}"
-            for name in self.dataset["test"].features[self.label_column_name].names
-        ]

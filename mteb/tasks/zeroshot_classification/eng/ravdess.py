@@ -1,15 +1,15 @@
-from mteb.abstasks import AbsTaskZeroShotClassification
+from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 
-class RavdessZeroshotClassification(AbsTaskZeroShotClassification):
+class RavdessZeroshotClassification(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="RavdessZeroshot",
         description="Emotion classification Dataset. RAVDESS contains 24 professional actors (12 female, 12 male), vocalizing two lexically-matched statements in a neutral North American accent. Speech emotions includes neutral,calm, happy, sad, angry, fearful, surprise, and disgust expressions. These 8 emtoions also serve as labels for the dataset.",
         reference="https://huggingface.co/datasets/narad/ravdess",
         dataset={
-            "path": "mteb/RavdessZeroshot",
-            "revision": "9ab83d763c01b2dec59d79a6dcb44691d2fb80ee",
+            "path": "mteb/RavdessZeroshot-retrieval",
+            "revision": "f9db49a613bbf7fb0abb6f9779507b27e0b6b8b9",
         },
         type="AudioZeroshotClassification",
         category="a2t",
@@ -40,19 +40,3 @@ class RavdessZeroshotClassification(AbsTaskZeroShotClassification):
 }
 """,
     )
-
-    input_column_name: str = "audio"
-    label_column_name: str = "labels"
-
-    def get_candidate_labels(self) -> list[str]:  # noqa: PLR6301
-        """Return the text candidates for zeroshot classification"""
-        return [
-            "this person is feeling neutral",
-            "this person is feeling calm",
-            "this person is feeling happy",
-            "this person is feeling sad",
-            "this person is feeling angry",
-            "this person is feeling fearful",
-            "this person is feeling disgust",
-            "this person is feeling surprised",
-        ]
