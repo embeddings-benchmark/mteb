@@ -41,6 +41,17 @@ def _evaluate_classifier(
     classifier: SklearnModelProtocol,
 ) -> tuple[NDArray[np.integer | np.floating], SklearnModelProtocol]:
     classifier_copy: SklearnModelProtocol = clone(classifier)
+    n_train = len(embeddings_train)
+    if isinstance(classifier_copy, KNeighborsClassifier) and (
+        classifier_copy.n_neighbors > n_train
+    ):
+        # kNN cannot look up more neighbours than there are training rows, which
+        # happens for subsets with a very small train split.
+        logger.warning(
+            f"Only {n_train} training samples, which is fewer than n_neighbors="
+            f"{classifier_copy.n_neighbors}. Using n_neighbors={n_train} instead."
+        )
+        classifier_copy.set_params(n_neighbors=n_train)
     classifier_copy.fit(embeddings_train, y_train)
     return classifier_copy.predict(embeddings_test), classifier_copy
 
