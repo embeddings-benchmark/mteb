@@ -453,6 +453,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "BrightProSustainableLivingRetrieval",
     ],
     "duplicate_text": [
+        "BrighterEmotionMultilabelClassification",  # the upstream BRIGHTER ptbr test split lists each of its 2,226 texts twice (same labels, different ids); kept as released
         "GoogleSVQA2TRetrieval.v2",  # unique within a locale; the same sentences recur across locale subsets
         "GoogleSVQT2ARetrieval.v2",  # unique within a locale; the same sentences recur across locale subsets
         "HatefulMemesT2IRetrieval.v2",  # memes that share a caption are separate queries with the same answer
@@ -558,6 +559,8 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "JaCWIRRetrieval",
         "JaCWIRRetrievalLite",
         "JaGovFaqsRetrieval",
+        "JurisTCU",  # 991 texts appear under more than one document id in the original JurisTCU corpus; kept to reproduce the published evaluation
+        "JurisTCUReranking",  # candidate pools inherit the duplicated JurisTCU documents
         "KinNewsClassification",
         "KorFin",
         "KurdishSentimentClassification",
@@ -594,6 +597,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MassiveIntentVNClassification",
         "MassiveScenarioClassification",
         "MassiveScenarioVNClassification",
+        "MedPTRetrieval",  # 7 questions are asked more than once in MedPT, each paired with a different answer
         "MedicalQARetrieval",
         "MedrxivClusteringP2P",
         "MedrxivClusteringP2P.v2",
@@ -799,6 +803,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "Banking77VNClassification",
         "BengaliDocumentClassification",
         "BrazilianToxicTweetsClassification",
+        "BrighterEmotionMultilabelClassification",  # 1 text shared between the upstream BRIGHTER ptbr train and test splits
         "CBD",
         "CEDRClassification",
         "CSFDCZMovieReviewSentimentClassification",
@@ -903,6 +908,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "TamilNewsClassification",
         "TeluguAndhraJyotiNewsClassification",
         "TenKGnadClassification",
+        "ToxSynPT",  # 2 of 5,208 test texts also occur in the official ToxSyn-PT train split
         "ToxicChatClassification",
         "ToxicConversationsClassification",
         "ToxicConversationsVNClassification",
@@ -1143,6 +1149,8 @@ KNOWN_ISSUES: dict[str, list[str]] = {
     ],
     "zero_relevant_docs": [
         "BrightRetrieval",
+        "Quati",  # 1 of 50 topics only has score-0 judgments in the original Quati qrels; kept to reproduce the published evaluation
+        "QuatiReranking",  # same topics and qrels as Quati
         "SciDocsDecontaminated",  # retain 71 source queries with only zero-score judgments to reproduce the published evaluation
         "NeuCLIR2023Retrieval",  # 4 queries (2 fas, 1 rus, 1 zho) only have score-0 judgments in the original qrels
         "TwitterHjerneRetrieval",

@@ -1,0 +1,59 @@
+{
+    "test": {
+        "num_samples": 600,
+        "text_statistics": {
+            "total_text_length": 105592,
+            "min_text_length": 28,
+            "average_text_length": 175.98666666666668,
+            "max_text_length": 990,
+            "unique_texts": 598
+        },
+        "image_statistics": null,
+        "audio_statistics": null,
+        "video_statistics": null,
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 12,
+            "labels": {
+                "Dentista": {
+                    "count": 50
+                },
+                "Dermatologista": {
+                    "count": 50
+                },
+                "Ginecologista": {
+                    "count": 50
+                },
+                "Neurologista": {
+                    "count": 50
+                },
+                "Oftalmologista": {
+                    "count": 50
+                },
+                "Ortopedista - traumatologista": {
+                    "count": 50
+                },
+                "Otorrino": {
+                    "count": 50
+                },
+                "Pediatra": {
+                    "count": 50
+                },
+                "Psic\u00f3logo": {
+                    "count": 50
+                },
+                "Psic\u00f3logo, Psicanalista": {
+                    "count": 50
+                },
+                "Psiquiatra": {
+                    "count": 50
+                },
+                "Urologista": {
+                    "count": 50
+                }
+            }
+        }
+    }
+}
