@@ -1,7 +1,3 @@
-from typing import Any
-
-import datasets
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -33,8 +29,8 @@ class CrossLingualSemanticDiscriminationWMT21(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CrossLingualSemanticDiscriminationWMT21",
         dataset={
-            "path": "Andrianos/clsd_wmt19_21",
-            "revision": "9627fbdb39b827ee5c066011ebe1e947cdb137bd",
+            "path": "mteb/CrossLingualSemanticDiscriminationWMT21",
+            "revision": "0d23cec1d8fcab64c43df8e4182b4bcfe0cf72d7",
         },
         description="Evaluate a multilingual embedding model based on its ability to discriminate against the original parallel pair against challenging distractors - spawning from WMT21 DE-FR test set",
         reference="https://huggingface.co/datasets/Andrianos/clsd_wmt19_21",
@@ -55,69 +51,3 @@ class CrossLingualSemanticDiscriminationWMT21(AbsTaskRetrieval):
     )
 
     num_of_distractors = 4
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        """Generic data loader function for original clsd datasets with the format shown in "hf_dataset_link".
-        Loading the hf dataset, it populates the following three variables to be used for retrieval evaluation.
-
-        self.corpus
-
-        self.queries
-
-        self.relevant_docs
-
-        Sets self.data_loaded to True.
-        """
-        if self.data_loaded:
-            return
-        queries, corpus, relevant_docs = {}, {}, {}
-        dataset_raw = {}
-        for split in self.metadata.eval_splits:  # noqa: PLR1702
-            for hf_subset, langs in _LANGUAGES.items():
-                lang_pair = _build_lang_pair(langs)
-                dataset_raw[lang_pair] = datasets.load_dataset(
-                    name=hf_subset,
-                    **self.metadata.dataset,
-                )[split]
-
-                queries[lang_pair] = {}
-                corpus[lang_pair] = {}
-                relevant_docs[lang_pair] = {}
-                queries[lang_pair][split] = {}
-                corpus[lang_pair][split] = {}
-                relevant_docs[lang_pair][split] = {}
-
-                # Generate unique IDs for queries and documents
-                document_id_counter = 1
-
-                for query_id_counter, row in enumerate(dataset_raw[lang_pair], start=1):
-                    query_text = row["Source"]
-                    positive_text = [row["Target"]]
-                    negative_texts = [
-                        row[f"TargetAdv{str(i)}"]
-                        for i in range(
-                            1, self.num_of_distractors + 1
-                        )  # Four Distractors. Columns are named TargetAdv1-TargetAdv4
-                    ]
-
-                    # Assign unique ID to the query
-                    query_id = f"Q{query_id_counter}"
-                    queries[lang_pair][split][query_id] = query_text
-
-                    # Add true parallel and distractors to corpus with unique id.
-                    for text in positive_text + negative_texts:
-                        doc_id = f"D{document_id_counter}"
-                        corpus[lang_pair][split][doc_id] = {"text": text}
-                        document_id_counter += 1
-
-                        # Add relevant document information to relevant_docs for positive texts only
-                        if text in positive_text:
-                            if query_id not in relevant_docs[lang_pair][split]:
-                                relevant_docs[lang_pair][split][query_id] = {}
-                            relevant_docs[lang_pair][split][query_id][doc_id] = 1
-
-            self.corpus = datasets.DatasetDict(corpus)
-            self.queries = datasets.DatasetDict(queries)
-            self.relevant_docs = datasets.DatasetDict(relevant_docs)
-
-            self.data_loaded = True

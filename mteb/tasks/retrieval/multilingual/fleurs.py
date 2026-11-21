@@ -2,10 +2,11 @@ from collections import defaultdict
 from typing import Any
 
 import datasets
-from datasets import Dataset, DatasetDict
+from datasets import Dataset
 from tqdm.auto import tqdm
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _FLEURS_EVAL_LANGS = {
@@ -213,9 +214,7 @@ class FleursA2TRetrieval(AbsTaskRetrieval):
     def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
-        self.corpus = defaultdict(DatasetDict)
-        self.queries = defaultdict(DatasetDict)
-        self.relevant_docs = defaultdict(DatasetDict)
+        self.dataset = {}
         self.dataset_transform()
         self.data_loaded = True
 
@@ -243,9 +242,12 @@ class FleursA2TRetrieval(AbsTaskRetrieval):
                     str(row["id"]): {str(row["id"]): 1} for row in split_dataset
                 }
 
-                self.corpus[lang][split] = corpus_ds
-                self.queries[lang][split] = queries_ds
-                self.relevant_docs[lang][split] = relevant_docs_
+                self.dataset.setdefault(lang, {})[split] = RetrievalSplitData(
+                    corpus=corpus_ds,
+                    queries=queries_ds,
+                    relevant_docs=relevant_docs_,
+                    top_ranked=None,
+                )
 
 
 class FleursT2ARetrieval(AbsTaskRetrieval):
@@ -286,9 +288,7 @@ class FleursT2ARetrieval(AbsTaskRetrieval):
     def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
-        self.corpus = defaultdict(DatasetDict)
-        self.queries = defaultdict(DatasetDict)
-        self.relevant_docs = defaultdict(DatasetDict)
+        self.dataset = {}
         self.dataset_transform()
         self.data_loaded = True
 
@@ -319,9 +319,12 @@ class FleursT2ARetrieval(AbsTaskRetrieval):
                     str(row["id"]): {str(row["id"]): 1} for row in split_dataset
                 }
 
-                self.corpus[lang][split] = corpus_ds
-                self.queries[lang][split] = queries_ds
-                self.relevant_docs[lang][split] = relevant_docs_
+                self.dataset.setdefault(lang, {})[split] = RetrievalSplitData(
+                    corpus=corpus_ds,
+                    queries=queries_ds,
+                    relevant_docs=relevant_docs_,
+                    top_ranked=None,
+                )
 
 
 class FleursA2TRetrievalV2(AbsTaskRetrieval):
@@ -367,9 +370,7 @@ class FleursA2TRetrievalV2(AbsTaskRetrieval):
     def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
-        self.corpus = defaultdict(DatasetDict)
-        self.queries = defaultdict(DatasetDict)
-        self.relevant_docs = defaultdict(DatasetDict)
+        self.dataset = {}
         self.dataset_transform()
         self.data_loaded = True
 
@@ -387,9 +388,12 @@ class FleursA2TRetrievalV2(AbsTaskRetrieval):
                     lang_dataset[split]
                 )
 
-                self.queries[lang][split] = audio_ds
-                self.corpus[lang][split] = text_ds
-                self.relevant_docs[lang][split] = a2t_relevant_docs
+                self.dataset.setdefault(lang, {})[split] = RetrievalSplitData(
+                    corpus=text_ds,
+                    queries=audio_ds,
+                    relevant_docs=a2t_relevant_docs,
+                    top_ranked=None,
+                )
 
 
 class FleursT2ARetrievalV2(AbsTaskRetrieval):
@@ -435,9 +439,7 @@ class FleursT2ARetrievalV2(AbsTaskRetrieval):
     def load_data(self, **kwargs: Any):
         if self.data_loaded:
             return
-        self.corpus = defaultdict(DatasetDict)
-        self.queries = defaultdict(DatasetDict)
-        self.relevant_docs = defaultdict(DatasetDict)
+        self.dataset = {}
         self.dataset_transform()
         self.data_loaded = True
 
@@ -455,6 +457,9 @@ class FleursT2ARetrievalV2(AbsTaskRetrieval):
                     lang_dataset[split]
                 )
 
-                self.queries[lang][split] = text_ds
-                self.corpus[lang][split] = audio_ds
-                self.relevant_docs[lang][split] = t2a_relevant_docs
+                self.dataset.setdefault(lang, {})[split] = RetrievalSplitData(
+                    corpus=audio_ds,
+                    queries=text_ds,
+                    relevant_docs=t2a_relevant_docs,
+                    top_ranked=None,
+                )

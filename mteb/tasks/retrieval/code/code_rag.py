@@ -1,17 +1,5 @@
-from typing import Any
-
-import datasets
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-
-
-def split_by_first_newline(s: str) -> tuple[str, str]:
-    # Split the string by the first newline
-    parts = s.split("\n", 1)
-    # Return parts or (s, '') if no newline
-    return parts if len(parts) > 1 else (s, "")
-
 
 common_args = {
     "reference": "https://arxiv.org/pdf/2406.14497",
@@ -52,56 +40,11 @@ class CodeRAGProgrammingSolutionsRetrieval(AbsTaskRetrieval):
         name="CodeRAGProgrammingSolutions",
         description="Evaluation of programming solution retrieval using CodeRAG-Bench. Tests the ability to retrieve relevant programming solutions given code-related queries.",
         dataset={
-            "path": "code-rag-bench/programming-solutions",
-            "revision": "1064f7bba54d5400d4836f5831fe4c2332a566a6",
+            "path": "mteb/CodeRAGProgrammingSolutions",
+            "revision": "c03ca3b5de3d8d9ccd0c9e5c45c63b3b10d8f7f3",
         },
         **common_args,
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        """Load dataset from HuggingFace hub"""
-        if self.data_loaded:
-            return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)
-        self.dataset_transform()
-        self.data_loaded = True
-
-    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        """And transform to a retrieval dataset, which have the following attributes
-
-        self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document data like title and text
-        self.queries = Dict[query_id, str] #id => query
-        self.relevant_docs = Dict[query_id, Dict[[doc_id, score]]
-        """
-        self.corpus = {}
-        self.relevant_docs = {}
-        self.queries = {}
-
-        split = self.metadata.eval_splits[0]
-        ds: datasets.Dataset = self.dataset[split]
-        ds = ds.shuffle(seed=42)
-
-        self.queries[split] = {}
-        self.relevant_docs[split] = {}
-        self.corpus[split] = {}
-
-        texts = ds["text"]
-        meta = ds["meta"]
-        for text, mt in zip(texts, meta, strict=True):
-            # in code-rag-bench,
-            # text = query + "\n" + doc(code)
-            query, doc = split_by_first_newline(text)
-
-            task_id = mt["task_id"]
-
-            query_id = task_id
-            doc_id = f"doc_{task_id}"
-            self.queries[split][query_id] = query
-            self.corpus[split][doc_id] = {"title": "", "text": doc}
-
-            self.relevant_docs[split][query_id] = {
-                doc_id: 1
-            }  # only one correct matches
 
 
 class CodeRAGOnlineTutorialsRetrieval(AbsTaskRetrieval):
@@ -109,58 +52,11 @@ class CodeRAGOnlineTutorialsRetrieval(AbsTaskRetrieval):
         name="CodeRAGOnlineTutorials",
         description="Evaluation of online programming tutorial retrieval using CodeRAG-Bench. Tests the ability to retrieve relevant tutorials from online platforms given code-related queries.",
         dataset={
-            "path": "code-rag-bench/online-tutorials",
-            "revision": "095bb77130082e4690d6c3a031997b03487bf6e2",
+            "path": "mteb/CodeRAGOnlineTutorials",
+            "revision": "39eea899325953de062731c3dd0e924d06a831bc",
         },
         **common_args,
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        """Load dataset from HuggingFace hub"""
-        if self.data_loaded:
-            return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)
-        self.dataset_transform()
-        self.data_loaded = True
-
-    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        """And transform to a retrieval dataset, which have the following attributes
-
-        self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document data like title and text
-        self.queries = Dict[query_id, str] #id => query
-        self.relevant_docs = Dict[query_id, Dict[[doc_id, score]]
-        """
-        self.corpus = {}
-        self.relevant_docs = {}
-        self.queries = {}
-
-        split = self.metadata.eval_splits[0]
-        ds: datasets.Dataset = self.dataset[split]
-        ds = ds.shuffle(seed=42)
-
-        self.queries[split] = {}
-        self.relevant_docs[split] = {}
-        self.corpus[split] = {}
-
-        titles = ds["title"]
-        texts = ds["text"]
-        parsed = ds["parsed"]
-        for idx, (title, text, _mt) in enumerate(
-            zip(titles, texts, parsed, strict=True)
-        ):
-            # in code-rag-bench,
-            # query=doc(code)
-            # text=query+doc(code)
-            query, doc = title, text
-
-            query_id = str(idx)
-            doc_id = f"doc_{idx}"
-            self.queries[split][query_id] = query
-            self.corpus[split][doc_id] = {"title": "", "text": doc}
-
-            self.relevant_docs[split][query_id] = {
-                doc_id: 1
-            }  # only one correct matches
 
 
 class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
@@ -168,56 +64,11 @@ class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
         name="CodeRAGLibraryDocumentationSolutions",
         description="Evaluation of code library documentation retrieval using CodeRAG-Bench. Tests the ability to retrieve relevant Python library documentation sections given code-related queries.",
         dataset={
-            "path": "code-rag-bench/library-documentation",
-            "revision": "b530d3b5a25087d2074e731b76232db85b9e9107",
+            "path": "mteb/CodeRAGLibraryDocumentationSolutions",
+            "revision": "0e988363415924f3b841169da53dca985534d864",
         },
         **common_args,
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        """Load dataset from HuggingFace hub"""
-        if self.data_loaded:
-            return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)
-        self.dataset_transform()
-        self.data_loaded = True
-
-    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        """And transform to a retrieval dataset, which have the following attributes
-
-        self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document data like title and text
-        self.queries = Dict[query_id, str] #id => query
-        self.relevant_docs = Dict[query_id, Dict[[doc_id, score]]
-        """
-        self.corpus = {}
-        self.relevant_docs = {}
-        self.queries = {}
-
-        split = self.metadata.eval_splits[0]
-        ds: datasets.Dataset = self.dataset[split]
-        ds = ds.shuffle(seed=42)
-
-        self.queries[split] = {}
-        self.relevant_docs[split] = {}
-        self.corpus[split] = {}
-
-        texts = ds["doc_content"]
-
-        idx = 0
-        for text in texts:
-            # text format "document title \n document content"
-            query, doc = split_by_first_newline(text)
-
-            # some library documents doesn't have query-doc pair
-            if not doc:
-                continue
-            query_id = str(idx)
-            doc_id = f"doc_{idx}"
-            self.queries[split][query_id] = query
-            self.corpus[split][doc_id] = {"title": "", "text": doc}
-            # only one correct match
-            self.relevant_docs[split][query_id] = {doc_id: 1}
-            idx += 1
 
 
 class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
@@ -225,50 +76,8 @@ class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
         name="CodeRAGStackoverflowPosts",
         description="Evaluation of StackOverflow post retrieval using CodeRAG-Bench. Tests the ability to retrieve relevant StackOverflow posts given code-related queries.",
         dataset={
-            "path": "code-rag-bench/stackoverflow-posts",
-            "revision": "04e05d86cb0ac467b29a5d87f4c56eac99dfc0a4",
+            "path": "mteb/CodeRAGStackoverflowPosts",
+            "revision": "96e41c476939ff9cccfa5a493ccd664d67a048a9",
         },
         **common_args,
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        """Load dataset from HuggingFace hub"""
-        if self.data_loaded:
-            return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)
-        self.dataset_transform()
-        self.data_loaded = True
-
-    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        """And transform to a retrieval dataset, which have the following attributes
-
-        self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document data like title and text
-        self.queries = Dict[query_id, str] #id => query
-        self.relevant_docs = Dict[query_id, Dict[[doc_id, score]]
-        """
-        self.corpus = {}
-        self.relevant_docs = {}
-        self.queries = {}
-
-        split = self.metadata.eval_splits[0]
-        ds: datasets.Dataset = self.dataset[split]
-        ds = ds.shuffle(seed=42)
-
-        self.queries[split] = {}
-        self.relevant_docs[split] = {}
-        self.corpus[split] = {}
-
-        texts = ds["text"]
-        for idx, text in enumerate(texts):
-            # in code-rag-bench,
-            # text = query + "\n" + doc
-            query, doc = split_by_first_newline(text)
-
-            query_id = str(idx)
-            doc_id = f"doc_{idx}"
-            self.queries[split][query_id] = query
-            self.corpus[split][doc_id] = {"title": "", "text": doc}
-
-            self.relevant_docs[split][query_id] = {
-                doc_id: 1
-            }  # only one correct matches

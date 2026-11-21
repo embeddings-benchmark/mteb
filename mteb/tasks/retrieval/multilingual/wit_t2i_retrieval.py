@@ -1,15 +1,12 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
-from datasets import Dataset, DatasetDict, load_dataset
+from datasets import Dataset, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
-
-if TYPE_CHECKING:
-    from mteb.types import RelevantDocumentsType
 
 _LANGUAGES = {
     "ar": ["ara-Arab"],
@@ -24,76 +21,6 @@ _LANGUAGES = {
     "vi": ["vie-Latn"],
     "en": ["eng-Latn"],
 }
-
-
-def _load_wit_data(
-    path: str, langs: list, splits: str, revision: str | None = None
-) -> tuple[
-    dict[str, dict[str, Dataset]],
-    dict[str, dict[str, Dataset]],
-    dict[str, dict[str, RelevantDocumentsType]],
-]:
-    corpus = {lang: dict.fromkeys(splits) for lang in langs}
-    queries = {lang: dict.fromkeys(splits) for lang in langs}
-    relevant_docs = {lang: dict.fromkeys(splits) for lang in langs}
-
-    split = "test"
-
-    for lang in langs:
-        lang_data = load_dataset(
-            path,
-            split=lang,
-            revision=revision,
-        )
-        lang_corpus = lang_data.map(
-            lambda x: {
-                "id": "corpus-" + x["image_id"],
-                "modality": "image",
-                "image": x["image"],
-            },
-            remove_columns=[
-                "captions",
-                "image_id",
-            ],
-        )
-
-        corpus[lang][split] = lang_corpus
-
-        lang_data = lang_data.remove_columns(["image"])
-
-        queries[lang][split] = []
-        relevant_docs[lang][split] = {}
-
-        for row in lang_data:
-            image_id = "corpus-" + row["image_id"]
-            for idx, caption in enumerate(row["captions"]):
-                query_id = f"query-{row['image_id']}-{idx}"
-                queries[lang][split].append(
-                    {
-                        "id": query_id,
-                        "text": caption,
-                        "modality": "text",
-                    }
-                )
-                if query_id not in relevant_docs[lang][split]:
-                    relevant_docs[lang][split][query_id] = {}
-                relevant_docs[lang][split][query_id][image_id] = 1
-
-        queries[lang][split] = Dataset.from_dict(
-            {
-                "id": [query["id"] for query in queries[lang][split]],
-                "text": [query["text"] for query in queries[lang][split]],
-                "modality": [query["modality"] for query in queries[lang][split]],
-                "image": [None for _ in queries[lang][split]],
-            }
-        )
-    corpus = DatasetDict({lang: DatasetDict(splits) for lang, splits in corpus.items()})
-    queries = DatasetDict(
-        {lang: DatasetDict(splits) for lang, splits in queries.items()}
-    )
-    relevant_docs = DatasetDict(relevant_docs)
-
-    return corpus, queries, relevant_docs
 
 
 def _load_wit_i2t_data(
@@ -152,8 +79,8 @@ class WITT2IRetrieval(AbsTaskRetrieval):
         description="Retrieve images based on multilingual descriptions.",
         reference="https://proceedings.mlr.press/v162/bugliarello22a/bugliarello22a.pdf",
         dataset={
-            "path": "mteb/wit",
-            "revision": "91ac153f1371a98b209ed763205e25e115ecd06e",
+            "path": "mteb/WITT2IRetrieval",
+            "revision": "2efdca4d8cbe9c815102f0f06eae6e7ed799c011",
         },
         type="Any2AnyMultilingualRetrieval",
         category="t2i",
@@ -179,19 +106,6 @@ class WITT2IRetrieval(AbsTaskRetrieval):
 }
 """,
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = _load_wit_data(
-            path=self.metadata.dataset["path"],
-            langs=self.hf_subsets,
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
-
-        self.data_loaded = True
 
 
 class WITI2TRetrieval(AbsTaskRetrieval):

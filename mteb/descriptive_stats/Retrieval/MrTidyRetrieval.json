@@ -179,6 +179,8 @@
             },
             "japanese": {
                 "num_samples": 7000747,
+                "num_queries": 720,
+                "num_documents": 7000027,
                 "number_of_characters": 1035816982,
                 "documents_text_statistics": {
                     "total_text_length": 1035803963,
@@ -188,6 +190,8 @@
                     "unique_texts": 6982048
                 },
                 "documents_image_statistics": null,
+                "documents_audio_statistics": null,
+                "documents_video_statistics": null,
                 "queries_text_statistics": {
                     "total_text_length": 13019,
                     "min_text_length": 6,
@@ -196,16 +200,19 @@
                     "unique_texts": 720
                 },
                 "queries_image_statistics": null,
+                "queries_audio_statistics": null,
+                "queries_video_statistics": null,
                 "relevant_docs_statistics": {
                     "num_relevant_docs": 923,
                     "min_relevant_docs_per_query": 1,
                     "average_relevant_docs_per_query": 1.2819444444444446,
                     "max_relevant_docs_per_query": 3,
-                    "unique_relevant_docs": 880
+                    "unique_relevant_docs": 880,
+                    "num_missing_query_ids": 0,
+                    "num_missing_corpus_ids": 0,
+                    "queries_with_all_gold_black_or_white": 0
                 },
-                "top_ranked_statistics": null,
-                "num_documents": 880,
-                "num_queries": 6999867
+                "top_ranked_statistics": null
             },
             "telugu": {
                 "num_samples": 548870,
@@ -358,7 +365,7 @@
                 "num_queries": 829
             }
         },
-        "num_documents": 51044179,
-        "num_queries": 7007808
+        "num_documents": 58043326,
+        "num_queries": 8661
     }
 }

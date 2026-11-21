@@ -3,9 +3,10 @@ from typing import Any
 from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
-HF_REPO = "datalyes/DAPFAM_patent"
+HF_REPO = "mteb/DAPFAM_patent"
 REFERENCE = "https://arxiv.org/abs/2506.22141"
 BIBTEX = r"""@article{ayaou2025dapfamdomainawarefamilyleveldataset,
   author = {Ayaou, Iliass and Cavallucci, Denis and Chibane, Hicham},
@@ -22,7 +23,7 @@ BIBTEX = r"""@article{ayaou2025dapfamdomainawarefamilyleveldataset,
 }"""
 
 _SHARED_METADATA = dict(
-    dataset={"path": HF_REPO, "revision": "780f4011d60297fc6e97a4119b0c516d13afea2d"},
+    dataset={"path": HF_REPO, "revision": "8200e3c1a58522df3592ace8d015c3b1e9a0ee0e"},
     reference=REFERENCE,
     type="Retrieval",
     modalities=["text"],
@@ -58,6 +59,25 @@ _CORPUS_FIELDS = {
 }
 
 
+def _format_patent(
+    row: dict[str, Any], fields: list[str], id_column: str, is_corpus: bool
+) -> dict[str, Any]:
+    if is_corpus:
+        return {
+            "id": row[id_column],
+            "title": row["title_en"],
+            "text": "\n".join(
+                str(row[field])
+                for field in fields
+                if row.get(field) and field != "title_en"
+            ),
+        }
+    return {
+        "id": row[id_column],
+        "text": "\n".join(str(row[field]) for field in fields if row.get(field)),
+    }
+
+
 # MIX-IN with shared logic
 class _DAPFAMMixin:
     # class-level attributes are filled in each concrete subclass
@@ -65,7 +85,9 @@ class _DAPFAMMixin:
     query_fields: list[str] = []  # noqa: RUF012
     corpus_fields: list[str] = []  # noqa: RUF012
 
-    def load_data(self, **kwargs: Any) -> tuple[dict, dict, dict]:
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        if self.data_loaded:
+            return
         ds_c = load_dataset(
             self.metadata.dataset["path"],
             "corpus",
@@ -85,27 +107,30 @@ class _DAPFAMMixin:
             revision=self.metadata.dataset["revision"],
         )
 
-        self.corpus = {
-            "train": {
-                r["relevant_id"]: {
-                    "title": r["title_en"],
-                    "text": "\n".join(
-                        str(r[f])
-                        for f in self.corpus_fields
-                        if r.get(f) and f != "title_en"
-                    ),
-                }
-                for r in ds_c
-            }
-        }
-        self.queries = {
-            "train": {
-                r["query_id"]: "\n".join(
-                    str(r[f]) for f in self.query_fields if r.get(f)
-                )
-                for r in ds_q
-            }
-        }
+        # Deterministic maps reuse the same Arrow cache for equal field selections
+        # across the All/In/Out tasks, without eighteen separate Hub uploads.
+        corpus = ds_c.select_columns(["relevant_id", *self.corpus_fields])
+        corpus = corpus.map(
+            _format_patent,
+            fn_kwargs={
+                "fields": self.corpus_fields,
+                "id_column": "relevant_id",
+                "is_corpus": True,
+            },
+            remove_columns=corpus.column_names,
+            num_proc=num_proc,
+        )
+        queries = ds_q.select_columns(["query_id", *self.query_fields])
+        queries = queries.map(
+            _format_patent,
+            fn_kwargs={
+                "fields": self.query_fields,
+                "id_column": "query_id",
+                "is_corpus": False,
+            },
+            remove_columns=queries.column_names,
+            num_proc=num_proc,
+        )
 
         raw: dict[str, dict[str, tuple[float, str]]] = {}
         for r in ds_r:
@@ -130,9 +155,17 @@ class _DAPFAMMixin:
             if pos:
                 qrels_int[qid] = pos
 
-        self.relevant_docs = {"train": qrels_int}
+        self.dataset = {
+            "default": {
+                "train": RetrievalSplitData(
+                    corpus=corpus,
+                    queries=queries,
+                    relevant_docs=qrels_int,
+                    top_ranked=None,
+                )
+            }
+        }
         self.data_loaded = True
-        return self.corpus, self.queries, self.relevant_docs
 
 
 # ───────────────────────────────────────────────────

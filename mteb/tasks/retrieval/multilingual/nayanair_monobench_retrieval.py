@@ -1,17 +1,7 @@
 from __future__ import annotations
 
-from collections import defaultdict
-from typing import TYPE_CHECKING, Any
-
-from datasets import load_dataset
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-
-if TYPE_CHECKING:
-    from datasets import Dataset
-
-    from mteb.types import RelevantDocumentsType
 
 COMMON_METADATA = {
     "reference": "https://arxiv.org/abs/2512.03514",
@@ -51,77 +41,17 @@ _DESCRIPTION = (
 )
 
 
-def _load_data(
-    path: str,
-    splits: list[str],
-    revision: str | None = None,
-) -> tuple[
-    dict[str, Dataset],
-    dict[str, Dataset],
-    dict[str, RelevantDocumentsType],
-]:
-    corpus: dict[str, Dataset] = {}
-    queries: dict[str, Dataset] = {}
-    relevant_docs: dict[str, RelevantDocumentsType] = {}
-
-    for split in splits:
-        queries_ds = load_dataset(path, "queries", split=split, revision=revision)
-        queries[split] = queries_ds.map(
-            lambda x, split=split: {
-                "id": f"query-{split}-{x['query-id']}",
-                "text": x["query"],
-                "modality": "text",
-            },
-            remove_columns=queries_ds.column_names,
-        )
-
-        corpus_ds = load_dataset(path, "corpus", split=split, revision=revision)
-        corpus[split] = corpus_ds.map(
-            lambda x, split=split: {
-                "id": f"corpus-{split}-{x['corpus-id']}",
-                "modality": "image",
-            },
-            remove_columns=["corpus-id", "doc-id"],
-        )
-
-        qrels_ds = load_dataset(path, "qrels", split=split, revision=revision)
-        relevant_docs[split] = defaultdict(dict)
-        for row in qrels_ds:
-            qid = f"query-{split}-{row['query-id']}"
-            did = f"corpus-{split}-{row['corpus-id']}"
-            relevant_docs[split][qid][did] = int(row["score"])
-
-    return corpus, queries, relevant_docs
-
-
-def load_data(
-    self: AbsTaskRetrieval, num_proc: int | None = None, **kwargs: Any
-) -> None:
-    if self.data_loaded:
-        return
-
-    self.corpus, self.queries, self.relevant_docs = _load_data(
-        path=self.metadata.dataset["path"],
-        splits=self.metadata.eval_splits,
-        revision=self.metadata.dataset["revision"],
-    )
-
-    self.data_loaded = True
-
-
 class NayanaIRMonoBenchTamilRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NayanaIRMonoBenchTamilRetrieval",
         description=_DESCRIPTION.format(lang="Tamil"),
         dataset={
-            "path": "Nayana-cognitivelab/NayanaIR-MonoBench-ta",
-            "revision": "ee6bf80a8ef716b3c0d0206a6ac7044366929f71",
+            "path": "mteb/NayanaIRMonoBenchTamilRetrieval",
+            "revision": "7563d4b065caed16f2d22aa1aa7bc4be4f01c0be",
         },
         eval_langs=["tam-Taml"],
         **COMMON_METADATA,
     )
-
-    load_data = load_data
 
 
 class NayanaIRMonoBenchKannadaRetrieval(AbsTaskRetrieval):
@@ -129,14 +59,12 @@ class NayanaIRMonoBenchKannadaRetrieval(AbsTaskRetrieval):
         name="NayanaIRMonoBenchKannadaRetrieval",
         description=_DESCRIPTION.format(lang="Kannada"),
         dataset={
-            "path": "Nayana-cognitivelab/NayanaIR-MonoBench-kn",
-            "revision": "57aadad161dc544aae19a1940ad0725e5feb31a0",
+            "path": "mteb/NayanaIRMonoBenchKannadaRetrieval",
+            "revision": "83c0fa56a4b2199b8095a2f8c1b7a842f0d74225",
         },
         eval_langs=["kan-Knda"],
         **COMMON_METADATA,
     )
-
-    load_data = load_data
 
 
 class NayanaIRMonoBenchGujaratiRetrieval(AbsTaskRetrieval):
@@ -144,14 +72,12 @@ class NayanaIRMonoBenchGujaratiRetrieval(AbsTaskRetrieval):
         name="NayanaIRMonoBenchGujaratiRetrieval",
         description=_DESCRIPTION.format(lang="Gujarati"),
         dataset={
-            "path": "Nayana-cognitivelab/NayanaIR-MonoBench-gu",
-            "revision": "980d284e5f2e6c3ad0fe910d0702c661a047924a",
+            "path": "mteb/NayanaIRMonoBenchGujaratiRetrieval",
+            "revision": "9b41c17a77c8bcea9b940705a3b62f7a9be46495",
         },
         eval_langs=["guj-Gujr"],
         **COMMON_METADATA,
     )
-
-    load_data = load_data
 
 
 class NayanaIRMonoBenchPunjabiRetrieval(AbsTaskRetrieval):
@@ -159,14 +85,12 @@ class NayanaIRMonoBenchPunjabiRetrieval(AbsTaskRetrieval):
         name="NayanaIRMonoBenchPunjabiRetrieval",
         description=_DESCRIPTION.format(lang="Punjabi"),
         dataset={
-            "path": "Nayana-cognitivelab/NayanaIR-MonoBench-pa",
-            "revision": "62b4a070e1c352c999bedb7d43886aa10936d7ce",
+            "path": "mteb/NayanaIRMonoBenchPunjabiRetrieval",
+            "revision": "3d8f2a3df3ffd8c6421df6cf78273736a692001a",
         },
         eval_langs=["pan-Guru"],
         **COMMON_METADATA,
     )
-
-    load_data = load_data
 
 
 class NayanaIRMonoBenchMalayalamRetrieval(AbsTaskRetrieval):
@@ -174,14 +98,12 @@ class NayanaIRMonoBenchMalayalamRetrieval(AbsTaskRetrieval):
         name="NayanaIRMonoBenchMalayalamRetrieval",
         description=_DESCRIPTION.format(lang="Malayalam"),
         dataset={
-            "path": "Nayana-cognitivelab/NayanaIR-MonoBench-ml",
-            "revision": "c319524ed3b9dff43e9bba67f06b473fb75c7c3b",
+            "path": "mteb/NayanaIRMonoBenchMalayalamRetrieval",
+            "revision": "d46c3aeec5ec1d3ae2566d1b68a0fc0ddeb835fb",
         },
         eval_langs=["mal-Mlym"],
         **COMMON_METADATA,
     )
-
-    load_data = load_data
 
 
 class NayanaIRMonoBenchMarathiRetrieval(AbsTaskRetrieval):
@@ -189,14 +111,12 @@ class NayanaIRMonoBenchMarathiRetrieval(AbsTaskRetrieval):
         name="NayanaIRMonoBenchMarathiRetrieval",
         description=_DESCRIPTION.format(lang="Marathi"),
         dataset={
-            "path": "Nayana-cognitivelab/NayanaIR-MonoBench-mr",
-            "revision": "2be6a52d7ed244396595a884ea6ed8d9d67c55fb",
+            "path": "mteb/NayanaIRMonoBenchMarathiRetrieval",
+            "revision": "abee2d8691230b6515becbf69084670f6ac4d2d9",
         },
         eval_langs=["mar-Deva"],
         **COMMON_METADATA,
     )
-
-    load_data = load_data
 
 
 class NayanaIRMonoBenchOdiaRetrieval(AbsTaskRetrieval):
@@ -204,14 +124,12 @@ class NayanaIRMonoBenchOdiaRetrieval(AbsTaskRetrieval):
         name="NayanaIRMonoBenchOdiaRetrieval",
         description=_DESCRIPTION.format(lang="Odia"),
         dataset={
-            "path": "Nayana-cognitivelab/NayanaIR-MonoBench-or",
-            "revision": "12e57c3efbc0abfeb4a3105886dfc5cefe9ecc89",
+            "path": "mteb/NayanaIRMonoBenchOdiaRetrieval",
+            "revision": "70b5671b4b81f79fae2cf07a9e8fd3dbc7b5a1f7",
         },
         eval_langs=["ory-Orya"],
         **COMMON_METADATA,
     )
-
-    load_data = load_data
 
 
 class NayanaIRMonoBenchSanskritRetrieval(AbsTaskRetrieval):
@@ -219,11 +137,9 @@ class NayanaIRMonoBenchSanskritRetrieval(AbsTaskRetrieval):
         name="NayanaIRMonoBenchSanskritRetrieval",
         description=_DESCRIPTION.format(lang="Sanskrit"),
         dataset={
-            "path": "Nayana-cognitivelab/NayanaIR-MonoBench-sa",
-            "revision": "a0c0cab1de4d8e25fd94a851f243b82f14487b8f",
+            "path": "mteb/NayanaIRMonoBenchSanskritRetrieval",
+            "revision": "094314400e6d11fb3695eacf8ae128fb1411d8bf",
         },
         eval_langs=["san-Deva"],
         **COMMON_METADATA,
     )
-
-    load_data = load_data

@@ -1,17 +1,13 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 import polars as pl
 from datasets import concatenate_datasets, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
-
-if TYPE_CHECKING:
-    from datasets import Dataset
-
-    from mteb.types import RelevantDocumentsType
 
 
 def _load_data(
@@ -19,7 +15,7 @@ def _load_data(
     splits: str,
     revision: str | None = None,
     point_to_kept_copy: bool = False,
-) -> tuple[dict[str, Dataset], dict[str, Dataset], dict[str, RelevantDocumentsType]]:
+) -> dict[str, RetrievalSplitData]:
     corpus = {}
     queries = {}
     relevant_docs = {}
@@ -76,7 +72,15 @@ def _load_data(
                 relevant_docs[split][query_id] = {}
             relevant_docs[split][query_id][doc_id] = 1
 
-    return corpus, queries, relevant_docs
+    return {
+        split: RetrievalSplitData(
+            corpus=corpus[split],
+            queries=queries[split],
+            relevant_docs=relevant_docs[split],
+            top_ranked=None,
+        )
+        for split in splits
+    }
 
 
 class HatefulMemesI2TRetrieval(AbsTaskRetrieval):
@@ -85,8 +89,8 @@ class HatefulMemesI2TRetrieval(AbsTaskRetrieval):
         description="Retrieve captions based on memes to assess OCR abilities.",
         reference="https://arxiv.org/pdf/2005.04790",
         dataset={
-            "path": "mteb/MMSoc_HatefulMemes",
-            "revision": "852290806bbf9d660f5c04c246f81ce38bfc1d48",
+            "path": "mteb/HatefulMemesI2TRetrieval",
+            "revision": "7f85809d252b5e4805d5aa48f29d8c55e99471dd",
         },
         type="Any2AnyRetrieval",
         category="i2t",
@@ -114,21 +118,14 @@ class HatefulMemesI2TRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
-
-        self.data_loaded = True
-
 
 class HatefulMemesI2TRetrievalV2(AbsTaskRetrieval):
     metadata = HatefulMemesI2TRetrieval.metadata.model_copy(
         update={
+            "dataset": {
+                "path": "mteb/MMSoc_HatefulMemes",
+                "revision": "852290806bbf9d660f5c04c246f81ce38bfc1d48",
+            },
             "name": "HatefulMemesI2TRetrieval.v2",
             "description": HatefulMemesI2TRetrieval.metadata.description
             + " Version 2 points each query at the corpus text kept for it: the corpus keeps one text per meme text, and v1 pointed 171 of the 1,000 test queries at removed duplicates.",
@@ -140,10 +137,12 @@ class HatefulMemesI2TRetrievalV2(AbsTaskRetrieval):
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         if self.data_loaded:
             return
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-            point_to_kept_copy=True,
-        )
+        self.dataset = {
+            "default": _load_data(
+                path=self.metadata.dataset["path"],
+                splits=self.metadata.eval_splits,
+                revision=self.metadata.dataset["revision"],
+                point_to_kept_copy=True,
+            )
+        }
         self.data_loaded = True

@@ -602,7 +602,6 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MindSmallReranking",  # num_documents is a flattened per-query candidate pool; the same article legitimately appears across many queries
         "MintakaRetrieval",
         "Moroco",
-        "MrTidyRetrieval",
         "MultiSWEbenchRR",
         "MultilingualNanoDBPediaRetrieval",
         "MultilingualNanoNFCorpusRetrieval",
@@ -1168,12 +1167,6 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         # text rows scanned when the stats were computed.
         "BUCC",  # sentence2_statistics unique count is ~32x num_samples
         "MSMARCOv2",  # documents_text_statistics unique count is ~9x num_documents
-        "MrTidyRetrieval",  # documents_text_statistics unique count exceeds num_documents by ~13%
-        "MuPLeR-retrieval",  # both documents_ and queries_text_statistics exceed their counts
-        "R2MEDBioinformaticsRetrieval",
-        "R2MEDMedQADiagRetrieval",
-        "R2MEDMedicalSciencesRetrieval",
-        "R2MEDPMCTreatmentRetrieval",  # queries_text_statistics: 150 unique vs 5 queries
     ],
 }
 

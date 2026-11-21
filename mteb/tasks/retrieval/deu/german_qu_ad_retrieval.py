@@ -1,37 +1,41 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
-from datasets import DatasetDict, load_dataset
+from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
-
-if TYPE_CHECKING:
-    from datasets import Dataset
-
-    from mteb.types import RelevantDocumentsType
 
 
 def load_retrieval_data(
     dataset_path: str, eval_splits: list[str]
-) -> tuple[dict[str, Dataset], dict[str, Dataset], dict[str, RelevantDocumentsType]]:
+) -> dict[str, RetrievalSplitData]:
     eval_split = eval_splits[0]
     corpus_dataset = load_dataset(dataset_path, "corpus")
     queries_dataset = load_dataset(dataset_path, "queries")
     qrels = load_dataset(dataset_path + "-qrels")[eval_split]
 
-    corpus = {e["_id"]: {"text": e["text"]} for e in corpus_dataset["corpus"]}
-    queries = {e["_id"]: e["text"] for e in queries_dataset["queries"]}
+    corpus = (
+        corpus_dataset["corpus"]
+        .select_columns(["_id", "text"])
+        .rename_column("_id", "id")
+    )
+    queries = (
+        queries_dataset["queries"]
+        .select_columns(["_id", "text"])
+        .rename_column("_id", "id")
+    )
     relevant_docs = defaultdict(dict)
     for e in qrels:
         relevant_docs[e["query-id"]][e["corpus-id"]] = e["score"]
-
-    corpus = DatasetDict({eval_split: corpus})
-    queries = DatasetDict({eval_split: queries})
-    relevant_docs = DatasetDict({eval_split: relevant_docs})
-    return corpus, queries, relevant_docs
+    return {
+        eval_split: RetrievalSplitData(
+            corpus=corpus, queries=queries, relevant_docs=relevant_docs, top_ranked=None
+        )
+    }
 
 
 class GermanQuADRetrieval(AbsTaskRetrieval):
@@ -77,7 +81,9 @@ class GermanQuADRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = load_retrieval_data(
-            self.metadata.dataset["path"], self.metadata.eval_splits
-        )
+        self.dataset = {
+            "default": load_retrieval_data(
+                self.metadata.dataset["path"], self.metadata.eval_splits
+            )
+        }
         self.data_loaded = True

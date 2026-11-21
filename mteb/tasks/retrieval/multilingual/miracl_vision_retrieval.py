@@ -1,16 +1,12 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 import datasets
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
-
-if TYPE_CHECKING:
-    from datasets import Dataset
-
-    from mteb.types import RelevantDocumentsType
 
 _EVAL_SPLIT = "default"
 
@@ -39,16 +35,9 @@ _LANGUAGES = {
 def _load_miracl_data(  # noqa: PLR0914
     path: str,
     langs: list,
-    splits: list[str],
     revision: str | None = None,
-) -> tuple[
-    dict[str, dict[str, Dataset]],
-    dict[str, dict[str, Dataset]],
-    dict[str, dict[str, RelevantDocumentsType]],
-]:
-    corpus = {lang: dict.fromkeys(splits) for lang in langs}
-    queries = {lang: dict.fromkeys(splits) for lang in langs}
-    relevant_docs = {lang: dict.fromkeys(splits) for lang in langs}
+) -> dict[str, dict[str, RetrievalSplitData]]:
+    dataset = {}
 
     split = _EVAL_SPLIT
 
@@ -83,7 +72,7 @@ def _load_miracl_data(  # noqa: PLR0914
             remove_columns=["file_name"],
         )
 
-        corpus[lang][split] = images_data[split]
+        corpus = images_data[split]
 
         # Load queries data
         queries_identifier = f"queries-{lang}"
@@ -100,7 +89,7 @@ def _load_miracl_data(  # noqa: PLR0914
             },
             remove_columns=["_id"],
         )
-        queries[lang][split] = queries_data[split]
+        queries = queries_data[split]
 
         # Load relevant documents data
         qrels_identifier = f"qrels-{lang}"
@@ -109,16 +98,24 @@ def _load_miracl_data(  # noqa: PLR0914
             qrels_identifier,
             revision=revision,
         )
-        relevant_docs[lang][split] = {}
+        relevant_docs = {}
         for row in qrels_data[split]:
             query_id = str(row["query-id"])
             doc_id = str(row["corpus-id"])
             score = row["score"]
-            if query_id not in relevant_docs[lang][split]:
-                relevant_docs[lang][split][query_id] = {}
-            relevant_docs[lang][split][query_id][doc_id] = score
+            if query_id not in relevant_docs:
+                relevant_docs[query_id] = {}
+            relevant_docs[query_id][doc_id] = score
 
-    return corpus, queries, relevant_docs
+        dataset[lang] = {
+            split: RetrievalSplitData(
+                corpus=corpus,
+                queries=queries,
+                relevant_docs=relevant_docs,
+                top_ranked=None,
+            )
+        }
+    return dataset
 
 
 class MIRACLVisionRetrieval(AbsTaskRetrieval):
@@ -127,8 +124,8 @@ class MIRACLVisionRetrieval(AbsTaskRetrieval):
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/abs/2505.11651",
         dataset={
-            "path": "nvidia/miracl-vision",
-            "revision": "309e1696433408fbd555959cf1da968f3814f8b6",
+            "path": "mteb/miracl-vision",
+            "revision": "ac20083a5d92eef30146952a0318569d72ece116",
         },
         type="DocumentUnderstanding",
         category="t2i",
@@ -160,9 +157,8 @@ class MIRACLVisionRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = _load_miracl_data(
+        self.dataset = _load_miracl_data(
             path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
             langs=self.hf_subsets,
             revision=self.metadata.dataset["revision"],
         )

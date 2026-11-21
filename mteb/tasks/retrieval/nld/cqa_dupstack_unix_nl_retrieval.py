@@ -1,7 +1,3 @@
-from typing import Any
-
-import datasets
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -13,9 +9,8 @@ class CQADupstackUnixNLRetrieval(AbsTaskRetrieval):
         "Dutch-translated version.",
         reference="https://huggingface.co/datasets/clips/beir-nl-cqadupstack",
         dataset={
-            "path": "clips/beir-nl-cqadupstack",
-            "revision": "1de13232f452f0b4f5525d8c6c41cd6a9ae1d084",
-            "split": "unix",
+            "path": "mteb/CQADupstackUnix-NL",
+            "revision": "eea90eee0b348e987ddc6ae8f05082ee02baca90",
         },
         type="Retrieval",
         category="t2t",
@@ -48,38 +43,3 @@ class CQADupstackUnixNLRetrieval(AbsTaskRetrieval):
 """,
         adapted_from=["CQADupstackUnixRetrieval"],
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = {}, {}, {}
-        # fetch both subsets of the dataset, only test split
-        corpus_raw = datasets.load_dataset(
-            name="corpus",
-            **self.metadata.dataset,
-        )
-        queries_raw = datasets.load_dataset(
-            name="queries",
-            **self.metadata.dataset,
-        )
-
-        qrels_raw = datasets.load_dataset(
-            name="test",
-            **self.metadata.dataset,
-        )
-
-        self.queries["test"] = {query["_id"]: query["text"] for query in queries_raw}
-
-        self.corpus["test"] = {
-            doc["_id"]: {
-                "text": doc["text"],
-                "title": doc["title"],
-            }
-            for doc in corpus_raw
-        }
-        self.relevant_docs["test"] = {
-            q["query-id"]: {q["corpus-id"]: int(q["score"])} for q in qrels_raw
-        }
-
-        self.data_loaded = True

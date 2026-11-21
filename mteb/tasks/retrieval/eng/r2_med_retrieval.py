@@ -1,57 +1,15 @@
 from __future__ import annotations
 
-from collections import defaultdict
-from typing import TYPE_CHECKING, Any
-
-import datasets
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-
-if TYPE_CHECKING:
-    from datasets import Dataset
-
-    from mteb.types import RelevantDocumentsType
-
-
-def load_r2med_data(
-    path: str,
-    eval_splits: list,
-    revision: str,
-) -> tuple[dict[str, Dataset], dict[str, Dataset], dict[str, RelevantDocumentsType]]:
-    eval_split = eval_splits[0]
-    corpus = {eval_split: None}
-    queries = {eval_split: None}
-    relevant_docs = {eval_split: None}
-    domain_corpus = datasets.load_dataset(
-        path, name="corpus", split="corpus", revision=revision
-    )
-    domain_queries = datasets.load_dataset(
-        path, name="query", split="query", revision=revision
-    )
-    domain_qrels = datasets.load_dataset(
-        path, name="qrels", split="qrels", revision=revision
-    )
-    corpus[eval_split] = {e["id"]: {"text": e["text"]} for e in domain_corpus}
-    queries[eval_split] = {e["id"]: e["text"] for e in domain_queries}
-    relevant_docs[eval_split] = defaultdict(dict)
-    for e in domain_qrels:
-        qid = e["q_id"]
-        pid = e["p_id"]
-        relevant_docs[eval_split][qid][pid] = int(e["score"])
-
-    corpus = datasets.DatasetDict(corpus)
-    queries = datasets.DatasetDict(queries)
-    relevant_docs = datasets.DatasetDict(relevant_docs)
-    return corpus, queries, relevant_docs
 
 
 class R2MEDBiologyRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="R2MEDBiologyRetrieval",
         dataset={
-            "path": "R2MED/Biology",
-            "revision": "8b9fec2db9eda4b5742d03732213fbaee8169556",
+            "path": "mteb/R2MEDBiologyRetrieval",
+            "revision": "5784d4f7ca11b0467bbce42ffd48fa82c101a40c",
         },
         reference="https://huggingface.co/datasets/R2MED/Biology",
         description="Biology retrieval dataset.",
@@ -82,24 +40,13 @@ class R2MEDBiologyRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = load_r2med_data(
-            path=self.metadata.dataset["path"],
-            eval_splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
-        self.data_loaded = True
-
 
 class R2MEDBioinformaticsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="R2MEDBioinformaticsRetrieval",
         dataset={
-            "path": "R2MED/Bioinformatics",
-            "revision": "6021fce366892cbfd7837fa85a4128ea93315e18",
+            "path": "mteb/R2MEDBioinformaticsRetrieval",
+            "revision": "cd73a5e8eeaef9b8dfbcc7de2fb4dd858acfe93f",
         },
         reference="https://huggingface.co/datasets/R2MED/Bioinformatics",
         description="Bioinformatics retrieval dataset.",
@@ -130,24 +77,13 @@ class R2MEDBioinformaticsRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = load_r2med_data(
-            path=self.metadata.dataset["path"],
-            eval_splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
-        self.data_loaded = True
-
 
 class R2MEDMedicalSciencesRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="R2MEDMedicalSciencesRetrieval",
         dataset={
-            "path": "R2MED/Medical-Sciences",
-            "revision": "1b48911514c80bf9182222d99752ad75e23b4b47",
+            "path": "mteb/R2MEDMedicalSciencesRetrieval",
+            "revision": "acc8238076e63c0de24fb41de597c2cb1adef8db",
         },
         reference="https://huggingface.co/datasets/R2MED/Medical-Sciences",
         description="Medical-Sciences retrieval dataset.",
@@ -178,24 +114,13 @@ class R2MEDMedicalSciencesRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = load_r2med_data(
-            path=self.metadata.dataset["path"],
-            eval_splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
-        self.data_loaded = True
-
 
 class R2MEDMedXpertQAExamRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="R2MEDMedXpertQAExamRetrieval",
         dataset={
-            "path": "R2MED/MedXpertQA-Exam",
-            "revision": "b457ea43db9ae5db74c3a3e5be0a213d0f85ac3a",
+            "path": "mteb/R2MEDMedXpertQAExamRetrieval",
+            "revision": "8cd897ce426f9d7ad7a62aa4aeccd7b04477eb5a",
         },
         reference="https://huggingface.co/datasets/R2MED/MedXpertQA-Exam",
         description="MedXpertQA-Exam retrieval dataset.",
@@ -226,24 +151,13 @@ class R2MEDMedXpertQAExamRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = load_r2med_data(
-            path=self.metadata.dataset["path"],
-            eval_splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
-        self.data_loaded = True
-
 
 class R2MEDMedQADiagRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="R2MEDMedQADiagRetrieval",
         dataset={
-            "path": "R2MED/MedQA-Diag",
-            "revision": "78b585990279cc01a493f876c1b0cf09557fba57",
+            "path": "mteb/R2MEDMedQADiagRetrieval",
+            "revision": "2a5aa3eeb2413762152587b0e40bfc78905ed8af",
         },
         reference="https://huggingface.co/datasets/R2MED/MedQA-Diag",
         description="MedQA-Diag retrieval dataset.",
@@ -274,24 +188,13 @@ class R2MEDMedQADiagRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = load_r2med_data(
-            path=self.metadata.dataset["path"],
-            eval_splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
-        self.data_loaded = True
-
 
 class R2MEDPMCTreatmentRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="R2MEDPMCTreatmentRetrieval",
         dataset={
-            "path": "R2MED/PMC-Treatment",
-            "revision": "53c489a44a3664ba352c07550b72b4525a5968d5",
+            "path": "mteb/R2MEDPMCTreatmentRetrieval",
+            "revision": "c46cb9cb83bf94a5bce9cc70b1bc98b15cebfe91",
         },
         reference="https://huggingface.co/datasets/R2MED/PMC-Treatment",
         description="PMC-Treatment retrieval dataset.",
@@ -322,24 +225,13 @@ class R2MEDPMCTreatmentRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = load_r2med_data(
-            path=self.metadata.dataset["path"],
-            eval_splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
-        self.data_loaded = True
-
 
 class R2MEDPMCClinicalRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="R2MEDPMCClinicalRetrieval",
         dataset={
-            "path": "R2MED/PMC-Clinical",
-            "revision": "812829522f7eaa407ef82b96717be85788a50f7e",
+            "path": "mteb/R2MEDPMCClinicalRetrieval",
+            "revision": "d97d0aa167d9c8d5fc87374a2db20b2e183d25f5",
         },
         reference="https://huggingface.co/datasets/R2MED/PMC-Clinical",
         description="PMC-Clinical retrieval dataset.",
@@ -370,24 +262,13 @@ class R2MEDPMCClinicalRetrieval(AbsTaskRetrieval):
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = load_r2med_data(
-            path=self.metadata.dataset["path"],
-            eval_splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
-        self.data_loaded = True
-
 
 class R2MEDIIYiClinicalRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="R2MEDIIYiClinicalRetrieval",
         dataset={
-            "path": "R2MED/IIYi-Clinical",
-            "revision": "974abbc9bc281c3169180a6aa5d7586cfd2f5877",
+            "path": "mteb/R2MEDIIYiClinicalRetrieval",
+            "revision": "63494d49fe21b369198c4bc013f2a305070013c4",
         },
         reference="https://huggingface.co/datasets/R2MED/IIYi-Clinical",
         description="IIYi-Clinical retrieval dataset.",
@@ -417,14 +298,3 @@ class R2MEDIIYiClinicalRetrieval(AbsTaskRetrieval):
 }
 """,
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = load_r2med_data(
-            path=self.metadata.dataset["path"],
-            eval_splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
-        self.data_loaded = True

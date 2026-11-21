@@ -1,20 +1,10 @@
 from __future__ import annotations
 
-from logging import getLogger
-from typing import TYPE_CHECKING, Any
-
 import datasets
 
 from mteb._evaluators.retrieval_metrics import evaluate_p_mrr_change
 from mteb.abstasks import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-
-if TYPE_CHECKING:
-    from datasets import Dataset
-
-    from mteb.types import RelevantDocumentsType, TopRankedDocumentsType
-
-logger = getLogger(__name__)
 
 _LANGUAGES = {
     "fas": ["fas-Arab"],
@@ -49,104 +39,6 @@ _CLIR_LANGS = extend_lang_pairs()
 EVAL_SPLIT = "test"
 
 
-def load_data(
-    path: str,
-    langs: list,
-    eval_splits: list,
-    revision: str | None = None,
-) -> tuple[
-    dict[str, dict[str, Dataset]],
-    dict[str, dict[str, Dataset]],
-    dict[str, dict[str, Dataset]],
-    dict[str, dict[str, RelevantDocumentsType]],
-    dict[str, dict[str, TopRankedDocumentsType]],
-    dict[str, dict[str, RelevantDocumentsType]],
-]:
-    corpus = {lang: {EVAL_SPLIT: {}} for lang in langs}
-    queries = {lang: {EVAL_SPLIT: {}} for lang in langs}
-    relevant_docs = {lang: {EVAL_SPLIT: {}} for lang in langs}
-    instructions = {lang: {EVAL_SPLIT: {}} for lang in langs}
-    top_ranked = {lang: {EVAL_SPLIT: {}} for lang in langs}
-    qrel_diffs = {lang: {EVAL_SPLIT: {}} for lang in langs}
-
-    for lang in langs:
-        if "-" in lang:
-            loading_lang = lang.split("-")[1]  # don't care about the eng part
-        else:
-            loading_lang = lang
-        logger.info(f"Loading data for {lang} from {loading_lang}")
-
-        # Load corpus data
-        corpus_data = datasets.load_dataset(
-            path,
-            f"corpus-{loading_lang}",
-            revision=revision,
-        )
-        corpus[lang][EVAL_SPLIT] = {
-            row["_id"]: {"title": row["title"], "text": row["text"]}
-            for row in corpus_data["corpus"]
-        }
-
-        # Load queries data
-        queries_data = datasets.load_dataset(
-            path,
-            f"queries-{loading_lang}",
-            revision=revision,
-        )
-        queries[lang][EVAL_SPLIT] = {
-            row["_id"]: row["text"] for row in queries_data["queries"]
-        }
-
-        # Load instructions data
-        instructions_data = datasets.load_dataset(
-            path,
-            f"instruction-{loading_lang}",
-            revision=revision,
-        )
-        instructions[lang][EVAL_SPLIT] = {
-            row["query-id"]: row["instruction"]
-            for row in instructions_data["instruction"]
-        }
-
-        # Load qrels_og data
-        qrels_og_data = datasets.load_dataset(
-            path,
-            f"default-{loading_lang}",
-            revision=revision,
-        )
-        for row in qrels_og_data[EVAL_SPLIT]:
-            if row["query-id"] not in relevant_docs[lang][EVAL_SPLIT]:
-                relevant_docs[lang][EVAL_SPLIT][row["query-id"]] = {
-                    row["corpus-id"]: int(row["score"])
-                }
-            else:
-                relevant_docs[lang][EVAL_SPLIT][row["query-id"]][row["corpus-id"]] = (
-                    int(row["score"])
-                )
-
-        # Load top_ranked data
-        top_ranked_data = datasets.load_dataset(
-            path,
-            f"top_ranked-{loading_lang}",
-            revision=revision,
-        )
-        for row in top_ranked_data["top_ranked"]:
-            top_ranked[lang][EVAL_SPLIT][row["query-id"]] = row["corpus-ids"]
-
-        qrel_diff = datasets.load_dataset(
-            path,
-            f"qrel_diff-{loading_lang}",
-            split="qrel_diff",
-            revision=revision,
-        )
-
-        qrel_diffs[lang][EVAL_SPLIT] = {
-            item["query-id"]: item["corpus-ids"] for item in qrel_diff
-        }
-
-    return corpus, queries, instructions, relevant_docs, top_ranked, qrel_diffs
-
-
 def load_qrel_diff(metadata: TaskMetadata, hf_subset: str) -> dict[str, list[str]]:
     hf_subset = hf_subset.replace("eng-", "")
     qrel_diff_ds = datasets.load_dataset(
@@ -164,8 +56,8 @@ class mFollowIRCrossLingual(AbsTaskRetrieval):  # noqa: N801
         description="This tasks measures retrieval instruction following ability on NeuCLIR narratives for the mFollowIR benchmark on the Farsi, Russian, and Chinese languages with English queries/instructions.",
         reference="https://neuclir.github.io/",
         dataset={
-            "path": "jhu-clsp/mFollowIR-cross-lingual-parquet-mteb",
-            "revision": "6b01566619233a0c35d135123510b6b02c258ff5",
+            "path": "mteb/mFollowIRCrossLingual",
+            "revision": "2882dd6076298fc65a3515f10f8924e806ffa4f8",
         },
         type="InstructionReranking",
         category="t2t",
@@ -196,26 +88,6 @@ class mFollowIRCrossLingual(AbsTaskRetrieval):  # noqa: N801
 """,
     )
 
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        (
-            self.corpus,
-            self.queries,
-            self.instructions,
-            self.relevant_docs,
-            self.top_ranked,
-            self.qrels_diff,
-        ) = load_data(
-            path=self.metadata.dataset["path"],
-            langs=self.metadata.eval_langs,
-            eval_splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
-
-        self.data_loaded = True
-
     def task_specific_scores(
         self,
         scores: dict[str, dict[str, float]],
@@ -238,8 +110,8 @@ class mFollowIR(AbsTaskRetrieval):  # noqa: N801
         description="This tasks measures retrieval instruction following ability on NeuCLIR narratives for the mFollowIR benchmark on the Farsi, Russian, and Chinese languages.",
         reference="https://neuclir.github.io/",
         dataset={
-            "path": "jhu-clsp/mFollowIR-parquet-mteb",
-            "revision": "09eecbe45c54b4a6dfb8e68e345cae77337768e2",
+            "path": "mteb/mFollowIR",
+            "revision": "86d5e6d63e148af1cf9c85139c4796cae0a21feb",
         },
         type="InstructionReranking",
         category="t2t",
@@ -269,26 +141,6 @@ class mFollowIR(AbsTaskRetrieval):  # noqa: N801
 }
 """,
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        (
-            self.corpus,
-            self.queries,
-            self.instructions,
-            self.relevant_docs,
-            self.top_ranked,
-            self.qrels_diff,
-        ) = load_data(
-            path=self.metadata.dataset["path"],
-            langs=self.metadata.eval_langs,
-            eval_splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
-
-        self.data_loaded = True
 
     def task_specific_scores(
         self,

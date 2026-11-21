@@ -1,10 +1,9 @@
-from collections import defaultdict
 from typing import Any
 
 import datasets
-from datasets import DatasetDict
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
 # Language codes for Common Voice 17
@@ -255,9 +254,7 @@ class CommonVoiceMini17A2TRetrieval(AbsTaskRetrieval):
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.corpus = defaultdict(DatasetDict)
-        self.queries = defaultdict(DatasetDict)
-        self.relevant_docs = defaultdict(DatasetDict)
+        self.dataset = {}
         self.dataset_transform()
         self.data_loaded = True
 
@@ -296,9 +293,12 @@ class CommonVoiceMini17A2TRetrieval(AbsTaskRetrieval):
                     str(row[id_col]): {str(row[id_col]): 1} for row in lang_dataset
                 }
 
-                self.corpus[lang][split] = corpus_ds
-                self.queries[lang][split] = queries_ds
-                self.relevant_docs[lang][split] = relevant_docs_
+                self.dataset.setdefault(lang, {})[split] = RetrievalSplitData(
+                    corpus=corpus_ds,
+                    queries=queries_ds,
+                    relevant_docs=relevant_docs_,
+                    top_ranked=None,
+                )
 
 
 class CommonVoiceMini17T2ARetrieval(AbsTaskRetrieval):
@@ -330,9 +330,7 @@ class CommonVoiceMini17T2ARetrieval(AbsTaskRetrieval):
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.corpus = defaultdict(DatasetDict)
-        self.queries = defaultdict(DatasetDict)
-        self.relevant_docs = defaultdict(DatasetDict)
+        self.dataset = {}
         self.dataset_transform()
         self.data_loaded = True
 
@@ -368,9 +366,12 @@ class CommonVoiceMini17T2ARetrieval(AbsTaskRetrieval):
                     str(row[id_col]): {str(row[id_col]): 1} for row in lang_dataset
                 }
 
-                self.corpus[lang][split] = corpus_ds
-                self.queries[lang][split] = queries_ds
-                self.relevant_docs[lang][split] = relevant_docs_
+                self.dataset.setdefault(lang, {})[split] = RetrievalSplitData(
+                    corpus=corpus_ds,
+                    queries=queries_ds,
+                    relevant_docs=relevant_docs_,
+                    top_ranked=None,
+                )
 
 
 class CommonVoiceMini21A2TRetrieval(AbsTaskRetrieval):
@@ -402,9 +403,7 @@ class CommonVoiceMini21A2TRetrieval(AbsTaskRetrieval):
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.corpus = defaultdict(DatasetDict)
-        self.queries = defaultdict(DatasetDict)
-        self.relevant_docs = defaultdict(DatasetDict)
+        self.dataset = {}
         self.dataset_transform()
         self.data_loaded = True
 
@@ -443,9 +442,12 @@ class CommonVoiceMini21A2TRetrieval(AbsTaskRetrieval):
                     str(row[id_col]): {str(row[id_col]): 1} for row in lang_dataset
                 }
 
-                self.corpus[lang][split] = corpus_ds
-                self.queries[lang][split] = queries_ds
-                self.relevant_docs[lang][split] = relevant_docs_
+                self.dataset.setdefault(lang, {})[split] = RetrievalSplitData(
+                    corpus=corpus_ds,
+                    queries=queries_ds,
+                    relevant_docs=relevant_docs_,
+                    top_ranked=None,
+                )
 
 
 class CommonVoiceMini21T2ARetrieval(AbsTaskRetrieval):
@@ -477,9 +479,7 @@ class CommonVoiceMini21T2ARetrieval(AbsTaskRetrieval):
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.corpus = defaultdict(DatasetDict)
-        self.queries = defaultdict(DatasetDict)
-        self.relevant_docs = defaultdict(DatasetDict)
+        self.dataset = {}
         self.dataset_transform()
         self.data_loaded = True
 
@@ -515,6 +515,9 @@ class CommonVoiceMini21T2ARetrieval(AbsTaskRetrieval):
                     str(row[id_col]): {str(row[id_col]): 1} for row in lang_dataset
                 }
 
-                self.corpus[lang][split] = corpus_ds
-                self.queries[lang][split] = queries_ds
-                self.relevant_docs[lang][split] = relevant_docs_
+                self.dataset.setdefault(lang, {})[split] = RetrievalSplitData(
+                    corpus=corpus_ds,
+                    queries=queries_ds,
+                    relevant_docs=relevant_docs_,
+                    top_ranked=None,
+                )
