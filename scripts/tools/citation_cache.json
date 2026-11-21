@@ -11680,6 +11680,16 @@
                 "similarity": 1.0,
                 "note": ""
             }
+        },
+        "pont-tuset2020localized|10.1007/978-3-030-58558-7_38||connecting vision and language with localized narratives|2020": {
+            "stored_at": 1795296027.2633815,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Connecting Vision and Language with Localized Narratives",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
         }
     }
 }
