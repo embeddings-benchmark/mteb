@@ -1,21 +1,21 @@
 {
     "test": {
-        "num_samples": 11020,
-        "number_of_characters": 2544138,
-        "unique_pairs": 5130,
+        "num_samples": 16720,
+        "number_of_characters": 3680680,
+        "unique_pairs": 7804,
         "text1_statistics": {
-            "total_text_length": 1192532,
-            "min_text_length": 8,
-            "average_text_length": 108.21524500907441,
+            "total_text_length": 1754702,
+            "min_text_length": 5,
+            "average_text_length": 104.9462918660287,
             "max_text_length": 299,
-            "unique_texts": 284
+            "unique_texts": 450
         },
         "text2_statistics": {
-            "total_text_length": 1351606,
-            "min_text_length": 8,
-            "average_text_length": 122.6502722323049,
+            "total_text_length": 1925978,
+            "min_text_length": 5,
+            "average_text_length": 115.19007177033492,
             "max_text_length": 299,
-            "unique_texts": 288
+            "unique_texts": 457
         },
         "image1_statistics": null,
         "image2_statistics": null,
@@ -25,8 +25,8 @@
         "video2_statistics": null,
         "label_statistics": {
             "min_score": 0.0,
-            "avg_score": 0.5752968012816596,
-            "max_score": 0.9442539239162606
+            "avg_score": 0.5721798741520973,
+            "max_score": 0.9469888063400419
         },
         "hf_subset_descriptive_stats": {
             "rai": {
@@ -57,6 +57,36 @@
                     "min_score": 0.0,
                     "avg_score": 0.5752968012816596,
                     "max_score": 0.9442539239162606
+                }
+            },
+            "welfare": {
+                "num_samples": 5700,
+                "number_of_characters": 1136542,
+                "unique_pairs": 2674,
+                "text1_statistics": {
+                    "total_text_length": 562170,
+                    "min_text_length": 5,
+                    "average_text_length": 98.62631578947368,
+                    "max_text_length": 297,
+                    "unique_texts": 166
+                },
+                "text2_statistics": {
+                    "total_text_length": 574372,
+                    "min_text_length": 5,
+                    "average_text_length": 100.76701754385965,
+                    "max_text_length": 297,
+                    "unique_texts": 169
+                },
+                "image1_statistics": null,
+                "image2_statistics": null,
+                "audio1_statistics": null,
+                "audio2_statistics": null,
+                "video1_statistics": null,
+                "video2_statistics": null,
+                "label_statistics": {
+                    "min_score": 0.0,
+                    "avg_score": 0.5661538150349434,
+                    "max_score": 0.9469888063400419
                 }
             }
         }
