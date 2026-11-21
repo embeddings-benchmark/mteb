@@ -318,6 +318,10 @@ from .lmeb_retrieval import (
     ReMe,
     ToolBench,
 )
+from .localized_narratives_retrieval import (
+    LocalizedNarrativesA2IRetrieval,
+    LocalizedNarrativesI2ARetrieval,
+)
 from .lombard_grid_retrieval import (
     LombardGridA2VRetrieval,
     LombardGridV2ARetrieval,
@@ -844,6 +848,8 @@ __all__ = [
     "LitSearchRetrieval",
     "LoCoMo",
     "LoTTERetrieval",
+    "LocalizedNarrativesA2IRetrieval",
+    "LocalizedNarrativesI2ARetrieval",
     "LombardGridA2VRetrieval",
     "LombardGridV2ARetrieval",
     "LombardGridV2VRetrieval",
