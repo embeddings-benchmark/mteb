@@ -494,12 +494,12 @@ def test_evaluate_model_meta_load_error():
     """Test that model loading errors are suppressed when raise_error=False"""
     task = MockClassificationTask()
 
-    meta = copy(mteb.get_model_meta("mteb/baseline-random-encoder"))
-
-    def failing_load_model(**kwargs: Any):
+    def failing_loader(*args: Any, **kwargs: Any):
         raise RuntimeError("Failed to download model weights")
 
-    meta.load_model = failing_load_model
+    meta = mteb.get_model_meta("mteb/baseline-random-encoder").model_copy(
+        update={"loader": failing_loader}
+    )
 
     with pytest.raises(RuntimeError, match="Failed to download model weights"):
         mteb.evaluate(meta, task, cache=None)
