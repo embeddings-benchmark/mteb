@@ -36,6 +36,31 @@ mteb run -m sentence-transformers/average_word_embeddings_komninos \
 This will create a folder `mteb_output/{model_name}/{model_revision}` containing the results of the model on the specified tasks supplied as a json
 file; `{task_name}.json`.
 
+### Running models served by an OpenAI-compatible API
+
+Embedding models served by an OpenAI-compatible `/v1/embeddings` endpoint can be evaluated with `--openai-compatible-endpoint`. `--model` is then the name of the served model, which is evaluated as served instead of through MTEB's implementation of the model:
+
+=== "vLLM"
+    ```bash
+    # start a server: vllm serve BAAI/bge-small-en-v1.5 --runner pooling --port 8000
+    mteb run -m BAAI/bge-small-en-v1.5 \
+             -t Banking77Classification \
+             --openai-compatible-endpoint http://localhost:8000
+    ```
+
+=== "OpenAI"
+    ```bash
+    export OPENAI_API_KEY=sk-...
+    mteb run -m text-embedding-3-small \
+             -t Banking77Classification \
+             --openai-compatible-endpoint https://api.openai.com/v1
+    ```
+
+The API key is read from the `OPENAI_API_KEY` environment variable, or can be passed with `--api-key`. Run `mteb run --help` for the other endpoint options.
+
+If `--model` is a model registered in MTEB, the results are saved as an experiment of that model, since the served model is not MTEB's reference implementation.
+Reranking and token-level (ColBERT-style) models served this way are only supported through the [Python API](../advanced_usage/openai_api_wrappers.md).
+
 ## Submitting Results
 
 To submit results to the [results repository](https://github.com/embeddings-benchmark/results), use the `mteb submit-results` command. It submits the results that the repository does not have yet, from the same folder that `mteb run` writes to (`--output-folder`, `results` by default). For example:

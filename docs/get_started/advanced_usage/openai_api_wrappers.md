@@ -18,8 +18,8 @@ This is useful for:
 - Avoiding repeated model loading overhead
 - Using hosted embedding and reranking APIs
 
-!!! note "CLI support"
-    The MTEB CLI does not currently support OpenAI-compatible API wrappers. Use the Python API directly as shown in the examples below.
+!!! note "Registered models"
+    If `model_name` is a model registered in MTEB, the results are saved as an experiment (`served_via_openai_api`) of that model rather than as the model's own results, since the served model is not MTEB's reference implementation.
 
 ## Usage
 
@@ -55,6 +55,19 @@ This is useful for:
     )
     print(results)
     ```
+
+=== "Embedding models (CLI)"
+    ```bash
+    # Connect to a vLLM server
+    mteb run -m BAAI/bge-small-en-v1.5 -t STS12 \
+             --openai-compatible-endpoint http://localhost:8000
+
+    # Or use OpenAI's API (the API key is read from OPENAI_API_KEY)
+    mteb run -m text-embedding-3-small -t STS12 \
+             --openai-compatible-endpoint https://api.openai.com/v1
+    ```
+
+    See [Command Line](../usage/cli.md#running-models-served-by-an-openai-compatible-api) for more. Reranking and token-level models are only supported through the Python API.
 
 === "Reranking models (OpenAIAPIRerankWrapper)"
     ```python
@@ -143,7 +156,7 @@ print(results)
     Image/audio/video content is always sent via `messages`, which vLLM renders through the model's **chat template**. Non-chat text-encoder models — e.g. `BAAI/bge-small-en-v1.5`, `BAAI/bge-m3` — don't define one and will reject `messages` requests with a 400 error (`"...default chat template is no longer allowed..."`).
 
     - `OpenAIAPITokenEmbedWrapper` defaults to `use_chat_template=True` (every request, including pure text, goes through `messages`), since it's vLLM-only.
-    - `OpenAIAPIEncodeWrapper` also defaults to `use_chat_template=True`, but is commonly pointed at the real OpenAI API or non-chat vLLM models — neither supports `messages` for embeddings — so set `use_chat_template=False` for those; pure-text requests then use the plain `input` field instead.
+    - `OpenAIAPIEncodeWrapper` defaults to `use_chat_template=None`: text uses the plain `input` field for text-only tasks (which works with the OpenAI API and non-chat vLLM models), and goes through `messages` for tasks with image/audio/video inputs, so text and media are embedded the same way. Set it to `True` or `False` to force either.
     - `OpenAIAPIRerankWrapper` has no such flag: text-only rerank/score requests never use `messages` in the first place (they use the `query`/`documents` string fields), so this only matters for the two wrappers above.
 
 ## Live testing scripts
