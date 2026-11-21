@@ -688,6 +688,7 @@ extend-ignore-words-re = [
     # ISO 15924 script codes
     "Beng",  # Bengali script
     # dataset names
+    "(?i)stard", # STARD statute retrieval dataset
     "Matix",  # Docmatix (HF dataset)
     "ABOV",  # ABOV2IRetrieval (ABO + V2I)
 

@@ -9,6 +9,7 @@ from .cmteb_retrieval import (
     VideoRetrieval,
 )
 from .le_ca_r_dv2_retrieval import LeCaRDv2
+from .stard_retrieval import STARDRetrieval
 
 __all__ = [
     "CmedqaRetrieval",
@@ -18,6 +19,7 @@ __all__ = [
     "LeCaRDv2",
     "MMarcoRetrieval",
     "MedicalRetrieval",
+    "STARDRetrieval",
     "T2Retrieval",
     "VideoRetrieval",
 ]
