@@ -575,6 +575,26 @@ def test_run_list_with_error():
     assert len(results.exceptions) == 1
 
 
+def test_evaluate_model_meta_load_error():
+    """Test that model loading errors are suppressed when raise_error=False"""
+    task = MockClassificationTask()
+
+    def failing_loader(*args: Any, **kwargs: Any):
+        raise RuntimeError("Failed to download model weights")
+
+    meta = mteb.get_model_meta("mteb/baseline-random-encoder").model_copy(
+        update={"loader": failing_loader}
+    )
+
+    with pytest.raises(RuntimeError, match="Failed to download model weights"):
+        mteb.evaluate(meta, task, cache=None)
+
+    results = mteb.evaluate(meta, task, cache=None, raise_error=False)
+    assert len(results.task_results) == 0
+    assert len(results.exceptions) == 1
+    assert "Failed to download model weights" in str(results.exceptions[0].exception)
+
+
 def test_evaluate_unloads_data_when_not_preloaded():
     """Test that evaluate() unloads data when it was not preloaded."""
     model = MockSentenceTransformer()
