@@ -25,7 +25,6 @@ if TYPE_CHECKING:
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.models import MTEBModels
     from mteb.types import Array, BatchedInput
 
 _EMBED_DIMS: dict[str, int] = {"single_vector": 1024, "multi_vector": 128}
@@ -37,43 +36,14 @@ def _query_lengths(queries: Array, device: torch.device) -> torch.Tensor:
     return torch.tensor([len(query) for query in queries], device=device)
 
 
-class NeoMMEModelMeta(ModelMeta):
-    """Load the head chosen by `vector_type` and label its metadata to match."""
-
-    def load_model(
-        self,
-        device: str | None = None,
-        *,
-        embed_dim: int | None = None,
-        **kwargs: Any,
-    ) -> MTEBModels:
-        # MTEB saves results under experiments/ when load_model gets extra kwargs.
-        # Dropping the default keeps multi-vector results in the plain revision
-        # folder, which the leaderboard reads.
-        if kwargs.get("vector_type") == "multi_vector":
-            del kwargs["vector_type"]
-        # The base class checks embed_dim against the default head's 128, so the
-        # wrapper checks the dense head's 1024 instead.
-        if kwargs.get("vector_type") == "single_vector":
-            embed_dim = None if embed_dim == _EMBED_DIMS["single_vector"] else embed_dim
-        model = super().load_model(device=device, embed_dim=embed_dim, **kwargs)
-        if model.mteb_model_meta.loader_kwargs.get("vector_type") == "single_vector":
-            model.mteb_model_meta = model.mteb_model_meta.model_copy(
-                update={
-                    "embed_dim": _EMBED_DIMS["single_vector"],
-                    "model_type": ["dense"],
-                    "similarity_fn_name": ScoringFunction.COSINE,
-                }
-            )
-        return model
-
-
 class NeoMMERetrieverWrapper(AbsEncoder):
     """Encode text and images with the native Transformers NeoMME retriever.
 
     Args:
         vector_type: "multi_vector" (128-d token vectors scored with MaxSim) or
             "single_vector" (one 1024-d vector scored with cosine).
+        embed_dim: Only checked against the head's size. Leave it unset with
+            the dense head, since MTEB checks it against the default head's 128.
         max_text_tokens: Text is cut to this many tokens before the chat template
             is applied, as in the paper. Image pages are not truncated.
         max_batch_tokens: Upper bound on padded tokens per text batch.
@@ -97,11 +67,15 @@ class NeoMMERetrieverWrapper(AbsEncoder):
             )
         dimension = _EMBED_DIMS[vector_type]
         if embed_dim is not None and embed_dim != dimension:
-            raise ValueError(f"{vector_type} requires embed_dim={dimension}")
+            raise ValueError(
+                f"{vector_type} gives {dimension}-d vectors, got embed_dim={embed_dim}. "
+                "Leave embed_dim unset: vector_type sets the dimension."
+            )
 
         import torch
         from transformers import NeoMMEForRetrieval, NeoMMEProcessor
 
+        self._mteb_model_meta: ModelMeta | None = None
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
         self.vector_type = vector_type
         self.max_text_tokens = max_text_tokens
@@ -118,14 +92,39 @@ class NeoMMERetrieverWrapper(AbsEncoder):
                 model_name,
                 revision=revision,
                 dtype=torch_dtype,
-                trust_remote_code=False,
                 **kwargs,
             )
             .to(self.device)
             .eval()
         )
-        self.processor = NeoMMEProcessor.from_pretrained(
-            model_name, revision=revision, trust_remote_code=False
+        self.processor = NeoMMEProcessor.from_pretrained(model_name, revision=revision)
+
+    @property
+    def mteb_model_meta(self) -> ModelMeta | None:
+        return self._mteb_model_meta
+
+    @mteb_model_meta.setter
+    def mteb_model_meta(self, meta: ModelMeta | None) -> None:
+        if meta is None:
+            self._mteb_model_meta = None
+            return
+        if self.vector_type == "single_vector":
+            self._mteb_model_meta = meta.model_copy(
+                update={
+                    "embed_dim": _EMBED_DIMS["single_vector"],
+                    "model_type": ["dense"],
+                    "similarity_fn_name": ScoringFunction.COSINE,
+                },
+                deep=True,
+            )
+            return
+        # MTEB saves results under experiments/ when experiment_kwargs is set.
+        # Dropping the default head keeps multi-vector results in the plain
+        # revision folder, which the leaderboard reads.
+        experiment_kwargs = dict(meta.experiment_kwargs or {})
+        experiment_kwargs.pop("vector_type", None)
+        self._mteb_model_meta = meta.model_copy(
+            update={"experiment_kwargs": experiment_kwargs or None}, deep=True
         )
 
     def encode(
@@ -300,7 +299,7 @@ class NeoMMERetrieverWrapper(AbsEncoder):
         }
 
 
-neomme_260m_retriever = NeoMMEModelMeta(
+neomme_260m_retriever = ModelMeta(
     name="Hcompany/NeoMME-260M-Retriever",
     loader=NeoMMERetrieverWrapper,
     revision="481083153ac22931afbd614e672212bffbcb666e",
