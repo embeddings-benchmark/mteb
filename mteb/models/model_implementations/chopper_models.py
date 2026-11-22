@@ -71,6 +71,37 @@ class ChopperWrapper:
         device: str | None = None,
         **kwargs: Any,
     ) -> None:
+        """Chopper as a reranker.
+
+        Args:
+            model_name: Hugging Face repository of the Chopper weights.
+            revision: Repository revision (unused; the weights are loaded by `chopper_rag`).
+            variant: Encoder variant inside the repository ("base" or "small").
+            window_chars: Documents longer than this many characters are split into half-overlapping windows; a
+                document is represented by its best window. None reads every document whole.
+            block: Candidate lists longer than this are ranked in rounds: blocks of `block` candidates are read
+                separately and the best `keep` of each block go on to the next round. None reads the whole list in
+                one pass. Must be at least 2.
+            keep: How many candidates of each block go on to the next round. Must be at least 1 and smaller than
+                `block`, so that every round shortens the list.
+            reread: After a block round, the best `reread` survivors are read together once more. None or 0
+                disables the re-read.
+            device: Torch device; "auto" (the default) picks CUDA when available.
+            **kwargs: Ignored.
+        """
+        if window_chars is not None and window_chars < 1:
+            raise ValueError(
+                f"window_chars must be positive or None, got {window_chars}"
+            )
+        if block is not None:
+            if block < 2:
+                raise ValueError(f"block must be at least 2 or None, got {block}")
+            if not 1 <= keep < block:
+                raise ValueError(
+                    f"keep must satisfy 1 <= keep < block ({block}), got {keep}"
+                )
+        if reread is not None and reread < 0:
+            raise ValueError(f"reread must be non-negative or None, got {reread}")
         from chopper_rag import Chopper
 
         self.model = Chopper.from_pretrained(
@@ -156,13 +187,6 @@ class ChopperWrapper:
 chopper_031b = ModelMeta(
     extra_requirements_groups=["chopper"],
     loader=ChopperWrapper,
-    loader_kwargs={
-        "variant": "base",
-        "window_chars": 900,
-        "block": 50,
-        "keep": 25,
-        "reread": 10,
-    },
     name="wiiiktor/chopper-0.31B",
     revision="d551e53419da0169ebfea7b1eb99177c788c4f2d",
     release_date="2026-11-10",
